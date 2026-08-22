@@ -294,9 +294,11 @@ const Auth = (() => {
     const name  = (_el('auth-name')?.value         || '').trim();
     const email = (_el('auth-signup-email')?.value || '').trim();
     const pass  = (_el('auth-signup-pass')?.value  || '').trim();
-    if (!name)              { _showAuthError('Please enter your name.'); return; }
-    if (!email)             { _showAuthError('Please enter your email.'); return; }
-    if (pass.length < 6)   { _showAuthError('Password must be at least 6 characters.'); return; }
+    const passConfirm = (_el('auth-signup-pass-confirm')?.value || '').trim();
+    if (!name)                   { _showAuthError('Please enter your name.'); return; }
+    if (!email)                  { _showAuthError('Please enter your email.'); return; }
+    if (pass.length < 6)         { _showAuthError('Password must be at least 6 characters.'); return; }
+    if (pass !== passConfirm)    { _showAuthError('Passwords do not match.'); return; }
 
     // Check if registrations are open
     const gs = await Store.getGlobalSettings();
@@ -320,6 +322,13 @@ const Auth = (() => {
     _pendingVerifyEmail = email;
     if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
     showScreen('verify-email');
+  }
+
+  function backToSignUp() {
+    _pendingVerifyEmail = '';
+    showScreen('auth');
+    // Switch to sign-up tab
+    setTimeout(() => showSignUp(), 50);
   }
 
   // ── Forgot password ────────────────────────────
@@ -553,6 +562,11 @@ const Auth = (() => {
     toast(`${target.display_name}'s account deleted.`, 2000);
   }
 
+  function editCurrentStudent() {
+    const sess = Store.getStudentSession();
+    if (sess?.id) editStudent(sess.id);
+  }
+
   function editStudent(id) {
     const student = _familyStudents.find(s => s.id === id);
     if (!student) return;
@@ -750,13 +764,13 @@ const Auth = (() => {
     init, getActiveAccount,
     // Auth screen
     setRole, showSignIn, showSignUp, emailSignIn, emailSignUp,
-    showForgotPassword, backToSignIn, forgotPassword,
+    showForgotPassword, backToSignIn, forgotPassword, backToSignUp,
     resendVerification, setNewPassword, togglePass,
     studentSignIn,
     // Family setup
     completeSetup, _pickSetupAvatar,
     // Add/edit student
-    addStudent, saveNewStudent, deleteStudent, editStudent,
+    addStudent, saveNewStudent, deleteStudent, editStudent, editCurrentStudent,
     _pickAddAvatar,
     // Session
     loginStudent, logout, switchStudent,
