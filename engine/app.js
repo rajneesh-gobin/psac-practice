@@ -41,7 +41,7 @@ function applyTheme(t) {
   });
 }
 document.getElementById('theme-toggle').addEventListener('click', () => applyTheme((DB.theme || 'light') === 'dark' ? 'light' : 'dark'));
-applyTheme('light'); // default until student loads their saved theme
+applyTheme('dark'); // default until student loads their saved theme
 
 // ── TOAST ─────────────────────────────────────
 let toastTimer;
@@ -99,6 +99,7 @@ function updateStreak() {
 
 // ── CHAPTER PROGRESS ──────────────────────────
 function getChapterPct(id) {
+  if (!DB.chapters) return 0;
   const c = DB.chapters[id];
   if (!c || !c.attempted) return 0;
   return Math.round(c.correct / c.attempted * 100);

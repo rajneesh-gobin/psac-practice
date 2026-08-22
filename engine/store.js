@@ -18,7 +18,7 @@ const Store = (() => {
       chapters:     {},
       examHistory:  [],
       badges:       [],
-      theme:        'light',
+      theme:        'dark',
       xp:           0,
       level:        1,
       assignments:  [],

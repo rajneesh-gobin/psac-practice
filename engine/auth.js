@@ -128,6 +128,11 @@ const Auth = (() => {
     updateXPBar();
     _setWelcomeName(sess.displayName);
 
+    // Pre-load questions for this student's grade
+    if (typeof QuestionLoader !== 'undefined') {
+      QuestionLoader.loadForStudent(sess.grade).catch(() => {});
+    }
+
     const startScreen = (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1)
       ? 'grade-select' : 'dashboard';
     showScreen(startScreen);
@@ -157,6 +162,11 @@ const Auth = (() => {
     updateStreak();
     updateXPBar();
     _setWelcomeName(studentRow.display_name);
+
+    // Pre-load questions for this student's grade
+    if (typeof QuestionLoader !== 'undefined') {
+      QuestionLoader.loadForStudent(studentRow.grade).catch(() => {});
+    }
 
     const startScreen = (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1)
       ? 'grade-select' : 'dashboard';
@@ -707,4 +717,4 @@ const Auth = (() => {
 })();
 
 // Start app
-Store.sync().then(() => Auth.init()).catch(() => Auth.init());
+Auth.init();

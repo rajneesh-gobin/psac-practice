@@ -1,0 +1,21 @@
+[build]
+  functions = "netlify/functions"
+  publish   = "."
+
+[functions]
+  node_bundler = "esbuild"
+
+# ── Block direct browser access to question source files ──────────────
+# The /subjects/*/questions/* path is served by the Netlify Function instead.
+# These redirects only apply to Netlify hosting, not local file:// access.
+[[redirects]]
+  from   = "/subjects/*/questions/*"
+  to     = "/"
+  status = 404
+  force  = true
+
+# Route API calls to the function
+[[redirects]]
+  from   = "/api/questions"
+  to     = "/.netlify/functions/questions"
+  status = 200
