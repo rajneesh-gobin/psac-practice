@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,11 +85,33 @@
           <div class="space-y-3" id="auth-signin-fields">
             <input id="auth-email" type="email" placeholder="Email address" autocomplete="email"
               class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 transition-all">
-            <input id="auth-pass" type="password" placeholder="Password" autocomplete="current-password"
-              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 transition-all">
+            <div class="relative">
+              <input id="auth-pass" type="password" placeholder="Password" autocomplete="current-password"
+                class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 transition-all">
+              <button type="button" onclick="Auth.togglePass('auth-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+            </div>
             <button onclick="Auth.emailSignIn()"
               class="w-full py-3 bg-indigo-500 hover:bg-indigo-400 active:bg-indigo-600 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
               Sign In →
+            </button>
+            <button type="button" onclick="Auth.showForgotPassword()"
+              class="w-full text-white/50 text-xs hover:text-white/80 transition-colors text-center pt-1">
+              Forgot password?
+            </button>
+          </div>
+
+          <!-- Forgot password panel -->
+          <div class="space-y-3 hidden" id="auth-forgot-panel">
+            <p class="text-white/70 text-sm text-center">Enter your email to receive a reset link:</p>
+            <input id="auth-forgot-email" type="email" placeholder="Email address" autocomplete="email"
+              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 transition-all">
+            <button onclick="Auth.forgotPassword()"
+              class="w-full py-3 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
+              Send Reset Link →
+            </button>
+            <button type="button" onclick="Auth.backToSignIn()"
+              class="w-full text-white/50 text-xs hover:text-white/80 transition-colors text-center">
+              ← Back to Sign In
             </button>
           </div>
 
@@ -99,8 +121,11 @@
               class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
             <input id="auth-signup-email" type="email" placeholder="Email address" autocomplete="email"
               class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
-            <input id="auth-signup-pass" type="password" placeholder="Password (min 6 characters)"
-              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
+            <div class="relative">
+              <input id="auth-signup-pass" type="password" placeholder="Password (min 6 characters)"
+                class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
+              <button type="button" onclick="Auth.togglePass('auth-signup-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+            </div>
             <button onclick="Auth.emailSignUp()"
               class="w-full py-3 bg-green-500 hover:bg-green-400 active:bg-green-600 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
               Create Account →
@@ -111,30 +136,20 @@
 
         <!-- Student login -->
         <div id="auth-student-panel" class="hidden">
-          <!-- Step 1: Family code -->
-          <div id="student-code-step">
-            <p class="text-white/70 text-sm mb-3">Enter the <b class="text-white">family code</b> your parent gave you:</p>
-            <input id="student-family-code" type="text" maxlength="6" placeholder="e.g. AB3X9K"
-              class="selectable w-full text-center text-2xl font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 uppercase mb-3"
+          <p class="text-white/70 text-sm mb-4">Enter your <b class="text-white">username</b> and <b class="text-white">PIN</b>:</p>
+          <div class="space-y-3">
+            <input id="student-username" type="text" maxlength="20" placeholder="Your username (e.g. SHANVI)"
+              class="selectable w-full text-center text-xl font-bold bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 uppercase"
               oninput="this.value=this.value.toUpperCase()">
-            <button onclick="Auth.lookupFamily()"
-              class="w-full py-3 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
-              Find My Account →
-            </button>
-          </div>
-          <!-- Step 2: Pick student + PIN -->
-          <div id="student-pick-step" class="hidden">
-            <button onclick="Auth.backToFamilyCode()" class="text-white/50 text-xs mb-4 flex items-center gap-1 hover:text-white/80 transition-colors">← Back</button>
-            <p class="text-white/70 text-sm mb-3">Who are you?</p>
-            <div id="student-picker" class="grid grid-cols-3 gap-2 mb-4"></div>
-            <div id="student-pin-form" class="hidden space-y-3">
-              <input id="student-pin" type="password" maxlength="4" placeholder="Enter PIN"
-                class="selectable w-full text-center text-2xl font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400">
-              <button onclick="Auth.studentSignIn()"
-                class="w-full py-3 bg-green-500 hover:bg-green-400 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
-                Let's Go! 🚀
-              </button>
+            <div class="relative">
+              <input id="student-pin" type="password" maxlength="4" placeholder="PIN (4 digits)"
+                class="selectable w-full text-center text-2xl font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 pr-11 focus:outline-none focus:ring-2 focus:ring-green-400">
+              <button type="button" onclick="Auth.togglePass('student-pin',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
+            <button onclick="Auth.studentSignIn()"
+              class="w-full py-3 bg-green-500 hover:bg-green-400 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
+              Let's Go! 🚀
+            </button>
           </div>
         </div>
 
@@ -153,8 +168,40 @@
         <h2 class="text-2xl font-black text-white mb-2">Check your email!</h2>
         <p class="text-indigo-200 text-sm mb-2">We sent a verification link to</p>
         <p class="text-white font-semibold mb-5" id="verify-email-addr"></p>
-        <p class="text-white/50 text-xs mb-6">Click the link in the email to activate your account. Check your spam folder if you don't see it within a minute.</p>
+        <p class="text-white/50 text-xs mb-5">Click the link in the email to activate your account. Check your spam folder if you don't see it within a minute.</p>
+        <button onclick="Auth.resendVerification()"
+          class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl transition-colors text-sm mb-3">
+          Resend verification email
+        </button>
         <button onclick="showScreen('auth')" class="text-indigo-300 text-sm hover:text-white transition-colors">← Back to login</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ RESET PASSWORD ══════════ -->
+  <div id="screen-reset-password" class="screen hidden" data-hide-header="true">
+    <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center p-4">
+      <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 max-w-sm w-full text-center border border-white/20">
+        <div class="text-6xl mb-4 select-none">🔐</div>
+        <h2 class="text-2xl font-black text-white mb-2">Set New Password</h2>
+        <p class="text-indigo-200 text-sm mb-5">Choose a strong password for your account.</p>
+        <div class="space-y-3 text-left">
+          <div class="relative">
+            <input id="reset-new-pass" type="password" placeholder="New password (min 6 characters)"
+              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <button type="button" onclick="Auth.togglePass('reset-new-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+          </div>
+          <div class="relative">
+            <input id="reset-confirm-pass" type="password" placeholder="Confirm new password"
+              class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <button type="button" onclick="Auth.togglePass('reset-confirm-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+          </div>
+          <button onclick="Auth.setNewPassword()"
+            class="w-full py-3 bg-green-500 hover:bg-green-400 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
+            Update Password →
+          </button>
+          <p id="reset-pass-error" class="text-red-300 text-xs text-center hidden"></p>
+        </div>
       </div>
     </div>
   </div>
@@ -262,6 +309,10 @@
             <button id="btn-change-subject" onclick="showScreen('grade-select')"
               class="hidden text-xs font-semibold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
               📚 Subjects
+            </button>
+            <button onclick="Auth.enterParentMode()"
+              class="text-xs font-semibold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
+              🔒 Parent
             </button>
             <button onclick="Auth.logout()"
               class="text-xs font-semibold bg-white/20 hover:bg-red-500/60 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
@@ -625,6 +676,92 @@
     </div>
 
     <!-- ══════════ TEACHER DASHBOARD ══════════ -->
+    <!-- ══════════ ADMIN DASHBOARD ══════════ -->
+    <div id="screen-admin" class="screen hidden">
+      <div class="flex justify-between items-center mb-5">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🛡️ Admin Panel</h2>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Superuser access — PSAC Master</p>
+        </div>
+        <button onclick="Auth.logout()" class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-colors">🚪 Logout</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex gap-1 mb-5 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-xl overflow-x-auto">
+        <button onclick="AdminPanel.showTab('members')" data-tab="members"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg bg-white dark:bg-gray-600 shadow text-gray-800 dark:text-white transition-all whitespace-nowrap">👥 Members</button>
+        <button onclick="AdminPanel.showTab('content')" data-tab="content"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📚 Content</button>
+        <button onclick="AdminPanel.showTab('stats')" data-tab="stats"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📊 Stats</button>
+      </div>
+
+      <!-- Members tab -->
+      <div id="admin-tab-members" class="admin-tab-panel">
+        <div class="flex justify-between items-center mb-3">
+          <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">All registered accounts</p>
+          <button onclick="AdminPanel.loadMembers()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
+        </div>
+        <div class="mb-3">
+          <input id="admin-member-search" type="text" placeholder="Search by name or email…"
+            oninput="AdminPanel.filterMembers(this.value)"
+            class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        </div>
+        <div id="admin-members-list" class="space-y-2"></div>
+      </div>
+
+      <!-- Content tab -->
+      <div id="admin-tab-content" class="admin-tab-panel hidden">
+        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Globally disable grades, subjects or chapters. Affects all students immediately.</p>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">🎓 Grades</h3>
+          <div id="admin-grades-list" class="space-y-2"></div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">📚 Subjects</h3>
+          <div id="admin-subjects-list" class="space-y-2"></div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
+          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">🔐 Registration</h3>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">When disabled, new sign-ups are blocked.</p>
+          <label class="flex items-center justify-between cursor-pointer">
+            <span class="text-sm text-gray-700 dark:text-gray-300">New registrations open</span>
+            <div class="relative">
+              <input id="admin-reg-toggle" type="checkbox" class="sr-only" onchange="AdminPanel.toggleRegistration(this.checked)">
+              <div class="w-11 h-6 bg-gray-300 dark:bg-gray-600 rounded-full shadow-inner toggle-bg"></div>
+              <div class="toggle-dot absolute w-4 h-4 bg-white rounded-full shadow top-1 left-1 transition"></div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Stats tab -->
+      <div id="admin-tab-stats" class="admin-tab-panel hidden">
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow text-center">
+            <div class="text-3xl font-black text-indigo-600 dark:text-indigo-400" id="stat-total-users">—</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Accounts</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow text-center">
+            <div class="text-3xl font-black text-green-600 dark:text-green-400" id="stat-total-students">—</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Students</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow text-center">
+            <div class="text-3xl font-black text-purple-600 dark:text-purple-400" id="stat-total-families">—</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Families</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow text-center">
+            <div class="text-3xl font-black text-amber-600 dark:text-amber-400" id="stat-total-teachers">—</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Teachers</div>
+          </div>
+        </div>
+        <button onclick="AdminPanel.loadStats()" class="w-full py-2 bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold rounded-xl transition-colors">↻ Refresh Stats</button>
+      </div>
+    </div>
+
     <div id="screen-teacher" class="screen hidden">
       <div class="flex justify-between items-center mb-5">
         <h2 class="text-2xl font-bold text-gray-800 dark:text-white">👩‍🏫 Teacher Dashboard</h2>
@@ -790,7 +927,7 @@
       <div class="flex items-center justify-between mb-5 flex-wrap gap-2">
         <div>
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🔒 Parent Dashboard</h2>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Family code: <span id="pd-family-code" class="font-mono font-semibold text-purple-600 dark:text-purple-400"></span></p>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Students log in with their <b class="text-gray-500 dark:text-gray-400">username + PIN</b></p>
         </div>
         <div class="flex gap-2 items-center">
           <button onclick="Auth.addStudent()"
@@ -1041,5 +1178,7 @@
   <script src="engine/auth.js"></script>
   <!-- Teacher mode (loads last — uses globals from app + auth) -->
   <script src="engine/teacher.js"></script>
+  <!-- Admin panel (loads after auth) -->
+  <script src="engine/admin.js"></script>
 </body>
 </html>

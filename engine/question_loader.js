@@ -99,13 +99,21 @@ const QuestionLoader = (() => {
 
   // Pre-load the active subject as soon as we know who's logged in
   async function loadForStudent(grade, subjectHint) {
-    // Derive the subject id from grade + the first available subject pack
+    const gs = window.GLOBAL_SETTINGS || {};
+    const disabledGrades   = gs.disabled_grades   || [];
+    const disabledSubjects = gs.disabled_subjects || [];
+
     if (subjectHint) {
-      await loadSubject(subjectHint);
+      if (!disabledSubjects.includes(subjectHint)) await loadSubject(subjectHint);
       return;
     }
     if (typeof SUBJECT_PACKS !== 'undefined') {
-      const packs = SUBJECT_PACKS.filter(p => p.grade === grade && !p.comingSoon);
+      const packs = SUBJECT_PACKS.filter(p =>
+        p.grade === grade &&
+        !p.comingSoon &&
+        !disabledGrades.includes(p.grade) &&
+        !disabledSubjects.includes(p.id)
+      );
       for (const p of packs) await loadSubject(p.id);
     }
   }

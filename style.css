@@ -9,6 +9,10 @@ input, textarea, [contenteditable], .selectable { -webkit-user-select: auto; use
 /* Coming-soon subject cards */
 button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
 
+/* ===== TOGGLE SWITCH ===== */
+.toggle-bg  { transition: background-color 0.2s ease; }
+.toggle-dot { transition: transform 0.2s ease; }
+
 /* ===== PARENT DASHBOARD TABS ===== */
 .pd-tab { transition: background 0.15s, color 0.15s, box-shadow 0.15s; }
 .pd-tab-content { animation: fadeSlideIn 0.2s ease both; }

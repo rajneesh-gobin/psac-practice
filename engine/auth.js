@@ -16,10 +16,10 @@ const Auth = (() => {
   let _family        = null;   // families row
   let _familyStudents = [];    // students rows for this family
 
-  let _activeAccount  = null;  // { id, name, avatar } — current student
-  let _currentRole    = 'parent'; // selected tab on auth screen
-  let _selectedStudentForLogin = null; // student row picked at login step
-  let _setupAvatar    = AVATARS[0];
+  let _activeAccount       = null;  // { id, name, avatar } — current student
+  let _currentRole         = 'parent'; // selected tab on auth screen
+  let _setupAvatar         = AVATARS[0];
+  let _pendingVerifyEmail  = ''; // email stored for resend verification
 
   function _el(id) { return document.getElementById(id); }
 
@@ -33,6 +33,10 @@ const Auth = (() => {
     // 1. Listen for Supabase auth state changes (email verification callback lands here)
     if (_sb) {
       _sb.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          showScreen('reset-password');
+          return;
+        }
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session && !_parentUser) {
           await _handleParentSession(session);
         } else if (event === 'SIGNED_OUT') {
@@ -80,6 +84,19 @@ const Auth = (() => {
     }
 
     _parentProfile = profile;
+
+    if (profile.disabled) {
+      await _sb.auth.signOut();
+      showScreen('auth');
+      _showAuthError('This account has been disabled. Please contact support.');
+      return;
+    }
+
+    if (profile.role === 'admin') {
+      showScreen('admin');
+      if (typeof AdminPanel !== 'undefined') AdminPanel.render();
+      return;
+    }
 
     if (profile.role === 'teacher') {
       _loadTeacherDashboard();
@@ -157,11 +174,14 @@ const Auth = (() => {
     _activeAccount    = { id: studentRow.id, name: studentRow.display_name, avatar: studentRow.avatar };
     ACTIVE_STUDENT_ID = studentRow.id;
 
-    applyTheme(DB.theme || 'light');
+    applyTheme(DB.theme || 'dark');
     renderDashboard();
     updateStreak();
     updateXPBar();
     _setWelcomeName(studentRow.display_name);
+
+    // Fetch global settings (disabled grades/subjects set by admin)
+    Store.getGlobalSettings().then(gs => { window.GLOBAL_SETTINGS = gs || {}; }).catch(() => {});
 
     // Pre-load questions for this student's grade
     if (typeof QuestionLoader !== 'undefined') {
@@ -255,7 +275,17 @@ const Auth = (() => {
     const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
     _setAuthLoading(false);
 
-    if (error) { _showAuthError(error.message); return; }
+    if (error) {
+      if (error.message.toLowerCase().includes('not confirmed') || error.message.toLowerCase().includes('not verified')) {
+        _pendingVerifyEmail = email;
+        if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
+        toast('Please verify your email first.', 3000);
+        showScreen('verify-email');
+      } else {
+        _showAuthError(error.message);
+      }
+      return;
+    }
     // onAuthStateChange handles routing
   }
 
@@ -267,6 +297,13 @@ const Auth = (() => {
     if (!name)              { _showAuthError('Please enter your name.'); return; }
     if (!email)             { _showAuthError('Please enter your email.'); return; }
     if (pass.length < 6)   { _showAuthError('Password must be at least 6 characters.'); return; }
+
+    // Check if registrations are open
+    const gs = await Store.getGlobalSettings();
+    if (gs && gs.registration_open === false) {
+      _showAuthError('New registrations are currently closed. Please try again later.');
+      return;
+    }
 
     const role = _currentRole === 'teacher' ? 'teacher' : 'parent';
 
@@ -280,91 +317,106 @@ const Auth = (() => {
     if (error) { _showAuthError(error.message); return; }
 
     // Show check-email screen
+    _pendingVerifyEmail = email;
     if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
     showScreen('verify-email');
   }
 
-  // ── Student login ──────────────────────────────
-  async function lookupFamily() {
-    if (!_sb) return;
-    const code = (_el('student-family-code')?.value || '').trim();
-    if (code.length !== 6) { _showAuthError('Family code is 6 characters.'); return; }
+  // ── Forgot password ────────────────────────────
+  function showForgotPassword() {
+    _el('auth-signin-fields')?.classList.add('hidden');
+    _el('auth-forgot-panel')?.classList.remove('hidden');
+    _clearAuthError();
+    setTimeout(() => _el('auth-forgot-email')?.focus(), 100);
+  }
 
-    _setAuthLoading(true);
-    const family = await Store.lookupFamily(code);
-    _setAuthLoading(false);
-
-    if (!family) { _showAuthError('Family code not found. Check with your parent.'); return; }
-
-    const students = await Store.getFamilyStudents(family.id);
-    if (!students.length) { _showAuthError('No students found in this family.'); return; }
-
-    // Show student picker
-    _renderStudentPicker(family, students);
-    _el('student-code-step')?.classList.add('hidden');
-    _el('student-pick-step')?.classList.remove('hidden');
+  function backToSignIn() {
+    _el('auth-forgot-panel')?.classList.add('hidden');
+    _el('auth-signin-fields')?.classList.remove('hidden');
     _clearAuthError();
   }
 
-  function _renderStudentPicker(family, students) {
-    const grid = _el('student-picker');
-    if (!grid) return;
+  async function forgotPassword() {
+    if (!_sb) return;
+    const email = (_el('auth-forgot-email')?.value || '').trim();
+    if (!email) { _showAuthError('Please enter your email address.'); return; }
 
-    grid.innerHTML = students.map(s => `
-      <button onclick="Auth._pickStudent('${s.id}')"
-        data-sid="${s.id}"
-        class="student-pick-btn flex flex-col items-center gap-1 p-2 rounded-xl border-2 border-transparent hover:border-indigo-400 hover:bg-white/10 transition-all text-center">
-        <span class="text-3xl">${s.avatar}</span>
-        <span class="text-white text-xs font-semibold">${s.display_name}</span>
-        <span class="text-white/50 text-xs">Gr ${s.grade}</span>
-      </button>`).join('');
-
-    // Store for PIN check
-    grid._students = students;
-    grid._family   = family;
-  }
-
-  function _pickStudent(studentId) {
-    const grid = _el('student-picker');
-    const students = grid?._students || [];
-    _selectedStudentForLogin = students.find(s => s.id === studentId);
-
-    // Highlight selected
-    document.querySelectorAll('.student-pick-btn').forEach(b => {
-      const on = b.dataset.sid === studentId;
-      b.classList.toggle('border-indigo-400', on);
-      b.classList.toggle('bg-white/20', on);
-      b.classList.toggle('border-transparent', !on);
+    _setAuthLoading(true);
+    const { error } = await _sb.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://psac-practice.netlify.app/',
     });
+    _setAuthLoading(false);
 
-    // Show PIN input
-    _el('student-pin-form')?.classList.remove('hidden');
-    setTimeout(() => _el('student-pin')?.focus(), 100);
+    if (error) { _showAuthError(error.message); return; }
+    _clearAuthError();
+    const panel = _el('auth-forgot-panel');
+    if (panel) panel.innerHTML = `
+      <div class="text-center">
+        <div class="text-4xl mb-3 select-none">📧</div>
+        <p class="text-white font-semibold mb-2">Reset link sent!</p>
+        <p class="text-white/60 text-sm mb-4">Check your inbox for the reset link. It expires in 1 hour.</p>
+        <button onclick="Auth.backToSignIn()" class="text-indigo-300 text-sm hover:text-white transition-colors">← Back to Sign In</button>
+      </div>`;
   }
 
-  async function studentSignIn() {
-    if (!_selectedStudentForLogin) { _showAuthError('Please select your name first.'); return; }
-    const pin = (_el('student-pin')?.value || '').trim();
-    if (!pin) { _showAuthError('Please enter your PIN.'); return; }
+  // ── Resend verification email ───────────────────
+  async function resendVerification() {
+    if (!_sb) return;
+    const email = _pendingVerifyEmail || (_el('verify-email-addr')?.textContent || '').trim();
+    if (!email) { toast('Could not find email address. Please go back and sign up again.', 4000); return; }
+    const { error } = await _sb.auth.resend({ type: 'signup', email });
+    if (error) toast(`Error: ${error.message}`, 4000);
+    else toast('Verification email resent! Check your inbox.', 4000);
+  }
 
-    if (pin !== _selectedStudentForLogin.pin) {
+  // ── Reset password (from email link) ───────────
+  async function setNewPassword() {
+    if (!_sb) return;
+    const pass = (_el('reset-new-pass')?.value    || '').trim();
+    const conf = (_el('reset-confirm-pass')?.value || '').trim();
+    const errEl = _el('reset-pass-error');
+    const showErr = msg => { if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); } };
+
+    if (pass.length < 6) { showErr('Password must be at least 6 characters.'); return; }
+    if (pass !== conf)   { showErr('Passwords do not match.'); return; }
+    if (errEl) errEl.classList.add('hidden');
+
+    const { error } = await _sb.auth.updateUser({ password: pass });
+    if (error) { showErr(error.message); return; }
+
+    toast('Password updated! Please sign in again.', 4000);
+    await _sb.auth.signOut();
+  }
+
+  // ── Show/hide password toggle ───────────────────
+  function togglePass(inputId, btn) {
+    const inp = document.getElementById(inputId);
+    if (!inp) return;
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+    btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+  }
+
+  // ── Student login (username + PIN — no family code needed) ────────
+  async function studentSignIn() {
+    if (!_sb) return;
+    const username = (_el('student-username')?.value || '').trim();
+    const pin      = (_el('student-pin')?.value      || '').trim();
+    if (!username) { _showAuthError('Please enter your username.'); return; }
+    if (!pin)      { _showAuthError('Please enter your PIN.');      return; }
+
+    _setAuthLoading(true);
+    const student = await Store.findStudentByUsername(username);
+    _setAuthLoading(false);
+
+    if (!student) { _showAuthError('Username not found. Ask your parent to check the spelling.'); return; }
+    if (pin !== student.pin) {
       _showAuthError('Wrong PIN. Try again.');
       if (_el('student-pin')) _el('student-pin').value = '';
       return;
     }
 
     _clearAuthError();
-    await _loginStudentRow(_selectedStudentForLogin);
-  }
-
-  function backToFamilyCode() {
-    _selectedStudentForLogin = null;
-    _el('student-pick-step')?.classList.add('hidden');
-    _el('student-code-step')?.classList.remove('hidden');
-    if (_el('student-family-code')) _el('student-family-code').value = '';
-    if (_el('student-pin'))         _el('student-pin').value = '';
-    _el('student-pin-form')?.classList.add('hidden');
-    _clearAuthError();
+    await _loginStudentRow(student);
   }
 
   // ── Family Setup (first login after email verification) ──
@@ -687,8 +739,7 @@ const Auth = (() => {
     const authVisible = !_el('screen-auth')?.classList.contains('hidden');
     if (!authVisible) return;
     if (_currentRole === 'student') {
-      if (!_el('student-pick-step')?.classList.contains('hidden')) studentSignIn();
-      else lookupFamily();
+      studentSignIn();
     } else {
       if (!_el('auth-signup-fields')?.classList.contains('hidden')) emailSignUp();
       else emailSignIn();
@@ -699,8 +750,9 @@ const Auth = (() => {
     init, getActiveAccount,
     // Auth screen
     setRole, showSignIn, showSignUp, emailSignIn, emailSignUp,
-    lookupFamily, studentSignIn, backToFamilyCode,
-    _pickStudent,
+    showForgotPassword, backToSignIn, forgotPassword,
+    resendVerification, setNewPassword, togglePass,
+    studentSignIn,
     // Family setup
     completeSetup, _pickSetupAvatar,
     // Add/edit student

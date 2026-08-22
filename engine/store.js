@@ -39,6 +39,16 @@ const Store = (() => {
     try { localStorage.removeItem(STUDENT_SESS); } catch(e) {}
   }
 
+  // ── Student lookup by username (Option A login — no family code) ──
+  async function findStudentByUsername(username) {
+    if (!_sb) return null;
+    const { data, error } = await _sb.from('students')
+      .select('*')
+      .ilike('username', username.trim())
+      .maybeSingle();
+    return error ? null : data;
+  }
+
   // ── Families ───────────────────────────────────
   async function lookupFamily(code) {
     if (!_sb) return null;
@@ -182,6 +192,12 @@ const Store = (() => {
   }
 
   // ── mm_data (teacher assignments sync) ────────
+  async function getGlobalSettings() {
+    if (!_sb) return null;
+    const { data } = await _sb.from('mm_data').select('value').eq('key', 'global_settings').maybeSingle();
+    return data?.value || { disabled_grades: [], disabled_subjects: [], disabled_chapters: [], registration_open: true };
+  }
+
   async function mmGet(key) {
     if (!_sb) return null;
     const { data } = await _sb.from('mm_data').select('value').eq('key', key).single();
@@ -203,15 +219,15 @@ const Store = (() => {
     // Families
     lookupFamily, getMyFamily, createFamily, updateFamilyName,
     // Students
-    getFamilyStudents, createStudent, updateStudent, deleteStudent,
+    findStudentByUsername, getFamilyStudents, createStudent, updateStudent, deleteStudent,
     // Progress
     loadStudentProgress, saveStudentProgress,
     // Legacy API (used by app.js / existing screens)
     getAccounts, saveAccounts, getParentPin, setParentPin, loadStudent, saveStudent, clearStudent,
     // Profiles
     getProfile, createProfile,
-    // mm_data (teacher)
-    mmGet, mmSet,
+    // mm_data (teacher + global settings)
+    getGlobalSettings, mmGet, mmSet,
     generateId,
   };
 })();
