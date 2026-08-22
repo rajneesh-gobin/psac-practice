@@ -62,6 +62,9 @@ const AdminPanel = (() => {
     _renderMembers(filtered);
   }
 
+  // children cached by parent profile id
+  let _familyStudents = {}; // { profileId: [students] }
+
   function _renderMembers(list) {
     const el = document.getElementById('admin-members-list');
     if (!el) return;
@@ -70,31 +73,74 @@ const AdminPanel = (() => {
       return;
     }
     el.innerHTML = list.map(m => `
-      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow flex flex-wrap items-center gap-3">
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-bold text-gray-800 dark:text-white truncate">${_esc(m.full_name || 'Unnamed')}</p>
-          <p class="text-xs text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-bold text-gray-800 dark:text-white truncate">${_esc(m.full_name || 'Unnamed')}</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${ROLE_COLORS[m.role] || ''}">
+              ${ROLE_LABELS[m.role] || m.role}
+            </span>
+            ${m.disabled ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚫 Disabled</span>' : ''}
+          </div>
+          <div class="flex gap-2 flex-wrap w-full sm:w-auto">
+            <select onchange="AdminPanel.changeRole('${m.id}', this.value)"
+              class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+              <option value="parent"  ${m.role==='parent'  ? 'selected':''}>👨‍👩‍👧 Parent</option>
+              <option value="teacher" ${m.role==='teacher' ? 'selected':''}>👩‍🏫 Teacher</option>
+              <option value="admin"   ${m.role==='admin'   ? 'selected':''}>🛡️ Admin</option>
+            </select>
+            <button onclick="AdminPanel.toggleDisable('${m.id}', ${!m.disabled})"
+              class="text-xs px-3 py-1 rounded-lg font-semibold transition-colors ${m.disabled
+                ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200'
+                : 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200'}">
+              ${m.disabled ? '✅ Enable' : '🚫 Disable'}
+            </button>
+            ${m.role === 'parent' || m.role === 'admin' ? `
+            <button onclick="AdminPanel.toggleChildren('${m.id}')"
+              id="btn-children-${m.id}"
+              class="text-xs px-3 py-1 rounded-lg font-semibold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 transition-colors">
+              👶 Children
+            </button>` : ''}
+          </div>
         </div>
-        <div class="flex items-center gap-2 flex-wrap">
-          <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${ROLE_COLORS[m.role] || ''}">
-            ${ROLE_LABELS[m.role] || m.role}
-          </span>
-          ${m.disabled ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚫 Disabled</span>' : ''}
+        <div id="children-panel-${m.id}" class="hidden mt-3 pl-2 border-l-2 border-indigo-200 dark:border-indigo-700">
+          <p class="text-xs text-gray-400 animate-pulse">Loading children…</p>
         </div>
-        <div class="flex gap-2 flex-wrap w-full sm:w-auto">
-          <select onchange="AdminPanel.changeRole('${m.id}', this.value)"
-            class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
-            <option value="parent"  ${m.role==='parent'  ? 'selected':''}>👨‍👩‍👧 Parent</option>
-            <option value="teacher" ${m.role==='teacher' ? 'selected':''}>👩‍🏫 Teacher</option>
-            <option value="admin"   ${m.role==='admin'   ? 'selected':''}>🛡️ Admin</option>
-          </select>
-          <button onclick="AdminPanel.toggleDisable('${m.id}', ${!m.disabled})"
-            class="text-xs px-3 py-1 rounded-lg font-semibold transition-colors ${m.disabled
-              ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200'
-              : 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200'}">
-            ${m.disabled ? '✅ Enable' : '🚫 Disable'}
-          </button>
-        </div>
+      </div>`).join('');
+  }
+
+  async function toggleChildren(profileId) {
+    const panel = document.getElementById(`children-panel-${profileId}`);
+    if (!panel) return;
+    if (!panel.classList.contains('hidden')) {
+      panel.classList.add('hidden');
+      return;
+    }
+    panel.classList.remove('hidden');
+    if (_familyStudents[profileId]) { _renderChildren(profileId); return; }
+
+    // Load family → students
+    const { data: fam } = await _sb.from('families').select('id').eq('owner_id', profileId).maybeSingle();
+    if (!fam) { panel.innerHTML = '<p class="text-xs text-gray-400">No family found.</p>'; return; }
+    const { data: kids } = await _sb.from('students').select('id, name, username, grade, created_at').eq('family_id', fam.id);
+    _familyStudents[profileId] = kids || [];
+    _renderChildren(profileId);
+  }
+
+  function _renderChildren(profileId) {
+    const panel = document.getElementById(`children-panel-${profileId}`);
+    if (!panel) return;
+    const kids = _familyStudents[profileId] || [];
+    if (!kids.length) { panel.innerHTML = '<p class="text-xs text-gray-400 py-1">No children registered yet.</p>'; return; }
+    panel.innerHTML = kids.map(k => `
+      <div class="flex items-center gap-2 py-1 text-xs text-gray-600 dark:text-gray-300">
+        <span class="text-base">🧒</span>
+        <span class="font-medium">${_esc(k.name)}</span>
+        <span class="text-gray-400">@${_esc(k.username)}</span>
+        <span class="ml-auto text-gray-400">Grade ${k.grade || '?'}</span>
       </div>`).join('');
   }
 
@@ -227,5 +273,5 @@ const AdminPanel = (() => {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleGrade, toggleSubject, toggleRegistration, loadStats };
+  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, toggleGrade, toggleSubject, toggleRegistration, loadStats };
 })();

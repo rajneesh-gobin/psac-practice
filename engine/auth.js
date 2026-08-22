@@ -20,6 +20,9 @@ const Auth = (() => {
   let _currentRole         = 'parent'; // selected tab on auth screen
   let _setupAvatar         = AVATARS[0];
   let _pendingVerifyEmail  = ''; // email stored for resend verification
+  let _isAdminUser         = false;  // true when logged-in user is admin role
+  let _pinAttempts         = 0;
+  let _pinLockedUntil      = 0;
 
   function _el(id) { return document.getElementById(id); }
 
@@ -93,9 +96,10 @@ const Auth = (() => {
     }
 
     if (profile.role === 'admin') {
-      showScreen('admin');
-      if (typeof AdminPanel !== 'undefined') AdminPanel.render();
-      return;
+      _isAdminUser = true;
+      // Admin lands on parent dashboard; admin panel accessible via button
+      const adminBtn = document.getElementById('btn-open-admin');
+      if (adminBtn) adminBtn.classList.remove('hidden');
     }
 
     if (profile.role === 'teacher') {
@@ -405,9 +409,70 @@ const Auth = (() => {
     btn.textContent = inp.type === 'password' ? '👁' : '🙈';
   }
 
+  // ── Google sign-in ─────────────────────────────
+  async function googleSignIn() {
+    if (!_sb) return;
+    const { error } = await _sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: 'https://psac-practice.netlify.app/' },
+    });
+    if (error) _showAuthError(error.message);
+  }
+
+  // ── Admin panel toggle ─────────────────────────
+  function openAdminPanel() {
+    showScreen('admin');
+    if (typeof AdminPanel !== 'undefined') AdminPanel.render();
+  }
+
+  // ── Change password modal ──────────────────────
+  function openPasswordModal() {
+    const m = document.getElementById('modal-change-password');
+    if (m) { m.classList.remove('hidden'); const f = document.getElementById('cp-new'); if (f) f.focus(); }
+  }
+  function closePasswordModal() {
+    const m = document.getElementById('modal-change-password');
+    if (m) m.classList.add('hidden');
+    ['cp-new','cp-confirm'].forEach(id => { const f = document.getElementById(id); if (f) f.value = ''; });
+    const e = document.getElementById('cp-error');
+    if (e) e.classList.add('hidden');
+  }
+  async function changePassword() {
+    if (!_sb) return;
+    const pass    = (document.getElementById('cp-new')?.value     || '').trim();
+    const confirm = (document.getElementById('cp-confirm')?.value || '').trim();
+    const errEl   = document.getElementById('cp-error');
+    const showErr = msg => { if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); } };
+    if (pass.length < 6) { showErr('Password must be at least 6 characters.'); return; }
+    if (pass !== confirm){ showErr('Passwords do not match.');                  return; }
+    const { error } = await _sb.auth.updateUser({ password: pass });
+    if (error) { showErr(error.message); return; }
+    closePasswordModal();
+    toast('Password updated successfully! ✓', 3000);
+  }
+
+  // ── Reset student progress ─────────────────────
+  async function confirmResetStudentProgress(studentId, studentName) {
+    if (!confirm(`Delete ALL progress for ${studentName}?\n\nThis cannot be undone.`)) return;
+    if (!confirm('Final confirmation — all chapters, XP and badges will be lost.')) return;
+    if (!_sb) return;
+    await _sb.from('student_progress').delete().eq('student_id', studentId);
+    try { localStorage.removeItem(`mm_s_${studentId}`); } catch(e) {}
+    toast(`${studentName}'s progress has been reset.`, 3000);
+    renderParentDashboard();
+  }
+
   // ── Student login (username + PIN — no family code needed) ────────
   async function studentSignIn() {
     if (!_sb) return;
+
+    // PIN lockout check
+    if (Date.now() < _pinLockedUntil) {
+      const secs = Math.ceil((_pinLockedUntil - Date.now()) / 1000);
+      _showAuthError(`Too many wrong PINs. Please wait ${secs} seconds.`);
+      return;
+    }
+
     const username = (_el('student-username')?.value || '').trim();
     const pin      = (_el('student-pin')?.value      || '').trim();
     if (!username) { _showAuthError('Please enter your username.'); return; }
@@ -418,12 +483,22 @@ const Auth = (() => {
     _setAuthLoading(false);
 
     if (!student) { _showAuthError('Username not found. Ask your parent to check the spelling.'); return; }
+
     if (pin !== student.pin) {
-      _showAuthError('Wrong PIN. Try again.');
+      _pinAttempts++;
+      if (_pinAttempts >= 3) {
+        _pinLockedUntil = Date.now() + 60000;
+        _pinAttempts = 0;
+        _showAuthError('Too many wrong PINs. Locked for 60 seconds.');
+      } else {
+        _showAuthError(`Wrong PIN. ${3 - _pinAttempts} attempt${3 - _pinAttempts === 1 ? '' : 's'} left.`);
+      }
       if (_el('student-pin')) _el('student-pin').value = '';
       return;
     }
 
+    _pinAttempts = 0;
+    _pinLockedUntil = 0;
     _clearAuthError();
     await _loginStudentRow(student);
   }
@@ -766,6 +841,9 @@ const Auth = (() => {
     setRole, showSignIn, showSignUp, emailSignIn, emailSignUp,
     showForgotPassword, backToSignIn, forgotPassword, backToSignUp,
     resendVerification, setNewPassword, togglePass,
+    googleSignIn, openAdminPanel,
+    openPasswordModal, closePasswordModal, changePassword,
+    confirmResetStudentProgress,
     studentSignIn,
     // Family setup
     completeSetup, _pickSetupAvatar,

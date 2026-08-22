@@ -17,6 +17,35 @@
 
   <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
 
+  <!-- Offline banner -->
+  <div id="offline-banner" class="hidden fixed top-0 left-0 right-0 z-[100] bg-red-500 text-white text-center text-xs py-2 font-semibold shadow-lg select-none">
+    📡 You're offline — your progress is saved locally and will sync when you reconnect
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="modal-change-password" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+      <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">🔑 Change Password</h3>
+      <div class="space-y-3">
+        <div class="relative">
+          <input id="cp-new" type="password" placeholder="New password (min 6 characters)"
+            class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2.5 pr-10 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+          <button type="button" onclick="Auth.togglePass('cp-new',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+        </div>
+        <div class="relative">
+          <input id="cp-confirm" type="password" placeholder="Confirm new password"
+            class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2.5 pr-10 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+          <button type="button" onclick="Auth.togglePass('cp-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+        </div>
+        <p id="cp-error" class="text-red-500 text-xs hidden"></p>
+        <div class="flex gap-2 pt-1">
+          <button onclick="Auth.changePassword()" class="flex-1 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-sm transition-colors">Save Password</button>
+          <button onclick="Auth.closePasswordModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white rounded-xl text-sm transition-colors">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -97,6 +126,16 @@
             <button type="button" onclick="Auth.showForgotPassword()"
               class="w-full text-white/50 text-xs hover:text-white/80 transition-colors text-center pt-1">
               Forgot password?
+            </button>
+            <div class="relative flex items-center gap-2 py-1">
+              <div class="flex-1 h-px bg-white/20"></div>
+              <span class="text-white/30 text-xs">or</span>
+              <div class="flex-1 h-px bg-white/20"></div>
+            </div>
+            <button onclick="Auth.googleSignIn()"
+              class="w-full py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold rounded-xl transition-colors text-sm flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Continue with Google
             </button>
           </div>
 
@@ -314,7 +353,7 @@
       <div class="bg-gradient-to-br from-blue-500 via-blue-600 to-purple-700 rounded-2xl p-6 mb-6 text-white shadow-xl relative overflow-hidden">
         <div class="absolute right-0 top-0 text-9xl opacity-10 pointer-events-none select-none">🏆</div>
         <div class="flex items-start justify-between gap-2 mb-1">
-          <h2 class="text-2xl font-bold">Welcome back, <span id="welcome-name">Shanvi</span>! 👋</h2>
+          <h2 id="dashboard-greeting" class="text-2xl font-bold">Welcome back, <span id="welcome-name">Shanvi</span>! 👋</h2>
           <div class="flex gap-2 shrink-0">
             <button id="btn-change-subject" onclick="showScreen('grade-select')"
               class="hidden text-xs font-semibold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
@@ -939,7 +978,13 @@
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🔒 Parent Dashboard</h2>
           <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Students log in with their <b class="text-gray-500 dark:text-gray-400">username + PIN</b></p>
         </div>
-        <div class="flex gap-2 items-center">
+        <div class="flex gap-2 items-center flex-wrap">
+          <button id="btn-open-admin" onclick="Auth.openAdminPanel()" class="hidden text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-colors">
+            🛡️ Admin Panel
+          </button>
+          <button onclick="Auth.openPasswordModal()" class="text-xs bg-gray-100 dark:bg-gray-700/60 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-1.5 rounded-full font-semibold transition-colors">
+            🔑 Password
+          </button>
           <button onclick="Auth.addStudent()"
             class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">
             ➕ Add Child
@@ -991,6 +1036,12 @@
             <tbody id="pd-chapters"></tbody>
           </table>
         </div>
+        <!-- Family leaderboard -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
+          <h3 class="font-bold text-gray-800 dark:text-white mb-3">🏆 Family Leaderboard</h3>
+          <div id="pd-leaderboard" class="space-y-2"></div>
+        </div>
+
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-5">
           <h3 class="font-bold text-gray-800 dark:text-white mb-3">All Students</h3>
           <div id="pd-all-students" class="space-y-2"></div>

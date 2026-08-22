@@ -464,6 +464,31 @@ function showLevelUp(level) {
   launchConfetti();
 }
 
+// ── FAMILY LEADERBOARD ────────────────────────
+function _renderLeaderboard() {
+  const el = document.getElementById('pd-leaderboard');
+  if (!el) return;
+  const accounts = Store.getAccounts();
+  if (accounts.length < 2) { el.innerHTML = '<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-2">Add more children to see the leaderboard.</p>'; return; }
+
+  const ranked = accounts.map(a => {
+    const d = Store.loadStudent(a.id);
+    const acc = d.stats.totalAttempted ? Math.round(d.stats.totalCorrect / d.stats.totalAttempted * 100) : 0;
+    return { ...a, xp: d.xp || 0, acc, level: d.level || 1 };
+  }).sort((a, b) => b.xp - a.xp || b.acc - a.acc);
+
+  const medals = ['🥇', '🥈', '🥉'];
+  el.innerHTML = ranked.map((a, i) => `
+    <div class="flex items-center gap-3 py-2 ${a.id === ACTIVE_STUDENT_ID ? 'font-bold' : ''}">
+      <span class="text-lg w-6 text-center shrink-0">${medals[i] || `${i+1}.`}</span>
+      <span class="text-xl select-none">${a.avatar}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm text-gray-800 dark:text-white truncate">${a.name}${a.id === ACTIVE_STUDENT_ID ? ' <span class="text-xs text-blue-400 font-normal">(active)</span>' : ''}</div>
+        <div class="text-xs text-gray-400">Lv.${a.level} · ${a.xp} XP · ${a.acc}% accuracy</div>
+      </div>
+    </div>`).join('<hr class="border-gray-100 dark:border-gray-700">');
+}
+
 // ── PARENT DASHBOARD ──────────────────────────
 function renderParentDashboard() {
   const acct  = Auth.getActiveAccount() || {};
@@ -533,15 +558,19 @@ function renderParentDashboard() {
               <div class="font-semibold text-sm text-gray-800 dark:text-white truncate">${a.name}${isMe ? ' <span class="text-xs text-blue-400 font-normal">(active)</span>' : ''}</div>
               <div class="text-xs text-gray-400">Lv.${d.level||1} ${lname} · ${d.xp||0} XP · ${p}% accuracy · ${d.stats.totalAttempted} done</div>
             </div>
-            <div class="flex gap-1.5 shrink-0">
+            <div class="flex gap-1.5 shrink-0 flex-wrap">
               ${!isMe ? `<button onclick="Auth.loginStudent('${a.id}');Auth.exitParentMode()" class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-lg hover:bg-blue-200 transition-colors">Switch</button>` : ''}
               <button onclick="Auth.editStudent('${a.id}')" class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-lg hover:bg-gray-200 transition-colors">Edit</button>
+              <button onclick="Auth.confirmResetStudentProgress('${a.id}','${a.name.replace(/'/g,"\\'")}')" class="text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-2.5 py-1 rounded-lg hover:bg-yellow-200 transition-colors">Reset</button>
               <button onclick="Auth.deleteStudent('${a.id}')" class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2.5 py-1 rounded-lg hover:bg-red-200 transition-colors">Delete</button>
             </div>
           </div>`;
         }).join('')
       : '<p class="text-sm text-gray-400 py-3">No children yet — click ➕ Add Child to get started.</p>';
   }
+
+  // ── Family leaderboard ────────────────────
+  _renderLeaderboard();
 
   // ── Assignments tab ───────────────────────
   const chSelect = el('pd-assign-chapter');
@@ -631,12 +660,25 @@ function clearScratch(id) {
 }
 
 // ── DASHBOARD ─────────────────────────────────
+function _greeting() {
+  const h = new Date().getHours();
+  if (h < 12) return ['Good morning', '☀️'];
+  if (h < 17) return ['Good afternoon', '🌤️'];
+  return ['Good evening', '🌙'];
+}
+
 function renderDashboard() {
   if (!ACTIVE_STUDENT_ID) return; // guard: no student loaded yet
-  // Child name in welcome banner — comes from active account, not DB
-  const nameEl = document.getElementById('welcome-name');
   const _acct  = (typeof Auth !== 'undefined') && Auth.getActiveAccount();
-  if (nameEl && _acct) nameEl.textContent = _acct.name;
+  const nameEl = document.getElementById('welcome-name');
+  const greetEl = document.getElementById('dashboard-greeting');
+  if (_acct) {
+    if (nameEl) nameEl.textContent = _acct.name;
+    if (greetEl) {
+      const [greet, emoji] = _greeting();
+      greetEl.innerHTML = `${greet}, <span id="welcome-name">${_acct.name}</span>! ${emoji}`;
+    }
+  }
 
   // Show "Subjects" button only when multiple subject packs are registered
   const subjectBtn = document.getElementById('btn-change-subject');
@@ -1804,3 +1846,15 @@ if (pScreen) practiceObserver.observe(pScreen, { attributes: true, attributeFilt
 if (eScreen) examObserver.observe(eScreen, { attributes: true, attributeFilter: ['class'] });
 
 console.log(`✅ PSAC Master loaded. ${STATIC_QUESTIONS.length} static questions across ${CHAPTERS.length} chapters.`);
+
+// ── OFFLINE DETECTION (K) ─────────────────────
+(function _initOffline() {
+  const banner = document.getElementById('offline-banner');
+  if (!banner) return;
+  function _update() {
+    banner.classList.toggle('hidden', navigator.onLine);
+  }
+  window.addEventListener('online',  _update);
+  window.addEventListener('offline', _update);
+  _update(); // set correct state on load
+}());
