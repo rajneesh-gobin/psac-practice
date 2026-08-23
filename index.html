@@ -13,7 +13,7 @@
   </script>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300">
+<body class="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300" style="opacity:0">
 
   <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
 
@@ -326,7 +326,7 @@
         <div id="auth-student-panel">
           <p class="text-white/70 text-sm mb-4">Enter your <b class="text-white">username</b> and <b class="text-white">PIN</b>:</p>
           <div class="space-y-3">
-            <input id="student-username" type="text" maxlength="20" placeholder="Your username (e.g. PAUL)"
+            <input id="student-username" type="text" maxlength="20" placeholder="Your username"
               class="selectable w-full text-center text-xl font-bold bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 uppercase"
               oninput="this.value=this.value.toUpperCase()">
             <div class="relative">
@@ -498,7 +498,7 @@
       <div class="bg-gradient-to-br from-blue-500 via-blue-600 to-purple-700 rounded-2xl p-6 mb-6 text-white shadow-xl relative overflow-hidden">
         <div class="absolute right-0 top-0 text-9xl opacity-10 pointer-events-none select-none">🏆</div>
         <div class="flex items-start justify-between gap-2 mb-1">
-          <h2 id="dashboard-greeting" class="text-2xl font-bold">Welcome back, <span id="welcome-name">Paul</span>! 👋</h2>
+          <h2 id="dashboard-greeting" class="text-2xl font-bold">Welcome! 👋</h2>
           <div class="flex gap-2 shrink-0">
             <button id="btn-change-subject" onclick="showScreen('grade-select')"
               class="hidden text-xs font-semibold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
@@ -514,7 +514,7 @@
             </button>
           </div>
         </div>
-        <p class="opacity-90 text-sm mb-3">Ready to master Grade 5 Maths? Let's go!</p>
+        <p id="dash-subject-tagline" class="opacity-90 text-sm mb-3">Ready to practise? Let's go!</p>
         <div class="flex flex-wrap gap-4 text-sm font-medium">
           <span class="bg-white/20 px-3 py-1 rounded-full">✅ <span id="dash-total-q">0</span> done</span>
           <span class="bg-white/20 px-3 py-1 rounded-full">🎯 <span id="dash-accuracy">0</span>% accuracy</span>
@@ -536,6 +536,15 @@
             </button>
           </div>
         </div>
+      </div>
+
+      <!-- Today's Study Plan (filled by Calendar.renderTodayPlan) -->
+      <div id="dash-today-plan" class="hidden mb-5">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-bold text-gray-800 dark:text-white">📅 Today's Study Plan</h3>
+          <span id="dash-today-date" class="text-xs text-gray-400"></span>
+        </div>
+        <div id="dash-today-entries" class="space-y-2"></div>
       </div>
 
       <div id="assignments-banner" class="hidden bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-6">
@@ -1151,6 +1160,10 @@
           <button onclick="Auth.openPasswordModal()" class="text-xs bg-gray-100 dark:bg-gray-700/60 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-1.5 rounded-full font-semibold transition-colors">
             🔑 Password
           </button>
+          <button onclick="showScreen('calendar')"
+            class="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">
+            📅 Calendar
+          </button>
           <button onclick="Auth.addStudent()"
             class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">
             ➕ Add Child
@@ -1168,9 +1181,9 @@
       <div id="pd-child-card" class="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl p-5 mb-5 text-white flex items-center gap-5 shadow-xl">
         <div class="text-5xl select-none" id="pd-avatar">🧒</div>
         <div class="flex-1">
-          <div class="text-xl font-bold" id="pd-name">Student</div>
-          <div class="text-sm opacity-90" id="pd-level">Level 1 — Beginner</div>
-          <div class="text-xs opacity-75 mt-0.5" id="pd-xp">0 XP</div>
+          <div class="text-xl font-bold" id="pd-name"></div>
+          <div class="text-sm opacity-90" id="pd-level"></div>
+          <div class="text-xs opacity-75 mt-0.5" id="pd-xp"></div>
         </div>
         <div class="flex flex-col gap-1.5 shrink-0">
           <button onclick="Auth.editCurrentStudent()" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition-colors">✏️ Edit / Reset PIN</button>
@@ -1300,6 +1313,9 @@
 
         <!-- Header -->
         <div class="flex items-center gap-3 mb-6">
+          <button onclick="showScreen('dashboard')" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold shrink-0">
+            🏠
+          </button>
           <button id="forum-back-btn" onclick="Forum.back()" class="hidden p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold">
             ← Back
           </button>
@@ -1416,7 +1432,7 @@
       </div>
       <div class="mb-4">
         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Your name</label>
-        <input id="profile-name-input" type="text" maxlength="20" placeholder="e.g. Paul"
+        <input id="profile-name-input" type="text" maxlength="20" placeholder="Display name"
           class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2.5 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
           onkeydown="if(event.key==='Enter') Auth.saveProfile()">
       </div>
@@ -1459,6 +1475,204 @@
     </div>
   </div>
 
+  <!-- ══ CALENDAR SCREEN ══ -->
+  <div id="screen-calendar" class="screen hidden p-4 max-w-2xl mx-auto pb-24">
+
+    <!-- Header -->
+    <div class="flex items-center gap-3 mb-4 flex-wrap">
+      <button onclick="showScreen('parent')" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold">← Back</button>
+      <h2 class="text-xl font-bold text-gray-800 dark:text-white flex-1">📅 Study Calendar</h2>
+      <select id="cal-student-select" onchange="Calendar.setStudent(this.value)"
+        class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+      </select>
+    </div>
+
+    <!-- Action bar -->
+    <div class="flex gap-2 mb-4 flex-wrap">
+      <button onclick="Calendar.showGenModal()"
+        class="bg-purple-500 hover:bg-purple-400 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors shadow-sm">
+        ⚡ Generate Timetable
+      </button>
+      <button onclick="Calendar.showAddEvent()"
+        class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+        + Add Event
+      </button>
+      <button onclick="Calendar.print()"
+        class="ml-auto bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-sm font-semibold px-4 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors">
+        🖨 Print
+      </button>
+    </div>
+
+    <!-- Month nav -->
+    <div class="flex items-center justify-between mb-3">
+      <button onclick="Calendar.prevMonth()" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 font-bold">‹</button>
+      <h3 id="cal-month-title" class="font-bold text-lg text-gray-800 dark:text-white"></h3>
+      <button onclick="Calendar.nextMonth()" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 font-bold">›</button>
+    </div>
+
+    <!-- Grid -->
+    <div id="cal-grid"></div>
+
+    <!-- Legend -->
+    <div class="flex gap-4 text-xs text-gray-400 mt-4 flex-wrap">
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block"></span>Study</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>Exam</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>Holiday</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-gray-400 inline-block"></span>No Study</span>
+    </div>
+  </div>
+
+  <!-- ══ CALENDAR: DAY EVENTS MODAL ══ -->
+  <div id="modal-day-events" class="hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 w-full max-w-sm shadow-2xl max-h-[80vh] flex flex-col">
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="day-events-title" class="font-bold text-gray-800 dark:text-white text-base"></h3>
+        <button onclick="Calendar.closeDayModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+      </div>
+      <div id="day-events-list" class="overflow-y-auto flex-1"></div>
+    </div>
+  </div>
+
+  <!-- ══ CALENDAR: ADD EVENT MODAL ══ -->
+  <div id="modal-add-event" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-gray-800 dark:text-white">Add Event</h3>
+        <button onclick="Calendar.closeAddEvent()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Date</label>
+          <input id="add-event-date" type="date"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Type</label>
+          <select id="add-event-type"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <option value="exam">📝 Exam</option>
+            <option value="holiday">🎉 Holiday / Day Off</option>
+            <option value="blocked">🚫 No Study Today</option>
+            <option value="other">📌 Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Event Name</label>
+          <input id="add-event-label" type="text" maxlength="80" placeholder="e.g. Maths Test, School Holiday"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Notes (optional)</label>
+          <input id="add-event-notes" type="text" maxlength="120" placeholder="Any extra details"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+        </div>
+        <p id="add-event-error" class="hidden text-xs text-red-500"></p>
+      </div>
+
+      <div class="flex gap-3 mt-5">
+        <button onclick="Calendar.closeAddEvent()" class="btn-secondary flex-1 text-sm">Cancel</button>
+        <button onclick="Calendar.saveEvent()" class="bg-purple-500 hover:bg-purple-400 text-white font-semibold flex-1 py-2 rounded-xl text-sm transition-colors">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CALENDAR: GENERATE TIMETABLE MODAL ══ -->
+  <div id="modal-gen-timetable" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-gray-800 dark:text-white text-base">⚡ Generate Study Timetable</h3>
+        <button onclick="Calendar.closeGenModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+      </div>
+
+      <!-- Section: Schedule -->
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Schedule</p>
+      <div class="space-y-3 mb-4">
+        <div class="flex gap-3">
+          <div class="flex-1">
+            <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Start date</label>
+            <input id="gen-start-date" type="date"
+              class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+          </div>
+          <div class="w-24">
+            <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Weeks</label>
+            <input id="gen-weeks" type="number" min="1" max="12" value="4"
+              class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-gray-500 dark:text-gray-400 mb-2">Study days</label>
+          <div class="flex gap-1 flex-wrap">
+            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-0"><span>Sun</span></label>
+            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-1" checked><span>Mon</span></label>
+            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-2" checked><span>Tue</span></label>
+            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-3" checked><span>Wed</span></label>
+            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-4" checked><span>Thu</span></label>
+            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-5" checked><span>Fri</span></label>
+            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-6"><span>Sat</span></label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Section: Subjects & Hours -->
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Subjects & Hours per Week</p>
+      <p class="text-xs text-gray-400 mb-2">Set hours per week per subject. Uncheck to skip a subject.</p>
+      <div id="gen-subject-hours" class="mb-4 border border-gray-200 dark:border-gray-700 rounded-xl p-3 max-h-44 overflow-y-auto"></div>
+
+      <!-- Section: Style -->
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Daily Style</p>
+      <div class="flex gap-3 mb-4">
+        <label class="flex items-center gap-2 text-sm cursor-pointer flex-1 border border-gray-200 dark:border-gray-600 rounded-xl p-3 hover:border-purple-400 transition-colors">
+          <input type="radio" name="gen-style" id="gen-single" checked class="accent-purple-500">
+          <div>
+            <div class="font-semibold text-gray-800 dark:text-white text-xs">One Subject</div>
+            <div class="text-[11px] text-gray-400">Deep focus per day</div>
+          </div>
+        </label>
+        <label class="flex items-center gap-2 text-sm cursor-pointer flex-1 border border-gray-200 dark:border-gray-600 rounded-xl p-3 hover:border-purple-400 transition-colors">
+          <input type="radio" name="gen-style" id="gen-mixed" class="accent-purple-500">
+          <div>
+            <div class="font-semibold text-gray-800 dark:text-white text-xs">Mixed Subjects</div>
+            <div class="text-[11px] text-gray-400">Variety each day</div>
+          </div>
+        </label>
+      </div>
+
+      <p id="gen-error" class="hidden text-xs text-red-500 mb-3"></p>
+
+      <div class="flex gap-3">
+        <button onclick="Calendar.closeGenModal()" class="btn-secondary flex-1 text-sm">Cancel</button>
+        <button id="gen-submit-btn" onclick="Calendar.generateTimetable()"
+          class="bg-purple-500 hover:bg-purple-400 text-white font-semibold flex-1 py-2 rounded-xl text-sm transition-colors">
+          ⚡ Generate Schedule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ REVISION NOTES MODAL ══ -->
+  <div id="modal-revision-notes" class="hidden fixed inset-0 z-[110] flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-700">
+        <div>
+          <div id="notes-subject-label" class="text-xs font-bold text-indigo-500 uppercase tracking-wide mb-0.5"></div>
+          <h3 id="notes-chapter-title" class="font-bold text-gray-800 dark:text-white text-lg"></h3>
+        </div>
+        <button onclick="Calendar.closeNotes()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none ml-3">✕</button>
+      </div>
+      <div id="notes-body" class="overflow-y-auto p-5 space-y-3 flex-1"></div>
+      <div class="p-4 border-t border-gray-100 dark:border-gray-700">
+        <p class="text-xs text-gray-400 text-center">📚 Read carefully, then close and practise from memory.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print-only timetable (hidden from screen, shown only during window.print()) -->
+  <div id="cal-print-view" class="hidden"></div>
+  <style>@media print { body > *:not(#cal-print-view) { display:none !important; } #cal-print-view { display:block !important; } }</style>
+
   <!-- ══ FORMULA MODAL ══ -->
   <div id="formula-modal" class="fixed inset-0 z-50 items-center justify-center" style="display:none;background:rgba(0,0,0,0.5)">
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6">
@@ -1483,10 +1697,18 @@
   <script src="engine/events.js"></script>
   <script src="engine/store.js"></script>
   <!-- Subject packs -->
+  <!-- Grade 5 subjects -->
   <script src="subjects/grade5-maths/_manifest.js"></script>
   <script src="subjects/grade5-science/_manifest.js"></script>
   <script src="subjects/grade5-english/_manifest.js"></script>
+  <script src="subjects/grade5-french/_manifest.js"></script>
+  <script src="subjects/grade5-history/_manifest.js"></script>
+  <!-- Grade 6 subjects -->
   <script src="subjects/grade6-maths/_manifest.js"></script>
+  <script src="subjects/grade6-science/_manifest.js"></script>
+  <script src="subjects/grade6-english/_manifest.js"></script>
+  <script src="subjects/grade6-french/_manifest.js"></script>
+  <script src="subjects/grade6-history/_manifest.js"></script>
   <script src="subjects/grade5-maths/help.js"></script>
   <!-- Question loader — fetches questions from server (production) or local files (file://) -->
   <script src="engine/question_loader.js"></script>
@@ -1498,5 +1720,6 @@
   <!-- Admin panel (loads after auth) -->
   <script src="engine/admin.js"></script>
   <script src="engine/forum.js"></script>
+  <script src="engine/calendar.js"></script>
 </body>
 </html>

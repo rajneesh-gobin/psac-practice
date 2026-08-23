@@ -40,12 +40,24 @@ function _buildContext(buf) {
       explanation: explanation || 'Each cell mirrors its pair across the axis of symmetry.' };
   }
 
+  function makeTF({ id, chapterId, difficulty, subsection, question, answer, hint, explanation }) {
+    return makeMCQ({ id, chapterId, difficulty, subsection, question,
+      options: ['True', 'False'], answer: answer ? 'True' : 'False', hint, explanation });
+  }
+
+  function makeMatch({ id, chapterId, difficulty, subsection, leftItem, correctRight, allRights, hint, explanation }) {
+    const wrongOpts = shuffle((allRights || []).filter(r => r !== correctRight)).slice(0, 3);
+    return makeMCQ({ id, chapterId, difficulty, subsection,
+      question: `What does <b>${leftItem}</b> match to?`,
+      options: [correctRight, ...wrongOpts], answer: correctRight, hint, explanation });
+  }
+
   // STATIC_QUESTIONS.push(...) — collect into buf
   const STATIC_QUESTIONS = {
     push(...qs) { qs.flat().forEach(q => q && buf.push(q)); }
   };
 
-  return { rnd, shuffle, fmt, makeMCQ, makeNum, makeSymmetry, STATIC_QUESTIONS,
+  return { rnd, shuffle, fmt, makeMCQ, makeNum, makeTF, makeMatch, makeSymmetry, STATIC_QUESTIONS,
            'use strict': undefined }; // suppress strict-mode header errors
 }
 

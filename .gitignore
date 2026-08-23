@@ -1,0 +1,9 @@
+# Student books and exam papers — large files, not for version control
+*.pdf
+*.PDF
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

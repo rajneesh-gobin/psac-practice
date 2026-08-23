@@ -59,9 +59,14 @@ const Store = (() => {
     return error ? null : data;
   }
 
-  async function getMyFamily() {
+  async function getMyFamily(parentId) {
     if (!_sb) return null;
-    const { data } = await _sb.from('families').select('*').maybeSingle();
+    // Try RLS-filtered query first; fall back to explicit parent_id filter if provided
+    let { data, error } = await _sb.from('families').select('*').maybeSingle();
+    if ((!data || error) && parentId) {
+      const r2 = await _sb.from('families').select('*').eq('parent_id', parentId).maybeSingle();
+      data = r2.data || null;
+    }
     return data || null;
   }
 

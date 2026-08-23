@@ -115,8 +115,8 @@ const Auth = (() => {
       return;
     }
 
-    // Parent — load family + students
-    _family = await Store.getMyFamily();
+    // Parent — load family + students (pass parent ID as fallback if RLS query returns null)
+    _family = await Store.getMyFamily(_parentUser.id);
     if (_family) {
       _familyStudents = await Store.getFamilyStudents(_family.id);
       _cacheAccountsLocally(_familyStudents);
@@ -667,7 +667,17 @@ const Auth = (() => {
 
   // ── Parent adds/manages children ───────────────
   async function addStudent() {
-    if (!_family) return;
+    if (!_family) {
+      // Family may not have loaded yet — retry with explicit parent ID fallback
+      _family = await Store.getMyFamily(_parentUser?.id);
+      if (!_family && _parentUser) {
+        // Still null — could be a fresh account that skipped setup, create a default family
+        const name = _parentProfile?.full_name || _parentUser.email?.split('@')[0] || 'My Family';
+        _family = await Store.createFamily(_parentUser.id, `${name}'s Family`);
+      }
+      if (!_family) { toast('Could not load family data. Please refresh and try again.', 3000); return; }
+      _familyStudents = await Store.getFamilyStudents(_family.id);
+    }
     if (_familyStudents.length >= 3) { toast('Maximum 3 children per family.', 2500); return; }
     showScreen('add-student');
     if (_el('add-student-title')) _el('add-student-title').textContent = 'Add Child';

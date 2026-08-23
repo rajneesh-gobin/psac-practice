@@ -13,7 +13,6 @@ const CHAPTERS = [
   { id:'geometry',    name:'Geometry & Angles',        icon:'📐', color:'teal',   part:1, examWeight:4 },
   { id:'fractions',   name:'Fractions',                icon:'½',  color:'orange', part:1, examWeight:4 },
   { id:'decimals',    name:'Decimals',                 icon:'•',  color:'amber',  part:1, examWeight:3 },
-  { id:'percentage',  name:'Percentage',               icon:'%',  color:'pink',   part:1, examWeight:3 },
   { id:'powers',      name:'Powers & Exponents',       icon:'²',  color:'red',    part:1, examWeight:2 },
   { id:'average',     name:'Average',                  icon:'📊', color:'green',  part:2, examWeight:2 },
   { id:'ratio',       name:'Ratio & Proportion',       icon:'⚖️', color:'cyan',   part:2, examWeight:3 },
@@ -30,10 +29,10 @@ const CHAPTERS = [
 // ── SYLLABUS ───────────────────────────────────
 const SYLLABUS = {
   numeration:  { subsections: [
-    { id:'place_value',  name:'Place Value (up to millions)' },
+    { id:'place_value',  name:'Place Value (up to 100,000)' },
     { id:'ordering',     name:'Ordering & Comparing Numbers' },
-    { id:'rounding',     name:'Rounding Numbers' },
-    { id:'roman',        name:'Roman Numerals' },
+    { id:'expanded',     name:'Expanded Notation' },
+    { id:'square_types', name:'Types of Numbers (Square Numbers)' },
     { id:'sequences',    name:'Number Sequences & Patterns' },
   ]},
   four_ops:    { subsections: [
@@ -68,12 +67,6 @@ const SYLLABUS = {
     { id:'ordering',     name:'Ordering Decimals' },
     { id:'operations',   name:'Adding & Subtracting Decimals' },
     { id:'conversion',   name:'Fractions ↔ Decimals' },
-  ]},
-  percentage:  { subsections: [
-    { id:'meaning',      name:'What is Percentage?' },
-    { id:'conversion',   name:'Fractions / Decimals ↔ Percentage' },
-    { id:'of_quantity',  name:'Percentage of a Quantity' },
-    { id:'increase',     name:'Percentage Increase & Decrease' },
   ]},
   powers:      { subsections: [
     { id:'notation',     name:'Power / Exponent Notation' },
@@ -182,13 +175,6 @@ const FORMULAS = {
     'Multiply by 10 → move decimal right one place',
     '÷ by 10 → move decimal left one place',
   ]},
-  percentage: { title:'% Percentage', facts:[
-    '% means "per hundred". 45% = 45/100',
-    '50%=½ | 25%=¼ | 75%=¾ | 10%=1/10 | 20%=1/5',
-    'X% of Y = (X ÷ 100) × Y',
-    '% of a number: find 10% first then scale',
-    '% increase = (increase ÷ original) × 100',
-  ]},
   powers: { title:'² Powers & Exponents', facts:[
     '2³ = 2×2×2 = 8 (2 to the power of 3)',
     '10¹=10 | 10²=100 | 10³=1,000 | 10⁴=10,000',
@@ -276,7 +262,6 @@ const BADGES = [
   { id:'time_keeper',    name:'Time Keeper',      icon:'⏰', desc:'Master Time chapter',               cond: (s,c) => c.time && pct(c.time) >= 80 },
   { id:'data_scientist', name:'Data Scientist',   icon:'📈', desc:'Master Graphs & Data',              cond: (s,c) => c.graphs && pct(c.graphs) >= 80 },
   { id:'converter',      name:'Unit Converter',   icon:'🔄', desc:'Master Unit Conversions chapter',     cond: (s,c) => c.conversions && pct(c.conversions) >= 80 },
-  { id:'pct_pro',        name:'Percentage Pro',   icon:'%',  desc:'Master Percentage chapter',           cond: (s,c) => c.percentage && pct(c.percentage) >= 80 },
 ];
 function pct(c) { return c.attempted ? Math.round(c.correct / c.attempted * 100) : 0; }
 

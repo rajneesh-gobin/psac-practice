@@ -16,6 +16,17 @@ function makeMCQ({ id, chapterId, difficulty, subsection, question, options, ans
 function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation }) {
   return { id, chapterId, difficulty, subsection, type: 'numeric', question, answer: String(answer), acceptableAnswers: (acceptableAnswers || [String(answer)]).map(String), hint, explanation };
 }
+function makeTF({ id, chapterId, difficulty, subsection, question, answer, hint, explanation }) {
+  return makeMCQ({ id, chapterId, difficulty, subsection, question,
+    options: ['True', 'False'], answer: answer ? 'True' : 'False', hint, explanation });
+}
+function makeMatch({ id, chapterId, difficulty, subsection, leftItem, otherItems, correctRight, allRights, hint, explanation }) {
+  // Converts one matching pair into an MCQ: "What does X match to?"
+  const wrongOpts = shuffle(allRights.filter(r => r !== correctRight)).slice(0, 3);
+  return makeMCQ({ id, chapterId, difficulty, subsection,
+    question: `What does <b>${leftItem}</b> match to?`,
+    options: [correctRight, ...wrongOpts], answer: correctRight, hint, explanation });
+}
 function makeSymmetry({ id, chapterId, difficulty, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {
   const ans = answer || given.map(([r, c]) => {
     if (axis === 'vertical')   return [r, (cols - 1) - c];

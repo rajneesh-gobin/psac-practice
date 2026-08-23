@@ -92,6 +92,22 @@ let DB = {};   // populated by Auth.init() after student is selected
 
 // ── GRADE / SUBJECT SELECTION ─────────────────
 let SELECTED_GRADE = null;
+let ACTIVE_PACK    = null; // set when student selects a subject; defaults to first non-comingSoon pack
+
+function _activePack() {
+  if (ACTIVE_PACK) return ACTIVE_PACK;
+  if (typeof SUBJECT_PACKS !== 'undefined')
+    return SUBJECT_PACKS.find(p => !p.comingSoon) || SUBJECT_PACKS[0] || null;
+  return null;
+}
+
+function _activeSubjectLabel() {
+  const pack  = _activePack();
+  const acct  = (typeof Auth !== 'undefined') ? Auth.getActiveAccount() : null;
+  const grade = acct?.grade || pack?.grade || 5;
+  const name  = pack?.name  || 'Maths';
+  return { grade, name };
+}
 
 // ── ASSIGNMENT MODE ───────────────────────────
 let ASSIGNMENT_MODE         = false;
@@ -110,14 +126,16 @@ function applyTheme(t) {
   t = t || 'light';
   document.documentElement.classList.toggle('dark', t === 'dark');
   document.getElementById('theme-icon').textContent = t === 'dark' ? '☀️' : '🌙';
+  try { localStorage.setItem('mm_global_theme', t); } catch(e) {}
   if (ACTIVE_STUDENT_ID) { DB.theme = t; save(DB); }
   ['scratchpad-exam', 'scratchpad-practice'].forEach(id => {
     const c = document.getElementById(id);
     if (c && c._ctx) c._ctx.strokeStyle = t === 'dark' ? '#fff' : '#1e293b';
   });
 }
-document.getElementById('theme-toggle').addEventListener('click', () => applyTheme((DB.theme || 'light') === 'dark' ? 'light' : 'dark'));
-applyTheme('light'); // default until student loads their saved theme
+document.getElementById('theme-toggle').addEventListener('click', () => applyTheme((DB.theme || localStorage.getItem('mm_global_theme') || 'light') === 'dark' ? 'light' : 'dark'));
+// Restore last-used theme immediately (before auth resolves)
+applyTheme(localStorage.getItem('mm_global_theme') || 'light');
 
 // ── TOAST ─────────────────────────────────────
 let toastTimer;
@@ -172,7 +190,8 @@ function showScreen(id) {
   if (id === 'student-select')  renderStudentSelect();
   if (id === 'grade-select')    renderGradeSelect();
   if (id === 'teacher' && typeof TeacherMode !== 'undefined') TeacherMode.render();
-  if (id === 'forum'   && typeof Forum       !== 'undefined') Forum.render();
+  if (id === 'forum'     && typeof Forum     !== 'undefined') Forum.render();
+  if (id === 'calendar'  && typeof Calendar  !== 'undefined') Calendar.render();
 }
 
 // back buttons
@@ -801,6 +820,12 @@ function _greeting() {
 function renderDashboard() {
   if (!ACTIVE_STUDENT_ID) return; // guard: no student loaded yet
   const _acct  = (typeof Auth !== 'undefined') && Auth.getActiveAccount();
+
+  // Today's study plan (async, non-blocking)
+  if (typeof Calendar !== 'undefined') {
+    const grade = _acct?.grade || 5;
+    Calendar.renderTodayPlan(ACTIVE_STUDENT_ID, grade);
+  }
   const nameEl = document.getElementById('welcome-name');
   const greetEl = document.getElementById('dashboard-greeting');
   if (_acct) {
@@ -816,6 +841,13 @@ function renderDashboard() {
   if (subjectBtn) {
     const multiSubject = typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1;
     subjectBtn.classList.toggle('hidden', !multiSubject);
+  }
+
+  // Update tagline with student's actual grade + active subject
+  const taglineEl = document.getElementById('dash-subject-tagline');
+  if (taglineEl) {
+    const { grade, name } = _activeSubjectLabel();
+    taglineEl.textContent = `Ready to master Grade ${grade} ${name}? Let's go!`;
   }
 
   // Stats bar
@@ -1040,7 +1072,7 @@ function generatePrintablePaper() {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Grade 5 Mathematics — Mock Exam ${year}</title>
+<title>Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} — Mock Exam ${year}</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #111; padding: 20px; background: #fff; }
@@ -1096,7 +1128,7 @@ function generatePrintablePaper() {
   <div class="header-box">
     <div class="ministry">Republic of Mauritius — Ministry of Education</div>
     <div class="title">End-of-Year Assessment ${year}</div>
-    <div class="subtitle">Mathematics &nbsp;|&nbsp; Grade 5</div>
+    <div class="subtitle">${_activeSubjectLabel().name} &nbsp;|&nbsp; Grade ${_activeSubjectLabel().grade}</div>
     <div class="meta">
       <span><b>Duration:</b> 1 hour 30 minutes</span>
       <span><b>Total Marks:</b> 100</span>
@@ -2029,6 +2061,7 @@ function renderSubjectSelect() {
 window.selectSubject = function(id) {
   const pack = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === id);
   if (pack && pack.comingSoon) { toast(`${pack.name} Grade ${pack.grade} is coming soon! 🚀`, 2500); return; }
+  if (pack) ACTIVE_PACK = pack;
   showScreen('dashboard');
 };
 
