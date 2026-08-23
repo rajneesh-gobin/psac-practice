@@ -198,7 +198,8 @@ const Auth = (() => {
   }
 
   // ── Login a student (after PIN verified) ──────
-  async function _loginStudentRow(studentRow) {
+  // navigate=false skips showScreen so the caller controls where to go (used by pdSwitchStudent)
+  async function _loginStudentRow(studentRow, { navigate = true } = {}) {
     const sess = {
       id:             studentRow.id,
       displayName:    studentRow.display_name,
@@ -233,11 +234,13 @@ const Auth = (() => {
     }
 
     // Skip grade select — parent already set the grade; go straight to subject picker
-    if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
-      SELECTED_GRADE = studentGrade;
-      showScreen('subject-select');
-    } else {
-      showScreen('dashboard');
+    if (navigate) {
+      if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
+        SELECTED_GRADE = studentGrade;
+        showScreen('subject-select');
+      } else {
+        showScreen('dashboard');
+      }
     }
   }
 
@@ -908,10 +911,11 @@ const Auth = (() => {
     });
   }
 
-  function pdSwitchStudent(id) {
+  async function pdSwitchStudent(id) {
     const student = _familyStudents.find(s => s.id === id);
     if (student) {
-      _loginStudentRow(student);
+      // navigate:false so _loginStudentRow loads data only — we control where to go
+      await _loginStudentRow(student, { navigate: false });
     } else {
       loginStudent(id);
     }
