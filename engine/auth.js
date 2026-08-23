@@ -122,10 +122,12 @@ const Auth = (() => {
       _cacheAccountsLocally(_familyStudents);
     }
 
+    applyTheme('dark');
     _openParentDashboard();
   }
 
   function _loadTeacherDashboard() {
+    applyTheme('dark');
     showScreen('teacher');
     if (typeof TeacherMode !== 'undefined') TeacherMode.render();
   }
@@ -669,7 +671,7 @@ const Auth = (() => {
     _family           = null;
     _familyStudents   = [];
     if (_sb) await _sb.auth.signOut();
-    showScreen('auth');
+    showScreen('landing');
   }
 
   // ── Parent adds/manages children ───────────────
@@ -730,7 +732,7 @@ const Auth = (() => {
       // Create mode — PIN is required
       if (!/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
       const student = await Store.createStudent(_family.id, {
-        username: uname, displayName: name, avatar: _addAvatar, grade,
+        username: uname, displayName: name, avatar: _addAvatar, grade, pin,
       });
       if (!student || student._error) {
         const err = student?._error;
@@ -819,6 +821,11 @@ const Auth = (() => {
     Store.clearStudentSession();
     _activeAccount    = null;
     ACTIVE_STUDENT_ID = null;
+    showScreen('landing');
+  }
+
+  function switchToStudentSelect() {
+    // From parent/teacher dashboard → show the student login screen
     showScreen('auth');
     setRole('student');
   }
@@ -993,7 +1000,7 @@ const Auth = (() => {
     addStudent, saveNewStudent, deleteStudent, editStudent, editCurrentStudent,
     _pickAddAvatar,
     // Session
-    loginStudent, logout, switchStudent,
+    loginStudent, logout, switchStudent, switchToStudentSelect,
     // Parent mode
     enterParentMode, exitParentMode, resetProgress,
     pdTab, pdSwitchStudent,

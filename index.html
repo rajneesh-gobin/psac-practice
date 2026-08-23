@@ -817,6 +817,7 @@
                 </div>
               </div>
               <button id="practice-hint-btn" class="btn-ghost text-sm">💡 Hint</button>
+              <button id="practice-report-btn" onclick="openReportModal()" title="Report a problem with this question" class="btn-ghost text-sm text-gray-400 hover:text-red-500">🚩</button>
             </div>
             <div id="practice-hint-box" class="hidden mb-3 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl text-sm">
               <span class="font-semibold text-amber-700 dark:text-amber-400">💡 Strategy: </span>
@@ -918,6 +919,8 @@
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📚 Content</button>
         <button onclick="AdminPanel.showTab('stats')" data-tab="stats"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📊 Stats</button>
+        <button onclick="AdminPanel.showTab('reports')" data-tab="reports"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🚩 Reports</button>
       </div>
 
       <!-- Members tab -->
@@ -984,12 +987,32 @@
         </div>
         <button onclick="AdminPanel.loadStats()" class="w-full py-2 bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold rounded-xl transition-colors">↻ Refresh Stats</button>
       </div>
+
+      <!-- ── Reports tab ── -->
+      <div id="admin-tab-reports" class="admin-tab-panel hidden">
+        <div class="flex justify-between items-center mb-3">
+          <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Question reports from students</p>
+          <button onclick="AdminPanel.loadReports()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
+        </div>
+        <div id="admin-reports-list">
+          <p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6">Click Refresh to load reports.</p>
+        </div>
+      </div>
     </div>
 
     <div id="screen-teacher" class="screen hidden">
-      <div class="flex justify-between items-center mb-5">
+      <div class="flex justify-between items-center mb-5 flex-wrap gap-2">
         <h2 class="text-2xl font-bold text-gray-800 dark:text-white">👩‍🏫 Teacher Dashboard</h2>
-        <button onclick="TeacherMode.exit()" class="back-btn">← Exit</button>
+        <div class="flex gap-2 flex-wrap">
+          <button onclick="Auth.switchToStudentSelect()"
+            class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 px-3 py-1.5 rounded-full font-semibold transition-colors">
+            👦 Student View
+          </button>
+          <button onclick="Auth.logout()"
+            class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-colors">
+            🚪 Logout
+          </button>
+        </div>
       </div>
 
       <!-- Tabs -->
@@ -1167,6 +1190,10 @@
           <button onclick="Auth.addStudent()"
             class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">
             ➕ Add Child
+          </button>
+          <button onclick="Auth.switchToStudentSelect()"
+            class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">
+            👦 Student View
           </button>
           <button onclick="Auth.logout()"
             class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">
@@ -1388,6 +1415,23 @@
     </div>
 
   </main>
+
+  <!-- ══ REPORT QUESTION MODAL ══ -->
+  <div id="modal-report" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-2xl">🚩</span>
+        <h3 class="font-bold text-gray-800 dark:text-white text-lg">Report a Problem</h3>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Tell us what's wrong with this question. An admin will review it.</p>
+      <textarea id="report-message" rows="4" maxlength="500" placeholder="Describe the issue (e.g. wrong answer, typo, unclear question…)"
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-400 mb-4 resize-none"></textarea>
+      <div class="flex gap-3">
+        <button onclick="closeReportModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white rounded-xl text-sm font-semibold transition-colors">Cancel</button>
+        <button onclick="submitReport()" class="flex-1 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-semibold transition-colors">Send Report</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ══ HELP MODAL ══ -->
   <div id="help-modal" class="fixed inset-0 z-50 items-center justify-center overflow-y-auto" style="display:none;background:rgba(0,0,0,0.6)">

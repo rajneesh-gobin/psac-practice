@@ -2101,3 +2101,47 @@ console.log(`✅ PSAC Master loaded. ${STATIC_QUESTIONS.length} static questions
   window.addEventListener('offline', _update);
   _update(); // set correct state on load
 }());
+
+// ── Report question modal ──────────────────────
+function openReportModal() {
+  const modal = document.getElementById('modal-report');
+  if (modal) {
+    document.getElementById('report-message').value = '';
+    modal.classList.remove('hidden');
+  }
+}
+
+function closeReportModal() {
+  const modal = document.getElementById('modal-report');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function submitReport() {
+  const msg = (document.getElementById('report-message')?.value || '').trim();
+  if (!msg) { toast('Please describe the issue first.', 2000); return; }
+
+  const q = S.practice?.qs?.[S.practice?.idx];
+  if (!q) { closeReportModal(); return; }
+
+  const btn = document.querySelector('#modal-report .bg-red-500');
+  if (btn) btn.textContent = 'Sending…';
+
+  // Strip HTML tags from question for readable report text
+  const tmpDiv = document.createElement('div');
+  tmpDiv.innerHTML = q.question;
+  const questionText = tmpDiv.textContent || tmpDiv.innerText || q.question;
+
+  const ok = await Store.reportQuestion(
+    q.id,
+    questionText.slice(0, 300),
+    msg,
+    typeof ACTIVE_STUDENT_ID !== 'undefined' ? ACTIVE_STUDENT_ID : null
+  );
+
+  closeReportModal();
+  if (ok) {
+    toast('Report sent — thank you! 🙏', 2500);
+  } else {
+    toast('Could not send report. Check your connection.', 3000);
+  }
+}

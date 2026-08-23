@@ -38,6 +38,7 @@ const AdminPanel = (() => {
     });
     const panel = document.getElementById(`admin-tab-${name}`);
     if (panel) panel.classList.remove('hidden');
+    if (name === 'reports') loadReports();
   }
 
   // ── Members ────────────────────────────────
@@ -354,5 +355,27 @@ const AdminPanel = (() => {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats };
+  // ── Question Reports tab ───────────────────────
+  async function loadReports() {
+    const el = document.getElementById('admin-reports-list');
+    if (el) el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
+    const reports = await Store.loadReports();
+    if (!reports.length) {
+      if (el) el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">No reports yet.</p>';
+      return;
+    }
+    if (el) el.innerHTML = reports.map(r => `
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3">
+        <div class="flex justify-between items-start gap-2 mb-2">
+          <span class="text-xs font-mono text-gray-400">${_esc(r.question_id || '—')}</span>
+          <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">${_esc(r.status || 'open')}</span>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 italic">"${_esc((r.question_text || '').slice(0, 120))}${(r.question_text||'').length > 120 ? '…' : ''}"</p>
+        <p class="text-sm text-gray-800 dark:text-white font-semibold">${_esc(r.message || '—')}</p>
+        <p class="text-xs text-gray-400 mt-1">${new Date(r.created_at).toLocaleString()}</p>
+      </div>
+    `).join('');
+  }
+
+  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports };
 })();

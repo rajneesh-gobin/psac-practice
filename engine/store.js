@@ -220,6 +220,26 @@ const Store = (() => {
     return 'stu_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
   }
 
+  // ── Question reports ──────────────────────────
+  async function reportQuestion(questionId, questionText, message, studentId) {
+    if (!_sb) return false;
+    const { error } = await _sb.from('question_reports').insert({
+      question_id:   questionId,
+      question_text: (questionText || '').slice(0, 500),
+      message:       (message || '').trim().slice(0, 1000),
+      student_id:    studentId || null,
+      status:        'open',
+    });
+    return !error;
+  }
+
+  async function loadReports() {
+    if (!_sb) return [];
+    const { data } = await _sb.from('question_reports')
+      .select('*').order('created_at', { ascending: false }).limit(100);
+    return data || [];
+  }
+
   return {
     // Auth session
     saveStudentSession, getStudentSession, clearStudentSession,
@@ -236,5 +256,7 @@ const Store = (() => {
     // mm_data (teacher + global settings)
     getGlobalSettings, mmGet, mmSet,
     generateId,
+    // Question reports
+    reportQuestion, loadReports,
   };
 })();
