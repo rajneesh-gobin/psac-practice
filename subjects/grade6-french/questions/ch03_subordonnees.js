@@ -1,80 +1,80 @@
 'use strict';
-// Grade 6 French — Chapter: Les Propositions Subordonnées
+// Grade 6 French — Chapitre : Les Propositions Subordonnées
 // IDs format: g6fr-sub-NNN
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-sub-001', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'Complete with the correct relative pronoun: "L\'homme ___ chante est mon père."',
+    question:'Complétez avec le bon pronom relatif : "L\'homme ___ chante est mon père."',
     options:['que','dont','où','qui'],
     answer:'qui',
-    hint:'"Qui" = subject of the relative clause (it replaces the subject). "Que" = object.',
-    explanation:'"L\'homme <b>qui</b> chante est mon père." — <b>Qui</b> is the subject of the relative clause (qui chante = who sings). Use qui when the relative pronoun is the SUBJECT of the clause. Use que when it is the OBJECT.' }),
+    hint:'"qui" remplace le sujet de la proposition subordonnée.',
+    explanation:'"L\'homme <b>qui</b> chante est mon père." — <b>qui</b> = sujet de la relative. Règle : <b>qui</b> (sujet), <b>que/qu\'</b> (objet direct), <b>dont</b> (de + nom), <b>où</b> (lieu ou temps).' }),
 
   makeMCQ({ id:'g6fr-sub-002', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'Complete: "Le livre ___ je lis est intéressant."',
-    options:['qui','dont','où','que'],
+    question:'Complétez : "Le livre ___ je lis est intéressant."',
+    options:['qui','dont','que','où'],
     answer:'que',
-    hint:'"Je lis" already has a subject (je). The relative pronoun is the OBJECT of the verb lire.',
-    explanation:'"Le livre <b>que</b> je lis est intéressant." — <b>Que</b> is the object of the relative clause (je lis le livre → le livre que je lis). Note: que becomes qu\' before a vowel: "le film qu\'il regarde".' }),
+    hint:'"je lis" a déjà un sujet (je). Le pronom remplace l\'objet direct.',
+    explanation:'"Le livre <b>que</b> je lis est intéressant." — <b>que</b> (ou <b>qu\'</b> devant voyelle) remplace l\'<b>objet direct</b>. Le sujet de "je lis" est "je", donc on n\'utilise pas "qui".' }),
 
   makeMCQ({ id:'g6fr-sub-003', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'Complete: "C\'est la ville ___ je suis né."',
+    question:'Complétez : "La ville ___ j\'habite est très belle."',
     options:['qui','que','dont','où'],
     answer:'où',
-    hint:'"Où" replaces a place or a time expression in a relative clause.',
-    explanation:'"C\'est la ville <b>où</b> je suis né." — <b>Où</b> = where / in which, replacing a place. It can also replace a time: "le jour où je suis arrivé" (the day when I arrived).' }),
+    hint:'"où" remplace un lieu ou un moment.',
+    explanation:'"La ville <b>où</b> j\'habite est très belle." — <b>où</b> remplace un <b>lieu</b> ou un <b>moment</b>. Exemples : "le jour où", "la maison où", "le pays où".' }),
 
   makeMCQ({ id:'g6fr-sub-004', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'Complete: "C\'est le professeur ___ j\'ai parlé hier."',
-    options:['qui','que','dont','où'],
+    question:'Complétez : "C\'est un auteur ___ j\'admire le talent."',
+    options:['que','dont','qui','où'],
     answer:'dont',
-    hint:'"Dont" replaces "de + noun/pronoun". "Parler de quelqu\'un" → "dont".',
-    explanation:'"C\'est le professeur <b>dont</b> j\'ai parlé hier." — <b>Dont</b> replaces "de + noun": "j\'ai parlé du professeur" → "le professeur dont j\'ai parlé". Dont is also used with: avoir besoin de, avoir peur de, être content de.' }),
+    hint:'"dont" = de + pronom. J\'admire le talent de cet auteur.',
+    explanation:'"C\'est un auteur <b>dont</b> j\'admire le talent." — <b>dont</b> remplace "de + nom" : "j\'admire <b>le talent de cet auteur</b>". On utilise "dont" après les verbes qui se construisent avec "de" (parler de, avoir besoin de, être fier de…).' }),
 
   makeTF({ id:'g6fr-sub-005', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'In indirect speech in French, the present tense shifts to the imparfait.',
+    question:'Dans le discours indirect, le présent devient l\'imparfait quand le verbe principal est au passé.',
     answer:true,
-    hint:'Think: "Je suis fatigué." → Il a dit qu\'il ___.',
-    explanation:'<b>Vrai (True).</b> In indirect speech: présent → imparfait. "Je suis fatigué." → "Il a dit qu\'il <b>était</b> fatigué." Other shifts: passé composé → plus-que-parfait, futur → conditionnel.' }),
+    hint:'Exemple : "Je suis fatigué." → Il a dit qu\'il ___ fatigué.',
+    explanation:'<b>Vrai.</b> Dans le discours indirect au passé : présent → <b>imparfait</b>. "Je suis fatigué." → Il a dit qu\'il <b>était</b> fatigué. Autres changements : passé composé → plus-que-parfait ; futur → conditionnel.' }),
 
   makeMCQ({ id:'g6fr-sub-006', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'Report: Il a dit : "Je viendrai demain."',
-    options:[
-      'Il a dit qu\'il viendra demain.',
-      'Il a dit qu\'il venait le lendemain.',
-      'Il a dit qu\'il viendrait le lendemain.',
-      'Il a dit il viendrait demain.'
-    ],
-    answer:'Il a dit qu\'il viendrait le lendemain.',
-    hint:'Futur → conditionnel in reported speech. "Demain" → "le lendemain".',
-    explanation:'"<b>Il a dit qu\'il viendrait le lendemain.</b>" — In indirect speech: futur → <b>conditionnel</b> (viendra → viendrait). Time expressions shift: demain → le lendemain. Note: "que" is required before the reported clause.' }),
+    question:'Mettez au discours indirect : Marie dit : "Je viendrai demain." → Marie dit qu\'elle ___.',
+    options:['viendra demain','viendrait le lendemain','vient demain','venait le lendemain'],
+    answer:'viendrait le lendemain',
+    hint:'Verbe principal au présent → … Mais ici : "Marie dit" (présent), donc le futur peut rester futur. Attention : choisissez selon le contexte de concordance.',
+    explanation:'Si "Marie dit" (présent), le futur peut rester : "Marie dit qu\'elle <b>viendra le lendemain</b>." Mais si c\'est au passé ("Marie a dit"), le futur → conditionnel : "Marie a dit qu\'elle <b>viendrait le lendemain</b>". Ici le seul choix correct proposé est "viendrait le lendemain".' }),
 
   makeMCQ({ id:'g6fr-sub-007', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'Which connector expresses CAUSE?',
+    question:'Quel connecteur exprime la CAUSE ?',
     options:['cependant','bien que','parce que','donc'],
     answer:'parce que',
-    hint:'"Parce que" answers the question "pourquoi ?" (why?).',
-    explanation:'"<b>Parce que</b>" expresses cause/reason. Other causal connectors: <b>car, puisque, comme</b>. "Cependant" = however (concession). "Bien que" = although (concession + subjunctive). "Donc" = therefore (consequence).' }),
+    hint:'"Parce que" répond à la question "Pourquoi ?".',
+    explanation:'"<b>Parce que</b>" exprime la cause. Exemples : "Il est absent <b>parce qu\'il</b> est malade." Autres connecteurs de cause : <b>car, puisque, comme</b>. Distinguer : cause (parce que) ≠ conséquence (donc, par conséquent) ≠ concession (bien que, cependant).' }),
 
-  makeMCQ({ id:'g6fr-sub-008', chapterId:'g6fr-subordonnees', difficulty:1,
-    question:'Complete: "Il a demandé ___ j\'étais prêt."',
-    options:['que','si','parce que','comme'],
-    answer:'si',
-    hint:'This is indirect speech for a yes/no question. Use "si" (if/whether).',
-    explanation:'"Il a demandé <b>si</b> j\'étais prêt." — In indirect speech, yes/no questions use <b>si</b> (= whether): "Es-tu prêt?" → "Il a demandé si j\'étais prêt." Tense shift: es (présent) → étais (imparfait).' }),
+  makeMCQ({ id:'g6fr-sub-008', chapterId:'g6fr-subordonnees', difficulty:2,
+    question:'Complétez : "Il a réussi ___ il a beaucoup travaillé."',
+    options:['bien que','cependant','car','pourtant'],
+    answer:'car',
+    hint:'"car" introduit une cause, comme "parce que".',
+    explanation:'"Il a réussi <b>car</b> il a beaucoup travaillé." — <b>car</b> exprime la cause (= parce que). Différence : "parce que" peut commencer une phrase, "car" ne peut pas commencer une phrase et ne s\'utilise pas après une virgule en début de réponse.' }),
 
   makeTF({ id:'g6fr-sub-009', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'"Qui" and "que" can always be used interchangeably in relative clauses.',
+    question:'"Bien que" est suivi de l\'indicatif.',
     answer:false,
-    hint:'One is a subject pronoun, the other is an object pronoun — they serve different grammatical roles.',
-    explanation:'<b>Faux (False).</b> <b>Qui</b> = subject of the relative clause. <b>Que</b> = object of the relative clause. They cannot be interchanged: "L\'homme qui parle" (who speaks — subject) vs "L\'homme que je vois" (whom I see — object).' }),
+    hint:'"Bien que" est un connecteur de concession — à quel mode le fait-il suivre ?',
+    explanation:'<b>Faux.</b> "Bien que" est toujours suivi du <b>subjonctif</b> : "Bien qu\'il <b>soit</b> fatigué, il continue." Autres conjonctions + subjonctif : pour que, avant que, à moins que. Connecteurs + indicatif : parce que, car, puisque, comme.' }),
 
   makeMCQ({ id:'g6fr-sub-010', chapterId:'g6fr-subordonnees', difficulty:2,
-    question:'Complete: "C\'est l\'auteur ___ les romans sont célèbres."',
-    options:['que','qui','dont','où'],
-    answer:'dont',
-    hint:'"Dont" is used here to express possession (les romans de l\'auteur).',
-    explanation:'"C\'est l\'auteur <b>dont</b> les romans sont célèbres." — <b>Dont</b> replaces "de + noun" and shows possession: "les romans de l\'auteur" → "l\'auteur dont les romans sont célèbres". This is similar to "whose" in English: "the author whose novels are famous".' })
+    question:'Transformez en discours indirect : Paul demande : "Est-ce que tu as faim ?" → Paul demande ___.',
+    options:[
+      'qu\'il a faim',
+      'si tu as faim',
+      'si j\'ai faim',
+      'si elle a faim'
+    ],
+    answer:'si j\'ai faim',
+    hint:'Les questions avec "est-ce que" → "si" dans le discours indirect. Le "tu" de Paul devient "je" du point de vue de la personne interrogée.',
+    explanation:'Paul demande <b>si j\'ai faim</b>. — Les questions oui/non (est-ce que…) → <b>si</b> dans le discours indirect. Le pronom change selon la perspective : "tu" (Paul parle à moi) → "je" (moi, celui qui rapporte). Si le verbe principal est au passé : "Paul a demandé si j\'<b>avais</b> faim" (imparfait).' })
 
 );

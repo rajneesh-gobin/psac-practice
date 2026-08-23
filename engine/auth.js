@@ -642,7 +642,14 @@ const Auth = (() => {
       username: childUser, displayName: childName,
       avatar: _setupAvatar, grade: childGrade, pin: childPin,
     });
-    if (!student) { toast('Error creating student. Username may already exist.', 3000); return; }
+    if (!student || student._error) {
+      const err = student?._error;
+      const msg = (err?.code === '23505')
+        ? 'That username is already taken. Please choose another.'
+        : (err?.message || 'Error creating student account. Check the browser console.');
+      toast(msg, 3500);
+      return;
+    }
 
     _familyStudents = [student];
     _cacheAccountsLocally(_familyStudents);
@@ -725,7 +732,15 @@ const Auth = (() => {
       const student = await Store.createStudent(_family.id, {
         username: uname, displayName: name, avatar: _addAvatar, grade,
       });
-      if (!student) { toast('Username already taken in this family.', 2500); return; }
+      if (!student || student._error) {
+        const err = student?._error;
+        // PostgreSQL unique violation code = 23505
+        const msg = (err?.code === '23505')
+          ? 'Username already taken in this family.'
+          : (err?.message || 'Could not create child account. Check the browser console for details.');
+        toast(msg, 3500);
+        return;
+      }
       await _setStudentPin(student.id, pin);
       toast('Child added! 🎉', 2000);
     }

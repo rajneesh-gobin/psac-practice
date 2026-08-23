@@ -64,7 +64,7 @@ const Store = (() => {
     // Try RLS-filtered query first; fall back to explicit parent_id filter if provided
     let { data, error } = await _sb.from('families').select('*').maybeSingle();
     if ((!data || error) && parentId) {
-      const r2 = await _sb.from('families').select('*').eq('parent_id', parentId).maybeSingle();
+      const r2 = await _sb.from('families').select('*').eq('owner_id', parentId).maybeSingle();
       data = r2.data || null;
     }
     return data || null;
@@ -73,7 +73,7 @@ const Store = (() => {
   async function createFamily(parentId, familyName) {
     if (!_sb) return null;
     const { data, error } = await _sb.from('families')
-      .insert({ parent_id: parentId, family_name: familyName })
+      .insert({ owner_id: parentId, family_name: familyName })
       .select().single();
     return error ? null : data;
   }
@@ -103,7 +103,8 @@ const Store = (() => {
     // pin only stored directly in local-dev fallback; production uses set-pin function
     if (pin) row.pin = pin;
     const { data, error } = await _sb.from('students').insert(row).select().single();
-    return error ? null : data;
+    if (error) { console.error('[Store.createStudent]', error); return { _error: error }; }
+    return data;
   }
 
   async function updateStudent(studentId, updates) {

@@ -1,96 +1,91 @@
 'use strict';
-// Grade 5 French — Chapter: Grammaire Essentielle
+// Grade 5 French — Chapitre : Grammaire Essentielle
 // IDs format: g5fr-gr-NNN
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-gr-001', chapterId:'fr-grammaire', difficulty:1,
-    question:'How do you make a sentence NEGATIVE in French?',
+    question:'Comment forme-t-on la NÉGATION en français ?',
     options:[
-      'Put "pas" before the verb',
-      'Put "ne" before the verb and "pas" after it',
-      'Put "non" at the start of the sentence',
-      'Change the verb to its negative form'
+      'On met "pas" avant le verbe',
+      'On met "ne" avant le verbe et "pas" après',
+      'On met "non" au début de la phrase',
+      'On change le verbe à sa forme négative'
     ],
-    answer:'Put "ne" before the verb and "pas" after it',
-    hint:'Think of the phrase "ne...pas" as a bracket around the verb.',
-    explanation:'French negation wraps the verb: subject + <b>ne</b> + verb + <b>pas</b>. Example: "Je mange" → "Je <b>ne</b> mange <b>pas</b>." Before a vowel: ne → n\': "Il n\'aime pas." In spoken French, the "ne" is often dropped, but in writing, include both.' }),
+    answer:'On met "ne" avant le verbe et "pas" après',
+    hint:'La négation encadre le verbe : ____ + verbe + ____.',
+    explanation:'La négation française encadre le verbe : sujet + <b>ne</b> + verbe + <b>pas</b>. Exemple : "Je mange" → "Je <b>ne</b> mange <b>pas</b>." Devant voyelle : ne → n\' : "Il <b>n\'</b>aime pas."' }),
 
   makeMCQ({ id:'g5fr-gr-002', chapterId:'fr-grammaire', difficulty:1,
-    question:'Make this sentence negative: "Elle parle français."',
+    question:'Mettez cette phrase à la forme négative : "Elle parle français."',
     options:[
       'Elle pas parle français.',
       'Elle ne parle pas français.',
-      'Ne elle parle pas français.',
-      'Elle parle ne pas français.'
+      'Elle parle ne pas français.',
+      'Non elle parle français.'
     ],
     answer:'Elle ne parle pas français.',
-    hint:'ne goes before the verb, pas goes after.',
-    explanation:'"<b>Elle ne parle pas français.</b>" — The verb "parle" is wrapped in ne...pas. Word order: Elle + <b>ne</b> + parle + <b>pas</b> + français.' }),
+    hint:'Placez "ne" avant "parle" et "pas" après.',
+    explanation:'"<b>Elle ne parle pas français.</b>" — La structure négative est : sujet + <b>ne</b> + verbe + <b>pas</b> + reste. Si le verbe commence par une voyelle : "Il <b>n\'</b>aime pas."' }),
 
   makeMCQ({ id:'g5fr-gr-003', chapterId:'fr-grammaire', difficulty:2,
-    question:'Which question form is CORRECT in French?',
+    question:'Quelle est la forme correcte pour poser une question avec "est-ce que" ?',
     options:[
-      'Tu parles français ?',
-      'Est-ce que tu parles français ?',
-      'Parles-tu français ?',
-      'All three are correct ways to ask a question.'
+      '"Tu aimes le chocolat ?" (intonation montante seulement)',
+      '"Est-ce que tu aimes le chocolat ?"',
+      '"Aimes tu le chocolat ?"',
+      '"Tu aimes-tu le chocolat ?"'
     ],
-    answer:'All three are correct ways to ask a question.',
-    hint:'French has multiple ways to form questions — informal, standard, and formal inversion.',
-    explanation:'In French, there are three ways to ask a question: (1) <b>Rising intonation</b>: "Tu parles français?" (informal spoken). (2) <b>Est-ce que</b>: "Est-ce que tu parles français?" (standard written). (3) <b>Inversion</b>: "Parles-tu français?" (formal/written). All three are correct.' }),
+    answer:'"Est-ce que tu aimes le chocolat ?"',
+    hint:'"Est-ce que" se place au début de la question, avant le sujet.',
+    explanation:'"<b>Est-ce que</b> tu aimes le chocolat ?" — "Est-ce que" est la façon la plus facile de poser une question. On garde l\'ordre sujet + verbe. Les trois façons : 1) intonation montante, 2) est-ce que + sujet + verbe, 3) inversion verbe-sujet : "Aimes-<b>tu</b> le chocolat ?"' }),
 
   makeMCQ({ id:'g5fr-gr-004', chapterId:'fr-grammaire', difficulty:2,
-    question:'Complete: "Le chat est ___ la table." (The cat is UNDER the table.)',
+    question:'Complétez avec la bonne préposition : "Le chat est ___ la table." (sous)',
     options:['sur','dans','sous','devant'],
     answer:'sous',
-    hint:'Think of the positions: sur=on top, sous=below, dans=inside, devant=in front.',
-    explanation:'"Le chat est <b>sous</b> la table." — Prepositions of place: <b>sous</b> (under), sur (on), dans (in), devant (in front of), derrière (behind), entre (between), à côté de (next to), en face de (opposite).' }),
+    hint:'"Sous" = under/beneath en anglais.',
+    explanation:'"Le chat est <b>sous</b> la table." — Les prépositions de lieu : <b>sur</b> (on/above), <b>sous</b> (under), <b>dans</b> (in/inside), <b>devant</b> (in front of), <b>derrière</b> (behind), <b>entre</b> (between), <b>à côté de</b> (next to).' }),
 
   makeMCQ({ id:'g5fr-gr-005', chapterId:'fr-grammaire', difficulty:2,
-    question:'Choose the correct partitive article: "Elle boit ___ eau." (She drinks some water.)',
-    options:['du','de la','des','de l\''],
-    answer:"de l'",
-    hint:'Eau (water) is feminine and begins with a vowel.',
-    explanation:'"Elle boit <b>de l\'</b>eau." — Partitive articles (some): du (m. sg: du pain), de la (f. sg: de la limonade), <b>de l\'</b> (before vowel/silent h: de l\'eau, de l\'huile), des (pl.: des fruits).' }),
+    question:'Complétez avec l\'article partitif : "Je mange ___ pain."',
+    options:['le','un','du','de'],
+    answer:'du',
+    hint:'"Du" = de + le → utilisé pour une quantité non précisée d\'un nom masculin.',
+    explanation:'"Je mange <b>du</b> pain." — L\'article partitif exprime une quantité indéfinie : <b>du</b> (de + le, masc. : du pain, du lait), <b>de la</b> (fém. : de la viande, de la musique), <b>de l\'</b> (devant voyelle), <b>des</b> (pluriel).' }),
 
   makeMCQ({ id:'g5fr-gr-006', chapterId:'fr-grammaire', difficulty:2,
-    question:'Complete: "Je ___ ___ au cinéma ce soir." (I am going to go — futur proche)',
-    options:['vais aller','vais allé','suis aller','vais à aller'],
-    answer:'vais aller',
-    hint:'Futur proche = aller (conjugated) + infinitive of the main verb.',
-    explanation:'"Je <b>vais aller</b> au cinéma ce soir." — The <b>futur proche</b> (near future) = present tense of aller + <b>infinitive</b>: je vais manger, tu vas partir, il va finir, nous allons jouer.' }),
+    question:'À la forme négative, l\'article partitif "du" devient :',
+    options:['du','le','de / d\'','des'],
+    answer:'de / d\'',
+    hint:'Après une négation, les articles partitifs et indéfinis deviennent "de" ou "d\'".',
+    explanation:'Après une négation, "du / de la / des" → <b>de</b> (ou d\' devant voyelle) : "Je mange <b>du</b> pain." → "Je ne mange <b>pas de</b> pain." / "Il boit <b>de l\'</b>eau." → "Il ne boit <b>pas d\'</b>eau."' }),
 
-  makeTF({ id:'g5fr-gr-007', chapterId:'fr-grammaire', difficulty:1,
-    question:'"Est-ce que" can be added to the beginning of any statement to turn it into a question.',
-    answer:true,
-    hint:'Try it: "Tu as faim." → "Est-ce que tu as faim?" Does that work?',
-    explanation:'<b>Vrai (True).</b> "<b>Est-ce que</b>" is placed at the beginning of a sentence to form a question without changing the word order: "Tu parles français." → "<b>Est-ce que</b> tu parles français?" It is the easiest and most common way to form questions in written French.' }),
+  makeMCQ({ id:'g5fr-gr-007', chapterId:'fr-grammaire', difficulty:2,
+    question:'Complétez avec le futur proche : "Nous ___ (partir) demain."',
+    options:['partons','partions','allons partir','partirons'],
+    answer:'allons partir',
+    hint:'Futur proche = aller (conjugué) + infinitif.',
+    explanation:'"Nous <b>allons partir</b> demain." — Le futur proche = <b>aller (présent)</b> + <b>infinitif</b>. Conjugaison : je vais partir, tu vas partir, il va partir, nous <b>allons partir</b>, vous allez partir, ils vont partir.' }),
 
-  makeMCQ({ id:'g5fr-gr-008', chapterId:'fr-grammaire', difficulty:2,
-    question:'Complete: "Il y a ___ livres sur la table." (There are some books — plural)',
-    options:['du','de la','de l\'','des'],
-    answer:'des',
-    hint:'"Des" is the partitive/indefinite plural article (= some).',
-    explanation:'"Il y a <b>des</b> livres sur la table." — <b>Des</b> is used before plural nouns to mean "some": des livres, des amis, des voitures. After a negative, all partitive articles become just "de": "Il n\'y a pas <b>de</b> livres."' }),
+  makeTF({ id:'g5fr-gr-008', chapterId:'fr-grammaire', difficulty:1,
+    question:'"Ne … pas" est la seule façon de former la négation en français.',
+    answer:false,
+    hint:'Il existe d\'autres expressions négatives comme "ne… jamais" ou "ne… rien".',
+    explanation:'<b>Faux.</b> Il existe plusieurs formes de négation : <b>ne… pas</b> (not), <b>ne… jamais</b> (never), <b>ne… rien</b> (nothing), <b>ne… personne</b> (nobody), <b>ne… plus</b> (no longer), <b>ne… que</b> (only). Toutes encadrent le verbe.' }),
 
   makeMCQ({ id:'g5fr-gr-009', chapterId:'fr-grammaire', difficulty:2,
-    question:'What happens to "du/de la/des" after a NEGATIVE verb?',
-    options:[
-      'They stay the same: "Je ne mange pas du pain."',
-      'They all become "de" or "d\'": "Je ne mange pas de pain."',
-      'They become "le/la/les"',
-      'They are removed completely'
-    ],
-    answer:'They all become "de" or "d\'": "Je ne mange pas de pain."',
-    hint:'In the negative, partitive articles are replaced by just "de/d\'".',
-    explanation:'After a negative, du/de la/des all become <b>de (or d\' before a vowel)</b>: "Je mange du pain." → "Je ne mange <b>pas de</b> pain." "Il boit de l\'eau." → "Il ne boit <b>pas d\'</b>eau."' }),
+    question:'Complétez avec la bonne préposition : "Le stylo est ___ la trousse et le livre."',
+    options:['dans','derrière','entre','sur'],
+    answer:'entre',
+    hint:'"Entre" = between — entre deux objets.',
+    explanation:'"Le stylo est <b>entre</b> la trousse et le livre." — <b>Entre</b> + deux éléments = between. On dit toujours "entre A <b>et</b> B". Ne pas confondre avec "parmi" (among/amongst — plus de deux éléments).' }),
 
   makeMCQ({ id:'g5fr-gr-010', chapterId:'fr-grammaire', difficulty:2,
-    question:'"Le livre est ___ la chaise et le bureau." (The book is BETWEEN the chair and the desk.)',
-    options:['devant','derrière','entre','sur'],
-    answer:'entre',
-    hint:'"Between" two things in French = ?',
-    explanation:'"Le livre est <b>entre</b> la chaise et le bureau." — "<b>Entre</b>" = between. This preposition always takes two objects (between A and B). Other prepositions: devant (in front of), derrière (behind), à côté de (next to).' })
+    question:'Complétez : "Si tu travailles bien, tu ___ (réussir — futur proche) ton examen."',
+    options:['réussis','vas réussir','réussirais','réussiras'],
+    answer:'vas réussir',
+    hint:'Futur proche pour "tu" = tu vas + infinitif.',
+    explanation:'"Si tu travailles bien, tu <b>vas réussir</b> ton examen." — Futur proche pour "tu" = tu <b>vas</b> + infinitif. Structure si + présent → futur (proche ou simple). Le futur proche est plus courant à l\'oral.' })
 
 );

@@ -1,64 +1,64 @@
 'use strict';
-// Grade 6 French — Chapter: L'Expression Écrite & Argumentation
+// Grade 6 French — Chapitre : L'Expression Écrite & Argumentation
 // IDs format: g6fr-arg-NNN
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-arg-001', chapterId:'g6fr-argumentation', difficulty:2,
-    question:'Which expression introduces a PERSONAL OPINION in French?',
+    question:'Quelle expression introduit une OPINION PERSONNELLE ?',
     options:['En conclusion','De plus','À mon avis','Cependant'],
     answer:'À mon avis',
-    hint:'"À mon avis" literally means "In my opinion".',
-    explanation:'"<b>À mon avis</b>" = In my opinion. Other opinion phrases: Je pense que, Je crois que, Il me semble que, Je suis convaincu(e) que, Selon moi. "En conclusion" = In conclusion. "De plus" = Furthermore. "Cependant" = However.' }),
+    hint:'"À mon avis" signifie "In my opinion" — c\'est une expression d\'opinion.',
+    explanation:'"<b>À mon avis</b>" = pour exprimer son opinion. Autres expressions d\'opinion : Je pense que, Je crois que, Il me semble que, Je suis convaincu(e) que, Selon moi. "En conclusion" = conclusion ; "De plus" = ajout d\'idée ; "Cependant" = opposition.' }),
 
   makeMCQ({ id:'g6fr-arg-002', chapterId:'g6fr-argumentation', difficulty:2,
-    question:'Which connector ADDS an idea to a previous one?',
+    question:'Quel connecteur AJOUTE une idée à la précédente ?',
     options:['Cependant','Pourtant','De plus','En revanche'],
     answer:'De plus',
-    hint:'"De plus" is used to say "furthermore" or "in addition".',
-    explanation:'"<b>De plus</b>" = Furthermore / In addition. Other additive connectors: En outre (Moreover), Par ailleurs (Furthermore), Non seulement… mais aussi (Not only… but also), Également (Also). "Cependant/Pourtant/En revanche" = contrast (however).' }),
+    hint:'"De plus" signifie "furthermore" — on ajoute une information.',
+    explanation:'"<b>De plus</b>" = pour ajouter une idée. Autres connecteurs d\'ajout : En outre, Par ailleurs, Non seulement… mais aussi, Également. "Cependant / Pourtant / En revanche" = opposition.' }),
 
   makeMCQ({ id:'g6fr-arg-003', chapterId:'g6fr-argumentation', difficulty:2,
-    question:'Which phrase signals a CONCESSION (acknowledging the other side)?',
-    options:['En conclusion','Certes, … Cependant','De plus','En résumé'],
-    answer:'Certes, … Cependant',
-    hint:'"Certes" admits a point, then "Cependant" (however) counters it.',
-    explanation:'"<b>Certes, … Cependant</b>" (Granted / True, … However) is the classic concession structure in French argumentative writing: "Certes, les voitures sont pratiques. Cependant, elles polluent l\'environnement." It shows the writer has considered both sides.' }),
+    question:'Quelle structure exprime une CONCESSION (reconnaître le point de vue contraire) ?',
+    options:['En conclusion…','Certes, … Cependant,…','De plus…','En résumé…'],
+    answer:'Certes, … Cependant,…',
+    hint:'"Certes" admet un point, puis "Cependant" introduit l\'opposition.',
+    explanation:'"<b>Certes, … Cependant,…</b>" = structure de concession classique : "Certes, les voitures sont pratiques. Cependant, elles polluent l\'environnement." On reconnaît d\'abord l\'argument adverse, puis on donne son propre argument.' }),
 
   makeMCQ({ id:'g6fr-arg-004', chapterId:'g6fr-argumentation', difficulty:1,
-    question:'What is the structure of a French argumentative essay?',
+    question:'Quelle est la structure d\'un texte argumentatif en français ?',
     options:[
-      'Introduction, one argument, conclusion',
+      'Introduction, un seul argument, conclusion',
       'Introduction (contexte + problématique) → Développement (arguments + exemples) → Conclusion',
-      'List of arguments, then list of counter-arguments',
-      'Résumé, thèse, antithèse'
+      'Liste d\'arguments pour, puis liste d\'arguments contre',
+      'Résumé, thèse, antithèse seulement'
     ],
     answer:'Introduction (contexte + problématique) → Développement (arguments + exemples) → Conclusion',
-    hint:'Think of the three-part essay structure used in French.',
-    explanation:'French essay structure: <b>Introduction</b> (contexte = context, problématique = key question/issue), <b>Développement</b> (thèse = arguments for, antithèse = arguments against, each with examples), <b>Conclusion</b> (résumé + ouverture = broader reflection).' }),
+    hint:'Pensez à la structure en trois parties utilisée en français.',
+    explanation:'Structure du texte argumentatif : <b>Introduction</b> (contexte + problématique = question centrale), <b>Développement</b> (thèse = arguments pour + antithèse = arguments contre, avec exemples), <b>Conclusion</b> (résumé + ouverture = réflexion plus large).' }),
 
   makeMCQ({ id:'g6fr-arg-005', chapterId:'g6fr-argumentation', difficulty:2,
-    question:'Which phrase correctly CONCLUDES a French essay?',
+    question:'Quelle expression annonce correctement la CONCLUSION d\'un texte ?',
     options:['De plus','Bien que','En conclusion','Certes'],
     answer:'En conclusion',
-    hint:'This phrase signals the final paragraph.',
-    explanation:'"<b>En conclusion</b>" signals the conclusion. Other concluding phrases: En résumé (In summary), Pour conclure (To conclude), En définitive (Ultimately), En somme (In short). The conclusion should summarise the main points and offer a final reflection.' }),
+    hint:'Cette expression signal le dernier paragraphe.',
+    explanation:'"<b>En conclusion</b>" annonce la conclusion. Autres expressions : En résumé, Pour conclure, En définitive, En somme. La conclusion résume les idées principales et propose une réflexion finale — elle n\'introduit pas de nouvelles idées.' }),
 
   makeTF({ id:'g6fr-arg-006', chapterId:'g6fr-argumentation', difficulty:2,
-    question:'"Non seulement… mais aussi" is used to add a contrasting idea.',
+    question:'"Non seulement… mais aussi" est utilisé pour introduire une idée contraire.',
     answer:false,
-    hint:'"Non seulement" = not only. What does "mais aussi" mean?',
-    explanation:'<b>Faux (False).</b> "Non seulement… <b>mais aussi</b>" = "Not only… but also" — it <b>adds</b> an idea, not contrasts. "Non seulement c\'est utile, mais aussi c\'est beau." Contrast connectors: Cependant, Pourtant, En revanche, Néanmoins, Toutefois.' }),
+    hint:'"Non seulement" = not only. "Mais aussi" = but also.',
+    explanation:'<b>Faux.</b> "Non seulement… <b>mais aussi</b>" = "Non seulement… mais également" — cette structure <b>ajoute</b> une idée, elle n\'oppose pas. "Non seulement c\'est utile, mais aussi c\'est beau." Les connecteurs d\'opposition : Cependant, Pourtant, En revanche, Néanmoins, Toutefois.' }),
 
   makeMCQ({ id:'g6fr-arg-007', chapterId:'g6fr-argumentation', difficulty:2,
-    question:'Which connector expresses a CONSEQUENCE or result?',
+    question:'Quel connecteur exprime une CONSÉQUENCE ?',
     options:['Cependant','Donc / Ainsi','De plus','Certes'],
     answer:'Donc / Ainsi',
-    hint:'"Donc" = therefore/so. It shows a result follows from the previous idea.',
-    explanation:'"<b>Donc</b>" (therefore/so) and "<b>Ainsi</b>" (thus/therefore) express consequence. "La forêt a brûlé. Donc, de nombreux animaux ont perdu leur habitat." Other consequence connectors: Par conséquent, C\'est pourquoi, En conséquence.' }),
+    hint:'"Donc" = therefore/so — la conséquence découle de ce qui précède.',
+    explanation:'"<b>Donc</b>" et "<b>Ainsi</b>" expriment la conséquence. "La forêt a brûlé. <b>Donc</b>, de nombreux animaux ont perdu leur habitat." Autres connecteurs de conséquence : Par conséquent, C\'est pourquoi, En conséquence, Si bien que.' }),
 
   makeMCQ({ id:'g6fr-arg-008', chapterId:'g6fr-argumentation', difficulty:2,
-    question:'Which sentence expresses an opinion MOST STRONGLY?',
+    question:'Quelle phrase exprime l\'opinion la PLUS FORTE ?',
     options:[
       'Il me semble que cela est important.',
       'Je pense que c\'est une bonne idée.',
@@ -66,20 +66,20 @@ STATIC_QUESTIONS.push(
       'On pourrait peut-être considérer cette option.'
     ],
     answer:'Je suis convaincu(e) que cette solution est la meilleure.',
-    hint:'Which expression shows the most certainty and conviction?',
-    explanation:'"<b>Je suis convaincu(e) que</b>" (I am convinced that) expresses the strongest, most certain opinion. Scale of strength: "on pourrait peut-être" (weakest) < "il me semble" < "je pense" < "je suis convaincu(e)" (strongest).' }),
+    hint:'Quelle expression montre la plus grande certitude et conviction ?',
+    explanation:'"<b>Je suis convaincu(e) que</b>" exprime l\'opinion la plus forte. Échelle de force : "on pourrait peut-être" (faible) < "il me semble" < "je pense" < "je suis convaincu(e)" (fort). Plus l\'expression est forte, plus l\'argument semble assuré.' }),
 
   makeTF({ id:'g6fr-arg-009', chapterId:'g6fr-argumentation', difficulty:1,
-    question:'In a French argumentative essay, the "problématique" is the central question or issue that the essay addresses.',
+    question:'Dans un texte argumentatif, la "problématique" est la question centrale à laquelle le texte cherche à répondre.',
     answer:true,
-    hint:'Think of it as the essay\'s fundamental question that the whole argument tries to answer.',
-    explanation:'<b>Vrai (True).</b> The <b>problématique</b> is the central issue or question raised in the introduction: e.g., "Les réseaux sociaux sont-ils bénéfiques pour les jeunes?" (Are social media beneficial for young people?) The whole essay is structured around answering this question.' }),
+    hint:'Pensez à la question principale posée dans l\'introduction.',
+    explanation:'<b>Vrai.</b> La <b>problématique</b> est la question centrale posée dans l\'introduction : ex. "Les réseaux sociaux sont-ils bénéfiques pour les jeunes ?" Tout le développement s\'organise autour de cette question.' }),
 
   makeMCQ({ id:'g6fr-arg-010', chapterId:'g6fr-argumentation', difficulty:2,
-    question:'What does "En revanche" mean in a French essay?',
-    options:['In conclusion','Furthermore','On the other hand','Because of this'],
-    answer:'On the other hand',
-    hint:'"En revanche" introduces an opposing or contrasting idea.',
-    explanation:'"<b>En revanche</b>" = On the other hand / In contrast. It is used to introduce a contrasting argument: "Les voitures sont rapides. En revanche, elles polluent." Similar to: Cependant, Toutefois, Néanmoins, Pourtant.' })
+    question:'Que signifie "En revanche" dans un texte ?',
+    options:['En conclusion','De plus','En revanche = D\'un autre côté / Par contre','À cause de cela'],
+    answer:'En revanche = D\'un autre côté / Par contre',
+    hint:'"En revanche" introduit une idée qui s\'oppose à la précédente.',
+    explanation:'"<b>En revanche</b>" = D\'un autre côté / Par contre / En contrepartie. "Les voitures sont rapides. <b>En revanche</b>, elles polluent." Synonymes : Cependant, Toutefois, Néanmoins, Pourtant.' })
 
 );
