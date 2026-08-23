@@ -665,8 +665,9 @@ function renderParentDashboard() {
     } else {
       spEl.innerHTML = packs.map(pack => {
         const chs = pack._chapters || pack.chapters || [];
-        const total   = chs.reduce((s, ch) => s + ((DB.chapters[ch.id]?.attempted) || 0), 0);
-        const correct = chs.reduce((s, ch) => s + ((DB.chapters[ch.id]?.correct)   || 0), 0);
+        const dbCh = DB.chapters || {};
+        const total   = chs.reduce((s, ch) => s + ((dbCh[ch.id]?.attempted) || 0), 0);
+        const correct = chs.reduce((s, ch) => s + ((dbCh[ch.id]?.correct)   || 0), 0);
         const pct = total ? Math.round(correct / total * 100) : 0;
         const col = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#3b82f6';
         const chapRows = chs.map(ch => {
