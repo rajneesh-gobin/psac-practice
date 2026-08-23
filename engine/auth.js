@@ -17,7 +17,7 @@ const Auth = (() => {
   let _familyStudents = [];    // students rows for this family
 
   let _activeAccount       = null;  // { id, name, avatar } — current student
-  let _currentRole         = 'parent'; // selected tab on auth screen
+  let _currentRole         = 'student'; // selected tab on auth screen
   let _setupAvatar         = AVATARS[0];
   let _pendingVerifyEmail  = ''; // email stored for resend verification
   let _isAdminUser         = false;  // true when logged-in user is admin role
@@ -344,7 +344,7 @@ const Auth = (() => {
     }
 
     if (_currentRole === 'teacher') {
-      _showAuthError('Teacher accounts are created by an administrator. Please sign in if you already have an account.');
+      _showAuthError('Teacher accounts are created by the school administrator. If you need access, ask your admin to create an account for you, then use Sign In.');
       return;
     }
     const role = 'parent';
@@ -833,6 +833,7 @@ const Auth = (() => {
   async function resetProgress() {
     if (!ACTIVE_STUDENT_ID) return;
     if (!confirm('Delete ALL progress for this student? This cannot be undone.')) return;
+    if (!confirm('Final confirmation — all chapters, XP and badges will be permanently lost.')) return;
     Store.clearStudent(ACTIVE_STUDENT_ID);
     const fresh = { stats:{totalAttempted:0,totalCorrect:0,examCount:0,bestScore:0,maxStreak:0,streak:0,lastDate:null},chapters:{},examHistory:[],badges:[],theme:'light',xp:0,level:1,assignments:[],restrictions:{lockedChapters:[],maxDifficulty:4,examDisabled:false} };
     Object.assign(DB, fresh);

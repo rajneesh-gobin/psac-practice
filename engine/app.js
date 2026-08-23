@@ -117,7 +117,7 @@ function applyTheme(t) {
   });
 }
 document.getElementById('theme-toggle').addEventListener('click', () => applyTheme((DB.theme || 'light') === 'dark' ? 'light' : 'dark'));
-applyTheme('dark'); // default until student loads their saved theme
+applyTheme('light'); // default until student loads their saved theme
 
 // ── TOAST ─────────────────────────────────────
 let toastTimer;
@@ -132,6 +132,24 @@ function toast(msg, dur = 2500) {
   el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+// ── CONFIRM MODAL (replaces browser confirm() dialogs) ───────────
+let _confirmCallback = null;
+function _confirmModal(msg, onConfirm, { icon = '⚠️', okLabel = 'Confirm', danger = true } = {}) {
+  const m = document.getElementById('modal-confirm');
+  if (!m) { if (onConfirm && confirm(msg)) onConfirm(); return; } // fallback
+  document.getElementById('modal-confirm-msg').textContent  = msg;
+  document.getElementById('modal-confirm-icon').textContent = icon;
+  const okBtn = document.getElementById('modal-confirm-ok');
+  if (okBtn) { okBtn.textContent = okLabel; okBtn.className = danger ? 'btn-danger flex-1 text-sm' : 'btn-primary flex-1 text-sm'; }
+  _confirmCallback = onConfirm;
+  m.classList.remove('hidden');
+}
+function _closeConfirmModal(confirmed) {
+  document.getElementById('modal-confirm')?.classList.add('hidden');
+  if (confirmed && typeof _confirmCallback === 'function') _confirmCallback();
+  _confirmCallback = null;
 }
 
 // ── SCREEN NAVIGATION ─────────────────────────
@@ -408,14 +426,15 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
       }
 
       const padId = 'numpad-' + containerId;
+      const _isMobile = ('ontouchstart' in window) || window.matchMedia('(max-width:768px)').matches;
       cont.innerHTML += `
-        <button type="button" class="numpad-toggle" onclick="
+        <button type="button" class="numpad-toggle${_isMobile ? ' active' : ''}" onclick="
           var p=document.getElementById('${padId}');
           var show=p.style.display==='none'||!p.style.display;
           p.style.display=show?'block':'none';
           this.classList.toggle('active',show);
         " title="Show / hide keypad">⌨️ Keypad</button>
-        <div id="${padId}" style="display:none">${padHTML}</div>`;
+        <div id="${padId}" style="display:${_isMobile ? 'block' : 'none'}">${padHTML}</div>`;
       setTimeout(() => document.getElementById('num-ans-' + containerId)?.focus(), 50);
     }
   }
@@ -752,6 +771,19 @@ function initScratchpad(id) {
   canvas.addEventListener('touchstart', start, { passive: false });
   canvas.addEventListener('touchmove', draw, { passive: false });
   canvas.addEventListener('touchend', stop);
+
+  // Faint placeholder text
+  ctx.save();
+  ctx.globalAlpha = 0.18;
+  ctx.font = '13px sans-serif';
+  ctx.fillStyle = DB.theme === 'dark' ? '#fff' : '#1e293b';
+  ctx.textAlign = 'center';
+  ctx.fillText('✏️ Draw your working here', canvas.width / 2, canvas.height / 2);
+  ctx.restore();
+  canvas._hasPlaceholder = true;
+
+  canvas.addEventListener('mousedown', () => { if (canvas._hasPlaceholder) { canvas._hasPlaceholder = false; ctx.clearRect(0,0,canvas.width,canvas.height); } }, { once: true });
+  canvas.addEventListener('touchstart', () => { if (canvas._hasPlaceholder) { canvas._hasPlaceholder = false; ctx.clearRect(0,0,canvas.width,canvas.height); } }, { once: true });
 }
 function clearScratch(id) {
   const c = document.getElementById(id);
@@ -792,6 +824,10 @@ function renderDashboard() {
   document.getElementById('dash-accuracy').textContent = acc;
   document.getElementById('dash-exams').textContent = DB.stats.examCount;
   document.getElementById('streak-count').textContent = DB.stats.streak;
+
+  // "Start here" nudge for brand-new students
+  const startHere = document.getElementById('dash-start-here');
+  if (startHere) startHere.classList.toggle('hidden', DB.stats.totalAttempted > 0);
 
   // Assignments banner
   const asgns     = DB.assignments || [];
@@ -1210,14 +1246,14 @@ document.getElementById('exam-hint-btn').addEventListener('click', () => {
   document.getElementById('exam-hint-box').classList.toggle('hidden');
 });
 document.getElementById('exit-exam-btn').addEventListener('click', () => {
-  if (confirm('Exit this exam? All your answers will be lost.')) {
+  _confirmModal('Exit this exam? All your answers will be lost.', () => {
     clearInterval(S.exam.timer);
     S.exam.qs = []; S.exam.answers = {}; S.exam.flagged = new Set();
     showScreen('dashboard');
-  }
+  }, { icon: '🚪', okLabel: 'Yes, Exit' });
 });
 document.getElementById('submit-exam-btn').addEventListener('click', () => {
-  if (confirm('Submit your exam now? You can\'t go back after submission.')) submitExam();
+  _confirmModal("Submit your exam now? You can't go back after submission.", submitExam, { icon: '📝', okLabel: 'Submit Exam', danger: false });
 });
 
 function submitExam() {
@@ -1361,6 +1397,7 @@ function loadPracticeQuestion() {
     `Question ${S.practice.idx + 1} of ${S.practice.qs.length}`;
   document.getElementById('practice-feedback').classList.add('hidden');
   document.getElementById('practice-submit-btn').classList.remove('hidden');
+  document.getElementById('practice-skip-btn').classList.remove('hidden');
   document.getElementById('practice-next-btn').classList.add('hidden');
   renderAnswerArea(q, 'practice-answer-area', null, false);
   updateSessionStats();
@@ -1375,6 +1412,7 @@ document.getElementById('practice-hint-btn').addEventListener('click', () => {
 
 document.getElementById('practice-submit-btn').addEventListener('click', practiceSubmit);
 document.getElementById('practice-next-btn').addEventListener('click', practiceNext);
+document.getElementById('practice-skip-btn').addEventListener('click', practiceSkip);
 
 function practiceSubmit() {
   const q = S.practice.qs[S.practice.idx];
@@ -1448,6 +1486,34 @@ function practiceSubmit() {
   updateSessionStats();
 
   document.getElementById('practice-submit-btn').classList.add('hidden');
+  document.getElementById('practice-skip-btn').classList.add('hidden');
+  document.getElementById('practice-next-btn').classList.remove('hidden');
+}
+
+function practiceSkip() {
+  const q = S.practice.qs[S.practice.idx];
+  if (!q) return;
+  _comboStreak = 0;
+  _playSound('wrong');
+  renderAnswerArea(q, 'practice-answer-area', '', true);
+  const fb = document.getElementById('practice-feedback');
+  fb.className = 'mb-4 p-4 rounded-xl feedback-wrong';
+  fb.innerHTML = `
+    <div class="flex items-start gap-3">
+      <span class="text-2xl">💡</span>
+      <div>
+        <div class="font-bold mb-1">Answer: <span class="text-green-600 dark:text-green-400">${q.answer}</span></div>
+        <div class="text-sm">${q.explanation}</div>
+      </div>
+    </div>`;
+  fb.classList.remove('hidden', 'feedback-pop', 'feedback-shake');
+  void fb.offsetWidth;
+  fb.classList.add('feedback-shake');
+  S.practice.session.attempted++;
+  recordAnswer(S.practice.chapterId, false);
+  updateSessionStats();
+  document.getElementById('practice-submit-btn').classList.add('hidden');
+  document.getElementById('practice-skip-btn').classList.add('hidden');
   document.getElementById('practice-next-btn').classList.remove('hidden');
 }
 

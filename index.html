@@ -26,6 +26,18 @@
   </div>
 
   <!-- Change Password Modal -->
+  <!-- Reusable confirm modal (replaces browser confirm() dialogs) -->
+  <div id="modal-confirm" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+      <div class="text-4xl text-center mb-3 select-none" id="modal-confirm-icon">⚠️</div>
+      <p id="modal-confirm-msg" class="text-center text-gray-700 dark:text-gray-200 font-semibold mb-5 text-sm leading-relaxed"></p>
+      <div class="flex gap-3">
+        <button onclick="_closeConfirmModal(false)" class="btn-secondary flex-1 text-sm">Cancel</button>
+        <button id="modal-confirm-ok" onclick="_closeConfirmModal(true)" class="btn-danger flex-1 text-sm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
   <div id="modal-change-password" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
       <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">🔑 Change Password</h3>
@@ -65,7 +77,7 @@
           <span id="streak-count" class="font-bold text-orange-600 dark:text-orange-400 text-sm">0</span>
           <span class="text-xs text-orange-500 dark:text-orange-400 hidden sm:inline">day streak</span>
         </div>
-        <div id="xp-display" class="hidden sm:flex items-center gap-1.5 bg-purple-100 dark:bg-purple-900/40 px-3 py-1.5 rounded-full"></div>
+        <div id="xp-display" class="flex items-center gap-1.5 bg-purple-100 dark:bg-purple-900/40 px-3 py-1.5 rounded-full"></div>
         <button onclick="Auth.enterParentMode()" class="flex items-center gap-1.5 text-xs font-semibold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/60 transition-colors" title="Parent Dashboard">🔒 <span class="hidden sm:inline">Parent</span></button>
         <button onclick="TeacherMode.enter()" class="flex items-center gap-1.5 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Teacher Dashboard">👩‍🏫 <span class="hidden sm:inline">Teacher</span></button>
         <button onclick="showScreen('forum')" class="icon-btn" title="Community Forum">💬</button>
@@ -107,7 +119,7 @@
           XP points, streaks, leaderboards &amp; real-time parent tracking. Learning that actually feels like a game.
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <button onclick="showScreen('auth'); setTimeout(()=>Auth.showSignUp(),60)"
+          <button onclick="showScreen('auth'); setTimeout(()=>{Auth.setRole('parent');Auth.showSignUp();},60)"
             class="bg-indigo-500 hover:bg-indigo-400 active:scale-95 text-white font-bold px-8 py-4 rounded-2xl text-base shadow-2xl transition-all hover:scale-105">
             Get Started — Free →
           </button>
@@ -220,11 +232,11 @@
         <!-- Role tabs -->
         <div class="flex gap-1 bg-black/20 p-1 rounded-2xl mb-5">
           <button onclick="Auth.setRole('parent')" data-role="parent"
-            class="auth-tab flex-1 py-2.5 text-xs font-bold rounded-xl bg-white text-indigo-900 shadow-sm transition-all">
+            class="auth-tab flex-1 py-2.5 text-xs font-bold rounded-xl text-white/60 transition-all">
             👨‍👩‍👧<br>Parent
           </button>
           <button onclick="Auth.setRole('student')" data-role="student"
-            class="auth-tab flex-1 py-2.5 text-xs font-bold rounded-xl text-white/60 transition-all">
+            class="auth-tab flex-1 py-2.5 text-xs font-bold rounded-xl bg-white text-indigo-900 shadow-sm transition-all">
             🎒<br>Student
           </button>
           <button onclick="Auth.setRole('teacher')" data-role="teacher"
@@ -234,7 +246,7 @@
         </div>
 
         <!-- Parent / Teacher email form -->
-        <div id="auth-email-panel">
+        <div id="auth-email-panel" class="hidden">
           <div class="flex gap-1 bg-black/20 p-1 rounded-xl mb-4">
             <button onclick="Auth.showSignIn()" id="auth-signin-tab"
               class="flex-1 text-sm py-1.5 rounded-lg bg-white/20 text-white font-semibold transition-all">Sign In</button>
@@ -311,7 +323,7 @@
         </div>
 
         <!-- Student login -->
-        <div id="auth-student-panel" class="hidden">
+        <div id="auth-student-panel">
           <p class="text-white/70 text-sm mb-4">Enter your <b class="text-white">username</b> and <b class="text-white">PIN</b>:</p>
           <div class="space-y-3">
             <input id="student-username" type="text" maxlength="20" placeholder="Your username (e.g. PAUL)"
@@ -319,6 +331,7 @@
               oninput="this.value=this.value.toUpperCase()">
             <div class="relative">
               <input id="student-pin" type="password" maxlength="4" placeholder="PIN (4 digits)"
+                oninput="if(this.value.length===4) Auth.studentSignIn()"
                 class="selectable w-full text-center text-2xl font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 pr-11 focus:outline-none focus:ring-2 focus:ring-green-400">
               <button type="button" onclick="Auth.togglePass('student-pin',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
@@ -510,6 +523,21 @@
       </div>
 
       <!-- Assignments from parent -->
+      <!-- Start-here nudge — visible only for brand-new students (0 questions attempted) -->
+      <div id="dash-start-here" class="hidden bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl p-5 mb-5 text-white shadow-xl">
+        <div class="flex items-center gap-4">
+          <div class="text-5xl select-none">🚀</div>
+          <div class="flex-1">
+            <div class="font-bold text-lg mb-0.5">Ready to begin?</div>
+            <div class="text-sm opacity-90 mb-3">Start with Level 1 practice — it's easy and fun!</div>
+            <button onclick="showScreen('chapter-select')"
+              class="bg-white text-indigo-600 font-bold text-sm px-5 py-2 rounded-xl hover:bg-indigo-50 transition-colors shadow">
+              Start Practising →
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div id="assignments-banner" class="hidden bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-6">
         <h3 class="text-base font-bold text-gray-800 dark:text-white mb-3">📋 Assignments from your parent</h3>
         <div id="assignments-list" class="space-y-2"></div>
@@ -790,7 +818,8 @@
             <div id="practice-feedback" class="hidden mb-4 p-4 rounded-xl"></div>
             <div class="flex gap-3">
               <button id="practice-submit-btn" class="btn-primary flex-1">✅ Check Answer</button>
-              <button id="practice-next-btn" class="btn-secondary flex-1 hidden">Next →</button>
+              <button id="practice-skip-btn" class="btn-secondary text-sm px-4" title="Show the answer without scoring">💡 Skip</button>
+              <button id="practice-next-btn" class="btn-primary flex-1 hidden">Next →</button>
             </div>
           </div>
         </div>
@@ -1048,7 +1077,7 @@
         <div id="ta-answer-panel" class="hidden bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
           <div class="flex justify-between items-center mb-3">
             <h3 id="ta-answer-panel-title" class="font-bold text-gray-800 dark:text-white text-sm"></h3>
-            <button onclick="_el('ta-answer-panel')?.classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
+            <button onclick="document.getElementById('ta-answer-panel')?.classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
           </div>
           <div class="ta-answer-body space-y-2 max-h-96 overflow-y-auto"></div>
         </div>
