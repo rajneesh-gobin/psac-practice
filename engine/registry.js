@@ -6,4 +6,8 @@
 // ══════════════════════════════════════════════
 
 const SUBJECT_PACKS = [];
-function registerSubject(pack) { SUBJECT_PACKS.push(pack); }
+function registerSubject(pack) {
+  // Save an immutable copy of chapters so CHAPTERS global can be safely mutated later
+  pack._chapters = Array.isArray(pack.chapters) ? pack.chapters.slice() : [];
+  SUBJECT_PACKS.push(pack);
+}

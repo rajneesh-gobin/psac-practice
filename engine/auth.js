@@ -169,7 +169,7 @@ const Auth = (() => {
       } catch (_) { /* offline — allow resume */ }
     }
 
-    _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar };
+    _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar, grade: sess.grade };
     ACTIVE_STUDENT_ID = sess.id;
 
     // Load progress from Supabase (or localStorage cache)
@@ -183,13 +183,18 @@ const Auth = (() => {
     _setWelcomeName(sess.displayName);
 
     // Pre-load questions for this student's grade
+    const resumeGrade = sess.grade || 5;
     if (typeof QuestionLoader !== 'undefined') {
-      QuestionLoader.loadForStudent(sess.grade).catch(() => {});
+      QuestionLoader.loadForStudent(resumeGrade).catch(() => {});
     }
 
-    const startScreen = (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1)
-      ? 'grade-select' : 'dashboard';
-    showScreen(startScreen);
+    // Skip grade select — go straight to subject picker with the stored grade
+    if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
+      SELECTED_GRADE = resumeGrade;
+      showScreen('subject-select');
+    } else {
+      showScreen('dashboard');
+    }
   }
 
   // ── Login a student (after PIN verified) ──────
@@ -209,7 +214,7 @@ const Auth = (() => {
     const merged   = Object.assign(progress, { restrictions: studentRow.settings });
     Object.assign(DB, merged);
 
-    _activeAccount    = { id: studentRow.id, name: studentRow.display_name, avatar: studentRow.avatar };
+    _activeAccount    = { id: studentRow.id, name: studentRow.display_name, avatar: studentRow.avatar, grade: studentRow.grade };
     ACTIVE_STUDENT_ID = studentRow.id;
 
     applyTheme(DB.theme || 'dark');
@@ -222,13 +227,18 @@ const Auth = (() => {
     Store.getGlobalSettings().then(gs => { window.GLOBAL_SETTINGS = gs || {}; }).catch(() => {});
 
     // Pre-load questions for this student's grade
+    const studentGrade = studentRow.grade || 5;
     if (typeof QuestionLoader !== 'undefined') {
-      QuestionLoader.loadForStudent(studentRow.grade).catch(() => {});
+      QuestionLoader.loadForStudent(studentGrade).catch(() => {});
     }
 
-    const startScreen = (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1)
-      ? 'grade-select' : 'dashboard';
-    showScreen(startScreen);
+    // Skip grade select — parent already set the grade; go straight to subject picker
+    if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
+      SELECTED_GRADE = studentGrade;
+      showScreen('subject-select');
+    } else {
+      showScreen('dashboard');
+    }
   }
 
   // ── Public: loginStudent by id (called from student-select cards) ──
@@ -241,7 +251,7 @@ const Auth = (() => {
       const accounts = Store.getAccounts();
       const account  = accounts.find(a => a.id === id);
       if (account) {
-        _activeAccount    = account;
+        _activeAccount    = { ...account, grade: account.grade || 5 };
         ACTIVE_STUDENT_ID = account.id;
         const data = Store.loadStudent(account.id);
         Object.assign(DB, data);
@@ -249,8 +259,13 @@ const Auth = (() => {
         renderDashboard();
         updateStreak();
         updateXPBar();
-        showScreen((typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) ? 'grade-select' : 'dashboard');
         _setWelcomeName(account.name);
+        if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
+          SELECTED_GRADE = account.grade || 5;
+          showScreen('subject-select');
+        } else {
+          showScreen('dashboard');
+        }
       }
     }
   }
@@ -904,6 +919,13 @@ const Auth = (() => {
     showScreen('parent');
   }
 
+  // ── Update assignment chapter dropdown when subject changes ──
+  function pdUpdateAssignChapters() {
+    const subj = document.getElementById('pd-assign-subject')?.value;
+    const pack = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === subj);
+    if (typeof _pdFillAssignChapters !== 'undefined') _pdFillAssignChapters(pack);
+  }
+
   // ── Parent assignments ────────────────────────
   function addAssignment() {
     const chId = (_el('pd-assign-chapter')?.value || '') || null;
@@ -1004,7 +1026,7 @@ const Auth = (() => {
     // Parent mode
     enterParentMode, exitParentMode, resetProgress,
     pdTab, pdSwitchStudent,
-    addAssignment, removeAssignment,
+    addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
   };
 })();

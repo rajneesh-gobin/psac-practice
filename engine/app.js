@@ -652,24 +652,63 @@ function renderParentDashboard() {
   if (el('pd-streak')) el('pd-streak').textContent = (stats.streak || 0) + ' 🔥';
   if (el('pd-badges')) el('pd-badges').textContent = (DB.badges || []).length;
 
-  const tbody = el('pd-chapters');
-  if (tbody) {
-    tbody.innerHTML = CHAPTERS.map(ch => {
-      const c        = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
-      const pct      = c.attempted ? Math.round(c.correct / c.attempted * 100) : 0;
-      const barColor = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#3b82f6';
-      const locked   = (DB.restrictions?.lockedChapters || []).includes(ch.id) ? ' 🔒' : '';
-      const bar = `<div style="display:inline-flex;align-items:center;gap:6px">
-        <div style="width:60px;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden">
-          <div style="width:${pct}%;height:100%;background:${barColor};border-radius:3px"></div>
-        </div><span>${pct}%</span></div>`;
-      return `<tr class="border-b border-gray-100 dark:border-gray-700">
-        <td class="py-2 pr-2 text-sm text-gray-700 dark:text-gray-300">${ch.icon} ${ch.name}${locked}</td>
-        <td class="py-2 text-sm text-center text-gray-500">${c.attempted}</td>
-        <td class="py-2 text-sm text-center text-gray-500">${c.correct}</td>
-        <td class="py-2 text-sm">${bar}</td>
-      </tr>`;
-    }).join('');
+  // Subject progress cards (grouped by subject, all subjects for this student's grade)
+  const spEl = el('pd-subject-progress');
+  if (spEl) {
+    const studentGrade = acct?.grade || 5;
+    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+      .filter(p => p.grade === studentGrade && !p.comingSoon);
+    const lockedChs = DB.restrictions?.lockedChapters || [];
+
+    if (!packs.length) {
+      spEl.innerHTML = '<p class="text-sm text-gray-400">No subjects loaded yet.</p>';
+    } else {
+      spEl.innerHTML = packs.map(pack => {
+        const chs = pack._chapters || pack.chapters || [];
+        const total   = chs.reduce((s, ch) => s + ((DB.chapters[ch.id]?.attempted) || 0), 0);
+        const correct = chs.reduce((s, ch) => s + ((DB.chapters[ch.id]?.correct)   || 0), 0);
+        const pct = total ? Math.round(correct / total * 100) : 0;
+        const col = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#3b82f6';
+        const chapRows = chs.map(ch => {
+          const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
+          const cp = c.attempted ? Math.round(c.correct / c.attempted * 100) : 0;
+          const cc = cp >= 80 ? '#22c55e' : cp >= 50 ? '#f59e0b' : '#3b82f6';
+          const lk = lockedChs.includes(ch.id) ? ' 🔒' : '';
+          return `<div class="flex items-center gap-3 py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
+            <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${lk}</span>
+            <span class="text-xs text-gray-400 w-8 text-center shrink-0">${c.attempted}</span>
+            <div class="shrink-0" style="display:inline-flex;align-items:center;gap:5px;width:90px">
+              <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
+                <div style="width:${cp}%;height:100%;background:${cc};border-radius:3px"></div>
+              </div>
+              <span class="text-xs font-medium" style="color:${cc};width:28px;text-align:right">${cp}%</span>
+            </div>
+          </div>`;
+        }).join('');
+        return `<div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+          <button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+            onclick="this.nextElementSibling.classList.toggle('hidden')">
+            <span class="text-xl select-none">${pack.icon}</span>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-sm text-gray-800 dark:text-white">${pack.subject}</div>
+              <div style="display:inline-flex;align-items:center;gap:5px;margin-top:3px;width:120px">
+                <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
+                  <div style="width:${pct}%;height:100%;background:${col};border-radius:3px"></div>
+                </div>
+                <span class="text-xs font-bold" style="color:${col}">${pct}%</span>
+              </div>
+            </div>
+            <span class="text-xs text-gray-400">${total} Q done ▾</span>
+          </button>
+          <div class="hidden px-4 py-2">
+            <div class="flex text-xs text-gray-400 uppercase border-b border-gray-100 dark:border-gray-700 pb-1 mb-1">
+              <span class="flex-1">Chapter</span><span class="w-8 text-center">Tried</span><span style="width:90px" class="ml-3">Score</span>
+            </div>
+            ${chapRows}
+          </div>
+        </div>`;
+      }).join('');
+    }
   }
 
   // Family code display
@@ -710,17 +749,25 @@ function renderParentDashboard() {
   _renderLeaderboard();
 
   // ── Assignments tab ───────────────────────
-  const chSelect = el('pd-assign-chapter');
-  if (chSelect && !chSelect.children.length) {
-    chSelect.innerHTML = `<option value="">Any Chapter</option>` +
-      CHAPTERS.map(ch => `<option value="${ch.id}">${ch.icon} ${ch.name}</option>`).join('');
+  const assignSubjEl = el('pd-assign-subject');
+  if (assignSubjEl) {
+    const studentGrade = acct?.grade || 5;
+    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+      .filter(p => p.grade === studentGrade && !p.comingSoon);
+    assignSubjEl.innerHTML = packs.map(p =>
+      `<option value="${p.id}">${p.icon} ${p.subject}</option>`
+    ).join('');
+    // Populate chapter dropdown for first subject
+    _pdFillAssignChapters(packs[0]);
   }
   const asgList = el('pd-asgn-list');
   if (asgList) {
     const asgns = DB.assignments || [];
     const DLABELS = ['','Basic','Medium','Hard','Word Problems'];
+    const allPdChs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+      .flatMap(p => p._chapters || p.chapters || []);
     asgList.innerHTML = asgns.length ? asgns.map(a => {
-      const ch  = CHAPTERS.find(c => c.id === a.chapterId);
+      const ch  = allPdChs.find(c => c.id === a.chapterId) || CHAPTERS.find(c => c.id === a.chapterId);
       const dlv = a.difficulty ? (DLABELS[a.difficulty] || `L${a.difficulty}`) : 'All Levels';
       return `<div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
         <span class="text-xl select-none">${ch?.icon || '📚'}</span>
@@ -746,16 +793,35 @@ function renderParentDashboard() {
 
   const chLocks = el('pd-chapter-locks');
   if (chLocks) {
-    chLocks.innerHTML = CHAPTERS.map(ch => {
-      const isLocked = lockedChs.includes(ch.id);
-      return `<label class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer">
-        <input type="checkbox" ${!isLocked ? 'checked' : ''} onchange="Auth.toggleChapterLock('${ch.id}', !this.checked)"
-          class="w-4 h-4 accent-blue-500">
-        <span class="text-sm text-gray-700 dark:text-gray-300">${ch.icon} ${ch.name}</span>
-        ${isLocked ? '<span class="ml-auto text-xs text-red-400">Locked 🔒</span>' : ''}
-      </label>`;
+    const lockGrade = acct?.grade || 5;
+    const lockPacks = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+      .filter(p => p.grade === lockGrade && !p.comingSoon);
+    chLocks.innerHTML = lockPacks.map(pack => {
+      const packChs = pack._chapters || pack.chapters || [];
+      const rows = packChs.map(ch => {
+        const isLocked = lockedChs.includes(ch.id);
+        return `<label class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer">
+          <input type="checkbox" ${!isLocked ? 'checked' : ''} onchange="Auth.toggleChapterLock('${ch.id}', !this.checked)"
+            class="w-4 h-4 accent-blue-500">
+          <span class="text-sm text-gray-700 dark:text-gray-300">${ch.icon || ''} ${ch.name}</span>
+          ${isLocked ? '<span class="ml-auto text-xs text-red-400">Locked 🔒</span>' : ''}
+        </label>`;
+      }).join('');
+      return `<div class="col-span-full mb-2">
+        <div class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">${pack.icon} ${pack.subject}</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-0.5">${rows}</div>
+      </div>`;
     }).join('');
   }
+}
+
+// ── ASSIGNMENT CHAPTER HELPER ─────────────────
+function _pdFillAssignChapters(pack) {
+  const el = document.getElementById('pd-assign-chapter');
+  if (!el) return;
+  const chs = pack?._chapters || pack?.chapters || [];
+  el.innerHTML = `<option value="">Any Chapter</option>` +
+    chs.map(ch => `<option value="${ch.id}">${ch.icon || ''} ${ch.name}</option>`).join('');
 }
 
 // ── SCRATCHPAD ────────────────────────────────
@@ -868,17 +934,21 @@ function renderDashboard() {
   if (asgBanner && asgList) {
     if (asgns.length) {
       asgBanner.classList.remove('hidden');
+      // Build a lookup across ALL subject packs so chapter names resolve regardless of subject
+      const allChs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+        .flatMap(p => p._chapters || p.chapters || []);
       asgList.innerHTML = asgns.map(a => {
-        const ch  = CHAPTERS.find(c => c.id === a.chapterId);
+        const ch  = allChs.find(c => c.id === a.chapterId) || CHAPTERS.find(c => c.id === a.chapterId);
         const dlv = a.difficulty ? `Level ${a.difficulty}` : 'All Levels';
-        return `<div class="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-700">
-          <span class="text-xl select-none">${ch?.icon || '📚'}</span>
+        return `<div class="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border-2 border-blue-300 dark:border-blue-600 shadow-sm">
+          <span class="text-2xl select-none">${ch?.icon || '📚'}</span>
           <div class="flex-1 min-w-0">
-            <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${ch?.name || a.chapterId}</div>
-            <div class="text-xs text-gray-500 dark:text-gray-400">${dlv}${a.note ? ' · ' + a.note : ''}</div>
+            <div class="text-sm font-bold text-gray-800 dark:text-white truncate">${ch?.name || a.chapterId}</div>
+            <div class="text-xs text-blue-600 dark:text-blue-400 font-medium">${dlv}</div>
+            ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic mt-0.5">"${a.note}"</div>` : ''}
           </div>
           <button onclick="startAssignment('${a.id}')"
-            class="shrink-0 text-xs bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg transition-colors font-medium">
+            class="shrink-0 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors font-bold text-sm shadow">
             Start →
           </button>
         </div>`;
@@ -945,8 +1015,16 @@ function renderChapterSelect() {
 window.startAssignment = function(assignId) {
   const a = (DB.assignments || []).find(x => x.id === assignId);
   if (!a) return;
-  const diff = a.difficulty || 1;
-  startChapterDirect(a.chapterId, diff);
+  // Switch to the right subject first so CHAPTERS is in sync
+  const pack = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .find(p => (p._chapters || p.chapters || []).some(ch => ch.id === a.chapterId));
+  if (pack) {
+    ACTIVE_PACK = pack;
+    const chs = pack._chapters || pack.chapters || [];
+    CHAPTERS.length = 0;
+    chs.forEach(ch => CHAPTERS.push(ch));
+  }
+  startChapterDirect(a.chapterId, a.difficulty || 1);
 };
 
 function startChapterDirect(chapterId, forceDiff) {
@@ -2060,8 +2138,20 @@ function renderSubjectSelect() {
 
 window.selectSubject = function(id) {
   const pack = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === id);
-  if (pack && pack.comingSoon) { toast(`${pack.name} Grade ${pack.grade} is coming soon! 🚀`, 2500); return; }
-  if (pack) ACTIVE_PACK = pack;
+  if (pack && pack.comingSoon) { toast(`${pack.subject || pack.name} is coming soon! 🚀`, 2500); return; }
+  if (pack) {
+    ACTIVE_PACK = pack;
+    // Sync the global CHAPTERS in-place so all rendering functions see the right subject's chapters
+    const chs = pack._chapters || pack.chapters || [];
+    CHAPTERS.length = 0;
+    chs.forEach(ch => CHAPTERS.push(ch));
+    // Load questions for this subject if not already loaded
+    if (typeof QuestionLoader !== 'undefined') {
+      QuestionLoader.loadSubject(pack.id).then(() => {
+        renderDashboard(); // refresh mastery grid after questions arrive
+      }).catch(() => {});
+    }
+  }
   showScreen('dashboard');
 };
 
