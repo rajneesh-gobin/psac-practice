@@ -82,7 +82,7 @@ const Store = (() => {
   async function getFamilyStudents(familyId) {
     if (!_sb) return [];
     const { data } = await _sb.from('students')
-      .select('id, username, display_name, avatar, grade, pin, settings')
+      .select('id, username, display_name, avatar, grade, pin, settings, session_version')
       .eq('family_id', familyId)
       .order('created_at');
     return data || [];

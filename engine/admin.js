@@ -125,7 +125,7 @@ const AdminPanel = (() => {
     // Load family → students
     const { data: fam } = await _sb.from('families').select('id').eq('owner_id', profileId).maybeSingle();
     if (!fam) { panel.innerHTML = '<p class="text-xs text-gray-400">No family found.</p>'; return; }
-    const { data: kids } = await _sb.from('students').select('id, name, username, grade, created_at').eq('family_id', fam.id);
+    const { data: kids } = await _sb.from('students').select('id, display_name, username, grade, session_version, created_at').eq('family_id', fam.id);
     _familyStudents[profileId] = kids || [];
     _renderChildren(profileId);
   }
@@ -136,12 +136,31 @@ const AdminPanel = (() => {
     const kids = _familyStudents[profileId] || [];
     if (!kids.length) { panel.innerHTML = '<p class="text-xs text-gray-400 py-1">No children registered yet.</p>'; return; }
     panel.innerHTML = kids.map(k => `
-      <div class="flex items-center gap-2 py-1 text-xs text-gray-600 dark:text-gray-300">
+      <div class="flex items-center gap-2 py-1 text-xs text-gray-600 dark:text-gray-300 flex-wrap">
         <span class="text-base">🧒</span>
-        <span class="font-medium">${_esc(k.name)}</span>
+        <span class="font-medium">${_esc(k.display_name)}</span>
         <span class="text-gray-400">@${_esc(k.username)}</span>
-        <span class="ml-auto text-gray-400">Grade ${k.grade || '?'}</span>
-      </div>`).join('');
+        <span class="text-gray-400">Grade ${k.grade || '?'}</span>
+        <button onclick="AdminPanel.forceLogout('${k.id}','${_esc(k.display_name)}')"
+          class="ml-auto shrink-0 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200 transition-colors font-semibold">
+          ⏏ Force Logout
+        </button>
+      </div>`).join('<hr class="border-gray-100 dark:border-gray-700 my-0.5">');
+  }
+
+  async function forceLogout(studentId, studentName) {
+    if (!_sb) return;
+    if (!confirm(`Force logout ${studentName}?\n\nThey will be logged out immediately and must re-enter their PIN.`)) return;
+    const { data: cur } = await _sb.from('students').select('session_version').eq('id', studentId).maybeSingle();
+    const newVersion = (cur?.session_version || 0) + 1;
+    const { error } = await _sb.from('students').update({ session_version: newVersion }).eq('id', studentId);
+    if (error) { alert('Error: ' + error.message); return; }
+    // Update local cache
+    for (const key of Object.keys(_familyStudents)) {
+      const idx = (_familyStudents[key] || []).findIndex(s => s.id === studentId);
+      if (idx >= 0) _familyStudents[key][idx].session_version = newVersion;
+    }
+    toast(`${studentName} has been logged out`, 3000);
   }
 
   async function changeRole(userId, newRole) {
@@ -273,5 +292,5 @@ const AdminPanel = (() => {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, toggleGrade, toggleSubject, toggleRegistration, loadStats };
+  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, toggleGrade, toggleSubject, toggleRegistration, loadStats };
 })();

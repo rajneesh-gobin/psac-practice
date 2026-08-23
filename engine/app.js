@@ -1471,6 +1471,24 @@ function showAssignmentComplete() {
   const grade = pct >= 80 ? '🌟 Excellent!' : pct >= 60 ? '👍 Good job!' : pct >= 40 ? '📚 Keep practising!' : '💪 You can do it!';
   const el    = id => document.getElementById(id);
 
+  // Notify parent by email (fire-and-forget, only on Netlify)
+  if (location.protocol !== 'file:' && ASSIGNMENT_CONFIG) {
+    const sess = typeof Store !== 'undefined' && Store.getStudentSession();
+    if (sess?.id) {
+      fetch('/.netlify/functions/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Student-Id': sess.id },
+        body: JSON.stringify({
+          studentId:       sess.id,
+          assignmentLabel: ASSIGNMENT_CONFIG.label || 'Assignment',
+          score:           correct,
+          total:           attempted,
+          pct,
+        }),
+      }).catch(() => {});
+    }
+  }
+
   if (el('asgn-complete-name'))  el('asgn-complete-name').textContent  = ASSIGNMENT_STUDENT_NAME;
   if (el('asgn-complete-score')) el('asgn-complete-score').textContent = `${correct} / ${attempted}`;
   if (el('asgn-complete-pct'))   el('asgn-complete-pct').textContent   = `${pct}%`;

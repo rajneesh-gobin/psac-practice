@@ -5,6 +5,9 @@
 [functions]
   node_bundler = "esbuild"
 
+[functions."weekly-digest"]
+  schedule = "0 9 * * 0"
+
 # ── Block direct browser access to question source files ──────────────
 # The /subjects/*/questions/* path is served by the Netlify Function instead.
 # These redirects only apply to Netlify hosting, not local file:// access.

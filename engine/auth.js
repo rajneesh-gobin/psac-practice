@@ -136,6 +136,20 @@ const Auth = (() => {
 
   // ── Resume a stored student session ───────────
   async function _resumeStudent(sess) {
+    // Admin force-expire check — validate session_version against DB
+    if (_sb) {
+      try {
+        const { data: sv } = await _sb.from('students').select('session_version').eq('id', sess.id).maybeSingle();
+        if (sv && sv.session_version !== (sess.sessionVersion || 0)) {
+          Store.clearStudentSession();
+          document.body.style.opacity = '1';
+          showScreen('auth');
+          toast('Your session was ended by the administrator. Please log in again.', 5000);
+          return;
+        }
+      } catch (_) { /* offline — allow resume */ }
+    }
+
     _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar };
     ACTIVE_STUDENT_ID = sess.id;
 
@@ -162,11 +176,12 @@ const Auth = (() => {
   // ── Login a student (after PIN verified) ──────
   async function _loginStudentRow(studentRow) {
     const sess = {
-      id:          studentRow.id,
-      displayName: studentRow.display_name,
-      avatar:      studentRow.avatar,
-      grade:       studentRow.grade,
-      settings:    studentRow.settings,
+      id:             studentRow.id,
+      displayName:    studentRow.display_name,
+      avatar:         studentRow.avatar,
+      grade:          studentRow.grade,
+      settings:       studentRow.settings,
+      sessionVersion: studentRow.session_version || 0,
     };
     Store.saveStudentSession(sess);
 
