@@ -48,8 +48,32 @@ const QuestionLoader = (() => {
     for (const f of files) await _injectScript(f);
   }
 
+  const _CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+  function _readCache(subjectId) {
+    try {
+      const raw = localStorage.getItem(`mm_qc_${subjectId}`);
+      if (!raw) return null;
+      const { ts, data } = JSON.parse(raw);
+      if (Date.now() - ts > _CACHE_TTL) { localStorage.removeItem(`mm_qc_${subjectId}`); return null; }
+      return data;
+    } catch { return null; }
+  }
+
+  function _writeCache(subjectId, data) {
+    try { localStorage.setItem(`mm_qc_${subjectId}`, JSON.stringify({ ts: Date.now(), data })); } catch {}
+  }
+
   async function _loadFromAPI(subjectId) {
     try {
+      // ── Serve from localStorage cache if fresh (avoids Netlify function calls) ──
+      const cached = _readCache(subjectId);
+      if (cached) {
+        const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
+        STATIC_QUESTIONS.push(...cached.filter(q => !existing.has(q.id)));
+        return;
+      }
+
       // Build auth headers
       const headers = {};
 
@@ -75,10 +99,12 @@ const QuestionLoader = (() => {
 
       const incoming = await resp.json();
 
+      // Cache for 7 days so subsequent page loads skip the function entirely
+      _writeCache(subjectId, incoming);
+
       // Deduplicate — avoid double-loading if somehow already present
       const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
-      const fresh    = incoming.filter(q => !existing.has(q.id));
-      STATIC_QUESTIONS.push(...fresh);
+      STATIC_QUESTIONS.push(...incoming.filter(q => !existing.has(q.id)));
 
     } catch(e) {
       console.warn('[QuestionLoader] Fetch error:', e.message);

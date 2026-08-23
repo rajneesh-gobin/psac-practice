@@ -26,7 +26,8 @@ const Auth = (() => {
 
   function _el(id) { return document.getElementById(id); }
 
-  function getActiveAccount() { return _activeAccount; }
+  function getActiveAccount()  { return _activeAccount; }
+  function getParentProfile()  { return _parentProfile; }
 
   // ── App init ───────────────────────────────────
   async function init() {
@@ -71,7 +72,7 @@ const Auth = (() => {
     }
 
     document.body.style.opacity = '1';
-    showScreen('auth');
+    showScreen('landing');
   }
 
   // ── Handle parent/teacher Supabase session ─────
@@ -342,7 +343,11 @@ const Auth = (() => {
       return;
     }
 
-    const role = _currentRole === 'teacher' ? 'teacher' : 'parent';
+    if (_currentRole === 'teacher') {
+      _showAuthError('Teacher accounts are created by an administrator. Please sign in if you already have an account.');
+      return;
+    }
+    const role = 'parent';
 
     _setAuthLoading(true);
     const { data, error } = await _sb.auth.signUp({
@@ -452,6 +457,7 @@ const Auth = (() => {
 
   // ── Admin panel toggle ─────────────────────────
   function openAdminPanel() {
+    if (!_isAdminUser) return;
     showScreen('admin');
     if (typeof AdminPanel !== 'undefined') AdminPanel.render();
   }
@@ -497,7 +503,7 @@ const Auth = (() => {
   async function studentSignIn() {
     if (!_sb) return;
 
-    // PIN lockout check
+    // Client-side lockout: first line of defence (server is the real gate)
     if (Date.now() < _pinLockedUntil) {
       const secs = Math.ceil((_pinLockedUntil - Date.now()) / 1000);
       _showAuthError(`Too many wrong PINs. Please wait ${secs} seconds.`);
@@ -510,19 +516,67 @@ const Auth = (() => {
     if (!pin)      { _showAuthError('Please enter your PIN.');      return; }
 
     _setAuthLoading(true);
+
+    const isLocal = location.protocol === 'file:' || location.hostname === 'localhost';
+
+    if (!isLocal) {
+      // Production: verify via Supabase RPC — pin hash stays inside the database, 0 Netlify credits
+      const { data, error } = await _sb.rpc('verify_student_pin', { p_username: username, p_pin: pin });
+      _setAuthLoading(false);
+
+      if (error) {
+        _showAuthError('Login error. Please try again.');
+        return;
+      }
+
+      if (data.locked) {
+        const secs = data.secsLeft || 60;
+        _pinLockedUntil = Date.now() + secs * 1000;
+        _showAuthError(`Too many wrong PINs. Please wait ${secs} seconds.`);
+        if (_el('student-pin')) _el('student-pin').value = '';
+        return;
+      }
+
+      if (data.error === 'account_expired') {
+        _showAuthError('Your practice access has expired. Please ask your parent.');
+        return;
+      }
+
+      if (!data.ok) {
+        _pinAttempts++;
+        if (_pinAttempts >= 5) {
+          _pinLockedUntil = Date.now() + 60000;
+          _pinAttempts = 0;
+          _showAuthError('Too many wrong PINs. Locked for 60 seconds.');
+        } else {
+          const left = data.attemptsLeft ?? (5 - _pinAttempts);
+          _showAuthError(`Username or PIN is incorrect. ${left} attempt${left === 1 ? '' : 's'} left.`);
+        }
+        if (_el('student-pin')) _el('student-pin').value = '';
+        return;
+      }
+
+      _pinAttempts = 0;
+      _pinLockedUntil = 0;
+      _clearAuthError();
+      await _loginStudentRow(data.student);
+      return;
+    }
+
+    // ── Local dev path: client-side comparison ──
     const student = await Store.findStudentByUsername(username);
     _setAuthLoading(false);
 
-    if (!student) { _showAuthError('Username not found. Ask your parent to check the spelling.'); return; }
+    if (!student) { _showAuthError('Username or PIN is incorrect.'); return; }
 
     if (pin !== student.pin) {
       _pinAttempts++;
-      if (_pinAttempts >= 3) {
+      if (_pinAttempts >= 5) {
         _pinLockedUntil = Date.now() + 60000;
         _pinAttempts = 0;
         _showAuthError('Too many wrong PINs. Locked for 60 seconds.');
       } else {
-        _showAuthError(`Wrong PIN. ${3 - _pinAttempts} attempt${3 - _pinAttempts === 1 ? '' : 's'} left.`);
+        _showAuthError(`Username or PIN is incorrect. ${5 - _pinAttempts} attempt${5 - _pinAttempts === 1 ? '' : 's'} left.`);
       }
       if (_el('student-pin')) _el('student-pin').value = '';
       return;
@@ -621,6 +675,20 @@ const Auth = (() => {
     _el('add-student-id') && (_el('add-student-id').value = '');
   }
 
+  // Hash a student's PIN via Supabase RPC (bcrypt inside the DB, 0 Netlify credits).
+  async function _setStudentPin(studentId, pin) {
+    const isLocal = location.protocol === 'file:' || location.hostname === 'localhost';
+    if (isLocal) {
+      await Store.updateStudent(studentId, { pin });
+      return;
+    }
+    const { data, error } = await _sb.rpc('set_student_pin', { p_student_id: studentId, p_pin: pin });
+    if (error || !data?.ok) {
+      console.warn('[set_student_pin]', error?.message || data?.error);
+      await Store.updateStudent(studentId, { pin }); // fallback if RPC not deployed
+    }
+  }
+
   async function saveNewStudent() {
     if (!_family) return;
 
@@ -629,25 +697,26 @@ const Auth = (() => {
     const grade = parseInt(_el('add-child-grade')?.value || '5');
     const pin   = (_el('add-child-pin')?.value      || '').trim();
 
-    if (!name)              { toast('Please enter a name.', 2000); return; }
-    if (!uname)             { toast('Please enter a username.', 2000); return; }
-    if (!/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
+    if (!name)  { toast('Please enter a name.', 2000); return; }
+    if (!uname) { toast('Please enter a username.', 2000); return; }
 
     const existingId = _el('add-student-id')?.value;
     if (existingId) {
-      // Edit mode
-      await Store.updateStudent(existingId, {
-        displayName: name, grade, pin,
-        avatar: _addAvatar,
-        settings: ((_familyStudents.find(s => s.id === existingId))?.settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false }),
-      });
+      // Edit mode — PIN is optional; blank = keep existing PIN
+      if (pin && !/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
+      const updates = { displayName: name, grade, avatar: _addAvatar,
+        settings: ((_familyStudents.find(s => s.id === existingId))?.settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false }) };
+      await Store.updateStudent(existingId, updates);
+      if (pin) await _setStudentPin(existingId, pin);
       toast('Child updated! ✅', 1500);
     } else {
-      // Create mode
+      // Create mode — PIN is required
+      if (!/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
       const student = await Store.createStudent(_family.id, {
-        username: uname, displayName: name, avatar: _addAvatar, grade, pin,
+        username: uname, displayName: name, avatar: _addAvatar, grade,
       });
       if (!student) { toast('Username already taken in this family.', 2500); return; }
+      await _setStudentPin(student.id, pin);
       toast('Child added! 🎉', 2000);
     }
 
@@ -673,16 +742,26 @@ const Auth = (() => {
     if (sess?.id) editStudent(sess.id);
   }
 
-  function editStudent(id) {
-    const student = _familyStudents.find(s => s.id === id);
-    if (!student) return;
+  async function editStudent(id) {
+    let student = (_familyStudents || []).find(s => s.id === id);
+    if (!student && _sb && _family) {
+      // Scope query to this family to prevent cross-family data access (H-5)
+      const { data } = await _sb.from('students')
+        .select('id, display_name, username, grade, pin, avatar, session_version, family_id')
+        .eq('id', id).eq('family_id', _family.id).maybeSingle();
+      if (data) {
+        student = data;
+        _familyStudents = [...(_familyStudents || []), student];
+      }
+    }
+    if (!student) { toast('Student not found. Try reloading the dashboard.', 3000); return; }
     showScreen('add-student');
     if (_el('add-student-title')) _el('add-student-title').textContent = `Edit — ${student.display_name}`;
     if (_el('add-student-id'))    _el('add-student-id').value = id;
     if (_el('add-child-name'))     _el('add-child-name').value     = student.display_name;
     if (_el('add-child-username')) _el('add-child-username').value  = student.username;
     if (_el('add-child-grade'))    _el('add-child-grade').value     = student.grade;
-    if (_el('add-child-pin'))      _el('add-child-pin').value       = student.pin;
+    if (_el('add-child-pin'))      _el('add-child-pin').value       = ''; // never pre-fill PIN
     _buildAddStudentAvatarGrid('add', student.avatar);
   }
 
@@ -726,9 +805,15 @@ const Auth = (() => {
   }
 
   // ── Parent dashboard ───────────────────────────
-  function enterParentMode() {
+  async function enterParentMode() {
     if (_parentProfile) {
-      // Already logged in as parent — go straight to dashboard
+      // Refresh student list so edit/switch always has current data
+      if (_family && _sb) {
+        try {
+          _familyStudents = await Store.getFamilyStudents(_family.id);
+          _cacheAccountsLocally(_familyStudents);
+        } catch(e) {}
+      }
       _openParentDashboard();
     } else {
       // Prompt for parent login
@@ -867,7 +952,7 @@ const Auth = (() => {
   });
 
   return {
-    init, getActiveAccount,
+    init, getActiveAccount, getParentProfile,
     // Auth screen
     setRole, showSignIn, showSignUp, emailSignIn, emailSignUp,
     showForgotPassword, backToSignIn, forgotPassword, backToSignUp,

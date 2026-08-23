@@ -154,6 +154,7 @@ function showScreen(id) {
   if (id === 'student-select')  renderStudentSelect();
   if (id === 'grade-select')    renderGradeSelect();
   if (id === 'teacher' && typeof TeacherMode !== 'undefined') TeacherMode.render();
+  if (id === 'forum'   && typeof Forum       !== 'undefined') Forum.render();
 }
 
 // back buttons
@@ -572,11 +573,31 @@ function renderParentDashboard() {
   const stats = DB.stats || {};
   const acc   = stats.totalAttempted ? Math.round(stats.totalCorrect / stats.totalAttempted * 100) : 0;
 
-  // Child card
-  if (el('pd-avatar')) el('pd-avatar').textContent = acct.avatar || '🧒';
-  if (el('pd-name'))   el('pd-name').textContent   = acct.name   || 'Student';
-  if (el('pd-level'))  el('pd-level').textContent  = `Level ${DB.level || 1} — ${LEVEL_NAMES[(DB.level||1)-1]}`;
-  if (el('pd-xp'))     el('pd-xp').textContent     = `${DB.xp || 0} XP · ${acc}% accuracy`;
+  // ── Show/hide sections based on whether any students exist ──
+  const accounts   = Store.getAccounts();
+  const hasStudents = accounts.length > 0;
+  if (el('pd-child-card'))   el('pd-child-card').classList.toggle('hidden', !hasStudents);
+  if (el('pd-tab-bar'))      el('pd-tab-bar').classList.toggle('hidden', !hasStudents);
+  if (el('pd-student-switch')) el('pd-student-switch').classList.toggle('hidden', !hasStudents);
+  if (el('pd-empty-state'))  el('pd-empty-state').classList.toggle('hidden', hasStudents);
+  if (!hasStudents) return;
+
+  // Ensure the progress tab is visible if none are currently shown
+  const anyTabVisible = [...document.querySelectorAll('.pd-tab-content')].some(c => !c.classList.contains('hidden'));
+  if (!anyTabVisible) Auth.pdTab('progress');
+
+  // Child card — show placeholder when no student is actively selected
+  if (acct.name) {
+    if (el('pd-avatar')) el('pd-avatar').textContent = acct.avatar || '🧒';
+    if (el('pd-name'))   el('pd-name').textContent   = acct.name;
+    if (el('pd-level'))  el('pd-level').textContent  = `Level ${DB.level || 1} — ${LEVEL_NAMES[(DB.level||1)-1]}`;
+    if (el('pd-xp'))     el('pd-xp').textContent     = `${DB.xp || 0} XP · ${acc}% accuracy`;
+  } else {
+    if (el('pd-avatar')) el('pd-avatar').textContent = '👇';
+    if (el('pd-name'))   el('pd-name').textContent   = 'Select a student';
+    if (el('pd-level'))  el('pd-level').textContent  = 'Use the dropdown above to view their progress';
+    if (el('pd-xp'))     el('pd-xp').textContent     = '';
+  }
 
   // Student switcher dropdown
   const sw = el('pd-student-switch');
@@ -628,14 +649,16 @@ function renderParentDashboard() {
           const p     = d.stats.totalAttempted ? Math.round(d.stats.totalCorrect / d.stats.totalAttempted * 100) : 0;
           const lname = LEVEL_NAMES[Math.min((d.level || 1) - 1, LEVEL_NAMES.length - 1)];
           const isMe  = a.id === ACTIVE_STUDENT_ID;
-          return `<div class="flex items-center gap-3 p-3 rounded-xl ${isMe ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700' : 'bg-gray-50 dark:bg-gray-700/50'}">
+          return `<div class="flex items-center gap-3 p-3 rounded-xl ${isMe ? 'bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700' : 'bg-gray-50 dark:bg-gray-700/50'}">
             <span class="text-2xl select-none">${a.avatar}</span>
             <div class="flex-1 min-w-0">
-              <div class="font-semibold text-sm text-gray-800 dark:text-white truncate">${a.name}${isMe ? ' <span class="text-xs text-blue-400 font-normal">(active)</span>' : ''}</div>
+              <div class="font-semibold text-sm text-gray-800 dark:text-white truncate">${a.name}</div>
               <div class="text-xs text-gray-400">Lv.${d.level||1} ${lname} · ${d.xp||0} XP · ${p}% accuracy · ${d.stats.totalAttempted} done</div>
             </div>
             <div class="flex gap-1.5 shrink-0 flex-wrap">
-              ${!isMe ? `<button onclick="Auth.loginStudent('${a.id}');Auth.exitParentMode()" class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2.5 py-1 rounded-lg hover:bg-blue-200 transition-colors">Switch</button>` : ''}
+              ${isMe
+                ? `<span class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2.5 py-1 rounded-lg font-medium">👁 Viewing</span>`
+                : `<button onclick="Auth.pdSwitchStudent('${a.id}');document.getElementById('pd-child-card')?.scrollIntoView({behavior:'smooth',block:'nearest'})" class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-2.5 py-1 rounded-lg hover:bg-indigo-200 transition-colors font-medium">👁 View</button>`}
               <button onclick="Auth.editStudent('${a.id}')" class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-lg hover:bg-gray-200 transition-colors">Edit</button>
               <button onclick="Auth.confirmResetStudentProgress('${a.id}','${a.name.replace(/'/g,"\\'")}')" class="text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-2.5 py-1 rounded-lg hover:bg-yellow-200 transition-colors">Reset</button>
               <button onclick="Auth.deleteStudent('${a.id}')" class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2.5 py-1 rounded-lg hover:bg-red-200 transition-colors">Delete</button>

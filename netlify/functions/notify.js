@@ -8,10 +8,14 @@
 //   NOTIFY_FROM_EMAIL          — e.g. "PSAC Master <no-reply@yourdomain.com>"
 //                                Defaults to Resend test address if unset.
 
-const SUPABASE_URL = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RESEND_KEY   = process.env.RESEND_API_KEY;
 const FROM_EMAIL   = process.env.NOTIFY_FROM_EMAIL || 'PSAC Master <onboarding@resend.dev>';
+
+function _he(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 async function sbGet(path) {
   const res = await fetch(`${SUPABASE_URL}${path}`, {
@@ -30,7 +34,8 @@ exports.handler = async (event) => {
   try { body = JSON.parse(event.body || '{}'); } catch { return { statusCode: 400 }; }
 
   const { studentId, assignmentLabel, score, total, pct } = body;
-  if (!studentId) return { statusCode: 400 };
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  if (!studentId || !UUID_RE.test(studentId)) return { statusCode: 400 };
 
   // Validate student via X-Student-Id header (same pattern as questions.js)
   const headerStudentId = event.headers['x-student-id'];
@@ -51,8 +56,9 @@ exports.handler = async (event) => {
   const parentEmail = authUser?.email;
   if (!parentEmail) return { statusCode: 200 };
 
-  const safeLabel = String(assignmentLabel || 'an assignment');
-  const safePct   = Number(pct) || 0;
+  const safeLabel       = _he(String(assignmentLabel || 'an assignment'));
+  const safeDisplayName = _he(student.display_name);
+  const safePct         = Number(pct) || 0;
   const safeScore = Number(score) || 0;
   const safeTotal = Number(total) || 0;
 
@@ -74,7 +80,7 @@ exports.handler = async (event) => {
     </div>
     <div style="padding:24px 28px">
       <p style="margin:0 0 16px;color:#374151;font-size:15px">
-        <strong>${student.display_name}</strong> just finished <strong>${safeLabel}</strong>.
+        <strong>${safeDisplayName}</strong> just finished <strong>${safeLabel}</strong>.
       </p>
       <div style="background:#f8fafc;border-radius:12px;padding:20px;text-align:center;margin-bottom:20px">
         <div style="font-size:48px;font-weight:800;color:#4f46e5;line-height:1">${safePct}%</div>
@@ -102,7 +108,7 @@ exports.handler = async (event) => {
     body: JSON.stringify({
       from:    FROM_EMAIL,
       to:      parentEmail,
-      subject: `${student.display_name} completed: ${safeLabel} — ${safePct}%`,
+      subject: `${safeDisplayName} completed: ${safeLabel} — ${safePct}%`,
       html,
     }),
   });

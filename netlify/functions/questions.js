@@ -78,14 +78,14 @@ exports.handler = async (event) => {
   const headers = {
     'Content-Type':                'application/json',
     'Access-Control-Allow-Origin': '*',
-    'Cache-Control':               'private, max-age=60',
+    'Cache-Control':               'private, max-age=86400',
   };
 
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
 
-  // ── Auth: require either a Supabase JWT or a student session id ──
+  // ── Auth: require either a valid Supabase JWT or a known student UUID ──
   const authHeader = (event.headers['authorization'] || '').replace('Bearer ', '').trim();
   const studentId  = (event.headers['x-student-id']  || '').trim();
 
@@ -93,13 +93,33 @@ exports.handler = async (event) => {
     return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
   }
 
-  // Optionally verify Supabase JWT via the Auth API (uncomment when ready)
-  // if (authHeader) {
-  //   const r = await fetch(`${process.env.SUPABASE_URL}/auth/v1/user`, {
-  //     headers: { Authorization: `Bearer ${authHeader}`, apikey: process.env.SUPABASE_KEY }
-  //   });
-  //   if (!r.ok) return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid token' }) };
-  // }
+  const SB_URL  = process.env.SUPABASE_URL  || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
+  const SB_ANON = process.env.SUPABASE_ANON_KEY || 'sb_publishable_wERRrZnvoWhM5faN2AaYpQ_CpTNHFkL';
+  const SB_SRK  = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (authHeader) {
+    // Verify Supabase JWT — rejects expired, forged, or random strings
+    const r = await fetch(`${SB_URL}/auth/v1/user`, {
+      headers: { Authorization: `Bearer ${authHeader}`, apikey: SB_ANON },
+    });
+    if (!r.ok) return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid token' }) };
+  } else if (studentId) {
+    // Validate student UUID format first (fast, no DB call)
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    if (!UUID_RE.test(studentId)) {
+      return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid session' }) };
+    }
+    // Verify student exists in DB (requires SUPABASE_SERVICE_ROLE_KEY env var)
+    if (SB_SRK) {
+      const res  = await fetch(`${SB_URL}/rest/v1/students?id=eq.${studentId}&select=id&limit=1`, {
+        headers: { apikey: SB_SRK, Authorization: `Bearer ${SB_SRK}` },
+      });
+      const rows = res.ok ? await res.json() : [];
+      if (!Array.isArray(rows) || !rows.length) {
+        return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid session' }) };
+      }
+    }
+  }
 
   const p          = event.queryStringParameters || {};
   const subjectId  = (p.subject    || '').replace(/[^a-z0-9-]/g, '');

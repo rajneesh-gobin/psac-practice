@@ -5,6 +5,17 @@
 [functions]
   node_bundler = "esbuild"
 
+# ── Security headers ──────────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options            = "DENY"
+    X-Content-Type-Options     = "nosniff"
+    Referrer-Policy            = "strict-origin-when-cross-origin"
+    Permissions-Policy         = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security  = "max-age=31536000; includeSubDomains"
+    Content-Security-Policy    = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; connect-src 'self' https://*.supabase.co https://accounts.google.com; img-src 'self' data: https:; frame-src https://accounts.google.com; frame-ancestors 'none'; object-src 'none'"
+
 [functions."weekly-digest"]
   schedule = "0 9 * * 0"
 
@@ -17,8 +28,18 @@
   status = 404
   force  = true
 
-# Route API calls to the function
+# Route API calls to functions
 [[redirects]]
   from   = "/api/questions"
   to     = "/.netlify/functions/questions"
+  status = 200
+
+[[redirects]]
+  from   = "/api/student-login"
+  to     = "/.netlify/functions/student-login"
+  status = 200
+
+[[redirects]]
+  from   = "/api/set-pin"
+  to     = "/.netlify/functions/set-pin"
   status = 200

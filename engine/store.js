@@ -61,7 +61,7 @@ const Store = (() => {
 
   async function getMyFamily() {
     if (!_sb) return null;
-    const { data } = await _sb.from('families').select('*').single();
+    const { data } = await _sb.from('families').select('*').maybeSingle();
     return data || null;
   }
 
@@ -82,7 +82,7 @@ const Store = (() => {
   async function getFamilyStudents(familyId) {
     if (!_sb) return [];
     const { data } = await _sb.from('students')
-      .select('id, username, display_name, avatar, grade, pin, settings, session_version')
+      .select('id, username, display_name, avatar, grade, settings, session_version, expires_at')
       .eq('family_id', familyId)
       .order('created_at');
     return data || [];
@@ -90,13 +90,14 @@ const Store = (() => {
 
   async function createStudent(familyId, { username, displayName, avatar, grade, pin, settings }) {
     if (!_sb) return null;
-    const { data, error } = await _sb.from('students')
-      .insert({
-        family_id: familyId, username, display_name: displayName,
-        avatar, grade: parseInt(grade), pin,
-        settings: settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false },
-      })
-      .select().single();
+    const row = {
+      family_id: familyId, username, display_name: displayName,
+      avatar, grade: parseInt(grade),
+      settings: settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false },
+    };
+    // pin only stored directly in local-dev fallback; production uses set-pin function
+    if (pin) row.pin = pin;
+    const { data, error } = await _sb.from('students').insert(row).select().single();
     return error ? null : data;
   }
 
@@ -106,7 +107,7 @@ const Store = (() => {
     if (updates.displayName !== undefined) row.display_name = updates.displayName;
     if (updates.avatar      !== undefined) row.avatar       = updates.avatar;
     if (updates.grade       !== undefined) row.grade        = parseInt(updates.grade);
-    if (updates.pin         !== undefined) row.pin          = updates.pin;
+    if (updates.pin         !== undefined) row.pin          = updates.pin; // legacy/local-dev only
     if (updates.settings    !== undefined) row.settings     = updates.settings;
     await _sb.from('students').update(row).eq('id', studentId);
   }
