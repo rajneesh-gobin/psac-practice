@@ -510,11 +510,12 @@ const GENERATORS = {
 
 // ── Self-register with subject registry (Phase 2) ──
 registerSubject({
-  id:         'grade5-maths',
-  name:       'Mathematics',
-  grade:      5,
-  icon:       '🔢',
-  subject:    'Maths',
-  curriculum: 'MIE Mauritius',
-  chapters:   CHAPTERS,
+  id:          'grade5-maths',
+  name:        'Mathematics',
+  grade:       5,
+  icon:        '🔢',
+  subject:     'Maths',
+  curriculum:  'MIE Mauritius',
+  level4Label: 'Word Problems',
+  chapters:    CHAPTERS,
 });

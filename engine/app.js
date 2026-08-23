@@ -764,7 +764,7 @@ function renderParentDashboard() {
   const asgList = el('pd-asgn-list');
   if (asgList) {
     const asgns = DB.assignments || [];
-    const DLABELS = ['','Basic','Medium','Hard','Word Problems'];
+    const DLABELS = ['','Basic','Medium','Hard', (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.level4Label) || 'Challenge'];
     const allPdChs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
       .flatMap(p => p._chapters || p.chapters || []);
     asgList.innerHTML = asgns.length ? asgns.map(a => {
@@ -1043,6 +1043,17 @@ function startChapterDirect(chapterId, forceDiff) {
   const ch = CHAPTERS.find(c => c.id === chapterId);
   document.getElementById('practice-ch-name').textContent = ch ? `${ch.icon} ${ch.name}` : chapterId;
   updateDiffBtns(1);
+
+  // Disable video help button when no CHAPTER_HELP entry exists for this chapter
+  const helpBtn = document.getElementById('help-btn');
+  if (helpBtn) {
+    const hasHelp = (typeof CHAPTER_HELP !== 'undefined') && !!CHAPTER_HELP[chapterId];
+    helpBtn.disabled = !hasHelp;
+    helpBtn.classList.toggle('opacity-40', !hasHelp);
+    helpBtn.classList.toggle('cursor-not-allowed', !hasHelp);
+    helpBtn.title = hasHelp ? '' : 'No video help available for this chapter yet';
+  }
+
   setTimeout(() => { initScratchpad('scratchpad-practice'); }, 100);
 }
 
@@ -1286,7 +1297,8 @@ function renderExamQuestion() {
   const q = S.exam.qs[S.exam.idx];
   if (!q) return;
   const ch = CHAPTERS.find(c => c.id === q.chapterId);
-  const lvlText = ['','⭐ Basic','⭐⭐ Medium','⭐⭐⭐ Hard','🏆 Word Problem'][q.difficulty] || '';
+  const _l4 = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.level4Label) || 'Challenge';
+  const lvlText = ['','⭐ Basic','⭐⭐ Medium','⭐⭐⭐ Hard',`🏆 ${_l4}`][q.difficulty] || '';
 
   document.getElementById('exam-q-badge').textContent = `Q${S.exam.idx + 1}`;
   document.getElementById('exam-q-chapter').textContent = ch ? ch.name : '';
@@ -1459,17 +1471,27 @@ document.getElementById('difficulty-btns').addEventListener('click', e => {
 });
 
 function updateDiffBtns(active) {
-  const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
+  const maxDiff  = DB.restrictions?.maxDifficulty ?? 4;
+  const chId     = S.practice.chapterId;
+  const l4Label  = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.level4Label) || 'Challenge';
+  // Hide L4 button when no L4 questions exist for this chapter (avoids "Word Problems" on Science etc.)
+  const hasL4    = chId ? STATIC_QUESTIONS.some(q => q.chapterId === chId && q.difficulty === 4) : true;
+
   document.querySelectorAll('.diff-btn').forEach(b => {
-    const lv = parseInt(b.dataset.level);
+    const lv     = parseInt(b.dataset.level);
     const locked = lv > maxDiff;
-    b.classList.toggle('active', active !== null && lv === active);
-    b.classList.toggle('opacity-30', locked);
-    b.classList.toggle('cursor-not-allowed', locked);
-    b.title = locked ? '🔒 This difficulty is locked by your parent' : '';
-    b.disabled = locked;
+    const noL4   = lv === 4 && !hasL4;
+    if (lv === 4) b.textContent = `🏆 Level 4 — ${l4Label}`;
+    b.classList.toggle('active',           active !== null && lv === active && !noL4);
+    b.classList.toggle('opacity-30',       locked || noL4);
+    b.classList.toggle('cursor-not-allowed', locked || noL4);
+    b.title    = locked ? '🔒 This difficulty is locked by your parent'
+               : noL4   ? `No ${l4Label.toLowerCase()} questions for this chapter yet`
+               : '';
+    b.disabled = locked || noL4;
   });
-  const labels = ['','⭐ Level 1 — Basic','⭐⭐ Level 2 — Medium','⭐⭐⭐ Level 3 — Hard','🏆 Level 4 — Word Problems'];
+
+  const labels = ['','⭐ Level 1 — Basic','⭐⭐ Level 2 — Medium','⭐⭐⭐ Level 3 — Hard',`🏆 Level 4 — ${l4Label}`];
   document.getElementById('practice-diff-badge').textContent = active === null ? '📋 Topic Practice' : (labels[active] || '');
 }
 

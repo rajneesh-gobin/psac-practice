@@ -4,7 +4,7 @@
 registerSubject({
   id: 'grade6-maths', name: 'Mathematics', grade: 6, icon: '🔢', subject: 'Maths',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false,
+  practiceble: true, notesBased: false, level4Label: 'Word Problems',
   chapters: [
     { id: 'g6-numeration',   name: 'Numbers & Numeration',             icon: '🔢', examWeight: 3,
       syllabus: 'Read/write numbers to 1,000,000. Place value up to one million. Expanded notation. Ordering and comparing numbers. Prime and composite numbers. Number patterns with whole numbers, fractions and decimals.' },
