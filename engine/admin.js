@@ -105,6 +105,20 @@ const AdminPanel = (() => {
               👶 Children
             </button>` : ''}
           </div>
+          <!-- Name edit + Expiry -->
+          <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+            <input type="text" value="${_esc(m.full_name || '')}" placeholder="Display name…"
+              onblur="AdminPanel.updateMemberName('${m.id}', this.value)"
+              onkeydown="if(event.key==='Enter')this.blur()"
+              title="Click to edit display name"
+              class="flex-1 min-w-0 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+            <span class="text-xs text-gray-400 shrink-0">⏳ Expires</span>
+            <input type="date" value="${m.expires_at ? m.expires_at.slice(0,10) : ''}"
+              onchange="AdminPanel.setExpiry('${m.id}', this.value)"
+              title="Set account expiry — leave blank for no expiry"
+              class="text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+            ${m.expires_at ? `<button onclick="AdminPanel.setExpiry('${m.id}','')" class="text-xs text-red-400 hover:text-red-600 shrink-0" title="Remove expiry">✕</button>` : ''}
+          </div>
         </div>
         <div id="children-panel-${m.id}" class="hidden mt-3 pl-2 border-l-2 border-indigo-200 dark:border-indigo-700">
           <p class="text-xs text-gray-400 animate-pulse">Loading children…</p>
@@ -125,7 +139,7 @@ const AdminPanel = (() => {
     // Load family → students
     const { data: fam } = await _sb.from('families').select('id').eq('owner_id', profileId).maybeSingle();
     if (!fam) { panel.innerHTML = '<p class="text-xs text-gray-400">No family found.</p>'; return; }
-    const { data: kids } = await _sb.from('students').select('id, display_name, username, grade, session_version, created_at').eq('family_id', fam.id);
+    const { data: kids } = await _sb.from('students').select('id, display_name, username, grade, session_version, expires_at, created_at').eq('family_id', fam.id);
     _familyStudents[profileId] = kids || [];
     _renderChildren(profileId);
   }
@@ -136,16 +150,64 @@ const AdminPanel = (() => {
     const kids = _familyStudents[profileId] || [];
     if (!kids.length) { panel.innerHTML = '<p class="text-xs text-gray-400 py-1">No children registered yet.</p>'; return; }
     panel.innerHTML = kids.map(k => `
-      <div class="flex items-center gap-2 py-1 text-xs text-gray-600 dark:text-gray-300 flex-wrap">
-        <span class="text-base">🧒</span>
-        <span class="font-medium">${_esc(k.display_name)}</span>
-        <span class="text-gray-400">@${_esc(k.username)}</span>
-        <span class="text-gray-400">Grade ${k.grade || '?'}</span>
-        <button onclick="AdminPanel.forceLogout('${k.id}','${_esc(k.display_name)}')"
-          class="ml-auto shrink-0 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200 transition-colors font-semibold">
-          ⏏ Force Logout
-        </button>
+      <div class="py-1.5 text-xs text-gray-600 dark:text-gray-300">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-base">🧒</span>
+          <span class="font-medium">${_esc(k.display_name)}</span>
+          <span class="text-gray-400">@${_esc(k.username)}</span>
+          <span class="text-gray-400">Grade ${k.grade || '?'}</span>
+          ${k.expires_at ? `<span class="text-orange-500 font-semibold">⏳ ${new Date(k.expires_at) < new Date() ? 'Expired' : 'Expires'} ${k.expires_at.slice(0,10)}</span>` : ''}
+          <button onclick="AdminPanel.forceLogout('${k.id}','${_esc(k.display_name)}')"
+            class="ml-auto shrink-0 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200 transition-colors font-semibold">
+            ⏏ Force Logout
+          </button>
+        </div>
+        <div class="flex items-center gap-2 mt-1">
+          <span class="text-gray-400 shrink-0">⏳ Expires:</span>
+          <input type="date" value="${k.expires_at ? k.expires_at.slice(0,10) : ''}"
+            onchange="AdminPanel.setStudentExpiry('${k.id}','${_esc(k.display_name)}',this.value)"
+            class="border border-gray-200 dark:border-gray-600 rounded px-1.5 py-0.5 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400 text-xs">
+          ${k.expires_at ? `<button onclick="AdminPanel.setStudentExpiry('${k.id}','${_esc(k.display_name)}','')" class="text-red-400 hover:text-red-600" title="Remove expiry">✕</button>` : ''}
+        </div>
       </div>`).join('<hr class="border-gray-100 dark:border-gray-700 my-0.5">');
+  }
+
+  async function updateMemberName(userId, newName) {
+    if (!_sb || !newName?.trim()) return;
+    const trimmed = newName.trim();
+    const current = _members.find(m => m.id === userId);
+    if (current?.full_name === trimmed) return;
+    const { error } = await _sb.from('profiles').update({ full_name: trimmed }).eq('id', userId);
+    if (error) { alert('Error: ' + error.message); return; }
+    if (current) current.full_name = trimmed;
+    toast(`Name updated to "${trimmed}"`, 2500);
+  }
+
+  async function setExpiry(userId, dateStr) {
+    if (!_sb) return;
+    const val = dateStr ? new Date(dateStr).toISOString() : null;
+    const { error } = await _sb.from('profiles').update({ expires_at: val }).eq('id', userId);
+    if (error) { alert('Error: ' + error.message); return; }
+    toast(val ? `Account expires ${dateStr}` : 'Expiry removed', 2500);
+    await loadMembers();
+  }
+
+  async function setStudentExpiry(studentId, studentName, dateStr) {
+    if (!_sb) return;
+    const val = dateStr ? new Date(dateStr).toISOString() : null;
+    const { error } = await _sb.from('students').update({ expires_at: val }).eq('id', studentId);
+    if (error) { alert('Error: ' + error.message); return; }
+    toast(val ? `${studentName} expires ${dateStr}` : `Expiry removed for ${studentName}`, 2500);
+    // Refresh local cache
+    Object.keys(_familyStudents).forEach(k => {
+      const s = (_familyStudents[k] || []).find(x => x.id === studentId);
+      if (s) s.expires_at = val;
+    });
+    // Re-render the open panel
+    Object.keys(_familyStudents).forEach(k => {
+      const panel = document.getElementById(`children-panel-${k}`);
+      if (panel && !panel.classList.contains('hidden')) _renderChildren(k);
+    });
   }
 
   async function forceLogout(studentId, studentName) {
@@ -292,5 +354,5 @@ const AdminPanel = (() => {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, toggleGrade, toggleSubject, toggleRegistration, loadStats };
+  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats };
 })();

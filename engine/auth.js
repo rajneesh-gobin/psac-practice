@@ -95,6 +95,13 @@ const Auth = (() => {
       return;
     }
 
+    if (profile.expires_at && new Date(profile.expires_at) < new Date()) {
+      await _sb.auth.signOut();
+      showScreen('auth');
+      _showAuthError('Your account access has expired. Please contact the administrator.');
+      return;
+    }
+
     if (profile.role === 'admin') {
       _isAdminUser = true;
       // Admin lands on parent dashboard; admin panel accessible via button
@@ -139,13 +146,22 @@ const Auth = (() => {
     // Admin force-expire check — validate session_version against DB
     if (_sb) {
       try {
-        const { data: sv } = await _sb.from('students').select('session_version').eq('id', sess.id).maybeSingle();
-        if (sv && sv.session_version !== (sess.sessionVersion || 0)) {
-          Store.clearStudentSession();
-          document.body.style.opacity = '1';
-          showScreen('auth');
-          toast('Your session was ended by the administrator. Please log in again.', 5000);
-          return;
+        const { data: sv } = await _sb.from('students').select('session_version, expires_at').eq('id', sess.id).maybeSingle();
+        if (sv) {
+          if (sv.session_version !== (sess.sessionVersion || 0)) {
+            Store.clearStudentSession();
+            document.body.style.opacity = '1';
+            showScreen('auth');
+            toast('Your session was ended by the administrator. Please log in again.', 5000);
+            return;
+          }
+          if (sv.expires_at && new Date(sv.expires_at) < new Date()) {
+            Store.clearStudentSession();
+            document.body.style.opacity = '1';
+            showScreen('auth');
+            toast('Your practice access has expired. Please ask your parent.', 5000);
+            return;
+          }
         }
       } catch (_) { /* offline — allow resume */ }
     }
