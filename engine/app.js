@@ -10,6 +10,82 @@ const S = {
   currentScreen: 'dashboard',
 };
 
+// ── GAMIFICATION STATE ────────────────────────
+let _soundEnabled = true;
+let _comboStreak  = 0;
+let _audioCtx     = null;
+
+function _getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+function _playTone(freq, dur, start, ctx, vol) {
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.frequency.value = freq;
+  osc.type = 'sine';
+  gain.gain.setValueAtTime(vol || 0.22, start);
+  gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+  osc.start(start);
+  osc.stop(start + dur + 0.05);
+}
+
+function _playSound(type) {
+  if (!_soundEnabled) return;
+  try {
+    const ctx = _getAudioCtx();
+    const t   = ctx.currentTime;
+    if      (type === 'correct') { _playTone(523, 0.15, t,      ctx, 0.18); _playTone(659, 0.2,  t + 0.1,  ctx, 0.18); }
+    else if (type === 'wrong')   { _playTone(300, 0.1,  t,      ctx, 0.18); _playTone(220, 0.28, t + 0.09, ctx, 0.13); }
+    else if (type === 'combo')   { _playTone(523, 0.1,  t,      ctx, 0.18); _playTone(659, 0.1,  t + 0.08, ctx, 0.18); _playTone(784, 0.2, t + 0.16, ctx, 0.22); }
+    else if (type === 'levelup') { [523,659,784,1047].forEach((f,i) => _playTone(f, 0.15, t + i*0.1, ctx, 0.2)); }
+  } catch (_) {}
+}
+
+function toggleSound() {
+  _soundEnabled = !_soundEnabled;
+  const btn = document.getElementById('sound-toggle-btn');
+  if (btn) {
+    btn.textContent = _soundEnabled ? '🔔 Sound On' : '🔕 Sound Off';
+    btn.classList.toggle('muted', !_soundEnabled);
+  }
+}
+
+function _floatXP(amount) {
+  const xpEl = document.getElementById('xp-display');
+  if (!xpEl) return;
+  const rect = xpEl.getBoundingClientRect();
+  const el   = document.createElement('div');
+  el.className = 'xp-float';
+  el.textContent = `+${amount} XP ✨`;
+  el.style.left = `${rect.left + rect.width / 2 - 30}px`;
+  el.style.top  = `${rect.top + window.scrollY - 10}px`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1400);
+}
+
+const _COMBO_MSGS = { 2:'🔥 2 in a row!', 3:'🔥🔥 3 in a row!', 4:'💪 4 in a row!', 5:'🔥🔥🔥 On fire!', 7:'⚡ 7 in a row!', 10:'🏆 10 in a row! LEGENDARY!' };
+
+function _showCombo(n) {
+  const msg = _COMBO_MSGS[n];
+  if (!msg) return;
+  const el = document.getElementById('practice-combo');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.remove('hidden', 'combo-out');
+  void el.offsetWidth;
+  el.classList.add('combo-in');
+  clearTimeout(el._comboTimer);
+  el._comboTimer = setTimeout(() => {
+    el.classList.remove('combo-in');
+    el.classList.add('combo-out');
+    setTimeout(() => el.classList.add('hidden'), 350);
+  }, 1800);
+}
+
 // ── STORAGE ───────────────────────────────────
 let ACTIVE_STUDENT_ID = null;
 let DB = {};   // populated by Auth.init() after student is selected
@@ -441,7 +517,7 @@ function gainXP() {
   const newLevel = getLevel(DB.xp);
   const oldLevel = DB.level || 1;
   DB.level = newLevel;
-  if (newLevel > oldLevel) showLevelUp(newLevel);
+  if (newLevel > oldLevel) { _playSound('levelup'); showLevelUp(newLevel); }
   updateXPBar();
 }
 
@@ -1237,7 +1313,25 @@ function loadPracticeQuestion() {
   }
   const q = S.practice.qs[S.practice.idx];
   if (!q) return;
-  document.getElementById('practice-q-text').innerHTML = q.question;
+
+  // Progress bar
+  const _pbar = document.getElementById('practice-progress-bar');
+  if (_pbar && S.practice.qs.length > 1) {
+    const _pct = Math.round(S.practice.idx / S.practice.qs.length * 100);
+    _pbar.style.width = _pct + '%';
+  }
+
+  // Question entrance animation
+  const _qText = document.getElementById('practice-q-text');
+  if (_qText) {
+    _qText.classList.remove('question-enter');
+    void _qText.offsetWidth; // force reflow
+    _qText.innerHTML = q.question;
+    _qText.classList.add('question-enter');
+  } else {
+    document.getElementById('practice-q-text').innerHTML = q.question;
+  }
+
   document.getElementById('practice-hint-box').classList.add('hidden');
   S.practice.hintShown = false;
   document.getElementById('practice-q-counter').textContent =
@@ -1291,10 +1385,21 @@ function practiceSubmit() {
   }
   // ── PRACTICE MODE (existing behaviour) ──────────────────────────
 
+  // Combo + sounds (before rendering so float appears at correct time)
+  if (ok) {
+    _comboStreak++;
+    _floatXP(XP_PER_ANSWER);
+    _playSound('correct');
+    _showCombo(_comboStreak);
+  } else {
+    _comboStreak = 0;
+    _playSound('wrong');
+  }
+
   // show correct/wrong state
   renderAnswerArea(q, 'practice-answer-area', ua, true);
 
-  // Feedback — symmetry shows colour-coded grid instead of text answer
+  // Feedback
   const answerLine = q.type === 'symmetry'
     ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
     : `Not quite. Correct answer: <b>${q.answer}</b>`;
@@ -1308,7 +1413,10 @@ function practiceSubmit() {
         <div class="text-sm">${q.explanation}</div>
       </div>
     </div>`;
-  fb.classList.remove('hidden');
+  // Entrance animation — remove old class first, force reflow, re-add
+  fb.classList.remove('hidden', 'feedback-pop', 'feedback-shake');
+  void fb.offsetWidth;
+  fb.classList.add(ok ? 'feedback-pop' : 'feedback-shake');
 
   // Stats
   S.practice.session.attempted++;
@@ -1318,11 +1426,6 @@ function practiceSubmit() {
 
   document.getElementById('practice-submit-btn').classList.add('hidden');
   document.getElementById('practice-next-btn').classList.remove('hidden');
-
-  // Auto-badge check
-  if (ok && S.practice.session.correct === S.practice.session.attempted && S.practice.session.correct >= 5) {
-    toast('🔥 Perfect streak! Keep going!', 2000);
-  }
 }
 
 function practiceNext() {

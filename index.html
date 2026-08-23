@@ -17,6 +17,9 @@
 
   <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
 
+  <!-- Combo / streak banner (fixed, practice mode only) -->
+  <div id="practice-combo" class="hidden"></div>
+
   <!-- Offline banner -->
   <div id="offline-banner" class="hidden fixed top-0 left-0 right-0 z-[100] bg-red-500 text-white text-center text-xs py-2 font-semibold shadow-lg select-none">
     📡 You're offline — your progress is saved locally and will sync when you reconnect
@@ -638,9 +641,13 @@
             <div class="flex items-start justify-between mb-3">
               <div>
                 <h3 id="practice-ch-name" class="font-bold text-gray-800 dark:text-white text-lg"></h3>
-                <div class="flex gap-2 mt-1 flex-wrap">
+                <div class="flex gap-2 mt-1 flex-wrap items-center">
                   <span id="practice-diff-badge" class="chip green text-xs"></span>
                   <span id="practice-q-counter" class="text-xs text-gray-500 dark:text-gray-400"></span>
+                </div>
+                <!-- Question progress bar -->
+                <div class="practice-progress-outer mt-2">
+                  <div id="practice-progress-bar" class="practice-progress-inner" style="width:0%"></div>
                 </div>
               </div>
               <button id="practice-hint-btn" class="btn-ghost text-sm">💡 Hint</button>
@@ -671,7 +678,8 @@
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
             <button id="formula-btn" onclick="showFormulaModal()" class="w-full btn-secondary text-sm mb-2">📐 Key Formulas & Facts</button>
-            <button id="help-btn" onclick="showHelpModal()" class="w-full btn-help text-sm">🎬 How to — Video Help</button>
+            <button id="help-btn" onclick="showHelpModal()" class="w-full btn-help text-sm mb-2">🎬 How to — Video Help</button>
+            <button id="sound-toggle-btn" onclick="toggleSound()" class="w-full btn-ghost text-sm">🔔 Sound On</button>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
             <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3">📊 This Session</p>
