@@ -114,3 +114,104 @@ STATIC_QUESTIONS.push(
     explanation:'True. <b>Rodrigues Island</b>, located about 560 km east of Mauritius, is also in the cyclone belt of the southern Indian Ocean and faces similar — sometimes more severe — cyclone risk due to its more exposed position.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6hg-nh-011', chapterId:'g6-natural-hazards', difficulty:1,
+    question:'Cyclones are caused by: (PSAC 2025 Part B)',
+    options:[
+      'The violent shaking of the Earth\'s tectonic plates',
+      'Warm ocean water heating moist air that rises, cools, and forms a rotating storm system',
+      'Cold air from the Antarctic colliding with warm tropical air',
+      'Large volcanic eruptions in the Indian Ocean'
+    ],
+    answer:'Warm ocean water heating moist air that rises, cools, and forms a rotating storm system',
+    hint:'PSAC 2025 confirmed that cyclones are NOT caused by the Earth shaking.',
+    explanation:'Cyclones form when <b>warm ocean water</b> (above 26°C) heats the air above it. This warm, moist air rises rapidly, cools, and condenses — releasing enormous energy. As more warm air rushes in to replace the rising air, the Earth\'s rotation (Coriolis effect) causes the whole system to <b>spin</b>. Cyclones are NOT caused by earthquakes. (PSAC 2025 Part B: "Cyclones are caused by violent shaking of the earth" — FALSE.)' }),
+
+  makeMCQ({ id:'g6hg-nh-012', chapterId:'g6-natural-hazards', difficulty:2,
+    question:'What is a VOLCANO? (PSAC 2025 Q4)',
+    options:[
+      'A circular lake formed in a meteor crater',
+      'An opening in the Earth\'s crust through which molten rock (lava), ash and gases are expelled',
+      'A very tall mountain with permanent snow on its peak',
+      'An underground river of very hot water'
+    ],
+    answer:'An opening in the Earth\'s crust through which molten rock (lava), ash and gases are expelled',
+    hint:'The Grade 6 textbook includes a labelled diagram of a volcano.',
+    explanation:'A <b>volcano</b> is an opening (vent) in the Earth\'s crust where <b>magma</b> (molten rock underground) forces its way to the surface. Once at the surface, it is called <b>lava</b>. Volcanic eruptions also release gases, dust and ash. The Grade 6 textbook labels volcano parts including: crater, volcanic cone, pipe, magma chamber, lava flow, volcanic bombs and dust/gas.' }),
+
+  makeMCQ({ id:'g6hg-nh-013', chapterId:'g6-natural-hazards', difficulty:2,
+    question:'What is a DORMANT VOLCANO? (PSAC 2025 Q4d)',
+    options:[
+      'A volcano that is currently erupting violently',
+      'A volcano that has become completely extinct with no possibility of future eruption',
+      'A volcano that is not currently erupting but could erupt again in the future',
+      'A small volcano found only underwater'
+    ],
+    answer:'A volcano that is not currently erupting but could erupt again in the future',
+    hint:'"Dormant" means sleeping — it could wake up!',
+    explanation:'A <b>dormant volcano</b> is one that is not currently active but has the potential to erupt again. In Mauritius, several features are <b>dormant volcanoes</b>: Trou aux Cerfs (Curepipe), Kanaka Crater, Bassin Blanc, and Grand Bassin. Piton de la Fournaise on neighbouring <b>Réunion Island</b> is one of the world\'s most <b>active</b> volcanoes.' }),
+
+  makeMCQ({ id:'g6hg-nh-014', chapterId:'g6-natural-hazards', difficulty:1,
+    question:'PITON DE LA FOURNAISE is an active volcano. On which island is it located? (PSAC 2025 Q4b)',
+    options:['Mauritius','Rodrigues','Réunion Island','Madagascar'],
+    answer:'Réunion Island',
+    hint:'This island is a French territory very close to Mauritius.',
+    explanation:'<b>Piton de la Fournaise</b> ("Peak of the Furnace") is one of the world\'s most active volcanoes, located on <b>Réunion Island</b> — a French overseas territory about 200 km west of Mauritius. It erupts several times a year. Mauritius itself has no active volcanoes — it is geologically older and its volcanoes are all dormant or extinct.' }),
+
+  makeMCQ({ id:'g6hg-nh-015', chapterId:'g6-natural-hazards', difficulty:2,
+    question:'What is a TSUNAMI and what causes it?',
+    options:[
+      'A very heavy rainfall event caused by cyclones',
+      'A series of enormous waves caused by an undersea earthquake, volcanic eruption or landslide that displaces large amounts of water',
+      'A type of flooding caused by rivers overflowing after heavy rain',
+      'A storm surge caused by cyclone winds pushing water towards the coast'
+    ],
+    answer:'A series of enormous waves caused by an undersea earthquake, volcanic eruption or landslide that displaces large amounts of water',
+    hint:'"Tsunami" is a Japanese word meaning harbour wave.',
+    explanation:'A <b>tsunami</b> is a series of large ocean waves generated when a massive event (usually an <b>undersea earthquake</b>) suddenly displaces enormous amounts of seawater. The waves travel at up to 800 km/h across the ocean and can cause catastrophic flooding when they reach shore. The 2004 Indian Ocean tsunami killed over 230,000 people in 14 countries and reached the coasts of Mauritius.' }),
+
+  makeTF({ id:'g6hg-nh-016', chapterId:'g6-natural-hazards', difficulty:1,
+    question:'December, January and February are SUMMER months in Mauritius.',
+    answer:true,
+    hint:'Mauritius is in the Southern Hemisphere — its seasons are opposite to Europe\'s.',
+    explanation:'<b>True.</b> In Mauritius (Southern Hemisphere), <b>December, January and February</b> are <b>summer months</b> — hot, humid and coinciding with the cyclone season. This is the opposite of the Northern Hemisphere where December–February is winter. (PSAC 2025 Part B: "December, January and February are winter months in Mauritius" — FALSE.)' }),
+
+  makeMCQ({ id:'g6hg-nh-017', chapterId:'g6-natural-hazards', difficulty:2,
+    question:'What is an EARTHQUAKE and what causes it?',
+    options:[
+      'A severe tropical storm with rotating winds',
+      'The sudden shaking of the Earth\'s surface caused by the movement of tectonic plates',
+      'A flood caused by heavy rainfall on deforested slopes',
+      'A large underwater volcanic eruption'
+    ],
+    answer:'The sudden shaking of the Earth\'s surface caused by the movement of tectonic plates',
+    hint:'The Earth\'s crust is made of huge "plates" that move slowly — sometimes they slip suddenly.',
+    explanation:'An <b>earthquake</b> is the sudden violent shaking of the Earth\'s surface, caused by the <b>movement of tectonic plates</b>. The Earth\'s crust is divided into large sections (tectonic plates) that move slowly. When they collide, separate or slide against each other, the released energy causes earthquakes. Earthquakes are measured on the Richter scale. They can trigger tsunamis if they occur under the ocean.' }),
+
+  makeMCQ({ id:'g6hg-nh-018', chapterId:'g6-natural-hazards', difficulty:3,
+    question:'What ADVANTAGE do volcanoes offer to humans? (PSAC 2025 Q4c)',
+    options:[
+      'Volcanic eruptions bring fresh water to dry regions',
+      'Volcanic soil is extremely fertile — ideal for growing crops',
+      'Volcanoes create natural harbours for ships',
+      'Volcanic ash cools the climate, helping reduce global warming'
+    ],
+    answer:'Volcanic soil is extremely fertile — ideal for growing crops',
+    hint:'The lava breaks down into mineral-rich soil that farmers love.',
+    explanation:'Despite being dangerous, <b>volcanoes create extremely fertile soil</b>. Lava and volcanic ash contain rich minerals (phosphorus, potassium) that, when broken down over time, produce highly productive agricultural land. Many of the world\'s most productive farming areas are on the slopes of volcanoes (e.g., Mount Etna in Sicily, Java in Indonesia). Mauritius itself has fertile volcanic soil well-suited to sugar cane.' }),
+
+  makeMCQ({ id:'g6hg-nh-019', chapterId:'g6-natural-hazards', difficulty:4,
+    question:'A DROUGHT is another natural hazard affecting Mauritius. What is a drought and why is it particularly serious for Mauritius?',
+    options:[
+      'A drought is a brief period of very heavy rain that causes flooding',
+      'A drought is a prolonged period of abnormally low rainfall — serious because Mauritius relies on rainfall for drinking water reservoirs and agricultural irrigation',
+      'A drought is when temperatures fall below 10°C, damaging crops',
+      'A drought is caused by cyclones removing all moisture from the air'
+    ],
+    answer:'A drought is a prolonged period of abnormally low rainfall — serious because Mauritius relies on rainfall for drinking water reservoirs and agricultural irrigation',
+    hint:'Mauritius is a small island — it cannot import fresh water easily.',
+    explanation:'A <b>drought</b> is an extended period of <b>abnormally low rainfall</b>. It is serious for Mauritius because: (1) the island\'s <b>reservoirs</b> (like La Nicolière, Mare aux Vacoas) depend on rainfall for drinking water supply; (2) agriculture requires irrigation; (3) sugar cane and vegetable crops can fail. Climate change is increasing the frequency of droughts in Mauritius, making water conservation increasingly important.' })
+
+);

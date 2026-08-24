@@ -140,3 +140,74 @@ STATIC_QUESTIONS.push(
     explanation:'On a contour map of a hill, the lines form concentric loops. The <b>innermost (smallest) loop</b> represents the <b>highest point — the summit</b>. Each outward loop shows a lower contour level going down towards the base of the hill.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6hg-ms-011', chapterId:'g6-map-skills', difficulty:1,
+    question:'An area of flat and low land is called a: (PSAC 2025 Q1)',
+    options:['Gorge','Plateau','Plain','Valley'],
+    answer:'Plain',
+    hint:'Think of the Northern Plains of Mauritius — flat, low land perfect for sugar cane.',
+    explanation:'A <b>plain</b> is an area of flat and low land. In Mauritius, the <b>Northern Plains</b> (around Triolet, Mapou and Poudre d\'Or) are the main plain — flat, low-lying areas ideal for sugar cane cultivation. A <b>plateau</b> is flat but HIGH (like the central plateau of Mauritius). A <b>valley</b> is a low area between hills. A <b>gorge</b> is a narrow, deep valley.' }),
+
+  makeMCQ({ id:'g6hg-ms-012', chapterId:'g6-map-skills', difficulty:2,
+    question:'The line of latitude at 0° is called the: (PSAC 2025 Q8b)',
+    options:['Prime Meridian','Tropic of Cancer','International Date Line','Equator'],
+    answer:'Equator',
+    hint:'It divides the Earth into the Northern and Southern Hemispheres.',
+    explanation:'The <b>Equator</b> is the line of latitude at <b>0°</b>. It circles the Earth horizontally at its widest point, dividing it into the <b>Northern Hemisphere</b> (above) and <b>Southern Hemisphere</b> (below). Mauritius is located south of the Equator (approximately 20°S latitude). The <b>Prime Meridian</b> is the line of longitude at 0° (running through Greenwich, London).' }),
+
+  makeMCQ({ id:'g6hg-ms-013', chapterId:'g6-map-skills', difficulty:2,
+    question:'A plane leaves SSR International Airport in Mauritius for Madagascar. In which direction does it fly? (PSAC 2025 Q8d)',
+    options:['North','South-East','West','North-East'],
+    answer:'West',
+    hint:'Look at a map of the Indian Ocean — where is Madagascar relative to Mauritius?',
+    explanation:'Madagascar lies to the <b>west</b> of Mauritius (approximately 800 km to the west-northwest). Therefore, a plane from SSR International Airport (Mauritius) heading to Madagascar would fly <b>west</b>. The PSAC 2025 Q8 tested compass direction reading from a map of the Indian Ocean region. Knowing cardinal directions (N, S, E, W) and the relative positions of Indian Ocean islands is important in Grade 6.' }),
+
+  makeMCQ({ id:'g6hg-ms-014', chapterId:'g6-map-skills', difficulty:2,
+    question:'The district of GRAND BAIE is described in the PSAC 2025 map as a busy tourist resort. Where is Grand Baie located?',
+    options:['On the south coast','On the east coast','On the north coast','On the west coast'],
+    answer:'On the north coast',
+    hint:'Grand Baie is the most famous beach resort area in Mauritius — it is in the North district.',
+    explanation:'<b>Grand Baie</b> is located on the <b>north coast</b> of Mauritius (in the Rivière du Rempart district). It is Mauritius\'s most famous tourist resort, known for its beautiful beach, water sports, restaurants and shopping. PSAC 2025 Q3 used a map of Mauritius and asked students to identify Grand Baie as a "busy tourist resort" and identify the Fort Frederik Hendrik Museum at Vieux Grand Port.' }),
+
+  makeMCQ({ id:'g6hg-ms-015', chapterId:'g6-map-skills', difficulty:2,
+    question:'What does a SPOT HEIGHT on a map show?',
+    options:[
+      'The exact depth of a river at that point',
+      'The precise altitude (height above sea level) of a specific point on the land, shown as a number',
+      'The distance from that point to the nearest town',
+      'The temperature at that point on the map'
+    ],
+    answer:'The precise altitude (height above sea level) of a specific point on the land, shown as a number',
+    hint:'You often see a small dot with a number like ".643" on a topographic map — that is the height in metres.',
+    explanation:'A <b>spot height</b> is a precise measurement of height above sea level at a specific point, shown as a dot (•) with a number on a topographic map. Unlike contour lines (which show height bands), spot heights give the <b>exact elevation</b> at one point. Mountain peaks and hilltops are often marked with spot heights. Example: "• 828" next to Pieter Both means it is 828 metres above sea level.' }),
+
+  makeTF({ id:'g6hg-ms-016', chapterId:'g6-map-skills', difficulty:1,
+    question:'When reading a grid reference, you read the column number (along the bottom) BEFORE the row letter (up the side).',
+    answer:true,
+    hint:'Remember: "along the corridor, then up the stairs."',
+    explanation:'<b>True.</b> The correct order for grid references is: <b>column first (left to right), then row (bottom to top)</b>. The memory phrase used in schools is "<b>along the corridor, then up the stairs.</b>" For example, if a school is in column 1, row D, the grid reference is "1D." Always give the horizontal (easting) coordinate before the vertical (northing) coordinate.' }),
+
+  makeMCQ({ id:'g6hg-ms-017', chapterId:'g6-map-skills', difficulty:2,
+    question:'The Chagos Archipelago is a group of islands in the Indian Ocean. How is it classified in the MIE Grade 6 textbook?',
+    options:['A volcanic island group','A coral atoll group','A continental island group','A mangrove island group'],
+    answer:'A coral atoll group',
+    hint:'Atolls are ring-shaped coral islands that form on the rims of underwater volcanoes.',
+    explanation:'The MIE Grade 6 H&G textbook classifies the islands of Mauritius as: volcanic islands (Mauritius and Rodrigues), coral islands (Agaléga, Saint Brandon/Cargados Carajos, Tromelin, Chagos Archipelago), and coral atoll (Diego Garcia, part of the Chagos Archipelago). The <b>Chagos Archipelago</b> is listed as a <b>coral island group</b> that forms part of the territory of Mauritius.' }),
+
+  makeMCQ({ id:'g6hg-ms-018', chapterId:'g6-map-skills', difficulty:3,
+    question:'On a map with scale 1:25,000, two villages are 4 cm apart. What is the REAL distance between them?',
+    options:['100 m','250 m','1 km','25 km'],
+    answer:'1 km',
+    hint:'Scale 1:25,000 → 1 cm = 25,000 cm. Convert 25,000 cm to metres and then km.',
+    explanation:'Scale 1:25,000 means 1 cm on the map = 25,000 cm in real life. 25,000 cm = <b>250 m</b> per cm. Real distance = 4 cm × 250 m = <b>1,000 m = 1 km</b>. Compare with 1:50,000 scale: 1 cm = 500 m (used in PSAC). The larger the second number in a scale, the smaller the map features appear relative to real life.' }),
+
+  makeMCQ({ id:'g6hg-ms-019', chapterId:'g6-map-skills', difficulty:4,
+    question:'A map shows mountain range P with the label "Himalayas", and group of islands R as the "Chagos Archipelago." These are tested in a map of the INDIAN OCEAN REGION (PSAC 2025 Q8). In which direction are the Himalayas from Mauritius?',
+    options:['South','West','North','East'],
+    answer:'North',
+    hint:'The Himalayas are in Asia — is Asia north or south of Mauritius?',
+    explanation:'The <b>Himalayas</b> are located in <b>north</b> Asia (spanning Nepal, India, Bhutan, Tibet and Pakistan) — to the <b>north</b> of Mauritius. Mauritius is at approximately 20°S latitude; the Himalayas are at approximately 28–36°N latitude. PSAC 2025 Q8 used a map of the Indian Ocean region requiring students to identify the Himalayas (mountain range P) and the Chagos Archipelago (island group R), and understand compass directions in this regional context.' })
+
+);

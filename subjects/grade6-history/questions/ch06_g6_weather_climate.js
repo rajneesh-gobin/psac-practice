@@ -120,3 +120,99 @@ STATIC_QUESTIONS.push(
     explanation:'The <b>central plateau and south-east</b> of Mauritius receive the most rainfall (over 3,500 mm/year in some areas). The South-East Trade Winds carry moisture; when they hit the mountains, the air rises, cools and drops its moisture as rain on the windward side (south-east). This is the <b>orographic effect</b>.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6hg-wc-011', chapterId:'g6-weather-climate', difficulty:1,
+    question:'What instrument is used to measure TEMPERATURE? (PSAC 2025 Q2)',
+    options:['Rain gauge','Anemometer','Barometer','Thermometer'],
+    answer:'Thermometer',
+    hint:'The PSAC 2025 showed a picture of this instrument and asked for its name.',
+    explanation:'A <b>thermometer</b> is used to measure <b>temperature</b> in degrees Celsius (°C). Traditional thermometers contain a liquid (mercury or alcohol) that expands or contracts with temperature changes. The Grade 6 textbook shows that meteorological stations around Mauritius use thermometers to record daily maximum and minimum temperatures.' }),
+
+  makeMCQ({ id:'g6hg-wc-012', chapterId:'g6-weather-climate', difficulty:1,
+    question:'Name a liquid commonly used in a thermometer. (PSAC 2025 Q2)',
+    options:['Water','Mercury or alcohol','Salt water','Petrol'],
+    answer:'Mercury or alcohol',
+    hint:'One is a silvery metal liquid, the other is a coloured fluid — both expand with heat.',
+    explanation:'Traditional thermometers use either <b>mercury</b> (a silvery liquid metal) or <b>coloured alcohol</b>. Both liquids expand when heated and contract when cooled — the height of the liquid column shows the temperature. Mercury thermometers are very accurate but are being phased out due to mercury\'s toxicity; alcohol thermometers are safer.' }),
+
+  makeMCQ({ id:'g6hg-wc-013', chapterId:'g6-weather-climate', difficulty:2,
+    question:'The Grade 6 textbook discusses how WEATHER FORECASTS are important for agriculture. Give ONE reason why.',
+    options:[
+      'Weather forecasts help farmers decide when to plant or harvest crops to avoid losses from rain, drought or frost',
+      'Weather forecasts tell farmers which seeds to buy',
+      'Weather forecasts only help sailors, not farmers',
+      'Weather forecasts allow farmers to control the rainfall in their area'
+    ],
+    answer:'Weather forecasts help farmers decide when to plant or harvest crops to avoid losses from rain, drought or frost',
+    hint:'Think about what happens to crops if they are harvested in heavy rain, or planted during a drought.',
+    explanation:'Weather forecasts are vital for <b>agriculture</b>: (1) farmers know when to <b>plant</b> (avoiding planting before a drought); (2) they know when to <b>harvest</b> (before heavy rains damage ripe crops); (3) they can <b>protect livestock</b> before cyclones. In Mauritius, the Mauritius Meteorological Services (MMS) provides forecasts that help the sugar cane and vegetable farming sectors plan effectively.' }),
+
+  makeMCQ({ id:'g6hg-wc-014', chapterId:'g6-weather-climate', difficulty:2,
+    question:'France is the country that sent the HIGHEST number of tourists to Mauritius in the first three months of 2024 (Table 1 in PSAC 2025 Q2). Why might this be?',
+    options:[
+      'France has a free trade agreement with Mauritius for tourism',
+      'France has historical, cultural and language ties with Mauritius — many French-speaking Mauritians have family in France',
+      'France is the closest country to Mauritius geographically',
+      'The Mauritian government offers free flights to French tourists'
+    ],
+    answer:'France has historical, cultural and language ties with Mauritius — many French-speaking Mauritians have family in France',
+    hint:'Think about the historical relationship between France and Mauritius.',
+    explanation:'France sends the most tourists to Mauritius (84,860 in the first 3 months of 2024 per PSAC 2025 Table 1) because of deep <b>historical and cultural ties</b>: Mauritius was French (Île de France) for nearly 100 years; French is still widely spoken; there are large Mauritian diaspora communities in France; and many Franco-Mauritians have family connections in France. Réunion Island (a French territory nearby) also sends many visitors.' }),
+
+  makeMCQ({ id:'g6hg-wc-015', chapterId:'g6-weather-climate', difficulty:2,
+    question:'Why does CLIMATE CHANGE threaten Mauritius\'s tourist industry specifically?',
+    options:[
+      'Climate change makes Mauritius too cold for tourists',
+      'Rising sea levels and coral bleaching from warmer seas destroy beaches and reefs — the primary tourist attractions',
+      'Climate change causes too much rain, making outdoor activities impossible',
+      'Climate change has no effect on Mauritius\'s tourist industry'
+    ],
+    answer:'Rising sea levels and coral bleaching from warmer seas destroy beaches and reefs — the primary tourist attractions',
+    hint:'Tourists come to Mauritius mainly for beaches and snorkelling — what happens if these disappear?',
+    explanation:'Climate change specifically threatens Mauritius\'s tourism through: (1) <b>Rising sea levels</b> — eroding beaches and flooding coastal resorts; (2) <b>Coral bleaching</b> — warmer water kills coral, destroying reef ecosystems that attract snorkellers and divers; (3) <b>More intense cyclones</b> — damaging hotels and infrastructure. Since tourism is one of Mauritius\'s largest industries, this represents a major economic risk.' }),
+
+  makeTF({ id:'g6hg-wc-016', chapterId:'g6-weather-climate', difficulty:1,
+    question:'The east and south-east of Mauritius receive more rainfall than the west coast.',
+    answer:true,
+    hint:'The South-East Trade Winds bring moisture from the east — which side of the island receives it first?',
+    explanation:'<b>True.</b> The South-East Trade Winds carry moisture from the ocean. When they hit the central mountains of Mauritius, moist air rises, cools and releases rain on the <b>windward (east and south-east) side</b>. The west coast (leeward side) is in a "rain shadow" and is much drier — which is why most beach hotels and tourist resorts are on the sheltered, sunnier west coast.' }),
+
+  makeMCQ({ id:'g6hg-wc-017', chapterId:'g6-weather-climate', difficulty:2,
+    question:'Why is the WEATHER FORECAST important for TRANSPORT in Mauritius?',
+    options:[
+      'Weather forecasts are only important for ships and boats, not road transport',
+      'Forecasts warn pilots, ship captains and motorists about dangerous cyclones, rough seas or poor visibility, enabling them to take precautions',
+      'Transport companies use weather forecasts to decide on fuel prices',
+      'Forecasts have no practical effect on transport safety'
+    ],
+    answer:'Forecasts warn pilots, ship captains and motorists about dangerous cyclones, rough seas or poor visibility, enabling them to take precautions',
+    hint:'Think about what happens to aeroplanes, ships and roads during a cyclone.',
+    explanation:'Weather forecasts are essential for transport: (1) <b>Aviation</b> — SSR International Airport closes during cyclones and severe weather; (2) <b>Shipping</b> — vessels stay in port during Class 3–4 cyclone warnings; (3) <b>Road transport</b> — motorists are warned about flooding, poor visibility and dangerous road conditions. The MMS issues weather warnings that directly affect transport safety decisions.' }),
+
+  makeMCQ({ id:'g6hg-wc-018', chapterId:'g6-weather-climate', difficulty:3,
+    question:'The climate of RODRIGUES is slightly different from Mauritius. Which statement is correct?',
+    options:[
+      'Rodrigues has the same climate as Mauritius in every way',
+      'Rodrigues is generally drier than Mauritius and more exposed to strong trade winds due to its more isolated, elevated position',
+      'Rodrigues has a cold temperate climate due to its higher elevation',
+      'Rodrigues receives more rainfall than anywhere on Mauritius'
+    ],
+    answer:'Rodrigues is generally drier than Mauritius and more exposed to strong trade winds due to its more isolated, elevated position',
+    hint:'Rodrigues is 560 km east of Mauritius, smaller and more exposed to ocean winds.',
+    explanation:'Rodrigues has a <b>drier climate</b> than Mauritius because: (1) it is smaller and cannot force trade winds to rise and produce heavy orographic rain; (2) it is more exposed to <b>strong trade winds</b>; (3) it receives less rainfall on average. Drought is a more frequent concern in Rodrigues, and water conservation is critical. The island also uses <b>terracing</b> (as PSAC 2025 confirmed) to make the most of available agricultural land.' }),
+
+  makeMCQ({ id:'g6hg-wc-019', chapterId:'g6-weather-climate', difficulty:4,
+    question:'A student measures rainfall in Curepipe and Flic en Flac (west coast) over a year. Curepipe records 3,500 mm and Flic en Flac records 850 mm. What is the BEST explanation?',
+    options:[
+      'Curepipe is closer to the sea and gets sea spray',
+      'The central plateau (Curepipe) is at higher elevation and on the windward side of mountains — trade winds rise, cool and drop moisture there; the west coast (Flic en Flac) is in the rain shadow',
+      'Flic en Flac has more sunshine which evaporates the rain before it can be measured',
+      'Curepipe has more factories that produce steam which is measured as rainfall'
+    ],
+    answer:'The central plateau (Curepipe) is at higher elevation and on the windward side of mountains — trade winds rise, cool and drop moisture there; the west coast (Flic en Flac) is in the rain shadow',
+    hint:'This is the orographic effect — the same principle that makes one side of a mountain wet and the other dry.',
+    explanation:'This is the <b>orographic effect</b>: South-East Trade Winds carry moisture → hit the central mountains → air rises and cools → clouds form → heavy <b>rain on the windward/eastern side</b> (Curepipe: ~3,500 mm/year). By the time the air descends on the <b>western/leeward side</b> (Flic en Flac), it is dry and warm → <b>rain shadow</b> (only ~850 mm/year). This explains why the west coast is sunnier and hosts most beach resorts.' })
+
+);

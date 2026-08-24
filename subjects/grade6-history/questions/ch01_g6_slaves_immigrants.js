@@ -98,3 +98,94 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Maroons</b> (or "marrons") were enslaved people who escaped their captors and hid in the forests and mountains. Le Morne Brabant was one of their refuges. The history of maroonage is a key part of Mauritius\'s story of resistance.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6hg-si-011', chapterId:'g6-slaves-immigrants', difficulty:1,
+    question:'Who were the FIRST European settlers to discover and settle on Mauritius?',
+    options:['The Portuguese','The French','The Dutch','The British'],
+    answer:'The Dutch',
+    hint:'They named the island after their prince Maurits van Nassau.',
+    explanation:'The <b>Dutch</b> were the first to settle in Mauritius, arriving in 1638. They named the island <b>Mauritius</b> after their Prince Maurits van Nassau. They introduced sugar cane to the island but abandoned it by 1710. Before them, the Portuguese had discovered the island (around 1507–1513) but did not settle.' }),
+
+  makeMCQ({ id:'g6hg-si-012', chapterId:'g6-slaves-immigrants', difficulty:1,
+    question:'In which year did France take control of Mauritius (then called "Île de France")?',
+    options:['1638','1715','1810','1835'],
+    answer:'1715',
+    hint:'The French period followed the Dutch, and lasted nearly a century.',
+    explanation:'France took possession of Mauritius in <b>1715</b>, renaming it <b>Île de France</b>. Under French rule (1715–1810), the island was developed with sugar plantations using enslaved labour. The French also built Port Louis as the capital. Britain took control in 1810 after the Battle of Grand Port.' }),
+
+  makeMCQ({ id:'g6hg-si-013', chapterId:'g6-slaves-immigrants', difficulty:2,
+    question:'In which year did BRITAIN take control of Mauritius from France?',
+    options:['1715','1788','1810','1835'],
+    answer:'1810',
+    hint:'This followed a major sea battle and the signing of the Capitulation of Mauritius.',
+    explanation:'Britain took control of Mauritius in <b>1810</b> following military action. The island was officially ceded to Britain under the Treaty of Paris (1814). British rule lasted until independence in 1968. The name was changed back from "Île de France" to "Mauritius."' }),
+
+  makeMCQ({ id:'g6hg-si-014', chapterId:'g6-slaves-immigrants', difficulty:2,
+    question:'Why did Chinese immigrants come to Mauritius in the 19th and 20th centuries?',
+    options:[
+      'They were brought as enslaved workers on ships',
+      'They came as indentured workers to work on sugar cane plantations',
+      'They came mainly as traders and merchants, setting up shops and businesses',
+      'They were government officials sent by China'
+    ],
+    answer:'They came mainly as traders and merchants, setting up shops and businesses',
+    hint:'The Chinese community became famous for their role in commerce.',
+    explanation:'Chinese immigrants came to Mauritius mainly as <b>traders and merchants</b>. They established shops, trading businesses and restaurants, and became an important part of Mauritius\'s commercial life. Today, the <b>Sino-Mauritian</b> community is a recognised part of the island\'s diverse population.' }),
+
+  makeTF({ id:'g6hg-si-015', chapterId:'g6-slaves-immigrants', difficulty:1,
+    question:'The indentured labour system ended completely in Mauritius by 1924.',
+    answer:true,
+    hint:'The system that began in 1834 was officially terminated around 90 years later.',
+    explanation:'<b>True.</b> The system of Indian indentured labour in Mauritius began in <b>1834</b> (the year after the Slavery Abolition Act) and officially ended in <b>1924</b>. During this 90-year period, over 450,000 workers came from India. Many chose to stay after completing their contracts, becoming permanent residents.' }),
+
+  makeMCQ({ id:'g6hg-si-016', chapterId:'g6-slaves-immigrants', difficulty:2,
+    question:'What were the living conditions like for enslaved people on Mauritian plantations during French rule?',
+    options:[
+      'Comfortable — they were paid well and had free time',
+      'Harsh — they worked long hours in the fields, had poor food and shelter, and were frequently punished',
+      'Equal to French colonists — they shared the same rights',
+      'Good — they were protected by strict laws against mistreatment'
+    ],
+    answer:'Harsh — they worked long hours in the fields, had poor food and shelter, and were frequently punished',
+    hint:'Enslaved people had no rights or freedom under the plantation system.',
+    explanation:'Enslaved people endured extremely <b>harsh conditions</b>: they worked from dawn to dusk in sugar cane fields, received minimal food and poor shelter, had no legal rights, could not marry without permission, and faced violent punishment if they disobeyed. This is why many escaped to become maroons, seeking freedom in remote areas like Le Morne Brabant.' }),
+
+  makeMCQ({ id:'g6hg-si-017', chapterId:'g6-slaves-immigrants', difficulty:2,
+    question:'What important cultural contribution did Indian indentured workers bring to Mauritius?',
+    options:[
+      'They introduced the French language and culture',
+      'They brought Hinduism, Islam, Hindi/Bhojpuri language, music, food, and festivals like Diwali and Eid',
+      'They introduced the Christian religion to Mauritius',
+      'They brought the Dutch language and traditions'
+    ],
+    answer:'They brought Hinduism, Islam, Hindi/Bhojpuri language, music, food, and festivals like Diwali and Eid',
+    hint:'Indian workers brought their entire cultural heritage with them on the journey.',
+    explanation:'Indian indentured workers made enormous cultural contributions: <b>Hinduism and Islam</b> became the major religions of Mauritius; <b>Hindi and Bhojpuri</b> are widely spoken; festivals like <b>Diwali</b> (Hindu) and <b>Eid</b> (Muslim) are public holidays; Indian <b>cuisine, music and art</b> became central to Mauritian identity.' }),
+
+  makeMCQ({ id:'g6hg-si-018', chapterId:'g6-slaves-immigrants', difficulty:3,
+    question:'What does the CAPITULATION OF MAURITIUS (1810) refer to?',
+    options:[
+      'The agreement by which France took the island from the Dutch',
+      'The formal surrender of Mauritius by France to Britain, ending French rule',
+      'The treaty that abolished slavery in Mauritius',
+      'The agreement that ended the indentured labour system'
+    ],
+    answer:'The formal surrender of Mauritius by France to Britain, ending French rule',
+    hint:'A "capitulation" in history means a formal surrender.',
+    explanation:'The <b>Capitulation of Mauritius (December 1810)</b> was the formal document by which the French colonial government surrendered the island to Britain. Crucially, the capitulation guaranteed that the French colonists could keep their language, laws, religion (Catholicism) and property — which is why French culture, the Civil Code (Code Napoléon) and Catholicism remain important in Mauritius today.' }),
+
+  makeMCQ({ id:'g6hg-si-019', chapterId:'g6-slaves-immigrants', difficulty:4,
+    question:'Why is Aapravasi Ghat important for WORLD history, not just Mauritian history?',
+    options:[
+      'Because it was the largest fort built by any colonial power',
+      'Because Mauritius was the starting point of the largest slave trade in history',
+      'Because it was the first site in the world to receive indentured labourers and represents the beginning of the global modern labour migration system',
+      'Because it was used as a model for building airports around the world'
+    ],
+    answer:'Because it was the first site in the world to receive indentured labourers and represents the beginning of the global modern labour migration system',
+    hint:'UNESCO inscribed it for its "outstanding universal value" — not just its local value.',
+    explanation:'UNESCO inscribed Aapravasi Ghat in 2006 because Mauritius was <b>the first destination of the largest migration of indentured labour in history</b>. The indenture system that started here spread across the British Empire — to Trinidad, Guyana, Fiji, South Africa, Natal — reshaping the demographics of much of the world. Aapravasi Ghat is where this transformative global history began.' })
+
+);
