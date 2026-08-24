@@ -1516,6 +1516,37 @@
             class="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
         </div>
 
+        <!-- ── POSTING AS BAR ── -->
+        <div class="flex items-center justify-between mb-4 px-1">
+          <span class="text-xs text-gray-400 dark:text-gray-500">
+            Posting as: <span id="forum-display-name" class="font-semibold text-gray-600 dark:text-gray-300">…</span>
+          </span>
+          <button onclick="Forum.showNicknameSettings()"
+            class="text-xs text-indigo-500 hover:text-indigo-400 font-medium transition-colors">
+            🎭 Change name
+          </button>
+        </div>
+
+        <!-- ── NICKNAME SETTINGS PANEL (shown on demand) ── -->
+        <div id="forum-nick-panel" class="hidden mb-5 p-4 bg-white dark:bg-gray-800 rounded-2xl border border-indigo-200 dark:border-indigo-700 shadow-sm">
+          <p class="text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1">🎭 Your Forum Display Name</p>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">Leave blank to use your initials. Others see this name on all your posts.</p>
+          <div class="flex gap-2">
+            <input id="forum-nick-input" type="text" maxlength="20"
+              placeholder="e.g. MathMum, RishiG5, P.R. …"
+              onkeydown="if(event.key==='Enter')Forum.saveNickname()"
+              class="flex-1 border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <button onclick="Forum.saveNickname()"
+              class="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold px-4 py-2 rounded-xl transition-colors">
+              Save
+            </button>
+            <button onclick="Forum.hideNicknameSettings()"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm px-3 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 transition-colors">
+              ✕
+            </button>
+          </div>
+        </div>
+
         <!-- ── CATEGORY LIST ── -->
         <div id="forum-categories">
           <div id="forum-cat-list" class="space-y-3">

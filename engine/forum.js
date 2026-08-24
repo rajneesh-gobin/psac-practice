@@ -35,12 +35,28 @@ const Forum = (() => {
 
   function _el(id) { return document.getElementById(id); }
 
+  const NICK_KEY = 'mm_forum_nick';
+
+  function _toInitials(name) {
+    const s = (name || '').replace(/^(Mrs?\.|Dr\.|Prof\.)\s*/i, '').trim();
+    const parts = s.split(/\s+/).filter(Boolean);
+    if (!parts.length) return '?';
+    if (parts.length === 1) return parts[0][0].toUpperCase() + '.';
+    return parts[0][0].toUpperCase() + '.' + parts[parts.length - 1][0].toUpperCase() + '.';
+  }
+
+  function _forumDisplayName(fullName) {
+    const nick = localStorage.getItem(NICK_KEY)?.trim();
+    return nick || _toInitials(fullName);
+  }
+
   function _author() {
     const sess = (typeof Store !== 'undefined') ? Store.getStudentSession?.() : null;
-    if (sess?.name) return { name: sess.name.split(' ')[0], type: 'student' };
+    if (sess?.name) return { name: _forumDisplayName(sess.name), type: 'student' };
     const p = (typeof Auth !== 'undefined') ? Auth.getParentProfile?.() : null;
-    if (p?.full_name) return { name: p.full_name.split(' ')[0], type: p.role || 'parent' };
-    return { name: 'Anonymous', type: 'parent' };
+    if (p?.full_name) return { name: _forumDisplayName(p.full_name), type: p.role || 'parent' };
+    const nick = localStorage.getItem(NICK_KEY)?.trim();
+    return { name: nick || '?', type: 'parent' };
   }
 
   function _ago(iso) {
@@ -111,6 +127,8 @@ const Forum = (() => {
   async function render() {
     _sub('forum-categories');
     const si = _el('forum-search-input'); if (si) si.value = '';
+    const displayEl = _el('forum-display-name');
+    if (displayEl) displayEl.textContent = _author().name;
 
     const el = _el('forum-cat-list');
     if (!el) return;
@@ -463,6 +481,35 @@ const Forum = (() => {
     await openPost(_currentPost);
   }
 
+  // ── Nickname / display name settings ─────────
+  function showNicknameSettings() {
+    const panel = _el('forum-nick-panel');
+    const input = _el('forum-nick-input');
+    if (!panel) return;
+    panel.classList.remove('hidden');
+    if (input) {
+      input.value = localStorage.getItem(NICK_KEY)?.trim() || '';
+      input.focus();
+    }
+  }
+
+  function hideNicknameSettings() {
+    _el('forum-nick-panel')?.classList.add('hidden');
+  }
+
+  function saveNickname() {
+    const val = _el('forum-nick-input')?.value.trim() || '';
+    if (val) {
+      localStorage.setItem(NICK_KEY, val);
+    } else {
+      localStorage.removeItem(NICK_KEY);
+    }
+    hideNicknameSettings();
+    const displayEl = _el('forum-display-name');
+    if (displayEl) displayEl.textContent = _author().name;
+    if (typeof toast !== 'undefined') toast('Display name updated!', 1500);
+  }
+
   // ── Back navigation ───────────────────────────
   function back() {
     const views = ['forum-new-post','forum-post-detail','forum-search-results'];
@@ -486,5 +533,6 @@ const Forum = (() => {
     likeItem,
     deletePost, deleteReply, closePost, reopenPost,
     updateChars,
+    showNicknameSettings, hideNicknameSettings, saveNickname,
   };
 })();
