@@ -216,6 +216,98 @@ STATIC_QUESTIONS.push(
     allRights:['Good conductor — electricity passes through it easily','Good insulator — stops electricity flowing','Provides energy for the circuit','Opens or closes the circuit'],
     correctRight:'Good conductor — electricity passes through it easily',
     hint:'Copper is the metal inside electrical wires.',
-    explanation:'Copper is one of the best electrical conductors. It is used for wiring because electricity flows through it with very little resistance.' })
+    explanation:'Copper is one of the best electrical conductors. It is used for wiring because electricity flows through it with very little resistance.' }),
+
+  makeMCQ({ id:'g5sci-el-013', chapterId:'electricity', difficulty:1,
+    question:'Diagram 3 shows an electrical wire. Part X is the OUTER part of the wire. What material is used to make Part X?',
+    options:['Copper','Iron','Rubber','Wool'],
+    answer:'Rubber',
+    hint:'The outer part of a wire protects us from electric shock — what material is a good insulator?',
+    explanation:'The outer part of an electrical wire is made of <b>rubber</b> (or plastic). Both are insulators — they do not conduct electricity. This coating protects us from electric shocks. The inner core is copper (a conductor).' }),
+
+  makeMCQ({ id:'g5sci-el-014', chapterId:'electricity', difficulty:1,
+    question:'Which of the following is a conductor of electricity?',
+    options:['A plastic ruler','A rubber band','A glass plate','A metal coin'],
+    answer:'A metal coin',
+    hint:'Metals are generally good conductors.',
+    explanation:'A <b>metal coin</b> is a conductor of electricity — metals allow electricity to flow through them. Plastic, rubber and glass are insulators and do not conduct electricity.' }),
+
+  makeMCQ({ id:'g5sci-el-015', chapterId:'electricity', difficulty:2,
+    question:'Lina connects a plastic spoon between two points in an electric circuit. The bulb does not light up. Why?',
+    options:[
+      'The plastic spoon is too big for the circuit',
+      'Plastic is an insulator — electricity cannot flow through it',
+      'The spoon broke the battery',
+      'The bulb needs to be replaced'
+    ],
+    answer:'Plastic is an insulator — electricity cannot flow through it',
+    hint:'Would electricity pass through a plastic material?',
+    explanation:'Plastic is an <b>insulator</b> — it does not allow electricity to pass through it. So when the plastic spoon is placed in the circuit, the circuit remains broken and the bulb cannot light. To complete the circuit, a <b>conductor</b> (e.g. a metal spoon) must be used.' }),
+
+  makeMCQ({ id:'g5sci-el-016', chapterId:'electricity', difficulty:2,
+    question:'What is the function of the CELL (battery) in an electric circuit?',
+    options:[
+      'To make the bulb glow brighter by reflecting light',
+      'To provide electrical energy to push current around the circuit',
+      'To open and close the circuit',
+      'To conduct electricity through the wires'
+    ],
+    answer:'To provide electrical energy to push current around the circuit',
+    hint:'Think of the cell as the "heart" or power source that drives everything.',
+    explanation:'The <b>cell (battery)</b> provides the <b>electrical energy</b> that drives current around the circuit. It converts chemical energy stored inside it into electrical energy. Without the cell, no current flows and the bulb stays off.' }),
+
+  makeMCQ({ id:'g5sci-el-017', chapterId:'electricity', difficulty:2,
+    question:'What is the function of the WIRE in an electric circuit?',
+    options:[
+      'To store electrical energy',
+      'To provide a conducting path for electricity to flow around the circuit',
+      'To open and close the circuit',
+      'To convert electrical energy into light energy'
+    ],
+    answer:'To provide a conducting path for electricity to flow around the circuit',
+    hint:'Wire connects all the components — what does it allow to flow through it?',
+    explanation:'Electric <b>wires</b> are made of copper (a conductor). They provide the <b>conducting path</b> through which electric current flows from the battery to the bulb and back. Without wires, the components cannot be connected.' }),
+
+  makeTF({ id:'g5sci-el-018', chapterId:'electricity', difficulty:1,
+    question:'Wire A has a plastic covering and Wire B has its metal core uncovered. Wire A is safer to use.',
+    answer:true,
+    hint:'What does the plastic covering do?',
+    explanation:'True. Wire A is safer because the <b>plastic covering acts as an insulator</b>, preventing anyone who touches the wire from receiving an electric shock. Wire B\'s uncovered metal core is dangerous because touching it could cause a shock.' }),
+
+  makeMCQ({ id:'g5sci-el-019', chapterId:'electricity', difficulty:3,
+    question:'A pupil has a battery, two wires and a bulb, but no switch. She connects them all in a complete circuit. The bulb lights up. What is the DISADVANTAGE of having no switch?',
+    options:[
+      'The circuit will not work without a switch',
+      'The battery will drain quickly because there is no way to break the circuit and turn it off',
+      'Without a switch, the bulb will shine too brightly and break',
+      'A circuit with no switch is not a real circuit'
+    ],
+    answer:'The battery will drain quickly because there is no way to break the circuit and turn it off',
+    hint:'A switch allows you to break the circuit. Without one, can you ever turn the bulb off?',
+    explanation:'Without a switch, the circuit is always complete — current always flows and the bulb is always on. The battery will quickly run out of stored chemical energy because there is no way to stop the current. A <b>switch</b> allows you to <b>break the circuit</b> (open it) when power is not needed, saving the battery.' }),
+
+  makeMCQ({ id:'g5sci-el-020', chapterId:'electricity', difficulty:3,
+    question:'What happens if you add MORE batteries (cells) in a circuit with a single bulb?',
+    options:[
+      'The bulb gets dimmer',
+      'The bulb shines brighter because more energy is supplied',
+      'The bulb turns off',
+      'The circuit breaks'
+    ],
+    answer:'The bulb shines brighter because more energy is supplied',
+    hint:'More batteries means more electrical energy driving the current.',
+    explanation:'Adding more batteries increases the total <b>electrical energy</b> (voltage) in the circuit. This pushes more current through the bulb, making it glow <b>brighter</b>. However, too many batteries could overheat and damage the bulb.' }),
+
+  makeMCQ({ id:'g5sci-el-021', chapterId:'electricity', difficulty:4,
+    question:'A student builds a circuit with a battery, switch, wire and a buzzer. She says: "Chemical energy → Electrical energy → Sound energy." Is she correct? Explain.',
+    options:[
+      'Yes — the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
+      'No — buzzers only convert heat to sound',
+      'No — the wire converts chemical energy, not the battery',
+      'Yes — but the wire also converts some energy to light'
+    ],
+    answer:'Yes — the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
+    hint:'Trace the energy transformation step by step through each component.',
+    explanation:'The student is correct. The <b>battery</b> stores chemical energy and converts it to electrical energy. The <b>wire</b> conducts the electrical energy around the circuit. The <b>buzzer</b> converts electrical energy into sound energy (vibrations). Each component has a specific role in the energy transformation chain.' })
 
 );

@@ -102,6 +102,67 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Using solar panels and wind turbines instead of fossil fuels',
     hint:'Renewable energy does not produce smoke or harmful gases.',
-    explanation:'Using <b>renewable energy</b> (solar, wind) instead of fossil fuels reduces the burning of coal and oil, which are the main sources of air-polluting gases like carbon dioxide and sulphur dioxide.' })
+    explanation:'Using <b>renewable energy</b> (solar, wind) instead of fossil fuels reduces the burning of coal and oil, which are the main sources of air-polluting gases like carbon dioxide and sulphur dioxide.' }),
+
+  makeMCQ({ id:'g5sci-air-011', chapterId:'air', difficulty:1,
+    question:'What form of energy does a sailing boat use to move across the water?',
+    options:['Chemical energy (petrol)','Electrical energy','Wind (movement) energy','Solar energy'],
+    answer:'Wind (movement) energy',
+    hint:'Look at the sails — what fills them?',
+    explanation:'A sailing boat uses <b>wind energy</b>. The moving air (wind) pushes against the sails, providing the force needed to move the boat across the water. Wind energy is a form of kinetic (movement) energy.' }),
+
+  makeNum({ id:'g5sci-air-012', chapterId:'air', difficulty:2,
+    question:'Air is made up of approximately 78% nitrogen, 21% __________ and about 1% other gases. (One word)',
+    answer:'oxygen', acceptableAnswers:['oxygen'],
+    hint:'This is the gas that humans need to breathe to survive.',
+    explanation:'Air is composed of approximately 78% <b>nitrogen</b>, 21% <b>oxygen</b>, and about 1% other gases (including carbon dioxide and argon). Oxygen is the gas that living things use for respiration.' }),
+
+  makeMCQ({ id:'g5sci-air-013', chapterId:'air', difficulty:2,
+    question:'Why do trees and plants help to REDUCE air pollution?',
+    options:[
+      'They release carbon dioxide which cleans the air',
+      'They absorb carbon dioxide and release oxygen during photosynthesis',
+      'They produce wind which blows pollution away',
+      'They absorb oxygen and release carbon dioxide'
+    ],
+    answer:'They absorb carbon dioxide and release oxygen during photosynthesis',
+    hint:'What gas do plants take in, and what do they give out, during photosynthesis?',
+    explanation:'During photosynthesis, plants <b>absorb carbon dioxide</b> (a greenhouse gas and air pollutant) from the air and <b>release oxygen</b>. This helps to clean the air and reduce the concentration of carbon dioxide, which is a major cause of climate change and air pollution.' }),
+
+  makeMCQ({ id:'g5sci-air-014', chapterId:'air', difficulty:3,
+    question:'A sealed room contains a burning candle and a mouse. After some time, the candle goes out AND the mouse becomes distressed. What is the BEST explanation?',
+    options:[
+      'The room gets too hot for the candle to burn',
+      'The candle and the mouse both use up oxygen; when oxygen runs out the flame dies and the mouse cannot breathe',
+      'The mouse blows out the candle by moving around',
+      'Carbon dioxide makes the candle flame burn and oxygen makes the mouse breathe — they compete'
+    ],
+    answer:'The candle and the mouse both use up oxygen; when oxygen runs out the flame dies and the mouse cannot breathe',
+    hint:'Both combustion (burning) and respiration need the same gas.',
+    explanation:'Both the candle (combustion) and the mouse (respiration) use up <b>oxygen</b>. In a sealed room, the oxygen is gradually used up. First the candle flame goes out (combustion needs oxygen), then the mouse becomes distressed (respiration needs oxygen). This shows that both burning and breathing depend on oxygen.' }),
+
+  makeMCQ({ id:'g5sci-air-015', chapterId:'air', difficulty:3,
+    question:'Factories near a school release smoke that contains sulphur dioxide and soot particles. Students at the school report increased coughing and asthma attacks. What does this suggest about the link between air quality and health?',
+    options:[
+      'Coughing at school is caused by the noise of the factories',
+      'Breathing air containing smoke, soot and sulphur dioxide irritates the lungs and can trigger respiratory problems',
+      'Students are allergic to the colour of the factory buildings',
+      'Asthma is caused by studying too hard, not by pollution'
+    ],
+    answer:'Breathing air containing smoke, soot and sulphur dioxide irritates the lungs and can trigger respiratory problems',
+    hint:'What enters the body every time a student breathes near the factory?',
+    explanation:'When students breathe air containing <b>smoke, soot and sulphur dioxide</b>, these particles and gases irritate and damage the lining of the airways and lungs. This can trigger <b>coughing, asthma attacks and other respiratory illnesses</b>. This illustrates the direct link between poor air quality and poor health.' }),
+
+  makeMCQ({ id:'g5sci-air-016', chapterId:'air', difficulty:4,
+    question:'Town A plants 10,000 trees along its streets and parks over 5 years. Measurements show that carbon dioxide levels in the air decreased by 12% and respiratory illness rates dropped by 8%. What TWO conclusions can be reasonably drawn from this data?',
+    options:[
+      'Trees absorb CO₂ and improve air quality, AND better air quality appears to reduce respiratory illness rates in the town',
+      'Trees cause illness by releasing pollen, AND CO₂ levels fell because fewer cars were used',
+      'The data proves trees are the only solution to air pollution, AND all towns must plant exactly 10,000 trees',
+      'CO₂ levels fell due to rainfall, AND the illness drop was a coincidence'
+    ],
+    answer:'Trees absorb CO₂ and improve air quality, AND better air quality appears to reduce respiratory illness rates in the town',
+    hint:'Look at what changed and what also changed — but remember, correlation does not always equal causation.',
+    explanation:'Two reasonable conclusions: (1) <b>Trees absorb CO₂</b> — the 12% reduction in CO₂ levels is consistent with trees absorbing it during photosynthesis; (2) <b>Better air quality is associated with fewer respiratory illnesses</b> — the 8% drop in illness rates after air quality improved suggests a link. Note: we cannot prove trees CAUSED the illness drop without ruling out other factors (confounding variables), but the data is consistent with this conclusion.' })
 
 );

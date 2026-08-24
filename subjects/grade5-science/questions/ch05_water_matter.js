@@ -116,6 +116,77 @@ STATIC_QUESTIONS.push(
     ],
     answer:'It melts and becomes liquid',
     hint:'Butter is a solid. What does heat do to solids?',
-    explanation:'Butter is a solid that <b>melts</b> when warmed — it changes from solid to liquid. This is the same process as ice melting into water.' })
+    explanation:'Butter is a solid that <b>melts</b> when warmed — it changes from solid to liquid. This is the same process as ice melting into water.' }),
+
+  makeMCQ({ id:'g5sci-wm-013', chapterId:'water-matter', difficulty:2,
+    question:'A cold glass of water is left on a table on a humid day. Small droplets of water appear on the OUTSIDE of the glass. By which process do these droplets form?',
+    options:['Melting','Evaporation','Condensation','Freezing'],
+    answer:'Condensation',
+    hint:'The glass is cold — what happens to warm, moist air when it touches the cold surface?',
+    explanation:'The water droplets on the outside of the cold glass form by <b>condensation</b>. Warm, moist air surrounding the glass is cooled when it touches the cold surface. This causes the water vapour in the air to change back into liquid water droplets.' }),
+
+  makeMCQ({ id:'g5sci-wm-014', chapterId:'water-matter', difficulty:1,
+    question:'What is the liquid found inside a thermometer?',
+    options:['Alcohol or mercury','Petrol','Cooking oil','Salt water'],
+    answer:'Alcohol or mercury',
+    hint:'Traditional thermometers use one of two special liquids that expand and contract with temperature.',
+    explanation:'Thermometers use either <b>alcohol</b> (usually red-coloured) or <b>mercury</b> (shiny silver liquid). Both expand when heated and contract when cooled, causing the liquid column to rise or fall and show the temperature.' }),
+
+  makeMCQ({ id:'g5sci-wm-015', chapterId:'water-matter', difficulty:2,
+    question:'What happens to the level of mercury inside a thermometer when the temperature INCREASES?',
+    options:['It falls','It stays the same','It rises','It disappears'],
+    answer:'It rises',
+    hint:'Mercury expands when heated — if it takes up more space, which way does it go in the narrow tube?',
+    explanation:'When temperature increases, the mercury (or alcohol) in the thermometer <b>expands</b> and takes up more volume. Since the tube is narrow, the liquid is pushed <b>upward</b>, causing the level to rise.' }),
+
+  makeMCQ({ id:'g5sci-wm-016', chapterId:'water-matter', difficulty:2,
+    question:'A table shows air temperatures measured at different times: 6 a.m. = 15°C, 10 a.m. = 18°C, 1 p.m. = 23°C, 4 p.m. = 21°C, 8 p.m. = 19°C. At what time was the temperature highest?',
+    options:['6 a.m.','10 a.m.','1 p.m.','8 p.m.'],
+    answer:'1 p.m.',
+    hint:'Find the largest number in the table.',
+    explanation:'The highest temperature was <b>23°C at 1 p.m.</b> This is because the sun is highest in the sky around midday, providing maximum heating. By the evening the temperature falls as the sun sets.' }),
+
+  makeMCQ({ id:'g5sci-wm-017', chapterId:'water-matter', difficulty:3,
+    question:'The temperature was lower at 6 a.m. than at 1 p.m. What is the BEST explanation for this?',
+    options:[
+      'It rains in the morning, making the temperature lower',
+      'The sun has not been heating the ground for long at 6 a.m., so it is cooler',
+      'The thermometer does not work properly in the morning',
+      'Wind is stronger in the morning, making the temperature lower'
+    ],
+    answer:'The sun has not been heating the ground for long at 6 a.m., so it is cooler',
+    hint:'During the night, no sunlight heats the ground. The sun only starts warming things after it rises.',
+    explanation:'At <b>6 a.m.</b>, the sun has just risen (or not yet risen). The ground has been losing heat overnight with no sunlight to replace it, so the temperature is at its lowest point of the day. By 1 p.m., the sun has been heating the ground for several hours, making it the warmest time.' }),
+
+  makeMCQ({ id:'g5sci-wm-018', chapterId:'water-matter', difficulty:3,
+    question:'Ice cubes are put in a glass of water. After some time, the ice melts. What happens to the temperature of the water as the ice melts?',
+    options:[
+      'It increases because ice releases heat energy',
+      'It decreases (becomes cooler) because melting ice absorbs heat from the surrounding water',
+      'It stays exactly the same throughout',
+      'It first increases then decreases rapidly'
+    ],
+    answer:'It decreases (becomes cooler) because melting ice absorbs heat from the surrounding water',
+    hint:'The ice needs energy (heat) to melt — where does this energy come from?',
+    explanation:'To melt, ice must <b>absorb heat energy</b>. This heat comes from the surrounding water. As heat is drawn out of the water, the water becomes <b>cooler</b>. This is why ice is used to keep drinks cold — the melting process removes heat from the liquid.' }),
+
+  makeMCQ({ id:'g5sci-wm-019', chapterId:'water-matter', difficulty:2,
+    question:'Give ONE property of ice that makes skating possible.',
+    options:['Ice is hard','Ice is slippery','Ice is transparent','Ice is white'],
+    answer:'Ice is slippery',
+    hint:'Think about why you can slide on ice.',
+    explanation:'Ice is <b>slippery</b> — this is the property that makes skating possible. Ice skate blades glide smoothly over the ice surface with very little friction, allowing the skater to slide.' }),
+
+  makeMCQ({ id:'g5sci-wm-020', chapterId:'water-matter', difficulty:4,
+    question:'A scientist puts identical ice cubes in three containers: one in a freezer (−10°C), one in a warm room (25°C) and one in boiling water (100°C). Rank them from slowest to fastest melting and explain WHY.',
+    options:[
+      'Freezer slowest (ice cannot melt at −10°C), warm room next, boiling water fastest (most heat available)',
+      'Boiling water slowest, warm room next, freezer fastest',
+      'All melt at the same speed regardless of temperature',
+      'Warm room fastest because ice melts better in still air'
+    ],
+    answer:'Freezer slowest (ice cannot melt at −10°C), warm room next, boiling water fastest (most heat available)',
+    hint:'Ice melts when it absorbs enough heat to reach 0°C. More heat available = faster melting.',
+    explanation:'In the <b>freezer</b>, the temperature is below 0°C so ice does not melt — it stays frozen. In the <b>warm room</b> (25°C), heat slowly transfers from the air to the ice, melting it gradually. In <b>boiling water</b> (100°C), a large amount of heat transfers to the ice very quickly, melting it fastest. The rate of melting depends on the temperature difference between the ice and its surroundings.' })
 
 );

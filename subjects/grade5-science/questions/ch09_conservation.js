@@ -105,6 +105,78 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Forests provide habitat for animals, prevent soil erosion, clean the air and regulate rainfall',
     hint:'Forests do many jobs for the environment.',
-    explanation:'Forests are vital ecosystems: they provide <b>habitat</b> for countless species, <b>prevent soil erosion</b> (tree roots hold soil), <b>absorb carbon dioxide</b> (cleaning the air), and <b>regulate rainfall</b> (trees release water vapour into the atmosphere).' })
+    explanation:'Forests are vital ecosystems: they provide <b>habitat</b> for countless species, <b>prevent soil erosion</b> (tree roots hold soil), <b>absorb carbon dioxide</b> (cleaning the air), and <b>regulate rainfall</b> (trees release water vapour into the atmosphere).' }),
+
+  makeMCQ({ id:'g5sci-con-011', chapterId:'conservation', difficulty:2,
+    question:'Which of the following is a HUMAN activity that causes soil erosion?',
+    options:[
+      'Heavy rainfall',
+      'Strong winds',
+      'Cutting down trees and deforestation',
+      'Earthquakes'
+    ],
+    answer:'Cutting down trees and deforestation',
+    hint:'Humans remove the trees that protect the soil.',
+    explanation:'<b>Deforestation</b> (cutting down trees) is a major human cause of soil erosion. Without trees and their roots to hold the soil in place, rain and wind can easily wash or blow the topsoil away. Other human causes include overgrazing of land and burning of forests.' }),
+
+  makeMCQ({ id:'g5sci-con-012', chapterId:'conservation', difficulty:2,
+    question:'How does soil erosion lead to FLOODING?',
+    options:[
+      'Eroded soil makes rivers shallower, reducing their capacity to hold water, causing overflow',
+      'Eroded soil cracks and allows water to sink underground, filling caves',
+      'Soil erosion only affects forests, not rivers',
+      'Flooding and soil erosion are unrelated'
+    ],
+    answer:'Eroded soil makes rivers shallower, reducing their capacity to hold water, causing overflow',
+    hint:'Where does eroded soil end up?',
+    explanation:'Eroded soil is carried by rainwater into rivers and streams. This <b>sediment builds up on the riverbed</b>, making rivers shallower. A shallower river can hold less water, so during heavy rain it overflows its banks, causing <b>flooding</b> in nearby areas.' }),
+
+  makeMCQ({ id:'g5sci-con-013', chapterId:'conservation', difficulty:2,
+    question:'Dense forests have almost no soil erosion. Give ONE reason why the trees prevent soil erosion.',
+    options:[
+      'Tree leaves absorb all the rainwater before it reaches the ground',
+      'Tree roots bind the soil particles together, holding the soil in place',
+      'Trees attract birds that eat the soil',
+      'Trees produce chemicals that harden the soil permanently'
+    ],
+    answer:'Tree roots bind the soil particles together, holding the soil in place',
+    hint:'Think about what tree roots do underground.',
+    explanation:'Tree <b>roots spread through the soil</b> and bind soil particles together. This makes it very difficult for wind or rainwater to dislodge and carry away the soil. Dense forest also means the tree canopy breaks the force of raindrops before they hit the ground.' }),
+
+  makeMCQ({ id:'g5sci-con-014', chapterId:'conservation', difficulty:3,
+    question:'A hillside farm has been stripped of all vegetation. Heavy rain causes severe soil erosion. The farmer re-plants the hillside in rows along the slope (terracing) and also plants rows of vetiver grass across the slope. Explain how EACH measure reduces soil erosion.',
+    options:[
+      'Terracing creates flat steps that slow water flow; vetiver grass roots grip the soil on each step',
+      'Terracing makes the slope steeper so water flows faster; vetiver grass makes the soil wetter',
+      'Both terracing and vetiver grass only work on flat land, not slopes',
+      'Terracing has no effect; only vetiver grass prevents erosion'
+    ],
+    answer:'Terracing creates flat steps that slow water flow; vetiver grass roots grip the soil on each step',
+    hint:'Terracing changes the shape of the land; vetiver adds roots.',
+    explanation:'<b>Terracing</b> converts the continuous slope into flat steps. Water running down the slope slows at each flat step instead of rushing straight down, giving the soil time to absorb it rather than washing it away. <b>Vetiver grass</b> has very deep, dense root systems that anchor the soil on each terrace, preventing it from being washed off by any remaining water flow.' }),
+
+  makeMCQ({ id:'g5sci-con-015', chapterId:'conservation', difficulty:3,
+    question:'The government of Mauritius passes a law making it illegal to hunt Pink Pigeons. Why is a LAW needed — cannot conservation rely on people choosing to protect animals voluntarily?',
+    options:[
+      'A law forces everyone to comply, not just those who choose to protect wildlife — and legal penalties deter poachers',
+      'Laws are only needed for domestic animals, not wild ones',
+      'People always voluntarily protect animals, so a law is unnecessary',
+      'Laws are easier to write than education programmes'
+    ],
+    answer:'A law forces everyone to comply, not just those who choose to protect wildlife — and legal penalties deter poachers',
+    hint:'What happens to someone who breaks a law compared to someone who breaks a voluntary guideline?',
+    explanation:'Voluntary protection only works if everyone agrees. A <b>law</b> makes it mandatory — it <b>applies to everyone</b> and those who hunt or harm protected species face legal penalties (fines, imprisonment). This deters poachers who might otherwise not choose to protect wildlife. Laws also send a clear signal about the seriousness of conservation.' }),
+
+  makeMCQ({ id:'g5sci-con-016', chapterId:'conservation', difficulty:4,
+    question:'In 1990, only 9 Pink Pigeons remained alive. A conservation programme was started: a nature reserve was set up, introduced predators were controlled, and some birds were bred in captivity then released. By 2020, the population reached 500. Which TWO factors from the programme were MOST critical to this recovery?',
+    options:[
+      'Protecting habitat in the nature reserve AND controlling predators that ate eggs and chicks',
+      'Painting the birds brighter colours AND giving them extra food',
+      'Releasing them in a different country AND building bird houses',
+      'Stopping all tourism on the island AND banning all farming nearby'
+    ],
+    answer:'Protecting habitat in the nature reserve AND controlling predators that ate eggs and chicks',
+    hint:'The birds need a safe place to live AND their eggs/chicks need to survive to adulthood.',
+    explanation:'The two most critical factors were: (1) <b>Protecting habitat</b> — the nature reserve provided food, shelter and safe nesting sites; (2) <b>Controlling predators</b> (rats, cats, monkeys) — without predators destroying eggs and chicks, more young birds survived to adulthood and could breed. Together, these two actions directly addressed the main reasons the species was declining.' })
 
 );

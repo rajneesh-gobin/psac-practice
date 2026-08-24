@@ -87,6 +87,89 @@ STATIC_QUESTIONS.push(
     options:['A small brightly-coloured bird','A large flightless bird','A fast-flying seabird','A parrot-like bird'],
     answer:'A large flightless bird',
     hint:'It was similar to the Dodo of Mauritius.',
-    explanation:'The Rodrigues Solitaire was a large flightless bird — similar to the Dodo — that lived only in Rodrigues. François Leguat described it in 1691; it became extinct in the 18th century.' })
+    explanation:'The Rodrigues Solitaire was a large flightless bird — similar to the Dodo — that lived only in Rodrigues. François Leguat described it in 1691; it became extinct in the 18th century.' }),
+
+  makeMCQ({ id:'g5sci-an-011', chapterId:'animals', difficulty:1,
+    question:'Which bird is endemic to the island of Rodrigues?',
+    options:['Echo Parakeet','Pink Pigeon','Cardinal Jaune','Dodo'],
+    answer:'Cardinal Jaune',
+    hint:'This bright yellow bird is found only on Rodrigues.',
+    explanation:'The <b>Cardinal Jaune</b> (Yellow Cardinal or Rodrigues Fody) is a bird endemic to Rodrigues. It is found only on Rodrigues and is one of the island\'s iconic endemic birds.' }),
+
+  makeMCQ({ id:'g5sci-an-012', chapterId:'animals', difficulty:1,
+    question:'Where does a fish naturally live?',
+    options:['Desert','Forest','Water','Underground soil'],
+    answer:'Water',
+    hint:'Fish breathe through gills which work in water.',
+    explanation:'Fish live naturally in <b>water</b> (sea, rivers, lakes). They are adapted to an aquatic habitat — they breathe through gills that extract oxygen from the water.' }),
+
+  makeMCQ({ id:'g5sci-an-013', chapterId:'animals', difficulty:2,
+    question:'Give TWO ways in which fish are adapted to live in water.',
+    options:[
+      'They have fins to swim and gills to breathe underwater',
+      'They have wings to fly and lungs to breathe air',
+      'They have four legs and a thick fur coat',
+      'They have a hump to store water and wide flat feet'
+    ],
+    answer:'They have fins to swim and gills to breathe underwater',
+    hint:'Think about how fish move and how they get oxygen.',
+    explanation:'Fish are adapted to water in two key ways: (1) <b>Fins</b> allow them to swim and steer through water; (2) <b>Gills</b> allow them to extract dissolved oxygen from the water to breathe. They also have streamlined bodies to reduce resistance.' }),
+
+  makeMCQ({ id:'g5sci-an-014', chapterId:'animals', difficulty:1,
+    question:'What is the habitat of a worm?',
+    options:['Sea','Air','Soil','Desert'],
+    answer:'Soil',
+    hint:'You find worms when you dig in the garden.',
+    explanation:'Worms live in <b>soil</b>. They burrow through the soil, feeding on decaying plant matter, and help to aerate and fertilise the soil. They need moist conditions to breathe through their skin.' }),
+
+  makeMCQ({ id:'g5sci-an-015', chapterId:'animals', difficulty:2,
+    question:'Which one of the following is an endemic animal that lives on Île Ronde, a nature reserve near Mauritius?',
+    options:['Dodo','Boa constrictor (Round Island boa)','Polar bear','Cardinal Jaune'],
+    answer:'Boa constrictor (Round Island boa)',
+    hint:'Île Ronde protects several reptiles found nowhere else on Earth.',
+    explanation:'<b>Île Ronde</b> (Round Island) is a nature reserve north of Mauritius that protects several endemic reptiles found nowhere else, including the <b>Round Island boa</b> and endemic skinks and geckos. The Dodo (Mauritius mainland) and Cardinal Jaune (Rodrigues) are different.' }),
+
+  makeMCQ({ id:'g5sci-an-016', chapterId:'animals', difficulty:2,
+    question:'Why have most endemic birds in Mauritius become rare?',
+    options:[
+      'They chose to fly away to other countries',
+      'Their forest habitats were destroyed and predators (rats, cats, monkeys) were introduced',
+      'They stopped breeding because of too much sunlight',
+      'The government collected them all for zoos'
+    ],
+    answer:'Their forest habitats were destroyed and predators (rats, cats, monkeys) were introduced',
+    hint:'Two key factors: habitat loss and new predators.',
+    explanation:'Endemic birds became rare mainly because: (1) Their <b>forest habitat was destroyed</b> when settlers cleared land for farming and building; (2) <b>Introduced animals</b> (rats, cats, monkeys, pigs) ate their eggs, chicks and food sources. These two factors together drove many species to near-extinction.' }),
+
+  makeMCQ({ id:'g5sci-an-017', chapterId:'animals', difficulty:3,
+    question:'A dolphin breathes air using lungs, but it lives in the sea. Which group of animals does a dolphin belong to?',
+    options:['Fish','Amphibian','Mammal','Reptile'],
+    answer:'Mammal',
+    hint:'If it breathes air, is warm-blooded and feeds its young on milk, it is in this group.',
+    explanation:'The dolphin is a <b>mammal</b>. Although it lives in the sea and looks like a fish, it breathes air through a blowhole (it has lungs, not gills), is warm-blooded, gives birth to live young, and nurses them with milk — all characteristics of mammals.' }),
+
+  makeMCQ({ id:'g5sci-an-018', chapterId:'animals', difficulty:3,
+    question:'The government sets up a nature reserve on an island and removes all introduced predators (cats and rats). Over the next 10 years, the population of the endemic Pink Pigeon doubles. What does this tell us?',
+    options:[
+      'Pink Pigeons reproduce faster when it is warmer',
+      'Removing predators reduces death rates, allowing the bird population to increase',
+      'Pink Pigeons were pretending to be endangered before the reserve was set up',
+      'The birds flew in from other islands to join the nature reserve'
+    ],
+    answer:'Removing predators reduces death rates, allowing the bird population to increase',
+    hint:'Fewer predators = fewer birds being killed = more birds survive to reproduce.',
+    explanation:'By removing introduced predators, fewer Pink Pigeons and their eggs/chicks are killed. The <b>death rate falls</b> while the <b>birth rate stays the same</b>, so the population grows. This confirms that predation was a key reason the species was endangered.' }),
+
+  makeMCQ({ id:'g5sci-an-019', chapterId:'animals', difficulty:4,
+    question:'A student argues: "Animals should be taken from nature reserves and kept in zoos, because zoos are safer." Give the BEST argument AGAINST this view.',
+    options:[
+      'Zoos are too expensive to visit',
+      'In zoos, animals cannot live and behave naturally, may not reproduce well, and removing them from nature reserves reduces the wild population that conservation aims to protect',
+      'Zoos always mistreat animals',
+      'Wild animals cannot survive in zoos at all'
+    ],
+    answer:'In zoos, animals cannot live and behave naturally, may not reproduce well, and removing them from nature reserves reduces the wild population that conservation aims to protect',
+    hint:'What is the purpose of a nature reserve compared to a zoo?',
+    explanation:'Nature reserves are designed to allow animals to live naturally in their own habitat, hunt their own food and reproduce naturally — this is the goal of conservation. Moving animals to zoos removes them from their natural habitat, can reduce their quality of life, and depletes the very wild population that conservation programmes aim to grow. Captive breeding in zoos can play a supplementary role, but nature reserves in the wild are considered more sustainable.' })
 
 );

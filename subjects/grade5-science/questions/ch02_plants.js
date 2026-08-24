@@ -107,6 +107,118 @@ STATIC_QUESTIONS.push(
     options:['More crops that leave the soil bare between rows','Trees and grass along the edges of the field','Large stones to block rainwater','Nothing — rain erosion cannot be stopped'],
     answer:'Trees and grass along the edges of the field',
     hint:'Roots are nature\'s anchor for soil.',
-    explanation:'Trees and grass have extensive root systems that bind soil particles together, reducing the impact of rain and preventing topsoil from being washed away.' })
+    explanation:'Trees and grass have extensive root systems that bind soil particles together, reducing the impact of rain and preventing topsoil from being washed away.' }),
+
+  makeMCQ({ id:'g5sci-pl-014', chapterId:'plants', difficulty:1,
+    question:'Which part of a plant attracts insects for pollination?',
+    options:['Root','Stem','Flower','Leaf'],
+    answer:'Flower',
+    hint:'This brightly coloured part draws in bees and butterflies.',
+    explanation:'The <b>flower</b> attracts insects for pollination. Its bright colours, patterns and sweet scent attract bees, butterflies and other insects that carry pollen from flower to flower.' }),
+
+  makeMCQ({ id:'g5sci-pl-015', chapterId:'plants', difficulty:1,
+    question:'The root of which of these plants is usually used as food by humans?',
+    options:['Sugarcane','Grass','Carrot','Vetiver'],
+    answer:'Carrot',
+    hint:'You eat this underground orange vegetable.',
+    explanation:'The <b>carrot</b> plant stores food in its root, which humans eat. Other examples of edible roots include cassava, sweet potato and radish.' }),
+
+  makeMCQ({ id:'g5sci-pl-016', chapterId:'plants', difficulty:2,
+    question:'Which gas do plants absorb from the air to make their own food (photosynthesis)?',
+    options:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'],
+    answer:'Carbon dioxide',
+    hint:'Plants "breathe in" this gas and breathe out oxygen.',
+    explanation:'Plants absorb <b>carbon dioxide</b> from the air through small openings in their leaves. They combine it with water (from the roots) and light energy to make glucose during photosynthesis.' }),
+
+  makeMCQ({ id:'g5sci-pl-017', chapterId:'plants', difficulty:2,
+    question:'The cactus plant grows in the desert. Which feature of the cactus allows it to survive with very little water?',
+    options:[
+      'It has large broad leaves that collect rain',
+      'It has a thick stem that stores water',
+      'It has many flowers to attract insects',
+      'It has deep roots that reach underground rivers'
+    ],
+    answer:'It has a thick stem that stores water',
+    hint:'The thick, fleshy stem of a cactus is like a water tank.',
+    explanation:'The cactus has a <b>thick, fleshy stem</b> that stores large amounts of water. This allows it to survive in the desert where there is very little rainfall. The stem also has a waxy coating to reduce water loss.' }),
+
+  makeNum({ id:'g5sci-pl-018', chapterId:'plants', difficulty:2,
+    question:'A cactus has thin, sharp __________ instead of leaves to reduce water loss. (One word)',
+    answer:'spines', acceptableAnswers:['spines','thorns','needles'],
+    hint:'These sharp structures also protect the cactus from animals that might eat it.',
+    explanation:'The cactus has <b>spines</b> (sharp thorns/needles) instead of leaves. Leaves would lose too much water through transpiration in the hot desert. Spines have a much smaller surface area, so less water is lost.' }),
+
+  makeMCQ({ id:'g5sci-pl-019', chapterId:'plants', difficulty:2,
+    question:'What is the first part to appear when a seed germinates?',
+    options:['Leaf','Stem','Root','Flower'],
+    answer:'Root',
+    hint:'The plant needs to anchor itself and find water before it grows upward.',
+    explanation:'During germination, the <b>root</b> appears first. It grows downward into the soil to anchor the seedling and absorb water and minerals before the shoot (stem and leaves) emerges above ground.' }),
+
+  makeTF({ id:'g5sci-pl-020', chapterId:'plants', difficulty:2,
+    question:'A germinating seed becomes smaller because it uses its stored food to grow.',
+    answer:true,
+    hint:'Before the seedling can make its own food, where does it get energy from?',
+    explanation:'True. A seed contains stored food (starch, oils). During germination, before the seedling has leaves to make food by photosynthesis, it uses up this stored food for energy and growth. This is why the seed shrinks and loses mass.' }),
+
+  makeMCQ({ id:'g5sci-pl-021', chapterId:'plants', difficulty:3,
+    question:'Jim places a balsam plant in red-coloured water. After two days, the stem turns red. What does this experiment show?',
+    options:[
+      'The stem produces red pigment when exposed to sunlight',
+      'The stem transports water from the roots upward through the plant',
+      'The stem absorbs water from the air',
+      'The roots of the balsam plant release red chemicals'
+    ],
+    answer:'The stem transports water from the roots upward through the plant',
+    hint:'The red colour travels up the stem with the water.',
+    explanation:'The red-coloured water travels up through the stem from the roots. When the stem turns red, it proves that the <b>stem transports water upward</b> throughout the plant. This is a classic experiment demonstrating the transport function of the stem.' }),
+
+  makeMCQ({ id:'g5sci-pl-022', chapterId:'plants', difficulty:3,
+    question:'Seed A is placed in wet cotton wool and Seed B in dry cotton wool, both at room temperature. Which seed will germinate and why?',
+    options:[
+      'Seed A — because water is one of the conditions needed for germination',
+      'Seed B — because dry conditions help germination',
+      'Both seeds — temperature is the only factor that matters',
+      'Neither seed — seeds need sunlight to germinate'
+    ],
+    answer:'Seed A — because water is one of the conditions needed for germination',
+    hint:'What are the three conditions needed for germination?',
+    explanation:'<b>Seed A</b> will germinate because it has <b>water</b> — one of the three conditions needed (water, warmth, air/oxygen). Seed B has no water so it cannot start the chemical reactions needed for germination. Sunlight is NOT needed for germination.' }),
+
+  makeMCQ({ id:'g5sci-pl-023', chapterId:'plants', difficulty:3,
+    question:'A plant is placed in a room with good lighting, but the room has no air flow and all the windows are sealed. Why might the plant eventually stop growing well?',
+    options:[
+      'The plant will overheat without any breeze',
+      'The plant will use up the carbon dioxide in the air and have none left for photosynthesis',
+      'The plant cannot grow without wind to spread its seeds',
+      'The sealed room traps too much oxygen, which poisons the plant'
+    ],
+    answer:'The plant will use up the carbon dioxide in the air and have none left for photosynthesis',
+    hint:'What gas does the plant need from the air to make food?',
+    explanation:'Plants need <b>carbon dioxide</b> for photosynthesis. In a completely sealed room, the plant would gradually use up all the CO₂. With no fresh CO₂ coming in, photosynthesis slows and the plant cannot make enough food to grow.' }),
+
+  makeMCQ({ id:'g5sci-pl-024', chapterId:'plants', difficulty:4,
+    question:'Ryan investigates whether water is needed for germination. He sets up two cups of soil with identical seeds. Cup A receives 5 ml of water daily; Cup B receives no water. After 10 days, only the seed in Cup A has germinated. His friend says, "Temperature also changed during the experiment." Why does this make the experiment UNFAIR?',
+    options:[
+      'Because a fair test must change two things at a time',
+      'Because a fair test changes only ONE variable — if temperature also changed, we cannot be sure water caused the germination',
+      'Because seeds always germinate when watered, so the result is obvious',
+      'Because the friend should have done the experiment themselves'
+    ],
+    answer:'Because a fair test changes only ONE variable — if temperature also changed, we cannot be sure water caused the germination',
+    hint:'In a fair test (controlled experiment), only the variable being tested should change.',
+    explanation:'In a <b>fair test</b>, only the <b>independent variable</b> (here: water) should change. All other conditions (temperature, type of seed, type of soil, light) must stay the same. If temperature also changed, we cannot be sure whether it was the water or the temperature change that caused Cup A\'s seed to germinate.' }),
+
+  makeMCQ({ id:'g5sci-pl-025', chapterId:'plants', difficulty:4,
+    question:'A pupil notices that a field with no plants erodes quickly in heavy rain, but a nearby field covered in thick grass does not. Give TWO reasons why the grassy field is protected from soil erosion.',
+    options:[
+      'Grass roots bind the soil, and grass leaves slow the rain drops before they hit the soil',
+      'Grass makes the soil harder and drier so rain cannot penetrate',
+      'Grass attracts birds that eat the rain drops before they reach the soil',
+      'Grass produces chemicals that repel rainwater'
+    ],
+    answer:'Grass roots bind the soil, and grass leaves slow the rain drops before they hit the soil',
+    hint:'Think about what the roots do underground AND what the leaves do above ground.',
+    explanation:'The grassy field is protected in two ways: (1) The <b>roots bind soil particles together</b>, making it harder for water to wash the soil away; (2) The <b>leaves/blades of grass slow the rain drops</b> as they fall, reducing the force with which they hit the soil surface.' })
 
 );
