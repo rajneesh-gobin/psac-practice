@@ -140,6 +140,7 @@ const Forum = (() => {
   async function searchPosts(query) {
     const q = (query || '').trim();
     if (!q) { render(); return; }
+    if (!_sb) return;
 
     _sub('forum-search-results');
     const sr = _el('forum-search-results');
@@ -212,6 +213,7 @@ const Forum = (() => {
   }
 
   async function _renderPostsList(catId, list) {
+    if (!_sb) { list.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">Not connected.</p>'; return; }
     const sortBtns = `
       <div class="flex gap-2 mb-4 text-xs font-semibold">
         <button onclick="Forum.setSort('newest')"
@@ -277,6 +279,7 @@ const Forum = (() => {
 
   // ── Post detail ───────────────────────────────
   async function openPost(postId) {
+    if (!_sb) return;
     _currentPost = postId;
     _sub('forum-post-detail');
     const replyInput = _el('forum-reply-input'); if (replyInput) replyInput.value = '';
@@ -342,6 +345,7 @@ const Forum = (() => {
 
   // ── Delete ────────────────────────────────────
   async function deletePost(postId) {
+    if (!_sb) return;
     const doIt = async () => {
       await _sb.from('forum_replies').delete().eq('post_id', postId);
       await _sb.from('forum_posts').delete().eq('id', postId);
@@ -356,6 +360,7 @@ const Forum = (() => {
   }
 
   async function deleteReply(replyId) {
+    if (!_sb) return;
     const doIt = async () => {
       await _sb.from('forum_replies').delete().eq('id', replyId);
       if (typeof toast !== 'undefined') toast('Reply deleted', 1500);
@@ -382,9 +387,10 @@ const Forum = (() => {
   }
 
   async function submitPost() {
+    const errEl = _el('forum-np-error');
+    if (!_sb) { _err(errEl, 'Not connected. Please refresh the page.'); return; }
     const title = _el('forum-np-title')?.value.trim();
     const body  = _el('forum-np-body')?.value.trim();
-    const errEl = _el('forum-np-error');
     if (!title || title.length < 3)  { _err(errEl,'Please enter a title (at least 3 characters).'); return; }
     if (title.length > TITLE_MAX)     { _err(errEl,`Title must be under ${TITLE_MAX} characters.`); return; }
     if (!body  || body.length < 5)   { _err(errEl,'Please write a bit more in the body.'); return; }
@@ -401,8 +407,9 @@ const Forum = (() => {
 
   // ── Reply ─────────────────────────────────────
   async function submitReply() {
-    const body  = _el('forum-reply-input')?.value.trim();
     const errEl = _el('forum-reply-error');
+    if (!_sb) { _err(errEl, 'Not connected. Please refresh the page.'); return; }
+    const body  = _el('forum-reply-input')?.value.trim();
     if (!body || body.length < 2)  { _err(errEl,'Please write something before replying.'); return; }
     if (body.length > REPLY_MAX)    { _err(errEl,`Reply must be under ${REPLY_MAX} characters.`); return; }
     const cooldownLeft = Math.ceil((COOLDOWN_MS - (Date.now() - _lastReplyAt)) / 1000);

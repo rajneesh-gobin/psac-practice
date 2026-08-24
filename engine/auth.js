@@ -21,6 +21,7 @@ const Auth = (() => {
   let _setupAvatar         = AVATARS[0];
   let _pendingVerifyEmail  = ''; // email stored for resend verification
   let _isAdminUser         = false;  // true when logged-in user is admin role
+  let _isSuperAdmin        = false;  // true when logged-in user is super admin
   let _pinAttempts         = 0;
   let _pinLockedUntil      = 0;
 
@@ -105,6 +106,7 @@ const Auth = (() => {
 
     if (profile.role === 'admin') {
       _isAdminUser = true;
+      if (profile.is_super_admin) _isSuperAdmin = true;
       // Admin lands on parent dashboard; admin panel accessible via button
       const adminBtn = document.getElementById('btn-open-admin');
       if (adminBtn) adminBtn.classList.remove('hidden');
@@ -135,6 +137,9 @@ const Auth = (() => {
   function _openParentDashboard() {
     renderParentDashboard();
     showScreen('parent');
+    const hdrLogout = document.getElementById('header-logout-btn');
+    if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
+    if (_parentUser) Store.logLoginEvent(_parentUser.id, _isSuperAdmin ? 'super_admin' : (_isAdminUser ? 'admin' : 'parent'));
   }
 
   // ── Cache Supabase students as local accounts ──
@@ -232,6 +237,11 @@ const Auth = (() => {
     if (typeof QuestionLoader !== 'undefined') {
       QuestionLoader.loadForStudent(studentGrade).catch(() => {});
     }
+
+    // Show header logout button
+    const hdrLogout = document.getElementById('header-logout-btn');
+    if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
+    Store.logLoginEvent(studentRow.id, 'student');
 
     // Skip grade select — parent already set the grade; go straight to subject picker
     if (navigate) {
@@ -514,7 +524,7 @@ const Auth = (() => {
     if (!confirm('Final confirmation — all chapters, XP and badges will be lost.')) return;
     if (!_sb) return;
     await _sb.from('student_progress').delete().eq('student_id', studentId);
-    try { localStorage.removeItem(`mm_s_${studentId}`); } catch(e) {}
+    try { localStorage.removeItem(`mathmaster_s_${studentId}`); } catch(e) {}
     toast(`${studentName}'s progress has been reset.`, 3000);
     renderParentDashboard();
   }
@@ -688,6 +698,10 @@ const Auth = (() => {
     _parentProfile    = null;
     _family           = null;
     _familyStudents   = [];
+    _isAdminUser      = false;
+    _isSuperAdmin     = false;
+    const hdrLogout = document.getElementById('header-logout-btn');
+    if (hdrLogout) { hdrLogout.classList.add('hidden'); hdrLogout.classList.remove('flex'); }
     if (_sb) await _sb.auth.signOut();
     showScreen('landing');
   }
@@ -719,10 +733,12 @@ const Auth = (() => {
       await Store.updateStudent(studentId, { pin });
       return;
     }
-    const { data, error } = await _sb.rpc('set_student_pin', { p_student_id: studentId, p_pin: pin });
-    if (error || !data?.ok) {
-      console.warn('[set_student_pin]', error?.message || data?.error);
-      await Store.updateStudent(studentId, { pin }); // fallback if RPC not deployed
+    const { error } = await _sb.rpc('set_student_pin', { p_student_id: studentId, p_pin: pin });
+    // set_student_pin returns VOID — success gives { data: null, error: null }
+    // only fall back to plaintext if the RPC itself errors (not deployed yet)
+    if (error) {
+      console.warn('[set_student_pin] RPC error, storing plaintext (dev only):', error?.message);
+      await Store.updateStudent(studentId, { pin });
     }
   }
 
@@ -792,7 +808,7 @@ const Auth = (() => {
     if (!student && _sb && _family) {
       // Scope query to this family to prevent cross-family data access (H-5)
       const { data } = await _sb.from('students')
-        .select('id, display_name, username, grade, pin, avatar, session_version, family_id')
+        .select('id, display_name, username, grade, avatar, session_version, family_id')
         .eq('id', id).eq('family_id', _family.id).maybeSingle();
       if (data) {
         student = data;
@@ -1033,6 +1049,7 @@ const Auth = (() => {
     enterParentMode, exitParentMode, resetProgress,
     pdTab, pdSwitchStudent,
     getStudents: () => _familyStudents,
+    isSuperAdmin: () => _isSuperAdmin,
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
   };

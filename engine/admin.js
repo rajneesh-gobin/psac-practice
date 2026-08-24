@@ -21,6 +21,12 @@ const AdminPanel = (() => {
     await Promise.all([loadMembers(), loadSettings()]);
     _renderContent();
     await loadStats();
+    // Show super-admin-only tabs
+    const isSA = typeof Auth !== 'undefined' && Auth.isSuperAdmin?.();
+    const rolesBtn = document.getElementById('admin-tab-roles-btn');
+    const plansBtn = document.getElementById('admin-tab-plans-btn');
+    if (rolesBtn) rolesBtn.classList.toggle('hidden', !isSA);
+    if (plansBtn) plansBtn.classList.toggle('hidden', !isSA);
   }
 
   // ── Tab switching ───────────────────────────
@@ -39,6 +45,8 @@ const AdminPanel = (() => {
     const panel = document.getElementById(`admin-tab-${name}`);
     if (panel) panel.classList.remove('hidden');
     if (name === 'reports') loadReports();
+    if (name === 'roles')   loadRoles();
+    if (name === 'plans')   loadPlans();
   }
 
   // ── Members ────────────────────────────────
@@ -121,10 +129,59 @@ const AdminPanel = (() => {
             ${m.expires_at ? `<button onclick="AdminPanel.setExpiry('${m.id}','')" class="text-xs text-red-400 hover:text-red-600 shrink-0" title="Remove expiry">✕</button>` : ''}
           </div>
         </div>
+        ${(m.role === 'parent' || m.role === 'admin') ? `
+        <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+          <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold shrink-0">💳 Plan:</span>
+          <span id="plan-label-${m.id}" class="text-xs text-gray-400">loading…</span>
+          <select id="plan-sel-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+            <option value="free">Free</option>
+            <option value="starter">Starter</option>
+            <option value="premium">Premium</option>
+          </select>
+          <select id="plan-months-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+            <option value="1">1 month</option>
+            <option value="3">3 months</option>
+            <option value="6">6 months</option>
+            <option value="12">12 months</option>
+          </select>
+          <button onclick="AdminPanel.assignPlan('${m.id}')"
+            class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 px-3 py-1 rounded-lg font-semibold transition-colors">
+            ✅ Activate
+          </button>
+        </div>` : ''}
         <div id="children-panel-${m.id}" class="hidden mt-3 pl-2 border-l-2 border-indigo-200 dark:border-indigo-700">
           <p class="text-xs text-gray-400 animate-pulse">Loading children…</p>
         </div>
       </div>`).join('');
+
+    // Load plan labels asynchronously for each parent/admin row
+    list.filter(m => m.role === 'parent' || m.role === 'admin').forEach(async m => {
+      const lbl = document.getElementById(`plan-label-${m.id}`);
+      if (!lbl) return;
+      const { plan_id, subscription } = await Store.getUserPlan(m.id);
+      const exp = subscription?.expires_at
+        ? ` (expires ${new Date(subscription.expires_at).toLocaleDateString()})`
+        : '';
+      lbl.textContent = plan_id + exp;
+      lbl.className = `text-xs font-semibold ${plan_id === 'free' ? 'text-gray-400' : 'text-green-500'}`;
+      const sel = document.getElementById(`plan-sel-${m.id}`);
+      if (sel) sel.value = plan_id;
+    });
+  }
+
+  async function assignPlan(userId) {
+    const planId  = document.getElementById(`plan-sel-${userId}`)?.value;
+    const months  = parseInt(document.getElementById(`plan-months-${userId}`)?.value || '1');
+    if (!planId || !userId) return;
+    const ok = await Store.activatePlan(userId, planId, months, 'Manual activation by admin');
+    if (ok) {
+      toast(`Plan activated: ${planId} for ${months} month(s) ✅`, 2000);
+      // Refresh the label
+      const lbl = document.getElementById(`plan-label-${userId}`);
+      if (lbl) { const r = await Store.getUserPlan(userId); lbl.textContent = r.plan_id; }
+    } else {
+      toast('Could not activate plan. Check console.', 2500);
+    }
   }
 
   async function toggleChildren(profileId) {
@@ -138,7 +195,7 @@ const AdminPanel = (() => {
     if (_familyStudents[profileId]) { _renderChildren(profileId); return; }
 
     // Load family → students
-    const { data: fam } = await _sb.from('families').select('id').eq('owner_id', profileId).maybeSingle();
+    const { data: fam } = await _sb.from('families').select('id').eq('parent_id', profileId).maybeSingle();
     if (!fam) { panel.innerHTML = '<p class="text-xs text-gray-400">No family found.</p>'; return; }
     const { data: kids } = await _sb.from('students').select('id, display_name, username, grade, session_version, expires_at, created_at').eq('family_id', fam.id);
     _familyStudents[profileId] = kids || [];
@@ -332,9 +389,9 @@ const AdminPanel = (() => {
     ['stat-total-users','stat-total-students','stat-total-families','stat-total-teachers']
       .forEach(id => _set(id, '…'));
     const [pRes, sRes, fRes] = await Promise.all([
-      _sb.from('profiles').select('id, role', { count: 'exact', head: false }),
-      _sb.from('students').select('id', { count: 'exact', head: false }),
-      _sb.from('families').select('id', { count: 'exact', head: false }),
+      _sb.from('profiles').select('id, role', { count: 'exact', head: false }), // needs role data for teacher filter
+      _sb.from('students').select('id', { count: 'exact', head: true }),
+      _sb.from('families').select('id', { count: 'exact', head: true }),
     ]);
 
     const profiles = pRes.data || [];
@@ -353,6 +410,71 @@ const AdminPanel = (() => {
 
   function _esc(str) {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── Roles tab (super admin only) ───────────────
+  async function loadRoles() {
+    if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
+    const listEl = document.getElementById('admin-roles-list');
+    if (!listEl) return;
+    listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
+    const { data } = await _sb.from('profiles').select('id, full_name, role, is_super_admin').order('full_name');
+    const mySelf = typeof Auth !== 'undefined' ? Auth.getParentProfile?.()?.id : null;
+    listEl.innerHTML = (data || []).map(p => {
+      const isSelf  = p.id === mySelf;
+      const isSuper = p.is_super_admin;
+      return `<div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(p.full_name || p.id)}</div>
+          <div class="text-xs text-gray-400">${p.role || 'user'}${isSuper ? ' 👑 super admin' : ''}</div>
+        </div>
+        ${(isSelf || isSuper) ? '<span class="text-xs text-gray-400 italic">Cannot change</span>' :
+          `<button onclick="AdminPanel.setRole('${p.id}','${p.role === 'admin' ? 'user' : 'admin'}')"
+            class="text-xs ${p.role === 'admin' ? 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400' : 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400'} px-3 py-1.5 rounded-full font-semibold hover:opacity-80 transition-colors">
+            ${p.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
+          </button>`}
+      </div>`;
+    }).join('') || '<p class="text-sm text-gray-400 text-center py-4">No profiles found.</p>';
+  }
+
+  async function setRole(userId, newRole) {
+    if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
+    await _sb.from('profiles').update({ role: newRole }).eq('id', userId).eq('is_super_admin', false);
+    loadRoles();
+    toast(newRole === 'admin' ? 'User promoted to admin ✅' : 'Admin rights removed.', 2000);
+  }
+
+  // ── Plans tab (super admin only) ───────────────
+  async function loadPlans() {
+    if (!_sb) return;
+    const listEl = document.getElementById('admin-plans-list');
+    if (!listEl) return;
+    listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
+    const { data } = await _sb.from('plans').select('*').order('price_mur');
+    listEl.innerHTML = (data || []).map(p => `
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border border-gray-100 dark:border-gray-700">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <div class="font-bold text-gray-800 dark:text-white">${_esc(p.name)} Plan ${p.price_mur === 0 ? '— Free' : `— Rs ${p.price_mur}/mo`}</div>
+            <div class="text-xs text-gray-400">Up to ${p.max_children} child${p.max_children > 1 ? 'ren' : ''}</div>
+          </div>
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <span class="text-xs ${p.is_active ? 'text-green-500 font-semibold' : 'text-gray-400'}">${p.is_active ? 'Live' : 'Draft'}</span>
+            <div class="relative w-9 h-5 ${p.is_active ? 'bg-green-400' : 'bg-gray-300 dark:bg-gray-600'} rounded-full shadow-inner">
+              <input type="checkbox" ${p.is_active ? 'checked' : ''} onchange="AdminPanel.togglePlan('${p.id}', this.checked)" class="sr-only">
+              <div class="absolute w-3 h-3 bg-white rounded-full shadow top-1 transition-transform ${p.is_active ? 'translate-x-5' : 'translate-x-1'}"></div>
+            </div>
+          </label>
+        </div>
+        <pre class="text-xs text-gray-400 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2 overflow-x-auto">${JSON.stringify(p.features, null, 2)}</pre>
+      </div>`).join('');
+  }
+
+  async function togglePlan(planId, active) {
+    if (!_sb) return;
+    await _sb.from('plans').update({ is_active: active }).eq('id', planId);
+    loadPlans();
+    toast(active ? `${planId} plan is now live!` : `${planId} plan disabled.`, 2000);
   }
 
   // ── Question Reports tab ───────────────────────
@@ -377,5 +499,5 @@ const AdminPanel = (() => {
     `).join('');
   }
 
-  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports };
+  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, loadRoles, setRole, loadPlans, togglePlan, assignPlan };
 })();

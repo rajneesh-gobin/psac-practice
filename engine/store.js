@@ -117,6 +117,9 @@ const Store = (() => {
 
   async function deleteStudent(studentId) {
     if (!_sb) return;
+    // Clean up progress first (student_progress has no FK cascade to students)
+    await _sb.from('student_progress').delete().eq('student_id', studentId);
+    try { localStorage.removeItem(_sKey(studentId)); } catch(e) {}
     await _sb.from('students').delete().eq('id', studentId);
   }
 
@@ -226,7 +229,7 @@ const Store = (() => {
 
   // ── Question reports ──────────────────────────
   async function reportQuestion(questionId, questionText, message, studentId) {
-    if (!_sb) return false;
+    if (!_sb || !questionId) return false;
     const { error } = await _sb.from('question_reports').insert({
       question_id:   questionId,
       question_text: (questionText || '').slice(0, 500),
@@ -277,6 +280,79 @@ const Store = (() => {
       .update({ completed_at: new Date().toISOString() }).eq('id', id);
   }
 
+  // ── Plans / subscriptions ─────────────────────
+  async function getUserPlan(userId) {
+    if (!_sb || !userId) return { plan_id: 'free', plan: null, subscription: null };
+    // Active subscription wins; fall back to free
+    const { data: sub } = await _sb.from('subscriptions')
+      .select('*, plans(*)')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .order('started_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (sub?.plans) return { plan_id: sub.plan_id, plan: sub.plans, subscription: sub };
+    // Fetch free plan details for display
+    const { data: freePlan } = await _sb.from('plans').select('*').eq('id', 'free').maybeSingle();
+    return { plan_id: 'free', plan: freePlan, subscription: null };
+  }
+
+  async function activatePlan(userId, planId, months, notes) {
+    if (!_sb) return false;
+    const expiresAt = new Date();
+    expiresAt.setMonth(expiresAt.getMonth() + (months || 1));
+    // Cancel any existing active subscriptions first
+    await _sb.from('subscriptions').update({ status: 'cancelled' }).eq('user_id', userId).eq('status', 'active');
+    const { error } = await _sb.from('subscriptions').insert({
+      user_id: userId, plan_id: planId, status: 'active', expires_at: expiresAt.toISOString(),
+    });
+    if (!error) {
+      // Log a manual payment record
+      await _sb.from('payments').insert({
+        user_id: userId, plan_id: planId, amount_mur: 0,
+        provider: 'manual', status: 'completed',
+        notes: notes || 'Admin manual activation', processed_at: new Date().toISOString(),
+      });
+    }
+    return !error;
+  }
+
+  async function getPaymentHistory(userId) {
+    if (!_sb) return [];
+    const { data } = await _sb.from('payments').select('*').eq('user_id', userId)
+      .order('created_at', { ascending: false }).limit(20);
+    return data || [];
+  }
+
+  // ── Login event tracking ──────────────────────
+  async function logLoginEvent(userId, userType) {
+    if (!_sb || !userId) return;
+    const fingerprint = (() => {
+      try {
+        return btoa([
+          navigator.userAgent,
+          navigator.language,
+          screen.width + 'x' + screen.height,
+          Intl.DateTimeFormat().resolvedOptions().timeZone,
+        ].join('|')).slice(0, 64);
+      } catch(e) { return null; }
+    })();
+
+    let ip = null;
+    try {
+      const r = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(3000) });
+      if (r.ok) ip = (await r.json()).ip;
+    } catch(e) {}
+
+    _sb.from('login_events').insert({
+      user_id:     String(userId),
+      user_type:   userType || 'student',
+      ip_address:  ip,
+      user_agent:  navigator.userAgent.slice(0, 500),
+      fingerprint,
+    }).then(() => {}).catch(() => {});
+  }
+
   return {
     // Auth session
     saveStudentSession, getStudentSession, clearStudentSession,
@@ -297,5 +373,9 @@ const Store = (() => {
     reportQuestion, loadReports,
     // Assignments
     loadAssignments, createAssignment, deleteAssignment, completeAssignment,
+    // Login tracking
+    logLoginEvent,
+    // Plans & billing
+    getUserPlan, activatePlan, getPaymentHistory,
   };
 })();
