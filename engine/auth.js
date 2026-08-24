@@ -140,7 +140,7 @@ const Auth = (() => {
   // ── Cache Supabase students as local accounts ──
   // Keeps existing renderStudentSelect() / renderParentDashboard() working
   function _cacheAccountsLocally(students) {
-    const accounts = students.map(s => ({ id: s.id, name: s.display_name, avatar: s.avatar }));
+    const accounts = students.map(s => ({ id: s.id, name: s.display_name, avatar: s.avatar, grade: s.grade }));
     Store.saveAccounts(accounts);
   }
 

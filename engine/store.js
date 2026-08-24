@@ -131,7 +131,14 @@ const Store = (() => {
     const raw  = data?.data || {};
     const def  = _defaultStudent();
     for (const k of Object.keys(def)) { if (!(k in raw)) raw[k] = def[k]; }
-    // Cache locally for fast access during practice
+    // Preserve locally-saved assignments if Supabase doesn't have them yet
+    // (parent may have added assignments while the background Supabase sync was still pending)
+    if (!raw.assignments?.length) {
+      try {
+        const cached = JSON.parse(localStorage.getItem(_sKey(studentId)));
+        if (cached?.assignments?.length) raw.assignments = cached.assignments;
+      } catch(e) {}
+    }
     try { localStorage.setItem(_sKey(studentId), JSON.stringify(raw)); } catch(e) {}
     return raw;
   }

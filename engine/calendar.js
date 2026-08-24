@@ -111,6 +111,11 @@ const Calendar = (() => {
 
   async function _ensureSchedule() {
     if (_scheduleId) return _scheduleId;
+    // Try to find an existing schedule first (in case _loadEntries failed silently)
+    const { data: existing } = await _sb.from('study_schedules')
+      .select('id').eq('student_id', _studentId).limit(1).maybeSingle();
+    if (existing?.id) { _scheduleId = existing.id; return _scheduleId; }
+    // No schedule found — create one
     const profile  = typeof Auth !== 'undefined' ? Auth.getParentProfile() : null;
     const { data, error } = await _sb.from('study_schedules').insert({
       student_id: _studentId,
@@ -251,12 +256,13 @@ const Calendar = (() => {
   function closeAddEvent() { _el('modal-add-event')?.classList.add('hidden'); }
 
   async function saveEvent() {
-    if (!_sb || !_studentId) return;
+    const errEl = _el('add-event-error');
+    if (!_sb)         { _showErr(errEl, 'Connection not ready. Please refresh the page.'); return; }
+    if (!_studentId)  { _showErr(errEl, 'No student selected — please choose a student from the dropdown.'); return; }
     const date  = _el('add-event-date')?.value;
     const type  = _el('add-event-type')?.value  || 'other';
     const label = (_el('add-event-label')?.value || '').trim();
     const notes = (_el('add-event-notes')?.value || '').trim();
-    const errEl = _el('add-event-error');
     if (!date)  { _showErr(errEl, 'Please select a date.'); return; }
     if (!label) { _showErr(errEl, 'Please enter an event name.'); return; }
 
