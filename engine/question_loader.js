@@ -141,6 +141,14 @@ const QuestionLoader = (() => {
       'subjects/grade4-science/questions/ch05_g4_water.js',
       'subjects/grade4-science/questions/ch06_g4_materials.js',
     ],
+    'grade4-french': [
+      'subjects/grade4-french/questions/ch01_g4_vocabulaire.js',
+      'subjects/grade4-french/questions/ch02_g4_noms.js',
+      'subjects/grade4-french/questions/ch03_g4_verbes.js',
+      'subjects/grade4-french/questions/ch04_g4_adjectifs.js',
+      'subjects/grade4-french/questions/ch05_g4_phrase.js',
+      'subjects/grade4-french/questions/ch06_g4_lecture.js',
+    ],
   };
 
   function _injectScript(src) {
