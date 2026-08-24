@@ -169,3 +169,19 @@ STATIC_QUESTIONS.push(
     explanation:'The <b>chemical energy</b> stored in the wax is the input. When the candle burns, this chemical energy is converted into two outputs: <b>light energy</b> (the flame produces light) and <b>heat energy</b> (the flame warms the surroundings). The shrinking candle shows stored chemical energy being released.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5sci-en-019', chapterId:'energy', difficulty:4,
+    question:'Trace the energy journey: the Sun heats a lake → water evaporates and falls as rain on mountains → water flows downhill through a pipe → it spins a turbine → electricity is produced. How many energy TRANSFORMATIONS occur in this chain?',
+    options:[
+      'One — the turbine converts water movement to electricity',
+      'Two — the Sun heats the water, then the turbine spins',
+      'Three — light energy → potential energy (raised water) → kinetic energy (flowing water) → electrical energy',
+      'None — energy just moves without changing form'
+    ],
+    answer:'Three — light energy → potential energy (raised water) → kinetic energy (flowing water) → electrical energy',
+    hint:'Count every time energy changes from one form to another along the chain.',
+    explanation:'The chain has <b>three transformations</b>: (1) <b>Light energy</b> from the Sun evaporates water, which rises and is stored as <b>potential energy</b> (water held at height); (2) potential energy converts to <b>kinetic energy</b> as water rushes downhill through the pipe and spins the turbine; (3) kinetic energy converts to <b>electrical energy</b> in the generator. This is how <b>hydroelectric power</b> works — tracing all the way back to the Sun as the original energy source.' })
+
+);

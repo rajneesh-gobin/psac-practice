@@ -147,3 +147,31 @@ STATIC_QUESTIONS.push(
     explanation:'The weed demonstrates three life processes: <b>movement</b> (pushing apart the concrete), <b>growth</b> (getting larger and stronger) and <b>reproduction</b> (dropping seeds that grow into new plants). This shows that even small plants are fully living.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5sci-liv-018', chapterId:'living-nonliving', difficulty:3,
+    question:'A pupil mixes yeast with warm water and sugar. After 10 minutes, bubbles form and the mixture smells different. Which statement BEST explains why this proves yeast is a living organism?',
+    options:[
+      'Yeast produces bubbles, which only non-living things do',
+      'Yeast carries out respiration (breaking down sugar to release energy and carbon dioxide gas), which is a life process',
+      'Yeast changes colour when mixed with water, proving it is alive',
+      'The bubbles are simply trapped air and prove nothing'
+    ],
+    answer:'Yeast carries out respiration (breaking down sugar to release energy and carbon dioxide gas), which is a life process',
+    hint:'The bubbles are carbon dioxide gas. What life process produces carbon dioxide?',
+    explanation:'The bubbles are <b>carbon dioxide gas</b> produced when yeast carries out <b>respiration</b> — it breaks down sugar to release energy and releases CO₂ as a waste product. Respiration is one of the 7 life processes (MRS GREN). Because yeast respires, feeds, grows and reproduces, it is a <b>living organism</b> (a type of fungus).' }),
+
+  makeMCQ({ id:'g5sci-liv-019', chapterId:'living-nonliving', difficulty:4,
+    question:'Astronauts on a space station need a life-support system. Scientists must provide: oxygen to breathe, food and water, a way to remove carbon dioxide and waste, and a comfortable temperature. Which concept BEST explains why ALL these things are needed?',
+    options:[
+      'Astronauts are non-living and only need air to function',
+      'Astronauts, like all living organisms, carry out all 7 life processes (MRS GREN) and each one must be supported to keep them alive',
+      'Only food is needed — astronauts can survive without oxygen in space',
+      'Only movement and reproduction matter for survival in space'
+    ],
+    answer:'Astronauts, like all living organisms, carry out all 7 life processes (MRS GREN) and each one must be supported to keep them alive',
+    hint:'Think about all 7 life processes — which ones do astronauts need support for in space?',
+    explanation:'Astronauts need support for ALL their life processes: <b>nutrition</b> (food and water), <b>respiration</b> (oxygen supplied; CO₂ removed), <b>excretion</b> (waste removed), <b>sensitivity</b> (temperature control) and <b>movement</b>. In space, none of these occur naturally — scientists must provide everything a living organism needs. This shows that ALL life processes work together; removing support for any one of them can be fatal.' })
+
+);

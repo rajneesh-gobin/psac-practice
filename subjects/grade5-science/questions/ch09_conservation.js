@@ -180,3 +180,43 @@ STATIC_QUESTIONS.push(
     explanation:'The two most critical factors were: (1) <b>Protecting habitat</b> — the nature reserve provided food, shelter and safe nesting sites; (2) <b>Controlling predators</b> (rats, cats, monkeys) — without predators destroying eggs and chicks, more young birds survived to adulthood and could breed. Together, these two actions directly addressed the main reasons the species was declining.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5sci-con-017', chapterId:'conservation', difficulty:2,
+    question:'What is BIODIVERSITY?',
+    options:[
+      'The process of growing more crops using fewer chemicals',
+      'The variety of different living things (plants, animals, fungi, microorganisms) found in a place or on Earth',
+      'A type of farming that recycles nutrients back into the soil',
+      'The scientific study of fossils found underground'
+    ],
+    answer:'The variety of different living things (plants, animals, fungi, microorganisms) found in a place or on Earth',
+    hint:'"Bio" = life, "diversity" = variety. Put them together.',
+    explanation:'"<b>Biodiversity</b>" means the <b>variety of all living things</b> — plants, animals, fungi and microorganisms — found in an ecosystem, a country, or on Earth as a whole. High biodiversity means many different species coexist. Mauritius has unique biodiversity because it was isolated for millions of years, producing species found <b>nowhere else on Earth</b> (endemic species like the Pink Pigeon and Echo Parakeet). When species go extinct, biodiversity is permanently reduced and can never be recovered.' }),
+
+  makeMCQ({ id:'g5sci-con-018', chapterId:'conservation', difficulty:3,
+    question:'Coral reefs are sometimes called "the rainforests of the sea" because they support so many species. Scientists warn that Mauritius\'s coral reefs are being damaged. Give TWO causes of this damage.',
+    options:[
+      'Ocean water becoming warmer (causing coral bleaching) AND pollution from sewage and chemicals entering the sea',
+      'Too many fish living in the reef AND too much rainfall washing sand over the coral',
+      'Coral reefs grow too fast AND need to be cut back periodically',
+      'Too many sharks in the area AND a lack of sunlight reaching the seabed'
+    ],
+    answer:'Ocean water becoming warmer (causing coral bleaching) AND pollution from sewage and chemicals entering the sea',
+    hint:'Think about what humans put into the sea AND how rising temperatures from global warming affect coral.',
+    explanation:'Mauritius\'s coral reefs are threatened by: (1) <b>Ocean warming</b> — when sea temperatures rise, corals expel the algae that give them colour and food, turning white (<b>coral bleaching</b>); if temperatures stay high the coral dies; (2) <b>Pollution</b> — sewage, agricultural chemicals and plastic waste entering the sea smother or poison coral. Other causes include anchor damage from boats and overfishing. Protecting reefs requires reducing CO₂ emissions globally AND controlling local water pollution.' }),
+
+  makeMCQ({ id:'g5sci-con-019', chapterId:'conservation', difficulty:4,
+    question:'A coastal village in Mauritius wants to build a large hotel on the beach to earn money. BUT the beach is a nesting site for sea turtles. Environmentalists warn the construction will destroy the nests. Which solution BEST shows SUSTAINABLE DEVELOPMENT?',
+    options:[
+      'Build the hotel immediately — earning money is more important than turtle nests',
+      'Do nothing — never build anything near wildlife, ever',
+      'Design the hotel away from nesting areas, use eco-friendly materials, and set up a turtle protection programme — earning tourism income while protecting the turtle population',
+      'Move all the turtles to a zoo so they are safe and the hotel can be built anywhere on the beach'
+    ],
+    answer:'Design the hotel away from nesting areas, use eco-friendly materials, and set up a turtle protection programme — earning tourism income while protecting the turtle population',
+    hint:'Sustainable development = meeting TODAY\'s needs without destroying nature for FUTURE generations.',
+    explanation:'<b>Sustainable development</b> means meeting the needs of people today without permanently damaging the environment for future generations. The balanced solution earns <b>tourism income</b> for the village while <b>preserving turtle nesting sites</b>. Moving turtles to a zoo removes them from their natural habitat. Doing nothing ignores real human needs. Only careful planning — hotel positioned away from nests, combined with a protection programme — achieves both goals. This is the core principle of sustainable, conservation-friendly development.' })
+
+);

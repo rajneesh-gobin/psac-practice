@@ -166,3 +166,43 @@ STATIC_QUESTIONS.push(
     explanation:'Two reasonable conclusions: (1) <b>Trees absorb CO₂</b> — the 12% reduction in CO₂ levels is consistent with trees absorbing it during photosynthesis; (2) <b>Better air quality is associated with fewer respiratory illnesses</b> — the 8% drop in illness rates after air quality improved suggests a link. Note: we cannot prove trees CAUSED the illness drop without ruling out other factors (confounding variables), but the data is consistent with this conclusion.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5sci-air-017', chapterId:'air', difficulty:2,
+    question:'Some factories release SULPHUR DIOXIDE gas into the air. When this gas mixes with water in clouds, it forms ACID RAIN. What damage does acid rain cause?',
+    options:[
+      'Acid rain makes plants grow faster and buildings stronger',
+      'Acid rain damages leaves of plants, kills fish in lakes, and corrodes (eats away) stone buildings and metal structures',
+      'Acid rain is harmless — it is just ordinary rain with a different name',
+      'Acid rain only affects people who breathe it directly'
+    ],
+    answer:'Acid rain damages leaves of plants, kills fish in lakes, and corrodes (eats away) stone buildings and metal structures',
+    hint:'The word "acid" tells you this rain is harmful. What does acid do to living things and materials?',
+    explanation:'<b>Acid rain</b> forms when <b>sulphur dioxide (SO₂)</b> from factories and power stations reacts with water vapour in clouds, making the rain more acidic than normal. It causes: <b>leaf damage</b> in plants (blocking photosynthesis), <b>death of fish</b> in lakes and rivers (water becomes too acidic), and <b>corrosion of stone buildings and statues</b>. Reducing factory emissions of SO₂ is the best way to prevent acid rain.' }),
+
+  makeMCQ({ id:'g5sci-air-018', chapterId:'air', difficulty:3,
+    question:'Carbon dioxide (CO₂) in the atmosphere acts like a blanket around the Earth, trapping heat from the Sun. What is this effect called, and what is the main concern?',
+    options:[
+      'The ozone effect — it protects us from UV rays and is completely harmless',
+      'The greenhouse effect — too much CO₂ from burning fossil fuels traps extra heat, causing global temperatures to rise (global warming)',
+      'The acid effect — CO₂ falls as acid rain and cools the planet',
+      'The reflection effect — CO₂ reflects sunlight back into space, keeping Earth cool'
+    ],
+    answer:'The greenhouse effect — too much CO₂ from burning fossil fuels traps extra heat, causing global temperatures to rise (global warming)',
+    hint:'A greenhouse has glass walls that trap heat inside. What gas does the same thing for Earth?',
+    explanation:'The <b>greenhouse effect</b> occurs when gases like <b>CO₂ and methane</b> in the atmosphere trap heat from the Sun, keeping Earth warm. However, burning fossil fuels (coal, oil, petrol) releases extra CO₂, which traps <b>too much heat</b> — causing Earth\'s average temperature to slowly rise. This is called <b>global warming</b>. Effects include melting polar ice, rising sea levels and more extreme weather. Reducing CO₂ emissions — by using renewable energy and planting trees — helps slow global warming.' }),
+
+  makeMCQ({ id:'g5sci-air-019', chapterId:'air', difficulty:4,
+    question:'Town X has 5 large coal-burning factories. Scientists record: trees with badly damaged leaves, fish dying in the nearby lake, rising local temperatures, and increasing numbers of children with breathing problems. If the town switches all factories to solar energy, which THREE problems would MOST likely improve?',
+    options:[
+      'Leaf damage from acid rain, fish deaths in the lake, and children\'s breathing problems — solar produces no SO₂ or CO₂',
+      'Only the rising temperature — solar energy cannot reduce acid rain',
+      'Only the fish deaths — solar energy does not improve air quality for people',
+      'None — switching to solar energy has no effect on existing pollution'
+    ],
+    answer:'Leaf damage from acid rain, fish deaths in the lake, and children\'s breathing problems — solar produces no SO₂ or CO₂',
+    hint:'Which problems are caused by SO₂ and CO₂ from burning coal? Solar produces neither of these gases.',
+    explanation:'Switching to <b>solar energy</b> eliminates SO₂ and CO₂ emissions from coal. This would improve: (1) <b>Leaf damage</b> — no SO₂ means no acid rain, so plants can recover; (2) <b>Fish deaths</b> — without acid rain, the lake returns to a healthy pH and fish can survive; (3) <b>Children\'s breathing problems</b> — cleaner air with fewer pollutants (no smoke, soot or SO₂) reduces respiratory illness. Rising temperatures would also slow over time as less CO₂ is released, reducing the greenhouse effect.' })
+
+);
