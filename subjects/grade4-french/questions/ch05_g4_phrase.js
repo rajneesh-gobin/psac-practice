@@ -89,3 +89,79 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Qui</b> est ton ami ?" demande l\'identité → Qui (Who). "<b>Où</b> habites-tu ?" demande le lieu → Où (Where). Associer le bon mot interrogatif à la réponse attendue est une compétence essentielle : Qui → personne, Où → lieu, Quand → temps, Comment → manière, Pourquoi → raison.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4fr-phr-011', chapterId:'g4fr-phrase', difficulty:1,
+    question:'Que signifie la préposition "dans" ?',
+    options:['on','under','in / inside','in front of'],
+    answer:'in / inside',
+    hint:'"Le chat est dans la boîte." Où est le chat ?',
+    explanation:'"<b>Dans</b>" = in / inside. Prépositions de lieu : dans (in), sur (on), sous (under), devant (in front of), derrière (behind), entre (between). Exemple : Le livre est dans le sac (The book is in the bag).' }),
+
+  makeMCQ({ id:'g4fr-phr-012', chapterId:'g4fr-phrase', difficulty:1,
+    question:'Que signifie le mot interrogatif "Quand" ?',
+    options:['Who','Where','When','Why'],
+    answer:'When',
+    hint:'"Quand" demande le temps — à quel moment quelque chose se passe.',
+    explanation:'"<b>Quand</b>" = When. Exemple : Quand vas-tu à l\'école ? (When do you go to school?). Mots interrogatifs : Qui (Who), Où (Where), <b>Quand</b> (When), Comment (How), Pourquoi (Why), Combien (How much/many).' }),
+
+  makeMCQ({ id:'g4fr-phr-013', chapterId:'g4fr-phrase', difficulty:1,
+    question:'Que signifie le mot interrogatif "Pourquoi" ?',
+    options:['Where','When','How','Why'],
+    answer:'Why',
+    hint:'"Pourquoi es-tu en retard ?" — "Why are you late?"',
+    explanation:'"<b>Pourquoi</b>" = Why. La réponse à "pourquoi" utilise souvent "parce que" (because) : Pourquoi pleures-tu ? — Parce que j\'ai mal (Because I am in pain).' }),
+
+  makeMCQ({ id:'g4fr-phr-014', chapterId:'g4fr-phrase', difficulty:2,
+    question:'Que signifie "sous" dans "Le chat est sous la table" ?',
+    options:['on','in','under','behind'],
+    answer:'under',
+    hint:'"Sur" = on (dessus), "sous" = ? (dessous)',
+    explanation:'"<b>Sous</b>" = under. Le chat est <b>sous</b> la table = The cat is <b>under</b> the table. Ne pas confondre : sur (on/above) ≠ sous (under/below). Exemple : le stylo est sous le livre (the pen is under the book).' }),
+
+  makeMCQ({ id:'g4fr-phr-015', chapterId:'g4fr-phrase', difficulty:2,
+    question:'Que signifie "du" dans "Je parle du professeur" ? (du = de + le)',
+    options:[
+      'of the (professeur = masculin, du = de + le)',
+      'to the (aller au marché)',
+      'from a (source indéfinie)',
+      'some (article partitif)'
+    ],
+    answer:'of the (professeur = masculin, du = de + le)',
+    hint:'"Je parle du professeur" = I talk about the teacher. "Du" ici = de + le.',
+    explanation:'"<b>Du</b>" = de + le (contraction obligatoire). "Je parle <b>du</b> professeur" = I am talking about the teacher. Contractions : de + le = <b>du</b>, de + les = <b>des</b>. À comparer : au = à + le (direction) vs du = de + le (about/of).' }),
+
+  makeTF({ id:'g4fr-phr-016', chapterId:'g4fr-phrase', difficulty:2,
+    question:'Pour mettre "Tu habites à Paris." à la forme négative, on dit : "Tu n\'habites pas à Paris."',
+    answer:true,
+    hint:'Négatif : sujet + ne + verbe + pas. Devant voyelle, "ne" → "n\'".',
+    explanation:'<b>Vrai.</b> "Tu <b>n\'habites pas</b> à Paris." — La négation encadre le verbe. "Ne" → "<b>n\'</b>" devant une voyelle ou h muet : n\'habite, n\'aime, n\'est, n\'a.' }),
+
+  makeMCQ({ id:'g4fr-phr-017', chapterId:'g4fr-phrase', difficulty:2,
+    question:'Quelle conjonction exprime un CONTRASTE — comme "but" en anglais ?',
+    options:['et','ou','donc','mais'],
+    answer:'mais',
+    hint:'"I like maths but I prefer French." Quel mot français traduit "but" ?',
+    explanation:'"<b>Mais</b>" = but (contraste). Conjonctions : <b>et</b> (and), <b>ou</b> (or), <b>mais</b> (but), <b>donc</b> (so/therefore), <b>car</b> (because). Exemple : J\'aime les maths mais je préfère le français.' }),
+
+  makeMCQ({ id:'g4fr-phr-018', chapterId:'g4fr-phrase', difficulty:3,
+    question:'Forme une phrase correcte avec ces mots : [joue / mon / le / frère / football / à]',
+    options:[
+      'Le football joue mon frère à.',
+      'Mon frère joue au football.',
+      'Football mon frère au joue.',
+      'Mon frère au joue football.'
+    ],
+    answer:'Mon frère joue au football.',
+    hint:'Structure : sujet + verbe + complément. N\'oublie pas : à + le = au.',
+    explanation:'"<b>Mon frère joue au football.</b>" — sujet (Mon frère) + verbe (joue) + complément (au football). "Au" = à + le (football est masculin). L\'ordre des mots : sujet + verbe + complément.' }),
+
+  makeMCQ({ id:'g4fr-phr-019', chapterId:'g4fr-phrase', difficulty:4,
+    question:'Priya écrit : "Je ne suis pas à l\'école aujourd\'hui. Je suis malade. Ma mère ___ dit de rester à la maison." Quel mot complète correctement ?',
+    options:['a','est','ai','ont'],
+    answer:'a',
+    hint:'Sujet = "ma mère" (= elle, 3e personne sg.). Verbe AVOIR pour elle au passé composé = ?',
+    explanation:'"Ma mère <b>a</b> dit de rester à la maison." — Passé composé : avoir (conjugué) + participe passé. Sujet = "ma mère" (= elle) → avoir → "<b>a</b>". "Elle a dit" = She said / She has told.' })
+
+);

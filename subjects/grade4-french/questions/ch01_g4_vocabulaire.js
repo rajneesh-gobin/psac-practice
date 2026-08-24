@@ -75,3 +75,75 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Bonjour</b>" est correct — c\'est la salutation du matin et de l\'après-midi. "Bonsoir" s\'utilise le soir uniquement. "Au revoir" signifie goodbye. "Bonne nuit" s\'utilise avant de dormir. Il est aussi correct de dire "Bonjour" à un professeur car on le vouvoie (vous).' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4fr-voc-011', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Quelle est la couleur "black" en français ?',
+    options:['blanc','rouge','noir','gris'],
+    answer:'noir',
+    hint:'C\'est la couleur de la nuit et du charbon.',
+    explanation:'"<b>Noir</b>" = black. Les formes : noir (m.sg.), noire (f.sg.), noirs (m.pl.), noires (f.pl.). Blanc/blanche = white. Gris/grise = grey. Exemples : un chat noir (a black cat), une robe noire (a black dress).' }),
+
+  makeMCQ({ id:'g4fr-voc-012', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Comment dit-on le nombre 20 en français ?',
+    options:['douze','quinze','dix-neuf','vingt'],
+    answer:'vingt',
+    hint:'20 marque la fin de la série 1–20.',
+    explanation:'"<b>Vingt</b>" = 20. Les dizaines : dix (10), vingt (20), trente (30), quarante (40), cinquante (50), soixante (60). Les nombres 21–29 : vingt et un (21), vingt-deux (22)... vingt-neuf (29).' }),
+
+  makeMCQ({ id:'g4fr-voc-013', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Comment dit-on "please" en français (forme formelle, avec un adulte) ?',
+    options:['Merci','Au revoir','S\'il vous plaît','De rien'],
+    answer:"S'il vous plaît",
+    hint:'"Please" en s\'adressant à un adulte — forme formelle (vous).',
+    explanation:'"<b>S\'il vous plaît</b>" = please (formal — avec un adulte qu\'on vouvoie). "S\'il te plaît" = please (informal — avec un ami). "Merci" = thank you. "De rien" = you\'re welcome.' }),
+
+  makeMCQ({ id:'g4fr-voc-014', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Que signifie "le frère" en anglais ?',
+    options:['The father','The son','The brother','The uncle'],
+    answer:'The brother',
+    hint:'La famille : le père, la mère, le frère, la sœur...',
+    explanation:'"<b>Le frère</b>" = the brother. La famille : le père (father), la mère (mother), le frère (brother), la sœur (sister), le fils (son), la fille (daughter), le grand-père (grandfather), la grand-mère (grandmother).' }),
+
+  makeMCQ({ id:'g4fr-voc-015', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'Quel mois vient après "mars" ?',
+    options:['janvier','février','mai','avril'],
+    answer:'avril',
+    hint:'Les mois : janvier, février, mars, ___, mai...',
+    explanation:'L\'ordre des mois : janvier, février, mars, <b>avril</b>, mai, juin, juillet, août, septembre, octobre, novembre, décembre. En français, les mois ne prennent pas de majuscule (sauf en début de phrase).' }),
+
+  makeMCQ({ id:'g4fr-voc-016', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'Comment dit-on "white" en français (forme masculine) ?',
+    options:['noir','gris','beige','blanc'],
+    answer:'blanc',
+    hint:'C\'est la couleur de la neige et du lait.',
+    explanation:'"<b>Blanc</b>" = white (masculin). Forme féminine : "<b>blanche</b>". Exemples : un mur blanc, une robe blanche. "Blanc" a une forme féminine irrégulière (-c → -che).' }),
+
+  makeMCQ({ id:'g4fr-voc-017', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'Que signifie le nombre "douze" ?',
+    options:['10','11','12','13'],
+    answer:'12',
+    hint:'Compte : onze (11), douze (?), treize (13).',
+    explanation:'"<b>Douze</b>" = 12. Les nombres 11–20 : onze (11), <b>douze</b> (12), treize (13), quatorze (14), quinze (15), seize (16), dix-sept (17), dix-huit (18), dix-neuf (19), vingt (20).' }),
+
+  makeMCQ({ id:'g4fr-voc-018', chapterId:'g4fr-vocabulaire', difficulty:3,
+    question:'Quel jour de la semaine vient juste AVANT "vendredi" ?',
+    options:['samedi','mercredi','jeudi','mardi'],
+    answer:'jeudi',
+    hint:'Rappelle l\'ordre des jours : ..., mercredi, jeudi, vendredi, ...',
+    explanation:'L\'ordre des jours : lundi, mardi, mercredi, <b>jeudi</b>, vendredi, samedi, dimanche. "Jeudi" (Thursday) vient directement avant "vendredi" (Friday).' }),
+
+  makeMCQ({ id:'g4fr-voc-019', chapterId:'g4fr-vocabulaire', difficulty:4,
+    question:'Riya arrive à l\'école. Elle a déjà dit bonjour au professeur. Elle ne trouve pas son stylo et veut en demander un. Quelle phrase est la plus CORRECTE et la plus POLIE ?',
+    options:[
+      'Merci, avez-vous un stylo ?',
+      'Bonjour, avez-vous un stylo ?',
+      'Excusez-moi, s\'il vous plaît, avez-vous un stylo ?',
+      'Au revoir, avez-vous un stylo ?'
+    ],
+    answer:"Excusez-moi, s'il vous plaît, avez-vous un stylo ?",
+    hint:'Elle interrompt son professeur pour demander quelque chose. Quels mots de politesse utilise-t-on ?',
+    explanation:'"<b>Excusez-moi, s\'il vous plaît</b>, avez-vous un stylo ?" est la phrase la plus polie. "Excusez-moi" (Excuse me) pour interrompre poliment + "s\'il vous plaît" (please, forme formelle). "Merci" se dit après avoir reçu quelque chose. "Bonjour" est une salutation, pas une demande.' })
+
+);

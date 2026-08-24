@@ -79,3 +79,78 @@ STATIC_QUESTIONS.push(
     explanation:'"Je vois <b>un</b> chat noir dans <b>le</b> jardin." Premier blanc : "<b>un</b>" (article indéfini masculin) — c\'est un chat inconnu, pas un chat spécifique. Deuxième blanc : "<b>le</b>" jardin (article défini masculin) — il s\'agit d\'un jardin précis (celui de Luc). Règle : article indéfini = chose non identifiée; article défini = chose identifiée/spécifique.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4fr-nom-011', chapterId:'g4fr-noms', difficulty:1,
+    question:'Quelle est la forme plurielle de "le bateau" ?',
+    options:['les bateaus','les bateau','les bateaux','les bateux'],
+    answer:'les bateaux',
+    hint:'Les noms qui se terminent en -eau forment leur pluriel en -eaux.',
+    explanation:'"<b>Les bateaux</b>" — les noms en <b>-eau</b> prennent <b>-x</b> au pluriel (pas -s) : bateau → bateaux, gâteau → gâteaux, chapeau → chapeaux. C\'est une règle importante à retenir !' }),
+
+  makeMCQ({ id:'g4fr-nom-012', chapterId:'g4fr-noms', difficulty:1,
+    question:'Que signifie "du" dans "Je mange du pain" ?',
+    options:['some — article partitif masculin','the — article défini masculin','a — article indéfini masculin','many — beaucoup de'],
+    answer:'some — article partitif masculin',
+    hint:'"Du" = de + le. On l\'utilise pour une quantité indéfinie.',
+    explanation:'"<b>Du</b>" est l\'article partitif masculin (de + le). Il exprime une quantité indéfinie : "Je mange du pain" = I eat some bread. Articles partitifs : du (m.), de la (f.), de l\' (voyelle), des (pluriel).' }),
+
+  makeTF({ id:'g4fr-nom-013', chapterId:'g4fr-noms', difficulty:1,
+    question:'"Le soleil" est un nom masculin.',
+    answer:true,
+    hint:'L\'article "le" indique le genre. "Le" = masculin.',
+    explanation:'<b>Vrai.</b> "Soleil" (sun) est masculin — on dit "<b>le soleil</b>". En français, le genre des noms n\'est pas toujours logique : "le soleil" (masculin), "la lune" (féminin — the moon). Il faut apprendre le genre avec chaque mot nouveau.' }),
+
+  makeMCQ({ id:'g4fr-nom-014', chapterId:'g4fr-noms', difficulty:2,
+    question:'Comment dit-on "a school" en français ? ("école" est féminin et commence par une voyelle)',
+    options:['un école','le école','une école','l\'école'],
+    answer:'une école',
+    hint:'Article indéfini féminin = "une". L\'article INDÉFINI ne change pas devant une voyelle.',
+    explanation:'"<b>Une école</b>" = a school. L\'article indéfini ne change pas devant une voyelle : une école ✓. C\'est l\'article DÉFINI qui change : "la école" → "<b>l\'école</b>". Règle : un/une restent toujours un/une (jamais un\' ou une\'). Défini: l\'école. Indéfini: une école.' }),
+
+  makeMCQ({ id:'g4fr-nom-015', chapterId:'g4fr-noms', difficulty:2,
+    question:'Que signifie "au" dans "Je vais au marché" ? ("marché" est masculin)',
+    options:['au = à + la (féminin)','au = à + le (masculin)','au = à + les (pluriel)','au = à + l\' (voyelle)'],
+    answer:'au = à + le (masculin)',
+    hint:'"Marché" est masculin. La contraction obligatoire : à + le = ?',
+    explanation:'"<b>Au</b>" = <b>à + le</b> (contraction obligatoire). On ne dit jamais "à le marché" ✗ — on dit "au marché" ✓. Contractions : à + le = <b>au</b>, à + les = <b>aux</b>. "À la" et "à l\'" ne se contractent pas. Exemples : au cinéma, aux enfants.' }),
+
+  makeMCQ({ id:'g4fr-nom-016', chapterId:'g4fr-noms', difficulty:2,
+    question:'Quelle est la forme plurielle de "l\'oiseau" (the bird) ?',
+    options:['les oiseaus','les oiseau','les oiseaux','les oyseaux'],
+    answer:'les oiseaux',
+    hint:'"Oiseau" se termine en -eau. Rappelle la règle pour les noms en -eau.',
+    explanation:'"<b>Les oiseaux</b>" — comme "bateau → bateaux", les noms en -eau ajoutent -x au pluriel : oiseau → oiseaux. L\'article passe de "l\'" (devant voyelle sg.) à "les" (pluriel). Le -x final ne se prononce généralement pas.' }),
+
+  makeTF({ id:'g4fr-nom-017', chapterId:'g4fr-noms', difficulty:2,
+    question:'Les noms propres (comme "Priya" ou "Maurice") prennent toujours une majuscule en français.',
+    answer:true,
+    hint:'Qu\'est-ce qu\'un nom propre ? Pense aux prénoms et aux noms de villes.',
+    explanation:'<b>Vrai.</b> En français, les <b>noms propres</b> (prénoms, noms de famille, noms de villes et de pays) prennent toujours une majuscule : Priya, Ravi, Maurice, Port-Louis. Les noms communs (chat, livre, école) ne prennent pas de majuscule (sauf en début de phrase).' }),
+
+  makeMCQ({ id:'g4fr-nom-018', chapterId:'g4fr-noms', difficulty:3,
+    question:'Choisis la phrase où TOUS les articles sont correctement utilisés.',
+    options:[
+      'Le filles jouent avec les ballon rouge.',
+      'Les filles jouent avec le ballon rouge.',
+      'La filles jouent avec les ballons rouge.',
+      'Les fille jouent avec un ballons rouge.'
+    ],
+    answer:'Les filles jouent avec le ballon rouge.',
+    hint:'Vérifie : "filles" = féminin pluriel, "ballon" = masculin singulier.',
+    explanation:'"<b>Les filles jouent avec le ballon rouge.</b>" — "filles" f.pl. → les filles ✓. "ballon" m.sg. → le ballon ✓. "rouge" avec ballon (m.sg.) → rouge ✓ (invariable). Les erreurs des autres options : mauvais genre, mauvais nombre ou accord incorrect.' }),
+
+  makeMCQ({ id:'g4fr-nom-019', chapterId:'g4fr-noms', difficulty:4,
+    question:'Luc écrit : "Je vais ___ cinéma avec ___ amis. Après, nous mangeons ___ gâteau." Complète avec les bons articles dans l\'ordre.',
+    options:[
+      'au / les / un',
+      'à le / des / un',
+      'au / des / un',
+      'au / des / de la'
+    ],
+    answer:'au / des / un',
+    hint:'"Cinéma" m. (à + le = ?), "amis" pluriel indéfini (= ?), "gâteau" m.sg. indéfini (= ?)',
+    explanation:'"Je vais <b>au</b> cinéma" (à + le = au, masculin singulier). "avec <b>des</b> amis" (des = article indéfini pluriel = some). "nous mangeons <b>un</b> gâteau" (un = article indéfini masculin singulier). Trois articles différents, trois règles différentes !' })
+
+);
