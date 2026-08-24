@@ -125,6 +125,14 @@ const QuestionLoader = (() => {
       'subjects/grade4-maths/questions/ch05_g4_measures.js',
       'subjects/grade4-maths/questions/ch06_g4_data.js',
     ],
+    'grade4-english': [
+      'subjects/grade4-english/questions/ch01_g4_nouns.js',
+      'subjects/grade4-english/questions/ch02_g4_verbs.js',
+      'subjects/grade4-english/questions/ch03_g4_adjectives.js',
+      'subjects/grade4-english/questions/ch04_g4_sentences.js',
+      'subjects/grade4-english/questions/ch05_g4_comprehension.js',
+      'subjects/grade4-english/questions/ch06_g4_vocabulary.js',
+    ],
   };
 
   function _injectScript(src) {
