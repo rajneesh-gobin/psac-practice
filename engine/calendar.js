@@ -5,11 +5,12 @@ const Calendar = (() => {
   let _studentId    = null;
   let _studentName  = null;
   let _studentGrade = null;
-  let _scheduleId   = null;
-  let _entries      = [];
-  let _viewYear     = new Date().getFullYear();
-  let _viewMonth    = new Date().getMonth();
-  let _selectedDate = null;
+  let _scheduleId      = null;
+  let _entries         = [];
+  let _viewYear        = new Date().getFullYear();
+  let _viewMonth       = new Date().getMonth();
+  let _selectedDate    = null;
+  let _editingEntryId  = null;
 
   let _gen = {
     startDate:        null,
@@ -226,8 +227,12 @@ const Calendar = (() => {
               ${e.duration_mins && e.entry_type==='study' ? `<div class="text-xs text-gray-400">${e.duration_mins} min</div>` : ''}
               ${e.notes ? `<div class="text-xs text-gray-500 mt-0.5 italic">${e.notes}</div>` : ''}
             </div>
-            <button onclick="Calendar.deleteEntry('${e.id}')"
-              class="text-gray-300 hover:text-red-400 text-xl leading-none select-none transition-colors">×</button>
+            <div class="flex gap-0.5 ml-1 flex-shrink-0">
+              <button onclick="Calendar.editEntry('${e.id}')" title="Edit"
+                class="w-7 h-7 flex items-center justify-center rounded-lg text-base text-gray-300 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors">✏️</button>
+              <button onclick="Calendar.deleteEntry('${e.id}')" title="Delete"
+                class="w-7 h-7 flex items-center justify-center rounded-lg text-base text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">🗑</button>
+            </div>
           </div>`;
       }).join('') + `
         <button onclick="Calendar.showAddEvent('${dateStr}')"
@@ -248,20 +253,56 @@ const Calendar = (() => {
     if (typeof toast !== 'undefined') toast('Event removed', 1500);
   }
 
-  // ── Add manual event ──────────────────────────────
+  // ── Add / Edit manual event ──────────────────────────────
   function showAddEvent(dateStr) {
     closeDayModal();
+    _editingEntryId = null;
     const m = _el('modal-add-event');
     if (!m) return;
-    const di = _el('add-event-date'); if (di) di.value = dateStr || _toDateStr(new Date());
-    const ti = _el('add-event-type'); if (ti) ti.value = 'exam';
+    const titleEl = _el('add-event-modal-title'); if (titleEl) titleEl.textContent = 'Add Event';
+    const saveBtn = _el('add-event-save-btn');   if (saveBtn) saveBtn.textContent = 'Save';
+    const di = _el('add-event-date');  if (di) di.value = dateStr || _toDateStr(new Date());
+    const ti = _el('add-event-type');  if (ti) ti.value = 'exam';
     const li = _el('add-event-label'); if (li) li.value = '';
     const ni = _el('add-event-notes'); if (ni) ni.value = '';
     const er = _el('add-event-error'); if (er) er.classList.add('hidden');
     m.classList.remove('hidden');
   }
 
-  function closeAddEvent() { _el('modal-add-event')?.classList.add('hidden'); }
+  function editEntry(id) {
+    const entry = _entries.find(e => e.id === id);
+    if (!entry) return;
+    closeDayModal();
+    _editingEntryId = id;
+
+    const m = _el('modal-add-event');
+    if (!m) return;
+    const titleEl = _el('add-event-modal-title'); if (titleEl) titleEl.textContent = 'Edit Event';
+    const saveBtn = _el('add-event-save-btn');   if (saveBtn) saveBtn.textContent = 'Update';
+
+    const di = _el('add-event-date');  if (di) di.value = entry.date;
+    const ti = _el('add-event-type');
+    if (ti) {
+      const hasOpt = [...ti.options].some(o => o.value === entry.entry_type);
+      if (!hasOpt) {
+        const opt = document.createElement('option');
+        opt.value = entry.entry_type; opt.textContent = '📚 Study Session';
+        ti.appendChild(opt);
+      }
+      ti.value = entry.entry_type;
+    }
+    const li = _el('add-event-label'); if (li) li.value = entry.topic_label;
+    const ni = _el('add-event-notes'); if (ni) ni.value = entry.notes || '';
+    const er = _el('add-event-error'); if (er) er.classList.add('hidden');
+    m.classList.remove('hidden');
+  }
+
+  function closeAddEvent() {
+    _editingEntryId = null;
+    const titleEl = _el('add-event-modal-title'); if (titleEl) titleEl.textContent = 'Add Event';
+    const saveBtn = _el('add-event-save-btn');   if (saveBtn) saveBtn.textContent = 'Save';
+    _el('modal-add-event')?.classList.add('hidden');
+  }
 
   async function saveEvent() {
     const errEl = _el('add-event-error');
@@ -274,6 +315,25 @@ const Calendar = (() => {
     if (!date)  { _showErr(errEl, 'Please select a date.'); return; }
     if (!label) { _showErr(errEl, 'Please enter an event name.'); return; }
 
+    // ── UPDATE existing entry ──────────────────────
+    if (_editingEntryId) {
+      const { data, error } = await _sb.from('schedule_entries')
+        .update({ date, topic_label: label, entry_type: type, notes: notes || null })
+        .eq('id', _editingEntryId)
+        .select().single();
+      if (error) { _showErr(errEl, 'Could not update. Please try again.'); return; }
+      const idx = _entries.findIndex(e => e.id === _editingEntryId);
+      if (idx >= 0 && data) _entries[idx] = data;
+      closeAddEvent();
+      const d = _parseDate(date);
+      _viewYear = d.getFullYear(); _viewMonth = d.getMonth();
+      _selectedDate = date;
+      _renderCalendar();
+      if (typeof toast !== 'undefined') toast('Event updated ✓', 1500);
+      return;
+    }
+
+    // ── INSERT new entry ───────────────────────────
     const sid = await _ensureSchedule();
     if (!sid)   { _showErr(errEl, 'Database not ready — please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.'); return; }
 
@@ -291,6 +351,33 @@ const Calendar = (() => {
     _selectedDate = date;
     _renderCalendar();
     if (typeof toast !== 'undefined') toast('Event added! 📌', 1500);
+  }
+
+  // ── Reset schedule ────────────────────────────────
+  function confirmReset() {
+    if (!_studentId) {
+      if (typeof toast !== 'undefined') toast('No student selected.', 2000);
+      return;
+    }
+    if (typeof _confirmModal === 'function') {
+      _confirmModal(
+        'Delete all auto-generated study sessions? Manual events (exams, holidays, blocked days) will be kept.',
+        _doResetSchedule,
+        { icon: '🗑', okLabel: 'Reset Schedule', danger: true }
+      );
+    } else if (window.confirm('Delete all auto-generated study sessions?\n\nManual events (exams, holidays) will be kept.')) {
+      _doResetSchedule();
+    }
+  }
+
+  async function _doResetSchedule() {
+    if (!_sb || !_studentId) return;
+    await _sb.from('schedule_entries')
+      .delete().eq('student_id', _studentId).eq('entry_type', 'study');
+    try { localStorage.removeItem(`mm_schedule_${_studentId}`); } catch(e) {}
+    _entries = _entries.filter(e => e.entry_type !== 'study');
+    _renderCalendar();
+    if (typeof toast !== 'undefined') toast('Study sessions cleared ✓', 2000);
   }
 
   // ── Generate timetable (multi-subject) ────────────
@@ -715,7 +802,8 @@ const Calendar = (() => {
     prevMonth, nextMonth,
     openDay, closeDayModal,
     showAddEvent, closeAddEvent, saveEvent,
-    deleteEntry,
+    editEntry, deleteEntry,
+    confirmReset,
     showGenModal, closeGenModal, generateTimetable,
     showNotes, closeNotes,
     renderTodayPlan, startPractice,
