@@ -1,10 +1,10 @@
-'use strict';
+﻿'use strict';
 // Grade 6 Science — MIE Mauritius Syllabus (Grades 3-6, 2015)
 // Grade 6 introduces: Air pressure, Rusting, Food groups/teeth, Ecosystems, Solar System
 registerSubject({
   id: 'grade6-science', name: 'Science', grade: 6, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false,
+  practiceble: true, notesBased: false, noDifficulty: true,
   chapters: [
     { id: 'g6-air',          name: 'Air',                                    icon: '🌬️', examWeight: 4,
       syllabus: 'Air is a mixture of gases: nitrogen, oxygen, carbon dioxide, water vapour. Importance of air for breathing and combustion. Air pressure and its uses. Extinguishing fires (removing oxygen). Types of air pollution (noise, vehicle emissions, factory smoke). Causes and effects of air pollution. Measures to reduce air pollution.' },

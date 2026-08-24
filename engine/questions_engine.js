@@ -43,6 +43,26 @@ function getQuestionsForChapter(chapterId, difficulty, count = 10) {
   return shuffle(pool).slice(0, count);
 }
 
+// ── MIXED PRACTICE (no chosen difficulty — random across levels) ──────────
+function getMixedQuestions(chapterId, maxDiff, count = 20) {
+  const levels = [1, 2, 3, 4].filter(l => l <= (maxDiff || 4));
+  let pool = [];
+  for (const lv of levels) pool = pool.concat(getStaticQs(chapterId, lv));
+  // Pad with generators (L1–L3 only; L4 is always static)
+  if (pool.length < count) {
+    for (const lv of [1, 2, 3].filter(l => l <= (maxDiff || 4))) {
+      let tries = 0;
+      while (pool.length < count && tries++ < 8) {
+        const dyn = generateDynamic(chapterId, lv);
+        if (dyn) pool.push(dyn); else break;
+      }
+    }
+  }
+  const seen = new Set();
+  pool = pool.filter(q => { if (!q?.id || seen.has(q.id)) return false; seen.add(q.id); return true; });
+  return shuffle(pool).slice(0, count);
+}
+
 // ── SUBSECTION PRACTICE ───────────────────────
 function getQuestionsForSubsection(chapterId, subsectionId, count = 15) {
   const pool = shuffle(STATIC_QUESTIONS.filter(q =>

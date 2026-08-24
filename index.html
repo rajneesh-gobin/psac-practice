@@ -895,14 +895,10 @@
         </div>
 
         <div class="lg:col-span-1 space-y-4">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
-            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3">Difficulty Level</p>
-            <div class="space-y-2" id="difficulty-btns">
-              <button class="diff-btn w-full" data-level="1">⭐ Level 1 — Basic</button>
-              <button class="diff-btn w-full" data-level="2">⭐⭐ Level 2 — Medium</button>
-              <button class="diff-btn w-full" data-level="3">⭐⭐⭐ Level 3 — Hard</button>
-              <button class="diff-btn w-full" data-level="4">🏆 Level 4 — Word Problems</button>
-            </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow" id="practice-level-card">
+            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Question Level</p>
+            <p id="practice-level-label" class="font-bold text-gray-800 dark:text-white text-sm mb-1.5"></p>
+            <p id="practice-level-desc" class="text-xs text-gray-400 dark:text-gray-500 leading-relaxed"></p>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
             <button id="formula-btn" onclick="showFormulaModal()" class="w-full btn-secondary text-sm mb-2">📐 Key Formulas & Facts</button>
@@ -1421,10 +1417,10 @@
                 <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Chapter</label>
                 <select id="pd-assign-chapter" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
               </div>
-              <div>
+              <div id="pd-assign-diff-row">
                 <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Difficulty</label>
                 <select id="pd-assign-diff" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
-                  <option value="">Any Level</option>
+                  <option value="">🎲 Random (Mixed)</option>
                   <option value="1">⭐ Level 1 — Basic</option>
                   <option value="2">⭐⭐ Level 2 — Medium</option>
                   <option value="3">⭐⭐⭐ Level 3 — Hard</option>
@@ -1461,8 +1457,8 @@
             </div>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
-            <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">🎯 Maximum Difficulty</div>
-            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Student cannot access levels above this</div>
+            <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">🎯 Question Difficulty Cap</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Random practice draws from levels 1 up to this cap (mainly affects Maths)</div>
             <div class="flex gap-2 flex-wrap">
               <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="pd-maxdiff" id="pd-maxdiff-1" value="1" onchange="Auth.setMaxDifficulty(1)" class="accent-blue-500"><span class="text-sm text-gray-700 dark:text-gray-300">⭐ Basic only</span></label>
               <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="pd-maxdiff" id="pd-maxdiff-2" value="2" onchange="Auth.setMaxDifficulty(2)" class="accent-blue-500"><span class="text-sm text-gray-700 dark:text-gray-300">⭐⭐ Up to Medium</span></label>

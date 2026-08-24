@@ -1,9 +1,9 @@
-'use strict';
+﻿'use strict';
 // Grade 4 Science — MIE Mauritius Curriculum
 registerSubject({
   id: 'grade4-science', name: 'Science', grade: 4, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false,
+  practiceble: true, notesBased: false, noDifficulty: true,
   chapters: [
     { id: 'g4sci-living',    name: 'Living & Non-Living Things',  icon: '🌿', examWeight: 3,
       syllabus: 'Characteristics of living things (MRS GREN: Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition). Differences between living and non-living things. What living things need to survive.' },

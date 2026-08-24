@@ -1,8 +1,8 @@
-'use strict';
+﻿'use strict';
 registerSubject({
   id: 'grade6-french', name: 'French', grade: 6, icon: '🇫🇷', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true,
+  practiceble: true, notesBased: true, noDifficulty: true,
   chapters: [
     {
       id: 'g6fr-imparfait', name: "L'Imparfait", icon: '⏳',

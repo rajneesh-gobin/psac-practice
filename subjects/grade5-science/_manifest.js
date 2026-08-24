@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // Grade 5 Science — MIE Mauritius Syllabus (Grades 3-6, 2015)
 // Topics for Grade 5: Plants, Animals, Energy, Water/States of Matter,
 //   Simple Electric Circuit, Protection & Conservation
@@ -6,7 +6,7 @@
 registerSubject({
   id: 'grade5-science', name: 'Science', grade: 5, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false,
+  practiceble: true, notesBased: false, noDifficulty: true,
   chapters: [
     { id: 'plants',           name: 'Plants',                              icon: '🌱', examWeight: 4,
       syllabus: 'Flowering and non-flowering plants. Parts of a plant (root, stem, leaf, flower, fruit, seed) and their functions. Functions of root and stem (absorb/transport water). Germination — conditions needed. Conditions for plants to grow well. Soil erosion: causes and measures.' },

@@ -1,11 +1,11 @@
-'use strict';
+﻿'use strict';
 // Grade 5 History & Geography — MIE Mauritius Syllabus (Grades 3-6, 2015)
 // HISTORY: Discovery of Mauritius, Settlement, Trade/Agriculture, Port Louis
 // GEOGRAPHY: Natural Environment, Volcanic Origin, Environmental Problems, Map Skills
 registerSubject({
   id: 'grade5-history', name: 'History & Geography', grade: 5, icon: '🌍', subject: 'History & Geography',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false,
+  practiceble: true, notesBased: false, noDifficulty: true,
   chapters: [
     // ── HISTORY ────────────────────────────────────────────────────────────────
     { id: 'discovery',    name: 'Discovery of Mauritius & Rodrigues',       icon: '⛵', examWeight: 4,
@@ -27,5 +27,16 @@ registerSubject({
       syllabus: 'Reading a map: title, key/legend, scale, compass/direction. Latitude and longitude (lines on a globe). Equator (0° latitude). Greenwich Meridian (0° longitude). Locating places on a map using grid references. Mascarene Islands on a world map. Indian Ocean.' },
     { id: 'g5ge-weather', name: 'Weather (Grade 5)',                        icon: '🌦️', examWeight: 3,
       syllabus: 'Revision of seasons and weather instruments. How weather affects farming, tourism and fishing. Cyclone warning signals in Mauritius (Class 1-4) and precautions. Difference between weather and climate. Climate of Rodrigues.' },
+
+    // ── ENRICHMENT ────────────────────────────────────────────────────────────────
+    // @enrichment — These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
+    // DO NOT remove during syllabus alignment audits — they are intentional bonus content.
+    // They are recognisable by enrichment:true and display with a gold "✨ BONUS" badge in the UI.
+    { id: 'g5enr-personalities', name: 'Key Historical Personalities',   icon: '👤', enrichment: true, examWeight: 0,
+      enrichmentNote: 'Famous governors, explorers and figures from Grade 5 History: Mahé de Labourdonnais, Pierre Poivre, Farquhar, Van Warwyck, Decaen and others.' },
+    { id: 'g5enr-landmarks',     name: 'Mauritius Landmarks & Heritage', icon: '🏛️', enrichment: true, examWeight: 0,
+      enrichmentNote: 'Port Louis buildings, volcanic features, Trou aux Cerfs, Grand Bassin, Pamplemousses Botanical Garden — derived from Port Louis and Volcanism chapters.' },
+    { id: 'g5enr-world',         name: 'Indian Ocean & Volcanoes',       icon: '🌋', enrichment: true, examWeight: 0,
+      enrichmentNote: 'Mascarene Islands, active volcanoes in the region (Karthala, La Fournaise), Indian Ocean world map — derived from Volcanism and Map Skills chapters.' },
   ],
 });

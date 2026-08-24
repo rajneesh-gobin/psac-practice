@@ -1,8 +1,8 @@
-'use strict';
+﻿'use strict';
 registerSubject({
   id: 'grade4-english', name: 'English', grade: 4, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true,
+  practiceble: true, notesBased: true, noDifficulty: true,
   chapters: [
     {
       id: 'g4eng-nouns', name: 'Nouns, Pronouns & Articles', icon: '📝',

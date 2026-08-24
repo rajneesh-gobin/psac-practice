@@ -1,8 +1,8 @@
-'use strict';
+﻿'use strict';
 registerSubject({
   id: 'grade5-french', name: 'French', grade: 5, icon: '🇫🇷', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true,
+  practiceble: true, notesBased: true, noDifficulty: true,
   chapters: [
     {
       id: 'fr-vocabulaire', name: 'Vocabulaire de base', icon: '🗣️',

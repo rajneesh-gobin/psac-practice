@@ -841,7 +841,7 @@ const PD = (() => {
     if (!listEl || !_activeId) return;
     listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-4">Loading…</p>';
     const asgns  = await Store.loadAssignments(_activeId);
-    const DLABELS = ['','Basic','Medium','Hard','Challenge'];
+    const DLABELS = ['🎲 Random','Basic','Medium','Hard','Challenge'];
     const allChs  = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
       .flatMap(p => p._chapters || p.chapters || []);
     listEl.innerHTML = asgns.length ? asgns.map(a => {
@@ -997,9 +997,12 @@ function _renderParentControls(acct) {
 function _pdFillAssignChapters(pack) {
   const el = document.getElementById('pd-assign-chapter');
   if (!el) return;
-  const chs = pack?._chapters || pack?.chapters || [];
+  const chs = (pack?._chapters || pack?.chapters || []).filter(ch => !ch.enrichment);
   el.innerHTML = `<option value="">Any Chapter</option>` +
     chs.map(ch => `<option value="${ch.id}">${ch.icon || ''} ${ch.name}</option>`).join('');
+  // Hide difficulty selector for subjects where difficulty levels don't apply
+  const diffRow = document.getElementById('pd-assign-diff-row');
+  if (diffRow) diffRow.classList.toggle('hidden', !!pack?.noDifficulty);
 }
 
 // ── STUDENT ASSIGNMENTS (dashboard view) ──────
@@ -1017,7 +1020,7 @@ async function _renderStudentAssignments(studentId) {
     const ch   = allChs.find(c => c.id === a.chapter_id) || CHAPTERS.find(c => c.id === a.chapter_id);
     const subjectName = pack?.subject || a.subject_id || 'Subject';
     const chName = ch?.name || a.chapter_id || 'Any Chapter';
-    const dlv  = a.difficulty ? `Level ${a.difficulty}` : 'All Levels';
+    const dlv  = a.difficulty ? `Level ${a.difficulty}` : '🎲 Random';
     const canStart = !!(a.subject_id && a.chapter_id);
     return `<div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border-2 border-blue-300 dark:border-blue-600 shadow-sm">
       <div class="flex items-start gap-3">
@@ -1250,7 +1253,6 @@ function startChapterDirect(chapterId, forceDiff) {
   const locked = DB.restrictions?.lockedChapters || [];
   if (locked.includes(chapterId)) { toast('🔒 This chapter is locked by your parent.', 2000); return; }
   const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
-  const diff = Math.min(forceDiff || 1, maxDiff);
 
   // If questions for this chapter aren't loaded yet, wait for the active subject to load first
   const hasQs = STATIC_QUESTIONS.some(q => q && q.chapterId === chapterId);
@@ -1262,6 +1264,9 @@ function startChapterDirect(chapterId, forceDiff) {
     return;
   }
 
+  // null diff = mixed mode (random across all levels up to parent cap)
+  const diff = forceDiff ? Math.min(forceDiff, maxDiff) : null;
+
   S.practice.chapterId = chapterId;
   S.practice.difficulty = diff;
   S.practice.qs = [];
@@ -1271,7 +1276,7 @@ function startChapterDirect(chapterId, forceDiff) {
   showScreen('practice');
   const ch = CHAPTERS.find(c => c.id === chapterId);
   document.getElementById('practice-ch-name').textContent = ch ? `${ch.icon} ${ch.name}` : chapterId;
-  updateDiffBtns(1);
+  _updateDiffBadge(null);
 
   // Disable video help button when no CHAPTER_HELP entry exists for this chapter
   const helpBtn = document.getElementById('help-btn');
@@ -1306,7 +1311,7 @@ async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswe
   }
 
   S.practice.showAnswers = showAnswers !== false;
-  startChapterDirect(chapterId, difficulty || 1);
+  startChapterDirect(chapterId, difficulty || null);
 }
 
 // ── EXAM MODE ─────────────────────────────────
@@ -1711,51 +1716,56 @@ document.getElementById('results-home-btn').addEventListener('click', () => show
 
 // ── PRACTICE MODE ─────────────────────────────
 document.getElementById('practice-back-btn').addEventListener('click', () => {
-  S.practice.difficulty = 1; // reset from any subsection mode
   showScreen('chapter-select');
 });
 
-document.getElementById('difficulty-btns').addEventListener('click', e => {
-  const btn = e.target.closest('.diff-btn');
-  if (!btn) return;
-  const level = parseInt(btn.dataset.level);
-  S.practice.difficulty = level;
-  S.practice.idx = 0;
-  S.practice.qs = [];
-  updateDiffBtns(level);
-  loadPracticeQuestion();
-});
+function _updateDiffBadge(q) {
+  const badge = document.getElementById('practice-diff-badge');
+  const label = document.getElementById('practice-level-label');
+  const desc  = document.getElementById('practice-level-desc');
+  const card  = document.getElementById('practice-level-card');
+  const noDiff = typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.noDifficulty;
 
-function updateDiffBtns(active) {
-  const maxDiff  = DB.restrictions?.maxDifficulty ?? 4;
-  const chId     = S.practice.chapterId;
-  const l4Label  = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.level4Label) || 'Challenge';
-  // Hide L4 button when no L4 questions exist for this chapter (avoids "Word Problems" on Science etc.)
-  const hasL4    = chId ? STATIC_QUESTIONS.some(q => q.chapterId === chId && q.difficulty === 4) : true;
+  if (card) card.classList.toggle('hidden', !!noDiff);
+  if (!badge) return;
 
-  document.querySelectorAll('.diff-btn').forEach(b => {
-    const lv     = parseInt(b.dataset.level);
-    const locked = lv > maxDiff;
-    const noL4   = lv === 4 && !hasL4;
-    if (lv === 4) b.textContent = `🏆 Level 4 — ${l4Label}`;
-    b.classList.toggle('active',           active !== null && lv === active && !noL4);
-    b.classList.toggle('opacity-30',       locked || noL4);
-    b.classList.toggle('cursor-not-allowed', locked || noL4);
-    b.title    = locked ? '🔒 This difficulty is locked by your parent'
-               : noL4   ? `No ${l4Label.toLowerCase()} questions for this chapter yet`
-               : '';
-    b.disabled = locked || noL4;
-  });
+  if (noDiff) {
+    badge.className = 'chip gray text-xs';
+    badge.textContent = '📋 Practice';
+    return;
+  }
 
-  const labels = ['','⭐ Level 1 — Basic','⭐⭐ Level 2 — Medium','⭐⭐⭐ Level 3 — Hard',`🏆 Level 4 — ${l4Label}`];
-  document.getElementById('practice-diff-badge').textContent = active === null ? '📋 Topic Practice' : (labels[active] || '');
+  if (S.practice.difficulty === null && !q) {
+    badge.className = 'chip gray text-xs';
+    badge.textContent = '🎲 Mixed';
+    if (label) label.textContent = 'Mixed Practice';
+    if (desc)  desc.textContent  = 'Questions are drawn from all levels available for this chapter.';
+    return;
+  }
+
+  const l4Label = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.level4Label) || 'Challenge';
+  const LEVELS = {
+    1: { cls: 'chip green text-xs',  badge: '⭐ Basic',    lab: '⭐ Level 1 — Basic',           dsc: 'Recall and recognition. Great for building confidence.' },
+    2: { cls: 'chip blue text-xs',   badge: '⭐⭐ Medium',  lab: '⭐⭐ Level 2 — Medium',         dsc: 'Application questions. Tests understanding in context.' },
+    3: { cls: 'chip amber text-xs',  badge: '⭐⭐⭐ Hard',  lab: '⭐⭐⭐ Level 3 — Hard',         dsc: 'Multi-step reasoning. Challenges deeper understanding.' },
+    4: { cls: 'chip purple text-xs', badge: `🏆 ${l4Label}`, lab: `🏆 Level 4 — ${l4Label}`, dsc: 'Extended problems requiring full working out. PSAC exam style.' },
+  };
+  const lv = LEVELS[q?.difficulty] || LEVELS[S.practice.difficulty] || LEVELS[1];
+  badge.className = lv.cls;
+  badge.textContent = lv.badge;
+  if (label) label.textContent = lv.lab;
+  if (desc)  desc.textContent  = lv.dsc;
 }
 
 function loadPracticeQuestion() {
   if (!S.practice.qs.length || S.practice.idx >= S.practice.qs.length) {
-    // Subsection mode (difficulty===null) — don't reload with chapter generator
     if (S.practice.difficulty !== null) {
+      // Specific difficulty assigned (parent assignment)
       S.practice.qs = getQuestionsForChapter(S.practice.chapterId, S.practice.difficulty, 20);
+    } else if (S.practice.chapterId) {
+      // Mixed mode — random across all levels up to parent cap
+      const _maxD = DB.restrictions?.maxDifficulty ?? 4;
+      S.practice.qs = getMixedQuestions(S.practice.chapterId, _maxD, 20);
     }
     S.practice.idx = 0;
   }
@@ -1803,6 +1813,7 @@ function loadPracticeQuestion() {
   document.getElementById('practice-skip-btn').classList.remove('hidden');
   document.getElementById('practice-next-btn').classList.add('hidden');
   renderAnswerArea(q, 'practice-answer-area', null, false);
+  _updateDiffBadge(q);
   updateSessionStats();
 }
 

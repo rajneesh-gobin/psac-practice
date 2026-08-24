@@ -1,8 +1,8 @@
-'use strict';
+﻿'use strict';
 registerSubject({
   id: 'grade6-english', name: 'English', grade: 6, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: true,
+  practiceble: true, notesBased: true, noDifficulty: true,
   chapters: [
     {
       id: 'g6eng-nouns', name: 'Nouns, Pronouns & Determiners', icon: '📝',

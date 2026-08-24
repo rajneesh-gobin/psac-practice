@@ -1,9 +1,9 @@
-'use strict';
+﻿'use strict';
 // Grade 4 History & Geography — MIE Mauritius Syllabus (Grades 3-6, 2015)
 registerSubject({
   id: 'grade4-history', name: 'History & Geography', grade: 4, icon: '🌍', subject: 'History & Geography',
   curriculum: 'MIE Mauritius', comingSoon: false,
-  practiceble: true, notesBased: false,
+  practiceble: true, notesBased: false, noDifficulty: true,
   chapters: [
     { id: 'g4hist-locality',  name: 'Locality: Past & Present',  icon: '🏙️', examWeight: 4,
       syllabus: 'Types of locality: urban (town/city), rural (village/countryside) and coastal. Change and continuity: comparing old and new buildings, monuments, places of worship, means of transport. Using evidence (photographs, drawings, objects) to compare the past with the present. Simple timeline of events in the locality.' },
