@@ -914,13 +914,11 @@ const Auth = (() => {
   async function pdSwitchStudent(id) {
     const student = _familyStudents.find(s => s.id === id);
     if (student) {
-      // navigate:false so _loginStudentRow loads data only — we control where to go
       await _loginStudentRow(student, { navigate: false });
     } else {
       loginStudent(id);
     }
-    renderParentDashboard();
-    showScreen('parent');
+    // Caller (PD.selectChild or _openParentDashboard) is responsible for UI update
   }
 
   // ── Update assignment chapter dropdown when subject changes ──
@@ -931,23 +929,27 @@ const Auth = (() => {
   }
 
   // ── Parent assignments ────────────────────────
-  function addAssignment() {
-    const chId = (_el('pd-assign-chapter')?.value || '') || null;
-    const diff = parseInt(_el('pd-assign-diff')?.value || '0') || null;
-    const note = (_el('pd-assign-note')?.value || '').trim();
+  async function addAssignment() {
+    const subjId = (_el('pd-assign-subject')?.value || '') || null;
+    const chId   = (_el('pd-assign-chapter')?.value  || '') || null;
+    const diff   = parseInt(_el('pd-assign-diff')?.value || '0') || null;
+    const note        = (_el('pd-assign-note')?.value || '').trim();
+    const showAnswers = _el('pd-assign-show-answers')?.checked !== false;
     if (!chId && !diff) { toast('Select a chapter or difficulty.', 2000); return; }
-    DB.assignments = DB.assignments || [];
-    DB.assignments.push({ id:'asgn_'+Date.now(), chapterId:chId, difficulty:diff, note, createdAt:Date.now() });
-    save(DB);
-    renderParentDashboard();
+    if (!ACTIVE_STUDENT_ID) { toast('Select a student first.', 2000); return; }
+    const profile = _parentProfile;
+    const result  = await Store.createAssignment(ACTIVE_STUDENT_ID, profile?.id, {
+      subjectId: subjId, chapterId: chId, difficulty: diff, note, showAnswers,
+    });
+    if (!result) { toast('Could not save. Please try again.', 2500); return; }
     if (_el('pd-assign-note')) _el('pd-assign-note').value = '';
+    if (typeof PD !== 'undefined') PD.renderDetail();
     toast('Assignment added! 📋', 1500);
   }
 
-  function removeAssignment(id) {
-    DB.assignments = (DB.assignments || []).filter(a => a.id !== id);
-    save(DB);
-    renderParentDashboard();
+  async function removeAssignment(id) {
+    await Store.deleteAssignment(id);
+    if (typeof PD !== 'undefined') PD.renderDetail();
     toast('Assignment removed.', 1500);
   }
 
@@ -1030,6 +1032,7 @@ const Auth = (() => {
     // Parent mode
     enterParentMode, exitParentMode, resetProgress,
     pdTab, pdSwitchStudent,
+    getStudents: () => _familyStudents,
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
   };

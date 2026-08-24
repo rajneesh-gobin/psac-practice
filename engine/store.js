@@ -60,21 +60,18 @@ const Store = (() => {
   }
 
   async function getMyFamily(parentId) {
-    if (!_sb) return null;
-    // Try RLS-filtered query first; fall back to explicit parent_id filter if provided
-    let { data, error } = await _sb.from('families').select('*').maybeSingle();
-    if ((!data || error) && parentId) {
-      const r2 = await _sb.from('families').select('*').eq('owner_id', parentId).maybeSingle();
-      data = r2.data || null;
-    }
+    if (!_sb || !parentId) return null;
+    const { data, error } = await _sb.from('families').select('*').eq('parent_id', parentId).maybeSingle();
+    if (error) console.warn('[Store.getMyFamily]', error.message);
     return data || null;
   }
 
   async function createFamily(parentId, familyName) {
     if (!_sb) return null;
     const { data, error } = await _sb.from('families')
-      .insert({ owner_id: parentId, family_name: familyName })
+      .insert({ parent_id: parentId, family_name: familyName })
       .select().single();
+    if (error) console.error('[Store.createFamily]', error);
     return error ? null : data;
   }
 
@@ -247,6 +244,39 @@ const Store = (() => {
     return data || [];
   }
 
+  // ── Student assignments (Supabase) ────────────
+  async function loadAssignments(studentId) {
+    if (!_sb) return [];
+    const { data } = await _sb.from('student_assignments')
+      .select('*').eq('student_id', studentId)
+      .is('completed_at', null)
+      .order('created_at', { ascending: false });
+    return data || [];
+  }
+
+  async function createAssignment(studentId, parentId, { subjectId, chapterId, difficulty, note, showAnswers }) {
+    if (!_sb) return null;
+    const { data, error } = await _sb.from('student_assignments').insert({
+      student_id: studentId, parent_id: parentId || null,
+      subject_id: subjectId || null, chapter_id: chapterId || null,
+      difficulty: difficulty ? parseInt(difficulty) : null,
+      note: note || null,
+      show_answers: showAnswers !== false,
+    }).select().single();
+    return error ? null : data;
+  }
+
+  async function deleteAssignment(id) {
+    if (!_sb) return;
+    await _sb.from('student_assignments').delete().eq('id', id);
+  }
+
+  async function completeAssignment(id) {
+    if (!_sb) return;
+    await _sb.from('student_assignments')
+      .update({ completed_at: new Date().toISOString() }).eq('id', id);
+  }
+
   return {
     // Auth session
     saveStudentSession, getStudentSession, clearStudentSession,
@@ -265,5 +295,7 @@ const Store = (() => {
     generateId,
     // Question reports
     reportQuestion, loadReports,
+    // Assignments
+    loadAssignments, createAssignment, deleteAssignment, completeAssignment,
   };
 })();

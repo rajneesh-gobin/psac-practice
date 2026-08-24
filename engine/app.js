@@ -950,7 +950,7 @@ async function _renderStudentAssignments(studentId) {
         </div>
       </div>
       <div class="flex gap-2 mt-3">
-        ${canStart ? `<button onclick="${typeof Calendar !== 'undefined' ? `Calendar.startPractice('${a.subject_id}','${a.chapter_id}')` : `toast('Loading…',1500)`}"
+        ${canStart ? `<button onclick="startAssignmentDirect('${a.subject_id}','${a.chapter_id}',${a.difficulty || 1},${a.show_answers !== false})"
           class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-colors shadow">
           ▶ Start Now
         </button>` : ''}
@@ -1172,6 +1172,29 @@ function startChapterDirect(chapterId, forceDiff) {
   }
 
   setTimeout(() => { initScratchpad('scratchpad-practice'); }, 100);
+}
+
+// ── ASSIGNMENT DIRECT LAUNCH ──────────────────
+async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers) {
+  const packs = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
+  const pack  = packs.find(p => p.id === subjectId);
+  if (!pack || pack.comingSoon) { toast('Subject coming soon! 📚', 2500); return; }
+
+  // Activate pack globals (same as Calendar.startPractice)
+  /* eslint-disable no-global-assign */
+  if (typeof ACTIVE_PACK    !== 'undefined') ACTIVE_PACK    = pack;
+  if (typeof SELECTED_GRADE !== 'undefined') SELECTED_GRADE = pack.grade;
+  /* eslint-enable no-global-assign */
+  const chs = pack._chapters || pack.chapters || [];
+  if (typeof CHAPTERS !== 'undefined') { CHAPTERS.length = 0; chs.forEach(ch => CHAPTERS.push(ch)); }
+
+  // Load questions for this subject, then jump straight to practice
+  if (typeof QuestionLoader !== 'undefined') {
+    await QuestionLoader.loadSubject(pack.id);
+  }
+
+  S.practice.showAnswers = showAnswers !== false;
+  startChapterDirect(chapterId, difficulty || 1);
 }
 
 // ── EXAM MODE ─────────────────────────────────
@@ -1714,19 +1737,27 @@ function practiceSubmit() {
   renderAnswerArea(q, 'practice-answer-area', ua, true);
 
   // Feedback
-  const answerLine = q.type === 'symmetry'
-    ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
-    : `Not quite. Correct answer: <b>${q.answer}</b>`;
   const fb = document.getElementById('practice-feedback');
   fb.className = `mb-4 p-4 rounded-xl ${ok ? 'feedback-correct' : 'feedback-wrong'}`;
-  fb.innerHTML = `
-    <div class="flex items-start gap-3">
-      <span class="text-2xl">${ok ? '🎉' : '💡'}</span>
-      <div>
-        <div class="font-bold mb-1">${ok ? 'Correct! Well done!' : answerLine}</div>
-        <div class="text-sm">${q.explanation}</div>
-      </div>
-    </div>`;
+  if (S.practice.showAnswers === false) {
+    fb.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">${ok ? '🎉' : '❌'}</span>
+        <div class="font-bold">${ok ? 'Correct! Well done!' : 'Not quite — keep trying!'}</div>
+      </div>`;
+  } else {
+    const answerLine = q.type === 'symmetry'
+      ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
+      : `Not quite. Correct answer: <b>${q.answer}</b>`;
+    fb.innerHTML = `
+      <div class="flex items-start gap-3">
+        <span class="text-2xl">${ok ? '🎉' : '💡'}</span>
+        <div>
+          <div class="font-bold mb-1">${ok ? 'Correct! Well done!' : answerLine}</div>
+          <div class="text-sm">${q.explanation}</div>
+        </div>
+      </div>`;
+  }
   // Entrance animation — remove old class first, force reflow, re-add
   fb.classList.remove('hidden', 'feedback-pop', 'feedback-shake');
   void fb.offsetWidth;
@@ -1751,14 +1782,22 @@ function practiceSkip() {
   renderAnswerArea(q, 'practice-answer-area', '', true);
   const fb = document.getElementById('practice-feedback');
   fb.className = 'mb-4 p-4 rounded-xl feedback-wrong';
-  fb.innerHTML = `
-    <div class="flex items-start gap-3">
-      <span class="text-2xl">💡</span>
-      <div>
-        <div class="font-bold mb-1">Answer: <span class="text-green-600 dark:text-green-400">${q.answer}</span></div>
-        <div class="text-sm">${q.explanation}</div>
-      </div>
-    </div>`;
+  if (S.practice.showAnswers === false) {
+    fb.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">⏭️</span>
+        <div class="font-bold">Skipped — keep going!</div>
+      </div>`;
+  } else {
+    fb.innerHTML = `
+      <div class="flex items-start gap-3">
+        <span class="text-2xl">💡</span>
+        <div>
+          <div class="font-bold mb-1">Answer: <span class="text-green-600 dark:text-green-400">${q.answer}</span></div>
+          <div class="text-sm">${q.explanation}</div>
+        </div>
+      </div>`;
+  }
   fb.classList.remove('hidden', 'feedback-pop', 'feedback-shake');
   void fb.offsetWidth;
   fb.classList.add('feedback-shake');
