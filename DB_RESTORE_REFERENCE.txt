@@ -1,0 +1,601 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║          MathMaster PSAC — DATABASE & SECRETS REFERENCE FILE               ║
+║          !! DELETE THIS FILE FROM GIT BEFORE GOING PUBLIC !!               ║
+║          !! ROTATE KEYS IMMEDIATELY IF THIS FILE IS EVER LEAKED !!         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Generated: 2026-08-24
+Project: MathMaster PSAC — Mauritius MIE Curriculum (Grades 4–6)
+Stack: Vanilla JS + Tailwind CSS + Supabase (no build step)
+Repo: https://github.com/rajneesh-gobin/psac-practice
+Branches: main (production/Netlify), dev (staging — push here, not main)
+Netlify: 15 deploy credits per production push — push to dev unless shipping
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — SUPABASE CONNECTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Project URL  : https://xawvjwsiqhtxgpocdqgm.supabase.co
+Anon Key     : sb_publishable_wERRrZnvoWhM5faN2AaYpQ_CpTNHFkL
+Dashboard    : https://supabase.com/dashboard/project/xawvjwsiqhtxgpocdqgm
+
+The anon key is embedded directly in engine/supabase.js — it is a publishable
+key (safe for client-side use). RLS policies control what anonymous users can
+read/write. Do NOT put the service_role key in any frontend file.
+
+Auth storage key : mm_sb_auth  (localStorage)
+Client init      : supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession:true, storageKey:'mm_sb_auth' } })
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — THIRD-PARTY SERVICES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Email (Activation / Reset Password)
+  Provider   : Resend (planned; not yet configured)
+  SMTP Host  : smtp.resend.com
+  SMTP Port  : 465
+  Username   : resend
+  Password   : [RESEND API KEY — to be added when Resend is set up]
+  Sender name: MathMaster PSAC
+  Sender addr: onboarding@resend.dev (shared domain, free tier)
+  Dashboard  : https://resend.com/
+
+  Supabase email templates → Authentication → Email Templates → Confirm signup:
+    Subject: Activate your MathMaster account 🎓
+    Body: see bottom of this file (SECTION 7)
+
+IP Geolocation (login audit logging)
+  API: https://api.ipify.org?format=json
+  No auth key required — free, unauthenticated
+
+Google OAuth
+  Configured in Supabase → Authentication → Providers → Google
+  [Add Google OAuth client ID and secret here when available]
+  Redirect URL : https://xawvjwsiqhtxgpocdqgm.supabase.co/auth/v1/callback
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — DATABASE SCHEMA (Full Restore SQL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Run in Supabase → SQL Editor in this exact order.
+
+━━━━━━━━━━━━━━━ 3.1  profiles ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.profiles (
+  id             UUID        PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  role           TEXT        NOT NULL DEFAULT 'parent'
+                               CHECK (role IN ('parent','teacher','admin')),
+  full_name      TEXT        NOT NULL,
+  disabled       BOOLEAN     NOT NULL DEFAULT false,
+  expires_at     TIMESTAMPTZ,          -- null = no expiry
+  is_super_admin BOOLEAN     NOT NULL DEFAULT false
+);
+
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "user_owns" ON public.profiles;
+CREATE POLICY "user_owns" ON public.profiles
+  FOR ALL USING (auth.uid() = id);
+-- Admins need a broader policy; add via Supabase dashboard or service_role calls.
+
+━━━━━━━━━━━━━━━ 3.2  families ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.families (
+  id           UUID  DEFAULT gen_random_uuid() PRIMARY KEY,
+  parent_id    UUID  NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  family_name  TEXT  NOT NULL,
+  family_code  TEXT  UNIQUE NOT NULL
+                 DEFAULT upper(substring(replace(gen_random_uuid()::text,'-',''), 1, 8))
+);
+
+CREATE INDEX IF NOT EXISTS families_parent_idx ON public.families(parent_id);
+CREATE INDEX IF NOT EXISTS families_code_idx   ON public.families(family_code);
+
+ALTER TABLE public.families ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.families;
+CREATE POLICY "anon_all" ON public.families FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.3  students ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.students (
+  id               UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  family_id        UUID         NOT NULL REFERENCES public.families(id) ON DELETE CASCADE,
+  username         TEXT         UNIQUE NOT NULL,
+  display_name     TEXT         NOT NULL,
+  avatar           TEXT         NOT NULL DEFAULT '🧒',
+  grade            INTEGER      NOT NULL CHECK (grade IN (4,5,6)),
+  pin              TEXT,        -- bcrypt hash via set_student_pin() RPC
+  settings         JSONB        NOT NULL DEFAULT '{"lockedChapters":[],"maxDifficulty":4,"examDisabled":false}',
+  session_version  INTEGER      NOT NULL DEFAULT 0,
+  expires_at       TIMESTAMPTZ,
+  created_at       TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS students_family_idx    ON public.students(family_id);
+CREATE INDEX IF NOT EXISTS students_username_idx  ON public.students(lower(username));
+
+ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.students;
+CREATE POLICY "anon_all" ON public.students FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.4  student_progress ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.student_progress (
+  student_id  TEXT         PRIMARY KEY,  -- stored as text/uuid string
+  data        JSONB        NOT NULL DEFAULT '{}',
+  updated_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+-- data jsonb structure:
+-- {
+--   "stats": {
+--     "totalAttempted": 0, "totalCorrect": 0, "examCount": 0,
+--     "bestScore": 0, "maxStreak": 0, "streak": 0, "lastDate": null
+--   },
+--   "chapters": {},       -- keyed by chapterId; per-chapter accuracy/attempts
+--   "examHistory": [],    -- array of exam result objects
+--   "badges": [],         -- earned badge ids
+--   "theme": "dark",      -- "dark" | "light"
+--   "xp": 0,
+--   "level": 1,
+--   "assignments": [],    -- cached active assignments
+--   "restrictions": { "lockedChapters":[], "maxDifficulty":4, "examDisabled":false }
+-- }
+
+ALTER TABLE public.student_progress ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.student_progress;
+CREATE POLICY "anon_all" ON public.student_progress FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.5  student_assignments ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.student_assignments (
+  id            UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  student_id    UUID         NOT NULL REFERENCES public.students(id) ON DELETE CASCADE,
+  parent_id     UUID         REFERENCES public.profiles(id) ON DELETE SET NULL,
+  subject_id    TEXT,
+  chapter_id    TEXT,
+  difficulty    INTEGER      CHECK (difficulty BETWEEN 1 AND 4),
+  note          TEXT,
+  show_answers  BOOLEAN      NOT NULL DEFAULT true,
+  completed_at  TIMESTAMPTZ,           -- null = active; set when student taps "Done"
+  created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS assignments_student_idx ON public.student_assignments(student_id);
+
+ALTER TABLE public.student_assignments ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.student_assignments;
+CREATE POLICY "anon_all" ON public.student_assignments FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.6  mm_data (key-value config store) ━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.mm_data (
+  key         TEXT         PRIMARY KEY,
+  value       JSONB        NOT NULL DEFAULT '{}',
+  updated_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+-- Seed the default global settings row:
+INSERT INTO public.mm_data (key, value)
+VALUES ('global_settings', '{"disabled_grades":[],"disabled_subjects":[],"disabled_chapters":[],"registration_open":true}')
+ON CONFLICT (key) DO NOTHING;
+
+ALTER TABLE public.mm_data ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.mm_data;
+CREATE POLICY "anon_all" ON public.mm_data FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.7  question_reports ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.question_reports (
+  id             UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  question_id    TEXT         NOT NULL,
+  question_text  TEXT,        -- truncated to 500 chars
+  message        TEXT,        -- max 1000 chars
+  student_id     TEXT,        -- nullable; not a typed FK
+  status         TEXT         NOT NULL DEFAULT 'open',
+  created_at     TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS qreports_status_idx ON public.question_reports(status);
+
+ALTER TABLE public.question_reports ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.question_reports;
+CREATE POLICY "anon_all" ON public.question_reports FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.8  plans ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.plans (
+  id            TEXT     PRIMARY KEY,  -- e.g. 'free', 'basic', 'premium'
+  name          TEXT     NOT NULL,
+  price_mur     INTEGER  NOT NULL DEFAULT 0,
+  max_children  INTEGER  NOT NULL DEFAULT 1,
+  features      JSONB    NOT NULL DEFAULT '[]',
+  is_active     BOOLEAN  NOT NULL DEFAULT true
+);
+
+-- Seed the free plan:
+INSERT INTO public.plans (id, name, price_mur, max_children, features, is_active)
+VALUES ('free', 'Free', 0, 3, '["Unlimited practice questions","Progress tracking","Community forum"]', true)
+ON CONFLICT (id) DO NOTHING;
+
+ALTER TABLE public.plans ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_read" ON public.plans;
+CREATE POLICY "anon_read" ON public.plans FOR SELECT USING (true);
+
+━━━━━━━━━━━━━━━ 3.9  subscriptions ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.subscriptions (
+  id          UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id     UUID         NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  plan_id     TEXT         NOT NULL REFERENCES public.plans(id),
+  status      TEXT         NOT NULL DEFAULT 'active'
+                             CHECK (status IN ('active','cancelled')),
+  started_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+  expires_at  TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS subs_user_idx ON public.subscriptions(user_id);
+
+ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.subscriptions;
+CREATE POLICY "anon_all" ON public.subscriptions FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.10  payments ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.payments (
+  id            UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id       UUID         NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  plan_id       TEXT         NOT NULL REFERENCES public.plans(id),
+  amount_mur    INTEGER      NOT NULL DEFAULT 0,
+  provider      TEXT         NOT NULL DEFAULT 'manual',
+  status        TEXT         NOT NULL DEFAULT 'completed',
+  notes         TEXT,
+  processed_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+  created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS payments_user_idx ON public.payments(user_id);
+
+ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.payments;
+CREATE POLICY "anon_all" ON public.payments FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.11  login_events (audit log) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.login_events (
+  id           UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id      TEXT         NOT NULL,  -- NOT a typed FK; stores both student & parent UUIDs as text
+  user_type    TEXT         NOT NULL
+                              CHECK (user_type IN ('student','parent','teacher','admin','super_admin')),
+  ip_address   TEXT,
+  user_agent   TEXT,        -- truncated to 500 chars
+  fingerprint  TEXT,        -- base64 device fingerprint, max 64 chars
+  created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS login_events_user_idx ON public.login_events(user_id);
+CREATE INDEX IF NOT EXISTS login_events_time_idx ON public.login_events(created_at DESC);
+
+ALTER TABLE public.login_events ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_insert" ON public.login_events;
+CREATE POLICY "anon_insert" ON public.login_events FOR INSERT WITH CHECK (true);
+-- Read restricted to service_role / admin only
+
+━━━━━━━━━━━━━━━ 3.12  forum_posts ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.forum_posts (
+  id           UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  category     TEXT         NOT NULL
+                              CHECK (category IN ('general','maths','english','science','french','history','tips','suggest','report')),
+  title        TEXT         NOT NULL,
+  body         TEXT         NOT NULL,
+  author_name  TEXT         NOT NULL,
+  author_type  TEXT         NOT NULL
+                              CHECK (author_type IN ('student','parent','teacher','admin')),
+  reply_count  INTEGER      NOT NULL DEFAULT 0,
+  created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS forum_posts_cat_idx  ON public.forum_posts(category);
+CREATE INDEX IF NOT EXISTS forum_posts_time_idx ON public.forum_posts(created_at DESC);
+
+-- Trigger to keep reply_count in sync:
+CREATE OR REPLACE FUNCTION public.update_reply_count()
+RETURNS TRIGGER LANGUAGE plpgsql AS $$
+BEGIN
+  IF (TG_OP = 'INSERT') THEN
+    UPDATE public.forum_posts SET reply_count = reply_count + 1 WHERE id = NEW.post_id;
+  ELSIF (TG_OP = 'DELETE') THEN
+    UPDATE public.forum_posts SET reply_count = GREATEST(0, reply_count - 1) WHERE id = OLD.post_id;
+  END IF;
+  RETURN NULL;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_reply_count ON public.forum_replies;
+-- (created after forum_replies table below)
+
+ALTER TABLE public.forum_posts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.forum_posts;
+CREATE POLICY "anon_all" ON public.forum_posts FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.13  forum_replies ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.forum_replies (
+  id           UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  post_id      UUID         NOT NULL REFERENCES public.forum_posts(id) ON DELETE CASCADE,
+  body         TEXT         NOT NULL,
+  author_name  TEXT         NOT NULL,
+  author_type  TEXT         NOT NULL
+                              CHECK (author_type IN ('student','parent','teacher','admin')),
+  created_at   TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS forum_replies_post_idx  ON public.forum_replies(post_id);
+CREATE INDEX IF NOT EXISTS forum_replies_time_idx  ON public.forum_replies(created_at ASC);
+
+-- Attach reply_count trigger (defined above):
+CREATE TRIGGER trg_reply_count
+  AFTER INSERT OR DELETE ON public.forum_replies
+  FOR EACH ROW EXECUTE FUNCTION public.update_reply_count();
+
+ALTER TABLE public.forum_replies ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.forum_replies;
+CREATE POLICY "anon_all" ON public.forum_replies FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.14  study_schedules ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.study_schedules (
+  id          UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  student_id  TEXT         NOT NULL,
+  parent_id   UUID         REFERENCES auth.users(id) ON DELETE SET NULL,
+  settings    JSONB        NOT NULL DEFAULT '{}',
+  created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS study_schedules_student_idx ON public.study_schedules(student_id);
+
+ALTER TABLE public.study_schedules ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.study_schedules;
+CREATE POLICY "anon_all" ON public.study_schedules FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━ 3.15  schedule_entries ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE TABLE IF NOT EXISTS public.schedule_entries (
+  id            UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+  schedule_id   UUID         NOT NULL REFERENCES public.study_schedules(id) ON DELETE CASCADE,
+  student_id    TEXT         NOT NULL,
+  date          DATE         NOT NULL,
+  topic_label   TEXT         NOT NULL,
+  entry_type    TEXT         NOT NULL DEFAULT 'study',
+                               -- values: 'study', 'exam', 'holiday', 'blocked', 'other'
+  duration_mins INTEGER,
+  notes         TEXT,
+  subject_id    TEXT,
+  chapter_id    TEXT,
+  created_at    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS schedule_entries_schedule_idx   ON public.schedule_entries(schedule_id);
+CREATE INDEX IF NOT EXISTS schedule_entries_student_date   ON public.schedule_entries(student_id, date);
+
+ALTER TABLE public.schedule_entries ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_all" ON public.schedule_entries;
+CREATE POLICY "anon_all" ON public.schedule_entries FOR ALL USING (true) WITH CHECK (true);
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — CUSTOM RPC FUNCTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+-- ── verify_student_pin ───────────────────────────────────────────────────
+-- Called by: engine/auth.js when student logs in via username + 4-digit PIN.
+-- Returns: JSON object { ok, locked, secsLeft, attemptsLeft, error, student }
+-- Must be created as SECURITY DEFINER so it can read students.pin.
+
+CREATE OR REPLACE FUNCTION public.verify_student_pin(
+  p_username TEXT,
+  p_pin      TEXT
+)
+RETURNS JSONB
+LANGUAGE plpgsql SECURITY DEFINER AS $$
+DECLARE
+  v_student   public.students%ROWTYPE;
+  v_max_tries CONSTANT INT := 5;
+  v_lockout   CONSTANT INT := 300; -- 5 minutes in seconds
+  v_attempts  INT := 0;
+  -- NOTE: implement attempt tracking via a separate table or within students.settings if needed
+BEGIN
+  SELECT * INTO v_student
+  FROM public.students
+  WHERE lower(username) = lower(p_username)
+  LIMIT 1;
+
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('ok', false, 'error', 'User not found');
+  END IF;
+
+  -- Simple PIN check (plaintext for dev; replace with crypt() for prod):
+  IF v_student.pin = p_pin OR crypt(p_pin, v_student.pin) = v_student.pin THEN
+    RETURN jsonb_build_object('ok', true, 'student', row_to_json(v_student)::jsonb);
+  ELSE
+    RETURN jsonb_build_object('ok', false, 'error', 'Incorrect PIN', 'attemptsLeft', v_max_tries);
+  END IF;
+END;
+$$;
+
+-- ── set_student_pin ──────────────────────────────────────────────────────
+-- Called by: engine/store.js when parent sets/changes a student PIN.
+-- Hashes PIN with bcrypt before storing.
+
+CREATE OR REPLACE FUNCTION public.set_student_pin(
+  p_student_id UUID,
+  p_pin        TEXT
+)
+RETURNS VOID
+LANGUAGE plpgsql SECURITY DEFINER AS $$
+BEGIN
+  UPDATE public.students
+  SET pin = crypt(p_pin, gen_salt('bf'))
+  WHERE id = p_student_id;
+END;
+$$;
+
+-- Enable pgcrypto extension (required for crypt/gen_salt):
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — FOREIGN KEY RELATIONSHIP MAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+auth.users (id)  [Supabase built-in]
+  └── profiles (id)  [1:1 — same UUID]
+        ├── families (parent_id)  [1:1 in practice, max 1 per parent]
+        │     └── students (family_id)  [1:many, app limits to 3]
+        │           ├── student_progress (student_id)  [1:1]
+        │           └── student_assignments (student_id)  [1:many]
+        ├── subscriptions (user_id)  [1:many]
+        ├── payments (user_id)  [1:many]
+        └── student_assignments (parent_id, nullable)
+
+plans (id)
+  ├── subscriptions (plan_id)
+  └── payments (plan_id)
+
+forum_posts (id)
+  └── forum_replies (post_id, CASCADE DELETE)
+
+study_schedules (id)
+  └── schedule_entries (schedule_id, CASCADE DELETE)
+
+mm_data            — standalone key-value config store
+login_events       — standalone audit log (user_id stored as TEXT, no FK)
+question_reports   — standalone report log (student_id nullable TEXT, no FK)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — APP ARCHITECTURE NOTES (for AI assistants)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GENERAL
+  - Pure vanilla JS + Tailwind CSS. No React, Vue, bundler, or build step.
+  - Single HTML file (index.html) loads all scripts in <head>/<body> order.
+  - All JS is globally scoped IIFEs (const Foo = (() => { ... return {...}; })())
+  - Dark mode via Tailwind class="dark" on <html>
+
+SUBJECTS & QUESTIONS
+  - Global array: STATIC_QUESTIONS — all subject files push into it.
+  - Each question: { id, chapterId, subjectId, grade, type, difficulty, ... }
+  - Types: MCQ, TF (true/false), NUM (numeric), MATCH (matching pairs)
+  - Difficulty 1–4; Level 4 MUST be a narrative word problem.
+  - SUBJECT_PACKS global — array of subject pack descriptors (id, name, grade, chapters[])
+  - Question file naming: subjects/grade{N}-{subject}/questions/ch{NN}_{name}.js
+  - Each subject folder has _manifest.js that pushes pack metadata into SUBJECT_PACKS
+
+STUDENT AUTH FLOW
+  - Students do NOT use Supabase Auth.
+  - Login: username + 4-digit PIN → verify_student_pin() RPC
+  - Session stored in localStorage under key: mm_student_session
+  - Session has: { studentId, name, grade, sessionVersion, expiresAt }
+  - On resume: re-fetches students.session_version; mismatch = force logout
+
+PARENT/TEACHER AUTH FLOW
+  - Full Supabase Auth (email+password or Google OAuth)
+  - Profile fetched from profiles table on sign-in
+  - Family fetched from families table (one per parent)
+
+CALENDAR / TIMETABLE
+  - engine/calendar.js — Calendar IIFE
+  - study_schedules: one row per student (settings: { weeks, studyDays, subjectHours, mixed })
+  - schedule_entries: one row per day per session
+  - entry_type: 'study' (auto-generated) | 'exam' | 'holiday' | 'blocked' | 'other'
+  - localStorage cache key: mm_schedule_{studentId} (fallback if Supabase slow)
+  - Single-subject mode: weighted rotation, exactly 1 subject per study day
+  - Mixed mode: multiple subjects per day, proportional to hours setting
+
+FORUM
+  - engine/forum.js — Forum IIFE
+  - Categories: general, maths, english, science, french, history, tips, suggest, report
+  - reply_count maintained by DB trigger (trg_reply_count)
+  - Likes: localStorage only (mm_forum_likes key), not stored in DB
+  - Delete: author-name match (no secure auth check — by design for simplicity)
+  - Cooldown: 30 seconds between posts; 30 seconds between replies
+
+PROGRESS
+  - engine/store.js — Store IIFE
+  - All progress in student_progress.data (single JSONB blob per student)
+  - Saved on a debounced timer (background upsert)
+  - chapters key: { [chapterId]: { attempts, correct, lastDate, difficulty stats } }
+
+ADMIN
+  - engine/admin.js — AdminPanel IIFE
+  - Accessible only when profiles.role = 'admin' or 'super_admin'
+  - Controls: disable grades/subjects/chapters, manage members, plans, payments
+
+SCRIPT LOAD ORDER (index.html)
+  1. Tailwind CDN
+  2. Supabase CDN (supabase-js)
+  3. engine/supabase.js      — _sb singleton
+  4. engine/helpers.js
+  5. engine/store.js
+  6. engine/auth.js
+  7. engine/app.js
+  8. engine/calendar.js
+  9. engine/forum.js
+  10. engine/admin.js
+  11. engine/teacher.js
+  12. engine/events.js
+  13. engine/protect.js
+  14. engine/question_loader.js
+  15. engine/questions_engine.js
+  16. engine/registry.js
+  17. subjects/**/_manifest.js   (one per subject pack)
+  18. subjects/**/questions/*.js  (question bank files)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — EMAIL TEMPLATE (Confirm Signup)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Paste into Supabase → Authentication → Email Templates → Confirm signup
+
+SUBJECT:
+  Activate your MathMaster account 🎓
+
+BODY (HTML):
+  <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:520px;margin:0 auto;background:#f8f7ff;border-radius:16px;overflow:hidden;border:1px solid #e0e0f0">
+    <div style="background:linear-gradient(135deg,#6366f1,#8b5cf6);padding:32px 24px;text-align:center">
+      <div style="font-size:40px;margin-bottom:8px">🎓</div>
+      <h1 style="color:#fff;margin:0;font-size:22px;font-weight:700">MathMaster PSAC</h1>
+      <p style="color:rgba(255,255,255,0.8);margin:4px 0 0;font-size:13px">Grades 4 · 5 · 6 — Mauritius MIE Curriculum</p>
+    </div>
+    <div style="padding:32px 28px;background:#fff">
+      <h2 style="color:#1e1b4b;font-size:18px;margin:0 0 12px;font-weight:700">Welcome! Please confirm your email 👋</h2>
+      <p style="color:#4b5563;font-size:14px;line-height:1.6;margin:0 0 20px">
+        You're one step away from unlocking practice questions for
+        <strong>Maths, English, French, Science</strong> and <strong>History &amp; Geography</strong>.
+      </p>
+      <div style="text-align:center;margin-bottom:28px">
+        <a href="{{ .ConfirmationURL }}"
+          style="display:inline-block;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:15px;padding:14px 36px;border-radius:12px;text-decoration:none">
+          ✅ Activate My Account
+        </a>
+      </div>
+      <p style="color:#9ca3af;font-size:12px;margin:0 0 4px">Button not working? Copy and paste this link:</p>
+      <p style="color:#6366f1;font-size:11px;word-break:break-all;margin:0">{{ .ConfirmationURL }}</p>
+    </div>
+    <div style="background:#f5f3ff;padding:16px 28px;text-align:center">
+      <span style="background:#dbeafe;color:#1d4ed8;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin:2px">📐 Maths</span>
+      <span style="background:#fce7f3;color:#be185d;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin:2px">📖 English</span>
+      <span style="background:#ede9fe;color:#7c3aed;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin:2px">🇫🇷 French</span>
+      <span style="background:#dcfce7;color:#15803d;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin:2px">🔬 Science</span>
+      <span style="background:#fef3c7;color:#92400e;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;margin:2px">🌍 History &amp; Geo</span>
+    </div>
+    <div style="padding:16px 28px;text-align:center;background:#f8f7ff">
+      <p style="color:#9ca3af;font-size:11px;margin:0;line-height:1.5">
+        This link expires in 24 hours. If you didn't create an account, ignore this email.<br>
+        © MathMaster PSAC · Built for Mauritius students
+      </p>
+    </div>
+  </div>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+!! REMINDER: DELETE THIS FILE AND REWRITE GIT HISTORY BEFORE MAKING REPO    !!
+!! PUBLIC. Use: git filter-repo --path DB_RESTORE_REFERENCE.txt --invert-paths!!
+!! Then rotate the Supabase anon key in the dashboard.                       !!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
