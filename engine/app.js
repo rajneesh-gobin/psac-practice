@@ -181,6 +181,8 @@ function showScreen(id) {
   const hdr = document.querySelector('header');
   if (hdr) hdr.classList.toggle('hidden', hideHeader);
 
+  _updateBreadcrumb(id);
+
   if (id === 'dashboard')       renderDashboard();
   if (id === 'analytics')       renderAnalytics();
   if (id === 'chapter-select')  renderChapterSelect();
@@ -192,6 +194,49 @@ function showScreen(id) {
   if (id === 'teacher' && typeof TeacherMode !== 'undefined') TeacherMode.render();
   if (id === 'forum'     && typeof Forum     !== 'undefined') Forum.render();
   if (id === 'calendar'  && typeof Calendar  !== 'undefined') Calendar.render();
+}
+
+function _updateBreadcrumb(screenId) {
+  const bar   = document.getElementById('breadcrumb-bar');
+  const inner = document.getElementById('breadcrumb-inner');
+  if (!bar || !inner) return;
+
+  const studentScreens = ['dashboard','chapter-select','syllabus','analytics','practice','exam-config','exam'];
+  if (!studentScreens.includes(screenId)) { bar.classList.add('hidden'); return; }
+
+  const grade    = (typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : null) || 5;
+  const pack     = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) || null;
+  const packIcon = pack ? (pack.icon || '') : '';
+  const packName = pack ? (pack.subject || pack.name || '') : '';
+  const packLabel = (packIcon + ' ' + packName).trim() || 'Subject';
+
+  const chId  = S.practice?.chapterId;
+  const ch    = chId && pack ? ((pack._chapters || pack.chapters || []).find(c => c.id === chId)) : null;
+  const chLabel = ch ? ((ch.icon ? ch.icon + ' ' : '') + ch.name) : 'Practice';
+
+  const link = (label, fn) =>
+    `<button class="text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-200 hover:underline font-medium whitespace-nowrap transition-colors" onclick="${fn}">${label}</button>` +
+    `<span class="text-gray-300 dark:text-gray-600 mx-1.5 select-none">›</span>`;
+  const curr = label =>
+    `<span class="text-gray-700 dark:text-gray-300 font-semibold whitespace-nowrap">${label}</span>`;
+
+  let parts = link(`Grade ${grade}`, `showScreen('subject-select')`);
+
+  if (screenId === 'dashboard') {
+    parts += curr(packLabel);
+  } else if (['chapter-select','syllabus','analytics','exam-config'].includes(screenId)) {
+    const label = screenId === 'syllabus' ? 'Syllabus' : screenId === 'analytics' ? 'Analytics' : screenId === 'exam-config' ? 'Exam' : 'Chapters';
+    parts += link(packLabel, `showScreen('dashboard')`) + curr(label);
+  } else if (screenId === 'practice') {
+    parts += link(packLabel, `showScreen('dashboard')`) + link('Chapters', `showScreen('chapter-select')`) + curr(chLabel);
+  } else if (screenId === 'exam') {
+    parts += link(packLabel, `showScreen('dashboard')`) + curr('Exam in progress');
+  } else {
+    bar.classList.add('hidden'); return;
+  }
+
+  inner.innerHTML = parts;
+  bar.classList.remove('hidden');
 }
 
 // back buttons
@@ -1002,11 +1047,12 @@ function renderChapterSelect() {
   const grid = document.getElementById('chapter-grid');
   grid.innerHTML = CHAPTERS.map(ch => {
     const pct = getChapterPct(ch.id);
-    const c = DB.chapters[ch.id] || { attempted: 0, correct: 0 };
+    const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
+    const partLabel = ch.part != null ? `Part ${ch.part} · ` : '';
     return `<button class="chapter-card" onclick="startChapterDirect('${ch.id}')">
       <div class="text-3xl mb-2">${ch.icon}</div>
       <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">${ch.name}</div>
-      <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">Part ${ch.part} · ${c.attempted} attempted</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">${partLabel}${c.attempted} attempted</div>
       <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${pct}%;background:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}"></div></div>
       <div class="text-xs mt-1 font-medium" style="color:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}">${pct}% mastery</div>
     </button>`;
@@ -1092,13 +1138,16 @@ function generatePrintablePaper() {
   const year = new Date().getFullYear();
 
   // Build pools: Section A (Q1-30 mixed difficulty), Section B (Q31-40 hardest)
-  const secAPool = shuffle(STATIC_QUESTIONS.filter(q => q.difficulty <= 3));
-  const secBPool = shuffle(STATIC_QUESTIONS.filter(q => q.difficulty === 4));
+  // Filter by the active subject's chapters so Science exam doesn't pull maths questions
+  const _activeChs = new Set(CHAPTERS.map(c => c.id));
+  const _subjectQs = STATIC_QUESTIONS.filter(q => _activeChs.has(q.chapterId));
+  const secAPool = shuffle(_subjectQs.filter(q => q.difficulty <= 3));
+  const secBPool = shuffle(_subjectQs.filter(q => q.difficulty === 4));
 
   // Ensure chapter spread for Section A
   const secA = [];
   const usedIds = new Set();
-  const chapters = [...new Set(STATIC_QUESTIONS.map(q => q.chapterId))];
+  const chapters = [...new Set(_subjectQs.map(q => q.chapterId))];
   // 1-2 questions per chapter first pass
   for (const ch of chapters) {
     const pick = secAPool.find(q => q.chapterId === ch && !usedIds.has(q.id));
@@ -1122,7 +1171,7 @@ function generatePrintablePaper() {
   }
   // Top up if needed from L3
   if (secB.length < 10) {
-    for (const q of shuffle(STATIC_QUESTIONS.filter(q => q.difficulty === 3))) {
+    for (const q of shuffle(_subjectQs.filter(q => q.difficulty === 3))) {
       if (secB.length >= 10) break;
       if (!usedB.has(q.id) && !usedIds.has(q.id)) { secB.push(q); usedB.add(q.id); }
     }
@@ -1852,7 +1901,7 @@ function renderAnalytics() {
   document.getElementById('a-exams').textContent = DB.stats.examCount;
 
   document.getElementById('analytics-chapters').innerHTML = CHAPTERS.map(ch => {
-    const c = DB.chapters[ch.id] || { attempted: 0, correct: 0 };
+    const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
     const p = c.attempted ? Math.round(c.correct/c.attempted*100) : 0;
     const col = p>=80?'#22c55e':p>=50?'#f59e0b':'#ef4444';
     return `<div>
@@ -1902,13 +1951,12 @@ function renderSyllabus() {
   if (!list) return;
 
   list.innerHTML = CHAPTERS.map(ch => {
-    const syl = SYLLABUS[ch.id];
+    const syl = (typeof SYLLABUS !== 'undefined') ? SYLLABUS[ch.id] : null;
     const subsections = syl ? syl.subsections : [];
     const chPct = getChapterPct(ch.id);
     const chColor = chPct >= 80 ? '#22c55e' : chPct >= 50 ? '#f59e0b' : '#3b82f6';
 
     const subsHTML = subsections.map(sub => {
-      // Count questions tagged with this subsection
       const qCount = STATIC_QUESTIONS.filter(q =>
         q.chapterId === ch.id && q.subsection === sub.id
       ).length;
@@ -1930,13 +1978,18 @@ function renderSyllabus() {
       </div>`;
     }).join('');
 
+    // For non-maths subjects there are no SYLLABUS subsections — show the chapter description instead
+    const bodyHTML = subsHTML || (ch.syllabus
+      ? `<p class="text-sm text-gray-600 dark:text-gray-400 py-3 leading-relaxed">${ch.syllabus}</p>`
+      : '<p class="text-sm text-gray-400 py-3">No subsections defined yet.</p>');
+
     return `<div class="bg-white dark:bg-gray-800 rounded-2xl shadow overflow-hidden">
       <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-700 cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
         <div class="flex items-center gap-3">
           <span class="text-2xl">${ch.icon}</span>
           <div>
             <span class="font-bold text-gray-800 dark:text-white">${ch.name}</span>
-            <span class="ml-2 text-xs text-gray-400">Part ${ch.part}</span>
+            ${ch.part != null ? `<span class="ml-2 text-xs text-gray-400">Part ${ch.part}</span>` : ''}
           </div>
         </div>
         <div class="flex items-center gap-3">
@@ -1946,7 +1999,7 @@ function renderSyllabus() {
           <span class="text-gray-400 text-sm">▾</span>
         </div>
       </div>
-      <div class="px-5 py-1">${subsHTML || '<p class="text-sm text-gray-400 py-3">No subsections defined yet.</p>'}</div>
+      <div class="px-5 py-1">${bodyHTML}</div>
     </div>`;
   }).join('');
 }
