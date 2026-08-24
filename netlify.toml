@@ -43,3 +43,8 @@
   from   = "/api/set-pin"
   to     = "/.netlify/functions/set-pin"
   status = 200
+
+[[redirects]]
+  from   = "/api/create-user"
+  to     = "/.netlify/functions/create-user"
+  status = 200

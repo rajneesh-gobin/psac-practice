@@ -23,10 +23,12 @@ const AdminPanel = (() => {
     await loadStats();
     // Show super-admin-only tabs
     const isSA = typeof Auth !== 'undefined' && Auth.isSuperAdmin?.();
-    const rolesBtn = document.getElementById('admin-tab-roles-btn');
-    const plansBtn = document.getElementById('admin-tab-plans-btn');
-    if (rolesBtn) rolesBtn.classList.toggle('hidden', !isSA);
-    if (plansBtn) plansBtn.classList.toggle('hidden', !isSA);
+    const rolesBtn  = document.getElementById('admin-tab-roles-btn');
+    const plansBtn  = document.getElementById('admin-tab-plans-btn');
+    const createBtn = document.getElementById('admin-tab-create-btn');
+    if (rolesBtn)  rolesBtn.classList.toggle('hidden', !isSA);
+    if (plansBtn)  plansBtn.classList.toggle('hidden', !isSA);
+    if (createBtn) createBtn.classList.toggle('hidden', !isSA);
   }
 
   // ── Tab switching ───────────────────────────
@@ -499,5 +501,99 @@ const AdminPanel = (() => {
     `).join('');
   }
 
-  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, loadRoles, setRole, loadPlans, togglePlan, assignPlan };
+  // ── Create pre-activated account (super admin only) ───────────
+  function _elCA(id) { return document.getElementById(id); }
+
+  function toggleFamilyField() {
+    const role = _elCA('ca-role')?.value;
+    const row  = _elCA('ca-family-row');
+    if (row) row.classList.toggle('hidden', role !== 'parent');
+  }
+
+  function genPassword() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!';
+    const pwd   = Array.from({ length: 10 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+    const el    = _elCA('ca-password');
+    if (el) { el.value = pwd; el.select(); }
+  }
+
+  let _lastCreated = null;
+
+  async function createAccount() {
+    const errEl  = _elCA('ca-error');
+    const resEl  = _elCA('ca-result');
+    const resBod = _elCA('ca-result-body');
+    if (errEl)  { errEl.textContent = ''; errEl.classList.add('hidden'); }
+    if (resEl)  resEl.classList.add('hidden');
+
+    const name    = (_elCA('ca-name')?.value     || '').trim();
+    const email   = (_elCA('ca-email')?.value    || '').trim();
+    const pwd     = (_elCA('ca-password')?.value || '').trim();
+    const role    = _elCA('ca-role')?.value    || 'parent';
+    const plan    = _elCA('ca-plan')?.value    || 'free';
+    const family  = (_elCA('ca-family')?.value  || '').trim();
+    const note    = (_elCA('ca-note')?.value    || '').trim();
+
+    if (!name)            { _showErrCA(errEl, 'Full name is required.'); return; }
+    if (!email.includes('@')) { _showErrCA(errEl, 'Valid email is required.'); return; }
+    if (pwd.length < 6)   { _showErrCA(errEl, 'Password must be at least 6 characters.'); return; }
+
+    const btn = document.querySelector('[onclick="AdminPanel.createAccount()"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Creating…'; }
+
+    try {
+      const session = await _sb.auth.getSession();
+      const jwt     = session?.data?.session?.access_token;
+      if (!jwt) { _showErrCA(errEl, 'Not logged in — please refresh.'); return; }
+
+      const res  = await fetch('/api/create-user', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
+        body:    JSON.stringify({ email, password: pwd, full_name: name, role, plan_id: plan, family_name: family, note }),
+      });
+      const data = await res.json();
+
+      if (!data.ok) { _showErrCA(errEl, data.error || 'Could not create account.'); return; }
+
+      _lastCreated = { name, email, password: pwd, role, plan, family_code: data.family_code };
+
+      if (resBod) resBod.innerHTML = [
+        `Name        : ${name}`,
+        `Email       : ${email}`,
+        `Password    : ${pwd}`,
+        `Role        : ${role}`,
+        `Plan        : ${plan}`,
+        data.family_code ? `Family Code : ${data.family_code}` : null,
+      ].filter(Boolean).map(l => `<div>${l}</div>`).join('');
+
+      if (resEl) resEl.classList.remove('hidden');
+      toast('Account created! 🎉', 2500);
+
+      // Reset form
+      ['ca-name','ca-email','ca-password','ca-family','ca-note'].forEach(id => {
+        const el = _elCA(id); if (el) el.value = '';
+      });
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '🎁 Create Account'; }
+    }
+  }
+
+  function copyAccountDetails() {
+    if (!_lastCreated) return;
+    const text = Object.entries(_lastCreated)
+      .filter(([,v]) => v)
+      .map(([k,v]) => `${k}: ${v}`)
+      .join('\n');
+    navigator.clipboard?.writeText(text).then(() => toast('Copied! 📋', 1500));
+  }
+
+  function _showErrCA(el, msg) {
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    const btn = document.querySelector('[onclick="AdminPanel.createAccount()"]');
+    if (btn) { btn.disabled = false; btn.textContent = '🎁 Create Account'; }
+  }
+
+  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, loadRoles, setRole, loadPlans, togglePlan, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails };
 })();
