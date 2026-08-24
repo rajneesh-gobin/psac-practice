@@ -71,3 +71,66 @@ STATIC_QUESTIONS.push(
     explanation:'A <b>cone</b> has a circular base, 1 curved lateral surface and 1 apex (point) at the top. It has 2 faces (1 flat circle + 1 curved), 1 edge and 1 vertex. Examples: ice cream cone, party hat, traffic cone.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4m-geo-011', chapterId:'g4-geometry', difficulty:1,
+    question:'An angle that is LESS THAN 90° is called:',
+    options:['A right angle','An obtuse angle','An acute angle','A reflex angle'],
+    answer:'An acute angle',
+    hint:'"Acute" means sharp — these are small, pointy angles.',
+    explanation:'An <b>acute angle</b> is any angle less than 90°. A right angle is exactly 90°. An obtuse angle is between 90° and 180°. A reflex angle is more than 180°. MIE Grade 4: classify angles as acute, right, obtuse.' }),
+
+  makeMCQ({ id:'g4m-geo-012', chapterId:'g4-geometry', difficulty:1,
+    question:'An angle of 135° is best described as:',
+    options:['Acute','Right','Obtuse','Reflex'],
+    answer:'Obtuse',
+    hint:'Is 135° between 90° and 180°?',
+    explanation:'135° is between 90° and 180°, so it is an <b>obtuse angle</b>. Memory tip: Obtuse = Over 90° but Under 180°.' }),
+
+  makeMCQ({ id:'g4m-geo-013', chapterId:'g4-geometry', difficulty:2,
+    question:'A triangle with ALL THREE sides EQUAL is called:',
+    options:['Scalene','Isosceles','Equilateral','Right-angled'],
+    answer:'Equilateral',
+    hint:'"Equi" means equal, "lateral" means sides.',
+    explanation:'An <b>equilateral triangle</b> has all three sides equal and all three angles equal (each 60°). An isosceles triangle has two equal sides. A scalene triangle has no equal sides.' }),
+
+  makeNum({ id:'g4m-geo-014', chapterId:'g4-geometry', difficulty:2,
+    question:'What is the PERIMETER of a square with side length 9 cm?',
+    answer:'36', acceptableAnswers:['36','36 cm'],
+    hint:'A square has 4 equal sides. Perimeter = 4 × side length.',
+    explanation:'Perimeter = 4 × 9 cm = <b>36 cm</b>. Perimeter is the total distance around a shape (sum of all side lengths). For a square: P = 4 × side.' }),
+
+  makeNum({ id:'g4m-geo-015', chapterId:'g4-geometry', difficulty:2,
+    question:'A rectangle is 8 cm long and 5 cm wide. What is its PERIMETER (in cm)?',
+    answer:'26', acceptableAnswers:['26','26 cm'],
+    hint:'Perimeter of a rectangle = 2 × (length + width).',
+    explanation:'P = 2 × (8 + 5) = 2 × 13 = <b>26 cm</b>. Or: add all four sides — 8+5+8+5=26. Either method works.' }),
+
+  makeTF({ id:'g4m-geo-016', chapterId:'g4-geometry', difficulty:2,
+    question:'A SQUARE is a special type of RECTANGLE.',
+    answer:true,
+    hint:'Does a square have all the properties of a rectangle (4 right angles, 2 pairs of equal parallel sides)?',
+    explanation:'<b>True.</b> A square satisfies every property of a rectangle (4 right angles, opposite sides parallel and equal) AND has all four sides equal. Therefore it is a special rectangle.' }),
+
+  makeMCQ({ id:'g4m-geo-017', chapterId:'g4-geometry', difficulty:2,
+    question:'How many LINES OF SYMMETRY does a square have?',
+    options:['1','2','3','4'],
+    answer:'4',
+    hint:'A line of symmetry folds the shape so both halves match perfectly. Try horizontal, vertical and both diagonal folds.',
+    explanation:'A square has <b>4 lines of symmetry</b>: 1 horizontal, 1 vertical and 2 diagonal lines. A rectangle has only 2 (horizontal and vertical — the diagonals do NOT work for a non-square rectangle).' }),
+
+  makeNum({ id:'g4m-geo-018', chapterId:'g4-geometry', difficulty:3,
+    question:'A rectangular garden is 12 m long and 7 m wide. What is the TOTAL LENGTH of the path that runs around the outside (perimeter) in metres?',
+    answer:'38', acceptableAnswers:['38','38 m'],
+    hint:'Perimeter = 2 × (length + width) = 2 × (12 + 7).',
+    explanation:'P = 2 × (12 + 7) = 2 × 19 = <b>38 m</b>. Real-life perimeter: fencing a garden, framing a picture, or marking out a field.' }),
+
+  makeMCQ({ id:'g4m-geo-019', chapterId:'g4-geometry', difficulty:4,
+    question:'Priya fences a rectangular field 30 m long and 15 m wide. Fencing costs Rs 50 per metre. What is the TOTAL COST of the fence?',
+    options:['Rs 2,250','Rs 3,750','Rs 4,500','Rs 22,500'],
+    answer:'Rs 4,500',
+    hint:'Step 1: find the perimeter. Step 2: multiply by the cost per metre.',
+    explanation:'Perimeter = 2 × (30 + 15) = 2 × 45 = 90 m. Cost = 90 × Rs 50 = <b>Rs 4,500</b>. Two-step geometry word problem: calculate perimeter, then apply unit cost.' })
+
+);

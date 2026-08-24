@@ -66,3 +66,63 @@ STATIC_QUESTIONS.push(
     explanation:'Rice: 3 × Rs 75 = Rs 225. Flour: 2 × Rs 48 = Rs 96. Total = 225 + 96 = <b>Rs 321</b>. This is a two-step word problem — a Level 3 skill in MIE Grade 4.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g4m-ops-011', chapterId:'g4-four-ops', difficulty:1,
+    question:'Calculate: 6 × 8',
+    answer:'48', acceptableAnswers:['48'],
+    hint:'Use your times tables: 6 groups of 8.',
+    explanation:'6 × 8 = <b>48</b>. Recall: 8×6=48 too — multiplication is commutative. MIE Grade 4 requires fluency with multiplication tables up to 10×10.' }),
+
+  makeNum({ id:'g4m-ops-012', chapterId:'g4-four-ops', difficulty:2,
+    question:'Calculate: 47 × 6',
+    answer:'282', acceptableAnswers:['282'],
+    hint:'Multiply units first: 7×6=42 (write 2, carry 4). Then tens: 4×6=24, plus 4 carry = 28.',
+    explanation:'47 × 6: Units 7×6=42 (write 2, carry 4). Tens 4×6=24 + 4=28. Answer: <b>282</b>. Multiply each digit by 6 from right to left, carrying when needed.' }),
+
+  makeNum({ id:'g4m-ops-013', chapterId:'g4-four-ops', difficulty:2,
+    question:'Calculate: 325 × 4',
+    answer:'1300', acceptableAnswers:['1300','1,300'],
+    hint:'Multiply each digit by 4: units first, then tens, then hundreds.',
+    explanation:'325 × 4: Units 5×4=20 (write 0, carry 2). Tens 2×4=8+2=10 (write 0, carry 1). Hundreds 3×4=12+1=13. Answer: <b>1,300</b>.' }),
+
+  makeMCQ({ id:'g4m-ops-014', chapterId:'g4-four-ops', difficulty:1,
+    question:'What is the INVERSE (opposite) operation of multiplication?',
+    options:['Addition','Subtraction','Division','Nothing'],
+    answer:'Division',
+    hint:'If 3 × 4 = 12, which operation takes you back to 3 or 4?',
+    explanation:'The inverse of multiplication is <b>division</b>. If 3 × 4 = 12, then 12 ÷ 4 = 3 and 12 ÷ 3 = 4. Use inverse operations to check answers: 1,300 ÷ 4 = 325 confirms 325 × 4 = 1,300.' }),
+
+  makeNum({ id:'g4m-ops-015', chapterId:'g4-four-ops', difficulty:2,
+    question:'Calculate: 98 ÷ 7',
+    answer:'14', acceptableAnswers:['14'],
+    hint:'Try 7 × 10 = 70, 7 × 14 = 98. What times 7 equals 98?',
+    explanation:'98 ÷ 7 = <b>14</b>. Check: 7 × 14 = 98 ✓. Short method: 70 ÷ 7 = 10; remaining 28 ÷ 7 = 4; total = 14.' }),
+
+  makeNum({ id:'g4m-ops-016', chapterId:'g4-four-ops', difficulty:2,
+    question:'Calculate: 175 ÷ 5',
+    answer:'35', acceptableAnswers:['35'],
+    hint:'100 ÷ 5 = 20 and 75 ÷ 5 = 15. Add the two parts.',
+    explanation:'100 ÷ 5 = 20. 75 ÷ 5 = 15. Total = 20 + 15 = <b>35</b>. Check: 5 × 35 = 175 ✓.' }),
+
+  makeNum({ id:'g4m-ops-017', chapterId:'g4-four-ops', difficulty:2,
+    question:'A school has 9 classrooms. Each classroom has 32 pupils. How many pupils are there in TOTAL?',
+    answer:'288', acceptableAnswers:['288'],
+    hint:'Multiply: 9 × 32. Try 9 × 30 = 270, then 9 × 2 = 18. Add.',
+    explanation:'9 × 32 = 9×30 + 9×2 = 270 + 18 = <b>288</b>. The distributive property: 9×(30+2) = (9×30)+(9×2) = 270+18 = 288.' }),
+
+  makeMCQ({ id:'g4m-ops-018', chapterId:'g4-four-ops', difficulty:3,
+    question:'A minivan carries 8 passengers. How many minivans are needed to carry 63 people, with NO ONE left behind?',
+    options:['7','8','9','63'],
+    answer:'8',
+    hint:'63 ÷ 8 = 7 remainder 7. What does the remainder mean for the number of vans?',
+    explanation:'63 ÷ 8 = 7 remainder 7. Seven vans carry 56 people; 7 more still need to travel. One extra van is needed. Total: <b>8 vans</b>. When a remainder means someone is left out, always round UP the number of groups.' }),
+
+  makeNum({ id:'g4m-ops-019', chapterId:'g4-four-ops', difficulty:4,
+    question:'A baker bakes 6 trays of biscuits with 24 biscuits per tray. She packs them into bags of 9. How many COMPLETE bags can she fill?',
+    answer:'16', acceptableAnswers:['16'],
+    hint:'Step 1: 6 × 24 = total biscuits. Step 2: divide total by 9.',
+    explanation:'Total biscuits: 6 × 24 = 144. Bags: 144 ÷ 9 = <b>16 complete bags</b> with 0 left over. Check: 9 × 16 = 144 ✓. Two-step word problem: multiply first, then divide.' })
+
+);

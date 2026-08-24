@@ -69,3 +69,72 @@ STATIC_QUESTIONS.push(
     explanation:'4,536 + 2,718: Units 6+8=14 (write 4, carry 1). Tens 3+1+1=5. Hundreds 5+7=12 (write 2, carry 1). Thousands 4+2+1=7. Answer: <b>7,254</b>.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4m-num-011', chapterId:'g4-numeration', difficulty:1,
+    question:'What is 2,847 rounded to the NEAREST 10?',
+    options:['2,840','2,850','2,800','2,900'],
+    answer:'2,850',
+    hint:'Look at the units digit (7). If it is 5 or more, round up the tens.',
+    explanation:'The units digit is 7. Since 7 ≥ 5, we round UP the tens digit: 4 tens becomes 5 tens. So 2,847 rounds to <b>2,850</b>. Rule: if the units digit is 0–4, round down; if 5–9, round up.' }),
+
+  makeMCQ({ id:'g4m-num-012', chapterId:'g4-numeration', difficulty:1,
+    question:'What is 5,365 rounded to the NEAREST 100?',
+    options:['5,300','5,400','5,000','5,360'],
+    answer:'5,400',
+    hint:'Look at the tens digit (6). If it is 5 or more, round the hundreds up.',
+    explanation:'The tens digit is 6. Since 6 ≥ 5, we round UP the hundreds digit: 3 hundreds becomes 4 hundreds. So 5,365 rounds to <b>5,400</b>. The tens and units become zero when rounding to the nearest 100.' }),
+
+  makeNum({ id:'g4m-num-013', chapterId:'g4-numeration', difficulty:1,
+    question:'What is 100 LESS than 7,300?',
+    answer:'7200', acceptableAnswers:['7200','7,200'],
+    hint:'Subtract 100 from 7,300. The hundreds digit decreases by 1.',
+    explanation:'7,300 − 100 = <b>7,200</b>. Subtracting 100 decreases the hundreds digit by 1; all other digits remain the same.' }),
+
+  makeNum({ id:'g4m-num-014', chapterId:'g4-numeration', difficulty:2,
+    question:'Complete the number pattern: 3,000 → 2,750 → 2,500 → _____ → 2,000',
+    answer:'2250', acceptableAnswers:['2250','2,250'],
+    hint:'Find the rule: 3,000 − 2,750 = 250. The pattern SUBTRACTS 250 each time.',
+    explanation:'Each step subtracts 250: 3,000 → 2,750 → 2,500 → <b>2,250</b> → 2,000. Confirm: 2,250 − 250 = 2,000 ✓. Number patterns can count up or down by any amount.' }),
+
+  makeMCQ({ id:'g4m-num-015', chapterId:'g4-numeration', difficulty:1,
+    question:'Which numerals represent "six thousand, seven hundred and forty"?',
+    options:['6,074','6,704','6,740','6,470'],
+    answer:'6,740',
+    hint:'Six thousand = 6,000. Seven hundred = 700. Forty = 40. No units.',
+    explanation:'6,000 + 700 + 40 + 0 = <b>6,740</b>. Take care when a digit is zero — do not leave out its place.' }),
+
+  makeMCQ({ id:'g4m-num-016', chapterId:'g4-numeration', difficulty:2,
+    question:'Which number has 5 thousands, 3 hundreds, 0 tens and 2 units?',
+    options:['5,032','5,302','5,320','5,023'],
+    answer:'5,302',
+    hint:'Build digit by digit: Th=5, H=3, T=0, U=2.',
+    explanation:'Thousands=5, Hundreds=3, Tens=0, Units=2 → <b>5,302</b>. The zero in the tens place is a placeholder — omitting it would change the number entirely.' }),
+
+  makeTF({ id:'g4m-num-017', chapterId:'g4-numeration', difficulty:1,
+    question:'The number 9,999 is a 4-digit number.',
+    answer:true,
+    hint:'Count the digits in 9,999.',
+    explanation:'<b>True.</b> 9,999 has four digits and is the largest 4-digit number. The next number, 10,000, is the smallest 5-digit number.' }),
+
+  makeMCQ({ id:'g4m-num-018', chapterId:'g4-numeration', difficulty:3,
+    question:'Place these numbers in order from GREATEST to SMALLEST: 4,519 ; 4,951 ; 4,195 ; 4,915',
+    options:[
+      '4,915 ; 4,951 ; 4,519 ; 4,195',
+      '4,951 ; 4,915 ; 4,519 ; 4,195',
+      '4,195 ; 4,519 ; 4,915 ; 4,951',
+      '4,519 ; 4,951 ; 4,195 ; 4,915'
+    ],
+    answer:'4,951 ; 4,915 ; 4,519 ; 4,195',
+    hint:'All have 4 thousands. Compare hundreds: 9 > 5 > 1. Two numbers have 9 hundreds — compare their tens next.',
+    explanation:'All have 4,000. Hundreds: 9 (4,9xx) > 5 (4,5xx) > 1 (4,1xx). The two 9-hundreds numbers: 4,951 has 5 tens and 4,915 has 1 ten, so 4,951 > 4,915. Final order: <b>4,951 ; 4,915 ; 4,519 ; 4,195</b>.' }),
+
+  makeMCQ({ id:'g4m-num-019', chapterId:'g4-numeration', difficulty:4,
+    question:'Priya saves Rs 1,000 every month for 8 months. She then spends Rs 3,500. To the NEAREST HUNDRED RUPEES, how much does she have left?',
+    options:['Rs 4,000','Rs 4,500','Rs 5,000','Rs 3,500'],
+    answer:'Rs 4,500',
+    hint:'Step 1: 1,000 × 8 = total saved. Step 2: subtract 3,500. Step 3: round to nearest 100.',
+    explanation:'Total saved: Rs 1,000 × 8 = Rs 8,000. After spending: Rs 8,000 − Rs 3,500 = Rs 4,500. 4,500 is already a multiple of 100, so it rounds to <b>Rs 4,500</b>.' })
+
+);

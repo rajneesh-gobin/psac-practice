@@ -68,3 +68,70 @@ STATIC_QUESTIONS.push(
     explanation:'1/4 = 2/8. Total drunk = 3/8 + 2/8 = 5/8. Left = 8/8 − 5/8 = <b>3/8 L</b>. This is a two-step fraction word problem — a Level 3 MIE Grade 4 skill.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g4m-frac-011', chapterId:'g4-fractions', difficulty:1,
+    question:'What is 1/4 of 20?',
+    answer:'5', acceptableAnswers:['5'],
+    hint:'Divide 20 by the denominator (4).',
+    explanation:'1/4 of 20 = 20 ÷ 4 = <b>5</b>. "A fraction of a quantity" = divide by the denominator, then multiply by the numerator. For 1/4: just divide by 4.' }),
+
+  makeNum({ id:'g4m-frac-012', chapterId:'g4-fractions', difficulty:1,
+    question:'What is 3/4 of 24?',
+    answer:'18', acceptableAnswers:['18'],
+    hint:'First find 1/4 of 24, then multiply by 3.',
+    explanation:'1/4 of 24 = 24 ÷ 4 = 6. Then 3/4 = 3 × 6 = <b>18</b>. Method: ÷ denominator, × numerator. MIE Grade 4 fractions of quantities.' }),
+
+  makeMCQ({ id:'g4m-frac-013', chapterId:'g4-fractions', difficulty:2,
+    question:'Which fraction is EQUIVALENT to 1/2?',
+    options:['2/6','3/8','4/8','3/5'],
+    answer:'4/8',
+    hint:'Multiply both numerator and denominator of 1/2 by the same number.',
+    explanation:'1/2 × (4/4) = 4/8. Check: 1×4=4 and 2×4=8, so 4/8 = 1/2 ✓. <b>4/8</b> is equivalent to 1/2. Equivalent fractions represent the same amount.' }),
+
+  makeMCQ({ id:'g4m-frac-014', chapterId:'g4-fractions', difficulty:2,
+    question:'A number line goes from 0 to 1. Where would you place 3/5?',
+    options:['Closer to 0','Exactly at the middle','Closer to 1 but not at 1','Exactly at 1'],
+    answer:'Closer to 1 but not at 1',
+    hint:'The midpoint is 1/2 = 2.5/5. Is 3/5 past the midpoint?',
+    explanation:'The midpoint (1/2) = 2.5/5. Since 3/5 > 2.5/5, it is past the halfway point — <b>closer to 1 but not at 1</b>. It is 2/5 from 1 and 3/5 from 0.' }),
+
+  makeNum({ id:'g4m-frac-015', chapterId:'g4-fractions', difficulty:2,
+    question:'Simplify 6/10 to its LOWEST TERMS. (Write as A/B)',
+    answer:'3/5', acceptableAnswers:['3/5'],
+    hint:'Find the HCF of 6 and 10. Divide both by it.',
+    explanation:'HCF of 6 and 10 = 2. 6÷2=3, 10÷2=5. So 6/10 = <b>3/5</b>. A fraction is in lowest terms when its numerator and denominator share no common factor other than 1.' }),
+
+  makeMCQ({ id:'g4m-frac-016', chapterId:'g4-fractions', difficulty:2,
+    question:'Which fraction is GREATER: 2/3 or 3/5?',
+    options:['2/3','3/5','They are equal','Cannot compare'],
+    answer:'2/3',
+    hint:'Convert to the same denominator. LCM of 3 and 5 is 15. So: 2/3 = 10/15 and 3/5 = 9/15.',
+    explanation:'2/3 = 10/15. 3/5 = 9/15. Since 10/15 > 9/15, <b>2/3 > 3/5</b>. To compare fractions with different denominators, convert to equivalent fractions with the same denominator.' }),
+
+  makeNum({ id:'g4m-frac-017', chapterId:'g4-fractions', difficulty:2,
+    question:'Write 0.7 as a FRACTION. (Write as A/B)',
+    answer:'7/10', acceptableAnswers:['7/10'],
+    hint:'0.7 means 7 tenths.',
+    explanation:'0.7 = 7 tenths = <b>7/10</b>. The tenths place is the first digit after the decimal point. MIE Grade 4 connects decimals and fractions with denominator 10.' }),
+
+  makeNum({ id:'g4m-frac-018', chapterId:'g4-fractions', difficulty:3,
+    question:'Riya has 36 marbles. She gives 1/3 to Priya and 1/4 to Dev. How many marbles does Riya have LEFT?',
+    answer:'15', acceptableAnswers:['15'],
+    hint:'Find 1/3 of 36 and 1/4 of 36. Add them. Subtract from 36.',
+    explanation:'1/3 of 36 = 12. 1/4 of 36 = 9. Given away = 12 + 9 = 21. Left = 36 − 21 = <b>15 marbles</b>. Two-step problem: fractions of a quantity, then subtraction.' }),
+
+  makeMCQ({ id:'g4m-frac-019', chapterId:'g4-fractions', difficulty:4,
+    question:'Asha walks 3/4 km to school and the same distance back home each day. Her brother walks 2 km in total each day. Who walks MORE, and by how much?',
+    options:[
+      'Asha — she walks 0.5 km more than her brother',
+      'Her brother — he walks 0.5 km more than Asha',
+      'They walk the same distance',
+      'Her brother — he walks 1/4 km more'
+    ],
+    answer:'Her brother — he walks 0.5 km more than Asha',
+    hint:'Asha\'s total = 3/4 + 3/4 = 6/4. Convert to a decimal or mixed number to compare with 2 km.',
+    explanation:'Asha: 3/4 + 3/4 = 6/4 = 1½ km = 1.5 km. Her brother: 2 km. Difference: 2 − 1.5 = 0.5 km. <b>Her brother walks 0.5 km more</b> than Asha. Converting 3/4 to 0.75 makes comparison easier.' })
+
+);
