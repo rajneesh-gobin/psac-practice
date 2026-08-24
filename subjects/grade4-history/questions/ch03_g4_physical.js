@@ -104,3 +104,74 @@ STATIC_QUESTIONS.push(
     explanation:'Sugar cane grows best on the <b>flat coastal plain and lower slopes</b> where soils are deep and fertile and the land is easy to farm with machinery. Tourist <b>hotels belong on the coast</b> near beaches and lagoons which attract visitors. This shows how physical features of the land influence where different activities take place — a key concept in geography.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4h-phy-011', chapterId:'g4hist-physical', difficulty:1,
+    question:'What is the name of the longest river in Mauritius?',
+    options:['Black River','Grand River North West','Grand River South East','Rivière du Rempart'],
+    answer:'Grand River South East',
+    hint:'Its name tells you both its size (Grand) and where it flows (South East).',
+    explanation:'The <b>Grand River South East</b> is the longest river in Mauritius. Rivers in Mauritius tend to be short and fast-flowing because the island is small and mountainous. The Grand River South East flows from the central plateau towards the south-east coast. Rivers are important for irrigation, hydroelectric power and as freshwater sources.' }),
+
+  makeMCQ({ id:'g4h-phy-012', chapterId:'g4hist-physical', difficulty:1,
+    question:'What is the name of the national park in south-west Mauritius that protects native forests and wildlife?',
+    options:['SSR National Park','Blue Bay Marine Park','Black River Gorges National Park','Pamplemousses Botanical Garden'],
+    answer:'Black River Gorges National Park',
+    hint:'It is named after the famous gorges in the Black River district.',
+    explanation:'<b>Black River Gorges National Park</b> is Mauritius\'s main national park, located in the south-west of the island. It protects the last remaining native forests of Mauritius, including endemic plants and animals like the Pink Pigeon, Echo Parakeet, and Mauritian Flying Fox. It includes the highest peak — Piton de la Petite Rivière Noire (828 m).' }),
+
+  makeMCQ({ id:'g4h-phy-013', chapterId:'g4hist-physical', difficulty:1,
+    question:'Le Morne Brabant in south-west Mauritius was named a UNESCO World Heritage Site. What makes it UNESCO-listed?',
+    options:['It is the tallest mountain in Mauritius','It is a symbol of freedom — enslaved people took refuge there and it is a cultural landscape of slavery and resistance','It has the largest coral reef in Mauritius','It is the oldest fort in Mauritius'],
+    answer:'It is a symbol of freedom — enslaved people took refuge there and it is a cultural landscape of slavery and resistance',
+    hint:'Think about the history of slavery in Mauritius and what happened at Le Morne.',
+    explanation:'<b>Le Morne Brabant</b> is a rugged mountain peninsula where enslaved people took refuge in the 18th and early 19th centuries. According to tradition, when British soldiers came to announce the abolition of slavery (1835), the escaped enslaved people on the mountain, not knowing they were free, jumped to their deaths rather than be re-enslaved. It became a symbol of resistance and freedom, earning <b>UNESCO World Heritage</b> status in 2008.' }),
+
+  makeMCQ({ id:'g4h-phy-014', chapterId:'g4hist-physical', difficulty:2,
+    question:'The trade winds in Mauritius blow from which direction?',
+    options:['North-West','North-East','South-East','South-West'],
+    answer:'South-East',
+    hint:'Mauritius is in the Southern Hemisphere. The dominant trade winds blow from the South-East.',
+    explanation:'Mauritius is influenced by the <b>South-East Trade Winds</b>. These winds blow consistently from the south-east across the Indian Ocean. They bring moisture from the sea and drop rain mainly on the <b>windward (south-east) side</b> of Mauritius, making that side wetter. The opposite (north-west) side is the <b>leeward side</b> and receives much less rainfall.' }),
+
+  makeMCQ({ id:'g4h-phy-015', chapterId:'g4hist-physical', difficulty:2,
+    question:'The windward side of Mauritius receives MORE rainfall than the leeward side. Which side of Mauritius is the WINDWARD side?',
+    options:['North-West (towards Port Louis)','South-East (towards Mahébourg)','The Central Plateau only','The West coast'],
+    answer:'South-East (towards Mahébourg)',
+    hint:'Trade winds blow FROM the South-East. The side that faces the wind is called windward.',
+    explanation:'The <b>South-East side</b> of Mauritius is the <b>windward side</b> — it faces the direction from which the South-East Trade Winds blow. When moist air from the sea hits the mountains, it rises, cools and drops rain on the windward side. The <b>north-west (leeward) side</b> is sheltered and drier. Curepipe and the south-east receive significantly more rain than Port Louis on the north-west.' }),
+
+  makeTF({ id:'g4h-phy-016', chapterId:'g4hist-physical', difficulty:2,
+    question:'Contour lines on a map show the direction in which rivers flow.',
+    answer:false,
+    hint:'What do contour lines actually show?',
+    explanation:'<b>False.</b> Contour lines show the <b>height (elevation) of the land</b> — they connect all points at the same altitude above sea level. Closely spaced contour lines = steep slope. Widely spaced = gentle slope. Rivers flow downhill, and while you can infer flow direction from contour lines, contour lines themselves show height, not river direction.' }),
+
+  makeMCQ({ id:'g4h-phy-017', chapterId:'g4hist-physical', difficulty:3,
+    question:'Where are mangroves typically found in Mauritius?',
+    options:['On the Central Plateau at high altitude','In the middle of the interior forests','Along sheltered coastal areas and river mouths','On mountain peaks and ridges'],
+    answer:'Along sheltered coastal areas and river mouths',
+    hint:'Mangroves are special trees that grow in saltwater or where fresh water meets the sea.',
+    explanation:'<b>Mangroves</b> are salt-tolerant trees that grow in <b>sheltered coastal areas, lagoons, and river mouths</b> where fresh water and salt water mix. In Mauritius, mangroves are found around parts of the coast, particularly in sheltered bays. They are very important: they protect the coastline from erosion, provide nursery habitats for fish, and help filter water.' }),
+
+  makeMCQ({ id:'g4h-phy-018', chapterId:'g4hist-physical', difficulty:3,
+    question:'What is the main natural disaster that threatens Mauritius, especially between November and April?',
+    options:['Earthquake','Volcano eruption','Cyclone (Tropical Storm)','Tsunami'],
+    answer:'Cyclone (Tropical Storm)',
+    hint:'Mauritius is a tropical island in the Indian Ocean. What type of storms form over warm tropical oceans?',
+    explanation:'<b>Cyclones</b> (tropical storms) are the main natural disaster affecting Mauritius. They form over warm Indian Ocean waters, especially between <b>November and April</b> (cyclone season). Cyclones bring very strong winds, heavy rain, flooding and can cause serious damage to crops, buildings and infrastructure. Mauritius has a Meteorological Services station that tracks and warns about cyclones.' }),
+
+  makeMCQ({ id:'g4h-phy-019', chapterId:'g4hist-physical', difficulty:4,
+    question:'Two farmers live on opposite sides of Mauritius. Farmer A lives on the South-East side; Farmer B lives on the North-West side. Farmer A grows rice (needs lots of water) and Farmer B grows sugar cane (tolerates drier conditions). Based on trade winds and rainfall patterns, is this a sensible arrangement?',
+    options:[
+      'No — Farmer A should move to the North-West because rice needs dry conditions',
+      'Yes — the South-East (windward) side receives more rainfall, making it better suited for water-intensive crops like rice; the drier North-West suits sugar cane',
+      'No — both sides of Mauritius have identical rainfall so it makes no difference',
+      'Yes — but only because Farmer A is closer to the sea'
+    ],
+    answer:'Yes — the South-East (windward) side receives more rainfall, making it better suited for water-intensive crops like rice; the drier North-West suits sugar cane',
+    hint:'Recall: which side of Mauritius is wetter? Which crop needs more water?',
+    explanation:'This is a sensible arrangement. The <b>South-East (windward) side</b> receives more rainfall from the South-East Trade Winds — ideal for water-intensive crops like <b>rice</b>. The <b>North-West (leeward) side</b> is drier — better suited for <b>sugar cane</b>, which tolerates less rain. This is an example of how physical geography (rainfall patterns from trade winds) directly influences where different crops are grown.' })
+
+);

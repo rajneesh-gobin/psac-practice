@@ -84,3 +84,79 @@ STATIC_QUESTIONS.push(
     explanation:'Given that the town is <b>far from the nearest hospital</b>, a <b>health centre</b> should be prioritised — medical emergencies (injuries, serious illness) cannot wait for a long journey. While all four services are important needs, the urgency of health emergencies (especially with children present) makes healthcare the most critical first investment.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4h-com-011', chapterId:'g4hist-community', difficulty:1,
+    question:'Which type of community is mainly found along the coast and whose people depend on the sea for their livelihoods?',
+    options:['Rural community','Urban community','Coastal community','Industrial community'],
+    answer:'Coastal community',
+    hint:'Think about where fishermen and people who work in tourism often live.',
+    explanation:'A <b>coastal community</b> is one found along the coast (seashore). People in coastal communities often depend on the sea for their livelihoods — through <b>fishing</b>, <b>tourism</b>, and related activities. In Mauritius, coastal villages like Mahébourg, Grand Baie and Blue Bay are examples of coastal communities.' }),
+
+  makeMCQ({ id:'g4h-com-012', chapterId:'g4hist-community', difficulty:1,
+    question:'What does "interdependence" mean in a community?',
+    options:['People living far away from each other','People depending on one another for goods and services','People being completely independent','People only helping family members'],
+    answer:'People depending on one another for goods and services',
+    hint:'The prefix "inter-" means "between." "Dependence" means relying on something.',
+    explanation:'"<b>Interdependence</b>" means people <b>depending on one another</b>. In a community, the farmer grows food, the doctor provides health care, the teacher educates children, and the bus driver provides transport — they all need each other\'s services. No person in a community can do everything alone. This is why communities form: to work together for mutual benefit.' }),
+
+  makeMCQ({ id:'g4h-com-013', chapterId:'g4hist-community', difficulty:1,
+    question:'Which of the following is a RESPONSIBILITY of a citizen in their community?',
+    options:['Littering on the streets','Keeping the environment clean','Ignoring community problems','Taking services but not contributing'],
+    answer:'Keeping the environment clean',
+    hint:'A responsibility is something you are expected to do for the good of others.',
+    explanation:'Citizens have <b>responsibilities</b> to their community. <b>Keeping the environment clean</b> is one example. Other responsibilities include: paying taxes (which fund schools and hospitals), voting in elections, obeying laws, and participating in community activities. Responsibilities are the duties you owe to your community in return for the services it provides.' }),
+
+  makeMCQ({ id:'g4h-com-014', chapterId:'g4hist-community', difficulty:2,
+    question:'A library where people can borrow books for free is an example of a...',
+    options:['Private service','Social/community service','Commercial service','Personal service'],
+    answer:'Social/community service',
+    hint:'Is a library provided for profit, or for the benefit of the whole community?',
+    explanation:'A <b>library</b> is a <b>social (community) service</b> — it is provided for the benefit of the whole community, usually by the government or a local authority. Other examples of social services include parks, public hospitals, schools, and community centres. These services are available to everyone and are not run for profit.' }),
+
+  makeMCQ({ id:'g4h-com-015', chapterId:'g4hist-community', difficulty:2,
+    question:'Urban communities typically have MORE of which of the following compared to rural communities?',
+    options:['Open farmland and rice fields','Factories, large hospitals, and shopping centres','Fishing boats and nets','Dense forests and wildlife'],
+    answer:'Factories, large hospitals, and shopping centres',
+    hint:'Urban = city. What types of buildings and services are common in cities?',
+    explanation:'<b>Urban communities</b> (towns and cities) typically have more <b>factories, large hospitals, shopping centres, offices, and schools</b> compared to rural areas. They are more densely populated and have more facilities. Rural communities have more open land, farming activity, and natural surroundings. Neither is "better" — both have advantages and disadvantages.' }),
+
+  makeTF({ id:'g4h-com-016', chapterId:'g4hist-community', difficulty:2,
+    question:'People in a community can be completely independent — they do not need to rely on each other.',
+    answer:false,
+    hint:'Think about where your food, water, medicine, and education come from.',
+    explanation:'<b>False.</b> People in communities are <b>interdependent</b> — they rely on each other for goods and services. A farmer needs a doctor when sick; a doctor needs a farmer to grow food; a child needs a teacher; a teacher needs a builder to build the school. Nobody in a community can provide everything they need on their own. Interdependence is one of the key features of community life.' }),
+
+  makeMCQ({ id:'g4h-com-017', chapterId:'g4hist-community', difficulty:3,
+    question:'Which occupation would you MOST LIKELY find in a coastal community in Mauritius?',
+    options:['Tea planter','Sugar cane farmer','Commercial fisherman','Coal miner'],
+    answer:'Commercial fisherman',
+    hint:'Coastal communities are found near the sea. What work relies on the sea?',
+    explanation:'A <b>commercial fisherman</b> is the most typical occupation for a coastal community — they catch fish from the sea to sell in markets. Tea planters work in highland areas. Sugar cane farmers work mainly on the lowland plains and central plateau. Coal mining does not exist in Mauritius.' }),
+
+  makeMCQ({ id:'g4h-com-018', chapterId:'g4hist-community', difficulty:3,
+    question:'What does it mean to be a "good citizen" in your community?',
+    options:[
+      'Only following rules when someone is watching',
+      'Taking all the community resources for yourself',
+      'Contributing to the community, respecting others, and fulfilling your responsibilities',
+      'Avoiding contact with your neighbours'
+    ],
+    answer:'Contributing to the community, respecting others, and fulfilling your responsibilities',
+    hint:'A good citizen thinks about both their rights AND their responsibilities.',
+    explanation:'A <b>good citizen</b> <b>contributes to</b> their community, <b>respects others</b>, and fulfils their <b>responsibilities</b> — such as keeping public areas clean, voting, paying taxes, and helping neighbours in need. Good citizenship is about balancing your rights (what you receive) with your duties (what you give back). Being a good citizen makes the community better for everyone.' }),
+
+  makeMCQ({ id:'g4h-com-019', chapterId:'g4hist-community', difficulty:4,
+    question:'A cyclone damages a village in Mauritius — houses are destroyed, roads are blocked, and there is no electricity. The villagers include farmers, fishermen, teachers, a nurse, and a shopkeeper. Which approach would BEST help the community recover?',
+    options:[
+      'Each family should work alone and rebuild only their own house before helping others',
+      'Only the government should help — villagers should wait for officials to arrive',
+      'Community members should pool their skills and resources together — the nurse treats injuries, farmers share food, teachers organise children, and all work together to clear roads',
+      'The village should be abandoned and everyone should move to the city'
+    ],
+    answer:'Community members should pool their skills and resources together — the nurse treats injuries, farmers share food, teachers organise children, and all work together to clear roads',
+    hint:'Think about interdependence — how does each person\'s skills help the whole community recover?',
+    explanation:'<b>Working together</b> using each person\'s skills and resources is the best approach. This is <b>interdependence in action</b>: the nurse uses medical skills, farmers share food, the shopkeeper provides supplies, teachers keep children safe and organised, fishermen can navigate blocked areas. Communities are strongest when everyone contributes according to their abilities — especially in a crisis.' })
+
+);

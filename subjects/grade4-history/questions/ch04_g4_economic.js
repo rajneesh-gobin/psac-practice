@@ -104,3 +104,79 @@ STATIC_QUESTIONS.push(
     explanation:'This illustrates a real <b>trade-off</b> in land use decisions: building a hotel creates <b>tourist jobs and income</b>, but it <b>removes agricultural land and displaces farmers</b> who depend on sugar cane for their livelihoods. Good decision-making requires weighing the economic, social and environmental impacts — not just short-term gains.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4h-eco-011', chapterId:'g4hist-economic', difficulty:1,
+    question:'What does "ICT" stand for in the context of Mauritius\'s economy?',
+    options:['Indian Cultural Tourism','International Coffee Trade','Information and Communication Technology','Island Commercial Textiles'],
+    answer:'Information and Communication Technology',
+    hint:'ICT includes computers, internet, mobile phones, and digital services.',
+    explanation:'"<b>ICT</b>" stands for <b>Information and Communication Technology</b>. This includes computers, internet services, software, mobile technology, and digital communications. Mauritius has developed a strong ICT sector and is often called "the cyber island of Africa." ICT is now considered one of the newer pillars of the Mauritian economy alongside the traditional pillars of sugar, tourism, and textiles.' }),
+
+  makeMCQ({ id:'g4h-eco-012', chapterId:'g4hist-economic', difficulty:1,
+    question:'What does it mean to EXPORT a product?',
+    options:['To buy goods from another country','To sell goods TO another country','To make goods for use within Mauritius','To store goods in a warehouse'],
+    answer:'To sell goods TO another country',
+    hint:'"Ex-" means out. Exporting = sending goods OUT of the country.',
+    explanation:'To <b>export</b> means to <b>sell goods or services to another country</b>. Mauritius exports sugar, textiles, fish, and tourism services. The opposite is <b>importing</b> — buying goods from another country. Mauritius imports more than it exports (e.g. fuel, machinery, food), which means it has a trade deficit. Exports earn foreign currency for the country.' }),
+
+  makeMCQ({ id:'g4h-eco-013', chapterId:'g4hist-economic', difficulty:1,
+    question:'Rum is produced in Mauritius. What is it made from?',
+    options:['Sugar cane juice and molasses','Coconut milk','Tea leaves','Sea water'],
+    answer:'Sugar cane juice and molasses',
+    hint:'Rum is a by-product of the sugar industry. What is left over after making sugar?',
+    explanation:'<b>Rum</b> is made from <b>sugar cane juice and/or molasses</b> (the dark syrupy by-product left after sugar is extracted from sugar cane). Mauritius produces high-quality rum and has several famous rum distilleries. This shows how the sugar industry has diversified — the same crop (sugar cane) produces sugar, molasses, and rum, adding more value to a single agricultural product.' }),
+
+  makeMCQ({ id:'g4h-eco-014', chapterId:'g4hist-economic', difficulty:2,
+    question:'A farmer in Mauritius grows just enough food for their own family and does not sell any surplus. This is an example of...',
+    options:['Commercial farming','Subsistence farming','Industrial farming','Export farming'],
+    answer:'Subsistence farming',
+    hint:'"Subsistence" means just enough to survive. Who does this farmer grow food for?',
+    explanation:'<b>Subsistence farming</b> means growing food <b>mainly for your own family\'s use</b>, with little or no surplus to sell. The opposite is <b>commercial farming</b>, where crops are grown to sell on a large scale (like sugar cane estates in Mauritius). In developing countries, many small farmers practise subsistence farming.' }),
+
+  makeMCQ({ id:'g4h-eco-015', chapterId:'g4hist-economic', difficulty:2,
+    question:'A company from France builds a hotel in Mauritius and creates 200 local jobs. This is an example of...',
+    options:['Subsistence farming','Domestic investment','Foreign direct investment (FDI)','Economic isolation'],
+    answer:'Foreign direct investment (FDI)',
+    hint:'The money comes FROM another country (France) and is invested IN Mauritius.',
+    explanation:'<b>Foreign Direct Investment (FDI)</b> is when a company from one country invests money in a business in another country. Mauritius actively encourages FDI because it creates jobs, brings new technology, and boosts the economy. Tourism, banking, and ICT sectors in Mauritius have all benefited from significant foreign investment.' }),
+
+  makeTF({ id:'g4h-eco-016', chapterId:'g4hist-economic', difficulty:2,
+    question:'Mauritius exports more goods than it imports.',
+    answer:false,
+    hint:'Think about what Mauritius produces locally versus what it needs to buy from other countries (e.g. fuel, cars, electronics).',
+    explanation:'<b>False.</b> Mauritius <b>imports more than it exports</b>. Mauritius needs to import many goods it cannot produce locally — such as <b>oil/fuel, machinery, vehicles, electronics, and much of its food</b>. The country earns foreign exchange mainly through tourism, textile exports, sugar, and financial services, but spending on imports typically exceeds export earnings. This is called a <b>trade deficit</b>.' }),
+
+  makeMCQ({ id:'g4h-eco-017', chapterId:'g4hist-economic', difficulty:3,
+    question:'Economic diversification means...',
+    options:['Depending on one major crop for all income','Developing many different types of industries so the economy doesn\'t depend on just one sector','Exporting only one product to multiple countries','Closing down old industries'],
+    answer:'Developing many different types of industries so the economy doesn\'t depend on just one sector',
+    hint:'Think about the risks of putting all your eggs in one basket.',
+    explanation:'<b>Economic diversification</b> means <b>developing several different industries</b> so that the country\'s economy does not rely on just one sector. Mauritius diversified from sugar (its original main income) to add <b>tourism, textiles, financial services, ICT</b>, and more. If one sector struggles (e.g. a bad sugar harvest), the others keep the economy going.' }),
+
+  makeMCQ({ id:'g4h-eco-018', chapterId:'g4hist-economic', difficulty:3,
+    question:'Which TWO sectors are considered NEWER pillars of the Mauritian economy, added more recently to the traditional three (sugar, tourism, textiles)?',
+    options:[
+      'Fishing and cotton',
+      'ICT (Information Technology) and Financial Services',
+      'Coal mining and oil refining',
+      'Tea and coffee exports'
+    ],
+    answer:'ICT (Information Technology) and Financial Services',
+    hint:'One uses computers and the internet; the other involves banking, insurance, and investments.',
+    explanation:'<b>ICT (Information and Communication Technology)</b> and <b>Financial Services</b> (banking, insurance, investment management) are the newer pillars of the Mauritian economy. Mauritius has positioned itself as a business hub for Africa and Asia through its strong legal and financial systems. ICT is growing rapidly, with Mauritius sometimes called "the Cyber Island of Africa."' }),
+
+  makeMCQ({ id:'g4h-eco-019', chapterId:'g4hist-economic', difficulty:4,
+    question:'A developer wants to convert a large sugar cane estate into an ICT business park. The estate employs 300 farmers; the ICT park would employ 500 tech workers. What is the MOST COMPLETE analysis of this economic decision?',
+    options:[
+      'The ICT park is always better because it creates more jobs',
+      'The sugar estate should never change because sugar is the oldest industry',
+      'The decision involves trade-offs: more jobs in ICT but loss of agricultural land, displacement of 300 farmers, and reduction of sugar export income — all impacts must be weighed',
+      'There is no trade-off because tech workers earn more than farmers'
+    ],
+    answer:'The decision involves trade-offs: more jobs in ICT but loss of agricultural land, displacement of 300 farmers, and reduction of sugar export income — all impacts must be weighed',
+    hint:'A good economic analysis considers ALL impacts — positive AND negative — on jobs, land use, communities, and long-term income.',
+    explanation:'Economic decisions always involve <b>trade-offs</b>. Converting the estate to an ICT park creates <b>more jobs (500 vs 300)</b>, but it also: permanently <b>removes agricultural land</b>, <b>displaces 300 farmers</b> who may lack tech skills, and <b>reduces sugar production and export income</b>. A balanced analysis weighs short-term gains (more jobs) against long-term risks (food security, community disruption). This reflects real decisions Mauritius faces as it modernises its economy.' })
+
+);
