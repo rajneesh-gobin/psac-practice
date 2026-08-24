@@ -78,3 +78,73 @@ STATIC_QUESTIONS.push(
     explanation:'Paul demande <b>si j\'ai faim</b>. — Les questions oui/non (est-ce que…) → <b>si</b> dans le discours indirect. Le pronom change selon la perspective : "tu" (Paul parle à moi) → "je" (moi, celui qui rapporte). Si le verbe principal est au passé : "Paul a demandé si j\'<b>avais</b> faim" (imparfait).' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6fr-sub-011', chapterId:'g6fr-subordonnees', difficulty:2,
+    question:'Complétez avec le bon pronom relatif : "Voici la maison ___ j\'ai grandi."',
+    options:['qui','que','dont','où'],
+    answer:'où',
+    hint:'"Où" remplace un lieu. "J\'ai grandi dans cette maison" → "la maison où j\'ai grandi."',
+    explanation:'"Voici la maison <b>où</b> j\'ai grandi." — <b>Où</b> remplace un lieu ou un moment : "la maison <b>dans laquelle</b> j\'ai grandi" → simplification avec <b>où</b>. Autres exemples : "le pays <b>où</b> je suis né", "l\'époque <b>où</b> il vivait", "le moment <b>où</b> tout a changé". Le manuel MIE de 6e classe "où" parmi les pronoms relatifs invariables.' }),
+
+  makeMCQ({ id:'g6fr-sub-012', chapterId:'g6fr-subordonnees', difficulty:2,
+    question:'Complétez avec le bon pronom relatif : "C\'est un problème ___ nous avons besoin de parler."',
+    options:['qui','que','dont','où'],
+    answer:'dont',
+    hint:'"Avoir besoin de" → le verbe se construit avec "de". "Dont" remplace "de + nom".',
+    explanation:'"C\'est un problème <b>dont</b> nous avons besoin de parler." — <b>Dont</b> remplace <b>de + groupe nominal</b>. Ici : "nous avons besoin <b>de ce problème</b>" → "dont". Verbes qui se construisent avec "de" et utilisent "dont" : avoir besoin de, parler de, avoir peur de, être fier de, se souvenir de, s\'occuper de.' }),
+
+  makeTF({ id:'g6fr-sub-013', chapterId:'g6fr-subordonnees', difficulty:1,
+    question:'"Que" s\'élide en "qu\'" devant une voyelle ou un h muet.',
+    answer:true,
+    hint:'Le livre que il lit → le livre qu\'il lit.',
+    explanation:'<b>Vrai.</b> "Que" → "qu\'" devant une voyelle ou un h muet : "le livre <b>qu\'</b>il lit", "la chanson <b>qu\'</b>elle chante", "l\'histoire <b>qu\'</b>on raconte". En revanche, "qui" ne s\'élide jamais : "l\'homme <b>qui</b> arrive" (jamais "qu\'arrive"). "Dont" et "où" ne s\'élident jamais non plus.' }),
+
+  makeMCQ({ id:'g6fr-sub-014', chapterId:'g6fr-subordonnees', difficulty:2,
+    question:'Transformez en discours indirect au passé : Il a dit : "Je veux partir." → Il a dit qu\'il ___.',
+    options:['veut partir','voulait partir','voudra partir','aurait voulu partir'],
+    answer:'voulait partir',
+    hint:'Verbe principal au passé (a dit) → présent → imparfait dans la subordonnée.',
+    explanation:'"Il a dit qu\'il <b>voulait</b> partir." — Concordance des temps au discours indirect : quand le verbe de déclaration est au passé (a dit, disait), le présent devient <b>imparfait</b>. Tableau complet : présent → imparfait ; passé composé → plus-que-parfait ; futur → conditionnel présent. "Veux" (présent) → <b>"voulait"</b> (imparfait).' }),
+
+  makeMCQ({ id:'g6fr-sub-015', chapterId:'g6fr-subordonnees', difficulty:2,
+    question:'Quel pronom relatif complète correctement : "Le chanteur ___ vous admirez le talent vient de Maurice."',
+    options:['qui','que','dont','où'],
+    answer:'dont',
+    hint:'"Admirer le talent de quelqu\'un" → "de" disparaît et se remplace par "dont".',
+    explanation:'"Le chanteur <b>dont</b> vous admirez le talent vient de Maurice." — On admirait <b>le talent du chanteur</b> → "de + le chanteur" → <b>dont</b>. Structure : "dont" + sujet + verbe + objet direct (sans de). Comparez : "le chanteur <b>que</b> vous admirez" (admirer quelqu\'un, objet direct sans "de") vs "le chanteur <b>dont</b> vous admirez le talent" (admirer le talent de quelqu\'un).' }),
+
+  makeMCQ({ id:'g6fr-sub-016', chapterId:'g6fr-subordonnees', difficulty:2,
+    question:'Quel connecteur exprime la CONSÉQUENCE (consequence) ?',
+    options:['puisque','bien que','donc','comme'],
+    answer:'donc',
+    hint:'"Donc" = therefore/so — la conséquence résulte de ce qui précède.',
+    explanation:'"<b>Donc</b>" exprime la conséquence : "Il a travaillé dur, <b>donc</b> il a réussi." Autres connecteurs de conséquence : ainsi, par conséquent, c\'est pourquoi, si bien que, du coup. Distinguer : cause (parce que, car, puisque, comme) ≠ conséquence (<b>donc</b>, ainsi) ≠ concession (bien que, même si, cependant).' }),
+
+  makeMCQ({ id:'g6fr-sub-017', chapterId:'g6fr-subordonnees', difficulty:3,
+    question:'Complétez avec le bon pronom relatif : "Les élèves ___ les résultats sont excellents seront récompensés."',
+    options:['qui','que','dont','où'],
+    answer:'dont',
+    hint:'"Les résultats de ces élèves" → de + élèves → dont.',
+    explanation:'"Les élèves <b>dont</b> les résultats sont excellents seront récompensés." — "les résultats <b>des</b> élèves" → <b>dont</b>. Structure avec "dont" (possession) : élève → "dont les résultats" (= les résultats de cet élève). C\'est la même structure que l\'anglais "whose" : "the students <b>whose</b> results are excellent." Très fréquent dans les textes du manuel MIE.' }),
+
+  makeTF({ id:'g6fr-sub-018', chapterId:'g6fr-subordonnees', difficulty:2,
+    question:'Dans le discours indirect, "demain" devient "le lendemain".',
+    answer:true,
+    hint:'Les expressions de temps changent quand on passe du discours direct au discours indirect.',
+    explanation:'<b>Vrai.</b> Changements d\'expressions temporelles au discours indirect : <b>demain → le lendemain</b>, hier → la veille, aujourd\'hui → ce jour-là, maintenant → alors / à ce moment-là, la semaine prochaine → la semaine suivante, l\'année dernière → l\'année précédente. Ces changements sont testés régulièrement dans les épreuves PSAC de français.' }),
+
+  makeMCQ({ id:'g6fr-sub-019', chapterId:'g6fr-subordonnees', difficulty:3,
+    question:'Quelle phrase utilise CORRECTEMENT "puisque" (since/given that — cause connue) ?',
+    options:[
+      '"Il est parti puisque demain."',
+      '"Puisque tu es là, aide-moi, s\'il te plaît."',
+      '"Il réussira puisque il travaillera."',
+      '"Je mange puisque avoir faim."'
+    ],
+    answer:'"Puisque tu es là, aide-moi, s\'il te plaît."',
+    hint:'"Puisque" exprime une cause évidente, connue des deux interlocuteurs. Il est suivi d\'un verbe conjugué.',
+    explanation:'"<b>Puisque</b> tu es là, aide-moi." — "Puisque" (= given that, since) introduit une cause <b>déjà connue ou évidente</b> : "Puisque tu es là" (je sais que tu es là, c\'est un fait établi). Différence avec "parce que" : "Je t\'appelle <b>parce que</b> j\'ai besoin d\'aide" (cause nouvelle). "Puisque" reconnaît un fait déjà connu ; "parce que" en donne un nouveau.' })
+
+);

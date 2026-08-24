@@ -84,3 +84,74 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Bibliography</b>" — "biblio" comes from Greek "biblion" (book), not "bios" (life). So bibliography = list of books, not related to "life". Biology (study of life), biography (writing about a life), biosphere (the sphere of life on Earth) — all from bios.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6eng-voc-011', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'The Latin root "dict" means SAY or SPEAK. Which word does NOT come from this root?',
+    options:['dictate','dictionary','predict','depict'],
+    answer:'depict',
+    hint:'"Depict" — think about what it means. Does it relate to speaking?',
+    explanation:'"<b>Depict</b>" does NOT come from "dict" (say) — it comes from Latin "depingere" (to paint). Words from "dict": <b>dictate</b> (to say aloud for someone to write), <b>dictionary</b> (a book of words/sayings), <b>predict</b> (to say in advance), <b>contradict</b> (to say the opposite), <b>verdict</b> (true saying in court). The MIE Grade 6 textbook teaches Latin and Greek roots as a vocabulary strategy.' }),
+
+  makeMCQ({ id:'g6eng-voc-012', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'What does the PREFIX "mis-" mean in words like "mislead", "misunderstand" and "misbehave"?',
+    options:['again','wrongly or badly','before','not enough'],
+    answer:'wrongly or badly',
+    hint:'"Mislead" = to lead someone in the wrong direction.',
+    explanation:'The prefix "<b>mis-</b>" means <b>wrongly or badly</b>: <b>mis</b>lead (lead wrongly), <b>mis</b>understand (understand wrongly), <b>mis</b>behave (behave badly), <b>mis</b>spell (spell incorrectly), <b>mis</b>treat (treat badly). Other useful prefixes from MIE Grade 6: <b>re-</b> (again: rewrite, return), <b>pre-</b> (before: preview, prepare), <b>un-</b> (not: unhappy), <b>dis-</b> (not/reverse: disagree, dislike).' }),
+
+  makeMCQ({ id:'g6eng-voc-013', chapterId:'g6eng-vocabulary', difficulty:1,
+    question:'Which pair are ANTONYMS (opposite in meaning)?',
+    options:['big / large','happy / joyful','ancient / modern','quick / fast'],
+    answer:'ancient / modern',
+    hint:'Antonyms are words with opposite meanings.',
+    explanation:'"<b>Ancient / modern</b>" are antonyms — ancient means very old; modern means new or contemporary. The MIE Grade 6 textbook builds vocabulary through: <b>synonyms</b> (same meaning: big = large = enormous), <b>antonyms</b> (opposite: ancient ≠ modern), and <b>context clues</b> (guessing meaning from surrounding text). Common exam pairs: ancient/modern, generous/mean, shallow/deep, courage/cowardice.' }),
+
+  makeMCQ({ id:'g6eng-voc-014', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'The word "INEVITABLE" means:',
+    options:['impossible to prevent or avoid','able to be fixed easily','surprising and unexpected','happening very slowly'],
+    answer:'impossible to prevent or avoid',
+    hint:'Think of "in-" (not) + "evitable" (able to be avoided). Something inevitable will definitely happen.',
+    explanation:'"<b>Inevitable</b>" = impossible to prevent or avoid. From Latin: <b>in-</b> (not) + <b>evitabilis</b> (avoidable). "Conflict was inevitable" = conflict could not be avoided. The MIE Grade 6 comprehension sections often include challenging vocabulary like this. Context clue strategy: look for synonyms or contrasting words in nearby sentences to deduce meaning.' }),
+
+  makeTF({ id:'g6eng-voc-015', chapterId:'g6eng-vocabulary', difficulty:1,
+    question:'"Lose" (to no longer have something) and "loose" (not tight) are homophones.',
+    answer:false,
+    hint:'Say both words aloud. Do they sound exactly the same?',
+    explanation:'<b>False.</b> "Lose" and "loose" are <b>NOT homophones</b> — they sound different: "lose" rhymes with "news" (/luːz/); "loose" rhymes with "moose" (/luːs/). They are commonly confused spellings, but different pronunciation. True homophones: write/right, their/there/they\'re, principal/principle, stationary/stationery. MIE Grade 6 includes these commonly confused pairs.' }),
+
+  makeMCQ({ id:'g6eng-voc-016', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'What does the SUFFIX "-ology" mean? (e.g., biology, geology, archaeology)',
+    options:['the practice of','the study of','the fear of','the love of'],
+    answer:'the study of',
+    hint:'"Bio" (life) + "ology" = biology = the study of life.',
+    explanation:'The suffix "<b>-ology</b>" means <b>the study of</b>: <b>bio</b>logy (study of life), <b>geo</b>logy (study of the Earth), <b>archaeo</b>logy (study of ancient things), <b>psycho</b>logy (study of the mind), <b>zoo</b>logy (study of animals). Other important suffixes from MIE Grade 6: <b>-ist</b> (one who does: scientist), <b>-tion</b> (act of: education), <b>-ful</b> (full of: helpful), <b>-less</b> (without: helpless).' }),
+
+  makeMCQ({ id:'g6eng-voc-017', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'Choose the correct word: "The politician made a ___ (principle/principal) speech about the nation\'s future."',
+    options:['principle','principal','principel','principall'],
+    answer:'principal',
+    hint:'"Principal" = main/most important OR head of a school. "Principle" = a rule or belief.',
+    explanation:'"A <b>principal</b> speech" = the most important speech. <b>Principal</b> (adjective) = main, most important; (noun) = head of a school. <b>Principle</b> (noun) = a fundamental rule or moral belief ("a man of principles"). Memory tricks: "The principal is your <b>pal</b>"; "A principle is a ru<b>le</b>". From the MIE Grade 6 vocabulary list of commonly confused homophones.' }),
+
+  makeMCQ({ id:'g6eng-voc-018', chapterId:'g6eng-vocabulary', difficulty:3,
+    question:'The word "METAMORPHOSIS" comes from Greek "meta" (change) + "morphe" (form/shape). Which word shares the root "morph"?',
+    options:['metaphor','morphology','microphone','magnificent'],
+    answer:'morphology',
+    hint:'"Morphology" — look for the "morph" root meaning shape/form.',
+    explanation:'"<b>Morphology</b>" (the study of word forms/shapes) contains the root "morph" (form/shape). Other words with this root: <b>morph</b> (to transform), <b>amorphous</b> (shapeless), <b>poly</b>morph (many forms). "Metaphor" contains "meta" but uses a different root for the second part (phor = to carry). Knowing Greek roots helps decode unfamiliar words in PSAC comprehension passages.' }),
+
+  makeMCQ({ id:'g6eng-voc-019', chapterId:'g6eng-vocabulary', difficulty:3,
+    question:'"The scientist\'s conclusion was AMBIGUOUS." What does ambiguous mean?',
+    options:[
+      'Completely clear and easy to understand',
+      'Open to more than one interpretation; unclear or uncertain',
+      'Supported by strong evidence',
+      'Written in a foreign language'
+    ],
+    answer:'Open to more than one interpretation; unclear or uncertain',
+    hint:'"Ambi-" = both/two. An ambiguous statement could mean two (or more) things.',
+    explanation:'"<b>Ambiguous</b>" = open to more than one interpretation; unclear. From Latin <b>ambi-</b> (both/around) + <b>agere</b> (to drive). An ambiguous message could be understood in different ways. Other "ambi-" words: <b>ambidextrous</b> (able to use both hands), <b>ambivalent</b> (having mixed feelings). The MIE Grade 6 vocabulary section teaches word analysis through roots and prefixes as a core exam skill.' })
+
+);

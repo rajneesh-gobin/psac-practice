@@ -83,3 +83,73 @@ STATIC_QUESTIONS.push(
     explanation:'Faire → radical irrégulier <b>fer-</b> + <b>-ez</b> → <b>vous ferez</b>. Conjugaison : je ferai, tu feras, il fera, nous ferons, <b>vous ferez</b>, ils feront.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6fr-fut-011', chapterId:'g6fr-futur', difficulty:2,
+    question:'Conjuguez "venir" au futur simple pour "je" :',
+    options:['je viendrai','je venrai','je venirai','je viendrerai'],
+    answer:'je viendrai',
+    hint:'Venir a un radical irrégulier au futur : viendr-.',
+    explanation:'Venir → radical irrégulier <b>viendr-</b> → + terminaison <b>-ai</b> → <b>je viendrai</b>. Conjugaison complète : <b>je viendrai</b>, tu viendras, il viendra, nous viendrons, vous viendrez, ils viendront. Même radical pour "tenir" → je tiendrai. Ne pas confondre avec le conditionnel (je <b>viendrais</b>) qui se forme pareil mais avec les terminaisons -ais/-ait/-aient.' }),
+
+  makeMCQ({ id:'g6fr-fut-012', chapterId:'g6fr-futur', difficulty:2,
+    question:'Conjuguez "pouvoir" au futur simple pour "ils" :',
+    options:['ils pourront','ils pourraient','ils peuvent','ils pouvront'],
+    answer:'ils pourront',
+    hint:'Pouvoir → radical irrégulier pourr- + terminaison -ont.',
+    explanation:'Pouvoir → radical irrégulier <b>pourr-</b> → + terminaison <b>-ont</b> → <b>ils pourront</b>. Conjugaison : je pourrai, tu pourras, il pourra, nous pourrons, vous pourrez, <b>ils pourront</b>. Autres radicaux irréguliers importants : savoir → <b>saur-</b>, voir → <b>verr-</b>, courir → <b>courr-</b>.' }),
+
+  makeTF({ id:'g6fr-fut-013', chapterId:'g6fr-futur', difficulty:1,
+    question:'Le radical du futur simple de "aller" est "ir-".',
+    answer:true,
+    hint:'Je ___ → je irai. Que donne "ir-" + "-ai" ?',
+    explanation:'<b>Vrai.</b> Aller → radical irrégulier <b>ir-</b> au futur simple. Conjugaison : <b>j\'irai</b>, tu iras, il ira, nous irons, vous irez, ils iront. Ne pas confondre avec "je vais" (présent) ou "je suis allé" (passé composé). "Ir-" est aussi le début de "il" en futur proche : "il va aller" ≠ "il ira" (futur simple).' }),
+
+  makeMCQ({ id:'g6fr-fut-014', chapterId:'g6fr-futur', difficulty:2,
+    question:'Complétez : "L\'année prochaine, nous ___ (étudier) à l\'université."',
+    options:['étudions','étudierons','étudiions','avons étudié'],
+    answer:'étudierons',
+    hint:'"L\'année prochaine" indique un futur → futur simple. Étudier est un verbe régulier en -er.',
+    explanation:'"L\'année prochaine, nous <b>étudierons</b> à l\'université." — Étudier → infinitif + terminaison -ons → étudier + <b>-ons</b> → nous <b>étudierons</b>. Indicateurs temporels du futur simple : <b>l\'année prochaine, demain, bientôt, dans dix ans, un jour, lorsque + futur</b>. Le manuel MIE de 6e insiste sur la reconnaissance de ces marqueurs.' }),
+
+  makeMCQ({ id:'g6fr-fut-015', chapterId:'g6fr-futur', difficulty:2,
+    question:'Conjuguez "vouloir" au futur simple pour "tu" :',
+    options:['tu voudras','tu voulras','tu voudrais','tu veuxras'],
+    answer:'tu voudras',
+    hint:'Vouloir → radical irrégulier voudr- + terminaison pour "tu".',
+    explanation:'Vouloir → radical irrégulier <b>voudr-</b> → + terminaison <b>-as</b> → <b>tu voudras</b>. Conjugaison complète : je voudrai, <b>tu voudras</b>, il voudra, nous voudrons, vous voudrez, ils voudront. À apprendre par cœur : aller→ir-, être→ser-, avoir→aur-, faire→fer-, aller→ir-, pouvoir→pourr-, vouloir→<b>voudr-</b>, venir→viendr-, voir→verr-, savoir→saur-.' }),
+
+  makeMCQ({ id:'g6fr-fut-016', chapterId:'g6fr-futur', difficulty:2,
+    question:'Quelle structure utilise-t-on après "quand" dans une phrase avec deux actions futures ?',
+    options:[
+      '"Quand je rentrerai, je mangerai." (futur + futur)',
+      '"Quand je rentrerai, je mangerais." (futur + conditionnel)',
+      '"Quand je rentrais, je mangerai." (imparfait + futur)',
+      '"Quand je rentrerai, je mange." (futur + présent)'
+    ],
+    answer:'"Quand je rentrerai, je mangerai." (futur + futur)',
+    hint:'Après "quand" dans une phrase de sens futur, on utilise le futur simple — pas le présent comme en anglais.',
+    explanation:'"Quand je <b>rentrerai</b>, je <b>mangerai</b>." — En français, après <b>quand, lorsque, dès que, aussitôt que, tant que</b> dans un contexte futur, on utilise le <b>futur simple</b> (pas le présent comme en anglais "when I get home, I will eat"). C\'est une règle importante du manuel MIE de 6e qui diffère de l\'anglais.' }),
+
+  makeMCQ({ id:'g6fr-fut-017', chapterId:'g6fr-futur', difficulty:2,
+    question:'Conjuguez "savoir" au futur simple pour "elle" :',
+    options:['elle saura','elle savra','elle saurait','elle savera'],
+    answer:'elle saura',
+    hint:'Savoir → radical irrégulier saur- + terminaison pour "il/elle".',
+    explanation:'Savoir → radical irrégulier <b>saur-</b> → + terminaison <b>-a</b> → <b>elle saura</b>. Conjugaison : je saurai, tu sauras, <b>il/elle saura</b>, nous saurons, vous saurez, ils sauront. Attention : ne pas confondre avec "elle savait" (imparfait) ou "elle sache" (subjonctif).' }),
+
+  makeTF({ id:'g6fr-fut-018', chapterId:'g6fr-futur', difficulty:2,
+    question:'On peut utiliser le futur simple pour exprimer un ordre ou une instruction ferme.',
+    answer:true,
+    hint:'Exemple : "Vous ferez l\'exercice numéro 3 pour lundi."',
+    explanation:'<b>Vrai.</b> Le futur simple peut exprimer un <b>ordre ou une instruction</b>, surtout à l\'écrit formel : "Vous <b>rendrez</b> votre devoir vendredi." / "Tu <b>rangeras</b> ta chambre avant de sortir." Cette valeur est proche de l\'impératif mais plus formelle. Le manuel MIE de 6e cite aussi l\'usage du futur dans les recettes ("vous <b>ajouterez</b>...") et les instructions officielles.' }),
+
+  makeMCQ({ id:'g6fr-fut-019', chapterId:'g6fr-futur', difficulty:3,
+    question:'Conjuguez "recevoir" au futur simple pour "nous" :',
+    options:['nous recevrons','nous recevrions','nous recevrons','nous recerons'],
+    answer:'nous recevrons',
+    hint:'Recevoir → radical irrégulier recevr- + terminaison -ons.',
+    explanation:'Recevoir → radical irrégulier <b>recevr-</b> → + terminaison <b>-ons</b> → <b>nous recevrons</b>. Conjugaison : je recevrai, tu recevras, il recevra, <b>nous recevrons</b>, vous recevrez, ils recevront. De même : apercevoir → nous apercevrons, décevoir → nous décevrons. Groupe des verbes en -cevoir : radical = -cevr-.' })
+
+);

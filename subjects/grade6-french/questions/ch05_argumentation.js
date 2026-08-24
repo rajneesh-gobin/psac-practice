@@ -83,3 +83,99 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>En revanche</b>" = D\'un autre côté / Par contre / En contrepartie. "Les voitures sont rapides. <b>En revanche</b>, elles polluent." Synonymes : Cependant, Toutefois, Néanmoins, Pourtant.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6fr-arg-011', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Quel connecteur indique qu\'une idée s\'ajoute à la précédente en l\'amplifiant ?',
+    options:['Or','Pourtant','De surcroît','Car'],
+    answer:'De surcroît',
+    hint:'"De surcroît" = moreover/on top of that — on ajoute une idée encore plus forte.',
+    explanation:'"<b>De surcroît</b>" (= moreover, on top of that) ajoute une idée en l\'amplifiant : "Ce projet est coûteux. <b>De surcroît</b>, il risque d\'être inefficace." Connecteurs d\'ajout par ordre de fréquence (manuel MIE de 6e) : de plus, en outre, par ailleurs, également, <b>de surcroît</b> (renforcé), non seulement… mais aussi.' }),
+
+  makeMCQ({ id:'g6fr-arg-012', chapterId:'g6fr-argumentation', difficulty:1,
+    question:'Qu\'est-ce qu\'une "thèse" dans un texte argumentatif ?',
+    options:[
+      'La question posée dans l\'introduction',
+      'La position ou l\'opinion défendue par l\'auteur dans le texte',
+      'Un argument contre l\'opinion de l\'auteur',
+      'Le dernier paragraphe du texte'
+    ],
+    answer:'La position ou l\'opinion défendue par l\'auteur dans le texte',
+    hint:'"Thèse" vient du grec "thesis" = position/affirmation.',
+    explanation:'La <b>thèse</b> est l\'opinion ou la position que l\'auteur défend dans son texte : par exemple, "Les réseaux sociaux sont bénéfiques pour les jeunes." L\' <b>antithèse</b> est la position contraire. La <b>problématique</b> est la question centrale (sont-ils bénéfiques ou non ?). Le <b>développement</b> présente la thèse + antithèse + arguments + exemples.' }),
+
+  makeMCQ({ id:'g6fr-arg-013', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Complétez avec le bon connecteur : "___ je comprends les inquiétudes, je pense que les bénéfices l\'emportent."',
+    options:['Donc','Certes','Car','Ainsi'],
+    answer:'Certes',
+    hint:'"Certes" reconnaît un point opposé avant de le dépasser avec son propre argument.',
+    explanation:'"<b>Certes</b> je comprends les inquiétudes, je pense que les bénéfices l\'emportent." — <b>Certes</b> (= admittedly, granted) concède un point à l\'adversaire avant de le réfuter. Structure classique de la concession au bac de français : "Certes… mais/cependant/néanmoins…" Le manuel MIE de 6e enseigne cette structure pour les dissertations et les débats.' }),
+
+  makeMCQ({ id:'g6fr-arg-014', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Quelle phrase représente le meilleur ARGUMENT pour un débat sur la protection de l\'environnement à Maurice ?',
+    options:[
+      '"Je pense que l\'environnement est important."',
+      '"L\'environnement est beau à Maurice."',
+      '"La dégradation des récifs coralliens menace directement le tourisme, pilier essentiel de l\'économie mauricienne."',
+      '"Il faudrait peut-être faire quelque chose pour la nature."'
+    ],
+    answer:'"La dégradation des récifs coralliens menace directement le tourisme, pilier essentiel de l\'économie mauricienne."',
+    hint:'Un bon argument est précis, factuel et montre clairement les conséquences.',
+    explanation:'"La dégradation des récifs coralliens <b>menace directement le tourisme, pilier essentiel de l\'économie mauricienne</b>." — C\'est un argument efficace car : (1) il est <b>précis</b> (récifs coralliens, tourisme) ; (2) il montre les <b>conséquences</b> économiques ; (3) il utilise le vocabulaire soutenu du manuel MIE de 6e. Un bon argument répond toujours à "Pourquoi ? Avec quelles preuves ?"' }),
+
+  makeTF({ id:'g6fr-arg-015', chapterId:'g6fr-argumentation', difficulty:1,
+    question:'Dans un texte argumentatif, la conclusion peut introduire de nouveaux arguments.',
+    answer:false,
+    hint:'Que doit contenir la conclusion ? Que ne doit-elle PAS contenir ?',
+    explanation:'<b>Faux.</b> La conclusion d\'un texte argumentatif doit : (1) <b>résumer</b> les idées principales ; (2) reprendre la thèse en d\'autres termes ; (3) proposer une <b>ouverture</b> (réflexion plus large). Elle ne doit <b>jamais</b> introduire de nouveaux arguments — ceux-ci appartiennent au développement. Selon le manuel MIE de 6e, introduire un nouveau point dans la conclusion est considéré comme une erreur de structure.' }),
+
+  makeMCQ({ id:'g6fr-arg-016', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Comment orthographie-t-on correctement l\'accord dans : "Elle est convaincue que cette solution est la meilleure."',
+    options:[
+      '"convaincu" (masculin, sans accord)',
+      '"convaincue" (féminin, accord avec le sujet)',
+      '"convaincues" (pluriel)',
+      '"convaincu" (forme invariable)'
+    ],
+    answer:'"convaincue" (féminin, accord avec le sujet)',
+    hint:'"Elle" est féminin singulier → l\'adjectif s\'accorde en genre et en nombre.',
+    explanation:'"Elle est <b>convaincue</b>" — Les adjectifs et les participes passés (attributs du sujet) s\'accordent en <b>genre et en nombre</b> avec le sujet. "Elle" = féminin singulier → "convaincu" + <b>-e</b> = "convaincue". Le manuel MIE de 6e insiste sur les accords (adjectif/nom, verbe/sujet) dans l\'expression écrite — c\'est un critère de notation du PSAC.' }),
+
+  makeMCQ({ id:'g6fr-arg-017', chapterId:'g6fr-argumentation', difficulty:3,
+    question:'Quel est le rôle du connecteur "Or" dans un texte argumentatif ?',
+    options:[
+      'Il ajoute une idée semblable à la précédente',
+      'Il introduit un fait nouveau qui va modifier ou nuancer ce qui vient d\'être dit',
+      'Il conclut le texte',
+      'Il exprime la cause'
+    ],
+    answer:'Il introduit un fait nouveau qui va modifier ou nuancer ce qui vient d\'être dit',
+    hint:'"Or" = now/but in fact — il marque une transition vers un fait inattendu ou révélateur.',
+    explanation:'"<b>Or</b>" (= now, but, however — en anglais) introduit un fait nouveau qui change ou nuance la perspective : "On pensait que le problème était résolu. <b>Or</b>, les chiffres montrent une aggravation." Il crée une surprise ou un tournant dans l\'argumentation. Très utilisé dans les dissertations de niveau 6e, mais moins fréquent que "cependant" ou "de plus".' }),
+
+  makeMCQ({ id:'g6fr-arg-018', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Laquelle de ces phrases utilise correctement les connecteurs pour structurer un paragraphe argumentatif ?',
+    options:[
+      '"De plus, cependant, en conclusion, les technologies sont utiles."',
+      '"Premièrement, les technologies facilitent l\'apprentissage. En effet, les élèves accèdent facilement à des ressources éducatives. Cependant, elles peuvent aussi distraire."',
+      '"Les technologies. De plus. Sont utiles. Car. En conclusion."',
+      '"Je pense que les technologies. Donc elles sont bonnes."'
+    ],
+    answer:'"Premièrement, les technologies facilitent l\'apprentissage. En effet, les élèves accèdent facilement à des ressources éducatives. Cependant, elles peuvent aussi distraire."',
+    hint:'Un bon paragraphe suit la structure : argument + illustration/explication + nuance.',
+    explanation:'"<b>Premièrement</b>, les technologies facilitent l\'apprentissage. <b>En effet</b>, les élèves accèdent à des ressources. <b>Cependant</b>, elles peuvent distraire." — Structure modèle : (1) <b>Premièrement</b> = annonce l\'argument ; (2) <b>En effet</b> = illustre/explique ; (3) <b>Cependant</b> = nuance. Le manuel MIE de 6e utilise ce modèle explicitement pour la rédaction argumentative.' }),
+
+  makeMCQ({ id:'g6fr-arg-019', chapterId:'g6fr-argumentation', difficulty:4,
+    question:'Dans un débat sur l\'utilisation des téléphones portables à l\'école, quelle phrase représente la meilleure RÉFUTATION (contre-argument) ?',
+    options:[
+      '"Je ne suis pas d\'accord avec toi."',
+      '"Certes, les téléphones permettent d\'accéder à des informations rapidement. Néanmoins, des études montrent qu\'ils réduisent la concentration des élèves de 25%."',
+      '"Les téléphones sont mauvais pour les enfants."',
+      '"Mon professeur dit que les téléphones sont interdits."'
+    ],
+    answer:'"Certes, les téléphones permettent d\'accéder à des informations rapidement. Néanmoins, des études montrent qu\'ils réduisent la concentration des élèves de 25%."',
+    hint:'Une bonne réfutation reconnaît d\'abord l\'argument adverse (certes...) puis le dépasse avec une preuve plus forte.',
+    explanation:'Structure de la réfutation efficace : (1) <b>Certes</b> [reconnaître l\'argument adverse] + (2) <b>Néanmoins / Cependant / Toutefois</b> [réfuter avec un argument plus fort + preuve]. La preuve chiffrée ("25%") donne plus de crédibilité. Le manuel MIE de 6e enseigne cette technique de concession-réfutation comme l\'une des compétences argumentatives clés pour le PSAC.' })
+
+);

@@ -112,3 +112,102 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Biodegrade</b>" means to break down naturally through the action of bacteria and other organisms into harmless substances. The passage contrasts organic materials (which biodegrade) with plastic (which does not — it only fragments into microplastics).' })
 
 );
+
+const _PASSAGE_DODO = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65">
+<b style="color:#0e7490">Read the passage carefully, then answer the questions.</b><br><br>
+<b>The Dodo — Mauritius's Lost Bird</b><br><br>
+The dodo was a large, flightless bird that lived only on the island of Mauritius. Standing nearly a metre tall and weighing up to twenty-three kilograms, it had short, stubby wings that were completely useless for flight. Its rounded body and peculiar beak gave it an appearance unlike any other bird on Earth. Scientists believe the dodo evolved without the ability to fly because Mauritius had no land predators — there was simply no need to escape from danger by air.<br><br>
+When Dutch sailors arrived in Mauritius in the late 1600s, the dodo's fate was sealed. The birds were easy to catch because they had no fear of humans — they had never learned to run from predators. Sailors hunted them for food, but the greater threat came from the animals the settlers brought with them: rats, pigs and monkeys that raided dodo nests and ate the eggs. Within less than eighty years of human arrival, the dodo was extinct.<br><br>
+Today, the dodo has become a powerful symbol. Scientists use the phrase "dead as a dodo" to describe anything completely and irreversibly gone. Yet the dodo's story is also a warning: the same combination of hunting, habitat destruction and introduced species continues to drive other animals to extinction today. In Mauritius, conservation efforts now protect surviving endemic species such as the Pink Pigeon and the Echo Parakeet, determined that history shall not repeat itself.
+</div>`;
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6eng-comp-011', chapterId:'g6eng-comprehension', difficulty:1,
+    question:`${_PASSAGE_DODO}According to the passage, approximately how tall was the dodo?`,
+    options:['About half a metre','Nearly a metre tall','Over two metres','About thirty centimetres'],
+    answer:'Nearly a metre tall',
+    hint:'Look in the first paragraph for the dodo\'s physical description.',
+    explanation:'"<b>Nearly a metre tall</b>" — the passage states: "Standing <b>nearly a metre tall</b> and weighing up to twenty-three kilograms." This is a direct retrieval question — the answer is stated explicitly in the text.' }),
+
+  makeMCQ({ id:'g6eng-comp-012', chapterId:'g6eng-comprehension', difficulty:2,
+    question:`${_PASSAGE_DODO}Why did the dodo evolve without the ability to fly, according to the passage?`,
+    options:[
+      'Because its wings were injured by sailors',
+      'Because it was too heavy to take off',
+      'Because Mauritius had no land predators, so there was no need to escape by air',
+      'Because it preferred swimming to flying'
+    ],
+    answer:'Because Mauritius had no land predators, so there was no need to escape by air',
+    hint:'The passage gives a clear scientific explanation in paragraph one.',
+    explanation:'The passage explains: "Scientists believe the dodo evolved without the ability to fly because Mauritius had <b>no land predators</b> — there was simply no need to escape from danger by air." This is an example of <b>evolutionary adaptation</b>: species develop (or lose) features based on what helps them survive in their environment.' }),
+
+  makeMCQ({ id:'g6eng-comp-013', chapterId:'g6eng-comprehension', difficulty:2,
+    question:`${_PASSAGE_DODO}What does the word "peculiar" mean as used in paragraph one?`,
+    options:['beautiful','ordinary','strange and unusual','broken'],
+    answer:'strange and unusual',
+    hint:'The context suggests the dodo looked unlike any other bird — what quality does "peculiar" describe?',
+    explanation:'"<b>Peculiar</b>" means strange, unusual or distinctive in an odd way. The context — "gave it an appearance unlike any other bird on Earth" — confirms the unusual quality. The MIE Grade 6 comprehension technique: use surrounding context clues to deduce the meaning of unfamiliar vocabulary words.' }),
+
+  makeTF({ id:'g6eng-comp-014', chapterId:'g6eng-comprehension', difficulty:1,
+    question:`${_PASSAGE_DODO}True or False: The main reason the dodo became extinct was that sailors hunted it for food.`,
+    answer:false,
+    hint:'Re-read paragraph two carefully — which threat does the author say was GREATER?',
+    explanation:'<b>False.</b> The passage states: "The birds were easy to catch... Sailors hunted them for food, <b>but the greater threat</b> came from the animals the settlers brought with them: <b>rats, pigs and monkeys</b> that raided dodo nests and ate the eggs." The introduced animals (invasive species) were the bigger cause of extinction.' }),
+
+  makeMCQ({ id:'g6eng-comp-015', chapterId:'g6eng-comprehension', difficulty:2,
+    question:`${_PASSAGE_DODO}What does the phrase "dead as a dodo" mean, according to the passage?`,
+    options:[
+      'Extinct and gone forever',
+      'Completely and irreversibly gone',
+      'Something that has been hunted to near extinction',
+      'A bird that cannot fly'
+    ],
+    answer:'Completely and irreversibly gone',
+    hint:'The passage gives the exact meaning of this phrase.',
+    explanation:'The passage states: "Scientists use the phrase \'dead as a dodo\' to describe anything <b>completely and irreversibly gone</b>." An idiom whose meaning is explained in the text itself — always read carefully for such definitions. "Irreversibly" means it cannot be undone or brought back.' }),
+
+  makeMCQ({ id:'g6eng-comp-016', chapterId:'g6eng-comprehension', difficulty:2,
+    question:`${_PASSAGE_DODO}What literary technique is used in "determined that history shall not repeat itself" (paragraph 3)?`,
+    options:['simile','alliteration','personification','idiom/figurative language'],
+    answer:'idiom/figurative language',
+    hint:'"History repeating itself" — can history literally repeat? This is a common English expression.',
+    explanation:'"History shall not repeat itself" is an <b>idiom / figurative expression</b> — history cannot literally repeat; the phrase means "the same mistake (extinction) should not happen again." Recognising figurative language is a key comprehension skill in MIE Grade 6. Contrast: a <b>simile</b> uses "like/as"; a <b>metaphor</b> states something IS something else; <b>alliteration</b> repeats consonant sounds.' }),
+
+  makeMCQ({ id:'g6eng-comp-017', chapterId:'g6eng-comprehension', difficulty:2,
+    question:`${_PASSAGE_DODO}Why were dodo birds "easy to catch" when sailors arrived?`,
+    options:[
+      'Because they were very slow runners',
+      'Because they had no fear of humans — they had never encountered predators before',
+      'Because they were asleep during the day',
+      'Because they were attracted to the sailors\' food'
+    ],
+    answer:'Because they had no fear of humans — they had never encountered predators before',
+    hint:'Paragraph two explains exactly why dodos were easy to catch.',
+    explanation:'The passage says the dodo had "<b>no fear of humans</b> — they had never learned to run from predators." Because Mauritius had no land predators before human arrival, dodos had never developed the instinct to flee. This made them tragically vulnerable when hunters arrived.' }),
+
+  makeMCQ({ id:'g6eng-comp-018', chapterId:'g6eng-comprehension', difficulty:3,
+    question:`${_PASSAGE_DODO}What is the AUTHOR'S PURPOSE in paragraph three?`,
+    options:[
+      'To entertain readers with facts about a famous extinct bird',
+      'To use the dodo\'s story as a warning about current extinction threats and inspire conservation',
+      'To explain the scientific process of evolution',
+      'To describe what Mauritius looks like today'
+    ],
+    answer:'To use the dodo\'s story as a warning about current extinction threats and inspire conservation',
+    hint:'What does the author want the reader to take away from the dodo\'s story?',
+    explanation:'Paragraph three shifts from history to <b>warning and call to action</b>: "the dodo\'s story is also a warning" — hunting, habitat loss and invasive species still threaten animals today. The author then shows hope: Mauritius is now actively protecting surviving species. This combines <b>informing</b> (facts about dodo), <b>warning</b> (extinction is still happening) and <b>inspiring</b> (conservation is working).' }),
+
+  makeMCQ({ id:'g6eng-comp-019', chapterId:'g6eng-comprehension', difficulty:4,
+    question:`${_PASSAGE_DODO}Using PEE structure: which evidence from the passage BEST supports the claim "Introduced species were the greatest threat to the dodo"?`,
+    options:[
+      '"Sailors hunted them for food"',
+      '"rats, pigs and monkeys that raided dodo nests and ate the eggs"',
+      '"the dodo was extinct"',
+      '"Standing nearly a metre tall"'
+    ],
+    answer:'"rats, pigs and monkeys that raided dodo nests and ate the eggs"',
+    hint:'Find the quotation that most directly shows HOW introduced species threatened the dodo.',
+    explanation:'The best <b>Evidence</b> (E in PEE): "rats, pigs and monkeys <b>that raided dodo nests and ate the eggs</b>." This directly proves the claim — it explains the specific mechanism of harm (nest raiding, egg destruction). The <b>Explanation</b> (second E): This shows introduced species attacked dodos at the reproductive stage, preventing new dodos from being born, which was more devastating than hunting adult birds.' })
+
+);
