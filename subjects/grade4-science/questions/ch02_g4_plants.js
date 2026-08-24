@@ -104,3 +104,99 @@ STATIC_QUESTIONS.push(
     explanation:'The only variable that differed between the two plants was <b>water</b>. Plant A (with water) thrived; Plant B (without water) wilted. This is a fair test and Mira can conclude that <b>water is essential for plant survival</b>, even when sunlight is present. Without water, the plant cannot photosynthesise or carry out other life processes.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4s-plt-011', chapterId:'g4sci-plants', difficulty:1,
+    question:'Photosynthesis makes food (glucose) for the plant. What GAS is also released as a by-product?',
+    options:['Carbon dioxide','Nitrogen','Oxygen','Hydrogen'],
+    answer:'Oxygen',
+    hint:'The gas released by plants during photosynthesis is the same gas we need to breathe.',
+    explanation:'Photosynthesis: sunlight + water + CO₂ → glucose + <b>oxygen</b>. Plants release <b>oxygen</b> as a by-product — this is where almost all the oxygen in our air comes from. This is why forests and other plant life are so important for all living creatures.' }),
+
+  makeMCQ({ id:'g4s-plt-012', chapterId:'g4sci-plants', difficulty:1,
+    question:'What is GERMINATION?',
+    options:[
+      'The process of a flower producing pollen',
+      'The process of a seed sprouting and growing into a new plant',
+      'The process of leaves making food',
+      'The process of roots absorbing water'
+    ],
+    answer:'The process of a seed sprouting and growing into a new plant',
+    hint:'Think about what happens when you plant a seed in soil and water it.',
+    explanation:'<b>Germination</b> is the process where a <b>seed sprouts</b> and begins growing into a new plant. The seed absorbs water, swells, and a tiny root (radicle) pushes out first, followed by a tiny shoot. Germination needs water, warmth and air.' }),
+
+  makeMCQ({ id:'g4s-plt-013', chapterId:'g4sci-plants', difficulty:2,
+    question:'What THREE conditions does a seed need to GERMINATE?',
+    options:[
+      'Sunlight, soil and fertiliser',
+      'Water, warmth and air (oxygen)',
+      'Darkness, cold and dry conditions',
+      'Light, water and soil only'
+    ],
+    answer:'Water, warmth and air (oxygen)',
+    hint:'A seed in a frozen, dry, airless environment will not germinate.',
+    explanation:'Seeds need: (1) <b>Water</b> — to activate enzymes and start growth; (2) <b>Warmth</b> — for chemical reactions to work; (3) <b>Air (oxygen)</b> — for respiration. Note: seeds do NOT need sunlight to germinate — the seedling uses food stored inside the seed.' }),
+
+  makeMCQ({ id:'g4s-plt-014', chapterId:'g4sci-plants', difficulty:2,
+    question:'What is POLLINATION?',
+    options:[
+      'The process of seeds sprouting in soil',
+      'The transfer of pollen from one flower to another, usually by insects or wind',
+      'The process of leaves making food',
+      'The process of water moving up the stem'
+    ],
+    answer:'The transfer of pollen from one flower to another, usually by insects or wind',
+    hint:'Pollination leads to seed formation. How does pollen move between flowers?',
+    explanation:'<b>Pollination</b> is the <b>transfer of pollen</b> from the male part (anther) of a flower to the female part (stigma), usually by <b>insects</b> (bees, butterflies — attracted by colour and scent) or by <b>wind</b>. After pollination, seeds develop inside the flower.' }),
+
+  makeTF({ id:'g4s-plt-015', chapterId:'g4sci-plants', difficulty:2,
+    question:'Seeds can be dispersed (spread to new places) by wind, water and animals.',
+    answer:true,
+    hint:'Think about dandelion seeds blowing away, coconuts floating in water, and seeds sticking to fur.',
+    explanation:'<b>True.</b> Seed dispersal methods: <b>wind</b> (dandelion, sycamore — light or winged seeds), <b>water</b> (coconut — floats), <b>animals</b> (berries eaten and seeds excreted; seeds that stick to fur). Dispersal allows plants to spread to new growing areas away from the parent plant.' }),
+
+  makeMCQ({ id:'g4s-plt-016', chapterId:'g4sci-plants', difficulty:2,
+    question:'What gives leaves their GREEN colour?',
+    options:['Water inside the leaf','Sunlight hitting the leaf','Chlorophyll — a green pigment inside leaf cells','Minerals from the soil'],
+    answer:'Chlorophyll — a green pigment inside leaf cells',
+    hint:'This green substance also captures sunlight energy for photosynthesis.',
+    explanation:'Leaves are green because of <b>chlorophyll</b> — a green pigment found inside the leaf cells (in structures called chloroplasts). Chlorophyll <b>absorbs sunlight</b> and uses that energy for photosynthesis. When leaves yellow in autumn, the chlorophyll breaks down.' }),
+
+  makeMCQ({ id:'g4s-plt-017', chapterId:'g4sci-plants', difficulty:2,
+    question:'Leaves have tiny pores called STOMATA. What is their main function?',
+    options:[
+      'To absorb water from rain',
+      'To allow gases (carbon dioxide and oxygen) to move in and out of the leaf',
+      'To trap insects for food',
+      'To reflect sunlight away from the leaf'
+    ],
+    answer:'To allow gases (carbon dioxide and oxygen) to move in and out of the leaf',
+    hint:'Stomata are like tiny doors for gases. What gases does a leaf need for photosynthesis?',
+    explanation:'<b>Stomata</b> are tiny pores (usually on the underside of leaves). They allow: <b>carbon dioxide</b> to enter for photosynthesis, <b>oxygen</b> to exit as a by-product, and water vapour to exit (transpiration). Stomata can open and close to control gas exchange.' }),
+
+  makeMCQ({ id:'g4s-plt-018', chapterId:'g4sci-plants', difficulty:3,
+    question:'If ALL the leaves are removed from a healthy plant, what will most likely happen?',
+    options:[
+      'The plant will grow faster because energy is not wasted on leaves',
+      'The plant will survive — roots can make food instead',
+      'The plant will die because it can no longer photosynthesise to make food',
+      'The plant will grow new leaves immediately and be unaffected'
+    ],
+    answer:'The plant will die because it can no longer photosynthesise to make food',
+    hint:'Leaves are the plant\'s food factories. What happens if the factory is removed?',
+    explanation:'Without leaves, the plant cannot <b>photosynthesise</b> — it has no way to make food. Without food, the plant cannot carry out its life processes and will <b>weaken and die</b>. Roots cannot make food — they only absorb water and minerals.' }),
+
+  makeMCQ({ id:'g4s-plt-019', chapterId:'g4sci-plants', difficulty:4,
+    question:'Sasha grows two identical pots of grass. Both get the same water and warmth. Pot A gets sunlight. Pot B is covered with a black cloth. After one week, Pot A is green and healthy. Pot B has turned yellow and is wilting. What can Sasha conclude?',
+    options:[
+      'The black cloth caused the yellowing because black is a dark colour.',
+      'Sunlight is essential for plants to make food (photosynthesis) and stay healthy.',
+      'Watering is more important than sunlight for grass.',
+      'Both pots will recover equally once the cloth is removed.'
+    ],
+    answer:'Sunlight is essential for plants to make food (photosynthesis) and stay healthy.',
+    hint:'Everything was the same EXCEPT sunlight. What does the difference in results tell you?',
+    explanation:'This is a <b>fair test</b> — the only variable that differed was sunlight. Pot A (with sunlight) was healthy; Pot B (without sunlight) turned yellow because chlorophyll breaks down without light and photosynthesis cannot occur. Sasha concludes: <b>sunlight is essential for plant health</b>.' })
+
+);

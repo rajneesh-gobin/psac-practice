@@ -88,3 +88,89 @@ STATIC_QUESTIONS.push(
     explanation:'Her friend is <b>not correct</b>. Being very old does not make something living. The object shows <b>none of the MRS GREN characteristics</b> — it does not grow, breathe, feed, move, reproduce, excrete or respond to its environment. These characteristics are what determine if something is living, not its age.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4s-liv-011', chapterId:'g4sci-living', difficulty:1,
+    question:'In MRS GREN, what does the letter "G" stand for?',
+    options:['Germination','Growth','Gas','Giving'],
+    answer:'Growth',
+    hint:'G is the fourth letter of MRS GREN: M, R, S, G…',
+    explanation:'"G" stands for <b>Growth</b> — all living things grow. Bacteria grow, plants grow, animals grow. Non-living things do not grow biologically. MRS GREN: Movement, Respiration, Sensitivity, <b>Growth</b>, Reproduction, Excretion, Nutrition.' }),
+
+  makeMCQ({ id:'g4s-liv-012', chapterId:'g4sci-living', difficulty:1,
+    question:'In MRS GREN, what does the letter "N" stand for?',
+    options:['Nature','Nutrition','Nitrogen','Nervousness'],
+    answer:'Nutrition',
+    hint:'N is the last letter of MRS GREN. It relates to food and feeding.',
+    explanation:'"N" stands for <b>Nutrition</b> — all living things need and use food for energy and growth. Plants make their own food (photosynthesis); animals must eat. MRS GREN: Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, <b>Nutrition</b>.' }),
+
+  makeTF({ id:'g4s-liv-013', chapterId:'g4sci-living', difficulty:1,
+    question:'A mushroom is a living thing.',
+    answer:true,
+    hint:'Does a mushroom grow, reproduce and feed? Check MRS GREN.',
+    explanation:'<b>True.</b> A mushroom is a living thing (a fungus). It grows, feeds on decaying matter, reproduces by releasing spores, and carries out all MRS GREN processes. Fungi are a separate group of living organisms — neither plants nor animals.' }),
+
+  makeMCQ({ id:'g4s-liv-014', chapterId:'g4sci-living', difficulty:2,
+    question:'What does "E" stand for in MRS GREN?',
+    options:['Eating','Energy','Excretion','Expansion'],
+    answer:'Excretion',
+    hint:'E is the sixth letter. It is about removing waste from the body.',
+    explanation:'"E" stands for <b>Excretion</b> — all living things remove waste products from their bodies. Animals excrete urine and breathe out carbon dioxide. Plants release oxygen and water vapour as waste. MRS GREN: Movement, Respiration, Sensitivity, Growth, Reproduction, <b>Excretion</b>, Nutrition.' }),
+
+  makeMCQ({ id:'g4s-liv-015', chapterId:'g4sci-living', difficulty:2,
+    question:'What does "S" stand for in MRS GREN?',
+    options:['Size','Speed','Sensitivity','Survival'],
+    answer:'Sensitivity',
+    hint:'S is the third letter. It is about how living things respond to their surroundings.',
+    explanation:'"S" stands for <b>Sensitivity</b> — living things react to changes in their environment (stimuli). A plant turns its leaves towards light. An animal jumps away from danger. MRS GREN: Movement, Respiration, <b>Sensitivity</b>, Growth, Reproduction, Excretion, Nutrition.' }),
+
+  makeMCQ({ id:'g4s-liv-016', chapterId:'g4sci-living', difficulty:2,
+    question:'What is the KEY difference between plants and animals regarding NUTRITION?',
+    options:[
+      'Animals make their own food; plants eat other organisms',
+      'Plants make their own food using sunlight; animals must eat other organisms',
+      'Both plants and animals make their own food',
+      'Neither plants nor animals need food'
+    ],
+    answer:'Plants make their own food using sunlight; animals must eat other organisms',
+    hint:'Which group uses photosynthesis to produce food from sunlight?',
+    explanation:'<b>Plants make their own food</b> using sunlight (photosynthesis — they are producers). <b>Animals cannot make food</b> — they must eat plants or other animals (they are consumers). This is why plants are the foundation of all food chains.' }),
+
+  makeMCQ({ id:'g4s-liv-017', chapterId:'g4sci-living', difficulty:2,
+    question:'MICROORGANISMS (like bacteria) are:',
+    options:[
+      'Non-living chemicals',
+      'Living things too small to be seen without a microscope',
+      'Only found in dirty water',
+      'Only found in hospitals'
+    ],
+    answer:'Living things too small to be seen without a microscope',
+    hint:'Micro = very small. Organism = living thing.',
+    explanation:'<b>Microorganisms</b> (microbes) are <b>living things so small they can only be seen with a microscope</b>. They include bacteria, viruses and fungi. They show MRS GREN characteristics. Some are helpful (making yoghurt); others cause disease.' }),
+
+  makeMCQ({ id:'g4s-liv-018', chapterId:'g4sci-living', difficulty:3,
+    question:'Which group correctly separates LIVING from NON-LIVING things?',
+    options:[
+      'Living: river, fish, tree | Non-living: rock, sand, cloud',
+      'Living: fish, tree, mushroom | Non-living: river, rock, sand',
+      'Living: river, rock, fish | Non-living: tree, sand, cloud',
+      'Living: rock, tree, sand | Non-living: fish, mushroom, river'
+    ],
+    answer:'Living: fish, tree, mushroom | Non-living: river, rock, sand',
+    hint:'A river moves but is not living — movement alone does not make something living.',
+    explanation:'"Living: <b>fish, tree, mushroom</b>" — all show MRS GREN. "Non-living: <b>river, rock, sand</b>" — they do not breathe, grow, feed or reproduce. A river moves because of gravity, not because it is alive.' }),
+
+  makeMCQ({ id:'g4s-liv-019', chapterId:'g4sci-living', difficulty:4,
+    question:'Shan says: "A car moves, uses fuel for energy, and produces exhaust gas. It must be living." Which response CORRECTLY explains why a car is NOT living?',
+    options:[
+      'Cars are man-made, so they are never living.',
+      'A car does not grow, cannot reproduce, and cannot respond to its environment on its own — it fails the MRS GREN test.',
+      'Cars are living because they use fuel the same way animals use food.',
+      'Cars are non-living because they cannot fly.'
+    ],
+    answer:'A car does not grow, cannot reproduce, and cannot respond to its environment on its own — it fails the MRS GREN test.',
+    hint:'Apply ALL of MRS GREN: does a car grow? Can it reproduce? Does it respond to stimuli independently?',
+    explanation:'A car moves and uses fuel, but it is <b>not living</b> because it does not: <b>grow</b> (stays the same size), <b>reproduce</b> (cannot make baby cars on its own), or <b>respond to its environment independently</b>. It fails multiple MRS GREN checks. All 7 characteristics must be present for something to be classified as living.' })
+
+);
