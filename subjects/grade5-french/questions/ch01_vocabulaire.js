@@ -74,3 +74,69 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Bonjour</b>" s\'utilise pendant la journée (le matin et l\'après-midi). "Bonsoir" = le soir. "Bonne nuit" = avant de dormir. "Salut" = informel, à tout moment.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5fr-voc-011', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'Comment dit-on "1 000" en français ?',
+    options:['cent','mille','dix','douze'],
+    answer:'mille',
+    hint:'100 = cent, 1 000 = ?',
+    explanation:'"<b>Mille</b>" = 1 000. Les nombres : 100 = cent, 200 = deux cents, 1 000 = mille, 2 000 = deux mille. Note : "cents" prend un s quand il est multiplié et n\'est pas suivi d\'un autre nombre : deux cents / deux cent cinq.' }),
+
+  makeMCQ({ id:'g5fr-voc-012', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'Quelle saison correspond à "l\'été" en anglais ?',
+    options:['spring','summer','autumn','winter'],
+    answer:'summer',
+    hint:'Les quatre saisons : le printemps, l\'été, l\'automne, l\'hiver.',
+    explanation:'"<b>l\'été</b>" = summer. Les saisons : le printemps (spring), l\'été (summer), l\'automne (autumn), l\'hiver (winter). À Maurice, l\'été correspond à la saison chaude et pluvieuse (novembre – avril).' }),
+
+  makeMCQ({ id:'g5fr-voc-013', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'Quel jour vient juste avant "dimanche" ?',
+    options:['lundi','jeudi','vendredi','samedi'],
+    answer:'samedi',
+    hint:'La semaine se termine avec samedi, puis dimanche.',
+    explanation:'"<b>samedi</b>" (Saturday) vient avant "dimanche" (Sunday). Les jours de la semaine : lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche. En français, les jours ne prennent pas de majuscule.' }),
+
+  makeMCQ({ id:'g5fr-voc-014', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'Que signifie "Il est midi et demi" ?',
+    options:['It is 12:00','It is 12:30','It is 11:30','It is 1:00'],
+    answer:'It is 12:30',
+    hint:'"midi" = 12h00 ; "et demi" = + 30 minutes.',
+    explanation:'"<b>midi et demi</b>" = 12:30. Expressions d\'heure : et quart (+ 15 min), et demi (+ 30 min), moins le quart (− 15 min). "Il est minuit" = 00:00. "Il est midi" = 12:00.' }),
+
+  makeMCQ({ id:'g5fr-voc-015', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'Que veut dire "une barque" ? (Mot du texte PSAC 2025)',
+    options:['a fishing hook','a small wooden boat','a bucket','a beach'],
+    answer:'a small wooden boat',
+    hint:'Sanjeev et Marcelin montent à bord de leur petite barque en bois.',
+    explanation:'"<b>une barque</b>" = a small wooden boat (rowing boat / dinghy). Du texte PSAC 2025 : "Les deux gamins montent à bord de leur petite barque en bois." Une barque est plus petite qu\'un bateau ou un navire.' }),
+
+  makeMCQ({ id:'g5fr-voc-016', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'Que signifie "sain et sauf" ? (Expression du PSAC 2025)',
+    options:['tired and cold','safe and sound','lost and scared','hungry and thirsty'],
+    answer:'safe and sound',
+    hint:'Après le sauvetage, les parents ont été soulagés car les enfants étaient "sains et saufs".',
+    explanation:'"<b>sain et sauf</b>" = safe and sound (non blessé, hors de danger). Du PSAC 2025 : "les enfants sont sains et saufs." L\'expression peut s\'accorder : saine et sauve (f), sains et saufs (m pl), saines et sauves (f pl).' }),
+
+  makeTF({ id:'g5fr-voc-017', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'"Il pleut" veut dire "it is raining".',
+    answer:true,
+    hint:'"Pleuvoir" = to rain. "Il pleut" est une expression impersonnelle.',
+    explanation:'<b>Vrai.</b> "Il pleut" = it is raining. Les expressions météo utilisent le "il" impersonnel : il neige (it is snowing), il fait chaud (it is hot), il y a du vent (it is windy), il fait beau (the weather is fine), il fait mauvais (the weather is bad).' }),
+
+  makeMCQ({ id:'g5fr-voc-018', chapterId:'fr-vocabulaire', difficulty:3,
+    question:'Quel mot n\'appartient PAS au thème de la pêche ?',
+    options:['un hameçon','un seau','une barque','un congélateur'],
+    answer:'un congélateur',
+    hint:'Trois mots viennent du texte de pêche 2025 ; un vient d\'une autre histoire.',
+    explanation:'"<b>un congélateur</b>" (a freezer) n\'appartient pas au thème de la pêche. "Un hameçon" = a fishing hook, "un seau" = a bucket, "une barque" = a small boat — tous liés à la pêche. "Un congélateur" est apparu dans l\'histoire du supermarché (Gaminou, PSAC 2024).' }),
+
+  makeMCQ({ id:'g5fr-voc-019', chapterId:'fr-vocabulaire', difficulty:4,
+    question:'Dans "Ravis, ils s\'amusent et parlent de revenir le lendemain", que signifie "ravis" ?',
+    options:['tired','delighted','bored','surprised'],
+    answer:'delighted',
+    hint:'Ils venaient d\'attraper beaucoup de poissons. "Ravi" vient du verbe "ravir" = enchanter.',
+    explanation:'"<b>ravis</b>" = delighted, very pleased. Les garçons étaient heureux parce que les poissons mordaient rapidement et le seau était presque plein. "Ravi" est plus fort que "content" — il exprime une grande joie. Synonymes : enchantés, comblés, très heureux.' })
+
+);

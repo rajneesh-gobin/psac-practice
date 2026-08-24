@@ -78,3 +78,80 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Pris</b>" est le participe passé de "prendre" : j\'<b>ai pris</b> le bus. Autres verbes en -endre : apprendre → appris, comprendre → compris, surprendre → surpris.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5fr-pc-011', chapterId:'fr-passe-compose', difficulty:1,
+    question:'Quel est le participe passé de "voir" ?',
+    options:['voyé','vé','vu','voir'],
+    answer:'vu',
+    hint:'"Voir" est irrégulier. "J\'ai ___ ce film."',
+    explanation:'"<b>vu</b>" — voir → vu. J\'ai vu, tu as vu, il a vu. Autres participes passés irréguliers en -u : boire → bu, croire → cru, lire → lu, courir → couru, savoir → su.' }),
+
+  makeMCQ({ id:'g5fr-pc-012', chapterId:'fr-passe-compose', difficulty:1,
+    question:'Quel auxiliaire le verbe "venir" utilise-t-il au passé composé ?',
+    options:['avoir','être','aller','faire'],
+    answer:'être',
+    hint:'"Venir" fait partie du groupe DR MRS VAN DER TRAMP.',
+    explanation:'"<b>être</b>" — venir utilise être : je suis venu(e). Les verbes DR MRS VAN DER TRAMP (Devenir, Revenir, Mourir, Rester, Sortir, Venir, Arriver, Naître, Descendre, Entrer, Rentrer, Tomber, Repartir, Aller, Monter, Partir) + tous les verbes réfléchis utilisent être.' }),
+
+  makeMCQ({ id:'g5fr-pc-013', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Complétez : "Il ___ (tomber) de son vélo hier."',
+    options:['a tombé','est tombé','a tombe','est tombe'],
+    answer:'est tombé',
+    hint:'"Tomber" utilise l\'auxiliaire "être".',
+    explanation:'"Il <b>est tombé</b> de son vélo hier." — tomber utilise être. Accord : il est tombé / elle est tombée / ils sont tombés / elles sont tombées. Autres verbes similaires : monter → il est monté, descendre → il est descendu.' }),
+
+  makeMCQ({ id:'g5fr-pc-014', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Comment forme-t-on la NÉGATION au passé composé ?\n"Il a mangé." → ?',
+    options:[
+      'Il n\'a pas mangé.',
+      'Il a ne mangé pas.',
+      'Il n\'mangé pas a.',
+      'Il ne pas a mangé.'
+    ],
+    answer:'Il n\'a pas mangé.',
+    hint:'Au passé composé, "ne...pas" encadre l\'AUXILIAIRE, pas le participe passé.',
+    explanation:'"Il <b>n\'a pas mangé</b>." — La négation au passé composé : sujet + <b>ne</b> + auxiliaire + <b>pas</b> + participe passé. "Ne" et "pas" encadrent l\'auxiliaire. Exemples : Elle n\'est pas venue. / Nous n\'avons pas fini.' }),
+
+  makeMCQ({ id:'g5fr-pc-015', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Complétez : "Nous ___ (aller) à la plage samedi dernier."',
+    options:['avons allé','sommes allés','sommes allées','avons allés'],
+    answer:'sommes allés',
+    hint:'"Aller" utilise être. Sujet = "nous" (groupe masculin ou mixte → -és).',
+    explanation:'"Nous <b>sommes allés</b> à la plage." — aller → être. Pour "nous" (masculin ou mixte) : sommes + allés. Pour un groupe féminin : nous sommes allées. Avec être, le participe s\'accorde avec le sujet.' }),
+
+  makeMCQ({ id:'g5fr-pc-016', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Quel est le participe passé de "boire" ?',
+    options:['boiré','bu','boi','buvé'],
+    answer:'bu',
+    hint:'"Boire" est irrégulier. "Il a ___ de l\'eau."',
+    explanation:'"<b>bu</b>" — boire → bu. J\'ai bu de l\'eau. Participes irréguliers en -u : boire → bu, avoir → eu, savoir → su, lire → lu, croire → cru. Ces formes doivent être mémorisées car elles n\'ont pas de règle commune.' }),
+
+  makeMCQ({ id:'g5fr-pc-017', chapterId:'fr-passe-compose', difficulty:3,
+    question:'Complétez : "Elles ___ (naître) à Maurice."',
+    options:['ont nées','sont nées','sont nés','ont naîts'],
+    answer:'sont nées',
+    hint:'"Naître" utilise être. Sujet = "elles" → accord féminin pluriel.',
+    explanation:'"Elles <b>sont nées</b> à Maurice." — naître utilise être. Accord féminin pluriel : né + es = nées. Tableau : il est né / elle est née / ils sont nés / elles sont <b>nées</b>. "Naître" fait partie du groupe DR MRS VAN DER TRAMP (N = naître).' }),
+
+  makeMCQ({ id:'g5fr-pc-018', chapterId:'fr-passe-compose', difficulty:3,
+    question:'Question type PSAC 2025 (Q4c) : "La semaine dernière, ta voisine ___ pour la France." (partir)',
+    options:['a parti','est partie','a partis','est partes'],
+    answer:'est partie',
+    hint:'"Partir" utilise être. Sujet = "ta voisine" (féminin singulier).',
+    explanation:'"ta voisine <b>est partie</b> pour la France." — partir utilise être. Accord : "ta voisine" = féminin singulier → partie. Masc. : ton voisin est parti. Fém. : ta voisine est partie. Plur. masc. : ils sont partis. Plur. fém. : elles sont parties. (Cette phrase exacte a été testée au PSAC 2025 Q4c.)' }),
+
+  makeMCQ({ id:'g5fr-pc-019', chapterId:'fr-passe-compose', difficulty:4,
+    question:'Trouvez l\'erreur dans : "Hier soir, ils ont allé au cinéma et ont bu une limonade."',
+    options:[
+      '"ont bu" est faux → il faut "sont bu"',
+      '"ont allé" est faux → il faut "sont allés" (aller utilise être)',
+      '"hier soir" est faux → utiliser seulement "hier"',
+      'Il n\'y a pas d\'erreur dans cette phrase'
+    ],
+    answer:'"ont allé" est faux → il faut "sont allés" (aller utilise être)',
+    hint:'Vérifiez l\'auxiliaire du verbe "aller".',
+    explanation:'"<b>ont allé</b>" → "<b>sont allés</b>" — aller utilise ÊTRE, pas avoir. "Ils sont allés au cinéma." "Ont bu" est correct (boire → avoir → ils ont bu). L\'erreur la plus courante au PSAC : utiliser "avoir" avec les verbes DR MRS VAN DER TRAMP. "Aller" prend TOUJOURS être.' })
+
+);

@@ -74,3 +74,84 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Grand</b>" se place <b>avant</b> le nom : un <b>grand</b> immeuble, une <b>grande</b> ville. Règle BAGS : Beauté (beau, joli), Âge (jeune, vieux), Grandeur/nombre (grand, petit, gros), formes courtes (bon, mauvais) → avant le nom. Les autres (couleurs, nationalités, etc.) → après.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5fr-adj-011', chapterId:'fr-adjectifs', difficulty:1,
+    question:'Quelle est la forme féminine de "blanc" ?',
+    options:['blanche','blance','blanque','blanc'],
+    answer:'blanche',
+    hint:'Les adjectifs en -nc forment généralement leur féminin en -che.',
+    explanation:'"<b>blanche</b>" — blanc → blanche. Autres adjectifs en -c → -che : sec → sèche, franc → franche. Note : "public" → "publique" est différent. Féminin : une fleur blanche, une voiture blanche.' }),
+
+  makeMCQ({ id:'g5fr-adj-012', chapterId:'fr-adjectifs', difficulty:1,
+    question:'Quelle est la forme féminine de "sportif" ?',
+    options:['sportive','sportife','sportiève','sportife'],
+    answer:'sportive',
+    hint:'Les adjectifs en -if changent en -ive au féminin.',
+    explanation:'"<b>sportive</b>" — -if → -ive : sportif → sportive. Autres exemples : actif → active, naïf → naïve, attentif → attentive, négatif → négative. Question type très courante au PSAC !' }),
+
+  makeMCQ({ id:'g5fr-adj-013', chapterId:'fr-adjectifs', difficulty:2,
+    question:'Complétez : "Cette fille est très ___ ." (heureux)',
+    options:['heureux','heureuse','heureuses','heureux'],
+    answer:'heureuse',
+    hint:'"Fille" est féminin singulier → forme féminine singulière de l\'adjectif.',
+    explanation:'"<b>heureuse</b>" — heureux (masc.) → heureuse (fém.). Schéma -eux → -euse : heureux/heureuse, courageux/courageuse, sérieux/sérieuse, dangereux/dangereuse. L\'adjectif doit s\'accorder en genre et en nombre avec le nom qu\'il qualifie.' }),
+
+  makeMCQ({ id:'g5fr-adj-014', chapterId:'fr-adjectifs', difficulty:2,
+    question:'Quel est le comparatif de supériorité de "grand" ?',
+    options:['aussi grand','plus grand','le plus grand','très grand'],
+    answer:'plus grand',
+    hint:'Comparatif = more than → "plus + adjectif". Superlatif = the most → "le/la plus + adjectif".',
+    explanation:'"<b>plus grand</b>" — le comparatif de supériorité. Structures : plus + adj (+ que) → comparatif de supériorité. aussi + adj (+ que) → comparatif d\'égalité. moins + adj (+ que) → comparatif d\'infériorité. Superlatif : le/la/les plus + adj.' }),
+
+  makeMCQ({ id:'g5fr-adj-015', chapterId:'fr-adjectifs', difficulty:2,
+    question:'Dans "son ventre est aussi doux que Caramel", pourquoi "doux" est-il au masculin ?',
+    options:[
+      '"doux" est toujours masculin',
+      '"ventre" (stomach) est masculin → l\'adjectif est masculin',
+      '"Caramel" est masculin',
+      '"doux" ne change pas au féminin'
+    ],
+    answer:'"ventre" (stomach) est masculin → l\'adjectif est masculin',
+    hint:'L\'adjectif s\'accorde avec le nom qu\'il qualifie. Quel nom "doux" qualifie-t-il ici ?',
+    explanation:'"<b>ventre</b>" est masculin → "doux" reste au masculin. Si "ventre" était féminin, on dirait "douce". Règle d\'accord : l\'adjectif s\'accorde en genre ET en nombre avec le nom qu\'il qualifie. (Exemple tiré du manuel scolaire MIE Grade 5, PSAC 2025.)' }),
+
+  makeTF({ id:'g5fr-adj-016', chapterId:'fr-adjectifs', difficulty:2,
+    question:'"La forme féminine de \'bon\' est \'bone\'."',
+    answer:false,
+    hint:'"Bon" a une forme féminine irrégulière.',
+    explanation:'<b>Faux.</b> La forme féminine de "bon" est "<b>bonne</b>" (double n). Bon → bonne, mignon → mignonne, ancien → ancienne, moyen → moyenne. Ces adjectifs doublent la consonne finale au féminin. Autres irréguliers : beau → belle, vieux → vieille, nouveau → nouvelle.' }),
+
+  makeMCQ({ id:'g5fr-adj-017', chapterId:'fr-adjectifs', difficulty:3,
+    question:'Corrigez l\'ordre des adjectifs : "C\'est une voiture rouge vieille."',
+    options:[
+      'C\'est une rouge voiture vieille.',
+      'C\'est une vieille voiture rouge.',
+      'C\'est une voiture vieille rouge.',
+      'C\'est une rouge vieille voiture.'
+    ],
+    answer:'C\'est une vieille voiture rouge.',
+    hint:'"Vieille" (âge) = BAGS → avant le nom. "Rouge" (couleur) → après le nom.',
+    explanation:'"<b>une vieille voiture rouge</b>" — Les adjectifs BAGS (Beauté, Âge, Bonté, Grandeur) se placent AVANT le nom : belle, vieille, bonne, grande. Les adjectifs de couleur se placent TOUJOURS après le nom : rouge, bleu, vert. Donc : vieille (avant) + voiture + rouge (après).' }),
+
+  makeMCQ({ id:'g5fr-adj-018', chapterId:'fr-adjectifs', difficulty:3,
+    question:'Quel est le superlatif de supériorité de "intelligent" pour un groupe masculin pluriel ?',
+    options:['le plus intelligent','les plus intelligents','très intelligent','plus intelligent'],
+    answer:'les plus intelligents',
+    hint:'Superlatif + accord pluriel masculin.',
+    explanation:'"<b>les plus intelligents</b>" — superlatif pour un groupe masculin pluriel : les + plus + adj (accordé au pluriel). "Ce sont les élèves les plus intelligents de l\'école." Féminin singulier : la plus intelligente. Pluriel féminin : les plus intelligentes.' }),
+
+  makeMCQ({ id:'g5fr-adj-019', chapterId:'fr-adjectifs', difficulty:4,
+    question:'Quelle phrase utilise les adjectifs CORRECTEMENT ?',
+    options:[
+      'Il porte un chapeau grand noir.',
+      'Elle a de beaux yeux marron.',
+      'C\'est une fille intelligente belle.',
+      'Il a des cheveux noirs très longues.'
+    ],
+    answer:'Elle a de beaux yeux marron.',
+    hint:'"Beau" (BAGS) est avant le nom ; "marron" (couleur) est après. Vérifiez aussi les accords.',
+    explanation:'"<b>Elle a de beaux yeux marron.</b>" ✓ — beau (BAGS) → beaux (avant, masc. plur.), marron (couleur invariable → après, pas d\'accord). Erreurs : (1) "chapeau <b>grand</b> noir" → "grand" (BAGS) doit être avant : un <b>grand</b> chapeau noir ; (2) "fille intelligente belle" → beau (BAGS) doit être avant : une <b>belle</b> fille intelligente ; (3) "cheveux... <b>longues</b>" → cheveux est masculin → longs.' })
+
+);
