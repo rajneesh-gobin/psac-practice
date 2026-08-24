@@ -941,27 +941,56 @@ function _renderParentControls(acct) {
   if (examToggle) examToggle.checked = !examOff;
 
   const chLocks = _el('pd-chapter-locks');
-  if (chLocks) {
-    const lockGrade = acct?.grade || 5;
-    const lockPacks = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
-      .filter(p => p.grade === lockGrade && !p.comingSoon);
-    chLocks.innerHTML = lockPacks.map(pack => {
-      const packChs = pack._chapters || pack.chapters || [];
-      const rows = packChs.map(ch => {
-        const isLocked = lockedChs.includes(ch.id);
-        return `<label class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer">
-          <input type="checkbox" ${!isLocked ? 'checked' : ''} onchange="Auth.toggleChapterLock('${ch.id}', !this.checked)"
-            class="w-4 h-4 accent-blue-500">
-          <span class="text-sm text-gray-700 dark:text-gray-300">${ch.icon || ''} ${ch.name}</span>
-          ${isLocked ? '<span class="ml-auto text-xs text-red-400">Locked 🔒</span>' : ''}
-        </label>`;
-      }).join('');
-      return `<div class="col-span-full mb-2">
-        <div class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">${pack.icon} ${pack.subject}</div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-0.5">${rows}</div>
-      </div>`;
-    }).join('');
-  }
+  if (!chLocks) return;
+
+  const lockGrade = acct?.grade || 5;
+  const lockPacks = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .filter(p => p.grade === lockGrade && !p.comingSoon);
+
+  if (!lockPacks.length) { chLocks.innerHTML = '<p class="text-sm text-gray-400 text-center py-3">No subjects loaded yet.</p>'; return; }
+
+  chLocks.innerHTML = lockPacks.map((pack, idx) => {
+    const packChs    = (pack._chapters || pack.chapters || []).filter(ch => !ch.enrichment);
+    const enrichChs  = (pack._chapters || pack.chapters || []).filter(ch =>  ch.enrichment);
+    const lockedMain = packChs.filter(ch => lockedChs.includes(ch.id)).length;
+    const hasLocked  = lockedMain > 0;
+    const isOpen     = hasLocked || idx === 0;
+
+    const pill = hasLocked
+      ? `<span class="text-xs font-semibold text-red-500 bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full">${lockedMain} locked</span>`
+      : `<span class="text-xs font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded-full">All open</span>`;
+
+    const mkRow = (ch, isEnr) => {
+      const isLocked = lockedChs.includes(ch.id);
+      return `<label class="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-colors
+          ${isLocked ? 'bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'}">
+        <input type="checkbox" ${isLocked ? '' : 'checked'} onchange="Auth.toggleChapterLock('${ch.id}',!this.checked)"
+          class="w-4 h-4 accent-blue-500 shrink-0">
+        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${isEnr ? ' <span class="text-xs text-amber-500">✨</span>' : ''}</span>
+        ${isLocked ? '<span class="text-xs font-medium text-red-400 shrink-0">🔒 Locked</span>' : ''}
+      </label>`;
+    };
+
+    const mainRows = packChs.map(ch => mkRow(ch, false)).join('');
+    const enrSection = enrichChs.length ? `
+      <div class="mt-1 pt-1 border-t border-dashed border-gray-200 dark:border-gray-600">
+        <div class="px-3 py-1 text-xs text-amber-500 font-semibold uppercase tracking-wide">✨ Bonus Chapters</div>
+        ${enrichChs.map(ch => mkRow(ch, true)).join('')}
+      </div>` : '';
+
+    return `<div class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden${idx ? ' mt-2' : ''}">
+      <button onclick="var b=this.nextElementSibling;b.classList.toggle('hidden');this.querySelector('.chev').style.transform=b.classList.contains('hidden')?'':'rotate(180deg)'"
+        class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-800/60 hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors text-left">
+        <span class="text-xl select-none">${pack.icon}</span>
+        <span class="flex-1 font-semibold text-sm text-gray-800 dark:text-white">${pack.subject}</span>
+        ${pill}
+        <span class="chev text-gray-400 text-xs transition-transform" style="transform:${isOpen ? 'rotate(180deg)' : ''}">▼</span>
+      </button>
+      <div class="${isOpen ? '' : 'hidden'} px-2 py-1.5 space-y-0.5">
+        ${mainRows}${enrSection}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ── ASSIGNMENT CHAPTER HELPER ─────────────────
