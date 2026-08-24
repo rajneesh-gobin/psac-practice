@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════════════════════
-//  MathMaster — Super Admin: Create Pre-Activated Account
+//  PSAC Exam Practice — Super Admin: Create Pre-Activated Account
 //  POST /.netlify/functions/create-user
 //
 //  Called only from the admin panel by a verified super admin.

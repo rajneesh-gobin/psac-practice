@@ -1,5 +1,5 @@
--- ═══════════════════════════════════════════════════════════════
---  MathMaster — Calendar Migration
+﻿-- ═══════════════════════════════════════════════════════════════
+--  PSAC Exam Practice — Calendar Migration
 --  Run this in your Supabase project → SQL Editor
 -- ═══════════════════════════════════════════════════════════════
 

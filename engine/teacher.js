@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster — Teacher Mode
+//  PSAC Exam Practice — Teacher Mode
 //  Loads LAST (after auth.js).
 //  Relies on globals: toast(), showScreen(), CHAPTERS, STATIC_QUESTIONS, shuffle()
 // ══════════════════════════════════════════════

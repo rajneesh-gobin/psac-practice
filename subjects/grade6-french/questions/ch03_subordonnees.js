@@ -271,6 +271,30 @@ STATIC_QUESTIONS.push(
     ],
     answer:'à cause d\'une / en raison du',
     hint:'Forte fièvre = cause négative → "à cause de". Manque de participants (neutre/officiel) → "en raison de".',
-    explanation:'"<b>À cause d\'une</b> forte fièvre" — cause négative. "<b>En raison du</b> manque" — cause neutre/officielle, langage formel. "Grâce à" = cause positive (résultat positif). "À cause de" = cause négative (résultat négatif). "En raison de" = cause neutre et formelle.' })
+    explanation:'"<b>À cause d\'une</b> forte fièvre" — cause négative. "<b>En raison du</b> manque" — cause neutre/officielle, langage formel. "Grâce à" = cause positive (résultat positif). "À cause de" = cause négative (résultat négatif). "En raison de" = cause neutre et formelle.' }),
+
+  makeMCQ({ id:'g6fr-sub-034', chapterId:'g6fr-subordonnees', difficulty:4,
+    question:'Identifie le connecteur logique approprié : "Il travaille beaucoup ___ réussir à l\'examen. ___ il est fatigué, il n\'abandonne pas."',
+    options:[
+      'afin de / Bien que',
+      'parce que / Donc',
+      'grâce à / Cependant',
+      'pour / Pourtant'
+    ],
+    answer:'afin de / Bien que',
+    hint:'1ère lacune : but + infinitif (même sujet). 2ème lacune : concession (il est fatigué MAIS il n\'abandonne pas).',
+    explanation:'"<b>afin de</b> réussir" (but, même sujet → afin de + infinitif). "<b>Bien que</b> il soit fatigué" (concession → bien que + subjonctif). Pour = but + infinitif (synonyme). Pourtant = opposition mais relie deux propositions indépendantes, pas une subordonnée.' }),
+
+  makeMCQ({ id:'g6fr-sub-035', chapterId:'g6fr-subordonnees', difficulty:4,
+    question:'Restructure la phrase avec "si bien que" : "Il pleuvait beaucoup. La rivière a débordé." → ?',
+    options:[
+      'Il pleuvait beaucoup si bien que la rivière a débordé.',
+      'La rivière a débordé si bien qu\'il pleuvait.',
+      'Si bien qu\'il pleuvait, la rivière a débordé.',
+      'Il pleuvait si bien que la rivière débordait.'
+    ],
+    answer:'Il pleuvait beaucoup si bien que la rivière a débordé.',
+    hint:'"Si bien que" exprime une conséquence : cause → si bien que → effet.',
+    explanation:'"<b>Il pleuvait beaucoup si bien que la rivière a débordé.</b>" — "si bien que" = tellement que → conséquence. Ordre : <b>cause + si bien que + conséquence</b>. Ne pas inverser les propositions. Distinguer : "parce que" introduit la cause, "si bien que / donc / ainsi" introduisent la conséquence.' })
 
 );

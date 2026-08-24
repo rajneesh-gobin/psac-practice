@@ -1,17 +1,17 @@
-// Netlify Function — Assignment Completion Notifier
+﻿// Netlify Function — Assignment Completion Notifier
 // Called by the student's browser when they finish an assignment.
 // Looks up the parent's email and sends a summary via Resend.
 //
 // Required Netlify environment variables:
 //   SUPABASE_SERVICE_ROLE_KEY  — service role key (never in frontend)
 //   RESEND_API_KEY             — from resend.com (free tier available)
-//   NOTIFY_FROM_EMAIL          — e.g. "PSAC Master <no-reply@yourdomain.com>"
+//   NOTIFY_FROM_EMAIL          — e.g. "PSAC Exam Practice <no-reply@yourdomain.com>"
 //                                Defaults to Resend test address if unset.
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RESEND_KEY   = process.env.RESEND_API_KEY;
-const FROM_EMAIL   = process.env.NOTIFY_FROM_EMAIL || 'PSAC Master <onboarding@resend.dev>';
+const FROM_EMAIL   = process.env.NOTIFY_FROM_EMAIL || 'PSAC Exam Practice <onboarding@resend.dev>';
 
 function _he(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -76,7 +76,7 @@ exports.handler = async (event) => {
   <div style="max-width:480px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
     <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:24px 28px;color:#fff">
       <div style="font-size:22px;font-weight:bold">📊 Assignment Complete!</div>
-      <div style="opacity:.85;margin-top:4px;font-size:14px">PSAC Master — Parent Notification</div>
+      <div style="opacity:.85;margin-top:4px;font-size:14px">PSAC Exam Practice — Parent Notification</div>
     </div>
     <div style="padding:24px 28px">
       <p style="margin:0 0 16px;color:#374151;font-size:15px">
@@ -95,7 +95,7 @@ exports.handler = async (event) => {
         View Full Dashboard →
       </a>
       <p style="margin:16px 0 0;color:#9ca3af;font-size:12px;text-align:center">
-        You received this because you are a parent on PSAC Master.<br>
+        You received this because you are a parent on PSAC Exam Practice.<br>
         To unsubscribe, remove your email in account settings.
       </p>
     </div>

@@ -1,5 +1,5 @@
--- ═══════════════════════════════════════════════════════════════════════════
---  MathMaster — DB Alignment Patch
+﻿-- ═══════════════════════════════════════════════════════════════════════════
+--  PSAC Exam Practice — DB Alignment Patch
 --  Run this in Supabase → SQL Editor
 --  Fixes: C-2 (admin RLS), C-3 (plans RLS), H-1 (missing plans),
 --         H-2 (verify_student_pin lockout + expiry), M-1 (hide PIN from response)

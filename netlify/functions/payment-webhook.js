@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════════════════════
-//  MathMaster — Payment Webhook (SKELETON)
+//  PSAC Exam Practice — Payment Webhook (SKELETON)
 //
 //  This endpoint will receive payment confirmations from
 //  payment providers and activate the matching subscription.

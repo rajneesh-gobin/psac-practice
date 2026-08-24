@@ -234,6 +234,32 @@ STATIC_QUESTIONS.push(
     options:['il est possible que','bien que','après que','avant que'],
     answer:'après que',
     hint:'"Après que" = action déjà accomplie → indicatif (pas subjonctif). C\'est une exception importante.',
-    explanation:'"<b>Après que</b>" + <b>indicatif</b> — c\'est une exception : "Après qu\'il <b>est parti</b>…" / "Après qu\'elle <b>aura fini</b>…". En français correct, "après que" demande l\'indicatif car l\'action est accomplie et certaine. Comparer avec "<b>avant que</b>" → subjonctif (action non encore réalisée). Cette distinction est souvent testée au niveau PSAC.' })
+    explanation:'"<b>Après que</b>" + <b>indicatif</b> — c\'est une exception : "Après qu\'il <b>est parti</b>…" / "Après qu\'elle <b>aura fini</b>…". En français correct, "après que" demande l\'indicatif car l\'action est accomplie et certaine. Comparer avec "<b>avant que</b>" → subjonctif (action non encore réalisée). Cette distinction est souvent testée au niveau PSAC.' }),
+
+  makeMCQ({ id:'g6fr-sjv-033', chapterId:'g6fr-subjunctif', difficulty:3,
+    question:'Complète : "Quoique le problème ___ (être) difficile, il a trouvé la solution."',
+    options:['est','sera','soit','était'],
+    answer:'soit',
+    hint:'"Quoique" = although → déclencheur du subjonctif.',
+    explanation:'"Quoique le problème <b>soit</b> difficile" — "quoique" (= bien que, although) → subjonctif. Être → que je sois, que tu sois, qu\'il/elle <b>soit</b>. "Quoique" et "bien que" sont synonymes et requièrent toujours le subjonctif.' }),
+
+  makeMCQ({ id:'g6fr-sjv-034', chapterId:'g6fr-subjunctif', difficulty:3,
+    question:'Complète : "Je cherche un appartement qui ___ (avoir) une terrasse."',
+    options:['a','aura','ait','avait'],
+    answer:'ait',
+    hint:'Proposition relative exprimant un souhait/une caractéristique désirée (pas un fait certain) → subjonctif.',
+    explanation:'"Je cherche un appartement qui <b>ait</b> une terrasse." — Subjonctif dans une relative après un antécédent indéfini (l\'appartement n\'existe pas encore). Avoir → que j\'aie, que tu aies, qu\'il/elle <b>ait</b>. Si l\'appartement existait : "J\'ai trouvé un appartement qui <b>a</b> une terrasse" (indicatif).' }),
+
+  makeMCQ({ id:'g6fr-sjv-035', chapterId:'g6fr-subjunctif', difficulty:4,
+    question:'Identifie la phrase qui nécessite le subjonctif : "Je (vouloir) que tu ___." vs "Je (croire) que tu ___."',
+    options:[
+      'veux que tu viennes / crois que tu viendras',
+      'veux que tu viens / crois que tu viennes',
+      'veux que tu viendrais / crois que tu viens',
+      'veux que tu viens / crois que tu viens'
+    ],
+    answer:'veux que tu viennes / crois que tu viendras',
+    hint:'"Vouloir que" → subjonctif. "Croire que" (affirmatif) → indicatif (futur).',
+    explanation:'"Je <b>veux</b> que tu <b>viennes</b>" (vouloir que = volonté → subjonctif). "Je <b>crois</b> que tu <b>viendras</b>" (croire que affirmatif = certitude → indicatif, futur logique). Règle PSAC : verbes de volonté/sentiment → subjonctif ; verbes d\'opinion à l\'affirmatif → indicatif.' })
 
 );

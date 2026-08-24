@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster — Content Protection
+//  PSAC Exam Practice — Content Protection
 //  Disables right-click save, view-source shortcuts,
 //  and text selection on question content.
 //  Must load FIRST in index.html.

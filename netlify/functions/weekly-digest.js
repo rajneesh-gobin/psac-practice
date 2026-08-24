@@ -1,4 +1,4 @@
-// Netlify Scheduled Function — Weekly Parent Progress Digest
+﻿// Netlify Scheduled Function — Weekly Parent Progress Digest
 // Runs every Sunday at 9:00 AM UTC.
 // Schedule is set in netlify.toml: [functions."weekly-digest"] schedule = "0 9 * * 0"
 //
@@ -10,7 +10,7 @@
 const SUPABASE_URL = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RESEND_KEY   = process.env.RESEND_API_KEY;
-const FROM_EMAIL   = process.env.NOTIFY_FROM_EMAIL || 'PSAC Master <onboarding@resend.dev>';
+const FROM_EMAIL   = process.env.NOTIFY_FROM_EMAIL || 'PSAC Exam Practice <onboarding@resend.dev>';
 
 async function sbGet(path) {
   const res = await fetch(`${SUPABASE_URL}${path}`, {
@@ -99,7 +99,7 @@ exports.handler = async () => {
     </div>
     <div style="padding:24px 28px">
       <p style="margin:0 0 16px;color:#374151;font-size:15px">
-        Here's how your children performed this week on PSAC Master.
+        Here's how your children performed this week on PSAC Exam Practice.
       </p>
       <table style="width:100%;border-collapse:collapse;font-size:14px;color:#374151">
         <thead>
@@ -120,13 +120,13 @@ exports.handler = async () => {
         </a>
       </div>
       <p style="margin:20px 0 0;color:#9ca3af;font-size:12px;text-align:center">
-        Sent every Sunday · PSAC Master
+        Sent every Sunday · PSAC Exam Practice
       </p>
     </div>
   </div>
 </body></html>`;
 
-      await sendEmail(parentEmail, `PSAC Master — Weekly Report (${weekStr})`, html);
+      await sendEmail(parentEmail, `PSAC Exam Practice — Weekly Report (${weekStr})`, html);
       sent++;
     } catch (err) {
       console.error('[weekly-digest] Error for family', family.id, err.message);

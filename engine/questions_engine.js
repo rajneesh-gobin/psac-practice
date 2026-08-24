@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster Engine — Question Pool & Access Functions
+//  PSAC Exam Practice Engine — Question Pool & Access Functions
 //  STATIC_QUESTIONS is populated at load time by subject question files.
 //  GENERATORS is populated by each subject's _manifest.js.
 //  CHAPTERS is populated by each subject's _manifest.js.

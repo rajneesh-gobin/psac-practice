@@ -242,6 +242,32 @@ STATIC_QUESTIONS.push(
     ],
     answer:'avait travaillé / aurait obtenu',
     hint:'"Hier" = passé → hypothèse passée = si + PQP → conditionnel passé.',
-    explanation:'"Si Shanvi <b>avait travaillé</b>" (si + PQP = hypothèse passée), "elle <b>aurait obtenu</b>" (conditionnel passé = conséquence passée non réalisée). Structure : <b>si + PQP → conditionnel passé</b>. "Hier" confirme que c\'est une hypothèse sur le passé.' })
+    explanation:'"Si Shanvi <b>avait travaillé</b>" (si + PQP = hypothèse passée), "elle <b>aurait obtenu</b>" (conditionnel passé = conséquence passée non réalisée). Structure : <b>si + PQP → conditionnel passé</b>. "Hier" confirme que c\'est une hypothèse sur le passé.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-033', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Complète : "Si j\'étais riche, j\'___ (acheter) une maison au bord de la mer."',
+    options:['achèterais','achèterai','achetais','aurais acheté'],
+    answer:'achèterais',
+    hint:'Si + imparfait → conditionnel présent (hypothèse irréelle du présent).',
+    explanation:'"j\'<b>achèterais</b>" — Si + <b>imparfait</b> → <b>conditionnel présent</b> (hypothèse irréelle, présent). Structure : "Si j\'<b>étais</b> riche (imparfait), j\'<b>achèterais</b> (conditionnel présent)." Acheter → j\'achèterais, tu achèterais, il achèterait (radical achet- + terminaisons : -ais, -ais, -ait, -ions, -iez, -aient).' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-034', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Quel temps est utilisé pour atténuer une demande formellement ? "Je ___ vous demander un service."',
+    options:['voulais','voudrai','voudrais','veuille'],
+    answer:'voudrais',
+    hint:'Le conditionnel de politesse = "je voudrais" (I would like).',
+    explanation:'"Je <b>voudrais</b> vous demander un service." — Le <b>conditionnel de politesse</b> adoucit une demande (= I would like). Plus poli que "je veux" (direct/brusque). Autres exemples : "Pourriez-vous m\'aider ?" / "Auriez-vous le temps ?" / "Je souhaiterais réserver une table." Ce registre est attendu dans les lettres formelles PSAC.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-035', chapterId:'g6fr-conditionnel', difficulty:4,
+    question:'Analyse : "S\'il avait plu, le match aurait été annulé, mais les joueurs auraient quand même été déçus." Quels sont les deux temps utilisés dans les deux propositions principales ?',
+    options:[
+      'Conditionnel passé / Conditionnel passé',
+      'Conditionnel présent / Conditionnel présent',
+      'Conditionnel passé / Plus-que-parfait',
+      'Imparfait / Conditionnel passé'
+    ],
+    answer:'Conditionnel passé / Conditionnel passé',
+    hint:'Les deux propositions principales (sans "si") expriment des conséquences passées hypothétiques.',
+    explanation:'"le match <b>aurait été</b> annulé" + "les joueurs <b>auraient</b> quand même <b>été</b> déçus" = deux <b>conditionnels passés</b> (avoir/être à l\'imparfait + participe passé). La proposition en "si" (S\'il avait plu = PQP) est la condition ; les deux propositions principales (aurait été, auraient été) sont les conséquences au conditionnel passé.' })
 
 );

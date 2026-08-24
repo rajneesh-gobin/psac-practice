@@ -1,5 +1,5 @@
 ﻿-- ═══════════════════════════════════════════════════════════════════════════
---  MathMaster — Forum Seed Data
+--  PSAC Exam Practice — Forum Seed Data
 --  Run in Supabase → SQL Editor
 --  Prerequisites: supabase-db-patch.sql must have been run first.
 --
@@ -35,15 +35,15 @@ BEGIN
    'P.R.', 'parent', NOW() - INTERVAL '88 days'),
 
   ('general', 'App shows white screen on my iPhone',
-   'Hello everyone, since yesterday when I open MathMaster on my iPhone (iOS 16), I just see a white/blank screen. I tried closing and reopening the app but the same problem. My husband''s Android phone works fine. Any ideas?',
+   'Hello everyone, since yesterday when I open PSAC Exam Practice on my iPhone (iOS 16), I just see a white/blank screen. I tried closing and reopening the app but the same problem. My husband''s Android phone works fine. Any ideas?',
    'A.S.', 'parent', NOW() - INTERVAL '62 days'),
 
   ('general', 'How to switch between my two children?',
-   'I have two children using MathMaster — one in Grade 4 and one in Grade 6. After logging in with my parent account, I can only see one child''s dashboard. How do I switch between them? I''m new to the app so sorry if this is obvious!',
+   'I have two children using PSAC Exam Practice — one in Grade 4 and one in Grade 6. After logging in with my parent account, I can only see one child''s dashboard. How do I switch between them? I''m new to the app so sorry if this is obvious!',
    'M.S.', 'parent', NOW() - INTERVAL '45 days'),
 
-  ('general', 'Can I use MathMaster on a Chromebook?',
-   'My son''s school gave him a Chromebook this year. Can he use MathMaster on it? Or is it only for phones and tablets? Wanted to check before setting it up for him.',
+  ('general', 'Can I use PSAC Exam Practice on a Chromebook?',
+   'My son''s school gave him a Chromebook this year. Can he use PSAC Exam Practice on it? Or is it only for phones and tablets? Wanted to check before setting it up for him.',
    'S.D.', 'parent', NOW() - INTERVAL '28 days'),
 
   ('general', 'My son''s timetable disappeared after I logged out',
@@ -51,7 +51,7 @@ BEGIN
    'R.G.', 'parent', NOW() - INTERVAL '11 days'),
 
   ('general', 'Progress not saving when using school WiFi',
-   'My daughter uses MathMaster during lunch break at school but her scores and progress don''t seem to save when she''s on the school WiFi. At home everything saves perfectly. Could the school network be blocking something?',
+   'My daughter uses PSAC Exam Practice during lunch break at school but her scores and progress don''t seem to save when she''s on the school WiFi. At home everything saves perfectly. Could the school network be blocking something?',
    'N.K.', 'parent', NOW() - INTERVAL '3 days');
 
   -- ──────────────────────────────────────────────────────────────────────
@@ -228,7 +228,7 @@ What strategies work best for your children? Please share!',
    'A.B.', 'parent', NOW() - INTERVAL '33 days'),
 
   ('tips', 'How to stay focused when practising on the app?',
-   'I have a bad habit of picking up my phone when using MathMaster — I''ll do 2-3 questions then check a message then come back. I know it''s hurting my focus and scores. Any advice for staying focused during a practice session?',
+   'I have a bad habit of picking up my phone when using PSAC Exam Practice — I''ll do 2-3 questions then check a message then come back. I know it''s hurting my focus and scores. Any advice for staying focused during a practice session?',
    'RishiP', 'student', NOW() - INTERVAL '14 days');
 
   -- ──────────────────────────────────────────────────────────────────────
@@ -236,11 +236,11 @@ What strategies work best for your children? Please share!',
   -- ──────────────────────────────────────────────────────────────────────
   INSERT INTO public.forum_posts (category, title, body, author_name, author_type, created_at) VALUES
   ('suggest', 'Please add a study timetable / schedule feature!',
-   'It would be amazing if MathMaster had a built-in study timetable where parents can plan the week''s study sessions for each child. Right now we use a paper planner but it would be much more convenient to have it in the app. Even a simple weekly grid where you can block out study times and subjects would be very useful!',
+   'It would be amazing if PSAC Exam Practice had a built-in study timetable where parents can plan the week''s study sessions for each child. Right now we use a paper planner but it would be much more convenient to have it in the app. Even a simple weekly grid where you can block out study times and subjects would be very useful!',
    'P.R.', 'parent', NOW() - INTERVAL '118 days'),
 
   ('suggest', 'Can you add more subjects — English, French and Science?',
-   'At the moment I can only see Maths chapters. But PSAC covers English, French, Science, and Social Studies too. Any plans to add content for those subjects? My daughter needs to revise all her PSAC subjects, not just Maths. It would make MathMaster a complete PSAC preparation tool if all subjects were covered.',
+   'At the moment I can only see Maths chapters. But PSAC covers English, French, Science, and Social Studies too. Any plans to add content for those subjects? My daughter needs to revise all her PSAC subjects, not just Maths. It would make PSAC Exam Practice a complete PSAC preparation tool if all subjects were covered.',
    'A.B.', 'parent', NOW() - INTERVAL '108 days'),
 
   ('suggest', 'We need a community forum to discuss and ask questions!',
@@ -248,7 +248,7 @@ What strategies work best for your children? Please share!',
    'V.P.', 'parent', NOW() - INTERVAL '103 days'),
 
   ('suggest', 'Please add a dark mode for studying at night',
-   'I study in the evening after dinner and the white background is very bright in a dark room. My eyes get tired quickly. Many apps now have a dark mode option — would it be possible to add this to MathMaster? It would make evening study sessions much more comfortable.',
+   'I study in the evening after dinner and the white background is very bright in a dark room. My eyes get tired quickly. Many apps now have a dark mode option — would it be possible to add this to PSAC Exam Practice? It would make evening study sessions much more comfortable.',
    'RishiP', 'student', NOW() - INTERVAL '92 days'),
 
   ('suggest', 'Can parents view their child''s detailed progress?',
@@ -260,7 +260,7 @@ What strategies work best for your children? Please share!',
    'LéaL', 'student', NOW() - INTERVAL '28 days'),
 
   ('suggest', 'Would love to have printable past PSAC exam papers',
-   'This is a suggestion for the future — it would be fantastic if MathMaster could provide printable versions of past PSAC exam papers or similar practice papers that match the format exactly. Many students benefit from practising on paper under timed conditions, exactly like the real exam. Would this be possible to add?',
+   'This is a suggestion for the future — it would be fantastic if PSAC Exam Practice could provide printable versions of past PSAC exam papers or similar practice papers that match the format exactly. Many students benefit from practising on paper under timed conditions, exactly like the real exam. Would this be possible to add?',
    'J.L.', 'parent', NOW() - INTERVAL '13 days'),
 
   ('suggest', 'Suggestion: audio pronunciation for French vocabulary',
@@ -276,7 +276,7 @@ What strategies work best for your children? Please share!',
    'R.B.', 'student', NOW() - INTERVAL '48 days'),
 
   ('report', 'Login page not working on older Android phones',
-   'My mother-in-law''s Android phone (Android 7) can''t load the MathMaster login page — it just shows a loading spinner that never stops. Newer phones work fine. Is there a minimum Android version required? Or is this a bug? She looks after the kids in the afternoon and was trying to access it to help with their study.',
+   'My mother-in-law''s Android phone (Android 7) can''t load the PSAC Exam Practice login page — it just shows a loading spinner that never stops. Newer phones work fine. Is there a minimum Android version required? Or is this a bug? She looks after the kids in the afternoon and was trying to access it to help with their study.',
    'A.S.', 'parent', NOW() - INTERVAL '23 days'),
 
   ('report', 'Calendar page loading very slowly',
@@ -303,7 +303,7 @@ What strategies work best for your children? Please share!',
   -- ── General: white screen ──────────────────────────────────────────
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
-    'This sometimes happens when the browser cache is full. Try opening Safari → go to Settings → Safari → Clear History and Website Data. Then open MathMaster again. That usually fixes it!',
+    'This sometimes happens when the browser cache is full. Try opening Safari → go to Settings → Safari → Clear History and Website Data. Then open PSAC Exam Practice again. That usually fixes it!',
     'A.S.', 'teacher', NOW() - INTERVAL '62 days 8 hours'
   FROM public.forum_posts WHERE title = 'App shows white screen on my iPhone' LIMIT 1;
 
@@ -329,15 +329,15 @@ What strategies work best for your children? Please share!',
   -- ── General: Chromebook ────────────────────────────────────────────
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
-    'Yes, MathMaster works perfectly on a Chromebook! Since it''s a web app, you just open the Chrome browser, go to the MathMaster website, and it works the same as on any device. You can even add it to the Chromebook shelf as a shortcut for easy access.',
+    'Yes, PSAC Exam Practice works perfectly on a Chromebook! Since it''s a web app, you just open the Chrome browser, go to the PSAC Exam Practice website, and it works the same as on any device. You can even add it to the Chromebook shelf as a shortcut for easy access.',
     'R.B.', 'teacher', NOW() - INTERVAL '27 days 16 hours'
-  FROM public.forum_posts WHERE title = 'Can I use MathMaster on a Chromebook?' LIMIT 1;
+  FROM public.forum_posts WHERE title = 'Can I use PSAC Exam Practice on a Chromebook?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Tested it on our Chromebook — works great! Even the timetable and forum work perfectly. Highly recommend adding it to the shelf as a shortcut so it feels like a proper app.',
     'S.D.', 'parent', NOW() - INTERVAL '27 days 10 hours'
-  FROM public.forum_posts WHERE title = 'Can I use MathMaster on a Chromebook?' LIMIT 1;
+  FROM public.forum_posts WHERE title = 'Can I use PSAC Exam Practice on a Chromebook?' LIMIT 1;
 
   -- ── General: timetable disappeared ────────────────────────────────
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -459,7 +459,7 @@ Always write each step clearly — you get marks even if you make one arithmetic
   -- ── Maths: low fractions score ─────────────────────────────────────
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
-    'Please don''t panic! Grade 4 fractions is genuinely one of the harder new concepts and most children find it confusing at first — even strong maths students. With consistent practice (especially the fraction questions in the Grade 4 MathMaster pack!) she will improve quickly. Daily 15-minute sessions make a huge difference.',
+    'Please don''t panic! Grade 4 fractions is genuinely one of the harder new concepts and most children find it confusing at first — even strong maths students. With consistent practice (especially the fraction questions in the Grade 4 PSAC Exam Practice pack!) she will improve quickly. Daily 15-minute sessions make a huge difference.',
     'R.B.', 'teacher', NOW() - INTERVAL '12 days 18 hours'
   FROM public.forum_posts WHERE title = 'My Grade 4 daughter scored 2/10 on fractions quiz — is this normal?' LIMIT 1;
 
@@ -933,13 +933,13 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'This suggestion has been noted and is in our development pipeline! We''re aiming to have it ready very soon. Watch this space!',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '112 days 10 hours'
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '112 days 10 hours'
   FROM public.forum_posts WHERE title = 'Please add a study timetable / schedule feature!' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     '🎉 UPDATE: The Study Calendar is now LIVE! Go to the Calendar tab to set up your child''s weekly study schedule. You can add any subject, set session durations, and manage the whole week. Thank you Priya for the suggestion that started this! This thread is now closed.',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '90 days 10 hours'
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '90 days 10 hours'
   FROM public.forum_posts WHERE title = 'Please add a study timetable / schedule feature!' LIMIT 1;
 
   -- ── Suggestions (closed): more subjects ───────────────────────────
@@ -957,8 +957,8 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
-    '✅ All 5 PSAC subjects are now available on MathMaster: Mathematics, English, French, Science, and Social Studies/History & Geography — for Grades 4, 5, and 6. Go to the Subjects section to explore the full content library. This thread is now closed.',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '80 days 10 hours'
+    '✅ All 5 PSAC subjects are now available on PSAC Exam Practice: Mathematics, English, French, Science, and Social Studies/History & Geography — for Grades 4, 5, and 6. Go to the Subjects section to explore the full content library. This thread is now closed.',
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '80 days 10 hours'
   FROM public.forum_posts WHERE title = 'Can you add more subjects — English, French and Science?' LIMIT 1;
 
   -- ── Suggestions (closed): forum ───────────────────────────────────
@@ -976,8 +976,8 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
-    'Well, look where you are right now! 😄 The MathMaster Community Forum is now live! This thread is closed but the community continues — we look forward to many more great discussions and questions from everyone.',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '78 days 10 hours'
+    'Well, look where you are right now! 😄 The PSAC Exam Practice Community Forum is now live! This thread is closed but the community continues — we look forward to many more great discussions and questions from everyone.',
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '78 days 10 hours'
   FROM public.forum_posts WHERE title = 'We need a community forum to discuss and ask questions!' LIMIT 1;
 
   -- ── Suggestions (closed): dark mode ───────────────────────────────
@@ -990,7 +990,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     '🌙 Dark mode is now available! Look for the moon icon in the top bar to toggle between light and dark mode. Your preference is saved automatically. Happy studying! This thread is now closed.',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '75 days 10 hours'
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '75 days 10 hours'
   FROM public.forum_posts WHERE title = 'Please add a dark mode for studying at night' LIMIT 1;
 
   -- ── Suggestions (closed): parent progress ─────────────────────────
@@ -1003,7 +1003,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     '📊 Detailed progress tracking is now available! In your parent dashboard, click on your child''s name then "View Progress" to see chapter-by-chapter scores, time spent, and which topics need more practice. This thread is now closed — enjoy the new feature!',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '65 days 10 hours'
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '65 days 10 hours'
   FROM public.forum_posts WHERE title = 'Can parents view their child''s detailed progress?' LIMIT 1;
 
   -- ── Suggestions (closed): forum search ────────────────────────────
@@ -1016,20 +1016,20 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     '🔍 Forum search is now live! You''ll see a search bar at the top of the forum — type any keyword and it will find relevant posts across all categories instantly. This thread is now closed. Thank you for the great suggestion, Léa!',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '21 days 10 hours'
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '21 days 10 hours'
   FROM public.forum_posts WHERE title = 'Please add a search bar to the forum!' LIMIT 1;
 
   -- ── Suggestions (open): printable papers ──────────────────────────
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
-    'Excellent suggestion! Practising under exam conditions (timed, on paper, no going back) is a completely different skill from using an app. Both are important for PSAC preparation. I hope this gets implemented — it would make MathMaster a truly complete resource.',
+    'Excellent suggestion! Practising under exam conditions (timed, on paper, no going back) is a completely different skill from using an app. Both are important for PSAC preparation. I hope this gets implemented — it would make PSAC Exam Practice a truly complete resource.',
     'A.S.', 'teacher', NOW() - INTERVAL '12 days 14 hours'
   FROM public.forum_posts WHERE title = 'Would love to have printable past PSAC exam papers' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'We are working on printable exam-style practice papers — this is on our roadmap! We''ll post an update in the forum when they''re available. Thank you for the suggestion.',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '11 days 10 hours'
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '11 days 10 hours'
   FROM public.forum_posts WHERE title = 'Would love to have printable past PSAC exam papers' LIMIT 1;
 
   -- ── Suggestions (open): French audio ──────────────────────────────
@@ -1043,19 +1043,19 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Thank you so much for spotting this Rohan! We really appreciate careful readers like you. We''ve logged the typo and will fix it and review the answer ordering. These reports are very helpful — please keep them coming if you spot anything else!',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '47 days 14 hours'
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '47 days 14 hours'
   FROM public.forum_posts WHERE title = 'Found a typo in one of the Grade 4 maths questions' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
-    'Thank you for reporting this! MathMaster works best on Android 9 and above. Android 7 uses an older version of Chrome that may not fully support some modern web features we use. In the meantime, try updating Chrome on that device to the latest version via the Play Store — that sometimes resolves compatibility issues even on older Android versions.',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '22 days 14 hours'
+    'Thank you for reporting this! PSAC Exam Practice works best on Android 9 and above. Android 7 uses an older version of Chrome that may not fully support some modern web features we use. In the meantime, try updating Chrome on that device to the latest version via the Play Store — that sometimes resolves compatibility issues even on older Android versions.',
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '22 days 14 hours'
   FROM public.forum_posts WHERE title = 'Login page not working on older Android phones' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Thanks for reporting this! We''ve noted the calendar performance issue and will investigate. It may be loading too much data at once on initial load. Could you let us know what device and browser you''re using? That will help us narrow down the cause.',
-    'MathMaster Team', 'admin', NOW() - INTERVAL '6 days 14 hours'
+    'PSAC Exam Practice Team', 'admin', NOW() - INTERVAL '6 days 14 hours'
   FROM public.forum_posts WHERE title = 'Calendar page loading very slowly' LIMIT 1;
 
   -- ══════════════════════════════════════════════════════════════════════

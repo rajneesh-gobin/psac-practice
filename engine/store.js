@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster — Storage Adapter
+//  PSAC Exam Practice — Storage Adapter
 //  Uses _sb (global from supabase.js).
 //  localStorage = fast cache; Supabase = source of truth.
 // ══════════════════════════════════════════════

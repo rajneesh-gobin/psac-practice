@@ -313,6 +313,37 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Parce qu\'il y a une contradiction : victoire annoncée mais pleurs des soldats — l\'auteur suggère que cette victoire a un coût humain.',
     hint:'L\'ironie ou l\'implicite : le texte dit "victoire" mais montre des pleurs. Que veut dire l\'auteur vraiment ?',
-    explanation:'L\'<b>ironie implicite</b> : le mot "victoire" (positif) contraste avec "des soldats pleuraient" (négatif). L\'auteur ne dit pas explicitement que la victoire est amère — il le <b>suggère par l\'opposition</b>. Lire entre les lignes (l\'implicite) est une compétence clé dans les épreuves PSAC de 6e : repérer ce que le texte dit vs ce qu\'il veut dire.' })
+    explanation:'L\'<b>ironie implicite</b> : le mot "victoire" (positif) contraste avec "des soldats pleuraient" (négatif). L\'auteur ne dit pas explicitement que la victoire est amère — il le <b>suggère par l\'opposition</b>. Lire entre les lignes (l\'implicite) est une compétence clé dans les épreuves PSAC de 6e : repérer ce que le texte dit vs ce qu\'il veut dire.' }),
+
+  makeMCQ({ id:'g6fr-lec-033', chapterId:'g6fr-lecture', difficulty:3,
+    question:'Dans un texte, "le narrateur omniscient" signifie que :',
+    options:[
+      'Le narrateur raconte à la première personne',
+      'Le narrateur sait tout sur tous les personnages',
+      'Le narrateur est un personnage de l\'histoire',
+      'Le narrateur ne connaît que les actions extérieures'
+    ],
+    answer:'Le narrateur sait tout sur tous les personnages',
+    hint:'Omniscient = sait tout (latin : omni = tout, scient = savoir).',
+    explanation:'"<b>Le narrateur sait tout sur tous les personnages</b>" — <b>narrateur omniscient</b> (3ème personne) : connaît les pensées, sentiments, et actions de tous. Comparer : <b>narrateur interne</b> (je — point de vue limité au héros) ; <b>narrateur externe</b> (observateur extérieur, pas d\'accès aux pensées). Ces notions sont évaluées en lecture analytique PSAC.' }),
+
+  makeMCQ({ id:'g6fr-lec-034', chapterId:'g6fr-lecture', difficulty:3,
+    question:'Quelle figure de style est utilisée dans : "Le vent hurlait comme un loup affamé." ?',
+    options:['Métaphore','Comparaison','Personnification','Hyperbole'],
+    answer:'Comparaison',
+    hint:'La présence de "comme" = comparaison (pas métaphore).',
+    explanation:'"<b>Comparaison</b>" — "comme un loup affamé" → outil de comparaison "comme". La <b>comparaison</b> utilise "comme", "tel", "semblable à". La <b>métaphore</b> dit directement : "Le vent est un loup affamé" (pas de "comme"). La <b>personnification</b> attribue des qualités humaines : "le vent décida de partir". Ici "hurlait" (personnification) + "comme" (comparaison) : double figure.' }),
+
+  makeMCQ({ id:'g6fr-lec-035', chapterId:'g6fr-lecture', difficulty:4,
+    question:'Texte : "La mer était calme. Soudain, les nuages s\'amassèrent et les vagues se levèrent avec fureur." Quel procédé narratif est utilisé pour créer le suspense ?',
+    options:[
+      'Un retour en arrière (flashback)',
+      'Un contraste entre calme et tempête + accélération du rythme',
+      'Une description détaillée de la mer',
+      'Un dialogue entre les personnages'
+    ],
+    answer:'Un contraste entre calme et tempête + accélération du rythme',
+    hint:'Le calme soudainement interrompu → contraste + "soudain" = accélération.',
+    explanation:'"<b>Contraste + accélération du rythme</b>" — Le procédé du <b>contraste</b> (calme → tempête) crée l\'effet de surprise. "Soudain" marque la rupture. L\'<b>accélération</b> (phrases courtes, verbes d\'action rapides : s\'amassèrent, se levèrent) crée le suspense. Identifier ces procédés stylistiques est une compétence clé en lecture analytique de 6e.' })
 
 );

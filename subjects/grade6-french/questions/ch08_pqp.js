@@ -263,6 +263,25 @@ STATIC_QUESTIONS.push(
     ],
     answer:'avait / lu',
     hint:'Action antérieure (avait lu avant de regarder) = PQP. Lire → participe passé irrégulier = lu.',
-    explanation:'"Elle <b>avait</b> déjà <b>lu</b> le livre" — lire → participe passé irrégulier = <b>lu</b>. Auxiliaire avoir, imparfait = <b>avait</b>. Action (lire le livre) antérieure à l\'action principale (regarder le film) → <b>PQP</b>.' })
+    explanation:'"Elle <b>avait</b> déjà <b>lu</b> le livre" — lire → participe passé irrégulier = <b>lu</b>. Auxiliaire avoir, imparfait = <b>avait</b>. Action (lire le livre) antérieure à l\'action principale (regarder le film) → <b>PQP</b>.' }),
+
+  makeMCQ({ id:'g6fr-pqp-034', chapterId:'g6fr-pqp', difficulty:3,
+    question:'Complète : "Quand nous sommes arrivés, le professeur ___ (commencer) déjà le cours."',
+    options:['a commencé','commençait','avait commencé','commença'],
+    answer:'avait commencé',
+    hint:'Action antérieure à "sommes arrivés" (passé composé) → plus-que-parfait.',
+    explanation:'"le professeur <b>avait commencé</b> déjà le cours." — Le cours a commencé <b>avant</b> notre arrivée → <b>PQP</b>. Action de référence : nous sommes arrivés (passé composé). Action antérieure : avait commencé (PQP). "Déjà" confirme l\'antériorité. Commencer → participe passé = commencé ; auxiliaire avoir imparfait = avait.' }),
+
+  makeMCQ({ id:'g6fr-pqp-035', chapterId:'g6fr-pqp', difficulty:4,
+    question:'Texte : "Après qu\'il eut terminé son discours, tout le monde applaudit." Quel temps est "eut terminé" et pourquoi ?',
+    options:[
+      'Plus-que-parfait — action antérieure au passé composé',
+      'Passé antérieur — action antérieure au passé simple dans un récit littéraire',
+      'Conditionnel passé — hypothèse passée',
+      'Subjonctif passé — après une expression de doute'
+    ],
+    answer:'Passé antérieur — action antérieure au passé simple dans un récit littéraire',
+    hint:'"Eut terminé" = avoir à passé simple (eut) + participe passé → passé antérieur.',
+    explanation:'"<b>Passé antérieur</b>" — "eut terminé" = eut (passé simple de avoir) + terminé (participe passé). Le passé antérieur exprime une action <b>immédiatement antérieure</b> à un passé simple, après "après que", "dès que", "quand" dans le registre littéraire. Ici : discours terminé → immédiatement → applaudissements (passé simple). À distinguer du PQP (avait terminé).' })
 
 );

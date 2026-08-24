@@ -290,6 +290,37 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses"',
     hint:'L\'objet d\'une lettre formelle est concis, précis et nomme clairement la demande.',
-    explanation:'"<b>Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses</b>" — L\'objet est un <b>titre bref et précis</b> qui résume la raison de la lettre. Il doit : (1) utiliser un nom (Demande / Réclamation / Candidature…) + (2) préciser l\'action souhaitée + (3) ajouter les détails pertinents.' })
+    explanation:'"<b>Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses</b>" — L\'objet est un <b>titre bref et précis</b> qui résume la raison de la lettre. Il doit : (1) utiliser un nom (Demande / Réclamation / Candidature…) + (2) préciser l\'action souhaitée + (3) ajouter les détails pertinents.' }),
+
+  makeMCQ({ id:'g6fr-arg-033', chapterId:'g6fr-argumentation', difficulty:3,
+    question:'Dans un essai argumentatif, quelle est la structure idéale ?',
+    options:[
+      'Introduction → Arguments → Conclusion',
+      'Arguments → Introduction → Conclusion',
+      'Conclusion → Arguments → Introduction',
+      'Introduction → Conclusion → Arguments'
+    ],
+    answer:'Introduction → Arguments → Conclusion',
+    hint:'L\'ordre logique : présenter le sujet, développer les arguments, conclure.',
+    explanation:'"<b>Introduction → Arguments → Conclusion</b>" — Structure classique de l\'essai argumentatif : (1) <b>Introduction</b> : présenter le sujet et annoncer la thèse ; (2) <b>Développement</b> : arguments avec exemples et connecteurs ; (3) <b>Conclusion</b> : synthèse et ouverture. Cette structure est évaluée au PSAC.' }),
+
+  makeMCQ({ id:'g6fr-arg-034', chapterId:'g6fr-argumentation', difficulty:3,
+    question:'Quel connecteur introduit une CONCESSION dans un argument ?',
+    options:['De plus','En conclusion','Certes','C\'est pourquoi'],
+    answer:'Certes',
+    hint:'"Certes" = il est vrai que / admittedly — concède un point avant de le nuancer.',
+    explanation:'"<b>Certes</b>" = connecteur de concession (admittedly/granted). Usage : "Certes, internet présente des risques, <b>mais</b> ses avantages sont nombreux." Autres connecteurs de concession : "il est vrai que", "même si". À distinguer de "de plus" (ajout), "c\'est pourquoi" (conséquence), "en conclusion" (synthèse).' }),
+
+  makeMCQ({ id:'g6fr-arg-035', chapterId:'g6fr-argumentation', difficulty:4,
+    question:'Shanvi doit écrire un paragraphe argumentatif sur les réseaux sociaux. Quelle structure est la meilleure ?',
+    options:[
+      'Argument + Exemple + Explication',
+      'Exemple + Argument + Exemple',
+      'Conclusion + Argument + Introduction',
+      'Explication + Conclusion + Argument'
+    ],
+    answer:'Argument + Exemple + Explication',
+    hint:'Structure P.E.E. (Point / Evidence / Explanation) : d\'abord l\'idée, puis la preuve, puis la justification.',
+    explanation:'"<b>Argument + Exemple + Explication</b>" — Structure P.E.E. (Point-Evidence-Explanation) : (1) énoncer l\'<b>argument</b> (thèse du paragraphe), (2) donner un <b>exemple</b> concret ou une statistique, (3) expliquer le lien entre l\'exemple et l\'argument. Ex : "Les réseaux sociaux créent des liens (argument). Par exemple, des amis séparés par l\'océan peuvent rester en contact (exemple). Ainsi, la distance géographique n\'empêche plus l\'amitié (explication)."' })
 
 );

@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster — Auth
+//  PSAC Exam Practice — Auth
 //  Uses _sb (global from supabase.js).
 //  Manages: Supabase email auth for parent/teacher,
 //           PIN-based student login,
