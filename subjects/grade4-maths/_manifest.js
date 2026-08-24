@@ -6,7 +6,7 @@ registerSubject({
   icon:       '🔢',
   subject:    'Maths',
   curriculum: 'MIE Mauritius',
-  comingSoon: true,
+  comingSoon: false,
   chapters: [
     { id: 'g4-numeration', name: 'Numeration & Place Value', icon: '🔢' },
     { id: 'g4-four-ops',   name: 'Four Operations',         icon: '➕' },

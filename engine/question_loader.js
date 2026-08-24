@@ -117,6 +117,14 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/ch05_argumentation.js',
       'subjects/grade6-french/questions/ch06_lecture.js',
     ],
+    'grade4-maths': [
+      'subjects/grade4-maths/questions/ch01_g4_numeration.js',
+      'subjects/grade4-maths/questions/ch02_g4_four_ops.js',
+      'subjects/grade4-maths/questions/ch03_g4_fractions.js',
+      'subjects/grade4-maths/questions/ch04_g4_geometry.js',
+      'subjects/grade4-maths/questions/ch05_g4_measures.js',
+      'subjects/grade4-maths/questions/ch06_g4_data.js',
+    ],
   };
 
   function _injectScript(src) {
