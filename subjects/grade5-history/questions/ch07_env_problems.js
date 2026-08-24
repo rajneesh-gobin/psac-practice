@@ -134,3 +134,109 @@ STATIC_QUESTIONS.push(
     explanation:'Mauritius\'s pristine beaches, coral reefs and forests support the <b>tourism industry</b> (the main source of income), provide <b>fish</b> for food and livelihoods, ensure <b>clean water</b> through healthy watersheds, and preserve <b>endemic biodiversity</b>. Protecting nature is protecting the island\'s future.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5hg-ep-011', chapterId:'env-problems', difficulty:1,
+    question:'What is a CYCLONE?',
+    options:[
+      'A very cold snowstorm that occurs in winter',
+      'A powerful tropical storm with strong circular winds and heavy rain, common in the Indian Ocean',
+      'A slow-moving rain cloud that brings light drizzle',
+      'A type of earthquake that occurs under the sea'
+    ],
+    answer:'A powerful tropical storm with strong circular winds and heavy rain, common in the Indian Ocean',
+    hint:'Mauritius has a "cyclone season" from November to April.',
+    explanation:'A <b>cyclone</b> is a powerful tropical storm system with very strong spiralling winds (over 120 km/h), heavy rainfall and a calm "eye" at the centre. In the Indian Ocean, cyclones are common during the summer season (November–April) and can cause serious damage to Mauritius.' }),
+
+  makeMCQ({ id:'g5hg-ep-012', chapterId:'env-problems', difficulty:2,
+    question:'How do cyclones cause COASTAL EROSION in Mauritius?',
+    options:[
+      'Cyclones bring drought that dries and cracks the beach sand',
+      'Powerful cyclone waves strike the coast with enormous force, removing large amounts of sand and damaging the shoreline',
+      'Cyclones cool the sea, making the coral reef grow onto beaches',
+      'Cyclone winds blow sand inland but do not affect the actual coastline'
+    ],
+    answer:'Powerful cyclone waves strike the coast with enormous force, removing large amounts of sand and damaging the shoreline',
+    hint:'Cyclone winds generate very large, destructive waves.',
+    explanation:'During a cyclone, <b>huge storm waves</b> strike the coastline with great energy. These waves remove large amounts of sand, erode the shore, damage coral reefs and can destroy coastal infrastructure. A single major cyclone can cause years\' worth of beach erosion in just a few days.' }),
+
+  makeTF({ id:'g5hg-ep-013', chapterId:'env-problems', difficulty:1,
+    question:'Climate change and rising sea levels are a threat to low-lying coastal areas in Mauritius.',
+    answer:true,
+    hint:'Think about what happens to beaches and lagoons if sea level rises.',
+    explanation:'True. <b>Climate change</b> is causing sea levels to rise globally. In Mauritius, this threatens low-lying coastal areas, beaches and the coral reef. Higher sea levels increase flooding during cyclones, worsen beach erosion and could damage the reef. Small island states like Mauritius are among the most vulnerable.' }),
+
+  makeMCQ({ id:'g5hg-ep-014', chapterId:'env-problems', difficulty:2,
+    question:'Fertilisers used by sugar cane farmers sometimes wash into rivers and the lagoon. What environmental problem does this cause?',
+    options:[
+      'The fertilisers make the fish grow too large to catch',
+      'Fertiliser nutrients cause algae to grow excessively (algal bloom), blocking sunlight and killing coral and marine life',
+      'Fertilisers make the water cleaner by killing harmful bacteria',
+      'Fertilisers have no effect on the sea because salt water neutralises them'
+    ],
+    answer:'Fertiliser nutrients cause algae to grow excessively (algal bloom), blocking sunlight and killing coral and marine life',
+    hint:'Too much of a good thing — nutrients that help plants can harm the sea.',
+    explanation:'When fertiliser-rich water enters the lagoon, excess nitrogen and phosphorus cause <b>algal blooms</b> — rapid growth of algae. Dense algae block sunlight from reaching the coral reef. Coral and seagrass die without sunlight, and decomposing algae use up dissolved oxygen, suffocating fish. This process is called <b>eutrophication</b>.' }),
+
+  makeMCQ({ id:'g5hg-ep-015', chapterId:'env-problems', difficulty:2,
+    question:'In 2020, the bulk carrier MV Wakashio ran aground and spilt oil near Mahébourg in south-east Mauritius. What type of environmental pollution resulted?',
+    options:[
+      'Air pollution from the ship\'s engines',
+      'Marine oil pollution — oil spilled into the lagoon, harming marine life, seabirds and coral',
+      'Noise pollution from rescue helicopters',
+      'Plastic pollution from the ship\'s cargo'
+    ],
+    answer:'Marine oil pollution — oil spilled into the lagoon, harming marine life, seabirds and coral',
+    hint:'The oil formed a dark slick across the sea surface.',
+    explanation:'The MV Wakashio disaster caused <b>marine oil pollution</b> in the lagoon near Mahébourg. Oil is toxic to fish, seabirds (it coats their feathers), coral and marine mammals. The spill devastated the local marine ecosystem, killed hundreds of dolphins and birds, and severely impacted fishermen and tourism businesses.' }),
+
+  makeMCQ({ id:'g5hg-ep-016', chapterId:'env-problems', difficulty:3,
+    question:'A coastal village has lost 50 metres of beach over 20 years. They consider (A) building a concrete sea wall, or (B) replanting mangroves. Compare ONE advantage of each approach.',
+    options:[
+      'Sea wall: immediately stops wave erosion; Mangroves: slower but natural — they trap sediment, protect the reef, provide fish nursery habitat and cost less long-term',
+      'Sea wall: grows bigger over time on its own; Mangroves: are made of concrete and last longer',
+      'Both solutions are identical in cost and effect',
+      'Sea wall: is completely free; Mangroves: cost millions of rupees and never work'
+    ],
+    answer:'Sea wall: immediately stops wave erosion; Mangroves: slower but natural — they trap sediment, protect the reef, provide fish nursery habitat and cost less long-term',
+    hint:'Think about short-term vs long-term, and hard engineering vs nature-based solutions.',
+    explanation:'<b>Sea wall:</b> provides immediate protection by reflecting wave energy — quick to build. <b>Mangroves:</b> a natural solution that traps sediment (rebuilds beach over time), dissipates wave energy, provides fish nursery habitat, supports biodiversity, and requires no maintenance once established. Mangroves are cheaper long-term and work WITH the ecosystem. Many plans combine both approaches.' }),
+
+  makeMCQ({ id:'g5hg-ep-017', chapterId:'env-problems', difficulty:3,
+    question:'Why is plastic pollution in the ocean a particular danger to sea turtles?',
+    options:[
+      'Turtles confuse plastic bags for jellyfish and eat them — plastic blocks their digestive system and they starve',
+      'Plastic makes the water too cold for turtles to swim',
+      'Turtles are afraid of plastic and abandon Mauritius',
+      'Plastic turns the water acidic which burns turtle skin'
+    ],
+    answer:'Turtles confuse plastic bags for jellyfish and eat them — plastic blocks their digestive system and they starve',
+    hint:'What do sea turtles eat that looks similar to a floating plastic bag?',
+    explanation:'Sea turtles eat jellyfish. Floating <b>plastic bags</b> look almost identical to jellyfish underwater. Turtles swallow plastic bags, which cannot be digested — the plastic fills their stomach, causing them to feel "full" while actually starving. The plastic also blocks their intestines and is fatal. This is why reducing single-use plastic bags is critical for turtle conservation.' }),
+
+  makeMCQ({ id:'g5hg-ep-018', chapterId:'env-problems', difficulty:4,
+    question:'The Wakashio oil spill (2020) affected fishermen, coral reefs, birds, tourism and local communities simultaneously. What does this show about environmental problems?',
+    options:[
+      'Environmental damage is usually limited to one specific species or industry at a time',
+      'Environmental problems are interconnected — damage to one part of the ecosystem creates a chain reaction affecting biodiversity, livelihoods, food security and the economy',
+      'Oil spills only affect tourism; the rest of the ecosystem recovers quickly',
+      'The damage was unusual — environmental problems normally affect only one sector'
+    ],
+    answer:'Environmental problems are interconnected — damage to one part of the ecosystem creates a chain reaction affecting biodiversity, livelihoods, food security and the economy',
+    hint:'Think about who and what depends on the health of the lagoon.',
+    explanation:'The Wakashio spill shows that ecosystems are <b>interconnected</b>: oil damaged coral reefs → fish populations collapsed → fishermen lost income → food supply was disrupted → coastal tourism dropped → local businesses lost revenue → dolphins and birds died. This chain reaction shows that environmental damage rarely stays isolated — it ripples through ecology, economy and society.' }),
+
+  makeMCQ({ id:'g5hg-ep-019', chapterId:'env-problems', difficulty:2,
+    question:'Which individual action helps REDUCE water pollution in the Mauritian lagoon?',
+    options:[
+      'Pour used cooking oil down the drain',
+      'Use fewer chemical pesticides and fertilisers in the garden, and dispose of rubbish properly so it does not wash into streams',
+      'Throw plastic rubbish near the beach where tides can carry it away',
+      'Wash cars directly on the beach to save water'
+    ],
+    answer:'Use fewer chemical pesticides and fertilisers in the garden, and dispose of rubbish properly so it does not wash into streams',
+    hint:'What individual actions prevent harmful substances from reaching the lagoon through rivers?',
+    explanation:'Individuals can help by: <b>reducing chemical use</b> in gardens (pesticides and fertilisers that run off into rivers and eventually the lagoon), and <b>disposing of waste properly</b> so rubbish does not end up in waterways. Small individual actions, multiplied across the population, significantly reduce pollution reaching the coral reef lagoon.' })
+
+);

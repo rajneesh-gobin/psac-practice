@@ -144,3 +144,99 @@ STATIC_QUESTIONS.push(
     explanation:'If 1 cm on the map = 10 km in reality, then 4 cm = 4 × 10 = <b>40 km</b>. The scale of a map helps you calculate real-world distances from measurements on the map.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5hg-ms-011', chapterId:'map-skills', difficulty:1,
+    question:'At which latitude does the ARCTIC CIRCLE lie?',
+    options:[
+      '0° — it is another name for the Equator',
+      'Approximately 66.5° North latitude',
+      '23.5° North — the Tropic of Cancer',
+      '90° North — the North Pole itself'
+    ],
+    answer:'Approximately 66.5° North latitude',
+    hint:'It is well into the far north, above Europe and Russia.',
+    explanation:'The <b>Arctic Circle</b> is a line of latitude at approximately <b>66.5° North</b>. Above this line, the sun does not set in midsummer (midnight sun) and does not rise in midwinter (polar night). Mauritius at ~20°S is very far from the Arctic Circle.' }),
+
+  makeMCQ({ id:'g5hg-ms-012', chapterId:'map-skills', difficulty:1,
+    question:'Which continent is the LARGEST in the world by area?',
+    options:['Africa','North America','Europe','Asia'],
+    answer:'Asia',
+    hint:'It includes countries like China, India, Russia and Saudi Arabia.',
+    explanation:'<b>Asia</b> is the world\'s largest continent by both area (about 44.6 million km²) and population (over 4.5 billion people). It covers about one-third of Earth\'s total land area.' }),
+
+  makeMCQ({ id:'g5hg-ms-013', chapterId:'map-skills', difficulty:2,
+    question:'What do CONTOUR LINES on a topographic map show?',
+    options:[
+      'Lines joining places with the same rainfall',
+      'Lines joining places with the same temperature',
+      'Lines joining places at the same height (altitude) above sea level',
+      'Lines showing the borders between countries'
+    ],
+    answer:'Lines joining places at the same height (altitude) above sea level',
+    hint:'They show the shape and height of the land.',
+    explanation:'<b>Contour lines</b> connect all points at the <b>same altitude above sea level</b>. They show the shape, height and slope of the land: contour lines close together mean a steep slope; lines far apart mean gentle or flat land.' }),
+
+  makeMCQ({ id:'g5hg-ms-014', chapterId:'map-skills', difficulty:2,
+    question:'On a topographic map, contour lines are very CLOSE TOGETHER on the mountainside and very FAR APART on the coastal plain. What does this indicate?',
+    options:[
+      'The mountain is warmer than the plain',
+      'The mountain has steep slopes (height changes quickly); the plain is nearly flat',
+      'The plain receives more rainfall than the mountain',
+      'The contour lines are drawn incorrectly'
+    ],
+    answer:'The mountain has steep slopes (height changes quickly); the plain is nearly flat',
+    hint:'Closely packed contour lines = height changes rapidly over a short horizontal distance.',
+    explanation:'Closely spaced contour lines indicate a <b>steep slope</b> — the land rises or falls rapidly. Widely spaced contour lines indicate <b>gentle or flat land</b>. Looking at a map of Mauritius, the mountainous south-west has closely packed contours, while the northern coastal plains have widely spaced ones.' }),
+
+  makeTF({ id:'g5hg-ms-015', chapterId:'map-skills', difficulty:1,
+    question:'The Tropic of Capricorn is a line of latitude at 23.5° South.',
+    answer:true,
+    hint:'Mauritius at ~20°S lies just north of the Tropic of Capricorn.',
+    explanation:'True. The <b>Tropic of Capricorn</b> is at <b>23.5° South</b> latitude. It marks the southernmost point where the sun can be directly overhead (on the December solstice). Mauritius (~20°S) lies just north of this line, placing it in the tropics — explaining its warm tropical climate.' }),
+
+  makeMCQ({ id:'g5hg-ms-016', chapterId:'map-skills', difficulty:2,
+    question:'A map has a scale of 1:50,000. What does this mean?',
+    options:[
+      '1 cm on the map equals 50 cm in real life',
+      '1 cm on the map equals 50,000 cm (500 metres) in real life',
+      '1 cm on the map equals 50 km in real life',
+      '50 cm on the map equals 1 cm in real life'
+    ],
+    answer:'1 cm on the map equals 50,000 cm (500 metres) in real life',
+    hint:'A scale of 1:50,000 means the map is 50,000 times smaller than reality.',
+    explanation:'A scale of <b>1:50,000</b> means every 1 unit on the map equals 50,000 of the same unit in reality. So 1 cm on the map = 50,000 cm = <b>500 metres</b> in real life. To find real distance: map measurement (cm) × 50,000 = real distance in cm, then convert to metres or km.' }),
+
+  makeMCQ({ id:'g5hg-ms-017', chapterId:'map-skills', difficulty:3,
+    question:'A rainfall map shows isohyets at 1,000 mm, 2,000 mm and 3,000 mm. Port Louis falls between 1,000 and 2,000 mm. Curepipe falls between 2,000 and 3,000 mm. What can you CONCLUDE?',
+    options:[
+      'Port Louis receives more rainfall than Curepipe',
+      'Curepipe receives more rainfall than Port Louis, consistent with orographic rainfall on the central plateau',
+      'Both cities receive identical rainfall because they are on the same island',
+      'The isohyets must be incorrect — all of Mauritius receives the same rainfall'
+    ],
+    answer:'Curepipe receives more rainfall than Port Louis, consistent with orographic rainfall on the central plateau',
+    hint:'Higher isohyet values = more rain; higher altitude = more orographic rain.',
+    explanation:'Curepipe (central plateau, ~550 m) lies between 2,000 and 3,000 mm isohyets — more than 2,000 mm per year. Port Louis (low-lying, leeward coast) lies between 1,000 and 2,000 mm — less than 2,000 mm. This is consistent with <b>orographic rainfall</b>: trade winds drop moisture on the plateau before reaching the rain shadow where Port Louis lies.' }),
+
+  makeMCQ({ id:'g5hg-ms-018', chapterId:'map-skills', difficulty:3,
+    question:'Port Louis is on the NORTH-WEST coast; Curepipe is on the SOUTH-EAST of the central plateau. In which direction do you travel from Port Louis to Curepipe?',
+    options:['North','West','South-East','North-East'],
+    answer:'South-East',
+    hint:'If you start north-west and go to south-east, which direction are you heading?',
+    explanation:'To travel from Port Louis (north-west) to Curepipe (south-east), you head <b>south-east</b>. On a compass, south-east is approximately 135°. This is consistent with the actual geography of Mauritius — Port Louis is on the north-west coast and Curepipe is in the south-east of the central plateau.' }),
+
+  makeMCQ({ id:'g5hg-ms-019', chapterId:'map-skills', difficulty:4,
+    question:'A geographer wants to find where in Mauritius gets the most rain, where the land is highest, and which towns are in the rain shadow. Which THREE types of map would they need?',
+    options:[
+      'A rainfall map (isohyets show rainfall), a topographic map (contours show altitude) and a political/settlement map (to locate town names)',
+      'A population map, a road map and a temperature map',
+      'A tourist map, a road map and a language map',
+      'Any single combined map — there is no need for three separate maps'
+    ],
+    answer:'A rainfall map (isohyets show rainfall), a topographic map (contours show altitude) and a political/settlement map (to locate town names)',
+    hint:'Match each question to the type of map that answers it.',
+    explanation:'Three map types are needed: (1) <b>Rainfall map (isohyets)</b> — shows how much rain each area receives; (2) <b>Topographic map (contours)</b> — shows altitude and relief of the land; (3) <b>Political/settlement map</b> — names the towns so the geographer knows which communities are in the rain shadow or on high ground. Using all three together gives a complete picture of the relationship between relief, rainfall and settlement.' })
+
+);

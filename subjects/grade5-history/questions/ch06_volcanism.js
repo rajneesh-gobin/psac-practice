@@ -117,3 +117,109 @@ STATIC_QUESTIONS.push(
     explanation:'True. <b>Basalt</b> is a dark, dense volcanic rock formed from cooled lava. It makes up the majority of Mauritius\'s geology and is visible everywhere — in field walls, old buildings and rocky outcrops.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5hg-vol-011', chapterId:'volcanism', difficulty:2,
+    question:'What is Karthala?',
+    options:[
+      'An extinct volcanic crater in the centre of Mauritius',
+      'An active volcano on Grand Comore in the Comoro Islands, north of Madagascar',
+      'A type of volcanic rock found only in Rodrigues',
+      'A coral island near the coast of Mauritius'
+    ],
+    answer:'An active volcano on Grand Comore in the Comoro Islands, north of Madagascar',
+    hint:'It is one of the largest active volcanoes in the Indian Ocean region.',
+    explanation:'<b>Karthala</b> is an active volcano on Grand Comore, the largest of the Comoro Islands, located north of Madagascar in the Indian Ocean. It is one of the most active volcanoes in the world and erupts regularly — unlike the extinct volcanoes of Mauritius.' }),
+
+  makeMCQ({ id:'g5hg-vol-012', chapterId:'volcanism', difficulty:2,
+    question:'What is LAVA?',
+    options:[
+      'The molten rock INSIDE the Earth before it reaches the surface',
+      'Molten rock that has erupted and reached the Earth\'s surface through a volcano',
+      'The cloud of ash and gas released by a volcano',
+      'The solid black rock found in fields in Mauritius'
+    ],
+    answer:'Molten rock that has erupted and reached the Earth\'s surface through a volcano',
+    hint:'The same material is called "magma" underground and a different name above ground.',
+    explanation:'<b>Lava</b> is molten rock that has erupted from a volcano and reached the Earth\'s surface. When still underground it is called <b>magma</b>. Once erupted and flowing on the surface it becomes <b>lava</b>. When lava cools and solidifies it forms rocks like <b>basalt</b>.' }),
+
+  makeTF({ id:'g5hg-vol-013', chapterId:'volcanism', difficulty:1,
+    question:'The island of Mauritius was formed by underwater volcanic eruptions.',
+    answer:true,
+    hint:'All the volcanic rock (basalt) in Mauritius is evidence of this.',
+    explanation:'True. <b>Mauritius was formed by underwater volcanic eruptions</b> over millions of years. Lava built up on the ocean floor until it rose above sea level, creating the island. The basalt rock found everywhere is evidence of this volcanic origin.' }),
+
+  makeMCQ({ id:'g5hg-vol-014', chapterId:'volcanism', difficulty:2,
+    question:'Where in Mauritius is the most fertile volcanic soil found, and which crop benefits most from it?',
+    options:[
+      'Along the beach, mixed with coral sand — coconut trees grow best there',
+      'On the central plateau and plains, where basalt has weathered into deep, rich red soil — ideal for sugar cane',
+      'In the lagoon, where volcanic minerals dissolve in the water',
+      'Only in the Black River Gorges, where trees keep the soil moist'
+    ],
+    answer:'On the central plateau and plains, where basalt has weathered into deep, rich red soil — ideal for sugar cane',
+    hint:'The main agricultural crop of Mauritius grows best in this rich soil.',
+    explanation:'The central plateau and surrounding plains have the <b>deepest, most fertile volcanic soil</b> from centuries of basalt weathering. This iron-rich, mineral-laden red soil is ideal for <b>sugar cane cultivation</b>, which is why the sugar industry developed mainly on the plateau and its slopes.' }),
+
+  makeMCQ({ id:'g5hg-vol-015', chapterId:'volcanism', difficulty:3,
+    question:'Mauritius has extinct volcanoes while Réunion (170 km away) has an active volcano. What best explains why one island is volcanically active and the other is not?',
+    options:[
+      'Réunion is newer and still sits over a volcanic hot spot; Mauritius is older and has drifted away from the hot spot as the tectonic plate moved',
+      'Réunion is larger so it has more magma stored inside',
+      'Mauritius used all its lava building the island; Réunion still has some left',
+      'The coral reef around Mauritius prevents volcanic activity'
+    ],
+    answer:'Réunion is newer and still sits over a volcanic hot spot; Mauritius is older and has drifted away from the hot spot as the tectonic plate moved',
+    hint:'Think about "hot spots" — fixed points of volcanic activity while tectonic plates move slowly above them.',
+    explanation:'Both islands were created by a <b>volcanic hot spot</b> — a fixed plume of magma rising through the Earth\'s mantle. The African tectonic plate moves slowly over this hot spot. <b>Mauritius</b> formed first (~8 million years ago) and has drifted away — so its volcanoes are extinct. <b>Réunion</b> formed more recently and is still directly over the hot spot, so Piton de la Fournaise remains active.' }),
+
+  makeMCQ({ id:'g5hg-vol-016', chapterId:'volcanism', difficulty:3,
+    question:'A geologist finds basalt rocks near Tamarin with clear horizontal layers. What does this tell them about how the rock formed?',
+    options:[
+      'The basalt was deposited by a river, which created the horizontal layers',
+      'The horizontal layers show repeated lava flows — each layer is a separate eruption that cooled before the next one flowed over it',
+      'The basalt fell from the sky in horizontal layers',
+      'The layering shows this is sedimentary rock, not volcanic'
+    ],
+    answer:'The horizontal layers show repeated lava flows — each layer is a separate eruption that cooled before the next one flowed over it',
+    hint:'How are layers in rock generally formed?',
+    explanation:'Horizontal layers (strata) in basalt reveal <b>repeated lava flows</b>. Each eruption produced a flow that spread across the land and cooled into solid basalt. The next eruption added another layer on top. These stacked layers record the volcanic history of the island — each layer represents an ancient eruption preserved in rock.' }),
+
+  makeMCQ({ id:'g5hg-vol-017', chapterId:'volcanism', difficulty:2,
+    question:'Why is the Black River Gorges National Park important for Mauritius\'s water supply?',
+    options:[
+      'The forests produce rain by releasing chemicals into the atmosphere',
+      'Native forests absorb rainfall into the soil, filter it and slowly release it into rivers that supply drinking water',
+      'The gorges collect rainwater in underground pools that can be pumped out',
+      'The forests are important for tourism income, not water supply'
+    ],
+    answer:'Native forests absorb rainfall into the soil, filter it and slowly release it into rivers that supply drinking water',
+    hint:'Think about what happens to rain when it falls on a forested hillside versus bare rock.',
+    explanation:'Native forests act as a <b>"green water tower"</b>: trees and soil absorb heavy rainfall, preventing runoff. Water slowly percolates through the soil (which acts as a natural filter) and is released gradually into streams and rivers — providing a steady, clean water supply. Without forests, rain would run straight off the volcanic rock as flash floods.' }),
+
+  makeMCQ({ id:'g5hg-vol-018', chapterId:'volcanism', difficulty:2,
+    question:'What is a volcanic HOT SPOT?',
+    options:[
+      'A very hot beach near a volcano',
+      'A fixed point of intense volcanic activity in the Earth\'s mantle that stays in place while tectonic plates move over it',
+      'The crater at the top of a volcano which is the hottest part',
+      'An area near a volcano where the ground temperature is warm'
+    ],
+    answer:'A fixed point of intense volcanic activity in the Earth\'s mantle that stays in place while tectonic plates move over it',
+    hint:'Think about how Mauritius and Réunion formed — both from the same source, yet at different times.',
+    explanation:'A <b>volcanic hot spot</b> is a plume of extremely hot magma rising from the Earth\'s mantle that remains fixed in position while the tectonic plate above it moves slowly. As the plate moves, a chain of volcanic islands or mountains is created over time — older ones become extinct (like Mauritius) as they drift away, while newer ones over the hot spot (like Réunion) remain active.' }),
+
+  makeMCQ({ id:'g5hg-vol-019', chapterId:'volcanism', difficulty:4,
+    question:'Mauritius has rich volcanic soil, no active volcanoes, a coral reef lagoon and rivers from the plateau. How do ALL FOUR features combine to support the sugar cane industry?',
+    options:[
+      'Volcanic soil provides nutrients; no active volcanoes means stable farmland; the reef protects the coast from erosion; rivers from the plateau provide irrigation water',
+      'Volcanoes provide heat that warms the soil; the reef acts as a breakwater for ships; rivers water nothing; volcanic soil is too hard for farming',
+      'None of these features matter for sugar cane — success was due only to labour',
+      'The reef provides fish protein to workers; the soil needs volcanic ash added constantly; rivers flood the fields'
+    ],
+    answer:'Volcanic soil provides nutrients; no active volcanoes means stable farmland; the reef protects the coast from erosion; rivers from the plateau provide irrigation water',
+    hint:'Think about what each geographical feature contributes to farming.',
+    explanation:'Each feature plays a role: (1) <b>Volcanic soil</b> — rich in minerals from weathered basalt, ideal for sugar cane; (2) <b>No active volcanoes</b> — safe, stable farmland without eruption risk; (3) <b>Coral reef</b> — protects the coastline and flat alluvial farmland near the coast from wave erosion; (4) <b>Rivers from the plateau</b> — provide freshwater irrigation during dry season. Together, these make Mauritius geographically ideal for a sugar cane economy.' })
+
+);

@@ -99,3 +99,109 @@ STATIC_QUESTIONS.push(
     explanation:'Port Louis became multicultural through its layered history: <b>French settlers</b> built it up, <b>enslaved Africans and Malagasy</b> worked the plantations, <b>British colonists</b> governed after 1810, and <b>Indian indentured workers</b> arrived after 1835 — all contributing to today\'s diverse Mauritian society.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5hg-pl-011', chapterId:'port-louis', difficulty:2,
+    question:'Which of the following structures did Mahé de Labourdonnais build in Port Louis?',
+    options:[
+      'The Blue Penny Museum and Fort Adelaide',
+      'The harbour (quay), a hospital, a windmill and Government House',
+      'Aapravasi Ghat and Champ de Mars racecourse',
+      'The Natural History Museum and the Central Market'
+    ],
+    answer:'The harbour (quay), a hospital, a windmill and Government House',
+    hint:'He governed 1735–1746 and built key infrastructure for the city.',
+    explanation:'<b>Mahé de Labourdonnais</b> built the <b>harbour (quay)</b> for ships, <b>warehouses</b>, <b>barracks</b>, a <b>hospital</b>, a <b>windmill</b> and the early <b>Government House</b>. These structures transformed Port Louis from a small settlement into a functioning colonial city.' }),
+
+  makeMCQ({ id:'g5hg-pl-012', chapterId:'port-louis', difficulty:1,
+    question:'The Natural History Museum in Port Louis contains one of the world\'s most famous natural history exhibits. What is it?',
+    options:[
+      'The original Blue Penny stamp',
+      'A reconstructed skeleton of the extinct Dodo bird',
+      'A Dutch cannon from Fort Frederick Hendrik',
+      'A model of the first sugar mill'
+    ],
+    answer:'A reconstructed skeleton of the extinct Dodo bird',
+    hint:'This extinct bird was endemic to Mauritius.',
+    explanation:'The <b>Natural History Museum</b> in Port Louis has a famous reconstructed <b>Dodo skeleton</b> — one of the most complete in existence. The Dodo was endemic to Mauritius and went extinct in the late 17th century after hunting and introduced predators destroyed the population.' }),
+
+  makeTF({ id:'g5hg-pl-013', chapterId:'port-louis', difficulty:1,
+    question:'Government House (Hôtel du Gouvernement) was first built during the French period and has served as the official residence for every ruler of Mauritius since.',
+    answer:true,
+    hint:'Labourdonnais established this tradition in the 18th century.',
+    explanation:'True. <b>Government House</b> was first established during the French period under Mahé de Labourdonnais. It has served as the official residence and office for the island\'s rulers continuously — from French governors to British governors to the President of the Republic of Mauritius today.' }),
+
+  makeMCQ({ id:'g5hg-pl-014', chapterId:'port-louis', difficulty:2,
+    question:'Port Louis was an ideal base for French corsairs like Robert Surcouf. Why was the harbour so valuable to them?',
+    options:[
+      'The harbour was hidden from British ships by tall mountains',
+      'The harbour provided shelter, repairs and supplies for their ships between raids on British vessels in the Indian Ocean',
+      'British ships were not allowed to enter Indian Ocean waters at all',
+      'The French government paid corsairs directly from the Port Louis treasury'
+    ],
+    answer:'The harbour provided shelter, repairs and supplies for their ships between raids on British vessels in the Indian Ocean',
+    hint:'A good harbour allows ships to be repaired and restocked for the next voyage.',
+    explanation:'Port Louis\'s <b>well-developed harbour</b> (built by Labourdonnais) provided everything corsairs needed: shelter from storms, ship repairs, food and water resupply, and a safe port to sell captured goods. Its central Indian Ocean location made it perfect for launching raids on British trade routes.' }),
+
+  makeMCQ({ id:'g5hg-pl-015', chapterId:'port-louis', difficulty:2,
+    question:'What was the Central Market (Bazaar) of Port Louis historically used for?',
+    options:[
+      'Only importing goods from France and Britain',
+      'Trading fresh local produce, spices, crafts and food — reflecting Mauritius\'s multicultural population',
+      'Storing military equipment and weapons',
+      'Housing newly arrived indentured workers'
+    ],
+    answer:'Trading fresh local produce, spices, crafts and food — reflecting Mauritius\'s multicultural population',
+    hint:'It reflects Mauritius\'s diverse agricultural produce and cultural heritages.',
+    explanation:'The <b>Central Market</b> of Port Louis has long been a vibrant bazaar selling fresh vegetables, fruits, spices, crafts and street food. It reflects the diverse cultural heritages of Mauritius — African, Indian, Chinese and European — that have shaped the island\'s commerce and cuisine.' }),
+
+  makeMCQ({ id:'g5hg-pl-016', chapterId:'port-louis', difficulty:3,
+    question:'The British built Fort Adelaide (La Citadelle) on a hill overlooking Port Louis in the 1830s, right after the abolition of slavery in 1835. Why do historians believe the timing was NOT a coincidence?',
+    options:[
+      'The British needed a new fort after demolishing the French ones',
+      'The fort was positioned to control the city and harbour in case formerly enslaved people rebelled after emancipation',
+      'The British built forts on every hill they found as general policy',
+      'The fort was built to defend against a Portuguese invasion'
+    ],
+    answer:'The fort was positioned to control the city and harbour in case formerly enslaved people rebelled after emancipation',
+    hint:'What might plantation owners have feared would happen when enslaved people were freed?',
+    explanation:'Historians note that <b>Fort Adelaide</b> was built on a commanding hill with guns pointed over the city and port during the period of emancipation. It is widely believed its purpose was to <b>control any uprising</b> by formerly enslaved people who might rebel against their former owners. The fort represents the power imbalance that persisted even after the legal abolition of slavery.' }),
+
+  makeMCQ({ id:'g5hg-pl-017', chapterId:'port-louis', difficulty:3,
+    question:'Aapravasi Ghat was used as an immigration depot from 1834 to 1923. Why is it now a UNESCO World Heritage Site?',
+    options:[
+      'Because it is the oldest building in Mauritius',
+      'Because it was the first site in the British Empire where large-scale indentured labour was implemented — over 500,000 workers passed through it, shaping Mauritius and influencing similar migration worldwide',
+      'Because great battles were fought there during the World Wars',
+      'Because it holds the largest collection of colonial art in the Indian Ocean region'
+    ],
+    answer:'Because it was the first site in the British Empire where large-scale indentured labour was implemented — over 500,000 workers passed through it, shaping Mauritius and influencing similar migration worldwide',
+    hint:'UNESCO sites are chosen for their outstanding universal value to humanity.',
+    explanation:'<b>Aapravasi Ghat</b> is a UNESCO World Heritage Site because it was the <b>first site in the British Empire</b> where the system of indentured labour was implemented on a large scale. Over 500,000 workers from India passed through it. The system was then replicated in Fiji, Trinidad, South Africa and other colonies — making this site of global historical importance.' }),
+
+  makeMCQ({ id:'g5hg-pl-018', chapterId:'port-louis', difficulty:2,
+    question:'Which of the following is an important colonial building that still stands in Port Louis today?',
+    options:[
+      'The Eiffel Tower replica',
+      'The Dutch windmill of 1638',
+      'The Jummah Mosque, one of the oldest mosques in the southern hemisphere',
+      'The original sugar mill of Mahé de Labourdonnais'
+    ],
+    answer:'The Jummah Mosque, one of the oldest mosques in the southern hemisphere',
+    hint:'Port Louis\'s multicultural history is reflected in its places of worship.',
+    explanation:'The <b>Jummah Mosque</b> (Mosque of the Friday congregation) in Port Louis was built in the mid-19th century by Indian Muslim indentured workers and their descendants. It is one of the oldest mosques in the southern hemisphere and reflects the influence of the Indian community on Mauritian culture and architecture.' }),
+
+  makeMCQ({ id:'g5hg-pl-019', chapterId:'port-louis', difficulty:4,
+    question:'Port Louis developed as an important Indian Ocean port due to geography, colonial investment and trade. Which factor was MOST fundamental to its importance, and why?',
+    options:[
+      'Location in the central Indian Ocean — this existed before anything was built and made everything else possible',
+      'Labourdonnais\'s construction programme — without his buildings there was no port',
+      'Trade routes — these created the demand that made Port Louis important',
+      'All three factors are equally important and cannot be ranked'
+    ],
+    answer:'Location in the central Indian Ocean — this existed before anything was built and made everything else possible',
+    hint:'Which factor pre-existed all the others and made the others worthwhile?',
+    explanation:'<b>Location</b> was the foundation — Mauritius\'s position in the central Indian Ocean meant ships on Europe-Asia routes needed to pass nearby, making a port there inherently valuable. <b>Labourdonnais\'s investment</b> converted this geographic advantage into a working harbour. <b>Trade routes</b> grew as a result of both. Without the strategic location, no governor\'s buildings would have attracted the same volume of trade.' })
+
+);
