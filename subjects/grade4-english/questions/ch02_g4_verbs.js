@@ -88,3 +88,89 @@ STATIC_QUESTIONS.push(
     explanation:'"Today was" sets the past tense context. <b>Woke</b> = irregular past of "wake". <b>Brushed</b> = regular past of "brush" (+ed). <b>Helped</b> = regular past of "help" (+ed). All three verbs must match the past tense set by "Today was a great day."' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4eng-verb-011', chapterId:'g4eng-verbs', difficulty:1,
+    question:'Which sentence is in the FUTURE tense?',
+    options:[
+      'She plays tennis every day.',
+      'She played tennis yesterday.',
+      'She will play tennis tomorrow.',
+      'She is playing tennis now.'
+    ],
+    answer:'She will play tennis tomorrow.',
+    hint:'The future tense uses "will" + base verb to describe what will happen later.',
+    explanation:'"<b>She will play tennis tomorrow</b>" is the future tense. Formula: will + base verb (play, not plays or played). Time signals: yesterday = past, now/today = present, tomorrow/soon = future.' }),
+
+  makeMCQ({ id:'g4eng-verb-012', chapterId:'g4eng-verbs', difficulty:1,
+    question:'What is the PAST TENSE of "write"?',
+    options:['writed','written','wrote','writes'],
+    answer:'wrote',
+    hint:'"Write" is an irregular verb. Its past tense is not "writed".',
+    explanation:'The past tense of "write" is <b>wrote</b>. "Written" is the past participle (used with has/have: "She has written"). Irregular sets: write/wrote/written, ring/rang/rung, sing/sang/sung.' }),
+
+  makeTF({ id:'g4eng-verb-013', chapterId:'g4eng-verbs', difficulty:1,
+    question:'In "He has finished his work", the word "has" is an auxiliary (helping) verb.',
+    answer:true,
+    hint:'An auxiliary verb helps the main verb. It comes before the main verb.',
+    explanation:'<b>True.</b> "Has" is an <b>auxiliary (helping) verb</b> that helps "finished" form the present perfect tense. Common auxiliary verbs: have/has, is/am/are, was/were, do/does, will, can, should.' }),
+
+  makeMCQ({ id:'g4eng-verb-014', chapterId:'g4eng-verbs', difficulty:2,
+    question:'Choose the correct verb form: "She ___ already eaten her lunch."',
+    options:['is','was','has','have'],
+    answer:'has',
+    hint:'Present perfect tense = has/have + past participle. For "she" (singular), which auxiliary?',
+    explanation:'"She <b>has</b> already eaten" — present perfect = has/have + past participle. "She" (third person singular) uses "has". Compare: I/you/we/they have eaten; he/she/it has eaten.' }),
+
+  makeMCQ({ id:'g4eng-verb-015', chapterId:'g4eng-verbs', difficulty:2,
+    question:'What is the PAST TENSE of "break"?',
+    options:['breaked','broken','brake','broke'],
+    answer:'broke',
+    hint:'"Break" is an irregular verb.',
+    explanation:'The past tense of "break" is <b>broke</b>. "Broken" is the past participle (used with has/have: "She has broken the cup"). Irregular sets: break/broke/broken, take/took/taken, shake/shook/shaken.' }),
+
+  makeMCQ({ id:'g4eng-verb-016', chapterId:'g4eng-verbs', difficulty:2,
+    question:'Choose the correct verb: "Everyone ___ the school rules."',
+    options:['follow','follows','following','followed'],
+    answer:'follows',
+    hint:'"Everyone" is grammatically singular, even though it seems to mean many people.',
+    explanation:'"Everyone <b>follows</b>" — "everyone", "someone", "anyone" and "no one" are all singular. They take a verb+s form: everyone follows, someone needs, no one knows. This is a common subject-verb agreement mistake.' }),
+
+  makeMCQ({ id:'g4eng-verb-017', chapterId:'g4eng-verbs', difficulty:2,
+    question:'Which sentence uses the SIMPLE PRESENT tense to express a permanent fact?',
+    options:[
+      'The sun will rise in the east.',
+      'The sun rose in the east.',
+      'The sun rises in the east.',
+      'The sun is rising in the east.'
+    ],
+    answer:'The sun rises in the east.',
+    hint:'For permanent facts and general truths, we use the simple present tense.',
+    explanation:'"<b>The sun rises in the east</b>" — the simple present expresses permanent facts and general truths (always true). "Rises" is the third person singular form (he/she/it + verb+s).' }),
+
+  makeMCQ({ id:'g4eng-verb-018', chapterId:'g4eng-verbs', difficulty:3,
+    question:'Which sentence is GRAMMATICALLY CORRECT?',
+    options:[
+      'Last week, she goes to the dentist.',
+      'Last week, she gone to the dentist.',
+      'Last week, she went to the dentist.',
+      'Last week, she is going to the dentist.'
+    ],
+    answer:'Last week, she went to the dentist.',
+    hint:'"Last week" is a past time signal. Which form of "go" is the correct past tense?',
+    explanation:'"<b>Last week, she went to the dentist</b>" — "last week" signals the past. "Went" is the irregular past tense of "go". Never write "goed" or "goes" with a past time signal.' }),
+
+  makeMCQ({ id:'g4eng-verb-019', chapterId:'g4eng-verbs', difficulty:4,
+    question:'Meena writes: "I ___ (enjoy) school today. My teacher ___ (give) us a science project. We ___ (learn) about plants and I ___ (bring) home a small cactus." All four actions are past tense. Which set fills the blanks correctly?',
+    options:[
+      'enjoyed / gave / learnt / brought',
+      'enjoy / give / learn / bring',
+      'enjoyed / gived / learned / bringed',
+      'was enjoying / was giving / was learning / was bringing'
+    ],
+    answer:'enjoyed / gave / learnt / brought',
+    hint:'Check each verb: enjoy (regular: +ed), give (irregular: gave), learn (regular: learnt or learned), bring (irregular: brought).',
+    explanation:'"<b>Enjoyed</b>" (enjoy+ed, regular), "<b>gave</b>" (irregular: give→gave), "<b>learnt</b>" (learn+t, regular — "learned" also accepted), "<b>brought</b>" (irregular: bring→brought). Four different verb forms tested in one passage.' })
+
+);

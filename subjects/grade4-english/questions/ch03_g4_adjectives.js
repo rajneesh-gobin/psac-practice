@@ -88,3 +88,74 @@ STATIC_QUESTIONS.push(
     explanation:'"The <b>kindest</b>" = superlative (comparing grandmother to all people Meena knows). "<b>More patient</b> than" = comparative (comparing to family members — "than" always signals comparative). Kind→kindest (short adjective). Patient→more patient (multi-syllable adjective uses "more").' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4eng-adj-011', chapterId:'g4eng-adjectives', difficulty:1,
+    question:'Which word is an ADVERB in: "The children ran quickly to the bus."',
+    options:['children','ran','quickly','bus'],
+    answer:'quickly',
+    hint:'An adverb describes a verb. How did the children run?',
+    explanation:'"<b>Quickly</b>" is an adverb — it describes the verb "ran" (how they ran). Most adverbs end in -ly: quickly, slowly, loudly, quietly, happily. Adverbs tell us HOW, WHEN or WHERE an action happens.' }),
+
+  makeMCQ({ id:'g4eng-adj-012', chapterId:'g4eng-adjectives', difficulty:1,
+    question:'What is the ADVERB form of the adjective "slow"?',
+    options:['slower','slowing','slowly','slowness'],
+    answer:'slowly',
+    hint:'Add -ly to most adjectives to form adverbs.',
+    explanation:'slow → <b>slowly</b>. To form adverbs from adjectives: add -ly. Examples: quick→quickly, happy→happily (y→ily), gentle→gently, easy→easily. Adverbs describe verbs: "She walked slowly."' }),
+
+  makeMCQ({ id:'g4eng-adj-013', chapterId:'g4eng-adjectives', difficulty:2,
+    question:'Choose the correct COMPARATIVE: "This film is ___ (interesting) than the last one."',
+    options:['interestinger','most interesting','more interesting','the most interesting'],
+    answer:'more interesting',
+    hint:'Long adjectives (3+ syllables) use "more" to compare two things — never add -er.',
+    explanation:'"<b>More interesting</b>" — for long adjectives (3 or more syllables), use more + adjective, not -er. Examples: more beautiful, more expensive, more comfortable. "Interestinger" is never correct in English.' }),
+
+  makeMCQ({ id:'g4eng-adj-014', chapterId:'g4eng-adjectives', difficulty:2,
+    question:'What is the SUPERLATIVE of "beautiful"?',
+    options:['beautifuller','more beautiful','the beautifullest','the most beautiful'],
+    answer:'the most beautiful',
+    hint:'Long adjectives (3+ syllables) use "the most" for the superlative.',
+    explanation:'"<b>The most beautiful</b>" — for long adjectives, use the most + adjective. Examples: the most expensive, the most comfortable, the most intelligent. Never add -est to a long adjective.' }),
+
+  makeMCQ({ id:'g4eng-adj-015', chapterId:'g4eng-adjectives', difficulty:2,
+    question:'What is the correct COMPARATIVE form of "good"?',
+    options:['gooder','more good','better','the best'],
+    answer:'better',
+    hint:'"Good" is irregular. Its comparison forms do not follow the normal rules.',
+    explanation:'"Good" has an irregular comparative: <b>better</b>. Full irregular comparison: good → better → best. Similarly: bad → worse → worst. Never write "gooder" or "more good".' }),
+
+  makeTF({ id:'g4eng-adj-016', chapterId:'g4eng-adjectives', difficulty:2,
+    question:'In the sentence "She is kind", the adjective "kind" comes AFTER the verb.',
+    answer:true,
+    hint:'Adjectives can appear before a noun ("a kind teacher") or after a linking verb ("she is kind").',
+    explanation:'<b>True.</b> Adjectives can be used in two positions: (1) before a noun — "a <b>kind</b> teacher" (attributive); (2) after a linking verb — "She <b>is</b> kind" (predicative). Both positions are correct.' }),
+
+  makeMCQ({ id:'g4eng-adj-017', chapterId:'g4eng-adjectives', difficulty:2,
+    question:'Which sentence correctly uses a comma between adjectives?',
+    options:[
+      'She wore a long, blue, silk dress.',
+      'She wore a long blue, silk dress.',
+      'She wore a, long blue silk dress.',
+      'She, wore a long blue silk dress.'
+    ],
+    answer:'She wore a long, blue, silk dress.',
+    hint:'Commas separate adjectives that independently describe the same noun.',
+    explanation:'"<b>She wore a long, blue, silk dress</b>" — commas separate adjectives that could be joined by "and": a long and blue and silk dress. When adjectives independently modify the noun, separate them with commas.' }),
+
+  makeMCQ({ id:'g4eng-adj-018', chapterId:'g4eng-adjectives', difficulty:3,
+    question:'Which word is an ADVERB (not an adjective) in: "The dog barked loudly at the strange noise."',
+    options:['strange','loudly','barked','noise'],
+    answer:'loudly',
+    hint:'One word describes HOW the dog barked (adverb). Another describes the noise (adjective).',
+    explanation:'"<b>Loudly</b>" is an adverb — it modifies the verb "barked" (how the dog barked). "Strange" is an adjective — it describes the noun "noise". Adverbs modify verbs; adjectives modify nouns.' }),
+
+  makeMCQ({ id:'g4eng-adj-019', chapterId:'g4eng-adjectives', difficulty:4,
+    question:'Riya wrote: "It was a hot, sunny day. The sea looked beautiful and calm. We felt very happy as we walked along the beach." How many ADJECTIVES appear in this passage?',
+    options:['4','5','6','7'],
+    answer:'5',
+    hint:'Find every word that describes a noun. Note: "very" is an adverb (it describes the adjective "happy"), not an adjective itself.',
+    explanation:'The 5 adjectives are: <b>hot</b> (day), <b>sunny</b> (day), <b>beautiful</b> (sea), <b>calm</b> (sea), <b>happy</b> (we — predicative adjective after "felt"). "Very" is an adverb that intensifies the adjective "happy". Counting adjectives in a passage is a key MIE Grade 4 skill.' })
+
+);

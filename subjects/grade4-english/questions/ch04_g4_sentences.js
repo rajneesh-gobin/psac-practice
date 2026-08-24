@@ -94,3 +94,89 @@ STATIC_QUESTIONS.push(
     explanation:'4 corrections needed: (1) Capital "Y" for "Yesterday". (2) Full stop after "mother" (new sentence). (3) Capital "W" for "We". (4) Comma after "fish" and after "vegetables" in the list — or at minimum one comma. The corrected version: "Yesterday I went to the market with my mother. We bought fish, vegetables and fruit. It was a fun day."' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4eng-sent-011', chapterId:'g4eng-sentences', difficulty:1,
+    question:'Which word is a CONJUNCTION in: "I was tired but I finished my homework."',
+    options:['tired','but','finished','homework'],
+    answer:'but',
+    hint:'A conjunction joins two parts (clauses) of a sentence.',
+    explanation:'"<b>But</b>" is a conjunction — it joins two clauses: "I was tired" + "I finished my homework". Common conjunctions: and, but, because, so, or, yet, although. Conjunctions are joining words.' }),
+
+  makeMCQ({ id:'g4eng-sent-012', chapterId:'g4eng-sentences', difficulty:1,
+    question:'Which conjunction best completes: "She missed the bus ___ she had to walk to school."',
+    options:['but','or','because','so'],
+    answer:'so',
+    hint:'The second clause shows what happened AS A RESULT of missing the bus.',
+    explanation:'"She missed the bus <b>so</b> she had to walk to school." "So" shows a result (therefore). Compare: "She had to walk <b>because</b> she missed the bus" — "because" introduces a reason, not a result. "So" = as a result / therefore.' }),
+
+  makeMCQ({ id:'g4eng-sent-013', chapterId:'g4eng-sentences', difficulty:2,
+    question:'Which option joins these two sentences correctly: "Ram was hungry." + "He ate a banana."',
+    options:[
+      'Ram was hungry, he ate a banana.',
+      'Ram was hungry and ate a banana.',
+      'Ram was hungry but ate a banana.',
+      'Ram was hungry. He ate, a banana.'
+    ],
+    answer:'Ram was hungry and ate a banana.',
+    hint:'Join with a conjunction. "And" connects two related ideas.',
+    explanation:'"<b>Ram was hungry and ate a banana</b>" uses "and" to join the two ideas smoothly. A comma alone without a conjunction (option 1) creates a comma splice error. "But" implies contrast, which doesn\'t fit here.' }),
+
+  makeTF({ id:'g4eng-sent-014', chapterId:'g4eng-sentences', difficulty:2,
+    question:'The names of months (January, February…) always begin with a capital letter.',
+    answer:true,
+    hint:'Months are proper nouns — are proper nouns capitalised?',
+    explanation:'<b>True.</b> Months (January, February, March…) and days of the week (Monday, Tuesday…) are proper nouns and always begin with a capital letter. Many students forget to capitalise these words.' }),
+
+  makeMCQ({ id:'g4eng-sent-015', chapterId:'g4eng-sentences', difficulty:2,
+    question:'Which sentence correctly shows POSSESSION for MULTIPLE dogs?',
+    options:[
+      "The dog's kennel is dirty.",
+      "The dogs' kennel is dirty.",
+      "The dogs kennel is dirty.",
+      "The dogs is kennel dirty."
+    ],
+    answer:"The dogs' kennel is dirty.",
+    hint:'Multiple dogs = plural noun ending in -s. For plural nouns ending in -s, the apostrophe goes AFTER the s.',
+    explanation:'"<b>The dogs\' kennel</b>" — for plural nouns ending in -s, place the apostrophe after the s. Compare: one dog\'s kennel (singular) vs the dogs\' kennel (plural). Irregular plurals (no s): the children\'s toys, the women\'s team.' }),
+
+  makeMCQ({ id:'g4eng-sent-016', chapterId:'g4eng-sentences', difficulty:2,
+    question:'Which sentence is a COMPOUND sentence (two simple sentences joined by a conjunction)?',
+    options:[
+      'The bird sang.',
+      'The bird sang a beautiful song.',
+      'The bird sang and the flowers bloomed.',
+      'The singing bird sat in the tree.'
+    ],
+    answer:'The bird sang and the flowers bloomed.',
+    hint:'A compound sentence has TWO complete clauses joined by a conjunction.',
+    explanation:'"<b>The bird sang and the flowers bloomed</b>" is compound — it joins two complete clauses ("The bird sang" + "the flowers bloomed") with "and". Simple sentences have one clause. Compound sentences join two simple sentences with a conjunction.' }),
+
+  makeMCQ({ id:'g4eng-sent-017', chapterId:'g4eng-sentences', difficulty:3,
+    question:'Which sentence correctly punctuates DIRECT SPEECH?',
+    options:[
+      'Priya said that she was happy.',
+      'Priya said "I am happy"',
+      'Priya said, "I am happy."',
+      '"Priya said, I am happy."'
+    ],
+    answer:'Priya said, "I am happy."',
+    hint:'Direct speech rules: comma before the opening speech mark, capital letter for the first spoken word, full stop inside the closing speech mark.',
+    explanation:'"<b>Priya said, "I am happy."</b>" — rules: comma after the reporting verb (said,), opening inverted comma, capital letter for the first spoken word (I), and full stop before the closing inverted comma. Option 1 is indirect/reported speech (no inverted commas needed).' }),
+
+  makeMCQ({ id:'g4eng-sent-018', chapterId:'g4eng-sentences', difficulty:3,
+    question:'What type of sentence is: "How amazing the view from the mountain is!"',
+    options:['Statement','Question','Exclamation','Command'],
+    answer:'Exclamation',
+    hint:'This sentence begins with "How" and ends with an exclamation mark. It expresses strong feeling.',
+    explanation:'"<b>Exclamation</b>" — sentences beginning with "What" or "How" that express strong feeling are exclamatory sentences, ending with "!". Examples: "What a wonderful day!" / "How beautiful the flowers are!" Note: commands can also end in "!" — the key is the "What/How" pattern and strong emotion.' }),
+
+  makeMCQ({ id:'g4eng-sent-019', chapterId:'g4eng-sentences', difficulty:4,
+    question:'A student wrote: "on saturday, my friend Aisha and i went to the park. we saw a peacock and took photo\'s." How many punctuation or capitalisation errors are there?',
+    options:['3','4','5','6'],
+    answer:'5',
+    hint:'Check: capital at the start of each sentence, capital for proper nouns (days, names), capital for the pronoun "I", and apostrophe errors.',
+    explanation:'5 errors: (1) "on" → <b>On</b> (sentence start). (2) "saturday" → <b>Saturday</b> (day of week). (3) "i" → <b>I</b> (the pronoun I is always capital). (4) "we" → <b>We</b> (start of new sentence). (5) "photo\'s" → <b>photos</b> (plural, no apostrophe). Corrected: "On Saturday, my friend Aisha and I went to the park. We saw a peacock and took photos."' })
+
+);
