@@ -67,3 +67,63 @@ STATIC_QUESTIONS.push(
     explanation:'48 = 2(14 + w). 24 = 14 + w. w = 24 − 14 = <b>10 cm</b>.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g6m-meas-011', chapterId:'g6-measure', difficulty:1,
+    question:'Convert 3.5 km to METRES.',
+    answer:'3500', acceptableAnswers:['3500','3500 m'],
+    hint:'1 km = 1000 m. Multiply by 1000.',
+    explanation:'3.5 km × 1000 = <b>3500 m</b>. Key conversions from MIE Grade 6: 1 km = 1000 m, 1 m = 100 cm, 1 cm = 10 mm. To convert from larger to smaller units, multiply.' }),
+
+  makeNum({ id:'g6m-meas-012', chapterId:'g6-measure', difficulty:1,
+    question:'Convert 4500 g to KILOGRAMS.',
+    answer:'4.5', acceptableAnswers:['4.5','4.5 kg'],
+    hint:'1 kg = 1000 g. Divide by 1000.',
+    explanation:'4500 ÷ 1000 = <b>4.5 kg</b>. To convert from smaller to larger units, divide. MIE Grade 6 mass conversions: 1 tonne = 1000 kg, 1 kg = 1000 g.' }),
+
+  makeNum({ id:'g6m-meas-013', chapterId:'g6-measure', difficulty:2,
+    question:'A tank holds 2.5 litres. How many CENTILITRES is this? (1 litre = 100 cL)',
+    answer:'250', acceptableAnswers:['250','250 cL'],
+    hint:'Multiply by 100 to convert litres to centilitres.',
+    explanation:'2.5 L × 100 = <b>250 cL</b>. Capacity conversions: 1 L = 100 cL = 1000 mL. So 1 cL = 10 mL.' }),
+
+  makeMCQ({ id:'g6m-meas-014', chapterId:'g6-measure', difficulty:2,
+    question:'A tourist from France exchanges €200 for Mauritian Rupees. If the exchange rate is 1 euro = Rs 48.50, how many Rupees does she receive?',
+    options:['Rs 9,700','Rs 9,500','Rs 9,600','Rs 9,800'],
+    answer:'Rs 9,700',
+    hint:'Multiply 200 × 48.50.',
+    explanation:'200 × 48.50 = <b>Rs 9,700</b>. Currency conversion in MIE Grade 6: Rupees = foreign currency × exchange rate. Common currencies: Euro (€), US Dollar ($), British Pound (£).' }),
+
+  makeNum({ id:'g6m-meas-015', chapterId:'g6-measure', difficulty:2,
+    question:'A rope is 4 m 75 cm long. Another rope is 2 m 50 cm long. What is the TOTAL length in metres and centimetres? (Answer as decimal metres, e.g. 7.25)',
+    answer:'7.25', acceptableAnswers:['7.25','7.25 m','7 m 25 cm'],
+    hint:'Convert both to cm: 475 + 250 = 725 cm = 7 m 25 cm.',
+    explanation:'4 m 75 cm = 475 cm. 2 m 50 cm = 250 cm. Total = 725 cm = <b>7 m 25 cm = 7.25 m</b>.' }),
+
+  makeNum({ id:'g6m-meas-016', chapterId:'g6-measure', difficulty:2,
+    question:'A suitcase weighs 18 kg 500 g. The airport allowance is 23 kg. How much MORE weight (in kg and g) can be added? (Answer in kg as decimal, e.g. 4.5)',
+    answer:'4.5', acceptableAnswers:['4.5','4.5 kg','4 kg 500 g'],
+    hint:'23 kg − 18 kg 500 g = ?',
+    explanation:'23 kg = 23,000 g. 18 kg 500 g = 18,500 g. Difference = 23,000 − 18,500 = 4,500 g = <b>4 kg 500 g = 4.5 kg</b>.' }),
+
+  makeNum({ id:'g6m-meas-017', chapterId:'g6-measure', difficulty:2,
+    question:'A jug contains 1 L 250 mL of juice. 475 mL is poured out. How much is LEFT? (Answer in mL)',
+    answer:'775', acceptableAnswers:['775','775 mL'],
+    hint:'Convert 1 L 250 mL to mL: 1250 mL. Subtract 475.',
+    explanation:'1 L 250 mL = 1250 mL. 1250 − 475 = <b>775 mL</b> remaining.' }),
+
+  makeMCQ({ id:'g6m-meas-018', chapterId:'g6-measure', difficulty:2,
+    question:'Which is heavier: 2.5 tonnes or 2,600 kg?',
+    options:['2.5 tonnes','2,600 kg','They are equal','Cannot be compared'],
+    answer:'2,600 kg',
+    hint:'Convert 2.5 tonnes to kg: 2.5 × 1000 = 2,500 kg. Compare with 2,600 kg.',
+    explanation:'2.5 tonnes = 2.5 × 1000 = 2,500 kg. Since 2,600 kg > 2,500 kg, <b>2,600 kg is heavier</b>. Always convert to the same unit before comparing.' }),
+
+  makeNum({ id:'g6m-meas-019', chapterId:'g6-measure', difficulty:4,
+    question:'A family\'s electricity bill in Mauritius is charged at Rs 4.20 per unit for the first 100 units and Rs 6.50 per unit for units above 100. If they used 150 units, what is their TOTAL bill?',
+    answer:'745', acceptableAnswers:['745','Rs 745'],
+    hint:'First 100 units: 100 × 4.20. Next 50 units: 50 × 6.50. Add together.',
+    explanation:'First 100 units: 100 × Rs 4.20 = Rs 420. Next 50 units (150 − 100): 50 × Rs 6.50 = Rs 325. Total = 420 + 325 = <b>Rs 745</b>.' })
+
+);

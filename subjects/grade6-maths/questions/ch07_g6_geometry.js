@@ -108,3 +108,64 @@ STATIC_QUESTIONS.push(
     explanation:'Angles on a straight line: 3x + x = 180. 4x = 180. x = 180 ÷ 4 = <b>45</b>.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g6m-geo-011', chapterId:'g6-geometry', difficulty:2,
+    question:'The angles of a triangle are x°, 2x° and 3x°. Find the value of x.',
+    answer:'30', acceptableAnswers:['30'],
+    hint:'Angles in a triangle always sum to 180°. So x + 2x + 3x = 180°.',
+    explanation:'x + 2x + 3x = 180. 6x = 180. x = 180 ÷ 6 = <b>30°</b>. The three angles are 30°, 60° and 90° — this is a right-angled triangle!' }),
+
+  makeNum({ id:'g6m-geo-012', chapterId:'g6-geometry', difficulty:2,
+    question:'In a quadrilateral, three angles are 95°, 110° and 85°. Find the FOURTH angle.',
+    answer:'70', acceptableAnswers:['70','70°'],
+    hint:'Angles in any quadrilateral sum to 360°.',
+    explanation:'Sum of all angles = 360°. Known angles: 95 + 110 + 85 = 290°. Fourth angle = 360 − 290 = <b>70°</b>. This applies to all quadrilaterals (square, rectangle, parallelogram, trapezium, irregular).' }),
+
+  makeMCQ({ id:'g6m-geo-013', chapterId:'g6-geometry', difficulty:1,
+    question:'How many FACES does a CYLINDER have?',
+    options:['2','3','4','1'],
+    answer:'3',
+    hint:'A cylinder has a curved surface and two circular ends.',
+    explanation:'A cylinder has <b>3</b> faces: 2 flat circular faces (top and bottom) and 1 curved face (the lateral surface). It has 0 vertices and 2 edges (the circles where the flat faces meet the curved surface). MIE Grade 6 3D shapes: cube (6F, 8V, 12E), cuboid (6F, 8V, 12E), cylinder (3F, 0V, 2E), cone (2F, 1V, 1E).' }),
+
+  makeMCQ({ id:'g6m-geo-014', chapterId:'g6-geometry', difficulty:1,
+    question:'A REGULAR HEXAGON has all its angles equal. What is each interior angle?',
+    options:['90°','108°','120°','135°'],
+    answer:'120°',
+    hint:'Sum of interior angles of a hexagon = (6−2) × 180° = 720°. Divide by 6.',
+    explanation:'Sum of interior angles = (n−2) × 180° = (6−2) × 180° = 4 × 180° = 720°. Each angle = 720° ÷ 6 = <b>120°</b>. MIE Grade 6 formula: sum of interior angles = (n−2) × 180°, where n = number of sides.' }),
+
+  makeTF({ id:'g6m-geo-015', chapterId:'g6-geometry', difficulty:1,
+    question:'A scalene triangle has all three sides of DIFFERENT lengths.',
+    answer:true,
+    hint:'Think about the three types of triangles by side length.',
+    explanation:'<b>True.</b> Triangle types by side: <b>Scalene</b> = all 3 sides different lengths; <b>Isosceles</b> = 2 sides equal; <b>Equilateral</b> = all 3 sides equal. By angles: acute (all angles < 90°), right-angled (one 90° angle), obtuse (one angle > 90°).' }),
+
+  makeNum({ id:'g6m-geo-016', chapterId:'g6-geometry', difficulty:2,
+    question:'An isosceles triangle has a base angle of 55°. What is the APEX (top) angle?',
+    answer:'70', acceptableAnswers:['70','70°'],
+    hint:'Isosceles: the two base angles are equal. All 3 angles sum to 180°.',
+    explanation:'Both base angles = 55°. Apex = 180 − 55 − 55 = 180 − 110 = <b>70°</b>. In an isosceles triangle, the two base angles are always equal.' }),
+
+  makeMCQ({ id:'g6m-geo-017', chapterId:'g6-geometry', difficulty:2,
+    question:'A shape has 4 lines of symmetry. Which shape could it be?',
+    options:['Rectangle','Equilateral triangle','Square','Regular pentagon'],
+    answer:'Square',
+    hint:'Count lines of symmetry: square has 4 (2 through midpoints of sides, 2 through corners).',
+    explanation:'A <b>square</b> has <b>4 lines of symmetry</b>: 2 through midpoints of opposite sides, and 2 through opposite corners. A rectangle has 2, an equilateral triangle has 3, a regular pentagon has 5, a regular hexagon has 6.' }),
+
+  makeNum({ id:'g6m-geo-018', chapterId:'g6-geometry', difficulty:2,
+    question:'An angle is 250°. What type of angle is it, and what is its REFLEX supplement? (i.e., what is 360° − 250°?)',
+    answer:'110', acceptableAnswers:['110','110°'],
+    hint:'360° − 250° = ?',
+    explanation:'250° is a <b>reflex angle</b> (between 180° and 360°). 360° − 250° = <b>110°</b>. This 110° is the remaining angle when you \'wrap around\' a full circle. Angle types: acute (0°–90°), right (90°), obtuse (90°–180°), straight (180°), reflex (180°–360°), full turn (360°).' }),
+
+  makeNum({ id:'g6m-geo-019', chapterId:'g6-geometry', difficulty:4,
+    question:'In the diagram (not shown), two straight lines cross. One of the four angles formed is 68°. What are the sizes of the OTHER three angles?',
+    answer:'112', acceptableAnswers:['112','112°'],
+    hint:'Vertically opposite angles are equal. Adjacent angles on a straight line sum to 180°. What is the angle adjacent to 68°?',
+    explanation:'Vertically opposite to 68° = 68° (equal). Adjacent angle = 180° − 68° = <b>112°</b>. The four angles: 68°, 112°, 68°, 112°. Vertically opposite angles are always equal; adjacent angles sum to 180° (supplementary).' })
+
+);

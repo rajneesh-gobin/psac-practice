@@ -70,3 +70,63 @@ STATIC_QUESTIONS.push(
     explanation:'2 1/2 = 10/4. 10/4 − 3/4 = 7/4 = <b>1 3/4 metres</b> remaining.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g6m-frac-011', chapterId:'g6-fractions', difficulty:2,
+    question:'Calculate: 2/3 × 3/4 (Write in simplest form)',
+    answer:'1/2', acceptableAnswers:['1/2','2/4'],
+    hint:'Multiply numerators together, denominators together. Then simplify.',
+    explanation:'2/3 × 3/4 = (2×3)/(3×4) = 6/12 = <b>1/2</b>. Shortcut (cross-cancellation): 2/3 × 3/4 → cancel the 3s → 2/1 × 1/4 = 2/4 = 1/2. The MIE Grade 6 textbook introduces fraction × fraction in Part 1.' }),
+
+  makeNum({ id:'g6m-frac-012', chapterId:'g6-fractions', difficulty:2,
+    question:'Calculate: 3/4 ÷ 1/2 (Write as a whole number or fraction)',
+    answer:'3/2', acceptableAnswers:['3/2','1 1/2','1.5'],
+    hint:'To divide by a fraction, multiply by its RECIPROCAL: flip the second fraction.',
+    explanation:'3/4 ÷ 1/2 = 3/4 × 2/1 = 6/4 = <b>3/2 = 1 1/2</b>. Rule: Keep the first fraction, Change ÷ to ×, Flip the second fraction (reciprocal). "Keep, Change, Flip" is the MIE Grade 6 method.' }),
+
+  makeNum({ id:'g6m-frac-013', chapterId:'g6-fractions', difficulty:2,
+    question:'Calculate: 2 1/4 × 2/3 (Write as a mixed number or fraction)',
+    answer:'3/2', acceptableAnswers:['3/2','1 1/2','1.5'],
+    hint:'Convert 2 1/4 to an improper fraction first: (2×4+1)/4 = 9/4. Then multiply.',
+    explanation:'2 1/4 = 9/4. Then: 9/4 × 2/3 = 18/12 = 3/2 = <b>1 1/2</b>. Always convert mixed numbers to improper fractions before multiplying or dividing.' }),
+
+  makeNum({ id:'g6m-frac-014', chapterId:'g6-fractions', difficulty:2,
+    question:'Calculate: 1 2/3 + 2 3/4 (Write as a mixed number, e.g. 4 5/12)',
+    answer:'4 5/12', acceptableAnswers:['4 5/12','53/12'],
+    hint:'Add the whole numbers. Then add the fractions using LCM(3,4)=12.',
+    explanation:'Whole numbers: 1 + 2 = 3. Fractions: 2/3 + 3/4 = 8/12 + 9/12 = 17/12 = 1 5/12. Total: 3 + 1 5/12 = <b>4 5/12</b>.' }),
+
+  makeNum({ id:'g6m-frac-015', chapterId:'g6-fractions', difficulty:2,
+    question:'Calculate: 3 1/2 − 1 3/4 (Write as a mixed number, e.g. 1 3/4)',
+    answer:'1 3/4', acceptableAnswers:['1 3/4','7/4'],
+    hint:'Convert to improper fractions: 3 1/2 = 7/2 = 14/4. Subtract 7/4.',
+    explanation:'3 1/2 = 7/2 = 14/4. 1 3/4 = 7/4. 14/4 − 7/4 = 7/4 = <b>1 3/4</b>. Alternatively: borrow from 3: 2 + 1 1/2 = 2 + 6/4; subtract 1 3/4: (2−1) + (6/4 − 3/4) = 1 3/4.' }),
+
+  makeMCQ({ id:'g6m-frac-016', chapterId:'g6-fractions', difficulty:2,
+    question:'Convert 3/8 to a DECIMAL.',
+    options:['0.38','0.375','0.83','0.3'],
+    answer:'0.375',
+    hint:'Divide the numerator by the denominator: 3 ÷ 8.',
+    explanation:'3 ÷ 8 = <b>0.375</b>. Method: 3.000 ÷ 8: 30÷8=3 rem 6; 60÷8=7 rem 4; 40÷8=5. So 3/8 = 0.375. Common fractions to know: 1/4=0.25, 1/2=0.5, 3/4=0.75, 1/8=0.125, 3/8=0.375, 5/8=0.625, 7/8=0.875.' }),
+
+  makeNum({ id:'g6m-frac-017', chapterId:'g6-fractions', difficulty:2,
+    question:'A farm has 240 animals. 5/8 of them are cows. How many COWS are on the farm?',
+    answer:'150', acceptableAnswers:['150'],
+    hint:'Find 5/8 of 240: multiply 240 × 5/8, or find 1/8 first then multiply by 5.',
+    explanation:'1/8 of 240 = 240 ÷ 8 = 30. 5/8 of 240 = 30 × 5 = <b>150 cows</b>. MIE Grade 6 method: always find the unit fraction (1/8) first, then multiply by the required number of parts (5).' }),
+
+  makeMCQ({ id:'g6m-frac-018', chapterId:'g6-fractions', difficulty:2,
+    question:'Which is GREATER: 2/3 or 3/5?',
+    options:['2/3','3/5','They are equal','Cannot be determined'],
+    answer:'2/3',
+    hint:'Find the LCM of 3 and 5 = 15. Convert both to fifteenths.',
+    explanation:'LCM(3,5) = 15. 2/3 = 10/15. 3/5 = 9/15. Since 10/15 > 9/15, <b>2/3 is greater</b>. To compare fractions with different denominators, always convert to the same denominator first.' }),
+
+  makeNum({ id:'g6m-frac-019', chapterId:'g6-fractions', difficulty:4,
+    question:'Priya spent 1/4 of her pocket money on sweets and 2/5 on a book. What FRACTION of her money has she spent altogether? If she started with Rs 200, how much does she have LEFT? (Answer: remaining amount in Rs)',
+    answer:'70', acceptableAnswers:['70','Rs 70'],
+    hint:'Add the fractions spent: 1/4 + 2/5. Find the remaining fraction. Apply to Rs 200.',
+    explanation:'Spent: 1/4 + 2/5 = 5/20 + 8/20 = 13/20. Remaining: 1 − 13/20 = 7/20. Amount left: 7/20 × 200 = <b>Rs 70</b>.' })
+
+);

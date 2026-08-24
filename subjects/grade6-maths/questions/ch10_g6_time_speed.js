@@ -78,3 +78,65 @@ STATIC_QUESTIONS.push(
     explanation:'Time = 180 ÷ 60 = 3 hours. 3 hours × 60 = <b>180 minutes</b>.' })
 
 );
+
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6m-ts-011', chapterId:'g6-time-speed', difficulty:1,
+    question:'Convert 14:45 to 12-hour (am/pm) format.',
+    options:['4:45 am','2:45 am','4:45 pm','2:45 pm'],
+    answer:'2:45 pm',
+    hint:'14:45 is in the afternoon (pm). Subtract 12: 14 - 12 = 2.',
+    explanation:'14:45 - 12:00 = <b>2:45 pm</b>. Times from 13:00 to 23:59 in 24-hour format are converted to pm by subtracting 12 from the hours. 00:00 to 11:59 = am (keep the same hours, with midnight = 12:00 am and noon = 12:00 pm).' }),
+
+  makeMCQ({ id:'g6m-ts-012', chapterId:'g6-time-speed', difficulty:1,
+    question:'Write 7:30 am in 24-hour clock format.',
+    options:['07:30','19:30','7:30','17:30'],
+    answer:'07:30',
+    hint:'Morning times (am) stay the same in 24-hour format - just write single-digit hours with a leading zero.',
+    explanation:'7:30 am becomes <b>07:30</b> in 24-hour format. For am times: keep the same hour value and write it with 2 digits (e.g. 7 becomes 07). For pm times: add 12 to the hour (e.g. 7:30 pm = 19:30).' }),
+
+  makeNum({ id:'g6m-ts-013', chapterId:'g6-time-speed', difficulty:2,
+    question:'A film starts at 09:50 and ends at 13:25. How long is the film? (Write as: Xh Ymin, e.g. 3h 35min)',
+    answer:'3h 35min', acceptableAnswers:['3h 35min','3 hours 35 minutes','3:35'],
+    hint:'From 09:50 to 13:50 = 4 hours. But 13:25 is 25 minutes before 13:50. So 4h - 25min = 3h 35min.',
+    explanation:'09:50 to 13:50 = 4 hours. 13:25 is 25 minutes before 13:50, so: 4 hours - 25 minutes = <b>3 hours 35 minutes</b>. MIE method: count on from start time to the nearest whole hour, then add remaining minutes.' }),
+
+  makeMCQ({ id:'g6m-ts-014', chapterId:'g6-time-speed', difficulty:2,
+    question:'Mauritius is at UTC+4 (4 hours ahead of GMT). When it is 10:00 in London (GMT), what time is it in Mauritius?',
+    options:['06:00','14:00','12:00','10:00'],
+    answer:'14:00',
+    hint:'Mauritius is 4 hours AHEAD. Add 4 to the GMT time.',
+    explanation:'10:00 GMT + 4 hours = <b>14:00</b> in Mauritius. Mauritius Standard Time (MUT) = UTC + 4. This time zone difference is a standard topic in the MIE Grade 6 Maths textbook (Measurement chapter).' }),
+
+  makeNum({ id:'g6m-ts-015', chapterId:'g6-time-speed', difficulty:2,
+    question:'A car travels 150 km in 2 hours 30 minutes. What is its average SPEED in km/h?',
+    answer:'60', acceptableAnswers:['60','60 km/h'],
+    hint:'Convert 2h 30min to decimal hours (2.5 h). Speed = Distance / Time.',
+    explanation:'Time = 2h 30min = 2.5 hours. Speed = 150 / 2.5 = <b>60 km/h</b>. MIE Grade 6 formula triangle: Speed = Distance / Time. Cover S to see D/T. Cover D to see S x T. Cover T to see D/S.' }),
+
+  makeNum({ id:'g6m-ts-016', chapterId:'g6-time-speed', difficulty:2,
+    question:'A cyclist rides at 16 km/h for 2 hours 30 minutes. How far does she travel? (Answer in km)',
+    answer:'40', acceptableAnswers:['40','40 km'],
+    hint:'Convert 2h 30min to decimal hours (2.5 h). Distance = Speed x Time.',
+    explanation:'Time = 2.5 hours. Distance = 16 x 2.5 = <b>40 km</b>. Always convert time to decimal hours before calculating distance. 30 min = 0.5 h, 15 min = 0.25 h, 45 min = 0.75 h.' }),
+
+  makeNum({ id:'g6m-ts-017', chapterId:'g6-time-speed', difficulty:2,
+    question:'A bus travels 240 km at an average speed of 80 km/h. How long does the journey take? (Answer in hours)',
+    answer:'3', acceptableAnswers:['3','3 hours','3 h'],
+    hint:'Time = Distance / Speed.',
+    explanation:'Time = 240 / 80 = <b>3 hours</b>. If the answer is not a whole number, convert the decimal part to minutes: e.g. 3.5 hours = 3 hours 30 minutes (0.5 x 60 = 30 min).' }),
+
+  makeNum({ id:'g6m-ts-018', chapterId:'g6-time-speed', difficulty:3,
+    question:'A train leaves at 08:45 and arrives at 12:15. If the average speed was 90 km/h, what is the length of the route in km?',
+    answer:'315', acceptableAnswers:['315','315 km'],
+    hint:'Step 1: find journey duration (08:45 to 12:15). Step 2: convert to decimal hours. Step 3: Distance = Speed x Time.',
+    explanation:'Duration: 08:45 to 12:15 = 3 hours 30 minutes = 3.5 hours. Distance = 90 x 3.5 = <b>315 km</b>.' }),
+
+  makeNum({ id:'g6m-ts-019', chapterId:'g6-time-speed', difficulty:4,
+    question:'Cyclist A leaves point P at 09:00 travelling at 15 km/h. Cyclist B leaves the same point at 10:00 in the same direction at 20 km/h. At what time does Cyclist B catch up with Cyclist A? (Write as HH:MM)',
+    answer:'13:00', acceptableAnswers:['13:00','1:00 pm'],
+    hint:'By 10:00, A has a 1-hour head start = 15 km lead. B gains (20-15) = 5 km per hour on A. Time to close gap = 15 / 5 = 3 hours after 10:00.',
+    explanation:'By 10:00, Cyclist A has covered 1 x 15 = 15 km. Relative speed of B over A = 20 - 15 = 5 km/h. Time for B to close the 15 km gap = 15 / 5 = 3 hours after 10:00 = <b>13:00</b>. Check: B at 13:00 = 3 x 20 = 60 km. A at 13:00 = 4 x 15 = 60 km ✓.' })
+
+);

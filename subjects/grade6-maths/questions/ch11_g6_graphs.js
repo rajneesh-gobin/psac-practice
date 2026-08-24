@@ -126,3 +126,64 @@ STATIC_QUESTIONS.push(
     explanation:'40% of 360° = (40÷100) × 360 = 0.4 × 360 = <b>144°</b>.' })
 
 );
+
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g6m-gr-011', chapterId:'g6-graphs', difficulty:1,
+    question:'Find the MEAN of these five values: 12, 15, 18, 9, 16.',
+    answer:'14', acceptableAnswers:['14'],
+    hint:'Mean = Sum / Number of values. Add all 5 values first.',
+    explanation:'Sum = 12 + 15 + 18 + 9 + 16 = 70. Mean = 70 / 5 = <b>14</b>. The mean is the most common type of average. MIE Grade 6: Mean = Total / Number of items.' }),
+
+  makeNum({ id:'g6m-gr-012', chapterId:'g6-graphs', difficulty:1,
+    question:'Find the RANGE of these values: 23, 7, 15, 19, 11, 8.',
+    answer:'16', acceptableAnswers:['16'],
+    hint:'Range = Highest value - Lowest value.',
+    explanation:'Highest = 23. Lowest = 7. Range = 23 - 7 = <b>16</b>. The range measures the spread of data. A larger range means data is more spread out; a smaller range means data is more consistent.' }),
+
+  makeNum({ id:'g6m-gr-013', chapterId:'g6-graphs', difficulty:2,
+    question:'In a pie chart, 1/3 of students chose cricket as their favourite sport. How many DEGREES does the cricket sector represent?',
+    answer:'120', acceptableAnswers:['120','120 degrees'],
+    hint:'1/3 of 360 degrees. Or: 360 / 3.',
+    explanation:'1/3 of 360 degrees = 360 / 3 = <b>120 degrees</b>. To find degrees for any fraction: multiply 360 by the fraction. For a percentage: (percentage / 100) x 360. Example: 25% = (25/100) x 360 = 90 degrees.' }),
+
+  makeMCQ({ id:'g6m-gr-014', chapterId:'g6-graphs', difficulty:2,
+    question:'In a pictogram, each full symbol represents 8 students. A row shows 3 and a half symbols. How many students does this row represent?',
+    options:['28','24','32','3.5'],
+    answer:'28',
+    hint:'Multiply the number of symbols by the value each symbol represents. Half symbol = 4 students.',
+    explanation:'3 full symbols = 3 x 8 = 24. Half symbol = 4. Total = 24 + 4 = <b>28 students</b>. Always check the key (legend) of a pictogram to find the value of each symbol before reading the data.' }),
+
+  makeMCQ({ id:'g6m-gr-015', chapterId:'g6-graphs', difficulty:2,
+    question:'A sector in a pie chart represents 72 degrees. What PERCENTAGE of the whole does this sector represent?',
+    options:['20%','25%','18%','72%'],
+    answer:'20%',
+    hint:'Percentage = (degrees / 360) x 100.',
+    explanation:'Percentage = (72 / 360) x 100 = 0.2 x 100 = <b>20%</b>. Divide the sector angle by 360 degrees and multiply by 100. Reverse: degrees to % divide by 360 x 100; % to degrees multiply by 360 / 100.' }),
+
+  makeNum({ id:'g6m-gr-016', chapterId:'g6-graphs', difficulty:2,
+    question:'Point A is at coordinates (2, 3) and Point B is at (7, 3). Both points share the same y-coordinate. What is the DISTANCE between them?',
+    answer:'5', acceptableAnswers:['5','5 units'],
+    hint:'When y-coordinates are equal, the points lie on a horizontal line. Distance = difference in x-values.',
+    explanation:'Both points have y = 3, so they lie on a horizontal line. Distance = 7 - 2 = <b>5 units</b>. For horizontal lines: distance = |x2 - x1|. For vertical lines: distance = |y2 - y1|. MIE Grade 6 coordinates use the standard (x, y) notation with x horizontal and y vertical.' }),
+
+  makeNum({ id:'g6m-gr-017', chapterId:'g6-graphs', difficulty:2,
+    question:'A bar chart shows monthly rainfall for 4 months: January 120 mm, February 80 mm, March 60 mm, April 40 mm. What is the MEAN monthly rainfall?',
+    answer:'75', acceptableAnswers:['75','75 mm'],
+    hint:'Mean = Sum / Number of months. Sum = 120 + 80 + 60 + 40.',
+    explanation:'Sum = 120 + 80 + 60 + 40 = 300 mm. Mean = 300 / 4 = <b>75 mm</b>. Reading data from charts and then performing calculations is a key MIE Grade 6 data handling skill.' }),
+
+  makeTF({ id:'g6m-gr-018', chapterId:'g6-graphs', difficulty:2,
+    question:'In a correctly drawn bar chart, all bars must have EQUAL WIDTH and EQUAL SPACING between them.',
+    answer:true,
+    hint:'Think about what makes a bar chart fair and easy to read.',
+    explanation:'<b>True.</b> In a correctly drawn bar chart: bars have equal width, equal gaps between them, a clearly labelled scale on the y-axis, and labelled categories on the x-axis. Unequal bar widths would make bars appear to represent different totals, misleading the reader.' }),
+
+  makeNum({ id:'g6m-gr-019', chapterId:'g6-graphs', difficulty:4,
+    question:'Five students scored: 62, 78, 55, 84 and 71 in a Maths test. A sixth student then scored 91. What is the NEW MEAN score for all 6 students?',
+    answer:'73.5', acceptableAnswers:['73.5'],
+    hint:'Sum of first 5 scores: 62+78+55+84+71. Add the 6th. Divide total by 6.',
+    explanation:'Sum of 5 scores = 62 + 78 + 55 + 84 + 71 = 350. Original mean = 350 / 5 = 70. New sum = 350 + 91 = 441. New mean = 441 / 6 = <b>73.5</b>. The mean increased because 91 is above the original mean of 70.' })
+
+);

@@ -67,3 +67,68 @@ STATIC_QUESTIONS.push(
     explanation:'1.5 × 1000 = <b>1500 ml</b>. Multiplying by 1000 shifts the decimal 3 places right.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g6m-dec-011', chapterId:'g6-decimals', difficulty:1,
+    question:'Calculate: 4.35 × 3',
+    answer:'13.05', acceptableAnswers:['13.05'],
+    hint:'Multiply 435 × 3 = 1305, then place the decimal point 2 places from right.',
+    explanation:'435 × 3 = 1305. The original number had 2 decimal places → answer has 2 decimal places: <b>13.05</b>. MIE Grade 6 method: ignore the decimal, multiply as whole numbers, then insert the decimal at the end by counting decimal places.' }),
+
+  makeNum({ id:'g6m-dec-012', chapterId:'g6-decimals', difficulty:2,
+    question:'Calculate: 2.46 × 12',
+    answer:'29.52', acceptableAnswers:['29.52'],
+    hint:'Multiply 246 × 12 = 2952, then place the decimal 2 places from right.',
+    explanation:'246 × 12: 246×2=492; 246×10=2460; total=2952. Two decimal places → <b>29.52</b>.' }),
+
+  makeNum({ id:'g6m-dec-013', chapterId:'g6-decimals', difficulty:1,
+    question:'Meera bought items costing Rs 45.75, Rs 128.50 and Rs 67.25. What is the TOTAL cost?',
+    answer:'241.50', acceptableAnswers:['241.50','241.5','Rs 241.50'],
+    hint:'Add the three amounts, aligning decimal points: 45.75 + 128.50 + 67.25.',
+    explanation:'45.75 + 128.50 = 174.25. Then 174.25 + 67.25 = <b>Rs 241.50</b>. Always align decimal points when adding/subtracting decimals.' }),
+
+  makeMCQ({ id:'g6m-dec-014', chapterId:'g6-decimals', difficulty:2,
+    question:'Which decimal is the GREATEST?',
+    options:['0.45','0.405','0.450','0.045'],
+    answer:'0.45',
+    hint:'0.45 and 0.450 are the same. Compare 0.45 with 0.405: look at the hundredths digit.',
+    explanation:'0.45 = 0.450 (adding a zero after the last decimal place doesn\'t change the value). Compare 0.450 with 0.405: tenths are the same (4), but hundredths: 5 > 0. So 0.45 = 0.450 > 0.405 > 0.045. The greatest is <b>0.45</b>.' }),
+
+  makeNum({ id:'g6m-dec-015', chapterId:'g6-decimals', difficulty:2,
+    question:'Convert the fraction 7/20 to a DECIMAL.',
+    answer:'0.35', acceptableAnswers:['0.35'],
+    hint:'Multiply numerator and denominator to make the denominator 100: 7/20 = 35/100.',
+    explanation:'7/20 × 5/5 = 35/100 = <b>0.35</b>. Alternatively: 7 ÷ 20 = 0.35. The MIE Grade 6 textbook teaches converting to hundredths (or thousandths) as the most efficient method for simple fractions.' }),
+
+  makeNum({ id:'g6m-dec-016', chapterId:'g6-decimals', difficulty:2,
+    question:'Round 6.847 to 2 DECIMAL PLACES.',
+    answer:'6.85', acceptableAnswers:['6.85'],
+    hint:'Look at the third decimal place (7). Since 7 ≥ 5, round up the second decimal place.',
+    explanation:'6.847 — the third decimal digit is 7 (≥ 5), so round up: 6.84 → 6.<b>85</b>. Rounding to 2 decimal places means keeping only 2 digits after the decimal point.' }),
+
+  makeNum({ id:'g6m-dec-017', chapterId:'g6-decimals', difficulty:2,
+    question:'A shopkeeper buys 12 kg of rice at Rs 35.50 per kg. What is the TOTAL COST?',
+    answer:'426', acceptableAnswers:['426','Rs 426','426.00'],
+    hint:'Multiply 35.50 × 12. Try 35.5 × 10 = 355, then 35.5 × 2 = 71. Add.',
+    explanation:'35.50 × 10 = 355. 35.50 × 2 = 71. Total: 355 + 71 = <b>Rs 426</b>.' }),
+
+  makeMCQ({ id:'g6m-dec-018', chapterId:'g6-decimals', difficulty:2,
+    question:'Which of these has the correct ORDER from SMALLEST to GREATEST?',
+    options:[
+      '0.6, 0.06, 0.61, 0.609',
+      '0.06, 0.6, 0.609, 0.61',
+      '0.06, 0.6, 0.61, 0.609',
+      '0.609, 0.61, 0.6, 0.06'
+    ],
+    answer:'0.06, 0.6, 0.609, 0.61',
+    hint:'Compare digit by digit from left: tenths first, then hundredths, then thousandths.',
+    explanation:'Tenths: 0.06 has 0 tenths; others have 6 tenths. So 0.06 is smallest. Among 0.6, 0.609, 0.61: all have 6 tenths; compare hundredths: 0 vs 0 vs 1. 0.609 vs 0.610: thousandths 9 < 0 — wait: 0.610 > 0.609. So order: <b>0.06, 0.6, 0.609, 0.61</b>.' }),
+
+  makeNum({ id:'g6m-dec-019', chapterId:'g6-decimals', difficulty:4,
+    question:'A car travels 38.4 km on 3.2 litres of petrol. How many km does it travel per LITRE? If petrol costs Rs 52.50 per litre, what is the cost of petrol for a 192 km journey? (Answer: cost in Rs)',
+    answer:'315', acceptableAnswers:['315','Rs 315'],
+    hint:'km per litre = 38.4 ÷ 3.2. Litres for 192 km = 192 ÷ km per litre. Cost = litres × Rs 52.50.',
+    explanation:'km per litre = 38.4 ÷ 3.2 = 12 km/litre. Litres for 192 km = 192 ÷ 12 = 6 litres. Cost = 6 × 52.50 = <b>Rs 315</b>.' })
+
+);

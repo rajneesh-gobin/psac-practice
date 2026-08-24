@@ -74,3 +74,65 @@ STATIC_QUESTIONS.push(
     explanation:'Largest: <b>975,310</b>. Smallest: <b>103,579</b> (0 cannot lead). Difference: 975,310 − 103,579 = <b>871,731</b>. (Note: if puzzle digits allow 0 to lead this answer will differ. Correct difference: 975,310 − 103,579 = 871,731.)' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6m-num-011', chapterId:'g6-numeration', difficulty:1,
+    question:'Which of these numbers is a PRIME number?',
+    options:['9','15','23','27'],
+    answer:'23',
+    hint:'A prime number has exactly two factors: 1 and itself. Test each option.',
+    explanation:'<b>23</b> is prime — its only factors are 1 and 23. Check the others: 9 = 3 × 3 (composite); 15 = 3 × 5 (composite); 27 = 3 × 9 (composite). Prime numbers from the MIE Grade 6 list: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47...' }),
+
+  makeMCQ({ id:'g6m-num-012', chapterId:'g6-numeration', difficulty:1,
+    question:'Which of these numbers is COMPOSITE?',
+    options:['2','11','31','49'],
+    answer:'49',
+    hint:'A composite number has more than 2 factors.',
+    explanation:'<b>49</b> is composite: 49 = 7 × 7. Its factors are 1, 7, and 49 (three factors). 2, 11, and 31 are all prime. Note: 49 is a perfect square of 7. The MIE Grade 6 textbook requires students to identify prime and composite numbers up to at least 100.' }),
+
+  makeNum({ id:'g6m-num-013', chapterId:'g6-numeration', difficulty:2,
+    question:'What is the NEXT number in this pattern? 100 000, 200 000, 400 000, 800 000, ___',
+    answer:'1600000', acceptableAnswers:['1600000','1,600,000','1 600 000'],
+    hint:'Each term is multiplied by 2. What is 800,000 × 2?',
+    explanation:'The pattern multiplies by 2 each time: 100,000 × 2 = 200,000; × 2 = 400,000; × 2 = 800,000; × 2 = <b>1,600,000</b>. This is a geometric sequence with common ratio 2.' }),
+
+  makeMCQ({ id:'g6m-num-014', chapterId:'g6-numeration', difficulty:2,
+    question:'In the number 856,423, what is the SUM of the values of the digits in the TEN-THOUSANDS place and the HUNDREDS place?',
+    options:['50,400','50,000','54,000','55,000'],
+    answer:'50,400',
+    hint:'Ten-thousands digit = 5 (value = 50,000). Hundreds digit = 4 (value = 400). Add them.',
+    explanation:'In 856,423: ten-thousands digit = <b>5</b> (value = 50,000); hundreds digit = <b>4</b> (value = 400). Sum = 50,000 + 400 = <b>50,400</b>.' }),
+
+  makeTF({ id:'g6m-num-015', chapterId:'g6-numeration', difficulty:1,
+    question:'The number 2 is the only even prime number.',
+    answer:true,
+    hint:'All other even numbers are divisible by 2 — so they have at least 3 factors.',
+    explanation:'<b>True.</b> 2 is the only even prime number. Every other even number is divisible by 2, so it has at least three factors (1, 2, and itself), making it composite. For example: 4 = 2 × 2 (composite), 6 = 2 × 3 (composite). 2 has exactly two factors: 1 and 2.' }),
+
+  makeNum({ id:'g6m-num-016', chapterId:'g6-numeration', difficulty:2,
+    question:'Write in expanded notation: 503,060 (use the form a + b + c, with no spaces)',
+    answer:'500000+3000+60', acceptableAnswers:['500000+3000+60','500,000 + 3,000 + 60'],
+    hint:'Only write terms for non-zero digits. 5 is in hundred-thousands, 3 is in thousands, 6 is in tens.',
+    explanation:'503,060 = <b>500,000 + 3,000 + 60</b>. The MIE Grade 6 textbook teaches that expanded notation only includes terms for non-zero digit values. There are no hundred-thousands term for 0 digits.' }),
+
+  makeNum({ id:'g6m-num-017', chapterId:'g6-numeration', difficulty:2,
+    question:'The population of Mauritius is approximately 1,260,000. Round this to the nearest HUNDRED THOUSAND.',
+    answer:'1300000', acceptableAnswers:['1300000','1,300,000'],
+    hint:'Look at the ten-thousands digit (6). Since 6 ≥ 5, round up.',
+    explanation:'1,260,000 — the ten-thousands digit is 6 (≥ 5), so <b>round up</b> the hundred-thousands digit: 2 → 3. Answer: <b>1,300,000</b>. The MIE Grade 6 textbook uses Mauritius population data in rounding exercises.' }),
+
+  makeMCQ({ id:'g6m-num-018', chapterId:'g6-numeration', difficulty:2,
+    question:'A number has the digit 8 in the hundred-thousands place, 0 in the ten-thousands, 4 in the thousands, 7 in the hundreds, 0 in the tens and 3 in the ones. What is the number?',
+    options:['804,703','840,703','804,073','840,073'],
+    answer:'804,703',
+    hint:'Build the number: HTh=8, TTh=0, Th=4, H=7, T=0, O=3.',
+    explanation:'HTh=8 → 800,000; TTh=0 → 0; Th=4 → 4,000; H=7 → 700; T=0 → 0; O=3 → 3. Answer: <b>804,703</b>.' }),
+
+  makeNum({ id:'g6m-num-019', chapterId:'g6-numeration', difficulty:4,
+    question:'A sugarcane factory produces 234,756 kg of sugar in January and 189,438 kg in February. In March it produces 45,000 kg MORE than in February. What is the TOTAL production for the three months? (kg)',
+    answer:'658632', acceptableAnswers:['658632','658,632'],
+    hint:'Step 1: March = Feb + 45,000. Step 2: Total = Jan + Feb + March.',
+    explanation:'March = 189,438 + 45,000 = 234,438 kg. Total = 234,756 + 189,438 + 234,438. Add Jan + Feb: 234,756 + 189,438 = 424,194. Add March: 424,194 + 234,438 = <b>658,632 kg</b>.' })
+
+);
