@@ -59,6 +59,13 @@ const Forum = (() => {
     return { name: nick || '?', type: 'parent' };
   }
 
+  function _authorName(name, type) {
+    const label = `${_esc(name)}${type === 'teacher' ? ' <span class="opacity-60">(T)</span>' : ''}`;
+    return type === 'teacher'
+      ? `<span class="text-green-600 dark:text-green-400 font-medium">${label}</span>`
+      : `<span>${_esc(name)}</span>`;
+  }
+
   function _ago(iso) {
     const s = Math.floor((Date.now() - new Date(iso)) / 1000);
     if (s < 60)    return 'just now';
@@ -195,7 +202,7 @@ const Forum = (() => {
           <div class="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">${_esc(p.body)}</div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
             ${_badge(p.author_type)}
-            <span>${_esc(p.author_name)}</span>
+            ${_authorName(p.author_name, p.author_type)}
             <span>·</span>
             <span>${_ago(p.created_at)}</span>
             <span class="ml-auto flex items-center gap-2">
@@ -275,7 +282,7 @@ const Forum = (() => {
             <div class="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">${_esc(p.body)}</div>
             <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
               ${_badge(p.author_type)}
-              <span>${_esc(p.author_name)}</span>
+              ${_authorName(p.author_name, p.author_type)}
               <span>·</span>
               <span>${_ago(p.created_at)}</span>
               <span class="ml-auto flex items-center gap-2">
@@ -355,7 +362,7 @@ const Forum = (() => {
         <p class="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-wrap leading-relaxed mb-4">${_esc(post.body)}</p>
         <div class="flex items-center gap-3 text-xs text-gray-400 flex-wrap pt-3 border-t border-gray-100 dark:border-gray-700">
           ${_badge(post.author_type)}
-          <span>${_esc(post.author_name)}</span>
+          ${_authorName(post.author_name, post.author_type)}
           <span>·</span>
           <span>${_ago(post.created_at)}</span>
           <span class="ml-auto">${_likeBtn(post.id)}</span>
@@ -371,7 +378,7 @@ const Forum = (() => {
             <p class="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap leading-relaxed mb-2">${_esc(r.body)}</p>
             <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
               ${_badge(r.author_type)}
-              <span>${_esc(r.author_name)}</span>
+              ${_authorName(r.author_name, r.author_type)}
               <span>·</span>
               <span>${_ago(r.created_at)}</span>
               <span class="ml-auto flex items-center gap-2">

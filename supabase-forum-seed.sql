@@ -103,7 +103,7 @@ BEGIN
 5. Check the mark allocation — a 2-mark question needs 2 clear points in your answer
 
 Please share any other strategies you use!',
-   'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '77 days'),
+   'A.S.', 'teacher', NOW() - INTERVAL '77 days'),
 
   ('english', 'Simile vs metaphor — what is the difference?',
    'I always get confused between simile and metaphor in English. My teacher says a simile uses "like" or "as" but sometimes I see sentences that seem like comparisons without those words and I''m not sure which type they are. Can someone give a clear explanation with examples?',
@@ -213,7 +213,7 @@ Please share any other strategies you use!',
 4. Mixed practice — switching between subjects in one study session
 
 What strategies work best for your children? Please share!',
-   'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '98 days'),
+   'A.S.', 'teacher', NOW() - INTERVAL '98 days'),
 
   ('tips', 'How many hours should a Grade 5 child study per day?',
    'I''ve been asking around and getting very different answers — some parents say 3-4 hours daily, others say 1-2 hours. What is the recommended amount for a Grade 5 child? I don''t want to overwork my daughter but also don''t want her to fall behind.',
@@ -291,7 +291,7 @@ What strategies work best for your children? Please share!',
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Hi Priya! To reset your child''s PIN, go to the Students section in your parent dashboard, click on your daughter''s name, and you''ll see a "Change PIN" option. Enter a new 4-digit PIN and she''ll be able to log in right away. Hope this helps!',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '87 days 12 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '87 days 12 hours'
   FROM public.forum_posts WHERE title = 'How do I reset my child''s login PIN?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -304,7 +304,7 @@ What strategies work best for your children? Please share!',
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'This sometimes happens when the browser cache is full. Try opening Safari → go to Settings → Safari → Clear History and Website Data. Then open MathMaster again. That usually fixes it!',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '62 days 8 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '62 days 8 hours'
   FROM public.forum_posts WHERE title = 'App shows white screen on my iPhone' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -330,7 +330,7 @@ What strategies work best for your children? Please share!',
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Yes, MathMaster works perfectly on a Chromebook! Since it''s a web app, you just open the Chrome browser, go to the MathMaster website, and it works the same as on any device. You can even add it to the Chromebook shelf as a shortcut for easy access.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '27 days 16 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '27 days 16 hours'
   FROM public.forum_posts WHERE title = 'Can I use MathMaster on a Chromebook?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -343,7 +343,7 @@ What strategies work best for your children? Please share!',
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'The timetable is saved to your account in the cloud, so it should persist across logins. This might have been a temporary glitch. Could you try logging in again and refreshing the page? If it still doesn''t appear, let us know what device and browser you''re using and we''ll investigate further.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '11 days 6 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '11 days 6 hours'
   FROM public.forum_posts WHERE title = 'My son''s timetable disappeared after I logged out' LIMIT 1;
 
   -- ── Maths: long division ───────────────────────────────────────────
@@ -358,7 +358,7 @@ What strategies work best for your children? Please share!',
 6. So: 347 ÷ 8 = 43 remainder 3
 
 The key is to always check if your subtraction result is smaller than the divisor. If not, your quotient for that step is too small!',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '82 days 6 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '82 days 6 hours'
   FROM public.forum_posts WHERE title = 'Long division with remainders — my daughter keeps getting the wrong answer' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -383,7 +383,7 @@ The key is to always check if your subtraction result is smaller than the diviso
 = 8
 
 Same rule applies for addition and subtraction — left to right when they''re at the same level. BODMAS tells you the LEVEL of priority, and at the same level, always go left to right!',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '66 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '66 days 18 hours'
   FROM public.forum_posts WHERE title = 'BODMAS — order of operations question' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -401,7 +401,7 @@ Same rule applies for addition and subtraction — left to right when they''re a
 • Mixed number: a whole number AND a fraction → 1¾ (1 whole pizza and ¾ of another)
 
 They''re all the same amount just written differently! 7/4 = 1¾. Use the pizza example and he''ll never forget!',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '51 days 16 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '51 days 16 hours'
   FROM public.forum_posts WHERE title = 'Proper fractions vs improper fractions vs mixed numbers' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -420,7 +420,7 @@ They''re all the same amount just written differently! 7/4 = 1¾. Use the pizza 
   Example: Bus A every 12 min, Bus B every 18 min — when do they coincide? → LCM(12,18) = 36 min
 
 Memory trick: Factor = smaller (dividing), Multiple = bigger (building up).',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '39 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '39 days 18 hours'
   FROM public.forum_posts WHERE title = 'LCM and HCF — can someone explain the difference clearly?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -447,7 +447,7 @@ For L-shaped: split into 2 rectangles, find each area, add them.
 For shapes with a hole: find area of full outer rectangle, then SUBTRACT the missing piece.
 
 Always write each step clearly — you get marks even if you make one arithmetic mistake.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '23 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '23 days 18 hours'
   FROM public.forum_posts WHERE title = 'Area of compound shapes — stuck on this chapter' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -460,7 +460,7 @@ Always write each step clearly — you get marks even if you make one arithmetic
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Please don''t panic! Grade 4 fractions is genuinely one of the harder new concepts and most children find it confusing at first — even strong maths students. With consistent practice (especially the fraction questions in the Grade 4 MathMaster pack!) she will improve quickly. Daily 15-minute sessions make a huge difference.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '12 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '12 days 18 hours'
   FROM public.forum_posts WHERE title = 'My Grade 4 daughter scored 2/10 on fractions quiz — is this normal?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -475,14 +475,14 @@ Always write each step clearly — you get marks even if you make one arithmetic
     'Tell him to look for the key phrase "for every" or "to every" in word problems. Example: "For every 3 boys there are 2 girls in a class of 25." → ratio is 3:2 directly.
 Method: add the parts (3+2=5), divide total by parts (25÷5=5), multiply each (boys=3×5=15, girls=2×5=10).
 Draw a ratio box table and he''ll never get confused again!',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '5 days 16 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '5 days 16 hours'
   FROM public.forum_posts WHERE title = 'Word problems involving ratio — my son gets confused' LIMIT 1;
 
   -- ── Maths: Grade 6 differences ────────────────────────────────────
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Grade 6 introduces more algebra-style thinking, harder percentages (discount, profit/loss), speed-distance-time problems, and more complex geometry (angles, properties of shapes). The biggest jump is usually word problems — they become longer and need more steps. Spend the holidays making sure Grade 5 topics like fractions, decimals and ratio are very solid, as they underpin a lot of Grade 6 work.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '1 day 12 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '1 day 12 hours'
   FROM public.forum_posts WHERE title = 'How is Grade 6 maths different from Grade 5?' LIMIT 1;
 
   -- ── English: comprehension tips ────────────────────────────────────
@@ -495,7 +495,7 @@ Draw a ratio box table and he''ll never get confused again!',
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'She should show understanding in her own words — but it doesn''t need to be completely different vocabulary. The key is NOT to copy the sentence word for word. Paraphrase it: change the sentence structure and swap some words where you can. That shows she understood the meaning rather than just copied.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '76 days 10 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '76 days 10 hours'
   FROM public.forum_posts WHERE title = 'Tips for answering comprehension passages' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -512,7 +512,7 @@ Draw a ratio box table and he''ll never get confused again!',
 • METAPHOR = comparison WITHOUT "like" or "as" — says something IS something else → "She IS the wind." / "The classroom WAS a zoo."
 
 Easy test: If you can insert "like" or "as" and the sentence still makes sense as a comparison → simile. If it''s still a comparison without them → metaphor.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '62 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '62 days 18 hours'
   FROM public.forum_posts WHERE title = 'Simile vs metaphor — what is the difference?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -531,7 +531,7 @@ Easy test: If you can insert "like" or "as" and the sentence still makes sense a
 2. It''s vs Its: "It''s" = IT IS (always). If you can say "it is" in the sentence, use the apostrophe. If not, use "its". Example: "It''s raining." ✓ / "The dog wagged its tail." ✓
 
 3. Apostrophe for possession: singular → add ''s (the girl''s book). Plural ending in s → just add '' after (the girls'' books).',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '47 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '47 days 18 hours'
   FROM public.forum_posts WHERE title = 'Common punctuation mistakes my daughter keeps making' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -550,7 +550,7 @@ Easy test: If you can insert "like" or "as" and the sentence still makes sense a
 4. Change time/place words: now → then, here → there, today → that day, tomorrow → the next day
 
 Example: She said, "I will come tomorrow." → She said that she would come the next day.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '28 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '28 days 18 hours'
   FROM public.forum_posts WHERE title = 'Direct speech vs indirect speech — so confusing!' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -563,7 +563,7 @@ Example: She said, "I will come tomorrow." → She said that she would come the 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Essay planning is the key! Before writing a single sentence, spend 3-5 minutes planning. Use the PEEL structure for each paragraph: Point (your idea), Evidence (a detail or example), Explanation (why it matters), Link (back to the question). Write 3-4 PEEL paragraphs plus an intro and conclusion and you''ll have a full essay every time. One idea per paragraph, developed fully.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '13 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '13 days 18 hours'
   FROM public.forum_posts WHERE title = 'Any tips for essay writing in Grade 5?' LIMIT 1;
 
   -- ── Science: photosynthesis ────────────────────────────────────────
@@ -581,7 +581,7 @@ PRODUCT (what comes OUT):
 • Oxygen O₂ — the fresh air we breathe! 🌿
 
 The green part of plants (chlorophyll) is what does the "cooking". That''s why only green plants can photosynthesise.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '73 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '73 days 18 hours'
   FROM public.forum_posts WHERE title = 'Simple explanation of photosynthesis for Grade 4?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -598,7 +598,7 @@ The green part of plants (chlorophyll) is what does the "cooking". That''s why o
 • Food web = MANY food chains connected together in a network
 
 In real life, animals eat more than one type of food. A fox doesn''t only eat rabbits — it also eats mice, birds, berries. So all those different food chains cross and connect. A food web shows the FULL picture of all eating relationships in an ecosystem. The arrows always show the direction energy flows — from prey TO predator.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '56 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '56 days 18 hours'
   FROM public.forum_posts WHERE title = 'Food chains vs food webs — what is the difference?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -617,7 +617,7 @@ In real life, animals eat more than one type of food. A fox doesn''t only eat ra
 
 Steam IS a gas — it spreads out and has no fixed shape or volume. Water is liquid. Ice is solid.
 Tricky one: honey is slow but it flows and takes the shape of its container → liquid. Sand as a whole acts liquid-ish but each grain is a solid particle.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '40 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '40 days 18 hours'
   FROM public.forum_posts WHERE title = 'My son keeps mixing up solids, liquids and gases' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -637,7 +637,7 @@ VERTEBRATES — "FARB-M":
 INVERTEBRATES: insects, spiders, worms, snails, jellyfish, crabs, starfish
 
 Quick test: Does it have a spine/backbone? YES → vertebrate. NO → invertebrate. A snail has a shell (exoskeleton) but NO backbone → invertebrate.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '26 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '26 days 18 hours'
   FROM public.forum_posts WHERE title = 'Best way to remember vertebrates vs invertebrates?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -650,7 +650,7 @@ Quick test: Does it have a spine/backbone? YES → vertebrate. NO → invertebra
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Common experiment-type questions in PSAC science tend to involve: separating mixtures (filtration, evaporation, magnetism), identifying acids and bases (using litmus paper), simple food tests (starch — iodine turns blue-black), and observing plant growth. For home practice: filtration is easy — mix sand and water and filter it through a cloth. For the food test, buy iodine solution from a pharmacy and test bread, banana, potato. Hands-on experience helps children describe experiments much more confidently in writing.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '8 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '8 days 18 hours'
   FROM public.forum_posts WHERE title = 'What practical experiments might come in PSAC science?' LIMIT 1;
 
   -- ── French: passé composé/imparfait ───────────────────────────────
@@ -667,7 +667,7 @@ IMPARFAIT = ongoing background, habits, descriptions
 Simple test: Can you say "used to" or "was doing" in English? → imparfait. Did something happen once and finish? → passé composé.
 
 In stories: use IMPARFAIT for setting the scene, PASSÉ COMPOSÉ for the events.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '75 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '75 days 18 hours'
   FROM public.forum_posts WHERE title = 'Passé composé or imparfait — how do you choose?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -685,7 +685,7 @@ Usually MASCULINE (-age, -ment, -eau): le garage, le gouvernement, le gâteau
 Usually FEMININE (-tion, -sion, -ure, -ette, -ance): la nation, la télévision, la nature, la baguette
 
 The best approach: always learn the article WITH the noun — don''t just learn "arbre", learn "l''arbre (m)". If you learn them together from the start, gender becomes automatic with practice!',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '58 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '58 days 18 hours'
   FROM public.forum_posts WHERE title = 'Is there a pattern for masculine vs feminine nouns in French?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -703,7 +703,7 @@ The best approach: always learn the article WITH the noun — don''t just learn 
 3. Record himself speaking and play it back — children often hear their own mistakes more easily than when speaking live.
 4. MFM radio in Mauritius has French programming — leaving it on as background normalises French sounds.
 5. Praise effort, not just correctness — the shyness often comes from fear of making mistakes.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '41 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '41 days 18 hours'
   FROM public.forum_posts WHERE title = 'How to improve my son''s spoken French?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -727,7 +727,7 @@ VENIR: viens, viens, vient, venons, venez, viennent
 PRENDRE: prends, prends, prend, prenons, prenez, prennent
 
 Learn être and avoir especially well — they''re used to form passé composé!',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '18 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '18 days 18 hours'
   FROM public.forum_posts WHERE title = 'List of irregular French verbs needed for PSAC' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -739,14 +739,14 @@ Learn être and avoir especially well — they''re used to form passé composé!
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Yes, definitely! Past participles: être → été, avoir → eu, aller → allé, faire → fait, pouvoir → pu, vouloir → voulu, venir → venu, prendre → pris. These are used in passé composé — learn them alongside the main conjugations.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '17 days 14 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '17 days 14 hours'
   FROM public.forum_posts WHERE title = 'List of irregular French verbs needed for PSAC' LIMIT 1;
 
   -- ── French: PSAC weighting ─────────────────────────────────────────
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'In the MIE PSAC, all subjects (English, French, Mathematics, Science, and Social Studies/History) are assessed separately and each contributes to the overall profile. They are generally weighted equally in terms of the qualification result. French should not be neglected — strong performance across all subjects gives the best overall outcome. I''d recommend balanced revision across all subjects rather than deprioritising any one.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '4 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '4 days 18 hours'
   FROM public.forum_posts WHERE title = 'How much does French count toward the PSAC total mark?' LIMIT 1;
 
   -- ── History: remember dates ────────────────────────────────────────
@@ -758,7 +758,7 @@ Learn être and avoir especially well — they''re used to form passé composé!
 3. RHYMES or mnemonics — "In sixty-eight, we celebrate!"
 4. TIMELINE on your wall — put all dates in order visually.
 5. QUIZZING yourself is the most effective — don''t just re-read, actively test recall.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '69 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '69 days 18 hours'
   FROM public.forum_posts WHERE title = 'How to remember history dates — any memory tricks?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -784,7 +784,7 @@ Learn être and avoir especially well — they''re used to form passé composé!
 5. V-SHAPES pointing DOWNHILL = ridges/spurs
 
 Practice tip: Look at the NUMBERS on the lines — they tell you the actual height. Moving toward higher numbers means going uphill.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '53 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '53 days 18 hours'
   FROM public.forum_posts WHERE title = 'How to read a contour map properly?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -803,7 +803,7 @@ Practice tip: Look at the NUMBERS on the lines — they tell you the actual heig
 3. EASTERN REGION: Lower elevation, some dry areas, beaches and lagoons.
 4. SOUTHERN REGION: More rugged, scenic cliffs (Chamarel), Black River Gorges National Park — main biodiversity area.
 5. WESTERN REGION: Dry, sunny, low rainfall (rain shadow of mountains). Beaches: Flic en Flac, Tamarin.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '36 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '36 days 18 hours'
   FROM public.forum_posts WHERE title = 'Main geographic regions of Mauritius' LIMIT 1;
 
   -- ── History: 12 March 1968 ─────────────────────────────────────────
@@ -821,7 +821,7 @@ WHY IMPORTANT:
 • The country could now make its own laws
 
 BONUS FACT: Mauritius became a Republic on 12 March 1992 (exactly 24 years later), leaving the Commonwealth as a sovereign republic. So 12 March is doubly significant!',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '16 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '16 days 18 hours'
   FROM public.forum_posts WHERE title = 'What happened on 12 March 1968?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -837,7 +837,7 @@ BONUS FACT: Mauritius became a Republic on 12 March 1992 (exactly 24 years later
 PHYSICAL MAP: Shows NATURAL features — mountains, rivers, valleys, plains. Uses colour shading (green=lowland, brown=highlands, blue=water). Use for questions about landscape, terrain, rivers, or natural resources.
 POLITICAL MAP: Shows HUMAN-made boundaries — countries, regions, cities, roads. Use for questions about countries, capitals, borders, or administrative divisions.
 Memory tip: "Physical = Physical world (nature), Political = People''s boundaries."',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '3 days 16 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '3 days 16 hours'
   FROM public.forum_posts WHERE title = 'My daughter confuses physical maps and political maps' LIMIT 1;
 
   -- ── Tips: study strategies ─────────────────────────────────────────
@@ -869,7 +869,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Quality beats quantity for children''s studying. For Grade 5, 1.5 to 2 hours of FOCUSED study per day is more effective than 4 hours of distracted studying. The key: no phone, no TV, proper seating, good lighting. Split into sessions of 30-40 minutes with short breaks. As you get closer to PSAC (Grade 6), you might increase to 2.5 hours. Over-studying leads to burnout and actually reduces retention.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '78 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '78 days 18 hours'
   FROM public.forum_posts WHERE title = 'How many hours should a Grade 5 child study per day?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -882,7 +882,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Both have their place! Notes are better for understanding concepts (how/why things work). Flashcards are better for pure memorisation (vocabulary, dates, formulas). Suggestion: write notes FIRST to understand a topic, then make flashcards for key facts you need to memorise. You get the benefits of both.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '57 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '57 days 18 hours'
   FROM public.forum_posts WHERE title = 'Flashcards or written notes — which works better for you?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -901,7 +901,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'It really depends on the child''s natural rhythm! Morning tends to be better for early risers — the brain is fresh and not yet tired from a full school day. Evening works well for night owls or when the child needs time to decompress from school before they can focus. Try a week of morning study, a week of evening, and see which produces better focus and less resistance.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '32 days 18 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '32 days 18 hours'
   FROM public.forum_posts WHERE title = 'Morning study vs evening study — what do you prefer?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -914,7 +914,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Phone discipline is the biggest study challenge today! Things that help: 1) Use a dedicated device for studying with no social apps, 2) Turn on "Do Not Disturb" for 30 minutes, 3) Use Pomodoro technique (25 min full focus, 5-min phone break as reward), 4) Tell yourself "I will not check my phone until I finish this set of questions." The urge passes after a few minutes if you commit to ignoring it.',
-    'Mr. Bhunjun', 'teacher', NOW() - INTERVAL '13 days 18 hours'
+    'R.B.', 'teacher', NOW() - INTERVAL '13 days 18 hours'
   FROM public.forum_posts WHERE title = 'How to stay focused when practising on the app?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -971,7 +971,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Fully supporting this! Other educational apps have forums and it''s by far the most used feature. The community aspect really helps children feel they''re not studying alone.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '100 days 10 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '100 days 10 hours'
   FROM public.forum_posts WHERE title = 'We need a community forum to discuss and ask questions!' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -997,7 +997,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'This is really important. As a teacher I''d love this too — seeing which specific topics students are struggling with would let us target our help much more effectively. Please prioritise this feature!',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '82 days 14 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '82 days 14 hours'
   FROM public.forum_posts WHERE title = 'Can parents view their child''s detailed progress?' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
@@ -1023,7 +1023,7 @@ Memory tip: "Physical = Physical world (nature), Political = People''s boundarie
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
   SELECT id,
     'Excellent suggestion! Practising under exam conditions (timed, on paper, no going back) is a completely different skill from using an app. Both are important for PSAC preparation. I hope this gets implemented — it would make MathMaster a truly complete resource.',
-    'Mrs. Soopramanien', 'teacher', NOW() - INTERVAL '12 days 14 hours'
+    'A.S.', 'teacher', NOW() - INTERVAL '12 days 14 hours'
   FROM public.forum_posts WHERE title = 'Would love to have printable past PSAC exam papers' LIMIT 1;
 
   INSERT INTO public.forum_replies (post_id, body, author_name, author_type, created_at)
