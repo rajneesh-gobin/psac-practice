@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 French — Le Plus-que-parfait
+﻿'use strict';
+// Grade 6 French - Le Plus-que-parfait
 // IDs format: g6fr-pqp-NNN
 
 STATIC_QUESTIONS.push(
@@ -9,7 +9,7 @@ STATIC_QUESTIONS.push(
     options:['une action future','une action passée qui s\'est produite AVANT une autre action passée','une action habituelle dans le passé','une action en cours dans le passé'],
     answer:'une action passée qui s\'est produite AVANT une autre action passée',
     hint:'Plus-que-parfait = "plus tôt que le passé". C\'est le passé du passé.',
-    explanation:'Le <b>plus-que-parfait</b> exprime une action qui a eu lieu <b>avant</b> une autre action passée. Exemple : "Quand je suis arrivé, il <b>avait déjà mangé</b>." — il a mangé en premier, puis je suis arrivé.' }),
+    explanation:'Le <b>plus-que-parfait</b> exprime une action qui a eu lieu <b>avant</b> une autre action passée. Exemple : "Quand je suis arrivé, il <b>avait déjà mangé</b>." - il a mangé en premier, puis je suis arrivé.' }),
 
   makeMCQ({ id:'g6fr-pqp-002', chapterId:'g6fr-pqp', difficulty:1,
     question:'Comment se forme le plus-que-parfait ?',
@@ -23,7 +23,7 @@ STATIC_QUESTIONS.push(
     options:['avait / mangé','a / mangé','avait / mangé','avait / mangeait'],
     answer:'avait / mangé',
     hint:'Plus-que-parfait : imparfait de avoir (il → avait) + participe passé (manger → mangé).',
-    explanation:'"Il <b>avait déjà mangé</b>" — imparfait de avoir pour "il" = <b>avait</b>. Participe passé de manger = <b>mangé</b>. "Déjà" est souvent utilisé avec le plus-que-parfait.' }),
+    explanation:'"Il <b>avait déjà mangé</b>" - imparfait de avoir pour "il" = <b>avait</b>. Participe passé de manger = <b>mangé</b>. "Déjà" est souvent utilisé avec le plus-que-parfait.' }),
 
   makeTF({ id:'g6fr-pqp-004', chapterId:'g6fr-pqp', difficulty:1,
     question:'"J\'avais fini mes devoirs avant de regarder la télé." utilise correctement le plus-que-parfait.',
@@ -36,7 +36,7 @@ STATIC_QUESTIONS.push(
     options:['nous avons parlé','nous parlions','nous avions parlé','nous aurions parlé'],
     answer:'nous avions parlé',
     hint:'Imparfait de avoir pour "nous" = avions. Participe passé de parler = parlé.',
-    explanation:'"Nous <b>avions parlé</b>" — imparfait de avoir (nous) = <b>avions</b> + participe passé = <b>parlé</b>.' }),
+    explanation:'"Nous <b>avions parlé</b>" - imparfait de avoir (nous) = <b>avions</b> + participe passé = <b>parlé</b>.' }),
 
   makeMCQ({ id:'g6fr-pqp-006', chapterId:'g6fr-pqp', difficulty:2,
     question:'Dans la phrase "Quand elle est arrivée, ses amis <u>avaient déjà</u> commencé à manger", que signifie le plus-que-parfait ?',
@@ -50,14 +50,14 @@ STATIC_QUESTIONS.push(
     options:['elle avait allé','elle était allée','elle allait','elle serait allée'],
     answer:'elle était allée',
     hint:'Aller utilise ÊTRE comme auxiliaire. Imparfait de être (elle) = était. Participe passé = allée (accord féminin).',
-    explanation:'"Elle <b>était allée</b>" — aller utilise l\'auxiliaire <b>être</b>. Imparfait de être pour "elle" = <b>était</b>. Participe passé = <b>allée</b> (accord féminin). Rappel : les verbes avec être s\'accordent avec le sujet.' }),
+    explanation:'"Elle <b>était allée</b>" - aller utilise l\'auxiliaire <b>être</b>. Imparfait de être pour "elle" = <b>était</b>. Participe passé = <b>allée</b> (accord féminin). Rappel : les verbes avec être s\'accordent avec le sujet.' }),
 
   makeMCQ({ id:'g6fr-pqp-008', chapterId:'g6fr-pqp', difficulty:2,
     question:'Complète : "Il a dit qu\'il ___ déjà ___ le film." (voir)',
     options:['avait / vu','a / vu','avait / vuyé','aura / vu'],
     answer:'avait / vu',
     hint:'Voir → participe passé irrégulier = vu. Auxiliaire avoir, imparfait il = avait.',
-    explanation:'"Il <b>avait</b> déjà <b>vu</b> le film" — voir → participe passé irrégulier = <b>vu</b>. Auxiliaire avoir, imparfait pour "il" = <b>avait</b>.' }),
+    explanation:'"Il <b>avait</b> déjà <b>vu</b> le film" - voir → participe passé irrégulier = <b>vu</b>. Auxiliaire avoir, imparfait pour "il" = <b>avait</b>.' }),
 
   makeTF({ id:'g6fr-pqp-009', chapterId:'g6fr-pqp', difficulty:2,
     question:'"Nous étions partis avant que le film commence." est un exemple de plus-que-parfait avec l\'auxiliaire être.',
@@ -75,14 +75,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Elle avait lu le livre avant le cours." ✓',
     hint:'Plus-que-parfait = imparfait de avoir/être + participe passé.',
-    explanation:'"Elle <b>avait lu</b>" — imparfait de avoir (avait) + participe passé (lu) = plus-que-parfait. "Lisait" = imparfait. "Avons lu" = passé composé. "Lirez" = futur.' }),
+    explanation:'"Elle <b>avait lu</b>" - imparfait de avoir (avait) + participe passé (lu) = plus-que-parfait. "Lisait" = imparfait. "Avons lu" = passé composé. "Lirez" = futur.' }),
 
   makeMCQ({ id:'g6fr-pqp-011', chapterId:'g6fr-pqp', difficulty:2,
     question:'Quel est le plus-que-parfait de FAIRE pour "tu" ?',
     options:['tu avais fait','tu as fait','tu faisais','tu avais faisé'],
     answer:'tu avais fait',
     hint:'Faire → participe passé irrégulier = fait. Imparfait avoir (tu) = avais.',
-    explanation:'"Tu <b>avais fait</b>" — faire → participe passé irrégulier = <b>fait</b>. Imparfait de avoir pour "tu" = <b>avais</b>.' }),
+    explanation:'"Tu <b>avais fait</b>" - faire → participe passé irrégulier = <b>fait</b>. Imparfait de avoir pour "tu" = <b>avais</b>.' }),
 
   makeMCQ({ id:'g6fr-pqp-012', chapterId:'g6fr-pqp', difficulty:3,
     question:'Complète en distinguant passé composé et plus-que-parfait : "Quand mon père ___ (rentrer), ma mère ___ (déjà/préparer) le dîner."',
@@ -96,7 +96,7 @@ STATIC_QUESTIONS.push(
     options:['ils avaient venu','ils étaient venus','ils venaient','ils sont venus'],
     answer:'ils étaient venus',
     hint:'Venir utilise être. Imparfait de être (ils) = étaient. Participe passé = venus (pluriel).',
-    explanation:'"Ils <b>étaient venus</b>" — venir utilise l\'auxiliaire <b>être</b>. Imparfait de être pour "ils" = <b>étaient</b>. Participe passé = <b>venus</b> (accord masculin pluriel).' }),
+    explanation:'"Ils <b>étaient venus</b>" - venir utilise l\'auxiliaire <b>être</b>. Imparfait de être pour "ils" = <b>étaient</b>. Participe passé = <b>venus</b> (accord masculin pluriel).' }),
 
   makeMCQ({ id:'g6fr-pqp-014', chapterId:'g6fr-pqp', difficulty:3,
     question:'Distingue les temps : "Lorsqu\'il ___ (arriver), je ___ (partir) depuis une heure."',
@@ -109,21 +109,21 @@ STATIC_QUESTIONS.push(
     question:'"Elles avaient fini leurs devoirs avant que le cours commence." est correctement formé.',
     answer:true,
     hint:'"Avaient fini" = imparfait de avoir (elles → avaient) + participe passé (finir → fini). Correct.',
-    explanation:'<b>Vrai.</b> "Elles <b>avaient fini</b>" — finir utilise avoir. Imparfait de avoir pour "elles" = <b>avaient</b>. Participe passé de finir = <b>fini</b>. Plus-que-parfait bien formé.' }),
+    explanation:'<b>Vrai.</b> "Elles <b>avaient fini</b>" - finir utilise avoir. Imparfait de avoir pour "elles" = <b>avaient</b>. Participe passé de finir = <b>fini</b>. Plus-que-parfait bien formé.' }),
 
   makeMCQ({ id:'g6fr-pqp-016', chapterId:'g6fr-pqp', difficulty:3,
     question:'Lequel de ces verbes utilise ÊTRE (et non avoir) au plus-que-parfait ?',
     options:['manger','finir','partir','voir'],
     answer:'partir',
     hint:'Les verbes de mouvement/état utilisent être : aller, venir, partir, arriver, naître, mourir…',
-    explanation:'<b>Partir</b> utilise l\'auxiliaire <b>être</b> au plus-que-parfait (et au passé composé) : j\'étais parti. Les autres — manger (j\'avais mangé), finir (j\'avais fini), voir (j\'avais vu) — utilisent avoir.' }),
+    explanation:'<b>Partir</b> utilise l\'auxiliaire <b>être</b> au plus-que-parfait (et au passé composé) : j\'étais parti. Les autres - manger (j\'avais mangé), finir (j\'avais fini), voir (j\'avais vu) - utilisent avoir.' }),
 
   makeMCQ({ id:'g6fr-pqp-017', chapterId:'g6fr-pqp', difficulty:3,
     question:'Accorde le participe passé : "Mes sœurs ___ (partir) avant moi." (plus-que-parfait)',
     options:['étaient parti','étaient partis','étaient parties','avaient parti'],
     answer:'étaient parties',
     hint:'Partir + être → accord avec le sujet "mes sœurs" (féminin pluriel) → -ies.',
-    explanation:'"Mes sœurs <b>étaient parties</b>" — partir + être, sujet "mes sœurs" = féminin pluriel → accord : <b>parties</b> (-es au féminin pluriel).' }),
+    explanation:'"Mes sœurs <b>étaient parties</b>" - partir + être, sujet "mes sœurs" = féminin pluriel → accord : <b>parties</b> (-es au féminin pluriel).' }),
 
   makeMCQ({ id:'g6fr-pqp-018', chapterId:'g6fr-pqp', difficulty:4,
     question:'Complète le récit : "Quand la cloche ___ (sonner), les élèves ___ (déjà/ranger) leurs affaires et ___ (se lever) de leur chaise."',
@@ -154,14 +154,14 @@ STATIC_QUESTIONS.push(
     options:['tu as fini','tu avais fini','tu aurais fini','tu finissais'],
     answer:'tu avais fini',
     hint:'PQP = imparfait de avoir (tu → avais) + participe passé (finir → fini).',
-    explanation:'"Tu <b>avais fini</b>" — imparfait de avoir pour "tu" = <b>avais</b>. Participe passé de finir = <b>fini</b>.' }),
+    explanation:'"Tu <b>avais fini</b>" - imparfait de avoir pour "tu" = <b>avais</b>. Participe passé de finir = <b>fini</b>.' }),
 
   makeMCQ({ id:'g6fr-pqp-021', chapterId:'g6fr-pqp', difficulty:1,
     question:'Quel est le plus-que-parfait de PRENDRE pour "ils" ?',
     options:['ils avaient pris','ils ont pris','ils prenaient','ils auraient pris'],
     answer:'ils avaient pris',
     hint:'PQP = imparfait de avoir (ils → avaient) + participe passé irrégulier (prendre → pris).',
-    explanation:'"Ils <b>avaient pris</b>" — prendre → participe passé irrégulier = <b>pris</b>. Imparfait de avoir pour "ils" = <b>avaient</b>.' }),
+    explanation:'"Ils <b>avaient pris</b>" - prendre → participe passé irrégulier = <b>pris</b>. Imparfait de avoir pour "ils" = <b>avaient</b>.' }),
 
   makeTF({ id:'g6fr-pqp-022', chapterId:'g6fr-pqp', difficulty:1,
     question:'"Elles étaient arrivées" est le plus-que-parfait de ARRIVER pour "elles".',
@@ -174,21 +174,21 @@ STATIC_QUESTIONS.push(
     options:['nous avions dit','nous avions dis','nous disions','nous aurions dit'],
     answer:'nous avions dit',
     hint:'Dire → participe passé irrégulier = dit. Imparfait de avoir (nous → avions).',
-    explanation:'"Nous <b>avions dit</b>" — dire → participe passé irrégulier = <b>dit</b>. Imparfait de avoir pour "nous" = <b>avions</b>. Attention : "dis" est incorrect, le participe passé de dire = <b>dit</b>.' }),
+    explanation:'"Nous <b>avions dit</b>" - dire → participe passé irrégulier = <b>dit</b>. Imparfait de avoir pour "nous" = <b>avions</b>. Attention : "dis" est incorrect, le participe passé de dire = <b>dit</b>.' }),
 
   makeMCQ({ id:'g6fr-pqp-024', chapterId:'g6fr-pqp', difficulty:2,
     question:'Transforme au plus-que-parfait : "Elle a ouvert la fenêtre." →',
     options:['Elle avait ouvert la fenêtre.','Elle ouvrait la fenêtre.','Elle avait ouvri la fenêtre.','Elle aurait ouvert la fenêtre.'],
     answer:'Elle avait ouvert la fenêtre.',
     hint:'Ouvrir → participe passé irrégulier = ouvert. Auxiliaire avoir → imparfait = avait.',
-    explanation:'"Elle <b>avait ouvert</b>" — ouvrir → participe passé irrégulier = <b>ouvert</b>. Passé composé (a ouvert) → plus-que-parfait : remplacer "a" (présent de avoir) par "avait" (imparfait de avoir).' }),
+    explanation:'"Elle <b>avait ouvert</b>" - ouvrir → participe passé irrégulier = <b>ouvert</b>. Passé composé (a ouvert) → plus-que-parfait : remplacer "a" (présent de avoir) par "avait" (imparfait de avoir).' }),
 
   makeMCQ({ id:'g6fr-pqp-025', chapterId:'g6fr-pqp', difficulty:2,
     question:'Quel est le plus-que-parfait de METTRE pour "vous" ?',
     options:['vous aviez mis','vous mettiez','vous aviez metti','vous auriez mis'],
     answer:'vous aviez mis',
     hint:'Mettre → participe passé irrégulier = mis. Imparfait de avoir (vous → aviez).',
-    explanation:'"Vous <b>aviez mis</b>" — mettre → participe passé irrégulier = <b>mis</b>. Imparfait de avoir pour "vous" = <b>aviez</b>. Famille : mettre, promettre, remettre, soumettre → tous avec participe passé en <b>-mis</b>.' }),
+    explanation:'"Vous <b>aviez mis</b>" - mettre → participe passé irrégulier = <b>mis</b>. Imparfait de avoir pour "vous" = <b>aviez</b>. Famille : mettre, promettre, remettre, soumettre → tous avec participe passé en <b>-mis</b>.' }),
 
   makeMCQ({ id:'g6fr-pqp-026', chapterId:'g6fr-pqp', difficulty:2,
     question:'Dans quelle phrase le plus-que-parfait est-il utilisé correctement ?',
@@ -200,21 +200,21 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Il était déjà parti quand elle est arrivée."',
     hint:'"Était parti" = PQP de partir (avec être). Action antérieure à son arrivée (passé composé).',
-    explanation:'"Il <b>était déjà parti</b>" (PQP — action antérieure) "quand elle <b>est arrivée</b>" (passé composé — action déclenchante). "Il avait parti" est incorrect — partir utilise être, pas avoir.' }),
+    explanation:'"Il <b>était déjà parti</b>" (PQP - action antérieure) "quand elle <b>est arrivée</b>" (passé composé - action déclenchante). "Il avait parti" est incorrect - partir utilise être, pas avoir.' }),
 
   makeMCQ({ id:'g6fr-pqp-027', chapterId:'g6fr-pqp', difficulty:3,
     question:'Quel est le plus-que-parfait de ÉCRIRE pour "elle" ?',
     options:['elle avait écrit','elle avait écrive','elle écrivait','elle aurait écrit'],
     answer:'elle avait écrit',
     hint:'Écrire → participe passé irrégulier = écrit. Auxiliaire avoir, imparfait = avait.',
-    explanation:'"Elle <b>avait écrit</b>" — écrire → participe passé irrégulier = <b>écrit</b>. Imparfait de avoir pour "elle" = <b>avait</b>. Famille : écrire, décrire, inscrire → tous avec participe passé en <b>-crit</b>.' }),
+    explanation:'"Elle <b>avait écrit</b>" - écrire → participe passé irrégulier = <b>écrit</b>. Imparfait de avoir pour "elle" = <b>avait</b>. Famille : écrire, décrire, inscrire → tous avec participe passé en <b>-crit</b>.' }),
 
   makeMCQ({ id:'g6fr-pqp-028', chapterId:'g6fr-pqp', difficulty:3,
     question:'Accorde le participe passé : "Mes cousines ___ (se lever) tôt ce matin-là." (plus-que-parfait)',
     options:['s\'étaient levé','s\'étaient levées','s\'étaient levés','avaient levées'],
     answer:'s\'étaient levées',
     hint:'Se lever = verbe pronominal → être. Sujet "mes cousines" = féminin pluriel → -ées.',
-    explanation:'"Mes cousines <b>s\'étaient levées</b>" — se lever est pronominal → auxiliaire <b>être</b>. Imparfait de être pour "elles" = <b>étaient</b>. Accord avec "mes cousines" (féminin pluriel) → <b>levées</b> (+es).' }),
+    explanation:'"Mes cousines <b>s\'étaient levées</b>" - se lever est pronominal → auxiliaire <b>être</b>. Imparfait de être pour "elles" = <b>étaient</b>. Accord avec "mes cousines" (féminin pluriel) → <b>levées</b> (+es).' }),
 
   makeMCQ({ id:'g6fr-pqp-029', chapterId:'g6fr-pqp', difficulty:3,
     question:'Complète la si-clause (hypothèse passée non réalisée) : "Si j\'___ (savoir), je n\'aurais pas fait cette erreur."',
@@ -263,25 +263,25 @@ STATIC_QUESTIONS.push(
     ],
     answer:'avait / lu',
     hint:'Action antérieure (avait lu avant de regarder) = PQP. Lire → participe passé irrégulier = lu.',
-    explanation:'"Elle <b>avait</b> déjà <b>lu</b> le livre" — lire → participe passé irrégulier = <b>lu</b>. Auxiliaire avoir, imparfait = <b>avait</b>. Action (lire le livre) antérieure à l\'action principale (regarder le film) → <b>PQP</b>.' }),
+    explanation:'"Elle <b>avait</b> déjà <b>lu</b> le livre" - lire → participe passé irrégulier = <b>lu</b>. Auxiliaire avoir, imparfait = <b>avait</b>. Action (lire le livre) antérieure à l\'action principale (regarder le film) → <b>PQP</b>.' }),
 
   makeMCQ({ id:'g6fr-pqp-034', chapterId:'g6fr-pqp', difficulty:3,
     question:'Complète : "Quand nous sommes arrivés, le professeur ___ (commencer) déjà le cours."',
     options:['a commencé','commençait','avait commencé','commença'],
     answer:'avait commencé',
     hint:'Action antérieure à "sommes arrivés" (passé composé) → plus-que-parfait.',
-    explanation:'"le professeur <b>avait commencé</b> déjà le cours." — Le cours a commencé <b>avant</b> notre arrivée → <b>PQP</b>. Action de référence : nous sommes arrivés (passé composé). Action antérieure : avait commencé (PQP). "Déjà" confirme l\'antériorité. Commencer → participe passé = commencé ; auxiliaire avoir imparfait = avait.' }),
+    explanation:'"le professeur <b>avait commencé</b> déjà le cours." - Le cours a commencé <b>avant</b> notre arrivée → <b>PQP</b>. Action de référence : nous sommes arrivés (passé composé). Action antérieure : avait commencé (PQP). "Déjà" confirme l\'antériorité. Commencer → participe passé = commencé ; auxiliaire avoir imparfait = avait.' }),
 
   makeMCQ({ id:'g6fr-pqp-035', chapterId:'g6fr-pqp', difficulty:4,
     question:'Texte : "Après qu\'il eut terminé son discours, tout le monde applaudit." Quel temps est "eut terminé" et pourquoi ?',
     options:[
-      'Plus-que-parfait — action antérieure au passé composé',
-      'Passé antérieur — action antérieure au passé simple dans un récit littéraire',
-      'Conditionnel passé — hypothèse passée',
-      'Subjonctif passé — après une expression de doute'
+      'Plus-que-parfait - action antérieure au passé composé',
+      'Passé antérieur - action antérieure au passé simple dans un récit littéraire',
+      'Conditionnel passé - hypothèse passée',
+      'Subjonctif passé - après une expression de doute'
     ],
-    answer:'Passé antérieur — action antérieure au passé simple dans un récit littéraire',
+    answer:'Passé antérieur - action antérieure au passé simple dans un récit littéraire',
     hint:'"Eut terminé" = avoir à passé simple (eut) + participe passé → passé antérieur.',
-    explanation:'"<b>Passé antérieur</b>" — "eut terminé" = eut (passé simple de avoir) + terminé (participe passé). Le passé antérieur exprime une action <b>immédiatement antérieure</b> à un passé simple, après "après que", "dès que", "quand" dans le registre littéraire. Ici : discours terminé → immédiatement → applaudissements (passé simple). À distinguer du PQP (avait terminé).' })
+    explanation:'"<b>Passé antérieur</b>" - "eut terminé" = eut (passé simple de avoir) + terminé (participe passé). Le passé antérieur exprime une action <b>immédiatement antérieure</b> à un passé simple, après "après que", "dès que", "quand" dans le registre littéraire. Ici : discours terminé → immédiatement → applaudissements (passé simple). À distinguer du PQP (avait terminé).' })
 
 );

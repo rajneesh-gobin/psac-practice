@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 4 Science — MIE Mauritius Curriculum
+// Grade 4 Science - MIE Mauritius Curriculum
 registerSubject({
   id: 'grade4-science', name: 'Science', grade: 4, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius', comingSoon: false,
@@ -10,7 +10,7 @@ registerSubject({
     { id: 'g4sci-plants',    name: 'Plants',                      icon: '🌱', examWeight: 4,
       syllabus: 'Parts of a plant (roots, stem, leaves, flowers, fruit, seeds) and their functions. Conditions needed for plants to grow well (water, sunlight, air, warmth, minerals). Roots absorb water; stem carries water; leaves make food using sunlight (photosynthesis).' },
     { id: 'g4sci-animals',   name: 'Animals & Habitats',          icon: '🐾', examWeight: 4,
-      syllabus: 'Habitats: sea, forest, pond, grassland. Herbivores, carnivores and omnivores. Food chains (producer → herbivore → carnivore). Endemic and endangered animals of Mauritius: Pink Pigeon, Echo Parakeet. Dodo — extinct. Measures to protect animals.' },
+      syllabus: 'Habitats: sea, forest, pond, grassland. Herbivores, carnivores and omnivores. Food chains (producer → herbivore → carnivore). Endemic and endangered animals of Mauritius: Pink Pigeon, Echo Parakeet. Dodo - extinct. Measures to protect animals.' },
     { id: 'g4sci-air',       name: 'Air',                         icon: '🌬️', examWeight: 3,
       syllabus: 'Properties of air (colourless, odourless, tasteless, takes up space). Oxygen for breathing and combustion. Wind = moving air. Air pollution: causes (vehicles, factories, burning waste) and effects. Ways to reduce pollution.' },
     { id: 'g4sci-water',     name: 'Water',                       icon: '💧', examWeight: 3,

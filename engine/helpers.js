@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice Engine — Shared Helpers & Question Factories
+//  PSAC Exam Practice Engine - Shared Helpers & Question Factories
 //  These globals are used by all subject question files.
 // ══════════════════════════════════════════════
 

@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  Supabase client — shared singleton
+//  Supabase client - shared singleton
 //  Loaded before all other engine files.
 // ══════════════════════════════════════════════
 const SB_URL = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';

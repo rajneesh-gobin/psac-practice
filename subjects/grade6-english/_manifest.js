@@ -11,7 +11,7 @@ registerSubject({
         '**Collective nouns**: a flock of birds, a pride of lions, a swarm of bees.',
         '**Relative pronouns**: who (person), which (thing), that (person or thing), whose (possession).',
         '**Determiners**: articles (a, an, the), demonstratives (this, that, these, those), possessives (my, your, his, her).',
-        '**Indefinite pronouns**: everyone, nobody, something, anywhere — always singular verb.',
+        '**Indefinite pronouns**: everyone, nobody, something, anywhere - always singular verb.',
       ],
     },
     {
@@ -38,7 +38,7 @@ registerSubject({
     {
       id: 'g6eng-comprehension', name: 'Reading & Critical Thinking', icon: '🔍',
       notes: [
-        '**Inference** questions: The answer is not directly stated — deduce from clues.',
+        '**Inference** questions: The answer is not directly stated - deduce from clues.',
         '**Author\'s purpose**: to inform, to persuade, to entertain, to describe.',
         '**Tone**: formal, informal, serious, humorous, ironic, sympathetic.',
         '**Literary devices**: simile (like/as), metaphor (is), personification, onomatopoeia, alliteration.',
@@ -59,9 +59,9 @@ registerSubject({
     {
       id: 'g6eng-vocabulary', name: 'Advanced Vocabulary', icon: '🔤',
       notes: [
-        '**Homonyms** — same spelling/sound, different meaning: bear (animal / to carry), bank (river bank / financial bank).',
+        '**Homonyms** - same spelling/sound, different meaning: bear (animal / to carry), bank (river bank / financial bank).',
         '**Homophones**: affect/effect, principle/principal, stationary/stationery, complement/compliment.',
-        '**Etymology**: knowing roots helps — *port* (carry): transport, import, export, portable.',
+        '**Etymology**: knowing roots helps - *port* (carry): transport, import, export, portable.',
         'Greek roots: *tele* (far), *bio* (life), *geo* (earth), *photo* (light), *micro* (small).',
         'Latin roots: *aud* (hear), *vis* (see), *scrib* (write), *dict* (say), *rupt* (break).',
       ],

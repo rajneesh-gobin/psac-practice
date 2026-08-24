@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 English — Chapter: Creative Writing
+﻿'use strict';
+// Grade 5 English - Chapter: Creative Writing
 // IDs format: g5eng-writ-NNN
 
 STATIC_QUESTIONS.push(
@@ -26,7 +26,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'His hands trembled and his heart pounded as he read the question.',
     hint:'"Show don\'t tell" means describing physical actions and sensations instead of just naming the emotion.',
-    explanation:'"<b>His hands trembled and his heart pounded</b>" shows nervousness through physical description — the reader feels it rather than being told about it. "He was very nervous" simply tells us. Good writers use sensory details and actions to convey emotions.' }),
+    explanation:'"<b>His hands trembled and his heart pounded</b>" shows nervousness through physical description - the reader feels it rather than being told about it. "He was very nervous" simply tells us. Good writers use sensory details and actions to convey emotions.' }),
 
   makeMCQ({ id:'g5eng-writ-003', chapterId:'eng-writing', difficulty:1,
     question:'What is ALLITERATION?',
@@ -50,7 +50,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'He ran as fast as a cheetah.',
     hint:'A simile compares two things using "like" or "as".',
-    explanation:'"<b>He ran as fast as a cheetah</b>" is a simile — it uses "<b>as...as</b>" to compare. "She is a shining star" is a metaphor (no like/as). "The wind howled" and "the angry sky" are personification.' }),
+    explanation:'"<b>He ran as fast as a cheetah</b>" is a simile - it uses "<b>as...as</b>" to compare. "She is a shining star" is a metaphor (no like/as). "The wind howled" and "the angry sky" are personification.' }),
 
   makeMCQ({ id:'g5eng-writ-005', chapterId:'eng-writing', difficulty:2,
     question:'What is PERSONIFICATION?',
@@ -61,7 +61,7 @@ STATIC_QUESTIONS.push(
       'Exaggerating for effect'
     ],
     answer:'Giving human qualities or feelings to non-human things',
-    hint:'The word person is inside personification — think of treating a thing as if it were a person.',
+    hint:'The word person is inside personification - think of treating a thing as if it were a person.',
     explanation:'<b>Personification</b> gives human qualities to non-human things. Examples: "The sun smiled down on us." / "The waves whispered secrets." / "The trees danced in the wind." It makes writing more vivid and engaging.' }),
 
   makeMCQ({ id:'g5eng-writ-006', chapterId:'eng-writing', difficulty:1,
@@ -81,17 +81,17 @@ STATIC_QUESTIONS.push(
     options:[
       'My story is about a boy called Max who goes on an adventure.',
       'In this story I will tell you about what happened one day.',
-      'The cave was silent — until the moment the torchlight flickered and went out.',
+      'The cave was silent - until the moment the torchlight flickered and went out.',
       'There was a boy. He was ten years old. He lived in a house.'
     ],
-    answer:'The cave was silent — until the moment the torchlight flickered and went out.',
-    hint:'A good opening grabs the reader immediately — it creates atmosphere or raises a question.',
-    explanation:'"<b>The cave was silent — until the moment the torchlight flickered and went out.</b>" immediately creates suspense and atmosphere. The other openings are weak: they tell instead of show, or simply introduce facts without engaging the reader.' }),
+    answer:'The cave was silent - until the moment the torchlight flickered and went out.',
+    hint:'A good opening grabs the reader immediately - it creates atmosphere or raises a question.',
+    explanation:'"<b>The cave was silent - until the moment the torchlight flickered and went out.</b>" immediately creates suspense and atmosphere. The other openings are weak: they tell instead of show, or simply introduce facts without engaging the reader.' }),
 
   makeTF({ id:'g5eng-writ-008', chapterId:'eng-writing', difficulty:1,
     question:'Using a variety of sentence lengths (short and long) makes creative writing more interesting to read.',
     answer:true,
-    hint:'Think about rhythm in writing — what happens if all sentences are the same length?',
+    hint:'Think about rhythm in writing - what happens if all sentences are the same length?',
     explanation:'<b>True.</b> Mixing short sentences (for impact: "She fell.") and longer, descriptive sentences creates <b>rhythm and variety</b>. Short sentences build tension. Longer sentences develop description or action. Sameness makes writing monotonous.' }),
 
   makeMCQ({ id:'g5eng-writ-009', chapterId:'eng-writing', difficulty:2,
@@ -116,7 +116,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Alliteration and personification',
     hint:'Look at the starting sounds AND whether the ocean is being given a human quality.',
-    explanation:'<b>Alliteration</b>: "ancient, <b>a</b>ngry ocean <b>a</b>ttacked" — repeated "a" sounds. <b>Personification</b>: "angry ocean attacked" — the ocean is given the human emotion of anger and the human action of attacking.' })
+    explanation:'<b>Alliteration</b>: "ancient, <b>a</b>ngry ocean <b>a</b>ttacked" - repeated "a" sounds. <b>Personification</b>: "angry ocean attacked" - the ocean is given the human emotion of anger and the human action of attacking.' })
 
 );
 
@@ -132,7 +132,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'A direct comparison that says one thing IS another, without using "like" or "as"',
     hint:'Example: "Life is a journey." No "like" or "as" is used.',
-    explanation:'A <b>metaphor</b> says one thing IS another directly: "Life is a journey." / "He is a lion on the field." Compare with a simile: "He ran <b>like</b> a lion." A metaphor does not use "like" or "as" — it makes the comparison direct and stronger.' }),
+    explanation:'A <b>metaphor</b> says one thing IS another directly: "Life is a journey." / "He is a lion on the field." Compare with a simile: "He ran <b>like</b> a lion." A metaphor does not use "like" or "as" - it makes the comparison direct and stronger.' }),
 
   makeMCQ({ id:'g5eng-writ-012', chapterId:'eng-writing', difficulty:1,
     question:'Which of the following is an example of ONOMATOPOEIA?',
@@ -144,17 +144,17 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"The bees buzzed around the flowers."',
     hint:'Onomatopoeia uses words that sound like the sound they describe.',
-    explanation:'"<b>Buzzed</b>" is onomatopoeia — it sounds like the noise bees make. Other examples: crash, hiss, splash, sizzle, crunch, murmur, roar. Using onomatopoeia makes writing more vivid and brings sounds to life for the reader.' }),
+    explanation:'"<b>Buzzed</b>" is onomatopoeia - it sounds like the noise bees make. Other examples: crash, hiss, splash, sizzle, crunch, murmur, roar. Using onomatopoeia makes writing more vivid and brings sounds to life for the reader.' }),
 
   makeMCQ({ id:'g5eng-writ-013', chapterId:'eng-writing', difficulty:2,
     question:'What is a RHETORICAL QUESTION in persuasive writing?',
     options:[
       'A question the writer genuinely does not know the answer to',
-      'A question asked for effect — the writer does not expect an answer, but it makes the reader think',
+      'A question asked for effect - the writer does not expect an answer, but it makes the reader think',
       'A question that starts a new paragraph',
       'A question that only teachers can answer'
     ],
-    answer:'A question asked for effect — the writer does not expect an answer, but it makes the reader think',
+    answer:'A question asked for effect - the writer does not expect an answer, but it makes the reader think',
     hint:'Example in persuasive writing: "Would you want your children to breathe dirty air?" No answer is expected.',
     explanation:'A <b>rhetorical question</b> is asked to create an effect, not to get an answer. It makes the reader think and often draws them into the argument. Example: "How can we call ourselves civilised if we destroy our own planet?" The writer already knows the audience\'s emotional response.' }),
 
@@ -162,7 +162,7 @@ STATIC_QUESTIONS.push(
     question:'Which is a better way to say "He said" in a story to show the character spoke quietly?',
     options:['He said loudly','He whispered','He said quietly quietly','He talked'],
     answer:'He whispered',
-    hint:'Precise vocabulary replaces weak phrases — instead of "said + adverb", use a specific verb.',
+    hint:'Precise vocabulary replaces weak phrases - instead of "said + adverb", use a specific verb.',
     explanation:'"<b>He whispered</b>" is more precise and powerful than "he said quietly". Good writers replace weak verbs + adverbs with specific verbs that carry the meaning themselves. Other examples: shouted, muttered, exclaimed, announced, replied, gasped, snapped.' }),
 
   makeMCQ({ id:'g5eng-writ-015', chapterId:'eng-writing', difficulty:2,
@@ -174,18 +174,18 @@ STATIC_QUESTIONS.push(
       'The beach had water and sand.'
     ],
     answer:'The waves crashed and hissed against the shore, and the salty breeze stung her cheeks.',
-    hint:'Good descriptive writing appeals to the five senses — sound, sight, touch, smell, taste.',
-    explanation:'"<b>The waves crashed and hissed</b> against the shore, and the salty breeze <b>stung</b> her cheeks" uses: <b>sound</b> (crashed, hissed — onomatopoeia), <b>touch</b> (stung her cheeks), and <b>taste/smell</b> (salty). This multi-sensory description makes the reader feel present at the scene.' }),
+    hint:'Good descriptive writing appeals to the five senses - sound, sight, touch, smell, taste.',
+    explanation:'"<b>The waves crashed and hissed</b> against the shore, and the salty breeze <b>stung</b> her cheeks" uses: <b>sound</b> (crashed, hissed - onomatopoeia), <b>touch</b> (stung her cheeks), and <b>taste/smell</b> (salty). This multi-sensory description makes the reader feel present at the scene.' }),
 
   makeMCQ({ id:'g5eng-writ-016', chapterId:'eng-writing', difficulty:3,
     question:'A student writes: "I got up. I ate breakfast. I went to school. I saw my friends." What is the MAIN weakness of this writing?',
     options:[
       'The tense is wrong',
-      'All sentences begin with "I" and have the same structure — no variety, no description, no detail',
+      'All sentences begin with "I" and have the same structure - no variety, no description, no detail',
       'The sentences are too long',
       'There are spelling mistakes'
     ],
-    answer:'All sentences begin with "I" and have the same structure — no variety, no description, no detail',
+    answer:'All sentences begin with "I" and have the same structure - no variety, no description, no detail',
     hint:'Think about what makes writing interesting to read.',
     explanation:'The main weakness is <b>lack of variety and detail</b>: every sentence starts with "I" and follows the same simple structure. Good writing varies sentence starters, uses adjectives, adverbs, and figurative language, and builds atmosphere. Improved version: "After a quick breakfast, I dashed out into the cool morning air to meet my friends at the school gates."' }),
 
@@ -210,18 +210,18 @@ STATIC_QUESTIONS.push(
       'One day Jake went somewhere and something happened.'
     ],
     answer:'Darkness. The wind shrieked through the broken window and the candle went out.',
-    hint:'A strong opening creates immediate atmosphere — it drops the reader INTO the moment.',
+    hint:'A strong opening creates immediate atmosphere - it drops the reader INTO the moment.',
     explanation:'"<b>Darkness. The wind shrieked...</b>" is powerful: the single-word sentence "Darkness" creates instant impact; "shrieked" (personification/onomatopoeia) and the dramatic event (candle going out) immediately build tension and make the reader want to continue. The other openings tell rather than show, and fail to create atmosphere.' }),
 
   makeMCQ({ id:'g5eng-writ-019', chapterId:'eng-writing', difficulty:4,
     question:'A student is writing a persuasive letter about protecting Mauritius\'s coral reef. Which paragraph BEST uses AFOREST techniques?',
     options:[
       '"Dear Sir/Madam, I am writing about the coral reef. It is nice. Please protect it."',
-      '"Imagine a Mauritius without its coral reef — no turquoise lagoons, no colourful fish, no tourists, no future. Every year, 30% of our reef is damaged by pollution and climate change. Are we really willing to let this natural treasure disappear forever? We must act now."',
+      '"Imagine a Mauritius without its coral reef - no turquoise lagoons, no colourful fish, no tourists, no future. Every year, 30% of our reef is damaged by pollution and climate change. Are we really willing to let this natural treasure disappear forever? We must act now."',
       '"The reef has coral and fish. Some people damage it. This is bad. The end."',
       '"I think the reef is important because my teacher said so and I agree with her."'
     ],
-    answer:'"Imagine a Mauritius without its coral reef — no turquoise lagoons, no colourful fish, no tourists, no future. Every year, 30% of our reef is damaged by pollution and climate change. Are we really willing to let this natural treasure disappear forever? We must act now."',
+    answer:'"Imagine a Mauritius without its coral reef - no turquoise lagoons, no colourful fish, no tourists, no future. Every year, 30% of our reef is damaged by pollution and climate change. Are we really willing to let this natural treasure disappear forever? We must act now."',
     hint:'AFOREST = Alliteration, Facts, Opinions, Rhetorical questions, Emotive language, Statistics, Triples.',
     explanation:'The second option uses multiple AFOREST techniques: <b>Emotive language</b> ("let this natural treasure disappear"); <b>Statistics</b> ("30% of our reef"); <b>Rhetorical question</b> ("Are we really willing...?"); <b>Triple</b> ("no turquoise lagoons, no colourful fish, no tourists"). These techniques together make the argument persuasive and powerful.' })
 

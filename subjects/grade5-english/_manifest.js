@@ -54,7 +54,7 @@ registerSubject({
         'For "explain" questions: use your own words and give reasons.',
         'For "what do you think?" questions: give your opinion + evidence from the text.',
         'Underlining key words in questions helps you focus on what to look for.',
-        'Always check how many marks a question is worth — give that many points in your answer.',
+        'Always check how many marks a question is worth - give that many points in your answer.',
       ],
     },
     {
@@ -84,7 +84,7 @@ registerSubject({
         'Learn the **ie/ei** rule: i before e except after c (believe, receive).',
         'Silent letters: know, wrap, knight, write, gnat, bomb.',
         'Double consonants: running (run+n+ing), sitting, stopped, beginning.',
-        'Homophones — sound the same but different spelling/meaning: there/their/they\'re, to/too/two, wear/where/were.',
+        'Homophones - sound the same but different spelling/meaning: there/their/they\'re, to/too/two, wear/where/were.',
         'Practice strategy: **Look, Cover, Write, Check**.',
       ],
     },

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Science — Chapter: Protection & Conservation
+﻿'use strict';
+// Grade 4 Science - Chapter: Protection & Conservation
 // IDs format: g4sc-protect-NNN
 
 STATIC_QUESTIONS.push(
@@ -55,7 +55,7 @@ STATIC_QUESTIONS.push(
       'Bury it in the ground'
     ],
     answer:'Process used materials (paper, glass, metal, plastic) so they can be used again',
-    hint:'Recycling starts with "re" — meaning to do something again.',
+    hint:'Recycling starts with "re" - meaning to do something again.',
     explanation:'<b>Recycling</b> means processing used materials so they can be made into new products. For example: old newspapers become new paper; glass bottles are melted and re-formed; aluminium cans are melted and made into new cans. Recycling reduces waste in landfills and uses fewer raw materials from nature.' }),
 
   makeMCQ({ id:'g4sc-protect-006', chapterId:'g4sci-protect', difficulty:2,
@@ -105,7 +105,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Use LESS of something to produce less waste',
     hint:'Reduce = make smaller/less.',
-    explanation:'<b>REDUCE</b> means using <b>less</b> in the first place — so less waste is created. For example: use both sides of paper before throwing it away; buy food with less plastic packaging; turn off the tap while brushing teeth (to reduce water waste). Reducing is the most effective of the 3 Rs because it prevents waste at the source.' }),
+    explanation:'<b>REDUCE</b> means using <b>less</b> in the first place - so less waste is created. For example: use both sides of paper before throwing it away; buy food with less plastic packaging; turn off the tap while brushing teeth (to reduce water waste). Reducing is the most effective of the 3 Rs because it prevents waste at the source.' }),
 
   makeMCQ({ id:'g4sc-protect-011', chapterId:'g4sci-protect', difficulty:2,
     question:'What does REUSE mean in the 3 Rs?',
@@ -125,7 +125,7 @@ STATIC_QUESTIONS.push(
       'Because it wastes the chemicals',
       'Because it can pollute rivers, groundwater and the sea, harming plants and animals',
       'Because the chemicals clean the drain and that is wasteful',
-      'There is no problem — chemicals disappear in water'
+      'There is no problem - chemicals disappear in water'
     ],
     answer:'Because it can pollute rivers, groundwater and the sea, harming plants and animals',
     hint:'Where does water from the drain eventually go?',
@@ -148,10 +148,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Too much sunlight reaching the river',
       'Rainwater flowing into the river',
-      'Pollution — probably from chemicals or waste dumped upstream',
+      'Pollution - probably from chemicals or waste dumped upstream',
       'The fish left to find another river'
     ],
-    answer:'Pollution — probably from chemicals or waste dumped upstream',
+    answer:'Pollution - probably from chemicals or waste dumped upstream',
     hint:'What could make a river brown, smelly, and deadly to fish at the same time?',
     explanation:'A brown, smelly river with dead fish is a sign of <b>water pollution</b>. The most likely cause is that <b>chemicals, sewage or waste</b> have been dumped upstream. Pollutants reduce oxygen in the water (fish suffocate) and may be directly toxic. To investigate, you would look for a factory, farm using pesticides, or illegal dumping site upstream.' }),
 
@@ -159,11 +159,11 @@ STATIC_QUESTIONS.push(
     question:'Saving water is important because freshwater is not available in unlimited amounts.',
     answer:true,
     hint:'Can we always get clean, fresh water from the tap whenever we want, forever?',
-    explanation:'<b>True.</b> Freshwater (the clean water we drink and use) is a <b>limited resource</b>. Only about 3% of Earth\'s water is fresh water, and not all of it is easily accessible. In Mauritius, rainfall fills reservoirs, but droughts can reduce supply. Saving water — turning off taps, fixing leaks, collecting rainwater — helps ensure there is enough for everyone.' }),
+    explanation:'<b>True.</b> Freshwater (the clean water we drink and use) is a <b>limited resource</b>. Only about 3% of Earth\'s water is fresh water, and not all of it is easily accessible. In Mauritius, rainfall fills reservoirs, but droughts can reduce supply. Saving water - turning off taps, fixing leaks, collecting rainwater - helps ensure there is enough for everyone.' }),
 
   makeMCQ({ id:'g4sc-protect-016', chapterId:'g4sci-protect', difficulty:2,
     question:'Using CHEMICALS on fields (pesticides and fertilisers) can cause environmental harm. Which type of pollution can result?',
-    options:['Only air pollution','Only sound pollution','Water and land pollution when chemicals wash into rivers and soil','No pollution — chemicals are harmless'],
+    options:['Only air pollution','Only sound pollution','Water and land pollution when chemicals wash into rivers and soil','No pollution - chemicals are harmless'],
     answer:'Water and land pollution when chemicals wash into rivers and soil',
     hint:'Rain washes chemicals from the field into streams and soil.',
     explanation:'When rain falls on fields treated with chemicals, it washes <b>pesticides and fertilisers</b> into streams and the groundwater (<b>water pollution</b>), and leaves chemicals in the soil (<b>land pollution</b>). This kills aquatic animals, causes algae to grow out of control in rivers, and can make groundwater unsafe to drink.' }),
@@ -202,6 +202,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Use a reusable cloth bag (Reuse), turn off taps when brushing teeth (Reduce), put empty bottles in the recycling bin (Recycle)',
     hint:'Look for one example of each: Reduce (use less), Reuse (use again), Recycle (process to make new).',
-    explanation:'The best answer applies all 3 Rs: (1) <b>Reuse</b> — cloth bag used again instead of disposable plastic; (2) <b>Reduce</b> — turning off taps saves water (uses less); (3) <b>Recycle</b> — bottles go to recycling to be made into new products. Together, these three habits significantly reduce a person\'s environmental impact.' })
+    explanation:'The best answer applies all 3 Rs: (1) <b>Reuse</b> - cloth bag used again instead of disposable plastic; (2) <b>Reduce</b> - turning off taps saves water (uses less); (3) <b>Recycle</b> - bottles go to recycling to be made into new products. Together, these three habits significantly reduce a person\'s environmental impact.' })
 
 );

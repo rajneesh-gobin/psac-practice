@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ═══════════════════════════════════════════════════════════════
-//  MathMaster Grade 5 — Unit Conversions Chapter
+//  MathMaster Grade 5 - Unit Conversions Chapter
 //  All conversion types: mass, length, capacity, time, money, area
 //
 //  Chapter ID: 'conversions'
@@ -327,7 +327,7 @@ const CONV_QS = [
     explanation:'25,000 ÷ 10,000 = <b>2.5 m²</b>.' }),
 
   // ═══════════════════════════════════════════════
-  //  MIXED — multi-step & cross-unit conversions
+  //  MIXED - multi-step & cross-unit conversions
   // ═══════════════════════════════════════════════
   makeMCQ({ id:'CV_MX01', chapterId:'conversions', subsection:'mixed', difficulty:2,
     question:'Which of these is the <b>odd one out</b> (different from the others)?',
@@ -346,7 +346,7 @@ const CONV_QS = [
     question:'A swimming pool holds <b>500,000 L</b> of water. A pump fills it at <b>2,500 L per minute</b>.<br>How many <b>hours</b> does it take to fill?',
     answer:'200', acceptableAnswers:['200','200 hours'],
     hint:'Minutes to fill = 500,000 ÷ 2,500. Convert to hours (÷60).',
-    explanation:'500,000 ÷ 2,500 = 200 minutes. 200 ÷ 60 is not a whole number... re-check: 200 minutes = 3 h 20 min. Wait — let me fix: fill time = 200 min = <b>200 minutes</b>. (Answer updated below.)' }),
+    explanation:'500,000 ÷ 2,500 = 200 minutes. 200 ÷ 60 is not a whole number... re-check: 200 minutes = 3 h 20 min. Wait - let me fix: fill time = 200 min = <b>200 minutes</b>. (Answer updated below.)' }),
 
   makeNum({ id:'CV_MX04', chapterId:'conversions', subsection:'mixed', difficulty:3,
     question:'A runner covers <b>5 km</b> in <b>25 minutes</b>.<br>How many <b>metres per minute</b> is that?',
@@ -380,7 +380,7 @@ const CONV_QS = [
 
 ];
 
-// Fix CV_MX03 — answer was wrong; correct answer is 200 minutes, not hours
+// Fix CV_MX03 - answer was wrong; correct answer is 200 minutes, not hours
 // Let's replace it with a better-formed question:
 const mxFix = CONV_QS.findIndex(q => q && q.id === 'CV_MX03');
 if (mxFix !== -1) {

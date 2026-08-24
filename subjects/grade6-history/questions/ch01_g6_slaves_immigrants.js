@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 History — Chapter: Slaves & Immigrants
+﻿'use strict';
+// Grade 6 History - Chapter: Slaves & Immigrants
 // IDs format: g6hg-si-NNN
 
 STATIC_QUESTIONS.push(
@@ -16,7 +16,7 @@ STATIC_QUESTIONS.push(
     options:['China','France','Africa','India'],
     answer:'India',
     hint:'The largest group came from the sub-continent to work on sugar cane plantations.',
-    explanation:'After 1835, the plantation owners needed a new workforce. The British organised the immigration of <b>indentured workers mainly from India</b> — over 450,000 arrived between 1834 and 1907. They came under contracts to work for a fixed period in exchange for passage and wages.' }),
+    explanation:'After 1835, the plantation owners needed a new workforce. The British organised the immigration of <b>indentured workers mainly from India</b> - over 450,000 arrived between 1834 and 1907. They came under contracts to work for a fixed period in exchange for passage and wages.' }),
 
   makeMCQ({ id:'g6hg-si-003', chapterId:'g6-slaves-immigrants', difficulty:2,
     question:'What was an INDENTURED worker?',
@@ -46,7 +46,7 @@ STATIC_QUESTIONS.push(
     question:'Aapravasi Ghat in Port Louis is a UNESCO World Heritage Site.',
     answer:true,
     hint:'It was inscribed in 2006 for its global historical significance.',
-    explanation:'True. <b>Aapravasi Ghat</b> was inscribed as a UNESCO World Heritage Site in 2006. UNESCO recognised it as a key site in the history of the modern world — it was the first destination of the largest migration of indentured labour in history.' }),
+    explanation:'True. <b>Aapravasi Ghat</b> was inscribed as a UNESCO World Heritage Site in 2006. UNESCO recognised it as a key site in the history of the modern world - it was the first destination of the largest migration of indentured labour in history.' }),
 
   makeMCQ({ id:'g6hg-si-006', chapterId:'g6-slaves-immigrants', difficulty:2,
     question:'Why is Le Morne Brabant Peninsula a UNESCO World Heritage Site?',
@@ -83,7 +83,7 @@ STATIC_QUESTIONS.push(
     question:'The descendants of Indian indentured workers are the largest community in Mauritius today.',
     answer:true,
     hint:'Over 450,000 workers came from India between 1834 and 1907.',
-    explanation:'True. <b>Indo-Mauritians</b> — descendants of Indian indentured workers — make up the largest community in Mauritius (about 68% of the population). They brought their languages, religions (Hinduism, Islam), foods and cultural traditions, which remain central to Mauritian society.' }),
+    explanation:'True. <b>Indo-Mauritians</b> - descendants of Indian indentured workers - make up the largest community in Mauritius (about 68% of the population). They brought their languages, religions (Hinduism, Islam), foods and cultural traditions, which remain central to Mauritian society.' }),
 
   makeMCQ({ id:'g6hg-si-010', chapterId:'g6-slaves-immigrants', difficulty:2,
     question:'What does the term MAROON (or "marron") refer to in Mauritian history?',
@@ -143,12 +143,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6hg-si-016', chapterId:'g6-slaves-immigrants', difficulty:2,
     question:'What were the living conditions like for enslaved people on Mauritian plantations during French rule?',
     options:[
-      'Comfortable — they were paid well and had free time',
-      'Harsh — they worked long hours in the fields, had poor food and shelter, and were frequently punished',
-      'Equal to French colonists — they shared the same rights',
-      'Good — they were protected by strict laws against mistreatment'
+      'Comfortable - they were paid well and had free time',
+      'Harsh - they worked long hours in the fields, had poor food and shelter, and were frequently punished',
+      'Equal to French colonists - they shared the same rights',
+      'Good - they were protected by strict laws against mistreatment'
     ],
-    answer:'Harsh — they worked long hours in the fields, had poor food and shelter, and were frequently punished',
+    answer:'Harsh - they worked long hours in the fields, had poor food and shelter, and were frequently punished',
     hint:'Enslaved people had no rights or freedom under the plantation system.',
     explanation:'Enslaved people endured extremely <b>harsh conditions</b>: they worked from dawn to dusk in sugar cane fields, received minimal food and poor shelter, had no legal rights, could not marry without permission, and faced violent punishment if they disobeyed. This is why many escaped to become maroons, seeking freedom in remote areas like Le Morne Brabant.' }),
 
@@ -174,7 +174,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The formal surrender of Mauritius by France to Britain, ending French rule',
     hint:'A "capitulation" in history means a formal surrender.',
-    explanation:'The <b>Capitulation of Mauritius (December 1810)</b> was the formal document by which the French colonial government surrendered the island to Britain. Crucially, the capitulation guaranteed that the French colonists could keep their language, laws, religion (Catholicism) and property — which is why French culture, the Civil Code (Code Napoléon) and Catholicism remain important in Mauritius today.' }),
+    explanation:'The <b>Capitulation of Mauritius (December 1810)</b> was the formal document by which the French colonial government surrendered the island to Britain. Crucially, the capitulation guaranteed that the French colonists could keep their language, laws, religion (Catholicism) and property - which is why French culture, the Civil Code (Code Napoléon) and Catholicism remain important in Mauritius today.' }),
 
   makeMCQ({ id:'g6hg-si-019', chapterId:'g6-slaves-immigrants', difficulty:4,
     question:'Why is Aapravasi Ghat important for WORLD history, not just Mauritian history?',
@@ -185,7 +185,7 @@ STATIC_QUESTIONS.push(
       'Because it was used as a model for building airports around the world'
     ],
     answer:'Because it was the first site in the world to receive indentured labourers and represents the beginning of the global modern labour migration system',
-    hint:'UNESCO inscribed it for its "outstanding universal value" — not just its local value.',
-    explanation:'UNESCO inscribed Aapravasi Ghat in 2006 because Mauritius was <b>the first destination of the largest migration of indentured labour in history</b>. The indenture system that started here spread across the British Empire — to Trinidad, Guyana, Fiji, South Africa, Natal — reshaping the demographics of much of the world. Aapravasi Ghat is where this transformative global history began.' })
+    hint:'UNESCO inscribed it for its "outstanding universal value" - not just its local value.',
+    explanation:'UNESCO inscribed Aapravasi Ghat in 2006 because Mauritius was <b>the first destination of the largest migration of indentured labour in history</b>. The indenture system that started here spread across the British Empire - to Trinidad, Guyana, Fiji, South Africa, Natal - reshaping the demographics of much of the world. Aapravasi Ghat is where this transformative global history began.' })
 
 );

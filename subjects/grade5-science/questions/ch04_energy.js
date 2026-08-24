@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 Science — Chapter: Energy Sources
+﻿'use strict';
+// Grade 5 Science - Chapter: Energy Sources
 // Uses STATIC_QUESTIONS + helpers from engine/helpers.js
 // IDs format: g5sci-en-NNN
 
@@ -10,14 +10,14 @@ STATIC_QUESTIONS.push(
     options:['Petrol','Wind','Solar panels','Water'],
     answer:'Wind',
     hint:'Think about what fills the sails of a boat.',
-    explanation:'A sailing boat uses wind energy — the wind pushes against the sails, moving the boat through the water.' }),
+    explanation:'A sailing boat uses wind energy - the wind pushes against the sails, moving the boat through the water.' }),
 
   makeMCQ({ id:'g5sci-en-002', chapterId:'energy', difficulty:1,
     question:'Which of the following is a RENEWABLE energy source?',
     options:['Coal','Oil','Natural gas','Solar energy'],
     answer:'Solar energy',
     hint:'Renewable energy comes from a source that will not run out.',
-    explanation:'Solar energy from the sun is renewable — it will not run out. Coal, oil and natural gas are fossil fuels — they are non-renewable.' }),
+    explanation:'Solar energy from the sun is renewable - it will not run out. Coal, oil and natural gas are fossil fuels - they are non-renewable.' }),
 
   makeMCQ({ id:'g5sci-en-003', chapterId:'energy', difficulty:1,
     question:'Which of the following is a NON-RENEWABLE energy source?',
@@ -67,7 +67,7 @@ STATIC_QUESTIONS.push(
     question:'Wind is a renewable source of energy because it will never run out.',
     answer:true,
     hint:'Think about what causes wind.',
-    explanation:'Wind is caused by the uneven heating of the Earth\'s surface by the sun. As long as the sun shines, there will be wind — making it renewable.' }),
+    explanation:'Wind is caused by the uneven heating of the Earth\'s surface by the sun. As long as the sun shines, there will be wind - making it renewable.' }),
 
   makeMCQ({ id:'g5sci-en-009', chapterId:'energy', difficulty:1,
     question:'Which energy source does a motorcycle use?',
@@ -92,7 +92,7 @@ STATIC_QUESTIONS.push(
       'Kinetic energy → Chemical energy'
     ],
     answer:'Chemical energy (from food) → Kinetic (movement) energy',
-    hint:'The girl gets energy from food — what type of energy does food store?',
+    hint:'The girl gets energy from food - what type of energy does food store?',
     explanation:'When a girl runs, <b>chemical energy</b> stored in food is converted into <b>kinetic (movement) energy</b>. The body also releases some heat energy during this process.' }),
 
   makeMCQ({ id:'g5sci-en-012', chapterId:'energy', difficulty:2,
@@ -104,15 +104,15 @@ STATIC_QUESTIONS.push(
       'Heat energy → Sound energy'
     ],
     answer:'Light energy → Chemical energy (stored in glucose)',
-    hint:'The tree captures light and stores it as food — a form of chemical energy.',
+    hint:'The tree captures light and stores it as food - a form of chemical energy.',
     explanation:'During photosynthesis, the tree converts <b>light energy</b> from the sun into <b>chemical energy</b> stored in glucose (sugar). This stored chemical energy is later used by the plant for growth and life processes.' }),
 
   makeMCQ({ id:'g5sci-en-013', chapterId:'energy', difficulty:2,
     question:'Which of the following is NOT a fossil fuel?',
     options:['Petrol','Coal','Natural gas','Bagasse'],
     answer:'Bagasse',
-    hint:'Fossil fuels formed from ancient living things millions of years ago — which of these comes from a current crop?',
-    explanation:'<b>Bagasse</b> is NOT a fossil fuel — it is the fibrous material left after sugarcane is crushed to extract juice. It is a <b>biofuel</b> (renewable). Petrol, coal and natural gas are fossil fuels formed over millions of years from ancient plants and animals.' }),
+    hint:'Fossil fuels formed from ancient living things millions of years ago - which of these comes from a current crop?',
+    explanation:'<b>Bagasse</b> is NOT a fossil fuel - it is the fibrous material left after sugarcane is crushed to extract juice. It is a <b>biofuel</b> (renewable). Petrol, coal and natural gas are fossil fuels formed over millions of years from ancient plants and animals.' }),
 
   makeMCQ({ id:'g5sci-en-014', chapterId:'energy', difficulty:2,
     question:'Solar street lamps have panels on top that charge batteries during the day, and light the street at night. What is the COMPLETE energy chain from day to night?',
@@ -154,7 +154,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Solar and wind produce no air pollution AND they are renewable so they will not run out',
     hint:'Think about pollution AND sustainability.',
-    explanation:'Two environmental advantages: (1) Solar and wind energy produce <b>no air pollution</b> — no smoke, carbon dioxide or other harmful gases are released; (2) They are <b>renewable</b> — they will never run out because the sun and wind are continuously available, unlike coal which will eventually be exhausted.' }),
+    explanation:'Two environmental advantages: (1) Solar and wind energy produce <b>no air pollution</b> - no smoke, carbon dioxide or other harmful gases are released; (2) They are <b>renewable</b> - they will never run out because the sun and wind are continuously available, unlike coal which will eventually be exhausted.' }),
 
   makeMCQ({ id:'g5sci-en-018', chapterId:'energy', difficulty:4,
     question:'A pupil burns a candle and notes: the candle gets smaller, wax melts, light is produced and the area gets warmer. Identify the energy INPUT and list ALL energy OUTPUTS.',
@@ -165,7 +165,7 @@ STATIC_QUESTIONS.push(
       'Input: Light energy. Outputs: Chemical energy and Sound energy'
     ],
     answer:'Input: Chemical energy (in wax). Outputs: Light energy and Heat energy',
-    hint:'The wax stores energy — what type? The flame produces two forms of energy — what are they?',
+    hint:'The wax stores energy - what type? The flame produces two forms of energy - what are they?',
     explanation:'The <b>chemical energy</b> stored in the wax is the input. When the candle burns, this chemical energy is converted into two outputs: <b>light energy</b> (the flame produces light) and <b>heat energy</b> (the flame warms the surroundings). The shrinking candle shows stored chemical energy being released.' })
 
 );
@@ -175,13 +175,13 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-en-019', chapterId:'energy', difficulty:4,
     question:'Trace the energy journey: the Sun heats a lake → water evaporates and falls as rain on mountains → water flows downhill through a pipe → it spins a turbine → electricity is produced. How many energy TRANSFORMATIONS occur in this chain?',
     options:[
-      'One — the turbine converts water movement to electricity',
-      'Two — the Sun heats the water, then the turbine spins',
-      'Three — light energy → potential energy (raised water) → kinetic energy (flowing water) → electrical energy',
-      'None — energy just moves without changing form'
+      'One - the turbine converts water movement to electricity',
+      'Two - the Sun heats the water, then the turbine spins',
+      'Three - light energy → potential energy (raised water) → kinetic energy (flowing water) → electrical energy',
+      'None - energy just moves without changing form'
     ],
-    answer:'Three — light energy → potential energy (raised water) → kinetic energy (flowing water) → electrical energy',
+    answer:'Three - light energy → potential energy (raised water) → kinetic energy (flowing water) → electrical energy',
     hint:'Count every time energy changes from one form to another along the chain.',
-    explanation:'The chain has <b>three transformations</b>: (1) <b>Light energy</b> from the Sun evaporates water, which rises and is stored as <b>potential energy</b> (water held at height); (2) potential energy converts to <b>kinetic energy</b> as water rushes downhill through the pipe and spins the turbine; (3) kinetic energy converts to <b>electrical energy</b> in the generator. This is how <b>hydroelectric power</b> works — tracing all the way back to the Sun as the original energy source.' })
+    explanation:'The chain has <b>three transformations</b>: (1) <b>Light energy</b> from the Sun evaporates water, which rises and is stored as <b>potential energy</b> (water held at height); (2) potential energy converts to <b>kinetic energy</b> as water rushes downhill through the pipe and spins the turbine; (3) kinetic energy converts to <b>electrical energy</b> in the generator. This is how <b>hydroelectric power</b> works - tracing all the way back to the Sun as the original energy source.' })
 
 );

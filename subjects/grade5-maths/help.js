@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster Grade 5 — Chapter Help Data
+//  MathMaster Grade 5 - Chapter Help Data
 //  CHAPTER_HELP maps chapterId → {
 //    videoId: YouTube embed ID,
 //    title:   video title for display,
@@ -13,12 +13,12 @@ const CHAPTER_HELP = {
 
   numeration: {
     videoId: 'Yjc87rAqIYs',
-    title:   'Place Value — Grade 5',
+    title:   'Place Value - Grade 5',
     channel: 'Khan Academy',
     bullets: [
       '📍 Place value: each digit\'s position shows its value (units, tens, hundreds… up to millions)',
       '🔢 A 7-digit number: Millions | Hundred-thousands | Ten-thousands | Thousands | Hundreds | Tens | Units',
-      '🔼 Rounding: look at the digit to the right — if it\'s 5 or more, round up; if less, round down',
+      '🔼 Rounding: look at the digit to the right - if it\'s 5 or more, round up; if less, round down',
       '🏛️ Roman numerals: I=1, V=5, X=10, L=50, C=100, D=500, M=1000. Subtract when a smaller value comes before a larger (IX=9, CM=900)',
       '📈 Number sequences: find the pattern (add, subtract, multiply, or a combination)',
     ]
@@ -31,15 +31,15 @@ const CHAPTER_HELP = {
     bullets: [
       '🔤 BODMAS: Brackets → Orders (powers/roots) → Division → Multiplication → Addition → Subtraction',
       '✖️ Always do operations inside Brackets first',
-      '➗ Division and Multiplication have equal priority — work left to right',
-      '➕ Addition and Subtraction have equal priority — work left to right',
+      '➗ Division and Multiplication have equal priority - work left to right',
+      '➕ Addition and Subtraction have equal priority - work left to right',
       '📝 Multi-step problems: read carefully, identify what is asked, work step by step',
     ]
   },
 
   square_nums: {
     videoId: 'Ro38G7t0Hkk',
-    title:   'Square Numbers & Patterns — Grade 5',
+    title:   'Square Numbers & Patterns - Grade 5',
     channel: 'Khan Academy',
     bullets: [
       '⬜ A square number is a number multiplied by itself: 4² = 4 × 4 = 16',
@@ -59,7 +59,7 @@ const CHAPTER_HELP = {
       '🔺 Angles in a triangle always add to 180°',
       '🔷 Angles in a quadrilateral always add to 360°',
       '♻️ Lines of symmetry: a regular polygon with n sides has n lines of symmetry',
-      '🗺️ Coordinates: (x, y) — x goes across (horizontal), y goes up (vertical)',
+      '🗺️ Coordinates: (x, y) - x goes across (horizontal), y goes up (vertical)',
       '🔄 3D shapes: count faces (flat surfaces), edges (where faces meet), vertices (corners)',
     ]
   },
@@ -70,7 +70,7 @@ const CHAPTER_HELP = {
     channel: 'Math Antics',
     bullets: [
       '🍕 Proper fraction: numerator < denominator (e.g. ¾)',
-      '🔄 Improper fraction: numerator ≥ denominator (e.g. 7/4) — convert by dividing',
+      '🔄 Improper fraction: numerator ≥ denominator (e.g. 7/4) - convert by dividing',
       '🔀 Mixed number: whole + fraction (e.g. 1¾)',
       '➕ To add/subtract fractions: find a common denominator first',
       '✖️ To find a fraction of a quantity: divide by denominator, multiply by numerator',
@@ -97,7 +97,7 @@ const CHAPTER_HELP = {
     title:   'What Are Percentages?',
     channel: 'Math Antics',
     bullets: [
-      '% means "out of 100" — 45% = 45/100 = 0.45',
+      '% means "out of 100" - 45% = 45/100 = 0.45',
       '🔢 Finding % of a quantity: (percentage ÷ 100) × quantity',
       '📉 Discount: new price = original × (1 − discount%/100)',
       '📈 Percentage increase/decrease: (change ÷ original) × 100',
@@ -122,7 +122,7 @@ const CHAPTER_HELP = {
 
   average: {
     videoId: 'uhxtUt_-GyM',
-    title:   'Mean (Average) — Statistics',
+    title:   'Mean (Average) - Statistics',
     channel: 'Khan Academy',
     bullets: [
       '📊 Mean (average) = total sum ÷ number of items',
@@ -164,7 +164,7 @@ const CHAPTER_HELP = {
 
   area: {
     videoId: 'xCdxURXMdFY',
-    title:   'Area — Rectangles and Triangles',
+    title:   'Area - Rectangles and Triangles',
     channel: 'Math Antics',
     bullets: [
       '▭ Rectangle area = length × width',
@@ -220,7 +220,7 @@ const CHAPTER_HELP = {
 
   time: {
     videoId: 'iK1CUKzKB3c',
-    title:   '12-Hour & 24-Hour Clock — Grade 5',
+    title:   '12-Hour & 24-Hour Clock - Grade 5',
     channel: 'Khan Academy',
     bullets: [
       '🕐 12-hour clock uses am (midnight→noon) and pm (noon→midnight)',
@@ -238,8 +238,8 @@ const CHAPTER_HELP = {
     channel: 'Math Antics',
     bullets: [
       '📊 Bar chart: the height (or length) of each bar shows frequency or amount',
-      '📈 Line graph: shows how a value changes over time — look for trends',
-      '🌟 Pictogram: each symbol represents a fixed number — check the key!',
+      '📈 Line graph: shows how a value changes over time - look for trends',
+      '🌟 Pictogram: each symbol represents a fixed number - check the key!',
       '📋 Frequency table: organises data into groups with tallies or counts',
       '📐 Mean from a chart: sum all values ÷ total number of data points',
       '🎯 Mode = most common; Median = middle value; Range = max − min',
@@ -248,7 +248,7 @@ const CHAPTER_HELP = {
 
   conversions: {
     videoId: 'mI84WDfhuYA',
-    title:   'Unit Conversions — Grade 5',
+    title:   'Unit Conversions - Grade 5',
     channel: 'Khan Academy',
     bullets: [
       '📏 Length: 10 mm = 1 cm; 100 cm = 1 m; 1000 m = 1 km',

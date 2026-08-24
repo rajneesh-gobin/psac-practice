@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Subject Pack: Grade 5 Mathematics (MIE Mauritius)
 //  Defines CHAPTERS, SYLLABUS, FORMULAS, BADGES, GENERATORS
@@ -231,7 +231,7 @@ const FORMULAS = {
     'Range = highest value − lowest value',
     'Mode = most common value | Median = middle when sorted',
   ]},
-  conversions: { title:'🔄 Unit Conversions — All Facts', facts:[
+  conversions: { title:'🔄 Unit Conversions - All Facts', facts:[
     '── MASS ──   1 kg = 1,000 g  |  1 tonne = 1,000 kg',
     '── LENGTH ── 1 km = 1,000 m  |  1 m = 100 cm  |  1 cm = 10 mm',
     '   1 km = 100,000 cm  |  1 m = 1,000 mm',

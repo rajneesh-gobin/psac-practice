@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster Grade 5 — Extended Question Pool
+//  MathMaster Grade 5 - Extended Question Pool
 //  Adds ~200 questions to bring total to 300+
 // ══════════════════════════════════════════════
 
@@ -176,7 +176,7 @@ const EXTRA = [
     question:'A <b>kite</b> has:',
     options:['4 equal sides','2 pairs of equal adjacent sides','All angles equal','Opposite sides equal and parallel'],
     answer:'2 pairs of equal adjacent sides',
-    hint:'A kite looks like a flying kite — it has two pairs of sides that are equal, but they are adjacent (next to each other), not opposite.',
+    hint:'A kite looks like a flying kite - it has two pairs of sides that are equal, but they are adjacent (next to each other), not opposite.',
     explanation:'A kite has <b>2 pairs of equal adjacent sides</b>. It is not a parallelogram.' }),
 
   makeNum({ id:'G13', chapterId:'geometry', difficulty:3,
@@ -625,7 +625,7 @@ Object.assign(GENERATORS, {
       });
     }
     if (level === 3) {
-      // Isosceles triangle — find the base angles given top angle
+      // Isosceles triangle - find the base angles given top angle
       const top = rnd(20, 80);
       const base = (180 - top) / 2;
       return makeNum({
@@ -636,7 +636,7 @@ Object.assign(GENERATORS, {
         explanation:`(180° − ${top}°) ÷ 2 = ${180-top}° ÷ 2 = <b>${base}°</b>.`
       });
     }
-    // L4 — compass direction word problem
+    // L4 - compass direction word problem
     const dirs = ['North','East','South','West'];
     const startIdx = rnd(0, 3);
     const cw = Math.random() > 0.5;
@@ -680,7 +680,7 @@ Object.assign(GENERATORS, {
         explanation:`l + w = ${P} ÷ 2 = ${P/2}. Width = ${P/2} − ${l} = <b>${w} cm</b>.`
       });
     }
-    // L4 — fencing cost word problem
+    // L4 - fencing cost word problem
     const l = rnd(10, 40), w = rnd(5, 25);
     const P = 2 * (l + w);
     const costPerM = rnd(50, 200);
@@ -725,7 +725,7 @@ Object.assign(GENERATORS, {
         explanation:`${startStr} + ${durStr} = <b>${endStr}</b>.`
       });
     }
-    // L4 — find duration between two times (word problem)
+    // L4 - find duration between two times (word problem)
     const startH = rnd(7, 12), startM = [0,15,30,45][rnd(0,3)];
     const durH = rnd(1, 5), durM = [0,15,30,45][rnd(0,3)];
     let endM = startM + durM, carry = 0;
@@ -752,7 +752,7 @@ Object.assign(GENERATORS, {
     const partA = factor * a;
 
     if (level <= 2) {
-      // Direct proportion — price per unit
+      // Direct proportion - price per unit
       const qty1 = rnd(2, 8), price1 = rnd(10, 60);
       const qty2 = rnd(3, 15);
       const price2 = (price1 / qty1) * qty2;
@@ -784,7 +784,7 @@ Object.assign(GENERATORS, {
         explanation:`1 part = ${partA} ÷ ${a} = ${factor} g. Sugar = ${b} × ${factor} = <b>${factor*b} g</b>.`
       });
     }
-    // L4 — full sharing word problem
+    // L4 - full sharing word problem
     const prize = actualTotal * rnd(2, 5);
     const fac2 = prize / (a + b);
     if (!Number.isInteger(fac2)) {
@@ -820,7 +820,7 @@ Object.assign(GENERATORS, {
             hint:`Which number × itself = ${sq}?`, explanation:`${n} × ${n} = ${sq}, so √${sq} = <b>${n}</b>.` });
     }
     if (level === 3) {
-      // Number pattern — find next term
+      // Number pattern - find next term
       const start = rnd(2, 6), step = rnd(2, 4);
       const seq = [start, start*step, start*step*step, start*step*step*step];
       const next = seq[3] * step;
@@ -832,7 +832,7 @@ Object.assign(GENERATORS, {
         explanation:`Rule: ×${step} each time. ${seq[3]} × ${step} = <b>${next}</b>.`
       });
     }
-    // L4 — square area word problem
+    // L4 - square area word problem
     return makeNum({
       id:`GS${Date.now()}`, chapterId:'square_nums', difficulty:level,
       question:`A square room has an area of <b>${sq} m²</b>.<br>A tile is <b>1 m × 1 m</b>. How many tiles are needed to cover the floor?<br><i>Hint: first find the side length.</i>`,
@@ -871,7 +871,7 @@ Object.assign(GENERATORS, {
         explanation:`${base} × ${times} = <b>${result}</b>.`
       });
     }
-    // L4 — decimal word problem (money/measurement)
+    // L4 - decimal word problem (money/measurement)
     const price = (rnd(50, 500) / 10).toFixed(1);
     const qty = rnd(2, 8);
     const total = (parseFloat(price) * qty).toFixed(1);

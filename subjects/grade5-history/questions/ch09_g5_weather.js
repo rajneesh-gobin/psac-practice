@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 History & Geography — Chapter: Weather (Grade 5)
+﻿'use strict';
+// Grade 5 History & Geography - Chapter: Weather (Grade 5)
 // IDs format: g5ge-weather-NNN
 
 STATIC_QUESTIONS.push(
@@ -9,7 +9,7 @@ STATIC_QUESTIONS.push(
     options:['One','Two','Three','Four'],
     answer:'Two',
     hint:'Think about the hot months and the cooler months.',
-    explanation:'Mauritius has <b>two seasons</b>: summer (November to April — hot and rainy) and winter (May to October — cooler and drier).' }),
+    explanation:'Mauritius has <b>two seasons</b>: summer (November to April - hot and rainy) and winter (May to October - cooler and drier).' }),
 
   makeMCQ({ id:'g5ge-weather-002', chapterId:'g5ge-weather', difficulty:1,
     question:'Which months make up summer in Mauritius?',
@@ -29,7 +29,7 @@ STATIC_QUESTIONS.push(
     question:'What does a rain gauge measure?',
     options:['Wind speed','Rainfall (the amount of rain)','Wind direction','Air pressure'],
     answer:'Rainfall (the amount of rain)',
-    hint:'The name contains "rain" — what does it measure?',
+    hint:'The name contains "rain" - what does it measure?',
     explanation:'A <b>rain gauge</b> measures the amount of rainfall (precipitation) over a period of time. Rainfall is usually recorded in millimetres (mm).' }),
 
   makeMCQ({ id:'g5ge-weather-005', chapterId:'g5ge-weather', difficulty:1,
@@ -44,7 +44,7 @@ STATIC_QUESTIONS.push(
     options:['Temperature','Rainfall','Wind direction','Wind speed'],
     answer:'Wind speed',
     hint:'It has spinning cups that spin faster when the wind is stronger.',
-    explanation:'An <b>anemometer</b> measures wind speed. It has spinning cups — the faster they spin, the stronger the wind. Wind speed is usually measured in km/h.' }),
+    explanation:'An <b>anemometer</b> measures wind speed. It has spinning cups - the faster they spin, the stronger the wind. Wind speed is usually measured in km/h.' }),
 
   makeTF({ id:'g5ge-weather-007', chapterId:'g5ge-weather', difficulty:1,
     question:'During winter in Mauritius, the weather is mainly hot and rainy.',
@@ -61,7 +61,7 @@ STATIC_QUESTIONS.push(
       'Schools and businesses must close immediately'
     ],
     answer:'A cyclone is within 200 km of Mauritius',
-    hint:'Class 1 is the first warning — the cyclone is still far away.',
+    hint:'Class 1 is the first warning - the cyclone is still far away.',
     explanation:'A <b>Class 1</b> cyclone warning means a cyclone is within approximately <b>200 km</b> of Mauritius. It is an early warning; people should watch for updates but normal activities can continue.' }),
 
   makeMCQ({ id:'g5ge-weather-009', chapterId:'g5ge-weather', difficulty:2,
@@ -75,12 +75,12 @@ STATIC_QUESTIONS.push(
     question:'A Class 4 cyclone warning is the most serious. Which of the following best describes Class 4 conditions?',
     options:[
       'Slight rain and strong breezes expected',
-      'Cyclone is 200 km away — watch for updates',
+      'Cyclone is 200 km away - watch for updates',
       'Cyclone is about to hit with extremely strong, destructive winds',
       'All schools are closed but shops remain open'
     ],
     answer:'Cyclone is about to hit with extremely strong, destructive winds',
-    hint:'Class 4 is the highest level — the most dangerous situation.',
+    hint:'Class 4 is the highest level - the most dangerous situation.',
     explanation:'A <b>Class 4</b> warning means the cyclone centre is about to pass over or very close to Mauritius with extremely destructive winds. Everyone must remain sheltered until the warning is lifted.' }),
 
   makeMCQ({ id:'g5ge-weather-011', chapterId:'g5ge-weather', difficulty:2,
@@ -146,7 +146,7 @@ STATIC_QUESTIONS.push(
       'Wait for the drought to pass before doing anything'
     ],
     answer:'Store water in tanks and choose drought-resistant crops',
-    hint:'Droughts mean less water — how do you prepare for less water?',
+    hint:'Droughts mean less water - how do you prepare for less water?',
     explanation:'During a <b>drought</b> (a long period without enough rain), water is scarce. Farmers can prepare by <b>storing water</b> for irrigation, choosing <b>drought-resistant crop varieties</b>, and using water-saving techniques like drip irrigation.' }),
 
   makeMCQ({ id:'g5ge-weather-017', chapterId:'g5ge-weather', difficulty:3,
@@ -165,13 +165,13 @@ STATIC_QUESTIONS.push(
     question:'During which season is Mauritius most at risk from cyclones?',
     options:['Winter (May–October)','Summer (November–April)','All year equally','Spring (September–October) only'],
     answer:'Summer (November–April)',
-    hint:'Cyclones form over warm ocean water — in which season is the sea warmest?',
+    hint:'Cyclones form over warm ocean water - in which season is the sea warmest?',
     explanation:'Cyclones form over <b>warm ocean water</b>. The Indian Ocean around Mauritius is warmest in summer (November–April), making this the <b>cyclone season</b>. Sea surface temperatures must be above 26 °C for cyclones to develop.' }),
 
   makeTF({ id:'g5ge-weather-019', chapterId:'g5ge-weather', difficulty:2,
     question:'A Class 2 cyclone warning means stronger and closer danger than a Class 1 warning.',
     answer:true,
     hint:'Higher class numbers mean the cyclone is closer and more dangerous.',
-    explanation:'True. Cyclone warnings go from <b>Class 1</b> (cyclone within ~200 km — early warning) to <b>Class 4</b> (cyclone about to hit — maximum danger). Class 2 means the cyclone is within ~100 km and conditions are deteriorating.' })
+    explanation:'True. Cyclone warnings go from <b>Class 1</b> (cyclone within ~200 km - early warning) to <b>Class 4</b> (cyclone about to hit - maximum danger). Class 2 means the cyclone is within ~100 km and conditions are deteriorating.' })
 
 );

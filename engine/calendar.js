@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 const Calendar = (() => {
 
   // ── State ──────────────────────────────────────
@@ -116,11 +116,11 @@ const Calendar = (() => {
     const { data: existing, error: selErr } = await _sb.from('study_schedules')
       .select('id').eq('student_id', _studentId).limit(1).maybeSingle();
     if (selErr) {
-      console.error('[Calendar] study_schedules query failed — table may not exist yet. Run supabase-calendar-migration.sql in your Supabase SQL editor.', selErr);
+      console.error('[Calendar] study_schedules query failed - table may not exist yet. Run supabase-calendar-migration.sql in your Supabase SQL editor.', selErr);
       return null;
     }
     if (existing?.id) { _scheduleId = existing.id; return _scheduleId; }
-    // No schedule found — create one
+    // No schedule found - create one
     const profile  = typeof Auth !== 'undefined' ? Auth.getParentProfile() : null;
     const { data, error } = await _sb.from('study_schedules').insert({
       student_id: _studentId,
@@ -128,7 +128,7 @@ const Calendar = (() => {
       settings:   _gen,
     }).select('id').single();
     if (error) {
-      console.error('[Calendar] study_schedules insert failed — run supabase-calendar-migration.sql in your Supabase SQL editor.', error);
+      console.error('[Calendar] study_schedules insert failed - run supabase-calendar-migration.sql in your Supabase SQL editor.', error);
       return null;
     }
     if (!data) return null;
@@ -307,7 +307,7 @@ const Calendar = (() => {
   async function saveEvent() {
     const errEl = _el('add-event-error');
     if (!_sb)         { _showErr(errEl, 'Connection not ready. Please refresh the page.'); return; }
-    if (!_studentId)  { _showErr(errEl, 'No student selected — please choose a student from the dropdown.'); return; }
+    if (!_studentId)  { _showErr(errEl, 'No student selected - please choose a student from the dropdown.'); return; }
     const date  = _el('add-event-date')?.value;
     const type  = _el('add-event-type')?.value  || 'other';
     const label = (_el('add-event-label')?.value || '').trim();
@@ -335,7 +335,7 @@ const Calendar = (() => {
 
     // ── INSERT new entry ───────────────────────────
     const sid = await _ensureSchedule();
-    if (!sid)   { _showErr(errEl, 'Database not ready — please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.'); return; }
+    if (!sid)   { _showErr(errEl, 'Database not ready - please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.'); return; }
 
     const { data, error } = await _sb.from('schedule_entries').insert({
       schedule_id: sid, student_id: _studentId,
@@ -562,7 +562,7 @@ const Calendar = (() => {
     // Persist
     const sid = await _ensureSchedule();
     if (!sid) {
-      _showErr(errEl, 'Database not ready — please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.');
+      _showErr(errEl, 'Database not ready - please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.');
       if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
       return;
     }
@@ -592,7 +592,7 @@ const Calendar = (() => {
     _viewYear = d.getFullYear(); _viewMonth = d.getMonth();
     closeGenModal();
     _renderCalendar();
-    if (typeof toast !== 'undefined') toast(`Timetable generated — ${allEntries.length} sessions across ${activeSubjects.length} subjects 📅`, 3500);
+    if (typeof toast !== 'undefined') toast(`Timetable generated - ${allEntries.length} sessions across ${activeSubjects.length} subjects 📅`, 3500);
     if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
   }
 
@@ -733,7 +733,7 @@ const Calendar = (() => {
 
     const displayDate = _parseDate(firstDate).toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
     if (dateEl)  dateEl.textContent  = displayDate;
-    if (titleEl) titleEl.textContent = isToday ? '📅 Today\'s Study Plan' : `📅 Next Up — ${displayDate}`;
+    if (titleEl) titleEl.textContent = isToday ? '📅 Today\'s Study Plan' : `📅 Next Up - ${displayDate}`;
 
     // Build cards
     const subjects = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];

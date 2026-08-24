@@ -1,4 +1,4 @@
-// Netlify Function — Secure student PIN login
+﻿// Netlify Function - Secure student PIN login
 // Handles:
 //   • scrypt PIN verification (no plain PIN ever returned to browser)
 //   • Server-side lockout (persists across page refreshes)
@@ -66,7 +66,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST')    return { statusCode: 405, headers, body: '{}' };
 
   if (!SUPABASE_KEY) {
-    // Service role key not configured — fall through to client-side (dev only)
+    // Service role key not configured - fall through to client-side (dev only)
     return { statusCode: 503, headers, body: JSON.stringify({ error: 'not_configured' }) };
   }
 
@@ -88,7 +88,7 @@ exports.handler = async (event) => {
   );
   const student = rows?.[0];
 
-  // Always return the same generic error — no username enumeration
+  // Always return the same generic error - no username enumeration
   if (!student) {
     return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid credentials', attemptsLeft: MAX_ATTEMPTS }) };
   }
@@ -106,7 +106,7 @@ exports.handler = async (event) => {
   if (student.pin_hash) {
     valid = await verifyPin(String(pin), student.pin_hash);
   } else if (student.pin) {
-    // Legacy plain-text path — lazy migration on success
+    // Legacy plain-text path - lazy migration on success
     valid = String(pin) === String(student.pin);
     if (valid) needsRehash = true;
   }
@@ -130,7 +130,7 @@ exports.handler = async (event) => {
     };
   }
 
-  // ── Correct PIN — reset counter, migrate hash if needed ──
+  // ── Correct PIN - reset counter, migrate hash if needed ──
   const update = { pin_attempts: 0, pin_locked_until: null };
   if (needsRehash) {
     update.pin_hash = await hashPin(String(pin));
@@ -138,7 +138,7 @@ exports.handler = async (event) => {
   }
   await sbPatch('students', student.id, update);
 
-  // Return only the fields _loginStudentRow needs — never the PIN
+  // Return only the fields _loginStudentRow needs - never the PIN
   return {
     statusCode: 200,
     headers,

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Science — Chapter: Air (pressure, fire triangle, pollution)
+﻿'use strict';
+// Grade 6 Science - Chapter: Air (pressure, fire triangle, pollution)
 // IDs format: g6sci-air-NNN
 
 const _SVG_FIRE_TRI = `<svg viewBox="0 0 200 138" width="200" height="138" style="display:block;margin:6px auto;background:#fef2f2;border-radius:8px;border:1px solid #fca5a5">
@@ -25,7 +25,7 @@ STATIC_QUESTIONS.push(
     question:'A fire extinguisher sprays foam over a fire to smother it. Which side of the Fire Triangle does this target?',
     options:['Heat','Oxygen','Fuel','Carbon dioxide'],
     answer:'Oxygen',
-    hint:'Smothering means covering — what does the foam cut off from reaching the fire?',
+    hint:'Smothering means covering - what does the foam cut off from reaching the fire?',
     explanation:'Foam smothers the fire by cutting off the <b>oxygen supply</b>. Without oxygen, the fire cannot continue to burn and is extinguished.' }),
 
   makeMCQ({ id:'g6sci-air-003', chapterId:'g6-air', difficulty:2,
@@ -40,7 +40,7 @@ STATIC_QUESTIONS.push(
     options:['Thermometer','Anemometer','Barometer','Hygrometer'],
     answer:'Barometer',
     hint:'The "baro-" prefix comes from the Greek word for weight/pressure.',
-    explanation:'A <b>barometer</b> measures atmospheric (air) pressure. Changes in air pressure help meteorologists predict weather — falling pressure often signals rain or storms, rising pressure indicates fair weather.' }),
+    explanation:'A <b>barometer</b> measures atmospheric (air) pressure. Changes in air pressure help meteorologists predict weather - falling pressure often signals rain or storms, rising pressure indicates fair weather.' }),
 
   makeTF({ id:'g6sci-air-005', chapterId:'g6-air', difficulty:2,
     question:'Air pressure is higher at the top of a mountain than at sea level.',
@@ -65,7 +65,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Sulphur dioxide and nitrogen oxides from burning fossil fuels dissolving in rainwater',
     hint:'Factory smoke and vehicle exhaust contain gases that react with rain.',
-    explanation:'When <b>sulphur dioxide (SO&#8322;)</b> and <b>nitrogen oxides (NO&#8339;)</b> from burning coal and petrol dissolve in rainwater, they form sulphuric and nitric acid — producing acid rain, which damages forests, lakes and buildings.' }),
+    explanation:'When <b>sulphur dioxide (SO&#8322;)</b> and <b>nitrogen oxides (NO&#8339;)</b> from burning coal and petrol dissolve in rainwater, they form sulphuric and nitric acid - producing acid rain, which damages forests, lakes and buildings.' }),
 
   makeMCQ({ id:'g6sci-air-008', chapterId:'g6-air', difficulty:2,
     question:'The ozone layer in the atmosphere is important because it:',
@@ -90,7 +90,7 @@ STATIC_QUESTIONS.push(
     question:'Carbon dioxide makes up the largest proportion of air.',
     answer:false,
     hint:'Think about what Grade 5 taught you about air composition.',
-    explanation:'<b>Nitrogen (~78%)</b> is the most abundant gas in air, followed by oxygen (~21%). Carbon dioxide makes up only about 0.04% of air — a very small amount, but enough to have a significant greenhouse effect.' })
+    explanation:'<b>Nitrogen (~78%)</b> is the most abundant gas in air, followed by oxygen (~21%). Carbon dioxide makes up only about 0.04% of air - a very small amount, but enough to have a significant greenhouse effect.' })
 
 );
 
@@ -120,7 +120,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Keep warm, move your body, and keep organs working',
     hint:'Think about what you need energy for every day.',
-    explanation:'The Grade 6 Science Pupil\'s Book explains that the body uses <b>oxygen + food → energy</b>. This energy: (1) keeps you <b>warm</b>; (2) allows <b>movement</b>; (3) keeps <b>organs working</b>. Without enough oxygen, body functions slow down — this is why we cannot survive more than a few minutes without breathing.' }),
+    explanation:'The Grade 6 Science Pupil\'s Book explains that the body uses <b>oxygen + food → energy</b>. This energy: (1) keeps you <b>warm</b>; (2) allows <b>movement</b>; (3) keeps <b>organs working</b>. Without enough oxygen, body functions slow down - this is why we cannot survive more than a few minutes without breathing.' }),
 
   makeTF({ id:'g6sci-air-014', chapterId:'g6-air', difficulty:2,
     question:'Drinking juice through a straw works because of a difference in air pressure (PSAC 2025 Q7a).',
@@ -144,18 +144,18 @@ STATIC_QUESTIONS.push(
       'It only harms animals, not plants'
     ],
     answer:'Soot and smoke block the tiny pores on leaves, preventing gas exchange and photosynthesis',
-    hint:'Leaves breathe through tiny openings — what happens if these get blocked?',
+    hint:'Leaves breathe through tiny openings - what happens if these get blocked?',
     explanation:'The Grade 6 Science Pupil\'s Book explains that air pollution harms plants because <b>soot blocks the tiny pores (stomata) on leaves</b>. Without open pores, leaves cannot exchange gases (take in CO₂, release O₂) and cannot photosynthesize properly. Heavy pollution can kill plants entirely. Air pollution also puts humans at risk of lung cancer.' }),
 
   makeMCQ({ id:'g6sci-air-017', chapterId:'g6-air', difficulty:3,
     question:'A cockroach is placed in a sealed jar with air. After 30 minutes the oxygen level falls from 21% to about 15%. What PROCESS caused this?',
     options:[
       'The cockroach photosynthesising inside the jar',
-      'The cockroach respiring — using oxygen to release energy from food',
+      'The cockroach respiring - using oxygen to release energy from food',
       'Nitrogen dissolving in the oxygen',
       'The cockroach producing oxygen as a waste product'
     ],
-    answer:'The cockroach respiring — using oxygen to release energy from food',
+    answer:'The cockroach respiring - using oxygen to release energy from food',
     hint:'The Grade 6 textbook describes this exact experiment to show how animals use up oxygen.',
     explanation:'The Grade 6 Science Pupil\'s Book describes this experiment: a cockroach in a sealed jar uses <b>oxygen for respiration</b> (breaking down food to release energy). O₂ drops from 21% → ~15% in 30 minutes → ~8% after 1 hour. This shows that ALL living things consume oxygen during respiration and release carbon dioxide as a waste product.' }),
 
@@ -175,12 +175,12 @@ STATIC_QUESTIONS.push(
     question:'The Grade 6 textbook states air pressure is approximately 10 tonnes per m². A suction cup (area ~10 cm²) sticks to a smooth wall. Which statement BEST explains why it holds?',
     options:[
       'The suction cup produces its own glue when pressed against the wall',
-      'The cup has no air inside at all — a perfect vacuum',
+      'The cup has no air inside at all - a perfect vacuum',
       'Air pressure outside the cup (pressing on the flat back) is greater than the low-pressure zone inside the cup, creating a net inward force',
       'The cup sticks because of static electricity between rubber and the wall'
     ],
     answer:'Air pressure outside the cup (pressing on the flat back) is greater than the low-pressure zone inside the cup, creating a net inward force',
     hint:'When you press the cup, you squeeze out most of the air. Outside pressure then has nothing equal to push against.',
-    explanation:'The Grade 6 Science Pupil\'s Book states air pressure is about <b>10 tonnes (10,000 kg) per m²</b> — an enormous force we don\'t normally notice because it acts equally from all directions. A suction cup works by <b>reducing the pressure inside</b> (squeezing out air). The full atmospheric pressure then acts on the outside of the cup, pressing it firmly against the wall. The cup "holds" because outside pressure > inside pressure.' })
+    explanation:'The Grade 6 Science Pupil\'s Book states air pressure is about <b>10 tonnes (10,000 kg) per m²</b> - an enormous force we don\'t normally notice because it acts equally from all directions. A suction cup works by <b>reducing the pressure inside</b> (squeezing out air). The full atmospheric pressure then acts on the outside of the cup, pressing it firmly against the wall. The cup "holds" because outside pressure > inside pressure.' })
 
 );

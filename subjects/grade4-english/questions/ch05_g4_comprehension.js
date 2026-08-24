@@ -1,10 +1,10 @@
-'use strict';
-// Grade 4 English — Chapter: Reading Comprehension
+﻿'use strict';
+// Grade 4 English - Chapter: Reading Comprehension
 // IDs format: g4eng-comp-NNN
 //
 // Passage used in this chapter:
 // ─────────────────────────────────────────────────────────────────────
-// THE MORNING MARKET (MIE Grade 4 — Mauritius context)
+// THE MORNING MARKET (MIE Grade 4 - Mauritius context)
 //
 // Every morning before sunrise, fishermen in Mauritius set out to sea
 // in their colourful boats. They cast their nets and wait patiently for
@@ -30,13 +30,13 @@ STATIC_QUESTIONS.push(
     options:['After sunrise','Before sunrise','At midday','At seven o\'clock'],
     answer:'Before sunrise',
     hint:'Read the first sentence of paragraph 1 carefully.',
-    explanation:'The passage states: "Every morning <b>before sunrise</b>, fishermen in Mauritius set out to sea." This is a direct "find" question — the answer is in the text.' }),
+    explanation:'The passage states: "Every morning <b>before sunrise</b>, fishermen in Mauritius set out to sea." This is a direct "find" question - the answer is in the text.' }),
 
   makeMCQ({ id:'g4eng-comp-002', chapterId:'g4eng-comprehension', difficulty:1,
     question:_PASSAGE_G4 + '<hr>What do the fishermen use to catch fish?',
     options:['Fishing rods','Hooks','Nets','Baskets'],
     answer:'Nets',
-    hint:'Read paragraph 1 — what do the fishermen cast into the sea?',
+    hint:'Read paragraph 1 - what do the fishermen cast into the sea?',
     explanation:'The passage states: "They cast their <b>nets</b> and wait patiently for fish to swim inside." The answer is directly in the text.' }),
 
   makeMCQ({ id:'g4eng-comp-003', chapterId:'g4eng-comprehension', difficulty:1,
@@ -50,21 +50,21 @@ STATIC_QUESTIONS.push(
     question:_PASSAGE_G4 + '<hr>What does the word "vendors" mean as used in the passage?',
     options:['Fishermen at sea','People who sell things','Buyers at the market','Cooks who prepare fish'],
     answer:'People who sell things',
-    hint:'Vendors arrange the fish on tables — what kind of person arranges goods for sale?',
+    hint:'Vendors arrange the fish on tables - what kind of person arranges goods for sale?',
     explanation:'"Vendors" are <b>people who sell things</b>. In the passage, vendors arrange the fish to sell to buyers. Context clue: they arrange goods on tables, which is what sellers do at a market.' }),
 
   makeMCQ({ id:'g4eng-comp-005', chapterId:'g4eng-comprehension', difficulty:2,
     question:_PASSAGE_G4 + '<hr>Why do people come EARLY to the fish market?',
     options:['To avoid the crowd','To choose the best fish','To help the fishermen','To watch the boats arrive'],
     answer:'To choose the best fish',
-    hint:'Read paragraph 2 carefully — the passage gives a direct reason.',
+    hint:'Read paragraph 2 carefully - the passage gives a direct reason.',
     explanation:'The passage says: "Housewives, cooks and shopkeepers come early <b>to choose the best fish</b>." They arrive early because the best fish sells out quickly.' }),
 
   makeMCQ({ id:'g4eng-comp-006', chapterId:'g4eng-comprehension', difficulty:2,
     question:_PASSAGE_G4 + '<hr>Name ONE type of fish mentioned in the passage.',
     options:['Tuna','Capitaine','Sardine','Barracuda'],
     answer:'Capitaine',
-    hint:'Paragraph 2 lists the most popular fish — look for the names.',
+    hint:'Paragraph 2 lists the most popular fish - look for the names.',
     explanation:'The passage names three popular fish: <b>capitaine</b>, cordonnier and red snapper. All three are popular fish in Mauritius. Capitaine (also called golden snapper) is a well-known Mauritian fish.' }),
 
   makeMCQ({ id:'g4eng-comp-007', chapterId:'g4eng-comprehension', difficulty:2,
@@ -72,14 +72,14 @@ STATIC_QUESTIONS.push(
     options:['He buys the fish','He carries the heavy basket home','He arranges the fish on ice','He casts the fishing nets'],
     answer:'He carries the heavy basket home',
     hint:'Paragraph 3 describes what Rama does at the market.',
-    explanation:'The passage says: "He helps her <b>carry the heavy basket back home</b>." Rama does not buy the fish — his grandmother does. He helps by carrying the load.' }),
+    explanation:'The passage says: "He helps her <b>carry the heavy basket back home</b>." Rama does not buy the fish - his grandmother does. He helps by carrying the load.' }),
 
   makeMCQ({ id:'g4eng-comp-008', chapterId:'g4eng-comprehension', difficulty:2,
     question:_PASSAGE_G4 + '<hr>Why are the fish placed on TABLES OF ICE?',
     options:['To make them look nice','To count them easily','To keep them fresh and cold','Because it is easier to carry'],
     answer:'To keep them fresh and cold',
     hint:'Think about what ice does to food. Why do we put fish on ice?',
-    explanation:'Fish are placed on ice <b>to keep them fresh and cold</b>. Ice slows down the growth of bacteria and prevents fish from going bad. This is a comprehension inference — the passage says "tables of ice" and you use your knowledge to understand why.' }),
+    explanation:'Fish are placed on ice <b>to keep them fresh and cold</b>. Ice slows down the growth of bacteria and prevents fish from going bad. This is a comprehension inference - the passage says "tables of ice" and you use your knowledge to understand why.' }),
 
   makeMCQ({ id:'g4eng-comp-009', chapterId:'g4eng-comprehension', difficulty:3,
     question:_PASSAGE_G4 + '<hr>What does Rama\'s grandmother mean when she says "Fresh fish makes us strong and healthy"?',
@@ -91,7 +91,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Eating fresh fish is good for our bodies and gives us nutrients.',
     hint:'Think about what "strong and healthy" means in terms of the body.',
-    explanation:'The grandmother means that <b>eating fresh fish provides nutrients that are good for our bodies</b> — it helps us grow and stay healthy. Fresh fish contains protein, vitamins and minerals. This is an inference question — you must go beyond the literal words.' }),
+    explanation:'The grandmother means that <b>eating fresh fish provides nutrients that are good for our bodies</b> - it helps us grow and stay healthy. Fresh fish contains protein, vitamins and minerals. This is an inference question - you must go beyond the literal words.' }),
 
   makeMCQ({ id:'g4eng-comp-010', chapterId:'g4eng-comprehension', difficulty:4,
     question:_PASSAGE_G4 + '<hr>Based on the WHOLE PASSAGE, which statement BEST describes Rama\'s character?',
@@ -103,7 +103,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Rama is a helpful and caring grandson who appreciates Mauritius traditions.',
     hint:'Think about everything the passage tells us about Rama: what he does, how he feels, what he learns.',
-    explanation:'The passage shows Rama is <b>helpful</b> (he carries the basket), <b>caring</b> (he loves visiting with his grandmother), and <b>connected to Mauritius traditions</b> (the fish market is a traditional part of Mauritian life). This is a character inference question — you must read the whole passage and draw a conclusion about the person.' })
+    explanation:'The passage shows Rama is <b>helpful</b> (he carries the basket), <b>caring</b> (he loves visiting with his grandmother), and <b>connected to Mauritius traditions</b> (the fish market is a traditional part of Mauritian life). This is a character inference question - you must read the whole passage and draw a conclusion about the person.' })
 
 );
 
@@ -162,19 +162,19 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The best fish sell out quickly, so early buyers get the freshest ones.',
     hint:'Why would people NEED to arrive early? What might happen to the best fish if they arrive late?',
-    explanation:'If people come early to choose the best fish, it implies that <b>the best fish sell out quickly</b>. The early buyer gets the freshest, highest quality fish. This is an inference question — you must read between the lines.' }),
+    explanation:'If people come early to choose the best fish, it implies that <b>the best fish sell out quickly</b>. The early buyer gets the freshest, highest quality fish. This is an inference question - you must read between the lines.' }),
 
   makeMCQ({ id:'g4eng-comp-016', chapterId:'g4eng-comprehension', difficulty:3,
     question:_PASSAGE_G4 + '<hr>Which literary device is used in: "The smell of the sea fills the air"?',
     options:[
-      'A simile — comparing two things using "like" or "as"',
-      'Personification — giving the smell human qualities',
-      'Sensory imagery — appealing to the sense of smell to create a vivid picture',
-      'Rhyme — two words that sound the same'
+      'A simile - comparing two things using "like" or "as"',
+      'Personification - giving the smell human qualities',
+      'Sensory imagery - appealing to the sense of smell to create a vivid picture',
+      'Rhyme - two words that sound the same'
     ],
-    answer:'Sensory imagery — appealing to the sense of smell to create a vivid picture',
+    answer:'Sensory imagery - appealing to the sense of smell to create a vivid picture',
     hint:'The sentence appeals to one of our five senses. Which sense? What does that type of description create?',
-    explanation:'"The smell of the sea fills the air" uses <b>sensory imagery</b> — it appeals to the sense of <b>smell</b> to help the reader imagine being at the market. Good writers use sensory details (sight, sound, smell, taste, touch) to make writing vivid.' }),
+    explanation:'"The smell of the sea fills the air" uses <b>sensory imagery</b> - it appeals to the sense of <b>smell</b> to help the reader imagine being at the market. Good writers use sensory details (sight, sound, smell, taste, touch) to make writing vivid.' }),
 
   makeMCQ({ id:'g4eng-comp-017', chapterId:'g4eng-comprehension', difficulty:3,
     question:_PASSAGE_G4 + '<hr>Which sentence from the passage is an OPINION rather than a fact?',
@@ -186,7 +186,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Fresh fish makes us strong and healthy."',
     hint:'A fact can be checked and proven true or false. An opinion is someone\'s belief or judgement.',
-    explanation:'"<b>Fresh fish makes us strong and healthy</b>" is the grandmother\'s <b>opinion/belief</b> — it cannot be verified from the passage alone. The other three sentences are facts that can be observed. Distinguishing fact from opinion is an important comprehension skill.' }),
+    explanation:'"<b>Fresh fish makes us strong and healthy</b>" is the grandmother\'s <b>opinion/belief</b> - it cannot be verified from the passage alone. The other three sentences are facts that can be observed. Distinguishing fact from opinion is an important comprehension skill.' }),
 
   makeMCQ({ id:'g4eng-comp-018', chapterId:'g4eng-comprehension', difficulty:3,
     question:_PASSAGE_G4 + '<hr>What is a suitable alternative TITLE for this passage?',
@@ -204,12 +204,12 @@ STATIC_QUESTIONS.push(
     question:_PASSAGE_G4 + '<hr>How does the writer create a sense of COMMUNITY in this passage?',
     options:[
       'By describing only the fishermen\'s work at sea.',
-      'By showing many different people — fishermen, vendors, housewives, cooks, shopkeepers, Rama and his grandmother — all connected through the fish market.',
+      'By showing many different people - fishermen, vendors, housewives, cooks, shopkeepers, Rama and his grandmother - all connected through the fish market.',
       'By listing the types of fish available.',
       'By writing about the smell of the sea in paragraph 2.'
     ],
-    answer:'By showing many different people — fishermen, vendors, housewives, cooks, shopkeepers, Rama and his grandmother — all connected through the fish market.',
+    answer:'By showing many different people - fishermen, vendors, housewives, cooks, shopkeepers, Rama and his grandmother - all connected through the fish market.',
     hint:'Look at the range of people mentioned across the three paragraphs. What do they all have in common?',
-    explanation:'The writer mentions <b>many different people from different roles</b> — all gathering at or connected to the fish market. This creates a sense of a <b>vibrant, interdependent community</b>. Noticing how a writer builds meaning across a whole passage is a higher-order comprehension skill.' })
+    explanation:'The writer mentions <b>many different people from different roles</b> - all gathering at or connected to the fish market. This creates a sense of a <b>vibrant, interdependent community</b>. Noticing how a writer builds meaning across a whole passage is a higher-order comprehension skill.' })
 
 );

@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice Grade 5 — Application Logic
+//  PSAC Exam Practice Grade 5 - Application Logic
 // ══════════════════════════════════════════════
 
 // ── STATE ─────────────────────────────────────
@@ -399,7 +399,7 @@ function renderSymmetryGrid(q, cont, selectedAnswer, disabled) {
 
   cont.innerHTML = `
     <div class="sym-wrap">
-      <span class="sym-label">🪞 Symmetry — ${isVertical ? 'Vertical' : 'Horizontal'} axis</span>
+      <span class="sym-label">🪞 Symmetry - ${isVertical ? 'Vertical' : 'Horizontal'} axis</span>
       <div class="sym-grid" style="${colsStyle}">${cells}</div>
       ${legend}
     </div>`;
@@ -660,7 +660,7 @@ function updateXPBar() {
 }
 
 function showLevelUp(level) {
-  toast(`🎉 Level Up! You're now Level ${level} — ${LEVEL_NAMES[level - 1] || ''}!`, 4000);
+  toast(`🎉 Level Up! You're now Level ${level} - ${LEVEL_NAMES[level - 1] || ''}!`, 4000);
   launchConfetti();
 }
 
@@ -700,7 +700,7 @@ async function renderParentDashboard() {
   if (_el('pd-children-grid')) _el('pd-children-grid').classList.toggle('hidden', !hasStudents);
   if (_el('pd-detail-panel'))  _el('pd-detail-panel').classList.add('hidden');
 
-  // Plan banner — load async, non-blocking
+  // Plan banner - load async, non-blocking
   const parentProfile = Auth.getParentProfile?.();
   if (parentProfile?.id && _el('pd-plan-banner')) {
     Store.getUserPlan(parentProfile.id).then(({ plan_id, plan, subscription }) => {
@@ -714,7 +714,7 @@ async function renderParentDashboard() {
       if (expEl) {
         expEl.textContent = subscription?.expires_at
           ? `Active until ${new Date(subscription.expires_at).toLocaleDateString()}`
-          : 'No expiry — free tier';
+          : 'No expiry - free tier';
       }
     }).catch(() => {});
   }
@@ -850,7 +850,7 @@ const PD = (() => {
       return `<div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
         <span class="text-xl select-none">${ch?.icon || '📚'}</span>
         <div class="flex-1 min-w-0">
-          <div class="font-semibold text-sm text-gray-800 dark:text-white">${ch?.name || a.chapter_id || 'Any Chapter'} — ${dlv}</div>
+          <div class="font-semibold text-sm text-gray-800 dark:text-white">${ch?.name || a.chapter_id || 'Any Chapter'} - ${dlv}</div>
           ${a.note ? `<div class="text-xs text-gray-400 italic">"${a.note}"</div>` : ''}
           <div class="text-xs text-gray-400">${new Date(a.created_at).toLocaleDateString()}</div>
         </div>
@@ -1026,7 +1026,7 @@ async function _renderStudentAssignments(studentId) {
       <div class="flex items-start gap-3">
         <span class="text-2xl select-none mt-0.5">${ch?.icon || '📚'}</span>
         <div class="flex-1 min-w-0">
-          <div class="text-sm font-bold text-gray-800 dark:text-white">${subjectName} — ${chName}</div>
+          <div class="text-sm font-bold text-gray-800 dark:text-white">${subjectName} - ${chName}</div>
           <div class="text-xs text-blue-600 dark:text-blue-400 font-medium mt-0.5">${dlv}</div>
           ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic mt-1">"${a.note}"</div>` : ''}
         </div>
@@ -1154,7 +1154,7 @@ function renderDashboard() {
   const startHere = document.getElementById('dash-start-here');
   if (startHere) startHere.classList.toggle('hidden', DB.stats.totalAttempted > 0);
 
-  // Assignments from parent (Supabase — async, non-blocking)
+  // Assignments from parent (Supabase - async, non-blocking)
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
 
   // Exam mode visibility (respect restrictions)
@@ -1226,7 +1226,7 @@ function renderChapterSelect() {
         <span class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">✨ Bonus Enrichment Topics</span>
         <div class="flex-1 h-px bg-amber-200 dark:bg-amber-800/40"></div>
       </div>
-      <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-1">Derived from the syllabus — great for extra practice on specific themes</p>
+      <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-1">Derived from the syllabus - great for extra practice on specific themes</p>
     </div>`;
     html += enrichment.map(_card).join('');
   }
@@ -1422,7 +1422,7 @@ function generatePrintablePaper() {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} — Mock Exam ${year}</title>
+<title>Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} - Mock Exam ${year}</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #111; padding: 20px; background: #fff; }
@@ -1476,7 +1476,7 @@ function generatePrintablePaper() {
   <button class="no-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
 
   <div class="header-box">
-    <div class="ministry">Republic of Mauritius — Ministry of Education</div>
+    <div class="ministry">Republic of Mauritius - Ministry of Education</div>
     <div class="title">End-of-Year Assessment ${year}</div>
     <div class="subtitle">${_activeSubjectLabel().name} &nbsp;|&nbsp; Grade ${_activeSubjectLabel().grade}</div>
     <div class="meta">
@@ -1500,7 +1500,7 @@ function generatePrintablePaper() {
   </div>
 
   <!-- SECTION A -->
-  <div class="section-head">SECTION A &nbsp;—&nbsp; 60 Marks &nbsp;(Questions 1–30)</div>
+  <div class="section-head">SECTION A &nbsp;-&nbsp; 60 Marks &nbsp;(Questions 1–30)</div>
   <div class="section-sub">Answer all 30 questions. Each question carries <b>2 marks</b>. Write your answer on the line provided. For MCQ, circle or fill in the correct letter.</div>
   <table>
     <tr><td></td><td></td><td class="marks-header">Marks</td></tr>
@@ -1509,7 +1509,7 @@ function generatePrintablePaper() {
   </table>
 
   <!-- SECTION B -->
-  <div class="section-head">SECTION B &nbsp;—&nbsp; 40 Marks &nbsp;(Questions 31–40)</div>
+  <div class="section-head">SECTION B &nbsp;-&nbsp; 40 Marks &nbsp;(Questions 31–40)</div>
   <div class="section-sub">Answer all 10 questions. Each question carries <b>4 marks</b>. Show all working. Read each problem carefully.</div>
   <table>
     <tr><td></td><td></td><td class="marks-header">Marks</td></tr>
@@ -1526,7 +1526,7 @@ function generatePrintablePaper() {
 
   <div class="footer">
     Generated by PSAC Exam Practice · MIE Mauritius Curriculum · psac-master &nbsp;|&nbsp;
-    This is a practice paper — not an official MIE document.
+    This is a practice paper - not an official MIE document.
   </div>
 </div>
 </body>
@@ -1669,7 +1669,7 @@ function submitExam() {
 function renderResults(correct, total, pct, timeTaken, chapterStats) {
   const banner = document.getElementById('results-banner');
   const emoji = pct>=90?'🏆':pct>=70?'🎉':pct>=50?'👍':'💪';
-  const grade = pct>=90?'Outstanding — A+':pct>=80?'Excellent — A':pct>=70?'Good — B':pct>=60?'Satisfactory — C':pct>=50?'Pass — D':'Needs more practice — Try again!';
+  const grade = pct>=90?'Outstanding - A+':pct>=80?'Excellent - A':pct>=70?'Good - B':pct>=60?'Satisfactory - C':pct>=50?'Pass - D':'Needs more practice - Try again!';
   const cls = pct>=70?'banner-a':pct>=50?'banner-b':pct>=30?'banner-c':'banner-f';
   banner.className = `rounded-2xl p-8 text-white text-center shadow-xl ${cls}`;
   document.getElementById('result-emoji').textContent = emoji;
@@ -1745,10 +1745,10 @@ function _updateDiffBadge(q) {
 
   const l4Label = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.level4Label) || 'Challenge';
   const LEVELS = {
-    1: { cls: 'chip green text-xs',  badge: '⭐ Basic',    lab: '⭐ Level 1 — Basic',           dsc: 'Recall and recognition. Great for building confidence.' },
-    2: { cls: 'chip blue text-xs',   badge: '⭐⭐ Medium',  lab: '⭐⭐ Level 2 — Medium',         dsc: 'Application questions. Tests understanding in context.' },
-    3: { cls: 'chip amber text-xs',  badge: '⭐⭐⭐ Hard',  lab: '⭐⭐⭐ Level 3 — Hard',         dsc: 'Multi-step reasoning. Challenges deeper understanding.' },
-    4: { cls: 'chip purple text-xs', badge: `🏆 ${l4Label}`, lab: `🏆 Level 4 — ${l4Label}`, dsc: 'Extended problems requiring full working out. PSAC exam style.' },
+    1: { cls: 'chip green text-xs',  badge: '⭐ Basic',    lab: '⭐ Level 1 - Basic',           dsc: 'Recall and recognition. Great for building confidence.' },
+    2: { cls: 'chip blue text-xs',   badge: '⭐⭐ Medium',  lab: '⭐⭐ Level 2 - Medium',         dsc: 'Application questions. Tests understanding in context.' },
+    3: { cls: 'chip amber text-xs',  badge: '⭐⭐⭐ Hard',  lab: '⭐⭐⭐ Level 3 - Hard',         dsc: 'Multi-step reasoning. Challenges deeper understanding.' },
+    4: { cls: 'chip purple text-xs', badge: `🏆 ${l4Label}`, lab: `🏆 Level 4 - ${l4Label}`, dsc: 'Extended problems requiring full working out. PSAC exam style.' },
   };
   const lv = LEVELS[q?.difficulty] || LEVELS[S.practice.difficulty] || LEVELS[1];
   badge.className = lv.cls;
@@ -1763,7 +1763,7 @@ function loadPracticeQuestion() {
       // Specific difficulty assigned (parent assignment)
       S.practice.qs = getQuestionsForChapter(S.practice.chapterId, S.practice.difficulty, 20);
     } else if (S.practice.chapterId) {
-      // Mixed mode — random across all levels up to parent cap
+      // Mixed mode - random across all levels up to parent cap
       const _maxD = DB.restrictions?.maxDifficulty ?? 4;
       S.practice.qs = getMixedQuestions(S.practice.chapterId, _maxD, 20);
     }
@@ -1772,7 +1772,7 @@ function loadPracticeQuestion() {
   const q = S.practice.qs[S.practice.idx];
   if (!q || !q.question) {
     if (S.practice.idx < S.practice.qs.length - 1) { S.practice.idx++; loadPracticeQuestion(); return; }
-    // No questions available — clear stale DOM so previous subject's content isn't shown
+    // No questions available - clear stale DOM so previous subject's content isn't shown
     const _qt = document.getElementById('practice-q-text');
     if (_qt) _qt.innerHTML = '';
     const _qc = document.getElementById('practice-q-counter');
@@ -1828,8 +1828,8 @@ function _buildHints(q) {
   }
   h2 = h2 || 'Re-read the question slowly and identify the key numbers.';
   const h3 = q.type === 'mcq'
-    ? 'Try eliminating options you know are wrong — that narrows it down quickly.'
-    : `The answer is <b>${q.answer}</b> — try to understand why before moving on.`;
+    ? 'Try eliminating options you know are wrong - that narrows it down quickly.'
+    : `The answer is <b>${q.answer}</b> - try to understand why before moving on.`;
   return [h1, h2, h3];
 }
 
@@ -1876,7 +1876,7 @@ function practiceSubmit() {
   if (ASSIGNMENT_IS_TEST) {
     ASSIGNMENT_TEST_ANSWERS.push({
       question:      q.question,
-      userAnswer:    ua || '—',
+      userAnswer:    ua || '-',
       correctAnswer: q.answer,
       correct:       ok,
       explanation:   q.explanation || '',
@@ -1919,7 +1919,7 @@ function practiceSubmit() {
     fb.innerHTML = `
       <div class="flex items-center gap-3">
         <span class="text-2xl">${ok ? '🎉' : '❌'}</span>
-        <div class="font-bold">${ok ? 'Correct! Well done!' : 'Not quite — keep trying!'}</div>
+        <div class="font-bold">${ok ? 'Correct! Well done!' : 'Not quite - keep trying!'}</div>
       </div>`;
   } else {
     const answerLine = q.type === 'symmetry'
@@ -1934,7 +1934,7 @@ function practiceSubmit() {
         </div>
       </div>`;
   }
-  // Entrance animation — remove old class first, force reflow, re-add
+  // Entrance animation - remove old class first, force reflow, re-add
   fb.classList.remove('hidden', 'feedback-pop', 'feedback-shake');
   void fb.offsetWidth;
   fb.classList.add(ok ? 'feedback-pop' : 'feedback-shake');
@@ -1962,7 +1962,7 @@ function practiceSkip() {
     fb.innerHTML = `
       <div class="flex items-center gap-3">
         <span class="text-2xl">⏭️</span>
-        <div class="font-bold">Skipped — keep going!</div>
+        <div class="font-bold">Skipped - keep going!</div>
       </div>`;
   } else {
     fb.innerHTML = `
@@ -2173,7 +2173,7 @@ function updateSessionStats() {
   const { attempted, correct } = S.practice.session;
   document.getElementById('sess-attempted').textContent = attempted;
   document.getElementById('sess-correct').textContent = correct;
-  document.getElementById('sess-acc').textContent = attempted ? Math.round(correct/attempted*100)+'%' : '—';
+  document.getElementById('sess-acc').textContent = attempted ? Math.round(correct/attempted*100)+'%' : '-';
 }
 
 // ── ANALYTICS ─────────────────────────────────
@@ -2264,7 +2264,7 @@ function renderSyllabus() {
       </div>`;
     }).join('');
 
-    // For non-maths subjects there are no SYLLABUS subsections — show the chapter description instead
+    // For non-maths subjects there are no SYLLABUS subsections - show the chapter description instead
     const bodyHTML = subsHTML || (ch.syllabus
       ? `<p class="text-sm text-gray-600 dark:text-gray-400 py-3 leading-relaxed">${ch.syllabus}</p>`
       : '<p class="text-sm text-gray-400 py-3">No subsections defined yet.</p>');
@@ -2292,7 +2292,7 @@ function renderSyllabus() {
 
 window.startSubsectionPractice = function(chapterId, subsectionId, subsectionName) {
   S.practice.chapterId = chapterId;
-  S.practice.difficulty = null; // subsection mode — no level filter
+  S.practice.difficulty = null; // subsection mode - no level filter
   S.practice.qs = getQuestionsForSubsection(chapterId, subsectionId, 20);
   S.practice.idx = 0;
   S.practice.session = { attempted: 0, correct: 0 };
@@ -2300,7 +2300,7 @@ window.startSubsectionPractice = function(chapterId, subsectionId, subsectionNam
   showScreen('practice');
   const ch = CHAPTERS.find(c => c.id === chapterId);
   document.getElementById('practice-ch-name').textContent =
-    `${ch ? ch.icon : ''} ${ch ? ch.name : chapterId} — ${subsectionName}`;
+    `${ch ? ch.icon : ''} ${ch ? ch.name : chapterId} - ${subsectionName}`;
   updateDiffBtns(null);
   setTimeout(() => initScratchpad('scratchpad-practice'), 100);
 };
@@ -2337,7 +2337,7 @@ window.showHelpModal = function() {
 
   const ch = CHAPTERS.find(c => c.id === chId);
   document.getElementById('help-chapter-title').textContent =
-    `${ch ? ch.icon + ' ' : ''}${ch ? ch.name : chId} — Video Help`;
+    `${ch ? ch.icon + ' ' : ''}${ch ? ch.name : chId} - Video Help`;
   document.getElementById('help-video-credit').textContent =
     `"${h.title}" · ${h.channel}`;
 
@@ -2372,7 +2372,7 @@ function startWeakAreaDrill() {
     .slice(0, 3); // target 3 weakest
 
   if (!weakChapters.length) {
-    // All strong — just do a random drill
+    // All strong - just do a random drill
     toast('Great job! No weak areas found. Starting random drill.', 2500);
     startExam('drill');
     return;
@@ -2453,7 +2453,7 @@ function renderGradeSelect() {
           Grade ${grade}
         </h3>
         <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">
-          ${soon ? 'Coming soon — check back later!' : `${count} subject${count !== 1 ? 's' : ''} available`}
+          ${soon ? 'Coming soon - check back later!' : `${count} subject${count !== 1 ? 's' : ''} available`}
         </p>
         ${!soon ? `<div class="flex flex-wrap gap-2"><span class="chip blue">${subjects}</span></div>` : ''}
       </button>`;
@@ -2476,7 +2476,7 @@ function renderSubjectSelect() {
 
   // Update heading
   const heading = document.getElementById('subject-select-heading');
-  if (heading) heading.textContent = SELECTED_GRADE ? `Grade ${SELECTED_GRADE} — Choose a Subject` : 'Choose a Subject';
+  if (heading) heading.textContent = SELECTED_GRADE ? `Grade ${SELECTED_GRADE} - Choose a Subject` : 'Choose a Subject';
 
   container.innerHTML = packs.map(pack => {
     const soon  = !!pack.comingSoon;
@@ -2592,7 +2592,7 @@ async function submitReport() {
 
   closeReportModal();
   if (ok) {
-    toast('Report sent — thank you! 🙏', 2500);
+    toast('Report sent - thank you! 🙏', 2500);
   } else {
     toast('Could not send report. Check your connection.', 3000);
   }

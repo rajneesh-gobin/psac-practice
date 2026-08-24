@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 Science — Chapter: Simple Electric Circuit
+﻿'use strict';
+// Grade 5 Science - Chapter: Simple Electric Circuit
 // IDs format: g5sci-el-NNN
 // Circuit diagrams are embedded as inline SVG in the question field.
 
@@ -116,25 +116,25 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-el-002', chapterId:'electricity', difficulty:1,
     question:`${_EL_CLOSED}Look at the circuit diagram above. Will the bulb light up? Why?`,
     options:[
-      'Yes — the switch is closed and the circuit is complete',
-      'No — there is no battery in the circuit',
-      'No — the switch is open, breaking the circuit',
-      'Yes — but only for a few seconds'
+      'Yes - the switch is closed and the circuit is complete',
+      'No - there is no battery in the circuit',
+      'No - the switch is open, breaking the circuit',
+      'Yes - but only for a few seconds'
     ],
-    answer:'Yes — the switch is closed and the circuit is complete',
+    answer:'Yes - the switch is closed and the circuit is complete',
     hint:'Trace the path of electricity from the battery all the way around the circuit.',
     explanation:'The bulb lights up because the switch is <b>closed</b>, making the circuit <b>complete</b>. Electricity can flow from the battery, through the wires, through the bulb and back to the battery.' }),
 
   makeMCQ({ id:'g5sci-el-003', chapterId:'electricity', difficulty:1,
     question:`${_EL_OPEN}Look at the circuit diagram above. Will the bulb light up? Why?`,
     options:[
-      'Yes — electricity always flows in a circuit',
-      'No — the switch is open, breaking the circuit',
-      'Yes — the battery provides enough power',
-      'No — the battery is missing'
+      'Yes - electricity always flows in a circuit',
+      'No - the switch is open, breaking the circuit',
+      'Yes - the battery provides enough power',
+      'No - the battery is missing'
     ],
-    answer:'No — the switch is open, breaking the circuit',
-    hint:'Look at the switch — is it connected or is there a gap?',
+    answer:'No - the switch is open, breaking the circuit',
+    hint:'Look at the switch - is it connected or is there a gap?',
     explanation:'The bulb does <b>not</b> light up because the switch is <b>open</b>. An open switch creates a break in the circuit, so electricity cannot flow around the loop.' }),
 
   makeMCQ({ id:'g5sci-el-004', chapterId:'electricity', difficulty:1,
@@ -166,19 +166,19 @@ STATIC_QUESTIONS.push(
     options:['Rubber','Plastic','Copper wire','Glass'],
     answer:'Copper wire',
     hint:'Metals are generally good conductors of electricity.',
-    explanation:'<b>Copper</b> is an excellent conductor of electricity — electricity passes through it easily. This is why electrical wires are made of copper. Rubber, plastic and glass are insulators.' }),
+    explanation:'<b>Copper</b> is an excellent conductor of electricity - electricity passes through it easily. This is why electrical wires are made of copper. Rubber, plastic and glass are insulators.' }),
 
   makeMCQ({ id:'g5sci-el-007', chapterId:'electricity', difficulty:2,
     question:'Which of the following materials is a good INSULATOR of electricity?',
     options:['Iron','Steel','Aluminium','Rubber'],
     answer:'Rubber',
     hint:'An insulator does NOT allow electricity to pass through it.',
-    explanation:'<b>Rubber</b> is a good insulator — it does not allow electricity to flow through it. This is why electrical wires are coated in rubber or plastic, to protect us from electric shocks.' }),
+    explanation:'<b>Rubber</b> is a good insulator - it does not allow electricity to flow through it. This is why electrical wires are coated in rubber or plastic, to protect us from electric shocks.' }),
 
   makeTF({ id:'g5sci-el-008', chapterId:'electricity', difficulty:1,
     question:'A circuit must be COMPLETE (no gaps) for electricity to flow and the bulb to light.',
     answer:true,
-    hint:'Think about what "circuit" means — it comes from the word circle (a complete loop).',
+    hint:'Think about what "circuit" means - it comes from the word circle (a complete loop).',
     explanation:'True. For electricity to flow, there must be a <b>complete, unbroken path</b> from the battery through the wires and back. Any gap (open switch, broken wire) stops the current.' }),
 
   makeTF({ id:'g5sci-el-009', chapterId:'electricity', difficulty:1,
@@ -204,7 +204,7 @@ STATIC_QUESTIONS.push(
     options:[
       'Brighter, because there are two bulbs',
       'Dimmer, because the battery\'s energy is shared between two bulbs',
-      'The same brightness — it makes no difference',
+      'The same brightness - it makes no difference',
       'One bulb will be bright and the other dark'
     ],
     answer:'Dimmer, because the battery\'s energy is shared between two bulbs',
@@ -213,8 +213,8 @@ STATIC_QUESTIONS.push(
 
   makeMatch({ id:'g5sci-el-012', chapterId:'electricity', difficulty:1,
     leftItem:'Copper',
-    allRights:['Good conductor — electricity passes through it easily','Good insulator — stops electricity flowing','Provides energy for the circuit','Opens or closes the circuit'],
-    correctRight:'Good conductor — electricity passes through it easily',
+    allRights:['Good conductor - electricity passes through it easily','Good insulator - stops electricity flowing','Provides energy for the circuit','Opens or closes the circuit'],
+    correctRight:'Good conductor - electricity passes through it easily',
     hint:'Copper is the metal inside electrical wires.',
     explanation:'Copper is one of the best electrical conductors. It is used for wiring because electricity flows through it with very little resistance.' }),
 
@@ -222,27 +222,27 @@ STATIC_QUESTIONS.push(
     question:'Diagram 3 shows an electrical wire. Part X is the OUTER part of the wire. What material is used to make Part X?',
     options:['Copper','Iron','Rubber','Wool'],
     answer:'Rubber',
-    hint:'The outer part of a wire protects us from electric shock — what material is a good insulator?',
-    explanation:'The outer part of an electrical wire is made of <b>rubber</b> (or plastic). Both are insulators — they do not conduct electricity. This coating protects us from electric shocks. The inner core is copper (a conductor).' }),
+    hint:'The outer part of a wire protects us from electric shock - what material is a good insulator?',
+    explanation:'The outer part of an electrical wire is made of <b>rubber</b> (or plastic). Both are insulators - they do not conduct electricity. This coating protects us from electric shocks. The inner core is copper (a conductor).' }),
 
   makeMCQ({ id:'g5sci-el-014', chapterId:'electricity', difficulty:1,
     question:'Which of the following is a conductor of electricity?',
     options:['A plastic ruler','A rubber band','A glass plate','A metal coin'],
     answer:'A metal coin',
     hint:'Metals are generally good conductors.',
-    explanation:'A <b>metal coin</b> is a conductor of electricity — metals allow electricity to flow through them. Plastic, rubber and glass are insulators and do not conduct electricity.' }),
+    explanation:'A <b>metal coin</b> is a conductor of electricity - metals allow electricity to flow through them. Plastic, rubber and glass are insulators and do not conduct electricity.' }),
 
   makeMCQ({ id:'g5sci-el-015', chapterId:'electricity', difficulty:2,
     question:'Lina connects a plastic spoon between two points in an electric circuit. The bulb does not light up. Why?',
     options:[
       'The plastic spoon is too big for the circuit',
-      'Plastic is an insulator — electricity cannot flow through it',
+      'Plastic is an insulator - electricity cannot flow through it',
       'The spoon broke the battery',
       'The bulb needs to be replaced'
     ],
-    answer:'Plastic is an insulator — electricity cannot flow through it',
+    answer:'Plastic is an insulator - electricity cannot flow through it',
     hint:'Would electricity pass through a plastic material?',
-    explanation:'Plastic is an <b>insulator</b> — it does not allow electricity to pass through it. So when the plastic spoon is placed in the circuit, the circuit remains broken and the bulb cannot light. To complete the circuit, a <b>conductor</b> (e.g. a metal spoon) must be used.' }),
+    explanation:'Plastic is an <b>insulator</b> - it does not allow electricity to pass through it. So when the plastic spoon is placed in the circuit, the circuit remains broken and the bulb cannot light. To complete the circuit, a <b>conductor</b> (e.g. a metal spoon) must be used.' }),
 
   makeMCQ({ id:'g5sci-el-016', chapterId:'electricity', difficulty:2,
     question:'What is the function of the CELL (battery) in an electric circuit?',
@@ -265,7 +265,7 @@ STATIC_QUESTIONS.push(
       'To convert electrical energy into light energy'
     ],
     answer:'To provide a conducting path for electricity to flow around the circuit',
-    hint:'Wire connects all the components — what does it allow to flow through it?',
+    hint:'Wire connects all the components - what does it allow to flow through it?',
     explanation:'Electric <b>wires</b> are made of copper (a conductor). They provide the <b>conducting path</b> through which electric current flows from the battery to the bulb and back. Without wires, the components cannot be connected.' }),
 
   makeTF({ id:'g5sci-el-018', chapterId:'electricity', difficulty:1,
@@ -284,7 +284,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The battery will drain quickly because there is no way to break the circuit and turn it off',
     hint:'A switch allows you to break the circuit. Without one, can you ever turn the bulb off?',
-    explanation:'Without a switch, the circuit is always complete — current always flows and the bulb is always on. The battery will quickly run out of stored chemical energy because there is no way to stop the current. A <b>switch</b> allows you to <b>break the circuit</b> (open it) when power is not needed, saving the battery.' }),
+    explanation:'Without a switch, the circuit is always complete - current always flows and the bulb is always on. The battery will quickly run out of stored chemical energy because there is no way to stop the current. A <b>switch</b> allows you to <b>break the circuit</b> (open it) when power is not needed, saving the battery.' }),
 
   makeMCQ({ id:'g5sci-el-020', chapterId:'electricity', difficulty:3,
     question:'What happens if you add MORE batteries (cells) in a circuit with a single bulb?',
@@ -301,12 +301,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-el-021', chapterId:'electricity', difficulty:4,
     question:'A student builds a circuit with a battery, switch, wire and a buzzer. She says: "Chemical energy → Electrical energy → Sound energy." Is she correct? Explain.',
     options:[
-      'Yes — the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
-      'No — buzzers only convert heat to sound',
-      'No — the wire converts chemical energy, not the battery',
-      'Yes — but the wire also converts some energy to light'
+      'Yes - the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
+      'No - buzzers only convert heat to sound',
+      'No - the wire converts chemical energy, not the battery',
+      'Yes - but the wire also converts some energy to light'
     ],
-    answer:'Yes — the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
+    answer:'Yes - the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
     hint:'Trace the energy transformation step by step through each component.',
     explanation:'The student is correct. The <b>battery</b> stores chemical energy and converts it to electrical energy. The <b>wire</b> conducts the electrical energy around the circuit. The <b>buzzer</b> converts electrical energy into sound energy (vibrations). Each component has a specific role in the energy transformation chain.' })
 

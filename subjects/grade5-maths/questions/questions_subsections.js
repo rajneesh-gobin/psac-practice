@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ═══════════════════════════════════════════════════════════════════════
-//  MathMaster Grade 5 — Subsection Questions
+//  MathMaster Grade 5 - Subsection Questions
 //  MIE Mauritius Curriculum
 //
 //  HOW TO ADD QUESTIONS (for human and AI contributors):
@@ -10,7 +10,7 @@
 //  3. Set subsection from the SYLLABUS list in questions.js.
 //  4. Set difficulty: 1=basic, 2=medium, 3=hard, 4=word problem.
 //  5. Use a unique id (prefix + sequential number, e.g. 'ROM01').
-//  6. Push into STATIC_QUESTIONS — already done by the loop at the bottom.
+//  6. Push into STATIC_QUESTIONS - already done by the loop at the bottom.
 //  7. Never duplicate an existing id. Run a grep first if unsure.
 //
 //  QUICK TEMPLATE:
@@ -26,7 +26,7 @@
 const QS2 = [
 
   // ══════════════════════════════════════════════
-  //  NUMERATION — Roman Numerals
+  //  NUMERATION - Roman Numerals
   // ══════════════════════════════════════════════
   makeMCQ({ id:'ROM01', chapterId:'numeration', subsection:'roman', difficulty:1,
     question:'What is the value of the Roman numeral <b>XIV</b>?',
@@ -62,7 +62,7 @@ const QS2 = [
     explanation:'CC(200) + XL(40) + V(5) = <b>245</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  NUMERATION — Rounding
+  //  NUMERATION - Rounding
   // ══════════════════════════════════════════════
   makeNum({ id:'RND01', chapterId:'numeration', subsection:'rounding', difficulty:1,
     question:'Round <b>3,672</b> to the nearest <b>100</b>.',
@@ -89,7 +89,7 @@ const QS2 = [
     explanation:'Hundreds digit = 7 (≥5) → 18,748 rounds up to <b>19,000</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  NUMERATION — Number Sequences
+  //  NUMERATION - Number Sequences
   // ══════════════════════════════════════════════
   makeNum({ id:'SEQ01', chapterId:'numeration', subsection:'sequences', difficulty:1,
     question:'What is the next number in the sequence?<br><b>3, 7, 11, 15, ___</b>',
@@ -117,7 +117,7 @@ const QS2 = [
     explanation:'1, 4, 9, 16 are 1², 2², 3², 4². Next is 5² = <b>25</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  FOUR OPERATIONS — BODMAS / Mixed Ops
+  //  FOUR OPERATIONS - BODMAS / Mixed Ops
   // ══════════════════════════════════════════════
   makeNum({ id:'BOD01', chapterId:'four_ops', subsection:'mixed_ops', difficulty:2,
     question:'Calculate: <b>5 + 3 × 4</b>',
@@ -144,7 +144,7 @@ const QS2 = [
     explanation:'(7−2)=5. 3×5=15. 15+8=<b>23</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  FOUR OPERATIONS — Division with Remainder
+  //  FOUR OPERATIONS - Division with Remainder
   // ══════════════════════════════════════════════
   makeMCQ({ id:'DIV01', chapterId:'four_ops', subsection:'division', difficulty:1,
     question:'What is <b>85 ÷ 9</b>?',
@@ -166,7 +166,7 @@ const QS2 = [
     explanation:'8×31=248. 250−248=2. So <b>31 rows, 2 left over</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  FOUR OPERATIONS — Multiplication
+  //  FOUR OPERATIONS - Multiplication
   // ══════════════════════════════════════════════
   makeNum({ id:'MUL01', chapterId:'four_ops', subsection:'multiplication', difficulty:2,
     question:'Calculate: <b>243 × 6</b>',
@@ -187,7 +187,7 @@ const QS2 = [
     explanation:'78×30=2340. 78×5=390. 2340+390=<b>2,730</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  FRACTIONS — Proper, Improper & Mixed Numbers
+  //  FRACTIONS - Proper, Improper & Mixed Numbers
   // ══════════════════════════════════════════════
   makeNum({ id:'FIM01', chapterId:'fractions', subsection:'proper_improper', difficulty:1,
     question:'Convert the mixed number <b>3¼</b> to an improper fraction.',
@@ -208,7 +208,7 @@ const QS2 = [
     explanation:'(2×4)+3=11. Improper fraction = <b>11/4</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  FRACTIONS — Comparing & Ordering
+  //  FRACTIONS - Comparing & Ordering
   // ══════════════════════════════════════════════
   makeMCQ({ id:'FCO01', chapterId:'fractions', subsection:'comparing', difficulty:2,
     question:'Which fraction is <b>smaller</b>: <b>3/8</b> or <b>2/5</b>?',
@@ -232,7 +232,7 @@ const QS2 = [
     explanation:'5/6=15/18, 7/9=14/18. 15>14, so <b>5/6 is greater</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  FRACTIONS — Adding & Subtracting
+  //  FRACTIONS - Adding & Subtracting
   // ══════════════════════════════════════════════
   makeNum({ id:'FAS01', chapterId:'fractions', subsection:'add_sub', difficulty:2,
     question:'Calculate: <b>1/3 + 1/4</b><br><i>(Give as a fraction, e.g. 5/12)</i>',
@@ -259,7 +259,7 @@ const QS2 = [
     explanation:'9/12 − 4/12 = <b>5/12</b> of the pizza remains.' }),
 
   // ══════════════════════════════════════════════
-  //  FRACTIONS — Fraction of a Quantity
+  //  FRACTIONS - Fraction of a Quantity
   // ══════════════════════════════════════════════
   makeNum({ id:'FFQ01', chapterId:'fractions', subsection:'fraction_of', difficulty:1,
     question:'Find <b>3/4 of 60</b>.',
@@ -280,7 +280,7 @@ const QS2 = [
     explanation:'2/3×90=60 km done. Left = 90−60=<b>30 km</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  DECIMALS — Operations
+  //  DECIMALS - Operations
   // ══════════════════════════════════════════════
   makeNum({ id:'DOP01', chapterId:'decimals', subsection:'operations', difficulty:1,
     question:'Calculate: <b>4.75 + 2.85</b>',
@@ -307,7 +307,7 @@ const QS2 = [
     explanation:'15.6÷4=<b>3.9</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  DECIMALS — Fraction ↔ Decimal Conversion
+  //  DECIMALS - Fraction ↔ Decimal Conversion
   // ══════════════════════════════════════════════
   makeMCQ({ id:'DCO01', chapterId:'decimals', subsection:'conversion', difficulty:1,
     question:'What is <b>0.75</b> as a fraction in its simplest form?',
@@ -330,7 +330,7 @@ const QS2 = [
     explanation:'4/10 ÷ 2/2 = <b>2/5</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  PERCENTAGE — All subsections
+  //  PERCENTAGE - All subsections
   // ══════════════════════════════════════════════
   makeMCQ({ id:'PC01', chapterId:'percentage', subsection:'meaning', difficulty:1,
     question:'What does <b>%</b> mean?',
@@ -420,7 +420,7 @@ const QS2 = [
     explanation:'Discount=15%×480=(15÷100)×480=Rs 72. Selling price=480−72=<b>Rs 408</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  MONEY — Discount & Best Buy
+  //  MONEY - Discount & Best Buy
   // ══════════════════════════════════════════════
   makeNum({ id:'DISC01', chapterId:'money', subsection:'discount', difficulty:2,
     question:'A watch is priced at <b>Rs 500</b>. A <b>20%</b> discount is offered.<br>What is the <b>sale price</b>?',
@@ -448,7 +448,7 @@ const QS2 = [
     explanation:'Discount=Rs 230. Sale price=Rs 690. Change=1000−690=<b>Rs 310</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  TIME — Reading Clocks (12h / 24h)
+  //  TIME - Reading Clocks (12h / 24h)
   // ══════════════════════════════════════════════
   makeNum({ id:'CLK01', chapterId:'time', subsection:'reading', difficulty:1,
     question:'Write <b>3:45 pm</b> in 24-hour format.',
@@ -475,7 +475,7 @@ const QS2 = [
     explanation:'19:45 + 1h = 20:45. 20:45 + 50min = <b>21:35</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  TIME — Calendar Problems
+  //  TIME - Calendar Problems
   // ══════════════════════════════════════════════
   makeMCQ({ id:'CAL01', chapterId:'time', subsection:'calendar', difficulty:2,
     question:'If today is <b>Wednesday 5th March</b>, what day is <b>14th March</b>?',
@@ -504,7 +504,7 @@ const QS2 = [
     explanation:'2025 − 2015 = <b>10 years old</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  AREA — Triangles
+  //  AREA - Triangles
   // ══════════════════════════════════════════════
   makeNum({ id:'TRI01', chapterId:'area', subsection:'triangle', difficulty:2,
     question:'Find the area of a triangle with base <b>8 cm</b> and height <b>5 cm</b>.',
@@ -525,7 +525,7 @@ const QS2 = [
     explanation:'Area=½×14×9=63 m². Cost=63×25=<b>Rs 1,575</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  AREA — Compound Shapes
+  //  AREA - Compound Shapes
   // ══════════════════════════════════════════════
   makeNum({ id:'COMP01', chapterId:'area', subsection:'compound', difficulty:3,
     question:`An L-shaped room is shown below:
@@ -549,7 +549,7 @@ const QS2 = [
     explanation:'Outer=8×6=48 m². Inner=6×4=24 m². Path area=48−24=<b>24 m²</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  GRAPHS — Bar Charts
+  //  GRAPHS - Bar Charts
   // ══════════════════════════════════════════════
   makeNum({ id:'BAR01', chapterId:'graphs', subsection:'bar_chart', difficulty:1,
     question:`A bar chart shows books read in a week:
@@ -595,7 +595,7 @@ Q1:120, Q2:150, Q3:90, Q4:180
     explanation:'Total=540. 540÷4=<b>135 cars</b> per quarter.' }),
 
   // ══════════════════════════════════════════════
-  //  GRAPHS — Frequency Tables
+  //  GRAPHS - Frequency Tables
   // ══════════════════════════════════════════════
   makeNum({ id:'FRQ01', chapterId:'graphs', subsection:'frequency', difficulty:2,
     question:`A frequency table shows test marks:
@@ -612,7 +612,7 @@ How many pupils took the test in <b>total</b>?`,
     explanation:'4+7+5+4=<b>20 pupils</b>.' }),
 
   makeMCQ({ id:'FRQ02', chapterId:'graphs', subsection:'frequency', difficulty:2,
-    question:`Using the same frequency table (Mark: Freq — 60:4, 70:7, 80:5, 90:4),
+    question:`Using the same frequency table (Mark: Freq - 60:4, 70:7, 80:5, 90:4),
 what is the <b>mode</b> (most common mark)?`,
     options:['60','70','80','90'],
     answer:'70',

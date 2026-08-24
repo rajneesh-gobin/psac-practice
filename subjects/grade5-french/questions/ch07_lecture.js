@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 French — Chapter: Lecture & Compréhension
+﻿'use strict';
+// Grade 5 French - Chapter: Lecture & Compréhension
 // IDs format: g5fr-lec-NNN
 
 const _TEXTE_FR = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7">
@@ -17,21 +17,21 @@ STATIC_QUESTIONS.push(
     options:['vendredi','dimanche','samedi','lundi'],
     answer:'samedi',
     hint:'Regardez la première phrase du texte.',
-    explanation:'"<b>Samedi</b>" — Le texte commence : "Demain, c\'est <b>samedi</b>. La famille Dupont va passer la journée à la mer."' }),
+    explanation:'"<b>Samedi</b>" - Le texte commence : "Demain, c\'est <b>samedi</b>. La famille Dupont va passer la journée à la mer."' }),
 
   makeMCQ({ id:'g5fr-lec-002', chapterId:'fr-lecture', difficulty:1,
     question:`${_TEXTE_FR}Qu'est-ce que Monsieur Dupont prépare ?`,
     options:['une salade','un pique-nique','du jus d\'orange','des gâteaux'],
     answer:'un pique-nique',
     hint:'Le texte dit ce que le père prépare dans la cuisine.',
-    explanation:'"<b>Un pique-nique</b>" — "Le père, Monsieur Dupont, <b>prépare le pique-nique</b> dans la cuisine." Il fait des sandwichs au fromage et au jambon.' }),
+    explanation:'"<b>Un pique-nique</b>" - "Le père, Monsieur Dupont, <b>prépare le pique-nique</b> dans la cuisine." Il fait des sandwichs au fromage et au jambon.' }),
 
   makeMCQ({ id:'g5fr-lec-003', chapterId:'fr-lecture', difficulty:1,
     question:`${_TEXTE_FR}Quel âge a Sophie ?`,
     options:['neuf ans','huit ans','sept ans','dix ans'],
     answer:'sept ans',
     hint:'Les âges des deux enfants sont mentionnés dans le deuxième paragraphe.',
-    explanation:'"<b>Sept ans</b>" — "Luc a neuf ans et Sophie a <b>sept ans</b>." En français, on dit "avoir X ans" pour exprimer l\'âge.' }),
+    explanation:'"<b>Sept ans</b>" - "Luc a neuf ans et Sophie a <b>sept ans</b>." En français, on dit "avoir X ans" pour exprimer l\'âge.' }),
 
   makeMCQ({ id:'g5fr-lec-004', chapterId:'fr-lecture', difficulty:2,
     question:`${_TEXTE_FR}Pourquoi est-ce que Luc veut faire du snorkeling ?`,
@@ -43,14 +43,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Parce qu\'il adore les poissons.',
     hint:'Cherchez le mot "parce que" dans le texte.',
-    explanation:'"<b>Parce qu\'il adore les poissons</b>" — "Luc veut faire du snorkeling <b>parce qu\'il adore les poissons</b>." Le connecteur "parce que" introduit la raison.' }),
+    explanation:'"<b>Parce qu\'il adore les poissons</b>" - "Luc veut faire du snorkeling <b>parce qu\'il adore les poissons</b>." Le connecteur "parce que" introduit la raison.' }),
 
   makeMCQ({ id:'g5fr-lec-005', chapterId:'fr-lecture', difficulty:2,
     question:`${_TEXTE_FR}Où se trouve la plage ?`,
     options:['À vingt kilomètres, à Belle Mare','À dix kilomètres, à Grand Baie','À vingt kilomètres, à Flic en Flac','À huit kilomètres de la maison'],
     answer:'À vingt kilomètres, à Flic en Flac',
     hint:'Le troisième paragraphe donne les détails sur la plage.',
-    explanation:'"<b>À vingt kilomètres, à Flic en Flac</b>" — "La plage se trouve à <b>vingt kilomètres</b> de leur maison, <b>à Flic en Flac</b>." Flic en Flac est une plage célèbre de Maurice.' }),
+    explanation:'"<b>À vingt kilomètres, à Flic en Flac</b>" - "La plage se trouve à <b>vingt kilomètres</b> de leur maison, <b>à Flic en Flac</b>." Flic en Flac est une plage célèbre de Maurice.' }),
 
   makeMCQ({ id:'g5fr-lec-006', chapterId:'fr-lecture', difficulty:2,
     question:`${_TEXTE_FR}Qu'est-ce que Madame Dupont met dans le sac ?`,
@@ -62,7 +62,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Des serviettes et des maillots de bain.',
     hint:'Le texte décrit ce que la mère fait.',
-    explanation:'"<b>Des serviettes et des maillots de bain</b>" — "La mère... met <b>les serviettes et les maillots de bain</b> dans un grand sac bleu."' }),
+    explanation:'"<b>Des serviettes et des maillots de bain</b>" - "La mère... met <b>les serviettes et les maillots de bain</b> dans un grand sac bleu."' }),
 
   makeTF({ id:'g5fr-lec-007', chapterId:'fr-lecture', difficulty:1,
     question:`${_TEXTE_FR}Vrai ou Faux : Sophie préfère faire du snorkeling.`,
@@ -75,25 +75,25 @@ STATIC_QUESTIONS.push(
     options:['froide et sale','chaude et cristalline','profonde et dangereuse','bleue et agitée'],
     answer:'chaude et cristalline',
     hint:'La description de l\'eau est dans le dernier paragraphe.',
-    explanation:'"<b>Chaude et cristalline</b>" — "L\'eau est <b>chaude et cristalline</b>." "Cristalline" veut dire très claire, comme du cristal — un adjectif qui décrit une eau très propre et transparente.' }),
+    explanation:'"<b>Chaude et cristalline</b>" - "L\'eau est <b>chaude et cristalline</b>." "Cristalline" veut dire très claire, comme du cristal - un adjectif qui décrit une eau très propre et transparente.' }),
 
   makeMCQ({ id:'g5fr-lec-009', chapterId:'fr-lecture', difficulty:1,
     question:`${_TEXTE_FR}À quelle heure est-ce que la famille part ?`,
     options:['à sept heures','à huit heures du matin','à neuf heures','à midi'],
     answer:'à huit heures du matin',
     hint:'L\'heure du départ est mentionnée dans le dernier paragraphe.',
-    explanation:'"<b>À huit heures du matin</b>" — "Ils partent à <b>huit heures du matin</b>." Du matin = in the morning (a.m.).' }),
+    explanation:'"<b>À huit heures du matin</b>" - "Ils partent à <b>huit heures du matin</b>." Du matin = in the morning (a.m.).' }),
 
   makeMCQ({ id:'g5fr-lec-010', chapterId:'fr-lecture', difficulty:2,
     question:`${_TEXTE_FR}Quel est le sentiment des enfants avant la sortie ?`,
     options:['tristes','fatigués','très contents','nerveux'],
     answer:'très contents',
     hint:'Comment sont Luc et Sophie ? Cherchez l\'adjectif qui les décrit.',
-    explanation:'"<b>Très contents</b>" — "Les deux enfants, Luc et Sophie, sont <b>très contents</b>." Contents = happy/pleased. Très = very. L\'adjectif "content" est au masculin pluriel car il décrit les deux enfants (un garçon et une fille → masculin pluriel en français).' })
+    explanation:'"<b>Très contents</b>" - "Les deux enfants, Luc et Sophie, sont <b>très contents</b>." Contents = happy/pleased. Très = very. L\'adjectif "content" est au masculin pluriel car il décrit les deux enfants (un garçon et une fille → masculin pluriel en français).' })
 
 );
 
-// Deuxième passage — "Une sortie pas comme les autres" (PSAC 2025)
+// Deuxième passage - "Une sortie pas comme les autres" (PSAC 2025)
 const _TEXTE_FR_B = `<div style="background:#f8fafc;border-left:4px solid #f59e0b;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7">
 <b style="color:#92400e">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
 <b>Une sortie pas comme les autres</b><br><br>
@@ -111,14 +111,14 @@ STATIC_QUESTIONS.push(
     options:['frères','camarades / amis','cousins','voisins'],
     answer:'camarades / amis',
     hint:'Le texte décrit leur relation dès la première phrase.',
-    explanation:'"<b>camarades / amis</b>" — Le texte commence : "deux <b>amis</b>, Sanjeev et Marcelin". La question PSAC 2025 utilisait "camarade" et "ami" comme options correctes pour une réponse à choix multiple.' }),
+    explanation:'"<b>camarades / amis</b>" - Le texte commence : "deux <b>amis</b>, Sanjeev et Marcelin". La question PSAC 2025 utilisait "camarade" et "ami" comme options correctes pour une réponse à choix multiple.' }),
 
   makeMCQ({ id:'g5fr-lec-012', chapterId:'fr-lecture', difficulty:1,
     question:`${_TEXTE_FR_B}Où est-ce que Sanjeev et Marcelin mettent les poissons ?`,
     options:['dans un sac','dans un panier','dans un seau','dans une boîte'],
     answer:'dans un seau',
     hint:'Cherchez le mot qui désigne le contenant utilisé pour les poissons.',
-    explanation:'"<b>dans un seau</b>" — "En quelques heures, leur <b>seau</b> est presque rempli." Un seau = a bucket. Ils avaient eu beaucoup de succès en pêchant !' }),
+    explanation:'"<b>dans un seau</b>" - "En quelques heures, leur <b>seau</b> est presque rempli." Un seau = a bucket. Ils avaient eu beaucoup de succès en pêchant !' }),
 
   makeMCQ({ id:'g5fr-lec-013', chapterId:'fr-lecture', difficulty:1,
     question:`${_TEXTE_FR_B}Pourquoi le ciel devient-il sombre ?`,
@@ -130,7 +130,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Il y a de gros nuages gris',
     hint:'Le texte décrit ce qui apparaît quand le ciel devient sombre.',
-    explanation:'"<b>Il y a de gros nuages gris</b>" — "De gros nuages gris apparaissent et un vent violent se lève." Ce sont les nuages qui assombrissent le ciel, marquant le début de la tempête.' }),
+    explanation:'"<b>Il y a de gros nuages gris</b>" - "De gros nuages gris apparaissent et un vent violent se lève." Ce sont les nuages qui assombrissent le ciel, marquant le début de la tempête.' }),
 
   makeMCQ({ id:'g5fr-lec-014', chapterId:'fr-lecture', difficulty:2,
     question:`${_TEXTE_FR_B}Qui a appelé les secours ?`,
@@ -142,7 +142,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Les gens sur la plage',
     hint:'Regardez ce que font les personnes qui assistent à la scène depuis la plage.',
-    explanation:'"<b>Les gens sur la plage</b>" — "Sur la plage, quelques personnes assistent à la scène. Affolées, elles appellent immédiatement les secours." Ce sont les témoins sur la plage, pas les parents ni les gardes-côtes, qui ont lancé l\'alerte.' }),
+    explanation:'"<b>Les gens sur la plage</b>" - "Sur la plage, quelques personnes assistent à la scène. Affolées, elles appellent immédiatement les secours." Ce sont les témoins sur la plage, pas les parents ni les gardes-côtes, qui ont lancé l\'alerte.' }),
 
   makeMCQ({ id:'g5fr-lec-015', chapterId:'fr-lecture', difficulty:2,
     question:`${_TEXTE_FR_B}Pourquoi les gardes-côtes donnent-ils des couvertures aux garçons ?`,
@@ -154,13 +154,13 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Ils ont froid et tremblent',
     hint:'Le texte explique la raison directement avec "car".',
-    explanation:'"<b>Ils ont froid et tremblent</b>" — "des gardes-côtes leur donnent les premiers soins, une boisson chaude et des couvertures <b>car ils tremblent de froid</b>." Le mot "car" = because, indique la raison.' }),
+    explanation:'"<b>Ils ont froid et tremblent</b>" - "des gardes-côtes leur donnent les premiers soins, une boisson chaude et des couvertures <b>car ils tremblent de froid</b>." Le mot "car" = because, indique la raison.' }),
 
   makeTF({ id:'g5fr-lec-016', chapterId:'fr-lecture', difficulty:1,
     question:`${_TEXTE_FR_B}Vrai ou Faux : Sanjeev et Marcelin ont pu rentrer chez eux avant la tempête.`,
     answer:false,
     hint:'Que s\'est-il passé à leur barque ?',
-    explanation:'<b>Faux.</b> La barque a chaviré pendant la tempête : "Leur barque finit par <b>chavirer</b>." Les deux garçons ont dû être secourus par hélicoptère. Ils n\'ont pas pu rentrer seuls — ils ont été ramenés sur la plage par les secours.' }),
+    explanation:'<b>Faux.</b> La barque a chaviré pendant la tempête : "Leur barque finit par <b>chavirer</b>." Les deux garçons ont dû être secourus par hélicoptère. Ils n\'ont pas pu rentrer seuls - ils ont été ramenés sur la plage par les secours.' }),
 
   makeMCQ({ id:'g5fr-lec-017', chapterId:'fr-lecture', difficulty:2,
     question:`${_TEXTE_FR_B}Que signifie "sains et saufs" dans ce texte ?`,
@@ -172,7 +172,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'en bonne santé et hors de danger',
     hint:'Les parents "poussent un ouf de soulagement" en voyant les enfants "sains et saufs".',
-    explanation:'"<b>en bonne santé et hors de danger</b>" — "sain et sauf" (safe and sound) signifie que les enfants n\'ont pas été blessés malgré l\'accident. Les parents ont poussé "un ouf de soulagement" (a sigh of relief) car ils étaient très inquiets.' }),
+    explanation:'"<b>en bonne santé et hors de danger</b>" - "sain et sauf" (safe and sound) signifie que les enfants n\'ont pas été blessés malgré l\'accident. Les parents ont poussé "un ouf de soulagement" (a sigh of relief) car ils étaient très inquiets.' }),
 
   makeMCQ({ id:'g5fr-lec-018', chapterId:'fr-lecture', difficulty:3,
     question:`${_TEXTE_FR_B}Que signifie "affolées" dans "Affolées, elles appellent les secours" ?`,
@@ -184,7 +184,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'paniquées et très inquiètes',
     hint:'Les personnes viennent de voir la barque chavirer. Comment se sentiraient-elles ?',
-    explanation:'"<b>paniquées et très inquiètes</b>" — "affolées" vient du verbe "affoler" = to panic, to throw into a panic. Les témoins ont vu un accident grave : la barque a chaviré avec deux enfants à bord. Leur réaction naturelle était la panique, d\'où l\'appel immédiat aux secours.' }),
+    explanation:'"<b>paniquées et très inquiètes</b>" - "affolées" vient du verbe "affoler" = to panic, to throw into a panic. Les témoins ont vu un accident grave : la barque a chaviré avec deux enfants à bord. Leur réaction naturelle était la panique, d\'où l\'appel immédiat aux secours.' }),
 
   makeMCQ({ id:'g5fr-lec-019', chapterId:'fr-lecture', difficulty:4,
     question:`${_TEXTE_FR_B}Quel est le message principal de ce texte ?`,
@@ -203,7 +203,7 @@ STATIC_QUESTIONS.push(
     options:['Salut !','Cher ami,','Madame / Monsieur,','Bonjour tout le monde,'],
     answer:'Madame / Monsieur,',
     hint:'Les lettres formelles utilisent des formules de politesse.',
-    explanation:'"<b>Madame / Monsieur,</b>" — Dans une lettre formelle (à un directeur, une autorité, un inconnu), on commence par "Madame," ou "Monsieur," ou "Madame, Monsieur,". Pour une lettre informelle (ami, famille) : "Cher Paul," / "Ma chère Marie,".' }),
+    explanation:'"<b>Madame / Monsieur,</b>" - Dans une lettre formelle (à un directeur, une autorité, un inconnu), on commence par "Madame," ou "Monsieur," ou "Madame, Monsieur,". Pour une lettre informelle (ami, famille) : "Cher Paul," / "Ma chère Marie,".' }),
 
   makeMCQ({ id:'g5fr-lec-021', chapterId:'fr-lecture', difficulty:1,
     question:'Quel est le meilleur synonyme de "magnifique" ?',
@@ -223,21 +223,21 @@ STATIC_QUESTIONS.push(
     options:['une métaphore','une comparaison','une exagération','une personnification'],
     answer:'une comparaison',
     hint:'Cherchez le mot de comparaison.',
-    explanation:'"<b>une comparaison</b>" — "comme" est le mot de comparaison. Structure : A est comme B. La métaphore dirait : "C\'est un poisson" (sans "comme"). La comparaison garde explicitement le lien entre les deux éléments comparés.' }),
+    explanation:'"<b>une comparaison</b>" - "comme" est le mot de comparaison. Structure : A est comme B. La métaphore dirait : "C\'est un poisson" (sans "comme"). La comparaison garde explicitement le lien entre les deux éléments comparés.' }),
 
   makeMCQ({ id:'g5fr-lec-024', chapterId:'fr-lecture', difficulty:2,
     question:'"Sa voix est de la musique." Cette figure de style est...',
     options:['une comparaison','une métaphore','une répétition','une question rhétorique'],
     answer:'une métaphore',
-    hint:'Il n\'y a pas de "comme" — la voix EST de la musique (directement).',
-    explanation:'"<b>une métaphore</b>" — La métaphore compare deux choses DIRECTEMENT, sans "comme" : "Sa voix <b>est</b> de la musique." Une comparaison dirait : "Sa voix <b>est comme</b> de la musique." La métaphore est plus forte et plus poétique.' }),
+    hint:'Il n\'y a pas de "comme" - la voix EST de la musique (directement).',
+    explanation:'"<b>une métaphore</b>" - La métaphore compare deux choses DIRECTEMENT, sans "comme" : "Sa voix <b>est</b> de la musique." Une comparaison dirait : "Sa voix <b>est comme</b> de la musique." La métaphore est plus forte et plus poétique.' }),
 
   makeMCQ({ id:'g5fr-lec-025', chapterId:'fr-lecture', difficulty:1,
     question:'Dans un texte écrit à la première personne, le narrateur utilise principalement...',
     options:['il/elle/ils','je/me/moi','vous/votre','on/soi'],
     answer:'je/me/moi',
     hint:'La première personne = "je".',
-    explanation:'"<b>je/me/moi</b>" — Un texte à la <b>première personne</b> utilise "je" : "Aujourd\'hui, je suis allé au marché..." Un texte à la <b>troisième personne</b> utilise "il/elle" : "Pierre est allé au marché..." Le point de vue change la relation entre le lecteur et l\'histoire.' }),
+    explanation:'"<b>je/me/moi</b>" - Un texte à la <b>première personne</b> utilise "je" : "Aujourd\'hui, je suis allé au marché..." Un texte à la <b>troisième personne</b> utilise "il/elle" : "Pierre est allé au marché..." Le point de vue change la relation entre le lecteur et l\'histoire.' }),
 
   makeTF({ id:'g5fr-lec-026', chapterId:'fr-lecture', difficulty:1,
     question:'Un texte narratif raconte une histoire avec un début, un développement et une fin.',
@@ -250,21 +250,21 @@ STATIC_QUESTIONS.push(
     options:['au début','au milieu','à la fin','dans le titre'],
     answer:'à la fin',
     hint:'Introduction → développement → conclusion.',
-    explanation:'"<b>à la fin</b>" — Structure d\'un texte organisé : <b>introduction</b> (début, présente le sujet), <b>développement</b> (milieu, développe les idées), <b>conclusion</b> (fin, résume ou conclut). La conclusion répond à la question posée ou tire la leçon.' }),
+    explanation:'"<b>à la fin</b>" - Structure d\'un texte organisé : <b>introduction</b> (début, présente le sujet), <b>développement</b> (milieu, développe les idées), <b>conclusion</b> (fin, résume ou conclut). La conclusion répond à la question posée ou tire la leçon.' }),
 
   makeMCQ({ id:'g5fr-lec-028', chapterId:'fr-lecture', difficulty:2,
     question:'"Vous devez remettre votre rapport demain." C\'est un registre...',
     options:['informel','familier','formel','vulgaire'],
     answer:'formel',
     hint:'"Vous" (et non "tu") + vocabulaire soutenu = registre formel.',
-    explanation:'"<b>formel</b>" — Le registre <b>formel/soutenu</b> utilise "vous", un vocabulaire précis et des phrases complètes. Le registre <b>informel/familier</b> utilise "tu", des abréviations, du slang : "T\'as fini ton truc ?"' }),
+    explanation:'"<b>formel</b>" - Le registre <b>formel/soutenu</b> utilise "vous", un vocabulaire précis et des phrases complètes. Le registre <b>informel/familier</b> utilise "tu", des abréviations, du slang : "T\'as fini ton truc ?"' }),
 
   makeMCQ({ id:'g5fr-lec-029', chapterId:'fr-lecture', difficulty:1,
     question:'"T\'as vu le film ?" C\'est un registre...',
     options:['formel','soutenu','informel','professionnel'],
     answer:'informel',
     hint:'Abréviation de "tu as" + langage parlé = registre informel.',
-    explanation:'"<b>informel</b>" — "T\'as" = tu as (forme parlée abrégée). Le registre informel s\'utilise entre amis et en famille. La version formelle serait : "Avez-vous vu le film ?" ou "As-tu vu le film ?"' }),
+    explanation:'"<b>informel</b>" - "T\'as" = tu as (forme parlée abrégée). Le registre informel s\'utilise entre amis et en famille. La version formelle serait : "Avez-vous vu le film ?" ou "As-tu vu le film ?"' }),
 
   makeMCQ({ id:'g5fr-lec-030', chapterId:'fr-lecture', difficulty:2,
     question:'Choisissez le meilleur synonyme pour "immense" : "Le parc est immense."',
@@ -277,7 +277,7 @@ STATIC_QUESTIONS.push(
     question:'Une métaphore compare deux choses directement, sans utiliser "comme".',
     answer:true,
     hint:'Comparaison = avec "comme". Métaphore = sans "comme".',
-    explanation:'<b>Vrai.</b> Métaphore : A <b>est</b> B (directement). Comparaison : A <b>est comme</b> B (avec mot de liaison). Exemples — Comparaison : "Il est fort <b>comme</b> un lion." Métaphore : "C\'est <b>un lion</b>" (en parlant de lui).' }),
+    explanation:'<b>Vrai.</b> Métaphore : A <b>est</b> B (directement). Comparaison : A <b>est comme</b> B (avec mot de liaison). Exemples - Comparaison : "Il est fort <b>comme</b> un lion." Métaphore : "C\'est <b>un lion</b>" (en parlant de lui).' }),
 
   makeMCQ({ id:'g5fr-lec-032', chapterId:'fr-lecture', difficulty:2,
     question:'"Je t\'écris pour te demander des nouvelles." Cette phrase d\'une lettre indique que l\'auteur...',
@@ -289,7 +289,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'veut savoir comment va le destinataire',
     hint:'"Demander des nouvelles" = s\'informer de l\'état de quelqu\'un.',
-    explanation:'"<b>veut savoir comment va le destinataire</b>" — "demander des nouvelles de quelqu\'un" = to ask how someone is doing. C\'est une formule courante dans les lettres : "Je t\'écris pour avoir de tes nouvelles" / "Je voulais prendre de tes nouvelles."' }),
+    explanation:'"<b>veut savoir comment va le destinataire</b>" - "demander des nouvelles de quelqu\'un" = to ask how someone is doing. C\'est une formule courante dans les lettres : "Je t\'écris pour avoir de tes nouvelles" / "Je voulais prendre de tes nouvelles."' }),
 
   makeMCQ({ id:'g5fr-lec-033', chapterId:'fr-lecture', difficulty:2,
     question:'Quel est l\'antonyme de "courageux" ?',
@@ -303,13 +303,13 @@ STATIC_QUESTIONS.push(
     options:['première personne (je)','deuxième personne (tu/vous)','troisième personne (il/elle)','quatrième personne'],
     answer:'troisième personne (il/elle)',
     hint:'"Elle" = pronom de la troisième personne.',
-    explanation:'"<b>troisième personne</b>" — "Elle regarda" utilise "elle" (3ème personne du singulier). Un narrateur à la 3ème personne raconte l\'histoire de l\'extérieur. Un narrateur à la 1ère personne dirait : "Je regardai l\'horizon et soupirai."' }),
+    explanation:'"<b>troisième personne</b>" - "Elle regarda" utilise "elle" (3ème personne du singulier). Un narrateur à la 3ème personne raconte l\'histoire de l\'extérieur. Un narrateur à la 1ère personne dirait : "Je regardai l\'horizon et soupirai."' }),
 
   makeMCQ({ id:'g5fr-lec-035', chapterId:'fr-lecture', difficulty:4,
     question:'"Le soleil se couchait, peignant le ciel de rouge et d\'orange. C\'était un spectacle ___." Quel mot complète le mieux la phrase ?',
     options:['ennuyeux','splendide','ordinaire','bruyant'],
     answer:'splendide',
-    hint:'Le soleil peint le ciel de couleurs vives — c\'est une belle description.',
-    explanation:'"C\'était un spectacle <b>splendide</b>." — Le contexte décrit un coucher de soleil coloré et poétique ("peignant le ciel de rouge et d\'orange"). "Splendide" (= magnificent, wonderful) correspond parfaitement. "Ennuyeux" et "ordinaire" s\'opposent au contexte positif. "Bruyant" s\'applique au son, pas à la vue.' })
+    hint:'Le soleil peint le ciel de couleurs vives - c\'est une belle description.',
+    explanation:'"C\'était un spectacle <b>splendide</b>." - Le contexte décrit un coucher de soleil coloré et poétique ("peignant le ciel de rouge et d\'orange"). "Splendide" (= magnificent, wonderful) correspond parfaitement. "Ennuyeux" et "ordinaire" s\'opposent au contexte positif. "Bruyant" s\'applique au son, pas à la vue.' })
 
 );

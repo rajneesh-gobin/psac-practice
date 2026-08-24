@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice — Teacher Mode
+//  PSAC Exam Practice - Teacher Mode
 //  Loads LAST (after auth.js).
 //  Relies on globals: toast(), showScreen(), CHAPTERS, STATIC_QUESTIONS, shuffle()
 // ══════════════════════════════════════════════
@@ -165,7 +165,7 @@ const TeacherMode = (() => {
     if (!list) return;
 
     if (!data.assignments || !data.assignments.length) {
-      list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 py-2">No assignments yet — build one above!</p>';
+      list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 py-2">No assignments yet - build one above!</p>';
       return;
     }
 
@@ -225,7 +225,7 @@ const TeacherMode = (() => {
     const data = _getData();
     const testAssigns = (data.assignments || []).filter(a => a.mode === 'test');
     if (!testAssigns.length) {
-      sel.innerHTML = '<option value="">— No test assignments yet —</option>';
+      sel.innerHTML = '<option value="">- No test assignments yet -</option>';
       return;
     }
     sel.innerHTML = '<option value="">Select an assignment…</option>' +
@@ -311,7 +311,7 @@ const TeacherMode = (() => {
     const panel = _el('ta-answer-panel');
     const title = _el('ta-answer-panel-title');
     if (panel) { panel.classList.remove('hidden'); panel.querySelector('.ta-answer-body').innerHTML = html; }
-    if (title) title.textContent = `${studentName} — Attempt ${attempt}`;
+    if (title) title.textContent = `${studentName} - Attempt ${attempt}`;
   }
 
   // ── Build + save an assignment ─────────────────

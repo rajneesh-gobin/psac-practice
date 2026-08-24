@@ -1,7 +1,7 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster Grade 5 — Challenge Question Bank (Part B)
-//  20 challenging questions per chapter — L2 / L3 / L4
+//  MathMaster Grade 5 - Challenge Question Bank (Part B)
+//  20 challenging questions per chapter - L2 / L3 / L4
 //  Chapters: ratio, length, area, capacity, mass,
 //            money, time, graphs, conversions
 // ══════════════════════════════════════════════
@@ -159,7 +159,7 @@ CHALLENGE_QS2.push(
   makeNum({ id:'CH_LEN03', chapterId:'length', difficulty:3,
     question:'Find the perimeter of an L-shaped path (in cm): outer rectangle 12 cm × 8 cm with a 4 cm × 3 cm notch cut from one corner.',
     answer:'40',
-    hint:'The notch doesn\'t change the perimeter — the removed sides are replaced by two new sides of the same total length. Perimeter = 2×(12+8) = 40 cm.',
+    hint:'The notch doesn\'t change the perimeter - the removed sides are replaced by two new sides of the same total length. Perimeter = 2×(12+8) = 40 cm.',
     explanation:'An L-shape cut from a rectangle has the same perimeter as the original rectangle: 2×(12+8)=40 cm.' }),
 
   makeMCQ({ id:'CH_LEN04', chapterId:'length', difficulty:3,
@@ -495,7 +495,7 @@ CHALLENGE_QS2.push(
 
   makeMCQ({ id:'CH_CAP14', chapterId:'capacity', difficulty:4,
     question:'A pump fills a 36,000 L tank. It runs for 4 hours at 150 L per minute. Is the tank full?',
-    options:['Yes, exactly full','Yes, overfilled','No — 36,000 L still needed','No — only 36,000 L filled, need 0 more'],
+    options:['Yes, exactly full','Yes, overfilled','No - 36,000 L still needed','No - only 36,000 L filled, need 0 more'],
     answer:'Yes, exactly full',
     hint:'4 hours = 240 minutes. 240×150=36,000 L.',
     explanation:'240×150=36,000 L. Tank is exactly full.' }),
@@ -510,7 +510,7 @@ CHALLENGE_QS2.push(
     question:'Which holds more: 4 bottles of 750 mL or 3 L?',
     options:['4 bottles','3 L','They are equal','Cannot tell'],
     answer:'4 bottles',
-    hint:'4×750=3000 mL=3 L. They\'re equal — wait.',
+    hint:'4×750=3000 mL=3 L. They\'re equal - wait.',
     explanation:'4×750=3000 mL=3 L. They are equal! Option: "They are equal".' }),
 
   makeNum({ id:'CH_CAP17', chapterId:'capacity', difficulty:4,
@@ -1010,19 +1010,19 @@ CHALLENGE_QS2.push(
     question:'Data set: 4, 7, 7, 9, 12, 7, 5. What is the mode?',
     answer:'7',
     hint:'Mode = most frequent value.',
-    explanation:'7 appears 3 times — more than any other value.' }),
+    explanation:'7 appears 3 times - more than any other value.' }),
 
   makeMCQ({ id:'CH_GRP15', chapterId:'graphs', difficulty:4,
     question:'Test scores: 45, 52, 68, 72, 75, 80, 88, 91. How many students scored above the mean?',
     options:['3','4','5','6'],
     answer:'4',
     hint:'Mean = (45+52+68+72+75+80+88+91)÷8=571÷8=71.375. Count scores > 71.375.',
-    explanation:'Mean≈71.4. Scores above: 72,75,80,88,91 — that\'s 5. Wait: 45+52+68+72+75+80+88+91=571; 571÷8=71.375. Above: 72,75,80,88,91 = 5 students.' }),
+    explanation:'Mean≈71.4. Scores above: 72,75,80,88,91 - that\'s 5. Wait: 45+52+68+72+75+80+88+91=571; 571÷8=71.375. Above: 72,75,80,88,91 = 5 students.' }),
 
   makeMCQ({ id:'CH_GRP17', chapterId:'graphs', difficulty:4,
     question:'A bar chart: Maths=72, English=68, Science=80, History=64. A student says "I scored at least 70 in half my subjects." Is this true?',
-    options:['Yes — Maths and Science are ≥70','Yes — all four are close to 70','No — only Science is ≥70','No — none are exactly 70'],
-    answer:'Yes — Maths and Science are ≥70',
+    options:['Yes - Maths and Science are ≥70','Yes - all four are close to 70','No - only Science is ≥70','No - none are exactly 70'],
+    answer:'Yes - Maths and Science are ≥70',
     hint:'Count subjects ≥70: Maths=72✓, Science=80✓. That\'s 2 out of 4 = half.',
     explanation:'Maths(72) and Science(80) are ≥70. 2 out of 4 = half. True.' }),
 
@@ -1144,7 +1144,7 @@ CHALLENGE_QS2.push(
     options:['2.5 km','2,600 m','260,000 cm','2,450,000 mm'],
     answer:'260,000 cm',
     hint:'Convert all to m: 2500m, 2600m, 2600m, 2450m.',
-    explanation:'260,000 cm = 2,600 m. Ties with 2,600 m — both are largest.' }),
+    explanation:'260,000 cm = 2,600 m. Ties with 2,600 m - both are largest.' }),
 
   makeNum({ id:'CH_CON17', chapterId:'conversions', difficulty:3,
     question:'A water tank holds 4,800 L. Convert this to m³.',

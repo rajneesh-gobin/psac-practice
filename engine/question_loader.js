@@ -1,11 +1,11 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
 //  Question Loader
 //  Production (Netlify):  fetches from /.netlify/functions/questions
 //                         so the raw JS files never reach the browser.
 //  Local dev (file://):   dynamically injects the question <script> tags
 //                         so you can test without running a server.
-//  Local dev (netlify dev / localhost:8888): uses the function — same as prod.
+//  Local dev (netlify dev / localhost:8888): uses the function - same as prod.
 // ══════════════════════════════════════════════
 
 const QuestionLoader = (() => {
@@ -14,7 +14,7 @@ const QuestionLoader = (() => {
   // file:// → local development without any server
   const _isFileProtocol = location.protocol === 'file:';
 
-  // Question file paths per subject — only used in file:// mode
+  // Question file paths per subject - only used in file:// mode
   const LOCAL_FILES = {
     'grade5-maths': [
       'subjects/grade5-maths/questions/core.js',
@@ -68,6 +68,11 @@ const QuestionLoader = (() => {
       'subjects/grade5-history/questions/ch06_volcanism.js',
       'subjects/grade5-history/questions/ch07_env_problems.js',
       'subjects/grade5-history/questions/ch08_map_skills.js',
+      'subjects/grade5-history/questions/ch09_g5_weather.js',
+      // @enrichment - bonus content, derived from syllabus
+      'subjects/grade5-history/questions/enrichment_g5_personalities.js',
+      'subjects/grade5-history/questions/enrichment_g5_landmarks.js',
+      'subjects/grade5-history/questions/enrichment_g5_world.js',
     ],
     'grade6-science': [
       'subjects/grade6-science/questions/ch01_g6_air.js',
@@ -85,8 +90,11 @@ const QuestionLoader = (() => {
       'subjects/grade6-history/questions/ch03_g6_cultural_heritage.js',
       'subjects/grade6-history/questions/ch04_g6_land_use.js',
       'subjects/grade6-history/questions/ch05_g6_natural_hazards.js',
-      'subjects/grade6-history/questions/ch06_g6_weather_climate.js',
       'subjects/grade6-history/questions/ch07_g6_map_skills.js',
+      // @enrichment - bonus content, derived from syllabus
+      'subjects/grade6-history/questions/enrichment_g6_personalities.js',
+      'subjects/grade6-history/questions/enrichment_g6_symbols.js',
+      'subjects/grade6-history/questions/enrichment_g6_world.js',
     ],
     'grade6-maths': [
       'subjects/grade6-maths/questions/ch01_g6_numeration.js',
@@ -156,7 +164,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-history/questions/ch04_g4_natural_env.js',
       'subjects/grade4-history/questions/ch05_g4_weather.js',
       'subjects/grade4-history/questions/ch06_g4_map_skills.js',
-      // @enrichment — bonus content, derived from syllabus
+      // @enrichment - bonus content, derived from syllabus
       'subjects/grade4-history/questions/enrichment_g4_explorers.js',
       'subjects/grade4-history/questions/enrichment_g4_mauritius.js',
       'subjects/grade4-history/questions/enrichment_g4_world.js',
@@ -220,7 +228,7 @@ const QuestionLoader = (() => {
       }
 
       if (!headers['Authorization'] && !headers['X-Student-Id']) {
-        console.warn('[QuestionLoader] No auth — skipping API load for', subjectId);
+        console.warn('[QuestionLoader] No auth - skipping API load for', subjectId);
         return;
       }
 
@@ -232,7 +240,7 @@ const QuestionLoader = (() => {
       // Cache for 7 days so subsequent page loads skip the function entirely
       _writeCache(subjectId, incoming);
 
-      // Deduplicate — avoid double-loading if somehow already present
+      // Deduplicate - avoid double-loading if somehow already present
       const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
       STATIC_QUESTIONS.push(...incoming.filter(q => !existing.has(q.id)));
 

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 English — Chapter: Verbs & Tenses
+﻿'use strict';
+// Grade 4 English - Chapter: Verbs & Tenses
 // IDs format: g4eng-verb-NNN
 
 STATIC_QUESTIONS.push(
@@ -9,7 +9,7 @@ STATIC_QUESTIONS.push(
     options:['The','dog','runs','fast'],
     answer:'runs',
     hint:'A verb shows an action or a state. What is the dog doing?',
-    explanation:'"<b>Runs</b>" is the verb — it shows the action the dog is doing. Verbs are "doing" words (run, jump, eat, sleep) or "being" words (is, are, was, were). Every sentence must have a verb.' }),
+    explanation:'"<b>Runs</b>" is the verb - it shows the action the dog is doing. Verbs are "doing" words (run, jump, eat, sleep) or "being" words (is, are, was, were). Every sentence must have a verb.' }),
 
   makeMCQ({ id:'g4eng-verb-002', chapterId:'g4eng-verbs', difficulty:1,
     question:'Choose the correct form: "She ___ her homework every evening."',
@@ -23,7 +23,7 @@ STATIC_QUESTIONS.push(
     options:['walk','walking','walked','walks'],
     answer:'walked',
     hint:'For regular verbs, add -ed to form the past tense.',
-    explanation:'The past tense of "walk" is <b>walked</b>. Regular past tense rule: add -ed. Examples: walk→walked, jump→jumped, play→played, clean→cleaned. These are regular verbs — they all follow the same rule.' }),
+    explanation:'The past tense of "walk" is <b>walked</b>. Regular past tense rule: add -ed. Examples: walk→walked, jump→jumped, play→played, clean→cleaned. These are regular verbs - they all follow the same rule.' }),
 
   makeTF({ id:'g4eng-verb-004', chapterId:'g4eng-verbs', difficulty:1,
     question:'The past tense of "go" is "goed".',
@@ -47,7 +47,7 @@ STATIC_QUESTIONS.push(
     question:'What is the PAST TENSE of "eat"?',
     options:['eated','eaten','ate','eats'],
     answer:'ate',
-    hint:'"Eat" is an irregular verb — it does not follow the -ed rule.',
+    hint:'"Eat" is an irregular verb - it does not follow the -ed rule.',
     explanation:'The past tense of "eat" is <b>ate</b>. "Eaten" is the past participle (used with has/have: "I have eaten"). Irregular verbs: eat/ate/eaten, drink/drank/drunk, swim/swam/swum, write/wrote/written.' }),
 
   makeMCQ({ id:'g4eng-verb-007', chapterId:'g4eng-verbs', difficulty:2,
@@ -55,12 +55,12 @@ STATIC_QUESTIONS.push(
     options:['fly','flies','flying','flied'],
     answer:'fly',
     hint:'The subject is "birds" (plural). Which verb form is used with a plural subject?',
-    explanation:'"<b>Fly</b>" — "birds" is plural (they), so we use the base verb without -s. Rule: singular subject → verb + s (the bird flies). Plural subject → base verb (the birds fly). This is called subject-verb agreement.' }),
+    explanation:'"<b>Fly</b>" - "birds" is plural (they), so we use the base verb without -s. Rule: singular subject → verb + s (the bird flies). Plural subject → base verb (the birds fly). This is called subject-verb agreement.' }),
 
   makeNum({ id:'g4eng-verb-008', chapterId:'g4eng-verbs', difficulty:2,
     question:'How many VERBS are in: "Tara ran to school, ate her lunch and played football."? Write a number.',
     answer:'3', acceptableAnswers:['3'],
-    hint:'Find all the action words — each action is a separate verb.',
+    hint:'Find all the action words - each action is a separate verb.',
     explanation:'There are <b>3 verbs</b>: "ran", "ate", "played". All three are past tense verbs listed one after another. Sentences can have more than one verb when listing actions joined by "and".' }),
 
   makeMCQ({ id:'g4eng-verb-009', chapterId:'g4eng-verbs', difficulty:3,
@@ -73,7 +73,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Yesterday, I went to the shop and bought milk.',
     hint:'"Yesterday" tells you both actions happened in the past. Both verbs must be in the past tense.',
-    explanation:'"<b>Went</b>" and "<b>bought</b>" are both correct irregular past tense forms. "Yesterday" is a past time signal — all verbs in the sentence must match (past tense). go→went, buy→bought.' }),
+    explanation:'"<b>Went</b>" and "<b>bought</b>" are both correct irregular past tense forms. "Yesterday" is a past time signal - all verbs in the sentence must match (past tense). go→went, buy→bought.' }),
 
   makeMCQ({ id:'g4eng-verb-010', chapterId:'g4eng-verbs', difficulty:4,
     question:'Riya wrote in her diary: "Today was a great day. I ___ (wake) up early, ___ (brush) my teeth and ___ (help) my mother cook breakfast." Which set of verbs correctly fills the blanks?',
@@ -84,7 +84,7 @@ STATIC_QUESTIONS.push(
       'waking, brushing, helping'
     ],
     answer:'woke, brushed, helped',
-    hint:'The diary says "Today was a great day" — past tense context. Fill in the past tense of each bracketed verb.',
+    hint:'The diary says "Today was a great day" - past tense context. Fill in the past tense of each bracketed verb.',
     explanation:'"Today was" sets the past tense context. <b>Woke</b> = irregular past of "wake". <b>Brushed</b> = regular past of "brush" (+ed). <b>Helped</b> = regular past of "help" (+ed). All three verbs must match the past tense set by "Today was a great day."' })
 
 );
@@ -121,7 +121,7 @@ STATIC_QUESTIONS.push(
     options:['is','was','has','have'],
     answer:'has',
     hint:'Present perfect tense = has/have + past participle. For "she" (singular), which auxiliary?',
-    explanation:'"She <b>has</b> already eaten" — present perfect = has/have + past participle. "She" (third person singular) uses "has". Compare: I/you/we/they have eaten; he/she/it has eaten.' }),
+    explanation:'"She <b>has</b> already eaten" - present perfect = has/have + past participle. "She" (third person singular) uses "has". Compare: I/you/we/they have eaten; he/she/it has eaten.' }),
 
   makeMCQ({ id:'g4eng-verb-015', chapterId:'g4eng-verbs', difficulty:2,
     question:'What is the PAST TENSE of "break"?',
@@ -135,7 +135,7 @@ STATIC_QUESTIONS.push(
     options:['follow','follows','following','followed'],
     answer:'follows',
     hint:'"Everyone" is grammatically singular, even though it seems to mean many people.',
-    explanation:'"Everyone <b>follows</b>" — "everyone", "someone", "anyone" and "no one" are all singular. They take a verb+s form: everyone follows, someone needs, no one knows. This is a common subject-verb agreement mistake.' }),
+    explanation:'"Everyone <b>follows</b>" - "everyone", "someone", "anyone" and "no one" are all singular. They take a verb+s form: everyone follows, someone needs, no one knows. This is a common subject-verb agreement mistake.' }),
 
   makeMCQ({ id:'g4eng-verb-017', chapterId:'g4eng-verbs', difficulty:2,
     question:'Which sentence uses the SIMPLE PRESENT tense to express a permanent fact?',
@@ -147,7 +147,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The sun rises in the east.',
     hint:'For permanent facts and general truths, we use the simple present tense.',
-    explanation:'"<b>The sun rises in the east</b>" — the simple present expresses permanent facts and general truths (always true). "Rises" is the third person singular form (he/she/it + verb+s).' }),
+    explanation:'"<b>The sun rises in the east</b>" - the simple present expresses permanent facts and general truths (always true). "Rises" is the third person singular form (he/she/it + verb+s).' }),
 
   makeMCQ({ id:'g4eng-verb-018', chapterId:'g4eng-verbs', difficulty:3,
     question:'Which sentence is GRAMMATICALLY CORRECT?',
@@ -159,7 +159,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Last week, she went to the dentist.',
     hint:'"Last week" is a past time signal. Which form of "go" is the correct past tense?',
-    explanation:'"<b>Last week, she went to the dentist</b>" — "last week" signals the past. "Went" is the irregular past tense of "go". Never write "goed" or "goes" with a past time signal.' }),
+    explanation:'"<b>Last week, she went to the dentist</b>" - "last week" signals the past. "Went" is the irregular past tense of "go". Never write "goed" or "goes" with a past time signal.' }),
 
   makeMCQ({ id:'g4eng-verb-019', chapterId:'g4eng-verbs', difficulty:4,
     question:'Meena writes: "I ___ (enjoy) school today. My teacher ___ (give) us a science project. We ___ (learn) about plants and I ___ (bring) home a small cactus." All four actions are past tense. Which set fills the blanks correctly?',
@@ -171,6 +171,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'enjoyed / gave / learnt / brought',
     hint:'Check each verb: enjoy (regular: +ed), give (irregular: gave), learn (regular: learnt or learned), bring (irregular: brought).',
-    explanation:'"<b>Enjoyed</b>" (enjoy+ed, regular), "<b>gave</b>" (irregular: give→gave), "<b>learnt</b>" (learn+t, regular — "learned" also accepted), "<b>brought</b>" (irregular: bring→brought). Four different verb forms tested in one passage.' })
+    explanation:'"<b>Enjoyed</b>" (enjoy+ed, regular), "<b>gave</b>" (irregular: give→gave), "<b>learnt</b>" (learn+t, regular - "learned" also accepted), "<b>brought</b>" (irregular: bring→brought). Four different verb forms tested in one passage.' })
 
 );

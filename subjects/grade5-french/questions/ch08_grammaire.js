@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 French — Chapitre : Grammaire Essentielle
+﻿'use strict';
+// Grade 5 French - Chapitre : Grammaire Essentielle
 // IDs format: g5fr-gr-NNN
 
 STATIC_QUESTIONS.push(
@@ -26,7 +26,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Elle ne parle pas français.',
     hint:'Placez "ne" avant "parle" et "pas" après.',
-    explanation:'"<b>Elle ne parle pas français.</b>" — La structure négative est : sujet + <b>ne</b> + verbe + <b>pas</b> + reste. Si le verbe commence par une voyelle : "Il <b>n\'</b>aime pas."' }),
+    explanation:'"<b>Elle ne parle pas français.</b>" - La structure négative est : sujet + <b>ne</b> + verbe + <b>pas</b> + reste. Si le verbe commence par une voyelle : "Il <b>n\'</b>aime pas."' }),
 
   makeMCQ({ id:'g5fr-gr-003', chapterId:'fr-grammaire', difficulty:2,
     question:'Quelle est la forme correcte pour poser une question avec "est-ce que" ?',
@@ -38,21 +38,21 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Est-ce que tu aimes le chocolat ?"',
     hint:'"Est-ce que" se place au début de la question, avant le sujet.',
-    explanation:'"<b>Est-ce que</b> tu aimes le chocolat ?" — "Est-ce que" est la façon la plus facile de poser une question. On garde l\'ordre sujet + verbe. Les trois façons : 1) intonation montante, 2) est-ce que + sujet + verbe, 3) inversion verbe-sujet : "Aimes-<b>tu</b> le chocolat ?"' }),
+    explanation:'"<b>Est-ce que</b> tu aimes le chocolat ?" - "Est-ce que" est la façon la plus facile de poser une question. On garde l\'ordre sujet + verbe. Les trois façons : 1) intonation montante, 2) est-ce que + sujet + verbe, 3) inversion verbe-sujet : "Aimes-<b>tu</b> le chocolat ?"' }),
 
   makeMCQ({ id:'g5fr-gr-004', chapterId:'fr-grammaire', difficulty:2,
     question:'Complétez avec la bonne préposition : "Le chat est ___ la table." (sous)',
     options:['sur','dans','sous','devant'],
     answer:'sous',
     hint:'"Sous" = under/beneath en anglais.',
-    explanation:'"Le chat est <b>sous</b> la table." — Les prépositions de lieu : <b>sur</b> (on/above), <b>sous</b> (under), <b>dans</b> (in/inside), <b>devant</b> (in front of), <b>derrière</b> (behind), <b>entre</b> (between), <b>à côté de</b> (next to).' }),
+    explanation:'"Le chat est <b>sous</b> la table." - Les prépositions de lieu : <b>sur</b> (on/above), <b>sous</b> (under), <b>dans</b> (in/inside), <b>devant</b> (in front of), <b>derrière</b> (behind), <b>entre</b> (between), <b>à côté de</b> (next to).' }),
 
   makeMCQ({ id:'g5fr-gr-005', chapterId:'fr-grammaire', difficulty:2,
     question:'Complétez avec l\'article partitif : "Je mange ___ pain."',
     options:['le','un','du','de'],
     answer:'du',
     hint:'"Du" = de + le → utilisé pour une quantité non précisée d\'un nom masculin.',
-    explanation:'"Je mange <b>du</b> pain." — L\'article partitif exprime une quantité indéfinie : <b>du</b> (de + le, masc. : du pain, du lait), <b>de la</b> (fém. : de la viande, de la musique), <b>de l\'</b> (devant voyelle), <b>des</b> (pluriel).' }),
+    explanation:'"Je mange <b>du</b> pain." - L\'article partitif exprime une quantité indéfinie : <b>du</b> (de + le, masc. : du pain, du lait), <b>de la</b> (fém. : de la viande, de la musique), <b>de l\'</b> (devant voyelle), <b>des</b> (pluriel).' }),
 
   makeMCQ({ id:'g5fr-gr-006', chapterId:'fr-grammaire', difficulty:2,
     question:'À la forme négative, l\'article partitif "du" devient :',
@@ -66,7 +66,7 @@ STATIC_QUESTIONS.push(
     options:['partons','partions','allons partir','partirons'],
     answer:'allons partir',
     hint:'Futur proche = aller (conjugué) + infinitif.',
-    explanation:'"Nous <b>allons partir</b> demain." — Le futur proche = <b>aller (présent)</b> + <b>infinitif</b>. Conjugaison : je vais partir, tu vas partir, il va partir, nous <b>allons partir</b>, vous allez partir, ils vont partir.' }),
+    explanation:'"Nous <b>allons partir</b> demain." - Le futur proche = <b>aller (présent)</b> + <b>infinitif</b>. Conjugaison : je vais partir, tu vas partir, il va partir, nous <b>allons partir</b>, vous allez partir, ils vont partir.' }),
 
   makeTF({ id:'g5fr-gr-008', chapterId:'fr-grammaire', difficulty:1,
     question:'"Ne … pas" est la seule façon de former la négation en français.',
@@ -78,15 +78,15 @@ STATIC_QUESTIONS.push(
     question:'Complétez avec la bonne préposition : "Le stylo est ___ la trousse et le livre."',
     options:['dans','derrière','entre','sur'],
     answer:'entre',
-    hint:'"Entre" = between — entre deux objets.',
-    explanation:'"Le stylo est <b>entre</b> la trousse et le livre." — <b>Entre</b> + deux éléments = between. On dit toujours "entre A <b>et</b> B". Ne pas confondre avec "parmi" (among/amongst — plus de deux éléments).' }),
+    hint:'"Entre" = between - entre deux objets.',
+    explanation:'"Le stylo est <b>entre</b> la trousse et le livre." - <b>Entre</b> + deux éléments = between. On dit toujours "entre A <b>et</b> B". Ne pas confondre avec "parmi" (among/amongst - plus de deux éléments).' }),
 
   makeMCQ({ id:'g5fr-gr-010', chapterId:'fr-grammaire', difficulty:2,
-    question:'Complétez : "Si tu travailles bien, tu ___ (réussir — futur proche) ton examen."',
+    question:'Complétez : "Si tu travailles bien, tu ___ (réussir - futur proche) ton examen."',
     options:['réussis','vas réussir','réussirais','réussiras'],
     answer:'vas réussir',
     hint:'Futur proche pour "tu" = tu vas + infinitif.',
-    explanation:'"Si tu travailles bien, tu <b>vas réussir</b> ton examen." — Futur proche pour "tu" = tu <b>vas</b> + infinitif. Structure si + présent → futur (proche ou simple). Le futur proche est plus courant à l\'oral.' })
+    explanation:'"Si tu travailles bien, tu <b>vas réussir</b> ton examen." - Futur proche pour "tu" = tu <b>vas</b> + infinitif. Structure si + présent → futur (proche ou simple). Le futur proche est plus courant à l\'oral.' })
 
 );
 
@@ -97,28 +97,28 @@ STATIC_QUESTIONS.push(
     options:['parlerai','parlera','parlerons','parleras'],
     answer:'parlerai',
     hint:'Futur simple pour "je" = infinitif + -ai.',
-    explanation:'"je <b>parlerai</b>" — Futur simple : infinitif + terminaisons (-ai, -as, -a, -ons, -ez, -ont). Je parlerai, tu parleras, il parlera, nous parlerons, vous parlerez, ils parleront. Pour les verbes en -RE, on enlève le -e final : prendre → je prendrai.' }),
+    explanation:'"je <b>parlerai</b>" - Futur simple : infinitif + terminaisons (-ai, -as, -a, -ons, -ez, -ont). Je parlerai, tu parleras, il parlera, nous parlerons, vous parlerez, ils parleront. Pour les verbes en -RE, on enlève le -e final : prendre → je prendrai.' }),
 
   makeMCQ({ id:'g5fr-gr-012', chapterId:'fr-grammaire', difficulty:1,
     question:'Question type PSAC (Q7) : "Papa a pris une bonne ___." (décider → forme nominale)',
     options:['décideur','décision','décidée','décidie'],
     answer:'décision',
     hint:'Verbe → nom avec le suffixe -sion/-tion.',
-    explanation:'"<b>décision</b>" — décider → décision. La dérivation lexicale : verbe → nom avec -sion/-tion. Autres exemples : polluer → pollution, protéger → protection, commencer → commencement. (Ce type de question apparaît régulièrement au PSAC : "Écris la forme correcte du mot entre parenthèses.")' }),
+    explanation:'"<b>décision</b>" - décider → décision. La dérivation lexicale : verbe → nom avec -sion/-tion. Autres exemples : polluer → pollution, protéger → protection, commencer → commencement. (Ce type de question apparaît régulièrement au PSAC : "Écris la forme correcte du mot entre parenthèses.")' }),
 
   makeMCQ({ id:'g5fr-gr-013', chapterId:'fr-grammaire', difficulty:2,
     question:'Question type PSAC 2025 (Q7c) : "Les élèves travaillent ___ en classe." (sérieux → adverbe)',
     options:['sérieusement','sérieuxement','sériément','sériousement'],
     answer:'sérieusement',
     hint:'Règle : -eux → -euse + -ment pour former l\'adverbe.',
-    explanation:'"<b>sérieusement</b>" — Pour former l\'adverbe : adjectif féminin + -ment. sérieux → sérieuse → sérieusement. Autres exemples : heureux → heureuse → heureusement, dangereux → dangereuse → dangereusement, doux → douce → doucement.' }),
+    explanation:'"<b>sérieusement</b>" - Pour former l\'adverbe : adjectif féminin + -ment. sérieux → sérieuse → sérieusement. Autres exemples : heureux → heureuse → heureusement, dangereux → dangereuse → dangereusement, doux → douce → doucement.' }),
 
   makeMCQ({ id:'g5fr-gr-014', chapterId:'fr-grammaire', difficulty:2,
     question:'Question type PSAC 2025 (Q7b) : "Il fait très froid. C\'est un temps ___." (hiver → adjectif)',
     options:['hivernel','hivernal','hivernale','d\'hiver'],
     answer:'hivernal',
     hint:'"Hiver" + suffixe -al → adjectif.',
-    explanation:'"<b>hivernal</b>" — hiver → hivernal (adjectif). Dérivation : nom → adjectif avec -al : hiver → hivernal, automne → automnal. Au féminin : hivernale, au pluriel masculin : hivernaux. (Cette phrase exacte figurait dans le PSAC 2025 Q7b.)' }),
+    explanation:'"<b>hivernal</b>" - hiver → hivernal (adjectif). Dérivation : nom → adjectif avec -al : hiver → hivernal, automne → automnal. Au féminin : hivernale, au pluriel masculin : hivernaux. (Cette phrase exacte figurait dans le PSAC 2025 Q7b.)' }),
 
   makeMCQ({ id:'g5fr-gr-015', chapterId:'fr-grammaire', difficulty:2,
     question:'Joignez avec "que" (PSAC 2025 Q5a) :\n"La fleur est belle. Tu achètes la fleur."',
@@ -130,12 +130,12 @@ STATIC_QUESTIONS.push(
     ],
     answer:'La fleur que tu achètes est belle.',
     hint:'"que" remplace "la fleur" (COD de "achètes"). La proposition relative se place après le nom.',
-    explanation:'"<b>La fleur que tu achètes est belle.</b>" — "que" remplace "la fleur" (COD d\'"achètes") : La fleur [que tu achètes] est belle. La proposition relative est placée directement après le nom qu\'elle qualifie (l\'antécédent). (Exercice identique testé au PSAC 2025 Q5a.)' }),
+    explanation:'"<b>La fleur que tu achètes est belle.</b>" - "que" remplace "la fleur" (COD d\'"achètes") : La fleur [que tu achètes] est belle. La proposition relative est placée directement après le nom qu\'elle qualifie (l\'antécédent). (Exercice identique testé au PSAC 2025 Q5a.)' }),
 
   makeTF({ id:'g5fr-gr-016', chapterId:'fr-grammaire', difficulty:2,
     question:'"Au futur simple, le verbe \'aller\' est irrégulier : j\'irai, tu iras, il ira…"',
     answer:true,
-    hint:'"Aller" n\'utilise pas "all-" comme radical au futur — il utilise "ir-".',
+    hint:'"Aller" n\'utilise pas "all-" comme radical au futur - il utilise "ir-".',
     explanation:'<b>Vrai.</b> Futur simple de "aller" : j\'irai, tu iras, il ira, nous irons, vous irez, ils iront (radical : <b>ir-</b>). Autres futurs irréguliers : être → je serai, avoir → j\'aurai, faire → je ferai, venir → je viendrai, pouvoir → je pourrai, vouloir → je voudrai.' }),
 
   makeMCQ({ id:'g5fr-gr-017', chapterId:'fr-grammaire', difficulty:3,
@@ -154,8 +154,8 @@ STATIC_QUESTIONS.push(
       'Est-ce que travaille-elle dans une usine ?'
     ],
     answer:'Est-ce qu\'elle travaille dans une usine ?',
-    hint:'Trois façons de poser une question — laquelle utilise "est-ce que" + ordre sujet + verbe ?',
-    explanation:'"<b>Est-ce qu\'elle travaille dans une usine ?</b>" — est-ce que + sujet + verbe (ordre normal). Pour l\'inversion : "Travaille-<b>t</b>-elle ?" (pas "Travaille-elle" — il faut -t- entre deux voyelles). "Elle travaille ?" fonctionne à l\'oral (intonation). (Question type testée au PSAC 2025 Q2A.)' }),
+    hint:'Trois façons de poser une question - laquelle utilise "est-ce que" + ordre sujet + verbe ?',
+    explanation:'"<b>Est-ce qu\'elle travaille dans une usine ?</b>" - est-ce que + sujet + verbe (ordre normal). Pour l\'inversion : "Travaille-<b>t</b>-elle ?" (pas "Travaille-elle" - il faut -t- entre deux voyelles). "Elle travaille ?" fonctionne à l\'oral (intonation). (Question type testée au PSAC 2025 Q2A.)' }),
 
   makeMCQ({ id:'g5fr-gr-019', chapterId:'fr-grammaire', difficulty:4,
     question:'Corrigez les erreurs : "Hier, Sophie et moi avons allé au marché et j\'ai acheter des fruits."',
@@ -174,14 +174,14 @@ STATIC_QUESTIONS.push(
     options:['réussiras','réussirais','réussirait','réussis'],
     answer:'réussiras',
     hint:'Si + présent → futur (hypothèse réelle/possible).',
-    explanation:'"Si tu étudies, tu <b>réussiras</b>." — Règle : Si + <b>présent</b> → <b>futur simple</b>. Cette structure exprime une hypothèse réelle (il est possible que tu étudies). Exemples : Si il fait beau → nous irons. Si tu manges bien → tu seras en forme.' }),
+    explanation:'"Si tu étudies, tu <b>réussiras</b>." - Règle : Si + <b>présent</b> → <b>futur simple</b>. Cette structure exprime une hypothèse réelle (il est possible que tu étudies). Exemples : Si il fait beau → nous irons. Si tu manges bien → tu seras en forme.' }),
 
   makeMCQ({ id:'g5fr-gr-021', chapterId:'fr-grammaire', difficulty:2,
     question:'"Si j\'avais de l\'argent, j\'___ (acheter) un vélo."',
     options:['achetais','achèterai','achèterais','ai acheté'],
     answer:'achèterais',
     hint:'Si + imparfait → conditionnel (hypothèse irréelle/imaginaire).',
-    explanation:'"Si j\'avais de l\'argent, j\'<b>achèterais</b> un vélo." — Règle : Si + <b>imparfait</b> → <b>conditionnel présent</b>. Hypothèse irréelle (je n\'ai pas d\'argent). Le conditionnel se forme avec l\'infinitif + terminaisons de l\'imparfait : -ais, -ais, -ait, -ions, -iez, -aient.' }),
+    explanation:'"Si j\'avais de l\'argent, j\'<b>achèterais</b> un vélo." - Règle : Si + <b>imparfait</b> → <b>conditionnel présent</b>. Hypothèse irréelle (je n\'ai pas d\'argent). Le conditionnel se forme avec l\'infinitif + terminaisons de l\'imparfait : -ais, -ais, -ait, -ions, -iez, -aient.' }),
 
   makeTF({ id:'g5fr-gr-022', chapterId:'fr-grammaire', difficulty:2,
     question:'Dans "Si + présent → futur", l\'hypothèse est réelle et possible.',
@@ -194,20 +194,20 @@ STATIC_QUESTIONS.push(
     options:['heureuxement','heureusement','heurèusement','heureument'],
     answer:'heureusement',
     hint:'Règle : adjectif féminin + -ment. Heureux → heureuse → heureuse + ment.',
-    explanation:'"<b>heureusement</b>" — heureux → heureuse (féminin) → heureuse + ment = <b>heureusement</b>. Pour les adjectifs en -eux : mettre au féminin (-euse) + -ment. Autres exemples : dangereux → dangereuse → dangereusement ; doux → douce → doucement.' }),
+    explanation:'"<b>heureusement</b>" - heureux → heureuse (féminin) → heureuse + ment = <b>heureusement</b>. Pour les adjectifs en -eux : mettre au féminin (-euse) + -ment. Autres exemples : dangereux → dangereuse → dangereusement ; doux → douce → doucement.' }),
 
   makeMCQ({ id:'g5fr-gr-024', chapterId:'fr-grammaire', difficulty:1,
     question:'Formez l\'adverbe à partir de "doux" :',
     options:['doucement','doucement','douxement','douce'],
     answer:'doucement',
     hint:'Doux → douce (féminin) + -ment.',
-    explanation:'"<b>doucement</b>" — doux → douce → douce + ment = <b>doucement</b>. Employé dans : "Parle doucement, le bébé dort." Autres adverbes irréguliers notables : vite (pas de féminin + -ment), bien → bien (invariable), mal → mal (invariable).' }),
+    explanation:'"<b>doucement</b>" - doux → douce → douce + ment = <b>doucement</b>. Employé dans : "Parle doucement, le bébé dort." Autres adverbes irréguliers notables : vite (pas de féminin + -ment), bien → bien (invariable), mal → mal (invariable).' }),
 
   makeTF({ id:'g5fr-gr-025', chapterId:'fr-grammaire', difficulty:2,
     question:'L\'adverbe "vite" ne suit pas la règle habituelle de formation des adverbes en -ment.',
     answer:true,
     hint:'"Vite" n\'est pas formé de "vit" + "-ement".',
-    explanation:'<b>Vrai.</b> "<b>vite</b>" est un adverbe invariable — pas formé selon la règle féminin + -ment. "Vite" = quickly, fast. Autres adverbes irréguliers : <b>bien</b> (well), <b>mal</b> (badly), <b>beaucoup</b> (a lot), <b>peu</b> (a little). Ces adverbes doivent être mémorisés.' }),
+    explanation:'<b>Vrai.</b> "<b>vite</b>" est un adverbe invariable - pas formé selon la règle féminin + -ment. "Vite" = quickly, fast. Autres adverbes irréguliers : <b>bien</b> (well), <b>mal</b> (badly), <b>beaucoup</b> (a lot), <b>peu</b> (a little). Ces adverbes doivent être mémorisés.' }),
 
   makeMCQ({ id:'g5fr-gr-026', chapterId:'fr-grammaire', difficulty:2,
     question:'Identifiez le complément circonstanciel de LIEU : "Il court rapidement dans le parc chaque matin."',
@@ -242,7 +242,7 @@ STATIC_QUESTIONS.push(
     options:['mais','donc','car','ou'],
     answer:'car',
     hint:'"Je suis fatigué" est la conséquence ; la raison est "j\'ai travaillé".',
-    explanation:'"Je suis fatigué <b>car</b> j\'ai travaillé toute la nuit." — "car" = because (exprime la cause). Structure : effet/résultat + <b>car</b> + cause. On peut aussi utiliser "parce que" : "Je suis fatigué <b>parce que</b> j\'ai travaillé..." (même sens, construction légèrement différente).' }),
+    explanation:'"Je suis fatigué <b>car</b> j\'ai travaillé toute la nuit." - "car" = because (exprime la cause). Structure : effet/résultat + <b>car</b> + cause. On peut aussi utiliser "parce que" : "Je suis fatigué <b>parce que</b> j\'ai travaillé..." (même sens, construction légèrement différente).' }),
 
   makeTF({ id:'g5fr-gr-031', chapterId:'fr-grammaire', difficulty:2,
     question:'"Lorsque" est une conjonction de subordination de temps.',
@@ -254,28 +254,28 @@ STATIC_QUESTIONS.push(
     question:'"Bien que + subjonctif" exprime quelle relation entre les deux propositions ?',
     options:['cause (because)','conséquence (so)','concession (despite/although)','condition (if)'],
     answer:'concession (despite/although)',
-    hint:'"Bien que" = although, even though — on admet quelque chose MALGRÉ une situation contraire.',
+    hint:'"Bien que" = although, even though - on admet quelque chose MALGRÉ une situation contraire.',
     explanation:'"<b>Bien que</b>" = although, despite. C\'est une <b>concession</b> : on accepte un fait qui s\'oppose à la principale. "Bien qu\'il soit fatigué, il travaille." (Despite being tired, he works.) Toujours suivi du <b>subjonctif</b>. Synonyme : malgré que (rare), même si + indicatif.' }),
 
   makeMCQ({ id:'g5fr-gr-033', chapterId:'fr-grammaire', difficulty:2,
-    question:'Complétez : "Parle ___ (doux → adverbe) — le bébé dort."',
+    question:'Complétez : "Parle ___ (doux → adverbe) - le bébé dort."',
     options:['doucèment','doucement','douxment','doucement'],
     answer:'doucement',
     hint:'Doux → douce → doucement.',
-    explanation:'"Parle <b>doucement</b> — le bébé dort." — doux → douce (féminin) → douce + ment = <b>doucement</b>. Synonymes : à voix basse, tout bas. Antonyme : fort, bruyamment.' }),
+    explanation:'"Parle <b>doucement</b> - le bébé dort." - doux → douce (féminin) → douce + ment = <b>doucement</b>. Synonymes : à voix basse, tout bas. Antonyme : fort, bruyamment.' }),
 
   makeMCQ({ id:'g5fr-gr-034', chapterId:'fr-grammaire', difficulty:3,
     question:'Identifiez le type de CC souligné : "Il a réussi <u>grâce à son travail acharné</u>."',
     options:['CC de lieu','CC de temps','CC de cause','CC de manière'],
     answer:'CC de cause',
     hint:'"Grâce à" répond à la question "Pourquoi ?" ou "Pour quelle raison ?"',
-    explanation:'"<b>CC de cause</b>" — "grâce à son travail acharné" répond à "Pourquoi a-t-il réussi ?" → cause. Les CC de cause : à cause de (negative), grâce à (positive), en raison de. Exemples : "Il est absent <b>à cause de</b> la pluie." "Il réussit <b>grâce à</b> ses efforts."' }),
+    explanation:'"<b>CC de cause</b>" - "grâce à son travail acharné" répond à "Pourquoi a-t-il réussi ?" → cause. Les CC de cause : à cause de (negative), grâce à (positive), en raison de. Exemples : "Il est absent <b>à cause de</b> la pluie." "Il réussit <b>grâce à</b> ses efforts."' }),
 
   makeMCQ({ id:'g5fr-gr-035', chapterId:'fr-grammaire', difficulty:4,
     question:'Complétez : "Si tu ___ (travailler, imparfait) plus, tu ___ (obtenir, conditionnel) de meilleures notes."',
     options:['travaillais / obtiendrais','travailles / obtiendras','travaillais / obtiendras','travaillas / obtiendrais'],
     answer:'travaillais / obtiendrais',
     hint:'Si + imparfait → conditionnel (hypothèse imaginaire).',
-    explanation:'"Si tu <b>travaillais</b> plus, tu <b>obtiendrais</b> de meilleures notes." — Hypothèse imaginaire/irréelle : si + <b>imparfait</b> → <b>conditionnel présent</b>. "Travaillais" = imparfait de travailler. "Obtiendrais" = conditionnel de obtenir (radical: obtiendr- + -ais).' })
+    explanation:'"Si tu <b>travaillais</b> plus, tu <b>obtiendrais</b> de meilleures notes." - Hypothèse imaginaire/irréelle : si + <b>imparfait</b> → <b>conditionnel présent</b>. "Travaillais" = imparfait de travailler. "Obtiendrais" = conditionnel de obtenir (radical: obtiendr- + -ais).' })
 
 );

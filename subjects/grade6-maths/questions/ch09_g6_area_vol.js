@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Area, Volume & Surface Area
+﻿'use strict';
+// Grade 6 Maths - Chapter: Area, Volume & Surface Area
 // IDs format: g6m-av-NNN
 
 // Cuboid SVG

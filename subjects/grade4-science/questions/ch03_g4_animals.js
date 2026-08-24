@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Science — Chapter: Animals & Habitats
+﻿'use strict';
+// Grade 4 Science - Chapter: Animals & Habitats
 // IDs format: g4s-ani-NNN
 
 STATIC_QUESTIONS.push(
@@ -16,13 +16,13 @@ STATIC_QUESTIONS.push(
     options:['Lion','Pink Pigeon','Elephant','Crocodile'],
     answer:'Pink Pigeon',
     hint:'This bird is found naturally only in Mauritius and is endangered.',
-    explanation:'The <b>Pink Pigeon</b> (Columba mayeri) is endemic to Mauritius — it is found naturally only on our island. It is an endangered species. Other Mauritius endemic animals include the Echo Parakeet and the Mauritius Kestrel.' }),
+    explanation:'The <b>Pink Pigeon</b> (Columba mayeri) is endemic to Mauritius - it is found naturally only on our island. It is an endangered species. Other Mauritius endemic animals include the Echo Parakeet and the Mauritius Kestrel.' }),
 
   makeTF({ id:'g4s-ani-003', chapterId:'g4sci-animals', difficulty:1,
     question:'The Dodo is an ENDANGERED animal of Mauritius.',
     answer:false,
     hint:'Endangered means the animal is at risk of dying out. Is the Dodo still alive?',
-    explanation:'<b>False.</b> The Dodo is <b>extinct</b> — it died out completely, mainly due to hunting by sailors and the introduction of non-native animals after Europeans arrived in Mauritius in the 17th century. Endangered animals are alive but at risk; extinct animals no longer exist anywhere on Earth.' }),
+    explanation:'<b>False.</b> The Dodo is <b>extinct</b> - it died out completely, mainly due to hunting by sailors and the introduction of non-native animals after Europeans arrived in Mauritius in the 17th century. Endangered animals are alive but at risk; extinct animals no longer exist anywhere on Earth.' }),
 
   makeMCQ({ id:'g4s-ani-004', chapterId:'g4sci-animals', difficulty:1,
     question:'A CARNIVORE eats:',
@@ -40,7 +40,7 @@ STATIC_QUESTIONS.push(
       'Humans do not need food'
     ],
     answer:'Humans eat both plants and animals',
-    hint:'Omni- means "all" — omnivores eat from all food types.',
+    hint:'Omni- means "all" - omnivores eat from all food types.',
     explanation:'An <b>omnivore</b> eats <b>both plants and animals</b>. Humans eat rice, vegetables, fruit (plants) AND fish, chicken, eggs (animals). Other omnivores: bears, pigs, foxes, crows.' }),
 
   makeMCQ({ id:'g4s-ani-006', chapterId:'g4sci-animals', difficulty:2,
@@ -67,7 +67,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The animal is found naturally only in that specific place and nowhere else',
     hint:'Endemic animals evolved in one specific place and do not naturally live anywhere else.',
-    explanation:'"<b>Endemic</b>" means the animal is found <b>naturally only in one specific location</b>. The Pink Pigeon is endemic to Mauritius — you will not find it naturally living in Africa or Asia. It evolved here. Contrast with "introduced species" (brought from another place) and "exotic species" (non-native).' }),
+    explanation:'"<b>Endemic</b>" means the animal is found <b>naturally only in one specific location</b>. The Pink Pigeon is endemic to Mauritius - you will not find it naturally living in Africa or Asia. It evolved here. Contrast with "introduced species" (brought from another place) and "exotic species" (non-native).' }),
 
   makeMCQ({ id:'g4s-ani-009', chapterId:'g4sci-animals', difficulty:3,
     question:'Which food chain is CORRECT for a Mauritius forest ecosystem?',
@@ -87,7 +87,7 @@ STATIC_QUESTIONS.push(
       'Rabbits will find other food; eagles will be unaffected',
       'Rabbits will have no food and their numbers will decrease; eagles will then also decline because their food (rabbits) is gone',
       'Eagle numbers will increase because rabbits will eat eagles instead',
-      'Nothing will change — animals always find a way to survive'
+      'Nothing will change - animals always find a way to survive'
     ],
     answer:'Rabbits will have no food and their numbers will decrease; eagles will then also decline because their food (rabbits) is gone',
     hint:'Follow the chain: if the grass disappears, what happens next? And then what?',
@@ -108,7 +108,7 @@ STATIC_QUESTIONS.push(
     question:'A fish is a vertebrate (it has a backbone).',
     answer:true,
     hint:'Fish have a spine running along their body.',
-    explanation:'<b>True.</b> Fish are vertebrates — they have a backbone (vertebral column). The five groups of vertebrates are: <b>fish, amphibians, reptiles, birds and mammals</b>. Invertebrates (no backbone) include insects, crabs, worms and jellyfish.' }),
+    explanation:'<b>True.</b> Fish are vertebrates - they have a backbone (vertebral column). The five groups of vertebrates are: <b>fish, amphibians, reptiles, birds and mammals</b>. Invertebrates (no backbone) include insects, crabs, worms and jellyfish.' }),
 
   makeMCQ({ id:'g4s-ani-013', chapterId:'g4sci-animals', difficulty:2,
     question:'A bird\'s beak is ADAPTED to its diet. A bird with a LONG, THIN beak most likely:',
@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
       'Scoops fish from water'
     ],
     answer:'Probes flowers or mud to find insects or nectar',
-    hint:'Long, thin beaks can reach into narrow spaces — like flowers or soft mud.',
+    hint:'Long, thin beaks can reach into narrow spaces - like flowers or soft mud.',
     explanation:'A <b>long, thin beak</b> is adapted for probing into flowers to reach nectar, or into mud/bark to find insects. Short, thick beaks crack seeds. Hooked beaks tear flesh. The matching of body structure to food source is called <b>adaptation</b>.' }),
 
   makeMCQ({ id:'g4s-ani-014', chapterId:'g4sci-animals', difficulty:2,
@@ -156,7 +156,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The animal is at serious risk of becoming extinct if nothing is done to protect it',
     hint:'Compare: endangered (alive but at risk) vs extinct (completely gone).',
-    explanation:'"<b>Endangered</b>" means the species has very low numbers and faces serious risk of becoming <b>extinct</b>. The Pink Pigeon and Mauritius Kestrel are endangered. The Dodo is extinct — it no longer exists anywhere on Earth.' }),
+    explanation:'"<b>Endangered</b>" means the species has very low numbers and faces serious risk of becoming <b>extinct</b>. The Pink Pigeon and Mauritius Kestrel are endangered. The Dodo is extinct - it no longer exists anywhere on Earth.' }),
 
   makeMCQ({ id:'g4s-ani-017', chapterId:'g4sci-animals', difficulty:2,
     question:'Why is the PINK PIGEON endangered in Mauritius?',
@@ -168,7 +168,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Because of habitat destruction, introduced predators (rats, mongooses) and past hunting',
     hint:'Introduced species (brought to Mauritius by humans) and deforestation are major threats.',
-    explanation:'The Pink Pigeon is endangered due to: (1) <b>Habitat destruction</b> — deforestation removed its native forest. (2) <b>Introduced predators</b> — rats, mongooses and macaque monkeys eat eggs and chicks. (3) Past <b>hunting</b>. Conservation efforts (captive breeding, protected areas) have helped its numbers recover.' }),
+    explanation:'The Pink Pigeon is endangered due to: (1) <b>Habitat destruction</b> - deforestation removed its native forest. (2) <b>Introduced predators</b> - rats, mongooses and macaque monkeys eat eggs and chicks. (3) Past <b>hunting</b>. Conservation efforts (captive breeding, protected areas) have helped its numbers recover.' }),
 
   makeMCQ({ id:'g4s-ani-018', chapterId:'g4sci-animals', difficulty:3,
     question:'In Mauritius: Sugar cane → Rat → Barn Owl. If BARN OWL numbers increase a lot, what will happen to the RAT population?',
@@ -179,8 +179,8 @@ STATIC_QUESTIONS.push(
       'Rats will move to another island'
     ],
     answer:'Rat numbers will decrease because more owls will eat more rats',
-    hint:'More predators (owls) eating the prey (rats) — what happens to prey numbers?',
-    explanation:'More owls → more rats hunted → <b>rat numbers decrease</b>. This is why barn owls are used as natural pest control in Mauritius sugar cane fields — they keep the rat population down without chemicals. This is called <b>biological control</b>.' }),
+    hint:'More predators (owls) eating the prey (rats) - what happens to prey numbers?',
+    explanation:'More owls → more rats hunted → <b>rat numbers decrease</b>. This is why barn owls are used as natural pest control in Mauritius sugar cane fields - they keep the rat population down without chemicals. This is called <b>biological control</b>.' }),
 
   makeMCQ({ id:'g4s-ani-019', chapterId:'g4sci-animals', difficulty:4,
     question:'A coral reef is damaged by pollution. It supports: Algae → Small fish → Large fish → Shark. What will MOST LIKELY happen to SHARK numbers if the algae disappear?',

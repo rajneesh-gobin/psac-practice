@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Geography — Chapter: Map Skills
+﻿'use strict';
+// Grade 4 Geography - Chapter: Map Skills
 // IDs format: g4ge-maps-NNN
 
 STATIC_QUESTIONS.push(
@@ -95,7 +95,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'To tell us the name of the area shown and what the map is about',
     hint:'Every good map has a title so you know what area it is showing.',
-    explanation:'The <b>title</b> of a map tells us the name of the area being shown and what the map is about. For example: "Map of Mauritius — Physical Features" or "Map of Port Louis — Tourist Guide".' })
+    explanation:'The <b>title</b> of a map tells us the name of the area being shown and what the map is about. For example: "Map of Mauritius - Physical Features" or "Map of Port Louis - Tourist Guide".' })
 
 );
 
@@ -111,7 +111,7 @@ STATIC_QUESTIONS.push(
     question:'On a map of Mauritius, you want to travel from Grand Baie (north) to Mahébourg (south-east). In which general direction would you travel?',
     options:['North-west','North','South-east','West'],
     answer:'South-east',
-    hint:'Grand Baie is in the north; Mahébourg is in the south-east — so you travel away from north towards south-east.',
+    hint:'Grand Baie is in the north; Mahébourg is in the south-east - so you travel away from north towards south-east.',
     explanation:'Grand Baie is in the <b>north</b> of Mauritius and Mahébourg is in the <b>south-east</b>. To travel from Grand Baie to Mahébourg, you would travel in a <b>south-easterly direction</b>.' }),
 
   makeMCQ({ id:'g4ge-maps-013', chapterId:'g4ge-map-skills', difficulty:1,
@@ -124,7 +124,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'North, South, East, West',
     hint:'Remember: Never Eat Shredded Wheat.',
-    explanation:'The four main <b>compass directions</b> are <b>North, South, East and West</b>. A useful memory trick is: <b>Never Eat Shredded Wheat</b> — going clockwise from North.' }),
+    explanation:'The four main <b>compass directions</b> are <b>North, South, East and West</b>. A useful memory trick is: <b>Never Eat Shredded Wheat</b> - going clockwise from North.' }),
 
   makeTF({ id:'g4ge-maps-014', chapterId:'g4ge-map-skills', difficulty:2,
     question:'Without a legend, it is easy to understand every symbol on an unfamiliar map.',

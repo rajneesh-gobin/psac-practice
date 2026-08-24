@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Time & Speed (Speed=D/T, GMT, time zones)
+﻿'use strict';
+// Grade 6 Maths - Chapter: Time & Speed (Speed=D/T, GMT, time zones)
 // IDs format: g6m-ts-NNN
 
 // Speed triangle SVG
@@ -44,7 +44,7 @@ STATIC_QUESTIONS.push(
     options:['8:00 am','12:00 noon','4:00 pm','16:00 pm'],
     answer:'4:00 pm',
     hint:'GMT+4 means Mauritius is 4 hours AHEAD of GMT. Add 4 hours to GMT time.',
-    explanation:'Mauritius is <b>GMT+4</b> — 4 hours ahead of Greenwich Mean Time. When GMT = 12:00, Mauritius time = 12:00 + 4 = <b>16:00 (4:00 pm)</b>.' }),
+    explanation:'Mauritius is <b>GMT+4</b> - 4 hours ahead of Greenwich Mean Time. When GMT = 12:00, Mauritius time = 12:00 + 4 = <b>16:00 (4:00 pm)</b>.' }),
 
   makeMCQ({ id:'g6m-ts-006', chapterId:'g6-time-speed', difficulty:2,
     question:'A flight from London (GMT) leaves at 10:00 am London time and takes 11 hours. What time does it arrive in Mauritius (GMT+4)?',

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 French — Le Passé Composé
+﻿'use strict';
+// Grade 4 French - Le Passé Composé
 // IDs format: g4fr-passe-comp-NNN
 
 STATIC_QUESTIONS.push(
@@ -19,11 +19,11 @@ STATIC_QUESTIONS.push(
     explanation:'Parler → <b>parlé</b>. Pour les verbes en -ER, le participe passé se forme en remplaçant <b>-ER</b> par <b>-É</b> : parler → parlé, manger → mangé, jouer → joué, regarder → regardé.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-003', chapterId:'g4fr-passe-comp', difficulty:1,
-    question:'Complète : "Il ___ son repas." (manger — passé composé)',
+    question:'Complète : "Il ___ son repas." (manger - passé composé)',
     options:['a mangé','ai mangé','avons mangé','ont mangé'],
     answer:'a mangé',
     hint:'Sujet = "il". Avoir pour "il" = a. Participe passé de manger = mangé.',
-    explanation:'"Il <b>a mangé</b>" — sujet "il", donc auxiliaire = <b>a</b>. Avoir : j\'ai, tu as, il/elle <b>a</b>, nous avons, vous avez, ils/elles ont. Participe passé : manger → mangé.' }),
+    explanation:'"Il <b>a mangé</b>" - sujet "il", donc auxiliaire = <b>a</b>. Avoir : j\'ai, tu as, il/elle <b>a</b>, nous avons, vous avez, ils/elles ont. Participe passé : manger → mangé.' }),
 
   makeTF({ id:'g4fr-passe-comp-004', chapterId:'g4fr-passe-comp', difficulty:1,
     question:'Le passé composé se forme avec "avoir" ou "être" + participe passé.',
@@ -43,13 +43,13 @@ STATIC_QUESTIONS.push(
     options:['avons regardé','avez regardé','ont regardé','ai regardé'],
     answer:'avons regardé',
     hint:'Sujet = "nous". Avoir pour "nous" = avons.',
-    explanation:'"Nous <b>avons regardé</b>" — sujet "nous", auxiliaire = <b>avons</b>. Regarder → regardé (participe passé). Avoir : j\'ai, tu as, il a, nous <b>avons</b>, vous avez, ils ont.' }),
+    explanation:'"Nous <b>avons regardé</b>" - sujet "nous", auxiliaire = <b>avons</b>. Regarder → regardé (participe passé). Avoir : j\'ai, tu as, il a, nous <b>avons</b>, vous avez, ils ont.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-007', chapterId:'g4fr-passe-comp', difficulty:2,
     question:'Quel est le participe passé IRRÉGULIER du verbe FAIRE ?',
     options:['faisé','fait','faité','fais'],
     answer:'fait',
-    hint:'Le participe passé de "faire" est irrégulier — à apprendre par cœur !',
+    hint:'Le participe passé de "faire" est irrégulier - à apprendre par cœur !',
     explanation:'Faire → <b>fait</b> (irrégulier). Participes passés irréguliers à apprendre : faire → <b>fait</b>, voir → <b>vu</b>, prendre → <b>pris</b>, avoir → <b>eu</b>, être → <b>été</b>, dire → <b>dit</b>.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-008', chapterId:'g4fr-passe-comp', difficulty:2,
@@ -57,7 +57,7 @@ STATIC_QUESTIONS.push(
     options:['n\'ai','ne ai','n\'a','n\'avons'],
     answer:"n'ai",
     hint:'Négation au passé composé : ne + auxiliaire + pas. Sujet = "je".',
-    explanation:'"Je <b>n\'ai</b> pas mangé" — au passé composé, la négation encadre l\'<b>auxiliaire</b> : <b>ne</b> + auxiliaire + <b>pas</b>. Je n\'ai pas mangé. Tu n\'as pas parlé. Il n\'a pas joué.' }),
+    explanation:'"Je <b>n\'ai</b> pas mangé" - au passé composé, la négation encadre l\'<b>auxiliaire</b> : <b>ne</b> + auxiliaire + <b>pas</b>. Je n\'ai pas mangé. Tu n\'as pas parlé. Il n\'a pas joué.' }),
 
   makeTF({ id:'g4fr-passe-comp-009', chapterId:'g4fr-passe-comp', difficulty:2,
     question:'Le participe passé du verbe "voir" est "vué".',
@@ -70,7 +70,7 @@ STATIC_QUESTIONS.push(
     options:['Elle a parler.','Elle a parlé.','Elle est parlé.','Elle avons parlé.'],
     answer:'Elle a parlé.',
     hint:'Structure : avoir (elle → a) + participe passé (-ER → -É).',
-    explanation:'"<b>Elle a parlé.</b>" — auxiliaire "a" (avoir, sujet elle) + participe passé "parlé". Les autres options sont incorrectes : "parler" est un infinitif (pas un participe passé), "est" n\'est pas l\'auxiliaire de parler, "avons" ne correspond pas au sujet "elle".' }),
+    explanation:'"<b>Elle a parlé.</b>" - auxiliaire "a" (avoir, sujet elle) + participe passé "parlé". Les autres options sont incorrectes : "parler" est un infinitif (pas un participe passé), "est" n\'est pas l\'auxiliaire de parler, "avons" ne correspond pas au sujet "elle".' }),
 
   makeMCQ({ id:'g4fr-passe-comp-011', chapterId:'g4fr-passe-comp', difficulty:2,
     question:'Quel est le participe passé du verbe PRENDRE ?',
@@ -80,23 +80,23 @@ STATIC_QUESTIONS.push(
     explanation:'Prendre → <b>pris</b> (irrégulier). Exemples : j\'ai pris mon sac, tu as pris le bus, il a pris son stylo. Autres irréguliers similaires : apprendre → appris, comprendre → compris.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-012', chapterId:'g4fr-passe-comp', difficulty:2,
-    question:'Complète : "Vous ___ vos devoirs." (finir — passé composé)',
+    question:'Complète : "Vous ___ vos devoirs." (finir - passé composé)',
     options:['avez fini','avons fini','ont fini','ai fini'],
     answer:'avez fini',
     hint:'Sujet = "vous". Avoir pour "vous" = avez. Participe passé de finir = fini.',
-    explanation:'"Vous <b>avez fini</b>" — sujet "vous", auxiliaire = <b>avez</b>. Finir → fini (verbe en -IR : participe passé = -I). Avoir : vous <b>avez</b>.' }),
+    explanation:'"Vous <b>avez fini</b>" - sujet "vous", auxiliaire = <b>avez</b>. Finir → fini (verbe en -IR : participe passé = -I). Avoir : vous <b>avez</b>.' }),
 
   makeTF({ id:'g4fr-passe-comp-013', chapterId:'g4fr-passe-comp', difficulty:3,
     question:'"Ils ont vu le film" est une phrase correcte au passé composé.',
     answer:true,
     hint:'Voir → vu (irrégulier). Sujet "ils" → ont.',
-    explanation:'<b>Vrai.</b> "Ils <b>ont vu</b>" — sujet "ils", auxiliaire = <b>ont</b> (avoir), participe passé de voir = <b>vu</b>. C\'est une phrase correcte au passé composé.' }),
+    explanation:'<b>Vrai.</b> "Ils <b>ont vu</b>" - sujet "ils", auxiliaire = <b>ont</b> (avoir), participe passé de voir = <b>vu</b>. C\'est une phrase correcte au passé composé.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-014', chapterId:'g4fr-passe-comp', difficulty:3,
     question:'Quel est le participe passé du verbe DIRE ?',
     options:['diré','disé','dit','disant'],
     answer:'dit',
-    hint:'Le participe passé de "dire" est irrégulier — à apprendre par cœur.',
+    hint:'Le participe passé de "dire" est irrégulier - à apprendre par cœur.',
     explanation:'Dire → <b>dit</b> (irrégulier). J\'ai dit, tu as dit, il a dit. Autres verbes en -it : écrire → écrit, conduire → conduit.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-015', chapterId:'g4fr-passe-comp', difficulty:3,
@@ -104,14 +104,14 @@ STATIC_QUESTIONS.push(
     options:['Tu as mangé une banane.','Tu avais mangé une banane.','Tu auras mangé une banane.','Tu mangeas une banane.'],
     answer:'Tu as mangé une banane.',
     hint:'Passé composé = avoir (tu → as) + participe passé de manger (= mangé).',
-    explanation:'"Tu <b>as mangé</b> une banane." — sujet "tu", auxiliaire = <b>as</b>, participe passé = <b>mangé</b>. Structure correcte : tu + as + mangé.' }),
+    explanation:'"Tu <b>as mangé</b> une banane." - sujet "tu", auxiliaire = <b>as</b>, participe passé = <b>mangé</b>. Structure correcte : tu + as + mangé.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-016', chapterId:'g4fr-passe-comp', difficulty:3,
     question:'Complète la phrase négative : "Ils ___ ___ regardé le match."',
     options:["n'ont pas","ne ont pas","n'avons pas","n'ont point"],
     answer:"n'ont pas",
     hint:'Négation : ne + auxiliaire (ils → ont) + pas.',
-    explanation:'"Ils <b>n\'ont pas</b> regardé le match." — la négation encadre l\'auxiliaire : <b>n\'</b> + ont + <b>pas</b>. Rappel : "ne" devient "n\'" devant une voyelle.' }),
+    explanation:'"Ils <b>n\'ont pas</b> regardé le match." - la négation encadre l\'auxiliaire : <b>n\'</b> + ont + <b>pas</b>. Rappel : "ne" devient "n\'" devant une voyelle.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-017', chapterId:'g4fr-passe-comp', difficulty:3,
     question:'Quelle forme du passé composé est INCORRECTE ?',
@@ -125,7 +125,7 @@ STATIC_QUESTIONS.push(
     options:['a fait / a lu','avait fait / avait lu','faisait / lisait','a faisé / a lisé'],
     answer:'a fait / a lu',
     hint:'Actions terminées dans le passé → passé composé. Irréguliers : faire → fait, lire → lu.',
-    explanation:'"Ma mère <b>a fait</b> les courses" — faire → <b>fait</b> (irrégulier), auxiliaire avoir (elle → a). "Mon père <b>a lu</b> le journal" — lire → <b>lu</b> (irrégulier), auxiliaire avoir (il → a).' }),
+    explanation:'"Ma mère <b>a fait</b> les courses" - faire → <b>fait</b> (irrégulier), auxiliaire avoir (elle → a). "Mon père <b>a lu</b> le journal" - lire → <b>lu</b> (irrégulier), auxiliaire avoir (il → a).' }),
 
   makeMCQ({ id:'g4fr-passe-comp-019b', chapterId:'g4fr-passe-comp', difficulty:3,
     question:'Quel verbe utilise l\'auxiliaire ÊTRE au passé composé ?',
@@ -151,7 +151,7 @@ STATIC_QUESTIONS.push(
     options:['a allée','est allée','était allée','avait allé'],
     answer:'est allée',
     hint:'"Aller" utilise être. Elle = féminin → accord du participe.',
-    explanation:'"Elle <b>est allée</b> au marché." — <b>aller</b> utilise être. Sujet féminin "elle" → accord : allé<b>e</b>. Règle : avec être, le participe passé s\'accorde avec le sujet : il est allé, <b>elle est allée</b>, ils sont allés, elles sont allées.' }),
+    explanation:'"Elle <b>est allée</b> au marché." - <b>aller</b> utilise être. Sujet féminin "elle" → accord : allé<b>e</b>. Règle : avec être, le participe passé s\'accorde avec le sujet : il est allé, <b>elle est allée</b>, ils sont allés, elles sont allées.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-021', chapterId:'g4fr-passe-comp', difficulty:2,
     question:'Quel est le participe passé de METTRE ?',
@@ -165,12 +165,12 @@ STATIC_QUESTIONS.push(
     options:['ont parti','sont partis','ont partis','est parti'],
     answer:'sont partis',
     hint:'"Partir" utilise être. Ils = masculin pluriel → accord.',
-    explanation:'"Ils <b>sont partis</b> tôt ce matin." — <b>partir</b> utilise être. Sujet masculin pluriel "ils" → accord : parti<b>s</b>. Conjugaison complète : je suis parti(e), tu es parti(e), il est parti, elle est partie, nous sommes parti(e)s, vous êtes parti(e)(s), ils sont <b>partis</b>, elles sont parties.' }),
+    explanation:'"Ils <b>sont partis</b> tôt ce matin." - <b>partir</b> utilise être. Sujet masculin pluriel "ils" → accord : parti<b>s</b>. Conjugaison complète : je suis parti(e), tu es parti(e), il est parti, elle est partie, nous sommes parti(e)s, vous êtes parti(e)(s), ils sont <b>partis</b>, elles sont parties.' }),
 
   makeTF({ id:'g4fr-passe-comp-023', chapterId:'g4fr-passe-comp', difficulty:2,
     question:'Au passé composé avec être, le participe passé s\'accorde avec le sujet.',
     answer:true,
-    hint:'Il est allé / Elle est allée — la différence = accord.',
+    hint:'Il est allé / Elle est allée - la différence = accord.',
     explanation:'<b>Vrai.</b> Avec <b>être</b> comme auxiliaire, le participe passé s\'accorde avec le sujet : <b>il</b> est allé, <b>elle</b> est allée, <b>ils</b> sont allés, <b>elles</b> sont allées. Avec <b>avoir</b>, pas d\'accord avec le sujet : il a mangé, elle a mangé (pas de changement).' }),
 
   makeMCQ({ id:'g4fr-passe-comp-024', chapterId:'g4fr-passe-comp', difficulty:2,
@@ -185,7 +185,7 @@ STATIC_QUESTIONS.push(
     options:['avez venu','êtes venus','avez venus','êtes venez'],
     answer:'êtes venus',
     hint:'"Venir" utilise être. Vous = pluriel → accord.',
-    explanation:'"Vous <b>êtes venus</b> à ma fête ?" — <b>venir</b> utilise être. "Vous" pluriel → venus. Attention : "vous" peut être singulier (poli) ou pluriel. Ici, pluriel → <b>êtes venus</b>.' }),
+    explanation:'"Vous <b>êtes venus</b> à ma fête ?" - <b>venir</b> utilise être. "Vous" pluriel → venus. Attention : "vous" peut être singulier (poli) ou pluriel. Ici, pluriel → <b>êtes venus</b>.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-026', chapterId:'g4fr-passe-comp', difficulty:3,
     question:'Quelle question au passé composé est correcte (inversion) ?',
@@ -204,7 +204,7 @@ STATIC_QUESTIONS.push(
     options:['ai né','suis né(e)','avais né','était né'],
     answer:'suis né(e)',
     hint:'"Naître" utilise être. Je suis...',
-    explanation:'"Je <b>suis né(e)</b> à Curepipe." — <b>naître</b> utilise être. Le participe passé "né" s\'accorde : je suis né (garçon), je suis née (fille). C\'est la même structure qu\'aller, venir, partir : sujet + être + participe accordé.' }),
+    explanation:'"Je <b>suis né(e)</b> à Curepipe." - <b>naître</b> utilise être. Le participe passé "né" s\'accorde : je suis né (garçon), je suis née (fille). C\'est la même structure qu\'aller, venir, partir : sujet + être + participe accordé.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-028', chapterId:'g4fr-passe-comp', difficulty:3,
     question:'Forme la question par inversion : "Tu es arrivé à l\'heure." →',
@@ -216,7 +216,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Es-tu arrivé à l\'heure ?',
     hint:'Inversion : place l\'auxiliaire avant le sujet avec un trait d\'union.',
-    explanation:'"<b>Es</b>-tu arrivé à l\'heure ?" — Pour l\'inversion avec être : l\'auxiliaire (es) se place avant le sujet (tu) avec un trait d\'union : <b>es-tu</b>. Le participe "arrivé" reste après. Autres exemples : est-il parti ? êtes-vous venus ? sont-elles arrivées ?' }),
+    explanation:'"<b>Es</b>-tu arrivé à l\'heure ?" - Pour l\'inversion avec être : l\'auxiliaire (es) se place avant le sujet (tu) avec un trait d\'union : <b>es-tu</b>. Le participe "arrivé" reste après. Autres exemples : est-il parti ? êtes-vous venus ? sont-elles arrivées ?' }),
 
   makeMCQ({ id:'g4fr-passe-comp-029', chapterId:'g4fr-passe-comp', difficulty:4,
     question:'Priya raconte : "Hier, ma famille ___ (aller) au restaurant. Mon père ___ (choisir) une pizza. Ma mère ___ (prendre) du riz. Moi, j\'___ (manger) une glace." Bonne série ?',
@@ -252,7 +252,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Est-ce que tu as ouvert la fenêtre et es sorti(e) ?',
     hint:'"Ouvrir" → avoir. "Sortir" → être.',
-    explanation:'"Est-ce que tu <b>as ouvert</b> la fenêtre et <b>es sorti(e)</b> ?" — "ouvrir" (→ avoir : tu as ouvert). "sortir" (→ être : tu es sorti/sortie). Deux verbes en une question : l\'un avec avoir, l\'autre avec être. "Ouverte" serait incorrect (avoir ne s\'accorde pas avec le sujet).' }),
+    explanation:'"Est-ce que tu <b>as ouvert</b> la fenêtre et <b>es sorti(e)</b> ?" - "ouvrir" (→ avoir : tu as ouvert). "sortir" (→ être : tu es sorti/sortie). Deux verbes en une question : l\'un avec avoir, l\'autre avec être. "Ouverte" serait incorrect (avoir ne s\'accorde pas avec le sujet).' }),
 
   makeMCQ({ id:'g4fr-passe-comp-032', chapterId:'g4fr-passe-comp', difficulty:4,
     question:'Shanvi écrit dans son journal : "Aujourd\'hui ___ une bonne journée ! Ce matin, je ___ (se réveiller) tôt. Mes amis ___ (venir) chez moi. Nous ___ (jouer) et ___ (rire) beaucoup." Bonne série ?',
@@ -271,7 +271,7 @@ STATIC_QUESTIONS.push(
     options:['ont resté','sont restées','avaient restées','sont restés'],
     answer:'sont restées',
     hint:'"Rester" utilise être. Elles = féminin pluriel → accord -ées.',
-    explanation:'"Elles <b>sont restées</b>" — <b>rester</b> utilise être. Sujet féminin pluriel "elles" → participe passé accordé : rest-<b>ées</b>. Rappel : avec être, accord avec le sujet : il est resté / elle est restée / ils sont restés / elles sont <b>restées</b>.' }),
+    explanation:'"Elles <b>sont restées</b>" - <b>rester</b> utilise être. Sujet féminin pluriel "elles" → participe passé accordé : rest-<b>ées</b>. Rappel : avec être, accord avec le sujet : il est resté / elle est restée / ils sont restés / elles sont <b>restées</b>.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-034', chapterId:'g4fr-passe-comp', difficulty:4,
     question:'Complète le message de Ravi à sa cousine : "Ce week-end, je ___ (sortir) avec papa. Nous ___ (aller) au marché et nous ___ (acheter) des fruits. Maman ___ (rester) à la maison et elle ___ (faire) un gâteau."',
@@ -294,7 +294,7 @@ STATIC_QUESTIONS.push(
       'as fait / ai allée / avons joué / avons mangé'
     ],
     answer:'as fait / suis allée / avons joué / avons mangé',
-    hint:'"Faire" = avoir (tu as fait). "Aller" = être (je suis allée — Priya est fille). "Jouer/manger" = avoir.',
-    explanation:'"tu <b>as fait</b>" (faire→avoir, tu). "j\'<b>suis allée</b>" (aller→être, je f. → allée). "<b>avons joué</b>" (jouer→avoir, nous — pas d\'accord). "<b>avons mangé</b>" (manger→avoir, nous). Avec avoir, pas d\'accord sauf COD placé avant !' })
+    hint:'"Faire" = avoir (tu as fait). "Aller" = être (je suis allée - Priya est fille). "Jouer/manger" = avoir.',
+    explanation:'"tu <b>as fait</b>" (faire→avoir, tu). "j\'<b>suis allée</b>" (aller→être, je f. → allée). "<b>avons joué</b>" (jouer→avoir, nous - pas d\'accord). "<b>avons mangé</b>" (manger→avoir, nous). Avec avoir, pas d\'accord sauf COD placé avant !' })
 
 );

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 History & Geography — Chapter: Map Skills (contour lines, scale, grid references)
+﻿'use strict';
+// Grade 6 History & Geography - Chapter: Map Skills (contour lines, scale, grid references)
 // IDs format: g6hg-ms-NNN  (Grade 6, extends Grade 5 lat/lon work)
 
 // Contour map showing a hill
@@ -67,18 +67,18 @@ STATIC_QUESTIONS.push(
     options:[
       'The land is very flat in that area',
       'The height difference is very small',
-      'The slope is steep — the land rises sharply',
+      'The slope is steep - the land rises sharply',
       'The area is below sea level'
     ],
-    answer:'The slope is steep — the land rises sharply',
+    answer:'The slope is steep - the land rises sharply',
     hint:'If you have to gain a lot of height in a short horizontal distance, the slope is steep.',
-    explanation:'<b>Closely spaced contour lines</b> show a <b>steep slope</b> — the land rises quickly over a short distance. <b>Widely spaced lines</b> show a gentle, gradual slope. This is shown in the note at the bottom of the diagram.' }),
+    explanation:'<b>Closely spaced contour lines</b> show a <b>steep slope</b> - the land rises quickly over a short distance. <b>Widely spaced lines</b> show a gentle, gradual slope. This is shown in the note at the bottom of the diagram.' }),
 
   makeMCQ({ id:'g6hg-ms-003', chapterId:'g6-map-skills', difficulty:2,
     question:`${_SVG_CONTOUR}Using the contour map, what is the approximate height of the hill at its summit?`,
     options:['100 m','300 m','500 m','1000 m'],
     answer:'500 m',
-    hint:'Look at the innermost (smallest) contour line — it is labelled.',
+    hint:'Look at the innermost (smallest) contour line - it is labelled.',
     explanation:'The summit (top) of the hill is shown by the innermost contour. The diagram labels it <b>500 m</b>. The contour lines at 100 m, 200 m, 300 m, 400 m and 500 m show the hill rising in stages.' }),
 
   makeMCQ({ id:'g6hg-ms-004', chapterId:'g6-map-skills', difficulty:2,
@@ -86,14 +86,14 @@ STATIC_QUESTIONS.push(
     options:['1C','2D','1D','2C'],
     answer:'1D',
     hint:'Read the column number FIRST (along the bottom), then the row letter (up the side). The star is in column 1, row D.',
-    explanation:'Grid references are read by going <b>along the bottom first</b> (easting/column) <b>then up</b> (northing/row). The star (school) is in column <b>1</b>, row <b>D</b> — so the grid reference is <b>1D</b>.' }),
+    explanation:'Grid references are read by going <b>along the bottom first</b> (easting/column) <b>then up</b> (northing/row). The star (school) is in column <b>1</b>, row <b>D</b> - so the grid reference is <b>1D</b>.' }),
 
   makeMCQ({ id:'g6hg-ms-005', chapterId:'g6-map-skills', difficulty:2,
     question:`${_SVG_GRID_REF}What is the grid reference of the LAKE (blue circle)?`,
     options:['3A','3B','2C','3C'],
     answer:'3B',
     hint:'Count along the bottom to find the column, then up to find the row.',
-    explanation:'The lake (blue circle) is in column <b>3</b> and row <b>B</b> — so its grid reference is <b>3B</b>. Always read the column (left-right/easting) BEFORE the row (up-down/northing).' }),
+    explanation:'The lake (blue circle) is in column <b>3</b> and row <b>B</b> - so its grid reference is <b>3B</b>. Always read the column (left-right/easting) BEFORE the row (up-down/northing).' }),
 
   makeMCQ({ id:'g6hg-ms-006', chapterId:'g6-map-skills', difficulty:2,
     question:'A map has a scale of 1:50,000. What does this mean?',
@@ -137,7 +137,7 @@ STATIC_QUESTIONS.push(
     options:['The lowest point of the hill (valley)','The steepest side of the hill','The highest point (summit) of the hill','The base of the hill at sea level'],
     answer:'The highest point (summit) of the hill',
     hint:'As you move inward on the loops, you are going uphill.',
-    explanation:'On a contour map of a hill, the lines form concentric loops. The <b>innermost (smallest) loop</b> represents the <b>highest point — the summit</b>. Each outward loop shows a lower contour level going down towards the base of the hill.' })
+    explanation:'On a contour map of a hill, the lines form concentric loops. The <b>innermost (smallest) loop</b> represents the <b>highest point - the summit</b>. Each outward loop shows a lower contour level going down towards the base of the hill.' })
 
 );
 
@@ -147,8 +147,8 @@ STATIC_QUESTIONS.push(
     question:'An area of flat and low land is called a: (PSAC 2025 Q1)',
     options:['Gorge','Plateau','Plain','Valley'],
     answer:'Plain',
-    hint:'Think of the Northern Plains of Mauritius — flat, low land perfect for sugar cane.',
-    explanation:'A <b>plain</b> is an area of flat and low land. In Mauritius, the <b>Northern Plains</b> (around Triolet, Mapou and Poudre d\'Or) are the main plain — flat, low-lying areas ideal for sugar cane cultivation. A <b>plateau</b> is flat but HIGH (like the central plateau of Mauritius). A <b>valley</b> is a low area between hills. A <b>gorge</b> is a narrow, deep valley.' }),
+    hint:'Think of the Northern Plains of Mauritius - flat, low land perfect for sugar cane.',
+    explanation:'A <b>plain</b> is an area of flat and low land. In Mauritius, the <b>Northern Plains</b> (around Triolet, Mapou and Poudre d\'Or) are the main plain - flat, low-lying areas ideal for sugar cane cultivation. A <b>plateau</b> is flat but HIGH (like the central plateau of Mauritius). A <b>valley</b> is a low area between hills. A <b>gorge</b> is a narrow, deep valley.' }),
 
   makeMCQ({ id:'g6hg-ms-012', chapterId:'g6-map-skills', difficulty:2,
     question:'The line of latitude at 0° is called the: (PSAC 2025 Q8b)',
@@ -161,14 +161,14 @@ STATIC_QUESTIONS.push(
     question:'A plane leaves SSR International Airport in Mauritius for Madagascar. In which direction does it fly? (PSAC 2025 Q8d)',
     options:['North','South-East','West','North-East'],
     answer:'West',
-    hint:'Look at a map of the Indian Ocean — where is Madagascar relative to Mauritius?',
+    hint:'Look at a map of the Indian Ocean - where is Madagascar relative to Mauritius?',
     explanation:'Madagascar lies to the <b>west</b> of Mauritius (approximately 800 km to the west-northwest). Therefore, a plane from SSR International Airport (Mauritius) heading to Madagascar would fly <b>west</b>. The PSAC 2025 Q8 tested compass direction reading from a map of the Indian Ocean region. Knowing cardinal directions (N, S, E, W) and the relative positions of Indian Ocean islands is important in Grade 6.' }),
 
   makeMCQ({ id:'g6hg-ms-014', chapterId:'g6-map-skills', difficulty:2,
     question:'The district of GRAND BAIE is described in the PSAC 2025 map as a busy tourist resort. Where is Grand Baie located?',
     options:['On the south coast','On the east coast','On the north coast','On the west coast'],
     answer:'On the north coast',
-    hint:'Grand Baie is the most famous beach resort area in Mauritius — it is in the North district.',
+    hint:'Grand Baie is the most famous beach resort area in Mauritius - it is in the North district.',
     explanation:'<b>Grand Baie</b> is located on the <b>north coast</b> of Mauritius (in the Rivière du Rempart district). It is Mauritius\'s most famous tourist resort, known for its beautiful beach, water sports, restaurants and shopping. PSAC 2025 Q3 used a map of Mauritius and asked students to identify Grand Baie as a "busy tourist resort" and identify the Fort Frederik Hendrik Museum at Vieux Grand Port.' }),
 
   makeMCQ({ id:'g6hg-ms-015', chapterId:'g6-map-skills', difficulty:2,
@@ -180,7 +180,7 @@ STATIC_QUESTIONS.push(
       'The temperature at that point on the map'
     ],
     answer:'The precise altitude (height above sea level) of a specific point on the land, shown as a number',
-    hint:'You often see a small dot with a number like ".643" on a topographic map — that is the height in metres.',
+    hint:'You often see a small dot with a number like ".643" on a topographic map - that is the height in metres.',
     explanation:'A <b>spot height</b> is a precise measurement of height above sea level at a specific point, shown as a dot (•) with a number on a topographic map. Unlike contour lines (which show height bands), spot heights give the <b>exact elevation</b> at one point. Mountain peaks and hilltops are often marked with spot heights. Example: "• 828" next to Pieter Both means it is 828 metres above sea level.' }),
 
   makeTF({ id:'g6hg-ms-016', chapterId:'g6-map-skills', difficulty:1,
@@ -207,7 +207,7 @@ STATIC_QUESTIONS.push(
     question:'A map shows mountain range P with the label "Himalayas", and group of islands R as the "Chagos Archipelago." These are tested in a map of the INDIAN OCEAN REGION (PSAC 2025 Q8). In which direction are the Himalayas from Mauritius?',
     options:['South','West','North','East'],
     answer:'North',
-    hint:'The Himalayas are in Asia — is Asia north or south of Mauritius?',
-    explanation:'The <b>Himalayas</b> are located in <b>north</b> Asia (spanning Nepal, India, Bhutan, Tibet and Pakistan) — to the <b>north</b> of Mauritius. Mauritius is at approximately 20°S latitude; the Himalayas are at approximately 28–36°N latitude. PSAC 2025 Q8 used a map of the Indian Ocean region requiring students to identify the Himalayas (mountain range P) and the Chagos Archipelago (island group R), and understand compass directions in this regional context.' })
+    hint:'The Himalayas are in Asia - is Asia north or south of Mauritius?',
+    explanation:'The <b>Himalayas</b> are located in <b>north</b> Asia (spanning Nepal, India, Bhutan, Tibet and Pakistan) - to the <b>north</b> of Mauritius. Mauritius is at approximately 20°S latitude; the Himalayas are at approximately 28–36°N latitude. PSAC 2025 Q8 used a map of the Indian Ocean region requiring students to identify the Himalayas (mountain range P) and the Chagos Archipelago (island group R), and understand compass directions in this regional context.' })
 
 );

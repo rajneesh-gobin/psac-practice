@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 French — Chapitre : L'Expression Écrite & Argumentation
+﻿'use strict';
+// Grade 6 French - Chapitre : L'Expression Écrite & Argumentation
 // IDs format: g6fr-arg-NNN
 
 STATIC_QUESTIONS.push(
@@ -8,14 +8,14 @@ STATIC_QUESTIONS.push(
     question:'Quelle expression introduit une OPINION PERSONNELLE ?',
     options:['En conclusion','De plus','À mon avis','Cependant'],
     answer:'À mon avis',
-    hint:'"À mon avis" signifie "In my opinion" — c\'est une expression d\'opinion.',
+    hint:'"À mon avis" signifie "In my opinion" - c\'est une expression d\'opinion.',
     explanation:'"<b>À mon avis</b>" = pour exprimer son opinion. Autres expressions d\'opinion : Je pense que, Je crois que, Il me semble que, Je suis convaincu(e) que, Selon moi. "En conclusion" = conclusion ; "De plus" = ajout d\'idée ; "Cependant" = opposition.' }),
 
   makeMCQ({ id:'g6fr-arg-002', chapterId:'g6fr-argumentation', difficulty:2,
     question:'Quel connecteur AJOUTE une idée à la précédente ?',
     options:['Cependant','Pourtant','De plus','En revanche'],
     answer:'De plus',
-    hint:'"De plus" signifie "furthermore" — on ajoute une information.',
+    hint:'"De plus" signifie "furthermore" - on ajoute une information.',
     explanation:'"<b>De plus</b>" = pour ajouter une idée. Autres connecteurs d\'ajout : En outre, Par ailleurs, Non seulement… mais aussi, Également. "Cependant / Pourtant / En revanche" = opposition.' }),
 
   makeMCQ({ id:'g6fr-arg-003', chapterId:'g6fr-argumentation', difficulty:2,
@@ -42,19 +42,19 @@ STATIC_QUESTIONS.push(
     options:['De plus','Bien que','En conclusion','Certes'],
     answer:'En conclusion',
     hint:'Cette expression signal le dernier paragraphe.',
-    explanation:'"<b>En conclusion</b>" annonce la conclusion. Autres expressions : En résumé, Pour conclure, En définitive, En somme. La conclusion résume les idées principales et propose une réflexion finale — elle n\'introduit pas de nouvelles idées.' }),
+    explanation:'"<b>En conclusion</b>" annonce la conclusion. Autres expressions : En résumé, Pour conclure, En définitive, En somme. La conclusion résume les idées principales et propose une réflexion finale - elle n\'introduit pas de nouvelles idées.' }),
 
   makeTF({ id:'g6fr-arg-006', chapterId:'g6fr-argumentation', difficulty:2,
     question:'"Non seulement… mais aussi" est utilisé pour introduire une idée contraire.',
     answer:false,
     hint:'"Non seulement" = not only. "Mais aussi" = but also.',
-    explanation:'<b>Faux.</b> "Non seulement… <b>mais aussi</b>" = "Non seulement… mais également" — cette structure <b>ajoute</b> une idée, elle n\'oppose pas. "Non seulement c\'est utile, mais aussi c\'est beau." Les connecteurs d\'opposition : Cependant, Pourtant, En revanche, Néanmoins, Toutefois.' }),
+    explanation:'<b>Faux.</b> "Non seulement… <b>mais aussi</b>" = "Non seulement… mais également" - cette structure <b>ajoute</b> une idée, elle n\'oppose pas. "Non seulement c\'est utile, mais aussi c\'est beau." Les connecteurs d\'opposition : Cependant, Pourtant, En revanche, Néanmoins, Toutefois.' }),
 
   makeMCQ({ id:'g6fr-arg-007', chapterId:'g6fr-argumentation', difficulty:2,
     question:'Quel connecteur exprime une CONSÉQUENCE ?',
     options:['Cependant','Donc / Ainsi','De plus','Certes'],
     answer:'Donc / Ainsi',
-    hint:'"Donc" = therefore/so — la conséquence découle de ce qui précède.',
+    hint:'"Donc" = therefore/so - la conséquence découle de ce qui précède.',
     explanation:'"<b>Donc</b>" et "<b>Ainsi</b>" expriment la conséquence. "La forêt a brûlé. <b>Donc</b>, de nombreux animaux ont perdu leur habitat." Autres connecteurs de conséquence : Par conséquent, C\'est pourquoi, En conséquence, Si bien que.' }),
 
   makeMCQ({ id:'g6fr-arg-008', chapterId:'g6fr-argumentation', difficulty:2,
@@ -90,7 +90,7 @@ STATIC_QUESTIONS.push(
     question:'Quel connecteur indique qu\'une idée s\'ajoute à la précédente en l\'amplifiant ?',
     options:['Or','Pourtant','De surcroît','Car'],
     answer:'De surcroît',
-    hint:'"De surcroît" = moreover/on top of that — on ajoute une idée encore plus forte.',
+    hint:'"De surcroît" = moreover/on top of that - on ajoute une idée encore plus forte.',
     explanation:'"<b>De surcroît</b>" (= moreover, on top of that) ajoute une idée en l\'amplifiant : "Ce projet est coûteux. <b>De surcroît</b>, il risque d\'être inefficace." Connecteurs d\'ajout par ordre de fréquence (manuel MIE de 6e) : de plus, en outre, par ailleurs, également, <b>de surcroît</b> (renforcé), non seulement… mais aussi.' }),
 
   makeMCQ({ id:'g6fr-arg-012', chapterId:'g6fr-argumentation', difficulty:1,
@@ -110,7 +110,7 @@ STATIC_QUESTIONS.push(
     options:['Donc','Certes','Car','Ainsi'],
     answer:'Certes',
     hint:'"Certes" reconnaît un point opposé avant de le dépasser avec son propre argument.',
-    explanation:'"<b>Certes</b> je comprends les inquiétudes, je pense que les bénéfices l\'emportent." — <b>Certes</b> (= admittedly, granted) concède un point à l\'adversaire avant de le réfuter. Structure classique de la concession au bac de français : "Certes… mais/cependant/néanmoins…" Le manuel MIE de 6e enseigne cette structure pour les dissertations et les débats.' }),
+    explanation:'"<b>Certes</b> je comprends les inquiétudes, je pense que les bénéfices l\'emportent." - <b>Certes</b> (= admittedly, granted) concède un point à l\'adversaire avant de le réfuter. Structure classique de la concession au bac de français : "Certes… mais/cependant/néanmoins…" Le manuel MIE de 6e enseigne cette structure pour les dissertations et les débats.' }),
 
   makeMCQ({ id:'g6fr-arg-014', chapterId:'g6fr-argumentation', difficulty:2,
     question:'Quelle phrase représente le meilleur ARGUMENT pour un débat sur la protection de l\'environnement à Maurice ?',
@@ -122,13 +122,13 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"La dégradation des récifs coralliens menace directement le tourisme, pilier essentiel de l\'économie mauricienne."',
     hint:'Un bon argument est précis, factuel et montre clairement les conséquences.',
-    explanation:'"La dégradation des récifs coralliens <b>menace directement le tourisme, pilier essentiel de l\'économie mauricienne</b>." — C\'est un argument efficace car : (1) il est <b>précis</b> (récifs coralliens, tourisme) ; (2) il montre les <b>conséquences</b> économiques ; (3) il utilise le vocabulaire soutenu du manuel MIE de 6e. Un bon argument répond toujours à "Pourquoi ? Avec quelles preuves ?"' }),
+    explanation:'"La dégradation des récifs coralliens <b>menace directement le tourisme, pilier essentiel de l\'économie mauricienne</b>." - C\'est un argument efficace car : (1) il est <b>précis</b> (récifs coralliens, tourisme) ; (2) il montre les <b>conséquences</b> économiques ; (3) il utilise le vocabulaire soutenu du manuel MIE de 6e. Un bon argument répond toujours à "Pourquoi ? Avec quelles preuves ?"' }),
 
   makeTF({ id:'g6fr-arg-015', chapterId:'g6fr-argumentation', difficulty:1,
     question:'Dans un texte argumentatif, la conclusion peut introduire de nouveaux arguments.',
     answer:false,
     hint:'Que doit contenir la conclusion ? Que ne doit-elle PAS contenir ?',
-    explanation:'<b>Faux.</b> La conclusion d\'un texte argumentatif doit : (1) <b>résumer</b> les idées principales ; (2) reprendre la thèse en d\'autres termes ; (3) proposer une <b>ouverture</b> (réflexion plus large). Elle ne doit <b>jamais</b> introduire de nouveaux arguments — ceux-ci appartiennent au développement. Selon le manuel MIE de 6e, introduire un nouveau point dans la conclusion est considéré comme une erreur de structure.' }),
+    explanation:'<b>Faux.</b> La conclusion d\'un texte argumentatif doit : (1) <b>résumer</b> les idées principales ; (2) reprendre la thèse en d\'autres termes ; (3) proposer une <b>ouverture</b> (réflexion plus large). Elle ne doit <b>jamais</b> introduire de nouveaux arguments - ceux-ci appartiennent au développement. Selon le manuel MIE de 6e, introduire un nouveau point dans la conclusion est considéré comme une erreur de structure.' }),
 
   makeMCQ({ id:'g6fr-arg-016', chapterId:'g6fr-argumentation', difficulty:2,
     question:'Comment orthographie-t-on correctement l\'accord dans : "Elle est convaincue que cette solution est la meilleure."',
@@ -140,7 +140,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"convaincue" (féminin, accord avec le sujet)',
     hint:'"Elle" est féminin singulier → l\'adjectif s\'accorde en genre et en nombre.',
-    explanation:'"Elle est <b>convaincue</b>" — Les adjectifs et les participes passés (attributs du sujet) s\'accordent en <b>genre et en nombre</b> avec le sujet. "Elle" = féminin singulier → "convaincu" + <b>-e</b> = "convaincue". Le manuel MIE de 6e insiste sur les accords (adjectif/nom, verbe/sujet) dans l\'expression écrite — c\'est un critère de notation du PSAC.' }),
+    explanation:'"Elle est <b>convaincue</b>" - Les adjectifs et les participes passés (attributs du sujet) s\'accordent en <b>genre et en nombre</b> avec le sujet. "Elle" = féminin singulier → "convaincu" + <b>-e</b> = "convaincue". Le manuel MIE de 6e insiste sur les accords (adjectif/nom, verbe/sujet) dans l\'expression écrite - c\'est un critère de notation du PSAC.' }),
 
   makeMCQ({ id:'g6fr-arg-017', chapterId:'g6fr-argumentation', difficulty:3,
     question:'Quel est le rôle du connecteur "Or" dans un texte argumentatif ?',
@@ -151,8 +151,8 @@ STATIC_QUESTIONS.push(
       'Il exprime la cause'
     ],
     answer:'Il introduit un fait nouveau qui va modifier ou nuancer ce qui vient d\'être dit',
-    hint:'"Or" = now/but in fact — il marque une transition vers un fait inattendu ou révélateur.',
-    explanation:'"<b>Or</b>" (= now, but, however — en anglais) introduit un fait nouveau qui change ou nuance la perspective : "On pensait que le problème était résolu. <b>Or</b>, les chiffres montrent une aggravation." Il crée une surprise ou un tournant dans l\'argumentation. Très utilisé dans les dissertations de niveau 6e, mais moins fréquent que "cependant" ou "de plus".' }),
+    hint:'"Or" = now/but in fact - il marque une transition vers un fait inattendu ou révélateur.',
+    explanation:'"<b>Or</b>" (= now, but, however - en anglais) introduit un fait nouveau qui change ou nuance la perspective : "On pensait que le problème était résolu. <b>Or</b>, les chiffres montrent une aggravation." Il crée une surprise ou un tournant dans l\'argumentation. Très utilisé dans les dissertations de niveau 6e, mais moins fréquent que "cependant" ou "de plus".' }),
 
   makeMCQ({ id:'g6fr-arg-018', chapterId:'g6fr-argumentation', difficulty:2,
     question:'Laquelle de ces phrases utilise correctement les connecteurs pour structurer un paragraphe argumentatif ?',
@@ -164,7 +164,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Premièrement, les technologies facilitent l\'apprentissage. En effet, les élèves accèdent facilement à des ressources éducatives. Cependant, elles peuvent aussi distraire."',
     hint:'Un bon paragraphe suit la structure : argument + illustration/explication + nuance.',
-    explanation:'"<b>Premièrement</b>, les technologies facilitent l\'apprentissage. <b>En effet</b>, les élèves accèdent à des ressources. <b>Cependant</b>, elles peuvent distraire." — Structure modèle : (1) <b>Premièrement</b> = annonce l\'argument ; (2) <b>En effet</b> = illustre/explique ; (3) <b>Cependant</b> = nuance. Le manuel MIE de 6e utilise ce modèle explicitement pour la rédaction argumentative.' }),
+    explanation:'"<b>Premièrement</b>, les technologies facilitent l\'apprentissage. <b>En effet</b>, les élèves accèdent à des ressources. <b>Cependant</b>, elles peuvent distraire." - Structure modèle : (1) <b>Premièrement</b> = annonce l\'argument ; (2) <b>En effet</b> = illustre/explique ; (3) <b>Cependant</b> = nuance. Le manuel MIE de 6e utilise ce modèle explicitement pour la rédaction argumentative.' }),
 
   makeMCQ({ id:'g6fr-arg-019', chapterId:'g6fr-argumentation', difficulty:4,
     question:'Dans un débat sur l\'utilisation des téléphones portables à l\'école, quelle phrase représente la meilleure RÉFUTATION (contre-argument) ?',
@@ -253,7 +253,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Veuillez agréer, Monsieur le Directeur, l\'expression de mes salutations distinguées."',
     hint:'Les formules de politesse formelles utilisent des expressions comme "Veuillez agréer…" ou "Je vous prie d\'agréer…"',
-    explanation:'"<b>Veuillez agréer, Monsieur le Directeur, l\'expression de mes salutations distinguées.</b>" — formule de politesse formelle. Structure : <b>Veuillez agréer / Je vous prie d\'agréer</b> + [titre répété] + <b>l\'expression de mes salutations distinguées / respectueuses / les meilleures</b>. Répéter le titre (Monsieur le Directeur) est obligatoire dans la formule de politesse.' }),
+    explanation:'"<b>Veuillez agréer, Monsieur le Directeur, l\'expression de mes salutations distinguées.</b>" - formule de politesse formelle. Structure : <b>Veuillez agréer / Je vous prie d\'agréer</b> + [titre répété] + <b>l\'expression de mes salutations distinguées / respectueuses / les meilleures</b>. Répéter le titre (Monsieur le Directeur) est obligatoire dans la formule de politesse.' }),
 
   makeMCQ({ id:'g6fr-arg-029', chapterId:'g6fr-argumentation', difficulty:3,
     question:'Quel type de texte présente des arguments POUR et CONTRE sur un sujet ?',
@@ -290,7 +290,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses"',
     hint:'L\'objet d\'une lettre formelle est concis, précis et nomme clairement la demande.',
-    explanation:'"<b>Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses</b>" — L\'objet est un <b>titre bref et précis</b> qui résume la raison de la lettre. Il doit : (1) utiliser un nom (Demande / Réclamation / Candidature…) + (2) préciser l\'action souhaitée + (3) ajouter les détails pertinents.' }),
+    explanation:'"<b>Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses</b>" - L\'objet est un <b>titre bref et précis</b> qui résume la raison de la lettre. Il doit : (1) utiliser un nom (Demande / Réclamation / Candidature…) + (2) préciser l\'action souhaitée + (3) ajouter les détails pertinents.' }),
 
   makeMCQ({ id:'g6fr-arg-033', chapterId:'g6fr-argumentation', difficulty:3,
     question:'Dans un essai argumentatif, quelle est la structure idéale ?',
@@ -302,13 +302,13 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Introduction → Arguments → Conclusion',
     hint:'L\'ordre logique : présenter le sujet, développer les arguments, conclure.',
-    explanation:'"<b>Introduction → Arguments → Conclusion</b>" — Structure classique de l\'essai argumentatif : (1) <b>Introduction</b> : présenter le sujet et annoncer la thèse ; (2) <b>Développement</b> : arguments avec exemples et connecteurs ; (3) <b>Conclusion</b> : synthèse et ouverture. Cette structure est évaluée au PSAC.' }),
+    explanation:'"<b>Introduction → Arguments → Conclusion</b>" - Structure classique de l\'essai argumentatif : (1) <b>Introduction</b> : présenter le sujet et annoncer la thèse ; (2) <b>Développement</b> : arguments avec exemples et connecteurs ; (3) <b>Conclusion</b> : synthèse et ouverture. Cette structure est évaluée au PSAC.' }),
 
   makeMCQ({ id:'g6fr-arg-034', chapterId:'g6fr-argumentation', difficulty:3,
     question:'Quel connecteur introduit une CONCESSION dans un argument ?',
     options:['De plus','En conclusion','Certes','C\'est pourquoi'],
     answer:'Certes',
-    hint:'"Certes" = il est vrai que / admittedly — concède un point avant de le nuancer.',
+    hint:'"Certes" = il est vrai que / admittedly - concède un point avant de le nuancer.',
     explanation:'"<b>Certes</b>" = connecteur de concession (admittedly/granted). Usage : "Certes, internet présente des risques, <b>mais</b> ses avantages sont nombreux." Autres connecteurs de concession : "il est vrai que", "même si". À distinguer de "de plus" (ajout), "c\'est pourquoi" (conséquence), "en conclusion" (synthèse).' }),
 
   makeMCQ({ id:'g6fr-arg-035', chapterId:'g6fr-argumentation', difficulty:4,
@@ -321,6 +321,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Argument + Exemple + Explication',
     hint:'Structure P.E.E. (Point / Evidence / Explanation) : d\'abord l\'idée, puis la preuve, puis la justification.',
-    explanation:'"<b>Argument + Exemple + Explication</b>" — Structure P.E.E. (Point-Evidence-Explanation) : (1) énoncer l\'<b>argument</b> (thèse du paragraphe), (2) donner un <b>exemple</b> concret ou une statistique, (3) expliquer le lien entre l\'exemple et l\'argument. Ex : "Les réseaux sociaux créent des liens (argument). Par exemple, des amis séparés par l\'océan peuvent rester en contact (exemple). Ainsi, la distance géographique n\'empêche plus l\'amitié (explication)."' })
+    explanation:'"<b>Argument + Exemple + Explication</b>" - Structure P.E.E. (Point-Evidence-Explanation) : (1) énoncer l\'<b>argument</b> (thèse du paragraphe), (2) donner un <b>exemple</b> concret ou une statistique, (3) expliquer le lien entre l\'exemple et l\'argument. Ex : "Les réseaux sociaux créent des liens (argument). Par exemple, des amis séparés par l\'océan peuvent rester en contact (exemple). Ainsi, la distance géographique n\'empêche plus l\'amitié (explication)."' })
 
 );

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Maths — Chapter: Numeration & Place Value (0-10,000)
+﻿'use strict';
+// Grade 4 Maths - Chapter: Numeration & Place Value (0-10,000)
 // IDs format: g4m-num-NNN
 
 STATIC_QUESTIONS.push(
@@ -29,7 +29,7 @@ STATIC_QUESTIONS.push(
     options:['4,329','4,293','4,923','4,392'],
     answer:'4,923',
     hint:'Compare digit by digit from left. Start with thousands, then hundreds.',
-    explanation:'All numbers have 4 thousands. Compare the hundreds: 9 hundreds > 3 hundreds. So <b>4,923</b> is the greatest. Strategy: compare digit by digit from left — thousands first, then hundreds, then tens, then units.' }),
+    explanation:'All numbers have 4 thousands. Compare the hundreds: 9 hundreds > 3 hundreds. So <b>4,923</b> is the greatest. Strategy: compare digit by digit from left - thousands first, then hundreds, then tens, then units.' }),
 
   makeNum({ id:'g4m-num-005', chapterId:'g4-numeration', difficulty:1,
     question:'Write this in numerals: 4,000 + 200 + 50 + 7',
@@ -53,14 +53,14 @@ STATIC_QUESTIONS.push(
     question:'Write 7,000 + 600 + 9 in numerals. (There are NO tens.)',
     answer:'7609', acceptableAnswers:['7609','7,609'],
     hint:'When there are no tens, put a 0 in the tens place.',
-    explanation:'7,000 + 600 + 0 + 9 = <b>7,609</b>. The tens place has 0 because there are no tens. Zero acts as a placeholder — it is important to include it or the number changes.' }),
+    explanation:'7,000 + 600 + 0 + 9 = <b>7,609</b>. The tens place has 0 because there are no tens. Zero acts as a placeholder - it is important to include it or the number changes.' }),
 
   makeMCQ({ id:'g4m-num-009', chapterId:'g4-numeration', difficulty:2,
     question:'How do you write "eight thousand, five hundred and nine" in NUMERALS?',
     options:['8,059','8,509','8,590','8,905'],
     answer:'8,509',
     hint:'Eight thousand = 8,000. Five hundred = 500. Nine = 9. There are no tens.',
-    explanation:'Eight thousand = 8,000; five hundred = 500; nine = 9; no tens = 0. Total = <b>8,509</b>. The zero in the tens place is a placeholder — without it, we would get a different number.' }),
+    explanation:'Eight thousand = 8,000; five hundred = 500; nine = 9; no tens = 0. Total = <b>8,509</b>. The zero in the tens place is a placeholder - without it, we would get a different number.' }),
 
   makeNum({ id:'g4m-num-010', chapterId:'g4-numeration', difficulty:3,
     question:'A town has 4,536 people. A second town has 2,718 MORE people than the first town. How many people live in the second town?',
@@ -103,14 +103,14 @@ STATIC_QUESTIONS.push(
     options:['6,074','6,704','6,740','6,470'],
     answer:'6,740',
     hint:'Six thousand = 6,000. Seven hundred = 700. Forty = 40. No units.',
-    explanation:'6,000 + 700 + 40 + 0 = <b>6,740</b>. Take care when a digit is zero — do not leave out its place.' }),
+    explanation:'6,000 + 700 + 40 + 0 = <b>6,740</b>. Take care when a digit is zero - do not leave out its place.' }),
 
   makeMCQ({ id:'g4m-num-016', chapterId:'g4-numeration', difficulty:2,
     question:'Which number has 5 thousands, 3 hundreds, 0 tens and 2 units?',
     options:['5,032','5,302','5,320','5,023'],
     answer:'5,302',
     hint:'Build digit by digit: Th=5, H=3, T=0, U=2.',
-    explanation:'Thousands=5, Hundreds=3, Tens=0, Units=2 → <b>5,302</b>. The zero in the tens place is a placeholder — omitting it would change the number entirely.' }),
+    explanation:'Thousands=5, Hundreds=3, Tens=0, Units=2 → <b>5,302</b>. The zero in the tens place is a placeholder - omitting it would change the number entirely.' }),
 
   makeTF({ id:'g4m-num-017', chapterId:'g4-numeration', difficulty:1,
     question:'The number 9,999 is a 4-digit number.',
@@ -127,7 +127,7 @@ STATIC_QUESTIONS.push(
       '4,519 ; 4,951 ; 4,195 ; 4,915'
     ],
     answer:'4,951 ; 4,915 ; 4,519 ; 4,195',
-    hint:'All have 4 thousands. Compare hundreds: 9 > 5 > 1. Two numbers have 9 hundreds — compare their tens next.',
+    hint:'All have 4 thousands. Compare hundreds: 9 > 5 > 1. Two numbers have 9 hundreds - compare their tens next.',
     explanation:'All have 4,000. Hundreds: 9 (4,9xx) > 5 (4,5xx) > 1 (4,1xx). The two 9-hundreds numbers: 4,951 has 5 tens and 4,915 has 1 ten, so 4,951 > 4,915. Final order: <b>4,951 ; 4,915 ; 4,519 ; 4,195</b>.' }),
 
   makeMCQ({ id:'g4m-num-019', chapterId:'g4-numeration', difficulty:4,

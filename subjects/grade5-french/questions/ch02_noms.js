@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 French — Chapitre : Les Noms, Articles et Genre
+﻿'use strict';
+// Grade 5 French - Chapitre : Les Noms, Articles et Genre
 // IDs format: g5fr-nom-NNN
 
 STATIC_QUESTIONS.push(
@@ -16,21 +16,21 @@ STATIC_QUESTIONS.push(
     options:['Le','La','L\'','Les'],
     answer:'L\'',
     hint:'"École" commence par une voyelle (e). Quel article s\'utilise devant une voyelle ?',
-    explanation:'"<b>L\'</b>école est grande." — Devant une voyelle (a, e, i, o, u) ou un h muet, on utilise "l\'" (élision) pour les deux genres. "École" est féminin, mais "l\'ami" (masculin) prend aussi "l\'".' }),
+    explanation:'"<b>L\'</b>école est grande." - Devant une voyelle (a, e, i, o, u) ou un h muet, on utilise "l\'" (élision) pour les deux genres. "École" est féminin, mais "l\'ami" (masculin) prend aussi "l\'".' }),
 
   makeMCQ({ id:'g5fr-nom-003', chapterId:'fr-noms', difficulty:1,
     question:'Quel est le pluriel de "un bateau" ?',
     options:['des bateaux','des bateaux','des bateau','des bateaus'],
     answer:'des bateaux',
     hint:'Les mots en -eau forment leur pluriel en -eaux.',
-    explanation:'"<b>Des bateaux</b>" — les noms terminés en <b>-eau</b> forment leur pluriel en <b>-eaux</b> : bateau → bateaux, gâteau → gâteaux, chapeau → chapeaux. L\'article indéfini pluriel est "des".' }),
+    explanation:'"<b>Des bateaux</b>" - les noms terminés en <b>-eau</b> forment leur pluriel en <b>-eaux</b> : bateau → bateaux, gâteau → gâteaux, chapeau → chapeaux. L\'article indéfini pluriel est "des".' }),
 
   makeMCQ({ id:'g5fr-nom-004', chapterId:'fr-noms', difficulty:1,
     question:'Quel est le pluriel de "un animal" ?',
     options:['des animals','des animaux','des animalx','des animales'],
     answer:'des animaux',
     hint:'Les mots en -al forment généralement leur pluriel en -aux.',
-    explanation:'"<b>Des animaux</b>" — les noms terminés en <b>-al</b> forment leur pluriel en <b>-aux</b> : animal → animaux, cheval → chevaux, journal → journaux. Exceptions : bal → bals, carnaval → carnavals.' }),
+    explanation:'"<b>Des animaux</b>" - les noms terminés en <b>-al</b> forment leur pluriel en <b>-aux</b> : animal → animaux, cheval → chevaux, journal → journaux. Exceptions : bal → bals, carnaval → carnavals.' }),
 
   makeMCQ({ id:'g5fr-nom-005', chapterId:'fr-noms', difficulty:1,
     question:'Quel article indéfini utilise-t-on devant un nom féminin singulier ?',
@@ -44,21 +44,21 @@ STATIC_QUESTIONS.push(
     options:['un / un','un / une','une / un','le / la'],
     answer:'un / une',
     hint:'"Chien" est masculin, "chat" peut être masculin ou féminin. Ici : "un chat" (masculin).',
-    explanation:'"J\'ai <b>un</b> chien (masc.) et <b>un</b> chat (masc.)." — Mais si on dit "une chatte" (chatte = féminin), c\'est "une". "Chien" est toujours masculin. Articles indéfinis : <b>un</b> (masc. sing.), <b>une</b> (fém. sing.), <b>des</b> (pluriel).' }),
+    explanation:'"J\'ai <b>un</b> chien (masc.) et <b>un</b> chat (masc.)." - Mais si on dit "une chatte" (chatte = féminin), c\'est "une". "Chien" est toujours masculin. Articles indéfinis : <b>un</b> (masc. sing.), <b>une</b> (fém. sing.), <b>des</b> (pluriel).' }),
 
   makeMCQ({ id:'g5fr-nom-007', chapterId:'fr-noms', difficulty:2,
     question:'Complétez : "Elle a ___ robe bleue."',
     options:['un','le','une','la'],
     answer:'une',
     hint:'"Robe" est un nom féminin singulier. On parle d\'une robe en général, pas d\'une robe spécifique.',
-    explanation:'"Elle a <b>une</b> robe bleue." — "Robe" est féminin singulier. On utilise l\'article indéfini "une" car on parle d\'une robe quelconque (pas d\'une robe précise). Si on parlait d\'une robe spécifique : "Elle a <b>la</b> robe bleue."' }),
+    explanation:'"Elle a <b>une</b> robe bleue." - "Robe" est féminin singulier. On utilise l\'article indéfini "une" car on parle d\'une robe quelconque (pas d\'une robe précise). Si on parlait d\'une robe spécifique : "Elle a <b>la</b> robe bleue."' }),
 
   makeMCQ({ id:'g5fr-nom-008', chapterId:'fr-noms', difficulty:2,
     question:'Quel est le pluriel de "le journal" ?',
     options:['les journalx','les journals','les journaux','les journales'],
     answer:'les journaux',
     hint:'"Journal" se termine en -al. Rappel : -al → -aux au pluriel.',
-    explanation:'"<b>Les journaux</b>" — journal → journaux (-al → -aux). Article défini pluriel : "les". Autres exemples : cheval → chevaux, animal → animaux, carnaval → carnavals (exception).' }),
+    explanation:'"<b>Les journaux</b>" - journal → journaux (-al → -aux). Article défini pluriel : "les". Autres exemples : cheval → chevaux, animal → animaux, carnaval → carnavals (exception).' }),
 
   makeTF({ id:'g5fr-nom-009', chapterId:'fr-noms', difficulty:1,
     question:'En français, tous les noms ont un genre : masculin ou féminin.',
@@ -71,7 +71,7 @@ STATIC_QUESTIONS.push(
     options:['le','la','l\'','les'],
     answer:'l\'',
     hint:'"Ami" commence par une voyelle. Quel article s\'utilise devant une voyelle ?',
-    explanation:'"<b>L\'</b>ami" — "ami" commence par la voyelle "a", donc on utilise l\'article élidé "l\'" (masculin singulier). De même : "l\'amie" (féminin). L\'élision s\'applique aux deux genres devant une voyelle ou h muet.' })
+    explanation:'"<b>L\'</b>ami" - "ami" commence par la voyelle "a", donc on utilise l\'article élidé "l\'" (masculin singulier). De même : "l\'amie" (féminin). L\'élision s\'applique aux deux genres devant une voyelle ou h muet.' })
 
 );
 
@@ -89,74 +89,74 @@ STATIC_QUESTIONS.push(
     options:['des œils','des yeux','des œillets','des œils'],
     answer:'des yeux',
     hint:'C\'est l\'un des pluriels les plus irréguliers du français !',
-    explanation:'"<b>des yeux</b>" — "un œil" (one eye) → "des yeux" (eyes). Ce pluriel est complètement irrégulier. Autres pluriels irréguliers : un monsieur → des messieurs, un jeune homme → des jeunes gens.' }),
+    explanation:'"<b>des yeux</b>" - "un œil" (one eye) → "des yeux" (eyes). Ce pluriel est complètement irrégulier. Autres pluriels irréguliers : un monsieur → des messieurs, un jeune homme → des jeunes gens.' }),
 
   makeMCQ({ id:'g5fr-nom-013', chapterId:'fr-noms', difficulty:2,
     question:'Complétez avec l\'article partitif : "Je bois ___ eau."',
     options:['du','de la','de l\'','des'],
     answer:'de l\'',
     hint:'"Eau" est féminin et commence par une voyelle.',
-    explanation:'"Je bois <b>de l\'</b>eau." — Article partitif devant voyelle : de l\'. Les articles partitifs : du (m), de la (f), de l\' (voyelle), des (pluriel). Ils expriment une quantité indéfinie : du pain / de la viande / de l\'eau / des légumes.' }),
+    explanation:'"Je bois <b>de l\'</b>eau." - Article partitif devant voyelle : de l\'. Les articles partitifs : du (m), de la (f), de l\' (voyelle), des (pluriel). Ils expriment une quantité indéfinie : du pain / de la viande / de l\'eau / des légumes.' }),
 
   makeMCQ({ id:'g5fr-nom-014', chapterId:'fr-noms', difficulty:2,
     question:'"Je vais ___ marché." Choisissez le bon article contracté.',
     options:['au','du','de la','à la'],
     answer:'au',
     hint:'"Au" = à + le (article contracté masculin singulier).',
-    explanation:'"Je vais <b>au</b> marché." — "au" = à + le (contraction obligatoire). Articles contractés : à + le = <b>au</b>, à + les = <b>aux</b>, de + le = <b>du</b>, de + les = <b>des</b>. On ne contracte pas avec "la" ni "l\'" : je vais à la plage / à l\'école.' }),
+    explanation:'"Je vais <b>au</b> marché." - "au" = à + le (contraction obligatoire). Articles contractés : à + le = <b>au</b>, à + les = <b>aux</b>, de + le = <b>du</b>, de + les = <b>des</b>. On ne contracte pas avec "la" ni "l\'" : je vais à la plage / à l\'école.' }),
 
   makeMCQ({ id:'g5fr-nom-015', chapterId:'fr-noms', difficulty:2,
     question:'"Un pneu" au pluriel = ?',
     options:['des pneus','des pneuaux','des pneaux','des pneumatiques'],
     answer:'des pneus',
-    hint:'La plupart des mots en -eu prennent -x au pluriel — mais "pneu" est une exception.',
-    explanation:'"<b>des pneus</b>" — La plupart des mots en -eu prennent -x : un feu → des feux, un jeu → des jeux. Exceptions qui prennent -s : un pneu → des pneus, un bleu → des bleus. Question type PSAC !' }),
+    hint:'La plupart des mots en -eu prennent -x au pluriel - mais "pneu" est une exception.',
+    explanation:'"<b>des pneus</b>" - La plupart des mots en -eu prennent -x : un feu → des feux, un jeu → des jeux. Exceptions qui prennent -s : un pneu → des pneus, un bleu → des bleus. Question type PSAC !' }),
 
   makeTF({ id:'g5fr-nom-016', chapterId:'fr-noms', difficulty:2,
     question:'"Le pluriel de \'un œil\' est \'des œils\'."',
     answer:false,
     hint:'"Un œil" a un pluriel irrégulier.',
-    explanation:'<b>Faux.</b> Le pluriel de "un œil" est "<b>des yeux</b>" — complètement irrégulier. C\'est l\'un des pluriels les plus irréguliers du français. De même : "un monsieur" → "des messieurs" (pas "des monsieurs").' }),
+    explanation:'<b>Faux.</b> Le pluriel de "un œil" est "<b>des yeux</b>" - complètement irrégulier. C\'est l\'un des pluriels les plus irréguliers du français. De même : "un monsieur" → "des messieurs" (pas "des monsieurs").' }),
 
   makeMCQ({ id:'g5fr-nom-017', chapterId:'fr-noms', difficulty:3,
     question:'Après une négation, quel article utilise-t-on ?\n"J\'ai du lait." → "Je n\'ai ___ lait."',
     options:['pas du','pas de','pas le','aucun du'],
     answer:'pas de',
     hint:'Après "ne...pas", les articles partitifs et indéfinis deviennent "de" ou "d\'".',
-    explanation:'"Je n\'ai <b>pas de</b> lait." — Après une négation, du/de la/des/un/une → <b>de</b> (ou d\' devant voyelle). J\'ai des amis → Je n\'ai pas <b>d\'</b>amis. Exception : avec le verbe "être", l\'article reste : Ce n\'est pas <b>un</b> chat.' }),
+    explanation:'"Je n\'ai <b>pas de</b> lait." - Après une négation, du/de la/des/un/une → <b>de</b> (ou d\' devant voyelle). J\'ai des amis → Je n\'ai pas <b>d\'</b>amis. Exception : avec le verbe "être", l\'article reste : Ce n\'est pas <b>un</b> chat.' }),
 
   makeMCQ({ id:'g5fr-nom-018', chapterId:'fr-noms', difficulty:3,
     question:'"Des travaux" est le pluriel de quel mot ?',
     options:['un travail','un travau','un trav','un travaux'],
     answer:'un travail',
     hint:'"Travaux" est le pluriel irrégulier d\'un mot en -ail.',
-    explanation:'"<b>un travail</b>" → "des travaux" — irrégulier ! Les mots en -ail deviennent souvent -aux : travail → travaux, vitrail → vitraux, bail → baux. Exception : détail → des détails (régulier, prend -s).' }),
+    explanation:'"<b>un travail</b>" → "des travaux" - irrégulier ! Les mots en -ail deviennent souvent -aux : travail → travaux, vitrail → vitraux, bail → baux. Exception : détail → des détails (régulier, prend -s).' }),
 
   makeMCQ({ id:'g5fr-nom-019', chapterId:'fr-noms', difficulty:4,
     question:'Trouvez l\'erreur dans : "Je mange de la pain avec du beurre."',
     options:[
-      'Aucune erreur — les deux articles sont corrects',
-      '"de la pain" → "du pain" — pain est masculin',
-      '"du beurre" → "de la beurre" — beurre est féminin',
+      'Aucune erreur - les deux articles sont corrects',
+      '"de la pain" → "du pain" - pain est masculin',
+      '"du beurre" → "de la beurre" - beurre est féminin',
       'Les deux articles doivent être "du"'
     ],
-    answer:'"de la pain" → "du pain" — pain est masculin',
+    answer:'"de la pain" → "du pain" - pain est masculin',
     hint:'"Pain" est masculin → du (pas de la).',
-    explanation:'L\'erreur est "<b>de la pain</b>" → "<b>du pain</b>" — "pain" est masculin (le pain → du pain). "Beurre" est aussi masculin : le beurre → du beurre (correct). Pour vérifier le genre, chercher l\'article : le pain, la viande, le beurre, la farine.' }),
+    explanation:'L\'erreur est "<b>de la pain</b>" → "<b>du pain</b>" - "pain" est masculin (le pain → du pain). "Beurre" est aussi masculin : le beurre → du beurre (correct). Pour vérifier le genre, chercher l\'article : le pain, la viande, le beurre, la farine.' }),
 
   makeMCQ({ id:'g5fr-nom-020', chapterId:'fr-noms', difficulty:1,
     question:'Quel est le féminin de "acteur" ?',
     options:['acteure','actrice','acteuse','actresse'],
     answer:'actrice',
     hint:'-eur → -rice pour certains noms de profession.',
-    explanation:'"<b>actrice</b>" — Le suffixe change : acteur → actrice. Même transformation : directeur → directrice, inspecteur → inspectrice. Attention : chanteur → <b>chanteuse</b> (pas chantrice !).' }),
+    explanation:'"<b>actrice</b>" - Le suffixe change : acteur → actrice. Même transformation : directeur → directrice, inspecteur → inspectrice. Attention : chanteur → <b>chanteuse</b> (pas chantrice !).' }),
 
   makeMCQ({ id:'g5fr-nom-021', chapterId:'fr-noms', difficulty:1,
     question:'Quel est le féminin de "chanteur" ?',
     options:['chanteuse','chantrice','chanteure','chanteresse'],
     answer:'chanteuse',
     hint:'-eur → -euse pour ce type de nom.',
-    explanation:'"<b>chanteuse</b>" — Certains noms en -eur font leur féminin en <b>-euse</b> : chanteur → chanteuse, danseur → danseuse, serveur → serveuse, vendeur → vendeuse. D\'autres font -rice : acteur → actrice, directeur → directrice.' }),
+    explanation:'"<b>chanteuse</b>" - Certains noms en -eur font leur féminin en <b>-euse</b> : chanteur → chanteuse, danseur → danseuse, serveur → serveuse, vendeur → vendeuse. D\'autres font -rice : acteur → actrice, directeur → directrice.' }),
 
   makeTF({ id:'g5fr-nom-022', chapterId:'fr-noms', difficulty:2,
     question:'"Le féminin de \'directeur\' est \'directeure\'."',
@@ -169,21 +169,21 @@ STATIC_QUESTIONS.push(
     options:['construction','construision','constructement','construiage'],
     answer:'construction',
     hint:'Verbe → nom : construire + -tion.',
-    explanation:'"<b>construction</b>" — Le suffixe <b>-tion</b> forme des noms à partir de verbes : construire → construction, réaliser → réalisation, utiliser → utilisation. Ces noms sont toujours féminins : la construction, une réalisation.' }),
+    explanation:'"<b>construction</b>" - Le suffixe <b>-tion</b> forme des noms à partir de verbes : construire → construction, réaliser → réalisation, utiliser → utilisation. Ces noms sont toujours féminins : la construction, une réalisation.' }),
 
   makeMCQ({ id:'g5fr-nom-024', chapterId:'fr-noms', difficulty:1,
     question:'Quel est le pluriel IRRÉGULIER de "un œil" ?',
     options:['des œils','des œilles','des yeux','des œillets'],
     answer:'des yeux',
-    hint:'Le pluriel de "œil" est complètement irrégulier — un mot différent !',
-    explanation:'"<b>des yeux</b>" — "un œil" → "des yeux" est un pluriel irrégulier (suppletif). Le mot change complètement. Un autre exemple irrégulier : "un monsieur" → "des messieurs" (pas "des monsieurs").' }),
+    hint:'Le pluriel de "œil" est complètement irrégulier - un mot différent !',
+    explanation:'"<b>des yeux</b>" - "un œil" → "des yeux" est un pluriel irrégulier (suppletif). Le mot change complètement. Un autre exemple irrégulier : "un monsieur" → "des messieurs" (pas "des monsieurs").' }),
 
   makeMCQ({ id:'g5fr-nom-025', chapterId:'fr-noms', difficulty:2,
     question:'Quel nom NE CHANGE PAS de forme au pluriel ?',
     options:['un bal → des bals','un bras → des bras','un bijou → des bijoux','un travail → des travaux'],
     answer:'un bras → des bras',
     hint:'Cherchez le nom dont le singulier et le pluriel sont identiques.',
-    explanation:'"<b>un bras → des bras</b>" — Les mots qui se terminent en -s, -x, ou -z au singulier ne changent pas au pluriel : un bras/des bras, une voix/des voix, un nez/des nez. Les autres forment leur pluriel différemment : bal → bals, bijou → bijoux, travail → travaux.' }),
+    explanation:'"<b>un bras → des bras</b>" - Les mots qui se terminent en -s, -x, ou -z au singulier ne changent pas au pluriel : un bras/des bras, une voix/des voix, un nez/des nez. Les autres forment leur pluriel différemment : bal → bals, bijou → bijoux, travail → travaux.' }),
 
   makeTF({ id:'g5fr-nom-026', chapterId:'fr-noms', difficulty:2,
     question:'"Le pluriel de \'un genou\' est \'des genous\'."',
@@ -196,61 +196,61 @@ STATIC_QUESTIONS.push(
     options:['déplacement','déplaceur','déplacerie','déplacement'],
     answer:'déplacement',
     hint:'Verbe → nom : déplacer + -ment.',
-    explanation:'"<b>déplacement</b>" — Le suffixe <b>-ment</b> forme souvent des noms à partir de verbes : déplacer → déplacement, enseigner → enseignement, développer → développement. Ces noms sont masculins.' }),
+    explanation:'"<b>déplacement</b>" - Le suffixe <b>-ment</b> forme souvent des noms à partir de verbes : déplacer → déplacement, enseigner → enseignement, développer → développement. Ces noms sont masculins.' }),
 
   makeMCQ({ id:'g5fr-nom-028', chapterId:'fr-noms', difficulty:2,
     question:'Quel est le féminin de "pharmacien" ?',
     options:['pharmacière','pharmacienne','pharmacieure','pharmacière'],
     answer:'pharmacienne',
     hint:'-ien → -ienne (double n).',
-    explanation:'"<b>pharmacienne</b>" — Les noms en -ien font leur féminin en <b>-ienne</b> (double n) : pharmacien → pharmacienne, chirurgien → chirurgienne, musicien → musicienne, technicien → technicienne.' }),
+    explanation:'"<b>pharmacienne</b>" - Les noms en -ien font leur féminin en <b>-ienne</b> (double n) : pharmacien → pharmacienne, chirurgien → chirurgienne, musicien → musicienne, technicien → technicienne.' }),
 
   makeMCQ({ id:'g5fr-nom-029', chapterId:'fr-noms', difficulty:2,
     question:'Quel est le féminin de "boulanger" ?',
     options:['boulangère','boulangeuse','boulangeure','boulangrice'],
     answer:'boulangère',
     hint:'-er → -ère (accent grave).',
-    explanation:'"<b>boulangère</b>" — Les noms en -er font leur féminin en <b>-ère</b> : boulanger → boulangère, infirmier → infirmière, épicier → épicière, cuisinier → cuisinière.' }),
+    explanation:'"<b>boulangère</b>" - Les noms en -er font leur féminin en <b>-ère</b> : boulanger → boulangère, infirmier → infirmière, épicier → épicière, cuisinier → cuisinière.' }),
 
   makeTF({ id:'g5fr-nom-030', chapterId:'fr-noms', difficulty:1,
     question:'"Un nez" a la même forme au singulier et au pluriel : "un nez / des nez".',
     answer:true,
     hint:'Les mots terminés en -z ne changent pas au pluriel.',
-    explanation:'<b>Vrai.</b> "Un nez / des nez" — les mots terminés par -z au singulier ne prennent pas de -s au pluriel : un nez / des nez, une voix / des voix (terminé en -x). Ces mots sont invariables au pluriel.' }),
+    explanation:'<b>Vrai.</b> "Un nez / des nez" - les mots terminés par -z au singulier ne prennent pas de -s au pluriel : un nez / des nez, une voix / des voix (terminé en -x). Ces mots sont invariables au pluriel.' }),
 
   makeMCQ({ id:'g5fr-nom-031', chapterId:'fr-noms', difficulty:3,
     question:'Quel mot est un nom ABSTRAIT (concept, pas objet concret) ?',
     options:['la table','la liberté','le chien','la fleur'],
     answer:'la liberté',
     hint:'Un nom abstrait désigne une idée ou un sentiment, pas quelque chose qu\'on peut toucher.',
-    explanation:'"<b>la liberté</b>" est un nom abstrait — on ne peut pas la toucher. Les noms abstraits désignent des idées, sentiments, qualités : la liberté, le courage, la bonté, l\'amour, la justice. Les noms concrets désignent des choses physiques : la table, le chien, la fleur.' }),
+    explanation:'"<b>la liberté</b>" est un nom abstrait - on ne peut pas la toucher. Les noms abstraits désignent des idées, sentiments, qualités : la liberté, le courage, la bonté, l\'amour, la justice. Les noms concrets désignent des choses physiques : la table, le chien, la fleur.' }),
 
   makeMCQ({ id:'g5fr-nom-032', chapterId:'fr-noms', difficulty:2,
     question:'Quel est le pluriel de "un vitrail" (stained-glass window) ?',
     options:['des vitrals','des vitraux','des vitrailles','des vitrauils'],
     answer:'des vitraux',
     hint:'-ail → -aux pour certains noms.',
-    explanation:'"<b>des vitraux</b>" — Les noms en -ail font leur pluriel en <b>-aux</b> : vitrail → vitraux, travail → travaux, bail → baux. Exception : un détail → des détails (régulier, prend -s).' }),
+    explanation:'"<b>des vitraux</b>" - Les noms en -ail font leur pluriel en <b>-aux</b> : vitrail → vitraux, travail → travaux, bail → baux. Exception : un détail → des détails (régulier, prend -s).' }),
 
   makeMCQ({ id:'g5fr-nom-033', chapterId:'fr-noms', difficulty:3,
     question:'Formez un adjectif à partir du nom "nuage".',
     options:['nuageux','nuagé','nuagier','nuagal'],
     answer:'nuageux',
     hint:'"Nuage" + suffixe -eux → adjectif.',
-    explanation:'"<b>nuageux/nuageuse</b>" — Le suffixe <b>-eux/-euse</b> forme des adjectifs à partir de noms : nuage → nuageux/nuageuse, neige → neigeux/neigeuse, soleil → ensoleillé/ensoleillée (suffixe -é), chaleur → chaud/chaude.' }),
+    explanation:'"<b>nuageux/nuageuse</b>" - Le suffixe <b>-eux/-euse</b> forme des adjectifs à partir de noms : nuage → nuageux/nuageuse, neige → neigeux/neigeuse, soleil → ensoleillé/ensoleillée (suffixe -é), chaleur → chaud/chaude.' }),
 
   makeMCQ({ id:'g5fr-nom-034', chapterId:'fr-noms', difficulty:2,
     question:'Quel est le féminin de "serveur" (waiter) ?',
     options:['serveresse','serveuse','serveure','serveuresse'],
     answer:'serveuse',
     hint:'-eur → -euse.',
-    explanation:'"<b>serveuse</b>" — serveur → serveuse. Le suffixe -eur → -euse : serveur/serveuse, chanteur/chanteuse, danseur/danseuse, vendeur/vendeuse. (À distinguer des noms en -eur → -rice : acteur/actrice, directeur/directrice.)' }),
+    explanation:'"<b>serveuse</b>" - serveur → serveuse. Le suffixe -eur → -euse : serveur/serveuse, chanteur/chanteuse, danseur/danseuse, vendeur/vendeuse. (À distinguer des noms en -eur → -rice : acteur/actrice, directeur/directrice.)' }),
 
   makeMCQ({ id:'g5fr-nom-035', chapterId:'fr-noms', difficulty:4,
     question:'Trouvez le NOM DÉRIVÉ du verbe "récompenser" : "Une ___ heureuse attend les élèves qui travaillent bien."',
     options:['récompense','récompenseur','récompensement','récompensage'],
     answer:'récompense',
     hint:'Le verbe "récompenser" donne le nom "récompense" (supprimer le suffixe verbal).',
-    explanation:'"<b>récompense</b>" — récompenser → la récompense. Les noms dérivés de verbes par suppression du suffixe : récompenser → récompense, commencer → commencement, partir → départ. Ici, "récompense" est le nom correct (féminin : une récompense).' })
+    explanation:'"<b>récompense</b>" - récompenser → la récompense. Les noms dérivés de verbes par suppression du suffixe : récompenser → récompense, commencer → commencement, partir → départ. Ici, "récompense" est le nom correct (féminin : une récompense).' })
 
 );

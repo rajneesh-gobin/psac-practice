@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 English — Chapter: Advanced Vocabulary
+﻿'use strict';
+// Grade 6 English - Chapter: Advanced Vocabulary
 // IDs format: g6eng-voc-NNN
 
 STATIC_QUESTIONS.push(
@@ -9,28 +9,28 @@ STATIC_QUESTIONS.push(
     options:['affect / effect','fast / slow','write / right','bear / bare bear'],
     answer:'write / right',
     hint:'Homophones sound the same but have different spellings and meanings.',
-    explanation:'"<b>Write / right</b>" are homophones — they sound identical but have different meanings (write = to pen words; right = correct, or direction). "Affect/effect" are not homophones (they sound slightly different and are commonly confused). "Bear/bare" are also homophones.' }),
+    explanation:'"<b>Write / right</b>" are homophones - they sound identical but have different meanings (write = to pen words; right = correct, or direction). "Affect/effect" are not homophones (they sound slightly different and are commonly confused). "Bear/bare" are also homophones.' }),
 
   makeMCQ({ id:'g6eng-voc-002', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'"Stationary" and "stationery" are easily confused. Which is CORRECT: "The car remained ___ at the red light."',
     options:['stationery','stationary','stationairy','stationnary'],
     answer:'stationary',
     hint:'Stationary (adjective) = not moving. Stationery (noun) = pens, paper etc.',
-    explanation:'"<b>Stationary</b>" (adjective) = not moving, still. Memory trick: stationAry = stAy. "StationEry" = pEns and papEr — both contain the letter E. "The car remained stationary" = the car stayed still.' }),
+    explanation:'"<b>Stationary</b>" (adjective) = not moving, still. Memory trick: stationAry = stAy. "StationEry" = pEns and papEr - both contain the letter E. "The car remained stationary" = the car stayed still.' }),
 
   makeMCQ({ id:'g6eng-voc-003', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'The root "port" means "carry". Which word does NOT come from this root?',
     options:['transport','portable','import','portion'],
     answer:'portion',
     hint:'Transport = carry across. Portable = able to be carried. Import = carry in.',
-    explanation:'"<b>Portion</b>" does NOT come from the Latin root "port" (carry) — it comes from a different root meaning "part" or "share". Transport = carry across, portable = can be carried, import = carry in, export = carry out.' }),
+    explanation:'"<b>Portion</b>" does NOT come from the Latin root "port" (carry) - it comes from a different root meaning "part" or "share". Transport = carry across, portable = can be carried, import = carry in, export = carry out.' }),
 
   makeMCQ({ id:'g6eng-voc-004', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'The Greek root "tele" means FAR. Which word uses this root?',
     options:['telephone','television','telescope','All three'],
     answer:'All three',
     hint:'Think of all words beginning with "tele-".',
-    explanation:'"<b>All three</b>" — tele (far) + phone (sound) = telephone (hearing sounds from far); tele + vision (see) = television (seeing from far); tele + scope (see/examine) = telescope (seeing far objects). Greek: tele = far, bio = life, geo = earth, photo = light.' }),
+    explanation:'"<b>All three</b>" - tele (far) + phone (sound) = telephone (hearing sounds from far); tele + vision (see) = television (seeing from far); tele + scope (see/examine) = telescope (seeing far objects). Greek: tele = far, bio = life, geo = earth, photo = light.' }),
 
   makeMCQ({ id:'g6eng-voc-005', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'What is the difference between "affect" and "effect"?',
@@ -49,20 +49,20 @@ STATIC_QUESTIONS.push(
     options:['audible','audio','audience','All three'],
     answer:'All three',
     hint:'Audible = able to be heard. Audio = sound. Audience = those who hear.',
-    explanation:'"<b>All three</b>" — from Latin aud (hear): audible (able to be heard), audio (relating to sound), audience (those who listen/watch). Also: auditorium, audition, inaudible. Other Latin roots: vis (see: visible, vision), scrib (write: describe, script).' }),
+    explanation:'"<b>All three</b>" - from Latin aud (hear): audible (able to be heard), audio (relating to sound), audience (those who listen/watch). Also: auditorium, audition, inaudible. Other Latin roots: vis (see: visible, vision), scrib (write: describe, script).' }),
 
   makeTF({ id:'g6eng-voc-007', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'"Principal" (the school principal) and "principle" (a moral rule) are homophones.',
     answer:true,
-    hint:'Say both words aloud — do they sound the same?',
-    explanation:'<b>True.</b> "Principal" and "principle" are homophones — they sound identical but have different meanings. Principal = most important (adjective) OR the head of a school (noun). Principle = a fundamental rule or belief. Memory: "The principal is your PAL." "A principle is a ruLE."' }),
+    hint:'Say both words aloud - do they sound the same?',
+    explanation:'<b>True.</b> "Principal" and "principle" are homophones - they sound identical but have different meanings. Principal = most important (adjective) OR the head of a school (noun). Principle = a fundamental rule or belief. Memory: "The principal is your PAL." "A principle is a ruLE."' }),
 
   makeMCQ({ id:'g6eng-voc-008', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'"The word \'rupture\' comes from the Latin root \'rupt\' meaning BREAK." Which other word shares this root?',
     options:['interrupt','erupt','corrupt','All three'],
     answer:'All three',
     hint:'Think of words with -rupt: inter-rupt, e-rupt, cor-rupt.',
-    explanation:'"<b>All three</b>" — from Latin rupt (break): interrupt (break between), erupt (break out — as a volcano), corrupt (completely broken/spoiled). Also: abrupt, disrupt, bankruptcy (via Germanic related root). Knowing roots helps with unfamiliar vocabulary.' }),
+    explanation:'"<b>All three</b>" - from Latin rupt (break): interrupt (break between), erupt (break out - as a volcano), corrupt (completely broken/spoiled). Also: abrupt, disrupt, bankruptcy (via Germanic related root). Knowing roots helps with unfamiliar vocabulary.' }),
 
   makeMCQ({ id:'g6eng-voc-009', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'What does "complement" mean? (Different from "compliment")',
@@ -80,8 +80,8 @@ STATIC_QUESTIONS.push(
     question:'The Greek root "bio" means LIFE. In which word is this root NOT present?',
     options:['biology','biography','biosphere','bibliography'],
     answer:'bibliography',
-    hint:'"Bibliography" — break it apart: biblio + graphy. What does "biblio" mean?',
-    explanation:'"<b>Bibliography</b>" — "biblio" comes from Greek "biblion" (book), not "bios" (life). So bibliography = list of books, not related to "life". Biology (study of life), biography (writing about a life), biosphere (the sphere of life on Earth) — all from bios.' })
+    hint:'"Bibliography" - break it apart: biblio + graphy. What does "biblio" mean?',
+    explanation:'"<b>Bibliography</b>" - "biblio" comes from Greek "biblion" (book), not "bios" (life). So bibliography = list of books, not related to "life". Biology (study of life), biography (writing about a life), biosphere (the sphere of life on Earth) - all from bios.' })
 
 );
 
@@ -91,8 +91,8 @@ STATIC_QUESTIONS.push(
     question:'The Latin root "dict" means SAY or SPEAK. Which word does NOT come from this root?',
     options:['dictate','dictionary','predict','depict'],
     answer:'depict',
-    hint:'"Depict" — think about what it means. Does it relate to speaking?',
-    explanation:'"<b>Depict</b>" does NOT come from "dict" (say) — it comes from Latin "depingere" (to paint). Words from "dict": <b>dictate</b> (to say aloud for someone to write), <b>dictionary</b> (a book of words/sayings), <b>predict</b> (to say in advance), <b>contradict</b> (to say the opposite), <b>verdict</b> (true saying in court). The MIE Grade 6 textbook teaches Latin and Greek roots as a vocabulary strategy.' }),
+    hint:'"Depict" - think about what it means. Does it relate to speaking?',
+    explanation:'"<b>Depict</b>" does NOT come from "dict" (say) - it comes from Latin "depingere" (to paint). Words from "dict": <b>dictate</b> (to say aloud for someone to write), <b>dictionary</b> (a book of words/sayings), <b>predict</b> (to say in advance), <b>contradict</b> (to say the opposite), <b>verdict</b> (true saying in court). The MIE Grade 6 textbook teaches Latin and Greek roots as a vocabulary strategy.' }),
 
   makeMCQ({ id:'g6eng-voc-012', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'What does the PREFIX "mis-" mean in words like "mislead", "misunderstand" and "misbehave"?',
@@ -106,7 +106,7 @@ STATIC_QUESTIONS.push(
     options:['big / large','happy / joyful','ancient / modern','quick / fast'],
     answer:'ancient / modern',
     hint:'Antonyms are words with opposite meanings.',
-    explanation:'"<b>Ancient / modern</b>" are antonyms — ancient means very old; modern means new or contemporary. The MIE Grade 6 textbook builds vocabulary through: <b>synonyms</b> (same meaning: big = large = enormous), <b>antonyms</b> (opposite: ancient ≠ modern), and <b>context clues</b> (guessing meaning from surrounding text). Common exam pairs: ancient/modern, generous/mean, shallow/deep, courage/cowardice.' }),
+    explanation:'"<b>Ancient / modern</b>" are antonyms - ancient means very old; modern means new or contemporary. The MIE Grade 6 textbook builds vocabulary through: <b>synonyms</b> (same meaning: big = large = enormous), <b>antonyms</b> (opposite: ancient ≠ modern), and <b>context clues</b> (guessing meaning from surrounding text). Common exam pairs: ancient/modern, generous/mean, shallow/deep, courage/cowardice.' }),
 
   makeMCQ({ id:'g6eng-voc-014', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'The word "INEVITABLE" means:',
@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
     question:'"Lose" (to no longer have something) and "loose" (not tight) are homophones.',
     answer:false,
     hint:'Say both words aloud. Do they sound exactly the same?',
-    explanation:'<b>False.</b> "Lose" and "loose" are <b>NOT homophones</b> — they sound different: "lose" rhymes with "news" (/luːz/); "loose" rhymes with "moose" (/luːs/). They are commonly confused spellings, but different pronunciation. True homophones: write/right, their/there/they\'re, principal/principle, stationary/stationery. MIE Grade 6 includes these commonly confused pairs.' }),
+    explanation:'<b>False.</b> "Lose" and "loose" are <b>NOT homophones</b> - they sound different: "lose" rhymes with "news" (/luːz/); "loose" rhymes with "moose" (/luːs/). They are commonly confused spellings, but different pronunciation. True homophones: write/right, their/there/they\'re, principal/principle, stationary/stationery. MIE Grade 6 includes these commonly confused pairs.' }),
 
   makeMCQ({ id:'g6eng-voc-016', chapterId:'g6eng-vocabulary', difficulty:2,
     question:'What does the SUFFIX "-ology" mean? (e.g., biology, geology, archaeology)',
@@ -139,7 +139,7 @@ STATIC_QUESTIONS.push(
     question:'The word "METAMORPHOSIS" comes from Greek "meta" (change) + "morphe" (form/shape). Which word shares the root "morph"?',
     options:['metaphor','morphology','microphone','magnificent'],
     answer:'morphology',
-    hint:'"Morphology" — look for the "morph" root meaning shape/form.',
+    hint:'"Morphology" - look for the "morph" root meaning shape/form.',
     explanation:'"<b>Morphology</b>" (the study of word forms/shapes) contains the root "morph" (form/shape). Other words with this root: <b>morph</b> (to transform), <b>amorphous</b> (shapeless), <b>poly</b>morph (many forms). "Metaphor" contains "meta" but uses a different root for the second part (phor = to carry). Knowing Greek roots helps decode unfamiliar words in PSAC comprehension passages.' }),
 
   makeMCQ({ id:'g6eng-voc-019', chapterId:'g6eng-vocabulary', difficulty:3,

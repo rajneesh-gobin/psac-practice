@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Ratio, Average & Percentage
+﻿'use strict';
+// Grade 6 Maths - Chapter: Ratio, Average & Percentage
 // IDs format: g6m-pct-NNN
 
 STATIC_QUESTIONS.push(

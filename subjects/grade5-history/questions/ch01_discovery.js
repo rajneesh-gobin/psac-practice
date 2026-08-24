@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 History & Geography — Chapter: Discovery of the Mascarene Islands
+﻿'use strict';
+// Grade 5 History & Geography - Chapter: Discovery of the Mascarene Islands
 // Uses STATIC_QUESTIONS + helpers from engine/helpers.js
 // IDs format: g5hg-disc-NNN
 
@@ -43,7 +43,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'To find spices, trade goods and wealth',
     hint:'The spice trade was very valuable in those times.',
-    explanation:'European explorers — especially the Portuguese — explored new sea routes to find spices (pepper, cinnamon, cloves), gold and other trade goods that were extremely valuable in Europe.' }),
+    explanation:'European explorers - especially the Portuguese - explored new sea routes to find spices (pepper, cinnamon, cloves), gold and other trade goods that were extremely valuable in Europe.' }),
 
   makeTF({ id:'g5hg-disc-006', chapterId:'discovery', difficulty:1,
     question:'The Dutch were the first Europeans to discover the Mascarene Islands.',
@@ -61,7 +61,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The wildlife of Rodrigues, including the Rodrigues Solitaire',
     hint:'He carefully wrote down what he observed about the animals of Rodrigues.',
-    explanation:'François Leguat settled in Rodrigues in 1691 and wrote detailed accounts of the island\'s wildlife, including the Rodrigues Solitaire — a large flightless bird that is now extinct.' }),
+    explanation:'François Leguat settled in Rodrigues in 1691 and wrote detailed accounts of the island\'s wildlife, including the Rodrigues Solitaire - a large flightless bird that is now extinct.' }),
 
   makeMCQ({ id:'g5hg-disc-008', chapterId:'discovery', difficulty:2,
     question:'Which sea route did Portuguese explorers use to reach the Mascarene Islands in the Indian Ocean?',
@@ -96,7 +96,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Mauritius, Réunion and Rodrigues',
     hint:'They are all named after the same Portuguese explorer.',
-    explanation:'The <b>Mascarene Islands</b> are Mauritius, Réunion and Rodrigues — all in the south-west Indian Ocean. They were named after the Portuguese explorer Pedro de Mascarenhas.' }),
+    explanation:'The <b>Mascarene Islands</b> are Mauritius, Réunion and Rodrigues - all in the south-west Indian Ocean. They were named after the Portuguese explorer Pedro de Mascarenhas.' }),
 
   makeMCQ({ id:'g5hg-disc-011', chapterId:'discovery', difficulty:2,
     question:'When did the Dutch first CLAIM Mauritius (before settling it permanently in 1638)?',
@@ -109,11 +109,11 @@ STATIC_QUESTIONS.push(
     question:'What did the French Huguenot settler François Leguat find when he arrived on Rodrigues in 1691?',
     options:[
       'A busy trading port already established by the Dutch',
-      'An uninhabited island rich in wildlife — giant tortoises, birds and fish',
+      'An uninhabited island rich in wildlife - giant tortoises, birds and fish',
       'A Dutch settlement that he joined',
       'Farmland planted by the Portuguese'
     ],
-    answer:'An uninhabited island rich in wildlife — giant tortoises, birds and fish',
+    answer:'An uninhabited island rich in wildlife - giant tortoises, birds and fish',
     hint:'Rodrigues, like early Mauritius, had no human inhabitants at that time.',
     explanation:'When <b>François Leguat</b> arrived in 1691, Rodrigues was an uninhabited island with an abundance of wildlife, including giant tortoises, birds and sea life. He wrote detailed accounts of the island\'s natural richness.' }),
 
@@ -139,24 +139,24 @@ STATIC_QUESTIONS.push(
     question:'The Portuguese discovered Mauritius but never settled it permanently. What was the MOST LIKELY reason?',
     options:[
       'The Portuguese disliked islands and preferred mainland bases',
-      'The island had no strategic value at the time — Portugal already had better Indian Ocean bases elsewhere',
+      'The island had no strategic value at the time - Portugal already had better Indian Ocean bases elsewhere',
       'They were prevented from landing by native inhabitants',
       'The coral reef made it impossible to reach the shore'
     ],
-    answer:'The island had no strategic value at the time — Portugal already had better Indian Ocean bases elsewhere',
-    hint:'Portugal\'s main goal was reaching India and Asia for trade — what did they already have?',
+    answer:'The island had no strategic value at the time - Portugal already had better Indian Ocean bases elsewhere',
+    hint:'Portugal\'s main goal was reaching India and Asia for trade - what did they already have?',
     explanation:'The Portuguese focused on <b>trade routes to Asia</b>. They had bases in Goa (India) and East Africa. Mauritius had no permanent harbour, no local population to trade with, and no special resources Portugal needed. Settling a remote island would cost resources better used elsewhere.' }),
 
   makeMCQ({ id:'g5hg-disc-016', chapterId:'discovery', difficulty:3,
     question:'Both Mauritius and Rodrigues were uninhabited when Europeans arrived. Why do historians think no human population lived there before?',
     options:[
       'The islands were too hot with no fresh water',
-      'The islands are remote volcanic islands far from the nearest continent — too distant for ancient peoples to reach by simple boat',
+      'The islands are remote volcanic islands far from the nearest continent - too distant for ancient peoples to reach by simple boat',
       'A disease wiped out the original population before Europeans arrived',
       'The Portuguese had already removed the original inhabitants'
     ],
-    answer:'The islands are remote volcanic islands far from the nearest continent — too distant for ancient peoples to reach by simple boat',
-    hint:'Think about the geography — how far is Mauritius from Africa, India or Madagascar?',
+    answer:'The islands are remote volcanic islands far from the nearest continent - too distant for ancient peoples to reach by simple boat',
+    hint:'Think about the geography - how far is Mauritius from Africa, India or Madagascar?',
     explanation:'Mauritius and Rodrigues are <b>isolated volcanic islands</b> hundreds of kilometres from the nearest landmasses. Unlike larger islands close to continents (such as Madagascar), they were too remote for ancient peoples using simple vessels to reach accidentally or intentionally. This explains why they remained uninhabited.' }),
 
   makeMCQ({ id:'g5hg-disc-017', chapterId:'discovery', difficulty:4,
@@ -169,6 +169,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Sailors collected them as live food on ships, and introduced pigs and rats destroyed their eggs',
     hint:'Think about what sailors needed on long voyages, and what happens when new animals are introduced to an island.',
-    explanation:'Rodrigues tortoises became extinct from two linked causes: (1) <b>Direct exploitation</b> — sailors loaded tortoises as live food (they could survive months without eating); (2) <b>Introduced predators</b> — pigs and rats brought by settlers ate eggs and hatchlings. Neither cause alone was enough, but together they eliminated the population within a few centuries.' })
+    explanation:'Rodrigues tortoises became extinct from two linked causes: (1) <b>Direct exploitation</b> - sailors loaded tortoises as live food (they could survive months without eating); (2) <b>Introduced predators</b> - pigs and rats brought by settlers ate eggs and hatchlings. Neither cause alone was enough, but together they eliminated the population within a few centuries.' })
 
 );

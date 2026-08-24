@@ -27,7 +27,7 @@ registerSubject({
       ],
     },
     {
-      id: 'fr-verbes-present', name: 'Les Verbes — Présent', icon: '🏃',
+      id: 'fr-verbes-present', name: 'Les Verbes - Présent', icon: '🏃',
       notes: [
         '**-ER verbs** (most common): parler (to speak) → je parle, tu parles, il/elle parle, nous parlons, vous parlez, ils/elles parlent.',
         '**-IR verbs**: finir (to finish) → je finis, tu finis, il finit, nous finissons, vous finissez, ils finissent.',
@@ -109,7 +109,7 @@ registerSubject({
         '**Negation**: put *ne* before verb and *pas* after: Je ne mange pas. (I do not eat.)',
         '**Questions**: Inversion (Parles-tu?) or *Est-ce que* (Est-ce que tu parles?).',
         '**Prepositions of place**: dans (in), sur (on), sous (under), devant (in front of), derrière (behind), entre (between).',
-        '**Du/de la/des** (partitive articles — some): Je mange du pain. Elle boit de la limonade. Ils ont des amis.',
+        '**Du/de la/des** (partitive articles - some): Je mange du pain. Elle boit de la limonade. Ils ont des amis.',
         '**Futur proche** (near future): aller + infinitive. Je vais manger (I am going to eat).',
       ],
     },

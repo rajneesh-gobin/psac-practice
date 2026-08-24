@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ═══════════════════════════════════════════════════════════
-//  MathMaster Grade 5 — Difficulty Audit & Correction
+//  MathMaster Grade 5 - Difficulty Audit & Correction
 //  Loaded LAST so it can patch questions from all other files.
 //
 //  PURPOSE: Many questions were originally tagged difficulty:4
@@ -17,15 +17,15 @@
 // bare computation with minimal or no narrative context.
 
 const DEMOTE_TO_3 = new Set([
-  // Powers — not word problems, just calculations
-  'P_W05',  // "A number squared gives 289" — square root lookup
-  'P_W06',  // "Which is greater: 4³ or 6²?" — pure comparison
-  'P12',    // "Square field, side 9m, area = 9²" — one-step
+  // Powers - not word problems, just calculations
+  'P_W05',  // "A number squared gives 289" - square root lookup
+  'P_W06',  // "Which is greater: 4³ or 6²?" - pure comparison
+  'P12',    // "Square field, side 9m, area = 9²" - one-step
 
   // Square Numbers
-  'S14',    // "Square tile area 225cm², find side" — one-step sqrt
+  'S14',    // "Square tile area 225cm², find side" - one-step sqrt
 
-  // Geometry — shape definition, not a word problem
+  // Geometry - shape definition, not a word problem
   'G16',    // "A shape has 5 sides and one line of symmetry, name it"
 ]);
 
@@ -41,7 +41,7 @@ STATIC_QUESTIONS.forEach(q => {
 
 const WP4 = [
 
-  // ═══════ POWERS & EXPONENTS — 10 genuine word problems ═══
+  // ═══════ POWERS & EXPONENTS - 10 genuine word problems ═══
   makeNum({ id:'PW4_01', chapterId:'powers', difficulty:4,
     question:'Mia saves money each day: Rs 2 on Day 1, Rs 4 on Day 2, Rs 8 on Day 3 (each day it doubles).<br>How much does she save on <b>Day 6</b>?',
     answer:'64', acceptableAnswers:['64','Rs 64'],
@@ -103,7 +103,7 @@ const WP4 = [
     hint:'Area = 6² = 36 m². Cost = 36 × 450.',
     explanation:'6² = 36 m². 36 × 450 = <b>Rs 16,200</b>.' }),
 
-  // ═══════ FRACTIONS — extra L4 to pad thin pool ════════════
+  // ═══════ FRACTIONS - extra L4 to pad thin pool ════════════
   makeNum({ id:'FRW4_01', chapterId:'fractions', difficulty:4,
     question:'A school collects money for charity. Class A collects <b>Rs 240</b> and Class B collects <b>Rs 160</b>.<br>What <b>fraction</b> of the total did Class B collect? (Give in simplest form)',
     answer:'2/5',
@@ -116,7 +116,7 @@ const WP4 = [
     hint:'Books = 3/8 × 480 = 180. Stationery = 1/4 × 480 = 120. Left = 480 − 180 − 120.',
     explanation:'Books = Rs 180. Stationery = Rs 120. Left = 480 − 300 = <b>Rs 180</b>.' }),
 
-  // ═══════ RATIO — extra L4 ══════════════════════════════════
+  // ═══════ RATIO - extra L4 ══════════════════════════════════
   makeNum({ id:'RW4_01', chapterId:'ratio', difficulty:4,
     question:'Mango juice and water are mixed in the ratio <b>1:4</b>.<br>Leila makes <b>2 litres</b> of the mixture in total.<br>How many <b>mL of mango juice</b> does she use?',
     answer:'400', acceptableAnswers:['400','400mL'],
@@ -129,7 +129,7 @@ const WP4 = [
     hint:'5 parts = 350 g. 1 part = 70 g. Sugar = 2 parts.',
     explanation:'1 part = 350÷5 = 70 g. Sugar = 2×70 = <b>140 g</b>.' }),
 
-  // ═══════ AVERAGE — extra L4 ════════════════════════════════
+  // ═══════ AVERAGE - extra L4 ════════════════════════════════
   makeNum({ id:'AW4_01', chapterId:'average', difficulty:4,
     question:'The average mark of 6 pupils is <b>74</b>. When a seventh pupil joins, the new average drops to <b>71</b>.<br>What mark did the <b>seventh pupil</b> score?',
     answer:'50',
@@ -142,7 +142,7 @@ const WP4 = [
     hint:'Target total = 4×85=340. Current total = 82+76+90=248. 4th = 340−248.',
     explanation:'248+?=340. 4th test = <b>92</b>.' }),
 
-  // ═══════ GRAPHS — extra L4 ═════════════════════════════════
+  // ═══════ GRAPHS - extra L4 ═════════════════════════════════
   makeNum({ id:'GRW4_01', chapterId:'graphs', difficulty:4,
     question:`A pictogram shows fruit sold at a market stall:
 <div class="picto-wrap">

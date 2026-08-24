@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Science — Chapter: Air
+﻿'use strict';
+// Grade 4 Science - Chapter: Air
 // IDs format: g4s-air-NNN
 
 STATIC_QUESTIONS.push(
@@ -8,8 +8,8 @@ STATIC_QUESTIONS.push(
     question:'What colour is air?',
     options:['White','Blue','Grey','It has no colour (colourless)'],
     answer:'It has no colour (colourless)',
-    hint:'Look around you — can you see air?',
-    explanation:'Air is <b>colourless</b> — it has no colour, which is why we cannot see it. Air is also <b>odourless</b> (no smell) and <b>tasteless</b>. Clean air is invisible, but we know it is there because we can feel wind (moving air) and we breathe it.' }),
+    hint:'Look around you - can you see air?',
+    explanation:'Air is <b>colourless</b> - it has no colour, which is why we cannot see it. Air is also <b>odourless</b> (no smell) and <b>tasteless</b>. Clean air is invisible, but we know it is there because we can feel wind (moving air) and we breathe it.' }),
 
   makeMCQ({ id:'g4s-air-002', chapterId:'g4sci-air', difficulty:1,
     question:'Which gas from air do humans and animals need to BREATHE?',
@@ -21,15 +21,15 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g4s-air-003', chapterId:'g4sci-air', difficulty:1,
     question:'Air takes up space.',
     answer:true,
-    hint:'Try pushing air into a balloon — what happens?',
-    explanation:'<b>True.</b> Air takes up space, just like any other matter. When you blow up a balloon, air fills the space inside. You can also see a plastic bag inflate when you trap air inside it. Air has both <b>mass</b> and <b>volume</b> — it is a real substance, not "nothing".' }),
+    hint:'Try pushing air into a balloon - what happens?',
+    explanation:'<b>True.</b> Air takes up space, just like any other matter. When you blow up a balloon, air fills the space inside. You can also see a plastic bag inflate when you trap air inside it. Air has both <b>mass</b> and <b>volume</b> - it is a real substance, not "nothing".' }),
 
   makeMCQ({ id:'g4s-air-004', chapterId:'g4sci-air', difficulty:1,
     question:'What is WIND?',
     options:['Rain falling from clouds','Moving air','A type of gas different from air','Steam rising from hot water'],
     answer:'Moving air',
     hint:'Wind is simply air that is in motion.',
-    explanation:'<b>Wind</b> is <b>moving air</b>. When air moves from one place to another, we feel it as wind. Wind is caused by differences in temperature — warm air rises and cool air moves in to replace it. Wind is used in windmills and wind turbines to generate electricity.' }),
+    explanation:'<b>Wind</b> is <b>moving air</b>. When air moves from one place to another, we feel it as wind. Wind is caused by differences in temperature - warm air rises and cool air moves in to replace it. Wind is used in windmills and wind turbines to generate electricity.' }),
 
   makeMCQ({ id:'g4s-air-005', chapterId:'g4sci-air', difficulty:2,
     question:'A burning candle is placed under a glass jar. After a few minutes, the flame goes out. Why?',
@@ -84,7 +84,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'To absorb carbon dioxide for photosynthesis',
     hint:'Remember what plants use as one of the three ingredients for photosynthesis.',
-    explanation:'Plants need air to absorb <b>carbon dioxide (CO₂)</b>, which they use in <b>photosynthesis</b> to make food. During photosynthesis: carbon dioxide + water + sunlight → food (glucose) + oxygen. So plants take in CO₂ from air and release oxygen — the opposite of what animals do when they breathe.' }),
+    explanation:'Plants need air to absorb <b>carbon dioxide (CO₂)</b>, which they use in <b>photosynthesis</b> to make food. During photosynthesis: carbon dioxide + water + sunlight → food (glucose) + oxygen. So plants take in CO₂ from air and release oxygen - the opposite of what animals do when they breathe.' }),
 
   makeMCQ({ id:'g4s-air-010', chapterId:'g4sci-air', difficulty:4,
     question:'A factory opens near a town. Within one year, reports show a 25% increase in asthma cases among children, and measurements show high levels of sulphur dioxide in the air. What is the MOST LIKELY conclusion?',
@@ -120,7 +120,7 @@ STATIC_QUESTIONS.push(
     question:'Air has MASS (it weighs something).',
     answer:true,
     hint:'If you blow up a balloon, does it become heavier or lighter than when it was empty?',
-    explanation:'<b>True.</b> Air has <b>mass</b> — a blown-up balloon is slightly heavier than an empty one because it contains more air. Air is a physical substance with weight, not "nothing".' }),
+    explanation:'<b>True.</b> Air has <b>mass</b> - a blown-up balloon is slightly heavier than an empty one because it contains more air. Air is a physical substance with weight, not "nothing".' }),
 
   makeMCQ({ id:'g4s-air-014', chapterId:'g4sci-air', difficulty:2,
     question:'What is the ATMOSPHERE?',
@@ -144,7 +144,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Because there is no atmosphere on the Moon, so there is no oxygen to breathe',
     hint:'Without an atmosphere, what essential gas would be missing?',
-    explanation:'The Moon has almost no <b>atmosphere</b> — there is no air and therefore <b>no oxygen to breathe</b>. Astronauts must carry their own oxygen supply in spacesuits. The lack of breathable air is the primary reason humans cannot survive on the Moon without protection.' }),
+    explanation:'The Moon has almost no <b>atmosphere</b> - there is no air and therefore <b>no oxygen to breathe</b>. Astronauts must carry their own oxygen supply in spacesuits. The lack of breathable air is the primary reason humans cannot survive on the Moon without protection.' }),
 
   makeMCQ({ id:'g4s-air-016', chapterId:'g4sci-air', difficulty:2,
     question:'What happens to the percentage of OXYGEN in the air when a candle burns in a sealed container?',
@@ -156,35 +156,35 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Oxygen percentage decreases as the candle uses it for combustion',
     hint:'Burning (combustion) requires oxygen and uses it up.',
-    explanation:'As the candle burns, it <b>uses up oxygen</b> (combustion: fuel + oxygen → carbon dioxide + water + heat). In a sealed container, the oxygen percentage <b>decreases</b> until it is too low to support the flame — the candle goes out. This shows oxygen is consumed during combustion.' }),
+    explanation:'As the candle burns, it <b>uses up oxygen</b> (combustion: fuel + oxygen → carbon dioxide + water + heat). In a sealed container, the oxygen percentage <b>decreases</b> until it is too low to support the flame - the candle goes out. This shows oxygen is consumed during combustion.' }),
 
   makeTF({ id:'g4s-air-017', chapterId:'g4sci-air', difficulty:2,
     question:'Greenhouse gases like carbon dioxide help trap heat in the Earth\'s atmosphere.',
     answer:true,
-    hint:'Think of a greenhouse — glass lets sunlight in but traps heat inside.',
-    explanation:'<b>True.</b> Greenhouse gases (including carbon dioxide, water vapour and methane) absorb heat from the Earth\'s surface and trap it — like the glass of a greenhouse. A moderate greenhouse effect keeps Earth warm. Too much CO₂ from burning fossil fuels increases this effect, causing global warming.' }),
+    hint:'Think of a greenhouse - glass lets sunlight in but traps heat inside.',
+    explanation:'<b>True.</b> Greenhouse gases (including carbon dioxide, water vapour and methane) absorb heat from the Earth\'s surface and trap it - like the glass of a greenhouse. A moderate greenhouse effect keeps Earth warm. Too much CO₂ from burning fossil fuels increases this effect, causing global warming.' }),
 
   makeMCQ({ id:'g4s-air-018', chapterId:'g4sci-air', difficulty:3,
     question:'Which statement BEST describes the relationship between plants and animals regarding AIR?',
     options:[
       'Plants and animals both take in only oxygen and release only carbon dioxide.',
       'Animals breathe in oxygen and breathe out carbon dioxide; plants take in carbon dioxide and release oxygen during photosynthesis.',
-      'Only animals use air — plants do not need air at all.',
+      'Only animals use air - plants do not need air at all.',
       'Plants and animals both take in carbon dioxide and release oxygen.'
     ],
     answer:'Animals breathe in oxygen and breathe out carbon dioxide; plants take in carbon dioxide and release oxygen during photosynthesis.',
     hint:'Think about what each one takes IN and gives OUT.',
-    explanation:'Animals breathe in <b>oxygen</b> and breathe out <b>carbon dioxide</b>. During photosynthesis, plants take in <b>carbon dioxide</b> and release <b>oxygen</b>. This is a complementary relationship — animals produce the CO₂ that plants need, and plants produce the O₂ that animals need.' }),
+    explanation:'Animals breathe in <b>oxygen</b> and breathe out <b>carbon dioxide</b>. During photosynthesis, plants take in <b>carbon dioxide</b> and release <b>oxygen</b>. This is a complementary relationship - animals produce the CO₂ that plants need, and plants produce the O₂ that animals need.' }),
 
   makeMCQ({ id:'g4s-air-019', chapterId:'g4sci-air', difficulty:4,
     question:'A city council must choose: plant 500 new trees along the main road OR build a new car park. Which option BETTER reduces air pollution, and why?',
     options:[
-      'Car park — more cars can park and they produce fewer fumes when stationary',
-      'Trees — they absorb carbon dioxide, release oxygen, and filter dust particles from the air',
-      'Neither — trees and car parks have the same effect on air quality',
-      'Car park — because fewer people will drive if there is parking nearby'
+      'Car park - more cars can park and they produce fewer fumes when stationary',
+      'Trees - they absorb carbon dioxide, release oxygen, and filter dust particles from the air',
+      'Neither - trees and car parks have the same effect on air quality',
+      'Car park - because fewer people will drive if there is parking nearby'
     ],
-    answer:'Trees — they absorb carbon dioxide, release oxygen, and filter dust particles from the air',
+    answer:'Trees - they absorb carbon dioxide, release oxygen, and filter dust particles from the air',
     hint:'Think about what trees do to air quality versus what a car park encourages.',
     explanation:'<b>Planting trees</b> directly improves air quality: trees absorb CO₂ (a greenhouse gas), release O₂, and filter dust particles through their leaves. A car park encourages more driving → more exhaust → worse air quality. Trees are a proven natural solution to urban air pollution.' })
 

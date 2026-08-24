@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Maths — Chapter: Data Handling (pictograms, bar charts)
+﻿'use strict';
+// Grade 4 Maths - Chapter: Data Handling (pictograms, bar charts)
 // IDs format: g4m-data-NNN
 
 STATIC_QUESTIONS.push(
@@ -126,12 +126,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4m-data-019', chapterId:'g4-data', difficulty:4,
     question:'A class survey found: Blue=12, Red=9, Green=6, Yellow=3 (30 students total). Priya says "More than half the class chose Blue or Red." Is Priya correct?',
     options:[
-      'Yes — 21 students chose Blue or Red, which is more than half of 30',
-      'No — 21 is not more than half of 30',
-      'No — half of 30 is 15 and only 12 chose Blue',
+      'Yes - 21 students chose Blue or Red, which is more than half of 30',
+      'No - 21 is not more than half of 30',
+      'No - half of 30 is 15 and only 12 chose Blue',
       'Cannot tell without a bar chart'
     ],
-    answer:'Yes — 21 students chose Blue or Red, which is more than half of 30',
+    answer:'Yes - 21 students chose Blue or Red, which is more than half of 30',
     hint:'Blue + Red = 12 + 9 = ? Compare with half of 30 (= 15).',
     explanation:'Blue + Red = 12 + 9 = 21. Half of 30 = 15. Since 21 > 15, more than half chose Blue or Red. <b>Priya is correct.</b> Evaluating statements about data is a key Grade 4 data skill.' })
 

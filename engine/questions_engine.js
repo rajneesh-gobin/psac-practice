@@ -1,12 +1,12 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice Engine — Question Pool & Access Functions
+//  PSAC Exam Practice Engine - Question Pool & Access Functions
 //  STATIC_QUESTIONS is populated at load time by subject question files.
 //  GENERATORS is populated by each subject's _manifest.js.
 //  CHAPTERS is populated by each subject's _manifest.js.
 // ══════════════════════════════════════════════
 
-// Central question pool — all subject files push into this array
+// Central question pool - all subject files push into this array
 const STATIC_QUESTIONS = [];
 
 // ── QUESTION ACCESS FUNCTIONS ──────────────────
@@ -25,7 +25,7 @@ function getQuestionsForChapter(chapterId, difficulty, count = 10) {
   let pool = getStaticQs(chapterId, difficulty);
 
   if (difficulty === 4) {
-    // Word problem mode: use ONLY L4 static questions — no generator, no L3 padding.
+    // Word problem mode: use ONLY L4 static questions - no generator, no L3 padding.
     return shuffle(pool);
   }
 
@@ -43,7 +43,7 @@ function getQuestionsForChapter(chapterId, difficulty, count = 10) {
   return shuffle(pool).slice(0, count);
 }
 
-// ── MIXED PRACTICE (no chosen difficulty — random across levels) ──────────
+// ── MIXED PRACTICE (no chosen difficulty - random across levels) ──────────
 function getMixedQuestions(chapterId, maxDiff, count = 20) {
   const levels = [1, 2, 3, 4].filter(l => l <= (maxDiff || 4));
   let pool = [];

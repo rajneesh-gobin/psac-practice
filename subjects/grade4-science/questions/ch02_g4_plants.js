@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Science — Chapter: Plants
+﻿'use strict';
+// Grade 4 Science - Chapter: Plants
 // IDs format: g4s-plt-NNN
 
 STATIC_QUESTIONS.push(
@@ -41,8 +41,8 @@ STATIC_QUESTIONS.push(
     options:[
       'Darkness, cold temperature and no water',
       'Water, sunlight, air and warmth',
-      'Only water — nothing else',
-      'Sunlight and sand — no water needed'
+      'Only water - nothing else',
+      'Sunlight and sand - no water needed'
     ],
     answer:'Water, sunlight, air and warmth',
     hint:'Think about what a plant uses to make food and what it needs to stay alive.',
@@ -52,7 +52,7 @@ STATIC_QUESTIONS.push(
     question:'A plant is kept in a completely DARK cupboard for two weeks. What will most likely happen to it?',
     options:[
       'It will grow faster because it is warm inside',
-      'It will stay the same — plants do not need light',
+      'It will stay the same - plants do not need light',
       'It will wilt, turn yellow and die because it cannot photosynthesise',
       'It will grow bigger because of the darkness'
     ],
@@ -77,18 +77,18 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Sunlight, water and carbon dioxide',
     hint:'Photosynthesis = the process of making food in leaves. What goes IN to make food?',
-    explanation:'Photosynthesis uses: <b>sunlight</b> (energy), <b>water</b> (from the soil, carried by the stem) and <b>carbon dioxide</b> (from the air). The leaf uses these three things to produce food (glucose) and releases <b>oxygen</b> as a by-product — the oxygen we breathe!' }),
+    explanation:'Photosynthesis uses: <b>sunlight</b> (energy), <b>water</b> (from the soil, carried by the stem) and <b>carbon dioxide</b> (from the air). The leaf uses these three things to produce food (glucose) and releases <b>oxygen</b> as a by-product - the oxygen we breathe!' }),
 
   makeMCQ({ id:'g4s-plt-009', chapterId:'g4sci-plants', difficulty:3,
     question:'If the STEM of a plant is cut through, what will happen to the leaves? Why?',
     options:[
-      'Nothing will happen — leaves get water directly from the air',
+      'Nothing will happen - leaves get water directly from the air',
       'The leaves will droop and wilt because water from the roots can no longer reach them',
       'The leaves will grow faster because they are free from the stem',
       'The leaves will absorb water from the soil directly'
     ],
     answer:'The leaves will droop and wilt because water from the roots can no longer reach them',
-    hint:'Remember the stem\'s job — what happens if that transport route is broken?',
+    hint:'Remember the stem\'s job - what happens if that transport route is broken?',
     explanation:'Cutting the stem breaks the <b>transport system</b>. Water absorbed by the roots can no longer travel up to the leaves. Without water, the leaves cannot photosynthesise and will <b>droop, wilt and die</b>. This demonstrates that the stem is the vital water-transport link between roots and leaves.' }),
 
   makeMCQ({ id:'g4s-plt-010', chapterId:'g4sci-plants', difficulty:4,
@@ -112,7 +112,7 @@ STATIC_QUESTIONS.push(
     options:['Carbon dioxide','Nitrogen','Oxygen','Hydrogen'],
     answer:'Oxygen',
     hint:'The gas released by plants during photosynthesis is the same gas we need to breathe.',
-    explanation:'Photosynthesis: sunlight + water + CO₂ → glucose + <b>oxygen</b>. Plants release <b>oxygen</b> as a by-product — this is where almost all the oxygen in our air comes from. This is why forests and other plant life are so important for all living creatures.' }),
+    explanation:'Photosynthesis: sunlight + water + CO₂ → glucose + <b>oxygen</b>. Plants release <b>oxygen</b> as a by-product - this is where almost all the oxygen in our air comes from. This is why forests and other plant life are so important for all living creatures.' }),
 
   makeMCQ({ id:'g4s-plt-012', chapterId:'g4sci-plants', difficulty:1,
     question:'What is GERMINATION?',
@@ -136,7 +136,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Water, warmth and air (oxygen)',
     hint:'A seed in a frozen, dry, airless environment will not germinate.',
-    explanation:'Seeds need: (1) <b>Water</b> — to activate enzymes and start growth; (2) <b>Warmth</b> — for chemical reactions to work; (3) <b>Air (oxygen)</b> — for respiration. Note: seeds do NOT need sunlight to germinate — the seedling uses food stored inside the seed.' }),
+    explanation:'Seeds need: (1) <b>Water</b> - to activate enzymes and start growth; (2) <b>Warmth</b> - for chemical reactions to work; (3) <b>Air (oxygen)</b> - for respiration. Note: seeds do NOT need sunlight to germinate - the seedling uses food stored inside the seed.' }),
 
   makeMCQ({ id:'g4s-plt-014', chapterId:'g4sci-plants', difficulty:2,
     question:'What is POLLINATION?',
@@ -148,20 +148,20 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The transfer of pollen from one flower to another, usually by insects or wind',
     hint:'Pollination leads to seed formation. How does pollen move between flowers?',
-    explanation:'<b>Pollination</b> is the <b>transfer of pollen</b> from the male part (anther) of a flower to the female part (stigma), usually by <b>insects</b> (bees, butterflies — attracted by colour and scent) or by <b>wind</b>. After pollination, seeds develop inside the flower.' }),
+    explanation:'<b>Pollination</b> is the <b>transfer of pollen</b> from the male part (anther) of a flower to the female part (stigma), usually by <b>insects</b> (bees, butterflies - attracted by colour and scent) or by <b>wind</b>. After pollination, seeds develop inside the flower.' }),
 
   makeTF({ id:'g4s-plt-015', chapterId:'g4sci-plants', difficulty:2,
     question:'Seeds can be dispersed (spread to new places) by wind, water and animals.',
     answer:true,
     hint:'Think about dandelion seeds blowing away, coconuts floating in water, and seeds sticking to fur.',
-    explanation:'<b>True.</b> Seed dispersal methods: <b>wind</b> (dandelion, sycamore — light or winged seeds), <b>water</b> (coconut — floats), <b>animals</b> (berries eaten and seeds excreted; seeds that stick to fur). Dispersal allows plants to spread to new growing areas away from the parent plant.' }),
+    explanation:'<b>True.</b> Seed dispersal methods: <b>wind</b> (dandelion, sycamore - light or winged seeds), <b>water</b> (coconut - floats), <b>animals</b> (berries eaten and seeds excreted; seeds that stick to fur). Dispersal allows plants to spread to new growing areas away from the parent plant.' }),
 
   makeMCQ({ id:'g4s-plt-016', chapterId:'g4sci-plants', difficulty:2,
     question:'What gives leaves their GREEN colour?',
-    options:['Water inside the leaf','Sunlight hitting the leaf','Chlorophyll — a green pigment inside leaf cells','Minerals from the soil'],
-    answer:'Chlorophyll — a green pigment inside leaf cells',
+    options:['Water inside the leaf','Sunlight hitting the leaf','Chlorophyll - a green pigment inside leaf cells','Minerals from the soil'],
+    answer:'Chlorophyll - a green pigment inside leaf cells',
     hint:'This green substance also captures sunlight energy for photosynthesis.',
-    explanation:'Leaves are green because of <b>chlorophyll</b> — a green pigment found inside the leaf cells (in structures called chloroplasts). Chlorophyll <b>absorbs sunlight</b> and uses that energy for photosynthesis. When leaves yellow in autumn, the chlorophyll breaks down.' }),
+    explanation:'Leaves are green because of <b>chlorophyll</b> - a green pigment found inside the leaf cells (in structures called chloroplasts). Chlorophyll <b>absorbs sunlight</b> and uses that energy for photosynthesis. When leaves yellow in autumn, the chlorophyll breaks down.' }),
 
   makeMCQ({ id:'g4s-plt-017', chapterId:'g4sci-plants', difficulty:2,
     question:'Leaves have tiny pores called STOMATA. What is their main function?',
@@ -179,13 +179,13 @@ STATIC_QUESTIONS.push(
     question:'If ALL the leaves are removed from a healthy plant, what will most likely happen?',
     options:[
       'The plant will grow faster because energy is not wasted on leaves',
-      'The plant will survive — roots can make food instead',
+      'The plant will survive - roots can make food instead',
       'The plant will die because it can no longer photosynthesise to make food',
       'The plant will grow new leaves immediately and be unaffected'
     ],
     answer:'The plant will die because it can no longer photosynthesise to make food',
     hint:'Leaves are the plant\'s food factories. What happens if the factory is removed?',
-    explanation:'Without leaves, the plant cannot <b>photosynthesise</b> — it has no way to make food. Without food, the plant cannot carry out its life processes and will <b>weaken and die</b>. Roots cannot make food — they only absorb water and minerals.' }),
+    explanation:'Without leaves, the plant cannot <b>photosynthesise</b> - it has no way to make food. Without food, the plant cannot carry out its life processes and will <b>weaken and die</b>. Roots cannot make food - they only absorb water and minerals.' }),
 
   makeMCQ({ id:'g4s-plt-019', chapterId:'g4sci-plants', difficulty:4,
     question:'Sasha grows two identical pots of grass. Both get the same water and warmth. Pot A gets sunlight. Pot B is covered with a black cloth. After one week, Pot A is green and healthy. Pot B has turned yellow and is wilting. What can Sasha conclude?',
@@ -197,6 +197,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Sunlight is essential for plants to make food (photosynthesis) and stay healthy.',
     hint:'Everything was the same EXCEPT sunlight. What does the difference in results tell you?',
-    explanation:'This is a <b>fair test</b> — the only variable that differed was sunlight. Pot A (with sunlight) was healthy; Pot B (without sunlight) turned yellow because chlorophyll breaks down without light and photosynthesis cannot occur. Sasha concludes: <b>sunlight is essential for plant health</b>.' })
+    explanation:'This is a <b>fair test</b> - the only variable that differed was sunlight. Pot A (with sunlight) was healthy; Pot B (without sunlight) turned yellow because chlorophyll breaks down without light and photosynthesis cannot occur. Sasha concludes: <b>sunlight is essential for plant health</b>.' })
 
 );

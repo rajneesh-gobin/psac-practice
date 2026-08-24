@@ -1,15 +1,15 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════════════════════
-//  PSAC Exam Practice — Super Admin: Create Pre-Activated Account
+//  PSAC Exam Practice - Super Admin: Create Pre-Activated Account
 //  POST /.netlify/functions/create-user
 //
 //  Called only from the admin panel by a verified super admin.
 //  Uses service_role key to bypass email confirmation so the
-//  account is immediately usable — no verification email sent.
+//  account is immediately usable - no verification email sent.
 //
 //  Required env vars (set in Netlify → Site settings → Env vars):
 //    SUPABASE_URL              (optional, falls back to hardcoded)
-//    SUPABASE_SERVICE_ROLE_KEY (required — never expose in frontend)
+//    SUPABASE_SERVICE_ROLE_KEY (required - never expose in frontend)
 // ══════════════════════════════════════════════════════════════
 
 const { createClient } = require('@supabase/supabase-js');
@@ -30,7 +30,7 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization,Content-Type' }, body: '' };
   }
   if (event.httpMethod !== 'POST') return _json(405, { error: 'Method Not Allowed' });
-  if (!SB_SERVICE_KEY)             return _json(500, { error: 'Server not configured — add SUPABASE_SERVICE_ROLE_KEY to Netlify env vars' });
+  if (!SB_SERVICE_KEY)             return _json(500, { error: 'Server not configured - add SUPABASE_SERVICE_ROLE_KEY to Netlify env vars' });
 
   // ── 1. Verify caller via their Supabase JWT ─────────────────
   const jwt = (event.headers['authorization'] || '').replace(/^Bearer\s+/i, '').trim();
@@ -68,7 +68,7 @@ exports.handler = async (event) => {
   if (full_name.trim().length < 2) return _json(400, { error: 'Full name required' });
   if (!['parent','teacher','admin'].includes(role)) return _json(400, { error: 'Invalid role' });
 
-  // ── 4. Create auth user — email pre-confirmed ───────────────
+  // ── 4. Create auth user - email pre-confirmed ───────────────
   const { data: created, error: createErr } = await adminSb.auth.admin.createUser({
     email:          email.trim().toLowerCase(),
     password,
@@ -113,7 +113,7 @@ exports.handler = async (event) => {
     amount_mur: 0, provider: 'super_admin',
     status: 'completed',
     processed_at: new Date().toISOString(),
-    notes: `Created by super admin ${callerProfile.full_name} (${caller.email})${note ? ' — ' + note : ''}`,
+    notes: `Created by super admin ${callerProfile.full_name} (${caller.email})${note ? ' - ' + note : ''}`,
   });
 
   console.log(`[create-user] Super admin ${caller.email} created account ${email} (${role}, ${activePlan})`);

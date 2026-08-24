@@ -1,6 +1,6 @@
-// Netlify Function — Set / update a student PIN
+﻿// Netlify Function - Set / update a student PIN
 // Called by the parent dashboard when creating or editing a child account.
-// Hashes the PIN with scrypt before storing — the plain PIN never touches the DB.
+// Hashes the PIN with scrypt before storing - the plain PIN never touches the DB.
 
 const crypto = require('crypto');
 

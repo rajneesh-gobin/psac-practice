@@ -17,10 +17,10 @@ registerSubject({
     {
       id: 'g4fr-noms', name: 'Les Noms & Articles', icon: '📝',
       notes: [
-        'In French, every noun is **masculine (m.)** or **feminine (f.)** — you must learn the gender with each word.',
-        '**Indefinite articles** (a/an): **un** (m.) — un chat; **une** (f.) — une maison.',
-        '**Definite articles** (the): **le** (m.) — le chien; **la** (f.) — la fleur.',
-        'Before a vowel or silent h: **l\'** — l\'ami (m.), l\'école (f.).',
+        'In French, every noun is **masculine (m.)** or **feminine (f.)** - you must learn the gender with each word.',
+        '**Indefinite articles** (a/an): **un** (m.) - un chat; **une** (f.) - une maison.',
+        '**Definite articles** (the): **le** (m.) - le chien; **la** (f.) - la fleur.',
+        'Before a vowel or silent h: **l\'** - l\'ami (m.), l\'école (f.).',
         '**Plural**: add **-s** to most nouns. Definite plural = **les**; indefinite plural = **des**.',
         'Example: le livre (the book) → les livres (the books). Un stylo → des stylos.',
       ],

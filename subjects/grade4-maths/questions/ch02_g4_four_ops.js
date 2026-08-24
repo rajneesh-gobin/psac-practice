@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Maths — Chapter: Four Operations (addition, subtraction, multiplication, division)
+﻿'use strict';
+// Grade 4 Maths - Chapter: Four Operations (addition, subtraction, multiplication, division)
 // IDs format: g4m-ops-NNN
 
 STATIC_QUESTIONS.push(
@@ -63,7 +63,7 @@ STATIC_QUESTIONS.push(
     question:'Riya buys 3 bags of rice at Rs 75 each and 2 bags of flour at Rs 48 each. How much does she pay in TOTAL?',
     answer:'321', acceptableAnswers:['321','Rs 321'],
     hint:'Find the cost of rice (3 × 75), then the cost of flour (2 × 48). Add both.',
-    explanation:'Rice: 3 × Rs 75 = Rs 225. Flour: 2 × Rs 48 = Rs 96. Total = 225 + 96 = <b>Rs 321</b>. This is a two-step word problem — a Level 3 skill in MIE Grade 4.' })
+    explanation:'Rice: 3 × Rs 75 = Rs 225. Flour: 2 × Rs 48 = Rs 96. Total = 225 + 96 = <b>Rs 321</b>. This is a two-step word problem - a Level 3 skill in MIE Grade 4.' })
 
 );
 
@@ -73,7 +73,7 @@ STATIC_QUESTIONS.push(
     question:'Calculate: 6 × 8',
     answer:'48', acceptableAnswers:['48'],
     hint:'Use your times tables: 6 groups of 8.',
-    explanation:'6 × 8 = <b>48</b>. Recall: 8×6=48 too — multiplication is commutative. MIE Grade 4 requires fluency with multiplication tables up to 10×10.' }),
+    explanation:'6 × 8 = <b>48</b>. Recall: 8×6=48 too - multiplication is commutative. MIE Grade 4 requires fluency with multiplication tables up to 10×10.' }),
 
   makeNum({ id:'g4m-ops-012', chapterId:'g4-four-ops', difficulty:2,
     question:'Calculate: 47 × 6',

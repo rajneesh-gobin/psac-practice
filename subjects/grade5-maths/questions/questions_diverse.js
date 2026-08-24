@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ═══════════════════════════════════════════════════════════
-//  MathMaster Grade 5 — Diverse Question Bank
+//  MathMaster Grade 5 - Diverse Question Bank
 //  Fills gaps identified from MIE 2023/2024/2025 papers:
 //  3D shapes, symmetry, angles, compound perimeter/area,
 //  mixed numbers, equivalent fractions, unit conversions,
@@ -12,7 +12,7 @@
 const DV = [
 
   // ══════════════════════════════════════════════
-  //  GEOMETRY — 3D Shapes
+  //  GEOMETRY - 3D Shapes
   // ══════════════════════════════════════════════
   makeMCQ({ id:'DG01', chapterId:'geometry', difficulty:1,
     question:'How many <b>flat faces</b> does a <b>cylinder</b> have?',
@@ -25,7 +25,7 @@ const DV = [
     question:'How many <b>faces</b> does a <b>cuboid</b> have?',
     options:['4','6','8','12'],
     answer:'6',
-    hint:'Think of a cereal box — count top, bottom, front, back, left, right.',
+    hint:'Think of a cereal box - count top, bottom, front, back, left, right.',
     explanation:'A cuboid has <b>6</b> rectangular faces.' }),
 
   makeMCQ({ id:'DG03', chapterId:'geometry', difficulty:1,
@@ -46,7 +46,7 @@ const DV = [
     question:'A <b>sphere</b> has how many <b>flat faces</b>?',
     options:['0','1','2','4'],
     answer:'0',
-    hint:'A sphere is perfectly round — it has no flat surfaces.',
+    hint:'A sphere is perfectly round - it has no flat surfaces.',
     explanation:'A sphere has <b>0</b> flat faces. Its entire surface is curved.' }),
 
   makeMCQ({ id:'DG06', chapterId:'geometry', difficulty:2,
@@ -80,11 +80,11 @@ const DV = [
   makeNum({ id:'DG10', chapterId:'geometry', difficulty:3,
     question:'A cuboid has <b>6 faces, 12 edges</b> and <b>___ vertices</b>.<br>How many vertices does it have?',
     answer:'8',
-    hint:'Count the corners of a box — each corner is a vertex.',
+    hint:'Count the corners of a box - each corner is a vertex.',
     explanation:'A cuboid has <b>8</b> vertices.' }),
 
   // ══════════════════════════════════════════════
-  //  GEOMETRY — Lines of Symmetry
+  //  GEOMETRY - Lines of Symmetry
   // ══════════════════════════════════════════════
   makeMCQ({ id:'DG11', chapterId:'geometry', difficulty:1,
     question:'How many <b>lines of symmetry</b> does a <b>rectangle</b> have?',
@@ -112,7 +112,7 @@ const DV = [
     options:['3','4','5','6'],
     answer:'5',
     hint:'A regular polygon with n sides has n lines of symmetry.',
-    explanation:'A regular pentagon has <b>5</b> lines of symmetry — one through each vertex and opposite side.' }),
+    explanation:'A regular pentagon has <b>5</b> lines of symmetry - one through each vertex and opposite side.' }),
 
   makeMCQ({ id:'DG15', chapterId:'geometry', difficulty:2,
     question:'Which shape has <b>0 lines of symmetry</b>?',
@@ -135,7 +135,7 @@ const DV = [
     explanation:'n lines of symmetry = n sides. The shape is a regular <b>hexagon</b> with <b>6</b> sides.' }),
 
   // ══════════════════════════════════════════════
-  //  GEOMETRY — Angles
+  //  GEOMETRY - Angles
   // ══════════════════════════════════════════════
   makeMCQ({ id:'DG18', chapterId:'geometry', difficulty:1,
     question:'An angle of <b>130°</b> is called a(n) ___.',
@@ -190,7 +190,7 @@ const DV = [
     explanation:'A quadrilateral = 2 triangles = 2 × 180° = <b>360°</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  GEOMETRY — Compound shapes (L-shapes, perimeter, area)
+  //  GEOMETRY - Compound shapes (L-shapes, perimeter, area)
   // ══════════════════════════════════════════════
   makeNum({ id:'DG26', chapterId:'geometry', difficulty:3,
     question:'An L-shaped playground has the following measurements:<br>Total length = <b>10 m</b>, width = <b>6 m</b>. A rectangular piece of <b>4 m × 3 m</b> is cut from one corner.<br>Find the <b>perimeter</b> of the L-shape.',
@@ -223,7 +223,7 @@ const DV = [
     explanation:'60 − 10 = <b>50 cm²</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  FRACTIONS — Mixed numbers, improper fractions, equivalent
+  //  FRACTIONS - Mixed numbers, improper fractions, equivalent
   // ══════════════════════════════════════════════
   makeNum({ id:'DFR01', chapterId:'fractions', difficulty:2,
     question:'Convert the mixed number <b>2¾</b> to an <b>improper fraction</b>.',
@@ -258,7 +258,7 @@ const DV = [
   makeNum({ id:'DFR06', chapterId:'fractions', difficulty:3,
     question:'Write <b>27/6</b> as a mixed number in its <b>simplest form</b>.',
     answer:'4 1/2', acceptableAnswers:['4 1/2','4½','4 and 1/2'],
-    hint:'27÷6=4 r3. So 4 3/6 — now simplify 3/6.',
+    hint:'27÷6=4 r3. So 4 3/6 - now simplify 3/6.',
     explanation:'27÷6=4 r3 → 4 3/6. Simplify: 3/6 = 1/2. Answer = <b>4½</b>.' }),
 
   makeMCQ({ id:'DFR07', chapterId:'fractions', difficulty:3,
@@ -299,7 +299,7 @@ const DV = [
     explanation:'Girls = 5/9 × 36 = 20. Boys = 36−20 = <b>16</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  DECIMALS — Unit conversions
+  //  DECIMALS - Unit conversions
   // ══════════════════════════════════════════════
   makeNum({ id:'DD01', chapterId:'decimals', difficulty:2,
     question:'Convert <b>3.5 kg</b> to <b>grams</b>.',
@@ -351,7 +351,7 @@ const DV = [
     explanation:'180 − 65 = <b>115 cm</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  FOUR OPERATIONS — Division with remainder
+  //  FOUR OPERATIONS - Division with remainder
   // ══════════════════════════════════════════════
   makeNum({ id:'DF01', chapterId:'four_ops', difficulty:2,
     question:'A teacher has <b>65 drinking straws</b>. She packs them in bags of <b>8</b>.<br>How many <b>full bags</b> can she make?',
@@ -384,7 +384,7 @@ const DV = [
     explanation:'97 ÷ 8 = 12 r 1. Each friend gets <b>12</b> sweets, <b>1</b> left for Keshav.' }),
 
   // ══════════════════════════════════════════════
-  //  FOUR OPERATIONS — Age problems
+  //  FOUR OPERATIONS - Age problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DF06', chapterId:'four_ops', difficulty:3,
     question:'Riya is <b>9 years old</b>. Her mother is <b>4 times</b> as old as Riya.<br>How old is Riya\'s mother?',
@@ -405,7 +405,7 @@ const DV = [
     explanation:'56-x = 5(8-x) = 40-5x. 4x=−16. x=4. <b>4 years ago</b> (grandfather was 52, Ahmad was 4, 52=5×4 ✓).' }),
 
   // ══════════════════════════════════════════════
-  //  NUMERATION — Ordering and place value
+  //  NUMERATION - Ordering and place value
   // ══════════════════════════════════════════════
   makeNum({ id:'DN01', chapterId:'numeration', difficulty:2,
     question:'Arrange in <b>descending order</b> (greatest first):<br><b>5,432 &nbsp; 4,523 &nbsp; 5,243 &nbsp; 4,532</b>',
@@ -439,7 +439,7 @@ const DV = [
     explanation:'The smallest number that rounds to 450 is <b>445</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  LENGTH — More conversions and word problems
+  //  LENGTH - More conversions and word problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DL01', chapterId:'length', difficulty:2,
     question:'Convert <b>3 km 450 m</b> to <b>metres</b>.',
@@ -466,7 +466,7 @@ const DV = [
     explanation:'1260 ÷ 6 = <b>210 cm</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  AREA — More problems
+  //  AREA - More problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DAR01', chapterId:'area', difficulty:2,
     question:'Find the area of a <b>square</b> with side <b>9 cm</b>.',
@@ -493,7 +493,7 @@ const DV = [
     explanation:'Outer = 10×7=70. Inner=40. Path = 70−40 = <b>28 m²</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  MASS — More problems
+  //  MASS - More problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DM01', chapterId:'mass', difficulty:2,
     question:'Convert <b>3 kg 250 g</b> to <b>grams</b>.',
@@ -514,7 +514,7 @@ const DV = [
     explanation:'50 ÷ 2.5 = <b>20 weeks</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  CAPACITY — More problems
+  //  CAPACITY - More problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DC01', chapterId:'capacity', difficulty:2,
     question:'Convert <b>2 L 350 mL</b> to <b>mL</b>.',
@@ -529,7 +529,7 @@ const DV = [
     explanation:'1200 × 3 ÷ 4 = <b>900 mL</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  MONEY — More word problems
+  //  MONEY - More word problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DMO01', chapterId:'money', difficulty:3,
     question:'A stall sells:<br>• Mango juice: Rs 25 per cup<br>• Coconut water: Rs 30 per cup<br>Priya buys <b>3 mango juices</b> and <b>2 coconut waters</b>.<br>How much does she pay?',
@@ -550,7 +550,7 @@ const DV = [
     explanation:'58 + 60 = Rs 118. Change = 200−118 = <b>Rs 82</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  TIME — More word problems
+  //  TIME - More word problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DT01', chapterId:'time', difficulty:2,
     question:'A train journey takes <b>2 hours 35 minutes</b>.<br>The train departs at <b>09:20</b>. At what time does it arrive?',
@@ -583,7 +583,7 @@ const DV = [
     explanation:'6:00 − 2h 15min = <b>3:45 p.m.</b>' }),
 
   // ══════════════════════════════════════════════
-  //  AVERAGE — More word problems
+  //  AVERAGE - More word problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DAV01', chapterId:'average', difficulty:3,
     question:'The ages of 5 children are: <b>8, 11, 9, 7, 10</b>.<br>Find their <b>average age</b>.',
@@ -604,7 +604,7 @@ const DV = [
     explanation:'Total = 25.2. Third = 25.2 − 9.2 − 7.6 = <b>8.4 kg</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  RATIO — More word problems
+  //  RATIO - More word problems
   // ══════════════════════════════════════════════
   makeNum({ id:'DR01', chapterId:'ratio', difficulty:3,
     question:'Orange juice and mango juice are mixed in the ratio <b>2:3</b>.<br>If there are <b>250 mL</b> of orange juice, how much <b>mango juice</b> is there?',
@@ -631,7 +631,7 @@ const DV = [
     explanation:'1 part = 400. Leila = 4×400 = <b>Rs 1,600</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  GRAPHS — True/False and varied
+  //  GRAPHS - True/False and varied
   // ══════════════════════════════════════════════
   makeMCQ({ id:'DGR01', chapterId:'graphs', difficulty:2,
     question:`A pictogram shows loaves baked in a bakery:
@@ -664,7 +664,7 @@ How many loaves were baked on <b>Monday</b>?`,
     explanation:'Total = 250. Average = 250÷5 = <b>50</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  SQUARE NUMBERS — extra L4 word problems
+  //  SQUARE NUMBERS - extra L4 word problems
   // ══════════════════════════════════════════════
   makeNum({ id:'SQ_W01', chapterId:'square_nums', difficulty:4,
     question:'A square room has a <b>perimeter of 48 m</b>.<br>Find the <b>area</b> of the room.',
@@ -728,14 +728,14 @@ How many loaves were baked on <b>Monday</b>?`,
     explanation:'64 − 36 = <b>28 counters</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  SYMMETRY — Interactive grid questions
+  //  SYMMETRY - Interactive grid questions
   //  Grid layout: 6×7 (vertical axis at col 3)
   //               7×6 (horizontal axis at row 3)
   //  given = cells already filled (left/top side)
   //  answer = auto-mirrored (right/bottom side)
   // ══════════════════════════════════════════════
 
-  // SYM01 — Cross / plus shape (vertical axis)
+  // SYM01 - Cross / plus shape (vertical axis)
   // . . . | . . .
   // . . X | X . .
   // X X X | X X X
@@ -748,7 +748,7 @@ How many loaves were baked on <b>Monday</b>?`,
     given:[[1,2],[2,0],[2,1],[2,2],[3,2]],
     hint:'Find where each filled cell is, then click its mirror position on the other side.' }),
 
-  // SYM02 — Arrow pointing right (vertical axis)
+  // SYM02 - Arrow pointing right (vertical axis)
   // . . . | . . .
   // . X . | . X .
   // . X X | X X .
@@ -757,11 +757,11 @@ How many loaves were baked on <b>Monday</b>?`,
   // . . . | . . .
   makeSymmetry({ id:'SYM02', chapterId:'geometry', difficulty:2,
     rows:6, cols:7, axis:'vertical', axisPos:3,
-    question:'<b>Complete the symmetric pattern</b> — click the cells to mirror the shape across the yellow line.',
+    question:'<b>Complete the symmetric pattern</b> - click the cells to mirror the shape across the yellow line.',
     given:[[1,1],[2,1],[2,2],[3,1]],
     hint:'The shape is like an arrow. Mirror each filled cell to its opposite position.' }),
 
-  // SYM03 — Zigzag staircase (vertical axis)
+  // SYM03 - Zigzag staircase (vertical axis)
   // X . . | . . X
   // . X . | . X .
   // . . X | X . .
@@ -770,11 +770,11 @@ How many loaves were baked on <b>Monday</b>?`,
   // . . . | . . .
   makeSymmetry({ id:'SYM03', chapterId:'geometry', difficulty:3,
     rows:6, cols:7, axis:'vertical', axisPos:3,
-    question:'<b>Complete the symmetric pattern.</b> The shape is a zigzag — mirror it across the yellow line.',
+    question:'<b>Complete the symmetric pattern.</b> The shape is a zigzag - mirror it across the yellow line.',
     given:[[0,0],[1,1],[2,2],[3,1],[4,0]],
     hint:'Each cell at column 0 mirrors to column 6, column 1 to column 5, column 2 to column 4.' }),
 
-  // SYM04 — L-shape (vertical axis)
+  // SYM04 - L-shape (vertical axis)
   // . . X | X . .
   // . . X | X . .
   // . . X | X . .
@@ -783,11 +783,11 @@ How many loaves were baked on <b>Monday</b>?`,
   // . . . | . . .
   makeSymmetry({ id:'SYM04', chapterId:'geometry', difficulty:3,
     rows:6, cols:7, axis:'vertical', axisPos:3,
-    question:'<b>Complete the symmetric pattern.</b> The left side shows an L-shape — mirror it to the right.',
+    question:'<b>Complete the symmetric pattern.</b> The left side shows an L-shape - mirror it to the right.',
     given:[[0,2],[1,2],[2,2],[3,0],[3,1],[3,2]],
     hint:'The vertical part (column 2) mirrors to column 4. The horizontal part mirrors across the axis.' }),
 
-  // SYM05 — T-shape (horizontal axis)
+  // SYM05 - T-shape (horizontal axis)
   // . X X X X .
   // . . X X . .
   // . . X X . .
@@ -797,11 +797,11 @@ How many loaves were baked on <b>Monday</b>?`,
   // . X X X X .
   makeSymmetry({ id:'SYM05', chapterId:'geometry', difficulty:3,
     rows:7, cols:6, axis:'horizontal', axisPos:3,
-    question:'<b>Complete the symmetric pattern</b> below the yellow line — mirror the shape from the top half.',
+    question:'<b>Complete the symmetric pattern</b> below the yellow line - mirror the shape from the top half.',
     given:[[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[2,2],[2,3]],
     hint:'Row 0 mirrors to row 6. Row 1 mirrors to row 5. Row 2 mirrors to row 4.' }),
 
-  // SYM06 — Flag / triangle (horizontal axis)
+  // SYM06 - Flag / triangle (horizontal axis)
   // X X X X . .
   // . X X X . .
   // . . X X . .
@@ -811,7 +811,7 @@ How many loaves were baked on <b>Monday</b>?`,
   // X X X X . .
   makeSymmetry({ id:'SYM06', chapterId:'geometry', difficulty:4,
     rows:7, cols:6, axis:'horizontal', axisPos:3,
-    question:'<b>Complete the symmetric pattern</b> — the bottom half should mirror the top half across the yellow line.',
+    question:'<b>Complete the symmetric pattern</b> - the bottom half should mirror the top half across the yellow line.',
     given:[[0,0],[0,1],[0,2],[0,3],[1,1],[1,2],[1,3],[2,2],[2,3]],
     hint:'Row 0 mirrors to row 6, row 1 to row 5, row 2 to row 4.' }),
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice — Auth
+//  PSAC Exam Practice - Auth
 //  Uses _sb (global from supabase.js).
 //  Manages: Supabase email auth for parent/teacher,
 //           PIN-based student login,
@@ -16,7 +16,7 @@ const Auth = (() => {
   let _family        = null;   // families row
   let _familyStudents = [];    // students rows for this family
 
-  let _activeAccount       = null;  // { id, name, avatar } — current student
+  let _activeAccount       = null;  // { id, name, avatar } - current student
   let _currentRole         = 'student'; // selected tab on auth screen
   let _setupAvatar         = AVATARS[0];
   let _pendingVerifyEmail  = ''; // email stored for resend verification
@@ -82,7 +82,7 @@ const Auth = (() => {
 
     const profile = await Store.getProfile(_parentUser.id);
     if (!profile) {
-      // Brand-new user after email verification — needs family setup
+      // Brand-new user after email verification - needs family setup
       _buildSetupAvatarGrid();
       showScreen('family-setup');
       return;
@@ -117,7 +117,7 @@ const Auth = (() => {
       return;
     }
 
-    // Parent — load family + students (pass parent ID as fallback if RLS query returns null)
+    // Parent - load family + students (pass parent ID as fallback if RLS query returns null)
     _family = await Store.getMyFamily(_parentUser.id);
     if (_family) {
       _familyStudents = await Store.getFamilyStudents(_family.id);
@@ -151,7 +151,7 @@ const Auth = (() => {
 
   // ── Resume a stored student session ───────────
   async function _resumeStudent(sess) {
-    // Admin force-expire check — validate session_version against DB
+    // Admin force-expire check - validate session_version against DB
     if (_sb) {
       try {
         const { data: sv } = await _sb.from('students').select('session_version, expires_at').eq('id', sess.id).maybeSingle();
@@ -171,7 +171,7 @@ const Auth = (() => {
             return;
           }
         }
-      } catch (_) { /* offline — allow resume */ }
+      } catch (_) { /* offline - allow resume */ }
     }
 
     _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar, grade: sess.grade };
@@ -193,7 +193,7 @@ const Auth = (() => {
       QuestionLoader.loadForStudent(resumeGrade).catch(() => {});
     }
 
-    // Skip grade select — go straight to subject picker with the stored grade
+    // Skip grade select - go straight to subject picker with the stored grade
     if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
       SELECTED_GRADE = resumeGrade;
       showScreen('subject-select');
@@ -243,7 +243,7 @@ const Auth = (() => {
     if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
     Store.logLoginEvent(studentRow.id, 'student');
 
-    // Skip grade select — parent already set the grade; go straight to subject picker
+    // Skip grade select - parent already set the grade; go straight to subject picker
     if (navigate) {
       if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
         SELECTED_GRADE = studentGrade;
@@ -521,7 +521,7 @@ const Auth = (() => {
   // ── Reset student progress ─────────────────────
   async function confirmResetStudentProgress(studentId, studentName) {
     if (!confirm(`Delete ALL progress for ${studentName}?\n\nThis cannot be undone.`)) return;
-    if (!confirm('Final confirmation — all chapters, XP and badges will be lost.')) return;
+    if (!confirm('Final confirmation - all chapters, XP and badges will be lost.')) return;
     if (!_sb) return;
     await _sb.from('student_progress').delete().eq('student_id', studentId);
     try { localStorage.removeItem(`mathmaster_s_${studentId}`); } catch(e) {}
@@ -529,7 +529,7 @@ const Auth = (() => {
     renderParentDashboard();
   }
 
-  // ── Student login (username + PIN — no family code needed) ────────
+  // ── Student login (username + PIN - no family code needed) ────────
   async function studentSignIn() {
     if (!_sb) return;
 
@@ -550,7 +550,7 @@ const Auth = (() => {
     const isLocal = location.protocol === 'file:' || location.hostname === 'localhost';
 
     if (!isLocal) {
-      // Production: verify via Supabase RPC — pin hash stays inside the database, 0 Netlify credits
+      // Production: verify via Supabase RPC - pin hash stays inside the database, 0 Netlify credits
       const { data, error } = await _sb.rpc('verify_student_pin', { p_username: username, p_pin: pin });
       _setAuthLoading(false);
 
@@ -709,10 +709,10 @@ const Auth = (() => {
   // ── Parent adds/manages children ───────────────
   async function addStudent() {
     if (!_family) {
-      // Family may not have loaded yet — retry with explicit parent ID fallback
+      // Family may not have loaded yet - retry with explicit parent ID fallback
       _family = await Store.getMyFamily(_parentUser?.id);
       if (!_family && _parentUser) {
-        // Still null — could be a fresh account that skipped setup, create a default family
+        // Still null - could be a fresh account that skipped setup, create a default family
         const name = _parentProfile?.full_name || _parentUser.email?.split('@')[0] || 'My Family';
         _family = await Store.createFamily(_parentUser.id, `${name}'s Family`);
       }
@@ -734,7 +734,7 @@ const Auth = (() => {
       return;
     }
     const { error } = await _sb.rpc('set_student_pin', { p_student_id: studentId, p_pin: pin });
-    // set_student_pin returns VOID — success gives { data: null, error: null }
+    // set_student_pin returns VOID - success gives { data: null, error: null }
     // only fall back to plaintext if the RPC itself errors (not deployed yet)
     if (error) {
       console.warn('[set_student_pin] RPC error, storing plaintext (dev only):', error?.message);
@@ -755,7 +755,7 @@ const Auth = (() => {
 
     const existingId = _el('add-student-id')?.value;
     if (existingId) {
-      // Edit mode — PIN is optional; blank = keep existing PIN
+      // Edit mode - PIN is optional; blank = keep existing PIN
       if (pin && !/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
       const updates = { displayName: name, grade, avatar: _addAvatar,
         settings: ((_familyStudents.find(s => s.id === existingId))?.settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false }) };
@@ -763,7 +763,7 @@ const Auth = (() => {
       if (pin) await _setStudentPin(existingId, pin);
       toast('Child updated! ✅', 1500);
     } else {
-      // Create mode — PIN is required
+      // Create mode - PIN is required
       if (!/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
       const student = await Store.createStudent(_family.id, {
         username: uname, displayName: name, avatar: _addAvatar, grade, pin,
@@ -817,7 +817,7 @@ const Auth = (() => {
     }
     if (!student) { toast('Student not found. Try reloading the dashboard.', 3000); return; }
     showScreen('add-student');
-    if (_el('add-student-title')) _el('add-student-title').textContent = `Edit — ${student.display_name}`;
+    if (_el('add-student-title')) _el('add-student-title').textContent = `Edit - ${student.display_name}`;
     if (_el('add-student-id'))    _el('add-student-id').value = id;
     if (_el('add-child-name'))     _el('add-child-name').value     = student.display_name;
     if (_el('add-child-username')) _el('add-child-username').value  = student.username;
@@ -899,7 +899,7 @@ const Auth = (() => {
   async function resetProgress() {
     if (!ACTIVE_STUDENT_ID) return;
     if (!confirm('Delete ALL progress for this student? This cannot be undone.')) return;
-    if (!confirm('Final confirmation — all chapters, XP and badges will be permanently lost.')) return;
+    if (!confirm('Final confirmation - all chapters, XP and badges will be permanently lost.')) return;
     Store.clearStudent(ACTIVE_STUDENT_ID);
     const fresh = { stats:{totalAttempted:0,totalCorrect:0,examCount:0,bestScore:0,maxStreak:0,streak:0,lastDate:null},chapters:{},examHistory:[],badges:[],theme:'light',xp:0,level:1,assignments:[],restrictions:{lockedChapters:[],maxDifficulty:4,examDisabled:false} };
     Object.assign(DB, fresh);

@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════════════
-//  MathMaster Grade 5 — Exam-Style Question Bank
+//  MathMaster Grade 5 - Exam-Style Question Bank
 //  Modelled directly on MIE Mauritius 2023/2024/2025 papers
 //  Real contexts, real phrasings, real question types
 // ══════════════════════════════════════════════════════
@@ -185,7 +185,7 @@ const EX = [
     options:['The two angles between unequal sides','The top and bottom angles','All four angles','None of the angles'],
     answer:'The two angles between unequal sides',
     hint:'In a kite, the angles between the unequal sides are equal.',
-    explanation:'A kite has one pair of equal angles — the angles between the pairs of unequal sides.' }),
+    explanation:'A kite has one pair of equal angles - the angles between the pairs of unequal sides.' }),
 
   makeMCQ({ id:'EG06', chapterId:'geometry', difficulty:2,
     question:'How many <b>lines of symmetry</b> does a <b>square</b> have?',
@@ -610,13 +610,13 @@ const EX = [
     explanation:'60 + 15 = <b>75 minutes</b>.' }),
 
   // ════════════════════════════════════════════════
-  //  GRAPHS & DATA  (exam-style — pictogram/bar chart)
+  //  GRAPHS & DATA  (exam-style - pictogram/bar chart)
   // ════════════════════════════════════════════════
   makeNum({ id:'EGR01', chapterId:'graphs', difficulty:2,
     question:'A bar chart shows water bottles sold by Mr Kumar:<br>Mon=14, Tue=10, Wed=6, Thu=8, Fri=18.<br>On which day did Mr Kumar sell the <b>least</b> number of bottles?<br><i>Type the day name.</i>',
     answer:'Wednesday', acceptableAnswers:['Wednesday','wednesday','Wed'],
     hint:'Find the smallest bar: 6 bottles.',
-    explanation:'Wednesday had only 6 bottles — the <b>least</b>.' }),
+    explanation:'Wednesday had only 6 bottles - the <b>least</b>.' }),
 
   makeNum({ id:'EGR02', chapterId:'graphs', difficulty:3,
     question:'Mr Kumar\'s water bottle sales: Mon=14, Tue=10, Wed=6, Thu=8.<br>He sells each bottle for <b>Rs 15</b>.<br>How much money did he earn on <b>Tuesday and Thursday combined</b>?',
@@ -635,7 +635,7 @@ const EX = [
     options:['Van','Bus','Car','Foot'],
     answer:'Van',
     hint:'Find the tallest bar.',
-    explanation:'Van = 16 pupils — the most. Answer: <b>Van</b>.' }),
+    explanation:'Van = 16 pupils - the most. Answer: <b>Van</b>.' }),
 
   makeNum({ id:'EGR05', chapterId:'graphs', difficulty:4,
     question:'A pictogram shows bakery loaves:<br>Mon=700, Tue=500, Wed=800, Thu=900, Fri=700, Sat=1000.<br>On Sunday, the bakery makes <b>200 fewer loaves</b> than Wednesday.<br>How many more loaves were produced on <b>Saturday</b> than on <b>Tuesday</b>?',

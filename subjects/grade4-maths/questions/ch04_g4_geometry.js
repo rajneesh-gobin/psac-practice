@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Maths — Chapter: Geometry & Angles (2-D/3-D shapes, lines, angles)
+﻿'use strict';
+// Grade 4 Maths - Chapter: Geometry & Angles (2-D/3-D shapes, lines, angles)
 // IDs format: g4m-geo-NNN
 
 STATIC_QUESTIONS.push(
@@ -35,13 +35,13 @@ STATIC_QUESTIONS.push(
     question:'A cube has edges of 4 cm each. A cube has 12 edges. What is the TOTAL length of all its edges (in cm)?',
     answer:'48', acceptableAnswers:['48','48 cm'],
     hint:'Total length = number of edges x length of one edge.',
-    explanation:'12 edges x 4 cm = <b>48 cm</b>. A cube has 12 equal edges — 4 on the top face, 4 on the bottom face and 4 vertical edges joining them.' }),
+    explanation:'12 edges x 4 cm = <b>48 cm</b>. A cube has 12 equal edges - 4 on the top face, 4 on the bottom face and 4 vertical edges joining them.' }),
 
   makeMCQ({ id:'g4m-geo-006', chapterId:'g4-geometry', difficulty:1,
     question:'A HORIZONTAL line goes in which direction?',
     options:['Up and down','Diagonally','Left and right','In a circle'],
     answer:'Left and right',
-    hint:'The word "horizontal" comes from "horizon" — the line where the sky meets the sea.',
+    hint:'The word "horizontal" comes from "horizon" - the line where the sky meets the sea.',
     explanation:'A <b>horizontal line</b> goes left and right (like the horizon). A <b>vertical</b> line goes up and down. An <b>inclined</b> line goes at a diagonal angle. MIE Grade 4: horizontal, vertical, parallel and inclined lines.' }),
 
   makeMCQ({ id:'g4m-geo-007', chapterId:'g4-geometry', difficulty:2,
@@ -55,7 +55,7 @@ STATIC_QUESTIONS.push(
     question:'A SPHERE has how many flat FACES?',
     answer:'0', acceptableAnswers:['0'],
     hint:'Roll a sphere on the floor. Does it have any flat sides?',
-    explanation:'A sphere has <b>0 flat faces</b>, 0 edges and 0 vertices. It is perfectly round — like a ball or a globe. Unlike a cube or cylinder, there are no flat surfaces.' }),
+    explanation:'A sphere has <b>0 flat faces</b>, 0 edges and 0 vertices. It is perfectly round - like a ball or a globe. Unlike a cube or cylinder, there are no flat surfaces.' }),
 
   makeTF({ id:'g4m-geo-009', chapterId:'g4-geometry', difficulty:1,
     question:'A CUBOID has 12 edges.',
@@ -78,7 +78,7 @@ STATIC_QUESTIONS.push(
     question:'An angle that is LESS THAN 90° is called:',
     options:['A right angle','An obtuse angle','An acute angle','A reflex angle'],
     answer:'An acute angle',
-    hint:'"Acute" means sharp — these are small, pointy angles.',
+    hint:'"Acute" means sharp - these are small, pointy angles.',
     explanation:'An <b>acute angle</b> is any angle less than 90°. A right angle is exactly 90°. An obtuse angle is between 90° and 180°. A reflex angle is more than 180°. MIE Grade 4: classify angles as acute, right, obtuse.' }),
 
   makeMCQ({ id:'g4m-geo-012', chapterId:'g4-geometry', difficulty:1,
@@ -105,7 +105,7 @@ STATIC_QUESTIONS.push(
     question:'A rectangle is 8 cm long and 5 cm wide. What is its PERIMETER (in cm)?',
     answer:'26', acceptableAnswers:['26','26 cm'],
     hint:'Perimeter of a rectangle = 2 × (length + width).',
-    explanation:'P = 2 × (8 + 5) = 2 × 13 = <b>26 cm</b>. Or: add all four sides — 8+5+8+5=26. Either method works.' }),
+    explanation:'P = 2 × (8 + 5) = 2 × 13 = <b>26 cm</b>. Or: add all four sides - 8+5+8+5=26. Either method works.' }),
 
   makeTF({ id:'g4m-geo-016', chapterId:'g4-geometry', difficulty:2,
     question:'A SQUARE is a special type of RECTANGLE.',
@@ -118,7 +118,7 @@ STATIC_QUESTIONS.push(
     options:['1','2','3','4'],
     answer:'4',
     hint:'A line of symmetry folds the shape so both halves match perfectly. Try horizontal, vertical and both diagonal folds.',
-    explanation:'A square has <b>4 lines of symmetry</b>: 1 horizontal, 1 vertical and 2 diagonal lines. A rectangle has only 2 (horizontal and vertical — the diagonals do NOT work for a non-square rectangle).' }),
+    explanation:'A square has <b>4 lines of symmetry</b>: 1 horizontal, 1 vertical and 2 diagonal lines. A rectangle has only 2 (horizontal and vertical - the diagonals do NOT work for a non-square rectangle).' }),
 
   makeNum({ id:'g4m-geo-018', chapterId:'g4-geometry', difficulty:3,
     question:'A rectangular garden is 12 m long and 7 m wide. What is the TOTAL LENGTH of the path that runs around the outside (perimeter) in metres?',

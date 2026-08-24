@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Numeration (numbers to 1,000,000)
+﻿'use strict';
+// Grade 6 Maths - Chapter: Numeration (numbers to 1,000,000)
 // IDs format: g6m-num-NNN
 
 STATIC_QUESTIONS.push(
@@ -65,7 +65,7 @@ STATIC_QUESTIONS.push(
     question:'The population of a city is 924,716. Write this number in WORDS (as a number, not words, for checking): what is the digit in the HUNDREDS place?',
     answer:'7', acceptableAnswers:['7'],
     hint:'Position from right: ones(6), tens(1), hundreds(?), thousands(4), ten-thousands(2), hundred-thousands(9).',
-    explanation:'In 924,<b>7</b>16 — counting from right: 6=ones, 1=tens, 7=<b>hundreds</b>. The hundreds digit is <b>7</b>.' }),
+    explanation:'In 924,<b>7</b>16 - counting from right: 6=ones, 1=tens, 7=<b>hundreds</b>. The hundreds digit is <b>7</b>.' }),
 
   makeNum({ id:'g6m-num-010', chapterId:'g6-numeration', difficulty:2,
     question:'What is the DIFFERENCE between the largest and smallest 6-digit numbers you can make using the digits 3, 0, 7, 1, 5, 9 (each used once)?',
@@ -82,7 +82,7 @@ STATIC_QUESTIONS.push(
     options:['9','15','23','27'],
     answer:'23',
     hint:'A prime number has exactly two factors: 1 and itself. Test each option.',
-    explanation:'<b>23</b> is prime — its only factors are 1 and 23. Check the others: 9 = 3 × 3 (composite); 15 = 3 × 5 (composite); 27 = 3 × 9 (composite). Prime numbers from the MIE Grade 6 list: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47...' }),
+    explanation:'<b>23</b> is prime - its only factors are 1 and 23. Check the others: 9 = 3 × 3 (composite); 15 = 3 × 5 (composite); 27 = 3 × 9 (composite). Prime numbers from the MIE Grade 6 list: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47...' }),
 
   makeMCQ({ id:'g6m-num-012', chapterId:'g6-numeration', difficulty:1,
     question:'Which of these numbers is COMPOSITE?',
@@ -107,7 +107,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6m-num-015', chapterId:'g6-numeration', difficulty:1,
     question:'The number 2 is the only even prime number.',
     answer:true,
-    hint:'All other even numbers are divisible by 2 — so they have at least 3 factors.',
+    hint:'All other even numbers are divisible by 2 - so they have at least 3 factors.',
     explanation:'<b>True.</b> 2 is the only even prime number. Every other even number is divisible by 2, so it has at least three factors (1, 2, and itself), making it composite. For example: 4 = 2 × 2 (composite), 6 = 2 × 3 (composite). 2 has exactly two factors: 1 and 2.' }),
 
   makeNum({ id:'g6m-num-016', chapterId:'g6-numeration', difficulty:2,
@@ -120,7 +120,7 @@ STATIC_QUESTIONS.push(
     question:'The population of Mauritius is approximately 1,260,000. Round this to the nearest HUNDRED THOUSAND.',
     answer:'1300000', acceptableAnswers:['1300000','1,300,000'],
     hint:'Look at the ten-thousands digit (6). Since 6 ≥ 5, round up.',
-    explanation:'1,260,000 — the ten-thousands digit is 6 (≥ 5), so <b>round up</b> the hundred-thousands digit: 2 → 3. Answer: <b>1,300,000</b>. The MIE Grade 6 textbook uses Mauritius population data in rounding exercises.' }),
+    explanation:'1,260,000 - the ten-thousands digit is 6 (≥ 5), so <b>round up</b> the hundred-thousands digit: 2 → 3. Answer: <b>1,300,000</b>. The MIE Grade 6 textbook uses Mauritius population data in rounding exercises.' }),
 
   makeMCQ({ id:'g6m-num-018', chapterId:'g6-numeration', difficulty:2,
     question:'A number has the digit 8 in the hundred-thousands place, 0 in the ten-thousands, 4 in the thousands, 7 in the hundreds, 0 in the tens and 3 in the ones. What is the number?',

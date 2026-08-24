@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 Science — Chapter: Water & States of Matter
+﻿'use strict';
+// Grade 5 Science - Chapter: Water & States of Matter
 // IDs format: g5sci-wm-NNN
 
 // Inline SVG: states of matter transition diagram
@@ -29,14 +29,14 @@ STATIC_QUESTIONS.push(
     question:'What are the three states of matter?',
     options:['Solid, liquid and gas','Hot, warm and cold','Ice, water and cloud','Hard, soft and rough'],
     answer:'Solid, liquid and gas',
-    hint:'Think about ice, water and steam — what are these three forms called?',
+    hint:'Think about ice, water and steam - what are these three forms called?',
     explanation:'Matter exists in three states: <b>solid</b> (e.g. ice), <b>liquid</b> (e.g. water) and <b>gas</b> (e.g. steam/water vapour).' }),
 
   makeMCQ({ id:'g5sci-wm-002', chapterId:'water-matter', difficulty:1,
     question:'What is the state of water when it is in the form of ice?',
     options:['Liquid','Gas','Solid','Vapour'],
     answer:'Solid',
-    hint:'Ice is frozen water — very hard and rigid.',
+    hint:'Ice is frozen water - very hard and rigid.',
     explanation:'Ice is water in its <b>solid</b> state. When water is cooled to 0°C or below, it freezes and becomes solid ice.' }),
 
   makeMCQ({ id:'g5sci-wm-003', chapterId:'water-matter', difficulty:1,
@@ -56,7 +56,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g5sci-wm-005', chapterId:'water-matter', difficulty:1,
     question:'Steam is water in its liquid state.',
     answer:false,
-    hint:'Think about what steam looks like — can you hold it?',
+    hint:'Think about what steam looks like - can you hold it?',
     explanation:'Steam is water in its <b>gas</b> state, not liquid. Water becomes steam (water vapour) when it is heated to 100°C.' }),
 
   makeMCQ({ id:'g5sci-wm-006', chapterId:'water-matter', difficulty:1,
@@ -96,15 +96,15 @@ STATIC_QUESTIONS.push(
       'The water condenses into clouds directly'
     ],
     answer:'The water evaporates into water vapour',
-    hint:'The sun heats the water — what happens when water is heated?',
-    explanation:'The sun\'s heat causes the water to <b>evaporate</b> — changing from liquid water into invisible water vapour in the air.' }),
+    hint:'The sun heats the water - what happens when water is heated?',
+    explanation:'The sun\'s heat causes the water to <b>evaporate</b> - changing from liquid water into invisible water vapour in the air.' }),
 
   makeMCQ({ id:'g5sci-wm-011', chapterId:'water-matter', difficulty:2,
     question:'In the water cycle, water evaporates from the sea, rises, cools and forms clouds. What process forms the clouds?',
     options:['Freezing','Evaporation','Melting','Condensation'],
     answer:'Condensation',
-    hint:'Clouds are made of tiny water droplets — water vapour has turned back into liquid.',
-    explanation:'When water vapour rises high into the atmosphere and cools, it undergoes <b>condensation</b> — turning back into tiny liquid water droplets that form clouds.' }),
+    hint:'Clouds are made of tiny water droplets - water vapour has turned back into liquid.',
+    explanation:'When water vapour rises high into the atmosphere and cools, it undergoes <b>condensation</b> - turning back into tiny liquid water droplets that form clouds.' }),
 
   makeMCQ({ id:'g5sci-wm-012', chapterId:'water-matter', difficulty:2,
     question:'What happens to butter when it is left in a warm room?',
@@ -116,13 +116,13 @@ STATIC_QUESTIONS.push(
     ],
     answer:'It melts and becomes liquid',
     hint:'Butter is a solid. What does heat do to solids?',
-    explanation:'Butter is a solid that <b>melts</b> when warmed — it changes from solid to liquid. This is the same process as ice melting into water.' }),
+    explanation:'Butter is a solid that <b>melts</b> when warmed - it changes from solid to liquid. This is the same process as ice melting into water.' }),
 
   makeMCQ({ id:'g5sci-wm-013', chapterId:'water-matter', difficulty:2,
     question:'A cold glass of water is left on a table on a humid day. Small droplets of water appear on the OUTSIDE of the glass. By which process do these droplets form?',
     options:['Melting','Evaporation','Condensation','Freezing'],
     answer:'Condensation',
-    hint:'The glass is cold — what happens to warm, moist air when it touches the cold surface?',
+    hint:'The glass is cold - what happens to warm, moist air when it touches the cold surface?',
     explanation:'The water droplets on the outside of the cold glass form by <b>condensation</b>. Warm, moist air surrounding the glass is cooled when it touches the cold surface. This causes the water vapour in the air to change back into liquid water droplets.' }),
 
   makeMCQ({ id:'g5sci-wm-014', chapterId:'water-matter', difficulty:1,
@@ -136,7 +136,7 @@ STATIC_QUESTIONS.push(
     question:'What happens to the level of mercury inside a thermometer when the temperature INCREASES?',
     options:['It falls','It stays the same','It rises','It disappears'],
     answer:'It rises',
-    hint:'Mercury expands when heated — if it takes up more space, which way does it go in the narrow tube?',
+    hint:'Mercury expands when heated - if it takes up more space, which way does it go in the narrow tube?',
     explanation:'When temperature increases, the mercury (or alcohol) in the thermometer <b>expands</b> and takes up more volume. Since the tube is narrow, the liquid is pushed <b>upward</b>, causing the level to rise.' }),
 
   makeMCQ({ id:'g5sci-wm-016', chapterId:'water-matter', difficulty:2,
@@ -167,15 +167,15 @@ STATIC_QUESTIONS.push(
       'It first increases then decreases rapidly'
     ],
     answer:'It decreases (becomes cooler) because melting ice absorbs heat from the surrounding water',
-    hint:'The ice needs energy (heat) to melt — where does this energy come from?',
-    explanation:'To melt, ice must <b>absorb heat energy</b>. This heat comes from the surrounding water. As heat is drawn out of the water, the water becomes <b>cooler</b>. This is why ice is used to keep drinks cold — the melting process removes heat from the liquid.' }),
+    hint:'The ice needs energy (heat) to melt - where does this energy come from?',
+    explanation:'To melt, ice must <b>absorb heat energy</b>. This heat comes from the surrounding water. As heat is drawn out of the water, the water becomes <b>cooler</b>. This is why ice is used to keep drinks cold - the melting process removes heat from the liquid.' }),
 
   makeMCQ({ id:'g5sci-wm-019', chapterId:'water-matter', difficulty:2,
     question:'Give ONE property of ice that makes skating possible.',
     options:['Ice is hard','Ice is slippery','Ice is transparent','Ice is white'],
     answer:'Ice is slippery',
     hint:'Think about why you can slide on ice.',
-    explanation:'Ice is <b>slippery</b> — this is the property that makes skating possible. Ice skate blades glide smoothly over the ice surface with very little friction, allowing the skater to slide.' }),
+    explanation:'Ice is <b>slippery</b> - this is the property that makes skating possible. Ice skate blades glide smoothly over the ice surface with very little friction, allowing the skater to slide.' }),
 
   makeMCQ({ id:'g5sci-wm-020', chapterId:'water-matter', difficulty:4,
     question:'A scientist puts identical ice cubes in three containers: one in a freezer (−10°C), one in a warm room (25°C) and one in boiling water (100°C). Rank them from slowest to fastest melting and explain WHY.',
@@ -187,6 +187,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Freezer slowest (ice cannot melt at −10°C), warm room next, boiling water fastest (most heat available)',
     hint:'Ice melts when it absorbs enough heat to reach 0°C. More heat available = faster melting.',
-    explanation:'In the <b>freezer</b>, the temperature is below 0°C so ice does not melt — it stays frozen. In the <b>warm room</b> (25°C), heat slowly transfers from the air to the ice, melting it gradually. In <b>boiling water</b> (100°C), a large amount of heat transfers to the ice very quickly, melting it fastest. The rate of melting depends on the temperature difference between the ice and its surroundings.' })
+    explanation:'In the <b>freezer</b>, the temperature is below 0°C so ice does not melt - it stays frozen. In the <b>warm room</b> (25°C), heat slowly transfers from the air to the ice, melting it gradually. In <b>boiling water</b> (100°C), a large amount of heat transfers to the ice very quickly, melting it fastest. The rate of melting depends on the temperature difference between the ice and its surroundings.' })
 
 );

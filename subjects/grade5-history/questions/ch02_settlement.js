@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 History & Geography — Chapter: Settlement of Mauritius
+﻿'use strict';
+// Grade 5 History & Geography - Chapter: Settlement of Mauritius
 // Uses STATIC_QUESTIONS + helpers from engine/helpers.js
 // IDs format: g5hg-sett-NNN
 
@@ -16,7 +16,7 @@ STATIC_QUESTIONS.push(
     question:'When did the Dutch first settle in Mauritius?',
     options:['1598','1638','1715','1810'],
     answer:'1638',
-    hint:'The 17th century — just after the Dutch first claimed the island.',
+    hint:'The 17th century - just after the Dutch first claimed the island.',
     explanation:'The Dutch established the first permanent settlement in Mauritius in 1638, though they had claimed it earlier in 1598.' }),
 
   makeMCQ({ id:'g5hg-sett-003', chapterId:'settlement', difficulty:1,
@@ -36,7 +36,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g5hg-sett-005', chapterId:'settlement', difficulty:1,
     question:'The Dutch named Mauritius after Prince Maurice of Nassau.',
     answer:true,
-    hint:'The Dutch named the island — think about who they might have named it after.',
+    hint:'The Dutch named the island - think about who they might have named it after.',
     explanation:'True. The Dutch named Mauritius "Mauritius" (or Maurits) after Prince Maurice of Nassau (Maurits van Nassau), Stadtholder of the Dutch Republic at the time of its discovery in 1598.' }),
 
   makeMCQ({ id:'g5hg-sett-006', chapterId:'settlement', difficulty:2,
@@ -103,7 +103,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Devastating cyclones that destroyed crops and buildings, and plagues of rats that ate food stores',
     hint:'The island\'s natural hazards and introduced pests made sustaining the colony impossible.',
-    explanation:'The Dutch settlement failed because of: (1) <b>Cyclones</b> — severe tropical storms repeatedly destroyed crops and buildings; (2) <b>Rat plagues</b> — rats accidentally introduced by ships destroyed food stores and crops. Together these made it impossible to sustain the colony.' }),
+    explanation:'The Dutch settlement failed because of: (1) <b>Cyclones</b> - severe tropical storms repeatedly destroyed crops and buildings; (2) <b>Rat plagues</b> - rats accidentally introduced by ships destroyed food stores and crops. Together these made it impossible to sustain the colony.' }),
 
   makeMCQ({ id:'g5hg-sett-012', chapterId:'settlement', difficulty:1,
     question:'In which month and year did the British capture Rodrigues?',
@@ -115,13 +115,13 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5hg-sett-013', chapterId:'settlement', difficulty:2,
     question:'The Battle of Grand Port (August 1810) was significant in Mauritian history. What was unusual about its outcome?',
     options:[
-      'France won — making it the only naval victory for Napoleon against the British',
+      'France won - making it the only naval victory for Napoleon against the British',
       'The British won without firing a single shot',
       'The battle ended in a draw and both sides withdrew',
       'The French surrendered immediately'
     ],
-    answer:'France won — making it the only naval victory for Napoleon against the British',
-    hint:'This battle is celebrated in France — it was a rare success during that era.',
+    answer:'France won - making it the only naval victory for Napoleon against the British',
+    hint:'This battle is celebrated in France - it was a rare success during that era.',
     explanation:'The <b>Battle of Grand Port</b> (August 1810) was a French naval victory. British ships ran aground in the shallow sandy waters of the Grand Port lagoon. It is the only naval victory of the Napoleonic Wars inscribed on the Arc de Triomphe in Paris.' }),
 
   makeTF({ id:'g5hg-sett-014', chapterId:'settlement', difficulty:1,
@@ -153,11 +153,11 @@ STATIC_QUESTIONS.push(
     question:'Compare the Dutch and British approaches to settling Mauritius. Which statement BEST explains why the British were more successful at keeping long-term control?',
     options:[
       'The British had better weapons than the Dutch',
-      'The British established a proper civilian government, encouraged sugar production and maintained law through structures like Fort Adelaide — unlike the Dutch who had no long-term economic plan',
+      'The British established a proper civilian government, encouraged sugar production and maintained law through structures like Fort Adelaide - unlike the Dutch who had no long-term economic plan',
       'The British had more people so they simply outnumbered the Dutch',
       'The Dutch were only traders, not interested in governing territory'
     ],
-    answer:'The British established a proper civilian government, encouraged sugar production and maintained law through structures like Fort Adelaide — unlike the Dutch who had no long-term economic plan',
+    answer:'The British established a proper civilian government, encouraged sugar production and maintained law through structures like Fort Adelaide - unlike the Dutch who had no long-term economic plan',
     hint:'Think about what makes a settlement sustainable: economy, governance, security.',
     explanation:'The Dutch settlement failed because it lacked long-term economic sustainability (relying on timber and hunting) and was overwhelmed by natural difficulties. The British succeeded by: (1) encouraging profitable <b>sugar cultivation</b> as a lasting economic base; (2) establishing proper <b>civil government</b>; (3) building military infrastructure (Fort Adelaide) for security. These created a self-sustaining colony.' })
 

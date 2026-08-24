@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice Engine — Subject Registry (Phase 2)
+//  PSAC Exam Practice Engine - Subject Registry (Phase 2)
 //  Subject packs call registerSubject() on load.
 //  Future subject selector iterates SUBJECT_PACKS.
 // ══════════════════════════════════════════════

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Science — Chapter: Earth, Moon & Sun in the Solar System
+﻿'use strict';
+// Grade 6 Science - Chapter: Earth, Moon & Sun in the Solar System
 // IDs format: g6sci-sol-NNN
 
 const _SVG_SOLAR = `<svg viewBox="0 0 320 82" width="320" height="82" style="display:block;margin:6px auto;background:#0f172a;border-radius:8px">
@@ -23,7 +23,7 @@ const _SVG_SOLAR = `<svg viewBox="0 0 320 82" width="320" height="82" style="dis
   <text x="226" y="64" font-size="4.5" fill="#67e8f9" text-anchor="middle">Uranus</text>
   <circle cx="252" cy="41" r="5" fill="#818cf8"/>
   <text x="252" y="64" font-size="4.5" fill="#818cf8" text-anchor="middle">Neptune</text>
-  <text x="160" y="10" font-size="5.5" fill="#94a3b8" text-anchor="middle">Our Solar System — 8 planets orbit the Sun (not to scale)</text>
+  <text x="160" y="10" font-size="5.5" fill="#94a3b8" text-anchor="middle">Our Solar System - 8 planets orbit the Sun (not to scale)</text>
 </svg>`;
 
 const _SVG_DAY_NIGHT = `<svg viewBox="0 0 220 90" width="220" height="90" style="display:block;margin:6px auto;background:#0f172a;border-radius:8px">
@@ -59,7 +59,7 @@ STATIC_QUESTIONS.push(
     options:['Saturn','Uranus','Earth','Jupiter'],
     answer:'Jupiter',
     hint:'It is so large that all other planets could fit inside it.',
-    explanation:'<b>Jupiter</b> is the largest planet in the Solar System. It is a gas giant — so large that over 1,300 Earths could fit inside it. Jupiter is also famous for its Great Red Spot, a storm that has lasted hundreds of years.' }),
+    explanation:'<b>Jupiter</b> is the largest planet in the Solar System. It is a gas giant - so large that over 1,300 Earths could fit inside it. Jupiter is also famous for its Great Red Spot, a storm that has lasted hundreds of years.' }),
 
   makeMCQ({ id:'g6sci-sol-004', chapterId:'g6-solar-system', difficulty:1,
     question:`${_SVG_DAY_NIGHT}According to the diagram, what causes DAY and NIGHT on Earth?`,
@@ -71,14 +71,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The Earth rotating (spinning) on its own axis every 24 hours',
     hint:'One half of Earth faces the Sun (day), the other half faces away (night).',
-    explanation:'The Earth <b>rotates</b> on its own axis once every 24 hours. The side facing the Sun experiences <b>day</b>, while the opposite side, in shadow, experiences <b>night</b>. The Sun does not move — Earth spins.' }),
+    explanation:'The Earth <b>rotates</b> on its own axis once every 24 hours. The side facing the Sun experiences <b>day</b>, while the opposite side, in shadow, experiences <b>night</b>. The Sun does not move - Earth spins.' }),
 
   makeMCQ({ id:'g6sci-sol-005', chapterId:'g6-solar-system', difficulty:1,
     question:'How long does it take Earth to complete ONE orbit around the Sun?',
     options:['24 hours (1 day)','28 days (1 month)','365 days (1 year)','10 years'],
     answer:'365 days (1 year)',
     hint:'We call this period one year.',
-    explanation:'The Earth takes approximately <b>365.25 days</b> to orbit the Sun — this defines our year. The extra 0.25 day accumulates into a "leap year" (366 days) every 4 years.' }),
+    explanation:'The Earth takes approximately <b>365.25 days</b> to orbit the Sun - this defines our year. The extra 0.25 day accumulates into a "leap year" (366 days) every 4 years.' }),
 
   makeMCQ({ id:'g6sci-sol-006', chapterId:'g6-solar-system', difficulty:2,
     question:'What causes the SEASONS (summer and winter) on Earth?',
@@ -95,7 +95,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6sci-sol-007', chapterId:'g6-solar-system', difficulty:1,
     question:'The Moon produces its own light, just like the Sun.',
     answer:false,
-    hint:'Look at the Moon on a cloudy night — what is different about its light?',
+    hint:'Look at the Moon on a cloudy night - what is different about its light?',
     explanation:'The Moon does <b>not</b> produce its own light. It <b>reflects</b> sunlight. The Moon appears bright because its surface reflects light from the Sun. The phases of the Moon (new moon, crescent, full moon) occur as the angle between the Sun, Moon and Earth changes.' }),
 
   makeMCQ({ id:'g6sci-sol-008', chapterId:'g6-solar-system', difficulty:2,
@@ -107,7 +107,7 @@ STATIC_QUESTIONS.push(
       'The Earth\'s shadow falls on different parts of the Moon each night'
     ],
     answer:'We see different amounts of the Moon\'s sunlit surface as it orbits Earth each month',
-    hint:'The Moon is always half lit by the Sun — we just see different portions of the lit half.',
+    hint:'The Moon is always half lit by the Sun - we just see different portions of the lit half.',
     explanation:'As the Moon orbits Earth (taking ~28 days), our angle of view of the sunlit half changes. When the lit half faces us directly, we see a <b>full moon</b>; when the lit half faces away, we see a <b>new moon</b>. These changing views are the <b>lunar phases</b>.' }),
 
   makeMCQ({ id:'g6sci-sol-009', chapterId:'g6-solar-system', difficulty:1,
@@ -122,7 +122,7 @@ STATIC_QUESTIONS.push(
     options:['Juno','Janus','Jupiter','Jove'],
     answer:'Jupiter',
     hint:'My=Mercury, Very=Venus, Excellent=Earth, Mother=Mars, Just=?, Served=Saturn, Us=Uranus, Noodles=Neptune.',
-    explanation:'In the mnemonic "My Very Excellent Mother <b>J</b>ust Served Us Noodles", J stands for <b>Jupiter</b> — the 5th planet from the Sun. The full order is: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.' })
+    explanation:'In the mnemonic "My Very Excellent Mother <b>J</b>ust Served Us Noodles", J stands for <b>Jupiter</b> - the 5th planet from the Sun. The full order is: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.' })
 
 );
 
@@ -139,12 +139,12 @@ STATIC_QUESTIONS.push(
     question:'What causes DAY and NIGHT on Earth? (PSAC 2025 Q2b)',
     options:[
       'The Sun moving around the Earth once every 24 hours',
-      'Earth rotating on its axis — one side faces the Sun (day), the other is in shadow (night)',
+      'Earth rotating on its axis - one side faces the Sun (day), the other is in shadow (night)',
       'Clouds blocking the Sun at night',
       'The Moon moving between the Earth and the Sun'
     ],
-    answer:'Earth rotating on its axis — one side faces the Sun (day), the other is in shadow (night)',
-    hint:'The Sun does not move around Earth — Earth spins.',
+    answer:'Earth rotating on its axis - one side faces the Sun (day), the other is in shadow (night)',
+    hint:'The Sun does not move around Earth - Earth spins.',
     explanation:'<b>Earth rotates</b> on its axis once every <b>24 hours</b>. The half facing the Sun experiences <b>day</b>; the half facing away is in <b>night</b>. As Earth rotates, locations move from day to night and back again. In Mauritius (Southern Hemisphere), when it is midday, the opposite side of the world is having midnight. (PSAC 2025 Q2b)' }),
 
   makeMCQ({ id:'g6sci-sol-013', chapterId:'g6-solar-system', difficulty:2,
@@ -157,27 +157,27 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Earth has liquid water and a protective atmosphere with oxygen at the right temperature range',
     hint:'Think about what living things NEED: water, air (oxygen), and the right temperature.',
-    explanation:'Life exists on Earth because: (1) <b>Liquid water</b> — essential for all life; Earth\'s temperature keeps water liquid (unlike Mercury/Venus which are too hot); (2) <b>Atmosphere with oxygen</b> — our atmosphere has 21% oxygen for breathing, plus protects us from UV radiation; (3) <b>Right temperature range</b> — not too hot or too cold. Venus is too hot (~465°C), Mercury has extreme temperatures and almost no atmosphere. (PSAC 2025 Q2d)' }),
+    explanation:'Life exists on Earth because: (1) <b>Liquid water</b> - essential for all life; Earth\'s temperature keeps water liquid (unlike Mercury/Venus which are too hot); (2) <b>Atmosphere with oxygen</b> - our atmosphere has 21% oxygen for breathing, plus protects us from UV radiation; (3) <b>Right temperature range</b> - not too hot or too cold. Venus is too hot (~465°C), Mercury has extreme temperatures and almost no atmosphere. (PSAC 2025 Q2d)' }),
 
   makeMCQ({ id:'g6sci-sol-014', chapterId:'g6-solar-system', difficulty:2,
     question:'Which planet is famous for its beautiful rings? (from Grade 6 Solar System topic)',
     options:['Jupiter','Mars','Saturn','Uranus'],
     answer:'Saturn',
-    hint:'This planet\'s rings are made of ice and rocks — visible with a small telescope.',
-    explanation:'<b>Saturn</b> is famous for its spectacular ring system, made of billions of pieces of ice, rock and dust. Saturn is the 6th planet from the Sun and a gas giant — it is so light that it would float in water! In the mnemonic "My Very Excellent Mother Just Served Us Noodles": S = Saturn (6th planet).' }),
+    hint:'This planet\'s rings are made of ice and rocks - visible with a small telescope.',
+    explanation:'<b>Saturn</b> is famous for its spectacular ring system, made of billions of pieces of ice, rock and dust. Saturn is the 6th planet from the Sun and a gas giant - it is so light that it would float in water! In the mnemonic "My Very Excellent Mother Just Served Us Noodles": S = Saturn (6th planet).' }),
 
   makeMCQ({ id:'g6sci-sol-015', chapterId:'g6-solar-system', difficulty:1,
     question:'The Sun is classified as a:',
     options:['Planet','Moon','Star','Comet'],
     answer:'Star',
-    hint:'It produces its own light and heat through nuclear fusion — unlike planets which only reflect light.',
-    explanation:'The <b>Sun is a star</b> — a massive ball of hot gas that produces its own energy through <b>nuclear fusion</b> (hydrogen atoms fuse to form helium, releasing enormous energy as light and heat). Planets orbit stars and only reflect light. Our Sun is the nearest star to Earth — about 150 million km away. The next nearest star is Proxima Centauri, about 4.2 light-years away.' }),
+    hint:'It produces its own light and heat through nuclear fusion - unlike planets which only reflect light.',
+    explanation:'The <b>Sun is a star</b> - a massive ball of hot gas that produces its own energy through <b>nuclear fusion</b> (hydrogen atoms fuse to form helium, releasing enormous energy as light and heat). Planets orbit stars and only reflect light. Our Sun is the nearest star to Earth - about 150 million km away. The next nearest star is Proxima Centauri, about 4.2 light-years away.' }),
 
   makeTF({ id:'g6sci-sol-016', chapterId:'g6-solar-system', difficulty:1,
     question:'The Moon takes approximately 28 days to orbit the Earth.',
     answer:true,
     hint:'This period is why we have a lunar month of about 4 weeks.',
-    explanation:'<b>True.</b> The Moon orbits the Earth in approximately <b>27.3 days</b> (a sidereal month), or about 29.5 days from one full moon to the next (a synodic month — ~28 days). This is why a lunar month is approximately 4 weeks. The Moon\'s orbital period is also why we see all the lunar phases (new moon → crescent → quarter → full moon) over about 28 days.' }),
+    explanation:'<b>True.</b> The Moon orbits the Earth in approximately <b>27.3 days</b> (a sidereal month), or about 29.5 days from one full moon to the next (a synodic month - ~28 days). This is why a lunar month is approximately 4 weeks. The Moon\'s orbital period is also why we see all the lunar phases (new moon → crescent → quarter → full moon) over about 28 days.' }),
 
   makeMCQ({ id:'g6sci-sol-017', chapterId:'g6-solar-system', difficulty:2,
     question:'A SOLAR ECLIPSE occurs when:',
@@ -188,7 +188,7 @@ STATIC_QUESTIONS.push(
       'The Earth\'s shadow falls on the Moon'
     ],
     answer:'The Moon moves between the Earth and the Sun, blocking the Sun\'s light',
-    hint:'Think about what "solar" means — it relates to the Sun being blocked.',
+    hint:'Think about what "solar" means - it relates to the Sun being blocked.',
     explanation:'A <b>solar eclipse</b> occurs when the <b>Moon passes between the Earth and the Sun</b>, casting a shadow on part of Earth\'s surface. People in the shadow see the Sun partially or totally blocked by the Moon. A <b>lunar eclipse</b> is the reverse: Earth\'s shadow falls on the Moon. Solar eclipses only occur during a new moon phase.' }),
 
   makeMCQ({ id:'g6sci-sol-018', chapterId:'g6-solar-system', difficulty:3,
@@ -200,19 +200,19 @@ STATIC_QUESTIONS.push(
       'Mauritius moves to a higher position in the solar system during summer'
     ],
     answer:'The Southern Hemisphere tilts toward the Sun during November–March, so Mauritius receives more direct sunlight',
-    hint:'Mauritius is in the Southern Hemisphere — its summer is opposite to that of Europe.',
+    hint:'Mauritius is in the Southern Hemisphere - its summer is opposite to that of Europe.',
     explanation:'Earth\'s axis is <b>tilted 23.5°</b>. When the <b>Southern Hemisphere tilts toward the Sun</b> (November–March), Mauritius receives more <b>direct sunlight</b> at a higher angle → <b>summer</b>. When the Southern Hemisphere tilts away (June–August), sunlight arrives at a lower angle → <b>winter</b>. The distance to the Sun is NOT the main cause of seasons.' }),
 
   makeMCQ({ id:'g6sci-sol-019', chapterId:'g6-solar-system', difficulty:4,
     question:'A student says: "We don\'t feel the weight of the atmosphere because air has no mass." Is this correct, and why?',
     options:[
-      'Correct — air is weightless and exerts no pressure',
-      'Incorrect — air has mass and weight; we don\'t notice it because atmospheric pressure pushes equally from all directions',
-      'Correct — only water has mass, not air',
-      'Incorrect — air has mass, but it only pushes downward, not upward'
+      'Correct - air is weightless and exerts no pressure',
+      'Incorrect - air has mass and weight; we don\'t notice it because atmospheric pressure pushes equally from all directions',
+      'Correct - only water has mass, not air',
+      'Incorrect - air has mass, but it only pushes downward, not upward'
     ],
-    answer:'Incorrect — air has mass and weight; we don\'t notice it because atmospheric pressure pushes equally from all directions',
-    hint:'The Grade 6 textbook states air pressure is ~10 tonnes per m² — that\'s definitely not weightless!',
-    explanation:'The student is <b>incorrect</b>. Air definitely has mass and weight — the Grade 6 Science Pupil\'s Book states atmospheric pressure is about <b>10 tonnes (10,000 kg) per m²</b>. We don\'t feel it being crushed because the pressure acts <b>equally in all directions</b> (up, down, sideways), so the forces balance out on our body. Astronauts in space (no atmosphere) experience zero atmospheric pressure — a very different sensation.' })
+    answer:'Incorrect - air has mass and weight; we don\'t notice it because atmospheric pressure pushes equally from all directions',
+    hint:'The Grade 6 textbook states air pressure is ~10 tonnes per m² - that\'s definitely not weightless!',
+    explanation:'The student is <b>incorrect</b>. Air definitely has mass and weight - the Grade 6 Science Pupil\'s Book states atmospheric pressure is about <b>10 tonnes (10,000 kg) per m²</b>. We don\'t feel it being crushed because the pressure acts <b>equally in all directions</b> (up, down, sideways), so the forces balance out on our body. Astronauts in space (no atmosphere) experience zero atmospheric pressure - a very different sensation.' })
 
 );

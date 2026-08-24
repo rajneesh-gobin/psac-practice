@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 5 Science — MIE Mauritius Syllabus (Grades 3-6, 2015)
+// Grade 5 Science - MIE Mauritius Syllabus (Grades 3-6, 2015)
 // Topics for Grade 5: Plants, Animals, Energy, Water/States of Matter,
 //   Simple Electric Circuit, Protection & Conservation
 // NOTE: Living/Non-Living Things, Materials, and Air are Grade 3-4 topics (removed per MIE scope table)
@@ -9,7 +9,7 @@ registerSubject({
   practiceble: true, notesBased: false, noDifficulty: true,
   chapters: [
     { id: 'plants',           name: 'Plants',                              icon: '🌱', examWeight: 4,
-      syllabus: 'Flowering and non-flowering plants. Parts of a plant (root, stem, leaf, flower, fruit, seed) and their functions. Functions of root and stem (absorb/transport water). Germination — conditions needed. Conditions for plants to grow well. Soil erosion: causes and measures.' },
+      syllabus: 'Flowering and non-flowering plants. Parts of a plant (root, stem, leaf, flower, fruit, seed) and their functions. Functions of root and stem (absorb/transport water). Germination - conditions needed. Conditions for plants to grow well. Soil erosion: causes and measures.' },
     { id: 'animals',          name: 'Animals & Habitats',                  icon: '🐾', examWeight: 4,
       syllabus: 'Different habitats and the animals that live in them. Endangered and rare animals of Mauritius and Rodrigues (Dodo, Pink Pigeon, Echo Parakeet, Rodrigues Solitaire). Endemic animals. Measures to protect endangered animals. Nature reserves.' },
     { id: 'energy',           name: 'Energy Sources',                      icon: '⚡', examWeight: 4,

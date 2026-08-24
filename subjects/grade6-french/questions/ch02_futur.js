@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 French — Chapitre : Le Futur Simple
+﻿'use strict';
+// Grade 6 French - Chapitre : Le Futur Simple
 // IDs format: g6fr-fut-NNN
 
 STATIC_QUESTIONS.push(
@@ -41,14 +41,14 @@ STATIC_QUESTIONS.push(
     question:'Pour les verbes en -RE comme "vendre", on ajoute les terminaisons du futur directement à l\'infinitif sans enlever le -e final.',
     answer:false,
     hint:'Vendre + ai = vendr + ai = vendrai.',
-    explanation:'<b>Faux.</b> Pour les verbes en -RE, on <b>enlève le -e final</b> avant d\'ajouter les terminaisons. Vendre → <b>vendr</b>- → je vendrai, tu vendras, il vendra… Si on gardait le -e : "vendreai" — ce n\'est pas correct.' }),
+    explanation:'<b>Faux.</b> Pour les verbes en -RE, on <b>enlève le -e final</b> avant d\'ajouter les terminaisons. Vendre → <b>vendr</b>- → je vendrai, tu vendras, il vendra… Si on gardait le -e : "vendreai" - ce n\'est pas correct.' }),
 
   makeMCQ({ id:'g6fr-fut-006', chapterId:'g6fr-futur', difficulty:2,
     question:'Choisissez la forme correcte : "Demain, nous ___ (aller) à la plage."',
     options:['allons','allions','irons','allerons'],
     answer:'irons',
     hint:'Aller a un radical irrégulier au futur.',
-    explanation:'"Demain, nous <b>irons</b> à la plage." — Aller → radical irrégulier <b>ir-</b> → nous <b>irons</b>. Ne pas confondre avec le futur proche : "nous <b>allons aller</b>" (futur proche) vs "nous <b>irons</b>" (futur simple).' }),
+    explanation:'"Demain, nous <b>irons</b> à la plage." - Aller → radical irrégulier <b>ir-</b> → nous <b>irons</b>. Ne pas confondre avec le futur proche : "nous <b>allons aller</b>" (futur proche) vs "nous <b>irons</b>" (futur simple).' }),
 
   makeMCQ({ id:'g6fr-fut-007', chapterId:'g6fr-futur', difficulty:2,
     question:'Quelle est la différence entre le futur proche et le futur simple ?',
@@ -67,13 +67,13 @@ STATIC_QUESTIONS.push(
     options:['réussirais','réussiras','réussiras','as réussi'],
     answer:'réussiras',
     hint:'Si + présent → futur simple dans la principale.',
-    explanation:'"Si tu travailles bien, tu <b>réussiras</b> ton examen." — Structure conditionnelle : <b>si + présent</b> dans la subordonnée → <b>futur simple</b> dans la principale. <b>Attention</b> : on ne met JAMAIS le futur après "si" conditionnel.' }),
+    explanation:'"Si tu travailles bien, tu <b>réussiras</b> ton examen." - Structure conditionnelle : <b>si + présent</b> dans la subordonnée → <b>futur simple</b> dans la principale. <b>Attention</b> : on ne met JAMAIS le futur après "si" conditionnel.' }),
 
   makeTF({ id:'g6fr-fut-009', chapterId:'g6fr-futur', difficulty:2,
     question:'On peut utiliser le futur simple dans la proposition avec "si" conditionnel : "Si tu viendras, je serai content."',
     answer:false,
     hint:'Après "si" conditionnel, quel temps utilise-t-on ?',
-    explanation:'<b>Faux.</b> Après "si" conditionnel, on utilise le <b>présent</b>, jamais le futur. Forme correcte : "Si tu <b>viens</b>, je serai content." — si + présent → futur dans la principale.' }),
+    explanation:'<b>Faux.</b> Après "si" conditionnel, on utilise le <b>présent</b>, jamais le futur. Forme correcte : "Si tu <b>viens</b>, je serai content." - si + présent → futur dans la principale.' }),
 
   makeMCQ({ id:'g6fr-fut-010', chapterId:'g6fr-futur', difficulty:2,
     question:'Conjuguez "faire" au futur simple pour "vous" :',
@@ -111,7 +111,7 @@ STATIC_QUESTIONS.push(
     options:['étudions','étudierons','étudiions','avons étudié'],
     answer:'étudierons',
     hint:'"L\'année prochaine" indique un futur → futur simple. Étudier est un verbe régulier en -er.',
-    explanation:'"L\'année prochaine, nous <b>étudierons</b> à l\'université." — Étudier → infinitif + terminaison -ons → étudier + <b>-ons</b> → nous <b>étudierons</b>. Indicateurs temporels du futur simple : <b>l\'année prochaine, demain, bientôt, dans dix ans, un jour, lorsque + futur</b>. Le manuel MIE de 6e insiste sur la reconnaissance de ces marqueurs.' }),
+    explanation:'"L\'année prochaine, nous <b>étudierons</b> à l\'université." - Étudier → infinitif + terminaison -ons → étudier + <b>-ons</b> → nous <b>étudierons</b>. Indicateurs temporels du futur simple : <b>l\'année prochaine, demain, bientôt, dans dix ans, un jour, lorsque + futur</b>. Le manuel MIE de 6e insiste sur la reconnaissance de ces marqueurs.' }),
 
   makeMCQ({ id:'g6fr-fut-015', chapterId:'g6fr-futur', difficulty:2,
     question:'Conjuguez "vouloir" au futur simple pour "tu" :',
@@ -129,8 +129,8 @@ STATIC_QUESTIONS.push(
       '"Quand je rentrerai, je mange." (futur + présent)'
     ],
     answer:'"Quand je rentrerai, je mangerai." (futur + futur)',
-    hint:'Après "quand" dans une phrase de sens futur, on utilise le futur simple — pas le présent comme en anglais.',
-    explanation:'"Quand je <b>rentrerai</b>, je <b>mangerai</b>." — En français, après <b>quand, lorsque, dès que, aussitôt que, tant que</b> dans un contexte futur, on utilise le <b>futur simple</b> (pas le présent comme en anglais "when I get home, I will eat"). C\'est une règle importante du manuel MIE de 6e qui diffère de l\'anglais.' }),
+    hint:'Après "quand" dans une phrase de sens futur, on utilise le futur simple - pas le présent comme en anglais.',
+    explanation:'"Quand je <b>rentrerai</b>, je <b>mangerai</b>." - En français, après <b>quand, lorsque, dès que, aussitôt que, tant que</b> dans un contexte futur, on utilise le <b>futur simple</b> (pas le présent comme en anglais "when I get home, I will eat"). C\'est une règle importante du manuel MIE de 6e qui diffère de l\'anglais.' }),
 
   makeMCQ({ id:'g6fr-fut-017', chapterId:'g6fr-futur', difficulty:2,
     question:'Conjuguez "savoir" au futur simple pour "elle" :',
@@ -157,7 +157,7 @@ STATIC_QUESTIONS.push(
     options:['nous allons','nous irons','nous allerons','nous irions'],
     answer:'nous irons',
     hint:'Aller → radical irrégulier au futur = ir-.',
-    explanation:'Aller → radical irrégulier au futur : <b>ir-</b> → nous <b>irons</b>. Conjugaison complète : j\'irai, tu iras, il ira, <b>nous irons</b>, vous irez, ils iront. Ce radical est partagé avec le verbe aller seulement — ne pas confondre avec "ir-" d\'autres langues.' }),
+    explanation:'Aller → radical irrégulier au futur : <b>ir-</b> → nous <b>irons</b>. Conjugaison complète : j\'irai, tu iras, il ira, <b>nous irons</b>, vous irez, ils iront. Ce radical est partagé avec le verbe aller seulement - ne pas confondre avec "ir-" d\'autres langues.' }),
 
   makeMCQ({ id:'g6fr-fut-021', chapterId:'g6fr-futur', difficulty:1,
     question:'Conjugue ÊTRE au futur simple pour "je" :',
@@ -231,10 +231,10 @@ STATIC_QUESTIONS.push(
     options:[
       '"Demain, il pleuvra certainement."',
       '"Il mangera quand il aura faim." (futur antérieur)',
-      '"Où est Paul ? — Il aura oublié notre rendez-vous." (c\'est probablement ce qui s\'est passé)',
+      '"Où est Paul ? - Il aura oublié notre rendez-vous." (c\'est probablement ce qui s\'est passé)',
       '"Si vous venez, vous verrez."'
     ],
-    answer:'"Où est Paul ? — Il aura oublié notre rendez-vous." (c\'est probablement ce qui s\'est passé)',
+    answer:'"Où est Paul ? - Il aura oublié notre rendez-vous." (c\'est probablement ce qui s\'est passé)',
     hint:'Futur ou futur antérieur = probabilité concernant le passé ou présent : "Il aura sûrement…"',
     explanation:'Le <b>futur antérieur de probabilité</b> : "Il <b>aura oublié</b>" = j\'en déduis qu\'il a probablement oublié. C\'est une conjecture sur le passé. Le futur simple peut aussi exprimer la probabilité sur le présent : "Il <b>sera</b> en retard" = il est probablement en retard.' }),
 
@@ -242,7 +242,7 @@ STATIC_QUESTIONS.push(
     question:'"Quand tu arriveras, appelle-moi." utilise correctement le futur après "quand".',
     answer:true,
     hint:'En français, "quand" + futur est correct si le sens est futur. En anglais on dirait "when you arrive" (présent).',
-    explanation:'<b>Vrai.</b> En français, après <b>quand</b> dans un contexte futur, on utilise le <b>futur simple</b> : "Quand tu <b>arriveras</b>…" En anglais, on utilise le présent ("when you arrive") — c\'est une différence importante entre les deux langues. Même règle pour : lorsque, dès que, aussitôt que, tant que.' }),
+    explanation:'<b>Vrai.</b> En français, après <b>quand</b> dans un contexte futur, on utilise le <b>futur simple</b> : "Quand tu <b>arriveras</b>…" En anglais, on utilise le présent ("when you arrive") - c\'est une différence importante entre les deux langues. Même règle pour : lorsque, dès que, aussitôt que, tant que.' }),
 
   makeMCQ({ id:'g6fr-fut-032', chapterId:'g6fr-futur', difficulty:3,
     question:'Complète la série : "Dès que tu ___ (finir), tu ___ (pouvoir) sortir jouer."',

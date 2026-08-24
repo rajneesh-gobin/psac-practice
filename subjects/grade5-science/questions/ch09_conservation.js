@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 Science — Chapter: Protection & Conservation
+﻿'use strict';
+// Grade 5 Science - Chapter: Protection & Conservation
 // IDs format: g5sci-con-NNN
 
 STATIC_QUESTIONS.push(
@@ -14,7 +14,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Protecting and preserving nature, animals and resources for the future',
     hint:'Conservation is about looking after our natural world.',
-    explanation:'<b>Conservation</b> means protecting living things and natural resources — such as forests, animals, water and soil — so that they are not destroyed and can continue to exist in the future.' }),
+    explanation:'<b>Conservation</b> means protecting living things and natural resources - such as forests, animals, water and soil - so that they are not destroyed and can continue to exist in the future.' }),
 
   makeMCQ({ id:'g5sci-con-002', chapterId:'conservation', difficulty:1,
     question:'Which of the following is an endangered animal found in Mauritius?',
@@ -92,8 +92,8 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g5sci-con-009', chapterId:'conservation', difficulty:2,
     question:'Once a species becomes truly extinct, it is possible to bring it back to life.',
     answer:false,
-    hint:'Think about the Dodo — has it ever returned?',
-    explanation:'When a species becomes <b>extinct</b>, it is gone forever and cannot be brought back. This is why conservation — protecting species before they disappear — is so important. The Dodo has been extinct since the late 1600s.' }),
+    hint:'Think about the Dodo - has it ever returned?',
+    explanation:'When a species becomes <b>extinct</b>, it is gone forever and cannot be brought back. This is why conservation - protecting species before they disappear - is so important. The Dodo has been extinct since the late 1600s.' }),
 
   makeMCQ({ id:'g5sci-con-010', chapterId:'conservation', difficulty:2,
     question:'Why is it important to protect forests?',
@@ -156,16 +156,16 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Terracing</b> converts the continuous slope into flat steps. Water running down the slope slows at each flat step instead of rushing straight down, giving the soil time to absorb it rather than washing it away. <b>Vetiver grass</b> has very deep, dense root systems that anchor the soil on each terrace, preventing it from being washed off by any remaining water flow.' }),
 
   makeMCQ({ id:'g5sci-con-015', chapterId:'conservation', difficulty:3,
-    question:'The government of Mauritius passes a law making it illegal to hunt Pink Pigeons. Why is a LAW needed — cannot conservation rely on people choosing to protect animals voluntarily?',
+    question:'The government of Mauritius passes a law making it illegal to hunt Pink Pigeons. Why is a LAW needed - cannot conservation rely on people choosing to protect animals voluntarily?',
     options:[
-      'A law forces everyone to comply, not just those who choose to protect wildlife — and legal penalties deter poachers',
+      'A law forces everyone to comply, not just those who choose to protect wildlife - and legal penalties deter poachers',
       'Laws are only needed for domestic animals, not wild ones',
       'People always voluntarily protect animals, so a law is unnecessary',
       'Laws are easier to write than education programmes'
     ],
-    answer:'A law forces everyone to comply, not just those who choose to protect wildlife — and legal penalties deter poachers',
+    answer:'A law forces everyone to comply, not just those who choose to protect wildlife - and legal penalties deter poachers',
     hint:'What happens to someone who breaks a law compared to someone who breaks a voluntary guideline?',
-    explanation:'Voluntary protection only works if everyone agrees. A <b>law</b> makes it mandatory — it <b>applies to everyone</b> and those who hunt or harm protected species face legal penalties (fines, imprisonment). This deters poachers who might otherwise not choose to protect wildlife. Laws also send a clear signal about the seriousness of conservation.' }),
+    explanation:'Voluntary protection only works if everyone agrees. A <b>law</b> makes it mandatory - it <b>applies to everyone</b> and those who hunt or harm protected species face legal penalties (fines, imprisonment). This deters poachers who might otherwise not choose to protect wildlife. Laws also send a clear signal about the seriousness of conservation.' }),
 
   makeMCQ({ id:'g5sci-con-016', chapterId:'conservation', difficulty:4,
     question:'In 1990, only 9 Pink Pigeons remained alive. A conservation programme was started: a nature reserve was set up, introduced predators were controlled, and some birds were bred in captivity then released. By 2020, the population reached 500. Which TWO factors from the programme were MOST critical to this recovery?',
@@ -177,7 +177,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Protecting habitat in the nature reserve AND controlling predators that ate eggs and chicks',
     hint:'The birds need a safe place to live AND their eggs/chicks need to survive to adulthood.',
-    explanation:'The two most critical factors were: (1) <b>Protecting habitat</b> — the nature reserve provided food, shelter and safe nesting sites; (2) <b>Controlling predators</b> (rats, cats, monkeys) — without predators destroying eggs and chicks, more young birds survived to adulthood and could breed. Together, these two actions directly addressed the main reasons the species was declining.' })
+    explanation:'The two most critical factors were: (1) <b>Protecting habitat</b> - the nature reserve provided food, shelter and safe nesting sites; (2) <b>Controlling predators</b> (rats, cats, monkeys) - without predators destroying eggs and chicks, more young birds survived to adulthood and could breed. Together, these two actions directly addressed the main reasons the species was declining.' })
 
 );
 
@@ -193,7 +193,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The variety of different living things (plants, animals, fungi, microorganisms) found in a place or on Earth',
     hint:'"Bio" = life, "diversity" = variety. Put them together.',
-    explanation:'"<b>Biodiversity</b>" means the <b>variety of all living things</b> — plants, animals, fungi and microorganisms — found in an ecosystem, a country, or on Earth as a whole. High biodiversity means many different species coexist. Mauritius has unique biodiversity because it was isolated for millions of years, producing species found <b>nowhere else on Earth</b> (endemic species like the Pink Pigeon and Echo Parakeet). When species go extinct, biodiversity is permanently reduced and can never be recovered.' }),
+    explanation:'"<b>Biodiversity</b>" means the <b>variety of all living things</b> - plants, animals, fungi and microorganisms - found in an ecosystem, a country, or on Earth as a whole. High biodiversity means many different species coexist. Mauritius has unique biodiversity because it was isolated for millions of years, producing species found <b>nowhere else on Earth</b> (endemic species like the Pink Pigeon and Echo Parakeet). When species go extinct, biodiversity is permanently reduced and can never be recovered.' }),
 
   makeMCQ({ id:'g5sci-con-018', chapterId:'conservation', difficulty:3,
     question:'Coral reefs are sometimes called "the rainforests of the sea" because they support so many species. Scientists warn that Mauritius\'s coral reefs are being damaged. Give TWO causes of this damage.',
@@ -205,18 +205,18 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Ocean water becoming warmer (causing coral bleaching) AND pollution from sewage and chemicals entering the sea',
     hint:'Think about what humans put into the sea AND how rising temperatures from global warming affect coral.',
-    explanation:'Mauritius\'s coral reefs are threatened by: (1) <b>Ocean warming</b> — when sea temperatures rise, corals expel the algae that give them colour and food, turning white (<b>coral bleaching</b>); if temperatures stay high the coral dies; (2) <b>Pollution</b> — sewage, agricultural chemicals and plastic waste entering the sea smother or poison coral. Other causes include anchor damage from boats and overfishing. Protecting reefs requires reducing CO₂ emissions globally AND controlling local water pollution.' }),
+    explanation:'Mauritius\'s coral reefs are threatened by: (1) <b>Ocean warming</b> - when sea temperatures rise, corals expel the algae that give them colour and food, turning white (<b>coral bleaching</b>); if temperatures stay high the coral dies; (2) <b>Pollution</b> - sewage, agricultural chemicals and plastic waste entering the sea smother or poison coral. Other causes include anchor damage from boats and overfishing. Protecting reefs requires reducing CO₂ emissions globally AND controlling local water pollution.' }),
 
   makeMCQ({ id:'g5sci-con-019', chapterId:'conservation', difficulty:4,
     question:'A coastal village in Mauritius wants to build a large hotel on the beach to earn money. BUT the beach is a nesting site for sea turtles. Environmentalists warn the construction will destroy the nests. Which solution BEST shows SUSTAINABLE DEVELOPMENT?',
     options:[
-      'Build the hotel immediately — earning money is more important than turtle nests',
-      'Do nothing — never build anything near wildlife, ever',
-      'Design the hotel away from nesting areas, use eco-friendly materials, and set up a turtle protection programme — earning tourism income while protecting the turtle population',
+      'Build the hotel immediately - earning money is more important than turtle nests',
+      'Do nothing - never build anything near wildlife, ever',
+      'Design the hotel away from nesting areas, use eco-friendly materials, and set up a turtle protection programme - earning tourism income while protecting the turtle population',
       'Move all the turtles to a zoo so they are safe and the hotel can be built anywhere on the beach'
     ],
-    answer:'Design the hotel away from nesting areas, use eco-friendly materials, and set up a turtle protection programme — earning tourism income while protecting the turtle population',
+    answer:'Design the hotel away from nesting areas, use eco-friendly materials, and set up a turtle protection programme - earning tourism income while protecting the turtle population',
     hint:'Sustainable development = meeting TODAY\'s needs without destroying nature for FUTURE generations.',
-    explanation:'<b>Sustainable development</b> means meeting the needs of people today without permanently damaging the environment for future generations. The balanced solution earns <b>tourism income</b> for the village while <b>preserving turtle nesting sites</b>. Moving turtles to a zoo removes them from their natural habitat. Doing nothing ignores real human needs. Only careful planning — hotel positioned away from nests, combined with a protection programme — achieves both goals. This is the core principle of sustainable, conservation-friendly development.' })
+    explanation:'<b>Sustainable development</b> means meeting the needs of people today without permanently damaging the environment for future generations. The balanced solution earns <b>tourism income</b> for the village while <b>preserving turtle nesting sites</b>. Moving turtles to a zoo removes them from their natural habitat. Doing nothing ignores real human needs. Only careful planning - hotel positioned away from nests, combined with a protection programme - achieves both goals. This is the core principle of sustainable, conservation-friendly development.' })
 
 );

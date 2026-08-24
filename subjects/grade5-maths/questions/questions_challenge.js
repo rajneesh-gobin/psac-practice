@@ -1,7 +1,7 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  MathMaster Grade 5 — Challenge Question Bank (Part A)
-//  20 challenging questions per chapter — L2 / L3 / L4
+//  MathMaster Grade 5 - Challenge Question Bank (Part A)
+//  20 challenging questions per chapter - L2 / L3 / L4
 //  Chapters: numeration, four_ops, square_nums, geometry,
 //            fractions, decimals, percentage, powers, average
 // ══════════════════════════════════════════════
@@ -20,7 +20,7 @@ CHALLENGE_QS.push(
     question:'Round 2,847,392 to the nearest ten thousand.',
     options:['2,840,000','2,847,000','2,850,000','2,900,000'],
     answer:'2,850,000',
-    hint:'Look at the thousands digit (7) — is it ≥ 5?',
+    hint:'Look at the thousands digit (7) - is it ≥ 5?',
     explanation:'Thousands digit is 7 ≥ 5, so ten-thousands rounds up: 2,850,000.' }),
 
   makeNum({ id:'CH_NUM03', chapterId:'numeration', difficulty:3,
@@ -59,7 +59,7 @@ CHALLENGE_QS.push(
     question:'What is the missing term? 1, 3, 7, 13, 21, ___',
     options:['27','29','31','33'],
     answer:'31',
-    hint:'Differences: +2, +4, +6, +8, +10 — the gap increases by 2 each time.',
+    hint:'Differences: +2, +4, +6, +8, +10 - the gap increases by 2 each time.',
     explanation:'21 + 10 = 31. Differences increase by 2: 2, 4, 6, 8, 10.' }),
 
   makeNum({ id:'CH_NUM09', chapterId:'numeration', difficulty:3,
@@ -78,7 +78,7 @@ CHALLENGE_QS.push(
   makeNum({ id:'CH_NUM11', chapterId:'numeration', difficulty:3,
     question:'Round 7,654,321 to the nearest hundred thousand.',
     answer:'7700000', acceptableAnswers:['7700000','7,700,000'],
-    hint:'Look at the ten-thousands digit (5) — is it ≥ 5?',
+    hint:'Look at the ten-thousands digit (5) - is it ≥ 5?',
     explanation:'Ten-thousands digit is 5, so hundred-thousands rounds up: 7,700,000.' }),
 
   makeMCQ({ id:'CH_NUM12', chapterId:'numeration', difficulty:2,
@@ -122,8 +122,8 @@ CHALLENGE_QS.push(
 
   makeMCQ({ id:'CH_NUM18', chapterId:'numeration', difficulty:4,
     question:'A factory makes 1,350,000 bottles per year. It has been running for 4 years. The owner says "We have made more than 5 million bottles." Is this correct?',
-    options:['Yes — they made exactly 5,400,000','No — they made only 4,350,000','Yes — they made 5,000,000 exactly','No — they made 5,400,000 which is more than 5 million'],
-    answer:'Yes — they made exactly 5,400,000',
+    options:['Yes - they made exactly 5,400,000','No - they made only 4,350,000','Yes - they made 5,000,000 exactly','No - they made 5,400,000 which is more than 5 million'],
+    answer:'Yes - they made exactly 5,400,000',
     hint:'1,350,000 × 4 = ?',
     explanation:'1,350,000 × 4 = 5,400,000 which is indeed more than 5,000,000.' }),
 
@@ -350,8 +350,8 @@ CHALLENGE_QS.push(
     question:'How many square numbers are there between 50 and 150?',
     options:['3','4','5','6'],
     answer:'4',
-    hint:'List: 64 (8²), 81 (9²), 100 (10²), 121 (11²), 144 (12²) — which are strictly between 50 and 150?',
-    explanation:'8²=64, 9²=81, 10²=100, 11²=121, 12²=144. All 5 are between 50 and 150. Wait — 144<150 ✓. So 5. Let me recheck: strictly between means >50 and <150. 64,81,100,121,144 — all qualify. That\'s 5.' }),
+    hint:'List: 64 (8²), 81 (9²), 100 (10²), 121 (11²), 144 (12²) - which are strictly between 50 and 150?',
+    explanation:'8²=64, 9²=81, 10²=100, 11²=121, 12²=144. All 5 are between 50 and 150. Wait - 144<150 ✓. So 5. Let me recheck: strictly between means >50 and <150. 64,81,100,121,144 - all qualify. That\'s 5.' }),
 
   makeNum({ id:'CH_SQN13', chapterId:'square_nums', difficulty:4,
     question:'Zara tiles a square floor using 1 cm² tiles. She uses 441 tiles. What is the perimeter of the floor in cm?',
@@ -689,7 +689,7 @@ CHALLENGE_QS.push(
   makeNum({ id:'CH_DEC05', chapterId:'decimals', difficulty:3,
     question:'Round 8.3749 to 2 decimal places.',
     answer:'8.37',
-    hint:'Look at the third decimal place (4) — is it ≥ 5?',
+    hint:'Look at the third decimal place (4) - is it ≥ 5?',
     explanation:'Third decimal is 4 < 5, so round down: 8.37.' }),
 
   makeMCQ({ id:'CH_DEC06', chapterId:'decimals', difficulty:3,
@@ -775,7 +775,7 @@ CHALLENGE_QS.push(
     options:['0.9','0.95','1.05','1.1'],
     answer:'0.95',
     hint:'Find the distances: |0.9−1|=0.1, |0.95−1|=0.05, |1.05−1|=0.05, |1.1−1|=0.1.',
-    explanation:'Both 0.95 and 1.05 are 0.05 from 1 — but in multiple choice context 0.95 is first valid answer. Both tie.' }),
+    explanation:'Both 0.95 and 1.05 are 0.05 from 1 - but in multiple choice context 0.95 is first valid answer. Both tie.' }),
 
   makeNum({ id:'CH_DEC19', chapterId:'decimals', difficulty:4,
     question:'Leila runs 1.25 km every morning for 5 days, and 2.4 km every evening for 3 days. How many km does she run in total?',

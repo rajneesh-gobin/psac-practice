@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Geography — Chapter: Our Natural Environment
+﻿'use strict';
+// Grade 4 Geography - Chapter: Our Natural Environment
 // IDs format: g4ge-natenv-NNN
 
 STATIC_QUESTIONS.push(
@@ -14,7 +14,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Natural features are created by nature; man-made features are built by people',
     hint:'Think about who or what created the feature.',
-    explanation:'<b>Natural features</b> are created by nature — for example mountains, rivers, beaches and lagoons. <b>Man-made features</b> are built by people — for example roads, buildings, bridges and dams.' }),
+    explanation:'<b>Natural features</b> are created by nature - for example mountains, rivers, beaches and lagoons. <b>Man-made features</b> are built by people - for example roads, buildings, bridges and dams.' }),
 
   makeMCQ({ id:'g4ge-natenv-002', chapterId:'g4ge-natural-env', difficulty:1,
     question:'Which of the following is a NATURAL feature of Mauritius?',
@@ -52,7 +52,7 @@ STATIC_QUESTIONS.push(
     question:'Corps de Garde and Pieter Both are names of mountains in Mauritius.',
     answer:true,
     hint:'Both are well-known peaks visible from many parts of the island.',
-    explanation:'<b>Corps de Garde</b> and <b>Pieter Both</b> are both mountains in Mauritius. Corps de Garde (720 m) is near Quatre Bornes and Pieter Both (823 m) is in the Moka district — the second highest peak in Mauritius.' }),
+    explanation:'<b>Corps de Garde</b> and <b>Pieter Both</b> are both mountains in Mauritius. Corps de Garde (720 m) is near Quatre Bornes and Pieter Both (823 m) is in the Moka district - the second highest peak in Mauritius.' }),
 
   makeMCQ({ id:'g4ge-natenv-007', chapterId:'g4ge-natural-env', difficulty:2,
     question:'Which of the following is a river in Mauritius?',
@@ -131,7 +131,7 @@ STATIC_QUESTIONS.push(
     question:'The Grand River South East (Grande Rivière Sud-Est) is famous for which natural feature?',
     options:['Being the longest river in Mauritius','Having a waterfall where it meets the sea','Being a dry river all year','Flowing through Port Louis'],
     answer:'Having a waterfall where it meets the sea',
-    hint:'This is an unusual place to find a waterfall — right where the river ends!',
+    hint:'This is an unusual place to find a waterfall - right where the river ends!',
     explanation:'The <b>Grand River South East</b> is notable for its <b>waterfall</b> at its mouth, where it flows into the Indian Ocean. It is also the longest river in Mauritius (about 35 km) and flows through the south-east of the island.' }),
 
   makeMCQ({ id:'g4ge-natenv-016', chapterId:'g4ge-natural-env', difficulty:1,
@@ -143,13 +143,13 @@ STATIC_QUESTIONS.push(
       'A sandy beach by the sea'
     ],
     answer:'A flat or gently rolling area of high land',
-    hint:'The central plateau of Mauritius is high but relatively flat — many towns are built on it.',
-    explanation:'A <b>plateau</b> is a large flat or gently rolling area of elevated land. The <b>central plateau</b> of Mauritius is a good example — it sits 500–700 m above sea level and is flat enough for towns, roads and agriculture.' }),
+    hint:'The central plateau of Mauritius is high but relatively flat - many towns are built on it.',
+    explanation:'A <b>plateau</b> is a large flat or gently rolling area of elevated land. The <b>central plateau</b> of Mauritius is a good example - it sits 500–700 m above sea level and is flat enough for towns, roads and agriculture.' }),
 
   makeTF({ id:'g4ge-natenv-017', chapterId:'g4ge-natural-env', difficulty:1,
     question:'Mauritius is located in the Indian Ocean.',
     answer:true,
-    hint:'Look at a map of Africa — Mauritius is the island to the east of Madagascar.',
+    hint:'Look at a map of Africa - Mauritius is the island to the east of Madagascar.',
     explanation:'<b>Mauritius</b> is an island nation located in the <b>Indian Ocean</b>, approximately 2,000 km off the south-east coast of Africa. It is east of Madagascar and is part of the Mascarene Islands group.' }),
 
   makeMCQ({ id:'g4ge-natenv-018', chapterId:'g4ge-natural-env', difficulty:3,
@@ -162,7 +162,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Natural: a river. Man-made: a bridge. Natural features are formed by nature; man-made features are built by people.',
     hint:'Rivers exist without any human involvement; bridges are constructed by engineers.',
-    explanation:'A <b>river</b> is a natural feature — it was formed by rainfall and flows naturally downhill. A <b>bridge</b> is man-made — engineers and workers built it across the river. The key difference: natural features exist without human involvement; man-made features are constructed by people.' }),
+    explanation:'A <b>river</b> is a natural feature - it was formed by rainfall and flows naturally downhill. A <b>bridge</b> is man-made - engineers and workers built it across the river. The key difference: natural features exist without human involvement; man-made features are constructed by people.' }),
 
   makeMCQ({ id:'g4ge-natenv-019', chapterId:'g4ge-natural-env', difficulty:2,
     question:'Which of these best describes the shape of Mauritius?',

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Science — Chapter: Plants & Ecosystems (photosynthesis, food chains)
+﻿'use strict';
+// Grade 6 Science - Chapter: Plants & Ecosystems (photosynthesis, food chains)
 // IDs format: g6sci-pl-NNN
 
 const _SVG_FOOD_CHAIN = `<svg viewBox="0 0 290 75" width="290" height="75" style="display:block;margin:6px auto;background:#f0fdf4;border-radius:8px;border:1px solid #86efac">
@@ -53,7 +53,7 @@ STATIC_QUESTIONS.push(
     options:['Carbon dioxide and water','Glucose and oxygen','Nitrogen and glucose','Water vapour and carbon dioxide'],
     answer:'Glucose and oxygen',
     hint:'Look at the right side of the equation arrow in the diagram.',
-    explanation:'Photosynthesis produces <b>glucose</b> (which the plant uses as food for energy and growth) and <b>oxygen</b> (which is released into the air — this is why plants are vital for maintaining oxygen levels in the atmosphere).' }),
+    explanation:'Photosynthesis produces <b>glucose</b> (which the plant uses as food for energy and growth) and <b>oxygen</b> (which is released into the air - this is why plants are vital for maintaining oxygen levels in the atmosphere).' }),
 
   makeMCQ({ id:'g6sci-pl-003', chapterId:'g6-plants', difficulty:1,
     question:'What is chlorophyll and why is it important for photosynthesis?',
@@ -72,7 +72,7 @@ STATIC_QUESTIONS.push(
     options:['Hawk','Lizard','Grasshopper','Grass'],
     answer:'Grass',
     hint:'A producer makes its own food from sunlight.',
-    explanation:'<b>Grass</b> is the producer in this food chain. Producers are always green plants — they make their own food through photosynthesis. All other organisms in the food chain depend on the producer for energy.' }),
+    explanation:'<b>Grass</b> is the producer in this food chain. Producers are always green plants - they make their own food through photosynthesis. All other organisms in the food chain depend on the producer for energy.' }),
 
   makeMCQ({ id:'g6sci-pl-005', chapterId:'g6-plants', difficulty:2,
     question:`${_SVG_FOOD_CHAIN}In the food chain, what is the HAWK described as?`,
@@ -97,7 +97,7 @@ STATIC_QUESTIONS.push(
     question:'All food chains begin with a producer (a green plant).',
     answer:true,
     hint:'Where does the energy in a food chain originally come from?',
-    explanation:'True. All food chains start with a <b>producer</b> — a green plant (or alga) that captures energy from the sun through photosynthesis. All other organisms in the chain depend on this captured energy.' }),
+    explanation:'True. All food chains start with a <b>producer</b> - a green plant (or alga) that captures energy from the sun through photosynthesis. All other organisms in the chain depend on this captured energy.' }),
 
   makeMCQ({ id:'g6sci-pl-008', chapterId:'g6-plants', difficulty:2,
     question:'What is the role of DECOMPOSERS in a food chain or ecosystem?',
@@ -109,13 +109,13 @@ STATIC_QUESTIONS.push(
     ],
     answer:'They break down dead plants and animals, returning nutrients to the soil',
     hint:'Think about what happens to leaves and dead animals on a forest floor.',
-    explanation:'<b>Decomposers</b> (bacteria and fungi) break down dead organisms and waste into simpler substances, returning nutrients to the soil. This is essential for recycling nutrients in an ecosystem — without decomposers, nutrients would be locked in dead matter.' }),
+    explanation:'<b>Decomposers</b> (bacteria and fungi) break down dead organisms and waste into simpler substances, returning nutrients to the soil. This is essential for recycling nutrients in an ecosystem - without decomposers, nutrients would be locked in dead matter.' }),
 
   makeMCQ({ id:'g6sci-pl-009', chapterId:'g6-plants', difficulty:2,
     question:'What would happen if all the GRASS (producer) in a food chain were removed?',
     options:[
       'Only the top predator would be affected',
-      'Nothing would change — animals would find other food',
+      'Nothing would change - animals would find other food',
       'The entire food chain would collapse as all consumers would lose their food source',
       'Decomposers would immediately replace the grass'
     ],
@@ -148,7 +148,7 @@ STATIC_QUESTIONS.push(
       'Nitrogen and glucose'
     ],
     answer:'Sunlight and carbon dioxide',
-    hint:'The Grade 6 textbook lists 4 conditions — sunlight and CO₂ are among them.',
+    hint:'The Grade 6 textbook lists 4 conditions - sunlight and CO₂ are among them.',
     explanation:'The Grade 6 Science Pupil\'s Book lists FOUR conditions for photosynthesis: <b>water</b> (from roots), <b>sunlight</b> (energy source), <b>carbon dioxide</b> (from air through stomata), and <b>chlorophyll</b> (the green pigment that absorbs light). Without any one of these four, photosynthesis cannot occur. Sunlight and CO₂ are the most commonly tested pair.' }),
 
   makeMCQ({ id:'g6sci-pl-012', chapterId:'g6-plants', difficulty:2,
@@ -162,13 +162,13 @@ STATIC_QUESTIONS.push(
     question:'How do photosynthesis and respiration together MAINTAIN the composition of air? (PSAC 2025 Q8c)',
     options:[
       'Both add nitrogen to the air',
-      'Photosynthesis releases O₂ and absorbs CO₂; respiration releases CO₂ and absorbs O₂ — keeping the balance',
+      'Photosynthesis releases O₂ and absorbs CO₂; respiration releases CO₂ and absorbs O₂ - keeping the balance',
       'Both processes absorb CO₂ from the air',
       'Photosynthesis and respiration both produce water vapour only'
     ],
-    answer:'Photosynthesis releases O₂ and absorbs CO₂; respiration releases CO₂ and absorbs O₂ — keeping the balance',
-    hint:'The two processes are like opposite arrows — one produces what the other consumes.',
-    explanation:'The Grade 6 Pupil\'s Book explains the balance: <b>Photosynthesis</b> (in sunlight) absorbs CO₂ and releases O₂. <b>Respiration</b> (day AND night) absorbs O₂ and releases CO₂. Plants carry out BOTH processes — but during daylight, photosynthesis dominates, releasing extra O₂. This complementary cycle <b>maintains the O₂/CO₂ balance in the atmosphere</b> that all life depends on.' }),
+    answer:'Photosynthesis releases O₂ and absorbs CO₂; respiration releases CO₂ and absorbs O₂ - keeping the balance',
+    hint:'The two processes are like opposite arrows - one produces what the other consumes.',
+    explanation:'The Grade 6 Pupil\'s Book explains the balance: <b>Photosynthesis</b> (in sunlight) absorbs CO₂ and releases O₂. <b>Respiration</b> (day AND night) absorbs O₂ and releases CO₂. Plants carry out BOTH processes - but during daylight, photosynthesis dominates, releasing extra O₂. This complementary cycle <b>maintains the O₂/CO₂ balance in the atmosphere</b> that all life depends on.' }),
 
   makeMCQ({ id:'g6sci-pl-014', chapterId:'g6-plants', difficulty:1,
     question:'What is the correct sequence of events during GERMINATION of a seed? (PSAC 2024 Q1j)',
@@ -179,15 +179,15 @@ STATIC_QUESTIONS.push(
       'seed → shoot → leaf → root'
     ],
     answer:'seed → root → shoot → leaf',
-    hint:'Which part of the seedling appears first — the one that reaches down for water, or the one reaching up for light?',
-    explanation:'During <b>germination</b>, the correct sequence is: <b>seed → root → shoot → leaf</b>. The <b>root appears first</b> — it anchors the seed and absorbs water from the soil before anything else can grow. Then the shoot pushes upward, and finally leaves emerge and begin photosynthesis. The seed does NOT need sunlight to germinate (it uses stored food), but it needs water, warmth and oxygen.' }),
+    hint:'Which part of the seedling appears first - the one that reaches down for water, or the one reaching up for light?',
+    explanation:'During <b>germination</b>, the correct sequence is: <b>seed → root → shoot → leaf</b>. The <b>root appears first</b> - it anchors the seed and absorbs water from the soil before anything else can grow. Then the shoot pushes upward, and finally leaves emerge and begin photosynthesis. The seed does NOT need sunlight to germinate (it uses stored food), but it needs water, warmth and oxygen.' }),
 
   makeMCQ({ id:'g6sci-pl-015', chapterId:'g6-plants', difficulty:2,
     question:'The Grade 6 textbook says "the fruit protects and nourishes the seeds." Give an EXAMPLE of a fruit whose seeds are eaten. (PSAC 2025 Q4d)',
     options:['Carrot','Potato','Mango','Onion'],
     answer:'Mango',
     hint:'A fruit grows from a flower and contains seeds inside.',
-    explanation:'A <b>mango</b> is a fruit — it develops from a flower and contains a seed (the stone/pit) inside. The Grade 6 Pupil\'s Book states: "<b>the fruit protects and nourishes the seeds</b>." Carrots are roots, potatoes are stems, and onions are bulbs (modified leaves) — none are fruits in the botanical sense. Other examples of fruits: tomato, guava, papaya.' }),
+    explanation:'A <b>mango</b> is a fruit - it develops from a flower and contains a seed (the stone/pit) inside. The Grade 6 Pupil\'s Book states: "<b>the fruit protects and nourishes the seeds</b>." Carrots are roots, potatoes are stems, and onions are bulbs (modified leaves) - none are fruits in the botanical sense. Other examples of fruits: tomato, guava, papaya.' }),
 
   makeMCQ({ id:'g6sci-pl-016', chapterId:'g6-plants', difficulty:2,
     question:'Give ONE use of WOOD PULP obtained from plants. (PSAC 2025 Q8c)',
@@ -212,7 +212,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'To attract insects and other pollinators for pollination',
     hint:'Without pollinators, many flowers cannot be fertilised and cannot produce seeds.',
-    explanation:'Flowers are colourful and fragrant to <b>attract pollinators</b> (bees, butterflies, birds) which carry pollen from one flower to another. This is called <b>pollination</b>. During pollination, pollen from the stamen (male part) is transferred to the stigma (female part) of another flower — enabling fertilisation and seed formation. Some plants are pollinated by wind instead (e.g., grasses) and have less colourful flowers.' }),
+    explanation:'Flowers are colourful and fragrant to <b>attract pollinators</b> (bees, butterflies, birds) which carry pollen from one flower to another. This is called <b>pollination</b>. During pollination, pollen from the stamen (male part) is transferred to the stigma (female part) of another flower - enabling fertilisation and seed formation. Some plants are pollinated by wind instead (e.g., grasses) and have less colourful flowers.' }),
 
   makeMCQ({ id:'g6sci-pl-019', chapterId:'g6-plants', difficulty:4,
     question:'A student removes ALL the leaves from a healthy plant and places it in a well-lit room. Which prediction is CORRECT?',
@@ -223,7 +223,7 @@ STATIC_QUESTIONS.push(
       'The plant will switch to absorbing food through its roots instead'
     ],
     answer:'The plant will soon weaken and die because without leaves, photosynthesis almost stops and the plant cannot make food',
-    hint:'Recall that the leaf is the "factory" — what happens when you shut the factory?',
-    explanation:'Leaves are the main organs of photosynthesis. Without them, the plant produces almost no glucose — its energy and food source. The Grade 6 Pupil\'s Book explains the leaf\'s role: <b>inputs (sunlight, CO₂, water) → food (glucose) + O₂</b>. Without this "factory" running, the plant exhausts its stored food reserves, cannot grow or repair itself, and eventually dies. Some green stems photosynthesise slightly but cannot compensate for the loss of all leaves.' })
+    hint:'Recall that the leaf is the "factory" - what happens when you shut the factory?',
+    explanation:'Leaves are the main organs of photosynthesis. Without them, the plant produces almost no glucose - its energy and food source. The Grade 6 Pupil\'s Book explains the leaf\'s role: <b>inputs (sunlight, CO₂, water) → food (glucose) + O₂</b>. Without this "factory" running, the plant exhausts its stored food reserves, cannot grow or repair itself, and eventually dies. Some green stems photosynthesise slightly but cannot compensate for the loss of all leaves.' })
 
 );

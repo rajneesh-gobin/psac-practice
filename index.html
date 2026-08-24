@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PSAC Exam Practice 🇲🇺 — PSAC Revision</title>
+  <title>PSAC Exam Practice 🇲🇺 - PSAC Revision</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -22,7 +22,7 @@
 
   <!-- Offline banner -->
   <div id="offline-banner" class="hidden fixed top-0 left-0 right-0 z-[100] bg-red-500 text-white text-center text-xs py-2 font-semibold shadow-lg select-none">
-    📡 You're offline — your progress is saved locally and will sync when you reconnect
+    📡 You're offline - your progress is saved locally and will sync when you reconnect
   </div>
 
   <!-- Change Password Modal -->
@@ -88,7 +88,7 @@
     </div>
   </header>
 
-  <!-- Breadcrumb nav — shown on student practice screens -->
+  <!-- Breadcrumb nav - shown on student practice screens -->
   <nav id="breadcrumb-bar" class="hidden bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-700/50 px-4 py-2 sticky top-[60px] z-30">
     <div id="breadcrumb-inner" class="max-w-6xl mx-auto flex items-center gap-0 text-xs overflow-x-auto scrollbar-hide"></div>
   </nav>
@@ -119,7 +119,7 @@
           Ace the <span class="text-indigo-300">PSAC Exam</span><br>Practice Made Fun
         </h1>
         <p class="text-indigo-200 text-base sm:text-lg mb-5 max-w-xl font-medium">
-          Interactive revision across all 5 PSAC subjects — Maths, Science, History &amp; Geography, English and French — aligned with the Mauritius MIE curriculum.
+          Interactive revision across all 5 PSAC subjects - Maths, Science, History &amp; Geography, English and French - aligned with the Mauritius MIE curriculum.
         </p>
 
         <!-- Subject pills -->
@@ -137,7 +137,7 @@
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <button onclick="showScreen('auth'); setTimeout(()=>{Auth.setRole('parent');Auth.showSignUp();},60)"
             class="bg-indigo-500 hover:bg-indigo-400 active:scale-95 text-white font-bold px-8 py-4 rounded-2xl text-base shadow-2xl transition-all hover:scale-105">
-            Get Started — Free →
+            Get Started - Free →
           </button>
           <button onclick="showScreen('auth')"
             class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold px-8 py-4 rounded-2xl text-base transition-colors">
@@ -152,7 +152,7 @@
 
       <!-- Subjects showcase -->
       <section class="px-4 pb-12 max-w-5xl mx-auto w-full">
-        <h2 class="text-center text-xl font-bold mb-2 text-white/80">All 5 PSAC subjects — fully available</h2>
+        <h2 class="text-center text-xl font-bold mb-2 text-white/80">All 5 PSAC subjects - fully available</h2>
         <p class="text-center text-indigo-300/50 text-sm mb-7">Complete Mauritius MIE curriculum · Grades 4, 5 &amp; 6</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
@@ -215,7 +215,7 @@
           <div class="bg-white/5 hover:bg-white/8 border border-white/10 rounded-2xl p-5 transition-colors">
             <div class="text-3xl mb-3">📝</div>
             <h3 class="font-bold text-white mb-1">Practice &amp; Exam Mode</h3>
-            <p class="text-sm text-indigo-200/70">Timed exam simulations and free-practice mode. Students choose their subject, chapter and difficulty — from Basic to Word Problems.</p>
+            <p class="text-sm text-indigo-200/70">Timed exam simulations and free-practice mode. Students choose their subject, chapter and difficulty - from Basic to Word Problems.</p>
           </div>
 
           <div class="bg-white/5 hover:bg-white/8 border border-white/10 rounded-2xl p-5 transition-colors">
@@ -233,7 +233,7 @@
           <div class="bg-white/5 hover:bg-white/8 border border-white/10 rounded-2xl p-5 transition-colors">
             <div class="text-3xl mb-3">🔒</div>
             <h3 class="font-bold text-white mb-1">Safe &amp; Private</h3>
-            <p class="text-sm text-indigo-200/70">Students log in with a simple username + PIN — no email needed. Parents control access, assignments, and restrictions.</p>
+            <p class="text-sm text-indigo-200/70">Students log in with a simple username + PIN - no email needed. Parents control access, assignments, and restrictions.</p>
           </div>
 
         </div>
@@ -251,7 +251,7 @@
           <div class="flex flex-col items-center">
             <div class="w-12 h-12 rounded-full bg-indigo-500/30 border border-indigo-400/30 flex items-center justify-center text-2xl mb-3 select-none">2</div>
             <h3 class="font-bold text-white mb-1">Add your child</h3>
-            <p class="text-sm text-indigo-300/70">Set up your child's profile — pick their grade, a username, and a PIN.</p>
+            <p class="text-sm text-indigo-300/70">Set up your child's profile - pick their grade, a username, and a PIN.</p>
           </div>
           <div class="flex flex-col items-center">
             <div class="w-12 h-12 rounded-full bg-indigo-500/30 border border-indigo-400/30 flex items-center justify-center text-2xl mb-3 select-none">3</div>
@@ -276,7 +276,7 @@
     </div>
   </div>
 
-  <!-- ══════════ AUTH — LOGIN / SIGNUP ══════════ -->
+  <!-- ══════════ AUTH - LOGIN / SIGNUP ══════════ -->
   <!-- Outside <main> so it can be full-screen -->
   <div id="screen-auth" class="screen hidden" data-hide-header="true">
     <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex flex-col items-center justify-center p-4">
@@ -580,13 +580,13 @@
       </div>
 
       <!-- Assignments from parent -->
-      <!-- Start-here nudge — visible only for brand-new students (0 questions attempted) -->
+      <!-- Start-here nudge - visible only for brand-new students (0 questions attempted) -->
       <div id="dash-start-here" class="hidden bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl p-5 mb-5 text-white shadow-xl">
         <div class="flex items-center gap-4">
           <div class="text-5xl select-none">🚀</div>
           <div class="flex-1">
             <div class="font-bold text-lg mb-0.5">Ready to begin?</div>
-            <div class="text-sm opacity-90 mb-3">Start with Level 1 practice — it's easy and fun!</div>
+            <div class="text-sm opacity-90 mb-3">Start with Level 1 practice - it's easy and fun!</div>
             <button onclick="showScreen('chapter-select')"
               class="bg-white text-indigo-600 font-bold text-sm px-5 py-2 rounded-xl hover:bg-indigo-50 transition-colors shadow">
               Start Practising →
@@ -613,7 +613,7 @@
         <button id="btn-exam-mode" class="track-card group">
           <div class="text-4xl mb-3">📝</div>
           <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Exam Paper Mode</h3>
-          <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Take a timed mock exam — quick drill or full 45-minute PSAC paper. Get a detailed diagnostic report.</p>
+          <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Take a timed mock exam - quick drill or full 45-minute PSAC paper. Get a detailed diagnostic report.</p>
           <div class="flex flex-wrap gap-2">
             <span class="chip blue">⏱ Timed</span>
             <span class="chip purple">📊 Diagnostic</span>
@@ -825,9 +825,9 @@
       <div class="max-w-3xl mx-auto space-y-4">
         <div id="results-banner" class="rounded-2xl p-8 text-white text-center shadow-xl">
           <div id="result-emoji" class="text-6xl mb-3">🎉</div>
-          <div id="result-score" class="text-5xl font-bold mb-1">—</div>
-          <div id="result-grade" class="text-xl opacity-90 mb-1">—</div>
-          <div id="result-details" class="text-sm opacity-75">—</div>
+          <div id="result-score" class="text-5xl font-bold mb-1">-</div>
+          <div id="result-grade" class="text-xl opacity-90 mb-1">-</div>
+          <div id="result-details" class="text-sm opacity-75">-</div>
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
@@ -902,7 +902,7 @@
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
             <button id="formula-btn" onclick="showFormulaModal()" class="w-full btn-secondary text-sm mb-2">📐 Key Formulas & Facts</button>
-            <button id="help-btn" onclick="showHelpModal()" class="w-full btn-help text-sm mb-2">🎬 How to — Video Help</button>
+            <button id="help-btn" onclick="showHelpModal()" class="w-full btn-help text-sm mb-2">🎬 How to - Video Help</button>
             <button id="sound-toggle-btn" onclick="toggleSound()" class="w-full btn-ghost text-sm">🔔 Sound On</button>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
@@ -910,7 +910,7 @@
             <div class="space-y-2 text-sm">
               <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Attempted</span><span id="sess-attempted" class="font-bold text-gray-800 dark:text-white">0</span></div>
               <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Correct</span><span id="sess-correct" class="font-bold text-green-600 dark:text-green-400">0</span></div>
-              <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Accuracy</span><span id="sess-acc" class="font-bold text-blue-600 dark:text-blue-400">—</span></div>
+              <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Accuracy</span><span id="sess-acc" class="font-bold text-blue-600 dark:text-blue-400">-</span></div>
             </div>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
@@ -962,7 +962,7 @@
       <div class="flex justify-between items-center mb-5">
         <div>
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🛡️ Admin Panel</h2>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Superuser access — PSAC Exam Practice</p>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Superuser access - PSAC Exam Practice</p>
         </div>
       </div>
 
@@ -1031,19 +1031,19 @@
       <div id="admin-tab-stats" class="admin-tab-panel hidden">
         <div class="grid grid-cols-2 gap-3 mb-4">
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow text-center">
-            <div class="text-3xl font-black text-indigo-600 dark:text-indigo-400" id="stat-total-users">—</div>
+            <div class="text-3xl font-black text-indigo-600 dark:text-indigo-400" id="stat-total-users">-</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Accounts</div>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow text-center">
-            <div class="text-3xl font-black text-green-600 dark:text-green-400" id="stat-total-students">—</div>
+            <div class="text-3xl font-black text-green-600 dark:text-green-400" id="stat-total-students">-</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Students</div>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow text-center">
-            <div class="text-3xl font-black text-purple-600 dark:text-purple-400" id="stat-total-families">—</div>
+            <div class="text-3xl font-black text-purple-600 dark:text-purple-400" id="stat-total-families">-</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Families</div>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow text-center">
-            <div class="text-3xl font-black text-amber-600 dark:text-amber-400" id="stat-total-teachers">—</div>
+            <div class="text-3xl font-black text-amber-600 dark:text-amber-400" id="stat-total-teachers">-</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Teachers</div>
           </div>
         </div>
@@ -1073,7 +1073,7 @@
       <!-- Plans tab (super admin only) -->
       <div id="admin-tab-plans" class="admin-tab-panel hidden">
         <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl p-4 mb-4">
-          <p class="text-sm font-semibold text-amber-700 dark:text-amber-400">🚧 Paid plans are disabled — this is the setup skeleton for future monetisation.</p>
+          <p class="text-sm font-semibold text-amber-700 dark:text-amber-400">🚧 Paid plans are disabled - this is the setup skeleton for future monetisation.</p>
           <p class="text-xs text-amber-600 dark:text-amber-500 mt-1">Enable individual plans below to activate them. All users are on Free until plans go live.</p>
         </div>
         <div id="admin-plans-list" class="space-y-3"></div>
@@ -1247,10 +1247,10 @@
       <div class="ta-tab-content hidden" data-tab="results">
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
           <h3 class="font-bold text-gray-800 dark:text-white mb-3">📊 Student Results</h3>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">Only <b>Test mode</b> assignments collect results. Results are saved on this device — after hosting on Supabase they'll sync automatically.</p>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">Only <b>Test mode</b> assignments collect results. Results are saved on this device - after hosting on Supabase they'll sync automatically.</p>
           <select id="ta-results-assign-sel" onchange="taSelectResultsAssign(this)"
             class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 mb-4">
-            <option value="">— Select a test assignment —</option>
+            <option value="">- Select a test assignment -</option>
           </select>
           <div id="ta-results-list"></div>
         </div>
@@ -1421,10 +1421,10 @@
                 <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Difficulty</label>
                 <select id="pd-assign-diff" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
                   <option value="">🎲 Random (Mixed)</option>
-                  <option value="1">⭐ Level 1 — Basic</option>
-                  <option value="2">⭐⭐ Level 2 — Medium</option>
-                  <option value="3">⭐⭐⭐ Level 3 — Hard</option>
-                  <option value="4">🏆 Level 4 — Word Problems</option>
+                  <option value="1">⭐ Level 1 - Basic</option>
+                  <option value="2">⭐⭐ Level 2 - Medium</option>
+                  <option value="3">⭐⭐⭐ Level 3 - Hard</option>
+                  <option value="4">🏆 Level 4 - Word Problems</option>
                 </select>
               </div>
             </div>
@@ -1560,7 +1560,7 @@
 
           <!-- Closed banner (shown when post is closed) -->
           <div id="forum-closed-banner" class="hidden mt-4 flex items-center gap-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-200 dark:border-gray-600 text-sm text-gray-500 dark:text-gray-400">
-            🔒 This discussion is closed — no new replies can be added.
+            🔒 This discussion is closed - no new replies can be added.
           </div>
 
           <!-- Reply box -->
@@ -1656,7 +1656,7 @@
           allowfullscreen
           style="display:block;border:none"></iframe>
       </div>
-      <!-- Fallback link — always shown so embed errors never leave the user stuck -->
+      <!-- Fallback link - always shown so embed errors never leave the user stuck -->
       <div class="flex justify-center mt-2 mb-4">
         <a id="help-yt-link" href="#" target="_blank" rel="noopener"
           class="inline-flex items-center gap-2 text-xs text-red-600 dark:text-red-400 hover:underline font-medium">
@@ -1970,19 +1970,19 @@
   <script src="subjects/grade6-french/_manifest.js"></script>
   <script src="subjects/grade6-history/_manifest.js"></script>
   <script src="subjects/grade5-maths/help.js"></script>
-  <!-- Question loader — fetches questions from server (production) or local files (file://) -->
+  <!-- Question loader - fetches questions from server (production) or local files (file://) -->
   <script src="engine/question_loader.js"></script>
   <!-- App + Auth (auth loads after app so DB/save are available) -->
   <script src="engine/app.js"></script>
   <script src="engine/auth.js"></script>
-  <!-- Teacher mode (loads last — uses globals from app + auth) -->
+  <!-- Teacher mode (loads last - uses globals from app + auth) -->
   <script src="engine/teacher.js"></script>
   <!-- Admin panel (loads after auth) -->
   <script src="engine/admin.js"></script>
   <script src="engine/forum.js"></script>
   <script src="engine/calendar.js"></script>
 
-  <!-- Image lightbox — shown when any question image is tapped/clicked -->
+  <!-- Image lightbox - shown when any question image is tapped/clicked -->
   <div id="img-lightbox" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4"
        onclick="closeLightbox()" role="dialog" aria-modal="true" aria-label="Image zoom">
     <div class="relative max-w-full max-h-full flex items-center justify-center" onclick="event.stopPropagation()">

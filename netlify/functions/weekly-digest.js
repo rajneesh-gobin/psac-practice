@@ -1,4 +1,4 @@
-﻿// Netlify Scheduled Function — Weekly Parent Progress Digest
+﻿// Netlify Scheduled Function - Weekly Parent Progress Digest
 // Runs every Sunday at 9:00 AM UTC.
 // Schedule is set in netlify.toml: [functions."weekly-digest"] schedule = "0 9 * * 0"
 //
@@ -36,7 +36,7 @@ function _bar(pct, color) {
 
 exports.handler = async () => {
   if (!RESEND_KEY || !SUPABASE_KEY) {
-    console.log('[weekly-digest] Skipped — email not configured');
+    console.log('[weekly-digest] Skipped - email not configured');
     return { statusCode: 200 };
   }
 
@@ -126,7 +126,7 @@ exports.handler = async () => {
   </div>
 </body></html>`;
 
-      await sendEmail(parentEmail, `PSAC Exam Practice — Weekly Report (${weekStr})`, html);
+      await sendEmail(parentEmail, `PSAC Exam Practice - Weekly Report (${weekStr})`, html);
       sent++;
     } catch (err) {
       console.error('[weekly-digest] Error for family', family.id, err.message);

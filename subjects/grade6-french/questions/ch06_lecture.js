@@ -1,12 +1,12 @@
-'use strict';
-// Grade 6 French — Chapter: Textes & Compréhension
+﻿'use strict';
+// Grade 6 French - Chapter: Textes & Compréhension
 // IDs format: g6fr-lec-NNN
 
 const _TEXTE_G6 = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7">
 <b style="color:#5b21b6">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
 <b>L'Île Maurice et l'environnement</b><br><br>
 L'île Maurice est connue pour ses plages de sable blanc, ses lagons aux eaux cristallines et sa biodiversité exceptionnelle. Cependant, cet écrin de nature est aujourd'hui menacé par plusieurs problèmes environnementaux graves.<br><br>
-La pollution des océans constitue l'une des principales menaces. Des milliers de bouteilles en plastique et de sacs jetables se retrouvent dans nos lagons, mettant en danger les poissons, les coraux et les tortues marines. En 2020, le gouvernement mauricien a interdit les sacs en plastique à usage unique — une mesure saluée par les écologistes.<br><br>
+La pollution des océans constitue l'une des principales menaces. Des milliers de bouteilles en plastique et de sacs jetables se retrouvent dans nos lagons, mettant en danger les poissons, les coraux et les tortues marines. En 2020, le gouvernement mauricien a interdit les sacs en plastique à usage unique - une mesure saluée par les écologistes.<br><br>
 De plus, le réchauffement climatique provoque le blanchissement des coraux. Les coraux, qui abritent une grande variété d'espèces marines, blanchissent et meurent lorsque la température de l'eau augmente. La perte des récifs coralliens aurait des conséquences désastreuses pour le tourisme et la pêche, deux piliers essentiels de l'économie mauricienne.<br><br>
 Face à ces défis, il est impératif que les citoyens, les entreprises et le gouvernement unissent leurs efforts pour protéger ce patrimoine naturel exceptionnel.
 </div>`;
@@ -30,7 +30,7 @@ STATIC_QUESTIONS.push(
     options:['protégé','célébré','en danger','admirable'],
     answer:'en danger',
     hint:'Le contexte parle de "problèmes environnementaux graves". Quelle est la conséquence pour l\'île ?',
-    explanation:'"<b>Menacé</b>" = threatened / in danger. Le contexte — "problèmes environnementaux graves" qui suivent — confirme que l\'île est en danger. Synonymes : en péril, mis en danger, fragile.' }),
+    explanation:'"<b>Menacé</b>" = threatened / in danger. Le contexte - "problèmes environnementaux graves" qui suivent - confirme que l\'île est en danger. Synonymes : en péril, mis en danger, fragile.' }),
 
   makeMCQ({ id:'g6fr-lec-003', chapterId:'g6fr-lecture', difficulty:2,
     question:`${_TEXTE_G6}Quelle mesure le gouvernement mauricien a-t-il prise en 2020 ?`,
@@ -42,7 +42,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Il a interdit les sacs en plastique à usage unique.',
     hint:'Cherchez "2020" dans le deuxième paragraphe.',
-    explanation:'"En 2020, le gouvernement mauricien a <b>interdit les sacs en plastique à usage unique</b> — une mesure saluée par les écologistes." "Saluée" = welcomed/praised.' }),
+    explanation:'"En 2020, le gouvernement mauricien a <b>interdit les sacs en plastique à usage unique</b> - une mesure saluée par les écologistes." "Saluée" = welcomed/praised.' }),
 
   makeMCQ({ id:'g6fr-lec-004', chapterId:'g6fr-lecture', difficulty:2,
     question:`${_TEXTE_G6}Qu'est-ce que le blanchissement des coraux et quelle en est la cause selon le texte ?`,
@@ -73,13 +73,13 @@ STATIC_QUESTIONS.push(
     options:['une comparaison avec "comme"','une métaphore','une allitération','une personnification'],
     answer:'une métaphore',
     hint:'L\'île est comparée à un écrin (jewellery box) sans utiliser "comme" ou "tel que".',
-    explanation:'"Cet <b>écrin</b> de nature" est une <b>métaphore</b> — l\'île est comparée à un écrin (jewellery box) qui protège des bijoux précieux, mais sans utiliser les mots comparatifs "comme" ou "tel que". Si on disait "comme un écrin", ce serait une comparaison.' }),
+    explanation:'"Cet <b>écrin</b> de nature" est une <b>métaphore</b> - l\'île est comparée à un écrin (jewellery box) qui protège des bijoux précieux, mais sans utiliser les mots comparatifs "comme" ou "tel que". Si on disait "comme un écrin", ce serait une comparaison.' }),
 
   makeTF({ id:'g6fr-lec-007', chapterId:'g6fr-lecture', difficulty:1,
     question:`${_TEXTE_G6}Vrai ou Faux : Les récifs coralliens n'ont aucune importance économique pour Maurice.`,
     answer:false,
     hint:'Regardez la fin du troisième paragraphe.',
-    explanation:'<b>Faux.</b> Le texte dit que le tourisme et la pêche sont "<b>deux piliers essentiels de l\'économie mauricienne</b>". Les récifs coralliens soutiennent ces deux secteurs — ils ont donc une importance économique majeure.' }),
+    explanation:'<b>Faux.</b> Le texte dit que le tourisme et la pêche sont "<b>deux piliers essentiels de l\'économie mauricienne</b>". Les récifs coralliens soutiennent ces deux secteurs - ils ont donc une importance économique majeure.' }),
 
   makeMCQ({ id:'g6fr-lec-008', chapterId:'g6fr-lecture', difficulty:2,
     question:`${_TEXTE_G6}Quel est le ton général de ce texte ?`,
@@ -104,17 +104,17 @@ STATIC_QUESTIONS.push(
       'Les touristes étrangers'
     ],
     answer:'Les citoyens, les entreprises et le gouvernement ensemble',
-    hint:'Le dernier paragraphe utilise le mot "unissent" — qui doit s\'unir ?',
-    explanation:'"Il est impératif que <b>les citoyens, les entreprises et le gouvernement</b> unissent leurs efforts pour protéger ce patrimoine naturel exceptionnel." Le texte insiste sur une action collective — pas individuelle ou gouvernementale seule.' })
+    hint:'Le dernier paragraphe utilise le mot "unissent" - qui doit s\'unir ?',
+    explanation:'"Il est impératif que <b>les citoyens, les entreprises et le gouvernement</b> unissent leurs efforts pour protéger ce patrimoine naturel exceptionnel." Le texte insiste sur une action collective - pas individuelle ou gouvernementale seule.' })
 
 );
 
 const _TEXTE_DODO_FR = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7">
 <b style="color:#5b21b6">Lisez attentivement le texte, puis répondez aux questions.</b><br><br>
 <b>Le dodo : l\'oiseau disparu de Maurice</b><br><br>
-Le dodo était un grand oiseau incapable de voler qui vivait uniquement sur l\'île Maurice. Mesurant près d\'un mètre de hauteur et pesant jusqu\'à vingt-trois kilogrammes, cet oiseau étrange possédait des ailes si petites qu\'elles lui étaient totalement inutiles pour s\'élever dans les airs. Les scientifiques pensent que le dodo a perdu la faculté de voler parce que l\'île ne comptait aucun prédateur terrestre — il n\'avait donc aucun besoin de fuir par les airs.<br><br>
+Le dodo était un grand oiseau incapable de voler qui vivait uniquement sur l\'île Maurice. Mesurant près d\'un mètre de hauteur et pesant jusqu\'à vingt-trois kilogrammes, cet oiseau étrange possédait des ailes si petites qu\'elles lui étaient totalement inutiles pour s\'élever dans les airs. Les scientifiques pensent que le dodo a perdu la faculté de voler parce que l\'île ne comptait aucun prédateur terrestre - il n\'avait donc aucun besoin de fuir par les airs.<br><br>
 Lorsque les marins hollandais débarquèrent à Maurice à la fin du XVIIe siècle, le sort du dodo fut scellé. Ces oiseaux étaient faciles à attraper car ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger. Les marins les chassaient pour se nourrir, mais la menace la plus grave provenait des animaux introduits par les colons : des rats, des cochons et des singes qui pillaient les nids et dévoraient les œufs. En moins de quatre-vingts ans après l\'arrivée des premiers hommes, le dodo était éteint.<br><br>
-Aujourd\'hui, le dodo est devenu un puissant symbole. On utilise l\'expression "mort comme un dodo" pour désigner quelque chose de complètement et irrémédiablement disparu. Mais son histoire nous adresse également un avertissement : les mêmes facteurs — chasse, destruction des habitats et espèces envahissantes — continuent d\'entraîner l\'extinction d\'autres animaux de nos jours. À Maurice, des efforts de conservation protègent désormais des espèces endémiques comme le Pigeon Rose et la Perruche de Maurice.
+Aujourd\'hui, le dodo est devenu un puissant symbole. On utilise l\'expression "mort comme un dodo" pour désigner quelque chose de complètement et irrémédiablement disparu. Mais son histoire nous adresse également un avertissement : les mêmes facteurs - chasse, destruction des habitats et espèces envahissantes - continuent d\'entraîner l\'extinction d\'autres animaux de nos jours. À Maurice, des efforts de conservation protègent désormais des espèces endémiques comme le Pigeon Rose et la Perruche de Maurice.
 </div>`;
 
 STATIC_QUESTIONS.push(
@@ -129,19 +129,19 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Parce que l\'île ne comptait aucun prédateur terrestre, donc il n\'avait pas besoin de voler',
     hint:'Cherchez l\'explication scientifique dans le premier paragraphe.',
-    explanation:'Le texte explique : "Les scientifiques pensent que le dodo a perdu la faculté de voler parce que l\'île ne comptait <b>aucun prédateur terrestre</b> — il n\'avait donc aucun besoin de fuir par les airs." C\'est un exemple d\'<b>adaptation évolutive</b> : les espèces perdent les caractéristiques dont elles n\'ont pas besoin dans leur environnement.' }),
+    explanation:'Le texte explique : "Les scientifiques pensent que le dodo a perdu la faculté de voler parce que l\'île ne comptait <b>aucun prédateur terrestre</b> - il n\'avait donc aucun besoin de fuir par les airs." C\'est un exemple d\'<b>adaptation évolutive</b> : les espèces perdent les caractéristiques dont elles n\'ont pas besoin dans leur environnement.' }),
 
   makeMCQ({ id:'g6fr-lec-012', chapterId:'g6fr-lecture', difficulty:2,
     question:`${_TEXTE_DODO_FR}Que signifie le mot "scellé" dans "le sort du dodo fut scellé" ?`,
     options:['protégé','déterminé de façon définitive et irréversible','discuté longuement','changé favorablement'],
     answer:'déterminé de façon définitive et irréversible',
-    hint:'Dans ce contexte, "scellé" signifie quelque chose qui ne peut plus être changé — comme un destin fixé.',
-    explanation:'"Son sort fut <b>scellé</b>" = son destin fut définitivement et irrévocablement fixé. L\'expression "sceller le sort" est une expression figurée signifiant rendre quelque chose inévitable. Le manuel MIE de 6e demande aux élèves d\'expliquer le sens de mots ou d\'expressions en utilisant le contexte environnant — ici le contexte (l\'arrivée des marins, la disparition du dodo) confirme la notion de fin inévitable.' }),
+    hint:'Dans ce contexte, "scellé" signifie quelque chose qui ne peut plus être changé - comme un destin fixé.',
+    explanation:'"Son sort fut <b>scellé</b>" = son destin fut définitivement et irrévocablement fixé. L\'expression "sceller le sort" est une expression figurée signifiant rendre quelque chose inévitable. Le manuel MIE de 6e demande aux élèves d\'expliquer le sens de mots ou d\'expressions en utilisant le contexte environnant - ici le contexte (l\'arrivée des marins, la disparition du dodo) confirme la notion de fin inévitable.' }),
 
   makeTF({ id:'g6fr-lec-013', chapterId:'g6fr-lecture', difficulty:1,
     question:`${_TEXTE_DODO_FR}Vrai ou Faux : La principale raison de l'extinction du dodo était la chasse par les marins.`,
     answer:false,
-    hint:'Relisez attentivement le deuxième paragraphe — quelle menace l\'auteur qualifie de "la plus grave" ?',
+    hint:'Relisez attentivement le deuxième paragraphe - quelle menace l\'auteur qualifie de "la plus grave" ?',
     explanation:'<b>Faux.</b> Le texte précise : "les marins les chassaient pour se nourrir, mais <b>la menace la plus grave</b> provenait des animaux introduits par les colons : des rats, des cochons et des singes qui <b>pillaient les nids et dévoraient les œufs</b>." Les espèces envahissantes (invasive species) ont donc causé plus de dégâts que la chasse directe.' }),
 
   makeMCQ({ id:'g6fr-lec-014', chapterId:'g6fr-lecture', difficulty:2,
@@ -161,26 +161,26 @@ STATIC_QUESTIONS.push(
     options:['une métaphore','une personnification','une hyperbole','une comparaison avec "comme"'],
     answer:'une hyperbole',
     hint:'L\'auteur exagère pour renforcer l\'idée que les ailes ne servaient absolument à rien.',
-    explanation:'"Des ailes <b>totalement</b> inutiles" est une légère <b>hyperbole</b> — exagération pour souligner l\'inutilité complète des ailes. En réalité, les ailes jouaient peut-être un rôle d\'équilibre ou de séduction, mais l\'auteur les décrit comme "totalement" inutiles pour créer un effet de surprise. Le manuel MIE de 6e liste les figures de style : comparaison, métaphore, personnification, hyperbole, anaphore.' }),
+    explanation:'"Des ailes <b>totalement</b> inutiles" est une légère <b>hyperbole</b> - exagération pour souligner l\'inutilité complète des ailes. En réalité, les ailes jouaient peut-être un rôle d\'équilibre ou de séduction, mais l\'auteur les décrit comme "totalement" inutiles pour créer un effet de surprise. Le manuel MIE de 6e liste les figures de style : comparaison, métaphore, personnification, hyperbole, anaphore.' }),
 
   makeMCQ({ id:'g6fr-lec-016', chapterId:'g6fr-lecture', difficulty:2,
     question:`${_TEXTE_DODO_FR}Selon le dernier paragraphe, quelle est la leçon que l'on peut tirer de l'histoire du dodo ?`,
     options:[
       'Les oiseaux qui ne peuvent pas voler sont tous destinés à disparaître',
       'La chasse est toujours la principale cause d\'extinction des animaux',
-      'Les mêmes facteurs — chasse, destruction des habitats et espèces envahissantes — continuent de menacer d\'autres animaux aujourd\'hui',
+      'Les mêmes facteurs - chasse, destruction des habitats et espèces envahissantes - continuent de menacer d\'autres animaux aujourd\'hui',
       'Maurice est le seul pays à avoir perdu une espèce endémique'
     ],
-    answer:'Les mêmes facteurs — chasse, destruction des habitats et espèces envahissantes — continuent de menacer d\'autres animaux aujourd\'hui',
-    hint:'Le dernier paragraphe utilise le mot "avertissement" — qu\'est-ce que le dodo nous enseigne ?',
-    explanation:'Le texte dit : "son histoire nous adresse également un <b>avertissement</b> : les mêmes facteurs — chasse, destruction des habitats et espèces envahissantes — <b>continuent d\'entraîner l\'extinction d\'autres animaux de nos jours</b>." L\'auteur utilise l\'histoire du dodo pour parler des enjeux de conservation actuels — c\'est une démarche argumentative que le manuel MIE de 6e nomme le "passage du particulier au général".' }),
+    answer:'Les mêmes facteurs - chasse, destruction des habitats et espèces envahissantes - continuent de menacer d\'autres animaux aujourd\'hui',
+    hint:'Le dernier paragraphe utilise le mot "avertissement" - qu\'est-ce que le dodo nous enseigne ?',
+    explanation:'Le texte dit : "son histoire nous adresse également un <b>avertissement</b> : les mêmes facteurs - chasse, destruction des habitats et espèces envahissantes - <b>continuent d\'entraîner l\'extinction d\'autres animaux de nos jours</b>." L\'auteur utilise l\'histoire du dodo pour parler des enjeux de conservation actuels - c\'est une démarche argumentative que le manuel MIE de 6e nomme le "passage du particulier au général".' }),
 
   makeMCQ({ id:'g6fr-lec-017', chapterId:'g6fr-lecture', difficulty:2,
     question:`${_TEXTE_DODO_FR}Quel est le type de ce texte ?`,
     options:['Un texte poétique','Un texte narratif et informatif','Un texte publicitaire','Une lettre formelle'],
     answer:'Un texte narratif et informatif',
     hint:'Le texte raconte des événements (narratif) et donne des informations scientifiques et historiques (informatif).',
-    explanation:'Ce texte est <b>narratif et informatif</b> : (1) <b>Narratif</b> — il raconte l\'histoire du dodo dans un ordre chronologique (passé → présent) ; (2) <b>Informatif</b> — il donne des données scientifiques (poids, taille, évolution) et historiques (arrivée des Hollandais). Le manuel MIE de 6e distingue les types de textes : narratif, descriptif, informatif, argumentatif, poétique — savoir les identifier est une compétence de lecture évaluée au PSAC.' }),
+    explanation:'Ce texte est <b>narratif et informatif</b> : (1) <b>Narratif</b> - il raconte l\'histoire du dodo dans un ordre chronologique (passé → présent) ; (2) <b>Informatif</b> - il donne des données scientifiques (poids, taille, évolution) et historiques (arrivée des Hollandais). Le manuel MIE de 6e distingue les types de textes : narratif, descriptif, informatif, argumentatif, poétique - savoir les identifier est une compétence de lecture évaluée au PSAC.' }),
 
   makeMCQ({ id:'g6fr-lec-018', chapterId:'g6fr-lecture', difficulty:3,
     question:`${_TEXTE_DODO_FR}Quel temps verbal est principalement utilisé dans le deuxième paragraphe pour raconter les événements passés, et pourquoi ?`,
@@ -191,8 +191,8 @@ STATIC_QUESTIONS.push(
       'Le futur antérieur, pour des actions avant un moment futur'
     ],
     answer:'Le passé composé ou le passé simple, pour des actions précises et terminées dans le passé',
-    hint:'Les marins "débarquèrent", le sort "fut scellé", ils "chassaient" — identifiez les temps utilisés.',
-    explanation:'Le deuxième paragraphe utilise principalement le <b>passé simple</b> (débarquèrent, fut, provenait) pour des <b>actions précises et achevées</b> dans le passé. L\'imparfait est aussi utilisé ("n\'avaient aucune peur", "chassaient") pour des <b>états ou habitudes passés</b>. En lecture, reconnaître les temps verbaux aide à comprendre la structure temporelle du récit — compétence clé dans les épreuves PSAC de français de 6e.' }),
+    hint:'Les marins "débarquèrent", le sort "fut scellé", ils "chassaient" - identifiez les temps utilisés.',
+    explanation:'Le deuxième paragraphe utilise principalement le <b>passé simple</b> (débarquèrent, fut, provenait) pour des <b>actions précises et achevées</b> dans le passé. L\'imparfait est aussi utilisé ("n\'avaient aucune peur", "chassaient") pour des <b>états ou habitudes passés</b>. En lecture, reconnaître les temps verbaux aide à comprendre la structure temporelle du récit - compétence clé dans les épreuves PSAC de français de 6e.' }),
 
   makeMCQ({ id:'g6fr-lec-019', chapterId:'g6fr-lecture', difficulty:4,
     question:`${_TEXTE_DODO_FR}En utilisant la méthode "Relevé → Interprétation", quelle citation du texte illustre MIEUX l'idée que le dodo était vulnérable face aux humains ?`,
@@ -204,7 +204,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger"',
     hint:'Cherchez la citation qui explique directement POURQUOI les dodos étaient si faciles à capturer.',
-    explanation:'"<b>ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger</b>" — Cette citation illustre parfaitement la vulnérabilité du dodo. <b>Relevé</b> : "aucune peur" / "jamais appris à fuir". <b>Interprétation</b> : L\'isolement évolutif de Maurice, sans prédateurs terrestres, avait rendu le dodo incapable de reconnaître le danger humain comme une menace — ce qui le rendait d\'une facilité tragique à capturer. La méthode Relevé → Interprétation est enseignée dans le manuel MIE de 6e pour les questions de compréhension de texte.' }),
+    explanation:'"<b>ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger</b>" - Cette citation illustre parfaitement la vulnérabilité du dodo. <b>Relevé</b> : "aucune peur" / "jamais appris à fuir". <b>Interprétation</b> : L\'isolement évolutif de Maurice, sans prédateurs terrestres, avait rendu le dodo incapable de reconnaître le danger humain comme une menace - ce qui le rendait d\'une facilité tragique à capturer. La méthode Relevé → Interprétation est enseignée dans le manuel MIE de 6e pour les questions de compréhension de texte.' }),
 
   makeMCQ({ id:'g6fr-lec-020', chapterId:'g6fr-lecture', difficulty:1,
     question:'Dans un poème, comment appelle-t-on chaque groupe de vers séparés par un espace blanc ?',
@@ -231,14 +231,14 @@ STATIC_QUESTIONS.push(
     options:['AABB (rimes plates)','ABAB (rimes croisées)','ABBA (rimes embrassées)','Rimes libres'],
     answer:'ABAB (rimes croisées)',
     hint:'Fort (A), agitée (B), mort (A), brisée (B) → A et B alternent.',
-    explanation:'Fort (A) — agitée (B) — mort (A) — brisée (B) → schéma <b>ABAB</b> = <b>rimes croisées</b>. "Fort" rime avec "mort" (A-A), "agitée" rime avec "brisée" (B-B), mais ils alternent.' }),
+    explanation:'Fort (A) - agitée (B) - mort (A) - brisée (B) → schéma <b>ABAB</b> = <b>rimes croisées</b>. "Fort" rime avec "mort" (A-A), "agitée" rime avec "brisée" (B-B), mais ils alternent.' }),
 
   makeMCQ({ id:'g6fr-lec-024', chapterId:'g6fr-lecture', difficulty:2,
     question:'Quelle figure de style est utilisée dans "Le soleil se lève paresseusement" ?',
     options:['Une hyperbole','Une comparaison','Une personnification','Une allitération'],
     answer:'Une personnification',
     hint:'"Paresseusement" est un adverbe humain attribué au soleil (non-humain).',
-    explanation:'"Le soleil se lève <b>paresseusement</b>" — <b>personnification</b> : on attribue au soleil (chose non-humaine) un trait humain (être paresseux). La personnification rend la description plus vivante et poétique. C\'est une figure de style très fréquente dans la poésie et la littérature.' }),
+    explanation:'"Le soleil se lève <b>paresseusement</b>" - <b>personnification</b> : on attribue au soleil (chose non-humaine) un trait humain (être paresseux). La personnification rend la description plus vivante et poétique. C\'est une figure de style très fréquente dans la poésie et la littérature.' }),
 
   makeMCQ({ id:'g6fr-lec-025', chapterId:'g6fr-lecture', difficulty:2,
     question:'Dans un article de journal, comment s\'appelle la première phrase courte qui résume l\'article ?',
@@ -294,26 +294,26 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-lec-031', chapterId:'g6fr-lecture', difficulty:4,
     question:'Analyse ce vers : "Tes yeux sont deux étoiles dans la nuit profonde." Quelle figure de style est utilisée et pourquoi ?',
     options:[
-      'Comparaison — car "comme" est présent.',
-      'Métaphore — car les yeux sont directement identifiés aux étoiles sans "comme".',
-      'Personnification — car les étoiles reçoivent un attribut humain.',
-      'Hyperbole — car c\'est une exagération.'
+      'Comparaison - car "comme" est présent.',
+      'Métaphore - car les yeux sont directement identifiés aux étoiles sans "comme".',
+      'Personnification - car les étoiles reçoivent un attribut humain.',
+      'Hyperbole - car c\'est une exagération.'
     ],
-    answer:'Métaphore — car les yeux sont directement identifiés aux étoiles sans "comme".',
+    answer:'Métaphore - car les yeux sont directement identifiés aux étoiles sans "comme".',
     hint:'Pas de "comme" ou "tel que" → c\'est une métaphore, pas une comparaison.',
-    explanation:'"Tes yeux sont <b>deux étoiles</b>" — <b>métaphore</b> : identification directe entre les yeux et les étoiles sans "comme". Si on disait "tes yeux sont <b>comme</b> deux étoiles" → comparaison. La métaphore crée une image plus forte car elle affirme l\'équivalence au lieu de la suggérer.' }),
+    explanation:'"Tes yeux sont <b>deux étoiles</b>" - <b>métaphore</b> : identification directe entre les yeux et les étoiles sans "comme". Si on disait "tes yeux sont <b>comme</b> deux étoiles" → comparaison. La métaphore crée une image plus forte car elle affirme l\'équivalence au lieu de la suggérer.' }),
 
   makeMCQ({ id:'g6fr-lec-032', chapterId:'g6fr-lecture', difficulty:4,
     question:'Dans un texte, la phrase "Le général annonça la victoire. Pourtant, des soldats pleuraient." contient une ironie. Pourquoi ?',
     options:[
       'Parce que le général a menti.',
-      'Parce qu\'il y a une contradiction : victoire annoncée mais pleurs des soldats — l\'auteur suggère que cette victoire a un coût humain.',
+      'Parce qu\'il y a une contradiction : victoire annoncée mais pleurs des soldats - l\'auteur suggère que cette victoire a un coût humain.',
       'Parce que les soldats sont contents.',
       'Parce que "pourtant" est un connecteur d\'opposition.'
     ],
-    answer:'Parce qu\'il y a une contradiction : victoire annoncée mais pleurs des soldats — l\'auteur suggère que cette victoire a un coût humain.',
+    answer:'Parce qu\'il y a une contradiction : victoire annoncée mais pleurs des soldats - l\'auteur suggère que cette victoire a un coût humain.',
     hint:'L\'ironie ou l\'implicite : le texte dit "victoire" mais montre des pleurs. Que veut dire l\'auteur vraiment ?',
-    explanation:'L\'<b>ironie implicite</b> : le mot "victoire" (positif) contraste avec "des soldats pleuraient" (négatif). L\'auteur ne dit pas explicitement que la victoire est amère — il le <b>suggère par l\'opposition</b>. Lire entre les lignes (l\'implicite) est une compétence clé dans les épreuves PSAC de 6e : repérer ce que le texte dit vs ce qu\'il veut dire.' }),
+    explanation:'L\'<b>ironie implicite</b> : le mot "victoire" (positif) contraste avec "des soldats pleuraient" (négatif). L\'auteur ne dit pas explicitement que la victoire est amère - il le <b>suggère par l\'opposition</b>. Lire entre les lignes (l\'implicite) est une compétence clé dans les épreuves PSAC de 6e : repérer ce que le texte dit vs ce qu\'il veut dire.' }),
 
   makeMCQ({ id:'g6fr-lec-033', chapterId:'g6fr-lecture', difficulty:3,
     question:'Dans un texte, "le narrateur omniscient" signifie que :',
@@ -325,14 +325,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Le narrateur sait tout sur tous les personnages',
     hint:'Omniscient = sait tout (latin : omni = tout, scient = savoir).',
-    explanation:'"<b>Le narrateur sait tout sur tous les personnages</b>" — <b>narrateur omniscient</b> (3ème personne) : connaît les pensées, sentiments, et actions de tous. Comparer : <b>narrateur interne</b> (je — point de vue limité au héros) ; <b>narrateur externe</b> (observateur extérieur, pas d\'accès aux pensées). Ces notions sont évaluées en lecture analytique PSAC.' }),
+    explanation:'"<b>Le narrateur sait tout sur tous les personnages</b>" - <b>narrateur omniscient</b> (3ème personne) : connaît les pensées, sentiments, et actions de tous. Comparer : <b>narrateur interne</b> (je - point de vue limité au héros) ; <b>narrateur externe</b> (observateur extérieur, pas d\'accès aux pensées). Ces notions sont évaluées en lecture analytique PSAC.' }),
 
   makeMCQ({ id:'g6fr-lec-034', chapterId:'g6fr-lecture', difficulty:3,
     question:'Quelle figure de style est utilisée dans : "Le vent hurlait comme un loup affamé." ?',
     options:['Métaphore','Comparaison','Personnification','Hyperbole'],
     answer:'Comparaison',
     hint:'La présence de "comme" = comparaison (pas métaphore).',
-    explanation:'"<b>Comparaison</b>" — "comme un loup affamé" → outil de comparaison "comme". La <b>comparaison</b> utilise "comme", "tel", "semblable à". La <b>métaphore</b> dit directement : "Le vent est un loup affamé" (pas de "comme"). La <b>personnification</b> attribue des qualités humaines : "le vent décida de partir". Ici "hurlait" (personnification) + "comme" (comparaison) : double figure.' }),
+    explanation:'"<b>Comparaison</b>" - "comme un loup affamé" → outil de comparaison "comme". La <b>comparaison</b> utilise "comme", "tel", "semblable à". La <b>métaphore</b> dit directement : "Le vent est un loup affamé" (pas de "comme"). La <b>personnification</b> attribue des qualités humaines : "le vent décida de partir". Ici "hurlait" (personnification) + "comme" (comparaison) : double figure.' }),
 
   makeMCQ({ id:'g6fr-lec-035', chapterId:'g6fr-lecture', difficulty:4,
     question:'Texte : "La mer était calme. Soudain, les nuages s\'amassèrent et les vagues se levèrent avec fureur." Quel procédé narratif est utilisé pour créer le suspense ?',
@@ -344,6 +344,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Un contraste entre calme et tempête + accélération du rythme',
     hint:'Le calme soudainement interrompu → contraste + "soudain" = accélération.',
-    explanation:'"<b>Contraste + accélération du rythme</b>" — Le procédé du <b>contraste</b> (calme → tempête) crée l\'effet de surprise. "Soudain" marque la rupture. L\'<b>accélération</b> (phrases courtes, verbes d\'action rapides : s\'amassèrent, se levèrent) crée le suspense. Identifier ces procédés stylistiques est une compétence clé en lecture analytique de 6e.' })
+    explanation:'"<b>Contraste + accélération du rythme</b>" - Le procédé du <b>contraste</b> (calme → tempête) crée l\'effet de surprise. "Soudain" marque la rupture. L\'<b>accélération</b> (phrases courtes, verbes d\'action rapides : s\'amassèrent, se levèrent) crée le suspense. Identifier ces procédés stylistiques est une compétence clé en lecture analytique de 6e.' })
 
 );

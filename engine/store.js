@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice — Storage Adapter
+//  PSAC Exam Practice - Storage Adapter
 //  Uses _sb (global from supabase.js).
 //  localStorage = fast cache; Supabase = source of truth.
 // ══════════════════════════════════════════════
@@ -39,7 +39,7 @@ const Store = (() => {
     try { localStorage.removeItem(STUDENT_SESS); } catch(e) {}
   }
 
-  // ── Student lookup by username (Option A login — no family code) ──
+  // ── Student lookup by username (Option A login - no family code) ──
   async function findStudentByUsername(username) {
     if (!_sb) return null;
     const { data, error } = await _sb.from('students')

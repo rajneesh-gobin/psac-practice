@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════════════
-//  MathMaster Grade 5 — Word Problem Bank
+//  MathMaster Grade 5 - Word Problem Bank
 //  Hand-crafted L3 & L4 questions for all 16 chapters
 //  Based on MIE Mauritius Grade 5 Curriculum
 // ══════════════════════════════════════════════════════
@@ -105,8 +105,8 @@ const WP = [
 
   makeMCQ({ id:'S_W03', chapterId:'square_nums', difficulty:3,
     question:'Rajan says: <i>"The sum of 4² and 3² equals 5²."</i><br>Is he correct?',
-    options:['Yes — 16 + 9 = 25','No — 16 + 9 = 30','No — 16 + 9 = 20','Yes — 4 + 3 = 5'],
-    answer:'Yes — 16 + 9 = 25',
+    options:['Yes - 16 + 9 = 25','No - 16 + 9 = 30','No - 16 + 9 = 20','Yes - 4 + 3 = 5'],
+    answer:'Yes - 16 + 9 = 25',
     hint:'Calculate each: 4²=16, 3²=9, 5²=25. Check if 16+9=25.',
     explanation:'4²=16, 3²=9, 5²=25. 16+9=25 ✓. Rajan is <b>correct</b>.' }),
 

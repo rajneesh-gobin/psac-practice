@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 History — Chapter: Independence & National Symbols
+﻿'use strict';
+// Grade 6 History - Chapter: Independence & National Symbols
 // IDs format: g6hg-ind-NNN
 
 // Mauritius flag SVG (four horizontal stripes: red, blue, yellow, green)
@@ -8,10 +8,10 @@ const _SVG_FLAG = `<svg viewBox="0 0 180 100" width="180" height="100" style="di
   <rect x="0" y="25" width="180" height="25" fill="#1e40af"/>
   <rect x="0" y="50" width="180" height="25" fill="#fbbf24"/>
   <rect x="0" y="75" width="180" height="25" fill="#16a34a"/>
-  <text x="90" y="14" text-anchor="middle" font-size="8" fill="white" font-weight="bold">RED — independence struggle</text>
-  <text x="90" y="39" text-anchor="middle" font-size="8" fill="white" font-weight="bold">BLUE — Indian Ocean</text>
-  <text x="90" y="63" text-anchor="middle" font-size="8" fill="#78350f" font-weight="bold">YELLOW — light / sun</text>
-  <text x="90" y="88" text-anchor="middle" font-size="8" fill="white" font-weight="bold">GREEN — agriculture / nature</text>
+  <text x="90" y="14" text-anchor="middle" font-size="8" fill="white" font-weight="bold">RED - independence struggle</text>
+  <text x="90" y="39" text-anchor="middle" font-size="8" fill="white" font-weight="bold">BLUE - Indian Ocean</text>
+  <text x="90" y="63" text-anchor="middle" font-size="8" fill="#78350f" font-weight="bold">YELLOW - light / sun</text>
+  <text x="90" y="88" text-anchor="middle" font-size="8" fill="white" font-weight="bold">GREEN - agriculture / nature</text>
 </svg>`;
 
 STATIC_QUESTIONS.push(
@@ -20,7 +20,7 @@ STATIC_QUESTIONS.push(
     question:'In which year did Mauritius gain independence from Britain?',
     options:['1810','1835','1948','1968'],
     answer:'1968',
-    hint:'Mauritius became independent on 12 March — now celebrated as National Day.',
+    hint:'Mauritius became independent on 12 March - now celebrated as National Day.',
     explanation:'Mauritius gained <b>independence on 12 March 1968</b>. This date is celebrated annually as <b>National Day</b>. Mauritius had been a British colony since 1810.' }),
 
   makeMCQ({ id:'g6hg-ind-002', chapterId:'g6-independence', difficulty:1,
@@ -34,7 +34,7 @@ STATIC_QUESTIONS.push(
     question:`${_SVG_FLAG}The national flag of Mauritius has four horizontal stripes. What does the BLUE stripe represent?`,
     options:['The sugar cane fields','The Indian Ocean surrounding the island','The blood shed for independence','The sky above Mauritius'],
     answer:'The Indian Ocean surrounding the island',
-    hint:'Look at the diagram — the meaning of each colour is labelled.',
+    hint:'Look at the diagram - the meaning of each colour is labelled.',
     explanation:'The <b>blue stripe</b> represents the <b>Indian Ocean</b> that surrounds Mauritius. The four colours represent: red (struggle for independence), blue (Indian Ocean), yellow (light of independence/new hope/the sun), green (agriculture and the lush vegetation of the island).' }),
 
   makeMCQ({ id:'g6hg-ind-004', chapterId:'g6-independence', difficulty:2,
@@ -42,21 +42,21 @@ STATIC_QUESTIONS.push(
     options:['The blood of early settlers','The red soil of Mauritius','The struggle for independence','The warmth of the tropical climate'],
     answer:'The struggle for independence',
     hint:'Red is a colour often associated with struggle and sacrifice.',
-    explanation:'The <b>red stripe</b> represents the <b>struggle for independence</b> — a reminder of the sacrifices made to achieve freedom from colonial rule. It honours those who fought for Mauritius\'s sovereignty.' }),
+    explanation:'The <b>red stripe</b> represents the <b>struggle for independence</b> - a reminder of the sacrifices made to achieve freedom from colonial rule. It honours those who fought for Mauritius\'s sovereignty.' }),
 
   makeMCQ({ id:'g6hg-ind-005', chapterId:'g6-independence', difficulty:1,
     question:'What is the motto on the Coat of Arms of Mauritius?',
-    options:['"Freedom and Justice"','Stella Clavisque Maris Indici — "Star and Key of the Indian Ocean"','God Save the King','L\'union fait la force'],
-    answer:'Stella Clavisque Maris Indici — "Star and Key of the Indian Ocean"',
+    options:['"Freedom and Justice"','Stella Clavisque Maris Indici - "Star and Key of the Indian Ocean"','God Save the King','L\'union fait la force'],
+    answer:'Stella Clavisque Maris Indici - "Star and Key of the Indian Ocean"',
     hint:'This Latin motto reflects Mauritius\'s strategic position in the Indian Ocean.',
-    explanation:'The Mauritian Coat of Arms bears the Latin motto <b>Stella Clavisque Maris Indici</b> — meaning "<b>Star and Key of the Indian Ocean</b>". This reflects Mauritius\'s historically important strategic position as a stepping stone in the Indian Ocean trade routes.' }),
+    explanation:'The Mauritian Coat of Arms bears the Latin motto <b>Stella Clavisque Maris Indici</b> - meaning "<b>Star and Key of the Indian Ocean</b>". This reflects Mauritius\'s historically important strategic position as a stepping stone in the Indian Ocean trade routes.' }),
 
   makeMCQ({ id:'g6hg-ind-006', chapterId:'g6-independence', difficulty:2,
     question:'In which year did Mauritius become a REPUBLIC?',
     options:['1968','1992','2000','2010'],
     answer:'1992',
     hint:'This happened exactly 24 years after independence.',
-    explanation:'Mauritius became a <b>Republic on 12 March 1992</b> — exactly 24 years after independence. The country remained within the Commonwealth but replaced the British monarch as head of state with a President. Sir Veerasamy Ringadoo became the first President.' }),
+    explanation:'Mauritius became a <b>Republic on 12 March 1992</b> - exactly 24 years after independence. The country remained within the Commonwealth but replaced the British monarch as head of state with a President. Sir Veerasamy Ringadoo became the first President.' }),
 
   makeTF({ id:'g6hg-ind-007', chapterId:'g6-independence', difficulty:1,
     question:'The national flag of Mauritius has four horizontal stripes of equal width.',
@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
     options:['The Pink Pigeon','The Dodo','The Echo Parakeet','The Flying Fox'],
     answer:'The Dodo',
     hint:'This extinct flightless bird is one of the most famous symbols of Mauritius.',
-    explanation:'The <b>Dodo</b> appears on the Coat of Arms of Mauritius as a supporter — one of two animals flanking the shield (the other is a sambar deer). Even though the Dodo is extinct, it remains one of the most powerful and recognised symbols of Mauritius.' }),
+    explanation:'The <b>Dodo</b> appears on the Coat of Arms of Mauritius as a supporter - one of two animals flanking the shield (the other is a sambar deer). Even though the Dodo is extinct, it remains one of the most powerful and recognised symbols of Mauritius.' }),
 
   makeMCQ({ id:'g6hg-ind-009', chapterId:'g6-independence', difficulty:1,
     question:'What is the name of the national ANTHEM of Mauritius?',
@@ -83,7 +83,7 @@ STATIC_QUESTIONS.push(
     options:['The Indian Ocean','The struggle for independence','The agriculture and lush vegetation of Mauritius','The sky and hope for the future'],
     answer:'The agriculture and lush vegetation of Mauritius',
     hint:'Mauritius is known for its sugar cane fields and tropical forests.',
-    explanation:'The <b>green stripe</b> represents the <b>agriculture and lush vegetation</b> of Mauritius — its sugar cane fields, forests and tropical nature. Agriculture, particularly sugar, has been central to the island\'s economy and identity.' })
+    explanation:'The <b>green stripe</b> represents the <b>agriculture and lush vegetation</b> of Mauritius - its sugar cane fields, forests and tropical nature. Agriculture, particularly sugar, has been central to the island\'s economy and identity.' })
 
 );
 
@@ -106,20 +106,20 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Mauritius\'s strategic location made it essential for controlling trade routes and naval power in the Indian Ocean',
     hint:'Think about why colonial powers (Dutch, French, British) all wanted to control this island.',
-    explanation:'Mauritius\'s motto <b>Stella Clavisque Maris Indici</b> ("Star and Key of the Indian Ocean") reflects its <b>strategic location</b>. Positioned on the main sea route between Europe, India and East Asia, whoever controlled Mauritius had a powerful base to dominate Indian Ocean trade and naval operations — hence "key." Today it remains a strategic hub for shipping.' }),
+    explanation:'Mauritius\'s motto <b>Stella Clavisque Maris Indici</b> ("Star and Key of the Indian Ocean") reflects its <b>strategic location</b>. Positioned on the main sea route between Europe, India and East Asia, whoever controlled Mauritius had a powerful base to dominate Indian Ocean trade and naval operations - hence "key." Today it remains a strategic hub for shipping.' }),
 
   makeMCQ({ id:'g6hg-ind-013', chapterId:'g6-independence', difficulty:2,
     question:'What does the YELLOW stripe on the Mauritian flag represent?',
     options:['The struggle for independence','The Indian Ocean','The light of independence / new hope / the sun','The agriculture and vegetation'],
     answer:'The light of independence / new hope / the sun',
     hint:'Yellow is often associated with light, hope and a bright future.',
-    explanation:'The <b>yellow stripe</b> represents the <b>light of independence</b> — the new hope and bright future that independence brought to Mauritius. It also symbolises the <b>sun</b> shining on a prosperous nation. Together, the four colours tell the story of independence (red), the ocean environment (blue), hope (yellow) and the land\'s fertility (green).' }),
+    explanation:'The <b>yellow stripe</b> represents the <b>light of independence</b> - the new hope and bright future that independence brought to Mauritius. It also symbolises the <b>sun</b> shining on a prosperous nation. Together, the four colours tell the story of independence (red), the ocean environment (blue), hope (yellow) and the land\'s fertility (green).' }),
 
   makeMCQ({ id:'g6hg-ind-014', chapterId:'g6-independence', difficulty:2,
     question:'What animal OTHER than the Dodo appears on the Coat of Arms of Mauritius?',
     options:['A dolphin','A sambar deer','A mongoose','A flying fox (fruit bat)'],
     answer:'A sambar deer',
-    hint:'Two animals flank the shield as supporters — one is extinct, the other is a large deer.',
+    hint:'Two animals flank the shield as supporters - one is extinct, the other is a large deer.',
     explanation:'The Coat of Arms of Mauritius has two supporters flanking the central shield: the <b>Dodo</b> (extinct, left side) and the <b>sambar deer</b> (right side). The sambar deer was introduced to Mauritius and became part of its wildlife heritage. The shield contains four quarters depicting a ship, a key, a palm tree and the Red Cross of St George.' }),
 
   makeTF({ id:'g6hg-ind-015', chapterId:'g6-independence', difficulty:1,
@@ -132,11 +132,11 @@ STATIC_QUESTIONS.push(
     question:'What is the Coat of Arms of RODRIGUES designed to represent?',
     options:[
       'It is identical to the Mauritius Coat of Arms',
-      'It features symbols specific to Rodrigues — including a Rodrigues fruit bat and a Rodrigues warbler',
+      'It features symbols specific to Rodrigues - including a Rodrigues fruit bat and a Rodrigues warbler',
       'It shows only the British crown',
       'Rodrigues does not have its own Coat of Arms'
     ],
-    answer:'It features symbols specific to Rodrigues — including a Rodrigues fruit bat and a Rodrigues warbler',
+    answer:'It features symbols specific to Rodrigues - including a Rodrigues fruit bat and a Rodrigues warbler',
     hint:'Rodrigues has its own unique identity within the Republic of Mauritius.',
     explanation:'Rodrigues has its own <b>Coat of Arms</b> that reflects its unique identity. It features animals and plants endemic to Rodrigues, including the <b>Rodrigues fruit bat</b> and the <b>Rodrigues warbler</b>. Rodrigues is an autonomous region of Mauritius with its own Regional Assembly, and its symbols celebrate its distinct natural and cultural heritage.' }),
 
@@ -150,7 +150,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Sir Gaëtan Duval, who argued for a free association with Britain',
     hint:'He was known as the "King of the Creoles" and had a different vision for Mauritius\'s future.',
-    explanation:'<b>Sir Gaëtan Duval</b>, leader of the PMSD (Parti Mauricien Social Démocrate), strongly opposed full independence and argued instead for <b>free association with Britain</b> — a form of autonomy rather than full sovereignty. He feared that independence would disadvantage the Creole community. Despite losing the political debate, he later served in government alongside SSR.' }),
+    explanation:'<b>Sir Gaëtan Duval</b>, leader of the PMSD (Parti Mauricien Social Démocrate), strongly opposed full independence and argued instead for <b>free association with Britain</b> - a form of autonomy rather than full sovereignty. He feared that independence would disadvantage the Creole community. Despite losing the political debate, he later served in government alongside SSR.' }),
 
   makeMCQ({ id:'g6hg-ind-018', chapterId:'g6-independence', difficulty:3,
     question:'Why did Mauritius choose to become a REPUBLIC in 1992, even though it had been independent since 1968?',
@@ -161,18 +161,18 @@ STATIC_QUESTIONS.push(
       'It was required by the United Nations for small island states'
     ],
     answer:'Becoming a republic replaced the British monarch as head of state with a Mauritian President, completing full sovereignty',
-    hint:'At independence, the Queen of England was still technically the head of state — a republic changes this.',
-    explanation:'At independence in 1968, Mauritius was a <b>constitutional monarchy</b> — the British monarch (Queen Elizabeth II) was still the head of state, represented by a Governor-General. Becoming a <b>republic in 1992</b> replaced this with a Mauritian <b>President</b> as head of state, completing full national sovereignty. Mauritius remained within the Commonwealth of Nations.' }),
+    hint:'At independence, the Queen of England was still technically the head of state - a republic changes this.',
+    explanation:'At independence in 1968, Mauritius was a <b>constitutional monarchy</b> - the British monarch (Queen Elizabeth II) was still the head of state, represented by a Governor-General. Becoming a <b>republic in 1992</b> replaced this with a Mauritian <b>President</b> as head of state, completing full national sovereignty. Mauritius remained within the Commonwealth of Nations.' }),
 
   makeMCQ({ id:'g6hg-ind-019', chapterId:'g6-independence', difficulty:4,
     question:'The Mauritian flag\'s four colours are often said to tell the COMPLETE STORY of the nation. Which interpretation is MOST accurate?',
     options:[
       'The four colours represent the four seasons of the year in Mauritius',
       'The four colours represent the four compass directions around the island',
-      'The four colours represent the struggle (red), the environment (blue), the hope (yellow) and the land (green) — telling the story of a nation born from hardship into independence',
+      'The four colours represent the struggle (red), the environment (blue), the hope (yellow) and the land (green) - telling the story of a nation born from hardship into independence',
       'The four colours were chosen randomly by the designers'
     ],
-    answer:'The four colours represent the struggle (red), the environment (blue), the hope (yellow) and the land (green) — telling the story of a nation born from hardship into independence',
+    answer:'The four colours represent the struggle (red), the environment (blue), the hope (yellow) and the land (green) - telling the story of a nation born from hardship into independence',
     hint:'Each colour has a specific symbolic meaning that reflects Mauritius\'s history and identity.',
     explanation:'The four stripes form a narrative: <b>Red</b> = the blood and struggle for independence (colonial hardship, activism); <b>Blue</b> = the Indian Ocean that defines the island\'s geography and identity; <b>Yellow</b> = the light of freedom, a bright future; <b>Green</b> = the fertile agricultural land, particularly the sugar cane that shaped the island\'s economy and culture. Together they are a symbolic autobiography of the nation.' })
 

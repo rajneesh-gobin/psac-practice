@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Maths — Chapter: Fractions (up to tenths, comparison, addition, subtraction)
+﻿'use strict';
+// Grade 4 Maths - Chapter: Fractions (up to tenths, comparison, addition, subtraction)
 // IDs format: g4m-frac-NNN
 
 STATIC_QUESTIONS.push(
@@ -9,7 +9,7 @@ STATIC_QUESTIONS.push(
     options:['3/8','5/8','They are equal','Cannot compare'],
     answer:'5/8',
     hint:'When fractions have the SAME denominator, the one with the bigger numerator is greater.',
-    explanation:'Both fractions have denominator 8. Compare numerators: 5 > 3, so <b>5/8 > 3/8</b>. Imagine a pizza cut into 8 equal slices — 5 slices is more than 3 slices.' }),
+    explanation:'Both fractions have denominator 8. Compare numerators: 5 > 3, so <b>5/8 > 3/8</b>. Imagine a pizza cut into 8 equal slices - 5 slices is more than 3 slices.' }),
 
   makeNum({ id:'g4m-frac-002', chapterId:'g4-fractions', difficulty:1,
     question:'Calculate: 1/5 + 3/5 = ?  (Write as A/B)',
@@ -65,7 +65,7 @@ STATIC_QUESTIONS.push(
     question:'A container holds exactly 1 litre of juice. Meera drinks 3/8 L and her brother drinks 1/4 L. How much juice is LEFT (in litres, as a fraction)?',
     answer:'3/8', acceptableAnswers:['3/8'],
     hint:'Convert 1/4 to eighths. Add what was drunk. Subtract from 1 (= 8/8).',
-    explanation:'1/4 = 2/8. Total drunk = 3/8 + 2/8 = 5/8. Left = 8/8 − 5/8 = <b>3/8 L</b>. This is a two-step fraction word problem — a Level 3 MIE Grade 4 skill.' })
+    explanation:'1/4 = 2/8. Total drunk = 3/8 + 2/8 = 5/8. Left = 8/8 − 5/8 = <b>3/8 L</b>. This is a two-step fraction word problem - a Level 3 MIE Grade 4 skill.' })
 
 );
 
@@ -95,7 +95,7 @@ STATIC_QUESTIONS.push(
     options:['Closer to 0','Exactly at the middle','Closer to 1 but not at 1','Exactly at 1'],
     answer:'Closer to 1 but not at 1',
     hint:'The midpoint is 1/2 = 2.5/5. Is 3/5 past the midpoint?',
-    explanation:'The midpoint (1/2) = 2.5/5. Since 3/5 > 2.5/5, it is past the halfway point — <b>closer to 1 but not at 1</b>. It is 2/5 from 1 and 3/5 from 0.' }),
+    explanation:'The midpoint (1/2) = 2.5/5. Since 3/5 > 2.5/5, it is past the halfway point - <b>closer to 1 but not at 1</b>. It is 2/5 from 1 and 3/5 from 0.' }),
 
   makeNum({ id:'g4m-frac-015', chapterId:'g4-fractions', difficulty:2,
     question:'Simplify 6/10 to its LOWEST TERMS. (Write as A/B)',
@@ -125,12 +125,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4m-frac-019', chapterId:'g4-fractions', difficulty:4,
     question:'Asha walks 3/4 km to school and the same distance back home each day. Her brother walks 2 km in total each day. Who walks MORE, and by how much?',
     options:[
-      'Asha — she walks 0.5 km more than her brother',
-      'Her brother — he walks 0.5 km more than Asha',
+      'Asha - she walks 0.5 km more than her brother',
+      'Her brother - he walks 0.5 km more than Asha',
       'They walk the same distance',
-      'Her brother — he walks 1/4 km more'
+      'Her brother - he walks 1/4 km more'
     ],
-    answer:'Her brother — he walks 0.5 km more than Asha',
+    answer:'Her brother - he walks 0.5 km more than Asha',
     hint:'Asha\'s total = 3/4 + 3/4 = 6/4. Convert to a decimal or mixed number to compare with 2 km.',
     explanation:'Asha: 3/4 + 3/4 = 6/4 = 1½ km = 1.5 km. Her brother: 2 km. Difference: 2 − 1.5 = 0.5 km. <b>Her brother walks 0.5 km more</b> than Asha. Converting 3/4 to 0.75 makes comparison easier.' })
 

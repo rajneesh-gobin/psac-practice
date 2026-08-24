@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice Engine — Event Bus (Phase 4)
+//  PSAC Exam Practice Engine - Event Bus (Phase 4)
 //  Decouples gamification from core engine logic.
 //  Usage:
 //    Events.on('answer', ({ correct, chapterId }) => { ... });

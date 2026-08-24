@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Science — Chapter: Materials (rusting, biodegradable, waste disposal)
+﻿'use strict';
+// Grade 6 Science - Chapter: Materials (rusting, biodegradable, waste disposal)
 // IDs format: g6sci-mat-NNN
 
 STATIC_QUESTIONS.push(
@@ -14,13 +14,13 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Iron reacting with water and oxygen to form iron oxide (rust)',
     hint:'Rust is the reddish-brown substance that forms on iron.',
-    explanation:'<b>Rusting</b> is a chemical reaction between iron, water and oxygen that produces <b>iron oxide</b> (rust) — the reddish-brown, flaky substance that weakens iron and steel objects.' }),
+    explanation:'<b>Rusting</b> is a chemical reaction between iron, water and oxygen that produces <b>iron oxide</b> (rust) - the reddish-brown, flaky substance that weakens iron and steel objects.' }),
 
   makeMCQ({ id:'g6sci-mat-002', chapterId:'g6-materials', difficulty:2,
     question:'Which THREE conditions are needed for iron to rust?',
     options:['Iron, water and oxygen','Iron, heat and sunlight','Iron, salt and carbon dioxide','Iron, acid and nitrogen'],
     answer:'Iron, water and oxygen',
-    hint:'Rust forms fastest near the sea — salt water speeds up the process.',
+    hint:'Rust forms fastest near the sea - salt water speeds up the process.',
     explanation:'Iron rusts when it is in contact with both <b>water</b> and <b>oxygen</b>. Salt water speeds up rusting because salt is an electrolyte that helps the chemical reaction proceed faster.' }),
 
   makeMCQ({ id:'g6sci-mat-003', chapterId:'g6-materials', difficulty:2,
@@ -39,21 +39,21 @@ STATIC_QUESTIONS.push(
     question:'Painting iron or steel prevents rusting by keeping air and water away from the metal surface.',
     answer:true,
     hint:'Think about why bridges and cars are painted.',
-    explanation:'True. <b>Paint</b> forms a protective coating that prevents water and oxygen from reaching the iron surface. Once the paint chips or peels, rusting begins at the exposed spots — which is why surfaces must be repainted regularly.' }),
+    explanation:'True. <b>Paint</b> forms a protective coating that prevents water and oxygen from reaching the iron surface. Once the paint chips or peels, rusting begins at the exposed spots - which is why surfaces must be repainted regularly.' }),
 
   makeMCQ({ id:'g6sci-mat-005', chapterId:'g6-materials', difficulty:1,
     question:'Which of the following materials is BIODEGRADABLE?',
     options:['Plastic bottle','Glass jar','Apple core','Aluminium can'],
     answer:'Apple core',
     hint:'Biodegradable means it can be broken down naturally by bacteria and fungi.',
-    explanation:'An <b>apple core</b> is biodegradable — it is made of organic material that bacteria and fungi can break down into simpler substances. Plastic, glass and aluminium are NOT biodegradable and persist in the environment for hundreds of years.' }),
+    explanation:'An <b>apple core</b> is biodegradable - it is made of organic material that bacteria and fungi can break down into simpler substances. Plastic, glass and aluminium are NOT biodegradable and persist in the environment for hundreds of years.' }),
 
   makeMCQ({ id:'g6sci-mat-006', chapterId:'g6-materials', difficulty:1,
     question:'Which method of waste disposal is BEST for the environment?',
     options:['Burning all waste in the open','Burying all waste in a landfill','Reduce, reuse and recycle materials','Dumping waste in the ocean'],
     answer:'Reduce, reuse and recycle materials',
     hint:'The 3Rs reduce the amount of waste that needs to be disposed of.',
-    explanation:'<b>Reducing, reusing and recycling</b> waste is best for the environment — it conserves resources, reduces energy use and decreases the amount of rubbish sent to landfill or incinerated. Burning and dumping waste causes pollution.' }),
+    explanation:'<b>Reducing, reusing and recycling</b> waste is best for the environment - it conserves resources, reduces energy use and decreases the amount of rubbish sent to landfill or incinerated. Burning and dumping waste causes pollution.' }),
 
   makeMCQ({ id:'g6sci-mat-007', chapterId:'g6-materials', difficulty:2,
     question:'What is a LANDFILL?',
@@ -71,12 +71,12 @@ STATIC_QUESTIONS.push(
     question:'Why is plastic harmful to the environment even after it is thrown away?',
     options:[
       'Plastic dissolves quickly in seawater, making it salty',
-      'Plastic is non-biodegradable — it breaks into tiny microplastics that persist for centuries',
+      'Plastic is non-biodegradable - it breaks into tiny microplastics that persist for centuries',
       'Plastic absorbs all the sunlight, making it harder for plants to grow',
       'Plastic is magnetic and disrupts the Earth\'s magnetic field'
     ],
-    answer:'Plastic is non-biodegradable — it breaks into tiny microplastics that persist for centuries',
-    hint:'Plastic does not rot — it just breaks into smaller and smaller pieces.',
+    answer:'Plastic is non-biodegradable - it breaks into tiny microplastics that persist for centuries',
+    hint:'Plastic does not rot - it just breaks into smaller and smaller pieces.',
     explanation:'Plastic is <b>non-biodegradable</b>. Instead of breaking down into harmless substances, it fragments into tiny <b>microplastics</b> that enter waterways, oceans and food chains, causing harm to marine life and potentially to humans.' }),
 
   makeMCQ({ id:'g6sci-mat-009', chapterId:'g6-materials', difficulty:2,
@@ -106,7 +106,7 @@ STATIC_QUESTIONS.push(
     options:['Silver-grey','Shiny black','Reddish-brown','Dark green'],
     answer:'Reddish-brown',
     hint:'You have seen this colour on old metal gates and tin roofs.',
-    explanation:'Rust is <b>reddish-brown</b> in colour. It is the common name for iron oxide (Fe₂O₃), which forms when iron reacts with water and oxygen. Unlike iron, rust is weak and flaky — it gradually weakens and destroys iron structures if left untreated.' }),
+    explanation:'Rust is <b>reddish-brown</b> in colour. It is the common name for iron oxide (Fe₂O₃), which forms when iron reacts with water and oxygen. Unlike iron, rust is weak and flaky - it gradually weakens and destroys iron structures if left untreated.' }),
 
   makeMCQ({ id:'g6sci-mat-012', chapterId:'g6-materials', difficulty:1,
     question:'Which material is obtained from LATEX (the milky sap of the rubber tree)?',
@@ -143,13 +143,13 @@ STATIC_QUESTIONS.push(
       'It is cheap and found in large quantities everywhere'
     ],
     answer:'It is shiny, does not rust, and is a good conductor of electricity',
-    hint:'Gold jewellery stays beautiful for thousands of years — why?',
-    explanation:'<b>Gold</b> is prized because it: (1) is <b>shiny and attractive</b>; (2) does <b>not rust or corrode</b> — even ancient gold artefacts stay shiny; (3) is an excellent <b>conductor of electricity</b>, making it valuable in electronics. Gold\'s uses include jewellery, coins, electronic circuits and dental fillings.' }),
+    hint:'Gold jewellery stays beautiful for thousands of years - why?',
+    explanation:'<b>Gold</b> is prized because it: (1) is <b>shiny and attractive</b>; (2) does <b>not rust or corrode</b> - even ancient gold artefacts stay shiny; (3) is an excellent <b>conductor of electricity</b>, making it valuable in electronics. Gold\'s uses include jewellery, coins, electronic circuits and dental fillings.' }),
 
   makeTF({ id:'g6sci-mat-016', chapterId:'g6-materials', difficulty:1,
     question:'Iron needs BOTH water AND oxygen to rust.',
     answer:true,
-    hint:'Try leaving iron in dry air only — or in water with no oxygen.',
+    hint:'Try leaving iron in dry air only - or in water with no oxygen.',
     explanation:'<b>True.</b> Experiments show that iron does NOT rust in dry air (oxygen only) and does NOT rust in boiled water sealed from air (water only). Rusting only occurs when <b>both water AND oxygen</b> are present. Salt water speeds up rusting because salt acts as an electrolyte that accelerates the chemical reaction.' }),
 
   makeMCQ({ id:'g6sci-mat-017', chapterId:'g6-materials', difficulty:2,
@@ -175,7 +175,7 @@ STATIC_QUESTIONS.push(
     question:'SALT is produced in salt pans in Black River by leaving sea water in the sun. What is the process called? (PSAC 2024)',
     options:['Condensation','Filtration','Evaporation','Distillation'],
     answer:'Evaporation',
-    hint:'The sun heats the water — what happens to liquid water when heated strongly?',
+    hint:'The sun heats the water - what happens to liquid water when heated strongly?',
     explanation:'Salt pans use <b>evaporation</b>: sea water is collected in large shallow pans and the sun\'s heat evaporates the water, leaving the <b>salt crystals</b> behind. Salt pans are found in Black River because that area has plentiful sunshine and low rainfall. Evaporation is also used daily when drying clothes or food.' })
 
 );

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 History & Geography — Chapter 2: People in Our Community
+﻿'use strict';
+// Grade 4 History & Geography - Chapter 2: People in Our Community
 // MIE Syllabus: cultural diversity, festivals, lives past vs present
 // IDs format: g4h-com-NNN
 
@@ -10,7 +10,7 @@ STATIC_QUESTIONS.push(
     options:['Uniform','Diverse','Empty','Isolated'],
     answer:'Diverse',
     hint:'When there are many different things together, we use this word.',
-    explanation:'<b>Diverse</b> means having many different types. Mauritius is a <b>culturally diverse</b> country — people of Indian, African, Chinese, European and other origins all live together. They bring their own religions, languages, foods, festivals and traditions, making Mauritius a unique and rich multicultural society.' }),
+    explanation:'<b>Diverse</b> means having many different types. Mauritius is a <b>culturally diverse</b> country - people of Indian, African, Chinese, European and other origins all live together. They bring their own religions, languages, foods, festivals and traditions, making Mauritius a unique and rich multicultural society.' }),
 
   makeMCQ({ id:'g4h-com-002', chapterId:'g4hist-community', difficulty:1,
     question:'Which festival is celebrated by HINDU families in Mauritius with oil lamps and sweets?',
@@ -76,7 +76,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Traditional garments like saris, lungis, and hand-sewn dresses were more common; today Western-style clothing is more widespread',
     hint:'Think about how globalisation and new materials have changed what people wear.',
-    explanation:'In the <b>past</b>, more people wore traditional garments — Hindu women wore <b>saris</b>, men wore <b>lungis</b>, and clothes were often hand-sewn at home. Today, <b>Western-style clothing</b> (jeans, T-shirts, suits) is widespread, though traditional clothing is still worn on special occasions and religious festivals. This reflects both cultural continuity and change.' }),
+    explanation:'In the <b>past</b>, more people wore traditional garments - Hindu women wore <b>saris</b>, men wore <b>lungis</b>, and clothes were often hand-sewn at home. Today, <b>Western-style clothing</b> (jeans, T-shirts, suits) is widespread, though traditional clothing is still worn on special occasions and religious festivals. This reflects both cultural continuity and change.' }),
 
   makeMCQ({ id:'g4h-com-010', chapterId:'g4hist-community', difficulty:3,
     question:'Why is it IMPORTANT to learn about and respect the traditions and festivals of OTHER cultures in Mauritius?',
@@ -88,14 +88,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'To build understanding, respect and harmony among all communities, making Mauritius a stronger and more peaceful nation',
     hint:'Think about why Mauritius\'s national motto is "Unity in Diversity."',
-    explanation:'Learning about other cultures builds <b>understanding, respect and harmony</b>. When people understand why others celebrate Divali, Eid, Christmas or Chinese New Year, they are less likely to misunderstand or fear those practices. Mauritius\'s national motto is <b>"Unity in Diversity"</b> — the nation is strong because different communities live together peacefully, respecting each other\'s traditions.' }),
+    explanation:'Learning about other cultures builds <b>understanding, respect and harmony</b>. When people understand why others celebrate Divali, Eid, Christmas or Chinese New Year, they are less likely to misunderstand or fear those practices. Mauritius\'s national motto is <b>"Unity in Diversity"</b> - the nation is strong because different communities live together peacefully, respecting each other\'s traditions.' }),
 
   makeMCQ({ id:'g4h-com-011', chapterId:'g4hist-community', difficulty:1,
     question:'What did children in Mauritius MAINLY play with in the PAST (before electricity and modern toys)?',
     options:['Video games and tablets','Hand-made toys: spinning tops, kites, marbles, and games played outdoors','Remote-control cars and drones','Indoor board games on screens'],
     answer:'Hand-made toys: spinning tops, kites, marbles, and games played outdoors',
     hint:'Before electricity and factories, how were toys made?',
-    explanation:'In the <b>past</b>, children in Mauritius played with <b>hand-made toys</b> — spinning tops (<i>toton</i>), kites (<i>sèrf-volant</i>), marbles, hopscotch and outdoor games. There were no video games, tablets, or plastic factory-made toys. Today, children have access to both traditional games and modern electronic entertainment. This is an example of change in leisure.' }),
+    explanation:'In the <b>past</b>, children in Mauritius played with <b>hand-made toys</b> - spinning tops (<i>toton</i>), kites (<i>sèrf-volant</i>), marbles, hopscotch and outdoor games. There were no video games, tablets, or plastic factory-made toys. Today, children have access to both traditional games and modern electronic entertainment. This is an example of change in leisure.' }),
 
   makeMCQ({ id:'g4h-com-012', chapterId:'g4hist-community', difficulty:1,
     question:'Which of these is an example of TRADITIONAL Mauritian FOOD eaten during festivals?',
@@ -121,7 +121,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Many homes were simple wooden or thatched structures without electricity or running water',
     hint:'Think about what building materials were available 100 years ago.',
-    explanation:'In the <b>past</b>, many Mauritian homes were simple <b>wooden or thatched structures</b> — made of wood, bamboo and dried leaves. There was no electricity or running water in most homes. Today, most homes are built of <b>concrete</b>, with electricity, running water, and modern facilities. This change in housing reflects improvements in technology and living standards.' }),
+    explanation:'In the <b>past</b>, many Mauritian homes were simple <b>wooden or thatched structures</b> - made of wood, bamboo and dried leaves. There was no electricity or running water in most homes. Today, most homes are built of <b>concrete</b>, with electricity, running water, and modern facilities. This change in housing reflects improvements in technology and living standards.' }),
 
   makeTF({ id:'g4h-com-015', chapterId:'g4hist-community', difficulty:2,
     question:'Mauritius celebrates festivals from many different religions as national public holidays.',
@@ -146,7 +146,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Mauritius is made strong by its many different communities living together in peace and unity',
     hint:'Unity = togetherness. Diversity = differences. How can being different STRENGTHEN a nation?',
-    explanation:'"<b>Unity in Diversity</b>" means that Mauritius draws strength from its many different communities — Hindu, Muslim, Christian, Chinese, Creole and others — living together in <b>peace and mutual respect</b>. Instead of differences causing conflict, Mauritius treats cultural diversity as a treasure. Each community contributes its unique traditions, skills and knowledge to the nation.' }),
+    explanation:'"<b>Unity in Diversity</b>" means that Mauritius draws strength from its many different communities - Hindu, Muslim, Christian, Chinese, Creole and others - living together in <b>peace and mutual respect</b>. Instead of differences causing conflict, Mauritius treats cultural diversity as a treasure. Each community contributes its unique traditions, skills and knowledge to the nation.' }),
 
   makeMCQ({ id:'g4h-com-018', chapterId:'g4hist-community', difficulty:3,
     question:'Léa is Christian and her best friend Priya is Hindu. Priya invites Léa to celebrate Divali with her family. What is the BEST thing Léa can do?',
@@ -158,18 +158,18 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Accept the invitation, learn about the festival respectfully, and participate with an open mind',
     hint:'Respecting other cultures means being open and curious, not fearful or dismissive.',
-    explanation:'The best response is to <b>accept the invitation and participate respectfully</b>. Learning about another community\'s festival shows <b>respect and curiosity</b>. Léa does not have to share Priya\'s religious beliefs to appreciate the beauty of Divali. In Mauritius, friends from different communities often celebrate each other\'s festivals — this builds friendship and national unity.' }),
+    explanation:'The best response is to <b>accept the invitation and participate respectfully</b>. Learning about another community\'s festival shows <b>respect and curiosity</b>. Léa does not have to share Priya\'s religious beliefs to appreciate the beauty of Divali. In Mauritius, friends from different communities often celebrate each other\'s festivals - this builds friendship and national unity.' }),
 
   makeMCQ({ id:'g4h-com-019', chapterId:'g4hist-community', difficulty:4,
-    question:'A student says: "Life in Mauritius was BETTER in the past — people were happier, food was healthier, and communities were closer." Another student says: "Life today is BETTER — we have hospitals, schools, electricity, and more opportunities." Who is CORRECT?',
+    question:'A student says: "Life in Mauritius was BETTER in the past - people were happier, food was healthier, and communities were closer." Another student says: "Life today is BETTER - we have hospitals, schools, electricity, and more opportunities." Who is CORRECT?',
     options:[
-      'The first student is completely right — the past was always better',
-      'The second student is completely right — today is always better in every way',
+      'The first student is completely right - the past was always better',
+      'The second student is completely right - today is always better in every way',
       'Both students raise valid points: the past had stronger community bonds and traditional knowledge, while today offers better healthcare, education, and technology; historians look at BOTH sides',
-      'Neither student is correct — Mauritius has not changed at all'
+      'Neither student is correct - Mauritius has not changed at all'
     ],
     answer:'Both students raise valid points: the past had stronger community bonds and traditional knowledge, while today offers better healthcare, education, and technology; historians look at BOTH sides',
     hint:'Think about what was gained AND what was lost as Mauritius developed.',
-    explanation:'<b>Both students make valid points.</b> In the past, communities were often closer-knit, traditional knowledge was stronger, and food was less processed. Today, people benefit from better <b>healthcare, education, electricity, transport and opportunities</b>. Historians and social scientists examine <b>both change and continuity</b>, and look at gains and losses together. There is no simple answer — good historical thinking considers multiple perspectives.' })
+    explanation:'<b>Both students make valid points.</b> In the past, communities were often closer-knit, traditional knowledge was stronger, and food was less processed. Today, people benefit from better <b>healthcare, education, electricity, transport and opportunities</b>. Historians and social scientists examine <b>both change and continuity</b>, and look at gains and losses together. There is no simple answer - good historical thinking considers multiple perspectives.' })
 
 );

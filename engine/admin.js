@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  Admin Panel — Superuser dashboard
+//  Admin Panel - Superuser dashboard
 //  Only visible when profile.role === 'admin'
 // ══════════════════════════════════════════════
 
@@ -126,7 +126,7 @@ const AdminPanel = (() => {
             <span class="text-xs text-gray-400 shrink-0">⏳ Expires</span>
             <input type="date" value="${m.expires_at ? m.expires_at.slice(0,10) : ''}"
               onchange="AdminPanel.setExpiry('${m.id}', this.value)"
-              title="Set account expiry — leave blank for no expiry"
+              title="Set account expiry - leave blank for no expiry"
               class="text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
             ${m.expires_at ? `<button onclick="AdminPanel.setExpiry('${m.id}','')" class="text-xs text-red-400 hover:text-red-600 shrink-0" title="Remove expiry">✕</button>` : ''}
           </div>
@@ -418,8 +418,8 @@ const AdminPanel = (() => {
     const teachers = profiles.filter(p => p.role === 'teacher').length;
 
     _set('stat-total-users',    profiles.length);
-    _set('stat-total-students', sRes.data?.length ?? '—');
-    _set('stat-total-families', fRes.data?.length ?? '—');
+    _set('stat-total-students', sRes.data?.length ?? '-');
+    _set('stat-total-families', fRes.data?.length ?? '-');
     _set('stat-total-teachers', teachers);
   }
 
@@ -475,7 +475,7 @@ const AdminPanel = (() => {
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border border-gray-100 dark:border-gray-700">
         <div class="flex items-center justify-between mb-2">
           <div>
-            <div class="font-bold text-gray-800 dark:text-white">${_esc(p.name)} Plan ${p.price_mur === 0 ? '— Free' : `— Rs ${p.price_mur}/mo`}</div>
+            <div class="font-bold text-gray-800 dark:text-white">${_esc(p.name)} Plan ${p.price_mur === 0 ? '- Free' : `- Rs ${p.price_mur}/mo`}</div>
             <div class="text-xs text-gray-400">Up to ${p.max_children} child${p.max_children > 1 ? 'ren' : ''}</div>
           </div>
           <label class="flex items-center gap-2 cursor-pointer select-none">
@@ -509,11 +509,11 @@ const AdminPanel = (() => {
     if (el) el.innerHTML = reports.map(r => `
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3">
         <div class="flex justify-between items-start gap-2 mb-2">
-          <span class="text-xs font-mono text-gray-400">${_esc(r.question_id || '—')}</span>
+          <span class="text-xs font-mono text-gray-400">${_esc(r.question_id || '-')}</span>
           <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">${_esc(r.status || 'open')}</span>
         </div>
         <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 italic">"${_esc((r.question_text || '').slice(0, 120))}${(r.question_text||'').length > 120 ? '…' : ''}"</p>
-        <p class="text-sm text-gray-800 dark:text-white font-semibold">${_esc(r.message || '—')}</p>
+        <p class="text-sm text-gray-800 dark:text-white font-semibold">${_esc(r.message || '-')}</p>
         <p class="text-xs text-gray-400 mt-1">${new Date(r.created_at).toLocaleString()}</p>
       </div>
     `).join('');
@@ -562,7 +562,7 @@ const AdminPanel = (() => {
     try {
       const session = await _sb.auth.getSession();
       const jwt     = session?.data?.session?.access_token;
-      if (!jwt) { _showErrCA(errEl, 'Not logged in — please refresh.'); return; }
+      if (!jwt) { _showErrCA(errEl, 'Not logged in - please refresh.'); return; }
 
       const res  = await fetch('/api/create-user', {
         method:  'POST',

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 French — Chapitre : Vocabulaire de base
+﻿'use strict';
+// Grade 4 French - Chapitre : Vocabulaire de base
 // IDs format: g4fr-voc-NNN
 
 STATIC_QUESTIONS.push(
@@ -72,7 +72,7 @@ STATIC_QUESTIONS.push(
     options:['Au revoir','Bonne nuit','Bonjour','Bonsoir'],
     answer:'Bonjour',
     hint:'C\'est le matin. Quelle salutation est appropriée pour le matin ?',
-    explanation:'"<b>Bonjour</b>" est correct — c\'est la salutation du matin et de l\'après-midi. "Bonsoir" s\'utilise le soir uniquement. "Au revoir" signifie goodbye. "Bonne nuit" s\'utilise avant de dormir. Il est aussi correct de dire "Bonjour" à un professeur car on le vouvoie (vous).' })
+    explanation:'"<b>Bonjour</b>" est correct - c\'est la salutation du matin et de l\'après-midi. "Bonsoir" s\'utilise le soir uniquement. "Au revoir" signifie goodbye. "Bonne nuit" s\'utilise avant de dormir. Il est aussi correct de dire "Bonjour" à un professeur car on le vouvoie (vous).' })
 
 );
 
@@ -96,8 +96,8 @@ STATIC_QUESTIONS.push(
     question:'Comment dit-on "please" en français (forme formelle, avec un adulte) ?',
     options:['Merci','Au revoir','S\'il vous plaît','De rien'],
     answer:"S'il vous plaît",
-    hint:'"Please" en s\'adressant à un adulte — forme formelle (vous).',
-    explanation:'"<b>S\'il vous plaît</b>" = please (formal — avec un adulte qu\'on vouvoie). "S\'il te plaît" = please (informal — avec un ami). "Merci" = thank you. "De rien" = you\'re welcome.' }),
+    hint:'"Please" en s\'adressant à un adulte - forme formelle (vous).',
+    explanation:'"<b>S\'il vous plaît</b>" = please (formal - avec un adulte qu\'on vouvoie). "S\'il te plaît" = please (informal - avec un ami). "Merci" = thank you. "De rien" = you\'re welcome.' }),
 
   makeMCQ({ id:'g4fr-voc-014', chapterId:'g4fr-vocabulaire', difficulty:1,
     question:'Que signifie "le frère" en anglais ?',
@@ -218,19 +218,19 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Ce matin, je mange mon petit déjeuner.',
     hint:'"Ce matin" = this morning. Quelle phrase a du sens ?',
-    explanation:'"<b>Ce matin, je mange mon petit déjeuner.</b>" — "Ce matin" (this morning) est une expression de temps qui se place souvent au début ou à la fin de la phrase. On ne peut pas dire "ce matin hier" (deux temps qui se contredisent).' }),
+    explanation:'"<b>Ce matin, je mange mon petit déjeuner.</b>" - "Ce matin" (this morning) est une expression de temps qui se place souvent au début ou à la fin de la phrase. On ne peut pas dire "ce matin hier" (deux temps qui se contredisent).' }),
 
   makeMCQ({ id:'g4fr-voc-030', chapterId:'g4fr-vocabulaire', difficulty:2,
     question:'Comment dit-on "hand" en français ?',
     options:['pied','jambe','main','bras'],
     answer:'main',
     hint:'On écrit avec cette partie du corps.',
-    explanation:'"Hand" = <b>la main</b>. Astuce : "manicure" vient de "mani" (main en latin). Ne pas confondre : la <b>main</b> (hand) et le <b>bras</b> (arm) — le bras est plus long.' }),
+    explanation:'"Hand" = <b>la main</b>. Astuce : "manicure" vient de "mani" (main en latin). Ne pas confondre : la <b>main</b> (hand) et le <b>bras</b> (arm) - le bras est plus long.' }),
 
   makeMCQ({ id:'g4fr-voc-031', chapterId:'g4fr-vocabulaire', difficulty:3,
-    question:'Associe : "poisson / oiseau / lapin" — quel animal NE VIT PAS normalement à la maison comme animal domestique ?',
-    options:['poisson','oiseau','lapin','aucun — ils peuvent tous être des animaux domestiques'],
-    answer:'aucun — ils peuvent tous être des animaux domestiques',
+    question:'Associe : "poisson / oiseau / lapin" - quel animal NE VIT PAS normalement à la maison comme animal domestique ?',
+    options:['poisson','oiseau','lapin','aucun - ils peuvent tous être des animaux domestiques'],
+    answer:'aucun - ils peuvent tous être des animaux domestiques',
     hint:'Pense aux animaux qu\'on garde chez soi.',
     explanation:'<b>Les trois peuvent être des animaux domestiques !</b> Le <b>poisson</b> (aquarium), l\'<b>oiseau</b> (cage), le <b>lapin</b> (cage ou liberté dans la maison). En France et à Maurice, on garde souvent des poissons, des oiseaux et des lapins à la maison.' }),
 
@@ -239,7 +239,7 @@ STATIC_QUESTIONS.push(
     options:['tête','frère','dormir','chat'],
     answer:'dormir',
     hint:'Un verbe exprime une action ou un état.',
-    explanation:'"<b>Dormir</b>" est un verbe (to sleep) — c\'est une action. <b>Tête</b> = nom (partie du corps), <b>frère</b> = nom (personne), <b>chat</b> = nom (animal). Les verbes répondent à la question "Que fait-on ?".' }),
+    explanation:'"<b>Dormir</b>" est un verbe (to sleep) - c\'est une action. <b>Tête</b> = nom (partie du corps), <b>frère</b> = nom (personne), <b>chat</b> = nom (animal). Les verbes répondent à la question "Que fait-on ?".' }),
 
   makeMCQ({ id:'g4fr-voc-033', chapterId:'g4fr-vocabulaire', difficulty:3,
     question:'Quelle phrase est correcte pour décrire l\'heure de la journée ?',
@@ -251,14 +251,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Je me réveille le matin et je dors le soir.',
     hint:'L\'ordre normal : matin → après-midi → soir → nuit.',
-    explanation:'"<b>Je me réveille le matin et je dors le soir.</b>" — L\'ordre du jour : le <b>matin</b> (morning, on se réveille), l\'<b>après-midi</b> (afternoon), le <b>soir</b> (evening, on se couche). Le matin est avant le soir.' }),
+    explanation:'"<b>Je me réveille le matin et je dors le soir.</b>" - L\'ordre du jour : le <b>matin</b> (morning, on se réveille), l\'<b>après-midi</b> (afternoon), le <b>soir</b> (evening, on se couche). Le matin est avant le soir.' }),
 
   makeMCQ({ id:'g4fr-voc-034', chapterId:'g4fr-vocabulaire', difficulty:3,
     question:'Complète : "Mon ___ s\'appelle Jean et ma ___ s\'appelle Marie. Ensemble, ils sont mes grands-parents."',
     options:['père / mère','oncle / tante','grand-père / grand-mère','frère / sœur'],
     answer:'grand-père / grand-mère',
     hint:'Ils sont les parents de tes parents.',
-    explanation:'"Mon <b>grand-père</b> s\'appelle Jean et ma <b>grand-mère</b> s\'appelle Marie." — Les grands-parents sont les parents de nos parents. Le <b>grand-père</b> (paternel ou maternel) + la <b>grand-mère</b> = les grands-parents.' }),
+    explanation:'"Mon <b>grand-père</b> s\'appelle Jean et ma <b>grand-mère</b> s\'appelle Marie." - Les grands-parents sont les parents de nos parents. Le <b>grand-père</b> (paternel ou maternel) + la <b>grand-mère</b> = les grands-parents.' }),
 
   makeMCQ({ id:'g4fr-voc-035', chapterId:'g4fr-vocabulaire', difficulty:4,
     question:'Priya écrit : "Ce matin, mon ___ (father) et ma ___ (mother) travaillent. Mon ___ (brother) et ma ___ (sister) sont à l\'école. Moi, je suis malade à la maison." Quelle série est correcte ?',

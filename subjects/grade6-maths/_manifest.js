@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Mathematics — MIE Mauritius Syllabus (Grades 1-6, 2015)
+﻿'use strict';
+// Grade 6 Mathematics - MIE Mauritius Syllabus (Grades 1-6, 2015)
 // Grade 6 adds: Prime/Composite, Fraction×Fraction, HCF/LCM, Percentage, 3D Surface Area, Speed, Pie Chart, Coordinates
 registerSubject({
   id: 'grade6-maths', name: 'Mathematics', grade: 6, icon: '🔢', subject: 'Maths',
@@ -19,9 +19,9 @@ registerSubject({
     { id: 'g6-ratio-pct',    name: 'Ratio, Average & Percentage',      icon: '%',  examWeight: 4,
       syllabus: 'Ratio in simplest form. Ratio as a fraction. Equivalent ratios. Finding average. Percentage: convert fractions/decimals to percentage. Percentage of a quantity. Percentage profit and loss. Word problems on ratio, average and percentage.' },
     { id: 'g6-geometry',     name: 'Geometry: Shapes & Angles',        icon: '📐', examWeight: 4,
-      syllabus: '2D shapes up to hexagon: names, properties, perimeter, area. 3D shapes: cube, cuboid, cylinder, prism, pyramid — faces/vertices/edges. Find unknown angles (on a line, in triangles, quadrilaterals). Symmetry: 1–2 lines. Scalene triangles. Types of angles: acute, obtuse, reflex, straight.' },
+      syllabus: '2D shapes up to hexagon: names, properties, perimeter, area. 3D shapes: cube, cuboid, cylinder, prism, pyramid - faces/vertices/edges. Find unknown angles (on a line, in triangles, quadrilaterals). Symmetry: 1–2 lines. Scalene triangles. Types of angles: acute, obtuse, reflex, straight.' },
     { id: 'g6-measure',      name: 'Measurement & Conversions',        icon: '📏', examWeight: 3,
-      syllabus: 'Length: km, m, cm, mm — convert and calculate. Mass: kg, g, tonnes — convert and calculate. Capacity: L, cL, mL — convert and calculate. Money: convert Mauritian rupees to euro, dollar, pound sterling. Percentage profit and loss in context.' },
+      syllabus: 'Length: km, m, cm, mm - convert and calculate. Mass: kg, g, tonnes - convert and calculate. Capacity: L, cL, mL - convert and calculate. Money: convert Mauritian rupees to euro, dollar, pound sterling. Percentage profit and loss in context.' },
     { id: 'g6-area-vol',     name: 'Area, Surface Area & Volume',      icon: '▭',  examWeight: 3,
       syllabus: 'Area and perimeter of 2D shapes (including hexagon, triangle). Total surface area of cube and cuboid. Volume of cube and cuboid. Word problems involving area, surface area and volume.' },
     { id: 'g6-time-speed',   name: 'Time & Speed',                     icon: '⏰', examWeight: 3,

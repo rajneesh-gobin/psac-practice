@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 French — Le Passé Simple
+﻿'use strict';
+// Grade 5 French - Le Passé Simple
 // IDs format: g5fr-passe-simple-NNN
 
 STATIC_QUESTIONS.push(
@@ -23,7 +23,7 @@ STATIC_QUESTIONS.push(
     options:['parla','parlait','a parlé','parlera'],
     answer:'parla',
     hint:'Parler (verbe en -ER) → passé simple il = radical + -a.',
-    explanation:'"Il <b>parla</b>" — parler → radical parl- + terminaison -a → parla. C\'est le passé simple d\'un verbe en -ER.' }),
+    explanation:'"Il <b>parla</b>" - parler → radical parl- + terminaison -a → parla. C\'est le passé simple d\'un verbe en -ER.' }),
 
   makeTF({ id:'g5fr-passe-simple-004', chapterId:'g5fr-passe-simple', difficulty:1,
     question:'Le passé simple de "aller" pour "il" est "alla".',
@@ -43,7 +43,7 @@ STATIC_QUESTIONS.push(
     options:['mangeaient','mangèrent','mangeront','ont mangé'],
     answer:'mangèrent',
     hint:'Verbes en -ER, terminaison "ils" = -èrent. Manger → ils mang-èrent.',
-    explanation:'"Ils <b>mangèrent</b>" — verbe en -ER, terminaison pour ils/elles = <b>-èrent</b>. Attention : manger → ils mang<b>è</b>rent (accent grave). Autres exemples : parler → ils parlèrent, aimer → ils aimèrent.' }),
+    explanation:'"Ils <b>mangèrent</b>" - verbe en -ER, terminaison pour ils/elles = <b>-èrent</b>. Attention : manger → ils mang<b>è</b>rent (accent grave). Autres exemples : parler → ils parlèrent, aimer → ils aimèrent.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-007', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Quel est le passé simple de AVOIR pour "elle" ?',
@@ -64,7 +64,7 @@ STATIC_QUESTIONS.push(
     options:['venait','est venu','vint','viendra'],
     answer:'vint',
     hint:'Venir est irrégulier au passé simple. Radical = v- : il vint.',
-    explanation:'Venir → passé simple : je vins, tu vins, il/elle <b>vint</b>, nous vînmes, vous vîntes, ils/elles vinrent. "Vint" est irrégulier — à apprendre par cœur.' }),
+    explanation:'Venir → passé simple : je vins, tu vins, il/elle <b>vint</b>, nous vînmes, vous vîntes, ils/elles vinrent. "Vint" est irrégulier - à apprendre par cœur.' }),
 
   makeTF({ id:'g5fr-passe-simple-010', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'"Ils parlèrent" est la forme correcte de parler au passé simple pour "ils".',
@@ -89,20 +89,20 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Il marcha lentement.',
     hint:'Passé simple d\'un verbe en -ER pour "il" : terminaison -a.',
-    explanation:'"Il <b>marcha</b>" — terminaison -a → passé simple. "Marchait" = imparfait. "A marché" = passé composé. "Marchera" = futur simple.' }),
+    explanation:'"Il <b>marcha</b>" - terminaison -a → passé simple. "Marchait" = imparfait. "A marché" = passé composé. "Marchera" = futur simple.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-013', chapterId:'g5fr-passe-simple', difficulty:3,
     question:'Conjugue TROUVER au passé simple pour "nous" : Nous ___ un trésor.',
     options:['trouvâmes','trouvions','avons trouvé','trouvèrent'],
     answer:'trouvâmes',
     hint:'Verbes en -ER, terminaison "nous" = -âmes (avec accent circonflexe).',
-    explanation:'"Nous <b>trouvâmes</b>" — verbe en -ER, terminaison pour nous = <b>-âmes</b>. Trouver → nous trouv-<b>âmes</b>. Attention à l\'accent circonflexe sur le â.' }),
+    explanation:'"Nous <b>trouvâmes</b>" - verbe en -ER, terminaison pour nous = <b>-âmes</b>. Trouver → nous trouv-<b>âmes</b>. Attention à l\'accent circonflexe sur le â.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-014', chapterId:'g5fr-passe-simple', difficulty:3,
     question:'Identifie le passé simple dans ce passage de conte : "Il était une fois un roi qui régnait sur un beau royaume. Un jour, un dragon apparut et détruisit le village."',
     options:['était, régnait','apparut, détruisit','est apparu, a détruit','apparaît, détruit'],
     answer:'apparut, détruisit',
-    hint:'"Apparut" et "détruisit" — terminaisons -ut et -it = passé simple irrégulier.',
+    hint:'"Apparut" et "détruisit" - terminaisons -ut et -it = passé simple irrégulier.',
     explanation:'"<b>Apparut</b>" et "<b>détruisit</b>" sont au passé simple. "Était" et "régnait" sont à l\'imparfait (description/état). Les événements du récit (actions principales) sont au passé simple dans les textes littéraires.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-015', chapterId:'g5fr-passe-simple', difficulty:3,
@@ -110,7 +110,7 @@ STATIC_QUESTIONS.push(
     options:['chantâtes','chantiez','avez chanté','chantèrent'],
     answer:'chantâtes',
     hint:'Verbes en -ER, terminaison "vous" = -âtes (avec accent circonflexe).',
-    explanation:'"Vous <b>chantâtes</b>" — terminaison pour vous = <b>-âtes</b>. Chanter → vous chant-<b>âtes</b>. Note : cette forme est rare à l\'oral mais apparaît dans les textes littéraires.' }),
+    explanation:'"Vous <b>chantâtes</b>" - terminaison pour vous = <b>-âtes</b>. Chanter → vous chant-<b>âtes</b>. Note : cette forme est rare à l\'oral mais apparaît dans les textes littéraires.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-016', chapterId:'g5fr-passe-simple', difficulty:3,
     question:'Quelle différence y a-t-il entre "il parla" (passé simple) et "il a parlé" (passé composé) ?',
@@ -121,7 +121,7 @@ STATIC_QUESTIONS.push(
       'Le passé simple désigne le futur.'
     ],
     answer:'Le passé simple s\'utilise dans les écrits littéraires ; le passé composé à l\'oral.',
-    hint:'Les deux expriment une action passée terminée — la différence est stylistique et de registre.',
+    hint:'Les deux expriment une action passée terminée - la différence est stylistique et de registre.',
     explanation:'<b>Passé simple</b> = registre écrit/littéraire (livres, contes, journaux). <b>Passé composé</b> = registre parlé et écrit courant. Le sens est identique, mais le style diffère.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-017', chapterId:'g5fr-passe-simple', difficulty:3,
@@ -129,14 +129,14 @@ STATIC_QUESTIONS.push(
     options:['vécut / partit','vivait / est partie','vivait / partit','vécut / partait'],
     answer:'vivait / partit',
     hint:'"Vivait" = description (imparfait). "Partit" = action principale du récit (passé simple).',
-    explanation:'"Elle <b>vivait</b>" — description d\'un état habituel → imparfait. "Elle <b>partit</b>" — action principale du récit → passé simple. Dans les contes, on alterne imparfait (décor, état) et passé simple (événements).' }),
+    explanation:'"Elle <b>vivait</b>" - description d\'un état habituel → imparfait. "Elle <b>partit</b>" - action principale du récit → passé simple. Dans les contes, on alterne imparfait (décor, état) et passé simple (événements).' }),
 
   makeMCQ({ id:'g5fr-passe-simple-018', chapterId:'g5fr-passe-simple', difficulty:4,
     question:'Quel est le passé simple de NAÎTRE pour "il" dans la phrase : "Le prince ___ dans un château au bord de la mer."',
     options:['naissait','est né','naquit','naîtra'],
     answer:'naquit',
     hint:'Naître est irrégulier au passé simple. Radical = naqu-.',
-    explanation:'Naître → passé simple : je naquis, tu naquis, il/elle <b>naquit</b>, nous naquîmes, ils naquirent. Irrégulier — à apprendre.' }),
+    explanation:'Naître → passé simple : je naquis, tu naquis, il/elle <b>naquit</b>, nous naquîmes, ils naquirent. Irrégulier - à apprendre.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-019', chapterId:'g5fr-passe-simple', difficulty:4,
     question:'Complète ce récit en choisissant les bons temps : "Le soleil ___ (briller). Soudain, le héros ___ (entendre) un cri, ___ (sortir) de sa maison et ___ (courir) vers la rivière."',
@@ -148,28 +148,28 @@ STATIC_QUESTIONS.push(
     ],
     answer:'brillait / entendit / sortit / courut',
     hint:'"Le soleil brillait" = description (imparfait). "Soudain" = événements successifs (passé simple).',
-    explanation:'"Le soleil <b>brillait</b>" — description de fond → imparfait. "Soudain, il <b>entendit / sortit / courut</b>" — actions soudaines et successives → passé simple. Structure classique du récit : imparfait + passé simple.' }),
+    explanation:'"Le soleil <b>brillait</b>" - description de fond → imparfait. "Soudain, il <b>entendit / sortit / courut</b>" - actions soudaines et successives → passé simple. Structure classique du récit : imparfait + passé simple.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-020', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Conjuguez "venir" au passé simple pour "je" :',
     options:['je venais','je vins','je suis venu','je vendrais'],
     answer:'je vins',
     hint:'Venir est irrégulier au passé simple : vins, vins, vint, vînmes, vîntes, vinrent.',
-    explanation:'"<b>je vins</b>" — venir (irrégulier) : je <b>vins</b>, tu vins, il vint, nous vînmes, vous vîntes, ils vinrent. Même conjugaison pour "tenir" : je tins, tu tins, il tint.' }),
+    explanation:'"<b>je vins</b>" - venir (irrégulier) : je <b>vins</b>, tu vins, il vint, nous vînmes, vous vîntes, ils vinrent. Même conjugaison pour "tenir" : je tins, tu tins, il tint.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-021', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Conjuguez "voir" au passé simple pour "il" :',
     options:['il voyait','il vera','il vit','il voyait'],
     answer:'il vit',
     hint:'Voir est irrégulier : je vis, il vit.',
-    explanation:'"<b>il vit</b>" — voir (irrégulier) : je vis, tu vis, il/elle <b>vit</b>, nous vîmes, vous vîtes, ils virent. Exemple classique : "Il vit la princesse et tomba amoureux."' }),
+    explanation:'"<b>il vit</b>" - voir (irrégulier) : je vis, tu vis, il/elle <b>vit</b>, nous vîmes, vous vîtes, ils virent. Exemple classique : "Il vit la princesse et tomba amoureux."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-022', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Conjuguez "faire" au passé simple pour "ils" :',
     options:['ils faisaient','ils feront','ils firent','ils faisèrent'],
     answer:'ils firent',
     hint:'Faire est irrégulier : je fis, il fit, ils firent.',
-    explanation:'"<b>ils firent</b>" — faire (irrégulier) : je fis, tu fis, il fit, nous fîmes, vous fîtes, ils/elles <b>firent</b>. Exemple : "Ils firent le tour du monde en 80 jours."' }),
+    explanation:'"<b>ils firent</b>" - faire (irrégulier) : je fis, tu fis, il fit, nous fîmes, vous fîtes, ils/elles <b>firent</b>. Exemple : "Ils firent le tour du monde en 80 jours."' }),
 
   makeTF({ id:'g5fr-passe-simple-023', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Le passé simple de "avoir" pour "il" est "il eut".',
@@ -182,14 +182,14 @@ STATIC_QUESTIONS.push(
     options:['nous prenions','nous prîmes','nous prissions','nous avons pris'],
     answer:'nous prîmes',
     hint:'Prendre est irrégulier : je pris, il prit, nous prîmes (accent circonflexe).',
-    explanation:'"<b>nous prîmes</b>" — prendre (irrégulier) : je pris, tu pris, il prit, nous <b>prîmes</b>, vous prîtes, ils prirent. Note l\'accent circonflexe sur le i de prîmes/prîtes. Même conjugaison : apprendre → nous apprîmes, comprendre → nous comprîmes.' }),
+    explanation:'"<b>nous prîmes</b>" - prendre (irrégulier) : je pris, tu pris, il prit, nous <b>prîmes</b>, vous prîtes, ils prirent. Note l\'accent circonflexe sur le i de prîmes/prîtes. Même conjugaison : apprendre → nous apprîmes, comprendre → nous comprîmes.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-025', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Identifiez le verbe au passé simple : "Hier, le roi mangea une pomme dorée."',
     options:['Hier','le roi','mangea','une pomme dorée'],
     answer:'mangea',
     hint:'Cherchez la terminaison caractéristique des verbes en -ER au passé simple (3ème pers. sing. = -a).',
-    explanation:'"<b>mangea</b>" — terminaison -a = passé simple, 3ème personne singulière, verbe en -ER. Manger → il mang<b>a</b>. Autres terminaisons des -ER au passé simple : je parla<b>i</b>, tu parla<b>s</b>, nous parlâm<b>es</b>.' }),
+    explanation:'"<b>mangea</b>" - terminaison -a = passé simple, 3ème personne singulière, verbe en -ER. Manger → il mang<b>a</b>. Autres terminaisons des -ER au passé simple : je parla<b>i</b>, tu parla<b>s</b>, nous parlâm<b>es</b>.' }),
 
   makeTF({ id:'g5fr-passe-simple-026', chapterId:'g5fr-passe-simple', difficulty:3,
     question:'"Il finit" peut être soit le présent soit le passé simple du verbe "finir".',
@@ -202,28 +202,28 @@ STATIC_QUESTIONS.push(
     options:['je pouvais','je pourrai','je pus','je pusse'],
     answer:'je pus',
     hint:'Pouvoir est irrégulier : je pus, tu pus, il put.',
-    explanation:'"<b>je pus</b>" — pouvoir (irrégulier) : je pus, tu pus, il/elle put, nous pûmes, vous pûtes, ils/elles purent. Exemple : "Il ne put pas ouvrir la porte."' }),
+    explanation:'"<b>je pus</b>" - pouvoir (irrégulier) : je pus, tu pus, il/elle put, nous pûmes, vous pûtes, ils/elles purent. Exemple : "Il ne put pas ouvrir la porte."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-028', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Conjuguez "savoir" au passé simple pour "elle" :',
     options:['elle savait','elle saura','elle sut','elle sûte'],
     answer:'elle sut',
     hint:'Savoir est irrégulier : je sus, tu sus, il/elle sut.',
-    explanation:'"<b>elle sut</b>" — savoir (irrégulier) : je sus, tu sus, il/elle <b>sut</b>, nous sûmes, vous sûtes, ils surent. Exemple : "Elle sut immédiatement que quelque chose clochait."' }),
+    explanation:'"<b>elle sut</b>" - savoir (irrégulier) : je sus, tu sus, il/elle <b>sut</b>, nous sûmes, vous sûtes, ils surent. Exemple : "Elle sut immédiatement que quelque chose clochait."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-029', chapterId:'g5fr-passe-simple', difficulty:3,
     question:'Complétez le conte : "La sorcière ___ (tendre) la main et ___ (offrir) une pomme à la princesse."',
     options:['tendit / offrit','tendait / offrait','tendu / offert','tendra / offrira'],
     answer:'tendit / offrit',
     hint:'Actions dans un récit littéraire = passé simple. Tendre → tendit ; offrir → offrit.',
-    explanation:'"La sorcière <b>tendit</b> la main et <b>offrit</b> une pomme." — tendre (-RE) passé simple : je tendis, il tendit. Offrir (-IR irrégulier) : je offris, il offrit. Dans les contes, les actions principales = passé simple.' }),
+    explanation:'"La sorcière <b>tendit</b> la main et <b>offrit</b> une pomme." - tendre (-RE) passé simple : je tendis, il tendit. Offrir (-IR irrégulier) : je offris, il offrit. Dans les contes, les actions principales = passé simple.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-030', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Passé simple des verbes en -RE : "attendre" pour "ils" ?',
     options:['ils attendèrent','ils attendirent','ils attendront','ils attendaient'],
     answer:'ils attendirent',
     hint:'Verbes en -RE : terminaisons -is, -is, -it, -îmes, -îtes, -irent.',
-    explanation:'"<b>ils attendirent</b>" — attendre (-RE) au passé simple : j\'attendis, tu attendis, il attendit, nous attendîmes, vous attendîtes, ils/elles <b>attendirent</b>. Même terminaison pour : répondre → ils répondirent, vendre → ils vendirent.' }),
+    explanation:'"<b>ils attendirent</b>" - attendre (-RE) au passé simple : j\'attendis, tu attendis, il attendit, nous attendîmes, vous attendîtes, ils/elles <b>attendirent</b>. Même terminaison pour : répondre → ils répondirent, vendre → ils vendirent.' }),
 
   makeTF({ id:'g5fr-passe-simple-031', chapterId:'g5fr-passe-simple', difficulty:2,
     question:'Pour les verbes en -IR réguliers, les terminaisons du passé simple sont : -is, -is, -it, -îmes, -îtes, -irent.',
@@ -236,7 +236,7 @@ STATIC_QUESTIONS.push(
     options:['il tenait','il tiendra','il tint','il tendit'],
     answer:'il tint',
     hint:'Tenir est irrégulier : même schéma que "venir" (vins → tins).',
-    explanation:'"<b>il tint</b>" — tenir (irrégulier) : je tins, tu tins, il/elle <b>tint</b>, nous tînmes, vous tîntes, ils tinrent. Exemple : "Il tint sa promesse jusqu\'au bout."' }),
+    explanation:'"<b>il tint</b>" - tenir (irrégulier) : je tins, tu tins, il/elle <b>tint</b>, nous tînmes, vous tîntes, ils tinrent. Exemple : "Il tint sa promesse jusqu\'au bout."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-033', chapterId:'g5fr-passe-simple', difficulty:3,
     question:'Dans ce texte, quel verbe est au passé simple ? "Les nuages envahissaient le ciel. Soudain, l\'éclair jaillit."',
@@ -250,7 +250,7 @@ STATIC_QUESTIONS.push(
     options:['tu voulais','tu voudrais','tu voulus','tu voulûtes'],
     answer:'tu voulus',
     hint:'Vouloir est irrégulier : je voulus, tu voulus.',
-    explanation:'"<b>tu voulus</b>" — vouloir (irrégulier) : je voulus, tu <b>voulus</b>, il voulut, nous voulûmes, vous voulûtes, ils voulurent. Exemple : "Tu voulus partir mais il était trop tard."' }),
+    explanation:'"<b>tu voulus</b>" - vouloir (irrégulier) : je voulus, tu <b>voulus</b>, il voulut, nous voulûmes, vous voulûtes, ils voulurent. Exemple : "Tu voulus partir mais il était trop tard."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-035', chapterId:'g5fr-passe-simple', difficulty:4,
     question:'Quel temps est utilisé pour "régnait" et pour "reçut" dans : "Il était une fois un roi qui régnait sur un grand royaume. Un jour, il reçut une lettre mystérieuse." ?',

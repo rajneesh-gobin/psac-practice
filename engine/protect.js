@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
-//  PSAC Exam Practice — Content Protection
+//  PSAC Exam Practice - Content Protection
 //  Disables right-click save, view-source shortcuts,
 //  and text selection on question content.
 //  Must load FIRST in index.html.
@@ -17,7 +17,7 @@
       const k = e.key.toLowerCase();
       // Ctrl+S (Save page), Ctrl+U (View source)
       if (['s', 'u'].includes(k)) { e.preventDefault(); return; }
-      // Ctrl+P (Print — can expose source)
+      // Ctrl+P (Print - can expose source)
       if (k === 'p') { e.preventDefault(); return; }
     }
     // F5 / Ctrl+R / F12 / DevTools: all allowed

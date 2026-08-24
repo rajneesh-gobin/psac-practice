@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 History — Chapter: Trade & Agriculture (French Period)
+﻿'use strict';
+// Grade 5 History - Chapter: Trade & Agriculture (French Period)
 // IDs format: g5hg-ta-NNN
 
 STATIC_QUESTIONS.push(
@@ -9,7 +9,7 @@ STATIC_QUESTIONS.push(
     options:['Pierre Poivre','Robert Farquhar','Mahé de Labourdonnais','Charles Decaen'],
     answer:'Mahé de Labourdonnais',
     hint:'He governed Isle de France from 1735 to 1746 and transformed the island.',
-    explanation:'<b>Mahé de Labourdonnais</b> was the French governor of Isle de France (1735–1746). He built Port Louis harbour, set up sugar mills, constructed roads and established a hospital — transforming the island into an important base.' }),
+    explanation:'<b>Mahé de Labourdonnais</b> was the French governor of Isle de France (1735–1746). He built Port Louis harbour, set up sugar mills, constructed roads and established a hospital - transforming the island into an important base.' }),
 
   makeMCQ({ id:'g5hg-ta-002', chapterId:'trade-agri', difficulty:1,
     question:'What was the MAIN crop grown on plantations in Mauritius during the French period?',
@@ -28,7 +28,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Spice plants such as nutmeg and cloves',
     hint:'He managed to smuggle these precious plants from their original source in the East Indies.',
-    explanation:'<b>Pierre Poivre</b> introduced valuable spice plants — nutmeg, cloves, cinnamon and pepper — from the Dutch East Indies into Mauritius. The SSR Botanical Garden at Pamplemousses was partly used to grow and develop these spices.' }),
+    explanation:'<b>Pierre Poivre</b> introduced valuable spice plants - nutmeg, cloves, cinnamon and pepper - from the Dutch East Indies into Mauritius. The SSR Botanical Garden at Pamplemousses was partly used to grow and develop these spices.' }),
 
   makeMCQ({ id:'g5hg-ta-004', chapterId:'trade-agri', difficulty:1,
     question:'Who was the FIRST British governor of Mauritius after the British captured it in 1810?',
@@ -53,7 +53,7 @@ STATIC_QUESTIONS.push(
     question:'Mahé de Labourdonnais governed Isle de France in the 19th century.',
     answer:false,
     hint:'Think about the dates of French rule (1715–1810). When was Labourdonnais governor?',
-    explanation:'Mahé de Labourdonnais governed Isle de France from <b>1735 to 1746</b> — the 18th century, not the 19th century.' }),
+    explanation:'Mahé de Labourdonnais governed Isle de France from <b>1735 to 1746</b> - the 18th century, not the 19th century.' }),
 
   makeMCQ({ id:'g5hg-ta-007', chapterId:'trade-agri', difficulty:2,
     question:'The SSR Botanical Garden at Pamplemousses is one of the oldest botanical gardens in the southern hemisphere. Which French governor first developed it for growing spices?',
@@ -91,7 +91,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Slavery continued for over 20 more years; it was abolished in 1835',
     hint:'The British Empire abolished slavery across its colonies in a specific year.',
-    explanation:'Although the British took control in 1810, <b>slavery was not abolished until 1835</b>. After abolition, many formerly enslaved people left the plantations, leading to the importation of indentured workers — mainly from India.' })
+    explanation:'Although the British took control in 1810, <b>slavery was not abolished until 1835</b>. After abolition, many formerly enslaved people left the plantations, leading to the importation of indentured workers - mainly from India.' })
 
 );
 
@@ -131,13 +131,13 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Indentured workers, mainly from India',
     hint:'They signed contracts to work for a fixed period in exchange for passage to Mauritius.',
-    explanation:'After the abolition of slavery in 1835, plantation owners needed new labour. <b>Indentured workers</b> — mainly from India — came to Mauritius under contract to work for a fixed period (usually 5 years) in exchange for their passage and wages. Over 500,000 came between 1834 and 1923.' }),
+    explanation:'After the abolition of slavery in 1835, plantation owners needed new labour. <b>Indentured workers</b> - mainly from India - came to Mauritius under contract to work for a fixed period (usually 5 years) in exchange for their passage and wages. Over 500,000 came between 1834 and 1923.' }),
 
   makeTF({ id:'g5hg-ta-014', chapterId:'trade-agri', difficulty:1,
     question:'Indentured workers who came to Mauritius after 1835 were mainly from India.',
     answer:true,
     hint:'They arrived through the immigration depot Aapravasi Ghat in Port Louis.',
-    explanation:'True. The vast majority of <b>indentured workers</b> who came to Mauritius after the abolition of slavery were from <b>India</b> — mainly from Bihar, Uttar Pradesh and Madras. They profoundly shaped the culture, language, religion and cuisine of modern Mauritius.' }),
+    explanation:'True. The vast majority of <b>indentured workers</b> who came to Mauritius after the abolition of slavery were from <b>India</b> - mainly from Bihar, Uttar Pradesh and Madras. They profoundly shaped the culture, language, religion and cuisine of modern Mauritius.' }),
 
   makeMCQ({ id:'g5hg-ta-015', chapterId:'trade-agri', difficulty:2,
     question:'What is "indentured labour"?',
@@ -167,25 +167,25 @@ STATIC_QUESTIONS.push(
     question:'A plantation owner in 1840 switches from using enslaved workers to using indentured workers. What is ONE key difference that affects how he manages his workforce?',
     options:[
       'Enslaved people owned their tools; indentured workers did not',
-      'Indentured workers have a legal contract specifying their period of work and pay — the owner must fulfil these terms or face legal consequences',
+      'Indentured workers have a legal contract specifying their period of work and pay - the owner must fulfil these terms or face legal consequences',
       'Indentured workers always work harder because they are paid more',
-      'There is no real difference — both systems are identical in practice'
+      'There is no real difference - both systems are identical in practice'
     ],
-    answer:'Indentured workers have a legal contract specifying their period of work and pay — the owner must fulfil these terms or face legal consequences',
+    answer:'Indentured workers have a legal contract specifying their period of work and pay - the owner must fulfil these terms or face legal consequences',
     hint:'What does the word "indentured" (a legal contract) imply for the employer?',
-    explanation:'Unlike <b>enslaved workers</b> who had no legal rights or pay, <b>indentured workers</b> had a formal contract specifying the work period, wages and conditions. This gave them some legal protection — employers who broke the terms could face legal action. In practice many abuses still occurred, but the legal framework was fundamentally different.' }),
+    explanation:'Unlike <b>enslaved workers</b> who had no legal rights or pay, <b>indentured workers</b> had a formal contract specifying the work period, wages and conditions. This gave them some legal protection - employers who broke the terms could face legal action. In practice many abuses still occurred, but the legal framework was fundamentally different.' }),
 
   makeMCQ({ id:'g5hg-ta-018', chapterId:'trade-agri', difficulty:4,
     question:'By 1870, sugar cane covered 90% of Mauritius\'s cultivated land. Evaluate ONE ADVANTAGE and ONE DISADVANTAGE of this economic specialisation.',
     options:[
-      'Advantage: high export income from sugar; Disadvantage: the economy is vulnerable — a collapse in sugar prices or a cyclone destroying the crop causes a national economic crisis',
+      'Advantage: high export income from sugar; Disadvantage: the economy is vulnerable - a collapse in sugar prices or a cyclone destroying the crop causes a national economic crisis',
       'Advantage: sugar is grown all year with no seasons; Disadvantage: workers prefer other crops',
       'Advantage: sugar produces its own fuel; Disadvantage: it uses too much water',
       'Advantage: sugar is the only crop that grows in Mauritius; Disadvantage: it cannot be exported'
     ],
-    answer:'Advantage: high export income from sugar; Disadvantage: the economy is vulnerable — a collapse in sugar prices or a cyclone destroying the crop causes a national economic crisis',
+    answer:'Advantage: high export income from sugar; Disadvantage: the economy is vulnerable - a collapse in sugar prices or a cyclone destroying the crop causes a national economic crisis',
     hint:'Think about the risks of relying on ONE crop for the entire economy.',
-    explanation:'<b>Advantage:</b> Concentrating on sugar brought <b>high export earnings</b> when prices were good — Mauritius developed efficient mills and plantations. <b>Disadvantage:</b> A <b>monoculture economy</b> (one crop) is extremely vulnerable — a drop in world sugar prices, a devastating cyclone or a crop disease could ruin the entire national economy at once. This is why Mauritius later diversified into tourism, textiles and financial services.' }),
+    explanation:'<b>Advantage:</b> Concentrating on sugar brought <b>high export earnings</b> when prices were good - Mauritius developed efficient mills and plantations. <b>Disadvantage:</b> A <b>monoculture economy</b> (one crop) is extremely vulnerable - a drop in world sugar prices, a devastating cyclone or a crop disease could ruin the entire national economy at once. This is why Mauritius later diversified into tourism, textiles and financial services.' }),
 
   makeMCQ({ id:'g5hg-ta-019', chapterId:'trade-agri', difficulty:2,
     question:'How did Robert Farquhar, the first British governor, help the sugar industry in Mauritius?',

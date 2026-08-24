@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Maths — Chapter: Measures & Units (length/mass/capacity/time/money)
+﻿'use strict';
+// Grade 4 Maths - Chapter: Measures & Units (length/mass/capacity/time/money)
 // IDs format: g4m-meas-NNN
 
 STATIC_QUESTIONS.push(

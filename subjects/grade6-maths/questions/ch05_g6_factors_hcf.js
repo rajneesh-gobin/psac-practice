@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Factors, HCF & LCM
+﻿'use strict';
+// Grade 6 Maths - Chapter: Factors, HCF & LCM
 // IDs format: g6m-hcf-NNN
 
 // Factor tree SVG for 36
@@ -44,14 +44,14 @@ STATIC_QUESTIONS.push(
     options:['7','13','15','19'],
     answer:'15',
     hint:'A composite number has more than 2 factors.',
-    explanation:'<b>15</b> is composite — its factors are 1, 3, 5 and 15 (more than 2 factors). 7, 13 and 19 are all prime (exactly 2 factors each).' }),
+    explanation:'<b>15</b> is composite - its factors are 1, 3, 5 and 15 (more than 2 factors). 7, 13 and 19 are all prime (exactly 2 factors each).' }),
 
   makeMCQ({ id:'g6m-hcf-003', chapterId:'g6-factors-hcf', difficulty:2,
     question:`${_SVG_TREE}Using the factor tree, what is the prime factorisation of 36?`,
     options:['2 × 2 × 9','4 × 9','2 × 2 × 3 × 3','2 × 18'],
     answer:'2 × 2 × 3 × 3',
-    hint:'Look at the red circles in the factor tree — these are all prime.',
-    explanation:'From the factor tree: 36 = 4 × 9 = (2 × 2) × (3 × 3) = <b>2 × 2 × 3 × 3</b> = 2² × 3². This is the prime factorisation — all factors are prime numbers.' }),
+    hint:'Look at the red circles in the factor tree - these are all prime.',
+    explanation:'From the factor tree: 36 = 4 × 9 = (2 × 2) × (3 × 3) = <b>2 × 2 × 3 × 3</b> = 2² × 3². This is the prime factorisation - all factors are prime numbers.' }),
 
   makeNum({ id:'g6m-hcf-004', chapterId:'g6-factors-hcf', difficulty:2,
     question:'Find the <b>Highest Common Factor (HCF)</b> of 24 and 36.',
@@ -104,7 +104,7 @@ STATIC_QUESTIONS.push(
     question:'Write down ALL the factors of 60.',
     answer:'1,2,3,4,5,6,10,12,15,20,30,60', acceptableAnswers:['1,2,3,4,5,6,10,12,15,20,30,60','12'],
     hint:'Check every number from 1 to 60. A factor divides evenly with no remainder.',
-    explanation:'Factors of 60: <b>1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60</b>. There are 12 factors. Tip: work in pairs — 1×60, 2×30, 3×20, 4×15, 5×12, 6×10. The total number of factors of 60 is 12.' }),
+    explanation:'Factors of 60: <b>1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60</b>. There are 12 factors. Tip: work in pairs - 1×60, 2×30, 3×20, 4×15, 5×12, 6×10. The total number of factors of 60 is 12.' }),
 
   makeNum({ id:'g6m-hcf-012', chapterId:'g6-factors-hcf', difficulty:2,
     question:'Find the prime factorisation of 60. (Write as: 2 × 2 × 3 × 5)',
@@ -128,7 +128,7 @@ STATIC_QUESTIONS.push(
     question:'Two numbers are CO-PRIME (relatively prime) if their HCF is 1.',
     answer:true,
     hint:'8 and 9: HCF = 1. Are they co-prime?',
-    explanation:'<b>True.</b> Two numbers are <b>co-prime</b> (or relatively prime) when their HCF = 1 — they share no common factors other than 1. Example: 8 and 9 are co-prime (HCF = 1) even though neither is prime. Co-prime numbers are important in ratio simplification: a ratio is in simplest form when the two numbers are co-prime.' }),
+    explanation:'<b>True.</b> Two numbers are <b>co-prime</b> (or relatively prime) when their HCF = 1 - they share no common factors other than 1. Example: 8 and 9 are co-prime (HCF = 1) even though neither is prime. Co-prime numbers are important in ratio simplification: a ratio is in simplest form when the two numbers are co-prime.' }),
 
   makeMCQ({ id:'g6m-hcf-016', chapterId:'g6-factors-hcf', difficulty:2,
     question:'Three lights flash at intervals of 4 seconds, 6 seconds and 8 seconds. They all flash together at time 0. After how many seconds will they NEXT all flash together?',
@@ -140,7 +140,7 @@ STATIC_QUESTIONS.push(
   makeNum({ id:'g6m-hcf-017', chapterId:'g6-factors-hcf', difficulty:2,
     question:'A field is 72 m long and 48 m wide. A farmer wants to plant trees along the edges with EQUAL spacing (as large as possible), with one tree at each corner. What is the maximum spacing between trees? (m)',
     answer:'24', acceptableAnswers:['24'],
-    hint:'Find HCF(72, 48) — the largest length that divides both evenly.',
+    hint:'Find HCF(72, 48) - the largest length that divides both evenly.',
     explanation:'HCF(72, 48): Factors of 72: 1,2,3,4,6,8,9,12,<b>24</b>,36,72. Factors of 48: 1,2,3,4,6,8,12,16,<b>24</b>,48. HCF = <b>24 metres</b>. This is the largest equal spacing that works for both dimensions.' }),
 
   makeMCQ({ id:'g6m-hcf-018', chapterId:'g6-factors-hcf', difficulty:2,

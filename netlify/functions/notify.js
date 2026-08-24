@@ -1,11 +1,11 @@
-﻿// Netlify Function — Assignment Completion Notifier
+﻿// Netlify Function - Assignment Completion Notifier
 // Called by the student's browser when they finish an assignment.
 // Looks up the parent's email and sends a summary via Resend.
 //
 // Required Netlify environment variables:
-//   SUPABASE_SERVICE_ROLE_KEY  — service role key (never in frontend)
-//   RESEND_API_KEY             — from resend.com (free tier available)
-//   NOTIFY_FROM_EMAIL          — e.g. "PSAC Exam Practice <no-reply@yourdomain.com>"
+//   SUPABASE_SERVICE_ROLE_KEY  - service role key (never in frontend)
+//   RESEND_API_KEY             - from resend.com (free tier available)
+//   NOTIFY_FROM_EMAIL          - e.g. "PSAC Exam Practice <no-reply@yourdomain.com>"
 //                                Defaults to Resend test address if unset.
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
@@ -27,7 +27,7 @@ async function sbGet(path) {
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405 };
 
-  // Silently skip when email is not configured — never crash the student's flow
+  // Silently skip when email is not configured - never crash the student's flow
   if (!RESEND_KEY || !SUPABASE_KEY) return { statusCode: 200, body: 'not_configured' };
 
   let body;
@@ -76,7 +76,7 @@ exports.handler = async (event) => {
   <div style="max-width:480px;margin:32px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)">
     <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:24px 28px;color:#fff">
       <div style="font-size:22px;font-weight:bold">📊 Assignment Complete!</div>
-      <div style="opacity:.85;margin-top:4px;font-size:14px">PSAC Exam Practice — Parent Notification</div>
+      <div style="opacity:.85;margin-top:4px;font-size:14px">PSAC Exam Practice - Parent Notification</div>
     </div>
     <div style="padding:24px 28px">
       <p style="margin:0 0 16px;color:#374151;font-size:15px">
@@ -108,7 +108,7 @@ exports.handler = async (event) => {
     body: JSON.stringify({
       from:    FROM_EMAIL,
       to:      parentEmail,
-      subject: `${safeDisplayName} completed: ${safeLabel} — ${safePct}%`,
+      subject: `${safeDisplayName} completed: ${safeLabel} - ${safePct}%`,
       html,
     }),
   });

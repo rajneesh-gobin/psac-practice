@@ -1,4 +1,4 @@
-// Netlify Function — Question Server
+﻿// Netlify Function - Question Server
 // Reads question JS files server-side and returns filtered JSON.
 // Browser never sees the raw source files.
 
@@ -52,7 +52,7 @@ function _buildContext(buf) {
       options: [correctRight, ...wrongOpts], answer: correctRight, hint, explanation });
   }
 
-  // STATIC_QUESTIONS.push(...) — collect into buf
+  // STATIC_QUESTIONS.push(...) - collect into buf
   const STATIC_QUESTIONS = {
     push(...qs) { qs.flat().forEach(q => q && buf.push(q)); }
   };
@@ -110,7 +110,7 @@ exports.handler = async (event) => {
   const SB_SRK  = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (authHeader) {
-    // Verify Supabase JWT — rejects expired, forged, or random strings
+    // Verify Supabase JWT - rejects expired, forged, or random strings
     const r = await fetch(`${SB_URL}/auth/v1/user`, {
       headers: { Authorization: `Bearer ${authHeader}`, apikey: SB_ANON },
     });

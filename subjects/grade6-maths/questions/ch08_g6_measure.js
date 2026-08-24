@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Measurement (unit conversion, perimeter, 12h/24h time, money)
+﻿'use strict';
+// Grade 6 Maths - Chapter: Measurement (unit conversion, perimeter, 12h/24h time, money)
 // IDs format: g6m-meas-NNN
 
 STATIC_QUESTIONS.push(

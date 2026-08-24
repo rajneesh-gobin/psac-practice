@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 // ══════════════════════════════════════════════
-//  Grade 5 Maths — Core Question Bank
+//  Grade 5 Maths - Core Question Bank
 //  Base questions for all 18 chapters.
 //  Pushes into the global STATIC_QUESTIONS array.
 //  Must load AFTER engine/helpers.js and engine/questions_engine.js

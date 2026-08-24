@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Science — Chapter: Energy
+﻿'use strict';
+// Grade 4 Science - Chapter: Energy
 // IDs format: g4sc-energy-NNN
 
 STATIC_QUESTIONS.push(
@@ -23,20 +23,20 @@ STATIC_QUESTIONS.push(
     options:['Light energy','Heat energy','Sound energy','Chemical energy'],
     answer:'Sound energy',
     hint:'What do you notice when someone plays the drum?',
-    explanation:'When you beat a drum, the skin vibrates and produces <b>sound energy</b> — the vibrations travel through the air as sound waves and reach your ears. <b>Sound energy</b> is the energy carried by vibrating objects.' }),
+    explanation:'When you beat a drum, the skin vibrates and produces <b>sound energy</b> - the vibrations travel through the air as sound waves and reach your ears. <b>Sound energy</b> is the energy carried by vibrating objects.' }),
 
   makeTF({ id:'g4sc-energy-004', chapterId:'g4sci-energy', difficulty:1,
     question:'The Sun is a RENEWABLE source of energy because it will not run out in our lifetime.',
     answer:true,
     hint:'Can humans use up all of the Sun\'s energy?',
-    explanation:'<b>True.</b> The Sun is a <b>renewable</b> energy source — its energy is constantly available and will not run out in our lifetime (the Sun will burn for billions more years). Renewable sources are naturally replenished: sun, wind and water. Non-renewable sources like petrol and coal can be used up.' }),
+    explanation:'<b>True.</b> The Sun is a <b>renewable</b> energy source - its energy is constantly available and will not run out in our lifetime (the Sun will burn for billions more years). Renewable sources are naturally replenished: sun, wind and water. Non-renewable sources like petrol and coal can be used up.' }),
 
   makeMCQ({ id:'g4sc-energy-005', chapterId:'g4sci-energy', difficulty:1,
     question:'Which energy source is used by a WINDMILL?',
     options:['Solar energy','Wind energy','Water energy','Petrol'],
     answer:'Wind energy',
     hint:'What makes the blades of a windmill spin?',
-    explanation:'A windmill uses <b>wind energy</b> — the moving air (wind) pushes the blades and makes them spin. This spinning motion (mechanical energy) can be used to grind grain or generate electricity. Wind energy is renewable — the wind is always blowing somewhere.' }),
+    explanation:'A windmill uses <b>wind energy</b> - the moving air (wind) pushes the blades and makes them spin. This spinning motion (mechanical energy) can be used to grind grain or generate electricity. Wind energy is renewable - the wind is always blowing somewhere.' }),
 
   makeMCQ({ id:'g4sc-energy-006', chapterId:'g4sci-energy', difficulty:1,
     question:'Which energy source comes from BURNING WOOD or CHARCOAL?',
@@ -57,7 +57,7 @@ STATIC_QUESTIONS.push(
     options:['Sunlight','Wind','Petrol','Flowing water'],
     answer:'Petrol',
     hint:'Non-renewable means it can be used up and cannot be replaced quickly.',
-    explanation:'<b>Petrol</b> is a <b>non-renewable</b> energy source. It is made from crude oil, which took millions of years to form underground. Once we use it up, it cannot be replaced quickly. Sunlight, wind and flowing water are <b>renewable</b> — they are constantly available and will not run out.' }),
+    explanation:'<b>Petrol</b> is a <b>non-renewable</b> energy source. It is made from crude oil, which took millions of years to form underground. Once we use it up, it cannot be replaced quickly. Sunlight, wind and flowing water are <b>renewable</b> - they are constantly available and will not run out.' }),
 
   makeMCQ({ id:'g4sc-energy-009', chapterId:'g4sci-energy', difficulty:2,
     question:'When you switch on a STOVE to cook food, what is the MAIN form of energy produced?',
@@ -71,7 +71,7 @@ STATIC_QUESTIONS.push(
     options:['Heat energy','Sound energy','Mechanical (movement) energy','Light energy'],
     answer:'Mechanical (movement) energy',
     hint:'Energy of moving things is called...?',
-    explanation:'A moving bicycle has <b>mechanical energy</b> (also called kinetic energy — the energy of movement). Anything that moves has mechanical energy: running water, blowing wind, spinning wheels, a falling ball. The faster and heavier the object, the more mechanical energy it has.' }),
+    explanation:'A moving bicycle has <b>mechanical energy</b> (also called kinetic energy - the energy of movement). Anything that moves has mechanical energy: running water, blowing wind, spinning wheels, a falling ball. The faster and heavier the object, the more mechanical energy it has.' }),
 
   makeTF({ id:'g4sc-energy-011', chapterId:'g4sci-energy', difficulty:1,
     question:'Coal and petrol are examples of RENEWABLE energy sources.',
@@ -84,7 +84,7 @@ STATIC_QUESTIONS.push(
     options:['Chemical energy','Electricity','Mechanical energy','Sound energy'],
     answer:'Electricity',
     hint:'What do you use solar panels for at home?',
-    explanation:'<b>Solar panels</b> convert <b>light energy from the Sun</b> into <b>electricity</b>. The electricity can then be used to power lights, appliances and other devices in the home. Solar energy is clean and renewable — using it reduces our dependence on non-renewable sources like coal and oil.' }),
+    explanation:'<b>Solar panels</b> convert <b>light energy from the Sun</b> into <b>electricity</b>. The electricity can then be used to power lights, appliances and other devices in the home. Solar energy is clean and renewable - using it reduces our dependence on non-renewable sources like coal and oil.' }),
 
   makeMCQ({ id:'g4sc-energy-013', chapterId:'g4sci-energy', difficulty:2,
     question:'We use energy for TRANSPORT (getting from place to place). Which energy source do most cars use?',
@@ -98,7 +98,7 @@ STATIC_QUESTIONS.push(
     options:['Sound energy only','Light energy (and some heat energy)','Mechanical energy','Chemical energy'],
     answer:'Light energy (and some heat energy)',
     hint:'What does a light bulb do?',
-    explanation:'An electric bulb converts electrical energy into mainly <b>light energy</b>. It also produces some <b>heat energy</b> (that is why old-style bulbs get hot to touch). Modern LED bulbs are more efficient — they produce more light and less wasted heat.' }),
+    explanation:'An electric bulb converts electrical energy into mainly <b>light energy</b>. It also produces some <b>heat energy</b> (that is why old-style bulbs get hot to touch). Modern LED bulbs are more efficient - they produce more light and less wasted heat.' }),
 
   makeMCQ({ id:'g4sc-energy-015', chapterId:'g4sci-energy', difficulty:3,
     question:'Which of these pairs correctly shows an energy SOURCE and the FORM of energy it produces?',
@@ -110,7 +110,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Flowing river → mechanical (movement) energy',
     hint:'Think about what each source actually produces.',
-    explanation:'A <b>flowing river</b> has <b>mechanical (movement) energy</b> — the water is in motion. This energy can turn water wheels or turbines. The other pairs are wrong: the Sun produces light and heat (not sound); a drum produces sound (not light); a bulb produces light and heat (not chemical energy).' }),
+    explanation:'A <b>flowing river</b> has <b>mechanical (movement) energy</b> - the water is in motion. This energy can turn water wheels or turbines. The other pairs are wrong: the Sun produces light and heat (not sound); a drum produces sound (not light); a bulb produces light and heat (not chemical energy).' }),
 
   makeTF({ id:'g4sc-energy-016', chapterId:'g4sci-energy', difficulty:2,
     question:'We use energy for LIGHTING our homes at night.',
@@ -135,7 +135,7 @@ STATIC_QUESTIONS.push(
     options:['2','3','4','5'],
     answer:'4',
     hint:'Renewable = naturally replaced quickly (sun, wind, water, recently-grown wood). Non-renewable = fossil fuels that took millions of years to form.',
-    explanation:'<b>Renewable</b> (4): Sun (solar), wind, flowing water (hydro), wood (biomass — trees can be replanted). <b>Non-renewable</b> (2): coal, petrol (fossil fuels that take millions of years to form). So <b>4</b> of the 6 sources listed are renewable. Note: in practice, wood is only truly renewable if forests are managed sustainably.' }),
+    explanation:'<b>Renewable</b> (4): Sun (solar), wind, flowing water (hydro), wood (biomass - trees can be replanted). <b>Non-renewable</b> (2): coal, petrol (fossil fuels that take millions of years to form). So <b>4</b> of the 6 sources listed are renewable. Note: in practice, wood is only truly renewable if forests are managed sustainably.' }),
 
   makeMCQ({ id:'g4sc-energy-019', chapterId:'g4sci-energy', difficulty:4,
     question:'A family wants to save money on electricity. They live in a sunny country like Mauritius. Which TWO changes would help MOST?',

@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Decimals (3 decimal places, ×÷ by 10/100/1000)
+﻿'use strict';
+// Grade 6 Maths - Chapter: Decimals (3 decimal places, ×÷ by 10/100/1000)
 // IDs format: g6m-dec-NNN
 
 STATIC_QUESTIONS.push(
@@ -51,14 +51,14 @@ STATIC_QUESTIONS.push(
     question:'Calculate: 6.4 − 2.875',
     answer:'3.525', acceptableAnswers:['3.525'],
     hint:'Write as 6.400 − 2.875 (add trailing zeros so both have 3 decimal places).',
-    explanation:'6.400 − 2.875 = <b>3.525</b>. Adding trailing zeros (6.400) makes the subtraction easier — and does not change the value.' }),
+    explanation:'6.400 − 2.875 = <b>3.525</b>. Adding trailing zeros (6.400) makes the subtraction easier - and does not change the value.' }),
 
   makeMCQ({ id:'g6m-dec-009', chapterId:'g6-decimals', difficulty:2,
     question:'Round 4.7368 to <b>2 decimal places</b>.',
     options:['4.73','4.74','4.7','4.736'],
     answer:'4.74',
     hint:'Look at the third decimal place (6). Since 6 ≥ 5, round the second decimal place up.',
-    explanation:'4.7368 — third decimal digit is 6 (≥ 5), so we round up the second decimal digit from 3 to 4. Answer: <b>4.74</b>.' }),
+    explanation:'4.7368 - third decimal digit is 6 (≥ 5), so we round up the second decimal digit from 3 to 4. Answer: <b>4.74</b>.' }),
 
   makeNum({ id:'g6m-dec-010', chapterId:'g6-decimals', difficulty:2,
     question:'A bottle holds 1.5 litres. How many millilitres is this? (1 litre = 1000 ml)',
@@ -105,7 +105,7 @@ STATIC_QUESTIONS.push(
     question:'Round 6.847 to 2 DECIMAL PLACES.',
     answer:'6.85', acceptableAnswers:['6.85'],
     hint:'Look at the third decimal place (7). Since 7 ≥ 5, round up the second decimal place.',
-    explanation:'6.847 — the third decimal digit is 7 (≥ 5), so round up: 6.84 → 6.<b>85</b>. Rounding to 2 decimal places means keeping only 2 digits after the decimal point.' }),
+    explanation:'6.847 - the third decimal digit is 7 (≥ 5), so round up: 6.84 → 6.<b>85</b>. Rounding to 2 decimal places means keeping only 2 digits after the decimal point.' }),
 
   makeNum({ id:'g6m-dec-017', chapterId:'g6-decimals', difficulty:2,
     question:'A shopkeeper buys 12 kg of rice at Rs 35.50 per kg. What is the TOTAL COST?',
@@ -123,7 +123,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'0.06, 0.6, 0.609, 0.61',
     hint:'Compare digit by digit from left: tenths first, then hundredths, then thousandths.',
-    explanation:'Tenths: 0.06 has 0 tenths; others have 6 tenths. So 0.06 is smallest. Among 0.6, 0.609, 0.61: all have 6 tenths; compare hundredths: 0 vs 0 vs 1. 0.609 vs 0.610: thousandths 9 < 0 — wait: 0.610 > 0.609. So order: <b>0.06, 0.6, 0.609, 0.61</b>.' }),
+    explanation:'Tenths: 0.06 has 0 tenths; others have 6 tenths. So 0.06 is smallest. Among 0.6, 0.609, 0.61: all have 6 tenths; compare hundredths: 0 vs 0 vs 1. 0.609 vs 0.610: thousandths 9 < 0 - wait: 0.610 > 0.609. So order: <b>0.06, 0.6, 0.609, 0.61</b>.' }),
 
   makeNum({ id:'g6m-dec-019', chapterId:'g6-decimals', difficulty:4,
     question:'A car travels 38.4 km on 3.2 litres of petrol. How many km does it travel per LITRE? If petrol costs Rs 52.50 per litre, what is the cost of petrol for a 192 km journey? (Answer: cost in Rs)',

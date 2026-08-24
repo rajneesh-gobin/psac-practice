@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 French — L'Imparfait
+﻿'use strict';
+// Grade 4 French - L'Imparfait
 // IDs format: g4fr-imparfait-NNN
 
 STATIC_QUESTIONS.push(
@@ -23,7 +23,7 @@ STATIC_QUESTIONS.push(
     options:['il était','il est','il sera','il serait'],
     answer:'il était',
     hint:'Être est irrégulier à l\'imparfait. Radical = ét-.',
-    explanation:'"<b>Il était</b>" — être est le seul verbe irrégulier à l\'imparfait. Conjugaison : j\'étais, tu étais, il/elle <b>était</b>, nous étions, vous étiez, ils/elles étaient.' }),
+    explanation:'"<b>Il était</b>" - être est le seul verbe irrégulier à l\'imparfait. Conjugaison : j\'étais, tu étais, il/elle <b>était</b>, nous étions, vous étiez, ils/elles étaient.' }),
 
   makeTF({ id:'g4fr-imparfait-004', chapterId:'g4fr-imparfait', difficulty:1,
     question:'Pour former l\'imparfait, on prend le radical de la forme "nous" au présent.',
@@ -36,28 +36,28 @@ STATIC_QUESTIONS.push(
     options:['jouais','joue','ai joué','jouerai'],
     answer:'jouais',
     hint:'Action habituelle dans le passé → imparfait. Je + radical jou- + -ais.',
-    explanation:'"Je <b>jouais</b>" — action habituelle dans le passé → imparfait. Jouer → nous jouons → radical : jou- → je <b>jou-ais</b>.' }),
+    explanation:'"Je <b>jouais</b>" - action habituelle dans le passé → imparfait. Jouer → nous jouons → radical : jou- → je <b>jou-ais</b>.' }),
 
   makeMCQ({ id:'g4fr-imparfait-006', chapterId:'g4fr-imparfait', difficulty:2,
     question:'Quelle est la forme correcte de "avoir" à l\'imparfait pour "nous" ?',
     options:['nous avions','nous avais','nous avaient','nous avez'],
     answer:'nous avions',
     hint:'Avoir → présent nous avons → radical av- → nous av-ions.',
-    explanation:'"Nous <b>avions</b>" — avoir à l\'imparfait : j\'avais, tu avais, il avait, nous <b>avions</b>, vous aviez, ils avaient. Radical : av- (de "nous avons").' }),
+    explanation:'"Nous <b>avions</b>" - avoir à l\'imparfait : j\'avais, tu avais, il avait, nous <b>avions</b>, vous aviez, ils avaient. Radical : av- (de "nous avons").' }),
 
   makeMCQ({ id:'g4fr-imparfait-007', chapterId:'g4fr-imparfait', difficulty:2,
     question:'Complète : "Tous les étés, ma famille ___ (aller) à la mer." (imparfait)',
     options:['allait','va','est allée','ira'],
     answer:'allait',
     hint:'Action répétée dans le passé → imparfait. Aller → nous allons → all- + -ait.',
-    explanation:'"Ma famille <b>allait</b>" — action répétée = imparfait. Aller → nous allons → radical all- → il/elle <b>all-ait</b>. "Tous les étés" indique une habitude → imparfait.' }),
+    explanation:'"Ma famille <b>allait</b>" - action répétée = imparfait. Aller → nous allons → radical all- → il/elle <b>all-ait</b>. "Tous les étés" indique une habitude → imparfait.' }),
 
   makeMCQ({ id:'g4fr-imparfait-008', chapterId:'g4fr-imparfait', difficulty:2,
     question:'Complète : "Il ___ (faire) beau quand nous sommes sortis." (imparfait)',
     options:['faisait','fait','a fait','fera'],
     answer:'faisait',
     hint:'Description d\'un état passé → imparfait. Faire → nous faisons → fais- + -ait.',
-    explanation:'"Il <b>faisait</b> beau" — description d\'un état dans le passé → imparfait. Faire → nous faisons → radical fais- → il <b>fais-ait</b>.' }),
+    explanation:'"Il <b>faisait</b> beau" - description d\'un état dans le passé → imparfait. Faire → nous faisons → radical fais- → il <b>fais-ait</b>.' }),
 
   makeTF({ id:'g4fr-imparfait-009', chapterId:'g4fr-imparfait', difficulty:2,
     question:'"Nous mangions" est la forme correcte de "manger" à l\'imparfait pour "nous".',
@@ -75,14 +75,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Chaque soir, il regardait la télé. (action habituelle)',
     hint:'L\'imparfait = habitude/répétition passée. "Chaque soir" → imparfait.',
-    explanation:'"Chaque soir, il <b>regardait</b> la télé" — "chaque soir" indique une habitude passée → <b>imparfait</b> correct. "Hier, j\'ai mangé" (passé composé) = action terminée précise. L\'imparfait ne s\'utilise pas pour des actions futures.' }),
+    explanation:'"Chaque soir, il <b>regardait</b> la télé" - "chaque soir" indique une habitude passée → <b>imparfait</b> correct. "Hier, j\'ai mangé" (passé composé) = action terminée précise. L\'imparfait ne s\'utilise pas pour des actions futures.' }),
 
   makeMCQ({ id:'g4fr-imparfait-011', chapterId:'g4fr-imparfait', difficulty:2,
     question:'Conjugue HABITER à l\'imparfait pour "vous" : Vous ___ à Port-Louis.',
     options:['habitiez','habitais','habitaient','habitons'],
     answer:'habitiez',
     hint:'Habiter → nous habitons → habit- + terminaison "vous" = -iez.',
-    explanation:'"Vous <b>habitiez</b>" — habiter → radical habit- → vous habit-<b>iez</b>. Terminaisons : je -ais, tu -ais, il -ait, nous -ions, vous <b>-iez</b>, ils -aient.' }),
+    explanation:'"Vous <b>habitiez</b>" - habiter → radical habit- → vous habit-<b>iez</b>. Terminaisons : je -ais, tu -ais, il -ait, nous -ions, vous <b>-iez</b>, ils -aient.' }),
 
   makeMCQ({ id:'g4fr-imparfait-012', chapterId:'g4fr-imparfait', difficulty:3,
     question:'Laquelle de ces phrases décrit UNE HABITUDE passée (et non une action terminée précise) ?',
@@ -94,7 +94,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Chaque matin, ma mère préparait le petit-déjeuner.',
     hint:'"Chaque matin" = habitude → imparfait. "Lundi dernier / Hier soir / La semaine passée" = moment précis → passé composé.',
-    explanation:'"Chaque matin, ma mère <b>préparait</b>" — "chaque matin" signale une habitude répétée dans le passé → imparfait. Les autres phrases indiquent un moment précis (lundi dernier, hier soir, la semaine passée) → passé composé.' }),
+    explanation:'"Chaque matin, ma mère <b>préparait</b>" - "chaque matin" signale une habitude répétée dans le passé → imparfait. Les autres phrases indiquent un moment précis (lundi dernier, hier soir, la semaine passée) → passé composé.' }),
 
   makeMCQ({ id:'g4fr-imparfait-013', chapterId:'g4fr-imparfait', difficulty:3,
     question:'Complète la description : "La maison ___ (être) grande. Il y ___ (avoir) un beau jardin et des fleurs ___ (pousser) partout."',
@@ -106,7 +106,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g4fr-imparfait-014', chapterId:'g4fr-imparfait', difficulty:3,
     question:'Dans "Je lisais quand il est entré", "lisais" est au passé composé.',
     answer:false,
-    hint:'"Lisais" — quelle terminaison reconnaissez-vous ?',
+    hint:'"Lisais" - quelle terminaison reconnaissez-vous ?',
     explanation:'<b>Faux.</b> "Lisais" est à l\'<b>imparfait</b> (je lis-ais). Dans cette phrase, "lisais" exprime une action <b>continue</b> (fond) et "est entré" (passé composé) exprime l\'action qui l\'interrompt (événement).' }),
 
   makeMCQ({ id:'g4fr-imparfait-015', chapterId:'g4fr-imparfait', difficulty:3,
@@ -114,21 +114,21 @@ STATIC_QUESTIONS.push(
     options:['finissaient','finissais','finissait','finissions'],
     answer:'finissaient',
     hint:'Finir → nous finissons → radical finiss- + terminaison "ils" = -aient.',
-    explanation:'"Ils <b>finissaient</b>" — finir → nous finissons → radical finiss- → ils finiss-<b>aient</b>. Terminaison pour ils/elles = <b>-aient</b>.' }),
+    explanation:'"Ils <b>finissaient</b>" - finir → nous finissons → radical finiss- → ils finiss-<b>aient</b>. Terminaison pour ils/elles = <b>-aient</b>.' }),
 
   makeMCQ({ id:'g4fr-imparfait-016', chapterId:'g4fr-imparfait', difficulty:3,
     question:'Choisis le bon temps : "Hier soir, il ___ son dîner quand le téléphone a sonné." (manger)',
     options:['mangeait','a mangé','mangera','mange'],
     answer:'mangeait',
     hint:'Action continue interrompue → imparfait. L\'action qui interrompt → passé composé.',
-    explanation:'"Il <b>mangeait</b>" — action en cours (continue) au moment où le téléphone a sonné → <b>imparfait</b>. Le schéma classique : imparfait (fond/arrière-plan) + passé composé (événement qui interrompt).' }),
+    explanation:'"Il <b>mangeait</b>" - action en cours (continue) au moment où le téléphone a sonné → <b>imparfait</b>. Le schéma classique : imparfait (fond/arrière-plan) + passé composé (événement qui interrompt).' }),
 
   makeMCQ({ id:'g4fr-imparfait-017', chapterId:'g4fr-imparfait', difficulty:3,
     question:'Transforme au passé : "Tous les dimanches, nous allons à l\'église." →',
     options:['Tous les dimanches, nous allions à l\'église.','Tous les dimanches, nous sommes allés à l\'église.','Tous les dimanches, nous irons à l\'église.','Tous les dimanches, nous aillons à l\'église.'],
     answer:"Tous les dimanches, nous allions à l'église.",
     hint:'"Tous les dimanches" = habitude passée → imparfait. Aller → nous allons → all- + -ions.',
-    explanation:'"Nous <b>allions</b>" — habitude passée → imparfait. Aller → nous allons → radical all- → nous all-<b>ions</b>.' }),
+    explanation:'"Nous <b>allions</b>" - habitude passée → imparfait. Aller → nous allons → radical all- → nous all-<b>ions</b>.' }),
 
   makeMCQ({ id:'g4fr-imparfait-018', chapterId:'g4fr-imparfait', difficulty:4,
     question:'Choisis le bon temps pour chaque verbe : "Quand nous ___ (être) petits, nous ___ (jouer) souvent dehors. Un soir, nous ___ (voir) une étoile filante."',
@@ -159,14 +159,14 @@ STATIC_QUESTIONS.push(
     options:['nous étions','nous étais','nous étaient','nous sommes'],
     answer:'nous étions',
     hint:'Être → radical ét- + terminaison nous = -ions.',
-    explanation:'"Nous <b>étions</b>" — être est irrégulier à l\'imparfait. Conjugaison complète : j\'étais, tu étais, il/elle était, nous <b>étions</b>, vous étiez, ils/elles étaient. Seul "être" a un radical irrégulier (ét-) à l\'imparfait.' }),
+    explanation:'"Nous <b>étions</b>" - être est irrégulier à l\'imparfait. Conjugaison complète : j\'étais, tu étais, il/elle était, nous <b>étions</b>, vous étiez, ils/elles étaient. Seul "être" a un radical irrégulier (ét-) à l\'imparfait.' }),
 
   makeMCQ({ id:'g4fr-imparfait-021', chapterId:'g4fr-imparfait', difficulty:1,
     question:'Conjugue AVOIR à l\'imparfait : "Vous ___ beaucoup d\'amis."',
     options:['aviez','avais','avaient','avez'],
     answer:'aviez',
     hint:'Avoir → radical av- + terminaison vous = -iez.',
-    explanation:'"Vous <b>aviez</b>" — avoir à l\'imparfait : j\'avais, tu avais, il avait, nous avions, vous <b>aviez</b>, ils avaient. Radical av- + terminaison <b>-iez</b> pour vous.' }),
+    explanation:'"Vous <b>aviez</b>" - avoir à l\'imparfait : j\'avais, tu avais, il avait, nous avions, vous <b>aviez</b>, ils avaient. Radical av- + terminaison <b>-iez</b> pour vous.' }),
 
   makeTF({ id:'g4fr-imparfait-022', chapterId:'g4fr-imparfait', difficulty:1,
     question:'La terminaison de l\'imparfait pour "ils/elles" est "-aient".',
@@ -176,30 +176,30 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4fr-imparfait-023', chapterId:'g4fr-imparfait', difficulty:2,
     question:'Conjugue PARLER à l\'imparfait pour toutes les personnes. Laquelle est INCORRECTE ?',
-    options:['je parlais','tu parlais','nous parlions','vous parliez — INCORRECT'],
-    answer:'vous parliez — INCORRECT',
+    options:['je parlais','tu parlais','nous parlions','vous parliez - INCORRECT'],
+    answer:'vous parliez - INCORRECT',
     hint:'Parler → nous parlons → parl- + -iez. "Parliez" est correct. Mais est-ce bien la forme incorrecte ici ?',
-    explanation:'En réalité, toutes ces formes sont <b>correctes</b>. Je parlais ✓, tu parlais ✓, nous parlions ✓, vous parliez ✓. La question demande laquelle semble incorrecte — aucune ne l\'est ! Cette question teste ton attention : souvent "parliez" semble bizarre mais est bien la bonne forme.' }),
+    explanation:'En réalité, toutes ces formes sont <b>correctes</b>. Je parlais ✓, tu parlais ✓, nous parlions ✓, vous parliez ✓. La question demande laquelle semble incorrecte - aucune ne l\'est ! Cette question teste ton attention : souvent "parliez" semble bizarre mais est bien la bonne forme.' }),
 
   makeMCQ({ id:'g4fr-imparfait-024', chapterId:'g4fr-imparfait', difficulty:2,
     question:'Conjugue JOUER à l\'imparfait : "Ils ___ au foot chaque après-midi."',
     options:['jouaient','jouait','jouions','joueraient'],
     answer:'jouaient',
     hint:'Jouer → nous jouons → jou- + terminaison ils = -aient.',
-    explanation:'"Ils <b>jouaient</b>" — jouer → radical jou- → ils jou-<b>aient</b>. "Chaque après-midi" indique une habitude → imparfait. Terminaison pour ils/elles = <b>-aient</b>.' }),
+    explanation:'"Ils <b>jouaient</b>" - jouer → radical jou- → ils jou-<b>aient</b>. "Chaque après-midi" indique une habitude → imparfait. Terminaison pour ils/elles = <b>-aient</b>.' }),
 
   makeMCQ({ id:'g4fr-imparfait-025', chapterId:'g4fr-imparfait', difficulty:2,
     question:'Conjugue FINIR à l\'imparfait : "Tu ___ toujours tes devoirs avant le dîner."',
     options:['finissais','finissait','finissions','finissaient'],
     answer:'finissais',
     hint:'Finir → nous finissons → finiss- + terminaison tu = -ais.',
-    explanation:'"Tu <b>finissais</b>" — finir → nous finissons → radical finiss- → tu finiss-<b>ais</b>. "Toujours" indique une habitude → imparfait.' }),
+    explanation:'"Tu <b>finissais</b>" - finir → nous finissons → radical finiss- → tu finiss-<b>ais</b>. "Toujours" indique une habitude → imparfait.' }),
 
   makeMCQ({ id:'g4fr-imparfait-026', chapterId:'g4fr-imparfait', difficulty:2,
     question:'Quel marqueur de temps indique une HABITUDE passée et donc l\'imparfait ?',
     options:['hier soir','soudain','autrefois','la semaine dernière'],
     answer:'autrefois',
-    hint:'"Autrefois" = "in the old days" — habitude passée.',
+    hint:'"Autrefois" = "in the old days" - habitude passée.',
     explanation:'"<b>Autrefois</b>" (= in the old days / formerly) indique une habitude passée → imparfait. Autres marqueurs d\'imparfait : d\'habitude, tous les jours, chaque matin, souvent, toujours, en ce temps-là. Marqueurs de passé composé : hier, soudain, un jour, la semaine dernière.' }),
 
   makeMCQ({ id:'g4fr-imparfait-027', chapterId:'g4fr-imparfait', difficulty:2,
@@ -221,14 +221,14 @@ STATIC_QUESTIONS.push(
     options:['dormais / a aboyé','ai dormi / aboyait','dormais / aboyait','ai dormi / a aboyé'],
     answer:'dormais / a aboyé',
     hint:'Action continue (fond) = imparfait. Action soudaine qui interrompt = passé composé.',
-    explanation:'"Je <b>dormais</b>" (imparfait — action continue, en cours) "quand le chien <b>a aboyé</b>" (passé composé — événement soudain qui interrompt). Structure classique : <b>imparfait</b> (arrière-plan) + <b>passé composé</b> (événement).' }),
+    explanation:'"Je <b>dormais</b>" (imparfait - action continue, en cours) "quand le chien <b>a aboyé</b>" (passé composé - événement soudain qui interrompt). Structure classique : <b>imparfait</b> (arrière-plan) + <b>passé composé</b> (événement).' }),
 
   makeMCQ({ id:'g4fr-imparfait-030', chapterId:'g4fr-imparfait', difficulty:3,
     question:'MANGER à l\'imparfait : "Nous ___ des mangues chaque été."',
-    options:['mangions','mangeons','mangions — avec e supplémentaire ?','manger — INCORRECT'],
+    options:['mangions','mangeons','mangions - avec e supplémentaire ?','manger - INCORRECT'],
     answer:'mangions',
     hint:'Manger → nous mangeons → mange- + -ions = mangeions. Mais la vraie forme est...',
-    explanation:'"Nous <b>mangions</b>" — manger → nous mangeons → radical mange- → nous mang-<b>ions</b>. Attention : on garde le "e" (mangeions) pour conserver le son /ʒ/ devant -a, -o (nous mangeons, je mangeais) mais devant -i le son est préservé : nous mang<b>ions</b> est la forme standard.' }),
+    explanation:'"Nous <b>mangions</b>" - manger → nous mangeons → radical mange- → nous mang-<b>ions</b>. Attention : on garde le "e" (mangeions) pour conserver le son /ʒ/ devant -a, -o (nous mangeons, je mangeais) mais devant -i le son est préservé : nous mang<b>ions</b> est la forme standard.' }),
 
   makeTF({ id:'g4fr-imparfait-031', chapterId:'g4fr-imparfait', difficulty:3,
     question:'"Nous buvions de l\'eau fraîche" est correct. Le radical de "boire" à l\'imparfait est "buv-".',
@@ -240,20 +240,20 @@ STATIC_QUESTIONS.push(
     question:'Identifie l\'ERREUR dans cette phrase : "Avant, tu étaient toujours à l\'heure."',
     options:[
       '"Avant" ne va pas avec l\'imparfait',
-      '"étaient" — mauvaise terminaison pour "tu"',
+      '"étaient" - mauvaise terminaison pour "tu"',
       '"toujours" ne va pas avec l\'imparfait',
       'Il n\'y a pas d\'erreur'
     ],
-    answer:'"étaient" — mauvaise terminaison pour "tu"',
+    answer:'"étaient" - mauvaise terminaison pour "tu"',
     hint:'Rappelle les terminaisons : je -ais, tu -ais, il -ait, ils -aient.',
     explanation:'"Tu <b>étaient</b>" est incorrect. Terminaison pour "tu" = <b>-ais</b> (tu étais, pas étaient). "Étaient" est la forme pour <b>ils/elles</b>. Correct : "Avant, tu <b>étais</b> toujours à l\'heure."' }),
 
   makeMCQ({ id:'g4fr-imparfait-033', chapterId:'g4fr-imparfait', difficulty:3,
-    question:'"Il n\'___ pas de bonbons à la maison." (avoir — imparfait, négation)',
+    question:'"Il n\'___ pas de bonbons à la maison." (avoir - imparfait, négation)',
     options:["n'avait","n'avais","n'avaient","n'aviez"],
     answer:"n'avait",
     hint:'Sujet = "il". Avoir imparfait pour "il" = avait. Négation : ne...pas encadre le verbe.',
-    explanation:'"Il <b>n\'avait</b> pas de bonbons" — avoir à l\'imparfait pour "il" = <b>avait</b>. Négation : <b>n\'</b> + avait + <b>pas</b>. "N\'" remplace "ne" devant une voyelle.' }),
+    explanation:'"Il <b>n\'avait</b> pas de bonbons" - avoir à l\'imparfait pour "il" = <b>avait</b>. Négation : <b>n\'</b> + avait + <b>pas</b>. "N\'" remplace "ne" devant une voyelle.' }),
 
   makeMCQ({ id:'g4fr-imparfait-034', chapterId:'g4fr-imparfait', difficulty:4,
     question:'Complète le paragraphe : "Autrefois, la vie ___ (être) différente. Les gens ___ (avoir) moins de technologie. Les enfants ___ (jouer) dehors et les familles ___ (manger) ensemble tous les soirs."',

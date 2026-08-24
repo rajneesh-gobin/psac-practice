@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Fractions (equivalent, simplify, add/subtract, mixed numbers)
+﻿'use strict';
+// Grade 6 Maths - Chapter: Fractions (equivalent, simplify, add/subtract, mixed numbers)
 // IDs format: g6m-frac-NNN
 
 STATIC_QUESTIONS.push(
@@ -21,7 +21,7 @@ STATIC_QUESTIONS.push(
   makeNum({ id:'g6m-frac-003', chapterId:'g6-fractions', difficulty:1,
     question:'Calculate: 3/8 + 2/8 (Write your answer as a fraction, e.g. 5/8)',
     answer:'5/8', acceptableAnswers:['5/8'],
-    hint:'Same denominator — just add the numerators.',
+    hint:'Same denominator - just add the numerators.',
     explanation:'When fractions have the same denominator: 3/8 + 2/8 = (3+2)/8 = <b>5/8</b>.' }),
 
   makeNum({ id:'g6m-frac-004', chapterId:'g6-fractions', difficulty:2,

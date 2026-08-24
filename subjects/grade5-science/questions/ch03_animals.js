@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 Science — Chapter: Animals & Habitats
+﻿'use strict';
+// Grade 5 Science - Chapter: Animals & Habitats
 // Uses STATIC_QUESTIONS + helpers from engine/helpers.js
 // IDs format: g5sci-an-NNN
 
@@ -10,7 +10,7 @@ STATIC_QUESTIONS.push(
     options:['Crow','Cardinal Jaune','Echo Parakeet','Sparrow'],
     answer:'Echo Parakeet',
     hint:'An endemic species is found ONLY in that place and nowhere else in the world.',
-    explanation:'The Echo Parakeet (Psittacula eques) is endemic to Mauritius — it is found only in Mauritius. The Dodo was also endemic but is now extinct.' }),
+    explanation:'The Echo Parakeet (Psittacula eques) is endemic to Mauritius - it is found only in Mauritius. The Dodo was also endemic but is now extinct.' }),
 
   makeMCQ({ id:'g5sci-an-002', chapterId:'animals', difficulty:1,
     question:'The Dodo was a bird that used to live in Mauritius. Why can we NOT see it today?',
@@ -87,7 +87,7 @@ STATIC_QUESTIONS.push(
     options:['A small brightly-coloured bird','A large flightless bird','A fast-flying seabird','A parrot-like bird'],
     answer:'A large flightless bird',
     hint:'It was similar to the Dodo of Mauritius.',
-    explanation:'The Rodrigues Solitaire was a large flightless bird — similar to the Dodo — that lived only in Rodrigues. François Leguat described it in 1691; it became extinct in the 18th century.' }),
+    explanation:'The Rodrigues Solitaire was a large flightless bird - similar to the Dodo - that lived only in Rodrigues. François Leguat described it in 1691; it became extinct in the 18th century.' }),
 
   makeMCQ({ id:'g5sci-an-011', chapterId:'animals', difficulty:1,
     question:'Which bird is endemic to the island of Rodrigues?',
@@ -101,7 +101,7 @@ STATIC_QUESTIONS.push(
     options:['Desert','Forest','Water','Underground soil'],
     answer:'Water',
     hint:'Fish breathe through gills which work in water.',
-    explanation:'Fish live naturally in <b>water</b> (sea, rivers, lakes). They are adapted to an aquatic habitat — they breathe through gills that extract oxygen from the water.' }),
+    explanation:'Fish live naturally in <b>water</b> (sea, rivers, lakes). They are adapted to an aquatic habitat - they breathe through gills that extract oxygen from the water.' }),
 
   makeMCQ({ id:'g5sci-an-013', chapterId:'animals', difficulty:2,
     question:'Give TWO ways in which fish are adapted to live in water.',
@@ -146,7 +146,7 @@ STATIC_QUESTIONS.push(
     options:['Fish','Amphibian','Mammal','Reptile'],
     answer:'Mammal',
     hint:'If it breathes air, is warm-blooded and feeds its young on milk, it is in this group.',
-    explanation:'The dolphin is a <b>mammal</b>. Although it lives in the sea and looks like a fish, it breathes air through a blowhole (it has lungs, not gills), is warm-blooded, gives birth to live young, and nurses them with milk — all characteristics of mammals.' }),
+    explanation:'The dolphin is a <b>mammal</b>. Although it lives in the sea and looks like a fish, it breathes air through a blowhole (it has lungs, not gills), is warm-blooded, gives birth to live young, and nurses them with milk - all characteristics of mammals.' }),
 
   makeMCQ({ id:'g5sci-an-018', chapterId:'animals', difficulty:3,
     question:'The government sets up a nature reserve on an island and removes all introduced predators (cats and rats). Over the next 10 years, the population of the endemic Pink Pigeon doubles. What does this tell us?',
@@ -170,6 +170,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'In zoos, animals cannot live and behave naturally, may not reproduce well, and removing them from nature reserves reduces the wild population that conservation aims to protect',
     hint:'What is the purpose of a nature reserve compared to a zoo?',
-    explanation:'Nature reserves are designed to allow animals to live naturally in their own habitat, hunt their own food and reproduce naturally — this is the goal of conservation. Moving animals to zoos removes them from their natural habitat, can reduce their quality of life, and depletes the very wild population that conservation programmes aim to grow. Captive breeding in zoos can play a supplementary role, but nature reserves in the wild are considered more sustainable.' })
+    explanation:'Nature reserves are designed to allow animals to live naturally in their own habitat, hunt their own food and reproduce naturally - this is the goal of conservation. Moving animals to zoos removes them from their natural habitat, can reduce their quality of life, and depletes the very wild population that conservation programmes aim to grow. Captive breeding in zoos can play a supplementary role, but nature reserves in the wild are considered more sustainable.' })
 
 );

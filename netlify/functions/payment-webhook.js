@@ -1,6 +1,6 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════════════════════
-//  PSAC Exam Practice — Payment Webhook (SKELETON)
+//  PSAC Exam Practice - Payment Webhook (SKELETON)
 //
 //  This endpoint will receive payment confirmations from
 //  payment providers and activate the matching subscription.
@@ -24,7 +24,7 @@
 const { createClient } = require('@supabase/supabase-js');
 
 const SB_URL = process.env.SUPABASE_URL || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
-const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY; // service role — never expose in frontend
+const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY; // service role - never expose in frontend
 
 function _sb() {
   if (!SB_KEY) return null;
@@ -34,17 +34,17 @@ function _sb() {
 // ── Provider signature verifiers (TODO: implement per provider) ──
 function _verifyStripe(body, sig, secret) {
   // TODO: use stripe.webhooks.constructEvent(body, sig, secret)
-  return true; // placeholder — REMOVE before going live
+  return true; // placeholder - REMOVE before going live
 }
 
 function _verifyJuice(body, sig, secret) {
   // TODO: verify HMAC-SHA256 of body with JUICE_MERCHANT_KEY
-  return true; // placeholder — REMOVE before going live
+  return true; // placeholder - REMOVE before going live
 }
 
 function _verifyMytMoney(body, sig, secret) {
   // TODO: verify MYT Money signature per their docs
-  return true; // placeholder — REMOVE before going live
+  return true; // placeholder - REMOVE before going live
 }
 
 // ── Main handler ─────────────────────────────────────────────
@@ -88,6 +88,6 @@ exports.handler = async (event) => {
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ok: true, message: 'Skeleton — no action taken yet' }),
+    body: JSON.stringify({ ok: true, message: 'Skeleton - no action taken yet' }),
   };
 };

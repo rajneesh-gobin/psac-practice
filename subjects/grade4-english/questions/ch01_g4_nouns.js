@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 English — Chapter: Nouns, Pronouns & Articles
+﻿'use strict';
+// Grade 4 English - Chapter: Nouns, Pronouns & Articles
 // IDs format: g4eng-noun-NNN
 
 STATIC_QUESTIONS.push(
@@ -9,7 +9,7 @@ STATIC_QUESTIONS.push(
     options:['dog','school','Mauritius','teacher'],
     answer:'Mauritius',
     hint:'A proper noun is the specific name of a person, place or thing. It always starts with a capital letter.',
-    explanation:'<b>Mauritius</b> is a proper noun — it is the specific name of our country and always begins with a capital letter. Dog, school and teacher are common nouns — they name general things and do not need capitals.' }),
+    explanation:'<b>Mauritius</b> is a proper noun - it is the specific name of our country and always begins with a capital letter. Dog, school and teacher are common nouns - they name general things and do not need capitals.' }),
 
   makeMCQ({ id:'g4eng-noun-002', chapterId:'g4eng-nouns', difficulty:1,
     question:'Choose the correct article: "I saw ___ owl in the tree."',
@@ -22,14 +22,14 @@ STATIC_QUESTIONS.push(
     question:'What is the PLURAL of "child"?',
     options:['childs','childes','children','childrens'],
     answer:'children',
-    hint:'Some plurals are irregular — they do NOT follow the usual rule of adding -s or -es.',
+    hint:'Some plurals are irregular - they do NOT follow the usual rule of adding -s or -es.',
     explanation:'"Child" has the irregular plural <b>children</b>. Irregular plurals must be memorised: child→children, man→men, woman→women, tooth→teeth, foot→feet, mouse→mice, goose→geese.' }),
 
   makeTF({ id:'g4eng-noun-004', chapterId:'g4eng-nouns', difficulty:1,
     question:'"Happiness" is a noun.',
     answer:true,
     hint:'Nouns name not only people and objects, but also feelings and ideas.',
-    explanation:'<b>True.</b> "Happiness" is an <b>abstract noun</b> — it names a feeling that cannot be seen or touched. Other abstract nouns: love, kindness, freedom, anger, courage, honesty.' }),
+    explanation:'<b>True.</b> "Happiness" is an <b>abstract noun</b> - it names a feeling that cannot be seen or touched. Other abstract nouns: love, kindness, freedom, anger, courage, honesty.' }),
 
   makeMCQ({ id:'g4eng-noun-005', chapterId:'g4eng-nouns', difficulty:2,
     question:'What is the COLLECTIVE NOUN for a group of fish?',
@@ -50,7 +50,7 @@ STATIC_QUESTIONS.push(
     options:['gave','gift','She','a'],
     answer:'She',
     hint:'A pronoun replaces a noun. Look for words like he, she, it, they, him, her, me.',
-    explanation:'"<b>She</b>" is a subject pronoun — it replaces the name of the person giving the gift. "Him" is also a pronoun in this sentence. Pronouns avoid repeating names: instead of "Meena gave Raj a gift", we say "She gave him a gift."' }),
+    explanation:'"<b>She</b>" is a subject pronoun - it replaces the name of the person giving the gift. "Him" is also a pronoun in this sentence. Pronouns avoid repeating names: instead of "Meena gave Raj a gift", we say "She gave him a gift."' }),
 
   makeMCQ({ id:'g4eng-noun-008', chapterId:'g4eng-nouns', difficulty:2,
     question:'Which sentence uses "the" CORRECTLY?',
@@ -62,7 +62,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The sun sets in the west.',
     hint:'"The" is used for something specific and unique, or something already identified.',
-    explanation:'"<b>The sun sets in the west</b>" is correct — we use <b>the</b> for unique, one-of-a-kind things (the sun, the moon, the west). "I want to be <b>a</b> doctor" is correct — it refers to the job in general, not a specific doctor.' }),
+    explanation:'"<b>The sun sets in the west</b>" is correct - we use <b>the</b> for unique, one-of-a-kind things (the sun, the moon, the west). "I want to be <b>a</b> doctor" is correct - it refers to the job in general, not a specific doctor.' }),
 
   makeNum({ id:'g4eng-noun-009', chapterId:'g4eng-nouns', difficulty:2,
     question:'How many NOUNS are in: "The children played football in the park."? Write a number.',
@@ -74,8 +74,8 @@ STATIC_QUESTIONS.push(
     question:'Read this passage: "Asha found a puppy near the school gate. She brought it home and fed it some milk. Her parents were surprised when they saw it." Which pronoun refers to ASHA\'S PARENTS?',
     options:['She','it','Her','they'],
     answer:'they',
-    hint:'Find who "they" refers to — which noun in the passage comes before this pronoun?',
-    explanation:'"<b>They</b>" refers to Asha\'s parents — "they saw it" means her parents saw the puppy. Tracking what each pronoun refers back to (its antecedent) is a key comprehension skill. "She" = Asha. "It" = the puppy. "Her" = Asha (possessive).' })
+    hint:'Find who "they" refers to - which noun in the passage comes before this pronoun?',
+    explanation:'"<b>They</b>" refers to Asha\'s parents - "they saw it" means her parents saw the puppy. Tracking what each pronoun refers back to (its antecedent) is a key comprehension skill. "She" = Asha. "It" = the puppy. "Her" = Asha (possessive).' })
 
 );
 
@@ -92,7 +92,7 @@ STATIC_QUESTIONS.push(
     question:'What is the PLURAL of "man"?',
     options:['mans','manes','men','mens'],
     answer:'men',
-    hint:'This is an irregular plural — it does not follow the -s rule.',
+    hint:'This is an irregular plural - it does not follow the -s rule.',
     explanation:'"Man" has the irregular plural <b>men</b>. Irregular plurals must be memorised: man→men, woman→women, child→children, tooth→teeth, foot→feet, mouse→mice, ox→oxen.' }),
 
   makeTF({ id:'g4eng-noun-013', chapterId:'g4eng-nouns', difficulty:1,
@@ -103,7 +103,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4eng-noun-014', chapterId:'g4eng-nouns', difficulty:1,
     question:'Choose the correct article: "She found ___ umbrella on the bus."',
-    options:['a','an','the','—'],
+    options:['a','an','the','-'],
     answer:'an',
     hint:'"Umbrella" starts with the vowel sound "u". Which article do we use before a vowel sound?',
     explanation:'We use <b>an</b> before words beginning with a vowel sound: an umbrella, an apple, an egg, an ice cube, an orange. "Umbrella" begins with "u" (a vowel), so we write "an umbrella".' }),
@@ -113,7 +113,7 @@ STATIC_QUESTIONS.push(
     options:['That','book','is','mine'],
     answer:'mine',
     hint:'A possessive pronoun shows ownership without using a noun after it.',
-    explanation:'"<b>Mine</b>" is a possessive pronoun — it shows the book belongs to "me". Possessive pronouns: mine, yours, his, hers, ours, theirs. Compare: "my book" (possessive adjective before a noun) vs "that book is mine" (possessive pronoun standing alone).' }),
+    explanation:'"<b>Mine</b>" is a possessive pronoun - it shows the book belongs to "me". Possessive pronouns: mine, yours, his, hers, ours, theirs. Compare: "my book" (possessive adjective before a noun) vs "that book is mine" (possessive pronoun standing alone).' }),
 
   makeMCQ({ id:'g4eng-noun-016', chapterId:'g4eng-nouns', difficulty:2,
     question:'What is the FEMININE form of "lion"?',
@@ -126,15 +126,15 @@ STATIC_QUESTIONS.push(
     question:'Which of the following is an ABSTRACT noun?',
     options:['chair','Priya','river','courage'],
     answer:'courage',
-    hint:'An abstract noun names something you cannot touch or see — like a feeling or quality.',
-    explanation:'"<b>Courage</b>" is an abstract noun — it names a quality that cannot be touched or seen. "Chair" and "river" are concrete nouns. "Priya" is a proper noun. Other abstract nouns: love, hope, beauty, fear, justice, wisdom, honesty.' }),
+    hint:'An abstract noun names something you cannot touch or see - like a feeling or quality.',
+    explanation:'"<b>Courage</b>" is an abstract noun - it names a quality that cannot be touched or seen. "Chair" and "river" are concrete nouns. "Priya" is a proper noun. Other abstract nouns: love, hope, beauty, fear, justice, wisdom, honesty.' }),
 
   makeMCQ({ id:'g4eng-noun-018', chapterId:'g4eng-nouns', difficulty:3,
     question:'Which noun in this sentence is a COLLECTIVE noun: "The teacher watched the class as they worked quietly."',
     options:['teacher','class','they','quietly'],
     answer:'class',
     hint:'A collective noun names a group of people or things as a single unit.',
-    explanation:'"<b>Class</b>" is a collective noun — it names a group of students treated as one unit. Other collective nouns for groups of people: team, audience, crew, staff, family, crowd, committee, choir.' }),
+    explanation:'"<b>Class</b>" is a collective noun - it names a group of students treated as one unit. Other collective nouns for groups of people: team, audience, crew, staff, family, crowd, committee, choir.' }),
 
   makeMCQ({ id:'g4eng-noun-019', chapterId:'g4eng-nouns', difficulty:4,
     question:'Read: "Every evening, the family gathers in their kitchen. Grandmother prepares dal and rice while the children do homework." How many COMMON nouns are in these two sentences?',

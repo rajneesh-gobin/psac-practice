@@ -1,10 +1,10 @@
-'use strict';
-// Grade 4 French — Chapitre : Lecture & Compréhension
+﻿'use strict';
+// Grade 4 French - Chapitre : Lecture & Compréhension
 // IDs format: g4fr-comp-NNN
 //
 // Passage utilisé dans ce chapitre :
 // ─────────────────────────────────────────────────────────────────────
-// MA FAMILLE (MIE Grade 4 French — contexte mauricien)
+// MA FAMILLE (MIE Grade 4 French - contexte mauricien)
 //
 // Je m'appelle Priya. J'ai dix ans. J'habite à Curepipe avec ma famille.
 // Nous sommes quatre dans ma famille : mon père, ma mère, ma petite sœur
@@ -28,35 +28,35 @@ STATIC_QUESTIONS.push(
     options:['Anita','Mia','Priya','Ravi'],
     answer:'Priya',
     hint:'Lis la première phrase du texte.',
-    explanation:'"Je m\'appelle <b>Priya</b>." — La première phrase donne directement le prénom de la narratrice. "Je m\'appelle" = My name is. C\'est une question factuelle directe.' }),
+    explanation:'"Je m\'appelle <b>Priya</b>." - La première phrase donne directement le prénom de la narratrice. "Je m\'appelle" = My name is. C\'est une question factuelle directe.' }),
 
   makeMCQ({ id:'g4fr-comp-002', chapterId:'g4fr-lecture', difficulty:1,
     question:_PASSAGE_G4FR + '<hr>Quel âge a Priya ?',
     options:['cinq ans','huit ans','dix ans','douze ans'],
     answer:'dix ans',
     hint:'"J\'ai ___ ans." Quelle est la réponse dans le texte ?',
-    explanation:'"J\'ai <b>dix ans</b>." — Priya a 10 ans. En français, pour donner son âge, on utilise le verbe "avoir" : J\'ai dix ans (I am ten years old). "Dix" = 10.' }),
+    explanation:'"J\'ai <b>dix ans</b>." - Priya a 10 ans. En français, pour donner son âge, on utilise le verbe "avoir" : J\'ai dix ans (I am ten years old). "Dix" = 10.' }),
 
   makeMCQ({ id:'g4fr-comp-003', chapterId:'g4fr-lecture', difficulty:1,
     question:_PASSAGE_G4FR + '<hr>Quelle est la profession du père de Priya ?',
     options:['Professeur','Médecin','Dentiste','Pharmacien'],
     answer:'Médecin',
     hint:'Lis la phrase : "Mon père s\'appelle Ravi. Il est ___."',
-    explanation:'"Il est <b>médecin</b>." — Le père de Priya (Ravi) est médecin (doctor). "Il est médecin" = He is a doctor. En français, on ne met pas d\'article devant le métier : "Il est médecin" (pas "un médecin").' }),
+    explanation:'"Il est <b>médecin</b>." - Le père de Priya (Ravi) est médecin (doctor). "Il est médecin" = He is a doctor. En français, on ne met pas d\'article devant le métier : "Il est médecin" (pas "un médecin").' }),
 
   makeMCQ({ id:'g4fr-comp-004', chapterId:'g4fr-lecture', difficulty:1,
     question:_PASSAGE_G4FR + '<hr>Que mange Priya le matin ?',
     options:['Du riz','Des céréales','Du pain','Des fruits'],
     answer:'Du pain',
     hint:'"Je mange ___ et je bois du lait."',
-    explanation:'"Je mange <b>du pain</b> et je bois du lait." — Priya mange du pain (bread) et boit du lait (milk) le matin. "Du pain" = some bread. "Du" est l\'article partitif masculin (de + le).' }),
+    explanation:'"Je mange <b>du pain</b> et je bois du lait." - Priya mange du pain (bread) et boit du lait (milk) le matin. "Du pain" = some bread. "Du" est l\'article partitif masculin (de + le).' }),
 
   makeMCQ({ id:'g4fr-comp-005', chapterId:'g4fr-lecture', difficulty:2,
     question:_PASSAGE_G4FR + '<hr>Combien de personnes y a-t-il dans la famille de Priya ?',
     options:['Deux','Trois','Quatre','Cinq'],
     answer:'Quatre',
     hint:'"Nous sommes ___ dans ma famille."',
-    explanation:'"Nous sommes <b>quatre</b> dans ma famille." — Il y a 4 personnes : le père, la mère, la petite sœur (Mia) et Priya. "Combien" demande une quantité. "Quatre" = 4.' }),
+    explanation:'"Nous sommes <b>quatre</b> dans ma famille." - Il y a 4 personnes : le père, la mère, la petite sœur (Mia) et Priya. "Combien" demande une quantité. "Quatre" = 4.' }),
 
   makeMCQ({ id:'g4fr-comp-006', chapterId:'g4fr-lecture', difficulty:2,
     question:_PASSAGE_G4FR + '<hr>Que signifie "Je m\'appelle" en anglais ?',
@@ -70,21 +70,21 @@ STATIC_QUESTIONS.push(
     options:['En voiture','En bus','À vélo','À pied'],
     answer:'À pied',
     hint:'"je vais à l\'école ___ avec ma sœur."',
-    explanation:'"Je vais à l\'école <b>à pied</b>." — "À pied" = on foot / walking. Priya marche jusqu\'à l\'école avec sa sœur Mia. Moyens de transport : à pied (on foot), en voiture (by car), en bus (by bus), à vélo (by bike).' }),
+    explanation:'"Je vais à l\'école <b>à pied</b>." - "À pied" = on foot / walking. Priya marche jusqu\'à l\'école avec sa sœur Mia. Moyens de transport : à pied (on foot), en voiture (by car), en bus (by bus), à vélo (by bike).' }),
 
   makeMCQ({ id:'g4fr-comp-008', chapterId:'g4fr-lecture', difficulty:2,
     question:_PASSAGE_G4FR + '<hr>Quel âge a Mia, la petite sœur de Priya ?',
     options:['Trois ans','Quatre ans','Cinq ans','Six ans'],
     answer:'Cinq ans',
     hint:'"Ma petite sœur s\'appelle Mia. Elle a ___ ans."',
-    explanation:'"Elle a <b>cinq ans</b>." — Mia a 5 ans. "Cinq" = 5. N\'oublie pas : en français, on utilise "avoir" pour l\'âge — "Elle a cinq ans" (She has five years / She is five years old).' }),
+    explanation:'"Elle a <b>cinq ans</b>." - Mia a 5 ans. "Cinq" = 5. N\'oublie pas : en français, on utilise "avoir" pour l\'âge - "Elle a cinq ans" (She has five years / She is five years old).' }),
 
   makeMCQ({ id:'g4fr-comp-009', chapterId:'g4fr-lecture', difficulty:3,
     question:_PASSAGE_G4FR + '<hr>Que signifie le mot "Ensuite" dans le texte ?',
     options:['Before','Because','Then / Afterwards','But'],
     answer:'Then / Afterwards',
     hint:'"Ensuite" est un mot de liaison qui indique l\'ordre des actions.',
-    explanation:'"<b>Ensuite</b>" = Then / Afterwards — c\'est un mot de liaison (connecteur) qui indique que l\'action suivante se passe après. Dans le texte : Priya mange, boit du lait, <b>ensuite</b> elle va à l\'école. Autres connecteurs : d\'abord (first), puis (then), enfin (finally).' }),
+    explanation:'"<b>Ensuite</b>" = Then / Afterwards - c\'est un mot de liaison (connecteur) qui indique que l\'action suivante se passe après. Dans le texte : Priya mange, boit du lait, <b>ensuite</b> elle va à l\'école. Autres connecteurs : d\'abord (first), puis (then), enfin (finally).' }),
 
   makeMCQ({ id:'g4fr-comp-010', chapterId:'g4fr-lecture', difficulty:4,
     question:_PASSAGE_G4FR + '<hr>D\'après TOUT le texte, quelle phrase décrit le mieux la famille de Priya ?',
@@ -96,7 +96,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'C\'est une famille de quatre personnes où les parents ont des professions importantes.',
     hint:'Lis le texte en entier. Combien sont-ils ? Quelles sont les professions ? Où habitent-ils ? Comment Priya se sent-elle ?',
-    explanation:'La réponse correcte résume bien le texte : <b>quatre personnes</b> (nous sommes quatre), <b>professions</b> importantes (père = médecin, mère = professeur). Ils habitent à Curepipe (pas Port Louis). Priya dit "J\'aime beaucoup ma famille" — elle aime sa famille. Cette question teste la compréhension globale du texte.' })
+    explanation:'La réponse correcte résume bien le texte : <b>quatre personnes</b> (nous sommes quatre), <b>professions</b> importantes (père = médecin, mère = professeur). Ils habitent à Curepipe (pas Port Louis). Priya dit "J\'aime beaucoup ma famille" - elle aime sa famille. Cette question teste la compréhension globale du texte.' })
 
 );
 
@@ -107,28 +107,28 @@ STATIC_QUESTIONS.push(
     options:['Médecin','Infirmière','Professeur','Directrice'],
     answer:'Professeur',
     hint:'"Ma mère s\'appelle Anita. Elle est ___."',
-    explanation:'"Elle est <b>professeur</b>." — La mère de Priya (Anita) est professeur (teacher). Le père (Ravi) est médecin. En français, on dit "elle est professeur" sans article défini.' }),
+    explanation:'"Elle est <b>professeur</b>." - La mère de Priya (Anita) est professeur (teacher). Le père (Ravi) est médecin. En français, on dit "elle est professeur" sans article défini.' }),
 
   makeMCQ({ id:'g4fr-comp-012', chapterId:'g4fr-lecture', difficulty:1,
     question:_PASSAGE_G4FR + '<hr>À quelle heure Priya se lève-t-elle le matin ?',
     options:['À cinq heures','À six heures','À sept heures','À huit heures'],
     answer:'À six heures',
     hint:'"Le matin, je me lève à ___ heures."',
-    explanation:'"Le matin, je me lève à <b>six heures</b>." — Priya se lève à 6h. "Six" = 6. "Je me lève" = I get up (verbe réfléchi se lever).' }),
+    explanation:'"Le matin, je me lève à <b>six heures</b>." - Priya se lève à 6h. "Six" = 6. "Je me lève" = I get up (verbe réfléchi se lever).' }),
 
   makeMCQ({ id:'g4fr-comp-013', chapterId:'g4fr-lecture', difficulty:1,
     question:_PASSAGE_G4FR + '<hr>Que BOIT Priya le matin ?',
     options:['Du jus d\'orange','De l\'eau','Du thé','Du lait'],
     answer:'Du lait',
     hint:'"Je mange du pain et je bois ___."',
-    explanation:'"Je bois <b>du lait</b>." — Priya boit du lait (milk) le matin. "Boire" = to drink. "Du lait" = some milk (article partitif du = de + le). Ne pas confondre manger (to eat) et boire (to drink).' }),
+    explanation:'"Je bois <b>du lait</b>." - Priya boit du lait (milk) le matin. "Boire" = to drink. "Du lait" = some milk (article partitif du = de + le). Ne pas confondre manger (to eat) et boire (to drink).' }),
 
   makeMCQ({ id:'g4fr-comp-014', chapterId:'g4fr-lecture', difficulty:2,
     question:_PASSAGE_G4FR + '<hr>Avec qui Priya va-t-elle à l\'école ?',
     options:['Avec son père','Seule','Avec sa mère','Avec sa sœur'],
     answer:'Avec sa sœur',
     hint:'"je vais à l\'école à pied avec ___."',
-    explanation:'"Je vais à l\'école à pied avec <b>ma sœur</b>." — Priya va à l\'école avec sa sœur Mia. "Avec" = with. "Sa sœur" = her sister.' }),
+    explanation:'"Je vais à l\'école à pied avec <b>ma sœur</b>." - Priya va à l\'école avec sa sœur Mia. "Avec" = with. "Sa sœur" = her sister.' }),
 
   makeMCQ({ id:'g4fr-comp-015', chapterId:'g4fr-lecture', difficulty:2,
     question:_PASSAGE_G4FR + '<hr>Quelle est l\'idée principale du TROISIÈME paragraphe (qui commence par "Le matin") ?',
@@ -146,19 +146,19 @@ STATIC_QUESTIONS.push(
     question:_PASSAGE_G4FR + '<hr>Pourquoi Priya va-t-elle à l\'école avec SA SŒUR et non toute seule ?',
     options:[
       'Parce que sa sœur est plus âgée et la guide.',
-      'Le texte ne le dit pas explicitement — on peut inférer qu\'elles vont à la même école ou que c\'est pour la sécurité.',
+      'Le texte ne le dit pas explicitement - on peut inférer qu\'elles vont à la même école ou que c\'est pour la sécurité.',
       'Parce que Priya ne connaît pas le chemin.',
       'Parce que sa mère les oblige à y aller ensemble.'
     ],
-    answer:'Le texte ne le dit pas explicitement — on peut inférer qu\'elles vont à la même école ou que c\'est pour la sécurité.',
+    answer:'Le texte ne le dit pas explicitement - on peut inférer qu\'elles vont à la même école ou que c\'est pour la sécurité.',
     hint:'Le texte dit-il POURQUOI ? Ou doit-on faire une inférence ?',
-    explanation:'Le texte ne donne pas de raison directe — il dit seulement "je vais à l\'école à pied avec ma sœur". Pour répondre "pourquoi", on doit faire une <b>inférence</b> (lire entre les lignes). Les deux raisons les plus probables : même école, ou sécurité.' }),
+    explanation:'Le texte ne donne pas de raison directe - il dit seulement "je vais à l\'école à pied avec ma sœur". Pour répondre "pourquoi", on doit faire une <b>inférence</b> (lire entre les lignes). Les deux raisons les plus probables : même école, ou sécurité.' }),
 
   makeTF({ id:'g4fr-comp-017', chapterId:'g4fr-lecture', difficulty:3,
     question:_PASSAGE_G4FR + '<hr>"J\'aime beaucoup ma famille" est une OPINION et non un fait.',
     answer:true,
     hint:'Un fait peut être vérifié. Une opinion exprime un sentiment ou un jugement personnel.',
-    explanation:'<b>Vrai.</b> "J\'aime beaucoup ma famille" exprime le <b>sentiment personnel</b> de Priya — c\'est une opinion. Les faits (nombre de personnes, professions, horaire) peuvent être vérifiés. Les sentiments personnels sont des opinions, pas des faits.' }),
+    explanation:'<b>Vrai.</b> "J\'aime beaucoup ma famille" exprime le <b>sentiment personnel</b> de Priya - c\'est une opinion. Les faits (nombre de personnes, professions, horaire) peuvent être vérifiés. Les sentiments personnels sont des opinions, pas des faits.' }),
 
   makeMCQ({ id:'g4fr-comp-018', chapterId:'g4fr-lecture', difficulty:3,
     question:_PASSAGE_G4FR + '<hr>Que signifie l\'expression "je bois du lait" en anglais ?',
@@ -172,12 +172,12 @@ STATIC_QUESTIONS.push(
     options:[
       'Il rend le texte difficile à lire.',
       'Il crée une distance entre le lecteur et Priya.',
-      'Il donne au lecteur l\'impression de connaître Priya directement — le texte est personnel et intime.',
+      'Il donne au lecteur l\'impression de connaître Priya directement - le texte est personnel et intime.',
       'Il indique que le texte est une fiction inventée par quelqu\'un d\'autre.'
     ],
-    answer:'Il donne au lecteur l\'impression de connaître Priya directement — le texte est personnel et intime.',
+    answer:'Il donne au lecteur l\'impression de connaître Priya directement - le texte est personnel et intime.',
     hint:'Quand un auteur dit "Je...", quel effet cela crée-t-il sur le lecteur ?',
-    explanation:'La <b>première personne</b> ("je") crée une narration personnelle et directe — le lecteur a l\'impression que Priya lui parle directement. Cela rend le texte plus <b>intime et personnel</b>. À comparer avec la troisième personne ("Elle s\'appelle Priya") qui crée plus de distance. C\'est un choix d\'écriture délibéré.' }),
+    explanation:'La <b>première personne</b> ("je") crée une narration personnelle et directe - le lecteur a l\'impression que Priya lui parle directement. Cela rend le texte plus <b>intime et personnel</b>. À comparer avec la troisième personne ("Elle s\'appelle Priya") qui crée plus de distance. C\'est un choix d\'écriture délibéré.' }),
 
   makeMCQ({ id:'g4fr-comp-020', chapterId:'g4fr-lecture', difficulty:1,
     question:'Quelle connecteur logique signifie "first of all" ?',
@@ -218,7 +218,7 @@ STATIC_QUESTIONS.push(
     options:['faire les devoirs','regarder la télévision','dormir','manger'],
     answer:'dormir',
     hint:'"Enfin" indique la dernière action.',
-    explanation:'"<b>Enfin</b> elle a dormi" — <b>enfin</b> = finally = la dernière action. Ordre : d\'abord (1er) → puis (2ème) → enfin (3ème). Donc : 1. devoirs, 2. télévision, 3. <b>dormir</b>. Les connecteurs de séquence révèlent l\'ordre chronologique.' }),
+    explanation:'"<b>Enfin</b> elle a dormi" - <b>enfin</b> = finally = la dernière action. Ordre : d\'abord (1er) → puis (2ème) → enfin (3ème). Donc : 1. devoirs, 2. télévision, 3. <b>dormir</b>. Les connecteurs de séquence révèlent l\'ordre chronologique.' }),
 
   makeMCQ({ id:'g4fr-comp-026', chapterId:'g4fr-lecture', difficulty:2,
     question:'Quel connecteur signifie "because" ?',
@@ -232,7 +232,7 @@ STATIC_QUESTIONS.push(
     options:['un texte narratif','un texte instructif','une lettre','une affiche'],
     answer:'un texte instructif',
     hint:'Une recette donne des instructions étapes par étapes.',
-    explanation:'Une <b>recette</b> est un <b>texte instructif</b> — elle donne des instructions à suivre (liste d\'ingrédients + étapes de préparation). Elle utilise souvent l\'impératif : "Mélangez la farine, ajoutez les œufs..." À distinguer : narratif (histoire), descriptif (description), argumentatif (opinion).' }),
+    explanation:'Une <b>recette</b> est un <b>texte instructif</b> - elle donne des instructions à suivre (liste d\'ingrédients + étapes de préparation). Elle utilise souvent l\'impératif : "Mélangez la farine, ajoutez les œufs..." À distinguer : narratif (histoire), descriptif (description), argumentatif (opinion).' }),
 
   makeMCQ({ id:'g4fr-comp-028', chapterId:'g4fr-lecture', difficulty:3,
     question:'Lis : "Luc adore le football. Il s\'entraîne tous les jours. Son équipe a gagné le championnat." Quelle est l\'idée principale ?',
@@ -251,14 +251,14 @@ STATIC_QUESTIONS.push(
     options:['joue','mange','vis','court'],
     answer:'vis',
     hint:'"Habiter" et "vivre" peuvent tous les deux signifier "to live (somewhere)".',
-    explanation:'"J\'<b>habite</b> à Curepipe" = "Je <b>vis</b> à Curepipe." — <b>habiter</b> et <b>vivre</b> sont synonymes quand on parle d\'un lieu de résidence. "Vivre" est plus général (to live/to be alive), "habiter" est plus spécifique (to reside). Les deux sont corrects ici.' }),
+    explanation:'"J\'<b>habite</b> à Curepipe" = "Je <b>vis</b> à Curepipe." - <b>habiter</b> et <b>vivre</b> sont synonymes quand on parle d\'un lieu de résidence. "Vivre" est plus général (to live/to be alive), "habiter" est plus spécifique (to reside). Les deux sont corrects ici.' }),
 
   makeMCQ({ id:'g4fr-comp-030', chapterId:'g4fr-lecture', difficulty:3,
     question:'Lis : "Il fait beau. Marie décide donc d\'aller au parc." Quel connecteur pourrait remplacer "donc" ici ?',
     options:['parce que','d\'abord','mais','cependant'],
     answer:'parce que',
     hint:'La belle météo est la raison d\'aller au parc.',
-    explanation:'On pourrait restructurer : "Marie décide d\'aller au parc <b>parce qu\'</b>il fait beau." — <b>donc</b> (conséquence) et <b>parce que</b> (cause) expriment la même relation logique mais dans des structures différentes : Cause + donc + Résultat ↔ Résultat + parce que + Cause.' }),
+    explanation:'On pourrait restructurer : "Marie décide d\'aller au parc <b>parce qu\'</b>il fait beau." - <b>donc</b> (conséquence) et <b>parce que</b> (cause) expriment la même relation logique mais dans des structures différentes : Cause + donc + Résultat ↔ Résultat + parce que + Cause.' }),
 
   makeMCQ({ id:'g4fr-comp-031', chapterId:'g4fr-lecture', difficulty:3,
     question:'Quel est l\'antonyme de "rapide" ?',

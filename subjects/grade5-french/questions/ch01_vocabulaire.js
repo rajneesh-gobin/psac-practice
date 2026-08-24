@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 French — Chapitre : Vocabulaire de base
+﻿'use strict';
+// Grade 5 French - Chapitre : Vocabulaire de base
 // IDs format: g5fr-voc-NNN
 
 STATIC_QUESTIONS.push(
@@ -12,7 +12,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Bonsoir</b>" s\'utilise le soir. "Bonjour" = le matin ou l\'après-midi. "Au revoir" = pour dire adieu. "Bonne nuit" = avant de dormir.' }),
 
   makeMCQ({ id:'g5fr-voc-002', chapterId:'fr-vocabulaire', difficulty:1,
-    question:'Comment dit-on la couleur ROUGE en français ?',
+    question:'Comment dit-on la couleur <b>red</b> en français ?',
     options:['bleu','vert','rouge','jaune'],
     answer:'rouge',
     hint:'C\'est la couleur du sang et des tomates.',
@@ -130,28 +130,28 @@ STATIC_QUESTIONS.push(
     options:['un hameçon','un seau','une barque','un congélateur'],
     answer:'un congélateur',
     hint:'Trois mots viennent du texte de pêche 2025 ; un vient d\'une autre histoire.',
-    explanation:'"<b>un congélateur</b>" (a freezer) n\'appartient pas au thème de la pêche. "Un hameçon" = a fishing hook, "un seau" = a bucket, "une barque" = a small boat — tous liés à la pêche. "Un congélateur" est apparu dans l\'histoire du supermarché (Gaminou, PSAC 2024).' }),
+    explanation:'"<b>un congélateur</b>" (a freezer) n\'appartient pas au thème de la pêche. "Un hameçon" = a fishing hook, "un seau" = a bucket, "une barque" = a small boat - tous liés à la pêche. "Un congélateur" est apparu dans l\'histoire du supermarché (Gaminou, PSAC 2024).' }),
 
   makeMCQ({ id:'g5fr-voc-019', chapterId:'fr-vocabulaire', difficulty:4,
     question:'Dans "Ravis, ils s\'amusent et parlent de revenir le lendemain", que signifie "ravis" ?',
     options:['tired','delighted','bored','surprised'],
     answer:'delighted',
     hint:'Ils venaient d\'attraper beaucoup de poissons. "Ravi" vient du verbe "ravir" = enchanter.',
-    explanation:'"<b>ravis</b>" = delighted, very pleased. Les garçons étaient heureux parce que les poissons mordaient rapidement et le seau était presque plein. "Ravi" est plus fort que "content" — il exprime une grande joie. Synonymes : enchantés, comblés, très heureux.' }),
+    explanation:'"<b>ravis</b>" = delighted, very pleased. Les garçons étaient heureux parce que les poissons mordaient rapidement et le seau était presque plein. "Ravi" est plus fort que "content" - il exprime une grande joie. Synonymes : enchantés, comblés, très heureux.' }),
 
   makeMCQ({ id:'g5fr-voc-020', chapterId:'fr-vocabulaire', difficulty:1,
     question:'Quelle matière scolaire étudie les plantes, les animaux et la nature ?',
     options:['les maths','les sciences','la géographie','le sport'],
     answer:'les sciences',
     hint:'Cette matière parle de la vie et du monde naturel.',
-    explanation:'"<b>les sciences</b>" — En classe, on étudie la biologie, la physique et la chimie. Les autres matières : les <b>maths</b> (numbers), la <b>géographie</b> (countries/maps), le <b>sport</b> (physical education = EPS).' }),
+    explanation:'"<b>les sciences</b>" - En classe, on étudie la biologie, la physique et la chimie. Les autres matières : les <b>maths</b> (numbers), la <b>géographie</b> (countries/maps), le <b>sport</b> (physical education = EPS).' }),
 
   makeMCQ({ id:'g5fr-voc-021', chapterId:'fr-vocabulaire', difficulty:1,
     question:'Quelle matière étudie les pays, les fleuves et les reliefs du monde ?',
     options:['l\'histoire','la géographie','le français','l\'art'],
     answer:'la géographie',
     hint:'Cette matière parle des endroits sur la Terre.',
-    explanation:'"<b>la géographie</b>" — On étudie les pays, les capitales, les montagnes, les fleuves, les océans. Ne pas confondre avec <b>l\'histoire</b> (past events) et <b>le français</b> (language).' }),
+    explanation:'"<b>la géographie</b>" - On étudie les pays, les capitales, les montagnes, les fleuves, les océans. Ne pas confondre avec <b>l\'histoire</b> (past events) et <b>le français</b> (language).' }),
 
   makeTF({ id:'g5fr-voc-022', chapterId:'fr-vocabulaire', difficulty:1,
     question:'"Paresseux" et "travailleur" sont des antonymes (opposés).',
@@ -164,7 +164,7 @@ STATIC_QUESTIONS.push(
     options:['timide','paresseux','courageux','bavard'],
     answer:'courageux',
     hint:'Ce mot vient de "courage".',
-    explanation:'"<b>courageux/courageuse</b>" = brave, not afraid. Les autres : timide = shy, paresseux = lazy, bavard = talkative. Exemple : "Les pompiers sont très courageux — ils affrontent le danger tous les jours."' }),
+    explanation:'"<b>courageux/courageuse</b>" = brave, not afraid. Les autres : timide = shy, paresseux = lazy, bavard = talkative. Exemple : "Les pompiers sont très courageux - ils affrontent le danger tous les jours."' }),
 
   makeMCQ({ id:'g5fr-voc-024', chapterId:'fr-vocabulaire', difficulty:1,
     question:'Le repas du matin s\'appelle...',
@@ -191,21 +191,21 @@ STATIC_QUESTIONS.push(
     options:['sur','sous','dans','devant'],
     answer:'sous',
     hint:'Le contraire de "sur" (on top).',
-    explanation:'"Le chat est <b>sous</b> la table." — sous = under/beneath. Les prépositions de lieu : <b>sur</b> (on), <b>sous</b> (under), <b>dans</b> (in), <b>devant</b> (in front of), <b>derrière</b> (behind). Exemple : Le livre est sur la table. Le chien est sous le lit.' }),
+    explanation:'"Le chat est <b>sous</b> la table." - sous = under/beneath. Les prépositions de lieu : <b>sur</b> (on), <b>sous</b> (under), <b>dans</b> (in), <b>devant</b> (in front of), <b>derrière</b> (behind). Exemple : Le livre est sur la table. Le chien est sous le lit.' }),
 
   makeMCQ({ id:'g5fr-voc-028', chapterId:'fr-vocabulaire', difficulty:2,
     question:'"Le livre est ___ la chaise et le bureau." (between)',
     options:['devant','derrière','entre','en face de'],
     answer:'entre',
     hint:'"Entre" indique une position au milieu de deux objets.',
-    explanation:'"Le livre est <b>entre</b> la chaise et le bureau." — entre = between (two objects). Exemple : "Je suis assis entre Marie et Paul." Ne pas confondre avec <b>parmi</b> (among, for more than two).' }),
+    explanation:'"Le livre est <b>entre</b> la chaise et le bureau." - entre = between (two objects). Exemple : "Je suis assis entre Marie et Paul." Ne pas confondre avec <b>parmi</b> (among, for more than two).' }),
 
   makeMCQ({ id:'g5fr-voc-029', chapterId:'fr-vocabulaire', difficulty:2,
     question:'"Elle n\'aime pas parler beaucoup en public." Elle est...',
     options:['bavarde','courageuse','timide','généreuse'],
     answer:'timide',
     hint:'Cette personne est réservée et parle peu.',
-    explanation:'"<b>timide</b>" = shy, reserved. Ne pas confondre avec <b>bavarde</b> (talkative — elle parle beaucoup !). Exemples : "Ravi est timide : il rougit quand il répond en classe." Synonymes : réservé(e), introverti(e).' }),
+    explanation:'"<b>timide</b>" = shy, reserved. Ne pas confondre avec <b>bavarde</b> (talkative - elle parle beaucoup !). Exemples : "Ravi est timide : il rougit quand il répond en classe." Synonymes : réservé(e), introverti(e).' }),
 
   makeMCQ({ id:'g5fr-voc-030', chapterId:'fr-vocabulaire', difficulty:2,
     question:'Quel aliment est un produit laitier (dairy product) ?',
@@ -218,14 +218,14 @@ STATIC_QUESTIONS.push(
     question:'"Il fait beau" signifie "the weather is bad".',
     answer:false,
     hint:'"Beau" = beautiful/nice.',
-    explanation:'<b>Faux.</b> "Il fait beau" = the weather is fine/nice. "Le mauvais temps" = bad weather → "<b>il fait mauvais</b>". Exemple : "Il fait beau aujourd\'hui — allons à la plage !" vs "Il fait mauvais — restons à la maison."' }),
+    explanation:'<b>Faux.</b> "Il fait beau" = the weather is fine/nice. "Le mauvais temps" = bad weather → "<b>il fait mauvais</b>". Exemple : "Il fait beau aujourd\'hui - allons à la plage !" vs "Il fait mauvais - restons à la maison."' }),
 
   makeMCQ({ id:'g5fr-voc-032', chapterId:'fr-vocabulaire', difficulty:2,
     question:'"La bibliothèque est ___ l\'école." (directly opposite / across from)',
     options:['à côté de','en face de','derrière','entre'],
     answer:'en face de',
     hint:'"En face de" = directly opposite, facing.',
-    explanation:'"La bibliothèque est <b>en face de</b> l\'école." — en face de = opposite, across from. Ne pas confondre avec <b>à côté de</b> (next to), <b>derrière</b> (behind), <b>entre</b> (between).' }),
+    explanation:'"La bibliothèque est <b>en face de</b> l\'école." - en face de = opposite, across from. Ne pas confondre avec <b>à côté de</b> (next to), <b>derrière</b> (behind), <b>entre</b> (between).' }),
 
   makeMCQ({ id:'g5fr-voc-033', chapterId:'fr-vocabulaire', difficulty:2,
     question:'Quelle matière scolaire étudie les événements du passé ?',
@@ -239,7 +239,7 @@ STATIC_QUESTIONS.push(
     options:['timide','égoïste','paresseux','bavard'],
     answer:'égoïste',
     hint:'Une personne généreuse partage ; une personne _____ garde tout pour soi.',
-    explanation:'"<b>égoïste</b>" = selfish. Généreux/généreuse ↔ égoïste. Une personne généreuse partage son argent et son temps. Une personne égoïste pense seulement à elle-même. Exemple : "Il est très égoïste — il ne partage jamais ses jouets."' }),
+    explanation:'"<b>égoïste</b>" = selfish. Généreux/généreuse ↔ égoïste. Une personne généreuse partage son argent et son temps. Une personne égoïste pense seulement à elle-même. Exemple : "Il est très égoïste - il ne partage jamais ses jouets."' }),
 
   makeMCQ({ id:'g5fr-voc-035', chapterId:'fr-vocabulaire', difficulty:4,
     question:'Complète la description : "Mon ami Rishi est très ___ : il aide toujours les autres et partage tout. Sa sœur, au contraire, est très ___ : elle garde tout pour elle."',

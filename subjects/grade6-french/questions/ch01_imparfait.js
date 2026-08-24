@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 French — Chapitre : L'Imparfait
+﻿'use strict';
+// Grade 6 French - Chapitre : L'Imparfait
 // IDs format: g6fr-imp-NNN
 
 STATIC_QUESTIONS.push(
@@ -19,7 +19,7 @@ STATIC_QUESTIONS.push(
     explanation:'Radical de l\'imparfait = forme <b>nous</b> au présent sans <b>-ons</b>. Exemples : nous parlons → <b>parl</b>- ; nous finissons → <b>finiss</b>- ; nous mangeons → <b>mange</b>-.' }),
 
   makeMCQ({ id:'g6fr-imp-003', chapterId:'g6fr-imparfait', difficulty:2,
-    question:'Conjuguez "parler" à l\'imparfait — troisième personne du pluriel (ils) :',
+    question:'Conjuguez "parler" à l\'imparfait - troisième personne du pluriel (ils) :',
     options:['ils parlaient','ils parlait','ils parleront','ils parlent'],
     answer:'ils parlaient',
     hint:'Radical : parl- + terminaison de la 3e personne du pluriel.',
@@ -43,7 +43,7 @@ STATIC_QUESTIONS.push(
     options:['ai joué','jouais','jouerai','joue'],
     answer:'jouais',
     hint:'L\'action est habituelle et répétée dans le passé.',
-    explanation:'"Je <b>jouais</b> au football tous les samedis." — L\'imparfait convient car l\'action est <b>habituelle et répétée</b>. Les mots comme "tous les samedis", "chaque jour", "souvent", "toujours" signalent l\'imparfait.' }),
+    explanation:'"Je <b>jouais</b> au football tous les samedis." - L\'imparfait convient car l\'action est <b>habituelle et répétée</b>. Les mots comme "tous les samedis", "chaque jour", "souvent", "toujours" signalent l\'imparfait.' }),
 
   makeMCQ({ id:'g6fr-imp-007', chapterId:'g6fr-imparfait', difficulty:2,
     question:'Conjuguez "avoir" à l\'imparfait pour "elle" :',
@@ -56,8 +56,8 @@ STATIC_QUESTIONS.push(
     question:'Choisissez le temps correct : "Hier, Marie ___ (tomber) dans la cour."',
     options:['tombait','est tombée','tombera','tombe'],
     answer:'est tombée',
-    hint:'L\'action est précise, unique et terminée — quelle est la différence avec l\'imparfait ?',
-    explanation:'"Hier, Marie <b>est tombée</b> dans la cour." — Le <b>passé composé</b> convient car l\'action est unique, soudaine et terminée. "Hier" peut accompagner les deux temps, mais c\'est le sens de l\'action (soudaine/unique vs habituelle) qui décide.' }),
+    hint:'L\'action est précise, unique et terminée - quelle est la différence avec l\'imparfait ?',
+    explanation:'"Hier, Marie <b>est tombée</b> dans la cour." - Le <b>passé composé</b> convient car l\'action est unique, soudaine et terminée. "Hier" peut accompagner les deux temps, mais c\'est le sens de l\'action (soudaine/unique vs habituelle) qui décide.' }),
 
   makeTF({ id:'g6fr-imp-009', chapterId:'g6fr-imparfait', difficulty:1,
     question:'La terminaison de l\'imparfait pour "vous" est -iez.',
@@ -69,8 +69,8 @@ STATIC_QUESTIONS.push(
     question:'Complétez : "Il ___ (faire) beau et les enfants ___ (jouer) dehors."',
     options:['a fait / ont joué','faisait / jouaient','fera / joueront','fait / jouent'],
     answer:'faisait / jouaient',
-    hint:'Ce sont deux descriptions d\'une situation dans le passé — pas des actions soudaines.',
-    explanation:'"Il <b>faisait</b> beau et les enfants <b>jouaient</b> dehors." — Les deux verbes sont à l\'imparfait car ce sont des <b>descriptions</b> d\'un état passé, pas des actions précises. Faire → nous faisons → fais- + ait/aient.' })
+    hint:'Ce sont deux descriptions d\'une situation dans le passé - pas des actions soudaines.',
+    explanation:'"Il <b>faisait</b> beau et les enfants <b>jouaient</b> dehors." - Les deux verbes sont à l\'imparfait car ce sont des <b>descriptions</b> d\'un état passé, pas des actions précises. Faire → nous faisons → fais- + ait/aient.' })
 
 );
 
@@ -88,7 +88,7 @@ STATIC_QUESTIONS.push(
     options:['faisais','ai fait','ferai','fis'],
     answer:'faisais',
     hint:'Une action était en cours (imparfait) quand une action soudaine s\'est produite (passé composé).',
-    explanation:'"Hier, je <b>faisais</b> mes devoirs quand le téléphone <b>a sonné</b>." — Structure classique : <b>imparfait</b> (action en cours, arrière-plan) + <b>passé composé</b> (action soudaine qui l\'interrompt). Le manuel MIE de 6e présente ce modèle comme l\'un des usages fondamentaux de l\'imparfait. Mots clés signalant l\'imparfait dans ce contexte : quand, lorsque, pendant que, au moment où.' }),
+    explanation:'"Hier, je <b>faisais</b> mes devoirs quand le téléphone <b>a sonné</b>." - Structure classique : <b>imparfait</b> (action en cours, arrière-plan) + <b>passé composé</b> (action soudaine qui l\'interrompt). Le manuel MIE de 6e présente ce modèle comme l\'un des usages fondamentaux de l\'imparfait. Mots clés signalant l\'imparfait dans ce contexte : quand, lorsque, pendant que, au moment où.' }),
 
   makeTF({ id:'g6fr-imp-013', chapterId:'g6fr-imparfait', difficulty:1,
     question:'Pour les verbes en -ger comme "manger", on écrit "nous mangions" à l\'imparfait.',
@@ -113,7 +113,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Quand il était enfant, il mangeait de la pizza chaque vendredi."',
     hint:'Les mots "chaque vendredi" et "quand il était enfant" indiquent une habitude passée répétée.',
-    explanation:'"Quand il était enfant, il <b>mangeait</b> de la pizza chaque vendredi." — L\'imparfait exprime ici une <b>habitude passée répétée</b>. Marqueurs habituels de l\'imparfait : <b>chaque semaine / jour / fois, tous les + temps, souvent, toujours, généralement, autrefois, jadis, d\'habitude</b>. Ces indicateurs temporels sont des indices importants dans les épreuves PSAC.' }),
+    explanation:'"Quand il était enfant, il <b>mangeait</b> de la pizza chaque vendredi." - L\'imparfait exprime ici une <b>habitude passée répétée</b>. Marqueurs habituels de l\'imparfait : <b>chaque semaine / jour / fois, tous les + temps, souvent, toujours, généralement, autrefois, jadis, d\'habitude</b>. Ces indicateurs temporels sont des indices importants dans les épreuves PSAC.' }),
 
   makeMCQ({ id:'g6fr-imp-016', chapterId:'g6fr-imparfait', difficulty:2,
     question:'Conjuguez "voir" à l\'imparfait pour "vous" :',
@@ -127,7 +127,7 @@ STATIC_QUESTIONS.push(
     options:['ai eu','aurais','avais','aurai'],
     answer:'avais',
     hint:'"Lorsque j\'étais petit" décrit une période de l\'enfance → état continu et habituel = imparfait.',
-    explanation:'"Lorsque j\'étais petit, j\'<b>avais</b> peur du noir." — <b>Avoir</b> à l\'imparfait : j\'<b>avais</b>. Le contexte "lorsque j\'étais petit" place l\'action dans une période continue du passé. Les <b>états</b> (avoir faim, avoir peur, être triste, se sentir bien) se mettent à l\'imparfait quand ils décrivent une situation passée durable.' }),
+    explanation:'"Lorsque j\'étais petit, j\'<b>avais</b> peur du noir." - <b>Avoir</b> à l\'imparfait : j\'<b>avais</b>. Le contexte "lorsque j\'étais petit" place l\'action dans une période continue du passé. Les <b>états</b> (avoir faim, avoir peur, être triste, se sentir bien) se mettent à l\'imparfait quand ils décrivent une situation passée durable.' }),
 
   makeTF({ id:'g6fr-imp-018', chapterId:'g6fr-imparfait', difficulty:2,
     question:'L\'imparfait et le passé composé peuvent s\'utiliser ensemble dans la même phrase.',
@@ -200,7 +200,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Je voulais vous demander un conseil.',
     hint:'"Je voulais…" = imparfait de vouloir = forme polie pour atténuer une demande.',
-    explanation:'"Je <b>voulais</b> vous demander un conseil" — l\'imparfait de vouloir (<b>voulais</b>) atténue la demande et la rend plus polie. C\'est l\'<b>imparfait de politesse</b> : on s\'efface par rapport au présent "je veux" qui paraît trop direct. Remarque : "Je <b>voudrais</b>" (conditionnel) est aussi poli.' }),
+    explanation:'"Je <b>voulais</b> vous demander un conseil" - l\'imparfait de vouloir (<b>voulais</b>) atténue la demande et la rend plus polie. C\'est l\'<b>imparfait de politesse</b> : on s\'efface par rapport au présent "je veux" qui paraît trop direct. Remarque : "Je <b>voudrais</b>" (conditionnel) est aussi poli.' }),
 
   makeTF({ id:'g6fr-imp-028', chapterId:'g6fr-imparfait', difficulty:2,
     question:'"Je mangeais" et "je téléphonais" sont tous les deux à l\'imparfait.',
@@ -227,7 +227,7 @@ STATIC_QUESTIONS.push(
     options:['est partie','partait','part','sera partie'],
     answer:'partait',
     hint:'"Tous les étés" = habitude répétée dans le passé → imparfait.',
-    explanation:'"Tous les étés, la famille Sharma <b>partait</b>" — l\'expression "tous les étés" indique une action <b>habituelle et répétée</b> dans le passé → <b>imparfait</b>. C\'est l\'imparfait d\'habitude. Comparer avec : "Cet été, la famille est partie à Rodrigues" (événement unique → passé composé).' }),
+    explanation:'"Tous les étés, la famille Sharma <b>partait</b>" - l\'expression "tous les étés" indique une action <b>habituelle et répétée</b> dans le passé → <b>imparfait</b>. C\'est l\'imparfait d\'habitude. Comparer avec : "Cet été, la famille est partie à Rodrigues" (événement unique → passé composé).' }),
 
   makeTF({ id:'g6fr-imp-032', chapterId:'g6fr-imparfait', difficulty:3,
     question:'"Nous nagions" est l\'imparfait de NAGER pour "nous".',
@@ -240,7 +240,7 @@ STATIC_QUESTIONS.push(
     options:['elle s\'asseyait','elle était assise','elle asseyait','elle a été assise'],
     answer:'elle était assise',
     hint:'"Être assis(e)" est une locution = être + adjectif. Description d\'état = imparfait de être.',
-    explanation:'"Elle <b>était assise</b>" — pour décrire une position ou un état physique dans le passé, on utilise <b>être à l\'imparfait + adjectif</b>. "Elle était assise sur le banc, les yeux fermés…" C\'est une description typique du roman ou du conte.' }),
+    explanation:'"Elle <b>était assise</b>" - pour décrire une position ou un état physique dans le passé, on utilise <b>être à l\'imparfait + adjectif</b>. "Elle était assise sur le banc, les yeux fermés…" C\'est une description typique du roman ou du conte.' }),
 
   makeMCQ({ id:'g6fr-imp-034', chapterId:'g6fr-imparfait', difficulty:4,
     question:'Complète le passage : "Ce soir-là, le ciel ___ (être) nuageux, le vent ___ (souffler) fort et les vagues ___ (claquer) contre les rochers, quand soudain un bateau ___ (apparaître) à l\'horizon."',
@@ -264,6 +264,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'avais / ne savais / avais peur / adorais',
     hint:'Journal intime = souvenirs d\'enfance = habitudes et états dans le passé = imparfait (x4).',
-    explanation:'"<b>avais</b>" (état : avoir 6 ans), "<b>ne savais</b> pas" (état : ne pas savoir), "<b>avais peur</b>" (état émotionnel), "<b>adorais</b>" (goût habituel) — tous ces états et habitudes de l\'enfance sont à l\'<b>imparfait</b>. Le passé composé serait pour des événements précis et ponctuels.' })
+    explanation:'"<b>avais</b>" (état : avoir 6 ans), "<b>ne savais</b> pas" (état : ne pas savoir), "<b>avais peur</b>" (état émotionnel), "<b>adorais</b>" (goût habituel) - tous ces états et habitudes de l\'enfance sont à l\'<b>imparfait</b>. Le passé composé serait pour des événements précis et ponctuels.' })
 
 );

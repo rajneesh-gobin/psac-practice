@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Graphs (bar, line, pie charts)
+﻿'use strict';
+// Grade 6 Maths - Chapter: Graphs (bar, line, pie charts)
 // IDs format: g6m-gr-NNN
 
 // Pie chart SVG showing favourite fruit data
@@ -59,7 +59,7 @@ STATIC_QUESTIONS.push(
     options:['Mango','Banana','Apple','Papaya'],
     answer:'Banana',
     hint:'The largest sector of the pie chart represents the most popular choice.',
-    explanation:'<b>Banana</b> is the most popular fruit, with <b>30%</b> of the 200 students choosing it — the largest sector in the pie chart.' }),
+    explanation:'<b>Banana</b> is the most popular fruit, with <b>30%</b> of the 200 students choosing it - the largest sector in the pie chart.' }),
 
   makeNum({ id:'g6m-gr-002', chapterId:'g6-graphs', difficulty:2,
     question:`${_SVG_PIE}There are 200 students in total. How many students chose MANGO?`,
@@ -85,7 +85,7 @@ STATIC_QUESTIONS.push(
     options:['Monday','Tuesday','Wednesday','Thursday'],
     answer:'Tuesday',
     hint:'Compare the heights of the four bars.',
-    explanation:'<b>Tuesday</b> has the tallest bar in the chart, showing approximately 40 books were read — more than any other day shown.' }),
+    explanation:'<b>Tuesday</b> has the tallest bar in the chart, showing approximately 40 books were read - more than any other day shown.' }),
 
   makeMCQ({ id:'g6m-gr-006', chapterId:'g6-graphs', difficulty:2,
     question:'A line graph shows temperature over 5 days. On Monday it was 24°C and on Friday it was 29°C. The line rises steadily. What was the temperature on Wednesday (middle day)?',
@@ -111,7 +111,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Changes over time (trends)',
     hint:'Think of temperature recorded every day for a week.',
-    explanation:'A <b>line graph</b> is ideal for showing how something changes over time — showing trends, rises, falls, and patterns. For example: daily temperature, monthly rainfall, or weekly sales figures.' }),
+    explanation:'A <b>line graph</b> is ideal for showing how something changes over time - showing trends, rises, falls, and patterns. For example: daily temperature, monthly rainfall, or weekly sales figures.' }),
 
   makeTF({ id:'g6m-gr-009', chapterId:'g6-graphs', difficulty:1,
     question:'In a pie chart, all sectors together must represent exactly 100% (or 360°).',

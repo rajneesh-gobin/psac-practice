@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 5 History & Geography — MIE Mauritius Syllabus (Grades 3-6, 2015)
+// Grade 5 History & Geography - MIE Mauritius Syllabus (Grades 3-6, 2015)
 // HISTORY: Discovery of Mauritius, Settlement, Trade/Agriculture, Port Louis
 // GEOGRAPHY: Natural Environment, Volcanic Origin, Environmental Problems, Map Skills
 registerSubject({
@@ -18,7 +18,7 @@ registerSubject({
       syllabus: 'History of Port Louis. French governor who made Port Louis the capital. Key historical buildings: Citadel (Fort Adelaide), Government House, Aapravasi Ghat, Blue Penny Museum, Natural History Museum, Theatre. Harbour development by Labourdonnais. Port Louis as trading and commercial centre, past and present.' },
     // ── GEOGRAPHY ──────────────────────────────────────────────────────────────
     { id: 'natural-env',  name: 'Natural Environment of Mauritius',         icon: '🏔️', examWeight: 4,
-      syllabus: 'Natural features vs man-made features. Relief features: mountain ranges (Black River Gorges, Moka Range), peaks (Piton de la Petite Rivière Noire — highest), central plateau, plains, river valleys, gorges. Rodrigues: central ridge, sloping lands. Coastal features: beaches, lagoons, coral reefs, cliffs.' },
+      syllabus: 'Natural features vs man-made features. Relief features: mountain ranges (Black River Gorges, Moka Range), peaks (Piton de la Petite Rivière Noire - highest), central plateau, plains, river valleys, gorges. Rodrigues: central ridge, sloping lands. Coastal features: beaches, lagoons, coral reefs, cliffs.' },
     { id: 'volcanism',    name: 'Volcanic Origin & Relief',                  icon: '🌋', examWeight: 3,
       syllabus: 'Mauritius and Rodrigues formed by volcanic activity. Dormant volcanoes in Mauritius: Trou aux Cerfs, Grand Bassin, Bassin Blanc. Active volcanoes in region: Karthala (Comoros), La Fournaise (Réunion). Alluvium (river deposits), limestone (Rodrigues), tuffs. Map reading: locating relief features.' },
     { id: 'env-problems', name: 'Environmental Problems & Conservation',    icon: '🌊', examWeight: 3,
@@ -29,14 +29,14 @@ registerSubject({
       syllabus: 'Revision of seasons and weather instruments. How weather affects farming, tourism and fishing. Cyclone warning signals in Mauritius (Class 1-4) and precautions. Difference between weather and climate. Climate of Rodrigues.' },
 
     // ── ENRICHMENT ────────────────────────────────────────────────────────────────
-    // @enrichment — These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
-    // DO NOT remove during syllabus alignment audits — they are intentional bonus content.
+    // @enrichment - These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
+    // DO NOT remove during syllabus alignment audits - they are intentional bonus content.
     // They are recognisable by enrichment:true and display with a gold "✨ BONUS" badge in the UI.
     { id: 'g5enr-personalities', name: 'Key Historical Personalities',   icon: '👤', enrichment: true, examWeight: 0,
       enrichmentNote: 'Famous governors, explorers and figures from Grade 5 History: Mahé de Labourdonnais, Pierre Poivre, Farquhar, Van Warwyck, Decaen and others.' },
     { id: 'g5enr-landmarks',     name: 'Mauritius Landmarks & Heritage', icon: '🏛️', enrichment: true, examWeight: 0,
-      enrichmentNote: 'Port Louis buildings, volcanic features, Trou aux Cerfs, Grand Bassin, Pamplemousses Botanical Garden — derived from Port Louis and Volcanism chapters.' },
+      enrichmentNote: 'Port Louis buildings, volcanic features, Trou aux Cerfs, Grand Bassin, Pamplemousses Botanical Garden - derived from Port Louis and Volcanism chapters.' },
     { id: 'g5enr-world',         name: 'Indian Ocean & Volcanoes',       icon: '🌋', enrichment: true, examWeight: 0,
-      enrichmentNote: 'Mascarene Islands, active volcanoes in the region (Karthala, La Fournaise), Indian Ocean world map — derived from Volcanism and Map Skills chapters.' },
+      enrichmentNote: 'Mascarene Islands, active volcanoes in the region (Karthala, La Fournaise), Indian Ocean world map - derived from Volcanism and Map Skills chapters.' },
   ],
 });

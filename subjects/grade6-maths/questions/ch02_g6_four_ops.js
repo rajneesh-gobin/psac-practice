@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Four Operations (long mult/div, BODMAS)
+﻿'use strict';
+// Grade 6 Maths - Chapter: Four Operations (long mult/div, BODMAS)
 // IDs format: g6m-ops-NNN
 
 STATIC_QUESTIONS.push(

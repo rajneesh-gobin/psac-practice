@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Science — Chapter: Energy (electricity generation, national grid)
+﻿'use strict';
+// Grade 6 Science - Chapter: Energy (electricity generation, national grid)
 // IDs format: g6sci-en-NNN
 
 const _SVG_GRID = `<svg viewBox="0 0 300 70" width="300" height="70" style="display:block;margin:6px auto;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd">
@@ -34,7 +34,7 @@ STATIC_QUESTIONS.push(
       'It uses wind to push turbine blades connected to generators'
     ],
     answer:'It burns fuel to heat water, creating steam that spins turbines connected to generators',
-    hint:'The word "thermal" means heat — what does heat create?',
+    hint:'The word "thermal" means heat - what does heat create?',
     explanation:'In a <b>thermal power station</b>: fossil fuel (coal/oil) is burned → heats water → produces steam → steam spins turbines → turbines drive generators → electricity is produced. This is how most of Mauritius\'s electricity is generated.' }),
 
   makeMCQ({ id:'g6sci-en-002', chapterId:'g6-energy', difficulty:2,
@@ -54,7 +54,7 @@ STATIC_QUESTIONS.push(
     options:['Battery','Motor','Transformer','Generator'],
     answer:'Generator',
     hint:'This device is the final step in most power stations before electricity enters the grid.',
-    explanation:'A <b>generator</b> converts mechanical (kinetic) energy — from a spinning turbine — into <b>electrical energy</b>. It works using the principle of electromagnetic induction (a coil spinning in a magnetic field).' }),
+    explanation:'A <b>generator</b> converts mechanical (kinetic) energy - from a spinning turbine - into <b>electrical energy</b>. It works using the principle of electromagnetic induction (a coil spinning in a magnetic field).' }),
 
   makeMCQ({ id:'g6sci-en-004', chapterId:'g6-energy', difficulty:2,
     question:`${_SVG_GRID}Looking at the diagram of the national grid, what does a TRANSFORMER do?`,
@@ -72,7 +72,7 @@ STATIC_QUESTIONS.push(
     question:'Solar panels convert light energy directly into electrical energy.',
     answer:true,
     hint:'This is called the photovoltaic effect.',
-    explanation:'True. <b>Solar panels</b> (photovoltaic cells) convert light energy directly into electrical energy using the photovoltaic effect. No moving parts, no fuel, no emissions — making solar energy clean and renewable.' }),
+    explanation:'True. <b>Solar panels</b> (photovoltaic cells) convert light energy directly into electrical energy using the photovoltaic effect. No moving parts, no fuel, no emissions - making solar energy clean and renewable.' }),
 
   makeMCQ({ id:'g6sci-en-006', chapterId:'g6-energy', difficulty:2,
     question:'Which type of power station produces electricity WITHOUT burning fuel or creating air pollution?',
@@ -109,7 +109,7 @@ STATIC_QUESTIONS.push(
     question:'Wind turbines generate electricity by burning wind as a fuel.',
     answer:false,
     hint:'Nothing is burned in a wind turbine.',
-    explanation:'Wind turbines generate electricity using the <b>kinetic energy</b> of moving air — the wind spins the blades, which drive a generator. Nothing is burned. Wind is a free, renewable resource with no fuel cost and no emissions.' }),
+    explanation:'Wind turbines generate electricity using the <b>kinetic energy</b> of moving air - the wind spins the blades, which drive a generator. Nothing is burned. Wind is a free, renewable resource with no fuel cost and no emissions.' }),
 
   makeMCQ({ id:'g6sci-en-010', chapterId:'g6-energy', difficulty:2,
     question:'What is the main DISADVANTAGE of solar panels compared to thermal power stations?',
@@ -136,7 +136,7 @@ STATIC_QUESTIONS.push(
       'Electrical energy to chemical energy'
     ],
     answer:'Electrical energy to movement (kinetic) energy',
-    hint:'When you plug in a fan, electricity goes IN — what comes out?',
+    hint:'When you plug in a fan, electricity goes IN - what comes out?',
     explanation:'An electric fan converts <b>electrical energy → movement (kinetic) energy</b>. The electric motor inside uses electricity to spin the fan blades. This is an example of an energy transformation. Other examples: electric kettle (electrical → heat), light bulb (electrical → light + heat), microphone (sound → electrical).' }),
 
   makeMCQ({ id:'g6sci-en-012', chapterId:'g6-energy', difficulty:2,
@@ -149,7 +149,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Renewable, because it is the fibrous sugarcane waste left after juice extraction',
     hint:'Bagasse is produced every year as long as sugarcane is grown.',
-    explanation:'<b>Bagasse</b> is the fibrous residue left after sugarcane juice is extracted. It is a <b>renewable</b> energy source because sugarcane regrows each year. In Mauritius, bagasse is burned in sugar mills to generate electricity — a key local energy source. <b>Renewable sources</b>: bagasse, sun, wind, water. <b>Non-renewable</b>: coal, natural gas, petrol (fossil fuels that took millions of years to form and will run out).' }),
+    explanation:'<b>Bagasse</b> is the fibrous residue left after sugarcane juice is extracted. It is a <b>renewable</b> energy source because sugarcane regrows each year. In Mauritius, bagasse is burned in sugar mills to generate electricity - a key local energy source. <b>Renewable sources</b>: bagasse, sun, wind, water. <b>Non-renewable</b>: coal, natural gas, petrol (fossil fuels that took millions of years to form and will run out).' }),
 
   makeMCQ({ id:'g6sci-en-013', chapterId:'g6-energy', difficulty:1,
     question:'What is an INSULATOR in the context of electricity? (PSAC 2025 Q6c)',
@@ -161,7 +161,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'A material that does not allow electricity to flow through it',
     hint:'The plastic coating on an electric wire is an example.',
-    explanation:'An <b>insulator</b> is a material that does <b>not</b> allow electricity to flow through it. The plastic/rubber coating on electric wires is an insulator — it prevents electrocution. Examples of insulators: plastic, rubber, wood, glass, ceramics. <b>Conductors</b> (like copper and aluminium) allow electricity to flow freely and are used for the inner wire.' }),
+    explanation:'An <b>insulator</b> is a material that does <b>not</b> allow electricity to flow through it. The plastic/rubber coating on electric wires is an insulator - it prevents electrocution. Examples of insulators: plastic, rubber, wood, glass, ceramics. <b>Conductors</b> (like copper and aluminium) allow electricity to flow freely and are used for the inner wire.' }),
 
   makeMCQ({ id:'g6sci-en-014', chapterId:'g6-energy', difficulty:1,
     question:'In an electric wire, the inner part (conductor) is made of which material? (PSAC 2025 Q6c)',
@@ -180,7 +180,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'To conduct (carry) electrical current from one component to another',
     hint:'Think of the wire as the road that electricity travels along.',
-    explanation:'The <b>wire</b> in an electric circuit acts as a <b>conductor</b> — it carries the electrical current from the cell (battery) through the components (bulb, switch, etc.) and back. Without a wire completing the circuit, current cannot flow and the circuit is broken. Metal wires (usually copper) are used because metals are good conductors.' }),
+    explanation:'The <b>wire</b> in an electric circuit acts as a <b>conductor</b> - it carries the electrical current from the cell (battery) through the components (bulb, switch, etc.) and back. Without a wire completing the circuit, current cannot flow and the circuit is broken. Metal wires (usually copper) are used because metals are good conductors.' }),
 
   makeMCQ({ id:'g6sci-en-016', chapterId:'g6-energy', difficulty:1,
     question:'What form of energy is stored in a CELL (battery)? (PSAC 2025 Q6d)',
@@ -192,8 +192,8 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6sci-en-017', chapterId:'g6-energy', difficulty:1,
     question:'Coal is a renewable source of energy because it comes from the Earth.',
     answer:false,
-    hint:'How long does it take for coal to form — days, or millions of years?',
-    explanation:'<b>False.</b> Coal is a <b>non-renewable</b> fossil fuel. It formed from the remains of ancient plants over <b>millions of years</b> under heat and pressure. Once burned, it is gone — it cannot be replenished on a human timescale. Renewable sources (sun, wind, water, bagasse) can be used over and over without running out.' }),
+    hint:'How long does it take for coal to form - days, or millions of years?',
+    explanation:'<b>False.</b> Coal is a <b>non-renewable</b> fossil fuel. It formed from the remains of ancient plants over <b>millions of years</b> under heat and pressure. Once burned, it is gone - it cannot be replenished on a human timescale. Renewable sources (sun, wind, water, bagasse) can be used over and over without running out.' }),
 
   makeMCQ({ id:'g6sci-en-018', chapterId:'g6-energy', difficulty:2,
     question:'Give ONE safety precaution when using electricity at home. (PSAC 2025 Q6e)',
@@ -204,8 +204,8 @@ STATIC_QUESTIONS.push(
       'Leave charger cables plugged in and tangled at all times'
     ],
     answer:'Never insert metal objects into electrical sockets',
-    hint:'Electricity + metal conducts straight to your body — very dangerous!',
-    explanation:'<b>Never insert metal objects into electrical sockets</b> — this is a critical safety rule. Metal conducts electricity and would cause a severe electric shock. Other important electrical safety rules: (1) never use electrical appliances near water; (2) hold the plug — not the wire — when disconnecting; (3) switch off appliances when not in use; (4) do not overload sockets.' }),
+    hint:'Electricity + metal conducts straight to your body - very dangerous!',
+    explanation:'<b>Never insert metal objects into electrical sockets</b> - this is a critical safety rule. Metal conducts electricity and would cause a severe electric shock. Other important electrical safety rules: (1) never use electrical appliances near water; (2) hold the plug - not the wire - when disconnecting; (3) switch off appliances when not in use; (4) do not overload sockets.' }),
 
   makeMCQ({ id:'g6sci-en-019', chapterId:'g6-energy', difficulty:3,
     question:'Mauritius generates electricity using TWO main methods. Which pair is correct? (PSAC 2025 Q6b)',

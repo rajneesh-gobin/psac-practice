@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 History & Geography — Chapter: Map Skills (Latitude & Longitude)
+﻿'use strict';
+// Grade 5 History & Geography - Chapter: Map Skills (Latitude & Longitude)
 // IDs format: g5hg-ms-NNN
 
 // Latitude/longitude grid with Mauritius marked
@@ -150,10 +150,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5hg-ms-011', chapterId:'map-skills', difficulty:1,
     question:'At which latitude does the ARCTIC CIRCLE lie?',
     options:[
-      '0° — it is another name for the Equator',
+      '0° - it is another name for the Equator',
       'Approximately 66.5° North latitude',
-      '23.5° North — the Tropic of Cancer',
-      '90° North — the North Pole itself'
+      '23.5° North - the Tropic of Cancer',
+      '90° North - the North Pole itself'
     ],
     answer:'Approximately 66.5° North latitude',
     hint:'It is well into the far north, above Europe and Russia.',
@@ -188,13 +188,13 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The mountain has steep slopes (height changes quickly); the plain is nearly flat',
     hint:'Closely packed contour lines = height changes rapidly over a short horizontal distance.',
-    explanation:'Closely spaced contour lines indicate a <b>steep slope</b> — the land rises or falls rapidly. Widely spaced contour lines indicate <b>gentle or flat land</b>. Looking at a map of Mauritius, the mountainous south-west has closely packed contours, while the northern coastal plains have widely spaced ones.' }),
+    explanation:'Closely spaced contour lines indicate a <b>steep slope</b> - the land rises or falls rapidly. Widely spaced contour lines indicate <b>gentle or flat land</b>. Looking at a map of Mauritius, the mountainous south-west has closely packed contours, while the northern coastal plains have widely spaced ones.' }),
 
   makeTF({ id:'g5hg-ms-015', chapterId:'map-skills', difficulty:1,
     question:'The Tropic of Capricorn is a line of latitude at 23.5° South.',
     answer:true,
     hint:'Mauritius at ~20°S lies just north of the Tropic of Capricorn.',
-    explanation:'True. The <b>Tropic of Capricorn</b> is at <b>23.5° South</b> latitude. It marks the southernmost point where the sun can be directly overhead (on the December solstice). Mauritius (~20°S) lies just north of this line, placing it in the tropics — explaining its warm tropical climate.' }),
+    explanation:'True. The <b>Tropic of Capricorn</b> is at <b>23.5° South</b> latitude. It marks the southernmost point where the sun can be directly overhead (on the December solstice). Mauritius (~20°S) lies just north of this line, placing it in the tropics - explaining its warm tropical climate.' }),
 
   makeMCQ({ id:'g5hg-ms-016', chapterId:'map-skills', difficulty:2,
     question:'A map has a scale of 1:50,000. What does this mean?',
@@ -214,18 +214,18 @@ STATIC_QUESTIONS.push(
       'Port Louis receives more rainfall than Curepipe',
       'Curepipe receives more rainfall than Port Louis, consistent with orographic rainfall on the central plateau',
       'Both cities receive identical rainfall because they are on the same island',
-      'The isohyets must be incorrect — all of Mauritius receives the same rainfall'
+      'The isohyets must be incorrect - all of Mauritius receives the same rainfall'
     ],
     answer:'Curepipe receives more rainfall than Port Louis, consistent with orographic rainfall on the central plateau',
     hint:'Higher isohyet values = more rain; higher altitude = more orographic rain.',
-    explanation:'Curepipe (central plateau, ~550 m) lies between 2,000 and 3,000 mm isohyets — more than 2,000 mm per year. Port Louis (low-lying, leeward coast) lies between 1,000 and 2,000 mm — less than 2,000 mm. This is consistent with <b>orographic rainfall</b>: trade winds drop moisture on the plateau before reaching the rain shadow where Port Louis lies.' }),
+    explanation:'Curepipe (central plateau, ~550 m) lies between 2,000 and 3,000 mm isohyets - more than 2,000 mm per year. Port Louis (low-lying, leeward coast) lies between 1,000 and 2,000 mm - less than 2,000 mm. This is consistent with <b>orographic rainfall</b>: trade winds drop moisture on the plateau before reaching the rain shadow where Port Louis lies.' }),
 
   makeMCQ({ id:'g5hg-ms-018', chapterId:'map-skills', difficulty:3,
     question:'Port Louis is on the NORTH-WEST coast; Curepipe is on the SOUTH-EAST of the central plateau. In which direction do you travel from Port Louis to Curepipe?',
     options:['North','West','South-East','North-East'],
     answer:'South-East',
     hint:'If you start north-west and go to south-east, which direction are you heading?',
-    explanation:'To travel from Port Louis (north-west) to Curepipe (south-east), you head <b>south-east</b>. On a compass, south-east is approximately 135°. This is consistent with the actual geography of Mauritius — Port Louis is on the north-west coast and Curepipe is in the south-east of the central plateau.' }),
+    explanation:'To travel from Port Louis (north-west) to Curepipe (south-east), you head <b>south-east</b>. On a compass, south-east is approximately 135°. This is consistent with the actual geography of Mauritius - Port Louis is on the north-west coast and Curepipe is in the south-east of the central plateau.' }),
 
   makeMCQ({ id:'g5hg-ms-019', chapterId:'map-skills', difficulty:4,
     question:'A geographer wants to find where in Mauritius gets the most rain, where the land is highest, and which towns are in the rain shadow. Which THREE types of map would they need?',
@@ -233,10 +233,10 @@ STATIC_QUESTIONS.push(
       'A rainfall map (isohyets show rainfall), a topographic map (contours show altitude) and a political/settlement map (to locate town names)',
       'A population map, a road map and a temperature map',
       'A tourist map, a road map and a language map',
-      'Any single combined map — there is no need for three separate maps'
+      'Any single combined map - there is no need for three separate maps'
     ],
     answer:'A rainfall map (isohyets show rainfall), a topographic map (contours show altitude) and a political/settlement map (to locate town names)',
     hint:'Match each question to the type of map that answers it.',
-    explanation:'Three map types are needed: (1) <b>Rainfall map (isohyets)</b> — shows how much rain each area receives; (2) <b>Topographic map (contours)</b> — shows altitude and relief of the land; (3) <b>Political/settlement map</b> — names the towns so the geographer knows which communities are in the rain shadow or on high ground. Using all three together gives a complete picture of the relationship between relief, rainfall and settlement.' })
+    explanation:'Three map types are needed: (1) <b>Rainfall map (isohyets)</b> - shows how much rain each area receives; (2) <b>Topographic map (contours)</b> - shows altitude and relief of the land; (3) <b>Political/settlement map</b> - names the towns so the geographer knows which communities are in the rain shadow or on high ground. Using all three together gives a complete picture of the relationship between relief, rainfall and settlement.' })
 
 );

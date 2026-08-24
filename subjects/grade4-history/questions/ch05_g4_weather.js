@@ -1,5 +1,5 @@
-'use strict';
-// Grade 4 Geography — Chapter: Weather
+﻿'use strict';
+// Grade 4 Geography - Chapter: Weather
 // IDs format: g4ge-weather-NNN
 
 STATIC_QUESTIONS.push(
@@ -8,7 +8,7 @@ STATIC_QUESTIONS.push(
     question:'How many main seasons does Mauritius have?',
     options:['Four (spring, summer, autumn, winter)','Two (summer and winter)','Three (wet, dry, cyclone)','One (it is always hot)'],
     answer:'Two (summer and winter)',
-    hint:'Mauritius is a tropical island — it does not have four seasons like countries in Europe.',
+    hint:'Mauritius is a tropical island - it does not have four seasons like countries in Europe.',
     explanation:'Mauritius has <b>two main seasons</b>: a <b>summer</b> (November to April) which is hot and rainy, and a <b>winter</b> (May to October) which is cooler and drier.' }),
 
   makeMCQ({ id:'g4ge-weather-002', chapterId:'g4ge-weather', difficulty:1,
@@ -29,14 +29,14 @@ STATIC_QUESTIONS.push(
     question:'Mauritius has heavy snow in winter, just like countries in Europe.',
     answer:false,
     hint:'Mauritius is a tropical island in the Indian Ocean.',
-    explanation:'Mauritius does <b>not</b> have snow. It is a <b>tropical island</b> near the Equator. Its "winter" (May–October) is simply cooler and drier — temperatures stay between 17–24°C — nowhere near cold enough for snow.' }),
+    explanation:'Mauritius does <b>not</b> have snow. It is a <b>tropical island</b> near the Equator. Its "winter" (May–October) is simply cooler and drier - temperatures stay between 17–24°C - nowhere near cold enough for snow.' }),
 
   makeMCQ({ id:'g4ge-weather-005', chapterId:'g4ge-weather', difficulty:1,
     question:'A thermometer is used to measure which weather condition?',
     options:['Rainfall','Wind direction','Temperature','Wind speed'],
     answer:'Temperature',
     hint:'Thermo means heat.',
-    explanation:'A <b>thermometer</b> measures <b>temperature</b> — how hot or cold the air is. Temperature is measured in degrees Celsius (°C).' }),
+    explanation:'A <b>thermometer</b> measures <b>temperature</b> - how hot or cold the air is. Temperature is measured in degrees Celsius (°C).' }),
 
   makeMCQ({ id:'g4ge-weather-006', chapterId:'g4ge-weather', difficulty:1,
     question:'Which instrument measures how much rain has fallen?',
@@ -57,13 +57,13 @@ STATIC_QUESTIONS.push(
     options:['Temperature','Rainfall','Wind direction','Wind speed'],
     answer:'Wind speed',
     hint:'An anemometer has little cups that spin faster when the wind is stronger.',
-    explanation:'An <b>anemometer</b> measures <b>wind speed</b>. It has cups that spin in the wind — the faster the cups spin, the stronger the wind. Wind speed is measured in km/h or knots.' }),
+    explanation:'An <b>anemometer</b> measures <b>wind speed</b>. It has cups that spin in the wind - the faster the cups spin, the stronger the wind. Wind speed is measured in km/h or knots.' }),
 
   makeTF({ id:'g4ge-weather-009', chapterId:'g4ge-weather', difficulty:2,
     question:'A rain gauge measures wind speed.',
     answer:false,
     hint:'Think about what a rain gauge collects.',
-    explanation:'A <b>rain gauge</b> measures <b>rainfall</b> — not wind speed. Wind speed is measured by an <b>anemometer</b>. The rain gauge is a cylinder that catches and measures the amount of rain that falls.' }),
+    explanation:'A <b>rain gauge</b> measures <b>rainfall</b> - not wind speed. Wind speed is measured by an <b>anemometer</b>. The rain gauge is a cylinder that catches and measures the amount of rain that falls.' }),
 
   makeMCQ({ id:'g4ge-weather-010', chapterId:'g4ge-weather', difficulty:2,
     question:'Farmers in Mauritius need to listen to the weather forecast. Why is the forecast useful to them?',
@@ -85,13 +85,13 @@ STATIC_QUESTIONS.push(
     question:'How does heavy DROUGHT affect people\'s lives in Mauritius?',
     options:[
       'It brings cool, fresh water for everyone',
-      'It causes water shortages — crops die, reservoirs dry up and people may have limited water supply',
+      'It causes water shortages - crops die, reservoirs dry up and people may have limited water supply',
       'It makes rivers flood and damages buildings',
       'It brings lots of rain that helps farmers grow more crops'
     ],
-    answer:'It causes water shortages — crops die, reservoirs dry up and people may have limited water supply',
+    answer:'It causes water shortages - crops die, reservoirs dry up and people may have limited water supply',
     hint:'A drought means too little rain for a long time.',
-    explanation:'A <b>drought</b> is a long period with little or no rain. It causes <b>water shortages</b> — crops wither and die, reservoirs (water storage lakes) dry up, animals suffer and people may face restrictions on water use. In Mauritius, droughts can seriously damage the sugar cane and vegetable industries.' }),
+    explanation:'A <b>drought</b> is a long period with little or no rain. It causes <b>water shortages</b> - crops wither and die, reservoirs (water storage lakes) dry up, animals suffer and people may face restrictions on water use. In Mauritius, droughts can seriously damage the sugar cane and vegetable industries.' }),
 
   makeMCQ({ id:'g4ge-weather-012', chapterId:'g4ge-weather', difficulty:2,
     question:'How does a CYCLONE affect people in Mauritius?',
@@ -109,14 +109,14 @@ STATIC_QUESTIONS.push(
     question:'During which season in Mauritius is the risk of cyclones greatest?',
     options:['Winter (May–October)','Summer (November–April)','All year equally','Only in June'],
     answer:'Summer (November–April)',
-    hint:'Cyclones form over warm tropical seas — when are the seas warmest around Mauritius?',
+    hint:'Cyclones form over warm tropical seas - when are the seas warmest around Mauritius?',
     explanation:'Cyclones are most likely during Mauritius\'s <b>summer season (November to April)</b>. This is when the sea water is warmest, providing the energy for tropical storms and cyclones to form and develop.' }),
 
   makeTF({ id:'g4ge-weather-014', chapterId:'g4ge-weather', difficulty:2,
     question:'Weather forecasts are only useful for deciding what to wear each day.',
     answer:false,
     hint:'Think about farmers, fishermen, pilots and people preparing for cyclones.',
-    explanation:'Weather forecasts are important for many reasons beyond clothing — <b>farmers</b> plan planting and harvesting; <b>fishermen</b> check sea conditions for safety; <b>pilots and sailors</b> plan routes; and <b>everyone</b> uses storm warnings to prepare for cyclones and flooding.' }),
+    explanation:'Weather forecasts are important for many reasons beyond clothing - <b>farmers</b> plan planting and harvesting; <b>fishermen</b> check sea conditions for safety; <b>pilots and sailors</b> plan routes; and <b>everyone</b> uses storm warnings to prepare for cyclones and flooding.' }),
 
   makeMCQ({ id:'g4ge-weather-015', chapterId:'g4ge-weather', difficulty:2,
     question:'Which weather instrument would you use to find out if the wind is blowing from the south-east?',
@@ -135,7 +135,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'What the weather is expected to be like in the coming days',
     hint:'Forecast = prediction of future weather.',
-    explanation:'A <b>weather forecast</b> predicts what the weather will be like in the near future — for example tomorrow or the next few days. It includes predictions about temperature, rainfall, wind and any severe weather like storms or cyclones.' }),
+    explanation:'A <b>weather forecast</b> predicts what the weather will be like in the near future - for example tomorrow or the next few days. It includes predictions about temperature, rainfall, wind and any severe weather like storms or cyclones.' }),
 
   makeTF({ id:'g4ge-weather-017', chapterId:'g4ge-weather', difficulty:1,
     question:'Summer in Mauritius is generally hotter and rainier than winter.',
@@ -146,12 +146,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4ge-weather-018', chapterId:'g4ge-weather', difficulty:3,
     question:'A school trip to the beach is planned for tomorrow. The weather forecast shows "strong south-east winds, choppy seas and heavy showers." What should the school do and why?',
     options:[
-      'Go ahead — the weather usually changes anyway',
-      'Postpone the trip — strong winds and heavy showers make the sea unsafe for children and the trip unpleasant',
+      'Go ahead - the weather usually changes anyway',
+      'Postpone the trip - strong winds and heavy showers make the sea unsafe for children and the trip unpleasant',
       'Go ahead but bring extra food',
       'Ignore the forecast because forecasts are always wrong'
     ],
-    answer:'Postpone the trip — strong winds and heavy showers make the sea unsafe for children and the trip unpleasant',
+    answer:'Postpone the trip - strong winds and heavy showers make the sea unsafe for children and the trip unpleasant',
     hint:'The weather forecast is there to help us make safe decisions.',
     explanation:'The school should <b>postpone the trip</b>. Strong winds create rough, choppy seas that are <b>dangerous for children swimming</b>. Heavy showers make outdoor activities unpleasant and could cause flash flooding. Using the weather forecast to make safety decisions is a key reason forecasts are important.' }),
 

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 const Forum = (() => {
 
   // ── Categories ────────────────────────────────
@@ -262,7 +262,7 @@ const Forum = (() => {
     if (!data?.length) {
       list.innerHTML = sortBtns + `<div class="text-center py-10">
         <div class="text-4xl mb-3 select-none">🗒️</div>
-        <p class="text-sm text-gray-400 mb-4">No posts yet — be the first!</p>
+        <p class="text-sm text-gray-400 mb-4">No posts yet - be the first!</p>
         <button onclick="Forum.showNewPost()" class="text-sm bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-4 py-2 rounded-xl transition-colors">✏️ Write the First Post</button>
       </div>`;
       return;
@@ -390,7 +390,7 @@ const Forum = (() => {
             </div>
           </div>`;
         }).join('')
-      : '<p class="text-sm text-gray-400 text-center py-4 mt-4">No replies yet — be the first to reply!</p>';
+      : '<p class="text-sm text-gray-400 text-center py-4 mt-4">No replies yet - be the first to reply!</p>';
   }
 
   async function closePost(id) {

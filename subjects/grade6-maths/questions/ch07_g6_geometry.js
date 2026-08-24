@@ -1,5 +1,5 @@
-'use strict';
-// Grade 6 Maths — Chapter: Geometry (angles, triangles, parallel/perpendicular)
+﻿'use strict';
+// Grade 6 Maths - Chapter: Geometry (angles, triangles, parallel/perpendicular)
 // IDs format: g6m-geo-NNN
 
 // Angle types diagram
@@ -72,7 +72,7 @@ STATIC_QUESTIONS.push(
       'They cross at an acute angle'
     ],
     answer:'They never meet and stay the same distance apart',
-    hint:'Think of railway tracks — they go in the same direction forever without crossing.',
+    hint:'Think of railway tracks - they go in the same direction forever without crossing.',
     explanation:'<b>Parallel lines</b> always remain the same distance apart and <b>never intersect</b>, no matter how far they are extended. They are marked with arrows (→→) on diagrams.' }),
 
   makeMCQ({ id:'g6m-geo-006', chapterId:'g6-geometry', difficulty:2,
@@ -115,7 +115,7 @@ STATIC_QUESTIONS.push(
     question:'The angles of a triangle are x°, 2x° and 3x°. Find the value of x.',
     answer:'30', acceptableAnswers:['30'],
     hint:'Angles in a triangle always sum to 180°. So x + 2x + 3x = 180°.',
-    explanation:'x + 2x + 3x = 180. 6x = 180. x = 180 ÷ 6 = <b>30°</b>. The three angles are 30°, 60° and 90° — this is a right-angled triangle!' }),
+    explanation:'x + 2x + 3x = 180. 6x = 180. x = 180 ÷ 6 = <b>30°</b>. The three angles are 30°, 60° and 90° - this is a right-angled triangle!' }),
 
   makeNum({ id:'g6m-geo-012', chapterId:'g6-geometry', difficulty:2,
     question:'In a quadrilateral, three angles are 95°, 110° and 85°. Find the FOURTH angle.',

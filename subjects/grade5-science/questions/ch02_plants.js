@@ -1,5 +1,5 @@
-'use strict';
-// Grade 5 Science — Chapter: Plants
+﻿'use strict';
+// Grade 5 Science - Chapter: Plants
 // Uses STATIC_QUESTIONS + helpers from engine/helpers.js
 // IDs format: g5sci-pl-NNN
 
@@ -10,7 +10,7 @@ STATIC_QUESTIONS.push(
     options:['It absorbs water from the soil','It makes food for the plant','It holds the plant firmly in the soil','It protects the seed'],
     answer:'It makes food for the plant',
     hint:'The leaf carries out photosynthesis.',
-    explanation:'The leaf makes food for the plant through photosynthesis — using sunlight, water and carbon dioxide to produce glucose and oxygen.' }),
+    explanation:'The leaf makes food for the plant through photosynthesis - using sunlight, water and carbon dioxide to produce glucose and oxygen.' }),
 
   makeMCQ({ id:'g5sci-pl-002', chapterId:'plants', difficulty:1,
     question:'Which part of the plant anchors it firmly in the soil AND absorbs water and minerals?',
@@ -54,7 +54,7 @@ STATIC_QUESTIONS.push(
       'The process of soil becoming hard'
     ],
     answer:'The removal of topsoil by wind or water',
-    hint:'Erosion means wearing away — something is being removed.',
+    hint:'Erosion means wearing away - something is being removed.',
     explanation:'Soil erosion is the removal and transport of topsoil by wind, running water or waves, leaving the land less fertile.' }),
 
   makeMCQ({ id:'g5sci-pl-008', chapterId:'plants', difficulty:2,
@@ -82,7 +82,7 @@ STATIC_QUESTIONS.push(
     explanation:'Pollination is the transfer of pollen from the stamen (male part) to the stigma (female part) of a flower, enabling fertilisation and seed formation.' }),
 
   makeMCQ({ id:'g5sci-pl-010', chapterId:'plants', difficulty:1,
-    question:'Which part of a plant is responsible for reproduction — producing seeds?',
+    question:'Which part of a plant is responsible for reproduction - producing seeds?',
     options:['Root','Stem','Leaf','Flower'],
     answer:'Flower',
     hint:'Seeds develop after this part does its job.',
@@ -104,7 +104,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sci-pl-013', chapterId:'plants', difficulty:2,
     question:'A farmer notices that heavy rain is washing away the topsoil from his field. What should he plant to help prevent this?',
-    options:['More crops that leave the soil bare between rows','Trees and grass along the edges of the field','Large stones to block rainwater','Nothing — rain erosion cannot be stopped'],
+    options:['More crops that leave the soil bare between rows','Trees and grass along the edges of the field','Large stones to block rainwater','Nothing - rain erosion cannot be stopped'],
     answer:'Trees and grass along the edges of the field',
     hint:'Roots are nature\'s anchor for soil.',
     explanation:'Trees and grass have extensive root systems that bind soil particles together, reducing the impact of rain and preventing topsoil from being washed away.' }),
@@ -176,14 +176,14 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-pl-022', chapterId:'plants', difficulty:3,
     question:'Seed A is placed in wet cotton wool and Seed B in dry cotton wool, both at room temperature. Which seed will germinate and why?',
     options:[
-      'Seed A — because water is one of the conditions needed for germination',
-      'Seed B — because dry conditions help germination',
-      'Both seeds — temperature is the only factor that matters',
-      'Neither seed — seeds need sunlight to germinate'
+      'Seed A - because water is one of the conditions needed for germination',
+      'Seed B - because dry conditions help germination',
+      'Both seeds - temperature is the only factor that matters',
+      'Neither seed - seeds need sunlight to germinate'
     ],
-    answer:'Seed A — because water is one of the conditions needed for germination',
+    answer:'Seed A - because water is one of the conditions needed for germination',
     hint:'What are the three conditions needed for germination?',
-    explanation:'<b>Seed A</b> will germinate because it has <b>water</b> — one of the three conditions needed (water, warmth, air/oxygen). Seed B has no water so it cannot start the chemical reactions needed for germination. Sunlight is NOT needed for germination.' }),
+    explanation:'<b>Seed A</b> will germinate because it has <b>water</b> - one of the three conditions needed (water, warmth, air/oxygen). Seed B has no water so it cannot start the chemical reactions needed for germination. Sunlight is NOT needed for germination.' }),
 
   makeMCQ({ id:'g5sci-pl-023', chapterId:'plants', difficulty:3,
     question:'A plant is placed in a room with good lighting, but the room has no air flow and all the windows are sealed. Why might the plant eventually stop growing well?',
@@ -201,11 +201,11 @@ STATIC_QUESTIONS.push(
     question:'Ryan investigates whether water is needed for germination. He sets up two cups of soil with identical seeds. Cup A receives 5 ml of water daily; Cup B receives no water. After 10 days, only the seed in Cup A has germinated. His friend says, "Temperature also changed during the experiment." Why does this make the experiment UNFAIR?',
     options:[
       'Because a fair test must change two things at a time',
-      'Because a fair test changes only ONE variable — if temperature also changed, we cannot be sure water caused the germination',
+      'Because a fair test changes only ONE variable - if temperature also changed, we cannot be sure water caused the germination',
       'Because seeds always germinate when watered, so the result is obvious',
       'Because the friend should have done the experiment themselves'
     ],
-    answer:'Because a fair test changes only ONE variable — if temperature also changed, we cannot be sure water caused the germination',
+    answer:'Because a fair test changes only ONE variable - if temperature also changed, we cannot be sure water caused the germination',
     hint:'In a fair test (controlled experiment), only the variable being tested should change.',
     explanation:'In a <b>fair test</b>, only the <b>independent variable</b> (here: water) should change. All other conditions (temperature, type of seed, type of soil, light) must stay the same. If temperature also changed, we cannot be sure whether it was the water or the temperature change that caused Cup A\'s seed to germinate.' }),
 
