@@ -181,6 +181,15 @@ function showScreen(id) {
   const hdr = document.querySelector('header');
   if (hdr) hdr.classList.toggle('hidden', hideHeader);
 
+  // Show logout button in header whenever a student is active
+  const logoutBtn = document.getElementById('header-logout-btn');
+  if (logoutBtn) {
+    const studentActive = typeof ACTIVE_STUDENT_ID !== 'undefined' && !!ACTIVE_STUDENT_ID;
+    const isAuthScreen  = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
+    logoutBtn.classList.toggle('hidden',   !studentActive || isAuthScreen);
+    logoutBtn.classList.toggle('flex',      studentActive && !isAuthScreen);
+  }
+
   _updateBreadcrumb(id);
 
   if (id === 'dashboard')       renderDashboard();
@@ -650,177 +659,150 @@ function _renderLeaderboard() {
 }
 
 // ── PARENT DASHBOARD ──────────────────────────
-function renderParentDashboard() {
-  const acct  = Auth.getActiveAccount() || {};
-  const el    = id => document.getElementById(id);
-  const stats = DB.stats || {};
-  const acc   = stats.totalAttempted ? Math.round(stats.totalCorrect / stats.totalAttempted * 100) : 0;
+async function renderParentDashboard() {
+  const _el = id => document.getElementById(id);
 
-  // ── Show/hide sections based on whether any students exist ──
-  const accounts   = Store.getAccounts();
-  const hasStudents = accounts.length > 0;
-  if (el('pd-child-card'))   el('pd-child-card').classList.toggle('hidden', !hasStudents);
-  if (el('pd-tab-bar'))      el('pd-tab-bar').classList.toggle('hidden', !hasStudents);
-  if (el('pd-student-switch')) el('pd-student-switch').classList.toggle('hidden', !hasStudents);
-  if (el('pd-empty-state'))  el('pd-empty-state').classList.toggle('hidden', hasStudents);
+  const students    = Auth.getStudents() || [];
+  const hasStudents = students.length > 0;
+
+  if (_el('pd-no-children'))   _el('pd-no-children').classList.toggle('hidden', hasStudents);
+  if (_el('pd-children-grid')) _el('pd-children-grid').classList.toggle('hidden', !hasStudents);
+  if (_el('pd-detail-panel'))  _el('pd-detail-panel').classList.add('hidden');
+
   if (!hasStudents) return;
 
-  // Ensure the progress tab is visible if none are currently shown
-  const anyTabVisible = [...document.querySelectorAll('.pd-tab-content')].some(c => !c.classList.contains('hidden'));
-  if (!anyTabVisible) Auth.pdTab('progress');
+  const grid = _el('pd-children-grid');
+  if (!grid) return;
 
-  // Child card — show placeholder when no student is actively selected
-  if (acct.name) {
-    if (el('pd-avatar')) el('pd-avatar').textContent = acct.avatar || '🧒';
-    if (el('pd-name'))   el('pd-name').textContent   = acct.name;
-    if (el('pd-level'))  el('pd-level').textContent  = `Level ${DB.level || 1} — ${LEVEL_NAMES[(DB.level||1)-1]}`;
-    if (el('pd-xp'))     el('pd-xp').textContent     = `${DB.xp || 0} XP · ${acc}% accuracy`;
-  } else {
-    if (el('pd-avatar')) el('pd-avatar').textContent = '👇';
-    if (el('pd-name'))   el('pd-name').textContent   = 'Select a student';
-    if (el('pd-level'))  el('pd-level').textContent  = 'Use the dropdown above to view their progress';
-    if (el('pd-xp'))     el('pd-xp').textContent     = '';
-  }
+  // Render skeleton cards first for instant paint
+  grid.innerHTML = students.map(s => `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border-2 border-transparent
+      hover:border-indigo-300 dark:hover:border-indigo-600 cursor-pointer transition-all active:scale-95"
+      onclick="PD.selectChild('${s.id}')">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-4xl select-none">${s.avatar || '🧒'}</span>
+        <div>
+          <div class="font-bold text-gray-800 dark:text-white">${s.display_name || s.username}</div>
+          <div class="text-xs text-gray-400 dark:text-gray-500">Grade ${s.grade || '?'}</div>
+        </div>
+      </div>
+      <div id="pd-card-stats-${s.id}">
+        <div class="h-3 bg-gray-100 dark:bg-gray-700 rounded-full animate-pulse mb-1.5"></div>
+        <div class="h-3 bg-gray-100 dark:bg-gray-700 rounded-full animate-pulse w-2/3"></div>
+      </div>
+    </div>`).join('');
 
-  // Student switcher dropdown
-  const sw = el('pd-student-switch');
-  if (sw) {
-    const accounts = Store.getAccounts();
-    sw.innerHTML = accounts.map(a =>
-      `<option value="${a.id}" ${a.id === ACTIVE_STUDENT_ID ? 'selected' : ''}>${a.avatar} ${a.name}</option>`
-    ).join('');
-  }
-
-  // ── Progress tab ──────────────────────────
-  if (el('pd-total'))  el('pd-total').textContent  = stats.totalAttempted || 0;
-  if (el('pd-acc'))    el('pd-acc').textContent    = acc + '%';
-  if (el('pd-streak')) el('pd-streak').textContent = (stats.streak || 0) + ' 🔥';
-  if (el('pd-badges')) el('pd-badges').textContent = (DB.badges || []).length;
-
-  // Subject progress cards (grouped by subject, all subjects for this student's grade)
-  const spEl = el('pd-subject-progress');
-  if (spEl) {
-    const studentGrade = acct?.grade || 5;
-    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
-      .filter(p => p.grade === studentGrade && !p.comingSoon);
-    const lockedChs = DB.restrictions?.lockedChapters || [];
-
-    if (!packs.length) {
-      spEl.innerHTML = '<p class="text-sm text-gray-400">No subjects loaded yet.</p>';
-    } else {
-      spEl.innerHTML = packs.map(pack => {
-        const chs = pack._chapters || pack.chapters || [];
-        const dbCh = DB.chapters || {};
-        const total   = chs.reduce((s, ch) => s + ((dbCh[ch.id]?.attempted) || 0), 0);
-        const correct = chs.reduce((s, ch) => s + ((dbCh[ch.id]?.correct)   || 0), 0);
-        const pct = total ? Math.round(correct / total * 100) : 0;
-        const col = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#3b82f6';
-        const chapRows = chs.map(ch => {
-          const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
-          const cp = c.attempted ? Math.round(c.correct / c.attempted * 100) : 0;
-          const cc = cp >= 80 ? '#22c55e' : cp >= 50 ? '#f59e0b' : '#3b82f6';
-          const lk = lockedChs.includes(ch.id) ? ' 🔒' : '';
-          return `<div class="flex items-center gap-3 py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
-            <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${lk}</span>
-            <span class="text-xs text-gray-400 w-8 text-center shrink-0">${c.attempted}</span>
-            <div class="shrink-0" style="display:inline-flex;align-items:center;gap:5px;width:90px">
-              <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
-                <div style="width:${cp}%;height:100%;background:${cc};border-radius:3px"></div>
-              </div>
-              <span class="text-xs font-medium" style="color:${cc};width:28px;text-align:right">${cp}%</span>
-            </div>
-          </div>`;
-        }).join('');
-        return `<div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-          <button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
-            onclick="this.nextElementSibling.classList.toggle('hidden')">
-            <span class="text-xl select-none">${pack.icon}</span>
-            <div class="flex-1 min-w-0">
-              <div class="font-semibold text-sm text-gray-800 dark:text-white">${pack.subject}</div>
-              <div style="display:inline-flex;align-items:center;gap:5px;margin-top:3px;width:120px">
-                <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
-                  <div style="width:${pct}%;height:100%;background:${col};border-radius:3px"></div>
-                </div>
-                <span class="text-xs font-bold" style="color:${col}">${pct}%</span>
-              </div>
-            </div>
-            <span class="text-xs text-gray-400">${total} Q done ▾</span>
-          </button>
-          <div class="hidden px-4 py-2">
-            <div class="flex text-xs text-gray-400 uppercase border-b border-gray-100 dark:border-gray-700 pb-1 mb-1">
-              <span class="flex-1">Chapter</span><span class="w-8 text-center">Tried</span><span style="width:90px" class="ml-3">Score</span>
-            </div>
-            ${chapRows}
+  // Fill real stats asynchronously per card
+  for (const s of students) {
+    Store.loadStudentProgress(s.id).then(prog => {
+      const statsEl = document.getElementById(`pd-card-stats-${s.id}`);
+      if (!statsEl) return;
+      const st  = prog.stats || {};
+      const acc = st.totalAttempted ? Math.round(st.totalCorrect / st.totalAttempted * 100) : 0;
+      const col = acc >= 80 ? '#22c55e' : acc >= 50 ? '#f59e0b' : '#3b82f6';
+      statsEl.innerHTML = `
+        <div class="flex gap-3 text-xs text-gray-500 dark:text-gray-400 mb-1.5">
+          <span>📝 ${st.totalAttempted || 0}</span>
+          <span>🎯 ${acc}%</span>
+          <span>🔥 ${st.streak || 0}</span>
+          <span>⭐ ${prog.xp || 0} XP</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
+            <div style="width:${acc}%;height:100%;background:${col};border-radius:3px"></div>
           </div>
+          <span class="text-xs font-bold shrink-0" style="color:${col}">${acc}%</span>
         </div>`;
-      }).join('');
+    }).catch(() => {});
+  }
+}
+
+// ── PD (Parent Dashboard controller) ─────────
+const PD = (() => {
+  let _activeId = null;
+
+  function selectChild(id) {
+    _activeId = id;
+    Auth.pdSwitchStudent(id);
+
+    const _el = el => document.getElementById(el);
+    const s   = (Auth.getStudents() || []).find(st => st.id === id);
+
+    if (_el('pd-children-grid')) _el('pd-children-grid').classList.add('hidden');
+    if (_el('pd-no-children'))   _el('pd-no-children').classList.add('hidden');
+    const panel = _el('pd-detail-panel');
+    if (panel) panel.classList.remove('hidden');
+
+    if (s) {
+      if (_el('pd-detail-avatar')) _el('pd-detail-avatar').textContent = s.avatar || '🧒';
+      if (_el('pd-detail-name'))   _el('pd-detail-name').textContent   = s.display_name || s.username;
+      if (_el('pd-detail-grade'))  _el('pd-detail-grade').textContent  = `Grade ${s.grade || '?'}`;
     }
+
+    pdTab('progress');
+    renderDetail();
   }
 
-  // Family code display
-  const fcEl = el('pd-family-code');
-  if (fcEl && typeof Store !== 'undefined') {
-    Store.getMyFamily().then(f => { if (f && fcEl) fcEl.textContent = f.family_code; }).catch(() => {});
+  function closeDetail() {
+    const panel = document.getElementById('pd-detail-panel');
+    if (panel) panel.classList.add('hidden');
+    renderParentDashboard();
   }
 
-  const pdStudents = el('pd-all-students');
-  if (pdStudents) {
-    const accounts = Store.getAccounts();
-    pdStudents.innerHTML = accounts.length
-      ? accounts.map(a => {
-          const d     = Store.loadStudent(a.id);
-          const p     = d.stats.totalAttempted ? Math.round(d.stats.totalCorrect / d.stats.totalAttempted * 100) : 0;
-          const lname = LEVEL_NAMES[Math.min((d.level || 1) - 1, LEVEL_NAMES.length - 1)];
-          const isMe  = a.id === ACTIVE_STUDENT_ID;
-          return `<div class="flex items-center gap-3 p-3 rounded-xl ${isMe ? 'bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700' : 'bg-gray-50 dark:bg-gray-700/50'}">
-            <span class="text-2xl select-none">${a.avatar}</span>
-            <div class="flex-1 min-w-0">
-              <div class="font-semibold text-sm text-gray-800 dark:text-white truncate">${a.name}</div>
-              <div class="text-xs text-gray-400">Lv.${d.level||1} ${lname} · ${d.xp||0} XP · ${p}% accuracy · ${d.stats.totalAttempted} done</div>
-            </div>
-            <div class="flex gap-1.5 shrink-0 flex-wrap">
-              ${isMe
-                ? `<span class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 px-2.5 py-1 rounded-lg font-medium">👁 Viewing</span>`
-                : `<button onclick="Auth.pdSwitchStudent('${a.id}');document.getElementById('pd-child-card')?.scrollIntoView({behavior:'smooth',block:'nearest'})" class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-2.5 py-1 rounded-lg hover:bg-indigo-200 transition-colors font-medium">👁 View</button>`}
-              <button onclick="Auth.editStudent('${a.id}')" class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-lg hover:bg-gray-200 transition-colors">Edit</button>
-              <button onclick="Auth.confirmResetStudentProgress('${a.id}','${a.name.replace(/'/g,"\\'")}')" class="text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 px-2.5 py-1 rounded-lg hover:bg-yellow-200 transition-colors">Reset</button>
-              <button onclick="Auth.deleteStudent('${a.id}')" class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2.5 py-1 rounded-lg hover:bg-red-200 transition-colors">Delete</button>
-            </div>
-          </div>`;
-        }).join('')
-      : '<p class="text-sm text-gray-400 py-3">No children yet — click ➕ Add Child to get started.</p>';
+  function pdTab(tab) {
+    const panel = document.getElementById('pd-detail-panel');
+    if (!panel) return;
+    panel.querySelectorAll('.pd-tab').forEach(b => {
+      const active = b.dataset.tab === tab;
+      b.classList.toggle('bg-white',          active);
+      b.classList.toggle('dark:bg-gray-700',  active);
+      b.classList.toggle('shadow-sm',         active);
+      b.classList.toggle('font-semibold',     active);
+      b.classList.toggle('text-gray-800',     active);
+      b.classList.toggle('dark:text-white',   active);
+      b.classList.toggle('text-gray-500',    !active);
+      b.classList.toggle('dark:text-gray-400',!active);
+    });
+    panel.querySelectorAll('.pd-tab-content').forEach(c => {
+      c.classList.toggle('hidden', c.dataset.tab !== tab);
+    });
+    if (tab === 'assign') _renderAssignments();
   }
 
-  // ── Family leaderboard ────────────────────
-  _renderLeaderboard();
+  function renderDetail() {
+    const acct  = Auth.getActiveAccount() || {};
+    const _el   = id => document.getElementById(id);
+    const stats = DB.stats || {};
+    const acc   = stats.totalAttempted ? Math.round(stats.totalCorrect / stats.totalAttempted * 100) : 0;
 
-  // ── Assignments tab ───────────────────────
-  const assignSubjEl = el('pd-assign-subject');
-  if (assignSubjEl) {
-    const studentGrade = acct?.grade || 5;
-    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
-      .filter(p => p.grade === studentGrade && !p.comingSoon);
-    assignSubjEl.innerHTML = packs.map(p =>
-      `<option value="${p.id}">${p.icon} ${p.subject}</option>`
-    ).join('');
-    // Populate chapter dropdown for first subject
-    _pdFillAssignChapters(packs[0]);
+    if (_el('pd-total'))  _el('pd-total').textContent  = stats.totalAttempted || 0;
+    if (_el('pd-acc'))    _el('pd-acc').textContent    = acc + '%';
+    if (_el('pd-streak')) _el('pd-streak').textContent = (stats.streak || 0) + ' 🔥';
+    if (_el('pd-badges')) _el('pd-badges').textContent = (DB.badges || []).length;
+
+    _renderSubjectProgress(acct);
+    _renderLeaderboard();
+    _renderParentAssignDropdown(acct);
+    _renderParentControls(acct);
   }
-  const asgList = el('pd-asgn-list');
-  if (asgList) {
-    const asgns = DB.assignments || [];
-    const DLABELS = ['','Basic','Medium','Hard', (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.level4Label) || 'Challenge'];
-    const allPdChs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+
+  async function _renderAssignments() {
+    const listEl = document.getElementById('pd-asgn-list');
+    if (!listEl || !_activeId) return;
+    listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-4">Loading…</p>';
+    const asgns  = await Store.loadAssignments(_activeId);
+    const DLABELS = ['','Basic','Medium','Hard','Challenge'];
+    const allChs  = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
       .flatMap(p => p._chapters || p.chapters || []);
-    asgList.innerHTML = asgns.length ? asgns.map(a => {
-      const ch  = allPdChs.find(c => c.id === a.chapterId) || CHAPTERS.find(c => c.id === a.chapterId);
+    listEl.innerHTML = asgns.length ? asgns.map(a => {
+      const ch  = allChs.find(c => c.id === a.chapter_id) || CHAPTERS.find(c => c.id === a.chapter_id);
       const dlv = a.difficulty ? (DLABELS[a.difficulty] || `L${a.difficulty}`) : 'All Levels';
       return `<div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
         <span class="text-xl select-none">${ch?.icon || '📚'}</span>
         <div class="flex-1 min-w-0">
-          <div class="font-semibold text-sm text-gray-800 dark:text-white">${ch?.name || 'Any Chapter'} — ${dlv}</div>
+          <div class="font-semibold text-sm text-gray-800 dark:text-white">${ch?.name || a.chapter_id || 'Any Chapter'} — ${dlv}</div>
           ${a.note ? `<div class="text-xs text-gray-400 italic">"${a.note}"</div>` : ''}
-          <div class="text-xs text-gray-400">${new Date(a.createdAt).toLocaleDateString()}</div>
+          <div class="text-xs text-gray-400">${new Date(a.created_at).toLocaleDateString()}</div>
         </div>
         <button onclick="Auth.removeAssignment('${a.id}')"
           class="shrink-0 text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2.5 py-1 rounded-lg hover:bg-red-200 transition-colors">Remove</button>
@@ -828,16 +810,87 @@ function renderParentDashboard() {
     }).join('') : '<p class="text-sm text-gray-400 text-center py-4">No assignments yet. Add one above.</p>';
   }
 
-  // ── Controls tab ──────────────────────────
-  const maxDiff   = DB.restrictions?.maxDifficulty ?? 4;
-  const examOff   = DB.restrictions?.examDisabled  ?? false;
+  return { selectChild, closeDetail, pdTab, renderDetail };
+})();
+
+// ── PARENT DASHBOARD HELPERS ──────────────────
+function _renderSubjectProgress(acct) {
+  const spEl = document.getElementById('pd-subject-progress');
+  if (!spEl) return;
+  const studentGrade = acct?.grade || 5;
+  const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .filter(p => p.grade === studentGrade && !p.comingSoon);
+  const lockedChs = DB.restrictions?.lockedChapters || [];
+  if (!packs.length) { spEl.innerHTML = '<p class="text-sm text-gray-400">No subjects loaded yet.</p>'; return; }
+  spEl.innerHTML = packs.map(pack => {
+    const chs    = pack._chapters || pack.chapters || [];
+    const dbCh   = DB.chapters || {};
+    const total   = chs.reduce((s, ch) => s + ((dbCh[ch.id]?.attempted) || 0), 0);
+    const correct = chs.reduce((s, ch) => s + ((dbCh[ch.id]?.correct)   || 0), 0);
+    const pct = total ? Math.round(correct / total * 100) : 0;
+    const col = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#3b82f6';
+    const chapRows = chs.map(ch => {
+      const c  = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
+      const cp = c.attempted ? Math.round(c.correct / c.attempted * 100) : 0;
+      const cc = cp >= 80 ? '#22c55e' : cp >= 50 ? '#f59e0b' : '#3b82f6';
+      const lk = lockedChs.includes(ch.id) ? ' 🔒' : '';
+      return `<div class="flex items-center gap-3 py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
+        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${lk}</span>
+        <span class="text-xs text-gray-400 w-8 text-center shrink-0">${c.attempted}</span>
+        <div class="shrink-0" style="display:inline-flex;align-items:center;gap:5px;width:90px">
+          <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
+            <div style="width:${cp}%;height:100%;background:${cc};border-radius:3px"></div>
+          </div>
+          <span class="text-xs font-medium" style="color:${cc};width:28px;text-align:right">${cp}%</span>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+      <button class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+        onclick="this.nextElementSibling.classList.toggle('hidden')">
+        <span class="text-xl select-none">${pack.icon}</span>
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold text-sm text-gray-800 dark:text-white">${pack.subject}</div>
+          <div style="display:inline-flex;align-items:center;gap:5px;margin-top:3px;width:120px">
+            <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
+              <div style="width:${pct}%;height:100%;background:${col};border-radius:3px"></div>
+            </div>
+            <span class="text-xs font-bold" style="color:${col}">${pct}%</span>
+          </div>
+        </div>
+        <span class="text-xs text-gray-400">${total} Q done ▾</span>
+      </button>
+      <div class="hidden px-4 py-2">
+        <div class="flex text-xs text-gray-400 uppercase border-b border-gray-100 dark:border-gray-700 pb-1 mb-1">
+          <span class="flex-1">Chapter</span><span class="w-8 text-center">Tried</span><span style="width:90px" class="ml-3">Score</span>
+        </div>
+        ${chapRows}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function _renderParentAssignDropdown(acct) {
+  const assignSubjEl = document.getElementById('pd-assign-subject');
+  if (!assignSubjEl) return;
+  const studentGrade = acct?.grade || 5;
+  const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .filter(p => p.grade === studentGrade && !p.comingSoon);
+  assignSubjEl.innerHTML = packs.map(p => `<option value="${p.id}">${p.icon} ${p.subject}</option>`).join('');
+  _pdFillAssignChapters(packs[0]);
+}
+
+function _renderParentControls(acct) {
+  const _el     = id => document.getElementById(id);
+  const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
+  const examOff = DB.restrictions?.examDisabled  ?? false;
   const lockedChs = DB.restrictions?.lockedChapters || [];
 
-  [1,2,3,4].forEach(lv => { const r = el(`pd-maxdiff-${lv}`); if (r) r.checked = maxDiff === lv; });
-  const examToggle = el('pd-exam-toggle');
+  [1,2,3,4].forEach(lv => { const r = _el(`pd-maxdiff-${lv}`); if (r) r.checked = maxDiff === lv; });
+  const examToggle = _el('pd-exam-toggle');
   if (examToggle) examToggle.checked = !examOff;
 
-  const chLocks = el('pd-chapter-locks');
+  const chLocks = _el('pd-chapter-locks');
   if (chLocks) {
     const lockGrade = acct?.grade || 5;
     const lockPacks = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
@@ -868,6 +921,52 @@ function _pdFillAssignChapters(pack) {
   const chs = pack?._chapters || pack?.chapters || [];
   el.innerHTML = `<option value="">Any Chapter</option>` +
     chs.map(ch => `<option value="${ch.id}">${ch.icon || ''} ${ch.name}</option>`).join('');
+}
+
+// ── STUDENT ASSIGNMENTS (dashboard view) ──────
+async function _renderStudentAssignments(studentId) {
+  const banner = document.getElementById('dash-assignments');
+  const listEl = document.getElementById('dash-assignments-list');
+  if (!banner || !listEl || !studentId) return;
+  const asgns = await Store.loadAssignments(studentId);
+  if (!asgns.length) { banner.classList.add('hidden'); return; }
+  banner.classList.remove('hidden');
+  const packs  = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
+  const allChs = packs.flatMap(p => p._chapters || p.chapters || []);
+  listEl.innerHTML = asgns.map(a => {
+    const pack = packs.find(p => p.id === a.subject_id);
+    const ch   = allChs.find(c => c.id === a.chapter_id) || CHAPTERS.find(c => c.id === a.chapter_id);
+    const subjectName = pack?.subject || a.subject_id || 'Subject';
+    const chName = ch?.name || a.chapter_id || 'Any Chapter';
+    const dlv  = a.difficulty ? `Level ${a.difficulty}` : 'All Levels';
+    const canStart = !!(a.subject_id && a.chapter_id);
+    return `<div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border-2 border-blue-300 dark:border-blue-600 shadow-sm">
+      <div class="flex items-start gap-3">
+        <span class="text-2xl select-none mt-0.5">${ch?.icon || '📚'}</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-bold text-gray-800 dark:text-white">${subjectName} — ${chName}</div>
+          <div class="text-xs text-blue-600 dark:text-blue-400 font-medium mt-0.5">${dlv}</div>
+          ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic mt-1">"${a.note}"</div>` : ''}
+        </div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        ${canStart ? `<button onclick="${typeof Calendar !== 'undefined' ? `Calendar.startPractice('${a.subject_id}','${a.chapter_id}')` : `toast('Loading…',1500)`}"
+          class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-colors shadow">
+          ▶ Start Now
+        </button>` : ''}
+        <button onclick="_markAssignmentDone('${a.id}', this)"
+          class="${canStart ? 'shrink-0 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300' : 'flex-1 bg-green-500 hover:bg-green-600 text-white'} px-3 py-2 rounded-xl transition-colors text-xs font-semibold">
+          ✓ Mark Complete
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function _markAssignmentDone(id, btn) {
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  await Store.completeAssignment(id);
+  _renderStudentAssignments(ACTIVE_STUDENT_ID);
 }
 
 // ── SCRATCHPAD ────────────────────────────────
@@ -973,36 +1072,8 @@ function renderDashboard() {
   const startHere = document.getElementById('dash-start-here');
   if (startHere) startHere.classList.toggle('hidden', DB.stats.totalAttempted > 0);
 
-  // Assignments banner
-  const asgns     = DB.assignments || [];
-  const asgBanner = document.getElementById('assignments-banner');
-  const asgList   = document.getElementById('assignments-list');
-  if (asgBanner && asgList) {
-    if (asgns.length) {
-      asgBanner.classList.remove('hidden');
-      // Build a lookup across ALL subject packs so chapter names resolve regardless of subject
-      const allChs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
-        .flatMap(p => p._chapters || p.chapters || []);
-      asgList.innerHTML = asgns.map(a => {
-        const ch  = allChs.find(c => c.id === a.chapterId) || CHAPTERS.find(c => c.id === a.chapterId);
-        const dlv = a.difficulty ? `Level ${a.difficulty}` : 'All Levels';
-        return `<div class="flex items-center gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border-2 border-blue-300 dark:border-blue-600 shadow-sm">
-          <span class="text-2xl select-none">${ch?.icon || '📚'}</span>
-          <div class="flex-1 min-w-0">
-            <div class="text-sm font-bold text-gray-800 dark:text-white truncate">${ch?.name || a.chapterId}</div>
-            <div class="text-xs text-blue-600 dark:text-blue-400 font-medium">${dlv}</div>
-            ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic mt-0.5">"${a.note}"</div>` : ''}
-          </div>
-          <button onclick="startAssignment('${a.id}')"
-            class="shrink-0 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl transition-colors font-bold text-sm shadow">
-            Start →
-          </button>
-        </div>`;
-      }).join('');
-    } else {
-      asgBanner.classList.add('hidden');
-    }
-  }
+  // Assignments from parent (Supabase — async, non-blocking)
+  _renderStudentAssignments(ACTIVE_STUDENT_ID);
 
   // Exam mode visibility (respect restrictions)
   const examCard = document.getElementById('btn-exam-mode');

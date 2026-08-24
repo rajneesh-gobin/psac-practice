@@ -112,8 +112,12 @@ const Calendar = (() => {
   async function _ensureSchedule() {
     if (_scheduleId) return _scheduleId;
     // Try to find an existing schedule first (in case _loadEntries failed silently)
-    const { data: existing } = await _sb.from('study_schedules')
+    const { data: existing, error: selErr } = await _sb.from('study_schedules')
       .select('id').eq('student_id', _studentId).limit(1).maybeSingle();
+    if (selErr) {
+      console.error('[Calendar] study_schedules query failed — table may not exist yet. Run supabase-calendar-migration.sql in your Supabase SQL editor.', selErr);
+      return null;
+    }
     if (existing?.id) { _scheduleId = existing.id; return _scheduleId; }
     // No schedule found — create one
     const profile  = typeof Auth !== 'undefined' ? Auth.getParentProfile() : null;
@@ -122,7 +126,11 @@ const Calendar = (() => {
       parent_id:  profile?.id || null,
       settings:   _gen,
     }).select('id').single();
-    if (error || !data) return null;
+    if (error) {
+      console.error('[Calendar] study_schedules insert failed — run supabase-calendar-migration.sql in your Supabase SQL editor.', error);
+      return null;
+    }
+    if (!data) return null;
     _scheduleId = data.id;
     return _scheduleId;
   }
@@ -267,7 +275,7 @@ const Calendar = (() => {
     if (!label) { _showErr(errEl, 'Please enter an event name.'); return; }
 
     const sid = await _ensureSchedule();
-    if (!sid)   { _showErr(errEl, 'Could not save. Please try again.'); return; }
+    if (!sid)   { _showErr(errEl, 'Database not ready — please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.'); return; }
 
     const { data, error } = await _sb.from('schedule_entries').insert({
       schedule_id: sid, student_id: _studentId,
@@ -378,72 +386,96 @@ const Calendar = (() => {
     if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
     _gen = { startDate: startDateStr, weeks, studyDays, subjectHours: subjHours, mixed };
 
-    // Build day slots
-    const totalMinsPerWeek = {};
-    subjects.forEach(s => { totalMinsPerWeek[s.id] = (subjHours[s.id] || 0) * 60; });
+    // Build the flat list of all study dates in the period
+    const allStudyDates = [];
+    const _start = _parseDate(startDateStr);
+    for (let i = 0; i < weeks * 7; i++) {
+      const d = new Date(_start); d.setDate(_start.getDate() + i);
+      if (studyDays.includes(d.getDay())) allStudyDates.push(_toDateStr(d));
+    }
 
-    // Generate entries per subject
-    const allEntries = [];
+    // Load student progress once for chapter weighting
+    let chapData = {};
+    try {
+      const prog = await Store.loadStudentProgress(_studentId);
+      chapData   = prog?.chapters || {};
+    } catch(e) {}
 
-    for (const subj of subjects) {
-      const minsPerWeek = totalMinsPerWeek[subj.id] || 0;
-      if (minsPerWeek <= 0) continue;
-
-      const chapters = subj.chapters || [];
-      if (!chapters.length) continue;
-
-      // Weight chapters by examWeight and inverse accuracy
-      let chapData = {};
-      try {
-        const prog = await Store.loadStudentProgress(_studentId);
-        chapData   = prog?.chapters || {};
-      } catch(e) { chapData = {}; }
-
-      const scored = chapters.map(ch => {
+    // Build scored chapter queue per subject
+    const activeSubjects = subjects.filter(s => (subjHours[s.id] || 0) > 0 && (s.chapters || []).length);
+    const chapterQueues  = {};
+    for (const subj of activeSubjects) {
+      chapterQueues[subj.id] = (subj.chapters || []).map(ch => {
         const c   = chapData[ch.id] || { attempted: 0, correct: 0 };
         const acc = c.attempted ? c.correct / c.attempted : null;
         const wt  = ch.examWeight || 2;
         const budget = acc === null ? 50*wt/3 : acc < .5 ? 45*wt/3 : acc < .7 ? 30*wt/3 : 15*wt/3;
         const sort   = acc === null ? 999 + wt*10 : Math.round((1-acc)*500) + wt*10;
-        return { ...ch, budget: Math.round(budget), sort, subjectId: subj.id };
+        return { ...ch, budget: Math.round(budget), sort };
       }).sort((a, b) => b.sort - a.sort);
+    }
 
-      // Build day slots for this subject proportional to its share of the week
-      const sharePerDay = minsPerWeek / studyDays.length;
-      const start       = _parseDate(startDateStr);
+    const allEntries = [];
 
-      for (let i = 0; i < weeks * 7; i++) {
-        const d = new Date(start); d.setDate(start.getDate() + i);
-        if (!studyDays.includes(d.getDay())) continue;
-        const dateStr = _toDateStr(d);
-
-        let minsLeft = Math.round(sharePerDay);
-        let ci       = 0;
-
-        while (minsLeft >= 10 && ci < scored.length) {
-          const ch   = scored[ci];
-          const mins = Math.min(ch.budget, minsLeft, mixed ? 45 : minsLeft);
-          if (mins <= 0) { ci++; continue; }
-          allEntries.push({
-            date:          dateStr,
-            subject_id:    subj.id,
-            chapter_id:    ch.id,
-            topic_label:   `${ch.icon} ${ch.name}`,
-            duration_mins: mins,
-            entry_type:    'study',
-          });
-          ch.budget -= mins;
-          minsLeft  -= mins;
-          if (ch.budget <= 0) ci++;
-          if (!mixed) break; // single subject mode: one chapter per day per subject
+    if (mixed) {
+      // ── MIXED MODE: each study day gets a session per subject ──────────
+      for (const dateStr of allStudyDates) {
+        for (const subj of activeSubjects) {
+          const minsPerDay = Math.round((subjHours[subj.id] * 60) / studyDays.length);
+          if (minsPerDay < 10) continue;
+          const queue = chapterQueues[subj.id];
+          if (!queue.length) continue;
+          let minsLeft = minsPerDay;
+          while (minsLeft >= 10 && queue.length) {
+            const ch   = queue[0];
+            const mins = Math.min(ch.budget, minsLeft, 45);
+            if (mins <= 0) { queue.shift(); continue; }
+            allEntries.push({ date: dateStr, subject_id: subj.id, chapter_id: ch.id,
+              topic_label: `${ch.icon} ${ch.name}`, duration_mins: mins, entry_type: 'study' });
+            ch.budget -= mins; minsLeft -= mins;
+            if (ch.budget <= 0) queue.shift();
+          }
         }
       }
+    } else {
+      // ── SINGLE SUBJECT PER DAY: rotate subjects across days ────────────
+      // Build an interleaved rotation weighted by hours
+      // e.g. Maths=2h, English=2h, French=1h → rotation [Maths, English, French, Maths, English]
+      const totalHrs  = activeSubjects.reduce((a, s) => a + subjHours[s.id], 0);
+      const minHrs    = Math.min(...activeSubjects.map(s => subjHours[s.id]));
+      // Each subject gets weight proportional to hours (minimum 1 slot)
+      const weights   = activeSubjects.map(s => Math.max(1, Math.round(subjHours[s.id] / minHrs)));
+      // Interleave: fill one slot per subject per pass (not grouped)
+      const buckets   = activeSubjects.map((s, i) => Array(weights[i]).fill(s));
+      const rotation  = [];
+      let anyLeft = true;
+      while (anyLeft) {
+        anyLeft = false;
+        for (const bucket of buckets) {
+          if (bucket.length) { rotation.push(bucket.shift()); anyLeft = true; }
+        }
+      }
+
+      allStudyDates.forEach((dateStr, idx) => {
+        const subj = rotation[idx % rotation.length];
+        const queue = chapterQueues[subj.id];
+        if (!queue.length) return;
+        // Duration = proportional daily share for this subject
+        const minsPerDay = Math.max(30, Math.round((subjHours[subj.id] * 60) / studyDays.length));
+        const ch   = queue[0];
+        const mins = Math.min(ch.budget, minsPerDay);
+        if (mins < 10) return;
+        allEntries.push({ date: dateStr, subject_id: subj.id, chapter_id: ch.id,
+          topic_label: `${ch.icon} ${ch.name}`, duration_mins: mins, entry_type: 'study' });
+        ch.budget -= mins;
+        if (ch.budget <= 0) queue.shift();
+      });
     }
 
     // Persist
     const sid = await _ensureSchedule();
     if (!sid) {
-      _showErr(errEl, 'Could not save schedule. Please try again.');
+      _showErr(errEl, 'Database not ready — please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.');
       if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
       return;
     }
@@ -461,11 +493,19 @@ const Calendar = (() => {
     }
 
     await _loadEntries();
+    // Cache entries to localStorage so students can see the plan without a Supabase query
+    try {
+      localStorage.setItem(`mm_schedule_${_studentId}`, JSON.stringify({
+        generated: new Date().toISOString(),
+        entries: allEntries.map(e => ({ ...e, schedule_id: sid, student_id: _studentId })),
+      }));
+    } catch(e) {}
+
     const d = _parseDate(startDateStr);
     _viewYear = d.getFullYear(); _viewMonth = d.getMonth();
     closeGenModal();
     _renderCalendar();
-    if (typeof toast !== 'undefined') toast(`Timetable generated — ${allEntries.length} sessions across ${subjects.filter(s=>subjHours[s.id]>0).length} subjects 📅`, 3500);
+    if (typeof toast !== 'undefined') toast(`Timetable generated — ${allEntries.length} sessions across ${activeSubjects.length} subjects 📅`, 3500);
     if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
   }
 
@@ -556,37 +596,66 @@ const Calendar = (() => {
 
   // ── Student "Today's Plan" (called from app.js) ───
   async function renderTodayPlan(studentId, studentGrade) {
-    const container = _el('dash-today-plan');
-    const listEl    = _el('dash-today-entries');
-    const dateEl    = _el('dash-today-date');
+    const container  = _el('dash-today-plan');
+    const listEl     = _el('dash-today-entries');
+    const dateEl     = _el('dash-today-date');
+    const titleEl    = _el('dash-today-title');
     if (!container || !listEl) return;
 
     if (!_sb || !studentId) { container.classList.add('hidden'); return; }
 
     const today = _toDateStr(new Date());
-    if (dateEl) dateEl.textContent = _parseDate(today).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
 
     // Find schedule for this student
     const { data: scheds } = await _sb.from('study_schedules')
       .select('id').eq('student_id', studentId)
       .order('created_at', { ascending: false }).limit(1);
 
-    if (!scheds?.length) { container.classList.add('hidden'); return; }
+    // Helper: resolve upcoming entries from a flat list
+    function _pickUpcoming(entries) {
+      const future = entries.filter(e => e.date >= today).sort((a,b) => a.date < b.date ? -1 : 1);
+      return future;
+    }
 
-    const { data: entries } = await _sb.from('schedule_entries')
-      .select('*').eq('schedule_id', scheds[0].id).eq('date', today);
+    let upcoming = null;
 
-    if (!entries?.length) { container.classList.add('hidden'); return; }
+    if (scheds?.length) {
+      const { data } = await _sb.from('schedule_entries')
+        .select('*')
+        .eq('schedule_id', scheds[0].id)
+        .gte('date', today)
+        .order('date', { ascending: true })
+        .limit(50);
+      upcoming = data;
+    }
+
+    // Fall back to localStorage cache if Supabase returned nothing
+    if (!upcoming?.length) {
+      try {
+        const cached = JSON.parse(localStorage.getItem(`mm_schedule_${studentId}`));
+        if (cached?.entries?.length) upcoming = _pickUpcoming(cached.entries);
+      } catch(e) {}
+    }
+
+    if (!upcoming?.length) { container.classList.add('hidden'); return; }
+
+    // Use today's entries if present, otherwise fall back to the next scheduled day
+    const firstDate   = upcoming[0].date;
+    const isToday     = firstDate === today;
+    const entries     = upcoming.filter(e => e.date === firstDate);
+
+    const displayDate = _parseDate(firstDate).toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+    if (dateEl)  dateEl.textContent  = displayDate;
+    if (titleEl) titleEl.textContent = isToday ? '📅 Today\'s Study Plan' : `📅 Next Up — ${displayDate}`;
 
     // Build cards
-    const grade    = studentGrade || 5;
     const subjects = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
 
     listEl.innerHTML = entries.map(e => {
       const meta  = TYPE_META[e.entry_type] || TYPE_META.other;
       const subj  = e.subject_id ? subjects.find(s => s.id === e.subject_id) : null;
-      const notesBased = subj?.notesBased || false;
-      const practiceble = subj?.practiceble !== false;
+      const notesBased   = subj?.notesBased || false;
+      const practiceble  = subj?.practiceble !== false;
 
       let actionBtn = '';
       if (e.entry_type === 'study' && subj) {
@@ -619,17 +688,25 @@ const Calendar = (() => {
 
   // ── Practice link ─────────────────────────────────
   function startPractice(subjectId, chapterId) {
-    // For the active subject (grade5-maths), we can go directly to practice
-    const active = typeof SUBJECT_PACKS !== 'undefined'
-      ? SUBJECT_PACKS.find(p => !p.comingSoon)
-      : null;
+    const packs = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
+    const pack  = packs.find(p => p.id === subjectId);
+    if (!pack || pack.comingSoon) {
+      if (typeof toast !== 'undefined') toast('Practice for this subject coming soon! 📚', 2500);
+      return;
+    }
 
-    if (active && active.id === subjectId) {
-      // Set chapter and go to chapter select → practice
-      if (typeof showScreen !== 'undefined') showScreen('chapter-select');
-      if (typeof toast !== 'undefined') toast(`Open "${chapterId.replace(/_/g,' ')}" to start practising`, 3000);
-    } else {
-      if (typeof toast !== 'undefined') toast('Practice questions for this subject coming soon! 📚', 2500);
+    // Activate the pack globally so the chapter-select and quiz screens use it
+    if (typeof ACTIVE_PACK    !== 'undefined') { /* eslint-disable-next-line no-global-assign */ ACTIVE_PACK    = pack; }
+    if (typeof SELECTED_GRADE !== 'undefined') { /* eslint-disable-next-line no-global-assign */ SELECTED_GRADE = pack.grade; }
+    const chs = pack._chapters || pack.chapters || [];
+    if (typeof CHAPTERS !== 'undefined') { CHAPTERS.length = 0; chs.forEach(ch => CHAPTERS.push(ch)); }
+    if (typeof QuestionLoader !== 'undefined') QuestionLoader.loadSubject(pack.id).catch(() => {});
+
+    if (typeof showScreen !== 'undefined') showScreen('chapter-select');
+
+    if (chapterId) {
+      const ch = chs.find(c => c.id === chapterId);
+      if (typeof toast !== 'undefined') toast(ch ? `Tap "${ch.name}" to start! 🚀` : 'Pick a chapter to practice', 3000);
     }
   }
 
