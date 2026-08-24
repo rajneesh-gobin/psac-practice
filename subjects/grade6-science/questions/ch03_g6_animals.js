@@ -97,3 +97,84 @@ STATIC_QUESTIONS.push(
     explanation:'A fully grown adult human has <b>32 permanent teeth</b>: 8 incisors, 4 canines, 8 premolars and 12 molars (including 4 wisdom teeth). Children first have 20 milk (deciduous) teeth which are replaced from about age 6.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6sci-an-011', chapterId:'g6-animals', difficulty:1,
+    question:'The Grade 6 Science Pupil\'s Book classifies food into THREE groups. Which group does FISH belong to?',
+    options:['Food for Energy','Food for Growth','Food for Health','Food for Strength'],
+    answer:'Food for Growth',
+    hint:'Fish is rich in protein — which food group is protein linked to?',
+    explanation:'The MIE Grade 6 Science Pupil\'s Book classifies food into three groups: <b>Food for Energy</b> (starchy/sugary foods like rice, bread, sugar — provide carbohydrates and fats), <b>Food for Growth</b> (protein-rich foods like fish, meat, eggs, beans — build and repair the body), and <b>Food for Health</b> (vitamins/minerals from fruits and vegetables — protect the body from disease).' }),
+
+  makeMCQ({ id:'g6sci-an-012', chapterId:'g6-animals', difficulty:1,
+    question:'According to the Grade 6 textbook, a BALANCED MEAL must contain:',
+    options:[
+      'Only proteins and carbohydrates',
+      'At least one food from each of the three food groups (Energy, Growth, Health)',
+      'Five different types of vegetables',
+      'Only food for health and food for growth'
+    ],
+    answer:'At least one food from each of the three food groups (Energy, Growth, Health)',
+    hint:'The word "balanced" means including ALL three groups.',
+    explanation:'The Grade 6 Science Pupil\'s Book states: a <b>balanced meal</b> must contain <b>at least one food from each of the three groups</b>: Food for Energy + Food for Growth + Food for Health. Example: rice (energy) + fish (growth) + carrots (health) = balanced meal. This matches the PSAC 2024 Q3 format where food items are classified into the three groups.' }),
+
+  makeMCQ({ id:'g6sci-an-013', chapterId:'g6-animals', difficulty:2,
+    question:'A GRANIVOROUS animal eats mainly:',
+    options:['Flesh (meat) of other animals','Grass and leaves only','Seeds and grains','Both plants and animals'],
+    answer:'Seeds and grains',
+    hint:'Think of birds that pick up seeds from the ground — sparrows, parrots, pigeons.',
+    explanation:'<b>Granivorous</b> animals eat mainly <b>seeds and grains</b>. Examples include sparrows, parrots and mice. The four feeding types in the Grade 6 Science Pupil\'s Book are: <b>herbivorous</b> (grass/leaves), <b>carnivorous</b> (flesh), <b>granivorous</b> (seeds/grains), and <b>omnivorous</b> (both plant and animal food).' }),
+
+  makeMCQ({ id:'g6sci-an-014', chapterId:'g6-animals', difficulty:2,
+    question:'Which of the following animals is a MAMMAL that can FLY? (PSAC 2025 Q5c)',
+    options:['Eagle','Flying fish','Bat','Parrot'],
+    answer:'Bat',
+    hint:'This is the only true flying mammal — its wings are made of stretched skin.',
+    explanation:'The <b>bat</b> is the only mammal capable of true sustained flight. The Grade 6 Science Pupil\'s Book specifically notes: "bat = mammal that can fly." A bat has all the characteristics of a mammal: gives birth to live young, feeds them with milk, and has fur. Its wings are formed by a thin membrane of skin stretched between elongated finger bones.' }),
+
+  makeTF({ id:'g6sci-an-015', chapterId:'g6-animals', difficulty:2,
+    question:'The duck-billed platypus is a mammal that lays eggs.',
+    answer:true,
+    hint:'Most mammals give birth to live young — the platypus is one of very few exceptions.',
+    explanation:'<b>True.</b> The Grade 6 Science Pupil\'s Book notes that most mammals give birth to live young — <b>except</b> the duck-billed platypus, which <b>lays eggs</b>. The platypus is a semi-aquatic mammal endemic to eastern Australia. Despite laying eggs, it still feeds its young with milk, confirming it is a mammal.' }),
+
+  makeMCQ({ id:'g6sci-an-016', chapterId:'g6-animals', difficulty:2,
+    question:'Which animals have LONG and POINTED canine teeth? (PSAC 2025 Q3b)',
+    options:['Herbivores','Granivores','Carnivores','Omnivores'],
+    answer:'Carnivores',
+    hint:'Think about the teeth of lions, wolves and tigers — what are they used for?',
+    explanation:'<b>Carnivores</b> have long, sharp, pointed canine teeth for <b>catching prey and tearing meat</b>. The Grade 6 Pupil\'s Book explains that tooth shape reflects diet: carnivores (lions, dogs) have prominent canines; herbivores (cows, horses) have large flat molars for grinding plants; humans (omnivores) have a mix of all tooth types.' }),
+
+  makeMCQ({ id:'g6sci-an-017', chapterId:'g6-animals', difficulty:1,
+    question:'How many MILK TEETH does a child have in their complete first set?',
+    options:['16','20','24','32'],
+    answer:'20',
+    hint:'Children have fewer teeth than adults — they have not yet grown their permanent set.',
+    explanation:'A child\'s complete first set has <b>20 milk teeth</b> (also called deciduous or baby teeth). The Grade 6 Science Pupil\'s Book states: milk teeth first appear at about <b>7 months</b> old; the complete set is present by age <b>3</b>; they start falling out from about <b>age 5–6</b> to make way for 32 permanent teeth.' }),
+
+  makeMCQ({ id:'g6sci-an-018', chapterId:'g6-animals', difficulty:1,
+    question:'What is the function of INCISORS? (PSAC 2024 Q3d)',
+    options:[
+      'To grind and crush food',
+      'To tear and rip meat',
+      'To bite, cut and tear food into pieces',
+      'To crush seeds and grains'
+    ],
+    answer:'To bite, cut and tear food into pieces',
+    hint:'These are the front teeth — you use them to take a bite of an apple.',
+    explanation:'The Grade 6 Science Pupil\'s Book states that <b>incisors</b> (the front teeth) are used to <b>bite, cut and tear food</b>. Humans have 8 incisors (4 upper, 4 lower). Their sharp, chisel-shaped edges allow them to cut efficiently. Canines tear; premolars and molars crush and grind.' }),
+
+  makeMCQ({ id:'g6sci-an-019', chapterId:'g6-animals', difficulty:3,
+    question:'The Grade 6 Science Pupil\'s Book lists characteristics of MAMMALS. Which statement is NOT a characteristic of all mammals?',
+    options:[
+      'Mammals feed their young with milk',
+      'Most mammals have hair or fur on their body',
+      'All mammals give birth to live young (no eggs)',
+      'Most mammals can live on both land and in water'
+    ],
+    answer:'All mammals give birth to live young (no eggs)',
+    hint:'Think about the platypus — is there an exception to this rule?',
+    explanation:'The statement "all mammals give birth to live young" is <b>NOT true for all mammals</b>. The <b>duck-billed platypus</b> is a mammal that lays eggs. The characteristics that ALL mammals share are: (1) feed young with <b>milk</b>; (2) most have <b>hair or fur</b>; (3) are warm-blooded. The Grade 6 textbook specifically mentions the platypus as the exception to live birth.' })
+
+);

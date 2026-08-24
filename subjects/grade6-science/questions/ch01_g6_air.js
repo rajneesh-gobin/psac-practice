@@ -93,3 +93,94 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Nitrogen (~78%)</b> is the most abundant gas in air, followed by oxygen (~21%). Carbon dioxide makes up only about 0.04% of air — a very small amount, but enough to have a significant greenhouse effect.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6sci-air-011', chapterId:'g6-air', difficulty:1,
+    question:'Which gas in air is necessary for burning? (PSAC 2025 Q1a)',
+    options:['Nitrogen','Oxygen','Carbon dioxide','Water vapour'],
+    answer:'Oxygen',
+    hint:'Remove this gas and any fire immediately goes out.',
+    explanation:'<b>Oxygen</b> is essential for burning. The Grade 6 Science Pupil\'s Book states that burning requires both <b>fuel AND oxygen</b>. When a candle jar is covered, the flame dies because the oxygen inside is used up. Carbon dioxide from fire extinguishers smothers flames by displacing this vital gas.' }),
+
+  makeMCQ({ id:'g6sci-air-012', chapterId:'g6-air', difficulty:1,
+    question:'According to the Grade 6 Science Pupil\'s Book (Table 2), what percentage of dry air is nitrogen?',
+    options:['21.0%','0.03%','78.1%','0.87%'],
+    answer:'78.1%',
+    hint:'Nitrogen is by far the most abundant gas in our atmosphere.',
+    explanation:'The MIE Grade 6 Science Pupil\'s Book (Table 2) gives the composition of dry air as: <b>Nitrogen 78.1%</b>, Oxygen 21.0%, Carbon dioxide 0.03%, Other gases (argon etc.) 0.87%. Nitrogen makes up nearly four-fifths of the air we breathe, though our bodies cannot use it directly.' }),
+
+  makeMCQ({ id:'g6sci-air-013', chapterId:'g6-air', difficulty:2,
+    question:'Your body uses oxygen together with food to produce energy. Which THREE things does this energy allow you to do? (from Grade 6 textbook)',
+    options:[
+      'Keep warm, move your body, and keep organs working',
+      'Digest food, grow taller, and see in the dark',
+      'Breathe in nitrogen, produce CO₂, and sweat',
+      'Sleep, stop breathing, and store fat'
+    ],
+    answer:'Keep warm, move your body, and keep organs working',
+    hint:'Think about what you need energy for every day.',
+    explanation:'The Grade 6 Science Pupil\'s Book explains that the body uses <b>oxygen + food → energy</b>. This energy: (1) keeps you <b>warm</b>; (2) allows <b>movement</b>; (3) keeps <b>organs working</b>. Without enough oxygen, body functions slow down — this is why we cannot survive more than a few minutes without breathing.' }),
+
+  makeTF({ id:'g6sci-air-014', chapterId:'g6-air', difficulty:2,
+    question:'Drinking juice through a straw works because of a difference in air pressure (PSAC 2025 Q7a).',
+    answer:true,
+    hint:'When you suck, what happens to the air pressure inside the straw?',
+    explanation:'<b>True.</b> When you suck on a straw, you reduce the air pressure inside the straw and your mouth. The higher air pressure outside pushes down on the liquid in the glass, forcing it up the straw and into your mouth. This principle (outside pressure > inside pressure) also explains how a suction cup sticks to a wall.' }),
+
+  makeMCQ({ id:'g6sci-air-015', chapterId:'g6-air', difficulty:2,
+    question:'A weather forecast says "high pressure is building over the island." What weather does this predict?',
+    options:['Heavy rain and storms','Fair, dry and clear weather','Snow and ice','Very strong winds'],
+    answer:'Fair, dry and clear weather',
+    hint:'The Grade 6 textbook states the link between barometer readings and weather type.',
+    explanation:'The Grade 6 Science Pupil\'s Book states: <b>high pressure = good weather</b> (clear, dry, calm); <b>low pressure = bad weather</b> (rain, storms, strong winds). Meteorologists use barometers to measure air pressure and predict weather. A rising barometer reading signals improving conditions.' }),
+
+  makeMCQ({ id:'g6sci-air-016', chapterId:'g6-air', difficulty:2,
+    question:'How does AIR POLLUTION from vehicle emissions and factory smoke harm plants? (Grade 6 textbook)',
+    options:[
+      'It makes plants grow faster by adding more carbon dioxide',
+      'Soot and smoke block the tiny pores on leaves, preventing gas exchange and photosynthesis',
+      'It causes plants to produce more oxygen than normal',
+      'It only harms animals, not plants'
+    ],
+    answer:'Soot and smoke block the tiny pores on leaves, preventing gas exchange and photosynthesis',
+    hint:'Leaves breathe through tiny openings — what happens if these get blocked?',
+    explanation:'The Grade 6 Science Pupil\'s Book explains that air pollution harms plants because <b>soot blocks the tiny pores (stomata) on leaves</b>. Without open pores, leaves cannot exchange gases (take in CO₂, release O₂) and cannot photosynthesize properly. Heavy pollution can kill plants entirely. Air pollution also puts humans at risk of lung cancer.' }),
+
+  makeMCQ({ id:'g6sci-air-017', chapterId:'g6-air', difficulty:3,
+    question:'A cockroach is placed in a sealed jar with air. After 30 minutes the oxygen level falls from 21% to about 15%. What PROCESS caused this?',
+    options:[
+      'The cockroach photosynthesising inside the jar',
+      'The cockroach respiring — using oxygen to release energy from food',
+      'Nitrogen dissolving in the oxygen',
+      'The cockroach producing oxygen as a waste product'
+    ],
+    answer:'The cockroach respiring — using oxygen to release energy from food',
+    hint:'The Grade 6 textbook describes this exact experiment to show how animals use up oxygen.',
+    explanation:'The Grade 6 Science Pupil\'s Book describes this experiment: a cockroach in a sealed jar uses <b>oxygen for respiration</b> (breaking down food to release energy). O₂ drops from 21% → ~15% in 30 minutes → ~8% after 1 hour. This shows that ALL living things consume oxygen during respiration and release carbon dioxide as a waste product.' }),
+
+  makeMCQ({ id:'g6sci-air-018', chapterId:'g6-air', difficulty:3,
+    question:'The Bhopal disaster (1984) is an important example of air pollution. What happened?',
+    options:[
+      'A nuclear power plant in Japan exploded, releasing radioactive gas',
+      'A pesticide factory in India released tonnes of toxic gas, killing thousands immediately',
+      'Oil wells in Kuwait caught fire, burning for months',
+      'Volcanic eruptions in Iceland shut down air travel in Europe'
+    ],
+    answer:'A pesticide factory in India released tonnes of toxic gas, killing thousands immediately',
+    hint:'The Grade 6 Science Pupil\'s Book uses this as a case study of industrial air pollution.',
+    explanation:'The Grade 6 Science Pupil\'s Book cites the <b>Bhopal disaster (1984)</b> as a major air pollution event. A <b>pesticide factory in Bhopal, India</b> released thousands of tonnes of toxic gas. About <b>3,000 people died immediately</b>, and thousands more continue to suffer health effects decades later. It shows how industrial air pollution can be catastrophic.' }),
+
+  makeMCQ({ id:'g6sci-air-019', chapterId:'g6-air', difficulty:4,
+    question:'The Grade 6 textbook states air pressure is approximately 10 tonnes per m². A suction cup (area ~10 cm²) sticks to a smooth wall. Which statement BEST explains why it holds?',
+    options:[
+      'The suction cup produces its own glue when pressed against the wall',
+      'The cup has no air inside at all — a perfect vacuum',
+      'Air pressure outside the cup (pressing on the flat back) is greater than the low-pressure zone inside the cup, creating a net inward force',
+      'The cup sticks because of static electricity between rubber and the wall'
+    ],
+    answer:'Air pressure outside the cup (pressing on the flat back) is greater than the low-pressure zone inside the cup, creating a net inward force',
+    hint:'When you press the cup, you squeeze out most of the air. Outside pressure then has nothing equal to push against.',
+    explanation:'The Grade 6 Science Pupil\'s Book states air pressure is about <b>10 tonnes (10,000 kg) per m²</b> — an enormous force we don\'t normally notice because it acts equally from all directions. A suction cup works by <b>reducing the pressure inside</b> (squeezing out air). The full atmospheric pressure then acts on the outside of the cup, pressing it firmly against the wall. The cup "holds" because outside pressure > inside pressure.' })
+
+);

@@ -136,3 +136,94 @@ STATIC_QUESTIONS.push(
     explanation:'A <b>food web</b> shows how many food chains in an ecosystem are interconnected. Most animals eat multiple types of food and are eaten by multiple predators, so a web of interconnected chains (a food web) is more realistic than a single chain.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6sci-pl-011', chapterId:'g6-plants', difficulty:1,
+    question:'Give TWO conditions necessary for photosynthesis to take place. (PSAC 2025 Q8c)',
+    options:[
+      'Heat and carbon dioxide',
+      'Water and darkness',
+      'Sunlight and carbon dioxide',
+      'Nitrogen and glucose'
+    ],
+    answer:'Sunlight and carbon dioxide',
+    hint:'The Grade 6 textbook lists 4 conditions — sunlight and CO₂ are among them.',
+    explanation:'The Grade 6 Science Pupil\'s Book lists FOUR conditions for photosynthesis: <b>water</b> (from roots), <b>sunlight</b> (energy source), <b>carbon dioxide</b> (from air through stomata), and <b>chlorophyll</b> (the green pigment that absorbs light). Without any one of these four, photosynthesis cannot occur. Sunlight and CO₂ are the most commonly tested pair.' }),
+
+  makeMCQ({ id:'g6sci-pl-012', chapterId:'g6-plants', difficulty:2,
+    question:'Which PART of a plant mainly carries out photosynthesis? (PSAC 2025 Q8c)',
+    options:['Root','Stem','Leaf','Flower'],
+    answer:'Leaf',
+    hint:'The Grade 6 textbook describes the leaf as a "factory" for making food.',
+    explanation:'The Grade 6 Science Pupil\'s Book describes the <b>leaf</b> as the plant\'s "factory": inputs = sunlight, CO₂ and water/minerals; outputs = food (glucose) and O₂. Leaves are flat and broad to capture maximum sunlight. They contain <b>chloroplasts</b> with <b>chlorophyll</b>. Some green stems can also carry out photosynthesis, but the leaf is the main organ.' }),
+
+  makeMCQ({ id:'g6sci-pl-013', chapterId:'g6-plants', difficulty:2,
+    question:'How do photosynthesis and respiration together MAINTAIN the composition of air? (PSAC 2025 Q8c)',
+    options:[
+      'Both add nitrogen to the air',
+      'Photosynthesis releases O₂ and absorbs CO₂; respiration releases CO₂ and absorbs O₂ — keeping the balance',
+      'Both processes absorb CO₂ from the air',
+      'Photosynthesis and respiration both produce water vapour only'
+    ],
+    answer:'Photosynthesis releases O₂ and absorbs CO₂; respiration releases CO₂ and absorbs O₂ — keeping the balance',
+    hint:'The two processes are like opposite arrows — one produces what the other consumes.',
+    explanation:'The Grade 6 Pupil\'s Book explains the balance: <b>Photosynthesis</b> (in sunlight) absorbs CO₂ and releases O₂. <b>Respiration</b> (day AND night) absorbs O₂ and releases CO₂. Plants carry out BOTH processes — but during daylight, photosynthesis dominates, releasing extra O₂. This complementary cycle <b>maintains the O₂/CO₂ balance in the atmosphere</b> that all life depends on.' }),
+
+  makeMCQ({ id:'g6sci-pl-014', chapterId:'g6-plants', difficulty:1,
+    question:'What is the correct sequence of events during GERMINATION of a seed? (PSAC 2024 Q1j)',
+    options:[
+      'seed → shoot → root → leaf',
+      'seed → root → shoot → leaf',
+      'seed → leaf → root → shoot',
+      'seed → shoot → leaf → root'
+    ],
+    answer:'seed → root → shoot → leaf',
+    hint:'Which part of the seedling appears first — the one that reaches down for water, or the one reaching up for light?',
+    explanation:'During <b>germination</b>, the correct sequence is: <b>seed → root → shoot → leaf</b>. The <b>root appears first</b> — it anchors the seed and absorbs water from the soil before anything else can grow. Then the shoot pushes upward, and finally leaves emerge and begin photosynthesis. The seed does NOT need sunlight to germinate (it uses stored food), but it needs water, warmth and oxygen.' }),
+
+  makeMCQ({ id:'g6sci-pl-015', chapterId:'g6-plants', difficulty:2,
+    question:'The Grade 6 textbook says "the fruit protects and nourishes the seeds." Give an EXAMPLE of a fruit whose seeds are eaten. (PSAC 2025 Q4d)',
+    options:['Carrot','Potato','Mango','Onion'],
+    answer:'Mango',
+    hint:'A fruit grows from a flower and contains seeds inside.',
+    explanation:'A <b>mango</b> is a fruit — it develops from a flower and contains a seed (the stone/pit) inside. The Grade 6 Pupil\'s Book states: "<b>the fruit protects and nourishes the seeds</b>." Carrots are roots, potatoes are stems, and onions are bulbs (modified leaves) — none are fruits in the botanical sense. Other examples of fruits: tomato, guava, papaya.' }),
+
+  makeMCQ({ id:'g6sci-pl-016', chapterId:'g6-plants', difficulty:2,
+    question:'Give ONE use of WOOD PULP obtained from plants. (PSAC 2025 Q8c)',
+    options:['Making plastic bottles','Making paper','Making glass windows','Making metal wire'],
+    answer:'Making paper',
+    hint:'Books, newspapers and cardboard all come from this product.',
+    explanation:'<b>Wood pulp</b> is used to make <b>paper</b>. The Grade 6 Science Pupil\'s Book lists wood pulp as one of the important uses of plants. Trees are cut, their wood is processed into pulp (a wet mixture of fibres), which is then pressed and dried into paper and cardboard. This is why deforestation threatens paper production as well as wildlife.' }),
+
+  makeTF({ id:'g6sci-pl-017', chapterId:'g6-plants', difficulty:2,
+    question:'Plants carry out respiration ONLY at night, not during the day.',
+    answer:false,
+    hint:'The Grade 6 textbook specifically states when respiration occurs.',
+    explanation:'<b>False.</b> The Grade 6 Science Pupil\'s Book clearly states: <b>photosynthesis occurs ONLY in sunlight</b>, but <b>respiration occurs day AND night</b>. During the day, photosynthesis is much faster than respiration, so plants appear to only release O₂. At night, only respiration occurs, so plants take in O₂ and release CO₂.' }),
+
+  makeMCQ({ id:'g6sci-pl-018', chapterId:'g6-plants', difficulty:3,
+    question:'Why are FLOWERS usually colourful and have a scent? (PSAC 2025 Q4a)',
+    options:[
+      'To protect the plant from being eaten by animals',
+      'To attract insects and other pollinators for pollination',
+      'To absorb sunlight for photosynthesis',
+      'To store water during dry seasons'
+    ],
+    answer:'To attract insects and other pollinators for pollination',
+    hint:'Without pollinators, many flowers cannot be fertilised and cannot produce seeds.',
+    explanation:'Flowers are colourful and fragrant to <b>attract pollinators</b> (bees, butterflies, birds) which carry pollen from one flower to another. This is called <b>pollination</b>. During pollination, pollen from the stamen (male part) is transferred to the stigma (female part) of another flower — enabling fertilisation and seed formation. Some plants are pollinated by wind instead (e.g., grasses) and have less colourful flowers.' }),
+
+  makeMCQ({ id:'g6sci-pl-019', chapterId:'g6-plants', difficulty:4,
+    question:'A student removes ALL the leaves from a healthy plant and places it in a well-lit room. Which prediction is CORRECT?',
+    options:[
+      'The plant will grow faster because it wastes no energy on leaves',
+      'The plant will survive indefinitely using stem photosynthesis',
+      'The plant will soon weaken and die because without leaves, photosynthesis almost stops and the plant cannot make food',
+      'The plant will switch to absorbing food through its roots instead'
+    ],
+    answer:'The plant will soon weaken and die because without leaves, photosynthesis almost stops and the plant cannot make food',
+    hint:'Recall that the leaf is the "factory" — what happens when you shut the factory?',
+    explanation:'Leaves are the main organs of photosynthesis. Without them, the plant produces almost no glucose — its energy and food source. The Grade 6 Pupil\'s Book explains the leaf\'s role: <b>inputs (sunlight, CO₂, water) → food (glucose) + O₂</b>. Without this "factory" running, the plant exhausts its stored food reserves, cannot grow or repair itself, and eventually dies. Some green stems photosynthesise slightly but cannot compensate for the loss of all leaves.' })
+
+);

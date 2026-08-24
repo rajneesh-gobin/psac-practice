@@ -124,3 +124,99 @@ STATIC_QUESTIONS.push(
     explanation:'Solar panels cannot generate electricity at night or during heavy cloud cover. This <b>intermittency</b> (unreliable supply) is a key limitation. Solutions include battery storage systems to store excess power generated during sunny periods.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6sci-en-011', chapterId:'g6-energy', difficulty:1,
+    question:'An electric fan converts electrical energy into: (PSAC 2025 Q1c)',
+    options:[
+      'Chemical energy to electrical energy',
+      'Electrical energy to movement (kinetic) energy',
+      'Movement energy to electrical energy',
+      'Electrical energy to chemical energy'
+    ],
+    answer:'Electrical energy to movement (kinetic) energy',
+    hint:'When you plug in a fan, electricity goes IN — what comes out?',
+    explanation:'An electric fan converts <b>electrical energy → movement (kinetic) energy</b>. The electric motor inside uses electricity to spin the fan blades. This is an example of an energy transformation. Other examples: electric kettle (electrical → heat), light bulb (electrical → light + heat), microphone (sound → electrical).' }),
+
+  makeMCQ({ id:'g6sci-en-012', chapterId:'g6-energy', difficulty:2,
+    question:'Classify BAGASSE as a source of energy. (PSAC 2025 Q6a)',
+    options:[
+      'Non-renewable, because it comes from a living plant',
+      'Renewable, because it is the fibrous sugarcane waste left after juice extraction',
+      'Fossil fuel, because it is found underground',
+      'Nuclear energy source'
+    ],
+    answer:'Renewable, because it is the fibrous sugarcane waste left after juice extraction',
+    hint:'Bagasse is produced every year as long as sugarcane is grown.',
+    explanation:'<b>Bagasse</b> is the fibrous residue left after sugarcane juice is extracted. It is a <b>renewable</b> energy source because sugarcane regrows each year. In Mauritius, bagasse is burned in sugar mills to generate electricity — a key local energy source. <b>Renewable sources</b>: bagasse, sun, wind, water. <b>Non-renewable</b>: coal, natural gas, petrol (fossil fuels that took millions of years to form and will run out).' }),
+
+  makeMCQ({ id:'g6sci-en-013', chapterId:'g6-energy', difficulty:1,
+    question:'What is an INSULATOR in the context of electricity? (PSAC 2025 Q6c)',
+    options:[
+      'A material that allows electricity to flow through it easily',
+      'A material that does not allow electricity to flow through it',
+      'A device that stores electrical energy',
+      'A wire that carries electricity from a power station'
+    ],
+    answer:'A material that does not allow electricity to flow through it',
+    hint:'The plastic coating on an electric wire is an example.',
+    explanation:'An <b>insulator</b> is a material that does <b>not</b> allow electricity to flow through it. The plastic/rubber coating on electric wires is an insulator — it prevents electrocution. Examples of insulators: plastic, rubber, wood, glass, ceramics. <b>Conductors</b> (like copper and aluminium) allow electricity to flow freely and are used for the inner wire.' }),
+
+  makeMCQ({ id:'g6sci-en-014', chapterId:'g6-energy', difficulty:1,
+    question:'In an electric wire, the inner part (conductor) is made of which material? (PSAC 2025 Q6c)',
+    options:['Plastic','Rubber','Copper (a metal)','Glass'],
+    answer:'Copper (a metal)',
+    hint:'This metal is reddish-orange and an excellent conductor of electricity.',
+    explanation:'The inner conductor of an electric wire is made of <b>copper</b> (or sometimes aluminium). Copper is used because: (1) it is an excellent <b>conductor of electricity</b>; (2) it is <b>flexible</b> (can be bent); (3) it does not corrode easily. The outer plastic or rubber coating is the <b>insulator</b> that prevents electric shocks.' }),
+
+  makeMCQ({ id:'g6sci-en-015', chapterId:'g6-energy', difficulty:2,
+    question:'What is the role of the WIRE in a simple electric circuit? (PSAC 2025 Q6d)',
+    options:[
+      'To store electrical energy for later use',
+      'To conduct (carry) electrical current from one component to another',
+      'To transform electrical energy into chemical energy',
+      'To control the amount of electricity in the circuit'
+    ],
+    answer:'To conduct (carry) electrical current from one component to another',
+    hint:'Think of the wire as the road that electricity travels along.',
+    explanation:'The <b>wire</b> in an electric circuit acts as a <b>conductor</b> — it carries the electrical current from the cell (battery) through the components (bulb, switch, etc.) and back. Without a wire completing the circuit, current cannot flow and the circuit is broken. Metal wires (usually copper) are used because metals are good conductors.' }),
+
+  makeMCQ({ id:'g6sci-en-016', chapterId:'g6-energy', difficulty:1,
+    question:'What form of energy is stored in a CELL (battery)? (PSAC 2025 Q6d)',
+    options:['Electrical energy','Heat energy','Chemical energy','Light energy'],
+    answer:'Chemical energy',
+    hint:'The cell must undergo a chemical reaction to release the electricity you use.',
+    explanation:'A <b>cell (battery)</b> stores <b>chemical energy</b>. When connected in a circuit, chemical reactions inside the cell convert chemical energy → <b>electrical energy</b> that flows through the circuit. When the chemicals are used up, the battery is "dead." Rechargeable batteries reverse this process, converting electrical energy back to chemical energy for storage.' }),
+
+  makeTF({ id:'g6sci-en-017', chapterId:'g6-energy', difficulty:1,
+    question:'Coal is a renewable source of energy because it comes from the Earth.',
+    answer:false,
+    hint:'How long does it take for coal to form — days, or millions of years?',
+    explanation:'<b>False.</b> Coal is a <b>non-renewable</b> fossil fuel. It formed from the remains of ancient plants over <b>millions of years</b> under heat and pressure. Once burned, it is gone — it cannot be replenished on a human timescale. Renewable sources (sun, wind, water, bagasse) can be used over and over without running out.' }),
+
+  makeMCQ({ id:'g6sci-en-018', chapterId:'g6-energy', difficulty:2,
+    question:'Give ONE safety precaution when using electricity at home. (PSAC 2025 Q6e)',
+    options:[
+      'Touch electrical sockets with wet hands to test if they work',
+      'Pull on the wire (not the plug) when disconnecting appliances',
+      'Never insert metal objects into electrical sockets',
+      'Leave charger cables plugged in and tangled at all times'
+    ],
+    answer:'Never insert metal objects into electrical sockets',
+    hint:'Electricity + metal conducts straight to your body — very dangerous!',
+    explanation:'<b>Never insert metal objects into electrical sockets</b> — this is a critical safety rule. Metal conducts electricity and would cause a severe electric shock. Other important electrical safety rules: (1) never use electrical appliances near water; (2) hold the plug — not the wire — when disconnecting; (3) switch off appliances when not in use; (4) do not overload sockets.' }),
+
+  makeMCQ({ id:'g6sci-en-019', chapterId:'g6-energy', difficulty:3,
+    question:'Mauritius generates electricity using TWO main methods. Which pair is correct? (PSAC 2025 Q6b)',
+    options:[
+      'Nuclear power and hydroelectric',
+      'Wind turbines and solar panels only',
+      'Burning fossil fuels (thermal) and burning bagasse',
+      'Tidal energy and geothermal energy'
+    ],
+    answer:'Burning fossil fuels (thermal) and burning bagasse',
+    hint:'Think about what Mauritius imports (coal/oil) and what it produces locally (sugarcane).',
+    explanation:'Mauritius produces electricity mainly by: (1) <b>burning fossil fuels</b> (coal, oil, natural gas) in thermal power stations; (2) burning <b>bagasse</b> (sugarcane waste) in sugar mill power stations. Hydroelectric and solar contribute smaller amounts. Because most electricity comes from burning fuels, saving energy in Mauritius directly reduces fuel imports and CO₂ emissions.' })
+
+);

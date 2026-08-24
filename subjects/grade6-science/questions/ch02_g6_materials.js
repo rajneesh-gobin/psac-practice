@@ -98,3 +98,84 @@ STATIC_QUESTIONS.push(
     explanation:'Incineration produces <b>smoke, ash and harmful gases</b> (including CO&#8322; and toxic chemicals), contributing to air pollution and climate change. Modern incinerators filter much of the pollution, but they are not completely harmless.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6sci-mat-011', chapterId:'g6-materials', difficulty:1,
+    question:'What colour is rust? (PSAC 2025)',
+    options:['Silver-grey','Shiny black','Reddish-brown','Dark green'],
+    answer:'Reddish-brown',
+    hint:'You have seen this colour on old metal gates and tin roofs.',
+    explanation:'Rust is <b>reddish-brown</b> in colour. It is the common name for iron oxide (Fe₂O₃), which forms when iron reacts with water and oxygen. Unlike iron, rust is weak and flaky — it gradually weakens and destroys iron structures if left untreated.' }),
+
+  makeMCQ({ id:'g6sci-mat-012', chapterId:'g6-materials', difficulty:1,
+    question:'Which material is obtained from LATEX (the milky sap of the rubber tree)?',
+    options:['Cotton','Paper','Rubber','Silk'],
+    answer:'Rubber',
+    hint:'This material is used to make tyres, erasers and gloves.',
+    explanation:'<b>Rubber</b> is made from latex, the milky white sap collected from rubber trees (Hevea brasiliensis). Natural rubber is elastic, waterproof and flexible. It is used for tyres, shoe soles, gloves and erasers. Synthetic rubber can also be made from petroleum.' }),
+
+  makeMCQ({ id:'g6sci-mat-013', chapterId:'g6-materials', difficulty:2,
+    question:'Which of the following is a property of GLASS? (PSAC 2025 Q7b)',
+    options:[
+      'Elastic and can stretch',
+      'Transparent and brittle (breaks easily)',
+      'Magnetic and conducts electricity well',
+      'Biodegradable and soft'
+    ],
+    answer:'Transparent and brittle (breaks easily)',
+    hint:'You can see through it, but it shatters when dropped.',
+    explanation:'Glass is <b>transparent</b> (you can see through it clearly) and <b>brittle</b> (breaks/shatters easily when struck). Other properties of glass: hard, smooth, waterproof, and a poor conductor of electricity. Glass is a <b>man-made material</b>, manufactured from silica (sand) at very high temperatures.' }),
+
+  makeMCQ({ id:'g6sci-mat-014', chapterId:'g6-materials', difficulty:2,
+    question:'Give an example of a material obtained from ANIMALS. (PSAC 2025 Q7c)',
+    options:['Cotton','Wood','Brick','Silk'],
+    answer:'Silk',
+    hint:'It is produced by a caterpillar to make its cocoon.',
+    explanation:'<b>Silk</b> is a natural fibre produced by silkworms (caterpillars of the Bombyx mori moth) to spin their cocoons. Other materials from animals include: <b>wool</b> (from sheep), <b>leather</b> (from animal hides), <b>beeswax</b>, <b>honey</b> and <b>feathers</b>. Cotton comes from a plant, wood from trees, and brick is man-made from clay.' }),
+
+  makeMCQ({ id:'g6sci-mat-015', chapterId:'g6-materials', difficulty:2,
+    question:'Gold is a metal obtained from the Earth. Give one PROPERTY of gold. (PSAC 2025 Q7d)',
+    options:[
+      'It rusts quickly in rain',
+      'It is shiny, does not rust, and is a good conductor of electricity',
+      'It is magnetic and sticks to other metals',
+      'It is cheap and found in large quantities everywhere'
+    ],
+    answer:'It is shiny, does not rust, and is a good conductor of electricity',
+    hint:'Gold jewellery stays beautiful for thousands of years — why?',
+    explanation:'<b>Gold</b> is prized because it: (1) is <b>shiny and attractive</b>; (2) does <b>not rust or corrode</b> — even ancient gold artefacts stay shiny; (3) is an excellent <b>conductor of electricity</b>, making it valuable in electronics. Gold\'s uses include jewellery, coins, electronic circuits and dental fillings.' }),
+
+  makeTF({ id:'g6sci-mat-016', chapterId:'g6-materials', difficulty:1,
+    question:'Iron needs BOTH water AND oxygen to rust.',
+    answer:true,
+    hint:'Try leaving iron in dry air only — or in water with no oxygen.',
+    explanation:'<b>True.</b> Experiments show that iron does NOT rust in dry air (oxygen only) and does NOT rust in boiled water sealed from air (water only). Rusting only occurs when <b>both water AND oxygen</b> are present. Salt water speeds up rusting because salt acts as an electrolyte that accelerates the chemical reaction.' }),
+
+  makeMCQ({ id:'g6sci-mat-017', chapterId:'g6-materials', difficulty:2,
+    question:'Apart from GALVANISING, name another way to prevent iron from rusting. (PSAC 2025 Q7e)',
+    options:[
+      'Washing with water daily',
+      'Leaving it outdoors in rain',
+      'Painting it to keep water and air away from the surface',
+      'Heating it to a high temperature'
+    ],
+    answer:'Painting it to keep water and air away from the surface',
+    hint:'Both water AND oxygen must be kept away from the iron surface.',
+    explanation:'<b>Painting</b> is a common rust prevention method. Paint forms a physical barrier that keeps both water and oxygen away from the iron surface. Other methods include: <b>oiling/greasing</b> (for moving parts), <b>galvanising</b> (zinc coating), <b>tin plating</b> (food cans), and <b>using stainless steel</b> (an alloy that resists rust).' }),
+
+  makeMCQ({ id:'g6sci-mat-018', chapterId:'g6-materials', difficulty:3,
+    question:'Water can exist in THREE states. Which state is water in when it forms CLOUDS in the sky?',
+    options:['Solid (ice)','Liquid (water)','Gas (water vapour)','Plasma'],
+    answer:'Gas (water vapour)',
+    hint:'The process of water vapour cooling and forming tiny droplets is called condensation.',
+    explanation:'Clouds form when water vapour (a <b>gas</b>) in the atmosphere cools and <b>condenses</b> into tiny liquid water droplets or ice crystals. The droplets are so tiny they float in the air. When enough droplets gather and the cloud becomes heavy enough, rain (precipitation) falls. This is part of the <b>water cycle</b>.' }),
+
+  makeMCQ({ id:'g6sci-mat-019', chapterId:'g6-materials', difficulty:4,
+    question:'SALT is produced in salt pans in Black River by leaving sea water in the sun. What is the process called? (PSAC 2024)',
+    options:['Condensation','Filtration','Evaporation','Distillation'],
+    answer:'Evaporation',
+    hint:'The sun heats the water — what happens to liquid water when heated strongly?',
+    explanation:'Salt pans use <b>evaporation</b>: sea water is collected in large shallow pans and the sun\'s heat evaporates the water, leaving the <b>salt crystals</b> behind. Salt pans are found in Black River because that area has plentiful sunshine and low rainfall. Evaporation is also used daily when drying clothes or food.' })
+
+);
