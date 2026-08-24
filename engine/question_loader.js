@@ -133,6 +133,14 @@ const QuestionLoader = (() => {
       'subjects/grade4-english/questions/ch05_g4_comprehension.js',
       'subjects/grade4-english/questions/ch06_g4_vocabulary.js',
     ],
+    'grade4-science': [
+      'subjects/grade4-science/questions/ch01_g4_living_things.js',
+      'subjects/grade4-science/questions/ch02_g4_plants.js',
+      'subjects/grade4-science/questions/ch03_g4_animals.js',
+      'subjects/grade4-science/questions/ch04_g4_air.js',
+      'subjects/grade4-science/questions/ch05_g4_water.js',
+      'subjects/grade4-science/questions/ch06_g4_materials.js',
+    ],
   };
 
   function _injectScript(src) {
