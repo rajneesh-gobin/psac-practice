@@ -18,5 +18,16 @@ registerSubject({
       syllabus: 'Two seasons in Mauritius: summer (November–April — hot and rainy) and winter (May–October — cooler and drier). Weather instruments: thermometer (temperature), rain gauge (rainfall), wind vane (wind direction), anemometer (wind speed). Reading and using a weather forecast. How weather affects daily life: effects of rainfall, drought and cyclones on people, farming and transport.' },
     { id: 'g4ge-map-skills',  name: 'Map Skills',                 icon: '🗺️', examWeight: 3,
       syllabus: 'What a map is. Parts of a map: title, legend/key, scale, north arrow. Map symbols and what they represent. Compass directions: North, South, East, West. Using scale to calculate real distances. Locating features on a simple map. Drawing and labelling a simple map of a familiar area.' },
+
+    // ── ENRICHMENT ────────────────────────────────────────────────────────────────
+    // @enrichment — These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
+    // DO NOT remove during syllabus alignment audits — they are intentional bonus content.
+    // They are recognisable by enrichment:true and display with a gold "✨ BONUS" badge in the UI.
+    { id: 'g4enr-explorers', name: 'Famous Explorers & Figures', icon: '🧭', enrichment: true, examWeight: 0,
+      enrichmentNote: 'Key historical figures mentioned across Grade 4 History: Arab and Portuguese traders, Indian Ocean explorers, early visitors to Mauritius.' },
+    { id: 'g4enr-mauritius', name: 'Know Your Mauritius',        icon: '🏝️', enrichment: true, examWeight: 0,
+      enrichmentNote: 'Mountains, rivers, coasts, nature reserves and physical features of Mauritius — derived from the Natural Environment and Geography chapters.' },
+    { id: 'g4enr-world',     name: 'World at a Glance',          icon: '🌏', enrichment: true, examWeight: 0,
+      enrichmentNote: 'Continents, oceans, major rivers and countries — broad global awareness that supports the Indian Ocean trade and Map Skills topics.' },
   ],
 });

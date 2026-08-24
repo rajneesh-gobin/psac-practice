@@ -11,7 +11,7 @@ const STATIC_QUESTIONS = [];
 
 // ── QUESTION ACCESS FUNCTIONS ──────────────────
 function getStaticQs(chapterId, difficulty) {
-  return STATIC_QUESTIONS.filter(q => q.chapterId === chapterId && q.difficulty === difficulty);
+  return STATIC_QUESTIONS.filter(q => q && q.question && q.chapterId === chapterId && q.difficulty === difficulty);
 }
 
 function generateDynamic(chapterId, level) {

@@ -138,6 +138,38 @@ document.getElementById('theme-toggle').addEventListener('click', () => applyThe
 applyTheme(localStorage.getItem('mm_global_theme') || 'light');
 
 // ── TOAST ─────────────────────────────────────
+// ── Image Lightbox ─────────────────────────────
+function openLightbox(src) {
+  const lb = document.getElementById('img-lightbox');
+  const img = document.getElementById('img-lightbox-src');
+  if (!lb || !img) return;
+  img.src = src;
+  lb.classList.remove('hidden');
+  lb.classList.add('flex');
+  document.addEventListener('keydown', _lbKeyClose);
+}
+function closeLightbox() {
+  const lb = document.getElementById('img-lightbox');
+  if (!lb) return;
+  lb.classList.add('hidden');
+  lb.classList.remove('flex');
+  document.removeEventListener('keydown', _lbKeyClose);
+}
+function _lbKeyClose(e) { if (e.key === 'Escape') closeLightbox(); }
+
+// Make all <img> tags inside a container zoomable
+function _makeImgsZoomable(container) {
+  if (!container) return;
+  container.querySelectorAll('img').forEach(img => {
+    if (img.dataset.zoomWired) return;
+    img.dataset.zoomWired = '1';
+    img.style.cursor = 'zoom-in';
+    img.title = 'Click to zoom';
+    img.classList.add('rounded-lg', 'shadow', 'hover:opacity-90', 'transition-opacity');
+    img.addEventListener('click', () => openLightbox(img.src));
+  });
+}
+
 let toastTimer;
 function toast(msg, dur = 2500) {
   let el = document.getElementById('toast');
@@ -181,13 +213,12 @@ function showScreen(id) {
   const hdr = document.querySelector('header');
   if (hdr) hdr.classList.toggle('hidden', hideHeader);
 
-  // Show logout button in header whenever a student is active
+  // Show logout button in header on all screens except auth/landing
   const logoutBtn = document.getElementById('header-logout-btn');
   if (logoutBtn) {
-    const studentActive = typeof ACTIVE_STUDENT_ID !== 'undefined' && !!ACTIVE_STUDENT_ID;
-    const isAuthScreen  = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
-    logoutBtn.classList.toggle('hidden',   !studentActive || isAuthScreen);
-    logoutBtn.classList.toggle('flex',      studentActive && !isAuthScreen);
+    const isAuthScreen = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
+    logoutBtn.classList.toggle('hidden', isAuthScreen);
+    logoutBtn.classList.toggle('flex',  !isAuthScreen);
   }
 
   _updateBreadcrumb(id);
@@ -1135,18 +1166,40 @@ function renderDashboard() {
 // ── CHAPTER SELECT ─────────────────────────────
 function renderChapterSelect() {
   const grid = document.getElementById('chapter-grid');
-  grid.innerHTML = CHAPTERS.map(ch => {
+
+  const _card = (ch) => {
     const pct = getChapterPct(ch.id);
     const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
     const partLabel = ch.part != null ? `Part ${ch.part} · ` : '';
-    return `<button class="chapter-card" onclick="startChapterDirect('${ch.id}')">
+    const isEnr = !!ch.enrichment;
+    return `<button class="chapter-card${isEnr ? ' enrichment' : ''}" onclick="startChapterDirect('${ch.id}')">
+      ${isEnr ? '<span class="enr-badge">✨ BONUS</span>' : ''}
       <div class="text-3xl mb-2">${ch.icon}</div>
       <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">${ch.name}</div>
       <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">${partLabel}${c.attempted} attempted</div>
       <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${pct}%;background:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}"></div></div>
       <div class="text-xs mt-1 font-medium" style="color:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}">${pct}% mastery</div>
     </button>`;
-  }).join('');
+  };
+
+  const regular    = CHAPTERS.filter(ch => !ch.enrichment);
+  const enrichment = CHAPTERS.filter(ch =>  ch.enrichment);
+
+  let html = regular.map(_card).join('');
+
+  if (enrichment.length) {
+    html += `<div class="col-span-full mt-4 mb-1">
+      <div class="flex items-center gap-3">
+        <div class="flex-1 h-px bg-amber-200 dark:bg-amber-800/40"></div>
+        <span class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">✨ Bonus Enrichment Topics</span>
+        <div class="flex-1 h-px bg-amber-200 dark:bg-amber-800/40"></div>
+      </div>
+      <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-1">Derived from the syllabus — great for extra practice on specific themes</p>
+    </div>`;
+    html += enrichment.map(_card).join('');
+  }
+
+  grid.innerHTML = html;
 }
 
 window.startAssignment = function(assignId) {
@@ -1169,6 +1222,17 @@ function startChapterDirect(chapterId, forceDiff) {
   if (locked.includes(chapterId)) { toast('🔒 This chapter is locked by your parent.', 2000); return; }
   const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
   const diff = Math.min(forceDiff || 1, maxDiff);
+
+  // If questions for this chapter aren't loaded yet, wait for the active subject to load first
+  const hasQs = STATIC_QUESTIONS.some(q => q && q.chapterId === chapterId);
+  if (!hasQs && typeof QuestionLoader !== 'undefined' && typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) {
+    toast('⏳ Loading questions…', 2000);
+    QuestionLoader.loadSubject(ACTIVE_PACK.id)
+      .then(() => startChapterDirect(chapterId, forceDiff))
+      .catch(() => toast('Could not load questions. Please try again.', 3000));
+    return;
+  }
+
   S.practice.chapterId = chapterId;
   S.practice.difficulty = diff;
   S.practice.qs = [];
@@ -1467,6 +1531,7 @@ function renderExamQuestion() {
   document.getElementById('exam-q-level').textContent = lvlText;
   document.getElementById('exam-q-num').textContent = S.exam.idx + 1;
   document.getElementById('exam-q-text').innerHTML = q.question;
+  _makeImgsZoomable(document.getElementById('exam-q-text'));
   document.getElementById('exam-hint-box').classList.add('hidden');
 
   const saved = S.exam.answers[S.exam.idx];
@@ -1666,7 +1731,15 @@ function loadPracticeQuestion() {
     S.practice.idx = 0;
   }
   const q = S.practice.qs[S.practice.idx];
-  if (!q) return;
+  if (!q || !q.question) {
+    if (S.practice.idx < S.practice.qs.length - 1) { S.practice.idx++; loadPracticeQuestion(); return; }
+    // No questions available — clear stale DOM so previous subject's content isn't shown
+    const _qt = document.getElementById('practice-q-text');
+    if (_qt) _qt.innerHTML = '';
+    const _qc = document.getElementById('practice-q-counter');
+    if (_qc) _qc.textContent = '';
+    return;
+  }
 
   // Progress bar
   const _pbar = document.getElementById('practice-progress-bar');
@@ -1685,6 +1758,7 @@ function loadPracticeQuestion() {
   } else {
     document.getElementById('practice-q-text').innerHTML = q.question;
   }
+  _makeImgsZoomable(document.getElementById('practice-q-text'));
 
   document.getElementById('practice-hint-box').classList.add('hidden');
   S.practice.hintShown = false;

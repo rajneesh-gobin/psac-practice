@@ -3,6 +3,7 @@ const Forum = (() => {
 
   // ── Categories ────────────────────────────────
   const CATS = [
+    { id: 'announce', label: 'Announcements',        icon: '📢', desc: 'Official news, new features and platform updates from the team' },
     { id: 'general',  label: 'General Help',        icon: '🙋', desc: 'Questions about using the app or studying in general' },
     { id: 'maths',    label: 'Maths Help',           icon: '📐', desc: 'Stuck on a Maths question? Ask here!' },
     { id: 'english',  label: 'English Help',         icon: '📝', desc: 'Questions about English language and writing' },

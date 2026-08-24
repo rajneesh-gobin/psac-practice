@@ -569,10 +569,6 @@
               class="text-xs font-semibold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
               🔒 Parent
             </button>
-            <button onclick="Auth.logout()"
-              class="text-xs font-semibold bg-white/20 hover:bg-red-500/60 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
-              🚪 Logout
-            </button>
           </div>
         </div>
         <p id="dash-subject-tagline" class="opacity-90 text-sm mb-3">Ready to practise? Let's go!</p>
@@ -972,7 +968,6 @@
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🛡️ Admin Panel</h2>
           <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Superuser access — PSAC Exam Practice</p>
         </div>
-        <button onclick="Auth.logout()" class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-colors">🚪 Logout</button>
       </div>
 
       <!-- Tabs -->
@@ -1009,29 +1004,30 @@
 
       <!-- Content tab -->
       <div id="admin-tab-content" class="admin-tab-panel hidden">
-        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Globally disable grades, subjects or chapters. Affects all students immediately.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Enable or disable grades, subjects and registration globally. Changes apply to all students immediately.</p>
 
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
-          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">🎓 Grades</h3>
-          <div id="admin-grades-list" class="space-y-2"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
+            <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">🎓 Grades</h3>
+            <div id="admin-grades-list" class="divide-y divide-gray-100 dark:divide-gray-700"></div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
+            <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">🔐 Registration</h3>
+            <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">When off, new sign-ups are blocked for everyone.</p>
+            <label class="flex items-center justify-between cursor-pointer">
+              <span class="text-sm text-gray-700 dark:text-gray-300">Allow new registrations</span>
+              <div class="relative">
+                <input id="admin-reg-toggle" type="checkbox" class="sr-only" onchange="AdminPanel.toggleRegistration(this.checked)">
+                <div class="w-11 h-6 bg-gray-300 dark:bg-gray-600 rounded-full shadow-inner toggle-bg"></div>
+                <div class="toggle-dot absolute w-4 h-4 bg-white rounded-full shadow top-1 left-1 transition"></div>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
-          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">📚 Subjects</h3>
-          <div id="admin-subjects-list" class="space-y-2"></div>
-        </div>
-
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
-          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">🔐 Registration</h3>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">When disabled, new sign-ups are blocked.</p>
-          <label class="flex items-center justify-between cursor-pointer">
-            <span class="text-sm text-gray-700 dark:text-gray-300">New registrations open</span>
-            <div class="relative">
-              <input id="admin-reg-toggle" type="checkbox" class="sr-only" onchange="AdminPanel.toggleRegistration(this.checked)">
-              <div class="w-11 h-6 bg-gray-300 dark:bg-gray-600 rounded-full shadow-inner toggle-bg"></div>
-              <div class="toggle-dot absolute w-4 h-4 bg-white rounded-full shadow top-1 left-1 transition"></div>
-            </div>
-          </label>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
+          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-4">📚 Subjects by Grade</h3>
+          <div id="admin-subjects-list"></div>
         </div>
       </div>
 
@@ -1169,10 +1165,6 @@
           <button onclick="Auth.switchToStudentSelect()"
             class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 px-3 py-1.5 rounded-full font-semibold transition-colors">
             👦 Student View
-          </button>
-          <button onclick="Auth.logout()"
-            class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-colors">
-            🚪 Logout
           </button>
         </div>
       </div>
@@ -1346,7 +1338,6 @@
           <button onclick="showScreen('calendar')" class="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">📅 Calendar</button>
           <button onclick="Auth.addStudent()" class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">➕ Add Child</button>
           <button onclick="Auth.switchToStudentSelect()" class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">👦 Student View</button>
-          <button onclick="Auth.logout()" class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">🚪 Logout</button>
         </div>
       </div>
 
@@ -1991,5 +1982,16 @@
   <script src="engine/admin.js"></script>
   <script src="engine/forum.js"></script>
   <script src="engine/calendar.js"></script>
+
+  <!-- Image lightbox — shown when any question image is tapped/clicked -->
+  <div id="img-lightbox" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+       onclick="closeLightbox()" role="dialog" aria-modal="true" aria-label="Image zoom">
+    <div class="relative max-w-full max-h-full flex items-center justify-center" onclick="event.stopPropagation()">
+      <img id="img-lightbox-src" src="" alt="Enlarged image" class="max-w-[92vw] max-h-[88vh] rounded-xl shadow-2xl object-contain select-none">
+      <button onclick="closeLightbox()"
+        class="absolute -top-3 -right-3 w-9 h-9 flex items-center justify-center bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-full shadow-lg text-lg font-bold hover:bg-gray-100 transition-colors"
+        aria-label="Close">✕</button>
+    </div>
+  </div>
 </body>
 </html>

@@ -193,9 +193,25 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
   background: white; border-radius: 1.25rem; padding: 1.25rem;
   border: 2px solid #e5e7eb; cursor: pointer; text-align: left;
   transition: all 0.25s; box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  position: relative;
 }
 .dark .chapter-card { background: #1e293b; border-color: #374151; }
 .chapter-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.1); border-color: #93c5fd; }
+
+/* ===== ENRICHMENT CHAPTER CARD ===== */
+.chapter-card.enrichment {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: #fbbf24;
+}
+.dark .chapter-card.enrichment { background: linear-gradient(135deg, #1c1509 0%, #261a05 100%); border-color: #d97706; }
+.chapter-card.enrichment:hover { border-color: #d97706; box-shadow: 0 6px 18px rgba(245,158,11,0.2); }
+
+.enr-badge {
+  display: inline-block; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em;
+  color: #92400e; background: #fde68a; border: 1px solid #fbbf24;
+  border-radius: 9999px; padding: 0.15rem 0.55rem; margin-bottom: 0.5rem;
+}
+.dark .enr-badge { color: #fbbf24; background: #2d1f03; border-color: #d97706; }
 
 /* ===== DIFF BUTTONS ===== */
 .diff-btn {

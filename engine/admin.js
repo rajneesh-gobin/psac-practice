@@ -319,30 +319,48 @@ const AdminPanel = (() => {
   function _renderContent() {
     if (!_settings) return;
 
+    const grades = typeof SUBJECT_PACKS !== 'undefined'
+      ? [...new Set(SUBJECT_PACKS.map(p => p.grade))].sort()
+      : [];
+
     // Grades
     const gradesEl = document.getElementById('admin-grades-list');
-    if (gradesEl && typeof SUBJECT_PACKS !== 'undefined') {
-      const grades = [...new Set(SUBJECT_PACKS.map(p => p.grade))].sort();
+    if (gradesEl) {
       gradesEl.innerHTML = grades.map(g => {
         const off = _settings.disabled_grades.includes(g);
-        return `<label class="flex items-center justify-between cursor-pointer py-1">
-          <span class="text-sm text-gray-700 dark:text-gray-300">Grade ${g}</span>
+        return `<label class="flex items-center justify-between cursor-pointer py-2">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Grade ${g}</span>
+            ${off ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-500 px-2 py-0.5 rounded-full">Disabled</span>' : ''}
+          </div>
           <input type="checkbox" ${off ? '' : 'checked'} onchange="AdminPanel.toggleGrade(${g}, !this.checked)"
             class="w-4 h-4 accent-indigo-600">
         </label>`;
       }).join('');
     }
 
-    // Subjects
+    // Subjects grouped by grade
     const subjEl = document.getElementById('admin-subjects-list');
     if (subjEl && typeof SUBJECT_PACKS !== 'undefined') {
-      subjEl.innerHTML = SUBJECT_PACKS.map(p => {
-        const off = _settings.disabled_subjects.includes(p.id);
-        return `<label class="flex items-center justify-between cursor-pointer py-1">
-          <span class="text-sm text-gray-700 dark:text-gray-300">${p.icon || ''} ${p.name} — Grade ${p.grade}</span>
-          <input type="checkbox" ${off ? '' : 'checked'} onchange="AdminPanel.toggleSubject('${p.id}', !this.checked)"
-            class="w-4 h-4 accent-indigo-600">
-        </label>`;
+      subjEl.innerHTML = grades.map((g, gi) => {
+        const packs = SUBJECT_PACKS.filter(p => p.grade === g);
+        const gradeOff = _settings.disabled_grades.includes(g);
+        return `<div class="${gi > 0 ? 'mt-5 pt-5 border-t border-gray-100 dark:border-gray-700' : ''}">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Grade ${g}</span>
+            ${gradeOff ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-500 px-2 py-0.5 rounded-full">Grade disabled</span>' : ''}
+          </div>
+          <div class="space-y-0.5 pl-3 border-l-2 border-indigo-100 dark:border-indigo-900/50">
+            ${packs.map(p => {
+              const off = _settings.disabled_subjects.includes(p.id);
+              return `<label class="flex items-center justify-between cursor-pointer py-1.5 ${gradeOff ? 'opacity-40 pointer-events-none' : ''}">
+                <span class="text-sm text-gray-700 dark:text-gray-300">${p.icon || ''} ${p.name}</span>
+                <input type="checkbox" ${off ? '' : 'checked'} onchange="AdminPanel.toggleSubject('${p.id}', !this.checked)"
+                  class="w-4 h-4 accent-indigo-600" ${gradeOff ? 'disabled' : ''}>
+              </label>`;
+            }).join('')}
+          </div>
+        </div>`;
       }).join('');
     }
 

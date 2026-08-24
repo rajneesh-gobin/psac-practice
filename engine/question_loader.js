@@ -150,12 +150,16 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/ch06_g4_lecture.js',
     ],
     'grade4-history': [
-      'subjects/grade4-history/questions/ch01_g4_mauritius.js',
+      'subjects/grade4-history/questions/ch01_g4_locality.js',
       'subjects/grade4-history/questions/ch02_g4_community.js',
-      'subjects/grade4-history/questions/ch03_g4_physical.js',
-      'subjects/grade4-history/questions/ch04_g4_economic.js',
-      'subjects/grade4-history/questions/ch05_g4_history.js',
-      'subjects/grade4-history/questions/ch06_g4_maps.js',
+      'subjects/grade4-history/questions/ch03_g4_voyages.js',
+      'subjects/grade4-history/questions/ch04_g4_natural_env.js',
+      'subjects/grade4-history/questions/ch05_g4_weather.js',
+      'subjects/grade4-history/questions/ch06_g4_map_skills.js',
+      // @enrichment — bonus content, derived from syllabus
+      'subjects/grade4-history/questions/enrichment_g4_explorers.js',
+      'subjects/grade4-history/questions/enrichment_g4_mauritius.js',
+      'subjects/grade4-history/questions/enrichment_g4_world.js',
     ],
   };
 
