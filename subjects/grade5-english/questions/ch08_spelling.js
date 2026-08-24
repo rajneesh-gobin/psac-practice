@@ -79,3 +79,80 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Seperate</b>" is misspelled — the correct spelling is "<b>separate</b>". Memory trick: there is "a rat" in sep<b>a rat</b>e. Other commonly misspelled words: necessary (1 c, 2 s), beginning (double n), definitely (not definitly).' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5eng-spell-011', chapterId:'eng-spelling', difficulty:2,
+    question:'Choose the correctly spelled word meaning "the act of protecting".',
+    options:['protecsion','protection','protextion','protecttion'],
+    answer:'protection',
+    hint:'The verb "protect" + suffix "-tion" = ?',
+    explanation:'"<b>Protection</b>" — protect + -tion. The suffix -tion is spelled "-tion" after most consonants. Words ending in -t usually keep the t: protect→protection, direct→direction, act→action, select→selection.' }),
+
+  makeMCQ({ id:'g5eng-spell-012', chapterId:'eng-spelling', difficulty:2,
+    question:'What is the correct PLURAL of "child"?',
+    options:['childs','childes','children','childrens'],
+    answer:'children',
+    hint:'"Child" is an irregular noun — its plural does not follow the usual -s/-es pattern.',
+    explanation:'"<b>Children</b>" is the irregular plural of "child". Other irregular plurals: man→men, woman→women, tooth→teeth, foot→feet, mouse→mice, goose→geese, ox→oxen, person→people.' }),
+
+  makeMCQ({ id:'g5eng-spell-013', chapterId:'eng-spelling', difficulty:1,
+    question:'Choose the CORRECTLY spelled word.',
+    options:['beautifull','beautifull','beautiful','beutiful'],
+    answer:'beautiful',
+    hint:'"Beauty" + ful → remember to change the y to i.',
+    explanation:'"<b>Beautiful</b>" — beauty → beautiful. The -y changes to -i before -ful. Memory trick: "B-E-A-U-T-I-F-U-L". Other beauty-family words: beautifully, beautify, beautician. "Beautiful" is one of the most commonly misspelled words.' }),
+
+  makeMCQ({ id:'g5eng-spell-014', chapterId:'eng-spelling', difficulty:2,
+    question:'Which sentence uses the correct HOMOPHONE?',
+    options:[
+      'I wore my knew shoes to school.',
+      'She new the answer to the question.',
+      'He knew how to solve the problem.',
+      'We new it would rain today.'
+    ],
+    answer:'He knew how to solve the problem.',
+    hint:'"Knew" = past tense of "know". "New" = not old.',
+    explanation:'"<b>Knew</b>" is the past tense of "know" (an irregular verb: know→knew). "New" means not old/recent. They sound identical (homophones) but have different meanings. "He <b>knew</b> the answer" ✓ / "a <b>new</b> book" ✓.' }),
+
+  makeMCQ({ id:'g5eng-spell-015', chapterId:'eng-spelling', difficulty:2,
+    question:'How do you spell the -ing form of "begin"?',
+    options:['begining','beginng','beginning','beginnnig'],
+    answer:'beginning',
+    hint:'Begin ends in consonant-vowel-consonant (CVC) and the stress is on the last syllable — double the final "n".',
+    explanation:'"<b>Beginning</b>" — for words where the stress falls on the last syllable ending in CVC, double the final consonant before -ing: begin→beginning, occur→occurring, prefer→preferring. Compare: open→opening (stress NOT on last syllable, so no doubling).' }),
+
+  makeMCQ({ id:'g5eng-spell-016', chapterId:'eng-spelling', difficulty:1,
+    question:'Which word is spelled correctly?',
+    options:['nessesary','necesary','neccessary','necessary'],
+    answer:'necessary',
+    hint:'Memory trick: one Collar (1c) and two Socks (2s) = ne<b>c</b>e<b>ss</b>ary.',
+    explanation:'"<b>Necessary</b>" — 1 c and 2 s\'s. Memory aid: "Not Every Cat Eats Sardines — Some Are Really Yummy" (N-E-C-E-S-S-A-R-Y). Or: one Collar (c) and two Socks (ss). It is one of the most commonly misspelled English words.' }),
+
+  makeMCQ({ id:'g5eng-spell-017', chapterId:'eng-spelling', difficulty:2,
+    question:'Choose the correct spelling: "to ___" meaning to move around an object.',
+    options:['rap','wrap','rappe','wrop'],
+    answer:'wrap',
+    hint:'This word has a silent "w" at the beginning.',
+    explanation:'"<b>Wrap</b>" — the w is silent (we say "rap"). Other silent-w words: write, wrong, wrist, wreck, wrinkle, wrestle. Note that "rap" (also spelled correctly) means to knock or a style of music — context tells you which to use.' }),
+
+  makeMCQ({ id:'g5eng-spell-018', chapterId:'eng-spelling', difficulty:3,
+    question:'A student writes: "I definately recomend this book — its wonderfull!" Find ALL spelling errors.',
+    options:[
+      'No errors',
+      '"definately" → "definitely"; "recomend" → "recommend"; "wonderfull" → "wonderful"',
+      'Only "definately" is wrong',
+      '"its" → "it\'s" and "wonderfull" → "wonderful"'
+    ],
+    answer:'"definately" → "definitely"; "recomend" → "recommend"; "wonderfull" → "wonderful"',
+    hint:'Check each word carefully: the -ly adverb of "definite", double letters in recommend, and one "l" in wonderful.',
+    explanation:'Three spelling errors: (1) "definately" → "<b>definitely</b>" (definite + ly — keep the e); (2) "recomend" → "<b>recommend</b>" (double c, double m: re-<b>cc</b>o-<b>mm</b>end); (3) "wonderfull" → "<b>wonderful</b>" (only one l in the suffix -ful). Note: "its" is correct here (possessive, no apostrophe needed).' }),
+
+  makeMCQ({ id:'g5eng-spell-019', chapterId:'eng-spelling', difficulty:4,
+    question:'Which word correctly completes: "The scientist made an important ___." (The act of discovering something)',
+    options:['discovry','discovery','discoverey','discoverie'],
+    answer:'discovery',
+    hint:'Discover + y = ? Remember the rule for words ending in consonant + e + ry.',
+    explanation:'"<b>Discovery</b>" — discover + y. When forming nouns from verbs ending in -er, simply add -y: discover → discovery. Other examples: deliver → delivery, recover → recovery, bakery (bake+ery). The common error is adding extra letters or changing the vowels.' })
+
+);

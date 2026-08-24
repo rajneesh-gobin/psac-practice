@@ -78,3 +78,85 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Both</b> "kindness" and "virtue" are abstract nouns — they name qualities or values that cannot be seen or touched. Abstract nouns often end in -ness, -tion, -ity, -ment, -ance.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5eng-noun-011', chapterId:'eng-nouns', difficulty:1,
+    question:'Fill in the blank with the correct REFLEXIVE PRONOUN: "We really enjoyed ___ at the party."',
+    options:['ourselves','themselves','himself','yourself'],
+    answer:'ourselves',
+    hint:'The subject is "We" — the reflexive pronoun must match: we → ourselves.',
+    explanation:'"<b>Ourselves</b>" matches the subject "We". Reflexive pronouns reflect the action back to the subject: I→myself, you→yourself, he→himself, she→herself, it→itself, we→ourselves, they→themselves.' }),
+
+  makeMCQ({ id:'g5eng-noun-012', chapterId:'eng-nouns', difficulty:1,
+    question:'Fill in the blank: "My dog is sick. I am taking it to the ___."',
+    options:['dentist','vet','doctor','nurse'],
+    answer:'vet',
+    hint:'Which professional treats animals?',
+    explanation:'A <b>vet</b> (veterinarian) is the medical professional who treats animals. A doctor treats humans, a dentist treats teeth, a nurse assists in medical care. Always match the vocabulary to the context.' }),
+
+  makeMCQ({ id:'g5eng-noun-013', chapterId:'eng-nouns', difficulty:1,
+    question:'Fill in the blank: "The football match will take place at the ___."',
+    options:['restaurant','bank','stadium','library'],
+    answer:'stadium',
+    hint:'Football is a sport — where are sports events held?',
+    explanation:'A <b>stadium</b> is a large venue where sports events are held. A restaurant is for eating, a bank is for money, a library is for books. Using context to choose vocabulary is an important reading skill.' }),
+
+  makeMCQ({ id:'g5eng-noun-014', chapterId:'eng-nouns', difficulty:2,
+    question:'Fill in the blank: "The man forgot to take ___ umbrella before leaving."',
+    options:['his','her','its','their'],
+    answer:'his',
+    hint:'"The man" is singular and male — which possessive adjective matches?',
+    explanation:'"<b>His</b>" is the possessive adjective for a male subject (he). Her = female (she). Its = thing/animal. Their = plural (they). Possessive adjectives (my, your, his, her, its, our, their) always go before a noun.' }),
+
+  makeMCQ({ id:'g5eng-noun-015', chapterId:'eng-nouns', difficulty:1,
+    question:'Fill in the blank: "___ is knocking at the door?"',
+    options:['Who','Where','When','What'],
+    answer:'Who',
+    hint:'We are asking about a PERSON who is knocking.',
+    explanation:'"<b>Who</b>" asks about a person. Where asks about a place. When asks about a time. What asks about a thing or action. "Who is knocking?" asks for the identity of the person at the door.' }),
+
+  makeMCQ({ id:'g5eng-noun-016', chapterId:'eng-nouns', difficulty:2,
+    question:'Which sentence uses the correct QUANTIFIER?',
+    options:[
+      'She drank many water.',
+      'Grandfather drinks some juice every morning.',
+      'I have few milk in my glass.',
+      'He ate much apples.'
+    ],
+    answer:'Grandfather drinks some juice every morning.',
+    hint:'"Some" works with both countable and uncountable nouns. "Many/few" is for countable; "much/little" for uncountable.',
+    explanation:'"<b>Some juice</b>" is correct — "some" works with uncountable nouns. "Many water" and "few milk" are wrong (water/milk are uncountable — use "much/little"). "Much apples" is wrong (apples are countable — use "many"). Some can be used with both.' }),
+
+  makeMCQ({ id:'g5eng-noun-017', chapterId:'eng-nouns', difficulty:2,
+    question:'What is the correct COLLECTIVE NOUN for a group of wolves?',
+    options:['a flock of wolves','a pack of wolves','a herd of wolves','a swarm of wolves'],
+    answer:'a pack of wolves',
+    hint:'Wolves travel and hunt in packs.',
+    explanation:'<b>A pack</b> of wolves is the correct collective noun. Other collective nouns: a flock of birds/sheep, a herd of cows/elephants, a swarm of bees, a school of fish, a pride of lions, a bunch of flowers.' }),
+
+  makeMCQ({ id:'g5eng-noun-018', chapterId:'eng-nouns', difficulty:3,
+    question:'Choose the sentence where ALL pronouns are used correctly.',
+    options:[
+      'Me and her went to the market together.',
+      'She and I went to the market together.',
+      'Her and me went to the market together.',
+      'I and her went to the market together.'
+    ],
+    answer:'She and I went to the market together.',
+    hint:'Both pronouns are the SUBJECT of the sentence (doing the action). Which pronoun forms do you use for subjects?',
+    explanation:'"<b>She and I</b> went..." — both pronouns are subjects, so use subject forms (I, he, she, we, they). "Me and her" uses object pronouns as subjects — incorrect. Test by removing one: "I went ✓ / Me went ✗". "She went ✓ / Her went ✗".' }),
+
+  makeMCQ({ id:'g5eng-noun-019', chapterId:'eng-nouns', difficulty:4,
+    question:'The sentence "Raj always takes care ___ his little sister" needs a preposition. Which is correct, and why?',
+    options:[
+      '"care at his sister" — because "at" shows direction',
+      '"care of his sister" — because "take care of" is a fixed phrase (phrasal verb) meaning to look after',
+      '"care up his sister" — because "up" suggests improvement',
+      '"care by his sister" — because "by" shows the person involved'
+    ],
+    answer:'"care of his sister" — because "take care of" is a fixed phrase (phrasal verb) meaning to look after',
+    hint:'Some verbs always pair with specific prepositions — these must be learned as fixed expressions.',
+    explanation:'"<b>Take care of</b>" is a fixed phrasal expression meaning "to look after". Many English verbs pair with specific prepositions that cannot be changed: take care <b>of</b>, look <b>at</b>, listen <b>to</b>, arrive <b>at</b>, wait <b>for</b>. These must be learned as phrases, not worked out from the preposition meaning alone.' })
+
+);

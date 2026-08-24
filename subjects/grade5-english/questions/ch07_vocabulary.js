@@ -74,3 +74,85 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Significant</b>" means important, meaningful or noteworthy. A significant discovery is one that matters and has a large impact. Synonyms: major, considerable, notable, crucial.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5eng-voc-011', chapterId:'eng-vocabulary', difficulty:1,
+    question:'What does "overjoyed" mean?',
+    options:['a little happy','extremely happy and delighted','very tired','slightly surprised'],
+    answer:'extremely happy and delighted',
+    hint:'The prefix "over-" means "to an extreme degree".',
+    explanation:'"<b>Overjoyed</b>" means <b>extremely happy</b>. The prefix "over-" intensifies the meaning: overjoyed = beyond joy. Similar "over-" words: overwhelmed (very affected), overworked (working too much), overexcited (too excited).' }),
+
+  makeMCQ({ id:'g5eng-voc-012', chapterId:'eng-vocabulary', difficulty:1,
+    question:'What does "patient" mean in this sentence: "I just need to be patient."',
+    options:[
+      'a person being treated by a doctor',
+      'able to wait calmly without becoming annoyed',
+      'very fast at doing things',
+      'very clever and good at solving problems'
+    ],
+    answer:'able to wait calmly without becoming annoyed',
+    hint:'"Patient" has two meanings — context tells you which one is being used here.',
+    explanation:'In this context, "<b>patient</b>" means <b>able to wait calmly</b>. The speaker is waiting for the right fish and does not want to get frustrated. "Patient" also means a person receiving medical care — use context to identify which meaning is intended.' }),
+
+  makeMCQ({ id:'g5eng-voc-013', chapterId:'eng-vocabulary', difficulty:2,
+    question:'Which word is part of the same WORD FAMILY as "happy"?',
+    options:['hope','happening','unhappiness','helpful'],
+    answer:'unhappiness',
+    hint:'A word family shares the same root word.',
+    explanation:'"<b>Unhappiness</b>" shares the root "happy": happy → unhappy → unhappiness → happily → happiness. A word family contains words with the same base/root. "Happening" contains "hap" but is not from the same root as "happy" (though historically related).' }),
+
+  makeMCQ({ id:'g5eng-voc-014', chapterId:'eng-vocabulary', difficulty:2,
+    question:'What does the prefix "re-" mean in "rewrite, redo, rebuild"?',
+    options:['not','again','before','wrongly'],
+    answer:'again',
+    hint:'"Rewrite" = write again; "redo" = do again.',
+    explanation:'The prefix "<b>re-</b>" means <b>again</b>. rewrite = write again, redo = do again, rebuild = build again, replay = play again, recycle = cycle/process again. Other prefixes: un- (not), pre- (before), mis- (wrongly), dis- (not/opposite).' }),
+
+  makeMCQ({ id:'g5eng-voc-015', chapterId:'eng-vocabulary', difficulty:2,
+    question:'What does the suffix "-tion" do to a verb?',
+    options:[
+      'Makes it an adjective',
+      'Makes it an adverb',
+      'Turns it into a noun meaning "the act of doing something"',
+      'Makes it negative'
+    ],
+    answer:'Turns it into a noun meaning "the act of doing something"',
+    hint:'educate → education; direct → direction; act → action',
+    explanation:'The suffix "<b>-tion</b>" (or "-sion") turns a verb into a <b>noun</b>: educate → education, direct → direction, act → action, pollute → pollution, protect → protection. These nouns mean "the act or process of doing something".' }),
+
+  makeMCQ({ id:'g5eng-voc-016', chapterId:'eng-vocabulary', difficulty:1,
+    question:'What is the ANTONYM of "polite"?',
+    options:['kind','gentle','rude','careful'],
+    answer:'rude',
+    hint:'If someone is NOT polite, how would you describe them?',
+    explanation:'"<b>Rude</b>" is the antonym of "polite". Polite = well-mannered, respectful; rude = disrespectful, impolite. Other antonyms: discourteous, impolite, disrespectful. Synonyms of polite: courteous, well-mannered, considerate.' }),
+
+  makeMCQ({ id:'g5eng-voc-017', chapterId:'eng-vocabulary', difficulty:2,
+    question:'Choose the word that means "very surprised or shocked".',
+    options:['calm','astonished','patient','polite'],
+    answer:'astonished',
+    hint:'Think of a very strong reaction when something completely unexpected happens.',
+    explanation:'"<b>Astonished</b>" means <b>very surprised or amazed</b>. Synonyms of different strengths: surprised < amazed < astonished < astounded/flabbergasted. In writing, choosing the precise word for the degree of a feeling makes your work more powerful.' }),
+
+  makeMCQ({ id:'g5eng-voc-018', chapterId:'eng-vocabulary', difficulty:3,
+    question:'Read: "The ambassador presented his credentials to the Head of State." What does "credentials" most likely mean?',
+    options:[
+      'a gift wrapped in paper',
+      'official documents proving a person\'s authority or qualifications',
+      'a type of traditional food',
+      'a speech about future plans'
+    ],
+    answer:'official documents proving a person\'s authority or qualifications',
+    hint:'An ambassador represents their country — what would they need to prove who they are?',
+    explanation:'"<b>Credentials</b>" are official documents that prove a person\'s identity, authority or qualifications. Context clue: an ambassador presents them to a Head of State — this is a formal diplomatic act of proving one\'s authority to represent one\'s country.' }),
+
+  makeMCQ({ id:'g5eng-voc-019', chapterId:'eng-vocabulary', difficulty:4,
+    question:'In the sentence "The baobab tree has a thick trunk and few leaves. Some baobab trees are very old and have been growing for thousands of years." Which word could replace "few" without changing the meaning?',
+    options:['many','no','not many','several'],
+    answer:'not many',
+    hint:'"Few" means a small number — not zero, but not many.',
+    explanation:'"<b>Not many</b>" is the closest synonym to "few". Few = a small number (but not zero). "No leaves" means zero — too strong. "Several" suggests a moderate number — slightly too many. "Many" is the opposite. The distinction between "few" (little quantity, often implies less than expected) and "a few" (a small positive number) is subtle: "few leaves" implies fewer than expected.' })
+
+);

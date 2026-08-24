@@ -78,3 +78,99 @@ STATIC_QUESTIONS.push(
     explanation:'<b>False.</b> "Good" is an <b>adjective</b> here — it describes the subject "food" via the linking verb "smells". With sense/linking verbs (smell, taste, look, feel, seem), we use adjectives, not adverbs. ("The food smells good" not "smells goodly".)' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5eng-adj-011', chapterId:'eng-adjectives', difficulty:1,
+    question:'Fill in the blank: "This test is ___ than the last one."',
+    options:['difficulter','more difficult','most difficult','the most difficult'],
+    answer:'more difficult',
+    hint:'We are comparing TWO tests. "Difficult" has 3 syllables — use "more" instead of "-er".',
+    explanation:'"<b>More difficult</b>" is the comparative form. For adjectives of 3+ syllables, use "more + adjective" for comparatives: more difficult, more interesting, more beautiful. "-er" is only for short (1-syllable) adjectives: faster, taller, older.' }),
+
+  makeMCQ({ id:'g5eng-adj-012', chapterId:'eng-adjectives', difficulty:1,
+    question:'Which sentence uses an ADVERB OF FREQUENCY correctly?',
+    options:[
+      'She always is late for school.',
+      'He sometimes eats pizza for dinner.',
+      'They never do are on time.',
+      'We often to play in the park.'
+    ],
+    answer:'He sometimes eats pizza for dinner.',
+    hint:'Adverbs of frequency (always, often, sometimes, never) go BEFORE the main verb but AFTER "be".',
+    explanation:'"<b>He sometimes eats</b>" is correct — "sometimes" is placed before the main verb. With "be": "She is always late" (after be). Pattern: subject + adverb + main verb. "Always is late" is wrong (always goes after "is" with be: "is always").' }),
+
+  makeMCQ({ id:'g5eng-adj-013', chapterId:'eng-adjectives', difficulty:2,
+    question:'What are the COMPARATIVE and SUPERLATIVE of "good"?',
+    options:[
+      'gooder / goodest',
+      'more good / most good',
+      'better / best',
+      'gooder / most good'
+    ],
+    answer:'better / best',
+    hint:'"Good" is an irregular adjective — it changes completely.',
+    explanation:'"<b>Better / best</b>" — "good" is irregular: good → <b>better</b> (comparative) → <b>best</b> (superlative). Other irregulars: bad → worse → worst; much/many → more → most; little → less → least.' }),
+
+  makeMCQ({ id:'g5eng-adj-014', chapterId:'eng-adjectives', difficulty:2,
+    question:'Choose the correct adjective: "The film was ___. I fell asleep." (The film caused boredom.)',
+    options:['bored','boring','boringly','boredom'],
+    answer:'boring',
+    hint:'-ing adjectives describe what causes a feeling; -ed adjectives describe how a person feels.',
+    explanation:'"<b>Boring</b>" — the film caused the feeling of boredom. Use <b>-ing</b> for the cause: boring film, exciting game, interesting book. Use <b>-ed</b> for the person\'s feeling: I was bored/excited/interested. "I was bored because the film was boring."' }),
+
+  makeMCQ({ id:'g5eng-adj-015', chapterId:'eng-adjectives', difficulty:2,
+    question:'Which sentence uses "such" correctly?',
+    options:[
+      'She spoke such loudly.',
+      'It was such a beautiful day!',
+      'He ran such fast.',
+      'They are such tiredly.'
+    ],
+    answer:'It was such a beautiful day!',
+    hint:'"Such" is used before a noun phrase (a/an + adjective + noun). "So" is used before an adjective or adverb alone.',
+    explanation:'"<b>Such a beautiful day</b>" is correct. <b>Such + a/an + adjective + noun</b>: such a beautiful day, such an interesting story. <b>So + adjective/adverb alone</b>: so beautiful, so loudly. "She spoke so loudly" ✓ / "It was such a beautiful day" ✓.' }),
+
+  makeTF({ id:'g5eng-adj-016', chapterId:'eng-adjectives', difficulty:1,
+    question:'The adverb of the adjective "angry" is "angrily".',
+    answer:true,
+    hint:'For adjectives ending in consonant + y, change y to i before adding -ly.',
+    explanation:'<b>True.</b> Angry → <b>angrily</b>. For adjectives ending in consonant + y, change y to i before adding -ly: happy→happily, easy→easily, angry→angrily, heavy→heavily, lazy→lazily.' }),
+
+  makeMCQ({ id:'g5eng-adj-017', chapterId:'eng-adjectives', difficulty:3,
+    question:'What is the correct ORDER of adjectives in: "She wore a ___ dress."',
+    options:[
+      'silk beautiful blue long',
+      'beautiful long blue silk',
+      'long beautiful silk blue',
+      'blue long silk beautiful'
+    ],
+    answer:'beautiful long blue silk',
+    hint:'English adjective order: Opinion → Size → Colour → Material',
+    explanation:'The standard English adjective order is: Opinion → Size → Age → Shape → Colour → Origin → Material → Purpose. So: <b>beautiful (opinion) long (size) blue (colour) silk (material)</b> dress. This order feels natural to native speakers even if they cannot explain why.' }),
+
+  makeMCQ({ id:'g5eng-adj-018', chapterId:'eng-adjectives', difficulty:3,
+    question:'Identify the error: "She was more happier today than yesterday."',
+    options:[
+      'No error — "more happier" is correct',
+      '"More happier" is wrong — never double comparative. Correct: "happier" OR "more happy" (though "happier" is standard)',
+      '"Today" should be "nowadays"',
+      '"Than" should be "then"'
+    ],
+    answer:'"More happier" is wrong — never double comparative. Correct: "happier" OR "more happy" (though "happier" is standard)',
+    hint:'You cannot use both "more" AND "-er" at the same time.',
+    explanation:'"More happier" doubles the comparative — this is always wrong. Happy is a 2-syllable adjective ending in -y, so the comparative is <b>happier</b> (change y to i, add -er). Never say "more happier / more taller / more faster" — pick one form only.' }),
+
+  makeMCQ({ id:'g5eng-adj-019', chapterId:'eng-adjectives', difficulty:4,
+    question:'A student writes: "The ancient, angry ocean attacked the shore again and again." This sentence uses which TWO literary techniques?',
+    options:[
+      'Simile and rhyme',
+      'Alliteration (repeated "a" sounds) and personification (ocean is given human anger and action)',
+      'Metaphor and onomatopoeia',
+      'Hyperbole and rhyme'
+    ],
+    answer:'Alliteration (repeated "a" sounds) and personification (ocean is given human anger and action)',
+    hint:'Look at the starting sounds, and whether the ocean is behaving like a person.',
+    explanation:'<b>Alliteration</b>: "ancient, <b>a</b>ngry ocean <b>a</b>ttacked" — repeated "a" sounds create a rhythmic, dramatic effect. <b>Personification</b>: "angry ocean attacked" — the ocean is given the human emotion of anger and the human action of attacking. Both techniques make the description more vivid and powerful.' })
+
+);

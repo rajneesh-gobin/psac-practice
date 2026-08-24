@@ -93,3 +93,95 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Don\'t</b>" = <b>do not</b>. The apostrophe replaces the missing letter "o". Other contractions: can\'t = cannot, won\'t = will not, it\'s = it is, they\'re = they are, I\'ve = I have.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5eng-sent-011', chapterId:'eng-sentences', difficulty:2,
+    question:'Complete the TAG QUESTION: "They are going to the park, ___ they?"',
+    options:["aren't","isn't","weren't","don't"],
+    answer:"aren't",
+    hint:'Positive "are" → negative tag "aren\'t". Match the auxiliary.',
+    explanation:'"<b>Aren\'t</b> they?" — the statement uses "are" (positive) so the tag is "aren\'t" (negative) + subject pronoun "they". Rule: positive statement → negative tag; use the same auxiliary verb.' }),
+
+  makeMCQ({ id:'g5eng-sent-012', chapterId:'eng-sentences', difficulty:2,
+    question:'Complete the TAG QUESTION: "You don\'t like spicy food, ___ you?"',
+    options:['do','don\'t','are','aren\'t'],
+    answer:'do',
+    hint:'Negative statement → positive tag.',
+    explanation:'"<b>Do</b> you?" — the statement is negative ("don\'t") so the tag must be positive ("do"). Negative statement → positive tag: "You don\'t like... <b>do</b> you?" / "He isn\'t ready... <b>is</b> he?" / "She won\'t come... <b>will</b> she?"' }),
+
+  makeMCQ({ id:'g5eng-sent-013', chapterId:'eng-sentences', difficulty:1,
+    question:'Which is the correct PREPOSITION: "She is waiting ___ the bus."',
+    options:['at','for','on','to'],
+    answer:'for',
+    hint:'"Wait for" is a fixed phrasal verb — you wait for something/someone.',
+    explanation:'"<b>Wait for</b>" is the correct fixed expression. Other common preposition collocations: listen <b>to</b>, arrive <b>at</b>, take care <b>of</b>, look <b>at</b>, talk <b>about</b>, good <b>at</b>. These must be learned as set phrases.' }),
+
+  makeMCQ({ id:'g5eng-sent-014', chapterId:'eng-sentences', difficulty:2,
+    question:'Join these sentences with the best conjunction: "It was late. She continued working."',
+    options:['so','but','because','or'],
+    answer:'but',
+    hint:'The second sentence is surprising given the first — it shows contrast.',
+    explanation:'"<b>But</b>" shows contrast — it was late (you might expect her to stop) BUT she continued (surprise, opposite of expectation). "So" shows result, "because" shows reason, "or" shows alternatives. "It was late, <b>but</b> she continued working."' }),
+
+  makeMCQ({ id:'g5eng-sent-015', chapterId:'eng-sentences', difficulty:2,
+    question:'Change to REPORTED SPEECH: He said, "I am very tired."',
+    options:[
+      'He said that he is very tired.',
+      'He said that he was very tired.',
+      'He said that I am very tired.',
+      'He said that "he is very tired."'
+    ],
+    answer:'He said that he was very tired.',
+    hint:'In reported speech, the tense moves back one step: "am" (present) → "was" (past). Also change "I" to "he".',
+    explanation:'"<b>He said that he was very tired</b>" — reported speech changes: (1) Pronoun: I → he; (2) Tense shifts back: am → was; (3) Inverted commas are removed. Direct: "I <b>am</b> tired" → Reported: he <b>was</b> tired.' }),
+
+  makeMCQ({ id:'g5eng-sent-016', chapterId:'eng-sentences', difficulty:2,
+    question:'Which sentence uses "because" correctly?',
+    options:[
+      'She was tired, because went to bed.',
+      'He stayed home because he was ill.',
+      'They played because, it was fun.',
+      'Because lovely day, we had a picnic.'
+    ],
+    answer:'He stayed home because he was ill.',
+    hint:'"Because" introduces a reason — it must be followed by a complete clause (subject + verb).',
+    explanation:'"<b>He stayed home because he was ill</b>" — "because" introduces a subordinate clause with a subject (he) and verb (was). "Because" must always be followed by a complete clause: "because + subject + verb". It should not have a comma before it in most cases.' }),
+
+  makeMCQ({ id:'g5eng-sent-017', chapterId:'eng-sentences', difficulty:3,
+    question:'Which passage of DIRECT SPEECH is punctuated correctly?',
+    options:[
+      '"Come here," she said.',
+      '"Come here" she said.',
+      '"Come here" She said.',
+      'She said "come here".'
+    ],
+    answer:'"Come here," she said.',
+    hint:'The comma (or full stop) always goes INSIDE the closing speech mark.',
+    explanation:'"<b>"Come here," she said</b>" — rules for direct speech: (1) Opening speech mark before the spoken words; (2) Comma/full stop INSIDE the closing speech mark; (3) Reporting clause (she said) follows with a lower-case letter. "She said \'come here\'." is also acceptable with the full stop inside: She said, "Come here."' }),
+
+  makeMCQ({ id:'g5eng-sent-018', chapterId:'eng-sentences', difficulty:3,
+    question:'Combine into ONE sentence using "although": "It was raining." "They played outside."',
+    options:[
+      'Although they played outside, it was raining.',
+      'Although it was raining, they played outside.',
+      'It was raining although, they played outside.',
+      'They played outside, although. It was raining.'
+    ],
+    answer:'Although it was raining, they played outside.',
+    hint:'"Although" introduces the SURPRISING or contrasting condition. No comma after "although" — a comma separates the two clauses.',
+    explanation:'"<b>Although it was raining, they played outside</b>" — "although" introduces the subordinate clause (the condition/contrast). A comma separates the two clauses. The main clause ("they played outside") comes after. "Although it was raining" sets up a surprise: despite the rain, they played.' }),
+
+  makeMCQ({ id:'g5eng-sent-019', chapterId:'eng-sentences', difficulty:4,
+    question:'Find ALL errors in: "Yesterday, the children has gone to the zoo and they sees many animal."',
+    options:[
+      'No errors',
+      '"has gone" → "went" (past simple); "sees" → "saw" (past simple); "animal" → "animals" (plural)',
+      '"has gone" is correct; only "sees" → "saw" is wrong',
+      '"Yesterday" → "Today"; everything else is fine'
+    ],
+    answer:'"has gone" → "went" (past simple); "sees" → "saw" (past simple); "animal" → "animals" (plural)',
+    hint:'Check tense (yesterday = past simple) and number (more than one animal).',
+    explanation:'Three errors: (1) "<b>has gone</b>" → "<b>went</b>" — "yesterday" signals past simple, not present perfect; (2) "<b>sees</b>" → "<b>saw</b>" — past simple of "see"; (3) "<b>animal</b>" → "<b>animals</b>" — "many" needs a plural noun. Correct: "Yesterday, the children <b>went</b> to the zoo and they <b>saw</b> many <b>animals</b>."' })
+
+);
