@@ -337,7 +337,7 @@ const AdminPanel = (() => {
       subjEl.innerHTML = SUBJECT_PACKS.map(p => {
         const off = _settings.disabled_subjects.includes(p.id);
         return `<label class="flex items-center justify-between cursor-pointer py-1">
-          <span class="text-sm text-gray-700 dark:text-gray-300">${p.label} (Grade ${p.grade})</span>
+          <span class="text-sm text-gray-700 dark:text-gray-300">${p.icon || ''} ${p.name} — Grade ${p.grade}</span>
           <input type="checkbox" ${off ? '' : 'checked'} onchange="AdminPanel.toggleSubject('${p.id}', !this.checked)"
             class="w-4 h-4 accent-indigo-600">
         </label>`;
