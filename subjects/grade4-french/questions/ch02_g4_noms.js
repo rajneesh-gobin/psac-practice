@@ -151,6 +151,141 @@ STATIC_QUESTIONS.push(
     ],
     answer:'au / des / un',
     hint:'"Cinéma" m. (à + le = ?), "amis" pluriel indéfini (= ?), "gâteau" m.sg. indéfini (= ?)',
-    explanation:'"Je vais <b>au</b> cinéma" (à + le = au, masculin singulier). "avec <b>des</b> amis" (des = article indéfini pluriel = some). "nous mangeons <b>un</b> gâteau" (un = article indéfini masculin singulier). Trois articles différents, trois règles différentes !' })
+    explanation:'"Je vais <b>au</b> cinéma" (à + le = au, masculin singulier). "avec <b>des</b> amis" (des = article indéfini pluriel = some). "nous mangeons <b>un</b> gâteau" (un = article indéfini masculin singulier). Trois articles différents, trois règles différentes !' }),
+
+  makeMCQ({ id:'g4fr-nom-020', chapterId:'g4fr-noms', difficulty:1,
+    question:'Quel article partitif complète : "Je mange ___ pain" ?',
+    options:['le','un','du','de la'],
+    answer:'du',
+    hint:'"Pain" est masculin singulier. L\'article partitif masculin = ?',
+    explanation:'"Je mange <b>du</b> pain." — <b>du</b> = de + le (article partitif masculin singulier). On utilise l\'article partitif pour une quantité non comptée : du pain (some bread), de la soupe, de l\'eau. Pas "le pain" (le = the, pas some).' }),
+
+  makeMCQ({ id:'g4fr-nom-021', chapterId:'g4fr-noms', difficulty:1,
+    question:'Quel article partitif complète : "Je bois ___ eau" ?',
+    options:['du','de la','de l\'','des'],
+    answer:"de l'",
+    hint:'"Eau" commence par une voyelle.',
+    explanation:'"Je bois <b>de l\'</b>eau." — Devant un mot commençant par une voyelle ou un h muet, on utilise <b>de l\'</b> (partitif). Exemples : de l\'eau (water), de l\'orange (orange juice), de l\'huile (oil). La règle s\'applique aux deux genres.' }),
+
+  makeTF({ id:'g4fr-nom-022', chapterId:'g4fr-noms', difficulty:1,
+    question:'"Au" est la contraction de "à + le".',
+    answer:true,
+    hint:'"À + le" → on ne peut pas dire "à le", on dit "au".',
+    explanation:'<b>Vrai.</b> <b>au</b> = à + le. On ne peut pas dire "à le cinéma" → on dit "au cinéma". De même : <b>aux</b> = à + les (je parle aux élèves). Mais "à la" et "à l\'" ne se contractent pas : à la maison, à l\'école.' }),
+
+  makeMCQ({ id:'g4fr-nom-023', chapterId:'g4fr-noms', difficulty:1,
+    question:'Le pluriel irrégulier de "œil" est...',
+    options:['œils','œiles','yeux','œil'],
+    answer:'yeux',
+    hint:'Ce mot pluriel est complètement différent du singulier.',
+    explanation:'<b>œil → yeux</b> — c\'est un pluriel très irrégulier ! C\'est l\'un des rares mots français qui change complètement au pluriel. Exemples d\'usage : "J\'ai deux <b>yeux</b>." "Ses <b>yeux</b> sont bleus."' }),
+
+  makeMCQ({ id:'g4fr-nom-024', chapterId:'g4fr-noms', difficulty:2,
+    question:'Quel article partitif complète : "Elle mange ___ salade" ?',
+    options:['du','de l\'','de la','des'],
+    answer:'de la',
+    hint:'"Salade" est féminin singulier.',
+    explanation:'"Elle mange <b>de la</b> salade." — <b>de la</b> = article partitif féminin singulier. Règle : <b>du</b> (m. sg. consonne), <b>de la</b> (f. sg. consonne), <b>de l\'</b> (voyelle), <b>des</b> (pluriel). Salade = féminin → de la.' }),
+
+  makeMCQ({ id:'g4fr-nom-025', chapterId:'g4fr-noms', difficulty:2,
+    question:'Quelle est la forme correcte pour "à + les parcs" ?',
+    options:['à les parcs','aus parcs','aux parcs','au parcs'],
+    answer:'aux parcs',
+    hint:'à + les = ?',
+    explanation:'"à + les" → <b>aux</b>. On ne dit jamais "à les" en français. Exemples : "Je vais <b>aux</b> parcs." "Il parle <b>aux</b> enfants." Mémo : au (m.sg.) / aux (pluriel) / à la (f.sg.) / à l\' (voyelle).' }),
+
+  makeMCQ({ id:'g4fr-nom-026', chapterId:'g4fr-noms', difficulty:2,
+    question:'Quel est le pluriel de "cheval" ?',
+    options:['chevals','chevales','chevaux','les cheval'],
+    answer:'chevaux',
+    hint:'Les noms en -al font leur pluriel en -aux.',
+    explanation:'"Cheval" → <b>chevaux</b>. Les noms en <b>-al</b> font généralement leur pluriel en <b>-aux</b> : cheval → chevaux, animal → animaux, journal → journaux, hôpital → hôpitaux.' }),
+
+  makeMCQ({ id:'g4fr-nom-027', chapterId:'g4fr-noms', difficulty:2,
+    question:'Complète : "Il va ___ école chaque matin."',
+    options:['à le','au','à la','à l\''],
+    answer:"à l'",
+    hint:'"École" commence par une voyelle.',
+    explanation:'"Il va <b>à l\'</b>école." — "école" est féminin et commence par une voyelle. On ne peut pas dire "à la école" → on élide : <b>à l\'</b>. Autres exemples : à l\'université, à l\'hôpital, à l\'église.' }),
+
+  makeTF({ id:'g4fr-nom-028', chapterId:'g4fr-noms', difficulty:2,
+    question:'"Du" peut remplacer "de + le" ET être un article partitif.',
+    answer:true,
+    hint:'"Du" a deux rôles : contraction et partitif.',
+    explanation:'<b>Vrai.</b> "Du" a deux fonctions : (1) <b>Contraction</b> : "Je viens du marché" (de + le marché). (2) <b>Partitif</b> : "Je mange du riz" (some rice). Dans les deux cas, il s\'écrit "du" et précède un nom masculin singulier commençant par une consonne.' }),
+
+  makeMCQ({ id:'g4fr-nom-029', chapterId:'g4fr-noms', difficulty:3,
+    question:'Choisissez la phrase correcte :',
+    options:[
+      'Je bois de la eau.',
+      "Je bois de l'eau.",
+      'Je bois du eau.',
+      'Je bois des eaux.'
+    ],
+    answer:"Je bois de l'eau.",
+    hint:'"Eau" commence par une voyelle → article partitif = ?',
+    explanation:'"Je bois <b>de l\'</b>eau." — devant une voyelle (ici "e" de "eau"), l\'article partitif devient <b>de l\'</b>. "De la eau" est impossible (élision obligatoire). "Du eau" aussi impossible (eau = féminin). "Des eaux" = pluriel (plusieurs types d\'eau) — rare dans ce contexte.' }),
+
+  makeMCQ({ id:'g4fr-nom-030', chapterId:'g4fr-noms', difficulty:3,
+    question:'Complète : "Nous parlons ___ professeurs de l\'école."',
+    options:['à les','aux','au','de les'],
+    answer:'aux',
+    hint:'"Professeurs" est pluriel → à + les = ?',
+    explanation:'"Nous parlons <b>aux</b> professeurs." — "à + les" = <b>aux</b> (contraction obligatoire au pluriel). "À les" n\'existe pas en français standard. Rappel : au (à + le), aux (à + les), à la, à l\'.' }),
+
+  makeMCQ({ id:'g4fr-nom-031', chapterId:'g4fr-noms', difficulty:3,
+    question:'Quel groupe utilise CORRECTEMENT les articles partitifs ?',
+    options:[
+      'Je mange de la viande et je bois du lait.',
+      'Je mange la viande et je bois le lait.',
+      'Je mange une viande et je bois un lait.',
+      'Je mange des viande et je bois des lait.'
+    ],
+    answer:'Je mange de la viande et je bois du lait.',
+    hint:'Pour une quantité non définie de nourriture/boisson → article partitif.',
+    explanation:'"Je mange <b>de la</b> viande et je bois <b>du</b> lait." — viande = f.sg. → <b>de la</b>. Lait = m.sg. → <b>du</b>. Les articles partitifs expriment une quantité indéfinie (some). "La viande / le lait" = avec "the" (défini), moins naturel ici.' }),
+
+  makeMCQ({ id:'g4fr-nom-032', chapterId:'g4fr-noms', difficulty:3,
+    question:'Quel est le pluriel de "journal" ?',
+    options:['journals','journaus','journaux','journales'],
+    answer:'journaux',
+    hint:'Comme "cheval → chevaux", les noms en -al → -aux.',
+    explanation:'"Journal" → <b>journaux</b>. Règle : noms en <b>-al</b> → <b>-aux</b> au pluriel : journal → journaux, animal → animaux, cheval → chevaux, hôpital → hôpitaux. Exception notable : bal → bals, festival → festivals.' }),
+
+  makeMCQ({ id:'g4fr-nom-033', chapterId:'g4fr-noms', difficulty:4,
+    question:'Lina écrit : "Ce matin, je mange ___ céréales et je bois ___ jus d\'orange. Ma mère mange ___ yaourt." Bonne série d\'articles partitifs ?',
+    options:[
+      'des / du / un',
+      'les / le / le',
+      'des / du / du',
+      'de la / de l\' / de la'
+    ],
+    answer:'des / du / un',
+    hint:'"Céréales" pluriel, "jus" m.sg., "yaourt" m.sg. — partitif ou indéfini ?',
+    explanation:'"je mange <b>des</b> céréales" (pluriel → des). "je bois <b>du</b> jus d\'orange" (m.sg. → du). "ma mère mange <b>un</b> yaourt" (un seul yaourt dénombrable → un, pas du). Différence : <b>du/de la/des</b> = quantité indéfinie ; <b>un/une</b> = un exemplaire.' }),
+
+  makeMCQ({ id:'g4fr-nom-034', chapterId:'g4fr-noms', difficulty:4,
+    question:'Complète : "Je vais ___ supermarché et j\'achète ___ légumes pour ___ soupe de ma grand-mère."',
+    options:[
+      'au / des / la',
+      'à le / les / une',
+      'au / les / une',
+      'aux / des / la'
+    ],
+    answer:'au / des / la',
+    hint:'"supermarché" m.sg. (à + le = ?), "légumes" pluriel indéfini, "soupe" = défini car "de ma grand-mère" le précise.',
+    explanation:'"Je vais <b>au</b> supermarché" (à + le = au). "j\'achète <b>des</b> légumes" (pluriel indéfini = des). "pour <b>la</b> soupe de ma grand-mère" (défini — on sait de quelle soupe il s\'agit → la). Trois règles différentes en une phrase !' }),
+
+  makeMCQ({ id:'g4fr-nom-035', chapterId:'g4fr-noms', difficulty:4,
+    question:'Priya fait ses devoirs : "Les ___ (horse-PL) de la ferme mangent ___ herbe. Le ___ (eye) du cheval est très grand." Bonne série ?',
+    options:[
+      'chevals / de l\' / yeux',
+      'chevaux / de l\' / œil',
+      'chevaux / du / yeux',
+      'chevals / de la / œil'
+    ],
+    answer:"chevaux / de l' / œil",
+    hint:'"Horse" pluriel = ? (irrégulier). "Herbe" commence par une voyelle. "Eye" singulier = ?',
+    explanation:'"Les <b>chevaux</b>" (cheval → chevaux, pluriel en -aux). "mangent <b>de l\'</b>herbe" (herbe = f., commence par h muet → de l\'). "Le <b>œil</b> du cheval" — singulier → œil (le pluriel serait yeux). Trois irrégularités en une phrase !' })
 
 );

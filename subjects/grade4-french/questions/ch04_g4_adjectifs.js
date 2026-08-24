@@ -162,6 +162,152 @@ STATIC_QUESTIONS.push(
     ],
     answer:'ma / un / de',
     hint:'"Chambre" = f.sg. (possessif?), "lit" = m.sg. indéfini (article?), "rideaux" = m.pl. avec adjectif avant le nom ("jolis rideaux" → des → ?).',
-    explanation:'"<b>Ma</b> chambre" (f.sg. → ma). "<b>Un</b> lit confortable" (m.sg. indéfini → un). "<b>De</b> jolis rideaux blancs" (pluriel avec adjectif avant le nom → des → de). Trois règles en une phrase : adjectif possessif, article indéfini, et la règle "de" devant adjectif + nom pluriel.' })
+    explanation:'"<b>Ma</b> chambre" (f.sg. → ma). "<b>Un</b> lit confortable" (m.sg. indéfini → un). "<b>De</b> jolis rideaux blancs" (pluriel avec adjectif avant le nom → des → de). Trois règles en une phrase : adjectif possessif, article indéfini, et la règle "de" devant adjectif + nom pluriel.' }),
+
+  makeMCQ({ id:'g4fr-adj-020', chapterId:'g4fr-adjectifs', difficulty:1,
+    question:'Quel adjectif démonstratif s\'utilise avec "livre" (masculin singulier commençant par consonne) ?',
+    options:['cette','cet','ces','ce'],
+    answer:'ce',
+    hint:'"Livre" = masculin singulier, commence par consonne.',
+    explanation:'"<b>Ce</b> livre" — Les adjectifs démonstratifs : <b>ce</b> (m.sg. consonne), <b>cet</b> (m.sg. voyelle/h muet), <b>cette</b> (f.sg.), <b>ces</b> (pluriel). "Livre" est masculin et commence par "l" (consonne) → <b>ce</b>.' }),
+
+  makeMCQ({ id:'g4fr-adj-021', chapterId:'g4fr-adjectifs', difficulty:1,
+    question:'Comment dit-on "Mauritian" (nationality adjective, feminine) ?',
+    options:['mauricien','mauriciens','mauricienne','mauriciennes'],
+    answer:'mauricienne',
+    hint:'Féminin des adjectifs en -ien : ajoute -ne.',
+    explanation:'<b>mauricienne</b> — Les adjectifs de nationalité en -<b>ien</b> font leur féminin en -<b>ienne</b> : mauricien → <b>mauricienne</b>, indien → indienne, australien → australienne. À ne pas confondre avec "mauriciennes" (féminin pluriel).' }),
+
+  makeTF({ id:'g4fr-adj-022', chapterId:'g4fr-adjectifs', difficulty:1,
+    question:'"Cet" s\'utilise devant un nom masculin singulier commençant par une voyelle.',
+    answer:true,
+    hint:'Cet arbre, cet hôtel, cet ami.',
+    explanation:'<b>Vrai.</b> <b>cet</b> = adjectif démonstratif masculin singulier devant <b>voyelle ou h muet</b>. Exemples : <b>cet</b> arbre, <b>cet</b> enfant, <b>cet</b> hôtel, <b>cet</b> homme. Si le nom commence par une consonne → ce : ce livre, ce garçon.' }),
+
+  makeMCQ({ id:'g4fr-adj-023', chapterId:'g4fr-adjectifs', difficulty:1,
+    question:'Comment dit-on "French" (nationality adjective, masculine) ?',
+    options:['française','français','françaises','franças'],
+    answer:'français',
+    hint:'"Français" masculin = sans -e final.',
+    explanation:'"<b>français</b>" (masculin) / "<b>française</b>" (féminin). Les adjectifs en -<b>ais</b> : masculin = français, féminin = française (+e). Autres nationalités : anglais/anglaise, chinois/chinoise, portugais/portugaise.' }),
+
+  makeMCQ({ id:'g4fr-adj-024', chapterId:'g4fr-adjectifs', difficulty:2,
+    question:'Quel adjectif démonstratif complète : "___ enfants jouent dehors."',
+    options:['ce','cet','cette','ces'],
+    answer:'ces',
+    hint:'"Enfants" = pluriel.',
+    explanation:'"<b>Ces</b> enfants jouent dehors." — <b>ces</b> s\'utilise pour <b>tous les pluriels</b> (masculin et féminin). Exemples : <b>ces</b> livres, <b>ces</b> fleurs, <b>ces</b> enfants. Le pluriel ne distingue pas le genre.' }),
+
+  makeMCQ({ id:'g4fr-adj-025', chapterId:'g4fr-adjectifs', difficulty:2,
+    question:'Laquelle de ces phrases suit la règle BAGS (adjectif AVANT le nom) ?',
+    options:[
+      'une maison grande',
+      'un beau jardin',
+      'un enfant intelligent',
+      'une fleur rouge'
+    ],
+    answer:'un beau jardin',
+    hint:'BAGS = Beauty, Age, Goodness, Size — ces adjectifs vont AVANT le nom.',
+    explanation:'"Un <b>beau</b> jardin" — <b>beau</b> (beautiful) appartient à la catégorie BAGS (Beauty) → il se place <b>avant</b> le nom. "Grand", "petit", "bon", "jeune", "nouveau", "vieux" aussi. Les autres adjectifs (intelligent, rouge) se placent <b>après</b> le nom.' }),
+
+  makeMCQ({ id:'g4fr-adj-026', chapterId:'g4fr-adjectifs', difficulty:2,
+    question:'Comment dit-on "an Indian student" (féminin) en français ?',
+    options:['une étudiante indien','une étudiante indienne','une étudiant indienne','un étudiante indien'],
+    answer:'une étudiante indienne',
+    hint:'"Étudiant" f. = étudiante. "Indien" f. = indienne.',
+    explanation:'"<b>une étudiante indienne</b>" — Deux accords : (1) "étudiante" (féminin de étudiant). (2) "indienne" (féminin de indien → -ien + -ne = -ienne). Les deux mots s\'accordent en genre avec le sujet féminin.' }),
+
+  makeMCQ({ id:'g4fr-adj-027', chapterId:'g4fr-adjectifs', difficulty:2,
+    question:'Quel adjectif démonstratif complète : "___ arbre est très grand."',
+    options:['ce','cet','cette','ces'],
+    answer:'cet',
+    hint:'"Arbre" = masculin singulier commençant par "a" (voyelle).',
+    explanation:'"<b>Cet</b> arbre est très grand." — "arbre" est masculin singulier et commence par "a" (voyelle) → on utilise <b>cet</b> (pas "ce") pour éviter deux voyelles consécutives (ce + a = difficile à prononcer). Mémo : cet ami, cet enfant, cet homme, cet arbre.' }),
+
+  makeMCQ({ id:'g4fr-adj-028', chapterId:'g4fr-adjectifs', difficulty:3,
+    question:'Quelle phrase utilise correctement les adjectifs de nationalité ?',
+    options:[
+      'Elle est mauricien et elle parle français.',
+      'Elle est mauricienne et elle parle français.',
+      'Elle est mauricienne et elle parle française.',
+      'Elle est mauriciens et elle parle français.'
+    ],
+    answer:'Elle est mauricienne et elle parle français.',
+    hint:'"Elle" = féminin. La nationalité s\'accorde. La langue en français = invariable ici.',
+    explanation:'"Elle est <b>mauricienne</b>" — sujet féminin → adjectif féminin (mauricienne). "elle parle <b>français</b>" — après "parler une langue", la langue est invariable (pas de -e féminin) : parler français, anglais, chinois. Deux règles différentes en une phrase !' }),
+
+  makeMCQ({ id:'g4fr-adj-029', chapterId:'g4fr-adjectifs', difficulty:3,
+    question:'Identifie l\'adjectif qui va APRÈS le nom (pas dans BAGS) :',
+    options:['vieux','nouveau','rouge','bon'],
+    answer:'rouge',
+    hint:'BAGS = Beauty, Age, Goodness, Size. "Rouge" n\'est dans aucune de ces catégories.',
+    explanation:'"<b>Rouge</b>" va après le nom : "un chapeau rouge", "une fleur rouge". Les adjectifs BAGS (vieux, nouveau, bon, grand, petit, beau, jeune, long...) vont avant le nom. "Rouge" décrit une couleur, qui ne fait pas partie de BAGS → après le nom.' }),
+
+  makeMCQ({ id:'g4fr-adj-030', chapterId:'g4fr-adjectifs', difficulty:3,
+    question:'Complète : "___ histoire est très intéressante. J\'aime ___ genre de livre."',
+    options:['Cette / ce','Cet / ces','Ces / ce','Cette / cet'],
+    answer:'Cette / ce',
+    hint:'"Histoire" = f.sg. → ? "Genre" = m.sg. (consonne) → ?',
+    explanation:'"<b>Cette</b> histoire" (histoire = féminin singulier → cette). "ce <b>genre</b> de livre" (genre = masculin singulier, commence par g = consonne → ce). Rappel : ce (m.sg. consonne), cet (m.sg. voyelle), cette (f.sg.), ces (pluriel).' }),
+
+  makeMCQ({ id:'g4fr-adj-031', chapterId:'g4fr-adjectifs', difficulty:3,
+    question:'Quelle phrase utilise correctement un adjectif BAGS devant le nom ?',
+    options:[
+      'C\'est un enfant intelligent petit.',
+      'C\'est un petit enfant intelligent.',
+      'C\'est un enfant petit intelligent.',
+      'C\'est intelligent petit enfant.'
+    ],
+    answer:"C'est un petit enfant intelligent.",
+    hint:'"Petit" = BAGS (Size) → avant. "Intelligent" = hors BAGS → après.',
+    explanation:'"C\'est un <b>petit</b> enfant <b>intelligent</b>." — <b>petit</b> (Size = BAGS) se place <b>avant</b> le nom. <b>intelligent</b> (qualité non-BAGS) se place <b>après</b> le nom. Quand il y a deux adjectifs : BAGS + nom + non-BAGS.' }),
+
+  makeMCQ({ id:'g4fr-adj-032', chapterId:'g4fr-adjectifs', difficulty:4,
+    question:'Priya décrit sa classe : "Dans ma classe, il y a ___ (this) professeur chinoise et ___ (some) élèves mauriciens et ___ (some) élèves français." Bonne série ?',
+    options:[
+      'cette / des / des',
+      'cet / les / les',
+      'cette / ces / ces',
+      'ce / des / des'
+    ],
+    answer:'cette / des / des',
+    hint:'"Professeur" f. sg → ? "Élèves" pluriel indéfini → ?',
+    explanation:'"<b>cette</b> professeur" (féminin singulier → cette). "<b>des</b> élèves mauriciens" (pluriel indéfini → des). "<b>des</b> élèves français" (pluriel indéfini → des). Démonstratif pour "cette" puis article indéfini pluriel pour les deux groupes.' }),
+
+  makeMCQ({ id:'g4fr-adj-033', chapterId:'g4fr-adjectifs', difficulty:4,
+    question:'Décris ta famille : "Mon grand-père est ___ (Chinese). Ma grand-mère est ___. Mon père est ___ (Mauritian, masc.). Ma mère est ___." Bonne série ?',
+    options:[
+      'chinois / chinoise / mauricien / mauricienne',
+      'chinoise / chinois / mauricienne / mauricien',
+      'chinois / chinois / mauricien / mauricien',
+      'chinoise / chinoise / mauricienne / mauricienne'
+    ],
+    answer:'chinois / chinoise / mauricien / mauricienne',
+    hint:'Grand-père = m., grand-mère = f., père = m., mère = f. Accorde chaque adjectif.',
+    explanation:'Grand-père (m.) → <b>chinois</b>, grand-mère (f.) → <b>chinoise</b> (+e). Père (m.) → <b>mauricien</b>, mère (f.) → <b>mauricienne</b> (+ne). Chaque adjectif de nationalité s\'accorde avec le genre du nom de la personne.' }),
+
+  makeMCQ({ id:'g4fr-adj-034', chapterId:'g4fr-adjectifs', difficulty:4,
+    question:'Complète la description : "___ (this) nouvelle école a ___ (old, m.) bâtiments et un ___ (new, m.) jardin. ___ (these) professeurs sont excellents !"',
+    options:[
+      'Cette / vieux / nouveau / Ces',
+      'Cet / vieux / nouveau / Ces',
+      'Cette / vieil / nouvelles / Ces',
+      'Ce / vieux / nouvelle / Cette'
+    ],
+    answer:'Cette / vieux / nouveau / Ces',
+    hint:'"École" f. → cette. "Bâtiments" m.pl. → vieux (BAGS). "Jardin" m.sg. → nouveau (BAGS). "Professeurs" pl. → ces.',
+    explanation:'"<b>Cette</b> nouvelle école" (f.sg. → cette). "<b>vieux</b> bâtiments" (BAGS, m.pl. → vieux, invariable en genre). "un <b>nouveau</b> jardin" (BAGS, m.sg. → nouveau). "<b>Ces</b> professeurs" (pluriel → ces). Quatre règles en une phrase !' }),
+
+  makeMCQ({ id:'g4fr-adj-035', chapterId:'g4fr-adjectifs', difficulty:4,
+    question:'Shanvi écrit une carte postale : "___ (this, f.) île est magnifique ! Les plages sont belles et les gens sont très accueillants. Mon ___ (French, m.) ami dit que c\'est ___ (better, m.) que les ___ (French, f.pl.) plages !" Bonne série ?',
+    options:[
+      'Cette / français / meilleur / françaises',
+      'Cet / français / meilleur / françaises',
+      'Cette / françaises / meilleur / français',
+      'Ces / français / meilleurs / françaises'
+    ],
+    answer:'Cette / français / meilleur / françaises',
+    hint:'"Île" = f.sg. "ami" = m.sg. "que" modifie m.sg. "plages" = f.pl.',
+    explanation:'"<b>Cette</b> île" (f.sg. → cette). "Mon ami <b>français</b>" (m.sg. → français). "c\'est <b>meilleur</b>" (better, m.sg. → meilleur). "les plages <b>françaises</b>" (f.pl. → françaises). Quatre accords d\'adjectifs de nationalité et démonstratif !' })
 
 );

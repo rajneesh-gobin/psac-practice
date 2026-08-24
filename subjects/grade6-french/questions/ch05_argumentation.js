@@ -176,6 +176,120 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Certes, les téléphones permettent d\'accéder à des informations rapidement. Néanmoins, des études montrent qu\'ils réduisent la concentration des élèves de 25%."',
     hint:'Une bonne réfutation reconnaît d\'abord l\'argument adverse (certes...) puis le dépasse avec une preuve plus forte.',
-    explanation:'Structure de la réfutation efficace : (1) <b>Certes</b> [reconnaître l\'argument adverse] + (2) <b>Néanmoins / Cependant / Toutefois</b> [réfuter avec un argument plus fort + preuve]. La preuve chiffrée ("25%") donne plus de crédibilité. Le manuel MIE de 6e enseigne cette technique de concession-réfutation comme l\'une des compétences argumentatives clés pour le PSAC.' })
+    explanation:'Structure de la réfutation efficace : (1) <b>Certes</b> [reconnaître l\'argument adverse] + (2) <b>Néanmoins / Cependant / Toutefois</b> [réfuter avec un argument plus fort + preuve]. La preuve chiffrée ("25%") donne plus de crédibilité. Le manuel MIE de 6e enseigne cette technique de concession-réfutation comme l\'une des compétences argumentatives clés pour le PSAC.' }),
+
+  makeMCQ({ id:'g6fr-arg-020', chapterId:'g6fr-argumentation', difficulty:1,
+    question:'Quel connecteur introduit le DEUXIÈME argument dans un texte argumentatif ?',
+    options:['En conclusion','De plus / Deuxièmement','Certes','Néanmoins'],
+    answer:'De plus / Deuxièmement',
+    hint:'"De plus" ou "Deuxièmement" ajoutent un argument supplémentaire.',
+    explanation:'"<b>De plus</b>" ou "<b>Deuxièmement</b>" servent à <b>ajouter</b> un argument supplémentaire du même côté. Ordre type : Premièrement… → De plus… → En outre… → En conclusion…' }),
+
+  makeMCQ({ id:'g6fr-arg-021', chapterId:'g6fr-argumentation', difficulty:1,
+    question:'Quel connecteur introduit la CONCLUSION d\'un texte argumentatif ?',
+    options:['En effet','De plus','En conclusion / En résumé','Cependant'],
+    answer:'En conclusion / En résumé',
+    hint:'"En conclusion" = fin du texte, synthèse.',
+    explanation:'"<b>En conclusion</b>" ou "<b>En résumé</b>" introduisent la <b>synthèse finale</b> du texte. On récapitule les arguments principaux et on donne sa position définitive. Structure : Premièrement… → De plus… → Cependant… → <b>En conclusion</b>…' }),
+
+  makeTF({ id:'g6fr-arg-022', chapterId:'g6fr-argumentation', difficulty:1,
+    question:'Un texte INJONCTIF donne des ordres ou des instructions (ex : une recette, un règlement).',
+    answer:true,
+    hint:'Injonctif = donner des ordres, des conseils, des instructions. Ex : "Mélangez la farine…"',
+    explanation:'<b>Vrai.</b> Le texte <b>injonctif</b> donne des <b>ordres, instructions, conseils</b> : recettes de cuisine ("Ajoutez deux œufs…"), règlements ("Il est interdit de…"), modes d\'emploi. Il utilise souvent l\'impératif ou l\'infinitif. Les 5 types de textes MIE : <b>narratif, descriptif, informatif, argumentatif, injonctif</b>.' }),
+
+  makeMCQ({ id:'g6fr-arg-023', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Quel connecteur exprime une OPPOSITION ou une nuance (= however) ?',
+    options:['De plus','En effet','Cependant / Néanmoins / Toutefois','Par exemple'],
+    answer:'Cependant / Néanmoins / Toutefois',
+    hint:'"Cependant" = however. Il introduit un point qui contraste avec ce qui précède.',
+    explanation:'"<b>Cependant</b>", "<b>néanmoins</b>", "<b>toutefois</b>" = <b>however / nevertheless</b>. Ils introduisent un <b>contraste ou une nuance</b> : "Les téléphones sont utiles. <b>Cependant</b>, ils peuvent distraire." Comparer : "<b>De plus</b>" ajoute dans le même sens ; "<b>Cependant</b>" oppose.' }),
+
+  makeMCQ({ id:'g6fr-arg-024', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Quelle est la structure d\'une lettre formelle (ordre correct) ?',
+    options:[
+      'Corps → Formule de politesse → Objet → Destinataire',
+      'Destinataire → Objet → Formule d\'appel → Corps → Formule de politesse',
+      'Formule d\'appel → Destinataire → Corps → Objet → Signature',
+      'Objet → Corps → Destinataire → Formule de politesse'
+    ],
+    answer:'Destinataire → Objet → Formule d\'appel → Corps → Formule de politesse',
+    hint:'On indique d\'abord à qui on écrit, puis pourquoi (objet), puis on commence (formule d\'appel), puis on dit ce qu\'on veut dire (corps), puis on termine poliment.',
+    explanation:'Structure d\'une lettre formelle : (1) <b>Destinataire</b> (nom/adresse) ; (2) <b>Objet</b> ("Objet : demande de rendez-vous") ; (3) <b>Formule d\'appel</b> ("Monsieur, / Madame,") ; (4) <b>Corps</b> (message) ; (5) <b>Formule de politesse</b> ("Veuillez agréer…"). Le manuel MIE de 6e teste la rédaction de lettres formelles au PSAC.' }),
+
+  makeMCQ({ id:'g6fr-arg-025', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Quel type de texte DÉCRIT un lieu, une personne ou une chose en détail ?',
+    options:['Texte narratif','Texte descriptif','Texte argumentatif','Texte injonctif'],
+    answer:'Texte descriptif',
+    hint:'"Descriptif" = décrire = donner les caractéristiques visuelles, sensorielles d\'un objet, lieu ou personne.',
+    explanation:'Le texte <b>descriptif</b> peint une image en mots : couleurs, formes, textures, odeurs, tailles. Ex : "La plage était bordée de palmiers aux feuilles frémissantes, le sable blanc brillait sous le soleil…" Il répond à la question : <b>À quoi ressemble ?</b> Comparer : le texte <b>narratif</b> répond à : <b>Que s\'est-il passé ?</b>' }),
+
+  makeMCQ({ id:'g6fr-arg-026', chapterId:'g6fr-argumentation', difficulty:2,
+    question:'Quel connecteur illustre avec un exemple (= for example) ?',
+    options:['Cependant','En conclusion','Par exemple / C\'est-à-dire','En outre'],
+    answer:'Par exemple / C\'est-à-dire',
+    hint:'"Par exemple" introduit une illustration. "C\'est-à-dire" reformule ou précise.',
+    explanation:'"<b>Par exemple</b>" (= for example) introduit une <b>illustration concrète</b> d\'une idée abstraite. "<b>C\'est-à-dire</b>" (= that is to say) <b>reformule ou précise</b> une idée. Ex : "Les énergies renouvelables sont importantes, <b>par exemple</b> l\'énergie solaire et l\'énergie éolienne."' }),
+
+  makeMCQ({ id:'g6fr-arg-027', chapterId:'g6fr-argumentation', difficulty:3,
+    question:'Dans un texte argumentatif, quelle est la structure d\'un bon paragraphe ?',
+    options:[
+      'Exemple → Idée directrice → Conclusion',
+      'Idée directrice → Développement/Explication → Exemple',
+      'Connecteur → Connecteur → Connecteur',
+      'Conclusion → Idée → Exemple'
+    ],
+    answer:'Idée directrice → Développement/Explication → Exemple',
+    hint:'D\'abord l\'idée principale, puis on l\'explique, puis on l\'illustre avec un exemple.',
+    explanation:'Structure du paragraphe argumentatif : (1) <b>Idée directrice</b> (= topic sentence) : l\'argument principal ; (2) <b>Développement</b> : explication, justification ; (3) <b>Exemple</b> : illustration concrète. Ex : "Les transports en commun réduisent la pollution. <b>En effet</b>, un bus transporte 50 personnes contre 1 voiture. <b>Par exemple</b>, à Port-Louis, les bus publics ont réduit les embouteillages."' }),
+
+  makeMCQ({ id:'g6fr-arg-028', chapterId:'g6fr-argumentation', difficulty:3,
+    question:'Quelle formule de politesse convient pour terminer une lettre formelle à un directeur d\'école ?',
+    options:[
+      '"Bisous et à bientôt"',
+      '"Salut"',
+      '"Veuillez agréer, Monsieur le Directeur, l\'expression de mes salutations distinguées."',
+      '"Merci beaucoup, votre ami"'
+    ],
+    answer:'"Veuillez agréer, Monsieur le Directeur, l\'expression de mes salutations distinguées."',
+    hint:'Les formules de politesse formelles utilisent des expressions comme "Veuillez agréer…" ou "Je vous prie d\'agréer…"',
+    explanation:'"<b>Veuillez agréer, Monsieur le Directeur, l\'expression de mes salutations distinguées.</b>" — formule de politesse formelle. Structure : <b>Veuillez agréer / Je vous prie d\'agréer</b> + [titre répété] + <b>l\'expression de mes salutations distinguées / respectueuses / les meilleures</b>. Répéter le titre (Monsieur le Directeur) est obligatoire dans la formule de politesse.' }),
+
+  makeMCQ({ id:'g6fr-arg-029', chapterId:'g6fr-argumentation', difficulty:3,
+    question:'Quel type de texte présente des arguments POUR et CONTRE sur un sujet ?',
+    options:['Texte narratif','Texte descriptif','Texte argumentatif','Texte injonctif'],
+    answer:'Texte argumentatif',
+    hint:'Argumentatif = convaincre, débattre, défendre une thèse.',
+    explanation:'Le texte <b>argumentatif</b> présente une <b>thèse</b> et des <b>arguments</b> pour convaincre le lecteur. Il peut être organisé en deux parties (pour / contre) ou en plan dialectique (thèse → antithèse → synthèse). Il utilise des connecteurs logiques et des techniques de persuasion. Ex : dissertation, éditorial, lettre d\'opinion.' }),
+
+  makeTF({ id:'g6fr-arg-030', chapterId:'g6fr-argumentation', difficulty:3,
+    question:'"En effet" et "car" s\'utilisent tous les deux pour expliquer ou justifier une affirmation.',
+    answer:true,
+    hint:'"En effet" (= indeed/in fact) et "car" (= because/for) justifient tous les deux.',
+    explanation:'<b>Vrai.</b> "<b>En effet</b>" et "<b>car</b>" servent à <b>justifier ou expliquer</b> : "Ce projet est important. <b>En effet</b>, il concernera 500 familles." / "Ce projet est important, <b>car</b> il concernera 500 familles." Différence : "car" est une conjonction de coordination (milieu de phrase) ; "en effet" est un adverbe (début de phrase ou milieu).' }),
+
+  makeMCQ({ id:'g6fr-arg-031', chapterId:'g6fr-argumentation', difficulty:4,
+    question:'Riya écrit : "La technologie améliore l\'éducation. ___ , elle permet un accès rapide à l\'information. ___ , certains élèves l\'utilisent pour copier les devoirs. ___ , il faut encadrer son usage." Choisis les bons connecteurs.',
+    options:[
+      'En effet / Cependant / En conclusion',
+      'Cependant / En effet / De plus',
+      'De plus / En conclusion / En effet',
+      'Par exemple / Néanmoins / Certes'
+    ],
+    answer:'En effet / Cependant / En conclusion',
+    hint:'"En effet" explique. "Cependant" oppose. "En conclusion" conclut.',
+    explanation:'"<b>En effet</b>" (justifie l\'affirmation précédente : permet accès à l\'info), "<b>Cependant</b>" (nuance / oppose : certains copient), "<b>En conclusion</b>" (synthèse finale : il faut encadrer). Structure parfaite du paragraphe argumentatif en 3 temps.' }),
+
+  makeMCQ({ id:'g6fr-arg-032', chapterId:'g6fr-argumentation', difficulty:4,
+    question:'Shanvi doit rédiger une lettre au directeur pour demander une sortie scolaire. Quel est l\'OBJET correct de la lettre ?',
+    options:[
+      '"Objet : Bonjour, je veux une sortie"',
+      '"Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses"',
+      '"Objet : Sortie"',
+      '"Objet : Je vous écris pour vous demander si on peut sortir"'
+    ],
+    answer:'"Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses"',
+    hint:'L\'objet d\'une lettre formelle est concis, précis et nomme clairement la demande.',
+    explanation:'"<b>Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses</b>" — L\'objet est un <b>titre bref et précis</b> qui résume la raison de la lettre. Il doit : (1) utiliser un nom (Demande / Réclamation / Candidature…) + (2) préciser l\'action souhaitée + (3) ajouter les détails pertinents.' })
 
 );

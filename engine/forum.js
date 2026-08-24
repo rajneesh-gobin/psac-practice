@@ -228,7 +228,7 @@ const Forum = (() => {
 
     const orderField = _sortBy === 'popular' ? 'reply_count' : 'created_at';
     const { data } = await _sb.from('forum_posts')
-      .select('id,title,body,author_name,author_type,created_at,reply_count')
+      .select('id,title,body,author_name,author_type,created_at,reply_count,status')
       .eq('category', catId)
       .order(orderField, { ascending: false })
       .limit(50);
@@ -250,7 +250,10 @@ const Forum = (() => {
         <div class="relative group mb-3">
           <button onclick="Forum.openPost('${p.id}')"
             class="w-full text-left p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all">
-            <div class="font-semibold text-gray-800 dark:text-white mb-1 ${canDel ? 'pr-7' : ''} truncate">${_esc(p.title)}</div>
+            <div class="font-semibold text-gray-800 dark:text-white mb-1 flex items-center gap-1.5 ${canDel ? 'pr-7' : ''}">
+              <span class="truncate">${_esc(p.title)}</span>
+              ${p.status === 'closed' ? '<span class="shrink-0 text-xs bg-gray-100 dark:bg-gray-700 text-gray-400 px-1.5 py-0.5 rounded-full">🔒</span>' : ''}
+            </div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">${_esc(p.body)}</div>
             <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
               ${_badge(p.author_type)}
@@ -290,25 +293,46 @@ const Forum = (() => {
     if (bodyEl)    bodyEl.innerHTML    = '<p class="text-sm text-gray-400 py-4">Loading…</p>';
     if (repliesEl) repliesEl.innerHTML = '';
 
-    const [pr, rr] = await Promise.all([
+    const [pr, rr, gur] = await Promise.all([
       _sb.from('forum_posts').select('*').eq('id', postId).maybeSingle(),
       _sb.from('forum_replies').select('*').eq('post_id', postId).order('created_at', { ascending: true }),
+      _sb.auth.getUser(),
     ]);
 
     const post    = pr.data;
     const replies = rr.data || [];
+    const authUser = gur.data?.user;
 
     if (!post) { bodyEl.innerHTML = '<p class="text-sm text-red-400 py-4">Post not found.</p>'; return; }
 
+    let isAdmin = false;
+    if (authUser?.id) {
+      const { data: prof } = await _sb.from('profiles').select('role,is_super_admin').eq('id', authUser.id).maybeSingle();
+      isAdmin = prof?.role === 'admin' || prof?.is_super_admin === true;
+    }
+
     const { name: myName } = _author();
     const canDelPost = post.author_name === myName;
+    const isClosed   = post.status === 'closed';
+
+    const replyBox     = _el('forum-reply-box');
+    const closedBanner = _el('forum-closed-banner');
+    if (replyBox)     replyBox.classList.toggle('hidden', isClosed);
+    if (closedBanner) closedBanner.classList.toggle('hidden', !isClosed);
 
     bodyEl.innerHTML = `
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700">
-        <div class="flex items-start gap-3 mb-3">
+        <div class="flex items-start gap-2 mb-3">
           <h3 class="text-lg font-bold text-gray-800 dark:text-white leading-snug flex-1">${_esc(post.title)}</h3>
-          ${canDelPost ? `<button onclick="Forum.deletePost('${post.id}')" title="Delete post"
-            class="shrink-0 w-7 h-7 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">🗑</button>` : ''}
+          <div class="flex items-center gap-1 shrink-0">
+            ${isClosed ? '<span class="text-xs bg-gray-100 dark:bg-gray-600 text-gray-400 px-2 py-1 rounded-full">🔒 Closed</span>' : ''}
+            ${isAdmin && !isClosed ? `<button onclick="Forum.closePost('${post.id}')" title="Close discussion"
+              class="w-7 h-7 flex items-center justify-center rounded-lg text-gray-300 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 transition-colors text-sm" aria-label="Close discussion">🔒</button>` : ''}
+            ${isAdmin && isClosed  ? `<button onclick="Forum.reopenPost('${post.id}')" title="Reopen discussion"
+              class="w-7 h-7 flex items-center justify-center rounded-lg text-gray-300 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/30 transition-colors text-sm" aria-label="Reopen discussion">🔓</button>` : ''}
+            ${canDelPost ? `<button onclick="Forum.deletePost('${post.id}')" title="Delete post"
+              class="w-7 h-7 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors">🗑</button>` : ''}
+          </div>
         </div>
         <p class="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-wrap leading-relaxed mb-4">${_esc(post.body)}</p>
         <div class="flex items-center gap-3 text-xs text-gray-400 flex-wrap pt-3 border-t border-gray-100 dark:border-gray-700">
@@ -341,6 +365,20 @@ const Forum = (() => {
           </div>`;
         }).join('')
       : '<p class="text-sm text-gray-400 text-center py-4 mt-4">No replies yet — be the first to reply!</p>';
+  }
+
+  async function closePost(id) {
+    if (!_sb) return;
+    _confirmModal('Close this discussion? No new replies will be allowed.', async () => {
+      await _sb.from('forum_posts').update({ status: 'closed' }).eq('id', id);
+      openPost(id);
+    }, { icon: '🔒', okLabel: 'Close Discussion', danger: true });
+  }
+
+  async function reopenPost(id) {
+    if (!_sb) return;
+    await _sb.from('forum_posts').update({ status: 'open' }).eq('id', id);
+    openPost(id);
   }
 
   // ── Delete ────────────────────────────────────
@@ -446,7 +484,7 @@ const Forum = (() => {
     back,
     searchPosts, setSort,
     likeItem,
-    deletePost, deleteReply,
+    deletePost, deleteReply, closePost, reopenPost,
     updateChars,
   };
 })();

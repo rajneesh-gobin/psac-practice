@@ -52,8 +52,6 @@ const SYLLABUS = {
     { id:'2d_shapes',    name:'Properties of 2D Shapes' },
     { id:'3d_shapes',    name:'Properties of 3D Shapes' },
     { id:'symmetry',     name:'Lines of Symmetry' },
-    { id:'coordinates',  name:'Coordinates & Grid' },
-    { id:'transformation',name:'Reflection & Rotation' },
   ]},
   fractions:   { subsections: [
     { id:'proper_improper',name:'Proper, Improper & Mixed Numbers' },
@@ -120,7 +118,6 @@ const SYLLABUS = {
   graphs:      { subsections: [
     { id:'pictogram',    name:'Pictograms' },
     { id:'bar_chart',    name:'Bar Charts' },
-    { id:'line_graph',   name:'Line Graphs' },
     { id:'frequency',    name:'Frequency Tables' },
     { id:'mean',         name:'Mean / Average from Data' },
   ]},
@@ -160,7 +157,6 @@ const FORMULAS = {
     'Angles in a quadrilateral = 360°',
     'Angles on a straight line = 180°',
     'Acute < 90° | Right = 90° | Obtuse: 90°–180° | Reflex > 180°',
-    'Coordinates: (x, y) — x goes across, y goes up',
   ]},
   fractions: { title:'½ Fractions', facts:[
     'Improper fraction: numerator > denominator (e.g. 7/4)',

@@ -150,6 +150,141 @@ STATIC_QUESTIONS.push(
     options:['nous recevrons','nous recevrions','nous recevrons','nous recerons'],
     answer:'nous recevrons',
     hint:'Recevoir → radical irrégulier recevr- + terminaison -ons.',
-    explanation:'Recevoir → radical irrégulier <b>recevr-</b> → + terminaison <b>-ons</b> → <b>nous recevrons</b>. Conjugaison : je recevrai, tu recevras, il recevra, <b>nous recevrons</b>, vous recevrez, ils recevront. De même : apercevoir → nous apercevrons, décevoir → nous décevrons. Groupe des verbes en -cevoir : radical = -cevr-.' })
+    explanation:'Recevoir → radical irrégulier <b>recevr-</b> → + terminaison <b>-ons</b> → <b>nous recevrons</b>. Conjugaison : je recevrai, tu recevras, il recevra, <b>nous recevrons</b>, vous recevrez, ils recevront. De même : apercevoir → nous apercevrons, décevoir → nous décevrons. Groupe des verbes en -cevoir : radical = -cevr-.' }),
+
+  makeMCQ({ id:'g6fr-fut-020', chapterId:'g6fr-futur', difficulty:1,
+    question:'Conjugue ALLER au futur simple pour "nous" :',
+    options:['nous allons','nous irons','nous allerons','nous irions'],
+    answer:'nous irons',
+    hint:'Aller → radical irrégulier au futur = ir-.',
+    explanation:'Aller → radical irrégulier au futur : <b>ir-</b> → nous <b>irons</b>. Conjugaison complète : j\'irai, tu iras, il ira, <b>nous irons</b>, vous irez, ils iront. Ce radical est partagé avec le verbe aller seulement — ne pas confondre avec "ir-" d\'autres langues.' }),
+
+  makeMCQ({ id:'g6fr-fut-021', chapterId:'g6fr-futur', difficulty:1,
+    question:'Conjugue ÊTRE au futur simple pour "je" :',
+    options:['j\'étais','je serai','je serais','je suis'],
+    answer:'je serai',
+    hint:'Être → radical irrégulier au futur = ser-.',
+    explanation:'Être → radical irrégulier au futur : <b>ser-</b> → je <b>serai</b>. Conjugaison : <b>je serai</b>, tu seras, il sera, nous serons, vous serez, ils seront. Ne pas confondre avec "je serais" (conditionnel).' }),
+
+  makeTF({ id:'g6fr-fut-022', chapterId:'g6fr-futur', difficulty:1,
+    question:'Le radical du futur de TENIR est "tiendr-".',
+    answer:true,
+    hint:'Tenir → futur = tiendr- (même famille que venir → viendr-).',
+    explanation:'<b>Vrai.</b> Tenir → radical irrégulier au futur = <b>tiendr-</b> : je tiendrai, tu tiendras, il tiendra… De même : retenir → retiendrai, maintenir → maintiendrai, obtenir → obtiendrai. Même famille que venir (<b>viendr-</b>).' }),
+
+  makeMCQ({ id:'g6fr-fut-023', chapterId:'g6fr-futur', difficulty:2,
+    question:'Conjugue FAIRE au futur simple pour "vous" :',
+    options:['vous faites','vous feriez','vous ferez','vous faites'],
+    answer:'vous ferez',
+    hint:'Faire → radical irrégulier au futur = fer-.',
+    explanation:'Faire → radical irrégulier au futur : <b>fer-</b> → vous <b>ferez</b>. Conjugaison : je ferai, tu feras, il fera, nous ferons, <b>vous ferez</b>, ils feront.' }),
+
+  makeMCQ({ id:'g6fr-fut-024', chapterId:'g6fr-futur', difficulty:2,
+    question:'Complète la phrase si + présent → futur : "Si tu travailles bien, tu ___ (avoir) de bonnes notes."',
+    options:['aurais','as','auras','avais'],
+    answer:'auras',
+    hint:'Si + présent (condition réelle) → futur simple dans la conséquence.',
+    explanation:'"Si tu travailles (présent), tu <b>auras</b> (futur) de bonnes notes." Structure : <b>si + présent → futur simple</b>. C\'est une condition réelle et possible. Ne pas confondre avec si + imparfait → conditionnel (hypothèse irréelle).' }),
+
+  makeMCQ({ id:'g6fr-fut-025', chapterId:'g6fr-futur', difficulty:2,
+    question:'Quelle est la différence entre "il va partir" (futur proche) et "il partira" (futur simple) ?',
+    options:[
+      'Aucune différence, les deux sont identiques.',
+      'Le futur proche indique une action imminente ; le futur simple une action plus éloignée ou planifiée.',
+      'Le futur simple est plus poli que le futur proche.',
+      'Le futur proche est uniquement à l\'oral, le futur simple uniquement à l\'écrit.'
+    ],
+    answer:'Le futur proche indique une action imminente ; le futur simple une action plus éloignée ou planifiée.',
+    hint:'Futur proche = imminent ou certain très bientôt. Futur simple = futur général ou plus éloigné.',
+    explanation:'Le <b>futur proche</b> (aller + infinitif : "il <b>va partir</b>") indique une action <b>imminente</b> ou très proche dans le temps. Le <b>futur simple</b> ("il <b>partira</b>") exprime un futur plus général ou distant. Ex : "Il <b>va arriver</b> dans 5 minutes" vs "Il <b>arrivera</b> l\'année prochaine".' }),
+
+  makeMCQ({ id:'g6fr-fut-026', chapterId:'g6fr-futur', difficulty:2,
+    question:'Conjugue VOIR au futur simple pour "ils" :',
+    options:['ils voiront','ils verraient','ils verront','ils voyaient'],
+    answer:'ils verront',
+    hint:'Voir → radical irrégulier au futur = verr-.',
+    explanation:'Voir → radical irrégulier au futur : <b>verr-</b> → ils <b>verront</b>. Conjugaison : je verrai, tu verras, il verra, nous verrons, vous verrez, <b>ils verront</b>.' }),
+
+  makeMCQ({ id:'g6fr-fut-027', chapterId:'g6fr-futur', difficulty:2,
+    question:'Conjugue COURIR au futur simple pour "tu" :',
+    options:['tu couriras','tu courras','tu courrais','tu courira'],
+    answer:'tu courras',
+    hint:'Courir → radical irrégulier au futur = courr- (double r).',
+    explanation:'Courir → radical irrégulier au futur : <b>courr-</b> (avec double r) → tu <b>courras</b>. Conjugaison : je courrai, <b>tu courras</b>, il courra, nous courrons, vous courrez, ils courront. Attention au double r !' }),
+
+  makeMCQ({ id:'g6fr-fut-028', chapterId:'g6fr-futur', difficulty:3,
+    question:'Conjugue ENVOYER au futur simple pour "elle" :',
+    options:['elle envoyera','elle enverrait','elle enverra','elle envoyerait'],
+    answer:'elle enverra',
+    hint:'Envoyer → radical irrégulier au futur = enverr-.',
+    explanation:'Envoyer → radical irrégulier au futur : <b>enverr-</b> → elle <b>enverra</b>. Conjugaison : j\'enverrai, tu enverras, <b>il/elle enverra</b>, nous enverrons, vous enverrez, ils enverront. Attention : "y" disparaît et double r.' }),
+
+  makeMCQ({ id:'g6fr-fut-029', chapterId:'g6fr-futur', difficulty:3,
+    question:'Conjugue MOURIR au futur simple pour "nous" :',
+    options:['nous mourrons','nous mourirons','nous mourrions','nous mourons'],
+    answer:'nous mourrons',
+    hint:'Mourir → radical irrégulier au futur = mourr- (double r).',
+    explanation:'Mourir → radical irrégulier au futur : <b>mourr-</b> (double r) → nous <b>mourrons</b>. Conjugaison : je mourrai, tu mourras, il mourra, <b>nous mourrons</b>, vous mourrez, ils mourront.' }),
+
+  makeMCQ({ id:'g6fr-fut-030', chapterId:'g6fr-futur', difficulty:3,
+    question:'Laquelle de ces phrases utilise le futur pour exprimer une PROBABILITÉ ?',
+    options:[
+      '"Demain, il pleuvra certainement."',
+      '"Il mangera quand il aura faim." (futur antérieur)',
+      '"Où est Paul ? — Il aura oublié notre rendez-vous." (c\'est probablement ce qui s\'est passé)',
+      '"Si vous venez, vous verrez."'
+    ],
+    answer:'"Où est Paul ? — Il aura oublié notre rendez-vous." (c\'est probablement ce qui s\'est passé)',
+    hint:'Futur ou futur antérieur = probabilité concernant le passé ou présent : "Il aura sûrement…"',
+    explanation:'Le <b>futur antérieur de probabilité</b> : "Il <b>aura oublié</b>" = j\'en déduis qu\'il a probablement oublié. C\'est une conjecture sur le passé. Le futur simple peut aussi exprimer la probabilité sur le présent : "Il <b>sera</b> en retard" = il est probablement en retard.' }),
+
+  makeTF({ id:'g6fr-fut-031', chapterId:'g6fr-futur', difficulty:3,
+    question:'"Quand tu arriveras, appelle-moi." utilise correctement le futur après "quand".',
+    answer:true,
+    hint:'En français, "quand" + futur est correct si le sens est futur. En anglais on dirait "when you arrive" (présent).',
+    explanation:'<b>Vrai.</b> En français, après <b>quand</b> dans un contexte futur, on utilise le <b>futur simple</b> : "Quand tu <b>arriveras</b>…" En anglais, on utilise le présent ("when you arrive") — c\'est une différence importante entre les deux langues. Même règle pour : lorsque, dès que, aussitôt que, tant que.' }),
+
+  makeMCQ({ id:'g6fr-fut-032', chapterId:'g6fr-futur', difficulty:3,
+    question:'Complète la série : "Dès que tu ___ (finir), tu ___ (pouvoir) sortir jouer."',
+    options:['finiras / pourras','finiras / pourrais','finisses / pourras','auras fini / pourras'],
+    answer:'finiras / pourras',
+    hint:'"Dès que" + futur → futur. Finir futur = finiras. Pouvoir futur = pourras.',
+    explanation:'"Dès que tu <b>finiras</b> (futur), tu <b>pourras</b> (futur) sortir." Après <b>dès que</b> dans un contexte futur → futur simple. Pouvoir → radical irrégulier <b>pourr-</b> → tu <b>pourras</b>.' }),
+
+  makeMCQ({ id:'g6fr-fut-033', chapterId:'g6fr-futur', difficulty:4,
+    question:'Complète le discours : "Dans vingt ans, les voitures ___ (ne plus exister), les gens ___ (se déplacer) en vélos volants, et l\'énergie solaire ___ (alimenter) toutes les maisons."',
+    options:[
+      'n\'existeront plus / se déplaceront / alimentera',
+      'n\'existeraient plus / se déplaceraient / alimenterait',
+      'n\'existent plus / se déplacent / alimente',
+      'n\'ont plus existé / se sont déplacés / a alimenté'
+    ],
+    answer:'n\'existeront plus / se déplaceront / alimentera',
+    hint:'"Dans vingt ans" = futur éloigné. Trois conséquences = futur simple (x3).',
+    explanation:'"<b>n\'existeront plus</b>" (futur de exister, négatif), "<b>se déplaceront</b>" (futur de se déplacer), "<b>alimentera</b>" (futur de alimenter). Tous les trois sont au futur simple car "dans vingt ans" projette dans le futur.' }),
+
+  makeMCQ({ id:'g6fr-fut-034', chapterId:'g6fr-futur', difficulty:4,
+    question:'Identifie le futur antérieur : "J\'aurai terminé mon travail avant que tu rentres." Que signifie "j\'aurai terminé" ?',
+    options:[
+      'Je terminais mon travail.',
+      'J\'aurais fini si j\'avais pu.',
+      'Je finirai mon travail avant ton retour (action future antérieure à une autre action future).',
+      'J\'ai déjà fini mon travail.'
+    ],
+    answer:'Je finirai mon travail avant ton retour (action future antérieure à une autre action future).',
+    hint:'Futur antérieur = action future qui sera terminée AVANT une autre action future.',
+    explanation:'Le <b>futur antérieur</b> ("j\'<b>aurai terminé</b>") exprime une action future qui sera <b>achevée avant</b> une autre action future. Ici : (1) je termine mon travail → futur antérieur ; (2) tu rentres → futur simple. Formation : <b>futur de avoir/être + participe passé</b>.' }),
+
+  makeMCQ({ id:'g6fr-fut-035', chapterId:'g6fr-futur', difficulty:4,
+    question:'Priya planifie ses vacances : "Si les billets ___ (coûter) moins cher, nous ___ (prendre) l\'avion ; sinon, nous ___ (voyager) en bateau et nous ___ (voir) les dauphins !" Bonne série ?',
+    options:[
+      'coûtent / prendrons / voyagerons / verrons',
+      'coûtaient / prendrions / voyagerions / verrions',
+      'coûtent / prendrions / voyagerons / verrons',
+      'coûteront / prendrons / voyagerons / verrons'
+    ],
+    answer:'coûtent / prendrons / voyagerons / verrons',
+    hint:'Si + présent → futur simple (condition réelle). Trois conséquences au futur.',
+    explanation:'"Si les billets <b>coûtent</b>" (si + présent = condition réelle possible), alors "<b>prendrons</b> / <b>voyagerons</b> / <b>verrons</b>" (futur simple x3). Structure : <b>si + présent → futur</b>. Voir → futur irrégulier : <b>verrons</b>.' })
 
 );

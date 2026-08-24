@@ -504,29 +504,6 @@ const QS2 = [
     explanation:'2025 − 2015 = <b>10 years old</b>.' }),
 
   // ══════════════════════════════════════════════
-  //  GEOMETRY — Coordinates
-  // ══════════════════════════════════════════════
-  makeMCQ({ id:'COORD01', chapterId:'geometry', subsection:'coordinates', difficulty:1,
-    question:'In coordinates, the point <b>(5, 3)</b> means:<br>Move how many units <b>along</b> and how many units <b>up</b>?',
-    options:['5 along, 3 up','3 along, 5 up','5 up, 3 along','Both 5 and 3 along'],
-    answer:'5 along, 3 up',
-    hint:'Coordinates (x, y): x is always the horizontal (along), y is the vertical (up).',
-    explanation:'(5,3): x=5 → 5 units along. y=3 → 3 units up. <b>5 along, 3 up</b>.' }),
-
-  makeNum({ id:'COORD02', chapterId:'geometry', subsection:'coordinates', difficulty:2,
-    question:'A point is <b>4 units to the right</b> and <b>7 units up</b> from the origin.<br>Write its coordinates.',
-    answer:'(4,7)', acceptableAnswers:['(4,7)','4,7'],
-    hint:'x = units along (right) = 4. y = units up = 7.',
-    explanation:'Along = 4, Up = 7. Coordinates = <b>(4, 7)</b>.' }),
-
-  makeMCQ({ id:'COORD03', chapterId:'geometry', subsection:'coordinates', difficulty:3,
-    question:'A square has vertices at (1,1), (4,1) and (4,4).<br>What are the coordinates of the <b>4th vertex</b>?',
-    options:['(1,4)','(4,4)','(1,0)','(0,4)'],
-    answer:'(1,4)',
-    hint:'The 4th vertex completes the square. It must be at x=1 (left side) and y=4 (top).',
-    explanation:'The square completes at <b>(1,4)</b>.' }),
-
-  // ══════════════════════════════════════════════
   //  AREA — Triangles
   // ══════════════════════════════════════════════
   makeNum({ id:'TRI01', chapterId:'area', subsection:'triangle', difficulty:2,
@@ -616,36 +593,6 @@ Q1:120, Q2:150, Q3:90, Q4:180
     answer:'135',
     hint:'Total=(120+150+90+180)=540. Average=540÷4.',
     explanation:'Total=540. 540÷4=<b>135 cars</b> per quarter.' }),
-
-  // ══════════════════════════════════════════════
-  //  GRAPHS — Line Graphs
-  // ══════════════════════════════════════════════
-  makeNum({ id:'LIN01', chapterId:'graphs', subsection:'line_graph', difficulty:2,
-    question:`A line graph shows temperature (°C) during the day:
-<div style="background:#f8fafc;border:1px solid #e2e8f0;padding:8px;border-radius:6px;margin:6px 0;font-size:13px;">
-  8am: 18°C &nbsp; 10am: 22°C &nbsp; 12pm: 26°C<br>
-  2pm: 30°C &nbsp; 4pm: 27°C &nbsp; 6pm: 23°C
-</div>
-What was the temperature at <b>2 pm</b>?`,
-    answer:'30', acceptableAnswers:['30','30°C','30 degrees'],
-    hint:'Read the value for 2 pm from the table.',
-    explanation:'At 2 pm the temperature was <b>30°C</b>.' }),
-
-  makeNum({ id:'LIN02', chapterId:'graphs', subsection:'line_graph', difficulty:3,
-    question:`Using the same temperature data:
-8am: 18°C, 10am: 22°C, 12pm: 26°C, 2pm: 30°C, 4pm: 27°C, 6pm: 23°C
-<br>By how many degrees did the temperature <b>rise</b> from 8am to 2pm?`,
-    answer:'12', acceptableAnswers:['12','12°C'],
-    hint:'30 − 18 = ?',
-    explanation:'30°C − 18°C = <b>12°C</b> rise.' }),
-
-  makeNum({ id:'LIN03', chapterId:'graphs', subsection:'line_graph', difficulty:3,
-    question:`A line graph shows plant height (cm) over 5 weeks:
-Week 1: 3 cm, Week 2: 7 cm, Week 3: 12 cm, Week 4: 18 cm, Week 5: 25 cm
-<br>What was the <b>average weekly growth</b>?`,
-    answer:'5.5', acceptableAnswers:['5.5','5.5cm'],
-    hint:'Total growth from week 1 to 5 = 25−3=22 cm over 4 gaps. 22÷4.',
-    explanation:'Total growth=25−3=22 cm. Over 4 weeks. 22÷4=<b>5.5 cm per week</b>.' }),
 
   // ══════════════════════════════════════════════
   //  GRAPHS — Frequency Tables

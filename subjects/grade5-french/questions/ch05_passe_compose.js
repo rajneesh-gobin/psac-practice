@@ -152,6 +152,125 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"ont allé" est faux → il faut "sont allés" (aller utilise être)',
     hint:'Vérifiez l\'auxiliaire du verbe "aller".',
-    explanation:'"<b>ont allé</b>" → "<b>sont allés</b>" — aller utilise ÊTRE, pas avoir. "Ils sont allés au cinéma." "Ont bu" est correct (boire → avoir → ils ont bu). L\'erreur la plus courante au PSAC : utiliser "avoir" avec les verbes DR MRS VAN DER TRAMP. "Aller" prend TOUJOURS être.' })
+    explanation:'"<b>ont allé</b>" → "<b>sont allés</b>" — aller utilise ÊTRE, pas avoir. "Ils sont allés au cinéma." "Ont bu" est correct (boire → avoir → ils ont bu). L\'erreur la plus courante au PSAC : utiliser "avoir" avec les verbes DR MRS VAN DER TRAMP. "Aller" prend TOUJOURS être.' }),
+
+  makeMCQ({ id:'g5fr-pc-020', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Complétez : "Elle ___ (sortir) en courant."',
+    options:['a sorti','est sortie','est sorti','a sortie'],
+    answer:'est sortie',
+    hint:'"Sortir" utilise être. Sujet = "elle" → féminin singulier.',
+    explanation:'"Elle <b>est sortie</b> en courant." — sortir utilise être. Accord féminin singulier : sorti + <b>e</b> = sortie. Attention : "sortir" peut utiliser AVOIR quand il a un COD ("Elle a sorti les poubelles") — mais ici, pas de COD → être.' }),
+
+  makeMCQ({ id:'g5fr-pc-021', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Complétez : "Ils ___ (tomber) dans l\'escalier."',
+    options:['ont tombé','sont tombés','sont tombé','ont tombés'],
+    answer:'sont tombés',
+    hint:'"Tomber" utilise être. Sujet = "ils" → masculin pluriel.',
+    explanation:'"Ils <b>sont tombés</b> dans l\'escalier." — tomber utilise être. Accord masculin pluriel : tombé + <b>s</b> = tombés. Tableau : il est tombé / elle est tombée / ils sont tombés / elles sont tombées.' }),
+
+  makeTF({ id:'g5fr-pc-022', chapterId:'fr-passe-compose', difficulty:2,
+    question:'"Elles sont montées" — l\'accord "-ées" est correct pour un groupe féminin avec "monter".',
+    answer:true,
+    hint:'"Elles" = féminin pluriel → montées.',
+    explanation:'<b>Vrai.</b> monter → être → accord avec le sujet. "Elles" = féminin pluriel → montées (montée + s). Tableau de monter : il est monté / elle est montée / ils sont montés / elles sont <b>montées</b>.' }),
+
+  makeMCQ({ id:'g5fr-pc-023', chapterId:'fr-passe-compose', difficulty:1,
+    question:'Dans l\'aide-mémoire DR MRS VANDERTRAMP, quelle lettre représente "Venir" ?',
+    options:['D','M','V','T'],
+    answer:'V',
+    hint:'Cherchez la première lettre de "Venir" dans l\'acronyme.',
+    explanation:'"<b>V</b>" pour Venir. DR MRS VANDERTRAMP : <b>D</b>escendre, <b>R</b>entrer, <b>M</b>ourir, <b>R</b>ester, <b>S</b>ortir, <b>V</b>enir, <b>A</b>rriver, <b>N</b>aître, <b>D</b>evenir, <b>E</b>ntrer, <b>R</b>etourner, <b>T</b>omber, <b>R</b>etourner, <b>A</b>ller, <b>M</b>onter, <b>P</b>artir. Tous ces verbes utilisent être au passé composé.' }),
+
+  makeMCQ({ id:'g5fr-pc-024', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Verbe pronominal : "Les enfants ___ (s\'amuser) au parc."',
+    options:['ont amusé','se sont amusés','s\'ont amusés','se sont amusé'],
+    answer:'se sont amusés',
+    hint:'Les verbes pronominaux utilisent être. Sujet pluriel masculin = -és.',
+    explanation:'"Les enfants <b>se sont amusés</b>." — s\'amuser est pronominal → être. "Les enfants" = masculin pluriel → amusé + s = amusés. Structure : sujet + se (s\') + être + participe passé accordé. Exemples : Elle s\'est levée. Ils se sont levés.' }),
+
+  makeMCQ({ id:'g5fr-pc-025', chapterId:'fr-passe-compose', difficulty:3,
+    question:'Accord avec COD précédant : "La lettre qu\'il ___ (écrire) est belle."',
+    options:['a écrit','a écrite','est écrite','a écrits'],
+    answer:'a écrite',
+    hint:'Le COD "que" (= la lettre, féminin) précède le verbe → accord du participe passé.',
+    explanation:'"La lettre qu\'il <b>a écrite</b>." — Le pronom relatif "que" représente "la lettre" (féminin singulier). Quand le COD précède le verbe (avoir), le participe s\'accorde : écrit + e = écrite. Exemple : les livres qu\'il a <b>écrits</b> (masc. plur.).' }),
+
+  makeTF({ id:'g5fr-pc-026', chapterId:'fr-passe-compose', difficulty:2,
+    question:'"Mourir" utilise l\'auxiliaire être au passé composé.',
+    answer:true,
+    hint:'"Mourir" fait partie du groupe DR MRS VANDERTRAMP.',
+    explanation:'<b>Vrai.</b> "Mourir" utilise être : il est mort, elle est morte, ils sont morts, elles sont mortes. C\'est le M de DR MRS VANDER<b>M</b>...TRAMP. Exemple : "Le dodo est mort il y a plusieurs siècles."' }),
+
+  makeMCQ({ id:'g5fr-pc-027', chapterId:'fr-passe-compose', difficulty:1,
+    question:'Quel auxiliaire utilise "naître" au passé composé ?',
+    options:['avoir','être','aucun des deux','les deux sont possibles'],
+    answer:'être',
+    hint:'"Naître" fait partie des verbes de mouvement/état avec être.',
+    explanation:'"<b>être</b>" — naître utilise être : je suis né(e), il est né, elle est née, nous sommes né(e)s. Exemple : "Riya est née à Port-Louis." Ne jamais dire "j\'ai né" — c\'est une erreur fréquente.' }),
+
+  makeMCQ({ id:'g5fr-pc-028', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Complétez : "Il ___ (revenir) de vacances hier."',
+    options:['a revenu','est revenu','est revenu','a reveni'],
+    answer:'est revenu',
+    hint:'"Revenir" = re + venir → utilise être.',
+    explanation:'"Il <b>est revenu</b> de vacances." — revenir = re- + venir. Tous les composés de "venir" utilisent être : revenir, devenir, parvenir, survenir. Accord : il est revenu, elle est revenue, ils sont revenus.' }),
+
+  makeMCQ({ id:'g5fr-pc-029', chapterId:'fr-passe-compose', difficulty:2,
+    question:'Choisissez la forme correcte : "_____ (partir) pour l\'école, les filles ont pris le bus."',
+    options:['Elles ont parti','Elles sont parties','Elles sont partis','Elles ont parties'],
+    answer:'Elles sont parties',
+    hint:'"Partir" utilise être. "Les filles" = féminin pluriel → -ies.',
+    explanation:'"Elles <b>sont parties</b> pour l\'école." — partir utilise être. "Les filles" = elles = féminin pluriel → partie + s = <b>parties</b>. Tableau : il est parti / elle est partie / ils sont partis / elles sont parties.' }),
+
+  makeTF({ id:'g5fr-pc-030', chapterId:'fr-passe-compose', difficulty:3,
+    question:'"Descendre" peut utiliser soit "être" soit "avoir" selon le sens de la phrase.',
+    answer:true,
+    hint:'"Il est descendu" (intransitif) vs "Il a descendu la valise" (transitif).',
+    explanation:'<b>Vrai.</b> "Descendre" est ambivalent : (1) Sans COD → être : "Il <b>est descendu</b> de sa chambre." (2) Avec COD → avoir : "Il <b>a descendu</b> la valise." (il a descendu quelque chose). Même règle pour monter, sortir, rentrer, retourner.' }),
+
+  makeMCQ({ id:'g5fr-pc-031', chapterId:'fr-passe-compose', difficulty:3,
+    question:'Pronominal : "Vous ___ (se souvenir) de cette journée ?"',
+    options:['avez souvenu','vous êtes souvenus','vous avez souvenus','êtes souvenus'],
+    answer:'vous êtes souvenus',
+    hint:'Se souvenir = pronominal → être. "Vous" = masc. pluriel → -us.',
+    explanation:'"Vous <b>vous êtes souvenus</b> de cette journée ?" — se souvenir est pronominal → être. "Vous" = 2ème personne plurielle (masculin ou mixte) → souvenu + s = souvenus. Structure : vous + vous + êtes + souvenus.' }),
+
+  makeMCQ({ id:'g5fr-pc-032', chapterId:'fr-passe-compose', difficulty:2,
+    question:'"Retourner" utilise quel auxiliaire au passé composé ?',
+    options:['avoir','être','les deux sont possibles','aucun des deux'],
+    answer:'être',
+    hint:'"Retourner" fait partie de DR MRS VANDERTRAMP (R = retourner).',
+    explanation:'"<b>être</b>" — retourner utilise être : il est retourné (au sens de "revenir"). Exemple : "Elle est retournée chez sa grand-mère." Attention : "Il a retourné la crêpe" (flip the pancake) → avoir avec COD.' }),
+
+  makeMCQ({ id:'g5fr-pc-033', chapterId:'fr-passe-compose', difficulty:3,
+    question:'Accord avec COD précédant : "Les filles que nous avons ___ (rencontrer) sont sympas."',
+    options:['rencontré','rencontrée','rencontrées','rencontrés'],
+    answer:'rencontrées',
+    hint:'"Que" = les filles (féminin pluriel) → accord du participe passé.',
+    explanation:'"Les filles que nous avons <b>rencontrées</b>." — "que" représente "les filles" (féminin pluriel). Le COD précède → accord : rencontré + es = <b>rencontrées</b>. Si c\'était "les garçons" → rencontrés. Si c\'était "la fille" → rencontrée.' }),
+
+  makeMCQ({ id:'g5fr-pc-034', chapterId:'fr-passe-compose', difficulty:3,
+    question:'Pourquoi dit-on "Il a sorti les poubelles" et non "Il est sorti les poubelles" ?',
+    options:[
+      'Parce que "sortir" utilise toujours avoir',
+      'Parce qu\'il y a un COD (les poubelles) → avoir',
+      'C\'est une exception sans règle',
+      'Parce que "poubelles" est pluriel'
+    ],
+    answer:'Parce qu\'il y a un COD (les poubelles) → avoir',
+    hint:'"Sortir" utilise être (sens intransitif) ou avoir (avec COD).',
+    explanation:'"Il <b>a sorti</b> les poubelles" — "les poubelles" est le COD (complement d\'objet direct). Quand "sortir" a un COD, il utilise <b>avoir</b>. Sans COD → être : "Il est sorti." Même règle pour descendre, monter, rentrer, retourner.' }),
+
+  makeMCQ({ id:'g5fr-pc-035', chapterId:'fr-passe-compose', difficulty:4,
+    question:'Complétez : "Hier, ma mère ___ (aller) au marché, ___ (acheter) des légumes, ___ (rentrer) à la maison et ___ (préparer) un bon repas."',
+    options:[
+      'est allée / a acheté / est rentrée / a préparé',
+      'a allé / a acheté / a rentré / a préparé',
+      'est allée / est acheté / est rentrée / est préparée',
+      'est allée / a acheté / a rentré / a préparé'
+    ],
+    answer:'est allée / a acheté / est rentrée / a préparé',
+    hint:'Aller → être (fém. = allée). Acheter → avoir. Rentrer → être (fém. = rentrée). Préparer → avoir.',
+    explanation:'"Ma mère <b>est allée</b> (aller + être, fém. = allée) / <b>a acheté</b> (acheter + avoir) / <b>est rentrée</b> (rentrer + être, fém. = rentrée) / <b>a préparé</b> (préparer + avoir)." — aller et rentrer = être (VANDERTRAMP) ; acheter et préparer = avoir.' })
 
 );

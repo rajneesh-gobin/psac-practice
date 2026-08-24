@@ -1,0 +1,247 @@
+'use strict';
+// Grade 6 French — Le Conditionnel Présent
+// IDs format: g6fr-conditionnel-NNN
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6fr-conditionnel-001', chapterId:'g6fr-conditionnel', difficulty:1,
+    question:'Le conditionnel présent est utilisé principalement pour…',
+    options:['des actions passées terminées','des demandes polies et des hypothèses','des ordres directs','des descriptions habituelles dans le passé'],
+    answer:'des demandes polies et des hypothèses',
+    hint:'"Je voudrais un café" = demande polie. "Si j\'avais de l\'argent, j\'achèterais…" = hypothèse.',
+    explanation:'Le <b>conditionnel présent</b> s\'utilise pour : des demandes polies ("Je <b>voudrais</b>…"), des hypothèses ("Si j\'avais…, je <b>ferais</b>…"), des souhaits ("J\'<b>aimerais</b> voyager"), et des informations non confirmées (dans la presse : "Il <b>serait</b> blessé").' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-002', chapterId:'g6fr-conditionnel', difficulty:1,
+    question:'Comment se forme le conditionnel présent ?',
+    options:['radical du présent + terminaisons de l\'imparfait','infinitif + terminaisons de l\'imparfait (-ais/-ais/-ait…)','infinitif + terminaisons du futur','radical de "nous" au présent + -ais'],
+    answer:'infinitif + terminaisons de l\'imparfait (-ais/-ais/-ait…)',
+    hint:'Conditionnel = futur + terminaisons de l\'imparfait (-ais/-ais/-ait/-ions/-iez/-aient).',
+    explanation:'Le conditionnel se forme avec : <b>infinitif</b> (ou radical du futur) + terminaisons de l\'imparfait : <b>-ais, -ais, -ait, -ions, -iez, -aient</b>. Parler → je parler<b>ais</b>. Pour les verbes en -RE, on supprime le -e final : vendre → je vendr<b>ais</b>.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-003', chapterId:'g6fr-conditionnel', difficulty:1,
+    question:'Complète poliment : "Je ___ un verre d\'eau, s\'il vous plaît." (vouloir)',
+    options:['veux','voulais','voudrais','voudrai'],
+    answer:'voudrais',
+    hint:'Demande polie → conditionnel. Vouloir → radical voudr- + -ais.',
+    explanation:'"Je <b>voudrais</b>" — vouloir est irrégulier au conditionnel. Radical = <b>voudr-</b>. Je voudrais, tu voudrais, il voudrait… C\'est la forme polie pour "je veux".' }),
+
+  makeTF({ id:'g6fr-conditionnel-004', chapterId:'g6fr-conditionnel', difficulty:1,
+    question:'Le conditionnel de "être" pour "il" est "il serait".',
+    answer:true,
+    hint:'Être → radical du conditionnel = ser-. Il ser + -ait = serait.',
+    explanation:'<b>Vrai.</b> Être → conditionnel : radical <b>ser-</b> + terminaisons. Je serais, tu serais, il/elle <b>serait</b>, nous serions, vous seriez, ils/elles seraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-005', chapterId:'g6fr-conditionnel', difficulty:1,
+    question:'Quel est le conditionnel de AVOIR pour "nous" ?',
+    options:['nous avions','nous aurions','nous avons','nous aurons'],
+    answer:'nous aurions',
+    hint:'Avoir → radical conditionnel = aur-. Nous aur + -ions = aurions.',
+    explanation:'"Nous <b>aurions</b>" — avoir au conditionnel : radical <b>aur-</b>. Je aurais, tu aurais, il aurait, nous <b>aurions</b>, vous auriez, ils auraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-006', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Complète l\'hypothèse : "Si j\'avais de l\'argent, j\'___ (acheter) un vélo."',
+    options:['achetrais','achetais','achèterais','achetterai'],
+    answer:'achèterais',
+    hint:'Si + imparfait → conditionnel. Acheter → je achèterais.',
+    explanation:'"Si j\'avais de l\'argent, j\'<b>achèterais</b> un vélo" — structure : <b>si + imparfait → conditionnel</b>. Acheter → infinitif acheter → je achèter<b>ais</b>. Attention à l\'accent grave : achèterais.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-007', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Quel est le conditionnel de FAIRE pour "tu" ?',
+    options:['ferais','faisais','fairas','feras'],
+    answer:'ferais',
+    hint:'Faire → radical du conditionnel = fer-. Tu fer + -ais = ferais.',
+    explanation:'"Tu <b>ferais</b>" — faire est irrégulier : radical <b>fer-</b> + terminaisons. Je ferais, tu <b>ferais</b>, il ferait, nous ferions, vous feriez, ils feraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-008', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Complète poliment : "___ -vous me dire où se trouve la gare ?" (pouvoir)',
+    options:['Pourrez','Pouvez','Pourriez','Pouviez'],
+    answer:'Pourriez',
+    hint:'Demande polie → conditionnel. Pouvoir → radical pourr- + -iez = pourriez.',
+    explanation:'"<b>Pourriez</b>-vous me dire…" — pouvoir au conditionnel : radical <b>pourr-</b>. Je pourrais, tu pourrais, il pourrait, nous pourrions, vous <b>pourriez</b>, ils pourraient.' }),
+
+  makeTF({ id:'g6fr-conditionnel-009', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'La phrase "Si tu travaillais, tu réussirais" est correctement construite.',
+    answer:true,
+    hint:'Structure : si + imparfait → conditionnel présent.',
+    explanation:'<b>Vrai.</b> Structure correcte : <b>si + imparfait</b> ("si tu travaillais") → <b>conditionnel</b> ("tu réussirais"). Travailler → imparfait = travaillais. Réussir → conditionnel = réussirais.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-010', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Quel est le conditionnel de ALLER pour "ils" ?',
+    options:['iraient','allaient','iront','vont'],
+    answer:'iraient',
+    hint:'Aller → radical du conditionnel/futur = ir-. Ils ir + -aient = iraient.',
+    explanation:'"Ils <b>iraient</b>" — aller est irrégulier : radical <b>ir-</b> (même qu\'au futur). Je irais, tu irais, il irait, nous irions, vous iriez, ils/elles <b>iraient</b>.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-011', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Complète la phrase de souhait : "J\'___ (aimer) visiter Paris un jour."',
+    options:['aimais','aimerai','aimerais','ai aimé'],
+    answer:'aimerais',
+    hint:'Souhait → conditionnel. Aimer → j\'aimer + -ais = aimerais.',
+    explanation:'"J\'<b>aimerais</b> visiter Paris" — souhait → conditionnel. Aimer → infinitif aimer + -ais = <b>aimerais</b>.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-012', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Complète : "Si nous ___ (avoir) plus de temps, nous ___ (partir) en vacances."',
+    options:['avions / partirions','aurions / partons','avons / partions','eûmes / partîmes'],
+    answer:'avions / partirions',
+    hint:'Si + imparfait → conditionnel. Avoir imparfait = avions. Partir conditionnel = partirions.',
+    explanation:'"Si nous <b>avions</b> plus de temps" (avoir à l\'imparfait), "nous <b>partirions</b>" (partir au conditionnel : partir + -ions = partirions). Structure : si + imparfait → conditionnel.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-013', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Quel est le conditionnel de VENIR pour "vous" ?',
+    options:['viendriez','veniez','viendrez','venez'],
+    answer:'viendriez',
+    hint:'Venir → radical du conditionnel = viendr-. Vous viendr + -iez = viendriez.',
+    explanation:'"Vous <b>viendriez</b>" — venir est irrégulier : radical <b>viendr-</b> (même qu\'au futur). Je viendrais, tu viendrais, il viendrait, nous viendrions, vous <b>viendriez</b>, ils viendraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-014', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Laquelle de ces phrases utilise le conditionnel INCORRECTEMENT ?',
+    options:[
+      'Si j\'avais faim, je mangerais.',
+      'Je voudrais un thé, s\'il vous plaît.',
+      'Si tu viendras, je serais content.',
+      'Il aimerait voyager en Asie.'
+    ],
+    answer:'Si tu viendras, je serais content.',
+    hint:'Règle : si + imparfait → conditionnel. On ne met JAMAIS le futur après "si".',
+    explanation:'"Si tu <b>viendras</b>" est incorrect. On ne met <b>jamais le futur</b> après "si" dans une hypothèse. Il faut : "Si tu <b>venais</b> (imparfait), je serais content." Règle : si + <b>imparfait</b> → conditionnel.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-015', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Quel est le conditionnel de DEVOIR pour "elle" ?',
+    options:['devait','devrait','devra','doive'],
+    answer:'devrait',
+    hint:'Devoir → radical du conditionnel = devr-. Elle devr + -ait = devrait.',
+    explanation:'"Elle <b>devrait</b>" — devoir est irrégulier : radical <b>devr-</b>. Je devrais, tu devrais, il/elle <b>devrait</b>, nous devrions, vous devriez, ils devraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-016', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Transforme en demande polie : "Tu peux m\'aider ?" →',
+    options:['Tu pourras m\'aider ?','Tu pourrais m\'aider ?','Tu peux bien m\'aider ?','Peux-tu m\'aider ?'],
+    answer:'Tu pourrais m\'aider ?',
+    hint:'Demande polie → conditionnel de pouvoir.',
+    explanation:'"<b>Tu pourrais</b> m\'aider ?" — conditionnel de pouvoir pour "tu" = pourrais. C\'est plus poli que "Tu peux…" car le conditionnel adoucit la demande.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-017', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Dans la presse : "Le président ___ (rencontrer) les chefs d\'État demain." Quel temps s\'emploie pour une information non confirmée ?',
+    options:['présent','passé composé','conditionnel','imparfait'],
+    answer:'conditionnel',
+    hint:'Information non vérifiée dans la presse → conditionnel (Le président rencontrerait…).',
+    explanation:'Dans la presse, le <b>conditionnel</b> indique qu\'une information n\'est <b>pas encore confirmée</b>. "Le président <b>rencontrerait</b> les chefs d\'État demain." C\'est un usage important du conditionnel en journalisme.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-018', chapterId:'g6fr-conditionnel', difficulty:4,
+    question:'Complète : "Si vous ___ (étudier) davantage, vous ___ (avoir) de meilleures notes et vous ___ (pouvoir) entrer dans une bonne université."',
+    options:['étudiiez / auriez / pourriez','étudierez / aurez / pourrez','étudiez / avez / pouvez','aviez étudié / auriez eu / pourriez'],
+    answer:'étudiiez / auriez / pourriez',
+    hint:'Si + imparfait → conditionnel (x2). Étudier imparfait "vous" = étudiiez.',
+    explanation:'"Si vous <b>étudiiez</b>" (étudier, imparfait, vous = étudiiez), "vous <b>auriez</b>" (avoir, conditionnel = auriez), "vous <b>pourriez</b>" (pouvoir, conditionnel = pourriez). Structure : si + imparfait → conditionnel.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-019', chapterId:'g6fr-conditionnel', difficulty:4,
+    question:'Priya rêve : "Si j\'___ (être) riche, j\'___ (acheter) une grande maison, je ___ (voyager) autour du monde et je ___ (faire) des dons à des associations." Bonne série ?',
+    options:[
+      'étais / achèterais / voyagerais / ferais',
+      'serais / achèterais / voyagerais / ferais',
+      'étais / achetais / voyageais / faisais',
+      'étais / achèterai / voyagerai / ferai'
+    ],
+    answer:'étais / achèterais / voyagerais / ferais',
+    hint:'"Si j\'étais" (imparfait de être) + conditionnel (x3). Faire irrégulier = ferais.',
+    explanation:'"Si j\'<b>étais</b>" (être, imparfait = étais). "<b>Achèterais</b>" (acheter, conditionnel). "<b>Voyagerais</b>" (voyager, conditionnel). "<b>Ferais</b>" (faire, conditionnel irrégulier : radical fer-). Toutes les conséquences = conditionnel.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-020', chapterId:'g6fr-conditionnel', difficulty:1,
+    question:'Quel est le conditionnel de POUVOIR pour "je" ?',
+    options:['je pouvais','je pourrai','je pourrais','je peux'],
+    answer:'je pourrais',
+    hint:'Pouvoir → radical conditionnel = pourr-. Je pourr + -ais = pourrais.',
+    explanation:'"Je <b>pourrais</b>" — pouvoir au conditionnel : radical <b>pourr-</b> (double r). Je <b>pourrais</b>, tu pourrais, il pourrait, nous pourrions, vous pourriez, ils pourraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-021', chapterId:'g6fr-conditionnel', difficulty:1,
+    question:'Quel est le conditionnel de VOULOIR pour "nous" ?',
+    options:['nous voulons','nous voudrions','nous voulions','nous voudrons'],
+    answer:'nous voudrions',
+    hint:'Vouloir → radical conditionnel = voudr-. Nous voudr + -ions = voudrions.',
+    explanation:'"Nous <b>voudrions</b>" — vouloir au conditionnel : radical <b>voudr-</b>. Je voudrais, tu voudrais, il voudrait, <b>nous voudrions</b>, vous voudriez, ils voudraient.' }),
+
+  makeTF({ id:'g6fr-conditionnel-022', chapterId:'g6fr-conditionnel', difficulty:1,
+    question:'"Nous irions" est le conditionnel de ALLER pour "nous".',
+    answer:true,
+    hint:'Aller → radical conditionnel = ir-. Nous ir + -ions = irions.',
+    explanation:'<b>Vrai.</b> Aller → conditionnel : radical <b>ir-</b>. Je irais, tu irais, il irait, <b>nous irions</b>, vous iriez, ils iraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-023', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Quel est le conditionnel de SAVOIR pour "tu" ?',
+    options:['tu savais','tu saurai','tu saurais','tu saches'],
+    answer:'tu saurais',
+    hint:'Savoir → radical conditionnel/futur = saur-. Tu saur + -ais = saurais.',
+    explanation:'"Tu <b>saurais</b>" — savoir au conditionnel : radical <b>saur-</b>. Je saurais, <b>tu saurais</b>, il saurait, nous saurions, vous sauriez, ils sauraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-024', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Quel est le conditionnel de RECEVOIR pour "elle" ?',
+    options:['elle recevrait','elle recevait','elle recevra','elle reçoit'],
+    answer:'elle recevrait',
+    hint:'Recevoir → radical conditionnel = recevr-. Elle recevr + -ait = recevrait.',
+    explanation:'"Elle <b>recevrait</b>" — recevoir au conditionnel : radical <b>recevr-</b>. Je recevrais, tu recevrais, <b>elle recevrait</b>, nous recevrions, vous recevriez, ils recevraient.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-025', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Complète la phrase de presse : "Selon nos sources, le ministre ___ (démissionner) demain."',
+    options:['démissionnera','démissionnerait','démissionne','a démissionné'],
+    answer:'démissionnerait',
+    hint:'Information non confirmée dans la presse → conditionnel.',
+    explanation:'"Le ministre <b>démissionnerait</b>" — dans la presse, le <b>conditionnel</b> indique une information <b>non vérifiée ou non officielle</b>. "Selon nos sources, il <b>démissionnerait</b>" = on le dit mais ce n\'est pas confirmé. C\'est l\'usage journalistique du conditionnel.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-026', chapterId:'g6fr-conditionnel', difficulty:2,
+    question:'Transforme en souhait avec le conditionnel : "Je veux aller à Paris." →',
+    options:['Je voulais aller à Paris.','J\'aimerais aller à Paris.','J\'allais à Paris.','Je suis allé à Paris.'],
+    answer:'J\'aimerais aller à Paris.',
+    hint:'Souhait = conditionnel de aimer → j\'aimerais.',
+    explanation:'"J\'<b>aimerais</b> aller à Paris" — pour exprimer un <b>souhait</b>, on utilise le conditionnel de aimer (j\'<b>aimerais</b>) ou de vouloir (je <b>voudrais</b>). C\'est plus doux et poli que "je veux".' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-027', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Quel est le conditionnel de TENIR pour "ils" ?',
+    options:['ils tiendraient','ils tenaient','ils tiendront','ils tiennent'],
+    answer:'ils tiendraient',
+    hint:'Tenir → radical conditionnel = tiendr-. Ils tiendr + -aient = tiendraient.',
+    explanation:'"Ils <b>tiendraient</b>" — tenir au conditionnel : radical <b>tiendr-</b>. Je tiendrais, tu tiendrais, il tiendrait, nous tiendrions, vous tiendriez, <b>ils tiendraient</b>.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-028', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Laquelle est correcte pour une hypothèse PASSÉE non réalisée (conditionnel passé) ?',
+    options:['Si j\'avais su, je serais venu.','Si j\'avais su, je venais.','Si je savais, je serais venu.','Si j\'ai su, je suis venu.'],
+    answer:'Si j\'avais su, je serais venu.',
+    hint:'Hypothèse passée non réalisée = si + plus-que-parfait → conditionnel passé.',
+    explanation:'"Si j\'<b>avais su</b> (PQP), je <b>serais venu</b> (conditionnel passé)." — Hypothèse sur le passé (non réalisée) : <b>si + PQP → conditionnel passé</b>. Formation du conditionnel passé : <b>conditionnel de avoir/être + participe passé</b>. Venir + être → je <b>serais venu</b>.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-029', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Complète le conditionnel passé : "Si elle avait étudié, elle ___ (réussir) l\'examen."',
+    options:['aurait réussi','avait réussi','aurait réussie','avait réussit'],
+    answer:'aurait réussi',
+    hint:'Conditionnel passé = conditionnel de avoir + participe passé. Réussir → réussi.',
+    explanation:'"Elle <b>aurait réussi</b>" — conditionnel passé de réussir (avec avoir) : conditionnel de avoir (aurait) + participe passé (réussi) = <b>aurait réussi</b>. Structure hypothèse passée : si + PQP (avait étudié) → conditionnel passé (aurait réussi).' }),
+
+  makeTF({ id:'g6fr-conditionnel-030', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'"Elle serait arrivée plus tôt si elle avait pris le bus." est un exemple de conditionnel passé correctement formé.',
+    answer:true,
+    hint:'"Serait arrivée" = conditionnel passé de arriver (avec être, accord féminin).',
+    explanation:'<b>Vrai.</b> "Elle <b>serait arrivée</b>" = conditionnel passé de arriver. Arriver utilise <b>être</b> → conditionnel de être (<b>serait</b>) + participe passé accordé (<b>arrivée</b>, féminin singulier). Structure : si + PQP (avait pris) → conditionnel passé (serait arrivée).' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-031', chapterId:'g6fr-conditionnel', difficulty:3,
+    question:'Quelle est la différence entre le conditionnel présent et le conditionnel passé ?',
+    options:[
+      'Il n\'y a aucune différence.',
+      'Le conditionnel présent exprime une hypothèse présente/future ; le conditionnel passé une hypothèse passée non réalisée.',
+      'Le conditionnel présent est plus poli.',
+      'Le conditionnel passé s\'utilise uniquement dans les journaux.'
+    ],
+    answer:'Le conditionnel présent exprime une hypothèse présente/future ; le conditionnel passé une hypothèse passée non réalisée.',
+    hint:'Présent = si + imparfait → conditionnel. Passé = si + PQP → conditionnel passé.',
+    explanation:'<b>Conditionnel présent</b> : "Si j\'avais de l\'argent, j\'<b>achèterais</b> un vélo" (hypothèse sur le présent/futur). <b>Conditionnel passé</b> : "Si j\'avais eu de l\'argent, j\'<b>aurais acheté</b> un vélo" (hypothèse sur le passé — mais je n\'avais pas l\'argent, donc je ne l\'ai pas acheté). Le conditionnel passé exprime le <b>regret ou l\'irréel du passé</b>.' }),
+
+  makeMCQ({ id:'g6fr-conditionnel-032', chapterId:'g6fr-conditionnel', difficulty:4,
+    question:'Complète avec conditionnel présent ou passé selon le sens : "Si Shanvi ___ (travailler) hier, elle ___ (obtenir) la meilleure note."',
+    options:[
+      'avait travaillé / aurait obtenu',
+      'travaillait / obtiendrait',
+      'aurait travaillé / avait obtenu',
+      'avait travaillé / obtenait'
+    ],
+    answer:'avait travaillé / aurait obtenu',
+    hint:'"Hier" = passé → hypothèse passée = si + PQP → conditionnel passé.',
+    explanation:'"Si Shanvi <b>avait travaillé</b>" (si + PQP = hypothèse passée), "elle <b>aurait obtenu</b>" (conditionnel passé = conséquence passée non réalisée). Structure : <b>si + PQP → conditionnel passé</b>. "Hier" confirme que c\'est une hypothèse sur le passé.' })
+
+);

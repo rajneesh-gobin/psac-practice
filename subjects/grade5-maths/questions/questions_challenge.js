@@ -453,13 +453,6 @@ CHALLENGE_QS.push(
     hint:'The rectangle corner is 90°. The diagonal splits it into two angles that add to 90°.',
     explanation:'90° − 32° = 58°.' }),
 
-  makeMCQ({ id:'CH_GEO08', chapterId:'geometry', difficulty:3,
-    question:'Point A is at (2, 5). It is reflected in the x-axis. What are the new coordinates?',
-    options:['(−2, 5)','(2, −5)','(5, 2)','(−2, −5)'],
-    answer:'(2, −5)',
-    hint:'Reflection in the x-axis keeps x the same but changes the sign of y.',
-    explanation:'Reflecting (2, 5) in the x-axis gives (2, −5).' }),
-
   makeNum({ id:'CH_GEO09', chapterId:'geometry', difficulty:3,
     question:'How many faces, edges, and vertices does a triangular prism have? Give the number of edges.',
     answer:'9',
@@ -491,13 +484,6 @@ CHALLENGE_QS.push(
     answer:'95',
     hint:'Sum of angles in any quadrilateral = 360°. Subtract the two known angles, then divide by 2.',
     explanation:'360 − 120 − 50 = 190. 190 ÷ 2 = 95°.' }),
-
-  makeMCQ({ id:'CH_GEO14', chapterId:'geometry', difficulty:4,
-    question:'Point P is at (3, 4). It is rotated 180° about the origin. What are the new coordinates?',
-    options:['(−3, 4)','(3, −4)','(−3, −4)','(4, 3)'],
-    answer:'(−3, −4)',
-    hint:'A 180° rotation about the origin maps (x, y) to (−x, −y).',
-    explanation:'(3, 4) rotated 180° → (−3, −4).' }),
 
   makeNum({ id:'CH_GEO15', chapterId:'geometry', difficulty:3,
     question:'An equilateral triangle has a perimeter of 36 cm. What is the length of each side?',

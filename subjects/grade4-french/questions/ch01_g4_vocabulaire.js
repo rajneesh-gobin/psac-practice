@@ -144,6 +144,132 @@ STATIC_QUESTIONS.push(
     ],
     answer:"Excusez-moi, s'il vous plaît, avez-vous un stylo ?",
     hint:'Elle interrompt son professeur pour demander quelque chose. Quels mots de politesse utilise-t-on ?',
-    explanation:'"<b>Excusez-moi, s\'il vous plaît</b>, avez-vous un stylo ?" est la phrase la plus polie. "Excusez-moi" (Excuse me) pour interrompre poliment + "s\'il vous plaît" (please, forme formelle). "Merci" se dit après avoir reçu quelque chose. "Bonjour" est une salutation, pas une demande.' })
+    explanation:'"<b>Excusez-moi, s\'il vous plaît</b>, avez-vous un stylo ?" est la phrase la plus polie. "Excusez-moi" (Excuse me) pour interrompre poliment + "s\'il vous plaît" (please, forme formelle). "Merci" se dit après avoir reçu quelque chose. "Bonjour" est une salutation, pas une demande.' }),
+
+  makeMCQ({ id:'g4fr-voc-020', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Comment dit-on "head" en français ?',
+    options:['bras','tête','jambe','pied'],
+    answer:'tête',
+    hint:'La tête est la partie du corps en haut.',
+    explanation:'"Head" = <b>la tête</b>. Autres parties du corps : le <b>bras</b> (arm), la <b>jambe</b> (leg), le <b>pied</b> (foot).' }),
+
+  makeMCQ({ id:'g4fr-voc-021', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Comment dit-on "brother" en français ?',
+    options:['sœur','père','frère','oncle'],
+    answer:'frère',
+    hint:'Le frère est un garçon dans la famille.',
+    explanation:'"Brother" = <b>le frère</b>. La famille proche : le <b>père</b> (father), la <b>mère</b> (mother), la <b>sœur</b> (sister), le <b>frère</b> (brother).' }),
+
+  makeMCQ({ id:'g4fr-voc-022', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Quel animal est un "dog" en français ?',
+    options:['chat','chien','oiseau','lapin'],
+    answer:'chien',
+    hint:'Le chien est le meilleur ami de l\'homme.',
+    explanation:'"Dog" = <b>le chien</b>. Autres animaux : le <b>chat</b> (cat), l\'<b>oiseau</b> (bird), le <b>lapin</b> (rabbit), le <b>poisson</b> (fish).' }),
+
+  makeMCQ({ id:'g4fr-voc-023', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Comment dit-on "tomorrow" en français ?',
+    options:['hier','aujourd\'hui','demain','soir'],
+    answer:'demain',
+    hint:'Après "aujourd\'hui" vient "demain".',
+    explanation:'"Tomorrow" = <b>demain</b>. Expressions de temps : <b>hier</b> (yesterday), <b>aujourd\'hui</b> (today), <b>demain</b> (tomorrow). Pour les moments : le <b>matin</b> (morning), l\'<b>après-midi</b> (afternoon), le <b>soir</b> (evening).' }),
+
+  makeMCQ({ id:'g4fr-voc-024', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'Comment dit-on "to drink" en français ?',
+    options:['manger','dormir','boire','courir'],
+    answer:'boire',
+    hint:'On boit de l\'eau.',
+    explanation:'"To drink" = <b>boire</b>. Autres verbes courants : <b>manger</b> (to eat), <b>dormir</b> (to sleep), <b>courir</b> (to run), <b>jouer</b> (to play), <b>lire</b> (to read), <b>écrire</b> (to write).' }),
+
+  makeMCQ({ id:'g4fr-voc-025', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'Comment dit-on "grandfather" en français ?',
+    options:['oncle','grand-père','père','tante'],
+    answer:'grand-père',
+    hint:'Le père de ton père ou de ta mère.',
+    explanation:'"Grandfather" = <b>grand-père</b>. La grande famille : <b>grand-père</b> (grandfather), <b>grand-mère</b> (grandmother), <b>oncle</b> (uncle), <b>tante</b> (aunt).' }),
+
+  makeMCQ({ id:'g4fr-voc-026', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'Quelle partie du corps est le "nose" ?',
+    options:['oreille','bouche','nez','dos'],
+    answer:'nez',
+    hint:'On sent les fleurs avec cette partie du visage.',
+    explanation:'"Nose" = <b>le nez</b>. Autres parties du visage : l\'<b>oreille</b> (ear), la <b>bouche</b> (mouth), les <b>yeux</b> (eyes). Et le corps : le <b>dos</b> (back), le <b>ventre</b> (belly), la <b>main</b> (hand).' }),
+
+  makeTF({ id:'g4fr-voc-027', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'"Hier" signifie "tomorrow" en anglais.',
+    answer:false,
+    hint:'"Hier" est l\'opposé de "demain".',
+    explanation:'<b>Faux.</b> "Hier" = <b>yesterday</b> (pas "tomorrow"). "Tomorrow" = <b>demain</b>. Mémo : hier (before today), aujourd\'hui (today), demain (after today).' }),
+
+  makeMCQ({ id:'g4fr-voc-028', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'Quel verbe signifie "to run" ?',
+    options:['sauter','courir','lire','écrire'],
+    answer:'courir',
+    hint:'Les athlètes font ça dans un stade.',
+    explanation:'"To run" = <b>courir</b>. Verbes d\'action : <b>courir</b> (run), <b>sauter</b> (jump), <b>lire</b> (read), <b>écrire</b> (write). Astuce : "courir" ressemble à "course" (race).' }),
+
+  makeMCQ({ id:'g4fr-voc-029', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'Quelle phrase utilise correctement "ce matin" ?',
+    options:[
+      'Je mange ce matin hier.',
+      'Ce matin, je mange mon petit déjeuner.',
+      'Demain ce matin je dors.',
+      'Ce matin = après-midi.'
+    ],
+    answer:'Ce matin, je mange mon petit déjeuner.',
+    hint:'"Ce matin" = this morning. Quelle phrase a du sens ?',
+    explanation:'"<b>Ce matin, je mange mon petit déjeuner.</b>" — "Ce matin" (this morning) est une expression de temps qui se place souvent au début ou à la fin de la phrase. On ne peut pas dire "ce matin hier" (deux temps qui se contredisent).' }),
+
+  makeMCQ({ id:'g4fr-voc-030', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'Comment dit-on "hand" en français ?',
+    options:['pied','jambe','main','bras'],
+    answer:'main',
+    hint:'On écrit avec cette partie du corps.',
+    explanation:'"Hand" = <b>la main</b>. Astuce : "manicure" vient de "mani" (main en latin). Ne pas confondre : la <b>main</b> (hand) et le <b>bras</b> (arm) — le bras est plus long.' }),
+
+  makeMCQ({ id:'g4fr-voc-031', chapterId:'g4fr-vocabulaire', difficulty:3,
+    question:'Associe : "poisson / oiseau / lapin" — quel animal NE VIT PAS normalement à la maison comme animal domestique ?',
+    options:['poisson','oiseau','lapin','aucun — ils peuvent tous être des animaux domestiques'],
+    answer:'aucun — ils peuvent tous être des animaux domestiques',
+    hint:'Pense aux animaux qu\'on garde chez soi.',
+    explanation:'<b>Les trois peuvent être des animaux domestiques !</b> Le <b>poisson</b> (aquarium), l\'<b>oiseau</b> (cage), le <b>lapin</b> (cage ou liberté dans la maison). En France et à Maurice, on garde souvent des poissons, des oiseaux et des lapins à la maison.' }),
+
+  makeMCQ({ id:'g4fr-voc-032', chapterId:'g4fr-vocabulaire', difficulty:3,
+    question:'Quel mot est un verbe (action) ?',
+    options:['tête','frère','dormir','chat'],
+    answer:'dormir',
+    hint:'Un verbe exprime une action ou un état.',
+    explanation:'"<b>Dormir</b>" est un verbe (to sleep) — c\'est une action. <b>Tête</b> = nom (partie du corps), <b>frère</b> = nom (personne), <b>chat</b> = nom (animal). Les verbes répondent à la question "Que fait-on ?".' }),
+
+  makeMCQ({ id:'g4fr-voc-033', chapterId:'g4fr-vocabulaire', difficulty:3,
+    question:'Quelle phrase est correcte pour décrire l\'heure de la journée ?',
+    options:[
+      'Je dors le matin et je me réveille le soir.',
+      'Je me réveille le matin et je dors le soir.',
+      'Le soir arrive avant le matin.',
+      'L\'après-midi est avant le matin.'
+    ],
+    answer:'Je me réveille le matin et je dors le soir.',
+    hint:'L\'ordre normal : matin → après-midi → soir → nuit.',
+    explanation:'"<b>Je me réveille le matin et je dors le soir.</b>" — L\'ordre du jour : le <b>matin</b> (morning, on se réveille), l\'<b>après-midi</b> (afternoon), le <b>soir</b> (evening, on se couche). Le matin est avant le soir.' }),
+
+  makeMCQ({ id:'g4fr-voc-034', chapterId:'g4fr-vocabulaire', difficulty:3,
+    question:'Complète : "Mon ___ s\'appelle Jean et ma ___ s\'appelle Marie. Ensemble, ils sont mes grands-parents."',
+    options:['père / mère','oncle / tante','grand-père / grand-mère','frère / sœur'],
+    answer:'grand-père / grand-mère',
+    hint:'Ils sont les parents de tes parents.',
+    explanation:'"Mon <b>grand-père</b> s\'appelle Jean et ma <b>grand-mère</b> s\'appelle Marie." — Les grands-parents sont les parents de nos parents. Le <b>grand-père</b> (paternel ou maternel) + la <b>grand-mère</b> = les grands-parents.' }),
+
+  makeMCQ({ id:'g4fr-voc-035', chapterId:'g4fr-vocabulaire', difficulty:4,
+    question:'Priya écrit : "Ce matin, mon ___ (father) et ma ___ (mother) travaillent. Mon ___ (brother) et ma ___ (sister) sont à l\'école. Moi, je suis malade à la maison." Quelle série est correcte ?',
+    options:[
+      'père / mère / frère / sœur',
+      'oncle / tante / frère / sœur',
+      'grand-père / grand-mère / frère / sœur',
+      'père / mère / oncle / tante'
+    ],
+    answer:'père / mère / frère / sœur',
+    hint:'Father = ?, Mother = ?, Brother = ?, Sister = ?',
+    explanation:'"Mon <b>père</b>" (father), "ma <b>mère</b>" (mother), "mon <b>frère</b>" (brother), "ma <b>sœur</b>" (sister). La famille proche : père, mère, frère, sœur. Note le genre : "mon" (masc.) devant père/frère, "ma" (fém.) devant mère/sœur.' })
 
 );

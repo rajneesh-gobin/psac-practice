@@ -1,21 +1,22 @@
 'use strict';
-// Grade 4 History & Geography — MIE Mauritius Curriculum
+// Grade 4 History & Geography — MIE Mauritius Syllabus (Grades 3-6, 2015)
 registerSubject({
   id: 'grade4-history', name: 'History & Geography', grade: 4, icon: '🌍', subject: 'History & Geography',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: false,
   chapters: [
-    { id: 'g4hist-mauritius',  name: 'Our Island: Mauritius',         icon: '🏝️', examWeight: 4,
-      syllabus: 'Mauritius in the Indian Ocean. Mascarene Islands (Mauritius, Rodrigues, Réunion). Location, size, capital city (Port Louis). Central Plateau. Key landmarks. Mauritius as a multicultural society. Neighbouring islands and countries in the region.' },
-    { id: 'g4hist-community',  name: 'Our Community',                  icon: '🏘️', examWeight: 3,
-      syllabus: 'What is a community. Types of community: rural (village, countryside) vs urban (town, city). Community services: school, hospital, post office, market, police station, place of worship. Needs of a community: food, water, shelter, education, health.' },
-    { id: 'g4hist-physical',   name: 'Physical Features of Mauritius', icon: '🏔️', examWeight: 4,
-      syllabus: 'Natural features: mountains (Le Morne, Piton de la Petite Rivière Noire — highest peak), Central Plateau, rivers, gorges. Coastal features: beaches, lagoons, coral reefs. Rodrigues: central ridge. Man-made features vs natural features. Importance of rivers and coasts.' },
-    { id: 'g4hist-economic',   name: 'Economic Activities',            icon: '🌾', examWeight: 4,
-      syllabus: 'Main economic activities in Mauritius: sugar cane farming (key crop), fishing, tourism, textile/clothing industry. Why Mauritius is a popular tourist destination. How sugar cane is processed. Fishing communities. The port as a trading hub.' },
-    { id: 'g4hist-history',    name: 'Early History of Mauritius',     icon: '⛵', examWeight: 4,
-      syllabus: 'Mauritius uninhabited before European arrival. Portuguese explorers (16th century). Dutch settlement (1638, named the island after Prince Maurice of Nassau, introduced sugar cane). French settlement (1715, renamed Île de France). British conquest (1810). Role of Mahé de Labourdonnais. The Dodo — extinct due to hunting after European arrival.' },
-    { id: 'g4hist-maps',       name: 'Working with Maps',              icon: '🗺️', examWeight: 3,
-      syllabus: 'What is a map. Parts of a map: title, key/legend, scale, compass rose/direction indicator. Four main compass directions: North (N), South (S), East (E), West (W). Intercardinal directions (NE, NW, SE, SW). Reading a simple map key. Using scale to estimate real distances. Simple grid references to locate places.' },
+    { id: 'g4hist-locality',  name: 'Locality: Past & Present',  icon: '🏙️', examWeight: 4,
+      syllabus: 'Types of locality: urban (town/city), rural (village/countryside) and coastal. Change and continuity: comparing old and new buildings, monuments, places of worship, means of transport. Using evidence (photographs, drawings, objects) to compare the past with the present. Simple timeline of events in the locality.' },
+    { id: 'g4hist-community', name: 'People in Our Community',   icon: '🎉', examWeight: 4,
+      syllabus: 'Cultural diversity of Mauritius: different religions, foods, clothing and ways of life. Traditions and celebrations of common festivals: Divali, Eid ul-Fitr, Christmas, Chinese Spring Festival, Maha Shivaratri, Ugadi. Lives of people in the past compared with today: homes, food, clothing, transport, games and leisure. Appreciation and respect for cultural diversity.' },
+    { id: 'g4hist-voyages',   name: 'Voyages of Discovery',      icon: '⛵', examWeight: 4,
+      syllabus: 'Countries trading in the Indian Ocean in the past: Arab, Chinese, Indian and Portuguese traders. Reasons people travelled the Indian Ocean (spice trade, route to India and East Indies). Mauritius before human beings arrived: endemic fauna (Dodo, giant tortoise, Pink Pigeon, Echo Parakeet, Flying Fox) and flora (Ebony, Trochetia, endemic palms, Café Marron). Impact of human arrival: deforestation, hunting, extinction of the Dodo. Nature reserves: Black River Gorges National Park, Ile aux Aigrettes, Casela Nature Park — why they are important.' },
+    // ── GEOGRAPHY ──────────────────────────────────────────────────────────────
+    { id: 'g4ge-natural-env', name: 'Our Natural Environment',    icon: '🏔️', examWeight: 3,
+      syllabus: 'Natural features vs man-made features. Relief of Mauritius: central plateau, mountain peaks (Piton de la Petite Rivière Noire, Corps de Garde, Pieter Both), coastal plains. Coastal features: beaches, lagoons, coral reef. Rivers: Rivière du Rempart, Rivière Noire (Black River), Grand River South East. The island of Rodrigues: location, central ridge, lagoon.' },
+    { id: 'g4ge-weather',     name: 'Weather',                    icon: '🌦️', examWeight: 3,
+      syllabus: 'Two seasons in Mauritius: summer (November–April — hot and rainy) and winter (May–October — cooler and drier). Weather instruments: thermometer (temperature), rain gauge (rainfall), wind vane (wind direction), anemometer (wind speed). Reading and using a weather forecast. How weather affects daily life: effects of rainfall, drought and cyclones on people, farming and transport.' },
+    { id: 'g4ge-map-skills',  name: 'Map Skills',                 icon: '🗺️', examWeight: 3,
+      syllabus: 'What a map is. Parts of a map: title, legend/key, scale, north arrow. Map symbols and what they represent. Compass directions: North, South, East, West. Using scale to calculate real distances. Locating features on a simple map. Drawing and labelling a simple map of a familiar area.' },
   ],
 });

@@ -177,6 +177,142 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Il donne au lecteur l\'impression de connaître Priya directement — le texte est personnel et intime.',
     hint:'Quand un auteur dit "Je...", quel effet cela crée-t-il sur le lecteur ?',
-    explanation:'La <b>première personne</b> ("je") crée une narration personnelle et directe — le lecteur a l\'impression que Priya lui parle directement. Cela rend le texte plus <b>intime et personnel</b>. À comparer avec la troisième personne ("Elle s\'appelle Priya") qui crée plus de distance. C\'est un choix d\'écriture délibéré.' })
+    explanation:'La <b>première personne</b> ("je") crée une narration personnelle et directe — le lecteur a l\'impression que Priya lui parle directement. Cela rend le texte plus <b>intime et personnel</b>. À comparer avec la troisième personne ("Elle s\'appelle Priya") qui crée plus de distance. C\'est un choix d\'écriture délibéré.' }),
+
+  makeMCQ({ id:'g4fr-comp-020', chapterId:'g4fr-lecture', difficulty:1,
+    question:'Quelle connecteur logique signifie "first of all" ?',
+    options:['ensuite','enfin','d\'abord','donc'],
+    answer:"d'abord",
+    hint:'Pour commencer une liste d\'actions ou d\'étapes.',
+    explanation:'"First of all" = <b>d\'abord</b>. L\'ordre des connecteurs de séquence : <b>d\'abord</b> (first), <b>ensuite/puis</b> (then/next), <b>enfin</b> (finally). Ces mots structurent un texte narratif ou des instructions.' }),
+
+  makeMCQ({ id:'g4fr-comp-021', chapterId:'g4fr-lecture', difficulty:1,
+    question:'Comment s\'appelle le type de texte qui raconte une histoire ?',
+    options:['une recette','une lettre','une affiche','une histoire (texte narratif)'],
+    answer:'une histoire (texte narratif)',
+    hint:'Ce type de texte a un début, un milieu et une fin.',
+    explanation:'Un <b>texte narratif</b> (= une histoire) raconte des événements. Il a : un <b>début</b> (introduction des personnages), un <b>milieu</b> (événements), une <b>fin</b> (résolution). Les autres types : <b>recette</b> (instructions), <b>lettre</b> (communication), <b>affiche</b> (annonce visuelle).' }),
+
+  makeTF({ id:'g4fr-comp-022', chapterId:'g4fr-lecture', difficulty:1,
+    question:'"Ensuite" et "puis" ont le même sens (= "then / next").',
+    answer:true,
+    hint:'Les deux expriment ce qui vient après.',
+    explanation:'<b>Vrai.</b> <b>ensuite</b> et <b>puis</b> sont synonymes et signifient tous les deux "then / next". On peut les utiliser de manière interchangeable : "D\'abord je mange, <b>ensuite</b> je dors." = "D\'abord je mange, <b>puis</b> je dors."' }),
+
+  makeMCQ({ id:'g4fr-comp-023', chapterId:'g4fr-lecture', difficulty:2,
+    question:'Quel est le synonyme de "content" (happy) ?',
+    options:['triste','fatigué','joyeux','fâché'],
+    answer:'joyeux',
+    hint:'"Joyeux" et "content" expriment tous les deux la joie.',
+    explanation:'"Content" = <b>joyeux</b> (synonyme). Les deux mots signifient "happy". D\'autres synonymes : heureux, ravi, enchanté. Antonymes (opposés) : triste (sad), malheureux (unhappy), fâché (angry), déçu (disappointed).' }),
+
+  makeMCQ({ id:'g4fr-comp-024', chapterId:'g4fr-lecture', difficulty:2,
+    question:'Quel est l\'antonyme (opposé) de "petit" ?',
+    options:['petit','joli','grand','mignon'],
+    answer:'grand',
+    hint:'L\'opposé de "small" est "big".',
+    explanation:'"Petit" (small) → antonyme = <b>grand</b> (big). Les antonymes sont des mots de sens opposé. Autres paires : chaud/froid, rapide/lent, fort/faible, beau/laid, riche/pauvre, jeune/vieux.' }),
+
+  makeMCQ({ id:'g4fr-comp-025', chapterId:'g4fr-lecture', difficulty:2,
+    question:'Lis : "Priya a d\'abord fait ses devoirs, puis elle a regardé la télévision, enfin elle a dormi." Quelle action est arrivée en DERNIER ?',
+    options:['faire les devoirs','regarder la télévision','dormir','manger'],
+    answer:'dormir',
+    hint:'"Enfin" indique la dernière action.',
+    explanation:'"<b>Enfin</b> elle a dormi" — <b>enfin</b> = finally = la dernière action. Ordre : d\'abord (1er) → puis (2ème) → enfin (3ème). Donc : 1. devoirs, 2. télévision, 3. <b>dormir</b>. Les connecteurs de séquence révèlent l\'ordre chronologique.' }),
+
+  makeMCQ({ id:'g4fr-comp-026', chapterId:'g4fr-lecture', difficulty:2,
+    question:'Quel connecteur signifie "because" ?',
+    options:['d\'abord','enfin','donc','parce que'],
+    answer:'parce que',
+    hint:'"Parce que" répond à la question "pourquoi ?".',
+    explanation:'"Because" = <b>parce que</b>. "Je reste à la maison <b>parce que</b> je suis malade." (I stay home because I\'m sick). À ne pas confondre avec <b>donc</b> (so/therefore) qui exprime une conséquence, pas une raison.' }),
+
+  makeMCQ({ id:'g4fr-comp-027', chapterId:'g4fr-lecture', difficulty:2,
+    question:'Une "recette" est quel type de texte ?',
+    options:['un texte narratif','un texte instructif','une lettre','une affiche'],
+    answer:'un texte instructif',
+    hint:'Une recette donne des instructions étapes par étapes.',
+    explanation:'Une <b>recette</b> est un <b>texte instructif</b> — elle donne des instructions à suivre (liste d\'ingrédients + étapes de préparation). Elle utilise souvent l\'impératif : "Mélangez la farine, ajoutez les œufs..." À distinguer : narratif (histoire), descriptif (description), argumentatif (opinion).' }),
+
+  makeMCQ({ id:'g4fr-comp-028', chapterId:'g4fr-lecture', difficulty:3,
+    question:'Lis : "Luc adore le football. Il s\'entraîne tous les jours. Son équipe a gagné le championnat." Quelle est l\'idée principale ?',
+    options:[
+      'L\'équipe de Luc a gagné.',
+      'Luc est un jeune footballeur passionné et talentueux.',
+      'Luc s\'entraîne le mardi.',
+      'Le football est un sport populaire.'
+    ],
+    answer:'Luc est un jeune footballeur passionné et talentueux.',
+    hint:'L\'idée principale résume ce que tout le texte dit sur Luc.',
+    explanation:'L\'<b>idée principale</b> résume l\'ensemble du texte. "Luc adore le football" (passion), "s\'entraîne tous les jours" (dévouement), "a gagné le championnat" (talent/succès) → tout pointe vers : "<b>Luc est un jeune footballeur passionné et talentueux.</b>" Les autres options ne sont que des détails.' }),
+
+  makeMCQ({ id:'g4fr-comp-029', chapterId:'g4fr-lecture', difficulty:3,
+    question:'Dans le texte de Priya (Ma Famille), quel mot pourrait remplacer "habite" dans "J\'habite à Curepipe" ?',
+    options:['joue','mange','vis','court'],
+    answer:'vis',
+    hint:'"Habiter" et "vivre" peuvent tous les deux signifier "to live (somewhere)".',
+    explanation:'"J\'<b>habite</b> à Curepipe" = "Je <b>vis</b> à Curepipe." — <b>habiter</b> et <b>vivre</b> sont synonymes quand on parle d\'un lieu de résidence. "Vivre" est plus général (to live/to be alive), "habiter" est plus spécifique (to reside). Les deux sont corrects ici.' }),
+
+  makeMCQ({ id:'g4fr-comp-030', chapterId:'g4fr-lecture', difficulty:3,
+    question:'Lis : "Il fait beau. Marie décide donc d\'aller au parc." Quel connecteur pourrait remplacer "donc" ici ?',
+    options:['parce que','d\'abord','mais','cependant'],
+    answer:'parce que',
+    hint:'La belle météo est la raison d\'aller au parc.',
+    explanation:'On pourrait restructurer : "Marie décide d\'aller au parc <b>parce qu\'</b>il fait beau." — <b>donc</b> (conséquence) et <b>parce que</b> (cause) expriment la même relation logique mais dans des structures différentes : Cause + donc + Résultat ↔ Résultat + parce que + Cause.' }),
+
+  makeMCQ({ id:'g4fr-comp-031', chapterId:'g4fr-lecture', difficulty:3,
+    question:'Quel est l\'antonyme de "rapide" ?',
+    options:['vite','lent','court','fort'],
+    answer:'lent',
+    hint:'"Slow" est l\'opposé de "fast".',
+    explanation:'"Rapide" (fast/quick) → antonyme = <b>lent</b> (slow). Autres paires d\'antonymes : grand/petit, chaud/froid, fort/faible, riche/pauvre, heureux/triste, beau/laid. Ces paires sont utiles dans les exercices de synonymes/antonymes.' }),
+
+  makeMCQ({ id:'g4fr-comp-032', chapterId:'g4fr-lecture', difficulty:4,
+    question:'Lis : "D\'abord, Riya a préparé ses affaires. Ensuite, elle a dit au revoir à sa famille. Enfin, elle est partie à l\'école." Combien d\'actions y a-t-il et dans quel ordre ?',
+    options:[
+      '2 actions : au revoir → école',
+      '3 actions : préparer → au revoir → partir',
+      '3 actions : partir → préparer → au revoir',
+      '4 actions : école → famille → affaires → partir'
+    ],
+    answer:'3 actions : préparer → au revoir → partir',
+    hint:'Compte les connecteurs de séquence.',
+    explanation:'Il y a <b>3 actions</b>, dans cet ordre : 1. (<b>d\'abord</b>) préparer ses affaires → 2. (<b>ensuite</b>) dire au revoir → 3. (<b>enfin</b>) partir à l\'école. Chaque connecteur de séquence (d\'abord, ensuite, enfin) introduit une nouvelle action dans l\'ordre chronologique.' }),
+
+  makeMCQ({ id:'g4fr-comp-033', chapterId:'g4fr-lecture', difficulty:4,
+    question:'Lis ce court texte et choisis l\'idée principale : "La tortue géante peut vivre plus de 100 ans. Elle mange des plantes et des fruits. Elle peut peser jusqu\'à 200 kg. La tortue géante est un animal endémique des Mascareignes."',
+    options:[
+      'La tortue mange des fruits.',
+      'La tortue géante est un animal remarquable des Mascareignes.',
+      'La tortue peut peser 200 kg.',
+      'La tortue vit 100 ans.'
+    ],
+    answer:'La tortue géante est un animal remarquable des Mascareignes.',
+    hint:'L\'idée principale couvre TOUT le texte, pas juste un détail.',
+    explanation:'L\'<b>idée principale</b> englobe tous les détails : longévité (100 ans), régime alimentaire (plantes/fruits), poids (200 kg) → tout prouve que "<b>La tortue géante est un animal remarquable des Mascareignes.</b>" Les autres options ne sont que des détails spécifiques.' }),
+
+  makeMCQ({ id:'g4fr-comp-034', chapterId:'g4fr-lecture', difficulty:4,
+    question:'Dans la phrase "Je n\'aime pas la pluie parce qu\'elle mouille mes vêtements", quel est le rôle de "parce que" ?',
+    options:[
+      'Il exprime la conséquence.',
+      'Il exprime la raison/cause.',
+      'Il exprime l\'opposition.',
+      'Il exprime l\'ordre des événements.'
+    ],
+    answer:'Il exprime la raison/cause.',
+    hint:'"Parce que" répond à "Pourquoi n\'aimes-tu pas la pluie ?"',
+    explanation:'"<b>Parce que</b>" exprime la <b>raison/cause</b>. "Je n\'aime pas la pluie" (effet) + "parce que elle mouille mes vêtements" (cause = raison). À comparer : <b>donc</b> (so → conséquence), <b>mais</b> (but → opposition), <b>d\'abord/ensuite</b> (ordre chronologique).' }),
+
+  makeMCQ({ id:'g4fr-comp-035', chapterId:'g4fr-lecture', difficulty:4,
+    question:'Priya écrit une lettre à sa correspondante française. Elle termine : "J\'espère te revoir bientôt. ___" Quelle formule de politesse est la plus appropriée pour FINIR une lettre amicale ?',
+    options:[
+      'Bonjour,',
+      'Grosses bises,',
+      'Monsieur / Madame,',
+      'Veuillez agréer...'
+    ],
+    answer:'Grosses bises,',
+    hint:'Pour une lettre entre amis/enfants, on utilise une formule affectueuse.',
+    explanation:'"<b>Grosses bises</b>" (big kisses) est appropriée pour une lettre <b>amicale/informelle</b> entre enfants. "Bonjour" = salutation initiale. "Monsieur/Madame" = formule formelle (début). "Veuillez agréer..." = formule très formelle (lettre officielle). Une lettre amicale commence par "Chère/Cher..." et finit par "Bisous, Grosses bises, Amicalement..."' })
 
 );

@@ -72,6 +72,27 @@ registerSubject({
       ],
     },
     {
+      id: 'g5fr-passe-simple', name: 'Le Passé Simple', icon: '📜',
+      notes: [
+        '**Le passé simple** is used in literary writing, stories, and formal texts (NOT in everyday speech).',
+        'For -ER verbs: je parlai, tu parlas, il/elle parla, nous parlâmes, vous parlâtes, ils/elles parlèrent.',
+        'Irregular: être → fut, avoir → eut, faire → fit, aller → alla, venir → vint.',
+        'Identify it in texts: "il parla, ils marchèrent, elle fut, il eut…"',
+        'In stories: imparfait = background/description; passé simple = main events.',
+      ],
+    },
+    {
+      id: 'g5fr-subjonctif', name: 'Le Subjonctif Présent', icon: '🎭',
+      notes: [
+        'The **subjunctive** is used after expressions of: doubt, emotion, wish, necessity, possibility.',
+        'Triggers: **il faut que**, je veux que, bien que, pour que, avant que, il est possible que…',
+        'Formation: take **ils** present form, remove -ent → add -e/-es/-e/-ions/-iez/-ent.',
+        'Parler: ils parlent → parl- → que je parle, que tu parles, qu\'il parle…',
+        'Irregular: être → sois/soit/soyons, avoir → aie/ait/ayons, aller → aille, faire → fasse, pouvoir → puisse, venir → vienne.',
+        '"Je sais que" → indicatif. "Il faut que / bien que" → toujours subjonctif.',
+      ],
+    },
+    {
       id: 'fr-lecture', name: 'Lecture & Compréhension', icon: '🔍',
       notes: [
         'Read the text carefully **twice** before answering questions.',

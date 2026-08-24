@@ -19,8 +19,6 @@ registerSubject({
       syllabus: 'Types of land use: agriculture (sugar cane, vegetables, fruits), agro-industry (sugar factories, tea factories), tourism (hotels, beaches). How land use has changed over time. Impact of tourism on the environment. Sustainable land use. Comparison of land use in Mauritius and Rodrigues.' },
     { id: 'g6-natural-hazards',   name: 'Natural Hazards',                     icon: '🌀', examWeight: 3,
       syllabus: 'Cyclones: what they are, how they form in the Indian Ocean, cyclone warning signals in Mauritius (Class 1–4), precautions. Earthquakes: causes (tectonic plates), effects. Tsunamis: causes and effects. Floods: causes in Mauritius, effects, precautions. Drought and its effects. Disaster preparedness.' },
-    { id: 'g6-weather-climate',   name: 'Weather & Climate',                   icon: '🌦️', examWeight: 2,
-      syllabus: 'Two seasons in Mauritius: summer (Nov–Apr, hot, wet) and winter (May–Oct, cool, dry). Climate of Rodrigues. Instruments: thermometer, rain gauge, wind vane, anemometer. Weather forecast and its importance (agriculture, transport, schools). How weather affects daily life. Difference between weather and climate.' },
     { id: 'g6-map-skills',        name: 'Map Skills',                           icon: '🗺️', examWeight: 2,
       syllabus: 'Reading a relief map: contour lines, spot heights. Identifying relief features from a map. Latitude, longitude and coordinates. Scale and distance. Grid references. Maps of Mauritius, Rodrigues and the Indian Ocean region. Compass directions and bearings.' },
   ],

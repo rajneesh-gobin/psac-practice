@@ -46,6 +46,29 @@ registerSubject({
       ],
     },
     {
+      id: 'g6fr-conditionnel', name: 'Le Conditionnel Présent', icon: '🔀',
+      notes: [
+        '**Le conditionnel présent** is used for: polite requests, hypotheses, wishes, unconfirmed news.',
+        'Formation: **infinitive** (or future stem) + imperfect endings: -ais/-ais/-ait/-ions/-iez/-aient.',
+        'Parler → je parlerais. Vendre → je vendrais (drop final -e of -RE verbs).',
+        'Irregular stems (same as future): être→ser-, avoir→aur-, aller→ir-, faire→fer-, pouvoir→pourr-, vouloir→voudr-, venir→viendr-, devoir→devr-.',
+        '**Si + imparfait → conditionnel**: Si j\'avais de l\'argent, j\'achèterais une voiture.',
+        'NEVER put the future after "si": ~~Si tu viendras~~ → Si tu venais… (imparfait).',
+      ],
+    },
+    {
+      id: 'g6fr-pqp', name: 'Le Plus-que-parfait', icon: '⏮️',
+      notes: [
+        '**Le plus-que-parfait** expresses an action that happened BEFORE another past action.',
+        'Formation: **imparfait of avoir/être** + **past participle**.',
+        'Most verbs use avoir: j\'avais mangé, tu avais parlé, il avait fini.',
+        'Movement/state verbs use être (same list as passé composé): j\'étais allé(e), tu étais parti(e)…',
+        'With être, agree past participle with subject: Elles étaient arrivées.',
+        'In a sentence: passé composé = main event; plus-que-parfait = what happened BEFORE.',
+        'Example: "Quand je suis arrivé, il avait déjà mangé." (he ate first, then I arrived).',
+      ],
+    },
+    {
       id: 'g6fr-argumentation', name: "L'Expression Écrite & Argumentation", icon: '✏️',
       notes: [
         '**Essay structure**: Introduction (contexte + problématique) → Développement (arguments + exemples) → Conclusion.',

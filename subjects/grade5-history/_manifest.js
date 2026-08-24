@@ -25,5 +25,7 @@ registerSubject({
       syllabus: 'Beach erosion (causes: waves, human activities; measures: groins, mangroves). Soil erosion (causes: rain, deforestation; measures: terracing, tree planting). Pollution: water, air, land (causes and effects). Natural sites and nature reserves of value. Reasons to protect them.' },
     { id: 'map-skills',   name: 'Map Skills & Coordinates',                 icon: '🗺️', examWeight: 2,
       syllabus: 'Reading a map: title, key/legend, scale, compass/direction. Latitude and longitude (lines on a globe). Equator (0° latitude). Greenwich Meridian (0° longitude). Locating places on a map using grid references. Mascarene Islands on a world map. Indian Ocean.' },
+    { id: 'g5ge-weather', name: 'Weather (Grade 5)',                        icon: '🌦️', examWeight: 3,
+      syllabus: 'Revision of seasons and weather instruments. How weather affects farming, tourism and fishing. Cyclone warning signals in Mauritius (Class 1-4) and precautions. Difference between weather and climate. Climate of Rodrigues.' },
   ],
 });

@@ -954,13 +954,6 @@ CHALLENGE_QS2.push(
     hint:'Totals: 32, 28, 40. Sum=100. Mean=100÷3. Wait: 4×8=32; 3.5×8=28; 5×8=40. Sum=100. Mean=100÷3=33.33.',
     explanation:'32+28+40=100. Mean=100÷3≈33.3. Let me recalculate with whole symbols.' }),
 
-  makeMCQ({ id:'CH_GRP03', chapterId:'graphs', difficulty:3,
-    question:'A line graph shows temperature at: 08:00=18°C, 10:00=22°C, 12:00=28°C, 14:00=30°C, 16:00=26°C. What is the range in temperature?',
-    options:['8°C','10°C','12°C','14°C'],
-    answer:'12°C',
-    hint:'Range = max − min.',
-    explanation:'30 − 18 = 12°C.' }),
-
   makeNum({ id:'CH_GRP04', chapterId:'graphs', difficulty:3,
     question:'A frequency table shows: Red=12, Blue=18, Green=9, Yellow=21. What fraction of children chose Red? Give in simplest form.',
     answer:'2/10', acceptableAnswers:['2/10','1/5'],
@@ -980,13 +973,6 @@ CHALLENGE_QS2.push(
     hint:'B: 4×20=80. C: 2.5×20=50. Difference.',
     explanation:'80−50=30. Wait: 4×20=80; 2.5×20=50; 80-50=30. Answer=30.' }),
 
-  makeMCQ({ id:'CH_GRP07', chapterId:'graphs', difficulty:4,
-    question:'A line graph shows a shop\'s monthly profit. January: Rs 1,200. Each month the profit increases by Rs 350. What is the profit in June?',
-    options:['Rs 2,700','Rs 2,950','Rs 3,050','Rs 3,150'],
-    answer:'Rs 2,950',
-    hint:'Jan=1200; Feb=1550; Mar=1900; Apr=2250; May=2600; Jun=2950.',
-    explanation:'5 increases of Rs 350: 1200+5×350=1200+1750=Rs 2,950.' }),
-
   makeNum({ id:'CH_GRP08', chapterId:'graphs', difficulty:3,
     question:'A tally chart shows shoe sizes: Size 4: |||| (4), Size 5: |||| | (6), Size 6: |||| |||| (9), Size 7: ||| (3). What is the modal shoe size?',
     answer:'6',
@@ -999,12 +985,6 @@ CHALLENGE_QS2.push(
     answer:'Yes, average = 12 mm',
     hint:'Sum = 12+8+15+6+19=60. Mean=60÷5.',
     explanation:'60÷5=12 mm. 12 > 11 mm, so she is correct.' }),
-
-  makeNum({ id:'CH_GRP10', chapterId:'graphs', difficulty:3,
-    question:'A line graph shows plant growth (cm): Week 1=3, Week 2=7, Week 3=12, Week 4=18, Week 5=25. How much did the plant grow between Week 2 and Week 5?',
-    answer:'18',
-    hint:'Week 5 height − Week 2 height.',
-    explanation:'25 − 7 = 18 cm.' }),
 
   makeMCQ({ id:'CH_GRP11', chapterId:'graphs', difficulty:3,
     question:'A frequency table: 1–10: 5 students; 11–20: 8 students; 21–30: 12 students; 31–40: 7 students. What percentage of students scored 21–30?',
@@ -1039,12 +1019,6 @@ CHALLENGE_QS2.push(
     hint:'Mean = (45+52+68+72+75+80+88+91)÷8=571÷8=71.375. Count scores > 71.375.',
     explanation:'Mean≈71.4. Scores above: 72,75,80,88,91 — that\'s 5. Wait: 45+52+68+72+75+80+88+91=571; 571÷8=71.375. Above: 72,75,80,88,91 = 5 students.' }),
 
-  makeNum({ id:'CH_GRP16', chapterId:'graphs', difficulty:3,
-    question:'A line graph shows temperature at 10:00=24°C, 12:00=28°C, 14:00=32°C, 16:00=30°C, 18:00=25°C. What is the mean temperature?',
-    answer:'27.8',
-    hint:'Sum = 24+28+32+30+25=139. Divide by 5.',
-    explanation:'139÷5=27.8°C.' }),
-
   makeMCQ({ id:'CH_GRP17', chapterId:'graphs', difficulty:4,
     question:'A bar chart: Maths=72, English=68, Science=80, History=64. A student says "I scored at least 70 in half my subjects." Is this true?',
     options:['Yes — Maths and Science are ≥70','Yes — all four are close to 70','No — only Science is ≥70','No — none are exactly 70'],
@@ -1063,13 +1037,7 @@ CHALLENGE_QS2.push(
     options:['120°','130°','144°','160°'],
     answer:'144°',
     hint:'Football fraction = 12/30. Angle = 12/30 × 360°.',
-    explanation:'12/30×360=0.4×360=144°.' }),
-
-  makeNum({ id:'CH_GRP20', chapterId:'graphs', difficulty:4,
-    question:'A line graph records a plant\'s height: 0 cm at Week 0, growing 3.5 cm each week. What will the height be at Week 8?',
-    answer:'28',
-    hint:'8 × 3.5.',
-    explanation:'8×3.5=28 cm.' })
+    explanation:'12/30×360=0.4×360=144°.' })
 );
 
 // ── CONVERSIONS ───────────────────────────────

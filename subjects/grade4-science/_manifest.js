@@ -17,5 +17,9 @@ registerSubject({
       syllabus: 'Properties of water (colourless, tasteless, no smell, flows downhill). States of matter: solid (ice), liquid (water), gas (steam/water vapour). Changes of state: melting, freezing, evaporation, condensation. Simple water cycle. Importance of water and conservation.' },
     { id: 'g4sci-materials', name: 'Materials & Properties',      icon: '⚗️', examWeight: 3,
       syllabus: 'Natural materials (wood, stone, cotton, rubber, clay) vs man-made (plastic, glass, metal). Properties: hard/soft, transparent/opaque, waterproof, magnetic, flexible/rigid. Choosing materials based on properties. Magnets attract iron and steel.' },
+    { id: 'g4sci-energy',   name: 'Energy',                       icon: '⚡', examWeight: 3,
+      syllabus: 'Sources of energy: sun (solar), wind, water (hydro), wood/charcoal, petrol/oil. Forms of energy: light, heat, sound, mechanical (movement). How we use energy in daily life (cooking, transport, lighting). Renewable sources (sun, wind, water) vs non-renewable sources (petrol, coal).' },
+    { id: 'g4sci-protect',  name: 'Protection & Conservation',    icon: '♻️', examWeight: 3,
+      syllabus: 'Human activities that harm the environment: cutting trees, dumping rubbish, burning, using chemicals. Types of pollution: air pollution, water/sea pollution, land/soil pollution. Effects of pollution on plants, animals and people. What we can do: reduce, reuse, recycle; picking up litter; planting trees; saving water.' },
   ],
 });

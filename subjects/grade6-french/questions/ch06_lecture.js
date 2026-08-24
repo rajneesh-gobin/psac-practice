@@ -204,6 +204,115 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger"',
     hint:'Cherchez la citation qui explique directement POURQUOI les dodos étaient si faciles à capturer.',
-    explanation:'"<b>ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger</b>" — Cette citation illustre parfaitement la vulnérabilité du dodo. <b>Relevé</b> : "aucune peur" / "jamais appris à fuir". <b>Interprétation</b> : L\'isolement évolutif de Maurice, sans prédateurs terrestres, avait rendu le dodo incapable de reconnaître le danger humain comme une menace — ce qui le rendait d\'une facilité tragique à capturer. La méthode Relevé → Interprétation est enseignée dans le manuel MIE de 6e pour les questions de compréhension de texte.' })
+    explanation:'"<b>ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger</b>" — Cette citation illustre parfaitement la vulnérabilité du dodo. <b>Relevé</b> : "aucune peur" / "jamais appris à fuir". <b>Interprétation</b> : L\'isolement évolutif de Maurice, sans prédateurs terrestres, avait rendu le dodo incapable de reconnaître le danger humain comme une menace — ce qui le rendait d\'une facilité tragique à capturer. La méthode Relevé → Interprétation est enseignée dans le manuel MIE de 6e pour les questions de compréhension de texte.' }),
+
+  makeMCQ({ id:'g6fr-lec-020', chapterId:'g6fr-lecture', difficulty:1,
+    question:'Dans un poème, comment appelle-t-on chaque groupe de vers séparés par un espace blanc ?',
+    options:['Un verset','Une strophe','Un refrain','Un couplet'],
+    answer:'Une strophe',
+    hint:'Strophe = groupe de vers dans un poème, séparés par des espaces.',
+    explanation:'Une <b>strophe</b> est un groupe de vers dans un poème, séparés par des espaces blancs. Ex : un poème en 3 strophes de 4 vers = 3 × 4 = 12 vers au total. Les strophes de 4 vers s\'appellent des <b>quatrains</b> ; celles de 2 vers des <b>distiques</b> ; celles de 3 vers des <b>tercets</b>.' }),
+
+  makeMCQ({ id:'g6fr-lec-021', chapterId:'g6fr-lecture', difficulty:1,
+    question:'Dans le schéma de rimes ABAB, comment s\'appellent ces rimes ?',
+    options:['Rimes plates','Rimes croisées','Rimes embrassées','Rimes libres'],
+    answer:'Rimes croisées',
+    hint:'ABAB = les rimes alternent entre deux sons → elles se "croisent".',
+    explanation:'ABAB = <b>rimes croisées</b> (= rimes alternées). A rime avec A, B rime avec B, mais elles alternent : vers 1 rime avec vers 3, vers 2 avec vers 4. Autres schémas : <b>AABB</b> = rimes plates (consécutives) ; <b>ABBA</b> = rimes embrassées (entrelacées).' }),
+
+  makeTF({ id:'g6fr-lec-022', chapterId:'g6fr-lecture', difficulty:1,
+    question:'Une métaphore compare directement deux choses SANS utiliser "comme" ou "tel que".',
+    answer:true,
+    hint:'Métaphore = comparaison implicite. Comparaison = avec "comme".',
+    explanation:'<b>Vrai.</b> La <b>métaphore</b> compare deux choses <b>sans "comme"</b> : "La vie est un long fleuve tranquille." La <b>comparaison</b> utilise "comme" : "La vie est <b>comme</b> un long fleuve." La métaphore est plus forte et plus imagée car elle affirme directement l\'équivalence.' }),
+
+  makeMCQ({ id:'g6fr-lec-023', chapterId:'g6fr-lecture', difficulty:2,
+    question:'Quel est le schéma de rimes dans ce poème : "Le vent souffle fort (A) / Sur la mer agitée (B) / Il annonce la mort (A) / De la vague brisée (B)" ?',
+    options:['AABB (rimes plates)','ABAB (rimes croisées)','ABBA (rimes embrassées)','Rimes libres'],
+    answer:'ABAB (rimes croisées)',
+    hint:'Fort (A), agitée (B), mort (A), brisée (B) → A et B alternent.',
+    explanation:'Fort (A) — agitée (B) — mort (A) — brisée (B) → schéma <b>ABAB</b> = <b>rimes croisées</b>. "Fort" rime avec "mort" (A-A), "agitée" rime avec "brisée" (B-B), mais ils alternent.' }),
+
+  makeMCQ({ id:'g6fr-lec-024', chapterId:'g6fr-lecture', difficulty:2,
+    question:'Quelle figure de style est utilisée dans "Le soleil se lève paresseusement" ?',
+    options:['Une hyperbole','Une comparaison','Une personnification','Une allitération'],
+    answer:'Une personnification',
+    hint:'"Paresseusement" est un adverbe humain attribué au soleil (non-humain).',
+    explanation:'"Le soleil se lève <b>paresseusement</b>" — <b>personnification</b> : on attribue au soleil (chose non-humaine) un trait humain (être paresseux). La personnification rend la description plus vivante et poétique. C\'est une figure de style très fréquente dans la poésie et la littérature.' }),
+
+  makeMCQ({ id:'g6fr-lec-025', chapterId:'g6fr-lecture', difficulty:2,
+    question:'Dans un article de journal, comment s\'appelle la première phrase courte qui résume l\'article ?',
+    options:['Le titre','Le chapeau (lead)','Le corps','La signature'],
+    answer:'Le chapeau (lead)',
+    hint:'Le chapeau est le court texte introductif entre le titre et le corps de l\'article.',
+    explanation:'Le <b>chapeau</b> (ou "lead") est un court paragraphe introductif qui répond aux 5 questions de base : <b>Qui ? Quoi ? Quand ? Où ? Pourquoi ?</b> Il résume l\'essentiel pour que le lecteur comprenne l\'article en quelques lignes. Structure d\'un article : <b>Titre → Chapeau → Corps → Signature</b>.' }),
+
+  makeMCQ({ id:'g6fr-lec-026', chapterId:'g6fr-lecture', difficulty:2,
+    question:'Dans un texte, comment reconnaît-on une OPINION (par opposition à un fait) ?',
+    options:[
+      'Un fait peut être vérifié et prouvé ; une opinion exprime un point de vue subjectif.',
+      'Une opinion utilise toujours "je pense".',
+      'Un fait est toujours faux.',
+      'Une opinion est toujours vraie.'
+    ],
+    answer:'Un fait peut être vérifié et prouvé ; une opinion exprime un point de vue subjectif.',
+    hint:'Fait = objectif, vérifiable. Opinion = subjectif, personnel.',
+    explanation:'Un <b>fait</b> peut être <b>vérifié</b> : "Maurice a une superficie de 1865 km²." Une <b>opinion</b> exprime un <b>point de vue subjectif</b> : "Maurice est le plus beau pays du monde." Les indicateurs d\'opinion : "je pense que", "il me semble que", "à mon avis", adjectifs évaluatifs (magnifique, terrible…).' }),
+
+  makeMCQ({ id:'g6fr-lec-027', chapterId:'g6fr-lecture', difficulty:3,
+    question:'Quelle figure de style utilise la répétition du même son consonantique au début de plusieurs mots proches ?',
+    options:['Assonance','Allitération','Anaphore','Métaphore'],
+    answer:'Allitération',
+    hint:'Allitération = répétition de consonnes. Assonance = répétition de voyelles.',
+    explanation:'L\'<b>allitération</b> répète le même son <b>consonantique</b> : "Pour qui sont ces <b>s</b>erpents qui <b>s</b>ifflent <b>s</b>ur vos têtes ?" (Racine). L\'<b>assonance</b> répète le même son <b>vocalique</b> : "Les sangl<b>ots</b> l<b>ongs</b> des vi<b>ol</b>ons" (Verlaine). Les deux créent une musicalité dans le poème.' }),
+
+  makeMCQ({ id:'g6fr-lec-028', chapterId:'g6fr-lecture', difficulty:3,
+    question:'Dans la narration, comment appelle-t-on les obstacles et aventures qui compliquent le déroulement de l\'histoire ?',
+    options:['Le dénouement','La péripétie','Le cadre','Le narrateur'],
+    answer:'La péripétie',
+    hint:'Péripétie = événement inattendu qui change le cours de l\'histoire.',
+    explanation:'La <b>péripétie</b> est un <b>événement imprévu</b> qui complique la situation ou fait rebondir l\'histoire. C\'est le "rebondissement". Le schéma narratif : <b>Situation initiale → Élément perturbateur → Péripéties → Dénouement → Situation finale</b>. Le <b>dénouement</b> = résolution du problème.' }),
+
+  makeMCQ({ id:'g6fr-lec-029', chapterId:'g6fr-lecture', difficulty:3,
+    question:'Quel est le DÉNOUEMENT d\'un récit ?',
+    options:[
+      'Le début du récit où le cadre est présenté',
+      'L\'événement qui crée le problème',
+      'La résolution du conflit ou du problème',
+      'Les obstacles rencontrés par le héros'
+    ],
+    answer:'La résolution du conflit ou du problème',
+    hint:'Dénouement = fin, résolution. Comme "dénouer" un nœud.',
+    explanation:'Le <b>dénouement</b> est la <b>résolution</b> du conflit ou du problème principal du récit. Il précède la situation finale. Structure : Situation initiale → Élément perturbateur → Péripéties → <b>Dénouement</b> → Situation finale. En français "dénouer" = défaire un nœud → résoudre la tension.' }),
+
+  makeTF({ id:'g6fr-lec-030', chapterId:'g6fr-lecture', difficulty:3,
+    question:'Un narrateur "interne" (narration à la première personne) est un personnage de l\'histoire.',
+    answer:true,
+    hint:'"Je" dans le récit = le narrateur est dans l\'histoire = narrateur interne.',
+    explanation:'<b>Vrai.</b> Le <b>narrateur interne</b> (= narration à la <b>première personne</b> "je") est un <b>personnage de l\'histoire</b> qui la vit et la raconte. Il ne connaît que ce que son personnage peut voir/savoir. Comparer avec le <b>narrateur externe</b> (troisième personne "il/elle") qui observe de l\'extérieur et peut être omniscient.' }),
+
+  makeMCQ({ id:'g6fr-lec-031', chapterId:'g6fr-lecture', difficulty:4,
+    question:'Analyse ce vers : "Tes yeux sont deux étoiles dans la nuit profonde." Quelle figure de style est utilisée et pourquoi ?',
+    options:[
+      'Comparaison — car "comme" est présent.',
+      'Métaphore — car les yeux sont directement identifiés aux étoiles sans "comme".',
+      'Personnification — car les étoiles reçoivent un attribut humain.',
+      'Hyperbole — car c\'est une exagération.'
+    ],
+    answer:'Métaphore — car les yeux sont directement identifiés aux étoiles sans "comme".',
+    hint:'Pas de "comme" ou "tel que" → c\'est une métaphore, pas une comparaison.',
+    explanation:'"Tes yeux sont <b>deux étoiles</b>" — <b>métaphore</b> : identification directe entre les yeux et les étoiles sans "comme". Si on disait "tes yeux sont <b>comme</b> deux étoiles" → comparaison. La métaphore crée une image plus forte car elle affirme l\'équivalence au lieu de la suggérer.' }),
+
+  makeMCQ({ id:'g6fr-lec-032', chapterId:'g6fr-lecture', difficulty:4,
+    question:'Dans un texte, la phrase "Le général annonça la victoire. Pourtant, des soldats pleuraient." contient une ironie. Pourquoi ?',
+    options:[
+      'Parce que le général a menti.',
+      'Parce qu\'il y a une contradiction : victoire annoncée mais pleurs des soldats — l\'auteur suggère que cette victoire a un coût humain.',
+      'Parce que les soldats sont contents.',
+      'Parce que "pourtant" est un connecteur d\'opposition.'
+    ],
+    answer:'Parce qu\'il y a une contradiction : victoire annoncée mais pleurs des soldats — l\'auteur suggère que cette victoire a un coût humain.',
+    hint:'L\'ironie ou l\'implicite : le texte dit "victoire" mais montre des pleurs. Que veut dire l\'auteur vraiment ?',
+    explanation:'L\'<b>ironie implicite</b> : le mot "victoire" (positif) contraste avec "des soldats pleuraient" (négatif). L\'auteur ne dit pas explicitement que la victoire est amère — il le <b>suggère par l\'opposition</b>. Lire entre les lignes (l\'implicite) est une compétence clé dans les épreuves PSAC de 6e : repérer ce que le texte dit vs ce qu\'il veut dire.' })
 
 );

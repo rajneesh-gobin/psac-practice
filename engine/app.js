@@ -669,6 +669,25 @@ async function renderParentDashboard() {
   if (_el('pd-children-grid')) _el('pd-children-grid').classList.toggle('hidden', !hasStudents);
   if (_el('pd-detail-panel'))  _el('pd-detail-panel').classList.add('hidden');
 
+  // Plan banner — load async, non-blocking
+  const parentProfile = Auth.getParentProfile?.();
+  if (parentProfile?.id && _el('pd-plan-banner')) {
+    Store.getUserPlan(parentProfile.id).then(({ plan_id, plan, subscription }) => {
+      const banner = _el('pd-plan-banner');
+      if (!banner) return;
+      banner.classList.remove('hidden');
+      const icons = { free: '🆓', starter: '⭐', premium: '👑' };
+      if (_el('pd-plan-icon')) _el('pd-plan-icon').textContent = icons[plan_id] || '🆓';
+      if (_el('pd-plan-name')) _el('pd-plan-name').textContent = (plan?.name || plan_id || 'Free') + ' Plan';
+      const expEl = _el('pd-plan-expires');
+      if (expEl) {
+        expEl.textContent = subscription?.expires_at
+          ? `Active until ${new Date(subscription.expires_at).toLocaleDateString()}`
+          : 'No expiry — free tier';
+      }
+    }).catch(() => {});
+  }
+
   if (!hasStudents) return;
 
   const grid = _el('pd-children-grid');
@@ -1669,6 +1688,11 @@ function loadPracticeQuestion() {
 
   document.getElementById('practice-hint-box').classList.add('hidden');
   S.practice.hintShown = false;
+  S.practice.hintIdx   = 0;
+  const _hintBtn = document.getElementById('practice-hint-btn');
+  if (_hintBtn) { _hintBtn.disabled = false; _hintBtn.classList.remove('opacity-50'); }
+  const _hintBadge = document.getElementById('hint-count-badge');
+  if (_hintBadge) _hintBadge.textContent = '3';
   document.getElementById('practice-q-counter').textContent =
     `Question ${S.practice.idx + 1} of ${S.practice.qs.length}`;
   document.getElementById('practice-feedback').classList.add('hidden');
@@ -1679,11 +1703,49 @@ function loadPracticeQuestion() {
   updateSessionStats();
 }
 
+function _buildHints(q) {
+  const ch = CHAPTERS.find(c => c.id === q.chapterId);
+  const h1 = q.hint || `Think about what you know about ${ch ? ch.name : 'this topic'}.`;
+  let h2 = '';
+  if (q.explanation) {
+    const plain = q.explanation.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    const firstDot = plain.search(/[.!?]/);
+    h2 = firstDot > 0 ? plain.slice(0, firstDot + 1) : plain.slice(0, 120);
+  }
+  h2 = h2 || 'Re-read the question slowly and identify the key numbers.';
+  const h3 = q.type === 'mcq'
+    ? 'Try eliminating options you know are wrong — that narrows it down quickly.'
+    : `The answer is <b>${q.answer}</b> — try to understand why before moving on.`;
+  return [h1, h2, h3];
+}
+
 document.getElementById('practice-hint-btn').addEventListener('click', () => {
   const q = S.practice.qs[S.practice.idx];
-  document.getElementById('practice-hint-text').textContent = q?.hint || 'No hint.';
-  document.getElementById('practice-hint-box').classList.toggle('hidden');
+  if (!q) return;
+  const MAX_HINTS = 3;
+  if ((S.practice.hintIdx || 0) >= MAX_HINTS) return;
+  S.practice.hintIdx = (S.practice.hintIdx || 0) + 1;
   S.practice.hintShown = true;
+
+  const hints   = _buildHints(q);
+  const hint    = hints[S.practice.hintIdx - 1] || 'Think carefully about the problem.';
+  const numEl   = document.getElementById('practice-hint-num');
+  const remEl   = document.getElementById('practice-hints-remaining');
+  const txtEl   = document.getElementById('practice-hint-text');
+  const badgeEl = document.getElementById('hint-count-badge');
+  const box     = document.getElementById('practice-hint-box');
+
+  if (numEl)   numEl.textContent  = S.practice.hintIdx;
+  if (txtEl)   txtEl.innerHTML    = hint;
+  const left = MAX_HINTS - S.practice.hintIdx;
+  if (remEl)   remEl.textContent  = left > 0 ? `${left} more hint${left > 1 ? 's' : ''} available` : 'No more hints';
+  if (badgeEl) badgeEl.textContent = left > 0 ? left : '✓';
+  box.classList.remove('hidden');
+
+  if (S.practice.hintIdx >= MAX_HINTS) {
+    const btn = document.getElementById('practice-hint-btn');
+    if (btn) { btn.disabled = true; btn.classList.add('opacity-50'); }
+  }
 });
 
 document.getElementById('practice-submit-btn').addEventListener('click', practiceSubmit);

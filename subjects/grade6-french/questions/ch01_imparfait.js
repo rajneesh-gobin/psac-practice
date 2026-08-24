@@ -140,6 +140,130 @@ STATIC_QUESTIONS.push(
     options:['sav-','sach-','sau-','sai-'],
     answer:'sav-',
     hint:'Savoir → nous savons → enlève -ons → ?',
-    explanation:'Savoir → forme "nous" au présent : nous <b>savons</b> → enlève -ons → radical : <b>sav-</b> → je savais, tu savais, il savait, nous savions, vous saviez, ils savaient. Attention : ne pas confondre avec le subjonctif (que je <b>sache</b>) qui a un radical différent. L\'imparfait se forme toujours sur le radical "nous" du présent.' })
+    explanation:'Savoir → forme "nous" au présent : nous <b>savons</b> → enlève -ons → radical : <b>sav-</b> → je savais, tu savais, il savait, nous savions, vous saviez, ils savaient. Attention : ne pas confondre avec le subjonctif (que je <b>sache</b>) qui a un radical différent. L\'imparfait se forme toujours sur le radical "nous" du présent.' }),
+
+  makeMCQ({ id:'g6fr-imp-020', chapterId:'g6fr-imparfait', difficulty:1,
+    question:'Conjugue ALLER à l\'imparfait pour "je" :',
+    options:['j\'aillais','j\'allais','je vais','j\'allai'],
+    answer:'j\'allais',
+    hint:'Aller → radical imparfait : nous allons → all- → j\'allais.',
+    explanation:'Aller → présent "nous" : nous <b>allons</b> → radical = <b>all-</b> → imparfait : j\'<b>allais</b>, tu allais, il allait, nous allions, vous alliez, ils allaient. C\'est un verbe très fréquent : "Quand j\'étais petit, j\'<b>allais</b> à la plage chaque dimanche."' }),
+
+  makeMCQ({ id:'g6fr-imp-021', chapterId:'g6fr-imparfait', difficulty:1,
+    question:'Conjugue VENIR à l\'imparfait pour "il" :',
+    options:['il venait','il vient','il vint','il viendrait'],
+    answer:'il venait',
+    hint:'Venir → nous venons → radical ven- → il venait.',
+    explanation:'Venir → présent "nous" : nous <b>venons</b> → radical = <b>ven-</b> → imparfait : je venais, tu venais, <b>il venait</b>, nous venions, vous veniez, ils venaient.' }),
+
+  makeTF({ id:'g6fr-imp-022', chapterId:'g6fr-imparfait', difficulty:1,
+    question:'L\'expression "Il était une fois…" au début d\'un conte utilise l\'imparfait.',
+    answer:true,
+    hint:'"Il était" = imparfait de être. Les contes commencent par une description = imparfait.',
+    explanation:'<b>Vrai.</b> "Il <b>était</b> une fois…" est l\'imparfait de être (il <b>était</b>). Dans les contes, l\'imparfait sert à décrire le <b>cadre</b> (personnages, décors, situation initiale). C\'est l\'imparfait de <b>description</b>.' }),
+
+  makeMCQ({ id:'g6fr-imp-023', chapterId:'g6fr-imparfait', difficulty:2,
+    question:'Conjugue PRENDRE à l\'imparfait pour "nous" :',
+    options:['nous prenions','nous preniions','nous prenons','nous prendions'],
+    answer:'nous prenions',
+    hint:'Prendre → nous prenons → radical pren- → nous prenions.',
+    explanation:'Prendre → présent "nous" : nous <b>prenons</b> → radical = <b>pren-</b> → imparfait : je prenais, tu prenais, il prenait, <b>nous prenions</b>, vous preniez, ils prenaient.' }),
+
+  makeMCQ({ id:'g6fr-imp-024', chapterId:'g6fr-imparfait', difficulty:2,
+    question:'Conjugue VOIR à l\'imparfait pour "vous" :',
+    options:['vous voyiez','vous voyez','vous viez','vous verriez'],
+    answer:'vous voyiez',
+    hint:'Voir → nous voyons → radical voy- → vous voyiez.',
+    explanation:'Voir → présent "nous" : nous <b>voyons</b> → radical = <b>voy-</b> → imparfait : je voyais, tu voyais, il voyait, nous voyions, <b>vous voyiez</b>, ils voyaient. Remarque : même radical que le présent pluriel.' }),
+
+  makeMCQ({ id:'g6fr-imp-025', chapterId:'g6fr-imparfait', difficulty:2,
+    question:'Conjugue POUVOIR à l\'imparfait pour "ils" :',
+    options:['ils pouvaient','ils peuvent','ils pourraient','ils purent'],
+    answer:'ils pouvaient',
+    hint:'Pouvoir → nous pouvons → radical pouv- → ils pouvaient.',
+    explanation:'Pouvoir → présent "nous" : nous <b>pouvons</b> → radical = <b>pouv-</b> → imparfait : je pouvais, tu pouvais, il pouvait, nous pouvions, vous pouviez, <b>ils pouvaient</b>.' }),
+
+  makeMCQ({ id:'g6fr-imp-026', chapterId:'g6fr-imparfait', difficulty:2,
+    question:'Conjugue VOULOIR à l\'imparfait pour "tu" :',
+    options:['tu voulais','tu vouldrais','tu veux','tu voulus'],
+    answer:'tu voulais',
+    hint:'Vouloir → nous voulons → radical voul- → tu voulais.',
+    explanation:'Vouloir → présent "nous" : nous <b>voulons</b> → radical = <b>voul-</b> → imparfait : je voulais, <b>tu voulais</b>, il voulait, nous voulions, vous vouliez, ils voulaient.' }),
+
+  makeMCQ({ id:'g6fr-imp-027', chapterId:'g6fr-imparfait', difficulty:2,
+    question:'Laquelle de ces phrases est une demande polie utilisant l\'imparfait ?',
+    options:[
+      'Je veux vous demander un conseil.',
+      'Je voulais vous demander un conseil.',
+      'Je voudrais vous demander un conseil.',
+      'Je demande un conseil.'
+    ],
+    answer:'Je voulais vous demander un conseil.',
+    hint:'"Je voulais…" = imparfait de vouloir = forme polie pour atténuer une demande.',
+    explanation:'"Je <b>voulais</b> vous demander un conseil" — l\'imparfait de vouloir (<b>voulais</b>) atténue la demande et la rend plus polie. C\'est l\'<b>imparfait de politesse</b> : on s\'efface par rapport au présent "je veux" qui paraît trop direct. Remarque : "Je <b>voudrais</b>" (conditionnel) est aussi poli.' }),
+
+  makeTF({ id:'g6fr-imp-028', chapterId:'g6fr-imparfait', difficulty:2,
+    question:'"Je mangeais" et "je téléphonais" sont tous les deux à l\'imparfait.',
+    answer:true,
+    hint:'Les deux finissent en -ais = terminaison de l\'imparfait pour "je".',
+    explanation:'<b>Vrai.</b> Les deux formes se terminent par <b>-ais</b>, terminaison de l\'imparfait pour "je". Manger → je manger + <b>ais</b> = mangeais. Téléphoner → je téléphon + <b>ais</b> = téléphonais.' }),
+
+  makeMCQ({ id:'g6fr-imp-029', chapterId:'g6fr-imparfait', difficulty:3,
+    question:'Complète la phrase d\'interruption : "Je ___ (lire) un livre quand le tonnerre ___ (éclater)."',
+    options:['lisais / a éclaté','lisais / éclatait','lus / a éclaté','ai lu / a éclaté'],
+    answer:'lisais / a éclaté',
+    hint:'Action en cours (durée) = imparfait. Action soudaine qui interrompt = passé composé.',
+    explanation:'"Je <b>lisais</b>" (imparfait = action en cours, décor) "quand le tonnerre <b>a éclaté</b>" (passé composé = action soudaine). Structure classique : <b>imparfait (arrière-plan) + quand + passé composé (événement)</b>.' }),
+
+  makeMCQ({ id:'g6fr-imp-030', chapterId:'g6fr-imparfait', difficulty:3,
+    question:'Dans la phrase "Il était une fois une petite fille qui habitait dans la forêt", quel est le rôle de l\'imparfait ?',
+    options:['Décrire des actions rapides et ponctuelles','Décrire le cadre et la situation initiale du conte','Indiquer des actions futures','Exprimer des ordres'],
+    answer:'Décrire le cadre et la situation initiale du conte',
+    hint:'Dans les contes, l\'imparfait dessine le décor : personnages, lieu, habitudes.',
+    explanation:'Dans les contes, l\'<b>imparfait descriptif</b> sert à poser le <b>cadre</b> : qui sont les personnages, où ils vivent, leurs habitudes. "Il <b>était</b> une fois", "elle <b>habitait</b>", "il <b>aimait</b>"… Ces descriptions forment l\'arrière-plan du récit. Les événements ponctuels, eux, sont au passé composé ou passé simple.' }),
+
+  makeMCQ({ id:'g6fr-imp-031', chapterId:'g6fr-imparfait', difficulty:3,
+    question:'Choisis le bon temps : "Tous les étés, la famille Sharma ___ (partir) à Rodrigues."',
+    options:['est partie','partait','part','sera partie'],
+    answer:'partait',
+    hint:'"Tous les étés" = habitude répétée dans le passé → imparfait.',
+    explanation:'"Tous les étés, la famille Sharma <b>partait</b>" — l\'expression "tous les étés" indique une action <b>habituelle et répétée</b> dans le passé → <b>imparfait</b>. C\'est l\'imparfait d\'habitude. Comparer avec : "Cet été, la famille est partie à Rodrigues" (événement unique → passé composé).' }),
+
+  makeTF({ id:'g6fr-imp-032', chapterId:'g6fr-imparfait', difficulty:3,
+    question:'"Nous nagions" est l\'imparfait de NAGER pour "nous".',
+    answer:true,
+    hint:'Nager → nous nageons (présent) → radical : nage- → imparfait nous : nagions. Le -e s\'efface avant -ions.',
+    explanation:'<b>Vrai.</b> Nager → présent "nous" : nous <b>nageons</b> → à l\'imparfait, le -e disparaît : radical = <b>nag-</b> → nous nag + <b>ions</b> = <b>nagions</b>. Règle spéciale pour les verbes en -ger : un -e s\'intercale devant les terminaisons -ais/-ait/-aient mais PAS devant -ions/-iez.' }),
+
+  makeMCQ({ id:'g6fr-imp-033', chapterId:'g6fr-imparfait', difficulty:3,
+    question:'Quel est l\'imparfait de ÊTRE ASSIS pour "elle" ? (description physique)',
+    options:['elle s\'asseyait','elle était assise','elle asseyait','elle a été assise'],
+    answer:'elle était assise',
+    hint:'"Être assis(e)" est une locution = être + adjectif. Description d\'état = imparfait de être.',
+    explanation:'"Elle <b>était assise</b>" — pour décrire une position ou un état physique dans le passé, on utilise <b>être à l\'imparfait + adjectif</b>. "Elle était assise sur le banc, les yeux fermés…" C\'est une description typique du roman ou du conte.' }),
+
+  makeMCQ({ id:'g6fr-imp-034', chapterId:'g6fr-imparfait', difficulty:4,
+    question:'Complète le passage : "Ce soir-là, le ciel ___ (être) nuageux, le vent ___ (souffler) fort et les vagues ___ (claquer) contre les rochers, quand soudain un bateau ___ (apparaître) à l\'horizon."',
+    options:[
+      'était / soufflait / claquaient / a apparu',
+      'a été / a soufflé / ont claqué / a apparu',
+      'était / soufflait / claquaient / apparaissait',
+      'était / souffla / claquèrent / apparut'
+    ],
+    answer:'était / soufflait / claquaient / a apparu',
+    hint:'Descriptions de décors = imparfait (x3). Événement soudain = passé composé (x1).',
+    explanation:'"<b>était</b> / <b>soufflait</b> / <b>claquaient</b>" = descriptions du cadre → <b>imparfait</b>. "<b>a apparu</b>" = événement soudain qui rompt le décor → <b>passé composé</b>. Structure narrative : imparfait (arrière-plan) + passé composé (événement de premier plan).' }),
+
+  makeMCQ({ id:'g6fr-imp-035', chapterId:'g6fr-imparfait', difficulty:4,
+    question:'Shanvi écrit dans son journal : "Quand j\'___ (avoir) 6 ans, je n\'___ (pas savoir) nager, je ___ (avoir peur) de l\'eau mais j\'___ (adorer) regarder la mer de loin." Bonne série ?',
+    options:[
+      'avais / ne savais / avais peur / adorais',
+      'ai eu / n\'ai pas su / ai eu peur / ai adoré',
+      'avais / ne savais / ai eu peur / adorais',
+      'étais / ne savait / avais peur / adorais'
+    ],
+    answer:'avais / ne savais / avais peur / adorais',
+    hint:'Journal intime = souvenirs d\'enfance = habitudes et états dans le passé = imparfait (x4).',
+    explanation:'"<b>avais</b>" (état : avoir 6 ans), "<b>ne savais</b> pas" (état : ne pas savoir), "<b>avais peur</b>" (état émotionnel), "<b>adorais</b>" (goût habituel) — tous ces états et habitudes de l\'enfance sont à l\'<b>imparfait</b>. Le passé composé serait pour des événements précis et ponctuels.' })
 
 );

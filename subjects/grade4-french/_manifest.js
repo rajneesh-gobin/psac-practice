@@ -57,6 +57,30 @@ registerSubject({
       ],
     },
     {
+      id: 'g4fr-passe-comp', name: 'Le Passé Composé', icon: '⏰',
+      notes: [
+        'Used for actions **completed in the past**: "J\'ai mangé" (I ate / I have eaten).',
+        'Structure: **avoir or être** (conjugated) + **past participle**.',
+        '**-ER past participle**: parler → parlé, manger → mangé, jouer → joué.',
+        '**-IR past participle**: finir → fini, choisir → choisi.',
+        '**Irregular**: avoir→eu, être→été, faire→**fait**, prendre→**pris**, voir→**vu**, dire→**dit**.',
+        '**Negation**: ne + auxiliary + pas: Je n\'ai **pas** mangé.',
+        'Verbs using **être**: aller (allé), venir (venu), partir (parti), arriver (arrivé) + all reflexives.',
+        'With être, past participle agrees with subject: Elle est allée. Ils sont partis.',
+      ],
+    },
+    {
+      id: 'g4fr-imparfait', name: 'L\'Imparfait', icon: '⏳',
+      notes: [
+        '**L\'imparfait** is used for: habitual/repeated past actions, descriptions, ongoing past states.',
+        'Signal words: chaque jour, tous les soirs, souvent, quand j\'étais petit…',
+        'Formation: take **nous** present form, remove -ons → add -ais/-ais/-ait/-ions/-iez/-aient.',
+        'Parler → nous parlons → parl- → je parlais, tu parlais, il parlait, nous parlions…',
+        'Only irregular: **être** → j\'étais, tu étais, il était, nous étions.',
+        '**Passé composé vs imparfait**: P.C. = completed event. Imparfait = background/ongoing. "Je lisais quand il est entré."',
+      ],
+    },
+    {
       id: 'g4fr-lecture', name: 'Lecture & Compréhension', icon: '🔍',
       notes: [
         'Read the French passage **slowly and carefully** at least twice before answering.',

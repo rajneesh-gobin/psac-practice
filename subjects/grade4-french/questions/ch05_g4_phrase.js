@@ -162,6 +162,142 @@ STATIC_QUESTIONS.push(
     options:['a','est','ai','ont'],
     answer:'a',
     hint:'Sujet = "ma mère" (= elle, 3e personne sg.). Verbe AVOIR pour elle au passé composé = ?',
-    explanation:'"Ma mère <b>a</b> dit de rester à la maison." — Passé composé : avoir (conjugué) + participe passé. Sujet = "ma mère" (= elle) → avoir → "<b>a</b>". "Elle a dit" = She said / She has told.' })
+    explanation:'"Ma mère <b>a</b> dit de rester à la maison." — Passé composé : avoir (conjugué) + participe passé. Sujet = "ma mère" (= elle) → avoir → "<b>a</b>". "Elle a dit" = She said / She has told.' }),
+
+  makeMCQ({ id:'g4fr-phr-020', chapterId:'g4fr-phrase', difficulty:1,
+    question:'Quel est le mode impératif de "parler" pour "tu" ?',
+    options:['tu parles','parles','parle','parler'],
+    answer:'parle',
+    hint:'Impératif -ER pour "tu" : enlève le -s final.',
+    explanation:'"<b>Parle</b> !" — Pour l\'impératif des verbes en <b>-ER</b> avec "tu" : prends la forme du présent (tu parles) et <b>enlève le -s</b> : parle ! Attention : cette règle s\'applique uniquement aux verbes en -ER (pas finir → finis, rendre → rends).' }),
+
+  makeMCQ({ id:'g4fr-phr-021', chapterId:'g4fr-phrase', difficulty:1,
+    question:'Quelle conjonction signifie "but" ?',
+    options:['et','ou','car','mais'],
+    answer:'mais',
+    hint:'"But" exprime une opposition.',
+    explanation:'"But" = <b>mais</b>. Les conjonctions de coordination (mémo <b>MAIS OU ET DONC OR NI CAR</b>) : <b>mais</b> (but), <b>ou</b> (or), <b>et</b> (and), <b>donc</b> (so/therefore), <b>or</b> (now/yet), <b>ni</b> (neither/nor), <b>car</b> (because/for).' }),
+
+  makeMCQ({ id:'g4fr-phr-022', chapterId:'g4fr-phrase', difficulty:1,
+    question:'Dans "Je mange une pomme", qu\'est-ce que le COD ?',
+    options:['Je','mange','une pomme','est'],
+    answer:'une pomme',
+    hint:'Le COD répond à la question "Je mange quoi ?"',
+    explanation:'"Je mange <b>une pomme</b>" — le <b>COD</b> (Complément d\'Objet Direct) répond à "quoi ?" ou "qui ?" après le verbe, sans préposition. "Je mange quoi ?" → "une pomme" = COD. Le COD se place directement après le verbe.' }),
+
+  makeTF({ id:'g4fr-phr-023', chapterId:'g4fr-phrase', difficulty:1,
+    question:'L\'impératif de "vous" pour les verbes en -ER garde le -z final.',
+    answer:true,
+    hint:'Tu parles → Parle ! (perd -s). Vous parlez → Parlez ! (garde -z).',
+    explanation:'<b>Vrai.</b> Impératif pour <b>vous</b> : identique à la forme du présent (avec -z). "Vous parlez" → "<b>Parlez</b> !" "Vous écoutez" → "<b>Écoutez</b> !" Seul le "tu" des -ER perd son -s ; le "vous" garde toujours -z.' }),
+
+  makeMCQ({ id:'g4fr-phr-024', chapterId:'g4fr-phrase', difficulty:2,
+    question:'Quelle phrase utilise "donc" correctement ?',
+    options:[
+      'Il pleut, donc nous sortons.',
+      'Il pleut, donc mais nous sortons.',
+      'Donc il pleut et nous.',
+      'Il pleut, nous donc sortons.'
+    ],
+    answer:'Il pleut, donc nous sortons.',
+    hint:'"Donc" = therefore/so. Il relie une cause et une conséquence.',
+    explanation:'"Il pleut, <b>donc</b> nous sortons." — <b>donc</b> (so/therefore) exprime une conséquence. Position : entre deux propositions. Structure : cause + donc + conséquence. "Il pleut" (cause) → "donc nous sortons" (conséquence logique — même si ici ça semble illogique ! C\'est la grammaire qui compte).' }),
+
+  makeMCQ({ id:'g4fr-phr-025', chapterId:'g4fr-phrase', difficulty:2,
+    question:'Identifie le COI dans : "Je téléphone à ma mère."',
+    options:['Je','téléphone','à ma mère','mère'],
+    answer:'à ma mère',
+    hint:'Le COI répond à "à qui ?" et contient une préposition.',
+    explanation:'"Je téléphone <b>à ma mère</b>" — le <b>COI</b> (Complément d\'Objet Indirect) répond à "à qui ?" ou "de qui ?" et est introduit par une <b>préposition</b> (à, de). "Je téléphone à qui ?" → "à ma mère" = COI. Différence avec COD : le COI a une préposition.' }),
+
+  makeMCQ({ id:'g4fr-phr-026', chapterId:'g4fr-phrase', difficulty:2,
+    question:'Quel est le mode impératif de "finir" pour "vous" ?',
+    options:['finissez','finissez-vous','vous finissez','finis'],
+    answer:'finissez',
+    hint:'Impératif "vous" : même forme que le présent sans "vous".',
+    explanation:'"<b>Finissez</b> vos devoirs !" — Impératif "vous" de "finir" : prends la forme du présent (vous finissez), supprime le sujet (vous) → <b>finissez</b>. Même règle pour tous les verbes au "vous" : vous mangez → <b>mangez</b>, vous allez → <b>allez</b>.' }),
+
+  makeMCQ({ id:'g4fr-phr-027', chapterId:'g4fr-phrase', difficulty:2,
+    question:'Quelle conjonction complète : "Je veux un sandwich ___ une pizza."',
+    options:['donc','ni','car','ou'],
+    answer:'ou',
+    hint:'"Ou" exprime un choix entre deux options.',
+    explanation:'"Je veux un sandwich <b>ou</b> une pizza." — <b>ou</b> (or) exprime une <b>alternative/un choix</b>. Les conjonctions MAIS OU ET DONC OR NI CAR : <b>ou</b> = or, <b>et</b> = and (accumulation), <b>mais</b> = but (opposition), <b>car</b> = because (raison).' }),
+
+  makeMCQ({ id:'g4fr-phr-028', chapterId:'g4fr-phrase', difficulty:3,
+    question:'Dans "Elle donne des fleurs à son professeur", qu\'est-ce que "des fleurs" ?',
+    options:['sujet','COD','COI','verbe'],
+    answer:'COD',
+    hint:'"Elle donne quoi ?" → pas de préposition avant "des fleurs".',
+    explanation:'"Elle donne <b>des fleurs</b>" = COD. "Elle donne quoi ?" → "des fleurs" (sans préposition → COD). "à son professeur" = COI ("elle donne à qui ?" → à son professeur, avec préposition "à"). Une phrase peut avoir les deux : COD + COI.' }),
+
+  makeMCQ({ id:'g4fr-phr-029', chapterId:'g4fr-phrase', difficulty:3,
+    question:'Quelle phrase utilise l\'impératif correctement pour ordonner à quelqu\'un d\'aller à la maison ?',
+    options:['Vas à la maison !','Va à la maison !','Aller à la maison !','Tu vas à la maison !'],
+    answer:'Va à la maison !',
+    hint:'"Aller" impératif "tu" = Va (irrégulier, sans -s).',
+    explanation:'"<b>Va</b> à la maison !" — "aller" est irrégulier à l\'impératif : <b>va</b> (tu), <b>allons</b> (nous), <b>allez</b> (vous). "Vas" n\'existe pas à l\'impératif seul (sauf devant "y" : vas-y !). "Aller !" = infinitif (pas impératif). "Tu vas" = présent indicatif.' }),
+
+  makeMCQ({ id:'g4fr-phr-030', chapterId:'g4fr-phrase', difficulty:3,
+    question:'Identifie la conjonction correcte : "Je n\'aime ___ le poisson ___ la viande." (neither...nor)',
+    options:['ni / ni','ou / ou','et / et','mais / mais'],
+    answer:'ni / ni',
+    hint:'"Neither...nor" en français = ni...ni.',
+    explanation:'"Je n\'aime <b>ni</b> le poisson <b>ni</b> la viande." — <b>ni...ni</b> = neither...nor. On utilise toujours "ne" devant le verbe : "je <b>n\'</b>aime ni... ni...". Structure : ne + verbe + ni + X + ni + Y.' }),
+
+  makeMCQ({ id:'g4fr-phr-031', chapterId:'g4fr-phrase', difficulty:3,
+    question:'Quelle phrase a un COD et un COI ?',
+    options:[
+      'Je lis un livre.',
+      'Je donne un livre à mon ami.',
+      'Je parle à mon ami.',
+      'Mon ami lit.'
+    ],
+    answer:'Je donne un livre à mon ami.',
+    hint:'"Je donne quoi ?" (COD) et "à qui ?" (COI).',
+    explanation:'"Je donne <b>un livre</b> (COD) <b>à mon ami</b> (COI)." — COD = "un livre" (quoi ?, sans préposition). COI = "à mon ami" (à qui ?, avec préposition "à"). Les autres phrases n\'ont qu\'un seul complément.' }),
+
+  makeMCQ({ id:'g4fr-phr-032', chapterId:'g4fr-phrase', difficulty:4,
+    question:'Priya donne un ordre à sa petite sœur. Traduis : "Finish your homework and go to bed!" (using tu-form)',
+    options:[
+      'Finis tes devoirs et va au lit !',
+      'Finissez vos devoirs et allez au lit !',
+      'Tu finis tes devoirs et tu vas au lit !',
+      'Finir les devoirs et aller au lit !'
+    ],
+    answer:'Finis tes devoirs et va au lit !',
+    hint:'"Finir" (tu) impératif = ? "Aller" (tu) impératif = ?',
+    explanation:'"<b>Finis</b> tes devoirs et <b>va</b> au lit !" — "finir" impératif tu = <b>finis</b> (verbe -IR : garde le -s). "aller" impératif tu = <b>va</b> (irrégulier). La forme "vous" serait : finissez / allez. Les infinitifs ne peuvent pas servir d\'impératifs.' }),
+
+  makeMCQ({ id:'g4fr-phr-033', chapterId:'g4fr-phrase', difficulty:4,
+    question:'Complète en choisissant la bonne conjonction : "J\'aime le chocolat ___ je n\'en mange pas souvent ___ c\'est trop sucré."',
+    options:['mais / car','et / mais','ou / donc','ni / car'],
+    answer:'mais / car',
+    hint:'"mais" = opposition (j\'aime... mais pas souvent). "car" = raison (pas souvent, car = because).',
+    explanation:'"J\'aime le chocolat <b>mais</b> je n\'en mange pas souvent <b>car</b> c\'est trop sucré." — <b>mais</b> = opposition entre "j\'aime" et "je n\'en mange pas". <b>car</b> = raison/explication ("because it\'s too sweet"). Deux conjonctions MAIS OU ET DONC OR NI CAR dans une phrase !' }),
+
+  makeMCQ({ id:'g4fr-phr-034', chapterId:'g4fr-phrase', difficulty:4,
+    question:'Identifie le COD et le COI dans : "Ma sœur envoie un message à ses amies."',
+    options:[
+      'COD = un message / COI = à ses amies',
+      'COD = ses amies / COI = un message',
+      'COD = ma sœur / COI = un message',
+      'Il n\'y a pas de COD ni COI.'
+    ],
+    answer:'COD = un message / COI = à ses amies',
+    hint:'"Elle envoie quoi ?" (COD) et "à qui ?" (COI).',
+    explanation:'"Ma sœur envoie <b>un message</b> (COD) <b>à ses amies</b> (COI)." — COD = "un message" (quoi ? sans préposition). COI = "à ses amies" (à qui ? avec préposition "à"). Règle : COD répond à quoi/qui SANS préposition, COI AVEC préposition.' }),
+
+  makeMCQ({ id:'g4fr-phr-035', chapterId:'g4fr-phrase', difficulty:4,
+    question:'Traduis et mets à l\'impératif : "Sophie, don\'t eat the cake and don\'t drink the juice — they are for Grandma!"',
+    options:[
+      'Ne mange pas le gâteau et ne bois pas le jus !',
+      'Ne mangez pas le gâteau et ne buvez pas le jus !',
+      'Tu ne manges pas le gâteau et tu ne bois pas le jus !',
+      'Pas manger le gâteau et pas boire le jus !'
+    ],
+    answer:'Ne mange pas le gâteau et ne bois pas le jus !',
+    hint:'Négatif impératif (tu) : ne + verbe + pas. Sophie = une personne = tu-form.',
+    explanation:'"<b>Ne mange pas</b> le gâteau et <b>ne bois pas</b> le jus !" — Impératif négatif : <b>ne</b> + verbe impératif + <b>pas</b>. "Tu" form : manger → mange → ne mange pas. boire → bois → ne bois pas. "Vous" form aurait été : ne mangez pas, ne buvez pas.' })
 
 );

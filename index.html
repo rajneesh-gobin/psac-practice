@@ -1537,8 +1537,13 @@
           <div id="forum-post-body"></div>
           <div id="forum-post-replies" class="mt-4"></div>
 
+          <!-- Closed banner (shown when post is closed) -->
+          <div id="forum-closed-banner" class="hidden mt-4 flex items-center gap-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-200 dark:border-gray-600 text-sm text-gray-500 dark:text-gray-400">
+            🔒 This discussion is closed — no new replies can be added.
+          </div>
+
           <!-- Reply box -->
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 mt-4">
+          <div id="forum-reply-box" class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 mt-4">
             <div class="flex justify-between items-center mb-2">
               <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Write a reply</h4>
               <span id="forum-reply-chars" class="text-xs text-gray-400">0/1000</span>
