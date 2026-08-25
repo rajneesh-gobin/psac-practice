@@ -78,7 +78,7 @@ const Search = (() => {
       .filter(q => q && q.question && q.chapterId)
       .map(q => {
         const meta       = chMeta[q.chapterId] || {};
-        const rawText    = [q.question, ...(q.options || []), q.answer || ''].join(' ');
+        const rawText    = [q.question, ...(q.options || []), q.answer || ''].join(' ').replace(/<[^>]*>/g, ' ');
         const searchText = norm(rawText);
         return { q, meta, searchText, words: searchText.split(' ').filter(Boolean) };
       })
@@ -236,10 +236,15 @@ const Search = (() => {
     return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  // Strip HTML tags so question text with <b>, <br> etc. shows as plain text
+  function _plain(s) {
+    return (s || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
   function _highlight(text) {
     const inp    = document.getElementById('search-input');
     const qWords = norm(inp?.value || '').split(' ').filter(w => w.length >= 2);
-    let out = _esc(text);
+    let out = _esc(_plain(text));
     for (const w of qWords) {
       const re = new RegExp(`(${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
       out = out.replace(re, '<mark class="bg-yellow-200 dark:bg-yellow-700/60 rounded px-0.5">$1</mark>');
