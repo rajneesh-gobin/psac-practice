@@ -14,7 +14,20 @@ const QuestionLoader = (() => {
   // file:// → local development without any server
   const _isFileProtocol = location.protocol === 'file:';
 
-  // Question file paths per subject - only used in file:// mode
+  // Question file paths per subject - only used in file:// mode.
+  //
+  // ⚠ HAND-MAINTAINED AND PRONE TO DRIFT. Production auto-discovers every file
+  //   in subjects/<id>/questions/ via the Netlify function, so a file missing
+  //   from this list works in prod but is silently invisible under file://.
+  //   This list had drifted for 4 packs (8 chapters) before it was corrected.
+  //
+  // ✅ RECOMMENDED: don't use file:// at all. Run `netlify dev` and you get the
+  //   same auto-discovering /.netlify/functions/questions endpoint as
+  //   production, and this list is bypassed entirely. Keep it only as a
+  //   zero-tooling fallback.
+  //
+  //   To check for drift:
+  //     compare `ls subjects/*/questions/*.js` against the entries below.
   const LOCAL_FILES = {
     'grade5-maths': [
       'subjects/grade5-maths/questions/core.js',
@@ -37,6 +50,8 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/ch06_pronoms.js',
       'subjects/grade5-french/questions/ch07_lecture.js',
       'subjects/grade5-french/questions/ch08_grammaire.js',
+      'subjects/grade5-french/questions/ch09_passe_simple.js',
+      'subjects/grade5-french/questions/ch10_subjonctif.js',
     ],
     'grade5-english': [
       'subjects/grade5-english/questions/ch01_nouns.js',
@@ -127,6 +142,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/ch04_subjunctif.js',
       'subjects/grade6-french/questions/ch05_argumentation.js',
       'subjects/grade6-french/questions/ch06_lecture.js',
+      'subjects/grade6-french/questions/ch07_conditionnel.js',
+      'subjects/grade6-french/questions/ch08_pqp.js',
     ],
     'grade4-maths': [
       'subjects/grade4-maths/questions/ch01_g4_numeration.js',
@@ -151,6 +168,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-science/questions/ch04_g4_air.js',
       'subjects/grade4-science/questions/ch05_g4_water.js',
       'subjects/grade4-science/questions/ch06_g4_materials.js',
+      'subjects/grade4-science/questions/ch07_g4_energy.js',
+      'subjects/grade4-science/questions/ch08_g4_protection.js',
       // @enrichment — bonus content, derived from syllabus
       'subjects/grade4-science/questions/enrichment_g4sci_animals.js',
       'subjects/grade4-science/questions/enrichment_g4sci_equipment.js',
@@ -162,6 +181,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/ch04_g4_adjectifs.js',
       'subjects/grade4-french/questions/ch05_g4_phrase.js',
       'subjects/grade4-french/questions/ch06_g4_lecture.js',
+      'subjects/grade4-french/questions/ch07_g4_passe_compose.js',
+      'subjects/grade4-french/questions/ch08_g4_imparfait.js',
     ],
     'grade4-history': [
       'subjects/grade4-history/questions/ch01_g4_locality.js',

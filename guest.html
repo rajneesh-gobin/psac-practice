@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Homework · PSAC Practice</title>
+<meta name="theme-color" content="#4f46e5">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<!--
+  Deliberately standalone: no Tailwind CDN, no supabase-js, no engine/*.js.
+  A child opening this from WhatsApp on a phone data plan should download a few
+  KB, not the whole app. This page talks ONLY to /api/assignment-* .
+-->
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#f6f7fb; --card:#fff; --ink:#1e2537; --muted:#6b7280; --line:#e6e8ef;
+    --brand:#4f46e5; --brand-dk:#4338ca; --ok:#16a34a; --okbg:#ecfdf5;
+    --bad:#dc2626; --badbg:#fef2f2; --amber:#f59e0b;
+  }
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);
+       color:var(--ink);line-height:1.5;-webkit-text-size-adjust:100%}
+  .wrap{max-width:560px;margin:0 auto;padding:16px 14px 40px}
+  .screen{display:none}.screen.on{display:block}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+  h1{font-size:20px;font-weight:800;letter-spacing:-.01em}
+  h2{font-size:16px;font-weight:700;margin-bottom:8px}
+  .muted{color:var(--muted);font-size:13px}
+  .brandbar{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border-radius:16px;padding:18px;margin-bottom:14px}
+  .brandbar .t{font-size:19px;font-weight:800}
+  .brandbar .s{opacity:.9;font-size:13px;margin-top:3px}
+  .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .chip{background:rgba(255,255,255,.18);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600}
+  .chip.dark{background:#eef0f6;color:#4b5563}
+  label{display:block;font-size:13px;font-weight:600;margin:12px 0 5px}
+  input[type=text],input[type=tel]{width:100%;border:2px solid var(--line);border-radius:12px;
+    padding:13px 14px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
+  input:focus{outline:none;border-color:var(--brand)}
+  input.pin{letter-spacing:.5em;text-align:center;font-size:22px;font-weight:700}
+  .btn{width:100%;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:700;
+       font-family:inherit;background:var(--brand);color:#fff;cursor:pointer;margin-top:16px}
+  .btn:active{transform:scale(.99)}
+  .btn[disabled]{opacity:.55;cursor:default}
+  .btn.sec{background:#eef0f6;color:#374151;margin-top:9px}
+  .btn.wa{background:#25d366;color:#06281a}
+  .err{background:var(--badbg);color:var(--bad);border-radius:11px;padding:11px 13px;
+       font-size:14px;font-weight:600;margin-top:14px;display:none}
+  .err.on{display:block}
+  .bar{height:6px;background:#e9ebf2;border-radius:999px;overflow:hidden;margin-bottom:14px}
+  .bar>i{display:block;height:100%;background:var(--brand);border-radius:999px;transition:width .3s}
+  .qhead{display:flex;justify-content:space-between;align-items:center;font-size:13px;
+         color:var(--muted);font-weight:600;margin-bottom:10px}
+  .qtext{font-size:17px;font-weight:600;margin-bottom:14px}
+  .qtext img,.qtext svg{max-width:100%;height:auto;border-radius:10px;margin-top:8px}
+  .opt{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:#fff;
+       border:2px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:9px;
+       font-size:15px;font-family:inherit;color:var(--ink);cursor:pointer}
+  .opt .ltr{flex:0 0 27px;height:27px;border-radius:50%;background:#eef0f6;color:#4b5563;
+            display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+  .opt.sel{border-color:var(--brand);background:#f2f2ff}
+  .opt.ok{border-color:var(--ok);background:var(--okbg)}
+  .opt.no{border-color:var(--bad);background:var(--badbg)}
+  .opt[disabled]{cursor:default}
+  .fb{border-radius:12px;padding:13px 14px;margin-top:12px;font-size:14px;display:none}
+  .fb.on{display:block}
+  .fb.ok{background:var(--okbg);border:1px solid #bbf7d0}
+  .fb.no{background:var(--badbg);border:1px solid #fecaca}
+  .fb b{display:block;margin-bottom:4px;font-size:15px}
+  .score{font-size:52px;font-weight:800;text-align:center;line-height:1.1;color:var(--brand)}
+  .scoresub{text-align:center;color:var(--muted);font-size:14px;margin-top:2px}
+  .sent{background:var(--okbg);border:1px solid #bbf7d0;color:#166534;border-radius:12px;
+        padding:12px;text-align:center;font-weight:700;margin-top:16px}
+  .conv{background:linear-gradient(135deg,#eef2ff,#faf5ff);border:1px solid #ddd6fe;
+        border-radius:16px;padding:18px;margin-top:16px}
+  .review{margin-top:8px}
+  .rv{display:flex;gap:9px;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+  .rv .ic{flex:0 0 18px}
+  .foot{text-align:center;font-size:12px;color:var(--muted);margin-top:22px}
+  .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);
+        border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media (prefers-color-scheme:dark){
+    :root{--bg:#12141c;--card:#1b1e29;--ink:#eef0f6;--muted:#9aa1b1;--line:#2b3040;
+          --okbg:#0f2f22;--badbg:#361a1a}
+    .chip.dark{background:#2b3040;color:#c4cad8}
+    input[type=text],input[type=tel]{background:#12141c}
+    .opt{background:#1b1e29}
+    .opt.sel{background:#232544}
+    .btn.sec{background:#2b3040;color:#dfe3ec}
+    .conv{background:linear-gradient(135deg,#1e2140,#2a1e3d);border-color:#3b3566}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ══ 1 · GATE ══ -->
+  <section id="s-gate" class="screen on">
+    <div class="brandbar">
+      <div class="t" id="g-title">Homework</div>
+      <div class="s" id="g-sub">Enter your name and PIN to start</div>
+      <div class="meta" id="g-meta"></div>
+    </div>
+    <div class="card">
+      <label for="g-name">Your first name</label>
+      <input id="g-name" type="text" autocomplete="given-name" enterkeyhint="next"
+             placeholder="e.g. Shanvi" maxlength="40">
+      <label for="g-pin">4-digit PIN from your teacher</label>
+      <input id="g-pin" class="pin" type="tel" inputmode="numeric" maxlength="4"
+             enterkeyhint="go" placeholder="••••">
+      <div id="g-err" class="err"></div>
+      <button id="g-go" class="btn">Start homework →</button>
+      <p class="muted" style="margin-top:12px;text-align:center">
+        No account needed. Your teacher sees your score.
+      </p>
+    </div>
+    <div class="foot">PSAC Practice 🇲🇺</div>
+  </section>
+
+  <!-- ══ 2 · QUIZ ══ -->
+  <section id="s-quiz" class="screen">
+    <div class="bar"><i id="q-bar" style="width:0%"></i></div>
+    <div class="card">
+      <div class="qhead">
+        <span id="q-count">Question 1</span>
+        <span id="q-timer"></span>
+      </div>
+      <div class="qtext" id="q-text"></div>
+      <div id="q-answers"></div>
+      <div class="fb" id="q-fb"></div>
+      <button id="q-btn" class="btn">Check answer</button>
+    </div>
+    <div class="foot" id="q-who"></div>
+  </section>
+
+  <!-- ══ 3 · DONE ══ -->
+  <section id="s-done" class="screen">
+    <div class="card">
+      <div class="score" id="d-pct">0%</div>
+      <div class="scoresub" id="d-score">0 out of 0 correct</div>
+      <div class="sent" id="d-sent">Sent to your teacher ✅</div>
+      <button id="d-share" class="btn wa">📤 Share my result</button>
+      <button id="d-review" class="btn sec">Review my answers</button>
+      <div class="review" id="d-reviewlist" style="display:none"></div>
+    </div>
+
+    <div class="conv">
+      <h2>Want to keep going? 🚀</h2>
+      <p class="muted" style="margin-bottom:4px">
+        Ask a parent to create a <b>free</b> account and you can:
+      </p>
+      <p class="muted">✅ Save your progress forever &nbsp;·&nbsp; ⭐ Earn XP and badges
+        &nbsp;·&nbsp; 📚 Practise all 5 PSAC subjects</p>
+      <a class="btn" id="d-signup" href="/" style="display:block;text-align:center;text-decoration:none">
+        Create a free account
+      </a>
+      <button id="d-tellparent" class="btn wa">💬 Send this to a parent</button>
+    </div>
+    <div class="foot">PSAC Practice 🇲🇺 · Mauritius MIE curriculum</div>
+  </section>
+
+</div>
+<canvas id="cardcanvas" width="1080" height="1080" style="display:none"></canvas>
+<script src="/guest.js"></script>
+</body>
+</html>

@@ -19,61 +19,23 @@ const TeacherMode = (() => {
 
   function _el(id) { return document.getElementById(id); }
 
-  // ── PIN entry ──────────────────────────────────
-  function enter() {
-    const data  = _getData();
-    const input = _el('tpin-input');
-    if (!data.pin) {
-      _el('tpin-title').textContent = '👩‍🏫 Set Teacher PIN';
-      _el('tpin-desc').textContent  = 'Create a 4-digit PIN for teacher access.';
-      if (input) input._mode = 'set';
-    } else {
-      _el('tpin-title').textContent = '👩‍🏫 Teacher Access';
-      _el('tpin-desc').textContent  = 'Enter your teacher PIN.';
-      if (input) input._mode = 'enter';
-    }
-    if (input) input.value = '';
-    const modal = _el('teacher-pin-modal');
-    if (modal) { modal.style.display = 'flex'; setTimeout(() => input?.focus(), 100); }
-  }
-
-  function closeModal() {
-    const m = _el('teacher-pin-modal');
-    if (m) m.style.display = 'none';
-  }
-
-  function submitPin() {
-    const input = _el('tpin-input');
-    const pin   = (input?.value || '').trim();
-    const mode  = input?._mode || 'enter';
-    if (!/^\d{4}$/.test(pin)) { toast('Please enter exactly 4 digits.', 2000); return; }
-
-    const data = _getData();
-    if (mode === 'set') {
-      data.pin = pin;
-      _saveData(data);
-      closeModal();
-      toast('Teacher PIN set! 👩‍🏫', 1500);
-      _openDashboard();
-    } else {
-      if (pin !== data.pin) { toast('Incorrect PIN. Try again.', 2000); if (input) input.value = ''; return; }
-      closeModal();
-      _openDashboard();
-    }
-  }
-
-  function _openDashboard() {
-    render();
-    showScreen('teacher');
-  }
-
-  function exit() {
-    // Go back to whichever student screen is appropriate
-    if (typeof Auth !== 'undefined' && typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID) {
-      showScreen('dashboard');
-    } else {
-      showScreen('student-select');
-    }
+  // ── Access control ─────────────────────────────
+  // Teacher mode is a Supabase role (profiles.role = 'teacher'), granted by an
+  // administrator. There is no PIN, and no way for a parent or a child to opt in.
+  //
+  // The old enter()/submitPin() flow stored a 4-digit PIN in localStorage and,
+  // if none existed yet, invited the visitor to CREATE one - so any user could
+  // grant themselves teacher access on their own device. It has been removed.
+  //
+  // This is a UI guard only. The real enforcement is server-side: every teacher
+  // RPC (guest_assignment_create, guest_results, guest_grant_retry) re-checks
+  // the caller's role, so a non-teacher who forced their way to this screen
+  // would see an empty dashboard and every action would be refused.
+  // Requires role AND an approved status - a pending or suspended teacher is
+  // not a teacher yet. Auth computes this once at sign-in from the profile row.
+  function isTeacher() {
+    return (typeof Auth !== 'undefined' && typeof Auth.isTeacher === 'function')
+      ? !!Auth.isTeacher() : false;
   }
 
   // ── Results storage ────────────────────────────
@@ -142,6 +104,15 @@ const TeacherMode = (() => {
 
   // ── Build the teacher dashboard ────────────────
   function render() {
+    // Belt and braces: showScreen('teacher') can be reached from anywhere, so
+    // refuse to draw the dashboard for anyone who is not a teacher.
+    if (!isTeacher()) {
+      const list = _el('ta-asgn-list');
+      if (list) list.innerHTML = '<p class="text-sm text-gray-400 py-2">Teacher access required.</p>';
+      if (typeof toast === 'function') toast('Teacher access is granted by an administrator.', 3000);
+      if (typeof showScreen === 'function') showScreen(ACTIVE_STUDENT_ID ? 'dashboard' : 'landing');
+      return;
+    }
     _buildChapterCheckboxes();
     _renderAssignmentList();
     _renderResultsAssignSelector();
@@ -381,14 +352,8 @@ const TeacherMode = (() => {
     toast('Assignment deleted.', 1500);
   }
 
-  // Enter PIN on keydown
-  document.addEventListener('keydown', e => {
-    const modal = _el('teacher-pin-modal');
-    if (modal?.style.display === 'flex' && e.key === 'Enter') submitPin();
-  });
-
   return {
-    enter, closeModal, submitPin, exit, render, switchTab,
+    isTeacher, render, switchTab,
     buildAssignment, copyLink, deleteAssignment,
     saveResult, getAttemptCount, hasRetry, allowRetry, removeResult, showAnswers,
   };

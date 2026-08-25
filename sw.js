@@ -10,7 +10,15 @@ const CACHE_VERSION = 'v1';
 const SHELL_CACHE   = `psac-shell-${CACHE_VERSION}`;
 const DATA_CACHE    = `psac-data-${CACHE_VERSION}`;
 
-// Files to pre-cache on install (the app shell)
+// Files to pre-cache on install (the app shell).
+//
+// ⚠ HAND-MAINTAINED — every new engine/*.js file MUST be added here, or it will
+//   not be available offline. Add the <script> tag in index.html and the entry
+//   below in the same commit.
+//
+// ⚠ cache.addAll() is ALL-OR-NOTHING: if any single URL below 404s, the whole
+//   install step rejects and the app has NO offline shell at all. Never list a
+//   file before it is actually deployed.
 const SHELL_FILES = [
   '/',
   '/index.html',
@@ -31,6 +39,8 @@ const SHELL_FILES = [
   '/engine/teacher.js',
   '/engine/forum.js',
   '/engine/calendar.js',
+  '/engine/search.js',
+  '/engine/classroom.js',
 ];
 
 // ── Install: pre-cache the shell ─────────────────────────────────────────────
@@ -62,6 +72,16 @@ self.addEventListener('fetch', event => {
 
   // Only handle GET requests
   if (request.method !== 'GET') return;
+
+  // ── Guest assignment pages: never serve from cache ──
+  // /a/<CODE> and guest.html are time-sensitive (deadlines, expiry, one-shot
+  // submissions). A cache-first hit here would show a child a stale page for an
+  // assignment that has already closed. Let these go straight to the network.
+  if (url.pathname.startsWith('/a/') ||
+      url.pathname === '/guest.html' ||
+      url.pathname === '/guest.js') {
+    return;
+  }
 
   // ── Netlify functions & Supabase: network-first ──
   if (

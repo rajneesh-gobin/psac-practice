@@ -18,7 +18,7 @@ const AdminPanel = (() => {
   // ── Entry point called by auth.js ───────────
   async function render() {
     showTab('members');
-    await Promise.all([loadMembers(), loadSettings()]);
+    await Promise.all([loadMembers(), loadSettings(), loadTeacherQueue()]);
     _renderContent();
     await loadStats();
     // Show super-admin-only tabs
@@ -49,6 +49,94 @@ const AdminPanel = (() => {
     if (name === 'reports') loadReports();
     if (name === 'roles')   loadRoles();
     if (name === 'plans')   loadPlans();
+  }
+
+  // ── Teacher approval queue ─────────────────
+  const _TSTATUS = {
+    pending:   { label: '⏳ Pending',   cls: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300' },
+    approved:  { label: '✅ Approved',  cls: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' },
+    rejected:  { label: '✕ Rejected',   cls: 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400' },
+    suspended: { label: '🚫 Suspended', cls: 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400' },
+  };
+
+  async function loadTeacherQueue() {
+    const el = document.getElementById('admin-teacher-queue');
+    if (!el || !_sb) return;
+    const { data, error } = await _sb.rpc('admin_teacher_requests');
+    if (error || !data?.ok) {
+      el.innerHTML = '';
+      if (error) console.error('[AdminPanel.loadTeacherQueue]', error.message);
+      return;
+    }
+
+    const rows    = data.requests || [];
+    const pending = rows.filter(r => r.status === 'pending');
+    const others  = rows.filter(r => r.status !== 'pending');
+
+    if (!rows.length) { el.innerHTML = ''; return; }
+
+    const row = r => {
+      const st = _TSTATUS[r.status] || _TSTATUS.rejected;
+      const when = r.requested_at ? new Date(r.requested_at).toLocaleDateString() : '';
+      return `<div class="bg-white dark:bg-gray-800 rounded-xl p-3 border border-gray-100 dark:border-gray-700 mb-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-sm font-bold text-gray-800 dark:text-white">${_esc(r.full_name || r.id)}</span>
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${st.cls}">${st.label}</span>
+          ${r.status === 'approved'
+            ? `<span class="text-xs text-gray-400">${_esc(r.tier)}</span>` : ''}
+          <span class="text-xs text-gray-400 ml-auto">${when}</span>
+        </div>
+        ${r.note ? `<p class="text-xs text-gray-500 dark:text-gray-400 italic mt-1">"${_esc(r.note)}"</p>` : ''}
+        <div class="flex gap-2 flex-wrap mt-2">
+          ${r.status !== 'approved' ? `
+            <button onclick="AdminPanel.setTeacherStatus('${r.id}','approved','unverified')"
+              class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1 rounded-lg font-semibold hover:bg-green-200 transition-colors">✅ Approve</button>` : ''}
+          ${r.status === 'approved' ? `
+            <button onclick="AdminPanel.setTeacherStatus('${r.id}','approved','${r.tier === 'verified' ? 'unverified' : 'verified'}')"
+              class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-lg font-semibold hover:bg-indigo-200 transition-colors">
+              ${r.tier === 'verified' ? '↓ Make unverified' : '⭐ Make verified'}</button>
+            <button onclick="AdminPanel.setTeacherStatus('${r.id}','suspended')"
+              class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg font-semibold hover:bg-red-200 transition-colors">🚫 Suspend</button>` : ''}
+          ${r.status === 'pending' ? `
+            <button onclick="AdminPanel.setTeacherStatus('${r.id}','rejected')"
+              class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 px-3 py-1 rounded-lg font-semibold hover:bg-gray-200 transition-colors">✕ Reject</button>` : ''}
+        </div>
+      </div>`;
+    };
+
+    el.innerHTML = `
+      <div class="rounded-2xl border border-gray-200 dark:border-gray-700 p-3">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-sm font-bold text-gray-800 dark:text-white">👩‍🏫 Teacher accounts</span>
+          ${pending.length
+            ? `<span class="text-xs font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">${pending.length} awaiting review</span>`
+            : '<span class="text-xs text-gray-400">nothing pending</span>'}
+          <button onclick="AdminPanel.loadTeacherQueue()" class="ml-auto text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻</button>
+        </div>
+        ${pending.map(row).join('')}
+        ${others.length ? `<details class="mt-1"><summary class="text-xs text-gray-400 cursor-pointer py-1">
+            ${others.length} existing teacher${others.length === 1 ? '' : 's'}</summary>
+            <div class="mt-2">${others.map(row).join('')}</div></details>` : ''}
+      </div>`;
+  }
+
+  async function setTeacherStatus(userId, status, tier) {
+    if (!_sb) return;
+    if (status === 'suspended' && !confirm('Suspend this teacher? They keep access to past results but cannot set new work.')) return;
+    if (status === 'rejected'  && !confirm('Reject this application?')) return;
+    const { data, error } = await _sb.rpc('admin_set_teacher_status',
+      { p_user_id: userId, p_status: status, p_tier: tier || null });
+    if (error || !data?.ok) {
+      const why = error?.message || data?.error || 'unknown';
+      console.error('[AdminPanel.setTeacherStatus]', why);
+      toast('Could not update: ' + why, 3500);
+      return;
+    }
+    toast('Teacher status: ' + status, 2000);
+    await loadTeacherQueue();
+    await loadMembers();
+    // Keep the header badge honest after a decision.
+    if (typeof Auth !== 'undefined' && Auth.refreshAdminBadge) Auth.refreshAdminBadge();
   }
 
   // ── Members ────────────────────────────────
@@ -613,5 +701,6 @@ const AdminPanel = (() => {
     if (btn) { btn.disabled = false; btn.textContent = '🎁 Create Account'; }
   }
 
-  return { render, showTab, loadMembers, filterMembers, changeRole, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, loadRoles, setRole, loadPlans, togglePlan, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails };
+  return { render, showTab, loadMembers, filterMembers, changeRole,
+    loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, loadRoles, setRole, loadPlans, togglePlan, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails };
 })();

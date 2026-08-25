@@ -105,7 +105,10 @@
         </div>
         <div id="xp-display" class="flex items-center gap-1.5 bg-purple-100 dark:bg-purple-900/40 px-3 py-1.5 rounded-full"></div>
         <button onclick="Auth.enterParentMode()" class="flex items-center gap-1.5 text-xs font-semibold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/60 transition-colors" title="Parent Dashboard">🔒 <span class="hidden sm:inline">Parent</span></button>
-        <button onclick="TeacherMode.enter()" class="flex items-center gap-1.5 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Teacher Dashboard">👩‍🏫 <span class="hidden sm:inline">Teacher</span></button>
+        <!-- Teacher Dashboard: hidden by default. Auth reveals it ONLY when the
+             signed-in profile has role 'teacher' or 'admin'. Teachers are created
+             by an administrator; there is no self-service route in. -->
+        <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hidden items-center gap-1.5 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Teacher Dashboard">👩‍🏫 <span class="hidden sm:inline">Teacher</span></button>
         <button id="search-btn" onclick="Search.open()" class="icon-btn hidden" title="Search Questions">🔍</button>
         <button onclick="showScreen('forum')" class="icon-btn" title="Community Forum">💬</button>
         <button id="analytics-btn" class="icon-btn" title="Analytics">📊</button>
@@ -134,14 +137,37 @@
             <div class="text-xs text-indigo-300/70">Mauritius 🇲🇺</div>
           </div>
         </div>
-        <button onclick="showScreen('auth')"
-          class="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-semibold px-5 py-2 rounded-full transition-colors">
-          Sign In
-        </button>
+        <div class="flex items-center gap-2">
+          <a href="#plans" class="hidden sm:inline text-indigo-200/80 hover:text-white text-sm font-semibold px-3 py-2 transition-colors">Pricing</a>
+          <button onclick="showScreen('auth')"
+            class="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-semibold px-5 py-2 rounded-full transition-colors">
+            Sign In
+          </button>
+        </div>
       </nav>
 
+      <!-- ── Prototype / free-access banner ── -->
+      <div class="px-4 pt-2 pb-4 max-w-3xl mx-auto w-full">
+        <div class="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/40 rounded-2xl px-5 py-4">
+          <div class="flex items-start gap-3">
+            <span class="text-2xl select-none shrink-0">🚧</span>
+            <div>
+              <p class="font-bold text-amber-200 text-sm sm:text-base">
+                Prototype mode — everything is free until 31 October 2026
+              </p>
+              <p class="text-amber-100/80 text-xs sm:text-sm mt-1 leading-relaxed">
+                We're in the middle of a major rebuild, so the paid tiers are switched off.
+                <b>Every feature on this page is unlocked for every account</b> until the PSAC
+                exams are over. No card, no trial, nothing to cancel. Paid plans return
+                afterwards — and anything you do now is saved and carries over.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Hero -->
-      <section class="flex-1 flex flex-col items-center justify-center text-center px-4 py-12">
+      <section class="flex-1 flex flex-col items-center justify-center text-center px-4 py-8">
         <div class="text-8xl mb-6 drop-shadow-2xl select-none animate-bounce" style="animation-duration:3s">🎓</div>
         <h1 class="text-4xl sm:text-5xl font-black leading-tight mb-4 max-w-2xl">
           Ace the <span class="text-indigo-300">PSAC Exam</span><br>Practice Made Fun
@@ -267,6 +293,150 @@
         </div>
       </section>
 
+      <!-- ══ Three views: kids / parents / teachers ══ -->
+      <section class="px-4 pb-16 max-w-6xl mx-auto w-full">
+        <h2 class="text-center text-2xl font-bold mb-2 text-white">One app, three ways in</h2>
+        <p class="text-center text-indigo-300/60 text-sm mb-10 max-w-xl mx-auto">
+          Children practise. Parents steer and supervise. Tutors set homework.
+          Each gets a different screen — nobody sees more than they should.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+          <!-- KIDS -->
+          <div class="bg-white/[0.06] border border-white/10 rounded-2xl p-6 flex flex-col">
+            <div class="text-4xl mb-3 select-none">🧒</div>
+            <h3 class="text-lg font-bold text-white mb-1">Kids Mode</h3>
+            <p class="text-xs text-indigo-300/60 mb-4">Log in with a username &amp; 4-digit PIN — no email, no phone number.</p>
+            <ul class="space-y-2.5 text-sm text-indigo-100/85 flex-1">
+              <li class="flex gap-2"><span>⭐</span><span><b>XP, levels &amp; badges</b> — 10 levels from Beginner to Legend, with subject-specific badges</span></li>
+              <li class="flex gap-2"><span>🔥</span><span><b>Daily streaks &amp; combos</b> — "3 in a row!" banners, sounds and vibration feedback</span></li>
+              <li class="flex gap-2"><span>📚</span><span><b>Chapter practice</b> — instant marking, 3-step hints, worked explanations</span></li>
+              <li class="flex gap-2"><span>📝</span><span><b>Exam mode</b> — timed papers (10/25/45 min) with flagging, review and a diagnostic report</span></li>
+              <li class="flex gap-2"><span>💪</span><span><b>Weak-area drill</b> — automatically targets the chapters they score lowest in</span></li>
+              <li class="flex gap-2"><span>✏️</span><span><b>Scratchpad &amp; number pad</b> — draw your working, type answers with unit keys (cm², kg, h)</span></li>
+              <li class="flex gap-2"><span>🔊</span><span><b>Read-aloud</b> — any question can be spoken out loud</span></li>
+              <li class="flex gap-2"><span>🔍</span><span><b>Search</b> — find any topic by keyword; typos are fine</span></li>
+              <li class="flex gap-2"><span>📲</span><span><b>Works offline</b> — install it like an app; progress syncs when you reconnect</span></li>
+            </ul>
+          </div>
+
+          <!-- PARENTS -->
+          <div class="bg-white/[0.06] border border-purple-400/25 rounded-2xl p-6 flex flex-col ring-1 ring-purple-400/20">
+            <div class="text-4xl mb-3 select-none">👨‍👩‍👧</div>
+            <h3 class="text-lg font-bold text-white mb-1">Parent Dashboard</h3>
+            <p class="text-xs text-indigo-300/60 mb-4">Your account owns the family. Sign in with email or Google.</p>
+            <ul class="space-y-2.5 text-sm text-indigo-100/85 flex-1">
+              <li class="flex gap-2"><span>📊</span><span><b>See everything</b> — accuracy per subject and per chapter, questions attempted, streaks, XP</span></li>
+              <li class="flex gap-2"><span>📋</span><span><b>Set homework</b> — assign a chapter and difficulty, add a note, choose whether answers are revealed</span></li>
+              <li class="flex gap-2"><span>🔒</span><span><b>Parent controls</b> — lock chapters, cap the difficulty level, disable exam mode</span></li>
+              <li class="flex gap-2"><span>📅</span><span><b>Study timetable</b> — auto-generate a revision plan weighted to your child's weakest topics, then print it</span></li>
+              <li class="flex gap-2"><span>🔔</span><span><b>Daily reminders</b> — pick a time; your child gets a push notification to practise</span></li>
+              <li class="flex gap-2"><span>👥</span><span><b>Multiple children</b> — each with their own progress, plus a friendly family leaderboard</span></li>
+              <li class="flex gap-2"><span>📧</span><span><b>Weekly email digest</b> — a Sunday summary of how everyone did</span></li>
+              <li class="flex gap-2"><span>🛡️</span><span><b>One device at a time</b> — a new login signs the old device out, so accounts aren't shared around</span></li>
+            </ul>
+          </div>
+
+          <!-- TEACHERS -->
+          <div class="bg-white/[0.06] border border-green-400/25 rounded-2xl p-6 flex flex-col ring-1 ring-green-400/20">
+            <div class="text-4xl mb-3 select-none">👩‍🏫</div>
+            <h3 class="text-lg font-bold text-white mb-1">Teacher &amp; Tutor Mode</h3>
+            <p class="text-xs text-indigo-300/60 mb-4">Apply when you sign up — an administrator approves teacher accounts.</p>
+            <ul class="space-y-2.5 text-sm text-indigo-100/85 flex-1">
+              <li class="flex gap-2"><span>💬</span><span><b>Homework over WhatsApp</b> — share a code and a PIN; pupils just tap the link</span></li>
+              <li class="flex gap-2"><span>🚫</span><span><b>No accounts for pupils</b> — they enter a first name and PIN. Nothing to sign up for, no email collected</span></li>
+              <li class="flex gap-2"><span>🎯</span><span><b>Pick the content</b> — choose subject, chapters, how many questions, a timer and a deadline</span></li>
+              <li class="flex gap-2"><span>📈</span><span><b>Live results</b> — scores as they come in, class average, and the question most pupils got wrong</span></li>
+              <li class="flex gap-2"><span>🔁</span><span><b>Grant a retry</b> — per pupil, when someone deserves another go</span></li>
+              <li class="flex gap-2"><span>🔐</span><span><b>Marked on our server</b> — scores are re-graded server-side, so they can't be edited in the browser</span></li>
+              <li class="flex gap-2"><span>🤝</span><span><b>Separate from families</b> — tutors never see or touch a child's home account, and parents keep their own controls</span></li>
+            </ul>
+            <p class="text-[11px] text-green-200/60 mt-4 pt-3 border-t border-white/10">
+              Tutor and parent are separate roles. A parent account can apply to become a tutor; it is never granted automatically.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══ Plans ══ -->
+      <section id="plans" class="px-4 pb-16 max-w-5xl mx-auto w-full">
+        <h2 class="text-center text-2xl font-bold mb-2 text-white">Plans</h2>
+        <p class="text-center text-indigo-300/60 text-sm mb-3 max-w-xl mx-auto">
+          What the pricing will look like once the rebuild is finished.
+        </p>
+        <div class="text-center mb-9">
+          <span class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-bold px-4 py-2 rounded-full">
+            🎁 Right now every plan below is unlocked, free, for everyone — until 31 October 2026
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
+
+          <!-- FREE -->
+          <div class="bg-white/[0.06] border border-white/10 rounded-2xl p-6">
+            <div class="text-xs font-bold text-indigo-300/70 uppercase tracking-wider mb-1">Free</div>
+            <div class="flex items-end gap-1 mb-1"><span class="text-3xl font-black text-white">Rs 0</span></div>
+            <p class="text-xs text-indigo-300/60 mb-5">Always free. For one child.</p>
+            <ul class="space-y-2 text-sm text-indigo-100/80">
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>1 child</b> account</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>All 5 subjects, Grades 4–6</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>Unlimited practice questions</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>Exam mode &amp; printable papers</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>XP, badges and streaks</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>Community forum</span></li>
+              <li class="flex gap-2"><span class="text-amber-400">•</span><span><b>3 hints</b> per question</span></li>
+              <li class="flex gap-2 opacity-45"><span>✕</span><span>Advanced analytics</span></li>
+            </ul>
+          </div>
+
+          <!-- STARTER -->
+          <div class="bg-gradient-to-b from-indigo-500/20 to-transparent border-2 border-indigo-400/50 rounded-2xl p-6 relative">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-400 text-indigo-950 text-[11px] font-black px-3 py-1 rounded-full whitespace-nowrap">MOST POPULAR</div>
+            <div class="text-xs font-bold text-indigo-200 uppercase tracking-wider mb-1">Starter</div>
+            <div class="flex items-end gap-1 mb-1">
+              <span class="text-3xl font-black text-white">Rs 299</span>
+              <span class="text-indigo-300/60 text-sm mb-1">/month</span>
+            </div>
+            <p class="text-xs text-indigo-300/60 mb-5">For families with more than one child.</p>
+            <ul class="space-y-2 text-sm text-indigo-100/85">
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>Everything in Free</b></span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>2 children</b>, each tracked separately</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>Unlimited hints</b> — no 3-per-question cap</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>Advanced analytics</b> — chapter-by-chapter trends over time</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>Study timetable generator</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>Daily push reminders</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>Priority support</span></li>
+            </ul>
+          </div>
+
+          <!-- PREMIUM -->
+          <div class="bg-gradient-to-b from-purple-500/20 to-transparent border border-purple-400/40 rounded-2xl p-6">
+            <div class="text-xs font-bold text-purple-200 uppercase tracking-wider mb-1">Premium</div>
+            <div class="flex items-end gap-1 mb-1">
+              <span class="text-3xl font-black text-white">Rs 499</span>
+              <span class="text-indigo-300/60 text-sm mb-1">/month</span>
+            </div>
+            <p class="text-xs text-indigo-300/60 mb-5">For big families and private tutors.</p>
+            <ul class="space-y-2 text-sm text-indigo-100/85">
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>Everything in Starter</b></span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>5 children</b></span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>Detailed reports</b> — printable progress reports per child</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>Verified tutor status</b> — 3 homework sets a day, up to 40 pupils each</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>Weekly email digest</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span>Early access to new subjects and features</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="text-center text-indigo-300/45 text-xs mt-7 max-w-2xl mx-auto leading-relaxed">
+          Prices in Mauritian rupees, per family, per month. Nothing is charged during prototype mode and
+          no payment details are collected. When paid plans return you'll be told first, and the free plan
+          stays free.
+        </p>
+      </section>
+
       <!-- How it works -->
       <section class="px-4 pb-16 max-w-3xl mx-auto w-full">
         <h2 class="text-center text-xl font-bold mb-8 text-white/80">Get set up in 3 steps</h2>
@@ -288,9 +458,31 @@
           </div>
         </div>
         <div class="text-center mt-10">
-          <button onclick="showScreen('auth'); setTimeout(()=>Auth.showSignUp(),60)"
+          <button onclick="showScreen('auth'); setTimeout(()=>{Auth.setRole('parent');Auth.showSignUp();},60)"
             class="bg-indigo-500 hover:bg-indigo-400 active:scale-95 text-white font-bold px-8 py-4 rounded-2xl text-base shadow-xl transition-all hover:scale-105">
             Create a Free Account →
+          </button>
+          <p class="text-indigo-300/50 text-xs mt-3">Free during prototype mode · no card required</p>
+        </div>
+      </section>
+
+      <!-- ══ Tutors ══ -->
+      <section class="px-4 pb-16 max-w-3xl mx-auto w-full">
+        <div class="bg-gradient-to-br from-green-500/15 to-emerald-500/10 border border-green-400/30 rounded-2xl p-7 text-center">
+          <div class="text-4xl mb-3 select-none">👩‍🏫</div>
+          <h2 class="text-xl font-bold text-white mb-2">Are you a private tutor?</h2>
+          <p class="text-sm text-indigo-100/80 max-w-xl mx-auto mb-2">
+            Set homework your pupils complete straight from a WhatsApp link — no accounts, no
+            passwords, nothing for parents to install. You get their scores automatically.
+          </p>
+          <p class="text-xs text-indigo-300/55 max-w-xl mx-auto mb-5">
+            Sign up on the <b>Teacher</b> tab. We'll email you a verification link, then an
+            administrator reviews your application — usually within a day. Teacher tools appear
+            as soon as you're approved.
+          </p>
+          <button onclick="showScreen('auth'); setTimeout(()=>{Auth.setRole('teacher');Auth.showSignUp();},60)"
+            class="bg-green-500 hover:bg-green-400 active:scale-95 text-green-950 font-bold px-7 py-3.5 rounded-2xl text-sm shadow-xl transition-all hover:scale-105">
+            Apply for a teacher account →
           </button>
         </div>
       </section>
@@ -298,7 +490,11 @@
       <!-- Footer -->
       <footer class="text-center pb-10 text-indigo-400/40 text-xs px-4">
         <p>PSAC Exam Practice · Mauritius 🇲🇺 · Grades 4–6 · Maths · English · French · Science · History &amp; Geography</p>
-        <p class="mt-1">Progress saved securely in the cloud · Works offline</p>
+        <p class="mt-1">Progress saved securely in the cloud · Works offline · Aligned to the MIE curriculum</p>
+        <p class="mt-2 text-indigo-400/30">
+          Prototype mode — all features free until 31 October 2026. Not affiliated with the
+          Mauritius Institute of Education or the Ministry of Education.
+        </p>
       </footer>
 
     </div>
@@ -453,6 +649,13 @@
         <p class="text-indigo-200 text-sm mb-2">We sent a verification link to</p>
         <p class="text-white font-semibold mb-5" id="verify-email-addr"></p>
         <p class="text-white/50 text-xs mb-5">Click the link in the email to activate your account. Check your spam folder if you don't see it within a minute.</p>
+        <!-- Shown only for teacher sign-ups: verification alone does not grant
+             teacher powers, so say so before they wonder why nothing appeared. -->
+        <div id="verify-teacher-note" class="hidden bg-amber-500/15 border border-amber-400/30 rounded-xl p-3 mb-5 text-left">
+          <p class="text-amber-200 text-xs font-bold mb-1">👩‍🏫 Teacher account</p>
+          <p class="text-amber-100/80 text-xs">After you verify your email, an administrator reviews your teacher
+            application. You can sign in straight away — teacher tools appear once you're approved.</p>
+        </div>
         <button onclick="Auth.resendVerification()"
           class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl transition-colors text-sm mb-3">
           Resend verification email
@@ -737,7 +940,8 @@
       <div id="grade-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-6"></div>
       <div class="flex justify-center gap-4 flex-wrap">
         <button onclick="Auth.enterParentMode()" class="text-sm text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
-        <button onclick="TeacherMode.enter()" class="text-sm text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors">👩‍🏫 Teacher Access</button>
+        <!-- REMOVED: "Teacher Access". This is a student-facing screen, and
+             teacher mode is a Supabase role, not something to opt into. -->
       </div>
     </div>
 
@@ -1044,6 +1248,9 @@
 
       <!-- Members tab -->
       <div id="admin-tab-members" class="admin-tab-panel">
+        <!-- Teacher approval queue. Sits above the member list so pending
+             applications are seen rather than sitting unnoticed. -->
+        <div id="admin-teacher-queue" class="mb-4"></div>
         <div class="flex justify-between items-center mb-3">
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">All registered accounts</p>
           <button onclick="AdminPanel.loadMembers()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
@@ -1387,7 +1594,10 @@
           <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Tap a child to see details &amp; manage assignments</p>
         </div>
         <div class="flex gap-2 items-center flex-wrap">
-          <button id="btn-open-admin" onclick="Auth.openAdminPanel()" class="hidden text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-colors">🛡️ Admin</button>
+          <button id="btn-open-admin" onclick="Auth.openAdminPanel()" title="Admin panel" class="hidden relative text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-colors">🛡️ Admin<!--
+          Pending-work badge: teacher applications + open question reports.
+          Filled by Auth._refreshAdminBadge(); hidden when the count is zero.
+       --><span id="admin-pending-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold shadow">0</span></button>
           <button onclick="Auth.openPasswordModal()" class="text-xs bg-gray-100 dark:bg-gray-700/60 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-1.5 rounded-full font-semibold transition-colors">🔑 Password</button>
           <button onclick="showScreen('calendar')" class="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">📅 Calendar</button>
           <button onclick="Auth.addStudent()" class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">➕ Add Child</button>
@@ -1406,6 +1616,9 @@
         </div>
         <button id="pd-upgrade-btn" class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-full font-semibold opacity-50 cursor-not-allowed" title="Coming soon" disabled>⭐ Upgrade</button>
       </div>
+
+      <!-- Teacher application card (filled by _renderTeacherApplyCard) -->
+      <div id="pd-teacher-apply"></div>
 
       <!-- ── No children yet ── -->
       <div id="pd-no-children" class="hidden text-center py-16">
@@ -1767,58 +1980,18 @@
     </div>
   </div>
 
-  <!-- ══ PROFILE SETUP MODAL ══ -->
-  <div id="profile-modal" class="fixed inset-0 z-[60] items-center justify-center" style="display:none;background:rgba(0,0,0,0.75)">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-6">
-      <div class="text-center mb-4">
-        <div class="text-4xl mb-2">🧮</div>
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">Welcome to PSAC Exam Practice!</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Let's set up your profile</p>
-      </div>
-      <div class="mb-4">
-        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Your name</label>
-        <input id="profile-name-input" type="text" maxlength="20" placeholder="Display name"
-          class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2.5 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-          onkeydown="if(event.key==='Enter') Auth.saveProfile()">
-      </div>
-      <div class="mb-5">
-        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Choose your avatar</label>
-        <div id="avatar-grid" class="grid grid-cols-6 gap-1.5"></div>
-      </div>
-      <button onclick="Auth.saveProfile()" class="w-full btn-primary py-3 text-sm font-bold">Let's Go! 🚀</button>
-    </div>
-  </div>
+  <!-- REMOVED: #profile-modal and #pin-modal (v1 "MathMaster" leftovers).
+       Nothing ever opened them, and the handlers they referenced
+       (Auth.saveProfile / Auth.closePinModal / Auth.submitPin) do not exist.
+       Profile creation now happens on #screen-family-setup; parent access is
+       Supabase email auth, not a local PIN. -->
 
-  <!-- ══ PIN MODAL ══ -->
-  <div id="pin-modal" class="fixed inset-0 z-[60] items-center justify-center" style="display:none;background:rgba(0,0,0,0.75)">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-xs w-full mx-4 p-6">
-      <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-1 text-center" id="pin-title">🔒 Parent Access</h2>
-      <p class="text-gray-500 dark:text-gray-400 text-sm text-center mb-4" id="pin-desc">Enter your 4-digit PIN</p>
-      <input id="pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••"
-        class="w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-3 py-3 text-center text-2xl tracking-[0.5em] dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 mb-4">
-      <div class="flex gap-2">
-        <button onclick="Auth.closePinModal()" class="btn-secondary flex-1 text-sm">Cancel</button>
-        <button onclick="Auth.submitPin()" class="btn-primary flex-1 text-sm">Enter ↵</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ TEACHER PIN MODAL ══ -->
-  <div id="teacher-pin-modal" class="fixed inset-0 z-[60] items-center justify-center" style="display:none;background:rgba(0,0,0,0.75)">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-xs w-full mx-4 p-6">
-      <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-1 text-center" id="tpin-title">👩‍🏫 Teacher Access</h2>
-      <p class="text-gray-500 dark:text-gray-400 text-sm text-center mb-4" id="tpin-desc">Enter your 4-digit PIN</p>
-      <input id="tpin-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••"
-        class="selectable w-full border-2 border-gray-300 dark:border-gray-600 rounded-xl px-3 py-3 text-center text-2xl tracking-[0.5em] dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 mb-4">
-      <div class="flex gap-2">
-        <button onclick="TeacherMode.closeModal()" class="btn-secondary flex-1 text-sm">Cancel</button>
-        <button onclick="TeacherMode.submitPin()"
-          class="flex-1 py-2 text-sm font-semibold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors">
-          Enter ↵
-        </button>
-      </div>
-    </div>
-  </div>
+  <!-- REMOVED: teacher PIN modal.
+       It let ANYONE - a parent, or a signed-in child - click "Teacher", set a
+       brand-new 4-digit PIN in localStorage, and walk straight into the teacher
+       dashboard. That is a self-service privilege escalation, not an access
+       control. Teacher access is now solely profiles.role = 'teacher', granted
+       by an administrator. -->
 
   <!-- ══ SEARCH SCREEN ══ -->
   <div id="screen-search" class="screen hidden">
@@ -2146,6 +2319,8 @@
   <script src="engine/forum.js"></script>
   <script src="engine/calendar.js"></script>
   <script src="engine/search.js"></script>
+  <!-- Classrooms / enrollments data layer (teacher role) -->
+  <script src="engine/classroom.js"></script>
 
   <!-- Image lightbox - shown when any question image is tapped/clicked -->
   <div id="img-lightbox" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4"

@@ -16,7 +16,10 @@ function getStaticQs(chapterId, difficulty) {
 
 function generateDynamic(chapterId, level) {
   try {
-    if (GENERATORS[chapterId]) return GENERATORS[chapterId](level);
+    // Generators are per subject pack; a pack without any simply has none,
+    // in which case getQuestionsForChapter falls back to static questions.
+    const gens = (typeof packGenerators === 'function') ? packGenerators() : {};
+    if (gens[chapterId]) return gens[chapterId](level);
   } catch(e) {}
   return null;
 }

@@ -18,7 +18,12 @@ const Store = (() => {
       chapters:     {},
       examHistory:  [],
       badges:       [],
-      theme:        'dark',
+      // null = "no preference expressed yet", NOT "prefers light".
+      // loadStudentProgress() fills missing keys from here, so a concrete value
+      // would look like a deliberate choice and override whatever theme is
+      // already on screen - which is exactly what made viewing a newly created
+      // child flip the parent's UI to light.
+      theme:        null,
       xp:           0,
       level:        1,
       assignments:  [],
@@ -27,27 +32,46 @@ const Store = (() => {
   }
 
   // ── Student session (PIN-based, not Supabase Auth) ────
+  // sess.token is the x-student-token that RLS uses to identify this student.
+  // Saving or restoring a session also installs/clears that header, so callers
+  // never have to remember to do it separately.
   function saveStudentSession(sess) {
     try { localStorage.setItem(STUDENT_SESS, JSON.stringify(sess)); } catch(e) {}
+    if (typeof setStudentToken === 'function') setStudentToken(sess?.token || null);
   }
 
   function getStudentSession() {
     try { return JSON.parse(localStorage.getItem(STUDENT_SESS)) || null; } catch(e) { return null; }
   }
 
-  function clearStudentSession() {
-    try { localStorage.removeItem(STUDENT_SESS); } catch(e) {}
+  // Re-install the header from a stored session. Must run BEFORE any
+  // student-scoped query on page load, or every policy check sees NULL.
+  function restoreStudentToken() {
+    const sess = getStudentSession();
+    if (typeof setStudentToken === 'function') setStudentToken(sess?.token || null);
+    return sess?.token || null;
   }
 
-  // ── Student lookup by username (Option A login - no family code) ──
-  async function findStudentByUsername(username) {
-    if (!_sb) return null;
-    const { data, error } = await _sb.from('students')
-      .select('*')
-      .ilike('username', username.trim())
-      .maybeSingle();
-    return error ? null : data;
+  function clearStudentSession() {
+    try { localStorage.removeItem(STUDENT_SESS); } catch(e) {}
+    if (typeof setStudentToken === 'function') setStudentToken(null);
   }
+
+  // Tell the database to drop this student's sessions (logout on all devices).
+  // Fire-and-forget: a failure here must never block the local logout.
+  async function endStudentSession() {
+    if (!_sb) return;
+    try { await _sb.rpc('end_student_session'); } catch(e) {}
+  }
+
+  // NOTE: findStudentByUsername() was removed. It was only used by the
+  // client-side local-dev PIN comparison in auth.js, which is gone - all PIN
+  // verification now goes through the verify_student_pin() RPC. It was also the
+  // last `select('*')` on students, which the column revoke would have broken.
+  //
+  // ⚠ Never `select('*')` on students: pin/pin_hash are revoked from
+  //   anon/authenticated, so the whole query fails with 42501. Always list
+  //   columns explicitly (see getFamilyStudents).
 
   // ── Families ───────────────────────────────────
   async function lookupFamily(code) {
@@ -90,18 +114,57 @@ const Store = (() => {
     return data || [];
   }
 
+  // Hash a PIN into students.pin via the bcrypt RPC (pgcrypto crypt(), runs
+  // inside the database). This is the ONLY way a PIN may be written — a
+  // plaintext PIN must never reach a column, in any environment.
+  async function setStudentPin(studentId, pin) {
+    if (!_sb || !studentId || !pin) return false;
+    const { data, error } = await _sb.rpc('set_student_pin', { p_student_id: studentId, p_pin: pin });
+    if (error) { console.error('[Store.setStudentPin]', error.message); return false; }
+    // The deployed set_student_pin returns jsonb and reports authorisation
+    // failures as { ok:false, error:'unauthorized' } - a SUCCESSFUL rpc call
+    // carrying a failure payload. Checking only `error` would report success
+    // for a PIN that was never set. (An older revision returned VOID, i.e.
+    // data === null, so treat null/undefined as success.)
+    if (data && typeof data === 'object' && data.ok === false) {
+      console.error('[Store.setStudentPin] rejected:', data.error || 'unknown');
+      return false;
+    }
+    return true;
+  }
+
+  const _CREATE_ERRORS = {
+    username_taken:   'That username is already taken. Please choose another.',
+    invalid_pin:      'PIN must be exactly 4 digits.',
+    invalid_username: 'Please enter a username.',
+    not_authorised:   'You do not have permission to add a child to this family.',
+  };
+
+  // Creates the student and hashes the PIN in ONE database statement.
+  // Two reasons it is an RPC rather than a client-side insert:
+  //   • students.pin is NOT NULL, so we cannot insert first and hash after;
+  //   • doing it in one statement means a plaintext PIN never exists in a
+  //     column, not even momentarily, and there is no half-created row to
+  //     roll back if hashing fails.
   async function createStudent(familyId, { username, displayName, avatar, grade, pin, settings }) {
     if (!_sb) return null;
-    const row = {
-      family_id: familyId, username, display_name: displayName,
-      avatar, grade: parseInt(grade),
-      settings: settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false },
-    };
-    // pin only stored directly in local-dev fallback; production uses set-pin function
-    if (pin) row.pin = pin;
-    const { data, error } = await _sb.from('students').insert(row).select().single();
-    if (error) { console.error('[Store.createStudent]', error); return { _error: error }; }
-    return data;
+    const { data, error } = await _sb.rpc('create_student_with_pin', {
+      p_family_id:    familyId,
+      p_username:     username,
+      p_display_name: displayName,
+      p_avatar:       avatar || '🧒',
+      p_grade:        parseInt(grade) || 5,
+      p_pin:          pin,
+      p_settings:     settings || null,
+    });
+
+    if (error) { console.error('[Store.createStudent]', error.message); return { _error: error }; }
+    if (!data?.ok) {
+      const code = data?.error || 'unknown';
+      console.error('[Store.createStudent] rejected:', code);
+      return { _error: { code, message: _CREATE_ERRORS[code] || 'Could not create the child account.' } };
+    }
+    return data.student;
   }
 
   async function updateStudent(studentId, updates) {
@@ -110,9 +173,10 @@ const Store = (() => {
     if (updates.displayName !== undefined) row.display_name = updates.displayName;
     if (updates.avatar      !== undefined) row.avatar       = updates.avatar;
     if (updates.grade       !== undefined) row.grade        = parseInt(updates.grade);
-    if (updates.pin         !== undefined) row.pin          = updates.pin; // legacy/local-dev only
     if (updates.settings    !== undefined) row.settings     = updates.settings;
-    await _sb.from('students').update(row).eq('id', studentId);
+    if (Object.keys(row).length) await _sb.from('students').update(row).eq('id', studentId);
+    // A PIN never goes through a plain UPDATE - always via the hashing RPC.
+    if (updates.pin) await setStudentPin(studentId, updates.pin);
   }
 
   async function deleteStudent(studentId) {
@@ -124,10 +188,36 @@ const Store = (() => {
   }
 
   // ── Student progress ──────────────────────────
+  function _cachedStudent(studentId) {
+    try { return JSON.parse(localStorage.getItem(_sKey(studentId))) || null; } catch(e) { return null; }
+  }
+
   async function loadStudentProgress(studentId) {
     if (!_sb) return _defaultStudent();
-    const { data } = await _sb.from('student_progress')
-      .select('data').eq('student_id', studentId).single();
+    // maybeSingle, NOT single: a brand-new student has no student_progress row
+    // yet, and .single() reports "0 rows" as an ERROR. With the error logging
+    // added below, that would print a scary failure on every first login and,
+    // worse, take the cache-fallback branch for what is a perfectly normal state.
+    const { data, error } = await _sb.from('student_progress')
+      .select('data').eq('student_id', studentId).maybeSingle();
+
+    // A failed read used to fall through to _defaultStudent() AND overwrite the
+    // localStorage cache with those blank defaults - silently destroying the
+    // offline copy of a student's progress (xp, streak, chapter history, theme)
+    // whenever the network blipped or an RLS check failed. Never do that:
+    // prefer the local cache, and surface the error.
+    if (error) {
+      console.error('[Store.loadStudentProgress] read failed:', error.message,
+        '- falling back to the local cache; NOT overwriting it.');
+      const cached = _cachedStudent(studentId);
+      if (cached) {
+        const def = _defaultStudent();
+        for (const k of Object.keys(def)) { if (!(k in cached)) cached[k] = def[k]; }
+        return cached;
+      }
+      return _defaultStudent();
+    }
+
     const raw  = data?.data || {};
     const def  = _defaultStudent();
     for (const k of Object.keys(def)) { if (!(k in raw)) raw[k] = def[k]; }
@@ -146,11 +236,18 @@ const Store = (() => {
   async function saveStudentProgress(studentId, progressData) {
     // Write to localStorage immediately (zero latency during practice)
     try { localStorage.setItem(_sKey(studentId), JSON.stringify(progressData)); } catch(e) {}
-    // Push to Supabase in background
+    // Push to Supabase in background.
+    // supabase-js resolves with { data, error } rather than rejecting, so the
+    // old `.then(() => {}).catch(() => {})` swallowed EVERY write failure -
+    // including RLS rejections. A student could practise for an hour with
+    // nothing persisting and no indication anywhere.
     if (_sb) {
       _sb.from('student_progress').upsert({
         student_id: studentId, data: progressData, updated_at: new Date().toISOString(),
-      }).then(() => {}).catch(() => {});
+      }).then(({ error }) => {
+        if (error) console.error('[Store.saveStudentProgress] write failed:', error.message,
+          '- progress is saved locally only. Check the x-student-token header.');
+      }).catch(err => console.error('[Store.saveStudentProgress]', err));
     }
   }
 
@@ -193,7 +290,16 @@ const Store = (() => {
   // ── Profiles (parent / teacher) ───────────────
   async function getProfile(userId) {
     if (!_sb) return null;
-    const { data } = await _sb.from('profiles').select('*').eq('id', userId).single();
+    // maybeSingle: "no profile yet" is the NORMAL path for a freshly verified
+    // account - Auth._handleParentSession relies on it to route to family-setup.
+    // .single() treated that expected state as an error.
+    // ⚠ Explicit column list - anything added to `profiles` must be added HERE
+    //   too, or it silently arrives as undefined. teacher_status defaulting to
+    //   undefined would have meant no approved teacher was ever recognised.
+    const { data, error } = await _sb.from('profiles')
+      .select('id, role, full_name, disabled, expires_at, is_super_admin, teacher_status, teacher_tier')
+      .eq('id', userId).maybeSingle();
+    if (error) console.error('[Store.getProfile]', error.message);
     return data || null;
   }
 
@@ -356,10 +462,11 @@ const Store = (() => {
   return {
     // Auth session
     saveStudentSession, getStudentSession, clearStudentSession,
+    restoreStudentToken, endStudentSession,
     // Families
     lookupFamily, getMyFamily, createFamily, updateFamilyName,
     // Students
-    findStudentByUsername, getFamilyStudents, createStudent, updateStudent, deleteStudent,
+    getFamilyStudents, createStudent, updateStudent, deleteStudent, setStudentPin,
     // Progress
     loadStudentProgress, saveStudentProgress,
     // Legacy API (used by app.js / existing screens)

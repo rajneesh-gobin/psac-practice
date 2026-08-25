@@ -262,3 +262,8 @@ const CHAPTER_HELP = {
   },
 
 };
+
+// Attach to the pack rather than relying on a CHAPTER_HELP global, so video
+// help is per subject. This file loads after _manifest.js, hence extendSubject
+// instead of passing `help:` into registerSubject().
+extendSubject('grade5-maths', { help: CHAPTER_HELP });

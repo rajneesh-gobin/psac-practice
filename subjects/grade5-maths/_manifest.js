@@ -27,7 +27,7 @@ const CHAPTERS = [
 ];
 
 // ── SYLLABUS ───────────────────────────────────
-const SYLLABUS = {
+const G5M_SYLLABUS = {
   numeration:  { subsections: [
     { id:'place_value',  name:'Place Value (up to 100,000)' },
     { id:'ordering',     name:'Ordering & Comparing Numbers' },
@@ -133,7 +133,7 @@ const SYLLABUS = {
 };
 
 // ── FORMULAS ───────────────────────────────────
-const FORMULAS = {
+const G5M_FORMULAS = {
   numeration: { title:'🔢 Numeration Facts', facts:[
     'Place values (L→R): Millions · Hundred-thousands · Ten-thousands · Thousands · Hundreds · Tens · Ones',
     'Rounding: Look at the next digit. ≥5 → round up. <5 → round down.',
@@ -243,26 +243,23 @@ const FORMULAS = {
   ]},
 };
 
-// ── BADGES ─────────────────────────────────────
-const BADGES = [
-  { id:'first_blood',    name:'First Step',       icon:'👣', desc:'Answer your first question',        cond: s => s.totalAttempted >= 1 },
-  { id:'sharp_mind',     name:'Sharp Mind',       icon:'🧠', desc:'Get 10 correct in a row',           cond: s => s.maxStreak >= 10 },
-  { id:'fraction_wiz',   name:'Fraction Wizard',  icon:'🧙', desc:'Score 100% in Fractions',           cond: (s,c) => c.fractions && pct(c.fractions) === 100 },
-  { id:'angle_det',      name:'Angle Detective',  icon:'🔍', desc:'Master Geometry chapter',           cond: (s,c) => c.geometry && pct(c.geometry) >= 80 },
-  { id:'speed_demon',    name:'Speed Demon',      icon:'⚡', desc:'Complete a Quick Drill',            cond: s => s.examCount >= 1 },
-  { id:'exam_ace',       name:'Exam Ace',         icon:'🏆', desc:'Score 90%+ on a Full Mock',        cond: s => s.bestScore >= 90 },
-  { id:'century',        name:'Centurion',        icon:'💯', desc:'Attempt 100 questions',             cond: s => s.totalAttempted >= 100 },
-  { id:'daily_hero',     name:'Daily Hero',       icon:'🔥', desc:'Maintain a 7-day streak',           cond: s => s.streak >= 7 },
-  { id:'all_rounder',    name:'All Rounder',      icon:'🌟', desc:'Practise every chapter',            cond: (s,c) => CHAPTERS.every(ch => c[ch.id] && c[ch.id].attempted > 0) },
-  { id:'money_master',   name:'Money Master',     icon:'💰', desc:'Master Money & Profit/Loss',        cond: (s,c) => c.money && pct(c.money) >= 80 },
-  { id:'time_keeper',    name:'Time Keeper',      icon:'⏰', desc:'Master Time chapter',               cond: (s,c) => c.time && pct(c.time) >= 80 },
-  { id:'data_scientist', name:'Data Scientist',   icon:'📈', desc:'Master Graphs & Data',              cond: (s,c) => c.graphs && pct(c.graphs) >= 80 },
-  { id:'converter',      name:'Unit Converter',   icon:'🔄', desc:'Master Unit Conversions chapter',     cond: (s,c) => c.conversions && pct(c.conversions) >= 80 },
+// ── BADGES (Maths-specific only) ────────────────
+// The generic badges - First Step, Sharp Mind, Speed Demon, Exam Ace,
+// Centurion, Daily Hero, All Rounder - now live in engine/registry.js as
+// GENERIC_BADGES and are awarded in every subject. Only badges that are
+// genuinely about Maths chapters belong here.
+// pct() comes from engine/helpers.js.
+const G5M_BADGES = [
+  { id:'fraction_wiz',   name:'Fraction Wizard',  icon:'🧙', desc:'Score 100% in Fractions',         cond: (s,c) => pct(c.fractions) === 100 },
+  { id:'angle_det',      name:'Angle Detective',  icon:'🔍', desc:'Master Geometry chapter',         cond: (s,c) => pct(c.geometry) >= 80 },
+  { id:'money_master',   name:'Money Master',     icon:'💰', desc:'Master Money & Profit/Loss',      cond: (s,c) => pct(c.money) >= 80 },
+  { id:'time_keeper',    name:'Time Keeper',      icon:'⏰', desc:'Master Time chapter',             cond: (s,c) => pct(c.time) >= 80 },
+  { id:'data_scientist', name:'Data Scientist',   icon:'📈', desc:'Master Graphs & Data',            cond: (s,c) => pct(c.graphs) >= 80 },
+  { id:'converter',      name:'Unit Converter',   icon:'🔄', desc:'Master Unit Conversions',         cond: (s,c) => pct(c.conversions) >= 80 },
 ];
-function pct(c) { return c.attempted ? Math.round(c.correct / c.attempted * 100) : 0; }
 
 // ── DYNAMIC GENERATORS ──────────────────────────
-const GENERATORS = {
+const G5M_GENERATORS = {
 
   numeration: (level) => {
     const n = rnd(10001, 99999);
@@ -514,4 +511,13 @@ registerSubject({
   curriculum:  'MIE Mauritius',
   level4Label: 'Word Problems',
   chapters:    CHAPTERS,
+
+  // Per-subject content. Previously these were bare globals (SYLLABUS,
+  // FORMULAS, BADGES, GENERATORS) which meant every subject shared Maths'
+  // syllabus, formula cards and badges. They now travel with the pack.
+  // `help` is attached separately by help.js, which loads after this file.
+  syllabus:    G5M_SYLLABUS,
+  formulas:    G5M_FORMULAS,
+  badges:      G5M_BADGES,
+  generators:  G5M_GENERATORS,
 });

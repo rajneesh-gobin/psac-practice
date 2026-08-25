@@ -47,12 +47,12 @@ exports.handler = async (event) => {
   if (!student) return { statusCode: 200 };
 
   // Fetch family owner
-  const families = await sbGet(`/rest/v1/families?id=eq.${student.family_id}&select=owner_id`);
+  const families = await sbGet(`/rest/v1/families?id=eq.${student.family_id}&select=parent_id`);
   const family   = families?.[0];
   if (!family) return { statusCode: 200 };
 
   // Fetch parent email via Supabase Auth admin API
-  const authUser   = await sbGet(`/auth/v1/admin/users/${family.owner_id}`);
+  const authUser   = await sbGet(`/auth/v1/admin/users/${family.parent_id}`);
   const parentEmail = authUser?.email;
   if (!parentEmail) return { statusCode: 200 };
 

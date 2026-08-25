@@ -101,6 +101,34 @@ function _activePack() {
   return null;
 }
 
+// ── SUBJECT PACK ACTIVATION ───────────────────
+// Single source of truth for "switch the app to this subject". Sets ACTIVE_PACK
+// and SELECTED_GRADE, and syncs the global CHAPTERS array IN PLACE (it must be
+// mutated, never reassigned - every render function holds a reference to it).
+//
+// Call this instead of hand-rolling the three assignments. Previously the same
+// block was duplicated in selectSubject(), startAssignmentDirect(),
+// Calendar.startPractice() and Search.practiceChapter(), which meant a change
+// to activation semantics had to be made in four places.
+//
+// Returns the pack, or null if the id is unknown / the pack is coming soon.
+function activateSubjectPack(packId, { allowComingSoon = false } = {}) {
+  const packs = (typeof SUBJECT_PACKS !== 'undefined') ? SUBJECT_PACKS : [];
+  const pack  = packs.find(p => p.id === packId);
+  if (!pack) return null;
+  if (pack.comingSoon && !allowComingSoon) return null;
+
+  ACTIVE_PACK    = pack;
+  SELECTED_GRADE = pack.grade;
+
+  const chs = pack._chapters || pack.chapters || [];
+  CHAPTERS.length = 0;
+  chs.forEach(ch => CHAPTERS.push(ch));
+
+  return pack;
+}
+window.activateSubjectPack = activateSubjectPack;
+
 function _activeSubjectLabel() {
   const pack  = _activePack();
   const acct  = (typeof Auth !== 'undefined') ? Auth.getActiveAccount() : null;
@@ -122,6 +150,22 @@ function save(data) {
 }
 
 // ── THEME ─────────────────────────────────────
+// Which theme should we show for a user we just signed in?
+//   1. their own saved preference, if they have one
+//   2. otherwise whatever is already on screen (last used on this device)
+//   3. otherwise light
+//
+// Step 2 matters: signing in used to slam a hard-coded default over the theme
+// the user was already looking at ('dark' for parents, 'light' for students),
+// so switching between a parent and a child flipped the whole UI. Worse,
+// applyTheme() persists, so that hard-coded default got written into the
+// student's saved profile on their first login.
+function _preferredTheme(savedTheme) {
+  if (savedTheme) return savedTheme;
+  try { return localStorage.getItem('mm_global_theme') || 'light'; }
+  catch (e) { return 'light'; }
+}
+
 function applyTheme(t) {
   t = t || 'light';
   document.documentElement.classList.toggle('dark', t === 'dark');
@@ -890,7 +934,8 @@ function launchConfetti() {
 
 // ── BADGES ────────────────────────────────────
 function checkBadges() {
-  BADGES.forEach(b => {
+  // Generic badges + whatever the ACTIVE subject pack defines.
+  packBadges().forEach(b => {
     if (DB.badges.includes(b.id)) return;
     try {
       if (b.cond(DB.stats, DB.chapters)) {
@@ -1004,6 +1049,8 @@ async function renderParentDashboard() {
     }).catch(() => {});
   }
 
+  _renderTeacherApplyCard();
+
   if (!hasStudents) return;
 
   const grid = _el('pd-children-grid');
@@ -1050,6 +1097,71 @@ async function renderParentDashboard() {
         </div>`;
     }).catch(() => {});
   }
+}
+
+// ── TEACHER APPLICATION CARD (parent dashboard) ──
+// Rendered into a slot in the parent dashboard. Tutors in Mauritius are usually
+// also parents, so this is where they discover that teacher access exists -
+// rather than having to email someone and hope.
+function _renderTeacherApplyCard() {
+  const slot = document.getElementById('pd-teacher-apply');
+  if (!slot || typeof Auth === 'undefined' || !Auth.getTeacherStatus) return;
+
+  const status = Auth.getTeacherStatus();
+  if (Auth.isTeacher && Auth.isTeacher()) { slot.innerHTML = ''; return; }
+
+  const VIEW = {
+    pending: {
+      cls: 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-700/40',
+      icon: '⏳', title: 'Teacher application pending',
+      body: 'An administrator is reviewing your application. You will get access as soon as it is approved.',
+      btn: null,
+    },
+    rejected: {
+      cls: 'bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700',
+      icon: '📄', title: 'Application not approved',
+      body: 'Your teacher application was not approved. You can apply again with more detail.',
+      btn: 'Apply again',
+    },
+    suspended: {
+      cls: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-700/40',
+      icon: '🚫', title: 'Teacher access suspended',
+      body: 'Please contact the administrator.',
+      btn: null,
+    },
+  };
+  const v = VIEW[status] || {
+    cls: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700/40',
+    icon: '👩‍🏫', title: 'Are you a tutor?',
+    body: 'Apply for a teacher account to set homework your students complete without needing an account of their own.',
+    btn: 'Apply for teacher access',
+  };
+
+  slot.innerHTML = `
+    <div class="rounded-2xl border p-4 mb-4 ${v.cls}">
+      <div class="flex items-start gap-3">
+        <span class="text-2xl select-none shrink-0">${v.icon}</span>
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-sm text-gray-800 dark:text-white">${v.title}</div>
+          <p class="text-xs text-gray-600 dark:text-gray-400 mt-0.5">${v.body}</p>
+          ${v.btn ? `
+          <textarea id="pd-teacher-note" rows="2" maxlength="500"
+            class="w-full mt-3 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400"
+            placeholder="Where do you tutor, and which subjects? (helps the reviewer)"></textarea>
+          <button onclick="_submitTeacherApplication(this)"
+            class="mt-2 text-xs font-semibold bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl transition-colors">
+            ${v.btn}
+          </button>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+async function _submitTeacherApplication(btn) {
+  const note = document.getElementById('pd-teacher-note')?.value || '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  await Auth.requestTeacherAccess(note);
+  _renderTeacherApplyCard();
 }
 
 // ── PD (Parent Dashboard controller) ─────────
@@ -1536,7 +1648,7 @@ function renderDashboard() {
 
   // Badges
   const bg = document.getElementById('badges-grid');
-  bg.innerHTML = BADGES.map(b => {
+  bg.innerHTML = packBadges().map(b => {
     const earned = DB.badges.includes(b.id);
     return `<div class="badge-item ${earned ? '' : 'locked'}" title="${b.desc}">
       <span class="badge-icon">${b.icon}</span>
@@ -1587,15 +1699,11 @@ function renderChapterSelect() {
 window.startAssignment = function(assignId) {
   const a = (DB.assignments || []).find(x => x.id === assignId);
   if (!a) return;
-  // Switch to the right subject first so CHAPTERS is in sync
+  // Switch to the right subject first so CHAPTERS is in sync.
+  // (5th activation site - not in the original A4 list, found while refactoring.)
   const pack = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
     .find(p => (p._chapters || p.chapters || []).some(ch => ch.id === a.chapterId));
-  if (pack) {
-    ACTIVE_PACK = pack;
-    const chs = pack._chapters || pack.chapters || [];
-    CHAPTERS.length = 0;
-    chs.forEach(ch => CHAPTERS.push(ch));
-  }
+  if (pack) activateSubjectPack(pack.id);
   startChapterDirect(a.chapterId, a.difficulty || 1);
 };
 
@@ -1631,7 +1739,7 @@ function startChapterDirect(chapterId, forceDiff) {
   // Disable video help button when no CHAPTER_HELP entry exists for this chapter
   const helpBtn = document.getElementById('help-btn');
   if (helpBtn) {
-    const hasHelp = (typeof CHAPTER_HELP !== 'undefined') && !!CHAPTER_HELP[chapterId];
+    const hasHelp = !!packHelp()[chapterId];
     helpBtn.disabled = !hasHelp;
     helpBtn.classList.toggle('opacity-40', !hasHelp);
     helpBtn.classList.toggle('cursor-not-allowed', !hasHelp);
@@ -1666,17 +1774,8 @@ function startSearchPractice(questions, label) {
 
 // ── ASSIGNMENT DIRECT LAUNCH ──────────────────
 async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers) {
-  const packs = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
-  const pack  = packs.find(p => p.id === subjectId);
-  if (!pack || pack.comingSoon) { toast('Subject coming soon! 📚', 2500); return; }
-
-  // Activate pack globals (same as Calendar.startPractice)
-  /* eslint-disable no-global-assign */
-  if (typeof ACTIVE_PACK    !== 'undefined') ACTIVE_PACK    = pack;
-  if (typeof SELECTED_GRADE !== 'undefined') SELECTED_GRADE = pack.grade;
-  /* eslint-enable no-global-assign */
-  const chs = pack._chapters || pack.chapters || [];
-  if (typeof CHAPTERS !== 'undefined') { CHAPTERS.length = 0; chs.forEach(ch => CHAPTERS.push(ch)); }
+  const pack = activateSubjectPack(subjectId);
+  if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
 
   // Load questions for this subject, then jump straight to practice
   if (typeof QuestionLoader !== 'undefined') {
@@ -2453,8 +2552,8 @@ window.startAssignmentPractice = function() {
   showScreen('practice');
   document.getElementById('practice-ch-name').textContent = `📋 ${cfg.label || 'Assignment'}`;
   document.getElementById('practice-back-btn').classList.add('hidden');
-  document.getElementById('difficulty-btns').classList.add('hidden');
-  updateDiffBtns(null);
+  document.getElementById('difficulty-btns')?.classList.add('hidden');
+  _updateDiffBadge(null);
 
   if (ASSIGNMENT_IS_TEST) {
     document.getElementById('practice-hint-btn').classList.add('hidden');
@@ -2655,12 +2754,23 @@ document.getElementById('export-btn').addEventListener('click', () => {
 });
 
 document.getElementById('reset-btn').addEventListener('click', () => {
-  if (confirm('Reset ALL progress? This cannot be undone.')) {
-    DB = defaultStore();
-    save(DB);
-    toast('🗑 Progress reset.');
-    renderAnalytics();
-  }
+  if (!confirm('Reset ALL progress? This cannot be undone.')) return;
+  // Mutate DB in place - other modules hold a reference to it.
+  // Theme, assignments and parent restrictions are intentionally preserved.
+  Object.assign(DB, {
+    stats:       { totalAttempted:0, totalCorrect:0, examCount:0, bestScore:0, maxStreak:0, streak:0, lastDate:null },
+    chapters:    {},
+    examHistory: [],
+    badges:      [],
+    xp:          0,
+    level:       1,
+  });
+  save(DB);
+  const streakEl = document.getElementById('streak-count');
+  if (streakEl) streakEl.textContent = '0';
+  updateXPBar();
+  toast('🗑 Progress reset.');
+  renderAnalytics();
 });
 
 // ── SYLLABUS BROWSER ──────────────────────────
@@ -2669,7 +2779,7 @@ function renderSyllabus() {
   if (!list) return;
 
   list.innerHTML = CHAPTERS.map(ch => {
-    const syl = (typeof SYLLABUS !== 'undefined') ? SYLLABUS[ch.id] : null;
+    const syl = packSyllabus()[ch.id] || null;
     const subsections = syl ? syl.subsections : [];
     const chPct = getChapterPct(ch.id);
     const chColor = chPct >= 80 ? '#22c55e' : chPct >= 50 ? '#f59e0b' : '#3b82f6';
@@ -2733,14 +2843,14 @@ window.startSubsectionPractice = function(chapterId, subsectionId, subsectionNam
   const ch = CHAPTERS.find(c => c.id === chapterId);
   document.getElementById('practice-ch-name').textContent =
     `${ch ? ch.icon : ''} ${ch ? ch.name : chapterId} - ${subsectionName}`;
-  updateDiffBtns(null);
+  _updateDiffBadge(null);
   setTimeout(() => initScratchpad('scratchpad-practice'), 100);
 };
 
 // ── FORMULA MODAL ─────────────────────────────
 window.showFormulaModal = function() {
   const chId = S.practice.chapterId;
-  const f = FORMULAS[chId];
+  const f = packFormulas()[chId];
   if (!f) { toast('No formula card for this chapter yet.', 2000); return; }
   document.getElementById('formula-title').textContent = f.title;
   document.getElementById('formula-list').innerHTML = f.facts.map(fact =>
@@ -2764,7 +2874,7 @@ document.getElementById('formula-modal').addEventListener('click', function(e) {
 // ── HELP MODAL ────────────────────────────────
 window.showHelpModal = function() {
   const chId = S.practice.chapterId;
-  const h = (typeof CHAPTER_HELP !== 'undefined') && CHAPTER_HELP[chId];
+  const h = packHelp()[chId];
   if (!h) { toast('No help content for this chapter yet.', 2000); return; }
 
   const ch = CHAPTERS.find(c => c.id === chId);
@@ -2931,20 +3041,14 @@ function renderSubjectSelect() {
 }
 
 window.selectSubject = function(id) {
-  const pack = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === id);
-  if (pack && pack.comingSoon) { toast(`${pack.subject || pack.name} is coming soon! 🚀`, 2500); return; }
-  if (pack) {
-    ACTIVE_PACK = pack;
-    // Sync the global CHAPTERS in-place so all rendering functions see the right subject's chapters
-    const chs = pack._chapters || pack.chapters || [];
-    CHAPTERS.length = 0;
-    chs.forEach(ch => CHAPTERS.push(ch));
+  const known = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === id);
+  if (known && known.comingSoon) { toast(`${known.subject || known.name} is coming soon! 🚀`, 2500); return; }
+  const pack = activateSubjectPack(id);
+  if (pack && typeof QuestionLoader !== 'undefined') {
     // Load questions for this subject if not already loaded
-    if (typeof QuestionLoader !== 'undefined') {
-      QuestionLoader.loadSubject(pack.id).then(() => {
-        renderDashboard(); // refresh mastery grid after questions arrive
-      }).catch(() => {});
-    }
+    QuestionLoader.loadSubject(pack.id).then(() => {
+      renderDashboard(); // refresh mastery grid after questions arrive
+    }).catch(() => {});
   }
   showScreen('dashboard');
 };

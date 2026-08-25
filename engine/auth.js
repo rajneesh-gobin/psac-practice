@@ -21,6 +21,8 @@ const Auth = (() => {
   let _setupAvatar         = AVATARS[0];
   let _pendingVerifyEmail  = ''; // email stored for resend verification
   let _isAdminUser         = false;  // true when logged-in user is admin role
+  let _isTeacherUser       = false;  // role teacher AND approved, or admin
+  let _teacherStatus       = 'none'; // none|pending|approved|rejected|suspended
   let _isSuperAdmin        = false;  // true when logged-in user is super admin
   let _pinAttempts         = 0;
   let _pinLockedUntil      = 0;
@@ -80,7 +82,15 @@ const Auth = (() => {
   async function _handleParentSession(session) {
     _parentUser = session.user;
 
-    const profile = await Store.getProfile(_parentUser.id);
+    let profile = await Store.getProfile(_parentUser.id);
+
+    // A teacher who has just verified their email has no children to add, so
+    // the family-setup screen does not apply to them. Create the profile
+    // immediately - as a PLAIN account - and file the application for review.
+    if (!profile && _parentUser.user_metadata?.role === 'teacher') {
+      profile = await _bootstrapTeacherProfile();
+    }
+
     if (!profile) {
       // Brand-new user after email verification - needs family setup
       _buildSetupAvatarGrid();
@@ -110,9 +120,22 @@ const Auth = (() => {
       // Admin lands on parent dashboard; admin panel accessible via button
       const adminBtn = document.getElementById('btn-open-admin');
       if (adminBtn) adminBtn.classList.remove('hidden');
+      _refreshAdminBadge();
     }
 
-    if (profile.role === 'teacher') {
+    // Teacher access requires BOTH the role AND an approved status. A pending
+    // or suspended teacher is treated as a parent by the UI, and every teacher
+    // RPC refuses them server-side regardless of what the UI shows.
+    _teacherStatus = profile.teacher_status || 'none';
+    _isTeacherUser = profile.role === 'admin'
+                  || (profile.role === 'teacher' && _teacherStatus === 'approved');
+
+    if (_isTeacherUser) {
+      const tBtn = document.getElementById('btn-open-teacher');
+      if (tBtn) { tBtn.classList.remove('hidden'); tBtn.classList.add('flex'); }
+    }
+
+    if (profile.role === 'teacher' && _isTeacherUser) {
       _loadTeacherDashboard();
       return;
     }
@@ -124,12 +147,59 @@ const Auth = (() => {
       _cacheAccountsLocally(_familyStudents);
     }
 
-    applyTheme('dark');
+    // Parents/teachers have no per-user saved theme, so this keeps whatever is
+    // already on screen. It used to force 'dark', which is what made switching
+    // between a parent and a child flip the whole UI.
+    applyTheme(_preferredTheme(null));
     _openParentDashboard();
   }
 
+  // Note the role passed to createProfile: 'parent', NOT 'teacher'. Signing up
+  // on the teacher tab expresses intent, not entitlement - profiles.role only
+  // becomes 'teacher' when an admin approves, via admin_set_teacher_status().
+  async function _bootstrapTeacherProfile() {
+    const name = _parentUser.user_metadata?.full_name
+              || _parentUser.email?.split('@')[0] || 'Teacher';
+    const created = await Store.createProfile(_parentUser.id, 'parent', name);
+    if (!created) {
+      console.error('[auth] could not create teacher profile');
+      return null;
+    }
+    try {
+      await _sb.rpc('request_teacher_access', { p_note: 'Signed up via the teacher tab.' });
+    } catch (e) {
+      // Non-fatal: they can still apply from the parent dashboard card.
+      console.warn('[auth] teacher application not filed:', e.message);
+    }
+    return await Store.getProfile(_parentUser.id);
+  }
+
+  // ── Admin notification badge ───────────────────
+  // Shows a count on the header Admin button so pending teacher applications
+  // and open question reports are noticed rather than sitting in a tab nobody
+  // opens.
+  async function _refreshAdminBadge() {
+    if (!_isAdminUser || !_sb) return;
+    let n = 0, d = null;
+    try {
+      const { data } = await _sb.rpc('admin_pending_counts');
+      if (data?.ok) { d = data; n = data.total || 0; }
+    } catch (e) { return; }
+
+    const badge = document.getElementById('admin-pending-badge');
+    if (badge) {
+      badge.textContent = n > 9 ? '9+' : String(n);
+      badge.classList.toggle('hidden', n === 0);
+    }
+    const btn = document.getElementById('btn-open-admin');
+    if (btn && d) {
+      btn.title = n === 0 ? 'Admin panel'
+        : `${d.teacher_requests} teacher application(s), ${d.open_reports} open report(s)`;
+    }
+  }
+
   function _loadTeacherDashboard() {
-    applyTheme('dark');
+    applyTheme(_preferredTheme(null));
     showScreen('teacher');
     if (typeof TeacherMode !== 'undefined') TeacherMode.render();
   }
@@ -151,6 +221,22 @@ const Auth = (() => {
 
   // ── Resume a stored student session ───────────
   async function _resumeStudent(sess) {
+    // Re-install the x-student-token header FIRST. Every query below is
+    // student-scoped, and without the header current_student_id() is NULL, so
+    // RLS returns nothing.
+    Store.restoreStudentToken();
+
+    // A session stored before token auth existed (or one whose token was
+    // dropped) can no longer read anything. Send them back to the login screen
+    // rather than into an app that silently shows empty data.
+    if (!sess.token) {
+      Store.clearStudentSession();
+      document.body.style.opacity = '1';
+      showScreen('auth');
+      toast('Please sign in again to continue.', 4000);
+      return;
+    }
+
     // Admin force-expire check - validate session_version against DB
     if (_sb) {
       try {
@@ -184,7 +270,7 @@ const Auth = (() => {
     const progress = await Store.loadStudentProgress(sess.id);
     Object.assign(DB, progress);
 
-    applyTheme(DB.theme || 'light');
+    applyTheme(_preferredTheme(DB.theme));
     renderDashboard();
     updateStreak();
     updateXPBar();
@@ -240,7 +326,15 @@ const Auth = (() => {
   // ── Login a student (after PIN verified) ──────
   // navigate=false skips showScreen so the caller controls where to go (used by pdSwitchStudent)
   // bumpSession=false skips the session_version bump (parent-supervised switch, not a fresh PIN login)
-  async function _loginStudentRow(studentRow, { navigate = true, bumpSession = true } = {}) {
+  // token: the x-student-token from mint_student_session(). Required for a real
+  // student login. Omitted when a PARENT switches into a child's view
+  // (pdSwitchStudent) - there the parent's own JWT authorises the queries via
+  // owns_student(), and minting a student token would hand the parent's browser
+  // a credential that outlives the parent session.
+  // applyUserTheme: false when a PARENT is previewing a child from the
+  // dashboard. Loading a child's data must not restyle the parent's own UI -
+  // they did not change user, they opened a panel.
+  async function _loginStudentRow(studentRow, { navigate = true, bumpSession = true, token = null, applyUserTheme = true } = {}) {
     let sessionVersion = studentRow.session_version || 0;
 
     // Bump session_version in DB to invalidate any existing sessions on other devices
@@ -258,7 +352,10 @@ const Auth = (() => {
       grade:          studentRow.grade,
       settings:       studentRow.settings,
       sessionVersion: sessionVersion,
+      token:          token || null,
     };
+    // saveStudentSession installs the x-student-token header, so it MUST run
+    // before the first student-scoped query below.
     Store.saveStudentSession(sess);
 
     // Apply parent restrictions to DB
@@ -269,7 +366,7 @@ const Auth = (() => {
     _activeAccount    = { id: studentRow.id, name: studentRow.display_name, avatar: studentRow.avatar, grade: studentRow.grade };
     ACTIVE_STUDENT_ID = studentRow.id;
 
-    applyTheme(DB.theme || 'dark');
+    if (applyUserTheme) applyTheme(_preferredTheme(DB.theme));
     renderDashboard();
     updateStreak();
     updateXPBar();
@@ -305,32 +402,30 @@ const Auth = (() => {
   }
 
   // ── Public: loginStudent by id (called from student-select cards) ──
+  // A PIN is now MANDATORY. This used to log a child straight in from a card,
+  // with no credential at all - anyone holding the device could pick any
+  // sibling's profile. It also cannot work any more: a session with no
+  // x-student-token fails every RLS check, so the child would land in an app
+  // showing no progress, no assignments and no timetable.
+  //
+  // So instead of signing them in, send them to the PIN screen with the
+  // username prefilled.
   function loginStudent(id) {
-    const student = _familyStudents.find(s => s.id === id);
-    if (student) {
-      _loginStudentRow(student);
-    } else {
-      // Fallback for old localStorage-based flow
-      const accounts = Store.getAccounts();
-      const account  = accounts.find(a => a.id === id);
-      if (account) {
-        _activeAccount    = { ...account, grade: account.grade || 5 };
-        ACTIVE_STUDENT_ID = account.id;
-        const data = Store.loadStudent(account.id);
-        Object.assign(DB, data);
-        applyTheme(DB.theme || 'light');
-        renderDashboard();
-        updateStreak();
-        updateXPBar();
-        _setWelcomeName(account.name);
-        if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
-          SELECTED_GRADE = account.grade || 5;
-          showScreen('subject-select');
-        } else {
-          showScreen('dashboard');
-        }
-      }
-    }
+    const student = (_familyStudents || []).find(s => s.id === id);
+    const account = student || Store.getAccounts().find(a => a.id === id);
+    if (!account) return;
+
+    showScreen('auth');
+    setRole('student');
+
+    const uname = student?.username || '';
+    const el    = _el('student-username');
+    if (el) el.value = uname;
+    const pinEl = _el('student-pin');
+    if (pinEl) { pinEl.value = ''; setTimeout(() => pinEl.focus(), 80); }
+
+    const label = student?.display_name || account.name || 'your account';
+    toast(`Enter the PIN for ${label} to continue.`, 3000);
   }
 
   // ══════════════════════════════════════════════
@@ -423,11 +518,13 @@ const Auth = (() => {
       return;
     }
 
-    if (_currentRole === 'teacher') {
-      _showAuthError('Teacher accounts are created by the school administrator. If you need access, ask your administrator to create an account for you, then sign in.');
-      return;
-    }
-    const role = 'parent';
+    // Teachers may now sign up themselves. The account is created immediately
+    // but carries NO teacher powers: it becomes a normal account with
+    // teacher_status='pending' until an administrator approves it.
+    // `role` here is only an INTENT recorded in user_metadata - the actual
+    // profiles.role stays 'parent' until approval, so a self-declared teacher
+    // can never grant themselves anything.
+    const role = (_currentRole === 'teacher') ? 'teacher' : 'parent';
 
     _setAuthLoading(true);
     const { data, error } = await _sb.auth.signUp({
@@ -441,6 +538,8 @@ const Auth = (() => {
     // Show check-email screen
     _pendingVerifyEmail = email;
     if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
+    const note = _el('verify-teacher-note');
+    if (note) note.classList.toggle('hidden', role !== 'teacher');
     showScreen('verify-email');
   }
 
@@ -542,6 +641,50 @@ const Auth = (() => {
     if (typeof AdminPanel !== 'undefined') AdminPanel.render();
   }
 
+  // ── Teacher dashboard toggle ───────────────────
+  // Replaces TeacherMode.enter(), which used to offer ANY visitor a "set your
+  // teacher PIN" dialog. Teacher status comes from profiles.role and is granted
+  // by an administrator; a parent has no route in, by design.
+  function openTeacherDashboard() {
+    if (!_isTeacherUser) {
+      const msg = {
+        pending:   'Your teacher application is awaiting approval.',
+        rejected:  'Your teacher application was not approved. Contact the administrator.',
+        suspended: 'Your teacher access has been suspended. Contact the administrator.',
+      }[_teacherStatus] || 'Teacher access is granted by an administrator.';
+      toast(msg, 3500);
+      return;
+    }
+    _loadTeacherDashboard();
+  }
+
+  // ── Apply for teacher access ───────────────────
+  // Any signed-in adult may apply; approval is an admin decision. The RPC is
+  // idempotent - re-applying while pending just returns 'pending'.
+  async function requestTeacherAccess(note) {
+    if (!_sb || !_parentUser) { toast('Please sign in first.', 2500); return null; }
+    const { data, error } = await _sb.rpc('request_teacher_access', { p_note: note || null });
+    if (error) {
+      console.error('[requestTeacherAccess]', error.message);
+      toast('Could not send your application. Please try again.', 3000);
+      return null;
+    }
+    if (!data?.ok) {
+      toast(data?.error === 'suspended'
+        ? 'Your teacher access is suspended. Contact the administrator.'
+        : 'Could not send your application.', 3500);
+      return data;
+    }
+    _teacherStatus = data.status;
+    toast(data.status === 'approved'
+      ? 'You already have teacher access. 👩‍🏫'
+      : 'Application sent. An administrator will review it. ⏳', 4000);
+    renderParentDashboard();
+    return data;
+  }
+
+  function getTeacherStatus() { return _teacherStatus; }
+
   // ── Change password modal ──────────────────────
   function openPasswordModal() {
     const m = document.getElementById('modal-change-password');
@@ -597,66 +740,66 @@ const Auth = (() => {
 
     _setAuthLoading(true);
 
-    const isLocal = location.protocol === 'file:' || location.hostname === 'localhost';
+    // Single verification path for EVERY environment: verify_student_pin(),
+    // which (after supabase-fold-token-into-verify.sql) delegates the credential
+    // check to verify_student_pin_core() and appends a session token.
+    //
+    // We deliberately call verify_student_pin rather than mint_student_session:
+    // browsers get PostgREST 42883 for the newly-created function name while
+    // server-side clients on the same machine get 200, so we reuse the route
+    // PostgREST already resolves instead of fighting it.
+    // The PIN hash never leaves the database, and there is no client-side
+    // comparison to fall back to. (The old local-dev branch compared
+    // `pin !== student.pin` in the browser, which both required plaintext PINs
+    // in the DB and needed select('*') on students - the pin column is no
+    // longer readable by anon, so that branch could not work anyway.)
+    //
+    // The response is a superset of verify_student_pin's, so every branch below
+    // is unchanged; `data.session_token` is the only addition.
+    const { data, error } = await _sb.rpc('verify_student_pin', { p_username: username, p_pin: pin });
+    _setAuthLoading(false);
 
-    if (!isLocal) {
-      // Production: verify via Supabase RPC - pin hash stays inside the database, 0 Netlify credits
-      const { data, error } = await _sb.rpc('verify_student_pin', { p_username: username, p_pin: pin });
-      _setAuthLoading(false);
-
-      if (error) {
+    if (error) {
+      // 42883 = undefined_function. Transient right after the RPC is created,
+      // while PostgREST's schema cache catches up - and permanent if
+      // supabase-student-session-rpc.sql was never run at all. Distinguish it,
+      // because "try again in a moment" and "a migration is missing" need very
+      // different reactions.
+      const missing = error.code === '42883'
+        || /42883|undefined_function|could not find the function/i.test(error.message || '');
+      if (missing) {
+        _showAuthError('Login service is starting up. Please wait a few seconds and try again.');
+        console.error('[auth] verify_student_pin not found (42883) - PostgREST schema cache. '
+          + 'In the SQL editor: NOTIFY pgrst, \'reload schema\'; then restart the project.');
+      } else {
         _showAuthError('Login error. Please try again.');
-        return;
+        console.error('[auth] verify_student_pin failed:', error);
       }
-
-      if (data.locked) {
-        const secs = data.secsLeft || 60;
-        _pinLockedUntil = Date.now() + secs * 1000;
-        _showAuthError(`Too many wrong PINs. Please wait ${secs} seconds.`);
-        if (_el('student-pin')) _el('student-pin').value = '';
-        return;
-      }
-
-      if (data.error === 'account_expired') {
-        _showAuthError('Your practice access has expired. Please ask your parent.');
-        return;
-      }
-
-      if (!data.ok) {
-        _pinAttempts++;
-        if (_pinAttempts >= 5) {
-          _pinLockedUntil = Date.now() + 60000;
-          _pinAttempts = 0;
-          _showAuthError('Too many wrong PINs. Locked for 60 seconds.');
-        } else {
-          const left = data.attemptsLeft ?? (5 - _pinAttempts);
-          _showAuthError(`Username or PIN is incorrect. ${left} attempt${left === 1 ? '' : 's'} left.`);
-        }
-        if (_el('student-pin')) _el('student-pin').value = '';
-        return;
-      }
-
-      _pinAttempts = 0;
-      _pinLockedUntil = 0;
-      _clearAuthError();
-      await _loginStudentRow(data.student);
       return;
     }
 
-    // ── Local dev path: client-side comparison ──
-    const student = await Store.findStudentByUsername(username);
-    _setAuthLoading(false);
+    if (data.locked) {
+      const secs = data.secsLeft || 60;
+      _pinLockedUntil = Date.now() + secs * 1000;
+      _showAuthError(`Too many wrong PINs. Please wait ${secs} seconds.`);
+      if (_el('student-pin')) _el('student-pin').value = '';
+      return;
+    }
 
-    if (!student) { _showAuthError('Username or PIN is incorrect.'); return; }
+    if (data.error === 'account_expired') {
+      _showAuthError('Your practice access has expired. Please ask your parent.');
+      return;
+    }
 
-    if (pin !== student.pin) {
+    if (!data.ok) {
       _pinAttempts++;
       if (_pinAttempts >= 5) {
         _pinLockedUntil = Date.now() + 60000;
         _pinAttempts = 0;
         _showAuthError('Too many wrong PINs. Locked for 60 seconds.');
       } else {
-        _showAuthError(`Username or PIN is incorrect. ${5 - _pinAttempts} attempt${5 - _pinAttempts === 1 ? '' : 's'} left.`);
+        const left = data.attemptsLeft ?? (5 - _pinAttempts);
+        _showAuthError(`Username or PIN is incorrect. ${left} attempt${left === 1 ? '' : 's'} left.`);
       }
       if (_el('student-pin')) _el('student-pin').value = '';
       return;
@@ -665,7 +808,18 @@ const Auth = (() => {
     _pinAttempts = 0;
     _pinLockedUntil = 0;
     _clearAuthError();
-    await _loginStudentRow(student);
+
+    if (!data.session_token) {
+      // mint_student_session() has not been deployed yet (or an older
+      // verify_student_pin is still in place). Without a token every RLS policy
+      // sees current_student_id() = NULL, so the student can read nothing.
+      // Fail loudly rather than dropping them into a silently broken app.
+      _showAuthError('Login is temporarily unavailable. Please tell your parent (session service not deployed).');
+      console.error('[auth] mint_student_session returned no session_token - run supabase-student-session-rpc.sql');
+      return;
+    }
+
+    await _loginStudentRow(data.student, { token: data.session_token });
   }
 
   // ── Family Setup (first login after email verification) ──
@@ -742,6 +896,9 @@ const Auth = (() => {
   // ── Logout ─────────────────────────────────────
   async function logout() {
     _stopSessionGuard();
+    // Drop the server-side session before clearing the local token, otherwise
+    // the RPC has no x-student-token to identify which sessions to delete.
+    if (_activeAccount) await Store.endStudentSession();
     Store.clearStudentSession();
     _activeAccount    = null;
     ACTIVE_STUDENT_ID = null;
@@ -751,6 +908,14 @@ const Auth = (() => {
     _familyStudents   = [];
     _isAdminUser      = false;
     _isSuperAdmin     = false;
+    _isTeacherUser    = false;
+    _teacherStatus    = 'none';
+    // Re-hide the privileged buttons, or they persist into the next session on
+    // a shared device.
+    ['btn-open-teacher', 'btn-open-admin'].forEach(id => {
+      const b = document.getElementById(id);
+      if (b) { b.classList.add('hidden'); b.classList.remove('flex'); }
+    });
     const hdrLogout = document.getElementById('header-logout-btn');
     if (hdrLogout) { hdrLogout.classList.add('hidden'); hdrLogout.classList.remove('flex'); }
     if (_sb) await _sb.auth.signOut();
@@ -778,19 +943,12 @@ const Auth = (() => {
   }
 
   // Hash a student's PIN via Supabase RPC (bcrypt inside the DB, 0 Netlify credits).
+  // There is no plaintext fallback in ANY environment: if hashing fails we
+  // surface the error rather than silently storing a readable PIN.
   async function _setStudentPin(studentId, pin) {
-    const isLocal = location.protocol === 'file:' || location.hostname === 'localhost';
-    if (isLocal) {
-      await Store.updateStudent(studentId, { pin });
-      return;
-    }
-    const { error } = await _sb.rpc('set_student_pin', { p_student_id: studentId, p_pin: pin });
-    // set_student_pin returns VOID - success gives { data: null, error: null }
-    // only fall back to plaintext if the RPC itself errors (not deployed yet)
-    if (error) {
-      console.warn('[set_student_pin] RPC error, storing plaintext (dev only):', error?.message);
-      await Store.updateStudent(studentId, { pin });
-    }
+    const ok = await Store.setStudentPin(studentId, pin);
+    if (!ok) toast('Could not save the PIN. Please try again.', 3500);
+    return ok;
   }
 
   async function saveNewStudent() {
@@ -828,7 +986,7 @@ const Auth = (() => {
         toast(msg, 3500);
         return;
       }
-      await _setStudentPin(student.id, pin);
+      // Store.createStudent already hashed the PIN via set_student_pin().
       toast('Child added! 🎉', 2000);
     }
 
@@ -902,7 +1060,9 @@ const Auth = (() => {
   }
 
   // ── Student switches back to login (logout from student) ──
-  function switchStudent() {
+  async function switchStudent() {
+    _stopSessionGuard();
+    await Store.endStudentSession();
     Store.clearStudentSession();
     _activeAccount    = null;
     ACTIVE_STUDENT_ID = null;
@@ -952,9 +1112,13 @@ const Auth = (() => {
     if (!confirm('Delete ALL progress for this student? This cannot be undone.')) return;
     if (!confirm('Final confirmation - all chapters, XP and badges will be permanently lost.')) return;
     Store.clearStudent(ACTIVE_STUDENT_ID);
-    const fresh = { stats:{totalAttempted:0,totalCorrect:0,examCount:0,bestScore:0,maxStreak:0,streak:0,lastDate:null},chapters:{},examHistory:[],badges:[],theme:'light',xp:0,level:1,assignments:[],restrictions:{lockedChapters:[],maxDifficulty:4,examDisabled:false} };
+    // Resetting PROGRESS must not reset presentation preferences, so theme is
+    // carried over rather than forced back to a default. (Matches the Analytics
+    // reset button, which preserves theme, assignments and parent restrictions.)
+    const keepTheme = DB.theme;
+    const fresh = { stats:{totalAttempted:0,totalCorrect:0,examCount:0,bestScore:0,maxStreak:0,streak:0,lastDate:null},chapters:{},examHistory:[],badges:[],theme:keepTheme,xp:0,level:1,assignments:[],restrictions:{lockedChapters:[],maxDifficulty:4,examDisabled:false} };
     Object.assign(DB, fresh);
-    applyTheme('light');
+    applyTheme(_preferredTheme(keepTheme));
     renderDashboard();
     updateXPBar();
     showScreen('dashboard');
@@ -981,7 +1145,7 @@ const Auth = (() => {
   async function pdSwitchStudent(id) {
     const student = _familyStudents.find(s => s.id === id);
     if (student) {
-      await _loginStudentRow(student, { navigate: false, bumpSession: false });
+      await _loginStudentRow(student, { navigate: false, bumpSession: false, applyUserTheme: false });
     } else {
       loginStudent(id);
     }
@@ -1103,7 +1267,9 @@ const Auth = (() => {
     setRole, showSignIn, showSignUp, emailSignIn, emailSignUp,
     showForgotPassword, backToSignIn, forgotPassword, backToSignUp,
     resendVerification, setNewPassword, togglePass,
-    googleSignIn, openAdminPanel,
+    googleSignIn, openAdminPanel, openTeacherDashboard,
+    requestTeacherAccess, getTeacherStatus, refreshAdminBadge: _refreshAdminBadge,
+    isTeacher: () => _isTeacherUser,
     openPasswordModal, closePasswordModal, changePassword,
     confirmResetStudentProgress,
     studentSignIn,

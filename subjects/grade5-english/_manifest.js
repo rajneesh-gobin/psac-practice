@@ -1,8 +1,29 @@
 ﻿'use strict';
+
+// ── Subject-specific badges ────────────────────
+// Awarded ON TOP of engine/registry.js GENERIC_BADGES. Only list badges that
+// are genuinely about this subject's chapters - anything a Science or Maths
+// student could also earn belongs in GENERIC_BADGES instead.
+// pct() is from engine/helpers.js and is null-safe on untouched chapters.
+// ⚠ Badge ids are permanent: they are stored in DB.badges. Never reuse or
+//   rename one, or previously-earned badges vanish from a student's profile.
+const G5E_BADGES = [
+  { id:'g5e_grammar_guru', name:'Grammar Guru', icon:'✍️',
+    desc:'Score 80%+ in Nouns and in Verbs',
+    cond: (s,c) => pct(c['eng-nouns']) >= 80 && pct(c['eng-verbs']) >= 80 },
+  { id:'g5e_comp_king',    name:'Comprehension King', icon:'👑',
+    desc:'Score 80%+ in Comprehension',
+    cond: (s,c) => pct(c['eng-comprehension']) >= 80 },
+  { id:'g5e_word_smith',   name:'Word Smith', icon:'📚',
+    desc:'Master Vocabulary and Spelling',
+    cond: (s,c) => pct(c['eng-vocabulary']) >= 80 && pct(c['eng-spelling']) >= 80 },
+];
+
 registerSubject({
   id: 'grade5-english', name: 'English', grade: 5, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
+  badges: G5E_BADGES,
   chapters: [
     {
       id: 'eng-nouns', name: 'Nouns, Pronouns & Articles', icon: '📝',

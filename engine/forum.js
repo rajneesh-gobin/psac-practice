@@ -53,7 +53,9 @@ const Forum = (() => {
 
   function _author() {
     const sess = (typeof Store !== 'undefined') ? Store.getStudentSession?.() : null;
-    if (sess?.name) return { name: _forumDisplayName(sess.name), type: 'student' };
+    // Session stores displayName; `name` is only present on legacy cached sessions.
+    const sessName = sess?.displayName || sess?.name;
+    if (sessName) return { name: _forumDisplayName(sessName), type: 'student' };
     const p = (typeof Auth !== 'undefined') ? Auth.getParentProfile?.() : null;
     if (p?.full_name) return { name: _forumDisplayName(p.full_name), type: p.role || 'parent' };
     const nick = localStorage.getItem(NICK_KEY)?.trim();
@@ -412,7 +414,21 @@ const Forum = (() => {
     if (!_sb) return;
     const doIt = async () => {
       await _sb.from('forum_replies').delete().eq('post_id', postId);
-      await _sb.from('forum_posts').delete().eq('id', postId);
+      // RLS decides this, not the button's visibility: deletion needs
+      // author_id = auth.uid(), author_student_id = current_student_id(), or
+      // admin. Posts created BEFORE those columns existed have NULL authorship,
+      // so only an admin can remove them. Verify rather than assume - this used
+      // to toast "Post deleted" unconditionally, so a blocked delete looked
+      // like it worked until the list reloaded unchanged.
+      const { data, error } = await _sb.from('forum_posts')
+        .delete().eq('id', postId).select('id');
+      if (error || !data?.length) {
+        if (error) console.error('[Forum.deletePost]', error.message);
+        if (typeof toast !== 'undefined') {
+          toast('Could not delete that post - you can only delete your own posts.', 3500);
+        }
+        return;
+      }
       if (typeof toast !== 'undefined') toast('Post deleted', 1500);
       await openCategory(_currentCat);
     };
@@ -426,7 +442,15 @@ const Forum = (() => {
   async function deleteReply(replyId) {
     if (!_sb) return;
     const doIt = async () => {
-      await _sb.from('forum_replies').delete().eq('id', replyId);
+      const { data, error } = await _sb.from('forum_replies')
+        .delete().eq('id', replyId).select('id');
+      if (error || !data?.length) {
+        if (error) console.error('[Forum.deleteReply]', error.message);
+        if (typeof toast !== 'undefined') {
+          toast('Could not delete that reply - you can only delete your own replies.', 3500);
+        }
+        return;
+      }
       if (typeof toast !== 'undefined') toast('Reply deleted', 1500);
       await openPost(_currentPost);
     };

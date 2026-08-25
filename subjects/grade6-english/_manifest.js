@@ -1,8 +1,25 @@
 ﻿'use strict';
+
+// ── Subject-specific badges ────────────────────
+// Added to engine/registry.js GENERIC_BADGES for this pack only.
+// pct() is from engine/helpers.js. Badge ids are permanent - see registry.js.
+const G6E_BADGES = [
+  { id:'g6e_clause_master', name:'Clause Master', icon:'🔗',
+    desc:'Score 80%+ in Clauses',
+    cond: (s,c) => pct(c['g6eng-clauses']) >= 80 },
+  { id:'g6e_comp_king',     name:'Comprehension King', icon:'👑',
+    desc:'Score 80%+ in Comprehension',
+    cond: (s,c) => pct(c['g6eng-comprehension']) >= 80 },
+  { id:'g6e_storyteller',   name:'Storyteller', icon:'🖋️',
+    desc:'Score 80%+ in Writing',
+    cond: (s,c) => pct(c['g6eng-writing']) >= 80 },
+];
+
 registerSubject({
   id: 'grade6-english', name: 'English', grade: 6, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
+  badges: G6E_BADGES,
   chapters: [
     {
       id: 'g6eng-nouns', name: 'Nouns, Pronouns & Determiners', icon: '📝',

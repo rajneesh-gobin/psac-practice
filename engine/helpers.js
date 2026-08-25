@@ -8,6 +8,11 @@ const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
 const fmt = n => n.toLocaleString('en-GB');
 
+// Accuracy % for one chapter's { attempted, correct } record.
+// Used by subject badge conditions, so it lives here rather than in any pack.
+// Null-safe: `pct(chapters.fractions)` is fine even if that chapter is untouched.
+function pct(c) { return (c && c.attempted) ? Math.round(c.correct / c.attempted * 100) : 0; }
+
 function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation }) {
   const shuffled = shuffle(options.filter(o => o !== answer));
   const finalOpts = shuffle([answer, ...shuffled.slice(0, 3)]);

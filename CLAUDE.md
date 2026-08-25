@@ -161,12 +161,18 @@ All 15 subjects (grades 4/5/6 × 5 subjects each) are fully built with 19 questi
 
 ## Pending / Not yet done
 1. **Supabase table** — must run `supabase-push-table.sql` in Supabase SQL Editor (one-time)
-2. **Netlify env vars** — must add to Netlify dashboard:
+2. **Netlify env vars** — set these in the Netlify dashboard, never in the repo:
    ```
-   VAPID_PUBLIC_KEY  = BExWCMEBx-MGkPCv6tm0nC-DebalPys64ivbkWnWN7pxZuHQqUNtuZ85HehLssxBddlvjGB1d99IgtALRFZo8kc
-   VAPID_PRIVATE_KEY = KdiUP6MFrJOI_KoXhXRvGOaP_ZasHicqMoJ7e9M0clY
-   VAPID_EMAIL       = mailto:deepmala.gobin@accenture.com
+   VAPID_PUBLIC_KEY  = <see Netlify env vars>
+   VAPID_PRIVATE_KEY = <see Netlify env vars>   ← NEVER commit this
+   VAPID_EMAIL       = mailto:...
    ```
+   ⚠ The previous VAPID **private** key was committed here in `dba9b8e` and is
+   therefore in git history permanently. Removing it from this file does NOT
+   purge it. **Rotate the VAPID keypair** (`npx web-push generate-vapid-keys`),
+   update the Netlify env vars, and update `VAPID_PUBLIC_KEY` in `engine/app.js`.
+   Push is non-functional until `push_subscriptions` has real subscribers, so
+   rotating now costs nothing.
 3. **Push notifications for assignments** — infrastructure is ready; wire up `push-send.js` when parent creates an assignment
 4. **Badge API** — show assignment count badge on app icon (needs Supabase assignment count)
 5. **Enrichment chapters for French/English/Maths** — photo-based vocab (Vocabulaire en Images, Vocabulary Builder, Shapes Around Us)

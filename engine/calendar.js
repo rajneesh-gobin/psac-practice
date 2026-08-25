@@ -783,10 +783,8 @@ const Calendar = (() => {
     }
 
     // Activate the pack globally so the chapter-select and quiz screens use it
-    if (typeof ACTIVE_PACK    !== 'undefined') { /* eslint-disable-next-line no-global-assign */ ACTIVE_PACK    = pack; }
-    if (typeof SELECTED_GRADE !== 'undefined') { /* eslint-disable-next-line no-global-assign */ SELECTED_GRADE = pack.grade; }
+    activateSubjectPack(pack.id);
     const chs = pack._chapters || pack.chapters || [];
-    if (typeof CHAPTERS !== 'undefined') { CHAPTERS.length = 0; chs.forEach(ch => CHAPTERS.push(ch)); }
     if (typeof QuestionLoader !== 'undefined') QuestionLoader.loadSubject(pack.id).catch(() => {});
 
     if (typeof showScreen !== 'undefined') showScreen('chapter-select');

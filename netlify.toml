@@ -4,6 +4,10 @@
 
 [functions]
   node_bundler = "esbuild"
+  # The question files are DATA read at runtime by the vm sandbox
+  # (netlify/lib/questions-sandbox.js), not imports esbuild can follow.
+  # Without this they are absent from the bundle and every re-grade returns 0.
+  included_files = ["subjects/**"]
 
 # ── Security headers ──────────────────────────────────────────────────────────
 [[headers]]
@@ -22,6 +26,9 @@
 [functions."push-reminders"]
   schedule = "*/15 * * * *"
 
+[functions."assignment-cleanup"]
+  schedule = "17 2 * * *"
+
 # ── Block direct browser access to question source files ──────────────
 # The /subjects/*/questions/* path is served by the Netlify Function instead.
 # These redirects only apply to Netlify hosting, not local file:// access.
@@ -37,17 +44,32 @@
   to     = "/.netlify/functions/questions"
   status = 200
 
-[[redirects]]
-  from   = "/api/student-login"
-  to     = "/.netlify/functions/student-login"
-  status = 200
-
-[[redirects]]
-  from   = "/api/set-pin"
-  to     = "/.netlify/functions/set-pin"
-  status = 200
+# NOTE: /api/student-login and /api/set-pin were removed. Student PIN
+# verification and PIN setting are handled entirely by the Supabase RPCs
+# verify_student_pin() and set_student_pin() (bcrypt, inside the database),
+# which cost no function invocations. The scrypt-based Netlify functions that
+# used to back these routes were dead code and have been deleted.
 
 [[redirects]]
   from   = "/api/create-user"
   to     = "/.netlify/functions/create-user"
+  status = 200
+
+# ── Guest assignment mode ────────────────────────────────────────────────
+# /a/<CODE> serves the lightweight guest page. status 200 = rewrite, so the
+# URL the child received on WhatsApp stays in the address bar and guest.js can
+# read the code from location.pathname.
+[[redirects]]
+  from   = "/a/*"
+  to     = "/guest.html"
+  status = 200
+
+[[redirects]]
+  from   = "/api/assignment-open"
+  to     = "/.netlify/functions/assignment-open"
+  status = 200
+
+[[redirects]]
+  from   = "/api/assignment-submit"
+  to     = "/.netlify/functions/assignment-submit"
   status = 200

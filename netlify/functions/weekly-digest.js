@@ -40,7 +40,7 @@ exports.handler = async () => {
     return { statusCode: 200 };
   }
 
-  const families = await sbGet('/rest/v1/families?select=id,owner_id');
+  const families = await sbGet('/rest/v1/families?select=id,parent_id');
   if (!families?.length) return { statusCode: 200 };
 
   let sent = 0;
@@ -53,7 +53,7 @@ exports.handler = async () => {
       if (!students?.length) continue;
 
       // Get parent email
-      const authUser    = await sbGet(`/auth/v1/admin/users/${family.owner_id}`);
+      const authUser    = await sbGet(`/auth/v1/admin/users/${family.parent_id}`);
       const parentEmail = authUser?.email;
       if (!parentEmail) continue;
 

@@ -463,14 +463,8 @@ const Search = (() => {
   }
 
   function practiceChapter(packId, chapterId) {
-    const pack = SUBJECT_PACKS.find(p => p.id === packId);
+    const pack = activateSubjectPack(packId);
     if (!pack) { toast('Chapter not available.', 2000); return; }
-    /* eslint-disable no-global-assign */
-    if (typeof ACTIVE_PACK    !== 'undefined') ACTIVE_PACK    = pack;
-    if (typeof SELECTED_GRADE !== 'undefined') SELECTED_GRADE = pack.grade;
-    /* eslint-enable no-global-assign */
-    const chs = pack._chapters || pack.chapters || [];
-    if (typeof CHAPTERS !== 'undefined') { CHAPTERS.length = 0; chs.forEach(ch => CHAPTERS.push(ch)); }
     const go = () => startChapterDirect(chapterId, null);
     if (typeof QuestionLoader !== 'undefined') QuestionLoader.loadSubject(pack.id).then(go).catch(go);
     else go();

@@ -1,8 +1,25 @@
 ﻿'use strict';
+
+// ── Subject-specific badges ────────────────────
+// Added to engine/registry.js GENERIC_BADGES for this pack only.
+// pct() is from engine/helpers.js. Badge ids are permanent - see registry.js.
+const G5F_BADGES = [
+  { id:'g5f_maitre_vocab',  name:'Maître du Vocabulaire', icon:'🗝️',
+    desc:'Score 80%+ en Vocabulaire',
+    cond: (s,c) => pct(c['fr-vocabulaire']) >= 80 },
+  { id:'g5f_roi_conjug',    name:'Roi de la Conjugaison', icon:'⚔️',
+    desc:'80%+ au présent ET au passé composé',
+    cond: (s,c) => pct(c['fr-verbes-present']) >= 80 && pct(c['fr-passe-compose']) >= 80 },
+  { id:'g5f_grand_lecteur', name:'Grand Lecteur', icon:'🦉',
+    desc:'Score 80%+ en Lecture',
+    cond: (s,c) => pct(c['fr-lecture']) >= 80 },
+];
+
 registerSubject({
   id: 'grade5-french', name: 'French', grade: 5, icon: '🇫🇷', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
+  badges: G5F_BADGES,
   chapters: [
     {
       id: 'fr-vocabulaire', name: 'Vocabulaire de base', icon: '🗣️',
