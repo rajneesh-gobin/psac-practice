@@ -1823,6 +1823,10 @@ document.getElementById('start-exam-btn').addEventListener('click', () => {
 
 function startExam(type) {
   const paper = assembleExamPaper(type);
+  if (!paper.questions.length) {
+    toast('🔒 Not enough unlocked chapters/questions to build an exam. Ask your parent to review chapter locks.', 4000);
+    return;
+  }
   S.exam.qs = paper.questions;
   S.exam.answers = {};
   S.exam.flagged = new Set();
@@ -1841,12 +1845,23 @@ function startExam(type) {
 function generatePrintablePaper() {
   const year = new Date().getFullYear();
 
+  // Same restrictions startChapterDirect()/assembleExamPaper() enforce — a
+  // locked chapter or a difficulty cap must hold for the printable paper too.
+  const lockedChs = new Set(DB.restrictions?.lockedChapters || []);
+  const maxDiff   = Math.min(4, Math.max(1, DB.restrictions?.maxDifficulty ?? 4));
+
   // Build pools: Section A (Q1-30 mixed difficulty), Section B (Q31-40 hardest)
   // Filter by the active subject's chapters so Science exam doesn't pull maths questions
-  const _activeChs = new Set(CHAPTERS.map(c => c.id));
-  const _subjectQs = STATIC_QUESTIONS.filter(q => _activeChs.has(q.chapterId));
-  const secAPool = shuffle(_subjectQs.filter(q => q.difficulty <= 3));
-  const secBPool = shuffle(_subjectQs.filter(q => q.difficulty === 4));
+  const _activeChs = new Set(CHAPTERS.filter(c => !lockedChs.has(c.id)).map(c => c.id));
+  const _subjectQs = STATIC_QUESTIONS.filter(q => _activeChs.has(q.chapterId) && q.difficulty <= maxDiff);
+  const secAPool = shuffle(_subjectQs.filter(q => q.difficulty <= Math.min(3, maxDiff)));
+  // Section B is L4 word problems - only offer it once the cap actually allows L4.
+  const secBPool = maxDiff >= 4 ? shuffle(_subjectQs.filter(q => q.difficulty === 4)) : [];
+
+  if (!secAPool.length) {
+    toast('🔒 Not enough unlocked chapters/questions to build a printable paper. Ask your parent to review chapter locks.', 4000);
+    return;
+  }
 
   // Ensure chapter spread for Section A
   const secA = [];

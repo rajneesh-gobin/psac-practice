@@ -80,10 +80,25 @@ function assembleExamPaper(type) {
   const cfg = config[type] || config.full;
   const paper = [];
 
-  const weights = CHAPTERS.map(ch => ({
+  // Same restrictions startChapterDirect() enforces for practice mode — a
+  // parent's chapter lock or difficulty cap must hold in exams too, or a
+  // locked/capped chapter is only actually blocked in practice.
+  const lockedChs = new Set(DB.restrictions?.lockedChapters || []);
+  const maxDiff   = Math.min(4, Math.max(1, DB.restrictions?.maxDifficulty ?? 4));
+
+  // 7 of 15 subject packs never set examWeight on any chapter (grade4/5/6
+  // english/french, grade4-maths). ch.examWeight was undefined there, so
+  // `undefined * cfg.count` -> NaN propagated through every chapter's `n`,
+  // and assembleExamPaper() silently returned a fully empty exam for all of
+  // them. Default a missing/non-numeric weight to 1 (equal weighting) rather
+  // than let it poison the whole paper.
+  const weights = CHAPTERS.filter(ch => !lockedChs.has(ch.id)).map(ch => ({
     chapterId: ch.id,
-    n: Math.max(1, Math.round(ch.examWeight * cfg.count / 40))
+    n: Math.max(1, Math.round((Number.isFinite(ch.examWeight) ? ch.examWeight : 1) * cfg.count / 40))
   }));
+
+  // Every chapter locked (or none registered) — nothing to build a paper from.
+  if (!weights.length) return { questions: [], durationMins: cfg.mins };
 
   let total = weights.reduce((s, w) => s + w.n, 0);
   let idx = 0;
@@ -95,10 +110,10 @@ function assembleExamPaper(type) {
   }
 
   weights.forEach(({ chapterId, n }) => {
-    const q1 = shuffle(getStaticQs(chapterId, 1));
-    const q2 = shuffle(getStaticQs(chapterId, 2));
-    const q3 = shuffle(getStaticQs(chapterId, 3));
-    const q4 = shuffle(getStaticQs(chapterId, 4));
+    const q1 = maxDiff >= 1 ? shuffle(getStaticQs(chapterId, 1)) : [];
+    const q2 = maxDiff >= 2 ? shuffle(getStaticQs(chapterId, 2)) : [];
+    const q3 = maxDiff >= 3 ? shuffle(getStaticQs(chapterId, 3)) : [];
+    const q4 = maxDiff >= 4 ? shuffle(getStaticQs(chapterId, 4)) : [];
 
     const take = (arr, k) => arr.slice(0, Math.max(0, k));
     const pool = [
@@ -111,10 +126,10 @@ function assembleExamPaper(type) {
     let selected = pool.slice(0, n);
 
     while (selected.length < n) {
-      const dyn = generateDynamic(chapterId, rnd(1, 3));
+      const dyn = generateDynamic(chapterId, rnd(1, Math.min(3, maxDiff)));
       if (dyn) selected.push(dyn);
       else {
-        const all = STATIC_QUESTIONS.filter(q => q.chapterId === chapterId);
+        const all = STATIC_QUESTIONS.filter(q => q.chapterId === chapterId && q.difficulty <= maxDiff);
         selected = [...new Set([...selected, ...shuffle(all)])].slice(0, n);
         break;
       }
@@ -122,7 +137,7 @@ function assembleExamPaper(type) {
     paper.push(...selected.slice(0, n));
   });
 
-  const byDiff = [1, 2, 3, 4].flatMap(d =>
+  const byDiff = [1, 2, 3, 4].filter(d => d <= maxDiff).flatMap(d =>
     shuffle(paper.filter(q => q.difficulty === d))
   );
 
