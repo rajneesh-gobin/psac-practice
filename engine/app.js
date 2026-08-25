@@ -3157,6 +3157,54 @@ if (eScreen) examObserver.observe(eScreen, { attributes: true, attributeFilter: 
 
 console.log(`✅ PSAC Exam Practice loaded. ${STATIC_QUESTIONS.length} static questions across ${CHAPTERS.length} chapters.`);
 
+// ── MOBILE CARD CAROUSELS ─────────────────────
+// The landing page grids carry 17 cards between them, which on a phone is a
+// very long scroll. CSS (style.css, under 640px) turns each [data-carousel]
+// grid into a scroll-snap track showing one card at a time; this only builds
+// the dots and keeps them in sync. Everything still works with JS disabled -
+// it degrades to a plain horizontal swipe with no indicator.
+//
+// Dots are built even on desktop, where CSS keeps them hidden: positions are
+// read lazily (on scroll / on tap), so building them while #screen-landing is
+// still display:none is safe.
+(function _initMobileCarousels() {
+  document.querySelectorAll('[data-carousel]').forEach(track => {
+    const items = Array.from(track.children);
+    if (items.length < 2) return;
+
+    const dots = document.createElement('div');
+    dots.className = 'mcar-dots';
+
+    items.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'mcar-dot' + (i ? '' : ' active');
+      dot.setAttribute('aria-label', `Show card ${i + 1} of ${items.length}`);
+      dot.addEventListener('click', () => {
+        track.scrollTo({ left: items[i].offsetLeft - items[0].offsetLeft, behavior: 'smooth' });
+      });
+      dots.appendChild(dot);
+    });
+    track.after(dots);
+
+    // Nearest-card wins, rather than dividing by a card width: the cards are
+    // full-bleed but the gap between them is not, so arithmetic drifts.
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const base = items[0].offsetLeft;
+        let best = 0, bestDist = Infinity;
+        items.forEach((el, i) => {
+          const dist = Math.abs((el.offsetLeft - base) - track.scrollLeft);
+          if (dist < bestDist) { bestDist = dist; best = i; }
+        });
+        Array.from(dots.children).forEach((d, i) => d.classList.toggle('active', i === best));
+      });
+    }, { passive: true });
+  });
+})();
+
 // ── OFFLINE DETECTION (K) ─────────────────────
 (function _initOffline() {
   const banner = document.getElementById('offline-banner');
