@@ -105,6 +105,11 @@ exports.handler = async (event) => {
     body: JSON.stringify({
       ok: true,
       name: result.name,
+      // Per-attempt token. Only the browser that answered the PIN correctly
+      // gets it, and assignment-submit requires it - otherwise any classmate
+      // who knows the shared code and a first name could overwrite that
+      // child's marks.
+      token: result.token,
       isRetry: !!result.is_retry,
       assignment: {
         code: a.code, title: a.title, teacher: a.teacher, classroom: a.classroom,

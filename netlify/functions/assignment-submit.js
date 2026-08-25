@@ -24,6 +24,7 @@ const MESSAGES = {
   not_found:         'That assignment no longer exists.',
   no_session:        'Please open the assignment again before submitting.',
   already_submitted: 'You have already submitted this assignment.',
+  bad_token:         'This session has expired. Please open the assignment again.',
 };
 
 async function sb(pathname, opts = {}) {
@@ -50,9 +51,10 @@ exports.handler = async (event) => {
 
   const code    = String(body.code || '').trim().toUpperCase().slice(0, 12);
   const name    = String(body.name || '').trim().slice(0, 40);
+  const token   = String(body.token || '').trim().slice(0, 128);
   const answers = Array.isArray(body.answers) ? body.answers.slice(0, 200) : [];
 
-  if (!code || !name) {
+  if (!code || !name || !token) {
     return { statusCode: 400, headers: HEADERS, body: JSON.stringify({ ok: false, error: 'bad_request' }) };
   }
 
@@ -89,7 +91,7 @@ exports.handler = async (event) => {
     saved = await sb('/rest/v1/rpc/guest_submit', {
       method: 'POST',
       body: JSON.stringify({
-        p_code: code, p_name: name,
+        p_code: code, p_name: name, p_token: token,
         p_answers: result.detail, p_score: result.score, p_total: result.total,
       }),
     });

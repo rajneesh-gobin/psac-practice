@@ -18,7 +18,7 @@ const show = id => document.querySelectorAll('.screen')
   .forEach(s => s.classList.toggle('on', s.id === id));
 
 const S = {
-  code: '', name: '', assignment: null, questions: [],
+  code: '', name: '', token: '', assignment: null, questions: [],
   idx: 0, answers: [], answered: false, endAt: null, timer: null, result: null,
 };
 
@@ -139,6 +139,9 @@ async function openAssignment() {
   }
 
   S.name       = r.name;
+  // Per-attempt token from assignment-open. Held in memory only - it proves
+  // THIS browser passed the PIN, and the submit endpoint refuses without it.
+  S.token      = r.token || '';
   S.assignment = r.assignment;
   S.questions  = r.questions || [];
   S.answers    = [];
@@ -260,7 +263,7 @@ async function finish() {
   let r;
   try {
     r = await api('/api/assignment-submit',
-      { code: S.code, name: S.name, answers: S.answers });
+      { code: S.code, name: S.name, token: S.token, answers: S.answers });
   } catch (e) {
     // Never lose the child's work to a flaky connection - let them retry.
     $('d-pct').textContent = '⚠️';
