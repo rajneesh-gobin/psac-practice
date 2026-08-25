@@ -333,6 +333,26 @@ function _urlB64ToUint8Array(b64) {
   return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
 }
 
+// push-subscribe holds the service-role key, so it verifies that the caller
+// actually owns the studentId in the payload before touching the row. Send
+// whichever credentials this device has: a student proves ownership with the
+// session token, a parent with their Supabase JWT. Both are sent when both
+// exist — the function accepts either, and which one is valid depends on who
+// is driving the UI.
+async function _pushAuthHeaders() {
+  const h = { 'Content-Type': 'application/json' };
+  try {
+    const token = (typeof getStudentToken === 'function') ? getStudentToken() : null;
+    if (token) h['x-student-token'] = token;
+  } catch(_) {}
+  try {
+    const sess = await _sb?.auth.getSession();
+    const jwt  = sess?.data?.session?.access_token;
+    if (jwt) h['Authorization'] = `Bearer ${jwt}`;
+  } catch(_) {}
+  return h;
+}
+
 async function setupPushNotifications(studentId) {
   if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
   try {
@@ -350,7 +370,7 @@ async function setupPushNotifications(studentId) {
     // Save subscription to backend
     await fetch('/.netlify/functions/push-subscribe', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: await _pushAuthHeaders(),
       body: JSON.stringify({ studentId, subscription: sub.toJSON() }),
     });
   } catch(e) {
@@ -1264,7 +1284,7 @@ const PD = (() => {
     const statusEl = document.getElementById('pd-reminder-status');
     if (!timeEl || !statusEl) return;
     try {
-      const res  = await fetch(`/.netlify/functions/push-subscribe?studentId=${_activeId}&action=get`, { method: 'GET' });
+      const res  = await fetch(`/.netlify/functions/push-subscribe?studentId=${_activeId}&action=get`, { method: 'GET', headers: await _pushAuthHeaders() });
       if (!res.ok) return;
       const data = await res.json();
       if (data.reminder_time) {
@@ -1285,7 +1305,7 @@ const PD = (() => {
     try {
       const res = await fetch('/.netlify/functions/push-subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await _pushAuthHeaders(),
         body: JSON.stringify({ studentId: _activeId, reminderTime: time }),
       });
       if (statusEl) statusEl.textContent = res.ok ? `Reminder saved for ${time} MU time. ✅` : 'Save failed — make sure the student has notifications enabled.';
@@ -1299,7 +1319,7 @@ const PD = (() => {
     try {
       const res = await fetch('/.netlify/functions/push-subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await _pushAuthHeaders(),
         body: JSON.stringify({ studentId: _activeId, reminderTime: null }),
       });
       if (res.ok) { if (timeEl) timeEl.value = ''; if (statusEl) statusEl.textContent = 'Reminder cleared.'; }
