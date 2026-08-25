@@ -279,7 +279,12 @@
   <!-- ══════════ AUTH - LOGIN / SIGNUP ══════════ -->
   <!-- Outside <main> so it can be full-screen -->
   <div id="screen-auth" class="screen hidden" data-hide-header="true">
-    <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex flex-col items-center justify-center p-4">
+    <div class="relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex flex-col items-center justify-center p-4">
+      <!-- Back to Home -->
+      <button onclick="showScreen('landing')"
+        class="absolute top-4 left-4 flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition-colors">
+        <span class="text-base">←</span> Home
+      </button>
       <!-- Logo -->
       <div class="text-center mb-8 select-none">
         <div class="text-7xl mb-3 drop-shadow-xl">🎓</div>
