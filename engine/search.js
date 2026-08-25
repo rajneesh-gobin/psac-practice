@@ -49,7 +49,10 @@ const Search = (() => {
 
   function matchesQuery(entry, normQ, qWords) {
     if (_mode === 'exact') return entry.searchText.includes(normQ);
-    return qWords.every(qw => wordMatches(qw, entry.words));
+    // Short words (≤ 2 chars) like "de", "la", "le" are connectors — skip as required
+    const required = qWords.filter(w => w.length >= 3);
+    if (!required.length) return qWords.some(w => wordMatches(w, entry.words));
+    return required.every(qw => wordMatches(qw, entry.words));
   }
 
   // ── Chapter metadata map (chapterId → meta) ────────────────────────────────
@@ -78,7 +81,7 @@ const Search = (() => {
       .filter(q => q && q.question && q.chapterId)
       .map(q => {
         const meta       = chMeta[q.chapterId] || {};
-        const rawText    = [q.question, ...(q.options || []), q.answer || ''].join(' ').replace(/<[^>]*>/g, ' ');
+        const rawText    = [q.question, ...(q.options || []), q.answer || '', q.hint || '', q.explanation || ''].join(' ').replace(/<[^>]*>/g, ' ');
         const searchText = norm(rawText);
         return { q, meta, searchText, words: searchText.split(' ').filter(Boolean) };
       })
