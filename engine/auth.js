@@ -1210,8 +1210,12 @@ const Auth = (() => {
     r.lockedChapters = r.lockedChapters || [];
     if (lock) { if (!r.lockedChapters.includes(chapterId)) r.lockedChapters.push(chapterId); }
     else        r.lockedChapters = r.lockedChapters.filter(id => id !== chapterId);
-    save(DB);
-    // Sync restriction to student record in Supabase
+    // Persist the restriction only - NOT save(DB). DB here is a snapshot taken
+    // when the parent opened this child's panel; if the child is practising
+    // concurrently on another device, save(DB) would silently overwrite their
+    // newer XP/streak/chapter progress with this stale copy. The in-memory
+    // mutation above already updates this screen; Store.updateStudent patches
+    // just the settings column server-side.
     if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: r });
     renderParentDashboard();
     toast(lock ? '🔒 Chapter locked.' : '🔓 Chapter unlocked.', 1500);
@@ -1220,7 +1224,7 @@ const Auth = (() => {
   async function setMaxDifficulty(level) {
     DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
     DB.restrictions.maxDifficulty = parseInt(level);
-    save(DB);
+    // See toggleChapterLock for why this doesn't also call save(DB).
     if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
     toast(`Max difficulty set to Level ${level}.`, 1500);
   }
@@ -1228,7 +1232,7 @@ const Auth = (() => {
   async function toggleExamDisabled() {
     DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
     DB.restrictions.examDisabled = !DB.restrictions.examDisabled;
-    save(DB);
+    // See toggleChapterLock for why this doesn't also call save(DB).
     if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
     renderParentDashboard();
     toast(DB.restrictions.examDisabled ? '🔒 Exam mode locked.' : '🔓 Exam mode unlocked.', 1500);
@@ -1237,7 +1241,7 @@ const Auth = (() => {
   async function toggleCrossGradeSearch() {
     DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
     DB.restrictions.crossGradeSearch = !DB.restrictions.crossGradeSearch;
-    save(DB);
+    // See toggleChapterLock for why this doesn't also call save(DB).
     if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
     renderParentDashboard();
     toast(DB.restrictions.crossGradeSearch ? '🔍 Cross-grade search enabled.' : '🔒 Cross-grade search off.', 1500);
@@ -1246,7 +1250,7 @@ const Auth = (() => {
   async function toggleCrossGradePractice() {
     DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
     DB.restrictions.crossGradePractice = !DB.restrictions.crossGradePractice;
-    save(DB);
+    // See toggleChapterLock for why this doesn't also call save(DB).
     if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
     renderParentDashboard();
     toast(DB.restrictions.crossGradePractice ? '📚 Cross-grade revision enabled.' : '🔒 Cross-grade revision off.', 1500);
