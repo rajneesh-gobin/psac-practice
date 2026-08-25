@@ -11,7 +11,10 @@
   <!-- Theme colour (Android toolbar + Safari status bar) -->
   <meta name="theme-color" content="#3b82f6">
 
-  <!-- iOS PWA support -->
+  <!-- iOS PWA support.
+       apple-mobile-web-app-capable is deprecated and Chrome logs a warning for
+       it, but iOS Safari still needs it - keep both, standard name first. -->
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="PSAC Practice">

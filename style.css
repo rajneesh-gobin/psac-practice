@@ -501,6 +501,16 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 /* ===== PARENT DASHBOARD TABLE ===== */
 #pd-chapters td { white-space: nowrap; padding-right: 12px; }
 
+/* iOS Safari's 100vh includes the area behind the address bar, so a
+   `min-h-screen` section is taller than the screen actually is and adds a
+   phantom scroll the user cannot get rid of. 100dvh is the real visible
+   height. Guarded by @supports so nothing changes on browsers without it, and
+   qualified with `body` so it outranks Tailwind's own .min-h-screen whichever
+   order the CDN injects its stylesheet in. */
+@supports (min-height: 100dvh) {
+  body .min-h-screen { min-height: 100dvh; }
+}
+
 /* ===== MOBILE CARD CAROUSEL =====
    The landing page stacks 17 full-height cards on a phone (5 subjects,
    6 features, 3 audiences, 3 plans), which is a very long scroll for content
@@ -568,10 +578,13 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
      and its word together when it does. */
   header .icon-btn, header .btn-label { flex-shrink: 0; }
 
-  /* Last-resort guard: the header can no longer overflow, but a stray wide
-     element elsewhere must not be able to scroll the whole page sideways
-     either - that is what hid the Logout button. */
-  html, body { max-width: 100%; overflow-x: hidden; }
+  /* Backstop against a stray wide element scrolling the page sideways.
+     ⚠ Deliberately NOT on html/body: overflow-x there makes them a scroll
+     container, and on iOS Safari that is a well-known way to kill
+     `position: sticky` - which is exactly what our app header uses. The header
+     is a sibling of #screen-landing, not a descendant, so scoping it here
+     protects the long marketing page without touching the sticky header. */
+  #screen-landing { max-width: 100%; overflow-x: hidden; }
 }
 
 /* ===== GAMIFICATION / INTERACTIVE PRACTICE ===== */
