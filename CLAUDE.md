@@ -157,10 +157,29 @@ All 15 subjects (grades 4/5/6 × 5 subjects each) are fully built with 19 questi
 - Reminder stored in `push_subscriptions.reminder_time` as "HH:MM" in Mauritius time (UTC+4)
 - `package.json` created with `web-push` dependency
 
+### Referral system
+- Every `profiles` row gets a unique `referral_code` (8-char, auto-generated). Deliberately separate from `families.family_code` — that one's a private "join my family" secret, this one is meant to be pasted into WhatsApp.
+- Parent dashboard → "🎁 Invite Friends" button → modal with the code, a `?ref=CODE` link, WhatsApp share (`wa.me`), native Share (`navigator.share`, falls back to clipboard copy), and a live list of "Friends who joined" + total count.
+- Flow: `Auth._captureReferralFromUrl()` reads `?ref=` on every page load (before routing), stores it in `localStorage`, strips it from the URL. `screen-family-setup` shows it in an editable "Referral code (optional)" field, pre-filled if one was captured. On `completeSetup()` / teacher bootstrap, `Store.recordReferral()` calls the `record_referral()` RPC once the new profile exists.
+- `record_referral()` / `my_referrals()` are both `SECURITY DEFINER` (see `supabase-referrals.sql`) so a referrer can see who they referred (name + join date only, never email) without widening `profiles`' `SELECT` RLS policy beyond "own row".
+- `referrals.status` is `'joined'` for everyone today — the column already distinguishes `'joined'` from `'subscribed'` so a future reward (e.g. free tier months) can flip it without another migration, but nothing does yet.
+
 ---
 
 ## Pending / Not yet done
-1. **Supabase table** — must run `supabase-push-table.sql` in Supabase SQL Editor (one-time)
+1. ~~Supabase table~~ — **DONE.** `push_subscriptions` already exists (created by
+   `supabase-rls-migration.sql` Part 0, which supersedes the standalone
+   `supabase-push-table.sql`). Verified live 2026-08-25: anon read returns
+   `200 []`, not "relation does not exist."
+1b. ~~Supabase referrals~~ — **DONE.** `supabase-referrals.sql` is deployed.
+   Verified live 2026-08-25: `record_referral`/`my_referrals` both return
+   `42501 permission denied` (function exists, correctly gated to
+   `authenticated`), not `PGRST202 could not find the function`.
+   (Same live-verification pass confirmed every other `supabase-*.sql`
+   migration in the repo is also already deployed — guest assignments,
+   guest hardening, guest submit-token, teacher approval, classrooms,
+   the pgcrypto search_path fix, create_student_with_pin, and the
+   bridge-policy drop. Nothing outstanding needs running.)
 2. **Netlify env vars** — set these in the Netlify dashboard, never in the repo:
    ```
    VAPID_PUBLIC_KEY  = <see Netlify env vars>
