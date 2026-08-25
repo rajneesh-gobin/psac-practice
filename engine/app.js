@@ -1261,12 +1261,18 @@ async function renderParentDashboard() {
       const st  = prog.stats || {};
       const acc = st.totalAttempted ? Math.round(st.totalCorrect / st.totalAttempted * 100) : 0;
       const col = acc >= 80 ? '#22c55e' : acc >= 50 ? '#f59e0b' : '#3b82f6';
+      const today = new Date().toDateString();
+      const studiedToday = st.lastDate === today;
       statsEl.innerHTML = `
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${studiedToday ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'}">
+            ${studiedToday ? '✅ Studied today' : '⏳ No activity yet today'}
+          </span>
+        </div>
         <div class="flex gap-3 text-xs text-gray-500 dark:text-gray-400 mb-1.5">
           <span>📝 ${st.totalAttempted || 0}</span>
           <span>🎯 ${acc}%</span>
-          <span>🔥 ${st.streak || 0}</span>
-          <span>⭐ ${prog.xp || 0} XP</span>
+          <span>🔥 ${st.streak || 0}d streak</span>
         </div>
         <div class="flex items-center gap-2">
           <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
@@ -1400,6 +1406,27 @@ const PD = (() => {
     const _el   = id => document.getElementById(id);
     const stats = DB.stats || {};
     const acc   = stats.totalAttempted ? Math.round(stats.totalCorrect / stats.totalAttempted * 100) : 0;
+
+    const today = new Date().toDateString();
+    const studiedToday = stats.lastDate === today;
+    const todayEl = document.getElementById('pd-today-status');
+    if (todayEl) {
+      todayEl.className = `rounded-2xl p-4 mb-4 flex items-center gap-3 ${
+        studiedToday
+          ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40'
+          : 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40'
+      }`;
+      todayEl.innerHTML = `
+        <div class="text-2xl select-none">${studiedToday ? '✅' : '⏳'}</div>
+        <div>
+          <div class="font-semibold ${studiedToday ? 'text-green-800 dark:text-green-300' : 'text-amber-800 dark:text-amber-300'} text-sm">
+            ${studiedToday ? 'Studied today' : 'No activity yet today'}
+          </div>
+          <div class="text-xs ${studiedToday ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}">
+            ${stats.streak ? `${stats.streak}-day streak 🔥` : 'No streak yet'}
+          </div>
+        </div>`;
+    }
 
     if (_el('pd-total'))  _el('pd-total').textContent  = stats.totalAttempted || 0;
     if (_el('pd-acc'))    _el('pd-acc').textContent    = acc + '%';
@@ -2662,6 +2689,40 @@ function practiceSkip() {
   document.getElementById('practice-next-btn').classList.remove('hidden');
 }
 
+function _showRoundComplete() {
+  const { attempted, correct } = S.practice.session;
+  const acc = attempted ? Math.round(correct / attempted * 100) : 0;
+  const stars = acc >= 80 ? '⭐⭐⭐' : acc >= 50 ? '⭐⭐' : '⭐';
+  const chName = CHAPTERS.find(c => c.id === S.practice.chapterId)?.name || 'Practice';
+  const xpEarned = correct * XP_PER_ANSWER;
+  const el = id => document.getElementById(id);
+  if (el('rc-stars'))    el('rc-stars').textContent    = stars;
+  if (el('rc-chapter'))  el('rc-chapter').textContent  = chName;
+  if (el('rc-score'))    el('rc-score').textContent    = `${correct}/${attempted}`;
+  if (el('rc-accuracy')) el('rc-accuracy').textContent = `${acc}%`;
+  if (el('rc-xp'))       el('rc-xp').textContent       = `+${xpEarned}`;
+  document.getElementById('modal-round-complete')?.classList.remove('hidden');
+  _haptic('levelup');
+}
+
+function _roundCompleteNext() {
+  document.getElementById('modal-round-complete')?.classList.add('hidden');
+  S.practice.session = { attempted: 0, correct: 0 };
+  if (S.practice.difficulty !== null) {
+    S.practice.qs = getQuestionsForChapter(S.practice.chapterId, S.practice.difficulty, 20);
+  } else if (S.practice.chapterId) {
+    const _maxD = DB.restrictions?.maxDifficulty ?? 4;
+    S.practice.qs = getMixedQuestions(S.practice.chapterId, _maxD, 20);
+  }
+  S.practice.idx = 0;
+  loadPracticeQuestion();
+}
+
+function _roundCompleteBack() {
+  document.getElementById('modal-round-complete')?.classList.add('hidden');
+  showScreen('chapter-select');
+}
+
 function practiceNext() {
   S.practice.idx++;
   if (S.practice.idx >= S.practice.qs.length) {
@@ -2669,11 +2730,8 @@ function practiceNext() {
       showAssignmentComplete();
       return;
     }
-    if (S.practice.difficulty !== null) {
-      S.practice.qs = getQuestionsForChapter(S.practice.chapterId, S.practice.difficulty, 20);
-    }
-    S.practice.idx = 0;
-    toast('🔄 New set of questions loaded!', 2000);
+    _showRoundComplete();
+    return;
   }
   loadPracticeQuestion();
 }
