@@ -150,6 +150,76 @@ candidate function name. Verified: exits 0 clean now (commit `ca3a940`).
 
 ---
 
+## 5b. DONE — CSP blocked cdn.jsdelivr.net (would have broken every page load)
+
+`netlify.toml` CSP `script-src` didn't allow `cdn.jsdelivr.net`, where
+`index.html` loads the Supabase UMD client from. Nothing has deployed this
+config yet, so this would have broken the very first production push (no
+Supabase client → no auth → nothing works). Fixed on `dev` (commit `f9d213e`):
+added `https://cdn.jsdelivr.net` to `script-src`. **Same bug still present on
+`main`** — not fixed there yet, sync when `main` gets updated.
+
+Found in the same deployment-readiness pass, not yet fixed:
+- [ ] `@supabase/supabase-js` is imported by `create-user.js` and
+      `payment-webhook.js` but is **not in `package.json`** — Netlify's esbuild
+      bundler will fail to bundle or throw "Cannot find module" at runtime for
+      both functions.
+- [ ] Confirm `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY` are actually set in
+      Netlify env vars before deploy — `push-send.js`/`push-reminders.js` call
+      `webpush.setVapidDetails()` at module top-level, before any guard check,
+      so a missing var is a hard crash (502), not a graceful degrade. The
+      `*/15 * * * *` cron would error every single run.
+- [ ] CSP `frame-src` blocks YouTube embeds (`accounts.google.com` only) —
+      the video-help modal will show a blank iframe. Low severity, not
+      launch-blocking, but a visible rough edge for testers.
+- [ ] `.gitignore` doesn't cover `.env*` — no current leak (no `.env` file
+      exists), but add it now before someone creates one for `netlify dev`.
+
+## 5c. TODO — parent restrictions don't reliably apply (found in flow audit)
+
+Two verified bugs, both inside the parent-controls flow:
+
+1. **Exam mode ignores chapter locks and max-difficulty entirely.**
+   `assembleExamPaper()` (`engine/questions_engine.js`) builds its pool from
+   the full unfiltered `CHAPTERS` list across all 4 difficulty tiers, with no
+   reference to `DB.restrictions` anywhere in the function — unlike
+   `startChapterDirect()` (practice mode), which correctly checks both. A
+   parent can lock "Fractions" and cap difficulty at L1, and the child still
+   gets L4 Fractions questions in any timed exam. Same gap in the printable
+   paper generator (`generatePrintablePaper`).
+   - [ ] Filter `CHAPTERS` by `DB.restrictions.lockedChapters` and cap by
+         `maxDifficulty` inside `assembleExamPaper()` and
+         `generatePrintablePaper()`, matching `startChapterDirect()`'s logic.
+
+2. **Toggling a restriction can silently overwrite the child's newer progress.**
+   `Auth.toggleChapterLock`/`setMaxDifficulty`/etc. (`engine/auth.js:1208-1253`)
+   call `save(DB)`, which upserts the *entire* cached `DB` object — not just
+   the restriction — back to Supabase. `DB` is a snapshot taken once when the
+   parent opened that child's panel. If the child is practicing concurrently
+   on another device, the parent's later restriction-toggle save overwrites
+   the child's newer XP/streak/chapter progress with the stale snapshot. This
+   is an everyday scenario for the target audience, not an edge case.
+   - [ ] Change restriction toggles to only patch `settings`/`restrictions`
+         server-side (e.g. a narrow `Store.updateStudent(id, {settings})`
+         already exists per the audit — stop also calling `save(DB)` with the
+         full stale object), or re-fetch fresh progress before any save.
+
+## 5d. Confirmed SAFE (from this session's pre-launch audit — no action needed)
+
+- Student push-subscribe token ordering (item 1 fix) — token is set before
+  `setupPushNotifications()` fires, no race.
+- Parent reminder picker — every path into the parent dashboard requires a
+  live Supabase session, so the JWT is reliably available.
+- Guest WhatsApp assignment flow — `guest.js` request/response field names
+  match `assignment-open.js`/`assignment-submit.js` exactly, including the
+  6-arg `guest_submit` signature with `p_token`.
+- All `Store.*`/`Auth.*`/`Calendar.*`/`TeacherMode.*`/`Search.*`/`AdminPanel.*`
+  cross-file calls inside `engine/*.js` resolve correctly (checked beyond
+  what `scripts/check.js` covers, which only scans `index.html`).
+- Teacher `?assign=<base64>` share link is confirmed dead code (nothing parses
+  `location.search` for it) — unchanged from the earlier audit. Not a crash,
+  just a silent no-op. **Don't demo this link to a real class during testing.**
+
 ## 6. Backlog (lower priority, from earlier audit — not yet scheduled)
 
 - `main` is 64 commits behind `dev` (all 3 security commits included) —
