@@ -194,3 +194,42 @@ STATIC_QUESTIONS.push(
     explanation:'Rodrigues has its own heritage sites: (1) <b>François Leguat Reserve</b> - named after the French Huguenot who documented Rodrigues\'s unique wildlife in 1691–1693, now home to giant Aldabra tortoises; (2) <b>Caverne Patate</b> - a spectacular limestone cave system open to tourists; (3) archaeological sites from early colonial settlement. Rodrigues has a distinct cultural identity as part of the Republic of Mauritius.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6hg-ch-020', chapterId:'g6-cultural-heritage', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Le_Morne_Brabant_Mauritius.jpg" alt="a rugged mountain peninsula rising from the sea" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This UNESCO World Heritage mountain in Mauritius is a symbol of resistance against slavery. What is its name?</b>',
+    options:['Piton de la Petite Rivière Noire','Corps de Garde','Trois Mamelles','Le Morne Brabant'],
+    answer:'Le Morne Brabant',
+    hint:'Escaped enslaved people (maroons) hid in caves on this dramatic peninsula.',
+    explanation:'<b>Le Morne Brabant</b> was inscribed as a UNESCO World Heritage Site in 2008. It is a rugged basalt mountain in south-west Mauritius where <b>maroons</b> (escaped enslaved people) hid in caves during the colonial period. It now symbolises the fight against slavery and is an international emblem of human freedom.' }),
+
+  makeMCQ({ id:'g6hg-ch-021', chapterId:'g6-cultural-heritage', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Aapravasi_Ghat_2010.jpg" alt="a historical stone immigration depot near a waterfront" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this UNESCO World Heritage Site in Port Louis?</b>',
+    options:['Blue Penny Museum','Fort Adelaide','Aapravasi Ghat','Government House'],
+    answer:'Aapravasi Ghat',
+    hint:'It was the first site in the British Empire where large-scale indentured labour was introduced.',
+    explanation:'<b>Aapravasi Ghat</b> (Immigration Depot) was declared a UNESCO World Heritage Site in 2006. Over 500,000 indentured workers — mainly from India — passed through this landing depot between 1834 and 1923. It represents a defining chapter in the history of labour migration and the shaping of Mauritian society.' }),
+
+  makeMCQ({ id:'g6hg-ch-022', chapterId:'g6-cultural-heritage', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Victoria_amazonica1.jpg" alt="large circular floating lily pads on a pond" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>These giant water lilies (Victoria amazonica) are a famous feature of which botanical garden in Mauritius?</b>',
+    options:['Black River Gorges National Park','SSR Botanical Garden at Pamplemousses','Casela Nature Park','Ile aux Aigrettes'],
+    answer:'SSR Botanical Garden at Pamplemousses',
+    hint:'This is one of the oldest botanical gardens in the southern hemisphere.',
+    explanation:'The giant <b>Victoria amazonica</b> water lilies are one of the most spectacular features of the <b>SSR Botanical Garden at Pamplemousses</b>. Originally developed in the 18th century under Pierre Poivre during French rule, the garden is one of the oldest tropical botanical gardens in the southern hemisphere and contains hundreds of rare plant species.' }),
+
+  makeMCQ({ id:'g6hg-ch-023', chapterId:'g6-cultural-heritage', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Eureka_Moka_Mauritius.jpg" alt="a large colonial house with wide verandas" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What type of historical site is Eureka House (La Maison Eureka) in Moka?</b>',
+    options:['A French military fort','A colonial plantation house that is now a heritage museum','A Hindu temple built by indentured workers','A British customs warehouse'],
+    answer:'A colonial plantation house that is now a heritage museum',
+    hint:'It was built around 1830 and has 109 doors and windows.',
+    explanation:'<b>Eureka House (La Maison Eureka)</b> in Moka is a beautifully preserved <b>colonial plantation house</b> built around 1830. It demonstrates how wealthy French Creole planters lived during the colonial period and is considered the finest example of Mauritian colonial architecture. It is open to the public as a heritage museum.' }),
+
+  makeMCQ({ id:'g6hg-ch-024', chapterId:'g6-cultural-heritage', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Blue_penny_museum.jpg" alt="a modern museum building in a city" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>The Blue Penny Museum in Port Louis is famous for housing which extraordinarily rare item?</b>',
+    options:['A Dodo skeleton','The original Dutch East India Company charter','The Blue and Red Penny stamps of 1847','A map drawn by Vasco da Gama'],
+    answer:'The Blue and Red Penny stamps of 1847',
+    hint:'These stamps were accidentally printed with "Post Office" instead of "Post Paid."',
+    explanation:'The <b>Blue Penny Museum</b> houses the <b>"Post Office" Blue Penny and Red Penny stamps of 1847</b> — two of the world\'s rarest and most valuable postage stamps. The printing error (inscribed "Post Office" instead of "Post Paid") makes them extraordinarily rare. They are among the most prized items in philatelic history.' })
+
+);

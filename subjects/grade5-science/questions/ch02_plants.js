@@ -219,6 +219,51 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Grass roots bind the soil, and grass leaves slow the rain drops before they hit the soil',
     hint:'Think about what the roots do underground AND what the leaves do above ground.',
-    explanation:'The grassy field is protected in two ways: (1) The <b>roots bind soil particles together</b>, making it harder for water to wash the soil away; (2) The <b>leaves/blades of grass slow the rain drops</b> as they fall, reducing the force with which they hit the soil surface.' })
+    explanation:'The grassy field is protected in two ways: (1) The <b>roots bind soil particles together</b>, making it harder for water to wash the soil away; (2) The <b>leaves/blades of grass slow the rain drops</b> as they fall, reducing the force with which they hit the soil surface.' }),
+
+  makeMCQ({ id:'g5sci-pl-026', chapterId:'plants', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Diagram_showing_the_parts_of_a_plant_CRUK_371.svg" alt="a plant diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>In the diagram above, which part absorbs water and minerals from the soil?</b>',
+    options:['Stem','Leaf','Root','Flower'],
+    answer:'Root',
+    hint:'This part grows underground and holds the plant firmly in place.',
+    explanation:'The <b>root</b> absorbs water and minerals from the soil and also anchors the plant. In the diagram it is the underground part at the base of the plant.' }),
+
+  makeMCQ({ id:'g5sci-pl-027', chapterId:'plants', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Maize_seeds_germination.jpg" alt="a germinating seed photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo above shows seeds that have started to sprout tiny roots and shoots. What is this process called?</b>',
+    options:['Germination','Pollination','Photosynthesis','Erosion'],
+    answer:'Germination',
+    hint:'This process requires water, warmth and air — NOT sunlight — to begin.',
+    explanation:'<b>Germination</b> is the process by which a seed sprouts and begins to grow into a new plant. The root (radicle) appears first, pushing into the soil to anchor the seedling and absorb water, before the shoot emerges.' }),
+
+  makeMCQ({ id:'g5sci-pl-028', chapterId:'plants', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Erosion.jpg" alt="a field with eroded bare soil" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo above shows bare soil being stripped away by rain and wind. What is this process called, and what would PREVENT it?</b>',
+    options:[
+      'Pollination — prevented by adding fertiliser',
+      'Soil erosion — prevented by planting trees and grass whose roots bind the soil',
+      'Photosynthesis — prevented by removing leaves',
+      'Germination — prevented by watering crops'
+    ],
+    answer:'Soil erosion — prevented by planting trees and grass whose roots bind the soil',
+    hint:'Plant roots act like anchors — they hold soil particles together.',
+    explanation:'<b>Soil erosion</b> is the removal of topsoil by wind or running water. Bare fields with no plant roots to hold soil in place are very vulnerable. <b>Planting trees and grasses</b> helps prevent erosion because their roots bind soil particles and their leaves slow the impact of raindrops.' }),
+
+  makeMCQ({ id:'g5sci-pl-029', chapterId:'plants', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Simple_photosynthesis_overview.svg" alt="a photosynthesis diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The diagram shows photosynthesis taking place in a leaf. Which gas does the leaf RELEASE as a by-product of this process?</b>',
+    options:['Carbon dioxide','Nitrogen','Oxygen','Hydrogen'],
+    answer:'Oxygen',
+    hint:'We need this gas to breathe — plants release it while making food.',
+    explanation:'During photosynthesis, leaves use sunlight, water and carbon dioxide to make food (glucose). <b>Oxygen</b> is released as a by-product through the stomata. This is why plants are essential for producing the air we breathe.' }),
+
+  makeMCQ({ id:'g5sci-pl-030', chapterId:'plants', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Prop_roots_of_Maize_plant.jpg" alt="a plant root system photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows the root system of a plant. What are the TWO main functions of roots?</b>',
+    options:[
+      'They absorb water and minerals from the soil, AND anchor the plant firmly in the soil',
+      'They make food through photosynthesis AND transport it to the leaves',
+      'They attract insects for pollination AND produce seeds',
+      'They store seeds AND release oxygen into the soil'
+    ],
+    answer:'They absorb water and minerals from the soil, AND anchor the plant firmly in the soil',
+    hint:'Roots have one job underground related to what they take in, and one job holding the plant in place.',
+    explanation:'Roots have two main functions: (1) <b>Absorb water and minerals</b> from the soil to supply the rest of the plant; (2) <b>Anchor the plant</b> firmly in the soil so it does not topple over.' })
 
 );

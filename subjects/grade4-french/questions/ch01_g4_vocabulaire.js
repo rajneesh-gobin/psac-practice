@@ -270,6 +270,62 @@ STATIC_QUESTIONS.push(
     ],
     answer:'père / mère / frère / sœur',
     hint:'Father = ?, Mother = ?, Brother = ?, Sister = ?',
-    explanation:'"Mon <b>père</b>" (father), "ma <b>mère</b>" (mother), "mon <b>frère</b>" (brother), "ma <b>sœur</b>" (sister). La famille proche : père, mère, frère, sœur. Note le genre : "mon" (masc.) devant père/frère, "ma" (fém.) devant mère/sœur.' })
+    explanation:'"Mon <b>père</b>" (father), "ma <b>mère</b>" (mother), "mon <b>frère</b>" (brother), "ma <b>sœur</b>" (sister). La famille proche : père, mère, frère, sœur. Note le genre : "mon" (masc.) devant père/frère, "ma" (fém.) devant mère/sœur.' }),
+
+  makeMCQ({ id:'g4fr-voc-036', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Red_Apple.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['une pomme','une banane','une orange','une poire'],
+    answer:'une pomme',
+    hint:'C\'est un fruit rouge ou vert très commun.',
+    explanation:'"<b>Une pomme</b>" = an apple. Les fruits : une pomme (apple), une banane (banana), une orange (orange), une poire (pear).' }),
+
+  makeMCQ({ id:'g4fr-voc-037', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Banana.arp.750pix.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['une pomme','une banane','un citron','une mangue'],
+    answer:'une banane',
+    hint:'C\'est un fruit jaune et long.',
+    explanation:'"<b>Une banane</b>" = a banana. Les fruits : une pomme (apple), une banane (banana), un citron (lemon), une mangue (mango).' }),
+
+  makeMCQ({ id:'g4fr-voc-038', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cat_domestic.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est cet animal ?</b>',
+    options:['un chien','un chat','un lapin','un oiseau'],
+    answer:'un chat',
+    hint:'Il ronronne et attrape des souris.',
+    explanation:'"<b>Un chat</b>" = a cat. Les animaux domestiques : un chat (cat), un chien (dog), un lapin (rabbit), un oiseau (bird). Le chat dit "miaou" !' }),
+
+  makeMCQ({ id:'g4fr-voc-039', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/YellowLabradorLooking_new.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est cet animal ?</b>',
+    options:['un chat','un chien','un renard','un loup'],
+    answer:'un chien',
+    hint:'C\'est le meilleur ami de l\'homme.',
+    explanation:'"<b>Un chien</b>" = a dog. Le chien dit "ouaf" ! Les animaux domestiques : un chat (cat), un chien (dog), un poisson (fish), un hamster (hamster).' }),
+
+  makeMCQ({ id:'g4fr-voc-040', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Old_book_bindings.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['un cahier','un livre','un stylo','un sac'],
+    answer:'un livre',
+    hint:'On le lit pour apprendre ou pour s\'amuser.',
+    explanation:'"<b>Un livre</b>" = a book. Le matériel scolaire : un livre (book), un cahier (notebook), un stylo (pen), un crayon (pencil), une règle (ruler).' }),
+
+  makeMCQ({ id:'g4fr-voc-041', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Chair.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['une table','une chaise','un bureau','un lit'],
+    answer:'une chaise',
+    hint:'On s\'assoit dessus.',
+    explanation:'"<b>Une chaise</b>" = a chair. Le mobilier : une chaise (chair), une table (table), un bureau (desk), un lit (bed), une armoire (wardrobe).' }),
+
+  makeMCQ({ id:'g4fr-voc-042', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Oranges.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel fruit est-ce ?</b>',
+    options:['une pomme','une banane','une orange','une tomate'],
+    answer:'une orange',
+    hint:'C\'est un agrume rond et juteux.',
+    explanation:'"<b>Une orange</b>" = an orange. Les agrumes : une orange (orange), un citron (lemon), une mandarine (tangerine). En français, "orange" est aussi une couleur !' }),
+
+  makeMCQ({ id:'g4fr-voc-043', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sun-in-the-sky.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['la lune','le soleil','une étoile','un nuage'],
+    answer:'le soleil',
+    hint:'Il brille pendant la journée et donne de la chaleur.',
+    explanation:'"<b>Le soleil</b>" = the sun. Le ciel : le soleil (sun), la lune (moon), les étoiles (stars), un nuage (cloud). Le soleil se lève à l\'est et se couche à l\'ouest.' })
 
 );

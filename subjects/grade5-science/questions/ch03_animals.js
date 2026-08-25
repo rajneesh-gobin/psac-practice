@@ -170,6 +170,41 @@ STATIC_QUESTIONS.push(
     ],
     answer:'In zoos, animals cannot live and behave naturally, may not reproduce well, and removing them from nature reserves reduces the wild population that conservation aims to protect',
     hint:'What is the purpose of a nature reserve compared to a zoo?',
-    explanation:'Nature reserves are designed to allow animals to live naturally in their own habitat, hunt their own food and reproduce naturally - this is the goal of conservation. Moving animals to zoos removes them from their natural habitat, can reduce their quality of life, and depletes the very wild population that conservation programmes aim to grow. Captive breeding in zoos can play a supplementary role, but nature reserves in the wild are considered more sustainable.' })
+    explanation:'Nature reserves are designed to allow animals to live naturally in their own habitat, hunt their own food and reproduce naturally - this is the goal of conservation. Moving animals to zoos removes them from their natural habitat, can reduce their quality of life, and depletes the very wild population that conservation programmes aim to grow. Captive breeding in zoos can play a supplementary role, but nature reserves in the wild are considered more sustainable.' }),
+
+  makeMCQ({ id:'g5sci-an-020', chapterId:'animals', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/FoodChain.svg" alt="a food chain diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>In a food chain like the one shown, which type of organism is always the PRODUCER?</b>',
+    options:['The animal at the top of the chain','The plant at the start of the chain','The animal in the middle','The decomposer at the bottom'],
+    answer:'The plant at the start of the chain',
+    hint:'A producer makes its own food using sunlight — food chains always start with one.',
+    explanation:'In any food chain, the <b>producer</b> is always the plant (or other photosynthesising organism) at the start. Producers capture energy from sunlight and convert it into food, which is then passed along the chain to herbivores and carnivores.' }),
+
+  makeMCQ({ id:'g5sci-an-021', chapterId:'animals', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Colorful_underwater_landscape_of_a_coral_reef.jpg" alt="an underwater habitat photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo above shows a colourful habitat full of corals, fish and other sea creatures. What type of habitat is this?</b>',
+    options:['Desert habitat','Forest habitat','Aquatic (coral reef) habitat','Grassland habitat'],
+    answer:'Aquatic (coral reef) habitat',
+    hint:'This habitat is found underwater in warm, shallow tropical seas.',
+    explanation:'A <b>coral reef</b> is an aquatic (underwater) habitat found in warm, shallow tropical seas. It is one of the most biodiverse habitats on Earth, home to thousands of species of fish, invertebrates and corals. Mauritius is surrounded by coral reef lagoons.' }),
+
+  makeMCQ({ id:'g5sci-an-022', chapterId:'animals', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tropical_rainforest_Agumbe.jpg" alt="a dense tropical forest photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows a dense, hot, very wet forest with extremely tall trees. What type of habitat is this?</b>',
+    options:['Desert','Coral reef','Tropical rainforest','Arctic tundra'],
+    answer:'Tropical rainforest',
+    hint:'This habitat has very high rainfall throughout the year and enormous biodiversity.',
+    explanation:'A <b>tropical rainforest</b> is a dense forest habitat found near the equator, with very high rainfall (over 2,000 mm per year), warm temperatures all year, and an extraordinary diversity of plants and animals. It is one of the most biodiverse biomes on Earth.' }),
+
+  makeMCQ({ id:'g5sci-an-023', chapterId:'animals', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pink_Pigeon_RWD2.jpg" alt="a pigeon photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The Pink Pigeon pictured is found only in Mauritius. Its numbers fell very low due to habitat destruction and introduced predators. What term describes animals facing serious risk of dying out forever?</b>',
+    options:['Endemic','Extinct','Endangered','Introduced'],
+    answer:'Endangered',
+    hint:'This is different from "extinct" — the animal is still alive but its numbers are critically low.',
+    explanation:'An <b>endangered</b> species is one with very low numbers that faces serious risk of becoming extinct if nothing is done to protect it. The Pink Pigeon is both <b>endemic</b> (found only in Mauritius) and <b>endangered</b>. Conservation breeding programmes have helped its population recover.' }),
+
+  makeMCQ({ id:'g5sci-an-024', chapterId:'animals', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Food_Web.svg" alt="a food web diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>In a food web, the organism at the very top that is not hunted or eaten by any other animal is called the:</b>',
+    options:['Producer','Herbivore','Top predator','Decomposer'],
+    answer:'Top predator',
+    hint:'This organism hunts others but nothing in the web hunts it.',
+    explanation:'The <b>top predator</b> (apex predator) sits at the highest level of a food web. It hunts and eats other animals but is not preyed upon by any other animal in the web. Examples: sharks in the ocean, eagles in forests, lions on savannas.' })
 
 );

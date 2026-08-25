@@ -308,6 +308,56 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Yes - the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
     hint:'Trace the energy transformation step by step through each component.',
-    explanation:'The student is correct. The <b>battery</b> stores chemical energy and converts it to electrical energy. The <b>wire</b> conducts the electrical energy around the circuit. The <b>buzzer</b> converts electrical energy into sound energy (vibrations). Each component has a specific role in the energy transformation chain.' })
+    explanation:'The student is correct. The <b>battery</b> stores chemical energy and converts it to electrical energy. The <b>wire</b> conducts the electrical energy around the circuit. The <b>buzzer</b> converts electrical energy into sound energy (vibrations). Each component has a specific role in the energy transformation chain.' }),
+
+  makeMCQ({ id:'g5sci-el-022', chapterId:'electricity', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Diagram_of_a_primary_cell_(battery).jpg" alt="a battery diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The diagram shows a primary cell (battery). What type of energy stored inside the battery is converted into electrical energy when a circuit is connected?</b>',
+    options:['Heat energy','Light energy','Chemical energy','Kinetic energy'],
+    answer:'Chemical energy',
+    hint:'Batteries store ___ energy inside them, which is released when the circuit is switched on.',
+    explanation:'A battery (primary cell) stores <b>chemical energy</b>. When connected in a complete circuit, chemical reactions inside the battery convert this stored chemical energy into <b>electrical energy</b>, which drives current around the circuit to power the bulb or other components.' }),
+
+  makeMCQ({ id:'g5sci-el-023', chapterId:'electricity', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Battery_symbols_and_circuit.png" alt="a circuit symbols diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>Circuit diagrams use standard symbols. In a circuit diagram, a battery (cell) is represented by:</b>',
+    options:[
+      'A circle with a cross inside it',
+      'A long line and a shorter line placed parallel to each other',
+      'A zigzag line',
+      'A rectangle with an arrow through it'
+    ],
+    answer:'A long line and a shorter line placed parallel to each other',
+    hint:'The longer line is the positive terminal (+) and the shorter line is the negative terminal (−).',
+    explanation:'A <b>battery (cell)</b> in a circuit diagram is shown as a <b>long line</b> (positive terminal, +) next to a <b>shorter line</b> (negative terminal, −). Multiple cells in series show repeated pairs of lines. This is the standard international symbol used in circuit diagrams.' }),
+
+  makeMCQ({ id:'g5sci-el-024', chapterId:'electricity', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/9v_battery_and_led_circuit_components_(wires,_battery,_LED,_resistor).jpg" alt="a photo of circuit components including wires and battery" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows circuit components including wires, a battery and an LED. The connecting wires have a copper core coated in plastic. Why is copper used for the inner core rather than plastic?</b>',
+    options:[
+      'Copper is lighter and cheaper than plastic',
+      'Copper is a conductor — it allows electricity to flow; plastic is an insulator that would block the current',
+      'Plastic conducts electricity better than copper at high temperatures',
+      'Copper has a higher melting point than plastic so it is safer'
+    ],
+    answer:'Copper is a conductor — it allows electricity to flow; plastic is an insulator that would block the current',
+    hint:'For electricity to flow through a wire, the material must allow electrons to pass through it.',
+    explanation:'The inner core of a wire is made of <b>copper</b> because copper is an excellent <b>conductor</b> — it allows electrons to flow through it easily. The outer plastic coating is an <b>insulator</b> — it prevents electric shocks when the wire is touched and stops accidental short circuits.' }),
+
+  makeMCQ({ id:'g5sci-el-025', chapterId:'electricity', difficulty:2,
+    question:`${_EL_TWO_BULBS}<b>The circuit above shows two bulbs connected one after another in a single loop with one battery. What is the name of this type of circuit arrangement?</b>`,
+    options:['Parallel circuit','Open circuit','Series circuit','Short circuit'],
+    answer:'Series circuit',
+    hint:'In this arrangement, all components share ONE single path for current to flow.',
+    explanation:'This is a <b>series circuit</b>. In a series circuit, all components (bulbs, battery, switch) are connected in a single continuous loop, one after another. If one bulb breaks or is removed, the circuit is broken and both bulbs go out.' }),
+
+  makeMCQ({ id:'g5sci-el-026', chapterId:'electricity', difficulty:2,
+    question:`${_EL_CLOSED}<b>In the closed circuit shown above, the bulb is glowing. What energy transformation is taking place inside the bulb?</b>`,
+    options:[
+      'Chemical energy → Heat energy',
+      'Electrical energy → Light energy (and heat energy)',
+      'Light energy → Electrical energy',
+      'Kinetic energy → Sound energy'
+    ],
+    answer:'Electrical energy → Light energy (and heat energy)',
+    hint:'The bulb receives electrical energy from the battery — what does it produce?',
+    explanation:'In the bulb, <b>electrical energy</b> is converted into <b>light energy</b> (and some heat energy). The full energy chain is: battery converts chemical energy → electrical energy; the wire conducts electrical energy; the bulb converts electrical energy → light + heat.' })
 
 );

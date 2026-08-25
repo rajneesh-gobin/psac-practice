@@ -192,3 +192,35 @@ STATIC_QUESTIONS.push(
     explanation:'A conservation scientist would respond that <b>while extinct species cannot be recovered, many endemic Mauritian species are still alive but endangered</b> - including the Echo Parakeet, Pink Pigeon, Mauritius Kestrel, and many rare plants. Successful conservation of these species (e.g. Echo Parakeet population grew from ~12 to 700+) proves that action <b>works</b>. Every species that disappears is an irreplaceable loss to the world\'s biodiversity. <b>What we do today determines what future generations inherit.</b>' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4h-voy-020', chapterId:'g4hist-voyages', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dodo.jpg" alt="a painting of a large flightless bird" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name of this famous extinct bird that was endemic to Mauritius?</b>',
+    options:['Ostrich','Emu','Dodo','Penguin'],
+    answer:'Dodo',
+    hint:'This bird could not fly and was hunted to extinction around 1681.',
+    explanation:'The <b>Dodo</b> (<i>Raphus cucullatus</i>) was a large flightless bird that lived only on the island of Mauritius. When humans arrived, Dodos were hunted for food and rats, pigs and monkeys introduced by settlers ate their eggs. The last Dodo was seen around <b>1681</b>. The Dodo is now one of the most famous symbols of extinction and of Mauritius.' }),
+
+  makeMCQ({ id:'g4h-voy-021', chapterId:'g4hist-voyages', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pink_pigeon.jpg" alt="a pink-coloured bird perched on a branch" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This endangered endemic bird was saved from near-extinction by conservation efforts in Mauritius. What is it called?</b>',
+    options:['Flamingo','Pink Pigeon','Echo Parakeet','Mauritius Fody'],
+    answer:'Pink Pigeon',
+    hint:'By the 1990s fewer than 10 of these birds remained in the wild.',
+    explanation:'The <b>Pink Pigeon</b> (<i>Nesoenas mayeri</i>) is an endemic bird found only in Mauritius. It was nearly extinct in the early 1990s with fewer than 10 birds in the wild. Thanks to conservation efforts — breeding programmes, predator control and habitat protection — the population recovered to over 400 birds. It is one of the greatest conservation success stories in the region.' }),
+
+  makeMCQ({ id:'g4h-voy-022', chapterId:'g4hist-voyages', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Black_River_Gorges_National_Park,_Mauritius.jpg" alt="a lush green forested gorge landscape" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name of this protected nature reserve in south-west Mauritius?</b>',
+    options:['Casela Nature Park','Ile aux Aigrettes','Black River Gorges National Park','Pamplemousses Botanical Garden'],
+    answer:'Black River Gorges National Park',
+    hint:'It was established in 1994 to protect Mauritius\'s last areas of native forest.',
+    explanation:'<b>Black River Gorges National Park</b> was established in 1994 and covers about 6,574 hectares in south-west Mauritius. It protects the last significant areas of native Mauritian forest and the endemic species that live there — including the Echo Parakeet, Pink Pigeon, Mauritius Kestrel and rare plants like the Mauritian ebony tree.' }),
+
+  makeMCQ({ id:'g4h-voy-023', chapterId:'g4hist-voyages', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ile_aux_Aigrettes.jpg" alt="a small coral island with trees near the sea" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What type of site is Ile aux Aigrettes, this small island off the east coast of Mauritius?</b>',
+    options:['A military base','A tourist hotel resort','A nature reserve being restored to its pre-human ecosystem','A sugar cane plantation'],
+    answer:'A nature reserve being restored to its pre-human ecosystem',
+    hint:'It is managed by the Mauritian Wildlife Foundation and giant tortoises have been reintroduced.',
+    explanation:'<b>Ile aux Aigrettes</b> is a <b>nature reserve</b> managed by the Mauritian Wildlife Foundation. The coral island is being restored to resemble what Mauritius\'s coastal ecosystem looked like before humans arrived. Giant Aldabra tortoises (similar to the now-extinct Mauritian giant tortoise) have been introduced, alongside Pink Pigeons, Mauritius Fodies and rare endemic plants.' })
+
+);

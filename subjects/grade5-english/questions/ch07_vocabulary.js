@@ -156,3 +156,49 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Not many</b>" is the closest synonym to "few". Few = a small number (but not zero). "No leaves" means zero - too strong. "Several" suggests a moderate number - slightly too many. "Many" is the opposite. The distinction between "few" (little quantity, often implies less than expected) and "a few" (a small positive number) is subtle: "few leaves" implies fewer than expected.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5eng-voc-020', chapterId:'eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/STETHOSCOPE.jpg" alt="a medical instrument" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this medical instrument called?</b>',
+    options:['thermometer','microscope','telescope','stethoscope'],
+    answer:'stethoscope',
+    hint:'Doctors use it to listen to your heartbeat and breathing.',
+    explanation:'A "<b>stethoscope</b>" is the medical instrument used by doctors to listen to internal body sounds — especially the heart and lungs. The word comes from Greek: <i>stethos</i> (chest) + <i>skopein</i> (to examine).' }),
+
+  makeMCQ({ id:'g5eng-voc-021', chapterId:'eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Telescope.jpg" alt="a scientific instrument" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this scientific instrument called?</b>',
+    options:['microscope','periscope','stethoscope','telescope'],
+    answer:'telescope',
+    hint:'Astronomers use it to observe stars and planets far away in the night sky.',
+    explanation:'A "<b>telescope</b>" is used to observe distant objects — especially stars, planets and other celestial bodies. From Greek: <i>tele</i> (far) + <i>skopein</i> (to look). The prefix "tele-" also appears in: television, telephone, telecommunications.' }),
+
+  makeMCQ({ id:'g5eng-voc-022', chapterId:'eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Compass.jpg" alt="a navigation tool" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this navigation tool used for?</b>',
+    options:['measuring temperature','measuring distance','telling the time','finding direction'],
+    answer:'finding direction',
+    hint:'Sailors and explorers use it to find North, South, East and West.',
+    explanation:'A "<b>compass</b>" is a navigation instrument used for <b>finding direction</b>. Its needle always points to magnetic north. The four cardinal directions shown on a compass are: North, South, East and West. Explorers, sailors and hikers use compasses when maps are unavailable.' }),
+
+  makeMCQ({ id:'g5eng-voc-023', chapterId:'eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Optical_microscope.jpg" alt="a scientific instrument" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What does this instrument allow scientists to do?</b>',
+    options:['see very distant stars','measure temperature','find direction','see very tiny objects'],
+    answer:'see very tiny objects',
+    hint:'Scientists use it in laboratories to study cells and bacteria.',
+    explanation:'A "<b>microscope</b>" allows you to <b>see very tiny objects</b> invisible to the naked eye — such as cells, bacteria and microorganisms. From Greek: <i>mikros</i> (small) + <i>skopein</i> (to look). Compare with telescope (<i>tele</i> = far) — the prefix tells you what kind of "looking" the instrument does.' }),
+
+  makeMCQ({ id:'g5eng-voc-024', chapterId:'eng-vocabulary', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Thermometer.jpg" alt="a measuring instrument" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What does this instrument measure?</b>',
+    options:['pressure','distance','speed','temperature'],
+    answer:'temperature',
+    hint:'Doctors use it to check if you have a fever. It shows degrees.',
+    explanation:'A "<b>thermometer</b>" measures <b>temperature</b> — how hot or cold something is. From Greek: <i>thermos</i> (heat) + <i>metron</i> (measure). Body temperature is measured in degrees Celsius (°C). Normal human body temperature is about 37°C.' }),
+
+  makeMCQ({ id:'g5eng-voc-025', chapterId:'eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Anchor.jpg" alt="a ship object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this object called?</b>',
+    options:['rudder','propeller','helm','anchor'],
+    answer:'anchor',
+    hint:'It is heavy and is dropped into the water to stop a ship from drifting away.',
+    explanation:'An "<b>anchor</b>" is a heavy metal device dropped from a ship to the sea floor to hold the vessel in place. As a verb, "to anchor" means to secure or hold firmly. We also use "anchor" figuratively: "She was the anchor of the team" (the most reliable, steadying person).' })
+
+);

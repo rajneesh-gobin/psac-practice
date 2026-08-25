@@ -49,15 +49,15 @@ const QuestionLoader = (() => {
       'subjects/grade5-english/questions/ch08_spelling.js',
     ],
     'grade5-science': [
-      'subjects/grade5-science/questions/ch01_living_things.js',
       'subjects/grade5-science/questions/ch02_plants.js',
       'subjects/grade5-science/questions/ch03_animals.js',
       'subjects/grade5-science/questions/ch04_energy.js',
       'subjects/grade5-science/questions/ch05_water_matter.js',
       'subjects/grade5-science/questions/ch06_electricity.js',
-      'subjects/grade5-science/questions/ch07_materials.js',
-      'subjects/grade5-science/questions/ch08_air.js',
       'subjects/grade5-science/questions/ch09_conservation.js',
+      // @enrichment - bonus content, derived from syllabus
+      'subjects/grade5-science/questions/enrichment_g5sci_endemic.js',
+      'subjects/grade5-science/questions/enrichment_g5sci_energy.js',
     ],
     'grade5-history': [
       'subjects/grade5-history/questions/ch01_discovery.js',
@@ -83,6 +83,9 @@ const QuestionLoader = (() => {
       'subjects/grade6-science/questions/ch06_g6_ecosystems.js',
       'subjects/grade6-science/questions/ch07_g6_conservation.js',
       'subjects/grade6-science/questions/ch08_g6_solar.js',
+      // @enrichment - bonus content, derived from syllabus
+      'subjects/grade6-science/questions/enrichment_g6sci_ecosystems.js',
+      'subjects/grade6-science/questions/enrichment_g6sci_solar.js',
     ],
     'grade6-history': [
       'subjects/grade6-history/questions/ch01_g6_slaves_immigrants.js',
@@ -148,6 +151,9 @@ const QuestionLoader = (() => {
       'subjects/grade4-science/questions/ch04_g4_air.js',
       'subjects/grade4-science/questions/ch05_g4_water.js',
       'subjects/grade4-science/questions/ch06_g4_materials.js',
+      // @enrichment — bonus content, derived from syllabus
+      'subjects/grade4-science/questions/enrichment_g4sci_animals.js',
+      'subjects/grade4-science/questions/enrichment_g4sci_equipment.js',
     ],
     'grade4-french': [
       'subjects/grade4-french/questions/ch01_g4_vocabulaire.js',

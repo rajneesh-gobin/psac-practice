@@ -205,3 +205,42 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Location</b> was the foundation - Mauritius\'s position in the central Indian Ocean meant ships on Europe-Asia routes needed to pass nearby, making a port there inherently valuable. <b>Labourdonnais\'s investment</b> converted this geographic advantage into a working harbour. <b>Trade routes</b> grew as a result of both. Without the strategic location, no governor\'s buildings would have attracted the same volume of trade.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5hg-pl-020', chapterId:'port-louis', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Aapravasi_Ghat_2010.jpg" alt="a historical stone building near a waterfront" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name of this UNESCO World Heritage Site in Port Louis?</b>',
+    options:['Fort Adelaide (La Citadelle)','Aapravasi Ghat','Blue Penny Museum','Government House'],
+    answer:'Aapravasi Ghat',
+    hint:'This site was the arrival point for Indian indentured labourers after 1835.',
+    explanation:'<b>Aapravasi Ghat</b> (Immigration Depot) was declared a UNESCO World Heritage Site in 2006. It was the landing point for over 500,000 Indian indentured labourers between 1834 and 1923, and is one of the most historically significant sites in Port Louis.' }),
+
+  makeMCQ({ id:'g5hg-pl-021', chapterId:'port-louis', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fort_Adelaide_Mauritius.jpg" alt="a stone fort on a hilltop overlooking a city" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This fort was built by the British in the 1830s on a hill overlooking Port Louis. What is it called?</b>',
+    options:['Fort George','Fort Napoleon','Fort Adelaide (La Citadelle)','Fort Victoria'],
+    answer:'Fort Adelaide (La Citadelle)',
+    hint:'Its French nickname means "The Citadel." It was built to defend and control the city.',
+    explanation:'<b>Fort Adelaide (La Citadelle)</b> was built by the British in the 1830s on a commanding hill above Port Louis. It was designed to defend the city and — historians note — to overawe the newly freed slave population after emancipation. Today it is a heritage attraction with panoramic views over Port Louis.' }),
+
+  makeMCQ({ id:'g5hg-pl-022', chapterId:'port-louis', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Blue_penny_museum.jpg" alt="a modern museum building" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which museum in Port Louis houses two of the world\'s rarest postage stamps?</b>',
+    options:['Natural History Museum','Eureka House','Blue Penny Museum','Mauritius Institute'],
+    answer:'Blue Penny Museum',
+    hint:'The museum is named after the blue-coloured stamp issued in 1847.',
+    explanation:'The <b>Blue Penny Museum</b> in Port Louis houses the famous "Post Office" Blue Penny and Red Penny stamps of 1847 — two of the world\'s rarest and most valuable postage stamps. They were accidentally inscribed "Post Office" instead of "Post Paid," making them extraordinarily rare.' }),
+
+  makeMCQ({ id:'g5hg-pl-023', chapterId:'port-louis', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Government_House_Port_Louis_Mauritius.jpg" alt="a large colonial building with columns" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This colonial building is the official residence of the President of Mauritius. What is it called?</b>',
+    options:['Aapravasi Ghat','Blue Penny Museum','Government House','Fort Adelaide'],
+    answer:'Government House',
+    hint:'It was first built during the French colonial period under Mahé de Labourdonnais.',
+    explanation:'<b>Government House</b> (Hôtel du Gouvernement) is a historic colonial building in Port Louis first established during the French period. It has served as the official residence and office for every ruler of Mauritius — from French governors to British governors to today\'s President of the Republic.' }),
+
+  makeMCQ({ id:'g5hg-pl-024', chapterId:'port-louis', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Champ_de_mars_Port_Louis.jpg" alt="a horse racing track set within a city" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name of this famous venue in Port Louis, the oldest of its kind in the southern hemisphere?</b>',
+    options:['Central Market','Aapravasi Ghat','Champ de Mars Racecourse','Natural History Museum'],
+    answer:'Champ de Mars Racecourse',
+    hint:'Horse racing has been held here since 1812.',
+    explanation:'<b>Champ de Mars</b> in Port Louis is the <b>oldest horse-racing venue in the southern hemisphere</b>. Racing began there in 1812 under the first British governor, Robert Farquhar. It remains an active racecourse and a beloved feature of Mauritian culture.' })
+
+);

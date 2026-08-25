@@ -22,5 +22,13 @@ registerSubject({
       syllabus: 'Environmental pollution: types, causes, effects on living things. Deforestation and consequences. Recycling and waste management. Conservation efforts in Mauritius and Rodrigues. Why biodiversity is important.' },
     { id: 'g6-solar-system', name: 'Earth, Moon & Sun in Our Solar System',  icon: '🪐', examWeight: 3,
       syllabus: 'The solar system: Sun, 8 planets, Moon. Earth\'s rotation (causes day and night). Earth\'s revolution around the Sun (causes seasons). Phases of the Moon. Gravity. Eclipses (solar and lunar). Space exploration basics.' },
+    // ── ENRICHMENT ────────────────────────────────────────────────────────────────
+    // @enrichment — These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
+    // DO NOT remove during syllabus alignment audits — they are intentional bonus content.
+    { id: 'g6sci-enr-ecosystems', name: 'Ecosystems in Pictures',  icon: '🌿', enrichment: true, examWeight: 2,
+      enrichmentNote: 'Photo identification of ecosystem types and habitats — derived from the Ecosystems and Conservation chapters.' },
+    { id: 'g6sci-enr-solar',      name: 'Our Solar System',        icon: '🪐', enrichment: true, examWeight: 2,
+      enrichmentNote: 'Identify planets and space features by photo — derived from the Solar System chapter.' },
   ],
 });
+

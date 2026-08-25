@@ -159,3 +159,42 @@ STATIC_QUESTIONS.push(
     explanation:'The 5 adjectives are: <b>hot</b> (day), <b>sunny</b> (day), <b>beautiful</b> (sea), <b>calm</b> (sea), <b>happy</b> (we - predicative adjective after "felt"). "Very" is an adverb that intensifies the adjective "happy". Counting adjectives in a passage is a key MIE Grade 4 skill.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4eng-adj-020', chapterId:'g4eng-adjectives', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Loxodonta_africana.jpg" alt="a large animal" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which adjective best describes the SIZE of the animal shown in this picture?</b>',
+    options:['small','tiny','flat','big'],
+    answer:'big',
+    hint:'An adjective describes a noun. This animal is one of the largest land animals on Earth.',
+    explanation:'"<b>Big</b>" (or large/huge) is the size adjective that describes the elephant. Adjectives telling us about size include: big, small, tall, short, wide, narrow, enormous, tiny. The elephant is big — its comparative form is "bigger" and superlative is "the biggest".' }),
+
+  makeMCQ({ id:'g4eng-adj-021', chapterId:'g4eng-adjectives', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Red_Apple.jpg" alt="a fruit" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What COLOUR adjective describes the apple in this picture?</b>',
+    options:['green','yellow','purple','red'],
+    answer:'red',
+    hint:'Look carefully at the colour of the fruit in the picture.',
+    explanation:'"<b>Red</b>" is a colour adjective describing the apple. Colour adjectives describe the appearance of a noun: red, blue, green, yellow, purple, orange. We can say "a red apple" (adjective before noun) or "the apple is red" (adjective after a linking verb).' }),
+
+  makeMCQ({ id:'g4eng-adj-022', chapterId:'g4eng-adjectives', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Happy_child.jpg" alt="a child smiling" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which EMOTION adjective best describes the child shown in this picture?</b>',
+    options:['sad','angry','tired','happy'],
+    answer:'happy',
+    hint:'The child is smiling broadly. What adjective describes this feeling?',
+    explanation:'"<b>Happy</b>" is an emotion adjective — it describes how the child feels. Emotion adjectives include: happy, sad, angry, excited, scared, bored, surprised, proud. Comparative: happier. Superlative: the happiest.' }),
+
+  makeMCQ({ id:'g4eng-adj-023', chapterId:'g4eng-adjectives', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Burj_Khalifa.jpg" alt="a very tall building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SIZE adjective best describes this building?</b>',
+    options:['short','wide','flat','tall'],
+    answer:'tall',
+    hint:'This is the world\'s tallest skyscraper. Which adjective describes its HEIGHT?',
+    explanation:'"<b>Tall</b>" is the size adjective describing height. We say "a tall building" or "the building is tall". Comparative: taller. Superlative: the tallest. Other size adjectives for height and size: big, large, short, small, wide, narrow, deep, shallow.' }),
+
+  makeMCQ({ id:'g4eng-adj-024', chapterId:'g4eng-adjectives', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Football_(Soccer_ball).jpg" alt="a sports object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SHAPE adjective describes the object shown in this picture?</b>',
+    options:['square','flat','oval','round'],
+    answer:'round',
+    hint:'Look at the shape of the ball — it is perfectly circular.',
+    explanation:'"<b>Round</b>" is a shape adjective describing the ball. Shape adjectives describe the outline or form of a noun: round, square, oval, flat, triangular, rectangular, curved. We can say "a round ball" — the adjective comes before the noun it describes.' })
+
+);

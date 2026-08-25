@@ -144,3 +144,49 @@ STATIC_QUESTIONS.push(
     explanation:'The 7 common nouns are: <b>evening, family, kitchen, dal, rice, children, homework</b>. "Grandmother" is capitalised here and used as a title/name (a proper noun). "Their" is a pronoun. Identifying common nouns from a passage is a key MIE Grade 4 grammar skill.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4eng-noun-020', chapterId:'g4eng-nouns', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Stack_of_books_01.svg" alt="an object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for the object shown in this picture?</b>',
+    options:['pen','paper','shelf','book'],
+    answer:'book',
+    hint:'You read it — it has pages and a cover.',
+    explanation:'"<b>Book</b>" is a common countable noun. We say "a book" (singular) or "books" (plural). It names a physical object you can read. Notice we use "a book" — not "an book" — because "book" starts with a consonant sound.' }),
+
+  makeMCQ({ id:'g4eng-noun-021', chapterId:'g4eng-nouns', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Red_Apple.jpg" alt="a fruit" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for the fruit shown in this picture?</b>',
+    options:['orange','mango','apple','grape'],
+    answer:'apple',
+    hint:'This red fruit grows on trees and starts with the letter A.',
+    explanation:'"<b>Apple</b>" is a common countable noun naming a fruit. Notice we use the article "<b>an</b> apple" — because "apple" starts with a vowel sound (a, e, i, o, u), we use "an", not "a".' }),
+
+  makeMCQ({ id:'g4eng-noun-022', chapterId:'g4eng-nouns', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Windsor_chair.jpg" alt="a piece of furniture" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for this piece of furniture?</b>',
+    options:['table','bed','desk','chair'],
+    answer:'chair',
+    hint:'You sit on it — it usually has four legs and a back.',
+    explanation:'"<b>Chair</b>" is a common countable noun naming a piece of furniture. We say "a chair" (singular) and "chairs" (plural). Common nouns name general objects and do not need a capital letter.' }),
+
+  makeMCQ({ id:'g4eng-noun-023', chapterId:'g4eng-nouns', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Canis_lupus_familiaris.jpg" alt="a pet animal" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>The animal shown is called a "dog". Which type of noun is "dog"?</b>',
+    options:['proper noun','abstract noun','collective noun','common noun'],
+    answer:'common noun',
+    hint:'Does "dog" name a specific individual with a capital letter, or a general type of animal?',
+    explanation:'"<b>Dog</b>" is a <b>common noun</b> — it names a type of animal in general, without a capital letter. If you gave the dog a specific name (like Rex or Buddy), that name would be a <b>proper noun</b>, which always starts with a capital letter.' }),
+
+  makeMCQ({ id:'g4eng-noun-024', chapterId:'g4eng-nouns', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Classroom.jpg" alt="a classroom scene" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Look at the scene. Which word names the PLACE shown in this picture?</b>',
+    options:['learn','quiet','sit','classroom'],
+    answer:'classroom',
+    hint:'Nouns name persons, places or things. Which option is a place?',
+    explanation:'"<b>Classroom</b>" is a common noun naming a place where students learn. Nouns that name places: classroom, school, park, library, market. "Learn" and "sit" are verbs; "quiet" is an adjective — none of these are nouns.' }),
+
+  makeMCQ({ id:'g4eng-noun-025', chapterId:'g4eng-nouns', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Running_arp.jpg" alt="a person running" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>In the sentence "The athlete is <u>running</u> fast", what part of speech is the underlined word?</b>',
+    options:['noun','adjective','adverb','verb'],
+    answer:'verb',
+    hint:'"Running" describes an action the athlete is doing. What part of speech describes actions?',
+    explanation:'"<b>Running</b>" is a <b>verb</b> in this sentence — it describes the action being performed. Verbs are doing/action words: run, jump, eat, sleep, play. (Note: "running" can sometimes be a noun — e.g. "Running is good exercise" — but in "The athlete is running", it acts as a verb.)' })
+
+);

@@ -32,11 +32,11 @@ registerSubject({
     // @enrichment - These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
     // DO NOT remove during syllabus alignment audits - they are intentional bonus content.
     // They are recognisable by enrichment:true and display with a gold "✨ BONUS" badge in the UI.
-    { id: 'g5enr-personalities', name: 'Key Historical Personalities',   icon: '👤', enrichment: true, examWeight: 0,
+    { id: 'g5enr-personalities', name: 'Key Historical Personalities',   icon: '👤', enrichment: true, examWeight: 2,
       enrichmentNote: 'Famous governors, explorers and figures from Grade 5 History: Mahé de Labourdonnais, Pierre Poivre, Farquhar, Van Warwyck, Decaen and others.' },
-    { id: 'g5enr-landmarks',     name: 'Mauritius Landmarks & Heritage', icon: '🏛️', enrichment: true, examWeight: 0,
+    { id: 'g5enr-landmarks',     name: 'Mauritius Landmarks & Heritage', icon: '🏛️', enrichment: true, examWeight: 2,
       enrichmentNote: 'Port Louis buildings, volcanic features, Trou aux Cerfs, Grand Bassin, Pamplemousses Botanical Garden - derived from Port Louis and Volcanism chapters.' },
-    { id: 'g5enr-world',         name: 'Indian Ocean & Volcanoes',       icon: '🌋', enrichment: true, examWeight: 0,
+    { id: 'g5enr-world',         name: 'Indian Ocean & Volcanoes',       icon: '🌋', enrichment: true, examWeight: 2,
       enrichmentNote: 'Mascarene Islands, active volcanoes in the region (Karthala, La Fournaise), Indian Ocean world map - derived from Volcanism and Map Skills chapters.' },
   ],
 });

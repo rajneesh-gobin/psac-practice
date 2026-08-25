@@ -23,11 +23,11 @@ registerSubject({
     // @enrichment - These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
     // DO NOT remove during syllabus alignment audits - they are intentional bonus content.
     // They are recognisable by enrichment:true and display with a gold "✨ BONUS" badge in the UI.
-    { id: 'g4enr-explorers', name: 'Famous Explorers & Figures', icon: '🧭', enrichment: true, examWeight: 0,
+    { id: 'g4enr-explorers', name: 'Famous Explorers & Figures', icon: '🧭', enrichment: true, examWeight: 2,
       enrichmentNote: 'Key historical figures mentioned across Grade 4 History: Arab and Portuguese traders, Indian Ocean explorers, early visitors to Mauritius.' },
-    { id: 'g4enr-mauritius', name: 'Know Your Mauritius',        icon: '🏝️', enrichment: true, examWeight: 0,
+    { id: 'g4enr-mauritius', name: 'Know Your Mauritius',        icon: '🏝️', enrichment: true, examWeight: 2,
       enrichmentNote: 'Mountains, rivers, coasts, nature reserves and physical features of Mauritius - derived from the Natural Environment and Geography chapters.' },
-    { id: 'g4enr-world',     name: 'World at a Glance',          icon: '🌏', enrichment: true, examWeight: 0,
+    { id: 'g4enr-world',     name: 'World at a Glance',          icon: '🌏', enrichment: true, examWeight: 2,
       enrichmentNote: 'Continents, oceans, major rivers and countries - broad global awareness that supports the Indian Ocean trade and Map Skills topics.' },
   ],
 });

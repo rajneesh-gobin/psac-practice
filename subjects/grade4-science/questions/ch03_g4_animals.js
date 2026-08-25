@@ -192,6 +192,39 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Shark numbers decrease because the whole food chain collapses when the producer is removed',
     hint:'Algae are the producer (start of the chain). What happens when the very first link breaks?',
-    explanation:'No algae → no small fish → no large fish → <b>sharks lose their food source → shark numbers fall</b>. Even though sharks do not eat algae, they depend on all the links below them in the chain. This shows why <b>protecting producers</b> is critical for the whole ecosystem.' })
+    explanation:'No algae → no small fish → no large fish → <b>sharks lose their food source → shark numbers fall</b>. Even though sharks do not eat algae, they depend on all the links below them in the chain. This shows why <b>protecting producers</b> is critical for the whole ecosystem.' }),
+
+  makeMCQ({ id:'g4s-ani-020', chapterId:'g4sci-animals', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/FoodChain.svg" alt="a food chain diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>In the food chain diagram shown, which type of organism is ALWAYS at the START of a food chain?</b>',
+    options:['A carnivore','A herbivore','A producer (plant)','A decomposer'],
+    answer:'A producer (plant)',
+    hint:'Food chains always start with an organism that MAKES its own food using sunlight.',
+    explanation:'Food chains always start with a <b>producer</b> — a green plant (or other organism) that makes its own food through photosynthesis. Producers capture energy from the sun and pass it on to herbivores, which pass it to carnivores. Without producers, no food chain can exist.' }),
+
+  makeMCQ({ id:'g4s-ani-021', chapterId:'g4sci-animals', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Colorful_underwater_landscape_of_a_coral_reef.jpg" alt="an underwater habitat photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows an underwater habitat with corals, fish and other sea creatures. What type of habitat is this?</b>',
+    options:['Desert habitat','Grassland habitat','Aquatic habitat','Forest habitat'],
+    answer:'Aquatic habitat',
+    hint:'"Aqua" means water — this habitat is found in the sea.',
+    explanation:'This is an <b>aquatic habitat</b> — specifically a coral reef, found in warm, shallow seas. Many animals (fish, crabs, sea turtles, moray eels) are specially adapted to live in this underwater environment. Mauritius is surrounded by coral reef lagoons that are home to hundreds of species.' }),
+
+  makeMCQ({ id:'g4s-ani-022', chapterId:'g4sci-animals', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pink_Pigeon_RWD2.jpg" alt="a pigeon photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The bird shown is the Pink Pigeon — it is found naturally only in Mauritius, and its numbers fell very low due to habitat loss and introduced predators. Which TWO terms correctly describe this bird?</b>',
+    options:[
+      'Exotic and extinct',
+      'Endemic and endangered',
+      'Introduced and common',
+      'Invasive and predator'
+    ],
+    answer:'Endemic and endangered',
+    hint:'One term means "found only in one place." The other means "at serious risk of dying out."',
+    explanation:'The Pink Pigeon is <b>endemic</b> (found naturally only in Mauritius) and <b>endangered</b> (its numbers were very low and it faces extinction risk without protection). Conservation breeding programmes have helped its population recover from fewer than 20 birds in the wild.' }),
+
+  makeMCQ({ id:'g4s-ani-023', chapterId:'g4sci-animals', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Food_Web.svg" alt="a food web diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>In a food web, energy flows from producers up to consumers. The animal at the TOP of the food web that is not eaten by any other animal is called the:</b>',
+    options:['Producer','Prey','Top predator','Herbivore'],
+    answer:'Top predator',
+    hint:'This animal hunts and eats others but is NOT hunted by anyone in the web.',
+    explanation:'The <b>top predator</b> (or apex predator) sits at the highest level of a food web. It hunts and eats other animals but is not preyed upon by any other animal in the web. Examples: shark in the ocean, eagle in a forest ecosystem, lion on a savanna.' })
 
 );

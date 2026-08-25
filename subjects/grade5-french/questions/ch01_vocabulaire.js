@@ -246,6 +246,62 @@ STATIC_QUESTIONS.push(
     options:['généreux / égoïste','courageux / timide','bavard / timide','intelligent / paresseux'],
     answer:'généreux / égoïste',
     hint:'Le premier aide et partage ; le second garde tout pour soi.',
-    explanation:'"Rishi est très <b>généreux</b>" (il aide + partage → generosity). "Sa sœur est très <b>égoïste</b>" (elle garde tout → selfishness). Ces deux adjectifs de personnalité sont des antonymes directs. Accord : généreux (masc.) / généreuse (fém.); égoïste ne change pas au féminin.' })
+    explanation:'"Rishi est très <b>généreux</b>" (il aide + partage → generosity). "Sa sœur est très <b>égoïste</b>" (elle garde tout → selfishness). Ces deux adjectifs de personnalité sont des antonymes directs. Accord : généreux (masc.) / généreuse (fém.); égoïste ne change pas au féminin.' }),
+
+  makeMCQ({ id:'g5fr-voc-036', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bicycle_ride.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est ce moyen de transport ?</b>',
+    options:['une moto','un vélo','un scooter','une trottinette'],
+    answer:'un vélo',
+    hint:'On pédale pour avancer. C\'est un transport écologique.',
+    explanation:'"<b>Un vélo</b>" = a bicycle. Les transports : un vélo (bicycle), une moto (motorbike), un scooter (scooter), une voiture (car), un bus (bus), un train (train).' }),
+
+  makeMCQ({ id:'g5fr-voc-037', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/TGV_TMST.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est ce moyen de transport ?</b>',
+    options:['un avion','un bateau','un train','un bus'],
+    answer:'un train',
+    hint:'Il roule sur des rails et transporte de nombreux passagers.',
+    explanation:'"<b>Un train</b>" = a train. Ce train français s\'appelle le TGV (Train à Grande Vitesse = High-Speed Train). Les transports en commun : un train, un bus, un métro, un tramway.' }),
+
+  makeMCQ({ id:'g5fr-voc-038', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pencil.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['un stylo','un crayon','une règle','un feutre'],
+    answer:'un crayon',
+    hint:'On peut effacer ce qu\'on a écrit avec lui.',
+    explanation:'"<b>Un crayon</b>" = a pencil. Le matériel scolaire : un crayon (pencil, effaçable), un stylo (pen, à encre), un feutre (marker), une règle (ruler), une gomme (eraser). La gomme efface le crayon !' }),
+
+  makeMCQ({ id:'g5fr-voc-039', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Baguette-246424.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['une baguette de pain','une pizza','une barre de chocolat','une règle'],
+    answer:'une baguette de pain',
+    hint:'C\'est un aliment typiquement français, long et croustillant.',
+    explanation:'"<b>Une baguette de pain</b>" = a French baguette. Le pain en France : une baguette (long thin loaf), un pain de campagne (country bread), un croissant (croissant). "Baguette" signifie aussi une baguette magique ou des baguettes chinoises !' }),
+
+  makeMCQ({ id:'g5fr-voc-040', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Coconut_tree.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['un arbuste','un arbre','une fleur','un buisson'],
+    answer:'un arbre',
+    hint:'C\'est une grande plante avec un tronc et des branches.',
+    explanation:'"<b>Un arbre</b>" = a tree. Les végétaux : un arbre (tree), un arbuste (shrub), une fleur (flower), un buisson (bush). Cet arbre est un cocotier (coconut tree), très commun dans les pays tropicaux comme Maurice !' }),
+
+  makeMCQ({ id:'g5fr-voc-041', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rain.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel temps fait-il ?</b>',
+    options:['Il fait beau','Il neige','Il pleut','Il y a du vent'],
+    answer:'Il pleut',
+    hint:'Les gouttes d\'eau tombent du ciel.',
+    explanation:'"<b>Il pleut</b>" = it is raining. Les expressions météo : il pleut (raining), il neige (snowing), il fait beau (nice weather), il fait chaud (hot), il fait froid (cold), il y a du vent (windy), il y a des nuages (cloudy).' }),
+
+  makeMCQ({ id:'g5fr-voc-042', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Notebook.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['un livre','un cahier','un dictionnaire','un magazine'],
+    answer:'un cahier',
+    hint:'On y écrit ses leçons et ses devoirs.',
+    explanation:'"<b>Un cahier</b>" = a school notebook. Le matériel scolaire : un cahier (notebook), un livre (textbook), un classeur (binder/folder), un agenda (planner). En France, chaque matière a souvent son propre cahier !' }),
+
+  makeMCQ({ id:'g5fr-voc-043', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/School_bag.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['un sac à main','un cartable','une valise','un panier'],
+    answer:'un cartable',
+    hint:'Les élèves le portent sur le dos pour aller à l\'école.',
+    explanation:'"<b>Un cartable</b>" = a school bag/satchel. Un cartable contient les cahiers, livres, et le matériel scolaire de l\'élève. On dit aussi "un sac à dos" (backpack) pour le sac d\'école plus moderne.' })
 
 );

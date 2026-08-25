@@ -155,3 +155,49 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Ambiguous</b>" = open to more than one interpretation; unclear. From Latin <b>ambi-</b> (both/around) + <b>agere</b> (to drive). An ambiguous message could be understood in different ways. Other "ambi-" words: <b>ambidextrous</b> (able to use both hands), <b>ambivalent</b> (having mixed feelings). The MIE Grade 6 vocabulary section teaches word analysis through roots and prefixes as a core exam skill.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6eng-voc-020', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg" alt="a large government building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name for a building where a country\'s elected representatives meet to debate and make laws?</b>',
+    options:['cathedral','embassy','palace','parliament'],
+    answer:'parliament',
+    hint:'In Mauritius, this institution is called the National Assembly.',
+    explanation:'"<b>Parliament</b>" is the institution (and building) where elected representatives gather to debate and create laws. In Mauritius it is called the <b>National Assembly</b>. In the United Kingdom it is the <b>Houses of Parliament</b>. The word comes from Old French "parler" (to speak).' }),
+
+  makeMCQ({ id:'g6eng-voc-021', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Iceberg_in_the_Arctic_with_its_surrounding_sea.jpg" alt="a large mass of ice" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is a large mass of ice floating in the ocean called?</b>',
+    options:['glacier','avalanche','blizzard','iceberg'],
+    answer:'iceberg',
+    hint:'Only about 10% of this is visible above water — the rest is hidden below the surface.',
+    explanation:'An "<b>iceberg</b>" is a large floating mass of ice broken off from a glacier. About 90% of an iceberg is below the water surface — this gave rise to the idiom "tip of the iceberg" (a small visible part of a much larger problem). A <b>glacier</b> is a slow-moving mass of ice on land.' }),
+
+  makeMCQ({ id:'g6eng-voc-022', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lighthouse.jpg" alt="a tall tower by the sea" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the purpose of this structure found on coastlines?</b>',
+    options:['to store fresh water','to house a coast guard station','to measure wind speed','to guide ships safely with a light signal'],
+    answer:'to guide ships safely with a light signal',
+    hint:'It flashes a powerful light at night to warn sailors of rocks and coastlines.',
+    explanation:'A "<b>lighthouse</b>" is a tower with a powerful light that <b>guides ships safely</b> — warning them of rocks, reefs and coastlines, especially at night or in fog. It is a compound noun: light + house. Mauritius has several historic lighthouses, including the one at Île aux Fouquets.' }),
+
+  makeMCQ({ id:'g6eng-voc-023', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cracked_earth.jpg" alt="a dry landscape" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What word describes a long period with little or no rainfall, causing conditions like those shown?</b>',
+    options:['flood','blizzard','hurricane','drought'],
+    answer:'drought',
+    hint:'The cracked, dry soil tells you there has been no rain for a very long time.',
+    explanation:'A "<b>drought</b>" is a prolonged period of <b>abnormally low rainfall</b>, leading to water shortages and dried-out land. The cracked earth in the picture is a classic sign of drought. A drought affects agriculture, wildlife and water supply. Antonym: flood. Related adjective: <b>arid</b> (very dry climate).' }),
+
+  makeMCQ({ id:'g6eng-voc-024', chapterId:'g6eng-vocabulary', difficulty:3,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Barometer.jpg" alt="a scientific instrument" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What does this instrument measure?</b>',
+    options:['temperature','wind speed','rainfall','atmospheric pressure'],
+    answer:'atmospheric pressure',
+    hint:'Meteorologists use it to predict weather — falling readings often mean rain is coming.',
+    explanation:'A "<b>barometer</b>" measures <b>atmospheric pressure</b> — the weight of air pressing down on the Earth\'s surface. When pressure falls, unsettled or rainy weather is likely; when it rises, fair weather is expected. From Greek: <i>baros</i> (weight) + <i>metron</i> (measure). Used daily by meteorologists to forecast weather.' }),
+
+  makeMCQ({ id:'g6eng-voc-025', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Solar_eclipse_1999_4.jpg" alt="an astronomical event" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this astronomical event called?</b>',
+    options:['lunar eclipse','aurora borealis','solar flare','solar eclipse'],
+    answer:'solar eclipse',
+    hint:'The Moon passes between the Earth and the Sun, temporarily blocking the Sun\'s light.',
+    explanation:'A "<b>solar eclipse</b>" occurs when the Moon passes between the Earth and the Sun, blocking sunlight and casting a shadow on Earth. "Solar" comes from Latin <i>sol</i> (sun). A <b>lunar eclipse</b> is different — it happens when the Earth blocks sunlight from reaching the Moon. A <b>total</b> solar eclipse completely blocks the Sun; a <b>partial</b> eclipse blocks only part of it.' })
+
+);

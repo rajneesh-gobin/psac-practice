@@ -26,11 +26,11 @@ registerSubject({
     // @enrichment - These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
     // DO NOT remove during syllabus alignment audits - they are intentional bonus content.
     // They are recognisable by enrichment:true and display with a gold "✨ BONUS" badge in the UI.
-    { id: 'g6enr-personalities', name: 'Famous Figures of Mauritius',      icon: '👤', enrichment: true, examWeight: 0,
+    { id: 'g6enr-personalities', name: 'Famous Figures of Mauritius',      icon: '👤', enrichment: true, examWeight: 2,
       enrichmentNote: 'Independence leaders (Sir Seewoosagur Ramgoolam), historical figures from slaves/immigration era, cultural contributors - derived from Grade 6 History chapters.' },
-    { id: 'g6enr-symbols',       name: 'Mauritius: Identity & Symbols',    icon: '🇲🇺', enrichment: true, examWeight: 0,
+    { id: 'g6enr-symbols',       name: 'Mauritius: Identity & Symbols',    icon: '🇲🇺', enrichment: true, examWeight: 2,
       enrichmentNote: 'National flag colours, coat of arms, national flower, UNESCO sites (Aapravasi Ghat, Le Morne), national motto - derived from Independence and Cultural Heritage chapters.' },
-    { id: 'g6enr-world',         name: 'Global Connections',               icon: '🌐', enrichment: true, examWeight: 0,
+    { id: 'g6enr-world',         name: 'Global Connections',               icon: '🌐', enrichment: true, examWeight: 2,
       enrichmentNote: 'How Mauritius connects to India, Africa and China through immigration and trade; natural hazards around the world - derived from Settlers/Immigrants and Natural Hazards chapters.' },
   ],
 });

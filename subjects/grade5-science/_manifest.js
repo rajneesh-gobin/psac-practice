@@ -20,5 +20,13 @@ registerSubject({
       syllabus: 'Components of a simple circuit: battery, bulb, wire, switch. Open and closed circuits. Conductors and insulators. Safety with electricity.' },
     { id: 'conservation',     name: 'Protection & Conservation',           icon: '♻️', examWeight: 2,
       syllabus: 'Importance of protecting the environment. Pollution: types (water, air, land), causes and effects. Ways to protect and conserve habitats. Recycling. Deforestation and consequences.' },
+
+    // ── ENRICHMENT ────────────────────────────────────────────────────────────────
+    // @enrichment — These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
+    // DO NOT remove during syllabus alignment audits — they are intentional bonus content.
+    { id: 'g5sci-enr-endemic', name: 'Mauritius Endemic Species',  icon: '🦜', enrichment: true, examWeight: 2,
+      enrichmentNote: 'Photo identification of rare and endemic Mauritius animals and plants — derived from the Animals & Habitats and Conservation chapters.' },
+    { id: 'g5sci-enr-energy',  name: 'Energy Sources in Pictures', icon: '⚡', enrichment: true, examWeight: 2,
+      enrichmentNote: 'Identify renewable and non-renewable energy sources by photo — derived from the Energy Sources chapter.' },
   ],
 });

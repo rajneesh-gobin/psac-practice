@@ -21,5 +21,12 @@ registerSubject({
       syllabus: 'Sources of energy: sun (solar), wind, water (hydro), wood/charcoal, petrol/oil. Forms of energy: light, heat, sound, mechanical (movement). How we use energy in daily life (cooking, transport, lighting). Renewable sources (sun, wind, water) vs non-renewable sources (petrol, coal).' },
     { id: 'g4sci-protect',  name: 'Protection & Conservation',    icon: '♻️', examWeight: 3,
       syllabus: 'Human activities that harm the environment: cutting trees, dumping rubbish, burning, using chemicals. Types of pollution: air pollution, water/sea pollution, land/soil pollution. Effects of pollution on plants, animals and people. What we can do: reduce, reuse, recycle; picking up litter; planting trees; saving water.' },
+    // ── ENRICHMENT ────────────────────────────────────────────────────────────────
+    // @enrichment — These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
+    // DO NOT remove during syllabus alignment audits — they are intentional bonus content.
+    { id: 'g4sci-enr-animals',   name: 'Animals in Pictures',       icon: '🦜', enrichment: true, examWeight: 2,
+      enrichmentNote: 'Photo identification of Mauritius endemic and common animals — derived from the Living Things and Animals chapters.' },
+    { id: 'g4sci-enr-equipment', name: 'Science Tools & Instruments', icon: '🔬', enrichment: true, examWeight: 2,
+      enrichmentNote: 'Identify weather and science instruments by photo — derived from Weather and Science Process chapters.' },
   ],
 });

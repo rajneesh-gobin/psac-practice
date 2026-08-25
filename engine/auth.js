@@ -289,6 +289,9 @@ const Auth = (() => {
     if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
     Store.logLoginEvent(studentRow.id, 'student');
     if (bumpSession) _startSessionGuard(studentRow.id, sessionVersion);
+    if (bumpSession && typeof setupPushNotifications === 'function') {
+      setupPushNotifications(studentRow.id).catch(() => {});
+    }
 
     // Skip grade select - parent already set the grade; go straight to subject picker
     if (navigate) {

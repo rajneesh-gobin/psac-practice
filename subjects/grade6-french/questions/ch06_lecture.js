@@ -344,6 +344,48 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Un contraste entre calme et tempête + accélération du rythme',
     hint:'Le calme soudainement interrompu → contraste + "soudain" = accélération.',
-    explanation:'"<b>Contraste + accélération du rythme</b>" - Le procédé du <b>contraste</b> (calme → tempête) crée l\'effet de surprise. "Soudain" marque la rupture. L\'<b>accélération</b> (phrases courtes, verbes d\'action rapides : s\'amassèrent, se levèrent) crée le suspense. Identifier ces procédés stylistiques est une compétence clé en lecture analytique de 6e.' })
+    explanation:'"<b>Contraste + accélération du rythme</b>" - Le procédé du <b>contraste</b> (calme → tempête) crée l\'effet de surprise. "Soudain" marque la rupture. L\'<b>accélération</b> (phrases courtes, verbes d\'action rapides : s\'amassèrent, se levèrent) crée le suspense. Identifier ces procédés stylistiques est une compétence clé en lecture analytique de 6e.' }),
+
+  makeMCQ({ id:'g6fr-lec-036', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Candid_girl_reading_(20946248203).jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    options:['Elle écrit.','Elle lit.','Elle dessine.','Elle dort.'],
+    answer:'Elle lit.',
+    hint:'Elle regarde attentivement les pages d\'un livre.',
+    explanation:'"<b>Elle lit</b>" → verbe <b>lire</b> (to read). Conjugaison : je lis, tu lis, il/elle lit, nous lisons, vous lisez, ils/elles lisent. Verbe irrégulier du 3e groupe — à mémoriser !' }),
+
+  makeMCQ({ id:'g6fr-lec-037', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Notebook-writing-man-book-person-blur-1176206.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il dessine.','Il lit.','Il écrit.','Il mange.'],
+    answer:'Il écrit.',
+    hint:'Il tient un stylo et trace des mots sur le papier.',
+    explanation:'"<b>Il écrit</b>" → verbe <b>écrire</b> (to write). Conjugaison : j\'écris, tu écris, il/elle écrit, nous écrivons, vous écrivez, ils/elles écrivent. Verbe irrégulier du 3e groupe.' }),
+
+  makeMCQ({ id:'g6fr-lec-038', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Eating_rice,_China_-_collected_by_Berthold_Laufer.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il boit.','Il cuisine.','Il mange.','Il dort.'],
+    answer:'Il mange.',
+    hint:'Il porte de la nourriture à sa bouche.',
+    explanation:'"<b>Il mange</b>" → verbe <b>manger</b> (to eat). Conjugaison : je mange, tu manges, il/elle mange, nous mangeons, vous mangez, ils/elles mangent. Note : "nous mang<b>e</b>ons" garde le "e" pour préserver le son [ʒ] de "manger" — même règle pour nager, voyager, changer.' }),
+
+  makeMCQ({ id:'g6fr-lec-039', chapterId:'g6fr-lecture', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Running.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il marche.','Il court.','Il saute.','Il nage.'],
+    answer:'Il court.',
+    hint:'Il se déplace très vite sur ses pieds.',
+    explanation:'"<b>Il court</b>" → verbe <b>courir</b> (to run). Conjugaison : je cours, tu cours, il/elle court, nous courons, vous courez, ils/elles courent. Verbe irrégulier ! Ne pas confondre : <b>marcher</b> (walk, lentement) vs <b>courir</b> (run, vite).' }),
+
+  makeMCQ({ id:'g6fr-lec-040', chapterId:'g6fr-lecture', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Swimming_pool.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il plonge.','Il nage.','Il lave.','Il pêche.'],
+    answer:'Il nage.',
+    hint:'Il se déplace dans l\'eau en faisant des mouvements avec les bras et les jambes.',
+    explanation:'"<b>Il nage</b>" → verbe <b>nager</b> (to swim). Conjugaison : je nage, tu nages, il/elle nage, nous nageons, vous nagez, ils/elles nagent. Note : "nous nag<b>e</b>ons" — même règle orthographique que manger pour conserver le son [ʒ].' }),
+
+  makeMCQ({ id:'g6fr-lec-041', chapterId:'g6fr-lecture', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Children_playing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'ils font ?</b>',
+    options:['Ils étudient.','Ils jouent.','Ils travaillent.','Ils chantent.'],
+    answer:'Ils jouent.',
+    hint:'Ils s\'amusent ensemble avec énergie.',
+    explanation:'"<b>Ils jouent</b>" → verbe <b>jouer</b> (to play). Conjugaison : je joue, tu joues, il/elle joue, nous jouons, vous jouez, ils/elles jouent. Verbe régulier du 1er groupe (-er). "Jouer <b>à</b>" (sport/jeu) vs "jouer <b>de</b>" (instrument) : il joue au football, il joue de la guitare.' })
 
 );

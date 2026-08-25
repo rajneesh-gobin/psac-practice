@@ -177,3 +177,45 @@ STATIC_QUESTIONS.push(
     explanation:'The four stripes form a narrative: <b>Red</b> = the blood and struggle for independence (colonial hardship, activism); <b>Blue</b> = the Indian Ocean that defines the island\'s geography and identity; <b>Yellow</b> = the light of freedom, a bright future; <b>Green</b> = the fertile agricultural land, particularly the sugar cane that shaped the island\'s economy and culture. Together they are a symbolic autobiography of the nation.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6hg-ind-020', chapterId:'g6-independence', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Mauritius.svg" alt="a flag with four horizontal stripes of different colours" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What do the four colours of the Mauritius national flag represent (from top to bottom)?</b>',
+    options:[
+      'Sun, sea, soil, sky',
+      'Struggle for independence, Indian Ocean, light of independence/sun, agriculture and vegetation',
+      'Blood of settlers, sky, gold mines, forests',
+      'The four communities: Hindus, Muslims, Creoles, Chinese'
+    ],
+    answer:'Struggle for independence, Indian Ocean, light of independence/sun, agriculture and vegetation',
+    hint:'Think about what each colour symbolises — red is at the top, green at the bottom.',
+    explanation:'The four horizontal stripes of the Mauritius flag represent: <b>Red</b> (top) = the struggle for independence; <b>Blue</b> = the Indian Ocean; <b>Yellow</b> = the light of independence and the sun; <b>Green</b> (bottom) = the agriculture and lush vegetation of the island. The flag was adopted at independence on 12 March 1968.' }),
+
+  makeMCQ({ id:'g6hg-ind-021', chapterId:'g6-independence', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Coat_of_arms_of_Mauritius.svg" alt="a coat of arms with a shield and two animals as supporters" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which famous extinct bird of Mauritius appears as a supporter on the Coat of Arms?</b>',
+    options:['Pink Pigeon','Echo Parakeet','Dodo','Mauritius Kestrel'],
+    answer:'Dodo',
+    hint:'This flightless bird went extinct around 1681 and is now a symbol of Mauritius.',
+    explanation:'The <b>Dodo</b> appears on the Coat of Arms of Mauritius as one of the two supporters flanking the central shield (the other is a sambar deer). Although the Dodo is extinct, it remains one of the most powerful and recognised symbols of Mauritius, reminding us of the importance of protecting endemic species.' }),
+
+  makeMCQ({ id:'g6hg-ind-022', chapterId:'g6-independence', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Trochetia_boutoniana.jpg" alt="a pink flowering plant on a rocky slope" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This beautiful endemic flower is the national flower of Mauritius. What is its name?</b>',
+    options:['Hibiscus','Lotus','Rose','Trochetia boutoniana (Boucle d\'oreille)'],
+    answer:'Trochetia boutoniana (Boucle d\'oreille)',
+    hint:'Its nickname means "earring" in French because of the shape of its petals.',
+    explanation:'<b>Trochetia boutoniana</b>, popularly called <b>Boucle d\'oreille</b> (earring in French), is the national flower of Mauritius. It is endemic to Mauritius — found naturally only on this island — and grows mainly on the slopes of Pieter Both mountain. It represents the island\'s unique and irreplaceable natural heritage.' }),
+
+  makeMCQ({ id:'g6hg-ind-023', chapterId:'g6-independence', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mauritius_satellite.jpg" alt="a satellite view of a small island in the ocean" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This satellite image shows Mauritius in the Indian Ocean. Which Latin motto on the Coat of Arms reflects this strategic island location?</b>',
+    options:[
+      '"In God We Trust"',
+      '"Liberté, Égalité, Fraternité"',
+      'Stella Clavisque Maris Indici — "Star and Key of the Indian Ocean"',
+      '"Unity, Faith, Discipline"'
+    ],
+    answer:'Stella Clavisque Maris Indici — "Star and Key of the Indian Ocean"',
+    hint:'The motto is in Latin and refers to Mauritius\'s position in the Indian Ocean.',
+    explanation:'The Coat of Arms of Mauritius bears the Latin motto <b>Stella Clavisque Maris Indici</b> — meaning <b>"Star and Key of the Indian Ocean."</b> This reflects Mauritius\'s historically important strategic position: whoever controlled this island in the centre of the Indian Ocean could dominate the sea trade routes between Europe, Africa and Asia — hence "star" (guiding light) and "key" (gateway).' })
+
+);

@@ -240,3 +240,52 @@ STATIC_QUESTIONS.push(
     explanation:'Three map types are needed: (1) <b>Rainfall map (isohyets)</b> - shows how much rain each area receives; (2) <b>Topographic map (contours)</b> - shows altitude and relief of the land; (3) <b>Political/settlement map</b> - names the towns so the geographer knows which communities are in the rain shadow or on high ground. Using all three together gives a complete picture of the relationship between relief, rainfall and settlement.' })
 
 );
+
+// ── Mauritius Physical Map — river & mountain reading questions ──────────────
+const _SVG_G5_MUS_PHYS = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 400" style="max-width:100%;max-height:280px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"><rect width="420" height="400" fill="#dbeafe"/><text x="210" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e3a8a" font-family="sans-serif">Mauritius — Physical Features</text><path d="M 85,105 Q 120,60 200,30 Q 270,20 330,75 Q 370,130 370,210 Q 365,270 335,315 Q 270,360 200,360 Q 140,355 90,290 Q 55,240 55,180 Q 58,130 85,105 Z" fill="#d1fae5" stroke="#6ee7b7" stroke-width="2"/><path d="M 210,220 Q 260,250 340,295" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="255" y="243" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Gd. R. South East</text><path d="M 140,250 Q 100,255 62,240" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="78" y="251" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Black River</text><path d="M 205,185 Q 215,120 225,45" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="220" y="115" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">R. du Rempart</text><path d="M 175,175 Q 135,145 88,118" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="105" y="137" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Gd. R. NW</text><text x="108" y="256" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="118" y="253" font-size="8" fill="#991b1b" font-weight="bold" font-family="sans-serif">Piton PNR ★</text><text x="118" y="262" font-size="7" fill="#991b1b" font-family="sans-serif">828m (highest)</text><text x="233" y="167" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="241" y="163" font-size="8" fill="#991b1b" font-family="sans-serif">Pieter Both</text><text x="241" y="172" font-size="7" fill="#991b1b" font-family="sans-serif">823m</text><text x="148" y="132" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="156" y="128" font-size="8" fill="#991b1b" font-family="sans-serif">Le Pouce</text><text x="156" y="137" font-size="7" fill="#991b1b" font-family="sans-serif">811m</text><text x="183" y="237" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="190" y="233" font-size="7" fill="#991b1b" font-family="sans-serif">Corps de Garde</text><text x="190" y="242" font-size="7" fill="#991b1b" font-family="sans-serif">720m</text><text x="151" y="212" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="122" y="210" font-size="7" fill="#991b1b" font-family="sans-serif">Trois Mamelles 629m</text><circle cx="82" cy="108" r="4" fill="#fbbf24" stroke="#92400e" stroke-width="1.2"/><text x="89" y="106" font-size="8" fill="#92400e" font-weight="bold" font-family="sans-serif">Port Louis ★</text><text x="89" y="115" font-size="7" fill="#92400e" font-family="sans-serif">Capital</text><circle cx="210" cy="248" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="216" y="252" font-size="7" fill="#374151" font-family="sans-serif">Curepipe</text><circle cx="328" cy="296" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="290" y="293" font-size="7" fill="#374151" font-family="sans-serif">Mahebourg</text><circle cx="178" cy="232" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="132" y="230" font-size="7" fill="#374151" font-family="sans-serif">Quatre Bornes</text><line x1="390" y1="22" x2="390" y2="52" stroke="#374151" stroke-width="1.2"/><line x1="375" y1="37" x2="405" y2="37" stroke="#374151" stroke-width="1.2"/><polygon points="390,22 386,32 390,28 394,32" fill="#1e3a8a"/><text x="390" y="20" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e3a8a" font-family="sans-serif">N</text><text x="407" y="40" font-size="7" fill="#374151" font-family="sans-serif">E</text><text x="373" y="40" text-anchor="end" font-size="7" fill="#374151" font-family="sans-serif">W</text><text x="390" y="60" text-anchor="middle" font-size="7" fill="#374151" font-family="sans-serif">S</text><rect x="10" y="335" width="128" height="58" rx="4" fill="white" fill-opacity="0.88" stroke="#d1d5db" stroke-width="1"/><text x="16" y="348" font-size="8" font-weight="bold" fill="#374151" font-family="sans-serif">Legend</text><line x1="16" y1="356" x2="32" y2="356" stroke="#3b82f6" stroke-width="2"/><text x="36" y="360" font-size="7" fill="#374151" font-family="sans-serif">River</text><text x="16" y="370" font-size="10" fill="#dc2626" font-family="sans-serif">▲</text><text x="28" y="371" font-size="7" fill="#374151" font-family="sans-serif">Mountain peak</text><text x="16" y="382" font-size="9" fill="#dc2626" font-family="sans-serif">▲★</text><text x="28" y="383" font-size="7" fill="#374151" font-family="sans-serif">Highest peak</text><circle cx="18" cy="390" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="24" y="393" font-size="7" fill="#374151" font-family="sans-serif">Town  ★=Capital</text></svg>`;
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5hg-ms-020', chapterId:'map-skills', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>According to the map, which river flows NORTHWARD toward the coast?</b>`,
+    options:['Black River (Rivière Noire)','Grand River South East','Grand River North West','Rivière du Rempart'],
+    answer:'Rivière du Rempart',
+    hint:'Trace the river paths on the map. Which one flows from the central area straight up toward the north coast?',
+    explanation:'<b>Rivière du Rempart</b> rises in the central highlands and flows <b>northward</b> toward the north coast. Its name means "Rampart River." Rivers in Mauritius always flow outward from the central highlands — their direction tells us which coast they drain to.' }),
+
+  makeMCQ({ id:'g5hg-ms-021', chapterId:'map-skills', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>Pieter Both mountain is located in which part of Mauritius?</b>`,
+    options:['South-West','South coast','West coast','North-East of centre'],
+    answer:'North-East of centre',
+    hint:'Find the ▲ symbol for Pieter Both (823m) on the map and look at which part of the island it is in.',
+    explanation:'<b>Pieter Both</b> (823m) is located in the <b>north-east of the central mountain range</b> of Mauritius. It is famous for its distinctive mushroom-shaped peak and is named after a Dutch admiral. At 823m it is the second highest mountain in Mauritius after Piton de la Petite Rivière Noire (828m).' }),
+
+  makeMCQ({ id:'g5hg-ms-022', chapterId:'map-skills', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>Which mountain on the map has an elevation of 828m?</b>`,
+    options:['Le Pouce','Corps de Garde','Pieter Both','Piton de la Petite Rivière Noire'],
+    answer:'Piton de la Petite Rivière Noire',
+    hint:'Look at the elevation labels next to each mountain triangle on the map.',
+    explanation:'<b>Piton de la Petite Rivière Noire</b> (828m) is the <b>highest mountain in Mauritius</b>. It is marked with a ★ on the map to distinguish it as the highest peak. It is located in the south-west in the Black River Gorges National Park area.' }),
+
+  makeMCQ({ id:'g5hg-ms-023', chapterId:'map-skills', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>The Grand River South East flows toward which part of the island?</b>`,
+    options:['North','West','North-West','South-East'],
+    answer:'South-East',
+    hint:'Trace the river\'s path from the central area — which direction does it flow toward the coast?',
+    explanation:'The <b>Grand River South East</b> flows toward the <b>south-east</b> coast of Mauritius, entering the sea near Mahebourg. It is one of the longest rivers in Mauritius and rises in the central plateau. The direction a river flows always tells us which coast it reaches.' }),
+
+  makeMCQ({ id:'g5hg-ms-024', chapterId:'map-skills', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>Which mountain is closest to Port Louis on this map?</b>`,
+    options:['Trois Mamelles (629m)','Corps de Garde (720m)','Pieter Both (823m)','Le Pouce (811m)'],
+    answer:'Le Pouce (811m)',
+    hint:'Find Port Louis (★ on the north-west coast) and look for the nearest mountain triangle.',
+    explanation:'<b>Le Pouce</b> (811m, meaning "The Thumb") is the mountain <b>closest to Port Louis</b>. It is visible from Port Louis and is a popular hiking destination. Its name comes from its thumb-like shape when seen from the city.' }),
+
+  makeMCQ({ id:'g5hg-ms-025', chapterId:'map-skills', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>What does the ★ symbol next to Piton PNR on the map indicate?</b>`,
+    options:['It is a tourist attraction','It is an active volcano','It is the highest point in Mauritius','It is a nature reserve'],
+    answer:'It is the highest point in Mauritius',
+    hint:'Look at the legend box on the map — what does ▲★ stand for?',
+    explanation:'The <b>★ symbol</b> next to <b>Piton de la Petite Rivière Noire (PNR)</b> indicates it is the <b>highest point in Mauritius</b> at 828m. On physical maps, the highest peak is often marked with a special symbol to distinguish it from other peaks. Reading the map legend (key) is essential to correctly interpret any map symbol.' })
+
+);
