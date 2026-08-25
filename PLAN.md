@@ -11,9 +11,10 @@ and the doc-audit findings below explain *why* each item matters.
 Working tree has edits made directly in an editor, unrelated to the fixes below:
 `index.html` (revamp banner copy), `style.css` (re-enabled text selection),
 `engine/protect.js` (right-click/drag protection disabled), `sw.js` (cache
-bumped to `v2`). Decide what to do with these (commit, discard, keep editing)
-before committing the security fixes below, so they don't get mixed into one
-commit unintentionally.
+bumped to `v2`), `engine/auth.js`, `engine/store.js` (modified, not yet
+reviewed), and a new untracked `supabase-referrals.sql`. Decide what to do
+with these (commit, discard, keep editing) before committing further fixes,
+so they don't get mixed into one commit unintentionally.
 
 ---
 
@@ -175,23 +176,38 @@ Found in the same deployment-readiness pass, not yet fixed:
 - [ ] `.gitignore` doesn't cover `.env*` — no current leak (no `.env` file
       exists), but add it now before someone creates one for `netlify dev`.
 
-## 5c. TODO — parent restrictions don't reliably apply (found in flow audit)
+## 5c. Parent restrictions don't reliably apply (found in flow audit)
 
 Two verified bugs, both inside the parent-controls flow:
 
-1. **Exam mode ignores chapter locks and max-difficulty entirely.**
-   `assembleExamPaper()` (`engine/questions_engine.js`) builds its pool from
+1. **DONE — Exam mode ignored chapter locks and max-difficulty entirely.**
+   `assembleExamPaper()` (`engine/questions_engine.js`) built its pool from
    the full unfiltered `CHAPTERS` list across all 4 difficulty tiers, with no
    reference to `DB.restrictions` anywhere in the function — unlike
-   `startChapterDirect()` (practice mode), which correctly checks both. A
-   parent can lock "Fractions" and cap difficulty at L1, and the child still
-   gets L4 Fractions questions in any timed exam. Same gap in the printable
-   paper generator (`generatePrintablePaper`).
-   - [ ] Filter `CHAPTERS` by `DB.restrictions.lockedChapters` and cap by
-         `maxDifficulty` inside `assembleExamPaper()` and
-         `generatePrintablePaper()`, matching `startChapterDirect()`'s logic.
+   `startChapterDirect()` (practice mode), which correctly checked both. A
+   parent could lock "Fractions" and cap difficulty at L1, and the child would
+   still get L4 Fractions questions in any timed exam. Same gap existed in the
+   printable paper generator (`generatePrintablePaper`). Fixed (commit
+   `8929f5c`): both now filter locked chapters and cap by `maxDifficulty`,
+   matching `startChapterDirect()`'s logic; both toast + abort instead of
+   opening a blank exam/paper if restrictions leave nothing to build from.
 
-2. **Toggling a restriction can silently overwrite the child's newer progress.**
+   **Found and fixed in the same commit, more urgent:** 7 of 15 subject packs
+   (grade4/5/6 english/french, grade4-maths) never set `examWeight` on any
+   chapter at all. `ch.examWeight` was `undefined` there, so
+   `undefined * cfg.count` → `NaN` propagated through every chapter's question
+   count, and `assembleExamPaper()` silently returned a **fully empty exam**
+   for all exam types in those 7 subjects — not a restrictions bug, a plain
+   dead end any test user hits immediately on Quick Drill/Short Test/Full
+   Mock. Fixed by defaulting a missing/non-numeric `examWeight` to `1` (equal
+   weighting) instead of letting it poison the whole paper.
+   - [ ] **Follow-up, not yet done:** the default-1 fix is a safety net, not
+         real content design — those 7 packs still have no deliberate
+         per-chapter exam weighting. Decide real `examWeight` values per
+         chapter for grade4/5/6 english/french and grade4-maths (compare to
+         how grade5/6-maths and the history/science packs weight theirs).
+
+2. **TODO — Toggling a restriction can silently overwrite the child's newer progress.**
    `Auth.toggleChapterLock`/`setMaxDifficulty`/etc. (`engine/auth.js:1208-1253`)
    call `save(DB)`, which upserts the *entire* cached `DB` object — not just
    the restriction — back to Supabase. `DB` is a snapshot taken once when the
@@ -203,6 +219,54 @@ Two verified bugs, both inside the parent-controls flow:
          server-side (e.g. a narrow `Store.updateStudent(id, {settings})`
          already exists per the audit — stop also calling `save(DB)` with the
          full stale object), or re-fetch fresh progress before any save.
+
+## 5e. TODO — content integrity gaps (found in content audit)
+
+1. **34 unreachable questions in grade5-maths.** Both `questions_challenge.js`
+   (20 questions, ids `CH_PCT01`–`CH_PCT20`) and `questions_subsections.js`
+   (14 questions, ids `PC01`–`PC14`, subsections `meaning`/`conversion`/
+   `of_quantity`/`increase` — a whole "Percentage" mini-syllabus) use
+   `chapterId: 'percentage'`, but `subjects/grade5-maths/_manifest.js` has no
+   chapter with that id anywhere. These questions are permanently unreachable
+   — never selected for practice or exam, never counted toward mastery/badges.
+   Grade 6 maths has a `g6-ratio-pct` chapter, suggesting "Percentage" was
+   meant to be folded into an existing chapter (maybe `ratio`) or given its
+   own manifest entry, but the wiring was never finished.
+   - [ ] Decide the correct target chapter id and either add a `percentage`
+         chapter to the grade5-maths manifest, or re-point all 34 questions'
+         `chapterId` to wherever percentage content should actually live.
+
+2. **Silent difficulty substitution when a chapter lacks questions at the
+   requested level.** `getQuestionsForChapter()` (`engine/questions_engine.js`)
+   backfills a requested difficulty with questions of *any* difficulty for
+   that chapter once the exact-difficulty pool runs low — by design (it's
+   commented as a documented last resort), but it applies even to a
+   **parent-restricted** difficulty request. Confirmed this actually triggers
+   today: 8 of grade6-maths's 11 chapters have zero (or exactly one) L3
+   static question and grade6-maths has no dynamic generators, so selecting
+   "Level 3 – Hard" for any of those 8 chapters silently returns a mix of
+   L1/L2/L4 questions instead, with no indication to the UI. A parent who
+   assigns "Level 1 only" to a struggling child could see L2/L4 questions
+   served for these chapters, with restrictions nominally "on."
+   - [ ] Either add more L3 content to those 8 grade6-maths chapters, or make
+         the fallback respect an upper bound so it never serves *above* a
+         parent's `maxDifficulty` cap even when backfilling.
+
+3. **Silent blank practice screen when a chapter has zero eligible questions.**
+   `getMixedQuestions()` returns `[]` with no throw when a chapter has no
+   static questions at any difficulty ≤ the cap and no generator. The caller
+   sets `S.practice.qs = []`; `loadPracticeQuestion()` then just clears the
+   question DOM with no toast/error — a silent blank screen. Contrast with the
+   assignment path (`engine/app.js:2559`), which does toast
+   `"No questions available for this assignment..."`. Low severity (rare —
+   needs a chapter combined with a low enough difficulty cap to have zero
+   questions) but cheap to fix for a better error state.
+   - [ ] Add an equivalent toast/empty-state to the plain-practice path.
+
+All 15 packs were otherwise clean: no orphaned `chapterId` elsewhere, no
+malformed question objects (empty question/answer/options, null chapterId)
+in a spot check across 3 packs plus a full-repo regex sweep, and no
+suspicious image domains (all 26 `<img>` question images are Wikimedia).
 
 ## 5d. Confirmed SAFE (from this session's pre-launch audit — no action needed)
 
@@ -237,9 +301,20 @@ Two verified bugs, both inside the parent-controls flow:
 
 ## Suggested order when resuming
 
+Pre-launch blockers, roughly in order:
 1. §2 (guest submission check) — one query, tells us if there's a live incident
-2. §1 cleanup (test + commit the push-subscribe fix, already coded)
-3. §3 (session bug) — quick RPC fix
-4. §4 (VAPID rotation) — quick once confirmed safe
-5. §5 (docs) — no urgency, but do before telling another AI session to
-   "read CLAUDE.md first"
+2. ~~§5b CSP jsdelivr fix~~ — DONE (`f9d213e`)
+3. §5b `@supabase/supabase-js` missing from `package.json` — breaks
+   `create-user`/`payment-webhook` at deploy
+4. §5b confirm VAPID env vars are set in Netlify before deploy (hard-crash risk)
+5. ~~§5c exam-mode restrictions + examWeight NaN bug~~ — DONE (`8929f5c`)
+6. §5c #2 data-loss race on restriction toggle
+7. §5e content gaps (orphaned percentage chapter, L3 gaps in grade6-maths)
+8. §1 cleanup (test the push-subscribe fix against a live student/parent session)
+9. §3 (phantom student-logout bug)
+10. §4 (VAPID rotation) — quick once confirmed safe
+11. §5 (docs) — no urgency, but do before telling another AI session to
+    "read CLAUDE.md first"
+
+Also decide what to do with §0's uncommitted editor changes before they pile
+up further.
