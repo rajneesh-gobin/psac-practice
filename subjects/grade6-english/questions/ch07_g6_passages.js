@@ -71,13 +71,15 @@ const _G6PSG_REPORT = _g6psgBox(`
 <b>Rainfall and the Mauritian school year</b><br><br>
 Mauritius has two seasons. The warm, wet summer runs from November to April; the cooler, drier winter runs from May to October. Most of the island's rain falls on the central plateau, and far less falls along the west coast. The difference matters: the plateau supplies much of the water that reservoirs store for the dry months.<br><br>
 The table shows average monthly rainfall recorded at two stations.<br><br>
-<table style="border-collapse:collapse;width:100%;max-width:420px;font-size:0.95em">
+<div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+<table style="border-collapse:collapse;width:100%;max-width:420px;min-width:280px;font-size:0.95em">
 <tr style="background:#dcfce7"><th style="border:1px solid #86efac;padding:4px 8px;text-align:left">Month</th><th style="border:1px solid #86efac;padding:4px 8px">Plateau (mm)</th><th style="border:1px solid #86efac;padding:4px 8px">West coast (mm)</th></tr>
 <tr><td style="border:1px solid #86efac;padding:4px 8px">January</td><td style="border:1px solid #86efac;padding:4px 8px;text-align:center">310</td><td style="border:1px solid #86efac;padding:4px 8px;text-align:center">75</td></tr>
 <tr><td style="border:1px solid #86efac;padding:4px 8px">April</td><td style="border:1px solid #86efac;padding:4px 8px;text-align:center">200</td><td style="border:1px solid #86efac;padding:4px 8px;text-align:center">55</td></tr>
 <tr><td style="border:1px solid #86efac;padding:4px 8px">July</td><td style="border:1px solid #86efac;padding:4px 8px;text-align:center">105</td><td style="border:1px solid #86efac;padding:4px 8px;text-align:center">25</td></tr>
 <tr><td style="border:1px solid #86efac;padding:4px 8px">October</td><td style="border:1px solid #86efac;padding:4px 8px;text-align:center">60</td><td style="border:1px solid #86efac;padding:4px 8px;text-align:center">20</td></tr>
 </table>
+</div>
 `, '#22c55e');
 
 STATIC_QUESTIONS.push(

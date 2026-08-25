@@ -85,6 +85,9 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
   width: 2.25rem; height: 2.25rem; border-radius: 50%;
   background: #f1f5f9; border: none; cursor: pointer;
   font-size: 1.1rem; transition: all 0.2s;
+  /* As a flex child these would otherwise squash below 2.25rem before the row
+     wraps, so the icons distort instead of moving to the next line. */
+  flex: 0 0 auto;
 }
 .dark .icon-btn { background: #374151; }
 .icon-btn:hover { background: #e2e8f0; transform: scale(1.1); }
@@ -503,6 +506,15 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
   .track-card { padding: 1.25rem; }
   .btn-primary, .btn-secondary { font-size: 0.85rem; }
   #xp-display { display: none !important; }
+
+  /* Shrink the header controls so the whole toolbar fits one phone-width row.
+     Tailwind's utilities are single-class, so !important is needed to win. */
+  header .icon-btn { width: 2rem !important; height: 2rem !important; font-size: 1rem; }
+
+  /* Last-resort guard: the header can no longer overflow, but a stray wide
+     element elsewhere must not be able to scroll the whole page sideways
+     either - that is what hid the Logout button. */
+  html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 /* ===== GAMIFICATION / INTERACTIVE PRACTICE ===== */

@@ -150,10 +150,18 @@ function save(data) {
 }
 
 // ── THEME ─────────────────────────────────────
+// index.html ships <html class="dark">, so the page paints dark before any JS
+// runs. DEFAULT_THEME must therefore be 'dark' as well - when it was 'light',
+// the boot call below stripped that class and every first-time visitor got a
+// light flash and then a light UI, whatever the markup said.
+// One constant, used by all four fallbacks: they have to agree, and when they
+// were four separate literals they were one edit away from not agreeing.
+const DEFAULT_THEME = 'dark';
+
 // Which theme should we show for a user we just signed in?
 //   1. their own saved preference, if they have one
 //   2. otherwise whatever is already on screen (last used on this device)
-//   3. otherwise light
+//   3. otherwise DEFAULT_THEME
 //
 // Step 2 matters: signing in used to slam a hard-coded default over the theme
 // the user was already looking at ('dark' for parents, 'light' for students),
@@ -162,12 +170,12 @@ function save(data) {
 // student's saved profile on their first login.
 function _preferredTheme(savedTheme) {
   if (savedTheme) return savedTheme;
-  try { return localStorage.getItem('mm_global_theme') || 'light'; }
-  catch (e) { return 'light'; }
+  try { return localStorage.getItem('mm_global_theme') || DEFAULT_THEME; }
+  catch (e) { return DEFAULT_THEME; }
 }
 
 function applyTheme(t) {
-  t = t || 'light';
+  t = t || DEFAULT_THEME;
   document.documentElement.classList.toggle('dark', t === 'dark');
   document.getElementById('theme-icon').textContent = t === 'dark' ? '☀️' : '🌙';
   try { localStorage.setItem('mm_global_theme', t); } catch(e) {}
@@ -177,9 +185,21 @@ function applyTheme(t) {
     if (c && c._ctx) c._ctx.strokeStyle = t === 'dark' ? '#fff' : '#1e293b';
   });
 }
-document.getElementById('theme-toggle').addEventListener('click', () => applyTheme((DB.theme || localStorage.getItem('mm_global_theme') || 'light') === 'dark' ? 'light' : 'dark'));
+document.getElementById('theme-toggle').addEventListener('click', () => applyTheme((DB.theme || localStorage.getItem('mm_global_theme') || DEFAULT_THEME) === 'dark' ? 'light' : 'dark'));
+// One-time migration. The old default wrote 'light' into mm_global_theme on
+// every single boot, so every existing device now stores a "preference" nobody
+// actually chose - and it would keep beating DEFAULT_THEME forever. Clear it
+// once, behind a flag, so the new default applies. Any toggle after this point
+// is a genuine choice and is never touched again.
+try {
+  if (!localStorage.getItem('mm_theme_default_migrated')) {
+    localStorage.removeItem('mm_global_theme');
+    localStorage.setItem('mm_theme_default_migrated', '1');
+  }
+} catch(e) {}
+
 // Restore last-used theme immediately (before auth resolves)
-applyTheme(localStorage.getItem('mm_global_theme') || 'light');
+applyTheme(localStorage.getItem('mm_global_theme') || DEFAULT_THEME);
 
 // ── TOAST ─────────────────────────────────────
 // ── Image Lightbox ─────────────────────────────
