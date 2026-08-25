@@ -1,16 +1,19 @@
 'use strict';
 // ══════════════════════════════════════════════
 //  PSAC Exam Practice - Question Search Engine
-//  Searches STATIC_QUESTIONS across all loaded subject packs.
-//  Supports exact substring match and fuzzy word-level matching.
+//  Searches question text AND syllabus/chapter descriptions.
+//  Fuzzy matching with typo tolerance. Autocomplete suggestions.
 // ══════════════════════════════════════════════
 
 const Search = (() => {
-  let _index    = null;
-  let _mode     = 'fuzzy'; // 'exact' | 'fuzzy'
+  let _qIndex     = null;   // question index
+  let _chIndex    = null;   // chapter / syllabus index
+  let _suggestions = null;  // autocomplete terms array
+  let _mode       = 'fuzzy';
   let _prevScreen = 'dashboard';
+  let _activeSugg = -1;     // keyboard-selected suggestion index
 
-  // ── Text normalisation (lowercase, strip accents & punctuation) ────────────
+  // ── Text normalisation ─────────────────────────────────────────────────────
   function norm(str) {
     return (str || '').toLowerCase()
       .normalize('NFD').replace(/[̀-ͯ]/g, '')
@@ -18,7 +21,7 @@ const Search = (() => {
       .replace(/\s+/g, ' ').trim();
   }
 
-  // ── Levenshtein edit distance (caps at 3 for speed) ───────────────────────
+  // ── Levenshtein edit distance (capped for speed) ───────────────────────────
   function editDist(a, b) {
     if (a === b) return 0;
     if (!a.length) return b.length;
@@ -28,29 +31,33 @@ const Search = (() => {
     for (let i = 1; i <= a.length; i++) {
       let prev = i;
       for (let j = 1; j <= b.length; j++) {
-        const val = a[i - 1] === b[j - 1] ? row[j - 1] : 1 + Math.min(prev, row[j], row[j - 1]);
-        row[j - 1] = prev;
-        prev = val;
+        const val = a[i-1] === b[j-1] ? row[j-1] : 1 + Math.min(prev, row[j], row[j-1]);
+        row[j-1] = prev; prev = val;
       }
       row[b.length] = prev;
     }
     return row[b.length];
   }
 
-  // ── Check if a single query word matches any word in the text ─────────────
-  // Allows 1 typo for words >= 5 chars, 0 typos for shorter words but allows prefix match
+  // Word-level fuzzy: prefix match OR edit distance based on word length
   function wordMatches(qw, textWords) {
     const maxDist = qw.length >= 6 ? 2 : qw.length >= 4 ? 1 : 0;
-    return textWords.some(tw => tw.startsWith(qw) || qw.startsWith(tw) || editDist(qw, tw) <= maxDist);
+    return textWords.some(tw =>
+      tw.startsWith(qw) || qw.startsWith(tw) || editDist(qw, tw) <= maxDist
+    );
   }
 
-  // ── Build search index once (lazily) ──────────────────────────────────────
-  function buildIndex() {
-    if (_index) return _index;
-    const chMeta = {};
+  function matchesQuery(entry, normQ, qWords) {
+    if (_mode === 'exact') return entry.searchText.includes(normQ);
+    return qWords.every(qw => wordMatches(qw, entry.words));
+  }
+
+  // ── Chapter metadata map (chapterId → meta) ────────────────────────────────
+  function _getChMeta() {
+    const map = {};
     for (const pack of SUBJECT_PACKS) {
       for (const ch of (pack._chapters || [])) {
-        chMeta[ch.id] = {
+        map[ch.id] = {
           chapterName:  ch.name,
           subjectName:  pack.name,
           grade:        pack.grade,
@@ -60,7 +67,14 @@ const Search = (() => {
         };
       }
     }
-    _index = STATIC_QUESTIONS
+    return map;
+  }
+
+  // ── Build question index (lazy) ────────────────────────────────────────────
+  function buildQIndex() {
+    if (_qIndex) return _qIndex;
+    const chMeta = _getChMeta();
+    _qIndex = STATIC_QUESTIONS
       .filter(q => q && q.question && q.chapterId)
       .map(q => {
         const meta       = chMeta[q.chapterId] || {};
@@ -69,16 +83,171 @@ const Search = (() => {
         return { q, meta, searchText, words: searchText.split(' ').filter(Boolean) };
       })
       .filter(e => e.meta.grade);
-    return _index;
+    return _qIndex;
   }
 
-  // ── Score a single index entry against a normalised query ─────────────────
-  function matches(entry, normQ, qWords) {
-    if (_mode === 'exact') return entry.searchText.includes(normQ);
-    return qWords.every(qw => wordMatches(qw, entry.words));
+  // ── Build chapter/syllabus index (lazy) ────────────────────────────────────
+  function buildChIndex() {
+    if (_chIndex) return _chIndex;
+    _chIndex = [];
+    for (const pack of SUBJECT_PACKS) {
+      for (const ch of (pack._chapters || [])) {
+        const raw        = [ch.name, ch.syllabus || '', ch.enrichmentNote || ''].join(' ');
+        const searchText = norm(raw);
+        _chIndex.push({
+          chapterId:    ch.id,
+          chapterName:  ch.name,
+          subjectName:  pack.name,
+          grade:        pack.grade,
+          packId:       pack.id,
+          subjectIcon:  pack.icon,
+          noDifficulty: !!pack.noDifficulty,
+          enrichment:   !!ch.enrichment,
+          searchText,
+          words: searchText.split(' ').filter(Boolean),
+        });
+      }
+    }
+    return _chIndex;
   }
 
-  // ── Fill subject filter select (once) ─────────────────────────────────────
+  // ── Build autocomplete suggestion list (lazy) ──────────────────────────────
+  function buildSuggestions() {
+    if (_suggestions) return _suggestions;
+    const terms = new Set();
+
+    for (const pack of SUBJECT_PACKS) {
+      for (const ch of (pack._chapters || [])) {
+        // Chapter name as a suggestion
+        terms.add(norm(ch.name));
+
+        const text = (ch.syllabus || '') + ' ' + (ch.enrichmentNote || '');
+
+        // Proper nouns: sequences starting with a capital letter (names, places, events)
+        const proper = text.match(/\b[A-Z][a-zA-Zàâäéèêëîïôùûüç''-]{2,}(?:\s+[A-Z][a-zA-Zàâäéèêëîïôùûüç''-]{1,}){0,3}/g) || [];
+        for (const p of proper) {
+          const n = norm(p);
+          if (n.length > 3 && !n.match(/^(the|and|for|with|from|into|that|this|they|their|have|more|also|such|over|very|when|than|after|before)$/)) {
+            terms.add(n);
+          }
+        }
+
+        // Parenthetical terms like "(Dodo, Pink Pigeon, giant tortoise)"
+        const parens = text.match(/\(([^)]{3,60})\)/g) || [];
+        for (const p of parens) {
+          const inner = p.slice(1, -1);
+          for (const part of inner.split(/[,;]/)) {
+            const n = norm(part.trim());
+            if (n.length > 3 && n.split(' ').length <= 5) terms.add(n);
+          }
+        }
+      }
+    }
+
+    _suggestions = [...terms].filter(t => t.length > 2).sort((a, b) => a.localeCompare(b));
+    return _suggestions;
+  }
+
+  // ── Autocomplete ───────────────────────────────────────────────────────────
+  function showSuggestions(rawVal) {
+    const box = document.getElementById('search-suggestions');
+    if (!box) return;
+    const q = norm(rawVal).trim();
+    if (q.length < 2) { hideSuggestions(); return; }
+
+    const suggs   = buildSuggestions();
+    const qWords  = q.split(' ');
+    const lastW   = qWords[qWords.length - 1];
+
+    const scored = [];
+    for (const s of suggs) {
+      let sc = 0;
+      if (s.startsWith(q))                                          sc = 4; // full prefix
+      else if (s.includes(q))                                       sc = 3; // substring
+      else if (qWords.length > 1 && qWords.every(w => s.includes(w))) sc = 2; // all words
+      else if (lastW.length >= 3 && s.split(' ').some(w => w.startsWith(lastW))) sc = 1; // last word prefix
+      if (sc) scored.push({ s, sc });
+    }
+    scored.sort((a, b) => b.sc - a.sc || a.s.length - b.s.length);
+    const top = scored.slice(0, 7);
+
+    if (!top.length) { hideSuggestions(); return; }
+
+    _activeSugg = -1;
+    box.innerHTML = top.map((item, i) =>
+      `<div class="sugg-item px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200
+          hover:bg-indigo-50 dark:hover:bg-indigo-900/30 cursor-pointer transition-colors select-none"
+          data-idx="${i}" data-val="${_esc(item.s)}"
+          onmousedown="event.preventDefault()"
+          onclick="Search.selectSuggestion(this.dataset.val)"
+          onmouseenter="Search._hoverSugg(${i})">
+        <span class="text-gray-400 dark:text-gray-500 mr-2 text-xs">🔍</span>${_esc(item.s)}
+      </div>`
+    ).join('');
+    box.classList.remove('hidden');
+  }
+
+  function hideSuggestions() {
+    const box = document.getElementById('search-suggestions');
+    if (box) box.classList.add('hidden');
+    _activeSugg = -1;
+  }
+
+  function selectSuggestion(val) {
+    const inp = document.getElementById('search-input');
+    if (inp) { inp.value = val; inp.focus(); }
+    hideSuggestions();
+    run();
+  }
+
+  function _hoverSugg(idx) { _activeSugg = idx; _highlightSugg(); }
+
+  function _highlightSugg() {
+    document.querySelectorAll('#search-suggestions .sugg-item').forEach((el, i) => {
+      el.classList.toggle('bg-indigo-50',        i === _activeSugg);
+      el.classList.toggle('dark:bg-indigo-900/30', i === _activeSugg);
+    });
+  }
+
+  // Keyboard navigation inside suggestions
+  function handleKey(e) {
+    const box = document.getElementById('search-suggestions');
+    if (!box || box.classList.contains('hidden')) return;
+    const items = box.querySelectorAll('.sugg-item');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      _activeSugg = Math.min(_activeSugg + 1, items.length - 1);
+      _highlightSugg();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      _activeSugg = Math.max(_activeSugg - 1, -1);
+      _highlightSugg();
+    } else if (e.key === 'Enter' && _activeSugg >= 0) {
+      e.preventDefault();
+      const val = items[_activeSugg]?.dataset?.val;
+      if (val) selectSuggestion(val);
+    } else if (e.key === 'Escape') {
+      hideSuggestions();
+    }
+  }
+
+  // ── HTML helpers ───────────────────────────────────────────────────────────
+  function _esc(s) {
+    return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function _highlight(text) {
+    const inp    = document.getElementById('search-input');
+    const qWords = norm(inp?.value || '').split(' ').filter(w => w.length >= 2);
+    let out = _esc(text);
+    for (const w of qWords) {
+      const re = new RegExp(`(${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+      out = out.replace(re, '<mark class="bg-yellow-200 dark:bg-yellow-700/60 rounded px-0.5">$1</mark>');
+    }
+    return out;
+  }
+
+  // ── Fill subject filter (once) ─────────────────────────────────────────────
   function _fillSubjectFilter() {
     const sel = document.getElementById('search-subject-filter');
     if (!sel || sel.dataset.filled) return;
@@ -97,32 +266,13 @@ const Search = (() => {
     sel.dataset.filled = '1';
   }
 
-  // ── HTML escape helper ────────────────────────────────────────────────────
-  function _esc(s) {
-    return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  // ── Highlight query words in question text ────────────────────────────────
-  function _highlight(text) {
-    const inp = document.getElementById('search-input');
-    const qWords = norm(inp?.value || '').split(' ').filter(w => w.length >= 2);
-    let out = _esc(text);
-    for (const w of qWords) {
-      const re = new RegExp(`(${w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      out = out.replace(re, '<mark class="bg-yellow-200 dark:bg-yellow-700/60 rounded px-0.5">$1</mark>');
-    }
-    return out;
-  }
-
-  // ── Render a list of result cards ─────────────────────────────────────────
-  function _renderCards(entries, isPreview) {
-    const shown   = entries.slice(0, 10);
-    const opacity = isPreview ? 'opacity-60' : '';
-    const DIFF    = ['', '⭐', '⭐⭐', '⭐⭐⭐', '🏆'];
+  // ── Render question cards ──────────────────────────────────────────────────
+  function _renderQCards(entries, isPreview) {
+    const DIFF = ['', '⭐', '⭐⭐', '⭐⭐⭐', '🏆'];
     let html = '<div class="space-y-2">';
-    for (const e of shown) {
-      const diff = (!e.meta.noDifficulty && e.q.difficulty) ? DIFF[e.q.difficulty] || '' : '';
-      html += `<div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 ${opacity}">
+    for (const e of entries.slice(0, 10)) {
+      const diff = (!e.meta.noDifficulty && e.q.difficulty) ? (DIFF[e.q.difficulty] || '') : '';
+      html += `<div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-700 ${isPreview ? 'opacity-60' : ''}">
         <div class="flex items-start gap-2">
           <span class="text-lg select-none">${_esc(e.meta.subjectIcon || '📚')}</span>
           <div class="flex-1 min-w-0">
@@ -132,15 +282,37 @@ const Search = (() => {
         </div>
       </div>`;
     }
-    if (entries.length > 10) {
-      html += `<div class="text-xs text-gray-400 dark:text-gray-500 text-center py-1">... and ${entries.length - 10} more</div>`;
+    if (entries.length > 10) html += `<div class="text-xs text-gray-400 dark:text-gray-500 text-center py-1">... and ${entries.length - 10} more</div>`;
+    html += '</div>';
+    return html;
+  }
+
+  // ── Render chapter / syllabus match cards ──────────────────────────────────
+  function _renderChCards(chs, isPreview) {
+    let html = '<div class="space-y-2">';
+    for (const ch of chs) {
+      const qCount = STATIC_QUESTIONS.filter(q => q.chapterId === ch.chapterId).length;
+      const opacity = isPreview ? 'opacity-60' : '';
+      html += `<div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700/40 rounded-xl p-3 ${opacity} ${isPreview ? '' : 'cursor-pointer hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors'}"
+        ${isPreview ? '' : `onclick="Search.practiceChapter('${ch.packId}','${ch.chapterId}')"`}>
+        <div class="flex items-start gap-2">
+          <span class="text-lg select-none">${_esc(ch.subjectIcon || '📚')}</span>
+          <div class="flex-1 min-w-0">
+            <div class="text-[11px] text-indigo-500 dark:text-indigo-400 mb-0.5 font-semibold uppercase tracking-wide">${_esc(ch.subjectName)} &middot; Syllabus topic</div>
+            <div class="text-sm font-semibold text-gray-800 dark:text-white leading-snug">${_highlight(ch.chapterName)}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${qCount} question${qCount !== 1 ? 's' : ''} in this chapter${isPreview ? '' : ' &middot; Tap to practise'}</div>
+          </div>
+          ${isPreview ? '' : '<span class="text-indigo-400 text-sm shrink-0">▶</span>'}
+        </div>
+      </div>`;
     }
     html += '</div>';
     return html;
   }
 
-  // ── Main search function ───────────────────────────────────────────────────
+  // ── Main search ────────────────────────────────────────────────────────────
   function run() {
+    hideSuggestions();
     const inp        = document.getElementById('search-input');
     const rawQ       = inp?.value?.trim() || '';
     const statusEl   = document.getElementById('search-status');
@@ -161,86 +333,110 @@ const Search = (() => {
     const qWords = normQ.split(' ').filter(w => w.length >= 2);
     if (!qWords.length) return;
 
-    const index = buildIndex();
-
-    // Student's grade from current DB state
-    const studentGrade = typeof DB !== 'undefined' ? (DB.grade || 5) : 5;
-    const restr = typeof DB !== 'undefined' ? (DB.restrictions || {}) : {};
+    const studentGrade       = typeof DB !== 'undefined' ? (DB.grade || 5) : 5;
+    const restr              = typeof DB !== 'undefined' ? (DB.restrictions || {}) : {};
     const allowCrossSearch   = !!restr.crossGradeSearch;
     const allowCrossPractice = !!restr.crossGradePractice;
 
-    let pool = subjFilter ? index.filter(e => e.meta.packId === subjFilter) : index;
-    const matched = pool.filter(e => matches(e, normQ, qWords));
+    // Question matches
+    let qPool    = subjFilter ? buildQIndex().filter(e => e.meta.packId === subjFilter) : buildQIndex();
+    const qAll   = qPool.filter(e => matchesQuery(e, normQ, qWords));
+    const qOwn   = qAll.filter(e => e.meta.grade === studentGrade);
+    const qOther = qAll.filter(e => e.meta.grade !== studentGrade);
 
-    const own   = matched.filter(e => e.meta.grade === studentGrade);
-    const other = matched.filter(e => e.meta.grade !== studentGrade);
+    // Chapter/syllabus matches - exclude chapters already surfaced by question results
+    let chPool    = subjFilter ? buildChIndex().filter(c => c.packId === subjFilter) : buildChIndex();
+    const chAll   = chPool.filter(c => matchesQuery(c, normQ, qWords));
+    const ownQChs = new Set(qOwn.map(e => e.q.chapterId));
+    const syllOwn   = chAll.filter(c => c.grade === studentGrade && !ownQChs.has(c.chapterId));
+    const syllOther = chAll.filter(c => c.grade !== studentGrade);
+
+    const totalOwn   = qOwn.length + syllOwn.length;
+    const totalOther = qOther.length + syllOther.length;
 
     if (statusEl) {
-      statusEl.textContent = matched.length
-        ? `Found ${matched.length} question${matched.length !== 1 ? 's' : ''} - ${own.length} in your grade, ${other.length} in other grades.`
-        : `No results. ${_mode === 'exact' ? 'Try "Similar" mode to catch typos.' : 'Check spelling or try a different topic.'}`;
+      statusEl.textContent = (totalOwn + totalOther)
+        ? `${totalOwn} result${totalOwn !== 1 ? 's' : ''} in your grade, ${totalOther} in other grades.`
+        : `No results. ${_mode === 'exact' ? 'Try "Similar" mode to catch typos.' : 'Check spelling or try a different keyword.'}`;
       statusEl.classList.remove('hidden');
     }
 
     if (!resultsEl) return;
-
     let html = '';
 
-    // ── Own-grade results ──────────────────────────────────────────────────
-    if (own.length) {
+    // ── Own grade ──────────────────────────────────────────────────────────
+    if (totalOwn > 0) {
       html += `<div class="mb-5">
         <div class="flex items-center gap-2 mb-3">
           <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide">Grade ${studentGrade} - Your Grade</span>
-          <span class="chip green text-xs">${own.length} match${own.length !== 1 ? 'es' : ''}</span>
-        </div>
-        ${_renderCards(own, false)}
-        <button onclick="Search.practiceOwn(${JSON.stringify(own.map(e => e.q.id))})"
-          class="btn-primary w-full mt-3 text-sm">
-          ▶ Practise ${own.length} matched question${own.length !== 1 ? 's' : ''}
-        </button>
-      </div>`;
-    } else if (matched.length) {
-      html += `<div class="mb-5 text-center py-8 bg-gray-50 dark:bg-gray-800/40 rounded-2xl">
+          <span class="chip green text-xs">${totalOwn} match${totalOwn !== 1 ? 'es' : ''}</span>
+        </div>`;
+
+      if (syllOwn.length) {
+        html += `<div class="mb-3">
+          <div class="text-xs text-gray-400 dark:text-gray-500 font-semibold mb-2">Syllabus Topics</div>
+          ${_renderChCards(syllOwn, false)}
+        </div>`;
+      }
+
+      if (qOwn.length) {
+        html += `<div class="text-xs text-gray-400 dark:text-gray-500 font-semibold mb-2">Questions (${qOwn.length})</div>
+          ${_renderQCards(qOwn, false)}
+          <button onclick="Search.practiceOwn(${JSON.stringify(qOwn.map(e => e.q.id))})"
+            class="btn-primary w-full mt-3 text-sm">
+            ▶ Practise ${qOwn.length} matched question${qOwn.length !== 1 ? 's' : ''}
+          </button>`;
+      }
+      html += '</div>';
+
+    } else if (totalOther > 0) {
+      html += `<div class="mb-4 text-center py-6 bg-gray-50 dark:bg-gray-800/40 rounded-2xl">
         <p class="text-sm text-gray-400 dark:text-gray-500">No matches in your grade (Grade ${studentGrade}).</p>
       </div>`;
+
     } else {
       html += `<div class="text-center py-16">
         <div class="text-5xl mb-3">😕</div>
         <p class="text-sm text-gray-500 dark:text-gray-400">No questions found for "${_esc(rawQ)}".</p>
-        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">${_mode === 'exact' ? 'Switch to "Similar" mode to find questions with similar words.' : 'Try different keywords or check spelling.'}</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">${_mode === 'exact'
+          ? 'Switch to "Similar" mode to find questions with similar words.'
+          : 'Try different keywords or check spelling.'}</p>
       </div>`;
     }
 
-    // ── Other-grade results ────────────────────────────────────────────────
-    if (other.length) {
+    // ── Other grades ───────────────────────────────────────────────────────
+    if (totalOther > 0) {
       if (!allowCrossSearch) {
         html += `<div class="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/40 rounded-2xl text-center">
-          <p class="text-sm text-amber-700 dark:text-amber-400">🔒 ${other.length} more result${other.length !== 1 ? 's' : ''} found in other grades.</p>
+          <p class="text-sm text-amber-700 dark:text-amber-400">🔒 ${totalOther} more result${totalOther !== 1 ? 's' : ''} found in other grades.</p>
           <p class="text-xs text-amber-600 dark:text-amber-500 mt-1">Ask a parent to enable cross-grade search in Parent Controls.</p>
         </div>`;
       } else {
-        // Group by grade
-        const byGrade = {};
-        for (const e of other) {
-          if (!byGrade[e.meta.grade]) byGrade[e.meta.grade] = [];
-          byGrade[e.meta.grade].push(e);
-        }
-        for (const [g, items] of Object.entries(byGrade).sort((a, b) => a[0] - b[0])) {
-          const ids = items.map(e => e.q.id);
+        const otherGrades = [...new Set([
+          ...qOther.map(e => e.meta.grade),
+          ...syllOther.map(c => c.grade),
+        ])].sort();
+
+        for (const g of otherGrades) {
+          const gQs  = qOther.filter(e => e.meta.grade === g);
+          const gChs = syllOther.filter(c => c.grade === g);
+          const ids  = gQs.map(e => e.q.id);
           html += `<div class="mt-4 border-t border-gray-100 dark:border-gray-700 pt-4">
             <div class="flex items-center gap-2 mb-3">
               <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Grade ${g}</span>
               <span class="chip gray text-xs">Preview</span>
-              <span class="chip amber text-xs">${items.length} match${items.length !== 1 ? 'es' : ''}</span>
+              <span class="chip amber text-xs">${gQs.length + gChs.length} match${(gQs.length + gChs.length) !== 1 ? 'es' : ''}</span>
             </div>
-            ${_renderCards(items, true)}
-            ${allowCrossPractice
+            ${gChs.length ? _renderChCards(gChs, true) : ''}
+            ${gQs.length  ? `<div class="mt-2">${_renderQCards(gQs, true)}</div>` : ''}
+            ${gQs.length && allowCrossPractice
               ? `<button onclick="Search.practiceOther(${JSON.stringify(ids)},'Grade ${g}')"
                   class="w-full mt-2 py-2 text-sm font-semibold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-colors">
                   ▶ Revise Grade ${g} questions
                 </button>`
-              : `<p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">🔒 Cross-grade practice is off - ask a parent to enable it.</p>`
-            }
+              : gQs.length
+                ? `<p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">🔒 Cross-grade practice is off - ask a parent to enable it.</p>`
+                : ''}
           </div>`;
         }
       }
@@ -249,51 +445,66 @@ const Search = (() => {
     resultsEl.innerHTML = html;
   }
 
-  // ── Practice matched questions ─────────────────────────────────────────────
+  // ── Practice launchers ─────────────────────────────────────────────────────
   function practiceOwn(ids) {
-    const qs = STATIC_QUESTIONS.filter(q => ids.includes(q.id));
-    startSearchPractice(qs, 'Search Results');
+    startSearchPractice(STATIC_QUESTIONS.filter(q => ids.includes(q.id)), 'Search Results');
   }
 
   function practiceOther(ids, label) {
-    const qs = STATIC_QUESTIONS.filter(q => ids.includes(q.id));
-    startSearchPractice(qs, `Revision - ${label}`);
+    startSearchPractice(STATIC_QUESTIONS.filter(q => ids.includes(q.id)), `Revision - ${label}`);
   }
 
-  // ── Filter / mode controls ─────────────────────────────────────────────────
+  function practiceChapter(packId, chapterId) {
+    const pack = SUBJECT_PACKS.find(p => p.id === packId);
+    if (!pack) { toast('Chapter not available.', 2000); return; }
+    /* eslint-disable no-global-assign */
+    if (typeof ACTIVE_PACK    !== 'undefined') ACTIVE_PACK    = pack;
+    if (typeof SELECTED_GRADE !== 'undefined') SELECTED_GRADE = pack.grade;
+    /* eslint-enable no-global-assign */
+    const chs = pack._chapters || pack.chapters || [];
+    if (typeof CHAPTERS !== 'undefined') { CHAPTERS.length = 0; chs.forEach(ch => CHAPTERS.push(ch)); }
+    const go = () => startChapterDirect(chapterId, null);
+    if (typeof QuestionLoader !== 'undefined') QuestionLoader.loadSubject(pack.id).then(go).catch(go);
+    else go();
+  }
+
+  // ── Mode / filter UI ──────────────────────────────────────────────────────
   function setMode(mode) {
     _mode = mode;
+    const on  = 'flex-1 py-1.5 text-xs rounded-lg transition-all bg-white dark:bg-gray-600 shadow-sm text-gray-800 dark:text-white font-semibold px-3';
+    const off = 'flex-1 py-1.5 text-xs rounded-lg transition-all text-gray-500 dark:text-gray-400 px-3';
     const exact = document.getElementById('filter-exact');
     const fuzzy = document.getElementById('filter-fuzzy');
-    const activeClass  = 'bg-white dark:bg-gray-600 shadow-sm text-gray-800 dark:text-white font-semibold';
-    const inactiveClass = 'text-gray-500 dark:text-gray-400';
-    if (exact) { exact.className = `flex-1 py-1.5 text-xs rounded-lg transition-all ${mode === 'exact' ? activeClass : inactiveClass}`; }
-    if (fuzzy) { fuzzy.className = `flex-1 py-1.5 text-xs rounded-lg transition-all ${mode === 'fuzzy' ? activeClass : inactiveClass}`; }
+    if (exact) exact.className = mode === 'exact' ? on : off;
+    if (fuzzy) fuzzy.className = mode === 'fuzzy' ? on : off;
     run();
   }
 
   function clearInput() {
     const inp = document.getElementById('search-input');
     if (inp) { inp.value = ''; inp.focus(); }
+    hideSuggestions();
     run();
   }
 
-  // ── Open / close ───────────────────────────────────────────────────────────
+  // ── Open / close ──────────────────────────────────────────────────────────
   function open() {
     _prevScreen = (typeof S !== 'undefined' && S.currentScreen) ? S.currentScreen : 'dashboard';
     _fillSubjectFilter();
     showScreen('search');
-    setTimeout(() => document.getElementById('search-input')?.focus(), 120);
+    setTimeout(() => { const inp = document.getElementById('search-input'); inp?.focus(); inp && (inp.value = ''); run(); }, 120);
     setMode('fuzzy');
-    // Clear previous results
-    const inp = document.getElementById('search-input');
-    if (inp) inp.value = '';
-    run();
   }
 
   function close() {
+    hideSuggestions();
     showScreen(_prevScreen || 'dashboard');
   }
 
-  return { open, close, run, setMode, clearInput, practiceOwn, practiceOther };
+  return {
+    open, close, run, setMode, clearInput,
+    practiceOwn, practiceOther, practiceChapter,
+    showSuggestions, hideSuggestions, selectSuggestion,
+    handleKey, _hoverSugg,
+  };
 })();

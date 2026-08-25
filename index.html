@@ -109,6 +109,7 @@
         <button id="search-btn" onclick="Search.open()" class="icon-btn hidden" title="Search Questions">🔍</button>
         <button onclick="showScreen('forum')" class="icon-btn" title="Community Forum">💬</button>
         <button id="analytics-btn" class="icon-btn" title="Analytics">📊</button>
+        <button id="pwa-install-btn" class="hidden items-center gap-1 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Install app on this device">📲 <span class="hidden sm:inline">Install App</span></button>
         <button id="theme-toggle" class="icon-btn" title="Toggle theme"><span id="theme-icon">🌙</span></button>
         <button id="header-logout-btn" onclick="Auth.logout()" class="hidden items-center gap-1 text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-full hover:bg-red-200 dark:hover:bg-red-800/60 transition-colors" title="Logout">🚪 <span class="hidden sm:inline">Logout</span></button>
       </div>
@@ -1795,14 +1796,21 @@
         <h2 class="text-xl font-bold text-gray-800 dark:text-white flex-1">🔍 Search Questions</h2>
       </div>
 
-      <!-- Search bar -->
+      <!-- Search bar + suggestions dropdown -->
       <div class="relative mb-3">
-        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-base pointer-events-none select-none">🔍</span>
+        <span class="absolute left-3 top-[14px] text-gray-400 text-base pointer-events-none select-none z-10">🔍</span>
         <input id="search-input" type="search" autocomplete="off" spellcheck="false"
           placeholder="Search by topic, name, keyword…"
-          oninput="Search.run()"
+          oninput="Search.run(); Search.showSuggestions(this.value)"
+          onkeydown="Search.handleKey(event)"
+          onfocus="Search.showSuggestions(this.value)"
+          onblur="setTimeout(Search.hideSuggestions, 180)"
           class="w-full pl-9 pr-10 py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm">
         <button onclick="Search.clearInput()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg leading-none" title="Clear">✕</button>
+        <!-- Autocomplete dropdown -->
+        <div id="search-suggestions"
+          class="hidden absolute left-0 right-0 top-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl shadow-xl z-50 overflow-hidden max-h-64 overflow-y-auto">
+        </div>
       </div>
 
       <!-- Filters row -->
