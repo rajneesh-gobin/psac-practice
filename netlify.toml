@@ -30,7 +30,12 @@
     Referrer-Policy            = "strict-origin-when-cross-origin"
     Permissions-Policy         = "camera=(), microphone=(), geolocation=()"
     Strict-Transport-Security  = "max-age=31536000; includeSubDomains"
-    Content-Security-Policy    = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; connect-src 'self' https://*.supabase.co https://accounts.google.com; img-src 'self' data: https:; frame-src https://accounts.google.com; frame-ancestors 'none'; object-src 'none'"
+    # script-src must allow cdn.jsdelivr.net: index.html loads @supabase/supabase-js
+    # from there (the UMD build), and without it the browser blocks the script
+    # entirely — window.supabase stays undefined and the whole app fails (no
+    # client, no auth, no DB calls). Verified this was missing pre-launch: the
+    # CSP would have broken the very first real deploy.
+    Content-Security-Policy    = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; connect-src 'self' https://*.supabase.co https://accounts.google.com; img-src 'self' data: https:; frame-src https://accounts.google.com; frame-ancestors 'none'; object-src 'none'"
 
 [functions."weekly-digest"]
   schedule = "0 9 * * 0"
