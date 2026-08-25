@@ -274,34 +274,28 @@ Two verified bugs, both inside the parent-controls flow:
          chapter for grade4/5/6 english/french and grade4-maths (compare to
          how grade5/6-maths and the history/science packs weight theirs).
 
-2. **TODO — Toggling a restriction can silently overwrite the child's newer progress.**
-   `Auth.toggleChapterLock`/`setMaxDifficulty`/etc. (`engine/auth.js:1208-1253`)
-   call `save(DB)`, which upserts the *entire* cached `DB` object — not just
-   the restriction — back to Supabase. `DB` is a snapshot taken once when the
-   parent opened that child's panel. If the child is practicing concurrently
-   on another device, the parent's later restriction-toggle save overwrites
-   the child's newer XP/streak/chapter progress with the stale snapshot. This
-   is an everyday scenario for the target audience, not an edge case.
-   - [ ] Change restriction toggles to only patch `settings`/`restrictions`
-         server-side (e.g. a narrow `Store.updateStudent(id, {settings})`
-         already exists per the audit — stop also calling `save(DB)` with the
-         full stale object), or re-fetch fresh progress before any save.
+2. **DONE — Toggling a restriction could silently overwrite the child's newer
+   progress.** All 5 restriction-toggle functions in `engine/auth.js` called
+   `save(DB)` right next to the narrow, correct `Store.updateStudent(id,
+   {settings})` call that was already there — `save(DB)` upserts the entire
+   stale cached progress snapshot, which could overwrite a child's newer
+   XP/streak/chapter progress if they were practicing concurrently on another
+   device. Fixed (commit `54d7764`) by removing the redundant `save(DB)` call
+   from all 5 functions; the narrow update already persisted the restriction
+   correctly, and the in-memory mutation still updates the parent's own
+   screen immediately. Isolated cleanly from the in-progress referral-feature
+   edits already sitting in that file via a hand-built patch applied to the
+   git index only.
 
 ## 5e. TODO — content integrity gaps (found in content audit)
 
-1. **34 unreachable questions in grade5-maths.** Both `questions_challenge.js`
-   (20 questions, ids `CH_PCT01`–`CH_PCT20`) and `questions_subsections.js`
-   (14 questions, ids `PC01`–`PC14`, subsections `meaning`/`conversion`/
-   `of_quantity`/`increase` — a whole "Percentage" mini-syllabus) use
-   `chapterId: 'percentage'`, but `subjects/grade5-maths/_manifest.js` has no
-   chapter with that id anywhere. These questions are permanently unreachable
-   — never selected for practice or exam, never counted toward mastery/badges.
-   Grade 6 maths has a `g6-ratio-pct` chapter, suggesting "Percentage" was
-   meant to be folded into an existing chapter (maybe `ratio`) or given its
-   own manifest entry, but the wiring was never finished.
-   - [ ] Decide the correct target chapter id and either add a `percentage`
-         chapter to the grade5-maths manifest, or re-point all 34 questions'
-         `chapterId` to wherever percentage content should actually live.
+1. **DONE — 34 unreachable questions in grade5-maths.** Both
+   `questions_challenge.js` (20 questions) and `questions_subsections.js` (14
+   questions) used `chapterId: 'percentage'` with no matching chapter in the
+   manifest — permanently unreachable. Fixed (commit `d86a6f6`): added a
+   `percentage` chapter (examWeight:3), a SYLLABUS entry with the 4
+   subsections the questions actually use, and a FORMULAS card, all matching
+   the existing per-chapter pattern in that manifest.
 
 2. **Silent difficulty substitution when a chapter lacks questions at the
    requested level.** `getQuestionsForChapter()` (`engine/questions_engine.js`)
@@ -375,11 +369,22 @@ Pre-launch blockers, roughly in order:
 4. §5b confirm VAPID env vars are set in Netlify before deploy (hard-crash risk) — still needs your action, can't check from here
 5. ~~§5c exam-mode restrictions + examWeight NaN bug~~ — DONE (`8929f5c`)
 6. ~~§5f all SQL migrations~~ — DONE, none were actually pending (`2c1eb89`)
-7. §5c #2 data-loss race on restriction toggle
-8. §5e content gaps (orphaned percentage chapter, L3 gaps in grade6-maths)
+7. ~~§5c #2 data-loss race on restriction toggle~~ — DONE (`54d7764`)
+8. ~~§5e orphaned percentage chapter~~ — DONE (`d86a6f6`); L3 gaps in
+   grade6-maths still open (needs real content authoring, not a quick fix)
 9. §1 cleanup (test the push-subscribe fix against a live student/parent session)
-10. §3 (phantom student-logout bug)
-11. §4 (VAPID rotation) — quick once confirmed safe
+10. §3 (phantom student-logout bug) — confirmed real: only 2 policies exist on
+    `students` (`students_parent` needs `auth.uid()`, `students_self_read` is
+    SELECT-only), so a plain student session's client-side session_version
+    bump matches neither and silently affects 0 rows. Needs a new
+    `SECURITY DEFINER` RPC, not a quick fix — a bare RLS UPDATE policy would
+    be unsafe here since anon already holds broad column-level UPDATE grants
+    on `students` (pin, pin_hash, settings, etc.) left over from before the
+    RLS lockdown; a row-level-only policy would inadvertently let a student
+    session rewrite any of those columns, not just session_version.
+11. §4 (VAPID rotation) — explicitly deferred by you for now ("it's a
+    prototype"); revisit before real push subscribers exist, since rotating
+    later invalidates them
 12. §5 (docs) — no urgency, but do before telling another AI session to
     "read CLAUDE.md first"
 
