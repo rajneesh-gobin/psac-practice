@@ -586,25 +586,128 @@ const AdminPanel = (() => {
   }
 
   // ── Question Reports tab ───────────────────────
+  function _parseReportMeta(raw) {
+    const sep = (raw || '').indexOf('\n__meta__');
+    if (sep === -1) return { text: raw || '', meta: {} };
+    try {
+      return { text: raw.slice(0, sep), meta: JSON.parse(raw.slice(sep + 9)) };
+    } catch(_) {
+      return { text: raw.slice(0, sep), meta: {} };
+    }
+  }
+
+  function _diffBadge(diff) {
+    return ['', '⭐ Basic', '⭐⭐ Medium', '⭐⭐⭐ Hard', '⭐⭐⭐⭐ Challenge'][diff] || '';
+  }
+
+  async function resolveReport(id) {
+    const ok = await Store.resolveReport(id);
+    if (ok) { toast('Report marked resolved.', 1800); loadReports(); }
+    else toast('Could not update — try again.', 2500);
+  }
+
   async function loadReports() {
     const el = document.getElementById('admin-reports-list');
     if (el) el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
+    // Ensure question bank is fully loaded across all grades so the live lookup works
+    if (typeof QuestionLoader !== 'undefined') {
+      await Promise.allSettled([
+        QuestionLoader.loadForStudent(4),
+        QuestionLoader.loadForStudent(5),
+        QuestionLoader.loadForStudent(6),
+      ]);
+    }
     const reports = await Store.loadReports();
     if (!reports.length) {
       if (el) el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">No reports yet.</p>';
       return;
     }
-    if (el) el.innerHTML = reports.map(r => `
-      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3">
-        <div class="flex justify-between items-start gap-2 mb-2">
-          <span class="text-xs font-mono text-gray-400">${_esc(r.question_id || '-')}</span>
-          <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">${_esc(r.status || 'open')}</span>
+    if (el) el.innerHTML = reports.map(r => {
+      const { text: qText, meta } = _parseReportMeta(r.question_text);
+      const isOpen   = (r.status || 'open') === 'open';
+      const statusCls = isOpen ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700';
+
+      // Look up full question object from loaded question bank
+      const fullQ = (typeof STATIC_QUESTIONS !== 'undefined')
+        ? STATIC_QUESTIONS.find(q => q.id === r.question_id) : null;
+      const options  = fullQ?.options  || meta.options  || null;
+      const answer   = fullQ?.answer   || meta.answer   || null;
+      const diff     = fullQ?.difficulty || null;
+      const hint     = fullQ?.hint || null;
+
+      // Look up chapter & subject by searching all registered packs
+      let chapter = null, subjectPack = null;
+      if (fullQ?.chapterId && typeof SUBJECT_PACKS !== 'undefined') {
+        for (const p of SUBJECT_PACKS) {
+          const chs = p._chapters || p.chapters || [];
+          const found = chs.find(c => c.id === fullQ.chapterId);
+          if (found) { chapter = found; subjectPack = p; break; }
+        }
+      }
+      const chapterName = chapter?.name || fullQ?.chapterId || '';
+      const subjectLabel = subjectPack
+        ? `${subjectPack.name} — Grade ${subjectPack.grade}`
+        : (r.question_id || '').slice(0, 6);
+
+      // Student name: from joined row, or from meta for older reports
+      const studentName = r.students?.display_name || meta.studentName || null;
+      const mode        = meta.mode || null;
+
+      // Options rows with correct answer highlighted
+      const optionLetters = ['A','B','C','D','E'];
+      const optionsHtml = options ? options.map((opt, i) => {
+        const letter   = optionLetters[i] || String(i + 1);
+        const isAnswer = answer && (answer === letter || answer === opt);
+        return `<div class="flex items-start gap-2 py-0.5 ${isAnswer ? 'text-green-700 dark:text-green-400 font-semibold' : 'text-gray-700 dark:text-gray-300'}">
+          <span class="shrink-0 w-5 h-5 rounded-full text-xs flex items-center justify-center border ${isAnswer ? 'border-green-500 bg-green-50 dark:bg-green-900/30' : 'border-gray-300 dark:border-gray-600'}">${letter}</span>
+          <span class="text-sm">${_esc(opt)}${isAnswer ? ' <span class="text-green-600 dark:text-green-400">✓ correct</span>' : ''}</span>
+        </div>`;
+      }).join('') : '';
+
+      return `
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3 border-l-4 ${isOpen ? 'border-amber-400' : 'border-green-400'}">
+        <!-- Header row -->
+        <div class="flex justify-between items-start gap-2 mb-3">
+          <div>
+            <span class="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">${_esc(r.question_id || '-')}</span>
+            ${mode ? `<span class="ml-1 text-xs text-gray-400">(${_esc(mode)} mode)</span>` : ''}
+          </div>
+          <span class="text-xs ${statusCls} px-2 py-0.5 rounded-full shrink-0">${_esc(r.status || 'open')}</span>
         </div>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 italic">"${_esc((r.question_text || '').slice(0, 120))}${(r.question_text||'').length > 120 ? '…' : ''}"</p>
-        <p class="text-sm text-gray-800 dark:text-white font-semibold">${_esc(r.message || '-')}</p>
-        <p class="text-xs text-gray-400 mt-1">${new Date(r.created_at).toLocaleString()}</p>
-      </div>
-    `).join('');
+
+        <!-- Subject / chapter / difficulty -->
+        <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-0.5">${_esc(subjectLabel)}</p>
+        ${chapterName ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Chapter: ${_esc(chapterName)}</p>` : ''}
+        ${diff ? `<p class="text-xs text-gray-400 mb-2">${_esc(_diffBadge(diff))}</p>` : ''}
+
+        <!-- Question text -->
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 mb-3">
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Question</p>
+          <p class="text-sm text-gray-800 dark:text-white leading-relaxed">${_esc(qText.slice(0, 400))}${qText.length > 400 ? '…' : ''}</p>
+        </div>
+
+        <!-- Options -->
+        ${optionsHtml ? `<div class="mb-3">${optionsHtml}</div>` : ''}
+
+        <!-- Hint (for admin context) -->
+        ${hint ? `<p class="text-xs text-amber-600 dark:text-amber-400 mb-3">💡 Hint: ${_esc(hint)}</p>` : ''}
+
+        <!-- Reporter's comment -->
+        <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
+          <p class="text-xs font-semibold text-red-500 mb-1">Reporter's comment</p>
+          <p class="text-sm text-gray-800 dark:text-white">${_esc(r.message || '-')}</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-between items-center flex-wrap gap-2">
+          <div>
+            ${studentName ? `<p class="text-xs text-gray-500 dark:text-gray-400">Reported by: <span class="font-medium">${_esc(studentName)}</span></p>` : ''}
+            <p class="text-xs text-gray-400">${new Date(r.created_at).toLocaleString()}</p>
+          </div>
+          ${isOpen ? `<button onclick="Admin.resolveReport('${_esc(r.id)}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">Mark resolved</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
   }
 
   // ── Create pre-activated account (super admin only) ───────────
@@ -702,5 +805,5 @@ const AdminPanel = (() => {
   }
 
   return { render, showTab, loadMembers, filterMembers, changeRole,
-    loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, loadRoles, setRole, loadPlans, togglePlan, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails };
+    loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, resolveReport, loadRoles, setRole, loadPlans, togglePlan, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails };
 })();

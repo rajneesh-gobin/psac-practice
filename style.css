@@ -681,3 +681,17 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 
 /* Sound toggle muted state */
 #sound-toggle-btn.muted { opacity: 0.45; }
+
+/* Parent PIN number-pad keys */
+.pin-key-btn {
+  padding-top: 1rem; padding-bottom: 1rem;
+  font-size: 1.125rem; line-height: 1.75rem; font-weight: 700;
+  color: #1f2937; background-color: #f3f4f6;
+  border: none; border-radius: 1rem; cursor: pointer;
+  transition: background-color 0.15s, transform 0.1s;
+  user-select: none; width: 100%;
+}
+.pin-key-btn:hover  { background-color: #e5e7eb; }
+.pin-key-btn:active { transform: scale(0.93); }
+.dark .pin-key-btn          { color: #f9fafb; background-color: #1f2937; }
+.dark .pin-key-btn:hover    { background-color: #374151; }

@@ -377,11 +377,13 @@ const Store = (() => {
   }
 
   // ── Question reports ──────────────────────────
-  async function reportQuestion(questionId, questionText, message, studentId) {
+  async function reportQuestion(questionId, questionText, message, studentId, studentName, mode, options, answer) {
     if (!_sb || !questionId) return false;
+    // Pack extra context into question_text as JSON suffix (no schema change needed)
+    const meta = JSON.stringify({ studentName: studentName || null, mode: mode || 'practice', options: options || null, answer: answer || null });
     const { error } = await _sb.from('question_reports').insert({
       question_id:   questionId,
-      question_text: (questionText || '').slice(0, 500),
+      question_text: (questionText || '').slice(0, 400) + '\n__meta__' + meta,
       message:       (message || '').trim().slice(0, 1000),
       student_id:    studentId || null,
       status:        'open',
@@ -392,8 +394,16 @@ const Store = (() => {
   async function loadReports() {
     if (!_sb) return [];
     const { data } = await _sb.from('question_reports')
-      .select('*').order('created_at', { ascending: false }).limit(100);
+      .select('*, students!student_id(display_name, grade)')
+      .order('created_at', { ascending: false }).limit(100);
     return data || [];
+  }
+
+  async function resolveReport(id) {
+    if (!_sb || !id) return false;
+    const { error } = await _sb.from('question_reports')
+      .update({ status: 'resolved' }).eq('id', id);
+    return !error;
   }
 
   // ── Student assignments (Supabase) ────────────
@@ -522,7 +532,7 @@ const Store = (() => {
     getGlobalSettings, mmGet, mmSet,
     generateId,
     // Question reports
-    reportQuestion, loadReports,
+    reportQuestion, loadReports, resolveReport,
     // Assignments
     loadAssignments, createAssignment, deleteAssignment, completeAssignment,
     // Login tracking

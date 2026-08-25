@@ -77,6 +77,16 @@ const QuestionLoader = (() => {
       // @enrichment - bonus content, derived from syllabus
       'subjects/grade5-science/questions/enrichment_g5sci_endemic.js',
       'subjects/grade5-science/questions/enrichment_g5sci_energy.js',
+      // past papers
+      'subjects/grade5-science/questions/past_paper_2024.js',
+      'subjects/grade5-science/questions/past_paper_2023.js',
+      'subjects/grade5-science/questions/past_paper_2022.js',
+      'subjects/grade5-science/questions/past_paper_2021.js',
+      'subjects/grade5-science/questions/past_paper_2020.js',
+      'subjects/grade5-science/questions/past_paper_2019.js',
+      'subjects/grade5-science/questions/past_paper_2018.js',
+      'subjects/grade5-science/questions/past_paper_2017.js',
+      'subjects/grade5-science/questions/past_paper_2016.js',
     ],
     'grade5-history': [
       'subjects/grade5-history/questions/ch01_discovery.js',
@@ -92,6 +102,12 @@ const QuestionLoader = (() => {
       'subjects/grade5-history/questions/enrichment_g5_personalities.js',
       'subjects/grade5-history/questions/enrichment_g5_landmarks.js',
       'subjects/grade5-history/questions/enrichment_g5_world.js',
+      // past papers
+      'subjects/grade5-history/questions/past_paper_2024.js',
+      'subjects/grade5-history/questions/past_paper_2023.js',
+      'subjects/grade5-history/questions/past_paper_2022.js',
+      'subjects/grade5-history/questions/past_paper_2021.js',
+      'subjects/grade5-history/questions/past_paper_2020.js',
     ],
     'grade6-science': [
       'subjects/grade6-science/questions/ch01_g6_air.js',
@@ -105,6 +121,12 @@ const QuestionLoader = (() => {
       // @enrichment - bonus content, derived from syllabus
       'subjects/grade6-science/questions/enrichment_g6sci_ecosystems.js',
       'subjects/grade6-science/questions/enrichment_g6sci_solar.js',
+      // past papers
+      'subjects/grade6-science/questions/past_paper_2024.js',
+      'subjects/grade6-science/questions/past_paper_2023.js',
+      'subjects/grade6-science/questions/past_paper_2022.js',
+      'subjects/grade6-science/questions/past_paper_2021.js',
+      'subjects/grade6-science/questions/past_paper_2019.js',
     ],
     'grade6-history': [
       'subjects/grade6-history/questions/ch01_g6_slaves_immigrants.js',
@@ -117,6 +139,12 @@ const QuestionLoader = (() => {
       'subjects/grade6-history/questions/enrichment_g6_personalities.js',
       'subjects/grade6-history/questions/enrichment_g6_symbols.js',
       'subjects/grade6-history/questions/enrichment_g6_world.js',
+      // past papers
+      'subjects/grade6-history/questions/past_paper_2024.js',
+      'subjects/grade6-history/questions/past_paper_2023.js',
+      'subjects/grade6-history/questions/past_paper_2022.js',
+      'subjects/grade6-history/questions/past_paper_2021.js',
+      'subjects/grade6-history/questions/past_paper_2019.js',
     ],
     'grade6-maths': [
       'subjects/grade6-maths/questions/ch01_g6_numeration.js',
@@ -130,6 +158,12 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/ch09_g6_area_vol.js',
       'subjects/grade6-maths/questions/ch10_g6_time_speed.js',
       'subjects/grade6-maths/questions/ch11_g6_graphs.js',
+      // past papers
+      'subjects/grade6-maths/questions/past_paper_2024.js',
+      'subjects/grade6-maths/questions/past_paper_2023.js',
+      'subjects/grade6-maths/questions/past_paper_2022.js',
+      'subjects/grade6-maths/questions/past_paper_2021.js',
+      'subjects/grade6-maths/questions/past_paper_2019.js',
     ],
     'grade6-english': [
       'subjects/grade6-english/questions/ch01_nouns.js',
@@ -139,6 +173,12 @@ const QuestionLoader = (() => {
       'subjects/grade6-english/questions/ch05_writing.js',
       'subjects/grade6-english/questions/ch06_vocabulary.js',
       'subjects/grade6-english/questions/ch07_g6_passages.js',
+      // past papers
+      'subjects/grade6-english/questions/past_paper_2024.js',
+      'subjects/grade6-english/questions/past_paper_2023.js',
+      'subjects/grade6-english/questions/past_paper_2022.js',
+      'subjects/grade6-english/questions/past_paper_2021.js',
+      'subjects/grade6-english/questions/past_paper_2019.js',
     ],
     'grade6-french': [
       'subjects/grade6-french/questions/ch01_imparfait.js',
@@ -151,6 +191,12 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/ch08_pqp.js',
       'subjects/grade6-french/questions/ch09_g6_textes.js',
       'subjects/grade6-french/questions/ch10_g6_images.js',
+      // past papers
+      'subjects/grade6-french/questions/past_paper_2024.js',
+      'subjects/grade6-french/questions/past_paper_2023.js',
+      'subjects/grade6-french/questions/past_paper_2022.js',
+      'subjects/grade6-french/questions/past_paper_2021.js',
+      'subjects/grade6-french/questions/past_paper_2019.js',
     ],
     'grade4-maths': [
       'subjects/grade4-maths/questions/ch01_g4_numeration.js',
@@ -229,7 +275,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 2;
+  const _CACHE_VERSION = 5;
   const _cacheKey = subjectId => `mm_qc_v${_CACHE_VERSION}_${subjectId}`;
 
   // Drop caches written by any earlier version, so a bump reclaims the space

@@ -331,23 +331,55 @@ function _renderResumeBanner() {
   const slot = document.getElementById('resume-banner-slot');
   if (!slot) return;
   const saved = _getResume();
-  if (!saved) { slot.innerHTML = ''; return; }
-  const chName = saved.type === 'exam'
-    ? (saved.examType === 'quick' ? 'Quick Exam' : 'Full Exam')
-    : (CHAPTERS.find(c => c.id === saved.chapterId)?.name || 'Practice');
-  const detail = saved.type === 'exam'
-    ? `Question ${(saved.idx || 0) + 1} of ${(saved.qIds || []).length}`
-    : 'Practice session';
+
+  if (saved) {
+    const chName = saved.type === 'exam'
+      ? (saved.examType === 'quick' ? 'Quick Exam' : 'Full Exam')
+      : (CHAPTERS.find(c => c.id === saved.chapterId)?.name || 'Practice');
+    const detail = saved.type === 'exam'
+      ? `Question ${(saved.idx || 0) + 1} of ${(saved.qIds || []).length}`
+      : 'Practice session';
+    slot.innerHTML = `
+      <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-5 mb-5 text-white shadow-xl">
+        <div class="flex items-center gap-4">
+          <div class="text-4xl select-none shrink-0">▶️</div>
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-base mb-0.5">Continue where you left off</div>
+            <div class="text-sm opacity-90 truncate">${chName} · ${detail}</div>
+          </div>
+        </div>
+        <div class="flex gap-2 mt-4">
+          <button onclick="_doResume()" class="flex-1 bg-white text-green-700 font-bold py-3 rounded-xl hover:bg-green-50 transition-colors shadow text-sm">
+            Continue →
+          </button>
+          <button onclick="_clearResume()" class="px-4 py-3 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors">
+            Dismiss
+          </button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  if (typeof DB === 'undefined' || !DB.stats || DB.stats.totalAttempted < 1) {
+    slot.innerHTML = '';
+    return;
+  }
+  const pack = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK)
+    || (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.find(p => !p.comingSoon))
+    || null;
+  const subjectLabel = pack ? `Grade ${pack.grade} ${pack.name}` : 'your subject';
   slot.innerHTML = `
-    <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-xl p-4 mb-4 flex items-center justify-between gap-3 flex-wrap">
-      <div>
-        <div class="font-semibold text-blue-800 dark:text-blue-200">📖 Resume where you left off</div>
-        <div class="text-sm text-blue-600 dark:text-blue-300">${chName} · ${detail}</div>
+    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-5 mb-5 text-white shadow-xl">
+      <div class="flex items-center gap-4">
+        <div class="text-4xl select-none shrink-0">📚</div>
+        <div class="flex-1">
+          <div class="font-bold text-base mb-0.5">Ready to practise?</div>
+          <div class="text-sm opacity-90">${subjectLabel}</div>
+        </div>
       </div>
-      <div class="flex gap-2 shrink-0">
-        <button onclick="_doResume()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">Resume →</button>
-        <button onclick="_clearResume()" class="px-3 py-2 text-blue-500 dark:text-blue-400 text-sm hover:underline">Dismiss</button>
-      </div>
+      <button onclick="showScreen('chapter-select')" class="w-full mt-4 bg-white text-blue-700 font-bold py-3 rounded-xl hover:bg-blue-50 transition-colors shadow text-sm">
+        Start Practice →
+      </button>
     </div>`;
 }
 
@@ -3320,22 +3352,29 @@ async function submitReport() {
   const msg = (document.getElementById('report-message')?.value || '').trim();
   if (!msg) { toast('Please describe the issue first.', 2000); return; }
 
-  const q = S.practice?.qs?.[S.practice?.idx];
+  const q = S.practice?.qs?.[S.practice?.idx] ?? S.exam?.qs?.[S.exam?.idx];
   if (!q) { closeReportModal(); return; }
 
   const btn = document.querySelector('#modal-report .bg-red-500');
   if (btn) btn.textContent = 'Sending…';
 
-  // Strip HTML tags from question for readable report text
   const tmpDiv = document.createElement('div');
   tmpDiv.innerHTML = q.question;
   const questionText = tmpDiv.textContent || tmpDiv.innerText || q.question;
+
+  const sess = Store.getStudentSession ? Store.getStudentSession() : null;
+  const studentName = sess?.displayName || null;
+  const mode = S.exam?.qs?.length ? 'exam' : 'practice';
 
   const ok = await Store.reportQuestion(
     q.id,
     questionText.slice(0, 300),
     msg,
-    typeof ACTIVE_STUDENT_ID !== 'undefined' ? ACTIVE_STUDENT_ID : null
+    typeof ACTIVE_STUDENT_ID !== 'undefined' ? ACTIVE_STUDENT_ID : null,
+    studentName,
+    mode,
+    q.options || null,
+    q.answer || null
   );
 
   closeReportModal();

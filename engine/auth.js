@@ -26,6 +26,10 @@ const Auth = (() => {
   let _isSuperAdmin        = false;  // true when logged-in user is super admin
   let _pinAttempts         = 0;
   let _pinLockedUntil      = 0;
+  let _parentPinEntry      = '';
+  let _parentPinSetup1     = '';
+  let _parentPinSetup2     = '';
+  let _parentPinStep       = 1;
 
   function _el(id) { return document.getElementById(id); }
 
@@ -191,6 +195,7 @@ const Auth = (() => {
     // between a parent and a child flip the whole UI.
     applyTheme(_preferredTheme(null));
     _openParentDashboard();
+    _promptSetParentPin();
   }
 
   // Note the role passed to createProfile: 'parent', NOT 'teacher'. Signing up
@@ -1276,21 +1281,148 @@ const Auth = (() => {
   }
 
   // ── Parent dashboard ───────────────────────────
-  async function enterParentMode() {
-    if (_parentProfile) {
-      // Refresh student list so edit/switch always has current data
+  // ── Parent PIN helpers ─────────────────────────
+  const _PARENT_PIN_KEY = 'psac_parent_pin_v1';
+
+  function _getStoredPinHash() {
+    try { return localStorage.getItem(_PARENT_PIN_KEY) || null; } catch(_) { return null; }
+  }
+  function _storePin(pin) {
+    try { localStorage.setItem(_PARENT_PIN_KEY, btoa(pin + ':psac_v1')); } catch(_) {}
+  }
+  function _pinMatches(pin) {
+    return _getStoredPinHash() === btoa(pin + ':psac_v1');
+  }
+
+  function _updatePinDots(prefix, filled) {
+    for (let i = 0; i < 4; i++) {
+      const dot = document.getElementById(prefix + i);
+      if (!dot) continue;
+      if (i < filled) {
+        dot.classList.add('bg-indigo-500', 'border-indigo-500');
+        dot.classList.remove('border-gray-300', 'border-gray-600');
+      } else {
+        dot.classList.remove('bg-indigo-500', 'border-indigo-500');
+        dot.classList.add('border-gray-300');
+      }
+    }
+  }
+
+  function _showParentPinModal() {
+    _parentPinEntry = '';
+    _updatePinDots('pin-dot-', 0);
+    document.getElementById('pin-entry-error')?.classList.add('hidden');
+    document.getElementById('modal-parent-pin')?.classList.remove('hidden');
+  }
+
+  function _pinKey(k) {
+    document.getElementById('pin-entry-error')?.classList.add('hidden');
+    if (k === 'clear')      { _parentPinEntry = ''; }
+    else if (k === 'back')  { _parentPinEntry = _parentPinEntry.slice(0, -1); }
+    else if (_parentPinEntry.length < 4) { _parentPinEntry += k; }
+    _updatePinDots('pin-dot-', _parentPinEntry.length);
+    if (_parentPinEntry.length === 4) _submitParentPin();
+  }
+
+  async function _submitParentPin() {
+    if (!_pinMatches(_parentPinEntry)) {
+      _parentPinEntry = '';
+      _updatePinDots('pin-dot-', 0);
+      document.getElementById('pin-entry-error')?.classList.remove('hidden');
+      if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+      return;
+    }
+    document.getElementById('modal-parent-pin')?.classList.add('hidden');
+    const { data: { session } } = await _sb.auth.getSession();
+    if (session && !_parentUser) {
+      await _handleParentSession(session);
+    } else if (_parentProfile) {
       if (_family && _sb) {
-        try {
-          _familyStudents = await Store.getFamilyStudents(_family.id);
-          _cacheAccountsLocally(_familyStudents);
-        } catch(e) {}
+        try { _familyStudents = await Store.getFamilyStudents(_family.id); _cacheAccountsLocally(_familyStudents); } catch(e) {}
       }
       _openParentDashboard();
     } else {
-      // Prompt for parent login
+      toast('Your session has expired. Please sign in with your email.', 4000);
       showScreen('auth');
       setRole('parent');
     }
+  }
+
+  function _pinForgot() {
+    document.getElementById('modal-parent-pin')?.classList.add('hidden');
+    showScreen('auth');
+    setRole('parent');
+  }
+
+  function _promptSetParentPin() {
+    if (_getStoredPinHash()) return;
+    setTimeout(() => {
+      _parentPinStep   = 1;
+      _parentPinSetup1 = '';
+      _parentPinSetup2 = '';
+      _updatePinDots('setup-dot-', 0);
+      const label = document.getElementById('pin-setup-step-label');
+      if (label) label.textContent = 'Step 1 of 2 — Enter a 4-digit PIN';
+      document.getElementById('pin-setup-error')?.classList.add('hidden');
+      document.getElementById('modal-parent-pin-setup')?.classList.remove('hidden');
+    }, 1800);
+  }
+
+  function _pinSetupKey(k) {
+    const errEl = document.getElementById('pin-setup-error');
+    if (errEl) errEl.classList.add('hidden');
+    if (_parentPinStep === 1) {
+      if (k === 'clear')     _parentPinSetup1 = '';
+      else if (k === 'back') _parentPinSetup1 = _parentPinSetup1.slice(0, -1);
+      else if (_parentPinSetup1.length < 4) _parentPinSetup1 += k;
+      _updatePinDots('setup-dot-', _parentPinSetup1.length);
+      if (_parentPinSetup1.length === 4) {
+        _parentPinStep = 2;
+        _updatePinDots('setup-dot-', 0);
+        const label = document.getElementById('pin-setup-step-label');
+        if (label) label.textContent = 'Step 2 of 2 — Confirm your PIN';
+      }
+    } else {
+      if (k === 'clear')     _parentPinSetup2 = '';
+      else if (k === 'back') _parentPinSetup2 = _parentPinSetup2.slice(0, -1);
+      else if (_parentPinSetup2.length < 4) _parentPinSetup2 += k;
+      _updatePinDots('setup-dot-', _parentPinSetup2.length);
+      if (_parentPinSetup2.length === 4) {
+        if (_parentPinSetup1 === _parentPinSetup2) {
+          _storePin(_parentPinSetup1);
+          document.getElementById('modal-parent-pin-setup')?.classList.add('hidden');
+          toast('Parent PIN set! Use it next time you tap 🔒 Parent.', 3000);
+        } else {
+          _parentPinSetup2 = '';
+          _updatePinDots('setup-dot-', 0);
+          if (errEl) errEl.classList.remove('hidden');
+          _parentPinStep   = 1;
+          _parentPinSetup1 = '';
+          const label = document.getElementById('pin-setup-step-label');
+          if (label) label.textContent = 'Step 1 of 2 — Enter a 4-digit PIN';
+        }
+      }
+    }
+  }
+
+  async function enterParentMode() {
+    if (_parentProfile) {
+      if (_family && _sb) {
+        try { _familyStudents = await Store.getFamilyStudents(_family.id); _cacheAccountsLocally(_familyStudents); } catch(e) {}
+      }
+      _openParentDashboard();
+      return;
+    }
+    if (_getStoredPinHash()) {
+      _showParentPinModal();
+      return;
+    }
+    if (_sb) {
+      const { data: { session } } = await _sb.auth.getSession();
+      if (session) { await _handleParentSession(session); return; }
+    }
+    showScreen('auth');
+    setRole('parent');
   }
 
   function exitParentMode() {
@@ -1301,10 +1433,20 @@ const Auth = (() => {
     }
   }
 
+  function confirmResetProgress() {
+    const modal = document.getElementById('modal-reset-confirm');
+    if (!modal) { resetProgress(); return; }
+    const nameLine = document.getElementById('reset-confirm-name-line');
+    if (nameLine) {
+      const name = _activeAccount?.name || 'this student';
+      nameLine.textContent = `This will permanently delete all of ${name}'s progress, badges, XP, and exam history.`;
+    }
+    modal.classList.remove('hidden');
+  }
+
   async function resetProgress() {
+    document.getElementById('modal-reset-confirm')?.classList.add('hidden');
     if (!ACTIVE_STUDENT_ID) return;
-    if (!confirm('Delete ALL progress for this student? This cannot be undone.')) return;
-    if (!confirm('Final confirmation - all chapters, XP and badges will be permanently lost.')) return;
     Store.clearStudent(ACTIVE_STUDENT_ID);
     // Resetting PROGRESS must not reset presentation preferences, so theme is
     // carried over rather than forced back to a default. (Matches the Analytics
@@ -1497,7 +1639,8 @@ const Auth = (() => {
     // Session
     loginStudent, logout, switchStudent, switchToStudentSelect,
     // Parent mode
-    enterParentMode, exitParentMode, resetProgress,
+    enterParentMode, exitParentMode, resetProgress, confirmResetProgress,
+    _pinKey, _pinSetupKey, _pinForgot,
     pdTab, pdSwitchStudent,
     getStudents: () => _familyStudents,
     isSuperAdmin: () => _isSuperAdmin,
