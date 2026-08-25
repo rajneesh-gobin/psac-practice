@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PSAC Exam Practice 🇲🇺 - PSAC Revision</title>
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- Theme colour (Android toolbar + Safari status bar) -->
+  <meta name="theme-color" content="#3b82f6">
+
+  <!-- iOS PWA support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PSAC Practice">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
+
+  <!-- Fallback icon for older browsers -->
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -12,6 +28,16 @@
     }
   </script>
   <link rel="stylesheet" href="style.css">
+
+  <!-- Register service worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(err => console.warn('SW registration failed:', err));
+      });
+    }
+  </script>
 </head>
 <body class="min-h-screen bg-slate-50 dark:bg-gray-900 transition-colors duration-300" style="opacity:0">
 
@@ -80,6 +106,7 @@
         <div id="xp-display" class="flex items-center gap-1.5 bg-purple-100 dark:bg-purple-900/40 px-3 py-1.5 rounded-full"></div>
         <button onclick="Auth.enterParentMode()" class="flex items-center gap-1.5 text-xs font-semibold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/60 transition-colors" title="Parent Dashboard">🔒 <span class="hidden sm:inline">Parent</span></button>
         <button onclick="TeacherMode.enter()" class="flex items-center gap-1.5 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Teacher Dashboard">👩‍🏫 <span class="hidden sm:inline">Teacher</span></button>
+        <button id="search-btn" onclick="Search.open()" class="icon-btn hidden" title="Search Questions">🔍</button>
         <button onclick="showScreen('forum')" class="icon-btn" title="Community Forum">💬</button>
         <button id="analytics-btn" class="icon-btn" title="Analytics">📊</button>
         <button id="theme-toggle" class="icon-btn" title="Toggle theme"><span id="theme-icon">🌙</span></button>
@@ -583,6 +610,9 @@
           <span class="bg-white/20 px-3 py-1 rounded-full">📝 <span id="dash-exams">0</span> exams</span>
         </div>
       </div>
+
+      <!-- Resume banner — shown when an unfinished session was interrupted -->
+      <div id="resume-banner-slot"></div>
 
       <!-- Assignments from parent -->
       <!-- Start-here nudge - visible only for brand-new students (0 questions attempted) -->
@@ -1471,6 +1501,32 @@
               <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="pd-maxdiff" id="pd-maxdiff-4" value="4" onchange="Auth.setMaxDifficulty(4)" class="accent-blue-500"><span class="text-sm text-gray-700 dark:text-gray-300">🏆 All Levels</span></label>
             </div>
           </div>
+          <!-- Cross-grade search -->
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-bold text-gray-800 dark:text-white text-sm">🔍 Cross-grade Search</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Show results from other grades when the student searches questions</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="pd-crossgrade-search-toggle" class="sr-only peer" onchange="Auth.toggleCrossGradeSearch()">
+                <div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-500 rounded-full peer transition-colors peer-focus:ring-2 peer-focus:ring-blue-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+              </label>
+            </div>
+          </div>
+          <!-- Cross-grade practice -->
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-bold text-gray-800 dark:text-white text-sm">📚 Cross-grade Revision</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Allow the student to practise questions from other grades found via search</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="pd-crossgrade-practice-toggle" class="sr-only peer" onchange="Auth.toggleCrossGradePractice()">
+                <div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-500 rounded-full peer transition-colors peer-focus:ring-2 peer-focus:ring-blue-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+              </label>
+            </div>
+          </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
             <div class="flex items-center justify-between mb-1">
               <div class="font-bold text-gray-800 dark:text-white text-sm">📚 Chapter Access</div>
@@ -1726,6 +1782,67 @@
           Enter ↵
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ══ SEARCH SCREEN ══ -->
+  <div id="screen-search" class="screen hidden">
+    <div class="max-w-2xl mx-auto p-4 pb-24">
+
+      <!-- Header -->
+      <div class="flex items-center gap-3 mb-4">
+        <button onclick="Search.close()" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold">← Back</button>
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white flex-1">🔍 Search Questions</h2>
+      </div>
+
+      <!-- Search bar -->
+      <div class="relative mb-3">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-base pointer-events-none select-none">🔍</span>
+        <input id="search-input" type="search" autocomplete="off" spellcheck="false"
+          placeholder="Search by topic, name, keyword…"
+          oninput="Search.run()"
+          class="w-full pl-9 pr-10 py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm">
+        <button onclick="Search.clearInput()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg leading-none" title="Clear">✕</button>
+      </div>
+
+      <!-- Filters row -->
+      <div class="flex gap-2 mb-3 flex-wrap items-center">
+        <!-- Match mode -->
+        <div class="flex gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-xl">
+          <button id="filter-fuzzy" onclick="Search.setMode('fuzzy')"
+            class="flex-1 py-1.5 text-xs rounded-lg transition-all bg-white dark:bg-gray-600 shadow-sm text-gray-800 dark:text-white font-semibold px-3">
+            🔍 Similar
+          </button>
+          <button id="filter-exact" onclick="Search.setMode('exact')"
+            class="flex-1 py-1.5 text-xs rounded-lg transition-all text-gray-500 dark:text-gray-400 px-3">
+            🔎 Exact
+          </button>
+        </div>
+        <!-- Subject filter -->
+        <select id="search-subject-filter" onchange="Search.run()"
+          class="text-xs border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+          <option value="">All Subjects</option>
+        </select>
+      </div>
+
+      <!-- Filter explainer -->
+      <div class="flex gap-3 mb-4 text-xs text-gray-400 dark:text-gray-500">
+        <span><strong class="text-gray-500 dark:text-gray-400">Similar</strong> - finds questions even with typos</span>
+        <span><strong class="text-gray-500 dark:text-gray-400">Exact</strong> - matches the word exactly as typed</span>
+      </div>
+
+      <!-- Status line -->
+      <p id="search-status" class="hidden text-xs text-gray-400 dark:text-gray-500 mb-3"></p>
+
+      <!-- Results -->
+      <div id="search-results">
+        <div class="text-center py-16 text-gray-400 dark:text-gray-500 select-none">
+          <div class="text-5xl mb-3">🔍</div>
+          <p class="text-sm">Type at least 2 characters to search.</p>
+          <p class="text-xs mt-1">Try a topic, a name, or a keyword from your syllabus.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1986,6 +2103,7 @@
   <script src="engine/admin.js"></script>
   <script src="engine/forum.js"></script>
   <script src="engine/calendar.js"></script>
+  <script src="engine/search.js"></script>
 
   <!-- Image lightbox - shown when any question image is tapped/clicked -->
   <div id="img-lightbox" class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4"

@@ -157,7 +157,7 @@ function closeLightbox() {
 }
 function _lbKeyClose(e) { if (e.key === 'Escape') closeLightbox(); }
 
-// Make all <img> tags inside a container zoomable
+// Make all <img> and inline <svg> tags inside a container zoomable
 function _makeImgsZoomable(container) {
   if (!container) return;
   container.querySelectorAll('img').forEach(img => {
@@ -168,6 +168,116 @@ function _makeImgsZoomable(container) {
     img.classList.add('rounded-lg', 'shadow', 'hover:opacity-90', 'transition-opacity');
     img.addEventListener('click', () => openLightbox(img.src));
   });
+  container.querySelectorAll('svg').forEach(svg => {
+    if (svg.dataset.zoomWired) return;
+    svg.dataset.zoomWired = '1';
+    svg.style.cursor = 'zoom-in';
+    svg.title = 'Click to zoom';
+    svg.style.transition = 'opacity 0.2s';
+    svg.addEventListener('mouseenter', () => { svg.style.opacity = '0.85'; });
+    svg.addEventListener('mouseleave', () => { svg.style.opacity = '1'; });
+    svg.addEventListener('click', () => {
+      const s = new XMLSerializer().serializeToString(svg);
+      openLightbox('data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s));
+    });
+  });
+}
+
+// ── SESSION RESUME ─────────────────────────────────────────────────────────
+const _RESUME_TTL = 24 * 60 * 60 * 1000;
+let _pendingResume = null;
+
+function _saveResume() {
+  if (!ACTIVE_STUDENT_ID) return;
+  try {
+    const key = 'mm_resume_' + ACTIVE_STUDENT_ID;
+    if (S.exam && S.exam.qs && S.exam.qs.length) {
+      localStorage.setItem(key, JSON.stringify({
+        type: 'exam', subjectId: ACTIVE_PACK?.id, examType: S.exam.type,
+        qIds: S.exam.qs.map(q => q.id), idx: S.exam.idx,
+        answers: S.exam.answers, flagged: [...(S.exam.flagged || [])],
+        endTime: S.exam.endTime, ts: Date.now()
+      }));
+    } else if (S.practice && S.practice.chapterId) {
+      localStorage.setItem(key, JSON.stringify({
+        type: 'practice', subjectId: ACTIVE_PACK?.id,
+        chapterId: S.practice.chapterId, ts: Date.now()
+      }));
+    }
+  } catch(e) {}
+}
+
+function _clearResume() {
+  if (!ACTIVE_STUDENT_ID) return;
+  try { localStorage.removeItem('mm_resume_' + ACTIVE_STUDENT_ID); } catch(e) {}
+  _pendingResume = null;
+  const slot = document.getElementById('resume-banner-slot');
+  if (slot) slot.innerHTML = '';
+}
+
+function _getResume() {
+  if (!ACTIVE_STUDENT_ID) return null;
+  try {
+    const raw = localStorage.getItem('mm_resume_' + ACTIVE_STUDENT_ID);
+    if (!raw) return null;
+    const saved = JSON.parse(raw);
+    if (Date.now() - saved.ts > _RESUME_TTL) { _clearResume(); return null; }
+    _pendingResume = saved;
+    return saved;
+  } catch(e) { return null; }
+}
+
+async function _doResume() {
+  const saved = _pendingResume;
+  _clearResume();
+  if (!saved) return;
+  if (saved.subjectId && typeof QuestionLoader !== 'undefined') {
+    await QuestionLoader.loadSubject(saved.subjectId);
+  }
+  if (saved.type === 'practice') {
+    startChapterDirect(saved.chapterId);
+  } else if (saved.type === 'exam') {
+    const qMap = {};
+    STATIC_QUESTIONS.forEach(q => { if (q) qMap[q.id] = q; });
+    const qs = (saved.qIds || []).map(id => qMap[id]).filter(Boolean);
+    if (!qs.length) { toast('Could not restore exam — please start a new one.', 3000); return; }
+    S.exam.qs      = qs;
+    S.exam.answers = saved.answers || {};
+    S.exam.flagged = new Set(saved.flagged || []);
+    S.exam.idx     = Math.min(saved.idx || 0, qs.length - 1);
+    S.exam.type    = saved.examType;
+    const remaining = Math.max(60, Math.round((saved.endTime - Date.now()) / 1000));
+    S.exam.duration = remaining;
+    S.exam.endTime  = Date.now() + remaining * 1000;
+    showScreen('exam');
+    renderExamQuestion();
+    startExamTimer();
+    document.getElementById('exam-q-total').textContent = qs.length;
+  }
+}
+
+function _renderResumeBanner() {
+  const slot = document.getElementById('resume-banner-slot');
+  if (!slot) return;
+  const saved = _getResume();
+  if (!saved) { slot.innerHTML = ''; return; }
+  const chName = saved.type === 'exam'
+    ? (saved.examType === 'quick' ? 'Quick Exam' : 'Full Exam')
+    : (CHAPTERS.find(c => c.id === saved.chapterId)?.name || 'Practice');
+  const detail = saved.type === 'exam'
+    ? `Question ${(saved.idx || 0) + 1} of ${(saved.qIds || []).length}`
+    : 'Practice session';
+  slot.innerHTML = `
+    <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-xl p-4 mb-4 flex items-center justify-between gap-3 flex-wrap">
+      <div>
+        <div class="font-semibold text-blue-800 dark:text-blue-200">📖 Resume where you left off</div>
+        <div class="text-sm text-blue-600 dark:text-blue-300">${chName} · ${detail}</div>
+      </div>
+      <div class="flex gap-2 shrink-0">
+        <button onclick="_doResume()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">Resume →</button>
+        <button onclick="_clearResume()" class="px-3 py-2 text-blue-500 dark:text-blue-400 text-sm hover:underline">Dismiss</button>
+      </div>
+    </div>`;
 }
 
 let toastTimer;
@@ -234,6 +344,13 @@ function showScreen(id) {
   if (id === 'teacher' && typeof TeacherMode !== 'undefined') TeacherMode.render();
   if (id === 'forum'     && typeof Forum     !== 'undefined') Forum.render();
   if (id === 'calendar'  && typeof Calendar  !== 'undefined') Calendar.render();
+  // Search button in header: visible only when a student is logged in
+  const searchBtn = document.getElementById('search-btn');
+  if (searchBtn) {
+    const isAuth = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
+    const hasStudent = typeof DB !== 'undefined' && !!DB.grade;
+    searchBtn.classList.toggle('hidden', isAuth || !hasStudent);
+  }
 }
 
 function _updateBreadcrumb(screenId) {
@@ -932,13 +1049,19 @@ function _renderParentAssignDropdown(acct) {
 
 function _renderParentControls(acct) {
   const _el     = id => document.getElementById(id);
-  const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
-  const examOff = DB.restrictions?.examDisabled  ?? false;
+  const maxDiff = DB.restrictions?.maxDifficulty  ?? 4;
+  const examOff = DB.restrictions?.examDisabled   ?? false;
+  const crossSearch   = DB.restrictions?.crossGradeSearch   ?? false;
+  const crossPractice = DB.restrictions?.crossGradePractice ?? false;
   const lockedChs = DB.restrictions?.lockedChapters || [];
 
   [1,2,3,4].forEach(lv => { const r = _el(`pd-maxdiff-${lv}`); if (r) r.checked = maxDiff === lv; });
   const examToggle = _el('pd-exam-toggle');
   if (examToggle) examToggle.checked = !examOff;
+  const csToggle = _el('pd-crossgrade-search-toggle');
+  if (csToggle) csToggle.checked = crossSearch;
+  const cpToggle = _el('pd-crossgrade-practice-toggle');
+  if (cpToggle) cpToggle.checked = crossPractice;
 
   const chLocks = _el('pd-chapter-locks');
   if (!chLocks) return;
@@ -1154,6 +1277,9 @@ function renderDashboard() {
   const startHere = document.getElementById('dash-start-here');
   if (startHere) startHere.classList.toggle('hidden', DB.stats.totalAttempted > 0);
 
+  // Resume banner (unfinished session from a previous page load)
+  _renderResumeBanner();
+
   // Assignments from parent (Supabase - async, non-blocking)
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
 
@@ -1289,6 +1415,29 @@ function startChapterDirect(chapterId, forceDiff) {
   }
 
   setTimeout(() => { initScratchpad('scratchpad-practice'); }, 100);
+}
+
+// ── SEARCH PRACTICE LAUNCH ────────────────────
+// Called by Search.practiceOwn / practiceOther with a pre-built question array
+function startSearchPractice(questions, label) {
+  if (!questions || !questions.length) { toast('No questions to practise. Try a different search.', 2500); return; }
+  S.practice.chapterId  = 'search-results';
+  S.practice.difficulty = null;
+  S.practice.qs         = shuffle(questions.slice());
+  S.practice.idx        = 0;
+  S.practice.hintShown  = false;
+  S.practice.session    = { attempted: 0, correct: 0 };
+  S.practice.showAnswers = true;
+  showScreen('practice');
+  const nameEl = document.getElementById('practice-ch-name');
+  if (nameEl) nameEl.textContent = `🔍 ${label || 'Search Results'}`;
+  const backBtn = document.getElementById('practice-back-btn');
+  if (backBtn) {
+    backBtn.classList.remove('hidden');
+    backBtn.onclick = () => showScreen('search');
+  }
+  _updateDiffBadge(S.practice.qs[0]);
+  loadPracticeQuestion();
 }
 
 // ── ASSIGNMENT DIRECT LAUNCH ──────────────────
@@ -1566,6 +1715,7 @@ function renderExamQuestion() {
   document.getElementById('exam-q-num').textContent = S.exam.idx + 1;
   document.getElementById('exam-q-text').innerHTML = q.question;
   _makeImgsZoomable(document.getElementById('exam-q-text'));
+  _saveResume();
   document.getElementById('exam-hint-box').classList.add('hidden');
 
   const saved = S.exam.answers[S.exam.idx];
@@ -1631,6 +1781,7 @@ document.getElementById('exam-hint-btn').addEventListener('click', () => {
 });
 document.getElementById('exit-exam-btn').addEventListener('click', () => {
   _confirmModal('Exit this exam? All your answers will be lost.', () => {
+    _clearResume();
     clearInterval(S.exam.timer);
     S.exam.qs = []; S.exam.answers = {}; S.exam.flagged = new Set();
     showScreen('dashboard');
@@ -1641,6 +1792,7 @@ document.getElementById('submit-exam-btn').addEventListener('click', () => {
 });
 
 function submitExam() {
+  _clearResume();
   clearInterval(S.exam.timer);
   saveCurrentExamAnswer();
   const timeTaken = Math.round((S.exam.duration - Math.max(0, (S.exam.endTime - Date.now()) / 1000)));
@@ -1716,6 +1868,7 @@ document.getElementById('results-home-btn').addEventListener('click', () => show
 
 // ── PRACTICE MODE ─────────────────────────────
 document.getElementById('practice-back-btn').addEventListener('click', () => {
+  _clearResume();
   showScreen('chapter-select');
 });
 
@@ -1798,6 +1951,7 @@ function loadPracticeQuestion() {
     document.getElementById('practice-q-text').innerHTML = q.question;
   }
   _makeImgsZoomable(document.getElementById('practice-q-text'));
+  _saveResume();
 
   document.getElementById('practice-hint-box').classList.add('hidden');
   S.practice.hintShown = false;

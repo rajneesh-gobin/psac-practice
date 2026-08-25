@@ -177,6 +177,9 @@ const Auth = (() => {
     _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar, grade: sess.grade };
     ACTIVE_STUDENT_ID = sess.id;
 
+    // Resume session guard so an account-sharing kick still fires on refresh
+    _startSessionGuard(sess.id, sess.sessionVersion || 0);
+
     // Load progress from Supabase (or localStorage cache)
     const progress = await Store.loadStudentProgress(sess.id);
     Object.assign(DB, progress);
@@ -202,16 +205,59 @@ const Auth = (() => {
     }
   }
 
+  // ── Session guard (anti-sharing) ──────────────
+  // Polls DB every 5 min; if session_version changed, another login happened → kick this session.
+  // Also checks immediately when the device comes back online after being offline.
+  let _sessionGuardTimer = null;
+  let _sessionGuardOnlineFn = null;
+
+  function _startSessionGuard(studentId, version) {
+    _stopSessionGuard(); // clear any previous guard first
+    if (!_sb) return;
+
+    const _checkVersion = async () => {
+      try {
+        const { data } = await _sb.from('students').select('session_version').eq('id', studentId).maybeSingle();
+        if (data && data.session_version !== version) {
+          _stopSessionGuard();
+          Store.clearStudentSession();
+          if (typeof showScreen === 'function') showScreen('auth');
+          if (typeof toast === 'function') toast('⚠️ Your account was logged in on another device. You have been signed out.', 6000);
+        }
+      } catch(_) { /* offline — allow to continue */ }
+    };
+
+    _sessionGuardTimer    = setInterval(_checkVersion, 5 * 60 * 1000);
+    _sessionGuardOnlineFn = _checkVersion;
+    window.addEventListener('online', _sessionGuardOnlineFn);
+  }
+
+  function _stopSessionGuard() {
+    if (_sessionGuardTimer)    { clearInterval(_sessionGuardTimer); _sessionGuardTimer = null; }
+    if (_sessionGuardOnlineFn) { window.removeEventListener('online', _sessionGuardOnlineFn); _sessionGuardOnlineFn = null; }
+  }
+
   // ── Login a student (after PIN verified) ──────
   // navigate=false skips showScreen so the caller controls where to go (used by pdSwitchStudent)
-  async function _loginStudentRow(studentRow, { navigate = true } = {}) {
+  // bumpSession=false skips the session_version bump (parent-supervised switch, not a fresh PIN login)
+  async function _loginStudentRow(studentRow, { navigate = true, bumpSession = true } = {}) {
+    let sessionVersion = studentRow.session_version || 0;
+
+    // Bump session_version in DB to invalidate any existing sessions on other devices
+    if (bumpSession && _sb) {
+      try {
+        sessionVersion = sessionVersion + 1;
+        await _sb.from('students').update({ session_version: sessionVersion }).eq('id', studentRow.id);
+      } catch(_) { /* offline — keep existing version */ }
+    }
+
     const sess = {
       id:             studentRow.id,
       displayName:    studentRow.display_name,
       avatar:         studentRow.avatar,
       grade:          studentRow.grade,
       settings:       studentRow.settings,
-      sessionVersion: studentRow.session_version || 0,
+      sessionVersion: sessionVersion,
     };
     Store.saveStudentSession(sess);
 
@@ -242,6 +288,7 @@ const Auth = (() => {
     const hdrLogout = document.getElementById('header-logout-btn');
     if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
     Store.logLoginEvent(studentRow.id, 'student');
+    if (bumpSession) _startSessionGuard(studentRow.id, sessionVersion);
 
     // Skip grade select - parent already set the grade; go straight to subject picker
     if (navigate) {
@@ -691,6 +738,7 @@ const Auth = (() => {
 
   // ── Logout ─────────────────────────────────────
   async function logout() {
+    _stopSessionGuard();
     Store.clearStudentSession();
     _activeAccount    = null;
     ACTIVE_STUDENT_ID = null;
@@ -930,7 +978,7 @@ const Auth = (() => {
   async function pdSwitchStudent(id) {
     const student = _familyStudents.find(s => s.id === id);
     if (student) {
-      await _loginStudentRow(student, { navigate: false });
+      await _loginStudentRow(student, { navigate: false, bumpSession: false });
     } else {
       loginStudent(id);
     }
@@ -999,6 +1047,24 @@ const Auth = (() => {
     toast(DB.restrictions.examDisabled ? '🔒 Exam mode locked.' : '🔓 Exam mode unlocked.', 1500);
   }
 
+  async function toggleCrossGradeSearch() {
+    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
+    DB.restrictions.crossGradeSearch = !DB.restrictions.crossGradeSearch;
+    save(DB);
+    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
+    renderParentDashboard();
+    toast(DB.restrictions.crossGradeSearch ? '🔍 Cross-grade search enabled.' : '🔒 Cross-grade search off.', 1500);
+  }
+
+  async function toggleCrossGradePractice() {
+    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
+    DB.restrictions.crossGradePractice = !DB.restrictions.crossGradePractice;
+    save(DB);
+    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
+    renderParentDashboard();
+    toast(DB.restrictions.crossGradePractice ? '📚 Cross-grade revision enabled.' : '🔒 Cross-grade revision off.', 1500);
+  }
+
   // ── Auth helpers ───────────────────────────────
   function _showAuthError(msg) {
     const el = _el('auth-error');
@@ -1052,6 +1118,7 @@ const Auth = (() => {
     isSuperAdmin: () => _isSuperAdmin,
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
+    toggleCrossGradeSearch, toggleCrossGradePractice,
   };
 })();
 
