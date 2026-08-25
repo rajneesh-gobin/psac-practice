@@ -177,24 +177,24 @@
           <p class="text-xs text-gray-400 dark:text-gray-500 hidden sm:block">Mauritius 🇲🇺 · Grades 4–6</p>
         </div>
       </div>
-      <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 justify-between sm:justify-end">
+      <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 justify-center sm:justify-end">
         <div id="streak-display" class="flex items-center gap-1 bg-orange-100 dark:bg-orange-900/40 px-2 sm:px-3 py-1.5 rounded-full">
           <span class="text-base">🔥</span>
           <span id="streak-count" class="font-bold text-orange-600 dark:text-orange-400 text-sm">0</span>
           <span class="text-xs text-orange-500 dark:text-orange-400 hidden sm:inline">day streak</span>
         </div>
         <div id="xp-display" class="flex items-center gap-1.5 bg-purple-100 dark:bg-purple-900/40 px-2 sm:px-3 py-1.5 rounded-full"></div>
-        <button onclick="Auth.enterParentMode()" class="flex items-center gap-1.5 text-xs font-semibold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/60 transition-colors" title="Parent Dashboard">🔒 <span class="hidden sm:inline">Parent</span></button>
+        <button onclick="Auth.enterParentMode()" class="flex items-center gap-1.5 text-xs font-semibold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/60 transition-colors" title="Parent Dashboard">🔒 <span class="btn-label">Parent</span></button>
         <!-- Teacher Dashboard: hidden by default. Auth reveals it ONLY when the
              signed-in profile has role 'teacher' or 'admin'. Teachers are created
              by an administrator; there is no self-service route in. -->
-        <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hidden items-center gap-1.5 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Teacher Dashboard">👩‍🏫 <span class="hidden sm:inline">Teacher</span></button>
-        <button id="search-btn" onclick="Search.open()" class="icon-btn hidden" title="Search Questions">🔍</button>
-        <button onclick="showScreen('forum')" class="icon-btn" title="Community Forum">💬</button>
-        <button id="analytics-btn" class="icon-btn" title="Analytics">📊</button>
-        <button id="pwa-install-btn" class="hidden items-center gap-1 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Install app on this device">📲 <span class="hidden sm:inline">Install App</span></button>
-        <button id="theme-toggle" class="icon-btn" title="Toggle theme"><span id="theme-icon">🌙</span></button>
-        <button id="header-logout-btn" onclick="Auth.logout()" class="hidden items-center gap-1 text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 sm:px-3 py-1.5 rounded-full hover:bg-red-200 dark:hover:bg-red-800/60 transition-colors" title="Logout">🚪 <span class="hidden sm:inline">Logout</span></button>
+        <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hidden items-center gap-1.5 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Teacher Dashboard">👩‍🏫 <span class="btn-label">Teacher</span></button>
+        <button id="search-btn" onclick="Search.open()" class="icon-btn hidden" title="Search Questions">🔍<span class="btn-label sm:hidden">Search</span></button>
+        <button onclick="showScreen('forum')" class="icon-btn" title="Community Forum">💬<span class="btn-label sm:hidden">Forum</span></button>
+        <button id="analytics-btn" class="icon-btn" title="Analytics">📊<span class="btn-label sm:hidden">Stats</span></button>
+        <button id="pwa-install-btn" class="hidden items-center gap-1 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Install app on this device">📲 <span class="btn-label">Install</span></button>
+        <button id="theme-toggle" class="icon-btn" title="Toggle theme"><span id="theme-icon">🌙</span><span class="btn-label sm:hidden">Theme</span></button>
+        <button id="header-logout-btn" onclick="Auth.logout()" class="hidden items-center gap-1 text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 sm:px-3 py-1.5 rounded-full hover:bg-red-200 dark:hover:bg-red-800/60 transition-colors" title="Logout">🚪 <span class="btn-label">Logout</span></button>
       </div>
     </div>
   </header>
