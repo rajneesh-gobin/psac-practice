@@ -461,7 +461,7 @@ const AdminPanel = (() => {
     if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
     await _sb.from('profiles').update({ role: newRole }).eq('id', userId).eq('is_super_admin', false);
     loadRoles();
-    toast(newRole === 'admin' ? 'User promoted to admin ✅' : 'Admin rights removed.', 2000);
+    toast(newRole === 'admin' ? 'User promoted to Admin. ✅' : 'Admin rights removed.', 2000);
   }
 
   // ── Plans tab (super admin only) ───────────────

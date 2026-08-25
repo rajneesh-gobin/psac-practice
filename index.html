@@ -379,7 +379,7 @@
               class="w-full py-3 bg-green-500 hover:bg-green-400 active:bg-green-600 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
               Create Account →
             </button>
-            <p class="text-white/40 text-xs text-center">A verification email will be sent to you</p>
+            <p class="text-white/40 text-xs text-center">A verification email will be sent to you.</p>
           </div>
         </div>
 
@@ -424,8 +424,8 @@
           class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl transition-colors text-sm mb-3">
           Resend verification email
         </button>
-        <button onclick="showScreen('auth')" class="text-indigo-300 text-sm hover:text-white transition-colors">← Back to login</button>
-        <p class="text-white/30 text-xs mt-3">Wrong email? <button onclick="Auth.backToSignUp()" class="underline hover:text-white/60 transition-colors">Go back and re-register</button></p>
+        <button onclick="showScreen('auth')" class="text-indigo-300 text-sm hover:text-white transition-colors">← Back to Sign In</button>
+        <p class="text-white/30 text-xs mt-3">Wrong email? <button onclick="Auth.backToSignUp()" class="underline hover:text-white/60 transition-colors">Go back and sign up again</button></p>
       </div>
     </div>
   </div>
@@ -435,7 +435,7 @@
     <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center p-4">
       <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 max-w-sm w-full text-center border border-white/20">
         <div class="text-6xl mb-4 select-none">🔐</div>
-        <h2 class="text-2xl font-black text-white mb-2">Set New Password</h2>
+        <h2 class="text-2xl font-black text-white mb-2">Update Password</h2>
         <p class="text-indigo-200 text-sm mb-5">Choose a strong password for your account.</p>
         <div class="space-y-3 text-left">
           <div class="relative">
@@ -902,7 +902,7 @@
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
             <button id="formula-btn" onclick="showFormulaModal()" class="w-full btn-secondary text-sm mb-2">📐 Key Formulas & Facts</button>
-            <button id="help-btn" onclick="showHelpModal()" class="w-full btn-help text-sm mb-2">🎬 How to - Video Help</button>
+            <button id="help-btn" onclick="showHelpModal()" class="w-full btn-help text-sm mb-2">🎬 Video Help</button>
             <button id="sound-toggle-btn" onclick="toggleSound()" class="w-full btn-ghost text-sm">🔔 Sound On</button>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
@@ -1224,8 +1224,8 @@
           </div>
 
           <div class="text-xs text-gray-400 dark:text-gray-500 mb-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-            <b>🔍 Practice:</b> Students see correct/wrong after each question.<br>
-            <b>📝 Test:</b> Students answer all, submit at end. Results saved here automatically. You can allow retries.
+            <b>🔍 Practice:</b> Students see correct or incorrect feedback after each question.<br>
+            <b>📝 Test:</b> Students answer all questions and submit at the end. Results are saved here automatically. You can allow retries.
           </div>
 
           <button onclick="TeacherMode.buildAssignment()"
@@ -1247,7 +1247,7 @@
       <div class="ta-tab-content hidden" data-tab="results">
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
           <h3 class="font-bold text-gray-800 dark:text-white mb-3">📊 Student Results</h3>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">Only <b>Test mode</b> assignments collect results. Results are saved on this device - after hosting on Supabase they'll sync automatically.</p>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">Only <b>Test mode</b> assignments collect results. Results are saved on this device - once connected to Supabase they will sync automatically.</p>
           <select id="ta-results-assign-sel" onchange="taSelectResultsAssign(this)"
             class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 mb-4">
             <option value="">- Select a test assignment -</option>
@@ -1276,7 +1276,7 @@
           <p id="assign-meta" class="text-sm text-gray-500 dark:text-gray-400 mb-2"></p>
           <span id="assign-random-badge"
             class="hidden inline-block text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded-full mb-4">
-            🎲 Each student gets different question order
+            🎲 Each student gets a different question order
           </span>
           <div class="mb-5 mt-4">
             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Your name</label>
@@ -1448,7 +1448,7 @@
             <div class="flex items-center justify-between">
               <div>
                 <div class="font-bold text-gray-800 dark:text-white text-sm">📝 Exam Mode</div>
-                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Allow student to take timed exam papers</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Allow the student to take timed exam papers</div>
               </div>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" id="pd-exam-toggle" class="sr-only peer" onchange="Auth.toggleExamDisabled()">
@@ -1458,7 +1458,7 @@
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
             <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">🎯 Question Difficulty Cap</div>
-            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Random practice draws from levels 1 up to this cap (mainly affects Maths)</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Random practice draws questions from Level 1 up to this cap (mainly affects Maths).</div>
             <div class="flex gap-2 flex-wrap">
               <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="pd-maxdiff" id="pd-maxdiff-1" value="1" onchange="Auth.setMaxDifficulty(1)" class="accent-blue-500"><span class="text-sm text-gray-700 dark:text-gray-300">⭐ Basic only</span></label>
               <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="pd-maxdiff" id="pd-maxdiff-2" value="2" onchange="Auth.setMaxDifficulty(2)" class="accent-blue-500"><span class="text-sm text-gray-700 dark:text-gray-300">⭐⭐ Up to Medium</span></label>

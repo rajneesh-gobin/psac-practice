@@ -442,7 +442,7 @@ const Forum = (() => {
     _sub('forum-new-post');
     const cat = CATS.find(c => c.id === _currentCat);
     const hdr = _el('forum-np-header');
-    if (hdr && cat) hdr.textContent = `✏️ New post in "${cat.label}"`;
+    if (hdr && cat) hdr.textContent = `✏️ New Post in "${cat.label}"`;
     const t = _el('forum-np-title'); if (t) t.value = '';
     const b = _el('forum-np-body');  if (b) b.value = '';
     const e = _el('forum-np-error'); if (e) e.classList.add('hidden');

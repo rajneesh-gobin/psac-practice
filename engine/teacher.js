@@ -25,11 +25,11 @@ const TeacherMode = (() => {
     const input = _el('tpin-input');
     if (!data.pin) {
       _el('tpin-title').textContent = '👩‍🏫 Set Teacher PIN';
-      _el('tpin-desc').textContent  = 'Create a 4-digit PIN for teacher access';
+      _el('tpin-desc').textContent  = 'Create a 4-digit PIN for teacher access.';
       if (input) input._mode = 'set';
     } else {
       _el('tpin-title').textContent = '👩‍🏫 Teacher Access';
-      _el('tpin-desc').textContent  = 'Enter your teacher PIN';
+      _el('tpin-desc').textContent  = 'Enter your teacher PIN.';
       if (input) input._mode = 'enter';
     }
     if (input) input.value = '';

@@ -374,7 +374,7 @@ const Auth = (() => {
     }
 
     if (_currentRole === 'teacher') {
-      _showAuthError('Teacher accounts are created by the school administrator. If you need access, ask your admin to create an account for you, then use Sign In.');
+      _showAuthError('Teacher accounts are created by the school administrator. If you need access, ask your administrator to create an account for you, then sign in.');
       return;
     }
     const role = 'parent';

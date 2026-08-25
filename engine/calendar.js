@@ -335,7 +335,7 @@ const Calendar = (() => {
 
     // ── INSERT new entry ───────────────────────────
     const sid = await _ensureSchedule();
-    if (!sid)   { _showErr(errEl, 'Database not ready - please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.'); return; }
+    if (!sid)   { _showErr(errEl, 'Database not ready - please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh the page.'); return; }
 
     const { data, error } = await _sb.from('schedule_entries').insert({
       schedule_id: sid, student_id: _studentId,
@@ -562,7 +562,7 @@ const Calendar = (() => {
     // Persist
     const sid = await _ensureSchedule();
     if (!sid) {
-      _showErr(errEl, 'Database not ready - please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh.');
+      _showErr(errEl, 'Database not ready - please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh the page.');
       if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
       return;
     }
