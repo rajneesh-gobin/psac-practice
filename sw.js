@@ -7,7 +7,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CACHE_VERSION = 'v12';
+const CACHE_VERSION = 'v13';
 const SHELL_CACHE   = `psac-shell-${CACHE_VERSION}`;
 const DATA_CACHE    = `psac-data-${CACHE_VERSION}`;
 
@@ -175,8 +175,13 @@ self.addEventListener('push', event => {
       badge:   data.badge || '/icons/icon-192.png',
       data:    { url: data.url || '/' },
       vibrate: [100, 50, 100],
-      tag:     'psac-reminder',       // replaces previous unread notification
-      renotify: false,
+      // Tag comes from the payload so different kinds of notification do not
+      // silently overwrite one another. With a single hard-coded tag, a daily
+      // study reminder would replace an unread "new homework" notification and
+      // the child would never see it. Reminders keep collapsing (one pending
+      // reminder is enough); anything else should pass its own tag.
+      tag:      data.tag || 'psac-reminder',
+      renotify: data.renotify === true,
     })
   );
 });
@@ -184,13 +189,22 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   const url = event.notification.data?.url || '/';
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-      const existing = list.find(c => c.url.includes(self.location.origin));
-      if (existing) return existing.focus();
-      return clients.openWindow(url);
-    })
-  );
+  event.waitUntil((async () => {
+    const list = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const existing = list.find(c => c.url.startsWith(self.location.origin));
+
+    // An open tab used to be focused and the url thrown away, so tapping a
+    // notification about a specific assignment just surfaced whatever screen
+    // the child was already on. navigate() can reject (client not controlled,
+    // cross-origin); focusing is still better than nothing, so it is guarded.
+    if (existing) {
+      if (existing.url !== new URL(url, self.location.origin).href && 'navigate' in existing) {
+        try { await existing.navigate(url); } catch (_) {}
+      }
+      return existing.focus();
+    }
+    return clients.openWindow(url);
+  })());
 });
 
 async function networkFirstWithCache(request, cacheName) {

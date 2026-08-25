@@ -920,6 +920,26 @@
       <!-- Resume banner — shown when an unfinished session was interrupted -->
       <div id="resume-banner-slot"></div>
 
+      <!-- Notification opt-in. Hidden unless push is supported AND permission is
+           still 'default'. The prompt MUST come from a tap: iOS Safari rejects
+           Notification.requestPermission() outside a user gesture, so asking on
+           login (as it used to) simply never worked there. -->
+      <div id="dash-notify-optin" class="hidden bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-2xl p-4 mb-5 flex items-center justify-between gap-3 flex-wrap">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="text-2xl select-none shrink-0">🔔</div>
+          <div class="min-w-0">
+            <div class="text-sm font-bold text-amber-800 dark:text-amber-200">Get told about new homework</div>
+            <div class="text-xs text-amber-700/80 dark:text-amber-300/70">We'll let you know when a parent sets you an assignment.</div>
+          </div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button onclick="enableNotifications()"
+            class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold transition-colors">Turn on</button>
+          <button onclick="dismissNotifyOptIn()"
+            class="px-3 py-2 text-amber-600 dark:text-amber-400 text-sm hover:underline">Not now</button>
+        </div>
+      </div>
+
       <!-- Assignments from parent -->
       <!-- Start-here nudge - visible only for brand-new students (0 questions attempted) -->
       <div id="dash-start-here" class="hidden bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl p-5 mb-5 text-white shadow-xl">

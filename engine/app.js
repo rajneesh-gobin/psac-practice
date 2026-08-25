@@ -380,15 +380,29 @@ async function _pushAuthHeaders() {
   return h;
 }
 
-async function setupPushNotifications(studentId) {
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+// `prompt` defaults to FALSE: called on login this only refreshes a
+// subscription the child already granted, and never asks.
+//
+// Asking on login could not work on iOS anyway - Safari rejects
+// Notification.requestPermission() unless it comes from a user gesture - and on
+// Android it fired an unexplained system prompt the instant a child logged in,
+// which is the surest way to get "Block" tapped. The dashboard opt-in card
+// calls this with { prompt: true } from an actual tap.
+//
+// Note iOS delivers web push ONLY to a home-screen-installed app (16.4+); in a
+// Safari tab PushManager does not exist and we return on the first line.
+async function setupPushNotifications(studentId, { prompt = false } = {}) {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return false;
+  if (typeof Notification === 'undefined') return false;
   try {
     const reg = await navigator.serviceWorker.ready;
     // Check if already subscribed
     let sub = await reg.pushManager.getSubscription();
     if (!sub) {
+      if (!prompt) return false;                          // no gesture - stay silent
+      if (Notification.permission === 'denied') return false;
       const permission = await Notification.requestPermission();
-      if (permission !== 'granted') return;
+      if (permission !== 'granted') return false;
       sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: _urlB64ToUint8Array(VAPID_PUBLIC_KEY),
@@ -400,8 +414,60 @@ async function setupPushNotifications(studentId) {
       headers: await _pushAuthHeaders(),
       body: JSON.stringify({ studentId, subscription: sub.toJSON() }),
     });
+    return true;
   } catch(e) {
     console.warn('[push] Setup failed:', e.message);
+    return false;
+  }
+}
+
+// ── Notification opt-in card (student dashboard) ────────────────────────────
+// Only offered when there is something to offer: push must be supported and the
+// permission still un-asked. Once granted or denied, the card never returns -
+// a denied permission can only be undone in browser settings, so nagging is
+// pointless. "Not now" is remembered per device.
+function _renderNotifyOptIn() {
+  const card = document.getElementById('dash-notify-optin');
+  if (!card) return;
+  let dismissed = false;
+  try { dismissed = !!localStorage.getItem('mm_notify_optin_dismissed'); } catch(e) {}
+  const supported = ('serviceWorker' in navigator) && ('PushManager' in window)
+    && typeof Notification !== 'undefined';
+  const askable = supported && Notification.permission === 'default';
+  card.classList.toggle('hidden', !askable || dismissed || !ACTIVE_STUDENT_ID);
+}
+
+function dismissNotifyOptIn() {
+  try { localStorage.setItem('mm_notify_optin_dismissed', '1'); } catch(e) {}
+  document.getElementById('dash-notify-optin')?.classList.add('hidden');
+}
+
+async function enableNotifications() {
+  if (typeof Notification === 'undefined') { toast('This device cannot show notifications.', 3500); return; }
+
+  // requestPermission() has to be the FIRST thing the tap does. Calling
+  // setupPushNotifications() straight away would await navigator.serviceWorker
+  // .ready first, and on iOS that intervening await can drop the user
+  // activation, after which Safari refuses to show the prompt at all.
+  let permission = Notification.permission;
+  if (permission === 'default') {
+    try { permission = await Notification.requestPermission(); }
+    catch (_) { permission = 'denied'; }
+  }
+
+  document.getElementById('dash-notify-optin')?.classList.add('hidden');
+  if (permission !== 'granted') {
+    toast('Notifications stay off. You can turn them on in your browser settings.', 4000);
+    return;
+  }
+
+  const ok = await setupPushNotifications(ACTIVE_STUDENT_ID, { prompt: true });
+  if (ok) {
+    toast('🔔 Notifications on. You\'ll hear about new homework.', 3000);
+  } else if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+    toast('Notifications are blocked for this site. Turn them back on in your browser settings.', 4500);
+  } else {
+    toast('Could not turn on notifications on this device.', 3500);
   }
 }
 
@@ -845,6 +911,15 @@ window.numPadClear = (containerId) => {
 };
 
 // ── RENDER HELPERS ────────────────────────────
+// Escape a value for use inside a double-quoted HTML attribute. Only the
+// attribute - option text is still injected as HTML on purpose, so an option
+// may contain markup.
+function _attr(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
   const cont = document.getElementById(containerId);
   if (!cont) return;
@@ -863,7 +938,15 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
       } else {
         if (opt === selectedAnswer) cls += ' selected';
       }
-      return `<button class="${cls}" data-value="${opt}" onclick="selectMCQ(this,'${containerId}','${q.answer}',${disabled})">
+      // q.answer used to be interpolated into the onclick as a single-quoted JS
+      // string. Any answer containing an apostrophe - "c'est", "l'école", most
+      // of the French bank - closed that string early and made the handler a
+      // syntax error, so the option silently would not select and Check Answer
+      // then said "Please answer the question first".
+      // selectMCQ never read the argument anyway, so it is gone rather than
+      // escaped. data-value is the real data path (getSelectedAnswer reads it)
+      // and is now escaped properly.
+      return `<button class="${cls}" data-value="${_attr(opt)}" onclick="selectMCQ(this,'${containerId}',${disabled})">
         <span class="opt-letter">${String.fromCharCode(65+i)}</span>
         <span>${opt}</span>
       </button>`;
@@ -871,7 +954,7 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
   } else {
     const cls = disabled ? (checkAnswer(q, selectedAnswer) ? 'num-input correct' : 'num-input wrong') : 'num-input';
     const inputExtra = disabled ? 'disabled' : 'inputmode="decimal"';
-    cont.innerHTML = `<input type="text" class="${cls}" id="num-ans-${containerId}" value="${selectedAnswer||''}" placeholder="Type your answer here…" ${inputExtra}
+    cont.innerHTML = `<input type="text" class="${cls}" id="num-ans-${containerId}" value="${_attr(selectedAnswer || '')}" placeholder="Type your answer here…" ${inputExtra}
       onkeydown="if(event.key==='Enter'){${containerId==='exam-answer-area'?'saveCurrentExamAnswer()':'practiceSubmit()'}}" autocomplete="off">`;
 
     if (!disabled) {
@@ -937,7 +1020,7 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
   }
 }
 
-window.selectMCQ = (btn, containerId, correctAnswer, disabled) => {
+window.selectMCQ = (btn, containerId, disabled) => {
   if (disabled) return;
   document.querySelectorAll(`#${containerId} .mcq-opt`).forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -1636,6 +1719,8 @@ function _greeting() {
 function renderDashboard() {
   if (!ACTIVE_STUDENT_ID) return; // guard: no student loaded yet
   const _acct  = (typeof Auth !== 'undefined') && Auth.getActiveAccount();
+
+  _renderNotifyOptIn();
 
   // Today's study plan (async, non-blocking)
   if (typeof Calendar !== 'undefined') {
