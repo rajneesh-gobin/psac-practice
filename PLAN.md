@@ -143,10 +143,10 @@ Verified against source; four of seven docs actively mislead:
 - [ ] Patch `PROJECT_OVERVIEW.md` counts.
 - [ ] Patch `HOW_TO_RUN_LOCALLY.md`.
 
-**Also unrelated, found in passing:** `scripts/check.js`'s inline-handler regex
-false-positives on `onXXX="if(...)"` (matches `if(` as if it were a module
-method call). Pre-existing on `dev`, harmless (just noisy CI output). Fix the
-regex if touching that file for other reasons — not urgent.
+**DONE** — `scripts/check.js`'s inline-handler regex false-positived on
+`onXXX="if(...)"` (matched `if(` as if it were a module method call). Fixed
+by skipping a JS-keyword denylist before treating the captured token as a
+candidate function name. Verified: exits 0 clean now (commit `ca3a940`).
 
 ---
 
