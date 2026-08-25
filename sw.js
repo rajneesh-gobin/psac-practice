@@ -3,10 +3,11 @@
 // Strategy:
 //   Shell (HTML, CSS, engine JS): Cache-first — loads instantly offline
 //   Question files (subjects/**):  Stale-while-revalidate — serve cached, refresh in background
-//   Netlify functions / Supabase:  Network-first — fresh data required; fall back to cache
+//   Netlify functions:             Network-first — fresh data required; fall back to cache
+//   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CACHE_VERSION = 'v11';
+const CACHE_VERSION = 'v12';
 const SHELL_CACHE   = `psac-shell-${CACHE_VERSION}`;
 const DATA_CACHE    = `psac-data-${CACHE_VERSION}`;
 
@@ -73,6 +74,27 @@ self.addEventListener('fetch', event => {
   // Only handle GET requests
   if (request.method !== 'GET') return;
 
+  // ── Never touch anything that is not same-origin http(s) ──
+  //
+  // A fetch() issued from inside a service worker is governed by the CSP's
+  // connect-src, NOT by script-src / img-src. Our connect-src only lists 'self',
+  // *.supabase.co and accounts.google.com, so proxying a cross-origin request
+  // through here got it blocked, the catch below turned the block into a
+  // synthetic 503, and the browser reported that 503 against the <script> tag.
+  // That is what took down Tailwind, the Supabase UMD bundle (→ no auth, no
+  // questions) and every Wikimedia question image on the live site.
+  //
+  // Letting these go straight to the network is also the only thing that ever
+  // worked: a cross-origin <script>/<img> is a no-cors request, so the response
+  // is opaque, response.ok is false, and the cache.put below never ran. This
+  // branch only ever added a failure mode - it never cached anything.
+  //
+  // Skipping non-http(s) schemes additionally stops browser extensions
+  // (chrome-extension://…) from reaching cache.put(), which throws
+  // "Request scheme 'chrome-extension' is unsupported".
+  if (url.origin !== self.location.origin) return;
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+
   // ── Guest assignment pages: never serve from cache ──
   // /a/<CODE> and guest.html are time-sensitive (deadlines, expiry, one-shot
   // submissions). A cache-first hit here would show a child a stale page for an
@@ -83,18 +105,15 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // ── Netlify functions & Supabase: network-first ──
-  if (
-    url.pathname.startsWith('/.netlify/functions/') ||
-    url.hostname.includes('supabase.co') ||
-    url.hostname.includes('supabase.in')
-  ) {
-    event.respondWith(networkFirstWithCache(request, DATA_CACHE));
-    return;
-  }
-
-  // ── External CDN (Tailwind, Wikimedia images): network-first with cache fallback ──
-  if (url.hostname !== self.location.hostname) {
+  // ── Netlify functions: network-first ──
+  //
+  // Supabase used to be matched here too. It no longer reaches this point (it is
+  // cross-origin, so it now goes straight to the network above) and that is the
+  // right outcome twice over: connect-src already allows *.supabase.co directly,
+  // and caching authenticated Supabase GETs was a hazard on a shared family or
+  // school device - the offline fallback matches on URL alone, ignoring the auth
+  // header, so it could hand one child a response cached for another.
+  if (url.pathname.startsWith('/.netlify/functions/')) {
     event.respondWith(networkFirstWithCache(request, DATA_CACHE));
     return;
   }
@@ -111,6 +130,13 @@ self.addEventListener('fetch', event => {
 
 // ── Strategy helpers ──────────────────────────────────────────────────────────
 
+// cache.put() rejects for unsupported schemes and when storage is full. It was
+// called un-awaited, so those rejections surfaced as "Uncaught (in promise)" in
+// the console. Caching is best-effort: a failure must never break the response.
+async function safePut(cache, request, response) {
+  try { await cache.put(request, response); } catch(_) {}
+}
+
 async function cacheFirstWithNetwork(request, cacheName) {
   const cached = await caches.match(request);
   if (cached) return cached;
@@ -118,7 +144,7 @@ async function cacheFirstWithNetwork(request, cacheName) {
     const response = await fetch(request);
     if (response.ok) {
       const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
+      await safePut(cache, request, response.clone());
     }
     return response;
   } catch(_) {
@@ -130,7 +156,7 @@ async function staleWhileRevalidate(request, cacheName) {
   const cache  = await caches.open(cacheName);
   const cached = await cache.match(request);
   const fetchPromise = fetch(request).then(response => {
-    if (response.ok) cache.put(request, response.clone());
+    if (response.ok) safePut(cache, request, response.clone());
     return response;
   }).catch(() => null);
   return cached || await fetchPromise || new Response('Offline.', { status: 503 });
@@ -172,7 +198,7 @@ async function networkFirstWithCache(request, cacheName) {
     const response = await fetch(request);
     if (response.ok) {
       const cache = await caches.open(cacheName);
-      cache.put(request, response.clone());
+      await safePut(cache, request, response.clone());
     }
     return response;
   } catch(_) {
