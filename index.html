@@ -669,6 +669,16 @@
         </button>
       </div>
 
+      <!-- Search card -->
+      <button onclick="Search.open()" class="w-full mb-6 flex items-center gap-4 bg-white dark:bg-gray-800 rounded-2xl p-5 shadow hover:shadow-md border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all text-left group">
+        <div class="text-4xl select-none group-hover:scale-110 transition-transform">🔍</div>
+        <div class="flex-1">
+          <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Search Questions</h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Find questions by topic, keyword, or name - even across subjects. Typos are fine!</p>
+        </div>
+        <span class="text-indigo-400 dark:text-indigo-500 text-2xl shrink-0">›</span>
+      </button>
+
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-6">
         <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">📈 Chapter Mastery</h3>
         <div id="mastery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
@@ -825,7 +835,10 @@
               <span class="font-semibold text-amber-700 dark:text-amber-400">💡 Strategy: </span>
               <span id="exam-hint-text" class="text-amber-700 dark:text-amber-300"></span>
             </div>
-            <div id="exam-q-text" class="text-lg text-gray-800 dark:text-white mb-5 leading-relaxed font-medium"></div>
+            <div class="flex items-start gap-2">
+              <div id="exam-q-text" class="flex-1 text-lg text-gray-800 dark:text-white mb-5 leading-relaxed font-medium"></div>
+              <button id="exam-tts-btn" onclick="speakQuestion('exam')" class="shrink-0 mt-1 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors" title="Read question aloud">🔊</button>
+            </div>
             <div id="exam-answer-area" class="mb-4"></div>
             <div class="flex justify-between">
               <button id="exam-prev-btn" class="btn-secondary">← Prev</button>
@@ -880,13 +893,19 @@
           <button id="new-exam-btn" class="btn-primary flex-1">📝 New Exam</button>
           <button id="results-home-btn" class="btn-secondary flex-1">🏠 Dashboard</button>
         </div>
+        <button id="share-result-btn" class="hidden w-full btn-ghost text-sm text-gray-500 dark:text-gray-400">📤 Share my result</button>
       </div>
     </div>
 
     <!-- ══════════ CHAPTER SELECTOR ══════════ -->
     <div id="screen-chapter-select" class="screen hidden">
       <button class="back-btn mb-4" data-target="subject-select">← Subjects</button>
-      <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-1">📚 Chapter Practice</h2>
+      <div class="flex items-start justify-between gap-3 mb-1 flex-wrap">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">📚 Chapter Practice</h2>
+        <button onclick="Search.open()" class="flex items-center gap-2 text-sm font-semibold bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-800/60 px-4 py-2 rounded-xl transition-colors border border-indigo-200 dark:border-indigo-700/50">
+          🔍 Search all questions
+        </button>
+      </div>
       <p class="text-gray-500 dark:text-gray-400 text-sm mb-5">Pick a chapter. Your mastery is tracked automatically.</p>
       <div id="chapter-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
     </div>
@@ -919,7 +938,10 @@
               </div>
               <span id="practice-hint-text" class="text-amber-700 dark:text-amber-300"></span>
             </div>
-            <div id="practice-q-text" class="text-lg text-gray-800 dark:text-white mb-5 leading-relaxed font-medium"></div>
+            <div class="flex items-start gap-2">
+              <div id="practice-q-text" class="flex-1 text-lg text-gray-800 dark:text-white mb-5 leading-relaxed font-medium"></div>
+              <button id="practice-tts-btn" onclick="speakQuestion('practice')" class="shrink-0 mt-1 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors" title="Read question aloud">🔊</button>
+            </div>
             <div id="practice-answer-area" class="mb-4"></div>
             <div id="practice-feedback" class="hidden mb-4 p-4 rounded-xl"></div>
             <div class="flex gap-3">
