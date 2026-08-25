@@ -280,6 +280,71 @@ function _renderResumeBanner() {
     </div>`;
 }
 
+// ── PWA Install prompt ──────────────────────────────────────────────────────
+// Capture the browser's install prompt and surface it via the header button.
+// The button stays hidden on desktop and iOS (event never fires there).
+let _pwaInstallPrompt = null;
+
+// Show a one-time iOS tip banner (Safari doesn't support beforeinstallprompt)
+(function _maybeShowIOSTip() {
+  const isIOS        = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true; // already installed
+  const dismissed    = localStorage.getItem('mm_ios_tip_dismissed');
+  if (!isIOS || isStandalone || dismissed) return;
+
+  // Wait until page is interactive before injecting
+  window.addEventListener('load', () => {
+    const tip = document.createElement('div');
+    tip.id = 'ios-install-tip';
+    tip.innerHTML = `
+      <div style="position:fixed;bottom:0;left:0;right:0;z-index:9998;
+                  background:linear-gradient(135deg,#1e3a5f,#2d1b69);
+                  color:white;padding:14px 16px 20px;
+                  box-shadow:0 -4px 24px rgba(0,0,0,0.4);
+                  font-family:system-ui,sans-serif;">
+        <button onclick="document.getElementById('ios-install-tip').remove();localStorage.setItem('mm_ios_tip_dismissed','1')"
+                style="float:right;background:none;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;line-height:1;padding:0 0 0 12px">✕</button>
+        <div style="font-weight:700;font-size:15px;margin-bottom:6px">📲 Install on your iPhone</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.85);display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          Tap
+          <span style="background:rgba(255,255,255,0.15);border-radius:6px;padding:2px 8px;display:inline-flex;align-items:center;gap:4px">
+            <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 1v11M3.5 4L7 1l3.5 3M1 8v8a1 1 0 001 1h10a1 1 0 001-1V8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Share
+          </span>
+          then
+          <span style="background:rgba(255,255,255,0.15);border-radius:6px;padding:2px 8px;font-weight:600">
+            Add to Home Screen
+          </span>
+          to install the app
+        </div>
+      </div>`;
+    document.body.appendChild(tip);
+  });
+})();
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); // stop the automatic mini-bar
+  _pwaInstallPrompt = e;
+  const btn = document.getElementById('pwa-install-btn');
+  if (btn) { btn.classList.remove('hidden'); btn.classList.add('flex'); }
+});
+
+window.addEventListener('appinstalled', () => {
+  _pwaInstallPrompt = null;
+  const btn = document.getElementById('pwa-install-btn');
+  if (btn) { btn.classList.add('hidden'); btn.classList.remove('flex'); }
+  toast('App installed! Find it on your home screen. 🎉', 4000);
+});
+
+document.getElementById('pwa-install-btn')?.addEventListener('click', async () => {
+  if (!_pwaInstallPrompt) return;
+  _pwaInstallPrompt.prompt();
+  const { outcome } = await _pwaInstallPrompt.userChoice;
+  if (outcome === 'accepted') _pwaInstallPrompt = null;
+});
+
 let toastTimer;
 function toast(msg, dur = 2500) {
   let el = document.getElementById('toast');
@@ -344,11 +409,11 @@ function showScreen(id) {
   if (id === 'teacher' && typeof TeacherMode !== 'undefined') TeacherMode.render();
   if (id === 'forum'     && typeof Forum     !== 'undefined') Forum.render();
   if (id === 'calendar'  && typeof Calendar  !== 'undefined') Calendar.render();
-  // Search button in header: visible only when a student is logged in
+  // Search button in header: visible only when a student grade is active
   const searchBtn = document.getElementById('search-btn');
   if (searchBtn) {
     const isAuth = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
-    const hasStudent = typeof DB !== 'undefined' && !!DB.grade;
+    const hasStudent = typeof SELECTED_GRADE !== 'undefined' && !!SELECTED_GRADE;
     searchBtn.classList.toggle('hidden', isAuth || !hasStudent);
   }
 }

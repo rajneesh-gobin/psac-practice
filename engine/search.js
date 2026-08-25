@@ -333,7 +333,7 @@ const Search = (() => {
     const qWords = normQ.split(' ').filter(w => w.length >= 2);
     if (!qWords.length) return;
 
-    const studentGrade       = typeof DB !== 'undefined' ? (DB.grade || 5) : 5;
+    const studentGrade       = (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
     const restr              = typeof DB !== 'undefined' ? (DB.restrictions || {}) : {};
     const allowCrossSearch   = !!restr.crossGradeSearch;
     const allowCrossPractice = !!restr.crossGradePractice;
