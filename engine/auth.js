@@ -879,7 +879,37 @@ const Auth = (() => {
   }
 
   // ── Student login (username + PIN - no family code needed) ────────
+  //
+  // THREE things can trigger a sign-in: the PIN field auto-submits on the 4th
+  // digit, the "Let's Go!" button, and the Enter key. Without a guard they
+  // overlap: typing the last digit fires one attempt, and the click that
+  // follows a moment later fires a second while the first is still finishing.
+  // Two verify_student_pin calls land back to back, each minting a session and
+  // bumping session_version, so one of them is immediately stale - the child is
+  // told their login is wrong even though the credentials were correct. Waiting
+  // for the auto-submit to finish "worked" only because it meant not clicking.
+  //
+  // The guard also stops a double-fire from inflating _pinAttempts, which could
+  // trip the 5-attempt lockout on a single correct login.
+  let _signInBusy = false;
   async function studentSignIn() {
+    if (_signInBusy) return;
+    _signInBusy = true;
+    try {
+      await _studentSignIn();
+    } finally {
+      _signInBusy = false;
+      _setAuthLoading(false);
+    }
+  }
+
+  // Auto-submit when the 4th digit lands - but only once there is a username to
+  // submit with, so a child who fills the PIN first is not told off for it.
+  function onPinInput(el) {
+    if (el.value.length === 4 && (_el('student-username')?.value || '').trim()) studentSignIn();
+  }
+
+  async function _studentSignIn() {
     if (!_sb) return;
 
     // Client-side lockout: first line of defence (server is the real gate)
@@ -912,8 +942,10 @@ const Auth = (() => {
     //
     // The response is a superset of verify_student_pin's, so every branch below
     // is unchanged; `data.session_token` is the only addition.
+    // Buttons stay disabled until the wrapper's finally runs. Re-enabling here
+    // used to reopen the window for a second submit while the success path was
+    // still awaiting _loginStudentRow().
     const { data, error } = await _sb.rpc('verify_student_pin', { p_username: username, p_pin: pin });
-    _setAuthLoading(false);
 
     if (error) {
       // 42883 = undefined_function. Transient right after the RPC is created,
@@ -1456,7 +1488,7 @@ const Auth = (() => {
     openPasswordModal, closePasswordModal, changePassword,
     openInviteModal, closeInviteModal, copyInviteLink, shareInvite, shareInviteWhatsApp,
     confirmResetStudentProgress,
-    studentSignIn,
+    studentSignIn, onPinInput,
     // Family setup
     completeSetup, _pickSetupAvatar,
     // Add/edit student

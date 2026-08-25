@@ -708,7 +708,7 @@
               oninput="this.value=this.value.toUpperCase()">
             <div class="relative">
               <input id="student-pin" type="password" maxlength="4" placeholder="PIN (4 digits)"
-                oninput="if(this.value.length===4) Auth.studentSignIn()"
+                oninput="Auth.onPinInput(this)"
                 class="selectable w-full text-center text-2xl font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-11 py-3 focus:outline-none focus:ring-2 focus:ring-green-400">
               <button type="button" onclick="Auth.togglePass('student-pin',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
