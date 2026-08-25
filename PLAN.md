@@ -345,6 +345,43 @@ suspicious image domains (all 26 `<img>` question images are Wikimedia).
   `location.search` for it) — unchanged from the earlier audit. Not a crash,
   just a silent no-op. **Don't demo this link to a real class during testing.**
 
+## 5g. DONE — parent child-management gap: delete was completely missing from the UI
+
+You asked: "parent should be able to manage child, for eg reset, add more,
+delete, etc." Investigated what already existed before building anything:
+
+- **Add child**: already worked (`Auth.addStudent()`, max 3 per family).
+- **Edit child**: already worked (`Auth.editCurrentStudent()`, ✏️ Edit button
+  in the detail panel header).
+- **Reset progress**: was wired, but had a real bug (see below).
+- **Delete child**: `Auth.deleteStudent(id)` was fully implemented (confirm
+  dialog, cleans up `student_progress`, deletes the row, re-renders) but had
+  **zero UI entry point anywhere** — not on the child card, not in the detail
+  panel, not in the edit form. A parent genuinely could not delete a child
+  through the app.
+
+Fixed (commit `a8456d8`):
+1. Added a "⚠️ Danger Zone" card at the bottom of the Controls tab with a
+   delete button, wired through a new `Auth.deleteCurrentStudent()` wrapper.
+2. Fixed a real bug in `resetProgress()`: it's shared by the student's own
+   Analytics reset button and the parent dashboard's per-child reset, but
+   always called `showScreen('dashboard')` — which, when triggered from the
+   parent dashboard, ejected the parent into that child's own dashboard view
+   instead of staying put (violating `pdSwitchStudent`'s explicit
+   `navigate:false` contract). Fixed by branching on `_parentProfile`.
+
+Both changes isolated cleanly from the in-progress referral-feature edits
+already sitting in `engine/auth.js`/`index.html` via hand-built patches
+applied to the git index only.
+
+**In passing, found but not touched (not mine, not related):** two new
+untracked question files — `subjects/grade4-english/questions/ch07_g4_passages.js`
+and `subjects/grade5-english/questions/ch09_passages.js` — aren't yet
+registered in `question_loader.js`'s `LOCAL_FILES`, so `scripts/check.js`
+flags them (invisible under `file://` local dev only; production
+auto-discovers them fine). Add them to `LOCAL_FILES` before relying on local
+file:// testing for those two chapters.
+
 ## 6. Backlog (lower priority, from earlier audit — not yet scheduled)
 
 - `main` is 64 commits behind `dev` (all 3 security commits included) —
