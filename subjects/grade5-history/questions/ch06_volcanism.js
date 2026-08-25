@@ -265,3 +265,14 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Karthala</b> is an active volcano on <b>Grand Comore</b>, the largest of the Comoro Islands, located north of Madagascar in the Indian Ocean. It is one of the world\'s most active volcanoes and erupts regularly — in contrast to the extinct volcanic features of Mauritius such as Trou aux Cerfs.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5hg-vol-024', chapterId:'volcanism', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Volcano.jpg" alt="a mountain with a wide crater at its summit" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Mauritius was formed by this type of natural feature. What is it called?</b>',
+    options:['A canyon','A volcano','A glacier','A plateau'],
+    answer:'A volcano',
+    hint:'It forms when hot molten rock (magma) erupts from deep inside the Earth.',
+    explanation:'A <b>volcano</b> forms when magma from deep inside the Earth erupts onto the surface, cooling and building up land over time. Mauritius was formed by undersea volcanic eruptions millions of years ago - the island\'s volcanoes are now extinct, but craters like Trou aux Cerfs remain as evidence.' })
+
+);

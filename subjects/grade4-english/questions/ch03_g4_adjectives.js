@@ -198,3 +198,21 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Round</b>" is a shape adjective describing the ball. Shape adjectives describe the outline or form of a noun: round, square, oval, flat, triangular, rectangular, curved. We can say "a round ball" — the adjective comes before the noun it describes.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4eng-adj-025', chapterId:'g4eng-adjectives', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cottage.jpg" alt="a building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SIZE adjective best describes the building shown in this picture, compared to a large mansion?</b>',
+    options:['huge','enormous','small','tall'],
+    answer:'small',
+    hint:'This is a modest cottage, not a giant palace.',
+    explanation:'"<b>Small</b>" is a size adjective describing this modest cottage. Size adjectives include: big, small, tiny, huge, enormous, tall, short. A cottage is a small, simple house — the opposite of "huge" or "enormous".' }),
+
+  makeMCQ({ id:'g4eng-adj-026', chapterId:'g4eng-adjectives', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rainbow.jpg" alt="a sky phenomenon" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which adjective best describes what is shown in this picture, in terms of colour?</b>',
+    options:['plain','colourful','dull','pale'],
+    answer:'colourful',
+    hint:'This natural phenomenon shows many different colours at once.',
+    explanation:'"<b>Colourful</b>" describes something with many bright colours — exactly what a rainbow shows. The opposite adjectives would be "plain", "dull" or "pale", which describe a lack of strong colour.' })
+
+);

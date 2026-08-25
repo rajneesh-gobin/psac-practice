@@ -201,3 +201,28 @@ STATIC_QUESTIONS.push(
     explanation:'A "<b>solar eclipse</b>" occurs when the Moon passes between the Earth and the Sun, blocking sunlight and casting a shadow on Earth. "Solar" comes from Latin <i>sol</i> (sun). A <b>lunar eclipse</b> is different — it happens when the Earth blocks sunlight from reaching the Moon. A <b>total</b> solar eclipse completely blocks the Sun; a <b>partial</b> eclipse blocks only part of it.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6eng-voc-026', chapterId:'g6eng-vocabulary', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shirt.jpg" alt="an item of clothing" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this item of clothing called?</b>',
+    options:['jacket','shirt','sweater','vest'],
+    answer:'shirt',
+    hint:'It is worn on the upper body and usually has a collar and buttons.',
+    explanation:'A "<b>shirt</b>" is a garment worn on the upper body, typically with a collar, sleeves and a full or partial opening down the front fastened with buttons.' }),
+
+  makeMCQ({ id:'g6eng-voc-027', chapterId:'g6eng-vocabulary', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shoe.jpg" alt="a piece of footwear" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this piece of footwear called?</b>',
+    options:['sandal','boot','shoe','slipper'],
+    answer:'shoe',
+    hint:'It is worn on the foot for walking and usually has laces or a fastening.',
+    explanation:'A "<b>shoe</b>" is an item of footwear designed to protect and support the foot while walking. Related footwear words: "boot" (covers the ankle too), "sandal" (open-toed), "slipper" (worn indoors).' }),
+
+  makeMCQ({ id:'g6eng-voc-028', chapterId:'g6eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Trousers.jpg" alt="an item of clothing" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this item of clothing called (in British English)?</b>',
+    options:['trousers','shorts','skirt','dress'],
+    answer:'trousers',
+    hint:'They are a two-legged garment worn from the waist to the ankles. In American English, this word is different.',
+    explanation:'"<b>Trousers</b>" is the British English word for this garment covering both legs separately, from the waist to the ankles. In American English, the same item is called "pants". Like "scissors" and "glasses", "trousers" is always plural — we say "a pair of trousers".' })
+
+);

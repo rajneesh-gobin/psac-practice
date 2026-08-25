@@ -303,11 +303,47 @@ const Store = (() => {
     // ⚠ Explicit column list - anything added to `profiles` must be added HERE
     //   too, or it silently arrives as undefined. teacher_status defaulting to
     //   undefined would have meant no approved teacher was ever recognised.
+    // referral_code is deliberately NOT in this list - see getMyReferralCode().
+    // This query gates login for every parent/teacher; a column this codebase
+    // adds but the live DB doesn't have yet (migration not run) would error the
+    // whole fetch and bounce every returning user into family-setup again.
     const { data, error } = await _sb.from('profiles')
       .select('id, role, full_name, disabled, expires_at, is_super_admin, teacher_status, teacher_tier')
       .eq('id', userId).maybeSingle();
     if (error) console.error('[Store.getProfile]', error.message);
     return data || null;
+  }
+
+  // ── Referrals ──────────────────────────────────
+  // Isolated from getProfile() on purpose (see the comment there): fetched only
+  // when the invite UI actually needs it, so a not-yet-migrated database (no
+  // referral_code column, or the RPCs below not created yet) degrades to "no
+  // code to show" instead of breaking login for everyone.
+  async function getMyReferralCode(userId) {
+    if (!_sb || !userId) return '';
+    const { data, error } = await _sb.from('profiles')
+      .select('referral_code').eq('id', userId).maybeSingle();
+    if (error) { console.warn('[Store.getMyReferralCode]', error.message); return ''; }
+    return data?.referral_code || '';
+  }
+
+  // Credits whoever owns p_code with referring the CURRENTLY authenticated
+  // user. Call once, right after that user's own profile row is created -
+  // record_referral() is SECURITY DEFINER and always credits auth.uid(), so it
+  // can only ever be called for yourself, never on someone else's behalf.
+  async function recordReferral(code) {
+    if (!_sb || !code) return { ok: false, error: 'no_code' };
+    const { data, error } = await _sb.rpc('record_referral', { p_code: code });
+    if (error) { console.warn('[Store.recordReferral]', error.message); return { ok: false, error: error.message }; }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  // List of people the current user referred: [{referred_name, status, created_at}].
+  async function getMyReferrals() {
+    if (!_sb) return [];
+    const { data, error } = await _sb.rpc('my_referrals');
+    if (error) { console.warn('[Store.getMyReferrals]', error.message); return []; }
+    return data || [];
   }
 
   async function createProfile(userId, role, fullName) {
@@ -480,6 +516,8 @@ const Store = (() => {
     getAccounts, saveAccounts, getParentPin, setParentPin, loadStudent, saveStudent, clearStudent,
     // Profiles
     getProfile, createProfile,
+    // Referrals
+    recordReferral, getMyReferrals, getMyReferralCode,
     // mm_data (teacher + global settings)
     getGlobalSettings, mmGet, mmSet,
     generateId,

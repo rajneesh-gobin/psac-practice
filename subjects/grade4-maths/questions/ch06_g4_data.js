@@ -136,3 +136,94 @@ STATIC_QUESTIONS.push(
     explanation:'Blue + Red = 12 + 9 = 21. Half of 30 = 15. Since 21 > 15, more than half chose Blue or Red. <b>Priya is correct.</b> Evaluating statements about data is a key Grade 4 data skill.' })
 
 );
+
+// ── Illustrated questions: a real bar chart and a real pictogram, drawn from
+//    actual data (not just described in text) - the student reads the
+//    picture, same as an MIE exam paper diagram.
+function _g4mBarChart(title, cats, vals, opts) {
+  opts = opts || {};
+  const max = opts.max || 20, step = opts.step || 5;
+  const chartTop = 30, chartBottom = 175, chartLeft = 50, barW = 38, gap = 26;
+  const W = chartLeft + cats.length * (barW + gap) + 20, H = 210;
+  const pxPerUnit = (chartBottom - chartTop) / max;
+  let grid = '', bars = '';
+  for (let v = 0; v <= max; v += step) {
+    const y = (chartBottom - v * pxPerUnit).toFixed(1);
+    grid += `<line x1="${chartLeft}" y1="${y}" x2="${W - 15}" y2="${y}" stroke="#e5e7eb" stroke-width="1"/>`;
+    grid += `<text x="${chartLeft - 8}" y="${(+y + 4).toFixed(1)}" text-anchor="end" font-size="10" font-family="sans-serif" fill="#64748b">${v}</text>`;
+  }
+  const colors = ['#3b82f6', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6'];
+  cats.forEach((cat, i) => {
+    const val = vals[i];
+    const h = (val * pxPerUnit).toFixed(1);
+    const x = chartLeft + 15 + i * (barW + gap);
+    const y = (chartBottom - h).toFixed(1);
+    bars += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${colors[i % colors.length]}" rx="3"/>`;
+    bars += `<text x="${x + barW / 2}" y="${chartBottom + 16}" text-anchor="middle" font-size="10" font-family="sans-serif" fill="#334155">${cat}</text>`;
+    bars += `<text x="${x + barW / 2}" y="${(+y - 6).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="bold" font-family="sans-serif" fill="#1e293b">${val}</text>`;
+  });
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" style="max-width:100%;max-height:260px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white">
+    <text x="${W / 2}" y="16" text-anchor="middle" font-size="12" font-weight="bold" font-family="sans-serif" fill="#1e293b">${title}</text>
+    <line x1="${chartLeft}" y1="${chartTop}" x2="${chartLeft}" y2="${chartBottom}" stroke="#334155" stroke-width="1.5"/>
+    <line x1="${chartLeft}" y1="${chartBottom}" x2="${W - 15}" y2="${chartBottom}" stroke="#334155" stroke-width="1.5"/>
+    ${grid}${bars}
+  </svg>`;
+}
+
+function _g4mPictogram(title, icon, keyVal, rows) {
+  const rowH = 30, top = 46, left = 100;
+  let body = '';
+  rows.forEach((rrow, i) => {
+    const y = top + i * rowH;
+    body += `<text x="10" y="${y}" font-size="12" font-family="sans-serif" fill="#334155">${rrow.label}</text>`;
+    const full = Math.floor(rrow.count);
+    const half = (rrow.count - full) >= 0.5;
+    for (let s = 0; s < full; s++) {
+      body += `<text x="${left + s * 22}" y="${y + 5}" font-size="18" font-family="sans-serif">${icon}</text>`;
+    }
+    if (half) body += `<text x="${left + full * 22}" y="${y + 5}" font-size="18" font-family="sans-serif" fill-opacity="0.4">${icon}</text>`;
+  });
+  const H = top + rows.length * rowH + 30;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 ${H}" style="max-width:100%;max-height:260px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white">
+    <text x="160" y="18" text-anchor="middle" font-size="12" font-weight="bold" font-family="sans-serif" fill="#1e293b">${title}</text>
+    ${body}
+    <rect x="8" y="${H - 26}" width="304" height="18" rx="4" fill="#f1f5f9"/>
+    <text x="16" y="${H - 13}" font-size="10" font-family="sans-serif" fill="#334155">Key: ${icon} = ${keyVal} books (half ${icon} = ${keyVal / 2} books)</text>
+  </svg>`;
+}
+
+const _G4M_FRUIT_CHART = _g4mBarChart('Favourite Fruits — Class Survey', ['Apple', 'Banana', 'Mango', 'Orange'], [14, 10, 18, 6]);
+const _G4M_BOOKS_PICTO = _g4mPictogram('Books Read This Week', '📖', 2, [
+  { label: 'Monday',    count: 3   },
+  { label: 'Tuesday',   count: 2.5 },
+  { label: 'Wednesday', count: 4   },
+]);
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4m-data-020', chapterId:'g4-data', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_FRUIT_CHART}</div>According to the bar chart, which fruit is the MOST popular?`,
+    options:['Apple','Banana','Mango','Orange'],
+    answer:'Mango',
+    hint:'The most popular fruit has the TALLEST bar.',
+    explanation:'<b>Mango</b> has the tallest bar, reaching 18 - the highest value on the chart, so it is the most popular fruit in this survey.' }),
+
+  makeNum({ id:'g4m-data-021', chapterId:'g4-data', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_FRUIT_CHART}</div>How many MORE children chose Mango than Orange?`,
+    answer:'12', acceptableAnswers:['12'],
+    hint:'Read the value for Mango and the value for Orange from the chart, then subtract.',
+    explanation:'Mango = 18. Orange = 6. Difference = 18 − 6 = <b>12 more children</b> chose Mango than Orange.' }),
+
+  makeNum({ id:'g4m-data-022', chapterId:'g4-data', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_BOOKS_PICTO}</div>Using the KEY at the bottom of the pictogram, how many books were read on WEDNESDAY?`,
+    answer:'8', acceptableAnswers:['8'],
+    hint:'Count the full 📖 symbols on the Wednesday row, then multiply by the key value.',
+    explanation:'Wednesday shows 4 full symbols. Key: each 📖 = 2 books. 4 × 2 = <b>8 books</b>.' }),
+
+  makeNum({ id:'g4m-data-023', chapterId:'g4-data', difficulty:3,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_BOOKS_PICTO}</div>What is the TOTAL number of books read over Monday, Tuesday AND Wednesday?`,
+    answer:'19', acceptableAnswers:['19'],
+    hint:'Monday = 3 symbols. Tuesday = 2½ symbols (the faded one is half). Wednesday = 4 symbols. Convert each row to books using the key, then add.',
+    explanation:'Monday: 3 × 2 = 6 books. Tuesday: 2½ × 2 = 5 books (the faded symbol is half a symbol = 1 book). Wednesday: 4 × 2 = 8 books. Total = 6 + 5 + 8 = <b>19 books</b>.' })
+
+);

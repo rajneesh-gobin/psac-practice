@@ -82,6 +82,8 @@ STATIC_QUESTIONS.push(
 ## question_loader.js — LOCAL_FILES
 For `file://` local dev, each subject has an explicit file list in `LOCAL_FILES`. When adding new question files, add them here too. Prod (Netlify) auto-discovers all files in `subjects/[id]/questions/`.
 
+**Also bump `_CACHE_VERSION` in the same file.** Prod caches each subject's question JSON in `localStorage` for 7 days. Without a bump, a child keeps getting the old question set for up to a week after deploy — new chapters just do not appear, and nothing in the UI explains why. Bumping it also purges the previous version's cache entries.
+
 ---
 
 ## Subjects & chapters completed
@@ -105,6 +107,59 @@ All 15 subjects (grades 4/5/6 × 5 subjects each) are fully built with 19 questi
 - `ch06_g4_map_skills.js`, `ch08_g5_map_skills.js`, `ch07_g6_map_skills.js`
 - Self-contained inline SVG: 4 rivers + 5 mountains + 4 towns + compass rose + Mauritius flag strips
 - 6 map-reading questions per grade (18 total)
+
+---
+
+### Passages & Text Types chapters (English + French, all grades)
+Real exam-style texts in the MIE text types, with the passage embedded in every
+question (practice and exam both serve single questions at random, so there is
+no shared-stem slot to hang it on).
+
+| Grade | Chapter id | File | Text types |
+|---|---|---|---|
+| G4 Eng | `g4eng-passages` | `ch07_g4_passages.js` | story, poster/notice, postcard, recipe/instructions |
+| G5 Eng | `eng-passages` | `ch09_passages.js` | email (From/To/Cc/Subject), informal letter, personal recount, advertisement, poem |
+| G6 Eng | `g6eng-passages` | `ch07_g6_passages.js` | formal letter, newspaper report, advertisement + small print, legend (Pieter Both), factual report + data table |
+| G4 Fr | `g4fr-textes` | `ch09_g4_textes.js` | récit, affiche, carte postale, recette |
+| G5 Fr | `fr-textes` | `ch11_textes.js` | courriel, lettre amicale, récit personnel, annonce, poème |
+| G6 Fr | `g6fr-textes` | `ch09_g6_textes.js` | lettre formelle, article de journal, dépliant touristique, légende, mode d'emploi |
+
+Grounded in the MIE pupils' books: G5 English Units 1–3 teach postcard / email /
+informal letter; G6 English Units 1–3 teach folktale, legend, formal letter and
+poster; G6 French dossiers cover récit, descriptif, informatif, dialogue and
+brochure. Passages are original prose in Mauritian settings — nothing is copied
+out of a textbook.
+
+Grade progression: G4 = literal retrieval + one inference; G5 = evidence,
+simile/metaphor, bracketed conditions, deadlines; G6 = balance and bias in
+reporting, unnamed sources, real cost behind an advertised price, moral of a
+legend, reading a table against the prose.
+
+### Description d'Images chapters (French, all grades)
+Both PSAC formats: **one picture to describe**, and **three pictures telling a
+story**. Sourced from the MIE G6 French « Je décris une image » task and the
+picture-sequence writing in `Grade_5_French_40_Day_Practice_Workbook.pdf`.
+
+| Grade | Chapter id | File | Scenes |
+|---|---|---|---|
+| G4 Fr | `g4fr-images` | `ch10_g4_images.js` | à la plage (1 image) · le ballon perdu (3 images) |
+| G5 Fr | `fr-images` | `ch12_images.js` | au marché (1 image) · le chat dans le sac (3 images) |
+| G6 Fr | `g6fr-images` | `ch10_g6_images.js` | journée de l'environnement (1 image) · l'oiseau blessé (3 images) |
+
+The G5 and G6 sequences are the workbook's own Day 40 and Day 30 stories, so
+practice here lines up with the paper exercises.
+
+**Scenes are inline SVG, not photos.** Same reasoning as the maths diagrams: no
+external image can 404, it works offline in the PWA, and the contents are known
+exactly, so every question has a verifiable answer. Scenery is drawn from
+rects/circles/polygons; people and objects are emoji in `<text>`. The `<title>`
+is the generic "Image à décrire" — a descriptive title would leak the answers.
+
+Skills covered, by grade: G4 lieu/temps/personnages/actions, prépositions de
+lieu, connecteurs *D'abord–Ensuite–Enfin*, passé composé with *être*; G5 premier
+plan / arrière-plan, *être en train de*, imparfait vs passé composé, inventing
+dialogue; G6 champ lexical, discours indirect, *si + présent → futur*,
+narrator's point of view, and the message the image argues for.
 
 ---
 
@@ -194,9 +249,56 @@ All 15 subjects (grades 4/5/6 × 5 subjects each) are fully built with 19 questi
    rotating now costs nothing.
 3. **Push notifications for assignments** — infrastructure is ready; wire up `push-send.js` when parent creates an assignment
 4. **Badge API** — show assignment count badge on app icon (needs Supabase assignment count)
-5. **Enrichment chapters for French/English/Maths** — photo-based vocab (Vocabulaire en Images, Vocabulary Builder, Shapes Around Us)
+5. **Enrichment chapters for French/English/Maths** — partly superseded: `Description d'Images` (French, all grades) and `Passages & Text Types` (English + French, all grades) now cover the picture and text-type work. Still open: an English "Vocabulary Builder" and a maths "Shapes Around Us" picture chapter.
 6. **Grade 6 maths enrichment** — not started
-7. **Illustrated questions for Maths chapters** — shapes, graphs, geometry diagrams
+7. ~~Illustrated questions for Maths chapters~~ — **DONE for Grade 4 & 5** (Grade 6 Maths already had some).
+   All inline SVG (no external image dependency), built from straight lines/circles/polygons only —
+   no elliptical-arc SVG math, so nothing can render subtly wrong on any device.
+   - `g4-geometry` (+6 g4m-geo-020..025): right/acute/obtuse angle rays, equilateral/isosceles
+     triangles marked with tick marks, a square with all 4 lines of symmetry drawn.
+   - `g4-measures` (+3 g4m-meas-020..022): analog clock faces (`_g4mClockFace(hour,minute)` helper,
+     hands positioned by real trig, no digital readout — genuinely has to be read).
+   - `g4-data` (+4 g4m-data-020..023): a real bar chart (`_g4mBarChart`) and pictogram
+     (`_g4mPictogram`) with half-symbol shading, replacing "using the bar chart..." questions that
+     previously had no picture at all.
+   - New file `subjects/grade5-maths/questions/illustrated_diagrams.js` (+11 g5m-illus-001..011):
+     reflex-angle diagram (shaded wedge fan, sampled via `Math.cos/sin` in a loop — no arc-sweep
+     flags), triangle/quadrilateral angle-sum problems ("? angle" diagrams, "not to scale" like a
+     real exam paper), a non-square rectangle showing only its 2 real symmetry lines (tests the
+     "diagonals aren't symmetry lines unless it's a square" misconception), a 5-bar test-score
+     chart (mean/range/lowest), a car-sales pictogram, and two analog-clock questions (one is an
+     elapsed-time-between-two-clocks problem).
+   - Registered in `question_loader.js` `LOCAL_FILES['grade5-maths']` for local `file://` dev;
+     prod auto-discovers it.
+8. ~~Illustration coverage across other subjects (exam mode)~~ — **broad pass done**, follow-up
+   session. Metric used: illustrated questions as % of a subject's *whole* pool, since exam mode
+   draws proportionally across all chapters — a subject can have "some" illustrated chapters and
+   still show a blank paper almost every time if the pool is huge. Science was already the
+   strongest (10.6–16.9%); this pass targeted the weakest instead:
+   - **Grade 5 Maths** (+13 more, `illustrated_diagrams.js` g5m-illus-012..024): angles-around-a-
+     point (reuses the reflex-angle wedge-fan technique), fraction bars, a 100-square percentage
+     grid, decimal number lines, grid-square areas, a triangle base/height diagram, and two
+     perimeter diagrams (rectangle + a labelled L-shape). Still only ~1.4% of the 1,045-question
+     pool — the pool itself would need trimming or a much larger illustrated batch (50+) to move
+     this further; flagged, not solved.
+   - **Grade 6 Maths** (+14, spread across `ch07_geometry`/`ch09_area_vol`/`ch10_time_speed`/
+     `ch11_graphs`): angle-on-a-line, a shaded reflex wedge, a cube net (surface area), a simple
+     pseudo-3D cuboid (fixed offset vector, no trig), the D/S/T speed-triangle mnemonic, and a real
+     coordinate grid with plotted points (`_g6mCoordGrid`, computed by code, not hand-typed pixels).
+   - **French, all 3 grades** (+42: G4 `ch01_vocabulaire` +10 / `ch02_noms` +6, G5 `ch01_vocabulaire`
+     +10 / `ch02_noms` +6, G6 `ch06_lecture` +10) — was the weakest subject family (2.1–2.8%). Every
+     `<img>` filename was verified to actually exist on Wikimedia Commons via the `action=query`
+     API (`titles=File:X|File:Y|...&formatversion=2`, checking for the `missing` key) **before**
+     being written into a question — nothing here is a guessed/unverified filename. G6 has no
+     vocabulaire chapter (grammar-only), so its new content extends `g6fr-lecture`'s existing
+     action-verb-photo pattern (dormir/chanter/dessiner/cuisiner/danser/sauter/sourire/conduire/
+     pêcher/pleurer) instead.
+   - **English** (+17: G4 `ch01_nouns` +6 / `ch03_adjectives` +2, G5 `ch07_vocabulary` +6, G6
+     `ch06_vocabulary` +3) and **History** (+5: G4 `ch03_voyages` +2 / `ch05_weather` +1, G5
+     `ch06_volcanism` +1, G6 `ch05_natural_hazards` +1) — lighter top-up as scoped, same
+     Commons-verified-before-use discipline.
+   - Every new global SVG-helper/constant name across all touched files was checked for collisions
+     (all files share one global JS scope at runtime, loaded via plain `<script>` tags) — none found.
 
 ---
 

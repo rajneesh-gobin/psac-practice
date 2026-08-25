@@ -169,3 +169,61 @@ STATIC_QUESTIONS.push(
     explanation:'Vertically opposite to 68° = 68° (equal). Adjacent angle = 180° − 68° = <b>112°</b>. The four angles: 68°, 112°, 68°, 112°. Vertically opposite angles are always equal; adjacent angles sum to 180° (supplementary).' })
 
 );
+
+// ── Illustrated questions: an actual diagram for "angles on a line", a
+//    shaded reflex-angle wedge, a triangle with its real line of symmetry
+//    drawn, and a quadrilateral angle-sum problem. Straight lines, circles
+//    and polygons only - no elliptical-arc SVG commands.
+const _G6M_SVG_ANGLE_LINE = `<svg viewBox="0 0 300 180" width="300" height="180" style="display:block;margin:6px auto;background:#fefce8;border-radius:8px;border:1px solid #fde68a"><line x1="20" y1="150" x2="280" y2="150" stroke="#1e293b" stroke-width="3"/><line x1="150" y1="150" x2="80" y2="50" stroke="#1e293b" stroke-width="3"/><circle cx="150" cy="150" r="3" fill="#1e293b"/><text x="108" y="125" font-size="14" font-weight="600" font-family="sans-serif" fill="#1e293b">118°</text><text x="195" y="125" font-size="14" font-weight="bold" font-family="sans-serif" fill="#dc2626">?</text></svg>`;
+
+function _g6mReflexSVG() {
+  const cx = 100, cy = 100, r = 80, arcR = 50;
+  const rayBDeg = 160; // ray B, 160° clockwise from ray A (0°, pointing right)
+  const ax = cx + r, ay = cy;
+  const bx = (cx + r * Math.cos(rayBDeg * Math.PI / 180)).toFixed(1);
+  const by = (cy + r * Math.sin(rayBDeg * Math.PI / 180)).toFixed(1);
+  let fan = `${cx},${cy} `;
+  for (let d = rayBDeg; d <= 360; d += 10) {
+    const rad = d * Math.PI / 180;
+    fan += `${(cx + arcR * Math.cos(rad)).toFixed(1)},${(cy + arcR * Math.sin(rad)).toFixed(1)} `;
+  }
+  return `<svg viewBox="0 0 200 200" width="200" height="200" style="display:block;margin:6px auto;background:#fefce8;border-radius:8px;border:1px solid #fde68a">
+    <polygon points="${fan}" fill="#fca5a5" fill-opacity="0.6" stroke="none"/>
+    <line x1="${cx}" y1="${cy}" x2="${ax}" y2="${ay}" stroke="#1e293b" stroke-width="3"/>
+    <line x1="${cx}" y1="${cy}" x2="${bx}" y2="${by}" stroke="#1e293b" stroke-width="3"/>
+    <circle cx="${cx}" cy="${cy}" r="3" fill="#1e293b"/>
+  </svg>`;
+}
+
+const _G6M_SVG_TRI_SYMMETRY = `<svg viewBox="0 0 200 190" width="200" height="190" style="display:block;margin:6px auto;background:#f0fdf4;border-radius:8px;border:1px solid #86efac"><polygon points="100,20 30,170 170,170" fill="#dcfce7" stroke="#166534" stroke-width="2.5"/><line x1="100" y1="20" x2="100" y2="170" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,4"/></svg>`;
+
+const _G6M_SVG_QUAD_ANGLES = `<svg viewBox="0 0 260 210" width="260" height="210" style="display:block;margin:6px auto;background:#fce7f3;border-radius:8px;border:1px solid #f9a8d4"><polygon points="40,40 220,30 240,170 20,180" fill="#fdf2f8" stroke="#9d174d" stroke-width="2.5"/><text x="58" y="62" font-size="13" font-weight="600" font-family="sans-serif" fill="#1e293b">110°</text><text x="185" y="52" font-size="13" font-weight="600" font-family="sans-serif" fill="#1e293b">80°</text><text x="200" y="155" text-anchor="end" font-size="13" font-weight="600" font-family="sans-serif" fill="#1e293b">95°</text><text x="45" y="165" font-size="16" font-weight="bold" font-family="sans-serif" fill="#dc2626">?</text><text x="130" y="200" text-anchor="middle" font-size="9" font-style="italic" font-family="sans-serif" fill="#64748b">(diagram not to scale)</text></svg>`;
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g6m-geo-020', chapterId:'g6-geometry', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_ANGLE_LINE}</div>The two angles shown sit on a straight line. One is marked 118°. What is the size of the OTHER angle (marked ?)?`,
+    answer:'62', acceptableAnswers:['62','62°'],
+    hint:'Angles on a straight line always add up to 180°.',
+    explanation:'Angles on a straight line sum to 180°. 180° − 118° = <b>62°</b>.' }),
+
+  makeMCQ({ id:'g6m-geo-021', chapterId:'g6-geometry', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_g6mReflexSVG()}</div>Two rays meet at a point. The shaded region shows the angle between them, going the LONG way round. What TYPE of angle is shaded?`,
+    options:['Acute','Right angle','Obtuse','Reflex'],
+    answer:'Reflex',
+    hint:'The shaded region sweeps well past a straight line (180°) - more than halfway around the point.',
+    explanation:'The shaded region goes more than halfway around the point - further than 180° (a straight line) but less than a full turn (360°). This makes it a <b>reflex angle</b>.' }),
+
+  makeNum({ id:'g6m-geo-022', chapterId:'g6-geometry', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_TRI_SYMMETRY}</div>This isosceles triangle has ONE line of symmetry drawn (the dashed line from the top corner to the middle of the base). How many lines of symmetry does an isosceles triangle have IN TOTAL?`,
+    answer:'1', acceptableAnswers:['1'],
+    hint:'Try folding the triangle along the dashed line, then try any other line - does it still match?',
+    explanation:'An isosceles triangle has exactly <b>1 line of symmetry</b> - the line from the apex (top corner, between the two equal sides) straight down to the midpoint of the base. No other fold line makes the two halves match, because the base is a different length from the two equal sides.' }),
+
+  makeNum({ id:'g6m-geo-023', chapterId:'g6-geometry', difficulty:3,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_QUAD_ANGLES}</div>The quadrilateral shown has three angles marked: 110°, 80° and 95°. Angles in a quadrilateral add up to 360°. What is the size of the MISSING angle (marked ?)?`,
+    answer:'75', acceptableAnswers:['75','75°'],
+    hint:'Add the three known angles, then subtract from 360°.',
+    explanation:'110° + 80° + 95° = 285°. 360° − 285° = <b>75°</b>. Angles in any quadrilateral always add up to 360°.' })
+
+);

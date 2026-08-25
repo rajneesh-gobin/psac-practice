@@ -126,3 +126,60 @@ STATIC_QUESTIONS.push(
     explanation:'Ribbon: 3 × Rs 25 = Rs 75. Lace: 2 × Rs 18 = Rs 36. Total: Rs 75 + Rs 36 = Rs 111. Change: Rs 200 − Rs 111 = <b>Rs 89</b>. Three-step money word problem.' })
 
 );
+
+// ── Illustrated questions: a real analog clock face, hands drawn at the
+//    exact time requested (computed once at load time - no digital readout
+//    on the dial itself, so the question genuinely requires reading it).
+function _g4mClockFace(hour, minute) {
+  const size = 180, cx = size / 2, cy = size / 2, r = 78;
+  const hourDeg = ((hour % 12) + minute / 60) * 30 - 90;
+  const minDeg  = minute * 6 - 90;
+  const hourLen = r * 0.5, minLen = r * 0.8;
+  const hRad = hourDeg * Math.PI / 180, mRad = minDeg * Math.PI / 180;
+  const hx = (cx + hourLen * Math.cos(hRad)).toFixed(1), hy = (cy + hourLen * Math.sin(hRad)).toFixed(1);
+  const mx = (cx + minLen  * Math.cos(mRad)).toFixed(1), my = (cy + minLen  * Math.sin(mRad)).toFixed(1);
+  let numbers = '', ticks = '';
+  for (let n = 1; n <= 12; n++) {
+    const a = (n * 30 - 90) * Math.PI / 180;
+    const nx = (cx + (r - 16) * Math.cos(a)).toFixed(1), ny = (cy + (r - 16) * Math.sin(a) + 4).toFixed(1);
+    numbers += `<text x="${nx}" y="${ny}" text-anchor="middle" font-size="13" font-weight="600" font-family="sans-serif" fill="#1e293b">${n}</text>`;
+  }
+  for (let n = 0; n < 60; n += 5) {
+    const a = (n * 6 - 90) * Math.PI / 180;
+    const x1 = (cx + (r - 4)  * Math.cos(a)).toFixed(1), y1 = (cy + (r - 4)  * Math.sin(a)).toFixed(1);
+    const x2 = (cx + (r - 11) * Math.cos(a)).toFixed(1), y2 = (cy + (r - 11) * Math.sin(a)).toFixed(1);
+    ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#64748b" stroke-width="2"/>`;
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" style="max-width:200px;max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="white" stroke="#334155" stroke-width="3"/>
+    ${ticks}${numbers}
+    <line x1="${cx}" y1="${cy}" x2="${hx}" y2="${hy}" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round"/>
+    <line x1="${cx}" y1="${cy}" x2="${mx}" y2="${my}" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="4" fill="#dc2626"/>
+  </svg>`;
+}
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4m-meas-020', chapterId:'g4-measures', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:10px">${_g4mClockFace(3, 0)}</div>What time does this clock show?`,
+    options:['2 o\'clock','3 o\'clock','4 o\'clock','9 o\'clock'],
+    answer:"3 o'clock",
+    hint:'The minute hand points to the 12, so it is exactly on the hour. Read the hour hand.',
+    explanation:'The minute hand points to <b>12</b> (exactly on the hour) and the hour hand points to <b>3</b>. The time is <b>3 o\'clock</b>.' }),
+
+  makeMCQ({ id:'g4m-meas-021', chapterId:'g4-measures', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:10px">${_g4mClockFace(6, 30)}</div>What time does this clock show?`,
+    options:['6 o\'clock','Half past 5','Half past 6','Half past 7'],
+    answer:'Half past 6',
+    hint:'The minute hand points to the 6 (30 minutes = half past). The hour hand is between two numbers - which two?',
+    explanation:'The minute hand points to <b>6</b>, meaning 30 minutes past the hour. The hour hand sits halfway between 6 and 7, showing the hour has not been fully reached yet. This is <b>half past 6</b>.' }),
+
+  makeMCQ({ id:'g4m-meas-022', chapterId:'g4-measures', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:10px">${_g4mClockFace(9, 15)}</div>What time does this clock show?`,
+    options:['Quarter past 9','Quarter to 9','Half past 9','Quarter past 3'],
+    answer:'Quarter past 9',
+    hint:'The minute hand points to the 3 (15 minutes = quarter past). Read the hour hand, not the number the minute hand points to.',
+    explanation:'The minute hand points to <b>3</b>, meaning 15 minutes past the hour (a quarter of an hour). The hour hand is just past the 9. This is <b>quarter past 9</b> - a common mix-up is reading "3" from the minute hand as the hour.' })
+
+);

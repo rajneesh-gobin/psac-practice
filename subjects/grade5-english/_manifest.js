@@ -109,5 +109,17 @@ registerSubject({
         'Practice strategy: **Look, Cover, Write, Check**.',
       ],
     },
+    {
+      id: 'eng-passages', name: 'Passages & Text Types', icon: '📄',
+      notes: [
+        '**Email**: From / To / Cc / Subject. The **Subject** line states the purpose in a few words. **Cc** = people who get a copy.',
+        '**Informal letter**: writer\'s address top right, "Dear …", personal news, ends "With love". Formal letters end "Yours sincerely/faithfully".',
+        '**Personal recount (narrative)**: told with *I*, starts at one particular moment, uses similes and feelings.',
+        '**Advertisement / announcement**: bold key facts, a deadline, and **conditions in brackets** that change the price.',
+        '**Poem**: look for **simile** (like / as), **metaphor** (X *is* Y) and **personification** (an object given human actions).',
+        'When a question asks *how do we know*, point to the **evidence** - a number, a date, a quoted phrase.',
+        'Match every number in a text to the noun it belongs to. Papers set traps with two similar figures.',
+      ],
+    },
   ],
 });

@@ -71,5 +71,17 @@ registerSubject({
         'Use **context clues** - surrounding words - to work out the meaning of unknown words.',
       ],
     },
+    {
+      id: 'g4eng-passages', name: 'Passages & Text Types', icon: '📄',
+      notes: [
+        'A **text type** is the kind of writing you are reading. Each type looks different on the page.',
+        '**Story (narrative)**: has characters, a setting, a problem and an ending. Told in order.',
+        '**Poster / notice**: must answer WHAT, WHEN, WHERE and HOW MUCH. Big bold words, short lines.',
+        '**Postcard**: a very short message on the left, the address on the right. Only the best bits fit.',
+        '**Instructions (recipe, how-to)**: a list of what you need, then **numbered steps** in the right order.',
+        'Words in **brackets** and **small print** usually hide the exceptions - always read them.',
+        'Before you answer, ask yourself: *what kind of text is this?* The type tells you where to look.',
+      ],
+    },
   ],
 });

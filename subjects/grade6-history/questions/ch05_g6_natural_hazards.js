@@ -215,3 +215,14 @@ STATIC_QUESTIONS.push(
     explanation:'A <b>drought</b> is an extended period of <b>abnormally low rainfall</b>. It is serious for Mauritius because: (1) the island\'s <b>reservoirs</b> (like La Nicolière, Mare aux Vacoas) depend on rainfall for drinking water supply; (2) agriculture requires irrigation; (3) sugar cane and vegetable crops can fail. Climate change is increasing the frequency of droughts in Mauritius, making water conservation increasingly important.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6hg-nh-020', chapterId:'g6-natural-hazards', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flood.jpg" alt="water covering a road or land area" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What natural hazard is shown in this picture?</b>',
+    options:['A drought','A flood','A cyclone','A landslide'],
+    answer:'A flood',
+    hint:'Normally-dry land or roads are covered by excess water.',
+    explanation:'A <b>flood</b> happens when water covers land that is normally dry, often after heavy or sudden rainfall. In Mauritius, flash floods are a serious hazard, especially in low-lying areas of Port Louis and near rivers during intense cyclone-season downpours.' })
+
+);

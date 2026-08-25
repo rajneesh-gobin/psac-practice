@@ -142,3 +142,35 @@ STATIC_QUESTIONS.push(
     explanation:'Floor area = 6 x 5 = 30 m2. Floor cost = 30 x 120 = Rs 3,600. Wall area = 2(6x3) + 2(5x3) = 36 + 30 = 66 m2. Less windows/doors: 66 - 6 = 60 m2. Wall cost = 60 x 80 = Rs 4,800. Total = 3,600 + 4,800 = <b>Rs 8,400</b>.' })
 
 );
+
+// ── Illustrated questions: a labelled compound-shape outline (not a text
+//    description), an actual cube net for surface area, and a simple boxed
+//    cuboid for volume. All straight lines/rectangles/polygons with a fixed
+//    offset vector for the pseudo-3D look - no trig, no arcs.
+const _G6M_SVG_COMPOUND = `<svg viewBox="0 0 190 130" width="190" height="130" style="display:block;margin:6px auto;background:#eff6ff;border-radius:8px;border:1px solid #93c5fd"><polygon points="20,20 110,20 110,56 164,56 164,110 20,110" fill="#bfdbfe" stroke="#1e3a8a" stroke-width="2.5"/><text x="65" y="14" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#1e3a8a">5 m</text><text x="8" y="68" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#1e3a8a" transform="rotate(-90 8 68)">5 m</text><text x="92" y="126" text-anchor="middle" font-size="11" font-family="sans-serif" fill="#1e3a8a">8 m</text><text x="122" y="42" font-size="10" font-family="sans-serif" fill="#1e3a8a">2 m</text></svg>`;
+
+const _G6M_SVG_CUBE_NET = `<svg viewBox="0 0 110 145" width="110" height="145" style="display:block;margin:6px auto;background:#fff7ed;border-radius:8px;border:1px solid #fdba74"><rect x="40" y="15" width="30" height="30" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/><rect x="10" y="45" width="30" height="30" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/><rect x="40" y="45" width="30" height="30" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/><rect x="70" y="45" width="30" height="30" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/><rect x="40" y="75" width="30" height="30" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/><rect x="40" y="105" width="30" height="30" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/><text x="55" y="63" text-anchor="middle" font-size="9" font-weight="bold" font-family="sans-serif" fill="#7c2d12">5 cm</text></svg>`;
+
+const _G6M_SVG_CUBOID = `<svg viewBox="0 0 160 140" width="160" height="140" style="display:block;margin:6px auto;background:#f5f3ff;border-radius:8px;border:1px solid #c4b5fd"><polygon points="20,60 100,60 130,35 50,35" fill="#ddd6fe" stroke="#5b21b6" stroke-width="2"/><polygon points="100,60 130,35 130,95 100,120" fill="#c4b5fd" stroke="#5b21b6" stroke-width="2"/><rect x="20" y="60" width="80" height="60" fill="#ede9fe" stroke="#5b21b6" stroke-width="2"/><text x="60" y="135" text-anchor="middle" font-size="10" font-family="sans-serif" fill="#4c1d95">Length = 8 cm</text><text x="115" y="70" font-size="9" font-family="sans-serif" fill="#4c1d95">Width = 4 cm</text><text x="5" y="92" font-size="9" font-family="sans-serif" fill="#4c1d95" transform="rotate(-90 5 92)">Height = 5 cm</text></svg>`;
+
+STATIC_QUESTIONS.push(
+
+  makeNum({ id:'g6m-av-020', chapterId:'g6-area-vol', difficulty:3,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_COMPOUND}</div>Using the measurements marked on the diagram, find the TOTAL AREA of this L-shaped plot of land, in m².`,
+    answer:'34', acceptableAnswers:['34','34 m2','34 m²'],
+    hint:'Split the shape into two rectangles. One rectangle is 5 m × 5 m. The other is (8−5) m wide and (5−2) m tall.',
+    explanation:'Split into two rectangles: left rectangle 5 × 5 = 25 m². Right/bottom rectangle: width = 8−5 = 3 m, height = 5−2 = 3 m, so 3 × 3 = 9 m². Total = 25 + 9 = <b>34 m²</b>. (Check with the other method: full 8×5 rectangle = 40 m², minus the missing 3×2 corner = 6 m², 40 − 6 = 34 m² ✓.)' }),
+
+  makeNum({ id:'g6m-av-021', chapterId:'g6-area-vol', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_CUBE_NET}</div>This is the NET (unfolded shape) of a cube. Each of the 6 square faces has a side length of 5 cm. What is the TOTAL SURFACE AREA of the cube, in cm²?`,
+    answer:'150', acceptableAnswers:['150','150 cm2','150 cm²'],
+    hint:'Surface area of a cube = 6 × (side × side). Find the area of ONE face first.',
+    explanation:'One face = 5 × 5 = 25 cm². A cube has 6 identical faces, as shown unfolded in the net. Total surface area = 6 × 25 = <b>150 cm²</b>.' }),
+
+  makeNum({ id:'g6m-av-022', chapterId:'g6-area-vol', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_CUBOID}</div>This cuboid has the length, width and height marked on the diagram. What is its VOLUME, in cm³?`,
+    answer:'160', acceptableAnswers:['160','160 cm3','160 cm³'],
+    hint:'Volume of a cuboid = length × width × height.',
+    explanation:'Volume = 8 × 4 × 5 = <b>160 cm³</b>.' })
+
+);

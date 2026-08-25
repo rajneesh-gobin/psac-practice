@@ -329,3 +329,77 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Le soleil</b>" = the sun. Le ciel : le soleil (sun), la lune (moon), les étoiles (stars), un nuage (cloud). Le soleil se lève à l\'est et se couche à l\'ouest.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4fr-voc-044', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/House.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Une école','Une maison','Un magasin','Un hôpital'],
+    answer:'Une maison',
+    hint:'C\'est l\'endroit où une famille habite.',
+    explanation:'"<b>Une maison</b>" = a house. Les bâtiments : une maison (house), une école (school), un magasin (shop), un hôpital (hospital).' }),
+
+  makeMCQ({ id:'g4fr-voc-045', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Umbrella.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Un chapeau','Un parapluie','Un sac','Un manteau'],
+    answer:'Un parapluie',
+    hint:'On l\'utilise pour se protéger de la pluie.',
+    explanation:'"<b>Un parapluie</b>" = an umbrella. On l\'ouvre quand il pleut ! Les objets de pluie : un parapluie (umbrella), un manteau (coat), des bottes (boots).' }),
+
+  makeMCQ({ id:'g4fr-voc-046', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Moon.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Le soleil','La lune','Une étoile','Un nuage'],
+    answer:'La lune',
+    hint:'On la voit dans le ciel la nuit.',
+    explanation:'"<b>La lune</b>" = the moon. Le ciel de nuit : la lune (moon), les étoiles (stars). Le ciel de jour : le soleil (sun), les nuages (clouds).' }),
+
+  makeMCQ({ id:'g4fr-voc-047', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fish.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est cet animal ?</b>',
+    options:['Un oiseau','Un poisson','Un lapin','Un chat'],
+    answer:'Un poisson',
+    hint:'Il vit dans l\'eau et respire avec des branchies.',
+    explanation:'"<b>Un poisson</b>" = a fish. Les animaux aquatiques : un poisson (fish), une baleine (whale), un dauphin (dolphin).' }),
+
+  makeMCQ({ id:'g4fr-voc-048', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Flower.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Une fleur','Un arbre','Une feuille','Un fruit'],
+    answer:'Une fleur',
+    hint:'Elle pousse dans le jardin et sent souvent très bon.',
+    explanation:'"<b>Une fleur</b>" = a flower. Le jardin : une fleur (flower), un arbre (tree), une feuille (leaf), l\'herbe (grass).' }),
+
+  makeMCQ({ id:'g4fr-voc-049', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Star.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['La lune','Le soleil','Une étoile','Un nuage'],
+    answer:'Une étoile',
+    hint:'On en voit beaucoup dans le ciel la nuit, elles brillent.',
+    explanation:'"<b>Une étoile</b>" = a star. On dit "<b>l\'étoile</b>" (avec élision) devant une voyelle. Le ciel de nuit : la lune (moon), les étoiles (stars).' }),
+
+  makeMCQ({ id:'g4fr-voc-050', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sheep.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est cet animal ?</b>',
+    options:['Un mouton','Une vache','Un cheval','Une chèvre'],
+    answer:'Un mouton',
+    hint:'Il a une laine épaisse et fait "bêêê".',
+    explanation:'"<b>Un mouton</b>" = a sheep. Les animaux de la ferme : un mouton (sheep), une vache (cow), un cheval (horse), une chèvre (goat).' }),
+
+  makeMCQ({ id:'g4fr-voc-051', chapterId:'g4fr-vocabulaire', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Duck.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est cet animal ?</b>',
+    options:['Un canard','Une poule','Un oiseau','Un cygne'],
+    answer:'Un canard',
+    hint:'Il nage sur l\'eau et fait "coin coin".',
+    explanation:'"<b>Un canard</b>" = a duck. Les oiseaux de la ferme : un canard (duck), une poule (hen), un coq (rooster), une oie (goose).' }),
+
+  makeMCQ({ id:'g4fr-voc-052', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rabbit.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est cet animal ?</b>',
+    options:['Un chat','Un lapin','Un hamster','Une souris'],
+    answer:'Un lapin',
+    hint:'Il a de longues oreilles et saute.',
+    explanation:'"<b>Un lapin</b>" = a rabbit. Les petits animaux : un lapin (rabbit), un hamster (hamster), une souris (mouse).' }),
+
+  makeMCQ({ id:'g4fr-voc-053', chapterId:'g4fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bird.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel est cet animal ?</b>',
+    options:['Un poisson','Un oiseau','Un papillon','Une abeille'],
+    answer:'Un oiseau',
+    hint:'Il a des ailes et peut voler dans le ciel.',
+    explanation:'"<b>Un oiseau</b>" = a bird. On dit "<b>l\'oiseau</b>" (avec élision) devant une voyelle. Il vole dans le ciel avec ses ailes et chante souvent le matin.' })
+
+);

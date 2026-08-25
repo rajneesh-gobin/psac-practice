@@ -389,3 +389,77 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Ils jouent</b>" → verbe <b>jouer</b> (to play). Conjugaison : je joue, tu joues, il/elle joue, nous jouons, vous jouez, ils/elles jouent. Verbe régulier du 1er groupe (-er). "Jouer <b>à</b>" (sport/jeu) vs "jouer <b>de</b>" (instrument) : il joue au football, il joue de la guitare.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6fr-lec-042', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sleeping.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il mange.','Il dort.','Il lit.','Il court.'],
+    answer:'Il dort.',
+    hint:'Ses yeux sont fermés et il se repose.',
+    explanation:'"<b>Il dort</b>" → verbe <b>dormir</b> (to sleep). Conjugaison : je dors, tu dors, il/elle dort, nous dormons, vous dormez, ils/elles dorment. Verbe irrégulier du 3e groupe.' }),
+
+  makeMCQ({ id:'g6fr-lec-043', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Singing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    options:['Elle parle.','Elle chante.','Elle crie.','Elle rit.'],
+    answer:'Elle chante.',
+    hint:'Elle produit une mélodie avec sa voix.',
+    explanation:'"<b>Elle chante</b>" → verbe <b>chanter</b> (to sing). Conjugaison : je chante, tu chantes, il/elle chante, nous chantons, vous chantez, ils/elles chantent. Verbe régulier du 1er groupe (-er).' }),
+
+  makeMCQ({ id:'g6fr-lec-044', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Drawing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    options:['Elle écrit.','Elle dessine.','Elle peint.','Elle lit.'],
+    answer:'Elle dessine.',
+    hint:'Elle utilise un crayon pour créer une image.',
+    explanation:'"<b>Elle dessine</b>" → verbe <b>dessiner</b> (to draw). Conjugaison : je dessine, tu dessines, il/elle dessine, nous dessinons, vous dessinez, ils/elles dessinent. Différence : dessiner (crayon/pencil) vs peindre (peinture/paint).' }),
+
+  makeMCQ({ id:'g6fr-lec-045', chapterId:'g6fr-lecture', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cooking.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il mange.','Il cuisine.','Il lave.','Il range.'],
+    answer:'Il cuisine.',
+    hint:'Il prépare un repas dans la cuisine.',
+    explanation:'"<b>Il cuisine</b>" → verbe <b>cuisiner</b> (to cook). Conjugaison : je cuisine, tu cuisines, il/elle cuisine, nous cuisinons, vous cuisinez, ils/elles cuisinent. Verbe régulier du 1er groupe (-er).' }),
+
+  makeMCQ({ id:'g6fr-lec-046', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dancing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    options:['Elle marche.','Elle danse.','Elle saute.','Elle court.'],
+    answer:'Elle danse.',
+    hint:'Elle bouge son corps en rythme avec la musique.',
+    explanation:'"<b>Elle danse</b>" → verbe <b>danser</b> (to dance). Conjugaison : je danse, tu danses, il/elle danse, nous dansons, vous dansez, ils/elles dansent. Verbe régulier du 1er groupe (-er).' }),
+
+  makeMCQ({ id:'g6fr-lec-047', chapterId:'g6fr-lecture', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Jumping.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il court.','Il saute.','Il tombe.','Il marche.'],
+    answer:'Il saute.',
+    hint:'Ses deux pieds ont quitté le sol en même temps.',
+    explanation:'"<b>Il saute</b>" → verbe <b>sauter</b> (to jump). Conjugaison : je saute, tu sautes, il/elle saute, nous sautons, vous sautez, ils/elles sautent. Verbe régulier du 1er groupe (-er).' }),
+
+  makeMCQ({ id:'g6fr-lec-048', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Smiling.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    options:['Elle pleure.','Elle sourit.','Elle crie.','Elle dort.'],
+    answer:'Elle sourit.',
+    hint:'Ses lèvres forment un sourire - elle est heureuse.',
+    explanation:'"<b>Elle sourit</b>" → verbe <b>sourire</b> (to smile). Conjugaison : je souris, tu souris, il/elle sourit, nous sourions, vous souriez, ils/elles sourient. Se conjugue comme "rire" (to laugh).' }),
+
+  makeMCQ({ id:'g6fr-lec-049', chapterId:'g6fr-lecture', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Driving.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il marche.','Il conduit.','Il répare.','Il lave.'],
+    answer:'Il conduit.',
+    hint:'Il tient le volant d\'une voiture.',
+    explanation:'"<b>Il conduit</b>" → verbe <b>conduire</b> (to drive). Conjugaison : je conduis, tu conduis, il/elle conduit, nous conduisons, vous conduisez, ils/elles conduisent. Verbe irrégulier du 3e groupe.' }),
+
+  makeMCQ({ id:'g6fr-lec-050', chapterId:'g6fr-lecture', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fishing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    options:['Il nage.','Il pêche.','Il navigue.','Il plonge.'],
+    answer:'Il pêche.',
+    hint:'Il attend patiemment avec une canne pour attraper des poissons.',
+    explanation:'"<b>Il pêche</b>" → verbe <b>pêcher</b> (to fish). Conjugaison : je pêche, tu pêches, il/elle pêche, nous pêchons, vous pêchez, ils/elles pêchent. Verbe régulier du 1er groupe (-er). Ne pas confondre avec "une pêche" (a peach) !' }),
+
+  makeMCQ({ id:'g6fr-lec-051', chapterId:'g6fr-lecture', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Crying_baby.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que le bébé fait ?</b>',
+    options:['Il rit.','Il pleure.','Il dort.','Il mange.'],
+    answer:'Il pleure.',
+    hint:'Il verse des larmes et fait du bruit.',
+    explanation:'"<b>Il pleure</b>" → verbe <b>pleurer</b> (to cry). Conjugaison : je pleure, tu pleures, il/elle pleure, nous pleurons, vous pleurez, ils/elles pleurent. Verbe régulier du 1er groupe (-er). Contraire : rire (to laugh).' })
+
+);

@@ -187,3 +187,124 @@ STATIC_QUESTIONS.push(
     explanation:'Sum of 5 scores = 62 + 78 + 55 + 84 + 71 = 350. Original mean = 350 / 5 = 70. New sum = 350 + 91 = 441. New mean = 441 / 6 = <b>73.5</b>. The mean increased because 91 is above the original mean of 70.' })
 
 );
+
+// ── Illustrated questions: a real coordinate grid with plotted points, plus
+//    a bar chart and a pictogram - computed via code so the arithmetic
+//    (grid lines, point positions) is done by the JS engine, not by hand.
+function _g6mCoordGrid(points) {
+  const cell = 20, ox = 30, oyBase = 170, gw = 8, gh = 6;
+  let grid = '';
+  for (let i = 0; i <= gw; i++) {
+    const x = ox + i * cell;
+    grid += `<line x1="${x}" y1="${oyBase}" x2="${x}" y2="${oyBase - gh * cell}" stroke="#e2e8f0" stroke-width="1"/>`;
+    grid += `<text x="${x}" y="${oyBase + 14}" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#64748b">${i}</text>`;
+  }
+  for (let j = 0; j <= gh; j++) {
+    const y = oyBase - j * cell;
+    grid += `<line x1="${ox}" y1="${y}" x2="${ox + gw * cell}" y2="${y}" stroke="#e2e8f0" stroke-width="1"/>`;
+    grid += `<text x="${ox - 10}" y="${y + 3}" text-anchor="middle" font-size="9" font-family="sans-serif" fill="#64748b">${j}</text>`;
+  }
+  let pts = '';
+  points.forEach(p => {
+    const x = ox + p.x * cell, y = oyBase - p.y * cell;
+    pts += `<circle cx="${x}" cy="${y}" r="4" fill="#dc2626"/><text x="${x + 6}" y="${y - 6}" font-size="12" font-weight="bold" font-family="sans-serif" fill="#1e293b">${p.label}</text>`;
+  });
+  return `<svg viewBox="0 0 220 200" width="220" height="200" style="display:block;margin:6px auto;background:white;border-radius:8px;border:1px solid #cbd5e1">
+    <line x1="${ox}" y1="${oyBase}" x2="${ox + gw * cell}" y2="${oyBase}" stroke="#334155" stroke-width="1.5"/>
+    <line x1="${ox}" y1="${oyBase}" x2="${ox}" y2="${oyBase - gh * cell}" stroke="#334155" stroke-width="1.5"/>
+    ${grid}${pts}
+  </svg>`;
+}
+
+function _g6mBarChart(title, cats, vals, opts) {
+  opts = opts || {};
+  const max = opts.max || 20, step = opts.step || 5;
+  const chartTop = 30, chartBottom = 175, chartLeft = 50, barW = 38, gap = 26;
+  const W = chartLeft + cats.length * (barW + gap) + 20, H = 210;
+  const pxPerUnit = (chartBottom - chartTop) / max;
+  let grid = '', bars = '';
+  for (let v = 0; v <= max; v += step) {
+    const y = (chartBottom - v * pxPerUnit).toFixed(1);
+    grid += `<line x1="${chartLeft}" y1="${y}" x2="${W - 15}" y2="${y}" stroke="#e5e7eb" stroke-width="1"/>`;
+    grid += `<text x="${chartLeft - 8}" y="${(+y + 4).toFixed(1)}" text-anchor="end" font-size="10" font-family="sans-serif" fill="#64748b">${v}</text>`;
+  }
+  const colors = ['#3b82f6', '#22c55e', '#f97316', '#a855f7', '#ef4444'];
+  cats.forEach((cat, i) => {
+    const val = vals[i];
+    const h = (val * pxPerUnit).toFixed(1);
+    const x = chartLeft + 15 + i * (barW + gap);
+    const y = (chartBottom - h).toFixed(1);
+    bars += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" fill="${colors[i % colors.length]}" rx="3"/>`;
+    bars += `<text x="${x + barW / 2}" y="${chartBottom + 16}" text-anchor="middle" font-size="10" font-family="sans-serif" fill="#334155">${cat}</text>`;
+    bars += `<text x="${x + barW / 2}" y="${(+y - 6).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="bold" font-family="sans-serif" fill="#1e293b">${val}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block;margin:6px auto;background:white;border-radius:8px;border:1px solid #cbd5e1">
+    <text x="${W / 2}" y="16" text-anchor="middle" font-size="12" font-weight="bold" font-family="sans-serif" fill="#1e293b">${title}</text>
+    <line x1="${chartLeft}" y1="${chartTop}" x2="${chartLeft}" y2="${chartBottom}" stroke="#334155" stroke-width="1.5"/>
+    <line x1="${chartLeft}" y1="${chartBottom}" x2="${W - 15}" y2="${chartBottom}" stroke="#334155" stroke-width="1.5"/>
+    ${grid}${bars}
+  </svg>`;
+}
+
+function _g6mPictogram(title, icon, keyVal, unitName, rows) {
+  const rowH = 30, top = 46, left = 110;
+  let body = '';
+  rows.forEach((rrow, i) => {
+    const y = top + i * rowH;
+    body += `<text x="10" y="${y}" font-size="12" font-family="sans-serif" fill="#334155">${rrow.label}</text>`;
+    const full = Math.floor(rrow.count);
+    const half = (rrow.count - full) >= 0.5;
+    for (let s = 0; s < full; s++) {
+      body += `<text x="${left + s * 22}" y="${y + 5}" font-size="18" font-family="sans-serif">${icon}</text>`;
+    }
+    if (half) body += `<text x="${left + full * 22}" y="${y + 5}" font-size="18" font-family="sans-serif" fill-opacity="0.4">${icon}</text>`;
+  });
+  const H = top + rows.length * rowH + 30;
+  return `<svg viewBox="0 0 320 ${H}" width="320" height="${H}" style="display:block;margin:6px auto;background:white;border-radius:8px;border:1px solid #cbd5e1">
+    <text x="160" y="18" text-anchor="middle" font-size="12" font-weight="bold" font-family="sans-serif" fill="#1e293b">${title}</text>
+    ${body}
+    <rect x="8" y="${H - 26}" width="304" height="18" rx="4" fill="#f1f5f9"/>
+    <text x="16" y="${H - 13}" font-size="10" font-family="sans-serif" fill="#334155">Key: ${icon} = ${keyVal} ${unitName} (half ${icon} = ${keyVal / 2} ${unitName})</text>
+  </svg>`;
+}
+
+const _G6M_COORD_GRID = _g6mCoordGrid([
+  { x: 2, y: 4, label: 'A' }, { x: 6, y: 5, label: 'B' },
+  { x: 4, y: 1, label: 'C' }, { x: 7, y: 2, label: 'D' },
+]);
+const _G6M_PETS_CHART = _g6mBarChart('Pets Owned by the Class', ['Dog', 'Cat', 'Fish', 'Bird'], [15, 11, 7, 4]);
+const _G6M_ICECREAM_PICTO = _g6mPictogram('Ice Creams Sold This Week', '🍦', 5, 'ice creams', [
+  { label: 'Monday',    count: 3   },
+  { label: 'Tuesday',   count: 2.5 },
+  { label: 'Wednesday', count: 4   },
+]);
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6m-gr-020', chapterId:'g6-graphs', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_COORD_GRID}</div>What are the COORDINATES of point B on the grid?`,
+    options:['(2,4)','(6,5)','(4,1)','(7,2)'],
+    answer:'(6,5)',
+    hint:'Coordinates are written (x, y). First read across (x-axis), then read up (y-axis).',
+    explanation:'Point B is 6 units across and 5 units up from the origin, so its coordinates are <b>(6,5)</b>. Always read the x-value (across) first, then the y-value (up).' }),
+
+  makeMCQ({ id:'g6m-gr-021', chapterId:'g6-graphs', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_COORD_GRID}</div>Which point is located at coordinates (4,1)?`,
+    options:['A','B','C','D'],
+    answer:'C',
+    hint:'Find 4 on the x-axis (across), then go up 1 unit.',
+    explanation:'Going 4 units across and 1 unit up lands exactly on point <b>C</b>.' }),
+
+  makeNum({ id:'g6m-gr-022', chapterId:'g6-graphs', difficulty:3,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_PETS_CHART}</div>What is the MEAN (average) number of pets per category shown on the bar chart?`,
+    answer:'9.25', acceptableAnswers:['9.25'],
+    hint:'Add all 4 bar values, then divide by 4.',
+    explanation:'Total = 15 + 11 + 7 + 4 = 37. Mean = 37 ÷ 4 = <b>9.25</b>.' }),
+
+  makeNum({ id:'g6m-gr-023', chapterId:'g6-graphs', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_ICECREAM_PICTO}</div>Using the KEY at the bottom of the pictogram, how many ice creams were sold in TOTAL over Monday, Tuesday and Wednesday?`,
+    answer:'47.5', acceptableAnswers:['47.5'],
+    hint:'Monday = 3 symbols. Tuesday = 2½ symbols (the faded one is half). Wednesday = 4 symbols. Convert each row using the key, then add.',
+    explanation:'Monday: 3 × 5 = 15. Tuesday: 2½ × 5 = 12.5 (the faded symbol is half a symbol = 2.5). Wednesday: 4 × 5 = 20. Total = 15 + 12.5 + 20 = <b>47.5 ice creams</b>.' })
+
+);

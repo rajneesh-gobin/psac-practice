@@ -2,9 +2,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 /* ===== CONTENT PROTECTION ===== */
-/* Prevent text selection on question/UI content; allow it in inputs */
-body { -webkit-user-select: none; user-select: none; }
-input, textarea, [contenteditable], .selectable { -webkit-user-select: auto; user-select: auto; }
+/* Text selection is enabled app-wide for now; individual controls
+   (buttons, tabs, chips) still opt out via user-select: none below. */
+body { -webkit-user-select: text; user-select: text; }
 
 /* Coming-soon subject cards */
 button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
@@ -15,14 +15,24 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 
 /* ===== PARENT DASHBOARD TABS ===== */
 .pd-tab { transition: background 0.15s, color 0.15s, box-shadow 0.15s; }
+/* Opacity-only, no transform: an element that is EVER transform-animated can
+   stay on its own Chromium compositing layer for a while after the animation
+   ends, even once the CSS transform value itself has reverted to none (the
+   "backwards"/"forwards" fill-mode distinction does not prevent this - it only
+   controls the CSS value, not the compositor's promotion cooldown). Any input
+   under such a layer can have its native autofill/suggestion popover silently
+   stop registering clicks for that whole cooldown window. Dropping the
+   translateY slide removes the trigger entirely instead of racing its timing.
+   See also engine/protect.js and the screen-auth/reset-password/family-setup
+   card restructure for the same underlying bug. */
 .pd-tab-content { animation: fadeSlideIn 0.2s ease both; }
 
 /* ===== SCREEN TRANSITIONS ===== */
 .screen { animation: fadeSlideIn 0.3s ease both; }
 .screen.hidden { display: none !important; }
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ===== BUTTONS ===== */

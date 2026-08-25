@@ -40,6 +40,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-maths/questions/questions_challenge.js',
       'subjects/grade5-maths/questions/questions_challenge2.js',
       'subjects/grade5-maths/questions/questions_audit.js',
+      'subjects/grade5-maths/questions/illustrated_diagrams.js',
     ],
     'grade5-french': [
       'subjects/grade5-french/questions/ch01_vocabulaire.js',
@@ -52,6 +53,8 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/ch08_grammaire.js',
       'subjects/grade5-french/questions/ch09_passe_simple.js',
       'subjects/grade5-french/questions/ch10_subjonctif.js',
+      'subjects/grade5-french/questions/ch11_textes.js',
+      'subjects/grade5-french/questions/ch12_images.js',
     ],
     'grade5-english': [
       'subjects/grade5-english/questions/ch01_nouns.js',
@@ -62,6 +65,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-english/questions/ch06_writing.js',
       'subjects/grade5-english/questions/ch07_vocabulary.js',
       'subjects/grade5-english/questions/ch08_spelling.js',
+      'subjects/grade5-english/questions/ch09_passages.js',
     ],
     'grade5-science': [
       'subjects/grade5-science/questions/ch02_plants.js',
@@ -134,6 +138,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-english/questions/ch04_comprehension.js',
       'subjects/grade6-english/questions/ch05_writing.js',
       'subjects/grade6-english/questions/ch06_vocabulary.js',
+      'subjects/grade6-english/questions/ch07_g6_passages.js',
     ],
     'grade6-french': [
       'subjects/grade6-french/questions/ch01_imparfait.js',
@@ -144,6 +149,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/ch06_lecture.js',
       'subjects/grade6-french/questions/ch07_conditionnel.js',
       'subjects/grade6-french/questions/ch08_pqp.js',
+      'subjects/grade6-french/questions/ch09_g6_textes.js',
+      'subjects/grade6-french/questions/ch10_g6_images.js',
     ],
     'grade4-maths': [
       'subjects/grade4-maths/questions/ch01_g4_numeration.js',
@@ -160,6 +167,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-english/questions/ch04_g4_sentences.js',
       'subjects/grade4-english/questions/ch05_g4_comprehension.js',
       'subjects/grade4-english/questions/ch06_g4_vocabulary.js',
+      'subjects/grade4-english/questions/ch07_g4_passages.js',
     ],
     'grade4-science': [
       'subjects/grade4-science/questions/ch01_g4_living_things.js',
@@ -183,6 +191,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/ch06_g4_lecture.js',
       'subjects/grade4-french/questions/ch07_g4_passe_compose.js',
       'subjects/grade4-french/questions/ch08_g4_imparfait.js',
+      'subjects/grade4-french/questions/ch09_g4_textes.js',
+      'subjects/grade4-french/questions/ch10_g4_images.js',
     ],
     'grade4-history': [
       'subjects/grade4-history/questions/ch01_g4_locality.js',
@@ -215,18 +225,37 @@ const QuestionLoader = (() => {
 
   const _CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 
+  // ⚠ BUMP THIS whenever question files are added or edited.
+  //   Without it, the 7-day cache below means a child keeps being served the
+  //   old question set for up to a week after a deploy - new chapters simply
+  //   do not appear, with nothing in the UI to explain why.
+  const _CACHE_VERSION = 2;
+  const _cacheKey = subjectId => `mm_qc_v${_CACHE_VERSION}_${subjectId}`;
+
+  // Drop caches written by any earlier version, so a bump reclaims the space
+  // instead of leaving a dead copy of every subject behind.
+  (function _purgeStaleCaches() {
+    try {
+      const keep = `mm_qc_v${_CACHE_VERSION}_`;
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('mm_qc_') && !k.startsWith(keep)) localStorage.removeItem(k);
+      }
+    } catch {}
+  })();
+
   function _readCache(subjectId) {
     try {
-      const raw = localStorage.getItem(`mm_qc_${subjectId}`);
+      const raw = localStorage.getItem(_cacheKey(subjectId));
       if (!raw) return null;
       const { ts, data } = JSON.parse(raw);
-      if (Date.now() - ts > _CACHE_TTL) { localStorage.removeItem(`mm_qc_${subjectId}`); return null; }
+      if (Date.now() - ts > _CACHE_TTL) { localStorage.removeItem(_cacheKey(subjectId)); return null; }
       return data;
     } catch { return null; }
   }
 
   function _writeCache(subjectId, data) {
-    try { localStorage.setItem(`mm_qc_${subjectId}`, JSON.stringify({ ts: Date.now(), data })); } catch {}
+    try { localStorage.setItem(_cacheKey(subjectId), JSON.stringify({ ts: Date.now(), data })); } catch {}
   }
 
   async function _loadFromAPI(subjectId) {

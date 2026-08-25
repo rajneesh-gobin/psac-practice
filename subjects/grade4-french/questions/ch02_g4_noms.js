@@ -289,3 +289,51 @@ STATIC_QUESTIONS.push(
     explanation:'"Les <b>chevaux</b>" (cheval → chevaux, pluriel en -aux). "mangent <b>de l\'</b>herbe" (herbe = f., commence par h muet → de l\'). "Le <b>œil</b> du cheval" - singulier → œil (le pluriel serait yeux). Trois irrégularités en une phrase !' })
 
 );
+
+// ── Illustrated questions: which article (le/la) goes with each pictured
+//    noun - a genuinely visual way to practise grammatical gender.
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4fr-nom-036', chapterId:'g4fr-noms', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Window.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ fenêtre',
+    options:['le','la','un','les'],
+    answer:'la',
+    hint:'"Fenêtre" est un nom féminin.',
+    explanation:'"<b>La</b> fenêtre" = the window. "Fenêtre" est féminin, donc on utilise "la" (ou "une" au singulier indéfini).' }),
+
+  makeMCQ({ id:'g4fr-nom-037', chapterId:'g4fr-noms', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bed.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ lit',
+    options:['le','la','les','l\''],
+    answer:'le',
+    hint:'"Lit" est un nom masculin.',
+    explanation:'"<b>Le</b> lit" = the bed. "Lit" est masculin, donc on utilise "le" (ou "un" au singulier indéfini).' }),
+
+  makeMCQ({ id:'g4fr-nom-038', chapterId:'g4fr-noms', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Wooden_table.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ table',
+    options:['le','la','les','l\''],
+    answer:'la',
+    hint:'"Table" est un nom féminin.',
+    explanation:'"<b>La</b> table" = the table. "Table" est féminin, donc on utilise "la" (ou "une" au singulier indéfini).' }),
+
+  makeMCQ({ id:'g4fr-nom-039', chapterId:'g4fr-noms', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ball.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ ballon',
+    options:['le','la','les','l\''],
+    answer:'le',
+    hint:'"Ballon" est un nom masculin.',
+    explanation:'"<b>Le</b> ballon" = the ball. "Ballon" est masculin, donc on utilise "le" (ou "un" au singulier indéfini).' }),
+
+  makeMCQ({ id:'g4fr-nom-040', chapterId:'g4fr-noms', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Backpack.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ sac à dos',
+    options:['le','la','les','l\''],
+    answer:'le',
+    hint:'"Sac" est un nom masculin, même dans "sac à dos".',
+    explanation:'"<b>Le</b> sac à dos" = the backpack. "Sac" est masculin ; ajouter "à dos" ne change pas le genre du mot principal.' }),
+
+  makeMCQ({ id:'g4fr-nom-041', chapterId:'g4fr-noms', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Butterfly.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ papillon',
+    options:['le','la','les','l\''],
+    answer:'le',
+    hint:'Attention, "papillon" est masculin même si beaucoup d\'insectes féminins existent (une abeille, une mouche).',
+    explanation:'"<b>Le</b> papillon" = the butterfly. Piège fréquent : "papillon" est <b>masculin</b>, contrairement à "une abeille" (bee) ou "une mouche" (fly) qui sont féminins.' })
+
+);

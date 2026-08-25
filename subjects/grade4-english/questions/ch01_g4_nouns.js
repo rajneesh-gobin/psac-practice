@@ -190,3 +190,49 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Running</b>" is a <b>verb</b> in this sentence — it describes the action being performed. Verbs are doing/action words: run, jump, eat, sleep, play. (Note: "running" can sometimes be a noun — e.g. "Running is good exercise" — but in "The athlete is running", it acts as a verb.)' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4eng-noun-026', chapterId:'g4eng-nouns', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Elephant.jpg" alt="a large animal" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for the animal shown in this picture?</b>',
+    options:['rhino','hippo','elephant','giraffe'],
+    answer:'elephant',
+    hint:'It has a long trunk and very large ears.',
+    explanation:'"<b>Elephant</b>" is a common countable noun naming an animal. It is one of the largest land animals, known for its long trunk and big ears.' }),
+
+  makeMCQ({ id:'g4eng-noun-027', chapterId:'g4eng-nouns', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hat.jpg" alt="an item of clothing" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for this item of clothing?</b>',
+    options:['scarf','hat','glove','shoe'],
+    answer:'hat',
+    hint:'You wear it on your head.',
+    explanation:'"<b>Hat</b>" is a common countable noun naming an item of clothing worn on the head. Other clothing nouns: scarf, glove, shoe, coat.' }),
+
+  makeMCQ({ id:'g4eng-noun-028', chapterId:'g4eng-nouns', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ruler.jpg" alt="a school object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for this school object?</b>',
+    options:['pencil','ruler','eraser','pen'],
+    answer:'ruler',
+    hint:'You use it to draw straight lines and measure length.',
+    explanation:'"<b>Ruler</b>" is a common countable noun naming a piece of school equipment used for measuring and drawing straight lines.' }),
+
+  makeMCQ({ id:'g4eng-noun-029', chapterId:'g4eng-nouns', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Scissors.jpg" alt="a tool" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for this tool?</b>',
+    options:['stapler','glue','scissors','tape'],
+    answer:'scissors',
+    hint:'It has two blades and is used for cutting paper.',
+    explanation:'"<b>Scissors</b>" is a noun naming a cutting tool. Note: "scissors" is always plural in English (like "trousers" and "glasses") — we say "a pair of scissors", not "a scissor".' }),
+
+  makeMCQ({ id:'g4eng-noun-030', chapterId:'g4eng-nouns', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cup.jpg" alt="an object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for this object?</b>',
+    options:['plate','bowl','cup','spoon'],
+    answer:'cup',
+    hint:'You drink from it — it usually has a handle.',
+    explanation:'"<b>Cup</b>" is a common countable noun naming a small container with a handle, used for drinking.' }),
+
+  makeMCQ({ id:'g4eng-noun-031', chapterId:'g4eng-nouns', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Turtle.jpg" alt="an animal" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the noun for the animal shown in this picture?</b>',
+    options:['crab','turtle','frog','lizard'],
+    answer:'turtle',
+    hint:'It has a hard shell on its back and moves slowly.',
+    explanation:'"<b>Turtle</b>" is a common countable noun naming a reptile with a protective shell. Turtles are known for moving slowly on land.' })
+
+);

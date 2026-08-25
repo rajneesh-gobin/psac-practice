@@ -140,3 +140,61 @@ STATIC_QUESTIONS.push(
     explanation:'By 10:00, Cyclist A has covered 1 x 15 = 15 km. Relative speed of B over A = 20 - 15 = 5 km/h. Time for B to close the 15 km gap = 15 / 5 = 3 hours after 10:00 = <b>13:00</b>. Check: B at 13:00 = 3 x 20 = 60 km. A at 13:00 = 4 x 15 = 60 km ✓.' })
 
 );
+
+// ── Illustrated questions: the classic Distance/Speed/Time memory triangle,
+//    a journey line diagram, and an analog clock to convert to 24-hour time.
+const _G6M_SVG_DST_TRIANGLE = `<svg viewBox="0 0 120 100" width="120" height="100" style="display:block;margin:6px auto;background:#f0f9ff;border-radius:8px;border:1px solid #7dd3fc"><polygon points="60,10 10,90 110,90" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/><line x1="35" y1="55" x2="85" y2="55" stroke="#0369a1" stroke-width="1.5"/><line x1="60" y1="55" x2="60" y2="90" stroke="#0369a1" stroke-width="1.5"/><text x="60" y="40" text-anchor="middle" font-size="16" font-weight="bold" font-family="sans-serif" fill="#0c4a6e">D</text><text x="42" y="76" text-anchor="middle" font-size="16" font-weight="bold" font-family="sans-serif" fill="#0c4a6e">S</text><text x="78" y="76" text-anchor="middle" font-size="16" font-weight="bold" font-family="sans-serif" fill="#0c4a6e">T</text></svg>`;
+
+const _G6M_SVG_JOURNEY = `<svg viewBox="0 0 260 90" width="260" height="90" style="display:block;margin:6px auto;background:#f0fdf4;border-radius:8px;border:1px solid #86efac"><line x1="30" y1="45" x2="230" y2="45" stroke="#166534" stroke-width="3"/><circle cx="30" cy="45" r="5" fill="#166534"/><circle cx="230" cy="45" r="5" fill="#166534"/><text x="30" y="30" text-anchor="middle" font-size="10" font-weight="bold" font-family="sans-serif" fill="#166534">Town A</text><text x="230" y="30" text-anchor="middle" font-size="10" font-weight="bold" font-family="sans-serif" fill="#166534">Town B</text><text x="130" y="65" text-anchor="middle" font-size="12" font-family="sans-serif" fill="#166534">180 km</text><text x="130" y="80" text-anchor="middle" font-size="10" font-style="italic" font-family="sans-serif" fill="#64748b">Journey time: 3 hours</text></svg>`;
+
+function _g6mClockFace(hour, minute) {
+  const size = 160, cx = size / 2, cy = size / 2, r = 68;
+  const hourDeg = ((hour % 12) + minute / 60) * 30 - 90;
+  const minDeg  = minute * 6 - 90;
+  const hourLen = r * 0.5, minLen = r * 0.8;
+  const hRad = hourDeg * Math.PI / 180, mRad = minDeg * Math.PI / 180;
+  const hx = (cx + hourLen * Math.cos(hRad)).toFixed(1), hy = (cy + hourLen * Math.sin(hRad)).toFixed(1);
+  const mx = (cx + minLen  * Math.cos(mRad)).toFixed(1), my = (cy + minLen  * Math.sin(mRad)).toFixed(1);
+  let numbers = '', ticks = '';
+  for (let n = 1; n <= 12; n++) {
+    const a = (n * 30 - 90) * Math.PI / 180;
+    const nx = (cx + (r - 14) * Math.cos(a)).toFixed(1), ny = (cy + (r - 14) * Math.sin(a) + 4).toFixed(1);
+    numbers += `<text x="${nx}" y="${ny}" text-anchor="middle" font-size="11" font-weight="600" font-family="sans-serif" fill="#1e293b">${n}</text>`;
+  }
+  for (let n = 0; n < 60; n += 5) {
+    const a = (n * 6 - 90) * Math.PI / 180;
+    const x1 = (cx + (r - 4) * Math.cos(a)).toFixed(1), y1 = (cy + (r - 4) * Math.sin(a)).toFixed(1);
+    const x2 = (cx + (r - 10) * Math.cos(a)).toFixed(1), y2 = (cy + (r - 10) * Math.sin(a)).toFixed(1);
+    ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#64748b" stroke-width="1.5"/>`;
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" style="max-width:180px;max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="white" stroke="#334155" stroke-width="3"/>
+    ${ticks}${numbers}
+    <line x1="${cx}" y1="${cy}" x2="${hx}" y2="${hy}" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+    <line x1="${cx}" y1="${cy}" x2="${mx}" y2="${my}" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="3.5" fill="#dc2626"/>
+  </svg>`;
+}
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6m-ts-020', chapterId:'g6-time-speed', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_DST_TRIANGLE}</div>The diagram shows the Distance/Speed/Time memory triangle. To find SPEED, you cover up the S and read what is left. Which calculation does this give you?`,
+    options:['Distance × Time','Distance ÷ Time','Time ÷ Distance','Time × Distance'],
+    answer:'Distance ÷ Time',
+    hint:'Covering S leaves D above T - read it as a fraction, top divided by bottom.',
+    explanation:'Covering S leaves D above T, which means <b>Distance ÷ Time</b>. The same triangle also gives: Distance = Speed × Time (cover D), and Time = Distance ÷ Speed (cover T).' }),
+
+  makeNum({ id:'g6m-ts-021', chapterId:'g6-time-speed', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_JOURNEY}</div>A car travels from Town A to Town B, as shown in the diagram. Using the distance and time marked, calculate the car's AVERAGE SPEED in km/h.`,
+    answer:'60', acceptableAnswers:['60','60 km/h'],
+    hint:'Speed = Distance ÷ Time.',
+    explanation:'Speed = Distance ÷ Time = 180 ÷ 3 = <b>60 km/h</b>.' }),
+
+  makeNum({ id:'g6m-ts-022', chapterId:'g6-time-speed', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:8px">${_g6mClockFace(9, 40)}</div>The clock shows 9:40 in the EVENING (p.m.). Write this time using the 24-HOUR clock format (e.g. 14:05).`,
+    answer:'21:40', acceptableAnswers:['21:40','2140'],
+    hint:'For p.m. times (except 12 noon), add 12 to the hour shown on the clock.',
+    explanation:'9:40 p.m. → add 12 to the hour: 9 + 12 = 21. In 24-hour format this is <b>21:40</b>.' })
+
+);

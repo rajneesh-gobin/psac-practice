@@ -163,3 +163,14 @@ STATIC_QUESTIONS.push(
     explanation:'The <b>thermometer</b> measures temperature. The four main weather instruments are: <b>thermometer</b> (temperature), <b>rain gauge</b> (rainfall), <b>wind vane</b> (wind direction) and <b>anemometer</b> (wind speed).' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4ge-weather-020', chapterId:'g4ge-weather', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lightning.jpg" alt="a bright flash of light in a stormy sky" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What weather phenomenon is shown in this picture?</b>',
+    options:['A rainbow','Lightning','A sunset','Fog'],
+    answer:'Lightning',
+    hint:'It is a sudden bright flash seen during a thunderstorm, followed by thunder.',
+    explanation:'<b>Lightning</b> is a sudden electrical discharge during a thunderstorm, seen as a bright flash across the sky. The sound that follows it is called thunder - light travels faster than sound, so we usually see lightning before we hear thunder.' })
+
+);

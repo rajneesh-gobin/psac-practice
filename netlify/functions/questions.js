@@ -40,9 +40,14 @@ function _buildContext(buf) {
       explanation: explanation || 'Each cell mirrors its pair across the axis of symmetry.' };
   }
 
+  // French packs need French answer labels; the g4fr-/g5fr-/g6fr-/fr- id prefix is
+  // the only language marker a question factory can see.
+  const _tfLabels = (id, chapterId) =>
+    (/^(g\d)?fr[-_]/i.test(id || '') || /^(g\d)?fr[-_]/i.test(chapterId || ''))
+      ? ['Vrai', 'Faux'] : ['True', 'False'];
   function makeTF({ id, chapterId, difficulty, subsection, question, answer, hint, explanation }) {
     return makeMCQ({ id, chapterId, difficulty, subsection, question,
-      options: ['True', 'False'], answer: answer ? 'True' : 'False', hint, explanation });
+      options: _tfLabels(id, chapterId), answer: _tfLabels(id, chapterId)[answer ? 0 : 1], hint, explanation });
   }
 
   function makeMatch({ id, chapterId, difficulty, subsection, leftItem, correctRight, allRights, hint, explanation }) {

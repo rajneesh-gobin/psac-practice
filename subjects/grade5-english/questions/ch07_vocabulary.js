@@ -202,3 +202,49 @@ STATIC_QUESTIONS.push(
     explanation:'An "<b>anchor</b>" is a heavy metal device dropped from a ship to the sea floor to hold the vessel in place. As a verb, "to anchor" means to secure or hold firmly. We also use "anchor" figuratively: "She was the anchor of the team" (the most reliable, steadying person).' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5eng-voc-026', chapterId:'eng-vocabulary', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Spoon.jpg" alt="a kitchen object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this object called?</b>',
+    options:['fork','knife','spoon','ladle'],
+    answer:'spoon',
+    hint:'You use it to eat soup or stir a drink.',
+    explanation:'A "<b>spoon</b>" is a piece of cutlery with a shallow bowl-shaped end, used for eating liquid or soft foods and for stirring. Compare with "fork" (has prongs) and "knife" (has a blade for cutting).' }),
+
+  makeMCQ({ id:'g5eng-voc-027', chapterId:'eng-vocabulary', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Wristwatch.jpg" alt="an object worn on the wrist" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this object called?</b>',
+    options:['bracelet','wristwatch','ring','glove'],
+    answer:'wristwatch',
+    hint:'You wear it on your wrist to tell the time.',
+    explanation:'A "<b>wristwatch</b>" is a small clock worn on the wrist. It differs from an "alarm clock", which is a larger clock kept on a table or shelf.' }),
+
+  makeMCQ({ id:'g5eng-voc-028', chapterId:'eng-vocabulary', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Alarm_clock.jpg" alt="a household object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this object called?</b>',
+    options:['calendar','thermometer','alarm clock','compass'],
+    answer:'alarm clock',
+    hint:'It rings loudly at a set time, often to wake someone up.',
+    explanation:'An "<b>alarm clock</b>" is a clock designed to make a sound at a chosen time, usually to wake someone up. It is a compound noun made of "alarm" + "clock".' }),
+
+  makeMCQ({ id:'g5eng-voc-029', chapterId:'eng-vocabulary', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Front_door.jpg" alt="part of a building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this part of a building called?</b>',
+    options:['window','door','gate','wall'],
+    answer:'door',
+    hint:'You open and close it to walk in and out of a building.',
+    explanation:'A "<b>door</b>" is a movable structure used to open and close an entrance to a building or room. Compare with "gate" (an opening in a fence or wall, usually outdoors) and "window" (a glass opening for light).' }),
+
+  makeMCQ({ id:'g5eng-voc-030', chapterId:'eng-vocabulary', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Red_rose.jpg" alt="a flower" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this flower called?</b>',
+    options:['tulip','daisy','rose','sunflower'],
+    answer:'rose',
+    hint:'It has a strong sweet smell and often has thorns on its stem.',
+    explanation:'A "<b>rose</b>" is a flower known for its fragrant smell and thorny stem. Roses are often given as gifts to express love or appreciation.' }),
+
+  makeMCQ({ id:'g5eng-voc-031', chapterId:'eng-vocabulary', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kite.jpg" alt="a toy" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this toy called?</b>',
+    options:['balloon','kite','frisbee','parachute'],
+    answer:'kite',
+    hint:'It flies in the sky, held by a long string, and needs wind to stay up.',
+    explanation:'A "<b>kite</b>" is a light frame covered with fabric or paper, flown in the wind at the end of a long string. It is a popular outdoor toy on windy days.' })
+
+);

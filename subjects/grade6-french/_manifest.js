@@ -90,5 +90,30 @@ registerSubject({
         'Quote the text to justify your answers: *"…" montre que / illustre / souligne…*',
       ],
     },
+    {
+      id: 'g6fr-textes', name: 'Textes & Types de Textes', icon: '📄',
+      notes: [
+        'La **lettre formelle** : la ligne **Objet** résume la demande. « Monsieur, » → « Veuillez agréer, Monsieur, l\'expression de… ».',
+        'L\'**article de journal** : **pyramide inversée** - le premier paragraphe donne qui, quoi, où, quand.',
+        'Un article honnête donne l\'**équilibre** (plusieurs points de vue). Une **source anonyme** ne peut pas être vérifiée : pèse-la moins.',
+        'Le **dépliant touristique** est un texte **publicitaire** : slogan, images séduisantes, et un **astérisque** qui renvoie aux petits caractères.',
+        'La **légende** : « racontent les anciens… » signale la **tradition orale**. Une légende se termine par une **morale**.',
+        'Le **mode d\'emploi** : consignes à l\'impératif, avertissements en gras, et surtout ce que l\'appareil **ne fait pas**.',
+        'Surveille les verbes : *envisager* n\'est pas *décider*. Une question se joue souvent sur un seul mot.',
+      ],
+    },
+    {
+      id: 'g6fr-images', name: 'Description d\'Images', icon: '🖼️',
+      notes: [
+        'En Grade 6, il ne suffit plus de décrire : il faut aussi **interpréter** ce que l\'image veut dire.',
+        'Organise ta description : **arrière-plan → premier plan**, puis les détails, puis le **message** de l\'image.',
+        'Réemploie le **champ lexical** du thème (planter, arroser, creuser, la terre, l\'arrosoir) : c\'est ce qui rend le texte précis.',
+        'Ne confonds jamais ce qui est **écrit** sur l\'image (un objectif, un prix) avec ce qui est **montré**.',
+        '**Discours indirect** : un ordre rapporté devient *demander DE + infinitif*. « Arrosez ! » → « elle leur demande d\'arroser ».',
+        '**Hypothèse** : *si + présent → futur simple*. Jamais de *-rais* ni de *-ra* juste après « si ».',
+        'Pour TROIS images : imparfait pour le décor qui dure, passé composé pour l\'événement bref qui l\'interrompt.',
+        'Tu peux **inventer** prénoms, paroles et sentiments - à condition de rester **cohérent** avec les images.',
+      ],
+    },
   ],
 });

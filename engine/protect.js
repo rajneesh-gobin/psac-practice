@@ -1,13 +1,13 @@
 ﻿'use strict';
 // ══════════════════════════════════════════════
 //  PSAC Exam Practice - Content Protection
-//  Disables right-click save, view-source shortcuts,
-//  and text selection on question content.
+//  Disables view-source / save-page shortcuts.
+//  Right-click, text selection and copy are ENABLED for now.
 //  Must load FIRST in index.html.
 // ══════════════════════════════════════════════
 (function () {
-  // Disable right-click context menu
-  document.addEventListener('contextmenu', e => e.preventDefault());
+  // Right-click context menu left enabled so text can be copied.
+  // document.addEventListener('contextmenu', e => e.preventDefault());
 
   // Disable save / view-source keyboard shortcuts
   // NOTE: F12 and DevTools are NOT blocked so the parent/developer can inspect the app.
@@ -23,6 +23,6 @@
     // F5 / Ctrl+R / F12 / DevTools: all allowed
   });
 
-  // Disable drag-and-drop (prevents dragging content out)
-  document.addEventListener('dragstart', e => e.preventDefault());
+  // Drag-and-drop left enabled so selected text can be dragged/copied.
+  // document.addEventListener('dragstart', e => e.preventDefault());
 })();

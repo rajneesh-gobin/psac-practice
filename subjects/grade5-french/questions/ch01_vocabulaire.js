@@ -305,3 +305,77 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Un cartable</b>" = a school bag/satchel. Un cartable contient les cahiers, livres, et le matériel scolaire de l\'élève. On dit aussi "un sac à dos" (backpack) pour le sac d\'école plus moderne.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g5fr-voc-044', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Carrot.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel légume est-ce ?</b>',
+    options:['Une carotte','Une pomme de terre','Un oignon','Une tomate'],
+    answer:'Une carotte',
+    hint:'C\'est un légume orange, long, que les lapins adorent.',
+    explanation:'"<b>Une carotte</b>" = a carrot. Les légumes : une carotte (carrot), une pomme de terre (potato), un oignon (onion), une tomate (tomato).' }),
+
+  makeMCQ({ id:'g5fr-voc-045', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Egg.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Un œuf','Une pomme','Une balle','Un fromage'],
+    answer:'Un œuf',
+    hint:'Les poules le pondent, et on le mange au petit-déjeuner.',
+    explanation:'"<b>Un œuf</b>" = an egg. Attention à la prononciation : "un œuf" [œf] au singulier, mais "des œufs" [ø] au pluriel (le "f" ne se prononce plus).' }),
+
+  makeMCQ({ id:'g5fr-voc-046', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Boat.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel moyen de transport est-ce ?</b>',
+    options:['Une voiture','Un bateau','Un avion','Un train'],
+    answer:'Un bateau',
+    hint:'Il flotte et se déplace sur l\'eau.',
+    explanation:'"<b>Un bateau</b>" = a boat. Les transports sur l\'eau : un bateau (boat), un ferry (ferry), un voilier (sailboat).' }),
+
+  makeMCQ({ id:'g5fr-voc-047', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Airplane.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel moyen de transport est-ce ?</b>',
+    options:['Un hélicoptère','Un avion','Une fusée','Un bateau'],
+    answer:'Un avion',
+    hint:'Il vole dans le ciel et a des ailes fixes.',
+    explanation:'"<b>Un avion</b>" = an airplane. Les transports aériens : un avion (airplane), un hélicoptère (helicopter), une fusée (rocket).' }),
+
+  makeMCQ({ id:'g5fr-voc-048', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Clock.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Une montre','Une horloge','Un calendrier','Un thermomètre'],
+    answer:'Une horloge',
+    hint:'On l\'accroche au mur pour savoir l\'heure. C\'est plus grand qu\'une montre.',
+    explanation:'"<b>Une horloge</b>" = a (wall/large) clock. Différence : une horloge (wall clock, plus grande) vs une montre (wristwatch, se porte au poignet).' }),
+
+  makeMCQ({ id:'g5fr-voc-049', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Key.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Une serrure','Une clé','Une porte','Une poignée'],
+    answer:'Une clé',
+    hint:'On l\'utilise pour ouvrir ou fermer une serrure.',
+    explanation:'"<b>Une clé</b>" (aussi écrit "une clef") = a key. On l\'utilise avec "une serrure" (a lock) pour ouvrir ou fermer "une porte" (a door).' }),
+
+  makeMCQ({ id:'g5fr-voc-050', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Milk.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Du lait','De l\'eau','Du jus','Du yaourt'],
+    answer:'Du lait',
+    hint:'C\'est une boisson blanche que l\'on boit souvent le matin.',
+    explanation:'"<b>Du lait</b>" = milk. Les produits laitiers : le lait (milk), le fromage (cheese), le yaourt (yoghurt), le beurre (butter).' }),
+
+  makeMCQ({ id:'g5fr-voc-051', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bread.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Du pain','Un gâteau','Un croissant','Du riz'],
+    answer:'Du pain',
+    hint:'On le mange avec presque tous les repas, souvent tartiné de beurre.',
+    explanation:'"<b>Du pain</b>" = bread. En France, "une baguette" est une forme populaire de pain, longue et fine.' }),
+
+  makeMCQ({ id:'g5fr-voc-052', chapterId:'fr-vocabulaire', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cheese.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Du beurre','Du fromage','Du yaourt','Du lait'],
+    answer:'Du fromage',
+    hint:'La France est célèbre pour en produire des centaines de sortes différentes.',
+    explanation:'"<b>Du fromage</b>" = cheese. La France produit plus de 1000 variétés de fromage - le camembert et le brie sont parmi les plus connus.' }),
+
+  makeMCQ({ id:'g5fr-voc-053', chapterId:'fr-vocabulaire', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Bottle.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que c\'est ?</b>',
+    options:['Un verre','Une bouteille','Une tasse','Un pot'],
+    answer:'Une bouteille',
+    hint:'On la remplit de liquide et elle a un bouchon.',
+    explanation:'"<b>Une bouteille</b>" = a bottle. Les récipients : une bouteille (bottle), un verre (glass), une tasse (cup), un pot (jar/pot).' })
+
+);

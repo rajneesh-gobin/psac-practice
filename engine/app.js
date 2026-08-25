@@ -275,6 +275,13 @@ async function _doResume() {
   const saved = _pendingResume;
   _clearResume();
   if (!saved) return;
+  // Loading the questions is not enough: CHAPTERS/ACTIVE_PACK must point at the
+  // saved subject too, or resuming a session started in another subject renders
+  // the chapter name, badges and help from whichever subject is open now.
+  // startAssignment() already does this; resume was the one entry point missing it.
+  if (saved.subjectId && typeof activateSubjectPack === 'function') {
+    activateSubjectPack(saved.subjectId);
+  }
   if (saved.subjectId && typeof QuestionLoader !== 'undefined') {
     await QuestionLoader.loadSubject(saved.subjectId);
   }
@@ -412,6 +419,13 @@ function _unlockOrientation() {
 
 // ── Mobile: Text-to-speech ──────────────────────────────────────────────────
 let _ttsSpeaking = false;
+// A French passage read out by an English voice is worse than no audio at all,
+// so the utterance language follows the active pack rather than being fixed.
+function _ttsLang() {
+  const p = (typeof _activePack === 'function') ? _activePack() : null;
+  return (p && p.subject === 'French') ? 'fr-FR' : 'en-GB';
+}
+
 function speakQuestion(mode) {
   if (!window.speechSynthesis) { toast('Text-to-speech not supported on this browser.', 2500); return; }
   const elId = mode === 'exam' ? 'exam-q-text' : 'practice-q-text';
@@ -420,9 +434,19 @@ function speakQuestion(mode) {
   const text = (el.innerText || el.textContent || '').trim();
   if (!text) return;
   if (_ttsSpeaking) { speechSynthesis.cancel(); _ttsSpeaking = false; return; }
+  const lang  = _ttsLang();
   const utt   = new SpeechSynthesisUtterance(text);
   utt.rate    = 0.88;
-  utt.lang    = 'en-GB';
+  utt.lang    = lang;
+  // Setting .lang alone is not always enough - some engines keep the default
+  // voice unless one is named. getVoices() can be empty on first call, in which
+  // case .lang is the only hint available.
+  try {
+    const want  = lang.slice(0, 2).toLowerCase();
+    const voice = speechSynthesis.getVoices()
+      .find(v => (v.lang || '').replace('_', '-').toLowerCase().startsWith(want));
+    if (voice) utt.voice = voice;
+  } catch(e) {}
   utt.onstart = () => { _ttsSpeaking = true; };
   utt.onend   = () => { _ttsSpeaking = false; };
   utt.onerror = () => { _ttsSpeaking = false; };

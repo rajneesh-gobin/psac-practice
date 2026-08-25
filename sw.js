@@ -6,7 +6,7 @@
 //   Netlify functions / Supabase:  Network-first — fresh data required; fall back to cache
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v11';
 const SHELL_CACHE   = `psac-shell-${CACHE_VERSION}`;
 const DATA_CACHE    = `psac-data-${CACHE_VERSION}`;
 

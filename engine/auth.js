@@ -32,8 +32,44 @@ const Auth = (() => {
   function getActiveAccount()  { return _activeAccount; }
   function getParentProfile()  { return _parentProfile; }
 
+  const REF_STORAGE_KEY = 'psac_pending_referral';
+
+  // ── Referrals ───────────────────────────────────
+  // Capture ?ref=CODE from a shared invite link before any routing happens, so
+  // it survives all the way to family-setup even if the visitor browses around
+  // (landing page, auth tabs, email verification round-trip) before finishing
+  // sign-up. Stripped from the URL immediately so it never gets re-shared by
+  // accident if this visitor later copies their own address bar.
+  function _captureReferralFromUrl() {
+    try {
+      const params = new URLSearchParams(location.search);
+      const ref = (params.get('ref') || '').trim();
+      if (ref) {
+        localStorage.setItem(REF_STORAGE_KEY, ref.toUpperCase());
+        params.delete('ref');
+        const rest = params.toString();
+        history.replaceState(null, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
+      }
+    } catch(_) {}
+  }
+
+  function getPendingReferralCode() {
+    try { return localStorage.getItem(REF_STORAGE_KEY) || ''; } catch(_) { return ''; }
+  }
+
+  // Called once, right after a brand-new profile row exists (family-setup or
+  // teacher bootstrap). Non-fatal either way: signup must never be blocked by
+  // a bad or missing referral code.
+  async function _consumePendingReferral(explicitCode) {
+    const code = (explicitCode || getPendingReferralCode() || '').trim();
+    try { localStorage.removeItem(REF_STORAGE_KEY); } catch(_) {}
+    if (!code) return;
+    try { await Store.recordReferral(code); } catch(e) { console.warn('[auth] referral not recorded:', e.message); }
+  }
+
   // ── App init ───────────────────────────────────
   async function init() {
+    _captureReferralFromUrl();
     // Show a loading state so there's no blank flash
     document.body.style.opacity = '0';
 
@@ -94,6 +130,9 @@ const Auth = (() => {
     if (!profile) {
       // Brand-new user after email verification - needs family setup
       _buildSetupAvatarGrid();
+      const refField = _el('setup-referral-code');
+      const pending  = getPendingReferralCode();
+      if (refField && pending) refField.value = pending;
       showScreen('family-setup');
       return;
     }
@@ -165,6 +204,7 @@ const Auth = (() => {
       console.error('[auth] could not create teacher profile');
       return null;
     }
+    await _consumePendingReferral();
     try {
       await _sb.rpc('request_teacher_access', { p_note: 'Signed up via the teacher tab.' });
     } catch (e) {
@@ -494,6 +534,10 @@ const Auth = (() => {
     _el('auth-signup-tab')?.classList.remove('text-white/50');
     _el('auth-signin-tab')?.classList.remove('bg-white/20', 'text-white', 'font-semibold');
     _el('auth-signin-tab')?.classList.add('text-white/50');
+    // Pre-fill if a ?ref= link already captured a code - still editable/removable.
+    const refField = _el('auth-signup-referral');
+    const pending  = getPendingReferralCode();
+    if (refField && pending && !refField.value) refField.value = pending;
   }
 
   async function emailSignIn() {
@@ -530,6 +574,13 @@ const Auth = (() => {
     if (!email)                  { _showAuthError('Please enter your email.'); return; }
     if (pass.length < 6)         { _showAuthError('Password must be at least 6 characters.'); return; }
     if (pass !== passConfirm)    { _showAuthError('Passwords do not match.'); return; }
+
+    // A code typed here (or already captured from a ?ref= link) has to survive
+    // the email-verification round trip before there's even a profile to credit
+    // it to - stash it now, _consumePendingReferral() picks it up once that
+    // profile exists (family-setup / teacher bootstrap).
+    const referralCode = (_el('auth-signup-referral')?.value || '').trim();
+    if (referralCode) { try { localStorage.setItem(REF_STORAGE_KEY, referralCode.toUpperCase()); } catch(_) {} }
 
     // Check if registrations are open
     const gs = await Store.getGlobalSettings();
@@ -731,6 +782,91 @@ const Auth = (() => {
     toast('Password updated successfully! ✓', 3000);
   }
 
+  // ── Invite friends / referrals ──────────────────
+  // Fetched lazily (not part of _parentProfile - see Store.getMyReferralCode)
+  // and cached here once known, so the share buttons below can stay synchronous.
+  let _myReferralCode = '';
+
+  function _inviteLink() {
+    return _myReferralCode
+      ? `${location.origin}${location.pathname}?ref=${_myReferralCode}`
+      : location.origin + location.pathname;
+  }
+  function _inviteText() {
+    return `Join me on PSAC Exam Practice — free PSAC revision for Grades 4–6! 📚🇲🇺`;
+  }
+
+  async function openInviteModal() {
+    const codeEl = _el('invite-code');
+    const linkEl = _el('invite-link');
+    if (codeEl) codeEl.textContent = _myReferralCode || 'Loading…';
+    if (linkEl) linkEl.textContent = _inviteLink();
+
+    const listEl  = _el('invite-list');
+    const countEl = _el('invite-count');
+    if (listEl) listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-3">Loading…</p>';
+
+    const m = _el('modal-invite');
+    if (m) m.classList.remove('hidden');
+
+    if (!_myReferralCode && _parentUser) _myReferralCode = await Store.getMyReferralCode(_parentUser.id);
+    if (codeEl) codeEl.textContent = _myReferralCode || '—';
+    if (linkEl) linkEl.textContent = _inviteLink();
+
+    const referrals = await Store.getMyReferrals();
+    if (countEl) countEl.textContent = String(referrals.length);
+    if (listEl) {
+      listEl.innerHTML = referrals.length
+        ? referrals.map(r => `
+          <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+            <span class="text-xl select-none">🎉</span>
+            <div class="flex-1 min-w-0">
+              <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(r.referred_name)}</div>
+              <div class="text-xs text-gray-400">${new Date(r.created_at).toLocaleDateString()}</div>
+            </div>
+          </div>`).join('')
+        : '<p class="text-sm text-gray-400 text-center py-4">No one yet — share your link to get started!</p>';
+    }
+  }
+  function closeInviteModal() {
+    const m = _el('modal-invite');
+    if (m) m.classList.add('hidden');
+  }
+  function _esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s == null ? '' : String(s);
+    return d.innerHTML;
+  }
+
+  async function copyInviteLink() {
+    const link = _inviteLink();
+    try {
+      await navigator.clipboard.writeText(link);
+      toast('Invite link copied! 📋', 2500);
+    } catch(_) {
+      prompt('Copy this link and share it:', link);
+    }
+  }
+
+  async function shareInvite() {
+    const link = _inviteLink();
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'PSAC Exam Practice', text: _inviteText(), url: link });
+        return;
+      } catch(e) {
+        if (e.name === 'AbortError') return; // user cancelled the share sheet
+      }
+    }
+    // No Web Share API (desktop browsers) or it failed - fall back to copy.
+    await copyInviteLink();
+  }
+
+  function shareInviteWhatsApp() {
+    const msg = `${_inviteText()}\n\n${_inviteLink()}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+  }
+
   // ── Reset student progress ─────────────────────
   async function confirmResetStudentProgress(studentId, studentName) {
     if (!confirm(`Delete ALL progress for ${studentName}?\n\nThis cannot be undone.`)) return;
@@ -890,6 +1026,7 @@ const Auth = (() => {
     const profile = await Store.createProfile(_parentUser.id, role, name);
     if (!profile) { toast('Error creating profile. Please try again.', 3000); return; }
     _parentProfile = profile;
+    await _consumePendingReferral(_el('setup-referral-code')?.value);
 
     // Create family
     const family = await Store.createFamily(_parentUser.id, familyName);
@@ -1317,6 +1454,7 @@ const Auth = (() => {
     requestTeacherAccess, getTeacherStatus, refreshAdminBadge: _refreshAdminBadge,
     isTeacher: () => _isTeacherUser,
     openPasswordModal, closePasswordModal, changePassword,
+    openInviteModal, closeInviteModal, copyInviteLink, shareInvite, shareInviteWhatsApp,
     confirmResetStudentProgress,
     studentSignIn,
     // Family setup

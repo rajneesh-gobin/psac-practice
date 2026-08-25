@@ -83,5 +83,18 @@ registerSubject({
         'Latin roots: *aud* (hear), *vis* (see), *scrib* (write), *dict* (say), *rupt* (break).',
       ],
     },
+    {
+      id: 'g6eng-passages', name: 'Passages & Text Types', icon: '📄',
+      notes: [
+        '**Formal letter**: the RE: line states the request. *Dear Sir/Madam* → *Yours faithfully*; *Dear Mr Smith* → *Yours sincerely*.',
+        '**Newspaper report**: written as an **inverted pyramid** - the first paragraph carries who, what, where and when.',
+        'A fair report gives **balance** (more than one view). An **unnamed source** cannot be checked, so weigh it less.',
+        '**Advertisement**: an asterisk (*) always leads to small print. Work out the **real total cost**, not the headline price.',
+        'Judge a statistic by the **sample** it came from: 40 people at a launch event do not represent everyone.',
+        '**Legend / folktale**: phrases like *so the old people say* mark oral tradition. Legends end with a **moral**.',
+        '**Report with a table**: check a claim against **every row**, and use the text to interpret the figures.',
+        'Watch the verbs: *is considering* is not *has decided*. Whole marks turn on one word.',
+      ],
+    },
   ],
 });

@@ -90,5 +90,30 @@ registerSubject({
         'Useful connecting words: *et* (and), *mais* (but), *parce que* (because), *donc* (so), *ensuite* (then).',
       ],
     },
+    {
+      id: 'g4fr-textes', name: 'Textes & Types de Textes', icon: '📄',
+      notes: [
+        'Un **type de texte**, c\'est la sorte d\'écrit que tu lis. Chaque type a une forme différente sur la page.',
+        'Le **récit** : des personnages, un lieu, un problème, une fin. On raconte dans l\'ordre.',
+        'L\'**affiche** : elle répond à QUOI ? QUAND ? OÙ ? COMBIEN ? Gros titres, phrases très courtes.',
+        'La **carte postale** : un court message à gauche, l\'adresse à droite. On garde seulement l\'essentiel.',
+        'La **recette** : d\'abord « il te faut… », puis des **étapes numérotées** à l\'**impératif** (Lave, Coupe, Mets).',
+        'Les mots entre **parenthèses** cachent souvent les exceptions : lis-les toujours !',
+        'Avant de répondre, demande-toi : *quel type de texte est-ce ?* Le type t\'indique où chercher.',
+      ],
+    },
+    {
+      id: 'g4fr-images', name: 'Description d\'Images', icon: '🖼️',
+      notes: [
+        'Deux formats à l\'examen : **une seule image** à décrire, ou **trois images** qui racontent une histoire.',
+        'Pour UNE image, suis cet ordre : le **lieu**, le **temps qu\'il fait**, les **personnages**, leurs **actions**, un **détail**, ton **avis**.',
+        'Commence par une vue d\'ensemble : « *Cette image représente…* », puis « *Il y a…* ».',
+        'Les actions se disent au **présent** : *il nage, elle joue, le chien court*.',
+        'Prépositions de lieu indispensables : **sur, sous, dans, devant, derrière, à côté de, entre**.',
+        'Pour TROIS images : **image 1 = la situation de départ**, **image 2 = le problème**, **image 3 = la solution**.',
+        'Connecteurs de temps : *D\'abord, Ensuite, Puis, Soudain, Enfin, Finalement*. Sans eux, ce n\'est qu\'une liste.',
+        'Respecte toujours l\'ordre 1, 2, 3 - et donne à chaque image le même nombre de phrases.',
+      ],
+    },
   ],
 });

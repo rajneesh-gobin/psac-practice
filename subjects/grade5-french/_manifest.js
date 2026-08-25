@@ -130,5 +130,30 @@ registerSubject({
         '**Futur proche** (near future): aller + infinitive. Je vais manger (I am going to eat).',
       ],
     },
+    {
+      id: 'fr-textes', name: 'Textes & Types de Textes', icon: '📄',
+      notes: [
+        'Le **courriel** : De / À / Objet. La ligne **Objet** annonce le but en quelques mots.',
+        'La **lettre amicale** : adresse et date en haut à droite, « Chère… », des nouvelles personnelles, « Je t\'embrasse ». La lettre formelle finit par « Veuillez agréer… ».',
+        'Le **récit personnel** : on raconte à la **première personne**, à partir d\'un moment précis, avec des comparaisons et des sentiments.',
+        'L\'**annonce** : les informations clés en gras, une **date limite**, et des **conditions entre parenthèses** qui changent le prix.',
+        'Le **poème** : cherche la **comparaison** (comme), la **métaphore** (X *est* Y) et la **personnification** (un objet qui agit comme un humain).',
+        'Quand on demande « comment le sait-on ? », montre la **preuve** : un chiffre, une date, une phrase citée.',
+        'Relie chaque nombre du texte au mot auquel il se rapporte : les examens piègent avec deux chiffres proches.',
+      ],
+    },
+    {
+      id: 'fr-images', name: 'Description d\'Images', icon: '🖼️',
+      notes: [
+        'Deux formats : **une seule image** à décrire, ou **trois images** qui racontent une histoire.',
+        'Vocabulaire de position attendu : **au premier plan**, **à l\'arrière-plan**, **à gauche / à droite**, **au centre**.',
+        'Pour une action en cours : **être en train de + infinitif**. « Le marchand *est en train de vendre* des fruits. »',
+        'Utilise tout **texte visible** sur l\'image (panneau, prix, enseigne) : il fait partie des informations à exploiter.',
+        'Pour TROIS images : situation de départ → problème → solution. Repère dans l\'image 1 le **détail qui annonce la suite**.',
+        'Au passé, mélange les deux temps : **imparfait** pour le décor qui dure, **passé composé** pour l\'événement soudain.',
+        'Connecteurs utiles : *Ce matin-là, Ensuite, Soudain, Alors, Enfin, Le lendemain*.',
+        'Les images montrent les **actions** ; c\'est à toi d\'ajouter les **sentiments**, les **paroles** et une **conclusion**.',
+      ],
+    },
   ],
 });

@@ -224,3 +224,21 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Ile aux Aigrettes</b> is a <b>nature reserve</b> managed by the Mauritian Wildlife Foundation. The coral island is being restored to resemble what Mauritius\'s coastal ecosystem looked like before humans arrived. Giant Aldabra tortoises (similar to the now-extinct Mauritian giant tortoise) have been introduced, alongside Pink Pigeons, Mauritius Fodies and rare endemic plants.' })
 
 );
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4h-voy-024', chapterId:'g4hist-voyages', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sailing_ship.jpg" alt="a large wooden sailing vessel" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Early explorers like the Dutch, Portuguese and French travelled to Mauritius using vessels like this. What are they called?</b>',
+    options:['Steamships','Sailing ships','Submarines','Ferries'],
+    answer:'Sailing ships',
+    hint:'They use large cloth sheets, powered by wind, to move across the ocean.',
+    explanation:'<b>Sailing ships</b> used large sails to catch the wind and travel across oceans. Before engines were invented, all long sea voyages - including the discovery of Mauritius - depended entirely on wind power and sailing ships.' }),
+
+  makeMCQ({ id:'g4h-voy-025', chapterId:'g4hist-voyages', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Compass.jpg" alt="a navigation instrument with a needle" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Explorers used this instrument to find their direction at sea. What is it called?</b>',
+    options:['Telescope','Compass','Sextant','Barometer'],
+    answer:'Compass',
+    hint:'Its needle always points towards magnetic North.',
+    explanation:'A <b>compass</b> has a magnetic needle that always points towards North, helping sailors navigate the open ocean where there are no landmarks. It was an essential tool for explorers discovering new lands like Mauritius.' })
+
+);

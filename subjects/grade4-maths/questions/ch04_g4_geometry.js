@@ -134,3 +134,59 @@ STATIC_QUESTIONS.push(
     explanation:'Perimeter = 2 × (30 + 15) = 2 × 45 = 90 m. Cost = 90 × Rs 50 = <b>Rs 4,500</b>. Two-step geometry word problem: calculate perimeter, then apply unit cost.' })
 
 );
+
+// ── Illustrated questions: angles drawn, triangles marked with tick marks,
+//    a square's lines of symmetry drawn — actual diagrams, not just words.
+//    Coordinates are hand-fixed (no elliptical-arc trig) so they render
+//    exactly as intended on every device.
+const _G4M_SVG_ANGLE_RIGHT = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="max-width:220px;max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white"><line x1="40" y1="160" x2="170" y2="160" stroke="#1e293b" stroke-width="3"/><line x1="40" y1="160" x2="40" y2="30" stroke="#1e293b" stroke-width="3"/><path d="M40,144 L56,144 L56,160" fill="none" stroke="#dc2626" stroke-width="2"/><circle cx="40" cy="160" r="3" fill="#1e293b"/></svg>`;
+const _G4M_SVG_ANGLE_ACUTE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 180" style="max-width:220px;max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white"><line x1="30" y1="150" x2="170" y2="150" stroke="#1e293b" stroke-width="3"/><line x1="30" y1="150" x2="122" y2="73" stroke="#1e293b" stroke-width="3"/><circle cx="30" cy="150" r="3" fill="#1e293b"/></svg>`;
+const _G4M_SVG_ANGLE_OBTUSE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 180" style="max-width:220px;max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white"><line x1="100" y1="150" x2="220" y2="150" stroke="#1e293b" stroke-width="3"/><line x1="100" y1="150" x2="23" y2="58" stroke="#1e293b" stroke-width="3"/><circle cx="100" cy="150" r="3" fill="#1e293b"/></svg>`;
+const _G4M_SVG_TRI_EQUILATERAL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 190" style="max-width:220px;max-height:210px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white"><polygon points="100,20 20,170 180,170" fill="#dbeafe" stroke="#1e3a8a" stroke-width="2.5"/><line x1="54" y1="89" x2="66" y2="101" stroke="#dc2626" stroke-width="2"/><line x1="134" y1="89" x2="146" y2="101" stroke="#dc2626" stroke-width="2"/><line x1="94" y1="164" x2="106" y2="176" stroke="#dc2626" stroke-width="2"/></svg>`;
+const _G4M_SVG_TRI_ISOSCELES = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 190" style="max-width:220px;max-height:210px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white"><polygon points="100,15 45,170 155,170" fill="#fef3c7" stroke="#92400e" stroke-width="2.5"/><line x1="66.5" y1="86.5" x2="78.5" y2="98.5" stroke="#dc2626" stroke-width="2"/><line x1="121.5" y1="86.5" x2="133.5" y2="98.5" stroke="#dc2626" stroke-width="2"/></svg>`;
+const _G4M_SVG_SQUARE_SYMMETRY = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="max-width:220px;max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white"><rect x="30" y="30" width="140" height="140" fill="#f0fdf4" stroke="#166534" stroke-width="2.5"/><line x1="30" y1="30" x2="170" y2="170" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,4"/><line x1="170" y1="30" x2="30" y2="170" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,4"/><line x1="100" y1="30" x2="100" y2="170" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,4"/><line x1="30" y1="100" x2="170" y2="100" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5,4"/></svg>`;
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g4m-geo-020', chapterId:'g4-geometry', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_SVG_ANGLE_RIGHT}</div>The small red corner mark shows where the two lines meet. What TYPE of angle is shown?`,
+    options:['Acute angle','Right angle','Obtuse angle','Reflex angle'],
+    answer:'Right angle',
+    hint:'A small square/corner mark is the standard symbol for a 90° angle.',
+    explanation:'The small square corner mark is the standard symbol used to show a <b>right angle</b> (exactly 90°). You will see this mark in diagrams whenever two lines meet at a perfect square corner.' }),
+
+  makeMCQ({ id:'g4m-geo-021', chapterId:'g4-geometry', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_SVG_ANGLE_ACUTE}</div>Look carefully at the angle drawn between the two lines. What TYPE of angle is this?`,
+    options:['Acute angle','Right angle','Obtuse angle','Reflex angle'],
+    answer:'Acute angle',
+    hint:'Is the gap between the two lines SMALLER than a square corner (right angle)?',
+    explanation:'The angle between the two lines is clearly smaller than a right angle (90°) - it looks sharp and narrow. Any angle smaller than 90° is an <b>acute angle</b>.' }),
+
+  makeMCQ({ id:'g4m-geo-022', chapterId:'g4-geometry', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_SVG_ANGLE_OBTUSE}</div>Look carefully at the angle drawn between the two lines. What TYPE of angle is this?`,
+    options:['Acute angle','Right angle','Obtuse angle','Reflex angle'],
+    answer:'Obtuse angle',
+    hint:'Is the gap between the two lines WIDER than a square corner but still less than a straight line?',
+    explanation:'The angle between the two lines is wider than a right angle (90°) but narrower than a straight line (180°). This makes it an <b>obtuse angle</b>.' }),
+
+  makeMCQ({ id:'g4m-geo-023', chapterId:'g4-geometry', difficulty:1,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_SVG_TRI_EQUILATERAL}</div>The small red tick marks show which sides of this triangle are EQUAL in length. Every side has a tick mark. What TYPE of triangle is shown?`,
+    options:['Scalene (no equal sides)','Isosceles (2 equal sides)','Equilateral (3 equal sides)','Right-angled triangle'],
+    answer:'Equilateral (3 equal sides)',
+    hint:'Count how many sides have a matching tick mark.',
+    explanation:'All <b>3 sides</b> carry a tick mark, meaning all three sides are equal in length. A triangle with all three sides equal is an <b>equilateral triangle</b> - it also has all three angles equal (60° each).' }),
+
+  makeMCQ({ id:'g4m-geo-024', chapterId:'g4-geometry', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_SVG_TRI_ISOSCELES}</div>The small red tick marks show which sides of this triangle are EQUAL in length. Only TWO sides have a tick mark. What TYPE of triangle is shown?`,
+    options:['Scalene (no equal sides)','Isosceles (2 equal sides)','Equilateral (3 equal sides)','Right-angled triangle'],
+    answer:'Isosceles (2 equal sides)',
+    hint:'Count how many sides have a matching tick mark - is it all three, or just two?',
+    explanation:'Only <b>2 sides</b> carry a tick mark (the two slanted sides), so only two sides are equal. A triangle with exactly two equal sides is an <b>isosceles triangle</b>.' }),
+
+  makeNum({ id:'g4m-geo-025', chapterId:'g4-geometry', difficulty:2,
+    question:`<div style="text-align:center;margin-bottom:10px">${_G4M_SVG_SQUARE_SYMMETRY}</div>The dashed red lines show the lines of symmetry drawn on this square. How MANY lines of symmetry are drawn?`,
+    answer:'4', acceptableAnswers:['4'],
+    hint:'Count each separate dashed red line: 2 diagonals, 1 vertical, 1 horizontal.',
+    explanation:'The square shows <b>4 lines of symmetry</b>: the 2 diagonals (corner to corner), 1 vertical line and 1 horizontal line through the middle. Folding along any of these 4 lines makes both halves match exactly.' })
+
+);
