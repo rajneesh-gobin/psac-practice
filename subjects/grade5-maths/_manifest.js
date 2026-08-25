@@ -16,6 +16,7 @@ const CHAPTERS = [
   { id:'powers',      name:'Powers & Exponents',       icon:'²',  color:'red',    part:1, examWeight:2 },
   { id:'average',     name:'Average',                  icon:'📊', color:'green',  part:2, examWeight:2 },
   { id:'ratio',       name:'Ratio & Proportion',       icon:'⚖️', color:'cyan',   part:2, examWeight:3 },
+  { id:'percentage',  name:'Percentage',               icon:'%',  color:'pink',   part:2, examWeight:3 },
   { id:'length',      name:'Length & Perimeter',       icon:'📏', color:'lime',   part:2, examWeight:3 },
   { id:'area',        name:'Area',                     icon:'▭',  color:'yellow', part:2, examWeight:3 },
   { id:'capacity',    name:'Capacity',                 icon:'🧪', color:'sky',    part:2, examWeight:2 },
@@ -81,6 +82,12 @@ const G5M_SYLLABUS = {
     { id:'dividing',     name:'Dividing a Quantity in a Ratio' },
     { id:'equivalent',   name:'Equivalent Ratios' },
     { id:'word_probs',   name:'Ratio Word Problems' },
+  ]},
+  percentage:  { subsections: [
+    { id:'meaning',      name:'What Percentage Means' },
+    { id:'conversion',   name:'Converting Fractions/Decimals ↔ Percentages' },
+    { id:'of_quantity',  name:'Finding a Percentage of a Quantity' },
+    { id:'increase',     name:'Percentage Increase & Decrease' },
   ]},
   length:      { subsections: [
     { id:'conversion',   name:'Unit Conversions (km/m/cm/mm)' },
@@ -188,6 +195,12 @@ const G5M_FORMULAS = {
     'Dividing ratio a:b → total parts = a+b. First share = (a/total)×whole',
     'Equivalent ratios: multiply/divide both sides by same number',
     'If a:b = c:d then a×d = b×c (cross multiply)',
+  ]},
+  percentage: { title:'% Percentage', facts:[
+    '% means "per hundred" - 45% = 45/100',
+    'Fraction/decimal → %: multiply by 100 (0.5 = 50% | ¼ = 25%)',
+    '% of a quantity: (percentage ÷ 100) × quantity',
+    'Percentage increase/decrease: find the change, then (change ÷ original) × 100',
   ]},
   length: { title:'📏 Length', facts:[
     '1 km = 1,000 m | 1 m = 100 cm | 1 cm = 10 mm',
