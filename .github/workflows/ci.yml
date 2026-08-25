@@ -1,0 +1,59 @@
+name: CI
+
+# The project has no build step, so nothing catches a typo before it reaches
+# production. These checks are the cheap substitute: syntax-check every file,
+# then run the static reference checks that would have caught the real bugs
+# this codebase has actually shipped.
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Parse every JS file. Catches unclosed braces, stray characters and the
+      # sort of thing that only shows up as a blank screen otherwise.
+      - name: Syntax-check all JavaScript
+        run: |
+          fail=0
+          while IFS= read -r f; do
+            if ! node --check "$f" >/dev/null 2>&1; then
+              echo "::error file=$f::syntax error"
+              node --check "$f" || true
+              fail=1
+            fi
+          done < <(find engine netlify scripts subjects -name '*.js' -not -path '*/node_modules/*' 2>/dev/null; ls guest.js sw.js 2>/dev/null)
+          exit $fail
+
+      # Undefined handlers, drifted file lists, missing pre-cache entries,
+      # duplicate badge ids, and the pgcrypto search_path trap.
+      - name: Static reference checks
+        run: node scripts/check.js
+
+      # A secret in the repo is worth failing the build over.
+      - name: Scan for committed credentials
+        run: |
+          fail=0
+          # Supabase personal access token
+          if grep -rEn 'sbp_[a-f0-9]{40}' --include='*.js' --include='*.json' --include='*.md' --include='*.sql' --include='*.toml' . ; then
+            echo "::error::a Supabase personal access token is committed"; fail=1
+          fi
+          # service_role JWT (the legacy key format)
+          if grep -rEn 'eyJhbGciOiJIUzI1NiI[A-Za-z0-9_.-]{40,}' --include='*.js' --include='*.html' --include='*.md' . ; then
+            echo "::error::a JWT is committed"; fail=1
+          fi
+          # a literal assignment rather than process.env
+          if grep -rEn "SERVICE_ROLE_KEY\s*=\s*['\"][A-Za-z0-9]" --include='*.js' . ; then
+            echo "::error::a service role key is assigned literally"; fail=1
+          fi
+          exit $fail

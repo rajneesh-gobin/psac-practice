@@ -297,8 +297,28 @@ const Auth = (() => {
   let _sessionGuardTimer = null;
   let _sessionGuardOnlineFn = null;
 
+  // A student session can stop working without any visible error: the token
+  // expires (30 days) or is revoked, current_student_id() returns NULL, and RLS
+  // then returns zero rows for everything. The app would look empty rather than
+  // signed out. Anything that detects this raises 'session-invalid'.
+  let _sessionEndedHandled = false;
+  if (typeof Events !== 'undefined') {
+    Events.on('session-invalid', () => {
+      if (_sessionEndedHandled || !_activeAccount) return;
+      _sessionEndedHandled = true;
+      _stopSessionGuard();
+      Store.clearStudentSession();
+      _activeAccount = null;
+      ACTIVE_STUDENT_ID = null;
+      showScreen('auth');
+      setRole('student');
+      toast('Your session has expired. Please sign in again.', 5000);
+    });
+  }
+
   function _startSessionGuard(studentId, version) {
     _stopSessionGuard(); // clear any previous guard first
+    _sessionEndedHandled = false;
     if (!_sb) return;
 
     const _checkVersion = async () => {

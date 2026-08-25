@@ -207,6 +207,13 @@ const Store = (() => {
     // whenever the network blipped or an RLS check failed. Never do that:
     // prefer the local cache, and surface the error.
     if (error) {
+      // An expired or revoked x-student-token makes every policy check return
+      // NULL, so reads come back empty rather than erroring. Surface that as a
+      // session problem so the app can send them back to the PIN screen instead
+      // of showing an app with no data in it.
+      if (typeof Events !== 'undefined' && /jwt|permission|denied|row-level/i.test(error.message || '')) {
+        Events.emit('session-invalid', { source: 'loadStudentProgress' });
+      }
       console.error('[Store.loadStudentProgress] read failed:', error.message,
         '- falling back to the local cache; NOT overwriting it.');
       const cached = _cachedStudent(studentId);

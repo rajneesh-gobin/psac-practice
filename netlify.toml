@@ -4,9 +4,21 @@
 
 [functions]
   node_bundler = "esbuild"
-  # The question files are DATA read at runtime by the vm sandbox
-  # (netlify/lib/questions-sandbox.js), not imports esbuild can follow.
-  # Without this they are absent from the bundle and every re-grade returns 0.
+
+# The question files are DATA read at runtime by the vm sandbox
+# (netlify/lib/questions-sandbox.js), not imports esbuild can follow. Without
+# included_files they are absent from the bundle and every re-grade returns 0.
+#
+# Scoped per-function on purpose: subjects/ is ~2.5 MB across 147 files, and a
+# global [functions] included_files would ship all of it inside push-send,
+# notify, weekly-digest and every other function that never reads a question.
+[functions."questions"]
+  included_files = ["subjects/**"]
+
+[functions."assignment-open"]
+  included_files = ["subjects/**"]
+
+[functions."assignment-submit"]
   included_files = ["subjects/**"]
 
 # ── Security headers ──────────────────────────────────────────────────────────
