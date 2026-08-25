@@ -65,9 +65,12 @@ function checkHtmlReferences() {
   note(`checked ${seen.size} module references in index.html`);
 
   // Bare onclick="someFn(" handlers must resolve to a global in engine/.
+  // Skip JS keywords: "oninput=\"if(...) Auth.foo()\"" matches "if(" as the
+  // leading identifier, which is a control-flow keyword, not a function call.
+  const JS_KEYWORDS = new Set(['if', 'for', 'while', 'switch', 'catch', 'function', 'return', 'typeof', 'new', 'delete', 'void', 'do', 'else']);
   const bareRe = /on(?:click|change|input)="([a-z_][A-Za-z0-9_]*)\s*\(/g;
   const bare = new Set();
-  while ((m = bareRe.exec(html))) bare.add(m[1]);
+  while ((m = bareRe.exec(html))) { if (!JS_KEYWORDS.has(m[1])) bare.add(m[1]); }
   for (const fn of bare) {
     const ok = new RegExp('(?:function\\s+' + fn + '\\b|window\\.' + fn + '\\s*=|const\\s+' + fn + '\\s*=|\\b' + fn + '\\s*=\\s*\\()').test(engineSrc);
     if (!ok) fail(`index.html has on…="${fn}(" but engine/ defines no such global`);
