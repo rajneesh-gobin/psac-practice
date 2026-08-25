@@ -993,7 +993,7 @@
         <div class="stat-tile"><div id="a-exams" class="stat-num text-purple-600 dark:text-purple-400">0</div><div class="stat-label">Exams Done</div></div>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
-        <h3 class="font-bold text-gray-800 dark:text-white mb-4">Chapter Performance</h3>
+        <h3 class="font-bold text-gray-800 dark:text-white mb-4">📚 Performance by Subject</h3>
         <div id="analytics-chapters" class="space-y-3"></div>
       </div>
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
@@ -1558,8 +1558,20 @@
             <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Toggle chapters off to lock them from the student</div>
             <div id="pd-chapter-locks"></div>
           </div>
-        </div>
 
+          <!-- Study reminder -->
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm">
+            <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">🔔 Daily Study Reminder</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Send a push notification to the student's device at a set time each day. Requires the app to be installed and notifications allowed.</div>
+            <div class="flex items-center gap-3">
+              <input type="time" id="pd-reminder-time" class="text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              <button onclick="PD.saveReminder()" class="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">Save</button>
+              <button onclick="PD.clearReminder()" class="px-3 py-2 text-xs text-gray-400 hover:text-red-500 transition-colors">Clear</button>
+            </div>
+            <div id="pd-reminder-status" class="text-xs text-gray-400 mt-2"></div>
+          </div>
+
+        </div>
       </div><!-- /pd-detail-panel -->
 
     </div>

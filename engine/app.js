@@ -280,6 +280,109 @@ function _renderResumeBanner() {
     </div>`;
 }
 
+// ── Push notifications ──────────────────────────────────────────────────────
+const VAPID_PUBLIC_KEY = 'BExWCMEBx-MGkPCv6tm0nC-DebalPys64ivbkWnWN7pxZuHQqUNtuZ85HehLssxBddlvjGB1d99IgtALRFZo8kc';
+
+function _urlB64ToUint8Array(b64) {
+  const pad  = '='.repeat((4 - b64.length % 4) % 4);
+  const raw  = atob(b64.replace(/-/g, '+').replace(/_/g, '/') + pad);
+  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+}
+
+async function setupPushNotifications(studentId) {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    // Check if already subscribed
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') return;
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: _urlB64ToUint8Array(VAPID_PUBLIC_KEY),
+      });
+    }
+    // Save subscription to backend
+    await fetch('/.netlify/functions/push-subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ studentId, subscription: sub.toJSON() }),
+    });
+  } catch(e) {
+    console.warn('[push] Setup failed:', e.message);
+  }
+}
+
+// ── Mobile: Haptic feedback ─────────────────────────────────────────────────
+function _haptic(type) {
+  if (!navigator.vibrate) return;
+  if (type === 'correct')  navigator.vibrate(50);
+  else if (type === 'wrong')    navigator.vibrate([80, 40, 80]);
+  else if (type === 'levelup')  navigator.vibrate([50, 30, 50, 30, 150]);
+}
+
+// ── Mobile: Screen wake lock (prevent screen sleep during exam) ─────────────
+let _wakeLock = null;
+async function _requestWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  try {
+    _wakeLock = await navigator.wakeLock.request('screen');
+    _wakeLock.addEventListener('release', () => { _wakeLock = null; });
+  } catch(_) {}
+}
+function _releaseWakeLock() {
+  if (_wakeLock) { _wakeLock.release(); _wakeLock = null; }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && S.exam?.qs?.length) _requestWakeLock();
+});
+
+// ── Mobile: Portrait orientation lock during exam ───────────────────────────
+async function _lockPortrait() {
+  try { await screen.orientation.lock('portrait'); } catch(_) {}
+}
+function _unlockOrientation() {
+  try { screen.orientation.unlock(); } catch(_) {}
+}
+
+// ── Mobile: Text-to-speech ──────────────────────────────────────────────────
+let _ttsSpeaking = false;
+function speakQuestion(mode) {
+  if (!window.speechSynthesis) { toast('Text-to-speech not supported on this browser.', 2500); return; }
+  const elId = mode === 'exam' ? 'exam-q-text' : 'practice-q-text';
+  const el   = document.getElementById(elId);
+  if (!el) return;
+  const text = (el.innerText || el.textContent || '').trim();
+  if (!text) return;
+  if (_ttsSpeaking) { speechSynthesis.cancel(); _ttsSpeaking = false; return; }
+  const utt   = new SpeechSynthesisUtterance(text);
+  utt.rate    = 0.88;
+  utt.lang    = 'en-GB';
+  utt.onstart = () => { _ttsSpeaking = true; };
+  utt.onend   = () => { _ttsSpeaking = false; };
+  utt.onerror = () => { _ttsSpeaking = false; };
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utt);
+}
+
+// ── Mobile: Share exam result ───────────────────────────────────────────────
+async function shareResult() {
+  const score   = document.getElementById('result-score')?.textContent  || '';
+  const grade   = document.getElementById('result-grade')?.textContent  || '';
+  const details = document.getElementById('result-details')?.textContent || '';
+  const text    = `I scored ${score} (${grade}) on my PSAC Practice exam! ${details} 🇲🇺📚`;
+  try {
+    await navigator.share({ title: 'My PSAC Exam Result', text, url: location.origin });
+  } catch(e) {
+    if (e.name !== 'AbortError') {
+      try { await navigator.clipboard.writeText(text); toast('Result copied to clipboard! 📋', 2500); }
+      catch(_) {}
+    }
+  }
+}
+document.getElementById('share-result-btn')?.addEventListener('click', shareResult);
+
 // ── PWA Install prompt ──────────────────────────────────────────────────────
 // Capture the browser's install prompt and surface it via the header button.
 // The button stays hidden on desktop and iOS (event never fires there).
@@ -823,7 +926,7 @@ function gainXP() {
   const newLevel = getLevel(DB.xp);
   const oldLevel = DB.level || 1;
   DB.level = newLevel;
-  if (newLevel > oldLevel) { _playSound('levelup'); showLevelUp(newLevel); }
+  if (newLevel > oldLevel) { _playSound('levelup'); _haptic('levelup'); showLevelUp(newLevel); }
   updateXPBar();
 }
 
@@ -1042,7 +1145,63 @@ const PD = (() => {
     }).join('') : '<p class="text-sm text-gray-400 text-center py-4">No assignments yet. Add one above.</p>';
   }
 
-  return { selectChild, closeDetail, pdTab, renderDetail };
+  // ── Study reminder ─────────────────────────────
+  async function _loadReminder() {
+    if (!_activeId) return;
+    const timeEl   = document.getElementById('pd-reminder-time');
+    const statusEl = document.getElementById('pd-reminder-status');
+    if (!timeEl || !statusEl) return;
+    try {
+      const res  = await fetch(`/.netlify/functions/push-subscribe?studentId=${_activeId}&action=get`, { method: 'GET' });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.reminder_time) {
+        timeEl.value = data.reminder_time;
+        statusEl.textContent = `Reminder set for ${data.reminder_time} Mauritius time.`;
+      } else {
+        statusEl.textContent = 'No reminder set.';
+      }
+    } catch(_) {}
+  }
+
+  async function saveReminder() {
+    if (!_activeId) return;
+    const timeEl   = document.getElementById('pd-reminder-time');
+    const statusEl = document.getElementById('pd-reminder-status');
+    const time     = timeEl?.value;
+    if (!time) { if (statusEl) statusEl.textContent = 'Please pick a time first.'; return; }
+    try {
+      const res = await fetch('/.netlify/functions/push-subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId: _activeId, reminderTime: time }),
+      });
+      if (statusEl) statusEl.textContent = res.ok ? `Reminder saved for ${time} MU time. ✅` : 'Save failed — make sure the student has notifications enabled.';
+    } catch(_) { if (statusEl) statusEl.textContent = 'Network error.'; }
+  }
+
+  async function clearReminder() {
+    if (!_activeId) return;
+    const timeEl   = document.getElementById('pd-reminder-time');
+    const statusEl = document.getElementById('pd-reminder-status');
+    try {
+      const res = await fetch('/.netlify/functions/push-subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId: _activeId, reminderTime: null }),
+      });
+      if (res.ok) { if (timeEl) timeEl.value = ''; if (statusEl) statusEl.textContent = 'Reminder cleared.'; }
+    } catch(_) {}
+  }
+
+  // Load reminder when detail panel opens
+  const _origSelectChild = selectChild;
+  function selectChildWithReminder(id) {
+    _origSelectChild(id);
+    setTimeout(_loadReminder, 300);
+  }
+
+  return { selectChild: selectChildWithReminder, closeDetail, pdTab, renderDetail, saveReminder, clearReminder };
 })();
 
 // ── PARENT DASHBOARD HELPERS ──────────────────
@@ -1552,6 +1711,7 @@ function startExam(type) {
   S.exam.type = type;
   S.exam.duration = paper.durationMins * 60;
   S.exam.endTime = Date.now() + S.exam.duration * 1000;
+  _requestWakeLock(); _lockPortrait();
   showScreen('exam');
   renderExamNavGrid();
   renderExamQuestion();
@@ -1858,6 +2018,7 @@ document.getElementById('submit-exam-btn').addEventListener('click', () => {
 
 function submitExam() {
   _clearResume();
+  _releaseWakeLock(); _unlockOrientation();
   clearInterval(S.exam.timer);
   saveCurrentExamAnswer();
   const timeTaken = Math.round((S.exam.duration - Math.max(0, (S.exam.endTime - Date.now()) / 1000)));
@@ -1881,6 +2042,8 @@ function submitExam() {
   if (pct >= 80) launchConfetti();
   renderResults(correct, total, pct, timeTaken, chapterStats);
   showScreen('results');
+  const _shareBtn = document.getElementById('share-result-btn');
+  if (_shareBtn) _shareBtn.classList.toggle('hidden', !navigator.share && !navigator.clipboard);
 }
 
 function renderResults(correct, total, pct, timeTaken, chapterStats) {
@@ -2121,11 +2284,11 @@ function practiceSubmit() {
   if (ok) {
     _comboStreak++;
     _floatXP(XP_PER_ANSWER);
-    _playSound('correct');
+    _playSound('correct'); _haptic('correct');
     _showCombo(_comboStreak);
   } else {
     _comboStreak = 0;
-    _playSound('wrong');
+    _playSound('wrong'); _haptic('wrong');
   }
 
   // show correct/wrong state
@@ -2173,7 +2336,7 @@ function practiceSkip() {
   const q = S.practice.qs[S.practice.idx];
   if (!q) return;
   _comboStreak = 0;
-  _playSound('wrong');
+  _playSound('wrong'); _haptic('wrong');
   renderAnswerArea(q, 'practice-answer-area', '', true);
   const fb = document.getElementById('practice-feedback');
   fb.className = 'mb-4 p-4 rounded-xl feedback-wrong';
@@ -2401,31 +2564,81 @@ document.getElementById('analytics-btn').addEventListener('click', () => showScr
 function renderAnalytics() {
   const acc = DB.stats.totalAttempted ? Math.round(DB.stats.totalCorrect / DB.stats.totalAttempted * 100) : 0;
   document.getElementById('a-total').textContent = DB.stats.totalAttempted;
-  document.getElementById('a-acc').textContent = acc + '%';
+  document.getElementById('a-acc').textContent   = acc + '%';
   document.getElementById('a-streak').textContent = DB.stats.streak + '🔥';
-  document.getElementById('a-exams').textContent = DB.stats.examCount;
+  document.getElementById('a-exams').textContent  = DB.stats.examCount;
 
-  document.getElementById('analytics-chapters').innerHTML = CHAPTERS.map(ch => {
-    const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
-    const p = c.attempted ? Math.round(c.correct/c.attempted*100) : 0;
-    const col = p>=80?'#22c55e':p>=50?'#f59e0b':'#ef4444';
-    return `<div>
-      <div class="flex justify-between text-sm mb-1">
-        <span class="text-gray-700 dark:text-gray-300">${ch.icon} ${ch.name}</span>
-        <span class="font-bold" style="color:${col}">${c.correct}/${c.attempted} (${p}%)</span>
-      </div>
-      <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${p}%;background:${col}"></div></div>
-    </div>`;
-  }).join('');
+  const chapEl = document.getElementById('analytics-chapters');
+  if (chapEl) {
+    const grade = (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
+    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+      .filter(p => p.grade === grade && !p.comingSoon);
+
+    if (!packs.length) {
+      // Fallback: active subject only (pre-login or no packs loaded yet)
+      chapEl.innerHTML = CHAPTERS.map(ch => {
+        const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
+        const p = c.attempted ? Math.round(c.correct / c.attempted * 100) : 0;
+        const col = p >= 80 ? '#22c55e' : p >= 50 ? '#f59e0b' : '#ef4444';
+        return `<div class="flex items-center gap-2 py-1.5">
+          <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 truncate">${ch.icon} ${ch.name}</span>
+          <span class="text-xs font-bold shrink-0" style="color:${col}">${c.correct}/${c.attempted} &bull; ${p}%</span>
+          <div class="w-20 shrink-0"><div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${p}%;background:${col}"></div></div></div>
+        </div>`;
+      }).join('');
+    } else {
+      chapEl.innerHTML = packs.map(pack => {
+        const chs = pack._chapters || pack.chapters || [];
+        let sAttempted = 0, sCorrect = 0;
+        chs.forEach(ch => {
+          const c = (DB.chapters || {})[ch.id] || {};
+          sAttempted += c.attempted || 0;
+          sCorrect   += c.correct   || 0;
+        });
+        const sPct = sAttempted ? Math.round(sCorrect / sAttempted * 100) : 0;
+        const sCol = !sAttempted ? '#94a3b8' : sPct >= 80 ? '#22c55e' : sPct >= 50 ? '#f59e0b' : '#ef4444';
+
+        const chRows = chs.map(ch => {
+          const c   = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
+          const p   = c.attempted ? Math.round(c.correct / c.attempted * 100) : 0;
+          const col = !c.attempted ? '#94a3b8' : p >= 80 ? '#22c55e' : p >= 50 ? '#f59e0b' : '#ef4444';
+          const badge = !c.attempted
+            ? '<span class="text-xs text-gray-400 dark:text-gray-500 shrink-0">not started</span>'
+            : `<span class="text-xs font-bold shrink-0" style="color:${col}">${c.correct}/${c.attempted} &bull; ${p}%</span>`;
+          return `<div class="flex items-center gap-2 py-1.5">
+            <span class="text-sm text-gray-600 dark:text-gray-300 flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${ch.enrichment ? ' <span class="text-amber-400 text-[10px]">✨</span>' : ''}</span>
+            ${badge}
+            <div class="w-16 shrink-0"><div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${p}%;background:${col}"></div></div></div>
+          </div>`;
+        }).join('');
+
+        return `<div class="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
+          <button onclick="var b=this.nextElementSibling;b.classList.toggle('hidden');this.querySelector('.chev').style.transform=b.classList.contains('hidden')?'':'rotate(180deg)'"
+            class="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-800/60 hover:bg-gray-100 dark:hover:bg-gray-700/60 transition-colors text-left">
+            <span class="text-xl select-none">${pack.icon}</span>
+            <span class="flex-1 font-semibold text-sm text-gray-800 dark:text-white">${pack.name}</span>
+            ${!sAttempted
+              ? '<span class="text-xs text-gray-400 dark:text-gray-500">not started yet</span>'
+              : `<span class="text-xs font-bold" style="color:${sCol}">${sCorrect}/${sAttempted} &bull; ${sPct}%</span>`}
+            <span class="chev text-gray-400 text-xs transition-transform" style="${sAttempted ? 'transform:rotate(180deg)' : ''}">▼</span>
+          </button>
+          <div class="${sAttempted ? '' : 'hidden'} px-4 py-1 divide-y divide-gray-100 dark:divide-gray-700/50">
+            ${chRows}
+          </div>
+        </div>`;
+      }).join('<div class="mb-2"></div>');
+    }
+  }
 
   const hist = document.getElementById('exam-history-list');
+  if (!hist) return;
   if (!DB.examHistory.length) {
     hist.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500">No exams yet. Take your first exam!</p>';
   } else {
     hist.innerHTML = DB.examHistory.map(e => {
-      const col = e.pct>=80?'text-green-600 dark:text-green-400':e.pct>=50?'text-amber-600 dark:text-amber-400':'text-red-600 dark:text-red-400';
+      const col = e.pct >= 80 ? 'text-green-600 dark:text-green-400' : e.pct >= 50 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400';
       return `<div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
-        <span class="text-sm text-gray-600 dark:text-gray-400">${e.date} · ${e.total}Q exam</span>
+        <span class="text-sm text-gray-600 dark:text-gray-400">${e.date} &bull; ${e.total}Q exam</span>
         <span class="font-bold ${col}">${e.pct}% (${e.correct}/${e.total})</span>
       </div>`;
     }).join('');
