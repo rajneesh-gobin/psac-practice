@@ -1139,10 +1139,27 @@ const Auth = (() => {
     const fresh = { stats:{totalAttempted:0,totalCorrect:0,examCount:0,bestScore:0,maxStreak:0,streak:0,lastDate:null},chapters:{},examHistory:[],badges:[],theme:keepTheme,xp:0,level:1,assignments:[],restrictions:{lockedChapters:[],maxDifficulty:4,examDisabled:false} };
     Object.assign(DB, fresh);
     applyTheme(_preferredTheme(keepTheme));
-    renderDashboard();
-    updateXPBar();
-    showScreen('dashboard');
+    // This function is shared by two different callers: the student's own
+    // Analytics reset button, and the parent dashboard's per-child Progress
+    // tab. A parent session (_parentProfile set) got here via pdSwitchStudent,
+    // which is called with navigate:false specifically so previewing a child
+    // never leaves the parent dashboard - showScreen('dashboard') would break
+    // that contract and dump the parent into the child's own dashboard screen.
+    if (_parentProfile) {
+      if (typeof PD !== 'undefined') PD.selectChild(ACTIVE_STUDENT_ID);
+    } else {
+      renderDashboard();
+      updateXPBar();
+      showScreen('dashboard');
+    }
     toast('Progress reset. 🗑', 2000);
+  }
+
+  // Danger-zone delete from the parent dashboard's Controls tab - a thin
+  // wrapper so the button can call a no-arg action like the other Controls
+  // toggles, matching editCurrentStudent()'s pattern for the same reason.
+  function deleteCurrentStudent() {
+    if (ACTIVE_STUDENT_ID) deleteStudent(ACTIVE_STUDENT_ID);
   }
 
   // ── Parent dashboard tab switching ────────────
@@ -1300,7 +1317,7 @@ const Auth = (() => {
     // Family setup
     completeSetup, _pickSetupAvatar,
     // Add/edit student
-    addStudent, saveNewStudent, deleteStudent, editStudent, editCurrentStudent,
+    addStudent, saveNewStudent, deleteStudent, editStudent, editCurrentStudent, deleteCurrentStudent,
     _pickAddAvatar,
     // Session
     loginStudent, logout, switchStudent, switchToStudentSelect,
