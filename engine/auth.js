@@ -819,7 +819,12 @@ const Auth = (() => {
         _showAuthError('Too many wrong PINs. Locked for 60 seconds.');
       } else {
         const left = data.attemptsLeft ?? (5 - _pinAttempts);
-        _showAuthError(`Username or PIN is incorrect. ${left} attempt${left === 1 ? '' : 's'} left.`);
+        // Just-created accounts should log in immediately - there's no server-side
+        // activation delay. This hint covers the one scenario that can look like
+        // one: an app update rolling out while the account was created, which can
+        // leave a browser briefly serving a stale cached shell until it catches up.
+        _showAuthError(`Username or PIN is incorrect. ${left} attempt${left === 1 ? '' : 's'} left. `
+          + `Just created this account? Wait a minute and try again.`);
       }
       if (_el('student-pin')) _el('student-pin').value = '';
       return;
