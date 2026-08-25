@@ -8,9 +8,16 @@
 // La séquence « l'oiseau blessé » reprend celle du cahier d'entraînement
 // (récit de 10 lignes).
 //
-// SVG en ligne plutôt que photos : pas de 404, fonctionne hors ligne dans la
-// PWA, contenu connu exactement. Pas de <title> descriptif : il révélerait
-// les réponses.
+// L'image unique est une PHOTOGRAPHIE réelle (Wikimedia Commons) : le rendu
+// emoji d'origine ressemblait à du clipart et se décrivait mal. Les questions
+// ont été écrites en regardant la photo.
+//
+// La séquence de trois images reste dessinée : il n'existe pas de série de
+// photos libres montrant les mêmes personnages à trois moments d'une histoire.
+//
+// ⚠ alt et <title> restent génériques - ils ne doivent JAMAIS donner la réponse.
+// ⚠ Photos sous licence CC BY / CC BY-SA : le crédit sous chaque image est une
+//   obligation de la licence, pas une décoration. Ne pas le retirer.
 
 function _g6imgSvg(w, h, body) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img"
@@ -19,21 +26,6 @@ function _g6imgSvg(w, h, body) {
 }
 function _g6imgEmoji(x, y, size, ch) {
   return `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle">${ch}</text>`;
-}
-function _g6imgLabel(x, y, txt, size, colour, weight) {
-  return `<text x="${x}" y="${y}" font-size="${size || 11}" font-family="sans-serif"
-    font-weight="${weight || 'normal'}" fill="${colour || '#1e293b'}" text-anchor="middle">${txt}</text>`;
-}
-function _g6imgSapling(x, groundY) {
-  return `<line x1="${x}" y1="${groundY}" x2="${x}" y2="${groundY - 26}" stroke="#78350f" stroke-width="3"/>
-    <polygon points="${x},${groundY - 26} ${x - 13},${groundY - 33} ${x - 2},${groundY - 40}" fill="#16a34a"/>
-    <polygon points="${x},${groundY - 26} ${x + 13},${groundY - 33} ${x + 2},${groundY - 40}" fill="#22c55e"/>
-    <ellipse cx="${x}" cy="${groundY}" rx="14" ry="5" fill="#78350f"/>`;
-}
-function _g6imgWateringCan(x, y) {
-  return `<rect x="${x}" y="${y}" width="26" height="20" rx="3" fill="#38bdf8" stroke="#0369a1"/>
-    <polygon points="${x + 26},${y + 4} ${x + 42},${y - 6} ${x + 42},${y - 1} ${x + 26},${y + 10}" fill="#38bdf8" stroke="#0369a1"/>
-    <path d="M${x + 4} ${y} q9 -12 18 0" fill="none" stroke="#0369a1" stroke-width="2.5"/>`;
 }
 function _g6imgPanel(x, n, skyFill, groundFill, inner) {
   return `<g transform="translate(${x},0)">
@@ -45,33 +37,21 @@ function _g6imgPanel(x, n, skyFill, groundFill, inner) {
   </g>`;
 }
 
-// ── SCÈNE 1 : une seule image - la journée de l'environnement ─────────
-const _G6IMG_PLANTATION = _g6imgSvg(400, 240, `
-  <rect x="0" y="0" width="400" height="152" fill="#bfe4ff"/>
-  <circle cx="360" cy="34" r="20" fill="#fcd34d"/>
-  <path d="M96 44 l7 -5 l7 5" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
-  <path d="M128 34 l7 -5 l7 5" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
-  <rect x="248" y="72" width="130" height="80" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/>
-  <polygon points="240,72 313,42 386,72" fill="#9a3412"/>
-  <rect x="264" y="92" width="20" height="20" fill="#bfdbfe" stroke="#9a3412"/>
-  <rect x="300" y="92" width="20" height="20" fill="#bfdbfe" stroke="#9a3412"/>
-  <rect x="336" y="92" width="20" height="20" fill="#bfdbfe" stroke="#9a3412"/>
-  <rect x="300" y="124" width="22" height="28" fill="#7c2d12"/>
-  <rect x="20" y="18" width="200" height="34" rx="5" fill="#fff" stroke="#15803d" stroke-width="3"/>
-  ${_g6imgLabel(120, 33, "JOURNÉE DE L'ENVIRONNEMENT", 11, '#15803d', 'bold')}
-  ${_g6imgLabel(120, 46, 'Plantons 50 arbres !', 10, '#15803d')}
-  <rect x="0" y="152" width="400" height="88" fill="#86efac"/>
-  ${_g6imgSapling(74, 206)}
-  ${_g6imgSapling(150, 206)}
-  ${_g6imgSapling(226, 206)}
-  <line x1="196" y1="212" x2="212" y2="168" stroke="#78350f" stroke-width="4"/>
-  <polygon points="210,164 220,164 218,178 208,178" fill="#94a3b8" stroke="#475569"/>
-  ${_g6imgWateringCan(258, 196)}
-  ${_g6imgEmoji(50, 206, 34, '🧒')}
-  ${_g6imgEmoji(120, 200, 34, '🧒')}
-  ${_g6imgEmoji(196, 232, 30, '🧒')}
-  ${_g6imgEmoji(330, 208, 36, '👩')}
-`);
+// ── SCÈNE 1 : une seule image - la plantation d'arbres ────────────────
+// Photographie réelle : le rendu emoji d'origine ressemblait à du clipart.
+// Les questions ont été écrites en regardant la photo.
+function _g6imgPhoto(file, credit) {
+  return `<figure style="margin:6px 0">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=900"
+      alt="Une image à décrire" loading="lazy"
+      style="width:100%;max-width:520px;height:auto;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+    <figcaption style="font-size:.68em;color:#94a3b8;margin-top:3px">${credit}</figcaption>
+  </figure>`;
+}
+
+const _G6IMG_PLANTATION = _g6imgPhoto(
+  'Children%20planting%20plants%20in%20Seychelles.jpg',
+  'Photo : Joena Bonnelame, Seychelles News Agency, Wikimedia Commons, CC BY 4.0');
 
 // ── SCÈNE 2 : trois images - l'oiseau blessé ──────────────────────────
 const _G6IMG_OISEAU = _g6imgSvg(660, 190, `
@@ -113,62 +93,64 @@ STATIC_QUESTIONS.push(
 
   // ── IMAGE UNIQUE : la plantation ───────────────────────────────────
   makeMCQ({ id:`g6fr-img-001`, chapterId:`g6fr-images`, difficulty:1,
-    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quel événement cette image représente-t-elle ?`,
+    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Que font les trois élèves ?`,
     options:[
-      `Une journée de l'environnement dans une école`,
-      `Une compétition sportive`,
-      `Une visite au jardin botanique`,
-      `Une kermesse de fin d'année`
+      `Ils plantent un jeune arbre`,
+      `Ils ramassent des déchets`,
+      `Ils jouent au ballon`,
+      `Ils balaient la cour`
     ],
-    answer:`Une journée de l'environnement dans une école`,
-    hint:`Lis la banderole en haut de l'image.`,
-    explanation:`La banderole annonce « <b>JOURNÉE DE L'ENVIRONNEMENT - Plantons 50 arbres !</b> » et l'on voit des élèves planter devant un bâtiment scolaire. Sur une image d'examen, <b>tout texte affiché</b> (banderole, panneau, enseigne) est une information à exploiter.` }),
+    answer:`Ils plantent un jeune arbre`,
+    hint:`Regarde le trou dans la terre et ce qui s'y trouve.`,
+    explanation:`Un <b>jeune plant</b> aux larges feuilles vertes est posé dans un trou, et les élèves rebouchent autour : <b>ils plantent un arbre</b>. Sur une image d'examen, l'action principale se lit toujours au centre.` }),
 
   makeMCQ({ id:`g6fr-img-002`, chapterId:`g6fr-images`, difficulty:1,
-    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Combien de jeunes arbres ont déjà été plantés ?`,
-    options:[`Trois`, `Deux`, `Cinquante`, `Aucun`],
+    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Combien d'élèves y a-t-il au premier plan ?`,
+    options:[`Trois`, `Deux`, `Cinq`, `Un seul`],
     answer:`Trois`,
-    hint:`Compte les petits arbres en terre, pas le nombre écrit sur la banderole.`,
-    explanation:`On voit <b>trois jeunes arbres</b> déjà en terre. Attention au piège : « 50 arbres » est l'<b>objectif</b> annoncé sur la banderole, pas ce qui est réellement planté sur l'image. Ne confonds jamais ce qui est <i>écrit</i> avec ce qui est <i>montré</i>.` }),
+    hint:`Ne compte que ceux qui sont penchés sur le trou, pas les personnes du fond.`,
+    explanation:`<b>Trois élèves</b> sont penchés autour du trou. D'autres personnes apparaissent à l'arrière-plan, mais elles ne participent pas à l'action : il faut bien distinguer les deux plans.` }),
 
   makeMCQ({ id:`g6fr-img-003`, chapterId:`g6fr-images`, difficulty:2,
-    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Qu'y a-t-il à l'ARRIÈRE-PLAN de l'image ?`,
+    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Comment sont habillés les élèves ?`,
     options:[
-      `Le bâtiment de l'école et le ciel`,
-      `L'arrosoir et la pelle`,
-      `Les trois jeunes arbres`,
-      `Les élèves qui plantent`
+      `Ils portent un uniforme scolaire rose`,
+      `Ils portent un maillot de bain`,
+      `Ils portent un manteau d'hiver`,
+      `Ils portent une tenue de sport bleue`
     ],
-    answer:`Le bâtiment de l'école et le ciel`,
-    hint:`L'arrière-plan, c'est ce qui est loin, tout au fond.`,
-    explanation:`À l'<b>arrière-plan</b> on trouve le <b>bâtiment de l'école</b>, le ciel et les oiseaux. Les élèves, les outils et les arbres sont au <b>premier plan</b>. Un correcteur attend ce vocabulaire : <b>au premier plan / au second plan / à l'arrière-plan</b>.` }),
+    answer:`Ils portent un uniforme scolaire rose`,
+    hint:`Les trois enfants sont habillés de la même façon - c'est un indice.`,
+    explanation:`Les trois enfants portent le même <b>uniforme rose à carreaux</b>, ce qui montre qu'ils viennent de la même école. Un vêtement identique sur plusieurs personnages est toujours une information à relever.` }),
 
   makeMCQ({ id:`g6fr-img-004`, chapterId:`g6fr-images`, difficulty:2,
-    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quels outils voit-on sur l'image ?`,
-    options:[
-      `Une pelle et un arrosoir`,
-      `Un marteau et une scie`,
-      `Une brouette et un râteau`,
-      `Une balance et un panier`
-    ],
-    answer:`Une pelle et un arrosoir`,
-    hint:`Cherche l'objet planté en terre près d'un arbre, et l'objet bleu à bec.`,
-    explanation:`On distingue une <b>pelle</b> plantée dans la terre et un <b>arrosoir</b> bleu posé au sol. Le champ lexical du jardinage - <i>planter, creuser, arroser, la pelle, l'arrosoir, la terre, le jeune plant</i> - est exactement ce qu'il faut réemployer dans la description.` }),
+    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quel outil les élèves utilisent-ils ?`,
+    options:[`Des pelles`, `Un marteau`, `Un arrosoir`, `Un râteau`],
+    answer:`Des pelles`,
+    hint:`Regarde ce que tiennent les deux élèves qui sont debout.`,
+    explanation:`Deux élèves tiennent une <b>pelle</b> pour creuser et remettre la terre. Le champ lexical du jardinage - <i>planter, creuser, la pelle, la terre, le trou, les racines, le jeune plant</i> - est exactement ce qu'il faut réemployer.` }),
 
-  makeMCQ({ id:`g6fr-img-005`, chapterId:`g6fr-images`, difficulty:3,
-    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quels mots appartiennent au CHAMP LEXICAL de cette image ?`,
-    options:[
-      `planter, arroser, creuser, la terre, l'arrosoir`,
-      `naviguer, l'ancre, la voile, le port`,
-      `additionner, la fraction, le quotient`,
-      `guérir, l'ordonnance, l'infirmière`
-    ],
-    answer:`planter, arroser, creuser, la terre, l'arrosoir`,
-    hint:`Un champ lexical regroupe tous les mots liés à un même thème.`,
-    explanation:`Un <b>champ lexical</b> réunit les mots d'un même thème. Ici, le thème est la <b>plantation</b> : <i>planter, arroser, creuser, la terre, l'arrosoir, le jeune plant, les racines</i>. Utiliser le bon champ lexical est ce qui rend une description précise plutôt que vague.` }),
+  makeMCQ({ id:`g6fr-img-005`, chapterId:`g6fr-images`, difficulty:2,
+    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}De quelle couleur est la terre ?`,
+    options:[`Rouge-orangé`, `Noire`, `Blanche comme du sable`, `Grise comme du béton`],
+    answer:`Rouge-orangé`,
+    hint:`Regarde autour du trou et sous les pieds des élèves.`,
+    explanation:`La terre est <b>rouge-orangé</b>, typique des sols tropicaux. Nommer une couleur précise (« rouge-orangé » plutôt que « marron ») rend une description bien plus vivante.` }),
 
   makeMCQ({ id:`g6fr-img-006`, chapterId:`g6fr-images`, difficulty:3,
-    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quel est le MESSAGE que cette image cherche à faire passer ?`,
+    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Qu'y a-t-il à l'ARRIÈRE-PLAN de l'image ?`,
+    options:[
+      `D'autres personnes, des bâtiments et des voitures`,
+      `La mer et des bateaux`,
+      `Une forêt épaisse et sombre`,
+      `Rien du tout, le fond est vide`
+    ],
+    answer:`D'autres personnes, des bâtiments et des voitures`,
+    hint:`L'arrière-plan, c'est tout ce qui est loin, derrière les élèves.`,
+    explanation:`Au fond on distingue <b>d'autres personnes debout</b>, des <b>bâtiments</b> et des <b>voitures</b> : la plantation a lieu lors d'un événement collectif. Le correcteur attend ce vocabulaire : <b>au premier plan / au second plan / à l'arrière-plan</b>.` }),
+
+  makeMCQ({ id:`g6fr-img-007`, chapterId:`g6fr-images`, difficulty:3,
+    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quel est le MESSAGE que cette image fait passer ?`,
     options:[
       `Les jeunes peuvent agir concrètement pour protéger l'environnement`,
       `Le jardinage est un métier difficile`,
@@ -176,34 +158,34 @@ STATIC_QUESTIONS.push(
       `Il faut arroser les plantes le matin`
     ],
     answer:`Les jeunes peuvent agir concrètement pour protéger l'environnement`,
-    hint:`Qui agit sur l'image, et pour quel objectif annoncé ?`,
-    explanation:`Ce sont des <b>élèves</b>, encadrés par une enseignante, qui plantent des arbres sous une banderole écologique : l'image montre que <b>les jeunes peuvent agir</b> pour l'environnement. Distinguer ce que l'image <i>montre</i> de ce qu'elle <i>veut dire</i> est une compétence attendue en Grade 6.` }),
+    hint:`Qui agit sur l'image, et pour quel résultat à long terme ?`,
+    explanation:`Ce sont des <b>élèves</b>, et non des adultes, qui plantent l'arbre : l'image montre que <b>les jeunes peuvent agir</b> pour l'environnement. Distinguer ce que l'image <i>montre</i> de ce qu'elle <i>veut dire</i> est une compétence attendue en Grade 6.` }),
 
-  makeMCQ({ id:`g6fr-img-007`, chapterId:`g6fr-images`, difficulty:3,
-    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Transforme au DISCOURS INDIRECT : L'enseignante dit : « Arrosez bien les jeunes arbres. »`,
+  makeMCQ({ id:`g6fr-img-008`, chapterId:`g6fr-images`, difficulty:3,
+    question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Transforme au DISCOURS INDIRECT : L'enseignante dit : « Arrosez bien le jeune arbre. »`,
     options:[
-      `L'enseignante leur demande d'arroser bien les jeunes arbres.`,
-      `L'enseignante dit qu'arrosez bien les jeunes arbres.`,
-      `L'enseignante demande : arrosez bien les jeunes arbres.`,
-      `L'enseignante a dit « d'arroser bien les jeunes arbres ».`
+      `L'enseignante leur demande d'arroser bien le jeune arbre.`,
+      `L'enseignante dit qu'arrosez bien le jeune arbre.`,
+      `L'enseignante demande : arrosez bien le jeune arbre.`,
+      `L'enseignante a dit « d'arroser bien le jeune arbre ».`
     ],
-    answer:`L'enseignante leur demande d'arroser bien les jeunes arbres.`,
+    answer:`L'enseignante leur demande d'arroser bien le jeune arbre.`,
     hint:`Un ordre rapporté indirectement devient : demander DE + infinitif.`,
     explanation:`Un <b>impératif</b> rapporté au discours indirect devient <b>demander de + infinitif</b> : « Arrosez ! » → « elle leur <b>demande d'arroser</b> ». On supprime les guillemets et les deux-points, et on ne garde jamais la forme conjuguée de l'ordre.` }),
 
-  makeMCQ({ id:`g6fr-img-008`, chapterId:`g6fr-images`, difficulty:4,
+  makeMCQ({ id:`g6fr-img-009`, chapterId:`g6fr-images`, difficulty:4,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quelle phrase exprime correctement une HYPOTHÈSE sur la suite ?`,
     options:[
-      `Si chaque classe plante trois arbres, l'école atteindra son objectif de cinquante arbres.`,
-      `Si chaque classe planterait trois arbres, l'école atteindra son objectif.`,
-      `Si chaque classe plantera trois arbres, l'école atteindrait son objectif.`,
-      `Si chaque classe plante trois arbres, l'école atteindrait-elle son objectif.`
+      `Si chaque classe plante un arbre, la cour de l'école sera bientôt ombragée.`,
+      `Si chaque classe planterait un arbre, la cour sera ombragée.`,
+      `Si chaque classe plantera un arbre, la cour serait ombragée.`,
+      `Si chaque classe plante un arbre, la cour serait-elle ombragée.`
     ],
-    answer:`Si chaque classe plante trois arbres, l'école atteindra son objectif de cinquante arbres.`,
+    answer:`Si chaque classe plante un arbre, la cour de l'école sera bientôt ombragée.`,
     hint:`Après « si », on n'emploie jamais le futur ni le conditionnel.`,
-    explanation:`L'hypothèse réalisable se construit <b>si + présent → futur simple</b> : « <b>Si</b> chaque classe <b>plante</b>…, l'école <b>atteindra</b>… ». Écrire « si… planterait » ou « si… plantera » est une faute classique : après <b>si</b>, pas de <i>-rais</i> ni de <i>-ra</i>.` }),
+    explanation:`L'hypothèse réalisable se construit <b>si + présent → futur simple</b> : « <b>Si</b> chaque classe <b>plante</b>…, la cour <b>sera</b>… ». Écrire « si… planterait » ou « si… plantera » est une faute classique : après <b>si</b>, pas de <i>-rais</i> ni de <i>-ra</i>.` }),
 
-  makeMCQ({ id:`g6fr-img-009`, chapterId:`g6fr-images`, difficulty:4,
+  makeMCQ({ id:`g6fr-img-010`, chapterId:`g6fr-images`, difficulty:4,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Tu dois rédiger dix lignes sur cette image. Quel plan te fera gagner le plus de points ?`,
     options:[
       `Situer la scène, décrire l'arrière-plan puis le premier plan, rapporter une parole, puis dire ce que l'image défend`,
@@ -216,7 +198,7 @@ STATIC_QUESTIONS.push(
     explanation:`Le plan attendu combine <b>description organisée</b> (arrière-plan → premier plan), <b>vie</b> (une parole rapportée, un sentiment) et <b>interprétation</b> (le message de l'image). Une simple énumération d'objets reste au niveau du Grade 4 et plafonne la note.` }),
 
   // ── TROIS IMAGES : l'oiseau blessé ─────────────────────────────────
-  makeMCQ({ id:`g6fr-img-010`, chapterId:`g6fr-images`, difficulty:1,
+  makeMCQ({ id:`g6fr-img-011`, chapterId:`g6fr-images`, difficulty:1,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Que découvrent l'enfant et sa mère sur l'image 1 ?`,
     options:[
       `Un petit oiseau tombé par terre dans le parc`,
@@ -228,7 +210,7 @@ STATIC_QUESTIONS.push(
     hint:`Regarde ce qui se trouve au sol, aux pieds de l'enfant.`,
     explanation:`Sur l'image 1, dans un parc (banc, arbre, soleil), l'enfant et sa mère trouvent un <b>petit oiseau à terre</b>. C'est la <b>situation initiale</b> et, en même temps, l'<b>élément déclencheur</b> du récit.` }),
 
-  makeMCQ({ id:`g6fr-img-011`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-012`, chapterId:`g6fr-images`, difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Que font les personnages sur l'image 2 ?`,
     options:[
       `Ils soignent l'oiseau à la maison et lui donnent de l'eau`,
@@ -240,7 +222,7 @@ STATIC_QUESTIONS.push(
     hint:`Le décor a changé : regarde la table, la boîte et la goutte d'eau.`,
     explanation:`Le décor est devenu un <b>intérieur</b> : l'oiseau est installé dans une boîte sur la table, avec de l'<b>eau</b> à côté. L'image 2 correspond aux <b>péripéties</b> : ce que les personnages font pour résoudre le problème.` }),
 
-  makeMCQ({ id:`g6fr-img-012`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-013`, chapterId:`g6fr-images`, difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Comment se termine l'histoire ?`,
     options:[
       `L'oiseau guéri s'envole et la famille lui fait au revoir`,
@@ -252,7 +234,7 @@ STATIC_QUESTIONS.push(
     hint:`Sur l'image 3, où se trouve l'oiseau, et que fait la main levée ?`,
     explanation:`Sur l'image 3, on est de retour dehors : l'oiseau <b>vole dans le ciel</b> et la famille <b>fait au revoir</b> de la main. C'est la <b>situation finale</b> : le problème est résolu et la situation a changé pour de bon.` }),
 
-  makeMCQ({ id:`g6fr-img-013`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-014`, chapterId:`g6fr-images`, difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quel changement de LIEU se produit entre les trois images ?`,
     options:[
       `Le parc, puis la maison, puis de nouveau l'extérieur`,
@@ -264,7 +246,7 @@ STATIC_QUESTIONS.push(
     hint:`Compare la couleur du sol et le décor de chaque vignette.`,
     explanation:`Le récit se déplace : <b>parc → maison → extérieur</b>. Signaler ces changements avec des compléments de lieu (« <i>de retour à la maison</i> », « <i>le lendemain, dans le jardin</i> ») rend le texte beaucoup plus clair.` }),
 
-  makeMCQ({ id:`g6fr-img-014`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-015`, chapterId:`g6fr-images`, difficulty:3,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quelle phrase mélange correctement l'IMPARFAIT et le PASSÉ COMPOSÉ ?`,
     options:[
       `Nous nous promenions dans le parc quand mon fils a aperçu un oiseau blessé.`,
@@ -276,7 +258,7 @@ STATIC_QUESTIONS.push(
     hint:`L'action longue qui sert de décor va à l'imparfait ; l'événement bref qui la coupe va au passé composé.`,
     explanation:`L'<b>imparfait</b> plante le décor qui dure (« nous nous <b>promenions</b> ») et le <b>passé composé</b> marque l'événement bref qui l'interrompt (« il <b>a aperçu</b> »). C'est la règle des deux plans du récit : <i>arrière-plan à l'imparfait, premier plan au passé composé</i>.` }),
 
-  makeMCQ({ id:`g6fr-img-015`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-016`, chapterId:`g6fr-images`, difficulty:3,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quelle phrase ajoute un SENTIMENT que les images ne montrent pas directement ?`,
     options:[
       `Mon fils s'est agenouillé, le cœur serré, devant le petit corps immobile.`,
@@ -288,7 +270,7 @@ STATIC_QUESTIONS.push(
     hint:`Cherche l'expression qui décrit une émotion, pas un objet.`,
     explanation:`« <b>le cœur serré</b> » exprime une <b>émotion</b>, que le dessin ne peut pas montrer. Les images donnent les actions ; c'est à l'auteur d'ajouter les sentiments, les pensées et les sensations - c'est ce qui distingue un récit d'une simple légende d'image.` }),
 
-  makeMCQ({ id:`g6fr-img-016`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-017`, chapterId:`g6fr-images`, difficulty:3,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quelle est la MORALE de cette histoire ?`,
     options:[
       `Prendre soin des animaux, même les plus petits, est une belle action`,
@@ -300,13 +282,13 @@ STATIC_QUESTIONS.push(
     hint:`Que gagnent les personnages à la fin, et qu'ont-ils fait pour cela ?`,
     explanation:`La famille prend soin d'un oiseau fragile, et l'histoire se termine sur sa <b>liberté retrouvée</b> : la morale est qu'il faut <b>protéger les animaux</b>. Une bonne conclusion de récit peut énoncer cette leçon en une phrase, sans la répéter trois fois.` }),
 
-  makeTF({ id:`g6fr-img-017`, chapterId:`g6fr-images`, difficulty:2,
+  makeTF({ id:`g6fr-img-018`, chapterId:`g6fr-images`, difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Dans un récit à partir d'images, il est permis d'inventer des détails qui ne sont pas dessinés, à condition qu'ils restent cohérents avec l'histoire.`,
     answer:true,
     hint:`Pense aux prénoms, aux paroles et aux sentiments des personnages.`,
     explanation:`<b>Vrai.</b> On attend même que tu inventes : des <b>prénoms</b>, des <b>paroles</b>, des <b>sentiments</b>, un <b>moment de la journée</b>. La seule règle est la <b>cohérence</b> : rien ne doit contredire ce que montrent les images.` }),
 
-  makeMCQ({ id:`g6fr-img-018`, chapterId:`g6fr-images`, difficulty:4,
+  makeMCQ({ id:`g6fr-img-019`, chapterId:`g6fr-images`, difficulty:4,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Tu dois écrire le récit à la première personne, du point de vue de la MÈRE. Quelle ouverture convient ?`,
     options:[
       `Ce dimanche-là, j'avais emmené mon fils au parc pour profiter du beau temps.`,
@@ -318,7 +300,7 @@ STATIC_QUESTIONS.push(
     hint:`À la première personne, la mère dit « je » et parle de « mon fils ».`,
     explanation:`Du point de vue de la mère, il faut « <b>je</b> » et « <b>mon fils</b> ». Les propositions 2 et 4 sont à la <b>troisième personne</b> ; la 3 adopte le point de vue de l'oiseau, ce qui n'est pas ce qui est demandé. Choisir le bon <b>narrateur</b> et s'y tenir jusqu'au bout est essentiel.` }),
 
-  makeMCQ({ id:`g6fr-img-019`, chapterId:`g6fr-images`, difficulty:4,
+  makeMCQ({ id:`g6fr-img-020`, chapterId:`g6fr-images`, difficulty:4,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Ton récit doit faire dix lignes. Comment répartis-tu le mieux ton texte ?`,
     options:[
       `Deux lignes d'introduction, puis trois lignes par image, en respectant l'ordre`,

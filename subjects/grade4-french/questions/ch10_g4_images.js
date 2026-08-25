@@ -2,11 +2,18 @@
 // Grade 4 French - Chapitre : Description d'Images
 // IDs format: g4fr-img-NNN
 //
-// Les scènes sont des SVG en ligne, pas des photos : elles ne peuvent pas
-// tomber en 404, elles fonctionnent hors ligne dans la PWA, et le contenu de
-// l'image est connu exactement - donc chaque question a une réponse vérifiable.
-// Le décor est dessiné (formes simples) ; les personnages sont des emoji.
-// Aucun <title> descriptif : il révélerait les réponses.
+// L'image unique est une PHOTOGRAPHIE réelle (Wikimedia Commons) : le rendu
+// emoji d'origine ressemblait à un dessin animé et se décrivait mal. Chaque
+// question a été rédigée en regardant la photo et ne porte que sur ce qui y est
+// réellement visible.
+//
+// La séquence de trois images reste dessinée : il n'existe pas de série de
+// photos libres montrant le même enfant à trois moments d'une même histoire.
+//
+// ⚠ Le texte alternatif doit rester générique - il ne doit JAMAIS donner la
+//   réponse. Idem pour le <title> des SVG.
+// ⚠ Photos sous licence CC BY / CC BY-SA : le crédit affiché sous chaque image
+//   est une obligation de la licence, pas une décoration. Ne pas le retirer.
 
 function _g4imgSvg(w, h, body) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img"
@@ -15,9 +22,6 @@ function _g4imgSvg(w, h, body) {
 }
 function _g4imgEmoji(x, y, size, ch) {
   return `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle">${ch}</text>`;
-}
-function _g4imgBird(x, y) {
-  return `<path d="M${x} ${y} l7 -5 l7 5" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>`;
 }
 function _g4imgTree(x, groundY) {
   return `<rect x="${x - 6}" y="${groundY - 42}" width="12" height="42" fill="#92400e" rx="2"/>
@@ -42,23 +46,22 @@ function _g4imgPanel(x, n, inner) {
 }
 
 // ── SCÈNE 1 : une seule image - la plage ──────────────────────────────
-const _G4IMG_PLAGE = _g4imgSvg(400, 240, `
-  <rect x="0" y="0" width="400" height="120" fill="#bfe4ff"/>
-  <circle cx="48" cy="40" r="22" fill="#fcd34d"/>
-  ${_g4imgBird(150, 35)}${_g4imgBird(186, 26)}${_g4imgBird(216, 46)}
-  <rect x="0" y="120" width="400" height="46" fill="#38bdf8"/>
-  <path d="M0 132 q20 -7 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#0ea5e9" stroke-width="2"/>
-  <path d="M0 152 q20 -7 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0" fill="none" stroke="#0ea5e9" stroke-width="2"/>
-  <rect x="0" y="166" width="400" height="74" fill="#f5e3b3"/>
-  ${_g4imgEmoji(287, 145, 30, '⛵')}
-  ${_g4imgEmoji(92, 152, 28, '🏊')}
-  ${_g4imgEmoji(44, 218, 36, '⛱️')}
-  ${_g4imgEmoji(152, 218, 34, '👧')}
-  ${_g4imgEmoji(196, 226, 22, '🏐')}
-  ${_g4imgEmoji(252, 220, 28, '🐕')}
-  ${_g4imgEmoji(348, 212, 52, '🌴')}
-  ${_g4imgEmoji(312, 232, 18, '🦀')}
-`);
+// Photographie réelle. Le rendu emoji précédent ressemblait à un dessin animé
+// et se décrivait mal. Chaque question ci-dessous a été écrite en regardant
+// cette photo, et ne porte que sur ce qui y est réellement visible.
+// alt générique : il ne doit JAMAIS donner la réponse.
+function _g4imgPhoto(file, credit) {
+  return `<figure style="margin:6px 0">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=900"
+      alt="Une image à décrire" loading="lazy"
+      style="width:100%;max-width:520px;height:auto;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+    <figcaption style="font-size:.68em;color:#94a3b8;margin-top:3px">${credit}</figcaption>
+  </figure>`;
+}
+
+const _G4IMG_PLAGE = _g4imgPhoto(
+  'Children%20playing%20in%20the%20sands%20on%20a%20beach%20in%20the%20Philippines.jpg',
+  'Photo : Øyvind Holmstad, Wikimedia Commons, CC BY-SA 4.0');
 
 // ── SCÈNE 2 : trois images - le ballon perdu ──────────────────────────
 const _G4IMG_BALLON = _g4imgSvg(660, 190, `
@@ -85,76 +88,76 @@ STATIC_QUESTIONS.push(
   // ── IMAGE UNIQUE : la plage ────────────────────────────────────────
   makeMCQ({ id:`g4fr-img-001`, chapterId:`g4fr-images`, difficulty:1,
     question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Où se passe la scène ?`,
-    options:[`À la plage`, `Dans la cour de l'école`, `Au marché`, `Dans la cuisine`],
-    answer:`À la plage`,
-    hint:`Regarde le sable, la mer et le palmier.`,
-    explanation:`On voit le <b>sable</b>, la <b>mer</b>, un <b>palmier</b> et un <b>parasol</b> : la scène se passe <b>à la plage</b>. Pour décrire une image, commence toujours par le lieu : « <i>Cette image représente une plage.</i> »` }),
+    options:[`À la plage, au bord de la mer`, `Dans la cour de l'école`, `Au marché`, `Dans la cuisine`],
+    answer:`À la plage, au bord de la mer`,
+    hint:`Regarde le sable et ce qu'il y a derrière les enfants.`,
+    explanation:`On voit du <b>sable</b>, de l'eau et des <b>vagues</b> : la scène se passe <b>à la plage</b>. Pour décrire une image, commence toujours par le lieu : « <i>Cette image représente une plage.</i> »` }),
 
   makeMCQ({ id:`g4fr-img-002`, chapterId:`g4fr-images`, difficulty:1,
-    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Combien d'enfants y a-t-il sur l'image ?`,
-    options:[`Deux`, `Un`, `Trois`, `Quatre`],
-    answer:`Deux`,
-    hint:`Un enfant est dans la mer, l'autre est sur le sable.`,
-    explanation:`Il y a <b>deux enfants</b> : un garçon qui nage dans la mer et une fille debout sur le sable. Quand on décrit une image, on compte les personnages avant de les présenter : « <i>Il y a deux enfants.</i> »` }),
+    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Que font les enfants ?`,
+    options:[`Ils jouent dans le sable`, `Ils font leurs devoirs`, `Ils mangent à table`, `Ils dorment`],
+    answer:`Ils jouent dans le sable`,
+    hint:`Regarde ce qu'ils ont sous les mains.`,
+    explanation:`Les enfants sont accroupis et creusent : <b>ils jouent dans le sable</b>. Pour dire ce que font les personnages, on utilise le <b>présent</b> : <i>ils jouent, il creuse, elle regarde</i>.` }),
 
   makeMCQ({ id:`g4fr-img-003`, chapterId:`g4fr-images`, difficulty:1,
-    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Quel temps fait-il ?`,
-    options:[`Il fait beau, le soleil brille`, `Il pleut`, `Il y a un cyclone`, `Il neige`],
-    answer:`Il fait beau, le soleil brille`,
-    hint:`Regarde le ciel : y a-t-il des nuages gris ?`,
-    explanation:`Le ciel est bleu et le <b>soleil brille</b> : <b>il fait beau</b>. Le temps qu'il fait est l'une des premières choses à dire dans une description : <i>il fait beau / il pleut / il fait chaud / il y a du vent</i>.` }),
+    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Combien d'enfants y a-t-il, environ ?`,
+    options:[`Plus de cinq`, `Un seul`, `Deux`, `Aucun`],
+    answer:`Plus de cinq`,
+    hint:`Compte les enfants debout ET ceux qui sont accroupis.`,
+    explanation:`Il y a <b>plus de cinq enfants</b> : certains sont debout, d'autres sont accroupis dans le sable. Quand il y a beaucoup de personnages, on n'est pas obligé de donner un nombre exact : « <i>un groupe d'enfants</i> » ou « <i>plusieurs enfants</i> » suffit.` }),
 
   makeMCQ({ id:`g4fr-img-004`, chapterId:`g4fr-images`, difficulty:2,
-    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Que fait le garçon ?`,
-    options:[`Il nage dans la mer`, `Il dort sous le palmier`, `Il joue avec le chien`, `Il mange une glace`],
-    answer:`Il nage dans la mer`,
-    hint:`Regarde où se trouve le garçon : sur le sable ou dans l'eau ?`,
-    explanation:`Le garçon est dans l'eau : <b>il nage dans la mer</b>. Pour dire ce que fait un personnage, on utilise le <b>présent</b> : <i>il nage, elle joue, le chien court</i>.` }),
+    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Y a-t-il des adultes sur cette image ?`,
+    options:[`Non, il n'y a que des enfants`, `Oui, deux adultes`, `Oui, un seul adulte`, `Oui, toute une famille`],
+    answer:`Non, il n'y a que des enfants`,
+    hint:`Regarde bien la taille de chaque personnage.`,
+    explanation:`Tous les personnages sont des <b>enfants</b> : aucun adulte n'apparaît. Remarquer ce qui <b>n'est pas</b> sur une image est aussi utile que décrire ce qui y est.` }),
 
   makeMCQ({ id:`g4fr-img-005`, chapterId:`g4fr-images`, difficulty:2,
-    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Complète : « Le bateau est ______ la mer. »`,
-    options:[`sur`, `sous`, `dans`, `derrière`],
+    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Complète : « Les enfants jouent ______ le sable. »`,
+    options:[`sur`, `sous`, `dans le ciel`, `derrière`],
     answer:`sur`,
-    hint:`Le bateau flotte : il n'est pas au fond de l'eau.`,
-    explanation:`On dit « le bateau est <b>sur</b> la mer » parce qu'il <b>flotte à la surface</b>. Attention : le poisson, lui, est <i>dans</i> la mer. Les prépositions de lieu sont indispensables pour décrire une image : <b>sur, sous, dans, devant, derrière, à côté de, entre</b>.` }),
+    hint:`Ils sont posés dessus, pas enterrés dessous.`,
+    explanation:`On dit « les enfants jouent <b>sur</b> le sable » : ils sont <b>à la surface</b>. Les prépositions de lieu sont indispensables pour décrire une image : <b>sur, sous, dans, devant, derrière, à côté de, entre</b>.` }),
 
   makeMCQ({ id:`g4fr-img-006`, chapterId:`g4fr-images`, difficulty:2,
-    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Combien d'oiseaux volent dans le ciel ?`,
-    options:[`Trois`, `Deux`, `Quatre`, `Aucun`],
-    answer:`Trois`,
-    hint:`Cherche les petites formes grises en haut de l'image.`,
-    explanation:`Il y a <b>trois oiseaux</b> dans le ciel. Compter les petits détails est un bon réflexe : les questions de description portent souvent sur ce qu'on ne regarde pas en premier.` }),
+    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Qu'y a-t-il derrière les enfants, tout au fond ?`,
+    options:[`La mer et les vagues`, `Une forêt`, `Une grande ville`, `Une montagne`],
+    answer:`La mer et les vagues`,
+    hint:`Regarde la partie la plus haute de la photo.`,
+    explanation:`Au fond, on voit <b>la mer</b> et de petites <b>vagues</b> blanches. Ce qui est loin, tout au fond, s'appelle l'<b>arrière-plan</b> ; ce qui est près de nous s'appelle le <b>premier plan</b>.` }),
 
-  makeMCQ({ id:`g4fr-img-007`, chapterId:`g4fr-images`, difficulty:2,
-    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Quel animal se trouve sur le sable, à droite de la fille ?`,
-    options:[`Un chien`, `Un chat`, `Un cheval`, `Une vache`],
-    answer:`Un chien`,
-    hint:`C'est l'animal domestique le plus courant à la plage.`,
-    explanation:`C'est <b>un chien</b>. Il y a aussi un petit <b>crabe</b> près du palmier. En français, on présente les animaux avec <i>il y a</i> : « <b>Il y a</b> un chien sur le sable. »` }),
+  makeMCQ({ id:`g4fr-img-007`, chapterId:`g4fr-images`, difficulty:3,
+    question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Au premier plan, le sable est mouillé. Que voit-on dedans ?`,
+    options:[`Le reflet des enfants`, `Des poissons`, `Des coquillages roses`, `Un bateau`],
+    answer:`Le reflet des enfants`,
+    hint:`Le sable mouillé se comporte un peu comme un miroir.`,
+    explanation:`Le sable mouillé du premier plan renvoie le <b>reflet</b> des enfants, comme un miroir. Repérer ce genre de détail est ce qui distingue une bonne description d'une simple liste.` }),
 
   makeMCQ({ id:`g4fr-img-008`, chapterId:`g4fr-images`, difficulty:3,
     question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Quelle phrase décrit CORRECTEMENT l'image ?`,
     options:[
-      `Une fille joue au ballon sur le sable et un garçon nage dans la mer.`,
-      `Deux filles nagent dans la mer avec un chien.`,
-      `Un garçon dort sous le palmier pendant qu'il pleut.`,
-      `Une fille mange un crabe à côté du bateau.`
+      `Un groupe d'enfants joue dans le sable, au bord de la mer.`,
+      `Deux adultes se promènent sur une plage déserte.`,
+      `Des enfants nagent loin dans la mer avec un bateau.`,
+      `Un enfant dort sous un palmier pendant qu'il pleut.`
     ],
-    answer:`Une fille joue au ballon sur le sable et un garçon nage dans la mer.`,
+    answer:`Un groupe d'enfants joue dans le sable, au bord de la mer.`,
     hint:`Vérifie chaque phrase détail par détail : qui, où, quoi.`,
-    explanation:`Seule la première phrase correspond à tout ce qu'on voit : la <b>fille + le ballon + le sable</b> et le <b>garçon + la mer</b>. Le mot <b>et</b> relie deux actions dans une même phrase - c'est très utile pour décrire une image sans faire de listes.` }),
+    explanation:`Seule la première phrase correspond à ce qu'on voit : <b>un groupe d'enfants</b>, <b>dans le sable</b>, <b>au bord de la mer</b>. Il n'y a ni adulte, ni bateau, ni palmier, et personne ne nage.` }),
 
   makeMCQ({ id:`g4fr-img-009`, chapterId:`g4fr-images`, difficulty:3,
     question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Pour commencer une description, quelle phrase est la MEILLEURE ?`,
     options:[
-      `Cette image représente une plage ensoleillée à Maurice.`,
-      `Le crabe est petit.`,
+      `Cette image représente des enfants qui jouent sur une plage.`,
+      `Le sable est mouillé.`,
       `J'aime beaucoup la mer.`,
-      `Il y a un ballon.`
+      `Il y a un short jaune.`
     ],
-    answer:`Cette image représente une plage ensoleillée à Maurice.`,
+    answer:`Cette image représente des enfants qui jouent sur une plage.`,
     hint:`Une bonne première phrase donne une vue d'ensemble, pas un petit détail.`,
-    explanation:`On commence toujours par une <b>vue d'ensemble</b> : <i>où</i> et <i>quelle impression générale</i>. Les détails (le crabe, le ballon) viennent ensuite, et l'opinion personnelle (« j'aime ») se garde pour la <b>fin</b>.` }),
+    explanation:`On commence toujours par une <b>vue d'ensemble</b> : <i>où</i> et <i>qui</i>. Les détails (le sable mouillé, un short jaune) viennent ensuite, et l'opinion personnelle (« j'aime ») se garde pour la <b>fin</b>.` }),
 
   makeMCQ({ id:`g4fr-img-010`, chapterId:`g4fr-images`, difficulty:4,
     question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Tu dois écrire cinq phrases sur cette image. Quel plan suivras-tu ?`,

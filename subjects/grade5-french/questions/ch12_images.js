@@ -6,9 +6,16 @@
 // racontent une histoire. La séquence « le chat dans le sac » reprend celle du
 // cahier d'entraînement Grade 5 (Day 40, écriture 8-10 phrases).
 //
-// SVG en ligne plutôt que photos : pas de 404, fonctionne hors ligne dans la
-// PWA, et le contenu est connu exactement, donc chaque réponse est vérifiable.
-// Pas de <title> descriptif, il révélerait les réponses.
+// L'image unique est une PHOTOGRAPHIE réelle (Wikimedia Commons) : le rendu
+// emoji d'origine ressemblait à du clipart et se décrivait mal. Les questions
+// ont été écrites en regardant la photo.
+//
+// La séquence de trois images reste dessinée : il n'existe pas de série de
+// photos libres montrant les mêmes personnages à trois moments d'une histoire.
+//
+// ⚠ alt et <title> restent génériques - ils ne doivent JAMAIS donner la réponse.
+// ⚠ Photos sous licence CC BY / CC BY-SA : le crédit sous chaque image est une
+//   obligation de la licence, pas une décoration. Ne pas le retirer.
 
 function _g5imgSvg(w, h, body) {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" role="img"
@@ -33,36 +40,20 @@ function _g5imgPanel(x, n, skyFill, groundFill, inner) {
 }
 
 // ── SCÈNE 1 : une seule image - le marché ─────────────────────────────
-const _G5IMG_MARCHE = _g5imgSvg(400, 240, `
-  <rect x="0" y="0" width="400" height="240" fill="#fef9ef"/>
-  <rect x="0" y="0" width="400" height="30" fill="#dc2626"/>
-  <g>
-    <rect x="0" y="0" width="40" height="30" fill="#fff"/>
-    <rect x="80" y="0" width="40" height="30" fill="#fff"/>
-    <rect x="160" y="0" width="40" height="30" fill="#fff"/>
-    <rect x="240" y="0" width="40" height="30" fill="#fff"/>
-    <rect x="320" y="0" width="40" height="30" fill="#fff"/>
-  </g>
-  <line x1="0" y1="30" x2="400" y2="30" stroke="#7f1d1d" stroke-width="2"/>
-  <rect x="30" y="120" width="250" height="14" fill="#a16207"/>
-  <rect x="34" y="134" width="10" height="66" fill="#78350f"/>
-  <rect x="266" y="134" width="10" height="66" fill="#78350f"/>
-  <rect x="300" y="52" width="86" height="52" fill="#fff" stroke="#334155" stroke-width="2" rx="4"/>
-  ${_g5imgLabel(343, 68, 'PRIX DU JOUR', 10, '#b91c1c')}
-  ${_g5imgLabel(343, 84, 'Mangue  Rs 50', 11)}
-  ${_g5imgLabel(343, 98, 'Banane  Rs 30', 11)}
-  ${_g5imgEmoji(70, 116, 26, '🥭')}
-  ${_g5imgEmoji(112, 116, 26, '🍌')}
-  ${_g5imgEmoji(154, 116, 26, '🍍')}
-  ${_g5imgEmoji(196, 116, 26, '🥥')}
-  ${_g5imgEmoji(240, 116, 24, '⚖️')}
-  ${_g5imgEmoji(150, 84, 44, '👨')}
-  ${_g5imgEmoji(96, 196, 42, '👩')}
-  ${_g5imgEmoji(128, 204, 26, '🧺')}
-  ${_g5imgEmoji(196, 198, 34, '👧')}
-  ${_g5imgEmoji(330, 196, 32, '🐕')}
-  ${_g5imgEmoji(368, 150, 26, '🌂')}
-`);
+// Photographie réelle : le rendu emoji d'origine ressemblait à du clipart.
+// Les questions ont été écrites en regardant la photo.
+function _g5imgPhoto(file, credit) {
+  return `<figure style="margin:6px 0">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=900"
+      alt="Une image à décrire" loading="lazy"
+      style="width:100%;max-width:520px;height:auto;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
+    <figcaption style="font-size:.68em;color:#94a3b8;margin-top:3px">${credit}</figcaption>
+  </figure>`;
+}
+
+const _G5IMG_MARCHE = _g5imgPhoto(
+  'DFC%201758%20Vendors%20busy%20arranging%20fresh%20vegetables%20at%20a%20lively%20outdoor%20market%20stall%20preparing%20produce%20for%20customers.jpg',
+  'Photo : PattayaPatrol, Wikimedia Commons, CC BY-SA 4.0');
 
 // ── SCÈNE 2 : trois images - le chat dans le sac ──────────────────────
 const _G5IMG_CHAT = _g5imgSvg(660, 190, `
@@ -106,93 +97,98 @@ STATIC_QUESTIONS.push(
   // ── IMAGE UNIQUE : le marché ───────────────────────────────────────
   makeMCQ({ id:`g5fr-img-001`, chapterId:`fr-images`, difficulty:1,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Où se passe cette scène ?`,
-    options:[`Au marché`, `À la plage`, `Dans une salle de classe`, `À l'hôpital`],
-    answer:`Au marché`,
-    hint:`Regarde l'étal, les fruits, la balance et le panneau des prix.`,
-    explanation:`Un <b>étal</b> couvert d'un auvent rayé, des <b>fruits</b>, une <b>balance</b> et un <b>panneau de prix</b> : nous sommes <b>au marché</b>. La première phrase d'une description situe toujours la scène : « <i>Cette image représente un marché.</i> »` }),
+    options:[`Dans un marché de fruits et légumes`, `À la plage`, `Dans une salle de classe`, `À l'hôpital`],
+    answer:`Dans un marché de fruits et légumes`,
+    hint:`Regarde les cageots empilés et ce qu'ils contiennent.`,
+    explanation:`On voit des <b>cageots</b> et des <b>bassines</b> remplis de légumes, des étals et des clients : la scène se passe <b>dans un marché</b>. La première phrase d'une description situe toujours le lieu : « <i>Cette image représente un marché.</i> »` }),
 
   makeMCQ({ id:`g5fr-img-002`, chapterId:`fr-images`, difficulty:1,
-    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Combien de personnes y a-t-il sur l'image ?`,
-    options:[`Trois`, `Deux`, `Quatre`, `Cinq`],
-    answer:`Trois`,
-    hint:`Compte l'homme derrière l'étal et les clientes devant.`,
-    explanation:`Il y a <b>trois personnes</b> : le marchand derrière l'étal, une dame avec un panier et une fille. Le chien ne compte pas - c'est un animal, pas une personne.` }),
+    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Que vend-on surtout sur ce marché ?`,
+    options:[`Des légumes`, `Des vêtements`, `Des livres`, `Des jouets`],
+    answer:`Des légumes`,
+    hint:`Regarde ce qui remplit les caisses et les bassines.`,
+    explanation:`Partout on voit des <b>légumes</b> : des verts en botte, des choux, des oignons rouges dans un filet. C'est un marché de <b>fruits et légumes</b>, pas un marché de vêtements.` }),
 
   makeMCQ({ id:`g5fr-img-003`, chapterId:`fr-images`, difficulty:2,
-    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Où se tient le marchand par rapport à l'étal ?`,
-    options:[`Derrière l'étal`, `Devant l'étal`, `Sous l'étal`, `À côté du chien`],
-    answer:`Derrière l'étal`,
-    hint:`Le marchand et les clientes ne sont pas du même côté de la table.`,
-    explanation:`Le marchand se tient <b>derrière l'étal</b> et les clientes <b>devant</b>. Les prépositions de lieu structurent toute la description : <b>devant, derrière, sur, sous, à côté de, entre, au fond de, au premier plan</b>.` }),
+    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Ce marché est-il désert ou animé ?`,
+    options:[`Animé : il y a plusieurs personnes`, `Désert : il n'y a personne`, `Fermé pour la nuit`, `Réservé aux enfants`],
+    answer:`Animé : il y a plusieurs personnes`,
+    hint:`Compte les personnes, au premier plan comme au fond.`,
+    explanation:`<b>Plusieurs personnes</b> travaillent et circulent entre les étals : le marché est <b>animé</b>. Décrire l'ambiance d'une image - animée, calme, joyeuse, triste - vaut autant que d'énumérer les objets.` }),
 
   makeMCQ({ id:`g5fr-img-004`, chapterId:`fr-images`, difficulty:2,
-    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Combien coûte une mangue, d'après le panneau ?`,
-    options:[`Rs 50`, `Rs 30`, `Rs 80`, `Le prix n'est pas écrit`],
-    answer:`Rs 50`,
-    hint:`Lis les deux lignes du panneau blanc, à droite.`,
-    explanation:`Le panneau indique « Mangue <b>Rs 50</b> » et « Banane Rs 30 ». Dans une image d'examen, tout texte visible (panneau, enseigne, étiquette) fait partie des informations à utiliser.` }),
+    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Que tient dans les mains l'homme au tablier ?`,
+    options:[`Un grand sac de légumes verts`, `Un parapluie`, `Un téléphone`, `Un ballon`],
+    answer:`Un grand sac de légumes verts`,
+    hint:`Regarde ce qu'il porte devant lui, à hauteur de la taille.`,
+    explanation:`Il tient un grand <b>sac en plastique rempli de légumes verts</b> qu'il est en train de ranger sur l'étal. Pour décrire une personne, dis d'abord ce qu'elle porte, puis ce qu'elle fait.` }),
 
   makeMCQ({ id:`g5fr-img-005`, chapterId:`fr-images`, difficulty:2,
-    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Que tient la dame à la main ?`,
-    options:[`Un panier`, `Un parapluie`, `Une balance`, `Un ananas`],
-    answer:`Un panier`,
-    hint:`C'est l'objet dans lequel on met ses achats.`,
-    explanation:`Elle tient un <b>panier</b> pour transporter ses achats. Le parapluie est posé plus loin, à droite, et la balance appartient au marchand.` }),
+    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Qu'y a-t-il au PREMIER PLAN, tout près de nous ?`,
+    options:[`Un chariot chargé de caisses`, `Un chien endormi`, `Une voiture rouge`, `Un arbre en fleurs`],
+    answer:`Un chariot chargé de caisses`,
+    hint:`Le premier plan, c'est le bas de l'image, ce qui est le plus proche.`,
+    explanation:`Au <b>premier plan</b> se trouve un <b>chariot métallique</b> chargé de caisses vertes et d'un filet d'oignons. Le vocabulaire attendu : <b>au premier plan</b> (près) / <b>à l'arrière-plan</b> (loin).` }),
 
   makeMCQ({ id:`g5fr-img-006`, chapterId:`fr-images`, difficulty:2,
-    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Quelle phrase utilise correctement « être en train de » pour décrire le marchand ?`,
+    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Quelle phrase utilise correctement « être en train de » ?`,
     options:[
-      `Le marchand est en train de vendre des fruits.`,
-      `Le marchand est en train vendre des fruits.`,
-      `Le marchand est en train de vend des fruits.`,
-      `Le marchand en train de vendre des fruits.`
+      `Le marchand est en train de ranger ses légumes.`,
+      `Le marchand est en train ranger ses légumes.`,
+      `Le marchand est en train de range ses légumes.`,
+      `Le marchand en train de ranger ses légumes.`
     ],
-    answer:`Le marchand est en train de vendre des fruits.`,
+    answer:`Le marchand est en train de ranger ses légumes.`,
     hint:`La structure complète est : être + en train + DE + infinitif.`,
-    explanation:`La formule exacte est <b>être + en train + de + infinitif</b> : « Le marchand <b>est en train de vendre</b> des fruits. » Elle insiste sur une action <b>en cours au moment de l'image</b> - très utile pour décrire une photo ou un dessin.` }),
+    explanation:`La formule exacte est <b>être + en train + de + infinitif</b> : « Le marchand <b>est en train de ranger</b> ses légumes. » Elle insiste sur une action <b>en cours au moment de l'image</b> - parfaite pour décrire une photo.` }),
 
   makeMCQ({ id:`g5fr-img-007`, chapterId:`fr-images`, difficulty:3,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Quelle phrase décrit l'image AVEC PRÉCISION ?`,
     options:[
-      `Au premier plan, une dame et une fille choisissent des fruits ; derrière l'étal, le marchand les sert.`,
-      `Au premier plan, le marchand pèse un poisson pendant que la pluie tombe.`,
+      `Au premier plan, un chariot est chargé de caisses ; derrière, des marchands s'occupent de leurs étals de légumes.`,
+      `Au premier plan, un pêcheur vend du poisson sur une plage ensoleillée.`,
       `Trois enfants jouent au ballon devant une école.`,
-      `Une dame vend des mangues à un marchand assis par terre.`
+      `Une dame vend des fleurs dans un magasin vide.`
     ],
-    answer:`Au premier plan, une dame et une fille choisissent des fruits ; derrière l'étal, le marchand les sert.`,
-    hint:`Vérifie chaque détail : qui fait quoi, et de quel côté de l'étal.`,
-    explanation:`Seule la première phrase respecte tout : les <b>clientes au premier plan</b>, le <b>marchand derrière l'étal</b>, et des <b>fruits</b> (pas de poisson, pas de pluie). Les expressions <b>au premier plan / à l'arrière-plan</b> sont attendues dans une bonne description.` }),
+    answer:`Au premier plan, un chariot est chargé de caisses ; derrière, des marchands s'occupent de leurs étals de légumes.`,
+    hint:`Vérifie chaque détail : qui, où, et à quel plan.`,
+    explanation:`Seule la première phrase respecte tout : le <b>chariot au premier plan</b>, les <b>marchands derrière</b>, et des <b>légumes</b>. Pas de poisson, pas de plage, pas d'enfants, et le lieu n'est pas vide.` }),
 
   makeMCQ({ id:`g5fr-img-008`, chapterId:`fr-images`, difficulty:3,
-    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Tu dois imaginer le dialogue entre la dame et le marchand. Quelle réplique est la plus vraisemblable ?`,
+    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Tu dois imaginer un dialogue entre une cliente et le marchand. Quelle réplique est la plus vraisemblable ?`,
     options:[
-      `« Bonjour, monsieur. Combien coûtent les mangues, s'il vous plaît ? »`,
+      `« Bonjour, monsieur. Combien coûte le kilo de légumes verts, s'il vous plaît ? »`,
       `« Bonjour, monsieur. Où est la salle de classe ? »`,
       `« Bonjour, monsieur. Puis-je emprunter votre voiture ? »`,
       `« Bonjour, monsieur. Le train part à quelle heure ? »`
     ],
-    answer:`« Bonjour, monsieur. Combien coûtent les mangues, s'il vous plaît ? »`,
+    answer:`« Bonjour, monsieur. Combien coûte le kilo de légumes verts, s'il vous plaît ? »`,
     hint:`Le dialogue doit correspondre au lieu et à la situation de l'image.`,
-    explanation:`Au marché, on demande le <b>prix</b> : « Combien coûtent les mangues ? » Un dialogue inventé doit rester <b>cohérent avec la scène</b> : le lieu, les personnages et ce qu'ils sont en train de faire.` }),
+    explanation:`Au marché, on demande le <b>prix</b> : « Combien coûte le kilo… ? » Un dialogue inventé doit rester <b>cohérent avec la scène</b> : le lieu, les personnages et ce qu'ils sont en train de faire.` }),
 
-  makeMCQ({ id:`g5fr-img-009`, chapterId:`fr-images`, difficulty:4,
-    question:`${_G5IMG_C1}${_G5IMG_MARCHE}La dame achète 2 mangues et 3 bananes. Elle donne un billet de Rs 200. Combien le marchand lui rend-il ?`,
-    options:[`Rs 10`, `Rs 20`, `Rs 30`, `Rs 60`],
-    answer:`Rs 10`,
-    hint:`Calcule d'abord le total à partir des prix du panneau, puis soustrais de 200.`,
-    explanation:`2 mangues × Rs 50 = Rs 100. 3 bananes × Rs 30 = Rs 90. Total = <b>Rs 190</b>. Sur Rs 200, le marchand rend <b>Rs 10</b>. Une image d'examen peut aussi servir de support à un petit calcul : lis toujours les chiffres affichés.` }),
+  makeMCQ({ id:`g5fr-img-009`, chapterId:`fr-images`, difficulty:3,
+    question:`${_G5IMG_C1}${_G5IMG_MARCHE}Quels mots appartiennent au CHAMP LEXICAL de cette image ?`,
+    options:[
+      `le marchand, l'étal, la caisse, peser, vendre`,
+      `la voile, l'ancre, le port, naviguer`,
+      `la fraction, le quotient, additionner`,
+      `l'ordonnance, l'infirmière, guérir`
+    ],
+    answer:`le marchand, l'étal, la caisse, peser, vendre`,
+    hint:`Un champ lexical regroupe tous les mots liés à un même thème.`,
+    explanation:`Le thème est le <b>marché</b> : <i>le marchand, la cliente, l'étal, la caisse, le cageot, peser, vendre, acheter, le prix</i>. Employer le bon champ lexical est ce qui rend une description précise plutôt que vague.` }),
 
   makeMCQ({ id:`g5fr-img-010`, chapterId:`fr-images`, difficulty:4,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Tu dois écrire huit phrases sur cette image. Quel plan est le meilleur ?`,
     options:[
-      `Le lieu et le moment, puis les personnages, puis leurs actions, puis les objets et les prix, puis mon impression`,
+      `Le lieu, puis les personnages, puis leurs actions, puis les objets et les couleurs, puis mon impression`,
       `Huit phrases qui commencent toutes par « Il y a »`,
       `Une phrase par couleur visible sur l'image`,
-      `Décrire d'abord le chien, puis répéter la même idée`
+      `Décrire d'abord le chariot, puis répéter la même idée`
     ],
-    answer:`Le lieu et le moment, puis les personnages, puis leurs actions, puis les objets et les prix, puis mon impression`,
+    answer:`Le lieu, puis les personnages, puis leurs actions, puis les objets et les couleurs, puis mon impression`,
     hint:`Une description va du général au détail et se termine par ce que tu ressens.`,
-    explanation:`On suit un ordre <b>du général au particulier</b> : (1) le lieu et le moment, (2) qui est là, (3) ce que chacun fait, (4) les objets et les détails écrits, (5) l'impression finale. Commencer huit phrases par « Il y a » donnerait un texte plat et répétitif.` }),
+    explanation:`On suit un ordre <b>du général au particulier</b> : (1) le lieu, (2) qui est là, (3) ce que chacun fait, (4) les objets et les couleurs, (5) l'impression finale. Commencer huit phrases par « Il y a » donnerait un texte plat et répétitif.` }),
 
   // ── TROIS IMAGES : le chat dans le sac ─────────────────────────────
   makeMCQ({ id:`g5fr-img-011`, chapterId:`fr-images`, difficulty:1,
