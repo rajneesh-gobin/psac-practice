@@ -22,12 +22,14 @@ ALTER TABLE public.question_reports ENABLE ROW LEVEL SECURITY;
 -- This is intentional: PIN-authenticated students do not hold a Supabase JWT,
 -- so their _sb client runs as anon. Restricting to authenticated would silently
 -- drop every report a student submits.
-CREATE POLICY IF NOT EXISTS "anon can insert question reports"
+DROP POLICY IF EXISTS "anon can insert question reports" ON public.question_reports;
+CREATE POLICY "anon can insert question reports"
   ON public.question_reports FOR INSERT TO anon
   WITH CHECK (true);
 
 -- Authenticated admins can read and update all reports.
-CREATE POLICY IF NOT EXISTS "admins manage question reports"
+DROP POLICY IF EXISTS "admins manage question reports" ON public.question_reports;
+CREATE POLICY "admins manage question reports"
   ON public.question_reports FOR ALL TO authenticated
   USING (EXISTS (
     SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'
