@@ -1874,13 +1874,20 @@ function renderChapterSelect() {
     const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
     const partLabel = ch.part != null ? `Part ${ch.part} · ` : '';
     const isEnr = !!ch.enrichment;
+    const stars = c.attempted === 0 ? '<span class="text-gray-300 dark:text-gray-600 text-base tracking-tight">☆☆☆</span>'
+      : pct >= 80 ? '<span class="text-amber-400 text-base tracking-tight" title="Mastered">★★★</span>'
+      : pct >= 50 ? '<span class="text-base tracking-tight"><span class="text-amber-400">★★</span><span class="text-gray-300 dark:text-gray-600">☆</span></span>'
+      : '<span class="text-base tracking-tight"><span class="text-amber-400">★</span><span class="text-gray-300 dark:text-gray-600">☆☆</span></span>';
     return `<button class="chapter-card${isEnr ? ' enrichment' : ''}" onclick="startChapterDirect('${ch.id}')">
       ${isEnr ? '<span class="enr-badge">✨ BONUS</span>' : ''}
       <div class="text-3xl mb-2">${ch.icon}</div>
       <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">${ch.name}</div>
-      <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">${partLabel}${c.attempted} attempted</div>
+      <div class="flex items-center justify-between mb-1.5">
+        <div class="text-xs text-gray-500 dark:text-gray-400">${partLabel}${c.attempted} attempted</div>
+        <div>${stars}</div>
+      </div>
       <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${pct}%;background:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}"></div></div>
-      <div class="text-xs mt-1 font-medium" style="color:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}">${pct}% mastery</div>
+      <div class="text-xs mt-1 font-medium" style="color:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}">${pct >= 80 ? '🏆 ' : ''}${pct}% mastery</div>
     </button>`;
   };
 
@@ -3274,22 +3281,30 @@ function renderSubjectSelect() {
   const heading = document.getElementById('subject-select-heading');
   if (heading) heading.textContent = SELECTED_GRADE ? `Grade ${SELECTED_GRADE} - Choose a Subject` : 'Choose a Subject';
 
+  const _SUBJECT_THEME = {
+    'Maths':               { bg: 'from-blue-500 to-indigo-600',   chip: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',   icon: 'bg-blue-100 dark:bg-blue-900/40' },
+    'English':             { bg: 'from-green-500 to-emerald-600', chip: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300', icon: 'bg-green-100 dark:bg-green-900/40' },
+    'French':              { bg: 'from-purple-500 to-violet-600', chip: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300', icon: 'bg-purple-100 dark:bg-purple-900/40' },
+    'Science':             { bg: 'from-teal-500 to-cyan-600',     chip: 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300',     icon: 'bg-teal-100 dark:bg-teal-900/40' },
+    'History & Geography': { bg: 'from-amber-500 to-orange-500',  chip: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',  icon: 'bg-amber-100 dark:bg-amber-900/40' },
+  };
+  const _DEFAULT_THEME = { bg: 'from-gray-500 to-gray-600', chip: 'bg-gray-100 text-gray-700', icon: 'bg-gray-100' };
+
   container.innerHTML = packs.map(pack => {
     const soon  = !!pack.comingSoon;
-    const clsOp = soon ? 'opacity-70 cursor-default' : 'cursor-pointer group';
-    const badge = soon
-      ? '<span class="chip amber">Coming Soon</span>'
-      : `<span class="chip blue">${pack.chapters.length} chapters</span>`;
+    const theme = _SUBJECT_THEME[pack.subject] || _DEFAULT_THEME;
     const onclk = soon ? `toast('Coming soon!', 2000)` : `selectSubject('${pack.id}')`;
+    const chapCount = pack.chapters?.length || 0;
     return `
-      <button type="button" class="track-card ${clsOp} relative text-left" onclick="${onclk}" ${soon ? 'disabled' : ''}>
-        ${soon ? '<div class="absolute top-3 right-3 text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Coming Soon</div>' : ''}
-        <div class="text-4xl mb-3 select-none">${pack.icon}</div>
-        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1 ${soon ? '' : 'group-hover:text-blue-600 dark:group-hover:text-blue-400'} transition-colors">
-          ${pack.subject}
-        </h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">${pack.curriculum}</p>
-        <div class="flex flex-wrap gap-2">${badge}</div>
+      <button type="button" class="${soon ? 'opacity-70 cursor-default' : 'cursor-pointer group'} relative text-left bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg active:scale-95 transition-all overflow-hidden" onclick="${onclk}" ${soon ? 'disabled' : ''}>
+        <div class="h-2 bg-gradient-to-r ${theme.bg}"></div>
+        <div class="p-5">
+          ${soon ? '<div class="absolute top-4 right-4 text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Coming Soon</div>' : ''}
+          <div class="w-14 h-14 rounded-2xl ${theme.icon} flex items-center justify-center text-3xl mb-3 select-none">${pack.icon}</div>
+          <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1 transition-colors">${pack.subject}</h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">${pack.curriculum || ''}</p>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${soon ? 'bg-gray-100 text-gray-500' : theme.chip}">${soon ? 'Coming Soon' : `${chapCount} chapters`}</span>
+        </div>
       </button>`;
   }).join('');
 }
