@@ -122,6 +122,23 @@ async function upsertBatch(rows) {
   }
 }
 
+// Fetch IDs that are marked protected in the DB — import will skip them.
+// Returns an empty Set on any error so a missing column or unreachable DB
+// never aborts the import; it just stops protecting (fail-open).
+async function fetchProtectedIds(ids) {
+  if (!ids.length) return new Set();
+  try {
+    const inList = ids.map(id => encodeURIComponent(id)).join(',');
+    const r = await fetch(
+      `${SB_URL}/rest/v1/questions?id=in.(${inList})&protected=eq.true&select=id&limit=${ids.length}`,
+      { headers: { apikey: SB_SRK, Authorization: `Bearer ${SB_SRK}` } }
+    );
+    if (!r.ok) return new Set();
+    const rows = await r.json().catch(() => []);
+    return new Set(rows.map(r => r.id));
+  } catch(_) { return new Set(); }
+}
+
 async function upsertAll(rows, label) {
   const BATCH = 200;
   for (let i = 0; i < rows.length; i += BATCH) {
@@ -167,18 +184,27 @@ async function upsertAll(rows, label) {
       const gradeNum = parseInt(subjectId.match(/grade(\d)/)?.[1] || '0');
       const now      = new Date().toISOString();
 
-      const practiceRows = buf.map(q => ({
+      // Skip questions already in DB that are marked protected (admin-edited).
+      const allIds      = buf.map(q => q.id);
+      const protectedIds = await fetchProtectedIds(allIds);
+      if (protectedIds.size) {
+        console.log(`  ⚠ Skipping ${protectedIds.size} protected question(s) in ${subjectId}`);
+      }
+      const toImport = buf.filter(q => !protectedIds.has(q.id));
+
+      const practiceRows = toImport.map(q => ({
         id:            q.id,
         subject_id:    subjectId,
         chapter_id:    q.chapterId || null,
         grade:         gradeNum,
         difficulty:    q.difficulty || 1,
         is_past_paper: false,
+        protected:     false,
         data:          q,
         imported_at:   now,
       }));
 
-      console.log(`  ${subjectId}: ${buf.length} questions, ${pdfBuf.length} past-papers`);
+      console.log(`  ${subjectId}: ${toImport.length} questions, ${pdfBuf.length} past-papers`);
       await upsertAll(practiceRows, subjectId);
       totalPractice += buf.length;
 

@@ -1914,6 +1914,10 @@
             <input id="qm-has-image" type="checkbox" class="rounded" onchange="AdminPanel.qmSearch()">
             🖼 Has image
           </label>
+          <label class="flex items-center gap-1.5 text-sm cursor-pointer select-none border dark:border-gray-600 rounded px-2 py-1 dark:text-gray-300">
+            <input id="qm-protected" type="checkbox" class="rounded" onchange="AdminPanel.qmSearch()">
+            🔒 Protected only
+          </label>
           <input id="qm-search" type="text" placeholder="Search question text…" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm flex-1 min-w-32">
           <button onclick="AdminPanel.qmSearch()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Search</button>
           <button onclick="AdminPanel.qmOpenForm(null)" class="bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold">+ Add Question</button>

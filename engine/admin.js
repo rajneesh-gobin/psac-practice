@@ -1257,7 +1257,7 @@ const AdminPanel = (() => {
       const search   = (_el('qm-search').value || '').trim();
 
       let q = window._sb.from('questions')
-        .select('id,subject_id,chapter_id,difficulty,type,data')
+        .select('id,subject_id,chapter_id,difficulty,type,data,protected')
         .eq('is_past_paper', false)
         .order('subject_id').order('chapter_id').order('difficulty')
         .range(_offset, _offset + PAGE - 1);
@@ -1267,7 +1267,8 @@ const AdminPanel = (() => {
       if (chapter) q = q.eq('chapter_id', chapter);
       if (diff)    q = q.eq('difficulty', parseInt(diff));
       if (search)  q = q.ilike('data->>question', `%${search}%`);
-      if (_el('qm-has-image')?.checked) q = q.or('data->>question.ilike.%<img%,data->>question.ilike.%<svg%');
+      if (_el('qm-has-image')?.checked)  q = q.or('data->>question.ilike.%<img%,data->>question.ilike.%<svg%');
+      if (_el('qm-protected')?.checked)  q = q.eq('protected', true);
 
       const { data, error } = await q;
 
@@ -1291,6 +1292,8 @@ const AdminPanel = (() => {
           <span class="flex-1 truncate text-gray-700 dark:text-gray-300">${preview}</span>
           <span class="text-xs bg-gray-100 dark:bg-gray-600 dark:text-gray-300 rounded px-1 shrink-0">${r.chapter_id}</span>
           <span class="text-xs text-gray-400 shrink-0">L${r.difficulty}</span>
+          ${r.protected ? `<span title="Protected — import script will not overwrite" class="text-xs shrink-0">🔒</span>` : ''}
+          <button onclick="AdminPanel.qmToggleProtection('${safeId}',${!r.protected})" class="text-xs text-gray-400 border dark:border-gray-500 rounded px-1.5 py-0.5 shrink-0" title="${r.protected ? 'Remove protection' : 'Protect from import'}">${r.protected ? 'Unprotect' : 'Protect'}</button>
           <button onclick="AdminPanel.qmOpenForm('${safeId}')" class="text-blue-600 text-xs px-2 py-1 border dark:border-gray-500 rounded shrink-0">Edit</button>
           <button onclick="AdminPanel.qmDelete('${safeId}')" class="text-red-500 text-xs px-2 py-1 border dark:border-gray-500 rounded shrink-0">Delete</button>
         </div>`;
@@ -1477,6 +1480,7 @@ const AdminPanel = (() => {
       const row = {
         id: qId, subject_id: subject, chapter_id: chapter,
         grade: +grade, difficulty: +diff, is_past_paper: false,
+        protected: true,
         data, imported_at: new Date().toISOString(),
       };
 
@@ -1486,6 +1490,14 @@ const AdminPanel = (() => {
       toast('Question saved ✅', 1500);
       qmCloseForm();
       qmSearch();
+    }
+
+    // ── Protection toggle ─────────────────────────────────────────────────
+    async function qmToggleProtection(id, protect) {
+      const { error } = await window._sb.from('questions').update({ protected: protect }).eq('id', id);
+      if (error) { toast('Failed: ' + error.message, 2500); return; }
+      toast(protect ? '🔒 Protected' : '🔓 Unprotected', 1500);
+      _fetchAndRender(true);
     }
 
     // ── Delete ────────────────────────────────────────────────────────────
@@ -1506,7 +1518,8 @@ const AdminPanel = (() => {
 
     return { tabOpen, qmSearch, qmLoadMore, qmGradeFilter, qmOpenForm, qmCloseForm,
              qmFormGradeChange, qmFormSubjectChange, qmFormChapterChange,
-             qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmUploadImage, qmSave, qmDelete };
+             qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmUploadImage, qmSave, qmDelete,
+             qmToggleProtection };
   })();
 
   return { render, showTab, loadMembers, filterMembers, changeRole,
@@ -1517,5 +1530,6 @@ const AdminPanel = (() => {
     qmFormGradeChange: QM.qmFormGradeChange, qmFormSubjectChange: QM.qmFormSubjectChange,
     qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,
     qmUpdatePreview: QM.qmUpdatePreview, qmInsertImage: QM.qmInsertImage,
-    qmUploadImage: QM.qmUploadImage, qmSave: QM.qmSave, qmDelete: QM.qmDelete, qmResolveReport };
+    qmUploadImage: QM.qmUploadImage, qmSave: QM.qmSave, qmDelete: QM.qmDelete,
+    qmToggleProtection: QM.qmToggleProtection, qmResolveReport };
 })();
