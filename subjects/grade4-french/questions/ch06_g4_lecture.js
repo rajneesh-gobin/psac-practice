@@ -313,6 +313,220 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Grosses bises,',
     hint:'Pour une lettre entre amis/enfants, on utilise une formule affectueuse.',
-    explanation:'"<b>Grosses bises</b>" (big kisses) est appropriée pour une lettre <b>amicale/informelle</b> entre enfants. "Bonjour" = salutation initiale. "Monsieur/Madame" = formule formelle (début). "Veuillez agréer..." = formule très formelle (lettre officielle). Une lettre amicale commence par "Chère/Cher..." et finit par "Bisous, Grosses bises, Amicalement..."' })
+    explanation:'"<b>Grosses bises</b>" (big kisses) est appropriée pour une lettre <b>amicale/informelle</b> entre enfants. "Bonjour" = salutation initiale. "Monsieur/Madame" = formule formelle (début). "Veuillez agréer..." = formule très formelle (lettre officielle). Une lettre amicale commence par "Chère/Cher..." et finit par "Bisous, Grosses bises, Amicalement..."' }),
+
+// ── Passage B : Le marché du samedi ────────────────────────────────────────
+  makeMCQ({ id:'g4fr-comp-036', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le marché du samedi</b><br><br>Le samedi matin, Priya part au marché de Port Louis avec sa maman. Le marché est grand et animé. Les marchands crient leurs prix pour attirer les clients. "Des mangues bien mûres ! Dix roupies le kilo !" lance un vieux monsieur.<br><br>Priya et sa maman achètent du fruit à pain, des mangues jaunes et de la coriandre fraîche. Elles s\'arrêtent aussi devant l\'étalage d\'un pêcheur qui vend des capitaines et des cordonnes. Le poisson frais brille sous le soleil.<br><br>Sur le chemin du retour, les bras chargés de sacs, Priya est heureuse. Ce soir, sa maman va préparer un délicieux curry de poisson avec du riz blanc.</div><hr style="margin:8px 0">Quel jour Priya va-t-elle au marché ?',
+    options:['Le vendredi','Le samedi','Le dimanche','Le lundi'],
+    answer:'Le samedi',
+    hint:'Regardez la première phrase du texte.',
+    explanation:'"<b>Le samedi</b> matin, Priya part au marché…" — La première phrase donne directement le jour.' }),
+
+  makeMCQ({ id:'g4fr-comp-037', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le marché du samedi</b><br><br>Le samedi matin, Priya part au marché de Port Louis avec sa maman. Le marché est grand et animé. Les marchands crient leurs prix pour attirer les clients. "Des mangues bien mûres ! Dix roupies le kilo !" lance un vieux monsieur.<br><br>Priya et sa maman achètent du fruit à pain, des mangues jaunes et de la coriandre fraîche. Elles s\'arrêtent aussi devant l\'étalage d\'un pêcheur qui vend des capitaines et des cordonnes. Le poisson frais brille sous le soleil.<br><br>Sur le chemin du retour, les bras chargés de sacs, Priya est heureuse. Ce soir, sa maman va préparer un délicieux curry de poisson avec du riz blanc.</div><hr style="margin:8px 0">Qui vend du poisson au marché ?',
+    options:['Un marchand de légumes','Un vieux monsieur','Un pêcheur','La maman de Priya'],
+    answer:'Un pêcheur',
+    hint:'Cherchez la personne qui a un étalage de poissons.',
+    explanation:'"Elles s\'arrêtent devant l\'étalage d\'<b>un pêcheur</b> qui vend des capitaines et des cordonnes." — Le pêcheur est la personne qui vend le poisson.' }),
+
+  makeMCQ({ id:'g4fr-comp-038', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le marché du samedi</b><br><br>Le samedi matin, Priya part au marché de Port Louis avec sa maman. Le marché est grand et animé. Les marchands crient leurs prix pour attirer les clients. "Des mangues bien mûres ! Dix roupies le kilo !" lance un vieux monsieur.<br><br>Priya et sa maman achètent du fruit à pain, des mangues jaunes et de la coriandre fraîche. Elles s\'arrêtent aussi devant l\'étalage d\'un pêcheur qui vend des capitaines et des cordonnes. Le poisson frais brille sous le soleil.<br><br>Sur le chemin du retour, les bras chargés de sacs, Priya est heureuse. Ce soir, sa maman va préparer un délicieux curry de poisson avec du riz blanc.</div><hr style="margin:8px 0">Qu\'est-ce que la maman de Priya va préparer ce soir ?',
+    options:['Un gâteau au miel','Un briani de légumes','Un curry de poisson avec du riz','Des sandwichs au fromage'],
+    answer:'Un curry de poisson avec du riz',
+    hint:'Lisez la dernière phrase du texte.',
+    explanation:'"sa maman va préparer un délicieux <b>curry de poisson avec du riz blanc</b>" — La réponse est dans la dernière phrase.' }),
+
+  makeMCQ({ id:'g4fr-comp-039', chapterId:'g4fr-lecture', subsection:'vocabulaire', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le marché du samedi</b><br><br>Le samedi matin, Priya part au marché de Port Louis avec sa maman. Le marché est grand et animé. Les marchands crient leurs prix pour attirer les clients. "Des mangues bien mûres ! Dix roupies le kilo !" lance un vieux monsieur.<br><br>Priya et sa maman achètent du fruit à pain, des mangues jaunes et de la coriandre fraîche. Elles s\'arrêtent aussi devant l\'étalage d\'un pêcheur qui vend des capitaines et des cordonnes. Le poisson frais brille sous le soleil.<br><br>Sur le chemin du retour, les bras chargés de sacs, Priya est heureuse. Ce soir, sa maman va préparer un délicieux curry de poisson avec du riz blanc.</div><hr style="margin:8px 0">Dans le texte, que veut dire le mot "animé" ?',
+    options:['Calme et silencieux','Plein de monde et de vie','Petit et étroit','Sombre et fermé'],
+    answer:'Plein de monde et de vie',
+    hint:'Pensez à ce qui se passe au marché : des marchands, des clients, du bruit…',
+    explanation:'"Le marché est grand et <b>animé</b>" — "Animé" signifie <b>plein de monde et de vie</b>. Un endroit animé est vivant, bruyant, actif. Le contraire est "calme" ou "désert".' }),
+
+  makeMCQ({ id:'g4fr-comp-040', chapterId:'g4fr-lecture', subsection:'inference', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le marché du samedi</b><br><br>Le samedi matin, Priya part au marché de Port Louis avec sa maman. Le marché est grand et animé. Les marchands crient leurs prix pour attirer les clients. "Des mangues bien mûres ! Dix roupies le kilo !" lance un vieux monsieur.<br><br>Priya et sa maman achètent du fruit à pain, des mangues jaunes et de la coriandre fraîche. Elles s\'arrêtent aussi devant l\'étalage d\'un pêcheur qui vend des capitaines et des cordonnes. Le poisson frais brille sous le soleil.<br><br>Sur le chemin du retour, les bras chargés de sacs, Priya est heureuse. Ce soir, sa maman va préparer un délicieux curry de poisson avec du riz blanc.</div><hr style="margin:8px 0">Pourquoi les marchands crient-ils leurs prix ?',
+    options:['Parce qu\'ils sont en colère','Pour attirer les clients','Parce qu\'il y a beaucoup de bruit','Pour appeler leurs amis'],
+    answer:'Pour attirer les clients',
+    hint:'Le texte explique directement la raison.',
+    explanation:'"Les marchands crient leurs prix <b>pour attirer les clients</b>" — Le texte donne clairement la raison : crier les prix est une technique pour faire venir plus d\'acheteurs.' }),
+
+  makeMCQ({ id:'g4fr-comp-041', chapterId:'g4fr-lecture', subsection:'inference', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le marché du samedi</b><br><br>Le samedi matin, Priya part au marché de Port Louis avec sa maman. Le marché est grand et animé. Les marchands crient leurs prix pour attirer les clients. "Des mangues bien mûres ! Dix roupies le kilo !" lance un vieux monsieur.<br><br>Priya et sa maman achètent du fruit à pain, des mangues jaunes et de la coriandre fraîche. Elles s\'arrêtent aussi devant l\'étalage d\'un pêcheur qui vend des capitaines et des cordonnes. Le poisson frais brille sous le soleil.<br><br>Sur le chemin du retour, les bras chargés de sacs, Priya est heureuse. Ce soir, sa maman va préparer un délicieux curry de poisson avec du riz blanc.</div><hr style="margin:8px 0">Comment sait-on que Priya et sa maman ont beaucoup acheté ?',
+    options:['Le texte dit qu\'elles ont dépensé beaucoup d\'argent','Elles rentrent "les bras chargés de sacs"','Elles sont restées au marché toute la journée','Le marchand leur a dit qu\'elles avaient pris trop de choses'],
+    answer:'Elles rentrent "les bras chargés de sacs"',
+    hint:'Cherchez ce qui décrit leur retour à la maison.',
+    explanation:'"Sur le chemin du retour, <b>les bras chargés de sacs</b>…" — Cette expression montre qu\'elles ont acheté beaucoup de choses : leurs bras sont pleins de sacs lourds.' }),
+
+  makeMCQ({ id:'g4fr-comp-042', chapterId:'g4fr-lecture', subsection:'figures_style', difficulty:3,
+    question:'<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le marché du samedi</b><br><br>Le samedi matin, Priya part au marché de Port Louis avec sa maman. Le marché est grand et animé. Les marchands crient leurs prix pour attirer les clients. "Des mangues bien mûres ! Dix roupies le kilo !" lance un vieux monsieur.<br><br>Priya et sa maman achètent du fruit à pain, des mangues jaunes et de la coriandre fraîche. Elles s\'arrêtent aussi devant l\'étalage d\'un pêcheur qui vend des capitaines et des cordonnes. Le poisson frais brille sous le soleil.<br><br>Sur le chemin du retour, les bras chargés de sacs, Priya est heureuse. Ce soir, sa maman va préparer un délicieux curry de poisson avec du riz blanc.</div><hr style="margin:8px 0">"Le poisson frais brille sous le soleil." Que nous dit cette phrase sur le poisson ?',
+    options:['Le poisson est recouvert de paillettes dorées','Le poisson est de très bonne qualité et vient d\'être pêché','Le soleil réchauffe le poisson et le fait cuire','Le marchand a mis une lampe pour éclairer son étalage'],
+    answer:'Le poisson est de très bonne qualité et vient d\'être pêché',
+    hint:'Quand un poisson "brille", c\'est un signe de fraîcheur.',
+    explanation:'"Le poisson frais <b>brille</b> sous le soleil" — Un poisson frais et de bonne qualité est brillant et luisant. Cela montre que le poisson vient d\'être pêché et est en excellent état. C\'est une description sensorielle qui donne envie d\'acheter.' }),
+
+  makeMCQ({ id:'g4fr-comp-043', chapterId:'g4fr-lecture', subsection:'idee_principale', difficulty:4,
+    question:'<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le marché du samedi</b><br><br>Le samedi matin, Priya part au marché de Port Louis avec sa maman. Le marché est grand et animé. Les marchands crient leurs prix pour attirer les clients. "Des mangues bien mûres ! Dix roupies le kilo !" lance un vieux monsieur.<br><br>Priya et sa maman achètent du fruit à pain, des mangues jaunes et de la coriandre fraîche. Elles s\'arrêtent aussi devant l\'étalage d\'un pêcheur qui vend des capitaines et des cordonnes. Le poisson frais brille sous le soleil.<br><br>Sur le chemin du retour, les bras chargés de sacs, Priya est heureuse. Ce soir, sa maman va préparer un délicieux curry de poisson avec du riz blanc.</div><hr style="margin:8px 0">Quel est le sujet principal de ce texte ?',
+    options:[
+      'Un cours sur les poissons de Maurice',
+      'Une visite au marché et les achats pour le repas du soir',
+      'La vie d\'un marchand de légumes à Port Louis',
+      'Les différentes sortes de mangues que l\'on trouve à Maurice'
+    ],
+    answer:'Une visite au marché et les achats pour le repas du soir',
+    hint:'Le texte parle d\'une sortie au marché, de ce qu\'elles achètent, et de ce qu\'elles vont préparer.',
+    explanation:'Le texte décrit <b>une visite au marché de Port Louis</b> avec une maman et sa fille, les achats qu\'elles font (fruit à pain, mangues, poisson), et le repas préparé le soir. C\'est le fil conducteur de tout le texte.' }),
+
+// ── Passage C : Mon école ───────────────────────────────────────────────────
+  makeMCQ({ id:'g4fr-comp-044', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Mon école</b><br><br>Je m\'appelle Rohan. J\'ai dix ans et je suis en classe de quatrième à l\'école Jean La Fontaine de Quatre Bornes. Chaque matin, je prends le bus à sept heures.<br><br>À l\'école, la journée commence par le rassemblement dans la cour. Nous chantons l\'hymne national et le directeur nous parle des règles importantes.<br><br>Ma matière préférée, c\'est les sciences. J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique comment les plantes poussent et pourquoi le ciel est bleu.<br><br>À la récréation, je joue au football avec mes amis Vikash et Omar. L\'après-midi, nous avons le français et les mathématiques. Je rentre à la maison à trois heures et demie.</div><hr style="margin:8px 0">Quel âge a Rohan ?',
+    options:['Huit ans','Neuf ans','Dix ans','Onze ans'],
+    answer:'Dix ans',
+    hint:'Lisez la première ligne du texte.',
+    explanation:'"Je m\'appelle Rohan. J\'ai <b>dix ans</b>…" — L\'âge est mentionné dès la première phrase.' }),
+
+  makeMCQ({ id:'g4fr-comp-045', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Mon école</b><br><br>Je m\'appelle Rohan. J\'ai dix ans et je suis en classe de quatrième à l\'école Jean La Fontaine de Quatre Bornes. Chaque matin, je prends le bus à sept heures.<br><br>À l\'école, la journée commence par le rassemblement dans la cour. Nous chantons l\'hymne national et le directeur nous parle des règles importantes.<br><br>Ma matière préférée, c\'est les sciences. J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique comment les plantes poussent et pourquoi le ciel est bleu.<br><br>À la récréation, je joue au football avec mes amis Vikash et Omar. L\'après-midi, nous avons le français et les mathématiques. Je rentre à la maison à trois heures et demie.</div><hr style="margin:8px 0">Quelle est la matière préférée de Rohan ?',
+    options:['Le français','Les mathématiques','Les sciences','Le sport'],
+    answer:'Les sciences',
+    hint:'Le texte le dit clairement au troisième paragraphe.',
+    explanation:'"Ma matière préférée, c\'est <b>les sciences</b>." — Rohan l\'indique lui-même directement.' }),
+
+  makeMCQ({ id:'g4fr-comp-046', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Mon école</b><br><br>Je m\'appelle Rohan. J\'ai dix ans et je suis en classe de quatrième à l\'école Jean La Fontaine de Quatre Bornes. Chaque matin, je prends le bus à sept heures.<br><br>À l\'école, la journée commence par le rassemblement dans la cour. Nous chantons l\'hymne national et le directeur nous parle des règles importantes.<br><br>Ma matière préférée, c\'est les sciences. J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique comment les plantes poussent et pourquoi le ciel est bleu.<br><br>À la récréation, je joue au football avec mes amis Vikash et Omar. L\'après-midi, nous avons le français et les mathématiques. Je rentre à la maison à trois heures et demie.</div><hr style="margin:8px 0">Comment Rohan va-t-il à l\'école chaque matin ?',
+    options:['À pied','En voiture avec son père','En bus','À vélo'],
+    answer:'En bus',
+    hint:'Lisez la fin du premier paragraphe.',
+    explanation:'"Chaque matin, je prends <b>le bus</b> à sept heures." — Le bus est le moyen de transport de Rohan.' }),
+
+  makeMCQ({ id:'g4fr-comp-047', chapterId:'g4fr-lecture', subsection:'vocabulaire', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Mon école</b><br><br>Je m\'appelle Rohan. J\'ai dix ans et je suis en classe de quatrième à l\'école Jean La Fontaine de Quatre Bornes. Chaque matin, je prends le bus à sept heures.<br><br>À l\'école, la journée commence par le rassemblement dans la cour. Nous chantons l\'hymne national et le directeur nous parle des règles importantes.<br><br>Ma matière préférée, c\'est les sciences. J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique comment les plantes poussent et pourquoi le ciel est bleu.<br><br>À la récréation, je joue au football avec mes amis Vikash et Omar. L\'après-midi, nous avons le français et les mathématiques. Je rentre à la maison à trois heures et demie.</div><hr style="margin:8px 0">Que veut dire "le rassemblement" dans ce texte ?',
+    options:['Un repas partagé entre élèves','La réunion de tous les élèves dans la cour','Une compétition sportive','Une séance de travaux pratiques'],
+    answer:'La réunion de tous les élèves dans la cour',
+    hint:'Pensez à ce qui se passe au début de la journée scolaire dans la cour.',
+    explanation:'"La journée commence par <b>le rassemblement</b> dans la cour. Nous chantons l\'hymne national…" — Le rassemblement est la <b>réunion de tous les élèves</b> dans la cour avant d\'entrer en classe.' }),
+
+  makeMCQ({ id:'g4fr-comp-048', chapterId:'g4fr-lecture', subsection:'inference', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Mon école</b><br><br>Je m\'appelle Rohan. J\'ai dix ans et je suis en classe de quatrième à l\'école Jean La Fontaine de Quatre Bornes. Chaque matin, je prends le bus à sept heures.<br><br>À l\'école, la journée commence par le rassemblement dans la cour. Nous chantons l\'hymne national et le directeur nous parle des règles importantes.<br><br>Ma matière préférée, c\'est les sciences. J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique comment les plantes poussent et pourquoi le ciel est bleu.<br><br>À la récréation, je joue au football avec mes amis Vikash et Omar. L\'après-midi, nous avons le français et les mathématiques. Je rentre à la maison à trois heures et demie.</div><hr style="margin:8px 0">Pourquoi Rohan aime-t-il les sciences ?',
+    options:[
+      'Parce que c\'est la matière la plus facile',
+      'Parce que sa maîtresse explique des choses intéressantes comme les plantes et le ciel',
+      'Parce qu\'il y a beaucoup de récréation pendant les sciences',
+      'Parce que son ami Vikash aime aussi les sciences'
+    ],
+    answer:'Parce que sa maîtresse explique des choses intéressantes comme les plantes et le ciel',
+    hint:'Lisez ce que Rohan dit de Madame Pillay.',
+    explanation:'"J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique <b>comment les plantes poussent</b> et <b>pourquoi le ciel est bleu</b>." — Ce sont des sujets fascinants qui expliquent son amour pour la matière.' }),
+
+  makeMCQ({ id:'g4fr-comp-049', chapterId:'g4fr-lecture', subsection:'inference', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Mon école</b><br><br>Je m\'appelle Rohan. J\'ai dix ans et je suis en classe de quatrième à l\'école Jean La Fontaine de Quatre Bornes. Chaque matin, je prends le bus à sept heures.<br><br>À l\'école, la journée commence par le rassemblement dans la cour. Nous chantons l\'hymne national et le directeur nous parle des règles importantes.<br><br>Ma matière préférée, c\'est les sciences. J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique comment les plantes poussent et pourquoi le ciel est bleu.<br><br>À la récréation, je joue au football avec mes amis Vikash et Omar. L\'après-midi, nous avons le français et les mathématiques. Je rentre à la maison à trois heures et demie.</div><hr style="margin:8px 0">Combien d\'amis Rohan mentionne-t-il dans le texte ?',
+    options:['Un seul ami','Deux amis','Trois amis','Il n\'a pas d\'amis'],
+    answer:'Deux amis',
+    hint:'Lisez le paragraphe sur la récréation.',
+    explanation:'"je joue au football avec mes amis <b>Vikash</b> et <b>Omar</b>" — Rohan nomme deux amis dans le texte.' }),
+
+  makeMCQ({ id:'g4fr-comp-050', chapterId:'g4fr-lecture', subsection:'grammaire', difficulty:3,
+    question:'<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Mon école</b><br><br>Je m\'appelle Rohan. J\'ai dix ans et je suis en classe de quatrième à l\'école Jean La Fontaine de Quatre Bornes. Chaque matin, je prends le bus à sept heures.<br><br>À l\'école, la journée commence par le rassemblement dans la cour. Nous chantons l\'hymne national et le directeur nous parle des règles importantes.<br><br>Ma matière préférée, c\'est les sciences. J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique comment les plantes poussent et pourquoi le ciel est bleu.<br><br>À la récréation, je joue au football avec mes amis Vikash et Omar. L\'après-midi, nous avons le français et les mathématiques. Je rentre à la maison à trois heures et demie.</div><hr style="margin:8px 0">Ce texte est écrit à quelle personne ?',
+    options:['À la première personne (je / nous)','À la deuxième personne (tu / vous)','À la troisième personne (il / elle)','À la troisième personne du pluriel (ils / elles)'],
+    answer:'À la première personne (je / nous)',
+    hint:'Regardez les pronoms utilisés dans le texte.',
+    explanation:'Le texte utilise les pronoms <b>"Je"</b> ("Je m\'appelle Rohan", "Je prends le bus", "Je joue") et <b>"Nous"</b> ("Nous chantons", "nous avons"). Ce sont des pronoms de la <b>première personne</b>. Rohan raconte sa propre histoire.' }),
+
+  makeMCQ({ id:'g4fr-comp-051', chapterId:'g4fr-lecture', subsection:'idee_principale', difficulty:4,
+    question:'<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Mon école</b><br><br>Je m\'appelle Rohan. J\'ai dix ans et je suis en classe de quatrième à l\'école Jean La Fontaine de Quatre Bornes. Chaque matin, je prends le bus à sept heures.<br><br>À l\'école, la journée commence par le rassemblement dans la cour. Nous chantons l\'hymne national et le directeur nous parle des règles importantes.<br><br>Ma matière préférée, c\'est les sciences. J\'adore faire des expériences avec ma maîtresse, Madame Pillay. Elle nous explique comment les plantes poussent et pourquoi le ciel est bleu.<br><br>À la récréation, je joue au football avec mes amis Vikash et Omar. L\'après-midi, nous avons le français et les mathématiques. Je rentre à la maison à trois heures et demie.</div><hr style="margin:8px 0">Quel est le sujet principal de ce texte ?',
+    options:[
+      'Les règles à respecter dans une école mauricienne',
+      'La journée typique d\'un écolier mauricien',
+      'Pourquoi les sciences sont importantes',
+      'Les jeux pratiqués pendant la récréation'
+    ],
+    answer:'La journée typique d\'un écolier mauricien',
+    hint:'Le texte décrit toute la journée de Rohan, du matin au soir.',
+    explanation:'Le texte décrit la journée complète de Rohan : le bus du matin, le rassemblement, les cours, la récréation et le retour chez lui. C\'est donc <b>la journée typique d\'un écolier mauricien</b> qui est le sujet central.' }),
+
+// ── Passage D : La fête de Divali à la maison ───────────────────────────────
+  makeMCQ({ id:'g4fr-comp-052', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Quelle fête est célébrée dans le texte ?',
+    options:['Noël','Divali','Eid','La fête nationale'],
+    answer:'Divali',
+    hint:'Regardez la première phrase du texte.',
+    explanation:'"Ce soir, c\'est <b>Divali</b> !" — La première phrase annonce directement la fête. Divali est la fête hindoue des lumières, célébrée à Maurice par de nombreuses familles.' }),
+
+  makeMCQ({ id:'g4fr-comp-053', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Qui allume les diyas ?',
+    options:['La maman de Riya','Les voisins','Le papa de Riya','Riya elle-même'],
+    answer:'Le papa de Riya',
+    hint:'Lisez le troisième paragraphe.',
+    explanation:'"<b>Son papa</b> allume les diyas sur le balcon." — C\'est le père de Riya qui s\'occupe d\'allumer les petites lampes.' }),
+
+  makeMCQ({ id:'g4fr-comp-054', chapterId:'g4fr-lecture', subsection:'reperage', difficulty:1,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Que sont les diyas, selon le texte ?',
+    options:['Des fleurs décoratives','De grandes bougies parfumées','De petites lampes en terre cuite','Des boîtes de friandises'],
+    answer:'De petites lampes en terre cuite',
+    hint:'Le troisième paragraphe explique ce que sont les diyas.',
+    explanation:'"Ces <b>petites lampes en terre cuite</b> brillent dans la nuit." — Le texte définit lui-même les diyas juste après les avoir mentionnés.' }),
+
+  makeMCQ({ id:'g4fr-comp-055', chapterId:'g4fr-lecture', subsection:'inference', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Pourquoi la maison de Riya sent-elle bon ?',
+    options:['Parce que la maman fait cuire de la viande','À cause des fleurs et des bougies','Parce que les voisins apportent du parfum','Parce que les diyas brûlent'],
+    answer:'À cause des fleurs et des bougies',
+    hint:'La première phrase du texte donne la réponse.',
+    explanation:'"La maison de Riya sent bon <b>les fleurs et les bougies</b>." — Les deux sources du bon parfum sont mentionnées dès la première phrase.' }),
+
+  makeMCQ({ id:'g4fr-comp-056', chapterId:'g4fr-lecture', subsection:'vocabulaire', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Dans le texte, que veut dire le mot "douceurs" ?',
+    options:['Des mots gentils','Des friandises sucrées','Des parfums de fleurs','Des décorations colorées'],
+    answer:'Des friandises sucrées',
+    hint:'Le contexte montre que les douceurs sont sur un plateau dans la cuisine, à côté des gâteaux.',
+    explanation:'"Riya aide à disposer les <b>douceurs</b> sur un grand plateau." — Ici, "douceurs" désigne des <b>friandises sucrées</b> (gâteaux, bonbons). Le mot vient de "doux" et désigne tout ce qui est sucré et bon à manger lors d\'une fête.' }),
+
+  makeMCQ({ id:'g4fr-comp-057', chapterId:'g4fr-lecture', subsection:'inference', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Comment sait-on que toute la rue participe à la fête ?',
+    options:[
+      'Parce que les voisins arrivent chez Riya',
+      'Parce que la rue entière est illuminée',
+      'Parce que tout le monde chante dans la cour',
+      'Parce que la maman a préparé beaucoup de gâteaux'
+    ],
+    answer:'Parce que la rue entière est illuminée',
+    hint:'Cherchez la phrase qui décrit l\'aspect de la rue pendant la fête.',
+    explanation:'"<b>La rue entière est illuminée</b>." — Cette phrase montre que toutes les maisons de la rue ont allumé leurs diyas. L\'adjectif "entière" est important : ce n\'est pas seulement la maison de Riya, c\'est tout le quartier.' }),
+
+  makeTF({ id:'g4fr-comp-058', chapterId:'g4fr-lecture', subsection:'vrai_faux', difficulty:2,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Vrai ou Faux : Riya prépare les gâteaux toute seule.',
+    answer:false,
+    hint:'Qui prépare les gâteaux selon le texte ? Et quel est le rôle de Riya ?',
+    explanation:'<b>Faux.</b> "<b>Sa maman</b> prépare des gâteaux dans la cuisine. Riya <b>aide</b> à disposer les douceurs sur le plateau." — La maman prépare ; Riya aide seulement. Elle ne fait pas tout toute seule.' }),
+
+  makeMCQ({ id:'g4fr-comp-059', chapterId:'g4fr-lecture', subsection:'figures_style', difficulty:3,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Dans la liste "rit, mange et chante", combien d\'actions font les voisins ensemble ?',
+    options:['Une seule','Deux','Trois','Quatre'],
+    answer:'Trois',
+    hint:'Comptez les verbes dans la phrase "Tout le monde rit, mange et chante ensemble."',
+    explanation:'"Tout le monde <b>rit</b>, <b>mange</b> et <b>chante</b> ensemble dans la cour." — Il y a <b>trois verbes</b>, donc trois actions. Cette liste montre la joyeuse activité de la soirée.' }),
+
+  makeMCQ({ id:'g4fr-comp-060', chapterId:'g4fr-lecture', subsection:'inference', difficulty:3,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Que nous apprend ce texte sur la façon dont les Mauriciens fêtent Divali ?',
+    options:[
+      'Divali est une fête célébrée uniquement à l\'intérieur de la maison',
+      'Divali est une fête de lumières et de partage entre familles et voisins',
+      'Divali est surtout une fête pour les enfants qui reçoivent des cadeaux',
+      'Divali est une fête où l\'on mange uniquement des gâteaux salés'
+    ],
+    answer:'Divali est une fête de lumières et de partage entre familles et voisins',
+    hint:'Pensez à tout ce qui se passe : les diyas, les gâteaux partagés, les voisins…',
+    explanation:'Le texte montre deux éléments clés : les <b>lumières</b> (les diyas qui illuminent la rue) et le <b>partage</b> (les voisins qui apportent des friandises, tout le monde qui mange ensemble). Ce n\'est pas une fête privée — c\'est toute la communauté qui célèbre ensemble.' }),
+
+  makeMCQ({ id:'g4fr-comp-061', chapterId:'g4fr-lecture', subsection:'idee_principale', difficulty:4,
+    question:'<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête de Divali</b><br><br>Ce soir, c\'est Divali ! La maison de Riya sent bon les fleurs et les bougies.<br><br>Sa maman prépare des gâteaux dans la cuisine : des gâteaux piments, des napolitaines et du gâteau au miel. Riya aide à disposer les douceurs sur un grand plateau décoré de pétales de rose.<br><br>Son papa allume les diyas sur le balcon. Ces petites lampes en terre cuite brillent dans la nuit. La rue entière est illuminée.<br><br>Les voisins arrivent avec leurs enfants. Ils apportent des boîtes remplies de friandises. Tout le monde rit, mange et chante ensemble dans la cour.<br><br>Riya est très heureuse. Ce qu\'elle préfère à Divali, c\'est voir toutes les lumières briller et partager les gâteaux avec ses amis et ses voisins.</div><hr style="margin:8px 0">Quel est le message principal de ce texte ?',
+    options:[
+      'Divali est une fête difficile à préparer car il y a beaucoup de travail',
+      'Divali est une fête qui unit la famille et les voisins dans la joie, les lumières et le partage',
+      'La maman de Riya est une excellente cuisinière qui prépare beaucoup de gâteaux',
+      'Les diyas sont des objets très importants qu\'il faut acheter pour Divali'
+    ],
+    answer:'Divali est une fête qui unit la famille et les voisins dans la joie, les lumières et le partage',
+    hint:'Le texte décrit plusieurs éléments. Lequel les regroupe tous ?',
+    explanation:'Trois thèmes traversent tout le texte : <b>les lumières</b> (diyas, rue illuminée), <b>la nourriture partagée</b> (gâteaux, friandises) et <b>la communauté</b> (voisins, amis, tout le monde ensemble). Le message est donc que Divali <b>unit les gens</b> dans la joie et le partage.' })
 
 );

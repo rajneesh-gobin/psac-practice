@@ -3,7 +3,7 @@
 // IDs format: g5eng-comp-NNN
 // Passage is embedded as HTML - renders via innerHTML in both practice and exam modes.
 
-const _PASSAGE_A = `<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65">
+const _PASSAGE_A = `<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
 <b style="color:#1e40af">Read the passage carefully, then answer the question.</b><br><br>
 <b>The Dodo - Mauritius's Lost Bird</b><br><br>
 The dodo was a large, flightless bird that lived only on the island of Mauritius. It stood about one metre tall and weighed roughly 10 to 18 kilograms. Because it had evolved on an island with no natural predators, the dodo had no fear of humans and could not fly to escape danger.<br><br>
@@ -110,7 +110,7 @@ STATIC_QUESTIONS.push(
 );
 
 // Second passage - Nico and Tony (based on Grade 5 End of Year Assessment 2023)
-const _PASSAGE_B = `<div style="background:#f8fafc;border-left:4px solid #10b981;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65">
+const _PASSAGE_B = `<div style="background:#f8fafc;border-left:4px solid #10b981;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
 <b style="color:#065f46">Read the passage carefully, then answer the question.</b><br><br>
 <b>The Fishing Trip</b><br><br>
 One Saturday morning, Nico and Tony, two good friends, decided to go fishing at a nearby pond. They got their fishing lines and bait ready and also packed utensils and ingredients, as they wanted to have fresh fish for lunch.<br><br>

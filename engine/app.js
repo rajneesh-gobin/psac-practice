@@ -2428,6 +2428,269 @@ async function _markAssignmentDone(id, btn) {
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
 }
 
+// ── FRIENDS LEADERBOARD (dashboard) ──────────
+async function _renderFriendsLeaderboard(studentId) {
+  const card   = document.getElementById('dash-friends');
+  const listEl = document.getElementById('dash-friends-list');
+  if (!card || !listEl || !studentId) return;
+  card.classList.remove('hidden');
+
+  const [friends, myCode] = await Promise.all([
+    Store.getFriends(),
+    Store.getMyFriendCode(),
+  ]);
+  _friendCode = myCode;
+
+  const self = {
+    id: studentId,
+    display_name: DB.name || document.getElementById('welcome-name')?.textContent?.trim() || 'You',
+    avatar: DB.avatar || (typeof Auth !== 'undefined' && Auth.getActiveAccount?.()?.avatar) || '⭐',
+    xp: DB.xp || 0,
+    level: DB.level || 1,
+    streak: DB.stats?.streak || 0,
+    total_attempted: DB.stats?.totalAttempted || 0,
+    total_correct: DB.stats?.totalCorrect || 0,
+    isSelf: true,
+  };
+
+  if (!friends.length) {
+    listEl.innerHTML = `
+      <div class="text-center py-4">
+        <div class="text-5xl mb-2" style="filter:drop-shadow(0 0 8px gold)">🏆</div>
+        <p class="text-sm font-bold text-gray-700 dark:text-white mb-1">No rivals yet!</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Invite a friend and compete for the gold trophy 🔥</p>
+        <button onclick="openFriendInviteModal()"
+          class="bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white text-sm font-bold px-6 py-2.5 rounded-2xl transition-all shadow-md">
+          ✉️ Invite Your First Friend
+        </button>
+      </div>
+      ${_friendCodeBar(myCode)}`;
+    return;
+  }
+
+  const all = [self, ...friends.map(f => ({ ...f, isSelf: false }))];
+  all.sort((a, b) => (b.xp || 0) - (a.xp || 0));
+
+  const maxXp  = Math.max(...all.map(f => f.xp || 0), 1);
+  const myRank = all.findIndex(f => f.isSelf);
+
+  let callout;
+  if (myRank === 0) {
+    callout = `<div class="mb-3 rounded-xl px-3 py-2 text-xs font-semibold text-center text-amber-700 dark:text-amber-300"
+      style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #f59e0b">
+      🔥 You're the champion! Keep scoring to hold the gold!
+    </div>`;
+  } else {
+    const gap  = (all[myRank - 1].xp || 0) - (self.xp || 0);
+    const name = all[myRank - 1].display_name;
+    callout = `<div class="mb-3 rounded-xl px-3 py-2 text-xs text-center text-indigo-700 dark:text-indigo-300"
+      style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
+      You're <strong>#${myRank + 1}</strong> — earn <strong>${gap} more XP</strong> to beat ${name}! 💪
+    </div>`;
+  }
+
+  const trophyHtml = (rank) => {
+    if (rank === 0) return `<span class="text-2xl leading-none" style="filter:drop-shadow(0 0 8px #f59e0b)">🏆</span>`;
+    if (rank === 1) return `<span class="text-xl leading-none" style="filter:drop-shadow(0 0 5px #9ca3af)">🥈</span>`;
+    if (rank === 2) return `<span class="text-xl leading-none" style="filter:drop-shadow(0 0 5px #b45309)">🥉</span>`;
+    return `<span class="text-xs font-bold text-gray-400 w-6 block text-center leading-none">${rank + 1}</span>`;
+  };
+
+  listEl.innerHTML = callout + all.map((f, i) => {
+    const acc  = f.total_attempted ? Math.round(f.total_correct / f.total_attempted * 100) : 0;
+    const pct  = Math.round((f.xp || 0) / maxXp * 100);
+    const str  = f.streak || 0;
+    const fire = str >= 3 ? `<span class="text-xs ml-1">🔥${str}</span>` : '';
+    const bar  = i === 0 ? 'bg-amber-400' : f.isSelf ? 'bg-indigo-500' : 'bg-gray-300 dark:bg-gray-500';
+    const rowBg = f.isSelf
+      ? 'background:rgba(99,102,241,.07);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:6px 8px'
+      : i === 0
+      ? 'background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25);border-radius:12px;padding:6px 8px'
+      : 'padding:6px 0';
+    return `<div style="${rowBg}" class="mb-1">
+      <div class="flex items-center gap-2">
+        <div class="w-7 flex items-center justify-center shrink-0">${trophyHtml(i)}</div>
+        <span class="text-xl select-none">${f.avatar || '⭐'}</span>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1 leading-tight">
+            <span class="text-sm font-bold text-gray-800 dark:text-white truncate">${f.display_name}</span>
+            ${f.isSelf ? '<span class="text-xs text-indigo-400 font-normal shrink-0">(you)</span>' : ''}
+            ${fire}
+          </div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">Lv.${f.level} · ${acc}% accuracy</div>
+        </div>
+        <div class="shrink-0 text-right">
+          <div class="text-sm font-bold ${i === 0 ? 'text-amber-500' : f.isSelf ? 'text-indigo-500' : 'text-gray-500 dark:text-gray-300'}">${f.xp}<span class="text-xs font-normal ml-0.5">XP</span></div>
+          ${!f.isSelf ? `<button onclick="_removeFriend('${f.id}',this)" class="text-xs text-gray-300 hover:text-red-400 transition-colors">✕</button>` : ''}
+        </div>
+      </div>
+      <div class="mt-1.5 ml-9 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div class="h-full rounded-full transition-all duration-700 ${bar}" style="width:${pct}%"></div>
+      </div>
+    </div>`;
+  }).join('') + _friendCodeBar(myCode);
+}
+
+function _friendCodeBar(code) {
+  const display = code ? code.match(/.{1,4}/g).join(' ') : '···';
+  return `
+    <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700 space-y-2">
+      <div class="flex items-center gap-2 bg-gray-50 dark:bg-gray-700/50 rounded-xl px-3 py-2">
+        <span class="text-xs text-gray-400 shrink-0">Your code:</span>
+        <span id="fl-my-code" class="text-sm font-mono font-bold text-gray-700 dark:text-white tracking-widest flex-1">${display}</span>
+        <button onclick="_copyMyCode()" class="text-xs font-semibold text-indigo-500 hover:text-indigo-700 shrink-0">Copy</button>
+        <button onclick="openFriendInviteModal()" class="text-xs font-semibold text-indigo-500 hover:text-indigo-700 shrink-0 ml-1">Share ↗</button>
+      </div>
+      <div class="flex gap-2">
+        <input id="fl-code-input" type="text" maxlength="8" placeholder="Enter friend's code…"
+          class="flex-1 px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-mono uppercase text-gray-800 dark:text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-indigo-300"
+          style="font-size:16px" onkeydown="if(event.key==='Enter')_connectByCode()" />
+        <button onclick="_connectByCode()"
+          class="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-bold transition-colors shrink-0">
+          Connect
+        </button>
+      </div>
+    </div>`;
+}
+
+function _copyMyCode() {
+  const el = document.getElementById('fl-my-code');
+  const code = (_friendCode || el?.textContent || '').replace(/\s/g, '');
+  if (!code || code === '···') return;
+  navigator.clipboard?.writeText(code)
+    .then(() => toast('Friend code copied! 📋', 1500))
+    .catch(() => { prompt('Your friend code:', code); });
+}
+
+async function _connectByCode() {
+  const input = document.getElementById('fl-code-input');
+  if (!input) return;
+  const code = input.value.trim().toUpperCase().replace(/\s/g, '');
+  if (code.length < 4) { toast('Enter a friend code first.', 1500); return; }
+  const btn = input.nextElementSibling;
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  input.disabled = true;
+  const { data } = await _sb.rpc('add_friend', { p_friend_code: code });
+  input.disabled = false;
+  if (btn) { btn.disabled = false; btn.textContent = 'Connect'; }
+  if (data?.ok)                           { input.value = ''; toast('Friend connected! 🎉🎉', 3000); if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } }); _renderFriendsLeaderboard(ACTIVE_STUDENT_ID); }
+  else if (data?.error === 'self')        toast("That's your own code!", 2000);
+  else if (data?.error === 'not_found')   toast('Code not found — check and try again.', 2500);
+  else if (data?.error === 'max_friends') toast('Friend list is full (max 20).', 2500);
+  else                                    toast('Could not connect. Try again.', 2000);
+}
+
+async function _removeFriend(friendId, btn) {
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+  await Store.removeFriend(friendId);
+  _renderFriendsLeaderboard(ACTIVE_STUDENT_ID);
+}
+
+// ── FRIEND INVITE MODAL ───────────────────────
+let _friendCode = null;
+
+async function openFriendInviteModal() {
+  const modal = document.getElementById('modal-friend-invite');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+
+  if (!_friendCode) _friendCode = await Store.getMyFriendCode();
+
+  const codeEl = document.getElementById('friend-code-display');
+  if (codeEl && _friendCode) codeEl.textContent = _friendCode.match(/.{1,4}/g).join(' ');
+
+  const canvas = document.getElementById('friend-qr-canvas');
+  if (canvas && _friendCode && typeof QRCode !== 'undefined') {
+    const link = `${location.origin}${location.pathname}?friend=${_friendCode}`;
+    QRCode.toCanvas(canvas, link, { width: 180, margin: 1, color: { dark: '#1e293b', light: '#ffffff' } }, () => {});
+  }
+}
+
+function closeFriendInviteModal() {
+  document.getElementById('modal-friend-invite')?.classList.add('hidden');
+  closeQRScanner();
+}
+
+function _friendInviteLink() {
+  return `${location.origin}${location.pathname}?friend=${_friendCode || ''}`;
+}
+
+function _friendInviteText() {
+  const name = DB.name || (typeof Auth !== 'undefined' && Auth.getActiveAccount?.()?.name) || 'Your friend';
+  return `${name} challenges you to beat them on PSAC Practice! 🏆 Tap the link, log in, and see who scores higher!`;
+}
+
+function shareFriendLinkWhatsApp() {
+  if (!_friendCode) { toast('Loading your code…', 1500); return; }
+  const msg = `${_friendInviteText()}\n\n${_friendInviteLink()}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+}
+
+async function shareFriendLink() {
+  if (!_friendCode) { toast('Loading your code…', 1500); return; }
+  const link = _friendInviteLink();
+  if (navigator.share) {
+    try { await navigator.share({ title: 'PSAC Practice — Friend Challenge', text: _friendInviteText(), url: link }); return; }
+    catch(e) { if (e.name === 'AbortError') return; }
+  }
+  try { await navigator.clipboard.writeText(link); toast('Link copied! 📋', 2000); }
+  catch(_) { prompt('Copy this link:', link); }
+}
+
+async function _copyFriendCode() {
+  if (!_friendCode) return;
+  try { await navigator.clipboard.writeText(_friendCode); toast('Code copied! 📋', 1500); }
+  catch(_) { prompt('Your friend code:', _friendCode); }
+}
+
+// ── QR SCANNER ────────────────────────────────
+let _qrScanner = null;
+
+async function openQRScanner() {
+  const overlay = document.getElementById('modal-qr-scanner');
+  if (!overlay) return;
+  closeFriendInviteModal();
+  overlay.classList.remove('hidden');
+
+  if (typeof Html5Qrcode === 'undefined') { toast('Scanner not available.', 2000); return; }
+
+  try {
+    _qrScanner = new Html5Qrcode('qr-reader');
+    await _qrScanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 220, height: 220 } },
+      async (decodedText) => {
+        await closeQRScanner();
+        let code = decodedText;
+        try { const u = new URL(decodedText); code = u.searchParams.get('friend') || decodedText; } catch(_) {}
+        if (!code) { toast('Could not read QR code.', 2000); return; }
+        const { data } = await (typeof _sb !== 'undefined'
+          ? _sb.rpc('add_friend', { p_friend_code: code.toUpperCase() })
+          : { data: null });
+        if (data?.ok)                           { toast('Friend connected! 🎉', 3000); if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } }); _renderFriendsLeaderboard(ACTIVE_STUDENT_ID); }
+        else if (data?.error === 'self')        toast("That's your own QR code!", 2000);
+        else if (data?.error === 'not_found')   toast('QR code not recognised.', 2500);
+        else if (data?.error === 'max_friends') toast('Friend list is full (max 20).', 2500);
+        else                                    toast('Could not connect. Try again.', 2000);
+      },
+      () => {}
+    );
+  } catch(e) {
+    toast('Camera not available. Try the link instead.', 3000);
+    overlay.classList.add('hidden');
+  }
+}
+
+async function closeQRScanner() {
+  const overlay = document.getElementById('modal-qr-scanner');
+  if (overlay) overlay.classList.add('hidden');
+  if (_qrScanner) {
+    try { await _qrScanner.stop(); } catch(_) {}
+    try { _qrScanner.clear(); } catch(_) {}
+    _qrScanner = null;
+  }
+}
+
 // ── SCRATCHPAD ────────────────────────────────
 // The scratchpad used to be a permanently-rendered canvas in the sidebar, which
 // on a phone meant it sat below the answer buttons where nobody found it. It is
@@ -2563,6 +2826,9 @@ function renderDashboard() {
 
   // Assignments from parent (Supabase - async, non-blocking)
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
+
+  // Friends leaderboard (Supabase - async, non-blocking)
+  _renderFriendsLeaderboard(ACTIVE_STUDENT_ID);
 
   // Exam mode visibility (respect restrictions)
   const examCard = document.getElementById('btn-exam-mode');

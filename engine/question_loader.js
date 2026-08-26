@@ -298,7 +298,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 10;
+  const _CACHE_VERSION = 12;
   const _cacheKey = subjectId => `mm_qc_v${_CACHE_VERSION}_${subjectId}`;
 
   // Drop caches written by any earlier version, so a bump reclaims the space

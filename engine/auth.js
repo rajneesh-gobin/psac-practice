@@ -79,6 +79,35 @@ const Auth = (() => {
     try { return localStorage.getItem(REF_STORAGE_KEY) || ''; } catch(_) { return ''; }
   }
 
+  // ── Friend invite link capture ─────────────────
+  const _PENDING_FRIEND_KEY = 'psac_pending_friend';
+
+  function _tryFriendLink() {
+    try {
+      const params = new URLSearchParams(location.search);
+      const code = params.get('friend');
+      if (!code) return;
+      localStorage.setItem(_PENDING_FRIEND_KEY, code.toUpperCase());
+      const url = new URL(location.href);
+      url.searchParams.delete('friend');
+      history.replaceState({}, '', url.toString());
+    } catch(_) {}
+  }
+
+  async function _consumePendingFriend() {
+    if (!_sb) return;
+    let code;
+    try { code = localStorage.getItem(_PENDING_FRIEND_KEY); } catch(_) { return; }
+    if (!code) return;
+    try { localStorage.removeItem(_PENDING_FRIEND_KEY); } catch(_) {}
+    const { data, error } = await _sb.rpc('add_friend', { p_friend_code: code });
+    if (error) { console.warn('[auth] add_friend failed:', error.message); return; }
+    if (data?.ok)                         toast('Friend connected! 🎉', 3000);
+    else if (data?.error === 'self')      toast("That's your own invite code!", 2000);
+    else if (data?.error === 'not_found') toast('Invite link not found or expired.', 2500);
+    else if (data?.error === 'max_friends') toast('Friend list is full (max 20).', 2500);
+  }
+
   // Called once, right after a brand-new profile row exists (family-setup or
   // teacher bootstrap). Non-fatal either way: signup must never be blocked by
   // a bad or missing referral code.
@@ -131,6 +160,7 @@ const Auth = (() => {
   // ── App init ───────────────────────────────────
   async function init() {
     _captureReferralFromUrl();
+    _tryFriendLink();
     // Show a loading state so there's no blank flash
     document.body.style.opacity = '0';
 
@@ -652,6 +682,9 @@ const Auth = (() => {
     // saveStudentSession installs the x-student-token header, so it MUST run
     // before the first student-scoped query below.
     Store.saveStudentSession(sess);
+
+    // Connect any pending friend invite (captured from ?friend= URL before login)
+    if (bumpSession) _consumePendingFriend().catch(() => {});
 
     // Apply parent restrictions to DB
     const progress = await Store.loadStudentProgress(studentRow.id);
@@ -1722,7 +1755,15 @@ const Auth = (() => {
   }
 
   function switchToStudentSelect() {
-    // From parent/teacher dashboard → show the student login screen
+    // Clear _parentProfile so _isParentSession() returns false. Without this,
+    // showScreen('dashboard'/'subject-select') in _loginStudentRow triggers the
+    // _KID_ONLY_SCREENS guard and bounces the child straight back to the parent
+    // dashboard before they even see their own screen.
+    // _parentUser is intentionally kept: it prevents onAuthStateChange SIGNED_IN
+    // from re-firing _handleParentSessionGated during the child's session, and
+    // enterParentMode() restores _parentProfile via _handleParentSession() when
+    // the parent wants to come back.
+    _parentProfile = null;
     showScreen('auth');
     setRole('student');
   }

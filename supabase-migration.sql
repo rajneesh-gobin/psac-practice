@@ -657,3 +657,231 @@ DELETE FROM public.push_subscriptions ps
 --    (then clear it: reset that child's PIN from the parent dashboard)
 --
 -- 4. Counters survive a parent Controls toggle — flip one, re-run query 3.
+
+
+-- ═══════════════════════════════════════════════════════════════════════════
+--  PART 6 — FRIEND LEADERBOARD
+--  Safe to re-run (idempotent). No destructive steps.
+-- ═══════════════════════════════════════════════════════════════════════════
+
+-- 6-A  friend_code column on students
+ALTER TABLE public.students ADD COLUMN IF NOT EXISTS friend_code text;
+
+-- Generate an 8-char uppercase alphanumeric code for every student that
+-- doesn't have one yet.  pgcrypto must already be enabled (it is, Part 1).
+UPDATE public.students
+SET    friend_code = upper(substring(encode(gen_random_bytes(6),'hex') from 1 for 8))
+WHERE  friend_code IS NULL;
+
+-- Ensure uniqueness going forward (existing rows already unique after UPDATE).
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_indexes
+    WHERE tablename='students' AND indexname='students_friend_code_key'
+  ) THEN
+    ALTER TABLE public.students ADD CONSTRAINT students_friend_code_key UNIQUE (friend_code);
+  END IF;
+END$$;
+
+-- Allow the authenticated role to read this column.
+GRANT SELECT (friend_code) ON public.students TO authenticated;
+
+-- 6-B  student_friends table
+CREATE TABLE IF NOT EXISTS public.student_friends (
+  id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  student_id_a  uuid NOT NULL REFERENCES public.students(id) ON DELETE CASCADE,
+  student_id_b  uuid NOT NULL REFERENCES public.students(id) ON DELETE CASCADE,
+  created_at    timestamptz NOT NULL DEFAULT now(),
+  -- canonical ordering: a < b (UUID text comparison)
+  CONSTRAINT student_friends_order  CHECK (student_id_a < student_id_b),
+  CONSTRAINT student_friends_unique UNIQUE (student_id_a, student_id_b)
+);
+
+ALTER TABLE public.student_friends ENABLE ROW LEVEL SECURITY;
+
+-- A student can see pairs they are part of.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE tablename='student_friends' AND policyname='friends_select'
+  ) THEN
+    CREATE POLICY friends_select ON public.student_friends
+      FOR SELECT
+      USING (
+        student_id_a = public.current_student_id() OR
+        student_id_b = public.current_student_id()
+      );
+  END IF;
+END$$;
+
+-- A student can remove a pair they are part of.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE tablename='student_friends' AND policyname='friends_delete'
+  ) THEN
+    CREATE POLICY friends_delete ON public.student_friends
+      FOR DELETE
+      USING (
+        student_id_a = public.current_student_id() OR
+        student_id_b = public.current_student_id()
+      );
+  END IF;
+END$$;
+
+GRANT SELECT, DELETE ON public.student_friends TO authenticated;
+
+-- 6-C  add_friend(p_friend_code text) → jsonb
+--      Called by the accepting student.  Returns {ok:true} or {error:'...'}.
+CREATE OR REPLACE FUNCTION public.add_friend(p_friend_code text)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_caller uuid := public.current_student_id();
+  v_target uuid;
+  v_a      uuid;
+  v_b      uuid;
+  v_count  int;
+BEGIN
+  IF v_caller IS NULL THEN
+    RETURN jsonb_build_object('error', 'not_authenticated');
+  END IF;
+
+  SELECT id INTO v_target
+  FROM   public.students
+  WHERE  friend_code = upper(p_friend_code)
+    AND  deleted_at IS NULL;
+
+  IF v_target IS NULL THEN
+    RETURN jsonb_build_object('error', 'not_found');
+  END IF;
+
+  IF v_target = v_caller THEN
+    RETURN jsonb_build_object('error', 'self');
+  END IF;
+
+  -- Enforce max 20 friends per student.
+  SELECT count(*) INTO v_count
+  FROM   public.student_friends
+  WHERE  student_id_a = v_caller OR student_id_b = v_caller;
+
+  IF v_count >= 20 THEN
+    RETURN jsonb_build_object('error', 'max_friends');
+  END IF;
+
+  -- Canonical ordering.
+  IF v_caller < v_target THEN
+    v_a := v_caller; v_b := v_target;
+  ELSE
+    v_a := v_target; v_b := v_caller;
+  END IF;
+
+  INSERT INTO public.student_friends (student_id_a, student_id_b)
+  VALUES (v_a, v_b)
+  ON CONFLICT DO NOTHING;   -- idempotent
+
+  RETURN jsonb_build_object('ok', true);
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.add_friend(text) TO authenticated;
+
+-- 6-D  get_my_friends() → setof record
+--      Returns the leaderboard data for every friend of the calling student.
+--      XP/level/stats live in student_progress.data (JSONB), not on the students row.
+--      ⚠ Cannot use CREATE OR REPLACE when adding columns — must DROP first if re-running.
+DROP FUNCTION IF EXISTS public.get_my_friends();
+CREATE FUNCTION public.get_my_friends()
+RETURNS TABLE (
+  id              uuid,
+  display_name    text,
+  avatar          text,
+  grade           text,
+  friend_code     text,
+  xp              int,
+  level           int,
+  streak          int,
+  total_attempted int,
+  total_correct   int
+)
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT
+    s.id,
+    s.display_name,
+    s.avatar,
+    s.grade::text,
+    s.friend_code,
+    coalesce((sp.data->>'xp')::int,    0) AS xp,
+    coalesce((sp.data->>'level')::int, 1) AS level,
+    coalesce((sp.data->'stats'->>'streak')::int, 0) AS streak,
+    coalesce((sp.data->'stats'->>'totalAttempted')::int, 0) AS total_attempted,
+    coalesce((sp.data->'stats'->>'totalCorrect')::int,   0) AS total_correct
+  FROM public.student_friends f
+  JOIN public.students s
+    ON s.id = CASE
+                WHEN f.student_id_a = public.current_student_id() THEN f.student_id_b
+                ELSE f.student_id_a
+              END
+  LEFT JOIN public.student_progress sp ON sp.student_id = s.id::text
+  WHERE (f.student_id_a = public.current_student_id()
+     OR  f.student_id_b = public.current_student_id())
+    AND s.deleted_at IS NULL
+  ORDER BY xp DESC;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.get_my_friends() TO authenticated;
+
+-- 6-E  get_my_friend_code() → text
+CREATE OR REPLACE FUNCTION public.get_my_friend_code()
+RETURNS text
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT friend_code
+  FROM   public.students
+  WHERE  id = public.current_student_id()
+    AND  deleted_at IS NULL;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.get_my_friend_code() TO authenticated;
+
+-- 6-F  remove_friend(p_friend_id uuid) → void
+CREATE OR REPLACE FUNCTION public.remove_friend(p_friend_id uuid)
+RETURNS void
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  DELETE FROM public.student_friends
+  WHERE (student_id_a = public.current_student_id() AND student_id_b = p_friend_id)
+     OR (student_id_b = public.current_student_id() AND student_id_a = p_friend_id);
+$$;
+
+GRANT EXECUTE ON FUNCTION public.remove_friend(uuid) TO authenticated;
+
+-- ═══════════════════════════════════════════════════════════════════════════
+--  VERIFY Part 6 (run after)
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 1. Every student has a code:
+--      SELECT count(*) FROM public.students WHERE friend_code IS NULL;
+--    → expect 0
+--
+-- 2. Functions exist:
+--      SELECT routine_name FROM information_schema.routines
+--      WHERE routine_schema='public'
+--        AND routine_name IN ('add_friend','get_my_friends','get_my_friend_code','remove_friend');
+--    → expect 4 rows
+--
+-- 3. Canonical ordering is enforced:
+--      INSERT INTO public.student_friends (student_id_a, student_id_b)
+--      VALUES ('bbbb...','aaaa...');  -- should fail CHECK constraint

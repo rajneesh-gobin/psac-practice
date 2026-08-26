@@ -676,6 +676,26 @@ const Store = (() => {
     return { ok: true };
   }
 
+  // ── Friends ───────────────────────────────────
+  async function getFriends() {
+    if (!_sb) return [];
+    const { data, error } = await _sb.rpc('get_my_friends');
+    if (error) { console.warn('[Store.getFriends]', error.message); return []; }
+    return data || [];
+  }
+
+  async function getMyFriendCode() {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('get_my_friend_code');
+    if (error) { console.warn('[Store.getMyFriendCode]', error.message); return null; }
+    return data || null;
+  }
+
+  async function removeFriend(friendId) {
+    if (!_sb) return;
+    await _sb.rpc('remove_friend', { p_friend_id: friendId });
+  }
+
   // ── Plans / subscriptions ─────────────────────
   async function getUserPlan(userId) {
     if (!_sb || !userId) return { plan_id: 'free', plan: null, subscription: null };
@@ -777,6 +797,8 @@ const Store = (() => {
     reportQuestion, loadReports, resolveReport,
     // Assignments
     loadAssignments, createAssignment, deleteAssignment, completeAssignment,
+    // Friends
+    getFriends, getMyFriendCode, removeFriend,
     // Login tracking
     logLoginEvent,
     // Plans & billing

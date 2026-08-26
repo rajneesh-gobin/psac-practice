@@ -2,7 +2,7 @@
 // Grade 6 French - Chapter: Textes & Compréhension
 // IDs format: g6fr-lec-NNN
 
-const _TEXTE_G6 = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7">
+const _TEXTE_G6 = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a">
 <b style="color:#5b21b6">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
 <b>L'Île Maurice et l'environnement</b><br><br>
 L'île Maurice est connue pour ses plages de sable blanc, ses lagons aux eaux cristallines et sa biodiversité exceptionnelle. Cependant, cet écrin de nature est aujourd'hui menacé par plusieurs problèmes environnementaux graves.<br><br>
@@ -109,7 +109,7 @@ STATIC_QUESTIONS.push(
 
 );
 
-const _TEXTE_DODO_FR = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7">
+const _TEXTE_DODO_FR = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a">
 <b style="color:#5b21b6">Lisez attentivement le texte, puis répondez aux questions.</b><br><br>
 <b>Le dodo : l\'oiseau disparu de Maurice</b><br><br>
 Le dodo était un grand oiseau incapable de voler qui vivait uniquement sur l\'île Maurice. Mesurant près d\'un mètre de hauteur et pesant jusqu\'à vingt-trois kilogrammes, cet oiseau étrange possédait des ailes si petites qu\'elles lui étaient totalement inutiles pour s\'élever dans les airs. Les scientifiques pensent que le dodo a perdu la faculté de voler parce que l\'île ne comptait aucun prédateur terrestre - il n\'avait donc aucun besoin de fuir par les airs.<br><br>
@@ -460,6 +460,312 @@ STATIC_QUESTIONS.push(
     options:['Il rit.','Il pleure.','Il dort.','Il mange.'],
     answer:'Il pleure.',
     hint:'Il verse des larmes et fait du bruit.',
-    explanation:'"<b>Il pleure</b>" → verbe <b>pleurer</b> (to cry). Conjugaison : je pleure, tu pleures, il/elle pleure, nous pleurons, vous pleurez, ils/elles pleurent. Verbe régulier du 1er groupe (-er). Contraire : rire (to laugh).' })
+    explanation:'"<b>Il pleure</b>" → verbe <b>pleurer</b> (to cry). Conjugaison : je pleure, tu pleures, il/elle pleure, nous pleurons, vous pleurez, ils/elles pleurent. Verbe régulier du 1er groupe (-er). Contraire : rire (to laugh).' }),
 
+);
+
+// ── Passage E : Le projet du nouveau stade ──────────────────────────────────
+const _TEXTE_G6_C = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>UN NOUVEAU STADE POUR VACOAS ?</b><br><br>Un projet de construction d'un stade sportif multidisciplinaire à Vacoas fait couler beaucoup d'encre. Selon des sources proches du gouvernement, les travaux pourraient débuter dès l'an prochain, pour un coût estimé à deux cents millions de roupies.<br><br>Les partisans du projet se réjouissent. « Ce stade va créer au moins trois cents emplois et permettre à nos jeunes de pratiquer des sports dans de bonnes conditions », affirme un élu local. Pour lui, la fierté nationale justifie l'investissement.<br><br>Cependant, plusieurs agriculteurs de la région s'y opposent fermement. « On va perdre nos terres cultivées depuis trois générations », dénonce un riziculteur dont le champ jouxte le terrain prévu. Les riverains craignent également les nuisances sonores lors des grandes compétitions.<br><br>Une association de citoyens a lancé une pétition qui a déjà recueilli deux mille signatures. Elle réclame une étude d'impact environnemental complète avant tout démarrage des travaux.<br><br>Le ministère des Sports n'a pas répondu à nos sollicitations.</div>`;
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6fr-lec-052', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
+    question:`${_TEXTE_G6_C}Quel est le coût estimé de la construction du stade ?`,
+    options:['Cent millions de roupies','Deux cents millions de roupies','Trois cents millions de roupies','Deux mille roupies'],
+    answer:'Deux cents millions de roupies',
+    hint:'Cherchez le chiffre mentionné dans le premier paragraphe.',
+    explanation:'"pour un coût estimé à <b>deux cents millions de roupies</b>" — Ce chiffre précis est donné dans le premier paragraphe.' }),
+
+  makeMCQ({ id:'g6fr-lec-053', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
+    question:`${_TEXTE_G6_C}Combien de signatures a recueilli la pétition ?`,
+    options:['Trois cents','Mille','Deux mille','Vingt mille'],
+    answer:'Deux mille',
+    hint:'Lisez le quatrième paragraphe sur l\'association de citoyens.',
+    explanation:'"une pétition qui a déjà recueilli <b>deux mille signatures</b>" — Le chiffre est explicitement mentionné dans le texte.' }),
+
+  makeMCQ({ id:'g6fr-lec-054', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
+    question:`${_TEXTE_G6_C}Que signifie l'expression "fait couler beaucoup d'encre" dans ce texte ?`,
+    options:[
+      'Le projet a causé une inondation',
+      'Le projet fait l\'objet de nombreuses discussions et controverses',
+      'Des journalistes ont renversé leur encre en rédigeant l\'article',
+      'Le projet concerne la fabrication d\'encre'
+    ],
+    answer:'Le projet fait l\'objet de nombreuses discussions et controverses',
+    hint:'C\'est une expression idiomatique : imaginez tous les journalistes qui écrivent sur ce sujet.',
+    explanation:'"fait <b>couler beaucoup d\'encre</b>" est une expression idiomatique qui signifie <b>faire l\'objet de nombreux écrits et discussions</b>. Quand un sujet "fait couler de l\'encre", beaucoup de journalistes et de personnes en parlent et écrivent à son sujet, ce qui indique une controverse.' }),
+
+  makeMCQ({ id:'g6fr-lec-055', chapterId:'g6fr-lecture', subsection:'inference', difficulty:2,
+    question:`${_TEXTE_G6_C}Relevez un argument EN FAVEUR et un argument CONTRE le projet.`,
+    options:[
+      'Pour : le coût est raisonnable. Contre : il n\'y a pas de terrain disponible.',
+      'Pour : création d\'emplois et meilleures conditions sportives. Contre : perte de terres agricoles et nuisances sonores.',
+      'Pour : fierté nationale. Contre : le stade sera trop petit.',
+      'Pour : le projet est rapide à réaliser. Contre : les matériaux coûtent cher.'
+    ],
+    answer:'Pour : création d\'emplois et meilleures conditions sportives. Contre : perte de terres agricoles et nuisances sonores.',
+    hint:'Lisez les arguments du partisan et ceux des agriculteurs.',
+    explanation:'<b>Pour</b> : "créer au moins <b>trois cents emplois</b> et permettre à nos jeunes de pratiquer des sports dans de bonnes conditions". <b>Contre</b> : "perdre nos <b>terres cultivées</b> depuis trois générations" + "les <b>nuisances sonores</b> lors des grandes compétitions".' }),
+
+  makeMCQ({ id:'g6fr-lec-056', chapterId:'g6fr-lecture', subsection:'inference', difficulty:3,
+    question:`${_TEXTE_G6_C}Pourquoi le journaliste écrit-il "selon des sources proches du gouvernement" sans nommer la personne ?`,
+    options:[
+      'Parce que le journaliste a oublié le nom de son informateur',
+      'Parce que l\'informateur souhaite rester anonyme et le journaliste respecte cette confidentialité',
+      'Parce que les sources gouvernementales sont toujours fiables et n\'ont pas besoin d\'être nommées',
+      'Parce que c\'est une règle obligatoire dans les journaux mauriciens'
+    ],
+    answer:'Parce que l\'informateur souhaite rester anonyme et le journaliste respecte cette confidentialité',
+    hint:'Pourquoi une personne au sein du gouvernement ne voudrait-elle pas être nommée ?',
+    explanation:'"<b>selon des sources proches du gouvernement</b>" est une technique journalistique qui protège l\'identité d\'un informateur qui a parlé sous condition d\'anonymat. Cette personne partage une information sensible mais ne veut pas être identifiée, pour se protéger professionnellement.' }),
+
+  makeMCQ({ id:'g6fr-lec-057', chapterId:'g6fr-lecture', subsection:'figures_style', difficulty:3,
+    question:`${_TEXTE_G6_C}Quel est le rôle de la dernière phrase : "Le ministère des Sports n'a pas répondu à nos sollicitations." ?`,
+    options:[
+      'Elle indique que le ministère n\'a pas de téléphone',
+      'Elle souligne le refus du gouvernement de s\'expliquer, ce qui renforce le doute du lecteur',
+      'Elle prouve que le projet est annulé',
+      'Elle invite les lecteurs à contacter eux-mêmes le ministère'
+    ],
+    answer:'Elle souligne le refus du gouvernement de s\'expliquer, ce qui renforce le doute du lecteur',
+    hint:'Que pense le lecteur quand une partie impliquée refuse de répondre ?',
+    explanation:'La phrase finale "<b>Le ministère des Sports n\'a pas répondu à nos sollicitations</b>" est une formule journalistique classique. Elle indique que le journaliste a tenté de contacter le gouvernement sans succès. Le silence du ministère laisse le lecteur dans le doute et peut nourrir la suspicion : pourquoi refuser de s\'expliquer ?' }),
+
+  makeMCQ({ id:'g6fr-lec-058', chapterId:'g6fr-lecture', subsection:'idee_principale', difficulty:4,
+    question:`${_TEXTE_G6_C}Cet article présente-t-il le projet de manière équilibrée ? Justifiez votre réponse en vous appuyant sur le texte.`,
+    options:[
+      'Non, il favorise clairement les opposants en leur donnant plus de paragraphes',
+      'Oui, mais l\'absence de réponse du gouvernement crée un déséquilibre d\'information entre les partisans et les décideurs',
+      'Oui, il est parfaitement équilibré car chaque camp a exactement le même nombre de mots',
+      'Non, il soutient clairement la construction du stade'
+    ],
+    answer:'Oui, mais l\'absence de réponse du gouvernement crée un déséquilibre d\'information entre les partisans et les décideurs',
+    hint:'Les deux côtés sont-ils représentés ? Y a-t-il quelqu\'un dont on n\'entend pas vraiment la voix ?',
+    explanation:'L\'article cite <b>un partisan</b> (l\'élu local), <b>un opposant</b> (le riziculteur) et <b>une association citoyenne</b> — les deux camps sont donc représentés. Cependant, <b>le gouvernement n\'a pas répondu</b>, ce qui crée un manque : on entend des "sources proches" mais pas les décideurs officiels eux-mêmes. C\'est un déséquilibre d\'information caractéristique du journalisme d\'investigation.' }),
+
+);
+
+// ── Passage F : La conservation du Pigeon Rose ──────────────────────────────
+const _TEXTE_G6_D = `<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le Pigeon Rose : du bord de l'extinction à la renaissance</b><br><br>À la fin des années 1990, le pigeon rose (Nesoenas mayeri) frôlait la disparition. Il ne restait plus que douze individus à l'état sauvage dans les forêts de la Gorge de la Rivière Noire. Cette espèce endémique de Maurice, menacée par la déforestation, les prédateurs introduits et la destruction de son habitat, semblait condamnée.<br><br>C'est alors que la Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien, a lancé un programme d'élevage en captivité. Des œufs ont été prélevés, des poussins élevés en sécurité, puis réintroduits progressivement dans leur milieu naturel. Parallèlement, des pièges ont été installés pour contrôler les rats et les mangoustes qui pillaient les nids.<br><br>Aujourd'hui, la population sauvage dépasse quatre cents individus. Le pigeon rose est considéré comme l'un des plus grands succès mondiaux en matière de conservation d'espèces.<br><br>Les visiteurs du parc national peuvent l'apercevoir dans la canopée, reconnaissable à sa couleur rose pâle et à son roucoulement doux.</div>`;
+
+STATIC_QUESTIONS.push(
+
+  makeMCQ({ id:'g6fr-lec-059', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
+    question:`${_TEXTE_G6_D}Combien de pigeons roses restaient-il à l'état sauvage à la fin des années 1990 ?`,
+    options:['Quatre','Douze','Quarante','Quatre cents'],
+    answer:'Douze',
+    hint:'Cherchez le chiffre dans le premier paragraphe.',
+    explanation:'"Il ne restait plus que <b>douze individus</b> à l\'état sauvage dans les forêts de la Gorge de la Rivière Noire." — Ce chiffre alarmant est donné dans le premier paragraphe.' }),
+
+  makeMCQ({ id:'g6fr-lec-060', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
+    question:`${_TEXTE_G6_D}Quelle organisation a lancé le programme d'élevage en captivité ?`,
+    options:[
+      'Le gouvernement mauricien seul',
+      'La Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien',
+      'Le parc national de la Gorge de la Rivière Noire',
+      'Une association de bénévoles mauriciens'
+    ],
+    answer:'La Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien',
+    hint:'Lisez le deuxième paragraphe.',
+    explanation:'"<b>la Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien</b>, a lancé un programme d\'élevage en captivité." — Les deux partenaires sont clairement nommés.' }),
+
+  makeMCQ({ id:'g6fr-lec-061', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
+    question:`${_TEXTE_G6_D}Que veut dire le mot "endémique" dans ce texte ?`,
+    options:[
+      'Qui est en voie de disparition dans le monde entier',
+      'Qui vit uniquement dans une région ou une île particulière',
+      'Qui a été introduit à Maurice par les marins',
+      'Qui mange des insectes endémiques'
+    ],
+    answer:'Qui vit uniquement dans une région ou une île particulière',
+    hint:'Ce mot vient du grec "endemos" qui signifie "dans le pays".',
+    explanation:'"Cette espèce <b>endémique</b> de Maurice" signifie que le pigeon rose est une espèce <b>propre à Maurice</b>, qu\'on ne trouve nulle part ailleurs dans le monde. Une espèce endémique est indigène d\'un lieu précis. C\'est le contraire d\'une espèce introduite ou cosmopolite.' }),
+
+  makeMCQ({ id:'g6fr-lec-062', chapterId:'g6fr-lecture', subsection:'inference', difficulty:2,
+    question:`${_TEXTE_G6_D}Citez DEUX menaces qui ont mis le pigeon rose en danger d'extinction selon le texte.`,
+    options:[
+      'Le tourisme et la chaleur climatique',
+      'La déforestation et les prédateurs introduits',
+      'La chasse et la pêche intensive',
+      'Les cyclones et les inondations'
+    ],
+    answer:'La déforestation et les prédateurs introduits',
+    hint:'Lisez la liste des menaces dans le premier paragraphe.',
+    explanation:'"menacée par <b>la déforestation</b>, <b>les prédateurs introduits</b> et la destruction de son habitat" — Le texte liste trois menaces. La déforestation et les prédateurs introduits (rats, mangoustes) sont parmi elles.' }),
+
+  makeMCQ({ id:'g6fr-lec-063', chapterId:'g6fr-lecture', subsection:'inference', difficulty:2,
+    question:`${_TEXTE_G6_D}Quelle double stratégie a permis de sauver le pigeon rose ?`,
+    options:[
+      'La construction de nouvelles forêts et l\'interdiction du tourisme',
+      'L\'élevage en captivité et la réintroduction, combinés au contrôle des prédateurs',
+      'Le déplacement des oiseaux vers d\'autres îles et la création d\'une loi de protection',
+      'La sensibilisation du public et la collecte de fonds internationaux'
+    ],
+    answer:'L\'élevage en captivité et la réintroduction, combinés au contrôle des prédateurs',
+    hint:'Lisez le deuxième paragraphe attentivement — deux actions sont décrites.',
+    explanation:'Le programme comportait deux volets : 1) <b>"élevage en captivité"</b> puis réintroduction dans le milieu naturel ; 2) installation de <b>"pièges pour contrôler les rats et les mangoustes"</b>. Cette double approche s\'attaquait à la fois au problème de reproduction et à celui des prédateurs.' }),
+
+  makeMCQ({ id:'g6fr-lec-064', chapterId:'g6fr-lecture', subsection:'figures_style', difficulty:3,
+    question:`${_TEXTE_G6_D}"Le pigeon rose frôlait la disparition." Quelle figure de style est utilisée et quel en est l'effet ?`,
+    options:[
+      'Une comparaison — elle compare le pigeon à un autre animal en danger',
+      'Une personnification — elle donne au pigeon rose une action humaine pour souligner son danger imminent',
+      'Une hyperbole — elle exagère la situation pour faire peur au lecteur',
+      'Une métaphore — elle transforme la disparition en un objet physique'
+    ],
+    answer:'Une personnification — elle donne au pigeon rose une action humaine pour souligner son danger imminent',
+    hint:'"Frôler" est normalement une action humaine (effleurer quelque chose). Qu\'est-ce que cela apporte quand on l\'attribue à un oiseau ?',
+    explanation:'"<b>frôlait</b> la disparition" — Le verbe "frôler" (to brush against, to come close to) est normalement utilisé pour des personnes. C\'est une <b>personnification</b> : l\'oiseau est traité comme un être qui "s\'approche" du danger. Cela crée un sentiment d\'urgence et d\'humanité, rendant la situation plus émouvante pour le lecteur.' }),
+
+  makeMCQ({ id:'g6fr-lec-065', chapterId:'g6fr-lecture', subsection:'grammaire', difficulty:3,
+    question:`${_TEXTE_G6_D}Dans le deuxième paragraphe, relevez la voix passive et transformez-la en voix active.`,
+    options:[
+      '"Des œufs ont été prélevés" → Passive. Active : Les scientifiques ont prélevé des œufs.',
+      '"Des pièges ont été installés" → Passive. Active : Des pièges installent les scientifiques.',
+      '"le programme a lancé" → Passive. Active : La Durrell a été lancé un programme.',
+      '"des poussins élevés" → Passive. Active : Les poussins élevent en sécurité.'
+    ],
+    answer:'"Des œufs ont été prélevés" → Passive. Active : Les scientifiques ont prélevé des œufs.',
+    hint:'La voix passive a la structure : sujet + être + participe passé. Qui fait l\'action ?',
+    explanation:'"<b>Des œufs ont été prélevés</b>" est à la <b>voix passive</b> : l\'œuf (objet) devient sujet grammatical. À la <b>voix active</b> : "<b>Les scientifiques ont prélevé des œufs</b>." La voix passive est souvent utilisée dans les textes scientifiques quand l\'agent (qui fait l\'action) est moins important que l\'action elle-même.' }),
+
+  makeMCQ({ id:'g6fr-lec-066', chapterId:'g6fr-lecture', subsection:'idee_principale', difficulty:4,
+    question:`${_TEXTE_G6_D}Quels facteurs expliquent le succès exceptionnel de ce programme de conservation selon le texte ?`,
+    options:[
+      'L\'espèce était facile à élever et les touristes ont financé le projet',
+      'Un partenariat international solide, une méthode double (élevage + contrôle des prédateurs) et une réintroduction progressive',
+      'Le gouvernement mauricien a interdit la déforestation dans tout le pays',
+      'Les pigeons roses se sont adaptés eux-mêmes sans aide humaine'
+    ],
+    answer:'Un partenariat international solide, une méthode double (élevage + contrôle des prédateurs) et une réintroduction progressive',
+    hint:'Relevez les différents éléments du programme qui ont contribué au succès.',
+    explanation:'Trois facteurs de succès ressortent du texte : 1) <b>le partenariat</b> Durrell + gouvernement mauricien (expertise internationale + volonté politique) ; 2) la <b>double stratégie</b> : élevage en captivité ET contrôle des prédateurs ; 3) la <b>réintroduction "progressive"</b> dans le milieu naturel pour maximiser les chances de survie.' }),
+
+  makeMCQ({ id:'g6fr-lec-067', chapterId:'g6fr-lecture', subsection:'idee_principale', difficulty:4,
+    question:`${_TEXTE_G6_D}Le titre "du bord de l'extinction à la renaissance" résume l'évolution décrite dans le texte. Justifiez ce titre en citant des données précises du texte.`,
+    options:[
+      '"Bord de l\'extinction" = douze individus sauvages en 1990 ; "renaissance" = plus de quatre cents individus aujourd\'hui',
+      '"Bord de l\'extinction" = le pigeon était chassé ; "renaissance" = il est maintenant protégé par la loi',
+      '"Bord de l\'extinction" = la déforestation ; "renaissance" = la replantation d\'arbres',
+      '"Bord de l\'extinction" = les prédateurs ; "renaissance" = l\'absence de prédateurs dans le parc'
+    ],
+    answer:'"Bord de l\'extinction" = douze individus sauvages en 1990 ; "renaissance" = plus de quatre cents individus aujourd\'hui',
+    hint:'Cherchez les deux chiffres de population donnés dans le texte.',
+    explanation:'Le titre est justifié par deux données chiffrées : <b>"douze individus"</b> à la fin des années 1990 (= bord de l\'extinction, situation critique) et <b>"plus de quatre cents individus"</b> aujourd\'hui (= renaissance, retour à la vie). Le programme de conservation a donc permis une multiplication par plus de trente de la population sauvage.' })
+
+);
+
+// ── Passage E : La disparition des coraux à Maurice ─────────────────────────
+const _TEXTE_G6_E = `<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La disparition des coraux à Maurice</b><br><br>Depuis plusieurs années, les récifs coralliens qui entourent l'île Maurice sont en danger. Selon les scientifiques de l'Université de Maurice, la température de l'eau de mer a augmenté d'un degré et demi en trente ans. Ce réchauffement provoque le blanchiment des coraux : les polypes expulsent les algues colorées qui les nourrissent, et le récif devient blanc comme de la craie.<br><br>Les conséquences sont alarmantes. Les coraux servent d'abri et de nurserie à des centaines d'espèces de poissons. Sans eux, les bancs de poissons diminuent. « Notre prise a baissé de quarante pour cent en cinq ans », témoigne Jean-Marie, pêcheur à Mahébourg, dont le nom a été changé à sa demande.<br><br>Le gouvernement a annoncé un plan de protection des récifs, mais plusieurs organisations environnementales estiment que les mesures proposées sont insuffisantes. « Les restrictions sur la pêche sont nécessaires, mais tant que les émissions mondiales de carbone ne baissent pas, les coraux continueront à mourir », avertit une biologiste marine dont l'université préfère ne pas être citée.<br><br>Les touristes, eux, remarquent déjà la différence. Les fonds marins qui faisaient la réputation de Maurice ressemblent, dans certaines zones, à des déserts sous-marins.</div>`;
+
+STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g6fr-lec-068', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
+    question:`${_TEXTE_G6_E}De combien la température de l'eau de mer a-t-elle augmenté en trente ans ?`,
+    options:['D\'un demi-degré','D\'un degré','D\'un degré et demi','De deux degrés'],
+    answer:'D\'un degré et demi',
+    hint:'Cherchez le chiffre précis dans le premier paragraphe.',
+    explanation:'"la température de l\'eau de mer a augmenté d\'<b>un degré et demi</b> en trente ans." — Cette précision chiffrée vient des scientifiques de l\'Université de Maurice et donne de la crédibilité à l\'article.' }),
+
+  makeMCQ({ id:'g6fr-lec-069', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
+    question:`${_TEXTE_G6_E}Qu'est-ce que le blanchiment des coraux, selon le texte ?`,
+    options:[
+      'Les coraux sont peints en blanc par les plongeurs',
+      'Les polypes expulsent leurs algues et le récif devient blanc',
+      'Les poissons blancs envahissent le récif et le décolorent',
+      'Le sable se dépose sur les coraux et les recouvre'
+    ],
+    answer:'Les polypes expulsent leurs algues et le récif devient blanc',
+    hint:'La définition est donnée directement après le deux-points dans le premier paragraphe.',
+    explanation:'"les <b>polypes</b> expulsent les algues colorées qui les nourrissent, et le récif devient <b>blanc comme de la craie</b>." — Le blanchiment se produit parce que les polypes perdent les algues symbiotiques qui leur donnaient leur couleur et leur nourriture.' }),
+
+  makeMCQ({ id:'g6fr-lec-070', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
+    question:`${_TEXTE_G6_E}Selon le texte, quel est le rôle des récifs coralliens pour les poissons ?`,
+    options:[
+      'Ils servent de nourriture aux poissons',
+      'Ils empêchent les prédateurs d\'entrer dans le lagon',
+      'Ils servent d\'abri et de nurserie à des centaines d\'espèces',
+      'Ils régulent la température de l\'eau pour les poissons'
+    ],
+    answer:'Ils servent d\'abri et de nurserie à des centaines d\'espèces',
+    hint:'Le deuxième paragraphe explique pourquoi les coraux sont importants pour les poissons.',
+    explanation:'"Les coraux servent d\'<b>abri</b> et de <b>nurserie</b> à des centaines d\'espèces de poissons." — Ils fournissent deux services essentiels : la protection (abri) et la reproduction (nurserie où les jeunes poissons grandissent).' }),
+
+  makeMCQ({ id:'g6fr-lec-071', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
+    question:`${_TEXTE_G6_E}Que veut dire "nurserie" dans le contexte de ce texte ?`,
+    options:[
+      'Un hôpital pour les poissons malades',
+      'Un lieu où les jeunes poissons naissent et grandissent en sécurité',
+      'Une réserve marine protégée par la loi',
+      'Une zone de pêche réservée aux professionnels'
+    ],
+    answer:'Un lieu où les jeunes poissons naissent et grandissent en sécurité',
+    hint:'Pensez à ce que le mot "nurserie" signifie pour les bébés humains, puis appliquez-le aux poissons.',
+    explanation:'Une <b>nurserie</b> (de l\'anglais "nursery") est un lieu où les jeunes êtres vivants sont élevés et protégés. Pour les poissons, les récifs coralliens sont des abris où les <b>larves et les jeunes poissons</b> peuvent grandir à l\'abri des prédateurs avant de rejoindre le large.' }),
+
+  makeMCQ({ id:'g6fr-lec-072', chapterId:'g6fr-lecture', subsection:'inference', difficulty:2,
+    question:`${_TEXTE_G6_E}Pourquoi la prise de Jean-Marie a-t-elle baissé de quarante pour cent ?`,
+    options:[
+      'Parce qu\'il a changé de zone de pêche',
+      'Parce que les coraux disparaissent et que les populations de poissons diminuent avec eux',
+      'Parce que le gouvernement a imposé des restrictions de pêche',
+      'Parce que les touristes font de la pêche de loisir et épuisent les réserves'
+    ],
+    answer:'Parce que les coraux disparaissent et que les populations de poissons diminuent avec eux',
+    hint:'Faites le lien entre la disparition des coraux et ce que le texte dit des populations de poissons.',
+    explanation:'Le texte établit une chaîne de cause à effet : <b>réchauffement → blanchiment des coraux → disparition des coraux → diminution des poissons → baisse de la prise des pêcheurs</b>. Jean-Marie illustre concrètement les conséquences économiques de cette crise environnementale.' }),
+
+  makeMCQ({ id:'g6fr-lec-073', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
+    question:`${_TEXTE_G6_E}Quelle mesure le gouvernement a-t-il annoncée ?`,
+    options:[
+      'L\'interdiction totale de la pêche dans le lagon',
+      'Un plan de protection des récifs',
+      'La création d\'une taxe sur les émissions de carbone',
+      'L\'installation de récifs artificiels en béton'
+    ],
+    answer:'Un plan de protection des récifs',
+    hint:'Le troisième paragraphe mentionne l\'action du gouvernement.',
+    explanation:'"Le gouvernement a annoncé un <b>plan de protection des récifs</b>." — Notez le connecteur "mais" qui suit immédiatement : il annonce une objection, montrant que ce plan est jugé insuffisant par certains.' }),
+
+  makeMCQ({ id:'g6fr-lec-074', chapterId:'g6fr-lecture', subsection:'figures_style', difficulty:3,
+    question:`${_TEXTE_G6_E}"Les fonds marins ressemblent à des déserts sous-marins" — quelle figure de style est employée ici ?`,
+    options:['Une métaphore','Une comparaison','Une personnification','Une hyperbole'],
+    answer:'Une comparaison',
+    hint:'Quel mot de comparaison est utilisé dans la phrase ?',
+    explanation:'"ressemblent <b>à</b> des déserts sous-marins" — Le mot "<b>ressemblent à</b>" est un outil de comparaison (comme "comme" ou "tel que"). C\'est donc une <b>comparaison</b>. Elle évoque la désolation et l\'absence de vie dans les zones où les coraux ont disparu.' }),
+
+  makeMCQ({ id:'g6fr-lec-075', chapterId:'g6fr-lecture', subsection:'source_anonyme', difficulty:3,
+    question:`${_TEXTE_G6_E}Pourquoi le nom de Jean-Marie "a été changé à sa demande" et l'université de la biologiste "préfère ne pas être citée" ?`,
+    options:[
+      'Parce que le journaliste a oublié leurs vrais noms',
+      'Parce que ces personnes souhaitent témoigner sans être identifiées publiquement',
+      'Parce que la loi interdit de nommer des témoins dans un article de journal',
+      'Parce que leurs informations ne sont pas fiables et pourraient être fausses'
+    ],
+    answer:'Parce que ces personnes souhaitent témoigner sans être identifiées publiquement',
+    hint:'Pourquoi quelqu\'un demanderait-il à ne pas être nommé dans un article ?',
+    explanation:'Les <b>sources anonymes</b> ou partiellement anonymes choisissent de ne pas être identifiées pour éviter des répercussions professionnelles ou personnelles (peur de représailles, pression de l\'employeur, etc.). Le journaliste signale l\'anonymat pour être transparent avec le lecteur — les informations sont réelles, mais les sources se protègent.' }),
+
+  makeMCQ({ id:'g6fr-lec-076', chapterId:'g6fr-lecture', subsection:'inference', difficulty:4,
+    question:`${_TEXTE_G6_E}Pourquoi la biologiste marine mentionne-t-elle les "émissions mondiales de carbone" plutôt que des mesures uniquement locales à Maurice ?`,
+    options:[
+      'Parce qu\'elle est payée par une organisation internationale',
+      'Parce que le réchauffement climatique est un problème global — les actions mauriciennes seules ne peuvent pas sauver les coraux',
+      'Parce qu\'elle pense que Maurice ne contribue pas aux émissions de carbone',
+      'Parce que les restrictions de pêche locales sont déjà suffisantes'
+    ],
+    answer:'Parce que le réchauffement climatique est un problème global — les actions mauriciennes seules ne peuvent pas sauver les coraux',
+    hint:'Réfléchissez : si la cause du problème est mondiale, une solution locale peut-elle suffire ?',
+    explanation:'La biologiste souligne que les coraux meurent à cause du <b>réchauffement climatique</b>, lui-même causé par les émissions de CO₂ à l\'échelle mondiale. Même si Maurice adoptait les restrictions de pêche les plus strictes, les coraux continueraient à blanchir si les températures mondiales continuent d\'augmenter. C\'est un argument pour une <b>action internationale coordonnée</b>.' }),
+
+  makeMCQ({ id:'g6fr-lec-077', chapterId:'g6fr-lecture', subsection:'biais', difficulty:4,
+    question:`${_TEXTE_G6_E}Cet article présente-t-il le plan du gouvernement de façon équilibrée ? Justifiez votre réponse.`,
+    options:[
+      'Oui — le journaliste présente les arguments du gouvernement et ceux des organisations de façon égale',
+      'Non — le journaliste donne plus de place aux critiques du plan qu\'au plan lui-même, suggérant une position plus sceptique',
+      'Oui — seul le gouvernement a le droit de s\'exprimer sur cette question',
+      'Non — le journaliste soutient ouvertement le plan et critique les organisations environnementales'
+    ],
+    answer:'Non — le journaliste donne plus de place aux critiques du plan qu\'au plan lui-même, suggérant une position plus sceptique',
+    hint:'Comparez l\'espace accordé au gouvernement par rapport aux organisations environnementales et à la biologiste.',
+    explanation:'Le plan gouvernemental est mentionné en une demi-phrase. En revanche, les <b>critiques</b> occupent tout le troisième paragraphe (deux sources : les organisations environnementales + la biologiste). Cette disproportion dans l\'espace accordé révèle un <b>biais éditorial</b> : l\'article est plus favorable à la position critique qu\'à celle du gouvernement, même si ce biais n\'est pas dit explicitement.' })
 );

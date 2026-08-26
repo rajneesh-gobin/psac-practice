@@ -2,7 +2,7 @@
 // Grade 6 English - Chapter: Reading & Critical Thinking
 // IDs format: g6eng-comp-NNN
 
-const _PASSAGE_G6 = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65">
+const _PASSAGE_G6 = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
 <b style="color:#0e7490">Read the passage carefully, then answer the question.</b><br><br>
 <b>Plastic - A Modern Menace</b><br><br>
 Every year, over eight million tonnes of plastic waste enter the world's oceans. Marine creatures such as sea turtles, dolphins and seabirds often mistake plastic bags for food. When they swallow plastic, it blocks their digestive systems and can be fatal. Tiny fragments called microplastics have been found in fish that humans eat, raising serious concerns about the food chain.<br><br>
@@ -113,7 +113,7 @@ STATIC_QUESTIONS.push(
 
 );
 
-const _PASSAGE_DODO = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65">
+const _PASSAGE_DODO = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
 <b style="color:#0e7490">Read the passage carefully, then answer the questions.</b><br><br>
 <b>The Dodo - Mauritius's Lost Bird</b><br><br>
 The dodo was a large, flightless bird that lived only on the island of Mauritius. Standing nearly a metre tall and weighing up to twenty-three kilograms, it had short, stubby wings that were completely useless for flight. Its rounded body and peculiar beak gave it an appearance unlike any other bird on Earth. Scientists believe the dodo evolved without the ability to fly because Mauritius had no land predators - there was simply no need to escape from danger by air.<br><br>
