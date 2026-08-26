@@ -355,8 +355,10 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 .ch-status.mid  { color: #b45309; }
 .ch-status.good { color: #15803d; }
 .ch-status.lock { color: #b45309; }
+.ch-status.resume { color: #ea580c; }
 .dark .ch-status.low { color: #60a5fa; } .dark .ch-status.mid { color: #fbbf24; }
 .dark .ch-status.good { color: #4ade80; } .dark .ch-status.lock { color: #fcd34d; }
+.dark .ch-status.resume { color: #fb923c; }
 
 .ch-bar { height: 5px; border-radius: 9999px; background: #e2e8f0; overflow: hidden; }
 .dark .ch-bar { background: #334155; }
@@ -385,7 +387,19 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 .dark .ch-flag { color: #94a3b8; }
 .dark .ch-flag.on { color: #f87171; }
 
-/* Bonus + locked variants */
+/* Discard-and-restart: sits left of the flag, same pill treatment, only
+   rendered at all when the chapter actually has paused progress. */
+.ch-restart {
+  position: absolute; top: 0.4rem; right: 2.1rem; z-index: 2;
+  background: none; border: 0; cursor: pointer; line-height: 1;
+  font-size: 0.9rem; color: #64748b; padding: 0.3rem;
+  border-radius: 9999px; transition: color 0.15s, background 0.15s;
+}
+.ch-restart:hover { color: #ea580c; background: rgba(234,88,12,0.1); }
+.dark .ch-restart { color: #94a3b8; }
+.dark .ch-restart:hover { color: #fb923c; }
+
+/* Bonus + locked + paused variants */
 .ch-card.is-bonus { background: linear-gradient(135deg, #fffbeb, #fef3c7); border-color: #fcd34d; }
 .dark .ch-card.is-bonus { background: linear-gradient(135deg, #1c1509, #261a05); border-color: #b45309; }
 .ch-card.is-bonus::before { background: #f59e0b; }
@@ -393,6 +407,11 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 .ch-card.is-locked::before { background: #cbd5e1; }
 .ch-card.is-locked:hover { transform: none; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 .ch-card.is-locked .ch-hit { cursor: not-allowed; }
+/* Paused wins over the bonus tint if a chapter is somehow both - the
+   actionable "come back to this" state matters more than the badge. */
+.ch-card.is-paused { background: linear-gradient(135deg, #fff7ed, #ffedd5); border-color: #fdba74; }
+.dark .ch-card.is-paused { background: linear-gradient(135deg, #271707, #34190a); border-color: #c2410c; }
+.ch-card.is-paused::before { background: #ea580c; }
 .ch-card.is-locked .ch-cta { color: #64748b; }
 
 /* Section divider between the main chapters and the bonus ones */

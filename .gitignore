@@ -13,3 +13,6 @@ netlify/question-bundles/
 Thumbs.db
 *.swp
 *.swo
+
+# Local Netlify folder
+.netlify

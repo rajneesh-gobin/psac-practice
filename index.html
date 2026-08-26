@@ -1377,6 +1377,7 @@
                 <button id="exam-flag-btn" class="btn-ghost text-sm">🚩</button>
                 <button id="exam-hint-btn" class="btn-ghost text-sm">💡 Hint</button>
                 <button onclick="openReportModal()" title="Report a problem with this question" class="btn-ghost text-sm text-gray-500 dark:text-gray-400 hover:text-red-500">⚑ Report</button>
+                <button onclick="pauseExamForLater()" title="Save your progress and come back later" class="btn-ghost text-sm">⏸️ Continue Later</button>
               </div>
             </div>
             <div id="exam-hint-box" class="hidden mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl text-sm">
@@ -1478,7 +1479,13 @@
          off the bottom of the screen. Everything now reads top to bottom in the
          order it is used: where am I → the question → answer → tools → act. -->
     <div id="screen-practice" class="screen hidden">
-      <button id="practice-back-btn" class="back-btn mb-3">← Back to Chapters</button>
+      <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+        <button id="practice-back-btn" class="back-btn">← Back to Chapters</button>
+        <div class="flex items-center gap-2">
+          <button id="practice-prev-btn" class="btn-ghost text-sm" disabled title="Go back to review a question you already answered">← Prev</button>
+          <button id="practice-pause-btn" onclick="pausePracticeForLater()" class="btn-ghost text-sm" title="Save your progress and come back later">⏸️ Continue Later</button>
+        </div>
+      </div>
 
       <div class="pr-wrap">
         <!-- Status: chapter, position, progress, level, session -->
@@ -3134,8 +3141,9 @@
 
       <!-- QR code -->
       <div class="flex flex-col items-center mb-4">
-        <div class="text-xs text-gray-400 mb-2">or scan this QR code</div>
+        <div id="friend-qr-label" class="text-xs text-gray-400 mb-2">or scan this QR code</div>
         <canvas id="friend-qr-canvas" class="rounded-xl border border-gray-100 dark:border-gray-700"></canvas>
+        <p id="friend-qr-fallback" class="hidden text-xs text-amber-500 dark:text-amber-400 text-center max-w-[220px]">QR code unavailable right now — the code above still works.</p>
       </div>
 
       <div class="flex flex-col gap-2 mb-4">

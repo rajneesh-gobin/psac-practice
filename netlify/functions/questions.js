@@ -219,6 +219,41 @@ function _authCacheSet(key, uid) {
   _authCache.set(key, { uid, at: Date.now() });
 }
 
+// ── Rate limiting ──────────────────────────────────────────────────────────
+// This function's whole job is handing back question content in the clear -
+// the browser has to be able to grade an answer, so the correct answer ships
+// with every question, and no amount of client-side obfuscation changes that
+// for someone reading the response in devtools. What this DOES stop is bulk
+// scraping: a script looping every subject × grade × chapter × difficulty
+// combination to rip the whole bank in one burst, which looks nothing like a
+// real student (the client fetches a subject once and caches it client-side
+// for 7 days - see _CACHE_VERSION in question_loader.js).
+//
+// In-memory and per-warm-container, same tradeoff as _authCache/_planCache
+// above: it resets on a cold start and can't see across parallel warm
+// instances, so a determined attacker spreading requests across many
+// concurrent invocations can partially evade it. That is a real gap - a
+// durable counter (a Supabase table, checked/incremented per request) would
+// close it, at the cost of a DB round trip on every call. This is the cheap
+// backstop that stops the common case for free; upgrade it if scraping is
+// actually observed rather than paying that cost pre-emptively.
+const _rateLimit    = new Map(); // uid → { count, windowStart }
+const _RATE_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+const _RATE_MAX       = 40;            // generous for real use - see comment above
+
+function _isRateLimited(uid) {
+  if (!uid) return false; // no identity ⇒ the auth check earlier already rejected the call
+  if (_rateLimit.size > 2000) _rateLimit.clear(); // same unbounded-growth guard as _authCache
+  const now = Date.now();
+  const hit = _rateLimit.get(uid);
+  if (!hit || now - hit.windowStart > _RATE_WINDOW_MS) {
+    _rateLimit.set(uid, { count: 1, windowStart: now });
+    return false;
+  }
+  hit.count++;
+  return hit.count > _RATE_MAX;
+}
+
 // Returns the whole global_settings blob, not just the enforcement flag: the
 // same fetch also carries disabled_chapters, and doing it twice would double the
 // round trips on a cold Lambda.
@@ -333,6 +368,10 @@ exports.handler = async (event) => {
       _authCacheSet('stu:' + studentId, studentId);
     }
     _uid = studentId;
+  }
+
+  if (_isRateLimited(_uid)) {
+    return { statusCode: 429, headers, body: JSON.stringify({ error: 'Too many requests. Please slow down and try again shortly.' }) };
   }
 
   // ── Admin + plan enforcement ───────────────────────────────────────────────

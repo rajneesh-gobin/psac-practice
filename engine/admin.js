@@ -143,19 +143,31 @@ const AdminPanel = (() => {
   }
 
   // ── Members ────────────────────────────────
+  // Populated by loadMembers() before _renderMembers() runs, so the per-member
+  // "Assign a plan" <select> always lists whatever is actually in the plans
+  // table - it used to be three hardcoded <option>s (free/starter/premium)
+  // that happened to match today's rows by coincidence, and would have quietly
+  // gone stale the moment a plan was renamed, added, or removed from the Plans
+  // tab, with no error - the dropdown would just keep offering the old names.
+  let _plansForSelect = [];
+
   async function loadMembers() {
     if (!_sb) return;
     const el = document.getElementById('admin-members-list');
     if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
-    const { data, error } = await _sb.from('profiles')
-      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code')
-      .eq('role', 'parent')
-      .order('created_at', { ascending: false });
-    if (error) {
+    const [profilesRes, plansRes] = await Promise.all([
+      _sb.from('profiles')
+        .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code')
+        .eq('role', 'parent')
+        .order('created_at', { ascending: false }),
+      _sb.from('plans').select('id, name, price_mur').order('price_mur'),
+    ]);
+    if (profilesRes.error) {
       if (el) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load members.</p>';
       return;
     }
-    _members = data || [];
+    _plansForSelect = plansRes.data || [];
+    _members = profilesRes.data || [];
     _renderMembers(_members);
   }
 
@@ -241,9 +253,7 @@ const AdminPanel = (() => {
           <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold shrink-0">💳 Plan:</span>
           <span id="plan-label-${m.id}" class="text-xs text-gray-500 dark:text-gray-400">loading…</span>
           <select id="plan-sel-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
-            <option value="free">Free</option>
-            <option value="starter">Starter</option>
-            <option value="premium">Premium</option>
+            ${_plansForSelect.map(p => `<option value="${_esc(p.id)}">${_esc(p.name)}${p.price_mur ? ` (Rs ${p.price_mur}/mo)` : ' (Free)'}</option>`).join('')}
           </select>
           <select id="plan-months-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
             <option value="1">1 month</option>
@@ -1256,7 +1266,7 @@ const AdminPanel = (() => {
       const diff     = _el('qm-difficulty').value;
       const search   = (_el('qm-search').value || '').trim();
 
-      let q = window._sb.from('questions')
+      let q = _sb.from('questions')
         .select('id,subject_id,chapter_id,difficulty,type,data,protected')
         .eq('is_past_paper', false)
         .order('subject_id').order('chapter_id').order('difficulty')
@@ -1323,7 +1333,7 @@ const AdminPanel = (() => {
       qmFormGradeChange();
 
       if (id) {
-        const { data, error } = await window._sb.from('questions').select('*').eq('id', id).maybeSingle();
+        const { data, error } = await _sb.from('questions').select('*').eq('id', id).maybeSingle();
         if (error || !data) { toast('Could not load question.', 2000); return; }
         const q = data.data || {};
         _el('qmf-id').value          = data.id;
@@ -1425,9 +1435,9 @@ const AdminPanel = (() => {
       try {
         const ext  = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
         const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-        const { error } = await window._sb.storage.from('question-images').upload(name, file, { cacheControl: '31536000', upsert: false });
+        const { error } = await _sb.storage.from('question-images').upload(name, file, { cacheControl: '31536000', upsert: false });
         if (error) throw error;
-        const { data: urlData } = window._sb.storage.from('question-images').getPublicUrl(name);
+        const { data: urlData } = _sb.storage.from('question-images').getPublicUrl(name);
         const url = urlData.publicUrl;
         const ta  = _el('qmf-question');
         const pos = ta.selectionStart || ta.value.length;
@@ -1484,7 +1494,7 @@ const AdminPanel = (() => {
         data, imported_at: new Date().toISOString(),
       };
 
-      const { error } = await window._sb.from('questions').upsert(row, { onConflict: 'id' });
+      const { error } = await _sb.from('questions').upsert(row, { onConflict: 'id' });
       if (error) { toast('Save failed: ' + error.message, 3000); return; }
 
       toast('Question saved ✅', 1500);
@@ -1494,7 +1504,7 @@ const AdminPanel = (() => {
 
     // ── Protection toggle ─────────────────────────────────────────────────
     async function qmToggleProtection(id, protect) {
-      const { error } = await window._sb.from('questions').update({ protected: protect }).eq('id', id);
+      const { error } = await _sb.from('questions').update({ protected: protect }).eq('id', id);
       if (error) { toast('Failed: ' + error.message, 2500); return; }
       toast(protect ? '🔒 Protected' : '🔓 Unprotected', 1500);
       _fetchAndRender(true);
@@ -1503,7 +1513,7 @@ const AdminPanel = (() => {
     // ── Delete ────────────────────────────────────────────────────────────
     async function qmDelete(id) {
       if (!confirm(`Delete question "${id}"?\nThis cannot be undone.`)) return;
-      const { error } = await window._sb.from('questions').delete().eq('id', id);
+      const { error } = await _sb.from('questions').delete().eq('id', id);
       if (error) { toast('Delete failed: ' + error.message, 3000); return; }
       toast('Deleted ✅', 1500);
       qmSearch();

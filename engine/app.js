@@ -6,7 +6,7 @@
 // ── STATE ─────────────────────────────────────
 const S = {
   exam: { qs: [], answers: {}, flagged: new Set(), idx: 0, timer: null, duration: 0, endTime: null },
-  practice: { chapterId: null, difficulty: 1, qs: [], idx: 0, hintShown: false, session: { attempted: 0, correct: 0 } },
+  practice: { chapterId: null, difficulty: 1, qs: [], idx: 0, answers: {}, hintShown: false, session: { attempted: 0, correct: 0 } },
   currentScreen: 'dashboard',
 };
 
@@ -316,70 +316,119 @@ function _makeImgsZoomable(container) {
 }
 
 // ── SESSION RESUME ─────────────────────────────────────────────────────────
+// A student can have MULTIPLE paused practice sessions at once - one per
+// chapter they tapped "Continue Later" on - plus at most one paused exam
+// (an exam spans the whole subject, not one chapter, so only one at a time
+// makes sense). This used to be a single localStorage slot per student, so
+// pausing chapter B silently overwrote chapter A's paused progress - there
+// was nowhere for a second one to go. Now one key still holds everything for
+// the student, but shaped as { exam, practice: { [chapterId]: {...} } }, so
+// each chapter gets its own entry. The chapter-select cards
+// (renderChapterSelect()) read practice entries directly by chapterId; the
+// dashboard banner below shows the exam (if any) or the most recently paused
+// chapter, plus a count of anything else still waiting.
 const _RESUME_TTL = 24 * 60 * 60 * 1000;
-let _pendingResume = null;
+
+function _resumeKey() { return 'mm_resume_' + ACTIVE_STUDENT_ID; }
+
+function _readResumeStore() {
+  if (!ACTIVE_STUDENT_ID) return { exam: null, practice: {} };
+  try {
+    const raw = localStorage.getItem(_resumeKey());
+    const parsed = raw ? JSON.parse(raw) : {};
+    return { exam: parsed.exam || null, practice: parsed.practice || {} };
+  } catch(e) { return { exam: null, practice: {} }; }
+}
+
+function _writeResumeStore(store) {
+  if (!ACTIVE_STUDENT_ID) return;
+  try { localStorage.setItem(_resumeKey(), JSON.stringify(store)); } catch(e) {}
+}
+
+// Drops anything past _RESUME_TTL before every read, so a week-old paused
+// chapter never resurfaces and there is no separate cleanup pass to forget.
+function _pruneResumeStore(store) {
+  const now = Date.now();
+  if (store.exam && now - store.exam.ts > _RESUME_TTL) store.exam = null;
+  for (const id of Object.keys(store.practice || {})) {
+    if (now - store.practice[id].ts > _RESUME_TTL) delete store.practice[id];
+  }
+  return store;
+}
 
 function _saveResume() {
   if (!ACTIVE_STUDENT_ID) return;
-  try {
-    const key = 'mm_resume_' + ACTIVE_STUDENT_ID;
-    if (S.exam && S.exam.qs && S.exam.qs.length) {
-      localStorage.setItem(key, JSON.stringify({
-        type: 'exam', subjectId: ACTIVE_PACK?.id, examType: S.exam.type,
-        qIds: S.exam.qs.map(q => q.id), idx: S.exam.idx,
-        answers: S.exam.answers, flagged: [...(S.exam.flagged || [])],
-        endTime: S.exam.endTime, ts: Date.now()
-      }));
-    } else if (S.practice && S.practice.chapterId) {
-      localStorage.setItem(key, JSON.stringify({
-        type: 'practice', subjectId: ACTIVE_PACK?.id,
-        chapterId: S.practice.chapterId, ts: Date.now()
-      }));
-    }
-  } catch(e) {}
+  const store = _pruneResumeStore(_readResumeStore());
+  if (S.exam && S.exam.qs && S.exam.qs.length) {
+    store.exam = {
+      subjectId: ACTIVE_PACK?.id, examType: S.exam.type,
+      qIds: S.exam.qs.map(q => q.id), idx: S.exam.idx,
+      answers: S.exam.answers, flagged: [...(S.exam.flagged || [])],
+      endTime: S.exam.endTime, ts: Date.now()
+    };
+  } else if (S.practice && S.practice.chapterId && S.practice.qs && S.practice.qs.length) {
+    store.practice[S.practice.chapterId] = {
+      subjectId: ACTIVE_PACK?.id,
+      qIds: S.practice.qs.map(q => q.id), idx: S.practice.idx,
+      answers: S.practice.answers || {}, ts: Date.now()
+    };
+  }
+  _writeResumeStore(store);
 }
 
-function _clearResume() {
+// Each clears exactly the one thing its caller means to abandon (exiting an
+// exam, leaving a chapter, finishing a round) - never the whole store, or
+// abandoning one paused chapter would wipe out every other paused chapter too.
+function _clearExamResume() {
   if (!ACTIVE_STUDENT_ID) return;
-  try { localStorage.removeItem('mm_resume_' + ACTIVE_STUDENT_ID); } catch(e) {}
-  _pendingResume = null;
-  const slot = document.getElementById('resume-banner-slot');
-  if (slot) slot.innerHTML = '';
+  const store = _readResumeStore();
+  store.exam = null;
+  _writeResumeStore(store);
 }
 
-function _getResume() {
-  if (!ACTIVE_STUDENT_ID) return null;
-  try {
-    const raw = localStorage.getItem('mm_resume_' + ACTIVE_STUDENT_ID);
-    if (!raw) return null;
-    const saved = JSON.parse(raw);
-    if (Date.now() - saved.ts > _RESUME_TTL) { _clearResume(); return null; }
-    _pendingResume = saved;
-    return saved;
-  } catch(e) { return null; }
+function _clearPracticeResume(chapterId) {
+  if (!ACTIVE_STUDENT_ID || !chapterId) return;
+  const store = _readResumeStore();
+  delete store.practice[chapterId];
+  _writeResumeStore(store);
 }
 
-async function _doResume() {
-  const saved = _pendingResume;
-  _clearResume();
-  if (!saved) return;
+function _getChapterResume(chapterId) {
+  if (!ACTIVE_STUDENT_ID || !chapterId) return null;
+  const store = _pruneResumeStore(_readResumeStore());
+  return store.practice[chapterId] || null;
+}
+
+// kind: 'exam' | 'practice'. chapterId required (and ignored) for practice.
+// Reads fresh from storage every call rather than a cached "pending" handoff
+// set by whichever banner button was clicked last - with multiple resumable
+// chapters now possible at once, a single stashed variable could not safely
+// track which one was meant.
+async function _doResume(kind, chapterId) {
+  const store = _pruneResumeStore(_readResumeStore());
+  const saved = kind === 'exam' ? store.exam : store.practice[chapterId];
+  if (!saved) { toast('That session is no longer available.', 2500); return; }
+
   // Loading the questions is not enough: CHAPTERS/ACTIVE_PACK must point at the
   // saved subject too, or resuming a session started in another subject renders
   // the chapter name, badges and help from whichever subject is open now.
-  // startAssignment() already does this; resume was the one entry point missing it.
   if (saved.subjectId && typeof activateSubjectPack === 'function') {
     activateSubjectPack(saved.subjectId);
   }
   if (saved.subjectId && typeof QuestionLoader !== 'undefined') {
     await QuestionLoader.loadSubject(saved.subjectId);
   }
-  if (saved.type === 'practice') {
-    startChapterDirect(saved.chapterId);
-  } else if (saved.type === 'exam') {
-    const qMap = {};
-    STATIC_QUESTIONS.forEach(q => { if (q) qMap[q.id] = q; });
-    const qs = (saved.qIds || []).map(id => qMap[id]).filter(Boolean);
-    if (!qs.length) { toast('Could not restore exam — please start a new one.', 3000); return; }
+  const qMap = {};
+  STATIC_QUESTIONS.forEach(q => { if (q) qMap[q.id] = q; });
+  const qs = (saved.qIds || []).map(id => qMap[id]).filter(Boolean);
+  if (!qs.length) { toast('Could not restore that session — please start again.', 3000); return; }
+
+  if (kind === 'practice') {
+    // Handed to startChapterDirect via the one-shot _practiceResume - it adopts
+    // this instead of drawing a fresh batch. See its definition for why.
+    _practiceResume = { qs, idx: saved.idx || 0, answers: saved.answers || {} };
+    startChapterDirect(chapterId);
+  } else {
     S.exam.qs      = qs;
     S.exam.answers = saved.answers || {};
     S.exam.flagged = new Set(saved.flagged || []);
@@ -395,32 +444,63 @@ async function _doResume() {
   }
 }
 
+function _resumeSubjectLabel(subjectId) {
+  const p = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(x => x.id === subjectId);
+  return p ? `${p.subject} (Grade ${p.grade})` : '';
+}
+
 function _renderResumeBanner() {
   const slot = document.getElementById('resume-banner-slot');
   if (!slot) return;
-  const saved = _getResume();
+  const store = _pruneResumeStore(_readResumeStore());
+  _writeResumeStore(store); // persist the prune so a stale entry doesn't keep reappearing
+  const practiceEntries = Object.entries(store.practice); // [chapterId, saved][]
 
-  if (saved) {
-    const chName = saved.type === 'exam'
-      ? (saved.examType === 'quick' ? 'Quick Exam' : 'Full Exam')
-      : (CHAPTERS.find(c => c.id === saved.chapterId)?.name || 'Practice');
-    const detail = saved.type === 'exam'
-      ? `Question ${(saved.idx || 0) + 1} of ${(saved.qIds || []).length}`
-      : 'Practice session';
+  if (store.exam || practiceEntries.length) {
+    let title, detail, continueOnclick, dismissOnclick, extra = '';
+
+    if (store.exam) {
+      const s = store.exam;
+      const subj = _resumeSubjectLabel(s.subjectId);
+      title  = `Continue where you left off${subj ? ` — ${subj}` : ''}`;
+      detail = `${s.examType === 'quick' ? 'Quick Exam' : 'Full Exam'} · Question ${(s.idx || 0) + 1} of ${(s.qIds || []).length}`;
+      continueOnclick = `_doResume('exam')`;
+      dismissOnclick  = `_clearExamResume(); _renderResumeBanner();`;
+      if (practiceEntries.length) {
+        extra = `+ ${practiceEntries.length} paused practice chapter${practiceEntries.length > 1 ? 's' : ''} — see Chapter Practice`;
+      }
+    } else {
+      // Most recently paused chapter leads; the rest are still each individually
+      // resumable from their own chapter-select card, this is just the shortcut.
+      practiceEntries.sort((a, b) => b[1].ts - a[1].ts);
+      const [chapterId, s] = practiceEntries[0];
+      const subj = _resumeSubjectLabel(s.subjectId);
+      const chName = (typeof CHAPTERS !== 'undefined' ? CHAPTERS : []).find(c => c.id === chapterId)?.name || 'Practice';
+      title  = `Continue where you left off${subj ? ` — ${subj}` : ''}`;
+      detail = `${chName} · Question ${(s.idx || 0) + 1} of ${(s.qIds || []).length}`;
+      continueOnclick = `_doResume('practice','${chapterId}')`;
+      dismissOnclick  = `_clearPracticeResume('${chapterId}'); _renderResumeBanner();`;
+      if (practiceEntries.length > 1) {
+        const rest = practiceEntries.length - 1;
+        extra = `+ ${rest} more paused chapter${rest > 1 ? 's' : ''} — see Chapter Practice`;
+      }
+    }
+
     slot.innerHTML = `
       <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-5 mb-5 text-white shadow-xl">
         <div class="flex items-center gap-4">
           <div class="text-4xl select-none shrink-0">▶️</div>
           <div class="flex-1 min-w-0">
-            <div class="font-bold text-base mb-0.5">Continue where you left off</div>
-            <div class="text-sm opacity-90 truncate">${chName} · ${detail}</div>
+            <div class="font-bold text-base mb-0.5">${title}</div>
+            <div class="text-sm opacity-90 truncate">${detail}</div>
+            ${extra ? `<div class="text-xs opacity-75 mt-1">${extra}</div>` : ''}
           </div>
         </div>
         <div class="flex gap-2 mt-4">
-          <button onclick="_doResume()" class="flex-1 bg-white text-green-700 font-bold py-3 rounded-xl hover:bg-green-50 transition-colors shadow text-sm">
+          <button onclick="${continueOnclick}" class="flex-1 bg-white text-green-700 font-bold py-3 rounded-xl hover:bg-green-50 transition-colors shadow text-sm">
             Continue →
           </button>
-          <button onclick="_clearResume()" class="px-4 py-3 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors">
+          <button onclick="${dismissOnclick}" class="px-4 py-3 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors">
             Dismiss
           </button>
         </div>
@@ -2594,15 +2674,52 @@ async function openFriendInviteModal() {
   if (!modal) return;
   modal.classList.remove('hidden');
 
-  if (!_friendCode) _friendCode = await Store.getMyFriendCode();
+  const codeEl   = document.getElementById('friend-code-display');
+  const canvas   = document.getElementById('friend-qr-canvas');
+  const qrLabel  = document.getElementById('friend-qr-label');
+  const qrFail   = document.getElementById('friend-qr-fallback');
 
-  const codeEl = document.getElementById('friend-code-display');
-  if (codeEl && _friendCode) codeEl.textContent = _friendCode.match(/.{1,4}/g).join(' ');
+  if (!_friendCode) {
+    if (codeEl) { codeEl.textContent = '···'; codeEl.classList.remove('text-red-400'); }
+    _friendCode = await Store.getMyFriendCode();
+  }
 
-  const canvas = document.getElementById('friend-qr-canvas');
-  if (canvas && _friendCode && typeof QRCode !== 'undefined') {
+  // Both the code and the QR (which just encodes it) depend on this one
+  // fetch. It used to fail silently - Store.getMyFriendCode() swallows its
+  // own error and returns null - leaving the placeholder "···" up top and a
+  // blank canvas below a label that still says "scan this QR code", with
+  // nothing telling anyone it didn't load. Now a failure is visible and
+  // tappable to retry, same button that copies the code once it has one.
+  if (!_friendCode) {
+    if (codeEl) { codeEl.textContent = 'Tap to retry'; codeEl.classList.add('text-red-400'); }
+    if (qrLabel) qrLabel.classList.add('hidden');
+    if (canvas)  canvas.classList.add('hidden');
+    if (qrFail)  qrFail.classList.remove('hidden');
+    toast('Could not load your invite code. Check your connection and try again.', 3000);
+    return;
+  }
+
+  if (codeEl) codeEl.textContent = _friendCode.match(/.{1,4}/g).join(' ');
+  if (qrLabel) qrLabel.classList.remove('hidden');
+  if (canvas)  canvas.classList.remove('hidden');
+  if (qrFail)  qrFail.classList.add('hidden');
+
+  if (canvas && typeof QRCode !== 'undefined') {
     const link = `${location.origin}${location.pathname}?friend=${_friendCode}`;
-    QRCode.toCanvas(canvas, link, { width: 180, margin: 1, color: { dark: '#1e293b', light: '#ffffff' } }, () => {});
+    QRCode.toCanvas(canvas, link, { width: 180, margin: 1, color: { dark: '#1e293b', light: '#ffffff' } }, err => {
+      if (err) {
+        console.warn('[QR] toCanvas failed:', err);
+        canvas.classList.add('hidden');
+        if (qrLabel) qrLabel.classList.add('hidden');
+        if (qrFail)  qrFail.classList.remove('hidden');
+      }
+    });
+  } else {
+    // qrcode CDN script never loaded (blocked, offline, slow network) -
+    // typeof QRCode === 'undefined' used to fail this exact same way: silently.
+    if (canvas)  canvas.classList.add('hidden');
+    if (qrLabel) qrLabel.classList.add('hidden');
+    if (qrFail)  qrFail.classList.remove('hidden');
   }
 }
 
@@ -2638,7 +2755,9 @@ async function shareFriendLink() {
 }
 
 async function _copyFriendCode() {
-  if (!_friendCode) return;
+  // No code loaded means the earlier fetch failed (see openFriendInviteModal) -
+  // the button already reads "Tap to retry" in that state, so make it one.
+  if (!_friendCode) { openFriendInviteModal(); return; }
   try { await navigator.clipboard.writeText(_friendCode); toast('Code copied! 📋', 1500); }
   catch(_) { prompt('Your friend code:', _friendCode); }
 }
@@ -2992,6 +3111,12 @@ function _chapterCard(ch, borderColor) {
   const parentLocked = (DB.restrictions?.lockedChapters || []).includes(ch.id);
   const locked       = planLocked || parentLocked;
 
+  // A chapter paused via "Continue Later" (see pausePracticeForLater()) gets
+  // its own entry in the resume store, independent of every other chapter's -
+  // this is what makes pausing chapter A then chapter B keep BOTH resumable,
+  // instead of the second pause silently overwriting the first.
+  const resume = locked ? null : _getChapterResume(ch.id);
+
   const total = (typeof STATIC_QUESTIONS !== 'undefined')
     ? STATIC_QUESTIONS.filter(q => q && q.chapterId === ch.id).length : 0;
 
@@ -3001,17 +3126,20 @@ function _chapterCard(ch, borderColor) {
     `<span class="${i <= stars ? 'ch-star on' : 'ch-star'}">★</span>`).join('');
 
   const style = borderColor ? ` style="--ch-accent:${borderColor}"` : '';
-  const cls   = ['ch-card', isEnr ? 'is-bonus' : '', locked ? 'is-locked' : ''].filter(Boolean).join(' ');
+  const cls   = ['ch-card', isEnr ? 'is-bonus' : '', locked ? 'is-locked' : '', resume ? 'is-paused' : ''].filter(Boolean).join(' ');
 
   // Status line: one clear sentence per state, never two competing signals.
   let status;
   if (planLocked)        status = '<span class="ch-status lock">🔒 Upgrade to unlock</span>';
   else if (parentLocked) status = '<span class="ch-status lock">🔒 Locked by your parent</span>';
+  else if (resume)       status = `<span class="ch-status resume">⏸ Paused · Question ${(resume.idx || 0) + 1} of ${(resume.qIds || []).length}</span>`;
   else if (!attempted)   status = `<span class="ch-status new">Not started${total ? ` · ${total} questions` : ''}</span>`;
   else                   status = `<span class="ch-status ${tone}">${pct}% mastery · ${attempted} done</span>`;
 
   const hit = locked
     ? `<button class="ch-hit" onclick="toast('${planLocked ? '⭐ Upgrade your plan to access this chapter.' : '🔒 This chapter is locked by your parent.'}', 2500)" aria-label="${_profEsc(ch.name)} — locked"></button>`
+    : resume
+    ? `<button class="ch-hit" onclick="_doResume('practice','${ch.id}')" aria-label="Resume ${_profEsc(ch.name)}"></button>`
     : `<button class="ch-hit" onclick="startChapterDirect('${ch.id}')" aria-label="Practise ${_profEsc(ch.name)}"></button>`;
 
   return `<article class="${cls}"${style}>
@@ -3019,6 +3147,8 @@ function _chapterCard(ch, borderColor) {
     ${locked ? '' : `<button class="ch-flag${isFlagged ? ' on' : ''}" onclick="toggleChapterFlag('${ch.id}')"
       title="${isFlagged ? 'Remove flag' : 'Flag this chapter for your parent'}"
       aria-label="${isFlagged ? 'Remove flag' : 'Flag for parent'}">${isFlagged ? '🚩' : '⚐'}</button>`}
+    ${resume ? `<button class="ch-restart" onclick="event.stopPropagation();_discardChapterResume('${ch.id}')"
+      title="Discard paused progress and start fresh" aria-label="Discard paused progress and start fresh">↺</button>` : ''}
     <div class="ch-body">
       <div class="ch-head">
         <span class="ch-icon" aria-hidden="true">${ch.icon || '📘'}</span>
@@ -3033,10 +3163,16 @@ function _chapterCard(ch, borderColor) {
       </div>
       <div class="ch-foot">
         <span class="ch-stars" title="${stars} of 3">${starHtml}</span>
-        <span class="ch-cta">${locked ? 'Locked' : attempted ? 'Continue →' : 'Start →'}</span>
+        <span class="ch-cta">${locked ? 'Locked' : resume ? '▶ Resume →' : attempted ? 'Continue →' : 'Start →'}</span>
       </div>
     </div>
   </article>`;
+}
+
+function _discardChapterResume(chapterId) {
+  _clearPracticeResume(chapterId);
+  toast('Paused progress discarded — next tap starts fresh.', 2200);
+  renderChapterSelect();
 }
 
 function renderChapterSelect() {
@@ -3123,9 +3259,18 @@ window.startAssignment = function(assignId) {
 // assignment into the next ordinary practice session.
 let _practiceMode = null;
 
+// Same one-shot handover pattern as _practiceMode, set by _doResume() right
+// before it calls startChapterDirect() to resume a paused practice session at
+// its exact question instead of drawing a fresh batch. Carries the already
+// resolved question objects (not ids) plus idx/answers - startChapterDirect
+// just adopts them instead of the usual qs:[]/idx:0 reset.
+let _practiceResume = null;
+
 function startChapterDirect(chapterId, forceDiff) {
   const mode = _practiceMode;
   _practiceMode = null;
+  const resume = _practiceResume;
+  _practiceResume = null;
   const locked = DB.restrictions?.lockedChapters || [];
   if (locked.includes(chapterId)) { toast('🔒 This chapter is locked by your parent.', 2000); return; }
   if (!_planAllowsChapter(chapterId)) { toast('⭐ Upgrade your plan to access this chapter.', 3000); return; }
@@ -3133,10 +3278,10 @@ function startChapterDirect(chapterId, forceDiff) {
 
   // If questions for this chapter aren't loaded yet, wait for the active subject to load first
   const hasQs = STATIC_QUESTIONS.some(q => q && q.chapterId === chapterId);
-  if (!hasQs && typeof QuestionLoader !== 'undefined' && typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) {
+  if (!hasQs && !(resume && resume.qs.length) && typeof QuestionLoader !== 'undefined' && typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) {
     toast('⏳ Loading questions…', 2000);
     QuestionLoader.loadSubject(ACTIVE_PACK.id)
-      .then(() => { _practiceMode = mode; startChapterDirect(chapterId, forceDiff); })
+      .then(() => { _practiceMode = mode; _practiceResume = resume; startChapterDirect(chapterId, forceDiff); })
       .catch(() => toast('Could not load questions. Please try again.', 3000));
     return;
   }
@@ -3146,8 +3291,15 @@ function startChapterDirect(chapterId, forceDiff) {
 
   S.practice.chapterId = chapterId;
   S.practice.difficulty = diff;
-  S.practice.qs = [];
-  S.practice.idx = 0;
+  if (resume && resume.qs.length) {
+    S.practice.qs      = resume.qs;
+    S.practice.idx      = Math.min(resume.idx || 0, resume.qs.length - 1);
+    S.practice.answers  = resume.answers || {};
+  } else {
+    S.practice.qs = [];
+    S.practice.idx = 0;
+    S.practice.answers = {};
+  }
   S.practice.session = { attempted: 0, correct: 0 };
   S.practice.showAnswers = mode ? mode.showAnswers !== false : true;
   S.practice.showHints   = mode ? mode.showHints   !== false : true;
@@ -3178,6 +3330,7 @@ function startSearchPractice(questions, label) {
   S.practice.difficulty = null;
   S.practice.qs         = shuffle(questions.slice());
   S.practice.idx        = 0;
+  S.practice.answers    = {};
   S.practice.hintShown  = false;
   S.practice.session    = { attempted: 0, correct: 0 };
   S.practice.showAnswers = true;
@@ -3641,7 +3794,7 @@ document.getElementById('exam-hint-btn').addEventListener('click', () => {
 });
 document.getElementById('exit-exam-btn').addEventListener('click', () => {
   _confirmModal('Exit this exam? All your answers will be lost.', () => {
-    _clearResume();
+    _clearExamResume();
     clearInterval(S.exam.timer);
     S.exam.qs = []; S.exam.answers = {}; S.exam.flagged = new Set();
     showScreen('dashboard');
@@ -3652,7 +3805,7 @@ document.getElementById('submit-exam-btn').addEventListener('click', () => {
 });
 
 function submitExam() {
-  _clearResume();
+  _clearExamResume();
   _releaseWakeLock(); _unlockOrientation();
   clearInterval(S.exam.timer);
   saveCurrentExamAnswer();
@@ -3786,7 +3939,7 @@ document.getElementById('results-home-btn').addEventListener('click', () => show
 
 // ── PRACTICE MODE ─────────────────────────────
 document.getElementById('practice-back-btn').addEventListener('click', () => {
-  _clearResume();
+  _clearPracticeResume(S.practice.chapterId);
   showScreen('chapter-select');
 });
 
@@ -3839,6 +3992,7 @@ function loadPracticeQuestion() {
       S.practice.qs = getMixedQuestions(S.practice.chapterId, _maxD, 20);
     }
     S.practice.idx = 0;
+    S.practice.answers = {};
   }
   const q = S.practice.qs[S.practice.idx];
   if (!q || !q.question) {
@@ -3886,15 +4040,59 @@ function loadPracticeQuestion() {
   if (_hintBadge) _hintBadge.textContent = '3';
   document.getElementById('practice-q-counter').textContent =
     `Question ${S.practice.idx + 1} of ${S.practice.qs.length}`;
-  document.getElementById('practice-feedback').classList.add('hidden');
-  document.getElementById('practice-submit-btn').classList.remove('hidden');
-  document.getElementById('practice-skip-btn').classList.remove('hidden');
-  document.getElementById('practice-next-btn').classList.add('hidden');
-  // Or last question's "✅ Correct" would sit beside the new question.
-  document.getElementById('practice-verdict')?.classList.add('hidden');
-  renderAnswerArea(q, 'practice-answer-area', null, false);
+  const _prevBtn = document.getElementById('practice-prev-btn');
+  if (_prevBtn) _prevBtn.disabled = S.practice.idx === 0;
+
+  // Landing on a question already answered this session - via Prev, or a
+  // resumed "Continue Later" session - shows it read-only exactly as it
+  // looked right after submitting, instead of a blank answer area inviting a
+  // second attempt. Everything else (hint state, progress bar, resume save)
+  // above still runs the same either way.
+  const _saved = S.practice.answers[S.practice.idx];
+  if (_saved) {
+    _renderPracticeReviewAnswer(q, _saved);
+  } else {
+    document.getElementById('practice-feedback').classList.add('hidden');
+    document.getElementById('practice-submit-btn').classList.remove('hidden');
+    document.getElementById('practice-skip-btn').classList.remove('hidden');
+    document.getElementById('practice-next-btn').classList.add('hidden');
+    // Or last question's "✅ Correct" would sit beside the new question.
+    document.getElementById('practice-verdict')?.classList.add('hidden');
+    renderAnswerArea(q, 'practice-answer-area', null, false);
+  }
   _updateDiffBadge(q);
   updateSessionStats();
+}
+
+// Read-only recap for a question S.practice.answers already has a record of -
+// same visual language as the live feedback practiceSubmit()/practiceSkip()
+// show on first answer, just without the sound/haptics/combo/stat-counting
+// that only make sense the first time.
+function _renderPracticeReviewAnswer(q, saved) {
+  renderAnswerArea(q, 'practice-answer-area', saved.userAnswer, true);
+  const fb = document.getElementById('practice-feedback');
+  fb.className = `pr-feedback ${saved.correct ? 'feedback-correct' : 'feedback-wrong'}`;
+  if (saved.skipped) {
+    fb.innerHTML = S.practice.showAnswers === false
+      ? `<div class="flex items-center gap-3"><span class="text-2xl">⏭️</span><div class="font-bold">You skipped this one.</div></div>`
+      : `<div class="flex items-start gap-3"><span class="text-2xl">💡</span><div class="flex-1 min-w-0">
+           <div class="font-bold mb-1">You skipped this - answer: <span class="text-green-600 dark:text-green-400">${q.answer}</span></div>
+           <div class="text-sm">${q.explanation}</div>${_learnMoreHTML(q)}</div></div>`;
+  } else if (S.practice.showAnswers === false) {
+    fb.innerHTML = `<div class="flex items-center gap-3"><span class="text-2xl">${saved.correct ? '🎉' : '❌'}</span>
+      <div class="font-bold">${saved.correct ? 'You got this one right!' : 'Not quite, last time.'}</div></div>`;
+  } else {
+    const answerLine = q.type === 'symmetry'
+      ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
+      : `Your answer wasn't quite right. Correct answer: <b>${q.answer}</b>`;
+    fb.innerHTML = `<div class="flex items-start gap-3"><span class="text-2xl">${saved.correct ? '🎉' : '💡'}</span>
+      <div class="flex-1 min-w-0"><div class="font-bold mb-1">${saved.correct ? 'Correct! Well done!' : answerLine}</div>
+      <div class="text-sm">${q.explanation}</div>${_learnMoreHTML(q)}</div></div>`;
+  }
+  fb.classList.remove('hidden');
+  document.getElementById('practice-submit-btn').classList.add('hidden');
+  document.getElementById('practice-skip-btn').classList.add('hidden');
+  _revealNextButton(saved.correct, saved.skipped ? '👀 Reviewed' : undefined);
 }
 
 function _buildHints(q) {
@@ -3945,6 +4143,34 @@ document.getElementById('practice-hint-btn').addEventListener('click', () => {
 document.getElementById('practice-submit-btn').addEventListener('click', practiceSubmit);
 document.getElementById('practice-next-btn').addEventListener('click', practiceNext);
 document.getElementById('practice-skip-btn').addEventListener('click', practiceSkip);
+document.getElementById('practice-prev-btn').addEventListener('click', () => {
+  if (S.practice.idx > 0) { S.practice.idx--; loadPracticeQuestion(); }
+});
+
+// ── PAUSE / CONTINUE LATER ─────────────────────
+// Both modes already auto-save on every question render (_saveResume()) and
+// resume fully on return - this just makes that explicit and confirmable
+// instead of relying on the student trusting an invisible auto-save. Lands on
+// 'dashboard', not 'chapter-select': the resume banner (_renderResumeBanner())
+// only exists on the subject dashboard, so that is what "select this subject
+// and see the continue option" actually means - chapter-select is one tap
+// further in and would not show it at all.
+function pausePracticeForLater() {
+  if (!S.practice.qs.length) { showScreen('dashboard'); return; }
+  _saveResume();
+  const subj = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.subject) || 'this subject';
+  toast(`Saved — pick up where you left off next time you open ${subj}.`, 3500);
+  showScreen('dashboard');
+}
+
+function pauseExamForLater() {
+  if (!S.exam.qs.length) { showScreen('dashboard'); return; }
+  saveCurrentExamAnswer();
+  _saveResume();
+  const subj = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.subject) || 'this subject';
+  toast(`Saved — pick up where you left off next time you open ${subj}.`, 3500);
+  showScreen('dashboard');
+}
 
 function practiceSubmit() {
   const q = S.practice.qs[S.practice.idx];
@@ -3977,6 +4203,11 @@ function practiceSubmit() {
     return;
   }
   // ── PRACTICE MODE (existing behaviour) ──────────────────────────
+
+  // Record it so navigating back to this question (Prev, or a resumed
+  // "Continue Later" session) shows the read-only recap instead of a blank
+  // answer area - see _renderPracticeReviewAnswer().
+  S.practice.answers[S.practice.idx] = { userAnswer: ua, correct: ok, skipped: false };
 
   // Combo + sounds (before rendering so float appears at correct time)
   if (ok) {
@@ -4060,6 +4291,8 @@ function _revealNextButton(wasCorrect, verdict) {
 function practiceSkip() {
   const q = S.practice.qs[S.practice.idx];
   if (!q) return;
+  // See practiceSubmit() for why - same read-only-recap-on-Prev mechanism.
+  S.practice.answers[S.practice.idx] = { userAnswer: '', correct: false, skipped: true };
   _comboStreak = 0;
   _playSound('wrong'); _haptic('wrong');
   renderAnswerArea(q, 'practice-answer-area', '', true);
@@ -4227,11 +4460,17 @@ function _roundCompleteNext() {
     S.practice.qs = getMixedQuestions(S.practice.chapterId, _maxD, 20);
   }
   S.practice.idx = 0;
+  S.practice.answers = {};
   loadPracticeQuestion();
 }
 
 function _roundCompleteBack() {
   document.getElementById('modal-round-complete')?.classList.add('hidden');
+  // The round just finished (this modal only shows once all 20 are answered),
+  // so there is nothing left to offer "Continue where you left off" for -
+  // without this a completed round left a stale resume record pointing at its
+  // own last, fully-answered question.
+  _clearPracticeResume(S.practice.chapterId);
   showScreen('chapter-select');
 }
 
@@ -4312,6 +4551,7 @@ window.startAssignmentPractice = function() {
   S.practice.difficulty = cfg.difficulty || null;
   S.practice.qs         = questions;
   S.practice.idx        = 0;
+  S.practice.answers    = {};
   S.practice.hintShown  = false;
   S.practice.session    = { attempted: 0, correct: 0 };
 
@@ -4755,6 +4995,7 @@ window.startSubsectionPractice = function(chapterId, subsectionId, subsectionNam
   S.practice.difficulty = null; // subsection mode - no level filter
   S.practice.qs = getQuestionsForSubsection(chapterId, subsectionId, 20);
   S.practice.idx = 0;
+  S.practice.answers = {};
   S.practice.session = { attempted: 0, correct: 0 };
   loadPracticeQuestion();
   showScreen('practice');

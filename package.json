@@ -2,6 +2,9 @@
   "name": "psac-exam-practice",
   "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "dev": "node dev-server.js"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
     "web-push": "^3.6.7"
