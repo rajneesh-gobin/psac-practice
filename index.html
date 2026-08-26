@@ -197,6 +197,9 @@
         <button id="analytics-btn" class="icon-btn" title="Analytics">📊<span class="btn-label sm:hidden">Stats</span></button>
         <button id="pwa-install-btn" class="hidden items-center gap-1 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Install app on this device">📲 <span class="btn-label">Install</span></button>
         <button id="theme-toggle" class="icon-btn" title="Toggle theme"><span id="theme-icon">🌙</span><span class="btn-label sm:hidden">Theme</span></button>
+        <button id="header-profile-btn" onclick="showProfile()" class="hidden items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-xs font-semibold hover:bg-indigo-200 dark:hover:bg-indigo-800/60 transition-colors" title="My Profile">
+          <span id="header-profile-avatar" class="text-base select-none">👤</span><span id="header-profile-name" class="max-w-[90px] truncate hidden sm:inline">Account</span>
+        </button>
         <button id="header-logout-btn" onclick="Auth.logout()" class="hidden items-center gap-1 text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 sm:px-3 py-1.5 rounded-full hover:bg-red-200 dark:hover:bg-red-800/60 transition-colors" title="Logout">🚪 <span class="btn-label">Logout</span></button>
       </div>
     </div>
@@ -1386,10 +1389,32 @@
         </div>
       </div>
 
+      <!-- Admin Stats Bar -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow text-center">
+          <div class="text-2xl font-black text-indigo-600 dark:text-indigo-400" id="hstat-parents">-</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Members</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow text-center">
+          <div class="text-2xl font-black text-green-600 dark:text-green-400" id="hstat-students">-</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Students</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow text-center">
+          <div class="text-xl font-black text-purple-600 dark:text-purple-400 leading-tight" id="hstat-teachers">-</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Teachers</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow text-center">
+          <div class="text-2xl font-black text-red-600 dark:text-red-400" id="hstat-disabled">-</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Disabled</div>
+        </div>
+      </div>
+
       <!-- Tabs -->
       <div class="flex gap-1 mb-5 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-xl overflow-x-auto">
         <button onclick="AdminPanel.showTab('members')" data-tab="members"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg bg-white dark:bg-gray-600 shadow text-gray-800 dark:text-white transition-all whitespace-nowrap">👥 Members</button>
+        <button onclick="AdminPanel.showTab('teachers')" data-tab="teachers"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">👩‍🏫 Teachers</button>
         <button onclick="AdminPanel.showTab('content')" data-tab="content"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📚 Content</button>
         <button onclick="AdminPanel.showTab('stats')" data-tab="stats"
@@ -1419,6 +1444,15 @@
             class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
         </div>
         <div id="admin-members-list" class="space-y-2"></div>
+      </div>
+
+      <!-- Teachers tab -->
+      <div id="admin-tab-teachers" class="admin-tab-panel hidden">
+        <div class="flex justify-between items-center mb-3">
+          <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">All teacher accounts</p>
+          <button onclick="AdminPanel.loadTeachers()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
+        </div>
+        <div id="admin-teachers-list" class="space-y-2"></div>
       </div>
 
       <!-- Content tab -->
@@ -2118,6 +2152,13 @@
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- ══════════ PROFILE / ACCOUNT SETTINGS ══════════ -->
+    <div id="screen-profile" class="screen hidden">
+      <div id="profile-content" class="py-4">
+        <!-- Rendered by showProfile() -->
       </div>
     </div>
 

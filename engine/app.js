@@ -11,7 +11,7 @@ const S = {
 };
 
 // ── GAMIFICATION STATE ────────────────────────
-let _soundEnabled = true;
+let _soundEnabled = localStorage.getItem('pref_sound') !== 'false';
 let _comboStreak  = 0;
 let _audioCtx     = null;
 
@@ -596,6 +596,7 @@ async function enableNotifications() {
 // ── Mobile: Haptic feedback ─────────────────────────────────────────────────
 function _haptic(type) {
   if (!navigator.vibrate) return;
+  if (localStorage.getItem('pref_haptic') === 'false') return;
   if (type === 'correct')  navigator.vibrate(50);
   else if (type === 'wrong')    navigator.vibrate([80, 40, 80]);
   else if (type === 'levelup')  navigator.vibrate([50, 30, 50, 30, 150]);
@@ -859,12 +860,19 @@ function showScreen(id) {
   const hdr = document.querySelector('header');
   if (hdr) hdr.classList.toggle('hidden', hideHeader);
 
-  // Show logout button in header on all screens except auth/landing
+  // Show logout button + profile chip in header on all screens except auth/landing
   const logoutBtn = document.getElementById('header-logout-btn');
   if (logoutBtn) {
     const isAuthScreen = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
     logoutBtn.classList.toggle('hidden', isAuthScreen);
     logoutBtn.classList.toggle('flex',  !isAuthScreen);
+  }
+  const profileBtn = document.getElementById('header-profile-btn');
+  if (profileBtn) {
+    const isAuthSc   = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
+    const isLoggedIn = !!(ACTIVE_STUDENT_ID || (typeof Auth !== 'undefined' && Auth.getParentProfile()));
+    profileBtn.classList.toggle('hidden', isAuthSc || !isLoggedIn);
+    profileBtn.classList.toggle('flex',   !isAuthSc && isLoggedIn);
   }
 
   _updateBreadcrumb(id);
@@ -3635,4 +3643,329 @@ async function submitReport() {
   } else {
     toast('Could not send report. Check your connection.', 3000);
   }
+}
+
+// ── PROFILE / ACCOUNT SETTINGS ─────────────────────────────────────────────
+let _profileFromScreen = null;
+
+async function showProfile() {
+  _profileFromScreen = S.currentScreen;
+  showScreen('profile');
+  const container = document.getElementById('profile-content');
+  if (!container) return;
+  container.innerHTML = '<div class="flex justify-center py-16"><div class="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin"></div></div>';
+  if (ACTIVE_STUDENT_ID) {
+    await _renderStudentProfile(container);
+  } else {
+    await _renderParentProfile(container);
+  }
+}
+
+function _profileBack() {
+  const dest = _profileFromScreen && _profileFromScreen !== 'profile' ? _profileFromScreen : (ACTIVE_STUDENT_ID ? 'dashboard' : 'parent');
+  showScreen(dest);
+}
+
+function _profEsc(s) {
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : String(s);
+  return d.innerHTML;
+}
+
+function _profileSaved(btn) {
+  const label = btn.dataset.label || btn.textContent;
+  btn.dataset.label = label;
+  btn.textContent = 'Saved ✓';
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = label; btn.disabled = false; }, 2200);
+}
+
+// ── Student profile view ─────────────────────────────────
+async function _renderStudentProfile(container) {
+  const account = typeof Auth !== 'undefined' ? Auth.getActiveAccount() : null;
+  const name    = account?.name || DB.display_name || 'Student';
+  const avatar  = account?.avatar || DB.avatar || '🧒';
+  const grade   = account?.grade  || DB.grade  || '';
+  const restricted = !!(DB.restrictions?.disabled);
+
+  let expiresAt = null;
+  if (_sb && ACTIVE_STUDENT_ID) {
+    try {
+      const { data } = await _sb.from('students').select('expires_at').eq('id', ACTIVE_STUDENT_ID).maybeSingle();
+      expiresAt = data?.expires_at || null;
+    } catch(_) {}
+  }
+
+  const avatarList = ['🧒','👧','🧑','👦','🌟','🎓','🦁','🐯','🦊','🐧','🌈','💫','🏆','⭐','🚀','🎯','🎮','🎲','📚','🌺'];
+  const hapticOn = localStorage.getItem('pref_haptic') !== 'false';
+  const soundOn  = localStorage.getItem('pref_sound')  !== 'false';
+
+  const toggleHtml = (id, checked, key, label, sub) => `
+    <label class="flex items-center justify-between gap-3 cursor-pointer" onclick="_togglePref('${key}')">
+      <div>
+        <span class="text-sm font-medium text-gray-800 dark:text-white">${label}</span>
+        <p class="text-xs text-gray-400 dark:text-gray-500">${sub}</p>
+      </div>
+      <button id="${id}" role="switch" aria-checked="${checked}" type="button"
+        class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${checked ? 'bg-indigo-500' : 'bg-gray-300 dark:bg-gray-600'}">
+        <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-6' : 'translate-x-1'}"></span>
+      </button>
+    </label>`;
+
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto space-y-4">
+      <div class="flex items-center gap-3 mb-4">
+        <button onclick="_profileBack()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Back">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white">My Profile</h2>
+      </div>
+
+      ${restricted ? `<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 rounded-2xl p-4 flex items-center gap-3">
+        <span class="text-2xl select-none shrink-0">🔒</span>
+        <p class="text-sm text-red-700 dark:text-red-400 font-medium">Your account has been restricted by an administrator.</p>
+      </div>` : ''}
+
+      ${expiresAt ? `<div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-2xl p-4">
+        <p class="text-sm text-amber-700 dark:text-amber-400">Access expires on <strong>${new Date(expiresAt).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })}</strong>.</p>
+      </div>` : ''}
+
+      <!-- Avatar picker -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
+        <div class="flex items-center gap-4 mb-4">
+          <div id="prof-av-preview" class="text-5xl select-none">${avatar}</div>
+          <div>
+            <p class="font-semibold text-gray-800 dark:text-white text-base">${_profEsc(name)}</p>
+            <span class="inline-flex items-center mt-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300">Grade ${grade}</span>
+          </div>
+        </div>
+        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Choose your avatar</p>
+        <div class="grid grid-cols-10 gap-1.5" id="prof-av-grid">
+          ${avatarList.map(a => `<button type="button" aria-label="${a}"
+            class="text-2xl p-1 rounded-xl border-2 transition-colors hover:border-indigo-400 ${a === avatar ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30' : 'border-transparent'}"
+            onclick="_pickProfileAvatar(this,'${a}')">${a}</button>`).join('')}
+        </div>
+      </div>
+
+      <!-- Display name (read-only) -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
+        <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+          Display Name <span class="text-gray-400 normal-case font-normal ml-1">🔒 set by parent</span>
+        </label>
+        <p class="text-base font-medium text-gray-800 dark:text-white">${_profEsc(name)}</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">To change your name, ask your parent.</p>
+      </div>
+
+      <!-- Preferences -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
+        <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Preferences</h3>
+        ${toggleHtml('pref-haptic-toggle', hapticOn, 'haptic', 'Haptic Feedback', 'Vibration on correct / wrong answers')}
+        ${toggleHtml('pref-sound-toggle',  soundOn,  'sound',  'Sound / Read Aloud', 'Audio feedback and text-to-speech')}
+      </div>
+    </div>`;
+}
+
+function _pickProfileAvatar(btn, avatar) {
+  document.querySelectorAll('#prof-av-grid button').forEach(b => {
+    const sel = b === btn;
+    b.classList.toggle('border-indigo-500',        sel);
+    b.classList.toggle('bg-indigo-50',             sel);
+    b.classList.toggle('dark:bg-indigo-900/30',    sel);
+    b.classList.toggle('border-transparent',       !sel);
+  });
+  const preview = document.getElementById('prof-av-preview');
+  if (preview) preview.textContent = avatar;
+
+  if (!_sb || !ACTIVE_STUDENT_ID) { toast('Could not save avatar.', 2000); return; }
+  _sb.from('students').update({ avatar }).eq('id', ACTIVE_STUDENT_ID)
+    .then(({ error }) => {
+      if (error) { toast('Could not save avatar. Please try again.', 2000); return; }
+      if (typeof DB !== 'undefined') DB.avatar = avatar;
+      const hdrAv = document.getElementById('header-profile-avatar');
+      if (hdrAv) hdrAv.textContent = avatar;
+      try {
+        const raw  = localStorage.getItem('mm_student_sess');
+        const sess = raw ? JSON.parse(raw) : {};
+        sess.avatar = avatar;
+        localStorage.setItem('mm_student_sess', JSON.stringify(sess));
+      } catch(_) {}
+      toast('Avatar updated! ✓', 1800);
+    });
+}
+
+function _togglePref(key) {
+  const storageKey = `pref_${key}`;
+  const cur  = localStorage.getItem(storageKey) !== 'false';
+  const next = !cur;
+  localStorage.setItem(storageKey, String(next));
+
+  if (key === 'sound') _soundEnabled = next;
+
+  const btn  = document.getElementById(`pref-${key}-toggle`);
+  if (btn) {
+    btn.setAttribute('aria-checked', String(next));
+    btn.classList.toggle('bg-indigo-500',         next);
+    btn.classList.toggle('bg-gray-300',           !next);
+    btn.classList.toggle('dark:bg-gray-600',      !next);
+    const knob = btn.querySelector('span');
+    if (knob) {
+      knob.classList.toggle('translate-x-6', next);
+      knob.classList.toggle('translate-x-1', !next);
+    }
+  }
+  toast(`${key === 'haptic' ? 'Haptic feedback' : 'Sound'} ${next ? 'on' : 'off'}.`, 1500);
+}
+
+// ── Parent / Teacher / Admin profile view ────────────────
+async function _renderParentProfile(container) {
+  const profile = typeof Auth !== 'undefined' ? Auth.getParentProfile() : null;
+  if (!profile) {
+    container.innerHTML = '<p class="text-center text-gray-400 py-12">Not logged in.</p>';
+    return;
+  }
+
+  let email = '';
+  if (_sb) {
+    try {
+      const { data: { user } } = await _sb.auth.getUser();
+      email = user?.email || '';
+    } catch(_) {}
+  }
+
+  const roleLabel  = { admin: 'Admin', teacher: 'Teacher', parent: 'Parent' }[profile.role] || 'Parent';
+  const roleColour = {
+    admin:   'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300',
+    teacher: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
+    parent:  'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300',
+  }[profile.role] || 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300';
+
+  let referralHtml = '';
+  if (profile.role === 'parent' && _sb) {
+    try {
+      const code = await Store.getMyReferralCode(profile.id);
+      if (code) {
+        referralHtml = `
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
+            <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">Referral Code</h3>
+            <div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+              <span class="font-mono font-black tracking-widest text-indigo-700 dark:text-indigo-300 text-lg select-all">${_profEsc(code)}</span>
+              <button onclick="Auth.openInviteModal()" class="text-xs text-indigo-600 dark:text-indigo-300 font-semibold hover:underline shrink-0">Share →</button>
+            </div>
+          </div>`;
+      }
+    } catch(_) {}
+  }
+
+  container.innerHTML = `
+    <div class="max-w-lg mx-auto space-y-4">
+      <div class="flex items-center gap-3 mb-4">
+        <button onclick="_profileBack()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Back">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white">My Account</h2>
+      </div>
+
+      ${profile.disabled ? `<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 rounded-2xl p-4 flex items-center gap-3">
+        <span class="text-2xl select-none shrink-0">🔒</span>
+        <p class="text-sm text-red-700 dark:text-red-400 font-medium">Your account has been restricted by an administrator.</p>
+      </div>` : ''}
+
+      ${profile.expires_at ? `<div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-2xl p-4">
+        <p class="text-sm text-amber-700 dark:text-amber-400">Account expires on <strong>${new Date(profile.expires_at).toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })}</strong>.</p>
+      </div>` : ''}
+
+      <!-- Profile info -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-black select-none" aria-hidden="true">
+            ${_profEsc((profile.full_name || '?')[0].toUpperCase())}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="font-bold text-gray-800 dark:text-white text-base truncate">${_profEsc(profile.full_name || '—')}</p>
+            <p class="text-xs text-gray-400 dark:text-gray-500 truncate">${_profEsc(email)}</p>
+            <span class="inline-flex items-center mt-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${roleColour}">${roleLabel}</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="prof-name-input" class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Display Name</label>
+          <div class="flex gap-2">
+            <input id="prof-name-input" type="text" maxlength="60" value="${_profEsc(profile.full_name || '')}"
+              class="selectable flex-1 border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <button data-label="Save" onclick="_saveProfileName(this)"
+              class="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">Save</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+            Email <span class="text-gray-400 font-normal normal-case ml-1">🔒 cannot be changed here</span>
+          </label>
+          <p class="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-xl break-all">${_profEsc(email) || '—'}</p>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-3">
+        <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Security</h3>
+        <div>
+          <label for="prof-pw-new" class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">New Password</label>
+          <div class="relative">
+            <input id="prof-pw-new" type="password" placeholder="Min. 6 characters" autocomplete="new-password"
+              class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 pr-10 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <button type="button" onclick="Auth.togglePass('prof-pw-new',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+          </div>
+        </div>
+        <div>
+          <label for="prof-pw-confirm" class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Confirm New Password</label>
+          <div class="relative">
+            <input id="prof-pw-confirm" type="password" placeholder="Repeat new password" autocomplete="new-password"
+              class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 pr-10 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <button type="button" onclick="Auth.togglePass('prof-pw-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+          </div>
+        </div>
+        <p id="prof-pw-error" class="text-red-500 text-xs hidden"></p>
+        <button data-label="Change Password" onclick="_saveProfilePassword(this)"
+          class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-sm transition-colors">Change Password</button>
+      </div>
+
+      ${referralHtml}
+    </div>`;
+}
+
+async function _saveProfileName(btn) {
+  const input = document.getElementById('prof-name-input');
+  const name  = (input?.value || '').trim();
+  if (!name) { toast('Name cannot be blank.', 2000); return; }
+  if (!_sb) return;
+  const profile = typeof Auth !== 'undefined' ? Auth.getParentProfile() : null;
+  if (!profile) return;
+  const { error } = await _sb.from('profiles').update({ full_name: name }).eq('id', profile.id);
+  if (error) { toast('Could not save. Please try again.', 2500); return; }
+  profile.full_name = name;
+  const hdrNm = document.getElementById('header-profile-name');
+  if (hdrNm) hdrNm.textContent = name;
+  const hdrAv = document.getElementById('header-profile-avatar');
+  if (hdrAv) hdrAv.textContent = name[0].toUpperCase();
+  const avatarDiv = document.querySelector('#screen-profile .text-2xl.font-black');
+  if (avatarDiv) avatarDiv.textContent = name[0].toUpperCase();
+  _profileSaved(btn);
+}
+
+async function _saveProfilePassword(btn) {
+  if (!_sb) return;
+  const pass = (document.getElementById('prof-pw-new')?.value     || '').trim();
+  const conf = (document.getElementById('prof-pw-confirm')?.value || '').trim();
+  const errEl = document.getElementById('prof-pw-error');
+  const showErr = msg => { if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); } };
+  if (errEl) errEl.classList.add('hidden');
+  if (pass.length < 6) { showErr('Password must be at least 6 characters.'); return; }
+  if (pass !== conf)   { showErr('Passwords do not match.'); return; }
+  const { error } = await _sb.auth.updateUser({ password: pass });
+  if (error) { showErr(error.message); return; }
+  const pwNew  = document.getElementById('prof-pw-new');
+  const pwConf = document.getElementById('prof-pw-confirm');
+  if (pwNew)  pwNew.value  = '';
+  if (pwConf) pwConf.value = '';
+  _profileSaved(btn);
 }

@@ -5,7 +5,8 @@
 // ══════════════════════════════════════════════
 
 const AdminPanel = (() => {
-  let _members    = [];   // cached profiles list
+  let _members    = [];   // cached parent profiles
+  let _teachers   = [];   // cached teacher profiles
   let _settings   = null; // global_settings from mm_data
 
   const ROLE_LABELS = { parent: '👨‍👩‍👧 Parent', teacher: '👩‍🏫 Teacher', admin: '🛡️ Admin' };
@@ -18,7 +19,7 @@ const AdminPanel = (() => {
   // ── Entry point called by auth.js ───────────
   async function render() {
     showTab('members');
-    await Promise.all([loadMembers(), loadSettings(), loadTeacherQueue()]);
+    await Promise.all([loadMembers(), loadTeachers(), loadSettings(), loadTeacherQueue()]);
     _renderContent();
     await loadStats();
     // Show super-admin-only tabs
@@ -46,9 +47,10 @@ const AdminPanel = (() => {
     });
     const panel = document.getElementById(`admin-tab-${name}`);
     if (panel) panel.classList.remove('hidden');
-    if (name === 'reports') loadReports();
-    if (name === 'roles')   loadRoles();
-    if (name === 'plans')   loadPlans();
+    if (name === 'reports')  loadReports();
+    if (name === 'teachers') loadTeachers();
+    if (name === 'roles')    loadRoles();
+    if (name === 'plans')    loadPlans();
   }
 
   // ── Teacher approval queue ─────────────────
@@ -144,7 +146,10 @@ const AdminPanel = (() => {
     if (!_sb) return;
     const el = document.getElementById('admin-members-list');
     if (el) el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6 animate-pulse">Loading members…</p>';
-    const { data, error } = await _sb.from('profiles').select('*').order('full_name');
+    const { data, error } = await _sb.from('profiles')
+      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code')
+      .eq('role', 'parent')
+      .order('created_at', { ascending: false });
     if (error) {
       if (el) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load members.</p>';
       return;
@@ -159,6 +164,17 @@ const AdminPanel = (() => {
       ? _members.filter(m => (m.full_name || '').toLowerCase().includes(q) || (m.id || '').toLowerCase().includes(q))
       : _members;
     _renderMembers(filtered);
+  }
+
+  function _memberStatusBadge(m) {
+    if (m.disabled) return '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400">🔴 Disabled</span>';
+    if (m.expires_at) {
+      const exp = new Date(m.expires_at);
+      const now = new Date();
+      if (exp < now) return '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400">⏰ Expired</span>';
+      if ((exp - now) < 7 * 24 * 3600 * 1000) return '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400">🟡 Expires soon</span>';
+    }
+    return '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400">🟢 Active</span>';
   }
 
   // children cached by parent profile id
@@ -182,7 +198,7 @@ const AdminPanel = (() => {
             <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${ROLE_COLORS[m.role] || ''}">
               ${ROLE_LABELS[m.role] || m.role}
             </span>
-            ${m.disabled ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚫 Disabled</span>' : ''}
+            ${_memberStatusBadge(m)}
           </div>
           <div class="flex gap-2 flex-wrap w-full sm:w-auto">
             <select onchange="AdminPanel.changeRole('${m.id}', this.value)"
@@ -322,12 +338,14 @@ const AdminPanel = (() => {
 
   async function updateMemberName(userId, newName) {
     if (!_sb || !newName?.trim()) return;
-    const trimmed = newName.trim();
-    const current = _members.find(m => m.id === userId);
-    if (current?.full_name === trimmed) return;
+    const trimmed    = newName.trim();
+    const inMembers  = _members.find(m => m.id === userId);
+    const inTeachers = _teachers.find(t => t.id === userId);
+    if ((inMembers || inTeachers)?.full_name === trimmed) return;
     const { error } = await _sb.from('profiles').update({ full_name: trimmed }).eq('id', userId);
     if (error) { alert('Error: ' + error.message); return; }
-    if (current) current.full_name = trimmed;
+    if (inMembers)  inMembers.full_name  = trimmed;
+    if (inTeachers) inTeachers.full_name = trimmed;
     toast(`Name updated to "${trimmed}"`, 2500);
   }
 
@@ -381,15 +399,19 @@ const AdminPanel = (() => {
     const { error } = await _sb.from('profiles').update({ role: newRole }).eq('id', userId);
     if (error) { alert('Error: ' + error.message); return; }
     toast(`Role updated to ${newRole}`, 3000);
-    await loadMembers();
+    await Promise.all([loadMembers(), loadTeachers()]);
   }
 
   async function toggleDisable(userId, disable) {
     if (!_sb) return;
+    if (disable && !confirm('Disable this account? The user will not be able to log in.')) return;
     const { error } = await _sb.from('profiles').update({ disabled: disable }).eq('id', userId);
-    if (error) { alert('Error: ' + error.message); return; }
+    if (error) { toast('Error: ' + error.message, 3000); return; }
     toast(disable ? 'Account disabled' : 'Account enabled', 3000);
-    await loadMembers();
+    const m = _members.find(x => x.id === userId);
+    if (m) { m.disabled = disable; _renderMembers(_members); }
+    const t = _teachers.find(x => x.id === userId);
+    if (t) { t.disabled = disable; _renderTeachers(_teachers); }
   }
 
   // ── Global Settings (Content tab) ──────────
@@ -494,26 +516,137 @@ const AdminPanel = (() => {
   // ── Stats ───────────────────────────────────
   async function loadStats() {
     if (!_sb) return;
-    ['stat-total-users','stat-total-students','stat-total-families','stat-total-teachers']
+    ['stat-total-users','stat-total-students','stat-total-families','stat-total-teachers',
+     'hstat-parents','hstat-students','hstat-teachers','hstat-disabled']
       .forEach(id => _set(id, '…'));
     const [pRes, sRes, fRes] = await Promise.all([
-      _sb.from('profiles').select('id, role', { count: 'exact', head: false }), // needs role data for teacher filter
+      _sb.from('profiles').select('id, role, disabled, teacher_status', { count: 'exact', head: false }),
       _sb.from('students').select('id', { count: 'exact', head: true }),
       _sb.from('families').select('id', { count: 'exact', head: true }),
     ]);
 
-    const profiles = pRes.data || [];
-    const teachers = profiles.filter(p => p.role === 'teacher').length;
+    const profiles  = pRes.data || [];
+    const tList     = profiles.filter(p => p.role === 'teacher');
+    const parents   = profiles.filter(p => p.role === 'parent').length;
+    const disabled  = profiles.filter(p => p.disabled).length;
+    const tApproved = tList.filter(t => t.teacher_status === 'approved').length;
+    const tPending  = tList.filter(t => t.teacher_status === 'pending').length;
 
     _set('stat-total-users',    profiles.length);
     _set('stat-total-students', sRes.data?.length ?? '-');
     _set('stat-total-families', fRes.data?.length ?? '-');
-    _set('stat-total-teachers', teachers);
+    _set('stat-total-teachers', tList.length);
+
+    _set('hstat-parents',   parents);
+    _set('hstat-students',  sRes.count ?? '-');
+    _set('hstat-teachers',  tPending ? `${tApproved} (+${tPending} pending)` : tApproved);
+    _set('hstat-disabled',  disabled);
   }
 
   function _set(id, val) {
     const el = document.getElementById(id);
     if (el) el.textContent = val;
+  }
+
+  // ── Teachers tab ────────────────────────────
+  async function loadTeachers() {
+    if (!_sb) return;
+    const el = document.getElementById('admin-teachers-list');
+    if (el) el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6 animate-pulse">Loading teachers…</p>';
+    const { data, error } = await _sb.from('profiles')
+      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, teacher_tier')
+      .eq('role', 'teacher')
+      .order('teacher_status', { ascending: true });
+    if (error) {
+      if (el) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load teachers.</p>';
+      return;
+    }
+    _teachers = data || [];
+    _renderTeachers(_teachers);
+  }
+
+  function _renderTeachers(list) {
+    const el = document.getElementById('admin-teachers-list');
+    if (!el) return;
+    if (!list.length) {
+      el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6">No teacher accounts found.</p>';
+      return;
+    }
+    el.innerHTML = list.map(t => {
+      const st     = _TSTATUS[t.teacher_status] || _TSTATUS.pending;
+      const joined = t.created_at ? new Date(t.created_at).toLocaleDateString() : '-';
+      const tier   = t.teacher_tier || 'free';
+      return `
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-bold text-gray-800 dark:text-white truncate">${_esc(t.full_name || 'Unnamed')}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500 font-mono truncate">${t.id}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Joined ${joined}</p>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${st.cls}">${st.label}</span>
+              ${t.disabled ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚫 Disabled</span>' : ''}
+              <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">Tier: ${_esc(tier)}</span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+            ${t.teacher_status !== 'approved' ? `
+              <button onclick="AdminPanel.teacherApprove('${t.id}')"
+                class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-3 py-1 rounded-lg font-semibold hover:bg-green-200 transition-colors">✅ Approve</button>` : ''}
+            ${t.teacher_status === 'approved' ? `
+              <button onclick="AdminPanel.teacherSuspend('${t.id}')"
+                class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg font-semibold hover:bg-red-200 transition-colors">🚫 Suspend</button>` : ''}
+            <select onchange="AdminPanel.teacherChangeTier('${t.id}', this.value)"
+              class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+              <option value="free"    ${tier === 'free'    ? 'selected' : ''}>Free tier</option>
+              <option value="premium" ${tier === 'premium' ? 'selected' : ''}>Premium tier</option>
+              <option value="school"  ${tier === 'school'  ? 'selected' : ''}>School tier</option>
+            </select>
+            <button onclick="AdminPanel.toggleDisable('${t.id}', ${!t.disabled})"
+              class="text-xs px-3 py-1 rounded-lg font-semibold transition-colors ${t.disabled
+                ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200'
+                : 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200'}">
+              ${t.disabled ? '✅ Enable' : '🚫 Disable'}
+            </button>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+            <input type="text" value="${_esc(t.full_name || '')}" placeholder="Display name…"
+              onblur="AdminPanel.updateMemberName('${t.id}', this.value)"
+              onkeydown="if(event.key==='Enter')this.blur()"
+              title="Click to edit display name"
+              class="flex-1 min-w-0 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  async function teacherApprove(userId) {
+    if (!_sb) return;
+    const { error } = await _sb.from('profiles').update({ teacher_status: 'approved' }).eq('id', userId);
+    if (error) { toast('Error: ' + error.message, 3000); return; }
+    toast('Teacher approved ✅', 2000);
+    const t = _teachers.find(x => x.id === userId);
+    if (t) { t.teacher_status = 'approved'; _renderTeachers(_teachers); }
+    if (typeof Auth !== 'undefined' && Auth.refreshAdminBadge) Auth.refreshAdminBadge();
+  }
+
+  async function teacherSuspend(userId) {
+    if (!_sb || !confirm('Suspend this teacher? They keep access to past results but cannot set new work.')) return;
+    const { error } = await _sb.from('profiles').update({ teacher_status: 'suspended' }).eq('id', userId);
+    if (error) { toast('Error: ' + error.message, 3000); return; }
+    toast('Teacher suspended 🚫', 2000);
+    const t = _teachers.find(x => x.id === userId);
+    if (t) { t.teacher_status = 'suspended'; _renderTeachers(_teachers); }
+  }
+
+  async function teacherChangeTier(userId, tier) {
+    if (!_sb || !tier) return;
+    const { error } = await _sb.from('profiles').update({ teacher_tier: tier }).eq('id', userId);
+    if (error) { toast('Error: ' + error.message, 3000); return; }
+    toast(`Tier set to ${tier}`, 2000);
+    const t = _teachers.find(x => x.id === userId);
+    if (t) t.teacher_tier = tier;
   }
 
   function _esc(str) {
@@ -805,5 +938,6 @@ const AdminPanel = (() => {
   }
 
   return { render, showTab, loadMembers, filterMembers, changeRole,
-    loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, resolveReport, loadRoles, setRole, loadPlans, togglePlan, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails };
+    loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, resolveReport, loadRoles, setRole, loadPlans, togglePlan, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+    loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier };
 })();

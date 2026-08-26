@@ -249,11 +249,27 @@ const Auth = (() => {
     if (typeof TeacherMode !== 'undefined') TeacherMode.render();
   }
 
+  function _updateHeaderProfileChip(type, account) {
+    const btn = document.getElementById('header-profile-btn');
+    const av  = document.getElementById('header-profile-avatar');
+    const nm  = document.getElementById('header-profile-name');
+    if (!btn) return;
+    btn.classList.remove('hidden'); btn.classList.add('flex');
+    if (type === 'parent' && _parentProfile) {
+      if (av) av.textContent = (_parentProfile.full_name || '?')[0].toUpperCase();
+      if (nm) nm.textContent = _parentProfile.full_name || (_parentUser && _parentUser.email) || 'Account';
+    } else if (account) {
+      if (av) av.textContent = account.avatar || '👤';
+      if (nm) nm.textContent = account.display_name || account.displayName || 'Student';
+    }
+  }
+
   function _openParentDashboard() {
     renderParentDashboard();
     showScreen('parent');
     const hdrLogout = document.getElementById('header-logout-btn');
     if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
+    _updateHeaderProfileChip('parent', null);
     if (_parentUser) Store.logLoginEvent(_parentUser.id, _isSuperAdmin ? 'super_admin' : (_isAdminUser ? 'admin' : 'parent'));
   }
 
@@ -307,6 +323,7 @@ const Auth = (() => {
 
     _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar, grade: sess.grade };
     ACTIVE_STUDENT_ID = sess.id;
+    _updateHeaderProfileChip('student', { avatar: sess.avatar, display_name: sess.displayName });
 
     // Resume session guard so an account-sharing kick still fires on refresh
     _startSessionGuard(sess.id, sess.sessionVersion || 0);
@@ -450,9 +467,10 @@ const Auth = (() => {
       QuestionLoader.loadForStudent(studentGrade).catch(() => {});
     }
 
-    // Show header logout button
+    // Show header logout button and profile chip
     const hdrLogout = document.getElementById('header-logout-btn');
     if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
+    _updateHeaderProfileChip('student', studentRow);
     Store.logLoginEvent(studentRow.id, 'student');
     if (bumpSession) _startSessionGuard(studentRow.id, sessionVersion);
     if (bumpSession && typeof setupPushNotifications === 'function') {
@@ -1121,6 +1139,8 @@ const Auth = (() => {
     });
     const hdrLogout = document.getElementById('header-logout-btn');
     if (hdrLogout) { hdrLogout.classList.add('hidden'); hdrLogout.classList.remove('flex'); }
+    const hdrProfile = document.getElementById('header-profile-btn');
+    if (hdrProfile) { hdrProfile.classList.add('hidden'); hdrProfile.classList.remove('flex'); }
     if (_sb) await _sb.auth.signOut();
     showScreen('landing');
   }
