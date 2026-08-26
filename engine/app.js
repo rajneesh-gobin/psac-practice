@@ -1436,23 +1436,28 @@ async function renderParentDashboard() {
       const col = acc >= 80 ? '#22c55e' : acc >= 50 ? '#f59e0b' : '#3b82f6';
       const today = new Date().toDateString();
       const studiedToday = st.lastDate === today;
+      const lastDate  = st.lastDate ? new Date(st.lastDate) : null;
+      const daysSince = lastDate ? Math.floor((Date.now() - lastDate.getTime()) / 86400000) : null;
+      const activityPill = studiedToday
+        ? '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">✅ Studied today</span>'
+        : (daysSince !== null && daysSince > 3)
+          ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">⚠️ Last active ${daysSince}d ago</span>`
+          : '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">⏳ No activity yet today</span>';
+      const chips = _subjectChips(prog);
       statsEl.innerHTML = `
-        <div class="flex items-center gap-2 mb-2">
-          <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${studiedToday ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'}">
-            ${studiedToday ? '✅ Studied today' : '⏳ No activity yet today'}
-          </span>
-        </div>
+        <div class="flex items-center gap-2 mb-2">${activityPill}</div>
         <div class="flex gap-3 text-xs text-gray-500 dark:text-gray-400 mb-1.5">
           <span>📝 ${st.totalAttempted || 0}</span>
           <span>🎯 ${acc}%</span>
           <span>🔥 ${st.streak || 0}d streak</span>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 mb-2">
           <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
             <div style="width:${acc}%;height:100%;background:${col};border-radius:3px"></div>
           </div>
           <span class="text-xs font-bold shrink-0" style="color:${col}">${acc}%</span>
-        </div>`;
+        </div>
+        ${chips ? `<div class="flex flex-wrap gap-1">${chips}</div>` : ''}`;
     }).catch(() => {});
   }
 }
@@ -1601,11 +1606,15 @@ const PD = (() => {
         </div>`;
     }
 
-    if (_el('pd-total'))  _el('pd-total').textContent  = stats.totalAttempted || 0;
-    if (_el('pd-acc'))    _el('pd-acc').textContent    = acc + '%';
-    if (_el('pd-streak')) _el('pd-streak').textContent = (stats.streak || 0) + ' 🔥';
-    if (_el('pd-badges')) _el('pd-badges').textContent = (DB.badges || []).length;
+    if (_el('pd-total'))      _el('pd-total').textContent      = stats.totalAttempted || 0;
+    if (_el('pd-acc'))        _el('pd-acc').textContent        = acc + '%';
+    if (_el('pd-streak'))     _el('pd-streak').textContent     = (stats.streak || 0) + ' 🔥';
+    if (_el('pd-badges'))     _el('pd-badges').textContent     = (DB.badges || []).length;
+    if (_el('pd-best-exam'))  _el('pd-best-exam').textContent  = stats.bestScore ? stats.bestScore + '%' : '—';
+    if (_el('pd-exam-count')) _el('pd-exam-count').textContent = stats.examCount || 0;
 
+    _renderExamTimeline(DB);
+    _renderWeakChapters(DB);
     _renderSubjectProgress(acct);
     _renderLeaderboard();
     _renderParentAssignDropdown(acct);
@@ -2043,6 +2052,103 @@ function renderDashboard() {
   }).join('');
 }
 
+// ── PARENT REPORTING HELPERS ───────────────────
+function _renderExamTimeline(studentData) {
+  const el = document.getElementById('pd-exam-timeline');
+  if (!el) return;
+  const history = (studentData.examHistory || []).slice(0, 5);
+  if (!history.length) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
+      <div class="font-bold text-gray-800 dark:text-white text-sm mb-3">📝 Last ${history.length} Exam${history.length > 1 ? 's' : ''}</div>
+      <div class="flex gap-2 flex-wrap">
+        ${history.map(e => {
+          const pct = e.pct ?? e.score ?? null;
+          const color = pct >= 80 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                      : pct >= 50 ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                      : 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400';
+          const date = e.date ? new Date(e.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
+          const type = e.type === 'quick' ? 'Quick' : 'Full';
+          return `<div class="flex flex-col items-center ${color} rounded-xl px-3 py-2 min-w-[60px]">
+            <div class="text-lg font-bold">${pct != null ? pct + '%' : '?'}</div>
+            <div class="text-[10px] font-medium">${type}</div>
+            <div class="text-[10px] opacity-70">${date}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+function _renderWeakChapters(studentData) {
+  const el = document.getElementById('pd-weak-chapters');
+  if (!el) return;
+  const chapters = studentData.chapters || {};
+  const allChapters = [];
+  Object.values(typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : {}).forEach(pack => {
+    (pack._chapters || pack.chapters || []).forEach(c => allChapters.push({ ...c, subjectName: pack.name }));
+  });
+  const weak = allChapters.filter(c => {
+    const p = chapters[c.id];
+    if (!p) return false;
+    const flagged  = !!p.flagged;
+    const attempted = p.attempted || 0;
+    const accuracy  = attempted > 0 ? (p.correct || 0) / attempted : null;
+    return flagged || (attempted > 0 && accuracy < 0.5);
+  }).map(c => {
+    const p = chapters[c.id] || {};
+    const attempted = p.attempted || 0;
+    const accuracy  = attempted > 0 ? Math.round((p.correct || 0) / attempted * 100) : null;
+    return { ...c, attempted, accuracy, flagged: !!p.flagged };
+  });
+  if (!weak.length) { el.innerHTML = ''; return; }
+  el.innerHTML = `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
+      <div class="font-bold text-gray-800 dark:text-white text-sm mb-3">⚠️ Needs Attention (${weak.length})</div>
+      <div class="space-y-2">
+        ${weak.map(c => `
+          <div class="flex items-center justify-between gap-2 bg-red-50 dark:bg-red-900/20 rounded-xl px-3 py-2">
+            <div class="min-w-0">
+              <div class="text-xs font-semibold text-gray-800 dark:text-white truncate">${c.name}</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400">${c.subjectName}</div>
+            </div>
+            <div class="text-right shrink-0">
+              ${c.flagged && c.attempted === 0
+                ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚩 Flagged</span>'
+                : `<div class="text-sm font-bold ${c.accuracy < 40 ? 'text-red-500' : 'text-amber-500'}">${c.accuracy}%</div>
+                   <div class="text-[10px] text-gray-400">${c.attempted} tries${c.flagged ? ' · 🚩' : ''}</div>`
+              }
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function _subjectChips(studentData) {
+  const packs = Object.values(typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : {});
+  if (!packs.length) return '';
+  return packs.map(pack => {
+    const chs = pack._chapters || pack.chapters || [];
+    let att = 0, cor = 0;
+    chs.forEach(c => { const p = studentData.chapters?.[c.id]; if (p) { att += p.attempted||0; cor += p.correct||0; } });
+    const pct   = att > 0 ? Math.round(cor / att * 100) : null;
+    const color = pct === null ? 'bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500'
+                : pct >= 70   ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400'
+                : pct >= 45   ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400'
+                :               'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400';
+    const abbr  = pack.name.replace('History & Geography','H&G').slice(0,3);
+    return `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full ${color}">${abbr}${pct !== null ? ' '+pct+'%' : ''}</span>`;
+  }).join('');
+}
+
+function toggleChapterFlag(chapterId) {
+  if (!DB.chapters) DB.chapters = {};
+  if (!DB.chapters[chapterId]) DB.chapters[chapterId] = { attempted:0, correct:0, flagged:false };
+  DB.chapters[chapterId].flagged = !DB.chapters[chapterId].flagged;
+  save(DB);
+  renderChapterSelect();
+  toast(DB.chapters[chapterId].flagged ? '🚩 Flagged — your parent will see this.' : 'Flag removed.', 1800);
+}
+
 // ── CHAPTER SELECT ─────────────────────────────
 function renderChapterSelect() {
   const grid = document.getElementById('chapter-grid');
@@ -2057,8 +2163,10 @@ function renderChapterSelect() {
       : pct >= 80 ? '<span class="text-amber-400 text-base tracking-tight" title="Mastered">★★★</span>'
       : pct >= 50 ? '<span class="text-base tracking-tight"><span class="text-amber-400">★★</span><span class="text-gray-300 dark:text-gray-600">☆</span></span>'
       : '<span class="text-base tracking-tight"><span class="text-amber-400">★</span><span class="text-gray-300 dark:text-gray-600">☆☆</span></span>';
+    const isFlagged = !!(DB.chapters?.[ch.id]?.flagged);
     const borderStyle = _borderColor ? ` style="border-left:4px solid ${_borderColor}"` : '';
-    return `<button class="chapter-card${isEnr ? ' enrichment' : ''}" onclick="startChapterDirect('${ch.id}')"${borderStyle}>
+    return `<button class="chapter-card${isEnr ? ' enrichment' : ''} relative" onclick="startChapterDirect('${ch.id}')"${borderStyle}>
+      <button onclick="event.stopPropagation();toggleChapterFlag('${ch.id}')" class="absolute top-2 right-2 text-base leading-none p-1 rounded-full transition-colors z-10 ${isFlagged ? 'text-red-500' : 'text-gray-300 dark:text-gray-600 hover:text-red-400'}" title="${isFlagged ? 'Remove flag' : 'Flag for parent'}">🚩</button>
       ${isEnr ? '<span class="enr-badge">✨ BONUS</span>' : ''}
       <div class="text-3xl mb-2">${ch.icon}</div>
       <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">${ch.name}</div>
