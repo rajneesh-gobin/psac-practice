@@ -1690,7 +1690,7 @@
         <button id="admin-tab-create-btn" onclick="AdminPanel.showTab('create')" data-tab="create"
           class="admin-tab hidden flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🎁 Create</button>
         <button onclick="AdminPanel.showTab('questions')" data-tab="questions"
-          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">❓ Questions</button>
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">❓ Questions<span id="admin-reports-badge" class="hidden ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold align-middle">0</span></button>
       </div>
 
       <!-- Members tab -->
@@ -1889,6 +1889,7 @@
 
       <!-- Questions tab -->
       <div id="admin-tab-questions" class="admin-tab-panel hidden">
+        <div id="qm-reports-section"></div>
         <div class="flex flex-wrap gap-2 mb-4">
           <select id="qm-grade" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm" onchange="AdminPanel.qmGradeFilter()">
             <option value="">All grades</option>

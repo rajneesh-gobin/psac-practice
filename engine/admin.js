@@ -1150,6 +1150,50 @@ const AdminPanel = (() => {
     if (btn) { btn.disabled = false; btn.textContent = '🎁 Create Account'; }
   }
 
+  // ── Pending-report badge + mini panel shown in the Questions tab ─────────
+  async function _loadReportBadge() {
+    const { count, error } = await _sb.from('question_reports')
+      .select('*', { count: 'exact', head: true }).eq('status', 'open');
+    const n = error ? 0 : (count || 0);
+    const badge = document.getElementById('admin-reports-badge');
+    if (badge) { badge.textContent = n; badge.classList.toggle('hidden', n === 0); }
+  }
+
+  function _escRpt(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  async function _loadPendingReports() {
+    const el = document.getElementById('qm-reports-section');
+    if (!el) return;
+    const { data, error } = await _sb.from('question_reports')
+      .select('id,question_id,message,created_at')
+      .eq('status', 'open')
+      .order('created_at', { ascending: false })
+      .limit(10);
+    if (error || !data || !data.length) { el.innerHTML = ''; return; }
+    el.innerHTML = `<div class="mb-4 border border-red-200 dark:border-red-800 rounded-xl p-3 bg-red-50 dark:bg-red-900/20">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold text-sm text-red-600 dark:text-red-400">🚩 ${data.length} pending report${data.length > 1 ? 's' : ''}</h3>
+        <button onclick="AdminPanel.showTab('reports')" class="text-xs text-red-600 dark:text-red-400 underline">See all →</button>
+      </div>
+      <div class="space-y-2">${data.map(r => `
+        <div class="flex items-start gap-2 text-sm">
+          <span class="font-mono text-xs text-gray-500 dark:text-gray-400 shrink-0 mt-0.5">${_escRpt(r.question_id)}</span>
+          <span class="flex-1 text-gray-700 dark:text-gray-200 truncate">${_escRpt((r.message||'').split('\n__meta__')[0])}</span>
+          <div class="flex gap-1 shrink-0">
+            <button onclick="AdminPanel.qmOpenForm('${_escRpt(r.question_id)}')" class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded">Edit Q</button>
+            <button onclick="AdminPanel.qmResolveReport('${_escRpt(r.id)}')" class="text-xs bg-green-600 text-white px-2 py-0.5 rounded">Resolve</button>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  async function qmResolveReport(id) {
+    await _sb.from('question_reports').update({ status: 'resolved' }).eq('id', id);
+    _loadPendingReports(); _loadReportBadge();
+    if (typeof toast === 'function') toast('Report resolved ✅', 1500);
+  }
+
   // ── Question Manager ─────────────────────────────────────────────────────
   const QM = (() => {
     let _offset    = 0;
@@ -1430,6 +1474,8 @@ const AdminPanel = (() => {
     function tabOpen() {
       _populateSubjectFilter();
       qmSearch();
+      _loadPendingReports();
+      _loadReportBadge();
     }
 
     return { tabOpen, qmSearch, qmLoadMore, qmGradeFilter, qmOpenForm, qmCloseForm,
@@ -1445,5 +1491,5 @@ const AdminPanel = (() => {
     qmFormGradeChange: QM.qmFormGradeChange, qmFormSubjectChange: QM.qmFormSubjectChange,
     qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,
     qmUpdatePreview: QM.qmUpdatePreview, qmInsertImage: QM.qmInsertImage,
-    qmSave: QM.qmSave, qmDelete: QM.qmDelete };
+    qmSave: QM.qmSave, qmDelete: QM.qmDelete, qmResolveReport };
 })();
