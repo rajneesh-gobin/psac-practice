@@ -66,7 +66,7 @@ export async function handler() {
 
   const payload = JSON.stringify({
     title: '📚 Study time!',
-    body:  "It's time for your PSAC practice. Let's go! 🇲🇺",
+    body:  "It's time for your PSAC practice. Let's go! 📚",
     url:   '/',
     icon:  '/icons/icon-192.png',
     badge: '/icons/icon-192.png',

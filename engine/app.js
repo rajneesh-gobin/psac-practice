@@ -908,7 +908,7 @@ async function shareResult() {
   const score   = document.getElementById('result-score')?.textContent  || '';
   const grade   = document.getElementById('result-grade')?.textContent  || '';
   const details = document.getElementById('result-details')?.textContent || '';
-  const text    = `I scored ${score} (${grade}) on my PSAC Practice exam! ${details} 🇲🇺📚`;
+  const text    = `I scored ${score} (${grade}) on my PSAC Practice exam! ${details} 📚`;
   try {
     await navigator.share({ title: 'My PSAC Exam Result', text, url: location.origin });
   } catch(e) {
@@ -1289,6 +1289,42 @@ function _sameNumber(a, b) {
   return x !== null && y !== null && x === y;
 }
 
+// ── Kid-legible maths ───────────────────────────────────────────────────────
+// "Complete the chain: 2/5 = 4/□ = □/15" is how the question is authored, and
+// it is how a spreadsheet writes fractions, not how a Grade 4 book does. On
+// screen it reads as three divisions, and with two identical □ there is nothing
+// to tell a child which box the "10 and 6" in the options belongs to.
+//
+// This is DISPLAY ONLY. q.answer, the option values and everything checkAnswer
+// touches stay exactly as authored.
+//
+// ⚠ No lookbehind. A (?<!…) is a PARSE error on Safari before 16.4 — it would
+// take the whole of app.js down, not just this function. The leading boundary
+// is captured and re-emitted instead.
+const _FRAC_RE = /(^|[^\w\/.])(\d{1,3}|□)\s*\/\s*(\d{1,3}|□)(?![\w\/.])/g;
+const _BOX_NUMERALS = ['①', '②', '③', '④'];
+
+function _prettyMath(html) {
+  if (typeof html !== 'string') return html;
+  if (html.indexOf('/') < 0 && html.indexOf('□') < 0) return html;
+  // Diagrams label themselves; never rewrite anything inside one.
+  if (html.indexOf('<svg') >= 0) return html;
+
+  // Only text between tags — never an attribute value.
+  let out = html.replace(/(<[^>]+>)|([^<]+)/g, (m, tag, text) =>
+    tag ? tag : text.replace(_FRAC_RE, (_m, pre, n, d) =>
+      `${pre}<span class="frac"><span class="fr-n">${n}</span><span class="fr-d">${d}</span></span>`));
+
+  // Number the blanks only when there is more than one to tell apart.
+  const boxes = (out.match(/□/g) || []).length;
+  let i = 0;
+  out = out.replace(/□/g, () =>
+    boxes > 1 && i < _BOX_NUMERALS.length
+      ? `<span class="q-box">${_BOX_NUMERALS[i++]}</span>`
+      : '<span class="q-box"></span>');
+  return out;
+}
+
 function checkAnswer(q, userAnswer) {
   if (q.type === 'symmetry') {
     try {
@@ -1451,7 +1487,7 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
       // and is now escaped properly.
       return `<button class="${cls}" data-value="${_attr(opt)}" onclick="this.classList.add('mcq-spring');this.onanimationend=()=>this.classList.remove('mcq-spring');selectMCQ(this,'${containerId}',${disabled})">
         <span class="opt-letter">${String.fromCharCode(65+i)}</span>
-        <span>${opt}</span>
+        <span>${_prettyMath(opt)}</span>
       </button>`;
     }).join('');
   } else {
@@ -3069,11 +3105,11 @@ function generatePrintablePaper() {
   // each one.
   function renderQ(q, num, marks, overrideHtml) {
     const stripHTML = s => s.replace(/<[^>]+>/g, '');
-    let body = `<div class="q-text">${overrideHtml != null ? overrideHtml : q.question}`;
+    let body = `<div class="q-text">${_prettyMath(overrideHtml != null ? overrideHtml : q.question)}`;
     if (q.type === 'mcq' && q.options) {
       body += `<div class="mcq-opts">`;
       ['A','B','C','D'].forEach((ltr, i) => {
-        body += `<span class="mcq-opt"><span class="bubble"></span> <b>${ltr}.</b> ${q.options[i] || ''}</span>`;
+        body += `<span class="mcq-opt"><span class="bubble"></span> <b>${ltr}.</b> ${_prettyMath(q.options[i] || '')}</span>`;
       });
       body += `</div>`;
     } else {
@@ -3108,7 +3144,7 @@ function generatePrintablePaper() {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} - Mock Exam ${year}</title>
+<title>Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} - Practice Paper ${year}</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #111; padding: 20px; background: #fff; }
@@ -3153,6 +3189,15 @@ function generatePrintablePaper() {
 
   .marks-header { text-align:right; font-size:9pt; color:#555; padding: 3px 4px 3px 0; font-style:italic; }
 
+  /* The paper is a separate document, so _prettyMath()'s markup needs its own
+     copy of these rules — style.css is not loaded in the print window. */
+  .frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:-0.55em; margin:0 .18em; line-height:1.05; font-weight:bold; }
+  .frac .fr-n { padding:0 .28em; }
+  .frac .fr-d { padding:0 .28em; border-top:1.5px solid currentColor; }
+  .q-box { display:inline-flex; align-items:center; justify-content:center; min-width:1.5em; height:1.5em; padding:0 .15em;
+           border:1.2px dashed #444; border-radius:3px; font-weight:bold; font-size:.85em; vertical-align:middle; }
+  .frac .q-box { min-width:1.3em; height:1.3em; }
+
   .comp-intro { font-size:9.5pt; font-weight:bold; color:#1e3a5f; margin-bottom:4px; }
   /* Keep the passage and at least the first question on the same sheet - a
      passage stranded alone at the foot of page 1 is unusable. */
@@ -3166,9 +3211,15 @@ function generatePrintablePaper() {
 <div class="paper">
   <button class="no-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
 
+  <!-- ⚠ The letterhead used to read "Republic of Mauritius - Ministry of
+       Education" above "End-of-Year Assessment". Printed out and handed to a
+       child, or left on a teacher's desk, that is a generated practice sheet
+       presenting itself as a government document — the small-print disclaimer
+       at the very bottom does not undo the top of the page. It also is not the
+       PSAC format; it is this app's own layout. Both now say so. -->
   <div class="header-box">
-    <div class="ministry">Republic of Mauritius - Ministry of Education</div>
-    <div class="title">End-of-Year Assessment ${year}</div>
+    <div class="ministry">PSAC Exam Practice &mdash; practice paper</div>
+    <div class="title">Exam-Style Practice Paper ${year}</div>
     <div class="subtitle">${_activeSubjectLabel().name} &nbsp;|&nbsp; Grade ${_activeSubjectLabel().grade}</div>
     <div class="meta">
       <span><b>Duration:</b> 1 hour 30 minutes</span>
@@ -3216,8 +3267,9 @@ function generatePrintablePaper() {
   </table>
 
   <div class="footer">
-    Generated by PSAC Exam Practice · MIE Mauritius Curriculum · psac-master &nbsp;|&nbsp;
-    This is a practice paper - not an official MIE document.
+    Generated by PSAC Exam Practice · based on the MIE Mauritius curriculum &nbsp;|&nbsp;
+    Practice paper in our own layout - NOT the official PSAC paper format, and not
+    an MIE or Ministry of Education document.
   </div>
 </div>
 </body>
@@ -3255,7 +3307,7 @@ function renderExamQuestion() {
   document.getElementById('exam-q-chapter').textContent = ch ? ch.name : '';
   document.getElementById('exam-q-level').textContent = lvlText;
   document.getElementById('exam-q-num').textContent = S.exam.idx + 1;
-  document.getElementById('exam-q-text').innerHTML = q.question;
+  document.getElementById('exam-q-text').innerHTML = _prettyMath(q.question);
   _makeImgsZoomable(document.getElementById('exam-q-text'));
   _saveResume();
   document.getElementById('exam-hint-box').classList.add('hidden');
@@ -3545,10 +3597,10 @@ function loadPracticeQuestion() {
   if (_qText) {
     _qText.classList.remove('question-enter');
     void _qText.offsetWidth; // force reflow
-    _qText.innerHTML = q.question;
+    _qText.innerHTML = _prettyMath(q.question);
     _qText.classList.add('question-enter');
   } else {
-    document.getElementById('practice-q-text').innerHTML = q.question;
+    document.getElementById('practice-q-text').innerHTML = _prettyMath(q.question);
   }
   _makeImgsZoomable(document.getElementById('practice-q-text'));
   _saveResume();

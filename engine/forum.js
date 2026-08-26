@@ -8,7 +8,7 @@ const Forum = (() => {
     { id: 'maths',    label: 'Maths Help',           icon: '📐', desc: 'Stuck on a Maths question? Ask here!' },
     { id: 'english',  label: 'English Help',         icon: '📝', desc: 'Questions about English language and writing' },
     { id: 'science',  label: 'Science Help',         icon: '🔬', desc: 'Science questions and experiments' },
-    { id: 'french',   label: 'French Help',          icon: '🇫🇷', desc: 'French language questions and practice' },
+    { id: 'french',   label: 'French Help',          icon: '📕', desc: 'French language questions and practice' },
     { id: 'history',  label: 'History & Geo Help',   icon: '🌍', desc: 'History and Geography questions' },
     { id: 'tips',     label: 'Study Tips',           icon: '📖', desc: 'Share revision strategies and helpful tips' },
     { id: 'suggest',  label: 'Suggestions',          icon: '💡', desc: 'Feature requests and ideas to improve the app' },

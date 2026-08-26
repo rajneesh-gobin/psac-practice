@@ -81,7 +81,7 @@ const G4FR_SYLLABUS = {
 };
 
 registerSubject({
-  id: 'grade4-french', name: 'French', grade: 4, icon: '🇫🇷', subject: 'French',
+  id: 'grade4-french', name: 'French', grade: 4, icon: '📕', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
   syllabus: G4FR_SYLLABUS,

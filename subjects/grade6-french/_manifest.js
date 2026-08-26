@@ -76,7 +76,7 @@ const G6FR_SYLLABUS = {
 };
 
 registerSubject({
-  id: 'grade6-french', name: 'French', grade: 6, icon: '🇫🇷', subject: 'French',
+  id: 'grade6-french', name: 'French', grade: 6, icon: '📕', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
   syllabus: G6FR_SYLLABUS,
