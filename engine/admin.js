@@ -47,10 +47,11 @@ const AdminPanel = (() => {
     });
     const panel = document.getElementById(`admin-tab-${name}`);
     if (panel) panel.classList.remove('hidden');
-    if (name === 'reports')  loadReports();
-    if (name === 'teachers') loadTeachers();
-    if (name === 'roles')    loadRoles();
-    if (name === 'plans')    loadPlans();
+    if (name === 'reports')   loadReports();
+    if (name === 'teachers')  loadTeachers();
+    if (name === 'roles')     loadRoles();
+    if (name === 'plans')     loadPlans();
+    if (name === 'questions') QM.tabOpen();
   }
 
   // ── Teacher approval queue ─────────────────
@@ -1149,7 +1150,300 @@ const AdminPanel = (() => {
     if (btn) { btn.disabled = false; btn.textContent = '🎁 Create Account'; }
   }
 
+  // ── Question Manager ─────────────────────────────────────────────────────
+  const QM = (() => {
+    let _offset    = 0;
+    const PAGE     = 50;
+    let _editingId = null;
+    let _idCounter = 0;
+
+    function _el(id) { return document.getElementById(id); }
+
+    function _stripHtml(html) {
+      return (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    function _getPack(subjectId) {
+      return (window.SUBJECT_PACKS || []).find(p => p.id === subjectId);
+    }
+
+    // ── Filter bar: grade cascade ────────────────────────────────────────
+    function qmGradeFilter() {
+      const grade = _el('qm-grade').value;
+      const subSel = _el('qm-subject');
+      subSel.innerHTML = '<option value="">All subjects</option>';
+      _el('qm-chapter').innerHTML = '<option value="">All chapters</option>';
+      (window.SUBJECT_PACKS || [])
+        .filter(p => !grade || String(p.grade) === grade)
+        .forEach(p => {
+          const o = document.createElement('option');
+          o.value = p.id; o.textContent = p.name;
+          subSel.appendChild(o);
+        });
+    }
+
+    function _populateSubjectFilter() {
+      const subSel = _el('qm-subject');
+      if (subSel.options.length > 1) return; // already populated
+      (window.SUBJECT_PACKS || []).forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.id; o.textContent = `Grade ${p.grade} — ${p.name}`;
+        subSel.appendChild(o);
+      });
+    }
+
+    // ── Search / list ────────────────────────────────────────────────────
+    async function qmSearch() {
+      _offset = 0;
+      _el('qm-list').innerHTML = '<p class="text-sm text-gray-400 p-4">Loading…</p>';
+      _el('qm-load-more').classList.add('hidden');
+      await _fetchAndRender(true);
+    }
+
+    async function qmLoadMore() {
+      _offset += PAGE;
+      await _fetchAndRender(false);
+    }
+
+    async function _fetchAndRender(replace) {
+      const grade    = _el('qm-grade').value;
+      const subject  = _el('qm-subject').value;
+      const chapter  = _el('qm-chapter').value;
+      const diff     = _el('qm-difficulty').value;
+      const search   = (_el('qm-search').value || '').trim();
+
+      let q = window._sb.from('questions')
+        .select('id,subject_id,chapter_id,difficulty,type,data')
+        .eq('is_past_paper', false)
+        .order('subject_id').order('chapter_id').order('difficulty')
+        .range(_offset, _offset + PAGE - 1);
+
+      if (grade)   q = q.eq('grade', parseInt(grade));
+      if (subject) q = q.eq('subject_id', subject);
+      if (chapter) q = q.eq('chapter_id', chapter);
+      if (diff)    q = q.eq('difficulty', parseInt(diff));
+      if (search)  q = q.ilike('data->>question', `%${search}%`);
+
+      const { data, error } = await q;
+
+      if (error) {
+        _el('qm-list').innerHTML = `<p class="text-sm text-red-500 p-4">Error: ${error.message}</p>`;
+        return;
+      }
+
+      const rows = data || [];
+      if (replace) {
+        _el('qm-count').textContent = rows.length === PAGE
+          ? `Showing ${_offset + rows.length}+ questions`
+          : `${_offset + rows.length} question${rows.length !== 1 ? 's' : ''}`;
+      }
+
+      const html = rows.map(r => {
+        const preview = _stripHtml(r.data?.question || '').slice(0, 80) || '(no text)';
+        const safeId  = r.id.replace(/'/g, "\\'");
+        return `<div class="flex items-center gap-2 p-2 border dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700/40">
+          <span class="font-mono text-xs text-gray-400 w-36 shrink-0 truncate">${r.id}</span>
+          <span class="flex-1 truncate text-gray-700 dark:text-gray-300">${preview}</span>
+          <span class="text-xs bg-gray-100 dark:bg-gray-600 dark:text-gray-300 rounded px-1 shrink-0">${r.chapter_id}</span>
+          <span class="text-xs text-gray-400 shrink-0">L${r.difficulty}</span>
+          <button onclick="AdminPanel.qmOpenForm('${safeId}')" class="text-blue-600 text-xs px-2 py-1 border dark:border-gray-500 rounded shrink-0">Edit</button>
+          <button onclick="AdminPanel.qmDelete('${safeId}')" class="text-red-500 text-xs px-2 py-1 border dark:border-gray-500 rounded shrink-0">Delete</button>
+        </div>`;
+      }).join('');
+
+      const list = _el('qm-list');
+      if (replace) list.innerHTML = html || '<p class="text-sm text-gray-400 p-4">No questions found.</p>';
+      else list.insertAdjacentHTML('beforeend', html);
+
+      const loadMore = _el('qm-load-more');
+      if (rows.length === PAGE) loadMore.classList.remove('hidden');
+      else loadMore.classList.add('hidden');
+    }
+
+    // ── Form: open ───────────────────────────────────────────────────────
+    async function qmOpenForm(id) {
+      _editingId = id || null;
+      _el('qm-form-title').textContent = id ? 'Edit Question' : 'Add Question';
+
+      // Reset fields
+      ['qmf-id','qmf-question','qmf-opt-a','qmf-opt-b','qmf-opt-c','qmf-opt-d','qmf-answer','qmf-hint','qmf-explanation'].forEach(fid => { _el(fid).value = ''; });
+      _el('qmf-preview').innerHTML = '';
+      _el('qmf-grade').value = '4';
+      _el('qmf-difficulty').value = '2';
+      _el('qmf-type').value = 'mcq';
+      _el('qmf-options-block').classList.remove('hidden');
+      qmFormGradeChange();
+
+      if (id) {
+        const { data, error } = await window._sb.from('questions').select('*').eq('id', id).maybeSingle();
+        if (error || !data) { toast('Could not load question.', 2000); return; }
+        const q = data.data || {};
+        _el('qmf-id').value          = data.id;
+        _el('qmf-grade').value       = String(data.grade);
+        _el('qmf-difficulty').value  = String(data.difficulty);
+        _el('qmf-type').value        = q.type || 'mcq';
+        _el('qmf-question').value    = q.question || '';
+        _el('qmf-answer').value      = q.answer || '';
+        _el('qmf-hint').value        = q.hint || '';
+        _el('qmf-explanation').value = q.explanation || '';
+        _el('qmf-preview').innerHTML = q.question || '';
+        qmFormGradeChange();
+        _el('qmf-subject').value = data.subject_id;
+        qmFormSubjectChange();
+        _el('qmf-chapter').value = data.chapter_id;
+        qmFormChapterChange();
+        if (q.subsection) _el('qmf-subsection').value = q.subsection;
+        const opts = q.options || [];
+        ['qmf-opt-a','qmf-opt-b','qmf-opt-c','qmf-opt-d'].forEach((fid, i) => {
+          _el(fid).value = opts[i] || '';
+        });
+        qmFormTypeChange();
+      }
+
+      _el('modal-qm-form').classList.remove('hidden');
+    }
+
+    function qmCloseForm() {
+      _el('modal-qm-form').classList.add('hidden');
+      _editingId = null;
+    }
+
+    // ── Form: cascading dropdowns ─────────────────────────────────────────
+    function qmFormGradeChange() {
+      const grade   = _el('qmf-grade').value;
+      const subSel  = _el('qmf-subject');
+      subSel.innerHTML = '';
+      (window.SUBJECT_PACKS || [])
+        .filter(p => String(p.grade) === grade)
+        .forEach(p => {
+          const o = document.createElement('option');
+          o.value = p.id; o.textContent = p.name;
+          subSel.appendChild(o);
+        });
+      qmFormSubjectChange();
+    }
+
+    function qmFormSubjectChange() {
+      const subjectId = _el('qmf-subject').value;
+      const chSel     = _el('qmf-chapter');
+      chSel.innerHTML = '';
+      const pack = _getPack(subjectId);
+      (pack?.chapters || []).forEach(ch => {
+        const o = document.createElement('option');
+        o.value = ch.id; o.textContent = ch.name;
+        chSel.appendChild(o);
+      });
+      qmFormChapterChange();
+    }
+
+    function qmFormChapterChange() {
+      const subjectId  = _el('qmf-subject').value;
+      const chapterId  = _el('qmf-chapter').value;
+      const subSel     = _el('qmf-subsection');
+      subSel.innerHTML = '<option value="">— none —</option>';
+      const pack       = _getPack(subjectId);
+      const syllabus   = pack?.SYLLABUS?.[chapterId];
+      (syllabus?.subsections || []).forEach(s => {
+        const o = document.createElement('option');
+        o.value = s.id; o.textContent = s.name;
+        subSel.appendChild(o);
+      });
+    }
+
+    function qmFormTypeChange() {
+      const type = _el('qmf-type').value;
+      _el('qmf-options-block').classList.toggle('hidden', type !== 'mcq');
+    }
+
+    function qmUpdatePreview() {
+      _el('qmf-preview').innerHTML = _el('qmf-question').value;
+    }
+
+    function qmInsertImage() {
+      const url = prompt('Image URL:\n(e.g. https://commons.wikimedia.org/wiki/Special:FilePath/Filename.jpg)');
+      if (!url) return;
+      const tag = `<img src="${url}" style="max-height:220px;border-radius:8px" alt="a diagram">`;
+      const ta  = _el('qmf-question');
+      const pos = ta.selectionStart || ta.value.length;
+      ta.value  = ta.value.slice(0, pos) + tag + ta.value.slice(pos);
+      qmUpdatePreview();
+    }
+
+    // ── Save ─────────────────────────────────────────────────────────────
+    async function qmSave() {
+      const question = _el('qmf-question').value.trim();
+      const answer   = _el('qmf-answer').value.trim();
+      if (!question) { toast('Question text is required.', 2000); return; }
+      if (!answer)   { toast('Correct answer is required.', 2000); return; }
+
+      const grade    = _el('qmf-grade').value;
+      const subject  = _el('qmf-subject').value;
+      const chapter  = _el('qmf-chapter').value;
+      const subsect  = _el('qmf-subsection').value;
+      const diff     = _el('qmf-difficulty').value;
+      const type     = _el('qmf-type').value;
+      const hint     = _el('qmf-hint').value.trim();
+      const expl     = _el('qmf-explanation').value.trim();
+
+      let qId = _el('qmf-id').value.trim();
+      if (!qId) {
+        const prefix = subject.replace('grade', 'g').replace('-', '').replace(/[^a-z0-9]/gi, '');
+        qId = `${prefix}-db-${Date.now().toString(36)}${(++_idCounter).toString(36)}`;
+      }
+
+      const options = type === 'mcq'
+        ? [_el('qmf-opt-a').value.trim(), _el('qmf-opt-b').value.trim(),
+           _el('qmf-opt-c').value.trim(), _el('qmf-opt-d').value.trim()].filter(Boolean)
+        : type === 'tf' ? ['True', 'False'] : [];
+
+      const data = {
+        id: qId, chapterId: chapter, difficulty: +diff,
+        type, question, options, answer, acceptableAnswers: [answer],
+      };
+      if (subsect)  data.subsection   = subsect;
+      if (hint)     data.hint         = hint;
+      if (expl)     data.explanation  = expl;
+
+      const row = {
+        id: qId, subject_id: subject, chapter_id: chapter,
+        grade: +grade, difficulty: +diff, is_past_paper: false,
+        data, imported_at: new Date().toISOString(),
+      };
+
+      const { error } = await window._sb.from('questions').upsert(row, { onConflict: 'id' });
+      if (error) { toast('Save failed: ' + error.message, 3000); return; }
+
+      toast('Question saved ✅', 1500);
+      qmCloseForm();
+      qmSearch();
+    }
+
+    // ── Delete ────────────────────────────────────────────────────────────
+    async function qmDelete(id) {
+      if (!confirm(`Delete question "${id}"?\nThis cannot be undone.`)) return;
+      const { error } = await window._sb.from('questions').delete().eq('id', id);
+      if (error) { toast('Delete failed: ' + error.message, 3000); return; }
+      toast('Deleted ✅', 1500);
+      qmSearch();
+    }
+
+    function tabOpen() {
+      _populateSubjectFilter();
+      qmSearch();
+    }
+
+    return { tabOpen, qmSearch, qmLoadMore, qmGradeFilter, qmOpenForm, qmCloseForm,
+             qmFormGradeChange, qmFormSubjectChange, qmFormChapterChange,
+             qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmSave, qmDelete };
+  })();
+
   return { render, showTab, loadMembers, filterMembers, changeRole,
     loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, resolveReport, loadRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
-    loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier };
+    loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier,
+    qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
+    qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,
+    qmFormGradeChange: QM.qmFormGradeChange, qmFormSubjectChange: QM.qmFormSubjectChange,
+    qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,
+    qmUpdatePreview: QM.qmUpdatePreview, qmInsertImage: QM.qmInsertImage,
+    qmSave: QM.qmSave, qmDelete: QM.qmDelete };
 })();

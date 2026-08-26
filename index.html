@@ -1689,6 +1689,8 @@
           class="admin-tab hidden flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">💳 Plans</button>
         <button id="admin-tab-create-btn" onclick="AdminPanel.showTab('create')" data-tab="create"
           class="admin-tab hidden flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🎁 Create</button>
+        <button onclick="AdminPanel.showTab('questions')" data-tab="questions"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">❓ Questions</button>
       </div>
 
       <!-- Members tab -->
@@ -1884,6 +1886,39 @@
         </div>
       </div>
     </div>
+
+      <!-- Questions tab -->
+      <div id="admin-tab-questions" class="admin-tab-panel hidden">
+        <div class="flex flex-wrap gap-2 mb-4">
+          <select id="qm-grade" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm" onchange="AdminPanel.qmGradeFilter()">
+            <option value="">All grades</option>
+            <option value="4">Grade 4</option>
+            <option value="5">Grade 5</option>
+            <option value="6">Grade 6</option>
+          </select>
+          <select id="qm-subject" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm">
+            <option value="">All subjects</option>
+          </select>
+          <select id="qm-chapter" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm">
+            <option value="">All chapters</option>
+          </select>
+          <select id="qm-difficulty" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm">
+            <option value="">Any difficulty</option>
+            <option value="1">1 — Basic</option>
+            <option value="2">2 — Medium</option>
+            <option value="3">3 — Hard</option>
+            <option value="4">4 — Challenge</option>
+          </select>
+          <input id="qm-search" type="text" placeholder="Search question text…" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm flex-1 min-w-32">
+          <button onclick="AdminPanel.qmSearch()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Search</button>
+          <button onclick="AdminPanel.qmOpenForm(null)" class="bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold">+ Add Question</button>
+        </div>
+        <p id="qm-count" class="text-sm text-gray-500 dark:text-gray-400 mb-2"></p>
+        <div id="qm-list" class="space-y-1"></div>
+        <div class="text-center mt-4">
+          <button id="qm-load-more" onclick="AdminPanel.qmLoadMore()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
+        </div>
+      </div>
 
     <div id="screen-teacher" class="screen hidden">
       <div class="flex justify-between items-center mb-5 flex-wrap gap-2">
@@ -3118,6 +3153,111 @@
           <div class="flex gap-2"><span class="shrink-0 font-bold text-indigo-500">2.</span> They log in and enter your code (or tap the link)</div>
           <div class="flex gap-2"><span class="shrink-0 font-bold text-indigo-500">3.</span> You both appear on each other's leaderboard 🏆</div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUESTION MANAGER FORM MODAL ───────────────────────────── -->
+  <div id="modal-qm-form" class="fixed inset-0 bg-black/50 z-50 flex items-start justify-center p-4 hidden" style="overflow-y:auto">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl p-6 space-y-4 my-8">
+      <div class="flex items-center justify-between">
+        <h2 id="qm-form-title" class="text-lg font-bold text-gray-800 dark:text-white">Add Question</h2>
+        <button onclick="AdminPanel.qmCloseForm()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Grade</label>
+          <select id="qmf-grade" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1" onchange="AdminPanel.qmFormGradeChange()">
+            <option value="4">Grade 4</option>
+            <option value="5">Grade 5</option>
+            <option value="6">Grade 6</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Subject</label>
+          <select id="qmf-subject" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1" onchange="AdminPanel.qmFormSubjectChange()"></select>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Chapter</label>
+          <select id="qmf-chapter" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1" onchange="AdminPanel.qmFormChapterChange()"></select>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Subsection</label>
+          <select id="qmf-subsection" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+            <option value="">— none —</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Difficulty</label>
+          <select id="qmf-difficulty" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+            <option value="1">1 — Basic</option>
+            <option value="2" selected>2 — Medium</option>
+            <option value="3">3 — Hard</option>
+            <option value="4">4 — Challenge (word problem)</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Type</label>
+          <select id="qmf-type" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1" onchange="AdminPanel.qmFormTypeChange()">
+            <option value="mcq">MCQ (4 options)</option>
+            <option value="numeric">Numeric (typed answer)</option>
+            <option value="tf">True / False</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Question ID <span class="text-gray-400 font-normal">(leave blank to auto-generate)</span></label>
+        <input id="qmf-id" type="text" placeholder="e.g. g5fr-lec-071" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1 font-mono">
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Question text <span class="text-gray-400 font-normal">(HTML allowed)</span></label>
+          <button onclick="AdminPanel.qmInsertImage()" class="text-xs text-blue-600 underline">🖼 Insert image URL</button>
+        </div>
+        <textarea id="qmf-question" rows="4" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm font-mono" oninput="AdminPanel.qmUpdatePreview()"></textarea>
+        <div id="qmf-preview" class="mt-2 p-2 bg-gray-50 dark:bg-gray-700 rounded text-sm min-h-8 border border-dashed border-gray-300 dark:border-gray-500"></div>
+      </div>
+
+      <div id="qmf-options-block" class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-xs text-gray-500">Option A</label>
+          <input id="qmf-opt-a" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500">Option B</label>
+          <input id="qmf-opt-b" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500">Option C</label>
+          <input id="qmf-opt-c" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+        </div>
+        <div>
+          <label class="text-xs text-gray-500">Option D</label>
+          <input id="qmf-opt-d" type="text" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+        </div>
+      </div>
+
+      <div>
+        <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Correct answer</label>
+        <input id="qmf-answer" type="text" placeholder="Must match one of the options exactly" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1">
+      </div>
+
+      <div>
+        <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Hint <span class="text-gray-400 font-normal">(optional)</span></label>
+        <textarea id="qmf-hint" rows="2" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1"></textarea>
+      </div>
+
+      <div>
+        <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Explanation <span class="text-gray-400 font-normal">(shown after answer)</span></label>
+        <textarea id="qmf-explanation" rows="2" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1"></textarea>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button onclick="AdminPanel.qmCloseForm()" class="flex-1 border dark:border-gray-600 dark:text-gray-300 rounded py-2 text-sm">Cancel</button>
+        <button onclick="AdminPanel.qmSave()" class="flex-1 bg-blue-600 text-white rounded py-2 text-sm font-semibold">Save Question</button>
       </div>
     </div>
   </div>
