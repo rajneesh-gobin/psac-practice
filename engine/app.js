@@ -1140,7 +1140,7 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
       // selectMCQ never read the argument anyway, so it is gone rather than
       // escaped. data-value is the real data path (getSelectedAnswer reads it)
       // and is now escaped properly.
-      return `<button class="${cls}" data-value="${_attr(opt)}" onclick="selectMCQ(this,'${containerId}',${disabled})">
+      return `<button class="${cls}" data-value="${_attr(opt)}" onclick="this.classList.add('mcq-spring');this.onanimationend=()=>this.classList.remove('mcq-spring');selectMCQ(this,'${containerId}',${disabled})">
         <span class="opt-letter">${String.fromCharCode(65+i)}</span>
         <span>${opt}</span>
       </button>`;
@@ -2038,6 +2038,7 @@ function renderDashboard() {
 // ── CHAPTER SELECT ─────────────────────────────
 function renderChapterSelect() {
   const grid = document.getElementById('chapter-grid');
+  const _borderColor = _SUBJECT_BORDER_COLOR[ACTIVE_PACK?.subject] || '';
 
   const _card = (ch) => {
     const pct = getChapterPct(ch.id);
@@ -2048,7 +2049,8 @@ function renderChapterSelect() {
       : pct >= 80 ? '<span class="text-amber-400 text-base tracking-tight" title="Mastered">★★★</span>'
       : pct >= 50 ? '<span class="text-base tracking-tight"><span class="text-amber-400">★★</span><span class="text-gray-300 dark:text-gray-600">☆</span></span>'
       : '<span class="text-base tracking-tight"><span class="text-amber-400">★</span><span class="text-gray-300 dark:text-gray-600">☆☆</span></span>';
-    return `<button class="chapter-card${isEnr ? ' enrichment' : ''}" onclick="startChapterDirect('${ch.id}')">
+    const borderStyle = _borderColor ? ` style="border-left:4px solid ${_borderColor}"` : '';
+    return `<button class="chapter-card${isEnr ? ' enrichment' : ''}" onclick="startChapterDirect('${ch.id}')"${borderStyle}>
       ${isEnr ? '<span class="enr-badge">✨ BONUS</span>' : ''}
       <div class="text-3xl mb-2">${ch.icon}</div>
       <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">${ch.name}</div>
@@ -3440,6 +3442,22 @@ window.selectGrade = function(grade) {
 };
 
 // ── SUBJECT SELECTOR ──────────────────────────
+const _SUBJECT_THEME = {
+  'Maths':               { bg: 'from-blue-500 to-indigo-600',   chip: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',   icon: 'bg-blue-100 dark:bg-blue-900/40' },
+  'English':             { bg: 'from-green-500 to-emerald-600', chip: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300', icon: 'bg-green-100 dark:bg-green-900/40' },
+  'French':              { bg: 'from-purple-500 to-violet-600', chip: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300', icon: 'bg-purple-100 dark:bg-purple-900/40' },
+  'Science':             { bg: 'from-teal-500 to-cyan-600',     chip: 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300',     icon: 'bg-teal-100 dark:bg-teal-900/40' },
+  'History & Geography': { bg: 'from-amber-500 to-orange-500',  chip: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',  icon: 'bg-amber-100 dark:bg-amber-900/40' },
+};
+const _DEFAULT_THEME = { bg: 'from-gray-500 to-gray-600', chip: 'bg-gray-100 text-gray-700', icon: 'bg-gray-100' };
+const _SUBJECT_BORDER_COLOR = {
+  'Maths':               '#4f46e5',
+  'English':             '#10b981',
+  'French':              '#9333ea',
+  'Science':             '#0d9488',
+  'History & Geography': '#f59e0b',
+};
+
 function renderSubjectSelect() {
   const container = document.getElementById('subject-cards');
   if (!container) return;
@@ -3451,15 +3469,6 @@ function renderSubjectSelect() {
   // Update heading
   const heading = document.getElementById('subject-select-heading');
   if (heading) heading.textContent = SELECTED_GRADE ? `Grade ${SELECTED_GRADE} - Choose a Subject` : 'Choose a Subject';
-
-  const _SUBJECT_THEME = {
-    'Maths':               { bg: 'from-blue-500 to-indigo-600',   chip: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',   icon: 'bg-blue-100 dark:bg-blue-900/40' },
-    'English':             { bg: 'from-green-500 to-emerald-600', chip: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300', icon: 'bg-green-100 dark:bg-green-900/40' },
-    'French':              { bg: 'from-purple-500 to-violet-600', chip: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300', icon: 'bg-purple-100 dark:bg-purple-900/40' },
-    'Science':             { bg: 'from-teal-500 to-cyan-600',     chip: 'bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300',     icon: 'bg-teal-100 dark:bg-teal-900/40' },
-    'History & Geography': { bg: 'from-amber-500 to-orange-500',  chip: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',  icon: 'bg-amber-100 dark:bg-amber-900/40' },
-  };
-  const _DEFAULT_THEME = { bg: 'from-gray-500 to-gray-600', chip: 'bg-gray-100 text-gray-700', icon: 'bg-gray-100' };
 
   container.innerHTML = packs.map(pack => {
     const soon  = !!pack.comingSoon;
