@@ -812,7 +812,15 @@ const Auth = (() => {
       }
       return;
     }
-    // onAuthStateChange handles routing
+    // onAuthStateChange may handle routing, but it's async and not awaited by
+    // Supabase — if the event fires late or is missed, the user stays stuck on
+    // the auth screen even though their session was stored. Drive routing here
+    // directly using the session returned by signInWithPassword itself.
+    // _handleParentSessionGated's own `if (_parentUser) return` guard prevents
+    // double-execution if onAuthStateChange already fired.
+    if (data?.session) {
+      await _handleParentSessionGated(data.session);
+    }
   }
 
   async function emailSignUp() {

@@ -2089,6 +2089,7 @@ const PD = (() => {
     _renderLeaderboard();
     _renderParentAssignDropdown(acct);
     _renderParentControls(acct);
+    _renderAssignments();
   }
 
   async function _renderAssignments() {
