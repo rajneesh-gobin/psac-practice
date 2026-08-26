@@ -145,8 +145,8 @@ let ASSIGNMENT_SCORE        = { attempted: 0, correct: 0 };
 let ASSIGNMENT_IS_TEST      = false;   // test mode = no feedback until submission
 let ASSIGNMENT_TEST_ANSWERS = [];      // [{question,userAnswer,correctAnswer,correct,explanation}]
 
-function save(data) {
-  if (ACTIVE_STUDENT_ID) Store.saveStudent(ACTIVE_STUDENT_ID, data);
+function save(data, immediate = false) {
+  if (ACTIVE_STUDENT_ID) Store.saveStudent(ACTIVE_STUDENT_ID, data, immediate);
 }
 
 // ── THEME ─────────────────────────────────────
@@ -2539,7 +2539,7 @@ function submitExam() {
   if (pct > DB.stats.bestScore) DB.stats.bestScore = pct;
   DB.examHistory.unshift({ date: new Date().toLocaleDateString(), pct, correct, total, type: S.exam.type || 'exam' });
   if (DB.examHistory.length > 20) DB.examHistory.pop();
-  save(DB);
+  save(DB, true);
   if (pct >= 80) launchConfetti();
   renderResults(correct, total, pct, timeTaken, chapterStats);
   showScreen('results');

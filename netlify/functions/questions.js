@@ -95,7 +95,7 @@ exports.handler = async (event) => {
   const headers = {
     'Content-Type':                'application/json',
     'Access-Control-Allow-Origin': '*',
-    'Cache-Control':               'private, max-age=86400',
+    'Cache-Control':               'public, s-maxage=86400, stale-while-revalidate=3600',
   };
 
   if (event.httpMethod === 'OPTIONS') {
@@ -142,6 +142,25 @@ exports.handler = async (event) => {
   const subjectId  = (p.subject    || '').replace(/[^a-z0-9-]/g, '');
   const chapterId  = (p.chapter    || '') || null;
   const difficulty = p.difficulty  ? parseInt(p.difficulty) : null;
+  const batchAll   = p.all === '1';
+  const batchGrade = (p.grade      || '').replace(/[^0-9]/g, '');
+
+  // Batch endpoint: ?all=1&grade=N — returns all subjects for the grade in one call
+  if (batchAll && batchGrade) {
+    try {
+      const subjectsDir = path.join(ROOT, 'subjects');
+      const allDirs = fs.readdirSync(subjectsDir)
+        .filter(d => d.startsWith(`grade${batchGrade}-`) && fs.statSync(path.join(subjectsDir, d)).isDirectory());
+      const result = {};
+      for (const dir of allDirs) {
+        result[dir] = _loadSubject(dir);
+      }
+      return { statusCode: 200, headers, body: JSON.stringify(result) };
+    } catch(e) {
+      console.error('[questions batch]', e);
+      return { statusCode: 500, headers, body: JSON.stringify({ error: 'Server error' }) };
+    }
+  }
 
   if (!subjectId) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'subject param required' }) };

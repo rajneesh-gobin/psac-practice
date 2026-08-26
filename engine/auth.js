@@ -341,6 +341,7 @@ const Auth = (() => {
   // Also checks immediately when the device comes back online after being offline.
   let _sessionGuardTimer = null;
   let _sessionGuardOnlineFn = null;
+  let _sessionGuardVisibilityFn = null;
 
   // A student session can stop working without any visible error: the token
   // expires (30 days) or is revoked, current_student_id() returns NULL, and RLS
@@ -378,14 +379,17 @@ const Auth = (() => {
       } catch(_) { /* offline — allow to continue */ }
     };
 
-    _sessionGuardTimer    = setInterval(_checkVersion, 5 * 60 * 1000);
+    _sessionGuardTimer    = setInterval(() => { if (!document.hidden) _checkVersion(); }, 30 * 60 * 1000);
     _sessionGuardOnlineFn = _checkVersion;
     window.addEventListener('online', _sessionGuardOnlineFn);
+    _sessionGuardVisibilityFn = () => { if (!document.hidden) _checkVersion(); };
+    document.addEventListener('visibilitychange', _sessionGuardVisibilityFn);
   }
 
   function _stopSessionGuard() {
-    if (_sessionGuardTimer)    { clearInterval(_sessionGuardTimer); _sessionGuardTimer = null; }
-    if (_sessionGuardOnlineFn) { window.removeEventListener('online', _sessionGuardOnlineFn); _sessionGuardOnlineFn = null; }
+    if (_sessionGuardTimer)        { clearInterval(_sessionGuardTimer); _sessionGuardTimer = null; }
+    if (_sessionGuardOnlineFn)     { window.removeEventListener('online', _sessionGuardOnlineFn); _sessionGuardOnlineFn = null; }
+    if (_sessionGuardVisibilityFn) { document.removeEventListener('visibilitychange', _sessionGuardVisibilityFn); _sessionGuardVisibilityFn = null; }
   }
 
   // ── Login a student (after PIN verified) ──────

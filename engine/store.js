@@ -240,21 +240,29 @@ const Store = (() => {
     return raw;
   }
 
-  async function saveStudentProgress(studentId, progressData) {
+  let _saveDebounceTimer = null;
+
+  async function _flushProgressToSupabase(studentId, progressData) {
+    if (!_sb) return;
+    _sb.from('student_progress').upsert({
+      student_id: studentId, data: progressData, updated_at: new Date().toISOString(),
+    }).then(({ error }) => {
+      if (error) console.error('[Store.saveStudentProgress] write failed:', error.message,
+        '- progress is saved locally only. Check the x-student-token header.');
+    }).catch(err => console.error('[Store.saveStudentProgress]', err));
+  }
+
+  async function saveStudentProgress(studentId, progressData, immediate = false) {
     // Write to localStorage immediately (zero latency during practice)
     try { localStorage.setItem(_sKey(studentId), JSON.stringify(progressData)); } catch(e) {}
-    // Push to Supabase in background.
-    // supabase-js resolves with { data, error } rather than rejecting, so the
-    // old `.then(() => {}).catch(() => {})` swallowed EVERY write failure -
-    // including RLS rejections. A student could practise for an hour with
-    // nothing persisting and no indication anywhere.
-    if (_sb) {
-      _sb.from('student_progress').upsert({
-        student_id: studentId, data: progressData, updated_at: new Date().toISOString(),
-      }).then(({ error }) => {
-        if (error) console.error('[Store.saveStudentProgress] write failed:', error.message,
-          '- progress is saved locally only. Check the x-student-token header.');
-      }).catch(err => console.error('[Store.saveStudentProgress]', err));
+    // Debounce Supabase writes: batch rapid question answers into one write every 30s.
+    // Pass immediate=true on exam submit / explicit checkpoints so data is never lost.
+    if (immediate) {
+      clearTimeout(_saveDebounceTimer);
+      _flushProgressToSupabase(studentId, progressData);
+    } else {
+      clearTimeout(_saveDebounceTimer);
+      _saveDebounceTimer = setTimeout(() => _flushProgressToSupabase(studentId, progressData), 30_000);
     }
   }
 
@@ -285,8 +293,8 @@ const Store = (() => {
     } catch(e) { return _defaultStudent(); }
   }
 
-  function saveStudent(id, data) {
-    saveStudentProgress(id, data);
+  function saveStudent(id, data, immediate = false) {
+    saveStudentProgress(id, data, immediate);
   }
 
   function clearStudent(id) {
@@ -497,16 +505,9 @@ const Store = (() => {
       } catch(e) { return null; }
     })();
 
-    let ip = null;
-    try {
-      const r = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(3000) });
-      if (r.ok) ip = (await r.json()).ip;
-    } catch(e) {}
-
     _sb.from('login_events').insert({
       user_id:     String(userId),
       user_type:   userType || 'student',
-      ip_address:  ip,
       user_agent:  navigator.userAgent.slice(0, 500),
       fingerprint,
     }).then(() => {}).catch(() => {});

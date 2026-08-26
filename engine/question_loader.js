@@ -298,7 +298,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 7;
+  const _CACHE_VERSION = 8;
   const _cacheKey = subjectId => `mm_qc_v${_CACHE_VERSION}_${subjectId}`;
 
   // Drop caches written by any earlier version, so a bump reclaims the space
@@ -327,9 +327,21 @@ const QuestionLoader = (() => {
     try { localStorage.setItem(_cacheKey(subjectId), JSON.stringify({ ts: Date.now(), data })); } catch {}
   }
 
+  async function _buildAuthHeaders() {
+    const headers = {};
+    if (typeof _sb !== 'undefined' && _sb) {
+      const { data: { session } } = await _sb.auth.getSession().catch(() => ({ data: {} }));
+      if (session?.access_token) headers['Authorization'] = `Bearer ${session.access_token}`;
+    }
+    if (!headers['Authorization'] && typeof Store !== 'undefined') {
+      const sess = Store.getStudentSession();
+      if (sess?.id) headers['X-Student-Id'] = sess.id;
+    }
+    return headers;
+  }
+
   async function _loadFromAPI(subjectId) {
     try {
-      // ── Serve from localStorage cache if fresh (avoids Netlify function calls) ──
       const cached = _readCache(subjectId);
       if (cached) {
         const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
@@ -337,21 +349,7 @@ const QuestionLoader = (() => {
         return;
       }
 
-      // Build auth headers
-      const headers = {};
-
-      // Parent / Teacher: include Supabase JWT
-      if (typeof _sb !== 'undefined' && _sb) {
-        const { data: { session } } = await _sb.auth.getSession().catch(() => ({ data: {} }));
-        if (session?.access_token) headers['Authorization'] = `Bearer ${session.access_token}`;
-      }
-
-      // Student: include their session id
-      if (!headers['Authorization'] && typeof Store !== 'undefined') {
-        const sess = Store.getStudentSession();
-        if (sess?.id) headers['X-Student-Id'] = sess.id;
-      }
-
+      const headers = await _buildAuthHeaders();
       if (!headers['Authorization'] && !headers['X-Student-Id']) {
         console.warn('[QuestionLoader] No auth - skipping API load for', subjectId);
         return;
@@ -361,16 +359,38 @@ const QuestionLoader = (() => {
       if (!resp.ok) { console.warn('[QuestionLoader] API error', resp.status); return; }
 
       const incoming = await resp.json();
-
-      // Cache for 7 days so subsequent page loads skip the function entirely
       _writeCache(subjectId, incoming);
-
-      // Deduplicate - avoid double-loading if somehow already present
       const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
       STATIC_QUESTIONS.push(...incoming.filter(q => !existing.has(q.id)));
 
     } catch(e) {
       console.warn('[QuestionLoader] Fetch error:', e.message);
+    }
+  }
+
+  // Batch-load all subjects for a grade in a single API call (production only).
+  // Falls back to per-subject loads on error.
+  async function _loadBatchForGrade(grade, packs) {
+    try {
+      const headers = await _buildAuthHeaders();
+      if (!headers['Authorization'] && !headers['X-Student-Id']) return false;
+
+      const resp = await fetch(`/.netlify/functions/questions?all=1&grade=${grade}`, { headers });
+      if (!resp.ok) return false;
+
+      const bundle = await resp.json(); // { 'grade5-maths': [...], ... }
+      const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
+      for (const [subjectId, questions] of Object.entries(bundle)) {
+        if (!Array.isArray(questions)) continue;
+        _writeCache(subjectId, questions);
+        _done.add(subjectId);
+        STATIC_QUESTIONS.push(...questions.filter(q => !existing.has(q.id)));
+        questions.forEach(q => existing.add(q.id));
+      }
+      return true;
+    } catch(e) {
+      console.warn('[QuestionLoader] Batch fetch error:', e.message);
+      return false;
     }
   }
 
@@ -396,13 +416,32 @@ const QuestionLoader = (() => {
       if (!disabledSubjects.includes(subjectHint)) await loadSubject(subjectHint);
       return;
     }
-    if (typeof SUBJECT_PACKS !== 'undefined') {
-      const packs = SUBJECT_PACKS.filter(p =>
-        p.grade === grade &&
-        !p.comingSoon &&
-        !disabledGrades.includes(p.grade) &&
-        !disabledSubjects.includes(p.id)
-      );
+
+    if (typeof SUBJECT_PACKS === 'undefined') return;
+    const packs = SUBJECT_PACKS.filter(p =>
+      p.grade === grade &&
+      !p.comingSoon &&
+      !disabledGrades.includes(p.grade) &&
+      !disabledSubjects.includes(p.id)
+    );
+
+    // In file:// mode, fall back to per-subject script injection
+    if (_isFileProtocol) {
+      for (const p of packs) await loadSubject(p.id);
+      return;
+    }
+
+    // Check if all subjects are already cached — skip the network entirely
+    const allCached = packs.every(p => _done.has(p.id) || _readCache(p.id) !== null);
+    if (allCached) {
+      for (const p of packs) await loadSubject(p.id);
+      return;
+    }
+
+    // Batch fetch: one request for all subjects in this grade
+    const batchOk = await _loadBatchForGrade(grade, packs);
+    if (!batchOk) {
+      // Fallback: load individually
       for (const p of packs) await loadSubject(p.id);
     }
   }
