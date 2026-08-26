@@ -755,3 +755,26 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
   70%  { opacity: 0; transform: scale(1.15); }
   100% { opacity: 0; transform: scale(1.15); }
 }
+
+/* ── Screen slide transitions ─────────────────── */
+.screen-enter-right {
+  animation: slideInRight 0.22s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+.screen-enter-left {
+  animation: slideInLeft 0.22s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+/* ── Bottom navigation bar ────────────────────── */
+.nav-btn { color: #9ca3af; }
+.nav-btn.nav-active { color: #6366f1; }
+.nav-btn.nav-active svg { stroke: #6366f1; }
+.nav-btn.nav-active span { color: #6366f1; }
+body.has-bottom-nav main { padding-bottom: calc(4rem + env(safe-area-inset-bottom)); }

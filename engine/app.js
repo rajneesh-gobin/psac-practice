@@ -777,14 +777,82 @@ function _closeConfirmModal(confirmed) {
 }
 
 // ── SCREEN NAVIGATION ─────────────────────────
+const _SCREEN_ORDER = ['dashboard','subject-select','chapter-select','practice','exam'];
+let _prevScreen = null;
+
+const _BOTTOM_NAV_SCREENS = new Set(['dashboard','subject-select','chapter-select','practice','exam','exam-config','analytics','results']);
+const _NAV_MAP = {
+  'dashboard':'home','subject-select':'practice','chapter-select':'practice',
+  'practice':'practice','exam-config':'exam','exam':'exam','results':'exam','analytics':'progress',
+};
+
+function _updateBottomNav(screenId) {
+  const nav = document.getElementById('student-bottom-nav');
+  if (!nav) return;
+  const show = _BOTTOM_NAV_SCREENS.has(screenId) && (typeof ACTIVE_STUDENT_ID !== 'undefined') && !!ACTIVE_STUDENT_ID;
+  nav.classList.toggle('hidden', !show);
+  document.body.classList.toggle('has-bottom-nav', show);
+  const active = _NAV_MAP[screenId];
+  nav.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('nav-active', btn.dataset.nav === active));
+}
+
+function _launchConfetti() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;pointer-events:none';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const COLORS = ['#6366f1','#ec4899','#f59e0b','#10b981','#3b82f6','#ef4444','#a855f7'];
+  const pieces = Array.from({length: 120}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height * 0.5,
+    w: 8 + Math.random() * 8, h: 5 + Math.random() * 5,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    rot: Math.random() * Math.PI * 2,
+    vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 3,
+    vrot: (Math.random() - 0.5) * 0.2, opacity: 1,
+  }));
+  let frame = 0;
+  (function tick() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.vrot; p.vy += 0.08;
+      if (frame > 90) p.opacity = Math.max(0, p.opacity - 0.015);
+      ctx.save(); ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    frame++;
+    if (frame < 180) requestAnimationFrame(tick); else canvas.remove();
+  })();
+}
+
 function showScreen(id) {
   // Dismiss any floating hint callout on navigation
   const _hc = document.getElementById('hint-callout');
   if (_hc && !_hc.classList.contains('hint-hidden')) _dismissHint();
 
-  document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+  const prevIdx = _SCREEN_ORDER.indexOf(_prevScreen);
+  const nextIdx = _SCREEN_ORDER.indexOf(id);
+  const isForward = nextIdx > prevIdx;
+  const isBack    = prevIdx !== -1 && nextIdx !== -1 && nextIdx < prevIdx;
+
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('screen-enter-right','screen-enter-left');
+    s.classList.add('hidden');
+  });
   const sc = document.getElementById('screen-' + id);
-  if (sc) { sc.classList.remove('hidden'); S.currentScreen = id; }
+  if (sc) {
+    sc.classList.remove('hidden');
+    if (isForward)      sc.classList.add('screen-enter-right');
+    else if (isBack)    sc.classList.add('screen-enter-left');
+    S.currentScreen = id;
+  }
+  _prevScreen = id;
+  _updateBottomNav(id);
 
   // Hide header on full-page assignment screens
   const hideHeader = sc?.dataset?.hideHeader === 'true';
@@ -2478,6 +2546,7 @@ function submitExam() {
 }
 
 function renderResults(correct, total, pct, timeTaken, chapterStats) {
+  if (pct >= 80) setTimeout(_launchConfetti, 300);
   const banner = document.getElementById('results-banner');
   const emoji = pct>=90?'🏆':pct>=70?'🎉':pct>=50?'👍':'💪';
   const grade = pct>=90?'Outstanding - A+':pct>=80?'Excellent - A':pct>=70?'Good - B':pct>=60?'Satisfactory - C':pct>=50?'Pass - D':'Needs more practice - Try again!';
