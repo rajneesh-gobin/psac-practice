@@ -1267,6 +1267,7 @@ const AdminPanel = (() => {
       if (chapter) q = q.eq('chapter_id', chapter);
       if (diff)    q = q.eq('difficulty', parseInt(diff));
       if (search)  q = q.ilike('data->>question', `%${search}%`);
+      if (_el('qm-has-image')?.checked) q = q.or('data->>question.ilike.%<img%,data->>question.ilike.%<svg%');
 
       const { data, error } = await q;
 
@@ -1413,6 +1414,31 @@ const AdminPanel = (() => {
       qmUpdatePreview();
     }
 
+    async function qmUploadImage(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const status = _el('qmf-upload-status');
+      if (status) { status.textContent = 'Uploading…'; status.classList.remove('hidden'); }
+      try {
+        const ext  = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const { error } = await window._sb.storage.from('question-images').upload(name, file, { cacheControl: '31536000', upsert: false });
+        if (error) throw error;
+        const { data: urlData } = window._sb.storage.from('question-images').getPublicUrl(name);
+        const url = urlData.publicUrl;
+        const ta  = _el('qmf-question');
+        const pos = ta.selectionStart || ta.value.length;
+        ta.value  = ta.value.slice(0, pos) + `<img src="${url}" style="max-height:220px;border-radius:8px" alt="a diagram">` + ta.value.slice(pos);
+        qmUpdatePreview();
+        if (status) { status.textContent = 'Uploaded ✅'; setTimeout(() => status.classList.add('hidden'), 2000); }
+      } catch(e) {
+        if (status) status.textContent = 'Upload failed: ' + (e.message || 'unknown error');
+        console.error('[qmUploadImage]', e);
+      } finally {
+        input.value = '';
+      }
+    }
+
     // ── Save ─────────────────────────────────────────────────────────────
     async function qmSave() {
       const question = _el('qmf-question').value.trim();
@@ -1480,7 +1506,7 @@ const AdminPanel = (() => {
 
     return { tabOpen, qmSearch, qmLoadMore, qmGradeFilter, qmOpenForm, qmCloseForm,
              qmFormGradeChange, qmFormSubjectChange, qmFormChapterChange,
-             qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmSave, qmDelete };
+             qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmUploadImage, qmSave, qmDelete };
   })();
 
   return { render, showTab, loadMembers, filterMembers, changeRole,
@@ -1491,5 +1517,5 @@ const AdminPanel = (() => {
     qmFormGradeChange: QM.qmFormGradeChange, qmFormSubjectChange: QM.qmFormSubjectChange,
     qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,
     qmUpdatePreview: QM.qmUpdatePreview, qmInsertImage: QM.qmInsertImage,
-    qmSave: QM.qmSave, qmDelete: QM.qmDelete, qmResolveReport };
+    qmUploadImage: QM.qmUploadImage, qmSave: QM.qmSave, qmDelete: QM.qmDelete, qmResolveReport };
 })();
