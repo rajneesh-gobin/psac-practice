@@ -124,6 +124,78 @@ function _readBundle(name) {
   return parsed;
 }
 
+// ── DB question cache ─────────────────────────────────────────────────────────
+// Questions change only when the import script runs (not on every deploy), so
+// a 5-minute TTL balances freshness against Supabase round trips.
+const _dbCache = new Map(); // key → { data: [...], at }
+const _DB_TTL  = 5 * 60 * 1000;
+
+// Fetches all rows for a query, paginating 500 at a time.
+async function _fetchAllRows(url, hdrs) {
+  const PAGE = 500;
+  let offset = 0, all = [], done = false;
+  while (!done) {
+    const r = await fetch(`${url}&limit=${PAGE}&offset=${offset}`, { headers: hdrs });
+    if (!r.ok) return null;
+    const batch = await r.json();
+    if (!Array.isArray(batch)) return null;
+    all.push(...batch);
+    if (batch.length < PAGE) done = true;
+    else offset += PAGE;
+  }
+  return all;
+}
+
+// Returns question data array for a subject from DB, or null if empty/unavailable.
+async function _dbQuerySubject(subjectId, sbUrl, sbSrk) {
+  if (!sbSrk) return null;
+  const key = `sub:${subjectId}`;
+  const hit = _dbCache.get(key);
+  if (hit && (Date.now() - hit.at) < _DB_TTL) return hit.data;
+  const hdrs = { apikey: sbSrk, Authorization: `Bearer ${sbSrk}` };
+  const url  = `${sbUrl}/rest/v1/questions?subject_id=eq.${encodeURIComponent(subjectId)}&is_past_paper=eq.false&select=data`;
+  const rows = await _fetchAllRows(url, hdrs).catch(() => null);
+  if (!rows || !rows.length) return null;
+  const data = rows.map(r => r.data);
+  _dbCache.set(key, { data, at: Date.now() });
+  return data;
+}
+
+// Returns { subjectId: [...] } map for a grade from DB, or null.
+async function _dbQueryGrade(grade, sbUrl, sbSrk) {
+  if (!sbSrk) return null;
+  const key = `grade:${grade}`;
+  const hit = _dbCache.get(key);
+  if (hit && (Date.now() - hit.at) < _DB_TTL) return hit.data;
+  const hdrs = { apikey: sbSrk, Authorization: `Bearer ${sbSrk}` };
+  const url  = `${sbUrl}/rest/v1/questions?grade=eq.${grade}&is_past_paper=eq.false&select=subject_id,data`;
+  const rows = await _fetchAllRows(url, hdrs).catch(() => null);
+  if (!rows || !rows.length) return null;
+  const grouped = {};
+  for (const row of rows) {
+    if (!grouped[row.subject_id]) grouped[row.subject_id] = [];
+    grouped[row.subject_id].push(row.data);
+  }
+  _dbCache.set(key, { data: grouped, at: Date.now() });
+  return grouped;
+}
+
+// Returns past-paper array from DB, or null.
+async function _dbQueryPastPapers(grade, sbUrl, sbSrk) {
+  if (!sbSrk) return null;
+  const key = `papers:${grade || 'all'}`;
+  const hit = _dbCache.get(key);
+  if (hit && (Date.now() - hit.at) < _DB_TTL) return hit.data;
+  const hdrs = { apikey: sbSrk, Authorization: `Bearer ${sbSrk}` };
+  let url = `${sbUrl}/rest/v1/questions?is_past_paper=eq.true&select=data`;
+  if (grade) url += `&grade=eq.${grade}`;
+  const rows = await _fetchAllRows(url, hdrs).catch(() => null);
+  if (!rows || !rows.length) return null;
+  const data = rows.map(r => r.data);
+  _dbCache.set(key, { data, at: Date.now() });
+  return data;
+}
+
 // ── Auth cache ───────────────────────────────────────────────────────────────
 // Verifying a caller costs a Supabase round trip (~100-300 ms of billed time)
 // and the answer barely changes minute to minute. Keyed on the credential
@@ -314,20 +386,31 @@ exports.handler = async (event) => {
   // Goes through this function rather than being a static asset so it inherits
   // the same auth the rest of the content has.
   if (p.papers === '1') {
-    const all = _readBundle('past-papers') || [];
-    const list = batchGrade ? all.filter(q => String(q.grade) === batchGrade) : all;
+    let all = await _dbQueryPastPapers(batchGrade || null, SB_URL, SB_SRK);
+    if (!all) all = _readBundle('past-papers') || [];
+    const list = (batchGrade && all.some(q => q.grade)) ? all.filter(q => String(q.grade) === batchGrade) : all;
     return { statusCode: 200, headers, body: JSON.stringify(list) };
   }
 
   // Batch endpoint: ?all=1&grade=N — returns all subjects for the grade in one call
   if (batchAll && batchGrade) {
     try {
-      // Fast path: pre-built bundle, parsed once per warm container.
+      // Try DB first
+      const dbBundle = await _dbQueryGrade(batchGrade, SB_URL, SB_SRK);
+      if (dbBundle) {
+        const out = {};
+        for (const [key, qs] of Object.entries(dbBundle)) {
+          if (_blockedSubjects.has(key)) continue;
+          out[key] = _planFilter(qs);
+        }
+        return { statusCode: 200, headers, body: JSON.stringify(out) };
+      }
+      // Fall back to pre-built bundle, parsed once per warm container.
+      // ⚠ Never mutate the cached object — it is shared by every subsequent
+      // request this container serves, so deleting a blocked subject from it
+      // would hide that subject for everyone until the container recycles.
       const cachedBundle = _readBundle(`grade${batchGrade}`);
       if (cachedBundle) {
-        // ⚠ Never mutate the cached object - it is shared by every subsequent
-        // request this container serves, so deleting a blocked subject from it
-        // would hide that subject for everyone until the container recycles.
         const out = {};
         for (const [key, qs] of Object.entries(cachedBundle)) {
           if (_blockedSubjects.has(key)) continue;
@@ -335,7 +418,7 @@ exports.handler = async (event) => {
         }
         return { statusCode: 200, headers, body: JSON.stringify(out) };
       }
-      // Fallback: build dynamically (local dev or bundle missing)
+      // Last fallback: build dynamically (local dev or bundle missing)
       const subjectsDir = path.join(ROOT, 'subjects');
       const allDirs = fs.readdirSync(subjectsDir)
         .filter(d => d.startsWith(`grade${batchGrade}-`) && fs.statSync(path.join(subjectsDir, d)).isDirectory());
@@ -362,9 +445,12 @@ exports.handler = async (event) => {
   }
 
   try {
-    // Fastest path: the per-subject file. Reading grade5.json to answer a
-    // request for grade5-maths meant parsing 1.6 MB to return 100 KB.
-    let subjectQs = _readBundle(subjectId);
+    // Try DB first
+    let subjectQs = await _dbQuerySubject(subjectId, SB_URL, SB_SRK);
+
+    // Fall back to per-subject bundle. Reading grade5.json to answer a
+    // request for grade5-maths would mean parsing 1.6 MB to return 100 KB.
+    if (!subjectQs) subjectQs = _readBundle(subjectId);
 
     // Older deploys only have the whole-grade bundles; fall back to those.
     if (!subjectQs) {
@@ -379,12 +465,10 @@ exports.handler = async (event) => {
       if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
       return { statusCode: 200, headers, body: JSON.stringify(questions) };
     }
-    // Fallback: build dynamically
+    // Last fallback: build dynamically
     let questions = _planFilter(_loadSubject(subjectId));
-
     if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);
     if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
-
     return { statusCode: 200, headers, body: JSON.stringify(questions) };
   } catch(e) {
     console.error('[questions]', e);

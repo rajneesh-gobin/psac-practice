@@ -5,6 +5,9 @@
 # Pre-built question bundles (generated at deploy time by netlify/build-questions.js)
 netlify/question-bundles/
 
+# Local secrets — never commit
+.env
+
 # OS / editor noise
 .DS_Store
 Thumbs.db
