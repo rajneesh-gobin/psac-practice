@@ -1084,7 +1084,7 @@ const Auth = (() => {
       : location.origin + location.pathname;
   }
   function _inviteText() {
-    return `Join me on PSAC Exam Practice — free PSAC revision for Grades 4–6! 📚🇲🇺`;
+    return `Join me on PSAC Exam Practice — free PSAC revision for Grades 4–6! 📚`;
   }
 
   async function openInviteModal() {

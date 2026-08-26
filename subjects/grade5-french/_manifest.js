@@ -107,7 +107,7 @@ const G5F_BADGES = [
 ];
 
 registerSubject({
-  id: 'grade5-french', name: 'French', grade: 5, icon: '🇫🇷', subject: 'French',
+  id: 'grade5-french', name: 'French', grade: 5, icon: '📕', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
   badges: G5F_BADGES,

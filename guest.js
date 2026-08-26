@@ -335,7 +335,7 @@ function drawCard() {
 
   x.textAlign = 'center'; x.fillStyle = '#fff';
   x.font = '600 34px system-ui,sans-serif';
-  x.fillText('PSAC PRACTICE  🇲🇺', W / 2, 120);
+  x.fillText('PSAC PRACTICE', W / 2, 120);
 
   x.font = '700 46px system-ui,sans-serif';
   x.fillText(clip(x, S.name || 'Student', 900), W / 2, 250);
@@ -383,7 +383,7 @@ async function shareResult() {
   const r = S.result;
   if (!r) return;
   const text = S.name + ' scored ' + r.pct + '% (' + r.score + '/' + r.total + ') on "'
-    + ((S.assignment && S.assignment.title) || 'homework') + '" 🇲🇺📚';
+    + ((S.assignment && S.assignment.title) || 'homework') + '" 📚';
   const url = location.origin;
 
   try {
