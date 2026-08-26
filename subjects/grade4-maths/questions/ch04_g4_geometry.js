@@ -9,14 +9,16 @@ STATIC_QUESTIONS.push(
     options:['4','5','6','8'],
     answer:'6',
     hint:'A cube is like a dice. Count each flat square surface.',
-    explanation:'A cube has <b>6 faces</b> (all square and equal), 8 vertices (corners) and 12 edges. MIE Grade 4 3-D shapes: cube, cuboid, cone, cylinder and sphere.' }),
+    explanation:'A cube has <b>6 faces</b> (all square and equal), 8 vertices (corners) and 12 edges. MIE Grade 4 3-D shapes: cube, cuboid, cone, cylinder and sphere.',
+    learnMore:'There is a neat rule for 3-D shapes called <b>Euler\'s formula</b>: <b>Faces + Vertices − Edges = 2</b>. For a cube: 6 + 8 − 12 = 2. ✓ It works for every "normal" solid shape (prisms, pyramids, etc.)!<br><br>A die (dice) is a perfect cube. The opposite faces of a fair die always add up to 7: 1 opposite 6, 2 opposite 5, 3 opposite 4.' }),
 
   makeMCQ({ id:'g4m-geo-002', chapterId:'g4-geometry', difficulty:1,
     question:'Which 3-D shape has 2 circular FLAT faces and 1 curved surface?',
     options:['Cone','Cylinder','Sphere','Cuboid'],
     answer:'Cylinder',
     hint:'Think of a tin can or a drinking glass.',
-    explanation:'A <b>cylinder</b> has 2 flat circular faces (top and bottom) and 1 curved lateral surface. Examples: a tin can, a battery, a drum.' }),
+    explanation:'A <b>cylinder</b> has 2 flat circular faces (top and bottom) and 1 curved lateral surface. Examples: a tin can, a battery, a drum.',
+    learnMore:'A cylinder is essentially a <b>circle stretched along a straight axis</b>. If you "unroll" the curved surface of a cylinder, it becomes a rectangle — this is why the label on a tin can is rectangular.<br><br>Real-world cylinders: tin cans, toilet rolls, coins, rolling pins, a flagpole. Notice that coins are very <b>thin</b> cylinders — the same shape, just with a very small height.' }),
 
   makeMCQ({ id:'g4m-geo-003', chapterId:'g4-geometry', difficulty:1,
     question:'What type of lines NEVER MEET, no matter how far they are extended?',

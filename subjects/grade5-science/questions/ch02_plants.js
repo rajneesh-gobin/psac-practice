@@ -10,7 +10,8 @@ STATIC_QUESTIONS.push(
     options:['It absorbs water from the soil','It makes food for the plant','It holds the plant firmly in the soil','It protects the seed'],
     answer:'It makes food for the plant',
     hint:'The leaf carries out photosynthesis.',
-    explanation:'The leaf makes food for the plant through photosynthesis - using sunlight, water and carbon dioxide to produce glucose and oxygen.' }),
+    explanation:'The leaf makes food for the plant through photosynthesis - using sunlight, water and carbon dioxide to produce glucose and oxygen.',
+    learnMore:'The word equation for photosynthesis: <b>Carbon dioxide + Water → Glucose + Oxygen</b> (using sunlight and chlorophyll).<br><br>Chlorophyll is the green pigment inside leaf cells that captures sunlight energy. This is why leaves are green! Glucose is used by the plant for energy and to build new cells; oxygen is released as a by-product — which is why plants are essential for life on Earth. A single large tree can produce enough oxygen for two people to breathe for a year.' }),
 
   makeMCQ({ id:'g5sci-pl-002', chapterId:'plants', difficulty:1,
     question:'Which part of the plant anchors it firmly in the soil AND absorbs water and minerals?',
@@ -37,7 +38,8 @@ STATIC_QUESTIONS.push(
     options:['Water, warmth and air','Sunlight, soil and water','Water, air and fertiliser','Sunlight, warmth and soil'],
     answer:'Water, warmth and air',
     hint:'A seed does not need light to germinate.',
-    explanation:'Seeds need water (to activate enzymes), warmth (for chemical reactions) and air/oxygen (for respiration) to germinate. Sunlight is NOT needed for germination.' }),
+    explanation:'Seeds need water (to activate enzymes), warmth (for chemical reactions) and air/oxygen (for respiration) to germinate. Sunlight is NOT needed for germination.',
+    learnMore:'You can prove seeds don\'t need light to germinate by planting one in a dark cupboard — it will sprout just as well as one on a windowsill. Once the seedling\'s first leaves appear, it urgently needs light to begin photosynthesis, or it will run out of stored food energy and die.<br><br>The food energy a seedling uses before its first leaves open comes from the <b>seed\'s own food store</b> (cotyledons, or "seed leaves"). This is why bigger seeds (like beans) can survive longer underground than tiny seeds.' }),
 
   makeTF({ id:'g5sci-pl-006', chapterId:'plants', difficulty:1,
     question:'Sunlight is needed for a seed to germinate.',

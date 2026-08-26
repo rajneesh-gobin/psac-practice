@@ -254,7 +254,12 @@ const AdminPanel = (() => {
             class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 px-3 py-1 rounded-lg font-semibold transition-colors">
             ✅ Activate
           </button>
-        </div>` : ''}
+          <button onclick="AdminPanel.showPlanHistory('${m.id}')"
+            class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 px-3 py-1 rounded-lg font-semibold transition-colors">
+            📋 History
+          </button>
+        </div>
+        <div id="plan-history-${m.id}" class="hidden mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 overflow-x-auto"></div>` : ''}
         <div id="children-panel-${m.id}" class="hidden mt-3 pl-2 border-l-2 border-indigo-200 dark:border-indigo-700">
           <p class="text-xs text-gray-400 animate-pulse">Loading children…</p>
         </div>
@@ -478,6 +483,10 @@ const AdminPanel = (() => {
     const regToggle = document.getElementById('admin-reg-toggle');
     if (regToggle) regToggle.checked = !!_settings.registration_open;
     _styleToggle(regToggle);
+    // Plan enforcement toggle
+    const enfToggle = document.getElementById('admin-enforcement-toggle');
+    if (enfToggle) enfToggle.checked = !!_settings.plan_enforcement_enabled;
+    _styleToggle(enfToggle);
   }
 
   function _styleToggle(cb) {
@@ -511,6 +520,15 @@ const AdminPanel = (() => {
     const toggle = document.getElementById('admin-reg-toggle');
     _styleToggle(toggle);
     toast(`New registrations ${open ? 'opened' : 'closed'}`, 3000);
+  }
+
+  async function togglePlanEnforcement(on) {
+    if (!_settings) return;
+    _settings.plan_enforcement_enabled = on;
+    await _saveSettings();
+    const toggle = document.getElementById('admin-enforcement-toggle');
+    _styleToggle(toggle);
+    toast(`Plan enforcement ${on ? 'enabled ⚡' : 'disabled'}`, 3000);
   }
 
   // ── Stats ───────────────────────────────────
@@ -692,23 +710,180 @@ const AdminPanel = (() => {
     if (!listEl) return;
     listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
     const { data } = await _sb.from('plans').select('*').order('price_mur');
-    listEl.innerHTML = (data || []).map(p => `
-      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border border-gray-100 dark:border-gray-700">
-        <div class="flex items-center justify-between mb-2">
+
+    const grades = typeof SUBJECT_PACKS !== 'undefined'
+      ? [...new Set(SUBJECT_PACKS.map(sp => sp.grade))].sort() : [];
+
+    listEl.innerHTML = (data || []).map(plan => {
+      const features = plan.features || {};
+      const allowed  = features.allowed_chapters;
+      const allSet   = new Set(Array.isArray(allowed) ? allowed : []);
+      const isAll    = !Array.isArray(allowed);
+
+      const chapPickerHtml = grades.map(g => {
+        const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).filter(sp => sp.grade === g);
+        return packs.map(pack => {
+          const chs = pack._chapters || pack.chapters || [];
+          const allChecked = isAll || chs.every(ch => allSet.has(ch.id));
+          const chBoxes = chs.map(ch => {
+            const checked = isAll || allSet.has(ch.id);
+            return `<label class="flex items-center gap-2 py-0.5 cursor-pointer">
+              <input type="checkbox" data-plan="${plan.id}" data-ch="${_esc(ch.id)}"
+                class="plan-ch-check w-3.5 h-3.5 accent-indigo-600" ${checked ? 'checked' : ''}>
+              <span class="text-xs text-gray-600 dark:text-gray-300">${_esc(ch.name)}</span>
+            </label>`;
+          }).join('');
+          return `<details class="mb-1">
+            <summary class="text-xs font-semibold text-gray-700 dark:text-gray-200 cursor-pointer py-1 flex items-center gap-2">
+              <label class="flex items-center gap-1 mr-1 shrink-0" onclick="event.stopPropagation()">
+                <input type="checkbox" data-plan="${plan.id}" data-pack="${pack.id}"
+                  class="plan-pack-all w-3.5 h-3.5 accent-indigo-600" ${allChecked ? 'checked' : ''}
+                  onchange="AdminPanel.togglePackAll('${plan.id}','${pack.id}',this.checked)">
+              </label>
+              ${pack.icon || ''} Grade ${g} — ${_esc(pack.name)}
+            </summary>
+            <div class="pl-8 mt-1">${chBoxes}</div>
+          </details>`;
+        }).join('');
+      }).join('');
+
+      const capN = (key, label) => `<div class="flex items-center gap-2 mb-2">
+        <span class="text-xs text-gray-500 dark:text-gray-400 w-36 shrink-0">${label}</span>
+        <input type="number" min="0" value="${features[key] ?? ''}" placeholder="unlimited"
+          data-plan="${plan.id}" data-cap="${key}"
+          class="plan-cap w-24 text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+      </div>`;
+
+      const capB = (key, label) => `<label class="flex items-center gap-2 mb-1.5 cursor-pointer">
+        <input type="checkbox" data-plan="${plan.id}" data-bool="${key}"
+          class="plan-bool w-3.5 h-3.5 accent-indigo-600" ${features[key] ? 'checked' : ''}>
+        <span class="text-xs text-gray-600 dark:text-gray-300">${label}</span>
+      </label>`;
+
+      return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border border-gray-100 dark:border-gray-700">
+        <div class="flex items-center justify-between mb-3">
           <div>
-            <div class="font-bold text-gray-800 dark:text-white">${_esc(p.name)} Plan ${p.price_mur === 0 ? '- Free' : `- Rs ${p.price_mur}/mo`}</div>
-            <div class="text-xs text-gray-400">Up to ${p.max_children} child${p.max_children > 1 ? 'ren' : ''}</div>
+            <div class="font-bold text-gray-800 dark:text-white">${_esc(plan.name)} Plan ${plan.price_mur === 0 ? '— Free' : `— Rs ${plan.price_mur}/mo`}</div>
+            <div class="text-xs text-gray-400">max ${plan.max_children || 1} child${(plan.max_children || 1) > 1 ? 'ren' : ''}</div>
           </div>
           <label class="flex items-center gap-2 cursor-pointer select-none">
-            <span class="text-xs ${p.is_active ? 'text-green-500 font-semibold' : 'text-gray-400'}">${p.is_active ? 'Live' : 'Draft'}</span>
-            <div class="relative w-9 h-5 ${p.is_active ? 'bg-green-400' : 'bg-gray-300 dark:bg-gray-600'} rounded-full shadow-inner">
-              <input type="checkbox" ${p.is_active ? 'checked' : ''} onchange="AdminPanel.togglePlan('${p.id}', this.checked)" class="sr-only">
-              <div class="absolute w-3 h-3 bg-white rounded-full shadow top-1 transition-transform ${p.is_active ? 'translate-x-5' : 'translate-x-1'}"></div>
+            <span class="text-xs ${plan.is_active ? 'text-green-500 font-semibold' : 'text-gray-400'}">${plan.is_active ? 'Live' : 'Draft'}</span>
+            <div class="relative w-9 h-5 ${plan.is_active ? 'bg-green-400' : 'bg-gray-300 dark:bg-gray-600'} rounded-full shadow-inner">
+              <input type="checkbox" ${plan.is_active ? 'checked' : ''} onchange="AdminPanel.togglePlan('${plan.id}', this.checked)" class="sr-only">
+              <div class="absolute w-3 h-3 bg-white rounded-full shadow top-1 transition-transform ${plan.is_active ? 'translate-x-5' : 'translate-x-1'}"></div>
             </div>
           </label>
         </div>
-        <pre class="text-xs text-gray-400 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-2 overflow-x-auto">${JSON.stringify(p.features, null, 2)}</pre>
-      </div>`).join('');
+
+        <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wide">📚 Chapter Access</h4>
+            <label class="flex items-center gap-1.5 text-xs cursor-pointer">
+              <input type="checkbox" id="plan-all-${plan.id}"
+                class="w-3.5 h-3.5 accent-indigo-600" ${isAll ? 'checked' : ''}
+                onchange="AdminPanel.toggleAllChapters('${plan.id}',this.checked)">
+              <span class="text-gray-500 dark:text-gray-400">All chapters</span>
+            </label>
+          </div>
+          <div id="plan-chapters-${plan.id}" class="${isAll ? 'opacity-50 pointer-events-none' : ''}">
+            ${chapPickerHtml}
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
+          <h4 class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wide mb-2">⚙️ Feature Caps</h4>
+          ${capN('daily_question_cap', 'Daily question cap')}
+          ${capN('weekly_exam_cap',    'Weekly exam cap')}
+          ${capN('hints_per_question', 'Hints per question')}
+          ${capN('max_children',       'Max children')}
+          <div class="mt-2">
+            ${capB('printable_papers',    '🖨️ Printable papers')}
+            ${capB('advanced_analytics',  '📊 Advanced analytics')}
+            ${capB('push_reminders',      '🔔 Push reminders')}
+            ${capB('timetable_generator', '📅 Timetable generator')}
+            ${capB('weekly_digest',       '📧 Weekly digest')}
+            ${capB('tutor_status',        '👩‍🏫 Tutor status')}
+            ${capB('early_access',        '⭐ Early access')}
+          </div>
+        </div>
+
+        <button onclick="AdminPanel.savePlanFeatures('${plan.id}')"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 rounded-xl transition-colors">
+          💾 Save Plan
+        </button>
+      </div>`;
+    }).join('');
+  }
+
+  function toggleAllChapters(planId, checked) {
+    const container = document.getElementById(`plan-chapters-${planId}`);
+    if (container) {
+      container.classList.toggle('opacity-50', checked);
+      container.classList.toggle('pointer-events-none', checked);
+      container.querySelectorAll('.plan-ch-check').forEach(cb => { cb.checked = checked; });
+      container.querySelectorAll('.plan-pack-all').forEach(cb => { cb.checked = checked; });
+    }
+  }
+
+  function togglePackAll(planId, packId, checked) {
+    const pack = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(sp => sp.id === packId);
+    if (!pack) return;
+    const ids = new Set((pack._chapters || pack.chapters || []).map(c => c.id));
+    document.querySelectorAll(`.plan-ch-check[data-plan="${planId}"]`).forEach(cb => {
+      if (ids.has(cb.dataset.ch)) cb.checked = checked;
+    });
+  }
+
+  async function savePlanFeatures(planId) {
+    if (!_sb) return;
+    const allChk = document.getElementById(`plan-all-${planId}`);
+    let allowed = null;
+    if (!allChk?.checked) {
+      allowed = [];
+      document.querySelectorAll(`.plan-ch-check[data-plan="${planId}"]`).forEach(cb => {
+        if (cb.checked) allowed.push(cb.dataset.ch);
+      });
+    }
+
+    const features = { allowed_chapters: allowed };
+    document.querySelectorAll(`input[data-plan="${planId}"][data-cap]`).forEach(inp => {
+      features[inp.dataset.cap] = inp.value === '' ? null : parseInt(inp.value, 10);
+    });
+    document.querySelectorAll(`input[data-plan="${planId}"][data-bool]`).forEach(cb => {
+      features[cb.dataset.bool] = cb.checked;
+    });
+
+    const { error } = await _sb.from('plans').update({ features }).eq('id', planId);
+    if (error) { toast('Error saving plan: ' + error.message, 3000); return; }
+    toast('Plan saved ✅', 1500);
+  }
+
+  async function showPlanHistory(userId) {
+    const panel = document.getElementById(`plan-history-${userId}`);
+    if (!panel) return;
+    if (!panel.classList.contains('hidden')) { panel.classList.add('hidden'); return; }
+    panel.classList.remove('hidden');
+    panel.innerHTML = '<p class="text-xs text-gray-400 animate-pulse py-1">Loading…</p>';
+    const { data } = await _sb.from('payments')
+      .select('plan_id, amount_mur, processed_at, notes')
+      .eq('user_id', userId)
+      .order('processed_at', { ascending: false })
+      .limit(10);
+    if (!data?.length) { panel.innerHTML = '<p class="text-xs text-gray-400 py-1">No payment history.</p>'; return; }
+    panel.innerHTML = `<table class="w-full text-xs mt-1">
+      <thead><tr class="text-gray-400 border-b border-gray-100 dark:border-gray-700">
+        <th class="text-left pb-1 font-medium">Plan</th>
+        <th class="text-left pb-1 font-medium">Amount</th>
+        <th class="text-left pb-1 font-medium">Date</th>
+        <th class="text-left pb-1 font-medium">Notes</th>
+      </tr></thead>
+      <tbody>${data.map(r => `<tr class="border-b border-gray-50 dark:border-gray-700/50">
+        <td class="py-1 font-medium text-gray-700 dark:text-gray-200">${_esc(r.plan_id)}</td>
+        <td class="py-1 text-gray-500">Rs ${r.amount_mur ?? 0}</td>
+        <td class="py-1 text-gray-400">${r.processed_at ? new Date(r.processed_at).toLocaleDateString() : '-'}</td>
+        <td class="py-1 text-gray-400 max-w-xs truncate">${_esc(r.notes || '-')}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
   }
 
   async function togglePlan(planId, active) {
@@ -938,6 +1113,6 @@ const AdminPanel = (() => {
   }
 
   return { render, showTab, loadMembers, filterMembers, changeRole,
-    loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, loadStats, loadReports, resolveReport, loadRoles, setRole, loadPlans, togglePlan, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+    loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, resolveReport, loadRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier };
 })();

@@ -13,13 +13,13 @@ const fmt = n => n.toLocaleString('en-GB');
 // Null-safe: `pct(chapters.fractions)` is fine even if that chapter is untouched.
 function pct(c) { return (c && c.attempted) ? Math.round(c.correct / c.attempted * 100) : 0; }
 
-function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation }) {
+function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
   const shuffled = shuffle(options.filter(o => o !== answer));
   const finalOpts = shuffle([answer, ...shuffled.slice(0, 3)]);
-  return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts, answer, acceptableAnswers: [answer], hint, explanation };
+  return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts, answer, acceptableAnswers: [answer], hint, explanation, learnMore };
 }
-function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation }) {
-  return { id, chapterId, difficulty, subsection, type: 'numeric', question, answer: String(answer), acceptableAnswers: (acceptableAnswers || [String(answer)]).map(String), hint, explanation };
+function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation, learnMore }) {
+  return { id, chapterId, difficulty, subsection, type: 'numeric', question, answer: String(answer), acceptableAnswers: (acceptableAnswers || [String(answer)]).map(String), hint, explanation, learnMore };
 }
 // French packs need French answer labels; the g4fr-/g5fr-/g6fr-/fr- id prefix is
 // the only language marker a question factory can see.

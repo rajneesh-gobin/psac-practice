@@ -92,7 +92,7 @@ function assembleExamPaper(type) {
   // and assembleExamPaper() silently returned a fully empty exam for all of
   // them. Default a missing/non-numeric weight to 1 (equal weighting) rather
   // than let it poison the whole paper.
-  const weights = CHAPTERS.filter(ch => !lockedChs.has(ch.id)).map(ch => ({
+  const weights = CHAPTERS.filter(ch => !lockedChs.has(ch.id) && (typeof _planAllowsChapter === 'function' ? _planAllowsChapter(ch.id) : true)).map(ch => ({
     chapterId: ch.id,
     n: Math.max(1, Math.round((Number.isFinite(ch.examWeight) ? ch.examWeight : 1) * cfg.count / 40))
   }));

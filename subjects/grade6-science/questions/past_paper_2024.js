@@ -10,7 +10,8 @@ STATIC_QUESTIONS.push(
     question:'Tigers eat the flesh of other animals. What type of animal is the tiger?',
     options:['Carnivorous','Granivorous','Herbivorous','Omnivorous'], answer:'Carnivorous',
     hint:'An animal that eats only meat/flesh has a specific name.',
-    explanation:'Carnivorous animals eat other animals\' flesh. (Herbivores eat plants; omnivores eat both.)' }),
+    explanation:'Carnivorous animals eat other animals\' flesh. (Herbivores eat plants; omnivores eat both.)',
+    learnMore:'Tigers are the largest wild cats in the world. They are <b>apex predators</b> — no other animal hunts them in the wild. Their striped coat acts as camouflage in tall grass.<br><br>In food chains, carnivores are always <b>secondary or tertiary consumers</b>. Without them, herbivore populations would grow unchecked, overgrazing plants and collapsing ecosystems. This is why protecting predators is important for the whole food web.' }),
 
   makeMCQ({ id:'g6sc-pp24-002', chapterId:'g6-materials', difficulty:1,
     question:'An umbrella has a fabric canopy stretched over metal ribs. Which material is <b>most appropriate</b> to make the fabric canopy of the umbrella?',
@@ -28,7 +29,8 @@ STATIC_QUESTIONS.push(
     question:'Which one of the following gases is necessary for <b>burning</b> to take place?',
     options:['Carbon dioxide','Nitrogen','Oxygen','Water vapour'], answer:'Oxygen',
     hint:'Fire needs this gas to burn — and it is also needed for breathing.',
-    explanation:'Oxygen supports combustion (burning). Carbon dioxide actually extinguishes fires.' }),
+    explanation:'Oxygen supports combustion (burning). Carbon dioxide actually extinguishes fires.',
+    learnMore:'This explains how CO₂ fire extinguishers work: they smother the fire by <b>replacing oxygen</b> around the flame, so burning cannot continue.<br><br>Air is approximately 21% oxygen and 78% nitrogen. Nitrogen does not support burning, which is why a room full of air doesn\'t burst into flames — the nitrogen "dilutes" the oxygen. A fire in a sealed container will go out once it has used up all the available oxygen.' }),
 
   makeMCQ({ id:'g6sc-pp24-005', chapterId:'g6-animals', difficulty:2,
     question:'A breakfast meal consists of cereals and milk. Which of the following food items should be added to make it a <b>balanced</b> meal?',
@@ -62,7 +64,8 @@ STATIC_QUESTIONS.push(
     question:'Which animal shown — a pigeon, a bee, and a bat — is a <b>mammal</b>?',
     options:['Pigeon','Bee','Bat','All three'], answer:'Bat',
     hint:'Mammals give birth to live young and feed them with milk.',
-    explanation:'Bats are mammals — they are warm-blooded, have fur, and suckle their young. Pigeons are birds; bees are insects.' }),
+    explanation:'Bats are mammals — they are warm-blooded, have fur, and suckle their young. Pigeons are birds; bees are insects.',
+    learnMore:'Bats are the <b>only mammals capable of true, powered flight</b>. They navigate in the dark using <b>echolocation</b> — sending out high-pitched sound pulses and listening to the echo to build a 3D map of their surroundings.<br><br>Mauritius has its own bat: the <b>Mauritius Flying Fox</b> (<i>Pteropus niger</i>), a large fruit bat. It is a vital pollinator and seed disperser for native forest trees, and it is now endangered. Protecting it matters for the health of Mauritian forests.' }),
 
   makeMCQ({ id:'g6sc-pp24-010', chapterId:'g6-animals', difficulty:1,
     question:'To which group of animals does the <b>bee</b> belong?',
@@ -88,7 +91,8 @@ STATIC_QUESTIONS.push(
     question:'Iron pins are placed in three jars: Jar A (oil + water), Jar B (water only), Jar C (dry air, corked). After a few days, which pin will <b>change colour</b> (rust)?',
     options:['Pin A only','Pin B only','Pin C only','Pins A and B'], answer:'Pin B only',
     hint:'Rusting requires both water AND air/oxygen to be in contact with iron.',
-    explanation:'Pin B (in water open to air) rusts — it has both water and oxygen. Pin A is protected by the oil layer. Pin C has dry air only, no water.' }),
+    explanation:'Pin B (in water open to air) rusts — it has both water and oxygen. Pin A is protected by the oil layer. Pin C has dry air only, no water.',
+    learnMore:'Rusting is a chemical reaction: iron + water + oxygen → iron oxide (rust). The formula is <b>4Fe + 3O₂ + 6H₂O → 4Fe(OH)₃</b>, which slowly becomes the red-brown powder we see.<br><br>Ways to prevent rusting in real life: <b>painting</b> (keeps air and water out), <b>oiling/greasing</b> (same principle as Pin A), <b>galvanising</b> (coating iron with zinc — zinc reacts with oxygen first, protecting the iron underneath), and using <b>stainless steel</b> (an alloy that resists rust).' }),
 
   makeMCQ({ id:'g6sc-pp24-014', chapterId:'g6-materials', difficulty:2,
     question:'Pin A (in oil + water) does NOT rust. Which of the following best explains why?',
@@ -102,7 +106,8 @@ STATIC_QUESTIONS.push(
     question:'A power station burns <b>heavy oil</b> to generate electricity. What type of power station is this?',
     options:['Hydroelectric','Nuclear','Solar','Thermal'], answer:'Thermal',
     hint:'Burning fuel to produce heat, which drives turbines.',
-    explanation:'A thermal power station burns fuel (heavy oil, coal, gas) to produce heat, which generates steam to drive turbines.' }),
+    explanation:'A thermal power station burns fuel (heavy oil, coal, gas) to produce heat, which generates steam to drive turbines.',
+    learnMore:'Mauritius generates most of its electricity from <b>thermal power stations</b> burning coal and heavy oil. The island is working towards more renewable energy — it has solar farms, bagasse (sugarcane waste) plants, and wind projects.<br><br>Energy transformations in a thermal station: <b>Chemical → Heat → Kinetic (steam turbine) → Electrical</b>. Each step loses some energy as waste heat, which is why power stations are only about 35–40% efficient.' }),
 
   makeMCQ({ id:'g6sc-pp24-016', chapterId:'g6-energy', difficulty:2,
     question:'In a thermal power station using heavy oil, the energy transformation is: <b>___ energy → movement energy → ___ energy</b>. Which pair of words correctly fills the blanks?',

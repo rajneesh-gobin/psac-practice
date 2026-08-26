@@ -21,14 +21,16 @@ STATIC_QUESTIONS.push(
     options:['1810','1835','1948','1968'],
     answer:'1968',
     hint:'Mauritius became independent on 12 March - now celebrated as National Day.',
-    explanation:'Mauritius gained <b>independence on 12 March 1968</b>. This date is celebrated annually as <b>National Day</b>. Mauritius had been a British colony since 1810.' }),
+    explanation:'Mauritius gained <b>independence on 12 March 1968</b>. This date is celebrated annually as <b>National Day</b>. Mauritius had been a British colony since 1810.',
+    learnMore:'The road to independence began in the 1940s when political parties were formed and universal suffrage (the right of all adults to vote) was granted in 1959. Sir Seewoosagur Ramgoolam\'s Labour Party won the 1967 elections and negotiated independence from Britain.<br><br>Mauritius became the 24th member of the <b>Commonwealth</b> on independence day. The transition was peaceful, and Queen Elizabeth II remained head of state until 1992, when Mauritius became a Republic.' }),
 
   makeMCQ({ id:'g6hg-ind-002', chapterId:'g6-independence', difficulty:1,
     question:'Who was the first Prime Minister of Mauritius at independence in 1968?',
     options:['Sir Anerood Jugnauth','Sir Gaëtan Duval','Sir Seewoosagur Ramgoolam','Sir Abdool Razack Mohamed'],
     answer:'Sir Seewoosagur Ramgoolam',
     hint:'He is known as the "Father of the Nation."',
-    explanation:'<b>Sir Seewoosagur Ramgoolam (SSR)</b> was the first Prime Minister of independent Mauritius. He led the country to independence and is widely revered as the "Father of the Nation." The international airport and the SSR Botanical Garden are named after him.' }),
+    explanation:'<b>Sir Seewoosagur Ramgoolam (SSR)</b> was the first Prime Minister of independent Mauritius. He led the country to independence and is widely revered as the "Father of the Nation." The international airport and the SSR Botanical Garden are named after him.',
+    learnMore:'Sir Seewoosagur Ramgoolam (1900–1985) trained as a doctor in London and returned to Mauritius to enter politics. He founded the <b>Labour Party</b> in 1936 and spent decades working towards independence through peaceful negotiation.<br><br>His legacy is everywhere in Mauritius: the <b>Sir Seewoosagur Ramgoolam International Airport</b>, the <b>SSR Botanical Garden</b> in Pamplemousses (one of the oldest botanical gardens in the Southern Hemisphere), and the <b>SSR Memorial Centre</b> in Belle Rose. He was also a champion of the Non-Aligned Movement during the Cold War, keeping Mauritius independent from the superpowers.' }),
 
   makeMCQ({ id:'g6hg-ind-003', chapterId:'g6-independence', difficulty:2,
     question:`${_SVG_FLAG}The national flag of Mauritius has four horizontal stripes. What does the BLUE stripe represent?`,
@@ -49,7 +51,8 @@ STATIC_QUESTIONS.push(
     options:['"Freedom and Justice"','Stella Clavisque Maris Indici - "Star and Key of the Indian Ocean"','God Save the King','L\'union fait la force'],
     answer:'Stella Clavisque Maris Indici - "Star and Key of the Indian Ocean"',
     hint:'This Latin motto reflects Mauritius\'s strategic position in the Indian Ocean.',
-    explanation:'The Mauritian Coat of Arms bears the Latin motto <b>Stella Clavisque Maris Indici</b> - meaning "<b>Star and Key of the Indian Ocean</b>". This reflects Mauritius\'s historically important strategic position as a stepping stone in the Indian Ocean trade routes.' }),
+    explanation:'The Mauritian Coat of Arms bears the Latin motto <b>Stella Clavisque Maris Indici</b> - meaning "<b>Star and Key of the Indian Ocean</b>". This reflects Mauritius\'s historically important strategic position as a stepping stone in the Indian Ocean trade routes.',
+    learnMore:'The Coat of Arms has many symbols: the <b>dodo</b> and the <b>Sambar deer</b> as shield supporters, the <b>key</b> representing Mauritius\'s strategic importance for ships crossing the Indian Ocean, a <b>ship</b> (representing the traders and settlers who arrived by sea), and sugar cane stalks (representing the sugar industry that shaped Mauritius\'s history).<br><br>The motto is in <b>Latin</b> because European countries used Latin for official documents during the colonial era. France controlled Mauritius from 1715–1810 before Britain took over. Both nations left lasting marks on Mauritian culture, language, and law.' }),
 
   makeMCQ({ id:'g6hg-ind-006', chapterId:'g6-independence', difficulty:2,
     question:'In which year did Mauritius become a REPUBLIC?',

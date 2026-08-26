@@ -9,7 +9,8 @@ STATIC_QUESTIONS.push(
     options:['Bonjour','Bonsoir','Au revoir','Merci'],
     answer:'Bonsoir',
     hint:'On utilise "Bon-" suivi d\'un mot qui signifie "evening".',
-    explanation:'"<b>Bonsoir</b>" s\'utilise le soir. "Bonjour" = le matin ou l\'après-midi. "Au revoir" = pour dire adieu. "Bonne nuit" = avant de dormir.' }),
+    explanation:'"<b>Bonsoir</b>" s\'utilise le soir. "Bonjour" = le matin ou l\'après-midi. "Au revoir" = pour dire adieu. "Bonne nuit" = avant de dormir.',
+    learnMore:'Un petit guide des salutations en français selon le moment de la journée :<br><br>• <b>Bonjour</b> — le matin et l\'après-midi (environ 6h–18h)<br>• <b>Bonsoir</b> — le soir (environ 18h–minuit)<br>• <b>Bonne nuit</b> — uniquement au moment de se coucher<br>• <b>Salut</b> — salutation informelle, à tout moment (entre amis)<br><br>À Maurice, on entend souvent «&nbsp;allo&nbsp;» comme salutation informelle en créole. En français formel, on préfère toujours «&nbsp;Bonjour&nbsp;» ou «&nbsp;Bonsoir&nbsp;».' }),
 
   makeMCQ({ id:'g5fr-voc-002', chapterId:'fr-vocabulaire', difficulty:1,
     question:'Comment dit-on la couleur <b>red</b> en français ?',

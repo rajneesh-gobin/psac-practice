@@ -41,7 +41,8 @@ STATIC_QUESTIONS.push(
     question:'While Myra <b>___</b> the yard, she found her lost ring.',
     options:['will clean','has cleaned','is cleaning','was cleaning'], answer:'was cleaning',
     hint:'"While" + past continuous sets the background action; "found" is the interrupting event.',
-    explanation:'Past continuous (was cleaning) describes the ongoing background action interrupted by "found" (simple past).' }),
+    explanation:'Past continuous (was cleaning) describes the ongoing background action interrupted by "found" (simple past).',
+    learnMore:'The <b>past continuous + simple past</b> pattern is very common in storytelling. The structure is:<br><br><i>"While / When [past continuous], [simple past]."</i><br><br>The past continuous sets the <b>scene or background</b> (a long, ongoing action), and the simple past shows a <b>sudden event</b> that interrupts it. Example: "She was walking home <b>when</b> it started to rain." You can also reverse the clauses: "It started to rain while she was walking home."' }),
 
   makeMCQ({ id:'g6eng-pp24-007', chapterId:'g6eng-nouns', difficulty:2,
     question:'The children covered <b>___</b> with a blanket as it was very cold.',
@@ -59,7 +60,8 @@ STATIC_QUESTIONS.push(
     question:'The pupil <b>___</b> bag was lost was crying.',
     options:['which','whom','who','whose'], answer:'whose',
     hint:'We are talking about the pupil\'s bag — a possessive relationship. Which relative pronoun shows possession?',
-    explanation:'"Whose" is the possessive relative pronoun. "The pupil whose bag was lost" = the bag belongs to the pupil.' }),
+    explanation:'"Whose" is the possessive relative pronoun. "The pupil whose bag was lost" = the bag belongs to the pupil.',
+    learnMore:'The four key relative pronouns and when to use them:<br><br>• <b>who</b> — for people as the subject: "the boy <u>who</u> ran"<br>• <b>whom</b> — for people as the object: "the girl <u>whom</u> I met"<br>• <b>whose</b> — for possession (people or things): "the pupil <u>whose</u> bag was lost"<br>• <b>which</b> — for things/animals: "the car <u>which</u> broke down"<br><br>Quick test for <b>whose</b>: replace it with "his/her/its" — if the sentence still makes sense, "whose" is correct.' }),
 
   makeMCQ({ id:'g6eng-pp24-010', chapterId:'g6eng-clauses', difficulty:1,
     question:'Yohan is excited <b>___</b> he has received his favourite toy.',

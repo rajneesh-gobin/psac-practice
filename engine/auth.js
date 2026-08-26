@@ -24,6 +24,7 @@ const Auth = (() => {
   let _isTeacherUser       = false;  // role teacher AND approved, or admin
   let _teacherStatus       = 'none'; // none|pending|approved|rejected|suspended
   let _isSuperAdmin        = false;  // true when logged-in user is super admin
+  let _planFeatures        = null; // features object from the family's active plan
   let _pinAttempts         = 0;
   let _pinLockedUntil      = 0;
   let _parentPinEntry      = '';
@@ -31,10 +32,19 @@ const Auth = (() => {
   let _parentPinSetup2     = '';
   let _parentPinStep       = 1;
 
+  const DEFAULT_FREE_FEATURES = {
+    allowed_chapters: null, daily_question_cap: 20, weekly_exam_cap: 1,
+    hints_per_question: 3, printable_papers: false, advanced_analytics: false,
+    push_reminders: false, timetable_generator: false, weekly_digest: false,
+    tutor_status: false, early_access: false, max_children: 1,
+  };
+
   function _el(id) { return document.getElementById(id); }
 
   function getActiveAccount()  { return _activeAccount; }
   function getParentProfile()  { return _parentProfile; }
+  function getFamily()         { return _family; }
+  function getPlanFeatures()   { return _planFeatures ?? DEFAULT_FREE_FEATURES; }
 
   const REF_STORAGE_KEY = 'psac_pending_referral';
 
@@ -196,6 +206,14 @@ const Auth = (() => {
     applyTheme(_preferredTheme(null));
     _openParentDashboard();
     _promptSetParentPin();
+    // Load global settings + plan features for client-side enforcement
+    Store.getGlobalSettings().then(gs => {
+      window.GLOBAL_SETTINGS  = gs || {};
+      window.PLAN_ENFORCEMENT = !!(gs?.plan_enforcement_enabled);
+    }).catch(() => {});
+    Store.getUserPlan(_parentUser.id).then(r => {
+      if (r?.plan?.features) _planFeatures = r.plan.features;
+    }).catch(() => {});
   }
 
   // Note the role passed to createProfile: 'parent', NOT 'teacher'. Signing up
@@ -458,8 +476,22 @@ const Auth = (() => {
     updateXPBar();
     _setWelcomeName(studentRow.display_name);
 
-    // Fetch global settings (disabled grades/subjects set by admin)
-    Store.getGlobalSettings().then(gs => { window.GLOBAL_SETTINGS = gs || {}; }).catch(() => {});
+    // Fetch global settings (disabled grades/subjects set by admin) + plan enforcement flag
+    Store.getGlobalSettings().then(gs => {
+      window.GLOBAL_SETTINGS  = gs || {};
+      window.PLAN_ENFORCEMENT = !!(gs?.plan_enforcement_enabled);
+    }).catch(() => {});
+    // Load plan features for client-side chapter gating
+    if (_sb) {
+      _sb.from('students').select('family_id').eq('id', studentRow.id).maybeSingle()
+        .then(async ({ data: s }) => {
+          if (!s?.family_id) return;
+          const { data: fam } = await _sb.from('families').select('parent_id').eq('id', s.family_id).maybeSingle();
+          if (!fam?.parent_id) return;
+          const result = await Store.getUserPlan(fam.parent_id);
+          if (result?.plan?.features) _planFeatures = result.plan.features;
+        }).catch(() => {});
+    }
 
     // Pre-load questions for this student's grade
     const studentGrade = studentRow.grade || 5;
@@ -930,9 +962,21 @@ const Auth = (() => {
     }
   }
 
+  // Enable the sign-in button only when both fields are ready.
+  // Called from oninput on both fields so the button is never clickable until
+  // the child has typed something in each box.
+  function checkStudentReady() {
+    const family   = (_el('student-family-name')?.value || '').trim();
+    const username = (_el('student-username')?.value    || '').trim();
+    const pin      = (_el('student-pin')?.value         || '').trim();
+    const btn = _el('student-signin-btn');
+    if (btn) btn.disabled = !(family && username && pin.length === 4);
+  }
+
   // Auto-submit when the 4th digit lands - but only once there is a username to
   // submit with, so a child who fills the PIN first is not told off for it.
   function onPinInput(el) {
+    checkStudentReady();
     if (el.value.length === 4 && (_el('student-username')?.value || '').trim()) studentSignIn();
   }
 
@@ -946,10 +990,12 @@ const Auth = (() => {
       return;
     }
 
-    const username = (_el('student-username')?.value || '').trim();
-    const pin      = (_el('student-pin')?.value      || '').trim();
-    if (!username) { _showAuthError('Please enter your username.'); return; }
-    if (!pin)      { _showAuthError('Please enter your PIN.');      return; }
+    const family   = (_el('student-family-name')?.value || '').trim();
+    const username = (_el('student-username')?.value    || '').trim();
+    const pin      = (_el('student-pin')?.value         || '').trim();
+    if (!family)   { _showAuthError('Please enter your family name.'); return; }
+    if (!username) { _showAuthError('Please enter your name.'); return; }
+    if (!pin)      { _showAuthError('Please enter your PIN.');  return; }
 
     _setAuthLoading(true);
 
@@ -972,7 +1018,7 @@ const Auth = (() => {
     // Buttons stay disabled until the wrapper's finally runs. Re-enabling here
     // used to reopen the window for a second submit while the success path was
     // still awaiting _loginStudentRow().
-    const { data, error } = await _sb.rpc('verify_student_pin', { p_username: username, p_pin: pin });
+    const { data, error } = await _sb.rpc('verify_student_pin', { p_username: username, p_pin: pin, p_family_name: family });
 
     if (error) {
       // 42883 = undefined_function. Transient right after the RPC is created,
@@ -1131,6 +1177,8 @@ const Auth = (() => {
     _isSuperAdmin     = false;
     _isTeacherUser    = false;
     _teacherStatus    = 'none';
+    _planFeatures     = null;
+    window.PLAN_ENFORCEMENT = false;
     // Re-hide the privileged buttons, or they persist into the next session on
     // a shared device.
     ['btn-open-teacher', 'btn-open-admin'].forEach(id => {
@@ -1143,6 +1191,31 @@ const Auth = (() => {
     if (hdrProfile) { hdrProfile.classList.add('hidden'); hdrProfile.classList.remove('flex'); }
     if (_sb) await _sb.auth.signOut();
     showScreen('landing');
+  }
+
+  // ── PIN security helpers ───────────────────────
+  // The 30 most-guessed 4-digit PINs in the wild. Blocking these forces parents
+  // away from the "I'll just use 1111" reflex without touching the UX for anyone
+  // who picks something thoughtful.
+  const _WEAK_PINS = new Set([
+    '0000','1111','2222','3333','4444','5555','6666','7777','8888','9999',
+    '1234','2345','3456','4567','5678','6789','7890','0123',
+    '9876','8765','7654','6543','5432','4321','3210',
+    '1212','2121','1010','0101','2020','0202',
+    '1122','2211','1100','0011','1221','2112',
+  ]);
+  function _isWeakPin(pin) { return _WEAK_PINS.has(String(pin)); }
+  function _suggestPin() {
+    let p;
+    do { p = String(Math.floor(Math.random() * 9000) + 1000); } while (_isWeakPin(p));
+    return p;
+  }
+  function suggestPin() {
+    const pin = _suggestPin();
+    const el = _el('add-child-pin');
+    if (el) el.value = pin;
+    const disp = _el('pin-suggestion-display');
+    if (disp) disp.textContent = pin;
   }
 
   // ── Parent adds/manages children ───────────────
@@ -1163,6 +1236,11 @@ const Auth = (() => {
     if (_el('add-student-title')) _el('add-student-title').textContent = 'Add Child';
     _buildAddStudentAvatarGrid('add');
     _el('add-student-id') && (_el('add-student-id').value = '');
+    // Pre-fill a secure suggested PIN and show it in plain text so the parent can note it down
+    const _suggested = _suggestPin();
+    if (_el('add-child-pin'))            _el('add-child-pin').value          = _suggested;
+    if (_el('pin-suggestion-display'))   _el('pin-suggestion-display').textContent = _suggested;
+    if (_el('pin-suggestion-row'))       _el('pin-suggestion-row').classList.remove('hidden');
   }
 
   // Hash a student's PIN via Supabase RPC (bcrypt inside the DB, 0 Netlify credits).
@@ -1189,6 +1267,7 @@ const Auth = (() => {
     if (existingId) {
       // Edit mode - PIN is optional; blank = keep existing PIN
       if (pin && !/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
+      if (pin && _isWeakPin(pin)) { toast('That PIN is too easy to guess — try something less obvious (not 1111, 1234, etc.).', 3500); return; }
       const updates = { displayName: name, grade, avatar: _addAvatar,
         settings: ((_familyStudents.find(s => s.id === existingId))?.settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false }) };
       await Store.updateStudent(existingId, updates);
@@ -1197,6 +1276,7 @@ const Auth = (() => {
     } else {
       // Create mode - PIN is required
       if (!/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
+      if (_isWeakPin(pin)) { toast('That PIN is too easy to guess — try something less obvious (not 1111, 1234, etc.).', 3500); return; }
       const student = await Store.createStudent(_family.id, {
         username: uname, displayName: name, avatar: _addAvatar, grade, pin,
       });
@@ -1254,7 +1334,8 @@ const Auth = (() => {
     if (_el('add-child-name'))     _el('add-child-name').value     = student.display_name;
     if (_el('add-child-username')) _el('add-child-username').value  = student.username;
     if (_el('add-child-grade'))    _el('add-child-grade').value     = student.grade;
-    if (_el('add-child-pin'))      _el('add-child-pin').value       = ''; // never pre-fill PIN
+    if (_el('add-child-pin'))      _el('add-child-pin').value       = ''; // never pre-fill PIN in edit mode
+    if (_el('pin-suggestion-row')) _el('pin-suggestion-row').classList.add('hidden');
     _buildAddStudentAvatarGrid('add', student.avatar);
   }
 
@@ -1634,6 +1715,9 @@ const Auth = (() => {
   function _setAuthLoading(on) {
     const btns = document.querySelectorAll('#screen-auth button[onclick]');
     btns.forEach(b => b.disabled = on);
+    // When loading ends, re-evaluate the student button — it must only be
+    // re-enabled if both fields are still filled, not unconditionally.
+    if (!on) checkStudentReady();
   }
 
   // Enter key on login
@@ -1650,7 +1734,7 @@ const Auth = (() => {
   });
 
   return {
-    init, getActiveAccount, getParentProfile,
+    init, getActiveAccount, getParentProfile, getFamily, getPlanFeatures,
     // Auth screen
     setRole, showSignIn, showSignUp, emailSignIn, emailSignUp,
     showForgotPassword, backToSignIn, forgotPassword, backToSignUp,
@@ -1661,11 +1745,11 @@ const Auth = (() => {
     openPasswordModal, closePasswordModal, changePassword,
     openInviteModal, closeInviteModal, copyInviteLink, shareInvite, shareInviteWhatsApp,
     confirmResetStudentProgress,
-    studentSignIn, onPinInput,
+    studentSignIn, onPinInput, checkStudentReady,
     // Family setup
     completeSetup, _pickSetupAvatar,
     // Add/edit student
-    addStudent, saveNewStudent, deleteStudent, editStudent, editCurrentStudent, deleteCurrentStudent,
+    addStudent, saveNewStudent, deleteStudent, editStudent, editCurrentStudent, deleteCurrentStudent, suggestPin,
     _pickAddAvatar,
     // Session
     loginStudent, logout, switchStudent, switchToStudentSelect,

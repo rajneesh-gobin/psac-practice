@@ -45,6 +45,13 @@ function _playSound(type) {
   } catch (_) {}
 }
 
+function _planAllowsChapter(chapterId) {
+  if (!window.PLAN_ENFORCEMENT) return true;
+  const allowed = (typeof Auth !== 'undefined' ? Auth.getPlanFeatures?.() : null)?.allowed_chapters;
+  if (!allowed) return true; // null = unlimited plan
+  return allowed.includes(chapterId);
+}
+
 function toggleSound() {
   _soundEnabled = !_soundEnabled;
   const btn = document.getElementById('sound-toggle-btn');
@@ -1398,6 +1405,10 @@ async function renderParentDashboard() {
     }).catch(() => {});
   }
 
+  // Show family name so parents know what to tell their kids for login
+  const _famNameEl = _el('pd-family-name-display');
+  if (_famNameEl) _famNameEl.textContent = Auth.getFamily()?.family_name || '';
+
   _renderTeacherApplyCard();
 
   // First-time parent onboarding hints
@@ -2165,6 +2176,15 @@ function renderChapterSelect() {
       : '<span class="text-base tracking-tight"><span class="text-amber-400">★</span><span class="text-gray-300 dark:text-gray-600">☆☆</span></span>';
     const isFlagged = !!(DB.chapters?.[ch.id]?.flagged);
     const borderStyle = _borderColor ? ` style="border-left:4px solid ${_borderColor}"` : '';
+    const planLocked = !_planAllowsChapter(ch.id);
+    if (planLocked) {
+      return `<button class="chapter-card${isEnr ? ' enrichment' : ''} relative opacity-50 cursor-not-allowed" onclick="toast('⭐ Upgrade your plan to access this chapter.', 3000)"${borderStyle}>
+        <div class="absolute top-2 right-2 text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded-full font-semibold z-10">🔒 Upgrade</div>
+        <div class="text-3xl mb-2">${ch.icon}</div>
+        <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">${ch.name}</div>
+        <div class="text-xs text-gray-400 dark:text-gray-500">${partLabel}Locked</div>
+      </button>`;
+    }
     return `<button class="chapter-card${isEnr ? ' enrichment' : ''} relative" onclick="startChapterDirect('${ch.id}')"${borderStyle}>
       <button onclick="event.stopPropagation();toggleChapterFlag('${ch.id}')" class="absolute top-2 right-2 text-base leading-none p-1 rounded-full transition-colors z-10 ${isFlagged ? 'text-red-500' : 'text-gray-300 dark:text-gray-600 hover:text-red-400'}" title="${isFlagged ? 'Remove flag' : 'Flag for parent'}">🚩</button>
       ${isEnr ? '<span class="enr-badge">✨ BONUS</span>' : ''}
@@ -2213,6 +2233,7 @@ window.startAssignment = function(assignId) {
 function startChapterDirect(chapterId, forceDiff) {
   const locked = DB.restrictions?.lockedChapters || [];
   if (locked.includes(chapterId)) { toast('🔒 This chapter is locked by your parent.', 2000); return; }
+  if (!_planAllowsChapter(chapterId)) { toast('⭐ Upgrade your plan to access this chapter.', 3000); return; }
   const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
 
   // If questions for this chapter aren't loaded yet, wait for the active subject to load first
@@ -2927,9 +2948,10 @@ function practiceSubmit() {
     fb.innerHTML = `
       <div class="flex items-start gap-3">
         <span class="text-2xl">${ok ? '🎉' : '💡'}</span>
-        <div>
+        <div class="flex-1 min-w-0">
           <div class="font-bold mb-1">${ok ? 'Correct! Well done!' : answerLine}</div>
           <div class="text-sm">${q.explanation}</div>
+          ${_learnMoreHTML(q)}
         </div>
       </div>`;
   }
@@ -2967,9 +2989,10 @@ function practiceSkip() {
     fb.innerHTML = `
       <div class="flex items-start gap-3">
         <span class="text-2xl">💡</span>
-        <div>
+        <div class="flex-1 min-w-0">
           <div class="font-bold mb-1">Answer: <span class="text-green-600 dark:text-green-400">${q.answer}</span></div>
           <div class="text-sm">${q.explanation}</div>
+          ${_learnMoreHTML(q)}
         </div>
       </div>`;
   }
@@ -2982,6 +3005,22 @@ function practiceSkip() {
   document.getElementById('practice-submit-btn').classList.add('hidden');
   document.getElementById('practice-skip-btn').classList.add('hidden');
   document.getElementById('practice-next-btn').classList.remove('hidden');
+}
+
+function _learnMoreHTML(q) {
+  if (!q || !q.learnMore) return '';
+  return `<div class="mt-3 pt-3 border-t border-white/10">
+    <button class="flex items-center gap-1.5 text-xs text-indigo-300/70 hover:text-indigo-100 transition-colors" onclick="toggleLearnMore(this)">
+      <span>📚</span><span class="underline underline-offset-2">Learn More</span><span class="learn-more-arrow text-[10px]">▼</span>
+    </button>
+    <div class="learn-more-panel hidden mt-2 text-xs text-indigo-100/80 leading-relaxed space-y-1.5">${q.learnMore}</div>
+  </div>`;
+}
+function toggleLearnMore(btn) {
+  const panel = btn.nextElementSibling;
+  const arrow = btn.querySelector('.learn-more-arrow');
+  const open = panel.classList.toggle('hidden') === false;
+  if (arrow) arrow.textContent = open ? '▲' : '▼';
 }
 
 function _showRoundComplete() {
