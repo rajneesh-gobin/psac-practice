@@ -95,42 +95,42 @@ const _G5IMG_C3 = `<div style="background:#eef2ff;border-left:4px solid #6366f1;
 STATIC_QUESTIONS.push(
 
   // ── IMAGE UNIQUE : le marché ───────────────────────────────────────
-  makeMCQ({ id:`g5fr-img-001`, chapterId:`fr-images`, difficulty:1,
+  makeMCQ({ id:`g5fr-img-001`, chapterId:'fr-images', subsection:'une_image', difficulty:1,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Où se passe cette scène ?`,
     options:[`Dans un marché de fruits et légumes`, `À la plage`, `Dans une salle de classe`, `À l'hôpital`],
     answer:`Dans un marché de fruits et légumes`,
     hint:`Regarde les cageots empilés et ce qu'ils contiennent.`,
     explanation:`On voit des <b>cageots</b> et des <b>bassines</b> remplis de légumes, des étals et des clients : la scène se passe <b>dans un marché</b>. La première phrase d'une description situe toujours le lieu : « <i>Cette image représente un marché.</i> »` }),
 
-  makeMCQ({ id:`g5fr-img-002`, chapterId:`fr-images`, difficulty:1,
+  makeMCQ({ id:`g5fr-img-002`, chapterId:'fr-images', subsection:'une_image', difficulty:1,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Que vend-on surtout sur ce marché ?`,
     options:[`Des légumes`, `Des vêtements`, `Des livres`, `Des jouets`],
     answer:`Des légumes`,
     hint:`Regarde ce qui remplit les caisses et les bassines.`,
     explanation:`Partout on voit des <b>légumes</b> : des verts en botte, des choux, des oignons rouges dans un filet. C'est un marché de <b>fruits et légumes</b>, pas un marché de vêtements.` }),
 
-  makeMCQ({ id:`g5fr-img-003`, chapterId:`fr-images`, difficulty:2,
+  makeMCQ({ id:`g5fr-img-003`, chapterId:'fr-images', subsection:'une_image', difficulty:2,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Ce marché est-il désert ou animé ?`,
     options:[`Animé : il y a plusieurs personnes`, `Désert : il n'y a personne`, `Fermé pour la nuit`, `Réservé aux enfants`],
     answer:`Animé : il y a plusieurs personnes`,
     hint:`Compte les personnes, au premier plan comme au fond.`,
     explanation:`<b>Plusieurs personnes</b> travaillent et circulent entre les étals : le marché est <b>animé</b>. Décrire l'ambiance d'une image - animée, calme, joyeuse, triste - vaut autant que d'énumérer les objets.` }),
 
-  makeMCQ({ id:`g5fr-img-004`, chapterId:`fr-images`, difficulty:2,
+  makeMCQ({ id:`g5fr-img-004`, chapterId:'fr-images', subsection:'une_image', difficulty:2,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Que tient dans les mains l'homme au tablier ?`,
     options:[`Un grand sac de légumes verts`, `Un parapluie`, `Un téléphone`, `Un ballon`],
     answer:`Un grand sac de légumes verts`,
     hint:`Regarde ce qu'il porte devant lui, à hauteur de la taille.`,
     explanation:`Il tient un grand <b>sac en plastique rempli de légumes verts</b> qu'il est en train de ranger sur l'étal. Pour décrire une personne, dis d'abord ce qu'elle porte, puis ce qu'elle fait.` }),
 
-  makeMCQ({ id:`g5fr-img-005`, chapterId:`fr-images`, difficulty:2,
+  makeMCQ({ id:`g5fr-img-005`, chapterId:'fr-images', subsection:'une_image', difficulty:2,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Qu'y a-t-il au PREMIER PLAN, tout près de nous ?`,
     options:[`Un chariot chargé de caisses`, `Un chien endormi`, `Une voiture rouge`, `Un arbre en fleurs`],
     answer:`Un chariot chargé de caisses`,
     hint:`Le premier plan, c'est le bas de l'image, ce qui est le plus proche.`,
     explanation:`Au <b>premier plan</b> se trouve un <b>chariot métallique</b> chargé de caisses vertes et d'un filet d'oignons. Le vocabulaire attendu : <b>au premier plan</b> (près) / <b>à l'arrière-plan</b> (loin).` }),
 
-  makeMCQ({ id:`g5fr-img-006`, chapterId:`fr-images`, difficulty:2,
+  makeMCQ({ id:`g5fr-img-006`, chapterId:'fr-images', subsection:'une_image', difficulty:2,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Quelle phrase utilise correctement « être en train de » ?`,
     options:[
       `Le marchand est en train de ranger ses légumes.`,
@@ -142,7 +142,7 @@ STATIC_QUESTIONS.push(
     hint:`La structure complète est : être + en train + DE + infinitif.`,
     explanation:`La formule exacte est <b>être + en train + de + infinitif</b> : « Le marchand <b>est en train de ranger</b> ses légumes. » Elle insiste sur une action <b>en cours au moment de l'image</b> - parfaite pour décrire une photo.` }),
 
-  makeMCQ({ id:`g5fr-img-007`, chapterId:`fr-images`, difficulty:3,
+  makeMCQ({ id:`g5fr-img-007`, chapterId:'fr-images', subsection:'une_image', difficulty:3,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Quelle phrase décrit l'image AVEC PRÉCISION ?`,
     options:[
       `Au premier plan, un chariot est chargé de caisses ; derrière, des marchands s'occupent de leurs étals de légumes.`,
@@ -154,7 +154,7 @@ STATIC_QUESTIONS.push(
     hint:`Vérifie chaque détail : qui, où, et à quel plan.`,
     explanation:`Seule la première phrase respecte tout : le <b>chariot au premier plan</b>, les <b>marchands derrière</b>, et des <b>légumes</b>. Pas de poisson, pas de plage, pas d'enfants, et le lieu n'est pas vide.` }),
 
-  makeMCQ({ id:`g5fr-img-008`, chapterId:`fr-images`, difficulty:3,
+  makeMCQ({ id:`g5fr-img-008`, chapterId:'fr-images', subsection:'une_image', difficulty:3,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Tu dois imaginer un dialogue entre une cliente et le marchand. Quelle réplique est la plus vraisemblable ?`,
     options:[
       `« Bonjour, monsieur. Combien coûte le kilo de légumes verts, s'il vous plaît ? »`,
@@ -166,7 +166,7 @@ STATIC_QUESTIONS.push(
     hint:`Le dialogue doit correspondre au lieu et à la situation de l'image.`,
     explanation:`Au marché, on demande le <b>prix</b> : « Combien coûte le kilo… ? » Un dialogue inventé doit rester <b>cohérent avec la scène</b> : le lieu, les personnages et ce qu'ils sont en train de faire.` }),
 
-  makeMCQ({ id:`g5fr-img-009`, chapterId:`fr-images`, difficulty:3,
+  makeMCQ({ id:`g5fr-img-009`, chapterId:'fr-images', subsection:'une_image', difficulty:3,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Quels mots appartiennent au CHAMP LEXICAL de cette image ?`,
     options:[
       `le marchand, l'étal, la caisse, peser, vendre`,
@@ -178,7 +178,7 @@ STATIC_QUESTIONS.push(
     hint:`Un champ lexical regroupe tous les mots liés à un même thème.`,
     explanation:`Le thème est le <b>marché</b> : <i>le marchand, la cliente, l'étal, la caisse, le cageot, peser, vendre, acheter, le prix</i>. Employer le bon champ lexical est ce qui rend une description précise plutôt que vague.` }),
 
-  makeMCQ({ id:`g5fr-img-010`, chapterId:`fr-images`, difficulty:4,
+  makeMCQ({ id:`g5fr-img-010`, chapterId:'fr-images', subsection:'une_image', difficulty:4,
     question:`${_G5IMG_C1}${_G5IMG_MARCHE}Tu dois écrire huit phrases sur cette image. Quel plan est le meilleur ?`,
     options:[
       `Le lieu, puis les personnages, puis leurs actions, puis les objets et les couleurs, puis mon impression`,
@@ -191,7 +191,7 @@ STATIC_QUESTIONS.push(
     explanation:`On suit un ordre <b>du général au particulier</b> : (1) le lieu, (2) qui est là, (3) ce que chacun fait, (4) les objets et les couleurs, (5) l'impression finale. Commencer huit phrases par « Il y a » donnerait un texte plat et répétitif.` }),
 
   // ── TROIS IMAGES : le chat dans le sac ─────────────────────────────
-  makeMCQ({ id:`g5fr-img-011`, chapterId:`fr-images`, difficulty:1,
+  makeMCQ({ id:`g5fr-img-011`, chapterId:'fr-images', subsection:'trois_images', difficulty:1,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Que fait la fille sur l'image 1 ?`,
     options:[
       `Elle prépare son sac d'école dans sa chambre`,
@@ -203,7 +203,7 @@ STATIC_QUESTIONS.push(
     hint:`Regarde le sac ouvert et les livres, ainsi que le lit derrière elle.`,
     explanation:`Sur l'image 1, la fille met ses <b>livres</b> dans son <b>sac d'école</b>, dans sa chambre : elle <b>prépare son sac</b>. C'est la <b>situation initiale</b> de l'histoire.` }),
 
-  makeMCQ({ id:`g5fr-img-012`, chapterId:`fr-images`, difficulty:2,
+  makeMCQ({ id:`g5fr-img-012`, chapterId:'fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Quel détail de l'image 1 annonce la suite de l'histoire ?`,
     options:[
       `Le chat qui observe le sac ouvert`,
@@ -215,7 +215,7 @@ STATIC_QUESTIONS.push(
     hint:`Quel personnage réapparaît sur la troisième image ?`,
     explanation:`Le <b>chat</b> regarde le sac ouvert : c'est l'<b>indice</b> qui prépare la surprise de l'image 3. Dans une histoire en images, un détail du début annonce presque toujours l'événement de la fin - il faut le repérer avant d'écrire.` }),
 
-  makeMCQ({ id:`g5fr-img-013`, chapterId:`fr-images`, difficulty:1,
+  makeMCQ({ id:`g5fr-img-013`, chapterId:'fr-images', subsection:'trois_images', difficulty:1,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Que montre l'image 2 ?`,
     options:[
       `La fille marche vers l'école avec son sac sur le dos`,
@@ -227,7 +227,7 @@ STATIC_QUESTIONS.push(
     hint:`Regarde le bâtiment à l'arrière-plan et la route.`,
     explanation:`Elle avance sur la route, son <b>sac sur le dos</b>, vers un bâtiment marqué <b>ÉCOLE</b>, sous le soleil. L'image 2 assure le <b>déplacement</b> entre la maison et la classe.` }),
 
-  makeMCQ({ id:`g5fr-img-014`, chapterId:`fr-images`, difficulty:2,
+  makeMCQ({ id:`g5fr-img-014`, chapterId:'fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Que se passe-t-il sur l'image 3 ?`,
     options:[
       `Le chat sort du sac en classe et tout le monde est surpris`,
@@ -239,7 +239,7 @@ STATIC_QUESTIONS.push(
     hint:`Regarde ce qui sort du sac posé sur le bureau, puis les visages autour.`,
     explanation:`En classe, le <b>chat sort du sac</b> : les élèves et la maîtresse sont <b>surpris</b>. C'est l'<b>élément de surprise</b>, le point culminant de l'histoire.` }),
 
-  makeMCQ({ id:`g5fr-img-015`, chapterId:`fr-images`, difficulty:2,
+  makeMCQ({ id:`g5fr-img-015`, chapterId:'fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Quelle suite de connecteurs convient pour raconter les trois images ?`,
     options:[
       `Ce matin-là… Ensuite… Soudain…`,
@@ -251,7 +251,7 @@ STATIC_QUESTIONS.push(
     hint:`Il faut des connecteurs de TEMPS, et un mot fort pour la surprise finale.`,
     explanation:`<b>Ce matin-là</b> plante le décor, <b>Ensuite</b> assure la suite, et <b>Soudain</b> annonce la surprise : c'est exactement le rythme d'une histoire. « Premièrement / Deuxièmement » convient à une liste, pas à un récit, et « Parce que / Cependant » exprime la cause ou l'opposition, pas le temps.` }),
 
-  makeMCQ({ id:`g5fr-img-016`, chapterId:`fr-images`, difficulty:3,
+  makeMCQ({ id:`g5fr-img-016`, chapterId:'fr-images', subsection:'trois_images', difficulty:3,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Pour raconter cette histoire au passé, quelle phrase est correcte ?`,
     options:[
       `Pendant qu'elle marchait vers l'école, le chat dormait dans son sac.`,
@@ -263,7 +263,7 @@ STATIC_QUESTIONS.push(
     hint:`Deux actions qui durent en même temps se mettent au même temps du passé.`,
     explanation:`Deux actions <b>qui durent</b> en arrière-plan se mettent à l'<b>imparfait</b> : « elle <b>marchait</b> » et « le chat <b>dormait</b> ». Le passé composé serait réservé à l'événement bref et soudain : « Soudain, le chat <b>est sorti</b> du sac. »` }),
 
-  makeMCQ({ id:`g5fr-img-017`, chapterId:`fr-images`, difficulty:3,
+  makeMCQ({ id:`g5fr-img-017`, chapterId:'fr-images', subsection:'trois_images', difficulty:3,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Quelle phrase raconte le mieux le moment de surprise de l'image 3 ?`,
     options:[
       `Soudain, le chat est sorti du sac et toute la classe a éclaté de rire.`,
@@ -275,13 +275,13 @@ STATIC_QUESTIONS.push(
     hint:`Le moment de surprise se raconte au passé composé, avec un mot comme « Soudain ».`,
     explanation:`« <b>Soudain</b>, le chat <b>est sorti</b>… » : un connecteur de rupture + le <b>passé composé</b> pour l'action brusque, plus la <b>réaction</b> des personnages. Décrire des couleurs ou revenir au début n'exprime aucune surprise.` }),
 
-  makeTF({ id:`g5fr-img-018`, chapterId:`fr-images`, difficulty:2,
+  makeTF({ id:`g5fr-img-018`, chapterId:'fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Dans un récit en images, il faut décrire chaque image dans l'ordre où elle est numérotée.`,
     answer:true,
     hint:`Que se passe-t-il si on raconte la fin avant le début ?`,
     explanation:`<b>Vrai.</b> Les images sont numérotées pour imposer l'ordre <b>chronologique</b> : 1, puis 2, puis 3. Raconter la surprise avant le départ de la maison rendrait l'histoire incompréhensible et ferait perdre des points.` }),
 
-  makeMCQ({ id:`g5fr-img-019`, chapterId:`fr-images`, difficulty:4,
+  makeMCQ({ id:`g5fr-img-019`, chapterId:'fr-images', subsection:'trois_images', difficulty:4,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Tu dois écrire dix lignes sur cette histoire. Que faut-il ajouter que les images ne montrent PAS ?`,
     options:[
       `Les sentiments des personnages et une phrase de conclusion`,
@@ -293,7 +293,7 @@ STATIC_QUESTIONS.push(
     hint:`Les images montrent des actions ; un bon récit ajoute ce qui se passe à l'intérieur des personnages.`,
     explanation:`Les images montrent les <b>actions</b> ; c'est à toi d'ajouter les <b>sentiments</b> (« elle était gênée », « la maîtresse a souri ») et une <b>conclusion</b> (« le soir, elle a ramené le chat à la maison »). C'est ce qui transforme une légende d'images en véritable récit.` }),
 
-  makeMCQ({ id:`g5fr-img-020`, chapterId:`fr-images`, difficulty:3,
+  makeMCQ({ id:`g5fr-img-020`, chapterId:'fr-images', subsection:'trois_images', difficulty:3,
     question:`${_G5IMG_C3}${_G5IMG_CHAT}Quel titre convient le mieux à cette histoire ?`,
     options:[`Le chat dans le sac`, `La leçon de natation`, `Le marché du samedi`, `Le cyclone de janvier`],
     answer:`Le chat dans le sac`,

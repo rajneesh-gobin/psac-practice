@@ -1,35 +1,61 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- App icon: used as the browser favicon, the iOS home-screen icon, and the
+       Android "maskable" PWA icon (manifest.json marks it purpose="any
+       maskable"). Maskable icons get cropped by the OS into a circle/squircle/
+       rounded-square - only content inside a centered circle of ~80% of the
+       icon's size is guaranteed to survive. Every meaningful shape below stays
+       inside that circle (radius ~205 around the 256,256 center); only the
+       full-bleed background rect is allowed to touch the edges. The old
+       version's flag stripes sat almost entirely outside that circle and were
+       being clipped on Android home screens without anyone noticing. No text
+       here on purpose - a favicon renders as small as 16px and a home-screen
+       icon a little larger, and a phrase like "PSAC Question Simulator" would
+       be illegible (and get masked/cropped) at those sizes on every platform.
+       See icons/wordmark.svg for the icon + name lockup, meant for contexts
+       with room for both. -->
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#3b82f6"/>
-      <stop offset="100%" style="stop-color:#7c3aed"/>
+      <stop offset="0%" stop-color="#4338ca"/>
+      <stop offset="52%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#c026d3"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="30%" cy="22%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.38"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cap" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dfe6ff"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
   </defs>
-  <!-- Background -->
-  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
-  <!-- Graduation cap hat brim -->
-  <ellipse cx="256" cy="220" rx="150" ry="30" fill="white" opacity="0.95"/>
-  <!-- Cap top -->
-  <polygon points="256,100 406,220 256,250 106,220" fill="white" opacity="0.85"/>
-  <!-- Tassel string -->
-  <line x1="380" y1="220" x2="380" y2="310" stroke="white" stroke-width="6" opacity="0.9"/>
-  <!-- Tassel end -->
-  <circle cx="380" cy="318" r="14" fill="#fbbf24"/>
-  <!-- Book icon below cap -->
-  <rect x="186" y="300" width="140" height="110" rx="10" fill="white" opacity="0.2"/>
-  <rect x="196" y="310" width="120" height="90" rx="8" fill="white" opacity="0.15"/>
-  <!-- Book spine -->
-  <rect x="249" y="300" width="14" height="110" fill="white" opacity="0.3"/>
-  <!-- Lines on book -->
-  <line x1="220" y1="335" x2="244" y2="335" stroke="white" stroke-width="4" opacity="0.6"/>
-  <line x1="220" y1="350" x2="244" y2="350" stroke="white" stroke-width="4" opacity="0.6"/>
-  <line x1="220" y1="365" x2="244" y2="365" stroke="white" stroke-width="4" opacity="0.6"/>
-  <line x1="268" y1="335" x2="298" y2="335" stroke="white" stroke-width="4" opacity="0.6"/>
-  <line x1="268" y1="350" x2="298" y2="350" stroke="white" stroke-width="4" opacity="0.6"/>
-  <line x1="268" y1="365" x2="298" y2="365" stroke="white" stroke-width="4" opacity="0.6"/>
-  <!-- Flag colours strip at bottom (Mauritius) -->
-  <rect x="96" y="440" width="80" height="16" rx="4" fill="#e63946"/>
-  <rect x="176" y="440" width="80" height="16" rx="4" fill="#457b9d"/>
-  <rect x="256" y="440" width="80" height="16" rx="4" fill="#f4d35e"/>
-  <rect x="336" y="440" width="80" height="16" rx="4" fill="#2d6a4f"/>
+
+  <!-- Background - the only element allowed to touch the edges -->
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="115" fill="url(#glow)"/>
+
+  <!-- Soft grounding shadow under the cap (no <filter> - plain opacity, so it
+       renders identically everywhere a favicon/PWA icon does) -->
+  <ellipse cx="256" cy="300" rx="118" ry="18" fill="#1e1b4b" opacity="0.18"/>
+
+  <!-- Graduation cap -->
+  <rect x="220" y="222" width="72" height="58" rx="13" fill="url(#cap)"/>
+  <ellipse cx="256" cy="224" rx="120" ry="25" fill="url(#cap)"/>
+  <polygon points="256,128 378,224 256,258 134,224" fill="#ffffff"/>
+  <polygon points="256,128 378,224 356,232 256,152 156,232 134,224" fill="#eef2ff" opacity="0.7"/>
+
+  <!-- Button + tassel -->
+  <circle cx="256" cy="224" r="10" fill="url(#gold)"/>
+  <path d="M256 224 C298 240 306 270 300 298" stroke="url(#gold)" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="300" cy="304" r="15" fill="url(#gold)"/>
+
+  <!-- Achievement star badge - echoes the ★ mastery rating used throughout the app -->
+  <circle cx="356" cy="348" r="58" fill="#ffffff"/>
+  <circle cx="356" cy="348" r="58" fill="none" stroke="url(#gold)" stroke-width="5"/>
+  <path transform="translate(356,348) scale(1.85)"
+    d="M0,-26 6.47,-8.90 24.73,-8.03 10.46,3.40 15.28,21.03 0,11 -15.28,21.03 -10.46,3.40 -24.73,-8.03 -6.47,-8.90 Z"
+    fill="url(#gold)"/>
 </svg>

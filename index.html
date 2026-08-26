@@ -106,12 +106,12 @@
         <div class="relative">
           <input id="cp-new" type="password" placeholder="New password (min 6 characters)"
             class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2.5 pr-10 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
-          <button type="button" onclick="Auth.togglePass('cp-new',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+          <button type="button" onclick="Auth.togglePass('cp-new',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
         </div>
         <div class="relative">
           <input id="cp-confirm" type="password" placeholder="Confirm new password"
             class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2.5 pr-10 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
-          <button type="button" onclick="Auth.togglePass('cp-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+          <button type="button" onclick="Auth.togglePass('cp-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
         </div>
         <p id="cp-error" class="text-red-500 text-xs hidden"></p>
         <div class="flex gap-2 pt-1">
@@ -123,13 +123,58 @@
   </div>
 
   <!-- Invite Friends / Referrals Modal -->
+  <!-- Send a child their login. The link carries a single-use, 48-hour token,
+       never the PIN — see create_student_invite() in supabase-migration.sql. -->
+  <div id="modal-child-login" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white">📲 Send <span id="cl-child-name">your child</span> their login</h3>
+        <button onclick="closeChildLoginModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">One tap signs them in — no typing. The link works once and expires in 48 hours.</p>
+
+      <div class="bg-gray-50 dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700 rounded-xl p-3 mb-3 space-y-1.5 text-sm">
+        <div class="flex justify-between gap-3"><span class="text-gray-500 dark:text-gray-400">Family</span><span id="cl-family" class="font-semibold text-gray-800 dark:text-white text-right break-all"></span></div>
+        <div class="flex justify-between gap-3"><span class="text-gray-500 dark:text-gray-400">Username</span><span id="cl-username" class="font-semibold text-gray-800 dark:text-white text-right break-all"></span></div>
+        <div class="flex justify-between gap-3"><span class="text-gray-500 dark:text-gray-400">PIN</span><span id="cl-pin" class="font-mono font-bold tracking-widest text-gray-800 dark:text-white"></span></div>
+      </div>
+
+      <label class="flex items-start gap-2 mb-3 cursor-pointer select-none">
+        <input id="cl-include-pin" type="checkbox" class="mt-0.5 accent-indigo-500" onchange="_refreshChildLoginPreview()">
+        <span class="text-xs text-gray-500 dark:text-gray-400">Include the PIN in the message. They'll need it on their next sign-in, but anyone the message reaches can use it too.</span>
+      </label>
+
+      <p id="cl-link" class="text-xs text-gray-500 dark:text-gray-400 break-all select-all bg-gray-50 dark:bg-gray-900/40 rounded-lg p-2 mb-3">Creating link…</p>
+
+      <div class="grid grid-cols-2 gap-2 mb-2">
+        <button onclick="shareChildLoginWhatsApp()"
+          class="flex items-center justify-center gap-2 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl text-sm transition-colors">
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.2 3.3 5.3 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.8 13.5 3.8 12c0-4.5 3.7-8.2 8.2-8.2s8.2 3.7 8.2 8.2-3.7 8.2-8.2 8.2z"/></svg>
+          WhatsApp
+        </button>
+        <button onclick="shareChildLogin()"
+          class="flex items-center justify-center gap-2 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold rounded-xl text-sm transition-colors">
+          📤 Share
+        </button>
+      </div>
+      <button onclick="copyChildLoginMessage()"
+        class="w-full py-2 text-indigo-500 dark:text-indigo-300 font-semibold rounded-xl text-sm border border-indigo-200 dark:border-indigo-800/60 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors mb-3">
+        📋 Copy message
+      </button>
+      <button onclick="closeChildLoginModal()"
+        class="w-full py-2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm transition-colors">
+        Not now
+      </button>
+    </div>
+  </div>
+
   <div id="modal-invite" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl max-h-[85vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-1">
         <h3 class="text-lg font-bold text-gray-800 dark:text-white">🎁 Invite Friends</h3>
-        <button onclick="Auth.closeInviteModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+        <button onclick="Auth.closeInviteModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">Share PSAC Exam Practice with other families. When they join using your link, you'll see them here.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Share PSAC Exam Practice with other families. When they join using your link, you'll see them here.</p>
 
       <!-- Referral code + link -->
       <div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/40 rounded-xl p-3 mb-3">
@@ -164,6 +209,47 @@
     </div>
   </div>
 
+  <!-- Plans & Payment Modal.
+       Payment is NOT live: the methods below are shown so families know what is
+       coming, and every purchase control is disabled. Nothing here calls a
+       payment provider. -->
+  <div id="modal-plans" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl max-h-[88vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white">⭐ Plans</h3>
+        <button onclick="closePlansModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+      </div>
+
+      <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 rounded-xl p-3 mb-4">
+        <p class="text-sm font-bold text-green-700 dark:text-green-300">🎉 Everything is free until 31 October 2026</p>
+        <p class="text-xs text-green-600 dark:text-green-400 mt-0.5">Every chapter, every subject, every child. No card needed.</p>
+      </div>
+
+      <div id="plans-list" class="space-y-2 mb-5"></div>
+
+      <h4 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Payment methods</h4>
+      <div class="space-y-2 mb-3">
+        <button disabled class="w-full flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/40 opacity-60 cursor-not-allowed text-left">
+          <span class="text-2xl select-none">🧃</span>
+          <span class="flex-1 min-w-0">
+            <span class="block text-sm font-bold text-gray-700 dark:text-gray-200">Juice by MCB</span>
+            <span class="block text-xs text-gray-500 dark:text-gray-400">Pay from your Mauritian bank account</span>
+          </span>
+          <span class="text-[10px] font-bold uppercase tracking-wide bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 px-2 py-1 rounded-full shrink-0">Soon</span>
+        </button>
+        <button disabled class="w-full flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/40 opacity-60 cursor-not-allowed text-left">
+          <span class="text-2xl select-none">💳</span>
+          <span class="flex-1 min-w-0">
+            <span class="block text-sm font-bold text-gray-700 dark:text-gray-200">Credit or debit card</span>
+            <span class="block text-xs text-gray-500 dark:text-gray-400">Visa &amp; Mastercard</span>
+          </span>
+          <span class="text-[10px] font-bold uppercase tracking-wide bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 px-2 py-1 rounded-full shrink-0">Soon</span>
+        </button>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Payments open after 31 October 2026. Until then nothing is charged.</p>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
     <!-- Mobile: branding on one row, actions on a second full-width row.
@@ -177,7 +263,7 @@
         <div class="text-2xl sm:text-3xl select-none shrink-0">🎓</div>
         <div class="min-w-0">
           <h1 class="text-base sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">PSAC Exam Practice</h1>
-          <p class="text-xs text-gray-400 dark:text-gray-500 hidden sm:block">Mauritius 🇲🇺 · Grades 4–6</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius 🇲🇺 · Grades 4–6</p>
         </div>
       </div>
       <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 justify-center sm:justify-end">
@@ -194,7 +280,6 @@
         <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hidden items-center gap-1.5 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Teacher Dashboard">👩‍🏫 <span class="btn-label">Teacher</span></button>
         <button id="search-btn" onclick="Search.open()" class="icon-btn hidden" title="Search Questions">🔍<span class="btn-label sm:hidden">Search</span></button>
         <button onclick="showScreen('forum')" class="icon-btn" title="Community Forum">💬<span class="btn-label sm:hidden">Forum</span></button>
-        <button id="analytics-btn" class="icon-btn" title="Analytics">📊<span class="btn-label sm:hidden">Stats</span></button>
         <button id="pwa-install-btn" class="hidden items-center gap-1 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Install app on this device">📲 <span class="btn-label">Install</span></button>
         <button id="theme-toggle" class="icon-btn" title="Toggle theme"><span id="theme-icon">🌙</span><span class="btn-label sm:hidden">Theme</span></button>
         <button id="header-profile-btn" onclick="showProfile()" class="hidden items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-xs font-semibold hover:bg-indigo-200 dark:hover:bg-indigo-800/60 transition-colors" title="My Profile">
@@ -225,6 +310,10 @@
         </div>
         <div class="flex items-center gap-2">
           <a href="#plans" class="hidden sm:inline text-indigo-200/80 hover:text-white text-sm font-semibold px-3 py-2 transition-colors">Pricing</a>
+          <button onclick="shareAppWhatsApp()" title="Share via WhatsApp" aria-label="Share via WhatsApp"
+            class="w-9 h-9 flex items-center justify-center bg-green-500 hover:bg-green-400 active:scale-95 text-white rounded-full transition-all shadow-lg shrink-0">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.2 3.3 5.3 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.8 13.5 3.8 12c0-4.5 3.7-8.2 8.2-8.2s8.2 3.7 8.2 8.2-3.7 8.2-8.2 8.2z"/></svg>
+          </button>
           <button onclick="showScreen('auth')"
             class="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-semibold px-5 py-2 rounded-full transition-colors">
             Sign In
@@ -642,7 +731,7 @@
             <div class="relative">
               <input id="auth-pass" type="password" placeholder="Password" autocomplete="current-password"
                 class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white/20 transition-all">
-              <button type="button" onclick="Auth.togglePass('auth-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+              <button type="button" onclick="Auth.togglePass('auth-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
             <button onclick="Auth.emailSignIn()"
               class="w-full py-3 bg-indigo-500 hover:bg-indigo-400 active:bg-indigo-600 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
@@ -654,7 +743,7 @@
             </button>
             <div class="relative flex items-center gap-2 py-1">
               <div class="flex-1 h-px bg-white/20"></div>
-              <span class="text-white/30 text-xs">or</span>
+              <span class="text-white/70 text-xs">or</span>
               <div class="flex-1 h-px bg-white/20"></div>
             </div>
             <button onclick="Auth.googleSignIn()"
@@ -688,12 +777,12 @@
             <div class="relative">
               <input id="auth-signup-pass" type="password" placeholder="Password (min 6 characters)"
                 class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
-              <button type="button" onclick="Auth.togglePass('auth-signup-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+              <button type="button" onclick="Auth.togglePass('auth-signup-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
             <div class="relative">
               <input id="auth-signup-pass-confirm" type="password" placeholder="Confirm password"
                 class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 transition-all">
-              <button type="button" onclick="Auth.togglePass('auth-signup-pass-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+              <button type="button" onclick="Auth.togglePass('auth-signup-pass-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
             <input id="auth-signup-referral" type="text" placeholder="Referral code (optional)" maxlength="12"
               class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-green-400 transition-all"
@@ -702,7 +791,7 @@
               class="w-full py-3 bg-green-500 hover:bg-green-400 active:bg-green-600 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
               Create Account →
             </button>
-            <p class="text-white/40 text-xs text-center">A verification email will be sent to you.</p>
+            <p class="text-white/70 text-xs text-center">A verification email will be sent to you.</p>
           </div>
         </div>
 
@@ -710,31 +799,45 @@
         <div id="auth-student-panel" class="hidden">
           <p class="text-white/70 text-sm mb-4">Enter your <b class="text-white">family name</b>, <b class="text-white">username</b> and <b class="text-white">PIN</b>:</p>
           <div class="space-y-3">
-            <input id="student-family-name" type="text" maxlength="40" placeholder="Family name (e.g. Ramgoolam)"
+            <input id="student-family-name" type="text" maxlength="40" placeholder="Family name (e.g. Smith)"
               class="selectable w-full text-center text-base font-semibold bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
               oninput="Auth.checkStudentReady()">
-            <input id="student-username" type="text" maxlength="20" placeholder="Your name (e.g. Shanvi)"
-              class="selectable w-full text-center text-xl font-bold bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 uppercase"
-              oninput="this.value=this.value.toUpperCase(); Auth.checkStudentReady()">
+            <!-- Shown exactly as typed, like the family name above it. Usernames
+                 are stored lower-case and the parent dashboard shows them that
+                 way (@shanvi1), so forcing CAPS here made the two screens
+                 disagree about the child's own name. The value was rewritten on
+                 every keystroke too, which sends the caret to the end mid-edit.
+                 Login matches case-insensitively either way. -->
+            <input id="student-username" type="text" maxlength="20" placeholder="Your name (e.g. John)"
+              autocapitalize="off" autocorrect="off" spellcheck="false"
+              class="selectable w-full text-center text-xl font-bold bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              oninput="Auth.checkStudentReady()">
             <div class="relative">
               <input id="student-pin" type="password" maxlength="4" placeholder="PIN (4 digits)"
                 oninput="Auth.onPinInput(this)"
                 class="selectable w-full text-center text-2xl font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-11 py-3 focus:outline-none focus:ring-2 focus:ring-green-400">
-              <button type="button" onclick="Auth.togglePass('student-pin',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+              <button type="button" onclick="Auth.togglePass('student-pin',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
             <button id="student-signin-btn" disabled onclick="Auth.studentSignIn()"
               class="w-full py-3 bg-green-500 hover:bg-green-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
               Let's Go! 🚀
             </button>
-            <p class="text-white/40 text-xs text-center pt-1">Family name &amp; PIN set by your parent — ask them if you're not sure.</p>
+            <p class="text-white/70 text-xs text-center pt-1">Family name &amp; PIN set by your parent — ask them if you're not sure.</p>
           </div>
         </div>
 
         <p id="auth-error" class="text-red-300 text-xs text-center mt-3 hidden"></p>
+        <!-- Revealed only when sign-up hits an email that already has an account:
+             the fix is always "sign in", including for a closed account they
+             want back, so put that one tap away. -->
+        <button id="auth-goto-signin" onclick="Auth.showSignIn()"
+          class="hidden mx-auto mt-2 text-xs font-semibold text-white/90 underline underline-offset-2 hover:text-white transition-colors">
+          Go to sign in →
+        </button>
         </div>
       </div>
 
-      <p class="text-white/25 text-xs mt-6 select-none">© 2025 PSAC Exam Practice · Mauritius PSAC Curriculum</p>
+      <p class="text-white/70 text-xs mt-6 select-none">© 2025 PSAC Exam Practice · Mauritius PSAC Curriculum</p>
     </div>
   </div>
 
@@ -759,7 +862,7 @@
           Resend verification email
         </button>
         <button onclick="showScreen('auth')" class="text-indigo-300 text-sm hover:text-white transition-colors">← Back to Sign In</button>
-        <p class="text-white/30 text-xs mt-3">Wrong email? <button onclick="Auth.backToSignUp()" class="underline hover:text-white/60 transition-colors">Go back and sign up again</button></p>
+        <p class="text-white/70 text-xs mt-3">Wrong email? <button onclick="Auth.backToSignUp()" class="underline hover:text-white/60 transition-colors">Go back and sign up again</button></p>
       </div>
     </div>
   </div>
@@ -777,12 +880,12 @@
           <div class="relative">
             <input id="reset-new-pass" type="password" placeholder="New password (min 6 characters)"
               class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
-            <button type="button" onclick="Auth.togglePass('reset-new-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+            <button type="button" onclick="Auth.togglePass('reset-new-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
           </div>
           <div class="relative">
             <input id="reset-confirm-pass" type="password" placeholder="Confirm new password"
               class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 pr-11 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
-            <button type="button" onclick="Auth.togglePass('reset-confirm-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors text-base select-none">👁</button>
+            <button type="button" onclick="Auth.togglePass('reset-confirm-pass',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
           </div>
           <button onclick="Auth.setNewPassword()"
             class="w-full py-3 bg-green-500 hover:bg-green-400 text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
@@ -796,6 +899,52 @@
   </div>
 
   <!-- ══════════ FAMILY SETUP (first login after verification) ══════════ -->
+  <!-- Closed-account restore prompt.
+       Reached when someone signs in to an account whose profile carries a
+       deleted_at. Nothing was destroyed on close, so this offers it straight
+       back rather than making them start over. -->
+  <div id="screen-account-deleted" class="screen hidden" data-hide-header="true">
+    <div class="min-h-screen flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl w-full max-w-sm p-7 text-center">
+        <div class="text-5xl mb-3 select-none">📦</div>
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Welcome back!</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">You closed this account<span id="deleted-when"></span>.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">Nothing was erased — your children, their progress, badges and exam history are all still here.</p>
+        <button id="restore-btn" onclick="Auth.restoreAccount()"
+          class="w-full py-3 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl text-sm transition-colors shadow-lg mb-2">
+          ♻️ Restore my account
+        </button>
+        <button onclick="Auth.logout()"
+          class="w-full py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold rounded-xl text-sm transition-colors">
+          Sign out
+        </button>
+        <p id="restore-error" class="text-red-500 text-xs mt-3 hidden"></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-biometric-lock" class="screen hidden" data-hide-header="true">
+    <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center p-4">
+      <div class="relative w-full max-w-sm rounded-3xl shadow-2xl border border-white/20">
+        <div class="absolute inset-0 rounded-3xl bg-white/10 backdrop-blur-md pointer-events-none"></div>
+        <div class="relative p-7 text-center">
+          <div class="text-6xl mb-3 select-none">🔒</div>
+          <h2 class="text-xl font-bold text-white mb-1">Welcome back</h2>
+          <p class="text-white/60 text-sm mb-6">Unlock with your fingerprint or face to continue.</p>
+          <button onclick="Auth.attemptBiometricUnlock()"
+            class="w-full py-3 bg-indigo-500 hover:bg-indigo-400 active:bg-indigo-600 text-white font-bold rounded-xl transition-colors shadow-lg text-sm mb-3">
+            👆 Unlock
+          </button>
+          <p id="bio-lock-status" class="text-amber-300 text-xs mb-2 min-h-[1em]"></p>
+          <button type="button" id="bio-lock-fallback" onclick="Auth.biometricUsePassword()"
+            class="w-full text-white/50 text-xs hover:text-white/80 transition-colors text-center pt-1">
+            Use password instead
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="screen-family-setup" class="screen hidden" data-hide-header="true">
     <div class="min-h-screen bg-gradient-to-br from-green-900 via-teal-900 to-blue-900 flex items-center justify-center p-4 overflow-y-auto">
       <div class="relative rounded-3xl max-w-sm w-full border border-white/20 my-6">
@@ -814,7 +963,7 @@
         </div>
 
         <div class="mb-4">
-          <label class="text-xs font-semibold text-white/70 block mb-1">Referral code <span class="font-normal text-white/40">(optional — from a friend's invite)</span></label>
+          <label class="text-xs font-semibold text-white/70 block mb-1">Referral code <span class="font-normal text-white/70">(optional — from a friend's invite)</span></label>
           <input id="setup-referral-code" type="text" placeholder="e.g. AB12CD34" maxlength="12"
             class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-2.5 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-green-400"
             oninput="this.value=this.value.toUpperCase()">
@@ -830,6 +979,7 @@
             <div class="grid grid-cols-2 gap-2">
               <select id="setup-child-grade"
                 class="bg-white/10 border border-white/20 text-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+                <option value="4">Grade 4</option>
                 <option value="5">Grade 5</option>
                 <option value="6">Grade 6</option>
               </select>
@@ -861,6 +1011,12 @@
     <input type="hidden" id="add-student-id">
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4 max-w-md mx-auto">
       <div>
+        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Family</label>
+        <input id="add-child-family" type="text" readonly tabindex="-1"
+          class="selectable w-full border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900/50 text-gray-600 dark:text-gray-300 cursor-default focus:outline-none">
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Your child types this, their username and their PIN to log in. Change it in ⚙️ Settings → Family Login.</p>
+      </div>
+      <div>
         <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Child's Name</label>
         <input id="add-child-name" type="text" maxlength="30" placeholder="e.g. Emma"
           class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
@@ -874,16 +1030,17 @@
         <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Grade</label>
         <select id="add-child-grade"
           class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+          <option value="4">Grade 4</option>
           <option value="5">Grade 5</option>
           <option value="6">Grade 6</option>
         </select>
       </div>
       <div>
-        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">4-digit PIN <span class="font-normal text-gray-400">(student uses this to log in)</span></label>
+        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">4-digit PIN <span class="font-normal text-gray-500 dark:text-gray-400">(student uses this to log in)</span></label>
         <div class="relative">
           <input id="add-child-pin" type="password" maxlength="4" placeholder="e.g. 7342"
             class="selectable w-full text-center font-mono tracking-widest border border-gray-300 dark:border-gray-600 rounded-xl px-9 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
-          <button type="button" onclick="Auth.togglePass('add-child-pin',this)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+          <button type="button" onclick="Auth.togglePass('add-child-pin',this)" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
         </div>
         <div id="pin-suggestion-row" class="hidden mt-2 flex items-center gap-2 flex-wrap">
           <span class="text-xs text-gray-500 dark:text-gray-400">Suggested PIN:</span>
@@ -995,7 +1152,7 @@
       <div id="dash-today-plan" class="hidden mb-5">
         <div class="flex items-center justify-between mb-3">
           <h3 id="dash-today-title" class="text-base font-bold text-gray-800 dark:text-white">📅 Today's Study Plan</h3>
-          <span id="dash-today-date" class="text-xs text-gray-400"></span>
+          <span id="dash-today-date" class="text-xs text-gray-500 dark:text-gray-400"></span>
         </div>
         <div id="dash-today-entries" class="space-y-2"></div>
       </div>
@@ -1037,6 +1194,21 @@
           <p class="text-gray-500 dark:text-gray-400 text-sm">Find questions by topic, keyword, or name - even across subjects. Typos are fine!</p>
         </div>
         <span class="text-indigo-400 dark:text-indigo-500 text-2xl shrink-0">›</span>
+      </button>
+
+      <!-- Analytics card - the header's Stats icon used to live here globally
+           (parent/student/teacher alike); it now only makes sense for a
+           student actually studying, so it lives on their own dashboard
+           instead. The bottom nav's "Progress" tab opens the same screen but
+           only shows on a handful of screens - this stays reachable from Home
+           regardless. -->
+      <button onclick="showScreen('analytics')" class="w-full mb-6 flex items-center gap-4 bg-white dark:bg-gray-800 rounded-2xl p-5 shadow hover:shadow-md border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all text-left group">
+        <div class="text-4xl select-none group-hover:scale-110 transition-transform">📊</div>
+        <div class="flex-1">
+          <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">My Analytics</h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Accuracy, streaks, exams taken and performance by subject - all in one place.</p>
+        </div>
+        <span class="text-blue-400 dark:text-blue-500 text-2xl shrink-0">›</span>
       </button>
 
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-6">
@@ -1083,7 +1255,7 @@
       <div id="student-cards" class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto mb-6"></div>
       <div class="flex justify-center gap-4 flex-wrap">
         <button onclick="Auth.addStudent()" class="btn-secondary text-sm">+ Add Student</button>
-        <button onclick="Auth.enterParentMode()" class="text-sm text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
+        <button onclick="Auth.enterParentMode()" class="text-sm text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
       </div>
     </div>
 
@@ -1096,7 +1268,7 @@
       </div>
       <div id="grade-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-6"></div>
       <div class="flex justify-center gap-4 flex-wrap">
-        <button onclick="Auth.enterParentMode()" class="text-sm text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
+        <button onclick="Auth.enterParentMode()" class="text-sm text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
         <!-- REMOVED: "Teacher Access". This is a student-facing screen, and
              teacher mode is a Supabase role, not something to opt into. -->
       </div>
@@ -1112,7 +1284,7 @@
       </div>
       <div id="subject-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto mb-6"></div>
       <div class="text-center">
-        <button onclick="Auth.enterParentMode()" class="text-sm text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
+        <button onclick="Auth.enterParentMode()" class="text-sm text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
       </div>
     </div>
 
@@ -1193,7 +1365,7 @@
               <div class="flex gap-2">
                 <button id="exam-flag-btn" class="btn-ghost text-sm">🚩</button>
                 <button id="exam-hint-btn" class="btn-ghost text-sm">💡 Hint</button>
-                <button onclick="openReportModal()" title="Report a problem with this question" class="btn-ghost text-sm text-gray-400 hover:text-red-500">⚑ Report</button>
+                <button onclick="openReportModal()" title="Report a problem with this question" class="btn-ghost text-sm text-gray-500 dark:text-gray-400 hover:text-red-500">⚑ Report</button>
               </div>
             </div>
             <div id="exam-hint-box" class="hidden mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl text-sm">
@@ -1202,7 +1374,7 @@
             </div>
             <div class="flex items-start gap-2">
               <div id="exam-q-text" class="flex-1 text-lg text-gray-800 dark:text-white mb-5 leading-relaxed font-medium"></div>
-              <button id="exam-tts-btn" onclick="speakQuestion('exam')" class="shrink-0 mt-1 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors" title="Read question aloud">🔊</button>
+              <button id="exam-tts-btn" onclick="speakQuestion('exam')" class="shrink-0 mt-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors" title="Read question aloud">🔊</button>
             </div>
             <div id="exam-answer-area" class="mb-4"></div>
             <div class="flex justify-between">
@@ -1250,7 +1422,14 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
-          <h3 class="font-bold text-gray-800 dark:text-white mb-4">📝 Full Question Review</h3>
+          <div class="flex items-center justify-between gap-3 mb-4 flex-wrap">
+            <h3 class="font-bold text-gray-800 dark:text-white">📝 Full Question Review</h3>
+            <!-- A full mock is 40 questions; the mistakes are the point. -->
+            <button id="results-review-toggle" onclick="_toggleExamReviewWrongOnly()"
+              class="hidden text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 rounded-full hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors">
+              Show only what I got wrong
+            </button>
+          </div>
           <div id="results-review" class="space-y-4"></div>
         </div>
 
@@ -1265,84 +1444,117 @@
     <!-- ══════════ CHAPTER SELECTOR ══════════ -->
     <div id="screen-chapter-select" class="screen hidden">
       <button class="back-btn mb-4" data-target="subject-select">← Subjects</button>
-      <div class="flex items-start justify-between gap-3 mb-1 flex-wrap">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">📚 Chapter Practice</h2>
-        <button onclick="Search.open()" class="flex items-center gap-2 text-sm font-semibold bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-800/60 px-4 py-2 rounded-xl transition-colors border border-indigo-200 dark:border-indigo-700/50">
-          🔍 Search all questions
-        </button>
+
+      <div class="ch-header">
+        <div class="ch-header-text">
+          <h2 class="ch-title">📚 Chapter Practice</h2>
+          <p class="ch-subtitle" id="chapter-subtitle">Pick a chapter to begin. Your mastery is tracked automatically.</p>
+        </div>
+        <button onclick="Search.open()" class="ch-search-btn">🔍 <span>Search questions</span></button>
       </div>
-      <p class="text-gray-500 dark:text-gray-400 text-sm mb-5">Pick a chapter. Your mastery is tracked automatically.</p>
-      <div id="chapter-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+
+      <!-- Filled by _renderChapterSummary() -->
+      <div id="chapter-summary" class="ch-summary"></div>
+
+      <div id="chapter-grid"></div>
     </div>
 
     <!-- ══════════ PRACTICE ══════════ -->
+    <!-- ── PRACTICE ──
+         One column, not a 2/3+1/3 grid. The sidebar (level, formulas, session
+         stats, scratchpad) stacked BELOW the question on every phone, so the
+         scratchpad a child needs while working sat under the answer buttons,
+         off the bottom of the screen. Everything now reads top to bottom in the
+         order it is used: where am I → the question → answer → tools → act. -->
     <div id="screen-practice" class="screen hidden">
-      <button id="practice-back-btn" class="back-btn mb-4">← Back to Chapters</button>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div class="lg:col-span-2 space-y-4">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
-            <div class="flex items-start justify-between mb-3">
-              <div>
-                <h3 id="practice-ch-name" class="font-bold text-gray-800 dark:text-white text-lg"></h3>
-                <div class="flex gap-2 mt-1 flex-wrap items-center">
-                  <span id="practice-diff-badge" class="chip green text-xs"></span>
-                  <span id="practice-q-counter" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full"></span>
-                </div>
-                <!-- Question progress bar -->
-                <div class="practice-progress-outer mt-2">
-                  <div id="practice-progress-bar" class="practice-progress-inner" style="width:0%"></div>
-                </div>
-              </div>
-              <button id="practice-hint-btn" class="btn-ghost text-sm">💡 Hint <span id="hint-count-badge" class="text-xs text-amber-500 font-bold">3</span></button>
-              <button id="practice-report-btn" onclick="openReportModal()" title="Report a problem with this question" class="btn-ghost text-sm text-gray-400 hover:text-red-500">🚩</button>
+      <button id="practice-back-btn" class="back-btn mb-3">← Back to Chapters</button>
+
+      <div class="pr-wrap">
+        <!-- Status: chapter, position, progress, level, session -->
+        <div class="pr-head">
+          <div class="pr-head-row">
+            <h3 id="practice-ch-name" class="pr-chapter"></h3>
+            <span id="practice-q-counter" class="pr-counter"></span>
+          </div>
+          <div class="practice-progress-outer">
+            <div id="practice-progress-bar" class="practice-progress-inner" style="width:0%"></div>
+          </div>
+          <div class="pr-head-meta">
+            <span id="practice-diff-badge" class="chip green text-xs"></span>
+            <div class="pr-sess">
+              <span title="Attempted this session">📝 <b id="sess-attempted">0</b></span>
+              <span title="Correct this session">✅ <b id="sess-correct">0</b></span>
+              <span title="Accuracy this session">🎯 <b id="sess-acc">-</b></span>
             </div>
-            <div id="practice-hint-box" class="hidden mb-3 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl text-sm">
-              <div class="flex items-center justify-between mb-1">
-                <span class="font-semibold text-amber-700 dark:text-amber-400">💡 Hint <span id="practice-hint-num">1</span> of 3</span>
-                <span id="practice-hints-remaining" class="text-xs text-amber-600 dark:text-amber-500"></span>
-              </div>
-              <span id="practice-hint-text" class="text-amber-700 dark:text-amber-300"></span>
-            </div>
-            <div class="flex items-start gap-2">
-              <div id="practice-q-text" class="flex-1 text-lg text-gray-800 dark:text-white mb-5 leading-relaxed font-medium"></div>
-              <button id="practice-tts-btn" onclick="speakQuestion('practice')" class="shrink-0 mt-1 text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors" title="Read question aloud">🔊</button>
-            </div>
-            <div id="practice-answer-area" class="mb-4"></div>
-            <div id="practice-feedback" class="hidden mb-4 p-4 rounded-xl"></div>
-            <div class="flex gap-3">
-              <button id="practice-submit-btn" class="btn-primary flex-1">✅ Check Answer</button>
-              <button id="practice-skip-btn" class="btn-secondary text-sm px-4" title="Show the answer without scoring">💡 Skip</button>
-              <button id="practice-next-btn" class="btn-primary flex-1 hidden">Next →</button>
-            </div>
+          </div>
+          <div id="practice-level-card" class="pr-level">
+            <b id="practice-level-label"></b><span id="practice-level-desc"></span>
           </div>
         </div>
 
-        <div class="lg:col-span-1 space-y-4">
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow" id="practice-level-card">
-            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Question Level</p>
-            <p id="practice-level-label" class="font-bold text-gray-800 dark:text-white text-sm mb-1.5"></p>
-            <p id="practice-level-desc" class="text-xs text-gray-400 dark:text-gray-500 leading-relaxed"></p>
-          </div>
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
-            <button id="formula-btn" onclick="showFormulaModal()" class="w-full btn-secondary text-sm mb-2">📐 Key Formulas & Facts</button>
-            <button id="help-btn" onclick="showHelpModal()" class="w-full btn-help text-sm mb-2">🎬 Video Help</button>
-            <button id="sound-toggle-btn" onclick="toggleSound()" class="w-full btn-ghost text-sm">🔔 Sound On</button>
-          </div>
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
-            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-3">📊 This Session</p>
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Attempted</span><span id="sess-attempted" class="font-bold text-gray-800 dark:text-white">0</span></div>
-              <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Correct</span><span id="sess-correct" class="font-bold text-green-600 dark:text-green-400">0</span></div>
-              <div class="flex justify-between"><span class="text-gray-500 dark:text-gray-400">Accuracy</span><span id="sess-acc" class="font-bold text-blue-600 dark:text-blue-400">-</span></div>
+        <!-- Question -->
+        <div class="pr-card">
+          <div id="practice-hint-box" class="hidden pr-hint">
+            <div class="pr-hint-head">
+              <span>💡 Hint <span id="practice-hint-num">1</span> of 3</span>
+              <span id="practice-hints-remaining"></span>
             </div>
+            <span id="practice-hint-text"></span>
           </div>
-          <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
-            <div class="flex justify-between items-center mb-2">
-              <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">✏️ Scratchpad</p>
-              <button id="clear-scratch-practice" class="text-xs text-red-400 hover:text-red-600">Clear</button>
-            </div>
-            <canvas id="scratchpad-practice" class="scratchpad" height="200"></canvas>
+          <div id="practice-q-text" class="pr-q"></div>
+          <div id="practice-answer-area" class="pr-answers"></div>
+          <div id="practice-feedback" class="hidden pr-feedback"></div>
+        </div>
+
+        <!-- Tools: one row of identical boxes instead of buttons scattered
+             across the header and a sidebar card. -->
+        <div class="pr-tools">
+          <button id="practice-hint-btn" class="pr-tool" title="Get a hint">
+            <span class="pr-tool-ico">💡</span><span class="pr-tool-lbl">Hint</span>
+            <span id="hint-count-badge" class="pr-tool-badge">3</span>
+          </button>
+          <button id="scratch-toggle-btn" onclick="togglePracticeScratchpad()" class="pr-tool" title="Rough working">
+            <span class="pr-tool-ico">✏️</span><span class="pr-tool-lbl">Scratchpad</span>
+          </button>
+          <button id="formula-btn" onclick="showFormulaModal()" class="pr-tool" title="Key formulas and facts">
+            <span class="pr-tool-ico">📐</span><span class="pr-tool-lbl">Formulas</span>
+          </button>
+          <button id="help-btn" onclick="showHelpModal()" class="pr-tool" title="Video help">
+            <span class="pr-tool-ico">🎬</span><span class="pr-tool-lbl">Video</span>
+          </button>
+          <button id="practice-tts-btn" onclick="speakQuestion('practice')" class="pr-tool" title="Read the question aloud">
+            <span class="pr-tool-ico">🔊</span><span class="pr-tool-lbl">Read</span>
+          </button>
+          <button id="sound-toggle-btn" onclick="toggleSound()" class="pr-tool" title="Sound effects">
+            <span class="pr-tool-ico">🔔</span><span class="pr-tool-lbl">Sound on</span>
+          </button>
+          <button id="practice-report-btn" onclick="openReportModal()" class="pr-tool is-report" title="Report a problem with this question">
+            <span class="pr-tool-ico">🚩</span><span class="pr-tool-lbl">Report</span>
+          </button>
+        </div>
+
+        <!-- Scratchpad: collapsed by default, opened from the toolbar. -->
+        <div id="practice-scratch-wrap" class="hidden pr-scratch">
+          <div class="pr-scratch-head">
+            <span>✏️ Rough working — nobody sees this</span>
+            <button id="clear-scratch-practice" class="pr-scratch-clear">Clear</button>
           </div>
+          <canvas id="scratchpad-practice" class="scratchpad" height="200"></canvas>
+        </div>
+      </div>
+
+      <!-- Action bar: sticks to the bottom of the viewport so the child never
+           has to scroll to answer, and there is only ever ONE primary button. -->
+      <div class="pr-actions">
+        <!-- Three FIXED lanes: Skip · Check/verdict · Next. The Next lane is
+             reserved even while empty, so Check Answer can never grow into it —
+             Next appears somewhere Check has never been, and a second tap on
+             the spot you just pressed cannot skip past the explanation. -->
+        <div class="pr-actions-inner">
+          <button id="practice-skip-btn" class="pr-skip" title="Show the answer without scoring">Skip</button>
+          <button id="practice-submit-btn" class="pr-primary">✅ Check Answer</button>
+          <span id="practice-verdict" class="pr-verdict hidden" role="status" aria-live="polite"></span>
+          <button id="practice-next-btn" class="pr-next hidden">Next →</button>
         </div>
       </div>
     </div>
@@ -1386,7 +1598,36 @@
       <button class="back-btn mb-4" data-target="dashboard">← Back</button>
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-1">📋 Syllabus Browser</h2>
       <p class="text-gray-500 dark:text-gray-400 text-sm mb-5">Click any topic to start a targeted practice session.</p>
+      <button onclick="showScreen('past-papers')"
+        class="w-full mb-5 flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-gray-800 shadow border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition-colors text-left">
+        <span class="text-2xl select-none">📄</span>
+        <span class="flex-1 min-w-0">
+          <span class="block font-bold text-gray-800 dark:text-white text-sm">Real PSAC Past Papers</span>
+          <span class="block text-xs text-gray-500 dark:text-gray-400">Questions from the real exam, 2016–2024 — to try on paper</span>
+        </span>
+        <span class="text-gray-500 dark:text-gray-400 shrink-0">→</span>
+      </button>
       <div id="syllabus-list" class="space-y-4"></div>
+    </div>
+
+    <!-- ══════════ PAST PAPERS ══════════
+         Read-only on purpose. These are real exam questions with a mark
+         allocation and NO answer — they are written and drawn responses, so
+         nothing here can be auto-marked, and the screen never pretends it can. -->
+    <div id="screen-past-papers" class="screen hidden">
+      <button class="back-btn mb-4" data-target="syllabus">← Back</button>
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-1">📄 Past Papers</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Real questions from past PSAC exams.</p>
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-2xl p-4 mb-5 flex gap-3">
+        <span class="text-xl select-none shrink-0">✍️</span>
+        <p class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
+          These need <b>written or drawn answers</b>, so the app cannot mark them.
+          Write your answers on paper, then ask a parent or teacher to check them.
+          The marks in brackets show how much each one is worth in the real exam.
+        </p>
+      </div>
+      <div id="pp-filters" class="flex gap-2 flex-wrap mb-4"></div>
+      <div id="pp-list" class="space-y-3"></div>
     </div>
 
     <!-- ══════════ TEACHER DASHBOARD ══════════ -->
@@ -1395,7 +1636,7 @@
       <div class="flex justify-between items-center mb-5">
         <div>
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🛡️ Admin Panel</h2>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Superuser access - PSAC Exam Practice</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Superuser access - PSAC Exam Practice</p>
         </div>
       </div>
 
@@ -1476,7 +1717,7 @@
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
             <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">🔐 Registration</h3>
-            <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">When off, new sign-ups are blocked for everyone.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">When off, new sign-ups are blocked for everyone.</p>
             <label class="flex items-center justify-between cursor-pointer">
               <span class="text-sm text-gray-700 dark:text-gray-300">Allow new registrations</span>
               <div class="relative">
@@ -1487,7 +1728,7 @@
             </label>
             <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
               <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">⚡ Plan Enforcement</h3>
-              <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">When on, chapter access is restricted by each family's plan. Leave off during the free period.</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">When on, chapter access is restricted by each family's plan. Leave off during the free period.</p>
               <label class="flex items-center justify-between cursor-pointer">
                 <span class="text-sm text-gray-700 dark:text-gray-300">Enforce plan limits</span>
                 <div class="relative">
@@ -1536,7 +1777,7 @@
           <button onclick="AdminPanel.loadReports()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
         <div id="admin-reports-list">
-          <p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6">Click Refresh to load reports.</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Click Refresh to load reports.</p>
         </div>
       </div>
 
@@ -1667,7 +1908,7 @@
           </div>
 
           <div class="mb-3">
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Topics <span class="font-normal text-gray-400">(leave unchecked = all)</span></label>
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Topics <span class="font-normal text-gray-500 dark:text-gray-400">(leave unchecked = all)</span></label>
             <div id="ta-chapter-opts-container" class="grid grid-cols-2 sm:grid-cols-3 gap-1 max-h-48 overflow-y-auto p-1 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600"></div>
           </div>
 
@@ -1706,7 +1947,7 @@
             </div>
           </div>
 
-          <div class="text-xs text-gray-400 dark:text-gray-500 mb-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
             <b>🔍 Practice:</b> Students see correct or incorrect feedback after each question.<br>
             <b>📝 Test:</b> Students answer all questions and submit at the end. Results are saved here automatically. You can allow retries.
           </div>
@@ -1730,7 +1971,7 @@
       <div class="ta-tab-content hidden" data-tab="results">
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
           <h3 class="font-bold text-gray-800 dark:text-white mb-3">📊 Student Results</h3>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">Only <b>Test mode</b> assignments collect results. Results are saved on this device - once connected to Supabase they will sync automatically.</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Only <b>Test mode</b> assignments collect results. Results are saved on this device - once connected to Supabase they will sync automatically.</p>
           <select id="ta-results-assign-sel" onchange="taSelectResultsAssign(this)"
             class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 mb-4">
             <option value="">- Select a test assignment -</option>
@@ -1742,7 +1983,7 @@
         <div id="ta-answer-panel" class="hidden bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
           <div class="flex justify-between items-center mb-3">
             <h3 id="ta-answer-panel-title" class="font-bold text-gray-800 dark:text-white text-sm"></h3>
-            <button onclick="document.getElementById('ta-answer-panel')?.classList.add('hidden')" class="text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
+            <button onclick="document.getElementById('ta-answer-panel')?.classList.add('hidden')" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
           </div>
           <div class="ta-answer-body space-y-2 max-h-96 overflow-y-auto"></div>
         </div>
@@ -1795,7 +2036,7 @@
           <!-- Test mode per-question breakdown (hidden for practice mode) -->
           <div id="asgn-complete-breakdown" class="hidden text-left mt-4 space-y-2 max-h-80 overflow-y-auto pr-1"></div>
 
-          <p class="text-sm text-gray-400 dark:text-gray-500 mt-5">
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-5">
             Show this screen to your teacher. 😊
           </p>
         </div>
@@ -1809,19 +2050,22 @@
       <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
         <div>
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🔒 Parent Dashboard</h2>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Tap a child to see details &amp; manage assignments</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Tap a child to see details &amp; manage assignments</p>
           <p class="text-xs text-indigo-500 dark:text-indigo-400 mt-1">Your family login name: <strong id="pd-family-name-display" class="font-mono"></strong></p>
         </div>
-        <div class="flex gap-2 items-center flex-wrap">
-          <button id="btn-open-admin" onclick="Auth.openAdminPanel()" title="Admin panel" class="hidden relative text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 hover:bg-red-200 px-3 py-1.5 rounded-full font-semibold transition-colors">🛡️ Admin<!--
+        <!-- One neutral surface, icon over label — same shape language as the
+             student bottom nav. See .pd-action in style.css. -->
+        <div class="flex gap-2 items-stretch flex-wrap">
+          <button id="btn-open-admin" onclick="Auth.openAdminPanel()" title="Admin panel" class="pd-action is-alert hidden">
+            <span class="ico">🛡️</span><span>Admin</span><!--
           Pending-work badge: teacher applications + open question reports.
           Filled by Auth._refreshAdminBadge(); hidden when the count is zero.
        --><span id="admin-pending-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold shadow">0</span></button>
-          <button onclick="Auth.openPasswordModal()" class="text-xs bg-gray-100 dark:bg-gray-700/60 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 px-3 py-1.5 rounded-full font-semibold transition-colors">🔑 Password</button>
-          <button onclick="Auth.openInviteModal()" class="text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">🎁 Invite Friends</button>
-          <button onclick="showScreen('calendar')" class="text-xs bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">📅 Calendar</button>
-          <button onclick="Auth.addStudent()" class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">➕ Add Child</button>
-          <button onclick="Auth.switchToStudentSelect()" class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">👦 Student View</button>
+          <button onclick="Auth.addStudent()" class="pd-action is-primary"><span class="ico">➕</span><span>Add child</span></button>
+          <button onclick="Auth.switchToStudentSelect()" class="pd-action"><span class="ico">👦</span><span>Student view</span></button>
+          <button onclick="showScreen('calendar')" class="pd-action"><span class="ico">📅</span><span>Calendar</span></button>
+          <button onclick="Auth.openInviteModal()" class="pd-action"><span class="ico">🎁</span><span>Invite</span></button>
+          <button onclick="showProfile()" class="pd-action"><span class="ico">⚙️</span><span>Settings</span></button>
         </div>
       </div>
 
@@ -1831,20 +2075,30 @@
           <span id="pd-plan-icon" class="text-2xl">🆓</span>
           <div>
             <div class="text-sm font-bold text-gray-800 dark:text-white"><span id="pd-plan-name">Free Plan</span></div>
-            <div id="pd-plan-expires" class="text-xs text-gray-400"></div>
+            <div id="pd-plan-expires" class="text-xs text-gray-500 dark:text-gray-400"></div>
           </div>
         </div>
-        <button id="pd-upgrade-btn" class="text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-3 py-1.5 rounded-full font-semibold opacity-50 cursor-not-allowed" title="Coming soon" disabled>⭐ Upgrade</button>
+        <button id="pd-upgrade-btn" onclick="openPlansModal()" class="text-xs bg-indigo-500 hover:bg-indigo-600 text-white px-3.5 py-2 rounded-xl font-semibold transition-colors shadow-sm shrink-0">⭐ View plans</button>
       </div>
 
       <!-- Teacher application card (filled by _renderTeacherApplyCard) -->
       <div id="pd-teacher-apply"></div>
 
+      <!-- Shown INSTEAD of the empty state when the children query failed —
+           "you have no children" and "we could not read your children" must
+           never look the same. -->
+      <div id="pd-load-error" class="hidden rounded-2xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20 p-5 mb-6 text-center">
+        <div class="text-3xl mb-2">⚠️</div>
+        <h3 class="font-bold text-red-700 dark:text-red-300 mb-1">Could not load your children</h3>
+        <p id="pd-load-error-msg" class="text-xs text-red-600/80 dark:text-red-400/80 mb-4 break-words"></p>
+        <button onclick="Auth.reloadStudents()" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-5 py-2.5 rounded-xl transition-colors text-sm shadow">↻ Try again</button>
+      </div>
+
       <!-- ── No children yet ── -->
       <div id="pd-no-children" class="hidden text-center py-16">
         <div class="text-7xl mb-4">👶</div>
         <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Welcome! Let's add your first child.</h3>
-        <p class="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-xs mx-auto">Each child gets their own progress tracker, assignments, and study schedule.</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-xs mx-auto">Each child gets their own progress tracker, assignments, and study schedule.</p>
         <button id="pd-no-children-add-btn" onclick="Auth.addStudent()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm shadow-lg">➕ Add Your First Child</button>
       </div>
 
@@ -1861,9 +2115,10 @@
             <span id="pd-detail-avatar" class="text-3xl"></span>
             <div>
               <div id="pd-detail-name" class="font-bold text-gray-800 dark:text-white"></div>
-              <div id="pd-detail-grade" class="text-xs text-gray-400 dark:text-gray-500"></div>
+              <div id="pd-detail-grade" class="text-xs text-gray-500 dark:text-gray-400"></div>
             </div>
           </div>
+          <button onclick="sendCurrentChildLogin()" title="Send this child a one-tap sign-in link" class="text-xs bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 px-3 py-1.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 transition-colors">📲 Send login</button>
           <button onclick="Auth.editCurrentStudent()" class="text-xs bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 px-3 py-1.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 transition-colors">✏️ Edit</button>
         </div>
 
@@ -1871,6 +2126,7 @@
         <div class="flex gap-1 mb-5 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-xl">
           <button class="pd-tab flex-1 text-sm py-2 rounded-lg bg-white dark:bg-gray-700 shadow-sm font-semibold text-gray-800 dark:text-white" data-tab="progress" onclick="PD.pdTab('progress')">📊 Progress</button>
           <button class="pd-tab flex-1 text-sm py-2 rounded-lg text-gray-500 dark:text-gray-400" data-tab="assign"   onclick="PD.pdTab('assign')">📋 Assignments</button>
+          <button class="pd-tab flex-1 text-sm py-2 rounded-lg text-gray-500 dark:text-gray-400" data-tab="login"    onclick="PD.pdTab('login')">🔑 Login</button>
           <button class="pd-tab flex-1 text-sm py-2 rounded-lg text-gray-500 dark:text-gray-400" data-tab="controls" onclick="PD.pdTab('controls')">⚙️ Controls</button>
         </div>
 
@@ -1934,16 +2190,75 @@
             </div>
             <input id="pd-assign-note" type="text" maxlength="80" placeholder="Note for student (optional)…"
               class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 mb-3">
-            <label class="flex items-center gap-3 mb-3 cursor-pointer select-none">
+            <label class="flex items-center gap-3 mb-2 cursor-pointer select-none">
               <input type="checkbox" id="pd-assign-show-answers" checked class="w-4 h-4 accent-blue-500 cursor-pointer">
               <span class="text-sm text-gray-700 dark:text-gray-300">Show correct answers after each question</span>
+            </label>
+            <label class="flex items-center gap-3 mb-3 cursor-pointer select-none">
+              <input type="checkbox" id="pd-assign-show-hints" checked class="w-4 h-4 accent-blue-500 cursor-pointer">
+              <span class="text-sm text-gray-700 dark:text-gray-300">Allow hints <span class="text-xs text-gray-500 dark:text-gray-400">(turn off to make this a real test)</span></span>
             </label>
             <button id="pd-assign-btn" onclick="Auth.addAssignment()" class="btn-primary w-full text-sm">📋 Assign Work</button>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
             <h3 class="font-bold text-gray-800 dark:text-white mb-3">Current Assignments</h3>
-            <div id="pd-asgn-list" class="space-y-2"><p class="text-sm text-gray-400 dark:text-gray-500 text-center py-4">Loading…</p></div>
+            <div id="pd-asgn-list" class="space-y-2"><p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">Loading…</p></div>
           </div>
+        </div>
+
+        <!-- ── TAB: LOGIN DETAILS ── -->
+        <div class="pd-tab-content hidden" data-tab="login">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
+            <h3 class="font-bold text-gray-800 dark:text-white mb-1">🔑 Sign-in details</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">What your child types on the login screen — kept in clear here so you can read it straight off the screen.</p>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Family name</label>
+                <div class="flex items-center gap-2">
+                  <p id="pd-login-family" class="flex-1 text-base font-mono font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-700/50 px-3 py-2.5 rounded-xl select-all break-all">—</p>
+                  <button onclick="PD.copyLoginField('pd-login-family')" title="Copy" aria-label="Copy family name" class="p-2.5 text-gray-500 dark:text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors shrink-0">📋</button>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Username</label>
+                <div class="flex items-center gap-2">
+                  <p id="pd-login-username" class="flex-1 text-base font-mono font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-700/50 px-3 py-2.5 rounded-xl select-all break-all">—</p>
+                  <button onclick="PD.copyLoginField('pd-login-username')" title="Copy" aria-label="Copy username" class="p-2.5 text-gray-500 dark:text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors shrink-0">📋</button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">PIN</label>
+
+                <div id="pd-login-pin-known" class="hidden items-center gap-2">
+                  <p id="pd-login-pin" class="flex-1 text-base font-mono font-bold text-gray-800 dark:text-white bg-gray-50 dark:bg-gray-700/50 px-3 py-2.5 rounded-xl select-all">—</p>
+                  <button onclick="PD.copyLoginField('pd-login-pin')" title="Copy" aria-label="Copy PIN" class="p-2.5 text-gray-500 dark:text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors shrink-0">📋</button>
+                </div>
+
+                <div id="pd-login-pin-hidden">
+                  <p class="text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 px-3 py-2.5 rounded-xl">🔒 Hidden for security — PINs are encrypted, so even we can't display the current one.</p>
+                  <button onclick="PD.openPinSetter()" class="mt-2 text-xs text-indigo-600 dark:text-indigo-300 font-semibold hover:underline">Set a new PIN to see it here →</button>
+                </div>
+
+                <div id="pd-login-pin-setter" class="hidden mt-2">
+                  <div class="flex items-center gap-2">
+                    <input id="pd-login-pin-input" type="text" inputmode="numeric" maxlength="4" placeholder="4 digits"
+                      class="w-24 text-center font-mono text-lg tracking-widest border border-gray-300 dark:border-gray-600 rounded-xl px-2 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                    <button onclick="PD.suggestLoginPin()" class="text-xs text-gray-500 dark:text-gray-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors">🎲 Suggest</button>
+                    <button data-label="Save" onclick="PD.saveLoginPin(this)" class="ml-auto px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold rounded-xl transition-colors">Save</button>
+                  </div>
+                  <p id="pd-login-pin-error" class="text-red-500 text-xs mt-2 hidden"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="sendCurrentChildLogin()"
+            class="w-full flex items-center justify-center gap-2 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">
+            📲 Share via WhatsApp / link / copy
+          </button>
+          <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">Opens the share sheet — the PIN is included there only if you've just set it above.</p>
         </div>
 
         <!-- ── TAB: CONTROLS ── -->
@@ -1999,7 +2314,7 @@
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
             <div class="flex items-center justify-between mb-1">
               <div class="font-bold text-gray-800 dark:text-white text-sm">📚 Chapter Access</div>
-              <span class="text-xs text-gray-400 dark:text-gray-500">Tap subject to expand</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Tap subject to expand</span>
             </div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Toggle chapters off to lock them from the student</div>
             <div id="pd-chapter-locks"></div>
@@ -2026,16 +2341,16 @@
             <div class="flex items-center gap-3">
               <input type="time" id="pd-reminder-time" class="text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
               <button onclick="PD.saveReminder()" class="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors">Save</button>
-              <button onclick="PD.clearReminder()" class="px-3 py-2 text-xs text-gray-400 hover:text-red-500 transition-colors">Clear</button>
+              <button onclick="PD.clearReminder()" class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400 hover:text-red-500 transition-colors">Clear</button>
             </div>
-            <div id="pd-reminder-status" class="text-xs text-gray-400 mt-2"></div>
+            <div id="pd-reminder-status" class="text-xs text-gray-500 dark:text-gray-400 mt-2"></div>
           </div>
 
           <!-- Danger zone -->
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-red-200 dark:border-red-900/40 mt-4">
             <div class="font-bold text-red-600 dark:text-red-400 text-sm mb-1">⚠️ Danger Zone</div>
-            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Permanently deletes this child's account, login and all progress. This cannot be undone.</div>
-            <button onclick="Auth.deleteCurrentStudent()" class="btn-danger w-full text-sm">🗑️ Delete This Child's Account</button>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Removes this child's login and takes them off your dashboard. Their progress is kept, and the name becomes free to use again straight away.</div>
+            <button onclick="Auth.deleteCurrentStudent()" class="btn-danger w-full text-sm">🗑️ Remove This Child's Account</button>
           </div>
 
         </div>
@@ -2057,13 +2372,13 @@
           </button>
           <div>
             <h2 class="text-2xl font-bold text-gray-800 dark:text-white">💬 Community Forum</h2>
-            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Ask questions, share tips, and give feedback</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Ask questions, share tips, and give feedback</p>
           </div>
         </div>
 
         <!-- ── SEARCH BAR (always visible) ── -->
         <div class="relative mb-5">
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">🔍</span>
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none">🔍</span>
           <input id="forum-search-input" type="text" placeholder="Search all posts…"
             oninput="Forum.searchPosts(this.value)"
             class="w-full pl-9 pr-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-xl text-sm dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
@@ -2071,7 +2386,7 @@
 
         <!-- ── POSTING AS BAR ── -->
         <div class="flex items-center justify-between mb-4 px-1">
-          <span class="text-xs text-gray-400 dark:text-gray-500">
+          <span class="text-xs text-gray-500 dark:text-gray-400">
             Posting as: <span id="forum-display-name" class="font-semibold text-gray-600 dark:text-gray-300">…</span>
           </span>
           <button onclick="Forum.showNicknameSettings()"
@@ -2083,7 +2398,7 @@
         <!-- ── NICKNAME SETTINGS PANEL (shown on demand) ── -->
         <div id="forum-nick-panel" class="hidden mb-5 p-4 bg-white dark:bg-gray-800 rounded-2xl border border-indigo-200 dark:border-indigo-700 shadow-sm">
           <p class="text-xs font-semibold text-gray-700 dark:text-gray-200 mb-1">🎭 Your Forum Display Name</p>
-          <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">Leave blank to use your initials. Others see this name on all your posts.</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Leave blank to use your initials. Others see this name on all your posts.</p>
           <div class="flex gap-2">
             <input id="forum-nick-input" type="text" maxlength="20"
               placeholder="e.g. MathMum, RishiG5, P.R. …"
@@ -2094,7 +2409,7 @@
               Save
             </button>
             <button onclick="Forum.hideNicknameSettings()"
-              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm px-3 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 transition-colors">
+              class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-sm px-3 py-2 rounded-xl bg-gray-100 dark:bg-gray-700 transition-colors">
               ✕
             </button>
           </div>
@@ -2103,7 +2418,7 @@
         <!-- ── CATEGORY LIST ── -->
         <div id="forum-categories">
           <div id="forum-cat-list" class="space-y-3">
-            <p class="text-sm text-gray-400 text-center py-6">Loading…</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Loading…</p>
           </div>
         </div>
 
@@ -2130,7 +2445,7 @@
           <div id="forum-reply-box" class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 mt-4">
             <div class="flex justify-between items-center mb-2">
               <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Write a reply</h4>
-              <span id="forum-reply-chars" class="text-xs text-gray-400">0/1000</span>
+              <span id="forum-reply-chars" class="text-xs text-gray-500 dark:text-gray-400">0/1000</span>
             </div>
             <textarea id="forum-reply-input" rows="3" placeholder="Share your thoughts…"
               oninput="Forum.updateChars('forum-reply-input','forum-reply-chars',1000)"
@@ -2150,7 +2465,7 @@
             <div>
               <div class="flex justify-between items-center mb-1">
                 <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Title</label>
-                <span id="forum-np-title-chars" class="text-xs text-gray-400">0/120</span>
+                <span id="forum-np-title-chars" class="text-xs text-gray-500 dark:text-gray-400">0/120</span>
               </div>
               <input id="forum-np-title" type="text" maxlength="120" placeholder="What's your question or topic?"
                 oninput="Forum.updateChars('forum-np-title','forum-np-title-chars',120)"
@@ -2159,7 +2474,7 @@
             <div>
               <div class="flex justify-between items-center mb-1">
                 <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Body</label>
-                <span id="forum-np-body-chars" class="text-xs text-gray-400">0/2000</span>
+                <span id="forum-np-body-chars" class="text-xs text-gray-500 dark:text-gray-400">0/2000</span>
               </div>
               <textarea id="forum-np-body" rows="5" maxlength="2000" placeholder="Describe your question or idea in detail…"
                 oninput="Forum.updateChars('forum-np-body','forum-np-body-chars',2000)"
@@ -2214,9 +2529,9 @@
       <div class="flex justify-between items-start mb-4">
         <div>
           <h3 id="help-chapter-title" class="text-lg font-bold text-gray-800 dark:text-white"></h3>
-          <p id="help-video-credit" class="text-xs text-gray-400 mt-0.5"></p>
+          <p id="help-video-credit" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
         </div>
-        <button onclick="closeHelpModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none ml-4">✕</button>
+        <button onclick="closeHelpModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none ml-4">✕</button>
       </div>
       <!-- YouTube embed -->
       <div class="rounded-xl overflow-hidden bg-black" style="aspect-ratio:16/9">
@@ -2266,7 +2581,7 @@
 
       <!-- Search bar + suggestions dropdown -->
       <div class="relative mb-3">
-        <span class="absolute left-3 top-[14px] text-gray-400 text-base pointer-events-none select-none z-10">🔍</span>
+        <span class="absolute left-3 top-[14px] text-gray-500 dark:text-gray-400 text-base pointer-events-none select-none z-10">🔍</span>
         <input id="search-input" type="search" autocomplete="off" spellcheck="false"
           placeholder="Search by topic, name, keyword…"
           oninput="Search.run(); Search.showSuggestions(this.value)"
@@ -2274,7 +2589,7 @@
           onfocus="Search.showSuggestions(this.value)"
           onblur="setTimeout(Search.hideSuggestions, 180)"
           class="w-full pl-9 pr-10 py-3 text-sm border border-gray-300 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm">
-        <button onclick="Search.clearInput()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg leading-none" title="Clear">✕</button>
+        <button onclick="Search.clearInput()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg leading-none" title="Clear">✕</button>
         <!-- Autocomplete dropdown -->
         <div id="search-suggestions"
           class="hidden absolute left-0 right-0 top-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl shadow-xl z-50 overflow-hidden max-h-64 overflow-y-auto">
@@ -2302,17 +2617,17 @@
       </div>
 
       <!-- Filter explainer -->
-      <div class="flex gap-3 mb-4 text-xs text-gray-400 dark:text-gray-500">
+      <div class="flex gap-3 mb-4 text-xs text-gray-500 dark:text-gray-400">
         <span><strong class="text-gray-500 dark:text-gray-400">Similar</strong> - finds questions even with typos</span>
         <span><strong class="text-gray-500 dark:text-gray-400">Exact</strong> - matches the word exactly as typed</span>
       </div>
 
       <!-- Status line -->
-      <p id="search-status" class="hidden text-xs text-gray-400 dark:text-gray-500 mb-3"></p>
+      <p id="search-status" class="hidden text-xs text-gray-500 dark:text-gray-400 mb-3"></p>
 
       <!-- Results -->
       <div id="search-results">
-        <div class="text-center py-16 text-gray-400 dark:text-gray-500 select-none">
+        <div class="text-center py-16 text-gray-500 dark:text-gray-400 select-none">
           <div class="text-5xl mb-3">🔍</div>
           <p class="text-sm">Type at least 2 characters to search.</p>
           <p class="text-xs mt-1">Try a topic, a name, or a keyword from your syllabus.</p>
@@ -2365,7 +2680,7 @@
     <div id="cal-grid"></div>
 
     <!-- Legend -->
-    <div class="flex gap-4 text-xs text-gray-400 mt-4 flex-wrap">
+    <div class="flex gap-4 text-xs text-gray-500 dark:text-gray-400 mt-4 flex-wrap">
       <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block"></span>Study</span>
       <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>Exam</span>
       <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>Holiday</span>
@@ -2378,7 +2693,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 w-full max-w-sm shadow-2xl max-h-[80vh] flex flex-col">
       <div class="flex items-center justify-between mb-4">
         <h3 id="day-events-title" class="font-bold text-gray-800 dark:text-white text-base"></h3>
-        <button onclick="Calendar.closeDayModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+        <button onclick="Calendar.closeDayModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
       <div id="day-events-list" class="overflow-y-auto flex-1"></div>
     </div>
@@ -2389,7 +2704,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
       <div class="flex items-center justify-between mb-4">
         <h3 id="add-event-modal-title" class="font-bold text-gray-800 dark:text-white">Add Event</h3>
-        <button onclick="Calendar.closeAddEvent()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+        <button onclick="Calendar.closeAddEvent()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
 
       <div class="space-y-3">
@@ -2434,11 +2749,11 @@
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-bold text-gray-800 dark:text-white text-base">⚡ Generate Study Timetable</h3>
-        <button onclick="Calendar.closeGenModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+        <button onclick="Calendar.closeGenModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
 
       <!-- Section: Schedule -->
-      <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Schedule</p>
+      <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Schedule</p>
       <div class="space-y-3 mb-4">
         <div class="flex gap-3">
           <div class="flex-1">
@@ -2469,25 +2784,25 @@
       </div>
 
       <!-- Section: Subjects & Hours -->
-      <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Subjects & Hours per Week</p>
-      <p class="text-xs text-gray-400 mb-2">Set hours per week per subject. Uncheck to skip a subject.</p>
+      <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Subjects & Hours per Week</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Set hours per week per subject. Uncheck to skip a subject.</p>
       <div id="gen-subject-hours" class="mb-4 border border-gray-200 dark:border-gray-700 rounded-xl p-3 max-h-44 overflow-y-auto"></div>
 
       <!-- Section: Style -->
-      <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">Daily Style</p>
+      <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Daily Style</p>
       <div class="flex gap-3 mb-4">
         <label class="flex items-center gap-2 text-sm cursor-pointer flex-1 border border-gray-200 dark:border-gray-600 rounded-xl p-3 hover:border-purple-400 transition-colors">
           <input type="radio" name="gen-style" id="gen-single" checked class="accent-purple-500">
           <div>
             <div class="font-semibold text-gray-800 dark:text-white text-xs">One Subject</div>
-            <div class="text-[11px] text-gray-400">Deep focus per day</div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400">Deep focus per day</div>
           </div>
         </label>
         <label class="flex items-center gap-2 text-sm cursor-pointer flex-1 border border-gray-200 dark:border-gray-600 rounded-xl p-3 hover:border-purple-400 transition-colors">
           <input type="radio" name="gen-style" id="gen-mixed" class="accent-purple-500">
           <div>
             <div class="font-semibold text-gray-800 dark:text-white text-xs">Mixed Subjects</div>
-            <div class="text-[11px] text-gray-400">Variety each day</div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400">Variety each day</div>
           </div>
         </label>
       </div>
@@ -2512,11 +2827,11 @@
           <div id="notes-subject-label" class="text-xs font-bold text-indigo-500 uppercase tracking-wide mb-0.5"></div>
           <h3 id="notes-chapter-title" class="font-bold text-gray-800 dark:text-white text-lg"></h3>
         </div>
-        <button onclick="Calendar.closeNotes()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none ml-3">✕</button>
+        <button onclick="Calendar.closeNotes()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none ml-3">✕</button>
       </div>
       <div id="notes-body" class="overflow-y-auto p-5 space-y-3 flex-1"></div>
       <div class="p-4 border-t border-gray-100 dark:border-gray-700">
-        <p class="text-xs text-gray-400 text-center">📚 Read carefully, then close and practise from memory.</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 text-center">📚 Read carefully, then close and practise from memory.</p>
       </div>
     </div>
   </div>
@@ -2530,7 +2845,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 p-6">
       <div class="flex justify-between items-start mb-4">
         <h3 id="formula-title" class="text-lg font-bold text-gray-800 dark:text-white"></h3>
-        <button onclick="closeFormulaModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+        <button onclick="closeFormulaModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
       <ul id="formula-list" class="space-y-2"></ul>
     </div>
@@ -2572,6 +2887,7 @@
   <script src="engine/question_loader.js"></script>
   <!-- App + Auth (auth loads after app so DB/save are available) -->
   <script src="engine/app.js"></script>
+  <script src="engine/biometric.js"></script>
   <script src="engine/auth.js"></script>
   <!-- Teacher mode (loads last - uses globals from app + auth) -->
   <script src="engine/teacher.js"></script>
@@ -2584,8 +2900,11 @@
   <script src="engine/classroom.js"></script>
 
   <!-- ── Reset Progress confirmation modal ── -->
-  <div id="modal-round-complete" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-    <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 w-full max-w-sm text-center">
+  <!-- max-w-md not max-w-sm, and the card scrolls: with the review open a
+       20-question round is taller than a phone screen, and a centred flex child
+       that overflows gets its top clipped with no way to scroll to it. -->
+  <div id="modal-round-complete" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+    <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 w-full max-w-md text-center my-auto">
       <div id="rc-stars" class="text-4xl mb-2 select-none"></div>
       <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-1">Round Complete!</h3>
       <p id="rc-chapter" class="text-sm text-gray-500 dark:text-gray-400 mb-4"></p>
@@ -2596,6 +2915,14 @@
         <div class="w-px bg-gray-200 dark:bg-gray-700"></div>
         <div><div id="rc-xp" class="text-3xl font-black text-amber-500"></div><div class="text-xs text-gray-500 mt-0.5">XP earned</div></div>
       </div>
+      <!-- Answer review. Collapsed by default so the celebration lands first,
+           and so a 20-question round does not open as a wall of text. -->
+      <button id="rc-review-toggle" onclick="_toggleRoundReview()"
+        class="hidden w-full mb-3 py-2.5 text-sm font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 rounded-2xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors">
+        Review my answers
+      </button>
+      <div id="rc-review" class="hidden text-left max-h-72 overflow-y-auto mb-4 space-y-2 pr-1"></div>
+
       <div class="flex flex-col gap-3">
         <button onclick="_roundCompleteNext()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl transition-colors">Practice Again →</button>
         <button onclick="_roundCompleteBack()" class="w-full py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl transition-colors">← Back to Chapters</button>
@@ -2621,12 +2948,19 @@
   </div>
 
   <!-- ── Parent PIN entry modal ── -->
-  <div id="modal-parent-pin" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 w-full max-w-xs">
+  <!-- Dismissible on purpose. A child who taps "Parent" by accident must be able
+       to get straight back to what they were doing: the only way out used to be
+       the correct PIN or "Forgot PIN?", which signs the student out. Tapping the
+       backdrop, the ✕, Cancel or Escape all just close it. -->
+  <div id="modal-parent-pin" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+       onclick="if(event.target===this)Auth.closeParentPin()">
+    <div class="relative bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 w-full max-w-xs">
+      <button onclick="Auth.closeParentPin()" aria-label="Close"
+        class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-lg leading-none">✕</button>
       <div class="text-4xl text-center mb-2 select-none">🔒</div>
       <h3 class="text-lg font-bold text-gray-900 dark:text-white text-center mb-1">Parent settings</h3>
       <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-1">Enter the 4-digit PIN you created for quick access.</p>
-      <p class="text-xs text-gray-400 dark:text-gray-500 text-center mb-5">Not your account password — just a shortcut PIN.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 text-center mb-5">Not your account password — just a shortcut PIN.</p>
       <div class="flex justify-center gap-3 mb-6">
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="pin-dot-0"></div>
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="pin-dot-1"></div>
@@ -2648,19 +2982,27 @@
         <button onclick="Auth._pinKey('0')" class="pin-key-btn">0</button>
         <button onclick="Auth._pinKey('back')" class="pin-key-btn" style="color:#9ca3af">⌫</button>
       </div>
-      <button onclick="Auth._pinForgot()" class="w-full text-xs text-indigo-500 dark:text-indigo-400 hover:underline text-center py-1">
+      <button onclick="Auth.closeParentPin()"
+        class="w-full py-2.5 mb-2 text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition-colors">
+        ← Back to practice
+      </button>
+      <!-- Signs the student OUT, so it is the quiet option, not the obvious one. -->
+      <button onclick="Auth._pinForgot()" class="w-full text-xs text-indigo-600 dark:text-indigo-400 hover:underline text-center py-1">
         Forgot PIN? Sign in with your email →
       </button>
     </div>
   </div>
 
   <!-- ── Parent PIN setup modal (shown after first login) ── -->
-  <div id="modal-parent-pin-setup" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 w-full max-w-xs">
+  <div id="modal-parent-pin-setup" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+       onclick="if(event.target===this)Auth.closeParentPinSetup()">
+    <div class="relative bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 w-full max-w-xs">
+      <button onclick="Auth.closeParentPinSetup()" aria-label="Close"
+        class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-lg leading-none">✕</button>
       <div class="text-4xl text-center mb-2 select-none">🔑</div>
       <h3 class="text-lg font-bold text-gray-900 dark:text-white text-center mb-1">One last thing — set a shortcut PIN</h3>
       <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-1">When your child is using the app, you can tap <b>🔒 Parent</b> and enter these 4 digits instead of typing your full email and password.</p>
-      <p class="text-xs text-gray-400 dark:text-gray-500 text-center mb-5">This is <b>not</b> your account password — it does not replace it. You still sign in to the app with your email as normal.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 text-center mb-5">This is <b>not</b> your account password — it does not replace it. You still sign in to the app with your email as normal.</p>
       <p id="pin-setup-step-label" class="text-xs font-semibold text-indigo-500 text-center mb-3">Step 1 of 2 — Enter your new PIN</p>
       <div class="flex justify-center gap-3 mb-6">
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="setup-dot-0"></div>
@@ -2683,7 +3025,13 @@
         <button onclick="Auth._pinSetupKey('0')" class="pin-key-btn">0</button>
         <button onclick="Auth._pinSetupKey('back')" class="pin-key-btn" style="color:#9ca3af">⌫</button>
       </div>
-      <button onclick="document.getElementById('modal-parent-pin-setup').classList.add('hidden')" class="w-full text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-center py-1">
+      <!-- Only on step 2: without it, spotting a typo in the first PIN meant
+           deliberately entering four wrong digits to trigger the mismatch. -->
+      <button id="pin-setup-back" onclick="Auth.pinSetupBack()"
+        class="hidden w-full py-2 mb-2 text-xs font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition-colors">
+        ← Start over
+      </button>
+      <button onclick="Auth.closeParentPinSetup()" class="w-full py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition-colors">
         Skip for now
       </button>
     </div>

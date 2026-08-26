@@ -37,11 +37,15 @@ function makeMatch({ id, chapterId, difficulty, subsection, leftItem, otherItems
     question: `What does <b>${leftItem}</b> match to?`,
     options: [correctRight, ...wrongOpts], answer: correctRight, hint, explanation });
 }
-function makeSymmetry({ id, chapterId, difficulty, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {
+// `subsection` is destructured and returned like every other factory here. It
+// was the only one that dropped it, so a symmetry question could carry
+// subsection:'symmetry' in its source and still arrive with it undefined — the
+// six SYM questions were invisible to the Syllabus screen's per-topic counts.
+function makeSymmetry({ id, chapterId, difficulty, subsection, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {
   const ans = answer || given.map(([r, c]) => {
     if (axis === 'vertical')   return [r, (cols - 1) - c];
     if (axis === 'horizontal') return [(rows - 1) - r, c];
     return null;
   }).filter(Boolean);
-  return { id, chapterId, difficulty, type: 'symmetry', question, rows, cols, axis, axisPos, given, answer: ans, hint: hint || 'Click the empty cells to mirror the pattern across the coloured line.', explanation: explanation || 'Each cell mirrors its pair across the axis of symmetry.' };
+  return { id, chapterId, difficulty, subsection, type: 'symmetry', question, rows, cols, axis, axisPos, given, answer: ans, hint: hint || 'Click the empty cells to mirror the pattern across the coloured line.', explanation: explanation || 'Each cell mirrors its pair across the axis of symmetry.' };
 }

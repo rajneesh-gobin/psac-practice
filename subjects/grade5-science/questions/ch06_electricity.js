@@ -101,7 +101,7 @@ const _EL_TWO_BULBS = `<svg viewBox="0 0 260 125" width="260" height="125" style
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5sci-el-001', chapterId:'electricity', difficulty:1,
+  makeMCQ({ id:'g5sci-el-001', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'What components are needed to make a SIMPLE electric circuit?',
     options:[
       'A battery, wires, a bulb and a switch',
@@ -113,7 +113,7 @@ STATIC_QUESTIONS.push(
     hint:'A simple circuit has a source of electricity, a path for current to flow, and something that uses the electricity.',
     explanation:'A simple electric circuit needs: a <b>battery</b> (energy source), <b>wires</b> (path for electricity), a <b>bulb</b> (load/output) and a <b>switch</b> (to open or close the circuit).' }),
 
-  makeMCQ({ id:'g5sci-el-002', chapterId:'electricity', difficulty:1,
+  makeMCQ({ id:'g5sci-el-002', chapterId:'electricity', subsection:'diagrams', difficulty:1,
     question:`${_EL_CLOSED}Look at the circuit diagram above. Will the bulb light up? Why?`,
     options:[
       'Yes - the switch is closed and the circuit is complete',
@@ -125,7 +125,7 @@ STATIC_QUESTIONS.push(
     hint:'Trace the path of electricity from the battery all the way around the circuit.',
     explanation:'The bulb lights up because the switch is <b>closed</b>, making the circuit <b>complete</b>. Electricity can flow from the battery, through the wires, through the bulb and back to the battery.' }),
 
-  makeMCQ({ id:'g5sci-el-003', chapterId:'electricity', difficulty:1,
+  makeMCQ({ id:'g5sci-el-003', chapterId:'electricity', subsection:'diagrams', difficulty:1,
     question:`${_EL_OPEN}Look at the circuit diagram above. Will the bulb light up? Why?`,
     options:[
       'Yes - electricity always flows in a circuit',
@@ -137,7 +137,7 @@ STATIC_QUESTIONS.push(
     hint:'Look at the switch - is it connected or is there a gap?',
     explanation:'The bulb does <b>not</b> light up because the switch is <b>open</b>. An open switch creates a break in the circuit, so electricity cannot flow around the loop.' }),
 
-  makeMCQ({ id:'g5sci-el-004', chapterId:'electricity', difficulty:1,
+  makeMCQ({ id:'g5sci-el-004', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'What is the job of a SWITCH in an electric circuit?',
     options:[
       'It produces electricity for the circuit',
@@ -149,7 +149,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about what happens when you flick a light switch on and off.',
     explanation:'A switch <b>opens</b> (breaks) or <b>closes</b> (completes) a circuit. When closed, electricity flows and the bulb lights. When open, the circuit is broken and the bulb goes off.' }),
 
-  makeMCQ({ id:'g5sci-el-005', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-005', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:`${_EL_GAP}Look at the circuit above. The switch is closed but the bulb does not light. What is the most likely reason?`,
     options:[
       'The battery is too strong',
@@ -161,33 +161,33 @@ STATIC_QUESTIONS.push(
     hint:'A complete circuit must have an unbroken path all the way around.',
     explanation:'Even with the switch closed and the battery present, a <b>gap in the wire</b> breaks the circuit. Electricity cannot jump across a gap, so the bulb stays off.' }),
 
-  makeMCQ({ id:'g5sci-el-006', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-006', chapterId:'electricity', subsection:'conductors', difficulty:2,
     question:'Which of the following materials is a good CONDUCTOR of electricity?',
     options:['Rubber','Plastic','Copper wire','Glass'],
     answer:'Copper wire',
     hint:'Metals are generally good conductors of electricity.',
     explanation:'<b>Copper</b> is an excellent conductor of electricity - electricity passes through it easily. This is why electrical wires are made of copper. Rubber, plastic and glass are insulators.' }),
 
-  makeMCQ({ id:'g5sci-el-007', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-007', chapterId:'electricity', subsection:'conductors', difficulty:2,
     question:'Which of the following materials is a good INSULATOR of electricity?',
     options:['Iron','Steel','Aluminium','Rubber'],
     answer:'Rubber',
     hint:'An insulator does NOT allow electricity to pass through it.',
     explanation:'<b>Rubber</b> is a good insulator - it does not allow electricity to flow through it. This is why electrical wires are coated in rubber or plastic, to protect us from electric shocks.' }),
 
-  makeTF({ id:'g5sci-el-008', chapterId:'electricity', difficulty:1,
+  makeTF({ id:'g5sci-el-008', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'A circuit must be COMPLETE (no gaps) for electricity to flow and the bulb to light.',
     answer:true,
     hint:'Think about what "circuit" means - it comes from the word circle (a complete loop).',
     explanation:'True. For electricity to flow, there must be a <b>complete, unbroken path</b> from the battery through the wires and back. Any gap (open switch, broken wire) stops the current.' }),
 
-  makeTF({ id:'g5sci-el-009', chapterId:'electricity', difficulty:1,
+  makeTF({ id:'g5sci-el-009', chapterId:'electricity', subsection:'conductors', difficulty:1,
     question:'Rubber is a good conductor of electricity.',
     answer:false,
     hint:'This is why rubber is used to coat electrical wires.',
     explanation:'Rubber is a good <b>insulator</b>, not a conductor. It does not allow electricity to pass through it. Metals such as copper, iron and steel are good conductors.' }),
 
-  makeMCQ({ id:'g5sci-el-010', chapterId:'electricity', difficulty:1,
+  makeMCQ({ id:'g5sci-el-010', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'What does the BATTERY (cell) do in an electric circuit?',
     options:[
       'It produces light energy directly',
@@ -199,7 +199,7 @@ STATIC_QUESTIONS.push(
     hint:'Think of the battery as the "engine" or power source of the circuit.',
     explanation:'The <b>battery (cell)</b> is the energy source of the circuit. It converts stored chemical energy into electrical energy, pushing current around the circuit to power the bulb.' }),
 
-  makeMCQ({ id:'g5sci-el-011', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-011', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:`${_EL_TWO_BULBS}The circuit above shows TWO bulbs connected in series with one battery. Compared to a circuit with only ONE bulb, how will each bulb appear?`,
     options:[
       'Brighter, because there are two bulbs',
@@ -211,28 +211,28 @@ STATIC_QUESTIONS.push(
     hint:'The same battery now has to power two bulbs instead of one.',
     explanation:'When two bulbs are connected in series, the battery\'s energy is <b>shared</b> between them. Each bulb receives less energy, so they both glow <b>dimmer</b> than a single bulb would.' }),
 
-  makeMatch({ id:'g5sci-el-012', chapterId:'electricity', difficulty:1,
+  makeMatch({ id:'g5sci-el-012', chapterId:'electricity', subsection:'circuits', difficulty:1,
     leftItem:'Copper',
     allRights:['Good conductor - electricity passes through it easily','Good insulator - stops electricity flowing','Provides energy for the circuit','Opens or closes the circuit'],
     correctRight:'Good conductor - electricity passes through it easily',
     hint:'Copper is the metal inside electrical wires.',
     explanation:'Copper is one of the best electrical conductors. It is used for wiring because electricity flows through it with very little resistance.' }),
 
-  makeMCQ({ id:'g5sci-el-013', chapterId:'electricity', difficulty:1,
+  makeMCQ({ id:'g5sci-el-013', chapterId:'electricity', subsection:'components', difficulty:1,
     question:'Diagram 3 shows an electrical wire. Part X is the OUTER part of the wire. What material is used to make Part X?',
     options:['Copper','Iron','Rubber','Wool'],
     answer:'Rubber',
     hint:'The outer part of a wire protects us from electric shock - what material is a good insulator?',
     explanation:'The outer part of an electrical wire is made of <b>rubber</b> (or plastic). Both are insulators - they do not conduct electricity. This coating protects us from electric shocks. The inner core is copper (a conductor).' }),
 
-  makeMCQ({ id:'g5sci-el-014', chapterId:'electricity', difficulty:1,
+  makeMCQ({ id:'g5sci-el-014', chapterId:'electricity', subsection:'conductors', difficulty:1,
     question:'Which of the following is a conductor of electricity?',
     options:['A plastic ruler','A rubber band','A glass plate','A metal coin'],
     answer:'A metal coin',
     hint:'Metals are generally good conductors.',
     explanation:'A <b>metal coin</b> is a conductor of electricity - metals allow electricity to flow through them. Plastic, rubber and glass are insulators and do not conduct electricity.' }),
 
-  makeMCQ({ id:'g5sci-el-015', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-015', chapterId:'electricity', subsection:'circuits', difficulty:2,
     question:'Lina connects a plastic spoon between two points in an electric circuit. The bulb does not light up. Why?',
     options:[
       'The plastic spoon is too big for the circuit',
@@ -244,7 +244,7 @@ STATIC_QUESTIONS.push(
     hint:'Would electricity pass through a plastic material?',
     explanation:'Plastic is an <b>insulator</b> - it does not allow electricity to pass through it. So when the plastic spoon is placed in the circuit, the circuit remains broken and the bulb cannot light. To complete the circuit, a <b>conductor</b> (e.g. a metal spoon) must be used.' }),
 
-  makeMCQ({ id:'g5sci-el-016', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-016', chapterId:'electricity', subsection:'circuits', difficulty:2,
     question:'What is the function of the CELL (battery) in an electric circuit?',
     options:[
       'To make the bulb glow brighter by reflecting light',
@@ -256,7 +256,7 @@ STATIC_QUESTIONS.push(
     hint:'Think of the cell as the "heart" or power source that drives everything.',
     explanation:'The <b>cell (battery)</b> provides the <b>electrical energy</b> that drives current around the circuit. It converts chemical energy stored inside it into electrical energy. Without the cell, no current flows and the bulb stays off.' }),
 
-  makeMCQ({ id:'g5sci-el-017', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-017', chapterId:'electricity', subsection:'circuits', difficulty:2,
     question:'What is the function of the WIRE in an electric circuit?',
     options:[
       'To store electrical energy',
@@ -268,13 +268,13 @@ STATIC_QUESTIONS.push(
     hint:'Wire connects all the components - what does it allow to flow through it?',
     explanation:'Electric <b>wires</b> are made of copper (a conductor). They provide the <b>conducting path</b> through which electric current flows from the battery to the bulb and back. Without wires, the components cannot be connected.' }),
 
-  makeTF({ id:'g5sci-el-018', chapterId:'electricity', difficulty:1,
+  makeTF({ id:'g5sci-el-018', chapterId:'electricity', subsection:'components', difficulty:1,
     question:'Wire A has a plastic covering and Wire B has its metal core uncovered. Wire A is safer to use.',
     answer:true,
     hint:'What does the plastic covering do?',
     explanation:'True. Wire A is safer because the <b>plastic covering acts as an insulator</b>, preventing anyone who touches the wire from receiving an electric shock. Wire B\'s uncovered metal core is dangerous because touching it could cause a shock.' }),
 
-  makeMCQ({ id:'g5sci-el-019', chapterId:'electricity', difficulty:3,
+  makeMCQ({ id:'g5sci-el-019', chapterId:'electricity', subsection:'circuits', difficulty:3,
     question:'A pupil has a battery, two wires and a bulb, but no switch. She connects them all in a complete circuit. The bulb lights up. What is the DISADVANTAGE of having no switch?',
     options:[
       'The circuit will not work without a switch',
@@ -286,7 +286,7 @@ STATIC_QUESTIONS.push(
     hint:'A switch allows you to break the circuit. Without one, can you ever turn the bulb off?',
     explanation:'Without a switch, the circuit is always complete - current always flows and the bulb is always on. The battery will quickly run out of stored chemical energy because there is no way to stop the current. A <b>switch</b> allows you to <b>break the circuit</b> (open it) when power is not needed, saving the battery.' }),
 
-  makeMCQ({ id:'g5sci-el-020', chapterId:'electricity', difficulty:3,
+  makeMCQ({ id:'g5sci-el-020', chapterId:'electricity', subsection:'circuits', difficulty:3,
     question:'What happens if you add MORE batteries (cells) in a circuit with a single bulb?',
     options:[
       'The bulb gets dimmer',
@@ -298,7 +298,7 @@ STATIC_QUESTIONS.push(
     hint:'More batteries means more electrical energy driving the current.',
     explanation:'Adding more batteries increases the total <b>electrical energy</b> (voltage) in the circuit. This pushes more current through the bulb, making it glow <b>brighter</b>. However, too many batteries could overheat and damage the bulb.' }),
 
-  makeMCQ({ id:'g5sci-el-021', chapterId:'electricity', difficulty:4,
+  makeMCQ({ id:'g5sci-el-021', chapterId:'electricity', subsection:'circuits', difficulty:4,
     question:'A student builds a circuit with a battery, switch, wire and a buzzer. She says: "Chemical energy → Electrical energy → Sound energy." Is she correct? Explain.',
     options:[
       'Yes - the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
@@ -310,14 +310,14 @@ STATIC_QUESTIONS.push(
     hint:'Trace the energy transformation step by step through each component.',
     explanation:'The student is correct. The <b>battery</b> stores chemical energy and converts it to electrical energy. The <b>wire</b> conducts the electrical energy around the circuit. The <b>buzzer</b> converts electrical energy into sound energy (vibrations). Each component has a specific role in the energy transformation chain.' }),
 
-  makeMCQ({ id:'g5sci-el-022', chapterId:'electricity', difficulty:1,
+  makeMCQ({ id:'g5sci-el-022', chapterId:'electricity', subsection:'diagrams', difficulty:1,
     question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Diagram_of_a_primary_cell_(battery).jpg" alt="a battery diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The diagram shows a primary cell (battery). What type of energy stored inside the battery is converted into electrical energy when a circuit is connected?</b>',
     options:['Heat energy','Light energy','Chemical energy','Kinetic energy'],
     answer:'Chemical energy',
     hint:'Batteries store ___ energy inside them, which is released when the circuit is switched on.',
     explanation:'A battery (primary cell) stores <b>chemical energy</b>. When connected in a complete circuit, chemical reactions inside the battery convert this stored chemical energy into <b>electrical energy</b>, which drives current around the circuit to power the bulb or other components.' }),
 
-  makeMCQ({ id:'g5sci-el-023', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-023', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Battery_symbols_and_circuit.png" alt="a circuit symbols diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>Circuit diagrams use standard symbols. In a circuit diagram, a battery (cell) is represented by:</b>',
     options:[
       'A circle with a cross inside it',
@@ -329,7 +329,7 @@ STATIC_QUESTIONS.push(
     hint:'The longer line is the positive terminal (+) and the shorter line is the negative terminal (−).',
     explanation:'A <b>battery (cell)</b> in a circuit diagram is shown as a <b>long line</b> (positive terminal, +) next to a <b>shorter line</b> (negative terminal, −). Multiple cells in series show repeated pairs of lines. This is the standard international symbol used in circuit diagrams.' }),
 
-  makeMCQ({ id:'g5sci-el-024', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-024', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/9v_battery_and_led_circuit_components_(wires,_battery,_LED,_resistor).jpg" alt="a photo of circuit components including wires and battery" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows circuit components including wires, a battery and an LED. The connecting wires have a copper core coated in plastic. Why is copper used for the inner core rather than plastic?</b>',
     options:[
       'Copper is lighter and cheaper than plastic',
@@ -341,14 +341,14 @@ STATIC_QUESTIONS.push(
     hint:'For electricity to flow through a wire, the material must allow electrons to pass through it.',
     explanation:'The inner core of a wire is made of <b>copper</b> because copper is an excellent <b>conductor</b> — it allows electrons to flow through it easily. The outer plastic coating is an <b>insulator</b> — it prevents electric shocks when the wire is touched and stops accidental short circuits.' }),
 
-  makeMCQ({ id:'g5sci-el-025', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-025', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:`${_EL_TWO_BULBS}<b>The circuit above shows two bulbs connected one after another in a single loop with one battery. What is the name of this type of circuit arrangement?</b>`,
     options:['Parallel circuit','Open circuit','Series circuit','Short circuit'],
     answer:'Series circuit',
     hint:'In this arrangement, all components share ONE single path for current to flow.',
     explanation:'This is a <b>series circuit</b>. In a series circuit, all components (bulbs, battery, switch) are connected in a single continuous loop, one after another. If one bulb breaks or is removed, the circuit is broken and both bulbs go out.' }),
 
-  makeMCQ({ id:'g5sci-el-026', chapterId:'electricity', difficulty:2,
+  makeMCQ({ id:'g5sci-el-026', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:`${_EL_CLOSED}<b>In the closed circuit shown above, the bulb is glowing. What energy transformation is taking place inside the bulb?</b>`,
     options:[
       'Chemical energy → Heat energy',

@@ -104,13 +104,13 @@ const Forum = (() => {
     const cur = parseInt(countEl?.textContent || '0', 10);
     if (countEl) countEl.textContent = Math.max(0, cur + (nowLiked ? 1 : -1));
     btn.classList.toggle('text-red-500', nowLiked);
-    btn.classList.toggle('text-gray-400', !nowLiked);
+    btn.classList.toggle('text-gray-500', !nowLiked);
   }
 
   function _likeBtn(id) {
     const liked = _isLiked(id);
     return `<button onclick="event.stopPropagation();Forum.likeItem(this,'${id}')"
-      class="flex items-center gap-1 text-xs ${liked ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 transition-colors select-none">
+      class="flex items-center gap-1 text-xs  hover:text-red-500 transition-colors select-none">
       ❤️ <span class="like-count">${liked ? 1 : 0}</span>
     </button>`;
   }
@@ -123,7 +123,7 @@ const Forum = (() => {
     const len = input.value.length;
     counter.textContent = `${len}/${max}`;
     counter.classList.toggle('text-red-500', len > max * 0.9);
-    counter.classList.toggle('text-gray-400', len <= max * 0.9);
+    counter.classList.toggle('text-gray-500', len <= max * 0.9);
   }
 
   // ── View switcher ─────────────────────────────
@@ -142,7 +142,7 @@ const Forum = (() => {
 
     const el = _el('forum-cat-list');
     if (!el) return;
-    el.innerHTML = '<p class="text-sm text-gray-400 text-center py-4">Loading…</p>';
+    el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">Loading…</p>';
 
     const counts = {};
     if (_sb) {
@@ -156,9 +156,9 @@ const Forum = (() => {
         <div class="text-3xl shrink-0 select-none">${c.icon}</div>
         <div class="flex-1 min-w-0">
           <div class="font-bold text-gray-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">${c.label}</div>
-          <div class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">${c.desc}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${c.desc}</div>
         </div>
-        <div class="shrink-0 text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 px-2.5 py-1 rounded-full whitespace-nowrap">
+        <div class="shrink-0 text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2.5 py-1 rounded-full whitespace-nowrap">
           ${counts[c.id] || 0} post${counts[c.id] === 1 ? '' : 's'}
         </div>
       </button>`).join('');
@@ -173,7 +173,7 @@ const Forum = (() => {
     _sub('forum-search-results');
     const sr = _el('forum-search-results');
     if (!sr) return;
-    sr.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">Searching…</p>';
+    sr.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Searching…</p>';
 
     const { data } = await _sb.from('forum_posts')
       .select('id,title,body,author_name,author_type,created_at,reply_count,category')
@@ -187,12 +187,12 @@ const Forum = (() => {
     if (!data?.length) {
       sr.innerHTML = `<div class="text-center py-10">
         <div class="text-4xl mb-3 select-none">🔍</div>
-        <p class="text-sm text-gray-400">No posts found for "<strong>${_esc(q)}</strong>"</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">No posts found for "<strong>${_esc(q)}</strong>"</p>
       </div>`;
       return;
     }
 
-    sr.innerHTML = `<p class="text-xs text-gray-400 mb-3">${data.length} result${data.length === 1 ? '' : 's'} for "<strong>${_esc(q)}</strong>"</p>` +
+    sr.innerHTML = `<p class="text-xs text-gray-500 dark:text-gray-400 mb-3">${data.length} result${data.length === 1 ? '' : 's'} for "<strong>${_esc(q)}</strong>"</p>` +
       data.map(p => {
         const cat = catMap[p.category] || { icon: '💬', label: p.category };
         return `
@@ -203,7 +203,7 @@ const Forum = (() => {
           </div>
           <div class="font-semibold text-gray-800 dark:text-white mb-1 truncate">${_esc(p.title)}</div>
           <div class="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">${_esc(p.body)}</div>
-          <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
+          <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
             ${_badge(p.author_type)}
             ${_authorName(p.author_name, p.author_type)}
             <span>·</span>
@@ -236,12 +236,12 @@ const Forum = (() => {
 
     const list = _el('forum-posts-items');
     if (!list) return;
-    list.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">Loading…</p>';
+    list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Loading…</p>';
     await _renderPostsList(catId, list);
   }
 
   async function _renderPostsList(catId, list) {
-    if (!_sb) { list.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">Not connected.</p>'; return; }
+    if (!_sb) { list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Not connected.</p>'; return; }
     const sortBtns = `
       <div class="flex gap-2 mb-4 text-xs font-semibold">
         <button onclick="Forum.setSort('newest')"
@@ -264,7 +264,7 @@ const Forum = (() => {
     if (!data?.length) {
       list.innerHTML = sortBtns + `<div class="text-center py-10">
         <div class="text-4xl mb-3 select-none">🗒️</div>
-        <p class="text-sm text-gray-400 mb-4">No posts yet - be the first!</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">No posts yet - be the first!</p>
         <button onclick="Forum.showNewPost()" class="text-sm bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-4 py-2 rounded-xl transition-colors">✏️ Write the First Post</button>
       </div>`;
       return;
@@ -280,10 +280,10 @@ const Forum = (() => {
             class="w-full text-left p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all">
             <div class="font-semibold text-gray-800 dark:text-white mb-1 flex items-center gap-1.5 ${canDel ? 'pr-7' : ''}">
               <span class="truncate">${_esc(p.title)}</span>
-              ${p.status === 'closed' ? '<span class="shrink-0 text-xs bg-gray-100 dark:bg-gray-700 text-gray-400 px-1.5 py-0.5 rounded-full">🔒</span>' : ''}
+              ${p.status === 'closed' ? '<span class="shrink-0 text-xs bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded-full">🔒</span>' : ''}
             </div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mb-2 line-clamp-2">${_esc(p.body)}</div>
-            <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
+            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
               ${_badge(p.author_type)}
               ${_authorName(p.author_name, p.author_type)}
               <span>·</span>
@@ -318,7 +318,7 @@ const Forum = (() => {
 
     const bodyEl    = _el('forum-post-body');
     const repliesEl = _el('forum-post-replies');
-    if (bodyEl)    bodyEl.innerHTML    = '<p class="text-sm text-gray-400 py-4">Loading…</p>';
+    if (bodyEl)    bodyEl.innerHTML    = '<p class="text-sm text-gray-500 dark:text-gray-400 py-4">Loading…</p>';
     if (repliesEl) repliesEl.innerHTML = '';
 
     const [pr, rr, gur] = await Promise.all([
@@ -353,7 +353,7 @@ const Forum = (() => {
         <div class="flex items-start gap-2 mb-3">
           <h3 class="text-lg font-bold text-gray-800 dark:text-white leading-snug flex-1">${_esc(post.title)}</h3>
           <div class="flex items-center gap-1 shrink-0">
-            ${isClosed ? '<span class="text-xs bg-gray-100 dark:bg-gray-600 text-gray-400 px-2 py-1 rounded-full">🔒 Closed</span>' : ''}
+            ${isClosed ? '<span class="text-xs bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 px-2 py-1 rounded-full">🔒 Closed</span>' : ''}
             ${isAdmin && !isClosed ? `<button onclick="Forum.closePost('${post.id}')" title="Close discussion"
               class="w-7 h-7 flex items-center justify-center rounded-lg text-gray-300 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 transition-colors text-sm" aria-label="Close discussion">🔒</button>` : ''}
             ${isAdmin && isClosed  ? `<button onclick="Forum.reopenPost('${post.id}')" title="Reopen discussion"
@@ -363,7 +363,7 @@ const Forum = (() => {
           </div>
         </div>
         <p class="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-wrap leading-relaxed mb-4">${_esc(post.body)}</p>
-        <div class="flex items-center gap-3 text-xs text-gray-400 flex-wrap pt-3 border-t border-gray-100 dark:border-gray-700">
+        <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 flex-wrap pt-3 border-t border-gray-100 dark:border-gray-700">
           ${_badge(post.author_type)}
           ${_authorName(post.author_name, post.author_type)}
           <span>·</span>
@@ -379,7 +379,7 @@ const Forum = (() => {
           return `
           <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 mb-3 border border-gray-100 dark:border-gray-600">
             <p class="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap leading-relaxed mb-2">${_esc(r.body)}</p>
-            <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
+            <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
               ${_badge(r.author_type)}
               ${_authorName(r.author_name, r.author_type)}
               <span>·</span>
@@ -392,7 +392,7 @@ const Forum = (() => {
             </div>
           </div>`;
         }).join('')
-      : '<p class="text-sm text-gray-400 text-center py-4 mt-4">No replies yet - be the first to reply!</p>';
+      : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 mt-4">No replies yet - be the first to reply!</p>';
   }
 
   async function closePost(id) {

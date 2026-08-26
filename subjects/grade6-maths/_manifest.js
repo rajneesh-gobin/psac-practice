@@ -1,10 +1,108 @@
-﻿'use strict';
+'use strict';
+
+// Sub-topics for the Syllabus screen. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Trailing comments are the count at generation time.
+const G6M_SYLLABUS = {
+  'g6-numeration': { subsections: [
+    { id:'powers',          name:'Powers & Indices' },  // 6
+    { id:'primes',          name:'Prime & Composite Numbers' },  // 4
+    { id:'rounding',        name:'Rounding' },  // 3
+    { id:'expanded',        name:'Expanded Notation' },  // 8
+    { id:'sequences',       name:'Sequences & Patterns' },  // 8
+    { id:'words_digits',    name:'Numbers in Words & Figures' },  // 3
+    { id:'place_value',     name:'Place Value' },  // 7
+    { id:'compare_order',   name:'Comparing & Ordering' },  // 5
+    { id:'word_probs',      name:'Word Problems' },  // 1
+  ]},
+  'g6-four-ops': { subsections: [
+    { id:'mixed_ops',       name:'BODMAS & Mixed Operations' },  // 4
+    { id:'word_probs',      name:'Word Problems' },  // 9
+    { id:'division',        name:'Division' },  // 11
+    { id:'multiplication',  name:'Multiplication' },  // 9
+    { id:'add_sub',         name:'Addition & Subtraction' },  // 16
+  ]},
+  'g6-fractions': { subsections: [
+    { id:'proper_improper', name:'Improper Fractions & Mixed Numbers' },  // 8
+    { id:'equivalent',      name:'Equivalent Fractions' },  // 9
+    { id:'comparing',       name:'Comparing Fractions' },  // 2
+    { id:'multiply_divide', name:'Multiplying & Dividing Fractions' },  // 5
+    { id:'word_probs',      name:'Word Problems' },  // 1
+    { id:'fraction_of',     name:'Fraction of a Quantity' },  // 4
+    { id:'add_sub',         name:'Addition & Subtraction' },  // 14
+  ]},
+  'g6-decimals': { subsections: [
+    { id:'conversion',      name:'Unit Conversions' },  // 3
+    { id:'ordering',        name:'Ordering' },  // 3
+    { id:'place_value',     name:'Place Value' },  // 5
+    { id:'word_probs',      name:'Word Problems' },  // 6
+    { id:'operations',      name:'Calculations' },  // 14
+  ]},
+  'g6-factors-hcf': { subsections: [
+    { id:'prime_factors',   name:'Prime Factorisation' },  // 2
+    { id:'hcf',             name:'Highest Common Factor (HCF)' },  // 9
+    { id:'lcm',             name:'Lowest Common Multiple (LCM)' },  // 7
+    { id:'factors',         name:'Factors & Multiples' },  // 3
+    { id:'primes',          name:'Prime & Composite Numbers' },  // 5
+    { id:'word_probs',      name:'Word Problems' },  // 5
+  ]},
+  'g6-ratio-pct': { subsections: [
+    { id:'average',         name:'Averages' },  // 4
+    { id:'profit_loss',     name:'Profit & Loss' },  // 8
+    { id:'discount',        name:'Discount' },  // 3
+    { id:'increase',        name:'Increase & Decrease' },  // 4
+    { id:'conversion',      name:'Unit Conversions' },  // 6
+    { id:'ratio_divide',    name:'Dividing in a Ratio' },  // 4
+    { id:'ratio_simplify',  name:'Simplifying Ratios' },  // 3
+    { id:'percentage_of',   name:'Percentage of a Quantity' },  // 11
+    { id:'word_probs',      name:'Word Problems' },  // 2
+  ]},
+  'g6-geometry': { subsections: [
+    { id:'symmetry',        name:'Symmetry' },  // 3
+    { id:'perimeter',       name:'Perimeter' },  // 3
+    { id:'3d_shapes',       name:'3-D Shapes' },  // 3
+    { id:'2d_shapes',       name:'2-D Shapes' },  // 15
+    { id:'angles',          name:'Angles' },  // 18
+  ]},
+  'g6-measure': { subsections: [
+    { id:'perimeter',       name:'Perimeter' },  // 3
+    { id:'conversion',      name:'Unit Conversions' },  // 18
+    { id:'capacity',        name:'Capacity' },  // 4
+    { id:'mass',            name:'Mass' },  // 7
+    { id:'length',          name:'Length' },  // 1
+    { id:'word_probs',      name:'Word Problems' },  // 1
+  ]},
+  'g6-area-vol': { subsections: [
+    { id:'surface_area',    name:'Surface Area' },  // 5
+    { id:'volume',          name:'Volume' },  // 10
+    { id:'area_triangle',   name:'Area of Triangles' },  // 5
+    { id:'compound',        name:'Compound Shapes' },  // 3
+    { id:'word_probs',      name:'Word Problems' },  // 2
+    { id:'area_rect',       name:'Area of Rectangles' },  // 8
+  ]},
+  'g6-time-speed': { subsections: [
+    { id:'timezones',       name:'Time Zones' },  // 3
+    { id:'speed',           name:'Speed' },  // 22
+    { id:'clock_formats',   name:'12-hour & 24-hour Clock' },  // 3
+    { id:'conversion',      name:'Unit Conversions' },  // 3
+    { id:'duration',        name:'Duration & Elapsed Time' },  // 12
+  ]},
+  'g6-graphs': { subsections: [
+    { id:'averages',        name:'Mean, Median, Mode & Range' },  // 9
+    { id:'pie_chart',       name:'Pie Charts' },  // 8
+    { id:'line_graph',      name:'Line Graphs' },  // 4
+    { id:'pictogram',       name:'Pictograms' },  // 2
+    { id:'bar_chart',       name:'Bar Charts' },  // 13
+  ]},
+};
+
 // Grade 6 Mathematics - MIE Mauritius Syllabus (Grades 1-6, 2015)
 // Grade 6 adds: Prime/Composite, Fraction×Fraction, HCF/LCM, Percentage, 3D Surface Area, Speed, Pie Chart, Coordinates
 registerSubject({
   id: 'grade6-maths', name: 'Mathematics', grade: 6, icon: '🔢', subject: 'Maths',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  syllabus: G6M_SYLLABUS,
   chapters: [
     { id: 'g6-numeration',   name: 'Numbers & Numeration',             icon: '🔢', examWeight: 3,
       syllabus: 'Read/write numbers to 1,000,000. Place value up to one million. Expanded notation. Ordering and comparing numbers. Prime and composite numbers. Number patterns with whole numbers, fractions and decimals.' },

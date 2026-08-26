@@ -1,8 +1,85 @@
-﻿'use strict';
+'use strict';
+
+// Sous-thèmes pour l'écran Syllabus. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Trailing comments are the count at generation time.
+const G6FR_SYLLABUS = {
+  'g6fr-imparfait': { subsections: [
+    { id:'vs_passe_comp',   name:'Imparfait ou passé composé' },  // 1
+    { id:'terminaisons',    name:'Les terminaisons' },  // 2
+    { id:'usage',           name:'Quand l\'employer' },  // 2
+    { id:'formation',       name:'Comment le former' },  // 33
+  ]},
+  'g6fr-futur': { subsections: [
+    { id:'futur_proche',    name:'Le futur proche' },  // 2
+    { id:'irreguliers',     name:'Verbes irréguliers' },  // 17
+    { id:'formation',       name:'Comment le former' },  // 19
+  ]},
+  'g6fr-subordonnees': { subsections: [
+    { id:'relatives',       name:'Propositions relatives' },  // 11
+    { id:'conjonctions',    name:'Les conjonctions' },  // 5
+    { id:'analyse',         name:'Analyser la phrase' },  // 23
+  ]},
+  'g6fr-subjunctif': { subsections: [
+    { id:'declencheurs',    name:'Ce qui déclenche le subjonctif' },  // 10
+    { id:'irreguliers',     name:'Verbes irréguliers' },  // 10
+    { id:'usage',           name:'Quand l\'employer' },  // 1
+    { id:'formation',       name:'Comment le former' },  // 14
+  ]},
+  'g6fr-conditionnel': { subsections: [
+    { id:'si_clauses',      name:'Phrases avec « si »' },  // 9
+    { id:'politesse',       name:'Salutations & politesse' },  // 3
+    { id:'irreguliers',     name:'Verbes irréguliers' },  // 11
+    { id:'usage',           name:'Quand l\'employer' },  // 2
+    { id:'formation',       name:'Comment le former' },  // 10
+  ]},
+  'g6fr-pqp': { subsections: [
+    { id:'concordance',     name:'Concordance des temps' },  // 9
+    { id:'usage',           name:'Quand l\'employer' },  // 1
+    { id:'irreguliers',     name:'Verbes irréguliers' },  // 9
+    { id:'formation',       name:'Comment le former' },  // 16
+  ]},
+  'g6fr-argumentation': { subsections: [
+    { id:'connecteurs',     name:'Connecteurs logiques' },  // 12
+    { id:'opinion',         name:'Donner son opinion' },  // 3
+    { id:'structure',       name:'Structure du texte' },  // 7
+    { id:'arguments',       name:'Arguments' },  // 6
+    { id:'vocabulaire',     name:'Le sens des mots' },  // 7
+  ]},
+  'g6fr-lecture': { subsections: [
+    { id:'images',          name:'Vocabulaire en images' },  // 16
+    { id:'poesie',          name:'La poésie' },  // 3
+    { id:'narration',       name:'Le récit & le narrateur' },  // 4
+    { id:'fait_opinion',    name:'Fait ou opinion' },  // 1
+    { id:'figures_style',   name:'Figures de style' },  // 7
+    { id:'type_ton',        name:'Type & ton du texte' },  // 2
+    { id:'connecteurs',     name:'Connecteurs logiques' },  // 1
+    { id:'vrai_faux',       name:'Vrai ou faux' },  // 2
+    { id:'vocabulaire',     name:'Le sens des mots' },  // 3
+    { id:'idee_principale', name:'Idée principale' },  // 2
+    { id:'interpretation',  name:'Relevé & interprétation' },  // 1
+    { id:'inference',       name:'Reading Between the Lines' },  // 5
+    { id:'reperage',        name:'Trouver la réponse dans le texte' },  // 69
+  ]},
+  'g6fr-textes': { subsections: [
+    { id:'courriel',        name:'Courriels' },  // 4
+    { id:'affiche',         name:'Affiches & annonces' },  // 4
+    { id:'recette',         name:'Recettes & modes d\'emploi' },  // 3
+    { id:'article',         name:'Articles de journal' },  // 6
+    { id:'legende',         name:'Légendes & contes' },  // 4
+    { id:'recit',           name:'Récits' },  // 24
+  ]},
+  'g6fr-images': { subsections: [
+    { id:'trois_images',    name:'Raconter en trois images' },  // 10
+    { id:'une_image',       name:'Décrire une image' },  // 10
+  ]},
+};
+
 registerSubject({
   id: 'grade6-french', name: 'French', grade: 6, icon: '🇫🇷', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
+  syllabus: G6FR_SYLLABUS,
   chapters: [
     {
       id: 'g6fr-imparfait', name: "L'Imparfait", icon: '⏳',

@@ -1,4 +1,78 @@
-﻿'use strict';
+'use strict';
+
+// Sub-topics for the Syllabus screen. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Adding a subsection means tagging questions for it.
+// Trailing comments are the question count at the time of generation.
+const G5ENG_SYLLABUS = {
+  'eng-nouns': { subsections: [
+    { id:'articles',        name:'Articles: a, an, the' },  // 2
+    { id:'plurals',         name:'Plurals' },  // 1
+    { id:'collective',      name:'Collective Nouns' },  // 6
+    { id:'abstract',        name:'Abstract Nouns' },  // 4
+    { id:'pronouns',        name:'Pronouns' },  // 5
+    { id:'determiners',     name:'Determiners & Quantifiers' },  // 1
+    { id:'common_proper',   name:'Common & Proper Nouns' },  // 12
+  ]},
+  'eng-verbs': { subsections: [
+    { id:'voice',           name:'Active & Passive Voice' },  // 4
+    { id:'agreement',       name:'Subject-Verb Agreement' },  // 1
+    { id:'auxiliary',       name:'Auxiliary & Modal Verbs' },  // 4
+    { id:'past_tense',      name:'Past Tense' },  // 3
+    { id:'future_tense',    name:'Future Tense' },  // 2
+    { id:'continuous',      name:'Continuous Tense' },  // 1
+    { id:'perfect',         name:'Perfect Tense' },  // 5
+    { id:'present_tense',   name:'Present Tense' },  // 10
+    { id:'in_context',      name:'Finding Them in a Sentence' },  // 1
+  ]},
+  'eng-adjectives': { subsections: [
+    { id:'comparatives',    name:'Comparatives & Superlatives' },  // 9
+    { id:'adverbs',         name:'Adverbs' },  // 5
+    { id:'order',           name:'Order of Adjectives' },  // 3
+    { id:'in_context',      name:'Finding Them in a Sentence' },  // 2
+    { id:'adjectives',      name:'Adjectives' },  // 12
+  ]},
+  'eng-sentences': { subsections: [
+    { id:'punctuation',     name:'Punctuation' },  // 21
+    { id:'types',           name:'Types of Sentence' },  // 3
+    { id:'direct_speech',   name:'Direct & Reported Speech' },  // 4
+    { id:'in_context',      name:'Finding Them in a Sentence' },  // 3
+  ]},
+  'eng-comprehension': { subsections: [
+    { id:'vocabulary',      name:'Word Meaning in Context' },  // 6
+    { id:'main_idea',       name:'Main Idea & Title' },  // 2
+    { id:'authors_view',    name:'The Writer\'s Purpose & Tone' },  // 2
+    { id:'inference',       name:'Reading Between the Lines' },  // 4
+    { id:'retrieval',       name:'Finding the Answer in the Text' },  // 17
+  ]},
+  'eng-writing': { subsections: [
+    { id:'planning',        name:'Planning & Structure' },  // 18
+    { id:'formal_letter',   name:'Formal Letters' },  // 4
+    { id:'informal',        name:'Informal Writing' },  // 1
+    { id:'descriptive',     name:'Descriptive Writing' },  // 3
+    { id:'figurative',      name:'Figurative Language' },  // 5
+  ]},
+  'eng-vocabulary': { subsections: [
+    { id:'picture_words',   name:'Words from Pictures' },  // 6
+    { id:'synonyms',        name:'Synonyms' },  // 2
+    { id:'antonyms',        name:'Antonyms' },  // 3
+    { id:'prefix_suffix',   name:'Prefixes & Suffixes' },  // 6
+    { id:'meaning',         name:'Word Meanings' },  // 13
+    { id:'context_clues',   name:'Using Context Clues' },  // 1
+  ]},
+  'eng-spelling': { subsections: [
+    { id:'rules',           name:'Spelling Rules' },  // 1
+    { id:'plurals',         name:'Plurals' },  // 2
+    { id:'common_errors',   name:'Commonly Misspelt Words' },  // 28
+  ]},
+  'eng-passages': { subsections: [
+    { id:'letter',          name:'Letters' },  // 10
+    { id:'story',           name:'Stories & Legends' },  // 8
+    { id:'recount',         name:'Recounts, Diaries & Postcards' },  // 1
+    { id:'poem',            name:'Poems' },  // 2
+  ]},
+};
+
 
 // ── Subject-specific badges ────────────────────
 // Awarded ON TOP of engine/registry.js GENERIC_BADGES. Only list badges that
@@ -24,6 +98,7 @@ registerSubject({
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
   badges: G5E_BADGES,
+  syllabus: G5ENG_SYLLABUS,
   chapters: [
     {
       id: 'eng-nouns', name: 'Nouns, Pronouns & Articles', icon: '📝',

@@ -29,13 +29,15 @@ function _buildContext(buf) {
       hint, explanation };
   }
 
-  function makeSymmetry({ id, chapterId, difficulty, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {
+  // Mirrors engine/helpers.js, including `subsection` — the one field this
+  // factory used to drop while every other factory passed it through.
+  function makeSymmetry({ id, chapterId, difficulty, subsection, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {
     const ans = answer || (given || []).map(([r, c]) => {
       if (axis === 'vertical')   return [r, (cols - 1) - c];
       if (axis === 'horizontal') return [(rows - 1) - r, c];
       return null;
     }).filter(Boolean);
-    return { id, chapterId, difficulty, type: 'symmetry', question, rows, cols, axis, axisPos, given, answer: ans,
+    return { id, chapterId, difficulty, subsection, type: 'symmetry', question, rows, cols, axis, axisPos, given, answer: ans,
       hint: hint || 'Click the empty cells to mirror the pattern across the coloured line.',
       explanation: explanation || 'Each cell mirrors its pair across the axis of symmetry.' };
   }
@@ -57,9 +59,14 @@ function _buildContext(buf) {
       options: [correctRight, ...wrongOpts], answer: correctRight, hint, explanation });
   }
 
-  // STATIC_QUESTIONS.push(...) - collect into buf
-  const STATIC_QUESTIONS = {
-    push(...qs) { qs.flat().forEach(q => q && buf.push(q)); }
+  // The REAL array with a flattening push — see the note in build-questions.js.
+  // A { push }-only stub makes questions_audit.js throw on `.forEach`, which
+  // silently drops that whole file: 18 questions and every difficulty
+  // correction it applies.
+  const STATIC_QUESTIONS = buf;
+  buf.push = function (...qs) {
+    qs.flat().forEach(q => q && Array.prototype.push.call(this, q));
+    return this.length;
   };
 
   return { rnd, shuffle, fmt, makeMCQ, makeNum, makeTF, makeMatch, makeSymmetry, STATIC_QUESTIONS,
@@ -95,7 +102,55 @@ const _settingsCache = { data: null, at: 0 };
 const _planCache     = new Map(); // userId → { data: allowed_chapters|null, at }
 const _PLAN_TTL      = 5 * 60 * 1000; // 5 minutes
 
-async function _isEnforcementOn(sbUrl, sbAnon) {
+// ── Bundle cache ─────────────────────────────────────────────────────────────
+// Question bundles are IMMUTABLE for the life of a deploy — they are written by
+// the build step and never change until the next one. Re-reading and re-parsing
+// grade5.json (1.6 MB) on every invocation was the single most expensive thing
+// this function did, and Netlify bills the milliseconds. Parse once per warm
+// container, keep it for as long as the container lives; no TTL, because a new
+// deploy means a new container anyway.
+const _bundleCache = new Map(); // filename → parsed JSON
+
+function _readBundle(name) {
+  if (_bundleCache.has(name)) return _bundleCache.get(name);
+  const file = path.join(__dirname, '..', 'question-bundles', `${name}.json`);
+  let parsed = null;
+  try {
+    if (fs.existsSync(file)) parsed = JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch(e) {
+    console.error('[questions] bundle read', name, e.message);
+  }
+  _bundleCache.set(name, parsed);   // cache the miss too - existsSync is not free
+  return parsed;
+}
+
+// ── Auth cache ───────────────────────────────────────────────────────────────
+// Verifying a caller costs a Supabase round trip (~100-300 ms of billed time)
+// and the answer barely changes minute to minute. Keyed on the credential
+// itself, so a revoked token stops working within the TTL rather than never.
+// Deliberately short, and never cached for a FAILED check - a rejected caller
+// must not be able to pin a negative result, and a newly created child must be
+// able to log in immediately.
+const _authCache = new Map(); // credential → { uid, at }
+const _AUTH_TTL  = 5 * 60 * 1000;
+
+function _authCacheGet(key) {
+  const hit = _authCache.get(key);
+  if (hit && (Date.now() - hit.at) < _AUTH_TTL) return hit.uid;
+  if (hit) _authCache.delete(key);
+  return undefined;
+}
+
+function _authCacheSet(key, uid) {
+  // A warm container that has served many children should not grow unbounded.
+  if (_authCache.size > 500) _authCache.clear();
+  _authCache.set(key, { uid, at: Date.now() });
+}
+
+// Returns the whole global_settings blob, not just the enforcement flag: the
+// same fetch also carries disabled_chapters, and doing it twice would double the
+// round trips on a cold Lambda.
+async function _globalSettings(sbUrl, sbAnon) {
   const now = Date.now();
   if (_settingsCache.data !== null && (now - _settingsCache.at) < _PLAN_TTL) return _settingsCache.data;
   try {
@@ -104,11 +159,11 @@ async function _isEnforcementOn(sbUrl, sbAnon) {
       { headers: { apikey: sbAnon, Authorization: `Bearer ${sbAnon}` } }
     );
     const rows = r.ok ? await r.json() : [];
-    const val  = rows[0]?.value?.plan_enforcement_enabled === true;
+    const val  = rows[0]?.value || {};
     _settingsCache.data = val;
     _settingsCache.at   = now;
     return val;
-  } catch(_) { return false; }
+  } catch(_) { return {}; }
 }
 
 async function _getAllowedChapters(userId, isStudentId, sbUrl, sbSrk) {
@@ -178,12 +233,16 @@ exports.handler = async (event) => {
 
   let _uid = null; // authenticated principal id used for plan lookup
   if (authHeader) {
-    // Verify Supabase JWT - rejects expired, forged, or random strings
-    const r = await fetch(`${SB_URL}/auth/v1/user`, {
-      headers: { Authorization: `Bearer ${authHeader}`, apikey: SB_ANON },
-    });
-    if (!r.ok) return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid token' }) };
-    try { _uid = (await r.json()).id || null; } catch(_) {}
+    _uid = _authCacheGet('jwt:' + authHeader);
+    if (_uid === undefined) {
+      // Verify Supabase JWT - rejects expired, forged, or random strings
+      const r = await fetch(`${SB_URL}/auth/v1/user`, {
+        headers: { Authorization: `Bearer ${authHeader}`, apikey: SB_ANON },
+      });
+      if (!r.ok) return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid token' }) };
+      try { _uid = (await r.json()).id || null; } catch(_) { _uid = null; }
+      _authCacheSet('jwt:' + authHeader, _uid);
+    }
   } else if (studentId) {
     // Validate student UUID format first (fast, no DB call)
     const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -191,7 +250,7 @@ exports.handler = async (event) => {
       return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid session' }) };
     }
     // Verify student exists in DB (requires SUPABASE_SERVICE_ROLE_KEY env var)
-    if (SB_SRK) {
+    if (SB_SRK && _authCacheGet('stu:' + studentId) === undefined) {
       const res  = await fetch(`${SB_URL}/rest/v1/students?id=eq.${studentId}&select=id&limit=1`, {
         headers: { apikey: SB_SRK, Authorization: `Bearer ${SB_SRK}` },
       });
@@ -199,18 +258,45 @@ exports.handler = async (event) => {
       if (!Array.isArray(rows) || !rows.length) {
         return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid session' }) };
       }
+      _authCacheSet('stu:' + studentId, studentId);
     }
     _uid = studentId;
   }
 
-  // ── Plan enforcement ───────────────────────────────────────────────────────
-  let _allowedChapters = null; // null = no restriction (serve everything)
-  const _enforcing = await _isEnforcementOn(SB_URL, SB_ANON);
-  if (_enforcing && _uid) {
+  // ── Admin + plan enforcement ───────────────────────────────────────────────
+  // This is the ONLY enforcement that matters. The parent dashboard greys these
+  // chapters out and the practice screen refuses to open them, but both live in
+  // the browser and both are one devtools edit from being switched off. Here the
+  // questions simply never leave the server, so there is nothing to cheat with.
+  const _gs = await _globalSettings(SB_URL, SB_ANON);
+
+  let _allowedChapters = null; // null = no plan restriction (serve everything)
+  if (_gs.plan_enforcement_enabled === true && _uid) {
     _allowedChapters = await _getAllowedChapters(_uid, !!studentId, SB_URL, SB_SRK);
   }
   const _allowedSet = _allowedChapters ? new Set(_allowedChapters) : null;
-  const _planFilter = (qs) => _allowedSet ? qs.filter(q => _allowedSet.has(q.chapterId)) : qs;
+
+  // Chapters an admin switched off for everybody. Unlike the plan list this
+  // applies whether or not plan enforcement is on — it is a kill switch, not a
+  // tier.
+  const _blockedSet = new Set(_gs.disabled_chapters || []);
+  const _blockedSubjects = new Set(_gs.disabled_subjects || []);
+
+  const _planFilter = (qs) => {
+    let out = qs;
+    if (_allowedSet) out = out.filter(q => _allowedSet.has(q.chapterId));
+    if (_blockedSet.size) out = out.filter(q => !_blockedSet.has(q.chapterId));
+    return out;
+  };
+
+  // The default header is `public, s-maxage=86400`, which lets Netlify's shared
+  // CDN cache one response and hand it to everybody. That is fine while every
+  // caller gets the identical payload — but the moment the body depends on WHO
+  // asked (plan tier), a cached copy would leak one family's chapter set to
+  // another, in both directions. As soon as any per-caller filtering is in play,
+  // the response stops being shareable.
+  if (_allowedSet) headers['Cache-Control'] = 'private, max-age=300';
+  else if (_blockedSet.size || _blockedSubjects.size) headers['Cache-Control'] = 'public, s-maxage=300';
 
   const p          = event.queryStringParameters || {};
   const subjectId  = (p.subject    || '').replace(/[^a-z0-9-]/g, '');
@@ -219,19 +305,35 @@ exports.handler = async (event) => {
   const batchAll   = p.all === '1';
   const batchGrade = (p.grade      || '').replace(/[^0-9]/g, '');
 
+  // ── Past papers: ?papers=1[&grade=N] ──────────────────────────────────────
+  // Real PSAC exam questions, written/drawn responses with a mark allocation
+  // and NO answer — they are for reading and attempting on paper, never for
+  // marking. Served separately from the practice pool for exactly that reason:
+  // an item with no `answer` must never reach code that expects to grade one.
+  //
+  // Goes through this function rather than being a static asset so it inherits
+  // the same auth the rest of the content has.
+  if (p.papers === '1') {
+    const all = _readBundle('past-papers') || [];
+    const list = batchGrade ? all.filter(q => String(q.grade) === batchGrade) : all;
+    return { statusCode: 200, headers, body: JSON.stringify(list) };
+  }
+
   // Batch endpoint: ?all=1&grade=N — returns all subjects for the grade in one call
   if (batchAll && batchGrade) {
     try {
-      // Fast path: use pre-built bundle from build step
-      const bundlePath = path.join(__dirname, '..', 'question-bundles', `grade${batchGrade}.json`);
-      if (fs.existsSync(bundlePath)) {
-        const bundleData = JSON.parse(fs.readFileSync(bundlePath, 'utf8'));
-        if (_allowedSet) {
-          for (const key of Object.keys(bundleData)) {
-            bundleData[key] = bundleData[key].filter(q => _allowedSet.has(q.chapterId));
-          }
+      // Fast path: pre-built bundle, parsed once per warm container.
+      const cachedBundle = _readBundle(`grade${batchGrade}`);
+      if (cachedBundle) {
+        // ⚠ Never mutate the cached object - it is shared by every subsequent
+        // request this container serves, so deleting a blocked subject from it
+        // would hide that subject for everyone until the container recycles.
+        const out = {};
+        for (const [key, qs] of Object.entries(cachedBundle)) {
+          if (_blockedSubjects.has(key)) continue;
+          out[key] = _planFilter(qs);
         }
-        return { statusCode: 200, headers, body: JSON.stringify(bundleData) };
+        return { statusCode: 200, headers, body: JSON.stringify(out) };
       }
       // Fallback: build dynamically (local dev or bundle missing)
       const subjectsDir = path.join(ROOT, 'subjects');
@@ -239,6 +341,7 @@ exports.handler = async (event) => {
         .filter(d => d.startsWith(`grade${batchGrade}-`) && fs.statSync(path.join(subjectsDir, d)).isDirectory());
       const result = {};
       for (const dir of allDirs) {
+        if (_blockedSubjects.has(dir)) continue;
         result[dir] = _planFilter(_loadSubject(dir));
       }
       return { statusCode: 200, headers, body: JSON.stringify(result) };
@@ -252,20 +355,29 @@ exports.handler = async (event) => {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'subject param required' }) };
   }
 
+  // Subject switched off by an admin: an empty list, not an error — the client
+  // already handles "this subject has no questions loaded".
+  if (_blockedSubjects.has(subjectId)) {
+    return { statusCode: 200, headers, body: '[]' };
+  }
+
   try {
-    // Fast path: use pre-built bundle from build step
-    const gradeMatch = subjectId.match(/grade(\d)/);
-    if (gradeMatch) {
-      const bundlePath = path.join(__dirname, '..', 'question-bundles', `grade${gradeMatch[1]}.json`);
-      if (fs.existsSync(bundlePath)) {
-        const bundle = JSON.parse(fs.readFileSync(bundlePath, 'utf8'));
-        if (bundle[subjectId]) {
-          let questions = _planFilter(bundle[subjectId]);
-          if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);
-          if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
-          return { statusCode: 200, headers, body: JSON.stringify(questions) };
-        }
-      }
+    // Fastest path: the per-subject file. Reading grade5.json to answer a
+    // request for grade5-maths meant parsing 1.6 MB to return 100 KB.
+    let subjectQs = _readBundle(subjectId);
+
+    // Older deploys only have the whole-grade bundles; fall back to those.
+    if (!subjectQs) {
+      const gradeMatch = subjectId.match(/grade(\d)/);
+      const bundle = gradeMatch ? _readBundle(`grade${gradeMatch[1]}`) : null;
+      if (bundle && bundle[subjectId]) subjectQs = bundle[subjectId];
+    }
+
+    if (subjectQs) {
+      let questions = _planFilter(subjectQs);
+      if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);
+      if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
+      return { statusCode: 200, headers, body: JSON.stringify(questions) };
     }
     // Fallback: build dynamically
     let questions = _planFilter(_loadSubject(subjectId));

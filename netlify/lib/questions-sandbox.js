@@ -68,17 +68,24 @@ function buildContext(buf) {
       question: `What does <b>${leftItem}</b> match to?`,
       options: [correctRight, ...wrongOpts], answer: correctRight, hint, explanation });
   }
-  function makeSymmetry({ id, chapterId, difficulty, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {
+  function makeSymmetry({ id, chapterId, difficulty, subsection, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {
     const ans = answer || (given || []).map(([r, c]) => {
       if (axis === 'vertical')   return [r, (cols - 1) - c];
       if (axis === 'horizontal') return [(rows - 1) - r, c];
       return null;
     }).filter(Boolean);
-    return { id, chapterId, difficulty, type: 'symmetry', question, rows, cols, axis, axisPos, given,
+    return { id, chapterId, difficulty, subsection, type: 'symmetry', question, rows, cols, axis, axisPos, given,
              answer: ans, hint: hint || '', explanation: explanation || '' };
   }
 
-  const STATIC_QUESTIONS = { push(...qs) { qs.flat().forEach(q => q && buf.push(q)); } };
+  // The REAL array with a flattening push — see the note in build-questions.js.
+  // Grading has to see the same pool the browser does, and a { push }-only stub
+  // silently dropped questions_audit.js (18 questions + difficulty fixes).
+  const STATIC_QUESTIONS = buf;
+  buf.push = function (...qs) {
+    qs.flat().forEach(q => q && Array.prototype.push.call(this, q));
+    return this.length;
+  };
 
   return { rnd, shuffle, fmt, makeMCQ, makeNum, makeTF, makeMatch, makeSymmetry,
            STATIC_QUESTIONS, 'use strict': undefined };

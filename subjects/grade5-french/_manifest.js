@@ -1,4 +1,95 @@
-﻿'use strict';
+'use strict';
+
+// Sous-thèmes pour l'écran Syllabus. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Trailing comments are the count at generation time.
+const G5FR_SYLLABUS = {
+  'fr-vocabulaire': { subsections: [
+    { id:'couleurs',        name:'Les couleurs' },  // 1
+    { id:'nombres',         name:'Les nombres' },  // 1
+    { id:'jours_mois',      name:'Jours & mois' },  // 6
+    { id:'corps',           name:'Le corps' },  // 1
+    { id:'animaux',         name:'Les animaux' },  // 2
+    { id:'nourriture',      name:'La nourriture' },  // 5
+    { id:'politesse',       name:'Salutations & politesse' },  // 1
+    { id:'temps',           name:'Le temps qui passe' },  // 2
+    { id:'ecole',           name:'À l\'école' },  // 1
+    { id:'transport',       name:'Les transports' },  // 4
+    { id:'traduction',      name:'Traduire des mots' },  // 29
+  ]},
+  'fr-noms': { subsections: [
+    { id:'pluriel',         name:'Le pluriel' },  // 12
+    { id:'partitifs',       name:'Articles partitifs' },  // 1
+    { id:'genre',           name:'Masculin ou féminin' },  // 15
+    { id:'articles_indef',  name:'Articles indéfinis' },  // 6
+    { id:'articles_def',    name:'Articles définis' },  // 7
+  ]},
+  'fr-verbes-present': { subsections: [
+    { id:'pronominaux',     name:'Verbes pronominaux' },  // 2
+    { id:'etre_avoir',      name:'Être & avoir' },  // 3
+    { id:'irreguliers',     name:'Verbes irréguliers' },  // 16
+    { id:'verbes_er',       name:'Verbes en -ER' },  // 4
+    { id:'traduction',      name:'Traduire des mots' },  // 1
+    { id:'conjugaison',     name:'Conjugaison' },  // 9
+  ]},
+  'fr-adjectifs': { subsections: [
+    { id:'comparatif',      name:'Comparatif & superlatif' },  // 8
+    { id:'possessifs',      name:'Les possessifs' },  // 2
+    { id:'demonstratifs',   name:'Démonstratifs' },  // 3
+    { id:'accord',          name:'Les accords' },  // 22
+  ]},
+  'fr-passe-compose': { subsections: [
+    { id:'auxiliaire',      name:'Choisir l\'auxiliaire' },  // 6
+    { id:'accord',          name:'Les accords' },  // 3
+    { id:'participe',       name:'Le participe passé' },  // 6
+    { id:'usage',           name:'Quand l\'employer' },  // 1
+    { id:'formation',       name:'Comment le former' },  // 19
+  ]},
+  'fr-pronoms': { subsections: [
+    { id:'relatifs',        name:'Pronoms relatifs' },  // 4
+    { id:'cod_coi',         name:'COD & COI' },  // 4
+    { id:'possessifs',      name:'Les possessifs' },  // 3
+    { id:'demonstratifs',   name:'Démonstratifs' },  // 1
+    { id:'personnels',      name:'Pronoms personnels' },  // 23
+  ]},
+  'g5fr-passe-simple': { subsections: [
+    { id:'irreguliers',     name:'Verbes irréguliers' },  // 12
+    { id:'usage',           name:'Quand l\'employer' },  // 1
+    { id:'formation',       name:'Comment le former' },  // 22
+  ]},
+  'g5fr-subjonctif': { subsections: [
+    { id:'declencheurs',    name:'Ce qui déclenche le subjonctif' },  // 11
+    { id:'irreguliers',     name:'Verbes irréguliers' },  // 12
+    { id:'formation',       name:'Comment le former' },  // 12
+  ]},
+  'fr-lecture': { subsections: [
+    { id:'narration',       name:'Le récit & le narrateur' },  // 1
+    { id:'figures_style',   name:'Figures de style' },  // 4
+    { id:'type_ton',        name:'Type & ton du texte' },  // 2
+    { id:'vrai_faux',       name:'Vrai ou faux' },  // 2
+    { id:'vocabulaire',     name:'Le sens des mots' },  // 4
+    { id:'inference',       name:'Reading Between the Lines' },  // 4
+    { id:'reperage',        name:'Trouver la réponse dans le texte' },  // 18
+  ]},
+  'fr-grammaire': { subsections: [
+    { id:'negation',        name:'La négation' },  // 5
+    { id:'prepositions',    name:'Les prépositions' },  // 2
+    { id:'articles',        name:'Les articles' },  // 1
+    { id:'conjugaison',     name:'Conjugaison' },  // 5
+    { id:'divers',          name:'Divers' },  // 22
+  ]},
+  'fr-textes': { subsections: [
+    { id:'courriel',        name:'Courriels' },  // 5
+    { id:'affiche',         name:'Affiches & annonces' },  // 4
+    { id:'poeme',           name:'Poèmes' },  // 7
+    { id:'legende',         name:'Légendes & contes' },  // 5
+  ]},
+  'fr-images': { subsections: [
+    { id:'trois_images',    name:'Raconter en trois images' },  // 10
+    { id:'une_image',       name:'Décrire une image' },  // 10
+  ]},
+};
+
 
 // ── Subject-specific badges ────────────────────
 // Added to engine/registry.js GENERIC_BADGES for this pack only.
@@ -20,6 +111,7 @@ registerSubject({
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
   badges: G5F_BADGES,
+  syllabus: G5FR_SYLLABUS,
   chapters: [
     {
       id: 'fr-vocabulaire', name: 'Vocabulaire de base', icon: '🗣️',

@@ -298,7 +298,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 8;
+  const _CACHE_VERSION = 10;
   const _cacheKey = subjectId => `mm_qc_v${_CACHE_VERSION}_${subjectId}`;
 
   // Drop caches written by any earlier version, so a bump reclaims the space
@@ -406,6 +406,32 @@ const QuestionLoader = (() => {
     }
   }
 
+  // Which subject to fetch before the others. ACTIVE_PACK is set once the child
+  // picks a subject; on a fresh login nobody has picked yet, so fall back to the
+  // one the dashboard will open by default — the same `find(!comingSoon)` rule
+  // _activePack() uses, kept in step with it deliberately.
+  function _activeSubjectId(packs) {
+    if (!packs.length) return null;
+    const active = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) ? ACTIVE_PACK.id : null;
+    if (active && packs.some(p => p.id === active)) return active;
+    return (packs.find(p => !p.comingSoon) || packs[0]).id;
+  }
+
+  // Awaits EVERY subject in the grade. loadForStudent() deliberately no longer
+  // does that - it resolves as soon as the active subject is in, and prefetches
+  // the rest - so anything that reads across the whole bank (the admin report
+  // viewer looking up an arbitrary question id) has to ask for it explicitly.
+  async function loadAllForGrade(grade) {
+    const gs = window.GLOBAL_SETTINGS || {};
+    if (typeof SUBJECT_PACKS === 'undefined') return;
+    const packs = SUBJECT_PACKS.filter(p =>
+      p.grade === grade && !p.comingSoon &&
+      !(gs.disabled_grades   || []).includes(p.grade) &&
+      !(gs.disabled_subjects || []).includes(p.id)
+    );
+    await Promise.allSettled(packs.map(p => loadSubject(p.id)));
+  }
+
   // Pre-load the active subject as soon as we know who's logged in
   async function loadForStudent(grade, subjectHint) {
     const gs = window.GLOBAL_SETTINGS || {};
@@ -438,6 +464,25 @@ const QuestionLoader = (() => {
       return;
     }
 
+    // Fetch the subject the child is about to use FIRST, on its own, and leave
+    // the other four to load in the background.
+    //
+    // The batch call is one request but it is the whole grade — 346 KB gzipped
+    // for grade 5 — so a child opening Maths waited on English, French, History
+    // and Science too, on every cold cache. One subject is 26-100 KB. The rest
+    // still arrive, just after the screen is usable; startChapterDirect() waits
+    // on QuestionLoader anyway, so nothing can race ahead of its own questions.
+    const active = _activeSubjectId(packs);
+    if (active) {
+      await loadSubject(active);
+      const rest = packs.filter(p => p.id !== active && !_done.has(p.id));
+      if (rest.length) {
+        // Not awaited on purpose: this is prefetch, not a dependency.
+        Promise.all(rest.map(p => loadSubject(p.id))).catch(() => {});
+      }
+      return;
+    }
+
     // Batch fetch: one request for all subjects in this grade
     const batchOk = await _loadBatchForGrade(grade, packs);
     if (!batchOk) {
@@ -446,5 +491,28 @@ const QuestionLoader = (() => {
     }
   }
 
-  return { loadSubject, loadForStudent };
+  // ── Past papers ─────────────────────────────────────────────────────────
+  // Deliberately NOT pushed into STATIC_QUESTIONS: these have no `answer` and
+  // must never end up in a practice or exam pool that expects to mark them.
+  // Returned to the caller instead, and cached for the session only — they are
+  // read once, on a screen the child opens on purpose.
+  let _papersCache = null;
+
+  async function loadPastPapers(grade) {
+    if (_papersCache) return _papersCache.filter(q => !grade || String(q.grade) === String(grade));
+    if (_isFileProtocol) return [];          // no API in local file:// dev
+    try {
+      const headers = await _buildAuthHeaders();
+      if (!headers['Authorization'] && !headers['X-Student-Id']) return [];
+      const resp = await fetch('/.netlify/functions/questions?papers=1', { headers });
+      if (!resp.ok) { console.warn('[QuestionLoader] past papers', resp.status); return []; }
+      _papersCache = await resp.json();
+      return _papersCache.filter(q => !grade || String(q.grade) === String(grade));
+    } catch (e) {
+      console.warn('[QuestionLoader] past papers:', e.message);
+      return [];
+    }
+  }
+
+  return { loadSubject, loadForStudent, loadAllForGrade, loadPastPapers };
 })();

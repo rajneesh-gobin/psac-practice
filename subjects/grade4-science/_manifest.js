@@ -1,9 +1,80 @@
-﻿'use strict';
+'use strict';
+
+// Sub-topics for the Syllabus screen. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Trailing comments are the count at generation time.
+const G4SC_SYLLABUS = {
+  'g4sci-living': { subsections: [
+    { id:'mrs_gren',        name:'MRS GREN' },  // 7
+    { id:'living_nonliving', name:'Living or Non-living?' },  // 21
+    { id:'classification',  name:'Grouping & Classifying' },  // 3
+  ]},
+  'g4sci-plants': { subsections: [
+    { id:'diagrams',        name:'Diagrams to Label' },  // 4
+    { id:'photosynthesis',  name:'Photosynthesis' },  // 2
+    { id:'reproduction',    name:'Flowers, Seeds & Germination' },  // 7
+    { id:'parts',           name:'Parts & Their Jobs' },  // 15
+    { id:'growth',          name:'What Plants Need' },  // 3
+  ]},
+  'g4sci-animals': { subsections: [
+    { id:'photos',          name:'In Pictures' },  // 4
+    { id:'endangered',      name:'Endangered & Endemic Species' },  // 4
+    { id:'food_chains',     name:'Food Chains' },  // 14
+    { id:'habitats',        name:'Habitats' },  // 6
+    { id:'classification',  name:'Grouping & Classifying' },  // 3
+  ]},
+  'g4sci-air': { subsections: [
+    { id:'properties',      name:'Properties' },  // 16
+    { id:'composition',     name:'What Air Is Made Of' },  // 4
+    { id:'breathing',       name:'Breathing & Burning' },  // 5
+    { id:'pollution',       name:'Pollution' },  // 4
+    { id:'wind_pressure',   name:'Wind & Air Pressure' },  // 2
+  ]},
+  'g4sci-water': { subsections: [
+    { id:'states',          name:'States of Matter' },  // 20
+    { id:'water_cycle',     name:'The Water Cycle' },  // 6
+    { id:'uses',            name:'How We Use It' },  // 4
+    { id:'pollution',       name:'Pollution' },  // 1
+  ]},
+  'g4sci-materials': { subsections: [
+    { id:'natural_manmade', name:'Natural or Man-made?' },  // 12
+    { id:'properties',      name:'Properties' },  // 18
+    { id:'waste',           name:'Waste & Recycling' },  // 1
+  ]},
+  'g4sci-energy': { subsections: [
+    { id:'renewable',       name:'Renewable & Non-renewable' },  // 5
+    { id:'sources',         name:'Sources of Energy' },  // 12
+    { id:'forms',           name:'Forms of Energy' },  // 9
+    { id:'transfer',        name:'Energy Changes' },  // 3
+    { id:'saving',          name:'Saving Energy' },  // 2
+  ]},
+  'g4sci-protect': { subsections: [
+    { id:'pollution',       name:'Pollution' },  // 19
+    { id:'deforestation',   name:'Trees & Deforestation' },  // 3
+    { id:'recycling',       name:'Reduce, Reuse, Recycle' },  // 5
+    { id:'endangered',      name:'Endangered & Endemic Species' },  // 2
+    { id:'why_protect',     name:'Why We Protect It' },  // 2
+  ]},
+  'g4sci-enr-animals': { subsections: [
+    { id:'photos',          name:'In Pictures' },  // 6
+    { id:'endangered',      name:'Endangered & Endemic Species' },  // 3
+    { id:'food_chains',     name:'Food Chains' },  // 3
+    { id:'habitats',        name:'Habitats' },  // 5
+    { id:'classification',  name:'Grouping & Classifying' },  // 1
+    { id:'adaptation',      name:'Adaptation' },  // 1
+  ]},
+  'g4sci-enr-equipment': { subsections: [
+    { id:'photos',          name:'In Pictures' },  // 7
+    { id:'measuring',       name:'Measuring Instruments' },  // 12
+  ]},
+};
+
 // Grade 4 Science - MIE Mauritius Curriculum
 registerSubject({
   id: 'grade4-science', name: 'Science', grade: 4, icon: '🔬', subject: 'Science',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: false, noDifficulty: true,
+  syllabus: G4SC_SYLLABUS,
   chapters: [
     { id: 'g4sci-living',    name: 'Living & Non-Living Things',  icon: '🌿', examWeight: 3,
       syllabus: 'Characteristics of living things (MRS GREN: Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition). Differences between living and non-living things. What living things need to survive.' },

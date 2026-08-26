@@ -13,8 +13,19 @@
 # Scoped per-function on purpose: subjects/ is ~2.5 MB across 147 files, and a
 # global [functions] included_files would ship all of it inside push-send,
 # notify, weekly-digest and every other function that never reads a question.
+# ⚠ question-bundles/** is why this function is fast or slow, and it was MISSING.
+# build-questions.js writes netlify/question-bundles/*.json at deploy time, and
+# questions.js reads them with fs.readFileSync. esbuild only traces require()
+# and import — a runtime path is invisible to it — and the directory is
+# gitignored, so nothing else would ever pull it in. Without this line
+# fs.existsSync() was false in production and EVERY request fell through to the
+# vm fallback: read ~30 question source files, execute them in a sandbox, per
+# call. Measured TTFB was ~0.95 s for one subject.
+#
+# subjects/** stays as the fallback's safety net, for a deploy where the build
+# step produced no bundles.
 [functions."questions"]
-  included_files = ["subjects/**"]
+  included_files = ["subjects/**", "netlify/question-bundles/**"]
 
 [functions."assignment-open"]
   included_files = ["subjects/**"]
@@ -41,8 +52,17 @@
 [functions."weekly-digest"]
   schedule = "0 9 * * 0"
 
+# ⚠ SCHEDULE DELIBERATELY OFF. Every 15 minutes is 2,880 invocations a month,
+# each one querying Supabase, and push_subscriptions is EMPTY — nobody has ever
+# granted notification permission, so every single run sent nothing.
+#
+# Re-enable the moment there is a real subscriber:
+#   SELECT count(*) FROM push_subscriptions;
+# then uncomment the line below. The 15-minute cadence is not arbitrary —
+# reminder_time is stored as "HH:MM" and push-reminders.js matches a window
+# around now, so a coarser schedule would silently skip people's chosen times.
 [functions."push-reminders"]
-  schedule = "*/15 * * * *"
+# schedule = "*/15 * * * *"
 
 [functions."assignment-cleanup"]
   schedule = "17 2 * * *"

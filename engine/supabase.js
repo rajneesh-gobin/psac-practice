@@ -1,47 +1,56 @@
-﻿'use strict';
+'use strict';
 // ══════════════════════════════════════════════
-//  Supabase client - shared singleton
+//  PSAC Exam Practice - Supabase client - shared singleton
 //  Loaded before all other engine files.
 // ══════════════════════════════════════════════
 const SB_URL = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 const SB_KEY = 'sb_publishable_wERRrZnvoWhM5faN2AaYpQ_CpTNHFkL';
-const _sb = (typeof supabase !== 'undefined')
-  ? supabase.createClient(SB_URL, SB_KEY, {
-      auth: { persistSession: true, storageKey: 'mm_sb_auth' }
-    })
-  : null;
 
 // ── Student session token ──────────────────────────────────────────────────
 // Students are not Supabase Auth users, so RLS cannot key off auth.uid().
-// mint_student_session() issues an opaque token; we send it on every PostgREST
-// request as `x-student-token`, and current_student_id() resolves it inside the
-// database. Policies then read as  student_id = current_student_id().
+// mint_student_session() issues an opaque token; we send it on every
+// PostgREST request as `x-student-token`, and current_student_id() resolves
+// it inside the database. Policies then read as student_id = current_student_id().
 //
-// _sb.rest is the PostgrestClient. Its `headers` object is read at request-build
-// time, so mutating it here affects every subsequent .from() and .rpc() call —
-// no need to recreate the client and invalidate existing references to _sb.
+// This used to mutate `_sb.rest.headers` directly - an UNDOCUMENTED internal
+// of the bundled PostgrestClient. The CDN script tag pins only the major
+// version (@2), so it silently floats to whatever the latest 2.x.x release is
+// on every page load with no commit in this repo to point at - and that
+// internal shape is not part of supabase-js's public contract. It can (and,
+// evidenced by students suddenly getting 401s on every write - progress,
+// question reports, login_events - the moment they logged in, did) stop
+// actually reaching outgoing requests without ever throwing or logging
+// anything, because `_sb.rest.headers` staying a defined, mutable-looking
+// object is not proof that mutating it still affects a request built later.
+//
+// A custom `fetch` passed via the client's own `global.fetch` option is,
+// by contrast, documented, stable public API: SupabaseClient threads
+// `this.fetch` through to every sub-client it builds, including PostgREST,
+// Storage and Realtime. Every request the client ever makes runs through
+// this function, and the current token (if any) is read fresh and attached
+// on every single call - there is no cached object to go stale, get replaced,
+// or silently stop mattering on some future version bump.
 const SB_STUDENT_TOKEN_HEADER = 'x-student-token';
+let _studentToken = null;
 
-let _sbTokenWarned = false;
+function _sbFetch(input, init = {}) {
+  const headers = new Headers(init.headers || {});
+  if (_studentToken) headers.set(SB_STUDENT_TOKEN_HEADER, _studentToken);
+  else headers.delete(SB_STUDENT_TOKEN_HEADER);
+  return fetch(input, Object.assign({}, init, { headers }));
+}
+
+const _sb = (typeof supabase !== 'undefined')
+  ? supabase.createClient(SB_URL, SB_KEY, {
+      auth: { persistSession: true, storageKey: 'mm_sb_auth' },
+      global: { fetch: _sbFetch },
+    })
+  : null;
 
 function setStudentToken(token) {
-  if (!_sb) return;
-  if (!_sb.rest || !_sb.rest.headers) {
-    // Fail loudly: if this ever stops working (supabase-js internals change),
-    // every student RLS check silently sees NULL and the app looks empty
-    // rather than broken. Better to see it in the console immediately.
-    if (!_sbTokenWarned) {
-      _sbTokenWarned = true;
-      console.error('[supabase] _sb.rest.headers unavailable - the x-student-token header cannot be set. Student data access will fail.');
-    }
-    return;
-  }
-  if (token) _sb.rest.headers[SB_STUDENT_TOKEN_HEADER] = token;
-  else       delete _sb.rest.headers[SB_STUDENT_TOKEN_HEADER];
+  _studentToken = token || null;
 }
 
 function getStudentToken() {
-  return (_sb && _sb.rest && _sb.rest.headers)
-    ? (_sb.rest.headers[SB_STUDENT_TOKEN_HEADER] || null)
-    : null;
+  return _studentToken;
 }

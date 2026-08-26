@@ -1,4 +1,77 @@
-﻿'use strict';
+'use strict';
+
+// Sub-topics for the Syllabus screen. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Trailing comments are the count at generation time.
+const G5HG_SYLLABUS = {
+  'discovery': { subsections: [
+    { id:'mascarene',       name:'The Mascarene Islands' },  // 13
+    { id:'portuguese',      name:'The Portuguese' },  // 9
+    { id:'dutch',           name:'The Dutch' },  // 1
+    { id:'routes',          name:'Sea Routes' },  // 7
+  ]},
+  'settlement': { subsections: [
+    { id:'dutch',           name:'The Dutch' },  // 16
+    { id:'french',          name:'The French' },  // 13
+    { id:'british',         name:'The British' },  // 7
+  ]},
+  'trade-agri': { subsections: [
+    { id:'crops',           name:'Crops & Plantations' },  // 23
+    { id:'personalities',   name:'Key Personalities' },  // 10
+  ]},
+  'port-louis': { subsections: [
+    { id:'buildings',       name:'Buildings & Landmarks' },  // 25
+    { id:'history',         name:'How It Began' },  // 4
+    { id:'today',           name:'Port Louis Today' },  // 1
+  ]},
+  'natural-env': { subsections: [
+    { id:'relief',          name:'Mountains & Relief' },  // 24
+    { id:'water',           name:'Rivers & Lakes' },  // 1
+    { id:'coast',           name:'Coast, Reef & Lagoon' },  // 4
+  ]},
+  'volcanism': { subsections: [
+    { id:'craters',         name:'Craters & Dormant Volcanoes' },  // 6
+    { id:'active',          name:'Active Volcanoes' },  // 9
+    { id:'formation',       name:'How the Islands Formed' },  // 14
+    { id:'rocks_soil',      name:'Rocks & Soil' },  // 2
+  ]},
+  'env-problems': { subsections: [
+    { id:'beach_erosion',   name:'Beach Erosion' },  // 8
+    { id:'soil_erosion',    name:'Soil Erosion' },  // 7
+    { id:'pollution',       name:'Pollution & Waste' },  // 14
+    { id:'conservation',    name:'Conservation' },  // 1
+  ]},
+  'map-skills': { subsections: [
+    { id:'coordinates',     name:'Coordinates & Grids' },  // 13
+    { id:'directions',      name:'Compass Directions' },  // 5
+    { id:'scale',           name:'Scale & Distance' },  // 2
+    { id:'symbols',         name:'Map Symbols & Key' },  // 2
+    { id:'using_map',       name:'Using a Map' },  // 18
+  ]},
+  'g5ge-weather': { subsections: [
+    { id:'cyclones',        name:'Cyclones & Warnings' },  // 7
+    { id:'instruments',     name:'Weather Instruments' },  // 5
+    { id:'seasons',         name:'The Two Seasons' },  // 3
+    { id:'impact',          name:'Weather & Our Work' },  // 2
+    { id:'elements',        name:'Elements of Weather' },  // 10
+  ]},
+  'g5enr-personalities': { subsections: [
+    { id:'portraits',       name:'Who Is This? (Photos)' },  // 2
+    { id:'independence',    name:'Independence & Leaders' },  // 11
+    { id:'colonial',        name:'The Colonial Era' },  // 8
+  ]},
+  'g5enr-landmarks': { subsections: [
+    { id:'unesco',          name:'UNESCO World Heritage' },  // 3
+    { id:'buildings',       name:'Buildings & Landmarks' },  // 23
+    { id:'nature',          name:'Gardens & Natural Sites' },  // 5
+  ]},
+  'g5enr-world': { subsections: [
+    { id:'volcanoes',       name:'Volcanoes' },  // 5
+    { id:'indian_ocean',    name:'Around the Indian Ocean' },  // 15
+    { id:'world',           name:'Around the World' },  // 11
+  ]},
+};
+
 // Grade 5 History & Geography - MIE Mauritius Syllabus (Grades 3-6, 2015)
 // HISTORY: Discovery of Mauritius, Settlement, Trade/Agriculture, Port Louis
 // GEOGRAPHY: Natural Environment, Volcanic Origin, Environmental Problems, Map Skills
@@ -6,6 +79,7 @@ registerSubject({
   id: 'grade5-history', name: 'History & Geography', grade: 5, icon: '🌍', subject: 'History & Geography',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: false, noDifficulty: true,
+  syllabus: G5HG_SYLLABUS,
   chapters: [
     // ── HISTORY ────────────────────────────────────────────────────────────────
     { id: 'discovery',    name: 'Discovery of Mauritius & Rodrigues',       icon: '⛵', examWeight: 4,

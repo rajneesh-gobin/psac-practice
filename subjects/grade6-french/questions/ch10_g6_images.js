@@ -92,7 +92,7 @@ const _G6IMG_C3 = `<div style="background:#eef2ff;border-left:4px solid #6366f1;
 STATIC_QUESTIONS.push(
 
   // ── IMAGE UNIQUE : la plantation ───────────────────────────────────
-  makeMCQ({ id:`g6fr-img-001`, chapterId:`g6fr-images`, difficulty:1,
+  makeMCQ({ id:`g6fr-img-001`, chapterId:'g6fr-images', subsection:'une_image', difficulty:1,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Que font les trois élèves ?`,
     options:[
       `Ils plantent un jeune arbre`,
@@ -104,14 +104,14 @@ STATIC_QUESTIONS.push(
     hint:`Regarde le trou dans la terre et ce qui s'y trouve.`,
     explanation:`Un <b>jeune plant</b> aux larges feuilles vertes est posé dans un trou, et les élèves rebouchent autour : <b>ils plantent un arbre</b>. Sur une image d'examen, l'action principale se lit toujours au centre.` }),
 
-  makeMCQ({ id:`g6fr-img-002`, chapterId:`g6fr-images`, difficulty:1,
+  makeMCQ({ id:`g6fr-img-002`, chapterId:'g6fr-images', subsection:'une_image', difficulty:1,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Combien d'élèves y a-t-il au premier plan ?`,
     options:[`Trois`, `Deux`, `Cinq`, `Un seul`],
     answer:`Trois`,
     hint:`Ne compte que ceux qui sont penchés sur le trou, pas les personnes du fond.`,
     explanation:`<b>Trois élèves</b> sont penchés autour du trou. D'autres personnes apparaissent à l'arrière-plan, mais elles ne participent pas à l'action : il faut bien distinguer les deux plans.` }),
 
-  makeMCQ({ id:`g6fr-img-003`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-003`, chapterId:'g6fr-images', subsection:'une_image', difficulty:2,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Comment sont habillés les élèves ?`,
     options:[
       `Ils portent un uniforme scolaire rose`,
@@ -123,21 +123,21 @@ STATIC_QUESTIONS.push(
     hint:`Les trois enfants sont habillés de la même façon - c'est un indice.`,
     explanation:`Les trois enfants portent le même <b>uniforme rose à carreaux</b>, ce qui montre qu'ils viennent de la même école. Un vêtement identique sur plusieurs personnages est toujours une information à relever.` }),
 
-  makeMCQ({ id:`g6fr-img-004`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-004`, chapterId:'g6fr-images', subsection:'une_image', difficulty:2,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quel outil les élèves utilisent-ils ?`,
     options:[`Des pelles`, `Un marteau`, `Un arrosoir`, `Un râteau`],
     answer:`Des pelles`,
     hint:`Regarde ce que tiennent les deux élèves qui sont debout.`,
     explanation:`Deux élèves tiennent une <b>pelle</b> pour creuser et remettre la terre. Le champ lexical du jardinage - <i>planter, creuser, la pelle, la terre, le trou, les racines, le jeune plant</i> - est exactement ce qu'il faut réemployer.` }),
 
-  makeMCQ({ id:`g6fr-img-005`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-005`, chapterId:'g6fr-images', subsection:'une_image', difficulty:2,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}De quelle couleur est la terre ?`,
     options:[`Rouge-orangé`, `Noire`, `Blanche comme du sable`, `Grise comme du béton`],
     answer:`Rouge-orangé`,
     hint:`Regarde autour du trou et sous les pieds des élèves.`,
     explanation:`La terre est <b>rouge-orangé</b>, typique des sols tropicaux. Nommer une couleur précise (« rouge-orangé » plutôt que « marron ») rend une description bien plus vivante.` }),
 
-  makeMCQ({ id:`g6fr-img-006`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-006`, chapterId:'g6fr-images', subsection:'une_image', difficulty:3,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Qu'y a-t-il à l'ARRIÈRE-PLAN de l'image ?`,
     options:[
       `D'autres personnes, des bâtiments et des voitures`,
@@ -149,7 +149,7 @@ STATIC_QUESTIONS.push(
     hint:`L'arrière-plan, c'est tout ce qui est loin, derrière les élèves.`,
     explanation:`Au fond on distingue <b>d'autres personnes debout</b>, des <b>bâtiments</b> et des <b>voitures</b> : la plantation a lieu lors d'un événement collectif. Le correcteur attend ce vocabulaire : <b>au premier plan / au second plan / à l'arrière-plan</b>.` }),
 
-  makeMCQ({ id:`g6fr-img-007`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-007`, chapterId:'g6fr-images', subsection:'une_image', difficulty:3,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quel est le MESSAGE que cette image fait passer ?`,
     options:[
       `Les jeunes peuvent agir concrètement pour protéger l'environnement`,
@@ -161,7 +161,7 @@ STATIC_QUESTIONS.push(
     hint:`Qui agit sur l'image, et pour quel résultat à long terme ?`,
     explanation:`Ce sont des <b>élèves</b>, et non des adultes, qui plantent l'arbre : l'image montre que <b>les jeunes peuvent agir</b> pour l'environnement. Distinguer ce que l'image <i>montre</i> de ce qu'elle <i>veut dire</i> est une compétence attendue en Grade 6.` }),
 
-  makeMCQ({ id:`g6fr-img-008`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-008`, chapterId:'g6fr-images', subsection:'une_image', difficulty:3,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Transforme au DISCOURS INDIRECT : L'enseignante dit : « Arrosez bien le jeune arbre. »`,
     options:[
       `L'enseignante leur demande d'arroser bien le jeune arbre.`,
@@ -173,7 +173,7 @@ STATIC_QUESTIONS.push(
     hint:`Un ordre rapporté indirectement devient : demander DE + infinitif.`,
     explanation:`Un <b>impératif</b> rapporté au discours indirect devient <b>demander de + infinitif</b> : « Arrosez ! » → « elle leur <b>demande d'arroser</b> ». On supprime les guillemets et les deux-points, et on ne garde jamais la forme conjuguée de l'ordre.` }),
 
-  makeMCQ({ id:`g6fr-img-009`, chapterId:`g6fr-images`, difficulty:4,
+  makeMCQ({ id:`g6fr-img-009`, chapterId:'g6fr-images', subsection:'une_image', difficulty:4,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Quelle phrase exprime correctement une HYPOTHÈSE sur la suite ?`,
     options:[
       `Si chaque classe plante un arbre, la cour de l'école sera bientôt ombragée.`,
@@ -185,7 +185,7 @@ STATIC_QUESTIONS.push(
     hint:`Après « si », on n'emploie jamais le futur ni le conditionnel.`,
     explanation:`L'hypothèse réalisable se construit <b>si + présent → futur simple</b> : « <b>Si</b> chaque classe <b>plante</b>…, la cour <b>sera</b>… ». Écrire « si… planterait » ou « si… plantera » est une faute classique : après <b>si</b>, pas de <i>-rais</i> ni de <i>-ra</i>.` }),
 
-  makeMCQ({ id:`g6fr-img-010`, chapterId:`g6fr-images`, difficulty:4,
+  makeMCQ({ id:`g6fr-img-010`, chapterId:'g6fr-images', subsection:'une_image', difficulty:4,
     question:`${_G6IMG_C1}${_G6IMG_PLANTATION}Tu dois rédiger dix lignes sur cette image. Quel plan te fera gagner le plus de points ?`,
     options:[
       `Situer la scène, décrire l'arrière-plan puis le premier plan, rapporter une parole, puis dire ce que l'image défend`,
@@ -198,7 +198,7 @@ STATIC_QUESTIONS.push(
     explanation:`Le plan attendu combine <b>description organisée</b> (arrière-plan → premier plan), <b>vie</b> (une parole rapportée, un sentiment) et <b>interprétation</b> (le message de l'image). Une simple énumération d'objets reste au niveau du Grade 4 et plafonne la note.` }),
 
   // ── TROIS IMAGES : l'oiseau blessé ─────────────────────────────────
-  makeMCQ({ id:`g6fr-img-011`, chapterId:`g6fr-images`, difficulty:1,
+  makeMCQ({ id:`g6fr-img-011`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:1,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Que découvrent l'enfant et sa mère sur l'image 1 ?`,
     options:[
       `Un petit oiseau tombé par terre dans le parc`,
@@ -210,7 +210,7 @@ STATIC_QUESTIONS.push(
     hint:`Regarde ce qui se trouve au sol, aux pieds de l'enfant.`,
     explanation:`Sur l'image 1, dans un parc (banc, arbre, soleil), l'enfant et sa mère trouvent un <b>petit oiseau à terre</b>. C'est la <b>situation initiale</b> et, en même temps, l'<b>élément déclencheur</b> du récit.` }),
 
-  makeMCQ({ id:`g6fr-img-012`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-012`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Que font les personnages sur l'image 2 ?`,
     options:[
       `Ils soignent l'oiseau à la maison et lui donnent de l'eau`,
@@ -222,7 +222,7 @@ STATIC_QUESTIONS.push(
     hint:`Le décor a changé : regarde la table, la boîte et la goutte d'eau.`,
     explanation:`Le décor est devenu un <b>intérieur</b> : l'oiseau est installé dans une boîte sur la table, avec de l'<b>eau</b> à côté. L'image 2 correspond aux <b>péripéties</b> : ce que les personnages font pour résoudre le problème.` }),
 
-  makeMCQ({ id:`g6fr-img-013`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-013`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Comment se termine l'histoire ?`,
     options:[
       `L'oiseau guéri s'envole et la famille lui fait au revoir`,
@@ -234,7 +234,7 @@ STATIC_QUESTIONS.push(
     hint:`Sur l'image 3, où se trouve l'oiseau, et que fait la main levée ?`,
     explanation:`Sur l'image 3, on est de retour dehors : l'oiseau <b>vole dans le ciel</b> et la famille <b>fait au revoir</b> de la main. C'est la <b>situation finale</b> : le problème est résolu et la situation a changé pour de bon.` }),
 
-  makeMCQ({ id:`g6fr-img-014`, chapterId:`g6fr-images`, difficulty:2,
+  makeMCQ({ id:`g6fr-img-014`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quel changement de LIEU se produit entre les trois images ?`,
     options:[
       `Le parc, puis la maison, puis de nouveau l'extérieur`,
@@ -246,7 +246,7 @@ STATIC_QUESTIONS.push(
     hint:`Compare la couleur du sol et le décor de chaque vignette.`,
     explanation:`Le récit se déplace : <b>parc → maison → extérieur</b>. Signaler ces changements avec des compléments de lieu (« <i>de retour à la maison</i> », « <i>le lendemain, dans le jardin</i> ») rend le texte beaucoup plus clair.` }),
 
-  makeMCQ({ id:`g6fr-img-015`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-015`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:3,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quelle phrase mélange correctement l'IMPARFAIT et le PASSÉ COMPOSÉ ?`,
     options:[
       `Nous nous promenions dans le parc quand mon fils a aperçu un oiseau blessé.`,
@@ -258,7 +258,7 @@ STATIC_QUESTIONS.push(
     hint:`L'action longue qui sert de décor va à l'imparfait ; l'événement bref qui la coupe va au passé composé.`,
     explanation:`L'<b>imparfait</b> plante le décor qui dure (« nous nous <b>promenions</b> ») et le <b>passé composé</b> marque l'événement bref qui l'interrompt (« il <b>a aperçu</b> »). C'est la règle des deux plans du récit : <i>arrière-plan à l'imparfait, premier plan au passé composé</i>.` }),
 
-  makeMCQ({ id:`g6fr-img-016`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-016`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:3,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quelle phrase ajoute un SENTIMENT que les images ne montrent pas directement ?`,
     options:[
       `Mon fils s'est agenouillé, le cœur serré, devant le petit corps immobile.`,
@@ -270,7 +270,7 @@ STATIC_QUESTIONS.push(
     hint:`Cherche l'expression qui décrit une émotion, pas un objet.`,
     explanation:`« <b>le cœur serré</b> » exprime une <b>émotion</b>, que le dessin ne peut pas montrer. Les images donnent les actions ; c'est à l'auteur d'ajouter les sentiments, les pensées et les sensations - c'est ce qui distingue un récit d'une simple légende d'image.` }),
 
-  makeMCQ({ id:`g6fr-img-017`, chapterId:`g6fr-images`, difficulty:3,
+  makeMCQ({ id:`g6fr-img-017`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:3,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quelle est la MORALE de cette histoire ?`,
     options:[
       `Prendre soin des animaux, même les plus petits, est une belle action`,
@@ -282,13 +282,13 @@ STATIC_QUESTIONS.push(
     hint:`Que gagnent les personnages à la fin, et qu'ont-ils fait pour cela ?`,
     explanation:`La famille prend soin d'un oiseau fragile, et l'histoire se termine sur sa <b>liberté retrouvée</b> : la morale est qu'il faut <b>protéger les animaux</b>. Une bonne conclusion de récit peut énoncer cette leçon en une phrase, sans la répéter trois fois.` }),
 
-  makeTF({ id:`g6fr-img-018`, chapterId:`g6fr-images`, difficulty:2,
+  makeTF({ id:`g6fr-img-018`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Dans un récit à partir d'images, il est permis d'inventer des détails qui ne sont pas dessinés, à condition qu'ils restent cohérents avec l'histoire.`,
     answer:true,
     hint:`Pense aux prénoms, aux paroles et aux sentiments des personnages.`,
     explanation:`<b>Vrai.</b> On attend même que tu inventes : des <b>prénoms</b>, des <b>paroles</b>, des <b>sentiments</b>, un <b>moment de la journée</b>. La seule règle est la <b>cohérence</b> : rien ne doit contredire ce que montrent les images.` }),
 
-  makeMCQ({ id:`g6fr-img-019`, chapterId:`g6fr-images`, difficulty:4,
+  makeMCQ({ id:`g6fr-img-019`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:4,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Tu dois écrire le récit à la première personne, du point de vue de la MÈRE. Quelle ouverture convient ?`,
     options:[
       `Ce dimanche-là, j'avais emmené mon fils au parc pour profiter du beau temps.`,
@@ -300,7 +300,7 @@ STATIC_QUESTIONS.push(
     hint:`À la première personne, la mère dit « je » et parle de « mon fils ».`,
     explanation:`Du point de vue de la mère, il faut « <b>je</b> » et « <b>mon fils</b> ». Les propositions 2 et 4 sont à la <b>troisième personne</b> ; la 3 adopte le point de vue de l'oiseau, ce qui n'est pas ce qui est demandé. Choisir le bon <b>narrateur</b> et s'y tenir jusqu'au bout est essentiel.` }),
 
-  makeMCQ({ id:`g6fr-img-020`, chapterId:`g6fr-images`, difficulty:4,
+  makeMCQ({ id:`g6fr-img-020`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:4,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Ton récit doit faire dix lignes. Comment répartis-tu le mieux ton texte ?`,
     options:[
       `Deux lignes d'introduction, puis trois lignes par image, en respectant l'ordre`,

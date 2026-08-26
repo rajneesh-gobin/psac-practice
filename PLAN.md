@@ -4,6 +4,11 @@ Started 2026-08-25. Read this file first when resuming — it reflects verified
 code/DB state, not doc claims. Background: `PROJECT_OVERVIEW.md`, `ARCHITECTURE.md`
 and the doc-audit findings below explain *why* each item matters.
 
+⚠ The `supabase-*.sql` filenames below are a **historical record of what was run**.
+On 2026-08-26 those 24 files were consolidated into `supabase-migration.sql` (the
+one file to run) and `supabase-schema.sql` (a dump of the live schema); the
+originals are in git history only.
+
 ---
 
 ## 0. Uncommitted local changes (not from this session)

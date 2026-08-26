@@ -25,69 +25,69 @@ const _SVG_STATES = `<svg viewBox="0 0 290 78" width="290" height="78" style="di
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5sci-wm-001', chapterId:'water-matter', difficulty:1,
+  makeMCQ({ id:'g5sci-wm-001', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'What are the three states of matter?',
     options:['Solid, liquid and gas','Hot, warm and cold','Ice, water and cloud','Hard, soft and rough'],
     answer:'Solid, liquid and gas',
     hint:'Think about ice, water and steam - what are these three forms called?',
     explanation:'Matter exists in three states: <b>solid</b> (e.g. ice), <b>liquid</b> (e.g. water) and <b>gas</b> (e.g. steam/water vapour).' }),
 
-  makeMCQ({ id:'g5sci-wm-002', chapterId:'water-matter', difficulty:1,
+  makeMCQ({ id:'g5sci-wm-002', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'What is the state of water when it is in the form of ice?',
     options:['Liquid','Gas','Solid','Vapour'],
     answer:'Solid',
     hint:'Ice is frozen water - very hard and rigid.',
     explanation:'Ice is water in its <b>solid</b> state. When water is cooled to 0°C or below, it freezes and becomes solid ice.' }),
 
-  makeMCQ({ id:'g5sci-wm-003', chapterId:'water-matter', difficulty:1,
+  makeMCQ({ id:'g5sci-wm-003', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'At what temperature does water freeze (change from liquid to solid)?',
     options:['100°C','50°C','0°C','−20°C'],
     answer:'0°C',
     hint:'The freezing point and melting point of water are the same temperature.',
     explanation:'Water freezes at <b>0°C</b> (zero degrees Celsius). Below this temperature, liquid water turns into solid ice.' }),
 
-  makeMCQ({ id:'g5sci-wm-004', chapterId:'water-matter', difficulty:1,
+  makeMCQ({ id:'g5sci-wm-004', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'At what temperature does water boil (change from liquid to gas)?',
     options:['0°C','37°C','80°C','100°C'],
     answer:'100°C',
     hint:'This is the boiling point of water at normal atmospheric pressure.',
     explanation:'Water boils at <b>100°C</b>. At this temperature, liquid water turns into water vapour (steam/gas).' }),
 
-  makeTF({ id:'g5sci-wm-005', chapterId:'water-matter', difficulty:1,
+  makeTF({ id:'g5sci-wm-005', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'Steam is water in its liquid state.',
     answer:false,
     hint:'Think about what steam looks like - can you hold it?',
     explanation:'Steam is water in its <b>gas</b> state, not liquid. Water becomes steam (water vapour) when it is heated to 100°C.' }),
 
-  makeMCQ({ id:'g5sci-wm-006', chapterId:'water-matter', difficulty:1,
+  makeMCQ({ id:'g5sci-wm-006', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'What do we call the process of water changing from a liquid to a gas?',
     options:['Freezing','Condensation','Evaporation','Melting'],
     answer:'Evaporation',
     hint:'The sun causes this to happen to water in puddles, rivers and the sea.',
     explanation:'<b>Evaporation</b> is the process by which liquid water changes into water vapour (gas) when heated.' }),
 
-  makeMCQ({ id:'g5sci-wm-007', chapterId:'water-matter', difficulty:1,
+  makeMCQ({ id:'g5sci-wm-007', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'What do we call the process of water vapour (gas) changing back into liquid water?',
     options:['Evaporation','Melting','Condensation','Boiling'],
     answer:'Condensation',
     hint:'Think about water droplets forming on a cold glass of water on a hot day.',
     explanation:'<b>Condensation</b> is the process by which water vapour (gas) cools down and turns back into liquid water. Clouds and morning dew form this way.' }),
 
-  makeMCQ({ id:'g5sci-wm-008', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-008', chapterId:'water-matter', subsection:'diagrams', difficulty:2,
     question:`${_SVG_STATES}Looking at the diagram above, what process takes water from <b>liquid</b> to <b>solid</b>?`,
     options:['Evaporation','Condensation','Melting','Freezing'],
     answer:'Freezing',
     hint:'In the diagram, follow the blue arrow going from LIQUID back to SOLID.',
     explanation:'<b>Freezing</b> is the process of liquid water cooling to 0°C and turning into solid ice. In the diagram, the blue ← arrow from LIQUID to SOLID shows freezing.' }),
 
-  makeMCQ({ id:'g5sci-wm-009', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-009', chapterId:'water-matter', subsection:'diagrams', difficulty:2,
     question:`${_SVG_STATES}According to the diagram, what process takes water from <b>solid</b> to <b>liquid</b>?`,
     options:['Condensation','Freezing','Melting','Evaporation'],
     answer:'Melting',
     hint:'Follow the red arrow from SOLID to LIQUID.',
     explanation:'<b>Melting</b> is the process of solid ice heating up to 0°C and turning into liquid water.' }),
 
-  makeMCQ({ id:'g5sci-wm-010', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-010', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'Why does water in a puddle on the road disappear on a sunny day even though no one drinks it?',
     options:[
       'The road absorbs the water',
@@ -99,14 +99,14 @@ STATIC_QUESTIONS.push(
     hint:'The sun heats the water - what happens when water is heated?',
     explanation:'The sun\'s heat causes the water to <b>evaporate</b> - changing from liquid water into invisible water vapour in the air.' }),
 
-  makeMCQ({ id:'g5sci-wm-011', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-011', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'In the water cycle, water evaporates from the sea, rises, cools and forms clouds. What process forms the clouds?',
     options:['Freezing','Evaporation','Melting','Condensation'],
     answer:'Condensation',
     hint:'Clouds are made of tiny water droplets - water vapour has turned back into liquid.',
     explanation:'When water vapour rises high into the atmosphere and cools, it undergoes <b>condensation</b> - turning back into tiny liquid water droplets that form clouds.' }),
 
-  makeMCQ({ id:'g5sci-wm-012', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-012', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'What happens to butter when it is left in a warm room?',
     options:[
       'It evaporates into the air',
@@ -118,35 +118,35 @@ STATIC_QUESTIONS.push(
     hint:'Butter is a solid. What does heat do to solids?',
     explanation:'Butter is a solid that <b>melts</b> when warmed - it changes from solid to liquid. This is the same process as ice melting into water.' }),
 
-  makeMCQ({ id:'g5sci-wm-013', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-013', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'A cold glass of water is left on a table on a humid day. Small droplets of water appear on the OUTSIDE of the glass. By which process do these droplets form?',
     options:['Melting','Evaporation','Condensation','Freezing'],
     answer:'Condensation',
     hint:'The glass is cold - what happens to warm, moist air when it touches the cold surface?',
     explanation:'The water droplets on the outside of the cold glass form by <b>condensation</b>. Warm, moist air surrounding the glass is cooled when it touches the cold surface. This causes the water vapour in the air to change back into liquid water droplets.' }),
 
-  makeMCQ({ id:'g5sci-wm-014', chapterId:'water-matter', difficulty:1,
+  makeMCQ({ id:'g5sci-wm-014', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'What is the liquid found inside a thermometer?',
     options:['Alcohol or mercury','Petrol','Cooking oil','Salt water'],
     answer:'Alcohol or mercury',
     hint:'Traditional thermometers use one of two special liquids that expand and contract with temperature.',
     explanation:'Thermometers use either <b>alcohol</b> (usually red-coloured) or <b>mercury</b> (shiny silver liquid). Both expand when heated and contract when cooled, causing the liquid column to rise or fall and show the temperature.' }),
 
-  makeMCQ({ id:'g5sci-wm-015', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-015', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'What happens to the level of mercury inside a thermometer when the temperature INCREASES?',
     options:['It falls','It stays the same','It rises','It disappears'],
     answer:'It rises',
     hint:'Mercury expands when heated - if it takes up more space, which way does it go in the narrow tube?',
     explanation:'When temperature increases, the mercury (or alcohol) in the thermometer <b>expands</b> and takes up more volume. Since the tube is narrow, the liquid is pushed <b>upward</b>, causing the level to rise.' }),
 
-  makeMCQ({ id:'g5sci-wm-016', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-016', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'A table shows air temperatures measured at different times: 6 a.m. = 15°C, 10 a.m. = 18°C, 1 p.m. = 23°C, 4 p.m. = 21°C, 8 p.m. = 19°C. At what time was the temperature highest?',
     options:['6 a.m.','10 a.m.','1 p.m.','8 p.m.'],
     answer:'1 p.m.',
     hint:'Find the largest number in the table.',
     explanation:'The highest temperature was <b>23°C at 1 p.m.</b> This is because the sun is highest in the sky around midday, providing maximum heating. By the evening the temperature falls as the sun sets.' }),
 
-  makeMCQ({ id:'g5sci-wm-017', chapterId:'water-matter', difficulty:3,
+  makeMCQ({ id:'g5sci-wm-017', chapterId:'water-matter', subsection:'states', difficulty:3,
     question:'The temperature was lower at 6 a.m. than at 1 p.m. What is the BEST explanation for this?',
     options:[
       'It rains in the morning, making the temperature lower',
@@ -158,7 +158,7 @@ STATIC_QUESTIONS.push(
     hint:'During the night, no sunlight heats the ground. The sun only starts warming things after it rises.',
     explanation:'At <b>6 a.m.</b>, the sun has just risen (or not yet risen). The ground has been losing heat overnight with no sunlight to replace it, so the temperature is at its lowest point of the day. By 1 p.m., the sun has been heating the ground for several hours, making it the warmest time.' }),
 
-  makeMCQ({ id:'g5sci-wm-018', chapterId:'water-matter', difficulty:3,
+  makeMCQ({ id:'g5sci-wm-018', chapterId:'water-matter', subsection:'states', difficulty:3,
     question:'Ice cubes are put in a glass of water. After some time, the ice melts. What happens to the temperature of the water as the ice melts?',
     options:[
       'It increases because ice releases heat energy',
@@ -170,14 +170,14 @@ STATIC_QUESTIONS.push(
     hint:'The ice needs energy (heat) to melt - where does this energy come from?',
     explanation:'To melt, ice must <b>absorb heat energy</b>. This heat comes from the surrounding water. As heat is drawn out of the water, the water becomes <b>cooler</b>. This is why ice is used to keep drinks cold - the melting process removes heat from the liquid.' }),
 
-  makeMCQ({ id:'g5sci-wm-019', chapterId:'water-matter', difficulty:2,
+  makeMCQ({ id:'g5sci-wm-019', chapterId:'water-matter', subsection:'properties', difficulty:2,
     question:'Give ONE property of ice that makes skating possible.',
     options:['Ice is hard','Ice is slippery','Ice is transparent','Ice is white'],
     answer:'Ice is slippery',
     hint:'Think about why you can slide on ice.',
     explanation:'Ice is <b>slippery</b> - this is the property that makes skating possible. Ice skate blades glide smoothly over the ice surface with very little friction, allowing the skater to slide.' }),
 
-  makeMCQ({ id:'g5sci-wm-020', chapterId:'water-matter', difficulty:4,
+  makeMCQ({ id:'g5sci-wm-020', chapterId:'water-matter', subsection:'states', difficulty:4,
     question:'A scientist puts identical ice cubes in three containers: one in a freezer (−10°C), one in a warm room (25°C) and one in boiling water (100°C). Rank them from slowest to fastest melting and explain WHY.',
     options:[
       'Freezer slowest (ice cannot melt at −10°C), warm room next, boiling water fastest (most heat available)',

@@ -74,8 +74,15 @@ const Search = (() => {
   }
 
   // ── Build question index (lazy) ────────────────────────────────────────────
+  // Rebuilt whenever the bank has grown. QuestionLoader no longer waits for all
+  // five subjects before the app becomes usable - it loads the active one and
+  // streams the rest in behind it - so an index built the moment Search first
+  // opened could be missing four subjects, and caching it unconditionally meant
+  // those questions stayed unsearchable for the whole session.
+  let _qIndexSize = -1;
   function buildQIndex() {
-    if (_qIndex) return _qIndex;
+    if (_qIndex && _qIndexSize === STATIC_QUESTIONS.length) return _qIndex;
+    _qIndexSize = STATIC_QUESTIONS.length;
     const chMeta = _getChMeta();
     _qIndex = STATIC_QUESTIONS
       .filter(q => q && q.question && q.chapterId)
@@ -184,7 +191,7 @@ const Search = (() => {
           onmousedown="event.preventDefault()"
           onclick="Search.selectSuggestion(this.dataset.val)"
           onmouseenter="Search._hoverSugg(${i})">
-        <span class="text-gray-400 dark:text-gray-500 mr-2 text-xs">🔍</span>${_esc(item.s)}
+        <span class="text-gray-500 dark:text-gray-400 mr-2 text-xs">🔍</span>${_esc(item.s)}
       </div>`
     ).join('');
     box.classList.remove('hidden');
@@ -284,13 +291,13 @@ const Search = (() => {
         <div class="flex items-start gap-2">
           <span class="text-lg select-none">${_esc(e.meta.subjectIcon || '📚')}</span>
           <div class="flex-1 min-w-0">
-            <div class="text-[11px] text-gray-400 dark:text-gray-500 mb-0.5">${_esc(e.meta.subjectName)} &middot; ${_esc(e.meta.chapterName)} ${diff}</div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400 mb-0.5">${_esc(e.meta.subjectName)} &middot; ${_esc(e.meta.chapterName)} ${diff}</div>
             <div class="text-sm text-gray-700 dark:text-gray-200 leading-snug line-clamp-2">${_highlight(e.q.question)}</div>
           </div>
         </div>
       </div>`;
     }
-    if (entries.length > 10) html += `<div class="text-xs text-gray-400 dark:text-gray-500 text-center py-1">... and ${entries.length - 10} more</div>`;
+    if (entries.length > 10) html += `<div class="text-xs text-gray-500 dark:text-gray-400 text-center py-1">... and ${entries.length - 10} more</div>`;
     html += '</div>';
     return html;
   }
@@ -328,7 +335,7 @@ const Search = (() => {
     const subjFilter = document.getElementById('search-subject-filter')?.value || '';
 
     if (rawQ.length < 2) {
-      if (resultsEl) resultsEl.innerHTML = `<div class="text-center py-16 text-gray-400 dark:text-gray-500 select-none">
+      if (resultsEl) resultsEl.innerHTML = `<div class="text-center py-16 text-gray-500 dark:text-gray-400 select-none">
         <div class="text-5xl mb-3">🔍</div>
         <p class="text-sm">Type at least 2 characters to search.</p>
         <p class="text-xs mt-1">Try a topic, a name, or a keyword from your syllabus.</p>
@@ -382,13 +389,13 @@ const Search = (() => {
 
       if (syllOwn.length) {
         html += `<div class="mb-3">
-          <div class="text-xs text-gray-400 dark:text-gray-500 font-semibold mb-2">Syllabus Topics</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2">Syllabus Topics</div>
           ${_renderChCards(syllOwn, false)}
         </div>`;
       }
 
       if (qOwn.length) {
-        html += `<div class="text-xs text-gray-400 dark:text-gray-500 font-semibold mb-2">Questions (${qOwn.length})</div>
+        html += `<div class="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2">Questions (${qOwn.length})</div>
           ${_renderQCards(qOwn, false)}
           <button onclick="Search.practiceOwn(${JSON.stringify(qOwn.map(e => e.q.id))})"
             class="btn-primary w-full mt-3 text-sm">
@@ -399,14 +406,14 @@ const Search = (() => {
 
     } else if (totalOther > 0) {
       html += `<div class="mb-4 text-center py-6 bg-gray-50 dark:bg-gray-800/40 rounded-2xl">
-        <p class="text-sm text-gray-400 dark:text-gray-500">No matches in your grade (Grade ${studentGrade}).</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">No matches in your grade (Grade ${studentGrade}).</p>
       </div>`;
 
     } else {
       html += `<div class="text-center py-16">
         <div class="text-5xl mb-3">😕</div>
         <p class="text-sm text-gray-500 dark:text-gray-400">No questions found for "${_esc(rawQ)}".</p>
-        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">${_mode === 'exact'
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${_mode === 'exact'
           ? 'Switch to "Similar" mode to find questions with similar words.'
           : 'Try different keywords or check spelling.'}</p>
       </div>`;
@@ -443,7 +450,7 @@ const Search = (() => {
                   ▶ Revise Grade ${g} questions
                 </button>`
               : gQs.length
-                ? `<p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-center">🔒 Cross-grade practice is off - ask a parent to enable it.</p>`
+                ? `<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">🔒 Cross-grade practice is off - ask a parent to enable it.</p>`
                 : ''}
           </div>`;
         }

@@ -1,9 +1,66 @@
-﻿'use strict';
+'use strict';
+
+// Sub-topics for the Syllabus screen. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Trailing comments are the count at generation time.
+const G4HG_SYLLABUS = {
+  'g4hist-locality': { subsections: [
+    { id:'types_locality',  name:'Town, Village & Coast' },  // 18
+    { id:'change',          name:'Then & Now' },  // 7
+    { id:'buildings',       name:'Buildings & Landmarks' },  // 6
+  ]},
+  'g4hist-community': { subsections: [
+    { id:'festivals',       name:'Festivals & Celebrations' },  // 15
+    { id:'religions',       name:'Religions' },  // 3
+    { id:'food_dress',      name:'Food & Dress' },  // 4
+    { id:'languages',       name:'Languages' },  // 2
+    { id:'diversity',       name:'Our Diverse Island' },  // 7
+  ]},
+  'g4hist-voyages': { subsections: [
+    { id:'traders',         name:'Traders of the Indian Ocean' },  // 25
+    { id:'reasons',         name:'Why They Travelled' },  // 2
+    { id:'ships',           name:'Ships & Navigation' },  // 4
+  ]},
+  'g4ge-natural-env': { subsections: [
+    { id:'relief',          name:'Mountains & Relief' },  // 14
+    { id:'water',           name:'Rivers & Lakes' },  // 4
+    { id:'coast',           name:'Coast, Reef & Lagoon' },  // 9
+    { id:'natural_manmade', name:'Natural or Man-made?' },  // 4
+  ]},
+  'g4ge-weather': { subsections: [
+    { id:'seasons',         name:'The Two Seasons' },  // 8
+    { id:'instruments',     name:'Weather Instruments' },  // 13
+    { id:'elements',        name:'Elements of Weather' },  // 6
+    { id:'cyclones',        name:'Cyclones & Warnings' },  // 4
+  ]},
+  'g4ge-map-skills': { subsections: [
+    { id:'directions',      name:'Compass Directions' },  // 12
+    { id:'symbols',         name:'Map Symbols & Key' },  // 5
+    { id:'parts_of_map',    name:'Parts of a Map' },  // 4
+    { id:'using_map',       name:'Using a Map' },  // 10
+  ]},
+  'g4enr-explorers': { subsections: [
+    { id:'portraits',       name:'Who Is This? (Photos)' },  // 3
+    { id:'explorers',       name:'Famous Explorers' },  // 24
+    { id:'mauritian',       name:'Mauritian Figures' },  // 4
+  ]},
+  'g4enr-mauritius': { subsections: [
+    { id:'places',          name:'Places of Mauritius' },  // 5
+    { id:'symbols',         name:'Map Symbols & Key' },  // 9
+    { id:'facts',           name:'Facts About Mauritius' },  // 17
+  ]},
+  'g4enr-world': { subsections: [
+    { id:'continents',      name:'The Continents' },  // 22
+    { id:'oceans',          name:'Oceans & Seas' },  // 9
+  ]},
+};
+
 // Grade 4 History & Geography - MIE Mauritius Syllabus (Grades 3-6, 2015)
 registerSubject({
   id: 'grade4-history', name: 'History & Geography', grade: 4, icon: '🌍', subject: 'History & Geography',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: false, noDifficulty: true,
+  syllabus: G4HG_SYLLABUS,
   chapters: [
     { id: 'g4hist-locality',  name: 'Locality: Past & Present',  icon: '🏙️', examWeight: 4,
       syllabus: 'Types of locality: urban (town/city), rural (village/countryside) and coastal. Change and continuity: comparing old and new buildings, monuments, places of worship, means of transport. Using evidence (photographs, drawings, objects) to compare the past with the present. Simple timeline of events in the locality.' },

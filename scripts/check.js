@@ -167,7 +167,7 @@ function checkSqlSearchPath() {
   let sqls;
   try { sqls = fs.readdirSync(ROOT).filter(f => f.endsWith('.sql')); } catch { return; }
   for (const f of sqls) {
-    if (f === 'supabase-db-patch.sql' || f === 'supabase-schema-snapshot.sql') continue;  // legacy / generated
+    if (f === 'supabase-migration.sql' || f === 'supabase-schema.sql') continue;  // legacy / generated
     const src = read(path.join(ROOT, f)) || '';
     if (!/\b(crypt|gen_salt|digest|gen_random_bytes)\s*\(/.test(src)) continue;
     if (/SET\s+search_path\s*=\s*public\s+AS/.test(src))

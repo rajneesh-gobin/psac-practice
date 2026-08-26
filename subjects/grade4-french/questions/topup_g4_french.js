@@ -53,21 +53,21 @@ Elle prit doucement l'oiseau dans ses mains et courut chez sa voisine, Mme Ramsa
 STATIC_QUESTIONS.push(
 
   // ── AFFICHE ────────────────────────────────────────────────────────────
-  makeMCQ({ id:'g4fr-txt-050', chapterId:'g4fr-textes', difficulty:1,
+  makeMCQ({ id:'g4fr-txt-050', chapterId:'g4fr-textes', subsection:'affiche', difficulty:1,
     question:`${_G4TP_AFFICHE}Quel type de texte est-ce ?`,
     options:['Une recette', 'Un récit', 'Une carte postale', 'Une affiche'],
     answer:'Une affiche',
     hint:'Cherche les réponses à QUOI ? QUAND ? OÙ ? dans le texte — quel type de document répond toujours à ces trois questions ?',
     explanation:`C'est une <b>affiche</b> : elle annonce un événement (Journée de l'Environnement) avec une date, une heure, un lieu et des activités. Elle s'adresse à un groupe et utilise l'impératif (« Apportez »). Une affiche répond toujours à : <b>QUOI ? QUAND ? OÙ ?</b>` }),
 
-  makeMCQ({ id:'g4fr-txt-051', chapterId:'g4fr-textes', difficulty:1,
+  makeMCQ({ id:'g4fr-txt-051', chapterId:'g4fr-textes', subsection:'affiche', difficulty:1,
     question:`${_G4TP_AFFICHE}À quelle heure se termine la Journée de l'Environnement ?`,
     options:['9 h 00', '10 h 00', '12 h 00', '16 h 00'],
     answer:'12 h 00',
     hint:`Cherche les deux horaires séparés par le mot « à ».`,
     explanation:`L'affiche indique « de <b>9 h 00 à 12 h 00</b> ». La journée commence à 9 h 00 et se termine à <b>12 h 00</b>. Sur une affiche, lis toujours les deux horaires avec soin pour savoir quand arriver et quand partir.` }),
 
-  makeMCQ({ id:'g4fr-txt-052', chapterId:'g4fr-textes', difficulty:2,
+  makeMCQ({ id:'g4fr-txt-052', chapterId:'g4fr-textes', subsection:'affiche', difficulty:2,
     question:`${_G4TP_AFFICHE}Qu'est-ce que l'affiche demande aux élèves d'apporter ?`,
     options:['Des livres et des crayons', 'Des gants et leur bonne humeur', `Des plants de fleurs`, `De l'argent pour l'entrée`],
     answer:'Des gants et leur bonne humeur',
@@ -75,14 +75,14 @@ STATIC_QUESTIONS.push(
     explanation:`« Apportez <b>vos gants et votre bonne humeur</b> ! » Le verbe « Apportez » est à l'impératif : c'est une consigne donnée aux élèves. L'entrée est gratuite, donc il n'y a pas d'argent à payer.` }),
 
   // ── RECETTE ────────────────────────────────────────────────────────────
-  makeMCQ({ id:'g4fr-txt-053', chapterId:'g4fr-textes', difficulty:1,
+  makeMCQ({ id:'g4fr-txt-053', chapterId:'g4fr-textes', subsection:'recette', difficulty:1,
     question:`${_G4TP_RECETTE}Combien de mangues faut-il pour faire le jus de mangue ?`,
     options:['1', '2', '3', '4'],
     answer:'2',
     hint:`La liste « Il te faut » donne tous les ingrédients et leurs quantités.`,
     explanation:`« Il te faut : <b>2 mangues</b> bien mûres… » Dans une recette, la liste des ingrédients se lit <i>avant</i> de commencer les étapes, pour s'assurer qu'on a tout ce qu'il faut.` }),
 
-  makeMCQ({ id:'g4fr-txt-054', chapterId:'g4fr-textes', difficulty:2,
+  makeMCQ({ id:'g4fr-txt-054', chapterId:'g4fr-textes', subsection:'recette', difficulty:2,
     question:`${_G4TP_RECETTE}Pourquoi faut-il l'aide d'un adulte à l'étape 1 ?`,
     options:[
       `Parce que les mangues sont trop lourdes à porter`,
@@ -94,7 +94,7 @@ STATIC_QUESTIONS.push(
     hint:`Pense à l'outil qu'on utilise pour éplucher un fruit.`,
     explanation:`Pour éplucher une mangue, on utilise un couteau, ce qui est dangereux pour un enfant. La recette écrit « avec l'aide d'un adulte » <b>exactement à cette étape</b>, pas aux autres. Dans une recette, l'avertissement est toujours placé là où se trouve le risque.` }),
 
-  makeMCQ({ id:'g4fr-txt-055', chapterId:'g4fr-textes', difficulty:2,
+  makeMCQ({ id:'g4fr-txt-055', chapterId:'g4fr-textes', subsection:'recette', difficulty:2,
     question:`${_G4TP_RECETTE}À quel mode sont les verbes « Épluche », « Coupe », « Ajoute » dans cette recette ?`,
     options:[`À l'imparfait`, 'Au passé composé', `À l'impératif`, 'Au futur simple'],
     answer:`À l'impératif`,
@@ -102,21 +102,21 @@ STATIC_QUESTIONS.push(
     explanation:`<b>Épluche, Coupe, Ajoute, Mixe, Verse</b> : ces verbes sont à l'<b>impératif</b>. À l'impératif, il n'y a <b>pas de pronom sujet</b> devant le verbe. On l'utilise pour donner des ordres ou des consignes — dans les recettes, les notices et les affiches.` }),
 
   // ── CARTE POSTALE ──────────────────────────────────────────────────────
-  makeMCQ({ id:'g4fr-txt-056', chapterId:'g4fr-textes', difficulty:1,
+  makeMCQ({ id:'g4fr-txt-056', chapterId:'g4fr-textes', subsection:'legende', difficulty:1,
     question:`${_G4TP_CARTE}Qui a écrit cette carte postale ?`,
     options:['Layla', 'Sofia', `Un cousin de Grand Baie`, `La famille de Sofia`],
     answer:'Sofia',
     hint:`Sur une carte postale, celui qui écrit signe à la fin du message.`,
     explanation:`La carte est signée « <b>Sofia</b> ». Layla est la personne qui <i>reçoit</i> la carte, comme on le voit dans la formule d'adresse « Chère Layla ». Ne confonds pas l'expéditeur (celui qui écrit) et le destinataire (celui qui reçoit).` }),
 
-  makeMCQ({ id:'g4fr-txt-057', chapterId:'g4fr-textes', difficulty:2,
+  makeMCQ({ id:'g4fr-txt-057', chapterId:'g4fr-textes', subsection:'legende', difficulty:2,
     question:`${_G4TP_CARTE}Quel mot montre que Sofia a DÉJÀ vu le dauphin ?`,
     options:['Demain', 'Incroyable', 'Hier', 'Bientôt'],
     answer:'Hier',
     hint:`Cherche le mot qui situe l'action dans le passé.`,
     explanation:`« <b>Hier</b>, nous avons fait du bateau et j'ai vu un dauphin. » Le mot <i>hier</i> indique le <b>passé</b> : c'est déjà arrivé. « Demain » indique le futur (« nous rentrons »). « Incroyable » est un adjectif qui exprime une émotion, pas un moment dans le temps.` }),
 
-  makeMCQ({ id:'g4fr-txt-058', chapterId:'g4fr-textes', difficulty:3,
+  makeMCQ({ id:'g4fr-txt-058', chapterId:'g4fr-textes', subsection:'legende', difficulty:3,
     question:`${_G4TP_CARTE}La carte parle de trois moments différents. Lequel se passe dans le FUTUR ?`,
     options:[
       `L'arrivée à Grand Baie`,
@@ -129,21 +129,21 @@ STATIC_QUESTIONS.push(
     explanation:`« <b>Demain</b>, nous rentrons à Curepipe. » <i>Demain</i> = futur. <i>Hier</i> = passé (le dauphin). Le présent, c'est « Il fait très chaud » et « la mer est magnifique ». Une carte postale peut mélanger les trois temps pour raconter un séjour.` }),
 
   // ── RÉCIT ──────────────────────────────────────────────────────────────
-  makeMCQ({ id:'g4fr-txt-059', chapterId:'g4fr-textes', difficulty:1,
+  makeMCQ({ id:'g4fr-txt-059', chapterId:'g4fr-textes', subsection:'recit', difficulty:1,
     question:`${_G4TP_RECIT}Qu'est-ce que Priya trouve devant elle ?`,
     options:[`Un chaton blessé`, `Un petit chien`, `Un petit oiseau avec une aile blessée`, `Un nid vide`],
     answer:`Un petit oiseau avec une aile blessée`,
     hint:`Priya entend d'abord un bruit, puis quelque chose tombe sur l'herbe.`,
     explanation:`« <b>un petit oiseau tomba sur l'herbe devant elle. Il avait une aile blessée.</b> » Priya entend un bruit dans les buissons, mais c'est l'oiseau qui tombe sur l'herbe devant elle. Une question « Qu'est-ce que ? » demande une <b>chose</b> : lis attentivement pour ne pas confondre le bruit (cause) et l'oiseau (effet).` }),
 
-  makeMCQ({ id:'g4fr-txt-060', chapterId:'g4fr-textes', difficulty:2,
+  makeMCQ({ id:'g4fr-txt-060', chapterId:'g4fr-textes', subsection:'recit', difficulty:2,
     question:`${_G4TP_RECIT}Quel mot signal montre qu'un événement INATTENDU arrive dans le récit ?`,
     options:[`Un matin`, `Quand`, `Soudain`, `Doucement`],
     answer:`Soudain`,
     hint:`Dans un récit, certains mots annoncent un changement brusque.`,
     explanation:`« <b>Soudain</b>, un petit oiseau tomba sur l'herbe devant elle. » Le mot <i>soudain</i> est un <b>mot signal</b> qui introduit un événement inattendu et rapide. Autres mots similaires : <i>tout à coup, brusquement, d'un seul coup</i>. À comparer avec <i>d'abord, ensuite, enfin</i> qui indiquent l'<b>ordre</b> des actions.` }),
 
-  makeMCQ({ id:'g4fr-txt-061', chapterId:'g4fr-textes', difficulty:3,
+  makeMCQ({ id:'g4fr-txt-061', chapterId:'g4fr-textes', subsection:'recit', difficulty:3,
     question:`${_G4TP_RECIT}Pourquoi Priya court-elle chez Mme Ramsamy plutôt que chez ses parents ?`,
     options:[
       `Parce que ses parents ne sont pas à la maison`,

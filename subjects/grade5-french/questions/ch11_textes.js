@@ -90,7 +90,7 @@ Comme s'il devait quelque chose à la mer.
 STATIC_QUESTIONS.push(
 
   // ── TEXTE A : le courriel ──────────────────────────────────────────
-  makeMCQ({ id:`g5fr-txt-001`, chapterId:`fr-textes`, difficulty:1,
+  makeMCQ({ id:`g5fr-txt-001`, chapterId:'fr-textes', subsection:'courriel', difficulty:1,
     question:`${_G5TXT_COURRIEL}Quel est le but principal de ce courriel ?`,
     options:[
       `Autoriser sa fille à participer à une sortie scolaire`,
@@ -102,14 +102,14 @@ STATIC_QUESTIONS.push(
     hint:`La ligne « Objet » d'un courriel annonce son but en quelques mots.`,
     explanation:`L'objet est « <b>Autorisation pour la sortie au Jardin de Pamplemousses</b> » et le deuxième paragraphe dit « J'autorise avec plaisir ma fille Anjali à y participer ». Tout le reste n'est que détail au service de ce but.` }),
 
-  makeMCQ({ id:`g5fr-txt-002`, chapterId:`fr-textes`, difficulty:1,
+  makeMCQ({ id:`g5fr-txt-002`, chapterId:'fr-textes', subsection:'courriel', difficulty:1,
     question:`${_G5TXT_COURRIEL}Combien Mme Appadoo a-t-elle déjà payé ?`,
     options:[`Rs 250`, `Rs 150`, `Rs 300`, `Rien pour l'instant`],
     answer:`Rs 250`,
     hint:`Cherche la phrase qui parle du secrétariat.`,
     explanation:`« J'ai <b>déjà remis les Rs 250</b> au secrétariat et je joins le reçu. » Le mot <b>déjà</b> montre que le paiement est fait, et non prévu.` }),
 
-  makeMCQ({ id:`g5fr-txt-003`, chapterId:`fr-textes`, difficulty:2,
+  makeMCQ({ id:`g5fr-txt-003`, chapterId:'fr-textes', subsection:'courriel', difficulty:2,
     question:`${_G5TXT_COURRIEL}Pourquoi la mère parle-t-elle des arachides ?`,
     options:[
       `Parce que sa fille y est allergique et que le pique-nique doit être vérifié`,
@@ -121,7 +121,7 @@ STATIC_QUESTIONS.push(
     hint:`La cause et la demande sont dans la même phrase.`,
     explanation:`« Anjali est <b>allergique aux arachides</b> : le pique-nique contiendra-t-il des cacahuètes ? » Une allergie est une raison médicale : c'est pour cela qu'un parent la met par écrit plutôt que de la dire au portail.` }),
 
-  makeMCQ({ id:`g5fr-txt-004`, chapterId:`fr-textes`, difficulty:3,
+  makeMCQ({ id:`g5fr-txt-004`, chapterId:'fr-textes', subsection:'courriel', difficulty:3,
     question:`${_G5TXT_COURRIEL}Quelle formule montre que ce courriel est FORMEL (et non un message à une amie) ?`,
     options:[
       `« Veuillez agréer, Madame, mes salutations distinguées. »`,
@@ -133,7 +133,7 @@ STATIC_QUESTIONS.push(
     hint:`Cherche la formule de politesse tout à la fin.`,
     explanation:`« <b>Veuillez agréer, Madame, mes salutations distinguées</b> » est la formule de politesse des lettres et courriels <b>formels</b>. À une amie, on écrirait plutôt « Bises » ou « À bientôt ». Les autres phrases sont polies, mais elles s'écriraient aussi dans un message ordinaire.` }),
 
-  makeMCQ({ id:`g5fr-txt-005`, chapterId:`fr-textes`, difficulty:3,
+  makeMCQ({ id:`g5fr-txt-005`, chapterId:'fr-textes', subsection:'courriel', difficulty:3,
     question:`${_G5TXT_COURRIEL}Pourquoi la mère écrit-elle « (mère d'Anjali Appadoo, Grade 5B) » sous sa signature ?`,
     options:[
       `Pour que la maîtresse sache immédiatement de quelle élève il s'agit`,
@@ -146,21 +146,21 @@ STATIC_QUESTIONS.push(
     explanation:`Une enseignante reçoit beaucoup de messages. Donner <b>le nom de l'enfant et la classe</b> lui permet de retrouver l'élève tout de suite. Dans un écrit formel, bien s'identifier à la fin est une marque de politesse et fait gagner du temps au lecteur.` }),
 
   // ── TEXTE B : la lettre amicale ────────────────────────────────────
-  makeMCQ({ id:`g5fr-txt-006`, chapterId:`fr-textes`, difficulty:1,
+  makeMCQ({ id:`g5fr-txt-006`, chapterId:'fr-textes', subsection:'poeme', difficulty:1,
     question:`${_G5TXT_LETTRE}Où se trouvent l'adresse et la date dans cette lettre ?`,
     options:[`En haut à droite`, `En haut à gauche`, `En bas à droite`, `Sous la signature`],
     answer:`En haut à droite`,
     hint:`Regarde comment l'adresse et la date sont alignées.`,
     explanation:`Dans une lettre, l'adresse de celui qui écrit et la date se placent <b>en haut à droite</b>. La formule d'appel (« Chère Mamie, ») commence ensuite à gauche.` }),
 
-  makeMCQ({ id:`g5fr-txt-007`, chapterId:`fr-textes`, difficulty:2,
+  makeMCQ({ id:`g5fr-txt-007`, chapterId:'fr-textes', subsection:'poeme', difficulty:2,
     question:`${_G5TXT_LETTRE}Qu'y avait-il dans le colis d'anniversaire ?`,
     options:[`Un cahier bleu`, `Un pot de confiture de goyaves`, `Un livre de mathématiques`, `Une photo de Mamie`],
     answer:`Un cahier bleu`,
     hint:`Le remerciement est dans le tout premier paragraphe.`,
     explanation:`« Le <b>cahier bleu</b> est magnifique et j'ai déjà commencé à y écrire mes histoires. » La confiture, elle, sera <i>envoyée à</i> Mamie plus tard : ce n'est pas un cadeau reçu.` }),
 
-  makeMCQ({ id:`g5fr-txt-008`, chapterId:`fr-textes`, difficulty:2,
+  makeMCQ({ id:`g5fr-txt-008`, chapterId:'fr-textes', subsection:'poeme', difficulty:2,
     question:`${_G5TXT_LETTRE}Comment sait-on que Yashna a progressé en mathématiques ?`,
     options:[
       `Elle a eu huit sur dix au contrôle de mardi`,
@@ -172,13 +172,13 @@ STATIC_QUESTIONS.push(
     hint:`Cherche une preuve chiffrée, pas une opinion.`,
     explanation:`Elle a raté les quatre premières opérations, Papa l'a aidée, puis « <b>J'ai eu huit sur dix au contrôle de mardi !</b> » La note est la <b>preuve</b>. Quand on demande « comment sait-on ? », il faut toujours montrer la preuve dans le texte.` }),
 
-  makeTF({ id:`g5fr-txt-009`, chapterId:`fr-textes`, difficulty:2,
+  makeTF({ id:`g5fr-txt-009`, chapterId:'fr-textes', subsection:'poeme', difficulty:2,
     question:`${_G5TXT_LETTRE}Yashna pose une question à sa grand-mère dans sa lettre.`,
     answer:true,
     hint:`Cherche un point d'interrogation vers la fin.`,
     explanation:`<b>Vrai.</b> Elle écrit : « Est-ce qu'il te fait encore mal quand il pleut ? » Poser une question, c'est inviter l'autre à répondre : cela fait vivre la correspondance.` }),
 
-  makeMCQ({ id:`g5fr-txt-010`, chapterId:`fr-textes`, difficulty:3,
+  makeMCQ({ id:`g5fr-txt-010`, chapterId:'fr-textes', subsection:'poeme', difficulty:3,
     question:`${_G5TXT_LETTRE}Quel élément montre qu'il s'agit d'une lettre AMICALE et non d'une lettre officielle ?`,
     options:[
       `Elle se termine par « Je t'embrasse très fort » et parle du genou de Mamie`,
@@ -191,14 +191,14 @@ STATIC_QUESTIONS.push(
     explanation:`Date, paragraphes et formule d'appel se trouvent dans les deux types de lettres. Ce qui marque la lettre amicale, c'est la <b>formule affectueuse</b> (« Je t'embrasse très fort ») et la <b>question personnelle</b> sur la santé de Mamie. Une lettre officielle finirait par « Veuillez agréer… ».` }),
 
   // ── TEXTE C : le récit ─────────────────────────────────────────────
-  makeMCQ({ id:`g5fr-txt-011`, chapterId:`fr-textes`, difficulty:1,
+  makeMCQ({ id:`g5fr-txt-011`, chapterId:'fr-textes', subsection:'legende', difficulty:1,
     question:`${_G5TXT_RECIT}À quelle heure la lumière s'est-elle éteinte ?`,
     options:[`À huit heures et demie`, `À six heures`, `À minuit`, `Au lever du soleil`],
     answer:`À huit heures et demie`,
     hint:`Le texte donne deux heures : attribue la bonne à la bonne action.`,
     explanation:`« <b>À huit heures et demie</b>, la lumière s'est éteinte. » Six heures du soir, c'est le moment où le ciel a changé de couleur, plus tôt. Un bon lecteur relie chaque heure à son événement.` }),
 
-  makeMCQ({ id:`g5fr-txt-012`, chapterId:`fr-textes`, difficulty:2,
+  makeMCQ({ id:`g5fr-txt-012`, chapterId:'fr-textes', subsection:'legende', difficulty:2,
     question:`${_G5TXT_RECIT}« Le manguier se pliait comme un arc. » Qu'est-ce que cette comparaison montre ?`,
     options:[
       `Le vent était si fort qu'il courbait l'arbre`,
@@ -210,7 +210,7 @@ STATIC_QUESTIONS.push(
     hint:`Imagine la forme d'un arc de tir à l'arc.`,
     explanation:`Un arc est courbé en demi-cercle. Dire que l'arbre se pliait « <b>comme un arc</b> » montre la <b>force du vent</b>. Une image construite avec <i>comme</i> s'appelle une <b>comparaison</b>.` }),
 
-  makeMCQ({ id:`g5fr-txt-013`, chapterId:`fr-textes`, difficulty:2,
+  makeMCQ({ id:`g5fr-txt-013`, chapterId:'fr-textes', subsection:'legende', difficulty:2,
     question:`${_G5TXT_RECIT}Pourquoi Maman remplit-elle tous les seaux et toutes les bassines ?`,
     options:[
       `Pour stocker de l'eau au cas où l'eau serait coupée`,
@@ -222,7 +222,7 @@ STATIC_QUESTIONS.push(
     hint:`Que font toutes les familles mauriciennes avant un cyclone ?`,
     explanation:`Stocker de l'eau fait partie de la <b>préparation au cyclone</b> : pendant un cyclone, l'électricité et l'eau sont souvent coupées. Le texte ne le dit pas : tu le <b>déduis</b> de ce que tu sais des cyclones.` }),
 
-  makeMCQ({ id:`g5fr-txt-014`, chapterId:`fr-textes`, difficulty:3,
+  makeMCQ({ id:`g5fr-txt-014`, chapterId:'fr-textes', subsection:'legende', difficulty:3,
     question:`${_G5TXT_RECIT}Le texte se termine par : « Je me souviens mieux des bougies que du vent. » Que veut dire l'auteur ?`,
     options:[
       `Ce qui lui reste, c'est la famille réunie, pas la peur`,
@@ -234,7 +234,7 @@ STATIC_QUESTIONS.push(
     hint:`À quoi servaient les bougies ? Que s'est-il passé à la lumière des bougies ?`,
     explanation:`Les bougies, c'est le moment où Papa a ri et a dit « Maintenant, on raconte des histoires » : la <b>partie chaleureuse</b> d'une nuit effrayante. Terminer sur les bougies plutôt que sur le vent montre ce que l'auteur retient vraiment. C'est une <b>chute qui donne du sens</b> au récit.` }),
 
-  makeMCQ({ id:`g5fr-txt-015`, chapterId:`fr-textes`, difficulty:4,
+  makeMCQ({ id:`g5fr-txt-015`, chapterId:'fr-textes', subsection:'legende', difficulty:4,
     question:`${_G5TXT_RECIT}Ta classe doit écrire un récit personnel sur une tempête. Quelle première phrase reprend le mieux la technique de ce texte ?`,
     options:[
       `J'avais huit ans le soir où le toit de notre cabanon s'est envolé.`,
@@ -247,21 +247,21 @@ STATIC_QUESTIONS.push(
     explanation:`Le texte commence par « <b>J'avais neuf ans la nuit où</b> le cyclone est passé sur Maurice » : première personne, un moment précis, et une accroche qui donne envie de lire la suite. Les autres propositions sont des débuts de <b>texte documentaire</b> ou de <b>rédaction scolaire</b>, pas de récit.` }),
 
   // ── TEXTE D : l'annonce ────────────────────────────────────────────
-  makeMCQ({ id:`g5fr-txt-016`, chapterId:`fr-textes`, difficulty:1,
+  makeMCQ({ id:`g5fr-txt-016`, chapterId:'fr-textes', subsection:'affiche', difficulty:1,
     question:`${_G5TXT_ANNONCE}Quels jours le club de natation s'entraîne-t-il ?`,
     options:[`Le mercredi et le samedi`, `Le lundi et le jeudi`, `Tous les jours de la semaine`, `Le samedi seulement`],
     answer:`Le mercredi et le samedi`,
     hint:`Les jours sont écrits en gras, en haut de l'annonce.`,
     explanation:`Entraînement les <b>mercredis et samedis</b>, de 14 h 00 à 16 h 00. Une annonce met les informations essentielles en gras pour que même un lecteur pressé les remarque.` }),
 
-  makeMCQ({ id:`g5fr-txt-017`, chapterId:`fr-textes`, difficulty:2,
+  makeMCQ({ id:`g5fr-txt-017`, chapterId:'fr-textes', subsection:'affiche', difficulty:2,
     question:`${_G5TXT_ANNONCE}La grande sœur de Rahul est déjà membre du club. Combien Rahul paiera-t-il par mois ?`,
     options:[`Rs 100`, `Rs 150`, `Rs 50`, `Rien`],
     answer:`Rs 100`,
     hint:`Lis les mots entre parenthèses après la cotisation.`,
     explanation:`« Cotisation : Rs 150 par mois (<b>Rs 100 si un frère ou une sœur est déjà membre</b>) ». La sœur de Rahul est membre : il paiera donc <b>Rs 100</b>. Les conditions entre parenthèses changent le prix - lis-les toujours.` }),
 
-  makeMCQ({ id:`g5fr-txt-018`, chapterId:`fr-textes`, difficulty:3,
+  makeMCQ({ id:`g5fr-txt-018`, chapterId:'fr-textes', subsection:'affiche', difficulty:3,
     question:`${_G5TXT_ANNONCE}Pourquoi l'annonce précise-t-elle que Coach Devi entraîne des nageurs nationaux depuis 12 ans ?`,
     options:[
       `Pour convaincre les parents que l'entraînement est de qualité`,
@@ -273,7 +273,7 @@ STATIC_QUESTIONS.push(
     hint:`Une annonce donne des informations sur les personnes dans un but précis.`,
     explanation:`Citer l'expérience de l'entraîneur est un <b>procédé pour convaincre</b> : les parents se disent que leur argent sera bien employé. L'annonce dit d'ailleurs « Débutants bienvenus » : elle ne les décourage donc pas du tout.` }),
 
-  makeMCQ({ id:`g5fr-txt-019`, chapterId:`fr-textes`, difficulty:4,
+  makeMCQ({ id:`g5fr-txt-019`, chapterId:'fr-textes', subsection:'affiche', difficulty:4,
     question:`${_G5TXT_ANNONCE}Sofia décide le lundi 23 septembre qu'elle veut s'inscrire. Quel est son problème ?`,
     options:[
       `La date limite pour remettre la fiche est déjà passée`,
@@ -286,14 +286,14 @@ STATIC_QUESTIONS.push(
     explanation:`Les fiches devaient parvenir à M. Ramful <b>avant le vendredi 20 septembre</b>. Le lundi 23 septembre, c'est <b>après</b> : Sofia a manqué la date limite. Les élèves de Grade 4 sont acceptés, donc l'âge n'est pas le problème - c'est le calendrier.` }),
 
   // ── TEXTE E : le poème ─────────────────────────────────────────────
-  makeMCQ({ id:`g5fr-txt-020`, chapterId:`fr-textes`, difficulty:2,
+  makeMCQ({ id:`g5fr-txt-020`, chapterId:'fr-textes', subsection:'poeme', difficulty:2,
     question:`${_G5TXT_POEME}« Avant que le soleil ne quitte son lit » signifie que le pêcheur part…`,
     options:[`Avant le lever du soleil`, `À midi`, `Au coucher du soleil`, `Seulement quand il pleut`],
     answer:`Avant le lever du soleil`,
     hint:`Où est le soleil quand il est encore « dans son lit » ?`,
     explanation:`Le soleil « dans son lit » n'est pas encore levé : le pêcheur part donc <b>avant le lever du soleil</b>. Donner au soleil une action humaine (dormir) s'appelle une <b>personnification</b>.` }),
 
-  makeMCQ({ id:`g5fr-txt-021`, chapterId:`fr-textes`, difficulty:3,
+  makeMCQ({ id:`g5fr-txt-021`, chapterId:'fr-textes', subsection:'poeme', difficulty:3,
     question:`${_G5TXT_POEME}« Ses mains sont des cartes de trente années. » Que veut vraiment dire ce vers ?`,
     options:[
       `Ses mains sont marquées et ridées par trente ans de travail en mer`,

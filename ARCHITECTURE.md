@@ -171,14 +171,22 @@ auto-discovers it; add it to `LOCAL_FILES` too if you use `file://`.
 
 ## Database
 
-16+ tables. Full schema and verified drift notes in **PROJECT_OVERVIEW.md** §5
-and §15. Migrations, in run order:
+25 tables, all with RLS enabled. Two files, since 2026-08-26:
 
-1. `supabase-rls-migration.sql` — RLS lockdown, student sessions
-2. `supabase-hotfix-pin-exposure.sql` — bcrypt existing PINs, fix column grants
-3. `supabase-classrooms-migration.sql` — classrooms, enrollments, submissions
+| File | Purpose |
+|---|---|
+| `supabase-migration.sql` | The one file to run. Idempotent; Parts 1–4 unattended, Part 5 commented out because it is destructive or disruptive. |
+| `supabase-schema.sql` | Dump of the live schema — tables, constraints, indexes, policies, functions, grants. Rebuild reference, not for running against production. |
 
-⚠ `DB_RESTORE_REFERENCE.txt` and `supabase-db-patch.sql` have **drifted from
-production** — wrong column names and types in places, and an older
-`verify_student_pin`. Do not treat them as the source of truth; take a
-`pg_dump --schema-only` instead.
+The 24 incremental migrations they replaced are in git history. They were all
+applied, and an audit against the live database found the deployed schema
+differed from what they claimed in three places — which is why the dump, not the
+migration list, is now the source of truth.
+
+⚠ `DB_RESTORE_REFERENCE.txt` has **drifted from production** — wrong column names
+and types in places, and an older `verify_student_pin`. Use `supabase-schema.sql`.
+
+⚠ `public.students` has COLUMN-LEVEL SELECT grants so `pin` stays unreadable. A
+column added to it later inherits no grant and fails every query with
+`42501 permission denied for table students`, naming no column. Pair every
+`ALTER TABLE students ADD COLUMN` with a `GRANT SELECT (col)`.

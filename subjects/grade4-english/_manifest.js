@@ -1,8 +1,72 @@
-﻿'use strict';
+'use strict';
+
+// Sub-topics for the Syllabus screen. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Adding a subsection means tagging questions for it.
+// Trailing comments are the question count at the time of generation.
+const G4ENG_SYLLABUS = {
+  'g4eng-nouns': { subsections: [
+    { id:'picture_nouns',   name:'Naming Things from Pictures' },  // 6
+    { id:'articles',        name:'Articles: a, an, the' },  // 3
+    { id:'plurals',         name:'Plurals' },  // 3
+    { id:'collective',      name:'Collective Nouns' },  // 3
+    { id:'abstract',        name:'Abstract Nouns' },  // 1
+    { id:'gender',          name:'Masculine & Feminine' },  // 1
+    { id:'pronouns',        name:'Pronouns' },  // 3
+    { id:'common_proper',   name:'Common & Proper Nouns' },  // 9
+    { id:'in_context',      name:'Finding Them in a Sentence' },  // 2
+  ]},
+  'g4eng-verbs': { subsections: [
+    { id:'agreement',       name:'Subject-Verb Agreement' },  // 2
+    { id:'auxiliary',       name:'Auxiliary & Modal Verbs' },  // 1
+    { id:'past_tense',      name:'Past Tense' },  // 10
+    { id:'future_tense',    name:'Future Tense' },  // 2
+    { id:'continuous',      name:'Continuous Tense' },  // 2
+    { id:'perfect',         name:'Perfect Tense' },  // 1
+    { id:'present_tense',   name:'Present Tense' },  // 8
+    { id:'in_context',      name:'Finding Them in a Sentence' },  // 5
+  ]},
+  'g4eng-adjectives': { subsections: [
+    { id:'picture_words',   name:'Words from Pictures' },  // 5
+    { id:'comparatives',    name:'Comparatives & Superlatives' },  // 8
+    { id:'adverbs',         name:'Adverbs' },  // 3
+    { id:'in_context',      name:'Finding Them in a Sentence' },  // 4
+    { id:'adjectives',      name:'Adjectives' },  // 6
+  ]},
+  'g4eng-sentences': { subsections: [
+    { id:'punctuation',     name:'Punctuation' },  // 20
+    { id:'types',           name:'Types of Sentence' },  // 7
+    { id:'in_context',      name:'Finding Them in a Sentence' },  // 4
+  ]},
+  'g4eng-comprehension': { subsections: [
+    { id:'language',        name:'Language & Literary Devices' },  // 2
+    { id:'vocabulary',      name:'Word Meaning in Context' },  // 4
+    { id:'main_idea',       name:'Main Idea & Title' },  // 3
+    { id:'authors_view',    name:'The Writer\'s Purpose & Tone' },  // 1
+    { id:'inference',       name:'Reading Between the Lines' },  // 3
+    { id:'retrieval',       name:'Finding the Answer in the Text' },  // 18
+  ]},
+  'g4eng-vocabulary': { subsections: [
+    { id:'synonyms',        name:'Synonyms' },  // 5
+    { id:'antonyms',        name:'Antonyms' },  // 6
+    { id:'prefix_suffix',   name:'Prefixes & Suffixes' },  // 7
+    { id:'homophones',      name:'Homophones' },  // 2
+    { id:'meaning',         name:'Word Meanings' },  // 9
+    { id:'context_clues',   name:'Using Context Clues' },  // 2
+  ]},
+  'g4eng-passages': { subsections: [
+    { id:'letter',          name:'Letters' },  // 4
+    { id:'advert',          name:'Adverts, Posters & Notices' },  // 5
+    { id:'story',           name:'Stories & Legends' },  // 18
+    { id:'instructions',    name:'Instructions & Recipes' },  // 4
+  ]},
+};
+
 registerSubject({
   id: 'grade4-english', name: 'English', grade: 4, icon: '📖', subject: 'English',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
+  syllabus: G4ENG_SYLLABUS,
   chapters: [
     {
       id: 'g4eng-nouns', name: 'Nouns, Pronouns & Articles', icon: '📝',

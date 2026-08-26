@@ -49,7 +49,7 @@ const _SVG_COMPASS = `<svg viewBox="0 0 120 120" width="120" height="120" style=
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5hg-ms-001', chapterId:'map-skills', difficulty:1,
+  makeMCQ({ id:'g5hg-ms-001', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:'What are LINES OF LATITUDE on a map or globe?',
     options:[
       'Vertical lines running from the North Pole to the South Pole',
@@ -61,7 +61,7 @@ STATIC_QUESTIONS.push(
     hint:'Latitude lines go around the globe horizontally like the rungs of a ladder.',
     explanation:'<b>Lines of latitude</b> (also called parallels) are horizontal lines that circle the Earth parallel to the Equator. They measure how far north or south a place is from the Equator, in degrees.' }),
 
-  makeMCQ({ id:'g5hg-ms-002', chapterId:'map-skills', difficulty:1,
+  makeMCQ({ id:'g5hg-ms-002', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:'What are LINES OF LONGITUDE on a map or globe?',
     options:[
       'Horizontal lines running east-west',
@@ -73,21 +73,21 @@ STATIC_QUESTIONS.push(
     hint:'Longitude lines run up and down (north-south) on a map.',
     explanation:'<b>Lines of longitude</b> (also called meridians) are vertical lines that run from the North Pole to the South Pole. They measure how far east or west a place is from the Greenwich Meridian, in degrees.' }),
 
-  makeMCQ({ id:'g5hg-ms-003', chapterId:'map-skills', difficulty:1,
+  makeMCQ({ id:'g5hg-ms-003', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:`${_SVG_GRID}Look at the grid map above. What is the thick horizontal red line at 0° called?`,
     options:['The Greenwich Meridian','The International Date Line','The Equator','The Tropic of Cancer'],
     answer:'The Equator',
     hint:'This line divides the Earth into the Northern and Southern hemispheres.',
     explanation:'The thick red horizontal line at <b>0° latitude</b> is the <b>Equator</b>. It circles the Earth exactly halfway between the North and South poles, dividing the planet into the Northern and Southern hemispheres.' }),
 
-  makeMCQ({ id:'g5hg-ms-004', chapterId:'map-skills', difficulty:1,
+  makeMCQ({ id:'g5hg-ms-004', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:`${_SVG_GRID}On the grid above, what is the thick blue VERTICAL line at 0° longitude called?`,
     options:['The Equator','The Tropic of Capricorn','The Greenwich Meridian (Prime Meridian)','The International Date Line'],
     answer:'The Greenwich Meridian (Prime Meridian)',
     hint:'It is named after the Royal Observatory in Greenwich, London.',
     explanation:'The thick blue vertical line at <b>0° longitude</b> is the <b>Greenwich Meridian</b> (also called the Prime Meridian). It runs through Greenwich, London, and divides the Earth into Eastern and Western hemispheres.' }),
 
-  makeMCQ({ id:'g5hg-ms-005', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-005', chapterId:'map-skills', subsection:'coordinates', difficulty:2,
     question:`${_SVG_GRID}Using the grid above, Mauritius is located at approximately 20°S and 57°E. What does 20°S tell us?`,
     options:[
       'Mauritius is 20 degrees east of the Greenwich Meridian',
@@ -99,7 +99,7 @@ STATIC_QUESTIONS.push(
     hint:'S after a number means south of the Equator.',
     explanation:'<b>20°S</b> means 20 degrees of latitude <b>south of the Equator</b>. Mauritius is in the Southern Hemisphere. The "S" always means south; "N" means north.' }),
 
-  makeMCQ({ id:'g5hg-ms-006', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-006', chapterId:'map-skills', subsection:'coordinates', difficulty:2,
     question:`${_SVG_GRID}Using the grid, what does 57°E (the longitude of Mauritius) tell us?`,
     options:[
       'Mauritius is 57 degrees north of the Equator',
@@ -111,20 +111,20 @@ STATIC_QUESTIONS.push(
     hint:'E after a number means east of the 0° line.',
     explanation:'<b>57°E</b> means 57 degrees of longitude <b>east of the Greenwich Meridian</b>. Since Mauritius is east of the 0° line, it is in the Eastern Hemisphere.' }),
 
-  makeMCQ({ id:'g5hg-ms-007', chapterId:'map-skills', difficulty:1,
+  makeMCQ({ id:'g5hg-ms-007', chapterId:'map-skills', subsection:'directions', difficulty:1,
     question:`${_SVG_COMPASS}Look at the compass rose. If you face North and then turn to your RIGHT, which direction are you now facing?`,
     options:['West','South','East','North-East'],
     answer:'East',
     hint:'Imagine you are facing up (North). Turn 90° clockwise to your right.',
     explanation:'If you face <b>North</b> and turn 90° to your right (clockwise), you will be facing <b>East</b>. The cardinal directions in clockwise order are: North → East → South → West.' }),
 
-  makeTF({ id:'g5hg-ms-008', chapterId:'map-skills', difficulty:1,
+  makeTF({ id:'g5hg-ms-008', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:'The Equator is a line of longitude that divides the Earth into Northern and Southern hemispheres.',
     answer:false,
     hint:'Is the Equator a horizontal or vertical line? And is it latitude or longitude?',
     explanation:'The Equator is a line of <b>latitude</b> (not longitude). Latitude lines are horizontal. The Equator at 0° latitude divides the Earth into the Northern and Southern hemispheres. Longitude lines (like the Greenwich Meridian) divide East from West.' }),
 
-  makeMCQ({ id:'g5hg-ms-009', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-009', chapterId:'map-skills', subsection:'symbols', difficulty:2,
     question:'A map KEY (legend) is important because it:',
     options:[
       'Shows the name of the map maker',
@@ -136,7 +136,7 @@ STATIC_QUESTIONS.push(
     hint:'Without this, you cannot read what the symbols on a map represent.',
     explanation:'A map <b>key (legend)</b> is a box on a map that explains what each symbol, colour or line represents. For example, a blue line = river, a triangle = mountain peak, dotted line = border. Without a key, the map is very hard to read.' }),
 
-  makeMCQ({ id:'g5hg-ms-010', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-010', chapterId:'map-skills', subsection:'scale', difficulty:2,
     question:'On a map, the SCALE shows that 1 cm = 10 km. If two towns are 4 cm apart on the map, what is the real distance between them?',
     options:['4 km','10 km','14 km','40 km'],
     answer:'40 km',
@@ -147,7 +147,7 @@ STATIC_QUESTIONS.push(
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5hg-ms-011', chapterId:'map-skills', difficulty:1,
+  makeMCQ({ id:'g5hg-ms-011', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:'At which latitude does the ARCTIC CIRCLE lie?',
     options:[
       '0° - it is another name for the Equator',
@@ -159,14 +159,14 @@ STATIC_QUESTIONS.push(
     hint:'It is well into the far north, above Europe and Russia.',
     explanation:'The <b>Arctic Circle</b> is a line of latitude at approximately <b>66.5° North</b>. Above this line, the sun does not set in midsummer (midnight sun) and does not rise in midwinter (polar night). Mauritius at ~20°S is very far from the Arctic Circle.' }),
 
-  makeMCQ({ id:'g5hg-ms-012', chapterId:'map-skills', difficulty:1,
+  makeMCQ({ id:'g5hg-ms-012', chapterId:'map-skills', subsection:'using_map', difficulty:1,
     question:'Which continent is the LARGEST in the world by area?',
     options:['Africa','North America','Europe','Asia'],
     answer:'Asia',
     hint:'It includes countries like China, India, Russia and Saudi Arabia.',
     explanation:'<b>Asia</b> is the world\'s largest continent by both area (about 44.6 million km²) and population (over 4.5 billion people). It covers about one-third of Earth\'s total land area.' }),
 
-  makeMCQ({ id:'g5hg-ms-013', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-013', chapterId:'map-skills', subsection:'using_map', difficulty:2,
     question:'What do CONTOUR LINES on a topographic map show?',
     options:[
       'Lines joining places with the same rainfall',
@@ -178,7 +178,7 @@ STATIC_QUESTIONS.push(
     hint:'They show the shape and height of the land.',
     explanation:'<b>Contour lines</b> connect all points at the <b>same altitude above sea level</b>. They show the shape, height and slope of the land: contour lines close together mean a steep slope; lines far apart mean gentle or flat land.' }),
 
-  makeMCQ({ id:'g5hg-ms-014', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-014', chapterId:'map-skills', subsection:'using_map', difficulty:2,
     question:'On a topographic map, contour lines are very CLOSE TOGETHER on the mountainside and very FAR APART on the coastal plain. What does this indicate?',
     options:[
       'The mountain is warmer than the plain',
@@ -190,13 +190,13 @@ STATIC_QUESTIONS.push(
     hint:'Closely packed contour lines = height changes rapidly over a short horizontal distance.',
     explanation:'Closely spaced contour lines indicate a <b>steep slope</b> - the land rises or falls rapidly. Widely spaced contour lines indicate <b>gentle or flat land</b>. Looking at a map of Mauritius, the mountainous south-west has closely packed contours, while the northern coastal plains have widely spaced ones.' }),
 
-  makeTF({ id:'g5hg-ms-015', chapterId:'map-skills', difficulty:1,
+  makeTF({ id:'g5hg-ms-015', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:'The Tropic of Capricorn is a line of latitude at 23.5° South.',
     answer:true,
     hint:'Mauritius at ~20°S lies just north of the Tropic of Capricorn.',
     explanation:'True. The <b>Tropic of Capricorn</b> is at <b>23.5° South</b> latitude. It marks the southernmost point where the sun can be directly overhead (on the December solstice). Mauritius (~20°S) lies just north of this line, placing it in the tropics - explaining its warm tropical climate.' }),
 
-  makeMCQ({ id:'g5hg-ms-016', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-016', chapterId:'map-skills', subsection:'scale', difficulty:2,
     question:'A map has a scale of 1:50,000. What does this mean?',
     options:[
       '1 cm on the map equals 50 cm in real life',
@@ -208,7 +208,7 @@ STATIC_QUESTIONS.push(
     hint:'A scale of 1:50,000 means the map is 50,000 times smaller than reality.',
     explanation:'A scale of <b>1:50,000</b> means every 1 unit on the map equals 50,000 of the same unit in reality. So 1 cm on the map = 50,000 cm = <b>500 metres</b> in real life. To find real distance: map measurement (cm) × 50,000 = real distance in cm, then convert to metres or km.' }),
 
-  makeMCQ({ id:'g5hg-ms-017', chapterId:'map-skills', difficulty:3,
+  makeMCQ({ id:'g5hg-ms-017', chapterId:'map-skills', subsection:'using_map', difficulty:3,
     question:'A rainfall map shows isohyets at 1,000 mm, 2,000 mm and 3,000 mm. Port Louis falls between 1,000 and 2,000 mm. Curepipe falls between 2,000 and 3,000 mm. What can you CONCLUDE?',
     options:[
       'Port Louis receives more rainfall than Curepipe',
@@ -220,14 +220,14 @@ STATIC_QUESTIONS.push(
     hint:'Higher isohyet values = more rain; higher altitude = more orographic rain.',
     explanation:'Curepipe (central plateau, ~550 m) lies between 2,000 and 3,000 mm isohyets - more than 2,000 mm per year. Port Louis (low-lying, leeward coast) lies between 1,000 and 2,000 mm - less than 2,000 mm. This is consistent with <b>orographic rainfall</b>: trade winds drop moisture on the plateau before reaching the rain shadow where Port Louis lies.' }),
 
-  makeMCQ({ id:'g5hg-ms-018', chapterId:'map-skills', difficulty:3,
+  makeMCQ({ id:'g5hg-ms-018', chapterId:'map-skills', subsection:'directions', difficulty:3,
     question:'Port Louis is on the NORTH-WEST coast; Curepipe is on the SOUTH-EAST of the central plateau. In which direction do you travel from Port Louis to Curepipe?',
     options:['North','West','South-East','North-East'],
     answer:'South-East',
     hint:'If you start north-west and go to south-east, which direction are you heading?',
     explanation:'To travel from Port Louis (north-west) to Curepipe (south-east), you head <b>south-east</b>. On a compass, south-east is approximately 135°. This is consistent with the actual geography of Mauritius - Port Louis is on the north-west coast and Curepipe is in the south-east of the central plateau.' }),
 
-  makeMCQ({ id:'g5hg-ms-019', chapterId:'map-skills', difficulty:4,
+  makeMCQ({ id:'g5hg-ms-019', chapterId:'map-skills', subsection:'using_map', difficulty:4,
     question:'A geographer wants to find where in Mauritius gets the most rain, where the land is highest, and which towns are in the rain shadow. Which THREE types of map would they need?',
     options:[
       'A rainfall map (isohyets show rainfall), a topographic map (contours show altitude) and a political/settlement map (to locate town names)',
@@ -246,42 +246,42 @@ const _SVG_G5_MUS_PHYS = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5hg-ms-020', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-020', chapterId:'map-skills', subsection:'directions', difficulty:2,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>According to the map, which river flows NORTHWARD toward the coast?</b>`,
     options:['Black River (Rivière Noire)','Grand River South East','Grand River North West','Rivière du Rempart'],
     answer:'Rivière du Rempart',
     hint:'Trace the river paths on the map. Which one flows from the central area straight up toward the north coast?',
     explanation:'<b>Rivière du Rempart</b> rises in the central highlands and flows <b>northward</b> toward the north coast. Its name means "Rampart River." Rivers in Mauritius always flow outward from the central highlands — their direction tells us which coast they drain to.' }),
 
-  makeMCQ({ id:'g5hg-ms-021', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-021', chapterId:'map-skills', subsection:'using_map', difficulty:2,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>Pieter Both mountain is located in which part of Mauritius?</b>`,
     options:['South-West','South coast','West coast','North-East of centre'],
     answer:'North-East of centre',
     hint:'Find the ▲ symbol for Pieter Both (823m) on the map and look at which part of the island it is in.',
     explanation:'<b>Pieter Both</b> (823m) is located in the <b>north-east of the central mountain range</b> of Mauritius. It is famous for its distinctive mushroom-shaped peak and is named after a Dutch admiral. At 823m it is the second highest mountain in Mauritius after Piton de la Petite Rivière Noire (828m).' }),
 
-  makeMCQ({ id:'g5hg-ms-022', chapterId:'map-skills', difficulty:1,
+  makeMCQ({ id:'g5hg-ms-022', chapterId:'map-skills', subsection:'using_map', difficulty:1,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>Which mountain on the map has an elevation of 828m?</b>`,
     options:['Le Pouce','Corps de Garde','Pieter Both','Piton de la Petite Rivière Noire'],
     answer:'Piton de la Petite Rivière Noire',
     hint:'Look at the elevation labels next to each mountain triangle on the map.',
     explanation:'<b>Piton de la Petite Rivière Noire</b> (828m) is the <b>highest mountain in Mauritius</b>. It is marked with a ★ on the map to distinguish it as the highest peak. It is located in the south-west in the Black River Gorges National Park area.' }),
 
-  makeMCQ({ id:'g5hg-ms-023', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-023', chapterId:'map-skills', subsection:'directions', difficulty:2,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>The Grand River South East flows toward which part of the island?</b>`,
     options:['North','West','North-West','South-East'],
     answer:'South-East',
     hint:'Trace the river\'s path from the central area — which direction does it flow toward the coast?',
     explanation:'The <b>Grand River South East</b> flows toward the <b>south-east</b> coast of Mauritius, entering the sea near Mahebourg. It is one of the longest rivers in Mauritius and rises in the central plateau. The direction a river flows always tells us which coast it reaches.' }),
 
-  makeMCQ({ id:'g5hg-ms-024', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-024', chapterId:'map-skills', subsection:'using_map', difficulty:2,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>Which mountain is closest to Port Louis on this map?</b>`,
     options:['Trois Mamelles (629m)','Corps de Garde (720m)','Pieter Both (823m)','Le Pouce (811m)'],
     answer:'Le Pouce (811m)',
     hint:'Find Port Louis (★ on the north-west coast) and look for the nearest mountain triangle.',
     explanation:'<b>Le Pouce</b> (811m, meaning "The Thumb") is the mountain <b>closest to Port Louis</b>. It is visible from Port Louis and is a popular hiking destination. Its name comes from its thumb-like shape when seen from the city.' }),
 
-  makeMCQ({ id:'g5hg-ms-025', chapterId:'map-skills', difficulty:2,
+  makeMCQ({ id:'g5hg-ms-025', chapterId:'map-skills', subsection:'symbols', difficulty:2,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>What does the ★ symbol next to Piton PNR on the map indicate?</b>`,
     options:['It is a tourist attraction','It is an active volcano','It is the highest point in Mauritius','It is a nature reserve'],
     answer:'It is the highest point in Mauritius',

@@ -86,7 +86,7 @@ const _G6TXT_MODE = _g6txtBox(`
 STATIC_QUESTIONS.push(
 
   // ── TEXTE A : la lettre formelle ───────────────────────────────────
-  makeMCQ({ id:`g6fr-txt-001`, chapterId:`g6fr-textes`, difficulty:1,
+  makeMCQ({ id:`g6fr-txt-001`, chapterId:'g6fr-textes', subsection:'courriel', difficulty:1,
     question:`${_G6TXT_LETTRE}Que demandent exactement les élèves au Conseil municipal ?`,
     options:[
       `D'installer deux poubelles supplémentaires dans le jardin`,
@@ -98,7 +98,7 @@ STATIC_QUESTIONS.push(
     hint:`La ligne « Objet » d'une lettre formelle résume la demande en une ligne.`,
     explanation:`L'objet annonce : « <b>demande de deux poubelles supplémentaires au jardin Balfour</b> », et l'avant-dernier paragraphe précise les deux emplacements. Tout ce qui précède sert à <b>justifier</b> cette demande.` }),
 
-  makeMCQ({ id:`g6fr-txt-002`, chapterId:`g6fr-textes`, difficulty:2,
+  makeMCQ({ id:`g6fr-txt-002`, chapterId:'g6fr-textes', subsection:'courriel', difficulty:2,
     question:`${_G6TXT_LETTRE}Quelle phrase constitue la PREUVE la plus solide que les poubelles actuelles sont insuffisantes ?`,
     options:[
       `« Toutes les deux débordaient déjà à dix heures du matin. »`,
@@ -110,7 +110,7 @@ STATIC_QUESTIONS.push(
     hint:`Une preuve, c'est un fait observé et mesurable, pas une opinion ni une offre.`,
     explanation:`« <b>Débordaient déjà à dix heures du matin</b> » est un fait observé, daté et vérifiable : il démontre que les poubelles existantes ne suffisent pas. Les autres phrases disent qui écrit, proposent une aide ou terminent la lettre - aucune ne prouve le manque.` }),
 
-  makeMCQ({ id:`g6fr-txt-003`, chapterId:`g6fr-textes`, difficulty:3,
+  makeMCQ({ id:`g6fr-txt-003`, chapterId:'g6fr-textes', subsection:'courriel', difficulty:3,
     question:`${_G6TXT_LETTRE}Pourquoi les élèves proposent-ils de peindre les panneaux eux-mêmes, gratuitement ?`,
     options:[
       `Pour lever d'avance l'objection du coût et faciliter un « oui »`,
@@ -122,7 +122,7 @@ STATIC_QUESTIONS.push(
     hint:`Quelle est la raison habituelle d'un refus administratif ?`,
     explanation:`Une administration refuse le plus souvent à cause du <b>coût</b>. En offrant leur travail gratuitement, les élèves suppriment cette objection <i>avant</i> qu'elle ne soit formulée. Ce procédé s'appelle <b>anticiper le contre-argument</b>.` }),
 
-  makeMCQ({ id:`g6fr-txt-004`, chapterId:`g6fr-textes`, difficulty:4,
+  makeMCQ({ id:`g6fr-txt-004`, chapterId:'g6fr-textes', subsection:'courriel', difficulty:4,
     question:`${_G6TXT_LETTRE}Ta classe doit réécrire une phrase de cette lettre pour la rendre PLUS convaincante. Quelle réécriture ajoute une vraie force ?`,
     options:[
       `Ajouter : « Trente enfants ont retiré onze sacs en deux heures, alors que les employés du Conseil ne passent qu'une fois par semaine. »`,
@@ -135,21 +135,21 @@ STATIC_QUESTIONS.push(
     explanation:`Ajouter une <b>comparaison chiffrée</b> rend le problème impossible à écarter. Remplacer les chiffres par « énormément » <i>affaiblit</i> la lettre ; exiger et crier brisent le registre formel et rendent une administration moins disposée à aider.` }),
 
   // ── TEXTE B : l'article de journal ─────────────────────────────────
-  makeMCQ({ id:`g6fr-txt-005`, chapterId:`g6fr-textes`, difficulty:1,
+  makeMCQ({ id:`g6fr-txt-005`, chapterId:'g6fr-textes', subsection:'article', difficulty:1,
     question:`${_G6TXT_ARTICLE}Combien de tortues les élèves ont-ils recensées ?`,
     options:[`214`, `40`, `218`, `Quatre`],
     answer:`214`,
     hint:`Attention : l'article contient plusieurs nombres qui ne désignent pas la même chose.`,
     explanation:`« Ils en ont recensé <b>214 au total</b>. » 40 est le nombre d'élèves, et « quatre animaux » indique l'écart avec le comptage des chercheurs. Un article de presse concentre beaucoup de chiffres : relie chaque nombre à son nom.` }),
 
-  makeMCQ({ id:`g6fr-txt-006`, chapterId:`g6fr-textes`, difficulty:2,
+  makeMCQ({ id:`g6fr-txt-006`, chapterId:'g6fr-textes', subsection:'article', difficulty:2,
     question:`${_G6TXT_ARTICLE}Quel paragraphe d'un article de journal contient les informations les plus importantes ?`,
     options:[`Le premier`, `Le dernier`, `Celui qui contient la citation`, `Le titre seulement`],
     answer:`Le premier`,
     hint:`Pense à un lecteur qui s'arrête après un seul paragraphe.`,
     explanation:`Un article suit la <b>pyramide inversée</b> : le premier paragraphe (l'« attaque ») donne qui, quoi, où et quand, pour qu'un lecteur pressé ait déjà l'essentiel. Les paragraphes suivants ajoutent les détails, les citations et le contexte.` }),
 
-  makeMCQ({ id:`g6fr-txt-007`, chapterId:`g6fr-textes`, difficulty:3,
+  makeMCQ({ id:`g6fr-txt-007`, chapterId:'g6fr-textes', subsection:'article', difficulty:3,
     question:`${_G6TXT_ARTICLE}Pourquoi la journaliste rapporte-t-elle l'avis de l'agent de conservation ?`,
     options:[
       `Pour donner un article équilibré en présentant un avis opposé`,
@@ -161,7 +161,7 @@ STATIC_QUESTIONS.push(
     hint:`Un article de presse n'est pas une publicité.`,
     explanation:`Un article honnête présente <b>plusieurs points de vue</b>. La docteure Perrine est impressionnée ; l'agent de conservation craint pour les femelles qui pondent. Rapporter les deux s'appelle l'<b>équilibre</b>, et c'est un devoir du journaliste.` }),
 
-  makeMCQ({ id:`g6fr-txt-008`, chapterId:`g6fr-textes`, difficulty:3,
+  makeMCQ({ id:`g6fr-txt-008`, chapterId:'g6fr-textes', subsection:'article', difficulty:3,
     question:`${_G6TXT_ARTICLE}L'agent « a demandé à ne pas être nommé ». Que doit en conclure un lecteur attentif ?`,
     options:[
       `Son affirmation est plus difficile à vérifier que celle d'une source nommée`,
@@ -173,21 +173,21 @@ STATIC_QUESTIONS.push(
     hint:`Que peut-on faire avec une source nommée qu'on ne peut pas faire avec une source anonyme ?`,
     explanation:`Une <b>source anonyme</b> ne peut être ni recontactée ni tenue pour responsable : le lecteur ne peut donc pas vérifier son propos. Cela ne veut pas dire qu'il est faux - on reste souvent anonyme pour protéger son emploi - mais on lui accorde moins de poids qu'à la déclaration signée de la docteure Perrine.` }),
 
-  makeTF({ id:`g6fr-txt-009`, chapterId:`g6fr-textes`, difficulty:2,
+  makeTF({ id:`g6fr-txt-009`, chapterId:'g6fr-textes', subsection:'article', difficulty:2,
     question:`${_G6TXT_ARTICLE}La réserve a déjà décidé d'inviter une deuxième école l'an prochain.`,
     answer:false,
     hint:`Regarde attentivement le verbe de la dernière phrase.`,
     explanation:`<b>Faux.</b> L'article dit que la réserve « <b>envisage</b> d'inviter une deuxième école ». <i>Envisager</i> n'est pas <i>décider</i>. Une question d'examen se joue souvent sur un seul verbe : relis toujours la dernière phrase.` }),
 
   // ── TEXTE C : le dépliant touristique ──────────────────────────────
-  makeMCQ({ id:`g6fr-txt-010`, chapterId:`g6fr-textes`, difficulty:1,
+  makeMCQ({ id:`g6fr-txt-010`, chapterId:'g6fr-textes', subsection:'affiche', difficulty:1,
     question:`${_G6TXT_DEPLIANT}Que peut-on visiter à l'île aux Cocos ?`,
     options:[`Une réserve d'oiseaux marins`, `Des galeries souterraines`, `Un marché du samedi`, `Le point le plus haut de l'île`],
     answer:`Une réserve d'oiseaux marins`,
     hint:`Chaque puce du dépliant associe un lieu à une attraction précise.`,
     explanation:`« Île aux Cocos - <b>réserve d'oiseaux marins</b>, accessible en pirogue. » Les galeries sont à Caverne Patate, le marché à Port Mathurin et le sommet au mont Limon : quatre lieux, quatre attraits, à ne pas confondre.` }),
 
-  makeMCQ({ id:`g6fr-txt-011`, chapterId:`g6fr-textes`, difficulty:2,
+  makeMCQ({ id:`g6fr-txt-011`, chapterId:'g6fr-textes', subsection:'affiche', difficulty:2,
     question:`${_G6TXT_DEPLIANT}Que signale l'astérisque (*) placé après « Rs 12 500 par personne » ?`,
     options:[
       `Qu'il faut lire les petits caractères, où figurent les conditions`,
@@ -199,7 +199,7 @@ STATIC_QUESTIONS.push(
     hint:`Le même symbole apparaît deux fois dans le dépliant.`,
     explanation:`Un <b>astérisque</b> relie une affirmation à une note en bas. Ici, elle révèle que le prix exclut le vol, les repas du soir et les excursions, et qu'il ne vaut qu'en basse saison.` }),
 
-  makeMCQ({ id:`g6fr-txt-012`, chapterId:`g6fr-textes`, difficulty:3,
+  makeMCQ({ id:`g6fr-txt-012`, chapterId:'g6fr-textes', subsection:'affiche', difficulty:3,
     question:`${_G6TXT_DEPLIANT}Une famille réserve pour un séjour au mois de décembre. Que découvrira-t-elle ?`,
     options:[
       `Le tarif de Rs 12 500 ne s'applique pas, car décembre n'est pas en basse saison`,
@@ -211,7 +211,7 @@ STATIC_QUESTIONS.push(
     hint:`La note précise les mois concernés par le tarif annoncé.`,
     explanation:`La note indique « <b>Basse saison uniquement (mai à septembre)</b> ». Décembre n'en fait pas partie : le prix affiché ne s'applique donc pas. Le dépliant ne dit rien d'une fermeture de l'île aux Cocos - il précise seulement que le transfert dépend de la mer.` }),
 
-  makeMCQ({ id:`g6fr-txt-013`, chapterId:`g6fr-textes`, difficulty:3,
+  makeMCQ({ id:`g6fr-txt-013`, chapterId:'g6fr-textes', subsection:'affiche', difficulty:3,
     question:`${_G6TXT_DEPLIANT}« Ici, le temps a oublié de courir. » Pourquoi le dépliant commence-t-il par cette phrase ?`,
     options:[
       `Pour donner une image séduisante de calme et de lenteur, afin de séduire le lecteur`,
@@ -224,7 +224,7 @@ STATIC_QUESTIONS.push(
     explanation:`C'est un <b>slogan</b> : une personnification (« le temps a oublié de courir ») qui vend une promesse de <b>tranquillité</b>. Un dépliant est un texte <b>publicitaire</b> - il choisit ses images pour donner envie, pas pour informer objectivement.` }),
 
   // ── TEXTE D : la légende ───────────────────────────────────────────
-  makeMCQ({ id:`g6fr-txt-014`, chapterId:`g6fr-textes`, difficulty:1,
+  makeMCQ({ id:`g6fr-txt-014`, chapterId:'g6fr-textes', subsection:'legende', difficulty:1,
     question:`${_G6TXT_LEGENDE}Quelle condition la reine des fées a-t-elle posée ?`,
     options:[
       `Ne jamais parler de ce qu'il avait vu`,
@@ -236,7 +236,7 @@ STATIC_QUESTIONS.push(
     hint:`La condition est dans les paroles de la reine, après le mot « Mais ».`,
     explanation:`« <b>Mais si tu parles un jour de ce que tu as vu</b>, tu seras changé en pierre. » Dans une légende, la condition est toujours annoncée clairement au début : le lecteur voit venir la fin.` }),
 
-  makeMCQ({ id:`g6fr-txt-015`, chapterId:`g6fr-textes`, difficulty:2,
+  makeMCQ({ id:`g6fr-txt-015`, chapterId:'g6fr-textes', subsection:'legende', difficulty:2,
     question:`${_G6TXT_LEGENDE}« Il n'acheva pas sa phrase. » Que s'est-il passé à ce moment-là ?`,
     options:[
       `Il a été changé en pierre au milieu de sa vantardise`,
@@ -248,7 +248,7 @@ STATIC_QUESTIONS.push(
     hint:`Le paragraphe suivant décrit ce que les villageois ont vu au matin.`,
     explanation:`La punition tombe immédiatement : la phrase suivante décrit « un énorme rocher rond, en forme de tête d'homme » au sommet. L'auteur <b>ne raconte pas</b> la transformation : ce silence la rend bien plus frappante qu'une description.` }),
 
-  makeMCQ({ id:`g6fr-txt-016`, chapterId:`g6fr-textes`, difficulty:3,
+  makeMCQ({ id:`g6fr-txt-016`, chapterId:'g6fr-textes', subsection:'legende', difficulty:3,
     question:`${_G6TXT_LEGENDE}Quelle est la MORALE de cette légende ?`,
     options:[
       `Se vanter et trahir sa parole conduit à la ruine`,
@@ -260,7 +260,7 @@ STATIC_QUESTIONS.push(
     hint:`Que faisait exactement le laitier à l'instant où il a été puni ?`,
     explanation:`Il n'est puni ni pour avoir vu les fées, ni pour avoir accepté l'argent, mais pour <b>s'être vanté et avoir rompu sa promesse</b>. Une légende se termine presque toujours sur une leçon : c'est la <b>morale</b>.` }),
 
-  makeMCQ({ id:`g6fr-txt-017`, chapterId:`g6fr-textes`, difficulty:3,
+  makeMCQ({ id:`g6fr-txt-017`, chapterId:'g6fr-textes', subsection:'article', difficulty:3,
     question:`${_G6TXT_LEGENDE}Quelle expression montre qu'il s'agit d'une LÉGENDE et non d'un article de presse ?`,
     options:[
       `« racontent les anciens de Maurice »`,
@@ -273,7 +273,7 @@ STATIC_QUESTIONS.push(
     explanation:`« <b>racontent les anciens de Maurice</b> » signale la <b>tradition orale</b> : l'histoire se transmet de génération en génération, sans être vérifiée. Un article de presse citerait une source et une date.` }),
 
   // ── TEXTE E : le mode d'emploi ─────────────────────────────────────
-  makeMCQ({ id:`g6fr-txt-018`, chapterId:`g6fr-textes`, difficulty:2,
+  makeMCQ({ id:`g6fr-txt-018`, chapterId:'g6fr-textes', subsection:'recette', difficulty:2,
     question:`${_G6TXT_MODE}Pourquoi faut-il jeter les deux premiers réservoirs filtrés ?`,
     options:[
       `Parce qu'ils peuvent contenir de la poussière de charbon`,
@@ -285,7 +285,7 @@ STATIC_QUESTIONS.push(
     hint:`L'étape 4 donne la raison juste après la consigne.`,
     explanation:`« Jetez les deux premiers réservoirs filtrés : <b>ils peuvent contenir de la poussière de charbon</b>. » Un bon mode d'emploi donne la <b>raison</b> d'une consigne - sinon l'utilisateur la saute.` }),
 
-  makeMCQ({ id:`g6fr-txt-019`, chapterId:`g6fr-textes`, difficulty:3,
+  makeMCQ({ id:`g6fr-txt-019`, chapterId:'g6fr-textes', subsection:'recette', difficulty:3,
     question:`${_G6TXT_MODE}Un voisin dit : « J'utilise ce filtre pour boire l'eau d'un puits. » Que doit-on lui répondre d'après la notice ?`,
     options:[
       `Le filtre ne rend pas potable une eau non potable : c'est dangereux`,
@@ -297,7 +297,7 @@ STATIC_QUESTIONS.push(
     hint:`L'étape 5 contient une phrase en gras qui limite l'usage de l'appareil.`,
     explanation:`L'étape 5 est explicite : « Remplissez uniquement d'eau potable du robinet. Ce filtre <b>ne rend pas potable</b> une eau non potable. » Le filtre améliore le goût d'une eau déjà sûre ; il ne désinfecte pas. Lire ce que l'appareil <b>ne fait pas</b> est aussi important que lire ce qu'il fait.` }),
 
-  makeMCQ({ id:`g6fr-txt-020`, chapterId:`g6fr-textes`, difficulty:4,
+  makeMCQ({ id:`g6fr-txt-020`, chapterId:'g6fr-textes', subsection:'recette', difficulty:4,
     question:`${_G6TXT_MODE}Une famille filtre environ 4 litres par jour. Au bout de combien de temps devra-t-elle remplacer la cartouche, et pourquoi ?`,
     options:[
       `Au bout d'environ 25 jours, car la limite des 100 litres est atteinte avant les 4 semaines`,

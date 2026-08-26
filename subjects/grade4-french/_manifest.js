@@ -1,8 +1,90 @@
-﻿'use strict';
+'use strict';
+
+// Sous-thèmes pour l'écran Syllabus. GENERATED from the questions' own
+// `subsection:` tags — every id here has questions behind it, and every tagged
+// question has an id here. Trailing comments are the count at generation time.
+const G4FR_SYLLABUS = {
+  'g4fr-vocabulaire': { subsections: [
+    { id:'couleurs',        name:'Les couleurs' },  // 3
+    { id:'nombres',         name:'Les nombres' },  // 4
+    { id:'jours_mois',      name:'Jours & mois' },  // 7
+    { id:'famille',         name:'La famille' },  // 3
+    { id:'corps',           name:'Le corps' },  // 1
+    { id:'animaux',         name:'Les animaux' },  // 9
+    { id:'politesse',       name:'Salutations & politesse' },  // 1
+    { id:'temps',           name:'Le temps qui passe' },  // 4
+    { id:'verbes_utiles',   name:'Verbes utiles' },  // 2
+    { id:'traduction',      name:'Traduire des mots' },  // 19
+  ]},
+  'g4fr-noms': { subsections: [
+    { id:'pluriel',         name:'Le pluriel' },  // 7
+    { id:'noms_propres',    name:'Noms propres' },  // 1
+    { id:'partitifs',       name:'Articles partitifs' },  // 7
+    { id:'contractions',    name:'Contractions (au, du, des)' },  // 5
+    { id:'genre',           name:'Masculin ou féminin' },  // 10
+    { id:'articles_indef',  name:'Articles indéfinis' },  // 2
+    { id:'articles_def',    name:'Articles définis' },  // 9
+  ]},
+  'g4fr-verbes': { subsections: [
+    { id:'pronominaux',     name:'Verbes pronominaux' },  // 5
+    { id:'etre_avoir',      name:'Être & avoir' },  // 8
+    { id:'irreguliers',     name:'Verbes irréguliers' },  // 10
+    { id:'verbes_er',       name:'Verbes en -ER' },  // 5
+    { id:'adverbes',        name:'Adverbes de fréquence' },  // 4
+    { id:'conjugaison',     name:'Conjugaison' },  // 3
+  ]},
+  'g4fr-adjectifs': { subsections: [
+    { id:'possessifs',      name:'Les possessifs' },  // 7
+    { id:'demonstratifs',   name:'Démonstratifs' },  // 5
+    { id:'place',           name:'Place de l\'adjectif' },  // 1
+    { id:'accord',          name:'Les accords' },  // 22
+  ]},
+  'g4fr-phrase': { subsections: [
+    { id:'cod_coi',         name:'COD & COI' },  // 4
+    { id:'imperatif',       name:'L\'impératif' },  // 6
+    { id:'negation',        name:'La négation' },  // 5
+    { id:'interrogation',   name:'Poser une question' },  // 10
+    { id:'prepositions',    name:'Les prépositions' },  // 4
+    { id:'conjonctions',    name:'Les conjonctions' },  // 5
+    { id:'ordre_mots',      name:'Ordre des mots' },  // 1
+  ]},
+  'g4fr-passe-comp': { subsections: [
+    { id:'auxiliaire',      name:'Choisir l\'auxiliaire' },  // 3
+    { id:'participe',       name:'Le participe passé' },  // 9
+    { id:'formation',       name:'Comment le former' },  // 24
+  ]},
+  'g4fr-imparfait': { subsections: [
+    { id:'vs_passe_comp',   name:'Imparfait ou passé composé' },  // 1
+    { id:'terminaisons',    name:'Les terminaisons' },  // 2
+    { id:'usage',           name:'Quand l\'employer' },  // 5
+    { id:'formation',       name:'Comment le former' },  // 27
+  ]},
+  'g4fr-lecture': { subsections: [
+    { id:'fait_opinion',    name:'Fait ou opinion' },  // 1
+    { id:'connecteurs',     name:'Connecteurs logiques' },  // 3
+    { id:'vocabulaire',     name:'Le sens des mots' },  // 4
+    { id:'idee_principale', name:'Idée principale' },  // 3
+    { id:'inference',       name:'Reading Between the Lines' },  // 1
+    { id:'reperage',        name:'Trouver la réponse dans le texte' },  // 23
+  ]},
+  'g4fr-textes': { subsections: [
+    { id:'affiche',         name:'Affiches & annonces' },  // 8
+    { id:'recette',         name:'Recettes & modes d\'emploi' },  // 7
+    { id:'legende',         name:'Légendes & contes' },  // 3
+    { id:'carte_postale',   name:'Cartes postales' },  // 4
+    { id:'recit',           name:'Récits' },  // 9
+  ]},
+  'g4fr-images': { subsections: [
+    { id:'trois_images',    name:'Raconter en trois images' },  // 9
+    { id:'une_image',       name:'Décrire une image' },  // 10
+  ]},
+};
+
 registerSubject({
   id: 'grade4-french', name: 'French', grade: 4, icon: '🇫🇷', subject: 'French',
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: true, noDifficulty: true,
+  syllabus: G4FR_SYLLABUS,
   chapters: [
     {
       id: 'g4fr-vocabulaire', name: 'Vocabulaire de base', icon: '🗣️',

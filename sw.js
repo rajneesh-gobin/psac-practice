@@ -7,7 +7,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v1';
+const SHELL_VERSION = 'shell-v11';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -37,6 +37,7 @@ const SHELL_FILES = [
   '/engine/question_loader.js',
   '/engine/auth.js',
   '/engine/app.js',
+  '/engine/biometric.js',
   '/engine/admin.js',
   '/engine/teacher.js',
   '/engine/forum.js',

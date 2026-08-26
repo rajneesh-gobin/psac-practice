@@ -32,6 +32,14 @@ const Auth = (() => {
   let _parentPinSetup2     = '';
   let _parentPinStep       = 1;
 
+  // ── Biometric lock gate (see engine/biometric.js) ──
+  // Shared by both parent (Supabase session) and student (PIN token) resume -
+  // whichever one is silently restoring on this page load. Never both: only
+  // one of a parent session or a student session can be persisted at a time.
+  let _biometricGateResolved   = false; // true once this boot has cleared/skipped the gate
+  let _pendingBiometricSession = null;  // the session/sess object waiting behind #screen-biometric-lock
+  let _pendingBiometricKind    = null;  // 'parent' | 'student'
+
   const DEFAULT_FREE_FEATURES = {
     allowed_chapters: null, daily_question_cap: 20, weekly_exam_cap: 1,
     hints_per_question: 3, printable_papers: false, advanced_analytics: false,
@@ -81,11 +89,55 @@ const Auth = (() => {
     try { await Store.recordReferral(code); } catch(e) { console.warn('[auth] referral not recorded:', e.message); }
   }
 
+  // ── One-tap child login (?join=TOKEN) ──────────
+  // Runs before every other routing decision: the child tapping this link may
+  // already have a stale session, or be on a device where a parent is signed
+  // in, and the link has to win in both cases. The token is stripped from the
+  // URL immediately - it is single-use, but it should not sit in history or get
+  // shared onward by a screenshot of the address bar.
+  async function _tryJoinLink() {
+    let token = '';
+    try {
+      const params = new URLSearchParams(location.search);
+      token = (params.get('join') || '').trim();
+      if (!token) return false;
+      params.delete('join');
+      const rest = params.toString();
+      history.replaceState(null, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
+    } catch(_) { return false; }
+
+    const res = await Store.redeemStudentInvite(token);
+    if (!res?.ok) {
+      showScreen('auth');
+      setRole('student');
+      _showAuthError(res?.error === 'account_expired'
+        ? 'This practice account has expired. Please ask your parent.'
+        : 'That link has already been used or has expired. Ask your parent for a new one, '
+          + 'or sign in with your family name, username and PIN.');
+      return true;
+    }
+
+    // Any parent session on this device belongs to somebody else now.
+    try { if (_sb) await _sb.auth.signOut(); } catch(_) {}
+    _parentUser = null; _parentProfile = null; _family = null; _familyStudents = [];
+
+    // bumpSession stays TRUE so this behaves exactly like a PIN login - the
+    // account-sharing guard starts and push re-subscribes. redeem_student_invite
+    // has already dropped every other session server-side.
+    await _loginStudentRow(res.student, { token: res.session_token });
+    return true;
+  }
+
   // ── App init ───────────────────────────────────
   async function init() {
     _captureReferralFromUrl();
     // Show a loading state so there's no blank flash
     document.body.style.opacity = '0';
+
+    if (location.search.includes('join=')) {
+      document.body.style.opacity = '1';
+      if (await _tryJoinLink()) return;
+    }
 
     // 1. Listen for Supabase auth state changes (email verification callback lands here)
     if (_sb) {
@@ -95,7 +147,7 @@ const Auth = (() => {
           return;
         }
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session && !_parentUser) {
-          await _handleParentSession(session);
+          await _handleParentSessionGated(session);
         } else if (event === 'SIGNED_OUT') {
           _parentUser    = null;
           _parentProfile = null;
@@ -103,6 +155,9 @@ const Auth = (() => {
           _familyStudents = [];
           Store.clearStudentSession();
           _activeAccount = null;
+          _biometricGateResolved  = false;
+          _pendingBiometricSession = null;
+          _pendingBiometricKind    = null;
           showScreen('auth');
         }
       });
@@ -111,7 +166,7 @@ const Auth = (() => {
       const { data: { session } } = await _sb.auth.getSession();
       if (session) {
         document.body.style.opacity = '1';
-        await _handleParentSession(session);
+        await _handleParentSessionGated(session);
         return;
       }
     }
@@ -120,12 +175,126 @@ const Auth = (() => {
     const studentSess = Store.getStudentSession();
     if (studentSess) {
       document.body.style.opacity = '1';
-      await _resumeStudent(studentSess);
+      await _resumeStudentGated(studentSess);
       return;
     }
 
     document.body.style.opacity = '1';
     showScreen('landing');
+  }
+
+  // ── Biometric lock gate ─────────────────────────
+  // Sits in front of _handleParentSession()/_resumeStudent(): a persisted
+  // session (Supabase for a parent, the PIN token for a student) normally
+  // resumes silently on reload, which is exactly what a fingerprint lock is
+  // supposed to prevent on a shared family device. If this device has
+  // enrolled biometrics for whichever account is resuming, the dashboard
+  // stays behind #screen-biometric-lock until Biometric.verify() succeeds (or
+  // they fall back to password/PIN). Runs at most once per boot - every entry
+  // point funnels through _handleParentSessionGated / _resumeStudentGated,
+  // guarded by _biometricGateResolved (plus _parentUser/_activeAccount) so
+  // none of them can double-fire it.
+  async function _handleParentSessionGated(session) {
+    if (_parentUser) return;
+    if (_biometricGateResolved || typeof Biometric === 'undefined' || !Biometric.isEnrolled(session.user.id)) {
+      _biometricGateResolved = true;
+      await _handleParentSession(session);
+      return;
+    }
+    _showBiometricLock('parent', session);
+  }
+
+  async function _resumeStudentGated(sess) {
+    if (_activeAccount) return;
+    if (_biometricGateResolved || typeof Biometric === 'undefined' || !sess.id || !Biometric.isEnrolled(sess.id)) {
+      _biometricGateResolved = true;
+      await _resumeStudent(sess);
+      return;
+    }
+    _showBiometricLock('student', sess);
+  }
+
+  function _showBiometricLock(kind, session) {
+    _pendingBiometricKind    = kind;
+    _pendingBiometricSession = session;
+    const fallback = _el('bio-lock-fallback');
+    if (fallback) fallback.textContent = kind === 'student' ? 'Use my PIN instead' : 'Use password instead';
+    showScreen('biometric-lock');
+    _attemptBiometricUnlock();
+  }
+
+  async function _attemptBiometricUnlock() {
+    const session = _pendingBiometricSession;
+    const kind    = _pendingBiometricKind;
+    if (!session) return;
+    const userId = kind === 'student' ? session.id : session.user.id;
+    const statusEl = _el('bio-lock-status');
+    if (statusEl) statusEl.textContent = '';
+    const res = await Biometric.verify(userId);
+    if (res.ok) {
+      _biometricGateResolved  = true;
+      _pendingBiometricSession = null;
+      if (kind === 'student') await _resumeStudent(session);
+      else                    await _handleParentSession(session);
+    } else if (res.error !== 'cancelled' && statusEl) {
+      statusEl.textContent = "Couldn't verify — try again, or use the fallback below.";
+    }
+  }
+
+  // Abandons the biometric gate for this boot and sends them to the normal
+  // sign-in form. Deliberately clears the credential first (signs the parent
+  // out / drops the student token): unlike the fingerprint check, typing the
+  // password or PIN again is a real second factor, not just a convenience skip.
+  function biometricUsePassword() {
+    const kind = _pendingBiometricKind;
+    _biometricGateResolved  = true;
+    _pendingBiometricSession = null;
+    if (kind === 'student') {
+      Store.clearStudentSession();
+      showScreen('auth');
+      setRole('student');
+    } else {
+      if (_sb) _sb.auth.signOut();
+      showScreen('auth');
+      setRole('parent');
+    }
+  }
+
+  async function _biometricEnroll(userId, label, btn) {
+    if (!userId) return;
+    if (btn) btn.disabled = true;
+    const res = await Biometric.enroll(userId, label || '');
+    if (btn) btn.disabled = false;
+    if (!res.ok) { toast(res.error || 'Could not enable fingerprint login.'); return; }
+    toast('✅ Fingerprint login enabled on this device');
+    if (typeof showProfile === 'function') showProfile();
+  }
+
+  function _biometricUnenroll(userId) {
+    if (!userId) return;
+    Biometric.unenroll(userId);
+    toast('Fingerprint login disabled on this device');
+    if (typeof showProfile === 'function') showProfile();
+  }
+
+  function enableBiometricLogin(btn) {
+    if (!_parentProfile) return;
+    return _biometricEnroll(_parentProfile.id, _parentUser?.email || '', btn);
+  }
+
+  function disableBiometricLogin() {
+    if (!_parentProfile) return;
+    _biometricUnenroll(_parentProfile.id);
+  }
+
+  function enableStudentBiometricLogin(btn) {
+    if (!ACTIVE_STUDENT_ID) return;
+    return _biometricEnroll(ACTIVE_STUDENT_ID, _activeAccount?.name || '', btn);
+  }
+
+  function disableStudentBiometricLogin() {
+    if (!ACTIVE_STUDENT_ID) return;
+    _biometricUnenroll(ACTIVE_STUDENT_ID);
   }
 
   // ── Handle parent/teacher Supabase session ─────
@@ -152,6 +321,20 @@ const Auth = (() => {
     }
 
     _parentProfile = profile;
+
+    // Closed by the parent themselves (Settings → Close my account). Nothing was
+    // erased, so offer it back instead of letting them in to an app that looks
+    // mysteriously empty. Read separately from getProfile() so a database
+    // without the deleted_at column simply never takes this branch.
+    const deletedAt = await Store.getAccountDeletedAt(profile.id);
+    if (deletedAt) {
+      const whenEl = _el('deleted-when');
+      if (whenEl) {
+        whenEl.textContent = ` on ${new Date(deletedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+      }
+      showScreen('account-deleted');
+      return;
+    }
 
     if (profile.disabled) {
       await _sb.auth.signOut();
@@ -438,16 +621,24 @@ const Auth = (() => {
   // applyUserTheme: false when a PARENT is previewing a child from the
   // dashboard. Loading a child's data must not restyle the parent's own UI -
   // they did not change user, they opened a panel.
-  async function _loginStudentRow(studentRow, { navigate = true, bumpSession = true, token = null, applyUserTheme = true } = {}) {
-    let sessionVersion = studentRow.session_version || 0;
-
-    // Bump session_version in DB to invalidate any existing sessions on other devices
-    if (bumpSession && _sb) {
-      try {
-        sessionVersion = sessionVersion + 1;
-        await _sb.from('students').update({ session_version: sessionVersion }).eq('id', studentRow.id);
-      } catch(_) { /* offline — keep existing version */ }
-    }
+  // headerChip: false for that same preview - the header chip names who is
+  // SIGNED IN and opens their profile, so it must keep saying the parent even
+  // while a child's row is loaded into ACTIVE_STUDENT_ID.
+  //
+  // session_version is bumped SERVER-SIDE now, inside verify_student_pin() /
+  // redeem_student_invite() (both SECURITY DEFINER, run atomically with the
+  // login itself), NOT here. It used to be a separate client-side UPDATE
+  // straight after this function ran - but `students` RLS only allows a
+  // parent's own auth session (owns_student_txt) or an admin to write to that
+  // table, never a plain student token, so on any device with no parent ever
+  // signed in that write silently failed every time (wrapped in a try/catch
+  // that swallowed it). The LOCAL copy still incremented regardless, so the
+  // very next guard check on that same session saw its own un-persisted bump
+  // as a mismatch and signed the student out for a "different device" that
+  // never existed. studentRow.session_version below is now always the
+  // already-current, server-authoritative value - trust it as-is.
+  async function _loginStudentRow(studentRow, { navigate = true, bumpSession = true, token = null, applyUserTheme = true, headerChip = true } = {}) {
+    const sessionVersion = studentRow.session_version || 0;
 
     const sess = {
       id:             studentRow.id,
@@ -502,8 +693,8 @@ const Auth = (() => {
     // Show header logout button and profile chip
     const hdrLogout = document.getElementById('header-logout-btn');
     if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
-    _updateHeaderProfileChip('student', studentRow);
-    Store.logLoginEvent(studentRow.id, 'student');
+    if (headerChip) _updateHeaderProfileChip('student', studentRow);
+    if (bumpSession) Store.logLoginEvent(studentRow.id, 'student');
     if (bumpSession) _startSessionGuard(studentRow.id, sessionVersion);
     if (bumpSession && typeof setupPushNotifications === 'function') {
       setupPushNotifications(studentRow.id).catch(() => {});
@@ -578,6 +769,7 @@ const Auth = (() => {
   }
 
   function showSignIn() {
+    _clearAuthError();
     _el('auth-signin-fields')?.classList.remove('hidden');
     _el('auth-signup-fields')?.classList.add('hidden');
     _el('auth-signin-tab')?.classList.add('bg-white/20', 'text-white', 'font-semibold');
@@ -662,6 +854,23 @@ const Auth = (() => {
       options: { data: { full_name: name, role } },
     });
     _setAuthLoading(false);
+
+    // "This email already has an account" arrives two different ways depending
+    // on the project's email-enumeration setting: as an explicit error, or as a
+    // success with an EMPTY identities array and no new confirmation sent.
+    // Either way, silently showing "check your email" would leave them waiting
+    // for a message that never comes — and if they closed the account earlier,
+    // signing in is exactly what gets it back.
+    const alreadyRegistered =
+      (error && /already\s*(registered|exists|been registered)|user already/i.test(error.message)) ||
+      (!error && Array.isArray(data?.user?.identities) && data.user.identities.length === 0);
+
+    if (alreadyRegistered) {
+      _showAuthError('You already have an account with this email. Sign in instead — if you closed it, signing in lets you restore everything.');
+      const signInBtn = _el('auth-goto-signin');
+      if (signInBtn) signInBtn.classList.remove('hidden');
+      return;
+    }
 
     if (error) { _showAuthError(error.message); return; }
 
@@ -815,6 +1024,29 @@ const Auth = (() => {
 
   function getTeacherStatus() { return _teacherStatus; }
 
+  // ── Restore a closed account ───────────────────
+  async function restoreAccount() {
+    const btn = _el('restore-btn');
+    const err = _el('restore-error');
+    if (err) err.classList.add('hidden');
+    if (btn) { btn.disabled = true; btn.textContent = 'Restoring…'; }
+
+    const res = await Store.restoreMyAccount();
+    if (!res.ok) {
+      if (btn) { btn.disabled = false; btn.textContent = '♻️ Restore my account'; }
+      if (err) { err.textContent = 'Could not restore the account. Please try again.'; err.classList.remove('hidden'); }
+      return;
+    }
+
+    // Re-enter the normal login path from the top so family and children are
+    // re-fetched — they were invisible to every query a moment ago.
+    const { data: { session } } = await _sb.auth.getSession();
+    if (btn) { btn.disabled = false; btn.textContent = '♻️ Restore my account'; }
+    _parentProfile = null;
+    if (session) await _handleParentSession(session);
+    toast(res.children ? `Welcome back! ${res.children} child account${res.children === 1 ? '' : 's'} restored. 🎉` : 'Welcome back! 🎉', 4000);
+  }
+
   // ── Change password modal ──────────────────────
   function openPasswordModal() {
     const m = document.getElementById('modal-change-password');
@@ -863,7 +1095,7 @@ const Auth = (() => {
 
     const listEl  = _el('invite-list');
     const countEl = _el('invite-count');
-    if (listEl) listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-3">Loading…</p>';
+    if (listEl) listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-3">Loading…</p>';
 
     const m = _el('modal-invite');
     if (m) m.classList.remove('hidden');
@@ -881,10 +1113,10 @@ const Auth = (() => {
             <span class="text-xl select-none">🎉</span>
             <div class="flex-1 min-w-0">
               <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(r.referred_name)}</div>
-              <div class="text-xs text-gray-400">${new Date(r.created_at).toLocaleDateString()}</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleDateString()}</div>
             </div>
           </div>`).join('')
-        : '<p class="text-sm text-gray-400 text-center py-4">No one yet — share your link to get started!</p>';
+        : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No one yet — share your link to get started!</p>';
     }
   }
   function closeInviteModal() {
@@ -1000,7 +1232,7 @@ const Auth = (() => {
     _setAuthLoading(true);
 
     // Single verification path for EVERY environment: verify_student_pin(),
-    // which (after supabase-fold-token-into-verify.sql) delegates the credential
+    // which (after supabase-migration.sql) delegates the credential
     // check to verify_student_pin_core() and appends a session token.
     //
     // We deliberately call verify_student_pin rather than mint_student_session:
@@ -1023,7 +1255,7 @@ const Auth = (() => {
     if (error) {
       // 42883 = undefined_function. Transient right after the RPC is created,
       // while PostgREST's schema cache catches up - and permanent if
-      // supabase-student-session-rpc.sql was never run at all. Distinguish it,
+      // supabase-migration.sql was never run at all. Distinguish it,
       // because "try again in a moment" and "a migration is missing" need very
       // different reactions.
       const missing = error.code === '42883'
@@ -1044,6 +1276,15 @@ const Auth = (() => {
       _pinLockedUntil = Date.now() + secs * 1000;
       _showAuthError(`Too many wrong PINs. Please wait ${secs} seconds.`);
       if (_el('student-pin')) _el('student-pin').value = '';
+      return;
+    }
+
+    // More than one family is registered under this name, so the lookup cannot
+    // tell which child this is. Nothing the child types will fix it - a parent
+    // has to rename the family in Account & Settings → Family Login.
+    if (data.error === 'ambiguous_family') {
+      _showAuthError('Two families share this name, so we cannot tell which account this is. '
+        + 'Please ask your parent to change the family name in Settings.');
       return;
     }
 
@@ -1081,7 +1322,7 @@ const Auth = (() => {
       // sees current_student_id() = NULL, so the student can read nothing.
       // Fail loudly rather than dropping them into a silently broken app.
       _showAuthError('Login is temporarily unavailable. Please tell your parent (session service not deployed).');
-      console.error('[auth] mint_student_session returned no session_token - run supabase-student-session-rpc.sql');
+      console.error('[auth] mint_student_session returned no session_token - run supabase-migration.sql');
       return;
     }
 
@@ -1135,7 +1376,15 @@ const Auth = (() => {
 
     // Create family
     const family = await Store.createFamily(_parentUser.id, familyName);
-    if (!family) { toast('Error creating family. Please try again.', 3000); return; }
+    if (!family || family._error) {
+      // 23505: another family already answers to this name, and children log in
+      // with it - so it has to be unique. Name the real problem; "try again"
+      // would have them retry the same name for ever.
+      toast(family?._error?.code === '23505'
+        ? 'Another family already uses that name. Please choose a different family name.'
+        : 'Error creating family. Please try again.', 4000);
+      return;
+    }
     _family = family;
 
     // Create first student
@@ -1146,7 +1395,7 @@ const Auth = (() => {
     if (!student || student._error) {
       const err = student?._error;
       const msg = (err?.code === '23505')
-        ? 'That username is already taken. Please choose another.'
+        ? 'That username is not available. Please try another.'
         : (err?.message || 'Error creating student account. Check the browser console.');
       toast(msg, 3500);
       return;
@@ -1173,6 +1422,10 @@ const Auth = (() => {
     _parentProfile    = null;
     _family           = null;
     _familyStudents   = [];
+    _biometricGateResolved   = false;
+    _pendingBiometricSession = null;
+    _pendingBiometricKind    = null;
+    _justSetPins      = {};
     _isAdminUser      = false;
     _isSuperAdmin     = false;
     _isTeacherUser    = false;
@@ -1217,6 +1470,48 @@ const Auth = (() => {
     const disp = _el('pin-suggestion-display');
     if (disp) disp.textContent = pin;
   }
+  function suggestChildPin() { return _suggestPin(); }
+
+  // PINs never have a plaintext store anywhere - _setStudentPin() only ever
+  // hashes one via the DB's bcrypt RPC. This is the one place a just-set PIN
+  // is remembered, purely in memory, so the parent's dashboard "Login" tab can
+  // show it back to them for the rest of this tab session. It is per studentId
+  // so it survives switching between children, and is wiped on logout() below.
+  let _justSetPins = {};
+  function getJustSetPin(studentId) { return _justSetPins[studentId || ACTIVE_STUDENT_ID] || ''; }
+
+  async function setCurrentChildPin(pin) {
+    if (!ACTIVE_STUDENT_ID) return { ok: false, error: 'Open a child first.' };
+    pin = String(pin || '').trim();
+    if (!/^\d{4}$/.test(pin)) return { ok: false, error: 'PIN must be exactly 4 digits.' };
+    if (_isWeakPin(pin)) return { ok: false, error: 'That PIN is too easy to guess — try something less obvious (not 1111, 1234, etc.).' };
+    const ok = await _setStudentPin(ACTIVE_STUDENT_ID, pin);
+    if (!ok) return { ok: false, error: 'Could not save the PIN. Please try again.' };
+    _justSetPins[ACTIVE_STUDENT_ID] = pin;
+    return { ok: true, pin };
+  }
+
+  // Retry path behind the dashboard's "could not load your children" banner.
+  // renderParentDashboard() reads the cached list, so repainting alone would
+  // show the same failure for ever - the fetch has to be redone.
+  async function reloadStudents() {
+    if (!_family && _parentUser) _family = await Store.getMyFamily(_parentUser.id);
+    if (_family) {
+      _familyStudents = await Store.getFamilyStudents(_family.id);
+      _cacheAccountsLocally(_familyStudents);
+    }
+    renderParentDashboard();
+  }
+
+  // The family name is the first of the three things a child types at login,
+  // and it is the one the parent never picks on this form - so it is shown
+  // read-only rather than left to memory. Renaming it belongs in Account &
+  // Settings, where it applies to the whole family rather than one child.
+  function _fillFamilyField() {
+    const el = _el('add-child-family');
+    if (!el) return;
+    el.value = _family?.family_name || '';
+  }
 
   // ── Parent adds/manages children ───────────────
   async function addStudent() {
@@ -1226,7 +1521,12 @@ const Auth = (() => {
       if (!_family && _parentUser) {
         // Still null - could be a fresh account that skipped setup, create a default family
         const name = _parentProfile?.full_name || _parentUser.email?.split('@')[0] || 'My Family';
-        _family = await Store.createFamily(_parentUser.id, `${name}'s Family`);
+        const made = await Store.createFamily(_parentUser.id, `${name}'s Family`);
+        _family = made?._error ? null : made;
+        if (made?._error?.code === '23505') {
+          toast('A family already uses that name. Open Settings → Family Login and pick one.', 4500);
+          return;
+        }
       }
       if (!_family) { toast('Could not load family data. Please refresh and try again.', 3000); return; }
       _familyStudents = await Store.getFamilyStudents(_family.id);
@@ -1236,6 +1536,7 @@ const Auth = (() => {
     if (_el('add-student-title')) _el('add-student-title').textContent = 'Add Child';
     _buildAddStudentAvatarGrid('add');
     _el('add-student-id') && (_el('add-student-id').value = '');
+    _fillFamilyField();
     // Pre-fill a secure suggested PIN and show it in plain text so the parent can note it down
     const _suggested = _suggestPin();
     if (_el('add-child-pin'))            _el('add-child-pin').value          = _suggested;
@@ -1252,8 +1553,11 @@ const Auth = (() => {
     return ok;
   }
 
+  let _justCreated = null;
+
   async function saveNewStudent() {
     if (!_family) return;
+    _justCreated = null;
 
     const name  = (_el('add-child-name')?.value     || '').trim();
     const uname = (_el('add-child-username')?.value || '').trim().toLowerCase();
@@ -1271,7 +1575,13 @@ const Auth = (() => {
       const updates = { displayName: name, grade, avatar: _addAvatar,
         settings: ((_familyStudents.find(s => s.id === existingId))?.settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false }) };
       await Store.updateStudent(existingId, updates);
-      if (pin) await _setStudentPin(existingId, pin);
+      // A failed PIN write used to be followed immediately by the success
+      // toast below, which replaced the error in the same toast slot. The
+      // parent walked away believing the new PIN was live while the child was
+      // still on the old one - and had no way to find that out except by the
+      // child failing to log in.
+      if (pin && !await _setStudentPin(existingId, pin)) return;
+      if (pin) _justSetPins[existingId] = pin;
       toast('Child updated! ✅', 1500);
     } else {
       // Create mode - PIN is required
@@ -1284,30 +1594,59 @@ const Auth = (() => {
         const err = student?._error;
         // PostgreSQL unique violation code = 23505
         const msg = (err?.code === '23505')
-          ? 'Username already taken in this family.'
+          // Same wording as _CREATE_ERRORS.username_taken: never hint at WHY a
+          // name is unavailable, because one of the reasons is another family's child.
+          ? 'That username is not available. Please try another.'
           : (err?.message || 'Could not create child account. Check the browser console for details.');
         toast(msg, 3500);
         return;
       }
       // Store.createStudent already hashed the PIN via set_student_pin().
+      _justCreated = student;
+      _justSetPins[student.id] = pin;
       toast('Child added! 🎉', 2000);
     }
 
-    // Reload family students
-    _familyStudents = await Store.getFamilyStudents(_family.id);
+    // Reload family students. The refetch is the source of truth, but a child
+    // the database has definitely just accepted must not disappear because the
+    // read that followed it failed - that reads as "the child was not created"
+    // and invites the parent to create a duplicate.
+    const fetched = await Store.getFamilyStudents(_family.id);
+    if (_justCreated && !fetched.some(s => s.id === _justCreated.id)) {
+      _familyStudents = [...fetched, _justCreated];
+      console.warn('[auth] new child missing from the refetch — showing the created row.',
+        Store.lastFamilyStudentsError?.() || '');
+    } else {
+      _familyStudents = fetched;
+    }
+    const created = _justCreated;
+    _justCreated = null;
     _cacheAccountsLocally(_familyStudents);
     _openParentDashboard();
+
+    // Straight into "send it to them" — the moment the parent has the PIN in
+    // front of them is the only moment they can pass it on without resetting it.
+    if (created && typeof openChildLoginModal === 'function') {
+      openChildLoginModal(created, pin);
+    }
   }
 
   async function deleteStudent(id) {
     const target = _familyStudents.find(s => s.id === id);
     if (!target) return;
-    if (!confirm(`Delete ${target.display_name}'s account and all their progress?`)) return;
-    await Store.deleteStudent(id);
+    if (!confirm(`Remove ${target.display_name}'s account?\n\nThey will be signed out everywhere and disappear from your dashboard. Their progress is kept, and you can create a new child with the same name straight away.`)) return;
+    const res = await Store.deleteStudent(id);
+    if (res && res.ok === false) {
+      toast('Could not remove the account. Please try again.', 3000);
+      return;
+    }
     _familyStudents = _familyStudents.filter(s => s.id !== id);
     _cacheAccountsLocally(_familyStudents);
-    renderParentDashboard();
-    toast(`${target.display_name}'s account deleted.`, 2000);
+    // A child who was open in the detail panel is gone, so go back to the grid.
+    if (ACTIVE_STUDENT_ID === id) ACTIVE_STUDENT_ID = null;
+    if (typeof PD !== 'undefined' && PD.closeDetail) PD.closeDetail();
+    else renderParentDashboard();
+    toast(`${target.display_name}'s account removed.`, 2500);
   }
 
   function editCurrentStudent() {
@@ -1335,6 +1674,7 @@ const Auth = (() => {
     if (_el('add-child-username')) _el('add-child-username').value  = student.username;
     if (_el('add-child-grade'))    _el('add-child-grade').value     = student.grade;
     if (_el('add-child-pin'))      _el('add-child-pin').value       = ''; // never pre-fill PIN in edit mode
+    _fillFamilyField();
     if (_el('pin-suggestion-row')) _el('pin-suggestion-row').classList.add('hidden');
     _buildAddStudentAvatarGrid('add', student.avatar);
   }
@@ -1418,6 +1758,27 @@ const Auth = (() => {
     _updatePinDots('pin-dot-', 0);
     document.getElementById('pin-entry-error')?.classList.add('hidden');
     document.getElementById('modal-parent-pin')?.classList.remove('hidden');
+    document.addEventListener('keydown', _parentPinKeydown);
+  }
+
+  // Escape closes; the number keys drive the pad so a parent on a laptop is not
+  // forced to click twelve buttons.
+  function _parentPinKeydown(e) {
+    if (e.key === 'Escape')            { closeParentPin(); return; }
+    if (/^[0-9]$/.test(e.key))         { _pinKey(e.key); return; }
+    if (e.key === 'Backspace')         { e.preventDefault(); _pinKey('back'); }
+  }
+
+  // The child tapped "Parent" by mistake. Put them back exactly where they were:
+  // no sign-out, no navigation, no PIN attempt recorded. Before this the modal
+  // had no exit at all except the correct PIN or "Forgot PIN?", which signs the
+  // student out of their own session.
+  function closeParentPin() {
+    _parentPinEntry = '';
+    _updatePinDots('pin-dot-', 0);
+    document.getElementById('pin-entry-error')?.classList.add('hidden');
+    document.getElementById('modal-parent-pin')?.classList.add('hidden');
+    document.removeEventListener('keydown', _parentPinKeydown);
   }
 
   function _pinKey(k) {
@@ -1437,7 +1798,9 @@ const Auth = (() => {
       if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
       return;
     }
-    document.getElementById('modal-parent-pin')?.classList.add('hidden');
+    // Via closeParentPin so the keydown listener is detached too — otherwise
+    // every digit typed on the dashboard afterwards would still feed the pad.
+    closeParentPin();
     const { data: { session } } = await _sb.auth.getSession();
     if (session && !_parentUser) {
       await _handleParentSession(session);
@@ -1454,7 +1817,7 @@ const Auth = (() => {
   }
 
   function _pinForgot() {
-    document.getElementById('modal-parent-pin')?.classList.add('hidden');
+    closeParentPin();
     showScreen('auth');
     setRole('parent');
   }
@@ -1469,8 +1832,42 @@ const Auth = (() => {
       const label = document.getElementById('pin-setup-step-label');
       if (label) label.textContent = 'Step 1 of 2 — Enter a 4-digit PIN';
       document.getElementById('pin-setup-error')?.classList.add('hidden');
+      document.getElementById('pin-setup-back')?.classList.add('hidden');
       document.getElementById('modal-parent-pin-setup')?.classList.remove('hidden');
+      document.addEventListener('keydown', _pinSetupKeydown);
     }, 1800);
+  }
+
+  function _pinSetupKeydown(e) {
+    if (e.key === 'Escape')    { closeParentPinSetup(); return; }
+    if (/^[0-9]$/.test(e.key)) { _pinSetupKey(e.key); return; }
+    if (e.key === 'Backspace') { e.preventDefault(); _pinSetupKey('back'); }
+  }
+
+  // Same contract as closeParentPin: dismissing costs nothing. The PIN is a
+  // convenience shortcut, never a requirement - the parent still signs in with
+  // their email either way.
+  function closeParentPinSetup() {
+    _parentPinStep   = 1;
+    _parentPinSetup1 = '';
+    _parentPinSetup2 = '';
+    _updatePinDots('setup-dot-', 0);
+    document.getElementById('pin-setup-error')?.classList.add('hidden');
+    document.getElementById('pin-setup-back')?.classList.add('hidden');
+    document.getElementById('modal-parent-pin-setup')?.classList.add('hidden');
+    document.removeEventListener('keydown', _pinSetupKeydown);
+  }
+
+  // Step 2 → step 1, with the first PIN restored so it can be edited rather
+  // than retyped.
+  function pinSetupBack() {
+    _parentPinStep   = 1;
+    _parentPinSetup2 = '';
+    _updatePinDots('setup-dot-', _parentPinSetup1.length);
+    document.getElementById('pin-setup-error')?.classList.add('hidden');
+    document.getElementById('pin-setup-back')?.classList.add('hidden');
+    const label = document.getElementById('pin-setup-step-label');
+    if (label) label.textContent = 'Step 1 of 2 — Enter a 4-digit PIN';
   }
 
   function _pinSetupKey(k) {
@@ -1486,8 +1883,12 @@ const Auth = (() => {
         _updatePinDots('setup-dot-', 0);
         const label = document.getElementById('pin-setup-step-label');
         if (label) label.textContent = 'Step 2 of 2 — Confirm your PIN';
+        document.getElementById('pin-setup-back')?.classList.remove('hidden');
       }
     } else {
+      // Backspacing off the start of step 2 steps back to step 1, the way it
+      // does in every OS passcode screen.
+      if (k === 'back' && !_parentPinSetup2) { pinSetupBack(); return; }
       if (k === 'clear')     _parentPinSetup2 = '';
       else if (k === 'back') _parentPinSetup2 = _parentPinSetup2.slice(0, -1);
       else if (_parentPinSetup2.length < 4) _parentPinSetup2 += k;
@@ -1495,7 +1896,8 @@ const Auth = (() => {
       if (_parentPinSetup2.length === 4) {
         if (_parentPinSetup1 === _parentPinSetup2) {
           _storePin(_parentPinSetup1);
-          document.getElementById('modal-parent-pin-setup')?.classList.add('hidden');
+          // Via closeParentPinSetup so the keydown listener goes with it.
+          closeParentPinSetup();
           toast('Parent PIN set! Use it next time you tap 🔒 Parent.', 3000);
         } else {
           _parentPinSetup2 = '';
@@ -1503,6 +1905,7 @@ const Auth = (() => {
           if (errEl) errEl.classList.remove('hidden');
           _parentPinStep   = 1;
           _parentPinSetup1 = '';
+          document.getElementById('pin-setup-back')?.classList.add('hidden');
           const label = document.getElementById('pin-setup-step-label');
           if (label) label.textContent = 'Step 1 of 2 — Enter a 4-digit PIN';
         }
@@ -1603,7 +2006,7 @@ const Auth = (() => {
   async function pdSwitchStudent(id) {
     const student = _familyStudents.find(s => s.id === id);
     if (student) {
-      await _loginStudentRow(student, { navigate: false, bumpSession: false, applyUserTheme: false });
+      await _loginStudentRow(student, { navigate: false, bumpSession: false, applyUserTheme: false, headerChip: false });
     } else {
       loginStudent(id);
     }
@@ -1624,11 +2027,12 @@ const Auth = (() => {
     const diff   = parseInt(_el('pd-assign-diff')?.value || '0') || null;
     const note        = (_el('pd-assign-note')?.value || '').trim();
     const showAnswers = _el('pd-assign-show-answers')?.checked !== false;
+    const showHints   = _el('pd-assign-show-hints')?.checked   !== false;
     if (!chId && !diff) { toast('Select a chapter or difficulty.', 2000); return; }
     if (!ACTIVE_STUDENT_ID) { toast('Select a student first.', 2000); return; }
     const profile = _parentProfile;
     const result  = await Store.createAssignment(ACTIVE_STUDENT_ID, profile?.id, {
-      subjectId: subjId, chapterId: chId, difficulty: diff, note, showAnswers,
+      subjectId: subjId, chapterId: chId, difficulty: diff, note, showAnswers, showHints,
     });
     if (!result) { toast('Could not save. Please try again.', 2500); return; }
     if (_el('pd-assign-note')) _el('pd-assign-note').value = '';
@@ -1637,15 +2041,63 @@ const Auth = (() => {
   }
 
   async function removeAssignment(id) {
-    await Store.deleteAssignment(id);
+    const res = await Store.deleteAssignment(id);
     if (typeof PD !== 'undefined') PD.renderDetail();
-    toast('Assignment removed.', 1500);
+    toast(res?.ok ? 'Assignment removed.' : 'Could not remove that assignment. Please try again.',
+      res?.ok ? 1500 : 3000);
   }
 
   // ── Access controls ────────────────────────────
+  // Keeps the cached student row in step with DB.restrictions and repaints ONLY
+  // the Controls tab. It used to call renderParentDashboard(), which hides
+  // pd-detail-panel — so every toggle bounced the parent back to the children
+  // grid mid-edit.
+  function _syncCachedSettings() {
+    const row = _familyStudents.find(s => s.id === ACTIVE_STUDENT_ID);
+    if (row) row.settings = DB.restrictions;
+    if (typeof PD !== 'undefined' && PD.refreshControls) PD.refreshControls();
+  }
+
+  function _ensureRestrictions() {
+    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
+    DB.restrictions.lockedChapters = DB.restrictions.lockedChapters || [];
+    return DB.restrictions;
+  }
+
+  // Every Controls toggle mutates DB.restrictions in memory and then persists
+  // it. Each one used to announce success whether or not the write landed - so
+  // a parent could lock exam mode, read "🔒 Exam mode locked", and have the
+  // child sit an exam anyway. On failure the in-memory change is rolled back
+  // too, because a switch left ON over a server that still says OFF is the same
+  // lie one repaint later.
+  async function _saveRestrictions(prevJson, okMsg) {
+    if (ACTIVE_STUDENT_ID) {
+      const res = await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
+      if (!res?.ok) {
+        DB.restrictions = JSON.parse(prevJson);
+        if (typeof PD !== 'undefined' && PD.refreshControls) PD.refreshControls();
+        toast('Could not save that change — check your connection and try again.', 3000);
+        return false;
+      }
+    }
+    _syncCachedSettings();
+    toast(okMsg, 1500);
+    return true;
+  }
+
   async function toggleChapterLock(chapterId, lock) {
-    const r = DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
-    r.lockedChapters = r.lockedChapters || [];
+    // A chapter the admin has switched off — globally, or for this family's plan
+    // tier — is not the parent's to unlock. The checkbox is rendered disabled,
+    // but a disabled attribute is one devtools edit away from gone, so refuse
+    // here too. The real enforcement is server-side: netlify/functions/questions.js
+    // never serves those questions in the first place.
+    if (!lock && typeof _adminBlocksChapter === 'function' && _adminBlocksChapter(chapterId)) {
+      toast('🔒 This chapter is disabled by the administrator.', 2500);
+      if (typeof PD !== 'undefined' && PD.refreshControls) PD.refreshControls();
+      return;
+    }
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
     if (lock) { if (!r.lockedChapters.includes(chapterId)) r.lockedChapters.push(chapterId); }
     else        r.lockedChapters = r.lockedChapters.filter(id => id !== chapterId);
     // Persist the restriction only - NOT save(DB). DB here is a snapshot taken
@@ -1654,51 +2106,46 @@ const Auth = (() => {
     // newer XP/streak/chapter progress with this stale copy. The in-memory
     // mutation above already updates this screen; Store.updateStudent patches
     // just the settings column server-side.
-    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: r });
-    renderParentDashboard();
-    toast(lock ? '🔒 Chapter locked.' : '🔓 Chapter unlocked.', 1500);
+    await _saveRestrictions(prev, lock ? '🔒 Chapter locked.' : '🔓 Chapter unlocked.');
   }
 
   async function setMaxDifficulty(level) {
-    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
-    DB.restrictions.maxDifficulty = parseInt(level);
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
+    r.maxDifficulty = parseInt(level);
     // See toggleChapterLock for why this doesn't also call save(DB).
-    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
-    toast(`Max difficulty set to Level ${level}.`, 1500);
+    await _saveRestrictions(prev, `Max difficulty set to Level ${level}.`);
   }
 
   async function toggleExamDisabled() {
-    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
-    DB.restrictions.examDisabled = !DB.restrictions.examDisabled;
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
+    r.examDisabled = !r.examDisabled;
     // See toggleChapterLock for why this doesn't also call save(DB).
-    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
-    renderParentDashboard();
-    toast(DB.restrictions.examDisabled ? '🔒 Exam mode locked.' : '🔓 Exam mode unlocked.', 1500);
+    await _saveRestrictions(prev, r.examDisabled ? '🔒 Exam mode locked.' : '🔓 Exam mode unlocked.');
   }
 
   async function toggleCrossGradeSearch() {
-    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
-    DB.restrictions.crossGradeSearch = !DB.restrictions.crossGradeSearch;
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
+    r.crossGradeSearch = !r.crossGradeSearch;
     // See toggleChapterLock for why this doesn't also call save(DB).
-    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
-    renderParentDashboard();
-    toast(DB.restrictions.crossGradeSearch ? '🔍 Cross-grade search enabled.' : '🔒 Cross-grade search off.', 1500);
+    await _saveRestrictions(prev, r.crossGradeSearch ? '🔍 Cross-grade search enabled.' : '🔒 Cross-grade search off.');
   }
 
   async function toggleCrossGradePractice() {
-    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
-    DB.restrictions.crossGradePractice = !DB.restrictions.crossGradePractice;
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
+    r.crossGradePractice = !r.crossGradePractice;
     // See toggleChapterLock for why this doesn't also call save(DB).
-    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
-    renderParentDashboard();
-    toast(DB.restrictions.crossGradePractice ? '📚 Cross-grade revision enabled.' : '🔒 Cross-grade revision off.', 1500);
+    await _saveRestrictions(prev, r.crossGradePractice ? '📚 Cross-grade revision enabled.' : '🔒 Cross-grade revision off.');
   }
 
   async function toggleHintsDisabled() {
-    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
-    DB.restrictions.hintsDisabled = !DB.restrictions.hintsDisabled;
-    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
-    toast(DB.restrictions.hintsDisabled ? '💡 In-app hints off.' : '💡 In-app hints on.', 1500);
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
+    r.hintsDisabled = !r.hintsDisabled;
+    await _saveRestrictions(prev, r.hintsDisabled ? '💡 In-app hints off.' : '💡 In-app hints on.');
   }
 
   // ── Auth helpers ───────────────────────────────
@@ -1710,6 +2157,7 @@ const Auth = (() => {
   function _clearAuthError() {
     const el = _el('auth-error');
     if (el) { el.textContent = ''; el.classList.add('hidden'); }
+    _el('auth-goto-signin')?.classList.add('hidden');
   }
 
   function _setAuthLoading(on) {
@@ -1740,7 +2188,7 @@ const Auth = (() => {
     showForgotPassword, backToSignIn, forgotPassword, backToSignUp,
     resendVerification, setNewPassword, togglePass,
     googleSignIn, openAdminPanel, openTeacherDashboard,
-    requestTeacherAccess, getTeacherStatus, refreshAdminBadge: _refreshAdminBadge,
+    requestTeacherAccess, getTeacherStatus, restoreAccount, refreshAdminBadge: _refreshAdminBadge,
     isTeacher: () => _isTeacherUser,
     openPasswordModal, closePasswordModal, changePassword,
     openInviteModal, closeInviteModal, copyInviteLink, shareInvite, shareInviteWhatsApp,
@@ -1750,18 +2198,24 @@ const Auth = (() => {
     completeSetup, _pickSetupAvatar,
     // Add/edit student
     addStudent, saveNewStudent, deleteStudent, editStudent, editCurrentStudent, deleteCurrentStudent, suggestPin,
+    suggestChildPin, setCurrentChildPin, getJustSetPin,
+    reloadStudents,
     _pickAddAvatar,
     // Session
     loginStudent, logout, switchStudent, switchToStudentSelect,
     // Parent mode
     enterParentMode, exitParentMode, resetProgress, confirmResetProgress,
-    _pinKey, _pinSetupKey, _pinForgot,
+    _pinKey, _pinSetupKey, _pinForgot, closeParentPin, closeParentPinSetup, pinSetupBack,
     pdTab, pdSwitchStudent,
     getStudents: () => _familyStudents,
     isSuperAdmin: () => _isSuperAdmin,
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
     toggleCrossGradeSearch, toggleCrossGradePractice, toggleHintsDisabled,
+    // Biometric lock
+    attemptBiometricUnlock: _attemptBiometricUnlock, biometricUsePassword,
+    enableBiometricLogin, disableBiometricLogin,
+    enableStudentBiometricLogin, disableStudentBiometricLogin,
   };
 })();
 

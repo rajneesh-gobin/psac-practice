@@ -76,9 +76,11 @@ psac-practice/
 │
 ├── netlify/functions/            9 serverless functions (see §10)
 │
-├── SQL:  DB_RESTORE_REFERENCE.txt (full schema), supabase-db-patch.sql,
-│         supabase-calendar-migration.sql, supabase-push-table.sql,
-│         supabase-forum-seed.sql (89 KB of seed posts)
+├── SQL:  supabase-migration.sql (the one file to run), supabase-schema.sql
+│         (live-schema dump, rebuild reference). The 24 incremental
+│         supabase-*.sql files were consolidated into these two on 2026-08-26
+│         and live in git history — filenames mentioned later in this document
+│         are historical records of what was run, not files on disk.
 │
 └── Docs: CLAUDE.md, ARCHITECTURE.md (STALE — describes the old "MathMaster" v1),
           CONTRIBUTING.md, HOW_TO_PUBLISH.md, HOW_TO_RUN_LOCALLY.md,

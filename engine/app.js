@@ -52,13 +52,33 @@ function _planAllowsChapter(chapterId) {
   return allowed.includes(chapterId);
 }
 
+// Switched off by an administrator, either for everyone (global settings) or
+// for this family's plan tier. Distinct from a PARENT's own lock: a parent can
+// undo their own lock, but not this one. Mirrored server-side in
+// netlify/functions/questions.js, which simply does not serve these questions —
+// so editing the DOM or localStorage buys a cheat nothing.
+function _adminBlocksChapter(chapterId) {
+  const gs = window.GLOBAL_SETTINGS || {};
+  if ((gs.disabled_chapters || []).includes(chapterId)) return true;
+  return !_planAllowsChapter(chapterId);
+}
+
 function toggleSound() {
   _soundEnabled = !_soundEnabled;
   const btn = document.getElementById('sound-toggle-btn');
-  if (btn) {
+  if (!btn) return;
+  // Writes into the icon/label spans when they exist (the practice toolbar,
+  // where every tool is an icon over a word) and falls back to replacing the
+  // whole button text. textContent on the button itself would delete the spans.
+  const ico = btn.querySelector('.pr-tool-ico');
+  const lbl = btn.querySelector('.pr-tool-lbl');
+  if (ico && lbl) {
+    ico.textContent = _soundEnabled ? '🔔' : '🔕';
+    lbl.textContent = _soundEnabled ? 'Sound on' : 'Muted';
+  } else {
     btn.textContent = _soundEnabled ? '🔔 Sound On' : '🔕 Sound Off';
-    btn.classList.toggle('muted', !_soundEnabled);
   }
+  btn.classList.toggle('muted', !_soundEnabled);
 }
 
 function _floatXP(amount) {
@@ -186,13 +206,53 @@ function applyTheme(t) {
   document.documentElement.classList.toggle('dark', t === 'dark');
   document.getElementById('theme-icon').textContent = t === 'dark' ? '☀️' : '🌙';
   try { localStorage.setItem('mm_global_theme', t); } catch(e) {}
-  if (ACTIVE_STUDENT_ID) { DB.theme = t; save(DB); }
+  // Only a child's OWN session may write a theme into their progress. A parent
+  // viewing a child also has ACTIVE_STUDENT_ID set (pdSwitchStudent), and their
+  // theme choice is theirs, not the child's.
+  if (ACTIVE_STUDENT_ID && !_isParentSession()) { DB.theme = t; save(DB); }
   ['scratchpad-exam', 'scratchpad-practice'].forEach(id => {
     const c = document.getElementById(id);
     if (c && c._ctx) c._ctx.strokeStyle = t === 'dark' ? '#fff' : '#1e293b';
   });
 }
-document.getElementById('theme-toggle').addEventListener('click', () => applyTheme((DB.theme || localStorage.getItem('mm_global_theme') || DEFAULT_THEME) === 'dark' ? 'light' : 'dark'));
+// ── Theme preference: light | dark | system ───
+// applyTheme() only ever deals in a concrete 'light'/'dark'. "Follow my device"
+// is a third state that has to be re-resolved every time the OS flips, so it
+// lives in its own key and is resolved on the way in. mm_global_theme stays
+// exactly what it was - the last CONCRETE theme applied - so nothing that reads
+// it (student DB.theme, the boot paint, _preferredTheme) has to change.
+const THEME_PREF_KEY = 'mm_theme_pref';
+
+function _systemTheme() {
+  try { return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+  catch (e) { return DEFAULT_THEME; }
+}
+
+function getThemePreference() {
+  try {
+    const p = localStorage.getItem(THEME_PREF_KEY);
+    if (p === 'light' || p === 'dark' || p === 'system') return p;
+    // No stored preference: an existing device has only ever made concrete
+    // choices, so report whichever one is currently in force.
+    return localStorage.getItem('mm_global_theme') || DEFAULT_THEME;
+  } catch (e) { return DEFAULT_THEME; }
+}
+
+function setThemePreference(pref) {
+  if (!['light', 'dark', 'system'].includes(pref)) pref = 'system';
+  try { localStorage.setItem(THEME_PREF_KEY, pref); } catch (e) {}
+  applyTheme(pref === 'system' ? _systemTheme() : pref);
+}
+
+try {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (getThemePreference() === 'system') applyTheme(_systemTheme());
+  });
+} catch (e) {}
+
+// The header toggle is a deliberate concrete choice, so it also drops the
+// device out of 'system' - otherwise the next OS flip would silently undo it.
+document.getElementById('theme-toggle').addEventListener('click', () => setThemePreference((DB.theme || localStorage.getItem('mm_global_theme') || DEFAULT_THEME) === 'dark' ? 'light' : 'dark'));
 // One-time migration. The old default wrote 'light' into mm_global_theme on
 // every single boot, so every existing device now stores a "preference" nobody
 // actually chose - and it would keep beating DEFAULT_THEME forever. Clear it
@@ -206,7 +266,8 @@ try {
 } catch(e) {}
 
 // Restore last-used theme immediately (before auth resolves)
-applyTheme(localStorage.getItem('mm_global_theme') || DEFAULT_THEME);
+applyTheme(getThemePreference() === 'system' ? _systemTheme()
+                                             : (localStorage.getItem('mm_global_theme') || DEFAULT_THEME));
 
 // ── TOAST ─────────────────────────────────────
 // ── Image Lightbox ─────────────────────────────
@@ -409,65 +470,116 @@ function _markHintDone(key) {
 
 let _currentHintTarget = null;
 
-function _showHint(targetId, text, key) {
+// A hidden screen still has its buttons in the DOM, and their
+// getBoundingClientRect() is all zeros - which used to pin the callout to the
+// top-left corner of the viewport, pointing at nothing. Nothing gets hinted
+// unless it is actually on screen and laid out.
+function _hintTargetVisible(el) {
+  if (!el || !el.isConnected) return false;
+  if (!el.offsetParent && getComputedStyle(el).position !== 'fixed') return false;
+  const r = el.getBoundingClientRect();
+  return r.width > 0 && r.height > 0;
+}
+
+function _positionHint() {
+  if (!_currentHintTarget) return;
+  const callout = document.getElementById('hint-callout');
+  const target  = document.getElementById(_currentHintTarget.targetId);
+  if (!callout) return;
+  if (!_hintTargetVisible(target) ||
+      (_currentHintTarget.screen && S.currentScreen !== _currentHintTarget.screen)) {
+    _hideHint();
+    return;
+  }
+
+  const rect   = target.getBoundingClientRect();
+  const gap    = 12;
+  const margin = 8;
+  const cw     = callout.offsetWidth  || 240;
+  const ch     = callout.offsetHeight || 80;
+
+  const left = Math.max(margin,
+    Math.min(rect.left + rect.width / 2 - cw / 2, window.innerWidth - cw - margin));
+  callout.style.left = left + 'px';
+
+  const fitsBelow = window.innerHeight - rect.bottom >= ch + gap + margin;
+  const fitsAbove = rect.top >= ch + gap + margin;
+  const below     = fitsBelow || !fitsAbove;
+  callout.style.top       = (below ? rect.bottom + gap : rect.top - gap - ch) + 'px';
+  callout.style.transform = '';
+  callout.classList.toggle('arrow-top',    below);
+  callout.classList.toggle('arrow-bottom', !below);
+
+  // Point the arrow at the middle of the target, not at a fixed 20px inset
+  const arrowX = Math.max(16, Math.min(rect.left + rect.width / 2 - left, cw - 16));
+  callout.style.setProperty('--hint-arrow-x', arrowX + 'px');
+}
+
+function _showHint(targetId, text, key, opts) {
   if (_hintDone(key)) return;
+  const screen = opts?.screen;
+  if (screen && S.currentScreen !== screen) return;
   const target = document.getElementById(targetId);
-  if (!target) return;
+  if (!_hintTargetVisible(target)) return;
   const callout = document.getElementById('hint-callout');
   const textEl  = document.getElementById('hint-callout-text');
   if (!callout || !textEl) return;
 
-  _currentHintTarget = { key, targetId };
+  _currentHintTarget = { key, targetId, screen };
   textEl.textContent = text;
 
-  // Add pulse ring to target
   target.classList.add('hint-pulse');
-
-  // Position callout below or above the target
-  const rect = target.getBoundingClientRect();
-  const gap  = 12;
-  callout.className = 'arrow-top';
-  callout.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 260)) + 'px';
-
-  const spaceBelow = window.innerHeight - rect.bottom;
-  if (spaceBelow >= 120) {
-    callout.style.top       = (rect.bottom + gap + (window.pageYOffset || document.documentElement.scrollTop)) + 'px';
-    callout.style.transform = '';
-    callout.classList.add('arrow-top');
-    callout.classList.remove('arrow-bottom');
-  } else {
-    callout.style.top       = (rect.top - 10 + (window.pageYOffset || document.documentElement.scrollTop)) + 'px';
-    callout.style.transform = 'translateY(-100%)';
-    callout.classList.add('arrow-bottom');
-    callout.classList.remove('arrow-top');
+  if (typeof target.scrollIntoView === 'function') {
+    const r = target.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > window.innerHeight) {
+      target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
   }
 
   callout.classList.remove('hint-hidden');
+  _positionHint();
+  window.addEventListener('scroll', _positionHint, { passive: true });
+  window.addEventListener('resize', _positionHint);
 }
 
-function _dismissHint() {
+// Hide without marking the hint as seen - used when the target scrolls or
+// navigates out of view, so the tip can still do its job next time.
+function _hideHint() {
   const callout = document.getElementById('hint-callout');
   if (callout) callout.classList.add('hint-hidden');
   if (_currentHintTarget) {
-    _markHintDone(_currentHintTarget.key);
     const t = document.getElementById(_currentHintTarget.targetId);
     if (t) t.classList.remove('hint-pulse');
     _currentHintTarget = null;
   }
+  window.removeEventListener('scroll', _positionHint);
+  window.removeEventListener('resize', _positionHint);
+}
+
+function _dismissHint() {
+  if (_currentHintTarget) _markHintDone(_currentHintTarget.key);
+  _hideHint();
 }
 
 function _checkKidHints() {
+  // renderDashboard() also runs for a parent previewing a child
+  // (pdSwitchStudent -> _loginStudentRow), and a child's tip has no business
+  // appearing over the parent dashboard.
+  if (_isParentSession()) return;
   if (DB.restrictions?.hintsDisabled) return;
   if ((DB.stats?.totalAttempted || 0) > 0) return;
   const key = 'kid_start_' + (ACTIVE_STUDENT_ID || 'x');
-  setTimeout(() => _showHint('btn-chapter-mode', 'Tap here to start practising! Pick a chapter and get going. 🚀', key), 600);
+  setTimeout(() => _showHint('btn-chapter-mode',
+    'Tap here to start practising! Pick a chapter and get going. 🚀', key,
+    { screen: 'dashboard' }), 600);
 }
 
 function _checkParentHints() {
   const students = (typeof Auth !== 'undefined' && Auth.getStudents) ? Auth.getStudents() : [];
   if (students.length === 0) {
     setTimeout(() => _showHint('pd-no-children-add-btn',
-      'Start by adding your child here! Each child gets their own progress tracker. 👶', 'parent_add_child'), 700);
+      'Start by adding your child here! Each child gets their own progress tracker. 👶',
+      'parent_add_child', { screen: 'parent' }), 700);
   }
 }
 
@@ -477,7 +589,128 @@ function _checkAssignHint() {
   const firstId = students[0].id;
   const key = 'parent_first_assign_' + firstId;
   setTimeout(() => _showHint('pd-assign-btn',
-    'Set a chapter for your child to practice — they\'ll see it when they log in! 📋', key), 400);
+    'Set a chapter for your child to practice — they\'ll see it when they log in! 📋',
+    key, { screen: 'parent' }), 400);
+}
+
+// ── Send a child their login ────────────────────────────────────────────────
+// The link carries a single-use token that expires in 48 hours, NOT the PIN.
+// A PIN in a URL would be a permanent key to the account in anyone's chat
+// history, and the anti-sharing session guard could never see it being used.
+let _childLogin = null;   // { name, family, username, pin, url }
+
+async function openChildLoginModal(student, pin) {
+  const modal = document.getElementById('modal-child-login');
+  if (!modal) return;
+  const family = (typeof Auth !== 'undefined' && Auth.getFamily()) || {};
+  _childLogin = {
+    name:     student.display_name || student.username || 'your child',
+    family:   family.family_name || '',
+    username: student.username || '',
+    pin:      pin || '',
+    url:      '',
+  };
+
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('cl-child-name', _childLogin.name);
+  set('cl-family',     _childLogin.family || '—');
+  set('cl-username',   _childLogin.username);
+  set('cl-pin',        _childLogin.pin || 'unchanged');
+  // A PIN the parent did not just type is not ours to reveal - in edit mode we
+  // never see it, and it is bcrypt in the database.
+  const pinRow = document.getElementById('cl-include-pin');
+  if (pinRow) { pinRow.checked = false; pinRow.disabled = !_childLogin.pin; }
+  set('cl-link', 'Creating link…');
+  modal.classList.remove('hidden');
+
+  const res = await Store.createStudentInvite(student.id, 48);
+  if (!res?.ok) {
+    // Without the link the details alone are still worth sending, so the modal
+    // stays open and degrades to a details-only message.
+    _childLogin.url = '';
+    set('cl-link', res?.error === 'not_deployed'
+      ? 'One-tap link unavailable (run supabase-migration.sql). The details below still work.'
+      : 'Could not create the link — the details below still work.');
+    return;
+  }
+  _childLogin.url = `${location.origin}${location.pathname}?join=${res.token}`;
+  _refreshChildLoginPreview();
+}
+
+// Re-send from the child's panel. No PIN here: the parent's copy of it exists
+// only at creation time, and the stored one is bcrypt. If they have forgotten
+// it they reset it in Controls, which is the only honest answer.
+function sendCurrentChildLogin() {
+  const id = typeof ACTIVE_STUDENT_ID !== 'undefined' ? ACTIVE_STUDENT_ID : null;
+  const student = ((typeof Auth !== 'undefined' && Auth.getStudents()) || []).find(s => s.id === id);
+  if (!student) { toast('Open a child first.', 2000); return; }
+  // If the parent just set/created this PIN (this tab session only - see the
+  // Login tab), offer to include it. Otherwise it stays blank: a PIN nobody
+  // just typed is bcrypt in the database and nowhere in plaintext to send.
+  const pin = (typeof Auth !== 'undefined' && Auth.getJustSetPin) ? Auth.getJustSetPin(id) : '';
+  openChildLoginModal(student, pin);
+}
+
+function _refreshChildLoginPreview() {
+  const el = document.getElementById('cl-link');
+  if (el && _childLogin?.url) el.textContent = _childLogin.url;
+}
+
+function _childLoginMessage() {
+  if (!_childLogin) return '';
+  const withPin = document.getElementById('cl-include-pin')?.checked && _childLogin.pin;
+  const lines = [
+    `Hi ${_childLogin.name}! Here is your PSAC Exam Practice login 📚`,
+    '',
+    `Family name: ${_childLogin.family}`,
+    `Username: ${_childLogin.username}`,
+  ];
+  if (withPin) lines.push(`PIN: ${_childLogin.pin}`);
+  if (_childLogin.url) {
+    lines.push('', 'Or just tap this link to sign in (works once, for 48 hours):', _childLogin.url);
+  }
+  return lines.join('\n');
+}
+
+function closeChildLoginModal() {
+  document.getElementById('modal-child-login')?.classList.add('hidden');
+  _childLogin = null;
+}
+
+function shareChildLoginWhatsApp() {
+  window.open('https://wa.me/?text=' + encodeURIComponent(_childLoginMessage()), '_blank');
+}
+
+// Landing-page "share the app" button. Deliberately plain wa.me (not
+// navigator.share) - unlike shareResult()/shareInvite(), this one is asked
+// for by name as a WhatsApp button, and wa.me works for a visitor who isn't
+// signed in yet (no referral code, no Auth dependency at all).
+function _appShareText() {
+  return 'PSAC Exam Practice 🎓 — free, fun revision for Grades 4–6! Maths, English, French, '
+    + 'Science and History & Geography, all aligned with the Mauritius MIE curriculum. XP, '
+    + 'streaks and real-time parent tracking built in. Worth a look:';
+}
+
+function shareAppWhatsApp() {
+  const msg = `${_appShareText()}\n\n${location.origin}${location.pathname}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+}
+
+async function shareChildLogin() {
+  const text = _childLoginMessage();
+  if (navigator.share) {
+    try { await navigator.share({ title: 'PSAC Exam Practice login', text }); return; } catch(_) { return; }
+  }
+  copyChildLoginMessage();
+}
+
+async function copyChildLoginMessage() {
+  try {
+    await navigator.clipboard.writeText(_childLoginMessage());
+    toast('Message copied — paste it to your child. 📋', 2500);
+  } catch(_) {
+    toast('Could not copy. Select the link above and copy it manually.', 3000);
+  }
 }
 
 // ── Push notifications ──────────────────────────────────────────────────────
@@ -838,7 +1071,50 @@ function _launchConfetti() {
   })();
 }
 
+// Screens that only make sense for someone actually studying: they read/write
+// SELECTED_GRADE, ACTIVE_PACK and CHAPTERS. A signed-in PARENT (with or
+// without a child currently previewed via Auth.pdSwitchStudent) has no
+// business in any of them - previewing loads that child's progress into DB
+// exactly like a real login, so the Parent Dashboard's own tabs have
+// something to read, but deliberately never touches those three globals,
+// because the preview is meant to stay inside the Parent Dashboard. Gating
+// this on "is a child currently previewed" was the first version of this fix
+// and it was still wrong: a parent with NO child open yet (fresh into Parent
+// Dashboard, nothing clicked) could still tap the header's Stats icon and
+// land here. The only question that matters is "is this a parent session at
+// all" - _isParentSession() alone, full stop. Any button that lands here
+// anyway (the Analytics screen's own "← Back", a dashboard tile, a bottom-nav
+// tab...) used to render garbage instead: whatever grade/subject was left
+// over from an earlier session, matched against whatever child's progress (or
+// none) happened to be loaded - "0% mastery" on every chapter of a subject
+// nobody was ever studying. Patching each button was a losing game (there are
+// a dozen entry points into these screens); this catches all of them at once.
+const _KID_ONLY_SCREENS = new Set([
+  'dashboard', 'chapter-select', 'syllabus', 'past-papers', 'analytics',
+  'subject-select', 'grade-select', 'practice', 'exam-config', 'exam',
+  'results', 'assignment-complete', 'search',
+]);
+function _isParentContext() {
+  return !!(typeof _isParentSession === 'function' && _isParentSession());
+}
+function _returnToParentDashboard() {
+  const id = ACTIVE_STUDENT_ID;
+  showScreen('parent');
+  if (id) {
+    if (typeof PD !== 'undefined') PD.selectChild(id);
+  } else if (typeof toast === 'function') {
+    // Nothing to preview - e.g. Stats tapped before any child card was
+    // opened. Land on the grid rather than silently doing nothing.
+    toast('Open a child to see their stats.', 2000);
+  }
+}
+
 function showScreen(id) {
+  if (_KID_ONLY_SCREENS.has(id) && _isParentContext()) {
+    _returnToParentDashboard();
+    return;
+  }
+
   // Dismiss any floating hint callout on navigation
   const _hc = document.getElementById('hint-callout');
   if (_hc && !_hc.classList.contains('hint-hidden')) _dismissHint();
@@ -861,6 +1137,7 @@ function showScreen(id) {
   }
   _prevScreen = id;
   _updateBottomNav(id);
+  if (_currentHintTarget && _currentHintTarget.screen !== id) _hideHint();
 
   // Hide header on full-page assignment screens
   const hideHeader = sc?.dataset?.hideHeader === 'true';
@@ -888,6 +1165,7 @@ function showScreen(id) {
   if (id === 'analytics')       renderAnalytics();
   if (id === 'chapter-select')  renderChapterSelect();
   if (id === 'syllabus')        renderSyllabus();
+  if (id === 'past-papers')     renderPastPapers();
   if (id === 'parent')          renderParentDashboard();
   if (id === 'subject-select')  renderSubjectSelect();
   if (id === 'student-select')  renderStudentSelect();
@@ -995,6 +1273,22 @@ function normalise(v) {
     .replace(/rs\.?/g,'').replace(/cm2/g,'cm²').replace(/m2/g,'m²')
     .replace(/kg/g,'kg').replace(/min/g,'min').replace(/\bpm\b/g,'pm');
 }
+// Two answers that are the SAME NUMBER written differently: 12.5 / 12.50,
+// 0.5 / .5, 007 / 7, 1,200 / 1200. normalise() is a string comparison, so it
+// marked every one of those wrong — the child is right and the app says no,
+// which teaches them to distrust it. Only used when BOTH sides parse cleanly
+// as a bare number, so "3 apples" vs "3" still needs the unit.
+function _sameNumber(a, b) {
+  const num = s => {
+    const t = String(s).replace(/[\s,]/g, '').replace(/^rs\.?/i, '');
+    if (!/^[+-]?(\d+\.?\d*|\.\d+)$/.test(t)) return null;
+    const n = parseFloat(t);
+    return Number.isFinite(n) ? n : null;
+  };
+  const x = num(a), y = num(b);
+  return x !== null && y !== null && x === y;
+}
+
 function checkAnswer(q, userAnswer) {
   if (q.type === 'symmetry') {
     try {
@@ -1006,8 +1300,8 @@ function checkAnswer(q, userAnswer) {
     } catch { return false; }
   }
   const ua = normalise(userAnswer);
-  const correct = [q.answer, ...(q.acceptableAnswers || [])].some(a => normalise(a) === ua);
-  return correct;
+  const accepted = [q.answer, ...(q.acceptableAnswers || [])];
+  return accepted.some(a => normalise(a) === ua || _sameNumber(a, userAnswer));
 }
 
 // ── SYMMETRY GRID ─────────────────────────────
@@ -1355,7 +1649,7 @@ function _renderLeaderboard() {
   const el = document.getElementById('pd-leaderboard');
   if (!el) return;
   const accounts = Store.getAccounts();
-  if (accounts.length < 2) { el.innerHTML = '<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-2">Add more children to see the leaderboard.</p>'; return; }
+  if (accounts.length < 2) { el.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400 text-center py-2">Add more children to see the leaderboard.</p>'; return; }
 
   const ranked = accounts.map(a => {
     const d = Store.loadStudent(a.id);
@@ -1370,7 +1664,7 @@ function _renderLeaderboard() {
       <span class="text-xl select-none">${a.avatar}</span>
       <div class="flex-1 min-w-0">
         <div class="text-sm text-gray-800 dark:text-white truncate">${a.name}${a.id === ACTIVE_STUDENT_ID ? ' <span class="text-xs text-blue-400 font-normal">(active)</span>' : ''}</div>
-        <div class="text-xs text-gray-400">Lv.${a.level} · ${a.xp} XP · ${a.acc}% accuracy</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Lv.${a.level} · ${a.xp} XP · ${a.acc}% accuracy</div>
       </div>
     </div>`).join('<hr class="border-gray-100 dark:border-gray-700">');
 }
@@ -1381,8 +1675,20 @@ async function renderParentDashboard() {
 
   const students    = Auth.getStudents() || [];
   const hasStudents = students.length > 0;
+  // An empty list has two very different causes. Showing "add your first
+  // child" over a failed query hides children the parent has already created
+  // and invites them to create duplicates.
+  // A signed-in parent with no family row is the same kind of failure one step
+  // earlier - the children query never even ran, so it left no error behind.
+  const loadError   = !hasStudents
+    ? (Store.lastFamilyStudentsError?.()
+       || ((Auth.getParentProfile?.() && !Auth.getFamily?.())
+             ? 'Your family record could not be loaded.' : null))
+    : null;
 
-  if (_el('pd-no-children'))   _el('pd-no-children').classList.toggle('hidden', hasStudents);
+  if (_el('pd-load-error'))    _el('pd-load-error').classList.toggle('hidden', !loadError);
+  if (_el('pd-load-error-msg')) _el('pd-load-error-msg').textContent = loadError || '';
+  if (_el('pd-no-children'))   _el('pd-no-children').classList.toggle('hidden', hasStudents || !!loadError);
   if (_el('pd-children-grid')) _el('pd-children-grid').classList.toggle('hidden', !hasStudents);
   if (_el('pd-detail-panel'))  _el('pd-detail-panel').classList.add('hidden');
 
@@ -1400,7 +1706,7 @@ async function renderParentDashboard() {
       if (expEl) {
         expEl.textContent = subscription?.expires_at
           ? `Active until ${new Date(subscription.expires_at).toLocaleDateString()}`
-          : 'No expiry - free tier';
+          : `Everything is free until ${FREE_UNTIL_LABEL}`;
       }
     }).catch(() => {});
   }
@@ -1426,9 +1732,12 @@ async function renderParentDashboard() {
       onclick="PD.selectChild('${s.id}')">
       <div class="flex items-center gap-3 mb-3">
         <span class="text-4xl select-none">${s.avatar || '🧒'}</span>
-        <div>
-          <div class="font-bold text-gray-800 dark:text-white">${s.display_name || s.username}</div>
-          <div class="text-xs text-gray-400 dark:text-gray-500">Grade ${s.grade || '?'}</div>
+        <div class="min-w-0">
+          <div class="font-bold text-gray-800 dark:text-white truncate">${_profEsc(s.display_name || s.username)}</div>
+          <!-- Login name, not decoration: two children can share a display name
+               (and will, if a delete ever half-fails), and this is the only
+               thing on the card that tells them apart. -->
+          <div class="text-xs text-gray-500 dark:text-gray-400 truncate">Grade ${s.grade || '?'} · @${_profEsc(s.username || '?')}</div>
         </div>
       </div>
       <div id="pd-card-stats-${s.id}">
@@ -1509,13 +1818,21 @@ function _renderTeacherApplyCard() {
     icon: '👩‍🏫', title: 'Are you a tutor?',
     body: 'Apply for a teacher account to set homework your students complete without needing an account of their own.',
     btn: 'Apply for teacher access',
+    dismissable: true,
   };
 
+  // Only the unsolicited "Are you a tutor?" pitch is dismissable. The pending /
+  // rejected / suspended cards report the state of an application the parent
+  // actually filed, so hiding those would lose information they need.
+  if (v.dismissable && _teacherPitchDismissed()) { slot.innerHTML = ''; return; }
+
   slot.innerHTML = `
-    <div class="rounded-2xl border p-4 mb-4 ${v.cls}">
+    <div class="rounded-2xl border p-4 mb-4 relative ${v.cls}">
+      ${v.dismissable ? `<button onclick="_dismissTeacherPitch()" aria-label="Dismiss"
+        class="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-sm leading-none">✕</button>` : ''}
       <div class="flex items-start gap-3">
         <span class="text-2xl select-none shrink-0">${v.icon}</span>
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0 ${v.dismissable ? 'pr-6' : ''}">
           <div class="font-bold text-sm text-gray-800 dark:text-white">${v.title}</div>
           <p class="text-xs text-gray-600 dark:text-gray-400 mt-0.5">${v.body}</p>
           ${v.btn ? `
@@ -1529,6 +1846,72 @@ function _renderTeacherApplyCard() {
         </div>
       </div>
     </div>`;
+}
+
+// ── PLANS & PAYMENT ────────────────────────────
+// Payment is not live. The modal exists so families can see what is coming and
+// know they are not about to be charged; every purchase control in it is
+// disabled and nothing here talks to a payment provider. When payment does open,
+// this is the one place to wire it up.
+const FREE_UNTIL_LABEL = '31 October 2026';
+
+async function openPlansModal() {
+  const m = document.getElementById('modal-plans');
+  if (!m) return;
+  m.classList.remove('hidden');
+
+  const list = document.getElementById('plans-list');
+  if (!list) return;
+  list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-3">Loading…</p>';
+
+  const profile = (typeof Auth !== 'undefined' && Auth.getParentProfile) ? Auth.getParentProfile() : null;
+  const [plans, current] = await Promise.all([
+    Store.listPlans(),
+    profile?.id ? Store.getUserPlan(profile.id) : Promise.resolve({ plan_id: 'free' }),
+  ]);
+
+  if (!plans.length) {
+    list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-3">Plan details are not available right now.</p>';
+    return;
+  }
+
+  const ICONS = { free: '🆓', starter: '⭐', premium: '👑' };
+  list.innerHTML = plans.map(p => {
+    const isCurrent = p.id === (current?.plan_id || 'free');
+    const price = p.price_mur > 0 ? `Rs ${p.price_mur.toLocaleString('en-GB')}/month` : 'Free';
+    const kids  = p.max_children === 1 ? '1 child' : `${p.max_children} children`;
+    return `<div class="rounded-xl border p-3 ${isCurrent
+        ? 'border-indigo-400 bg-indigo-50 dark:bg-indigo-900/20'
+        : 'border-gray-200 dark:border-gray-700'}">
+      <div class="flex items-center gap-2">
+        <span class="text-xl select-none">${ICONS[p.id] || '📦'}</span>
+        <span class="flex-1 font-bold text-sm text-gray-800 dark:text-white">${_profEsc(p.name || p.id)}</span>
+        ${isCurrent ? '<span class="text-[10px] font-bold uppercase tracking-wide bg-indigo-500 text-white px-2 py-0.5 rounded-full">Current</span>' : ''}
+      </div>
+      <div class="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-1">${price}</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Up to ${kids}</div>
+      ${isCurrent ? '' : `<button disabled class="mt-2 w-full py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed">Available after ${FREE_UNTIL_LABEL}</button>`}
+    </div>`;
+  }).join('');
+}
+
+function closePlansModal() {
+  document.getElementById('modal-plans')?.classList.add('hidden');
+}
+
+// Keyed by user id so dismissing it on a shared device does not hide it from
+// the next parent who signs in there.
+function _teacherPitchKey() {
+  const p = (typeof Auth !== 'undefined' && Auth.getParentProfile) ? Auth.getParentProfile() : null;
+  return 'psac_tutor_pitch_hidden_' + (p?.id || 'anon');
+}
+function _teacherPitchDismissed() {
+  try { return localStorage.getItem(_teacherPitchKey()) === '1'; } catch (e) { return false; }
+}
+function _dismissTeacherPitch() {
+  try { localStorage.setItem(_teacherPitchKey(), '1'); } catch (e) {}
+  const slot = document.getElementById('pd-teacher-apply');
+  if (slot) slot.innerHTML = '';
 }
 
 async function _submitTeacherApplication(btn) {
@@ -1557,7 +1940,7 @@ const PD = (() => {
     if (s) {
       if (_el('pd-detail-avatar')) _el('pd-detail-avatar').textContent = s.avatar || '🧒';
       if (_el('pd-detail-name'))   _el('pd-detail-name').textContent   = s.display_name || s.username;
-      if (_el('pd-detail-grade'))  _el('pd-detail-grade').textContent  = `Grade ${s.grade || '?'}`;
+      if (_el('pd-detail-grade'))  _el('pd-detail-grade').textContent  = `Grade ${s.grade || '?'} · @${s.username || '?'}`;
     }
 
     pdTab('progress');
@@ -1588,6 +1971,82 @@ const PD = (() => {
       c.classList.toggle('hidden', c.dataset.tab !== tab);
     });
     if (tab === 'assign') { _renderAssignments(); _checkAssignHint(); }
+    if (tab === 'login')  { renderLoginTab(); }
+  }
+
+  // ── TAB: LOGIN DETAILS ──────────────────────────
+  // Family name + username are always plaintext (nothing to hide, and the
+  // child has to type them), so they render straight from the cached rows.
+  // The PIN is bcrypt in the database with no plaintext fallback anywhere -
+  // see engine/auth.js's _setStudentPin() - so it can only ever be shown here
+  // in the same tab-session it was just set/reset in-memory (Auth.getJustSetPin).
+  function renderLoginTab() {
+    const id = Auth.getActiveAccount()?.id || _activeId;
+    if (!id) return;
+    const student = (Auth.getStudents() || []).find(s => s.id === id) || {};
+    const family  = (Auth.getFamily && Auth.getFamily()) || {};
+
+    const set = (elId, v) => { const el = document.getElementById(elId); if (el) el.textContent = v; };
+    set('pd-login-family',   family.family_name || '—');
+    set('pd-login-username', student.username || Auth.getActiveAccount()?.name || '—');
+
+    const pin      = (typeof Auth.getJustSetPin === 'function') ? Auth.getJustSetPin(id) : '';
+    const knownEl  = document.getElementById('pd-login-pin-known');
+    const hiddenEl = document.getElementById('pd-login-pin-hidden');
+    const setterEl = document.getElementById('pd-login-pin-setter');
+    if (pin) {
+      set('pd-login-pin', pin);
+      // Tailwind CDN's .hidden can lose to a bare .flex present in the same
+      // class list (style.css loads after the CDN) - so 'flex' is only ever
+      // added once 'hidden' is gone, never left sitting there inert. Same
+      // pattern as the admin/teacher header buttons in auth.js.
+      knownEl?.classList.remove('hidden'); knownEl?.classList.add('flex');
+      hiddenEl?.classList.add('hidden');
+      setterEl?.classList.add('hidden');
+    } else {
+      knownEl?.classList.add('hidden'); knownEl?.classList.remove('flex');
+      hiddenEl?.classList.remove('hidden');
+      setterEl?.classList.add('hidden');
+    }
+    const pinInput = document.getElementById('pd-login-pin-input');
+    if (pinInput) pinInput.value = '';
+    const err = document.getElementById('pd-login-pin-error');
+    if (err) err.classList.add('hidden');
+  }
+
+  function openPinSetter() {
+    document.getElementById('pd-login-pin-hidden')?.classList.add('hidden');
+    document.getElementById('pd-login-pin-setter')?.classList.remove('hidden');
+    const input = document.getElementById('pd-login-pin-input');
+    if (input) { input.value = ''; input.focus(); }
+  }
+
+  function suggestLoginPin() {
+    const input = document.getElementById('pd-login-pin-input');
+    if (input && typeof Auth !== 'undefined' && Auth.suggestChildPin) input.value = Auth.suggestChildPin();
+  }
+
+  async function saveLoginPin(btn) {
+    const pin = (document.getElementById('pd-login-pin-input')?.value || '').trim();
+    const err = document.getElementById('pd-login-pin-error');
+    if (err) err.classList.add('hidden');
+    if (btn) btn.disabled = true;
+    const res = await Auth.setCurrentChildPin(pin);
+    if (btn) btn.disabled = false;
+    if (!res.ok) {
+      if (err) { err.textContent = res.error; err.classList.remove('hidden'); }
+      return;
+    }
+    toast('PIN updated ✅', 1800);
+    renderLoginTab();
+  }
+
+  function copyLoginField(elId) {
+    const text = document.getElementById(elId)?.textContent || '';
+    if (!text || text === '—') return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => toast('Copied ✓', 1200), () => toast('Could not copy.', 1500));
+    }
   }
 
   function renderDetail() {
@@ -1635,7 +2094,7 @@ const PD = (() => {
   async function _renderAssignments() {
     const listEl = document.getElementById('pd-asgn-list');
     if (!listEl || !_activeId) return;
-    listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-4">Loading…</p>';
+    listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">Loading…</p>';
     const asgns  = await Store.loadAssignments(_activeId);
     const DLABELS = ['🎲 Random','Basic','Medium','Hard','Challenge'];
     const allChs  = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
@@ -1647,13 +2106,17 @@ const PD = (() => {
         <span class="text-xl select-none">${ch?.icon || '📚'}</span>
         <div class="flex-1 min-w-0">
           <div class="font-semibold text-sm text-gray-800 dark:text-white">${ch?.name || a.chapter_id || 'Any Chapter'} - ${dlv}</div>
-          ${a.note ? `<div class="text-xs text-gray-400 italic">"${a.note}"</div>` : ''}
-          <div class="text-xs text-gray-400">${new Date(a.created_at).toLocaleDateString()}</div>
+          ${a.note ? `<div class="text-xs text-gray-500 dark:text-gray-400 italic">"${a.note}"</div>` : ''}
+          <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2 flex-wrap">
+            <span>${new Date(a.created_at).toLocaleDateString()}</span>
+            ${a.show_hints === false ? '<span class="text-amber-600 dark:text-amber-400 font-semibold">🚫 No hints</span>' : ''}
+            ${a.show_answers === false ? '<span class="text-amber-600 dark:text-amber-400 font-semibold">🙈 Answers hidden</span>' : ''}
+          </div>
         </div>
         <button onclick="Auth.removeAssignment('${a.id}')"
           class="shrink-0 text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2.5 py-1 rounded-lg hover:bg-red-200 transition-colors">Remove</button>
       </div>`;
-    }).join('') : '<p class="text-sm text-gray-400 text-center py-4">No assignments yet. Add one above.</p>';
+    }).join('') : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No assignments yet. Add one above.</p>';
   }
 
   // ── Study reminder ─────────────────────────────
@@ -1712,7 +2175,18 @@ const PD = (() => {
     setTimeout(_loadReminder, 300);
   }
 
-  return { selectChild: selectChildWithReminder, closeDetail, pdTab, renderDetail, saveReminder, clearReminder };
+  // Flipping one switch in the Controls tab used to call renderParentDashboard(),
+  // which hides pd-detail-panel — so every toggle threw the parent back out to
+  // the children grid and they had to tap back in. Only the controls actually
+  // changed, so only the controls are re-rendered.
+  function refreshControls() {
+    _renderParentControls(Auth.getActiveAccount() || {});
+  }
+
+  return { selectChild: selectChildWithReminder, closeDetail, pdTab, renderDetail,
+           saveReminder, clearReminder, refreshControls,
+           renderLoginTab, openPinSetter, suggestLoginPin, saveLoginPin, copyLoginField,
+           activeId: () => _activeId };
 })();
 
 // ── PARENT DASHBOARD HELPERS ──────────────────
@@ -1723,7 +2197,7 @@ function _renderSubjectProgress(acct) {
   const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
     .filter(p => p.grade === studentGrade && !p.comingSoon);
   const lockedChs = DB.restrictions?.lockedChapters || [];
-  if (!packs.length) { spEl.innerHTML = '<p class="text-sm text-gray-400">No subjects loaded yet.</p>'; return; }
+  if (!packs.length) { spEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">No subjects loaded yet.</p>'; return; }
   spEl.innerHTML = packs.map(pack => {
     const chs    = pack._chapters || pack.chapters || [];
     const dbCh   = DB.chapters || {};
@@ -1738,7 +2212,7 @@ function _renderSubjectProgress(acct) {
       const lk = lockedChs.includes(ch.id) ? ' 🔒' : '';
       return `<div class="flex items-center gap-3 py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
         <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${lk}</span>
-        <span class="text-xs text-gray-400 w-8 text-center shrink-0">${c.attempted}</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400 w-8 text-center shrink-0">${c.attempted}</span>
         <div class="shrink-0" style="display:inline-flex;align-items:center;gap:5px;width:90px">
           <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
             <div style="width:${cp}%;height:100%;background:${cc};border-radius:3px"></div>
@@ -1760,10 +2234,10 @@ function _renderSubjectProgress(acct) {
             <span class="text-xs font-bold" style="color:${col}">${pct}%</span>
           </div>
         </div>
-        <span class="text-xs text-gray-400">${total} Q done ▾</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">${total} Q done ▾</span>
       </button>
       <div class="hidden px-4 py-2">
-        <div class="flex text-xs text-gray-400 uppercase border-b border-gray-100 dark:border-gray-700 pb-1 mb-1">
+        <div class="flex text-xs text-gray-500 dark:text-gray-400 uppercase border-b border-gray-100 dark:border-gray-700 pb-1 mb-1">
           <span class="flex-1">Chapter</span><span class="w-8 text-center">Tried</span><span style="width:90px" class="ml-3">Score</span>
         </div>
         ${chapRows}
@@ -1807,12 +2281,12 @@ function _renderParentControls(acct) {
   const lockPacks = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
     .filter(p => p.grade === lockGrade && !p.comingSoon);
 
-  if (!lockPacks.length) { chLocks.innerHTML = '<p class="text-sm text-gray-400 text-center py-3">No subjects loaded yet.</p>'; return; }
+  if (!lockPacks.length) { chLocks.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-3">No subjects loaded yet.</p>'; return; }
 
   chLocks.innerHTML = lockPacks.map((pack, idx) => {
     const packChs    = (pack._chapters || pack.chapters || []).filter(ch => !ch.enrichment);
     const enrichChs  = (pack._chapters || pack.chapters || []).filter(ch =>  ch.enrichment);
-    const lockedMain = packChs.filter(ch => lockedChs.includes(ch.id)).length;
+    const lockedMain = packChs.filter(ch => lockedChs.includes(ch.id) || _adminBlocksChapter(ch.id)).length;
     const hasLocked  = lockedMain > 0;
     const isOpen     = hasLocked || idx === 0;
 
@@ -1821,13 +2295,19 @@ function _renderParentControls(acct) {
       : `<span class="text-xs font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded-full">All open</span>`;
 
     const mkRow = (ch, isEnr) => {
-      const isLocked = lockedChs.includes(ch.id);
-      return `<label class="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-colors
-          ${isLocked ? 'bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-700/40'}">
-        <input type="checkbox" ${isLocked ? '' : 'checked'} onchange="Auth.toggleChapterLock('${ch.id}',!this.checked)"
-          class="w-4 h-4 accent-blue-500 shrink-0">
-        <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${isEnr ? ' <span class="text-xs text-amber-500">✨</span>' : ''}</span>
-        ${isLocked ? '<span class="text-xs font-medium text-red-400 shrink-0">🔒 Locked</span>' : ''}
+      // Admin-disabled beats the parent's own lock: it renders unticked and
+      // untickable, and says who did it so the parent does not think it is a bug.
+      const adminOff = _adminBlocksChapter(ch.id);
+      const isLocked = adminOff || lockedChs.includes(ch.id);
+      return `<label class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors
+          ${adminOff ? 'bg-gray-50 dark:bg-gray-700/30 opacity-70 cursor-not-allowed'
+                     : isLocked ? 'bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/20 cursor-pointer'
+                                : 'hover:bg-gray-50 dark:hover:bg-gray-700/40 cursor-pointer'}">
+        <input type="checkbox" ${isLocked ? '' : 'checked'} ${adminOff ? 'disabled' : `onchange="Auth.toggleChapterLock('${ch.id}',!this.checked)"`}
+          class="w-4 h-4 accent-blue-500 shrink-0${adminOff ? ' cursor-not-allowed' : ''}">
+        <span class="text-sm ${adminOff ? 'text-gray-500 dark:text-gray-400' : 'text-gray-700 dark:text-gray-300'} flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${isEnr ? ' <span class="text-xs text-amber-500">✨</span>' : ''}</span>
+        ${adminOff ? '<span class="text-xs font-medium text-gray-500 dark:text-gray-400 shrink-0" title="Disabled by the administrator or not included in your plan">🛡️ Unavailable</span>'
+                   : isLocked ? '<span class="text-xs font-medium text-red-400 shrink-0">🔒 Locked</span>' : ''}
       </label>`;
     };
 
@@ -1844,7 +2324,7 @@ function _renderParentControls(acct) {
         <span class="text-xl select-none">${pack.icon}</span>
         <span class="flex-1 font-semibold text-sm text-gray-800 dark:text-white">${pack.subject}</span>
         ${pill}
-        <span class="chev text-gray-400 text-xs transition-transform" style="transform:${isOpen ? 'rotate(180deg)' : ''}">▼</span>
+        <span class="chev text-gray-500 dark:text-gray-400 text-xs transition-transform" style="transform:${isOpen ? 'rotate(180deg)' : ''}">▼</span>
       </button>
       <div class="${isOpen ? '' : 'hidden'} px-2 py-1.5 space-y-0.5">
         ${mainRows}${enrSection}
@@ -1892,7 +2372,7 @@ async function _renderStudentAssignments(studentId) {
         </div>
       </div>
       <div class="flex gap-2 mt-3">
-        ${canStart ? `<button onclick="startAssignmentDirect('${a.subject_id}','${a.chapter_id}',${a.difficulty || 1},${a.show_answers !== false})"
+        ${canStart ? `<button onclick="startAssignmentDirect('${a.subject_id}','${a.chapter_id}',${a.difficulty || 1},${a.show_answers !== false},${a.show_hints !== false})"
           class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-colors shadow">
           ▶ Start Now
         </button>` : ''}
@@ -1912,9 +2392,31 @@ async function _markAssignmentDone(id, btn) {
 }
 
 // ── SCRATCHPAD ────────────────────────────────
+// The scratchpad used to be a permanently-rendered canvas in the sidebar, which
+// on a phone meant it sat below the answer buttons where nobody found it. It is
+// now opened from the toolbar, and only initialised once it is actually visible
+// and can be measured.
+function togglePracticeScratchpad() {
+  const wrap = document.getElementById('practice-scratch-wrap');
+  const btn  = document.getElementById('scratch-toggle-btn');
+  if (!wrap) return;
+  const opening = wrap.classList.contains('hidden');
+  wrap.classList.toggle('hidden', !opening);
+  if (btn) btn.classList.toggle('is-on', opening);
+  if (opening) {
+    initScratchpad('scratchpad-practice');
+    wrap.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+}
+
 function initScratchpad(id) {
   const canvas = document.getElementById(id);
   if (!canvas || canvas._initialized) return;
+  // A canvas that is not on screen yet measures 0 wide, and the old fallback
+  // locked in a 240px backing store for a pad that later stretches to full
+  // width - so strokes landed away from the finger. Bail WITHOUT marking it
+  // initialised: the screen observer and the scratchpad toggle both retry.
+  if (!canvas.offsetWidth) return;
   canvas._initialized = true;
   canvas.width = canvas.offsetWidth || 240;
   canvas.height = parseInt(canvas.getAttribute('height')) || 200;
@@ -2126,7 +2628,7 @@ function _renderWeakChapters(studentData) {
               ${c.flagged && c.attempted === 0
                 ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 py-0.5 rounded-full font-semibold">🚩 Flagged</span>'
                 : `<div class="text-sm font-bold ${c.accuracy < 40 ? 'text-red-500' : 'text-amber-500'}">${c.accuracy}%</div>
-                   <div class="text-[10px] text-gray-400">${c.attempted} tries${c.flagged ? ' · 🚩' : ''}</div>`
+                   <div class="text-[10px] text-gray-500 dark:text-gray-400">${c.attempted} tries${c.flagged ? ' · 🚩' : ''}</div>`
               }
             </div>
           </div>`).join('')}
@@ -2142,7 +2644,7 @@ function _subjectChips(studentData) {
     let att = 0, cor = 0;
     chs.forEach(c => { const p = studentData.chapters?.[c.id]; if (p) { att += p.attempted||0; cor += p.correct||0; } });
     const pct   = att > 0 ? Math.round(cor / att * 100) : null;
-    const color = pct === null ? 'bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500'
+    const color = pct === null ? 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
                 : pct >= 70   ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400'
                 : pct >= 45   ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400'
                 :               'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400';
@@ -2161,62 +2663,141 @@ function toggleChapterFlag(chapterId) {
 }
 
 // ── CHAPTER SELECT ─────────────────────────────
+// ── CHAPTER SELECT ────────────────────────────────────────────────────────
+// ⚠ THE CARD MUST NOT BE A <button>.
+// It used to be, with the 🚩 flag as a nested <button> inside it. That is not
+// "tolerated by the browser" as the old CSS comment claimed: when the HTML
+// parser meets a <button> start tag while a button is still open it CLOSES the
+// outer one. So every card actually rendered as an empty bordered box, followed
+// by a loose flag button, followed by the icon, title, mastery bar and CTA
+// spilled out as bare flow content in the grid cell. That is what made this
+// screen look broken.
+//
+// The card is now an <article> with a transparent full-bleed <button> layered
+// over it (.ch-hit) as the click target, so the whole card is still one big
+// tap target and still keyboard-reachable, while the flag sits above it as a
+// separate, valid button.
+function _chapterCard(ch, borderColor) {
+  const c         = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
+  const pct       = getChapterPct(ch.id);
+  const attempted = c.attempted || 0;
+  const isEnr     = !!ch.enrichment;
+  const isFlagged = !!c.flagged;
+  const planLocked   = !_planAllowsChapter(ch.id);
+  // A parent's own lock used to be invisible here: the card looked normal and
+  // only said "locked by your parent" in a toast AFTER the child tapped it.
+  const parentLocked = (DB.restrictions?.lockedChapters || []).includes(ch.id);
+  const locked       = planLocked || parentLocked;
+
+  const total = (typeof STATIC_QUESTIONS !== 'undefined')
+    ? STATIC_QUESTIONS.filter(q => q && q.chapterId === ch.id).length : 0;
+
+  const tone  = pct >= 80 ? 'good' : pct >= 50 ? 'mid' : 'low';
+  const stars = attempted === 0 ? 0 : pct >= 80 ? 3 : pct >= 50 ? 2 : 1;
+  const starHtml = [1, 2, 3].map(i =>
+    `<span class="${i <= stars ? 'ch-star on' : 'ch-star'}">★</span>`).join('');
+
+  const style = borderColor ? ` style="--ch-accent:${borderColor}"` : '';
+  const cls   = ['ch-card', isEnr ? 'is-bonus' : '', locked ? 'is-locked' : ''].filter(Boolean).join(' ');
+
+  // Status line: one clear sentence per state, never two competing signals.
+  let status;
+  if (planLocked)        status = '<span class="ch-status lock">🔒 Upgrade to unlock</span>';
+  else if (parentLocked) status = '<span class="ch-status lock">🔒 Locked by your parent</span>';
+  else if (!attempted)   status = `<span class="ch-status new">Not started${total ? ` · ${total} questions` : ''}</span>`;
+  else                   status = `<span class="ch-status ${tone}">${pct}% mastery · ${attempted} done</span>`;
+
+  const hit = locked
+    ? `<button class="ch-hit" onclick="toast('${planLocked ? '⭐ Upgrade your plan to access this chapter.' : '🔒 This chapter is locked by your parent.'}', 2500)" aria-label="${_profEsc(ch.name)} — locked"></button>`
+    : `<button class="ch-hit" onclick="startChapterDirect('${ch.id}')" aria-label="Practise ${_profEsc(ch.name)}"></button>`;
+
+  return `<article class="${cls}"${style}>
+    ${hit}
+    ${locked ? '' : `<button class="ch-flag${isFlagged ? ' on' : ''}" onclick="toggleChapterFlag('${ch.id}')"
+      title="${isFlagged ? 'Remove flag' : 'Flag this chapter for your parent'}"
+      aria-label="${isFlagged ? 'Remove flag' : 'Flag for parent'}">${isFlagged ? '🚩' : '⚐'}</button>`}
+    <div class="ch-body">
+      <div class="ch-head">
+        <span class="ch-icon" aria-hidden="true">${ch.icon || '📘'}</span>
+        ${isEnr ? '<span class="ch-badge">✨ Bonus</span>' : ''}
+      </div>
+      <h3 class="ch-name">${_profEsc(ch.name)}</h3>
+      ${ch.part != null ? `<div class="ch-part">Part ${ch.part}</div>` : ''}
+      <div class="ch-spacer"></div>
+      ${status}
+      <div class="ch-bar" role="img" aria-label="${pct}% mastery">
+        <div class="ch-bar-fill ${tone}" style="width:${locked ? 0 : pct}%"></div>
+      </div>
+      <div class="ch-foot">
+        <span class="ch-stars" title="${stars} of 3">${starHtml}</span>
+        <span class="ch-cta">${locked ? 'Locked' : attempted ? 'Continue →' : 'Start →'}</span>
+      </div>
+    </div>
+  </article>`;
+}
+
 function renderChapterSelect() {
   const grid = document.getElementById('chapter-grid');
-  const _borderColor = _SUBJECT_BORDER_COLOR[ACTIVE_PACK?.subject] || '';
-
-  const _card = (ch) => {
-    const pct = getChapterPct(ch.id);
-    const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
-    const partLabel = ch.part != null ? `Part ${ch.part} · ` : '';
-    const isEnr = !!ch.enrichment;
-    const stars = c.attempted === 0 ? '<span class="text-gray-300 dark:text-gray-600 text-base tracking-tight">☆☆☆</span>'
-      : pct >= 80 ? '<span class="text-amber-400 text-base tracking-tight" title="Mastered">★★★</span>'
-      : pct >= 50 ? '<span class="text-base tracking-tight"><span class="text-amber-400">★★</span><span class="text-gray-300 dark:text-gray-600">☆</span></span>'
-      : '<span class="text-base tracking-tight"><span class="text-amber-400">★</span><span class="text-gray-300 dark:text-gray-600">☆☆</span></span>';
-    const isFlagged = !!(DB.chapters?.[ch.id]?.flagged);
-    const borderStyle = _borderColor ? ` style="border-left:4px solid ${_borderColor}"` : '';
-    const planLocked = !_planAllowsChapter(ch.id);
-    if (planLocked) {
-      return `<button class="chapter-card${isEnr ? ' enrichment' : ''} relative opacity-50 cursor-not-allowed" onclick="toast('⭐ Upgrade your plan to access this chapter.', 3000)"${borderStyle}>
-        <div class="absolute top-2 right-2 text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded-full font-semibold z-10">🔒 Upgrade</div>
-        <div class="text-3xl mb-2">${ch.icon}</div>
-        <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">${ch.name}</div>
-        <div class="text-xs text-gray-400 dark:text-gray-500">${partLabel}Locked</div>
-      </button>`;
-    }
-    return `<button class="chapter-card${isEnr ? ' enrichment' : ''} relative" onclick="startChapterDirect('${ch.id}')"${borderStyle}>
-      <button onclick="event.stopPropagation();toggleChapterFlag('${ch.id}')" class="absolute top-2 right-2 text-base leading-none p-1 rounded-full transition-colors z-10 ${isFlagged ? 'text-red-500' : 'text-gray-300 dark:text-gray-600 hover:text-red-400'}" title="${isFlagged ? 'Remove flag' : 'Flag for parent'}">🚩</button>
-      ${isEnr ? '<span class="enr-badge">✨ BONUS</span>' : ''}
-      <div class="text-3xl mb-2">${ch.icon}</div>
-      <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">${ch.name}</div>
-      <div class="flex items-center justify-between mb-1.5">
-        <div class="text-xs text-gray-500 dark:text-gray-400">${partLabel}${c.attempted} attempted</div>
-        <div>${stars}</div>
-      </div>
-      <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${pct}%;background:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}"></div></div>
-      <div class="text-xs mt-1 font-medium" style="color:${pct>=80?'#22c55e':pct>=50?'#f59e0b':'#3b82f6'}">${pct >= 80 ? '🏆 ' : ''}${pct}% mastery</div>
-    </button>`;
-  };
+  if (!grid) return;
+  const accent = _SUBJECT_BORDER_COLOR[ACTIVE_PACK?.subject] || '';
 
   const regular    = CHAPTERS.filter(ch => !ch.enrichment);
   const enrichment = CHAPTERS.filter(ch =>  ch.enrichment);
 
-  let html = regular.map(_card).join('');
+  // Says which subject this actually is. The old page just said "Pick a
+  // chapter", so a child two taps deep had nothing on screen naming the subject.
+  const sub = document.getElementById('chapter-subtitle');
+  if (sub) {
+    const { grade, name } = _activeSubjectLabel();
+    sub.textContent = `Grade ${grade} ${name} · ${regular.length} chapter${regular.length === 1 ? '' : 's'}`
+      + (enrichment.length ? ` + ${enrichment.length} bonus` : '');
+  }
+
+  if (!CHAPTERS.length) {
+    grid.innerHTML = `<div class="ch-empty">
+      <div class="text-4xl mb-2">📭</div>
+      <p class="font-semibold text-gray-700 dark:text-gray-200">No chapters here yet</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Pick a different subject from the Subjects screen.</p>
+    </div>`;
+    _renderChapterSummary(regular);
+    return;
+  }
+
+  let html = `<div class="ch-grid">${regular.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
 
   if (enrichment.length) {
-    html += `<div class="col-span-full mt-4 mb-1">
-      <div class="flex items-center gap-3">
-        <div class="flex-1 h-px bg-amber-200 dark:bg-amber-800/40"></div>
-        <span class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">✨ Bonus Enrichment Topics</span>
-        <div class="flex-1 h-px bg-amber-200 dark:bg-amber-800/40"></div>
+    html += `<div class="ch-section">
+        <span class="ch-section-line"></span>
+        <span class="ch-section-label">✨ Bonus topics</span>
+        <span class="ch-section-line"></span>
       </div>
-      <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-1">Derived from the syllabus - great for extra practice on specific themes</p>
-    </div>`;
-    html += enrichment.map(_card).join('');
+      <p class="ch-section-note">Extra themes drawn from the syllabus — great once the main chapters feel easy.</p>
+      <div class="ch-grid">${enrichment.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
   }
 
   grid.innerHTML = html;
+  _renderChapterSummary(regular);
+}
+
+// A one-line "where am I" strip above the grid, so the child does not have to
+// read every card to know how the subject is going.
+function _renderChapterSummary(chapters) {
+  const el = document.getElementById('chapter-summary');
+  if (!el) return;
+  if (!chapters.length) { el.innerHTML = ''; return; }
+
+  const done     = chapters.filter(ch => (DB.chapters?.[ch.id]?.attempted || 0) > 0);
+  const mastered = chapters.filter(ch => getChapterPct(ch.id) >= 80 && (DB.chapters?.[ch.id]?.attempted || 0) > 0);
+  const pct      = Math.round((mastered.length / chapters.length) * 100);
+
+  el.innerHTML = `
+    <div class="ch-sum-tile"><span class="ch-sum-num">${chapters.length}</span><span class="ch-sum-lbl">Chapters</span></div>
+    <div class="ch-sum-tile"><span class="ch-sum-num">${done.length}</span><span class="ch-sum-lbl">Started</span></div>
+    <div class="ch-sum-tile"><span class="ch-sum-num good">${mastered.length}</span><span class="ch-sum-lbl">Mastered</span></div>
+    <div class="ch-sum-bar">
+      <div class="ch-sum-bar-head"><span>Subject progress</span><span class="ch-sum-pct">${pct}%</span></div>
+      <div class="ch-bar"><div class="ch-bar-fill good" style="width:${pct}%"></div></div>
+    </div>`;
 }
 
 window.startAssignment = function(assignId) {
@@ -2230,7 +2811,18 @@ window.startAssignment = function(assignId) {
   startChapterDirect(a.chapterId, a.difficulty || 1);
 };
 
+// Set by startAssignmentDirect immediately before it calls startChapterDirect,
+// and consumed exactly once. A parameter would have been cleaner, but
+// startChapterDirect(chapterId, forceDiff) is called from a dozen places and
+// from inline onclick handlers in index.html, so its signature is effectively
+// public API. Anything that is NOT an assignment therefore gets the normal
+// defaults — which also fixes showAnswers:false leaking from a finished
+// assignment into the next ordinary practice session.
+let _practiceMode = null;
+
 function startChapterDirect(chapterId, forceDiff) {
+  const mode = _practiceMode;
+  _practiceMode = null;
   const locked = DB.restrictions?.lockedChapters || [];
   if (locked.includes(chapterId)) { toast('🔒 This chapter is locked by your parent.', 2000); return; }
   if (!_planAllowsChapter(chapterId)) { toast('⭐ Upgrade your plan to access this chapter.', 3000); return; }
@@ -2241,7 +2833,7 @@ function startChapterDirect(chapterId, forceDiff) {
   if (!hasQs && typeof QuestionLoader !== 'undefined' && typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) {
     toast('⏳ Loading questions…', 2000);
     QuestionLoader.loadSubject(ACTIVE_PACK.id)
-      .then(() => startChapterDirect(chapterId, forceDiff))
+      .then(() => { _practiceMode = mode; startChapterDirect(chapterId, forceDiff); })
       .catch(() => toast('Could not load questions. Please try again.', 3000));
     return;
   }
@@ -2254,6 +2846,8 @@ function startChapterDirect(chapterId, forceDiff) {
   S.practice.qs = [];
   S.practice.idx = 0;
   S.practice.session = { attempted: 0, correct: 0 };
+  S.practice.showAnswers = mode ? mode.showAnswers !== false : true;
+  S.practice.showHints   = mode ? mode.showHints   !== false : true;
   loadPracticeQuestion();
   showScreen('practice');
   const ch = CHAPTERS.find(c => c.id === chapterId);
@@ -2297,7 +2891,7 @@ function startSearchPractice(questions, label) {
 }
 
 // ── ASSIGNMENT DIRECT LAUNCH ──────────────────
-async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers) {
+async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers, showHints) {
   const pack = activateSubjectPack(subjectId);
   if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
 
@@ -2306,7 +2900,7 @@ async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswe
     await QuestionLoader.loadSubject(pack.id);
   }
 
-  S.practice.showAnswers = showAnswers !== false;
+  _practiceMode = { showAnswers: showAnswers !== false, showHints: showHints !== false };
   startChapterDirect(chapterId, difficulty || null);
 }
 
@@ -2346,6 +2940,56 @@ function startExam(type) {
   document.getElementById('exam-q-total').textContent = S.exam.qs.length;
 }
 
+// ── Comprehension passages on a printed paper ──────────────────────────────
+// Passage questions carry the WHOLE passage inside every question, because
+// practice and exam mode both serve single questions at random and there is no
+// shared-stem slot to hang it on. On a printed paper that is wrong twice over:
+// a 30-question Section A drawn from a shuffled pool pulls four or five of them,
+// so the sheet repeats 1,200 characters of prose several times over, and it
+// burns through the passage bank in two or three downloads. Grade 5 English has
+// 40 such questions but only SEVEN distinct passages.
+//
+// So: one passage per paper, printed once, with its own questions under it.
+// Every other passage question is kept out of Sections A and B entirely.
+const _PASSAGE_MIN_CHARS = 600;
+
+function _splitPassage(q) {
+  const html = q?.question || '';
+  if (html.length < _PASSAGE_MIN_CHARS) return null;
+  // The passage is a styled block; the task follows it. Split on the LAST
+  // closing tag of that block so a <div> or <hr> inside the prose is not
+  // mistaken for the boundary.
+  const cut = Math.max(html.lastIndexOf('</div>') + 6, html.lastIndexOf('<hr>') + 4, html.lastIndexOf('<hr/>') + 5);
+  if (cut <= 6) return null;
+  const passage = html.slice(0, cut);
+  const ask     = html.slice(cut).trim();
+  if (!ask || ask.length > passage.length) return null;   // not a passage layout
+  return { passage, ask };
+}
+
+// Questions sharing a stem are grouped by the stem itself, not by chapter —
+// one chapter holds several unrelated texts.
+//
+// ⚠ SHARED stems only (2+ questions). The same "big block then a question"
+// shape also describes a single illustrated maths question, where the <div>
+// holds one SVG diagram belonging to that one question. Those are singletons:
+// they cannot repeat, so they are not a problem, and treating them as passages
+// would have pulled every illustrated question but one OUT of the paper —
+// grade 5 maths alone has 21 such stems, 19 of them singletons.
+// Genuine shared stems: the English/French comprehension texts, and the
+// map-skills SVG that six history questions all read from.
+function _groupByPassage(questions) {
+  const groups = new Map();
+  for (const q of questions) {
+    const split = _splitPassage(q);
+    if (!split) continue;
+    const key = split.passage;
+    if (!groups.has(key)) groups.set(key, { passage: split.passage, items: [] });
+    groups.get(key).items.push({ q, ask: split.ask });
+  }
+  return [...groups.values()].filter(g => g.items.length > 1);
+}
+
 function generatePrintablePaper() {
   const year = new Date().getFullYear();
 
@@ -2357,15 +3001,31 @@ function generatePrintablePaper() {
   // Build pools: Section A (Q1-30 mixed difficulty), Section B (Q31-40 hardest)
   // Filter by the active subject's chapters so Science exam doesn't pull maths questions
   const _activeChs = new Set(CHAPTERS.filter(c => !lockedChs.has(c.id)).map(c => c.id));
-  const _subjectQs = STATIC_QUESTIONS.filter(q => _activeChs.has(q.chapterId) && q.difficulty <= maxDiff);
+  const _allSubjectQs = STATIC_QUESTIONS.filter(q => _activeChs.has(q.chapterId) && q.difficulty <= maxDiff);
+
+  // Pick ONE passage for this paper, and take up to 5 questions from it. The
+  // rest of the passage questions are removed from the pools below, so no
+  // passage prose can reach Section A or B.
+  const passageGroups = _groupByPassage(_allSubjectQs);
+  const chosenGroup   = passageGroups.length ? shuffle(passageGroups)[0] : null;
+  const comp          = chosenGroup ? shuffle(chosenGroup.items).slice(0, 5) : [];
+  const compIds       = new Set(comp.map(c => c.q.id));
+  const passageIds    = new Set();
+  for (const g of passageGroups) for (const it of g.items) passageIds.add(it.q.id);
+
+  const _subjectQs = _allSubjectQs.filter(q => !passageIds.has(q.id));
   const secAPool = shuffle(_subjectQs.filter(q => q.difficulty <= Math.min(3, maxDiff)));
   // Section B is L4 word problems - only offer it once the cap actually allows L4.
   const secBPool = maxDiff >= 4 ? shuffle(_subjectQs.filter(q => q.difficulty === 4)) : [];
 
-  if (!secAPool.length) {
+  if (!secAPool.length && !comp.length) {
     toast('🔒 Not enough unlocked chapters/questions to build a printable paper. Ask your parent to review chapter locks.', 4000);
     return;
   }
+
+  // The comprehension questions occupy the first slots of Section A rather than
+  // adding a section, so the paper stays 30 + 10 questions for 100 marks.
+  const secATarget = Math.max(0, 30 - comp.length);
 
   // Ensure chapter spread for Section A
   const secA = [];
@@ -2375,11 +3035,11 @@ function generatePrintablePaper() {
   for (const ch of chapters) {
     const pick = secAPool.find(q => q.chapterId === ch && !usedIds.has(q.id));
     if (pick) { secA.push(pick); usedIds.add(pick.id); }
-    if (secA.length >= 30) break;
+    if (secA.length >= secATarget) break;
   }
   // Fill remaining from pool, sorted easy→hard
   for (const q of secAPool) {
-    if (secA.length >= 30) break;
+    if (secA.length >= secATarget) break;
     if (!usedIds.has(q.id)) { secA.push(q); usedIds.add(q.id); }
   }
   secA.sort((a, b) => a.difficulty - b.difficulty);
@@ -2403,9 +3063,12 @@ function generatePrintablePaper() {
   const diffLabel = d => ['','⭐ Basic','⭐⭐ Medium','⭐⭐⭐ Hard','🏆 Challenge'][d] || '';
   const chName = id => (CHAPTERS.find(c => c.id === id) || {}).name || id;
 
-  function renderQ(q, num, marks) {
+  // overrideHtml: the question WITHOUT its passage, for the comprehension block
+  // where the passage is printed once above the questions instead of inside
+  // each one.
+  function renderQ(q, num, marks, overrideHtml) {
     const stripHTML = s => s.replace(/<[^>]+>/g, '');
-    let body = `<div class="q-text">${q.question}`;
+    let body = `<div class="q-text">${overrideHtml != null ? overrideHtml : q.question}`;
     if (q.type === 'mcq' && q.options) {
       body += `<div class="mcq-opts">`;
       ['A','B','C','D'].forEach((ltr, i) => {
@@ -2427,7 +3090,17 @@ function generatePrintablePaper() {
       </tr>`;
   }
 
-  const secARows = secA.slice(0, 30).map((q, i) => renderQ(q, i + 1, 2)).join('');
+  // Passage once, then its questions. colspan spans the number and marks
+  // columns so the prose gets the full width of the sheet.
+  const compRows = comp.length ? `
+      <tr class="comp-block"><td colspan="3" style="padding:4px 0 2px">
+        <div class="comp-intro">Comprehension — read the passage, then answer questions 1–${comp.length}.</div>
+        ${chosenGroup.passage}
+      </td></tr>
+      ${comp.map((c, i) => renderQ(c.q, i + 1, 2, c.ask)).join('')}` : '';
+
+  const secARows = compRows + secA.slice(0, secATarget)
+    .map((q, i) => renderQ(q, comp.length + i + 1, 2)).join('');
   const secBRows = secB.slice(0, 10).map((q, i) => renderQ(q, i + 31, 4)).join('');
 
   const html = `<!DOCTYPE html>
@@ -2478,6 +3151,11 @@ function generatePrintablePaper() {
   .ans-blank { flex: 1; max-width: 200px; border-bottom: 1px solid #444; height: 18px; }
 
   .marks-header { text-align:right; font-size:9pt; color:#555; padding: 3px 4px 3px 0; font-style:italic; }
+
+  .comp-intro { font-size:9.5pt; font-weight:bold; color:#1e3a5f; margin-bottom:4px; }
+  /* Keep the passage and at least the first question on the same sheet - a
+     passage stranded alone at the foot of page 1 is unusable. */
+  .comp-block { break-inside: avoid; page-break-inside: avoid; }
 
   .total-row td { border-top: 2px solid #333; padding: 6px 4px; font-weight:bold; font-size:10.5pt; }
   .footer { margin-top: 20px; border-top: 1px solid #bbb; padding-top: 8px; font-size: 8.5pt; color: #777; text-align:center; }
@@ -2709,24 +3387,79 @@ function renderResults(correct, total, pct, timeTaken, chapterStats) {
     </div>`;
   }).join('');
 
-  // Question review
-  document.getElementById('results-review').innerHTML = S.exam.qs.map((q, i) => {
+  // Question review. Reset the filter here, not in the toggle: it is
+  // module-level state, so without this the next exam's results open already
+  // filtered to mistakes from the moment they appear.
+  _examReviewWrongOnly = false;
+  _renderExamReview();
+}
+
+// ── EXAM ANSWER REVIEW ─────────────────────────
+// A full mock is 40 questions, so the whole paper is a long read and the point
+// of it is the mistakes. `_examReviewWrongOnly` filters to those; the toggle
+// says how many there are either way.
+let _examReviewWrongOnly = false;
+
+function _renderExamReview() {
+  const box = document.getElementById('results-review');
+  if (!box || !S.exam?.qs) return;
+
+  const rows = S.exam.qs.map((q, i) => {
     const ua = S.exam.answers[i];
-    const ok = ua != null && checkAnswer(q, ua);
-    const ch = CHAPTERS.find(c=>c.id===q.chapterId);
-    return `<div class="border-l-4 ${ok?'border-green-400':'border-red-400'} pl-4 py-2">
+    return { q, i, ua, ok: ua != null && checkAnswer(q, ua),
+             answered: ua != null && String(ua).trim() !== '',
+             flagged: !!(S.exam.flagged && S.exam.flagged[i]) };
+  });
+  const wrong = rows.filter(r => !r.ok);
+
+  const toggle = document.getElementById('results-review-toggle');
+  if (toggle) {
+    toggle.classList.toggle('hidden', wrong.length === 0);
+    toggle.textContent = _examReviewWrongOnly
+      ? `Showing your ${wrong.length} mistake${wrong.length === 1 ? '' : 's'} — show all ${rows.length}`
+      : `Show only what I got wrong (${wrong.length})`;
+  }
+
+  const shown = _examReviewWrongOnly ? wrong : rows;
+  if (!shown.length) {
+    box.innerHTML = `<p class="text-sm text-gray-400 text-center py-6">
+      Nothing wrong to review — every question correct. 🎉</p>`;
+    return;
+  }
+
+  box.innerHTML = shown.map(({ q, i, ua, ok, answered, flagged }) => {
+    const ch = CHAPTERS.find(c => c.id === q.chapterId);
+    // A symmetry answer is an array of [row,col] pairs. Interpolating it printed
+    // "Correct: 1,4,2,6,2,5" — a run of coordinates that means nothing to a
+    // child. Say what happened in words instead.
+    const isSym = q.type === 'symmetry';
+    const yours = isSym ? '' : _profEsc(String(ua ?? ''));
+    return `<div class="border-l-4 ${ok ? 'border-green-400' : 'border-red-400'} pl-4 py-2">
       <div class="flex items-start gap-2">
-        <span class="text-lg shrink-0">${ok?'✅':'❌'}</span>
-        <div class="flex-1 text-sm">
-          <div class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Q${i+1} · ${ch?.name||''}</div>
+        <span class="text-lg shrink-0">${ok ? '✅' : (answered ? '❌' : '⏭️')}</span>
+        <div class="flex-1 text-sm min-w-0">
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
+            Q${i + 1} · ${_profEsc(ch?.name || '')}${flagged ? ' · <span class="text-amber-500">🚩 flagged</span>' : ''}
+          </div>
           <div class="font-medium text-gray-800 dark:text-gray-200">${q.question}</div>
-          ${!ok?`<div class="mt-1 text-red-600 dark:text-red-400">Your answer: ${ua||'(not answered)'}</div>`:''}
-          <div class="mt-1 text-green-600 dark:text-green-400 font-medium">✓ Correct: ${q.answer}</div>
-          <div class="mt-1 text-gray-500 dark:text-gray-400 text-xs">${q.explanation}</div>
+          ${ok ? '' : (isSym
+            ? `<div class="mt-1 text-red-600 dark:text-red-400">${answered ? 'Not quite' : 'Not answered'} — the correct cells are shown on the grid during practice.</div>`
+            : `<div class="mt-1 text-red-600 dark:text-red-400">Your answer: ${answered ? yours : '<i>(not answered)</i>'}</div>`)}
+          ${isSym ? '' : `<div class="mt-1 text-green-600 dark:text-green-400 font-medium">✓ Correct: ${_profEsc(String(q.answer ?? ''))}</div>`}
+          <div class="mt-1 text-gray-500 dark:text-gray-400 text-xs">${q.explanation || ''}</div>
         </div>
       </div>
     </div>`;
   }).join('');
+
+  // Question text can carry an inline SVG diagram or a photo; without this the
+  // review is the one place in the app where they cannot be tapped to enlarge.
+  _makeImgsZoomable(box);
+}
+
+function _toggleExamReviewWrongOnly() {
+  _examReviewWrongOnly = !_examReviewWrongOnly;
+  _renderExamReview();
 }
 
 document.getElementById('new-exam-btn').addEventListener('click', () => showScreen('exam-config'));
@@ -2823,7 +3556,13 @@ function loadPracticeQuestion() {
   S.practice.hintShown = false;
   S.practice.hintIdx   = 0;
   const _hintBtn = document.getElementById('practice-hint-btn');
-  if (_hintBtn) { _hintBtn.disabled = false; _hintBtn.classList.remove('opacity-50'); }
+  if (_hintBtn) {
+    _hintBtn.disabled = false;
+    _hintBtn.classList.remove('opacity-50');
+    // Per-assignment only. NOT restrictions.hintsDisabled — that one governs the
+    // first-time onboarding tip callouts, which are a different feature.
+    _hintBtn.classList.toggle('hidden', S.practice.showHints === false);
+  }
   const _hintBadge = document.getElementById('hint-count-badge');
   if (_hintBadge) _hintBadge.textContent = '3';
   document.getElementById('practice-q-counter').textContent =
@@ -2832,6 +3571,8 @@ function loadPracticeQuestion() {
   document.getElementById('practice-submit-btn').classList.remove('hidden');
   document.getElementById('practice-skip-btn').classList.remove('hidden');
   document.getElementById('practice-next-btn').classList.add('hidden');
+  // Or last question's "✅ Correct" would sit beside the new question.
+  document.getElementById('practice-verdict')?.classList.add('hidden');
   renderAnswerArea(q, 'practice-answer-area', null, false);
   _updateDiffBadge(q);
   updateSessionStats();
@@ -2934,7 +3675,7 @@ function practiceSubmit() {
 
   // Feedback
   const fb = document.getElementById('practice-feedback');
-  fb.className = `mb-4 p-4 rounded-xl ${ok ? 'feedback-correct' : 'feedback-wrong'}`;
+  fb.className = `pr-feedback ${ok ? 'feedback-correct' : 'feedback-wrong'}`;
   if (S.practice.showAnswers === false) {
     fb.innerHTML = `
       <div class="flex items-center gap-3">
@@ -2961,6 +3702,7 @@ function practiceSubmit() {
   fb.classList.add(ok ? 'feedback-pop' : 'feedback-shake');
 
   // Stats
+  _logPracticeAnswer(q, ua, ok, false);
   S.practice.session.attempted++;
   if (ok) S.practice.session.correct++;
   recordAnswer(S.practice.chapterId, ok);
@@ -2968,7 +3710,32 @@ function practiceSubmit() {
 
   document.getElementById('practice-submit-btn').classList.add('hidden');
   document.getElementById('practice-skip-btn').classList.add('hidden');
-  document.getElementById('practice-next-btn').classList.remove('hidden');
+  _revealNextButton(ok);
+}
+
+// Check Answer and Next used to occupy the SAME spot, so the instant feedback
+// rendered, the button under the child's thumb changed meaning and a second tap
+// skipped the explanation. The action bar now has three fixed lanes and Next
+// lives in its own — a repeat tap lands on nothing.
+//
+// The short disable is belt to that braces (a fast double-tap while the browser
+// is still painting), not the fix itself, so it is brief enough not to feel
+// sluggish. `verdict` states the result in the bar next to the button, where
+// the eye already is.
+function _revealNextButton(wasCorrect, verdict) {
+  const next = document.getElementById('practice-next-btn');
+  const vEl  = document.getElementById('practice-verdict');
+  if (vEl) {
+    vEl.textContent = verdict || (wasCorrect ? '✅ Correct' : '❌ Not quite');
+    vEl.classList.remove('hidden', 'is-right', 'is-wrong');
+    vEl.classList.add(wasCorrect ? 'is-right' : 'is-wrong');
+  }
+  if (!next) return;
+  next.classList.remove('hidden');
+  next.disabled = true;
+  setTimeout(() => { next.disabled = false; }, 250);
+  document.getElementById('practice-feedback')
+    ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
 function practiceSkip() {
@@ -2978,7 +3745,7 @@ function practiceSkip() {
   _playSound('wrong'); _haptic('wrong');
   renderAnswerArea(q, 'practice-answer-area', '', true);
   const fb = document.getElementById('practice-feedback');
-  fb.className = 'mb-4 p-4 rounded-xl feedback-wrong';
+  fb.className = 'pr-feedback feedback-wrong';
   if (S.practice.showAnswers === false) {
     fb.innerHTML = `
       <div class="flex items-center gap-3">
@@ -2999,12 +3766,34 @@ function practiceSkip() {
   fb.classList.remove('hidden', 'feedback-pop', 'feedback-shake');
   void fb.offsetWidth;
   fb.classList.add('feedback-shake');
+  _logPracticeAnswer(q, '', false, true);
   S.practice.session.attempted++;
   recordAnswer(S.practice.chapterId, false);
   updateSessionStats();
-  document.getElementById('practice-submit-btn').classList.add('hidden');
-  document.getElementById('practice-skip-btn').classList.add('hidden');
-  document.getElementById('practice-next-btn').classList.remove('hidden');
+  document.getElementById("practice-submit-btn").classList.add("hidden");
+  document.getElementById("practice-skip-btn").classList.add("hidden");
+  _revealNextButton(false, '💡 Answer shown');
+}
+
+// Per-question record for the end-of-round review.
+//
+// The log is created lazily rather than in an initialiser: every place that
+// starts a fresh round REPLACES S.practice.session with a new object, so the
+// log clears itself automatically and there is no reset site to forget.
+function _logPracticeAnswer(q, userAnswer, correct, skipped) {
+  if (!q) return;
+  const log = (S.practice.session.log = S.practice.session.log || []);
+  log.push({
+    question:      q.question,
+    // A symmetry grid has no typeable answer — the result is shown on the grid
+    // itself, so the review says so in words rather than printing coordinates.
+    userAnswer:    q.type === 'symmetry' ? '' : String(userAnswer ?? ''),
+    correctAnswer: q.type === 'symmetry' ? '' : String(q.answer ?? ''),
+    explanation:   q.explanation || '',
+    type:          q.type,
+    correct:       !!correct,
+    skipped:       !!skipped,
+  });
 }
 
 function _learnMoreHTML(q) {
@@ -3035,8 +3824,78 @@ function _showRoundComplete() {
   if (el('rc-score'))    el('rc-score').textContent    = `${correct}/${attempted}`;
   if (el('rc-accuracy')) el('rc-accuracy').textContent = `${acc}%`;
   if (el('rc-xp'))       el('rc-xp').textContent       = `+${xpEarned}`;
+  _renderRoundReview();
   document.getElementById('modal-round-complete')?.classList.remove('hidden');
   _haptic('levelup');
+}
+
+// ── End-of-round answer review ─────────────────────────────────────────────
+// Shows every question of the round with what the child answered, whether it
+// was right, and the correct answer. Collapsed behind a button so the score
+// lands first; a 20-question round would otherwise open as a wall of text.
+function _renderRoundReview() {
+  const box = document.getElementById('rc-review');
+  const btn = document.getElementById('rc-review-toggle');
+  if (!box || !btn) return;
+
+  const log = S.practice.session.log || [];
+  // Reset to collapsed on every round, or the second round opens expanded
+  // showing the first round's state.
+  box.classList.add('hidden');
+
+  if (!log.length) { btn.classList.add('hidden'); box.innerHTML = ''; return; }
+  btn.classList.remove('hidden');
+  btn.textContent = `Review my answers (${log.length})`;
+
+  // The parent can turn answers off for an assignment. That setting has to hold
+  // here too — otherwise the review hands over every answer they chose to hide.
+  const showAnswers = S.practice.showAnswers !== false;
+
+  box.innerHTML = log.map((r, i) => {
+    const mark = r.correct ? '✅' : (r.skipped ? '⏭️' : '❌');
+    const tone = r.correct
+      ? 'border-green-200 dark:border-green-800/50 bg-green-50 dark:bg-green-900/15'
+      : 'border-red-200 dark:border-red-800/50 bg-red-50 dark:bg-red-900/15';
+
+    let detail = '';
+    if (r.correct) {
+      detail = `<div class="text-green-700 dark:text-green-400">Your answer: <b>${_profEsc(r.userAnswer)}</b></div>`;
+    } else if (!showAnswers) {
+      detail = `<div class="text-gray-500 dark:text-gray-400">${r.skipped ? 'Skipped.' : 'Not correct.'}</div>`;
+    } else if (r.type === 'symmetry') {
+      detail = `<div class="text-gray-600 dark:text-gray-400">${r.skipped ? 'Skipped' : 'Not quite'} — the correct cells were shown on the grid.</div>`;
+    } else {
+      detail = `
+        ${r.skipped
+          ? '<div class="text-gray-500 dark:text-gray-400">Skipped</div>'
+          : `<div class="text-red-700 dark:text-red-400">You said: <b>${_profEsc(r.userAnswer) || '—'}</b></div>`}
+        <div class="text-green-700 dark:text-green-400">Correct answer: <b>${_profEsc(r.correctAnswer)}</b></div>`;
+    }
+
+    return `<div class="rounded-xl border ${tone} px-3 py-2">
+      <div class="flex gap-2">
+        <span class="shrink-0 select-none">${mark}</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold text-gray-800 dark:text-gray-100 mb-1">${i + 1}. ${r.question}</div>
+          <div class="text-xs space-y-0.5">${detail}</div>
+          ${(!r.correct && showAnswers && r.explanation)
+            ? `<div class="text-xs text-gray-600 dark:text-gray-400 mt-1.5 pt-1.5 border-t border-black/5 dark:border-white/10">${r.explanation}</div>`
+            : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  _makeImgsZoomable(box);
+}
+
+function _toggleRoundReview() {
+  const box = document.getElementById('rc-review');
+  const btn = document.getElementById('rc-review-toggle');
+  if (!box || !btn) return;
+  const open = !box.classList.toggle('hidden');
+  const n = (S.practice.session.log || []).length;
+  btn.textContent = open ? 'Hide review' : `Review my answers (${n})`;
 }
 
 function _roundCompleteNext() {
@@ -3245,8 +4104,6 @@ function updateSessionStats() {
   document.getElementById('sess-acc').textContent = attempted ? Math.round(correct/attempted*100)+'%' : '-';
 }
 
-// ── ANALYTICS ─────────────────────────────────
-document.getElementById('analytics-btn').addEventListener('click', () => showScreen('analytics'));
 
 function renderAnalytics() {
   const acc = DB.stats.totalAttempted ? Math.round(DB.stats.totalCorrect / DB.stats.totalAttempted * 100) : 0;
@@ -3290,7 +4147,7 @@ function renderAnalytics() {
           const p   = c.attempted ? Math.round(c.correct / c.attempted * 100) : 0;
           const col = !c.attempted ? '#94a3b8' : p >= 80 ? '#22c55e' : p >= 50 ? '#f59e0b' : '#ef4444';
           const badge = !c.attempted
-            ? '<span class="text-xs text-gray-400 dark:text-gray-500 shrink-0">not started</span>'
+            ? '<span class="text-xs text-gray-500 dark:text-gray-400 shrink-0">not started</span>'
             : `<span class="text-xs font-bold shrink-0" style="color:${col}">${c.correct}/${c.attempted} &bull; ${p}%</span>`;
           return `<div class="flex items-center gap-2 py-1.5">
             <span class="text-sm text-gray-600 dark:text-gray-300 flex-1 min-w-0 truncate">${ch.icon || '📖'} ${ch.name}${ch.enrichment ? ' <span class="text-amber-400 text-[10px]">✨</span>' : ''}</span>
@@ -3305,9 +4162,9 @@ function renderAnalytics() {
             <span class="text-xl select-none">${pack.icon}</span>
             <span class="flex-1 font-semibold text-sm text-gray-800 dark:text-white">${pack.name}</span>
             ${!sAttempted
-              ? '<span class="text-xs text-gray-400 dark:text-gray-500">not started yet</span>'
+              ? '<span class="text-xs text-gray-500 dark:text-gray-400">not started yet</span>'
               : `<span class="text-xs font-bold" style="color:${sCol}">${sCorrect}/${sAttempted} &bull; ${sPct}%</span>`}
-            <span class="chev text-gray-400 text-xs transition-transform" style="${sAttempted ? 'transform:rotate(180deg)' : ''}">▼</span>
+            <span class="chev text-gray-500 dark:text-gray-400 text-xs transition-transform" style="${sAttempted ? 'transform:rotate(180deg)' : ''}">▼</span>
           </button>
           <div class="${sAttempted ? '' : 'hidden'} px-4 py-1 divide-y divide-gray-100 dark:divide-gray-700/50">
             ${chRows}
@@ -3320,7 +4177,7 @@ function renderAnalytics() {
   const hist = document.getElementById('exam-history-list');
   if (!hist) return;
   if (!DB.examHistory.length) {
-    hist.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500">No exams yet. Take your first exam!</p>';
+    hist.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">No exams yet. Take your first exam!</p>';
   } else {
     hist.innerHTML = DB.examHistory.map(e => {
       const col = e.pct >= 80 ? 'text-green-600 dark:text-green-400' : e.pct >= 50 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400';
@@ -3362,6 +4219,136 @@ document.getElementById('reset-btn').addEventListener('click', () => {
 });
 
 // ── SYLLABUS BROWSER ──────────────────────────
+// A chapter's `syllabus` is authored as one paragraph whose sentences ARE its
+// sub-topics, so listing them turns a wall of prose into something that reads
+// like a syllabus. Split on sentence enders only — these strings contain no
+// decimals, and their number ranges use dashes (1834–1924, Class 1–4).
+//
+// ⚠ Deliberately `.match()` and NOT a lookbehind split. A lookbehind regex is a
+//   PARSE error on Safari before 16.4, which would take the whole of app.js down
+//   with it, not just this screen.
+function _syllabusPoints(text) {
+  const parts = String(text || '').match(/[^.!?]+[.!?]*/g) || [];
+  return parts.map(s => s.trim()).filter(s => s.length > 1);
+}
+
+// English and French packs (notesBased: true) carry a `notes` array of revision
+// points per chapter instead of a `syllabus` paragraph. Calendar.showNotes() has
+// always rendered them; the syllabus screen never looked, which is why all 55
+// English/French chapters had an empty syllabus while the content sat right
+// there in the manifest. Same markdown subset as Calendar.showNotes.
+function _notesToHtml(note) {
+  return String(note || '')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+// ── PAST PAPERS ────────────────────────────────
+// Read-only. Every item here is a written or drawn response with a mark
+// allocation and NO answer field, so nothing on this screen can be marked and
+// the screen must never imply otherwise — no "check", no score, no streak.
+let _ppQuestions = null;
+let _ppYear = null;
+
+async function renderPastPapers() {
+  const list = document.getElementById('pp-list');
+  const filters = document.getElementById('pp-filters');
+  if (!list) return;
+
+  if (!_ppQuestions) {
+    list.innerHTML = '<div class="flex justify-center py-12"><div class="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin"></div></div>';
+    _ppQuestions = (typeof QuestionLoader !== 'undefined')
+      ? await QuestionLoader.loadPastPapers(SELECTED_GRADE) : [];
+  }
+
+  if (!_ppQuestions.length) {
+    if (filters) filters.innerHTML = '';
+    list.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-10">
+      No past papers available for Grade ${SELECTED_GRADE || '?'} yet.</p>`;
+    return;
+  }
+
+  const years = [...new Set(_ppQuestions.filter(q => !q.needsArtwork).map(q => q.year))].sort((a, b) => b - a);
+  if (_ppYear === null || !years.includes(_ppYear)) _ppYear = years[0];
+
+  if (filters) {
+    filters.innerHTML = years.map(y => `
+      <button onclick="_ppSetYear(${y})" class="text-xs font-bold px-3 py-1.5 rounded-full transition-colors ${
+        y === _ppYear
+          ? 'bg-indigo-500 text-white'
+          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+      }">${y}</button>`).join('');
+  }
+
+  // needsArtwork means the question refers to a diagram, map or picture that was
+  // never captured — "Study Map 2 … name the feature shown by diagonal shading"
+  // with no Map 2. Unanswerable and confusing, so it is not shown at all until
+  // the artwork is drawn. Counted in the footer so it is hidden, not lost.
+  const usable = _ppQuestions.filter(q => !q.needsArtwork);
+  const hidden = _ppQuestions.length - usable.length;
+
+  const shown = usable.filter(q => q.year === _ppYear);
+  const bySubject = {};
+  for (const q of shown) (bySubject[q.subject] || (bySubject[q.subject] = [])).push(q);
+
+  const chapterName = id => {
+    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []);
+    const ch = packs.flatMap(p => p._chapters || p.chapters || []).find(c => c.id === id);
+    return ch ? `${ch.icon || ''} ${ch.name}`.trim() : '';
+  };
+
+  list.innerHTML = Object.keys(bySubject).sort().map(subject => {
+    const qs = bySubject[subject];
+    const marks = qs.reduce((t, q) => t + (Number(q.marks) || 0), 0);
+    return `<div class="bg-white dark:bg-gray-800 rounded-2xl shadow overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-700">
+        <span class="font-bold text-gray-800 dark:text-white text-sm">${_profEsc(subject)}</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400">${qs.length} question${qs.length === 1 ? '' : 's'} · ${marks} marks</span>
+      </div>
+      <ol class="px-5 py-2 space-y-3 list-none">
+        ${qs.map((q, i) => {
+          const ch = chapterName(q.chapterId);
+          return `<li class="py-2 border-b border-gray-50 dark:border-gray-700/50 last:border-0">
+            <div class="flex gap-3">
+              <span class="text-xs font-bold text-indigo-400 shrink-0 mt-0.5">${i + 1}.</span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${q.question}</p>
+                <div class="flex items-center gap-2 flex-wrap mt-1.5">
+                  ${q.marks ? `<span class="text-[11px] font-bold text-gray-500 dark:text-gray-400">[${q.marks} mark${q.marks === 1 ? '' : 's'}]</span>` : ''}
+                  ${ch ? `<span class="text-[11px] text-gray-500 dark:text-gray-400">${_profEsc(ch)}</span>` : ''}
+                  ${q.markScheme ? `<button onclick="_ppToggleScheme('${q.id}',this)"
+                    class="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:underline">Show mark scheme</button>` : ''}
+                </div>
+                ${q.markScheme ? `<div id="ms-${q.id}" class="hidden mt-2 text-xs text-gray-600 dark:text-gray-300 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 rounded-xl px-3 py-2 leading-relaxed">${q.markScheme}</div>` : ''}
+              </div>
+            </div>
+          </li>`;
+        }).join('')}
+      </ol>
+    </div>`;
+  }).join('');
+
+  if (hidden) {
+    list.innerHTML += `<p class="text-xs text-gray-500 dark:text-gray-400 text-center pt-2">
+      ${hidden} more question${hidden === 1 ? '' : 's'} from these papers need a diagram or map that is not
+      available yet, so they are not shown.</p>`;
+  }
+
+  _makeImgsZoomable(list);
+}
+
+function _ppSetYear(y) { _ppYear = y; renderPastPapers(); }
+
+// Self-marking: the child writes on paper, then reveals the mark scheme and
+// checks their own work. Nothing is scored or stored — these questions cannot
+// be marked by the app, and the screen must not pretend they can.
+function _ppToggleScheme(id, btn) {
+  const box = document.getElementById('ms-' + id);
+  if (!box) return;
+  const open = box.classList.toggle('hidden');
+  if (btn) btn.textContent = open ? 'Show mark scheme' : 'Hide mark scheme';
+}
+
 function renderSyllabus() {
   const list = document.getElementById('syllabus-list');
   if (!list) return;
@@ -3378,12 +4365,12 @@ function renderSyllabus() {
       ).length;
       const hasQs = qCount >= 1;
       const statusDot = hasQs
-        ? `<span class="text-xs text-green-600 dark:text-green-400 font-medium">${qCount} questions</span>`
-        : `<span class="text-xs text-gray-400">practice available</span>`;
+        ? `<span class="text-xs text-green-600 dark:text-green-400 font-medium">${qCount} question${qCount === 1 ? '' : 's'}</span>`
+        : `<span class="text-xs text-gray-500 dark:text-gray-400">practice available</span>`;
 
       return `<div class="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
         <div class="flex items-center gap-2 flex-1 min-w-0">
-          <span class="text-gray-400">▸</span>
+          <span class="text-gray-500 dark:text-gray-400">▸</span>
           <span class="text-sm text-gray-700 dark:text-gray-300 truncate">${sub.name}</span>
           <span class="shrink-0">${statusDot}</span>
         </div>
@@ -3394,10 +4381,32 @@ function renderSyllabus() {
       </div>`;
     }).join('');
 
-    // For non-maths subjects there are no SYLLABUS subsections - show the chapter description instead
-    const bodyHTML = subsHTML || (ch.syllabus
-      ? `<p class="text-sm text-gray-600 dark:text-gray-400 py-3 leading-relaxed">${ch.syllabus}</p>`
-      : '<p class="text-sm text-gray-400 py-3">No subsections defined yet.</p>');
+    // Only grade5-maths defines a real `subsections` array. The rest of the app
+    // stores a chapter's content in one of three other shapes, and this screen
+    // read NONE of them — which is how English and French ended up with an
+    // entirely blank syllabus and every bonus chapter said "No subsections
+    // defined yet.":
+    //   ch.syllabus       — prose paragraph  (History, Science, G6 Maths)
+    //   ch.notes          — revision points  (English, French: notesBased packs)
+    //   ch.enrichmentNote — bonus chapters   (History, Science)
+    const chQs = STATIC_QUESTIONS.filter(q => q.chapterId === ch.id).length;
+    const points = (ch.notes || []).length
+      ? ch.notes.map(_notesToHtml)
+      : _syllabusPoints(ch.syllabus || ch.enrichmentNote);
+
+    const pointsHTML = points.length ? `<ul class="py-2 space-y-1.5">${points.map(p => `
+      <li class="flex gap-2 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+        <span class="text-indigo-400 dark:text-indigo-500 shrink-0">•</span><span>${p}</span>
+      </li>`).join('')}</ul>` : '';
+
+    const enrNote = ch.enrichment
+      ? `<p class="text-xs text-amber-600 dark:text-amber-400 pt-2 pb-1">✨ Bonus topic — drawn from the syllabus, not a separate MIE chapter.</p>`
+      : '';
+
+    const bodyHTML = subsHTML || ((enrNote + pointsHTML) || `
+      <p class="text-sm text-gray-500 dark:text-gray-400 py-3">${chQs
+        ? `${chQs} practice question${chQs === 1 ? '' : 's'} in this chapter.`
+        : 'Questions for this chapter are still being written.'}</p>`);
 
     return `<div class="bg-white dark:bg-gray-800 rounded-2xl shadow overflow-hidden">
       <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-700 cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden')">
@@ -3405,14 +4414,16 @@ function renderSyllabus() {
           <span class="text-2xl">${ch.icon}</span>
           <div>
             <span class="font-bold text-gray-800 dark:text-white">${ch.name}</span>
-            ${ch.part != null ? `<span class="ml-2 text-xs text-gray-400">Part ${ch.part}</span>` : ''}
+            ${ch.enrichment ? '<span class="ml-2 text-[10px] font-bold uppercase tracking-wide bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded-full align-middle">✨ Bonus</span>' : ''}
+            ${ch.part != null ? `<span class="ml-2 text-xs text-gray-500 dark:text-gray-400">Part ${ch.part}</span>` : ''}
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${chQs} question${chQs === 1 ? '' : 's'}</div>
           </div>
         </div>
         <div class="flex items-center gap-3">
           <span class="text-sm font-bold" style="color:${chColor}">${chPct}%</span>
           <button class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors"
             onclick="event.stopPropagation();startChapterDirect('${ch.id}')">All levels →</button>
-          <span class="text-gray-400 text-sm">▾</span>
+          <span class="text-gray-500 dark:text-gray-400 text-sm">▾</span>
         </div>
       </div>
       <div class="px-5 py-1">${bodyHTML}</div>
@@ -3549,8 +4560,8 @@ function renderStudentSelect() {
         onclick="Auth.loginStudent('${acc.id}')">
       <div class="text-5xl mb-3 select-none">${acc.avatar}</div>
       <div class="font-bold text-gray-800 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${acc.name}</div>
-      <div class="text-xs text-gray-400 mt-1">⭐ Lv.${d.level||1} ${lname}</div>
-      <div class="text-xs text-gray-400">${d.xp||0} XP</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">⭐ Lv.${d.level||1} ${lname}</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400">${d.xp||0} XP</div>
     </button>`;
   }).join('');
 }
@@ -3629,10 +4640,17 @@ function renderSubjectSelect() {
     const theme = _SUBJECT_THEME[pack.subject] || _DEFAULT_THEME;
     const onclk = soon ? `toast('Coming soon!', 2000)` : `selectSubject('${pack.id}')`;
     const chapCount = pack.chapters?.length || 0;
+    // Only shown when SELECTED_GRADE is unset (the fallback "every grade" view) -
+    // in the normal single-grade view the heading already says the grade, and
+    // repeating it on every card would be noise. Without this, three
+    // identical-looking "Mathematics" cards (Grade 4/5/6) are impossible to
+    // tell apart - see the comment above _shouldExitToParentDashboard().
+    const gradeBadge = SELECTED_GRADE ? '' : `<div class="absolute top-4 left-4 text-xs bg-gray-800/80 text-white px-2 py-0.5 rounded-full font-semibold">Grade ${pack.grade}</div>`;
     return `
       <button type="button" class="${soon ? 'opacity-70 cursor-default' : 'cursor-pointer group'} relative text-left bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg active:scale-95 transition-all overflow-hidden" onclick="${onclk}" ${soon ? 'disabled' : ''}>
         <div class="h-2 bg-gradient-to-r ${theme.bg}"></div>
         <div class="p-5">
+          ${gradeBadge}
           ${soon ? '<div class="absolute top-4 right-4 text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Coming Soon</div>' : ''}
           <div class="w-14 h-14 rounded-2xl ${theme.icon} flex items-center justify-center text-3xl mb-3 select-none">${pack.icon}</div>
           <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1 transition-colors">${pack.subject}</h3>
@@ -3773,7 +4791,7 @@ async function submitReport() {
   const studentName = sess?.displayName || null;
   const mode = S.exam?.qs?.length ? 'exam' : 'practice';
 
-  const ok = await Store.reportQuestion(
+  const res = await Store.reportQuestion(
     q.id,
     questionText.slice(0, 300),
     msg,
@@ -3785,9 +4803,13 @@ async function submitReport() {
   );
 
   closeReportModal();
-  if (ok) {
+  if (res.ok) {
     toast('Report sent - thank you! 🙏', 2500);
-  } else {
+  } else if (!res.sessionExpired) {
+    // A session-expired failure already got its own, more useful toast from
+    // the 'session-invalid' handler in auth.js (and already sent the student
+    // back to the login screen) - piling this generic one on top would just
+    // overwrite it, since toast() is a single slot, not a queue.
     toast('Could not send report. Check your connection.', 3000);
   }
 }
@@ -3795,21 +4817,38 @@ async function submitReport() {
 // ── PROFILE / ACCOUNT SETTINGS ─────────────────────────────────────────────
 let _profileFromScreen = null;
 
+// The parent's saved preferences blob, cached so a toggle can write the whole
+// object back without re-fetching. Re-read from the database on every render of
+// the settings page. Declared here, above its first use, so nothing can land in
+// the temporal dead zone if an earlier top-level statement ever throws.
+let _parentPrefs = {};
+
 async function showProfile() {
   _profileFromScreen = S.currentScreen;
   showScreen('profile');
   const container = document.getElementById('profile-content');
   if (!container) return;
   container.innerHTML = '<div class="flex justify-center py-16"><div class="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin"></div></div>';
-  if (ACTIVE_STUDENT_ID) {
-    await _renderStudentProfile(container);
-  } else {
+  // NOT `if (ACTIVE_STUDENT_ID)`. A parent who has tapped a child's card is
+  // holding that child in ACTIVE_STUDENT_ID (pdSwitchStudent loads them so the
+  // Controls tab has something to read) while still being signed in as a
+  // parent - so keying off the student id alone showed them the child's
+  // profile instead of their own account. A parent session wins.
+  if (_isParentSession()) {
     await _renderParentProfile(container);
+  } else {
+    await _renderStudentProfile(container);
   }
 }
 
+function _isParentSession() {
+  return typeof Auth !== 'undefined' && !!Auth.getParentProfile();
+}
+
 function _profileBack() {
-  const dest = _profileFromScreen && _profileFromScreen !== 'profile' ? _profileFromScreen : (ACTIVE_STUDENT_ID ? 'dashboard' : 'parent');
+  const dest = _profileFromScreen && _profileFromScreen !== 'profile'
+    ? _profileFromScreen
+    : (_isParentSession() ? 'parent' : 'dashboard');
   showScreen(dest);
 }
 
@@ -3851,13 +4890,35 @@ async function _renderStudentProfile(container) {
     <label class="flex items-center justify-between gap-3 cursor-pointer" onclick="_togglePref('${key}')">
       <div>
         <span class="text-sm font-medium text-gray-800 dark:text-white">${label}</span>
-        <p class="text-xs text-gray-400 dark:text-gray-500">${sub}</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400">${sub}</p>
       </div>
       <button id="${id}" role="switch" aria-checked="${checked}" type="button"
         class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${checked ? 'bg-indigo-500' : 'bg-gray-300 dark:bg-gray-600'}">
         <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-6' : 'translate-x-1'}"></span>
       </button>
     </label>`;
+
+  // Only offered on a touch device that actually has a platform authenticator
+  // (Face/Touch ID, fingerprint reader) set up - see engine/biometric.js.
+  let studentBiometricHtml = '';
+  if (ACTIVE_STUDENT_ID && typeof Biometric !== 'undefined' && await Biometric.isAvailable()) {
+    const bioOn = Biometric.isEnrolled(ACTIVE_STUDENT_ID);
+    studentBiometricHtml = `
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <div class="font-bold text-gray-800 dark:text-white text-sm">🔒 Fingerprint sign-in</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${bioOn
+              ? 'Enabled on this device — unlock instead of typing your PIN.'
+              : 'Skip typing your PIN on this phone next time.'}</div>
+          </div>
+          <button onclick="${bioOn ? 'Auth.disableStudentBiometricLogin()' : 'Auth.enableStudentBiometricLogin(this)'}"
+            class="px-4 py-2 ${bioOn
+              ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              : 'bg-indigo-500 hover:bg-indigo-400 text-white'} font-semibold rounded-xl text-xs transition-colors shrink-0">${bioOn ? 'Disable' : 'Enable'}</button>
+        </div>
+      </div>`;
+  }
 
   container.innerHTML = `
     <div class="max-w-lg mx-auto space-y-4">
@@ -3897,10 +4958,10 @@ async function _renderStudentProfile(container) {
       <!-- Display name (read-only) -->
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
         <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
-          Display Name <span class="text-gray-400 normal-case font-normal ml-1">🔒 set by parent</span>
+          Display Name <span class="text-gray-500 dark:text-gray-400 normal-case font-normal ml-1">🔒 set by parent</span>
         </label>
         <p class="text-base font-medium text-gray-800 dark:text-white">${_profEsc(name)}</p>
-        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">To change your name, ask your parent.</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">To change your name, ask your parent.</p>
       </div>
 
       <!-- Preferences -->
@@ -3909,6 +4970,8 @@ async function _renderStudentProfile(container) {
         ${toggleHtml('pref-haptic-toggle', hapticOn, 'haptic', 'Haptic Feedback', 'Vibration on correct / wrong answers')}
         ${toggleHtml('pref-sound-toggle',  soundOn,  'sound',  'Sound / Read Aloud', 'Audio feedback and text-to-speech')}
       </div>
+
+      ${studentBiometricHtml}
     </div>`;
 }
 
@@ -3967,7 +5030,7 @@ function _togglePref(key) {
 async function _renderParentProfile(container) {
   const profile = typeof Auth !== 'undefined' ? Auth.getParentProfile() : null;
   if (!profile) {
-    container.innerHTML = '<p class="text-center text-gray-400 py-12">Not logged in.</p>';
+    container.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 py-12">Not logged in.</p>';
     return;
   }
 
@@ -3986,6 +5049,40 @@ async function _renderParentProfile(container) {
     parent:  'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300',
   }[profile.role] || 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300';
 
+  // Saved parent preferences. Absent column / un-migrated database returns {},
+  // which is also the "everything on its default" state - so the settings below
+  // still render and still work locally, they just don't follow to another device.
+  _parentPrefs = (typeof Store !== 'undefined') ? (await Store.getMyPreferences(profile.id) || {}) : {};
+
+  // A theme saved from another device wins over whatever this one last used.
+  if (_parentPrefs.theme && _parentPrefs.theme !== getThemePreference()) {
+    setThemePreference(_parentPrefs.theme);
+  }
+
+  const family   = (typeof Auth !== 'undefined' && Auth.getFamily) ? Auth.getFamily() : null;
+  const children = (typeof Auth !== 'undefined' && Auth.getStudents) ? (Auth.getStudents() || []) : [];
+  const isParent = profile.role === 'parent';
+
+  // Only offered on a touch device that actually has a platform authenticator
+  // (Face/Touch ID, fingerprint reader) set up - see engine/biometric.js.
+  let biometricHtml = '';
+  if (isParent && typeof Biometric !== 'undefined' && await Biometric.isAvailable()) {
+    const bioOn = Biometric.isEnrolled(profile.id);
+    biometricHtml = `
+        <div class="border-t border-gray-100 dark:border-gray-700 pt-4 flex items-center justify-between gap-3">
+          <div>
+            <div class="font-bold text-gray-800 dark:text-white text-sm">🔒 Fingerprint / Face unlock</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${bioOn
+              ? 'Enabled on this device — unlock the app here instead of typing your password.'
+              : 'Skip typing your password on this phone next time.'}</div>
+          </div>
+          <button onclick="${bioOn ? 'Auth.disableBiometricLogin()' : 'Auth.enableBiometricLogin(this)'}"
+            class="px-4 py-2 ${bioOn
+              ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              : 'bg-indigo-500 hover:bg-indigo-400 text-white'} font-semibold rounded-xl text-xs transition-colors shrink-0">${bioOn ? 'Disable' : 'Enable'}</button>
+        </div>`;
+  }
+
   let referralHtml = '';
   if (profile.role === 'parent' && _sb) {
     try {
@@ -4003,13 +5100,143 @@ async function _renderParentProfile(container) {
     } catch(_) {}
   }
 
+  // ── Family login name (parents only) ──
+  // The child-facing half of the credentials: children type this on the login
+  // screen, so a parent who renames it has to know it changes what they type.
+  const familyHtml = family ? `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-3">
+      <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Family Login</h3>
+      <p class="text-xs text-gray-500 dark:text-gray-400">Your children type this family name, their own username and their PIN to sign in.</p>
+      <div class="flex gap-2">
+        <input id="set-family-name" type="text" maxlength="40" value="${_profEsc(family.family_name || '')}"
+          class="selectable flex-1 border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        <button data-label="Save" onclick="_saveFamilyName(this)"
+          class="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">Save</button>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400">Private family code: <span class="font-mono font-bold select-all">${_profEsc(family.family_code || '—')}</span></p>
+    </div>` : '';
+
+  // ── Appearance ──
+  const themePref = getThemePreference();
+  const themeBtn = (val, icon, label) => `
+    <button type="button" data-theme-opt="${val}" onclick="_setParentTheme('${val}')"
+      class="flex-1 flex flex-col items-center gap-1 py-3 rounded-xl border-2 transition-colors ${
+        themePref === val
+          ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300'
+          : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-gray-300'
+      }">
+      <span class="text-xl select-none">${icon}</span>
+      <span class="text-xs font-semibold">${label}</span>
+    </button>`;
+  const appearanceHtml = `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-3">
+      <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Appearance</h3>
+      <div class="flex gap-2">
+        ${themeBtn('light', '☀️', 'Light')}${themeBtn('dark', '🌙', 'Dark')}${themeBtn('system', '🖥️', 'System')}
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400">System follows your phone or computer's own light/dark setting. Children keep their own theme.</p>
+    </div>`;
+
+  // ── Notifications ──
+  const digestOn = _parentPrefs.weekly_digest !== false;
+  const notifyHtml = family ? `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
+      <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Notifications</h3>
+
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <div class="font-bold text-gray-800 dark:text-white text-sm">📧 Weekly progress email</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">A Sunday summary of each child's week, sent to ${_profEsc(email) || 'your email'}</div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer shrink-0">
+          <input type="checkbox" id="set-digest-toggle" class="sr-only peer" ${digestOn ? 'checked' : ''} onchange="_toggleWeeklyDigest(this)">
+          <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-checked:bg-blue-500 rounded-full peer transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+        </label>
+      </div>
+
+      ${children.length ? `
+      <div class="border-t border-gray-100 dark:border-gray-700 pt-4">
+        <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">🔔 Daily study reminder</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Push notification at this time (Mauritius time) for <b>every</b> child. Each child can still be given a different time from their own Controls tab.</div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <input type="time" id="set-reminder-all" value="${_profEsc(_parentPrefs.reminder_time || '')}"
+            class="text-sm rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          <button data-label="Apply to all" onclick="_applyReminderToAll(this)"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-colors">Apply to all</button>
+          <button onclick="_clearReminderForAll(this)" class="px-3 py-2 text-xs text-gray-500 dark:text-gray-400 hover:text-red-500 transition-colors">Clear all</button>
+        </div>
+        <div id="set-reminder-status" class="text-xs text-gray-500 dark:text-gray-400 mt-2"></div>
+      </div>` : ''}
+    </div>` : '';
+
+  // ── Defaults applied to every child at once ──
+  // Chapter locks are deliberately NOT here: they are per-grade and per-child,
+  // so "apply to all" would be meaningless at best and would silently wipe a
+  // parent's careful per-child locking at worst.
+  const d = Object.assign(
+    { maxDifficulty: 4, examDisabled: false, crossGradeSearch: false, crossGradePractice: false, hintsDisabled: false },
+    (children[0] && children[0].settings) || {},
+    _parentPrefs.child_defaults || {}
+  );
+  const diffOpt = (v, label) => `
+    <label class="flex items-center gap-1.5 cursor-pointer">
+      <input type="radio" name="set-def-diff" value="${v}" ${Number(d.maxDifficulty) === v ? 'checked' : ''} class="accent-blue-500">
+      <span class="text-sm text-gray-700 dark:text-gray-300">${label}</span>
+    </label>`;
+  const defToggle = (id, checked, title, sub) => `
+    <div class="flex items-center justify-between gap-3">
+      <div>
+        <div class="font-semibold text-gray-800 dark:text-white text-sm">${title}</div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${sub}</div>
+      </div>
+      <label class="relative inline-flex items-center cursor-pointer shrink-0">
+        <input type="checkbox" id="${id}" class="sr-only peer" ${checked ? 'checked' : ''}>
+        <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 peer-checked:bg-blue-500 rounded-full peer transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+      </label>
+    </div>`;
+  const defaultsHtml = children.length ? `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
+      <div>
+        <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Defaults For All Children</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Set these once and apply them to all ${children.length} ${children.length === 1 ? 'child' : 'children'}. Chapter locks are left untouched.</p>
+      </div>
+
+      <div>
+        <div class="font-semibold text-gray-800 dark:text-white text-sm mb-2">🎯 Question difficulty cap</div>
+        <div class="flex gap-3 flex-wrap">
+          ${diffOpt(1, '⭐ Basic')}${diffOpt(2, '⭐⭐ Medium')}${diffOpt(3, '⭐⭐⭐ Hard')}${diffOpt(4, '🏆 All')}
+        </div>
+      </div>
+
+      ${defToggle('set-def-exam',  !d.examDisabled,        '📝 Exam mode',            'Allow timed exam papers')}
+      ${defToggle('set-def-cgs',   !!d.crossGradeSearch,   '🔍 Cross-grade search',   'Show results from other grades')}
+      ${defToggle('set-def-cgp',   !!d.crossGradePractice, '📚 Cross-grade revision', 'Practise questions from other grades')}
+      ${defToggle('set-def-hints', !d.hintsDisabled,       '💡 In-app hints',         'First-time tip callouts')}
+
+      <button data-label="Apply to all children" onclick="_applyDefaultsToAll(this)"
+        class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-sm transition-colors">Apply to all children</button>
+      <p id="set-defaults-status" class="text-xs text-gray-500 dark:text-gray-400 text-center"></p>
+    </div>` : '';
+
+  // ── Danger zone ──
+  const dangerHtml = `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow border border-red-200 dark:border-red-900/40 space-y-3">
+      <h3 class="text-xs font-bold text-red-600 dark:text-red-400 uppercase tracking-wide">Danger Zone</h3>
+      <button onclick="Auth.logout()" class="w-full py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white font-semibold rounded-xl text-sm transition-colors">🚪 Sign out</button>
+      ${isParent ? `
+      <div class="pt-2 border-t border-gray-100 dark:border-gray-700">
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Closes your account${children.length ? ` and all ${children.length} ${children.length === 1 ? 'child account' : 'child accounts'}` : ''}. Nothing is erased — sign in again with the same email and you can restore everything.</p>
+        <button onclick="_confirmDeleteAccount()" class="btn-danger w-full text-sm">🗑️ Close my account</button>
+      </div>` : ''}
+    </div>`;
+
   container.innerHTML = `
     <div class="max-w-lg mx-auto space-y-4">
       <div class="flex items-center gap-3 mb-4">
         <button onclick="_profileBack()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Back">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
         </button>
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">My Account</h2>
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white">Account &amp; Settings</h2>
       </div>
 
       ${profile.disabled ? `<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 rounded-2xl p-4 flex items-center gap-3">
@@ -4029,7 +5256,7 @@ async function _renderParentProfile(container) {
           </div>
           <div class="flex-1 min-w-0">
             <p class="font-bold text-gray-800 dark:text-white text-base truncate">${_profEsc(profile.full_name || '—')}</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500 truncate">${_profEsc(email)}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 truncate">${_profEsc(email)}</p>
             <span class="inline-flex items-center mt-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${roleColour}">${roleLabel}</span>
           </div>
         </div>
@@ -4046,7 +5273,7 @@ async function _renderParentProfile(container) {
 
         <div>
           <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
-            Email <span class="text-gray-400 font-normal normal-case ml-1">🔒 cannot be changed here</span>
+            Email <span class="text-gray-500 dark:text-gray-400 font-normal normal-case ml-1">🔒 cannot be changed here</span>
           </label>
           <p class="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-xl break-all">${_profEsc(email) || '—'}</p>
         </div>
@@ -4060,7 +5287,7 @@ async function _renderParentProfile(container) {
           <div class="relative">
             <input id="prof-pw-new" type="password" placeholder="Min. 6 characters" autocomplete="new-password"
               class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 pr-10 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
-            <button type="button" onclick="Auth.togglePass('prof-pw-new',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+            <button type="button" onclick="Auth.togglePass('prof-pw-new',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
           </div>
         </div>
         <div>
@@ -4068,16 +5295,200 @@ async function _renderParentProfile(container) {
           <div class="relative">
             <input id="prof-pw-confirm" type="password" placeholder="Repeat new password" autocomplete="new-password"
               class="selectable w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 pr-10 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
-            <button type="button" onclick="Auth.togglePass('prof-pw-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
+            <button type="button" onclick="Auth.togglePass('prof-pw-confirm',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-white text-sm select-none">👁</button>
           </div>
         </div>
         <p id="prof-pw-error" class="text-red-500 text-xs hidden"></p>
         <button data-label="Change Password" onclick="_saveProfilePassword(this)"
           class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-sm transition-colors">Change Password</button>
+        ${biometricHtml}
       </div>
 
+      ${familyHtml}
+      ${appearanceHtml}
+      ${notifyHtml}
+      ${defaultsHtml}
       ${referralHtml}
+      ${dangerHtml}
     </div>`;
+}
+
+// ── Parent settings handlers ───────────────────────────────────────────────
+async function _savePrefs(patch) {
+  const profile = typeof Auth !== 'undefined' ? Auth.getParentProfile() : null;
+  if (!profile) return { ok: false };
+  _parentPrefs = Object.assign({}, _parentPrefs, patch);
+  return Store.saveMyPreferences(profile.id, _parentPrefs);
+}
+
+function _setParentTheme(pref) {
+  setThemePreference(pref);
+  document.querySelectorAll('[data-theme-opt]').forEach(b => {
+    const on = b.dataset.themeOpt === pref;
+    b.classList.toggle('border-indigo-500',        on);
+    b.classList.toggle('bg-indigo-50',             on);
+    b.classList.toggle('dark:bg-indigo-900/30',    on);
+    b.classList.toggle('text-indigo-700',          on);
+    b.classList.toggle('dark:text-indigo-300',     on);
+    b.classList.toggle('border-gray-200',         !on);
+    b.classList.toggle('dark:border-gray-600',    !on);
+    b.classList.toggle('text-gray-500',           !on);
+    b.classList.toggle('dark:text-gray-400',      !on);
+  });
+  _savePrefs({ theme: pref });
+}
+
+async function _toggleWeeklyDigest(el) {
+  const on = !!el.checked;
+  const res = await _savePrefs({ weekly_digest: on });
+  if (!res.ok) {
+    el.checked = !on;
+    toast('Could not save — check your connection.', 2500);
+    return;
+  }
+  toast(on ? '📧 Weekly email on.' : '📧 Weekly email off.', 1800);
+}
+
+async function _saveFamilyName(btn) {
+  const input = document.getElementById('set-family-name');
+  const name  = (input?.value || '').trim();
+  if (!name) { toast('Family name cannot be blank.', 2000); return; }
+  const family = typeof Auth !== 'undefined' ? Auth.getFamily() : null;
+  if (!family) return;
+  // Telling a parent to pass a new family name to their children when the
+  // rename never reached the database locks every child out - the login lookup
+  // joins on this exact string.
+  const res = await Store.updateFamilyName(family.id, name);
+  if (!res?.ok) {
+    if (input) input.value = family.family_name || '';
+    // 23505 = another family already answers to this name. Children log in with
+    // it, so two families cannot share one - say which problem this is rather
+    // than blaming the connection.
+    toast(res?.code === '23505'
+      ? 'Another family already uses that name. Please choose a different one.'
+      : 'Could not save the family name — check your connection and try again.', 4000);
+    return;
+  }
+  family.family_name = name;
+  const disp = document.getElementById('pd-family-name-display');
+  if (disp) disp.textContent = name;
+  _profileSaved(btn);
+  toast('Family name updated — tell your children the new name. 👨‍👩‍👧', 3500);
+}
+
+// Loops the children rather than doing one bulk write: push-subscribe is a
+// per-student endpoint and enforces ownership per request.
+async function _applyReminderToAll(btn) {
+  const time     = document.getElementById('set-reminder-all')?.value;
+  const statusEl = document.getElementById('set-reminder-status');
+  if (!time) { if (statusEl) statusEl.textContent = 'Pick a time first.'; return; }
+  const children = (typeof Auth !== 'undefined' && Auth.getStudents) ? (Auth.getStudents() || []) : [];
+  if (!children.length) return;
+
+  if (statusEl) statusEl.textContent = 'Saving…';
+  let ok = 0;
+  for (const c of children) {
+    try {
+      const res = await fetch('/.netlify/functions/push-subscribe', {
+        method: 'POST',
+        headers: await _pushAuthHeaders(),
+        body: JSON.stringify({ studentId: c.id, reminderTime: time }),
+      });
+      if (res.ok) ok++;
+    } catch (_) {}
+  }
+  await _savePrefs({ reminder_time: time });
+  if (statusEl) {
+    statusEl.textContent = ok === children.length
+      ? `Reminder set for ${time} MU time on all ${ok} ${ok === 1 ? 'child' : 'children'}. ✅`
+      : `Saved for ${ok} of ${children.length}. The rest need notifications enabled on their device.`;
+  }
+  _profileSaved(btn);
+}
+
+async function _clearReminderForAll() {
+  const statusEl = document.getElementById('set-reminder-status');
+  const children = (typeof Auth !== 'undefined' && Auth.getStudents) ? (Auth.getStudents() || []) : [];
+  if (statusEl) statusEl.textContent = 'Clearing…';
+  for (const c of children) {
+    try {
+      await fetch('/.netlify/functions/push-subscribe', {
+        method: 'POST',
+        headers: await _pushAuthHeaders(),
+        body: JSON.stringify({ studentId: c.id, reminderTime: null }),
+      });
+    } catch (_) {}
+  }
+  await _savePrefs({ reminder_time: null });
+  const t = document.getElementById('set-reminder-all');
+  if (t) t.value = '';
+  if (statusEl) statusEl.textContent = 'Reminders cleared for all children.';
+}
+
+async function _applyDefaultsToAll(btn) {
+  const children = (typeof Auth !== 'undefined' && Auth.getStudents) ? (Auth.getStudents() || []) : [];
+  if (!children.length) return;
+  const statusEl = document.getElementById('set-defaults-status');
+
+  const picked = document.querySelector('input[name="set-def-diff"]:checked');
+  const defaults = {
+    maxDifficulty:      picked ? parseInt(picked.value) : 4,
+    examDisabled:      !document.getElementById('set-def-exam')?.checked,
+    crossGradeSearch:  !!document.getElementById('set-def-cgs')?.checked,
+    crossGradePractice:!!document.getElementById('set-def-cgp')?.checked,
+    hintsDisabled:     !document.getElementById('set-def-hints')?.checked,
+  };
+
+  if (statusEl) statusEl.textContent = 'Applying…';
+  const failed = [];
+  for (const c of children) {
+    // Merge, never replace: lockedChapters and anything else already in this
+    // child's settings must survive.
+    const merged = Object.assign({ lockedChapters: [] }, c.settings || {}, defaults);
+    const res = await Store.updateStudent(c.id, { settings: merged });
+    // A child whose write failed keeps its old settings in the cache too -
+    // otherwise the dashboard would show limits the child is not actually under.
+    if (!res?.ok) { failed.push(c.display_name || c.username); continue; }
+    c.settings = merged;
+    // The parent may be looking at one of these children in the detail panel;
+    // DB.restrictions is that child's live copy, so keep it in step.
+    if (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID === c.id) DB.restrictions = merged;
+  }
+
+  await _savePrefs({ child_defaults: defaults });
+  if (failed.length) {
+    if (statusEl) statusEl.textContent = `Could not apply to ${failed.join(', ')}. Please try again. ⚠️`;
+    toast('Some children could not be updated — check your connection.', 3500);
+    return;
+  }
+  if (statusEl) statusEl.textContent = `Applied to all ${children.length} ${children.length === 1 ? 'child' : 'children'}. ✅`;
+  _profileSaved(btn);
+}
+
+// Two-step on purpose: a confirm() alone is one stray tap away from wiping a
+// family's entire history, and there is no undo on the other side of it.
+async function _confirmDeleteAccount() {
+  const children = (typeof Auth !== 'undefined' && Auth.getStudents) ? (Auth.getStudents() || []) : [];
+  const kids = children.length
+    ? `\n\nThis also closes ${children.length} child ${children.length === 1 ? 'account' : 'accounts'}: ${children.map(c => c.display_name || c.username).join(', ')}.`
+    : '';
+  if (!confirm(`Close your account?${kids}\n\nYou will be signed out and the app will look empty. Nothing is erased — sign in again with the same email and you can restore everything.`)) return;
+
+  const typed = prompt('Type DELETE (in capitals) to confirm.');
+  if ((typed || '').trim() !== 'DELETE') { toast('Cancelled — your account is untouched.', 2500); return; }
+
+  toast('Closing your account…', 3000);
+  const res = await Store.deleteMyAccount();
+  if (!res.ok) {
+    const msg = res.error === 'admin_cannot_self_delete'
+      ? 'Admin accounts cannot be closed from here.'
+      : 'Could not close the account. Please try again or contact support.';
+    toast(msg, 4000);
+    return;
+  }
+  try { await _sb?.auth.signOut(); } catch (_) {}
+  try { localStorage.clear(); } catch (_) {}
+  location.reload();
 }
 
 async function _saveProfileName(btn) {

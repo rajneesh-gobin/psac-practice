@@ -43,12 +43,26 @@ exports.handler = async () => {
   const families = await sbGet('/rest/v1/families?select=id,parent_id');
   if (!families?.length) return { statusCode: 200 };
 
+  // Parents who switched this off in Account & Settings. Absence of the key -
+  // and a database that has not run supabase-migration.sql at all, where
+  // this select errors and sbGet returns null - both mean "opted in", which is
+  // the behaviour this function had before the setting existed.
+  const optedOut = new Set();
+  const profiles = await sbGet('/rest/v1/profiles?select=id,preferences');
+  for (const p of profiles || []) {
+    if (p?.preferences?.weekly_digest === false) optedOut.add(p.id);
+  }
+
   let sent = 0;
   for (const family of families) {
+    if (optedOut.has(family.parent_id)) continue;
     try {
       // Get students
+      // deleted_at IS NULL, or the digest keeps reporting on children the parent
+      // has removed. This runs on the service-role key, which bypasses RLS and
+      // sees the soft-deleted rows the app itself filters out.
       const students = await sbGet(
-        `/rest/v1/students?family_id=eq.${family.id}&select=id,display_name,grade,avatar`
+        `/rest/v1/students?family_id=eq.${family.id}&deleted_at=is.null&select=id,display_name,grade,avatar`
       );
       if (!students?.length) continue;
 

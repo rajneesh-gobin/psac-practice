@@ -95,23 +95,87 @@ const Store = (() => {
     const { data, error } = await _sb.from('families')
       .insert({ parent_id: parentId, family_name: familyName })
       .select('id, family_name, family_code, parent_id').single();
-    if (error) console.error('[Store.createFamily]', error);
-    return error ? null : data;
+    if (error) {
+      console.error("[Store.createFamily]", error);
+      // 23505 = the family name is already in use. Children log in with it, so
+      // two families cannot share one; the caller has to say which name to change.
+      return { _error: { code: error.code, message: error.message } };
+    }
+    return data;
   }
 
+  // Reports whether the rename actually landed. The family name is one of the
+  // three things a child types at login, so a rename that silently failed while
+  // the parent was told it worked locks every child out of the account.
   async function updateFamilyName(familyId, name) {
-    if (!_sb) return;
-    await _sb.from('families').update({ family_name: name }).eq('id', familyId);
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { error } = await _sb.from('families').update({ family_name: name }).eq('id', familyId);
+    if (error) {
+      console.error('[Store.updateFamilyName]', error.message);
+      // The caller distinguishes 23505 (name taken by another family) from a
+      // connection failure - they need very different messages.
+      return { ok: false, code: error.code, error: error.message };
+    }
+    return { ok: true };
   }
 
   // ── Students (children) ───────────────────────
+  // Deleting a child is a soft delete (see supabase-migration.sql), so
+  // every read path has to skip the dead rows. The retry is for a database that
+  // has not run that migration yet: `deleted_at` would be an unknown column and
+  // the query would 42703, leaving a parent staring at an empty dashboard.
+  const _STUDENT_COLS = 'id, username, display_name, avatar, grade, settings, session_version, expires_at';
+
+  // "No children" and "could not read your children" are different answers and
+  // the caller has to be able to tell them apart - an empty array for both is
+  // what let a freshly created child look like an empty dashboard. The reason
+  // for the last empty result is kept here and read by renderParentDashboard.
+  let _familyStudentsError = null;
+  function lastFamilyStudentsError() { return _familyStudentsError; }
+
   async function getFamilyStudents(familyId) {
-    if (!_sb) return [];
-    const { data } = await _sb.from('students')
-      .select('id, username, display_name, avatar, grade, settings, session_version, expires_at')
+    _familyStudentsError = null;
+    if (!_sb) { _familyStudentsError = 'Not connected.'; return []; }
+    const { data, error } = await _sb.from('students')
+      .select(_STUDENT_COLS + ', deleted_at')
       .eq('family_id', familyId)
+      .is('deleted_at', null)
       .order('created_at');
-    return data || [];
+
+    if (!error) return (data || []).filter(s => !s.deleted_at);
+
+    // ⚠ ONLY fall back when the column genuinely does not exist yet (42703 /
+    //   PGRST204). The first version of this retried on ANY error and dropped
+    //   the `deleted_at IS NULL` filter to do it — which meant a transient
+    //   failure silently returned the DELETED children too, and the parent saw
+    //   a child they had just removed sitting next to the one they recreated.
+    //   Any other error is a real failure and must look like one.
+    // 42501 belongs here too, and it is not obvious why. students has
+    // COLUMN-LEVEL grants (supabase-migration.sql), so a column added
+    // later is unreadable rather than absent — same practical state, completely
+    // different error code, and the message says "permission denied for table
+    // students" without ever naming the column. Treating it as a hard failure
+    // is what turned a missing GRANT into an empty parent dashboard.
+    const missingColumn = error.code === '42703' || error.code === 'PGRST204'
+      || error.code === '42501' || /deleted_at/.test(error.message || '');
+    if (!missingColumn) {
+      console.error('[Store.getFamilyStudents]', error.message);
+      _familyStudentsError = error.message || 'Unknown database error.';
+      return [];
+    }
+    console.warn(error.code === '42501'
+      ? '[Store.getFamilyStudents] deleted_at is not readable — run: GRANT SELECT (deleted_at) '
+        + 'ON public.students TO anon, authenticated; (see supabase-migration.sql). '
+        + 'Falling back to the unfiltered list, so a soft-deleted child may appear until then.'
+      : '[Store.getFamilyStudents] no deleted_at column — run supabase-migration.sql.');
+    const { data: legacy, error: legacyErr } = await _sb.from('students').select(_STUDENT_COLS)
+      .eq('family_id', familyId).order('created_at');
+    if (legacyErr) {
+      console.error('[Store.getFamilyStudents] legacy', legacyErr.message);
+      _familyStudentsError = legacyErr.message || 'Unknown database error.';
+      return [];
+    }
+    return legacy || [];
   }
 
   // Hash a PIN into students.pin via the bcrypt RPC (pgcrypto crypt(), runs
@@ -133,8 +197,13 @@ const Store = (() => {
     return true;
   }
 
+  // 'username_taken' covers two cases the parent must not be able to tell
+  // apart: the name is used inside their own family, or it is used by a child
+  // in a DIFFERENT family that happens to share their family name. Naming the
+  // second would disclose another family's children. Both mean the same thing
+  // to the parent - pick another username - so both get the same words.
   const _CREATE_ERRORS = {
-    username_taken:   'That username is already taken. Please choose another.',
+    username_taken:   'That username is not available. Please try another.',
     invalid_pin:      'PIN must be exactly 4 digits.',
     invalid_username: 'Please enter a username.',
     not_authorised:   'You do not have permission to add a child to this family.',
@@ -167,24 +236,63 @@ const Store = (() => {
     return data.student;
   }
 
+  // Returns { ok } so callers never announce a change the database refused.
+  // An RLS denial comes back as a normal error here, not an exception.
   async function updateStudent(studentId, updates) {
-    if (!_sb) return;
+    if (!_sb) return { ok: false, error: 'offline' };
     const row = {};
     if (updates.displayName !== undefined) row.display_name = updates.displayName;
     if (updates.avatar      !== undefined) row.avatar       = updates.avatar;
     if (updates.grade       !== undefined) row.grade        = parseInt(updates.grade);
     if (updates.settings    !== undefined) row.settings     = updates.settings;
-    if (Object.keys(row).length) await _sb.from('students').update(row).eq('id', studentId);
+    if (Object.keys(row).length) {
+      const { error } = await _sb.from('students').update(row).eq('id', studentId);
+      if (error) { console.error('[Store.updateStudent]', error.message); return { ok: false, error: error.message }; }
+    }
     // A PIN never goes through a plain UPDATE - always via the hashing RPC.
-    if (updates.pin) await setStudentPin(studentId, updates.pin);
+    if (updates.pin && !await setStudentPin(studentId, updates.pin)) {
+      return { ok: false, error: 'pin_not_saved' };
+    }
+    return { ok: true };
   }
 
+  // Soft delete. The row and all its progress stay in the database — the child
+  // disappears from the app and their username is freed so the family can
+  // recreate a child with the same name, but nothing is destroyed.
+  //
+  // Falls back to the old hard delete ONLY when the RPC does not exist, i.e. a
+  // database that has not run supabase-migration.sql. That is exactly the
+  // behaviour such a database had yesterday, so nothing regresses — but the
+  // delete is irreversible there, hence the warning.
   async function deleteStudent(studentId) {
-    if (!_sb) return;
-    // Clean up progress first (student_progress has no FK cascade to students)
-    await _sb.from('student_progress').delete().eq('student_id', studentId);
+    if (!_sb) return { ok: false };
     try { localStorage.removeItem(_sKey(studentId)); } catch(e) {}
-    await _sb.from('students').delete().eq('id', studentId);
+
+    const { data, error } = await _sb.rpc('soft_delete_student', { p_student: studentId });
+    if (!error) return data || { ok: true };
+
+    if (error.code !== 'PGRST202') {
+      console.error('[Store.deleteStudent]', error.message);
+      return { ok: false, error: error.message };
+    }
+    console.warn('[Store.deleteStudent] soft_delete_student missing — run supabase-migration.sql. Falling back to a HARD delete.');
+    await _sb.from('student_progress').delete().eq('student_id', studentId);
+
+    // .select() is not decoration. Under RLS a DELETE whose policy matches no
+    // row is a SILENT no-op: no error, no rows, and the old code took that as
+    // success. The child vanished from the screen, came back on the next
+    // reload, and if the parent had recreated them in between they now had two.
+    const { data: removed, error: delErr } = await _sb.from('students')
+      .delete().eq('id', studentId).select('id');
+    if (delErr) {
+      console.error('[Store.deleteStudent]', delErr.message);
+      return { ok: false, error: delErr.message };
+    }
+    if (!removed || !removed.length) {
+      console.error('[Store.deleteStudent] delete affected 0 rows (blocked by RLS?)');
+      return { ok: false, error: 'not_deleted' };
+    }
+    return { ok: true, hard: true };
   }
 
   // ── Student progress ──────────────────────────
@@ -247,8 +355,18 @@ const Store = (() => {
     _sb.from('student_progress').upsert({
       student_id: studentId, data: progressData, updated_at: new Date().toISOString(),
     }).then(({ error }) => {
-      if (error) console.error('[Store.saveStudentProgress] write failed:', error.message,
-        '- progress is saved locally only. Check the x-student-token header.');
+      if (error) {
+        console.error('[Store.saveStudentProgress] write failed:', error.message,
+          '- progress is saved locally only. Check the x-student-token header.');
+        // Same signature/handling as the read path in loadStudentProgress() below:
+        // an expired or revoked x-student-token makes RLS reject every write with
+        // exactly this wording. Without this, a student can sit indefinitely with
+        // everything "saving locally only" and zero indication anything is wrong -
+        // this is what silently ate a bug report too (see reportQuestion below).
+        if (typeof Events !== 'undefined' && /jwt|permission|denied|row-level/i.test(error.message || '')) {
+          Events.emit('session-invalid', { source: 'saveStudentProgress' });
+        }
+      }
     }).catch(err => console.error('[Store.saveStudentProgress]', err));
   }
 
@@ -336,6 +454,33 @@ const Store = (() => {
   }
 
   // Credits whoever owns p_code with referring the CURRENTLY authenticated
+  // ── One-tap login links ───────────────────────
+  // The token is returned in the clear ONCE, here, and only a hash of it is
+  // stored - so it cannot be looked up again. If the parent loses the message
+  // they mint a new link, which invalidates the old one.
+  async function createStudentInvite(studentId, hours) {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('create_student_invite',
+      { p_student: studentId, p_hours: hours || 48 });
+    if (error) {
+      console.error('[Store.createStudentInvite]', error.message);
+      // PGRST202: the RPC is not deployed yet, which is a different problem
+      // from "you may not do that" and needs a different message.
+      return { ok: false, error: error.code === 'PGRST202' ? 'not_deployed' : error.message };
+    }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  async function redeemStudentInvite(token) {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('redeem_student_invite', { p_token: token });
+    if (error) {
+      console.error('[Store.redeemStudentInvite]', error.message);
+      return { ok: false, error: error.code === 'PGRST202' ? 'not_deployed' : error.message };
+    }
+    return data || { ok: false, error: 'unknown' };
+  }
+
   // user. Call once, right after that user's own profile row is created -
   // record_referral() is SECURITY DEFINER and always credits auth.uid(), so it
   // can only ever be called for yourself, never on someone else's behalf.
@@ -352,6 +497,57 @@ const Store = (() => {
     const { data, error } = await _sb.rpc('my_referrals');
     if (error) { console.warn('[Store.getMyReferrals]', error.message); return []; }
     return data || [];
+  }
+
+  // ── Parent preferences (profiles.preferences jsonb) ──
+  // Isolated from getProfile() for exactly the reason spelled out there: a
+  // database that has not run supabase-migration.sql yet must degrade to
+  // "no saved preferences" instead of erroring the query that gates login.
+  async function getMyPreferences(userId) {
+    if (!_sb || !userId) return {};
+    const { data, error } = await _sb.from('profiles')
+      .select('preferences').eq('id', userId).maybeSingle();
+    if (error) { console.warn('[Store.getMyPreferences]', error.message); return {}; }
+    return data?.preferences || {};
+  }
+
+  // Whole-blob write. Callers pass the merged object, not a patch — these are
+  // a handful of scalar settings edited one screen at a time, so a read-modify-
+  // write race would need two parent devices on the same page at once.
+  async function saveMyPreferences(userId, prefs) {
+    if (!_sb || !userId) return { ok: false, error: 'no_user' };
+    const { error } = await _sb.from('profiles')
+      .update({ preferences: prefs || {} }).eq('id', userId);
+    if (error) { console.warn('[Store.saveMyPreferences]', error.message); return { ok: false, error: error.message }; }
+    return { ok: true };
+  }
+
+  // Soft-deletes the signed-in parent, their family and every child under it.
+  // Always acts on auth.uid() - it takes no target - see supabase-migration.sql.
+  // The auth user survives, which is what makes restoreMyAccount() possible.
+  async function deleteMyAccount() {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('delete_my_account');
+    if (error) { console.error('[Store.deleteMyAccount]', error.message); return { ok: false, error: error.message }; }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  async function restoreMyAccount() {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('restore_my_account');
+    if (error) { console.error('[Store.restoreMyAccount]', error.message); return { ok: false, error: error.message }; }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  // Separate from getProfile() for the usual reason: an un-migrated database has
+  // no deleted_at column, and this must degrade to "not deleted" rather than
+  // erroring the query that decides whether a parent may log in at all.
+  async function getAccountDeletedAt(userId) {
+    if (!_sb || !userId) return null;
+    const { data, error } = await _sb.from('profiles')
+      .select('deleted_at').eq('id', userId).maybeSingle();
+    if (error) return null;
+    return data?.deleted_at || null;
   }
 
   async function createProfile(userId, role, fullName) {
@@ -386,7 +582,7 @@ const Store = (() => {
 
   // ── Question reports ──────────────────────────
   async function reportQuestion(questionId, questionText, message, studentId, studentName, mode, options, answer) {
-    if (!_sb || !questionId) return false;
+    if (!_sb || !questionId) return { ok: false, sessionExpired: false };
     // Pack extra context into question_text as JSON suffix (no schema change needed)
     const meta = JSON.stringify({ studentName: studentName || null, mode: mode || 'practice', options: options || null, answer: answer || null });
     const { error } = await _sb.from('question_reports').insert({
@@ -396,7 +592,18 @@ const Store = (() => {
       student_id:    studentId || null,
       status:        'open',
     });
-    return !error;
+    let sessionExpired = false;
+    if (error) {
+      console.error('[Store.reportQuestion] insert failed:', error.message);
+      // Same expired/revoked-token signature as loadStudentProgress()/
+      // _flushProgressToSupabase() above - this is the exact failure that made a
+      // student's report vanish with no trace and no error anyone saw.
+      sessionExpired = /jwt|permission|denied|row-level/i.test(error.message || '');
+      if (sessionExpired && typeof Events !== 'undefined') {
+        Events.emit('session-invalid', { source: 'reportQuestion' });
+      }
+    }
+    return { ok: !error, sessionExpired };
   }
 
   async function loadReports() {
@@ -415,36 +622,58 @@ const Store = (() => {
   }
 
   // ── Student assignments (Supabase) ────────────
+  // show_hints arrived after this table shipped, so the select falls back to the
+  // older column list if the database has not run supabase-migration.sql
+  // yet. Without the retry an un-migrated database returns 42703 and the parent
+  // sees "no assignments" for work that exists.
+  const _ASGN_COLS     = 'id, subject_id, chapter_id, difficulty, note, show_answers, created_at';
+  const _ASGN_COLS_NEW = _ASGN_COLS + ', show_hints';
+
   async function loadAssignments(studentId) {
     if (!_sb) return [];
-    const { data } = await _sb.from('student_assignments')
-      .select('id, subject_id, chapter_id, difficulty, note, show_answers, created_at').eq('student_id', studentId)
+    const q = cols => _sb.from('student_assignments')
+      .select(cols).eq('student_id', studentId)
       .is('completed_at', null)
       .order('created_at', { ascending: false });
+    let { data, error } = await q(_ASGN_COLS_NEW);
+    if (error) ({ data } = await q(_ASGN_COLS));
     return data || [];
   }
 
-  async function createAssignment(studentId, parentId, { subjectId, chapterId, difficulty, note, showAnswers }) {
+  async function createAssignment(studentId, parentId, { subjectId, chapterId, difficulty, note, showAnswers, showHints }) {
     if (!_sb) return null;
-    const { data, error } = await _sb.from('student_assignments').insert({
+    const base = {
       student_id: studentId, parent_id: parentId || null,
       subject_id: subjectId || null, chapter_id: chapterId || null,
       difficulty: difficulty ? parseInt(difficulty) : null,
       note: note || null,
       show_answers: showAnswers !== false,
-    }).select('id, subject_id, chapter_id, difficulty, note, show_answers, created_at').single();
+    };
+    // Same un-migrated-database fallback as loadAssignments: assigning work must
+    // not fail outright just because the hint switch has nowhere to be stored.
+    let { data, error } = await _sb.from('student_assignments')
+      .insert({ ...base, show_hints: showHints !== false })
+      .select(_ASGN_COLS_NEW).single();
+    if (error) {
+      ({ data, error } = await _sb.from('student_assignments')
+        .insert(base).select(_ASGN_COLS).single());
+    }
     return error ? null : data;
   }
 
   async function deleteAssignment(id) {
-    if (!_sb) return;
-    await _sb.from('student_assignments').delete().eq('id', id);
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { error } = await _sb.from('student_assignments').delete().eq('id', id);
+    if (error) { console.error('[Store.deleteAssignment]', error.message); return { ok: false, error: error.message }; }
+    return { ok: true };
   }
 
   async function completeAssignment(id) {
-    if (!_sb) return;
-    await _sb.from('student_assignments')
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { error } = await _sb.from('student_assignments')
       .update({ completed_at: new Date().toISOString() }).eq('id', id);
+    if (error) { console.error('[Store.completeAssignment]', error.message); return { ok: false, error: error.message }; }
+    return { ok: true };
   }
 
   // ── Plans / subscriptions ─────────────────────
@@ -462,6 +691,15 @@ const Store = (() => {
     // Fetch free plan details for display
     const { data: freePlan } = await _sb.from('plans').select('*').eq('id', 'free').maybeSingle();
     return { plan_id: 'free', plan: freePlan, subscription: null };
+  }
+
+  async function listPlans() {
+    if (!_sb) return [];
+    const { data, error } = await _sb.from('plans')
+      .select('id, name, price_mur, max_children, features')
+      .eq('is_active', true).order('price_mur');
+    if (error) { console.warn('[Store.listPlans]', error.message); return []; }
+    return data || [];
   }
 
   async function activatePlan(userId, planId, months, notes) {
@@ -520,15 +758,18 @@ const Store = (() => {
     // Families
     lookupFamily, getMyFamily, createFamily, updateFamilyName,
     // Students
-    getFamilyStudents, createStudent, updateStudent, deleteStudent, setStudentPin,
+    getFamilyStudents, lastFamilyStudentsError,
+    createStudent, updateStudent, deleteStudent, setStudentPin,
     // Progress
     loadStudentProgress, saveStudentProgress,
     // Legacy API (used by app.js / existing screens)
     getAccounts, saveAccounts, getParentPin, setParentPin, loadStudent, saveStudent, clearStudent,
     // Profiles
-    getProfile, createProfile,
+    getProfile, createProfile, getMyPreferences, saveMyPreferences,
+    deleteMyAccount, restoreMyAccount, getAccountDeletedAt,
     // Referrals
     recordReferral, getMyReferrals, getMyReferralCode,
+    createStudentInvite, redeemStudentInvite,
     // mm_data (teacher + global settings)
     getGlobalSettings, mmGet, mmSet,
     generateId,
@@ -539,6 +780,6 @@ const Store = (() => {
     // Login tracking
     logLoginEvent,
     // Plans & billing
-    getUserPlan, activatePlan, getPaymentHistory,
+    getUserPlan, listPlans, activatePlan, getPaymentHistory,
   };
 })();

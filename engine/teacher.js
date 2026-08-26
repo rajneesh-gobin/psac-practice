@@ -108,7 +108,7 @@ const TeacherMode = (() => {
     // refuse to draw the dashboard for anyone who is not a teacher.
     if (!isTeacher()) {
       const list = _el('ta-asgn-list');
-      if (list) list.innerHTML = '<p class="text-sm text-gray-400 py-2">Teacher access required.</p>';
+      if (list) list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-2">Teacher access required.</p>';
       if (typeof toast === 'function') toast('Teacher access is granted by an administrator.', 3000);
       if (typeof showScreen === 'function') showScreen(ACTIVE_STUDENT_ID ? 'dashboard' : 'landing');
       return;
@@ -136,7 +136,7 @@ const TeacherMode = (() => {
     if (!list) return;
 
     if (!data.assignments || !data.assignments.length) {
-      list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 py-2">No assignments yet - build one above!</p>';
+      list.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-2">No assignments yet - build one above!</p>';
       return;
     }
 
@@ -207,13 +207,13 @@ const TeacherMode = (() => {
     _currentResultsAssignId = assignId;
     const container = _el('ta-results-list');
     if (!container) return;
-    if (!assignId) { container.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 py-2">Select an assignment above to see results.</p>'; return; }
+    if (!assignId) { container.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-2">Select an assignment above to see results.</p>'; return; }
 
     const data    = _getData();
     const results = data.results?.[assignId] || [];
 
     if (!results.length) {
-      container.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 py-2">No submissions yet for this assignment.</p>';
+      container.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 py-2">No submissions yet for this assignment.</p>';
       return;
     }
 
@@ -235,9 +235,9 @@ const TeacherMode = (() => {
         const ts  = new Date(r.timestamp).toLocaleString();
         return `
           <div class="flex items-center gap-3 py-1.5 border-t border-gray-100 dark:border-gray-700 first:border-0">
-            <span class="text-xs text-gray-400 dark:text-gray-500 w-16 shrink-0">Attempt ${r.attempt}</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 w-16 shrink-0">Attempt ${r.attempt}</span>
             <span class="font-bold text-sm ${col}">${r.score}/${r.total} (${r.pct}%)</span>
-            <span class="text-xs text-gray-400 dark:text-gray-500 flex-1">${ts}</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 flex-1">${ts}</span>
             <button onclick="TeacherMode.removeResult('${assignId}','${name}',${r.attempt})"
               class="text-xs text-red-400 hover:text-red-600 px-1.5 py-0.5 rounded transition-colors">🗑</button>
             ${r.answers ? `<button onclick="TeacherMode.showAnswers('${assignId}','${name}',${r.attempt})"

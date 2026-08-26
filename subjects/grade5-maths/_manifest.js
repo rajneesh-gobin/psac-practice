@@ -31,10 +31,13 @@ const CHAPTERS = [
 const G5M_SYLLABUS = {
   numeration:  { subsections: [
     { id:'place_value',  name:'Place Value (up to 100,000)' },
+    { id:'words_digits', name:'Numbers in Words & Figures' },
     { id:'ordering',     name:'Ordering & Comparing Numbers' },
     { id:'expanded',     name:'Expanded Notation' },
-    { id:'square_types', name:'Types of Numbers (Square Numbers)' },
+    { id:'rounding',     name:'Rounding' },
+    { id:'roman',        name:'Roman Numerals' },
     { id:'sequences',    name:'Number Sequences & Patterns' },
+    { id:'word_probs',   name:'Word Problems' },
   ]},
   four_ops:    { subsections: [
     { id:'addition',     name:'Addition & Subtraction' },
@@ -47,12 +50,15 @@ const G5M_SYLLABUS = {
     { id:'square_nums',  name:'Square Numbers (1² to 15²)' },
     { id:'square_roots', name:'Square Roots' },
     { id:'patterns',     name:'Number Patterns & Sequences' },
+    { id:'word_probs',   name:'Word Problems' },
   ]},
   geometry:    { subsections: [
     { id:'angles',       name:'Types & Measurement of Angles' },
     { id:'2d_shapes',    name:'Properties of 2D Shapes' },
     { id:'3d_shapes',    name:'Properties of 3D Shapes' },
     { id:'symmetry',     name:'Lines of Symmetry' },
+    { id:'directions',   name:'Compass Directions & Turns' },
+    { id:'perimeter',    name:'Perimeter & Compound Shapes' },
   ]},
   fractions:   { subsections: [
     { id:'proper_improper',name:'Proper, Improper & Mixed Numbers' },
@@ -60,12 +66,14 @@ const G5M_SYLLABUS = {
     { id:'comparing',    name:'Comparing & Ordering Fractions' },
     { id:'add_sub',      name:'Adding & Subtracting Fractions' },
     { id:'fraction_of',  name:'Fraction of a Quantity' },
+    { id:'word_probs',   name:'Word Problems' },
   ]},
   decimals:    { subsections: [
     { id:'place_value',  name:'Decimal Place Value' },
     { id:'ordering',     name:'Ordering Decimals' },
     { id:'operations',   name:'Adding & Subtracting Decimals' },
     { id:'conversion',   name:'Fractions ↔ Decimals' },
+    { id:'word_probs',   name:'Word Problems' },
   ]},
   powers:      { subsections: [
     { id:'notation',     name:'Power / Exponent Notation' },
@@ -88,6 +96,7 @@ const G5M_SYLLABUS = {
     { id:'conversion',   name:'Converting Fractions/Decimals ↔ Percentages' },
     { id:'of_quantity',  name:'Finding a Percentage of a Quantity' },
     { id:'increase',     name:'Percentage Increase & Decrease' },
+    { id:'word_probs',   name:'Word Problems' },
   ]},
   length:      { subsections: [
     { id:'conversion',   name:'Unit Conversions (km/m/cm/mm)' },
@@ -98,7 +107,7 @@ const G5M_SYLLABUS = {
     { id:'rectangle',    name:'Area of Rectangles & Squares' },
     { id:'compound',     name:'Area of Compound Shapes' },
     { id:'triangle',     name:'Area of Triangles' },
-    { id:'conversion',   name:'Unit Conversions (m²/cm²)' },
+    { id:'word_probs',   name:'Word Problems' },
   ]},
   capacity:    { subsections: [
     { id:'conversion',   name:'Litres & Millilitres' },
@@ -121,6 +130,7 @@ const G5M_SYLLABUS = {
     { id:'conversion',   name:'Converting Units of Time' },
     { id:'duration',     name:'Duration & Elapsed Time' },
     { id:'calendar',     name:'Calendar Problems' },
+    { id:'word_probs',   name:'Word Problems' },
   ]},
   graphs:      { subsections: [
     { id:'pictogram',    name:'Pictograms' },
@@ -272,6 +282,13 @@ const G5M_BADGES = [
 ];
 
 // ── DYNAMIC GENERATORS ──────────────────────────
+// Every generated question needs a unique id. `Date.now()` on its own repeats
+// for every call inside the same millisecond, and getMixedQuestions() de-dupes
+// by id — so a run of generated questions collapsed to one and the padding
+// largely did not work.
+let _g5mGenSeq = 0;
+const genId = prefix => `${prefix}${Date.now()}_${++_g5mGenSeq}`;
+
 const G5M_GENERATORS = {
 
   numeration: (level) => {
@@ -283,7 +300,7 @@ const G5M_GENERATORS = {
     const dig = parseInt(nStr[pos]);
     const val = dig * values[pos];
     return makeNum({
-      id: `GN${Date.now()}`, chapterId:'numeration', difficulty:level,
+      id: genId('GN'), chapterId:'numeration', difficulty:level,
       question:`What is the value of the digit <b>${dig}</b> in the number <b>${fmt(n)}</b>?`,
       answer: String(val), acceptableAnswers:[String(val), fmt(val)],
       hint:`The positions from right to left are: ones, tens, hundreds, thousands, ten-thousands. Find where the digit ${dig} sits.`,
@@ -298,7 +315,7 @@ const G5M_GENERATORS = {
       const [big, small] = a > b ? [a, b] : [b, a];
       const ans = op === '+' ? big + small : big - small;
       return makeNum({
-        id:`GF${Date.now()}`, chapterId:'four_ops', difficulty:level,
+        id:genId('GF'), chapterId:'four_ops', difficulty:level,
         question:`Calculate: <b>${fmt(big)} ${op} ${fmt(small)}</b>`,
         answer: String(ans), acceptableAnswers:[String(ans), fmt(ans)],
         hint:`Line up digits by place value. Work ${op === '+' ? 'right to left, carrying' : 'right to left, borrowing'} when needed.`,
@@ -313,7 +330,7 @@ const G5M_GENERATORS = {
       const paid = Math.ceil(total / 100) * 100 + rnd(0,1)*100;
       const change = paid - total;
       return makeNum({
-        id:`GF${Date.now()}`, chapterId:'four_ops', difficulty:level,
+        id:genId('GF'), chapterId:'four_ops', difficulty:level,
         question:`A school buys <b>${qty} exercise books</b> at <b>Rs ${price} each</b>.<br>The cashier pays with <b>Rs ${fmt(paid)}</b>.<br>How much <b>change</b> is received?`,
         answer: String(change), acceptableAnswers:[String(change), 'Rs '+change],
         hint:`Step 1: Total cost = ${qty} × Rs ${price}. Step 2: Change = Rs ${fmt(paid)} − total cost.`,
@@ -327,7 +344,7 @@ const G5M_GENERATORS = {
     const paid = Math.ceil(totalCost / 500) * 500;
     const change = paid - totalCost;
     return makeNum({
-      id:`GF${Date.now()}`, chapterId:'four_ops', difficulty:level,
+      id:genId('GF'), chapterId:'four_ops', difficulty:level,
       question:`Priya buys <b>${qtyA} pens at Rs ${priceA} each</b> and <b>${qtyB} pencils at Rs ${priceB} each</b>.<br>She pays with <b>Rs ${fmt(paid)}</b>. How much <b>change</b> does she get?`,
       answer: String(change), acceptableAnswers:[String(change), 'Rs '+change],
       hint:`Step 1: Cost of pens = ${qtyA}×${priceA}. Step 2: Cost of pencils = ${qtyB}×${priceB}. Step 3: Total. Step 4: Change = ${fmt(paid)} − total.`,
@@ -345,7 +362,7 @@ const G5M_GENERATORS = {
       const whole = rnd(2, 9);
       const product = whole * n2;
       return makeNum({
-        id:`GFR${Date.now()}`, chapterId:'fractions', difficulty:level,
+        id:genId('GFR'), chapterId:'fractions', difficulty:level,
         question:`Calculate: <b>${n2}/${d} of ${whole * d}</b>`,
         answer: String(product), acceptableAnswers:[String(product)],
         hint:`Divide by ${d} first, then multiply by ${n2}.`,
@@ -368,7 +385,7 @@ const G5M_GENERATORS = {
       const simpNum = resNum / g, simpDen = lcd / g;
       const ansStr = simpDen === 1 ? String(simpNum) : `${simpNum}/${simpDen}`;
       return makeNum({
-        id:`GFR${Date.now()}`, chapterId:'fractions', difficulty:level,
+        id:genId('GFR'), chapterId:'fractions', difficulty:level,
         question:`Calculate: <b>${n1}/${d1} ${op} ${n2}/${d2}</b><br><i>Give your answer as a fraction (e.g. 3/4) or a whole number.</i>`,
         answer: ansStr, acceptableAnswers:[ansStr],
         hint:`LCD of ${d1} and ${d2} = ${lcd}. Convert: ${n1}/${d1} = ${numA}/${lcd} and ${n2}/${d2} = ${numB}/${lcd}.`,
@@ -389,7 +406,7 @@ const G5M_GENERATORS = {
     const part = whole * nfrac;
     const unitStr = sc.unit ? sc.unit + ' ' : '';
     return makeNum({
-      id:`GFR${Date.now()}`, chapterId:'fractions', difficulty:level,
+      id:genId('GFR'), chapterId:'fractions', difficulty:level,
       question:`Meera has <b>${unitStr}${sc.total} ${sc.thing}</b>. She gives <b>${nfrac}/${d}</b> of them to her friend.<br>How much does she give away?`,
       answer: String(part), acceptableAnswers:[String(part), unitStr+part],
       hint:`Divide ${sc.total} by ${d} to get 1/${d}, then multiply by ${nfrac}.`,
@@ -401,7 +418,7 @@ const G5M_GENERATORS = {
     if (level <= 2) {
       const l = rnd(3, 20), w = rnd(2, 15);
       return makeNum({
-        id: `GAR${Date.now()}`, chapterId:'area', difficulty:level,
+        id: genId('GAR'), chapterId:'area', difficulty:level,
         question:`Find the <b>area</b> of a rectangle with length <b>${l} cm</b> and width <b>${w} cm</b>.`,
         answer: String(l*w), acceptableAnswers:[String(l*w), l*w+'cm2', l*w+' cm²'],
         hint:'Area of a rectangle = length × width.',
@@ -410,7 +427,7 @@ const G5M_GENERATORS = {
     } else {
       const s = rnd(4, 15);
       return makeNum({
-        id: `GAR${Date.now()}`, chapterId:'area', difficulty:level,
+        id: genId('GAR'), chapterId:'area', difficulty:level,
         question:`A square has a side of <b>${s} cm</b>. Find its <b>area</b>.`,
         answer: String(s*s), acceptableAnswers:[String(s*s), s*s+'cm2', s*s+' cm²'],
         hint:'Area of a square = side × side = side².',
@@ -420,12 +437,23 @@ const G5M_GENERATORS = {
   },
 
   average: (level) => {
+    // n numbers whose mean is EXACTLY avg.
+    //
+    // The old version generated the numbers, clamped them to >= 5 (which threw
+    // the total off), then dumped the whole rounding difference into nums[0] —
+    // and if that pushed nums[0] below 1, RESET it to `avg`. That reset silently
+    // destroyed the total it had just balanced, so the "average" came out as
+    // 25.333333333333332: correct arithmetic for the numbers shown, but not an
+    // answer any child can type, and the only way to get it right was to be
+    // wrong. Clamp the RANGE instead, and retry rather than patching the result.
     function makeNums(n, avg) {
-      const nums = Array.from({length: n}, () => rnd(avg - 20, avg + 20)).map(v => Math.max(5, v));
-      const diff = avg * n - nums.reduce((a,b)=>a+b,0);
-      nums[0] += diff;
-      if (nums[0] < 1) nums[0] = avg;
-      return nums;
+      const lo = Math.max(5, avg - 20), hi = Math.max(lo, avg + 20);
+      for (let attempt = 0; attempt < 50; attempt++) {
+        const nums = Array.from({length: n}, () => rnd(lo, hi));
+        nums[0] += avg * n - nums.reduce((a,b)=>a+b,0);
+        if (nums[0] >= 1) return nums;
+      }
+      return Array.from({length: n}, () => avg);   // exact by construction
     }
 
     if (level <= 2) {
@@ -435,7 +463,7 @@ const G5M_GENERATORS = {
       const total = nums.reduce((a,b)=>a+b,0);
       const answer = total / count;
       return makeNum({
-        id:`GA${Date.now()}`, chapterId:'average', difficulty:level,
+        id:genId('GA'), chapterId:'average', difficulty:level,
         question:`Find the <b>average</b> of: <b>${nums.join(', ')}</b>`,
         answer: String(answer), acceptableAnswers:[String(answer)],
         hint:`Add all ${count} numbers then divide by ${count}.`,
@@ -447,11 +475,24 @@ const G5M_GENERATORS = {
       const count = rnd(4, 6);
       const avg = rnd(20, 70);
       const total = avg * count;
-      const known = Array.from({length: count - 1}, () => rnd(15, 85));
-      const missing = total - known.reduce((a,b)=>a+b,0);
-      if (missing < 5 || missing > 150) return null;
+      // Retry rather than give up. The old version drew the known numbers once
+      // and returned null if that left an implausible missing value — which
+      // happened 48% of the time, and a null makes getQuestionsForChapter stop
+      // padding altogether rather than try again.
+      let known = null, missing = 0;
+      for (let attempt = 0; attempt < 40; attempt++) {
+        const k = Array.from({length: count - 1}, () => rnd(15, 85));
+        const m = total - k.reduce((a,b)=>a+b,0);
+        if (m >= 5 && m <= 150) { known = k; missing = m; break; }
+      }
+      if (!known) {
+        // Every known number = the average, so the missing one is the average
+        // too: always in range, and still a fair question.
+        known = Array.from({length: count - 1}, () => avg);
+        missing = avg;
+      }
       return makeNum({
-        id:`GA${Date.now()}`, chapterId:'average', difficulty:level,
+        id:genId('GA'), chapterId:'average', difficulty:level,
         question:`The average of <b>${count} numbers</b> is <b>${avg}</b>.<br>The known numbers are: <b>${known.join(', ')}</b>.<br>Find the <b>missing number</b>.`,
         answer: String(missing), acceptableAnswers:[String(missing)],
         hint:`Total of all numbers = average × count = ${avg} × ${count} = ${total}. Missing = ${total} − sum of known.`,
@@ -493,7 +534,7 @@ const G5M_GENERATORS = {
     ];
     const sc = scenarios[rnd(0, scenarios.length - 1)]();
     return makeNum({
-      id:`GA${Date.now()}`, chapterId:'average', difficulty:level,
+      id:genId('GA'), chapterId:'average', difficulty:level,
       question: sc.q, answer: sc.ans, acceptableAnswers:[sc.ans],
       hint: sc.hint, explanation: sc.exp
     });
@@ -504,11 +545,296 @@ const G5M_GENERATORS = {
     const profit = rnd(10, 200);
     const sp = bp + profit;
     return makeNum({
-      id: `GMO${Date.now()}`, chapterId:'money', difficulty:level,
+      id: genId('GMO'), chapterId:'money', difficulty:level,
       question:`An item is bought for <b>Rs ${bp}</b> and sold for <b>Rs ${sp}</b>.<br>Calculate the <b>profit</b>.`,
       answer: String(profit), acceptableAnswers:[String(profit), 'Rs '+profit],
       hint:'Profit = Selling Price − Buying Price (when SP > BP).',
       explanation:`Profit = ${sp} − ${bp} = <b>Rs ${profit}</b>.`
+    });
+  },
+
+  // ── Moved here from questions/questions_extra.js ─────────────────────────
+  // They used to sit in that question file behind `Object.assign(GENERATORS, …)`
+  // — a global no file has ever defined, so the line threw a ReferenceError and
+  // none of these six generators had ever run. They belong in the MANIFEST
+  // regardless: in production the browser fetches question files as JSON from
+  // netlify/functions/questions, so nothing in a questions/*.js file is ever
+  // executed as a script in the browser. Manifests always are.
+
+  geometry: (level) => {
+    if (level <= 2) {
+      const a = rnd(30, 70), b = rnd(20, 50);
+      const c = 180 - a - b;
+      return makeNum({
+        id:genId('GG'), chapterId:'geometry', difficulty:level,
+        question:`A triangle has two angles of <b>${a}°</b> and <b>${b}°</b>.<br>Find the <b>third angle</b>.`,
+        answer: String(c), acceptableAnswers:[String(c), c+'°'],
+        hint:'All three angles in a triangle add up to 180°.',
+        explanation:`180° − ${a}° − ${b}° = <b>${c}°</b>.`
+      });
+    }
+    if (level === 3) {
+      // Isosceles triangle - find the base angles given top angle.
+      // The top angle must be EVEN, or (180 − top) ÷ 2 lands on a half-degree:
+      // a top of 21° gives base angles of 79.5°, which is correct maths but not
+      // an answer a Grade 5 paper would ever ask a child to type.
+      const top = rnd(10, 40) * 2;
+      const base = (180 - top) / 2;
+      return makeNum({
+        id:genId('GG'), chapterId:'geometry', difficulty:level,
+        question:`An isosceles triangle has a top angle of <b>${top}°</b>.<br>The two base angles are equal.<br>Find each <b>base angle</b>.`,
+        answer: String(base), acceptableAnswers:[String(base), base+'°'],
+        hint:`Total angles = 180°. Base angles together = 180° − ${top}°. Divide by 2.`,
+        explanation:`(180° − ${top}°) ÷ 2 = ${180-top}° ÷ 2 = <b>${base}°</b>.`
+      });
+    }
+    // L4 - compass direction word problem
+    const dirs = ['North','East','South','West'];
+    const startIdx = rnd(0, 3);
+    const cw = Math.random() > 0.5;
+    const turns90 = rnd(1, 3);
+    const endIdx = (startIdx + (cw ? turns90 : 4 - turns90)) % 4;
+    const startDir = dirs[startIdx];
+    const endDir = dirs[endIdx];
+    const turnDesc = `${cw ? 'clockwise' : 'anticlockwise'} ${turns90 * 90}°`;
+    const wrongOpts = dirs.filter(d => d !== endDir).slice(0, 3);
+    return makeMCQ({
+      id:genId('GG'), chapterId:'geometry', difficulty:level,
+      question:`Ravi faces <b>${startDir}</b> and turns <b>${turnDesc}</b>.<br>Which direction does he now face?`,
+      options:[endDir, ...wrongOpts],
+      answer: endDir,
+      hint:`Clockwise order: North → East → South → West → North. Each 90° = one step.`,
+      explanation:`From ${startDir}, ${turnDesc} → <b>${endDir}</b>.`
+    });
+  },
+
+  length: (level) => {
+    if (level <= 2) {
+      const l = rnd(4, 30), w = rnd(2, 20);
+      const P = 2 * (l + w);
+      return makeNum({
+        id:genId('GL'), chapterId:'length', difficulty:level,
+        question:`Find the <b>perimeter</b> of a rectangle with length <b>${l} cm</b> and width <b>${w} cm</b>.`,
+        answer: String(P), acceptableAnswers:[String(P), P+'cm', P+' cm'],
+        hint:'P = 2 × (length + width).',
+        explanation:`P = 2 × (${l} + ${w}) = 2 × ${l+w} = <b>${P} cm</b>.`
+      });
+    }
+    if (level === 3) {
+      // Find missing side given perimeter
+      const l = rnd(8, 30), w = rnd(4, 20);
+      const P = 2 * (l + w);
+      return makeNum({
+        id:genId('GL'), chapterId:'length', difficulty:level,
+        question:`A rectangle has a perimeter of <b>${P} cm</b> and a length of <b>${l} cm</b>.<br>Find its <b>width</b>.`,
+        answer: String(w), acceptableAnswers:[String(w), w+'cm'],
+        hint:`P = 2(l + w). So l + w = P ÷ 2. Width = (P ÷ 2) − length.`,
+        explanation:`l + w = ${P} ÷ 2 = ${P/2}. Width = ${P/2} − ${l} = <b>${w} cm</b>.`
+      });
+    }
+    // L4 - fencing cost word problem
+    const l = rnd(10, 40), w = rnd(5, 25);
+    const P = 2 * (l + w);
+    const costPerM = rnd(50, 200);
+    const total = P * costPerM;
+    return makeNum({
+      id:genId('GL'), chapterId:'length', difficulty:level,
+      question:`A rectangular garden is <b>${l} m long</b> and <b>${w} m wide</b>.<br>Fencing costs <b>Rs ${costPerM} per metre</b>.<br>Find the <b>total cost</b> to fence the entire garden.`,
+      answer: String(total), acceptableAnswers:[String(total), 'Rs '+total],
+      hint:`Step 1: Perimeter = 2(${l} + ${w}). Step 2: Cost = perimeter × Rs ${costPerM}.`,
+      explanation:`P = 2 × ${l+w} = ${P} m. Cost = ${P} × ${costPerM} = <b>Rs ${total}</b>.`
+    });
+  },
+
+  time: (level) => {
+    if (level <= 2) {
+      const h = rnd(1, 5), m = rnd(5, 55);
+      const totalMins = h * 60 + m;
+      return makeNum({
+        id:genId('GT'), chapterId:'time', difficulty:level,
+        question:`Convert <b>${h} h ${m} min</b> to minutes.`,
+        answer: String(totalMins), acceptableAnswers:[String(totalMins), totalMins+' min'],
+        hint:`1 h = 60 min. Multiply ${h} × 60, then add ${m}.`,
+        explanation:`${h} × 60 + ${m} = <b>${totalMins} min</b>.`
+      });
+    }
+    if (level === 3) {
+      // Journey: start time + duration → end time
+      const startH = rnd(7, 20), startM = [0,15,30,45][rnd(0,3)];
+      const durH = rnd(1, 4), durM = [0,15,30,45][rnd(0,3)];
+      let endM = startM + durM, carry = 0;
+      if (endM >= 60) { endM -= 60; carry = 1; }
+      let endH = (startH + durH + carry) % 24;
+      const fmt2 = (h, m) => `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+      const startStr = fmt2(startH, startM);
+      const endStr = fmt2(endH, endM);
+      const durStr = durM > 0 ? `${durH} h ${durM} min` : `${durH} h`;
+      return makeNum({
+        id:genId('GT'), chapterId:'time', difficulty:level,
+        question:`A bus departs at <b>${startStr}</b> and the journey takes <b>${durStr}</b>.<br>At what time does it arrive? <i>(24-hour format, e.g. 14:30)</i>`,
+        answer: endStr, acceptableAnswers:[endStr],
+        hint:`Add ${durH} hours to ${startH}: get ${startH+durH}h. Then add ${durM} minutes to ${startM} min.`,
+        explanation:`${startStr} + ${durStr} = <b>${endStr}</b>.`
+      });
+    }
+    // L4 - find duration between two times (word problem)
+    const startH = rnd(7, 12), startM = [0,15,30,45][rnd(0,3)];
+    const durH = rnd(1, 5), durM = [0,15,30,45][rnd(0,3)];
+    let endM = startM + durM, carry = 0;
+    if (endM >= 60) { endM -= 60; carry = 1; }
+    const endH = startH + durH + carry;
+    const fmt2 = (h, m) => `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+    const startStr = fmt2(startH, startM);
+    const endStr = fmt2(endH, endM);
+    const ansStr = durM > 0 ? `${durH}h${durM}min` : `${durH}h`;
+    const altStr = durM > 0 ? `${durH} h ${durM} min` : `${durH} h`;
+    return makeNum({
+      id:genId('GT'), chapterId:'time', difficulty:level,
+      question:`A school event starts at <b>${startStr}</b> and ends at <b>${endStr}</b>.<br>How long does the event last? <i>(e.g. 2h30min)</i>`,
+      answer: ansStr, acceptableAnswers:[ansStr, altStr],
+      hint:`Subtract start time from end time. End: ${endStr}, Start: ${startStr}.`,
+      explanation:`${endStr} − ${startStr} = <b>${altStr}</b>.`
+    });
+  },
+
+  ratio: (level) => {
+    const a = rnd(2, 7), b = rnd(2, 7);
+    const factor = rnd(3, 12);
+    const actualTotal = factor * (a + b);
+    const partA = factor * a;
+
+    if (level <= 2) {
+      // Direct proportion - price per unit
+      const qty1 = rnd(2, 8), price1 = rnd(10, 60);
+      const qty2 = rnd(3, 15);
+      const price2 = (price1 / qty1) * qty2;
+      if (!Number.isInteger(price2)) {
+        // fallback to sharing
+        return makeNum({
+          id:genId('GR'), chapterId:'ratio', difficulty:level,
+          question:`Share <b>Rs ${actualTotal}</b> in the ratio <b>${a}:${b}</b>.<br>How much is the <b>first share</b>?`,
+          answer: String(partA), acceptableAnswers:[String(partA),'Rs '+partA],
+          hint:`Total parts = ${a+b}. One part = ${actualTotal}÷${a+b} = ${factor}.`,
+          explanation:`1 part = ${factor}. First share = ${a}×${factor} = <b>Rs ${partA}</b>.`
+        });
+      }
+      return makeNum({
+        id:genId('GR'), chapterId:'ratio', difficulty:level,
+        question:`If <b>${qty1} pens cost Rs ${price1}</b>, how much do <b>${qty2} pens</b> cost?`,
+        answer: String(price2), acceptableAnswers:[String(price2),'Rs '+price2],
+        hint:`Cost of 1 pen = ${price1} ÷ ${qty1}. Then multiply by ${qty2}.`,
+        explanation:`1 pen = Rs ${price1/qty1}. ${qty2} pens = ${price1/qty1} × ${qty2} = <b>Rs ${price2}</b>.`
+      });
+    }
+    if (level === 3) {
+      // Given one part, find the other
+      return makeNum({
+        id:genId('GR'), chapterId:'ratio', difficulty:level,
+        question:`Flour and sugar are mixed in the ratio <b>${a}:${b}</b>.<br>If there is <b>${partA} g of flour</b>, how many grams of <b>sugar</b> are used?`,
+        answer: String(factor * b), acceptableAnswers:[String(factor*b), (factor*b)+'g'],
+        hint:`${a} parts = ${partA} g → 1 part = ${partA}÷${a} = ${factor} g. Sugar = ${b} parts.`,
+        explanation:`1 part = ${partA} ÷ ${a} = ${factor} g. Sugar = ${b} × ${factor} = <b>${factor*b} g</b>.`
+      });
+    }
+    // L4 - full sharing word problem
+    const prize = actualTotal * rnd(2, 5);
+    const fac2 = prize / (a + b);
+    if (!Number.isInteger(fac2)) {
+      return makeNum({
+        id:genId('GR'), chapterId:'ratio', difficulty:level,
+        question:`Ali and Bina share <b>Rs ${actualTotal}</b> in the ratio <b>${a}:${b}</b>.<br>How much more does <b>${a > b ? 'Ali' : 'Bina'}</b> receive than the other?`,
+        answer: String(Math.abs(partA - factor*b)), acceptableAnswers:[String(Math.abs(partA-factor*b))],
+        hint:`Calculate both shares first, then find the difference.`,
+        explanation:`Ali = Rs ${partA}, Bina = Rs ${factor*b}. Difference = Rs ${Math.abs(partA-factor*b)}.`
+      });
+    }
+    const shareA = fac2 * a, shareB = fac2 * b;
+    return makeNum({
+      id:genId('GR'), chapterId:'ratio', difficulty:level,
+      question:`A prize of <b>Rs ${prize}</b> is shared between two students in the ratio <b>${a}:${b}</b>.<br>The student with the <b>larger share</b> buys a book for <b>Rs ${Math.floor(Math.max(shareA,shareB)/3)}</b>.<br>How much does she have <b>left</b>?`,
+      answer: String(Math.max(shareA,shareB) - Math.floor(Math.max(shareA,shareB)/3)),
+      acceptableAnswers:[String(Math.max(shareA,shareB) - Math.floor(Math.max(shareA,shareB)/3))],
+      hint:`Step 1: Find the larger share (${a>b?a:b} parts × one part value). Step 2: Subtract the book cost.`,
+      explanation:`Larger share = Rs ${Math.max(shareA,shareB)}. After book = ${Math.max(shareA,shareB)} − ${Math.floor(Math.max(shareA,shareB)/3)} = <b>Rs ${Math.max(shareA,shareB)-Math.floor(Math.max(shareA,shareB)/3)}</b>.`
+    });
+  },
+
+  square_nums: (level) => {
+    const n = level <= 2 ? rnd(2, 9) : rnd(5, 13);
+    const sq = n * n;
+    if (level <= 2) {
+      return Math.random() > 0.5
+        ? makeNum({ id:genId('GS'), chapterId:'square_nums', difficulty:level,
+            question:`Calculate: <b>${n}²</b>`, answer: String(sq), acceptableAnswers:[String(sq)],
+            hint:`${n}² = ${n} × ${n}.`, explanation:`${n} × ${n} = <b>${sq}</b>.` })
+        : makeNum({ id:genId('GS'), chapterId:'square_nums', difficulty:level,
+            question:`What is the <b>square root</b> of <b>${sq}</b>?`, answer: String(n), acceptableAnswers:[String(n)],
+            hint:`Which number × itself = ${sq}?`, explanation:`${n} × ${n} = ${sq}, so √${sq} = <b>${n}</b>.` });
+    }
+    if (level === 3) {
+      // Number pattern - find next term
+      const start = rnd(2, 6), step = rnd(2, 4);
+      const seq = [start, start*step, start*step*step, start*step*step*step];
+      const next = seq[3] * step;
+      return makeNum({
+        id:genId('GS'), chapterId:'square_nums', difficulty:level,
+        question:`What is the <b>next number</b> in the pattern?<br><b>${seq.join(', ')}, ___</b>`,
+        answer: String(next), acceptableAnswers:[String(next)],
+        hint:`Find the rule: each term is multiplied by ${step}.`,
+        explanation:`Rule: ×${step} each time. ${seq[3]} × ${step} = <b>${next}</b>.`
+      });
+    }
+    // L4 - square area word problem
+    return makeNum({
+      id:genId('GS'), chapterId:'square_nums', difficulty:level,
+      question:`A square room has an area of <b>${sq} m²</b>.<br>A tile is <b>1 m × 1 m</b>. How many tiles are needed to cover the floor?<br><i>Hint: first find the side length.</i>`,
+      answer: String(sq), acceptableAnswers:[String(sq)],
+      hint:`Side = √${sq} = ${n} m. Area = ${n} × ${n} = ${sq} m². Each tile = 1 m², so tiles needed = area.`,
+      explanation:`Side = ${n} m. Floor area = ${n}² = <b>${sq} tiles</b>.`
+    });
+  },
+
+  decimals: (level) => {
+    if (level <= 2) {
+      const a = (rnd(100, 999) / 100).toFixed(2);
+      const b = (rnd(10, 500) / 100).toFixed(2);
+      const op = Math.random() > 0.5 ? '+' : '-';
+      const fa = parseFloat(a), fb = parseFloat(b);
+      const [big, small] = fa >= fb ? [fa, fb] : [fb, fa];
+      const result = op === '+' ? (big + small).toFixed(2) : (big - small).toFixed(2);
+      return makeNum({
+        id:genId('GD'), chapterId:'decimals', difficulty:level,
+        question:`Calculate: <b>${op === '+' ? a : big.toFixed(2)} ${op} ${op === '+' ? b : small.toFixed(2)}</b>`,
+        answer: result, acceptableAnswers:[result, String(parseFloat(result))],
+        hint:'Line up the decimal points and work column by column.',
+        explanation:`= <b>${result}</b>.`
+      });
+    }
+    if (level === 3) {
+      // Multiply decimal by whole number
+      const base = (rnd(10, 99) / 10).toFixed(1);
+      const times = rnd(2, 9);
+      const result = (parseFloat(base) * times).toFixed(1);
+      return makeNum({
+        id:genId('GD'), chapterId:'decimals', difficulty:level,
+        question:`Calculate: <b>${base} × ${times}</b>`,
+        answer: result, acceptableAnswers:[result, String(parseFloat(result))],
+        hint:`Multiply ${base.replace('.','').replace(/^0/,'')} × ${times} then place the decimal.`,
+        explanation:`${base} × ${times} = <b>${result}</b>.`
+      });
+    }
+    // L4 - decimal word problem (money/measurement)
+    const price = (rnd(50, 500) / 10).toFixed(1);
+    const qty = rnd(2, 8);
+    const total = (parseFloat(price) * qty).toFixed(1);
+    const paid = (Math.ceil(parseFloat(total) / 50) * 50).toFixed(1);
+    const change = (parseFloat(paid) - parseFloat(total)).toFixed(1);
+    return makeNum({
+      id:genId('GD'), chapterId:'decimals', difficulty:level,
+      question:`A pen costs <b>Rs ${price}</b>. Rajan buys <b>${qty} pens</b> and pays <b>Rs ${paid}</b>.<br>How much <b>change</b> does he receive?`,
+      answer: change, acceptableAnswers:[change, String(parseFloat(change)),'Rs '+change],
+      hint:`Total = Rs ${price} × ${qty}. Change = Rs ${paid} − total.`,
+      explanation:`Total = ${price} × ${qty} = Rs ${total}. Change = ${paid} − ${total} = <b>Rs ${change}</b>.`
     });
   },
 

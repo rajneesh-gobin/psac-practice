@@ -4,34 +4,34 @@
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g4s-mat-001', chapterId:'g4sci-materials', difficulty:1,
+  makeMCQ({ id:'g4s-mat-001', chapterId:'g4sci-materials', subsection:'properties', difficulty:1,
     question:'Which material is TRANSPARENT (you can see through it clearly)?',
     options:['Wood','Stone','Glass','Cardboard'],
     answer:'Glass',
     hint:'Think about what windows are made of.',
     explanation:'<b>Glass</b> is a transparent material - light passes through it clearly and you can see objects on the other side. This is why glass is used for windows and spectacles. Wood, stone and cardboard are <b>opaque</b> - you cannot see through them.' }),
 
-  makeMCQ({ id:'g4s-mat-002', chapterId:'g4sci-materials', difficulty:1,
+  makeMCQ({ id:'g4s-mat-002', chapterId:'g4sci-materials', subsection:'properties', difficulty:1,
     question:'Which object would be ATTRACTED by a magnet?',
     options:['A plastic ruler','A wooden pencil','A steel nail','A rubber eraser'],
     answer:'A steel nail',
     hint:'Magnets attract materials that contain iron or steel.',
     explanation:'A <b>steel nail</b> would be attracted to a magnet because steel contains <b>iron</b>, which is a magnetic material. Magnets attract iron and steel only. Plastic, wood, rubber, copper, aluminium and glass are <b>NOT</b> magnetic.' }),
 
-  makeTF({ id:'g4s-mat-003', chapterId:'g4sci-materials', difficulty:1,
+  makeTF({ id:'g4s-mat-003', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:1,
     question:'Wood is a NATURAL material.',
     answer:true,
     hint:'Natural materials come from nature (plants, animals, earth). Was wood made in a factory?',
     explanation:'<b>True.</b> Wood is a <b>natural material</b> - it comes from trees in nature. Other natural materials: stone, cotton (from cotton plants), rubber (from rubber trees), wool (from sheep), clay (from the earth). Man-made materials include: plastic, glass, metal (processed), nylon.' }),
 
-  makeMCQ({ id:'g4s-mat-004', chapterId:'g4sci-materials', difficulty:1,
+  makeMCQ({ id:'g4s-mat-004', chapterId:'g4sci-materials', subsection:'properties', difficulty:1,
     question:'What is an OPAQUE material?',
     options:['A material you can see through clearly','A material that glows in the dark','A material that you CANNOT see through','A material that is very soft'],
     answer:'A material that you CANNOT see through',
     hint:'Opaque is the opposite of transparent.',
     explanation:'An <b>opaque</b> material does not allow light to pass through - <b>you cannot see through it</b>. Examples: wood, stone, metal, cardboard. Transparent (see-through clearly): glass, clear plastic. Translucent (some light passes through, but blurry): frosted glass, tracing paper.' }),
 
-  makeMCQ({ id:'g4s-mat-005', chapterId:'g4sci-materials', difficulty:2,
+  makeMCQ({ id:'g4s-mat-005', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:2,
     question:'Why is glass the best material for WINDOWS?',
     options:[
       'Because glass is very strong and cannot break',
@@ -43,21 +43,21 @@ STATIC_QUESTIONS.push(
     hint:'What property of glass makes it useful for a window?',
     explanation:'Glass is used for windows because it is <b>transparent</b> - light passes through it, allowing daylight into the room. It also keeps out wind and rain. This shows how we choose materials based on their <b>properties</b>: the property needed for a window is transparency.' }),
 
-  makeMCQ({ id:'g4s-mat-006', chapterId:'g4sci-materials', difficulty:2,
+  makeMCQ({ id:'g4s-mat-006', chapterId:'g4sci-materials', subsection:'properties', difficulty:2,
     question:'Which material would be BEST for making a waterproof raincoat?',
     options:['Cotton','Rubber or plastic','Wood','Glass'],
     answer:'Rubber or plastic',
     hint:'A raincoat must keep water out. Which material does not let water through?',
     explanation:'<b>Rubber or plastic</b> is waterproof - water cannot pass through it. This makes it ideal for raincoats, wellington boots and umbrellas. Cotton absorbs water (becomes wet). Wood would be too heavy and rigid. Glass would break easily.' }),
 
-  makeMCQ({ id:'g4s-mat-007', chapterId:'g4sci-materials', difficulty:2,
+  makeMCQ({ id:'g4s-mat-007', chapterId:'g4sci-materials', subsection:'properties', difficulty:2,
     question:'Which of these would NOT be attracted to a magnet?',
     options:['An iron key','A steel pin','A copper coin','A steel paper clip'],
     answer:'A copper coin',
     hint:'Only iron and steel are magnetic. What is a copper coin made of?',
     explanation:'A <b>copper coin</b> is made of copper (or copper alloy), which is <b>NOT magnetic</b>. Magnets attract only iron and steel. Iron key ✓, steel pin ✓, steel paper clip ✓, copper coin ✗. Copper, aluminium, gold, silver, plastic, wood and glass are all non-magnetic.' }),
 
-  makeMCQ({ id:'g4s-mat-008', chapterId:'g4sci-materials', difficulty:2,
+  makeMCQ({ id:'g4s-mat-008', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:2,
     question:'A rubber ball can bounce because rubber is FLEXIBLE. What does flexible mean?',
     options:[
       'Hard and cannot be bent or compressed',
@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about what happens when you squeeze a rubber ball.',
     explanation:'<b>Flexible</b> means a material can be <b>bent, stretched or compressed and returns to its original shape</b>. Rubber is flexible and elastic. The opposite is <b>rigid</b> (stiff, cannot bend - e.g. metal rod, glass). Flexibility makes rubber useful for tyres, balls and erasers.' }),
 
-  makeMCQ({ id:'g4s-mat-009', chapterId:'g4sci-materials', difficulty:3,
+  makeMCQ({ id:'g4s-mat-009', chapterId:'g4sci-materials', subsection:'properties', difficulty:3,
     question:'Which material would be BEST for making a COOKING POT? Why?',
     options:[
       'Plastic - because it is lightweight and cheap',
@@ -81,7 +81,7 @@ STATIC_QUESTIONS.push(
     hint:'A cooking pot needs to transfer heat from the stove to the food. Which property is needed?',
     explanation:'<b>Metal</b> is the best choice because it <b>conducts heat</b> efficiently (heat from the flame transfers through the metal to cook the food) and <b>withstands very high temperatures</b> without melting or burning. Plastic would melt on a stove. Wood would catch fire. Glass can crack from heat shock.' }),
 
-  makeMCQ({ id:'g4s-mat-010', chapterId:'g4sci-materials', difficulty:4,
+  makeMCQ({ id:'g4s-mat-010', chapterId:'g4sci-materials', subsection:'properties', difficulty:4,
     question:'A builder needs material for a HOUSE FLOOR that must be: (1) hard, (2) strong enough to walk on, (3) waterproof, and (4) easy to clean. Which material is the BEST choice?',
     options:[
       'Carpet - soft, comfortable and warm',
@@ -97,21 +97,21 @@ STATIC_QUESTIONS.push(
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g4s-mat-011', chapterId:'g4sci-materials', difficulty:1,
+  makeMCQ({ id:'g4s-mat-011', chapterId:'g4sci-materials', subsection:'properties', difficulty:1,
     question:'Which of these is a TRANSLUCENT material?',
     options:['Clear glass','Wood','Frosted glass','Metal'],
     answer:'Frosted glass',
     hint:'Translucent materials let some light through but you cannot see clearly through them.',
     explanation:'"<b>Frosted glass</b>" is translucent - it allows some light to pass through but objects on the other side appear blurry. Transparent (see through clearly): clear glass. Translucent (some light, blurry): frosted glass, tracing paper. Opaque (no light): wood, metal.' }),
 
-  makeMCQ({ id:'g4s-mat-012', chapterId:'g4sci-materials', difficulty:1,
+  makeMCQ({ id:'g4s-mat-012', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:1,
     question:'Which of these is a MAN-MADE material?',
     options:['Cotton','Wood','Stone','Plastic'],
     answer:'Plastic',
     hint:'Man-made materials are manufactured in factories - they do not exist naturally.',
     explanation:'"<b>Plastic</b>" is man-made - manufactured from chemicals (usually from petroleum) in factories. Natural materials come from plants or the earth: cotton (plant), wood (tree), stone (earth). Other man-made materials: nylon, glass (processed from sand), concrete.' }),
 
-  makeMCQ({ id:'g4s-mat-013', chapterId:'g4sci-materials', difficulty:2,
+  makeMCQ({ id:'g4s-mat-013', chapterId:'g4sci-materials', subsection:'properties', difficulty:2,
     question:'What is a THERMAL INSULATOR?',
     options:[
       'A material that conducts heat easily',
@@ -123,20 +123,20 @@ STATIC_QUESTIONS.push(
     hint:'Thermal = heat. Insulator = prevents transfer. Think of oven gloves.',
     explanation:'A <b>thermal insulator</b> is a material that <b>slows or prevents heat transfer</b>. Examples: wood, plastic, rubber, foam. Oven gloves are made from thermal insulators to protect hands from heat. The opposite is a <b>thermal conductor</b> (transfers heat easily) - most metals.' }),
 
-  makeMCQ({ id:'g4s-mat-014', chapterId:'g4sci-materials', difficulty:2,
+  makeMCQ({ id:'g4s-mat-014', chapterId:'g4sci-materials', subsection:'properties', difficulty:2,
     question:'Which of these is a good ELECTRICAL CONDUCTOR?',
     options:['Rubber','Plastic','Copper wire','Wood'],
     answer:'Copper wire',
     hint:'Electrical wires are made of this material because electricity passes through it easily.',
     explanation:'"<b>Copper wire</b>" is a good electrical conductor - electricity passes through it easily. Most metals are good conductors. Rubber, plastic and wood are <b>electrical insulators</b> - electricity cannot flow through them. This is why wires are made of copper inside but coated in plastic for safety.' }),
 
-  makeTF({ id:'g4s-mat-015', chapterId:'g4sci-materials', difficulty:2,
+  makeTF({ id:'g4s-mat-015', chapterId:'g4sci-materials', subsection:'properties', difficulty:2,
     question:'Sugar DISSOLVES in water (it is soluble in water).',
     answer:true,
     hint:'What happens when you stir sugar into a cup of tea?',
     explanation:'<b>True.</b> Sugar is <b>soluble</b> in water - it dissolves and disappears into the water to form a solution. Salt is also soluble. Sand, oil and wood are <b>insoluble</b> - they do not dissolve in water.' }),
 
-  makeMCQ({ id:'g4s-mat-016', chapterId:'g4sci-materials', difficulty:2,
+  makeMCQ({ id:'g4s-mat-016', chapterId:'g4sci-materials', subsection:'waste', difficulty:2,
     question:'What does RECYCLING mean?',
     options:[
       'Throwing away old materials in a dustbin',
@@ -148,7 +148,7 @@ STATIC_QUESTIONS.push(
     hint:'Re- means again. Recycling means using materials again.',
     explanation:'<b>Recycling</b> means collecting used materials and processing them into <b>new products</b>. Recycling reduces waste, saves natural resources, and saves energy. In Mauritius, recycling is encouraged to reduce waste going to landfills.' }),
 
-  makeMCQ({ id:'g4s-mat-017', chapterId:'g4sci-materials', difficulty:2,
+  makeMCQ({ id:'g4s-mat-017', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:2,
     question:'Why is it important to RECYCLE plastic?',
     options:[
       'Because plastic burns safely in open fires',
@@ -160,7 +160,7 @@ STATIC_QUESTIONS.push(
     hint:'Plastic does not rot like food or paper. How long does it stay in the environment?',
     explanation:'Plastic can take <b>hundreds to thousands of years</b> to decompose. Plastic waste pollutes land, rivers and oceans, harming wildlife (animals eat or get tangled in plastic). Recycling plastic reduces this pollution and saves the oil used to make new plastic.' }),
 
-  makeMCQ({ id:'g4s-mat-018', chapterId:'g4sci-materials', difficulty:3,
+  makeMCQ({ id:'g4s-mat-018', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:3,
     question:'Why is a CERAMIC (pottery) mug better than a METAL mug for drinking hot tea?',
     options:[
       'Because metal is heavier than ceramic',
@@ -172,7 +172,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about what thermal conductors and insulators do when a hot liquid is inside.',
     explanation:'Ceramic is a <b>thermal insulator</b> - heat does not travel through it quickly, so the handle stays cool enough to hold. Metal is a <b>thermal conductor</b> - heat would travel rapidly from the hot tea through the metal walls to the handle, making it dangerously hot.' }),
 
-  makeMCQ({ id:'g4s-mat-019', chapterId:'g4sci-materials', difficulty:4,
+  makeMCQ({ id:'g4s-mat-019', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:4,
     question:'A scientist places each of four materials between a heat source and a thermometer. After 5 minutes the readings are: Wood = 35°C, Copper = 85°C, Rubber = 32°C, Glass = 40°C. Which material is the BEST thermal CONDUCTOR?',
     options:['Wood','Copper','Rubber','Glass'],
     answer:'Copper',

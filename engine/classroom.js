@@ -4,7 +4,7 @@
 //  Data layer for the teacher role. Follows the Store pattern:
 //  every Supabase call lives here, callers get plain objects back.
 //
-//  Requires: supabase-classrooms-migration.sql
+//  Requires: supabase-migration.sql
 //  Uses _sb (global from supabase.js).
 // ══════════════════════════════════════════════
 

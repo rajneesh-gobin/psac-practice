@@ -40,28 +40,28 @@ const _SVG_DAY_NIGHT = `<svg viewBox="0 0 220 90" width="220" height="90" style=
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g6sci-sol-001', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-001', chapterId:'g6-solar-system', subsection:'photos', difficulty:1,
     question:`${_SVG_SOLAR}How many planets orbit the Sun in our Solar System?`,
     options:['6','7','8','9'],
     answer:'8',
     hint:'Count them in the diagram: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.',
     explanation:'There are <b>8 planets</b> in our Solar System: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune. Pluto was reclassified as a dwarf planet in 2006.' }),
 
-  makeMCQ({ id:'g6sci-sol-002', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-002', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
     question:'Which planet is CLOSEST to the Sun?',
     options:['Venus','Earth','Mars','Mercury'],
     answer:'Mercury',
     hint:'In the diagram, which planet is nearest to the Sun on the left?',
     explanation:'<b>Mercury</b> is the planet closest to the Sun. It is also the smallest planet. Because it is so close to the Sun, its surface temperature is extremely hot during the day and very cold at night (it has almost no atmosphere to retain heat).' }),
 
-  makeMCQ({ id:'g6sci-sol-003', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-003', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
     question:'Which is the LARGEST planet in our Solar System?',
     options:['Saturn','Uranus','Earth','Jupiter'],
     answer:'Jupiter',
     hint:'It is so large that all other planets could fit inside it.',
     explanation:'<b>Jupiter</b> is the largest planet in the Solar System. It is a gas giant - so large that over 1,300 Earths could fit inside it. Jupiter is also famous for its Great Red Spot, a storm that has lasted hundreds of years.' }),
 
-  makeMCQ({ id:'g6sci-sol-004', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-004', chapterId:'g6-solar-system', subsection:'photos', difficulty:1,
     question:`${_SVG_DAY_NIGHT}According to the diagram, what causes DAY and NIGHT on Earth?`,
     options:[
       'The Sun moving around the Earth',
@@ -73,14 +73,14 @@ STATIC_QUESTIONS.push(
     hint:'One half of Earth faces the Sun (day), the other half faces away (night).',
     explanation:'The Earth <b>rotates</b> on its own axis once every 24 hours. The side facing the Sun experiences <b>day</b>, while the opposite side, in shadow, experiences <b>night</b>. The Sun does not move - Earth spins.' }),
 
-  makeMCQ({ id:'g6sci-sol-005', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-005', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
     question:'How long does it take Earth to complete ONE orbit around the Sun?',
     options:['24 hours (1 day)','28 days (1 month)','365 days (1 year)','10 years'],
     answer:'365 days (1 year)',
     hint:'We call this period one year.',
     explanation:'The Earth takes approximately <b>365.25 days</b> to orbit the Sun - this defines our year. The extra 0.25 day accumulates into a "leap year" (366 days) every 4 years.' }),
 
-  makeMCQ({ id:'g6sci-sol-006', chapterId:'g6-solar-system', difficulty:2,
+  makeMCQ({ id:'g6sci-sol-006', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
     question:'What causes the SEASONS (summer and winter) on Earth?',
     options:[
       'Earth getting closer to and further from the Sun during its orbit',
@@ -92,13 +92,13 @@ STATIC_QUESTIONS.push(
     hint:'Earth\'s axis is tilted at 23.5°.',
     explanation:'Earth\'s axis is <b>tilted 23.5°</b>. As Earth orbits the Sun, different hemispheres receive more direct sunlight at different times. When the Southern Hemisphere tilts toward the Sun (November–March), Mauritius has summer; when it tilts away, it has winter.' }),
 
-  makeTF({ id:'g6sci-sol-007', chapterId:'g6-solar-system', difficulty:1,
+  makeTF({ id:'g6sci-sol-007', chapterId:'g6-solar-system', subsection:'sun_moon', difficulty:1,
     question:'The Moon produces its own light, just like the Sun.',
     answer:false,
     hint:'Look at the Moon on a cloudy night - what is different about its light?',
     explanation:'The Moon does <b>not</b> produce its own light. It <b>reflects</b> sunlight. The Moon appears bright because its surface reflects light from the Sun. The phases of the Moon (new moon, crescent, full moon) occur as the angle between the Sun, Moon and Earth changes.' }),
 
-  makeMCQ({ id:'g6sci-sol-008', chapterId:'g6-solar-system', difficulty:2,
+  makeMCQ({ id:'g6sci-sol-008', chapterId:'g6-solar-system', subsection:'sun_moon', difficulty:2,
     question:'Why does the Moon appear to change shape from night to night (phases of the Moon)?',
     options:[
       'The Moon actually shrinks and grows in size',
@@ -110,14 +110,14 @@ STATIC_QUESTIONS.push(
     hint:'The Moon is always half lit by the Sun - we just see different portions of the lit half.',
     explanation:'As the Moon orbits Earth (taking ~28 days), our angle of view of the sunlit half changes. When the lit half faces us directly, we see a <b>full moon</b>; when the lit half faces away, we see a <b>new moon</b>. These changing views are the <b>lunar phases</b>.' }),
 
-  makeMCQ({ id:'g6sci-sol-009', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-009', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
     question:'What force keeps the planets in orbit around the Sun?',
     options:['Magnetism','Friction','Gravity','Wind'],
     answer:'Gravity',
     hint:'This is the same force that keeps you on the ground.',
     explanation:'<b>Gravity</b> is the force of attraction between objects with mass. The Sun\'s enormous mass creates a strong gravitational pull that keeps all the planets in their orbits. Without gravity, the planets would fly off into space in a straight line.' }),
 
-  makeMCQ({ id:'g6sci-sol-010', chapterId:'g6-solar-system', difficulty:2,
+  makeMCQ({ id:'g6sci-sol-010', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
     question:'A helpful mnemonic to remember the order of the 8 planets from the Sun is "My Very Excellent Mother Just Served Us Noodles." Which planet does "J" represent?',
     options:['Juno','Janus','Jupiter','Jove'],
     answer:'Jupiter',
@@ -128,14 +128,14 @@ STATIC_QUESTIONS.push(
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g6sci-sol-011', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-011', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
     question:'Which movement of Earth takes ONE YEAR to complete? (PSAC 2025 Q2b)',
     options:['Rotation (spinning on its axis)','Revolution (orbiting around the Sun)','The Moon orbiting the Earth','The tilting of Earth\'s axis'],
     answer:'Revolution (orbiting around the Sun)',
     hint:'Rotation gives us day and night. Which movement gives us years?',
     explanation:'<b>Revolution</b> is Earth\'s orbit around the Sun, which takes <b>365.25 days (1 year)</b>. <b>Rotation</b> is Earth spinning on its own axis, which takes <b>24 hours (1 day)</b>. The two movements are different: rotation causes day/night; revolution causes years and (combined with axial tilt) the seasons. (PSAC 2025 Q2b tested this exact distinction.)' }),
 
-  makeMCQ({ id:'g6sci-sol-012', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-012', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
     question:'What causes DAY and NIGHT on Earth? (PSAC 2025 Q2b)',
     options:[
       'The Sun moving around the Earth once every 24 hours',
@@ -147,7 +147,7 @@ STATIC_QUESTIONS.push(
     hint:'The Sun does not move around Earth - Earth spins.',
     explanation:'<b>Earth rotates</b> on its axis once every <b>24 hours</b>. The half facing the Sun experiences <b>day</b>; the half facing away is in <b>night</b>. As Earth rotates, locations move from day to night and back again. In Mauritius (Southern Hemisphere), when it is midday, the opposite side of the world is having midnight. (PSAC 2025 Q2b)' }),
 
-  makeMCQ({ id:'g6sci-sol-013', chapterId:'g6-solar-system', difficulty:2,
+  makeMCQ({ id:'g6sci-sol-013', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
     question:'Give TWO reasons why life can exist on planet EARTH but not on Mercury or Venus. (PSAC 2025 Q2d)',
     options:[
       'Earth is the largest planet and has the most gravity',
@@ -159,27 +159,27 @@ STATIC_QUESTIONS.push(
     hint:'Think about what living things NEED: water, air (oxygen), and the right temperature.',
     explanation:'Life exists on Earth because: (1) <b>Liquid water</b> - essential for all life; Earth\'s temperature keeps water liquid (unlike Mercury/Venus which are too hot); (2) <b>Atmosphere with oxygen</b> - our atmosphere has 21% oxygen for breathing, plus protects us from UV radiation; (3) <b>Right temperature range</b> - not too hot or too cold. Venus is too hot (~465°C), Mercury has extreme temperatures and almost no atmosphere. (PSAC 2025 Q2d)' }),
 
-  makeMCQ({ id:'g6sci-sol-014', chapterId:'g6-solar-system', difficulty:2,
+  makeMCQ({ id:'g6sci-sol-014', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
     question:'Which planet is famous for its beautiful rings? (from Grade 6 Solar System topic)',
     options:['Jupiter','Mars','Saturn','Uranus'],
     answer:'Saturn',
     hint:'This planet\'s rings are made of ice and rocks - visible with a small telescope.',
     explanation:'<b>Saturn</b> is famous for its spectacular ring system, made of billions of pieces of ice, rock and dust. Saturn is the 6th planet from the Sun and a gas giant - it is so light that it would float in water! In the mnemonic "My Very Excellent Mother Just Served Us Noodles": S = Saturn (6th planet).' }),
 
-  makeMCQ({ id:'g6sci-sol-015', chapterId:'g6-solar-system', difficulty:1,
+  makeMCQ({ id:'g6sci-sol-015', chapterId:'g6-solar-system', subsection:'sun_moon', difficulty:1,
     question:'The Sun is classified as a:',
     options:['Planet','Moon','Star','Comet'],
     answer:'Star',
     hint:'It produces its own light and heat through nuclear fusion - unlike planets which only reflect light.',
     explanation:'The <b>Sun is a star</b> - a massive ball of hot gas that produces its own energy through <b>nuclear fusion</b> (hydrogen atoms fuse to form helium, releasing enormous energy as light and heat). Planets orbit stars and only reflect light. Our Sun is the nearest star to Earth - about 150 million km away. The next nearest star is Proxima Centauri, about 4.2 light-years away.' }),
 
-  makeTF({ id:'g6sci-sol-016', chapterId:'g6-solar-system', difficulty:1,
+  makeTF({ id:'g6sci-sol-016', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
     question:'The Moon takes approximately 28 days to orbit the Earth.',
     answer:true,
     hint:'This period is why we have a lunar month of about 4 weeks.',
     explanation:'<b>True.</b> The Moon orbits the Earth in approximately <b>27.3 days</b> (a sidereal month), or about 29.5 days from one full moon to the next (a synodic month - ~28 days). This is why a lunar month is approximately 4 weeks. The Moon\'s orbital period is also why we see all the lunar phases (new moon → crescent → quarter → full moon) over about 28 days.' }),
 
-  makeMCQ({ id:'g6sci-sol-017', chapterId:'g6-solar-system', difficulty:2,
+  makeMCQ({ id:'g6sci-sol-017', chapterId:'g6-solar-system', subsection:'sun_moon', difficulty:2,
     question:'A SOLAR ECLIPSE occurs when:',
     options:[
       'The Earth moves between the Sun and the Moon',
@@ -191,7 +191,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about what "solar" means - it relates to the Sun being blocked.',
     explanation:'A <b>solar eclipse</b> occurs when the <b>Moon passes between the Earth and the Sun</b>, casting a shadow on part of Earth\'s surface. People in the shadow see the Sun partially or totally blocked by the Moon. A <b>lunar eclipse</b> is the reverse: Earth\'s shadow falls on the Moon. Solar eclipses only occur during a new moon phase.' }),
 
-  makeMCQ({ id:'g6sci-sol-018', chapterId:'g6-solar-system', difficulty:3,
+  makeMCQ({ id:'g6sci-sol-018', chapterId:'g6-solar-system', subsection:'planets', difficulty:3,
     question:'In Mauritius, the HOTTEST months are November to March. Which statement BEST explains why?',
     options:[
       'Mauritius is closer to the Sun during those months',
@@ -203,7 +203,7 @@ STATIC_QUESTIONS.push(
     hint:'Mauritius is in the Southern Hemisphere - its summer is opposite to that of Europe.',
     explanation:'Earth\'s axis is <b>tilted 23.5°</b>. When the <b>Southern Hemisphere tilts toward the Sun</b> (November–March), Mauritius receives more <b>direct sunlight</b> at a higher angle → <b>summer</b>. When the Southern Hemisphere tilts away (June–August), sunlight arrives at a lower angle → <b>winter</b>. The distance to the Sun is NOT the main cause of seasons.' }),
 
-  makeMCQ({ id:'g6sci-sol-019', chapterId:'g6-solar-system', difficulty:4,
+  makeMCQ({ id:'g6sci-sol-019', chapterId:'g6-solar-system', subsection:'planets', difficulty:4,
     question:'A student says: "We don\'t feel the weight of the atmosphere because air has no mass." Is this correct, and why?',
     options:[
       'Correct - air is weightless and exerts no pressure',

@@ -91,7 +91,7 @@ As if he owes the water yet.
 STATIC_QUESTIONS.push(
 
   // ── TEXT A: email ──────────────────────────────────────────────────
-  makeMCQ({ id:'g5eng-psg-001', chapterId:'eng-passages', difficulty:1,
+  makeMCQ({ id:'g5eng-psg-001', chapterId:'eng-passages', subsection:'letter', difficulty:1,
     question:`${_G5PSG_EMAIL}What is the MAIN purpose of this email?`,
     options:[
       'To complain about the cost of the trip',
@@ -103,14 +103,14 @@ STATIC_QUESTIONS.push(
     hint:'The Subject line of an email states its purpose in a few words.',
     explanation:'The subject line reads "<b>Permission for the Black River Gorges field trip</b>" and the second paragraph says "I am happy to give permission". Everything else in the email is a detail that supports that purpose.' }),
 
-  makeMCQ({ id:'g5eng-psg-002', chapterId:'eng-passages', difficulty:1,
+  makeMCQ({ id:'g5eng-psg-002', chapterId:'eng-passages', subsection:'letter', difficulty:1,
     question:`${_G5PSG_EMAIL}How much has Mrs Seeruttun already paid?`,
     options:['Rs 150','Rs 250','Rs 300','Nothing yet'],
     answer:'Rs 250',
     hint:'Look for the sentence that mentions the school office.',
     explanation:'"I have already paid the <b>Rs 250</b> to the school office and I attach the receipt." The word <i>already</i> tells you the payment is done, not planned.' }),
 
-  makeMCQ({ id:'g5eng-psg-003', chapterId:'eng-passages', difficulty:2,
+  makeMCQ({ id:'g5eng-psg-003', chapterId:'eng-passages', subsection:'letter', difficulty:2,
     question:`${_G5PSG_EMAIL}Why does Mrs Seeruttun mention peanuts?`,
     options:[
       'She wants peanuts added to the lunch',
@@ -122,7 +122,7 @@ STATIC_QUESTIONS.push(
     hint:'The reason and the request are in the same sentence.',
     explanation:'"Anjali is <b>allergic to peanuts</b>, so I would like to know whether the packed lunch will contain any nuts." An allergy is a medical reason - which is why a parent puts it in writing rather than saying it at the gate.' }),
 
-  makeMCQ({ id:'g5eng-psg-004', chapterId:'eng-passages', difficulty:2,
+  makeMCQ({ id:'g5eng-psg-004', chapterId:'eng-passages', subsection:'letter', difficulty:2,
     question:`${_G5PSG_EMAIL}What does the <b>Cc</b> line tell you about this email?`,
     options:[
       'A copy was also sent to the other Grade 5 parents',
@@ -134,7 +134,7 @@ STATIC_QUESTIONS.push(
     hint:'Cc stands for "carbon copy" - people who receive a copy of the message.',
     explanation:'<b>Cc</b> lists people who get a <b>copy</b> of the email. Here that is parents-grade5@vacoasgs.mu, so the other Grade 5 parents can read it too. The main person it is addressed to is on the <b>To</b> line.' }),
 
-  makeMCQ({ id:'g5eng-psg-005', chapterId:'eng-passages', difficulty:3,
+  makeMCQ({ id:'g5eng-psg-005', chapterId:'eng-passages', subsection:'letter', difficulty:3,
     question:`${_G5PSG_EMAIL}The email ends with "(Mother of Anjali Seeruttun, Grade 5B)". Why is this line useful to the teacher?`,
     options:[
       'It makes the email look longer',
@@ -147,21 +147,21 @@ STATIC_QUESTIONS.push(
     explanation:'A teacher receives many emails. Naming the <b>child and the class</b> lets Mrs Bhoyroo find the right pupil immediately. In formal writing, identifying yourself clearly at the end is good manners and saves the reader time.' }),
 
   // ── TEXT B: informal letter ────────────────────────────────────────
-  makeMCQ({ id:'g5eng-psg-006', chapterId:'eng-passages', difficulty:1,
+  makeMCQ({ id:'g5eng-psg-006', chapterId:'eng-passages', subsection:'letter', difficulty:1,
     question:`${_G5PSG_LETTER}Where on the page is the writer's address placed in this letter?`,
     options:['Top right','Top left','Bottom right','Under the signature'],
     answer:'Top right',
     hint:'Look at how the address and the date are lined up.',
     explanation:'In a letter, the writer\'s own address and the date go in the <b>top right</b>. The greeting ("Dear Grandma,") then starts on the left.' }),
 
-  makeMCQ({ id:'g5eng-psg-007', chapterId:'eng-passages', difficulty:2,
+  makeMCQ({ id:'g5eng-psg-007', chapterId:'eng-passages', subsection:'letter', difficulty:2,
     question:`${_G5PSG_LETTER}What did Yashna receive in the birthday parcel?`,
     options:['A blue notebook','A jar of guava jam','A Maths textbook','A photograph of Grandma'],
     answer:'A blue notebook',
     hint:'The thank-you is in the very first paragraph.',
     explanation:'"The <b>blue notebook</b> is beautiful and I have already started writing my stories in it." The guava jam is something Yashna will send TO Grandma later - not something she received.' }),
 
-  makeMCQ({ id:'g5eng-psg-008', chapterId:'eng-passages', difficulty:2,
+  makeMCQ({ id:'g5eng-psg-008', chapterId:'eng-passages', subsection:'letter', difficulty:2,
     question:`${_G5PSG_LETTER}How do we know Yashna's Maths has improved?`,
     options:[
       'She says long division is now easy for everyone',
@@ -173,7 +173,7 @@ STATIC_QUESTIONS.push(
     hint:'Look for evidence - a number, not an opinion.',
     explanation:'She got the first four sums wrong, Papa helped her, and then "<b>I got eight out of ten in Tuesday\'s test!</b>" The mark is the <b>evidence</b>. When a question asks "how do we know", always point to the proof in the text.' }),
 
-  makeMCQ({ id:'g5eng-psg-009', chapterId:'eng-passages', difficulty:3,
+  makeMCQ({ id:'g5eng-psg-009', chapterId:'eng-passages', subsection:'letter', difficulty:3,
     question:`${_G5PSG_LETTER}Which feature shows this is an INFORMAL letter rather than a formal one?`,
     options:[
       'It has a date at the top',
@@ -185,21 +185,21 @@ STATIC_QUESTIONS.push(
     hint:'Both formal and informal letters have dates, paragraphs and "Dear". Look for what only a family letter would have.',
     explanation:'A date, paragraphs and "Dear" appear in <b>both</b> kinds of letter. What marks this one as informal is the <b>affectionate ending</b> ("With lots of love") and the <b>personal question</b> about Grandma\'s knee. A formal letter would end "Yours sincerely" and stick to business.' }),
 
-  makeTF({ id:'g5eng-psg-010', chapterId:'eng-passages', difficulty:2,
+  makeTF({ id:'g5eng-psg-010', chapterId:'eng-passages', subsection:'letter', difficulty:2,
     question:`${_G5PSG_LETTER}Yashna asks Grandma a question in her letter.`,
     answer:true,
     hint:'Look for a question mark near the end.',
     explanation:'<b>True.</b> She writes: "Is it still painful when it rains?" Asking a question is how a letter-writer invites a reply - it keeps the conversation going.' }),
 
   // ── TEXT C: personal narrative ─────────────────────────────────────
-  makeMCQ({ id:'g5eng-psg-011', chapterId:'eng-passages', difficulty:1,
+  makeMCQ({ id:'g5eng-psg-011', chapterId:'eng-passages', subsection:'story', difficulty:1,
     question:`${_G5PSG_NARR}At what time did the lights go out?`,
     options:['Six o\'clock','Half past eight','Midnight','At sunrise'],
     answer:'Half past eight',
     hint:'The passage gives two clock times - match the right one to the power cut.',
     explanation:'"At <b>half past eight</b> the lights went out." Six o\'clock is when the sky turned grey, earlier in the evening. Careful readers match each time to the right event.' }),
 
-  makeMCQ({ id:'g5eng-psg-012', chapterId:'eng-passages', difficulty:2,
+  makeMCQ({ id:'g5eng-psg-012', chapterId:'eng-passages', subsection:'story', difficulty:2,
     question:`${_G5PSG_NARR}"The mango tree outside my window was bending like a bow." What does this comparison tell the reader?`,
     options:[
       'The tree was old and dying',
@@ -211,7 +211,7 @@ STATIC_QUESTIONS.push(
     hint:'Picture the shape of an archer\'s bow.',
     explanation:'A bow is bent into a deep curve. Saying the tree bent "<b>like a bow</b>" shows the <b>force of the wind</b>. A comparison using <i>like</i> or <i>as</i> is called a <b>simile</b>.' }),
 
-  makeMCQ({ id:'g5eng-psg-013', chapterId:'eng-passages', difficulty:2,
+  makeMCQ({ id:'g5eng-psg-013', chapterId:'eng-passages', subsection:'story', difficulty:2,
     question:`${_G5PSG_NARR}Why did Mama fill every bucket and basin with water?`,
     options:[
       'To water the garden after the storm',
@@ -223,7 +223,7 @@ STATIC_QUESTIONS.push(
     hint:'What do families in Mauritius always do before a cyclone?',
     explanation:'Storing water is standard <b>cyclone preparation</b> - during a cyclone the electricity and the water supply often stop. The text does not spell this out, so you infer it from what you know about cyclones.' }),
 
-  makeMCQ({ id:'g5eng-psg-014', chapterId:'eng-passages', difficulty:3,
+  makeMCQ({ id:'g5eng-psg-014', chapterId:'eng-passages', subsection:'story', difficulty:3,
     question:`${_G5PSG_NARR}The passage ends: "I remember the candles better than the wind." What does this suggest about the writer's memory of that night?`,
     options:[
       'She has forgotten most of what happened',
@@ -235,7 +235,7 @@ STATIC_QUESTIONS.push(
     hint:'What were the candles for? What happened by candlelight?',
     explanation:'The candles are the moment Papa laughed and said "Now we tell stories" - the <b>warm, family part</b> of a frightening night. Choosing to end on the candles rather than the wind shows what the writer values in the memory. This is a <b>closing line with meaning</b>.' }),
 
-  makeMCQ({ id:'g5eng-psg-015', chapterId:'eng-passages', difficulty:4,
+  makeMCQ({ id:'g5eng-psg-015', chapterId:'eng-passages', subsection:'recount', difficulty:4,
     question:`${_G5PSG_NARR}Your class is writing personal recounts about a storm. Which opening sentence best copies the technique used in this passage?`,
     options:[
       'A cyclone is a strong tropical storm with heavy rain and wind.',
@@ -248,21 +248,21 @@ STATIC_QUESTIONS.push(
     explanation:'The passage opens "<b>I was nine years old the night</b> Cyclone Berguitta passed over Mauritius" - first person, one particular night, and a hook that makes you want the rest. The other options are <b>factual report</b> or <b>essay</b> openings, not recounts.' }),
 
   // ── TEXT D: advertisement / announcement ───────────────────────────
-  makeMCQ({ id:'g5eng-psg-016', chapterId:'eng-passages', difficulty:1,
+  makeMCQ({ id:'g5eng-psg-016', chapterId:'eng-passages', subsection:'story', difficulty:1,
     question:`${_G5PSG_ADVERT}On which days does the swimming club meet?`,
     options:['Wednesday and Saturday','Monday and Thursday','Every weekday','Saturday only'],
     answer:'Wednesday and Saturday',
     hint:'The days are written in bold near the top.',
     explanation:'Coaching is on <b>Wednesday and Saturday</b>, 2.00 p.m. to 4.00 p.m. Advertisements put the key facts in bold so a reader skimming the notice board still catches them.' }),
 
-  makeMCQ({ id:'g5eng-psg-017', chapterId:'eng-passages', difficulty:2,
+  makeMCQ({ id:'g5eng-psg-017', chapterId:'eng-passages', subsection:'story', difficulty:2,
     question:`${_G5PSG_ADVERT}Rahul's older sister is already a member of the club. How much will Rahul pay each month?`,
     options:['Rs 150','Rs 100','Rs 50','Nothing'],
     answer:'Rs 100',
     hint:'Read the words in brackets after the fee.',
     explanation:'"Fee: Rs 150 per month (<b>Rs 100 if a brother or sister already belongs</b>)". Rahul\'s sister is a member, so the reduced rate of <b>Rs 100</b> applies. Bracketed conditions in adverts change the price - always read them.' }),
 
-  makeMCQ({ id:'g5eng-psg-018', chapterId:'eng-passages', difficulty:3,
+  makeMCQ({ id:'g5eng-psg-018', chapterId:'eng-passages', subsection:'story', difficulty:3,
     question:`${_G5PSG_ADVERT}Why does the announcement mention that Coach Devi has trained national swimmers for 12 years?`,
     options:[
       'To explain why the fee is Rs 150',
@@ -274,7 +274,7 @@ STATIC_QUESTIONS.push(
     hint:'Adverts add facts about people for a reason - what is that reason?',
     explanation:'Naming the coach\'s experience is a <b>persuasive technique</b>: it builds trust so parents feel their money is well spent. The advert also says "Beginners welcome", so it is certainly not warning them off.' }),
 
-  makeMCQ({ id:'g5eng-psg-019', chapterId:'eng-passages', difficulty:4,
+  makeMCQ({ id:'g5eng-psg-019', chapterId:'eng-passages', subsection:'story', difficulty:4,
     question:`${_G5PSG_ADVERT}Sofia decides on Monday 23 September that she wants to join. What is her problem?`,
     options:[
       'She is in Grade 4, so she is too young',
@@ -287,14 +287,14 @@ STATIC_QUESTIONS.push(
     explanation:'Forms had to reach Mr Ramful "before <b>Friday 20 September</b>". Monday 23 September is <b>after</b> that date, so Sofia has missed the deadline. Grade 4 pupils ARE allowed, so age is not the problem - the calendar is.' }),
 
   // ── TEXT E: poem ───────────────────────────────────────────────────
-  makeMCQ({ id:'g5eng-psg-020', chapterId:'eng-passages', difficulty:2,
+  makeMCQ({ id:'g5eng-psg-020', chapterId:'eng-passages', subsection:'poem', difficulty:2,
     question:`${_G5PSG_POEM}"Before the sun has left its bed" means that the fisherman goes out...`,
     options:['At midday','Before sunrise','At sunset','Only when it rains'],
     answer:'Before sunrise',
     hint:'Where is the sun when it is still "in bed"?',
     explanation:'The sun "in bed" means it has <b>not yet risen</b>, so he sets out <b>before sunrise</b>. Giving the sun a human action (sleeping) is called <b>personification</b>.' }),
 
-  makeMCQ({ id:'g5eng-psg-021', chapterId:'eng-passages', difficulty:3,
+  makeMCQ({ id:'g5eng-psg-021', chapterId:'eng-passages', subsection:'poem', difficulty:3,
     question:`${_G5PSG_POEM}"His hands are maps of thirty years." What does this line really tell us?`,
     options:[
       'He draws maps of the lagoon in his free time',

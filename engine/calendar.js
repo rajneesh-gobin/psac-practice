@@ -116,7 +116,7 @@ const Calendar = (() => {
     const { data: existing, error: selErr } = await _sb.from('study_schedules')
       .select('id').eq('student_id', _studentId).limit(1).maybeSingle();
     if (selErr) {
-      console.error('[Calendar] study_schedules query failed - table may not exist yet. Run supabase-calendar-migration.sql in your Supabase SQL editor.', selErr);
+      console.error('[Calendar] study_schedules query failed - table may not exist yet. Run supabase-migration.sql in your Supabase SQL editor.', selErr);
       return null;
     }
     if (existing?.id) { _scheduleId = existing.id; return _scheduleId; }
@@ -128,7 +128,7 @@ const Calendar = (() => {
       settings:   _gen,
     }).select('id').single();
     if (error) {
-      console.error('[Calendar] study_schedules insert failed - run supabase-calendar-migration.sql in your Supabase SQL editor.', error);
+      console.error('[Calendar] study_schedules insert failed - run supabase-migration.sql in your Supabase SQL editor.', error);
       return null;
     }
     if (!data) return null;
@@ -157,7 +157,7 @@ const Calendar = (() => {
 
     let html = `<div class="grid grid-cols-7 gap-px bg-gray-200 dark:bg-gray-700 rounded-2xl overflow-hidden">
       ${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d =>
-        `<div class="bg-gray-50 dark:bg-gray-800 text-center text-xs font-semibold text-gray-400 py-2">${d}</div>`
+        `<div class="bg-gray-50 dark:bg-gray-800 text-center text-xs font-semibold text-gray-500 dark:text-gray-400 py-2">${d}</div>`
       ).join('')}`;
 
     for (let i = 0; i < firstDay; i++)
@@ -210,7 +210,7 @@ const Calendar = (() => {
     if (!list) return;
 
     if (!events.length) {
-      list.innerHTML = `<p class="text-sm text-gray-400 text-center py-6">No events on this day.</p>
+      list.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No events on this day.</p>
         <button onclick="Calendar.showAddEvent('${dateStr}')"
           class="w-full text-sm text-indigo-500 font-medium py-2 border-2 border-dashed border-indigo-200 dark:border-indigo-800 rounded-xl">
           + Add Event</button>`;
@@ -224,7 +224,7 @@ const Calendar = (() => {
             <div class="flex-1 min-w-0">
               ${subj ? `<div class="text-xs font-bold text-indigo-500 mb-0.5">${subj.icon} ${subj.name}</div>` : ''}
               <div class="font-semibold text-sm text-gray-800 dark:text-white">${e.topic_label}</div>
-              ${e.duration_mins && e.entry_type==='study' ? `<div class="text-xs text-gray-400">${e.duration_mins} min</div>` : ''}
+              ${e.duration_mins && e.entry_type==='study' ? `<div class="text-xs text-gray-500 dark:text-gray-400">${e.duration_mins} min</div>` : ''}
               ${e.notes ? `<div class="text-xs text-gray-500 mt-0.5 italic">${e.notes}</div>` : ''}
             </div>
             <div class="flex gap-0.5 ml-1 flex-shrink-0">
@@ -246,7 +246,15 @@ const Calendar = (() => {
 
   async function deleteEntry(id) {
     if (!_sb) return;
-    await _sb.from('schedule_entries').delete().eq('id', id);
+    // Dropping it from _entries before knowing the delete landed makes a
+    // refused delete look like it worked until the next page load brings the
+    // event back.
+    const { error } = await _sb.from('schedule_entries').delete().eq('id', id);
+    if (error) {
+      console.error('[Calendar.deleteEntry]', error.message);
+      if (typeof toast !== 'undefined') toast('Could not remove that event. Please try again.', 3000);
+      return;
+    }
     _entries = _entries.filter(e => e.id !== id);
     closeDayModal();
     _renderCalendar();
@@ -335,7 +343,7 @@ const Calendar = (() => {
 
     // ── INSERT new entry ───────────────────────────
     const sid = await _ensureSchedule();
-    if (!sid)   { _showErr(errEl, 'Database not ready - please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh the page.'); return; }
+    if (!sid)   { _showErr(errEl, 'Database not ready - please run supabase-migration.sql in your Supabase SQL editor, then refresh the page.'); return; }
 
     const { data, error } = await _sb.from('schedule_entries').insert({
       schedule_id: sid, student_id: _studentId,
@@ -418,7 +426,7 @@ const Calendar = (() => {
     const saved    = _gen.subjectHours || {};
 
     if (!subjects.length) {
-      el.innerHTML = '<p class="text-xs text-gray-400">No subjects found for this grade.</p>';
+      el.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400">No subjects found for this grade.</p>';
       return;
     }
 
@@ -430,8 +438,8 @@ const Calendar = (() => {
           <input type="number" min="0" max="10" step="0.5" value="${saved[s.id] ?? 2}"
             id="gen-subj-${s.id.replace(/[^a-z0-9]/gi,'_')}"
             class="w-14 text-center border border-gray-300 dark:border-gray-600 rounded-lg px-1 py-0.5 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
-          <span class="text-xs text-gray-400">h/wk</span>
-          <label class="flex items-center gap-1 text-xs text-gray-400 ml-1 cursor-pointer">
+          <span class="text-xs text-gray-500 dark:text-gray-400">h/wk</span>
+          <label class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400 ml-1 cursor-pointer">
             <input type="checkbox" ${(saved[s.id] ?? 2) > 0 ? 'checked' : ''}
               onchange="document.getElementById('gen-subj-${s.id.replace(/[^a-z0-9]/gi,'_')}').disabled=!this.checked"
               id="gen-subj-chk-${s.id.replace(/[^a-z0-9]/gi,'_')}">
@@ -562,21 +570,38 @@ const Calendar = (() => {
     // Persist
     const sid = await _ensureSchedule();
     if (!sid) {
-      _showErr(errEl, 'Database not ready - please run supabase-calendar-migration.sql in your Supabase SQL editor, then refresh the page.');
+      _showErr(errEl, 'Database not ready - please run supabase-migration.sql in your Supabase SQL editor, then refresh the page.');
       if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
       return;
     }
 
-    await _sb.from('study_schedules')
+    const { error: settingsErr } = await _sb.from('study_schedules')
       .update({ settings: _gen, updated_at: new Date().toISOString() }).eq('id', sid);
-    await _sb.from('schedule_entries').delete().eq('schedule_id', sid).eq('entry_type', 'study');
+    if (settingsErr) console.error('[Calendar.generate] settings', settingsErr.message);
 
-    if (allEntries.length > 0) {
-      const rows = allEntries.map(e => ({ ...e, schedule_id: sid, student_id: _studentId }));
-      // Insert in chunks of 200 to avoid payload limits
-      for (let i = 0; i < rows.length; i += 200) {
-        await _sb.from('schedule_entries').insert(rows.slice(i, i + 200));
-      }
+    // Regeneration is destructive: the old study entries go first. If that
+    // delete fails, inserting on top would double every session, so stop here
+    // with the previous timetable intact.
+    const { error: clearErr } = await _sb.from('schedule_entries')
+      .delete().eq('schedule_id', sid).eq('entry_type', 'study');
+    if (clearErr) {
+      console.error('[Calendar.generate] clear', clearErr.message);
+      _showErr(errEl, 'Could not clear the previous timetable — nothing was changed. Please try again.');
+      if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
+      return;
+    }
+
+    const rows = allEntries.map(e => ({ ...e, schedule_id: sid, student_id: _studentId }));
+    // The delete above already removed the old plan, so a failed chunk leaves a
+    // PARTIAL timetable. Report what actually landed rather than what was
+    // intended, and cache only that - the student's offline copy must never
+    // list sessions the database does not have.
+    let saved = 0, insertErr = null;
+    for (let i = 0; i < rows.length; i += 200) {
+      const chunk = rows.slice(i, i + 200);
+      const { error } = await _sb.from('schedule_entries').insert(chunk);
+      if (error) { insertErr = error; break; }
+      saved += chunk.length;
     }
 
     await _loadEntries();
@@ -584,9 +609,22 @@ const Calendar = (() => {
     try {
       localStorage.setItem(`mm_schedule_${_studentId}`, JSON.stringify({
         generated: new Date().toISOString(),
-        entries: allEntries.map(e => ({ ...e, schedule_id: sid, student_id: _studentId })),
+        entries: rows.slice(0, saved),
       }));
     } catch(e) {}
+
+    if (insertErr) {
+      console.error('[Calendar.generate] insert', insertErr.message);
+      const d0 = _parseDate(startDateStr);
+      _viewYear = d0.getFullYear(); _viewMonth = d0.getMonth();
+      closeGenModal();
+      _renderCalendar();
+      if (typeof toast !== 'undefined') {
+        toast(`Only ${saved} of ${rows.length} sessions could be saved — generate again to complete the timetable.`, 5000);
+      }
+      if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
+      return;
+    }
 
     const d = _parseDate(startDateStr);
     _viewYear = d.getFullYear(); _viewMonth = d.getMonth();
@@ -763,7 +801,7 @@ const Calendar = (() => {
           <div class="flex-1 min-w-0">
             ${subj ? `<div class="text-xs font-bold text-indigo-500 mb-0.5">${subj.name}</div>` : ''}
             <div class="font-semibold text-sm text-gray-800 dark:text-white">${e.topic_label}</div>
-            ${e.duration_mins ? `<div class="text-xs text-gray-400">${e.duration_mins} min</div>` : ''}
+            ${e.duration_mins ? `<div class="text-xs text-gray-500 dark:text-gray-400">${e.duration_mins} min</div>` : ''}
             ${e.notes ? `<div class="text-xs text-gray-500 italic mt-0.5">${e.notes}</div>` : ''}
             ${actionBtn}
           </div>

@@ -85,8 +85,8 @@ const AdminPanel = (() => {
           <span class="text-sm font-bold text-gray-800 dark:text-white">${_esc(r.full_name || r.id)}</span>
           <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${st.cls}">${st.label}</span>
           ${r.status === 'approved'
-            ? `<span class="text-xs text-gray-400">${_esc(r.tier)}</span>` : ''}
-          <span class="text-xs text-gray-400 ml-auto">${when}</span>
+            ? `<span class="text-xs text-gray-500 dark:text-gray-400">${_esc(r.tier)}</span>` : ''}
+          <span class="text-xs text-gray-500 dark:text-gray-400 ml-auto">${when}</span>
         </div>
         ${r.note ? `<p class="text-xs text-gray-500 dark:text-gray-400 italic mt-1">"${_esc(r.note)}"</p>` : ''}
         <div class="flex gap-2 flex-wrap mt-2">
@@ -112,11 +112,11 @@ const AdminPanel = (() => {
           <span class="text-sm font-bold text-gray-800 dark:text-white">👩‍🏫 Teacher accounts</span>
           ${pending.length
             ? `<span class="text-xs font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">${pending.length} awaiting review</span>`
-            : '<span class="text-xs text-gray-400">nothing pending</span>'}
+            : '<span class="text-xs text-gray-500 dark:text-gray-400">nothing pending</span>'}
           <button onclick="AdminPanel.loadTeacherQueue()" class="ml-auto text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻</button>
         </div>
         ${pending.map(row).join('')}
-        ${others.length ? `<details class="mt-1"><summary class="text-xs text-gray-400 cursor-pointer py-1">
+        ${others.length ? `<details class="mt-1"><summary class="text-xs text-gray-500 dark:text-gray-400 cursor-pointer py-1">
             ${others.length} existing teacher${others.length === 1 ? '' : 's'}</summary>
             <div class="mt-2">${others.map(row).join('')}</div></details>` : ''}
       </div>`;
@@ -145,7 +145,7 @@ const AdminPanel = (() => {
   async function loadMembers() {
     if (!_sb) return;
     const el = document.getElementById('admin-members-list');
-    if (el) el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6 animate-pulse">Loading members…</p>';
+    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
     const { data, error } = await _sb.from('profiles')
       .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code')
       .eq('role', 'parent')
@@ -184,7 +184,7 @@ const AdminPanel = (() => {
     const el = document.getElementById('admin-members-list');
     if (!el) return;
     if (!list.length) {
-      el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6">No members found.</p>';
+      el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No members found.</p>';
       return;
     }
     el.innerHTML = list.map(m => `
@@ -192,7 +192,7 @@ const AdminPanel = (() => {
         <div class="flex flex-wrap items-center gap-3">
           <div class="flex-1 min-w-0">
             <p class="text-sm font-bold text-gray-800 dark:text-white truncate">${_esc(m.full_name || 'Unnamed')}</p>
-            <p class="text-xs text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">${m.id}</p>
           </div>
           <div class="flex items-center gap-2 flex-wrap">
             <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${ROLE_COLORS[m.role] || ''}">
@@ -227,7 +227,7 @@ const AdminPanel = (() => {
               onkeydown="if(event.key==='Enter')this.blur()"
               title="Click to edit display name"
               class="flex-1 min-w-0 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
-            <span class="text-xs text-gray-400 shrink-0">⏳ Expires</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 shrink-0">⏳ Expires</span>
             <input type="date" value="${m.expires_at ? m.expires_at.slice(0,10) : ''}"
               onchange="AdminPanel.setExpiry('${m.id}', this.value)"
               title="Set account expiry - leave blank for no expiry"
@@ -238,7 +238,7 @@ const AdminPanel = (() => {
         ${(m.role === 'parent' || m.role === 'admin') ? `
         <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
           <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold shrink-0">💳 Plan:</span>
-          <span id="plan-label-${m.id}" class="text-xs text-gray-400">loading…</span>
+          <span id="plan-label-${m.id}" class="text-xs text-gray-500 dark:text-gray-400">loading…</span>
           <select id="plan-sel-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
             <option value="free">Free</option>
             <option value="starter">Starter</option>
@@ -261,7 +261,7 @@ const AdminPanel = (() => {
         </div>
         <div id="plan-history-${m.id}" class="hidden mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 overflow-x-auto"></div>` : ''}
         <div id="children-panel-${m.id}" class="hidden mt-3 pl-2 border-l-2 border-indigo-200 dark:border-indigo-700">
-          <p class="text-xs text-gray-400 animate-pulse">Loading children…</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 animate-pulse">Loading children…</p>
         </div>
       </div>`).join('');
 
@@ -274,7 +274,7 @@ const AdminPanel = (() => {
         ? ` (expires ${new Date(subscription.expires_at).toLocaleDateString()})`
         : '';
       lbl.textContent = plan_id + exp;
-      lbl.className = `text-xs font-semibold ${plan_id === 'free' ? 'text-gray-400' : 'text-green-500'}`;
+      lbl.className = `text-xs font-semibold ${plan_id === 'free' ? 'text-gray-500 dark:text-gray-400' : 'text-green-600 dark:text-green-400'}`;
       const sel = document.getElementById(`plan-sel-${m.id}`);
       if (sel) sel.value = plan_id;
     });
@@ -307,7 +307,7 @@ const AdminPanel = (() => {
 
     // Load family → students
     const { data: fam } = await _sb.from('families').select('id').eq('parent_id', profileId).maybeSingle();
-    if (!fam) { panel.innerHTML = '<p class="text-xs text-gray-400">No family found.</p>'; return; }
+    if (!fam) { panel.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400">No family found.</p>'; return; }
     const { data: kids } = await _sb.from('students').select('id, display_name, username, grade, session_version, expires_at, created_at').eq('family_id', fam.id);
     _familyStudents[profileId] = kids || [];
     _renderChildren(profileId);
@@ -317,14 +317,14 @@ const AdminPanel = (() => {
     const panel = document.getElementById(`children-panel-${profileId}`);
     if (!panel) return;
     const kids = _familyStudents[profileId] || [];
-    if (!kids.length) { panel.innerHTML = '<p class="text-xs text-gray-400 py-1">No children registered yet.</p>'; return; }
+    if (!kids.length) { panel.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400 py-1">No children registered yet.</p>'; return; }
     panel.innerHTML = kids.map(k => `
       <div class="py-1.5 text-xs text-gray-600 dark:text-gray-300">
         <div class="flex items-center gap-2 flex-wrap">
           <span class="text-base">🧒</span>
           <span class="font-medium">${_esc(k.display_name)}</span>
-          <span class="text-gray-400">@${_esc(k.username)}</span>
-          <span class="text-gray-400">Grade ${k.grade || '?'}</span>
+          <span class="text-gray-500 dark:text-gray-400">@${_esc(k.username)}</span>
+          <span class="text-gray-500 dark:text-gray-400">Grade ${k.grade || '?'}</span>
           ${k.expires_at ? `<span class="text-orange-500 font-semibold">⏳ ${new Date(k.expires_at) < new Date() ? 'Expired' : 'Expires'} ${k.expires_at.slice(0,10)}</span>` : ''}
           <button onclick="AdminPanel.forceLogout('${k.id}','${_esc(k.display_name)}')"
             class="ml-auto shrink-0 px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200 transition-colors font-semibold">
@@ -332,7 +332,7 @@ const AdminPanel = (() => {
           </button>
         </div>
         <div class="flex items-center gap-2 mt-1">
-          <span class="text-gray-400 shrink-0">⏳ Expires:</span>
+          <span class="text-gray-500 dark:text-gray-400 shrink-0">⏳ Expires:</span>
           <input type="date" value="${k.expires_at ? k.expires_at.slice(0,10) : ''}"
             onchange="AdminPanel.setStudentExpiry('${k.id}','${_esc(k.display_name)}',this.value)"
             class="border border-gray-200 dark:border-gray-600 rounded px-1.5 py-0.5 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400 text-xs">
@@ -427,8 +427,23 @@ const AdminPanel = (() => {
   }
 
   async function _saveSettings() {
-    if (!_sb) return;
-    await _sb.from('mm_data').upsert({ key: 'global_settings', value: _settings, updated_at: new Date().toISOString() });
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { error } = await _sb.from('mm_data')
+      .upsert({ key: 'global_settings', value: _settings, updated_at: new Date().toISOString() });
+    if (error) { console.error('[Admin._saveSettings]', error.message); return { ok: false, error: error.message }; }
+    return { ok: true };
+  }
+
+  // These switches gate what every family in the app can reach, so "disabled"
+  // has to mean disabled in the database - not just in this admin's browser.
+  // A refused write now rolls the in-memory copy back, repaints the control it
+  // came from, and says the change did not apply.
+  async function _commitSettings(prevJson, okMsg, repaint) {
+    const res = await _saveSettings();
+    if (!res.ok) _settings = JSON.parse(prevJson);
+    if (repaint) repaint();
+    toast(res.ok ? okMsg : 'Could not save — the change was NOT applied.', res.ok ? 3000 : 4000);
+    return res.ok;
   }
 
   function _renderContent() {
@@ -499,36 +514,40 @@ const AdminPanel = (() => {
 
   async function toggleGrade(grade, disable) {
     if (!_settings) return;
+    const prev = JSON.stringify(_settings);
     if (disable) { if (!_settings.disabled_grades.includes(grade)) _settings.disabled_grades.push(grade); }
     else         { _settings.disabled_grades = _settings.disabled_grades.filter(g => g !== grade); }
-    await _saveSettings();
-    toast(`Grade ${grade} ${disable ? 'disabled' : 'enabled'} for all students`, 3000);
+    await _commitSettings(prev, `Grade ${grade} ${disable ? 'disabled' : 'enabled'} for all students`, _renderContent);
   }
 
   async function toggleSubject(subjectId, disable) {
     if (!_settings) return;
+    const prev = JSON.stringify(_settings);
     if (disable) { if (!_settings.disabled_subjects.includes(subjectId)) _settings.disabled_subjects.push(subjectId); }
     else         { _settings.disabled_subjects = _settings.disabled_subjects.filter(s => s !== subjectId); }
-    await _saveSettings();
-    toast(`Subject ${disable ? 'disabled' : 'enabled'} for all students`, 3000);
+    await _commitSettings(prev, `Subject ${disable ? 'disabled' : 'enabled'} for all students`, _renderContent);
   }
 
   async function toggleRegistration(open) {
     if (!_settings) return;
+    const prev = JSON.stringify(_settings);
     _settings.registration_open = open;
-    await _saveSettings();
-    const toggle = document.getElementById('admin-reg-toggle');
-    _styleToggle(toggle);
-    toast(`New registrations ${open ? 'opened' : 'closed'}`, 3000);
+    await _commitSettings(prev, `New registrations ${open ? 'opened' : 'closed'}`, () => {
+      const toggle = document.getElementById('admin-reg-toggle');
+      if (toggle) toggle.checked = !!_settings.registration_open;
+      _styleToggle(toggle);
+    });
   }
 
   async function togglePlanEnforcement(on) {
     if (!_settings) return;
+    const prev = JSON.stringify(_settings);
     _settings.plan_enforcement_enabled = on;
-    await _saveSettings();
-    const toggle = document.getElementById('admin-enforcement-toggle');
-    _styleToggle(toggle);
-    toast(`Plan enforcement ${on ? 'enabled ⚡' : 'disabled'}`, 3000);
+    await _commitSettings(prev, `Plan enforcement ${on ? 'enabled ⚡' : 'disabled'}`, () => {
+      const toggle = document.getElementById('admin-enforcement-toggle');
+      if (toggle) toggle.checked = !!_settings.plan_enforcement_enabled;
+      _styleToggle(toggle);
+    });
   }
 
   // ── Stats ───────────────────────────────────
@@ -570,7 +589,7 @@ const AdminPanel = (() => {
   async function loadTeachers() {
     if (!_sb) return;
     const el = document.getElementById('admin-teachers-list');
-    if (el) el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6 animate-pulse">Loading teachers…</p>';
+    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading teachers…</p>';
     const { data, error } = await _sb.from('profiles')
       .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, teacher_tier')
       .eq('role', 'teacher')
@@ -587,7 +606,7 @@ const AdminPanel = (() => {
     const el = document.getElementById('admin-teachers-list');
     if (!el) return;
     if (!list.length) {
-      el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-6">No teacher accounts found.</p>';
+      el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No teacher accounts found.</p>';
       return;
     }
     el.innerHTML = list.map(t => {
@@ -599,8 +618,8 @@ const AdminPanel = (() => {
           <div class="flex flex-wrap items-center gap-3">
             <div class="flex-1 min-w-0">
               <p class="text-sm font-bold text-gray-800 dark:text-white truncate">${_esc(t.full_name || 'Unnamed')}</p>
-              <p class="text-xs text-gray-400 dark:text-gray-500 font-mono truncate">${t.id}</p>
-              <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">Joined ${joined}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">${t.id}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Joined ${joined}</p>
             </div>
             <div class="flex items-center gap-2 flex-wrap">
               <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${st.cls}">${st.label}</span>
@@ -676,7 +695,7 @@ const AdminPanel = (() => {
     if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
     const listEl = document.getElementById('admin-roles-list');
     if (!listEl) return;
-    listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
+    listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
     const { data } = await _sb.from('profiles').select('id, full_name, role, is_super_admin').order('full_name');
     const mySelf = typeof Auth !== 'undefined' ? Auth.getParentProfile?.()?.id : null;
     listEl.innerHTML = (data || []).map(p => {
@@ -685,21 +704,30 @@ const AdminPanel = (() => {
       return `<div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
         <div class="flex-1 min-w-0">
           <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(p.full_name || p.id)}</div>
-          <div class="text-xs text-gray-400">${p.role || 'user'}${isSuper ? ' 👑 super admin' : ''}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">${p.role || 'user'}${isSuper ? ' 👑 super admin' : ''}</div>
         </div>
-        ${(isSelf || isSuper) ? '<span class="text-xs text-gray-400 italic">Cannot change</span>' :
+        ${(isSelf || isSuper) ? '<span class="text-xs text-gray-500 dark:text-gray-400 italic">Cannot change</span>' :
           `<button onclick="AdminPanel.setRole('${p.id}','${p.role === 'admin' ? 'user' : 'admin'}')"
             class="text-xs ${p.role === 'admin' ? 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400' : 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400'} px-3 py-1.5 rounded-full font-semibold hover:opacity-80 transition-colors">
             ${p.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
           </button>`}
       </div>`;
-    }).join('') || '<p class="text-sm text-gray-400 text-center py-4">No profiles found.</p>';
+    }).join('') || '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No profiles found.</p>';
   }
 
+  // .select('id') so a row blocked by RLS - or already a super admin, which the
+  // is_super_admin filter excludes - comes back as zero rows rather than a
+  // silent no-op that still toasted "promoted to Admin".
   async function setRole(userId, newRole) {
     if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
-    await _sb.from('profiles').update({ role: newRole }).eq('id', userId).eq('is_super_admin', false);
+    const { data, error } = await _sb.from('profiles')
+      .update({ role: newRole }).eq('id', userId).eq('is_super_admin', false).select('id');
     loadRoles();
+    if (error || !data?.length) {
+      console.error('[Admin.setRole]', error?.message || 'no row updated');
+      toast('Could not change that role — nothing was changed.', 3500);
+      return;
+    }
     toast(newRole === 'admin' ? 'User promoted to Admin. ✅' : 'Admin rights removed.', 2000);
   }
 
@@ -708,7 +736,7 @@ const AdminPanel = (() => {
     if (!_sb) return;
     const listEl = document.getElementById('admin-plans-list');
     if (!listEl) return;
-    listEl.innerHTML = '<p class="text-sm text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
+    listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
     const { data } = await _sb.from('plans').select('*').order('price_mur');
 
     const grades = typeof SUBJECT_PACKS !== 'undefined'
@@ -764,10 +792,10 @@ const AdminPanel = (() => {
         <div class="flex items-center justify-between mb-3">
           <div>
             <div class="font-bold text-gray-800 dark:text-white">${_esc(plan.name)} Plan ${plan.price_mur === 0 ? '— Free' : `— Rs ${plan.price_mur}/mo`}</div>
-            <div class="text-xs text-gray-400">max ${plan.max_children || 1} child${(plan.max_children || 1) > 1 ? 'ren' : ''}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">max ${plan.max_children || 1} child${(plan.max_children || 1) > 1 ? 'ren' : ''}</div>
           </div>
           <label class="flex items-center gap-2 cursor-pointer select-none">
-            <span class="text-xs ${plan.is_active ? 'text-green-500 font-semibold' : 'text-gray-400'}">${plan.is_active ? 'Live' : 'Draft'}</span>
+            <span class="text-xs ${plan.is_active ? 'text-green-600 dark:text-green-400 font-semibold' : 'text-gray-500 dark:text-gray-400'}">${plan.is_active ? 'Live' : 'Draft'}</span>
             <div class="relative w-9 h-5 ${plan.is_active ? 'bg-green-400' : 'bg-gray-300 dark:bg-gray-600'} rounded-full shadow-inner">
               <input type="checkbox" ${plan.is_active ? 'checked' : ''} onchange="AdminPanel.togglePlan('${plan.id}', this.checked)" class="sr-only">
               <div class="absolute w-3 h-3 bg-white rounded-full shadow top-1 transition-transform ${plan.is_active ? 'translate-x-5' : 'translate-x-1'}"></div>
@@ -863,15 +891,15 @@ const AdminPanel = (() => {
     if (!panel) return;
     if (!panel.classList.contains('hidden')) { panel.classList.add('hidden'); return; }
     panel.classList.remove('hidden');
-    panel.innerHTML = '<p class="text-xs text-gray-400 animate-pulse py-1">Loading…</p>';
+    panel.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400 animate-pulse py-1">Loading…</p>';
     const { data } = await _sb.from('payments')
       .select('plan_id, amount_mur, processed_at, notes')
       .eq('user_id', userId)
       .order('processed_at', { ascending: false })
       .limit(10);
-    if (!data?.length) { panel.innerHTML = '<p class="text-xs text-gray-400 py-1">No payment history.</p>'; return; }
+    if (!data?.length) { panel.innerHTML = '<p class="text-xs text-gray-500 dark:text-gray-400 py-1">No payment history.</p>'; return; }
     panel.innerHTML = `<table class="w-full text-xs mt-1">
-      <thead><tr class="text-gray-400 border-b border-gray-100 dark:border-gray-700">
+      <thead><tr class="text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-gray-700">
         <th class="text-left pb-1 font-medium">Plan</th>
         <th class="text-left pb-1 font-medium">Amount</th>
         <th class="text-left pb-1 font-medium">Date</th>
@@ -880,16 +908,21 @@ const AdminPanel = (() => {
       <tbody>${data.map(r => `<tr class="border-b border-gray-50 dark:border-gray-700/50">
         <td class="py-1 font-medium text-gray-700 dark:text-gray-200">${_esc(r.plan_id)}</td>
         <td class="py-1 text-gray-500">Rs ${r.amount_mur ?? 0}</td>
-        <td class="py-1 text-gray-400">${r.processed_at ? new Date(r.processed_at).toLocaleDateString() : '-'}</td>
-        <td class="py-1 text-gray-400 max-w-xs truncate">${_esc(r.notes || '-')}</td>
+        <td class="py-1 text-gray-500 dark:text-gray-400">${r.processed_at ? new Date(r.processed_at).toLocaleDateString() : '-'}</td>
+        <td class="py-1 text-gray-500 dark:text-gray-400 max-w-xs truncate">${_esc(r.notes || '-')}</td>
       </tr>`).join('')}</tbody>
     </table>`;
   }
 
   async function togglePlan(planId, active) {
     if (!_sb) return;
-    await _sb.from('plans').update({ is_active: active }).eq('id', planId);
+    const { error } = await _sb.from('plans').update({ is_active: active }).eq('id', planId);
     loadPlans();
+    if (error) {
+      console.error('[Admin.togglePlan]', error.message);
+      toast('Could not change that plan — nothing was changed.', 3500);
+      return;
+    }
     toast(active ? `${planId} plan is now live!` : `${planId} plan disabled.`, 2000);
   }
 
@@ -916,18 +949,22 @@ const AdminPanel = (() => {
 
   async function loadReports() {
     const el = document.getElementById('admin-reports-list');
-    if (el) el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
-    // Ensure question bank is fully loaded across all grades so the live lookup works
+    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
+    // Ensure question bank is fully loaded across all grades so the live lookup
+    // works. loadAllForGrade, NOT loadForStudent: the latter now resolves once
+    // the child's active subject is in and prefetches the rest in the
+    // background, which is right for a child and wrong here — a report can name
+    // a question in any subject, and the lookup runs the moment this resolves.
     if (typeof QuestionLoader !== 'undefined') {
       await Promise.allSettled([
-        QuestionLoader.loadForStudent(4),
-        QuestionLoader.loadForStudent(5),
-        QuestionLoader.loadForStudent(6),
+        QuestionLoader.loadAllForGrade(4),
+        QuestionLoader.loadAllForGrade(5),
+        QuestionLoader.loadAllForGrade(6),
       ]);
     }
     const reports = await Store.loadReports();
     if (!reports.length) {
-      if (el) el.innerHTML = '<p class="text-sm text-gray-400 text-center py-6">No reports yet.</p>';
+      if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No reports yet.</p>';
       return;
     }
     if (el) el.innerHTML = reports.map(r => {
@@ -978,7 +1015,7 @@ const AdminPanel = (() => {
         <div class="flex justify-between items-start gap-2 mb-3">
           <div>
             <span class="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">${_esc(r.question_id || '-')}</span>
-            ${mode ? `<span class="ml-1 text-xs text-gray-400">(${_esc(mode)} mode)</span>` : ''}
+            ${mode ? `<span class="ml-1 text-xs text-gray-500 dark:text-gray-400">(${_esc(mode)} mode)</span>` : ''}
           </div>
           <span class="text-xs ${statusCls} px-2 py-0.5 rounded-full shrink-0">${_esc(r.status || 'open')}</span>
         </div>
@@ -986,7 +1023,7 @@ const AdminPanel = (() => {
         <!-- Subject / chapter / difficulty -->
         <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-0.5">${_esc(subjectLabel)}</p>
         ${chapterName ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Chapter: ${_esc(chapterName)}</p>` : ''}
-        ${diff ? `<p class="text-xs text-gray-400 mb-2">${_esc(_diffBadge(diff))}</p>` : ''}
+        ${diff ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-2">${_esc(_diffBadge(diff))}</p>` : ''}
 
         <!-- Question text -->
         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 mb-3">
@@ -1010,7 +1047,7 @@ const AdminPanel = (() => {
         <div class="flex justify-between items-center flex-wrap gap-2">
           <div>
             ${studentName ? `<p class="text-xs text-gray-500 dark:text-gray-400">Reported by: <span class="font-medium">${_esc(studentName)}</span></p>` : ''}
-            <p class="text-xs text-gray-400">${new Date(r.created_at).toLocaleString()}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleString()}</p>
           </div>
           ${isOpen ? `<button onclick="Admin.resolveReport('${_esc(r.id)}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">Mark resolved</button>` : ''}
         </div>

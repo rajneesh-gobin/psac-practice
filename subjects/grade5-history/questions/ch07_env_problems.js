@@ -19,7 +19,7 @@ const _SVG_EROSION = `<svg viewBox="0 0 270 100" width="270" height="100" style=
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5hg-ep-001', chapterId:'env-problems', difficulty:1,
+  makeMCQ({ id:'g5hg-ep-001', chapterId:'env-problems', subsection:'beach_erosion', difficulty:1,
     question:'What is BEACH EROSION?',
     options:[
       'The building up of more sand on a beach over time',
@@ -31,7 +31,7 @@ STATIC_QUESTIONS.push(
     hint:'Erosion means wearing away - something is being removed.',
     explanation:'<b>Beach erosion</b> is the gradual removal of sand and rock from a beach by wave action, currents and wind. Over time, this can cause beaches to shrink and disappear.' }),
 
-  makeMCQ({ id:'g5hg-ep-002', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-002', chapterId:'env-problems', subsection:'pollution', difficulty:2,
     question:`${_SVG_EROSION}Looking at the diagram, what is causing the beach sand to be removed?`,
     options:[
       'Heavy rainfall from above',
@@ -43,7 +43,7 @@ STATIC_QUESTIONS.push(
     hint:'Look at the red dashed line and the arrows in the diagram.',
     explanation:'The diagram shows how <b>wave action</b> from the sea wears away the beach sand. Waves strike the shoreline repeatedly, loosening and carrying sand away, causing beach erosion.' }),
 
-  makeMCQ({ id:'g5hg-ep-003', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-003', chapterId:'env-problems', subsection:'beach_erosion', difficulty:2,
     question:'Which of the following CAUSES beach erosion to get worse?',
     options:[
       'Planting mangrove trees along the coast',
@@ -55,7 +55,7 @@ STATIC_QUESTIONS.push(
     hint:'If you take sand away, there is less beach left.',
     explanation:'Removing sand from beaches (for construction of buildings and roads) makes beach erosion much worse - there is less material to replace what waves wash away. It is now illegal to remove sand from beaches in Mauritius.' }),
 
-  makeMCQ({ id:'g5hg-ep-004', chapterId:'env-problems', difficulty:1,
+  makeMCQ({ id:'g5hg-ep-004', chapterId:'env-problems', subsection:'soil_erosion', difficulty:1,
     question:'What is SOIL EROSION?',
     options:[
       'The process of adding fertilisers to improve soil quality',
@@ -67,7 +67,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about what happens to bare soil when it rains heavily.',
     explanation:'<b>Soil erosion</b> is the removal and transport of the topsoil (the most fertile upper layer) by wind, rain or running water. Once topsoil is lost, the land becomes less fertile.' }),
 
-  makeMCQ({ id:'g5hg-ep-005', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-005', chapterId:'env-problems', subsection:'soil_erosion', difficulty:2,
     question:'How does DEFORESTATION lead to increased soil erosion?',
     options:[
       'Trees make the soil wetter, which causes it to erode faster',
@@ -79,13 +79,13 @@ STATIC_QUESTIONS.push(
     hint:'What do roots do for soil?',
     explanation:'Tree roots <b>bind the soil together</b> and slow rainwater runoff. When trees are cut down, their roots are gone, leaving soil exposed. Heavy rain then washes the unprotected topsoil away very easily.' }),
 
-  makeTF({ id:'g5hg-ep-006', chapterId:'env-problems', difficulty:1,
+  makeTF({ id:'g5hg-ep-006', chapterId:'env-problems', subsection:'beach_erosion', difficulty:1,
     question:'Mangrove trees along the coast help PREVENT beach erosion.',
     answer:true,
     hint:'Mangroves have tangled roots that grip the soil at the water\'s edge.',
     explanation:'True. <b>Mangrove trees</b> grow along tropical coastlines. Their dense root systems trap sediment, slow waves, and hold the shoreline in place - significantly reducing beach and coastal erosion.' }),
 
-  makeMCQ({ id:'g5hg-ep-007', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-007', chapterId:'env-problems', subsection:'pollution', difficulty:2,
     question:'What happens to the coral reef around Mauritius when the lagoon becomes polluted with sewage and chemicals?',
     options:[
       'The coral reef grows bigger because pollution adds nutrients',
@@ -97,7 +97,7 @@ STATIC_QUESTIONS.push(
     hint:'Coral reefs are very sensitive to changes in water quality.',
     explanation:'Pollution (sewage, chemicals, fertiliser runoff) reduces water quality and causes <b>coral bleaching and death</b>. A damaged reef means fewer fish and less protection for the coastline from waves.' }),
 
-  makeMCQ({ id:'g5hg-ep-008', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-008', chapterId:'env-problems', subsection:'beach_erosion', difficulty:2,
     question:'Which of the following is a SOLUTION to reduce beach erosion in Mauritius?',
     options:[
       'Remove mangroves to allow more wave energy to reach the beach',
@@ -109,7 +109,7 @@ STATIC_QUESTIONS.push(
     hint:'To stop erosion, you need to block or reduce the energy of the waves.',
     explanation:'Building <b>sea walls and groynes</b> dissipates wave energy before it reaches the beach, and <b>replanting mangroves</b> provides a natural coastal barrier. Both are effective ways to reduce beach erosion.' }),
 
-  makeMCQ({ id:'g5hg-ep-009', chapterId:'env-problems', difficulty:1,
+  makeMCQ({ id:'g5hg-ep-009', chapterId:'env-problems', subsection:'pollution', difficulty:1,
     question:'Which of the following actions causes WATER POLLUTION in the Mauritian lagoon?',
     options:[
       'Swimming and snorkelling in the lagoon',
@@ -121,7 +121,7 @@ STATIC_QUESTIONS.push(
     hint:'Pollution means harmful substances are added to the environment.',
     explanation:'<b>Untreated sewage</b> and industrial chemicals discharged into the sea pollute the lagoon. This harms marine life (fish, coral, seagrass) and makes the water unsafe for swimming and fishing.' }),
 
-  makeMCQ({ id:'g5hg-ep-010', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-010', chapterId:'env-problems', subsection:'conservation', difficulty:2,
     question:'Why is it important for Mauritius to protect its environment and natural landscapes?',
     options:[
       'Only because it looks pretty',
@@ -137,7 +137,7 @@ STATIC_QUESTIONS.push(
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5hg-ep-011', chapterId:'env-problems', difficulty:1,
+  makeMCQ({ id:'g5hg-ep-011', chapterId:'env-problems', subsection:'pollution', difficulty:1,
     question:'What is a CYCLONE?',
     options:[
       'A very cold snowstorm that occurs in winter',
@@ -149,7 +149,7 @@ STATIC_QUESTIONS.push(
     hint:'Mauritius has a "cyclone season" from November to April.',
     explanation:'A <b>cyclone</b> is a powerful tropical storm system with very strong spiralling winds (over 120 km/h), heavy rainfall and a calm "eye" at the centre. In the Indian Ocean, cyclones are common during the summer season (November–April) and can cause serious damage to Mauritius.' }),
 
-  makeMCQ({ id:'g5hg-ep-012', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-012', chapterId:'env-problems', subsection:'beach_erosion', difficulty:2,
     question:'How do cyclones cause COASTAL EROSION in Mauritius?',
     options:[
       'Cyclones bring drought that dries and cracks the beach sand',
@@ -161,13 +161,13 @@ STATIC_QUESTIONS.push(
     hint:'Cyclone winds generate very large, destructive waves.',
     explanation:'During a cyclone, <b>huge storm waves</b> strike the coastline with great energy. These waves remove large amounts of sand, erode the shore, damage coral reefs and can destroy coastal infrastructure. A single major cyclone can cause years\' worth of beach erosion in just a few days.' }),
 
-  makeTF({ id:'g5hg-ep-013', chapterId:'env-problems', difficulty:1,
+  makeTF({ id:'g5hg-ep-013', chapterId:'env-problems', subsection:'pollution', difficulty:1,
     question:'Climate change and rising sea levels are a threat to low-lying coastal areas in Mauritius.',
     answer:true,
     hint:'Think about what happens to beaches and lagoons if sea level rises.',
     explanation:'True. <b>Climate change</b> is causing sea levels to rise globally. In Mauritius, this threatens low-lying coastal areas, beaches and the coral reef. Higher sea levels increase flooding during cyclones, worsen beach erosion and could damage the reef. Small island states like Mauritius are among the most vulnerable.' }),
 
-  makeMCQ({ id:'g5hg-ep-014', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-014', chapterId:'env-problems', subsection:'pollution', difficulty:2,
     question:'Fertilisers used by sugar cane farmers sometimes wash into rivers and the lagoon. What environmental problem does this cause?',
     options:[
       'The fertilisers make the fish grow too large to catch',
@@ -179,7 +179,7 @@ STATIC_QUESTIONS.push(
     hint:'Too much of a good thing - nutrients that help plants can harm the sea.',
     explanation:'When fertiliser-rich water enters the lagoon, excess nitrogen and phosphorus cause <b>algal blooms</b> - rapid growth of algae. Dense algae block sunlight from reaching the coral reef. Coral and seagrass die without sunlight, and decomposing algae use up dissolved oxygen, suffocating fish. This process is called <b>eutrophication</b>.' }),
 
-  makeMCQ({ id:'g5hg-ep-015', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-015', chapterId:'env-problems', subsection:'pollution', difficulty:2,
     question:'In 2020, the bulk carrier MV Wakashio ran aground and spilt oil near Mahébourg in south-east Mauritius. What type of environmental pollution resulted?',
     options:[
       'Air pollution from the ship\'s engines',
@@ -191,7 +191,7 @@ STATIC_QUESTIONS.push(
     hint:'The oil formed a dark slick across the sea surface.',
     explanation:'The MV Wakashio disaster caused <b>marine oil pollution</b> in the lagoon near Mahébourg. Oil is toxic to fish, seabirds (it coats their feathers), coral and marine mammals. The spill devastated the local marine ecosystem, killed hundreds of dolphins and birds, and severely impacted fishermen and tourism businesses.' }),
 
-  makeMCQ({ id:'g5hg-ep-016', chapterId:'env-problems', difficulty:3,
+  makeMCQ({ id:'g5hg-ep-016', chapterId:'env-problems', subsection:'beach_erosion', difficulty:3,
     question:'A coastal village has lost 50 metres of beach over 20 years. They consider (A) building a concrete sea wall, or (B) replanting mangroves. Compare ONE advantage of each approach.',
     options:[
       'Sea wall: immediately stops wave erosion; Mangroves: slower but natural - they trap sediment, protect the reef, provide fish nursery habitat and cost less long-term',
@@ -203,7 +203,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about short-term vs long-term, and hard engineering vs nature-based solutions.',
     explanation:'<b>Sea wall:</b> provides immediate protection by reflecting wave energy - quick to build. <b>Mangroves:</b> a natural solution that traps sediment (rebuilds beach over time), dissipates wave energy, provides fish nursery habitat, supports biodiversity, and requires no maintenance once established. Mangroves are cheaper long-term and work WITH the ecosystem. Many plans combine both approaches.' }),
 
-  makeMCQ({ id:'g5hg-ep-017', chapterId:'env-problems', difficulty:3,
+  makeMCQ({ id:'g5hg-ep-017', chapterId:'env-problems', subsection:'pollution', difficulty:3,
     question:'Why is plastic pollution in the ocean a particular danger to sea turtles?',
     options:[
       'Turtles confuse plastic bags for jellyfish and eat them - plastic blocks their digestive system and they starve',
@@ -215,7 +215,7 @@ STATIC_QUESTIONS.push(
     hint:'What do sea turtles eat that looks similar to a floating plastic bag?',
     explanation:'Sea turtles eat jellyfish. Floating <b>plastic bags</b> look almost identical to jellyfish underwater. Turtles swallow plastic bags, which cannot be digested - the plastic fills their stomach, causing them to feel "full" while actually starving. The plastic also blocks their intestines and is fatal. This is why reducing single-use plastic bags is critical for turtle conservation.' }),
 
-  makeMCQ({ id:'g5hg-ep-018', chapterId:'env-problems', difficulty:4,
+  makeMCQ({ id:'g5hg-ep-018', chapterId:'env-problems', subsection:'pollution', difficulty:4,
     question:'The Wakashio oil spill (2020) affected fishermen, coral reefs, birds, tourism and local communities simultaneously. What does this show about environmental problems?',
     options:[
       'Environmental damage is usually limited to one specific species or industry at a time',
@@ -227,7 +227,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about who and what depends on the health of the lagoon.',
     explanation:'The Wakashio spill shows that ecosystems are <b>interconnected</b>: oil damaged coral reefs → fish populations collapsed → fishermen lost income → food supply was disrupted → coastal tourism dropped → local businesses lost revenue → dolphins and birds died. This chain reaction shows that environmental damage rarely stays isolated - it ripples through ecology, economy and society.' }),
 
-  makeMCQ({ id:'g5hg-ep-019', chapterId:'env-problems', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-019', chapterId:'env-problems', subsection:'pollution', difficulty:2,
     question:'Which individual action helps REDUCE water pollution in the Mauritian lagoon?',
     options:[
       'Pour used cooking oil down the drain',
