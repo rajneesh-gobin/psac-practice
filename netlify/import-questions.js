@@ -122,21 +122,28 @@ async function upsertBatch(rows) {
   }
 }
 
-// Fetch IDs that are marked protected in the DB — import will skip them.
-// Returns an empty Set on any error so a missing column or unreachable DB
+// Fetch protected questions from DB — returns a Map of id → data.
+// Returns an empty Map on any error so a missing column or unreachable DB
 // never aborts the import; it just stops protecting (fail-open).
-async function fetchProtectedIds(ids) {
-  if (!ids.length) return new Set();
+async function fetchProtectedQuestions(ids) {
+  if (!ids.length) return new Map();
   try {
     const inList = ids.map(id => encodeURIComponent(id)).join(',');
     const r = await fetch(
-      `${SB_URL}/rest/v1/questions?id=in.(${inList})&protected=eq.true&select=id&limit=${ids.length}`,
+      `${SB_URL}/rest/v1/questions?id=in.(${inList})&protected=eq.true&select=id,data&limit=${ids.length}`,
       { headers: { apikey: SB_SRK, Authorization: `Bearer ${SB_SRK}` } }
     );
-    if (!r.ok) return new Set();
+    if (!r.ok) return new Map();
     const rows = await r.json().catch(() => []);
-    return new Set(rows.map(r => r.id));
-  } catch(_) { return new Set(); }
+    return new Map(rows.map(r => [r.id, r.data]));
+  } catch(_) { return new Map(); }
+}
+
+// Compare the content fields that matter — NOT options (shuffled on every import).
+function _questionsMatch(jsQ, dbQ) {
+  if (!dbQ) return false;
+  const fields = ['question', 'answer', 'hint', 'explanation', 'difficulty', 'subsection', 'type', 'chapterId'];
+  return fields.every(f => (jsQ[f] ?? '') === (dbQ[f] ?? ''));
 }
 
 async function upsertAll(rows, label) {
@@ -184,12 +191,21 @@ async function upsertAll(rows, label) {
       const gradeNum = parseInt(subjectId.match(/grade(\d)/)?.[1] || '0');
       const now      = new Date().toISOString();
 
-      // Skip questions already in DB that are marked protected (admin-edited).
-      const allIds      = buf.map(q => q.id);
-      const protectedIds = await fetchProtectedIds(allIds);
-      if (protectedIds.size) {
-        console.log(`  ⚠ Skipping ${protectedIds.size} protected question(s) in ${subjectId}`);
+      // Skip questions marked protected in DB (admin-edited).
+      // Warn only when the JS file version actually differs from the DB version —
+      // if they match, the protection is silent (no noise for unchanged questions).
+      const allIds       = buf.map(q => q.id);
+      const protectedMap = await fetchProtectedQuestions(allIds);
+      const protectedIds = new Set(protectedMap.keys());
+
+      for (const q of buf) {
+        if (!protectedIds.has(q.id)) continue;
+        if (!_questionsMatch(q, protectedMap.get(q.id))) {
+          console.log(`  ⚠ PROTECTED (differs from JS file): ${q.id} — keeping DB version`);
+        }
+        // If content matches: skip silently (no warning needed)
       }
+
       const toImport = buf.filter(q => !protectedIds.has(q.id));
 
       const practiceRows = toImport.map(q => ({
