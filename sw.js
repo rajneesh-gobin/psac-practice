@@ -7,9 +7,10 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const CACHE_VERSION = 'v13';
-const SHELL_CACHE   = `psac-shell-${CACHE_VERSION}`;
-const DATA_CACHE    = `psac-data-${CACHE_VERSION}`;
+const SHELL_VERSION = 'shell-v1';
+const DATA_VERSION  = 'data-v13';
+const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
+const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
 
 // Files to pre-cache on install (the app shell).
 //

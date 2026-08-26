@@ -148,6 +148,12 @@ exports.handler = async (event) => {
   // Batch endpoint: ?all=1&grade=N — returns all subjects for the grade in one call
   if (batchAll && batchGrade) {
     try {
+      // Fast path: use pre-built bundle from build step
+      const bundlePath = path.join(__dirname, '..', 'question-bundles', `grade${batchGrade}.json`);
+      if (fs.existsSync(bundlePath)) {
+        return { statusCode: 200, headers, body: fs.readFileSync(bundlePath, 'utf8') };
+      }
+      // Fallback: build dynamically (local dev or bundle missing)
       const subjectsDir = path.join(ROOT, 'subjects');
       const allDirs = fs.readdirSync(subjectsDir)
         .filter(d => d.startsWith(`grade${batchGrade}-`) && fs.statSync(path.join(subjectsDir, d)).isDirectory());
@@ -167,6 +173,21 @@ exports.handler = async (event) => {
   }
 
   try {
+    // Fast path: use pre-built bundle from build step
+    const gradeMatch = subjectId.match(/grade(\d)/);
+    if (gradeMatch) {
+      const bundlePath = path.join(__dirname, '..', 'question-bundles', `grade${gradeMatch[1]}.json`);
+      if (fs.existsSync(bundlePath)) {
+        const bundle = JSON.parse(fs.readFileSync(bundlePath, 'utf8'));
+        if (bundle[subjectId]) {
+          let questions = bundle[subjectId];
+          if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);
+          if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
+          return { statusCode: 200, headers, body: JSON.stringify(questions) };
+        }
+      }
+    }
+    // Fallback: build dynamically
     let questions = _loadSubject(subjectId);
 
     if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);

@@ -85,7 +85,7 @@ const Store = (() => {
 
   async function getMyFamily(parentId) {
     if (!_sb || !parentId) return null;
-    const { data, error } = await _sb.from('families').select('*').eq('parent_id', parentId).maybeSingle();
+    const { data, error } = await _sb.from('families').select('id, family_name, family_code, parent_id, created_at').eq('parent_id', parentId).maybeSingle();
     if (error) console.warn('[Store.getMyFamily]', error.message);
     return data || null;
   }
@@ -94,7 +94,7 @@ const Store = (() => {
     if (!_sb) return null;
     const { data, error } = await _sb.from('families')
       .insert({ parent_id: parentId, family_name: familyName })
-      .select().single();
+      .select('id, family_name, family_code, parent_id').single();
     if (error) console.error('[Store.createFamily]', error);
     return error ? null : data;
   }
@@ -358,7 +358,7 @@ const Store = (() => {
     if (!_sb) return null;
     const { data, error } = await _sb.from('profiles')
       .insert({ id: userId, role, full_name: fullName })
-      .select().single();
+      .select('id, role, full_name, disabled, expires_at, is_super_admin, teacher_status, teacher_tier').single();
     return error ? null : data;
   }
 
@@ -418,7 +418,7 @@ const Store = (() => {
   async function loadAssignments(studentId) {
     if (!_sb) return [];
     const { data } = await _sb.from('student_assignments')
-      .select('*').eq('student_id', studentId)
+      .select('id, subject_id, chapter_id, difficulty, note, show_answers, created_at').eq('student_id', studentId)
       .is('completed_at', null)
       .order('created_at', { ascending: false });
     return data || [];
@@ -432,7 +432,7 @@ const Store = (() => {
       difficulty: difficulty ? parseInt(difficulty) : null,
       note: note || null,
       show_answers: showAnswers !== false,
-    }).select().single();
+    }).select('id, subject_id, chapter_id, difficulty, note, show_answers, created_at').single();
     return error ? null : data;
   }
 

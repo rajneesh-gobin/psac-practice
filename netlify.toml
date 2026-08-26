@@ -1,4 +1,5 @@
 [build]
+  command   = "node netlify/build-questions.js"
   functions = "netlify/functions"
   publish   = "."
 

@@ -103,7 +103,7 @@ const Calendar = (() => {
     }
 
     const { data } = await _sb.from('schedule_entries')
-      .select('*')
+      .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id')
       .eq('schedule_id', _scheduleId)
       .order('date', { ascending: true });
 
@@ -320,7 +320,7 @@ const Calendar = (() => {
       const { data, error } = await _sb.from('schedule_entries')
         .update({ date, topic_label: label, entry_type: type, notes: notes || null })
         .eq('id', _editingEntryId)
-        .select().single();
+        .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id').single();
       if (error) { _showErr(errEl, 'Could not update. Please try again.'); return; }
       const idx = _entries.findIndex(e => e.id === _editingEntryId);
       if (idx >= 0 && data) _entries[idx] = data;
@@ -341,7 +341,7 @@ const Calendar = (() => {
       schedule_id: sid, student_id: _studentId,
       date, topic_label: label, entry_type: type,
       notes: notes || null, duration_mins: null,
-    }).select().single();
+    }).select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id').single();
     if (error) { _showErr(errEl, 'Could not save. Please try again.'); return; }
 
     _entries.push(data);
@@ -708,7 +708,7 @@ const Calendar = (() => {
 
     if (scheds?.length) {
       const { data } = await _sb.from('schedule_entries')
-        .select('*')
+        .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id')
         .eq('schedule_id', scheds[0].id)
         .gte('date', today)
         .order('date', { ascending: true })

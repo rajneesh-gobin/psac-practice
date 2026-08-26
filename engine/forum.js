@@ -322,8 +322,8 @@ const Forum = (() => {
     if (repliesEl) repliesEl.innerHTML = '';
 
     const [pr, rr, gur] = await Promise.all([
-      _sb.from('forum_posts').select('*').eq('id', postId).maybeSingle(),
-      _sb.from('forum_replies').select('*').eq('post_id', postId).order('created_at', { ascending: true }),
+      _sb.from('forum_posts').select('id, title, body, author_name, author_type, created_at, status').eq('id', postId).maybeSingle(),
+      _sb.from('forum_replies').select('id, body, author_name, author_type, created_at').eq('post_id', postId).order('created_at', { ascending: true }),
       _sb.auth.getUser(),
     ]);
 

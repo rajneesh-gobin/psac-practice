@@ -2,6 +2,9 @@
 *.pdf
 *.PDF
 
+# Pre-built question bundles (generated at deploy time by netlify/build-questions.js)
+netlify/question-bundles/
+
 # OS / editor noise
 .DS_Store
 Thumbs.db
