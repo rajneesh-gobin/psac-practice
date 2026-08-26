@@ -695,3 +695,63 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 .pin-key-btn:active { transform: scale(0.93); }
 .dark .pin-key-btn          { color: #f9fafb; background-color: #1f2937; }
 .dark .pin-key-btn:hover    { background-color: #374151; }
+
+/* ── Onboarding hint callout ─────────────────────── */
+#hint-callout {
+  position: fixed;
+  z-index: 9999;
+  max-width: 240px;
+  background: #4f46e5;
+  color: #fff;
+  border-radius: 14px;
+  padding: 12px 14px 12px 12px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  box-shadow: 0 8px 28px rgba(79,70,229,0.45);
+  pointer-events: auto;
+  animation: hint-pop 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+#hint-callout.hint-hidden { display: none; }
+#hint-callout .hint-close {
+  position: absolute; top: 6px; right: 8px;
+  background: none; border: none; color: rgba(255,255,255,0.75);
+  font-size: 1rem; cursor: pointer; line-height: 1; padding: 0;
+}
+#hint-callout .hint-close:hover { color: #fff; }
+#hint-callout::after {
+  content: '';
+  position: absolute;
+  border: 8px solid transparent;
+}
+#hint-callout.arrow-top::after {
+  top: -16px; left: 20px;
+  border-bottom-color: #4f46e5;
+}
+#hint-callout.arrow-bottom::after {
+  bottom: -16px; left: 20px;
+  border-top-color: #4f46e5;
+}
+@keyframes hint-pop {
+  from { opacity: 0; transform: scale(0.85) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Pulsing ring on the hinted target element */
+.hint-pulse {
+  position: relative;
+}
+.hint-pulse::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  border: 2.5px solid #6366f1;
+  animation: hint-pulse-ring 1.4s ease-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes hint-pulse-ring {
+  0%   { opacity: 1; transform: scale(1); }
+  70%  { opacity: 0; transform: scale(1.15); }
+  100% { opacity: 0; transform: scale(1.15); }
+}

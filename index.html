@@ -1766,7 +1766,7 @@
         <div class="text-7xl mb-4">👶</div>
         <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Welcome! Let's add your first child.</h3>
         <p class="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-xs mx-auto">Each child gets their own progress tracker, assignments, and study schedule.</p>
-        <button onclick="Auth.addStudent()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm shadow-lg">➕ Add Your First Child</button>
+        <button id="pd-no-children-add-btn" onclick="Auth.addStudent()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm shadow-lg">➕ Add Your First Child</button>
       </div>
 
       <!-- ── Children grid ── -->
@@ -1855,7 +1855,7 @@
               <input type="checkbox" id="pd-assign-show-answers" checked class="w-4 h-4 accent-blue-500 cursor-pointer">
               <span class="text-sm text-gray-700 dark:text-gray-300">Show correct answers after each question</span>
             </label>
-            <button onclick="Auth.addAssignment()" class="btn-primary w-full text-sm">📋 Assign Work</button>
+            <button id="pd-assign-btn" onclick="Auth.addAssignment()" class="btn-primary w-full text-sm">📋 Assign Work</button>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
             <h3 class="font-bold text-gray-800 dark:text-white mb-3">Current Assignments</h3>
@@ -1920,6 +1920,20 @@
             </div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mb-3">Toggle chapters off to lock them from the student</div>
             <div id="pd-chapter-locks"></div>
+          </div>
+
+          <!-- In-app hints toggle -->
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-bold text-gray-800 dark:text-white text-sm">💡 In-app Hints</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Show first-time tip callouts to guide the student when they log in</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="pd-hints-toggle" class="sr-only peer" onchange="Auth.toggleHintsDisabled()">
+                <div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-500 rounded-full peer transition-colors peer-focus:ring-2 peer-focus:ring-blue-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+              </label>
+            </div>
           </div>
 
           <!-- Study reminder -->
@@ -2594,6 +2608,12 @@
         class="absolute -top-3 -right-3 w-9 h-9 flex items-center justify-center bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-full shadow-lg text-lg font-bold hover:bg-gray-100 transition-colors"
         aria-label="Close">✕</button>
     </div>
+  </div>
+
+  <!-- Onboarding hint callout (positioned by JS) -->
+  <div id="hint-callout" class="hint-hidden" role="tooltip">
+    <button class="hint-close" onclick="_dismissHint()" aria-label="Dismiss hint">✕</button>
+    <span id="hint-callout-text"></span>
   </div>
 </body>
 </html>

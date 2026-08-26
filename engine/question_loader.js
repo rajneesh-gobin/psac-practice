@@ -66,6 +66,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-english/questions/ch07_vocabulary.js',
       'subjects/grade5-english/questions/ch08_spelling.js',
       'subjects/grade5-english/questions/ch09_passages.js',
+      'subjects/grade5-english/questions/topup_g5_english.js',
     ],
     'grade5-science': [
       'subjects/grade5-science/questions/ch02_plants.js',
@@ -87,6 +88,8 @@ const QuestionLoader = (() => {
       'subjects/grade5-science/questions/past_paper_2018.js',
       'subjects/grade5-science/questions/past_paper_2017.js',
       'subjects/grade5-science/questions/past_paper_2016.js',
+      // top-up
+      'subjects/grade5-science/questions/topup_g5_science.js',
     ],
     'grade5-history': [
       'subjects/grade5-history/questions/ch01_discovery.js',
@@ -108,6 +111,8 @@ const QuestionLoader = (() => {
       'subjects/grade5-history/questions/past_paper_2022.js',
       'subjects/grade5-history/questions/past_paper_2021.js',
       'subjects/grade5-history/questions/past_paper_2020.js',
+      // top-up
+      'subjects/grade5-history/questions/topup_g5_history.js',
     ],
     'grade6-science': [
       'subjects/grade6-science/questions/ch01_g6_air.js',
@@ -127,6 +132,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-science/questions/past_paper_2022.js',
       'subjects/grade6-science/questions/past_paper_2021.js',
       'subjects/grade6-science/questions/past_paper_2019.js',
+      // top-up
+      'subjects/grade6-science/questions/topup_g6_science.js',
     ],
     'grade6-history': [
       'subjects/grade6-history/questions/ch01_g6_slaves_immigrants.js',
@@ -145,6 +152,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-history/questions/past_paper_2022.js',
       'subjects/grade6-history/questions/past_paper_2021.js',
       'subjects/grade6-history/questions/past_paper_2019.js',
+      // top-up
+      'subjects/grade6-history/questions/topup_g6_history.js',
     ],
     'grade6-maths': [
       'subjects/grade6-maths/questions/ch01_g6_numeration.js',
@@ -164,6 +173,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/past_paper_2022.js',
       'subjects/grade6-maths/questions/past_paper_2021.js',
       'subjects/grade6-maths/questions/past_paper_2019.js',
+      // top-up
+      'subjects/grade6-maths/questions/topup_g6_maths.js',
     ],
     'grade6-english': [
       'subjects/grade6-english/questions/ch01_nouns.js',
@@ -179,6 +190,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-english/questions/past_paper_2022.js',
       'subjects/grade6-english/questions/past_paper_2021.js',
       'subjects/grade6-english/questions/past_paper_2019.js',
+      // top-up
+      'subjects/grade6-english/questions/topup_g6_english.js',
     ],
     'grade6-french': [
       'subjects/grade6-french/questions/ch01_imparfait.js',
@@ -205,6 +218,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-maths/questions/ch04_g4_geometry.js',
       'subjects/grade4-maths/questions/ch05_g4_measures.js',
       'subjects/grade4-maths/questions/ch06_g4_data.js',
+      // top-up
+      'subjects/grade4-maths/questions/topup_g4_maths.js',
     ],
     'grade4-english': [
       'subjects/grade4-english/questions/ch01_g4_nouns.js',
@@ -214,6 +229,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-english/questions/ch05_g4_comprehension.js',
       'subjects/grade4-english/questions/ch06_g4_vocabulary.js',
       'subjects/grade4-english/questions/ch07_g4_passages.js',
+      // top-up
+      'subjects/grade4-english/questions/topup_g4_english.js',
     ],
     'grade4-science': [
       'subjects/grade4-science/questions/ch01_g4_living_things.js',
@@ -227,6 +244,8 @@ const QuestionLoader = (() => {
       // @enrichment — bonus content, derived from syllabus
       'subjects/grade4-science/questions/enrichment_g4sci_animals.js',
       'subjects/grade4-science/questions/enrichment_g4sci_equipment.js',
+      // top-up
+      'subjects/grade4-science/questions/topup_g4_science.js',
     ],
     'grade4-french': [
       'subjects/grade4-french/questions/ch01_g4_vocabulaire.js',
@@ -239,6 +258,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/ch08_g4_imparfait.js',
       'subjects/grade4-french/questions/ch09_g4_textes.js',
       'subjects/grade4-french/questions/ch10_g4_images.js',
+      // top-up
+      'subjects/grade4-french/questions/topup_g4_french.js',
     ],
     'grade4-history': [
       'subjects/grade4-history/questions/ch01_g4_locality.js',
@@ -251,6 +272,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-history/questions/enrichment_g4_explorers.js',
       'subjects/grade4-history/questions/enrichment_g4_mauritius.js',
       'subjects/grade4-history/questions/enrichment_g4_world.js',
+      // top-up
+      'subjects/grade4-history/questions/topup_g4_history.js',
     ],
   };
 
@@ -275,7 +298,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 5;
+  const _CACHE_VERSION = 7;
   const _cacheKey = subjectId => `mm_qc_v${_CACHE_VERSION}_${subjectId}`;
 
   // Drop caches written by any earlier version, so a bump reclaims the space

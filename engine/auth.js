@@ -1589,6 +1589,13 @@ const Auth = (() => {
     toast(DB.restrictions.crossGradePractice ? '📚 Cross-grade revision enabled.' : '🔒 Cross-grade revision off.', 1500);
   }
 
+  async function toggleHintsDisabled() {
+    DB.restrictions = DB.restrictions || { lockedChapters:[], maxDifficulty:4, examDisabled:false };
+    DB.restrictions.hintsDisabled = !DB.restrictions.hintsDisabled;
+    if (ACTIVE_STUDENT_ID) await Store.updateStudent(ACTIVE_STUDENT_ID, { settings: DB.restrictions });
+    toast(DB.restrictions.hintsDisabled ? '💡 In-app hints off.' : '💡 In-app hints on.', 1500);
+  }
+
   // ── Auth helpers ───────────────────────────────
   function _showAuthError(msg) {
     const el = _el('auth-error');
@@ -1646,7 +1653,7 @@ const Auth = (() => {
     isSuperAdmin: () => _isSuperAdmin,
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
-    toggleCrossGradeSearch, toggleCrossGradePractice,
+    toggleCrossGradeSearch, toggleCrossGradePractice, toggleHintsDisabled,
   };
 })();
 

@@ -383,6 +383,96 @@ function _renderResumeBanner() {
     </div>`;
 }
 
+// ── Onboarding hint callout ─────────────────────────────────────────────────
+const _HINTS_KEY = 'psac_hints_v1';
+
+function _getHints() {
+  try { return JSON.parse(localStorage.getItem(_HINTS_KEY) || '{}'); } catch { return {}; }
+}
+
+function _hintDone(key) {
+  return !!_getHints()[key];
+}
+
+function _markHintDone(key) {
+  const h = _getHints();
+  h[key] = true;
+  try { localStorage.setItem(_HINTS_KEY, JSON.stringify(h)); } catch {}
+}
+
+let _currentHintTarget = null;
+
+function _showHint(targetId, text, key) {
+  if (_hintDone(key)) return;
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  const callout = document.getElementById('hint-callout');
+  const textEl  = document.getElementById('hint-callout-text');
+  if (!callout || !textEl) return;
+
+  _currentHintTarget = { key, targetId };
+  textEl.textContent = text;
+
+  // Add pulse ring to target
+  target.classList.add('hint-pulse');
+
+  // Position callout below or above the target
+  const rect = target.getBoundingClientRect();
+  const gap  = 12;
+  callout.className = 'arrow-top';
+  callout.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 260)) + 'px';
+
+  const spaceBelow = window.innerHeight - rect.bottom;
+  if (spaceBelow >= 120) {
+    callout.style.top       = (rect.bottom + gap + window.scrollY) + 'px';
+    callout.style.transform = '';
+    callout.classList.add('arrow-top');
+    callout.classList.remove('arrow-bottom');
+  } else {
+    callout.style.top       = (rect.top - 10 + window.scrollY) + 'px';
+    callout.style.transform = 'translateY(-100%)';
+    callout.classList.add('arrow-bottom');
+    callout.classList.remove('arrow-top');
+  }
+
+  callout.classList.remove('hint-hidden');
+}
+
+function _dismissHint() {
+  const callout = document.getElementById('hint-callout');
+  if (callout) callout.classList.add('hint-hidden');
+  if (_currentHintTarget) {
+    _markHintDone(_currentHintTarget.key);
+    const t = document.getElementById(_currentHintTarget.targetId);
+    if (t) t.classList.remove('hint-pulse');
+    _currentHintTarget = null;
+  }
+}
+
+function _checkKidHints() {
+  if (DB.restrictions?.hintsDisabled) return;
+  if ((DB.stats?.totalAttempted || 0) > 0) return;
+  const key = 'kid_start_' + (ACTIVE_STUDENT_ID || 'x');
+  setTimeout(() => _showHint('btn-chapter-mode', 'Tap here to start practising! Pick a chapter and get going. 🚀', key), 600);
+}
+
+function _checkParentHints() {
+  const students = (typeof Auth !== 'undefined' && Auth.getStudents) ? Auth.getStudents() : [];
+  if (students.length === 0) {
+    setTimeout(() => _showHint('pd-no-children-add-btn',
+      'Start by adding your child here! Each child gets their own progress tracker. 👶', 'parent_add_child'), 700);
+  }
+}
+
+function _checkAssignHint() {
+  const students = (typeof Auth !== 'undefined' && Auth.getStudents) ? Auth.getStudents() : [];
+  if (students.length === 0) return;
+  const firstId = students[0].id;
+  const key = 'parent_first_assign_' + firstId;
+  setTimeout(() => _showHint('pd-assign-btn',
+    'Set a chapter for your child to practice — they\'ll see it when they log in! 📋', key), 400);
+}
+
 // ── Push notifications ──────────────────────────────────────────────────────
 const VAPID_PUBLIC_KEY = 'BExWCMEBx-MGkPCv6tm0nC-DebalPys64ivbkWnWN7pxZuHQqUNtuZ85HehLssxBddlvjGB1d99IgtALRFZo8kc';
 
@@ -688,6 +778,10 @@ function _closeConfirmModal(confirmed) {
 
 // ── SCREEN NAVIGATION ─────────────────────────
 function showScreen(id) {
+  // Dismiss any floating hint callout on navigation
+  const _hc = document.getElementById('hint-callout');
+  if (_hc && !_hc.classList.contains('hint-hidden')) _dismissHint();
+
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
   const sc = document.getElementById('screen-' + id);
   if (sc) { sc.classList.remove('hidden'); S.currentScreen = id; }
@@ -1230,6 +1324,9 @@ async function renderParentDashboard() {
 
   _renderTeacherApplyCard();
 
+  // First-time parent onboarding hints
+  _checkParentHints();
+
   if (!hasStudents) return;
 
   const grid = _el('pd-children-grid');
@@ -1398,7 +1495,7 @@ const PD = (() => {
     panel.querySelectorAll('.pd-tab-content').forEach(c => {
       c.classList.toggle('hidden', c.dataset.tab !== tab);
     });
-    if (tab === 'assign') _renderAssignments();
+    if (tab === 'assign') { _renderAssignments(); _checkAssignHint(); }
   }
 
   function renderDetail() {
@@ -1604,6 +1701,8 @@ function _renderParentControls(acct) {
   if (csToggle) csToggle.checked = crossSearch;
   const cpToggle = _el('pd-crossgrade-practice-toggle');
   if (cpToggle) cpToggle.checked = crossPractice;
+  const hintsToggle = _el('pd-hints-toggle');
+  if (hintsToggle) hintsToggle.checked = !(DB.restrictions?.hintsDisabled ?? false);
 
   const chLocks = _el('pd-chapter-locks');
   if (!chLocks) return;
@@ -1823,6 +1922,9 @@ function renderDashboard() {
 
   // Resume banner (unfinished session from a previous page load)
   _renderResumeBanner();
+
+  // First-time hint for brand-new students
+  _checkKidHints();
 
   // Assignments from parent (Supabase - async, non-blocking)
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
