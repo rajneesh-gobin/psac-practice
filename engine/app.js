@@ -62,7 +62,7 @@ function _floatXP(amount) {
   el.className = 'xp-float';
   el.textContent = `+${amount} XP ✨`;
   el.style.left = `${rect.left + rect.width / 2 - 30}px`;
-  el.style.top  = `${rect.top + window.scrollY - 10}px`;
+  el.style.top  = `${rect.top + (window.pageYOffset || document.documentElement.scrollTop) - 10}px`;
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 1400);
 }
@@ -424,12 +424,12 @@ function _showHint(targetId, text, key) {
 
   const spaceBelow = window.innerHeight - rect.bottom;
   if (spaceBelow >= 120) {
-    callout.style.top       = (rect.bottom + gap + window.scrollY) + 'px';
+    callout.style.top       = (rect.bottom + gap + (window.pageYOffset || document.documentElement.scrollTop)) + 'px';
     callout.style.transform = '';
     callout.classList.add('arrow-top');
     callout.classList.remove('arrow-bottom');
   } else {
-    callout.style.top       = (rect.top - 10 + window.scrollY) + 'px';
+    callout.style.top       = (rect.top - 10 + (window.pageYOffset || document.documentElement.scrollTop)) + 'px';
     callout.style.transform = 'translateY(-100%)';
     callout.classList.add('arrow-bottom');
     callout.classList.remove('arrow-top');
@@ -2548,7 +2548,6 @@ function submitExam() {
 }
 
 function renderResults(correct, total, pct, timeTaken, chapterStats) {
-  if (pct >= 80) setTimeout(_launchConfetti, 300);
   const banner = document.getElementById('results-banner');
   const emoji = pct>=90?'🏆':pct>=70?'🎉':pct>=50?'👍':'💪';
   const grade = pct>=90?'Outstanding - A+':pct>=80?'Excellent - A':pct>=70?'Good - B':pct>=60?'Satisfactory - C':pct>=50?'Pass - D':'Needs more practice - Try again!';
