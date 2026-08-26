@@ -146,6 +146,85 @@ function _questionsMatch(jsQ, dbQ) {
   return fields.every(f => (jsQ[f] ?? '') === (dbQ[f] ?? ''));
 }
 
+// Find the make*({...}) block containing the given question ID in a file's content.
+// Returns { start, end } character positions, or null if not found.
+function _findQuestionBlock(content, qid) {
+  const escaped = qid.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const idRe    = new RegExp(`id:\\s*['"\`]${escaped}['"\`]`);
+  const m       = idRe.exec(content);
+  if (!m) return null;
+
+  // Scan backward from the ID to find the 'make' factory name
+  let makePos = -1;
+  for (let i = m.index; i >= Math.max(0, m.index - 300); i--) {
+    if (content.slice(i, i + 4) === 'make') { makePos = i; break; }
+  }
+  if (makePos === -1) return null;
+
+  // Find the opening paren
+  const openParen = content.indexOf('(', makePos);
+  if (openParen === -1 || openParen > m.index) return null;
+
+  // Track paren depth to find the matching close paren
+  let depth = 0, closePos = -1;
+  for (let i = openParen; i < content.length; i++) {
+    if (content[i] === '(') depth++;
+    else if (content[i] === ')') { depth--; if (depth === 0) { closePos = i; break; } }
+  }
+  if (closePos === -1) return null;
+
+  return { start: makePos, end: closePos + 1 };
+}
+
+// Generate a makeMCQ / makeNum JS source string from a DB data object.
+// Uses JSON.stringify for all string values — handles HTML, SVG, quotes safely.
+// Returns null for symmetry questions (grid data cannot be reconstructed here).
+function _generateBlock(data) {
+  if (data.type === 'symmetry') return null;
+  const J       = v => (v == null ? 'undefined' : JSON.stringify(v));
+  const factory = data.type === 'numeric' ? 'makeNum' : 'makeMCQ';
+  let out = `${factory}({ id:${J(data.id)}, chapterId:${J(data.chapterId)}, difficulty:${data.difficulty || 1}`;
+  if (data.subsection) out += `, subsection:${J(data.subsection)}`;
+  out += `,\n    question:${J(data.question)}`;
+  if (data.type === 'numeric') {
+    out += `,\n    answer:${J(data.answer)}`;
+    if (data.acceptableAnswers && data.acceptableAnswers.length > 1)
+      out += `, acceptableAnswers:${JSON.stringify(data.acceptableAnswers)}`;
+  } else if (data.options && data.options.length) {
+    out += `,\n    options:${JSON.stringify(data.options)}, answer:${J(data.answer)}`;
+  }
+  if (data.hint)        out += `,\n    hint:${J(data.hint)}`;
+  if (data.explanation) out += `,\n    explanation:${J(data.explanation)}`;
+  out += ` })`;
+  return out;
+}
+
+// Find a question in its JS file and replace it with the DB version.
+// Creates a .bak backup of the file before modifying.
+// Returns true on success, false if the file/block could not be found.
+function _writeBackToJs(qid, dbData, qDir) {
+  let targetFile = null, fileContent = null;
+  const escaped = new RegExp(`id:\\s*['"\`]${qid.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"\`]`);
+  for (const file of fs.readdirSync(qDir).filter(f => f.endsWith('.js')).sort()) {
+    const content = fs.readFileSync(path.join(qDir, file), 'utf8');
+    if (escaped.test(content)) { targetFile = path.join(qDir, file); fileContent = content; break; }
+  }
+  if (!targetFile) return false;
+
+  const block = _findQuestionBlock(fileContent, qid);
+  if (!block) return false;
+
+  const replacement = _generateBlock(dbData);
+  if (!replacement) return false; // symmetry — skip
+
+  // Back up the original before touching it
+  fs.writeFileSync(targetFile + '.bak', fileContent, 'utf8');
+
+  const updated = fileContent.slice(0, block.start) + replacement + fileContent.slice(block.end);
+  fs.writeFileSync(targetFile, updated, 'utf8');
+  return true;
+}
+
 async function upsertAll(rows, label) {
   const BATCH = 200;
   for (let i = 0; i < rows.length; i += BATCH) {
@@ -200,10 +279,16 @@ async function upsertAll(rows, label) {
 
       for (const q of buf) {
         if (!protectedIds.has(q.id)) continue;
-        if (!_questionsMatch(q, protectedMap.get(q.id))) {
-          console.log(`  ⚠ PROTECTED (differs from JS file): ${q.id} — keeping DB version`);
+        const dbData = protectedMap.get(q.id);
+        if (!_questionsMatch(q, dbData)) {
+          const patched = _writeBackToJs(q.id, dbData, qDir);
+          if (patched) {
+            console.log(`  ✏ PATCHED: ${q.id} — JS file updated to match DB version (.bak created)`);
+          } else {
+            console.log(`  ⚠ PROTECTED (differs, JS not patched): ${q.id} — DB version kept`);
+          }
         }
-        // If content matches: skip silently (no warning needed)
+        // If content matches: skip silently
       }
 
       const toImport = buf.filter(q => !protectedIds.has(q.id));
