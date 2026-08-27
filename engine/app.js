@@ -11,7 +11,22 @@ const S = {
 };
 
 // ── GAMIFICATION STATE ────────────────────────
-let _soundEnabled = localStorage.getItem('pref_sound') !== 'false';
+// pref_* localStorage keys are scoped per student, not global to the device -
+// a shared family tablet has a parent and several kids taking turns on it,
+// and "sound off"/"haptic off" is a personal preference, not a device fact.
+// Falls back to a bare 'guest' bucket before any student has logged in.
+//
+// ACTIVE_STUDENT_ID is declared HERE, above _prefKey's first caller, and must
+// stay above it. A `typeof` guard does NOT make a later declaration safe: for a
+// let/const binding still in the temporal dead zone `typeof` throws instead of
+// returning "undefined". _soundEnabled below calls _prefKey() at load time, so
+// declaring it further down threw and killed the whole of app.js on load.
+let ACTIVE_STUDENT_ID = null;
+
+function _prefKey(base) {
+  return `pref_${base}_${ACTIVE_STUDENT_ID || 'guest'}`;
+}
+let _soundEnabled = localStorage.getItem(_prefKey('sound')) !== 'false';
 let _comboStreak  = 0;
 let _audioCtx     = null;
 
@@ -50,6 +65,156 @@ function _planAllowsChapter(chapterId) {
   const allowed = (typeof Auth !== 'undefined' ? Auth.getPlanFeatures?.() : null)?.allowed_chapters;
   if (!allowed) return true; // null = unlimited plan
   return allowed.includes(chapterId);
+}
+
+// ── PLAN CAPS ─────────────────────────────────
+// Every check below is behind window.PLAN_ENFORCEMENT, exactly like
+// _planAllowsChapter: with the admin switch off nothing is capped and the app
+// behaves as it always has. That is what lets this ship dark.
+//
+// Mauritius is UTC+4 all year with no DST, so the day/week keys are a FIXED
+// offset from UTC. Never toLocaleDateString() here - that follows the device
+// clock, so a child on a travelling parent's phone, or one who simply changes
+// the device timezone, would roll their own daily cap over at will.
+const _MU_OFFSET_MS = 4 * 60 * 60 * 1000;
+function _muNow()     { return new Date(Date.now() + _MU_OFFSET_MS); }
+function _muDayKey()  { return _muNow().toISOString().slice(0, 10); }
+function _muWeekKey() {
+  const d = _muNow();
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7)); // back to Monday
+  return d.toISOString().slice(0, 10);
+}
+
+// null = no cap. A plan states a cap as a number; anything else (missing key,
+// null, a string someone typed into the admin form) means unlimited, so a
+// malformed plan row can never lock a child out of the app.
+function _planFeature(key) {
+  if (!window.PLAN_ENFORCEMENT) return null;
+  const f = (typeof Auth !== 'undefined' ? Auth.getPlanFeatures?.() : null) || {};
+  return f[key];
+}
+function _planCap(key) {
+  const v = _planFeature(key);
+  return (typeof v === 'number' && isFinite(v) && v >= 0) ? v : null;
+}
+function _planAllowsFeature(key) {
+  if (!window.PLAN_ENFORCEMENT) return true;
+  return _planFeature(key) !== false;   // absent/unset = allowed
+}
+
+// Resets lazily on read rather than on a timer: the app can sit open across
+// midnight, and a child who leaves it open overnight must get their new day.
+function _usage() {
+  if (!DB.usage) DB.usage = { day: '', questions: 0, week: '', exams: 0 };
+  const u = DB.usage, dk = _muDayKey(), wk = _muWeekKey();
+  if (u.day  !== dk) { u.day  = dk; u.questions = 0; }
+  if (u.week !== wk) { u.week = wk; u.exams     = 0; }
+  return u;
+}
+const _CAP_KEY = { questions: 'daily_question_cap', exams: 'weekly_exam_cap' };
+
+function _capReached(kind) {
+  const cap = _planCap(_CAP_KEY[kind]);
+  if (cap === null) return false;
+  return (_usage()[kind] || 0) >= cap;
+}
+function _usageBump(kind) {
+  if (!window.PLAN_ENFORCEMENT) return;   // do not accumulate while dark
+  const u = _usage();
+  u[kind] = (u[kind] || 0) + 1;
+  save(DB);
+}
+
+// _buildHints() always builds exactly 3 steps, so 3 is the ceiling whatever a
+// plan says. One helper because three places need the same number: the badge
+// reset per question, the reveal handler, and the disable-at-cap decision.
+function _hintCap() { return Math.min(3, _planCap('hints_per_question') ?? 3); }
+
+const _CAP_COPY = {
+  questions: cap => `You've done ${cap} question${cap === 1 ? '' : 's'} today - great work! 🎉\n\nCome back tomorrow for more, or ask a parent about upgrading for unlimited practice.`,
+  exams:     cap => `You've done your ${cap} mock exam${cap === 1 ? '' : 's'} for this week - well done! 🎉\n\nA new one unlocks on Monday, or ask a parent about upgrading for unlimited exams.`,
+  // cap 0 gets its own wording: "You've used all 0 hints" fires on the very
+  // first tap and reads as a bug rather than a plan limit.
+  hints:     cap => cap === 0
+    ? 'Hints are not included in your plan.\n\nHave a go at answering it, or ask a parent about upgrading to unlock hints.'
+    : `You've used all ${cap} hint${cap === 1 ? '' : 's'} for this question.\n\nHave a go at answering it, or ask a parent about upgrading for more hints.`,
+};
+
+// screen id -> the plan feature that unlocks it. Read by showScreen().
+const _PLAN_GATED_SCREENS = {
+  analytics:     'advanced_analytics',
+  'past-papers': 'past_papers',
+  search:        'question_search',
+  forum:         'community_forum',
+  calendar:      'study_calendar',
+};
+
+const _FEATURE_COPY = {
+  advanced_analytics:  'Advanced analytics is part of a paid plan.\n\nIt shows chapter-by-chapter progress over time. Ask a parent about upgrading to switch it on.',
+  printable_papers:    'Printable exam papers are part of a paid plan.\n\nYou can still take the exam on screen. Ask a parent about upgrading to print papers.',
+  timetable_generator: 'The study timetable generator is part of a paid plan.\n\nAsk a parent about upgrading to build a revision timetable automatically.',
+  push_reminders:      'Daily study reminders are part of a paid plan.\n\nAsk a parent about upgrading to switch them on.',
+  // Parent-facing wording: only a signed-in adult ever reaches this one.
+  tutor_status:        'Applying for tutor access is part of the Premium plan.\n\nUpgrade to apply, then an administrator reviews your application.',
+  past_papers:         'Real past exam papers are part of a paid plan.\n\nAsk a parent about upgrading to practise with them.',
+  question_search:     'Searching across every subject is part of a paid plan.\n\nAsk a parent about upgrading to switch it on.',
+  community_forum:     'The community forum is part of a paid plan.\n\nAsk a parent about upgrading to join in.',
+  study_calendar:      'The study calendar is part of a paid plan.\n\nAsk a parent about upgrading to plan revision with it.',
+  weak_area_drill:     'Weak-area drills are part of a paid plan.\n\nThey pick the topics you find hardest. Ask a parent about upgrading.',
+};
+
+function _showFeatureModal(key) {
+  _confirmModal(_FEATURE_COPY[key] || 'That feature is part of a paid plan.',
+    () => { if (typeof openPlansModal === 'function') openPlansModal(); },
+    { icon: '🔒', okLabel: 'See plans', danger: false, cancelLabel: 'OK' });
+}
+
+// Paints the lock state onto controls that are still visible but gated. Called
+// from showScreen for the screens that own them rather than once at login: the
+// plan can change under a live session (an admin activates one, a parent
+// upgrades), and re-reading on every visit costs nothing.
+function _applyPlanGates(screenId) {
+  const mark = (el, locked, lockedTitle) => {
+    if (!el) return;
+    el.classList.toggle('plan-locked', locked);
+    if (locked) el.setAttribute('title', lockedTitle);
+    else if (el.getAttribute('title') === lockedTitle) el.removeAttribute('title');
+  };
+
+  if (screenId === 'dashboard') {
+    const locked = !_planAllowsFeature('advanced_analytics');
+    mark(document.querySelector('[data-nav="progress"]'), locked, 'Paid plan feature');
+    mark(document.getElementById('dash-analytics-tile'), locked, 'Paid plan feature');
+  }
+
+  if (screenId === 'exam-config') {
+    // The radio is disabled as well as marked: an exam type that cannot run
+    // should not be selectable at all, so the child never gets as far as
+    // pressing Start and being refused.
+    const locked = !_planAllowsFeature('printable_papers');
+    const radio  = document.querySelector('input[name="exam-type"][value="print"]');
+    if (radio) {
+      radio.disabled = locked;
+      if (locked && radio.checked) {
+        radio.checked = false;
+        const first = document.querySelector('input[name="exam-type"]:not([disabled])');
+        if (first) first.checked = true;
+      }
+    }
+    mark(radio?.closest('.exam-opt'), locked, 'Paid plan feature');
+  }
+}
+
+// A child must never be told to go and pay for something. The upgrade route is
+// the plans modal, which is the parent's screen - the wording points at asking
+// a parent, and the button is the softer of the two.
+function _showCapModal(kind) {
+  // _hintCap(), not the raw plan value: the copy must state the number actually
+  // enforced, which is clamped to the 3 hints _buildHints can produce.
+  const cap = kind === 'hints' ? _hintCap() : _planCap(_CAP_KEY[kind]);
+  const msg = (_CAP_COPY[kind] || (() => 'Limit reached.'))(cap ?? 0);
+  _confirmModal(msg, () => { if (typeof openPlansModal === 'function') openPlansModal(); },
+    { icon: '🔒', okLabel: 'See plans', danger: false, cancelLabel: 'OK' });
 }
 
 // Switched off by an administrator, either for everyone (global settings) or
@@ -114,7 +279,7 @@ function _showCombo(n) {
 }
 
 // ── STORAGE ───────────────────────────────────
-let ACTIVE_STUDENT_ID = null;
+// ACTIVE_STUDENT_ID is declared up beside _prefKey, which reads it at load time.
 let DB = {};   // populated by Auth.init() after student is selected
 
 // ── GRADE / SUBJECT SELECTION ─────────────────
@@ -172,6 +337,42 @@ let ASSIGNMENT_SCORE        = { attempted: 0, correct: 0 };
 let ASSIGNMENT_IS_TEST      = false;   // test mode = no feedback until submission
 let ASSIGNMENT_TEST_ANSWERS = [];      // [{question,userAnswer,correctAnswer,correct,explanation}]
 
+// True for EITHER assignment flow this codebase has: the teacher/guest one
+// above (ASSIGNMENT_MODE) and the separate parent-assignment one
+// (startAssignmentDirect(), which never sets ASSIGNMENT_MODE - it only hands
+// startChapterDirect() a one-shot _practiceMode). _saveResume() must never
+// write a resume record while either is active: parent assignments run on a
+// REAL chapterId, so pausing one would land in that SAME chapter's resume
+// slot as any genuine paused practice session on it - whichever saved last
+// silently overwrites the other, and resuming an assignment as if it were
+// ordinary practice drops its showAnswers/showHints restriction entirely.
+let _assignmentActive = false;
+
+// EVERY practice entry point must declare whether it is an assignment run, and
+// every exit must clear it. _assignmentActive suppresses three things at once -
+// the resume record (_saveResume), the daily question cap and its counter
+// (practiceSubmit), and the "⏸️ Continue Later" button - so a stale `true` left
+// over from a finished assignment silently disables all three for the rest of
+// the session. It used to be cleared only by showAssignmentComplete(), which
+// belongs to the guest/teacher ASSIGNMENT_MODE flow; a PARENT-assigned round
+// finishes through the round-complete modal instead and never reached it.
+function _setAssignmentContext(on) {
+  _assignmentActive = !!on;
+  document.getElementById('practice-pause-btn')?.classList.toggle('hidden', _assignmentActive);
+  // Leaving an assignment also has to hand back the two things an assignment is
+  // allowed to withhold. showAnswers/showHints are set from `mode` in
+  // startChapterDirect, but startSearchPractice and startSubsectionPractice
+  // never set them at all - so a parent's "no hints" homework silently removed
+  // the hint button from every Search and Syllabus round for the rest of the
+  // session, and "no answers" left those rounds giving no feedback whatsoever.
+  // Done here, after the caller's own assignment on the `on === true` path, so
+  // a real assignment's restrictions are never clobbered.
+  if (!_assignmentActive) {
+    S.practice.showAnswers = true;
+    S.practice.showHints   = true;
+  }
+}
+
 function save(data, immediate = false) {
   if (ACTIVE_STUDENT_ID) Store.saveStudent(ACTIVE_STUDENT_ID, data, immediate);
 }
@@ -215,6 +416,35 @@ function applyTheme(t) {
     if (c && c._ctx) c._ctx.strokeStyle = t === 'dark' ? '#fff' : '#1e293b';
   });
 }
+// ── Kid Home customisation (My Settings → My Colours / Big Text / Calm Mode) ──
+// Purely cosmetic and purely for the kid-facing screens (see the .kid-* rules
+// in style.css) - never touches the parent/teacher/admin UI, which doesn't
+// use any of these classes. Reads straight off DB.kidPrefs, so it stays in
+// sync with whatever _renderStudentProfile() just saved.
+function _applyKidPrefs() {
+  const prefs = (typeof DB !== 'undefined' && DB.kidPrefs) || {};
+  const root  = document.documentElement;
+  if (prefs.vibe && prefs.vibe !== 'default') root.dataset.kidVibe = prefs.vibe;
+  else root.removeAttribute('data-kid-vibe');
+  root.classList.toggle('kid-text-lg', !!prefs.bigText);
+  root.classList.toggle('kid-calm',    !!prefs.calm);
+
+  // _soundEnabled is a plain JS variable cached at page-load time (before
+  // ACTIVE_STUDENT_ID existed), from whatever the *global* pref_sound key
+  // used to hold. Re-read it now that _prefKey() can actually resolve to
+  // THIS student's own scoped key - otherwise a sibling logging in after
+  // someone who muted sound would inherit "muted" for the rest of the
+  // session (or vice versa) until they happened to tap the toggle themselves.
+  _soundEnabled = localStorage.getItem(_prefKey('sound')) !== 'false';
+}
+
+function _setKidPref(key, value) {
+  if (!ACTIVE_STUDENT_ID) return;
+  DB.kidPrefs = Object.assign({ vibe: 'default', bigText: false, calm: false }, DB.kidPrefs, { [key]: value });
+  save(DB);
+  _applyKidPrefs();
+}
+
 // ── Theme preference: light | dark | system ───
 // applyTheme() only ever deals in a concrete 'light'/'dark'. "Follow my device"
 // is a third state that has to be re-resolved every time the OS flips, so it
@@ -366,7 +596,11 @@ function _saveResume() {
       answers: S.exam.answers, flagged: [...(S.exam.flagged || [])],
       endTime: S.exam.endTime, ts: Date.now()
     };
-  } else if (S.practice && S.practice.chapterId && S.practice.qs && S.practice.qs.length) {
+  } else if (!_assignmentActive && S.practice && S.practice.chapterId && S.practice.qs && S.practice.qs.length) {
+    // Never for an assignment (teacher/test OR parent-assigned) - see
+    // _assignmentActive's own comment for why: it runs on a real chapterId
+    // and would silently collide with that chapter's genuine practice-resume
+    // slot, in either direction.
     store.practice[S.practice.chapterId] = {
       subjectId: ACTIVE_PACK?.id,
       qIds: S.practice.qs.map(q => q.id), idx: S.practice.idx,
@@ -450,8 +684,16 @@ function _resumeSubjectLabel(subjectId) {
 }
 
 function _renderResumeBanner() {
-  const slot = document.getElementById('resume-banner-slot');
-  if (!slot) return;
+  // Two slots share the same markup: the dashboard's (subject already picked)
+  // and the kid-home/subject-select one (shown before a subject is even
+  // picked - a paused session belongs on whichever screen the student sees
+  // first). Both live in the DOM at once (showScreen only hides screens, it
+  // doesn't remove them), so writing to every slot that exists is simpler and
+  // safer than tracking which one is currently visible.
+  const slots = ['resume-banner-slot', 'resume-banner-slot-kidhome']
+    .map(id => document.getElementById(id)).filter(Boolean);
+  if (!slots.length) return;
+  const setHtml = html => slots.forEach(s => { s.innerHTML = html; });
   const store = _pruneResumeStore(_readResumeStore());
   _writeResumeStore(store); // persist the prune so a stale entry doesn't keep reappearing
   const practiceEntries = Object.entries(store.practice); // [chapterId, saved][]
@@ -486,7 +728,7 @@ function _renderResumeBanner() {
       }
     }
 
-    slot.innerHTML = `
+    setHtml(`
       <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-5 mb-5 text-white shadow-xl">
         <div class="flex items-center gap-4">
           <div class="text-4xl select-none shrink-0">▶️</div>
@@ -504,19 +746,28 @@ function _renderResumeBanner() {
             Dismiss
           </button>
         </div>
-      </div>`;
+      </div>`);
     return;
   }
 
   if (typeof DB === 'undefined' || !DB.stats || DB.stats.totalAttempted < 1) {
-    slot.innerHTML = '';
+    setHtml('');
     return;
   }
+  // ACTIVE_PACK-dependent, so it only ever makes sense once a subject is
+  // actually active - the kid-home slot renders before that's necessarily
+  // true (a fresh page load may not have one set yet), and it already has
+  // its own "pick a subject" prompt built into the hero, so it stays empty
+  // here rather than risk pointing "Start Practice" at a stale/missing pack.
+  const dashSlot = document.getElementById('resume-banner-slot');
+  const kidSlot  = document.getElementById('resume-banner-slot-kidhome');
+  if (kidSlot) kidSlot.innerHTML = '';
+  if (!dashSlot) return;
   const pack = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK)
     || (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.find(p => !p.comingSoon))
     || null;
   const subjectLabel = pack ? `Grade ${pack.grade} ${pack.name}` : 'your subject';
-  slot.innerHTML = `
+  dashSlot.innerHTML = `
     <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-5 mb-5 text-white shadow-xl">
       <div class="flex items-center gap-4">
         <div class="text-4xl select-none shrink-0">📚</div>
@@ -916,7 +1167,7 @@ async function enableNotifications() {
 // ── Mobile: Haptic feedback ─────────────────────────────────────────────────
 function _haptic(type) {
   if (!navigator.vibrate) return;
-  if (localStorage.getItem('pref_haptic') === 'false') return;
+  if (localStorage.getItem(_prefKey('haptic')) === 'false') return;
   if (type === 'correct')  navigator.vibrate(50);
   else if (type === 'wrong')    navigator.vibrate([80, 40, 80]);
   else if (type === 'levelup')  navigator.vibrate([50, 30, 50, 30, 150]);
@@ -1081,13 +1332,17 @@ function toast(msg, dur = 2500) {
 
 // ── CONFIRM MODAL (replaces browser confirm() dialogs) ───────────
 let _confirmCallback = null;
-function _confirmModal(msg, onConfirm, { icon = '⚠️', okLabel = 'Confirm', danger = true } = {}) {
+function _confirmModal(msg, onConfirm, { icon = '⚠️', okLabel = 'Confirm', danger = true, cancelLabel = 'Cancel' } = {}) {
   const m = document.getElementById('modal-confirm');
   if (!m) { if (onConfirm && confirm(msg)) onConfirm(); return; } // fallback
   document.getElementById('modal-confirm-msg').textContent  = msg;
   document.getElementById('modal-confirm-icon').textContent = icon;
   const okBtn = document.getElementById('modal-confirm-ok');
   if (okBtn) { okBtn.textContent = okLabel; okBtn.className = danger ? 'btn-danger flex-1 text-sm' : 'btn-primary flex-1 text-sm'; }
+  // Reset every time: a plan-cap modal renames this to "OK", and without a
+  // reset the next genuine destructive confirm would offer "OK" / "Delete".
+  const cancelBtn = document.getElementById('modal-confirm-cancel');
+  if (cancelBtn) cancelBtn.textContent = cancelLabel;
   _confirmCallback = onConfirm;
   m.classList.remove('hidden');
 }
@@ -1172,7 +1427,7 @@ function _launchConfetti() {
 const _KID_ONLY_SCREENS = new Set([
   'dashboard', 'chapter-select', 'syllabus', 'past-papers', 'analytics',
   'subject-select', 'grade-select', 'practice', 'exam-config', 'exam',
-  'results', 'assignment-complete', 'search',
+  'results', 'assignment-complete', 'search', 'schedule',
 ]);
 function _isParentContext() {
   return !!(typeof _isParentSession === 'function' && _isParentSession());
@@ -1194,6 +1449,12 @@ function showScreen(id) {
     _returnToParentDashboard();
     return;
   }
+
+  // Plan-gated screens are stopped HERE rather than at each button, because
+  // analytics has two entry points (the dashboard tile and the bottom-nav
+  // Progress button) and any third one added later gets the gate for free.
+  const _gate = _PLAN_GATED_SCREENS[id];
+  if (_gate && !_planAllowsFeature(_gate)) { _showFeatureModal(_gate); return; }
 
   // Dismiss any floating hint callout on navigation
   const _hc = document.getElementById('hint-callout');
@@ -1240,8 +1501,17 @@ function showScreen(id) {
   }
 
   _updateBreadcrumb(id);
+  _applyPlanGates(id);
+  // Cheap (a querySelectorAll over 8 spans) and screen-agnostic: the date
+  // appears on the landing page, the auth screen and inside the plans modal,
+  // so tying it to one screen id would leave the others stale.
+  _applyFreeUntilLabel();
 
+  // Not awaited, and failure is silent: the markup ships with real prices in
+  // it, so a slow or unreachable database just leaves those on screen.
+  if (id === 'landing')         hydrateLandingPrices();
   if (id === 'dashboard')       renderDashboard();
+  if (id === 'schedule')        renderSchedule();
   if (id === 'analytics')       renderAnalytics();
   if (id === 'chapter-select')  renderChapterSelect();
   if (id === 'syllabus')        renderSyllabus();
@@ -1969,7 +2239,102 @@ function _renderTeacherApplyCard() {
 // know they are not about to be charged; every purchase control in it is
 // disabled and nothing here talks to a payment provider. When payment does open,
 // this is the one place to wire it up.
-const FREE_UNTIL_LABEL = '31 October 2026';
+// THE date string. index.html repeats it in 8 places for people with JS off
+// and for the first paint, but every one of those is wrapped in
+// <span data-free-until> and overwritten by _applyFreeUntilLabel() below - so
+// this constant is what actually decides, and the markup is only the fallback.
+//
+// It was previously duplicated as 8 independent literals with nothing tying
+// them together, which is how a date change becomes a find-and-replace that
+// misses one and leaves two different promises on the same page.
+const FREE_UNTIL_LABEL = '30 September 2026';
+
+function _applyFreeUntilLabel() {
+  document.querySelectorAll('[data-free-until]').forEach(el => {
+    if (el.textContent !== FREE_UNTIL_LABEL) el.textContent = FREE_UNTIL_LABEL;
+  });
+}
+
+// ── Pricing ───────────────────────────────────
+// features.price_was_mur, not a plans column: listPlans() selects explicit
+// columns, and a column a not-yet-migrated database lacks makes that whole
+// query 42703 and blanks the plans modal entirely. The features jsonb is
+// already selected and an absent key just means "no promotion".
+// Only shown when it is genuinely HIGHER than the live price - a "was" that is
+// lower or equal is a data-entry slip, and striking it out would advertise a
+// price rise as a discount.
+function _planPromo(p) {
+  const now = Number(p?.price_mur) || 0;
+  const was = Number(p?.features?.price_was_mur) || 0;
+  return (was > now) ? was : null;
+}
+function _formatMur(n) {
+  return n > 0 ? `Rs ${n.toLocaleString('en-GB')}` : 'Free';
+}
+
+// "SAVE 57%" reads faster than two numbers the reader has to subtract.
+// Rounded DOWN so the badge never overstates the discount: 350 → 150 is
+// 57.14%, and claiming 58% off would be a smaller lie than it looks but a lie.
+function _planSaveLabel(p) {
+  const was = _planPromo(p);
+  if (!was) return '';
+  const pct = Math.floor(((was - (Number(p.price_mur) || 0)) / was) * 100);
+  return pct >= 1 ? `Save ${pct}%` : '';
+}
+
+// The public pricing section is hand-written marketing copy, so this only
+// replaces the NUMBERS - the bullets stay as authored. Progressive enhancement:
+// if Supabase is unreachable or the plan row is missing, the markup's own
+// hardcoded price stays on screen rather than blanking.
+async function hydrateLandingPrices() {
+  if (!document.querySelector('[data-plan-price]')) return;
+  let plans = [];
+  try { plans = await Store.listPlans(); } catch (e) {
+    console.warn('[pricing] could not load plans, keeping the prices in the markup:', e?.message);
+    return;
+  }
+  // Silent failure here is indistinguishable from "no promotion configured",
+  // which is exactly the confusion this logging exists to end. listPlans()
+  // filters on is_active, so a plan left as DRAFT in the admin Plans tab never
+  // arrives and its card keeps whatever price is hardcoded in index.html.
+  if (!plans.length) {
+    console.warn('[pricing] no ACTIVE plans returned - every card is showing the '
+      + 'price hardcoded in index.html. Set the plans to Live in Admin → Plans.');
+    return;
+  }
+  const seen = new Set(plans.map(p => p.id));
+  document.querySelectorAll('[data-plan-price]').forEach(el => {
+    const id = el.dataset.planPrice;
+    if (!seen.has(id)) {
+      console.warn(`[pricing] plan "${id}" is not in the active plans list `
+        + '(is it set to Draft?) - its card still shows the hardcoded price.');
+    }
+  });
+
+  for (const p of plans) {
+    const box = document.querySelector(`[data-plan-price="${CSS.escape(p.id)}"]`);
+    if (!box) continue;
+    if (!_planPromo(p) && Number(p?.features?.price_was_mur)) {
+      console.warn(`[pricing] plan "${p.id}" has a was-price of `
+        + `${p.features.price_was_mur} which is not higher than its price of `
+        + `${p.price_mur} - no discount is shown for that.`);
+    }
+    const nowEl  = box.querySelector('[data-price-now]');
+    const wasEl  = box.querySelector('[data-price-was]');
+    const saveEl = box.querySelector('[data-price-save]');
+    if (nowEl) nowEl.textContent = _formatMur(Number(p.price_mur) || 0);
+    const promo = _planPromo(p);
+    if (wasEl) {
+      wasEl.textContent = promo ? _formatMur(promo) : '';
+      wasEl.classList.toggle('hidden', !promo);
+    }
+    if (saveEl) {
+      const label = _planSaveLabel(p);
+      saveEl.textContent = label;
+      saveEl.classList.toggle('hidden', !label);
+    }
+  }
+}
 
 async function openPlansModal() {
   const m = document.getElementById('modal-plans');
@@ -1991,10 +2356,16 @@ async function openPlansModal() {
     return;
   }
 
-  const ICONS = { free: '🆓', starter: '⭐', premium: '👑' };
+  const ICONS = { free: '🆓', starter: '⭐', premium: '👑', teacher: '👩‍🏫' };
   list.innerHTML = plans.map(p => {
     const isCurrent = p.id === (current?.plan_id || 'free');
-    const price = p.price_mur > 0 ? `Rs ${p.price_mur.toLocaleString('en-GB')}/month` : 'Free';
+    const promo = _planPromo(p);
+    const save  = _planSaveLabel(p);
+    const price = p.price_mur > 0
+      ? `${promo ? `<span class="price-was mr-1">${_formatMur(promo)}</span>` : ''}`
+        + `${_formatMur(p.price_mur)}/month`
+        + `${save ? `<span class="price-save ml-2">${save}</span>` : ''}`
+      : 'Free';
     const kids  = p.max_children === 1 ? '1 child' : `${p.max_children} children`;
     return `<div class="rounded-xl border p-3 ${isCurrent
         ? 'border-indigo-400 bg-indigo-50 dark:bg-indigo-900/20'
@@ -2097,14 +2468,27 @@ const PD = (() => {
   // see engine/auth.js's _setStudentPin() - so it can only ever be shown here
   // in the same tab-session it was just set/reset in-memory (Auth.getJustSetPin).
   function renderLoginTab() {
-    const id = Auth.getActiveAccount()?.id || _activeId;
+    // _activeId FIRST. This is the parent dashboard, so the child whose panel is
+    // open is the subject - getActiveAccount() is whatever student row happens
+    // to be loaded, which after pdSwitchStudent can be a different child, and on
+    // a shared device can be a leftover from an earlier session.
+    const id = _activeId || Auth.getActiveAccount()?.id;
     if (!id) return;
-    const student = (Auth.getStudents() || []).find(s => s.id === id) || {};
+    const student = (Auth.getStudents() || []).find(s => s.id === id);
     const family  = (Auth.getFamily && Auth.getFamily()) || {};
 
     const set = (elId, v) => { const el = document.getElementById(elId); if (el) el.textContent = v; };
     set('pd-login-family',   family.family_name || '—');
-    set('pd-login-username', student.username || Auth.getActiveAccount()?.name || '—');
+    // NEVER fall back to the display name here. _activeAccount.name is
+    // display_name, not username, and the two routinely differ ("Emma" vs
+    // "emma2025"). Printing one as the other under the heading "what your child
+    // types on the login screen" hands the parent a credential that cannot log
+    // in, with nothing to indicate it is wrong. A dash is the honest answer.
+    set('pd-login-username', student?.username || '—');
+    if (!student) {
+      console.warn('[renderLoginTab] no student row for', id,
+        '- sign-in details cannot be shown. Family students loaded:', (Auth.getStudents() || []).length);
+    }
 
     const pin      = (typeof Auth.getJustSetPin === 'function') ? Auth.getJustSetPin(id) : '';
     const knownEl  = document.getElementById('pd-login-pin-known');
@@ -2261,13 +2645,26 @@ const PD = (() => {
     const statusEl = document.getElementById('pd-reminder-status');
     const time     = timeEl?.value;
     if (!time) { if (statusEl) statusEl.textContent = 'Please pick a time first.'; return; }
+    // This is the PARENT's screen, so it says so plainly rather than using the
+    // child-facing "ask a parent" wording.
+    if (!_planAllowsFeature('push_reminders')) {
+      if (statusEl) statusEl.textContent = 'Daily reminders are not included in your plan.';
+      _showFeatureModal('push_reminders');
+      return;
+    }
     try {
       const res = await fetch('/.netlify/functions/push-subscribe', {
         method: 'POST',
         headers: await _pushAuthHeaders(),
         body: JSON.stringify({ studentId: _activeId, reminderTime: time }),
       });
-      if (statusEl) statusEl.textContent = res.ok ? `Reminder saved for ${time} MU time. ✅` : 'Save failed — make sure the student has notifications enabled.';
+      // 402 is this feature's own signal from push-subscribe.js, distinct from
+      // a genuine failure — the server had the final say and said no.
+      if (statusEl) statusEl.textContent = res.ok
+        ? `Reminder saved for ${time} MU time. ✅`
+        : res.status === 402
+          ? 'Daily reminders are not included in your plan.'
+          : 'Save failed — make sure the student has notifications enabled.';
     } catch(_) { if (statusEl) statusEl.textContent = 'Network error.'; }
   }
 
@@ -2506,6 +2903,7 @@ async function _markAssignmentDone(id, btn) {
   if (btn) { btn.disabled = true; btn.textContent = '…'; }
   await Store.completeAssignment(id);
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
+  renderDashSchedule(ACTIVE_STUDENT_ID);
 }
 
 // ── FRIENDS LEADERBOARD (dashboard) ──────────
@@ -2945,6 +3343,7 @@ function renderDashboard() {
 
   // Assignments from parent (Supabase - async, non-blocking)
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
+  renderDashSchedule(ACTIVE_STUDENT_ID);
 
   // Friends leaderboard (Supabase - async, non-blocking)
   _renderFriendsLeaderboard(ACTIVE_STUDENT_ID);
@@ -3303,6 +3702,13 @@ function startChapterDirect(chapterId, forceDiff) {
   S.practice.session = { attempted: 0, correct: 0 };
   S.practice.showAnswers = mode ? mode.showAnswers !== false : true;
   S.practice.showHints   = mode ? mode.showHints   !== false : true;
+  // See _assignmentActive's own comment: true only when THIS launch came from
+  // startAssignmentDirect (mode is its one-shot handover) - false for every
+  // ordinary practice start and every resume, which is exactly right, since
+  // _practiceResume can only ever be set by resuming a genuine paused PRACTICE
+  // session, never an assignment (assignments are never saved to the resume
+  // store in the first place - see _saveResume()).
+  _setAssignmentContext(!!mode);
   loadPracticeQuestion();
   showScreen('practice');
   const ch = CHAPTERS.find(c => c.id === chapterId);
@@ -3326,6 +3732,8 @@ function startChapterDirect(chapterId, forceDiff) {
 // Called by Search.practiceOwn / practiceOther with a pre-built question array
 function startSearchPractice(questions, label) {
   if (!questions || !questions.length) { toast('No questions to practise. Try a different search.', 2500); return; }
+  // Ordinary practice, whatever ran before it - see _setAssignmentContext.
+  _setAssignmentContext(false);
   S.practice.chapterId  = 'search-results';
   S.practice.difficulty = null;
   S.practice.qs         = shuffle(questions.slice());
@@ -3347,6 +3755,108 @@ function startSearchPractice(questions, label) {
 }
 
 // ── ASSIGNMENT DIRECT LAUNCH ──────────────────
+// ── SCHEDULED STUDY SESSIONS (child view) ─────────────────────────────────
+// A scheduled session is the child's OWN study plan, not homework, so it opens
+// as ordinary practice: no _practiceMode, which means hints and answers stay
+// on, it counts toward the daily cap, and the round is resumable. That is the
+// whole difference from startAssignmentDirect below.
+async function startScheduledSession(subjectId, chapterId) {
+  if (!subjectId || !chapterId) { toast('This session has no topic set. 📚', 2500); return; }
+  const pack = activateSubjectPack(subjectId);
+  if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
+  if (typeof QuestionLoader !== 'undefined') await QuestionLoader.loadSubject(pack.id);
+  startChapterDirect(chapterId, null);
+}
+
+// "Mon 15 Sep", plus a friendlier word for the two days that matter most.
+function _scheduleDayLabel(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  if (isNaN(d)) return dateStr;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const diff = Math.round((d - today) / 86400000);
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Tomorrow';
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+// Ids reach an inline onclick, where _profEsc is NOT enough - it escapes text
+// content but leaves quotes intact. Subject and chapter ids are manifest slugs,
+// so requiring the slug shape is both true and safer than escaping: anything
+// else simply gets no button.
+const _SLUG_RE = /^[a-z0-9][a-z0-9_-]*$/i;
+
+function _scheduleRow(e, compact) {
+  const startable = _SLUG_RE.test(e.subjectId || '') && _SLUG_RE.test(e.chapterId || '');
+  const start = startable
+    ? `<button onclick="startScheduledSession('${e.subjectId}','${e.chapterId}')"
+         class="shrink-0 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg">Start</button>`
+    // No matching chapter: the label is still shown, but there is nothing
+    // honest to start. Better than hiding a session the child was told about.
+    : `<span class="shrink-0 text-[11px] text-gray-400">see timetable</span>`;
+  return `<div class="flex items-center gap-3 p-3 rounded-xl border ${e.isToday
+      ? 'border-indigo-300 dark:border-indigo-600 bg-indigo-50 dark:bg-indigo-900/20'
+      : 'border-gray-200 dark:border-gray-700'}">
+    <span class="text-xl select-none">${e.icon}</span>
+    <div class="flex-1 min-w-0">
+      <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_profEsc(e.label)}</div>
+      <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">
+        ${compact ? _scheduleDayLabel(e.date) + (e.subjectName ? ' · ' : '') : ''}${_profEsc(e.subjectName || '')}${e.minutes ? ` · ${e.minutes} min` : ''}
+      </div>
+    </div>
+    ${start}
+  </div>`;
+}
+
+// Dashboard: the next few sessions only. A full month here would bury the
+// practice tiles underneath it.
+async function renderDashSchedule(studentId) {
+  const box  = document.getElementById('dash-schedule');
+  const list = document.getElementById('dash-schedule-list');
+  if (!box || !list || !studentId || typeof Calendar === 'undefined') return;
+  let items = [];
+  try { items = await Calendar.getUpcoming(studentId, 14); } catch (_) { }
+  if (!items.length) { box.classList.add('hidden'); return; }
+  box.classList.remove('hidden');
+  list.innerHTML = items.slice(0, 4).map(e => _scheduleRow(e, true)).join('');
+}
+
+// Full screen: everything ahead, grouped by day.
+async function renderSchedule() {
+  const body = document.getElementById('schedule-body');
+  if (!body) return;
+  const sid = ACTIVE_STUDENT_ID;
+  if (!sid || typeof Calendar === 'undefined') {
+    body.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">No timetable yet.</p>';
+    return;
+  }
+  let items = [];
+  try { items = await Calendar.getUpcoming(sid, 60); } catch (_) { }
+  if (!items.length) {
+    body.innerHTML = `<div class="text-center py-10">
+      <div class="text-4xl mb-3 select-none">🗓️</div>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Nothing scheduled yet.</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Ask a parent to build you a study timetable — or just pick a chapter yourself.</p>
+      <button onclick="showScreen('subject-select')" class="btn-primary text-sm mt-4">📚 Choose a chapter</button>
+    </div>`;
+    return;
+  }
+  const byDay = new Map();
+  for (const e of items) {
+    if (!byDay.has(e.date)) byDay.set(e.date, []);
+    byDay.get(e.date).push(e);
+  }
+  body.innerHTML = [...byDay.entries()].map(([date, rows]) => {
+    const total = rows.reduce((n, r) => n + (r.minutes || 0), 0);
+    return `<div>
+      <div class="flex items-baseline justify-between mb-2">
+        <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200">${_scheduleDayLabel(date)}</h3>
+        ${total ? `<span class="text-[11px] text-gray-400">${total} min</span>` : ''}
+      </div>
+      <div class="space-y-2">${rows.map(e => _scheduleRow(e, false)).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
 async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers, showHints) {
   const pack = activateSubjectPack(subjectId);
   if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
@@ -3371,16 +3881,31 @@ document.getElementById('btn-weak-areas').addEventListener('click', startWeakAre
 
 document.getElementById('start-exam-btn').addEventListener('click', () => {
   const type = document.querySelector('input[name="exam-type"]:checked')?.value || 'full';
-  if (type === 'print') { generatePrintablePaper(); return; }
+  // Belt-and-braces: _applyPlanGates already disables this radio, but a
+  // disabled attribute is one devtools edit from gone.
+  if (type === 'print') {
+    if (!_planAllowsFeature('printable_papers')) { _showFeatureModal('printable_papers'); return; }
+    generatePrintablePaper();
+    return;
+  }
   startExam(type);
 });
 
 function startExam(type) {
+  // Before assembleExamPaper, not after: building a 40-question paper and then
+  // throwing it away is wasted work, and the cap must never fire mid-paper.
+  if (_capReached('exams')) { _showCapModal('exams'); return; }
+
   const paper = assembleExamPaper(type);
   if (!paper.questions.length) {
     toast('🔒 Not enough unlocked chapters/questions to build an exam. Ask your parent to review chapter locks.', 4000);
     return;
   }
+  // Bumped once the paper is real and the exam is definitely starting - not at
+  // the check above, which would burn the week's allowance on a paper that
+  // then failed to assemble.
+  _usageBump('exams');
+
   S.exam.qs = paper.questions;
   S.exam.answers = {};
   S.exam.flagged = new Set();
@@ -4037,7 +4562,7 @@ function loadPracticeQuestion() {
     _hintBtn.classList.toggle('hidden', S.practice.showHints === false);
   }
   const _hintBadge = document.getElementById('hint-count-badge');
-  if (_hintBadge) _hintBadge.textContent = '3';
+  if (_hintBadge) _hintBadge.textContent = String(_hintCap());
   document.getElementById('practice-q-counter').textContent =
     `Question ${S.practice.idx + 1} of ${S.practice.qs.length}`;
   const _prevBtn = document.getElementById('practice-prev-btn');
@@ -4114,8 +4639,10 @@ function _buildHints(q) {
 document.getElementById('practice-hint-btn').addEventListener('click', () => {
   const q = S.practice.qs[S.practice.idx];
   if (!q) return;
-  const MAX_HINTS = 3;
-  if ((S.practice.hintIdx || 0) >= MAX_HINTS) return;
+  // _buildHints() always returns 3 steps; a plan may allow fewer. Clamped to
+  // that 3 so a plan claiming 99 does not promise hints that do not exist.
+  const MAX_HINTS = _hintCap();
+  if ((S.practice.hintIdx || 0) >= MAX_HINTS) { _showCapModal('hints'); return; }
   S.practice.hintIdx = (S.practice.hintIdx || 0) + 1;
   S.practice.hintShown = true;
 
@@ -4134,9 +4661,13 @@ document.getElementById('practice-hint-btn').addEventListener('click', () => {
   if (badgeEl) badgeEl.textContent = left > 0 ? left : '✓';
   box.classList.remove('hidden');
 
+  // Only grey the button out when the child has genuinely seen every hint that
+  // exists. When a PLAN is withholding steps, leave it tappable - a disabled
+  // button explains nothing, and this is the one moment the upgrade prompt is
+  // relevant. It fades either way so the state still reads as "spent".
   if (S.practice.hintIdx >= MAX_HINTS) {
     const btn = document.getElementById('practice-hint-btn');
-    if (btn) { btn.disabled = true; btn.classList.add('opacity-50'); }
+    if (btn) { btn.disabled = MAX_HINTS >= 3; btn.classList.add('opacity-50'); }
   }
 });
 
@@ -4176,6 +4707,16 @@ function practiceSubmit() {
   const q = S.practice.qs[S.practice.idx];
   const ua = getSelectedAnswer('practice-answer-area', q?.type);
   if (q?.type !== 'symmetry' && !ua) { toast('Please answer the question first! 📝'); return; }
+
+  // Daily cap. Checked BEFORE marking, so the child is stopped at the boundary
+  // rather than having an answer graded and then discarded. Assignment/test
+  // runs are exempt: a parent set that work and the child must be able to
+  // finish it - a cap is about free-play practice volume, not homework.
+  if (!ASSIGNMENT_IS_TEST && !_assignmentActive && _capReached('questions')) {
+    _showCapModal('questions');
+    return;
+  }
+
   const ok = checkAnswer(q, ua);
 
   // ── TEST MODE: record silently, advance immediately ──────────────
@@ -4208,6 +4749,11 @@ function practiceSubmit() {
   // "Continue Later" session) shows the read-only recap instead of a blank
   // answer area - see _renderPracticeReviewAnswer().
   S.practice.answers[S.practice.idx] = { userAnswer: ua, correct: ok, skipped: false };
+
+  // Counts a GRADED answer only. practiceSkip() deliberately does not bump:
+  // skipping teaches nothing, and charging a child's daily allowance for it
+  // would push them to guess rather than skip.
+  if (!_assignmentActive) _usageBump('questions');
 
   // Combo + sounds (before rendering so float appears at correct time)
   if (ok) {
@@ -4452,6 +4998,9 @@ function _toggleRoundReview() {
 
 function _roundCompleteNext() {
   document.getElementById('modal-round-complete')?.classList.add('hidden');
+  // The assignment, if this was one, is over - the next round is ordinary
+  // practice and must count against the daily cap like any other.
+  _setAssignmentContext(false);
   S.practice.session = { attempted: 0, correct: 0 };
   if (S.practice.difficulty !== null) {
     S.practice.qs = getQuestionsForChapter(S.practice.chapterId, S.practice.difficulty, 20);
@@ -4466,6 +5015,7 @@ function _roundCompleteNext() {
 
 function _roundCompleteBack() {
   document.getElementById('modal-round-complete')?.classList.add('hidden');
+  _setAssignmentContext(false);
   // The round just finished (this modal only shows once all 20 are answered),
   // so there is nothing left to offer "Continue where you left off" for -
   // without this a completed round left a stale resume record pointing at its
@@ -4554,10 +5104,19 @@ window.startAssignmentPractice = function() {
   S.practice.answers    = {};
   S.practice.hintShown  = false;
   S.practice.session    = { attempted: 0, correct: 0 };
+  // Same reasoning as startChapterDirect(): _saveResume() must never write a
+  // resume record for this - cfg.chapters?.[0] is very often a REAL chapter
+  // id, so pausing this would collide with that chapter's own genuine
+  // practice-resume slot.
+  // Via the helper so the "⏸️ Continue Later" button is hidden here too - this
+  // path set the flag directly and left the button visible on an assignment
+  // that _saveResume() deliberately refuses to save, so pausing it lost the run.
+  _setAssignmentContext(true);
 
   showScreen('practice');
   document.getElementById('practice-ch-name').textContent = `📋 ${cfg.label || 'Assignment'}`;
   document.getElementById('practice-back-btn').classList.add('hidden');
+  document.getElementById('practice-pause-btn')?.classList.add('hidden');
   document.getElementById('difficulty-btns')?.classList.add('hidden');
   _updateDiffBadge(null);
 
@@ -4644,9 +5203,11 @@ function showAssignmentComplete() {
 
   ASSIGNMENT_MODE    = false;
   ASSIGNMENT_IS_TEST = false;
+  _assignmentActive  = false;
 
   // Restore practice screen
   document.getElementById('practice-back-btn')?.classList.remove('hidden');
+  document.getElementById('practice-pause-btn')?.classList.remove('hidden');
   document.getElementById('difficulty-btns')?.classList.remove('hidden');
   document.getElementById('practice-hint-btn')?.classList.remove('hidden');
   const submitBtn = document.getElementById('practice-submit-btn');
@@ -4991,6 +5552,8 @@ function renderSyllabus() {
 }
 
 window.startSubsectionPractice = function(chapterId, subsectionId, subsectionName) {
+  // Ordinary practice, whatever ran before it - see _setAssignmentContext.
+  _setAssignmentContext(false);
   S.practice.chapterId = chapterId;
   S.practice.difficulty = null; // subsection mode - no level filter
   S.practice.qs = getQuestionsForSubsection(chapterId, subsectionId, 20);
@@ -5065,6 +5628,12 @@ document.getElementById('help-modal').addEventListener('click', function(e) {
 
 // ── WEAK AREA DRILL ───────────────────────────
 function startWeakAreaDrill() {
+  // Checked HERE as well as in startExam(): the pooled path below builds and
+  // runs a full timed exam without ever calling startExam, so without this a
+  // child at their weekly cap could take unlimited exams via "💪 Weak Areas".
+  if (!_planAllowsFeature('weak_area_drill')) { _showFeatureModal('weak_area_drill'); return; }
+  if (_capReached('exams')) { _showCapModal('exams'); return; }
+
   // Find chapters with accuracy < 60% (or never attempted → treat as 0%)
   const weakChapters = CHAPTERS
     .map(ch => ({ id: ch.id, pct: getChapterPct(ch.id) }))
@@ -5093,6 +5662,7 @@ function startWeakAreaDrill() {
 
   toast(`💪 Targeting: ${chNames}`, 3000);
 
+  _usageBump('exams');
   S.exam.qs = pool;
   S.exam.answers = {};
   S.exam.flagged = new Set();
@@ -5183,9 +5753,39 @@ const _SUBJECT_BORDER_COLOR = {
   'History & Geography': '#f59e0b',
 };
 
+function _kidHomeHero() {
+  const greetEl = document.getElementById('kidhome-greeting');
+  const subEl   = document.getElementById('kidhome-sub');
+  const avEl    = document.getElementById('kidhome-avatar');
+  const statsEl = document.getElementById('kidhome-stats');
+  if (!greetEl) return; // parent/teacher context or screen not in this build
+
+  const acct = typeof Auth !== 'undefined' && Auth.getActiveAccount ? Auth.getActiveAccount() : null;
+  const name = acct?.name || 'there';
+  const [greet, emoji] = typeof _greeting === 'function' ? _greeting() : ['Hey', '👋'];
+  greetEl.textContent = `${greet}, ${name}! ${emoji}`;
+
+  const attempted = (typeof DB !== 'undefined' && DB.stats?.totalAttempted) || 0;
+  subEl.textContent = attempted > 0 ? 'What do you want to learn today?' : "Let's get started - pick a subject below!";
+  if (avEl) avEl.textContent = acct?.avatar || DB?.avatar || '🧒';
+
+  if (statsEl) {
+    const streak = (typeof DB !== 'undefined' && DB.stats?.streak) || 0;
+    const level  = (typeof DB !== 'undefined' && DB.level) || 1;
+    const xp     = (typeof DB !== 'undefined' && DB.xp) || 0;
+    statsEl.innerHTML = `
+      <span class="bg-white/20 px-3 py-1 rounded-full">🔥 ${streak} day streak</span>
+      <span class="bg-white/20 px-3 py-1 rounded-full">⭐ Level ${level}</span>
+      <span class="bg-white/20 px-3 py-1 rounded-full">✨ ${xp} XP</span>`;
+  }
+}
+
 function renderSubjectSelect() {
   const container = document.getElementById('subject-cards');
   if (!container) return;
+
+  _kidHomeHero();
+  _renderResumeBanner();
 
   // Filter to selected grade; fall back to all if none chosen
   const all   = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
@@ -5193,13 +5793,22 @@ function renderSubjectSelect() {
 
   // Update heading
   const heading = document.getElementById('subject-select-heading');
-  if (heading) heading.textContent = SELECTED_GRADE ? `Grade ${SELECTED_GRADE} - Choose a Subject` : 'Choose a Subject';
+  if (heading) heading.textContent = SELECTED_GRADE ? `Grade ${SELECTED_GRADE} - pick a subject` : 'Pick a subject';
 
   container.innerHTML = packs.map(pack => {
     const soon  = !!pack.comingSoon;
     const theme = _SUBJECT_THEME[pack.subject] || _DEFAULT_THEME;
     const onclk = soon ? `toast('Coming soon!', 2000)` : `selectSubject('${pack.id}')`;
     const chapCount = pack.chapters?.length || 0;
+    // Per-subject progress pill - the tile doubles as a tiny progress report,
+    // not just a launcher, so a kid can see at a glance which subjects they've
+    // already been practising without opening each one.
+    const chIds = (pack._chapters || pack.chapters || []).map(c => c.id);
+    let progressPill = '';
+    if (!soon && chIds.length && typeof DB !== 'undefined' && DB.chapters) {
+      const attempted = chIds.reduce((n, id) => n + (DB.chapters[id]?.attempted || 0), 0);
+      if (attempted > 0) progressPill = `<span class="text-xs font-bold px-2 py-1 rounded-full bg-white/90 text-gray-700 shadow-sm">✅ ${attempted} done</span>`;
+    }
     // Only shown when SELECTED_GRADE is unset (the fallback "every grade" view) -
     // in the normal single-grade view the heading already says the grade, and
     // repeating it on every card would be noise. Without this, three
@@ -5207,18 +5816,52 @@ function renderSubjectSelect() {
     // tell apart - see the comment above _shouldExitToParentDashboard().
     const gradeBadge = SELECTED_GRADE ? '' : `<div class="absolute top-4 left-4 text-xs bg-gray-800/80 text-white px-2 py-0.5 rounded-full font-semibold">Grade ${pack.grade}</div>`;
     return `
-      <button type="button" class="${soon ? 'opacity-70 cursor-default' : 'cursor-pointer group'} relative text-left bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg active:scale-95 transition-all overflow-hidden" onclick="${onclk}" ${soon ? 'disabled' : ''}>
+      <button type="button" class="${soon ? 'opacity-70 cursor-default' : 'kid-subject-card cursor-pointer group'} relative text-left bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-xl active:scale-95 transition-all overflow-hidden" onclick="${onclk}" ${soon ? 'disabled' : ''}>
         <div class="h-2 bg-gradient-to-r ${theme.bg}"></div>
         <div class="p-5">
           ${gradeBadge}
           ${soon ? '<div class="absolute top-4 right-4 text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Coming Soon</div>' : ''}
-          <div class="w-14 h-14 rounded-2xl ${theme.icon} flex items-center justify-center text-3xl mb-3 select-none">${pack.icon}</div>
+          ${progressPill ? `<div class="absolute top-4 right-4">${progressPill}</div>` : ''}
+          <div class="w-14 h-14 rounded-2xl ${theme.icon} flex items-center justify-center text-3xl mb-3 select-none kid-subject-icon">${pack.icon}</div>
           <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1 transition-colors">${pack.subject}</h3>
           <p class="text-gray-500 dark:text-gray-400 text-sm mb-3">${pack.curriculum || ''}</p>
           <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${soon ? 'bg-gray-100 text-gray-500' : theme.chip}">${soon ? 'Coming Soon' : `${chapCount} chapters`}</span>
         </div>
       </button>`;
   }).join('');
+}
+
+// ── "Surprise Me!" — a random unlocked chapter from any of the student's
+// subjects. Reuses the exact same gating startChapterDirect already enforces
+// (_adminBlocksChapter + the parent's own lockedChapters), so it can never
+// hand out a chapter the student wouldn't otherwise be allowed to open.
+function surpriseMe() {
+  const grade = (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE)
+    || (typeof Auth !== 'undefined' && Auth.getActiveAccount?.()?.grade) || 5;
+  const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .filter(p => p.grade === grade && !p.comingSoon);
+  const locked = (typeof DB !== 'undefined' && DB.restrictions?.lockedChapters) || [];
+
+  const candidates = [];
+  packs.forEach(pack => {
+    (pack._chapters || pack.chapters || []).forEach(ch => {
+      if (locked.includes(ch.id)) return;
+      if (typeof _adminBlocksChapter === 'function' && _adminBlocksChapter(ch.id)) return;
+      candidates.push({ pack, chapter: ch });
+    });
+  });
+  if (!candidates.length) { toast('Nothing to surprise you with yet! 🙈', 2000); return; }
+
+  const pick = candidates[Math.floor(Math.random() * candidates.length)];
+  toast(`🎲 Surprise! ${pick.pack.icon} ${pick.chapter.icon || ''} ${pick.chapter.name}`, 2200);
+  activateSubjectPack(pick.pack.id);
+  if (typeof QuestionLoader !== 'undefined') {
+    QuestionLoader.loadSubject(pick.pack.id)
+      .then(() => startChapterDirect(pick.chapter.id))
+      .catch(() => startChapterDirect(pick.chapter.id));
+  } else {
+    startChapterDirect(pick.chapter.id);
+  }
 }
 
 window.selectSubject = function(id) {
@@ -5443,11 +6086,27 @@ async function _renderStudentProfile(container) {
   }
 
   const avatarList = ['🧒','👧','🧑','👦','🌟','🎓','🦁','🐯','🦊','🐧','🌈','💫','🏆','⭐','🚀','🎯','🎮','🎲','📚','🌺'];
-  const hapticOn = localStorage.getItem('pref_haptic') !== 'false';
-  const soundOn  = localStorage.getItem('pref_sound')  !== 'false';
+  const hapticOn = localStorage.getItem(_prefKey('haptic')) !== 'false';
+  const soundOn  = localStorage.getItem(_prefKey('sound'))  !== 'false';
+  const kidPrefs = Object.assign({ vibe: 'default', bigText: false, calm: false }, DB.kidPrefs);
 
   const toggleHtml = (id, checked, key, label, sub) => `
     <label class="flex items-center justify-between gap-3 cursor-pointer" onclick="_togglePref('${key}')">
+      <div>
+        <span class="text-sm font-medium text-gray-800 dark:text-white">${label}</span>
+        <p class="text-xs text-gray-500 dark:text-gray-400">${sub}</p>
+      </div>
+      <button id="${id}" role="switch" aria-checked="${checked}" type="button"
+        class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${checked ? 'bg-indigo-500' : 'bg-gray-300 dark:bg-gray-600'}">
+        <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${checked ? 'translate-x-6' : 'translate-x-1'}"></span>
+      </button>
+    </label>`;
+
+  // Same shape as toggleHtml above, but wired to DB.kidPrefs (via
+  // _toggleKidBoolPref) instead of the localStorage pref_* keys - these two
+  // ride in the synced progress blob, not device-local storage.
+  const kidToggleHtml = (id, checked, key, label, sub) => `
+    <label class="flex items-center justify-between gap-3 cursor-pointer" onclick="_toggleKidBoolPref('${key}','${label}')">
       <div>
         <span class="text-sm font-medium text-gray-800 dark:text-white">${label}</span>
         <p class="text-xs text-gray-500 dark:text-gray-400">${sub}</p>
@@ -5486,7 +6145,7 @@ async function _renderStudentProfile(container) {
         <button onclick="_profileBack()" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Back">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
         </button>
-        <h2 class="text-xl font-bold text-gray-800 dark:text-white">My Profile</h2>
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white">⚙️ My Settings</h2>
       </div>
 
       ${restricted ? `<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 rounded-2xl p-4 flex items-center gap-3">
@@ -5524,15 +6183,75 @@ async function _renderStudentProfile(container) {
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">To change your name, ask your parent.</p>
       </div>
 
+      <!-- My Colours - purely cosmetic, kid-home only (see .kid-* rules in
+           style.css). Kept separate from Preferences below: those two are
+           accessibility/feedback settings, this one is just fun. -->
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
+        <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">🎨 My Colours</h3>
+        <div class="grid grid-cols-3 gap-2" id="kidpref-vibe-grid">
+          ${KID_VIBES.map(v => `
+            <button type="button" onclick="_pickKidVibe('${v.id}')"
+              class="kidvibe-swatch flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 transition-colors ${kidPrefs.vibe === v.id ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30' : 'border-transparent bg-gray-50 dark:bg-gray-700/50'}"
+              data-vibe="${v.id}">
+              <span class="w-8 h-8 rounded-full shadow-inner" style="background:linear-gradient(135deg,${v.c1},${v.c2})"></span>
+              <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">${v.label}</span>
+            </button>`).join('')}
+        </div>
+      </div>
+
       <!-- Preferences -->
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-4">
         <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Preferences</h3>
         ${toggleHtml('pref-haptic-toggle', hapticOn, 'haptic', 'Haptic Feedback', 'Vibration on correct / wrong answers')}
         ${toggleHtml('pref-sound-toggle',  soundOn,  'sound',  'Sound / Read Aloud', 'Audio feedback and text-to-speech')}
+        ${kidToggleHtml('kidpref-bigText-toggle', !!kidPrefs.bigText, 'bigText', '🔠 Big Text', 'Larger text on your home screen')}
+        ${kidToggleHtml('kidpref-calm-toggle',    !!kidPrefs.calm,    'calm',    '🎬 Calm Mode', 'Turns off the bouncy animations')}
       </div>
 
       ${studentBiometricHtml}
     </div>`;
+}
+
+// 6 hex-only (no CSS var/named colour) so they can drive an inline
+// linear-gradient swatch directly - same reasoning as _subjectPrintColor()
+// in calendar.js. Keep in step with the :root[data-kid-vibe] rules in
+// style.css - each id here must have a matching CSS rule there.
+const KID_VIBES = [
+  { id: 'default', label: 'Classic', c1: '#6366f1', c2: '#ec4899' },
+  { id: 'ocean',   label: 'Ocean',   c1: '#0ea5e9', c2: '#14b8a6' },
+  { id: 'sunset',  label: 'Sunset',  c1: '#f97316', c2: '#ec4899' },
+  { id: 'forest',  label: 'Forest',  c1: '#22c55e', c2: '#0d9488' },
+  { id: 'galaxy',  label: 'Galaxy',  c1: '#7c3aed', c2: '#4338ca' },
+  { id: 'candy',   label: 'Candy',   c1: '#ec4899', c2: '#f43f5e' },
+];
+
+function _pickKidVibe(vibeId) {
+  _setKidPref('vibe', vibeId);
+  document.querySelectorAll('#kidpref-vibe-grid .kidvibe-swatch').forEach(btn => {
+    const sel = btn.dataset.vibe === vibeId;
+    btn.classList.toggle('border-indigo-500',     sel);
+    btn.classList.toggle('bg-indigo-50',          sel);
+    btn.classList.toggle('dark:bg-indigo-900/30', sel);
+    btn.classList.toggle('border-transparent',    !sel);
+    btn.classList.toggle('bg-gray-50',            !sel);
+    btn.classList.toggle('dark:bg-gray-700/50',   !sel);
+  });
+  toast('Colours updated! 🎨', 1500);
+}
+
+function _toggleKidBoolPref(key, label) {
+  const next = !(DB.kidPrefs && DB.kidPrefs[key]);
+  _setKidPref(key, next);
+  const btn = document.getElementById(`kidpref-${key}-toggle`);
+  if (btn) {
+    btn.setAttribute('aria-checked', String(next));
+    btn.classList.toggle('bg-indigo-500',    next);
+    btn.classList.toggle('bg-gray-300',      !next);
+    btn.classList.toggle('dark:bg-gray-600', !next);
+    const knob = btn.querySelector('span');
+    if (knob) { knob.classList.toggle('translate-x-6', next); knob.classList.toggle('translate-x-1', !next); }
+  }
+  toast(`${label} ${next ? 'on' : 'off'}.`, 1500);
 }
 
 function _pickProfileAvatar(btn, avatar) {
@@ -5564,7 +6283,7 @@ function _pickProfileAvatar(btn, avatar) {
 }
 
 function _togglePref(key) {
-  const storageKey = `pref_${key}`;
+  const storageKey = _prefKey(key);
   const cur  = localStorage.getItem(storageKey) !== 'false';
   const next = !cur;
   localStorage.setItem(storageKey, String(next));

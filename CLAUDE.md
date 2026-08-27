@@ -19,11 +19,22 @@ Hosted on **Netlify**. Backend: **Supabase**. No frameworks — pure HTML/CSS/JS
 
 ## Engine load order (index.html script tags)
 ```
-supabase.js → store.js → registry.js → questions_engine.js → helpers.js →
-events.js → protect.js → question_loader.js → auth.js → admin.js →
-teacher.js → forum.js → calendar.js → app.js
+supabase.js → protect.js → helpers.js → questions_engine.js → registry.js →
+events.js → store.js →
+  [all 15 subjects/*/_manifest.js] → subjects/grade5-maths/help.js →
+question_loader.js → app.js → biometric.js → auth.js → teacher.js →
+admin.js → forum.js → calendar.js → search.js → classroom.js
 ```
-Then all `_manifest.js` files (grades 4/5/6, all subjects).
+Two things this order guarantees, both load-bearing — verify against
+`index.html` before trusting any summary of it, this one included:
+- **The manifests load BEFORE `app.js`.** `CHAPTERS` is declared *once* in the
+  whole repo, as `const CHAPTERS` in `subjects/grade5-maths/_manifest.js:9`, and
+  `app.js` references it at top level (its final `console.log`, and
+  `activateSubjectPack`). Move a manifest after `app.js` and that is a
+  ReferenceError, not a warning.
+- **`app.js` loads BEFORE `auth.js`.** `auth.js` ends by calling `Auth.init()`,
+  which needs `showScreen` and assigns `ACTIVE_STUDENT_ID` — both defined in
+  `app.js`. Anything `auth.js` touches at load time must already exist.
 
 ---
 
@@ -334,7 +345,12 @@ Design notes worth keeping:
   banner, plans from the `plans` table, and Juice / card payment rows that are
   visibly **disabled**. Nothing here calls a payment provider — when payment
   opens this is the single place to wire it up. `FREE_UNTIL_LABEL` in `app.js`
-  is the one date string to change.
+  is the one date string to change — `index.html` still carries the date in 8
+  places for the first paint and for JS-off, but each is wrapped in
+  `<span data-free-until>` and overwritten by `_applyFreeUntilLabel()` on every
+  `showScreen`. Change the constant; the markup copies are only a fallback and
+  are worth updating in the same commit so the two never disagree on screen
+  before JS runs. Currently **30 September 2026**.
 - **Header buttons** were six pill buttons in six pastel colours matching nothing
   else in the app. Now `.pd-action` (style.css): icon over label, one neutral
   surface, same shape language as `.nav-btn` in the student bottom bar. Colour is

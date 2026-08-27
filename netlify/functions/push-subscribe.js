@@ -31,6 +31,30 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 // a Supabase JWT (owns_student() joins students → families → auth.uid()). Both
 // functions are SECURITY DEFINER and granted to anon/authenticated, so this adds
 // no new SQL surface.
+// Does this student's family plan include daily reminders?
+//
+// Fails OPEN on any error, and on the RPC not existing yet
+// (supabase-plan-enforcement.sql not run). A transient database blip must not
+// take a feature away from a family that has paid for it; the cost of the
+// opposite mistake is one unpaid reminder. plan_features_for_student() also
+// returns null when enforcement is switched off, which lands in the same
+// "allowed" branch.
+async function _planAllowsPush(studentId) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/plan_features_for_student`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ p_student: studentId }),
+    });
+    if (!res.ok) return true;
+    const features = await res.json();
+    if (!features || typeof features !== 'object') return true;
+    return features.push_reminders !== false;
+  } catch (_) {
+    return true;
+  }
+}
+
 async function _callerOwns(event, studentId) {
   const h     = event.headers || {};
   const token = (h['x-student-token'] || '').trim();
@@ -108,10 +132,25 @@ export async function handler(event) {
   if (!await _callerOwns(event, studentId)) return { statusCode: 403, body: 'Forbidden' };
 
   // ── Update reminder_time only (no subscription payload) ──
-  if (reminderTime !== undefined && !subscription) {
-    if (reminderTime !== null && !/^([01]\d|2[0-3]):[0-5]\d$/.test(reminderTime)) {
+  // Daily reminders are a paid feature. Gated HERE, before the branch split,
+  // because there are TWO ways in: the "reminder_time only" PATCH below, and
+  // the subscribe upsert further down which also writes reminder_time. Gating
+  // only the first left the second wide open to exactly the payload the normal
+  // subscribe flow already sends - {studentId, subscription, reminderTime} -
+  // while the admin Plans tab advertises this as enforced server-side.
+  //
+  // Only SETTING one is gated; clearing it (null) must always work, or a family
+  // that downgrades is stuck with a reminder they can no longer switch off.
+  if (reminderTime !== undefined && reminderTime !== null) {
+    if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(reminderTime)) {
       return { statusCode: 400, body: 'Invalid reminderTime' };
     }
+    if (!await _planAllowsPush(studentId)) {
+      return { statusCode: 402, body: 'Daily reminders are not included in this plan.' };
+    }
+  }
+
+  if (reminderTime !== undefined && !subscription) {
     const res = await fetch(
       `${SUPABASE_URL}/rest/v1/push_subscriptions?student_id=eq.${studentId}`,
       { method: 'PATCH', headers, body: JSON.stringify({ reminder_time: reminderTime }) }

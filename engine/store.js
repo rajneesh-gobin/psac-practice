@@ -28,14 +28,46 @@ const Store = (() => {
       level:        1,
       assignments:  [],
       restrictions: { lockedChapters:[], maxDifficulty:4, examDisabled:false },
+      // Purely cosmetic, student-chosen customisation for their own kid-home
+      // and dashboard screens (My Settings). Rides along in the same jsonb
+      // blob as everything else here, so it needs no schema change and syncs
+      // across the student's own devices for free - see save()/saveStudent().
+      kidPrefs:     { vibe: 'default', bigText: false, calm: false },
+      // Plan-cap counters (daily questions, weekly exams). Deliberately in this
+      // jsonb rather than a new column on `students`: no migration, no new
+      // column-level GRANT to forget (see the students grant note in CLAUDE.md),
+      // and loadStudentProgress() backfills it into every existing child for
+      // free. day/week are Mauritius date keys - see _muDayKey()/_muWeekKey().
+      usage:        { day: '', questions: 0, week: '', exams: 0 },
     };
+  }
+
+  // Declared HERE, above saveStudentSession/clearStudentSession which cancel it,
+  // rather than beside saveStudentProgress further down: both are let bindings,
+  // and a let read before its declaration line throws rather than reading
+  // undefined.
+  let _saveDebounceTimer = null;
+
+  function _cancelPendingFlush() {
+    clearTimeout(_saveDebounceTimer);
+    _saveDebounceTimer = null;
   }
 
   // ── Student session (PIN-based, not Supabase Auth) ────
   // sess.token is the x-student-token that RLS uses to identify this student.
   // Saving or restoring a session also installs/clears that header, so callers
   // never have to remember to do it separately.
+  //
+  // Changing WHO is signed in must also drop any progress write still sitting in
+  // the 30s debounce. That write carries the PREVIOUS student's id, and the
+  // header it would go out with belongs to whoever is signed in now - so on a
+  // shared family tablet, child A answering a question and child B logging in
+  // within 30s made the timer fire A's row under B's token. RLS rejects that as
+  // a row-level violation, which _flushProgressToSupabase reads as an expired
+  // session and signs B straight back out. The data is not lost: localStorage is
+  // written synchronously on every save, before the debounce is ever armed.
   function saveStudentSession(sess) {
+    _cancelPendingFlush();
     try { localStorage.setItem(STUDENT_SESS, JSON.stringify(sess)); } catch(e) {}
     if (typeof setStudentToken === 'function') setStudentToken(sess?.token || null);
   }
@@ -53,6 +85,7 @@ const Store = (() => {
   }
 
   function clearStudentSession() {
+    _cancelPendingFlush();
     try { localStorage.removeItem(STUDENT_SESS); } catch(e) {}
     if (typeof setStudentToken === 'function') setStudentToken(null);
   }
@@ -205,8 +238,11 @@ const Store = (() => {
   const _CREATE_ERRORS = {
     username_taken:   'That username is not available. Please try another.',
     invalid_pin:      'PIN must be exactly 4 digits.',
-    invalid_username: 'Please enter a username.',
+    invalid_username: 'Username must be 3-20 characters, start with a letter, and use only letters, numbers, dots or underscores.',
     not_authorised:   'You do not have permission to add a child to this family.',
+    // Raised by the students_max_children trigger. The cap comes back on the
+    // response, so the static wording here is only the fallback.
+    plan_child_limit: 'Your plan does not include another child account.',
   };
 
   // Creates the student and hashes the PIN in ONE database statement.
@@ -231,7 +267,12 @@ const Store = (() => {
     if (!data?.ok) {
       const code = data?.error || 'unknown';
       console.error('[Store.createStudent] rejected:', code);
-      return { _error: { code, message: _CREATE_ERRORS[code] || 'Could not create the child account.' } };
+      let message = _CREATE_ERRORS[code] || 'Could not create the child account.';
+      if (code === 'plan_child_limit' && Number.isFinite(data?.limit)) {
+        message = `Your plan covers ${data.limit} child account${data.limit === 1 ? '' : 's'}. `
+                + 'Upgrade to add another, or remove a child first.';
+      }
+      return { _error: { code, message, limit: data?.limit } };
     }
     return data.student;
   }
@@ -348,10 +389,20 @@ const Store = (() => {
     return raw;
   }
 
-  let _saveDebounceTimer = null;
-
   async function _flushProgressToSupabase(studentId, progressData) {
     if (!_sb) return;
+    // Belt-and-braces alongside the cancel in saveStudentSession/clearStudentSession:
+    // never write one student's row while a DIFFERENT student's token is installed.
+    // RLS would reject it anyway, but that rejection is indistinguishable from a
+    // genuinely expired session and would sign the wrong child out.
+    // A parent previewing a child has no student session at all and is authorised
+    // by owns_student_txt() instead, so only a mismatched session blocks the write.
+    const _sess = getStudentSession();
+    if (_sess && _sess.id && _sess.id !== studentId) {
+      console.warn('[Store.saveStudentProgress] dropped a stale write for', studentId,
+        '- the signed-in student is now', _sess.id, '(kept in localStorage)');
+      return;
+    }
     _sb.from('student_progress').upsert({
       student_id: studentId, data: progressData, updated_at: new Date().toISOString(),
     }).then(({ error }) => {
@@ -376,11 +427,14 @@ const Store = (() => {
     // Debounce Supabase writes: batch rapid question answers into one write every 30s.
     // Pass immediate=true on exam submit / explicit checkpoints so data is never lost.
     if (immediate) {
-      clearTimeout(_saveDebounceTimer);
+      _cancelPendingFlush();
       _flushProgressToSupabase(studentId, progressData);
     } else {
-      clearTimeout(_saveDebounceTimer);
-      _saveDebounceTimer = setTimeout(() => _flushProgressToSupabase(studentId, progressData), 30_000);
+      _cancelPendingFlush();
+      _saveDebounceTimer = setTimeout(() => {
+        _saveDebounceTimer = null;
+        _flushProgressToSupabase(studentId, progressData);
+      }, 30_000);
     }
   }
 
@@ -606,12 +660,27 @@ const Store = (() => {
     return { ok: !error, sessionExpired };
   }
 
-  async function loadReports() {
+  // offset/limit, not a flat .limit(100): at ~1000 users/month the report
+  // queue would eventually exceed 100 open items and the tab would silently
+  // stop showing anything past that, with no "load more" to reach the rest.
+  async function loadReports(offset = 0, limit = 30) {
     if (!_sb) return [];
     const { data } = await _sb.from('question_reports')
       .select('*, students!student_id(display_name, grade)')
-      .order('created_at', { ascending: false }).limit(100);
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
     return data || [];
+  }
+
+  // Total reports, for the "showing N of M" line. Separate from loadReports()
+  // rather than a second return value: the total only has to be fetched when
+  // the list resets, not on every Load more page.
+  // head:true means the rows are not transferred, only the count header.
+  async function countReports() {
+    if (!_sb) return null;
+    const { count, error } = await _sb.from('question_reports')
+      .select('id', { count: 'exact', head: true });
+    return error ? null : (count ?? null);
   }
 
   async function resolveReport(id) {
@@ -794,7 +863,7 @@ const Store = (() => {
     getGlobalSettings, mmGet, mmSet,
     generateId,
     // Question reports
-    reportQuestion, loadReports, resolveReport,
+    reportQuestion, loadReports, countReports, resolveReport,
     // Assignments
     loadAssignments, createAssignment, deleteAssignment, completeAssignment,
     // Friends

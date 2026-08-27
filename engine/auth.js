@@ -25,6 +25,10 @@ const Auth = (() => {
   let _teacherStatus       = 'none'; // none|pending|approved|rejected|suspended
   let _isSuperAdmin        = false;  // true when logged-in user is super admin
   let _planFeatures        = null; // features object from the family's active plan
+  // 'pending' until the lookup settles, then 'loaded' (a real answer, which may
+  // legitimately be "no plan" = free) or 'failed'. getPlanFeatures() only falls
+  // back to the free defaults on 'loaded' - see the comment there.
+  let _planFeaturesState   = 'pending';
   let _pinAttempts         = 0;
   let _pinLockedUntil      = 0;
   let _parentPinEntry      = '';
@@ -42,17 +46,76 @@ const Auth = (() => {
 
   const DEFAULT_FREE_FEATURES = {
     allowed_chapters: null, daily_question_cap: 20, weekly_exam_cap: 1,
-    hints_per_question: 3, printable_papers: false, advanced_analytics: false,
-    push_reminders: false, timetable_generator: false, weekly_digest: false,
-    tutor_status: false, early_access: false, max_children: 1,
+    // 1, not 3: _buildHints() only ever builds 3 steps, so a free tier of 3 is
+    // everything that exists and "unlimited hints" on a paid tier would be an
+    // empty promise. Step 3 also prints the answer outright for non-MCQ
+    // questions (see _buildHints), which is the step worth paying for.
+    hints_per_question: 1, printable_papers: false, advanced_analytics: false,
+    // weekly_digest_ENABLED, not weekly_digest: the latter is the PARENT's own
+    // on/off switch in profiles.preferences, read by weekly-digest.js. Two
+    // different concepts that shared a name until this rename - a plan saying
+    // "no digest" and a parent saying "not for me" must stay distinguishable.
+    push_reminders: false, timetable_generator: false, weekly_digest_enabled: false,
+    tutor_status: false,
+    // No early_access: it gated nothing, so the switch was removed from the
+    // admin form rather than left looking functional. Re-add both together if
+    // an actual early-access feature ever exists.
+    //
+    // No max_children either - that one is a COLUMN on plans (what the pricing
+    // page shows and what the students_max_children trigger reads), never a
+    // features key. Both copies existed and the form edited the dead one.
   };
 
   function _el(id) { return document.getElementById(id); }
 
+  // ── Username rules ──────────────────────────────
+  // A child types this on the login screen, often on a phone keyboard, and it
+  // is also the only thing distinguishing two children who share a display
+  // name. So: letters, digits, dot and underscore only.
+  //
+  // Spaces are the specific hazard. They are invisible at the end of a field,
+  // mobile keyboards insert one after autocomplete, and "emma 2025" then fails
+  // to log in with no clue why. The two entry paths used to disagree - setup
+  // stripped spaces silently, add-child did not strip anything - so the same
+  // typed name produced different accounts depending on which screen was used.
+  const _USERNAME_RE = /^[a-z][a-z0-9._]{2,19}$/;
+
+  function _normaliseUsername(raw) {
+    return (raw || '').trim().toLowerCase().replace(/\s+/g, '');
+  }
+
+  // Returns an error string, or null when the username is acceptable.
+  function _usernameError(u) {
+    if (!u)               return 'Please enter a username.';
+    if (u.length < 3)     return 'Username must be at least 3 characters.';
+    if (u.length > 20)    return 'Username must be 20 characters or fewer.';
+    if (!/^[a-z]/.test(u)) return 'Username must start with a letter.';
+    if (!_USERNAME_RE.test(u)) {
+      return 'Username can only use letters, numbers, dots and underscores — no spaces or symbols.';
+    }
+    return null;
+  }
+
   function getActiveAccount()  { return _activeAccount; }
   function getParentProfile()  { return _parentProfile; }
   function getFamily()         { return _family; }
-  function getPlanFeatures()   { return _planFeatures ?? DEFAULT_FREE_FEATURES; }
+  // ⚠ Fails OPEN while the plan is still loading, and if loading FAILED.
+  //
+  // window.PLAN_ENFORCEMENT comes from one mm_data read; _planFeatures needs a
+  // three-hop chain (students → families → subscriptions/plans). Enforcement is
+  // therefore ALWAYS on before the features arrive, and returning the free-tier
+  // defaults in that window capped a Premium family's child at 20 questions and
+  // 1 hint. Worse, any hop failing (RLS, offline) left _planFeatures null for
+  // the whole session, silently, with the child capped throughout.
+  //
+  // `{}` means "no restrictions": every cap reads as unlimited and every
+  // feature as allowed - the same direction as _planCap on a malformed value
+  // and the same direction the server-side gates fail. A free family briefly
+  // uncapped is a far cheaper mistake than a paying one capped.
+  function getPlanFeatures() {
+    if (_planFeatures) return _planFeatures;
+    return _planFeaturesState === 'loaded' ? DEFAULT_FREE_FEATURES : {};
+  }
 
   const REF_STORAGE_KEY = 'psac_pending_referral';
 
@@ -225,7 +288,22 @@ const Auth = (() => {
   // guarded by _biometricGateResolved (plus _parentUser/_activeAccount) so
   // none of them can double-fire it.
   async function _handleParentSessionGated(session) {
-    if (_parentUser) return;
+    if (_parentUser) {
+      // Already handled by onAuthStateChange, so do not redo the work - but DO
+      // make sure the parent actually LEFT the auth screen.
+      //
+      // Returning silently here is what made "Sign in" appear to do nothing:
+      // the first click let onAuthStateChange set _parentUser while its routing
+      // was still in flight or had failed, and from then on every further click
+      // hit this guard and returned before navigating anywhere. The session was
+      // valid the whole time, which is why a refresh went straight in - init()
+      // routes from the stored session instead of coming through here.
+      const authScreen = _el('screen-auth');
+      const stuck = authScreen && !authScreen.classList.contains('hidden');
+      if (stuck && _parentProfile) _openParentDashboard();
+      else if (stuck) await _handleParentSession(session);
+      return;
+    }
     if (_biometricGateResolved || typeof Biometric === 'undefined' || !Biometric.isEnrolled(session.user.id)) {
       _biometricGateResolved = true;
       await _handleParentSession(session);
@@ -424,9 +502,16 @@ const Auth = (() => {
       window.GLOBAL_SETTINGS  = gs || {};
       window.PLAN_ENFORCEMENT = !!(gs?.plan_enforcement_enabled);
     }).catch(() => {});
+    // Same load-state handling as the student path - see getPlanFeatures().
+    _planFeaturesState = 'pending';
     Store.getUserPlan(_parentUser.id).then(r => {
       if (r?.plan?.features) _planFeatures = r.plan.features;
-    }).catch(() => {});
+      _planFeaturesState = 'loaded';
+    }).catch(err => {
+      _planFeaturesState = 'failed';
+      console.warn('[Auth] plan features could not be loaded - plan limits are '
+        + 'NOT being applied this session:', err?.message || err);
+    });
   }
 
   // Note the role passed to createProfile: 'parent', NOT 'teacher'. Signing up
@@ -690,9 +775,21 @@ const Auth = (() => {
     const progress = await Store.loadStudentProgress(studentRow.id);
     const merged   = Object.assign(progress, { restrictions: studentRow.settings });
     Object.assign(DB, merged);
-
+    // Same guard as the theme line below: pdSwitchStudent (parent previewing
+    // a child from the Parent Dashboard) calls this too, with
+    // applyUserTheme:false - a read-only preview must not repaint the shared
+    // <html> element with THAT child's vibe/text-size/sound preference,
+    // which would otherwise still be sitting there the next time the parent
+    // (or a different child) looks at a kid-facing screen.
     _activeAccount    = { id: studentRow.id, name: studentRow.display_name, avatar: studentRow.avatar, grade: studentRow.grade };
     ACTIVE_STUDENT_ID = studentRow.id;
+
+    // AFTER ACTIVE_STUDENT_ID, never before. _applyKidPrefs re-reads
+    // _soundEnabled through _prefKey(), which scopes the key by the CURRENT
+    // student id - so running it first resolved to the previous child, or to
+    // the 'guest' bucket on a fresh load. On a shared tablet that meant child B
+    // silently inherited child A's sound setting instead of their own.
+    if (applyUserTheme && typeof _applyKidPrefs === 'function') _applyKidPrefs();
 
     if (applyUserTheme) applyTheme(_preferredTheme(DB.theme));
     renderDashboard();
@@ -707,14 +804,26 @@ const Auth = (() => {
     }).catch(() => {});
     // Load plan features for client-side chapter gating
     if (_sb) {
+      _planFeaturesState = 'pending';
       _sb.from('students').select('family_id').eq('id', studentRow.id).maybeSingle()
         .then(async ({ data: s }) => {
-          if (!s?.family_id) return;
+          if (!s?.family_id) throw new Error('no family_id for student');
           const { data: fam } = await _sb.from('families').select('parent_id').eq('id', s.family_id).maybeSingle();
-          if (!fam?.parent_id) return;
+          if (!fam?.parent_id) throw new Error('no parent_id for family');
           const result = await Store.getUserPlan(fam.parent_id);
           if (result?.plan?.features) _planFeatures = result.plan.features;
-        }).catch(() => {});
+          // 'loaded' even when there is no plan row: that IS the answer (free),
+          // and it is what lets getPlanFeatures() start applying free caps.
+          _planFeaturesState = 'loaded';
+        })
+        .catch(err => {
+          // Never silent. Enforcement stays OFF for this session rather than
+          // capping someone who may well have paid - but somebody has to be
+          // able to find out that it happened.
+          _planFeaturesState = 'failed';
+          console.warn('[Auth] plan features could not be loaded - plan limits are '
+            + 'NOT being applied this session:', err?.message || err);
+        });
     }
 
     // Pre-load questions for this student's grade
@@ -1043,6 +1152,13 @@ const Auth = (() => {
   // idempotent - re-applying while pending just returns 'pending'.
   async function requestTeacherAccess(note) {
     if (!_sb || !_parentUser) { toast('Please sign in first.', 2500); return null; }
+    // Premium is sold as the tier "for big families and private tutors", so the
+    // plan decides who may APPLY. Approval is still a separate admin decision -
+    // this gate does not grant teacher access, it only opens the application.
+    if (typeof _planAllowsFeature === 'function' && !_planAllowsFeature('tutor_status')) {
+      if (typeof _showFeatureModal === 'function') _showFeatureModal('tutor_status');
+      return null;
+    }
     const { data, error } = await _sb.rpc('request_teacher_access', { p_note: note || null });
     if (error) {
       console.error('[requestTeacherAccess]', error.message);
@@ -1320,12 +1436,18 @@ const Auth = (() => {
       return;
     }
 
-    // More than one family is registered under this name, so the lookup cannot
-    // tell which child this is. Nothing the child types will fix it - a parent
-    // has to rename the family in Account & Settings → Family Login.
+    // More than one family is registered under this name, so a name lookup
+    // cannot tell which child this is.
+    //
+    // There IS something the child can type: the 6-character family code is
+    // unique, and verify_student_pin now accepts it in the same box. Saying
+    // only "ask your parent to rename the family" left a child stranded until
+    // an adult was available to change a setting - the code unblocks them now,
+    // and the rename is the permanent fix rather than the only one.
     if (data.error === 'ambiguous_family') {
-      _showAuthError('Two families share this name, so we cannot tell which account this is. '
-        + 'Please ask your parent to change the family name in Settings.');
+      _showAuthError('Another family uses this name too, so we cannot tell which account is yours. '
+        + 'Type your 6-letter family code in the family box instead — your parent can '
+        + 'find it in Settings → Family Login.');
       return;
     }
 
@@ -1398,12 +1520,13 @@ const Auth = (() => {
 
     const familyName  = (_el('setup-family-name')?.value  || '').trim() || 'My Family';
     const childName   = (_el('setup-child-name')?.value   || '').trim();
-    const childUser   = (_el('setup-child-username')?.value || '').trim().toLowerCase().replace(/\s+/g,'');
+    const childUser   = _normaliseUsername(_el('setup-child-username')?.value);
     const childGrade  = parseInt(_el('setup-child-grade')?.value || '5');
     const childPin    = (_el('setup-child-pin')?.value    || '').trim();
 
     if (!childName)             { toast('Please enter the child\'s name.', 2000); return; }
-    if (!childUser)             { toast('Please enter a username for the child.', 2000); return; }
+    const _cuErr = _usernameError(childUser);
+    if (_cuErr)                 { toast(_cuErr, 3500); return; }
     if (!/^\d{4}$/.test(childPin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
 
     const role = _parentUser.user_metadata?.role || 'parent';
@@ -1471,7 +1594,8 @@ const Auth = (() => {
     _isSuperAdmin     = false;
     _isTeacherUser    = false;
     _teacherStatus    = 'none';
-    _planFeatures     = null;
+    _planFeatures      = null;
+    _planFeaturesState = 'pending';
     window.PLAN_ENFORCEMENT = false;
     // Re-hide the privileged buttons, or they persist into the next session on
     // a shared device.
@@ -1483,6 +1607,11 @@ const Auth = (() => {
     if (hdrLogout) { hdrLogout.classList.add('hidden'); hdrLogout.classList.remove('flex'); }
     const hdrProfile = document.getElementById('header-profile-btn');
     if (hdrProfile) { hdrProfile.classList.add('hidden'); hdrProfile.classList.remove('flex'); }
+    // Kid-home customisation (My Settings) is per-student - on a shared
+    // family device the next thing shown must not carry a previous child's
+    // vibe/text-size into the landing page or the next login.
+    document.documentElement.removeAttribute('data-kid-vibe');
+    document.documentElement.classList.remove('kid-calm', 'kid-text-lg');
     if (_sb) await _sb.auth.signOut();
     showScreen('landing');
   }
@@ -1601,14 +1730,23 @@ const Auth = (() => {
     _justCreated = null;
 
     const name  = (_el('add-child-name')?.value     || '').trim();
-    const uname = (_el('add-child-username')?.value || '').trim().toLowerCase();
+    const uname = _normaliseUsername(_el('add-child-username')?.value);
     const grade = parseInt(_el('add-child-grade')?.value || '5');
     const pin   = (_el('add-child-pin')?.value      || '').trim();
 
     if (!name)  { toast('Please enter a name.', 2000); return; }
-    if (!uname) { toast('Please enter a username.', 2000); return; }
 
     const existingId = _el('add-student-id')?.value;
+    // Validated on CREATE only. The edit branch below never writes username -
+    // it updates displayName/grade/avatar/settings and optionally the PIN - but
+    // the field is pre-filled from the stored value, so validating here would
+    // lock a child created under the old "not blank" rule out of every edit:
+    // no grade change, no PIN reset, and a complaint about a username the form
+    // was not going to touch.
+    if (!existingId) {
+      const _unErr = _usernameError(uname);
+      if (_unErr) { toast(_unErr, 3500); return; }
+    }
     if (existingId) {
       // Edit mode - PIN is optional; blank = keep existing PIN
       if (pin && !/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
@@ -1859,7 +1997,25 @@ const Auth = (() => {
       }
       _openParentDashboard();
     } else {
-      toast('Your session has expired. Please sign in with your email.', 4000);
+      // No parent has ever signed in on this device - which is not the same
+      // thing as a session expiring, and the old wording said the latter.
+      //
+      // It also navigated straight to the login screen. If a child was mid
+      // practice that threw away their place to fix a problem that is the
+      // PARENT's to fix, and read to the child as being kicked out. Their
+      // session was never touched: closeParentPin() only hides the modal, so
+      // simply not navigating leaves them exactly where they were.
+      if (_activeAccount) {
+        const who = _activeAccount.name ? `${_activeAccount.name} stays signed in here.` : '';
+        _confirmModal(
+          `No parent account is signed in on this device yet.\n\n`
+          + `Sign in with your email to open the parent dashboard. ${who}`,
+          () => { showScreen('auth'); setRole('parent'); },
+          { icon: '👋', okLabel: 'Sign in', danger: false, cancelLabel: 'Not now' }
+        );
+        return;
+      }
+      toast('Please sign in with your email to open the parent dashboard.', 4000);
       showScreen('auth');
       setRole('parent');
     }

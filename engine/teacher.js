@@ -113,21 +113,89 @@ const TeacherMode = (() => {
       if (typeof showScreen === 'function') showScreen(ACTIVE_STUDENT_ID ? 'dashboard' : 'landing');
       return;
     }
+    _buildSubjectSelect();
     _buildChapterCheckboxes();
+    _ensureSubjectLoaded();          // not awaited: the list below must paint now
     _renderAssignmentList();
     _renderResultsAssignSelector();
   }
 
+  // Every registered pack, not just the active one. This used to read the
+  // global CHAPTERS, which holds only the chapters of whichever pack the app
+  // last activated - and with no pack chosen that is grade5-maths, which is why
+  // teacher mode appeared to have Mathematics and nothing else. The `_built`
+  // one-shot guard made it worse: the list was frozen at whatever was loaded
+  // the first time the tab opened.
+  function _packs() {
+    return (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+      .filter(p => !p.comingSoon);
+  }
+
+  function _selectedPack() {
+    const id = _el('ta-subject')?.value;
+    return _packs().find(p => p.id === id) || _packs()[0] || null;
+  }
+
+  function _buildSubjectSelect() {
+    const sel = _el('ta-subject');
+    if (!sel) return;
+    const packs = _packs();
+    if (!packs.length) return;
+    const keep = sel.value;
+    sel.innerHTML = packs.map(p =>
+      `<option value="${p.id}">Grade ${p.grade} — ${p.icon || ''} ${p.name}</option>`
+    ).join('');
+    // Default to the pack already in view so the tab opens on something
+    // familiar rather than always snapping back to the first grade.
+    sel.value = (keep && packs.some(p => p.id === keep)) ? keep
+      : (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK && packs.some(p => p.id === ACTIVE_PACK.id))
+        ? ACTIVE_PACK.id : packs[0].id;
+  }
+
   function _buildChapterCheckboxes() {
     const container = _el('ta-chapter-opts-container');
-    if (!container || container._built) return;
-    container.innerHTML = CHAPTERS.map(c =>
+    if (!container) return;
+    const pack = _selectedPack();
+    const chs  = pack ? (pack._chapters || pack.chapters || []) : [];
+    if (!chs.length) {
+      container.innerHTML = '<p class="text-sm text-gray-400 p-2">No topics found for this subject.</p>';
+      return;
+    }
+    container.innerHTML = chs.map(c =>
       `<label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer p-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
         <input type="checkbox" value="${c.id}" class="w-4 h-4 rounded accent-green-500">
-        <span>${c.icon} ${c.name}</span>
+        <span>${c.icon || ''} ${c.name}</span>
       </label>`
     ).join('');
-    container._built = true;
+  }
+
+  async function subjectChange() {
+    _buildChapterCheckboxes();
+    await _ensureSubjectLoaded();
+  }
+
+  // STATIC_QUESTIONS only ever holds the subjects the app has actually fetched,
+  // and TeacherMode never asked for any - it inherited whatever the student
+  // login happened to load. That was invisible while this screen was hardcoded
+  // to grade5-maths; with a real subject picker, choosing anything else gave
+  // "No questions found for these settings" every time, because the pool was
+  // empty rather than because the filters matched nothing.
+  async function _ensureSubjectLoaded() {
+    const pack = _selectedPack();
+    if (!pack || typeof QuestionLoader === 'undefined') return;
+    const btn = _el('ta-build-btn');
+    if (btn) btn.disabled = true;
+    try { await QuestionLoader.loadSubject(pack.id); }
+    catch (e) { console.warn('[TeacherMode] could not load', pack.id, e?.message); }
+    finally { if (btn) btn.disabled = false; }
+  }
+
+  function _findChapter(cid) {
+    for (const p of _packs()) {
+      const hit = (p._chapters || p.chapters || []).find(c => c.id === cid);
+      if (hit) return hit;
+    }
+    return (typeof CHAPTERS !== 'undefined' ? CHAPTERS : []).find(c => c.id === cid) || null;
   }
 
   function _renderAssignmentList() {
@@ -142,7 +210,10 @@ const TeacherMode = (() => {
 
     list.innerHTML = data.assignments.map(a => {
       const chNames = (a.chapters || []).map(cid => {
-        const ch = CHAPTERS.find(c => c.id === cid);
+        // Across ALL packs, not the active one: an assignment saved for Grade 6
+        // French must still show its topic names while the app is sitting on
+        // Grade 5 Maths, instead of falling back to raw chapter ids.
+        const ch = _findChapter(cid);
         return ch ? ch.name : cid;
       }).join(', ') || 'All chapters';
       const diffLabel  = !a.difficulty ? '🔀 Mixed' : `L${a.difficulty}`;
@@ -286,7 +357,7 @@ const TeacherMode = (() => {
   }
 
   // ── Build + save an assignment ─────────────────
-  function buildAssignment() {
+  async function buildAssignment() {
     const label = (_el('ta-label')?.value || '').trim();
     if (!label) { toast('Please enter a name for this assignment.', 2000); return; }
 
@@ -299,17 +370,35 @@ const TeacherMode = (() => {
     const random     = _el('ta-random')?.checked ?? true;
     const mode       = _el('ta-mode')?.value || 'practice';
 
+    const pack = _selectedPack();
+    if (!pack) { toast('Please pick a subject first.', 2500); return; }
+
     // Validate: do we have questions for this config?
-    let pool = STATIC_QUESTIONS;
+    // Scoped to the chosen subject's own chapters when none are ticked -
+    // "leave unchecked = all" means all of THIS subject, not all 5,428
+    // questions in the app.
+    const packChapterIds = new Set((pack._chapters || pack.chapters || []).map(c => c.id));
+    let pool = STATIC_QUESTIONS.filter(q => packChapterIds.has(q.chapterId));
+    // The subject may still be loading (or have failed to load) - "no questions
+    // at all for this subject" and "no questions matching these filters" need
+    // different words, or a teacher retunes filters that were never the problem.
+    if (!pool.length) {
+      await _ensureSubjectLoaded();
+      pool = STATIC_QUESTIONS.filter(q => packChapterIds.has(q.chapterId));
+      if (!pool.length) {
+        toast(`Could not load questions for ${pack.name}. Check your connection and try again.`, 3500);
+        return;
+      }
+    }
     if (chapters.length) pool = pool.filter(q => chapters.includes(q.chapterId));
     if (difficulty)      pool = pool.filter(q => q.difficulty === difficulty);
     if (!pool.length) {
-      toast('No questions found for these settings. Try different chapters or difficulty.', 3000);
+      toast('No questions found for these settings. Try different topics or difficulty.', 3000);
       return;
     }
 
     const id     = 'ta_' + Date.now();
-    const config = { id, label, subject: 'grade5-maths', chapters, difficulty, count, random, mode };
+    const config = { id, label, subject: pack.id, chapters, difficulty, count, random, mode };
 
     const data = _getData();
     data.assignments = data.assignments || [];
@@ -353,7 +442,7 @@ const TeacherMode = (() => {
   }
 
   return {
-    isTeacher, render, switchTab,
+    isTeacher, render, switchTab, subjectChange,
     buildAssignment, copyLink, deleteAssignment,
     saveResult, getAttemptCount, hasRetry, allowRetry, removeResult, showAnswers,
   };

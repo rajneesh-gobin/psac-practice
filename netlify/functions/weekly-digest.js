@@ -53,9 +53,41 @@ exports.handler = async () => {
     if (p?.preferences?.weekly_digest === false) optedOut.add(p.id);
   }
 
+  // Plan gating, resolved in TWO queries for the whole run rather than one per
+  // family - this is a cron over every family in the system.
+  //
+  // notIncluded stays empty on any failure, which means everyone gets their
+  // digest. Same direction as the opt-out logic above: the pre-existing
+  // behaviour of this cron was "send", and a database that has not run
+  // supabase-plan-enforcement.sql must not silently stop sending.
+  const notIncluded = new Set();
+  try {
+    const gs  = await sbGet(`/rest/v1/mm_data?key=eq.global_settings&select=value&limit=1`);
+    const on  = gs?.[0]?.value?.plan_enforcement_enabled === true;
+    if (on) {
+      const freeFeat = (await sbGet(`/rest/v1/plans?id=eq.free&select=features`))?.[0]?.features || {};
+      const subs = await sbGet(
+        `/rest/v1/subscriptions?status=eq.active&select=user_id,expires_at,plans(features)`
+      );
+      const byUser = new Map();
+      const now = Date.now();
+      for (const s of subs || []) {
+        if (s.expires_at && new Date(s.expires_at).getTime() <= now) continue;
+        if (!byUser.has(s.user_id)) byUser.set(s.user_id, s.plans?.features || {});
+      }
+      for (const family of families) {
+        const feat = byUser.get(family.parent_id) ?? freeFeat;
+        if (feat?.weekly_digest_enabled === false) notIncluded.add(family.parent_id);
+      }
+    }
+  } catch (e) {
+    console.warn('[weekly-digest] plan gate skipped:', e.message);
+  }
+
   let sent = 0;
   for (const family of families) {
     if (optedOut.has(family.parent_id)) continue;
+    if (notIncluded.has(family.parent_id)) continue;
     try {
       // Get students
       // deleted_at IS NULL, or the digest keeps reporting on children the parent

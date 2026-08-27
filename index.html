@@ -60,7 +60,7 @@
       <div class="flex items-start gap-3 mb-4">
         <span class="text-2xl select-none shrink-0">🚧</span>
         <h3 class="text-base font-bold text-gray-800 dark:text-white leading-snug">
-          We're revamping the app — every tier is free until 31 October 2026
+          We're revamping the app — every tier is free until <span data-free-until>30 September 2026</span>
         </h3>
       </div>
       <div class="space-y-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -93,7 +93,7 @@
       <div class="text-4xl text-center mb-3 select-none" id="modal-confirm-icon">⚠️</div>
       <p id="modal-confirm-msg" class="text-center text-gray-700 dark:text-gray-200 font-semibold mb-5 text-sm leading-relaxed"></p>
       <div class="flex gap-3">
-        <button onclick="_closeConfirmModal(false)" class="btn-secondary flex-1 text-sm">Cancel</button>
+        <button id="modal-confirm-cancel" onclick="_closeConfirmModal(false)" class="btn-secondary flex-1 text-sm">Cancel</button>
         <button id="modal-confirm-ok" onclick="_closeConfirmModal(true)" class="btn-danger flex-1 text-sm">Confirm</button>
       </div>
     </div>
@@ -221,7 +221,7 @@
       </div>
 
       <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/40 rounded-xl p-3 mb-4">
-        <p class="text-sm font-bold text-green-700 dark:text-green-300">🎉 Everything is free until 31 October 2026</p>
+        <p class="text-sm font-bold text-green-700 dark:text-green-300">🎉 Everything is free until <span data-free-until>30 September 2026</span></p>
         <p class="text-xs text-green-600 dark:text-green-400 mt-0.5">Every chapter, every subject, every child. No card needed.</p>
       </div>
 
@@ -246,7 +246,7 @@
           <span class="text-[10px] font-bold uppercase tracking-wide bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-300 px-2 py-1 rounded-full shrink-0">Soon</span>
         </button>
       </div>
-      <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Payments open after 31 October 2026. Until then nothing is charged.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 text-center">Payments open after <span data-free-until>30 September 2026</span>. Until then nothing is charged.</p>
     </div>
   </div>
 
@@ -309,10 +309,18 @@
           </div>
         </div>
         <div class="flex items-center gap-2">
+          <button onclick="showScreen('info')" class="text-indigo-200/80 hover:text-white text-sm font-semibold px-3 py-2 transition-colors">How it works</button>
           <a href="#plans" class="hidden sm:inline text-indigo-200/80 hover:text-white text-sm font-semibold px-3 py-2 transition-colors">Pricing</a>
           <button onclick="shareAppWhatsApp()" title="Share via WhatsApp" aria-label="Share via WhatsApp"
             class="w-9 h-9 flex items-center justify-center bg-green-500 hover:bg-green-400 active:scale-95 text-white rounded-full transition-all shadow-lg shrink-0">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5 0-.1-.7-1.6-.9-2.2-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.2 3.3 5.3 4.6.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3.1.8.8-3-.2-.3C4 14.9 3.8 13.5 3.8 12c0-4.5 3.7-8.2 8.2-8.2s8.2 3.7 8.2 8.2-3.7 8.2-8.2 8.2z"/></svg>
+          </button>
+          <!-- Direct shortcut for a returning student - skips the role tabs on
+               the auth screen entirely instead of making a 9-year-old figure out
+               that "Sign In" hides a 🎒 Student tab two clicks deep. -->
+          <button onclick="showScreen('auth'); setTimeout(()=>Auth.setRole('student'),60)"
+            class="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-pink-500 hover:from-amber-300 hover:to-pink-400 active:scale-95 text-white text-sm font-bold px-4 py-2 rounded-full transition-all shadow-lg shadow-pink-500/20">
+            🎒 I'm a Student
           </button>
           <button onclick="showScreen('auth')"
             class="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-semibold px-5 py-2 rounded-full transition-colors">
@@ -327,7 +335,7 @@
           class="w-full flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-400/40 rounded-full px-4 py-2 text-left hover:from-amber-500/30 hover:to-orange-500/30 transition-colors">
           <span class="text-lg select-none shrink-0">🚧</span>
           <span class="font-bold text-amber-200 text-xs sm:text-sm flex-1 truncate">
-            We're revamping the app — every tier is free until 31 October 2026
+            We're revamping the app — every tier is free until <span data-free-until>30 September 2026</span>
           </span>
           <span class="text-amber-300/70 text-xs shrink-0 underline underline-offset-2">Details</span>
         </button>
@@ -340,7 +348,7 @@
           Ace the <span class="text-indigo-300">PSAC Exam</span><br>Practice Made Fun
         </h1>
         <p class="text-indigo-200 text-base sm:text-lg mb-5 max-w-xl font-medium">
-          Interactive revision across all 5 PSAC subjects - Maths, Science, History &amp; Geography, English and French - aligned with the Mauritius MIE curriculum.
+          Interactive revision across five core PSAC subjects - Maths, Science, History &amp; Geography, English and French - aligned with the Mauritius MIE curriculum.
         </p>
 
         <!-- Subject pills -->
@@ -369,12 +377,16 @@
         <div class="mt-8 flex items-center gap-2 text-xs text-indigo-300/60 bg-white/5 border border-white/10 px-4 py-2 rounded-full">
           <span>🏝</span> Built for Mauritian students · Primary School Achievement Certificate
         </div>
+        <button onclick="showScreen('auth'); setTimeout(()=>Auth.setRole('student'),60)"
+          class="mt-4 text-sm text-indigo-200/70 hover:text-white underline underline-offset-2 transition-colors">
+          🎒 Already have a username &amp; PIN? Student sign in →
+        </button>
       </section>
 
       <!-- Subjects showcase -->
       <section class="px-4 pb-12 max-w-5xl mx-auto w-full">
-        <h2 class="text-center text-xl font-bold mb-2 text-white/80">All 5 PSAC subjects - fully available</h2>
-        <p class="text-center text-indigo-300/50 text-sm mb-7">Complete Mauritius MIE curriculum · Grades 4, 5 &amp; 6</p>
+        <h2 class="text-center text-xl font-bold mb-2 text-white/80">Five core PSAC subjects - fully covered</h2>
+        <p class="text-center text-indigo-300/50 text-sm mb-7">Aligned with the Mauritius MIE curriculum · Grades 4, 5 &amp; 6<br><span class="text-xs">Asian languages and Kreol Morisien are not covered yet.</span></p>
 
         <div data-carousel class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
 
@@ -535,7 +547,7 @@
         </p>
         <div class="text-center mb-9">
           <span class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-bold px-4 py-2 rounded-full">
-            🎁 Right now every plan below is unlocked, free, for everyone — until 31 October 2026
+            🎁 Right now every plan below is unlocked, free, for everyone — until <span data-free-until>30 September 2026</span>
           </span>
         </div>
 
@@ -544,11 +556,11 @@
           <!-- FREE -->
           <div class="bg-white/[0.06] border border-white/10 rounded-2xl p-6">
             <div class="text-xs font-bold text-indigo-300/70 uppercase tracking-wider mb-1">Free</div>
-            <div class="flex items-end gap-1 mb-1"><span class="text-3xl font-black text-white">Rs 0</span></div>
+            <div class="flex items-end gap-1 mb-1" data-plan-price="free"><span class="text-3xl font-black text-white" data-price-now>Rs 0</span></div>
             <p class="text-xs text-indigo-300/60 mb-5">Always free. All subjects — first 4 chapters per subject.</p>
             <ul class="space-y-2 text-sm text-indigo-100/80">
               <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>1 child</b> account</span></li>
-              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>All 5 subjects</b> — Maths, English, French, Science &amp; H&amp;G, Grades 4–6</span></li>
+              <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>Five core subjects</b> — Maths, English, French, Science &amp; H&amp;G, Grades 4–6</span></li>
               <li class="flex gap-2"><span class="text-green-400">✓</span><span><b>First 4 chapters</b> unlocked in every subject</span></li>
               <li class="flex gap-2"><span class="text-amber-400">•</span><span><b>20 practice questions</b> a day</span></li>
               <li class="flex gap-2"><span class="text-amber-400">•</span><span><b>1 mock exam a week</b>, on screen</span></li>
@@ -565,9 +577,11 @@
           <div class="bg-gradient-to-b from-indigo-500/20 to-transparent border-2 border-indigo-400/50 rounded-2xl p-6 relative">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-400 text-indigo-950 text-[11px] font-black px-3 py-1 rounded-full whitespace-nowrap">MOST POPULAR</div>
             <div class="text-xs font-bold text-indigo-200 uppercase tracking-wider mb-1">Starter</div>
-            <div class="flex items-end gap-1 mb-1">
-              <span class="text-3xl font-black text-white">Rs 150</span>
+            <div class="flex items-end flex-wrap gap-x-2 gap-y-1 mb-1" data-plan-price="starter">
+              <span class="price-was hidden" data-price-was></span>
+              <span class="text-3xl font-black text-white" data-price-now>Rs 150</span>
               <span class="text-indigo-300/60 text-sm mb-1">/month</span>
+              <span class="price-save hidden" data-price-save></span>
             </div>
             <p class="text-xs text-indigo-300/60 mb-5">All chapters, all subjects. For families with more than one child.</p>
             <ul class="space-y-2 text-sm text-indigo-100/85">
@@ -587,9 +601,11 @@
           <!-- PREMIUM -->
           <div class="bg-gradient-to-b from-purple-500/20 to-transparent border border-purple-400/40 rounded-2xl p-6">
             <div class="text-xs font-bold text-purple-200 uppercase tracking-wider mb-1">Premium</div>
-            <div class="flex items-end gap-1 mb-1">
-              <span class="text-3xl font-black text-white">Rs 250</span>
+            <div class="flex items-end flex-wrap gap-x-2 gap-y-1 mb-1" data-plan-price="premium">
+              <span class="price-was hidden" data-price-was></span>
+              <span class="text-3xl font-black text-white" data-price-now>Rs 250</span>
               <span class="text-indigo-300/60 text-sm mb-1">/month</span>
+              <span class="price-save hidden" data-price-save></span>
             </div>
             <p class="text-xs text-indigo-300/60 mb-5">For big families and private tutors.</p>
             <ul class="space-y-2 text-sm text-indigo-100/85">
@@ -605,7 +621,7 @@
 
         <p class="text-center text-indigo-300/45 text-xs mt-7 max-w-2xl mx-auto leading-relaxed">
           Prices in Mauritian rupees, per family, per month — final pricing is still being worked out.
-          All tiers are free until 31 October 2026 while the app is being revamped, so students can revise
+          All tiers are free until <span data-free-until>30 September 2026</span> while the app is being revamped, so students can revise
           for their 2026 exams: nothing is charged and no payment details are collected. When paid plans
           start you'll be told first, and the free plan stays free.
         </p>
@@ -636,7 +652,10 @@
             class="bg-indigo-500 hover:bg-indigo-400 active:scale-95 text-white font-bold px-8 py-4 rounded-2xl text-base shadow-xl transition-all hover:scale-105">
             Create a Free Account →
           </button>
-          <p class="text-indigo-300/50 text-xs mt-3">All tiers free until 31 October 2026 · no card required</p>
+          <p class="text-indigo-300/50 text-xs mt-3">All tiers free until <span data-free-until>30 September 2026</span> · no card required</p>
+          <button onclick="showScreen('info')" class="mt-5 text-indigo-200/80 hover:text-white text-sm font-semibold underline underline-offset-4 decoration-indigo-400/40">
+            See everything the app can do →
+          </button>
         </div>
       </section>
 
@@ -666,7 +685,7 @@
         <p>PSAC Exam Practice · Mauritius · Grades 4–6 · Maths · English · French · Science · History &amp; Geography</p>
         <p class="mt-1">Progress saved securely in the cloud · Installable app · Aligned to the MIE curriculum</p>
         <p class="mt-2 text-indigo-400/30">
-          Currently being revamped — all tiers free until 31 October 2026 for the 2026 exams.
+          Currently being revamped — all tiers free until <span data-free-until>30 September 2026</span> for the 2026 exams.
           Not affiliated with the Mauritius Institute of Education or the Ministry of Education.
         </p>
       </footer>
@@ -676,6 +695,606 @@
 
   <!-- ══════════ AUTH - LOGIN / SIGNUP ══════════ -->
   <!-- Outside <main> so it can be full-screen -->
+  <!-- ═══ HOW IT WORKS / MORE INFORMATION ═══════════════════════════════
+       Reached from the landing nav ("How it works") and the footer. Every
+       mock-up below is built from the same Tailwind classes the real screen
+       uses, NOT a screenshot: a screenshot goes stale the moment a button
+       moves, and cannot be read by a screen reader or translated.
+       Deliberately describes only what the app actually does today. -->
+  <div id="screen-info" class="screen hidden" data-hide-header="true">
+    <div class="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-950 text-white">
+
+      <nav class="flex items-center justify-between px-5 py-4 max-w-5xl mx-auto w-full sticky top-0 z-20 bg-indigo-950/80 backdrop-blur-sm">
+        <button onclick="showScreen('landing')" class="flex items-center gap-2 text-indigo-200 hover:text-white text-sm font-semibold">
+          <span class="text-xl">←</span> Back
+        </button>
+        <div class="flex items-center gap-2">
+          <span class="text-2xl select-none">🎓</span>
+          <span class="font-black text-sm sm:text-base">How it works</span>
+        </div>
+        <button onclick="showScreen('auth')" class="bg-white text-indigo-900 text-xs font-bold px-3 py-2 rounded-xl hover:bg-indigo-100">Sign in</button>
+      </nav>
+
+      <div class="max-w-5xl mx-auto px-5 pb-20">
+
+        <header class="py-8 sm:py-12 text-center">
+          <h1 class="text-3xl sm:text-4xl font-black mb-3">Everything the app can do</h1>
+          <p class="text-indigo-200/70 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            Built for the Mauritius PSAC exam — Grades 4, 5 and 6, across Maths,
+            English, French, Science and History &amp; Geography. Here is each
+            part of it, with a picture of what your child actually sees.
+          </p>
+        </header>
+
+        <!-- quick jump -->
+        <div class="flex flex-wrap justify-center gap-2 mb-12">
+          <a href="#info-roles"     class="info-chip">🧭 Who is who</a>
+          <a href="#info-practice"  class="info-chip">📚 Practice</a>
+          <a href="#info-exam"      class="info-chip">📝 Mock exams</a>
+          <a href="#info-papers"    class="info-chip">📄 Past papers</a>
+          <a href="#info-syllabus"  class="info-chip">🗂️ Syllabus</a>
+          <a href="#info-progress"  class="info-chip">📊 Progress</a>
+          <a href="#info-parent"    class="info-chip">👨‍👩‍👧 For parents</a>
+          <a href="#info-monitor"   class="info-chip">📈 Monitoring</a>
+          <a href="#info-homework"  class="info-chip">📋 Setting work</a>
+          <a href="#info-controls"  class="info-chip">🎛️ Controls</a>
+          <a href="#info-login"     class="info-chip">🔑 Logins</a>
+          <a href="#info-kid"       class="info-chip">🧒 Their screen</a>
+          <a href="#info-teacher"   class="info-chip">👩‍🏫 For teachers</a>
+          <a href="#info-extras"    class="info-chip">✨ Extras</a>
+        </div>
+
+        <!-- ── WHO IS WHO ─────────────────────────────────────────────── -->
+        <section id="info-roles" class="pt-4 pb-2 scroll-mt-20">
+          <div class="text-center max-w-2xl mx-auto mb-8">
+            <div class="info-kicker">🧭 Start here</div>
+            <h2 class="text-2xl font-black mb-2">Three different areas — and who gets which</h2>
+            <p class="text-sm text-indigo-200/70 leading-relaxed">
+              The app is not one screen with more buttons for grown-ups. A parent,
+              a teacher and a child sign in differently and see genuinely
+              different things. This is the part worth reading first.
+            </p>
+          </div>
+
+          <div class="grid gap-4 md:grid-cols-3">
+
+            <div class="role-card">
+              <div class="role-head role-parent"><span class="role-ico">👨‍👩‍👧</span><b>Parent area</b></div>
+              <div class="role-body">
+                <p class="role-line"><b>Signs in with</b> an email address and password.</p>
+                <ul class="role-list">
+                  <li>Owns the account and the family — up to 3 children.</li>
+                  <li>Sees everything each child does, chapter by chapter.</li>
+                  <li>Sets homework, locks chapters, caps difficulty.</li>
+                  <li>Holds the billing, when paid plans open.</li>
+                  <li>Creates each child's username and PIN, and resets a forgotten one.</li>
+                </ul>
+                <p class="role-foot">This is the account you create when you sign up.</p>
+              </div>
+            </div>
+
+            <div class="role-card">
+              <div class="role-head role-kid"><span class="role-ico">🧒</span><b>Child area</b></div>
+              <div class="role-body">
+                <p class="role-line"><b>Signs in with</b> a family name, a username and a 4-digit PIN. <b>No email address at all.</b></p>
+                <ul class="role-list">
+                  <li>Practises, takes mocks, reads the syllabus, earns badges.</li>
+                  <li>Sees <b>only their own work</b> — not a sibling's, not anyone else's.</li>
+                  <li>Cannot open the parent area, and cannot lift their own limits.</li>
+                  <li>Signed in on one device at a time.</li>
+                  <li>Can pick their own colours, text size and sounds.</li>
+                </ul>
+                <p class="role-foot">Created by the parent. Nothing to set up on the child's side.</p>
+              </div>
+            </div>
+
+            <div class="role-card">
+              <div class="role-head role-teacher"><span class="role-ico">👩‍🏫</span><b>Teacher area</b></div>
+              <div class="role-body">
+                <p class="role-line"><b>Signs in with</b> an email address — then an administrator has to approve the account.</p>
+                <ul class="role-list">
+                  <li>Builds a homework set from any subject and topics.</li>
+                  <li>Shares <b>one link</b> with a class. Pupils need no account.</li>
+                  <li>Sees results for <b>the work they set</b> — nothing else about a pupil.</li>
+                  <li>Can grant a pupil a retry.</li>
+                  <li>Not self-serve: the role is granted, never switched on by the user.</li>
+                </ul>
+                <p class="role-foot">A teacher can also be a parent, with their own children on the same login.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="role-table-wrap">
+            <table class="role-table">
+              <thead>
+                <tr><th>&nbsp;</th><th>👨‍👩‍👧 Parent</th><th>🧒 Child</th><th>👩‍🏫 Teacher</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Signs in with</td><td>Email + password</td><td>Family name + username + PIN</td><td>Email + password</td></tr>
+                <tr><td>Needs approval</td><td>No</td><td>No</td><td><b>Yes — by an admin</b></td></tr>
+                <tr><td>Can see a child's progress</td><td>Their own children</td><td>Only themselves</td><td>Only their assignment results</td></tr>
+                <tr><td>Can set work</td><td>For their own children</td><td>No</td><td>For a whole class</td></tr>
+                <tr><td>Can lock chapters / cap level</td><td>Yes</td><td>No</td><td>No</td></tr>
+                <tr><td>Can create logins</td><td>Their children's</td><td>No</td><td>No — pupils need none</td></tr>
+                <tr><td>Holds the plan &amp; billing</td><td>Yes</td><td>No</td><td>Yes, for their own family</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-2 mt-6">
+            <div class="role-note">
+              <b>Parent and Teacher are the same kind of login.</b>
+              Both use an email address, and one person can be both — a teacher
+              with children of their own manages them in exactly the same parent
+              area. The teacher side is an <i>extra</i> area their account gains
+              once an administrator approves it, not a different account.
+            </div>
+            <div class="role-note">
+              <b>A pupil doing a teacher's link is not a child account.</b>
+              They type a first name and start — nothing to sign up for. Their
+              score goes back to that teacher for that assignment, but there is
+              no ongoing progress, no streak and no history unless a parent
+              creates them a proper child account.
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PRACTICE ────────────────────────────────────────────────── -->
+        <section id="info-practice" class="info-section">
+          <div class="info-copy">
+            <div class="info-kicker">📚 Chapter practice</div>
+            <h2>Work through one topic at a time</h2>
+            <p>
+              Pick a subject, then a chapter. Questions are marked the instant
+              they are answered — no waiting, no submitting a whole page and
+              hoping.
+            </p>
+            <ul class="info-list">
+              <li><b>Four difficulty levels</b> — Basic, Medium, Hard, and Challenge (real word problems, not just harder sums).</li>
+              <li><b>Three-step hints</b> — a nudge first, then a clue, then the method. The child chooses how much help to take.</li>
+              <li><b>A worked explanation</b> on every question, so a wrong answer teaches something.</li>
+              <li><b>Diagrams and photos</b> — clocks to read, bar charts, maps of Mauritius, angle diagrams. Tap any picture to enlarge it.</li>
+              <li><b>Pause and come back</b> — a half-finished round is still there tomorrow.</li>
+            </ul>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Fractions</span><span class="mock-dim">Question 4 of 20</span></div>
+              <div class="mock-body">
+                <div class="mock-q">A cake is cut into 8 equal slices. Priya eats 3 slices. What fraction of the cake is left?</div>
+                <div class="mock-opt">3/8</div>
+                <div class="mock-opt mock-opt-on">5/8 ✓</div>
+                <div class="mock-opt">1/3</div>
+                <div class="mock-opt">5/3</div>
+                <div class="mock-hint">💡 Hint 1 of 3 — how many slices were there to start with?</div>
+                <div class="mock-row"><span class="mock-btn-ghost">💡 Hint</span><span class="mock-btn">Check answer</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── EXAMS ──────────────────────────────────────────────────── -->
+        <section id="info-exam" class="info-section info-flip">
+          <div class="info-copy">
+            <div class="info-kicker">📝 Mock exams</div>
+            <h2>A real paper, under real time pressure</h2>
+            <p>
+              Practice tells you what a child knows. An exam tells you whether
+              they can do it in 40 minutes with a clock running.
+            </p>
+            <ul class="info-list">
+              <li><b>Full paper or a quick 10</b> — a complete 40-question mock, or a short one before bed.</li>
+              <li><b>Flag and come back</b>, just like the real thing, with a question grid to jump around.</li>
+              <li><b>A printable version</b> — same paper, exam layout, no timer. Print it or save as PDF and do it on paper.</li>
+              <li><b>Full review afterwards</b> — every question, what they answered, what was right, and why. Filter to just the ones they got wrong.</li>
+              <li><b>The screen stays awake</b> and locks to portrait for the duration.</li>
+            </ul>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar mock-bar-warn"><span>⏱ 24:18 left</span><span class="mock-dim">Q 12 / 40</span></div>
+              <div class="mock-body">
+                <div class="mock-grid">
+                  <span class="mg mg-done">1</span><span class="mg mg-done">2</span><span class="mg mg-done">3</span>
+                  <span class="mg mg-flag">4</span><span class="mg mg-done">5</span><span class="mg mg-done">6</span>
+                  <span class="mg mg-done">7</span><span class="mg mg-done">8</span><span class="mg mg-done">9</span>
+                  <span class="mg mg-done">10</span><span class="mg mg-done">11</span><span class="mg mg-now">12</span>
+                </div>
+                <div class="mock-q">Which of these is a prime number?</div>
+                <div class="mock-opt">21</div>
+                <div class="mock-opt mock-opt-on">29</div>
+                <div class="mock-opt">33</div>
+                <div class="mock-row"><span class="mock-btn-ghost">🚩 Flag</span><span class="mock-btn">Next →</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PAST PAPERS ────────────────────────────────────────────── -->
+        <section id="info-papers" class="info-section">
+          <div class="info-copy">
+            <div class="info-kicker">📄 Past papers</div>
+            <h2>Real PSAC questions, 2016–2024</h2>
+            <p>
+              Actual questions from past national papers, grouped by subject and
+              year. These are written, drawn and matched answers carrying a mark
+              allocation — the app does <b>not</b> mark them.
+            </p>
+            <ul class="info-list">
+              <li><b>Read-only, on purpose.</b> There is no score and no tick. The child writes on paper, as they will in the exam.</li>
+              <li><b>Mark schemes</b> reveal on the questions that have one, so they can check their own work.</li>
+              <li>Questions that referred to artwork we could not reproduce are <b>hidden rather than shown broken</b>, and the count of hidden ones is stated.</li>
+            </ul>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Past papers</span><span class="mock-dim">Grade 6 · 2024</span></div>
+              <div class="mock-body">
+                <div class="mock-note">✍️ Write your answers on paper — this section is not marked by the app.</div>
+                <div class="mock-paper"><b>3.</b> Study the map. Name the feature marked <b>X</b>. <span class="mock-marks">2 marks</span></div>
+                <div class="mock-paper"><b>4.</b> Complete the table below. <span class="mock-marks">4 marks</span></div>
+                <div class="mock-paper mock-dimmed"><b>5.</b> Give <b>two</b> reasons why… <span class="mock-marks">2 marks</span></div>
+                <div class="mock-btn-ghost w-full text-center">Show mark scheme</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── SYLLABUS ───────────────────────────────────────────────── -->
+        <section id="info-syllabus" class="info-section info-flip">
+          <div class="info-copy">
+            <div class="info-kicker">🗂️ Syllabus browser</div>
+            <h2>See the whole course, and drill any corner of it</h2>
+            <p>
+              Every chapter of every subject, broken into its own sub-topics —
+              with a live question count and a Practise button on each one.
+            </p>
+            <ul class="info-list">
+              <li><b>Practise one sub-topic</b> rather than a whole chapter. If long division is the problem, do long division.</li>
+              <li><b>Revision notes</b> on the English and French chapters.</li>
+              <li><b>✨ Bonus chapters</b> — extras beyond the core syllabus, marked so you know they are enrichment.</li>
+            </ul>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Syllabus</span><span class="mock-dim">Grade 5 · Maths</span></div>
+              <div class="mock-body">
+                <div class="mock-chapter">📐 Geometry <span class="mock-dim">76 questions</span></div>
+                <div class="mock-sub">Angles on a line <span class="mock-tiny">14 · Practise →</span></div>
+                <div class="mock-sub">Types of triangle <span class="mock-tiny">11 · Practise →</span></div>
+                <div class="mock-sub">Lines of symmetry <span class="mock-tiny">9 · Practise →</span></div>
+                <div class="mock-chapter">📊 Data handling <span class="mock-dim">48 questions</span></div>
+                <div class="mock-sub">Bar charts <span class="mock-tiny">12 · Practise →</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PROGRESS ───────────────────────────────────────────────── -->
+        <section id="info-progress" class="info-section">
+          <div class="info-copy">
+            <div class="info-kicker">📊 Progress</div>
+            <h2>Know which chapters are actually weak</h2>
+            <p>
+              Accuracy per chapter, exam history over time, and a drill that
+              targets the three topics the child is weakest at right now.
+            </p>
+            <ul class="info-list">
+              <li><b>Chapter-by-chapter accuracy</b>, so revision goes where it is needed instead of where it is comfortable.</li>
+              <li><b>💪 Weak-area drill</b> — builds a paper from the lowest-scoring topics automatically.</li>
+              <li><b>XP, levels, badges and streaks</b>, because a nine-year-old needs a reason to come back tomorrow.</li>
+            </ul>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>My progress</span><span class="mock-dim">Level 7 · 1,240 XP</span></div>
+              <div class="mock-body">
+                <div class="mock-stat"><span>Fractions</span><span class="bar"><i style="width:86%"></i></span><span class="mock-tiny">86%</span></div>
+                <div class="mock-stat"><span>Geometry</span><span class="bar"><i style="width:71%"></i></span><span class="mock-tiny">71%</span></div>
+                <div class="mock-stat"><span>Decimals</span><span class="bar bar-warn"><i style="width:42%"></i></span><span class="mock-tiny">42%</span></div>
+                <div class="mock-stat"><span>Time &amp; speed</span><span class="bar bar-warn"><i style="width:38%"></i></span><span class="mock-tiny">38%</span></div>
+                <div class="mock-btn w-full text-center">💪 Drill my weak areas</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PARENTS ────────────────────────────────────────────────── -->
+        <section id="info-parent" class="info-section info-flip">
+          <div class="info-copy">
+            <div class="info-kicker">👨‍👩‍👧 For parents</div>
+            <h2>You own the account, and you set the rules</h2>
+            <p>
+              You sign up with an email. Each child gets a username and a
+              4-digit PIN — no email address, no inbox, nothing to manage.
+            </p>
+            <ul class="info-list">
+              <li><b>Up to 3 children</b> on one account, each with their own progress, streak and history.</li>
+              <li><b>Four tabs per child</b> — Progress, Homework, Controls and Login — so everything about one child is in one place.</li>
+              <li><b>You never need their PIN</b> to check on them. Tap the child's card and you are in.</li>
+            </ul>
+            <p class="mt-3">Each tab is explained below.</p>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Parent dashboard</span><span class="mock-dim">Emma’s family</span></div>
+              <div class="mock-body">
+                <div class="mock-kid"><span class="mock-av">🧒</span><span><b>Emma</b><br><span class="mock-tiny">Grade 5 · @emma2025 · 🔥 6-day streak</span></span></div>
+                <div class="mock-tabs"><span class="mock-tab-on">Progress</span><span class="mock-tab">Homework</span><span class="mock-tab">Controls</span><span class="mock-tab">Login</span></div>
+                <div class="mock-stat"><span>This week</span><span class="bar"><i style="width:64%"></i></span><span class="mock-tiny">128 qs</span></div>
+                <div class="mock-toggle"><span>Lock chapters 5+</span><span class="tg tg-on"></span></div>
+                <div class="mock-toggle"><span>Allow mock exams</span><span class="tg tg-on"></span></div>
+                <div class="mock-toggle"><span>Show answers in homework</span><span class="tg"></span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PARENT: MONITORING ─────────────────────────────────────── -->
+        <section id="info-monitor" class="info-section">
+          <div class="info-copy">
+            <div class="info-kicker">📈 Tab 1 · Progress</div>
+            <h2>See what they have actually been doing</h2>
+            <p>
+              Not just "they used the app for 20 minutes" — which chapters, how
+              accurately, and whether it is getting better or worse.
+            </p>
+            <ul class="info-list">
+              <li><b>Accuracy per chapter</b>, so you can tell a topic they find hard from one they simply have not started.</li>
+              <li><b>Every exam they have taken</b>, with the score and the date — the trend matters more than any one paper.</li>
+              <li><b>Questions answered</b>, current streak, XP and level.</li>
+              <li><b>Their full answer review</b> — the same question-by-question breakdown they see, so you can go through a wrong answer together.</li>
+              <li><b>A weekly email</b> every Sunday summarising the week per child, if you want it pushed to you instead.</li>
+            </ul>
+            <p class="info-aside">
+              Tapping into a child is read-only supervision — it does not sign
+              them out, and it does not touch their session on their own device.
+            </p>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Emma · Progress</span><span class="mock-dim">This week</span></div>
+              <div class="mock-body">
+                <div class="mock-stat"><span>Questions</span><span class="bar"><i style="width:74%"></i></span><span class="mock-tiny">128</span></div>
+                <div class="mock-stat"><span>Accuracy</span><span class="bar"><i style="width:81%"></i></span><span class="mock-tiny">81%</span></div>
+                <div class="mock-sep">Recent exams</div>
+                <div class="mock-sub">Full mock · 12 Sep <span class="mock-tiny">32/40</span></div>
+                <div class="mock-sub">Quick 10 · 9 Sep <span class="mock-tiny">7/10</span></div>
+                <div class="mock-sub">Full mock · 5 Sep <span class="mock-tiny">27/40</span></div>
+                <div class="mock-note">📧 Weekly summary emailed every Sunday.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PARENT: SETTING WORK ───────────────────────────────────── -->
+        <section id="info-homework" class="info-section info-flip">
+          <div class="info-copy">
+            <div class="info-kicker">📋 Tab 2 · Homework</div>
+            <h2>Set work, and decide how much help they get</h2>
+            <p>
+              Assign a specific chapter instead of leaving them to choose. It
+              appears on their home screen as a task to finish.
+            </p>
+            <ul class="info-list">
+              <li><b>Pick the subject and the chapter</b> — or leave the chapter open and assign the whole subject.</li>
+              <li><b>Choose the difficulty</b>, or leave it mixed so they get a spread.</li>
+              <li><b>Add a note</b> — “do this before Friday”, “the ones we did on Sunday”. They see it with the task.</li>
+              <li><b>Show answers: on or off.</b> Off turns it into a test — they still get a score, but not the answers to copy.</li>
+              <li><b>Allow hints: on or off.</b> Off means no three-step help on this particular piece of work.</li>
+              <li><b>Assign as many as you like</b>, and delete one that is no longer relevant.</li>
+            </ul>
+            <p class="info-aside">
+              Homework does not count against a daily question limit — work you
+              set must always be finishable.
+            </p>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>New homework</span><span class="mock-dim">for Emma</span></div>
+              <div class="mock-body">
+                <div class="mock-field"><span class="mock-tiny">Subject</span><span>Grade 5 — 📐 Maths</span></div>
+                <div class="mock-field"><span class="mock-tiny">Chapter</span><span>Fractions</span></div>
+                <div class="mock-field"><span class="mock-tiny">Difficulty</span><span>Mixed</span></div>
+                <div class="mock-field"><span class="mock-tiny">Note</span><span>Before Friday please 🙂</span></div>
+                <div class="mock-toggle"><span>Show answers</span><span class="tg"></span></div>
+                <div class="mock-toggle"><span>Allow hints</span><span class="tg tg-on"></span></div>
+                <div class="mock-btn w-full text-center">Assign</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PARENT: CONTROLS ───────────────────────────────────────── -->
+        <section id="info-controls" class="info-section">
+          <div class="info-copy">
+            <div class="info-kicker">🎛️ Tab 3 · Controls</div>
+            <h2>Keep them on the part of the course they are on</h2>
+            <p>
+              A Grade 5 child does not need to stumble into Grade 6 work in
+              week two. These controls apply to that child only.
+            </p>
+            <ul class="info-list">
+              <li><b>Lock individual chapters.</b> Locked ones show a padlock and cannot be opened — including inside exams and printable papers.</li>
+              <li><b>Cap the difficulty.</b> Stop Challenge word problems appearing until they are ready for them.</li>
+              <li><b>Switch mock exams off</b> entirely if timed papers are causing more stress than they are worth.</li>
+              <li><b>Turn off the tips</b> — the little coaching callouts — for a child who finds them distracting.</li>
+              <li><b>Set defaults for all children at once</b> from Account &amp; Settings, instead of repeating yourself per child.</li>
+            </ul>
+            <p class="info-aside">
+              Changing a control takes effect on their next screen — you do not
+              have to sign them out for it to apply.
+            </p>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Emma · Controls</span><span class="mock-dim">Grade 5</span></div>
+              <div class="mock-body">
+                <div class="mock-toggle"><span>Allow mock exams</span><span class="tg tg-on"></span></div>
+                <div class="mock-toggle"><span>Show coaching tips</span><span class="tg tg-on"></span></div>
+                <div class="mock-field"><span class="mock-tiny">Hardest level allowed</span><span>3 · Hard</span></div>
+                <div class="mock-sep">Chapters</div>
+                <div class="mock-toggle"><span>Fractions</span><span class="tg tg-on"></span></div>
+                <div class="mock-toggle"><span>Decimals</span><span class="tg tg-on"></span></div>
+                <div class="mock-toggle"><span>🔒 Ratio &amp; proportion</span><span class="tg"></span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── PARENT: LOGIN + ACCOUNT ────────────────────────────────── -->
+        <section id="info-login" class="info-section info-flip">
+          <div class="info-copy">
+            <div class="info-kicker">🔑 Tab 4 · Login &amp; your account</div>
+            <h2>Getting them signed in, and keeping it that way</h2>
+            <ul class="info-list">
+              <li><b>The three things they type</b> — family name, username, 4-digit PIN — shown in one place so you can read them off the screen.</li>
+              <li><b>Reset a forgotten PIN</b> yourself, instantly. Nobody can read the old one back, including us.</li>
+              <li><b>Send a login link</b> on WhatsApp that signs them straight in. Single-use, expires in 48 hours, and never contains the PIN — a screenshot of it is useless a day later.</li>
+              <li><b>One device at a time.</b> A second sign-in signs the first out, so an account cannot quietly be shared around a class.</li>
+              <li><b>A daily study reminder</b> at a time you choose, applied to one child or all of them.</li>
+              <li><b>Rename the family</b>, change your password, pick light or dark, or close the account entirely — all from Account &amp; Settings.</li>
+            </ul>
+            <p class="info-aside">
+              Closing the account is reversible: sign back in and you are offered
+              a restore, with the children's usernames returned to them.
+            </p>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Emma · Login</span><span class="mock-dim">Sign-in details</span></div>
+              <div class="mock-body">
+                <div class="mock-field"><span class="mock-tiny">Family name</span><span>Emma’s family</span></div>
+                <div class="mock-field"><span class="mock-tiny">Username</span><span>emma2025</span></div>
+                <div class="mock-field"><span class="mock-tiny">PIN</span><span class="mock-tiny">🔒 Encrypted — reset it if forgotten</span></div>
+                <div class="mock-row"><span class="mock-btn-ghost">Reset PIN</span><span class="mock-btn">📲 Send login</span></div>
+                <div class="mock-note">Link works once and expires in 48 hours.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── THE CHILD'S OWN SCREEN ─────────────────────────────────── -->
+        <section id="info-kid" class="info-section">
+          <div class="info-copy">
+            <div class="info-kicker">🧒 What your child sees</div>
+            <h2>Built for a nine-year-old, on a phone</h2>
+            <p>
+              Their side is deliberately simple: big targets, no menus to get
+              lost in, and no way to wander into your settings.
+            </p>
+            <ul class="info-list">
+              <li><b>Homework first.</b> Anything you have set sits at the top of their home screen until it is done.</li>
+              <li><b>Then their own choice</b> — practise a chapter, take a mock, drill a weak area, or search for a topic.</li>
+              <li><b>Pick up where they left off.</b> A half-finished round is offered back to them next time.</li>
+              <li><b>Make it theirs</b> — five colour themes, bigger text, and a calm mode that turns off the animations and sounds.</li>
+              <li><b>Sound and vibration</b> on or off, per child, even on a shared family tablet.</li>
+              <li><b>Streaks, XP, levels and badges</b>, which is what actually gets them back tomorrow.</li>
+              <li><b>Report a confusing question</b> — it goes to an administrator, not into a void.</li>
+            </ul>
+            <p class="info-aside">
+              They cannot reach the parent area without your password or PIN, and
+              they cannot change their own locks or difficulty cap.
+            </p>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Hi Emma 👋</span><span class="mock-dim">🔥 6 · Level 7</span></div>
+              <div class="mock-body">
+                <div class="mock-task">📋 <b>Homework from Mum</b><br><span class="mock-tiny">Maths · Fractions · “Before Friday please 🙂”</span></div>
+                <div class="mock-row"><span class="mock-btn">📚 Practise</span><span class="mock-btn-ghost">📝 Mock exam</span></div>
+                <div class="mock-row"><span class="mock-btn-ghost">💪 Weak areas</span><span class="mock-btn-ghost">🔍 Search</span></div>
+                <div class="mock-note">⏸️ Continue where you left off — Decimals, question 12.</div>
+                <div class="mock-badges"><span>🏅</span><span>⭐</span><span>🎯</span><span>🔥</span><span class="mock-tiny">4 badges</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── TEACHERS ───────────────────────────────────────────────── -->
+        <section id="info-teacher" class="info-section">
+          <div class="info-copy">
+            <div class="info-kicker">👩‍🏫 For teachers &amp; tutors</div>
+            <h2>Set work for a whole class in a couple of minutes</h2>
+            <p>
+              Build a homework set from any subject and chapters, then share one
+              link. Pupils do not need an account.
+            </p>
+            <ul class="info-list">
+              <li><b>Any subject, any grade</b> — pick the topics, the difficulty and how many questions.</li>
+              <li><b>One link per assignment</b>, shared on WhatsApp. A pupil types their name and starts.</li>
+              <li><b>Results come back to you</b> per pupil, with the option to grant a retry.</li>
+              <li>Teacher access is <b>approved by an administrator</b> — it is not something anyone can switch on for themselves.</li>
+            </ul>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>New assignment</span><span class="mock-dim">Teacher</span></div>
+              <div class="mock-body">
+                <div class="mock-field"><span class="mock-tiny">Subject</span><span>Grade 6 — 🇫🇷 French</span></div>
+                <div class="mock-field"><span class="mock-tiny">Topics</span><span>Lecture · Grammaire</span></div>
+                <div class="mock-field"><span class="mock-tiny">Questions</span><span>15 · Mixed difficulty</span></div>
+                <div class="mock-btn w-full text-center">Create &amp; copy link</div>
+                <div class="mock-note">🔗 Link copied — share it with your class.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── EXTRAS ─────────────────────────────────────────────────── -->
+        <section id="info-extras" class="info-section info-flip">
+          <div class="info-copy">
+            <div class="info-kicker">✨ The rest of it</div>
+            <h2>Small things that matter on a real phone</h2>
+            <ul class="info-list">
+              <li><b>Works offline.</b> Install it to the home screen and questions already downloaded keep working with no signal.</li>
+              <li><b>Read aloud</b> — a 🔊 button on every question, for a child who reads slowly or is tired.</li>
+              <li><b>Study calendar</b> with an automatic revision timetable across subjects.</li>
+              <li><b>Search every question</b> in the app by keyword, across subjects and grades.</li>
+              <li><b>A forum</b> to ask about a question that did not make sense.</li>
+              <li><b>Report a bad question</b> — it goes straight to an administrator.</li>
+              <li><b>Dark mode</b>, larger text, and a calm mode that turns off the animations.</li>
+            </ul>
+          </div>
+          <div class="info-shot">
+            <div class="mock">
+              <div class="mock-bar"><span>Settings</span><span class="mock-dim">Emma</span></div>
+              <div class="mock-body">
+                <div class="mock-toggle"><span>🔊 Read questions aloud</span><span class="tg tg-on"></span></div>
+                <div class="mock-toggle"><span>🌙 Dark mode</span><span class="tg tg-on"></span></div>
+                <div class="mock-toggle"><span>🔠 Bigger text</span><span class="tg"></span></div>
+                <div class="mock-toggle"><span>🧘 Calm mode</span><span class="tg"></span></div>
+                <div class="mock-toggle"><span>📳 Vibration</span><span class="tg tg-on"></span></div>
+                <div class="mock-note">📶 Offline — your answers will sync when you reconnect.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── SAFETY ─────────────────────────────────────────────────── -->
+        <section class="mt-16 rounded-2xl bg-white/[0.05] border border-white/10 p-6 sm:p-8">
+          <h2 class="text-xl font-black mb-3">🔒 About your child's data</h2>
+          <ul class="info-list">
+            <li><b>Children have no email address.</b> They log in with a family name, a username and a 4-digit PIN.</li>
+            <li><b>PINs are encrypted</b> and cannot be read back by anyone — not by us either. A forgotten PIN is reset by the parent.</li>
+            <li><b>A child sees only their own work.</b> The database enforces that, not just the screen.</li>
+            <li><b>Closing your account</b> signs every child out immediately and can be undone by signing back in.</li>
+          </ul>
+        </section>
+
+        <div class="text-center mt-14">
+          <button onclick="showScreen('auth'); setTimeout(()=>{Auth.setRole('parent');Auth.showSignUp();},60)"
+            class="bg-white text-indigo-900 font-black px-8 py-3.5 rounded-2xl hover:bg-indigo-100 active:scale-95 transition-all">
+            Create a free parent account
+          </button>
+          <p class="text-indigo-300/50 text-xs mt-3">
+            All tiers free until <span data-free-until>30 September 2026</span> · no card required
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="screen-auth" class="screen hidden" data-hide-header="true">
     <div class="relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex flex-col items-center justify-center p-4">
       <!-- Back to Home -->
@@ -799,12 +1418,15 @@
         <div id="auth-student-panel" class="hidden">
           <p class="text-white/70 text-sm mb-4">Enter your <b class="text-white">family name</b>, <b class="text-white">username</b> and <b class="text-white">PIN</b>:</p>
           <div class="space-y-3">
-            <input id="student-family-name" type="text" maxlength="40" placeholder="Family name (e.g. Smith)"
+            <!-- Accepts the 6-character family CODE as well as the name. The
+                 code is unique, the name is not, so it is the way out when two
+                 families share a name - see verify_student_pin. -->
+            <input id="student-family-name" type="text" maxlength="40" placeholder="Family name (or family code)"
               class="selectable w-full text-center text-base font-semibold bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
               oninput="Auth.checkStudentReady()">
             <!-- Shown exactly as typed, like the family name above it. Usernames
                  are stored lower-case and the parent dashboard shows them that
-                 way (@shanvi1), so forcing CAPS here made the two screens
+                 way (@emma2025), so forcing CAPS here made the two screens
                  disagree about the child's own name. The value was rewritten on
                  every keystroke too, which sends the caret to the end mid-edit.
                  Login matches case-insensitively either way. -->
@@ -1162,6 +1784,21 @@
         <div id="dash-assignments-list" class="space-y-2"></div>
       </div>
 
+      <!-- Scheduled study sessions. Sits directly under assignments because it
+           is the same question for a child - "what am I meant to be doing?" -
+           and above the free-choice tiles below. -->
+      <div id="dash-schedule" class="hidden bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-6">
+        <div class="flex items-center justify-between mb-1">
+          <h3 class="text-base font-bold text-gray-800 dark:text-white">🗓️ Coming up</h3>
+          <button onclick="showScreen('schedule')"
+            class="text-xs bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full font-semibold hover:bg-indigo-200 dark:hover:bg-indigo-800">
+            My timetable →
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">You can do any of these early if you want to.</p>
+        <div id="dash-schedule-list" class="space-y-2"></div>
+      </div>
+
       <div id="dash-friends" class="hidden bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-6">
         <div class="flex items-center justify-between mb-3">
           <h3 class="text-base font-bold text-gray-800 dark:text-white">🏆 Friend Leaderboard</h3>
@@ -1213,7 +1850,7 @@
            instead. The bottom nav's "Progress" tab opens the same screen but
            only shows on a handful of screens - this stays reachable from Home
            regardless. -->
-      <button onclick="showScreen('analytics')" class="w-full mb-6 flex items-center gap-4 bg-white dark:bg-gray-800 rounded-2xl p-5 shadow hover:shadow-md border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all text-left group">
+      <button id="dash-analytics-tile" onclick="showScreen('analytics')" class="w-full mb-6 flex items-center gap-4 bg-white dark:bg-gray-800 rounded-2xl p-5 shadow hover:shadow-md border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all text-left group">
         <div class="text-4xl select-none group-hover:scale-110 transition-transform">📊</div>
         <div class="flex-1">
           <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">My Analytics</h3>
@@ -1285,16 +1922,57 @@
       </div>
     </div>
 
-    <!-- ══════════ SUBJECT SELECTOR ══════════ -->
+    <!-- ══════════ SUBJECT SELECTOR / KID HOME ══════════
+         The first screen a student sees after PIN login (their grade is fixed
+         by their parent, so there's no grade step to show - see the comment on
+         _loginStudentRow's navigate block in auth.js). This doubles as their
+         "landing page": a personal greeting, anything they left paused, a
+         couple of fun one-tap shortcuts, then their subjects as big tappable
+         tiles. Kept deliberately playful (kid-hero gradient, kid-tile bounce) -
+         see the .kid-* rules in style.css - without touching the rest of the
+         app's visual language, which stays as-is. -->
     <div id="screen-subject-select" class="screen hidden">
-      <button class="back-btn mb-4" onclick="showScreen('grade-select')">← Back to Grades</button>
-      <div class="text-center mb-8">
-        <div class="text-5xl mb-3 select-none">📚</div>
-        <h2 id="subject-select-heading" class="text-2xl font-bold text-gray-800 dark:text-white mb-2">Choose a Subject</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">Select what you'd like to practise today</p>
+      <div class="kid-hero rounded-3xl p-6 mb-5 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute -right-4 -top-4 text-8xl opacity-20 pointer-events-none select-none rotate-12">🎈</div>
+        <div class="absolute right-16 bottom-0 text-6xl opacity-10 pointer-events-none select-none">✨</div>
+        <div class="relative flex items-center gap-4">
+          <div id="kidhome-avatar" class="w-16 h-16 shrink-0 rounded-2xl bg-white/20 flex items-center justify-center text-4xl select-none kid-wiggle">🧒</div>
+          <div class="min-w-0 flex-1">
+            <h2 id="kidhome-greeting" class="text-2xl font-black leading-tight truncate">Hey there! 👋</h2>
+            <p id="kidhome-sub" class="text-sm opacity-90">What do you want to learn today?</p>
+          </div>
+        </div>
+        <div id="kidhome-stats" class="relative flex flex-wrap gap-2 mt-4 text-xs font-bold"></div>
+      </div>
+
+      <!-- Paused session, if any - same store _renderResumeBanner() already reads -->
+      <div id="resume-banner-slot-kidhome"></div>
+
+      <!-- One-tap fun shortcuts -->
+      <div class="grid grid-cols-3 gap-3 mb-6">
+        <button onclick="surpriseMe()" class="kid-tile bg-gradient-to-br from-fuchsia-500 to-purple-600">
+          <span class="text-3xl select-none">🎲</span>
+          <span class="text-xs font-bold text-white mt-1">Surprise Me!</span>
+        </button>
+        <button onclick="Search.open()" class="kid-tile bg-gradient-to-br from-sky-500 to-blue-600">
+          <span class="text-3xl select-none">🔍</span>
+          <span class="text-xs font-bold text-white mt-1">Search</span>
+        </button>
+        <button onclick="showProfile()" class="kid-tile bg-gradient-to-br from-emerald-500 to-teal-600">
+          <span class="text-3xl select-none">⚙️</span>
+          <span class="text-xs font-bold text-white mt-1">My Settings</span>
+        </button>
+      </div>
+
+      <div class="text-center mb-5">
+        <div class="text-4xl mb-2 select-none">📚</div>
+        <h2 id="subject-select-heading" class="text-2xl font-bold text-gray-800 dark:text-white mb-1">Pick a subject</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">Tap one to start practising!</p>
       </div>
       <div id="subject-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto mb-6"></div>
-      <div class="text-center">
+      <div class="text-center space-y-2">
+        <button class="back-btn" onclick="showScreen('grade-select')">← Back to Grades</button>
+        <br>
         <button onclick="Auth.enterParentMode()" class="text-sm text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
       </div>
     </div>
@@ -1710,11 +2388,20 @@
           <button onclick="AdminPanel.loadMembers()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
         <div class="mb-3">
-          <input id="admin-member-search" type="text" placeholder="Search by name or email…"
+          <input id="admin-member-search" type="text" placeholder="Search parents by name…"
             oninput="AdminPanel.filterMembers(this.value)"
             class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
         </div>
+        <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1 leading-relaxed">
+          This list shows <b>parents only</b>. Expand a row to change someone's role —
+          but once they are no longer a parent they leave this list, so use the
+          <b>👑 Roles</b> tab to change a teacher or admin back.
+        </p>
+        <p id="admin-members-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-members-list" class="space-y-2"></div>
+        <div class="text-center mt-4">
+          <button id="admin-members-more" onclick="AdminPanel.loadMoreMembers()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
+        </div>
       </div>
 
       <!-- Teachers tab -->
@@ -1723,7 +2410,11 @@
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">All teacher accounts</p>
           <button onclick="AdminPanel.loadTeachers()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
+        <p id="admin-teachers-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-teachers-list" class="space-y-2"></div>
+        <div class="text-center mt-4">
+          <button id="admin-teachers-more" onclick="AdminPanel.loadMoreTeachers()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
+        </div>
       </div>
 
       <!-- Content tab -->
@@ -1796,8 +2487,12 @@
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Question reports from students</p>
           <button onclick="AdminPanel.loadReports()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
+        <p id="admin-reports-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-reports-list">
           <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Click Refresh to load reports.</p>
+        </div>
+        <div class="text-center mt-4">
+          <button id="admin-reports-more" onclick="AdminPanel.loadMoreReports()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
         </div>
       </div>
 
@@ -1807,7 +2502,51 @@
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Admin role management</p>
           <button onclick="AdminPanel.loadRoles()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
+        <details class="mb-3 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <summary class="cursor-pointer px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700/40">
+            What each role can do
+          </summary>
+          <div class="p-3 overflow-x-auto">
+            <table class="w-full text-xs border-collapse">
+              <thead>
+                <tr class="text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                  <th class="text-left py-1 pr-3 font-medium">Can…</th>
+                  <th class="py-1 px-2 font-medium">👨‍👩‍👧 Parent</th>
+                  <th class="py-1 px-2 font-medium">👩‍🏫 Teacher</th>
+                  <th class="py-1 px-2 font-medium">🛡️ Admin</th>
+                  <th class="py-1 px-2 font-medium">👑 Super</th>
+                </tr>
+              </thead>
+              <tbody class="text-gray-600 dark:text-gray-300">
+                <tr class="border-b border-gray-100 dark:border-gray-700/50"><td class="py-1 pr-3">Manage own children</td><td class="text-center">✅</td><td class="text-center">✅</td><td class="text-center">✅</td><td class="text-center">✅</td></tr>
+                <tr class="border-b border-gray-100 dark:border-gray-700/50"><td class="py-1 pr-3">Set homework for a class</td><td class="text-center">—</td><td class="text-center">✅</td><td class="text-center">—</td><td class="text-center">✅</td></tr>
+                <tr class="border-b border-gray-100 dark:border-gray-700/50"><td class="py-1 pr-3">Open the admin panel</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">✅</td><td class="text-center">✅</td></tr>
+                <tr class="border-b border-gray-100 dark:border-gray-700/50"><td class="py-1 pr-3">Edit plans, questions, settings</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">✅</td><td class="text-center">✅</td></tr>
+                <tr><td class="py-1 pr-3">Roles / Plans / Create tabs</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">—</td><td class="text-center">✅</td></tr>
+              </tbody>
+            </table>
+            <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-3 leading-relaxed">
+              These three roles are fixed in the database, not configurable here.
+              <code>profiles.role</code> carries a CHECK constraint allowing only
+              <code>parent</code>, <code>teacher</code> and <code>admin</code>, and
+              <code>is_admin()</code> — literally <code>role = 'admin'</code> — gates
+              60 row-level-security policies. A fourth role would be rejected by the
+              constraint, and would grant nothing even if it were not, because no
+              policy would recognise it.
+              <br><br>
+              👑 <b>Super admin</b> is a separate flag (<code>profiles.is_super_admin</code>),
+              not a role. It is set in SQL only, deliberately: it is what protects an
+              admin from being demoted by another admin.
+              A teacher additionally needs <b>approved</b> status in the Teachers tab —
+              the role alone grants nothing.
+            </p>
+          </div>
+        </details>
+        <p id="admin-roles-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-roles-list" class="space-y-2"></div>
+        <div class="text-center mt-4">
+          <button id="admin-roles-more" onclick="AdminPanel.loadMoreRoles()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
+        </div>
       </div>
 
       <!-- Plans tab (super admin only) -->
@@ -1970,6 +2709,12 @@
           </div>
 
           <div class="mb-3">
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Subject</label>
+            <select id="ta-subject" onchange="TeacherMode.subjectChange()"
+              class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400"></select>
+          </div>
+
+          <div class="mb-3">
             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Topics <span class="font-normal text-gray-500 dark:text-gray-400">(leave unchecked = all)</span></label>
             <div id="ta-chapter-opts-container" class="grid grid-cols-2 sm:grid-cols-3 gap-1 max-h-48 overflow-y-auto p-1 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600"></div>
           </div>
@@ -2014,7 +2759,7 @@
             <b>📝 Test:</b> Students answer all questions and submit at the end. Results are saved here automatically. You can allow retries.
           </div>
 
-          <button onclick="TeacherMode.buildAssignment()"
+          <button id="ta-build-btn" onclick="TeacherMode.buildAssignment()"
             class="w-full py-2.5 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors shadow">
             🔗 Generate Assignment Link
           </button>
@@ -2700,6 +3445,26 @@
   </div>
 
   <!-- ══ CALENDAR SCREEN ══ -->
+  <!-- ═══ MY TIMETABLE (child view) ═══════════════════════════════════════
+       Read-only on purpose. screen-calendar above is the PARENT's editor;
+       a child needs to SEE the plan and be able to start any of it, not
+       rearrange it. Deliberately NOT plan-gated: the timetable GENERATOR is
+       the paid feature, but work already scheduled for a child must always
+       be visible to them. -->
+  <div id="screen-schedule" class="screen hidden p-4 max-w-2xl mx-auto pb-24">
+    <div class="flex items-center gap-3 mb-1">
+      <button onclick="showScreen('dashboard')" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white text-xl">←</button>
+      <h2 class="text-xl font-bold text-gray-800 dark:text-white">🗓️ My timetable</h2>
+    </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 pl-9">
+      Your study plan for the next few weeks. Tap <b>Start</b> on anything —
+      you do not have to wait for the day.
+    </p>
+    <div id="schedule-body" class="space-y-4">
+      <p class="text-sm text-gray-400 text-center py-8 animate-pulse">Loading…</p>
+    </div>
+  </div>
+
   <div id="screen-calendar" class="screen hidden p-4 max-w-2xl mx-auto pb-24">
 
     <!-- Header -->

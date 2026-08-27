@@ -151,32 +151,62 @@ const AdminPanel = (() => {
   // tab, with no error - the dropdown would just keep offering the old names.
   let _plansForSelect = [];
 
-  async function loadMembers() {
+  // Expected ~1000 users/month means the unfiltered member list would only
+  // ever grow - pulling every row on every tab open/refresh doesn't scale.
+  // Same page-and-"Load more" shape as Question Manager's _fetchAndRender().
+  const MEMBERS_PAGE = 30;
+  let _membersOffset  = 0;
+  let _membersQuery   = '';
+  let _membersFilterTimer = null;
+
+  async function loadMembers(reset = true) {
     if (!_sb) return;
+    if (reset) { _membersOffset = 0; _members = []; }
     const el = document.getElementById('admin-members-list');
-    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
+    if (reset && el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
+    let membersQuery = _sb.from('profiles')
+      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code',
+              { count: 'exact' })
+      .eq('role', 'parent')
+      .order('created_at', { ascending: false })
+      .range(_membersOffset, _membersOffset + MEMBERS_PAGE - 1);
+    // full_name only - the "or email" in the placeholder is aspirational,
+    // profiles carries no email column (auth.users does, and isn't queryable
+    // from here); id is a UUID so a name search covers the realistic case.
+    if (_membersQuery) membersQuery = membersQuery.ilike('full_name', `%${_membersQuery}%`);
     const [profilesRes, plansRes] = await Promise.all([
-      _sb.from('profiles')
-        .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code')
-        .eq('role', 'parent')
-        .order('created_at', { ascending: false }),
-      _sb.from('plans').select('id, name, price_mur').order('price_mur'),
+      membersQuery,
+      // Plans rarely change - no need to refetch on every page/search.
+      _plansForSelect.length ? Promise.resolve({ data: _plansForSelect }) :
+        _sb.from('plans').select('id, name, price_mur').order('price_mur'),
     ]);
     if (profilesRes.error) {
       if (el) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load members.</p>';
       return;
     }
-    _plansForSelect = plansRes.data || [];
-    _members = profilesRes.data || [];
+    _plansForSelect = plansRes.data || _plansForSelect;
+    const rows = profilesRes.data || [];
+    _members = reset ? rows : _members.concat(rows);
+    _membersOffset += rows.length;
     _renderMembers(_members);
+    _setCount('admin-members-count', _members.length, profilesRes.count, 'parents');
+    const moreBtn = document.getElementById('admin-members-more');
+    if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < MEMBERS_PAGE);
   }
 
+  async function loadMoreMembers() {
+    await loadMembers(false);
+  }
+
+  // Debounced so 1000 users' worth of typing doesn't fire a query per
+  // keystroke - each search now re-queries the server (a full client-side
+  // filter would need every member loaded first, defeating the pagination).
   function filterMembers(query) {
-    const q = query.toLowerCase();
-    const filtered = q
-      ? _members.filter(m => (m.full_name || '').toLowerCase().includes(q) || (m.id || '').toLowerCase().includes(q))
-      : _members;
-    _renderMembers(filtered);
+    clearTimeout(_membersFilterTimer);
+    _membersFilterTimer = setTimeout(() => {
+      _membersQuery = (query || '').trim();
+      loadMembers(true);
+    }, 300);
   }
 
   function _memberStatusBadge(m) {
@@ -193,6 +223,54 @@ const AdminPanel = (() => {
   // children cached by parent profile id
   let _familyStudents = {}; // { profileId: [students] }
 
+  // ── Shared list counter ─────────────────────────
+  // "Showing 50 of 5,428 questions" instead of "Showing 50+". The old form told
+  // you a page had filled up but not how much was left, so there was no way to
+  // tell 51 rows from five thousand without clicking Load more until it stopped.
+  //
+  // total comes from PostgREST's `count: 'exact'` header. It can legitimately be
+  // null - the count is a separate estimate the server may omit, and an older
+  // PostgREST ignores the option entirely - so the "+" form is kept as the
+  // fallback rather than printing "of null".
+  function _setCount(elId, shown, total, noun) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const n = (x) => x.toLocaleString('en-GB');
+    if (shown === 0)                 el.textContent = `No ${noun} found.`;
+    else if (typeof total === 'number' && total >= shown)
+      el.textContent = shown >= total
+        ? `${n(total)} ${noun}`
+        : `Showing ${n(shown)} of ${n(total)} ${noun}`;
+    else el.textContent = `Showing ${n(shown)}+ ${noun}`;
+  }
+
+  // Which member rows are expanded. Module-level, not per-render, so a repaint
+  // (role change, disable, plan activation) does not collapse the row the admin
+  // is working in - that was the worst part of the old card layout, where every
+  // action bounced you back to a wall of controls.
+  const _openMembers = new Set();
+
+  // Update one cached member row and repaint, instead of calling loadMembers(),
+  // which resets the offset and refetches page 1. An admin who edited someone
+  // on page 3 watched that person vanish from the list - the change had worked,
+  // but they had to page back down to see it, and the expanded row went with it.
+  function _patchMember(userId, patch) {
+    const row = _members.find(m => m.id === userId);
+    if (!row) { loadMembers(); return; }
+    Object.assign(row, patch);
+    _renderMembers(_members);
+  }
+
+  function toggleMemberRow(id) {
+    if (_openMembers.has(id)) _openMembers.delete(id);
+    else _openMembers.add(id);
+    const open  = _openMembers.has(id);
+    const panel = document.getElementById(`member-detail-${id}`);
+    const chev  = document.getElementById(`member-chev-${id}`);
+    if (panel) panel.classList.toggle('hidden', !open);
+    if (chev)  chev.textContent = open ? '▾' : '▸';
+  }
+
   function _renderMembers(list) {
     const el = document.getElementById('admin-members-list');
     if (!el) return;
@@ -200,92 +278,123 @@ const AdminPanel = (() => {
       el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No members found.</p>';
       return;
     }
-    el.innerHTML = list.map(m => `
-      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-gray-800 dark:text-white truncate">${_esc(m.full_name || 'Unnamed')}</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">${m.id}</p>
+
+    // A CSS grid, not a <table>: the columns collapse to a stacked two-line row
+    // under 640px, which a real table cannot do without horizontal scrolling.
+    // The header row is hidden on mobile for the same reason.
+    const COLS = 'grid-cols-[1.6rem_1fr] sm:grid-cols-[1.6rem_2.2fr_1fr_1fr_1.1fr]';
+    const header = `
+      <div class="hidden sm:grid grid-cols-[1.6rem_2.2fr_1fr_1fr_1.1fr] gap-2 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+        <span></span><span>Name</span><span>Role</span><span>Status</span><span>Plan</span>
+      </div>`;
+
+    el.innerHTML = header + list.map(m => {
+      const isParent = m.role === 'parent' || m.role === 'admin';
+      const open     = _openMembers.has(m.id);
+      // The whole summary row is a click-to-expand toggle, so every interactive
+      // control inside it must stop the click propagating - otherwise choosing a
+      // role also collapses the row out from under the person choosing it.
+      // stopPropagation on BOTH click and change: a keyboard user commits with
+      // Enter, which the row's own keydown handler would otherwise swallow.
+      const roleSelect = (extraClass = '') => `<select
+        onclick="event.stopPropagation()"
+        onkeydown="event.stopPropagation()"
+        onchange="event.stopPropagation();AdminPanel.changeRole('${m.id}', this.value)"
+        class="${extraClass} text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-1.5 py-0.5 bg-white dark:bg-gray-700 dark:text-white max-w-full">
+        <option value="parent"  ${m.role === 'parent'  ? 'selected' : ''}>👨‍👩‍👧 Parent</option>
+        <option value="teacher" ${m.role === 'teacher' ? 'selected' : ''}>👩‍🏫 Teacher</option>
+        <option value="admin"   ${m.role === 'admin'   ? 'selected' : ''}>🛡️ Admin</option>
+      </select>`;
+      return `
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+
+        <div role="button" tabindex="0"
+          onclick="AdminPanel.toggleMemberRow('${m.id}')"
+          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();AdminPanel.toggleMemberRow('${m.id}')}"
+          class="grid ${COLS} gap-2 items-center px-3 py-2.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors">
+          <span id="member-chev-${m.id}" class="text-gray-400 text-sm select-none">${open ? '▾' : '▸'}</span>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(m.full_name || 'Unnamed')}</p>
+            <p class="text-[11px] text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
           </div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${ROLE_COLORS[m.role] || ''}">
-              ${ROLE_LABELS[m.role] || m.role}
-            </span>
-            ${_memberStatusBadge(m)}
+          <span class="hidden sm:block">${roleSelect('w-full')}</span>
+          <span class="hidden sm:block">${_memberStatusBadge(m)}</span>
+          <span class="hidden sm:block text-xs truncate" id="plan-label-${m.id}">${isParent ? 'loading…' : '—'}</span>
+          <div class="col-span-2 sm:hidden flex flex-wrap items-center gap-1.5">
+            ${roleSelect()}${_memberStatusBadge(m)}
           </div>
-          <div class="flex gap-2 flex-wrap w-full sm:w-auto">
-            <select onchange="AdminPanel.changeRole('${m.id}', this.value)"
-              class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
-              <option value="parent"  ${m.role==='parent'  ? 'selected':''}>👨‍👩‍👧 Parent</option>
-              <option value="teacher" ${m.role==='teacher' ? 'selected':''}>👩‍🏫 Teacher</option>
-              <option value="admin"   ${m.role==='admin'   ? 'selected':''}>🛡️ Admin</option>
-            </select>
+        </div>
+
+        <div id="member-detail-${m.id}" class="${open ? '' : 'hidden'} border-t border-gray-100 dark:border-gray-700 px-3 py-3 bg-gray-50/60 dark:bg-gray-900/20">
+
+          <div class="flex flex-wrap items-center gap-2">
             <button onclick="AdminPanel.toggleDisable('${m.id}', ${!m.disabled})"
               class="text-xs px-3 py-1 rounded-lg font-semibold transition-colors ${m.disabled
                 ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200'
                 : 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200'}">
               ${m.disabled ? '✅ Enable' : '🚫 Disable'}
             </button>
-            ${m.role === 'parent' || m.role === 'admin' ? `
-            <button onclick="AdminPanel.toggleChildren('${m.id}')"
-              id="btn-children-${m.id}"
-              class="text-xs px-3 py-1 rounded-lg font-semibold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 transition-colors">
+            ${isParent ? `
+            <button onclick="AdminPanel.toggleChildren('${m.id}')" id="btn-children-${m.id}"
+              class="text-xs px-3 py-1 rounded-lg font-semibold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200">
               👶 Children
             </button>` : ''}
           </div>
-          <!-- Name edit + Expiry -->
+
           <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
             <input type="text" value="${_esc(m.full_name || '')}" placeholder="Display name…"
               onblur="AdminPanel.updateMemberName('${m.id}', this.value)"
               onkeydown="if(event.key==='Enter')this.blur()"
               title="Click to edit display name"
-              class="flex-1 min-w-0 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+              class="flex-1 min-w-0 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white">
             <span class="text-xs text-gray-500 dark:text-gray-400 shrink-0">⏳ Expires</span>
-            <input type="date" value="${m.expires_at ? m.expires_at.slice(0,10) : ''}"
+            <input type="date" value="${m.expires_at ? m.expires_at.slice(0, 10) : ''}"
               onchange="AdminPanel.setExpiry('${m.id}', this.value)"
               title="Set account expiry - leave blank for no expiry"
-              class="text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
-            ${m.expires_at ? `<button onclick="AdminPanel.setExpiry('${m.id}','')" class="text-xs text-red-400 hover:text-red-600 shrink-0" title="Remove expiry">✕</button>` : ''}
+              class="text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white">
+            ${m.expires_at ? `<button onclick="AdminPanel.setExpiry('${m.id}','')" class="text-xs text-red-400 hover:text-red-500">clear</button>` : ''}
           </div>
-        </div>
-        ${(m.role === 'parent' || m.role === 'admin') ? `
-        <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
-          <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold shrink-0">💳 Plan:</span>
-          <span id="plan-label-${m.id}" class="text-xs text-gray-500 dark:text-gray-400">loading…</span>
-          <select id="plan-sel-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
-            ${_plansForSelect.map(p => `<option value="${_esc(p.id)}">${_esc(p.name)}${p.price_mur ? ` (Rs ${p.price_mur}/mo)` : ' (Free)'}</option>`).join('')}
-          </select>
-          <select id="plan-months-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
-            <option value="1">1 month</option>
-            <option value="3">3 months</option>
-            <option value="6">6 months</option>
-            <option value="12">12 months</option>
-          </select>
-          <button onclick="AdminPanel.assignPlan('${m.id}')"
-            class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 px-3 py-1 rounded-lg font-semibold transition-colors">
-            ✅ Activate
-          </button>
-          <button onclick="AdminPanel.showPlanHistory('${m.id}')"
-            class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 px-3 py-1 rounded-lg font-semibold transition-colors">
-            📋 History
-          </button>
-        </div>
-        <div id="plan-history-${m.id}" class="hidden mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 overflow-x-auto"></div>` : ''}
-        <div id="children-panel-${m.id}" class="hidden mt-3 pl-2 border-l-2 border-indigo-200 dark:border-indigo-700">
-          <p class="text-xs text-gray-500 dark:text-gray-400 animate-pulse">Loading children…</p>
-        </div>
-      </div>`).join('');
 
-    // Load plan labels asynchronously for each parent/admin row
+          ${isParent ? `
+          <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+            <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold shrink-0">💳 Plan:</span>
+            <select id="plan-sel-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white">
+              ${_plansForSelect.map(p => `<option value="${_esc(p.id)}">${_esc(p.name)}${p.price_mur ? ` (Rs ${p.price_mur}/mo)` : ' (Free)'}</option>`).join('')}
+            </select>
+            <select id="plan-months-${m.id}" class="text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white">
+              <option value="1">1 month</option>
+              <option value="3">3 months</option>
+              <option value="6">6 months</option>
+              <option value="12">12 months</option>
+            </select>
+            <button onclick="AdminPanel.assignPlan('${m.id}')"
+              class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 px-3 py-1 rounded-lg font-semibold">
+              ✅ Activate
+            </button>
+            <button onclick="AdminPanel.showPlanHistory('${m.id}')"
+              class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 px-3 py-1 rounded-lg font-semibold">
+              📋 History
+            </button>
+          </div>
+          <div id="plan-history-${m.id}" class="hidden mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 overflow-x-auto"></div>
+          <div id="children-panel-${m.id}" class="hidden mt-3 pl-2 border-l-2 border-indigo-200 dark:border-indigo-700">
+            <p class="text-xs text-gray-500 dark:text-gray-400 animate-pulse">Loading children…</p>
+          </div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    // The plan label lives in the SUMMARY row now, so it is readable without
+    // expanding anything - that is the point of having a Plan column at all.
     list.filter(m => m.role === 'parent' || m.role === 'admin').forEach(async m => {
       const lbl = document.getElementById(`plan-label-${m.id}`);
       if (!lbl) return;
       const { plan_id, subscription } = await Store.getUserPlan(m.id);
       const exp = subscription?.expires_at
-        ? ` (expires ${new Date(subscription.expires_at).toLocaleDateString()})`
+        ? ` (exp ${new Date(subscription.expires_at).toLocaleDateString()})`
         : '';
       lbl.textContent = plan_id + exp;
-      lbl.className = `text-xs font-semibold ${plan_id === 'free' ? 'text-gray-500 dark:text-gray-400' : 'text-green-600 dark:text-green-400'}`;
+      lbl.className = `hidden sm:block text-xs truncate font-semibold ${plan_id === 'free' ? 'text-gray-500 dark:text-gray-400' : 'text-green-600 dark:text-green-400'}`;
       const sel = document.getElementById(`plan-sel-${m.id}`);
       if (sel) sel.value = plan_id;
     });
@@ -371,7 +480,7 @@ const AdminPanel = (() => {
     const { error } = await _sb.from('profiles').update({ expires_at: val }).eq('id', userId);
     if (error) { alert('Error: ' + error.message); return; }
     toast(val ? `Account expires ${dateStr}` : 'Expiry removed', 2500);
-    await loadMembers();
+    _patchMember(userId, { expires_at: val });
   }
 
   async function setStudentExpiry(studentId, studentName, dateStr) {
@@ -411,11 +520,20 @@ const AdminPanel = (() => {
     if (!newRole || !_sb) return;
     const current = _members.find(m => m.id === userId);
     if (current?.role === newRole) return; // no change
-    if (!confirm(`Change role to "${newRole}"?`)) return;
+    if (!confirm(`Change role to "${newRole}"?`)) {
+      // The <select> already shows the new value; the database does not. Repaint
+      // from the cached row so the two agree again - the old unconditional
+      // loadMembers() used to do this as a side effect.
+      _patchMember(userId, { role: current?.role });
+      return;
+    }
     const { error } = await _sb.from('profiles').update({ role: newRole }).eq('id', userId);
     if (error) { alert('Error: ' + error.message); return; }
     toast(`Role updated to ${newRole}`, 3000);
-    await Promise.all([loadMembers(), loadTeachers()]);
+    // The members list is filtered to role='parent', so a member who is no
+    // longer a parent has to leave it - that is a genuine refetch, not a patch.
+    if (newRole === 'parent') { _patchMember(userId, { role: newRole }); await loadTeachers(); }
+    else await Promise.all([loadMembers(), loadTeachers()]);
   }
 
   async function toggleDisable(userId, disable) {
@@ -597,20 +715,44 @@ const AdminPanel = (() => {
   }
 
   // ── Teachers tab ────────────────────────────
-  async function loadTeachers() {
+  // Paged like every other admin list. This one used to fetch EVERY teacher row
+  // with no limit - harmless at today's zero teachers, and a growing page load
+  // with no ceiling as soon as that changes.
+  const TEACHERS_PAGE = 30;
+  let _teachersOffset = 0;
+
+  async function loadTeachers(reset = true) {
     if (!_sb) return;
     const el = document.getElementById('admin-teachers-list');
-    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading teachers…</p>';
-    const { data, error } = await _sb.from('profiles')
-      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, teacher_tier')
+    if (reset) {
+      _teachersOffset = 0; _teachers = [];
+      if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading teachers…</p>';
+    }
+    const { data, error, count } = await _sb.from('profiles')
+      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, teacher_tier',
+              { count: 'exact' })
       .eq('role', 'teacher')
-      .order('teacher_status', { ascending: true });
+      .order('teacher_status', { ascending: true })
+      // Secondary sort so paging is stable: teacher_status alone leaves rows
+      // that share a status in an arbitrary order, and two pages of an unstable
+      // sort can repeat one row and skip another.
+      .order('created_at', { ascending: false })
+      .range(_teachersOffset, _teachersOffset + TEACHERS_PAGE - 1);
     if (error) {
-      if (el) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load teachers.</p>';
+      if (el && reset) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load teachers.</p>';
       return;
     }
-    _teachers = data || [];
+    const rows = data || [];
+    _teachers = reset ? rows : _teachers.concat(rows);
+    _teachersOffset += rows.length;
     _renderTeachers(_teachers);
+    _setCount('admin-teachers-count', _teachers.length, count, 'teachers');
+    const moreBtn = document.getElementById('admin-teachers-more');
+    if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < TEACHERS_PAGE);
+  }
+
+  async function loadMoreTeachers() {
+    await loadTeachers(false);
   }
 
   function _renderTeachers(list) {
@@ -702,14 +844,15 @@ const AdminPanel = (() => {
   }
 
   // ── Roles tab (super admin only) ───────────────
-  async function loadRoles() {
-    if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
+  const ROLES_PAGE = 40;
+  let _rolesOffset  = 0;
+  let _rolesAll     = [];
+
+  function _renderRoles() {
     const listEl = document.getElementById('admin-roles-list');
     if (!listEl) return;
-    listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
-    const { data } = await _sb.from('profiles').select('id, full_name, role, is_super_admin').order('full_name');
     const mySelf = typeof Auth !== 'undefined' ? Auth.getParentProfile?.()?.id : null;
-    listEl.innerHTML = (data || []).map(p => {
+    listEl.innerHTML = _rolesAll.map(p => {
       const isSelf  = p.id === mySelf;
       const isSuper = p.is_super_admin;
       return `<div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
@@ -724,6 +867,38 @@ const AdminPanel = (() => {
           </button>`}
       </div>`;
     }).join('') || '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No profiles found.</p>';
+  }
+
+  // Same 1000-users/month reasoning as Members: this used to pull every
+  // profile row (not just admins) in one unbounded query.
+  async function loadRoles(reset = true) {
+    if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
+    const listEl = document.getElementById('admin-roles-list');
+    if (!listEl) return;
+    if (reset) { _rolesOffset = 0; _rolesAll = []; listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>'; }
+    const { data, error, count } = await _sb.from('profiles')
+      .select('id, full_name, role, is_super_admin', { count: 'exact' })
+      .order('full_name')
+      .range(_rolesOffset, _rolesOffset + ROLES_PAGE - 1);
+    if (error) {
+      // An RLS denial or a network failure is NOT an empty database. Reporting
+      // it as "No profiles found" also hid the Load more button, so paging
+      // could not be retried without leaving and re-entering the tab.
+      console.error('[Admin.loadRoles]', error.message);
+      if (reset) listEl.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Could not load roles. Please try Refresh.</p>';
+      return;
+    }
+    const rows = data || [];
+    _rolesAll = reset ? rows : _rolesAll.concat(rows);
+    _rolesOffset += rows.length;
+    _renderRoles();
+    _setCount('admin-roles-count', _rolesAll.length, count, 'accounts');
+    const moreBtn = document.getElementById('admin-roles-more');
+    if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < ROLES_PAGE);
+  }
+
+  async function loadMoreRoles() {
+    await loadRoles(false);
   }
 
   // .select('id') so a row blocked by RLS - or already a super admin, which the
@@ -793,11 +968,38 @@ const AdminPanel = (() => {
           class="plan-cap w-24 text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
       </div>`;
 
+      // `!== false`, not truthy. _planAllowsFeature treats an ABSENT key as
+      // allowed, so rendering absent as unchecked showed the opposite of what
+      // was enforced - and the next save would write that false back and
+      // genuinely switch the feature off. Any switch added here in future would
+      // otherwise silently disable itself for every plan on the next save.
       const capB = (key, label) => `<label class="flex items-center gap-2 mb-1.5 cursor-pointer">
         <input type="checkbox" data-plan="${plan.id}" data-bool="${key}"
-          class="plan-bool w-3.5 h-3.5 accent-indigo-600" ${features[key] ? 'checked' : ''}>
+          class="plan-bool w-3.5 h-3.5 accent-indigo-600" ${features[key] !== false ? 'checked' : ''}>
         <span class="text-xs text-gray-600 dark:text-gray-300">${label}</span>
       </label>`;
+
+      // A COLUMN on plans, not a key in features. max_children is the only one:
+      // it is what the card header and the public pricing page display, and what
+      // the students_max_children trigger reads server-side. The old form wrote
+      // features.max_children instead, which nothing has ever read.
+      const colN = (key, label, hint, min = 1) => `<div class="flex items-center gap-2 mb-2">
+        <span class="text-xs text-gray-500 dark:text-gray-400 w-36 shrink-0">${label}</span>
+        <input type="number" min="${min}" value="${plan[key] ?? min}"
+          data-plan="${plan.id}" data-col="${key}"
+          class="plan-col w-24 text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+        <span class="text-[11px] text-gray-400">${hint}</span>
+      </div>`;
+
+      // Text columns need their own attribute: the numeric collector parses
+      // every data-col with parseInt, which would turn a plan name into NaN.
+      const colT = (key, label, hint) => `<div class="flex items-center gap-2 mb-2">
+        <span class="text-xs text-gray-500 dark:text-gray-400 w-36 shrink-0">${label}</span>
+        <input type="text" maxlength="40" value="${_esc(plan[key] ?? '')}"
+          data-plan="${plan.id}" data-col-text="${key}"
+          class="plan-col-text flex-1 min-w-0 text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
+        <span class="text-[11px] text-gray-400 shrink-0">${hint}</span>
+      </div>`;
 
       return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border border-gray-100 dark:border-gray-700">
         <div class="flex items-center justify-between mb-3">
@@ -815,6 +1017,18 @@ const AdminPanel = (() => {
         </div>
 
         <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
+          <h4 class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wide mb-2">💰 Pricing</h4>
+          <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2 leading-relaxed">
+            What the public pricing page and the plans modal show.
+            <b>Was price</b> renders a struck-out original with a “Save N%” badge,
+            and is ignored unless it is higher than the price above it.
+          </p>
+          ${colT('name',          'Plan name',          'shown to customers')}
+          ${colN('price_mur',     'Price / month (Rs)', '0 = free', 0)}
+          ${capN('price_was_mur', 'Was price (promo)')}
+        </div>
+
+        <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
           <div class="flex items-center justify-between mb-2">
             <h4 class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wide">📚 Chapter Access</h4>
             <label class="flex items-center gap-1.5 text-xs cursor-pointer">
@@ -824,6 +1038,14 @@ const AdminPanel = (() => {
               <span class="text-gray-500 dark:text-gray-400">All chapters</span>
             </label>
           </div>
+          <div class="flex items-center gap-2 mb-2 p-2 rounded-lg bg-indigo-50 dark:bg-indigo-900/20">
+            <span class="text-xs text-gray-600 dark:text-gray-300 shrink-0">Unlock the first</span>
+            <input type="number" min="0" max="30" value="4" id="plan-firstn-${plan.id}"
+              class="w-14 text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 dark:text-white">
+            <span class="text-xs text-gray-600 dark:text-gray-300 shrink-0">chapters of every subject</span>
+            <button onclick="AdminPanel.applyFirstNChapters('${plan.id}')"
+              class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-lg font-semibold shrink-0">Apply</button>
+          </div>
           <div id="plan-chapters-${plan.id}" class="${isAll ? 'opacity-50 pointer-events-none' : ''}">
             ${chapPickerHtml}
           </div>
@@ -831,19 +1053,36 @@ const AdminPanel = (() => {
 
         <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
           <h4 class="text-xs font-bold text-gray-700 dark:text-gray-200 uppercase tracking-wide mb-2">⚙️ Feature Caps</h4>
-          ${capN('daily_question_cap', 'Daily question cap')}
-          ${capN('weekly_exam_cap',    'Weekly exam cap')}
+          <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2 leading-relaxed">
+            Blank = unlimited. Nothing here applies until <b>Plan enforcement</b>
+            is switched on in the Settings tab.<br>
+            <b>Was price</b> only shows a struck-out promo when it is higher than
+            the live price — blank or lower means no promotion.
+          </p>
+          ${capN('daily_question_cap', 'Daily questions')}
+          ${capN('weekly_exam_cap',    'Weekly exams')}
           ${capN('hints_per_question', 'Hints per question')}
-          ${capN('max_children',       'Max children')}
-          <div class="mt-2">
+          ${colN('max_children',       'Max children', 'shown on pricing')}
+          <div class="mt-2 grid sm:grid-cols-2 gap-x-4">
             ${capB('printable_papers',    '🖨️ Printable papers')}
             ${capB('advanced_analytics',  '📊 Advanced analytics')}
-            ${capB('push_reminders',      '🔔 Push reminders')}
             ${capB('timetable_generator', '📅 Timetable generator')}
-            ${capB('weekly_digest',       '📧 Weekly digest')}
-            ${capB('tutor_status',        '👩‍🏫 Tutor status')}
-            ${capB('early_access',        '⭐ Early access')}
+            ${capB('push_reminders',      '🔔 Daily push reminders')}
+            ${capB('weekly_digest_enabled', '📧 Weekly progress email')}
+            ${capB('tutor_status',        '👩‍🏫 Can apply for tutor access')}
+            ${capB('past_papers',         '📄 Past exam papers')}
+            ${capB('question_search',     '🔍 Search all questions')}
+            ${capB('community_forum',     '💬 Community forum')}
+            ${capB('study_calendar',      '🗓️ Study calendar')}
+            ${capB('weak_area_drill',     '💪 Weak-area drills')}
           </div>
+          <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-3 leading-relaxed">
+            🛡️ Enforced server-side (cannot be bypassed): chapter access, max
+            children, push reminders, weekly email.<br>
+            Enforced in the browser only: daily/weekly caps, hints, printable
+            papers, analytics, timetable, tutor access, past papers, search,
+            forum, calendar, weak-area drills.
+          </p>
         </div>
 
         <button onclick="AdminPanel.savePlanFeatures('${plan.id}')"
@@ -862,6 +1101,52 @@ const AdminPanel = (() => {
       container.querySelectorAll('.plan-ch-check').forEach(cb => { cb.checked = checked; });
       container.querySelectorAll('.plan-pack-all').forEach(cb => { cb.checked = checked; });
     }
+  }
+
+  // "First 4 chapters of every subject" is what the public pricing page
+  // promises the free tier, and ticking that by hand is 148 checkboxes across
+  // 15 packs - tedious, and wrong the moment a subject gains a chapter.
+  //
+  // "First N" means the first N ORDINARY chapters in manifest order. Enrichment
+  // chapters are deliberately excluded from the count AND left unticked: they
+  // are the ✨ BONUS content, they carry examWeight, and counting one toward a
+  // free allowance would silently cost that tier a real chapter. An admin who
+  // wants them can still tick them individually afterwards.
+  function applyFirstNChapters(planId) {
+    const n = parseInt(document.getElementById(`plan-firstn-${planId}`)?.value, 10);
+    if (!Number.isFinite(n) || n < 0) { toast('Enter how many chapters to unlock.', 2500); return; }
+
+    // Leaving "All chapters" ticked would make the tree unreadable AND ignored -
+    // savePlanFeatures writes allowed_chapters = null when it is on.
+    const allChk = document.getElementById(`plan-all-${planId}`);
+    if (allChk?.checked) { allChk.checked = false; toggleAllChapters(planId, false); }
+
+    const allow = new Set();
+    let bonus = 0;
+    for (const pack of (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])) {
+      const chs = pack._chapters || pack.chapters || [];
+      const ordinary = chs.filter(c => !c.enrichment);
+      bonus += chs.length - ordinary.length;
+      ordinary.slice(0, n).forEach(c => allow.add(c.id));
+    }
+
+    let ticked = 0;
+    document.querySelectorAll(`.plan-ch-check[data-plan="${planId}"]`).forEach(cb => {
+      cb.checked = allow.has(cb.dataset.ch);
+      if (cb.checked) ticked++;
+    });
+    // The per-pack "all" boxes are now almost certainly wrong - a pack is only
+    // fully ticked if N covers every ordinary chapter in it and it has no bonus.
+    document.querySelectorAll(`.plan-pack-all[data-plan="${planId}"]`).forEach(cb => {
+      const pack = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+        .find(p => p.id === cb.dataset.pack);
+      const chs = pack ? (pack._chapters || pack.chapters || []) : [];
+      cb.checked = chs.length > 0 && chs.every(c => allow.has(c.id));
+    });
+
+    toast(`${ticked} chapter${ticked === 1 ? '' : 's'} ticked`
+      + (bonus ? ` · ${bonus} bonus chapter${bonus === 1 ? '' : 's'} left locked` : '')
+      + ' — press Save Plan to apply.', 4500);
   }
 
   function togglePackAll(planId, packId, checked) {
@@ -892,9 +1177,31 @@ const AdminPanel = (() => {
       features[cb.dataset.bool] = cb.checked;
     });
 
-    const { error } = await _sb.from('plans').update({ features }).eq('id', planId);
+    // Real columns on `plans`, written alongside the jsonb in one update.
+    const row = { features };
+    document.querySelectorAll(`input[data-plan="${planId}"][data-col]`).forEach(inp => {
+      const n = parseInt(inp.value, 10);
+      const k = inp.dataset.col;
+      // Both are NOT NULL on the table, so a blank or junk value must fall back
+      // to something valid rather than failing the whole save on a constraint.
+      // max_children: 0 children is not a product anyone sells, so the floor is 1.
+      // price_mur: 0 IS meaningful (the free tier), so the floor is 0 - and a
+      // negative price would render as "Rs -50" on the public pricing page.
+      if (k === 'max_children')   row.max_children = Number.isFinite(n) && n >= 1 ? n : 1;
+      else if (k === 'price_mur') row.price_mur    = Number.isFinite(n) && n >= 0 ? n : 0;
+      else if (Number.isFinite(n)) row[k] = n;
+    });
+    document.querySelectorAll(`input[data-plan="${planId}"][data-col-text]`).forEach(inp => {
+      const v = (inp.value || '').trim();
+      // name is NOT NULL. An empty box keeps whatever is stored rather than
+      // writing '' and leaving a nameless plan on the pricing page.
+      if (v) row[inp.dataset.colText] = v;
+    });
+
+    const { error } = await _sb.from('plans').update(row).eq('id', planId);
     if (error) { toast('Error saving plan: ' + error.message, 3000); return; }
     toast('Plan saved ✅', 1500);
+    loadPlans();   // repaint from the DB so the card header shows the saved cap
   }
 
   async function showPlanHistory(userId) {
@@ -958,27 +1265,43 @@ const AdminPanel = (() => {
     else toast('Could not update — try again.', 2500);
   }
 
-  async function loadReports() {
+  const REPORTS_PAGE = 30;
+  let _reportsOffset  = 0;
+  let _reportsAll     = [];
+  let _reportsTotal   = null;
+
+  async function loadReports(reset = true) {
     const el = document.getElementById('admin-reports-list');
-    if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
-    // Ensure question bank is fully loaded across all grades so the live lookup
-    // works. loadAllForGrade, NOT loadForStudent: the latter now resolves once
-    // the child's active subject is in and prefetches the rest in the
-    // background, which is right for a child and wrong here — a report can name
-    // a question in any subject, and the lookup runs the moment this resolves.
-    if (typeof QuestionLoader !== 'undefined') {
-      await Promise.allSettled([
-        QuestionLoader.loadAllForGrade(4),
-        QuestionLoader.loadAllForGrade(5),
-        QuestionLoader.loadAllForGrade(6),
-      ]);
+    if (reset) {
+      _reportsOffset = 0; _reportsAll = [];
+      if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading reports…</p>';
+      // Ensure question bank is fully loaded across all grades so the live lookup
+      // works. loadAllForGrade, NOT loadForStudent: the latter now resolves once
+      // the child's active subject is in and prefetches the rest in the
+      // background, which is right for a child and wrong here — a report can name
+      // a question in any subject, and the lookup runs the moment this resolves.
+      // Only needed once, not on every "load more" page.
+      if (typeof QuestionLoader !== 'undefined') {
+        await Promise.allSettled([
+          QuestionLoader.loadAllForGrade(4),
+          QuestionLoader.loadAllForGrade(5),
+          QuestionLoader.loadAllForGrade(6),
+        ]);
+      }
     }
-    const reports = await Store.loadReports();
-    if (!reports.length) {
+    // Total fetched only on reset - a Load more page does not change it.
+    if (reset) _reportsTotal = await Store.countReports();
+    const page = await Store.loadReports(_reportsOffset, REPORTS_PAGE);
+    _reportsOffset += page.length;
+    _reportsAll = reset ? page : _reportsAll.concat(page);
+    _setCount('admin-reports-count', _reportsAll.length, _reportsTotal, 'reports');
+    const moreBtn = document.getElementById('admin-reports-more');
+    if (moreBtn) moreBtn.classList.toggle('hidden', page.length < REPORTS_PAGE);
+    if (!_reportsAll.length) {
       if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No reports yet.</p>';
       return;
     }
-    if (el) el.innerHTML = reports.map(r => {
+    if (el) el.innerHTML = _reportsAll.map(r => {
       const { text: qText, meta } = _parseReportMeta(r.question_text);
       const isOpen   = (r.status || 'open') === 'open';
       const statusCls = isOpen ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700';
@@ -1064,6 +1387,10 @@ const AdminPanel = (() => {
         </div>
       </div>`;
     }).join('');
+  }
+
+  async function loadMoreReports() {
+    await loadReports(false);
   }
 
   // ── Create pre-activated account (super admin only) ───────────
@@ -1208,6 +1535,7 @@ const AdminPanel = (() => {
   const QM = (() => {
     let _offset    = 0;
     const PAGE     = 50;
+    let _qmTotal   = null;
     let _editingId = null;
     let _idCounter = 0;
 
@@ -1248,7 +1576,7 @@ const AdminPanel = (() => {
 
     // ── Search / list ────────────────────────────────────────────────────
     async function qmSearch() {
-      _offset = 0;
+      _offset = 0; _qmTotal = null;
       _el('qm-list').innerHTML = '<p class="text-sm text-gray-400 p-4">Loading…</p>';
       _el('qm-load-more').classList.add('hidden');
       await _fetchAndRender(true);
@@ -1267,7 +1595,12 @@ const AdminPanel = (() => {
       const search   = (_el('qm-search').value || '').trim();
 
       let q = _sb.from('questions')
-        .select('id,subject_id,chapter_id,difficulty,type,data,protected')
+        // No `type` here: it is a field INSIDE the data jsonb (see qmSave, which
+        // writes it into `data`, and the edit form, which reads it as q.type),
+        // never a column on questions. Selecting it made PostgREST fail the whole
+        // query with "column questions.type does not exist" - and the list does
+        // not render it anyway.
+        .select('id,subject_id,chapter_id,difficulty,data,protected', { count: 'exact' })
         .eq('is_past_paper', false)
         .order('subject_id').order('chapter_id').order('difficulty')
         .range(_offset, _offset + PAGE - 1);
@@ -1280,7 +1613,7 @@ const AdminPanel = (() => {
       if (_el('qm-has-image')?.checked)  q = q.or('data->>question.ilike.%<img%,data->>question.ilike.%<svg%');
       if (_el('qm-protected')?.checked)  q = q.eq('protected', true);
 
-      const { data, error } = await q;
+      const { data, error, count } = await q;
 
       if (error) {
         _el('qm-list').innerHTML = `<p class="text-sm text-red-500 p-4">Error: ${error.message}</p>`;
@@ -1288,11 +1621,11 @@ const AdminPanel = (() => {
       }
 
       const rows = data || [];
-      if (replace) {
-        _el('qm-count').textContent = rows.length === PAGE
-          ? `Showing ${_offset + rows.length}+ questions`
-          : `${_offset + rows.length} question${rows.length !== 1 ? 's' : ''}`;
-      }
+      // Updated on EVERY page, not just the first. It used to be inside
+      // `if (replace)`, so after a Load more the line still reported the first
+      // page's numbers while the list underneath had grown.
+      _qmTotal = (typeof count === 'number') ? count : _qmTotal;
+      _setCount('qm-count', _offset + rows.length, _qmTotal, 'questions');
 
       const html = rows.map(r => {
         const preview = _stripHtml(r.data?.question || '').slice(0, 80) || '(no text)';
@@ -1532,8 +1865,8 @@ const AdminPanel = (() => {
              qmToggleProtection };
   })();
 
-  return { render, showTab, loadMembers, filterMembers, changeRole,
-    loadTeacherQueue, setTeacherStatus, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, resolveReport, loadRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+  return { render, showTab, loadMembers, loadMoreMembers, filterMembers, changeRole, toggleMemberRow,
+    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, resolveReport, loadRoles, loadMoreRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier,
     qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
     qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,
@@ -1541,5 +1874,5 @@ const AdminPanel = (() => {
     qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,
     qmUpdatePreview: QM.qmUpdatePreview, qmInsertImage: QM.qmInsertImage,
     qmUploadImage: QM.qmUploadImage, qmSave: QM.qmSave, qmDelete: QM.qmDelete,
-    qmToggleProtection: QM.qmToggleProtection, qmResolveReport };
+    qmToggleProtection: QM.qmToggleProtection, qmResolveReport, applyFirstNChapters };
 })();
