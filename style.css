@@ -108,23 +108,233 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 .dark .pd-action.is-primary { background: #4f46e5; border-color: #6366f1; color: #fff; }
 .dark .pd-action.is-primary:hover { background: #4f46e5; }
 
+/* Credit balance on the Shop button. .pd-action is already position:relative. */
+.pd-badge {
+  position: absolute; top: -6px; right: -6px;
+  min-width: 1.25rem; height: 1.25rem; padding: 0 0.3rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px; background: #f59e0b; color: #fff;
+  font-size: 0.625rem; font-weight: 800; line-height: 1;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.pd-badge.hidden { display: none; }
+
 .pd-action.is-alert { border-color: #fecaca; color: #dc2626; }
 .pd-action.is-alert:hover { background: #fef2f2; border-color: #fca5a5; }
 .dark .pd-action.is-alert { border-color: #7f1d1d; color: #f87171; background: #1f2937; }
 .dark .pd-action.is-alert:hover { background: #450a0a; }
 
-.icon-btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 2.25rem; height: 2.25rem; border-radius: 50%;
-  background: #f1f5f9; border: none; cursor: pointer;
-  font-size: 1.1rem; transition: all 0.2s;
-  /* As a flex child these would otherwise squash below 2.25rem before the row
-     wraps, so the icons distort instead of moving to the next line. */
-  flex: 0 0 auto;
+/* ═══════════ HEADER CONTROLS ═══════════
+   One component for every button in the app header. They used to be eight
+   separate ad-hoc pills — four different paddings, four different font sizes,
+   six different pastel backgrounds — so the row's total width depended on which
+   ones happened to be visible and how big the device's system font was. On a
+   Samsung (One UI ships a larger default text size than stock Android) the row
+   grew past the viewport and the branding was pushed out of view.
+
+   Fixed height, fixed icon box, one neutral surface. Colour is spent only where
+   it means something: the parent/teacher switch, install, and logout. */
+.hdr-btn {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  /* 0.55rem, not the 0.6 it started at: with all eight controls showing the
+     labelled toolbar came out 2px wider than the space the max-w-6xl container
+     leaves it, and wrapped the whole row for the sake of two pixels. */
+  height: 2.25rem; padding: 0 0.55rem;
+  flex: 0 0 auto;                       /* never squash below its own size */
+  border: 1px solid #e5e7eb; border-radius: 999px;
+  background: #f8fafc; color: #475569;
+  font-size: 0.75rem; font-weight: 600; line-height: 1;
+  cursor: pointer; transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  -webkit-user-select: none; user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.dark .icon-btn { background: #374151; }
-.icon-btn:hover { background: #e2e8f0; transform: scale(1.1); }
-.dark .icon-btn:hover { background: #4b5563; }
+/* Two classes, so it outranks Tailwind's single-class `.flex` that the show/hide
+   code in auth.js and app.js adds alongside `.hidden`. Without this the Teacher
+   and Admin buttons would be visible to every account. */
+.hdr-btn.hidden { display: none !important; }
+.hdr-btn .hdr-ico { font-size: 1rem; line-height: 1; flex: 0 0 auto; }
+.hdr-btn .hdr-word { max-width: 7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* The account chip is the only label whose width is user data, and at the 7rem
+   cap a long Mauritian name ("Priyanka Ramgoolam") made it 161px — enough on
+   its own to push the full eight-button toolbar past the 1152px the max-w-6xl
+   container ever gets, so the row wrapped even on a 4K monitor. 4.5rem brings
+   the worst case to 1114px and it fits; the name still reads. */
+.hdr-btn.is-profile .hdr-word { max-width: 4.5rem; }
+.hdr-btn:hover { background: #eef2ff; border-color: #c7d2fe; color: #4338ca; }
+.hdr-btn:active { transform: scale(0.96); }
+/* ── Labelled pills, or one "Menu" button ──
+   The width at which the words fit is measured, not guessed: with all eight
+   controls visible (an admin parent with the install prompt showing) the
+   labelled toolbar needs ~810px at its widest — the account chip's name can run
+   to the 7rem cap — and the branding beside it another 234px, plus the row gap
+   and the container's own padding. That is ~1090px before anything wraps, which
+   is why the pills only appear at 1100px.
+
+   ⚠ Below that they are HIDDEN, not shrunk. Three approaches have now been
+   tried on this row and only the third answers the actual complaint:
+
+   1. Labelled pills on phones (the original). Seven controls took TWO rows at
+      every width from 360 to 428 and made the header 136px tall.
+   2. Icon-only squares. One tidy 94px row — and unusable: reported back as
+      "the top icons are not intuitive on mobile, we don't know what each one
+      does". Which is exactly what an emoji on its own is. 🔒 could be a lock, a
+      password or a private mode; 💬 could be chat, comments or feedback. Saving
+      42px of header was not worth making every control a guess.
+   3. One labelled Menu button opening a sheet where each action has its name
+      AND a line of description. The header is a single 94px row, and nothing
+      in it has to be guessed at.
+
+   Also learned the hard way: `#hdr-actions { flex-shrink: 0 }` to stop a
+   five-pixel wrap at 1024 stopped it by letting the row OVERFLOW instead — at
+   768 and 820 the toolbar ran to 876px and Logout sat off the right edge,
+   invisible because the page-level overflow guard clipped it. The toolbar must
+   be allowed to wrap; a two-row header is survivable, a control you cannot
+   reach is not. */
+#hdr-menu-btn { display: none; }
+.hdr-btn.is-menu { background: #eef2ff; border-color: #c7d2fe; color: #4338ca; }
+.dark .hdr-btn.is-menu { background: rgba(79,70,229,0.25); border-color: rgba(99,102,241,0.45); color: #c7d2fe; }
+.hdr-btn.is-menu .hdr-ico { font-size: 1.05rem; }
+.hdr-menu-word { font-weight: 700; }
+
+/* The mobile-only Logout twin. Hidden at every width where the labelled pills
+   are showing, or there would be two Log out buttons side by side. */
+#header-logout-mobile { display: none; }
+.hdr-mobile-word { font-weight: 700; white-space: nowrap; }
+
+@media (max-width: 1099px) {
+  /* Everything except the two controls that stay: the Menu button, and the
+     Logout twin. :not() keeps this to one rule — the alternative was a second
+     rule re-showing them and racing its own hide. */
+  header #hdr-actions .hdr-btn:not(#hdr-menu-btn):not(#header-logout-mobile) { display: none !important; }
+  #hdr-menu-btn { display: inline-flex; }
+  /* ⚠ `.hidden` has to keep winning here: showScreen() and auth.js hide this
+     button on the auth screens and when nobody is signed in. Two classes beats
+     the id? No — an id (1,0,0) outranks any number of classes, so this rule is
+     scoped to :not(.hidden) rather than relying on order. */
+  #header-logout-mobile:not(.hidden) { display: inline-flex; }
+  /* A finger needs a bigger target than a mouse pointer: 36px is under the 44px
+     both platforms ask for. */
+  @media (pointer: coarse) {
+    #hdr-menu-btn, #header-logout-mobile { height: 2.5rem; }
+  }
+}
+
+/* ── The menu sheet ──
+   Bottom-anchored on a phone (the header is the furthest point from a thumb),
+   a normal centred card from 640px up where reach is not the issue. */
+.hdr-menu-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  border-radius: 1.25rem 1.25rem 0 0;
+  max-height: 85vh;
+  padding-bottom: env(safe-area-inset-bottom);
+  animation: hdrSheetUp 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+@keyframes hdrSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .hdr-menu-sheet { animation: none; } }
+@supports (max-height: 85dvh) { .hdr-menu-sheet { max-height: 85dvh; } }
+
+@media (min-width: 640px) {
+  .hdr-menu-sheet {
+    left: auto; right: 1rem; bottom: auto; top: 4.5rem;
+    width: 22rem; max-width: calc(100vw - 2rem);
+    border-radius: 1rem;
+    animation-name: hdrSheetDrop;
+  }
+  @keyframes hdrSheetDrop {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+}
+
+.hdr-menu-item {
+  display: flex; align-items: center; gap: 0.875rem; width: 100%;
+  padding: 0.75rem 0.875rem; border: none; background: none; border-radius: 0.875rem;
+  text-align: left; cursor: pointer; transition: background-color 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.hdr-menu-item:hover  { background: #f1f5f9; }
+.dark .hdr-menu-item:hover { background: #374151; }
+.hdr-menu-item:active { background: #e2e8f0; }
+.dark .hdr-menu-item:active { background: #4b5563; }
+.hdr-menu-item .mi-ico {
+  font-size: 1.35rem; line-height: 1; flex: 0 0 2.5rem; height: 2.5rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 0.75rem; background: #f1f5f9;
+}
+.dark .hdr-menu-item .mi-ico { background: #374151; }
+.hdr-menu-item .mi-label { font-size: 0.875rem; font-weight: 700; color: #1e293b; line-height: 1.2; }
+.dark .hdr-menu-item .mi-label { color: #f1f5f9; }
+.hdr-menu-item .mi-desc  { font-size: 0.6875rem; color: #64748b; line-height: 1.3; margin-top: 0.125rem; }
+.dark .hdr-menu-item .mi-desc { color: #94a3b8; }
+/* Sign out sits under a divider: it is the one row nobody wants to hit by
+   accident on the way to something else. */
+.hdr-menu-item.is-danger { margin-top: 0.25rem; border-top: 1px solid #e5e7eb; border-radius: 0 0 0.875rem 0.875rem; }
+.dark .hdr-menu-item.is-danger { border-top-color: #374151; }
+.hdr-menu-item.is-danger .mi-label { color: #dc2626; }
+.dark .hdr-menu-item.is-danger .mi-label { color: #f87171; }
+.hdr-menu-item.is-danger .mi-ico { background: #fee2e2; }
+.dark .hdr-menu-item.is-danger .mi-ico { background: rgba(220,38,38,0.2); }
+.dark .hdr-btn { background: #374151; border-color: #4b5563; color: #d1d5db; }
+.dark .hdr-btn:hover { background: #4b5563; border-color: #6b7280; color: #e5e7eb; }
+
+.hdr-btn.is-parent  { background: #ede9fe; border-color: #ddd6fe; color: #6d28d9; }
+.dark .hdr-btn.is-parent { background: rgba(124,58,237,0.22); border-color: rgba(139,92,246,0.4); color: #ddd6fe; }
+.hdr-btn.is-teacher { background: #dcfce7; border-color: #bbf7d0; color: #15803d; }
+.dark .hdr-btn.is-teacher { background: rgba(22,163,74,0.22); border-color: rgba(34,197,94,0.4); color: #bbf7d0; }
+.hdr-btn.is-install { background: #dcfce7; border-color: #bbf7d0; color: #15803d; }
+.dark .hdr-btn.is-install { background: rgba(22,163,74,0.22); border-color: rgba(34,197,94,0.4); color: #bbf7d0; }
+.hdr-btn.is-profile { background: #e0e7ff; border-color: #c7d2fe; color: #4338ca; }
+.dark .hdr-btn.is-profile { background: rgba(79,70,229,0.25); border-color: rgba(99,102,241,0.45); color: #c7d2fe; }
+.hdr-btn.is-logout  { background: #fee2e2; border-color: #fecaca; color: #b91c1c; }
+.dark .hdr-btn.is-logout { background: rgba(220,38,38,0.2); border-color: rgba(248,113,113,0.4); color: #fca5a5; }
+
+/* Streak / XP read-outs. Same height as the buttons so the row has one
+   baseline whichever of them happen to be visible. */
+.hdr-stat {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  height: 2.25rem; padding: 0 0.6rem; border-radius: 999px;
+  font-size: 0.8rem; font-weight: 700; line-height: 1; flex: 0 0 auto;
+}
+.hdr-stat-streak { background: #ffedd5; color: #ea580c; }
+.dark .hdr-stat-streak { background: rgba(234,88,12,0.22); color: #fdba74; }
+.hdr-stat-xp { background: #f3e8ff; color: #7e22ce; gap: 0.4rem; }
+/* updateXPBar() fills this; before a student is signed in it is empty, and an
+   empty pill in the toolbar reads as a control that failed to load. */
+.hdr-stat-xp:empty { display: none; }
+.dark .hdr-stat-xp { background: rgba(126,34,206,0.25); color: #e9d5ff; }
+.hdr-stat-word { font-size: 0.7rem; font-weight: 600; opacity: 0.85; }
+
+/* The credit balance. A button, not a read-out — it opens the Shop, which is
+   the only place the number means anything. */
+.hdr-stat-credits {
+  background: #fef3c7; color: #b45309; border: 1px solid #fde68a;
+  cursor: pointer; transition: background-color 0.15s, border-color 0.15s;
+}
+.hdr-stat-credits:hover { background: #fde68a; border-color: #fcd34d; }
+.dark .hdr-stat-credits { background: rgba(180,83,9,0.25); color: #fcd34d; border-color: rgba(217,119,6,0.45); }
+.dark .hdr-stat-credits:hover { background: rgba(180,83,9,0.4); }
+/* Two classes, so it outranks .hdr-stat's own display when app.js hides it for
+   a student session or a database with no credits deployed. */
+.hdr-stat.hidden { display: none !important; }
+
+/* The streak chip exists twice — beside the branding on a phone, in the action
+   row from 640px up — so exactly one of them must be showing at any width.
+   Done with ids, not Tailwind's `hidden`/`sm:flex`, because .hdr-stat is a
+   single class in a sheet that loads after the CDN and would outrank both. */
+#streak-display { display: none; }
+@media (min-width: 640px) { #streak-display { display: inline-flex; } }
+
+/* A streak and an XP level belong to a CHILD. In a parent session DB holds
+   whichever child is currently loaded, so those chips were showing a parent
+   somebody else's numbers. A parent's header read-out is their credit balance
+   instead — see _renderCreditChip(), which sets this class. !important and an
+   id because both rules above are ids too. */
+body.is-parent-session #streak-display,
+body.is-parent-session #streak-display-m,
+body.is-parent-session #xp-display { display: none !important; }
+
+/* .icon-btn is gone: the three header controls that used it (Search, Forum,
+   Theme) are .hdr-btn now, and it had no other caller anywhere in the repo. */
 
 /* ===== TRACK CARDS ===== */
 .track-card {
@@ -729,6 +939,38 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
   body .min-h-screen { min-height: 100dvh; }
 }
 
+/* ═══════════ AUTH / SIGN-IN SCREEN ═══════════
+   The sign-in card sits under a 🎓 at text-7xl plus a text-4xl wordmark plus a
+   subtitle — roughly 200px of decoration before the first input. On a phone in
+   landscape, or any short viewport, that pushed the actual Sign In button below
+   the fold with no visual cue that there was anything to scroll to; the reports
+   of "the login button is almost outside the screen" are this plus the landing
+   nav overflow fixed above.
+
+   The logo is sized off the viewport HEIGHT rather than a width breakpoint,
+   because that is the axis that actually runs out. clamp() with vh units means
+   there is no cliff at a breakpoint and no device left un-handled. */
+#screen-auth .auth-logo   { font-size: clamp(2.5rem, 9vh, 4.5rem); line-height: 1; }
+#screen-auth .auth-title  { font-size: clamp(1.375rem, 4.5vh, 2.25rem); }
+#screen-auth .auth-shell  { padding-top: max(3.5rem, env(safe-area-inset-top)); padding-bottom: max(1.5rem, env(safe-area-inset-bottom)); }
+@media (max-height: 700px) {
+  #screen-auth .auth-brand { margin-bottom: 1rem; }
+  #screen-auth .auth-sub   { display: none; }
+}
+
+/* Four typed digits stay big; the placeholder words do not have to be, and at
+   text-2xl + tracking-widest they did not fit the field on a 360px phone. */
+.pin-field::-webkit-input-placeholder { font-size: 0.85rem; letter-spacing: normal; font-family: inherit; }
+.pin-field::placeholder { font-size: 0.85rem; letter-spacing: normal; }
+
+/* The role tabs are three two-line buttons in a row inside a max-w-sm card.
+   "👨‍👩‍👧 / Parent" is the widest and drives the row; on a narrow phone at a large
+   system font scale the words used to wrap to a third line and knock the three
+   tabs out of alignment. */
+.auth-tab { min-width: 0; overflow: hidden; }
+.auth-tab br + * , .auth-tab { white-space: normal; }
+@media (max-width: 360px) { .auth-tab { font-size: 0.65rem; padding-left: 0.25rem; padding-right: 0.25rem; } }
+
 /* ===== MOBILE CARD CAROUSEL =====
    The landing page stacks 17 full-height cards on a phone (5 subjects,
    6 features, 3 audiences, 3 plans), which is a very long scroll for content
@@ -778,23 +1020,10 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
   .btn-primary, .btn-secondary { font-size: 0.85rem; }
   #xp-display { display: none !important; }
 
-  /* On a phone an emoji on its own is a guess - 📊 could be anything. Every
-     header control becomes a small labelled pill instead, so .icon-btn has to
-     stop being a fixed-size circle and size to its content.
-     Tailwind's utilities are single-class, so !important is needed to win. */
-  header .icon-btn {
-    width: auto !important; height: auto !important;
-    border-radius: 999px;
-    padding: 0.375rem 0.625rem;
-    gap: 0.25rem;
-    font-size: 0.95rem;
-  }
-  header .btn-label {
-    font-size: 0.7rem; font-weight: 600; line-height: 1; white-space: nowrap;
-  }
-  /* Labelled pills are wider, so the toolbar wraps to two rows. Keep the icon
-     and its word together when it does. */
-  header .icon-btn, header .btn-label { flex-shrink: 0; }
+  /* The icon-only rule for the buttons lives in its own @media (max-width:
+     1099px) block further up - it is not a phone-only decision, tablets need it
+     too. Only the streak/XP chip sizing is phone-specific. */
+  header .hdr-stat { height: 2.25rem; padding: 0 0.5rem; font-size: 0.75rem; }
 
   /* Backstop against a stray wide element scrolling the page sideways.
      ⚠ Deliberately NOT on html/body: overflow-x there makes them a scroll
@@ -813,11 +1042,27 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
    unchanged, so nothing about answer checking is affected. */
 .frac {
   display: inline-flex; flex-direction: column; align-items: center;
-  vertical-align: -0.55em; margin: 0 0.18em; line-height: 1.05;
+  vertical-align: -0.62em; margin: 0 0.2em; line-height: 1.08;
   font-weight: 700;
+  /* A child reads a fraction as one object. Letting it break across a line, or
+     letting a text-selection drag pick up half of it, both undo that. */
+  white-space: nowrap;
+  -webkit-user-select: none; user-select: none;
 }
-.frac .fr-n { padding: 0 0.28em; }
-.frac .fr-d { padding: 0 0.28em; border-top: 2px solid currentColor; }
+/* The two halves are set at the surrounding size, not smaller: at 0.8em inside
+   an already-small option row the bar became a hairline and the whole thing read
+   as a smudge on a phone. */
+.frac .fr-n { padding: 0 0.3em; }
+.frac .fr-d { padding: 0 0.3em; border-top: 2px solid currentColor; }
+/* The bar is the whole point — it is what tells a Grade 4 child this is a
+   fraction and not a division sign. Keep it visible when the fraction is inside
+   a small-print row (an explanation, a review line, an option label). */
+.text-xs .frac .fr-d, .text-\[11px\] .frac .fr-d { border-top-width: 1.5px; }
+
+/* Mixed number: "2 1/2" is printed 2½ in a book, tight against the fraction,
+   not with a word space in between. */
+.frac-mixed { font-weight: 700; margin-right: 0.05em; }
+.frac-mixed + .frac { margin-left: 0; }
 
 /* The answer blank. Numbered ① ② when a question has more than one, so the
    options ("10 and 6") can be matched to the right box. */
@@ -1150,6 +1395,32 @@ body.has-bottom-nav .pr-wrap    { padding-bottom: 4rem; }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+/* ── Idle nudge ────────────────────────────────
+   The gentle "you have been sitting here a while, this is the thing to press"
+   shake. Kept small on purpose: a big bounce reads as an error state, and this
+   fires on a child who is merely thinking. Three wobbles and it stops.
+
+   ⚠ Two ways to switch the motion off, and both have to work:
+   the OS-level prefers-reduced-motion, and Calm Mode in My Settings (.kid-calm),
+   which is an explicit in-app choice and therefore has to win even on a device
+   whose OS says motion is fine. The glow and the callout stay either way — the
+   help is the sentence, the movement is only what draws the eye to it. */
+@keyframes attnNudge {
+  0%, 100%      { transform: translateX(0)      rotate(0deg); }
+  8%, 24%, 40%  { transform: translateX(-3px)   rotate(-0.9deg); }
+  16%, 32%, 48% { transform: translateX(3px)    rotate(0.9deg); }
+  56%           { transform: translateX(0)      rotate(0deg); }
+}
+.attn-nudge {
+  animation: attnNudge 2.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) 1;
+  position: relative; z-index: 2;
+  border-radius: inherit;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.32), 0 8px 22px rgba(99, 102, 241, 0.18);
+}
+.dark .attn-nudge { box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.4), 0 8px 22px rgba(0, 0, 0, 0.45); }
+@media (prefers-reduced-motion: reduce) { .attn-nudge { animation: none; } }
+.kid-calm .attn-nudge { animation: none !important; }
+
 /* Pulsing ring on the hinted target element */
 .hint-pulse {
   position: relative;
@@ -1170,8 +1441,27 @@ body.has-bottom-nav .pr-wrap    { padding-bottom: 4rem; }
   100% { opacity: 0; transform: scale(1.15); }
 }
 
-/* ── Prevent horizontal scroll during slide transitions ── */
+/* ── Prevent horizontal scroll ──────────────────
+   `overflow-x: hidden` on body propagates to the viewport and makes the
+   viewport a scroll container, which is the documented way to break
+   `position: sticky` in Safari — and the app header is sticky. `clip` does the
+   same clipping WITHOUT establishing a scroll container, so sticky survives.
+   The hidden rule stays as the fallback for engines with no `clip` support
+   (Safari < 16), where the sticky trade-off was already being made anyway. */
 body { overflow-x: hidden; }
+@supports (overflow-x: clip) {
+  html, body { overflow-x: clip; }
+}
+
+/* Backstops for the things that actually cause the sideways scroll: a wide
+   image, a long unbroken word (a URL, a French compound, a child's typed
+   answer), or a table. Every one of these was reachable in the app. */
+img, svg, video, canvas, iframe { max-width: 100%; }
+.q-text, .mcq-opt, .pr-feedback, #exam-q-text, #practice-q-text,
+#results-review, #rc-review { overflow-wrap: anywhere; }
+/* A table cannot wrap, so it gets its own scroller rather than pushing the
+   page. #pd-chapters sets white-space: nowrap on purpose. */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 /* ── Screen slide transitions ─────────────────── */
 .screen-enter-right {
@@ -1189,12 +1479,52 @@ body { overflow-x: hidden; }
   to   { transform: translateX(0);     opacity: 1; }
 }
 
-/* ── Bottom navigation bar ────────────────────── */
-.nav-btn { color: #6b7280; }
-.nav-btn.nav-active { color: #4f46e5; }
-.nav-btn.nav-active svg { stroke: #6366f1; }
-.nav-btn.nav-active span { color: #4f46e5; }
-body.has-bottom-nav main { padding-bottom: calc(4rem + env(safe-area-inset-bottom)); }
+/* ── Bottom navigation bar ──────────────────────
+   ⚠ These buttons used to carry class="nav-btn", the SAME class the exam
+   question-navigator grid uses (.nav-btn { width:2rem; height:2rem }). So on
+   every device the four tab buttons were being laid out inside a 32×32 box
+   while holding a 24px icon and a whole word ("Practice", "Progress"). The
+   label could not wrap - it is one word - so it spilled out of the button on
+   both sides. On a wide screen the max-w-lg track had slack to absorb it and
+   nobody noticed; on a 360px Android phone the four overflowing buttons added
+   up to more than the viewport, which is exactly the "the bottom bar is huge
+   and the page scrolls sideways" report. A device with a larger system font
+   scale (Samsung One UI defaults bigger than stock Android) crosses the line
+   sooner, which is why only some phones showed it.
+
+   The bar is its own component now. Nothing here is shared with the exam grid.
+   Sizes are in rem so a system font scale grows the bar gracefully instead of
+   bursting it, and each tab is a flex item that may shrink to nothing. */
+.tabbar-btn {
+  flex: 1 1 0;
+  min-width: 0;                 /* the part that actually stops the overflow */
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 0.125rem;
+  padding: 0.375rem 0.25rem;
+  border: none; background: none; cursor: pointer;
+  border-radius: 0.75rem;
+  color: #6b7280;
+  transition: color 0.15s, background-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tabbar-btn svg { width: 1.5rem; height: 1.5rem; flex: 0 0 auto; }
+.tabbar-btn span {
+  font-size: 0.625rem; font-weight: 600; line-height: 1.1;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tabbar-btn:active { background: rgba(99,102,241,0.08); }
+.tabbar-btn.nav-active { color: #4f46e5; }
+.tabbar-btn.nav-active svg { stroke: #6366f1; }
+.tabbar-btn.nav-active span { color: #4f46e5; }
+.dark .tabbar-btn { color: #9ca3af; }
+
+/* One source of truth for the bar's height, so the main padding below and the
+   bar itself can never disagree and clip the last card on the page. */
+#student-bottom-nav { --tabbar-h: 3.75rem; }
+#student-bottom-nav > div { height: var(--tabbar-h); }
+body.has-bottom-nav main {
+  padding-bottom: calc(var(--tabbar-h, 3.75rem) + env(safe-area-inset-bottom) + 0.75rem);
+}
 
 /* ── MCQ spring tap ───────────────────────────── */
 .mcq-spring {
@@ -1220,8 +1550,7 @@ body.has-bottom-nav main { padding-bottom: calc(4rem + env(safe-area-inset-botto
 .dark .pr-sess,
 .dark .pr-level,
 .dark .pr-scratch-head { color: #94a3b8; }
-.dark .stat-label,
-.dark .nav-btn { color: #9ca3af; }
+.dark .stat-label { color: #9ca3af; }
 .dark .ch-status.mid  { color: #fbbf24; }
 .dark .ch-status.good { color: #4ade80; }
 .dark .ch-status.low  { color: #60a5fa; }
@@ -1282,14 +1611,57 @@ body.has-bottom-nav main { padding-bottom: calc(4rem + env(safe-area-inset-botto
 .kid-text-lg #screen-subject-select,
 .kid-text-lg #screen-dashboard { font-size: 1.08em; }
 
-/* "My Colours" vibes (My Settings) - each just repoints the two CSS custom
-   properties .kid-hero already reads, so switching vibes never needs a
-   second stylesheet rule added here. */
-:root[data-kid-vibe="ocean"]  { --kid-accent-1: #0ea5e9; --kid-accent-2: #14b8a6; }
-:root[data-kid-vibe="sunset"] { --kid-accent-1: #f97316; --kid-accent-2: #ec4899; }
-:root[data-kid-vibe="forest"] { --kid-accent-1: #22c55e; --kid-accent-2: #0d9488; }
-:root[data-kid-vibe="galaxy"] { --kid-accent-1: #7c3aed; --kid-accent-2: #4338ca; }
-:root[data-kid-vibe="candy"]  { --kid-accent-1: #ec4899; --kid-accent-2: #f43f5e; }
+/* ══════════ "My Colours" vibes (My Settings) ══════════
+   Each vibe sets FOUR custom properties, not two:
+     --kid-accent-1/2  the gradient pair (used by .kid-hero and the tiles)
+     --kid-ink         a text/icon colour that passes contrast on a WHITE card
+     --kid-ink-dark    the same role on a DARK card
+   The two ink values are what makes a vibe theme-aware. Reusing --kid-accent-1
+   for text was the obvious shortcut and it is exactly wrong at both ends:
+   Mango's #f59e0b on white measures 2.15:1, and Midnight's #1e40af on the
+   #111827 dark page measures 2.03:1 — both well under the 3:1 floor and both
+   genuinely hard to read. Every vibe therefore states a darker ink for light
+   mode and a lighter one for dark mode; the lowest of the 24 is 5.02:1, so a
+   child can pick any colour without picking an unreadable one.
+
+   ⚠ Keep this list in step with KID_VIBES in engine/app.js — the ids must match
+   or the swatch in My Settings paints a colour the app then does not apply. */
+:root {
+  --kid-accent-1: #6366f1; --kid-accent-2: #ec4899;
+  --kid-ink: #4f46e5;      --kid-ink-dark: #a5b4fc;
+}
+:root[data-kid-vibe="ocean"]     { --kid-accent-1:#0ea5e9; --kid-accent-2:#14b8a6; --kid-ink:#0369a1; --kid-ink-dark:#7dd3fc; }
+:root[data-kid-vibe="sunset"]    { --kid-accent-1:#f97316; --kid-accent-2:#ec4899; --kid-ink:#c2410c; --kid-ink-dark:#fdba74; }
+:root[data-kid-vibe="forest"]    { --kid-accent-1:#22c55e; --kid-accent-2:#0d9488; --kid-ink:#15803d; --kid-ink-dark:#86efac; }
+:root[data-kid-vibe="galaxy"]    { --kid-accent-1:#7c3aed; --kid-accent-2:#4338ca; --kid-ink:#6d28d9; --kid-ink-dark:#c4b5fd; }
+:root[data-kid-vibe="candy"]     { --kid-accent-1:#ec4899; --kid-accent-2:#f43f5e; --kid-ink:#be185d; --kid-ink-dark:#f9a8d4; }
+:root[data-kid-vibe="mango"]     { --kid-accent-1:#f59e0b; --kid-accent-2:#ef4444; --kid-ink:#b45309; --kid-ink-dark:#fcd34d; }
+:root[data-kid-vibe="mint"]      { --kid-accent-1:#10b981; --kid-accent-2:#22d3ee; --kid-ink:#0f766e; --kid-ink-dark:#5eead4; }
+:root[data-kid-vibe="grape"]     { --kid-accent-1:#a855f7; --kid-accent-2:#6366f1; --kid-ink:#7e22ce; --kid-ink-dark:#d8b4fe; }
+:root[data-kid-vibe="bubblegum"] { --kid-accent-1:#f472b6; --kid-accent-2:#a78bfa; --kid-ink:#be185d; --kid-ink-dark:#f5d0fe; }
+:root[data-kid-vibe="lagoon"]    { --kid-accent-1:#0891b2; --kid-accent-2:#3b82f6; --kid-ink:#0e7490; --kid-ink-dark:#67e8f9; }
+:root[data-kid-vibe="midnight"]  { --kid-accent-1:#1e40af; --kid-accent-2:#312e81; --kid-ink:#1e40af; --kid-ink-dark:#93c5fd; }
+
+/* The one place the theme choice is made. Everything tinted by a vibe reads
+   var(--kid-ink-now) and never touches the two raw ink values. */
+:root      { --kid-ink-now: var(--kid-ink); }
+.dark      { --kid-ink-now: var(--kid-ink-dark); }
+
+/* Where a vibe actually shows up, beyond the hero gradient it started as.
+   Deliberately kid-facing surfaces only — no parent, teacher or admin screen
+   reads any of these, so a child's colour choice can never restyle an adult's
+   dashboard. */
+.kid-accent-text { color: var(--kid-ink-now); }
+.kid-accent-bg   { background: linear-gradient(135deg, var(--kid-accent-1), var(--kid-accent-2)); }
+.kid-accent-ring { box-shadow: 0 0 0 2px var(--kid-ink-now); }
+#student-bottom-nav .tabbar-btn.nav-active,
+#student-bottom-nav .tabbar-btn.nav-active span { color: var(--kid-ink-now); }
+#student-bottom-nav .tabbar-btn.nav-active svg  { stroke: var(--kid-ink-now); }
+.hint-pulse::before { border-color: var(--kid-ink-now); }
+/* ⚠ Deliberately NOT .kid-tile. Those three tiles carry their own Tailwind
+   gradients (fuchsia / sky / emerald) and they are how a child tells Surprise
+   Me from Search from My Settings at a glance. Repainting all three in the
+   chosen vibe would make them one indistinguishable colour. */
 .dark .ch-star        { color: #64748b; }
 
 /* ── Plan-gated controls ──────────────────────────────────────────────────

@@ -171,10 +171,26 @@
   <div id="modal-invite" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl max-h-[85vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-1">
-        <h3 class="text-lg font-bold text-gray-800 dark:text-white">🎁 Invite Friends</h3>
+        <h3 class="text-lg font-bold text-gray-800 dark:text-white">🎁 Invite &amp; Rewards</h3>
         <button onclick="Auth.closeInviteModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Share PSAC Exam Practice with other families. When they join using your link, you'll see them here.</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Share PSAC Exam Practice with other families. Every friend who <b>creates an account</b> with your link counts towards the rewards below.</p>
+
+      <!-- Credit balance + how it is earned. Filled by renderInviteCredits() in
+           app.js; empty markup here so a failed network call leaves a blank
+           panel rather than a broken one. -->
+      <div class="rounded-xl border border-amber-200 dark:border-amber-800/40 bg-amber-50/70 dark:bg-amber-900/15 p-3 mb-3">
+        <div class="flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div class="text-xs font-bold uppercase tracking-wide text-amber-700 dark:text-amber-300">Your credits</div>
+            <div id="rw-balance" class="text-2xl font-black text-amber-700 dark:text-amber-200 leading-tight">0</div>
+          </div>
+          <button onclick="Auth.closeInviteModal(); showScreen('shop')"
+            class="shrink-0 bg-amber-500 hover:bg-amber-400 text-white text-xs font-bold px-3 py-2 rounded-xl transition-colors">🛒 Spend them</button>
+        </div>
+        <p id="rw-earn-rule" class="text-[11px] text-amber-700/90 dark:text-amber-300/90 mt-2 leading-snug"></p>
+        <p id="rw-pending" class="text-[11px] text-amber-600/80 dark:text-amber-400/80 mt-1 leading-snug"></p>
+      </div>
 
       <!-- Referral code + link -->
       <div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/40 rounded-xl p-3 mb-3">
@@ -206,6 +222,35 @@
         <span class="text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded-full"><span id="invite-count">0</span> total</span>
       </div>
       <div id="invite-list" class="max-h-40 overflow-y-auto"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ HEADER MENU (mobile / tablet) ══════════
+       A bottom sheet, not a dropdown: on a phone the header is the furthest
+       point from the thumb, and this list is what replaced eight unlabelled
+       icons up there.
+
+       ⚠ The rows are BUILT FROM the real header buttons at open time
+       (_buildHeaderMenu in app.js) rather than duplicated here. Teacher, Search,
+       Install, Account and Logout each appear only under their own conditions,
+       and those conditions live in auth.js and showScreen(). Hard-coding a
+       second copy of the list would mean two places to keep in step, and the
+       menu would eventually offer a button the header had hidden. -->
+  <div id="modal-hdr-menu" class="hidden fixed inset-0 z-[96] bg-black/50 backdrop-blur-sm" onclick="if(event.target===this)closeHeaderMenu()">
+    <div class="hdr-menu-sheet bg-white dark:bg-gray-800 shadow-2xl flex flex-col"
+      role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-gray-100 dark:border-gray-700">
+        <span id="hdr-menu-avatar" class="text-2xl select-none shrink-0" aria-hidden="true">👤</span>
+        <div class="flex-1 min-w-0">
+          <div id="hdr-menu-name" class="text-sm font-bold text-gray-800 dark:text-white truncate">Menu</div>
+          <div id="hdr-menu-sub" class="text-[11px] text-gray-500 dark:text-gray-400 truncate"></div>
+        </div>
+        <button onclick="closeHeaderMenu()" aria-label="Close menu"
+          class="shrink-0 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-lg leading-none">✕</button>
+      </div>
+      <!-- min-h-0 is required: without it a flex child will not shrink below its
+           content, so a long list would push past the sheet cap instead of scrolling. -->
+      <div id="hdr-menu-list" class="overflow-y-auto flex-1 min-h-0 p-2"></div>
     </div>
   </div>
 
@@ -252,40 +297,114 @@
 
   <!-- HEADER -->
   <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
-    <!-- Mobile: branding on one row, actions on a second full-width row.
-         The action cluster used to sit on the same line as the branding with no
+    <!-- Mobile: branding on one row, actions on a second full-width row. The
+         action cluster used to sit on the same line as the branding with no
          wrapping, so on a phone it ran off the right edge and Logout - the last
-         item - could only be reached by scrolling the page sideways.
-         flex-col + flex-wrap means it can never overflow, however many buttons
-         end up visible (Teacher and Search are revealed conditionally). -->
-    <div class="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-      <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+         item - could only be reached by scrolling the page sideways. flex-col +
+         flex-wrap means it can never overflow, however many buttons end up
+         visible (Teacher and Search are revealed conditionally).
+
+         Every control below is the SAME component (.hdr-btn in style.css): one
+         height, one shape, one neutral surface. Before, the eight buttons were
+         eight different pastel pills in four different sizes, and each one grew
+         a different amount when a phone's system font scale was above 100% —
+         which is how the row ended up two and three lines deep on a Samsung and
+         pushed the branding off screen.
+
+         Priority is declared in the markup with data-hdr-pri, not by ordering
+         alone: on a narrow phone .hdr-btn[data-hdr-pri="low"] drops its word and
+         becomes an icon square, so the row fits without hiding anything. -->
+    <!-- One row at every width. It used to stack branding over a second
+         full-width action row on a phone, which was necessary while there were
+         seven or eight controls down there; with a single Menu button it just
+         cost 40px of header for one button sitting alone. -->
+    <div class="max-w-6xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2 sm:gap-3">
+      <div class="flex items-center gap-2 min-w-0 flex-1">
         <div class="text-2xl sm:text-3xl select-none shrink-0">🎓</div>
-        <div class="min-w-0">
-          <h1 class="text-base sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">PSAC Exam Practice</h1>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">PSAC Exam Practice</h1>
           <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6</p>
         </div>
-      </div>
-      <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 justify-center sm:justify-end">
-        <div id="streak-display" class="flex items-center gap-1 bg-orange-100 dark:bg-orange-900/40 px-2 sm:px-3 py-1.5 rounded-full">
-          <span class="text-base">🔥</span>
-          <span id="streak-count" class="font-bold text-orange-600 dark:text-orange-400 text-sm">0</span>
-          <span class="text-xs text-orange-500 dark:text-orange-400 hidden sm:inline">day streak</span>
+        <!-- Stats ride with the branding, not with the actions: they are
+             information, not buttons, and keeping them out of the action row is
+             what lets that row stay one line on a phone. -->
+        <div class="flex items-center gap-1.5 shrink-0 sm:hidden">
+          <div id="streak-display-m" class="hdr-stat hdr-stat-streak">
+            <span aria-hidden="true">🔥</span><span id="streak-count-m">0</span>
+          </div>
         </div>
-        <div id="xp-display" class="flex items-center gap-1.5 bg-purple-100 dark:bg-purple-900/40 px-2 sm:px-3 py-1.5 rounded-full"></div>
-        <button onclick="Auth.enterParentMode()" class="flex items-center gap-1.5 text-xs font-semibold bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-purple-200 dark:hover:bg-purple-800/60 transition-colors" title="Parent Dashboard">🔒 <span class="btn-label">Parent</span></button>
+      </div>
+      <div id="hdr-actions" class="flex items-center flex-wrap gap-1.5 justify-end">
+        <!-- ⚠ Visibility is NOT a Tailwind `hidden sm:flex` here. style.css loads
+             after the Tailwind CDN, so `.hdr-stat { display: inline-flex }` and
+             `.hidden` are both single-class and .hdr-stat would simply win — the
+             chip would show on every width and be duplicated with the one beside
+             the branding. The id rule in style.css settles it outright. -->
+        <div id="streak-display" class="hdr-stat hdr-stat-streak">
+          <span aria-hidden="true">🔥</span>
+          <span id="streak-count">0</span>
+          <span class="hdr-stat-word">day streak</span>
+        </div>
+        <div id="xp-display" class="hdr-stat hdr-stat-xp"></div>
+        <!-- Credit balance. Parent sessions only — a child has no balance of
+             their own and the number would only prompt them to ask for one.
+             Tapping it opens the Shop, which is where it means something.
+             _renderCreditChip() in app.js shows/hides and fills it. -->
+        <button id="hdr-credits" onclick="showScreen('shop')" class="hdr-stat hdr-stat-credits hidden"
+          title="Your credits — tap to open the shop" aria-label="Credits, open the shop">
+          <span aria-hidden="true">🪙</span><span id="hdr-credits-count">0</span>
+          <span class="hdr-stat-word">credits</span>
+        </button>
+        <button onclick="Auth.enterParentMode()" class="hdr-btn is-parent" data-hdr-pri="high" title="Parent Dashboard" aria-label="Parent dashboard"
+          data-menu-desc="Switch to the grown-up view: children, progress, controls">
+          <span class="hdr-ico" aria-hidden="true">🔒</span><span class="hdr-word">Parent</span></button>
         <!-- Teacher Dashboard: hidden by default. Auth reveals it ONLY when the
              signed-in profile has role 'teacher' or 'admin'. Teachers are created
              by an administrator; there is no self-service route in. -->
-        <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hidden items-center gap-1.5 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Teacher Dashboard">👩‍🏫 <span class="btn-label">Teacher</span></button>
-        <button id="search-btn" onclick="Search.open()" class="icon-btn hidden" title="Search Questions">🔍<span class="btn-label sm:hidden">Search</span></button>
-        <button onclick="showScreen('forum')" class="icon-btn" title="Community Forum">💬<span class="btn-label sm:hidden">Forum</span></button>
-        <button id="pwa-install-btn" class="hidden items-center gap-1 text-xs font-semibold bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 px-2 sm:px-3 py-1.5 rounded-full hover:bg-green-200 dark:hover:bg-green-800/60 transition-colors" title="Install app on this device">📲 <span class="btn-label">Install</span></button>
-        <button id="theme-toggle" class="icon-btn" title="Toggle theme"><span id="theme-icon">🌙</span><span class="btn-label sm:hidden">Theme</span></button>
-        <button id="header-profile-btn" onclick="showProfile()" class="hidden items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 text-xs font-semibold hover:bg-indigo-200 dark:hover:bg-indigo-800/60 transition-colors" title="My Profile">
-          <span id="header-profile-avatar" class="text-base select-none">👤</span><span id="header-profile-name" class="max-w-[90px] truncate hidden sm:inline">Account</span>
-        </button>
-        <button id="header-logout-btn" onclick="Auth.logout()" class="hidden items-center gap-1 text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-2 sm:px-3 py-1.5 rounded-full hover:bg-red-200 dark:hover:bg-red-800/60 transition-colors" title="Logout">🚪 <span class="btn-label">Logout</span></button>
+        <button id="btn-open-teacher" onclick="Auth.openTeacherDashboard()" class="hdr-btn is-teacher hidden" data-hdr-pri="high" title="Teacher Dashboard" aria-label="Teacher dashboard"
+          data-menu-desc="Your classes, assignments and pupils">
+          <span class="hdr-ico" aria-hidden="true">👩‍🏫</span><span class="hdr-word">Teacher</span></button>
+        <button id="search-btn" onclick="Search.open()" class="hdr-btn hidden" data-hdr-pri="low" title="Search Questions" aria-label="Search questions"
+          data-menu-desc="Find a question in any subject or chapter">
+          <span class="hdr-ico" aria-hidden="true">🔍</span><span class="hdr-word">Search</span></button>
+        <button onclick="showScreen('forum')" class="hdr-btn" data-hdr-pri="low" title="Community Forum" aria-label="Community forum"
+          data-menu-desc="Ask a question, see what other families are saying">
+          <span class="hdr-ico" aria-hidden="true">💬</span><span class="hdr-word">Forum</span></button>
+        <button id="pwa-install-btn" class="hdr-btn is-install hidden" data-hdr-pri="high" title="Install app on this device" aria-label="Install app on this device"
+          data-menu-desc="Add PSAC Practice to your home screen">
+          <span class="hdr-ico" aria-hidden="true">📲</span><span class="hdr-word">Install</span></button>
+        <button id="theme-toggle" class="hdr-btn" data-hdr-pri="low" title="Toggle theme" aria-label="Toggle light or dark theme"
+          data-menu-label="Appearance" data-menu-desc="Switch between light and dark">
+          <span class="hdr-ico" id="theme-icon" aria-hidden="true">🌙</span><span class="hdr-word">Theme</span></button>
+        <button id="header-profile-btn" onclick="showProfile()" class="hdr-btn is-profile hidden" data-hdr-pri="high" title="My Profile" aria-label="My profile and settings"
+          data-menu-label="My Account" data-menu-desc="Avatar, colours, settings">
+          <span class="hdr-ico" id="header-profile-avatar" aria-hidden="true">👤</span><span class="hdr-word" id="header-profile-name">Account</span></button>
+        <button id="header-logout-btn" onclick="Auth.logout()" class="hdr-btn is-logout hidden" data-hdr-pri="high" title="Log out" aria-label="Log out" data-menu-label="Log out"
+          data-menu-desc="Sign out on this device">
+          <span class="hdr-ico" aria-hidden="true">🚪</span><span class="hdr-word">Logout</span></button>
+
+        <!-- ⚠ Logout is the ONE control that stays out of the menu at every
+             width. Signing out is the thing a person on a shared family phone
+             reaches for in a hurry, and burying it two taps deep behind ☰ made
+             it the hardest control to find rather than the easiest. It keeps
+             its word on mobile for the same reason the menu button does — 🚪
+             alone is a door, not an instruction. It is ALSO listed in the menu:
+             that copy carries the "Sign out on this device" description. -->
+        <button id="header-logout-mobile" onclick="Auth.logout()" class="hdr-btn is-logout hidden"
+          title="Log out" aria-label="Log out">
+          <span class="hdr-ico" aria-hidden="true">🚪</span><span class="hdr-mobile-word">Log out</span></button>
+
+        <!-- ── The mobile/tablet entry point ──
+             Below 1100px every button above is hidden and this replaces the lot.
+             An emoji on its own is a guess — 🔒 could be a lock, a password, a
+             private mode; 💬 could be chat, comments or feedback — so instead of
+             shrinking the controls until they fit, the whole set moves into a
+             sheet where each one gets its name AND a line saying what it does.
+             The word "Menu" is on the button for the same reason: ☰ alone is
+             the same guessing game one level up. -->
+        <button id="hdr-menu-btn" onclick="openHeaderMenu()" class="hdr-btn is-menu"
+          title="Menu" aria-label="Open menu" aria-haspopup="dialog" aria-expanded="false">
+          <span class="hdr-ico" aria-hidden="true">☰</span><span class="hdr-menu-word">Menu</span></button>
       </div>
     </div>
   </header>
@@ -300,16 +419,23 @@
     <div class="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-950 text-white flex flex-col">
 
       <!-- Nav bar -->
-      <nav class="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
-        <div class="flex items-center gap-2.5">
-          <span class="text-3xl select-none">🎓</span>
-          <div>
-            <div class="text-lg font-black text-white leading-tight">PSAC Exam Practice</div>
+      <!-- ⚠ This row MUST wrap. It used to be a single no-wrap flex line holding
+           branding plus five controls; on a 360-412px Android phone that adds up
+           to well over the viewport, and because nothing could wrap the last item
+           - "Sign In", the one control a returning parent is looking for - was
+           pushed past the right edge and could only be reached by scrolling the
+           page sideways. flex-wrap + a full-width action row under 640px fixes it
+           at the source; the page-level overflow guard only hides the symptom. -->
+      <nav class="flex flex-wrap items-center justify-between gap-y-3 px-4 sm:px-6 py-4 max-w-6xl mx-auto w-full">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <span class="text-3xl select-none shrink-0">🎓</span>
+          <div class="min-w-0">
+            <div class="text-base sm:text-lg font-black text-white leading-tight truncate">PSAC Exam Practice</div>
             <div class="text-xs text-indigo-300/70">Mauritius</div>
           </div>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="showScreen('info')" class="text-indigo-200/80 hover:text-white text-sm font-semibold px-3 py-2 transition-colors">How it works</button>
+        <div class="flex items-center flex-wrap gap-2 w-full sm:w-auto justify-center sm:justify-end">
+          <button onclick="showScreen('info')" class="text-indigo-200/80 hover:text-white text-xs sm:text-sm font-semibold px-2 sm:px-3 py-2 transition-colors whitespace-nowrap">How it works</button>
           <a href="#plans" class="hidden sm:inline text-indigo-200/80 hover:text-white text-sm font-semibold px-3 py-2 transition-colors">Pricing</a>
           <button onclick="shareAppWhatsApp()" title="Share via WhatsApp" aria-label="Share via WhatsApp"
             class="w-9 h-9 flex items-center justify-center bg-green-500 hover:bg-green-400 active:scale-95 text-white rounded-full transition-all shadow-lg shrink-0">
@@ -319,11 +445,11 @@
                the auth screen entirely instead of making a 9-year-old figure out
                that "Sign In" hides a 🎒 Student tab two clicks deep. -->
           <button onclick="showScreen('auth'); setTimeout(()=>Auth.setRole('student'),60)"
-            class="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-pink-500 hover:from-amber-300 hover:to-pink-400 active:scale-95 text-white text-sm font-bold px-4 py-2 rounded-full transition-all shadow-lg shadow-pink-500/20">
+            class="flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-pink-500 hover:from-amber-300 hover:to-pink-400 active:scale-95 text-white text-xs sm:text-sm font-bold px-3 sm:px-4 py-2 rounded-full transition-all shadow-lg shadow-pink-500/20 whitespace-nowrap">
             🎒 I'm a Student
           </button>
           <button onclick="showScreen('auth')"
-            class="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-semibold px-5 py-2 rounded-full transition-colors">
+            class="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold px-4 sm:px-5 py-2 rounded-full transition-colors whitespace-nowrap">
             Sign In
           </button>
         </div>
@@ -1296,17 +1422,20 @@
   </div>
 
   <div id="screen-auth" class="screen hidden" data-hide-header="true">
-    <div class="relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex flex-col items-center justify-center p-4">
+    <div class="auth-shell relative min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex flex-col items-center justify-center px-4">
       <!-- Back to Home -->
       <button onclick="showScreen('landing')"
-        class="absolute top-4 left-4 flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition-colors">
+        class="absolute left-4 flex items-center gap-1.5 text-white/70 hover:text-white text-sm font-medium transition-colors"
+        style="top: max(1rem, env(safe-area-inset-top))">
         <span class="text-base">←</span> Home
       </button>
-      <!-- Logo -->
-      <div class="text-center mb-8 select-none">
-        <div class="text-7xl mb-3 drop-shadow-xl">🎓</div>
-        <h1 class="text-4xl font-black text-white tracking-tight">PSAC Exam Practice</h1>
-        <p class="text-indigo-300 text-sm mt-1">PSAC Prep · Grades 4–6 · Mauritius</p>
+      <!-- Logo. Sizes come from #screen-auth .auth-* in style.css, which scales
+           them off viewport height so the card below still reaches the fold on a
+           short screen. -->
+      <div class="auth-brand text-center mb-6 select-none">
+        <div class="auth-logo mb-2 drop-shadow-xl">🎓</div>
+        <h1 class="auth-title font-black text-white tracking-tight">PSAC Exam Practice</h1>
+        <p class="auth-sub text-indigo-300 text-sm mt-1">PSAC Prep · Grades 4–6 · Mauritius</p>
       </div>
 
       <!-- Card. The blur sits on a separate, pointer-events-none decorative
@@ -1434,11 +1563,21 @@
               autocapitalize="off" autocorrect="off" spellcheck="false"
               class="selectable w-full text-center text-xl font-bold bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               oninput="Auth.checkStudentReady()">
+            <!-- ⚠ The placeholder is deliberately NOT sized with the value.
+                 The field is text-2xl + tracking-widest so four typed digits read
+                 clearly, but at that size the words "PIN (4 digits)" are wider
+                 than the input's content box once px-11 has taken 88px of it —
+                 so on a 360px phone the placeholder was sliced off mid-word and
+                 the whole student login looked broken before a single key was
+                 pressed. .pin-field shrinks the placeholder only (::placeholder),
+                 and the padding is now asymmetric: the eye button is on the right,
+                 so only the right side needs to make room for it. -->
             <div class="relative">
               <input id="student-pin" type="password" maxlength="4" placeholder="PIN (4 digits)"
+                inputmode="numeric" autocomplete="off"
                 oninput="Auth.onPinInput(this)"
-                class="selectable w-full text-center text-2xl font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-11 py-3 focus:outline-none focus:ring-2 focus:ring-green-400">
-              <button type="button" onclick="Auth.togglePass('student-pin',this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
+                class="pin-field selectable w-full text-center text-2xl font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl pl-11 pr-11 py-3 focus:outline-none focus:ring-2 focus:ring-green-400">
+              <button type="button" onclick="Auth.togglePass('student-pin',this)" aria-label="Show or hide PIN" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-white/70 hover:text-white transition-colors text-base select-none">👁</button>
             </div>
             <button id="student-signin-btn" disabled onclick="Auth.studentSignIn()"
               class="w-full py-3 bg-green-500 hover:bg-green-400 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-colors shadow-lg text-sm">
@@ -1683,21 +1822,21 @@
   </div>
 
   <!-- ── Student bottom navigation bar ── -->
-  <nav id="student-bottom-nav" class="hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 min-h-[4rem]" style="padding-bottom: env(safe-area-inset-bottom)">
-    <div class="max-w-lg mx-auto w-full flex items-center justify-around h-16">
-    <button onclick="showScreen('dashboard')" data-nav="home" class="nav-btn flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors">
+  <nav id="student-bottom-nav" class="hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700" style="padding-bottom: env(safe-area-inset-bottom)">
+    <div class="max-w-lg mx-auto w-full flex items-stretch">
+    <button onclick="showScreen('dashboard')" data-nav="home" class="tabbar-btn">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
       <span class="text-[10px] font-semibold">Home</span>
     </button>
-    <button onclick="showScreen('subject-select')" data-nav="practice" class="nav-btn flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors">
+    <button onclick="showScreen('subject-select')" data-nav="practice" class="tabbar-btn">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
       <span class="text-[10px] font-semibold">Practice</span>
     </button>
-    <button onclick="showScreen('exam-config')" data-nav="exam" class="nav-btn flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors">
+    <button onclick="showScreen('exam-config')" data-nav="exam" class="tabbar-btn">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
       <span class="text-[10px] font-semibold">Exam</span>
     </button>
-    <button onclick="showScreen('analytics')" data-nav="progress" class="nav-btn flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl transition-colors">
+    <button onclick="showScreen('analytics')" data-nav="progress" class="tabbar-btn">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
       <span class="text-[10px] font-semibold">Progress</span>
     </button>
@@ -1708,7 +1847,16 @@
 
     <!-- ══════════ DASHBOARD ══════════ -->
     <div id="screen-dashboard" class="screen">
-      <div class="bg-gradient-to-br from-blue-500 via-blue-600 to-purple-700 rounded-2xl p-6 mb-6 text-white shadow-xl relative overflow-hidden">
+      <!-- kid-hero paints this in the child's chosen "My Colours" vibe.
+           ⚠ The Tailwind `bg-gradient-to-br from-blue-500 …` that used to be
+           here is deliberately gone rather than kept as a fallback: the Play CDN
+           injects its <style> into <head> at runtime, AFTER the <link> to
+           style.css, so its single-class `background-image` outranks
+           .kid-hero's equally-specific one and the vibe silently did nothing.
+           .kid-hero carries its own default (var(--kid-accent-1, #6366f1)), so
+           a child who never picks a colour still gets the indigo→pink gradient
+           the kid home page has always used. -->
+      <div class="kid-hero rounded-2xl p-6 mb-6 text-white shadow-xl relative overflow-hidden">
         <div class="absolute right-0 top-0 text-9xl opacity-10 pointer-events-none select-none">🏆</div>
         <div class="flex items-start justify-between gap-2 mb-1">
           <h2 id="dashboard-greeting" class="text-2xl font-bold">Welcome! 👋</h2>
@@ -1732,6 +1880,7 @@
       </div>
 
       <!-- Resume banner — shown when an unfinished session was interrupted -->
+      <div id="student-expired-slot"></div>
       <div id="resume-banner-slot"></div>
 
       <!-- Notification opt-in. Hidden unless push is supported AND permission is
@@ -2025,12 +2174,21 @@
 
     <!-- ══════════ EXAM INTERFACE ══════════ -->
     <div id="screen-exam" class="screen hidden">
-      <div class="bg-white dark:bg-gray-800 rounded-xl px-4 py-3 mb-4 shadow flex items-center gap-4">
-        <div class="flex items-center gap-2 shrink-0">
+      <!-- ⚠ This row used to be a single no-wrap line: timer, a flex-1 progress
+           bar, Exit, Submit. The three fixed items plus the gaps come to ~330px,
+           so on a 360px phone the progress bar - the only thing that could give -
+           was squeezed to SIXTEEN pixels and the "Q7 / 40" counter under it was
+           unreadable. Mid-exam, on the device most of these children use.
+           It wraps now: on a phone the timer and the two buttons share the first
+           line and the progress bar gets a full-width line of its own below
+           (order-3), while from 640px up the original single-line order is
+           restored. -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl px-4 py-3 mb-4 shadow flex flex-wrap items-center gap-x-3 gap-y-2">
+        <div class="order-1 flex items-center gap-2 shrink-0">
           <span class="text-lg">⏱</span>
           <span id="exam-timer" class="text-xl font-bold text-blue-600 dark:text-blue-400 font-mono">45:00</span>
         </div>
-        <div class="flex-1">
+        <div class="order-3 w-full sm:order-2 sm:w-auto sm:flex-1">
           <div class="h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
             <div id="exam-progress-bar" class="h-full bg-blue-500 rounded-full transition-all duration-500" style="width:0%"></div>
           </div>
@@ -2038,8 +2196,10 @@
             Q<span id="exam-q-num">1</span> / <span id="exam-q-total">40</span>
           </div>
         </div>
-        <button id="exit-exam-btn" class="btn-secondary text-sm px-3 py-1.5 shrink-0">✕ Exit</button>
-        <button id="submit-exam-btn" class="btn-danger text-sm px-3 py-1.5 shrink-0">✓ Submit</button>
+        <div class="order-2 sm:order-3 ml-auto sm:ml-0 flex items-center gap-2 shrink-0">
+          <button id="exit-exam-btn" class="btn-secondary text-sm px-3 py-1.5">✕ Exit</button>
+          <button id="submit-exam-btn" class="btn-danger text-sm px-3 py-1.5">✓ Submit</button>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -2452,9 +2612,114 @@
           </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
           <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-4">📚 Subjects by Grade</h3>
           <div id="admin-subjects-list"></div>
+        </div>
+
+        <!-- ── Credit shop ──
+             Prices and the referral rate live in mm_data.shop_settings, which
+             only an admin may write and which purchase_chapter() re-reads
+             server-side on every purchase. Nothing a parent's browser says
+             about a price is ever believed. -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200">🛒 Credit Shop</h3>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <span class="text-xs text-gray-500 dark:text-gray-400">Shop open</span>
+              <input id="admin-shop-enabled" type="checkbox" onchange="AdminPanel.setShopEnabled(this.checked)"
+                class="w-4 h-4 accent-indigo-500">
+            </label>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+            <label class="block">
+              <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Credits per referral</span>
+              <input id="admin-shop-refcredits" type="number" min="0" max="10000" oninput="AdminPanel.previewShopEconomy()"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            </label>
+            <label class="block">
+              <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Default chapter price</span>
+              <input id="admin-shop-price" type="number" min="0" max="1000000" oninput="AdminPanel.previewShopEconomy()"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            </label>
+            <label class="block">
+              <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Default subject price</span>
+              <input id="admin-shop-subjprice" type="number" min="0" max="1000000"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            </label>
+            <label class="block">
+              <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Unlock lasts (days)</span>
+              <input id="admin-shop-days" type="number" min="1" max="3650" oninput="AdminPanel.previewShopEconomy()"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            </label>
+          </div>
+
+          <!-- Anti-farming knobs. All three are read server-side by
+               record_student_activity() on every award, so changing one takes
+               effect on the next referral without a deploy. -->
+          <div class="rounded-xl bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 p-3 mb-3">
+            <div class="flex items-center justify-between gap-3 mb-3">
+              <span class="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">Referral earning</span>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <span class="text-xs text-gray-500 dark:text-gray-400">Earning on</span>
+                <input id="admin-shop-earning" type="checkbox" class="w-4 h-4 accent-indigo-500">
+              </label>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <label class="block">
+                <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Min account age (mins)</span>
+                <input id="admin-shop-minage" type="number" min="0" max="100000"
+                  class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+                <span class="block text-[10px] text-gray-400 mt-1">0 = pay immediately. Higher makes "sign up, answer one, collect" take real time.</span>
+              </label>
+              <label class="block">
+                <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Max paid referrals / person</span>
+                <input id="admin-shop-maxrefs" type="number" min="0" max="100000"
+                  class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+                <span class="block text-[10px] text-gray-400 mt-1">0 = no cap. Above it, referrals still register but pay nothing.</span>
+              </label>
+              <label class="block">
+                <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Flag burst above (per hour)</span>
+                <input id="admin-shop-burst" type="number" min="1" max="10000"
+                  class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+                <span class="block text-[10px] text-gray-400 mt-1">Writes a security-log entry only. Never auto-blocks — a popular referrer looks like a farm at first.</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="admin-shop-preview" class="text-[11px] text-gray-500 dark:text-gray-400 mb-3 leading-snug"></div>
+          <button onclick="AdminPanel.saveShopBasics()" class="w-full py-2 mb-4 bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold rounded-xl transition-colors">Save shop settings</button>
+
+          <h4 class="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-2">Per-subject prices</h4>
+          <div id="admin-shop-subjprices" class="mb-4 divide-y divide-gray-100 dark:divide-gray-700"></div>
+
+          <div class="flex items-center justify-between gap-3 mb-2">
+            <h4 class="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">Per-chapter prices</h4>
+            <button onclick="AdminPanel.publishCatalog()" class="text-xs font-semibold text-indigo-500 hover:text-indigo-700">⬆ Publish catalogue</button>
+          </div>
+          <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2 leading-relaxed">
+            Blank uses the default price. <b>Publish catalogue</b> writes the current chapter
+            list into the database so the server can reject a purchase for anything that is
+            not a real chapter — worth doing once after adding subjects.
+          </p>
+          <input id="admin-shop-search" type="text" placeholder="Filter chapters…" oninput="AdminPanel.renderShopPrices()"
+            class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-2 bg-white dark:bg-gray-700 dark:text-white">
+          <div id="admin-shop-prices" class="max-h-72 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700"></div>
+        </div>
+
+        <!-- ── Security log ── -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
+          <div class="flex items-center justify-between gap-3 mb-2">
+            <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200">🛡️ Security log</h3>
+            <button onclick="AdminPanel.loadSecurityEvents()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
+          </div>
+          <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-3 leading-relaxed">
+            Written by the database itself when a request tries something it should not —
+            a blocked privileged column write, an off-catalogue purchase, a burst of
+            referral activations. Entries marked <b>client:</b> were reported by a
+            browser and are hints, not evidence.
+          </p>
+          <div id="admin-security-list" class="space-y-2"></div>
         </div>
       </div>
 
@@ -2872,11 +3137,15 @@
           <button onclick="Auth.switchToStudentSelect()" class="pd-action"><span class="ico">👦</span><span>Student view</span></button>
           <button onclick="showScreen('calendar')" class="pd-action"><span class="ico">📅</span><span>Calendar</span></button>
           <button onclick="Auth.openInviteModal()" class="pd-action"><span class="ico">🎁</span><span>Invite</span></button>
+          <!-- The balance is painted in by _renderShopChip() so a parent sees
+               what they have without opening anything. -->
+          <button onclick="showScreen('shop')" class="pd-action"><span class="ico">🛒</span><span>Shop</span><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
           <button onclick="showProfile()" class="pd-action"><span class="ico">⚙️</span><span>Settings</span></button>
         </div>
       </div>
 
       <!-- ── My Plan banner ── -->
+      <div id="pd-expired-slot"></div>
       <div id="pd-plan-banner" class="hidden mb-4 flex items-center justify-between gap-3 bg-white dark:bg-gray-800 rounded-2xl px-5 py-3 shadow border border-gray-100 dark:border-gray-700">
         <div class="flex items-center gap-3">
           <span id="pd-plan-icon" class="text-2xl">🆓</span>
@@ -3305,6 +3574,72 @@
     </div>
 
     <!-- ══════════ PROFILE / ACCOUNT SETTINGS ══════════ -->
+    <!-- ══════════ CREDIT SHOP ══════════
+         A screen, not a modal: it is a browsable catalogue of 15 subjects and
+         148 chapters, which is more than a dialog should hold, and a parent
+         wants to be able to come back to it from the bottom of a long list.
+         ⚠ Parent-only. renderShop() bounces a student session — a child has no
+         balance of their own to spend and never sees prices.
+
+         Everything here is cosmetic. Buying goes through purchase_chapter() /
+         purchase_subject(), which read the price and the balance server-side,
+         and what a child can then download is decided in
+         netlify/functions/questions.js. -->
+    <div id="screen-shop" class="screen hidden">
+      <div class="max-w-3xl mx-auto">
+        <div class="flex items-center gap-3 mb-4">
+          <button onclick="showScreen('parent')" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Back">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <h2 class="text-xl font-bold text-gray-800 dark:text-white">🛒 Credit Shop</h2>
+        </div>
+
+        <!-- ⚠ The honest notice. Everything in the app is free right now, so a
+             shop that did not say so would read as a paywall that is not there.
+             Kept above the balance because it changes how to read everything
+             below it. -->
+        <div class="rounded-2xl border border-green-200 dark:border-green-800/40 bg-green-50 dark:bg-green-900/20 p-4 mb-4 flex items-start gap-3">
+          <span class="text-2xl select-none shrink-0">🎉</span>
+          <div class="min-w-0">
+            <div class="font-bold text-green-800 dark:text-green-300 text-sm">Everything is already free right now</div>
+            <p class="text-xs text-green-700 dark:text-green-400 mt-0.5 leading-relaxed">
+              Every subject and every chapter is open to every family until
+              <span data-free-until>30 September 2026</span> — you do not need to buy anything.
+              Credits you earn now are <b>banked</b>: spend them here whenever you like, and what
+              you unlock keeps working for its full <span id="shop-days-note">30</span> days even
+              after paid plans start, and even if your access lapses.
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-white dark:bg-gray-800 shadow p-4 mb-4">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl select-none">🪙</span>
+            <div class="flex-1 min-w-0">
+              <div id="shop-balance" class="text-2xl font-black text-amber-600 dark:text-amber-400 leading-none">0</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">credits available</div>
+            </div>
+            <button onclick="Auth.openInviteModal()"
+              class="shrink-0 text-xs font-bold bg-amber-500 hover:bg-amber-400 text-white px-4 py-2.5 rounded-xl transition-colors">🎁 Earn more</button>
+          </div>
+          <p id="shop-earn-note" class="text-[11px] text-gray-500 dark:text-gray-400 mt-2 leading-snug"></p>
+        </div>
+
+        <div class="flex gap-1 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-2xl mb-4">
+          <button id="shop-tab-subjects" onclick="shopTab('subjects')"
+            class="flex-1 text-sm font-bold py-2 rounded-xl transition-all bg-white dark:bg-gray-600 shadow text-gray-800 dark:text-white">📚 Whole subjects</button>
+          <button id="shop-tab-chapters" onclick="shopTab('chapters')"
+            class="flex-1 text-sm font-bold py-2 rounded-xl transition-all text-gray-500 dark:text-gray-400">📘 Single chapters</button>
+        </div>
+
+        <input id="shop-search" type="text" placeholder="Search…" oninput="renderShopList()"
+          class="w-full text-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2.5 mb-3 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400">
+
+        <div id="shop-body" class="bg-white dark:bg-gray-800 rounded-2xl shadow p-4"></div>
+        <p id="shop-note" class="text-[11px] text-gray-500 dark:text-gray-400 text-center leading-snug mt-3 mb-2"></p>
+      </div>
+    </div>
+
     <div id="screen-profile" class="screen hidden">
       <div id="profile-content" class="py-4">
         <!-- Rendered by showProfile() -->
@@ -3694,6 +4029,9 @@
   <script src="engine/registry.js"></script>
   <script src="engine/events.js"></script>
   <script src="engine/store.js"></script>
+  <!-- Referral credits + chapter shop. After store.js (it calls Store), before
+       auth.js and app.js (both reference Shop). -->
+  <script src="engine/shop.js"></script>
   <!-- Subject packs -->
   <!-- Grade 4 subjects -->
   <script src="subjects/grade4-maths/_manifest.js"></script>
@@ -3729,6 +4067,43 @@
   <script src="engine/search.js"></script>
   <!-- Classrooms / enrollments data layer (teacher role) -->
   <script src="engine/classroom.js"></script>
+
+  <!-- ── Exam review sheet ──
+       Reached from "Review →", the label the Next button takes on the last
+       question. That button used to be a dead end: its handler was
+       `if (idx < qs.length - 1) { idx++; render() }`, which on the LAST question
+       is false, so the tap did nothing at all. On a desktop the Question
+       Navigator sits in a sidebar so the child could still find their way; on an
+       iPad the grid is a single column and that navigator is far below the fold,
+       so "Review" genuinely led nowhere. -->
+  <div id="modal-exam-review" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+    <div class="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl w-full max-w-md my-auto max-h-[90vh] flex flex-col">
+      <div class="p-5 pb-3 border-b border-gray-100 dark:border-gray-800 flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <h3 class="text-lg font-bold text-gray-800 dark:text-white">📋 Check your paper</h3>
+          <p id="exr-summary" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
+        </div>
+        <button onclick="closeExamReview()" aria-label="Close" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none shrink-0">✕</button>
+      </div>
+      <div class="p-5 pt-4 overflow-y-auto flex-1">
+        <div id="exr-warn" class="hidden mb-3 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 px-3 py-2 text-xs font-semibold text-amber-700 dark:text-amber-300"></div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Tap any number to go back to that question.</p>
+        <div id="exr-grid" class="grid grid-cols-6 sm:grid-cols-8 gap-1.5 mb-4"></div>
+        <div class="grid grid-cols-3 gap-1 text-[11px] text-gray-500 dark:text-gray-400">
+          <div class="flex items-center gap-1.5"><span class="nav-legend bg-green-400 dark:bg-green-600"></span>Answered</div>
+          <div class="flex items-center gap-1.5"><span class="nav-legend bg-red-400 dark:bg-red-600"></span>Flagged</div>
+          <div class="flex items-center gap-1.5"><span class="nav-legend bg-gray-200 dark:bg-gray-600"></span>Blank</div>
+        </div>
+      </div>
+      <div class="p-5 pt-3 border-t border-gray-100 dark:border-gray-800 flex flex-col gap-2">
+        <button id="exr-first-blank-btn" onclick="examGoToFirstBlank()" class="hidden w-full btn-secondary text-sm">↩ Go to my first blank question</button>
+        <div class="flex gap-2">
+          <button onclick="closeExamReview()" class="flex-1 btn-secondary text-sm">Keep checking</button>
+          <button onclick="closeExamReview(); document.getElementById('submit-exam-btn').click()" class="flex-1 btn-danger text-sm">✓ Submit exam</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ── Reset Progress confirmation modal ── -->
   <!-- max-w-md not max-w-sm, and the card scrolls: with the review open a

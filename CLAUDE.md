@@ -664,6 +664,7 @@ misleading about what was running.
 
 | File | What it is |
 |---|---|
+| `supabase-credits-shop.sql` | **Run this one next** — referral credits, the chapter shop, and the privilege-escalation fix. Idempotent. |
 | `supabase-migration.sql` | **The file to run.** Idempotent; re-running changes nothing. Parts 1–4 run unattended, Part 5 is destructive/disruptive and stays commented out. |
 | `supabase-schema.sql` | Generated dump of the live schema — tables, constraints, indexes, RLS policies, functions, grants. For rebuilding a fresh project and for answering "what is actually deployed?". Not for running against production. |
 
@@ -690,7 +691,19 @@ adding `deleted_at` made the parent dashboard show zero children. Put a
    exists. **`supabase-migration.sql` has not been run yet** — it carries the
    PIN-counter move, the ambiguous-family-name guard, and the push-subscription
    cleanup on delete.
-2. **Netlify env vars** — set these in the Netlify dashboard, never in the repo:
+2. ⚠ **Re-run `supabase-credits-shop.sql`.** A live probe on 2026-08-28 found
+   `shop_settings`, `my_credits`, `my_entitlements` and `family_entitlements`
+   already deployed — so an earlier copy of this file HAS been run and Part 0
+   (the privilege-escalation fix) is in place. What is missing is everything
+   added since: `purchase_subject()` and `shop_subject_price()` (whole-subject
+   buying, confirmed 404 on the live database), the anti-farming knobs inside
+   `record_student_activity()`, and the new `shop_settings` keys. The file is
+   idempotent and now BACKFILLS the settings row instead of skipping it, so
+   re-running keeps every configured price and only adds what is absent.
+   Then open Admin → Content → 🛒 Credit Shop and press **Publish catalogue**
+   once — whole-subject buying refuses outright without it, since the database
+   has no other way to know which chapters belong to a pack.
+3. **Netlify env vars** — set these in the Netlify dashboard, never in the repo:
    ```
    VAPID_PUBLIC_KEY  = <see Netlify env vars>
    VAPID_PRIVATE_KEY = <see Netlify env vars>   ← NEVER commit this
@@ -702,11 +715,11 @@ adding `deleted_at` made the parent dashboard show zero children. Put a
    update the Netlify env vars, and update `VAPID_PUBLIC_KEY` in `engine/app.js`.
    Push is non-functional until `push_subscriptions` has real subscribers, so
    rotating now costs nothing.
-3. **Push notifications for assignments** — infrastructure is ready; wire up `push-send.js` when parent creates an assignment
-4. **Badge API** — show assignment count badge on app icon (needs Supabase assignment count)
-5. **Enrichment chapters for French/English/Maths** — partly superseded: `Description d'Images` (French, all grades) and `Passages & Text Types` (English + French, all grades) now cover the picture and text-type work. Still open: an English "Vocabulary Builder" and a maths "Shapes Around Us" picture chapter.
-6. **Grade 6 maths enrichment** — not started
-7. ~~Illustrated questions for Maths chapters~~ — **DONE for Grade 4 & 5** (Grade 6 Maths already had some).
+4. **Push notifications for assignments** — infrastructure is ready; wire up `push-send.js` when parent creates an assignment
+5. **Badge API** — show assignment count badge on app icon (needs Supabase assignment count)
+6. **Enrichment chapters for French/English/Maths** — partly superseded: `Description d'Images` (French, all grades) and `Passages & Text Types` (English + French, all grades) now cover the picture and text-type work. Still open: an English "Vocabulary Builder" and a maths "Shapes Around Us" picture chapter.
+7. **Grade 6 maths enrichment** — not started
+8. ~~Illustrated questions for Maths chapters~~ — **DONE for Grade 4 & 5** (Grade 6 Maths already had some).
    All inline SVG (no external image dependency), built from straight lines/circles/polygons only —
    no elliptical-arc SVG math, so nothing can render subtly wrong on any device.
    - `g4-geometry` (+6 g4m-geo-020..025): right/acute/obtuse angle rays, equilateral/isosceles
@@ -725,7 +738,7 @@ adding `deleted_at` made the parent dashboard show zero children. Put a
      elapsed-time-between-two-clocks problem).
    - Registered in `question_loader.js` `LOCAL_FILES['grade5-maths']` for local `file://` dev;
      prod auto-discovers it.
-8. ~~Illustration coverage across other subjects (exam mode)~~ — **broad pass done**, follow-up
+9. ~~Illustration coverage across other subjects (exam mode)~~ — **broad pass done**, follow-up
    session. Metric used: illustrated questions as % of a subject's *whole* pool, since exam mode
    draws proportionally across all chapters — a subject can have "some" illustrated chapters and
    still show a blank paper almost every time if the pool is huge. Science was already the
@@ -772,6 +785,7 @@ shanvi/
     icon.svg / icon-192.png / icon-512.png
   engine/
     app.js                    ← main app logic, all UI functions
+    shop.js                   ← referral credits + chapter shop (UI only; see the SQL for enforcement)
     auth.js                   ← Supabase auth + student PIN login + session guard
     store.js                  ← localStorage + Supabase data layer
     question_loader.js        ← loads question files (LOCAL_FILES for file://, API for prod)
@@ -837,6 +851,403 @@ it and added a filter:
   inline SVG diagram or a photo, and this was the one place they could not be
   tapped to enlarge.
 
+## Device-display pass (2026-08-28) — measured in headless Chrome, not eyeballed
+Reported from real devices: the bottom bar "gets extra large" and the page
+scrolled sideways on some Android phones; the Sign In button sat almost off the
+right edge on a Samsung; the student login looked broken; and on an iPad the
+**Review** button at the end of an exam did nothing.
+
+Every fix below was verified by driving the app in headless Chrome over the
+DevTools protocol at 320 / 360 / 390 / 412 / 428 / 640 / 768 / 820 / 1024 /
+1152 / 1440 px. Two things about that harness are worth knowing before repeating
+it: the **service worker serves a stale shell**, so a CDP run must
+`Page.setBypassServiceWorker` *and* `Page.reload {ignoreCache:true}` or it will
+happily measure the previous version of style.css and report a fix that has not
+landed (this happened, and briefly produced nonsense results); and an
+overflow-detector that walks up to `document.documentElement` now finds
+`overflow-x: clip` on `body` and concludes nothing overflows anywhere. **Stop
+the ancestor walk at `body`.**
+
+### The bottom bar: a class-name collision
+`.nav-btn` was TWO different components. The exam question-navigator grid
+(`width: 2rem; height: 2rem`) and the student bottom tab bar shared the name, so
+each tab was laid out in a 32×32 box while holding a 24px icon and a whole word.
+"Practice" and "Progress" cannot wrap, so they spilled out of the button on both
+sides; measured at 360px the four buttons were 32px wide with labels overflowing
+by up to 7px each. A wide screen had slack in the `max-w-lg` track and hid it —
+which is why it only showed on phones, and worse on Samsung's larger default
+font scale. The tab bar is now `.tabbar-btn`, its own component, `flex: 1 1 0` +
+`min-width: 0`. Four 90×60 tabs at 360px, no overflow. **Do not reintroduce a
+shared class name here.**
+
+### Header: labelled pills, or one "Menu" button
+Eight ad-hoc pills in four sizes and six pastel colours became one `.hdr-btn`.
+Three approaches have now been tried on this row; only the third works:
+
+1. **Labelled pills on phones** (the original). Seven controls took TWO rows at
+   every width from 360 to 428 and made the header **136px** tall.
+2. **Icon-only squares.** One tidy 94px row — and reported straight back as
+   *"the top icons are not intuitive on mobile, we don't know what each one
+   does"*. Which is what an emoji alone is: 🔒 could be a lock, a password or a
+   private mode; 💬 could be chat, comments or feedback. Saving 42px of header
+   was not worth making every control a guess. The pre-existing comment in
+   style.css had warned about exactly this and was overridden on measurements
+   alone — **vertical space is not worth comprehension.**
+3. **One labelled `☰ Menu` button** below 1100px, opening a sheet where every
+   action gets its name *and* a line saying what it does. Header is now a single
+   **52px** row on a phone (60px on desktop), one row at every width from 320 to
+   1440, nothing clipped, and nothing to guess at.
+
+1100px is measured, not chosen: with all eight controls showing, the labelled
+toolbar needs ~810px and the branding another ~234px, and `max-w-6xl` only ever
+gives 1120px.
+
+⚠ **The sheet's rows are BUILT FROM the live header buttons**
+(`_buildHeaderMenu()`), never hard-coded. Which controls exist is decided in
+half a dozen places — auth.js reveals Teacher only for an approved teacher, the
+`beforeinstallprompt` handler reveals Install, `showScreen()` shows Account and
+Logout everywhere except the auth screens, Search only once a grade is active. A
+second list would drift and start offering a button the header had hidden.
+Verified: hiding `#search-btn` removes its row.
+- `data-menu-desc` on each button carries the description; `data-menu-label`
+  overrides the word where it is dynamic (the account chip shows the person's
+  NAME, which is right in a header and useless as a menu row).
+- The Appearance row reports the current theme and is rebuilt on every open, so
+  it flips from "Currently dark — tap for light" to the opposite after use.
+- Bottom sheet under 640px (the header is the furthest point from a thumb), a
+  top-right dropdown above it. `#hdr-menu-list` needs `min-h-0` or a long list
+  pushes past the 85vh cap instead of scrolling.
+
+Also learned the hard way: `#hdr-actions { flex-shrink: 0 }` to stop a
+five-pixel wrap at 1024 stopped it by letting the row **overflow** instead — at
+768 and 820 the toolbar ran to 876px and Logout sat off the right edge,
+invisible because the page-level overflow guard clipped it. The toolbar must be
+allowed to wrap; a two-row header is survivable, a control you cannot reach is
+not.
+### Page-level overflow guard
+`body { overflow-x: hidden }` propagates to the viewport and makes it a scroll
+container, which is the documented way to break `position: sticky` in Safari —
+and the app header is sticky. It is now `overflow-x: clip` behind `@supports`
+(clips without creating a scroll container), with the old rule as the fallback.
+
+### Landing nav, auth screen, exam header
+- The landing `<nav>` was a single no-wrap flex line holding branding plus five
+  controls — well over a 360-412px viewport, so **"Sign In" was pushed past the
+  right edge**. It wraps now, with the action cluster full-width under 640px.
+  That is the Samsung report; the overflow guard only ever hid the symptom.
+- Auth screen: the logo block is sized off viewport **height** with `clamp()`
+  (that is the axis that runs out), and the subtitle drops under 700px tall.
+  The PIN field's placeholder is shrunk by `.pin-field::placeholder` — at
+  `text-2xl` + `tracking-widest` inside `px-11`, "PIN (4 digits)" was wider than
+  the content box and got sliced mid-word before a single key was pressed.
+- Exam header: timer + a `flex-1` progress bar + Exit + Submit on one no-wrap
+  line left the progress bar **16px wide** at 360px. It wraps now; the bar gets
+  its own full-width line on a phone (296px) and the original single line from
+  640px up.
+
+### "Review →" was a dead button
+`renderExamQuestion` relabels the Next button to "Review" on the last question,
+but the handler was `if (idx < len - 1) { idx++; render() }` — false there, so
+the tap did nothing at all. On a desktop the sidebar navigator softened it; on
+an iPad that navigator is a full screen below the fold, so Review genuinely led
+nowhere. It now opens `#modal-exam-review`: answered/blank/flagged counts, a
+tappable grid, "go to my first blank question", and Submit.
+Also fixed alongside it: `_renderExamReview` tested `S.exam.flagged[i]` on a
+**Set**, so the 🚩 marker never appeared on any reviewed question.
+
+## Fractions read as fractions (not "1 slash 5")
+`_prettyMath()` already stacked `a/b` over a bar, but two things undid it:
+- Its trailing guard `(?![\w\/.])` excluded a following full stop, so a fraction
+  at the **end of a sentence** ("Simplify 2/4.") stayed raw while the same
+  fraction mid-sentence was stacked. The guard is now `(?=$|[^\w\/]|\.(?!\d))`
+  — a `.` only disqualifies when a digit follows it, i.e. the "/5.5" of a
+  decimal. Dates (`3/4/2020`) and decimals (`12.5/2.5`) are still left alone.
+- It was applied to question text and options but **not** to explanations,
+  hints, correct-answer lines, the practice round review or the exam results
+  review — every place a child looks *after* getting it wrong. All now go
+  through it.
+
+Also: `2 1/2` is marked up as a mixed number (`.frac-mixed`) so it prints tight
+like a book, and each fraction carries `aria-label`/`data-tts`. That last one
+matters — the stack is a column flexbox, so `innerText` reads "1 5" and the
+read-aloud button used to say "one five". `_ttsText()` swaps `data-tts` in on a
+clone before speaking. A `□` inside a fraction becomes the word "blank" in the
+label **before** the blank-numbering pass runs, or that pass would rewrite it
+into markup inside an attribute value.
+
+## My Colours: 12 vibes, theme-aware
+`KID_VIBES` went 6 → 12, and each now sets **four** custom properties, not two:
+the gradient pair plus `--kid-ink` (readable on white) and `--kid-ink-dark`
+(readable on a dark card). Reusing the accent as a text colour is wrong at both
+ends — Mango's `#f59e0b` is 2.15:1 on white, Midnight's `#1e40af` is 2.03:1 on
+the dark page. All 24 inks were measured; the lowest is 5.02:1.
+`--kid-ink-now` resolves the pair once, and everything tinted reads only that.
+⚠ Keep the `:root[data-kid-vibe=…]` list in style.css in step with `KID_VIBES`.
+⚠ The dashboard hero's Tailwind `bg-gradient-to-br` was **removed**, not kept as
+a fallback: the Play CDN injects its `<style>` after the `<link>` to style.css,
+so its equally-specific `background-image` won and the vibe silently did
+nothing. `.kid-hero` carries its own default. Deliberately **not** applied to
+`.kid-tile` — those three tiles' distinct colours are how a child tells them
+apart.
+
+## Idle nudge — the shake, extended beyond the first-run tip
+`_IDLE_NUDGES` maps a screen to its obvious next action. Sit 15s without a
+pointer, key, wheel or touch event and that control gets a small shake
+(`.attn-nudge`) plus the existing hint callout. Twice per screen per page load,
+then that screen goes quiet. Never during practice or an exam, never while a
+modal is open, never in a parent session outside the parent dashboard, and never
+when the parent has turned tips off.
+- `_showHint(..., { ephemeral: true })` is new: an idle nudge is a reminder, not
+  a tutorial step, so it is **not** written to the persisted seen-list.
+- The nudge only fires when the target is already in the viewport —
+  `_showHint` scrolls to its target, and yanking the page under someone who is
+  simply reading is worse than staying quiet.
+- ⚠ The "is a modal open" gate must be `div[id^="modal-"].fixed:not(.hidden)`.
+  A bare `[id^="modal-"]` also matches `#modal-confirm-msg`, a text div inside
+  `#modal-confirm` that is never given `.hidden` — so the plain selector matched
+  on every page and the nudge could never fire at all.
+- Calm Mode (`.kid-calm`) and OS `prefers-reduced-motion` both drop the motion
+  and keep the words.
+
+## Referral CREDITS + the chapter SHOP (`engine/shop.js`)
+Replaces the tier ladder that was here before. Invite a family → **their child
+answers one practice question** → you earn credits → spend them on 30-day
+chapter unlocks. Defaults: **15 credits per activated referral, 250 per
+chapter, 30 days** — all three admin-configurable in
+`mm_data.shop_settings` (Admin → Content → 🛒 Credit Shop).
+
+**The activation rule IS the anti-abuse design.** A sign-up alone pays nothing;
+creating a shell account is cheap, sitting a child in front of it is not. The
+award is computed in the database from the student's own session token
+(`current_student_id()`), so a browser cannot claim it for an account it does
+not hold, and `record_student_activity()` is idempotent — the second and every
+later call returns `nothing_pending`.
+
+### Where each rule is actually enforced
+| Rule | Enforced in | Not enforced by |
+|---|---|---|
+| Credits can only be earned | `record_student_activity()` RPC | anything client-side |
+| Credits can only be spent | `purchase_chapter()` RPC (reads price + balance server-side, row-locked) | the Buy button |
+| A chapter is unlocked | `netlify/functions/questions.js` (service role) | `_planAllowsChapter()`, which is UI only |
+| An expired account is restricted | same function | `Auth.isAccessExpired()`, which only picks the wording |
+
+`credit_ledger`, `chapter_entitlements` and `security_events` have **no
+insert/update/delete grant at all** for anon or authenticated — stronger than a
+policy, because a policy mistake later cannot open a hole that has no grant
+behind it. Verified against a real Postgres: a direct insert, update or delete
+on any of them from the `authenticated` role returns *permission denied*.
+
+### Expiry became a soft door
+An expired account used to be refused at sign-in (`auth.js`, both the parent
+and the student path). It now **signs in to a restricted app**, because a
+chapter bought with credits outlives the account it was bought on and the family
+has to be able to reach what they paid for. `disabled` is still a hard stop —
+that is a moderation decision, not a lapsed date.
+
+⚠ The order of the two rules in `questions.js` is the whole feature:
+- **expired** ⇒ the allowed list becomes *exactly* the live entitlements, even
+  if the plan was unlimited **and even if plan enforcement is switched off**.
+- **not expired** ⇒ entitlements are *added* to whatever the plan allowed.
+  Never subtractive; buying can only ever give you more.
+
+Both directions, plus blocks, are covered by a harness that drives the real
+handler with a stubbed Supabase (10 scenarios, all passing) — including
+"expired with no entitlements ⇒ nothing served" and "child expiry counts as well
+as parent expiry".
+
+### ⚠ A live privilege-escalation hole was found and closed doing this
+`public.profiles` has a table-wide UPDATE grant and policy `profiles_update`
+allows `id = auth.uid()` **with no column restriction**. So before this work,
+any signed-in parent could run
+
+```js
+_sb.from("profiles").update({ role: "admin" }).eq("id", myOwnId)
+```
+
+and `is_admin()` — which reads exactly that column — returned true for them
+everywhere, including the admin panel and every `is_admin()` policy in the
+schema. The same statement cleared their own `expires_at` or `disabled`.
+`public.students` was the same shape (`students_parent` is FOR ALL over a
+parent's own children), so a parent could clear a child's expiry.
+
+Closed by `guard_profiles_privileged()` / `guard_students_privileged()`,
+BEFORE UPDATE triggers that revert privileged columns unless the caller is
+already an admin. Two things make that safe:
+- In a BEFORE UPDATE trigger the row is not written yet, so `is_admin()` reads
+  the **OLD** value — setting `role=admin` in the same statement cannot
+  bootstrap past the check.
+- The SECURITY DEFINER functions set a transaction-local flag
+  (`priv_write_allowed()`) around their own writes, so awarding and spending
+  credits still work while a direct PostgREST update does not.
+
+Guarded: `role`, `is_super_admin`, `disabled`, `expires_at`,
+`referral_code`, `credits`, `blocked_until`, and `students.expires_at`.
+
+⚠ **Deliberately NOT guarded**, and each for a reason that will look like an
+oversight if it is not written down:
+- `teacher_status` / `teacher_tier` / `teacher_decided_*` —
+  `request_teacher_access()` is SECURITY DEFINER but runs for a *non-admin*
+  applicant, so guarding these would silently break every teacher application.
+  They are inert alone: `is_approved_teacher()` needs `role='teacher'` too, and
+  `role` **is** guarded.
+- `students.session_version` — `verify_student_pin()` bumps it on every login
+  as an anon caller, so guarding it would freeze the account-sharing guard at
+  its first value. Writing it only logs your own child out.
+- `profiles.deleted_at` — `delete_my_account()` / `restore_my_account()` are
+  the owner's own to use.
+
+### Verified against a real Postgres, not reasoned about
+`supabase-credits-shop.sql` was executed twice (idempotent) against
+`postgres:16-alpine` with stub tables matching the live column names, then
+driven through the whole flow. Confirmed: referral pays 15 only after the child
+practises and only once (one ledger row); minting credits, self-promoting to
+admin and clearing own expiry are all **reverted and logged** with the exact
+columns attempted; direct writes to the three new tables are refused;
+purchase refuses an off-catalogue id, honours an admin price change instantly,
+and refuses when the shop is closed; re-buying **extends** to 60 days in one
+row rather than stacking two.
+
+One real bug that only a live run would have caught: `v_tampered || 'credits'`
+on a `text[]` makes Postgres read the literal as an **array literal**, not an
+element (*malformed array literal*). It is `array_append()` now.
+
+### The Shop is a PAGE (`#screen-shop`), and it sells subjects too
+A modal could not hold 15 subjects and 148 chapters, and a parent wants to come
+back to it from the bottom of a long list. Two tabs:
+- **Whole subjects** — every chapter of a pack, at `default_subject_price`
+  (1500) or a per-subject override. Shows "N already unlocked" so a parent can
+  see they are not paying twice for nothing.
+- **Single chapters** — as before, with what they already hold at the top and
+  its remaining days.
+
+⚠ The page carries a **prominent green notice that everything is already free**
+until the free-until date, and that credits are *banked* for later. Without it a
+shop reads as a paywall that is not actually there, which would be a straight
+lie to a parent.
+
+⚠ Parent-only: `renderShop()` bounces a student session. A child has no balance
+of their own and must never be shown prices to go and ask about.
+
+Under the hood there is **no second entitlement mechanism**: `purchase_subject()`
+grants an ordinary `chapter_entitlements` row per chapter, so
+`questions.js` needs no idea that subjects exist and "is this chapter live" is
+still one row lookup. Each chapter extends from its OWN expiry, so buying a
+subject over a chapter already held adds days rather than shortening it
+(verified: a 30-day chapter became 60 while its siblings got 30).
+
+⚠ Subject buying REQUIRES the published catalogue — the database has no other
+way to know which chapters belong to a pack, since they live in the JS
+manifests. It refuses with `catalog_not_published` rather than charging for
+nothing. `publishCatalog()` now writes `subject` = the **pack id** and
+`subjectName` = the display label; they were one field until subjects became
+buyable, and conflating them left the database only a display string to group by.
+
+### Credits are visible without opening anything
+A `🪙 N credits` chip in the header, next to the branding. Parent sessions only,
+and hidden at zero — "🪙 0" is clutter, and the Shop button on the parent
+dashboard is the discovery path for someone who has never earned any. Tapping it
+opens the Shop.
+
+⚠ Adding it surfaced something that predates credits: `#streak-display` and
+`#xp-display` read `DB`, and in a parent session `DB` holds whichever CHILD is
+loaded — so a parent had been looking at a streak that was never theirs.
+`body.is-parent-session` (set by `_renderCreditChip()`) now hides both for a
+parent. One reading of the header per session type, and as a bonus the two
+stopped competing for the same row, which is what had pushed the desktop header
+onto a second line.
+
+### Logout is the one control that never hides in the menu
+`#header-logout-mobile` is a labelled twin of `#header-logout-btn`, shown below
+1100px where the pills are hidden. Signing out is what someone on a shared
+family phone reaches for in a hurry; burying it two taps behind ☰ made it the
+hardest control to find rather than the easiest. It keeps its word for the same
+reason the Menu button does — 🚪 alone is a door, not an instruction.
+- Both are toggled together by `Auth._setLogoutVisible()` and by `showScreen()`.
+  Which of the two is on SCREEN is a CSS decision; those only decide whether
+  logging out makes sense at all.
+- `_MENU_EXCLUDED` keeps the twin out of the sheet, or there would be two
+  identical "Log out" rows in it.
+
+### Re-running supabase-credits-shop.sql BACKFILLS settings
+`on conflict (key) do nothing` was wrong the moment this file had a second
+version: a database that ran an earlier copy already has a `shop_settings` row,
+so `do nothing` skipped it and every key added since stayed missing. It is
+`excluded.value || mm_data.value` now — jsonb concat with the RIGHT side
+winning, so configured values are kept exactly and only unseen keys are added.
+Verified: a row customised to 40 credits / 300 / 45 days / a 999 chapter
+override kept all four and gained the six new keys.
+
+⚠ One consequence of the client's null contract, worth not undoing:
+`Store.getMyEntitlements()` and `getFamilyEntitlements()` return **null** on
+failure, never `[]`. An empty array is a real answer — "this family owns
+nothing" — and the caller acts on it by clearing what it has. Conflating a
+dropped request with that answer made a flaky network silently re-lock chapters
+in the UI.
+
+### Everything about the economy is admin-configurable
+Admin → Content → 🛒 Credit Shop. All of it lives in `mm_data.shop_settings`
+(admin-only under RLS) and every value is re-read **server-side on each award or
+purchase**, so changing one takes effect on the next referral or the next Buy
+with no deploy.
+
+| Setting | Default | What it does |
+|---|---|---|
+| Shop open | on | Closed ⇒ `purchase_chapter()` returns `shop_closed` |
+| Earning on | on | Off ⇒ referrals still register but pay nothing; balances and chapters already bought are untouched |
+| Credits per referral | 15 | Paid on activation |
+| Default chapter price | 250 | Overridable per chapter |
+| Default subject price | 1500 | A whole pack in one purchase; overridable per subject |
+| Unlock lasts (days) | 30 | Re-buying **extends** from the current expiry |
+| Min account age (mins) | 0 | The referred account must be this old before activation pays. ⚠ The referral stays **pending**, so it still pays after the wait |
+| Max paid referrals / person | 0 = none | Above it the referral is marked activated with 0 credits — leaving it pending would re-run the check on every question for ever |
+| Flag burst above (per hour) | 8 | Writes a security-log row only |
+
+A live line under the fields does the arithmetic an admin actually cares about:
+*"At 15 credits per referral and 250 per chapter, a parent needs **17**
+successful referrals to unlock one chapter for 30 days."* It reads the FIELDS,
+not the saved row, so the consequence is visible before pressing Save — 15
+against 250 is easy to set by accident.
+
+Per-account, in the member list: balance, a +/- adjustment with a reason
+(`admin_adjust_credits()`, which writes the ledger — there is deliberately no
+path that moves credits without leaving a row), a 30-entry ledger view, and
+block/unblock.
+
+⚠ The defaults exist in **three** places and all three have to agree:
+`SHOP_DEFAULTS` in `engine/admin.js`, `DEFAULTS` in `engine/shop.js`, and the
+`coalesce(...)` fallback inside each SQL function plus the defaults row at the
+bottom of `supabase-credits-shop.sql`. They are separate because the value has
+to be readable before the settings row loads, when the row is missing entirely,
+and inside the database with no client involved. The anti-farming knobs are
+deliberately **absent** from `engine/shop.js` — the database applies them and a
+browser has nothing to do with them, so a copy there would only be a copy to
+drift.
+
+Verified against a real Postgres, one scenario per knob: earning off pays 0 and
+the referral stays pending; turning it on pays the same child; 15→40 takes
+effect on the next referral; `min_account_age_minutes=60` refuses a
+minutes-old account as `account_too_new` and **still pays once the requirement
+is dropped**; `max_credited_referrals=3` pays 0 on the fourth and logs
+`referral_cap_reached`; a hand adjustment writes `admin:<reason>` to the ledger.
+
+### Suspicious activity
+`security_events` is written **by the database and the questions function**,
+about what they were actually asked to do — blocked privileged writes,
+off-catalogue purchases, runs of insufficient-funds attempts, referral
+activation bursts. Admin → Content → 🛡️ Security log shows them with Block 1h /
+24h / Unblock (`admin_block_user()`), and a block makes `questions.js` return
+**403** rather than an empty subject.
+
+⚠ Entries prefixed `client:` come from `flag_security_event()` and are **hints,
+not evidence** — a real attacker simply does not call it. The one client
+detector that exists compares the cached entitlement list against the server's
+and reports ids the server does not know about; it catches the casual
+localStorage edit and nothing more. Never build enforcement on a `client:`
+event.
+
+A referral burst is **flagged, never auto-blocked**: a genuinely popular
+referrer looks exactly like a farm for the first few hours, and locking one out
+is worse than reviewing them.
 ## Cross-browser notes (audited 2026-08-26)
 Audited statically against support matrices — **no browser was actually run**,
 so this is "no known hazards in the source", not "tested on device".

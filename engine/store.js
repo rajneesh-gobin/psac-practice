@@ -553,6 +553,111 @@ const Store = (() => {
     return data || [];
   }
 
+  // ── Credits & shop ─────────────────────────────
+  // Every one of these degrades quietly on a database that has not run
+  // supabase-credits-shop.sql yet: PGRST202 is "that function does not exist",
+  // which for this feature means "no credits, no shop" — exactly the state
+  // every family is in before it is deployed. Nothing here may throw into a
+  // login path or a practice answer.
+  function _rpcMissing(error) {
+    return error && (error.code === 'PGRST202' || error.code === '42883');
+  }
+
+  async function getShopSettings() {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('shop_settings');
+    if (error) {
+      if (!_rpcMissing(error)) console.warn('[Store.getShopSettings]', error.message);
+      return null;
+    }
+    return data || null;
+  }
+
+  async function getMyCredits() {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('my_credits');
+    if (error) {
+      if (!_rpcMissing(error)) console.warn('[Store.getMyCredits]', error.message);
+      return null;
+    }
+    return data || null;
+  }
+
+  // ⚠ Returns NULL on failure, never []. An empty array is a real answer —
+  // "this family owns nothing" — and the caller acts on it by clearing what it
+  // has. Conflating a dropped request with that answer made a flaky network, or
+  // a database without these RPCs, silently wipe the local list of unlocked
+  // chapters and re-lock them in the UI. (It could never unlock anything it
+  // should not: the server decides what is actually served.)
+  async function getMyEntitlements() {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('my_entitlements');
+    if (error) {
+      if (!_rpcMissing(error)) console.warn('[Store.getMyEntitlements]', error.message);
+      return null;
+    }
+    return data || [];
+  }
+
+  // The child's view of the same list. They are not the account holder, so this
+  // is a SECURITY DEFINER RPC keyed off their session token that returns chapter
+  // ids and expiry dates only — nothing about credits or money.
+  // Same null-on-failure contract as getMyEntitlements above.
+  async function getFamilyEntitlements() {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('family_entitlements');
+    if (error) {
+      if (!_rpcMissing(error)) console.warn('[Store.getFamilyEntitlements]', error.message);
+      return null;
+    }
+    return data || [];
+  }
+
+  // ⚠ Sends the chapter id and nothing else. The price, the balance check and
+  // the length of the unlock are all read server-side inside purchase_chapter();
+  // there is deliberately no amount parameter for a browser to tamper with.
+  async function purchaseChapter(chapterId) {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('purchase_chapter', { p_chapter_id: chapterId });
+    if (error) {
+      console.warn('[Store.purchaseChapter]', error.message);
+      return { ok: false, error: _rpcMissing(error) ? 'not_deployed' : error.message };
+    }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  // Same contract as purchaseChapter: the subject id and nothing else. The
+  // price, the balance check and which chapters the subject contains are all
+  // resolved server-side from the admin-published catalogue.
+  async function purchaseSubject(subjectId) {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('purchase_subject', { p_subject_id: subjectId });
+    if (error) {
+      console.warn('[Store.purchaseSubject]', error.message);
+      return { ok: false, error: _rpcMissing(error) ? 'not_deployed' : error.message };
+    }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  // Called by a STUDENT session after a practice answer. Takes no arguments:
+  // the RPC resolves who is calling from the x-student-token header, so a
+  // browser cannot claim activity for an account it does not hold.
+  async function recordStudentActivity() {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('record_student_activity');
+    if (error) {
+      if (!_rpcMissing(error)) console.warn('[Store.recordStudentActivity]', error.message);
+      return null;
+    }
+    return data || null;
+  }
+
+  // A hint for the security log, not evidence. See flag_security_event().
+  async function flagSecurityEvent(kind, detail) {
+    if (!_sb) return;
+    try { await _sb.rpc('flag_security_event', { p_kind: kind, p_detail: detail || {} }); } catch (_) {}
+  }
+
   // ── Parent preferences (profiles.preferences jsonb) ──
   // Isolated from getProfile() for exactly the reason spelled out there: a
   // database that has not run supabase-migration.sql yet must degrade to
@@ -858,6 +963,9 @@ const Store = (() => {
     deleteMyAccount, restoreMyAccount, getAccountDeletedAt,
     // Referrals
     recordReferral, getMyReferrals, getMyReferralCode,
+    // credits + shop
+    getShopSettings, getMyCredits, getMyEntitlements, getFamilyEntitlements,
+    purchaseChapter, purchaseSubject, recordStudentActivity, flagSecurityEvent,
     createStudentInvite, redeemStudentInvite,
     // mm_data (teacher + global settings)
     getGlobalSettings, mmGet, mmSet,

@@ -60,7 +60,17 @@ function _playSound(type) {
   } catch (_) {}
 }
 
+// ⚠ UI only, and it always has been — the enforcement that counts is in
+// netlify/functions/questions.js. Two things now override the plan list:
+//
+//   · A chapter bought with referral credits is open regardless of tier.
+//   · An EXPIRED account gets ONLY its credit-bought chapters, whatever the
+//     plan says and whether or not plan enforcement is switched on. That is the
+//     point of the 30-day window: it outlives the account it was bought on.
 function _planAllowsChapter(chapterId) {
+  const bought = (typeof Shop !== 'undefined') && Shop.isUnlocked(chapterId);
+  if (typeof Auth !== 'undefined' && Auth.isAccessExpired && Auth.isAccessExpired()) return bought;
+  if (bought) return true;
   if (!window.PLAN_ENFORCEMENT) return true;
   const allowed = (typeof Auth !== 'undefined' ? Auth.getPlanFeatures?.() : null)?.allowed_chapters;
   if (!allowed) return true; // null = unlimited plan
@@ -183,7 +193,7 @@ function _applyPlanGates(screenId) {
 
   if (screenId === 'dashboard') {
     const locked = !_planAllowsFeature('advanced_analytics');
-    mark(document.querySelector('[data-nav="progress"]'), locked, 'Paid plan feature');
+    mark(document.querySelector('.tabbar-btn[data-nav="progress"]'), locked, 'Paid plan feature');
     mark(document.getElementById('dash-analytics-tile'), locked, 'Paid plan feature');
   }
 
@@ -244,6 +254,16 @@ function toggleSound() {
     btn.textContent = _soundEnabled ? '🔔 Sound On' : '🔕 Sound Off';
   }
   btn.classList.toggle('muted', !_soundEnabled);
+}
+
+// The streak is shown twice in the header: with the branding on a phone, in the
+// action row from `sm:` up. One writer for both, so they can never disagree —
+// the alternative was three call sites each remembering two element ids.
+function _setStreakDisplay(n) {
+  ['streak-count', 'streak-count-m'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(n);
+  });
 }
 
 function _floatXP(amount) {
@@ -847,7 +867,7 @@ function _positionHint() {
 }
 
 function _showHint(targetId, text, key, opts) {
-  if (_hintDone(key)) return;
+  if (!opts?.ephemeral && _hintDone(key)) return;
   const screen = opts?.screen;
   if (screen && S.currentScreen !== screen) return;
   const target = document.getElementById(targetId);
@@ -856,7 +876,7 @@ function _showHint(targetId, text, key, opts) {
   const textEl  = document.getElementById('hint-callout-text');
   if (!callout || !textEl) return;
 
-  _currentHintTarget = { key, targetId, screen };
+  _currentHintTarget = { key, targetId, screen, ephemeral: !!opts?.ephemeral };
   textEl.textContent = text;
 
   target.classList.add('hint-pulse');
@@ -888,9 +908,106 @@ function _hideHint() {
 }
 
 function _dismissHint() {
-  if (_currentHintTarget) _markHintDone(_currentHintTarget.key);
+  // An ephemeral hint (the idle nudge) is a reminder, not a tutorial step, and
+  // its key is unique per firing. Persisting those would write a new
+  // never-read entry into localStorage every single time one appeared.
+  if (_currentHintTarget && !_currentHintTarget.ephemeral) _markHintDone(_currentHintTarget.key);
   _hideHint();
 }
+
+// ══════════ IDLE NUDGE ══════════
+// The one-off "Tap here to start practising" callout is only ever shown once, to
+// a brand-new student, on the dashboard. But someone who has stalled on a screen
+// is not necessarily new — they are just unsure which of six things to press,
+// and there was nothing in the app that noticed. This watches for a stall on any
+// screen with an obvious next action and gives that control a small shake plus a
+// one-line prompt.
+//
+// Deliberate constraints, all of them there so it stays helpful and not naggy:
+//   · Never during an exam or a practice question — a timed paper does not need
+//     something twitching in the corner of a child's eye.
+//   · Never while a modal is open; the thing to do is already on screen.
+//   · Never when the parent has turned tips off, and never in a parent session.
+//   · Twice per screen per page load, then that screen goes quiet for good.
+//   · Calm Mode (My Settings) and the OS reduced-motion setting drop the shake
+//     and keep the words — the help is the sentence, the motion is decoration.
+const _IDLE_NUDGES = {
+  dashboard:        { target: 'btn-chapter-mode',        text: 'Ready when you are — tap here to practise a chapter. 📚' },
+  'subject-select': { target: 'subject-cards',           text: 'Pick a subject to get started. Tap any card! 👆' },
+  'grade-select':   { target: 'grade-cards',             text: 'Choose your grade to see your subjects. 🎯' },
+  'student-select': { target: 'student-cards',           text: 'Tap your name to sign in. 👋' },
+  'chapter-select': { target: 'chapter-grid',            text: 'Tap a chapter to start — any one of them is fine. ✨' },
+  'exam-config':    { target: 'start-exam-btn',          text: 'All set? Tap here to begin your mock exam. 📝' },
+  results:          { target: 'results-review',          text: 'Scroll down to see which ones you got wrong — that is the useful bit. 🔍' },
+  syllabus:         { target: 'syllabus-list',           text: 'Tap a chapter to see what it covers, then practise it. 📖' },
+  parent:           { target: 'pd-no-children-add-btn',  text: 'Add your child here to start tracking their revision. 👶' },
+};
+
+const _IDLE_AFTER_MS   = 15000;
+const _IDLE_MAX_PER_SCREEN = 2;
+let _idleTimer  = null;
+let _idleCounts = {};
+
+function _idleNudgeAllowed() {
+  if (typeof _isParentSession === 'function' && _isParentSession() && S.currentScreen !== 'parent') return false;
+  if (DB?.restrictions?.hintsDisabled) return false;
+  // Any open modal already tells the user what to do.
+  //
+  // ⚠ `.fixed` is load-bearing, not decoration. A bare [id^="modal-"] also
+  // matches #modal-confirm-msg, which is a text div INSIDE #modal-confirm and
+  // is never given .hidden — so the plain selector matched on every single
+  // page and the nudge could never fire at all. Only the full-screen overlays
+  // carry `fixed inset-0`.
+  return !document.querySelector('div[id^="modal-"].fixed:not(.hidden)');
+}
+
+// The nudge points at something; if that something is off screen, _showHint
+// would scroll the page to it, yanking the view out from under someone who may
+// simply be reading. Better to stay quiet than to grab the page.
+function _inViewport(el) {
+  const r = el.getBoundingClientRect();
+  return r.bottom > 0 && r.top < (window.innerHeight || 0);
+}
+
+function _clearIdleNudge() {
+  clearTimeout(_idleTimer);
+  _idleTimer = null;
+  document.querySelectorAll('.attn-nudge').forEach(el => el.classList.remove('attn-nudge'));
+}
+
+function _armIdleNudge(screenId) {
+  _clearIdleNudge();
+  const cfg = _IDLE_NUDGES[screenId];
+  if (!cfg) return;
+  if ((_idleCounts[screenId] || 0) >= _IDLE_MAX_PER_SCREEN) return;
+
+  _idleTimer = setTimeout(() => {
+    if (S.currentScreen !== screenId || !_idleNudgeAllowed()) return;
+    const el = document.getElementById(cfg.target);
+    if (!_hintTargetVisible(el) || !_inViewport(el)) return;
+
+    _idleCounts[screenId] = (_idleCounts[screenId] || 0) + 1;
+    el.classList.add('attn-nudge');
+    // The class is removed on the next interaction (see the listeners below) or
+    // when the animation's own run finishes, whichever comes first.
+    setTimeout(() => el.classList.remove('attn-nudge'), 2600);
+
+    // Reuses the existing callout, but with a per-page-load key so it is a
+    // reminder rather than a one-time tutorial: _showHint refuses any key
+    // already in the persisted seen-list.
+    _showHint(cfg.target, cfg.text, `idle_${screenId}`, { screen: screenId, ephemeral: true });
+  }, _IDLE_AFTER_MS);
+}
+
+// Pointer/key/scroll all count as "they know what they are doing". Passive and
+// on the capture phase so nothing can swallow them before we see them.
+['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(evt => {
+  window.addEventListener(evt, () => {
+    if (!_idleTimer && !document.querySelector('.attn-nudge')) return;
+    _clearIdleNudge();
+    _armIdleNudge(S.currentScreen);
+  }, { passive: true, capture: true });
+});
 
 function _checkKidHints() {
   // renderDashboard() also runs for a parent previewing a child
@@ -1206,12 +1323,32 @@ function _ttsLang() {
   return (p && p.subject === 'French') ? 'fr-FR' : 'en-GB';
 }
 
+// A stacked fraction is a column flexbox, so innerText reads "1" then "5" and
+// the read-aloud button said "one five". Every .frac carries the spoken form in
+// data-tts (written by _prettyMath); swap it in on a CLONE so the question the
+// child is looking at is not touched.
+function _ttsText(el) {
+  if (!el) return '';
+  let src = el;
+  try {
+    if (el.querySelector('.frac[data-tts]')) {
+      src = el.cloneNode(true);
+      src.querySelectorAll('.frac[data-tts]').forEach(f => {
+        f.replaceWith(document.createTextNode(' ' + f.dataset.tts + ' '));
+      });
+      // innerText needs a laid-out node; a detached clone only has textContent.
+      return (src.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+  } catch (_) {}
+  return (src.innerText || src.textContent || '').trim();
+}
+
 function speakQuestion(mode) {
   if (!window.speechSynthesis) { toast('Text-to-speech not supported on this browser.', 2500); return; }
   const elId = mode === 'exam' ? 'exam-q-text' : 'practice-q-text';
   const el   = document.getElementById(elId);
   if (!el) return;
-  const text = (el.innerText || el.textContent || '').trim();
+  const text = _ttsText(el);
   if (!text) return;
   if (_ttsSpeaking) { speechSynthesis.cancel(); _ttsSpeaking = false; return; }
   const lang  = _ttsLang();
@@ -1342,7 +1479,12 @@ function _confirmModal(msg, onConfirm, { icon = '⚠️', okLabel = 'Confirm', d
   // Reset every time: a plan-cap modal renames this to "OK", and without a
   // reset the next genuine destructive confirm would offer "OK" / "Delete".
   const cancelBtn = document.getElementById('modal-confirm-cancel');
-  if (cancelBtn) cancelBtn.textContent = cancelLabel;
+  if (cancelBtn) {
+    cancelBtn.textContent = cancelLabel;
+    // An empty label means "this is a notice, not a choice" — otherwise the
+    // dialog shows a blank second button next to the only real one.
+    cancelBtn.classList.toggle('hidden', !cancelLabel);
+  }
   _confirmCallback = onConfirm;
   m.classList.remove('hidden');
 }
@@ -1369,7 +1511,7 @@ function _updateBottomNav(screenId) {
   nav.classList.toggle('hidden', !show);
   document.body.classList.toggle('has-bottom-nav', show);
   const active = _NAV_MAP[screenId];
-  nav.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('nav-active', btn.dataset.nav === active));
+  nav.querySelectorAll('.tabbar-btn').forEach(btn => btn.classList.toggle('nav-active', btn.dataset.nav === active));
 }
 
 function _launchConfetti() {
@@ -1460,6 +1602,11 @@ function showScreen(id) {
   const _hc = document.getElementById('hint-callout');
   if (_hc && !_hc.classList.contains('hint-hidden')) _dismissHint();
 
+  // A menu row that navigates leaves the sheet sitting over the new screen
+  // otherwise. Belt and braces — the row handler closes it too, but Logout and
+  // the parent-mode switch also route through here from other places.
+  if (typeof closeHeaderMenu === 'function') closeHeaderMenu();
+
   const prevIdx = _SCREEN_ORDER.indexOf(_prevScreen);
   const nextIdx = _SCREEN_ORDER.indexOf(id);
   const isForward = nextIdx > prevIdx;
@@ -1486,11 +1633,19 @@ function showScreen(id) {
   if (hdr) hdr.classList.toggle('hidden', hideHeader);
 
   // Show logout button + profile chip in header on all screens except auth/landing
-  const logoutBtn = document.getElementById('header-logout-btn');
-  if (logoutBtn) {
+  // Two logout buttons, one rule. #header-logout-btn is the labelled pill shown
+  // from 1100px up; #header-logout-mobile is its always-visible twin below that
+  // (see the comment on it in index.html). Whether EITHER is on screen is
+  // decided by width in CSS — this only decides whether logging out makes sense
+  // at all, which is a property of the screen, not the viewport.
+  {
     const isAuthScreen = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
-    logoutBtn.classList.toggle('hidden', isAuthScreen);
-    logoutBtn.classList.toggle('flex',  !isAuthScreen);
+    ['header-logout-btn', 'header-logout-mobile'].forEach(bid => {
+      const b = document.getElementById(bid);
+      if (!b) return;
+      b.classList.toggle('hidden', isAuthScreen);
+      b.classList.toggle('flex',  !isAuthScreen);
+    });
   }
   const profileBtn = document.getElementById('header-profile-btn');
   if (profileBtn) {
@@ -1517,6 +1672,7 @@ function showScreen(id) {
   if (id === 'syllabus')        renderSyllabus();
   if (id === 'past-papers')     renderPastPapers();
   if (id === 'parent')          renderParentDashboard();
+  if (id === 'shop')            renderShop();
   if (id === 'subject-select')  renderSubjectSelect();
   if (id === 'student-select')  renderStudentSelect();
   if (id === 'grade-select')    renderGradeSelect();
@@ -1530,6 +1686,11 @@ function showScreen(id) {
     const hasStudent = typeof SELECTED_GRADE !== 'undefined' && !!SELECTED_GRADE;
     searchBtn.classList.toggle('hidden', isAuth || !hasStudent);
   }
+
+  _renderCreditChip();
+
+  // Last, so the render calls above have put the target on the page already.
+  _armIdleNudge(id);
 }
 
 function _updateBreadcrumb(screenId) {
@@ -1589,7 +1750,7 @@ function updateStreak() {
   DB.stats.lastDate = today;
   if (DB.stats.streak > DB.stats.maxStreak) DB.stats.maxStreak = DB.stats.streak;
   save(DB);
-  document.getElementById('streak-count').textContent = DB.stats.streak;
+  _setStreakDisplay(DB.stats.streak);
 }
 
 // ── CHAPTER PROGRESS ──────────────────────────
@@ -1651,8 +1812,20 @@ function _sameNumber(a, b) {
 // ⚠ No lookbehind. A (?<!…) is a PARSE error on Safari before 16.4 — it would
 // take the whole of app.js down, not just this function. The leading boundary
 // is captured and re-emitted instead.
-const _FRAC_RE = /(^|[^\w\/.])(\d{1,3}|□)\s*\/\s*(\d{1,3}|□)(?![\w\/.])/g;
+// ⚠ The trailing guard used to be a flat `(?![\w\/.])`, which excluded a
+// following full stop — so "Shade 2/5." and "The answer is 3/4." (a sentence
+// ending in a fraction, which is most of the explanations and a good share of
+// the questions) were left as raw "2/5" while the same fraction mid-sentence was
+// stacked. Two identical fractions rendering differently on one screen is worse
+// than neither being stacked. A `.` is only disqualifying when a DIGIT follows
+// it, i.e. the "/5.5" of a decimal — that is what `\.\d` tests.
+const _FRAC_RE = /(^|[^\w\/.])(\d{1,3}|□)\s*\/\s*(\d{1,3}|□)(?=$|[^\w\/]|\.(?!\d))/g;
 const _BOX_NUMERALS = ['①', '②', '③', '④'];
+
+// A whole number immediately before a fraction is a MIXED number in a PSAC
+// paper ("2 1/2 hours"), and a book prints the two tight against each other, not
+// with a word space between them. Marked up so .frac-mixed can close that gap.
+const _MIXED_RE = /(^|[^\w.])(\d{1,3}) (<span class="frac")/g;
 
 function _prettyMath(html) {
   if (typeof html !== 'string') return html;
@@ -1661,9 +1834,22 @@ function _prettyMath(html) {
   if (html.indexOf('<svg') >= 0) return html;
 
   // Only text between tags — never an attribute value.
+  // aria-label carries the spoken form: the stacked markup is a column flexbox,
+  // so innerText reads it as "1 5" and every screen reader and the app's own
+  // read-aloud button would say "one five" instead of "one fifth". See _ttsText.
+  // ⚠ A □ inside the spoken label has to become a word BEFORE the blank pass
+  // below runs, or that pass would rewrite it into markup inside an attribute
+  // value and break the tag. "2/□" is a real, common question shape.
+  const say = v => v === '□' ? 'blank' : v;
   let out = html.replace(/(<[^>]+>)|([^<]+)/g, (m, tag, text) =>
-    tag ? tag : text.replace(_FRAC_RE, (_m, pre, n, d) =>
-      `${pre}<span class="frac"><span class="fr-n">${n}</span><span class="fr-d">${d}</span></span>`));
+    tag ? tag : text.replace(_FRAC_RE, (_m, pre, n, d) => {
+      const spoken = `${say(n)} over ${say(d)}`;
+      return `${pre}<span class="frac" role="img" aria-label="${spoken}" data-tts="${spoken}">` +
+             `<span class="fr-n">${n}</span><span class="fr-d">${d}</span></span>`;
+    }));
+
+  out = out.replace(_MIXED_RE, (_m, pre, whole, span) =>
+    `${pre}<span class="frac-mixed">${whole}</span>${span}`);
 
   // Number the blanks only when there is more than one to tell apart.
   const boxes = (out.match(/□/g) || []).length;
@@ -2056,8 +2242,89 @@ function _renderLeaderboard() {
 }
 
 // ── PARENT DASHBOARD ──────────────────────────
+// Paints the credit balance onto the Shop button, and refreshes it from the
+// server in the background. Called from the parent dashboard render, so a
+// parent sees a number without opening anything.
+function _renderShopChip() {
+  if (typeof Shop === 'undefined') return;
+  const paint = () => {
+    const n = Shop.balance();
+    const chip = document.getElementById('pd-credit-chip');
+    if (chip) {
+      chip.textContent = n > 999 ? '999+' : String(n);
+      chip.classList.toggle('hidden', n <= 0);
+    }
+    _renderCreditChip();
+  };
+  paint();
+  Shop.refresh().then(paint).catch(() => {});
+}
+
+// The header credit balance.
+//
+// Parent sessions only, and deliberately so: a child has no balance of their
+// own — the credits belong to the account holder — and putting a number they
+// cannot spend in front of them only invites "can I have 250 credits". A parent
+// previewing a child (pdSwitchStudent) is still a parent session, so they keep
+// seeing theirs.
+//
+// Hidden at zero as well. "🪙 0" is not information, it is clutter, and the
+// Shop button on the parent dashboard is the discovery path for someone who has
+// never earned any.
+function _renderCreditChip() {
+  const chip = document.getElementById('hdr-credits');
+  const isParent = typeof _isParentSession === 'function' && _isParentSession();
+
+  // ⚠ Also fixes something that predates credits: the streak and XP chips read
+  // DB, and in a parent session DB holds whichever CHILD is loaded. A parent has
+  // been looking at "🔥 12 day streak" that was never theirs. One reading of the
+  // header per session type — a child sees their streak, a parent sees their
+  // credits — and as a bonus the two no longer compete for the same row, which
+  // is what pushed the desktop header onto a second line.
+  document.body.classList.toggle('is-parent-session', isParent);
+
+  if (!chip) return;
+  const n = (typeof Shop !== 'undefined') ? Shop.balance() : 0;
+  const show = isParent && n > 0;
+  chip.classList.toggle('hidden', !show);
+  if (show) {
+    const el = document.getElementById('hdr-credits-count');
+    if (el) el.textContent = n > 9999 ? '9999+' : String(n);
+  }
+}
+window._renderCreditChip = _renderCreditChip;
+
+// Shown to an account whose access has lapsed. Deliberately not an error: they
+// can still reach anything they bought with credits, and saying so is the whole
+// reason expiry stopped being a locked door.
+function _renderExpiredBanner(slotId) {
+  const slot = document.getElementById(slotId);
+  if (!slot) return;
+  const expired = typeof Auth !== 'undefined' && Auth.isAccessExpired && Auth.isAccessExpired();
+  if (!expired) { slot.innerHTML = ''; return; }
+  const live = (typeof Shop !== 'undefined') ? Shop.owned().length : 0;
+  slot.innerHTML = `
+    <div class="rounded-2xl border border-amber-300 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-900/20 p-4 mb-4 flex items-start gap-3">
+      <span class="text-2xl select-none shrink-0">⏳</span>
+      <div class="flex-1 min-w-0">
+        <div class="font-bold text-amber-800 dark:text-amber-200 text-sm">Your access has expired</div>
+        <p class="text-xs text-amber-700 dark:text-amber-300 mt-0.5 leading-relaxed">
+          ${live
+            ? `You can still use the ${live} chapter${live === 1 ? '' : 's'} you unlocked with credits until ${live === 1 ? 'it runs' : 'they run'} out. Everything else is paused.`
+            : 'Chapters are paused. You can unlock individual ones with referral credits, or renew your plan.'}
+        </p>
+        <div class="flex gap-2 mt-2">
+          <button onclick="showScreen('shop')" class="text-xs font-bold bg-amber-500 hover:bg-amber-400 text-white px-3 py-1.5 rounded-lg transition-colors">🛒 Shop</button>
+          <button onclick="Auth.openInviteModal()" class="text-xs font-bold text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-700 px-3 py-1.5 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors">🎁 Earn credits</button>
+        </div>
+      </div>
+    </div>`;
+}
+
 async function renderParentDashboard() {
   const _el = id => document.getElementById(id);
+  _renderShopChip();
+  _renderExpiredBanner('pd-expired-slot');
 
   const students    = Auth.getStudents() || [];
   const hasStudents = students.length > 0;
@@ -2335,6 +2602,392 @@ async function hydrateLandingPrices() {
     }
   }
 }
+
+// ══════════════════════════════════════════════
+//  HEADER MENU (mobile / tablet)
+//
+//  Below 1100px the header's eight controls are hidden and replaced by one
+//  "☰ Menu" button. This builds the sheet.
+//
+//  ⚠ The rows are read OFF the real buttons rather than listed here. Which
+//  controls exist at any moment is decided in half a dozen places — auth.js
+//  reveals Teacher only for an approved teacher, the beforeinstallprompt
+//  handler reveals Install, showScreen() shows Account and Logout everywhere
+//  except the auth screens, and Search only once a grade is active. A second
+//  hard-coded list would drift out of step with all of that and start offering
+//  a button the header had deliberately hidden.
+// ══════════════════════════════════════════════
+
+// ⚠ #header-logout-mobile is excluded as well as the menu button itself: it is
+// a TWIN of #header-logout-btn, which is already in this list, and including
+// both would put two identical "Log out" rows in the sheet.
+const _MENU_EXCLUDED = new Set(['hdr-menu-btn', 'header-logout-mobile']);
+
+function _headerMenuButtons() {
+  return [...document.querySelectorAll('#hdr-actions .hdr-btn')]
+    .filter(b => !_MENU_EXCLUDED.has(b.id) && !b.classList.contains('hidden'));
+}
+
+function _buildHeaderMenu() {
+  const list = document.getElementById('hdr-menu-list');
+  if (!list) return;
+
+  const rows = _headerMenuButtons().map((btn, i) => {
+    const icon  = btn.querySelector('.hdr-ico')?.textContent?.trim() || '•';
+    // data-menu-label wins where the button's own word is dynamic: the account
+    // chip shows the person's NAME, which is right in a header and useless as a
+    // menu row ("Priya" does not say what tapping it does).
+    const label = btn.dataset.menuLabel || btn.querySelector('.hdr-word')?.textContent?.trim() || 'Open';
+    let   desc  = btn.dataset.menuDesc || '';
+    if (btn.id === 'theme-toggle') {
+      desc = document.documentElement.classList.contains('dark')
+        ? 'Currently dark — tap for light' : 'Currently light — tap for dark';
+    }
+    const danger = btn.id === 'header-logout-btn';
+    return `<button type="button" class="hdr-menu-item${danger ? ' is-danger' : ''}" data-menu-idx="${i}">
+      <span class="mi-ico" aria-hidden="true">${_profEsc(icon)}</span>
+      <span class="flex-1 min-w-0">
+        <span class="mi-label block truncate">${_profEsc(label)}</span>
+        ${desc ? `<span class="mi-desc block">${_profEsc(desc)}</span>` : ''}
+      </span>
+    </button>`;
+  });
+
+  list.innerHTML = rows.length
+    ? rows.join('')
+    : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">Nothing here yet.</p>';
+
+  // Bound by index against the same live list the rows were built from, so a
+  // row can never fire the wrong button. Re-read on click rather than captured,
+  // because opening the sheet does not freeze the header.
+  list.querySelectorAll('.hdr-menu-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const target = _headerMenuButtons()[Number(el.dataset.menuIdx)];
+      closeHeaderMenu();
+      // After the sheet is gone: several of these open another modal or change
+      // screen, and doing that under an overlay that is still up looks broken.
+      if (target) setTimeout(() => target.click(), 0);
+    });
+  });
+}
+
+function _headerMenuIdentity() {
+  const av   = document.getElementById('hdr-menu-avatar');
+  const name = document.getElementById('hdr-menu-name');
+  const sub  = document.getElementById('hdr-menu-sub');
+  const parent  = (typeof Auth !== 'undefined' && Auth.getParentProfile) ? Auth.getParentProfile() : null;
+  const student = (typeof Auth !== 'undefined' && Auth.getActiveAccount) ? Auth.getActiveAccount() : null;
+
+  if (parent) {
+    if (av)   av.textContent = '👤';
+    if (name) name.textContent = parent.full_name || 'My account';
+    if (sub)  sub.textContent  = 'Parent account';
+  } else if (student) {
+    if (av)   av.textContent = student.avatar || '🎒';
+    if (name) name.textContent = student.name || 'My account';
+    if (sub)  sub.textContent  = student.grade ? `Grade ${student.grade}` : '';
+  } else {
+    if (av)   av.textContent = '☰';
+    if (name) name.textContent = 'Menu';
+    if (sub)  sub.textContent  = '';
+  }
+}
+
+function openHeaderMenu() {
+  const m = document.getElementById('modal-hdr-menu');
+  if (!m) return;
+  _headerMenuIdentity();
+  _buildHeaderMenu();
+  m.classList.remove('hidden');
+  document.getElementById('hdr-menu-btn')?.setAttribute('aria-expanded', 'true');
+  document.addEventListener('keydown', _headerMenuEsc);
+}
+window.openHeaderMenu = openHeaderMenu;
+
+window.closeHeaderMenu = function () {
+  document.getElementById('modal-hdr-menu')?.classList.add('hidden');
+  document.getElementById('hdr-menu-btn')?.setAttribute('aria-expanded', 'false');
+  document.removeEventListener('keydown', _headerMenuEsc);
+};
+
+function _headerMenuEsc(e) { if (e.key === 'Escape') closeHeaderMenu(); }
+
+// ══════════════════════════════════════════════
+//  CREDIT SHOP (UI)
+//
+//  ⚠ Nothing here is a security boundary. The Buy button is a request, not a
+//  decision: purchase_chapter() re-reads the price and the balance in the
+//  database, and netlify/functions/questions.js decides what a child can
+//  actually download. Editing a price, a balance or a disabled attribute in
+//  devtools changes what this screen says and nothing else.
+// ══════════════════════════════════════════════
+
+// A child tapping a chapter they cannot open. Worth more than the old
+// "Upgrade your plan" toast: with credits there is now something a family can
+// actually DO about it, and the price is a concrete thing to go and ask for.
+//
+// Only a parent can buy — this is a kid screen (see _KID_ONLY_SCREENS), so the
+// job here is to tell the child what to ask for, not to offer a Buy button
+// they cannot use.
+function _showChapterLockedModal(chapterId) {
+  const ch    = CHAPTERS.find(c => c.id === chapterId);
+  const name  = ch ? ch.name : 'This chapter';
+  const price = (typeof Shop !== 'undefined') ? Shop.priceFor(chapterId) : null;
+  const days  = (typeof Shop !== 'undefined') ? Shop.entitlementDays() : 30;
+  const expired = typeof Auth !== 'undefined' && Auth.isAccessExpired && Auth.isAccessExpired();
+
+  const msg = expired
+    ? `${name} is paused because your access has expired.\n\nChapters your parent unlocked with credits still work until they run out.`
+    : `${name} is not unlocked yet.\n\nYour parent can open it for ${price} credits — that keeps it open for ${days} days. They earn credits by inviting other families.`;
+
+  _confirmModal(msg, () => {}, { icon: '🔒', okLabel: 'OK', cancelLabel: '' });
+}
+
+// ── The Shop page ──────────────────────────────
+// Two things are sold: a whole SUBJECT (every chapter in it) and a single
+// CHAPTER. Both grant the same thing underneath — a row in
+// chapter_entitlements with an expiry — so the server-side check in
+// questions.js needs no idea that subjects exist at all.
+let _shopTab = 'subjects';
+
+async function renderShop() {
+  // A child has no balance of their own and must never be shown prices to go
+  // and ask a parent about. The Shop is reached from the parent dashboard, but
+  // showScreen() is called from a dozen places and one of them will eventually
+  // be wrong.
+  if (typeof _isParentSession === 'function' && !_isParentSession()) {
+    toast('Only a parent can open the shop.', 2500);
+    showScreen(ACTIVE_STUDENT_ID ? 'dashboard' : 'landing');
+    return;
+  }
+  const body = document.getElementById('shop-body');
+  if (body) body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">Loading…</p>';
+  if (typeof Shop !== 'undefined') await Shop.refresh();
+  renderShopList();
+}
+
+window.shopTab = function (tab) {
+  _shopTab = tab === 'chapters' ? 'chapters' : 'subjects';
+  [['subjects', 'shop-tab-subjects'], ['chapters', 'shop-tab-chapters']].forEach(([k, id]) => {
+    const b = document.getElementById(id);
+    if (!b) return;
+    const on = _shopTab === k;
+    b.classList.toggle('bg-white',           on);
+    b.classList.toggle('dark:bg-gray-600',   on);
+    b.classList.toggle('shadow',             on);
+    b.classList.toggle('text-gray-800',      on);
+    b.classList.toggle('dark:text-white',    on);
+    b.classList.toggle('text-gray-500',     !on);
+    b.classList.toggle('dark:text-gray-400', !on);
+  });
+  const search = document.getElementById('shop-search');
+  if (search) search.placeholder = _shopTab === 'subjects' ? 'Search subjects…' : 'Search chapters…';
+  renderShopList();
+};
+
+function _shopBadge(text, tone) {
+  const tones = {
+    owned: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    price: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300',
+    poor:  'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400',
+  };
+  return `<span class="text-[11px] font-bold px-2 py-1 rounded-full whitespace-nowrap ${tones[tone] || tones.price}">${text}</span>`;
+}
+
+function renderShopList() {
+  const body = document.getElementById('shop-body');
+  if (!body || typeof Shop === 'undefined') return;
+
+  const bal  = Shop.balance();
+  const days = Shop.entitlementDays();
+  const set  = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = String(v); };
+  set('shop-balance', bal);
+  set('shop-days-note', days);
+
+  const earn = document.getElementById('shop-earn-note');
+  if (earn) {
+    earn.textContent = Shop.settings().referral_earning_enabled === false
+      ? 'Referral credits are paused at the moment.'
+      : `You earn ${Shop.creditsPerRef()} credits each time a family you invited gets their child answering questions.`;
+  }
+  const note = document.getElementById('shop-note');
+  if (note) {
+    note.textContent = `Buying something you already have adds another ${days} days to it — `
+      + 'you never lose time by unlocking early.';
+  }
+
+  if (Shop.settings().shop_enabled === false) {
+    body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">The shop is closed at the moment. Check back soon.</p>';
+    return;
+  }
+
+  const q = (document.getElementById('shop-search')?.value || '').trim().toLowerCase();
+  if (_shopTab === 'subjects') _renderShopSubjects(body, bal, days, q);
+  else                         _renderShopChapters(body, bal, days, q);
+}
+window.renderShopList = renderShopList;
+
+function _renderShopSubjects(body, bal, days, q) {
+  const all = Shop.sellableSubjects();
+  if (!all.length) {
+    body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">Subjects are still loading — come back in a moment.</p>';
+    return;
+  }
+  const list = q ? all.filter(s => s.name.toLowerCase().includes(q)) : all;
+  if (!list.length) {
+    body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No subject matches that search.</p>';
+    return;
+  }
+  body.innerHTML = list.map(sub => {
+    const afford = bal >= sub.price;
+    const full   = sub.chapters > 0 && sub.unlocked === sub.chapters;
+    return `<div class="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
+      <span class="text-2xl select-none shrink-0">${sub.icon}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-bold text-gray-800 dark:text-white truncate">${_profEsc(sub.name)}</div>
+        <div class="text-[11px] text-gray-500 dark:text-gray-400">
+          ${sub.chapters} chapter${sub.chapters === 1 ? '' : 's'}${sub.unlocked
+            ? ` · <span class="text-green-600 dark:text-green-400 font-semibold">${sub.unlocked} already unlocked</span>` : ''}
+        </div>
+      </div>
+      ${full ? _shopBadge('All active', 'owned') : _shopBadge(sub.price + ' 🪙', afford ? 'price' : 'poor')}
+      <button onclick="shopBuySubject('${_attr(sub.id)}', this)" ${afford ? '' : 'disabled'}
+        class="shrink-0 text-xs font-bold px-3 py-2 rounded-xl transition-colors ${afford
+          ? 'bg-indigo-500 hover:bg-indigo-400 text-white'
+          : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'}">
+        ${full ? '+' + days + 'd' : 'Unlock'}</button>
+    </div>`;
+  }).join('');
+}
+
+function _renderShopChapters(body, bal, days, q) {
+  const all = Shop.sellableChapters();
+  if (!all.length) {
+    body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">Chapters are still loading — come back in a moment.</p>';
+    return;
+  }
+  const list = q ? all.filter(c => (c.name + ' ' + c.subjectName).toLowerCase().includes(q)) : all;
+
+  // What a family already holds goes first, with its remaining days: "what have
+  // I got and when does it run out" is what a returning parent opens this for.
+  const ownedRows = list.filter(c => Shop.isUnlocked(c.id));
+  const buyRows   = list.filter(c => !Shop.isUnlocked(c.id));
+
+  const row = (c, isOwned) => {
+    const price  = Shop.priceFor(c.id);
+    const left   = Shop.daysLeft(c.id);
+    const afford = bal >= price;
+    return `<div class="flex items-center gap-3 py-2.5 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
+      <span class="text-xl select-none shrink-0">${c.icon}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_profEsc(c.name)}</div>
+        <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${_profEsc(c.subjectName)}</div>
+      </div>
+      ${isOwned ? _shopBadge(left + ' day' + (left === 1 ? '' : 's') + ' left', 'owned')
+                : _shopBadge(price + ' 🪙', afford ? 'price' : 'poor')}
+      <button onclick="shopBuy('${_attr(c.id)}', this)" ${afford ? '' : 'disabled'}
+        class="shrink-0 text-xs font-bold px-3 py-2 rounded-xl transition-colors ${afford
+          ? 'bg-indigo-500 hover:bg-indigo-400 text-white'
+          : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'}">
+        ${isOwned ? '+' + days + 'd' : 'Buy'}</button>
+    </div>`;
+  };
+
+  const section = (title, rows, isOwned) => rows.length
+    ? `<div class="mb-4 last:mb-0">
+         <h4 class="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1">${title}</h4>
+         ${rows.map(c => row(c, isOwned)).join('')}
+       </div>`
+    : '';
+
+  body.innerHTML =
+    section(`Active now (${ownedRows.length})`, ownedRows, true) +
+    section('Available', buyRows, false) +
+    (list.length ? '' : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No chapter matches that search.</p>');
+}
+
+// One reporter for both purchase kinds — the server returns the same shapes.
+function _shopPurchaseResult(res) {
+  if (res && res.ok) {
+    toast(`Unlocked! ${res.balance} credits left. 🎉`, 3000);
+    launchConfetti();
+    // ⚠ questions.js caches a family's entitlements for five minutes, so a
+    // child already signed in on another device will not see this open
+    // instantly. Saying so beats them thinking the purchase failed.
+    setTimeout(() => toast('It can take a few minutes to appear on your child’s device.', 5000), 3200);
+  } else if (res && res.error === 'insufficient_credits') {
+    toast(`Not enough credits — that one costs ${res.price}.`, 3500);
+  } else if (res && res.error === 'not_deployed') {
+    toast('The shop is not switched on yet. Ask the administrator.', 4000);
+  } else if (res && res.error === 'catalog_not_published') {
+    toast('Whole subjects are not on sale yet — the administrator needs to publish the catalogue.', 5000);
+  } else if (res && res.error === 'account_blocked') {
+    toast('Purchases are paused on this account. Please contact support.', 4000);
+  } else if (res && res.error === 'shop_closed') {
+    toast('The shop is closed at the moment.', 3500);
+  } else {
+    toast('Could not complete that purchase. Please try again.', 3500);
+  }
+  renderShopList();
+  _renderShopChip();
+}
+
+window.shopBuy = async function (chapterId, btn) {
+  if (typeof Shop === 'undefined') return;
+  const price = Shop.priceFor(chapterId);
+  const name  = (Shop.sellableChapters().find(c => c.id === chapterId) || {}).name || 'this chapter';
+  _confirmModal(
+    `Unlock ${name} for ${price} credits?\n\nIt stays open for ${Shop.entitlementDays()} days.`,
+    async () => {
+      if (btn) { btn.disabled = true; btn.textContent = '…'; }
+      _shopPurchaseResult(await Shop.buy(chapterId));
+    },
+    { icon: '🪙', okLabel: 'Unlock it', danger: false }
+  );
+};
+
+window.shopBuySubject = async function (subjectId, btn) {
+  if (typeof Shop === 'undefined') return;
+  const sub = Shop.sellableSubjects().find(s => s.id === subjectId);
+  if (!sub) return;
+  _confirmModal(
+    `Unlock all ${sub.chapters} chapters of ${sub.name} for ${sub.price} credits?\n\n`
+      + `Every chapter stays open for ${Shop.entitlementDays()} days.`,
+    async () => {
+      if (btn) { btn.disabled = true; btn.textContent = '…'; }
+      _shopPurchaseResult(await Shop.buySubject(subjectId));
+    },
+    { icon: '📚', okLabel: 'Unlock subject', danger: false }
+  );
+};
+
+// The credits panel inside the Invite modal. Separate from the shop so the two
+// can be opened in either order.
+function renderInviteCredits() {
+  if (typeof Shop === 'undefined') return;
+  const bal = document.getElementById('rw-balance');
+  if (bal) bal.textContent = String(Shop.balance());
+
+  const rule = document.getElementById('rw-earn-rule');
+  if (rule) {
+    // An admin can switch earning off entirely. Saying "you earn 15 credits"
+    // while the database is paying none would be a straight lie to the parent
+    // doing the inviting.
+    rule.textContent = Shop.settings().referral_earning_enabled === false
+      ? 'Referral credits are paused at the moment — your invites still count and we will let you know when they pay again.'
+      : `You earn ${Shop.creditsPerRef()} credits for every family that joins with your link — `
+        + `counted once their child has answered their first practice question.`;
+  }
+
+  const pending = document.getElementById('rw-pending');
+  if (pending) {
+    const n = Shop.pendingReferrals();
+    pending.textContent = n
+      ? `${n} friend${n === 1 ? ' has' : 's have'} signed up but not started practising yet — you'll get the credits when they do.`
+      : '';
+  }
+}
+window.renderInviteCredits = renderInviteCredits;
 
 async function openPlansModal() {
   const m = document.getElementById('modal-plans');
@@ -3329,11 +3982,15 @@ function renderDashboard() {
   document.getElementById('dash-total-q').textContent = DB.stats.totalAttempted;
   document.getElementById('dash-accuracy').textContent = acc;
   document.getElementById('dash-exams').textContent = DB.stats.examCount;
-  document.getElementById('streak-count').textContent = DB.stats.streak;
+  _setStreakDisplay(DB.stats.streak);
 
   // "Start here" nudge for brand-new students
   const startHere = document.getElementById('dash-start-here');
   if (startHere) startHere.classList.toggle('hidden', DB.stats.totalAttempted > 0);
+
+  // Expired-access notice, above the resume banner: a child whose access has
+  // lapsed needs to know why most chapters stopped opening.
+  _renderExpiredBanner('student-expired-slot');
 
   // Resume banner (unfinished session from a previous page load)
   _renderResumeBanner();
@@ -3672,7 +4329,7 @@ function startChapterDirect(chapterId, forceDiff) {
   _practiceResume = null;
   const locked = DB.restrictions?.lockedChapters || [];
   if (locked.includes(chapterId)) { toast('🔒 This chapter is locked by your parent.', 2000); return; }
-  if (!_planAllowsChapter(chapterId)) { toast('⭐ Upgrade your plan to access this chapter.', 3000); return; }
+  if (!_planAllowsChapter(chapterId)) { _showChapterLockedModal(chapterId); return; }
   const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
 
   // If questions for this chapter aren't loaded yet, wait for the active subject to load first
@@ -4138,6 +4795,8 @@ function generatePrintablePaper() {
   .frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:-0.55em; margin:0 .18em; line-height:1.05; font-weight:bold; }
   .frac .fr-n { padding:0 .28em; }
   .frac .fr-d { padding:0 .28em; border-top:1.5px solid currentColor; }
+  .frac-mixed { font-weight:bold; margin-right:.05em; }
+  .frac-mixed + .frac { margin-left:0; }
   .q-box { display:inline-flex; align-items:center; justify-content:center; min-width:1.5em; height:1.5em; padding:0 .15em;
            border:1.2px dashed #444; border-radius:3px; font-weight:bold; font-size:.85em; vertical-align:middle; }
   .frac .q-box { min-width:1.3em; height:1.3em; }
@@ -4265,7 +4924,7 @@ function renderExamQuestion() {
 
   // Nav
   document.getElementById('exam-prev-btn').disabled = S.exam.idx === 0;
-  document.getElementById('exam-next-btn').textContent = S.exam.idx === S.exam.qs.length - 1 ? 'Review →' : 'Next →';
+  document.getElementById('exam-next-btn').textContent = S.exam.idx === S.exam.qs.length - 1 ? '📋 Review & Submit' : 'Next →';
   updateNavGrid();
 
   const flagBtn = document.getElementById('exam-flag-btn');
@@ -4303,10 +4962,76 @@ function saveCurrentExamAnswer() {
 document.getElementById('exam-prev-btn').addEventListener('click', () => {
   saveCurrentExamAnswer(); if (S.exam.idx > 0) { S.exam.idx--; renderExamQuestion(); }
 });
+// ⚠ On the LAST question this button reads "Review →" (see renderExamQuestion)
+// and the old body — `if (idx < len-1) { idx++; render() }` — was false, so the
+// tap did nothing whatsoever. A child finishing a 40-question mock pressed the
+// only forward-looking control on the screen and got silence. The label now has
+// somewhere to go.
 document.getElementById('exam-next-btn').addEventListener('click', () => {
   saveCurrentExamAnswer();
   if (S.exam.idx < S.exam.qs.length - 1) { S.exam.idx++; renderExamQuestion(); }
+  else openExamReview();
 });
+
+// ── EXAM REVIEW SHEET ──────────────────────────
+// The one thing a child actually needs before submitting: what did I leave
+// blank, and what did I flag to come back to. The sidebar Question Navigator
+// answers that on a desktop; on a tablet or phone it is a full screen below the
+// question, which is why "Review" has to bring it to them.
+function openExamReview() {
+  const modal = document.getElementById('modal-exam-review');
+  if (!modal || !S.exam?.qs?.length) return;
+  saveCurrentExamAnswer();
+
+  const total = S.exam.qs.length;
+  const isAnswered = i => {
+    const a = S.exam.answers[i];
+    return a != null && String(a).trim() !== '';
+  };
+  const blanks  = S.exam.qs.map((_, i) => i).filter(i => !isAnswered(i));
+  const flagged = S.exam.qs.map((_, i) => i).filter(i => S.exam.flagged.has(i));
+
+  const sum = document.getElementById('exr-summary');
+  if (sum) sum.textContent = `${total - blanks.length} of ${total} answered`;
+
+  const warn = document.getElementById('exr-warn');
+  if (warn) {
+    const bits = [];
+    if (blanks.length)  bits.push(`${blanks.length} question${blanks.length === 1 ? '' : 's'} still blank`);
+    if (flagged.length) bits.push(`${flagged.length} flagged to come back to`);
+    warn.textContent = bits.join(' · ');
+    warn.classList.toggle('hidden', bits.length === 0);
+  }
+
+  const grid = document.getElementById('exr-grid');
+  if (grid) {
+    grid.innerHTML = S.exam.qs.map((_, i) => {
+      const cls = S.exam.flagged.has(i) ? 'flagged' : isAnswered(i) ? 'answered' : 'unanswered';
+      return `<button class="nav-btn ${cls}" onclick="examGoTo(${i}); closeExamReview()"
+                aria-label="Question ${i + 1}, ${cls}">${i + 1}</button>`;
+    }).join('');
+  }
+
+  const firstBlankBtn = document.getElementById('exr-first-blank-btn');
+  if (firstBlankBtn) {
+    firstBlankBtn.classList.toggle('hidden', blanks.length === 0);
+    firstBlankBtn.dataset.target = blanks.length ? String(blanks[0]) : '';
+  }
+
+  modal.classList.remove('hidden');
+}
+window.openExamReview = openExamReview;
+
+window.closeExamReview = function () {
+  document.getElementById('modal-exam-review')?.classList.add('hidden');
+};
+
+window.examGoToFirstBlank = function () {
+  const t = document.getElementById('exr-first-blank-btn')?.dataset.target;
+  if (t === '' || t == null) return;
+  closeExamReview();
+  examGoTo(Number(t));
+};
 document.getElementById('exam-flag-btn').addEventListener('click', () => {
   S.exam.flagged.has(S.exam.idx) ? S.exam.flagged.delete(S.exam.idx) : S.exam.flagged.add(S.exam.idx);
   document.getElementById('exam-flag-btn').textContent = S.exam.flagged.has(S.exam.idx) ? '🚩 Flagged' : '🚩 Flag';
@@ -4403,9 +5128,11 @@ function _renderExamReview() {
 
   const rows = S.exam.qs.map((q, i) => {
     const ua = S.exam.answers[i];
+    // S.exam.flagged is a Set, so the old `S.exam.flagged[i]` was always
+    // undefined and the 🚩 marker never appeared on a single reviewed question.
     return { q, i, ua, ok: ua != null && checkAnswer(q, ua),
              answered: ua != null && String(ua).trim() !== '',
-             flagged: !!(S.exam.flagged && S.exam.flagged[i]) };
+             flagged: !!(S.exam.flagged && S.exam.flagged.has && S.exam.flagged.has(i)) };
   });
   const wrong = rows.filter(r => !r.ok);
 
@@ -4438,11 +5165,11 @@ function _renderExamReview() {
           <div class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">
             Q${i + 1} · ${_profEsc(ch?.name || '')}${flagged ? ' · <span class="text-amber-500">🚩 flagged</span>' : ''}
           </div>
-          <div class="font-medium text-gray-800 dark:text-gray-200">${q.question}</div>
+          <div class="font-medium text-gray-800 dark:text-gray-200">${_prettyMath(q.question)}</div>
           ${ok ? '' : (isSym
             ? `<div class="mt-1 text-red-600 dark:text-red-400">${answered ? 'Not quite' : 'Not answered'} — the correct cells are shown on the grid during practice.</div>`
             : `<div class="mt-1 text-red-600 dark:text-red-400">Your answer: ${answered ? yours : '<i>(not answered)</i>'}</div>`)}
-          ${isSym ? '' : `<div class="mt-1 text-green-600 dark:text-green-400 font-medium">✓ Correct: ${_profEsc(String(q.answer ?? ''))}</div>`}
+          ${isSym ? '' : `<div class="mt-1 text-green-600 dark:text-green-400 font-medium">✓ Correct: ${_prettyMath(_profEsc(String(q.answer ?? '')))}</div>`}
           <div class="mt-1 text-gray-500 dark:text-gray-400 text-xs">${q.explanation || ''}</div>
         </div>
       </div>
@@ -4601,18 +5328,18 @@ function _renderPracticeReviewAnswer(q, saved) {
     fb.innerHTML = S.practice.showAnswers === false
       ? `<div class="flex items-center gap-3"><span class="text-2xl">⏭️</span><div class="font-bold">You skipped this one.</div></div>`
       : `<div class="flex items-start gap-3"><span class="text-2xl">💡</span><div class="flex-1 min-w-0">
-           <div class="font-bold mb-1">You skipped this - answer: <span class="text-green-600 dark:text-green-400">${q.answer}</span></div>
-           <div class="text-sm">${q.explanation}</div>${_learnMoreHTML(q)}</div></div>`;
+           <div class="font-bold mb-1">You skipped this - answer: <span class="text-green-600 dark:text-green-400">${_prettyMath(String(q.answer))}</span></div>
+           <div class="text-sm">${_prettyMath(q.explanation || "")}</div>${_learnMoreHTML(q)}</div></div>`;
   } else if (S.practice.showAnswers === false) {
     fb.innerHTML = `<div class="flex items-center gap-3"><span class="text-2xl">${saved.correct ? '🎉' : '❌'}</span>
       <div class="font-bold">${saved.correct ? 'You got this one right!' : 'Not quite, last time.'}</div></div>`;
   } else {
     const answerLine = q.type === 'symmetry'
       ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
-      : `Your answer wasn't quite right. Correct answer: <b>${q.answer}</b>`;
+      : `Your answer wasn't quite right. Correct answer: <b>${_prettyMath(String(q.answer))}</b>`;
     fb.innerHTML = `<div class="flex items-start gap-3"><span class="text-2xl">${saved.correct ? '🎉' : '💡'}</span>
       <div class="flex-1 min-w-0"><div class="font-bold mb-1">${saved.correct ? 'Correct! Well done!' : answerLine}</div>
-      <div class="text-sm">${q.explanation}</div>${_learnMoreHTML(q)}</div></div>`;
+      <div class="text-sm">${_prettyMath(q.explanation || "")}</div>${_learnMoreHTML(q)}</div></div>`;
   }
   fb.classList.remove('hidden');
   document.getElementById('practice-submit-btn').classList.add('hidden');
@@ -4719,6 +5446,14 @@ function practiceSubmit() {
 
   const ok = checkAnswer(q, ua);
 
+  // This is the event that turns the child's family's referral into credits for
+  // whoever invited them — the anti-abuse rule is that a sign-up alone earns
+  // nothing, a child actually practising does. Fire-and-forget and idempotent:
+  // the RPC takes no arguments, works out who is calling from the session token,
+  // and short-circuits after the first success. It must never delay or block the
+  // answer the child just gave.
+  if (typeof Shop !== 'undefined') Shop.reportPracticeActivity();
+
   // ── TEST MODE: record silently, advance immediately ──────────────
   if (ASSIGNMENT_IS_TEST) {
     ASSIGNMENT_TEST_ANSWERS.push({
@@ -4781,13 +5516,13 @@ function practiceSubmit() {
   } else {
     const answerLine = q.type === 'symmetry'
       ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
-      : `Not quite. Correct answer: <b>${q.answer}</b>`;
+      : `Not quite. Correct answer: <b>${_prettyMath(String(q.answer))}</b>`;
     fb.innerHTML = `
       <div class="flex items-start gap-3">
         <span class="text-2xl">${ok ? '🎉' : '💡'}</span>
         <div class="flex-1 min-w-0">
           <div class="font-bold mb-1">${ok ? 'Correct! Well done!' : answerLine}</div>
-          <div class="text-sm">${q.explanation}</div>
+          <div class="text-sm">${_prettyMath(q.explanation || "")}</div>
           ${_learnMoreHTML(q)}
         </div>
       </div>`;
@@ -4855,8 +5590,8 @@ function practiceSkip() {
       <div class="flex items-start gap-3">
         <span class="text-2xl">💡</span>
         <div class="flex-1 min-w-0">
-          <div class="font-bold mb-1">Answer: <span class="text-green-600 dark:text-green-400">${q.answer}</span></div>
-          <div class="text-sm">${q.explanation}</div>
+          <div class="font-bold mb-1">Answer: <span class="text-green-600 dark:text-green-400">${_prettyMath(String(q.answer))}</span></div>
+          <div class="text-sm">${_prettyMath(q.explanation || "")}</div>
           ${_learnMoreHTML(q)}
         </div>
       </div>`;
@@ -4957,7 +5692,7 @@ function _renderRoundReview() {
 
     let detail = '';
     if (r.correct) {
-      detail = `<div class="text-green-700 dark:text-green-400">Your answer: <b>${_profEsc(r.userAnswer)}</b></div>`;
+      detail = `<div class="text-green-700 dark:text-green-400">Your answer: <b>${_prettyMath(_profEsc(r.userAnswer))}</b></div>`;
     } else if (!showAnswers) {
       detail = `<div class="text-gray-500 dark:text-gray-400">${r.skipped ? 'Skipped.' : 'Not correct.'}</div>`;
     } else if (r.type === 'symmetry') {
@@ -4966,18 +5701,18 @@ function _renderRoundReview() {
       detail = `
         ${r.skipped
           ? '<div class="text-gray-500 dark:text-gray-400">Skipped</div>'
-          : `<div class="text-red-700 dark:text-red-400">You said: <b>${_profEsc(r.userAnswer) || '—'}</b></div>`}
-        <div class="text-green-700 dark:text-green-400">Correct answer: <b>${_profEsc(r.correctAnswer)}</b></div>`;
+          : `<div class="text-red-700 dark:text-red-400">You said: <b>${_prettyMath(_profEsc(r.userAnswer)) || '—'}</b></div>`}
+        <div class="text-green-700 dark:text-green-400">Correct answer: <b>${_prettyMath(_profEsc(r.correctAnswer))}</b></div>`;
     }
 
     return `<div class="rounded-xl border ${tone} px-3 py-2">
       <div class="flex gap-2">
         <span class="shrink-0 select-none">${mark}</span>
         <div class="flex-1 min-w-0">
-          <div class="text-xs font-semibold text-gray-800 dark:text-gray-100 mb-1">${i + 1}. ${r.question}</div>
+          <div class="text-xs font-semibold text-gray-800 dark:text-gray-100 mb-1">${i + 1}. ${_prettyMath(r.question)}</div>
           <div class="text-xs space-y-0.5">${detail}</div>
           ${(!r.correct && showAnswers && r.explanation)
-            ? `<div class="text-xs text-gray-600 dark:text-gray-400 mt-1.5 pt-1.5 border-t border-black/5 dark:border-white/10">${r.explanation}</div>`
+            ? `<div class="text-xs text-gray-600 dark:text-gray-400 mt-1.5 pt-1.5 border-t border-black/5 dark:border-white/10">${_prettyMath(r.explanation || "")}</div>`
             : ''}
         </div>
       </div>
@@ -5331,8 +6066,7 @@ document.getElementById('reset-btn').addEventListener('click', () => {
     level:       1,
   });
   save(DB);
-  const streakEl = document.getElementById('streak-count');
-  if (streakEl) streakEl.textContent = '0';
+  _setStreakDisplay(0);
   updateXPBar();
   toast('🗑 Progress reset.');
   renderAnalytics();
@@ -6188,7 +6922,7 @@ async function _renderStudentProfile(container) {
            accessibility/feedback settings, this one is just fun. -->
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
         <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">🎨 My Colours</h3>
-        <div class="grid grid-cols-3 gap-2" id="kidpref-vibe-grid">
+        <div class="grid grid-cols-3 sm:grid-cols-4 gap-2" id="kidpref-vibe-grid">
           ${KID_VIBES.map(v => `
             <button type="button" onclick="_pickKidVibe('${v.id}')"
               class="kidvibe-swatch flex flex-col items-center gap-1.5 p-3 rounded-2xl border-2 transition-colors ${kidPrefs.vibe === v.id ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30' : 'border-transparent bg-gray-50 dark:bg-gray-700/50'}"
@@ -6217,12 +6951,18 @@ async function _renderStudentProfile(container) {
 // in calendar.js. Keep in step with the :root[data-kid-vibe] rules in
 // style.css - each id here must have a matching CSS rule there.
 const KID_VIBES = [
-  { id: 'default', label: 'Classic', c1: '#6366f1', c2: '#ec4899' },
-  { id: 'ocean',   label: 'Ocean',   c1: '#0ea5e9', c2: '#14b8a6' },
-  { id: 'sunset',  label: 'Sunset',  c1: '#f97316', c2: '#ec4899' },
-  { id: 'forest',  label: 'Forest',  c1: '#22c55e', c2: '#0d9488' },
-  { id: 'galaxy',  label: 'Galaxy',  c1: '#7c3aed', c2: '#4338ca' },
-  { id: 'candy',   label: 'Candy',   c1: '#ec4899', c2: '#f43f5e' },
+  { id: 'default',   label: 'Classic',   c1: '#6366f1', c2: '#ec4899' },
+  { id: 'ocean',     label: 'Ocean',     c1: '#0ea5e9', c2: '#14b8a6' },
+  { id: 'sunset',    label: 'Sunset',    c1: '#f97316', c2: '#ec4899' },
+  { id: 'forest',    label: 'Forest',    c1: '#22c55e', c2: '#0d9488' },
+  { id: 'galaxy',    label: 'Galaxy',    c1: '#7c3aed', c2: '#4338ca' },
+  { id: 'candy',     label: 'Candy',     c1: '#ec4899', c2: '#f43f5e' },
+  { id: 'mango',     label: 'Mango',     c1: '#f59e0b', c2: '#ef4444' },
+  { id: 'mint',      label: 'Mint',      c1: '#10b981', c2: '#22d3ee' },
+  { id: 'grape',     label: 'Grape',     c1: '#a855f7', c2: '#6366f1' },
+  { id: 'bubblegum', label: 'Bubblegum', c1: '#f472b6', c2: '#a78bfa' },
+  { id: 'lagoon',    label: 'Lagoon',    c1: '#0891b2', c2: '#3b82f6' },
+  { id: 'midnight',  label: 'Midnight',  c1: '#1e40af', c2: '#312e81' },
 ];
 
 function _pickKidVibe(vibeId) {

@@ -96,6 +96,19 @@ const Auth = (() => {
     return null;
   }
 
+  // One place that knows there are two logout buttons: #header-logout-btn (the
+  // labelled pill, 1100px and up) and #header-logout-mobile (its twin below
+  // that). Which of the two is on screen is a CSS decision; this is only about
+  // whether logging out is possible at all.
+  function _setLogoutVisible(on) {
+    ['header-logout-btn', 'header-logout-mobile'].forEach(id => {
+      const b = document.getElementById(id);
+      if (!b) return;
+      b.classList.toggle('hidden', !on);
+      b.classList.toggle('flex',    on);
+    });
+  }
+
   function getActiveAccount()  { return _activeAccount; }
   function getParentProfile()  { return _parentProfile; }
   function getFamily()         { return _family; }
@@ -115,6 +128,24 @@ const Auth = (() => {
   function getPlanFeatures() {
     if (_planFeatures) return _planFeatures;
     return _planFeaturesState === 'loaded' ? DEFAULT_FREE_FEATURES : {};
+  }
+
+  // ── Account expiry ──────────────────────────────
+  // Expiry used to be a hard door: an expired parent or child was refused at
+  // sign-in. It is a soft one now, because a chapter bought with referral
+  // credits stays live for its full 30 days whether or not the account behind
+  // it has lapsed — and a family who spent credits has to be able to get to
+  // what they bought.
+  //
+  // So an expired account signs in and reaches a restricted app: only chapters
+  // with a live entitlement load. ⚠ That restriction is NOT this flag. It is
+  // applied in netlify/functions/questions.js, which will not send the
+  // questions for anything else. This flag only decides what the UI says.
+  let _accessExpired = false;
+  function isAccessExpired() { return _accessExpired; }
+  function _setAccessExpired(v) {
+    _accessExpired = !!v;
+    document.body.classList.toggle('access-expired', _accessExpired);
   }
 
   const REF_STORAGE_KEY = 'psac_pending_referral';
@@ -451,12 +482,11 @@ const Auth = (() => {
       return;
     }
 
-    if (profile.expires_at && new Date(profile.expires_at) < new Date()) {
-      await _sb.auth.signOut();
-      showScreen('auth');
-      _showAuthError('Your account access has expired. Please contact the administrator.');
-      return;
-    }
+    // Expired is no longer a refusal — see isAccessExpired(). The parent signs
+    // in, sees the banner, and can still reach anything they bought with
+    // credits (and the Shop, to spend what they have left). `disabled` above
+    // stays a hard stop: that is a moderation decision, not a lapsed date.
+    _setAccessExpired(!!(profile.expires_at && new Date(profile.expires_at) < new Date()));
 
     if (profile.role === 'admin') {
       _isAdminUser = true;
@@ -512,6 +542,9 @@ const Auth = (() => {
       console.warn('[Auth] plan features could not be loaded - plan limits are '
         + 'NOT being applied this session:', err?.message || err);
     });
+    // Not awaited and never fatal: with no referrals, or on a database without
+    // the rewards RPC, this resolves to 0 and the app behaves as it always has.
+    if (typeof Shop !== 'undefined') Shop.refresh().catch(() => {});
   }
 
   // Note the role passed to createProfile: 'parent', NOT 'teacher'. Signing up
@@ -583,8 +616,9 @@ const Auth = (() => {
   function _openParentDashboard() {
     renderParentDashboard();
     showScreen('parent');
-    const hdrLogout = document.getElementById('header-logout-btn');
-    if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
+    // Both logout buttons — the labelled desktop pill and its always-visible
+    // mobile twin. See the comment beside #header-logout-mobile in index.html.
+    _setLogoutVisible(true);
     _updateHeaderProfileChip('parent', null);
     if (_parentUser) Store.logLoginEvent(_parentUser.id, _isSuperAdmin ? 'super_admin' : (_isAdminUser ? 'admin' : 'parent'));
   }
@@ -626,13 +660,11 @@ const Auth = (() => {
             toast('Your session was ended by the administrator. Please log in again.', 5000);
             return;
           }
-          if (sv.expires_at && new Date(sv.expires_at) < new Date()) {
-            Store.clearStudentSession();
-            document.body.style.opacity = '1';
-            showScreen('auth');
-            toast('Your practice access has expired. Please ask your parent.', 5000);
-            return;
-          }
+          // Same change as the parent path: expired signs in to a restricted
+          // app rather than being turned away, because chapters the parent
+          // bought with credits outlive the account's expiry date. The server
+          // is what actually withholds everything else.
+          _setAccessExpired(!!(sv.expires_at && new Date(sv.expires_at) < new Date()));
         }
       } catch (_) { /* offline - allow resume */ }
     }
@@ -810,6 +842,13 @@ const Auth = (() => {
           if (!s?.family_id) throw new Error('no family_id for student');
           const { data: fam } = await _sb.from('families').select('parent_id').eq('id', s.family_id).maybeSingle();
           if (!fam?.parent_id) throw new Error('no parent_id for family');
+          // The child benefits from the parent's referrals, but cannot read the
+          // parent's referrals row — hence the parent id, and the count-only
+          // SECURITY DEFINER RPC behind it.
+          // The child needs the family's live chapter unlocks so the UI stops
+          // showing a bought chapter as locked. Credits themselves are the
+          // parent's and are never fetched into a child's session.
+          if (typeof Shop !== 'undefined') Shop.refreshFamily().catch(() => {});
           const result = await Store.getUserPlan(fam.parent_id);
           if (result?.plan?.features) _planFeatures = result.plan.features;
           // 'loaded' even when there is no plan row: that IS the answer (free),
@@ -833,8 +872,9 @@ const Auth = (() => {
     }
 
     // Show header logout button and profile chip
-    const hdrLogout = document.getElementById('header-logout-btn');
-    if (hdrLogout) { hdrLogout.classList.remove('hidden'); hdrLogout.classList.add('flex'); }
+    // Both logout buttons — the labelled desktop pill and its always-visible
+    // mobile twin. See the comment beside #header-logout-mobile in index.html.
+    _setLogoutVisible(true);
     if (headerChip) _updateHeaderProfileChip('student', studentRow);
     if (bumpSession) Store.logLoginEvent(studentRow.id, 'student');
     if (bumpSession) _startSessionGuard(studentRow.id, sessionVersion);
@@ -1261,8 +1301,15 @@ const Auth = (() => {
     if (codeEl) codeEl.textContent = _myReferralCode || '—';
     if (linkEl) linkEl.textContent = _inviteLink();
 
+    // Paint from cache first so the panel is never empty, then from the server.
+    if (typeof renderInviteCredits === 'function') renderInviteCredits();
+
     const referrals = await Store.getMyReferrals();
     if (countEl) countEl.textContent = String(referrals.length);
+    if (typeof Shop !== 'undefined') {
+      await Shop.refresh();
+      if (typeof renderInviteCredits === 'function') renderInviteCredits();
+    }
     if (listEl) {
       listEl.innerHTML = referrals.length
         ? referrals.map(r => `
@@ -1597,14 +1644,16 @@ const Auth = (() => {
     _planFeatures      = null;
     _planFeaturesState = 'pending';
     window.PLAN_ENFORCEMENT = false;
+    // One family's referral perks must not follow the next account signed in on
+    // a shared phone.
+    if (typeof Shop !== 'undefined') Shop.reset();
     // Re-hide the privileged buttons, or they persist into the next session on
     // a shared device.
     ['btn-open-teacher', 'btn-open-admin'].forEach(id => {
       const b = document.getElementById(id);
       if (b) { b.classList.add('hidden'); b.classList.remove('flex'); }
     });
-    const hdrLogout = document.getElementById('header-logout-btn');
-    if (hdrLogout) { hdrLogout.classList.add('hidden'); hdrLogout.classList.remove('flex'); }
+    _setLogoutVisible(false);
     const hdrProfile = document.getElementById('header-profile-btn');
     if (hdrProfile) { hdrProfile.classList.add('hidden'); hdrProfile.classList.remove('flex'); }
     // Kid-home customisation (My Settings) is per-student - on a shared
@@ -2387,7 +2436,7 @@ const Auth = (() => {
   });
 
   return {
-    init, getActiveAccount, getParentProfile, getFamily, getPlanFeatures,
+    init, getActiveAccount, getParentProfile, getFamily, getPlanFeatures, isAccessExpired,
     // Auth screen
     setRole, showSignIn, showSignUp, emailSignIn, emailSignUp,
     showForgotPassword, backToSignIn, forgotPassword, backToSignUp,

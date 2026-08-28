@@ -273,40 +273,122 @@ async function _globalSettings(sbUrl, sbAnon) {
   } catch(_) { return {}; }
 }
 
-async function _getAllowedChapters(userId, isStudentId, sbUrl, sbSrk) {
-  if (!sbSrk) return null; // no service key → serve everything
-  const now    = Date.now();
-  const cached = _planCache.get(userId);
-  if (cached && (now - cached.at) < _PLAN_TTL) return cached.data;
+// ══════════════════════════════════════════════════════════════════════════
+//  Account access: expiry, blocks, and credit-bought chapter entitlements
+//
+//  ⚠ THIS IS WHERE THE CREDIT SHOP IS ACTUALLY ENFORCED. Everything the
+//  browser shows about credits, purchases and unlocked chapters is decoration
+//  over this function. A parent who edits localStorage, flips a `disabled`
+//  attribute, or POSTs straight at PostgREST changes nothing here: the
+//  entitlement rows are written only by purchase_chapter() (a SECURITY DEFINER
+//  function over tables with no client write grant at all), and this reads them
+//  with the service role.
+//
+//  Three facts come back, and each one changes what may be served:
+//    · blocked  — a moderation hold. Nothing is served at all.
+//    · expired  — the account's date has passed. ONLY live entitlements are
+//                 served, whatever the plan says. This is what makes "a chapter
+//                 you bought with credits keeps working for 30 days even if
+//                 your account lapses" true rather than a promise in the UI.
+//    · entitled — chapter ids with an unexpired entitlement row, added to
+//                 whatever the plan already allowed.
+//
+//  Cached with the same 5-minute TTL as the plan lookup, so this costs one
+//  extra round trip per family per five minutes, not one per request.
+// ══════════════════════════════════════════════════════════════════════════
+const _accessCache = new Map(); // parentId → { data, at }
 
-  let parentId = userId;
+async function _accountAccess(parentId, studentExpiresAt, sbUrl, sbSrk) {
+  const empty = { blocked: false, expired: false, entitled: [] };
+  if (!parentId || !sbSrk) return empty;
+
+  const now = Date.now();
+  const hit = _accessCache.get(parentId);
+  let base = hit && (now - hit.at) < _PLAN_TTL ? hit.data : null;
+
+  if (!base) {
+    base = { blocked: false, expired: false, entitled: [] };
+    try {
+      const hdrs = { apikey: sbSrk, Authorization: `Bearer ${sbSrk}` };
+      const [pr, er] = await Promise.all([
+        fetch(`${sbUrl}/rest/v1/profiles?id=eq.${parentId}&select=expires_at,blocked_until&limit=1`, { headers: hdrs }),
+        fetch(`${sbUrl}/rest/v1/chapter_entitlements?user_id=eq.${parentId}&expires_at=gt.${new Date().toISOString()}&select=chapter_id`, { headers: hdrs }),
+      ]);
+      const p = pr.ok ? (await pr.json())[0] : null;
+      if (p) {
+        base.blocked = !!(p.blocked_until && new Date(p.blocked_until) > new Date());
+        base.expired = !!(p.expires_at && new Date(p.expires_at) < new Date());
+      }
+      // A database that has not run supabase-credits-shop.sql yet answers 404
+      // for this table. That must read as "no entitlements", never as an error
+      // that withholds a subject from a paying family.
+      if (er.ok) {
+        const rows = await er.json();
+        if (Array.isArray(rows)) base.entitled = rows.map(r => r.chapter_id).filter(c => typeof c === 'string');
+      }
+      _accessCache.set(parentId, { data: base, at: now });
+    } catch (e) {
+      console.warn('[questions] account access:', e.message);
+      return empty;   // fail OPEN, like every other gate in this file
+    }
+  }
+
+  // The CHILD's own expiry counts too, and it is not cached with the parent's
+  // because two siblings can differ.
+  const expired = base.expired
+    || !!(studentExpiresAt && new Date(studentExpiresAt) < new Date());
+  return { blocked: base.blocked, expired, entitled: base.entitled };
+}
+
+// Who owns this request's account, and (for a child) when their own access
+// runs out. Cached because it is two round trips and it never changes.
+const _ownerCache = new Map(); // uid → { parentId, studentExpiresAt, at }
+
+async function _resolveOwner(userId, isStudentId, sbUrl, sbSrk) {
+  if (!sbSrk) return null;
+  const now = Date.now();
+  const hit = _ownerCache.get(userId);
+  if (hit && (now - hit.at) < _PLAN_TTL) return hit;
+
+  const hdrs = { apikey: sbSrk, Authorization: `Bearer ${sbSrk}` };
+  let out = { parentId: userId, studentExpiresAt: null, at: now };
   try {
     if (isStudentId) {
       const sr = await fetch(
-        `${sbUrl}/rest/v1/students?id=eq.${userId}&select=family_id&limit=1`,
-        { headers: { apikey: sbSrk, Authorization: `Bearer ${sbSrk}` } }
-      );
-      const sRows = sr.ok ? await sr.json() : [];
-      const familyId = sRows[0]?.family_id;
-      if (!familyId) { _planCache.set(userId, { data: null, at: now }); return null; }
+        `${sbUrl}/rest/v1/students?id=eq.${userId}&select=family_id,expires_at&limit=1`, { headers: hdrs });
+      const s = sr.ok ? (await sr.json())[0] : null;
+      if (!s?.family_id) return null;
+      out.studentExpiresAt = s.expires_at || null;
 
       const fr = await fetch(
-        `${sbUrl}/rest/v1/families?id=eq.${familyId}&select=parent_id&limit=1`,
-        { headers: { apikey: sbSrk, Authorization: `Bearer ${sbSrk}` } }
-      );
-      const fRows = fr.ok ? await fr.json() : [];
-      parentId = fRows[0]?.parent_id;
-      if (!parentId) { _planCache.set(userId, { data: null, at: now }); return null; }
+        `${sbUrl}/rest/v1/families?id=eq.${s.family_id}&select=parent_id&limit=1`, { headers: hdrs });
+      const f = fr.ok ? (await fr.json())[0] : null;
+      if (!f?.parent_id) return null;
+      out.parentId = f.parent_id;
     }
+    _ownerCache.set(userId, out);
+    return out;
+  } catch (e) {
+    console.warn('[questions] owner lookup:', e.message);
+    return null;
+  }
+}
 
+// The plan's own chapter list. null = unlimited.
+async function _getAllowedChapters(parentId, sbUrl, sbSrk) {
+  if (!sbSrk || !parentId) return null;
+  const now    = Date.now();
+  const cached = _planCache.get(parentId);
+  if (cached && (now - cached.at) < _PLAN_TTL) return cached.data;
+  try {
     const subR = await fetch(
       `${sbUrl}/rest/v1/subscriptions?user_id=eq.${parentId}&status=eq.active&select=plan_id,plans(features)&order=started_at.desc&limit=1`,
       { headers: { apikey: sbSrk, Authorization: `Bearer ${sbSrk}` } }
     );
     const subRows  = subR.ok ? await subR.json() : [];
     const features = subRows[0]?.plans?.features;
-    const allowed  = features?.allowed_chapters ?? null; // null = unlimited
-    _planCache.set(userId, { data: allowed, at: now });
+    const allowed  = features?.allowed_chapters ?? null;
+    _planCache.set(parentId, { data: allowed, at: now });
     return allowed;
   } catch(e) {
     console.warn('[questions] plan lookup:', e.message);
@@ -381,9 +463,44 @@ exports.handler = async (event) => {
   // questions simply never leave the server, so there is nothing to cheat with.
   const _gs = await _globalSettings(SB_URL, SB_ANON);
 
+  // Who this request belongs to. Needed for the entitlement and expiry checks
+  // below whether or not plan enforcement is switched on: a lapsed account is
+  // restricted by its own date, not by a tier.
+  const _owner = await _resolveOwner(_uid, !!studentId, SB_URL, SB_SRK);
+  const _access = _owner
+    ? await _accountAccess(_owner.parentId, _owner.studentExpiresAt, SB_URL, SB_SRK)
+    : { blocked: false, expired: false, entitled: [] };
+
+  // A moderation hold. Refused outright rather than filtered, so it is visible
+  // to the person it applies to instead of looking like an empty subject.
+  if (_access.blocked) {
+    return {
+      statusCode: 403,
+      headers: Object.assign({}, headers, { 'Cache-Control': 'no-store' }),
+      body: JSON.stringify({ error: 'account_blocked',
+        message: 'This account is temporarily paused. Please contact support.' }),
+    };
+  }
+
   let _allowedChapters = null; // null = no plan restriction (serve everything)
-  if (_gs.plan_enforcement_enabled === true && _uid) {
-    _allowedChapters = await _getAllowedChapters(_uid, !!studentId, SB_URL, SB_SRK);
+  if (_gs.plan_enforcement_enabled === true && _owner) {
+    _allowedChapters = await _getAllowedChapters(_owner.parentId, SB_URL, SB_SRK);
+  }
+
+  // ⚠ The order of these two rules is the whole feature.
+  //
+  // EXPIRED wins over everything: the allowed list becomes exactly the chapters
+  // with a live credit entitlement, even if the plan was unlimited and even if
+  // plan enforcement is off. That is what "a chapter you bought stays open for
+  // 30 days even after your account expires" actually means — and equally, that
+  // nothing ELSE stays open.
+  //
+  // NOT EXPIRED: entitlements are added to whatever the plan already allowed.
+  // Never subtractive; buying a chapter can only ever give you more.
+  if (_access.expired) {
+    _allowedChapters = _access.entitled;
+  } else if (_allowedChapters && _access.entitled.length) {
+    _allowedChapters = [...new Set([..._allowedChapters, ..._access.entitled])];
   }
   const _allowedSet = _allowedChapters ? new Set(_allowedChapters) : null;
 

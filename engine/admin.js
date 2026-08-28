@@ -8,6 +8,9 @@ const AdminPanel = (() => {
   let _members    = [];   // cached parent profiles
   let _teachers   = [];   // cached teacher profiles
   let _settings   = null; // global_settings from mm_data
+  // True once a query has proved this database predates supabase-credits-shop.sql,
+  // so the credit controls are hidden instead of failing on every click.
+  let _creditColumnsMissing = false;
 
   const ROLE_LABELS = { parent: '👨‍👩‍👧 Parent', teacher: '👩‍🏫 Teacher', admin: '🛡️ Admin' };
   const ROLE_COLORS = {
@@ -19,7 +22,7 @@ const AdminPanel = (() => {
   // ── Entry point called by auth.js ───────────
   async function render() {
     showTab('members');
-    await Promise.all([loadMembers(), loadTeachers(), loadSettings(), loadTeacherQueue()]);
+    await Promise.all([loadMembers(), loadTeachers(), loadSettings(), loadShopSettings(), loadTeacherQueue()]);
     _renderContent();
     await loadStats();
     // Show super-admin-only tabs
@@ -52,6 +55,9 @@ const AdminPanel = (() => {
     if (name === 'roles')     loadRoles();
     if (name === 'plans')     loadPlans();
     if (name === 'questions') QM.tabOpen();
+    // The security log is on the Content tab and is a per-visit read: an admin
+    // opening it wants what has happened since, not what was cached at render.
+    if (name === 'content')   loadSecurityEvents();
   }
 
   // ── Teacher approval queue ─────────────────
@@ -165,7 +171,12 @@ const AdminPanel = (() => {
     const el = document.getElementById('admin-members-list');
     if (reset && el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
     let membersQuery = _sb.from('profiles')
-      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code',
+      // credits/blocked_until are read here rather than per-row: the admin needs to
+      // SEE a balance to spot a farm, and one extra column beats N extra queries.
+      // ⚠ A database that has not run supabase-credits-shop.sql has neither column,
+      // which would 42703 the whole query and empty the members list — hence the
+      // retry below with the original column list.
+      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code, credits, blocked_until',
               { count: 'exact' })
       .eq('role', 'parent')
       .order('created_at', { ascending: false })
@@ -181,8 +192,26 @@ const AdminPanel = (() => {
         _sb.from('plans').select('id, name, price_mur').order('price_mur'),
     ]);
     if (profilesRes.error) {
-      if (el) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load members.</p>';
-      return;
+      // 42703 = unknown column, i.e. supabase-credits-shop.sql has not been run
+      // on this database. Retry without the two credit columns rather than
+      // showing an admin an empty member list over a feature they have not
+      // deployed yet. Anything else is a real failure and is reported.
+      if (profilesRes.error.code === '42703') {
+        _creditColumnsMissing = true;
+        let retry = _sb.from('profiles')
+          .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code',
+                  { count: 'exact' })
+          .eq('role', 'parent')
+          .order('created_at', { ascending: false })
+          .range(_membersOffset, _membersOffset + MEMBERS_PAGE - 1);
+        if (_membersQuery) retry = retry.ilike('full_name', `%${_membersQuery}%`);
+        const again = await retry;
+        if (!again.error) { profilesRes.data = again.data; profilesRes.count = again.count; profilesRes.error = null; }
+      }
+      if (profilesRes.error) {
+        if (el) el.innerHTML = '<p class="text-sm text-red-400 text-center py-6">Failed to load members.</p>';
+        return;
+      }
     }
     _plansForSelect = plansRes.data || _plansForSelect;
     const rows = profilesRes.data || [];
@@ -376,6 +405,24 @@ const AdminPanel = (() => {
               📋 History
             </button>
           </div>
+          ${_creditColumnsMissing ? '' : `
+          <div class="flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+            <span class="text-xs text-gray-500 dark:text-gray-400 font-semibold shrink-0">🪙 Credits:</span>
+            <span id="credits-bal-${m.id}" class="text-xs font-black text-amber-600 dark:text-amber-400 shrink-0">${m.credits ?? 0}</span>
+            <input id="credits-delta-${m.id}" type="number" placeholder="+/- amount" step="5"
+              class="w-28 text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white">
+            <input id="credits-reason-${m.id}" type="text" placeholder="reason" maxlength="60"
+              class="flex-1 min-w-[6rem] text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white">
+            <button onclick="AdminPanel.adjustCredits('${m.id}')"
+              class="text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 px-3 py-1 rounded-lg font-semibold">Apply</button>
+            <button onclick="AdminPanel.showCreditLedger('${m.id}')"
+              class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 px-3 py-1 rounded-lg font-semibold">📋 Ledger</button>
+            ${m.blocked_until && new Date(m.blocked_until) > new Date()
+              ? `<span class="text-[11px] font-bold text-red-500 shrink-0">⛔ blocked until ${new Date(m.blocked_until).toLocaleString()}</span>
+                 <button onclick="AdminPanel.blockUser('${m.id}', 0)" class="text-xs text-green-600 hover:text-green-700 font-semibold">unblock</button>`
+              : `<button onclick="AdminPanel.blockUser('${m.id}', 1440)" class="text-xs text-red-400 hover:text-red-600 font-semibold">block 24h</button>`}
+          </div>
+          <div id="credits-ledger-${m.id}" class="hidden mt-2 pt-2 border-t border-gray-100 dark:border-gray-700"></div>`}
           <div id="plan-history-${m.id}" class="hidden mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 overflow-x-auto"></div>
           <div id="children-panel-${m.id}" class="hidden mt-3 pl-2 border-l-2 border-indigo-200 dark:border-indigo-700">
             <p class="text-xs text-gray-500 dark:text-gray-400 animate-pulse">Loading children…</p>
@@ -1865,7 +1912,334 @@ const AdminPanel = (() => {
              qmToggleProtection };
   })();
 
+  // ══════════════════════════════════════════════
+  //  Credit shop settings + security log
+  //
+  //  These write mm_data.shop_settings, which is admin-only under RLS and is
+  //  the row purchase_chapter() reads its prices out of. Editing a number here
+  //  changes what the SERVER charges; editing one in a parent's devtools
+  //  changes what their screen says and nothing else.
+  // ══════════════════════════════════════════════
+  let _shop = null;
+
+  // ⚠ Keep in step with the defaults row at the bottom of
+  // supabase-credits-shop.sql AND with the fallbacks each SQL function uses.
+  // These three copies exist because the value has to be readable before the
+  // settings row loads (here), when the row is missing entirely (the SQL
+  // coalesce), and in the browser's own shop UI (engine/shop.js).
+  const SHOP_DEFAULTS = {
+    shop_enabled: true, referral_earning_enabled: true,
+    referral_credits: 15, default_chapter_price: 250, default_subject_price: 1500,
+    entitlement_days: 30, subject_prices: {},
+    min_account_age_minutes: 0, max_credited_referrals: 0, activation_burst_limit: 8,
+    chapter_prices: {}, catalog: [],
+  };
+
+  async function loadShopSettings() {
+    if (!_sb) return;
+    const { data } = await _sb.from('mm_data').select('value').eq('key', 'shop_settings').maybeSingle();
+    _shop = Object.assign({}, SHOP_DEFAULTS, data?.value || {});
+    _renderShopSettings();
+  }
+
+  async function _saveShop() {
+    if (!_sb) return { ok: false };
+    const { error } = await _sb.from('mm_data')
+      .upsert({ key: 'shop_settings', value: _shop, updated_at: new Date().toISOString() });
+    if (error) { console.error('[Admin._saveShop]', error.message); return { ok: false, error: error.message }; }
+    return { ok: true };
+  }
+
+  function _renderShopSettings() {
+    if (!_shop) return;
+    const set   = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    const check = (id, v) => { const el = document.getElementById(id); if (el) el.checked = v; };
+    check('admin-shop-enabled', _shop.shop_enabled !== false);
+    check('admin-shop-earning', _shop.referral_earning_enabled !== false);
+    set('admin-shop-refcredits', _shop.referral_credits);
+    set('admin-shop-price',      _shop.default_chapter_price);
+    set('admin-shop-subjprice', _shop.default_subject_price);
+    set('admin-shop-days',       _shop.entitlement_days);
+    set('admin-shop-minage',     _shop.min_account_age_minutes);
+    set('admin-shop-maxrefs',    _shop.max_credited_referrals);
+    set('admin-shop-burst',      _shop.activation_burst_limit);
+    _renderShopPreview();
+    renderShopPrices();
+  }
+
+  // The one number an admin actually wants when tuning this: how many people a
+  // parent has to invite to afford one chapter. 15 credits against a 250 price
+  // is seventeen successful referrals, which is easy to set by accident.
+  //
+  // Reads the FIELDS, not the saved settings, so it updates as the numbers are
+  // typed — the point is to see the consequence before pressing Save.
+  function previewShopEconomy() { _renderShopPreview(true); }
+
+  function _renderShopPreview(fromFields) {
+    const el = document.getElementById('admin-shop-preview');
+    if (!el) return;
+    // ⚠ No `!_shop` guard. When called from an input handler this reads the
+    // FIELDS, which are on screen whether or not the settings row has loaded —
+    // requiring _shop made the preview silently do nothing on a database with
+    // no shop_settings row yet, which is exactly when an admin is setting the
+    // numbers for the first time.
+    const cfg = _shop || SHOP_DEFAULTS;
+    const field = (id, fallback) => {
+      if (!fromFields) return fallback;
+      const n = parseInt(document.getElementById(id)?.value, 10);
+      return Number.isFinite(n) ? n : fallback;
+    };
+    const per   = field('admin-shop-refcredits', Number(cfg.referral_credits)) || 0;
+    const price = field('admin-shop-price', Number(cfg.default_chapter_price)) || 0;
+    const days  = field('admin-shop-days', Number(cfg.entitlement_days)) || 30;
+    if (per <= 0) {
+      el.textContent = 'Referrals earn nothing at this rate, so no chapter can be bought with credits.';
+      return;
+    }
+    const need = Math.ceil(price / per);
+    el.innerHTML = `At <b>${per}</b> credits per referral and <b>${price}</b> per chapter, a parent needs `
+      + `<b>${need}</b> successful referral${need === 1 ? '' : 's'} to unlock one chapter for `
+      + `<b>${days}</b> days.`;
+  }
+
+  function _allChapters() {
+    if (typeof SUBJECT_PACKS === 'undefined') return [];
+    const out = [];
+    SUBJECT_PACKS.forEach(p => (p._chapters || p.chapters || []).forEach(ch => out.push({
+      id: ch.id, name: ch.name, icon: ch.icon || '📘',
+      // subjectId is the PACK id and is what purchase_subject() matches on;
+      // subject is the human label. They were one field until subjects became
+      // buyable, and conflating them meant the database had only a display
+      // string to group chapters by.
+      subjectId: p.id,
+      subject: `Grade ${p.grade} ${p.subject || p.name || ''}`.trim(),
+    })));
+    return out;
+  }
+
+  function _allSubjects() {
+    if (typeof SUBJECT_PACKS === 'undefined') return [];
+    return SUBJECT_PACKS.map(p => ({
+      id: p.id,
+      name: `Grade ${p.grade} ${p.subject || p.name || ''}`.trim(),
+      icon: p.icon || '📚',
+      chapters: (p._chapters || p.chapters || []).length,
+    }));
+  }
+
+  function renderSubjectPrices() {
+    const box = document.getElementById('admin-shop-subjprices');
+    if (!box || !_shop) return;
+    const rows = _allSubjects();
+    if (!rows.length) { box.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">No subject packs loaded.</p>'; return; }
+    box.innerHTML = rows.map(sub => `
+      <div class="flex items-center gap-2 py-1.5">
+        <span class="select-none">${sub.icon}</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold text-gray-800 dark:text-gray-100 truncate">${_esc(sub.name)}</div>
+          <div class="text-[10px] text-gray-400">${sub.chapters} chapters</div>
+        </div>
+        <input type="number" min="0" max="1000000" placeholder="${_shop.default_subject_price}"
+          value="${_shop.subject_prices?.[sub.id] ?? ''}"
+          onchange="AdminPanel.setSubjectPrice('${sub.id}', this.value)"
+          class="w-24 text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white">
+      </div>`).join('');
+  }
+
+  async function setSubjectPrice(subjectId, value) {
+    if (!_shop) return;
+    const prev = JSON.stringify(_shop);
+    if (!_shop.subject_prices) _shop.subject_prices = {};
+    const n = parseInt(value, 10);
+    if (value === '' || !Number.isFinite(n) || n < 0) delete _shop.subject_prices[subjectId];
+    else _shop.subject_prices[subjectId] = n;
+    const res = await _saveShop();
+    if (!res.ok) { _shop = JSON.parse(prev); renderSubjectPrices(); }
+    toast(res.ok ? 'Subject price saved.' : 'Could not save — NOT applied.', res.ok ? 1800 : 4000);
+  }
+
+  function renderShopPrices() {
+    renderSubjectPrices();
+    const box = document.getElementById('admin-shop-prices');
+    if (!box || !_shop) return;
+    const q = (document.getElementById('admin-shop-search')?.value || '').trim().toLowerCase();
+    const rows = _allChapters().filter(c => !q || (c.name + ' ' + c.subject).toLowerCase().includes(q));
+    if (!rows.length) {
+      box.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">No chapter matches.</p>';
+      return;
+    }
+    box.innerHTML = rows.slice(0, 400).map(c => `
+      <div class="flex items-center gap-2 py-1.5">
+        <span class="select-none">${c.icon}</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold text-gray-800 dark:text-gray-100 truncate">${_esc(c.name)}</div>
+          <div class="text-[10px] text-gray-400 truncate">${_esc(c.subject)}</div>
+        </div>
+        <input type="number" min="0" max="1000000" placeholder="${_shop.default_chapter_price}"
+          value="${_shop.chapter_prices?.[c.id] ?? ''}"
+          onchange="AdminPanel.setChapterPrice('${c.id}', this.value)"
+          class="w-24 text-xs border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-1 bg-white dark:bg-gray-700 dark:text-white">
+      </div>`).join('');
+  }
+
+  async function setChapterPrice(chapterId, value) {
+    if (!_shop) return;
+    const prev = JSON.stringify(_shop);
+    if (!_shop.chapter_prices) _shop.chapter_prices = {};
+    const n = parseInt(value, 10);
+    // Blank clears the override rather than storing 0 — "free" and "use the
+    // default" are different things and storing 0 for a cleared field would
+    // silently give every chapter away.
+    if (value === '' || !Number.isFinite(n) || n < 0) delete _shop.chapter_prices[chapterId];
+    else _shop.chapter_prices[chapterId] = n;
+    const res = await _saveShop();
+    if (!res.ok) { _shop = JSON.parse(prev); renderShopPrices(); }
+    toast(res.ok ? 'Price saved.' : 'Could not save — NOT applied.', res.ok ? 1800 : 4000);
+  }
+
+  async function saveShopBasics() {
+    if (!_shop) return;
+    const num = (id, min, max, fallback) => {
+      const n = parseInt(document.getElementById(id)?.value, 10);
+      return Number.isFinite(n) && n >= min && n <= max ? n : fallback;
+    };
+    const prev = JSON.stringify(_shop);
+    _shop.referral_credits         = num('admin-shop-refcredits', 0, 10000, SHOP_DEFAULTS.referral_credits);
+    _shop.default_chapter_price    = num('admin-shop-price', 0, 1000000, SHOP_DEFAULTS.default_chapter_price);
+    _shop.default_subject_price    = num('admin-shop-subjprice', 0, 1000000, SHOP_DEFAULTS.default_subject_price);
+    _shop.entitlement_days         = num('admin-shop-days', 1, 3650, SHOP_DEFAULTS.entitlement_days);
+    _shop.min_account_age_minutes  = num('admin-shop-minage', 0, 100000, SHOP_DEFAULTS.min_account_age_minutes);
+    _shop.max_credited_referrals   = num('admin-shop-maxrefs', 0, 100000, SHOP_DEFAULTS.max_credited_referrals);
+    _shop.activation_burst_limit   = num('admin-shop-burst', 1, 10000, SHOP_DEFAULTS.activation_burst_limit);
+    _shop.referral_earning_enabled = !!document.getElementById('admin-shop-earning')?.checked;
+    const res = await _saveShop();
+    if (!res.ok) _shop = JSON.parse(prev);
+    _renderShopSettings();
+    toast(res.ok ? 'Shop settings saved.' : 'Could not save — NOT applied.', res.ok ? 2500 : 4000);
+  }
+
+  async function setShopEnabled(on) {
+    if (!_shop) return;
+    const prev = JSON.stringify(_shop);
+    _shop.shop_enabled = !!on;
+    const res = await _saveShop();
+    if (!res.ok) { _shop = JSON.parse(prev); _renderShopSettings(); }
+    toast(res.ok ? (on ? 'Shop opened.' : 'Shop closed.') : 'Could not save — NOT applied.', res.ok ? 2500 : 4000);
+  }
+
+  // Writes the chapter list this browser has loaded into shop_settings.catalog.
+  // purchase_chapter() then refuses anything not in it — which is what stops a
+  // crafted RPC call from creating an entitlement row for a made-up id.
+  async function publishCatalog() {
+    if (!_shop) return;
+    const cat = _allChapters().map(c => ({ id: c.id, name: c.name, subject: c.subjectId, subjectName: c.subject }));
+    if (!cat.length) { toast('No subject packs loaded — cannot publish.', 3500); return; }
+    const prev = JSON.stringify(_shop);
+    _shop.catalog = cat;
+    const res = await _saveShop();
+    if (!res.ok) _shop = JSON.parse(prev);
+    toast(res.ok ? `Catalogue published — ${cat.length} chapters.` : 'Could not save — NOT applied.', res.ok ? 3000 : 4000);
+  }
+
+  async function loadSecurityEvents() {
+    const box = document.getElementById('admin-security-list');
+    if (!box || !_sb) return;
+    box.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">Loading…</p>';
+    const { data, error } = await _sb.rpc('admin_security_events', { p_limit: 100 });
+    if (error) {
+      box.innerHTML = `<p class="text-xs text-gray-400 py-3 text-center">${
+        error.code === 'PGRST202' ? 'Run supabase-credits-shop.sql to switch this on.' : 'Could not load.'}</p>`;
+      return;
+    }
+    if (!data?.length) {
+      box.innerHTML = '<p class="text-xs text-gray-400 py-3 text-center">Nothing logged. 👍</p>';
+      return;
+    }
+    box.innerHTML = data.map(e => {
+      const blocked = e.blocked_until && new Date(e.blocked_until) > new Date();
+      const fromClient = String(e.kind).startsWith('client:');
+      return `<div class="rounded-xl border ${fromClient
+          ? 'border-gray-200 dark:border-gray-700'
+          : 'border-amber-200 dark:border-amber-800/50 bg-amber-50/50 dark:bg-amber-900/10'} px-3 py-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs font-bold ${fromClient ? 'text-gray-500' : 'text-amber-700 dark:text-amber-300'}">${_esc(e.kind)}</span>
+          <span class="text-[10px] text-gray-400">${new Date(e.created_at).toLocaleString()}</span>
+          ${blocked ? '<span class="text-[10px] font-bold text-red-500">BLOCKED</span>' : ''}
+        </div>
+        <div class="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5 truncate">
+          ${_esc(e.user_name || e.user_id || e.student_id || '—')}
+        </div>
+        <div class="text-[10px] text-gray-400 font-mono truncate">${_esc(JSON.stringify(e.detail || {}))}</div>
+        ${e.user_id ? `<div class="flex gap-2 mt-1.5">
+          <button onclick="AdminPanel.blockUser('${e.user_id}', 60)" class="text-[10px] font-semibold text-red-500 hover:text-red-700">Block 1h</button>
+          <button onclick="AdminPanel.blockUser('${e.user_id}', 1440)" class="text-[10px] font-semibold text-red-500 hover:text-red-700">Block 24h</button>
+          <button onclick="AdminPanel.blockUser('${e.user_id}', 0)" class="text-[10px] font-semibold text-green-600 hover:text-green-700">Unblock</button>
+        </div>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  // Hand-adjust one account's balance: support, a refund, or clawing back a
+  // farmed balance. Goes through admin_adjust_credits(), which writes the
+  // ledger, so a manual change is as auditable as an earned one — there is
+  // deliberately no path that moves credits without leaving a row behind.
+  async function adjustCredits(userId) {
+    if (!_sb) return;
+    const raw = document.getElementById(`credits-delta-${userId}`)?.value;
+    const n   = parseInt(raw, 10);
+    if (!Number.isFinite(n) || n === 0) { toast('Enter an amount (use a minus sign to take credits away).', 3500); return; }
+    const reason = (document.getElementById(`credits-reason-${userId}`)?.value || '').trim() || 'admin adjustment';
+
+    const { data, error } = await _sb.rpc('admin_adjust_credits',
+      { p_user: userId, p_delta: n, p_reason: reason });
+    if (error || !data?.ok) {
+      toast(error?.code === 'PGRST202' ? 'Run supabase-credits-shop.sql first.' : 'Could not adjust credits.', 4000);
+      return;
+    }
+    const bal = document.getElementById(`credits-bal-${userId}`);
+    if (bal) bal.textContent = data.balance;
+    const row = _members.find(m => m.id === userId);
+    if (row) row.credits = data.balance;
+    const d = document.getElementById(`credits-delta-${userId}`);   if (d) d.value = '';
+    const r = document.getElementById(`credits-reason-${userId}`);  if (r) r.value = '';
+    toast(`${n > 0 ? '+' : ''}${n} credits — new balance ${data.balance}.`, 3000);
+  }
+
+  async function showCreditLedger(userId) {
+    const box = document.getElementById(`credits-ledger-${userId}`);
+    if (!box || !_sb) return;
+    if (!box.classList.contains('hidden')) { box.classList.add('hidden'); return; }
+    box.classList.remove('hidden');
+    box.innerHTML = '<p class="text-xs text-gray-400 py-2">Loading…</p>';
+    // credit_ledger's SELECT policy already allows is_admin(), so this needs no
+    // RPC of its own.
+    const { data, error } = await _sb.from('credit_ledger')
+      .select('delta, balance_after, reason, created_at')
+      .eq('user_id', userId).order('created_at', { ascending: false }).limit(30);
+    if (error) { box.innerHTML = '<p class="text-xs text-gray-400 py-2">Could not load the ledger.</p>'; return; }
+    if (!data?.length) { box.innerHTML = '<p class="text-xs text-gray-400 py-2">No credit movement yet.</p>'; return; }
+    box.innerHTML = data.map(l => `
+      <div class="flex items-center gap-2 text-[11px] py-1 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
+        <span class="font-black w-14 shrink-0 ${l.delta > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500'}">${l.delta > 0 ? '+' : ''}${l.delta}</span>
+        <span class="flex-1 min-w-0 truncate text-gray-600 dark:text-gray-300">${_esc(l.reason)}</span>
+        <span class="text-gray-400 shrink-0">= ${l.balance_after}</span>
+        <span class="text-gray-400 shrink-0 hidden sm:inline">${new Date(l.created_at).toLocaleDateString()}</span>
+      </div>`).join('');
+  }
+
+  async function blockUser(userId, minutes) {
+    if (!_sb) return;
+    const { data, error } = await _sb.rpc('admin_block_user',
+      { p_user: userId, p_minutes: minutes, p_reason: 'admin panel' });
+    if (error || !data?.ok) { toast('Could not apply that.', 3500); return; }
+    toast(minutes ? `Blocked for ${minutes} minutes.` : 'Unblocked.', 2500);
+    loadSecurityEvents();
+  }
+
   return { render, showTab, loadMembers, loadMoreMembers, filterMembers, changeRole, toggleMemberRow,
+    loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
+    publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
+    setSubjectPrice, renderSubjectPrices,
     loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, resolveReport, loadRoles, loadMoreRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier,
     qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
