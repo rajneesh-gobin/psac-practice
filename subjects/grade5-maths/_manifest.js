@@ -6,7 +6,19 @@
 // ══════════════════════════════════════════════
 
 // ── CHAPTERS ───────────────────────────────────
-const CHAPTERS = [
+// ⚠ CHAPTERS (the GLOBAL every screen renders from) starts EMPTY, and is
+// filled IN PLACE by activateSubjectPack() when a subject is chosen. It used to
+// be declared here already holding this pack's eighteen chapters, so until a
+// subject was activated every screen reading CHAPTERS showed Grade 5 Maths — to
+// a Grade 4 child, inside Science, whatever they had actually tapped. That is
+// the "I clicked a subject and maths material loaded" report.
+//
+// The declaration stays in THIS file at THIS point in the load order: app.js
+// references CHAPTERS at top level and the manifests load before it (see the
+// load-order note in CLAUDE.md). Only its initial contents moved.
+const CHAPTERS = [];
+
+const G5M_CHAPTERS = [
   { id:'numeration',  name:'Numeration & Notation',   icon:'🔢', color:'blue',   part:1, examWeight:3 },
   { id:'four_ops',    name:'Four Operations',          icon:'➕', color:'purple', part:1, examWeight:5 },
   { id:'square_nums', name:'Square Numbers & Patterns',icon:'⬜', color:'indigo', part:1, examWeight:2 },
@@ -849,7 +861,7 @@ registerSubject({
   subject:     'Maths',
   curriculum:  'MIE Mauritius',
   level4Label: 'Word Problems',
-  chapters:    CHAPTERS,
+  chapters:    G5M_CHAPTERS,
 
   // Per-subject content. Previously these were bare globals (SYLLABUS,
   // FORMULAS, BADGES, GENERATORS) which meant every subject shared Maths'

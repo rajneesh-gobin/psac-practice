@@ -34,17 +34,35 @@ function _sb() {
 // ── Provider signature verifiers (TODO: implement per provider) ──
 function _verifyStripe(body, sig, secret) {
   // TODO: use stripe.webhooks.constructEvent(body, sig, secret)
-  return true; // placeholder - REMOVE before going live
+  // FAILS CLOSED. This returned true, directly above a commented-out block that
+  // activates subscriptions from the request body. Whoever turns payments on
+  // would have uncommented that and shipped an endpoint granting paid plans to
+  // anyone who could POST JSON. Returning false means enabling payments breaks
+  // loudly until the real signature check is written, which is the only safe
+  // direction for an unimplemented verifier.
+  return false;
 }
 
 function _verifyJuice(body, sig, secret) {
   // TODO: verify HMAC-SHA256 of body with JUICE_MERCHANT_KEY
-  return true; // placeholder - REMOVE before going live
+  // FAILS CLOSED. This returned true, directly above a commented-out block that
+  // activates subscriptions from the request body. Whoever turns payments on
+  // would have uncommented that and shipped an endpoint granting paid plans to
+  // anyone who could POST JSON. Returning false means enabling payments breaks
+  // loudly until the real signature check is written, which is the only safe
+  // direction for an unimplemented verifier.
+  return false;
 }
 
 function _verifyMytMoney(body, sig, secret) {
   // TODO: verify MYT Money signature per their docs
-  return true; // placeholder - REMOVE before going live
+  // FAILS CLOSED. This returned true, directly above a commented-out block that
+  // activates subscriptions from the request body. Whoever turns payments on
+  // would have uncommented that and shipped an endpoint granting paid plans to
+  // anyone who could POST JSON. Returning false means enabling payments breaks
+  // loudly until the real signature check is written, which is the only safe
+  // direction for an unimplemented verifier.
+  return false;
 }
 
 // ── Main handler ─────────────────────────────────────────────

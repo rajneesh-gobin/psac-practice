@@ -244,7 +244,15 @@ async function upsertAll(rows, label) {
   let totalPapers   = 0;
   const allPapers   = [];
 
-  for (const grade of [4, 5, 6]) {
+  // Discovered from subjects/, not hardcoded — see build-questions.js.
+  const GRADES = [...new Set(
+    fs.readdirSync(path.join(ROOT, 'subjects'))
+      .map(d => (d.match(/^grade(\d+)-/) || [])[1])
+      .filter(Boolean)
+      .map(Number)
+  )].sort((a, b) => a - b);
+
+  for (const grade of GRADES) {
     const subjects = fs.readdirSync(subjectsDir)
       .filter(d => d.startsWith(`grade${grade}-`) && fs.statSync(path.join(subjectsDir, d)).isDirectory())
       .sort();

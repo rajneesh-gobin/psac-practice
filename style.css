@@ -54,6 +54,19 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 .btn-secondary:hover { background: #cbd5e1; }
 .dark .btn-secondary:hover { background: #4b5563; }
 
+/* The last-question finishing button. Green, and larger than an ordinary
+   primary: at the end of an exam this is the only thing a child is looking for,
+   and it competes with a small ✓ Submit pill up in the toolbar that they have
+   been ignoring for forty questions. Applied on top of .btn-primary by
+   renderExamQuestion(), so it only has to override what differs. */
+.btn-finish {
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+  box-shadow: 0 2px 10px rgba(34, 197, 94, 0.4) !important;
+  padding: 0.625rem 1.5rem;
+  font-size: 1rem;
+}
+.btn-finish:hover { box-shadow: 0 4px 16px rgba(34, 197, 94, 0.5) !important; }
+
 .btn-danger {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white; font-weight: 600; padding: 0.5rem 1.25rem;
@@ -303,6 +316,16 @@ button.track-card:disabled { opacity: 0.55; cursor: not-allowed; transform: none
 .hdr-stat-xp:empty { display: none; }
 .dark .hdr-stat-xp { background: rgba(126,34,206,0.25); color: #e9d5ff; }
 .hdr-stat-word { font-size: 0.7rem; font-weight: 600; opacity: 0.85; }
+
+/* The child's level. Same shape as the credits chip, and mutually exclusive
+   with it — a child sees a level, a parent sees credits. */
+.hdr-stat-level {
+  background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe;
+  cursor: pointer; transition: background-color 0.15s, border-color 0.15s;
+}
+.hdr-stat-level:hover { background: #ddd6fe; border-color: #c4b5fd; }
+.dark .hdr-stat-level { background: rgba(109,40,217,0.28); color: #ddd6fe; border-color: rgba(139,92,246,0.45); }
+.dark .hdr-stat-level:hover { background: rgba(109,40,217,0.42); }
 
 /* The credit balance. A button, not a read-out — it opens the Shop, which is
    the only place the number means anything. */
@@ -558,6 +581,54 @@ body.is-parent-session #xp-display { display: none !important; }
 /* Pushes the status/bar/footer block to the bottom so every card in a row
    lines its progress up, however long the titles are. */
 .ch-spacer { flex: 1; min-height: 0.5rem; }
+
+/* ── "Have I done this one?" ──
+   A done-ness badge and a last-practised stamp. The card already carried an
+   accuracy percentage, but accuracy answers "how well", never "have I". */
+.ch-meta {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem 0.4rem;
+  margin-bottom: 0.3rem;
+}
+.ch-done {
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.02em;
+  padding: 0.1rem 0.4rem; border-radius: 999px; white-space: nowrap;
+}
+.ch-done.is-mastered { background: #dcfce7; color: #15803d; }
+.dark .ch-done.is-mastered { background: rgba(22,163,74,0.25); color: #86efac; }
+.ch-done.is-worked   { background: #dbeafe; color: #1d4ed8; }
+.dark .ch-done.is-worked { background: rgba(37,99,235,0.25); color: #93c5fd; }
+.ch-done.is-started  { background: #f1f5f9; color: #64748b; }
+.dark .ch-done.is-started { background: #374151; color: #cbd5e1; }
+.ch-when { font-size: 0.6rem; font-weight: 600; color: #94a3b8; white-space: nowrap; }
+.dark .ch-when { color: #94a3b8; }
+
+/* ── Filter row above the grid ── */
+.ch-filters {
+  display: flex; flex-wrap: wrap; gap: 0.375rem; margin-bottom: 0.875rem;
+}
+.ch-filter {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.7rem; font-weight: 700; line-height: 1;
+  padding: 0.45rem 0.7rem; border-radius: 999px;
+  background: #f1f5f9; color: #475569; border: 1px solid transparent;
+  cursor: pointer; transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.dark .ch-filter { background: #374151; color: #cbd5e1; }
+.ch-filter:hover { background: #e2e8f0; }
+.dark .ch-filter:hover { background: #4b5563; }
+.ch-filter.on { background: #4f46e5; color: #fff; border-color: #6366f1; }
+.dark .ch-filter.on { background: #4f46e5; color: #fff; }
+.ch-filter-n {
+  font-size: 0.6rem; font-weight: 800; padding: 0.05rem 0.3rem;
+  border-radius: 999px; background: rgba(0,0,0,0.08);
+}
+.dark .ch-filter-n { background: rgba(255,255,255,0.15); }
+.ch-filter.on .ch-filter-n { background: rgba(255,255,255,0.25); }
+
+.ch-sum-of { font-size: 0.7rem; font-weight: 700; color: #94a3b8; }
+.ch-sum-last { font-size: 0.6rem; font-weight: 600; color: #64748b; margin-top: 0.3rem; }
+.dark .ch-sum-last { color: #94a3b8; }
 
 .ch-status { font-size: 0.7rem; font-weight: 600; display: block; margin-bottom: 0.35rem; }
 .ch-status.new  { color: #64748b; }
@@ -1248,6 +1319,23 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
 body.has-bottom-nav .pr-actions { bottom: calc(4rem + env(safe-area-inset-bottom)); }
 body.has-bottom-nav .pr-wrap    { padding-bottom: 4rem; }
 
+/* ── Exam Prev / Next row ──
+   Sticky, not fixed: it rides just above the bottom tab bar while the question
+   card is taller than the screen, then settles into its normal place at the
+   end of the card. Measured before this on a 360px phone at 130% font: the row
+   sat at 641-688px with the tab bar starting at 661px - half a button showing,
+   and a child who does not think to scroll sees a broken Next. Only below the
+   lg breakpoint, where the navigator sidebar has stacked under the card. */
+@media (max-width: 1023px) {
+  #exam-nav-row {
+    position: sticky; bottom: 0.5rem; z-index: 30;
+    background: rgba(255,255,255,0.94); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    margin: 0 -1.5rem -1.5rem; padding: 0.6rem 1.5rem 1.5rem; border-radius: 0 0 1rem 1rem;
+  }
+  .dark #exam-nav-row { background: rgba(31,41,55,0.94); }
+  body.has-bottom-nav #exam-nav-row { bottom: calc(var(--tabbar-h, 3.75rem) + env(safe-area-inset-bottom) + 0.5rem); }
+}
+
 /* Question progress bar */
 .practice-progress-outer {
   height: 6px; background: #e2e8f0; border-radius: 99px; overflow: hidden;
@@ -1355,6 +1443,31 @@ body.has-bottom-nav .pr-wrap    { padding-bottom: 4rem; }
 .dark .pin-key-btn          { color: #f9fafb; background-color: #1f2937; }
 .dark .pin-key-btn:hover    { background-color: #374151; }
 
+/* ── "Switch to a child" chips (#modal-student-switch) ───────────────────
+   Face over name, so the child is picked by the avatar they chose rather
+   than by reading. Sized past the 44px touch target even with one word. */
+.sw-kid {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.15rem;
+  min-width: 4.5rem; max-width: 6.5rem; padding: 0.5rem 0.4rem;
+  border: 2px solid #e5e7eb; border-radius: 1rem;
+  background-color: #f9fafb; cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s, transform 0.1s;
+  -webkit-user-select: none; user-select: none;
+}
+.sw-kid:active { transform: scale(0.95); }
+.sw-kid-face { font-size: 1.6rem; line-height: 1.8rem; }
+.sw-kid-name {
+  font-size: 0.7rem; font-weight: 700; color: #374151;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.sw-kid-on { border-color: #6366f1; background-color: #eef2ff; }
+.sw-kid-on .sw-kid-name { color: #4338ca; }
+.dark .sw-kid          { border-color: #374151; background-color: #111827; }
+.dark .sw-kid-name     { color: #d1d5db; }
+.dark .sw-kid-on       { border-color: #818cf8; background-color: #312e81; }
+.dark .sw-kid-on .sw-kid-name { color: #e0e7ff; }
+
 /* ── Onboarding hint callout ─────────────────────── */
 #hint-callout {
   position: fixed;
@@ -1394,6 +1507,168 @@ body.has-bottom-nav .pr-wrap    { padding-bottom: 4rem; }
   from { opacity: 0; transform: scale(0.85) translateY(6px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
+
+/* ══════════ TASK BUTTONS ══════════
+   Today's plan and anything paused, as two small cards instead of two full
+   panels. Side by side from 480px; stacked below that, where a phone has room
+   for exactly one readable row. */
+.task-row { display: grid; gap: 0.5rem; margin-bottom: 1.25rem; }
+@media (min-width: 480px) { .task-row { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); } }
+
+.task-btn {
+  display: flex; align-items: center; gap: 0.75rem; width: 100%;
+  padding: 0.75rem 0.875rem; border-radius: 1rem; border: 1px solid transparent;
+  text-align: left; cursor: pointer; transition: transform 0.12s, box-shadow 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.task-btn:active { transform: scale(0.985); }
+.task-btn.is-plan   { background: #eef2ff; border-color: #c7d2fe; }
+.dark .task-btn.is-plan { background: rgba(79,70,229,0.22); border-color: rgba(99,102,241,0.4); }
+.task-btn.is-resume { background: #ecfdf5; border-color: #a7f3d0; }
+.dark .task-btn.is-resume { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.4); }
+.task-btn.is-muted  { opacity: 0.7; }
+
+.task-ico { font-size: 1.5rem; line-height: 1; flex: 0 0 auto; }
+.task-body { flex: 1; min-width: 0; }
+.task-title {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.85rem; font-weight: 800; color: #1e293b; line-height: 1.2;
+}
+.dark .task-title { color: #f1f5f9; }
+.task-badge {
+  min-width: 1.15rem; height: 1.15rem; padding: 0 0.3rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px; background: #4f46e5; color: #fff;
+  font-size: 0.625rem; font-weight: 800; line-height: 1;
+}
+.task-btn.is-resume .task-badge { background: #059669; }
+.task-sub  { display: block; font-size: 0.72rem; font-weight: 600; color: #475569; margin-top: 0.1rem;
+             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dark .task-sub { color: #cbd5e1; }
+.task-meta { display: block; font-size: 0.65rem; color: #64748b; margin-top: 0.05rem; }
+.dark .task-meta { color: #94a3b8; }
+
+/* Rows inside the "pick up again" sheet */
+.rt-item {
+  display: flex; align-items: center; gap: 0.625rem;
+  padding: 0.625rem 0.5rem; border-radius: 0.875rem;
+}
+.rt-item + .rt-item { border-top: 1px solid #f1f5f9; }
+.dark .rt-item + .rt-item { border-top-color: #374151; }
+.rt-ico   { font-size: 1.35rem; flex: 0 0 auto; }
+.rt-body  { flex: 1; min-width: 0; }
+.rt-title { font-size: 0.8rem; font-weight: 700; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dark .rt-title { color: #f1f5f9; }
+.rt-sub   { font-size: 0.68rem; color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dark .rt-sub { color: #94a3b8; }
+.rt-go {
+  flex: 0 0 auto; font-size: 0.7rem; font-weight: 800; padding: 0.45rem 0.7rem;
+  border-radius: 0.7rem; border: none; cursor: pointer;
+  background: #059669; color: #fff;
+}
+.rt-go:hover { background: #047857; }
+.rt-drop {
+  flex: 0 0 auto; width: 1.75rem; height: 1.75rem; border: none; cursor: pointer;
+  border-radius: 999px; background: transparent; color: #94a3b8; font-size: 0.85rem;
+}
+.rt-drop:hover { background: #fee2e2; color: #dc2626; }
+.dark .rt-drop:hover { background: rgba(220,38,38,0.25); color: #fca5a5; }
+
+/* ══════════ TODAY'S GOAL ══════════
+   The card that gives a practice session an ending. Sits at the top of both
+   landing screens (kid home and dashboard). */
+.goal-card {
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 1.25rem;
+  padding: 1rem; margin-bottom: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.dark .goal-card { background: #1f2937; border-color: #374151; }
+.goal-card.is-done { border-color: #86efac; background: linear-gradient(180deg, #f0fdf4, #fff); }
+.dark .goal-card.is-done { border-color: rgba(34,197,94,0.5); background: linear-gradient(180deg, rgba(22,163,74,0.18), #1f2937); }
+
+.goal-main { display: flex; align-items: center; gap: 0.875rem; }
+.goal-ring-wrap { position: relative; width: 60px; height: 60px; flex: 0 0 60px; }
+.goal-ring { width: 60px; height: 60px; transform: rotate(-90deg); }
+.goal-ring-bg { fill: none; stroke: #e5e7eb; stroke-width: 6; }
+.dark .goal-ring-bg { stroke: #374151; }
+.goal-ring-fg {
+  fill: none; stroke: #6366f1; stroke-width: 6; stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.goal-ring-fg.is-done { stroke: #22c55e; }
+@media (prefers-reduced-motion: reduce) { .goal-ring-fg { transition: none; } }
+.goal-ring-txt {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 800; color: #334155;
+}
+.dark .goal-ring-txt { color: #f1f5f9; }
+.goal-ring-txt small { font-size: 0.65rem; font-weight: 700; color: #94a3b8; }
+.goal-card.is-done .goal-ring-txt { color: #16a34a; font-size: 1.5rem; }
+
+.goal-text { flex: 1; min-width: 0; }
+.goal-head { font-size: 0.95rem; font-weight: 800; color: #1e293b; line-height: 1.2; }
+.dark .goal-head { color: #f1f5f9; }
+.goal-sub  { font-size: 0.75rem; color: #64748b; margin-top: 0.1rem; }
+.dark .goal-sub { color: #94a3b8; }
+.goal-lv   { font-size: 0.68rem; font-weight: 700; color: #6d28d9; margin-top: 0.35rem; }
+.dark .goal-lv { color: #c4b5fd; }
+.goal-lv-bar { height: 4px; border-radius: 999px; background: #ede9fe; overflow: hidden; margin-top: 0.2rem; }
+.dark .goal-lv-bar { background: #374151; }
+.goal-lv-bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg,#8b5cf6,#6366f1); transition: width 0.6s ease; }
+
+/* Seven days, three states. A bare streak number cannot say "you met the goal
+   on 4 days and showed up on 2 more". */
+.goal-week { margin-top: 0.875rem; padding-top: 0.75rem; border-top: 1px solid #f1f5f9; }
+.dark .goal-week { border-top-color: #374151; }
+.goal-week-days { display: flex; gap: 0.3rem; }
+.goal-day {
+  flex: 1 1 0; min-width: 0; height: 1.75rem; border-radius: 0.5rem;
+  display: flex; align-items: center; justify-content: center;
+  background: #f1f5f9; color: #94a3b8;
+  font-size: 0.6rem; font-weight: 800;
+}
+.dark .goal-day { background: #374151; color: #6b7280; }
+.goal-day i { font-style: normal; }
+.goal-day.is-part { background: #e0e7ff; color: #4338ca; }
+.dark .goal-day.is-part { background: rgba(79,70,229,0.3); color: #c7d2fe; }
+.goal-day.is-met  { background: #22c55e; color: #fff; }
+.dark .goal-day.is-met { background: #16a34a; color: #fff; }
+.goal-week-note { font-size: 0.65rem; color: #64748b; margin-top: 0.4rem; }
+.dark .goal-week-note { color: #94a3b8; }
+
+/* ── Parent report: Today / Yesterday breakdown ──
+   The one card that answers "what did they do today", so it reads as a list of
+   chapters, not another chart. */
+.rep-days { display: grid; gap: 0.5rem; }
+@media (min-width: 480px) { .rep-days { grid-template-columns: 1fr 1fr; } }
+.rep-day-card {
+  background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 0.875rem;
+  padding: 0.625rem 0.75rem;
+}
+.dark .rep-day-card { background: #1f2937; border-color: #374151; }
+.rep-day-card.is-empty { opacity: 0.7; }
+.rep-day-when {
+  font-size: 0.625rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.04em; color: #64748b; margin-bottom: 0.25rem;
+}
+.dark .rep-day-when { color: #94a3b8; }
+.rep-day-top { display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.4rem; }
+.rep-day-q   { font-size: 0.95rem; font-weight: 800; color: #1e293b; }
+.dark .rep-day-q { color: #f1f5f9; }
+.rep-day-acc { font-size: 0.8rem; font-weight: 800; }
+.rep-day-exam{ font-size: 0.65rem; font-weight: 700; color: #64748b; }
+.dark .rep-day-exam { color: #94a3b8; }
+.rep-day-none{ font-size: 0.7rem; color: #94a3b8; }
+.rep-ch-row {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.2rem 0; font-size: 0.7rem;
+}
+.rep-ch-ico  { flex: 0 0 auto; }
+.rep-ch-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+               font-weight: 600; color: #334155; }
+.dark .rep-ch-name { color: #cbd5e1; }
+.rep-ch-n    { flex: 0 0 auto; font-weight: 700; color: #64748b; }
+.dark .rep-ch-n { color: #94a3b8; }
+.rep-ch-pct  { flex: 0 0 auto; font-weight: 800; min-width: 2.2rem; text-align: right; }
 
 /* ── Idle nudge ────────────────────────────────
    The gentle "you have been sitting here a while, this is the thing to press"
@@ -1470,13 +1745,21 @@ img, svg, video, canvas, iframe { max-width: 100%; }
 .screen-enter-left {
   animation: slideInLeft 0.22s cubic-bezier(0.25,0.46,0.45,0.94) both;
 }
+/* ⚠ Opacity ONLY - no transform, no translate. A screen div is the ancestor of
+   the practice screen's position:fixed action bar, and a transformed ancestor
+   becomes the containing block for fixed descendants. With the old
+   translateX() keyframes (fill-mode both leaves transform at matrix(1,0,0,1,0,0),
+   which is NOT none) the Check/Next bar was anchored to the bottom of the
+   screen's CONTENT, not the viewport: half visible on some phones, entirely
+   off-screen on a tall question or a larger font size. Measured in headless
+   Chrome at 390x844: bar at 784-875px on an 844px viewport. */
 @keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to   { transform: translateX(0);    opacity: 1; }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 @keyframes slideInLeft {
-  from { transform: translateX(-100%); opacity: 0; }
-  to   { transform: translateX(0);     opacity: 1; }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ── Bottom navigation bar ──────────────────────
@@ -1881,3 +2164,172 @@ label.exam-opt.plan-locked { cursor: not-allowed; }
   color: rgb(199 210 254 / 0.75);
 }
 .role-note b { color: #fff; }
+
+/* ── Parent dashboard tab bar ─────────────────────────────
+   Was `flex gap-1` with five flex-1 tabs. At 360px that is ~67px per tab and
+   "Assignments" needs more, so the labels spilled out of their buttons - the
+   same failure the bottom bar had before .tabbar-btn (see CLAUDE.md).
+   `flex: 1 0 auto` is the fix: grow to fill the row when there is space, never
+   shrink below the label, scroll when there is not. Scrollbar hidden because on
+   a phone the row is swiped, and a visible bar under five tabs reads as broken. */
+.pd-tabbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem;
+  /* Backstop only. With wrap + flex-shrink:0 below, a tab that does not fit
+     moves to the next row rather than overflowing, so this should never engage
+     - but a very long label at 320px would scroll rather than break the page. */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.pd-tabbar::-webkit-scrollbar { display: none; }
+/* flex-shrink MUST stay 0. Five flex-1 tabs at 360px give each ~64px while
+   "Assignments" needs ~130px, and the label spills out of the button on both
+   sides - the exact failure .nav-btn had in the bottom bar (see CLAUDE.md).
+   Wrapping costs one extra row on a phone; hiding tabs off the end of a
+   scroller cost a parent ever finding the Reports tab, which is worse. */
+.pd-tabbar .pd-tab {
+  flex: 1 0 auto;
+  white-space: nowrap;
+}
+
+/* ── Reports: 30-day activity strip ───────────────────────
+   Bars are sized in JS (height is data). Everything static lives here so the
+   inline style attribute carries only the two values that actually vary. */
+.rep-strip { display: flex; align-items: flex-end; gap: 2px; height: 64px; }
+.rep-day   { flex: 1 1 0; min-width: 0; border-radius: 2px 2px 0 0; position: relative; }
+.rep-day[data-empty="1"] { background: #e2e8f0; height: 2px !important; }
+:root.dark .rep-day[data-empty="1"] { background: #374151; }
+
+/* Sparklines and the exam trend are inline SVG with a viewBox and no fixed
+   width, so they scale to whatever the card gives them at any device width. */
+.rep-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.rep-key { display: inline-block; width: 8px; height: 8px; border-radius: 2px; vertical-align: middle; }
+
+/* ── Family overview table ────────────────────────────────
+   A row is a grid, not a flex line: the columns have to line up between rows
+   AND with the header, and a flex row with truncating names does not do that.
+   The name column is the only 1fr — everything else is content-sized, so a long
+   name shrinks and the numbers stay in their columns.
+   `min-width:0` on the row is what actually lets the name truncate; without it
+   a grid item refuses to shrink below its content and the row overflows. */
+.fam-head, .fam-row {
+  display: grid;
+  /* EXPLICIT widths, not auto. The header and the rows are separate grids, so
+     auto columns size to each grid's OWN content — "Streak" is wider than
+     "12🔥", "Acc" narrower than "72%" — and the two can never line up. Measured
+     misaligned at all ten widths before this. The strip column is 14 cells of
+     3px plus 13 gaps of 1px = 55px, hence 3.5rem. */
+  grid-template-columns: 1.75rem minmax(0, 1fr) 3.5rem 3.25rem 3rem 2.75rem 2.5rem 1.5rem;
+  align-items: center;
+  gap: .5rem;
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+}
+.fam-head {
+  padding: 0 .25rem .375rem;
+  color: #9ca3af;
+  font-weight: 600;
+}
+.fam-row {
+  padding: .5rem .25rem;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  border-radius: .5rem;
+  transition: background-color .15s;
+}
+.fam-row:hover  { background: rgba(99, 102, 241, .06); }
+.fam-row:active { transform: scale(.995); }
+:root.dark .fam-row:hover { background: rgba(99, 102, 241, .12); }
+.fam-name { min-width: 0; }
+.fam-num  { font-size: .75rem; text-align: right; white-space: nowrap; }
+.fam-unit { font-size: .625rem; opacity: .55; margin-left: .0625rem; }
+
+/* 14 one-day cells. Fixed 3px cells rather than flex: the strip must stay the
+   same width on every row or the columns after it stop lining up. */
+.fam-strip { display: inline-flex; gap: 1px; align-items: center; }
+.fam-cell  { width: 3px; height: 14px; border-radius: 1px; background: #cbd5e1; }
+.fam-cell[data-empty="1"] { background: #e5e7eb; height: 4px; }
+:root.dark .fam-cell[data-empty="1"] { background: #374151; }
+
+/* Below 560px the strip and the two least-load-bearing columns come off: eight
+   columns cannot fit a phone, and squeezing them was what broke the tab bar and
+   the bottom bar before it. Questions / accuracy / days survive, because those
+   are what the row is for. Streak and the trend arrow are in the child's own
+   report a tap away. */
+@media (max-width: 559px) {
+  .fam-head, .fam-row {
+    grid-template-columns: 1.75rem minmax(0, 1fr) 3.25rem 3rem 2.75rem;
+    gap: .375rem;
+  }
+  /* !important so this still wins if an inline display is ever put back on the
+     header cell — that is exactly how this rule silently stopped working and
+     left the header one column wider than every row beneath it. */
+  .fam-head > .fam-strip, .fam-row > .fam-strip { display: none !important; }
+  .fam-head > .fam-num:nth-last-child(-n+2),
+  .fam-row  > .fam-num:nth-last-child(-n+2) { display: none; }
+}
+
+/* ── Calendar: layer filters ──────────────────────────────
+   Four toggles above the month grid. Wraps rather than scrolls - there are only
+   ever four, and at 320px they land as 2x2, which is fine; a scroller would hide
+   one behind an edge with no affordance. */
+.cal-filters { display: flex; flex-wrap: wrap; gap: .375rem; }
+.cal-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .375rem .625rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: background-color .15s, color .15s, border-color .15s, opacity .15s;
+}
+:root.dark .cal-chip { background: #1f2937; border-color: #374151; color: #6b7280; }
+/* OFF is the styled state, not ON. A parent's default is everything visible, so
+   the chips must not all read as "selected buttons" on first sight - the muted
+   one is the one hiding something. */
+.cal-chip.is-on { color: #1f2937; border-color: #cbd5e1; }
+:root.dark .cal-chip.is-on { color: #f3f4f6; border-color: #4b5563; }
+.cal-chip:not(.is-on) { opacity: .55; }
+.cal-chip:not(.is-on) .cal-chip-dot { background: transparent !important; box-shadow: inset 0 0 0 1.5px currentColor; }
+.cal-chip-dot { width: .5rem; height: .5rem; border-radius: 999px; flex: 0 0 auto; }
+
+/* ── Calendar: day dots ───────────────────────────────────
+   Solid = it happened. Hollow = it is planned. There is no room for a legend on
+   a 52px square, and "was this actually done" is the question the month view is
+   being scanned for. */
+.cal-dot {
+  width: .375rem;
+  height: .375rem;
+  border-radius: 999px;
+  flex: 0 0 auto;
+}
+.cal-dot.is-plan {
+  background: transparent !important;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+  color: #94a3b8;
+}
+/* The plan dot borrows the type colour through currentColor, so the ring is
+   tinted rather than uniformly grey. Set after the reset above, or the grey
+   fallback would win. */
+.cal-dot.is-plan.bg-indigo-500 { color: #6366f1; }
+.cal-dot.is-plan.bg-red-500    { color: #ef4444; }
+.cal-dot.is-plan.bg-green-500  { color: #22c55e; }
+.cal-dot.is-plan.bg-gray-400   { color: #9ca3af; }
+.cal-dot.is-plan.bg-yellow-500 { color: #eab308; }
+.cal-dot-more {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 700;
+  color: #94a3b8;
+  align-self: center;
+}

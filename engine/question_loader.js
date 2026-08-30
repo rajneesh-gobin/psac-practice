@@ -29,6 +29,41 @@ const QuestionLoader = (() => {
   //   To check for drift:
   //     compare `ls subjects/*/questions/*.js` against the entries below.
   const LOCAL_FILES = {
+    // ── Placeholder packs (comingSoon: true) ──────────────────────────────
+    // Listed for completeness only. loadForStudent() filters comingSoon packs
+    // out before it gets here, so nothing below is ever fetched for a child;
+    // the entries exist so this list matches `ls subjects/*/questions/*.js`
+    // and the drift check in the comment above stays usable.
+    'grade1-maths': ['subjects/grade1-maths/questions/ch01_sample.js'],
+    'grade1-english': ['subjects/grade1-english/questions/ch01_sample.js'],
+    'grade1-french': ['subjects/grade1-french/questions/ch01_sample.js'],
+    'grade1-science': ['subjects/grade1-science/questions/ch01_sample.js'],
+    'grade1-history': ['subjects/grade1-history/questions/ch01_sample.js'],
+    'grade2-maths': ['subjects/grade2-maths/questions/ch01_sample.js'],
+    'grade2-english': ['subjects/grade2-english/questions/ch01_sample.js'],
+    'grade2-french': ['subjects/grade2-french/questions/ch01_sample.js'],
+    'grade2-science': ['subjects/grade2-science/questions/ch01_sample.js'],
+    'grade2-history': ['subjects/grade2-history/questions/ch01_sample.js'],
+    'grade3-maths': ['subjects/grade3-maths/questions/ch01_sample.js'],
+    'grade3-english': ['subjects/grade3-english/questions/ch01_sample.js'],
+    'grade3-french': ['subjects/grade3-french/questions/ch01_sample.js'],
+    'grade3-science': ['subjects/grade3-science/questions/ch01_sample.js'],
+    'grade3-history': ['subjects/grade3-history/questions/ch01_sample.js'],
+    'grade7-maths': ['subjects/grade7-maths/questions/ch01_sample.js'],
+    'grade7-english': ['subjects/grade7-english/questions/ch01_sample.js'],
+    'grade7-french': ['subjects/grade7-french/questions/ch01_sample.js'],
+    'grade7-science': ['subjects/grade7-science/questions/ch01_sample.js'],
+    'grade7-history': ['subjects/grade7-history/questions/ch01_sample.js'],
+    'grade8-maths': ['subjects/grade8-maths/questions/ch01_sample.js'],
+    'grade8-english': ['subjects/grade8-english/questions/ch01_sample.js'],
+    'grade8-french': ['subjects/grade8-french/questions/ch01_sample.js'],
+    'grade8-science': ['subjects/grade8-science/questions/ch01_sample.js'],
+    'grade8-history': ['subjects/grade8-history/questions/ch01_sample.js'],
+    'grade9-maths': ['subjects/grade9-maths/questions/ch01_sample.js'],
+    'grade9-english': ['subjects/grade9-english/questions/ch01_sample.js'],
+    'grade9-french': ['subjects/grade9-french/questions/ch01_sample.js'],
+    'grade9-science': ['subjects/grade9-science/questions/ch01_sample.js'],
+    'grade9-history': ['subjects/grade9-history/questions/ch01_sample.js'],
     'grade5-maths': [
       'subjects/grade5-maths/questions/core.js',
       'subjects/grade5-maths/questions/questions_extra.js',
@@ -298,7 +333,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 12;
+  const _CACHE_VERSION = 14;
   const _cacheKey = subjectId => `mm_qc_v${_CACHE_VERSION}_${subjectId}`;
 
   // Drop caches written by any earlier version, so a bump reclaims the space
@@ -313,18 +348,153 @@ const QuestionLoader = (() => {
     } catch {}
   })();
 
+  // ── Cache pressure ────────────────────────────────────────────────────
+  // A subject bundle is ~272 KB and the largest is 473 KB; one grade's five
+  // subjects is up to 1.66 MB, and all three grades is 4.3 MB against a
+  // ~5 MB localStorage quota. Cross-grade practice is a real feature, so a
+  // child CAN reach the ceiling.
+  //
+  // Before this, every write was `catch {}` with no eviction, so hitting the
+  // quota failed silently and stayed failed. Two consequences, neither visible:
+  // every subject load refetched ~272 KB for ever, and — worse — the writes
+  // that lose the race are whatever runs next, including
+  // Store.saveStudentSession(). That one is also try/caught, so the token stays
+  // installed on the live page and the child only discovers the session was
+  // never persisted when they reload and land back on the PIN screen.
+  //
+  // ⚠ This cache is now the ONLY offline copy of the questions. The service
+  // worker used to cache /functions/questions too, and deliberately no longer
+  // does — that response varies per caller and a shared URL-keyed cache served
+  // one child's entitled question set to another. So this is load-bearing.
+  const _LRU_KEY  = 'mm_qc_lru';
+  // Six subjects covers one full grade (five) with room to spare, and keeps the
+  // cache near 1.6 MB rather than 4.3 MB. A seventh evicts the least recently
+  // used, which is exactly the cross-grade case.
+  const _LRU_MAX  = 6;
+
+  function _lruRead() {
+    try { return JSON.parse(localStorage.getItem(_LRU_KEY)) || {}; } catch { return {}; }
+  }
+  // Written on every cache HIT, so recency reflects USE, not write time. Kept in
+  // its own tiny key (a few hundred bytes) rather than by rewriting the cached
+  // envelope, which would mean re-serialising ~272 KB just to record a read.
+  //
+  // ⚠ A MONOTONIC COUNTER, not Date.now(). Timestamps looked obvious and were
+  // wrong: several subjects are cached inside the same millisecond by
+  // _loadBatchForGrade (it writes all five of a grade's subjects in one pass),
+  // so they all recorded an identical time and the sort below had no way to
+  // order them. Eviction then picked arbitrarily among the tied entries — which
+  // showed up as a test that passed twice and failed the third time. A counter
+  // gives a strict total order and does not care about clock resolution.
+  function _lruTouch(subjectId) {
+    try {
+      const m = _lruRead();
+      const vals = Object.values(m).filter(v => typeof v === 'number');
+      m[subjectId] = (vals.length ? Math.max(...vals) : 0) + 1;
+      // Forget subjects that are no longer cached, so the index cannot grow
+      // without bound across _CACHE_VERSION bumps.
+      for (const k of Object.keys(m)) {
+        if (k !== subjectId && localStorage.getItem(_cacheKey(k)) === null) delete m[k];
+      }
+      localStorage.setItem(_LRU_KEY, JSON.stringify(m));
+    } catch {}
+  }
+  function _lruForget(subjectId) {
+    try {
+      const m = _lruRead();
+      if (subjectId in m) { delete m[subjectId]; localStorage.setItem(_LRU_KEY, JSON.stringify(m)); }
+    } catch {}
+  }
+
+  // Cached subject ids, least recently used first. Anything cached but missing
+  // from the index is treated as oldest — it was written before the index
+  // existed, so it is the right thing to drop first.
+  function _cachedSubjectsLRUFirst(exclude) {
+    const ids = [];
+    try {
+      const prefix = `mm_qc_v${_CACHE_VERSION}_`;
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(prefix)) ids.push(k.slice(prefix.length));
+      }
+    } catch { return []; }
+    const m = _lruRead();
+    return ids.filter(id => id !== exclude).sort((a, b) => (m[a] || 0) - (m[b] || 0));
+  }
+
+  // Only ever removes THIS cache's own keys. Never touches the session, the
+  // progress copy, or anything else sharing the origin's quota.
+  function _evictOldest(exclude, n) {
+    const victims = _cachedSubjectsLRUFirst(exclude).slice(0, Math.max(1, n || 1));
+    for (const id of victims) {
+      try { localStorage.removeItem(_cacheKey(id)); } catch {}
+      _lruForget(id);
+    }
+    return victims.length;
+  }
+
+  // Safari reports the quota differently from everyone else, and an old Firefox
+  // differently again. Matching only 'QuotaExceededError' would silently skip
+  // eviction on exactly the browser most likely to be tight for space.
+  function _isQuotaError(e) {
+    if (!e) return false;
+    return e.name === 'QuotaExceededError'
+        || e.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+        || e.code === 22 || e.code === 1014;
+  }
+
+  // ⚠ An EMPTY payload is never a cache hit, and is never written.
+  //
+  // A subject can legitimately answer with nothing — every chapter gated by the
+  // plan, or an expired account with no entitlements — and that answer used to
+  // be cached like any other. For the next SEVEN DAYS the child then got a
+  // subject with no questions in it, with nothing on screen to explain why, and
+  // no way to recover even after the parent bought the chapter or renewed. It
+  // also fed startChapterDirect's retry, which before this pass was unbounded.
+  //
+  // The cost of getting this wrong in the other direction is one extra request
+  // per subject load for a family that really is entitled to nothing. That is
+  // the cheaper mistake by a wide margin.
   function _readCache(subjectId) {
     try {
       const raw = localStorage.getItem(_cacheKey(subjectId));
       if (!raw) return null;
       const { ts, data } = JSON.parse(raw);
-      if (Date.now() - ts > _CACHE_TTL) { localStorage.removeItem(_cacheKey(subjectId)); return null; }
+      if (Date.now() - ts > _CACHE_TTL) { localStorage.removeItem(_cacheKey(subjectId)); _lruForget(subjectId); return null; }
+      if (!Array.isArray(data) || !data.length) { localStorage.removeItem(_cacheKey(subjectId)); _lruForget(subjectId); return null; }
+      _lruTouch(subjectId);
       return data;
     } catch { return null; }
   }
 
   function _writeCache(subjectId, data) {
-    try { localStorage.setItem(_cacheKey(subjectId), JSON.stringify({ ts: Date.now(), data })); } catch {}
+    if (!Array.isArray(data) || !data.length) return;
+    const payload = JSON.stringify({ ts: Date.now(), data });
+
+    // Stay under the cap BEFORE writing, so the common case never has to fail a
+    // write first. _cachedSubjectsLRUFirst excludes this subject either way, so
+    // the total after this write is always its length + 1 — whether this is a
+    // new entry or a refresh of an existing one.
+    try {
+      const others = _cachedSubjectsLRUFirst(subjectId).length;
+      if (others + 1 > _LRU_MAX) _evictOldest(subjectId, others + 1 - _LRU_MAX);
+    } catch {}
+
+    // Up to three attempts: the first may still fail if OTHER origins' data —
+    // the progress blobs, another child's cache — has taken the space, and one
+    // eviction may not free enough for a 473 KB bundle.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        localStorage.setItem(_cacheKey(subjectId), payload);
+        _lruTouch(subjectId);
+        return;
+      } catch (e) {
+        if (!_isQuotaError(e)) return;          // not a space problem — give up
+        if (!_evictOldest(subjectId, 2)) return; // nothing left to evict
+      }
+    }
+    // Still no room: leave the cache alone rather than thrashing. The subject
+    // simply refetches next time, which is the pre-existing behaviour.
   }
 
   async function _buildAuthHeaders() {
@@ -335,36 +505,51 @@ const QuestionLoader = (() => {
     }
     if (!headers['Authorization'] && typeof Store !== 'undefined') {
       const sess = Store.getStudentSession();
-      if (sess?.id) headers['X-Student-Id'] = sess.id;
+      // The TOKEN, not the id. The id only ever identified the child; the
+      // function used to accept it as proof of who was asking, which meant
+      // anyone holding a child's UUID could pull that child's gated question
+      // set. This is the same opaque session token RLS already checks through
+      // current_student_id(), and it expires and can be revoked.
+      if (sess?.token) headers['X-Student-Token'] = sess.token;
     }
     return headers;
   }
 
+  // Returns TRUE only when the server actually answered. ⚠ The distinction is
+  // load-bearing: "the server says you get nothing for this subject" is a final
+  // answer and must not be retried, but "we never managed to ask" is not, and
+  // treating the two the same is what let one 401 mark a subject permanently
+  // loaded with zero questions in it. Every chapter in that subject then looked
+  // empty for the rest of the session, with no way back short of a reload.
   async function _loadFromAPI(subjectId) {
     try {
       const cached = _readCache(subjectId);
       if (cached) {
         const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
         STATIC_QUESTIONS.push(...cached.filter(q => !existing.has(q.id)));
-        return;
+        return true;
       }
 
       const headers = await _buildAuthHeaders();
-      if (!headers['Authorization'] && !headers['X-Student-Id']) {
+      if (!headers['Authorization'] && !headers['X-Student-Token']) {
+        // Nothing was asked. This happens on a race with session restore, and
+        // the next attempt usually has a token.
         console.warn('[QuestionLoader] No auth - skipping API load for', subjectId);
-        return;
+        return false;
       }
 
       const resp = await fetch(`/.netlify/functions/questions?subject=${encodeURIComponent(subjectId)}`, { headers });
-      if (!resp.ok) { console.warn('[QuestionLoader] API error', resp.status); return; }
+      if (!resp.ok) { console.warn('[QuestionLoader] API error', resp.status); return false; }
 
       const incoming = await resp.json();
       _writeCache(subjectId, incoming);
       const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
       STATIC_QUESTIONS.push(...incoming.filter(q => !existing.has(q.id)));
+      return true;
 
     } catch(e) {
       console.warn('[QuestionLoader] Fetch error:', e.message);
+      return false;
     }
   }
 
@@ -373,7 +558,7 @@ const QuestionLoader = (() => {
   async function _loadBatchForGrade(grade, packs) {
     try {
       const headers = await _buildAuthHeaders();
-      if (!headers['Authorization'] && !headers['X-Student-Id']) return false;
+      if (!headers['Authorization'] && !headers['X-Student-Token']) return false;
 
       const resp = await fetch(`/.netlify/functions/questions?all=1&grade=${grade}`, { headers });
       if (!resp.ok) return false;
@@ -397,13 +582,20 @@ const QuestionLoader = (() => {
   // ── Public API ─────────────────────────────────
   async function loadSubject(subjectId) {
     if (!subjectId || _done.has(subjectId)) return;
+    // Added BEFORE the await so two concurrent calls do not both fetch, and
+    // removed again if the load did not actually happen — see _loadFromAPI.
+    // Without the rollback a transient failure was permanent for the session:
+    // _done said "loaded", the pool was empty, and startChapterDirect's retry
+    // then spun on a promise that resolved instantly and changed nothing.
     _done.add(subjectId);
 
+    let ok;
     if (_isFileProtocol) {
-      await _loadLocal(subjectId);
+      ok = await _loadLocal(subjectId);
     } else {
-      await _loadFromAPI(subjectId);
+      ok = await _loadFromAPI(subjectId);
     }
+    if (ok === false) _done.delete(subjectId);
   }
 
   // Which subject to fetch before the others. ACTIVE_PACK is set once the child
@@ -503,7 +695,7 @@ const QuestionLoader = (() => {
     if (_isFileProtocol) return [];          // no API in local file:// dev
     try {
       const headers = await _buildAuthHeaders();
-      if (!headers['Authorization'] && !headers['X-Student-Id']) return [];
+      if (!headers['Authorization'] && !headers['X-Student-Token']) return [];
       const resp = await fetch('/.netlify/functions/questions?papers=1', { headers });
       if (!resp.ok) { console.warn('[QuestionLoader] past papers', resp.status); return []; }
       _papersCache = await resp.json();

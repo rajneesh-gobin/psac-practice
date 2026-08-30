@@ -300,6 +300,21 @@ const AdminPanel = (() => {
     if (chev)  chev.textContent = open ? '▾' : '▸';
   }
 
+  // created_at was already in the members query and displayed nowhere. An admin
+  // asking "when exactly did this account start" wants the timestamp, and the
+  // relative age is what makes a list of them scannable.
+  function _fmtJoined(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return String(iso);
+    const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    const ago = days < 1 ? 'today'
+              : days === 1 ? 'yesterday'
+              : days < 31 ? days + ' days ago'
+              : days < 365 ? Math.round(days / 30) + ' months ago'
+              : (Math.round(days / 36.5) / 10) + ' years ago';
+    return `${d.toLocaleString()} · ${ago}`;
+  }
+
   function _renderMembers(list) {
     const el = document.getElementById('admin-members-list');
     if (!el) return;
@@ -344,7 +359,10 @@ const AdminPanel = (() => {
           <span id="member-chev-${m.id}" class="text-gray-400 text-sm select-none">${open ? '▾' : '▸'}</span>
           <div class="min-w-0">
             <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(m.full_name || 'Unnamed')}</p>
-            <p class="text-[11px] text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
+            <p class="text-[11px] text-gray-400 dark:text-gray-500 truncate">
+              ${m.created_at ? 'Joined ' + _fmtJoined(m.created_at) : ''}
+            </p>
+            <p class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
           </div>
           <span class="hidden sm:block">${roleSelect('w-full')}</span>
           <span class="hidden sm:block">${_memberStatusBadge(m)}</span>
@@ -470,7 +488,11 @@ const AdminPanel = (() => {
       return;
     }
     panel.classList.remove('hidden');
-    if (_familyStudents[profileId]) { _renderChildren(profileId); return; }
+    if (_familyStudents[profileId]) {
+      _renderChildren(profileId);
+      _loadChildStats(_familyStudents[profileId]).then(() => _renderChildren(profileId));
+      return;
+    }
 
     // Load family → students
     const { data: fam } = await _sb.from('families').select('id').eq('parent_id', profileId).maybeSingle();
@@ -478,6 +500,141 @@ const AdminPanel = (() => {
     const { data: kids } = await _sb.from('students').select('id, display_name, username, grade, session_version, expires_at, created_at').eq('family_id', fam.id);
     _familyStudents[profileId] = kids || [];
     _renderChildren(profileId);
+    // Paint the roster first, then fill the numbers in — a family list should
+    // not wait on a progress query.
+    _loadChildStats(_familyStudents[profileId]).then(() => _renderChildren(profileId));
+  }
+
+  // ══════════════════════════════════════════════
+  //  CHILD PROGRESS FOR ADMINS
+  //
+  //  The children panel listed name, username, grade and expiry — nothing about
+  //  whether the child had ever used the app. student_progress.data is the same
+  //  jsonb blob the child's own session reads, and progress_rw already grants
+  //  is_admin() read access, so this needs no new table, RPC or policy.
+  //
+  //  ⚠ One request for the whole family, not one per child: `student_id=in.(…)`.
+  //  A family of four was otherwise four round trips every time a row expanded.
+  // ══════════════════════════════════════════════
+  const _childStats = {};   // studentId -> summary | null
+
+  async function _loadChildStats(kids) {
+    if (!_sb || !kids.length) return;
+    const missing = kids.map(k => k.id).filter(id => !(id in _childStats));
+    if (!missing.length) return;
+    const { data, error } = await _sb.from('student_progress')
+      .select('student_id, data, updated_at')
+      .in('student_id', missing);
+    // Mark every requested id as fetched, hit or miss, or a child who has simply
+    // never practised would be re-queried on every expand.
+    missing.forEach(id => { _childStats[id] = null; });
+    if (error) { console.warn('[Admin._loadChildStats]', error.message); return; }
+    (data || []).forEach(row => {
+      _childStats[row.student_id] = _summariseProgress(row.data || {}, row.updated_at);
+    });
+  }
+
+  // Everything here is derived, never stored twice: chapters and exams come from
+  // the same counters the child's own screens read.
+  function _summariseProgress(d, updatedAt) {
+    const chapters = d.chapters || {};
+    const stats    = d.stats || {};
+    const daily    = d.daily || {};
+
+    let attempted = 0, correct = 0, touched = 0;
+    Object.values(chapters).forEach(c => {
+      const a = c.attempted || 0;
+      if (a > 0) touched++;
+      attempted += a;
+      correct   += c.correct || 0;
+    });
+    // stats.totalAttempted counts exam answers too, so it is the better total;
+    // the per-chapter sum is what "chapters practised" is built from.
+    const totalAns = stats.totalAttempted || attempted;
+    const totalCor = stats.totalCorrect   || correct;
+
+    // Seconds, from the day buckets. Absent for every child until they next
+    // practise — see _recordTimeOnTask(); rendered as "—", never as "0m",
+    // because "no data" and "no time" are different claims.
+    let seconds = 0, hasTime = false, activeDays = 0;
+    Object.values(daily).forEach(v => {
+      if (v && typeof v.s === 'number') { seconds += v.s; hasTime = true; }
+      if (v && (v.a || 0) > 0) activeDays++;
+    });
+
+    // Per subject, from the chapter ids the packs know about.
+    const packs = (typeof SUBJECT_PACKS !== 'undefined') ? SUBJECT_PACKS : [];
+    const bySubject = packs.map(p => {
+      let a = 0, c = 0, n = 0;
+      (p._chapters || p.chapters || []).forEach(ch => {
+        const rec = chapters[ch.id];
+        if (!rec || !rec.attempted) return;
+        n++; a += rec.attempted; c += rec.correct || 0;
+      });
+      return { id: p.id, label: `G${p.grade} ${p.subject || p.name || ''}`.trim(),
+               icon: p.icon || '📘', chapters: n, attempted: a,
+               acc: a ? Math.round(c / a * 100) : null };
+    }).filter(x => x.attempted > 0).sort((a, b) => b.attempted - a.attempted);
+
+    return {
+      answered: totalAns,
+      accuracy: totalAns ? Math.round(totalCor / totalAns * 100) : null,
+      chapters: touched,
+      exams:    stats.examCount || 0,
+      best:     stats.bestScore || 0,
+      streak:   stats.streak || 0,
+      seconds, hasTime, activeDays,
+      level:    d.level || 1,
+      updatedAt,
+      bySubject,
+    };
+  }
+
+  function _fmtDuration(sec) {
+    if (!sec) return '0m';
+    const h = Math.floor(sec / 3600), m = Math.round((sec % 3600) / 60);
+    return h ? `${h}h ${m}m` : `${m}m`;
+  }
+
+  function _childStatsHtml(id) {
+    const s = _childStats[id];
+    if (s === undefined) return '<div class="text-[11px] text-gray-400 py-1">Loading…</div>';
+    if (s === null || !s.answered) {
+      return '<div class="text-[11px] text-gray-400 py-1">Has not practised yet.</div>';
+    }
+    const pill = (label, value, tone) =>
+      `<span class="inline-flex flex-col items-center px-2 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 min-w-[3.5rem]">
+        <span class="text-xs font-black ${tone || 'text-gray-800 dark:text-gray-100'}">${value}</span>
+        <span class="text-[9px] text-gray-500 dark:text-gray-400 uppercase tracking-wide">${label}</span>
+      </span>`;
+
+    const subjects = s.bySubject.length
+      ? `<div class="mt-1.5 space-y-0.5">${s.bySubject.map(x => `
+          <div class="flex items-center gap-2 text-[11px]">
+            <span>${x.icon}</span>
+            <span class="flex-1 min-w-0 truncate text-gray-600 dark:text-gray-300">${_esc(x.label)}</span>
+            <span class="text-gray-500 dark:text-gray-400">${x.chapters} ch · ${x.attempted}q</span>
+            <span class="font-bold w-9 text-right ${x.acc >= 70 ? 'text-green-600 dark:text-green-400'
+              : x.acc >= 45 ? 'text-amber-500' : 'text-red-500'}">${x.acc}%</span>
+          </div>`).join('')}</div>`
+      : '';
+
+    return `<div class="mt-1.5">
+      <div class="flex flex-wrap gap-1.5">
+        ${pill('answered', s.answered)}
+        ${pill('accuracy', s.accuracy === null ? '—' : s.accuracy + '%')}
+        ${pill('chapters', s.chapters)}
+        ${pill('exams', s.exams)}
+        ${pill('best', s.best ? s.best + '%' : '—')}
+        ${pill('time', s.hasTime ? _fmtDuration(s.seconds) : '—')}
+        ${pill('days', s.activeDays)}
+      </div>
+      ${subjects}
+      <div class="text-[10px] text-gray-400 mt-1">
+        Level ${s.level}${s.updatedAt ? ` · last active ${new Date(s.updatedAt).toLocaleString()}` : ''}
+        ${s.hasTime ? '' : ' · time recorded from the next practice session onwards'}
+      </div>
+    </div>`;
   }
 
   function _renderChildren(profileId) {
@@ -498,6 +655,7 @@ const AdminPanel = (() => {
             ⏏ Force Logout
           </button>
         </div>
+        ${_childStatsHtml(k.id)}
         <div class="flex items-center gap-2 mt-1">
           <span class="text-gray-500 dark:text-gray-400 shrink-0">⏳ Expires:</span>
           <input type="date" value="${k.expires_at ? k.expires_at.slice(0,10) : ''}"
@@ -648,13 +806,38 @@ const AdminPanel = (() => {
     // Subjects grouped by grade
     const subjEl = document.getElementById('admin-subjects-list');
     if (subjEl && typeof SUBJECT_PACKS !== 'undefined') {
+      // Same PSAC/NCE split as the grade picker (see _gradeStage in app.js).
+      // An admin disabling "Grade 8" should be able to see at a glance that
+      // it is not a PSAC year.
+      const _stage = (typeof window._gradeStage === 'function') ? window._gradeStage : null;
+      let _lastStage = null;
+      const _stagesHere = _stage ? new Set(grades.map(g => _stage(g).id)) : new Set();
+      const _showStages = _stagesHere.size > 1;
       subjEl.innerHTML = grades.map((g, gi) => {
+        let stageHead = '';
+        if (_showStages) {
+          const st = _stage(g);
+          if (st.id !== _lastStage) {
+            _lastStage = st.id;
+            stageHead = '<div class="flex items-center gap-2 ' + (gi > 0 ? 'mt-6 ' : '') + 'mb-1">'
+              + '<span class="text-[11px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">'
+              + _esc(st.name) + ' · ' + _esc(st.exam) + '</span>'
+              + '<span class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></span></div>';
+          }
+        }
         const packs = SUBJECT_PACKS.filter(p => p.grade === g);
         const gradeOff = _settings.disabled_grades.includes(g);
-        return `<div class="${gi > 0 ? 'mt-5 pt-5 border-t border-gray-100 dark:border-gray-700' : ''}">
+        // ⚠ NOT filtered, deliberately: this is the admin kill switch and it
+        // has to be able to reach every registered grade. But a bare "Grade 1"
+        // row sitting next to Grade 5 reads as live content, so a grade with no
+        // live pack at all is labelled. Toggling it still works, and is still
+        // harmless, because nothing in that grade is served anyway.
+        const gradeSoon = packs.length > 0 && packs.every(p => p.comingSoon);
+        return stageHead + `<div class="${gi > 0 ? 'mt-5 pt-5 border-t border-gray-100 dark:border-gray-700' : ''}">
           <div class="flex items-center gap-2 mb-2">
             <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">Grade ${g}</span>
             ${gradeOff ? '<span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-500 px-2 py-0.5 rounded-full">Grade disabled</span>' : ''}
+            ${gradeSoon ? '<span class="text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-full">No content yet</span>' : ''}
           </div>
           <div class="space-y-0.5 pl-3 border-l-2 border-indigo-100 dark:border-indigo-900/50">
             ${packs.map(p => {
@@ -972,8 +1155,10 @@ const AdminPanel = (() => {
     listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>';
     const { data } = await _sb.from('plans').select('*').order('price_mur');
 
-    const grades = typeof SUBJECT_PACKS !== 'undefined'
-      ? [...new Set(SUBJECT_PACKS.map(sp => sp.grade))].sort() : [];
+    // Plan chapter picker: a plan can only ever allow chapters that exist, so
+    // a comingSoon pack has nothing to offer here.
+    const livePacks = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).filter(sp => !sp.comingSoon);
+    const grades = [...new Set(livePacks.map(sp => sp.grade))].sort();
 
     listEl.innerHTML = (data || []).map(plan => {
       const features = plan.features || {};
@@ -982,7 +1167,7 @@ const AdminPanel = (() => {
       const isAll    = !Array.isArray(allowed);
 
       const chapPickerHtml = grades.map(g => {
-        const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).filter(sp => sp.grade === g);
+        const packs = livePacks.filter(sp => sp.grade === g);
         return packs.map(pack => {
           const chs = pack._chapters || pack.chapters || [];
           const allChecked = isAll || chs.every(ch => allSet.has(ch.id));
@@ -2002,10 +2187,15 @@ const AdminPanel = (() => {
       + `<b>${days}</b> days.`;
   }
 
+  // ⚠ comingSoon packs are EXCLUDED, and this one reaches the DATABASE:
+  // publishCatalog() writes the result into mm_data.shop_settings.catalog, and
+  // purchase_subject() refuses anything that is not in it. Publishing the grade
+  // 1-3 / 7-9 placeholders would have made 30 empty packs genuinely buyable
+  // server-side, which no client-side filter could undo afterwards.
   function _allChapters() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
     const out = [];
-    SUBJECT_PACKS.forEach(p => (p._chapters || p.chapters || []).forEach(ch => out.push({
+    SUBJECT_PACKS.filter(p => !p.comingSoon).forEach(p => (p._chapters || p.chapters || []).forEach(ch => out.push({
       id: ch.id, name: ch.name, icon: ch.icon || '📘',
       // subjectId is the PACK id and is what purchase_subject() matches on;
       // subject is the human label. They were one field until subjects became
@@ -2019,7 +2209,7 @@ const AdminPanel = (() => {
 
   function _allSubjects() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
-    return SUBJECT_PACKS.map(p => ({
+    return SUBJECT_PACKS.filter(p => !p.comingSoon).map(p => ({
       id: p.id,
       name: `Grade ${p.grade} ${p.subject || p.name || ''}`.trim(),
       icon: p.icon || '📚',

@@ -84,7 +84,19 @@ function _withPdfCapture(ctx, pdfBuf) {
 
 const PAPERS = [];
 
-for (const grade of [4, 5, 6]) {
+// Grades are DISCOVERED from the subjects/ directory, not listed here. A new
+// pack used to mean editing this file and import-questions.js as well as
+// index.html — three places that had to agree and no way to tell when they did
+// not. `grade(\d+)-` also keeps working past grade 9, unlike the single-digit
+// \d used elsewhere in this codebase.
+const GRADES = [...new Set(
+  fs.readdirSync(path.join(ROOT, 'subjects'))
+    .map(d => (d.match(/^grade(\d+)-/) || [])[1])
+    .filter(Boolean)
+    .map(Number)
+)].sort((a, b) => a - b);
+
+for (const grade of GRADES) {
   const subjectsDir = path.join(ROOT, 'subjects');
   const subjects = fs.readdirSync(subjectsDir)
     .filter(d => d.startsWith(`grade${grade}-`) && fs.statSync(path.join(subjectsDir, d)).isDirectory());

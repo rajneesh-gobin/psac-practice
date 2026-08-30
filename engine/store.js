@@ -39,6 +39,25 @@ const Store = (() => {
       // and loadStudentProgress() backfills it into every existing child for
       // free. day/week are Mauritius date keys - see _muDayKey()/_muWeekKey().
       usage:        { day: '', questions: 0, week: '', exams: 0 },
+      // ── Parent reporting series ──────────────────────
+      // Everything else here is a CUMULATIVE total, which answers "how much"
+      // but never "is she improving?" or "did she study this week?". These are
+      // the only dated data in the app besides examHistory.
+      //
+      // Deliberately in this jsonb rather than a new table: no migration, and
+      // no new column-level GRANT to forget (see the students grant note in
+      // CLAUDE.md). The key-merge in loadStudentProgress() backfills them into
+      // every existing child for free.
+      //
+      // daily: { 'YYYY-MM-DD': { a: attempted, c: correct, e: exams } }, capped
+      // at _DAILY_KEEP days. Mauritius date keys, same as usage — NEVER the
+      // device clock, or a child who changes the timezone rewrites their own
+      // history, and the parent's week-on-week comparison with it.
+      daily:        {},
+      // Last _MISTAKE_KEEP wrong answers, newest first. Short field names and a
+      // truncated question: this rides in the same blob as everything else and
+      // is rewritten on every wrong answer.
+      mistakes:     [],
     };
   }
 
@@ -47,10 +66,45 @@ const Store = (() => {
   // and a let read before its declaration line throws rather than reading
   // undefined.
   let _saveDebounceTimer = null;
+  // The write that is waiting to go out, and when the OLDEST un-flushed change
+  // in it arrived. Both are needed: the timer alone could only ever be
+  // cancelled, never forced, so a pending write had no way to be rescued on
+  // logout or when the phone locks the screen.
+  let _pendingWrite = null;   // { studentId, data }
+  let _pendingSince = 0;
 
+  const _SAVE_DEBOUNCE_MS = 30_000;
+  // ⚠ Measured from the FIRST un-flushed change, not the last one. Without it
+  // this was a debounce with no maximum wait: a child answering a question
+  // every twenty seconds reset the timer on every answer, so it NEVER fired and
+  // nothing reached Supabase for the whole session. Everything looked right on
+  // screen (localStorage is written synchronously) and the next login read the
+  // server row back — which is how a subject tile could sit at "56 done" while
+  // the child kept working.
+  const _SAVE_MAX_WAIT_MS = 30_000;
+
+  // Drops the pending write. Only correct where the data has already been
+  // flushed or genuinely belongs to nobody — see flushPendingProgress(), which
+  // is what the session helpers now call instead.
   function _cancelPendingFlush() {
     clearTimeout(_saveDebounceTimer);
     _saveDebounceTimer = null;
+    _pendingWrite = null;
+    _pendingSince = 0;
+  }
+
+  // Send whatever is waiting, now. Returns a promise so callers that are about
+  // to invalidate the credential (endStudentSession) can await it — once the
+  // server session is deleted or the x-student-token header is gone, RLS
+  // rejects the write and the work is lost for good.
+  function flushPendingProgress() {
+    if (!_pendingWrite) return Promise.resolve();
+    const { studentId, data } = _pendingWrite;
+    clearTimeout(_saveDebounceTimer);
+    _saveDebounceTimer = null;
+    _pendingWrite = null;
+    _pendingSince = 0;
+    return _flushProgressToSupabase(studentId, data);
   }
 
   // ── Student session (PIN-based, not Supabase Auth) ────
@@ -67,7 +121,11 @@ const Store = (() => {
   // session and signs B straight back out. The data is not lost: localStorage is
   // written synchronously on every save, before the debounce is ever armed.
   function saveStudentSession(sess) {
-    _cancelPendingFlush();
+    // Flush BEFORE the new session is written: _flushProgressToSupabase checks
+    // the stored session id against the row it is writing, and the header still
+    // installed is the outgoing student's. Cancelling here — which is what this
+    // used to do — silently threw away the last stretch of their practice.
+    flushPendingProgress();
     try { localStorage.setItem(STUDENT_SESS, JSON.stringify(sess)); } catch(e) {}
     if (typeof setStudentToken === 'function') setStudentToken(sess?.token || null);
   }
@@ -85,7 +143,10 @@ const Store = (() => {
   }
 
   function clearStudentSession() {
-    _cancelPendingFlush();
+    // Same reasoning as saveStudentSession: the request has to leave while the
+    // token is still installed. It is already in flight by the time the header
+    // is removed below, so clearing does not affect it.
+    flushPendingProgress();
     try { localStorage.removeItem(STUDENT_SESS); } catch(e) {}
     if (typeof setStudentToken === 'function') setStudentToken(null);
   }
@@ -94,6 +155,11 @@ const Store = (() => {
   // Fire-and-forget: a failure here must never block the local logout.
   async function endStudentSession() {
     if (!_sb) return;
+    // ⚠ Awaited, and first. This RPC deletes the student's sessions, after which
+    // current_student_id() is null and every progress write is refused by RLS.
+    // Auth.logout() calls this BEFORE clearStudentSession(), so this is the last
+    // moment a pending write can still be accepted.
+    try { await flushPendingProgress(); } catch(e) {}
     try { await _sb.rpc('end_student_session'); } catch(e) {}
   }
 
@@ -374,7 +440,30 @@ const Store = (() => {
       return _defaultStudent();
     }
 
-    const raw  = data?.data || {};
+    let raw = data?.data || {};
+
+    // ⚠ The server row is not automatically the newer one. Any write that never
+    // landed — offline, a dropped request, a tab closed mid-flush — leaves the
+    // local cache ahead, and blindly taking the server copy (and then writing it
+    // back over the cache, as this function does below) makes that loss
+    // permanent. Total answers only ever goes up, so it is a safe ordering.
+    //
+    // Deliberately a comparison and not a merge: when the cache is ahead the
+    // server row is a strict ancestor of it, so there is nothing in the server
+    // row to merge back. assignments are handled separately, just below, because
+    // those the PARENT writes server-side and the child's cache may never have
+    // seen them.
+    try {
+      const cached = JSON.parse(localStorage.getItem(_sKey(studentId)) || 'null');
+      const localN  = cached?.stats?.totalAttempted || 0;
+      const remoteN = raw?.stats?.totalAttempted    || 0;
+      if (cached && localN > remoteN) {
+        console.warn('[Store.loadStudentProgress] local cache is ahead of the server for',
+          studentId, `(${localN} vs ${remoteN} answers) - keeping the local copy.`);
+        raw = cached;
+      }
+    } catch (e) {}
+
     const def  = _defaultStudent();
     for (const k of Object.keys(def)) { if (!(k in raw)) raw[k] = def[k]; }
     // Preserve locally-saved assignments if Supabase doesn't have them yet
@@ -403,7 +492,7 @@ const Store = (() => {
         '- the signed-in student is now', _sess.id, '(kept in localStorage)');
       return;
     }
-    _sb.from('student_progress').upsert({
+    return _sb.from('student_progress').upsert({
       student_id: studentId, data: progressData, updated_at: new Date().toISOString(),
     }).then(({ error }) => {
       if (error) {
@@ -421,21 +510,76 @@ const Store = (() => {
     }).catch(err => console.error('[Store.saveStudentProgress]', err));
   }
 
+  // ── Family-wide progress (parent dashboard overview) ──
+  // ONE query for every child rather than N. RLS does the limiting: progress_rw
+  // allows a row through on owns_student_txt(student_id), so a parent gets
+  // exactly their own children and the id list is a convenience, not the
+  // security boundary.
+  //
+  // Returns { studentId: blob }. A child who has never answered anything has no
+  // row at all, and is filled in with defaults - "no data" and "failed to read"
+  // must not look the same to the caller.
+  async function loadFamilyProgress(ids) {
+    const out = {};
+    if (!_sb || !Array.isArray(ids) || !ids.length) return out;
+    const { data, error } = await _sb.from('student_progress')
+      .select('student_id,data').in('student_id', ids);
+    if (error) {
+      // Deliberately returns {} rather than a partial result, so the caller can
+      // tell a failure from an all-children-are-new family and fall back to the
+      // per-child path instead of painting every card as empty.
+      console.warn('[Store.loadFamilyProgress]', error.message);
+      return out;
+    }
+    const def = _defaultStudent();
+    (data || []).forEach(row => {
+      const raw = row.data || {};
+      for (const k of Object.keys(def)) { if (!(k in raw)) raw[k] = def[k]; }
+      out[row.student_id] = raw;
+    });
+    ids.forEach(id => { if (!out[id]) out[id] = _defaultStudent(); });
+    return out;
+  }
+
   async function saveStudentProgress(studentId, progressData, immediate = false) {
     // Write to localStorage immediately (zero latency during practice)
     try { localStorage.setItem(_sKey(studentId), JSON.stringify(progressData)); } catch(e) {}
     // Debounce Supabase writes: batch rapid question answers into one write every 30s.
     // Pass immediate=true on exam submit / explicit checkpoints so data is never lost.
     if (immediate) {
-      _cancelPendingFlush();
-      _flushProgressToSupabase(studentId, progressData);
-    } else {
-      _cancelPendingFlush();
-      _saveDebounceTimer = setTimeout(() => {
-        _saveDebounceTimer = null;
-        _flushProgressToSupabase(studentId, progressData);
-      }, 30_000);
+      _pendingWrite = { studentId, data: progressData };
+      return flushPendingProgress();
     }
+    // A different child now: their write must go out rather than be replaced.
+    if (_pendingWrite && _pendingWrite.studentId !== studentId) flushPendingProgress();
+
+    _pendingWrite = { studentId, data: progressData };
+    if (!_pendingSince) _pendingSince = Date.now();
+
+    // The max-wait check is what turns this from a debounce into a throttle:
+    // steady practice now writes once every _SAVE_MAX_WAIT_MS instead of never.
+    if (Date.now() - _pendingSince >= _SAVE_MAX_WAIT_MS) return flushPendingProgress();
+
+    clearTimeout(_saveDebounceTimer);
+    _saveDebounceTimer = setTimeout(flushPendingProgress, _SAVE_DEBOUNCE_MS);
+  }
+
+  // ── Last chance to persist ──────────────────────────────────────────────
+  // Closing the tab, locking the phone, or the OS evicting a backgrounded PWA
+  // all kill the pending timer with no other warning, and there was nothing
+  // listening for any of them. 'hidden' is the only one of these that fires
+  // reliably on mobile Safari and Chrome — 'beforeunload' does not.
+  //
+  // Fire-and-forget by necessity: the page may be gone before the request
+  // completes. It usually is not, and a write that sometimes lands beats one
+  // that never does.
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') flushPendingProgress();
+    });
+  }
+  if (typeof window !== 'undefined') {
+    window.addEventListener('pagehide', () => { flushPendingProgress(); });
   }
 
   // ── Local cache helpers (used by existing app.js code) ──
@@ -955,7 +1099,7 @@ const Store = (() => {
     getFamilyStudents, lastFamilyStudentsError,
     createStudent, updateStudent, deleteStudent, setStudentPin,
     // Progress
-    loadStudentProgress, saveStudentProgress,
+    loadStudentProgress, saveStudentProgress, loadFamilyProgress, flushPendingProgress,
     // Legacy API (used by app.js / existing screens)
     getAccounts, saveAccounts, getParentPin, setParentPin, loadStudent, saveStudent, clearStudent,
     // Profiles

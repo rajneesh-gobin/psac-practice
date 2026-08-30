@@ -7,7 +7,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v17';
+const SHELL_VERSION = 'shell-v22';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -65,6 +65,16 @@ self.addEventListener('activate', event => {
           .filter(k => k !== SHELL_CACHE && k !== DATA_CACHE)
           .map(k => caches.delete(k))
       )
+    // DATA_CACHE survives a version bump by design, so it still holds
+    // per-caller /functions/questions responses written by every version before
+    // this one. Skipping the route from now on does not remove those, and the
+    // stale entries are exactly the cross-child leak — evict them once, here.
+    ).then(() => caches.open(DATA_CACHE).then(cache =>
+      cache.keys().then(reqs => Promise.all(
+        reqs.filter(r => new URL(r.url).pathname.startsWith('/.netlify/functions/questions'))
+            .map(r => cache.delete(r))
+      ))
+    ).catch(() => {})
     ).then(() => self.clients.claim())
   );
 });
@@ -116,6 +126,21 @@ self.addEventListener('fetch', event => {
   // and caching authenticated Supabase GETs was a hazard on a shared family or
   // school device - the offline fallback matches on URL alone, ignoring the auth
   // header, so it could hand one child a response cached for another.
+
+  // ── /functions/questions: NEVER cached ──
+  // The paragraph immediately above applies to this endpoint word for word, and
+  // for a while it was fixed for Supabase and left in place here.
+  // /.netlify/functions/questions varies per caller: it filters by plan tier,
+  // by admin-disabled chapters and by referral rewards, which is exactly why it
+  // answers `Cache-Control: private` when a filter applies. Caching it in a
+  // shared, URL-keyed cache would serve child A's entitled question set to
+  // child B on a family device. The subject payload already has its own
+  // 7-day localStorage cache in question_loader.js, keyed per subject and
+  // cleared on logout, so nothing offline is lost by skipping it here.
+  if (url.pathname.startsWith('/.netlify/functions/questions')) {
+    return; // straight to the network, never cached
+  }
+
   if (url.pathname.startsWith('/.netlify/functions/')) {
     event.respondWith(networkFirstWithCache(request, DATA_CACHE));
     return;

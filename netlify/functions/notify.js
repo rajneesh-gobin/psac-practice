@@ -24,6 +24,8 @@ async function sbGet(path) {
   return res.ok ? res.json() : null;
 }
 
+const { resolveStudent } = require('../lib/student-auth');
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405 };
 
@@ -33,13 +35,21 @@ exports.handler = async (event) => {
   let body;
   try { body = JSON.parse(event.body || '{}'); } catch { return { statusCode: 400 }; }
 
-  const { studentId, assignmentLabel, score, total, pct } = body;
-  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  if (!studentId || !UUID_RE.test(studentId)) return { statusCode: 400 };
+  const { assignmentLabel, score, total, pct } = body;
 
-  // Validate student via X-Student-Id header (same pattern as questions.js)
-  const headerStudentId = event.headers['x-student-id'];
-  if (!headerStudentId || headerStudentId !== studentId) return { statusCode: 403 };
+  // ⚠ This check used to be:
+  //     if (!headerStudentId || headerStudentId !== studentId) return 403;
+  // which compared a client-supplied HEADER against a client-supplied BODY
+  // FIELD. Both are attacker-controlled, so setting them to the same value
+  // passed — anyone could trigger email to any family's parent, with an
+  // attacker-chosen assignment label and score.
+  //
+  // The student is now resolved FROM THE SESSION TOKEN and the body's own
+  // studentId is ignored entirely. There is nothing left for a caller to
+  // assert about who they are.
+  const _auth = await resolveStudent(event.headers, { supabaseUrl: SUPABASE_URL, serviceKey: SUPABASE_KEY });
+  if (!_auth.ok) return { statusCode: _auth.status };
+  const studentId = _auth.studentId;
 
   // Fetch student
   const students = await sbGet(`/rest/v1/students?id=eq.${studentId}&select=display_name,family_id`);

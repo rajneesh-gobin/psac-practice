@@ -202,10 +202,16 @@ const Shop = (() => {
   // The chapters that can be bought, taken from the subject packs the browser
   // has loaded. The admin-published catalogue in shop_settings is what the
   // SERVER validates against; this is only how the list gets on screen.
+  // ⚠ comingSoon packs are EXCLUDED. Registering the grade 1-3 / 7-9
+  // placeholders put 30 empty packs into SUBJECT_PACKS, and without this filter
+  // the Shop offered "Grade 1 Maths · Sample Chapter" for 250 credits and the
+  // whole of Grade 1 Maths for 1500 — a real charge for one placeholder
+  // question. Same filter in _allChapters()/_allSubjects() in admin.js, which
+  // is what publishCatalog() writes to the database.
   function sellableChapters() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
     const out = [];
-    SUBJECT_PACKS.forEach(pack => {
+    SUBJECT_PACKS.filter(p => !p.comingSoon).forEach(pack => {
       (pack._chapters || pack.chapters || []).forEach(ch => {
         out.push({
           id: ch.id,
@@ -224,7 +230,7 @@ const Shop = (() => {
   // published — see publishCatalog() in admin.js.
   function sellableSubjects() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
-    return SUBJECT_PACKS.map(p => {
+    return SUBJECT_PACKS.filter(p => !p.comingSoon).map(p => {
       const chapters = (p._chapters || p.chapters || []).map(c => c.id);
       const live = chapters.filter(isUnlocked).length;
       return {

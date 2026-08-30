@@ -33,9 +33,49 @@ const SB_KEY = 'sb_publishable_wERRrZnvoWhM5faN2AaYpQ_CpTNHFkL';
 const SB_STUDENT_TOKEN_HEADER = 'x-student-token';
 let _studentToken = null;
 
+// ⚠ NEVER on /auth/v1/. This attached x-student-token to EVERY request the
+// client made, including the parent's own token refresh
+// (POST /auth/v1/token?grant_type=refresh_token).
+//
+// x-student-token is not a CORS-safelisted header, so adding it turns that
+// refresh into a preflighted request: the browser first sends OPTIONS and will
+// only proceed if GoTrue answers with x-student-token in
+// Access-Control-Allow-Headers. PostgREST is configured to accept the header —
+// that is how student sessions work at all — but the auth service is a separate
+// service with its own CORS configuration and no reason to know about it.
+//
+// The failure that produces is silent and delayed, which is why it was hard to
+// see: nothing goes wrong while the access token is still valid. About an hour
+// after a student token is installed on the device, the parent's session tries
+// to refresh, the refresh cannot complete, supabase-js retries and then drops
+// the session — and the next time the parent taps 🔒 Parent and types a correct
+// PIN, getSession() returns null and they are told their sign-in has expired on
+// the only device they own. Measured: one refreshSession() call produced EIGHT
+// refresh attempts, every one of them carrying the header.
+//
+// The student token is only ever meaningful to PostgREST, where
+// current_student_id() reads it. A deny-list on the auth path rather than an
+// allow-list on /rest/v1/, deliberately: this keeps every other route the
+// client may use behaving exactly as it does today, and fixes precisely the one
+// that was broken.
+function _sbIsAuthRequest(input) {
+  try {
+    const url = typeof input === 'string' ? input
+              : (input && typeof input.url === 'string') ? input.url
+              : String(input || '');
+    return url.indexOf('/auth/v1/') !== -1;
+  } catch (_) {
+    // Unparseable target: assume auth and leave the header off. The cost of
+    // being wrong that way is a student request without its token, which fails
+    // loudly and locally; the cost of being wrong the other way is the silent,
+    // hour-later session loss described above.
+    return true;
+  }
+}
+
 function _sbFetch(input, init = {}) {
   const headers = new Headers(init.headers || {});
-  if (_studentToken) headers.set(SB_STUDENT_TOKEN_HEADER, _studentToken);
+  if (_studentToken && !_sbIsAuthRequest(input)) headers.set(SB_STUDENT_TOKEN_HEADER, _studentToken);
   else headers.delete(SB_STUDENT_TOKEN_HEADER);
   return fetch(input, Object.assign({}, init, { headers }));
 }

@@ -225,6 +225,27 @@
     </div>
   </div>
 
+  <!-- ══════════ PICK UP AGAIN ══════════
+       Everything the child themselves paused: a half-finished exam, and any
+       chapter left mid-round via "Continue Later". Deliberately NOT parent
+       assignments — those are work somebody set, not work this child postponed,
+       and mixing the two is exactly the kind of pile-up that made the old
+       schedule panels confusing. -->
+  <div id="modal-resume-tasks" class="hidden fixed inset-0 z-[96] bg-black/50 backdrop-blur-sm" onclick="if(event.target===this)closeResumeTasks()">
+    <div class="hdr-menu-sheet bg-white dark:bg-gray-800 shadow-2xl flex flex-col" role="dialog" aria-modal="true" aria-label="Pick up again">
+      <div class="flex items-center gap-3 px-5 pt-4 pb-3 border-b border-gray-100 dark:border-gray-700">
+        <span class="text-2xl select-none" aria-hidden="true">⏸</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-bold text-gray-800 dark:text-white">Pick up again</div>
+          <div id="rt-sub" class="text-[11px] text-gray-500 dark:text-gray-400"></div>
+        </div>
+        <button onclick="closeResumeTasks()" aria-label="Close"
+          class="shrink-0 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-lg leading-none">✕</button>
+      </div>
+      <div id="rt-list" class="overflow-y-auto flex-1 min-h-0 p-3"></div>
+    </div>
+  </div>
+
   <!-- ══════════ HEADER MENU (mobile / tablet) ══════════
        A bottom sheet, not a dropdown: on a phone the header is the furthest
        point from the thumb, and this list is what replaced eight unlabelled
@@ -350,6 +371,15 @@
              their own and the number would only prompt them to ask for one.
              Tapping it opens the Shop, which is where it means something.
              _renderCreditChip() in app.js shows/hides and fills it. -->
+        <!-- ⚠ The child's level. #xp-display (the bar) is display:none below
+             640px, so on a phone — the device children actually use — the whole
+             XP system was invisible while the landing page advertised "earn XP,
+             level up". This compact chip is the mobile-visible half of it.
+             Student sessions only; _renderLevelChip() in app.js fills it. -->
+        <button id="hdr-level" onclick="showScreen('analytics')" class="hdr-stat hdr-stat-level hidden"
+          title="Your level — tap to see your progress" aria-label="Your level">
+          <span aria-hidden="true">⭐</span><span id="hdr-level-n">1</span>
+        </button>
         <button id="hdr-credits" onclick="showScreen('shop')" class="hdr-stat hdr-stat-credits hidden"
           title="Your credits — tap to open the shop" aria-label="Credits, open the shop">
           <span aria-hidden="true">🪙</span><span id="hdr-credits-count">0</span>
@@ -367,7 +397,10 @@
         <button id="search-btn" onclick="Search.open()" class="hdr-btn hidden" data-hdr-pri="low" title="Search Questions" aria-label="Search questions"
           data-menu-desc="Find a question in any subject or chapter">
           <span class="hdr-ico" aria-hidden="true">🔍</span><span class="hdr-word">Search</span></button>
-        <button onclick="showScreen('forum')" class="hdr-btn" data-hdr-pri="low" title="Community Forum" aria-label="Community forum"
+        <!-- ⚠ Hidden for a STUDENT session. The forum is for parents and teachers;
+             showScreen() enforces it too, and the RLS in supabase-forum-adults.sql
+             is what actually stops a child reading or posting. -->
+        <button id="btn-open-forum" onclick="showScreen('forum')" class="hdr-btn hidden" data-hdr-pri="low" title="Community Forum" aria-label="Community forum"
           data-menu-desc="Ask a question, see what other families are saying">
           <span class="hdr-ico" aria-hidden="true">💬</span><span class="hdr-word">Forum</span></button>
         <button id="pwa-install-btn" class="hdr-btn is-install hidden" data-hdr-pri="high" title="Install app on this device" aria-label="Install app on this device"
@@ -469,7 +502,7 @@
 
       <!-- Hero -->
       <section class="flex-1 flex flex-col items-center justify-center text-center px-4 py-8">
-        <div class="text-8xl mb-6 drop-shadow-2xl select-none animate-bounce" style="animation-duration:3s">🎓</div>
+        <div class="text-8xl mb-6 select-none animate-bounce" style="animation-duration:3s">🎓</div>
         <h1 class="text-4xl sm:text-5xl font-black leading-tight mb-4 max-w-2xl">
           Ace the <span class="text-indigo-300">PSAC Exam</span><br>Practice Made Fun
         </h1>
@@ -512,7 +545,7 @@
       <!-- Subjects showcase -->
       <section class="px-4 pb-12 max-w-5xl mx-auto w-full">
         <h2 class="text-center text-xl font-bold mb-2 text-white/80">Five core PSAC subjects - fully covered</h2>
-        <p class="text-center text-indigo-300/50 text-sm mb-7">Aligned with the Mauritius MIE curriculum · Grades 4, 5 &amp; 6<br><span class="text-xs">Asian languages and Kreol Morisien are not covered yet.</span></p>
+        <p class="text-center text-indigo-300/50 text-sm mb-7">Aligned with the Mauritius MIE curriculum · Grades 4, 5 &amp; 6<br><span class="text-xs">Grades 1–3 and 7–9 are being built. Asian languages and Kreol Morisien are not covered yet.</span></p>
 
         <div data-carousel class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
 
@@ -549,6 +582,17 @@
             <h3 class="font-bold text-white mb-1">History &amp; Geography</h3>
             <p class="text-xs text-amber-300/60 mb-2">Grade 4 · Grade 5 · Grade 6</p>
             <p class="text-sm text-indigo-200/60">Mauritius history, Physical features, Communities &amp; Map skills.</p>
+          </div>
+
+          <div class="bg-white/[0.04] border border-dashed border-white/15 rounded-2xl p-5 text-center">
+            <div class="text-4xl mb-2 opacity-70">🔜</div>
+            <h3 class="font-bold text-white/80 mb-1">More grades</h3>
+            <p class="text-xs text-indigo-300/50 mb-2">Grades 1–3 · Grades 7–9</p>
+            <p class="text-sm text-indigo-200/50">
+              <b class="text-indigo-100/70">Grades 1–3</b> — the earlier PSAC years, same MIE primary track.<br>
+              <b class="text-indigo-100/70">Grades 7–9</b> — lower secondary, which ends with the <b class="text-indigo-100/70">NCE</b>, not the PSAC.<br>
+              The PSAC years — Grades 4, 5 and 6 — are complete today.</p>
+            <span class="inline-block mt-3 text-xs bg-amber-400/15 text-amber-300/80 px-2.5 py-0.5 rounded-full font-semibold">Coming Soon</span>
           </div>
 
         </div>
@@ -808,7 +852,7 @@
 
       <!-- Footer -->
       <footer class="text-center pb-10 text-indigo-400/40 text-xs px-4">
-        <p>PSAC Exam Practice · Mauritius · Grades 4–6 · Maths · English · French · Science · History &amp; Geography</p>
+        <p>PSAC Exam Practice · Mauritius · Grades 4–6 (Grades 1–3 &amp; 7–9 coming) · Maths · English · French · Science · History &amp; Geography</p>
         <p class="mt-1">Progress saved securely in the cloud · Installable app · Aligned to the MIE curriculum</p>
         <p class="mt-2 text-indigo-400/30">
           Currently being revamped — all tiers free until <span data-free-until>30 September 2026</span> for the 2026 exams.
@@ -847,8 +891,9 @@
           <h1 class="text-3xl sm:text-4xl font-black mb-3">Everything the app can do</h1>
           <p class="text-indigo-200/70 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             Built for the Mauritius PSAC exam — Grades 4, 5 and 6, across Maths,
-            English, French, Science and History &amp; Geography. Here is each
-            part of it, with a picture of what your child actually sees.
+            English, French, Science and History &amp; Geography. Grades 1–3 and
+            7–9 are on the way. Here is each part of it, with a picture of what
+            your child actually sees.
           </p>
         </header>
 
@@ -1545,8 +1590,27 @@
 
         <!-- Student login -->
         <div id="auth-student-panel" class="hidden">
-          <p class="text-white/70 text-sm mb-4">Enter your <b class="text-white">family name</b>, <b class="text-white">username</b> and <b class="text-white">PIN</b>:</p>
+          <!-- Quick sign-in. Shown by Auth.loginStudent() when this device already
+               knows the family name and the child's username, so a returning child
+               types their four digits and nothing else.
+               ⚠ The PIN itself is never remembered — only the two identifying
+               fields — so verify_student_pin() still does exactly the same check. -->
+          <div id="student-quick" class="hidden mb-4 text-center">
+            <div class="text-4xl mb-1 select-none">👋</div>
+            <p class="text-white font-bold text-lg leading-tight">Welcome back, <span id="student-quick-who">there</span>!</p>
+            <p class="text-white/60 text-xs mt-1">Just type your PIN below.</p>
+            <button type="button" onclick="Auth.useFullStudentSignIn()"
+              class="mt-2 text-white/60 hover:text-white text-xs underline underline-offset-2 transition-colors">
+              Not you? Sign in another way
+            </button>
+          </div>
+          <p id="student-full-hint" class="text-white/70 text-sm mb-4">Enter your <b class="text-white">family name</b>, <b class="text-white">username</b> and <b class="text-white">PIN</b>:</p>
           <div class="space-y-3">
+            <!-- ⚠ Hidden, never emptied, in quick sign-in mode. studentSignIn()
+                 and checkStudentReady() still read both values, so the sign-in
+                 path is completely unchanged — the child just does not have to
+                 retype what this device already knows. -->
+            <div id="student-full-fields" class="space-y-3">
             <!-- Accepts the 6-character family CODE as well as the name. The
                  code is unique, the name is not, so it is the way out when two
                  families share a name - see verify_student_pin. -->
@@ -1563,6 +1627,7 @@
               autocapitalize="off" autocorrect="off" spellcheck="false"
               class="selectable w-full text-center text-xl font-bold bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
               oninput="Auth.checkStudentReady()">
+            </div>
             <!-- ⚠ The placeholder is deliberately NOT sized with the value.
                  The field is text-2xl + tracking-widest so four typed digits read
                  clearly, but at that size the words "PIN (4 digits)" are wider
@@ -1739,10 +1804,7 @@
               class="selectable w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
             <div class="grid grid-cols-2 gap-2">
               <select id="setup-child-grade"
-                class="bg-white/10 border border-white/20 text-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
-                <option value="4">Grade 4</option>
-                <option value="5">Grade 5</option>
-                <option value="6">Grade 6</option>
+                class="bg-white/10 border border-white/20 text-white rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400" data-grade-select="live">
               </select>
               <input id="setup-child-pin" type="password" maxlength="4" placeholder="4-digit PIN"
                 class="selectable text-center font-mono tracking-widest bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400">
@@ -1790,10 +1852,7 @@
       <div>
         <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Grade</label>
         <select id="add-child-grade"
-          class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
-          <option value="4">Grade 4</option>
-          <option value="5">Grade 5</option>
-          <option value="6">Grade 6</option>
+          class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400" data-grade-select="live">
         </select>
       </div>
       <div>
@@ -1878,6 +1937,9 @@
           <span class="bg-white/20 px-3 py-1 rounded-full">📝 <span id="dash-exams">0</span> exams</span>
         </div>
       </div>
+
+      <div id="goal-slot-dashboard"></div>
+      <div id="task-slot-dashboard"></div>
 
       <!-- Resume banner — shown when an unfinished session was interrupted -->
       <div id="student-expired-slot"></div>
@@ -2094,6 +2156,16 @@
         <div id="kidhome-stats" class="relative flex flex-wrap gap-2 mt-4 text-xs font-bold"></div>
       </div>
 
+      <!-- Today's goal. A child with more than one subject lands HERE, not on
+           the dashboard, so this is the first place the goal has to appear. -->
+      <div id="goal-slot-kidhome"></div>
+
+      <!-- Two compact task buttons: today's plan, and anything the child paused.
+           They replaced two full schedule panels that used to sit on the screen a
+           child reaches when they have just chosen a subject to practise — a wall
+           of suggestions competing with the thing they came to do. -->
+      <div id="task-slot-kidhome"></div>
+
       <!-- Paused session, if any - same store _renderResumeBanner() already reads -->
       <div id="resume-banner-slot-kidhome"></div>
 
@@ -2227,8 +2299,14 @@
               <button id="exam-tts-btn" onclick="speakQuestion('exam')" class="shrink-0 mt-1 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors" title="Read question aloud">🔊</button>
             </div>
             <div id="exam-answer-area" class="mb-4"></div>
-            <div class="flex justify-between">
+            <div id="exam-nav-row" class="flex justify-between">
               <button id="exam-prev-btn" class="btn-secondary">← Prev</button>
+              <!-- ⚠ On the LAST question this becomes "✓ Finish exam" and is the
+                   thing a child is actually looking for at the end. It must
+                   never be labelled "Review": to a nine-year-old that means
+                   "show me my answers", which only exists after submitting, and
+                   the word sent them tapping a button that could not give them
+                   what it promised. See renderExamQuestion(). -->
               <button id="exam-next-btn" class="btn-primary">Next →</button>
             </div>
           </div>
@@ -2902,11 +2980,7 @@
       <div id="admin-tab-questions" class="admin-tab-panel hidden">
         <div id="qm-reports-section"></div>
         <div class="flex flex-wrap gap-2 mb-4">
-          <select id="qm-grade" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm" onchange="AdminPanel.qmGradeFilter()">
-            <option value="">All grades</option>
-            <option value="4">Grade 4</option>
-            <option value="5">Grade 5</option>
-            <option value="6">Grade 6</option>
+          <select id="qm-grade" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm" onchange="AdminPanel.qmGradeFilter()" data-grade-select="all"><option value="">All grades</option>
           </select>
           <select id="qm-subject" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm">
             <option value="">All subjects</option>
@@ -3179,6 +3253,10 @@
       </div>
 
       <!-- ── Children grid ── -->
+      <!-- Family overview: rendered by _renderFamilyOverview() in engine/app.js.
+           Stays hidden with fewer than two children. -->
+      <div id="pd-family-overview" class="hidden mb-6"></div>
+
       <div id="pd-children-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"></div>
 
       <!-- ── Child detail panel (hidden until a card is tapped) ── -->
@@ -3199,11 +3277,22 @@
         </div>
 
         <!-- Tabs -->
-        <div class="flex gap-1 mb-5 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-xl">
-          <button class="pd-tab flex-1 text-sm py-2 rounded-lg bg-white dark:bg-gray-700 shadow-sm font-semibold text-gray-800 dark:text-white" data-tab="progress" onclick="PD.pdTab('progress')">📊 Progress</button>
-          <button class="pd-tab flex-1 text-sm py-2 rounded-lg text-gray-500 dark:text-gray-400" data-tab="assign"   onclick="PD.pdTab('assign')">📋 Assignments</button>
-          <button class="pd-tab flex-1 text-sm py-2 rounded-lg text-gray-500 dark:text-gray-400" data-tab="login"    onclick="PD.pdTab('login')">🔑 Login</button>
-          <button class="pd-tab flex-1 text-sm py-2 rounded-lg text-gray-500 dark:text-gray-400" data-tab="controls" onclick="PD.pdTab('controls')">⚙️ Controls</button>
+        <!-- .pd-tabbar scrolls rather than shrinking. Five flex-1 tabs at 360px
+             give each ~67px, and "Assignments" alone needs more than that - the
+             same class of overflow the device-display pass fixed in the bottom
+             bar. See style.css. -->
+        <div class="pd-tabbar mb-5 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-xl">
+          <button class="pd-tab text-sm py-2 px-3 rounded-lg bg-white dark:bg-gray-700 shadow-sm font-semibold text-gray-800 dark:text-white" data-tab="progress" onclick="PD.pdTab('progress')">📊 Progress</button>
+          <button class="pd-tab text-sm py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400" data-tab="reports"  onclick="PD.pdTab('reports')">📈 Reports</button>
+          <button class="pd-tab text-sm py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400" data-tab="assign"   onclick="PD.pdTab('assign')">📋 Assignments</button>
+          <button class="pd-tab text-sm py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400" data-tab="login"    onclick="PD.pdTab('login')">🔑 Login</button>
+          <button class="pd-tab text-sm py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400" data-tab="controls" onclick="PD.pdTab('controls')">⚙️ Controls</button>
+        </div>
+
+        <!-- ── TAB: REPORTS ── -->
+        <!-- Rendered entirely by _renderReports() in engine/app.js. -->
+        <div class="pd-tab-content hidden" data-tab="reports">
+          <div id="pd-reports"></div>
         </div>
 
         <!-- ── TAB: PROGRESS ── -->
@@ -3798,6 +3887,10 @@
     <div id="schedule-body" class="space-y-4">
       <p class="text-sm text-gray-400 text-center py-8 animate-pulse">Loading…</p>
     </div>
+    <!-- Filled by renderMyActivity(): the child's own record of completed work.
+         Outside #schedule-body on purpose - that element is overwritten whole by
+         renderSchedule(), including on its empty-timetable path. -->
+    <div id="schedule-done"></div>
   </div>
 
   <div id="screen-calendar" class="screen hidden p-4 max-w-2xl mx-auto pb-24">
@@ -3830,6 +3923,10 @@
         🖨 Print
       </button>
     </div>
+
+    <!-- Layer filters. Rendered by Calendar._renderFilters(); the state lives in
+         localStorage under mm_cal_filters so it survives a reload. -->
+    <div id="cal-filters" class="cal-filters mb-3"></div>
 
     <!-- Month nav -->
     <div class="flex items-center justify-between mb-3">
@@ -3907,61 +4004,68 @@
   </div>
 
   <!-- ══ CALENDAR: GENERATE TIMETABLE MODAL ══ -->
-  <div id="modal-gen-timetable" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl max-h-[90vh] overflow-y-auto">
+  <div id="modal-gen-timetable" class="hidden fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl p-5 sm:p-6 max-w-md w-full shadow-2xl max-h-[92vh] overflow-y-auto" oninput="Calendar.genPreview()" onchange="Calendar.genPreview()">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-bold text-gray-800 dark:text-white text-base">⚡ Generate Study Timetable</h3>
-        <button onclick="Calendar.closeGenModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
+        <button onclick="Calendar.closeGenModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none" aria-label="Close">✕</button>
       </div>
 
-      <!-- Section: Schedule -->
-      <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Schedule</p>
+      <!-- Section: When -->
+      <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">When</p>
       <div class="space-y-3 mb-4">
-        <div class="flex gap-3">
-          <div class="flex-1">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
             <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Start date</label>
-            <input id="gen-start-date" type="date"
+            <input id="gen-start-date" type="date" onchange="Calendar.genSyncFromWeeks()"
               class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
           </div>
-          <div class="w-24">
-            <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Weeks</label>
-            <input id="gen-weeks" type="number" min="1" max="12" value="4"
+          <div>
+            <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">End date</label>
+            <input id="gen-end-date" type="date" onchange="Calendar.genSyncFromEnd()"
               class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
           </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-xs text-gray-500 dark:text-gray-400 shrink-0">or</label>
+          <input id="gen-weeks" type="number" min="1" max="26" value="4" oninput="Calendar.genSyncFromWeeks()"
+            class="w-20 border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+          <span class="text-xs text-gray-500 dark:text-gray-400">weeks</span>
+          <button type="button" id="gen-until-exam" onclick="Calendar.genUntilExam()"
+            class="hidden ml-auto text-xs font-semibold text-purple-600 dark:text-purple-300 border border-purple-300 dark:border-purple-700 rounded-lg px-2 py-1 hover:bg-purple-50 dark:hover:bg-purple-900/30"></button>
         </div>
 
         <div>
           <label class="block text-xs text-gray-500 dark:text-gray-400 mb-2">Study days</label>
           <div class="flex gap-1 flex-wrap">
-            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-0"><span>Sun</span></label>
             <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-1" checked><span>Mon</span></label>
             <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-2" checked><span>Tue</span></label>
             <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-3" checked><span>Wed</span></label>
             <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-4" checked><span>Thu</span></label>
             <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-5" checked><span>Fri</span></label>
             <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-6"><span>Sat</span></label>
+            <label class="flex flex-col items-center gap-1 text-xs cursor-pointer"><input type="checkbox" id="gen-day-0"><span>Sun</span></label>
           </div>
         </div>
-
       </div>
 
       <!-- Section: Subjects & Hours -->
-      <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Subjects & Hours per Week</p>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Set hours per week per subject. Uncheck to skip a subject.</p>
+      <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Subjects &amp; Hours per Week</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Hours per week for each subject. Untick to skip one.</p>
       <div id="gen-subject-hours" class="mb-4 border border-gray-200 dark:border-gray-700 rounded-xl p-3 max-h-44 overflow-y-auto"></div>
 
       <!-- Section: Style -->
       <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Daily Style</p>
-      <div class="flex gap-3 mb-4">
+      <div class="flex gap-3 mb-3">
         <label class="flex items-center gap-2 text-sm cursor-pointer flex-1 border border-gray-200 dark:border-gray-600 rounded-xl p-3 hover:border-purple-400 transition-colors">
-          <input type="radio" name="gen-style" id="gen-single" checked class="accent-purple-500">
+          <input type="radio" name="gen-style" id="gen-single" checked class="accent-purple-500" onchange="Calendar.genStyleChanged()">
           <div>
-            <div class="font-semibold text-gray-800 dark:text-white text-xs">One Subject</div>
-            <div class="text-[11px] text-gray-500 dark:text-gray-400">Deep focus per day</div>
+            <div class="font-semibold text-gray-800 dark:text-white text-xs">One Subject a Day</div>
+            <div class="text-[11px] text-gray-500 dark:text-gray-400">Deep focus</div>
           </div>
         </label>
         <label class="flex items-center gap-2 text-sm cursor-pointer flex-1 border border-gray-200 dark:border-gray-600 rounded-xl p-3 hover:border-purple-400 transition-colors">
-          <input type="radio" name="gen-style" id="gen-mixed" class="accent-purple-500">
+          <input type="radio" name="gen-style" id="gen-mixed" class="accent-purple-500" onchange="Calendar.genStyleChanged()">
           <div>
             <div class="font-semibold text-gray-800 dark:text-white text-xs">Mixed Subjects</div>
             <div class="text-[11px] text-gray-500 dark:text-gray-400">Variety each day</div>
@@ -3969,6 +4073,59 @@
         </label>
       </div>
 
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div id="gen-block-wrap">
+          <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Stay on a subject for</label>
+          <select id="gen-block" class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-2 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <option value="1" selected>1 day (switch daily)</option>
+            <option value="2">2 days in a row</option>
+            <option value="3">3 days in a row</option>
+            <option value="5">5 days in a row</option>
+          </select>
+        </div>
+        <div id="gen-perday-wrap" class="hidden">
+          <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Subjects per day</label>
+          <select id="gen-perday" class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-2 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <option value="2">2 subjects</option>
+            <option value="3">3 subjects</option>
+            <option value="0" selected>All subjects</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Max study time per day</label>
+          <select id="gen-maxday" class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-2 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <option value="30">30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">1 hour</option>
+            <option value="90" selected>1½ hours</option>
+            <option value="120">2 hours</option>
+            <option value="180">3 hours</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Session length</label>
+          <select id="gen-session" class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-2 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <option value="20">20 min</option>
+            <option value="30" selected>30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">60 min</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Choose chapters by</label>
+          <select id="gen-focus" class="w-full border border-gray-300 dark:border-gray-600 rounded-xl px-2 py-2 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
+            <option value="weak" selected>Weakest topics more often</option>
+            <option value="balanced">Every chapter equally</option>
+            <option value="order">Syllabus order</option>
+          </select>
+        </div>
+      </div>
+      <label class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300 mb-4 cursor-pointer">
+        <input type="checkbox" id="gen-bonus" checked class="accent-purple-500">
+        Include ✨ bonus (enrichment) chapters
+      </label>
+
+      <div id="gen-preview" class="text-xs rounded-xl px-3 py-2 mb-3 bg-purple-50 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200"></div>
       <p id="gen-error" class="hidden text-xs text-red-500 mb-3"></p>
 
       <div class="flex gap-3">
@@ -4033,6 +4190,31 @@
        auth.js and app.js (both reference Shop). -->
   <script src="engine/shop.js"></script>
   <!-- Subject packs -->
+  <!-- ⚠ HAND-MAINTAINED, and load-bearing: every manifest MUST load before
+       app.js (CHAPTERS is declared in grade5-maths/_manifest.js and app.js
+       references it at top level). See the load-order note in CLAUDE.md.
+
+       ⚠ PERFORMANCE: these are blocking scripts on every page load. The 15 live
+       packs are ~200 KB; the 30 placeholders below are ~2 KB each and cost
+       nothing today, but they will not stay small. Before any of them is filled
+       in, this list needs to become a lazy per-grade load — a child only ever
+       needs their own grade. -->
+  <!-- Grade 1-3 subjects (placeholders, comingSoon) -->
+  <script src="subjects/grade1-maths/_manifest.js"></script>
+  <script src="subjects/grade1-english/_manifest.js"></script>
+  <script src="subjects/grade1-french/_manifest.js"></script>
+  <script src="subjects/grade1-science/_manifest.js"></script>
+  <script src="subjects/grade1-history/_manifest.js"></script>
+  <script src="subjects/grade2-maths/_manifest.js"></script>
+  <script src="subjects/grade2-english/_manifest.js"></script>
+  <script src="subjects/grade2-french/_manifest.js"></script>
+  <script src="subjects/grade2-science/_manifest.js"></script>
+  <script src="subjects/grade2-history/_manifest.js"></script>
+  <script src="subjects/grade3-maths/_manifest.js"></script>
+  <script src="subjects/grade3-english/_manifest.js"></script>
+  <script src="subjects/grade3-french/_manifest.js"></script>
+  <script src="subjects/grade3-science/_manifest.js"></script>
+  <script src="subjects/grade3-history/_manifest.js"></script>
   <!-- Grade 4 subjects -->
   <script src="subjects/grade4-maths/_manifest.js"></script>
   <script src="subjects/grade4-english/_manifest.js"></script>
@@ -4051,6 +4233,22 @@
   <script src="subjects/grade6-english/_manifest.js"></script>
   <script src="subjects/grade6-french/_manifest.js"></script>
   <script src="subjects/grade6-history/_manifest.js"></script>
+  <!-- Grade 7-9 subjects (placeholders, comingSoon) -->
+  <script src="subjects/grade7-maths/_manifest.js"></script>
+  <script src="subjects/grade7-english/_manifest.js"></script>
+  <script src="subjects/grade7-french/_manifest.js"></script>
+  <script src="subjects/grade7-science/_manifest.js"></script>
+  <script src="subjects/grade7-history/_manifest.js"></script>
+  <script src="subjects/grade8-maths/_manifest.js"></script>
+  <script src="subjects/grade8-english/_manifest.js"></script>
+  <script src="subjects/grade8-french/_manifest.js"></script>
+  <script src="subjects/grade8-science/_manifest.js"></script>
+  <script src="subjects/grade8-history/_manifest.js"></script>
+  <script src="subjects/grade9-maths/_manifest.js"></script>
+  <script src="subjects/grade9-english/_manifest.js"></script>
+  <script src="subjects/grade9-french/_manifest.js"></script>
+  <script src="subjects/grade9-science/_manifest.js"></script>
+  <script src="subjects/grade9-history/_manifest.js"></script>
   <script src="subjects/grade5-maths/help.js"></script>
   <!-- Question loader - fetches questions from server (production) or local files (file://) -->
   <script src="engine/question_loader.js"></script>
@@ -4097,9 +4295,17 @@
       </div>
       <div class="p-5 pt-3 border-t border-gray-100 dark:border-gray-800 flex flex-col gap-2">
         <button id="exr-first-blank-btn" onclick="examGoToFirstBlank()" class="hidden w-full btn-secondary text-sm">↩ Go to my first blank question</button>
+        <!-- ⚠ Submits directly, with no second "are you sure". This sheet IS the
+             confirmation: it has just shown how many questions are blank, how
+             many are flagged, and the warning below. Stacking another dialog on
+             top made finishing a four-tap job for a child who had already been
+             told everything twice. The top-bar Submit keeps ITS confirm — that
+             one is an escape hatch pressed mid-exam with no summary in front of
+             you. -->
+        <p class="text-[11px] text-gray-500 dark:text-gray-400 text-center mb-2">You can't change your answers after you submit.</p>
         <div class="flex gap-2">
-          <button onclick="closeExamReview()" class="flex-1 btn-secondary text-sm">Keep checking</button>
-          <button onclick="closeExamReview(); document.getElementById('submit-exam-btn').click()" class="flex-1 btn-danger text-sm">✓ Submit exam</button>
+          <button onclick="closeExamReview()" class="flex-1 btn-secondary text-sm">← Back to my paper</button>
+          <button onclick="closeExamReview(); submitExam()" class="flex-1 btn-danger text-sm">✓ Submit &amp; see my score</button>
         </div>
       </div>
     </div>
@@ -4158,6 +4364,55 @@
        to get straight back to what they were doing: the only way out used to be
        the correct PIN or "Forgot PIN?", which signs the student out. Tapping the
        backdrop, the ✕, Cancel or Escape all just close it. -->
+  <!-- ══════════ SWITCH TO A CHILD ══════════
+       "Student view" used to drop the parent on the full sign-in screen, where
+       the family name and the child's username had to be typed again — on a
+       device where the parent was already signed in and the app knew every
+       child by name. Pick a face, tap four digits.
+
+       ⚠ The PIN is still verified by verify_student_pin() in the database. This
+       modal fills the same three fields the sign-in screen uses and calls the
+       same studentSignIn(), so the lockout, the rate limit and the session
+       minting are shared, not reimplemented. -->
+  <div id="modal-student-switch" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+       onclick="if(event.target===this)Auth.closeStudentSwitch()">
+    <div class="relative bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 w-full max-w-xs">
+      <button onclick="Auth.closeStudentSwitch()" aria-label="Close"
+        class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-lg leading-none">✕</button>
+      <div class="text-4xl text-center mb-2 select-none">🎒</div>
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white text-center mb-1">Switch to a child</h3>
+      <p id="sw-hint" class="text-sm text-gray-500 dark:text-gray-400 text-center mb-4">Choose who is practising, then type their PIN.</p>
+
+      <div id="sw-kids" class="flex flex-wrap justify-center gap-2 mb-4"></div>
+
+      <div class="flex justify-center gap-3 mb-5">
+        <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="sw-dot-0"></div>
+        <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="sw-dot-1"></div>
+        <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="sw-dot-2"></div>
+        <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="sw-dot-3"></div>
+      </div>
+      <p id="sw-error" class="hidden text-xs text-red-500 text-center mb-3"></p>
+      <div class="grid grid-cols-3 gap-2 mb-4">
+        <button onclick="Auth._swKey('1')" class="pin-key-btn">1</button>
+        <button onclick="Auth._swKey('2')" class="pin-key-btn">2</button>
+        <button onclick="Auth._swKey('3')" class="pin-key-btn">3</button>
+        <button onclick="Auth._swKey('4')" class="pin-key-btn">4</button>
+        <button onclick="Auth._swKey('5')" class="pin-key-btn">5</button>
+        <button onclick="Auth._swKey('6')" class="pin-key-btn">6</button>
+        <button onclick="Auth._swKey('7')" class="pin-key-btn">7</button>
+        <button onclick="Auth._swKey('8')" class="pin-key-btn">8</button>
+        <button onclick="Auth._swKey('9')" class="pin-key-btn">9</button>
+        <button onclick="Auth._swKey('clear')" class="pin-key-btn" style="color:#f87171">✕</button>
+        <button onclick="Auth._swKey('0')" class="pin-key-btn">0</button>
+        <button onclick="Auth._swKey('back')" class="pin-key-btn">⌫</button>
+      </div>
+      <button type="button" onclick="Auth.fullStudentSignInFromSwitch()"
+        class="w-full text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 underline underline-offset-2 transition-colors">
+        Use the full sign-in screen instead
+      </button>
+    </div>
+  </div>
+
   <div id="modal-parent-pin" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
        onclick="if(event.target===this)Auth.closeParentPin()">
     <div class="relative bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-6 w-full max-w-xs">
@@ -4325,10 +4580,7 @@
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Grade</label>
-          <select id="qmf-grade" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1" onchange="AdminPanel.qmFormGradeChange()">
-            <option value="4">Grade 4</option>
-            <option value="5">Grade 5</option>
-            <option value="6">Grade 6</option>
+          <select id="qmf-grade" class="w-full border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1.5 text-sm mt-1" onchange="AdminPanel.qmFormGradeChange()" data-grade-select="all">
           </select>
         </div>
         <div>

@@ -168,7 +168,9 @@ const _FEATURE_COPY = {
   tutor_status:        'Applying for tutor access is part of the Premium plan.\n\nUpgrade to apply, then an administrator reviews your application.',
   past_papers:         'Real past exam papers are part of a paid plan.\n\nAsk a parent about upgrading to practise with them.',
   question_search:     'Searching across every subject is part of a paid plan.\n\nAsk a parent about upgrading to switch it on.',
-  community_forum:     'The community forum is part of a paid plan.\n\nAsk a parent about upgrading to join in.',
+  // Parent-facing wording: the forum is adult-only now (see
+  // _ADULT_ONLY_SCREENS), so a child never reaches this modal.
+  community_forum:     'The community forum is part of a paid plan.\n\nUpgrade to ask questions and compare notes with other parents and teachers.',
   study_calendar:      'The study calendar is part of a paid plan.\n\nAsk a parent about upgrading to plan revision with it.',
   weak_area_drill:     'Weak-area drills are part of a paid plan.\n\nThey pick the topics you find hardest. Ask a parent about upgrading.',
 };
@@ -306,11 +308,21 @@ let DB = {};   // populated by Auth.init() after student is selected
 let SELECTED_GRADE = null;
 let ACTIVE_PACK    = null; // set when student selects a subject; defaults to first non-comingSoon pack
 
+// ⚠ Returns null when no subject has been chosen, and that is deliberate.
+//
+// It used to fall back to `SUBJECT_PACKS.find(p => !p.comingSoon)` — the first
+// pack registered, which is grade4-maths. So before a child picked anything,
+// the breadcrumb said "Grade 4 Mathematics", the syllabus screen showed maths,
+// packBadges() offered maths badges and _ttsLang() answered for maths. Combined
+// with the global CHAPTERS starting full of GRADE 5 maths (fixed in that
+// manifest), the app confidently showed two DIFFERENT maths subjects at once to
+// a child who had tapped Science.
+//
+// A guess dressed as an answer is worse than no answer: every caller already
+// handles null (`(p && p.badges) || []` and friends), and an empty chapter grid
+// has a real empty state that points at the Subjects screen.
 function _activePack() {
-  if (ACTIVE_PACK) return ACTIVE_PACK;
-  if (typeof SUBJECT_PACKS !== 'undefined')
-    return SUBJECT_PACKS.find(p => !p.comingSoon) || SUBJECT_PACKS[0] || null;
-  return null;
+  return ACTIVE_PACK || null;
 }
 
 // ── SUBJECT PACK ACTIVATION ───────────────────
@@ -324,6 +336,16 @@ function _activePack() {
 // to activation semantics had to be made in four places.
 //
 // Returns the pack, or null if the id is unknown / the pack is coming soon.
+// Chapter-grid filter (All / Not started / In progress / Needs work).
+// ⚠ Declared HERE, above activateSubjectPack, not beside the filter bar that
+// uses it. It is a `let`, so a reference from activateSubjectPack() while the
+// declaration was still below would sit in the temporal dead zone and throw
+// ReferenceError rather than reading undefined. Nothing calls that function
+// during app.js's own top-level run today — but auth.js and the resume path
+// both call it, and the ordering is not something a future edit should have to
+// know about.
+let _chapterFilter = 'all';
+
 function activateSubjectPack(packId, { allowComingSoon = false } = {}) {
   const packs = (typeof SUBJECT_PACKS !== 'undefined') ? SUBJECT_PACKS : [];
   const pack  = packs.find(p => p.id === packId);
@@ -337,6 +359,12 @@ function activateSubjectPack(packId, { allowComingSoon = false } = {}) {
   CHAPTERS.length = 0;
   chs.forEach(ch => CHAPTERS.push(ch));
 
+  // ⚠ Reset here, not in the filter bar. A filter left on "Not started" would
+  // otherwise follow the child into the next subject, where it can legitimately
+  // match nothing — and an empty chapter grid reads as a broken app, not as an
+  // active filter.
+  _chapterFilter = 'all';
+
   return pack;
 }
 window.activateSubjectPack = activateSubjectPack;
@@ -345,8 +373,11 @@ function _activeSubjectLabel() {
   const pack  = _activePack();
   const acct  = (typeof Auth !== 'undefined') ? Auth.getActiveAccount() : null;
   const grade = acct?.grade || pack?.grade || 5;
-  const name  = pack?.name  || 'Maths';
-  return { grade, name };
+  // ⚠ Not 'Maths'. With no subject chosen this string went into the breadcrumb
+  // and the dashboard tagline, so a child who had picked nothing was told they
+  // were in Maths — the same guess _activePack() used to make, one level up.
+  const name  = pack?.name  || 'your subject';
+  return { grade, name, chosen: !!pack };
 }
 
 // ── ASSIGNMENT MODE ───────────────────────────
@@ -1323,6 +1354,44 @@ function _ttsLang() {
   return (p && p.subject === 'French') ? 'fr-FR' : 'en-GB';
 }
 
+// ── Voice list ────────────────────────────────
+// ⚠ speechSynthesis.getVoices() is EMPTY on first call in Chrome (desktop and
+// Android): the list is fetched asynchronously and only announced via
+// `voiceschanged`. Reading it at the moment the child taps 🔊 therefore returned
+// [] for the first tap after every page load, no voice was chosen, and the
+// engine fell back to its default — an English voice reading French.
+//
+// So the list is warmed at load and kept current, rather than asked for at the
+// worst possible moment. Nothing is deferred: the tap still calls speak()
+// synchronously inside the user gesture, which is what iOS requires.
+let _ttsVoices = [];
+function _refreshTtsVoices() {
+  try { _ttsVoices = window.speechSynthesis.getVoices() || []; } catch (_) { _ttsVoices = []; }
+}
+if (typeof window !== 'undefined' && window.speechSynthesis) {
+  _refreshTtsVoices();
+  // addEventListener where it exists; onvoiceschanged is the only hook in older
+  // Safari. Assigning both is safe — the property form simply never fires there.
+  try { window.speechSynthesis.addEventListener('voiceschanged', _refreshTtsVoices); } catch (_) {}
+  if (!window.speechSynthesis.onvoiceschanged) window.speechSynthesis.onvoiceschanged = _refreshTtsVoices;
+}
+
+// Best voice for a language tag. An exact region match first (fr-FR over fr-CA
+// for a Mauritian child, whose French is metropolitan), then any voice for the
+// language, then nothing — in which case utt.lang is the only hint left and
+// some engines will ignore it.
+function _pickVoice(lang) {
+  const voices = _ttsVoices.length ? _ttsVoices : (() => { _refreshTtsVoices(); return _ttsVoices; })();
+  if (!voices.length) return null;
+  const norm = v => (v.lang || '').replace('_', '-').toLowerCase();
+  const want = lang.toLowerCase();
+  const base = want.slice(0, 2);
+  return voices.find(v => norm(v) === want)
+      || voices.find(v => norm(v).startsWith(base + '-'))
+      || voices.find(v => norm(v).startsWith(base))
+      || null;
+}
+
 // A stacked fraction is a column flexbox, so innerText reads "1" then "5" and
 // the read-aloud button said "one five". Every .frac carries the spoken form in
 // data-tts (written by _prettyMath); swap it in on a CLONE so the question the
@@ -1355,13 +1424,11 @@ function speakQuestion(mode) {
   const utt   = new SpeechSynthesisUtterance(text);
   utt.rate    = 0.88;
   utt.lang    = lang;
-  // Setting .lang alone is not always enough - some engines keep the default
-  // voice unless one is named. getVoices() can be empty on first call, in which
-  // case .lang is the only hint available.
+  // Setting .lang alone is not always enough — some engines keep the default
+  // voice unless one is named, which is how a French question ended up being
+  // read aloud by an English voice. See _pickVoice / _refreshTtsVoices.
   try {
-    const want  = lang.slice(0, 2).toLowerCase();
-    const voice = speechSynthesis.getVoices()
-      .find(v => (v.lang || '').replace('_', '-').toLowerCase().startsWith(want));
+    const voice = _pickVoice(lang);
     if (voice) utt.voice = voice;
   } catch(e) {}
   utt.onstart = () => { _ttsSpeaking = true; };
@@ -1571,6 +1638,9 @@ const _KID_ONLY_SCREENS = new Set([
   'subject-select', 'grade-select', 'practice', 'exam-config', 'exam',
   'results', 'assignment-complete', 'search', 'schedule',
 ]);
+// Screens only an adult session may open. See the guard in showScreen().
+const _ADULT_ONLY_SCREENS = new Set(['forum']);
+
 function _isParentContext() {
   return !!(typeof _isParentSession === 'function' && _isParentSession());
 }
@@ -1589,6 +1659,22 @@ function _returnToParentDashboard() {
 function showScreen(id) {
   if (_KID_ONLY_SCREENS.has(id) && _isParentContext()) {
     _returnToParentDashboard();
+    return;
+  }
+
+  // ── Adult-only screens ──
+  // The mirror of _KID_ONLY_SCREENS above. The forum is for parents and
+  // teachers: children do not need it, and a community board is not something
+  // to hand a nine-year-old alongside their homework.
+  //
+  // ⚠ This is the UI half only. The half that counts is the RLS in
+  // supabase-forum-adults.sql — before it, `posts_read` was `USING (true)` and
+  // `posts_insert` explicitly allowed `current_student_id() IS NOT NULL`, so a
+  // child could read AND post. Hiding the button would have hidden a door that
+  // was still unlocked.
+  if (_ADULT_ONLY_SCREENS.has(id) && !_isParentContext()) {
+    toast('The community forum is for parents and teachers.', 3000);
+    showScreen(ACTIVE_STUDENT_ID ? 'dashboard' : 'landing');
     return;
   }
 
@@ -1647,6 +1733,14 @@ function showScreen(id) {
       b.classList.toggle('flex',  !isAuthScreen);
     });
   }
+  // Forum: adult sessions only, same rule the screen guard applies.
+  const forumBtn = document.getElementById('btn-open-forum');
+  if (forumBtn) {
+    const adult = _isParentContext();
+    forumBtn.classList.toggle('hidden', !adult);
+    forumBtn.classList.toggle('flex',    adult);
+  }
+
   const profileBtn = document.getElementById('header-profile-btn');
   if (profileBtn) {
     const isAuthSc   = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
@@ -1688,6 +1782,9 @@ function showScreen(id) {
   }
 
   _renderCreditChip();
+  _renderLevelChip();
+  _renderDailyGoal();
+  _renderTaskButtons();
 
   // Last, so the render calls above have put the target on the page already.
   _armIdleNudge(id);
@@ -1698,7 +1795,13 @@ function _updateBreadcrumb(screenId) {
   const inner = document.getElementById('breadcrumb-inner');
   if (!bar || !inner) return;
 
-  const studentScreens = ['dashboard','chapter-select','syllabus','analytics','practice','exam-config','exam'];
+  // ⚠ subject-select, grade-select, results and past-papers were missing, which
+  // is most of the "the breadcrumb does not show at all times" report: the
+  // subject picker is where a child LANDS, and the results screen is where they
+  // end up after an exam — the two moments they are most likely to want a way
+  // back — and both showed no trail at all.
+  const studentScreens = ['dashboard','chapter-select','syllabus','analytics','practice',
+                          'exam-config','exam','results','subject-select','grade-select','past-papers'];
   if (!studentScreens.includes(screenId)) { bar.classList.add('hidden'); return; }
 
   const grade    = (typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : null) || 5;
@@ -1717,9 +1820,31 @@ function _updateBreadcrumb(screenId) {
   const curr = label =>
     `<span class="text-gray-700 dark:text-gray-300 font-semibold whitespace-nowrap">${label}</span>`;
 
-  let parts = link(`Grade ${grade}`, `showScreen('subject-select')`);
+  // The grade crumb goes to the grade picker when there is more than one grade
+  // to pick — the screen the child said they could not get back to. Same
+  // reachability the "← Back to Grades" button on the subject picker already
+  // has, so this opens nothing that was not already open.
+  const gradeCount = (typeof SUBJECT_PACKS !== 'undefined')
+    ? new Set(SUBJECT_PACKS.map(p => p.grade)).size : 1;
+  const gradeCrumb = gradeCount > 1
+    ? link(`Grade ${grade}`, `showScreen('grade-select')`)
+    : link(`Grade ${grade}`, `showScreen('subject-select')`);
 
-  if (screenId === 'dashboard') {
+  if (screenId === 'grade-select') {
+    inner.innerHTML = curr('Choose your grade');
+    bar.classList.remove('hidden');
+    return;
+  }
+
+  let parts = gradeCrumb;
+
+  if (screenId === 'subject-select') {
+    parts += curr('Choose a subject');
+  } else if (screenId === 'results') {
+    parts += link(packLabel, `showScreen('dashboard')`) + curr('Exam results');
+  } else if (screenId === 'past-papers') {
+    parts += link(packLabel, `showScreen('dashboard')`) + curr('Past papers');
+  } else if (screenId === 'dashboard') {
     parts += curr(packLabel);
   } else if (['chapter-select','syllabus','analytics','exam-config'].includes(screenId)) {
     const label = screenId === 'syllabus' ? 'Syllabus' : screenId === 'analytics' ? 'Analytics' : screenId === 'exam-config' ? 'Exam' : 'Chapters';
@@ -1760,15 +1885,228 @@ function getChapterPct(id) {
   if (!c || !c.attempted) return 0;
   return Math.round(c.correct / c.attempted * 100);
 }
-function recordAnswer(chapterId, correct) {
+// ── PARENT REPORTING: dated activity series ───
+// How many days of per-day activity to keep. 120 covers "this term" and any
+// week-on-week or 30-day view a parent asks for, and bounds the jsonb: the
+// worst case is 120 keys of ~30 bytes, under 4KB.
+const _DAILY_KEEP   = 120;
+// How many wrong answers to keep. The point is "what is she getting wrong
+// lately", not a permanent transcript, and each entry carries question text.
+const _MISTAKE_KEEP = 60;
+
+// Prunes on write rather than on a timer: the app can sit open for days, and a
+// child who never reopens it must not accumulate an unbounded blob either.
+function _dayBucket() {
+  if (!DB.daily) DB.daily = {};
+  const k = _muDayKey();
+  if (!DB.daily[k]) {
+    DB.daily[k] = { a: 0, c: 0, e: 0 };
+    const keys = Object.keys(DB.daily).sort();
+    // Lexicographic sort IS chronological for YYYY-MM-DD — that is the whole
+    // reason the key is this format and not a locale date string.
+    if (keys.length > _DAILY_KEEP) {
+      keys.slice(0, keys.length - _DAILY_KEEP).forEach(k2 => delete DB.daily[k2]);
+    }
+  }
+  return DB.daily[k];
+}
+
+// Recorded even in ASSIGNMENT_MODE. A parent-set assignment is the activity a
+// parent most wants to see, and recordAnswer() returns early for it — so this
+// has to run BEFORE that early return, and must not touch DB.chapters, which
+// assignment mode deliberately leaves alone.
+// ⚠ chapterId is recorded per day as well as the totals. "How many questions
+// yesterday" is a number a parent can already get from the strip; "what did she
+// actually work on yesterday" is the question they ask out loud, and a day
+// bucket of {a, c} could never answer it.
+//
+// Bounded on purpose: at most _DAY_CH_KEEP chapters per day. A child cannot
+// meaningfully work through more than a handful in one sitting, and without a
+// cap a stuck loop could grow one day's entry without limit inside a blob that
+// is rewritten on every answer.
+const _DAY_CH_KEEP = 12;
+
+// `source` attributes the answer so the calendar does not report the same work
+// twice. An exam already gets one row of its own from examHistory, and an
+// assignment one from student_assignments.completed_at — so neither writes into
+// the per-chapter map. Without this a 40-question mock showed up as five
+// "practised X" lines AND an exam line, for one sitting.
+// The day totals (a / c) still count every answer, whatever its source: those
+// are "how much did she do today", and an exam is emphatically doing something.
+// ══════════════════════════════════════════════
+//  TODAY'S GOAL
+//
+//  Everything the app rewarded was either INSTANT (a ding on one answer) or very
+//  distant (100 questions, a 7-day streak, 90% on a full mock). Nothing sat in
+//  the five-to-fifteen-minute range a child can start AND FINISH, so a session
+//  had no ending: they answered questions until bored and closed the tab.
+//  Nothing ever told them they were done for the day.
+//
+//  ⚠ The goal deliberately does NOT drive the streak. updateStreak() still
+//  counts days a child showed up at all, for two reasons: breaking a twelve-day
+//  streak because a nine-year-old only managed three questions is a punishment
+//  no child-facing app should hand out, and re-basing it would silently reset
+//  the streak of every existing child on the day this deploys. The goal is
+//  recorded per day instead (daily[key].g), so the week strip can show "goal
+//  met" and "showed up" as different things without anyone losing what they had.
+const DEFAULT_DAILY_GOAL = 10;
+
+// Per-child override, so a parent control or an age-based default can land later
+// without touching any reader. Guarded because it rides in the synced blob and a
+// corrupt value must never make the goal unreachable.
+function _dailyGoal() {
+  const n = Number(DB.dailyGoal);
+  return Number.isFinite(n) && n >= 1 && n <= 500 ? Math.round(n) : DEFAULT_DAILY_GOAL;
+}
+
+function _goalToday() {
+  const d    = (DB.daily || {})[_muDayKey()] || { a: 0, c: 0 };
+  const goal = _dailyGoal();
+  const raw  = d.a || 0;
+  return { goal, raw, done: Math.min(raw, goal), correct: d.c || 0,
+           met: !!d.g || raw >= goal, left: Math.max(0, goal - raw) };
+}
+
+// Fires once, on the answer that completes the goal. `d.g` is the latch, written
+// into the same day bucket the parent reports read — so it survives a reload and
+// cannot celebrate twice.
+function _checkDailyGoal(d) {
+  if (d.g || (d.a || 0) < _dailyGoal()) return;
+  d.g = 1;
+  save(DB);
+  // Deliberately after a beat: the answer's own correct/wrong feedback lands
+  // first, and two celebrations on one frame read as a single confused flash.
+  setTimeout(() => {
+    launchConfetti();
+    _playSound('levelup');
+    if (navigator.vibrate) { try { navigator.vibrate([60, 40, 60, 40, 120]); } catch (_) {} }
+    toast(`🎯 Today's goal done — ${_dailyGoal()} questions! See you tomorrow.`, 4500);
+    _renderDailyGoal();
+  }, 900);
+}
+
+// ── Time on task ──────────────────────────────
+// ⚠ Measured as the GAP BETWEEN CONSECUTIVE ANSWERS, capped — not by a timer.
+//
+// A wall-clock timer is the obvious implementation and it is the wrong one: a
+// tab left open on the practice screen over lunch would report an hour of study
+// that never happened, and that number would then be shown to a parent and an
+// administrator as if it were real. The gap between two answers cannot run away:
+// anything longer than the cap is a child who wandered off, and is discarded.
+//
+// It therefore UNDER-reports slightly — the reading time before the first answer
+// of a session is never counted, because nothing knows when they started. An
+// honest floor beats a flattering guess.
+const _TIME_GAP_CAP_MS = 3 * 60 * 1000;   // a hard word problem, generously
+let _lastAnswerAt = 0;
+
+function _recordTimeOnTask(d) {
+  const now = Date.now();
+  const gap = now - _lastAnswerAt;
+  if (_lastAnswerAt && gap > 0 && gap < _TIME_GAP_CAP_MS) {
+    d.s = (d.s || 0) + Math.round(gap / 1000);
+  }
+  _lastAnswerAt = now;
+}
+
+function _recordDaily(correct, chapterId, source) {
+  const d = _dayBucket();
+  d.a++;
+  if (correct) d.c++;
+  _recordTimeOnTask(d);
+  // Before the early returns below: an exam question and a parent's assignment
+  // are both work done today, and both should count towards the goal even
+  // though neither is filed under a chapter.
+  _checkDailyGoal(d);
+  if (!chapterId) return;
+  // An exam gets one row of its own from examHistory, so it contributes no
+  // per-chapter breakdown at all.
+  if (source === 'exam') return;
+
+  // ⚠ Assignment work goes in its OWN bucket — not in `ch`, and not nowhere.
+  //
+  // This used to `return` for ASSIGNMENT_MODE, on the assumption that
+  // student_assignments.completed_at would supply the row instead. It does not:
+  // completed_at is written ONLY by the manual "✓ Done" button in the parent's
+  // list, so a child who actually sat the assignment left no completion record —
+  // and with that early return, no practice record either. A finished assignment
+  // was invisible on the calendar, which is precisely what a parent goes there
+  // to check.
+  //
+  // Both flows are covered, and they are genuinely different: _assignmentActive
+  // is the PARENT one (startAssignmentDirect, which deliberately never sets
+  // ASSIGNMENT_MODE), ASSIGNMENT_MODE is the teacher/guest one. Keeping `asg`
+  // separate from `ch` is what lets the calendar label the row correctly and
+  // dedupe it against a completed_at row for the same chapter and day.
+  const bucket = (_assignmentActive || ASSIGNMENT_MODE) ? 'asg' : 'ch';
+  if (!d[bucket]) d[bucket] = {};
+  if (!d[bucket][chapterId] && Object.keys(d[bucket]).length >= _DAY_CH_KEEP) return;
+  // [attempted, correct] — two-element array rather than {a,c} because this is
+  // the most-repeated structure in the whole blob.
+  const row = d[bucket][chapterId] || (d[bucket][chapterId] = [0, 0]);
+  row[0]++;
+  if (correct) row[1]++;
+}
+
+// q may be absent (exam replay passes one, some callers do not).
+function _recordMistake(q, userAnswer, chapterId, source) {
+  if (!q) return;
+  if (!Array.isArray(DB.mistakes)) DB.mistakes = [];
+  const chId = chapterId || q.chapterId || '';
+  const ch   = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .flatMap(p => (p._chapters || p.chapters || []).map(c => ({ c, p })))
+    .find(x => x.c.id === chId);
+  DB.mistakes.unshift({
+    d:   new Date().toISOString(),
+    ch:  chId,
+    chn: ch ? ch.c.name : chId,
+    sub: ch ? (ch.p.subject || ch.p.name || '') : '',
+    // Strip markup and cap the length: a comprehension question embeds a whole
+    // passage (see the subsection-tagging notes in CLAUDE.md), and storing that
+    // verbatim on every wrong answer would bloat the blob by kilobytes at a time.
+    q:   _plainText(q.question).slice(0, 160),
+    // A symmetry grid has no typeable answer — same reasoning as
+    // _logPracticeAnswer(), which says so in words rather than printing coordinates.
+    ua:  q.type === 'symmetry' ? '' : String(userAnswer ?? '').slice(0, 60),
+    ca:  q.type === 'symmetry' ? '' : String(q.answer ?? '').slice(0, 60),
+    dif: q.difficulty || 0,
+    src: source || 'practice',
+  });
+  if (DB.mistakes.length > _MISTAKE_KEEP) DB.mistakes.length = _MISTAKE_KEEP;
+}
+
+// Question text is innerHTML by design (see the question file pattern), so it
+// can carry <b>, <img> and whole inline SVG maps. textContent on a detached
+// node is the only reliable way to get the words out; a regex over tags trips
+// on the SVGs. Detached, so nothing loads and no script runs.
+function _plainText(html) {
+  if (!html) return '';
+  const d = document.createElement('div');
+  d.innerHTML = String(html);
+  return (d.textContent || '').replace(/\s+/g, ' ').trim();
+}
+
+function recordAnswer(chapterId, correct, source) {
+  _recordDaily(correct, chapterId, source);
   if (ASSIGNMENT_MODE) {
     ASSIGNMENT_SCORE.attempted++;
     if (correct) ASSIGNMENT_SCORE.correct++;
+    // This branch used to return without saving — correct when the only thing
+    // it touched was in-memory ASSIGNMENT_SCORE, but _recordDaily() above now
+    // writes to DB, and a whole assignment's activity would be lost on reload.
+    // save() is debounced in Store, so this costs nothing per answer.
+    save(DB);
     return;
   }
   if (!DB.chapters[chapterId]) DB.chapters[chapterId] = { attempted: 0, correct: 0 };
   DB.chapters[chapterId].attempted++;
   if (correct) DB.chapters[chapterId].correct++;
+  // WHEN, not just how much. Without this a child looking at the chapter grid
+  // can tell that a chapter has been touched but not whether that was this
+  // afternoon or in March, which is most of what "have I done this one?" means.
+  // One number per chapter, so the blob grows by ~20 bytes per chapter ever
+  // practised — cheap enough not to need its own table.
+  DB.chapters[chapterId].last = Date.now();
   DB.stats.totalAttempted++;
   if (correct) DB.stats.totalCorrect++;
   updateStreak();
@@ -1840,10 +2178,19 @@ function _prettyMath(html) {
   // ⚠ A □ inside the spoken label has to become a word BEFORE the blank pass
   // below runs, or that pass would rewrite it into markup inside an attribute
   // value and break the tag. "2/□" is a real, common question shape.
-  const say = v => v === '□' ? 'blank' : v;
+  //
+  // ⚠ And the words have to be in the language being READ. "2 over 5" handed to
+  // a French voice comes out "deux ovair cinq" — the read-aloud button was
+  // saying an English word in the middle of a French sentence. The active pack
+  // is what _ttsLang() keys off and it is active at render time, which is the
+  // only moment this markup is built.
+  const fr    = (typeof _ttsLang === 'function') && _ttsLang().slice(0, 2) === 'fr';
+  const OVER  = fr ? 'sur'   : 'over';
+  const BLANK = fr ? 'blanc' : 'blank';
+  const say = v => v === '□' ? BLANK : v;
   let out = html.replace(/(<[^>]+>)|([^<]+)/g, (m, tag, text) =>
     tag ? tag : text.replace(_FRAC_RE, (_m, pre, n, d) => {
-      const spoken = `${say(n)} over ${say(d)}`;
+      const spoken = `${say(n)} ${OVER} ${say(d)}`;
       return `${pre}<span class="frac" role="img" aria-label="${spoken}" data-tts="${spoken}">` +
              `<span class="fr-n">${n}</span><span class="fr-d">${d}</span></span>`;
     }));
@@ -2200,6 +2547,10 @@ function gainXP() {
 function updateXPBar() {
   const xp = DB.xp || 0;
   const lv = DB.level || 1;
+  // The header chip is the only place a child on a phone sees their level, and
+  // #xp-display below is display:none there — so it has to be refreshed from
+  // the same place, not left to the next navigation.
+  _renderLevelChip();
   const el = document.getElementById('xp-display');
   if (!el) return;
   const curr = XP_THRESHOLDS[lv - 1] || 0;
@@ -2271,6 +2622,330 @@ function _renderShopChip() {
 // Hidden at zero as well. "🪙 0" is not information, it is clutter, and the
 // Shop button on the parent dashboard is the discovery path for someone who has
 // never earned any.
+// ── Today's goal card ─────────────────────────
+// Rendered into both landing screens: a child with more than one subject lands
+// on the kid home, a child with one lands on the dashboard.
+// ══════════════════════════════════════════════
+//  TASK BUTTONS — today's plan, and anything paused
+//
+//  The dashboard used to carry two full schedule panels: "Today's Study Plan"
+//  and a 14-day upcoming list. A child who had just tapped a subject in order to
+//  practise landed on a screen where the first thing under the greeting was a
+//  stack of suggestions about something else. Reported as "the scheduler
+//  suggestion may confuse the kid", and it is a fair reading of a screen that
+//  answered a question nobody had asked.
+//
+//  Both are now one small button with a count and a one-line summary. The detail
+//  did not go anywhere — it is on the Schedule screen, one tap away, which is
+//  where a child goes when they actually want to know what is planned.
+// ══════════════════════════════════════════════
+const _TASK_SLOTS = ['task-slot-kidhome', 'task-slot-dashboard'];
+
+// Everything the CHILD paused, newest first. Parent assignments are deliberately
+// absent: work somebody else set is not work you postponed, and piling the two
+// into one list is how the old panels became noise.
+function _pausedTasks() {
+  if (!ACTIVE_STUDENT_ID) return [];
+  const store = _pruneResumeStore(_readResumeStore());
+  const out = [];
+
+  if (store.exam) {
+    const s = store.exam;
+    out.push({
+      kind: 'exam',
+      icon: '📝',
+      title: s.examType === 'quick' ? 'Quick Exam' : 'Full Exam',
+      sub: `Question ${(s.idx || 0) + 1} of ${(s.qIds || []).length}`,
+      subject: _resumeSubjectLabel(s.subjectId) || '',
+      ts: s.ts || 0,
+      go: `_doResume('exam')`,
+      drop: `_clearExamResume()`,
+    });
+  }
+
+  // A chapter's name has to be looked up across ALL packs, not just CHAPTERS:
+  // the global holds only the ACTIVE subject, and a child can have chapters
+  // paused in three different subjects at once.
+  const allChapters = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .flatMap(p => (p._chapters || p.chapters || []));
+
+  Object.entries(store.practice)
+    .sort((a, b) => (b[1].ts || 0) - (a[1].ts || 0))
+    .forEach(([chapterId, s]) => {
+      const ch = allChapters.find(c => c.id === chapterId);
+      out.push({
+        kind: 'practice',
+        icon: (ch && ch.icon) || '📘',
+        title: (ch && ch.name) || 'Practice',
+        sub: `Question ${(s.idx || 0) + 1} of ${(s.qIds || []).length}`,
+        subject: _resumeSubjectLabel(s.subjectId) || '',
+        ts: s.ts || 0,
+        go: `_doResume('practice','${chapterId}')`,
+        drop: `_clearPracticeResume('${chapterId}')`,
+      });
+    });
+
+  return out;
+}
+
+function _pausedSummary(tasks) {
+  const ex = tasks.filter(t => t.kind === 'exam').length;
+  const ch = tasks.length - ex;
+  const bits = [];
+  if (ch) bits.push(`${ch} chapter${ch === 1 ? '' : 's'}`);
+  if (ex) bits.push(`${ex} exam`);
+  return bits.join(' · ');
+}
+
+function _taskButton({ cls, icon, title, count, sub, meta, onclick, muted }) {
+  return `<button class="task-btn ${cls}${muted ? ' is-muted' : ''}" onclick="${onclick}">
+    <span class="task-ico" aria-hidden="true">${icon}</span>
+    <span class="task-body">
+      <span class="task-title">${title}${count ? `<span class="task-badge">${count}</span>` : ''}</span>
+      <span class="task-sub">${sub}</span>
+      ${meta ? `<span class="task-meta">${meta}</span>` : ''}
+    </span>
+  </button>`;
+}
+
+// Paints synchronously from the resume store (instant, no network), then fills
+// the plan half once the calendar answers. A child should never watch a spinner
+// where a button is about to be.
+function _renderTaskButtons() {
+  const slots = _TASK_SLOTS.map(id => document.getElementById(id)).filter(Boolean);
+  if (!slots.length) return;
+
+  if (!ACTIVE_STUDENT_ID || (typeof _isParentSession === 'function' && _isParentSession())) {
+    slots.forEach(s => { s.innerHTML = ''; });
+    return;
+  }
+
+  const paused = _pausedTasks();
+  const paint = (planBtn) => {
+    const resumeBtn = paused.length ? _taskButton({
+      cls: 'is-resume', icon: '⏸', title: 'Pick up again', count: paused.length,
+      sub: _pausedSummary(paused), meta: 'Tap to choose', onclick: 'openResumeTasks()',
+    }) : '';
+    const html = (planBtn || '') + resumeBtn;
+    // Nothing planned and nothing paused: show nothing at all rather than two
+    // empty boxes explaining their own emptiness.
+    slots.forEach(s => { s.innerHTML = html ? `<div class="task-row">${html}</div>` : ''; });
+  };
+
+  paint('');
+
+  if (typeof Calendar === 'undefined' || !Calendar.getUpcoming) return;
+  Calendar.getUpcoming(ACTIVE_STUDENT_ID, 0).then(items => {
+    const today = (items || []).filter(e => e.isToday);
+    if (!today.length) { paint(''); return; }
+    const mins = today.reduce((n, e) => n + (e.minutes || 0), 0);
+    const subjects = [...new Set(today.map(e => e.subjectName).filter(Boolean))];
+    paint(_taskButton({
+      cls: 'is-plan', icon: '🗓️', title: "Today's plan", count: today.length,
+      sub: subjects.length ? subjects.join(' · ') : `${today.length} session${today.length === 1 ? '' : 's'}`,
+      meta: mins ? `about ${mins} min` : '',
+      onclick: `showScreen('schedule')`,
+    }));
+  }).catch(() => {});
+}
+window._renderTaskButtons = _renderTaskButtons;
+
+// ── The "pick up again" sheet ──────────────────
+window.openResumeTasks = function () {
+  const m = document.getElementById('modal-resume-tasks');
+  if (!m) return;
+  renderResumeTasks();
+  m.classList.remove('hidden');
+};
+window.closeResumeTasks = function () {
+  document.getElementById('modal-resume-tasks')?.classList.add('hidden');
+};
+
+function renderResumeTasks() {
+  const list = document.getElementById('rt-list');
+  const sub  = document.getElementById('rt-sub');
+  if (!list) return;
+  const tasks = _pausedTasks();
+
+  if (sub) sub.textContent = tasks.length
+    ? _pausedSummary(tasks) + ' waiting'
+    : 'Nothing waiting';
+
+  if (!tasks.length) {
+    list.innerHTML = `<div class="text-center py-8">
+      <div class="text-4xl mb-2 select-none">✅</div>
+      <p class="text-sm font-semibold text-gray-700 dark:text-gray-200">All caught up!</p>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Anything you pause with "Continue Later" shows up here.</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = tasks.map(t => `<div class="rt-item">
+    <span class="rt-ico" aria-hidden="true">${t.icon}</span>
+    <div class="rt-body">
+      <div class="rt-title">${_profEsc(t.title)}</div>
+      <div class="rt-sub">${_profEsc(t.sub)}${t.subject ? ' · ' + _profEsc(t.subject) : ''}</div>
+    </div>
+    <button class="rt-go" onclick="closeResumeTasks(); ${t.go}">Continue →</button>
+    <button class="rt-drop" title="Remove this" aria-label="Remove ${_attr(t.title)}"
+      onclick="${t.drop}; renderResumeTasks(); _renderTaskButtons(); _renderResumeBanner();">✕</button>
+  </div>`).join('');
+}
+window.renderResumeTasks = renderResumeTasks;
+
+
+const _GOAL_SLOTS = ['goal-slot-kidhome', 'goal-slot-dashboard'];
+
+function _renderDailyGoal() {
+  const slots = _GOAL_SLOTS.map(id => document.getElementById(id)).filter(Boolean);
+  if (!slots.length) return;
+
+  // A parent previewing a child is not doing today's practice, and the card
+  // would read as the PARENT's goal on the parent's own screen.
+  if (!ACTIVE_STUDENT_ID || (typeof _isParentSession === 'function' && _isParentSession())) {
+    slots.forEach(s => { s.innerHTML = ''; });
+    return;
+  }
+
+  const g   = _goalToday();
+  const pct = g.goal ? Math.min(1, g.raw / g.goal) : 0;
+
+  // SVG ring. r=26 → circumference 2πr; the dash offset is the unfilled part.
+  const R = 26, C = 2 * Math.PI * R;
+  const ring = `<svg viewBox="0 0 60 60" class="goal-ring" aria-hidden="true">
+      <circle cx="30" cy="30" r="${R}" class="goal-ring-bg"></circle>
+      <circle cx="30" cy="30" r="${R}" class="goal-ring-fg${g.met ? ' is-done' : ''}"
+        style="stroke-dasharray:${C.toFixed(1)};stroke-dashoffset:${(C * (1 - pct)).toFixed(1)}"></circle>
+    </svg>`;
+
+  const headline = g.met
+    ? "Today's goal done! 🎉"
+    : g.raw === 0 ? "Today's goal" : 'Keep going!';
+  const sub = g.met
+    ? `${g.raw} question${g.raw === 1 ? '' : 's'} today. Come back tomorrow to keep it up.`
+    : `${g.left} more question${g.left === 1 ? '' : 's'} to finish today.`;
+
+  // Level line — the other half of the fix. XP was already awarded on every
+  // correct answer and shown nowhere a child on a phone could see it.
+  const xp   = DB.xp || 0;
+  const lv   = DB.level || 1;
+  const curr = XP_THRESHOLDS[lv - 1] || 0;
+  const next = XP_THRESHOLDS[lv] || null;
+  const lvName = LEVEL_NAMES[lv - 1] || '';
+  const lvLine = next
+    ? `⭐ Level ${lv} · ${lvName} — ${Math.max(0, next - xp)} XP to Level ${lv + 1}`
+    : `⭐ Level ${lv} · ${lvName} — top level reached!`;
+  const lvPct = next && next > curr ? Math.min(100, Math.round((xp - curr) / (next - curr) * 100)) : 100;
+
+  const html = `<div class="goal-card${g.met ? ' is-done' : ''}">
+    <div class="goal-main">
+      <div class="goal-ring-wrap">
+        ${ring}
+        <span class="goal-ring-txt">${g.met ? '✓' : `${g.raw}<small>/${g.goal}</small>`}</span>
+      </div>
+      <div class="goal-text">
+        <div class="goal-head">${headline}</div>
+        <div class="goal-sub">${sub}</div>
+        <div class="goal-lv">${lvLine}</div>
+        <div class="goal-lv-bar"><span style="width:${lvPct}%"></span></div>
+      </div>
+    </div>
+    ${_goalWeekStrip()}
+  </div>`;
+
+  slots.forEach(s => { s.innerHTML = html; });
+}
+window._renderDailyGoal = _renderDailyGoal;
+
+// Last 7 days. Three states, and they mean different things: goal met, showed up
+// but short of it, nothing. A bare streak number cannot say any of that.
+function _goalWeekStrip() {
+  const daily = DB.daily || {};
+  const LETTER = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+  let met = 0, active = 0;
+  const cells = [];
+  for (let i = 6; i >= 0; i--) {
+    const key = _muDayKeyBack(i);
+    const d   = daily[key] || {};
+    const a   = d.a || 0;
+    const isMet = !!d.g || (a > 0 && a >= _dailyGoal());
+    if (isMet) met++;
+    if (a > 0) active++;
+    // Day-of-week from the key by hand — new Date('YYYY-MM-DD') parses as UTC
+    // midnight and prints in the device timezone, shifting the letter for
+    // anyone west of Greenwich.
+    const [y, m, dd] = key.split('-').map(Number);
+    const dow = new Date(Date.UTC(y, m - 1, dd)).getUTCDay();
+    const cls = isMet ? 'is-met' : a > 0 ? 'is-part' : '';
+    const title = `${_repNiceDate(key)} — ${a ? `${a} question${a === 1 ? '' : 's'}` : 'nothing'}`;
+    cells.push(`<span class="goal-day ${cls}" title="${_attr(title)}"><i>${LETTER[dow]}</i></span>`);
+  }
+  return `<div class="goal-week">
+    <div class="goal-week-days">${cells.join('')}</div>
+    <div class="goal-week-note">${
+      met ? `Goal met on ${met} of the last 7 days.`
+          : active ? `Practised ${active} of the last 7 days — finish today's goal to fill a circle.`
+                   : 'Finish today to start filling in your week.'}</div>
+  </div>`;
+}
+
+// The header level chip — the mobile-visible half of the XP system.
+// ⚠ Student sessions only, and the mirror image of _renderCreditChip(): a child
+// sees their level where a parent sees their credits, and neither sees the
+// other's. A parent previewing a child has that child's DB loaded, so without
+// the guard the parent's header would show the child's level as their own.
+function _renderLevelChip() {
+  const chip = document.getElementById('hdr-level');
+  if (!chip) return;
+  const isParent = typeof _isParentSession === 'function' && _isParentSession();
+  const show = !!ACTIVE_STUDENT_ID && !isParent;
+  chip.classList.toggle('hidden', !show);
+  if (show) {
+    const n = document.getElementById('hdr-level-n');
+    if (n) n.textContent = String(DB.level || 1);
+    chip.title = `Level ${DB.level || 1} · ${LEVEL_NAMES[(DB.level || 1) - 1] || ''} — tap to see your progress`;
+  }
+}
+window._renderLevelChip = _renderLevelChip;
+
+// ── Parent PIN row (Account & Settings → Security) ──
+// ⚠ The PIN is stored on THIS DEVICE (localStorage), not on the account. It
+// guards the switch from a child's session back to the parent dashboard on the
+// phone or tablet the family shares — so the copy says so, rather than letting
+// a parent assume it followed them to their laptop.
+function _renderParentPinRow() {
+  const state = document.getElementById('prof-pin-state');
+  const setBtn = document.getElementById('prof-pin-set');
+  const clrBtn = document.getElementById('prof-pin-clear');
+  if (!state || !setBtn || !clrBtn) return;
+  const has = typeof Auth !== 'undefined' && Auth.hasParentPin && Auth.hasParentPin();
+
+  state.textContent = has
+    ? 'Set on this device. You type it to switch back from your child’s view.'
+    : 'Not set on this device. Without one, switching back needs your email and password.';
+  setBtn.textContent = has ? 'Change' : 'Set a PIN';
+  clrBtn.classList.toggle('hidden', !has);
+}
+window._renderParentPinRow = _renderParentPinRow;
+
+window._setParentPinFromSettings = function () {
+  if (typeof Auth === 'undefined' || !Auth.openParentPinSetup) return;
+  Auth.openParentPinSetup();
+};
+
+window._clearParentPinFromSettings = function () {
+  _confirmModal(
+    'Remove the parent PIN from this device?\n\n'
+    + 'Switching back from your child’s view will then need your email and password.',
+    () => {
+      Auth.clearParentPin();
+      _renderParentPinRow();
+      toast('Parent PIN removed from this device.', 3000);
+    },
+    { icon: '🔢', okLabel: 'Remove it', danger: true }
+  );
+};
+
 function _renderCreditChip() {
   const chip = document.getElementById('hdr-credits');
   const isParent = typeof _isParentSession === 'function' && _isParentSession();
@@ -2399,11 +3074,25 @@ async function renderParentDashboard() {
       </div>
     </div>`).join('');
 
-  // Fill real stats asynchronously per card
+  // ONE query for every child, not N. The same result also feeds the family
+  // overview, so the two views cannot disagree about a child's numbers - they
+  // are reading the same objects.
+  let progressById = await Store.loadFamilyProgress(students.map(s => s.id));
+  if (!Object.keys(progressById).length) {
+    // The batch read failed (loadFamilyProgress returns {} rather than a partial
+    // result for exactly this reason). Fall back to the original per-child path
+    // instead of painting every card empty.
+    const pairs = await Promise.all(students.map(s =>
+      Store.loadStudentProgress(s.id).then(p => [s.id, p]).catch(() => [s.id, null])));
+    progressById = Object.fromEntries(pairs.filter(([, p]) => p));
+  }
+
+  _renderFamilyOverview(students, progressById);
+
   for (const s of students) {
-    Store.loadStudentProgress(s.id).then(prog => {
+    (prog => {
       const statsEl = document.getElementById(`pd-card-stats-${s.id}`);
-      if (!statsEl) return;
+      if (!statsEl || !prog) return;
       const st  = prog.stats || {};
       const acc = st.totalAttempted ? Math.round(st.totalCorrect / st.totalAttempted * 100) : 0;
       const col = acc >= 80 ? '#22c55e' : acc >= 50 ? '#f59e0b' : '#3b82f6';
@@ -2431,8 +3120,178 @@ async function renderParentDashboard() {
           <span class="text-xs font-bold shrink-0" style="color:${col}">${acc}%</span>
         </div>
         ${chips ? `<div class="flex flex-wrap gap-1">${chips}</div>` : ''}`;
-    }).catch(() => {});
+    })(progressById[s.id]);
   }
+}
+
+// ══════════════════════════════════════════════
+//  FAMILY OVERVIEW  (parent dashboard, above the children grid)
+//  The one view that reads ALL children at once. Everything else in the app —
+//  the detail panel, the Reports tab, the global DB itself — holds exactly one
+//  child, so this is the only place a parent can see the household.
+//  Fed by the same Store.loadFamilyProgress() result as the child cards, so the
+//  two can never disagree about a child's numbers.
+// ══════════════════════════════════════════════
+
+// Shown from two children up. With one child it would restate the Reports tab
+// directly below it, in less detail.
+const _FAMILY_MIN_CHILDREN = 2;
+// A child is "quiet" after this many days with nothing. Chosen to match the
+// child card's own "⚠️ Last active Nd ago" threshold so the two never disagree
+// on the same screen.
+const _FAMILY_QUIET_DAYS = 3;
+
+function _famRow(s, prog) {
+  const daily = prog.daily || {};
+  const now   = _repWindow(0, 6, daily);
+  const prev  = _repWindow(7, 13, daily);
+  const st    = prog.stats || {};
+  // Days since anything at all, from the dated series rather than stats.lastDate:
+  // lastDate is a toDateString() written on the device clock, and this table
+  // sits next to Mauritius-keyed numbers.
+  let quietFor = null;
+  for (let i = 0; i < 120; i++) {
+    if ((daily[_muDayKeyBack(i)] || {}).a) { quietFor = i; break; }
+  }
+  return {
+    id: s.id,
+    name: s.display_name || s.username || '?',
+    avatar: s.avatar || '🧒',
+    grade: s.grade || '?',
+    now, prev, quietFor,
+    streak: st.streak || 0,
+    everDid: st.totalAttempted || 0,
+  };
+}
+
+// 14 days, one cell per day. The only genuinely new thing this screen offers:
+// who is actually turning up, side by side, at a glance.
+function _famStrip(daily) {
+  const cells = [];
+  for (let i = 13; i >= 0; i--) {
+    const k = _muDayKeyBack(i);
+    const d = daily[k];
+    if (!d || !d.a) {
+      cells.push(`<span class="fam-cell" data-empty="1" title="${_attr(_repNiceDate(k))} — nothing"></span>`);
+    } else {
+      const pct = Math.round(d.c / d.a * 100);
+      cells.push(`<span class="fam-cell" style="background:${_repAccColour(pct)}" title="${_attr(`${_repNiceDate(k)} — ${d.a} question${d.a > 1 ? 's' : ''}, ${pct}%`)}"></span>`);
+    }
+  }
+  return `<span class="fam-strip">${cells.join('')}</span>`;
+}
+
+function _renderFamilyOverview(students, progressById) {
+  const slot = document.getElementById('pd-family-overview');
+  if (!slot) return;
+  if (!students || students.length < _FAMILY_MIN_CHILDREN || !progressById) {
+    slot.classList.add('hidden');
+    slot.innerHTML = '';
+    return;
+  }
+
+  const rows = students
+    .map(s => _famRow(s, progressById[s.id] || {}))
+    .sort((a, b) => {
+      // Ordered by who needs looking at, NOT by score. Ranking siblings against
+      // each other is the wrong thing to put in front of a parent, and across
+      // grades an accuracy comparison is not even meaningful.
+      const q = (r) => r.quietFor === null ? 999 : r.quietFor;
+      if (q(b) !== q(a)) return q(b) - q(a);
+      // Both practised equally recently (typically both today). Break the tie on
+      // who has done LESS this week, so the ordering keeps meaning something
+      // instead of falling back to whatever order the children were created in.
+      return a.now.a - b.now.a;
+    });
+
+  const fam = rows.reduce((t, r) => ({
+    a: t.a + r.now.a, c: t.c + r.now.c, e: t.e + r.now.e,
+    active: t.active + (r.now.a ? 1 : 0),
+  }), { a: 0, c: 0, e: 0, active: 0 });
+  const famPrev = rows.reduce((t, r) => ({ a: t.a + r.prev.a, c: t.c + r.prev.c, e: t.e + r.prev.e }), { a: 0, c: 0, e: 0 });
+  const famAcc     = fam.a ? Math.round(fam.c / fam.a * 100) : null;
+  const famPrevAcc = famPrev.a ? Math.round(famPrev.c / famPrev.a * 100) : null;
+  // Days on which ANY child did something — "was this a week where the house
+  // revised", which is not the same as any one child's day count.
+  let famDays = 0;
+  for (let i = 0; i < 7; i++) {
+    const k = _muDayKeyBack(i);
+    if (rows.some(r => ((progressById[r.id] || {}).daily || {})[k]?.a)) famDays++;
+  }
+
+  const nothingYet = rows.every(r => r.everDid === 0);
+  const noDated    = rows.every(r => !Object.keys((progressById[r.id] || {}).daily || {}).length);
+
+  const quiet = rows.filter(r => r.quietFor === null ? r.everDid > 0 : r.quietFor >= _FAMILY_QUIET_DAYS);
+  const alerts = quiet.map(r => r.quietFor === null
+    ? `${r.name} has not practised in a while`
+    : `${r.name} — nothing for ${r.quietFor} day${r.quietFor > 1 ? 's' : ''}`);
+
+  const table = rows.map(r => {
+    const accCol = r.now.acc == null ? '' : `color:${_repAccColour(r.now.acc)}`;
+    const trend = (r.now.acc != null && r.prev.acc != null)
+      ? (r.now.acc - r.prev.acc >= 5 ? '<span class="text-green-600 dark:text-green-400" title="up on last week">▲</span>'
+        : r.prev.acc - r.now.acc >= 5 ? '<span class="text-red-500 dark:text-red-400" title="down on last week">▼</span>'
+        : '<span class="text-gray-400" title="about the same as last week">–</span>')
+      : '<span class="text-gray-300 dark:text-gray-600" title="not enough history to compare">·</span>';
+    return `<button class="fam-row" onclick="PD.selectChild('${_attr(r.id)}')" aria-label="${_attr(`Open ${r.name}'s dashboard`)}">
+      <span class="text-xl select-none shrink-0">${_attr(r.avatar)}</span>
+      <span class="fam-name">
+        <span class="block text-sm font-semibold text-gray-800 dark:text-white truncate">${_attr(r.name)}</span>
+        <span class="block text-[10px] text-gray-400 dark:text-gray-500">Grade ${_attr(r.grade)}</span>
+      </span>
+      ${_famStrip((progressById[r.id] || {}).daily || {})}
+      <span class="fam-num text-gray-700 dark:text-gray-300">${r.now.a}<span class="fam-unit">Q</span></span>
+      <span class="fam-num font-bold" style="${accCol}">${r.now.acc == null ? '—' : r.now.acc + '%'}</span>
+      <span class="fam-num text-gray-500 dark:text-gray-400">${r.now.days}<span class="fam-unit">/7d</span></span>
+      <span class="fam-num text-orange-500">${r.streak}<span class="fam-unit">🔥</span></span>
+      <span class="fam-num">${trend}</span>
+    </button>`;
+  }).join('');
+
+  const body = noDated
+    ? `<p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+         ${nothingYet
+           ? 'Once your children start practising, this shows who is keeping up and who has gone quiet.'
+           : 'Day-by-day tracking starts with this update, so the week-on-week view fills in from their next practice session. Their totals are on each card below.'}
+       </p>`
+    : `<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+        ${_repStatCard('Questions',       fam.a, _repDelta(fam.a, famPrev.a), '#2563eb')}
+        ${_repStatCard('Family accuracy', famAcc == null ? '—' : famAcc + '%', _repDelta(famAcc, famPrevAcc, '%'), famAcc == null ? '' : _repAccColour(famAcc))}
+        ${_repStatCard('Practising',      `${fam.active}/${rows.length}`, `<span class="text-[11px] text-gray-400">children this week</span>`, '#7c3aed')}
+        ${_repStatCard('Days covered',    `${famDays}/7`, `<span class="text-[11px] text-gray-400">someone revised</span>`, '#f97316')}
+      </div>
+      ${alerts.length ? `<div class="rounded-xl px-3 py-2.5 mb-3 bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300 text-xs leading-relaxed">
+        ⚠️ ${_attr(alerts.join(' · '))}
+      </div>` : ''}
+      <!-- Labels are short because the columns are fixed-width and shared with
+           the rows below; a longer word does not widen the column, it overflows
+           it. No inline display here either — the mobile rule hides this cell. -->
+      <div class="fam-head">
+        <span></span>
+        <span class="fam-name text-[10px] uppercase tracking-wide">Child</span>
+        <span class="fam-strip text-[10px] uppercase tracking-wide">14d</span>
+        <span class="fam-num text-[10px]">Qs</span>
+        <span class="fam-num text-[10px]">Acc</span>
+        <span class="fam-num text-[10px]">Days</span>
+        <span class="fam-num text-[10px]">🔥</span>
+        <span class="fam-num text-[10px]">vs</span>
+      </div>
+      <div class="divide-y divide-gray-100 dark:divide-gray-700">${table}</div>
+      <p class="text-[10px] text-gray-400 dark:text-gray-500 mt-2.5 leading-relaxed">
+        Questions, accuracy and days are the last 7 days; the bars are the last 14.
+        Listed by who has been quietest, not by score — children in different grades are answering
+        different questions, so their accuracy is not a like-for-like comparison. Tap a row for the full report.
+      </p>`;
+
+  slot.classList.remove('hidden');
+  slot.innerHTML = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow">
+    <div class="flex items-baseline justify-between gap-2 mb-3">
+      <div class="font-bold text-gray-800 dark:text-white text-sm">👨‍👩‍👧‍👦 The whole family, last 7 days</div>
+      <div class="text-[11px] text-gray-400 dark:text-gray-500">${rows.length} children</div>
+    </div>
+    ${body}
+  </div>`;
 }
 
 // ── TEACHER APPLICATION CARD (parent dashboard) ──
@@ -3065,9 +3924,13 @@ async function _submitTeacherApplication(btn) {
 const PD = (() => {
   let _activeId = null;
 
-  function selectChild(id) {
+  // MUST await pdSwitchStudent. It is async — it loads THIS child's progress
+  // blob into the global DB — and nothing re-renders the panel when it lands.
+  // Called without await, every renderDetail() below read the PREVIOUS child's
+  // data, so a parent who tapped child A, went back, then tapped child B saw
+  // A's questions, accuracy, streak and weak chapters under B's name.
+  async function selectChild(id) {
     _activeId = id;
-    Auth.pdSwitchStudent(id);
 
     const _el = el => document.getElementById(el);
     const s   = (Auth.getStudents() || []).find(st => st.id === id);
@@ -3077,13 +3940,21 @@ const PD = (() => {
     const panel = _el('pd-detail-panel');
     if (panel) panel.classList.remove('hidden');
 
+    // Name and avatar come from the already-cached family row, so they can paint
+    // immediately — the panel should not sit blank while the blob loads.
     if (s) {
       if (_el('pd-detail-avatar')) _el('pd-detail-avatar').textContent = s.avatar || '🧒';
       if (_el('pd-detail-name'))   _el('pd-detail-name').textContent   = s.display_name || s.username;
       if (_el('pd-detail-grade'))  _el('pd-detail-grade').textContent  = `Grade ${s.grade || '?'} · @${s.username || '?'}`;
     }
-
     pdTab('progress');
+
+    await Auth.pdSwitchStudent(id);
+    // The parent may have gone back and tapped a different child while this was
+    // in flight. Whoever they picked last wins; this load is stale, and painting
+    // it would put one child's numbers under another child's name.
+    if (_activeId !== id) return;
+
     renderDetail();
   }
 
@@ -3110,7 +3981,8 @@ const PD = (() => {
     panel.querySelectorAll('.pd-tab-content').forEach(c => {
       c.classList.toggle('hidden', c.dataset.tab !== tab);
     });
-    if (tab === 'assign') { _renderAssignments(); _checkAssignHint(); }
+    if (tab === 'assign')  { _renderAssignments(); _checkAssignHint(); }
+    if (tab === 'reports') { _renderReports(); }
     if (tab === 'login')  { renderLoginTab(); }
   }
 
@@ -3337,8 +4209,8 @@ const PD = (() => {
 
   // Load reminder when detail panel opens
   const _origSelectChild = selectChild;
-  function selectChildWithReminder(id) {
-    _origSelectChild(id);
+  async function selectChildWithReminder(id) {
+    await _origSelectChild(id);
     setTimeout(_loadReminder, 300);
   }
 
@@ -3411,6 +4283,489 @@ function _renderSubjectProgress(acct) {
       </div>
     </div>`;
   }).join('');
+}
+
+// ══════════════════════════════════════════════
+//  PARENT REPORTS  (parent dashboard → 📈 Reports)
+//  Read-only view over DB.daily / DB.mistakes / DB.examHistory / DB.chapters.
+//  Nothing here writes, so it works offline and needs no extra network call.
+// ══════════════════════════════════════════════
+
+// i days before today, as a Mauritius day key. Built by subtracting whole days
+// from the MU-shifted clock, NOT with setDate() on a local Date — Mauritius has
+// no DST so a fixed offset is exact, and a local Date would drift for a parent
+// checking in from a country that does.
+function _muDayKeyBack(i) {
+  return new Date(Date.now() + _MU_OFFSET_MS - i * 86400000).toISOString().slice(0, 10);
+}
+
+// Sums a daily map over [fromDaysAgo, toDaysAgo] inclusive, counting back from
+// today. `dailyMap` defaults to the currently-loaded child, but the family
+// overview passes each sibling's own map — only one child's blob is ever in the
+// global DB, so anything comparing children must pass it explicitly.
+function _repWindow(fromDaysAgo, toDaysAgo, dailyMap) {
+  const daily = dailyMap || DB.daily || {};
+  let a = 0, c = 0, e = 0, days = 0;
+  for (let i = fromDaysAgo; i <= toDaysAgo; i++) {
+    const d = daily[_muDayKeyBack(i)];
+    if (!d) continue;
+    a += d.a || 0; c += d.c || 0; e += d.e || 0;
+    if (d.a) days++;
+  }
+  return { a, c, e, days, acc: a ? Math.round(c / a * 100) : null };
+}
+
+// Deltas are shown against the previous window so a parent sees a direction,
+// not just a number. A previous window of zero must render as "new"/"—" and
+// NOT as a triumphant +100%.
+function _repDelta(now, prev, unit) {
+  if (now == null) return '<span class="text-[11px] text-gray-400">—</span>';
+  if (prev == null || prev === 0) {
+    return now > 0
+      ? '<span class="text-[11px] font-semibold text-green-600 dark:text-green-400">new</span>'
+      : '<span class="text-[11px] text-gray-400">—</span>';
+  }
+  const d = now - prev;
+  if (d === 0) return '<span class="text-[11px] text-gray-400">no change</span>';
+  const up = d > 0;
+  const cls = up ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+  return `<span class="text-[11px] font-semibold ${cls}">${up ? '▲' : '▼'} ${Math.abs(d)}${unit || ''}</span>`;
+}
+
+function _repStatCard(label, value, delta, tone) {
+  return `<div class="bg-gray-50 dark:bg-gray-700/40 rounded-xl px-3 py-2.5">
+    <div class="text-lg font-bold leading-tight" style="${tone ? `color:${tone}` : ''}">${value}</div>
+    <div class="text-[11px] text-gray-500 dark:text-gray-400 leading-tight">${label}</div>
+    <div class="mt-0.5">${delta}</div>
+  </div>`;
+}
+
+function _repAccColour(pct) {
+  return pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#ef4444';
+}
+
+// A day key is 'YYYY-MM-DD' and MUST be split by hand, not fed to new Date():
+// that parses it as UTC midnight and then prints it in the device's timezone,
+// showing the previous day to anyone west of Greenwich.
+function _repNiceDate(key) {
+  const [y, m, d] = String(key).split('-').map(Number);
+  if (!y || !m || !d) return String(key);
+  const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${d} ${MON[m - 1]}`;
+}
+
+// ── Today / Yesterday, chapter by chapter ─────
+// The literal question a parent asks: "what did she do today?" Everything else
+// in this tab is a trend; this is the one card that answers it in plain terms.
+//
+// Reads daily[key].ch, which only exists from the update that started recording
+// it — an older day shows its totals and says the breakdown was not kept, which
+// is honest and stops the card looking broken for the first two days.
+function _repRecentDays() {
+  const daily = DB.daily || {};
+  const names = {};
+  (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).forEach(p =>
+    (p._chapters || p.chapters || []).forEach(c => {
+      names[c.id] = { name: c.name, icon: c.icon || '📘', subject: `Grade ${p.grade} ${p.subject || p.name || ''}`.trim() };
+    }));
+
+  const card = (label, key) => {
+    const d = daily[key];
+    if (!d || !d.a) {
+      return `<div class="rep-day-card is-empty">
+        <div class="rep-day-when">${label}</div>
+        <div class="rep-day-none">Nothing practised</div>
+      </div>`;
+    }
+    const acc = Math.round((d.c || 0) / d.a * 100);
+    const rows = Object.entries(d.ch || {})
+      .sort((x, y) => y[1][0] - x[1][0])
+      .map(([id, [a, c]]) => {
+        const meta = names[id] || { name: id, icon: '📘', subject: '' };
+        const p = a ? Math.round(c / a * 100) : 0;
+        return `<div class="rep-ch-row">
+          <span class="rep-ch-ico" aria-hidden="true">${meta.icon}</span>
+          <span class="rep-ch-name">${_profEsc(meta.name)}</span>
+          <span class="rep-ch-n">${a}q</span>
+          <span class="rep-ch-pct" style="color:${_repAccColour(p)}">${p}%</span>
+        </div>`;
+      }).join('');
+
+    return `<div class="rep-day-card">
+      <div class="rep-day-when">${label}</div>
+      <div class="rep-day-top">
+        <span class="rep-day-q">${d.a} question${d.a === 1 ? '' : 's'}</span>
+        <span class="rep-day-acc" style="color:${_repAccColour(acc)}">${acc}%</span>
+        ${d.e ? `<span class="rep-day-exam">📝 ${d.e} exam${d.e === 1 ? '' : 's'}</span>` : ''}
+      </div>
+      ${rows || '<div class="rep-day-none">Chapter breakdown was not recorded for this day.</div>'}
+    </div>`;
+  };
+
+  return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+    <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">🕘 What they did</div>
+    <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2.5">Today and yesterday, chapter by chapter.</p>
+    <div class="rep-days">
+      ${card('Today', _muDayKeyBack(0))}
+      ${card('Yesterday', _muDayKeyBack(1))}
+    </div>
+  </div>`;
+}
+
+// ── 30-day activity strip ─────────────────────
+// Answers "does she actually sit down and do it?" — the question a parent asks
+// first, and the one no cumulative total can answer.
+function _repActivityStrip() {
+  const daily = DB.daily || {};
+  const DAYS = 30;
+  const days = [];
+  for (let i = DAYS - 1; i >= 0; i--) {
+    const k = _muDayKeyBack(i);
+    const d = daily[k] || { a: 0, c: 0, e: 0 };
+    days.push({ k, a: d.a || 0, c: d.c || 0, e: d.e || 0 });
+  }
+  const max = Math.max(1, ...days.map(d => d.a));
+  const active = days.filter(d => d.a).length;
+
+  const bars = days.map(d => {
+    if (!d.a) return `<div class="rep-day" data-empty="1" title="${_attr(_repNiceDate(d.k))} — nothing"></div>`;
+    const pct = Math.round(d.c / d.a * 100);
+    // Floor of 8% so a 2-question day still reads as a day she showed up,
+    // instead of a sliver indistinguishable from the empty marker.
+    const h = Math.max(8, Math.round(d.a / max * 100));
+    const t = `${_repNiceDate(d.k)} — ${d.a} question${d.a > 1 ? 's' : ''}, ${pct}%${d.e ? `, ${d.e} exam${d.e > 1 ? 's' : ''}` : ''}`;
+    return `<div class="rep-day" style="height:${h}%;background:${_repAccColour(pct)}" title="${_attr(t)}"></div>`;
+  }).join('');
+
+  return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+    <div class="flex items-baseline justify-between gap-2 mb-1">
+      <div class="font-bold text-gray-800 dark:text-white text-sm">📅 Last 30 days</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400">${active} of 30 days active</div>
+    </div>
+    <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2">Bar height is how much they did. Colour is how well.</p>
+    <div class="rep-strip">${bars}</div>
+    <div class="flex justify-between text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+      <span>${_repNiceDate(days[0].k)}</span><span>today</span>
+    </div>
+    <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2.5 text-[10px] text-gray-500 dark:text-gray-400">
+      <span><span class="rep-key" style="background:#22c55e"></span> 80% and up</span>
+      <span><span class="rep-key" style="background:#f59e0b"></span> 50–79%</span>
+      <span><span class="rep-key" style="background:#ef4444"></span> under 50%</span>
+    </div>
+  </div>`;
+}
+
+// ── Accuracy trend, 8 weeks ───────────────────
+function _repTrend() {
+  const WEEKS = 8;
+  const pts = [];
+  for (let w = WEEKS - 1; w >= 0; w--) {
+    const win = _repWindow(w * 7, w * 7 + 6);
+    pts.push({ w, acc: win.acc, a: win.a });
+  }
+  const real = pts.filter(p => p.acc != null);
+  if (real.length < 2) return '';
+
+  const W = 300, H = 70, PAD = 6;
+  const x = i => PAD + (i / (pts.length - 1)) * (W - PAD * 2);
+  const y = v => PAD + (1 - v / 100) * (H - PAD * 2);
+
+  // Two lines, deliberately. A SOLID segment joins consecutive active weeks —
+  // that stretch is measured. A faint DASHED line spans the whole series so a
+  // gap still reads as continuous, without claiming an improvement she was not
+  // there to make. Solid-only was wrong: a single silent week between two
+  // active ones left every run one point long and drew nothing at all.
+  const all  = [];
+  const segs = [];
+  let run = [];
+  pts.forEach((p, i) => {
+    if (p.acc == null) { if (run.length > 1) segs.push(run); run = []; return; }
+    const pt = `${x(i).toFixed(1)},${y(p.acc).toFixed(1)}`;
+    all.push(pt);
+    run.push(pt);
+  });
+  if (run.length > 1) segs.push(run);
+  const spine = all.length > 1
+    ? `<polyline points="${all.join(' ')}" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4 4" opacity=".45" stroke-linejoin="round"/>`
+    : '';
+
+  const first = real[0].acc, last = real[real.length - 1].acc;
+  const diff = last - first;
+  const verdict = diff >= 5
+    ? `<span class="text-green-600 dark:text-green-400 font-semibold">up ${diff} points</span> over the weeks they have been active`
+    : diff <= -5
+      ? `<span class="text-red-500 dark:text-red-400 font-semibold">down ${Math.abs(diff)} points</span> over the weeks they have been active`
+      : `<span class="text-gray-600 dark:text-gray-300 font-semibold">holding steady</span> around ${last}%`;
+
+  return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+    <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">📈 Accuracy trend</div>
+    <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2">${verdict}</p>
+    <svg class="rep-svg" viewBox="0 0 ${W} ${H}" role="img"
+         aria-label="Weekly accuracy over the last ${WEEKS} weeks, most recently ${last} percent">
+      <line x1="${PAD}" y1="${y(50).toFixed(1)}" x2="${W - PAD}" y2="${y(50).toFixed(1)}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" opacity=".45"/>
+      <line x1="${PAD}" y1="${y(80).toFixed(1)}" x2="${W - PAD}" y2="${y(80).toFixed(1)}" stroke="#22c55e" stroke-width="1" stroke-dasharray="3 3" opacity=".45"/>
+      ${spine}
+      ${segs.map(s => `<polyline points="${s.join(' ')}" fill="none" stroke="#6366f1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`).join('')}
+      ${pts.map((p, i) => p.acc == null ? '' :
+        `<circle cx="${x(i).toFixed(1)}" cy="${y(p.acc).toFixed(1)}" r="3.5" fill="${_repAccColour(p.acc)}"><title>${_attr(`${p.w === 0 ? 'this week' : p.w + ' week' + (p.w > 1 ? 's' : '') + ' ago'}: ${p.acc}% over ${p.a} questions`)}</title></circle>`).join('')}
+    </svg>
+    <div class="flex justify-between text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+      <span>${WEEKS} weeks ago</span><span>dotted: 50% and 80%</span><span>this week</span>
+    </div>
+  </div>`;
+}
+
+// ── Exam scores over time ─────────────────────
+function _repExams() {
+  // Newest first in storage; a chart reads left to right in time.
+  const hist = (DB.examHistory || []).slice().reverse();
+  const rows = hist.filter(e => typeof (e.pct ?? e.score) === 'number');
+  if (rows.length < 2) return '';
+  const pcts = rows.map(e => e.pct ?? e.score);
+
+  const W = 300, H = 70, PAD = 6;
+  const x = i => PAD + (i / (pcts.length - 1)) * (W - PAD * 2);
+  const y = v => PAD + (1 - v / 100) * (H - PAD * 2);
+  const line = pcts.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const best = Math.max(...pcts);
+  const avg  = Math.round(pcts.reduce((s, v) => s + v, 0) / pcts.length);
+
+  return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+    <div class="flex items-baseline justify-between gap-2 mb-2">
+      <div class="font-bold text-gray-800 dark:text-white text-sm">📝 Exam scores</div>
+      <div class="text-xs text-gray-500 dark:text-gray-400">${pcts.length} exams · best ${best}% · avg ${avg}%</div>
+    </div>
+    <svg class="rep-svg" viewBox="0 0 ${W} ${H}" role="img"
+         aria-label="Scores from the last ${pcts.length} exams, most recent ${pcts[pcts.length - 1]} percent">
+      <line x1="${PAD}" y1="${y(50).toFixed(1)}" x2="${W - PAD}" y2="${y(50).toFixed(1)}" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" opacity=".45"/>
+      <polyline points="${line}" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      ${pcts.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3.5" fill="${_repAccColour(v)}"><title>${_attr(`${_repExamDate(rows[i])}: ${v}%`)}</title></circle>`).join('')}
+    </svg>
+    <div class="flex justify-between text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+      <span>${_attr(_repExamDate(rows[0]))}</span><span>${_attr(_repExamDate(rows[rows.length - 1]))}</span>
+    </div>
+  </div>`;
+}
+
+// Rows written before the iso field existed carry only a locale date string,
+// and "30/08/2026" is Invalid Date to every parser. Prefer iso; otherwise show
+// the legacy string as-is rather than round-tripping it through Date.
+function _repExamDate(e) {
+  if (e && e.iso) {
+    const d = new Date(e.iso);
+    if (!isNaN(d)) return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+  }
+  return (e && e.date) || '';
+}
+
+// ── Subject ranking ───────────────────────────
+// Weakest first: the parent is here to find what to do something about.
+function _repSubjects(acct) {
+  const grade = acct && acct.grade ? acct.grade : 5;
+  const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .filter(p => p.grade === grade && !p.comingSoon);
+  const dbCh = DB.chapters || {};
+  const rows = packs.map(pack => {
+    const chs = pack._chapters || pack.chapters || [];
+    const a = chs.reduce((s, ch) => s + ((dbCh[ch.id] && dbCh[ch.id].attempted) || 0), 0);
+    const c = chs.reduce((s, ch) => s + ((dbCh[ch.id] && dbCh[ch.id].correct) || 0), 0);
+    // An untouched chapter is a gap, not a weakness — a more useful and more
+    // honest thing to tell a parent than a 0% that looks like failure.
+    const touched = chs.filter(ch => ((dbCh[ch.id] && dbCh[ch.id].attempted) || 0) > 0).length;
+    return { name: pack.subject || pack.name, icon: pack.icon, a, touched, total: chs.length,
+             acc: a ? Math.round(c / a * 100) : null };
+  }).filter(r => r.total);
+  if (!rows.length) return '';
+
+  const done  = rows.filter(r => r.acc != null).sort((x, y) => x.acc - y.acc);
+  const never = rows.filter(r => r.acc == null);
+  if (!done.length) return '';
+
+  const row = r => {
+    const tag = r.acc >= 80 ? ['Strong', 'text-green-600 dark:text-green-400']
+              : r.acc >= 50 ? ['Getting there', 'text-amber-600 dark:text-amber-400']
+              : ['Needs work', 'text-red-500 dark:text-red-400'];
+    return `<div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+      <span class="text-lg select-none shrink-0">${r.icon || '📘'}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_attr(r.name)}</div>
+        <div class="text-[11px] text-gray-500 dark:text-gray-400">${r.a} questions · ${r.touched} of ${r.total} chapters started</div>
+      </div>
+      <div class="text-right shrink-0">
+        <div class="text-sm font-bold" style="color:${_repAccColour(r.acc)}">${r.acc}%</div>
+        <div class="text-[10px] font-semibold ${tag[1]}">${tag[0]}</div>
+      </div>
+    </div>`;
+  };
+
+  return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+    <div class="font-bold text-gray-800 dark:text-white text-sm mb-0.5">📚 Subjects, weakest first</div>
+    <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1">Where the next hour of revision is worth the most.</p>
+    ${done.map(row).join('')}
+    ${never.length ? `<div class="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700 text-[11px] text-gray-500 dark:text-gray-400">
+      Not started yet: ${never.map(r => `${r.icon || '📘'} ${_attr(r.name)}`).join(' · ')}
+    </div>` : ''}
+  </div>`;
+}
+
+// ── Recent mistakes ───────────────────────────
+// Module-level, and reset in _renderReports() rather than in the toggle — the
+// same rule as _examReviewWrongOnly, or the next child's panel opens expanded.
+let _repShowAllMistakes = false;
+function _repToggleMistakes() { _repShowAllMistakes = !_repShowAllMistakes; _renderReports(true); }
+
+function _repMistakes() {
+  const all = DB.mistakes || [];
+  if (!all.length) return '';
+  const shown = _repShowAllMistakes ? all : all.slice(0, 8);
+
+  const item = m => `<div class="bg-gray-50 dark:bg-gray-700/40 rounded-xl px-3 py-2.5">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400 truncate">${_attr(m.chn || m.ch)}</span>
+      ${m.sub ? `<span class="text-[10px] text-gray-400 dark:text-gray-500 truncate">${_attr(m.sub)}</span>` : ''}
+      <span class="text-[10px] text-gray-400 dark:text-gray-500 ml-auto shrink-0">${_attr(_repRelDate(m.d))}</span>
+    </div>
+    <div class="text-xs text-gray-800 dark:text-gray-200 mb-1.5 leading-snug">${_attr(m.q)}</div>
+    <div class="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px]">
+      <span class="text-red-500 dark:text-red-400">Answered <b>${m.ua ? _attr(m.ua) : 'nothing'}</b></span>
+      ${m.ca ? `<span class="text-green-600 dark:text-green-400">Correct <b>${_attr(m.ca)}</b></span>` : ''}
+    </div>
+  </div>`;
+
+  return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+    <div class="font-bold text-gray-800 dark:text-white text-sm mb-0.5">❌ Recent mistakes (${all.length})</div>
+    <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-2.5">The actual questions they got wrong. Go over these together.</p>
+    <div class="space-y-2">${shown.map(item).join('')}</div>
+    ${all.length > 8 ? `<button onclick="_repToggleMistakes()" class="w-full mt-2.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 py-2 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+      ${_repShowAllMistakes ? 'Show fewer ▲' : `Show all ${all.length} ▼`}
+    </button>` : ''}
+  </div>`;
+}
+
+function _repRelDate(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+  if (days <= 0) return 'today';
+  if (days === 1) return 'yesterday';
+  if (days < 7) return `${days} days ago`;
+  return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+}
+
+// One plain sentence at the top. A parent who reads nothing else should still
+// come away knowing whether this week went well.
+function _repHeadline(now, prev, name) {
+  let msg, tone;
+  if (!now.a) {
+    msg = `${name} has not practised in the last 7 days.`;
+    tone = 'amber';
+  } else if (now.days >= 5) {
+    msg = `${name} practised on ${now.days} of the last 7 days. That consistency is the thing that moves exam scores.`;
+    tone = 'green';
+  } else if (prev.a && now.a < prev.a / 2) {
+    msg = `${name} did about half as much as the week before. Worth asking how it is going.`;
+    tone = 'amber';
+  } else if (now.acc != null && prev.acc != null && now.acc - prev.acc >= 5) {
+    msg = `${name}'s accuracy is up ${now.acc - prev.acc} points on last week.`;
+    tone = 'green';
+  } else if (now.acc != null && prev.acc != null && prev.acc - now.acc >= 10) {
+    msg = `Accuracy is down ${prev.acc - now.acc} points. That is often a sign they have moved on to harder chapters rather than that they are doing worse.`;
+    tone = 'amber';
+  } else {
+    msg = `${name} answered ${now.a} question${now.a > 1 ? 's' : ''} across ${now.days} day${now.days > 1 ? 's' : ''} this week.`;
+    tone = 'blue';
+  }
+  const c = { green: 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-300',
+              amber: 'bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-300',
+              blue:  'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300' }[tone];
+  return `<div class="mt-3 rounded-xl px-3 py-2.5 text-xs leading-relaxed ${c}">${_attr(msg)}</div>`;
+}
+
+// ── Main ──────────────────────────────────────
+// keepState is passed only by the mistakes toggle, which re-renders the whole
+// tab and must not undo the expansion it just asked for.
+function _renderReports(keepState) {
+  const el = document.getElementById('pd-reports');
+  if (!el) return;
+  if (!keepState) _repShowAllMistakes = false;
+
+  const acct = (typeof Auth !== 'undefined' && Auth.getActiveAccount()) || {};
+  const name = String(acct.name || 'Your child').trim().split(/\s+/)[0];
+
+  // A child with no dated history. This is also EVERY existing child on the day
+  // this ships — DB.daily starts empty and fills from the next answer on — so
+  // the empty state has to say that, not read as "no data, something is broken".
+  const hasAny = Object.keys(DB.daily || {}).length > 0;
+  if (!hasAny) {
+    const everDid = (DB.stats && DB.stats.totalAttempted) || 0;
+    el.innerHTML = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow text-center">
+      <div class="text-4xl mb-3 select-none">📈</div>
+      <div class="font-bold text-gray-800 dark:text-white mb-1.5">No reports yet</div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">${
+        everDid
+          ? `${_attr(name)} has answered ${everDid} questions, but day-by-day tracking only starts with this update. Reports build up from the next practice session.`
+          : `Once ${_attr(name)} starts practising, this tab shows week-on-week progress, which subjects need work, and the questions they got wrong.`
+      }</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">The <b>Progress</b> tab has the running totals in the meantime.</p>
+    </div>`;
+    return;
+  }
+
+  // Rolling 7-day windows, not calendar weeks. On a Monday a calendar week holds
+  // one day, and "questions down 95%" would be an artefact of the day it is
+  // rather than anything the child did.
+  const now  = _repWindow(0, 6);
+  const prev = _repWindow(7, 13);
+
+  const summary = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-4">
+    <div class="flex items-baseline justify-between gap-2 mb-2.5">
+      <div class="font-bold text-gray-800 dark:text-white text-sm">🗓️ Last 7 days</div>
+      <div class="text-[11px] text-gray-400 dark:text-gray-500">vs the 7 days before</div>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      ${_repStatCard('Questions',   now.a, _repDelta(now.a, prev.a), '#2563eb')}
+      ${_repStatCard('Accuracy',    now.acc == null ? '—' : now.acc + '%', _repDelta(now.acc, prev.acc, '%'), now.acc == null ? '' : _repAccColour(now.acc))}
+      ${_repStatCard('Days active', now.days + '/7', _repDelta(now.days, prev.days), '#f97316')}
+      ${_repStatCard('Exams',       now.e, _repDelta(now.e, prev.e), '#0d9488')}
+    </div>
+    ${_repHeadline(now, prev, name)}
+  </div>`;
+
+  // Today/Yesterday goes FIRST, above the trends. It is the question a parent
+  // actually opened this tab to answer; a 30-day chart is what they look at
+  // second.
+  el.innerHTML = summary
+    + _repRecentDays()
+    + _repActivityStrip()
+    + _repTrend()
+    + _repExams()
+    + _repSubjects(acct)
+    + _repMistakes()
+    + `<button onclick="_repShare()" class="w-full text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 shadow rounded-2xl py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">📤 Share this summary</button>`;
+}
+
+// Same Web Share / clipboard pattern as shareResult(). Plain text on purpose —
+// this gets pasted into WhatsApp to a tutor or to the other parent.
+async function _repShare() {
+  const acct = (typeof Auth !== 'undefined' && Auth.getActiveAccount()) || {};
+  const name = acct.name || 'My child';
+  const now = _repWindow(0, 6), prev = _repWindow(7, 13);
+  const spots = (DB.mistakes || []).slice(0, 3).map(m => `  - ${m.chn || m.ch}`).join('\n');
+  const text = [
+    `${name} — last 7 days`,
+    `Questions: ${now.a}${prev.a ? ` (was ${prev.a})` : ''}`,
+    `Accuracy: ${now.acc == null ? '—' : now.acc + '%'}${prev.acc != null ? ` (was ${prev.acc}%)` : ''}`,
+    `Days practised: ${now.days} of 7`,
+    now.e ? `Exams taken: ${now.e}` : '',
+    spots ? `\nRecent trouble spots:\n${spots}` : '',
+    `\nPSAC Exam Practice`,
+  ].filter(Boolean).join('\n');
+
+  try {
+    if (navigator.share) { await navigator.share({ title: `${name} — progress`, text }); return; }
+    await navigator.clipboard.writeText(text);
+    toast('Summary copied! 📋', 2000);
+  } catch (_) { /* dismissed share sheet, or clipboard denied — not an error */ }
 }
 
 function _renderParentAssignDropdown(acct) {
@@ -3539,7 +4894,7 @@ async function _renderStudentAssignments(studentId) {
         </div>
       </div>
       <div class="flex gap-2 mt-3">
-        ${canStart ? `<button onclick="startAssignmentDirect('${a.subject_id}','${a.chapter_id}',${a.difficulty || 1},${a.show_answers !== false},${a.show_hints !== false})"
+        ${canStart ? `<button onclick="startAssignmentDirect('${a.subject_id}','${a.chapter_id}',${a.difficulty || 1},${a.show_answers !== false},${a.show_hints !== false},'${a.id}')"
           class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm transition-colors shadow">
           ▶ Start Now
         </button>` : ''}
@@ -3556,7 +4911,7 @@ async function _markAssignmentDone(id, btn) {
   if (btn) { btn.disabled = true; btn.textContent = '…'; }
   await Store.completeAssignment(id);
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
-  renderDashSchedule(ACTIVE_STUDENT_ID);
+
 }
 
 // ── FRIENDS LEADERBOARD (dashboard) ──────────
@@ -3948,11 +5303,15 @@ function renderDashboard() {
 
   _renderNotifyOptIn();
 
-  // Today's study plan (async, non-blocking)
-  if (typeof Calendar !== 'undefined') {
-    const grade = _acct?.grade || 5;
-    Calendar.renderTodayPlan(ACTIVE_STUDENT_ID, grade);
-  }
+  // ⚠ The two schedule panels are deliberately NOT painted here any more.
+  // #dash-today-plan (Calendar.renderTodayPlan) and #dash-schedule stacked a
+  // study plan and a fortnight's outlook on the screen a child reaches
+  // immediately after tapping a subject TO PRACTISE — a wall of suggestions
+  // about something else, in front of the thing they came to do. Both are
+  // summarised on the "Today's plan" task button now, with the full detail one
+  // tap away on the Schedule screen. renderTodayPlan() and renderDashSchedule()
+  // still exist and still work; the dashboard simply stopped calling them, and
+  // their containers stay `hidden`.
   const nameEl = document.getElementById('welcome-name');
   const greetEl = document.getElementById('dashboard-greeting');
   if (_acct) {
@@ -4000,7 +5359,7 @@ function renderDashboard() {
 
   // Assignments from parent (Supabase - async, non-blocking)
   _renderStudentAssignments(ACTIVE_STUDENT_ID);
-  renderDashSchedule(ACTIVE_STUDENT_ID);
+
 
   // Friends leaderboard (Supabase - async, non-blocking)
   _renderFriendsLeaderboard(ACTIVE_STUDENT_ID);
@@ -4115,7 +5474,11 @@ function _renderWeakChapters(studentData) {
 }
 
 function _subjectChips(studentData) {
-  const packs = Object.values(typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : {});
+  // One chip PER PACK, so comingSoon packs have to go: 45 registered packs
+  // would print 30 grey "not started" chips onto a child's card, for grades
+  // they are not in and cannot open.
+  const packs = Object.values(typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : {})
+    .filter(p => !p.comingSoon);
   if (!packs.length) return '';
   return packs.map(pack => {
     const chs = pack._chapters || pack.chapters || [];
@@ -4155,6 +5518,73 @@ function toggleChapterFlag(chapterId) {
 // over it (.ch-hit) as the click target, so the whole card is still one big
 // tap target and still keyboard-reachable, while the flag sits above it as a
 // separate, valid button.
+// ══════════════════════════════════════════════
+//  CHAPTER PROGRESS — one reading, used by the card AND the summary
+//
+//  ⚠ getChapterPct() is ACCURACY (correct / attempted), and the chapter card
+//  had been printing it as "% mastery" with a three-star rating beside it. So a
+//  child who answered two questions and got both right saw "100% mastery ★★★"
+//  on a nineteen-question chapter they had barely opened — and every chapter
+//  they had actually worked through looked the same as one they had glanced at.
+//  That is why "I cannot see which chapters I have already done" was a fair
+//  complaint about a screen that already showed numbers.
+//
+//  Effort and accuracy are now separate readings, and stars need BOTH.
+//
+//  ⚠ `attempted` counts ANSWERS GIVEN, not distinct questions seen — nothing in
+//  the app records which questions a child has met, and a random 10 from the
+//  pool repeats. So this deliberately never claims "12 of 19 questions done".
+//  It says "12 answers" against a chapter of 19, which is true.
+// ══════════════════════════════════════════════
+function _chapterProgress(chId) {
+  const c = (DB.chapters || {})[chId] || {};
+  const attempted = c.attempted || 0;
+  const correct   = c.correct || 0;
+  const total = (typeof STATIC_QUESTIONS !== 'undefined')
+    ? STATIC_QUESTIONS.filter(q => q && q.chapterId === chId).length : 0;
+  const acc = attempted ? Math.round(correct / attempted * 100) : 0;
+
+  // ⚠ `total` is 0 whenever the question pool has not loaded yet — the grid can
+  // paint before QuestionLoader has answered. Effort must then be UNKNOWN, not
+  // 1: an earlier version fell back to `attempted ? 1 : 0`, which handed a
+  // "✓ Mastered ★★★" badge to any chapter with two correct answers the moment
+  // the pool was slow. That is the exact bug this function exists to kill, so
+  // an unknown denominator has to withhold the claim rather than assume it.
+  const known  = total > 0;
+  const effort = known ? Math.min(1, attempted / total) : null;
+
+  // "Worked through" = at least as many answers as the chapter has questions.
+  // Not proof every question was seen (a random 10 repeats), but it is the
+  // honest bar for effort and it cannot be reached by answering two.
+  let stars = 0;
+  if (attempted > 0)                              stars = 1;
+  if (attempted >= 5 && acc >= 50)                stars = 2;
+  if (known && effort >= 0.8 && acc >= 80)        stars = 3;
+
+  let state = 'new';
+  if (attempted > 0)                state = 'started';
+  if (known && effort >= 0.8)       state = 'worked';
+  if (stars === 3)                  state = 'mastered';
+
+  return { attempted, correct, acc, total, effort, known, stars, state, last: c.last || 0 };
+}
+
+// "Today" / "Yesterday" / "3 days ago". Uses the Mauritius day key rather than
+// the raw millisecond gap so that "today" means the calendar day the child is
+// living in, not "within the last 24 hours".
+function _chapterWhen(ms) {
+  if (!ms) return '';
+  const key   = new Date(ms + _MU_OFFSET_MS).toISOString().slice(0, 10);
+  const today = _muDayKey();
+  if (key === today) return 'Today';
+  const days = Math.round((Date.parse(today) - Date.parse(key)) / 86400000);
+  if (days === 1)  return 'Yesterday';
+  if (days < 7)    return `${days} days ago`;
+  if (days < 14)   return 'Last week';
+  if (days < 60)   return `${Math.round(days / 7)} weeks ago`;
+  return 'A while ago';
+}
+
 function _chapterCard(ch, borderColor) {
   const c         = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
   const pct       = getChapterPct(ch.id);
@@ -4173,11 +5603,11 @@ function _chapterCard(ch, borderColor) {
   // instead of the second pause silently overwriting the first.
   const resume = locked ? null : _getChapterResume(ch.id);
 
-  const total = (typeof STATIC_QUESTIONS !== 'undefined')
-    ? STATIC_QUESTIONS.filter(q => q && q.chapterId === ch.id).length : 0;
+  const prog  = _chapterProgress(ch.id);
+  const total = prog.total;
 
   const tone  = pct >= 80 ? 'good' : pct >= 50 ? 'mid' : 'low';
-  const stars = attempted === 0 ? 0 : pct >= 80 ? 3 : pct >= 50 ? 2 : 1;
+  const stars = prog.stars;
   const starHtml = [1, 2, 3].map(i =>
     `<span class="${i <= stars ? 'ch-star on' : 'ch-star'}">★</span>`).join('');
 
@@ -4190,7 +5620,22 @@ function _chapterCard(ch, borderColor) {
   else if (parentLocked) status = '<span class="ch-status lock">🔒 Locked by your parent</span>';
   else if (resume)       status = `<span class="ch-status resume">⏸ Paused · Question ${(resume.idx || 0) + 1} of ${(resume.qIds || []).length}</span>`;
   else if (!attempted)   status = `<span class="ch-status new">Not started${total ? ` · ${total} questions` : ''}</span>`;
-  else                   status = `<span class="ch-status ${tone}">${pct}% mastery · ${attempted} done</span>`;
+  // ⚠ "correct", not "mastery". It is accuracy, and calling it mastery told a
+  // child who had answered two questions that they had mastered the chapter.
+  // Effort sits beside it so the two can be read apart.
+  else                   status = `<span class="ch-status ${tone}">${pct}% correct · ${attempted} answer${attempted === 1 ? '' : 's'}</span>`;
+
+  // The line that actually answers "have I done this one?" — a done-ness badge
+  // and when it was last touched.
+  const doneBadge = locked ? ''
+    : prog.state === 'mastered' ? '<span class="ch-done is-mastered">✓ Mastered</span>'
+    : prog.state === 'worked'   ? '<span class="ch-done is-worked">✓ Worked through</span>'
+    : prog.state === 'started'  ? '<span class="ch-done is-started">In progress</span>'
+    : '';
+  const whenTxt = (!locked && prog.last) ? _chapterWhen(prog.last) : '';
+  const metaRow = (doneBadge || whenTxt)
+    ? `<div class="ch-meta">${doneBadge}${whenTxt ? `<span class="ch-when">🕘 ${whenTxt}</span>` : ''}</div>`
+    : '';
 
   const hit = locked
     ? `<button class="ch-hit" onclick="toast('${planLocked ? '⭐ Upgrade your plan to access this chapter.' : '🔒 This chapter is locked by your parent.'}', 2500)" aria-label="${_profEsc(ch.name)} — locked"></button>`
@@ -4213,8 +5658,9 @@ function _chapterCard(ch, borderColor) {
       <h3 class="ch-name">${_profEsc(ch.name)}</h3>
       ${ch.part != null ? `<div class="ch-part">Part ${ch.part}</div>` : ''}
       <div class="ch-spacer"></div>
+      ${metaRow}
       ${status}
-      <div class="ch-bar" role="img" aria-label="${pct}% mastery">
+      <div class="ch-bar" role="img" aria-label="${pct}% correct">
         <div class="ch-bar-fill ${tone}" style="width:${locked ? 0 : pct}%"></div>
       </div>
       <div class="ch-foot">
@@ -4258,20 +5704,66 @@ function renderChapterSelect() {
     return;
   }
 
-  let html = `<div class="ch-grid">${regular.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
+  // "Which ones have I not done yet" is a question about the WHOLE list, and no
+  // amount of per-card detail answers it on a screen of eighteen cards. The
+  // filter answers it directly.
+  const keep = ch => {
+    const p = _chapterProgress(ch.id);
+    if (_chapterFilter === 'todo')  return p.attempted === 0;
+    if (_chapterFilter === 'doing') return p.attempted > 0 && p.state !== 'mastered';
+    if (_chapterFilter === 'weak')  return p.attempted >= 5 && p.acc < 60;
+    return true;
+  };
+  const shownRegular    = regular.filter(keep);
+  const shownEnrichment = enrichment.filter(keep);
 
-  if (enrichment.length) {
-    html += `<div class="ch-section">
-        <span class="ch-section-line"></span>
-        <span class="ch-section-label">✨ Bonus topics</span>
-        <span class="ch-section-line"></span>
-      </div>
-      <p class="ch-section-note">Extra themes drawn from the syllabus — great once the main chapters feel easy.</p>
-      <div class="ch-grid">${enrichment.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
+  let html = _chapterFilterBar(regular.concat(enrichment));
+
+  if (!shownRegular.length && !shownEnrichment.length) {
+    html += `<div class="ch-empty">
+      <div class="text-4xl mb-2">🎉</div>
+      <p class="font-semibold text-gray-700 dark:text-gray-200">Nothing in this list</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">${
+        _chapterFilter === 'todo' ? 'You have started every chapter here. Nice.'
+        : _chapterFilter === 'weak' ? 'No chapter is giving you trouble right now.'
+        : 'Try another filter.'}</p>
+    </div>`;
+  } else {
+    html += `<div class="ch-grid">${shownRegular.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
+    if (shownEnrichment.length) {
+      html += `<div class="ch-section">
+          <span class="ch-section-line"></span>
+          <span class="ch-section-label">✨ Bonus topics</span>
+          <span class="ch-section-line"></span>
+        </div>
+        <p class="ch-section-note">Extra themes drawn from the syllabus — great once the main chapters feel easy.</p>
+        <div class="ch-grid">${shownEnrichment.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
+    }
   }
 
   grid.innerHTML = html;
   _renderChapterSummary(regular);
+}
+
+window.setChapterFilter = function (f) {
+  _chapterFilter = f;
+  renderChapterSelect();
+};
+
+function _chapterFilterBar(all) {
+  const counts = { all: all.length, todo: 0, doing: 0, weak: 0 };
+  all.forEach(ch => {
+    const p = _chapterProgress(ch.id);
+    if (p.attempted === 0) counts.todo++;
+    else if (p.state !== 'mastered') counts.doing++;
+    if (p.attempted >= 5 && p.acc < 60) counts.weak++;
+  });
+  const tab = (id, label) => `<button class="ch-filter${_chapterFilter === id ? ' on' : ''}"
+      onclick="setChapterFilter('${id}')">${label} <span class="ch-filter-n">${counts[id]}</span></button>`;
+  return `<div class="ch-filters">
+    ${tab('all', 'All')}${tab('todo', 'Not started')}${tab('doing', 'In progress')}
+    ${counts.weak ? tab('weak', 'Needs work') : ''}
+  </div>`;
 }
 
 // A one-line "where am I" strip above the grid, so the child does not have to
@@ -4281,17 +5773,33 @@ function _renderChapterSummary(chapters) {
   if (!el) return;
   if (!chapters.length) { el.innerHTML = ''; return; }
 
-  const done     = chapters.filter(ch => (DB.chapters?.[ch.id]?.attempted || 0) > 0);
-  const mastered = chapters.filter(ch => getChapterPct(ch.id) >= 80 && (DB.chapters?.[ch.id]?.attempted || 0) > 0);
-  const pct      = Math.round((mastered.length / chapters.length) * 100);
+  // ⚠ Same correction as the card: "Mastered" used to be accuracy >= 80% with a
+  // single answer, so a child who got two lucky questions right was told they
+  // had mastered the chapter and the tile was meaningless. It now needs real
+  // effort as well — see _chapterProgress().
+  const prog     = chapters.map(ch => _chapterProgress(ch.id));
+  const done     = prog.filter(p => p.attempted > 0);
+  const mastered = prog.filter(p => p.state === 'mastered');
+  const worked   = prog.filter(p => p.state === 'worked' || p.state === 'mastered');
+  const pct      = Math.round((worked.length / chapters.length) * 100);
+
+  // "When did I last touch this subject" — the other half of "what have I done".
+  const lastMs   = Math.max(0, ...prog.map(p => p.last || 0));
+  const todayKey = _muDayKey();
+  const doneToday = prog.filter(p => p.last &&
+    new Date(p.last + _MU_OFFSET_MS).toISOString().slice(0, 10) === todayKey).length;
 
   el.innerHTML = `
-    <div class="ch-sum-tile"><span class="ch-sum-num">${chapters.length}</span><span class="ch-sum-lbl">Chapters</span></div>
-    <div class="ch-sum-tile"><span class="ch-sum-num">${done.length}</span><span class="ch-sum-lbl">Started</span></div>
+    <div class="ch-sum-tile"><span class="ch-sum-num">${done.length}<span class="ch-sum-of">/${chapters.length}</span></span><span class="ch-sum-lbl">Started</span></div>
     <div class="ch-sum-tile"><span class="ch-sum-num good">${mastered.length}</span><span class="ch-sum-lbl">Mastered</span></div>
+    <div class="ch-sum-tile"><span class="ch-sum-num${doneToday ? ' good' : ''}">${doneToday}</span><span class="ch-sum-lbl">Done today</span></div>
     <div class="ch-sum-bar">
-      <div class="ch-sum-bar-head"><span>Subject progress</span><span class="ch-sum-pct">${pct}%</span></div>
+      <div class="ch-sum-bar-head">
+        <span>Worked through</span>
+        <span class="ch-sum-pct">${pct}%</span>
+      </div>
       <div class="ch-bar"><div class="ch-bar-fill good" style="width:${pct}%"></div></div>
+      <div class="ch-sum-last">${lastMs ? `Last practised: ${_chapterWhen(lastMs)}` : 'Nothing practised yet — pick any chapter to begin.'}</div>
     </div>`;
 }
 
@@ -4322,7 +5830,21 @@ let _practiceMode = null;
 // just adopts them instead of the usual qs:[]/idx:0 reset.
 let _practiceResume = null;
 
-function startChapterDirect(chapterId, forceDiff) {
+// ⚠ _attempt is INTERNAL. It exists because the "questions are not loaded yet"
+// branch below re-calls this function, and that retry was unbounded.
+//
+// QuestionLoader.loadSubject() short-circuits on its _done set, so the second
+// call resolves INSTANTLY doing no work at all. If the chapter's questions were
+// still missing — a subject the server filtered out, a chapter with no question
+// file, or a first load that failed and marked the subject done with nothing in
+// it — hasQs stayed false and this recursed through resolved promises as fast as
+// the event loop would go, running STATIC_QUESTIONS.some() over ~5,400 questions
+// and firing a toast on every pass. That is a pegged CPU and a dead tab, and it
+// is what a child saw as the browser crashing shortly after tapping a chapter.
+//
+// Every call from markup passes two arguments, so the default keeps the public
+// signature exactly as it was.
+function startChapterDirect(chapterId, forceDiff, _attempt) {
   const mode = _practiceMode;
   _practiceMode = null;
   const resume = _practiceResume;
@@ -4335,9 +5857,17 @@ function startChapterDirect(chapterId, forceDiff) {
   // If questions for this chapter aren't loaded yet, wait for the active subject to load first
   const hasQs = STATIC_QUESTIONS.some(q => q && q.chapterId === chapterId);
   if (!hasQs && !(resume && resume.qs.length) && typeof QuestionLoader !== 'undefined' && typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) {
+    // ONE retry. A second failure is a real answer — the questions are not
+    // coming — and must be said out loud rather than tried again for ever.
+    if (_attempt) {
+      console.warn('[startChapterDirect] no questions for', chapterId,
+        'after reloading', ACTIVE_PACK.id, '- giving up rather than retrying.');
+      toast('These questions could not be loaded. Check your connection, or ask your parent whether this chapter is unlocked.', 4000);
+      return;
+    }
     toast('⏳ Loading questions…', 2000);
     QuestionLoader.loadSubject(ACTIVE_PACK.id)
-      .then(() => { _practiceMode = mode; _practiceResume = resume; startChapterDirect(chapterId, forceDiff); })
+      .then(() => { _practiceMode = mode; _practiceResume = resume; startChapterDirect(chapterId, forceDiff, 1); })
       .catch(() => toast('Could not load questions. Please try again.', 3000));
     return;
   }
@@ -4488,6 +6018,9 @@ async function renderSchedule() {
   }
   let items = [];
   try { items = await Calendar.getUpcoming(sid, 60); } catch (_) { }
+  // Before the early return below: a child with no timetable at all still has a
+  // record of their own work, and that is exactly who most needs to see it.
+  renderMyActivity(sid);
   if (!items.length) {
     body.innerHTML = `<div class="text-center py-10">
       <div class="text-4xl mb-3 select-none">🗓️</div>
@@ -4512,9 +6045,72 @@ async function renderSchedule() {
       <div class="space-y-2">${rows.map(e => _scheduleRow(e, false)).join('')}</div>
     </div>`;
   }).join('');
+  renderMyActivity(sid);
 }
 
-async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers, showHints) {
+// ── WHAT I HAVE DONE (child timetable screen) ──
+// The child's half of the calendar activity layer. The parent gets filters and
+// a month grid to audit with; a child gets a short, recent, encouraging recap.
+//
+// ⚠ Only what they DID. There is no "missed sessions" counterpart here on
+// purpose — on a parent's calendar an unticked plan row is information; on a
+// child's own screen it is a list of their failures, served every time they
+// open it. Nothing here should make a child avoid this screen.
+async function renderMyActivity(studentId) {
+  const box = document.getElementById('schedule-done');
+  if (!box) return;
+  if (!studentId || typeof Calendar === 'undefined' || !Calendar.getRecentActivity) {
+    box.innerHTML = ''; return;
+  }
+
+  let items = [];
+  try { items = await Calendar.getRecentActivity(studentId, 14); } catch (_) { items = []; }
+  if (!items.length) { box.innerHTML = ''; return; }
+
+  const byDay = new Map();
+  for (const a of items) {
+    if (!byDay.has(a.date)) byDay.set(a.date, []);
+    byDay.get(a.date).push(a);
+  }
+  const days = byDay.size;
+  const qs = items.reduce((n, a) => {
+    const m = /^(\d+) question/.exec(a.detail || '');
+    return n + (m ? Number(m[1]) : 0);
+  }, 0);
+
+  const row = a => {
+    const col = a.pct == null ? '' : a.pct >= 80 ? '#22c55e' : a.pct >= 50 ? '#f59e0b' : '#ef4444';
+    return `<div class="flex items-center gap-3 p-2.5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+      <span class="text-lg select-none shrink-0">${a.icon}</span>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_profEsc(a.title)}</div>
+        <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">
+          ${a.subjectName ? _profEsc(a.subjectIcon + ' ' + a.subjectName) + ' · ' : ''}${_profEsc(a.detail || '')}
+        </div>
+      </div>
+      ${a.pct == null ? '' : `<span class="text-sm font-bold shrink-0" style="color:${col}">${a.pct}%</span>`}
+    </div>`;
+  };
+
+  box.innerHTML = `
+    <div class="mt-8">
+      <div class="flex items-baseline justify-between mb-1">
+        <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200">✅ What you have done</h3>
+        <span class="text-[11px] text-gray-400">last 14 days</span>
+      </div>
+      <p class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mb-3">
+        ${days} day${days === 1 ? '' : 's'} of work${qs ? ` · ${qs} question${qs === 1 ? '' : 's'}` : ''}. Nice going.
+      </p>
+      <div class="space-y-3">
+        ${[...byDay.entries()].map(([date, rows]) => `<div>
+          <div class="text-[11px] font-semibold text-gray-400 dark:text-gray-500 mb-1.5">${_scheduleDayLabel(date)}</div>
+          <div class="space-y-2">${rows.map(row).join('')}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers, showHints, assignmentId) {
   const pack = activateSubjectPack(subjectId);
   if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
 
@@ -4523,8 +6119,39 @@ async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswe
     await QuestionLoader.loadSubject(pack.id);
   }
 
+  // Which assignment this round IS. Without it, finishing the questions could
+  // never mark the assignment done — completed_at was only ever written by the
+  // parent's manual "✓ Done" button, so a child who actually did the work left
+  // no completion record anywhere.
+  _activeAssignmentId = assignmentId || null;
   _practiceMode = { showAnswers: showAnswers !== false, showHints: showHints !== false };
   startChapterDirect(chapterId, difficulty || null);
+}
+
+// Set by startAssignmentDirect, consumed once by _finishAssignmentIfAny().
+// Module-level rather than threaded through startChapterDirect for the same
+// reason _practiceMode is: that function is called from inline onclicks and its
+// signature is effectively public API.
+let _activeAssignmentId = null;
+
+// Marks the current assignment complete, once, when the child finishes the
+// round. Safe to call when no assignment is running.
+// Fire-and-forget on purpose: a child must never be blocked from seeing their
+// score because a status write did not land, and the calendar has a local
+// record of the work either way (daily[date].asg).
+function _finishAssignmentIfAny() {
+  const id = _activeAssignmentId;
+  _activeAssignmentId = null;
+  if (!id || typeof Store === 'undefined' || !Store.completeAssignment) return;
+  Store.completeAssignment(id)
+    .then(() => {
+      // Repaint the lists that show assignment status, if the parent or child
+      // happens to be looking at one.
+      if (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID) {
+        try { _renderStudentAssignments(ACTIVE_STUDENT_ID); } catch (_) {}
+      }
+    })
+    .catch(() => {});
 }
 
 // ── EXAM MODE ─────────────────────────────────
@@ -4924,7 +6551,17 @@ function renderExamQuestion() {
 
   // Nav
   document.getElementById('exam-prev-btn').disabled = S.exam.idx === 0;
-  document.getElementById('exam-next-btn').textContent = S.exam.idx === S.exam.qs.length - 1 ? '📋 Review & Submit' : 'Next →';
+  // ⚠ NOT "Review". A child at the end of an exam wants their score, and
+  // "Review" promises exactly that — but the only review worth the name is on
+  // the results screen, after submitting. Labelling the last-question button
+  // "Review" sent children tapping something that could never do what it said,
+  // while the control they actually needed (Submit) was a small pill in the top
+  // bar next to Exit. This is the finishing action now, it says so, and it is
+  // the biggest thing on the screen at that point.
+  const _isLastQ  = S.exam.idx === S.exam.qs.length - 1;
+  const _nextBtn  = document.getElementById('exam-next-btn');
+  _nextBtn.textContent = _isLastQ ? '✓ Finish exam' : 'Next →';
+  _nextBtn.classList.toggle('btn-finish', _isLastQ);
   updateNavGrid();
 
   const flagBtn = document.getElementById('exam-flag-btn');
@@ -4962,11 +6599,10 @@ function saveCurrentExamAnswer() {
 document.getElementById('exam-prev-btn').addEventListener('click', () => {
   saveCurrentExamAnswer(); if (S.exam.idx > 0) { S.exam.idx--; renderExamQuestion(); }
 });
-// ⚠ On the LAST question this button reads "Review →" (see renderExamQuestion)
-// and the old body — `if (idx < len-1) { idx++; render() }` — was false, so the
-// tap did nothing whatsoever. A child finishing a 40-question mock pressed the
-// only forward-looking control on the screen and got silence. The label now has
-// somewhere to go.
+// ⚠ On the LAST question the body used to be `if (idx < len-1) { idx++ }`,
+// which is false there — so the tap did nothing whatsoever, silently, on the one
+// screen where a child is most anxious to move on. It opens the check sheet now,
+// which is one tap from submitting and their score.
 document.getElementById('exam-next-btn').addEventListener('click', () => {
   saveCurrentExamAnswer();
   if (S.exam.idx < S.exam.qs.length - 1) { S.exam.idx++; renderExamQuestion(); }
@@ -4992,14 +6628,21 @@ function openExamReview() {
   const flagged = S.exam.qs.map((_, i) => i).filter(i => S.exam.flagged.has(i));
 
   const sum = document.getElementById('exr-summary');
-  if (sum) sum.textContent = `${total - blanks.length} of ${total} answered`;
+  if (sum) {
+    sum.textContent = blanks.length
+      ? `${total - blanks.length} of ${total} answered`
+      : `All ${total} questions answered — nice work!`;
+  }
 
+  // The warning a child needs BEFORE submitting, in their own terms. Silence
+  // here is what made the old flow feel broken: something was wrong with the
+  // paper and nothing on screen said so.
   const warn = document.getElementById('exr-warn');
   if (warn) {
     const bits = [];
     if (blanks.length)  bits.push(`${blanks.length} question${blanks.length === 1 ? '' : 's'} still blank`);
     if (flagged.length) bits.push(`${flagged.length} flagged to come back to`);
-    warn.textContent = bits.join(' · ');
+    warn.textContent = bits.length ? '⚠ ' + bits.join(' · ') : '';
     warn.classList.toggle('hidden', bits.length === 0);
   }
 
@@ -5068,13 +6711,21 @@ function submitExam() {
     const ans = S.exam.answers[i];
     const ok = ans != null && checkAnswer(q, ans);
     if (ok) { correct++; chapterStats[q.chapterId].correct++; }
-    recordAnswer(q.chapterId, ok);
+    else if (ans != null) _recordMistake(q, ans, q.chapterId, 'exam');
+    recordAnswer(q.chapterId, ok, 'exam');
   });
   const total = S.exam.qs.length;
   const pct = Math.round(correct / total * 100);
   DB.stats.examCount++;
   if (pct > DB.stats.bestScore) DB.stats.bestScore = pct;
-  DB.examHistory.unshift({ date: new Date().toLocaleDateString(), pct, correct, total, type: S.exam.type || 'exam' });
+  _dayBucket().e++;
+  // `date` was toLocaleDateString() ONLY, and _renderExamTimeline read it back
+  // with new Date(e.date) — which is Invalid Date for every en-GB browser,
+  // because "30/08/2026" is not a format Date can parse. So the parent's exam
+  // chips printed "Invalid Date" on exactly the devices this app targets.
+  // `iso` is the machine-readable one; `date` stays for rows already written
+  // and for anything still reading it.
+  DB.examHistory.unshift({ iso: new Date().toISOString(), date: new Date().toLocaleDateString(), pct, correct, total, type: S.exam.type || 'exam', timeTaken });
   if (DB.examHistory.length > 20) DB.examHistory.pop();
   save(DB, true);
   if (pct >= 80) launchConfetti();
@@ -5425,6 +7076,14 @@ function pauseExamForLater() {
   if (!S.exam.qs.length) { showScreen('dashboard'); return; }
   saveCurrentExamAnswer();
   _saveResume();
+  // The resume slot now holds everything needed to come back. Leaving the
+  // exam live in S would keep the 1s timer ticking on the dashboard and
+  // auto-submit an unattended exam when endTime passes, keep _saveResume
+  // overwriting later practice with this exam, and re-request the wake lock
+  // on every tab focus.
+  clearInterval(S.exam.timer);
+  _releaseWakeLock(); _unlockOrientation();
+  S.exam.qs = []; S.exam.answers = {}; S.exam.flagged = new Set();
   const subj = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.subject) || 'this subject';
   toast(`Saved — pick up where you left off next time you open ${subj}.`, 3500);
   showScreen('dashboard');
@@ -5627,6 +7286,12 @@ function _logPracticeAnswer(q, userAnswer, correct, skipped) {
     correct:       !!correct,
     skipped:       !!skipped,
   });
+  // Skips are not mistakes. A child who skipped ran out of ideas or ran out of
+  // patience; putting those in the parent's "what she's getting wrong" list
+  // would drown the answers she actually got wrong, which are the teachable ones.
+  if (!correct && !skipped) {
+    _recordMistake(q, userAnswer, S.practice.chapterId, 'practice');
+  }
 }
 
 function _learnMoreHTML(q) {
@@ -5646,6 +7311,10 @@ function toggleLearnMore(btn) {
 }
 
 function _showRoundComplete() {
+  // A PARENT assignment finishes here, not in showAssignmentComplete() — that
+  // one belongs to the guest/teacher ASSIGNMENT_MODE flow. This is the only
+  // point at which "the child actually did the assignment" becomes known.
+  _finishAssignmentIfAny();
   const { attempted, correct } = S.practice.session;
   const acc = attempted ? Math.round(correct / attempted * 100) : 0;
   const stars = acc >= 80 ? '⭐⭐⭐' : acc >= 50 ? '⭐⭐' : '⭐';
@@ -5907,6 +7576,13 @@ function _submitTestAssignment() {
 }
 
 function showAssignmentComplete() {
+  // The other flow's completion point. ASSIGNMENT_CONFIG.id is the teacher /
+  // guest assignment; _finishAssignmentIfAny covers the parent one if a run
+  // somehow reached here instead.
+  if (ASSIGNMENT_CONFIG && ASSIGNMENT_CONFIG.id && typeof Store !== 'undefined' && Store.completeAssignment) {
+    Store.completeAssignment(ASSIGNMENT_CONFIG.id).catch(() => {});
+  }
+  _finishAssignmentIfAny();
   const { attempted, correct } = ASSIGNMENT_SCORE;
   const pct   = attempted ? Math.round(correct / attempted * 100) : 0;
   const grade = pct >= 80 ? '🌟 Excellent!' : pct >= 60 ? '👍 Good job!' : pct >= 40 ? '📚 Keep practising!' : '💪 You can do it!';
@@ -5915,12 +7591,13 @@ function showAssignmentComplete() {
   // Notify parent by email (fire-and-forget, only on Netlify)
   if (location.protocol !== 'file:' && ASSIGNMENT_CONFIG) {
     const sess = typeof Store !== 'undefined' && Store.getStudentSession();
-    if (sess?.id) {
+    // The token, not the id: the endpoint now resolves the student from the
+    // session and ignores any id in the body, so sending one would be theatre.
+    if (sess?.token) {
       fetch('/.netlify/functions/notify', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Student-Id': sess.id },
+        headers: { 'Content-Type': 'application/json', 'X-Student-Token': sess.token },
         body: JSON.stringify({
-          studentId:       sess.id,
           assignmentLabel: ASSIGNMENT_CONFIG.label || 'Assignment',
           score:           correct,
           total:           attempted,
@@ -6431,6 +8108,31 @@ function renderStudentSelect() {
 }
 
 // ── GRADE SELECTOR ────────────────────────────
+// ══════════════════════════════════════════════
+//  PSAC YEARS vs NCE YEARS
+//
+//  Grades 1-6 are Mauritian primary and end in the PSAC. Grades 7-9 are
+//  lower secondary and end in the NCE — a different exam, a different
+//  syllabus, and (once the packs are filled in) a different subject list.
+//  Listing all nine as one flat run of cards invites a parent to read
+//  "Grade 8" as more of the same PSAC preparation, which it is not.
+//
+//  ⚠ ONE definition, used by the grade picker, the grade dropdowns and the
+//  admin Content tab. If Mauritius ever moves the boundary, it moves here.
+// ══════════════════════════════════════════════
+const _PSAC_MAX_GRADE = 6;
+const _GRADE_STAGES = [
+  { id: 'primary',   from: 1, to: _PSAC_MAX_GRADE, name: 'Primary',         exam: 'PSAC',
+    note: 'Grades 1-6 · ends with the PSAC' },
+  { id: 'secondary', from: _PSAC_MAX_GRADE + 1, to: 99, name: 'Lower secondary', exam: 'NCE',
+    note: 'Grades 7-9 · ends with the NCE, not the PSAC' },
+];
+function _gradeStage(grade) {
+  return _GRADE_STAGES.find(s => grade >= s.from && grade <= s.to) || _GRADE_STAGES[0];
+}
+window._gradeStage  = _gradeStage;
+window._GRADE_STAGES = _GRADE_STAGES;
+
 function renderGradeSelect() {
   const container = document.getElementById('grade-cards');
   if (!container) return;
@@ -6439,7 +8141,43 @@ function renderGradeSelect() {
   // Unique grades, sorted
   const grades = [...new Set(packs.map(p => p.grade))].sort((a, b) => a - b);
 
+  // A heading is emitted before the first grade of each stage. It spans the
+  // whole grid (sm:col-span-2) so it reads as a divider and not as a card.
+  // Only rendered when BOTH stages are present — with 4-6 alone a lone
+  // "Primary" header would be labelling the only thing on screen.
+  const stagesPresent = new Set(grades.map(g => _gradeStage(g).id));
+  const showHeads = stagesPresent.size > 1;
+  let lastStage = null;
+  let lastHeadShown = false;
+
   container.innerHTML = grades.map(grade => {
+    const stage = _gradeStage(grade);
+    let head = '';
+    if (showHeads && stage.id !== lastStage) {
+      lastStage = stage.id;
+      // ⚠ grid-column via an INLINE STYLE, not Tailwind's sm:col-span-2.
+      // The Play CDN generates rules from the classes it finds in the document,
+      // and this markup is injected by innerHTML long after its initial scan —
+      // the class landed in the attribute and no rule was ever produced for it.
+      // Measured: the heading rendered 328px wide inside a 672px two-column
+      // grid at 768px and up, i.e. sitting in one column with a grade card
+      // beside it. Only visible if you measure the WIDTH; asserting that the
+      // class is present passes either way.
+      head = '<div style="grid-column:1/-1" class="flex items-center gap-3 ' + (lastHeadShown ? 'mt-4' : '') + '">'
+           +   '<span class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 whitespace-nowrap">'
+           +     _attr(stage.name) + ' · ' + _attr(stage.exam)
+           +   '</span>'
+           +   '<span class="text-xs text-gray-400 dark:text-gray-500 truncate">' + _attr(stage.note) + '</span>'
+           +   '<span class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></span>'
+           + '</div>';
+      lastHeadShown = true;
+    }
+    return head + _gradeCard(grade, packs);
+  }).join('');
+}
+
+function _gradeCard(grade, packs) {
+  return (grade => {
     const gradePacks = packs.filter(p => p.grade === grade);
     const hasActive  = gradePacks.some(p => !p.comingSoon);
     const soon       = !hasActive;
@@ -6462,7 +8200,7 @@ function renderGradeSelect() {
         </p>
         ${!soon ? `<div class="flex flex-wrap gap-2"><span class="chip blue">${subjects}</span></div>` : ''}
       </button>`;
-  }).join('');
+  })(grade);
 }
 
 window.selectGrade = function(grade) {
@@ -6633,6 +8371,90 @@ const pScreen = document.getElementById('screen-practice');
 const eScreen = document.getElementById('screen-exam');
 if (pScreen) practiceObserver.observe(pScreen, { attributes: true, attributeFilter: ['class'] });
 if (eScreen) examObserver.observe(eScreen, { attributes: true, attributeFilter: ['class'] });
+
+// ══════════════════════════════════════════════
+//  GRADE DROPDOWNS ARE GENERATED, NOT TYPED
+//
+//  Four <select>s used to carry a hand-written <option value="4/5/6"> list, in
+//  three different files' worth of markup. Adding grades 1-3 and 7-9 meant
+//  editing all four and remembering all four again next time.
+//
+//  They are filled from SUBJECT_PACKS now, which is the same source
+//  renderGradeSelect(), the admin Content tab and the shop catalogue already
+//  read — so a new pack reaches every one of them together, or none.
+//
+//  ⚠ TWO MODES, and the difference is deliberate:
+//    data-grade-select="live" — only grades with at least one pack that is NOT
+//      comingSoon. These are the PARENT-facing ones (family setup, add child).
+//      Enrolling a child into a grade with no content gives them an app of
+//      "Coming Soon" cards and nothing to do, which is worse than not offering
+//      the grade at all. This list opens by itself the moment a pack flips to
+//      comingSoon: false — there is no second place to edit.
+//    data-grade-select="all" — every registered grade. These are the AUTHORING
+//      ones (admin question filter and question form): you have to be able to
+//      file a question under Grade 2 before Grade 2 opens to anyone.
+//
+//  ⚠ Run TWICE, and the second one is not belt-and-braces. The <script> tags
+//  sit in the middle of <body>, so a good part of the markup — including
+//  #modal-qm-form, which holds #qmf-grade — has not been parsed yet when app.js
+//  executes. Filling only at that point left the admin question form with an
+//  EMPTY grade dropdown (measured: 0 options), while #qm-grade higher up the
+//  document filled correctly. DOMContentLoaded catches the rest.
+//
+//  Packs themselves are ready either way: the manifest tags all precede app.js,
+//  so SUBJECT_PACKS is complete on the first pass.
+// ══════════════════════════════════════════════
+function _populateGradeSelects() {
+  const packs = (typeof SUBJECT_PACKS !== 'undefined') ? SUBJECT_PACKS : [];
+  if (!packs.length) return;
+
+  const all  = [...new Set(packs.map(p => p.grade))].sort((a, b) => a - b);
+  const live = [...new Set(packs.filter(p => !p.comingSoon).map(p => p.grade))].sort((a, b) => a - b);
+
+  document.querySelectorAll('[data-grade-select]').forEach(sel => {
+    const grades = sel.dataset.gradeSelect === 'all' ? all : live;
+    if (!grades.length) return;
+    // An "All grades" row (or any other authored option with no value) is part
+    // of the control, not part of the grade list — keep it and rebuild the rest.
+    const keep = [...sel.options].filter(o => o.value === '');
+    const prev = sel.value;
+    sel.innerHTML = '';
+    keep.forEach(o => sel.appendChild(o));
+    // Same split as the grade picker, and for the same reason — but only
+    // when both stages are actually on offer. A single <optgroup> around
+    // every option is noise.
+    const stages = [...new Set(grades.map(g => _gradeStage(g).id))];
+    if (stages.length > 1) {
+      _GRADE_STAGES.forEach(st => {
+        const mine = grades.filter(g => _gradeStage(g).id === st.id);
+        if (!mine.length) return;
+        const grp = document.createElement('optgroup');
+        grp.label = st.name + ' (' + st.exam + ')';
+        mine.forEach(g => {
+          const o = document.createElement('option');
+          o.value = String(g);
+          o.textContent = 'Grade ' + g;
+          grp.appendChild(o);
+        });
+        sel.appendChild(grp);
+      });
+    } else {
+      grades.forEach(g => {
+        const o = document.createElement('option');
+        o.value = String(g);
+        o.textContent = 'Grade ' + g;
+        sel.appendChild(o);
+      });
+    }
+    // Keep whatever was chosen if it is still on offer; otherwise fall back to
+    // the authored default rather than silently jumping to Grade 1.
+    if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+  });
+}
+_populateGradeSelects();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _populateGradeSelects);
+}
 
 console.log(`✅ PSAC Exam Practice loaded. ${STATIC_QUESTIONS.length} static questions across ${CHAPTERS.length} chapters.`);
 
@@ -7320,6 +9142,31 @@ async function _renderParentProfile(container) {
         <p id="prof-pw-error" class="text-red-500 text-xs hidden"></p>
         <button data-label="Change Password" onclick="_saveProfilePassword(this)"
           class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-sm transition-colors">Change Password</button>
+
+        <!-- ⚠ The parent PIN had NO control anywhere. _promptSetParentPin() was
+             its only entry point, it ran once from _openParentDashboard(), and it
+             returns early when a PIN already exists — so dismissing that one
+             prompt meant never being able to set one, and setting one meant never
+             being able to change it. This is that control.
+
+             It is device-local (localStorage), not an account setting: it guards
+             the switch from a child's session back to the parent dashboard ON
+             THIS DEVICE, which is why the row says so rather than letting a
+             parent assume it followed them to their laptop. -->
+        <div class="pt-3 mt-1 border-t border-gray-100 dark:border-gray-700">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <div class="text-sm font-semibold text-gray-800 dark:text-white">🔢 Parent PIN</div>
+              <p id="prof-pin-state" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed"></p>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <button id="prof-pin-set" onclick="_setParentPinFromSettings()"
+                class="text-xs font-bold px-3 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-800/60 transition-colors whitespace-nowrap"></button>
+              <button id="prof-pin-clear" onclick="_clearParentPinFromSettings()"
+                class="hidden text-xs font-bold px-3 py-2 rounded-xl bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/60 transition-colors whitespace-nowrap">Remove</button>
+            </div>
+          </div>
+        </div>
         ${biometricHtml}
       </div>
 
@@ -7330,6 +9177,11 @@ async function _renderParentProfile(container) {
       ${referralHtml}
       ${dangerHtml}
     </div>`;
+
+  // After the markup exists: this row reports DEVICE-LOCAL state (whether a
+  // PIN is stored in this browser), so it cannot be baked into the template
+  // string above with the rest of the account settings.
+  _renderParentPinRow();
 }
 
 // ── Parent settings handlers ───────────────────────────────────────────────

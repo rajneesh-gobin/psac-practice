@@ -485,8 +485,15 @@ const Forum = (() => {
     if (body.length > BODY_MAX)       { _err(errEl,`Post body must be under ${BODY_MAX} characters.`); return; }
     const cooldownLeft = Math.ceil((COOLDOWN_MS - (Date.now() - _lastPostAt)) / 1000);
     if (cooldownLeft > 0) { _err(errEl,`Please wait ${cooldownLeft} seconds before posting again.`); return; }
-    const { name, type } = _author();
-    const { error } = await _sb.from('forum_posts').insert({ category: _currentCat, title, body, author_name: name, author_type: type });
+    const { name } = _author();
+    // author_name / author_type are NOT sent. The database derives both from
+    // the caller's session in the forum_set_author() trigger
+    // (supabase-forum-author.sql). They used to be client-supplied, which let any
+    // parent or child post as author_type 'teacher' and collect the green (T)
+    // badge _authorName() renders. A name is still passed for the one case the
+    // trigger cannot cover - an account with no display name at all - and is
+    // discarded whenever the account has one.
+    const { error } = await _sb.from('forum_posts').insert({ category: _currentCat, title, body, author_name: name });
     if (error) { _err(errEl,'Could not publish. Please try again.'); return; }
     _lastPostAt = Date.now();
     if (typeof toast !== 'undefined') toast('Post published! 🎉', 2000);
@@ -502,8 +509,9 @@ const Forum = (() => {
     if (body.length > REPLY_MAX)    { _err(errEl,`Reply must be under ${REPLY_MAX} characters.`); return; }
     const cooldownLeft = Math.ceil((COOLDOWN_MS - (Date.now() - _lastReplyAt)) / 1000);
     if (cooldownLeft > 0) { _err(errEl,`Please wait ${cooldownLeft} seconds before replying again.`); return; }
-    const { name, type } = _author();
-    const { error } = await _sb.from('forum_replies').insert({ post_id: _currentPost, body, author_name: name, author_type: type });
+    const { name } = _author();
+    // See submitPost(): identity is the trigger's job, not the browser's.
+    const { error } = await _sb.from('forum_replies').insert({ post_id: _currentPost, body, author_name: name });
     if (error) { _err(errEl,'Could not post reply. Please try again.'); return; }
     _lastReplyAt = Date.now();
     const inp  = _el('forum-reply-input'); if (inp)  inp.value = '';

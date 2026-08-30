@@ -63,9 +63,12 @@ const Calendar = (() => {
   }
 
   // ── Get subjects for a grade from SUBJECT_PACKS ──
+  // ⚠ comingSoon packs excluded: this feeds the parent's "schedule a session"
+  // subject picker, and a session scheduled in a pack with no questions is a
+  // plan the child cannot possibly carry out.
   function _subjectsForGrade(grade) {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
-    return SUBJECT_PACKS.filter(p => p.grade === grade);
+    return SUBJECT_PACKS.filter(p => p.grade === grade && !p.comingSoon);
   }
 
   function _subjectById(id) {
@@ -91,6 +94,8 @@ const Calendar = (() => {
     }
 
     await _loadEntries();
+    await _loadActivity();
+    _renderFilters();
     _renderCalendar();
   }
 
@@ -103,6 +108,8 @@ const Calendar = (() => {
     _scheduleId   = null;
     _entries      = [];
     await _loadEntries();
+    await _loadActivity();
+    _renderFilters();
     _renderCalendar();
   }
 
@@ -125,7 +132,7 @@ const Calendar = (() => {
     }
 
     const { data } = await _sb.from('schedule_entries')
-      .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id')
+      .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id, chapter_id')
       .eq('schedule_id', _scheduleId)
       .order('date', { ascending: true });
 
@@ -223,6 +230,198 @@ const Calendar = (() => {
   }
 
   // ── Calendar grid ─────────────────────────────────
+  // ── WHAT ACTUALLY HAPPENED ────────────────────────────────────────────
+  // The calendar above is the PLAN: parent-authored rows in schedule_entries.
+  // These are the ACTUALS, derived from history the app already keeps. They are
+  // deliberately NOT written into schedule_entries — that table is editable, and
+  // a parent being able to edit or delete "she sat a mock on Tuesday" would be
+  // both meaningless and a way to quietly lose the record. Activity rows carry
+  // no edit or delete button for the same reason.
+  //
+  // Three sources, each already dated, none of them new storage:
+  //   practice    DB.daily[date].ch  →  { chapterId: [attempted, correct] }
+  //   exam        progress.examHistory (iso)
+  //   assignment  student_assignments.completed_at
+  let _activity = [];
+
+  const ACT_META = {
+    practice:   { icon: '✅', label: 'Practice',    dot: 'bg-emerald-500', tint: 'bg-emerald-50 dark:bg-emerald-900/20' },
+    exam:       { icon: '🏁', label: 'Exam',        dot: 'bg-rose-500',    tint: 'bg-rose-50 dark:bg-rose-900/20'       },
+    assignment: { icon: '📋', label: 'Assignment',  dot: 'bg-amber-500',   tint: 'bg-amber-50 dark:bg-amber-900/20'     },
+  };
+
+  // Which layers are on. Persisted per browser, not per student: a parent who
+  // switched the plan off to read the actuals means that for the calendar, not
+  // for one child.
+  const _FILTER_KEY = 'mm_cal_filters';
+  let _filters = { planned: true, practice: true, exam: true, assignment: true };
+  try {
+    const saved = JSON.parse(localStorage.getItem(_FILTER_KEY) || 'null');
+    if (saved && typeof saved === 'object') _filters = { ..._filters, ...saved };
+  } catch (_) { /* corrupt value - keep the defaults, all layers on */ }
+
+  function toggleFilter(kind) {
+    if (!(kind in _filters)) return;
+    _filters[kind] = !_filters[kind];
+    try { localStorage.setItem(_FILTER_KEY, JSON.stringify(_filters)); } catch (_) {}
+    _renderFilters();
+    _renderCalendar();
+    // The day modal is open often enough while filtering that leaving it stale
+    // reads as the filter not working.
+    if (_selectedDate && !_el('modal-day-events')?.classList.contains('hidden')) openDay(_selectedDate);
+  }
+
+  function _renderFilters() {
+    const bar = _el('cal-filters');
+    if (!bar) return;
+    const chip = (kind, icon, label, dot) => {
+      const on = _filters[kind];
+      return `<button onclick="Calendar.toggleFilter('${kind}')"
+        class="cal-chip ${on ? 'is-on' : ''}" aria-pressed="${on}"
+        title="${on ? 'Hide' : 'Show'} ${_esc(label)}">
+        <span class="cal-chip-dot ${dot}"></span>
+        <span>${icon} ${_esc(label)}</span>
+      </button>`;
+    };
+    bar.innerHTML =
+      chip('planned',    '📚', 'Planned',     'bg-indigo-500') +
+      chip('practice',   '✅', 'Practice',    ACT_META.practice.dot) +
+      chip('exam',       '🏁', 'Exams',       ACT_META.exam.dot) +
+      chip('assignment', '📋', 'Assignments', ACT_META.assignment.dot);
+  }
+
+  // Local calendar date for a timestamp. The calendar grid is built from local
+  // dates (new Date(year, month, day)), so an activity row has to be keyed the
+  // same way or an evening session lands on the wrong square.
+  function _localDateStr(ts) {
+    const d = new Date(ts);
+    return isNaN(d) ? null : _toDateStr(d);
+  }
+
+  async function _loadActivity() {
+    _activity = [];
+    if (!_studentId) return;
+
+    // The signed-in child's own blob is already in memory; re-fetching it would
+    // be a wasted round trip AND could serve a staler copy than the one holding
+    // answers from the current session that have not flushed yet.
+    let prog = null;
+    if (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID === _studentId
+        && typeof DB !== 'undefined' && DB) {
+      prog = DB;
+    } else if (typeof Store !== 'undefined' && Store.loadStudentProgress) {
+      try { prog = await Store.loadStudentProgress(_studentId); } catch (_) { prog = null; }
+    }
+
+    if (prog) {
+      // Per chapter per day, from BOTH buckets. `ch` is self-directed practice;
+      // `asg` is work done inside an assignment. They are recorded separately so
+      // this can label them differently — a parent looking for "did the homework
+      // get done" should not have to infer it from a generic practice row.
+      const _pushChapterRows = (date, map, kind) => {
+        Object.entries(map || {}).forEach(([chId, pair]) => {
+          const attempted = (pair && pair[0]) || 0;
+          if (!attempted) return;
+          const correct = pair[1] || 0;
+          const { pack, chapter } = _resolveChapterById(chId);
+          _activity.push({
+            kind, date, chapterId: chId,
+            title: chapter ? chapter.name : chId,
+            subject: pack || null,
+            detail: `${attempted} question${attempted === 1 ? '' : 's'} · ${Math.round(correct / attempted * 100)}%`,
+            pct: Math.round(correct / attempted * 100),
+            // Marks this as the LOCAL record of an assignment. A completed_at
+            // row from the server describes the same work, so one of the two is
+            // dropped below rather than showing the session twice.
+            local: kind === 'assignment',
+          });
+        });
+      };
+      Object.entries(prog.daily || {}).forEach(([date, d]) => {
+        _pushChapterRows(date, d.ch,  'practice');
+        _pushChapterRows(date, d.asg, 'assignment');
+      });
+
+      // exams
+      (prog.examHistory || []).forEach(e => {
+        // Rows written before the iso field existed carry only a locale date
+        // string, which is unparseable on an en-GB browser — see the digest
+        // note in CLAUDE.md. Those simply do not get a calendar square rather
+        // than being dropped onto the wrong one.
+        const date = e.iso ? _localDateStr(e.iso) : null;
+        if (!date) return;
+        const pct = e.pct ?? e.score;
+        _activity.push({
+          kind: 'exam', date,
+          title: e.type === 'quick' ? 'Quick Exam' : 'Full Mock Exam',
+          subject: null,
+          detail: typeof pct === 'number'
+            ? `${pct}%${e.total ? ` · ${e.correct ?? '?'}/${e.total}` : ''}`
+            : 'completed',
+          pct: typeof pct === 'number' ? pct : null,
+        });
+      });
+    }
+
+    // assignments the child has marked done
+    if (_sb) {
+      try {
+        const { data } = await _sb.from('student_assignments')
+          .select('id,chapter_id,subject_id,note,completed_at')
+          .eq('student_id', _studentId)
+          .not('completed_at', 'is', null)
+          .order('completed_at', { ascending: false })
+          .limit(200);
+        (data || []).forEach(a => {
+          const date = _localDateStr(a.completed_at);
+          if (!date) return;
+          const { pack, chapter } = _resolveChapterById(a.chapter_id, a.subject_id);
+          _activity.push({
+            kind: 'assignment', date, chapterId: a.chapter_id || null,
+            title: chapter ? chapter.name : (a.chapter_id || 'Assignment'),
+            subject: pack || null,
+            detail: a.note ? _esc(a.note) : 'marked done',
+            pct: null,
+          });
+        });
+      } catch (_) { /* an un-migrated column here must not empty the calendar */ }
+    }
+
+    // The same assignment can arrive twice: once as the local per-chapter record
+    // written while the child answered, and once as a completed_at row from the
+    // server. Keep the server row — it carries the parent's note — and drop the
+    // local one for that chapter and day. A local row with no server twin still
+    // shows, which is the whole point: it covers an assignment the child sat but
+    // never had marked complete, and one done offline.
+    const _serverKeys = new Set(
+      _activity.filter(a => a.kind === 'assignment' && !a.local && a.chapterId)
+               .map(a => a.date + '|' + a.chapterId)
+    );
+    _activity = _activity.filter(a =>
+      !(a.local && a.chapterId && _serverKeys.has(a.date + '|' + a.chapterId))
+    );
+  }
+
+  // By chapter ID, unlike _resolveChapter() which matches the display label a
+  // schedule_entries row stores. Both exist because the two data sources
+  // genuinely identify a chapter differently.
+  function _resolveChapterById(chapterId, subjectId) {
+    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []);
+    if (!chapterId) return { pack: packs.find(p => p.id === subjectId) || null, chapter: null };
+    for (const p of packs) {
+      const ch = (p._chapters || p.chapters || []).find(c => c.id === chapterId);
+      if (ch) return { pack: p, chapter: ch };
+    }
+    return { pack: packs.find(p => p.id === subjectId) || null, chapter: null };
+  }
+
+  function _activityFor(dateStr) {
+    return _activity.filter(a => a.date === dateStr && _filters[a.kind]);
+  }
+  function _plannedFor(dateStr) {
+    return _filters.planned ? _entries.filter(e => e.date === dateStr) : [];
+  }
+
   function _renderCalendar() {
     const title = _el('cal-month-title');
     if (title) title.textContent = new Date(_viewYear, _viewMonth, 1)
@@ -231,12 +430,7 @@ const Calendar = (() => {
     const grid = _el('cal-grid');
     if (!grid) return;
 
-    const today  = _toDateStr(new Date());
-    const byDate = {};
-    _entries.forEach(e => {
-      if (!byDate[e.date]) byDate[e.date] = [];
-      byDate[e.date].push(e);
-    });
+    const today = _toDateStr(new Date());
 
     const firstDay    = new Date(_viewYear, _viewMonth, 1).getDay();
     const daysInMonth = new Date(_viewYear, _viewMonth + 1, 0).getDate();
@@ -251,14 +445,23 @@ const Calendar = (() => {
 
     for (let d = 1; d <= daysInMonth; d++) {
       const dateStr = `${_viewYear}-${String(_viewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-      const events  = byDate[dateStr] || [];
+      const planned = _plannedFor(dateStr);
+      const actual  = _activityFor(dateStr);
       const isToday = dateStr === today;
       const isSel   = dateStr === _selectedDate;
 
-      const dots = events.slice(0, 4).map(e => {
-        const meta = TYPE_META[e.entry_type] || TYPE_META.other;
-        return `<span class="w-1.5 h-1.5 rounded-full ${meta.dot} shrink-0"></span>`;
-      }).join('');
+      // Planned dots are hollow, actual dots are solid. On a square barely
+      // 52px tall there is no room for a legend, and a parent scanning the
+      // month needs "was this done" answerable without opening the day.
+      // Capped at 4 with a +N, or a busy day pushes the grid row taller than
+      // its neighbours and the month stops reading as a grid.
+      const marks = [
+        ...planned.map(e => ({ dot: (TYPE_META[e.entry_type] || TYPE_META.other).dot, done: false })),
+        ...actual.map(a => ({ dot: ACT_META[a.kind].dot, done: true })),
+      ];
+      const dots = marks.slice(0, 4).map(m =>
+        `<span class="cal-dot ${m.dot} ${m.done ? '' : 'is-plan'}"></span>`).join('')
+        + (marks.length > 4 ? `<span class="cal-dot-more">+${marks.length - 4}</span>` : '');
 
       html += `
         <button onclick="Calendar.openDay('${dateStr}')"
@@ -283,7 +486,8 @@ const Calendar = (() => {
     _selectedDate = dateStr;
     _renderCalendar();
 
-    const events = _entries.filter(e => e.date === dateStr);
+    const events = _plannedFor(dateStr);
+    const acts   = _activityFor(dateStr);
     const d      = _parseDate(dateStr);
     const label  = d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
 
@@ -295,13 +499,35 @@ const Calendar = (() => {
     const list = _el('day-events-list');
     if (!list) return;
 
-    if (!events.length) {
-      list.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No events on this day.</p>
+    // What actually happened goes FIRST. A parent opening a past day wants to
+    // know whether the work got done, not to re-read what was scheduled.
+    const actHtml = acts.map(a => {
+      const meta = ACT_META[a.kind];
+      const pctCol = a.pct == null ? '' : a.pct >= 80 ? '#22c55e' : a.pct >= 50 ? '#f59e0b' : '#ef4444';
+      return `
+        <div class="flex items-start gap-3 p-3 rounded-xl ${meta.tint} mb-2">
+          <span class="text-xl select-none mt-0.5">${meta.icon}</span>
+          <div class="flex-1 min-w-0">
+            ${a.subject ? `<div class="text-xs font-bold text-indigo-500 mb-0.5">${a.subject.icon || ''} ${_esc(a.subject.subject || a.subject.name || '')}</div>` : ''}
+            <div class="font-semibold text-sm text-gray-800 dark:text-white">${_esc(a.title)}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400" ${pctCol ? `style="color:${pctCol}"` : ''}>${a.detail}</div>
+          </div>
+          <span class="text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 shrink-0 mt-1">${meta.label}</span>
+        </div>`;
+    }).join('');
+
+    // Activity rows carry NO edit or delete button on purpose: they are derived
+    // history, not editable plan rows. There is nothing for a delete to act on,
+    // and offering one would imply the record can be rewritten.
+    if (!events.length && !acts.length) {
+      const anyFilterOff = Object.values(_filters).some(v => !v);
+      list.innerHTML = `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">${
+        anyFilterOff ? 'Nothing on this day in the layers you have showing.' : 'No events on this day.'}</p>
         <button onclick="Calendar.showAddEvent('${dateStr}')"
           class="w-full text-sm text-indigo-500 font-medium py-2 border-2 border-dashed border-indigo-200 dark:border-indigo-800 rounded-xl">
           + Add Event</button>`;
     } else {
-      list.innerHTML = events.map(e => {
+      list.innerHTML = actHtml + events.map(e => {
         const meta = TYPE_META[e.entry_type] || TYPE_META.other;
         const subj = e.subject_id ? _subjectById(e.subject_id) : null;
         return `
@@ -414,7 +640,7 @@ const Calendar = (() => {
       const { data, error } = await _sb.from('schedule_entries')
         .update({ date, topic_label: label, entry_type: type, notes: notes || null })
         .eq('id', _editingEntryId)
-        .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id').single();
+        .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id, chapter_id').single();
       if (error) { _showErr(errEl, 'Could not update. Please try again.'); return; }
       const idx = _entries.findIndex(e => e.id === _editingEntryId);
       if (idx >= 0 && data) _entries[idx] = data;
@@ -435,7 +661,7 @@ const Calendar = (() => {
       schedule_id: sid, student_id: _studentId,
       date, topic_label: label, entry_type: type,
       notes: notes || null, duration_mins: null,
-    }).select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id').single();
+    }).select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id, chapter_id').single();
     if (error) { _showErr(errEl, 'Could not save. Please try again.'); return; }
 
     _entries.push(data);
@@ -475,6 +701,21 @@ const Calendar = (() => {
   }
 
   // ── Generate timetable (multi-subject) ────────────
+  const _GEN_MAX_WEEKS = 26;
+  const _GEN_DEFAULTS = {
+    weeks: 4, studyDays: [1,2,3,4,5], mixed: false,
+    block: 1,          // single mode: consecutive study days per subject before rotating
+    perDay: 0,         // mixed mode: subjects per day, 0 = all
+    maxPerDay: 90,     // minutes cap per study day
+    session: 30,       // minutes per chapter visit
+    focus: 'weak',     // weak | balanced | order
+    includeBonus: true,
+  };
+  function _genSetting(key) { return _gen[key] ?? _GEN_DEFAULTS[key]; }
+  function _addDays(dateStr, n) { const d = _parseDate(dateStr); d.setDate(d.getDate() + n); return _toDateStr(d); }
+  function _daysBetween(a, b) { return Math.round((_parseDate(b) - _parseDate(a)) / 86400000); }
+  function _clampInt(v, lo, hi, dflt) { const n = parseInt(v); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : dflt; }
+
   async function showGenModal() {
     // Gated before the modal opens: filling in weeks and study days and only
     // then being refused is worse than not opening it at all.
@@ -492,22 +733,231 @@ const Calendar = (() => {
     nextMon.setDate(today.getDate() + dtu);
 
     const sd = _el('gen-start-date'); if (sd) sd.value = _toDateStr(nextMon);
-    const wk = _el('gen-weeks');      if (wk) wk.value = _gen.weeks || 4;
+    const wk = _el('gen-weeks');      if (wk) wk.value = _clampInt(_genSetting('weeks'), 1, _GEN_MAX_WEEKS, 4);
     const er = _el('gen-error');      if (er) er.classList.add('hidden');
+    genSyncFromWeeks();
 
-    // Study day checkboxes
     [0,1,2,3,4,5,6].forEach(i => {
       const cb = _el(`gen-day-${i}`);
-      if (cb) cb.checked = (_gen.studyDays || [1,2,3,4,5]).includes(i);
+      if (cb) cb.checked = (_genSetting('studyDays')).includes(i);
     });
 
-    const mx = _el('gen-mixed');  if (mx) mx.checked = _gen.mixed || false;
-    const sg = _el('gen-single'); if (sg) sg.checked = !(_gen.mixed);
+    const mx = _el('gen-mixed');  if (mx) mx.checked = !!_genSetting('mixed');
+    const sg = _el('gen-single'); if (sg) sg.checked = !_genSetting('mixed');
+    const setSel = (id, v) => { const el = _el(id); if (el) el.value = String(v); };
+    setSel('gen-block',   _genSetting('block'));
+    setSel('gen-perday',  _genSetting('perDay'));
+    setSel('gen-maxday',  _genSetting('maxPerDay'));
+    setSel('gen-session', _genSetting('session'));
+    setSel('gen-focus',   _genSetting('focus'));
+    const bonus = _el('gen-bonus'); if (bonus) bonus.checked = _genSetting('includeBonus') !== false;
 
-    // Render subject hours selector
+    // "Until exam" shortcut: only offered when the parent has actually put an
+    // exam on the calendar, and only the next one - a plan that runs past the
+    // exam it is revising for is not a plan.
+    const todayStr = _toDateStr(today);
+    const nextExam = _entries
+      .filter(e => e.entry_type === 'exam' && e.date > todayStr)
+      .sort((a, b) => a.date.localeCompare(b.date))[0];
+    const ue = _el('gen-until-exam');
+    if (ue) {
+      if (nextExam) {
+        const d = _parseDate(nextExam.date);
+        ue.textContent = `📝 Until exam · ${d.getDate()} ${d.toLocaleString('en-GB', { month: 'short' })}`;
+        ue.dataset.date = nextExam.date;
+        ue.classList.remove('hidden');
+      } else {
+        ue.classList.add('hidden');
+        delete ue.dataset.date;
+      }
+    }
+
     _renderSubjectHours();
-
+    genStyleChanged();
     m.classList.remove('hidden');
+  }
+
+  // Start + weeks → end date. The end date is inclusive, so 1 week from a
+  // Monday ends on the Sunday, not the next Monday.
+  function genSyncFromWeeks() {
+    const sd = _el('gen-start-date'), ed = _el('gen-end-date'), wk = _el('gen-weeks');
+    if (!sd || !ed || !wk || !sd.value) return;
+    const weeks = _clampInt(wk.value, 1, _GEN_MAX_WEEKS, 4);
+    ed.value = _addDays(sd.value, weeks * 7 - 1);
+    ed.min = sd.value;
+    genPreview();
+  }
+
+  // End date → weeks (rounded up, so the last partial week is still planned).
+  function genSyncFromEnd() {
+    const sd = _el('gen-start-date'), ed = _el('gen-end-date'), wk = _el('gen-weeks');
+    if (!sd || !ed || !wk || !sd.value || !ed.value) return;
+    let days = _daysBetween(sd.value, ed.value) + 1;
+    if (days < 1) { ed.value = sd.value; days = 1; }
+    const weeks = Math.min(_GEN_MAX_WEEKS, Math.ceil(days / 7));
+    if (days > _GEN_MAX_WEEKS * 7) ed.value = _addDays(sd.value, _GEN_MAX_WEEKS * 7 - 1);
+    wk.value = weeks;
+    genPreview();
+  }
+
+  function genUntilExam() {
+    const ue = _el('gen-until-exam'), ed = _el('gen-end-date'), sd = _el('gen-start-date');
+    if (!ue?.dataset.date || !ed || !sd) return;
+    const last = _addDays(ue.dataset.date, -1);
+    if (sd.value && last < sd.value) {
+      _showErr(_el('gen-error'), 'That exam is before the start date - move the start date earlier first.');
+      return;
+    }
+    ed.value = last;
+    genSyncFromEnd();
+  }
+
+  function genStyleChanged() {
+    const mixed = _el('gen-mixed')?.checked;
+    _el('gen-block-wrap')?.classList.toggle('hidden', !!mixed);
+    _el('gen-perday-wrap')?.classList.toggle('hidden', !mixed);
+    genPreview();
+  }
+
+  // Everything the generator will use, read from the form in one place, with
+  // every number clamped here - the <input max> attributes are advisory and a
+  // typed 1e9 used to reach Array(...).fill() further down.
+  function _genReadForm() {
+    const grade    = _studentGrade || 5;
+    const subjects = _subjectsForGrade(grade);
+    const subjHours = {};
+    subjects.forEach(s => {
+      const safeId  = s.id.replace(/[^a-z0-9]/gi,'_');
+      const chk     = _el(`gen-subj-chk-${safeId}`);
+      const inp     = _el(`gen-subj-${safeId}`);
+      const enabled = chk ? chk.checked : true;
+      const h = parseFloat(inp?.value);
+      subjHours[s.id] = enabled && Number.isFinite(h) ? Math.min(20, Math.max(0, h)) : 0;
+    });
+    const startDate = _el('gen-start-date')?.value || null;
+    let endDate     = _el('gen-end-date')?.value || null;
+    if (startDate && (!endDate || endDate < startDate)) endDate = _addDays(startDate, 27);
+    const weeks = startDate ? Math.min(_GEN_MAX_WEEKS, Math.ceil((_daysBetween(startDate, endDate) + 1) / 7)) : 4;
+    return {
+      startDate, endDate, weeks,
+      studyDays:    [0,1,2,3,4,5,6].filter(i => _el(`gen-day-${i}`)?.checked),
+      mixed:        !!_el('gen-mixed')?.checked,
+      block:        _clampInt(_el('gen-block')?.value, 1, 7, 1),
+      perDay:       _clampInt(_el('gen-perday')?.value, 0, 6, 0),
+      maxPerDay:    _clampInt(_el('gen-maxday')?.value, 15, 240, 90),
+      session:      _clampInt(_el('gen-session')?.value, 10, 120, 30),
+      focus:        ['weak','balanced','order'].includes(_el('gen-focus')?.value) ? _el('gen-focus').value : 'weak',
+      includeBonus: _el('gen-bonus') ? _el('gen-bonus').checked : true,
+      subjectHours: subjHours,
+      subjects,
+    };
+  }
+
+  function _genStudyDates(cfg) {
+    const blockedDates = new Set(
+      _entries.filter(e => e.entry_type === 'blocked' || e.entry_type === 'holiday').map(e => e.date)
+    );
+    const out = [];
+    if (!cfg.startDate || !cfg.endDate) return out;
+    const total = Math.min(_GEN_MAX_WEEKS * 7, _daysBetween(cfg.startDate, cfg.endDate) + 1);
+    const start = _parseDate(cfg.startDate);
+    for (let i = 0; i < total; i++) {
+      const d  = new Date(start); d.setDate(start.getDate() + i);
+      const ds = _toDateStr(d);
+      if (cfg.studyDays.includes(d.getDay()) && !blockedDates.has(ds)) out.push(ds);
+    }
+    return out;
+  }
+
+  // Which subject(s) study on which date. Done BEFORE any minutes are worked
+  // out, so each subject's weekly hours are spread over the days it actually
+  // got - the old code estimated that count from the weights and was off
+  // whenever rounding did not land exactly.
+  function _genAssignDays(cfg, dates, active) {
+    const minHrs  = Math.min(...active.map(s => cfg.subjectHours[s.id]));
+    const weights = active.map(s => Math.min(10, Math.max(1, Math.round(cfg.subjectHours[s.id] / minHrs))));
+    const buckets = active.map((s, i) => Array(weights[i]).fill(s));
+    const rotation = [];
+    let any = true;
+    while (any) {
+      any = false;
+      for (const b of buckets) if (b.length) { rotation.push(b.shift()); any = true; }
+    }
+    const perDate = {};
+    if (!cfg.mixed) {
+      dates.forEach((ds, i) => {
+        perDate[ds] = [rotation[Math.floor(i / cfg.block) % rotation.length]];
+      });
+    } else {
+      const k = cfg.perDay > 0 ? Math.min(cfg.perDay, active.length) : active.length;
+      let cursor = 0;
+      dates.forEach(ds => {
+        const picked = [];
+        let guard = rotation.length * 2;
+        while (picked.length < k && guard-- > 0) {
+          const s = rotation[cursor % rotation.length];
+          cursor++;
+          if (!picked.includes(s)) picked.push(s);
+        }
+        perDate[ds] = picked;
+      });
+    }
+    return perDate;
+  }
+
+  // Minutes each subject gets on each of its days: its total time over the
+  // whole range (hours/week × weeks of calendar time) split over the days it
+  // was given, then capped by the parent's per-day ceiling.
+  function _genMinutes(cfg, dates, perDate, active) {
+    const calendarWeeks = Math.max(1, (_daysBetween(cfg.startDate, cfg.endDate) + 1) / 7);
+    const dayCount = {};
+    dates.forEach(ds => (perDate[ds] || []).forEach(s => { dayCount[s.id] = (dayCount[s.id] || 0) + 1; }));
+    const perSubject = {};
+    active.forEach(s => {
+      const n = dayCount[s.id] || 0;
+      perSubject[s.id] = n ? Math.max(10, Math.round((cfg.subjectHours[s.id] * 60 * calendarWeeks) / n)) : 0;
+    });
+    const plan = {};
+    dates.forEach(ds => {
+      const subs = perDate[ds] || [];
+      const wanted = subs.map(s => perSubject[s.id]);
+      const total  = wanted.reduce((a, b) => a + b, 0);
+      // Over the cap: scale every subject down in proportion, never drop one.
+      const scale  = total > cfg.maxPerDay ? cfg.maxPerDay / total : 1;
+      plan[ds] = subs.map((s, i) => ({ subject: s, mins: Math.round(wanted[i] * scale) })).filter(x => x.mins >= 10);
+    });
+    return { plan, perSubject, dayCount };
+  }
+
+  function genPreview() {
+    const box = _el('gen-preview');
+    if (!box) return;
+    const cfg = _genReadForm();
+    const dates = _genStudyDates(cfg);
+    const active = cfg.subjects.filter(s => (cfg.subjectHours[s.id] || 0) > 0 && (s.chapters || []).length);
+    if (!cfg.startDate || !dates.length || !active.length) {
+      box.textContent = !active.length ? 'Tick at least one subject with some hours.'
+                      : 'No study days in that range.';
+      return;
+    }
+    const perDate = _genAssignDays(cfg, dates, active);
+    const { plan, dayCount } = _genMinutes(cfg, dates, perDate, active);
+    let totalMins = 0, sessions = 0;
+    dates.forEach(ds => plan[ds].forEach(x => { totalMins += x.mins; sessions += Math.ceil(x.mins / cfg.session); }));
+    const avg = Math.round(totalMins / dates.length);
+    const missing = active.filter(s => !dayCount[s.id]).map(s => s.name);
+    const parts = [
+      `<b>${dates.length}</b> study days over ${cfg.weeks} week${cfg.weeks === 1 ? '' : 's'}`,
+      `about <b>${avg} min</b> a day`,
+      `~<b>${sessions}</b> sessions`,
+    ];
+    let html = parts.join(' · ');
+    const wantedMins = active.reduce((a, s) => a + cfg.subjectHours[s.id], 0) * 60 * Math.max(1, (_daysBetween(cfg.startDate, cfg.endDate) + 1) / 7);
+    if (totalMins < wantedMins * 0.8) {
+      html += `<br>⚠ The daily cap trims this to ${Math.round(totalMins / 60)}h of the ${Math.round(wantedMins / 60)}h requested - raise the cap or add study days.`;
+    }
+    if (missing.length) html += `<br>⚠ ${missing.join(', ')}: no days left in this range - lengthen the plan or reduce "stay on a subject".`;
+    box.innerHTML = html;
   }
 
   function _renderSubjectHours() {
@@ -528,7 +978,7 @@ const Calendar = (() => {
         <span class="text-lg select-none shrink-0">${s.icon}</span>
         <span class="text-sm font-medium text-gray-700 dark:text-gray-300 flex-1">${s.name}</span>
         <div class="flex items-center gap-1.5 shrink-0">
-          <input type="number" min="0" max="10" step="0.5" value="${saved[s.id] ?? 2}"
+          <input type="number" min="0" max="20" step="0.5" value="${saved[s.id] ?? 2}"
             id="gen-subj-${s.id.replace(/[^a-z0-9]/gi,'_')}"
             class="w-14 text-center border border-gray-300 dark:border-gray-600 rounded-lg px-1 py-0.5 text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">
           <span class="text-xs text-gray-500 dark:text-gray-400">h/wk</span>
@@ -552,9 +1002,15 @@ const Calendar = (() => {
   // to run dry partway through and leave silent gaps in the timetable for the
   // rest of the plan, instead of doing what real revision does - come back to
   // the same topics again.
-  function _buildChapterRotation(subj, chapData) {
-    const chs = subj.chapters || [];
+  function _buildChapterRotation(subj, chapData, focus = 'weak', includeBonus = true) {
+    let chs = subj.chapters || [];
+    if (!includeBonus) {
+      const regular = chs.filter(ch => !ch.enrichment);
+      if (regular.length) chs = regular;
+    }
     if (!chs.length) return [];
+    if (focus === 'order') return chs.slice();
+
     const scored = chs.map(ch => {
       const c   = chapData[ch.id] || { attempted: 0, correct: 0 };
       // Needs a few real attempts before an accuracy figure is trusted - one
@@ -564,17 +1020,18 @@ const Calendar = (() => {
       // from exams) must stay 0, not silently become the "2" default.
       const examWt = ch.examWeight ?? 2;
       let slots;
-      if (acc === null)     slots = 3; // untried - worth a normal look
-      else if (acc < 0.5)   slots = 4; // weak - seen most often
-      else if (acc < 0.7)   slots = 3;
-      else if (acc < 0.85)  slots = 2;
-      else                  slots = 1; // mastered - still gets periodic revision, never dropped entirely
+      if (focus === 'balanced') slots = 2;
+      else if (acc === null)    slots = 3; // untried - worth a normal look
+      else if (acc < 0.5)       slots = 4; // weak - seen most often
+      else if (acc < 0.7)       slots = 3;
+      else if (acc < 0.85)      slots = 2;
+      else                      slots = 1; // mastered - still gets periodic revision, never dropped entirely
       slots = Math.max(1, Math.round(slots * (examWt / 2)));
       return { ...ch, acc, slots };
     }).sort((a, b) => (a.acc ?? -1) - (b.acc ?? -1)); // weakest/untried first, cosmetic only
 
-    // Weighted round-robin interleave (same bucket-shift technique used below
-    // for subject-level rotation) so weak chapters recur more often, but nothing
+    // Weighted round-robin interleave (same bucket-shift technique used for
+    // subject-level rotation) so weak chapters recur more often, but nothing
     // is ever starved down to a long unbroken run of just one chapter.
     const buckets = scored.map(ch => Array(ch.slots).fill(ch));
     const rotation = [];
@@ -592,94 +1049,63 @@ const Calendar = (() => {
       if (typeof _showFeatureModal === 'function') _showFeatureModal('timetable_generator');
       return;
     }
-    const startDateStr = _el('gen-start-date')?.value;
-    const weeks        = parseInt(_el('gen-weeks')?.value) || 4;
-    const mixed        = _el('gen-mixed')?.checked || false;
-    const studyDays    = [0,1,2,3,4,5,6].filter(i => _el(`gen-day-${i}`)?.checked);
-    const errEl        = _el('gen-error');
-    const btn          = _el('gen-submit-btn');
+    const errEl = _el('gen-error');
+    const btn   = _el('gen-submit-btn');
+    const reset = () => { if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; } };
+    const cfg   = _genReadForm();
 
-    if (!startDateStr)     { _showErr(errEl, 'Please pick a start date.'); return; }
-    if (!studyDays.length) { _showErr(errEl, 'Select at least one study day.'); return; }
+    if (!cfg.startDate)          { _showErr(errEl, 'Please pick a start date.'); return; }
+    if (!cfg.studyDays.length)   { _showErr(errEl, 'Select at least one study day.'); return; }
     if (!_studentId) return;
 
-    // Collect subject hours
-    const grade    = _studentGrade || 5;
-    const subjects = _subjectsForGrade(grade);
-    const subjHours = {};
-    subjects.forEach(s => {
-      const safeId  = s.id.replace(/[^a-z0-9]/gi,'_');
-      const chk     = _el(`gen-subj-chk-${safeId}`);
-      const inp     = _el(`gen-subj-${safeId}`);
-      const enabled = chk ? chk.checked : true;
-      subjHours[s.id] = enabled ? (parseFloat(inp?.value) || 0) : 0;
-    });
-
-    const totalHrsPerWeek = Object.values(subjHours).reduce((a,b) => a+b, 0);
+    const totalHrsPerWeek = Object.values(cfg.subjectHours).reduce((a,b) => a+b, 0);
     if (totalHrsPerWeek <= 0) { _showErr(errEl, 'Please set study hours for at least one subject.'); return; }
 
     if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
-    _gen = { startDate: startDateStr, weeks, studyDays, subjectHours: subjHours, mixed };
+    const { subjects, ...settings } = cfg;
+    _gen = { ..._gen, ...settings };
 
-    // Build the flat list of all study dates in the period, minus any day the
-    // parent already marked Holiday/No Study - the generator must not double-
-    // book a study session over a day that was deliberately blocked out.
-    const blockedDates = new Set(
-      _entries.filter(e => e.entry_type === 'blocked' || e.entry_type === 'holiday').map(e => e.date)
-    );
-    const allStudyDates = [];
-    const _start = _parseDate(startDateStr);
-    for (let i = 0; i < weeks * 7; i++) {
-      const d  = new Date(_start); d.setDate(_start.getDate() + i);
-      const ds = _toDateStr(d);
-      if (studyDays.includes(d.getDay()) && !blockedDates.has(ds)) allStudyDates.push(ds);
-    }
+    const allStudyDates = _genStudyDates(cfg);
     if (!allStudyDates.length) {
-      _showErr(errEl, 'Every day in this range is marked Holiday/No Study — pick a different start date or study days.');
-      if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
-      return;
+      _showErr(errEl, 'Every day in this range is marked Holiday/No Study — pick different dates or study days.');
+      reset(); return;
     }
 
-    // Load student progress once for chapter weighting
     let chapData = {};
     try {
       const prog = await Store.loadStudentProgress(_studentId);
       chapData   = prog?.chapters || {};
     } catch(e) {}
 
-    const activeSubjects = subjects.filter(s => (subjHours[s.id] || 0) > 0 && (s.chapters || []).length);
+    const activeSubjects = subjects.filter(s => (cfg.subjectHours[s.id] || 0) > 0 && (s.chapters || []).length);
     if (!activeSubjects.length) {
       _showErr(errEl, 'Please set study hours for at least one subject.');
-      if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
-      return;
+      reset(); return;
     }
 
-    // Per-subject cyclic chapter rotation - see _buildChapterRotation().
     const rotations = {};
     const cursors   = {};
     for (const subj of activeSubjects) {
-      rotations[subj.id] = _buildChapterRotation(subj, chapData);
+      rotations[subj.id] = _buildChapterRotation(subj, chapData, cfg.focus, cfg.includeBonus);
       cursors[subj.id]   = 0;
     }
 
-    const SESSION_BLOCK = 30; // minutes per chapter visit - shrinks to fit whatever's left in the day
-
     // Pulls chapters from a subject's rotation to fill one day's time budget,
     // instead of stopping after a single chapter - a parent who set "2h/week"
-    // for a subject should see roughly 2h/week of sessions, not one ~15-30min
-    // block per day with the rest of the requested time silently dropped.
+    // for a subject should see roughly 2h/week of sessions, not one block per
+    // day with the rest of the requested time silently dropped.
     function _fillFromRotation(subjId, minsAvailable) {
       const rotation = rotations[subjId];
       const picks = [];
       if (!rotation || !rotation.length) return picks;
       let minsLeft = minsAvailable;
       let lastId   = null;
-      let guard    = rotation.length * 2; // generous - enough to skip one repeat per lap without ever spinning forever
+      let guard    = rotation.length * 2 + 8;
       while (minsLeft >= 10 && guard-- > 0) {
         const ch = rotation[cursors[subjId] % rotation.length];
         cursors[subjId]++;
         if (ch.id === lastId && rotation.length > 1) continue; // avoid "Fractions, Fractions" back to back
-        const mins = Math.min(SESSION_BLOCK, minsLeft);
+        const mins = Math.min(cfg.session, minsLeft);
         picks.push({ chapter: ch, mins });
         lastId = ch.id;
         minsLeft -= mins;
@@ -687,64 +1113,28 @@ const Calendar = (() => {
       return picks;
     }
 
+    const perDate  = _genAssignDays(cfg, allStudyDates, activeSubjects);
+    const { plan } = _genMinutes(cfg, allStudyDates, perDate, activeSubjects);
+
     const allEntries = [];
-
-    if (mixed) {
-      // ── MIXED MODE: each study day gets a session per active subject ────
-      for (const dateStr of allStudyDates) {
-        for (const subj of activeSubjects) {
-          const minsPerDay = Math.round((subjHours[subj.id] * 60) / studyDays.length);
-          if (minsPerDay < 10) continue;
-          for (const { chapter, mins } of _fillFromRotation(subj.id, minsPerDay)) {
-            allEntries.push({ date: dateStr, subject_id: subj.id, chapter_id: chapter.id,
-              topic_label: `${chapter.icon} ${chapter.name}`, duration_mins: mins, entry_type: 'study' });
-          }
+    for (const dateStr of allStudyDates) {
+      for (const { subject, mins } of plan[dateStr]) {
+        for (const { chapter, mins: m } of _fillFromRotation(subject.id, mins)) {
+          allEntries.push({ date: dateStr, subject_id: subject.id, chapter_id: chapter.id,
+            topic_label: `${chapter.icon} ${chapter.name}`, duration_mins: m, entry_type: 'study' });
         }
       }
-    } else {
-      // ── SINGLE SUBJECT PER DAY: rotate subjects across days, weighted by
-      // hours/week, then let that subject fill the WHOLE day from its own
-      // rotation - not just whatever one chapter's budget covers. ──────────
-      // e.g. Maths=2h, English=2h, French=1h → weights [2,2,1] →
-      // rotation [Maths, English, French, Maths, English]
-      const minHrs   = Math.min(...activeSubjects.map(s => subjHours[s.id]));
-      const weights  = activeSubjects.map(s => Math.max(1, Math.round(subjHours[s.id] / minHrs)));
-      const totalWeight = weights.reduce((a, b) => a + b, 0);
-
-      const buckets  = activeSubjects.map((s, i) => Array(weights[i]).fill(s));
-      const subjectRotation = [];
-      let anyLeft = true;
-      while (anyLeft) {
-        anyLeft = false;
-        for (const bucket of buckets) {
-          if (bucket.length) { subjectRotation.push(bucket.shift()); anyLeft = true; }
-        }
-      }
-
-      allStudyDates.forEach((dateStr, idx) => {
-        const subj   = subjectRotation[idx % subjectRotation.length];
-        const weight = weights[activeSubjects.indexOf(subj)];
-        // A subject that only comes up on, say, 2 of every 5 study days must
-        // get its whole weekly time budget across THOSE days, not spread as
-        // if it studied every day — dividing by every study day (the old
-        // formula) under-credited any subject that didn't appear daily and
-        // made its sessions come out far shorter than the hours requested.
-        const daysForSubject = Math.max(1, Math.round(allStudyDates.length * weight / totalWeight));
-        const minsPerDay = Math.min(90, Math.max(15,
-          Math.round((subjHours[subj.id] * 60 * weeks) / daysForSubject)));
-        for (const { chapter, mins } of _fillFromRotation(subj.id, minsPerDay)) {
-          allEntries.push({ date: dateStr, subject_id: subj.id, chapter_id: chapter.id,
-            topic_label: `${chapter.icon} ${chapter.name}`, duration_mins: mins, entry_type: 'study' });
-        }
-      });
+    }
+    if (!allEntries.length) {
+      _showErr(errEl, 'Those settings leave no time for any session - raise the hours or the daily cap.');
+      reset(); return;
     }
 
     // Persist
     const sid = await _ensureSchedule();
     if (!sid) {
       _showErr(errEl, 'Database not ready - please run supabase-migration.sql in your Supabase SQL editor, then refresh the page.');
-      if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
-      return;
+      reset(); return;
     }
 
     const { error: settingsErr } = await _sb.from('study_schedules')
@@ -759,8 +1149,7 @@ const Calendar = (() => {
     if (clearErr) {
       console.error('[Calendar.generate] clear', clearErr.message);
       _showErr(errEl, 'Could not clear the previous timetable — nothing was changed. Please try again.');
-      if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
-      return;
+      reset(); return;
     }
 
     const rows = allEntries.map(e => ({ ...e, schedule_id: sid, student_id: _studentId }));
@@ -785,25 +1174,21 @@ const Calendar = (() => {
       }));
     } catch(e) {}
 
+    const d0 = _parseDate(cfg.startDate);
+    _viewYear = d0.getFullYear(); _viewMonth = d0.getMonth();
+    closeGenModal();
+    _renderCalendar();
+
     if (insertErr) {
       console.error('[Calendar.generate] insert', insertErr.message);
-      const d0 = _parseDate(startDateStr);
-      _viewYear = d0.getFullYear(); _viewMonth = d0.getMonth();
-      closeGenModal();
-      _renderCalendar();
       if (typeof toast !== 'undefined') {
         toast(`Only ${saved} of ${rows.length} sessions could be saved — generate again to complete the timetable.`, 5000);
       }
-      if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
-      return;
+      reset(); return;
     }
 
-    const d = _parseDate(startDateStr);
-    _viewYear = d.getFullYear(); _viewMonth = d.getMonth();
-    closeGenModal();
-    _renderCalendar();
-    if (typeof toast !== 'undefined') toast(`Timetable generated - ${allEntries.length} sessions across ${activeSubjects.length} subjects 📅`, 3500);
-    if (btn) { btn.disabled = false; btn.textContent = '⚡ Generate Schedule'; }
+    if (typeof toast !== 'undefined') toast(`Timetable generated - ${allEntries.length} sessions across ${activeSubjects.length} subjects, ${cfg.startDate} → ${cfg.endDate} 📅`, 4000);
+    reset();
   }
 
   // ── Print ─────────────────────────────────────────
@@ -811,6 +1196,52 @@ const Calendar = (() => {
   // page) rather than a cramped one-column-per-entry-day table: a parent
   // printing this to pin on a fridge needs to read it from across the room,
   // not squint at 11px text crammed next to dotted separators.
+  // ── Child-facing: what I have already done ────────────────────────────
+  // The mirror of getUpcoming(). Same shape of contract: loads for a student
+  // WITHOUT calling setStudent(), which would repaint the parent calendar grid
+  // whose elements do not exist on a child's screen.
+  //
+  // ⚠ Returns activity UNFILTERED. _filters is the parent's auditing choice,
+  // stored per browser under mm_cal_filters — on a shared phone a parent who
+  // hid exams to read something would otherwise silently blank a chunk of the
+  // child's own record of their work.
+  //
+  // ⚠ Returns only what the child DID. There is deliberately no "missed"
+  // counterpart: on the parent's calendar an unticked plan row is information,
+  // on a child's screen it is a list of their own failures, every time they
+  // open it. The plan they can still act on is what getUpcoming() is for.
+  async function getRecentActivity(studentId, days = 14) {
+    if (!studentId) return [];
+    try {
+      if (_studentId !== studentId) { _studentId = studentId; _activity = []; }
+      if (!_activity.length) await _loadActivity();
+    } catch (_) { return []; }
+
+    const from = new Date();
+    from.setDate(from.getDate() - (days - 1));
+    const fromStr = _toDateStr(from);
+    const today   = _toDateStr(new Date());
+
+    return _activity
+      .filter(a => a.date >= fromStr && a.date <= today)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map(a => ({
+        kind: a.kind, date: a.date, title: a.title, detail: a.detail, pct: a.pct,
+        icon: ACT_META[a.kind].icon,
+        label: ACT_META[a.kind].label,
+        subjectName: a.subject ? (a.subject.subject || a.subject.name || '') : '',
+        subjectIcon: a.subject ? (a.subject.icon || '') : '',
+        isToday: a.date === today,
+      }));
+  }
+
+  // Chapter ids the child has already practised today, so the plan can tick off
+  // what is done instead of showing it as still outstanding.
+  function doneTodayChapterIds() {
+    const today = _toDateStr(new Date());
+    return new Set(_activity.filter(a => a.date === today && a.chapterId).map(a => a.chapterId));
+  }
+
   function print() {
     const printDiv = _el('cal-print-view');
     if (!printDiv) { window.print(); return; }
@@ -987,7 +1418,7 @@ const Calendar = (() => {
 
     if (scheds?.length) {
       const { data } = await _sb.from('schedule_entries')
-        .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id')
+        .select('id, date, entry_type, topic_label, notes, duration_mins, subject_id, schedule_id, chapter_id')
         .eq('schedule_id', scheds[0].id)
         .gte('date', today)
         .order('date', { ascending: true })
@@ -1017,27 +1448,47 @@ const Calendar = (() => {
     // Build cards
     const subjects = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
 
+    // What the child has already practised today, so a session they have done
+    // reads as done instead of nagging them to repeat it. Loaded here because
+    // this runs on the dashboard, where nothing else has touched _activity.
+    let doneToday = new Set();
+    try {
+      if (_studentId !== studentId) { _studentId = studentId; _activity = []; }
+      if (!_activity.length) await _loadActivity();
+      doneToday = doneTodayChapterIds();
+    } catch (_) { /* the plan must still render if history is unavailable */ }
+
     listEl.innerHTML = entries.map(e => {
       const meta  = TYPE_META[e.entry_type] || TYPE_META.other;
       const subj  = e.subject_id ? subjects.find(s => s.id === e.subject_id) : null;
       const notesBased   = subj?.notesBased || false;
       const practiceble  = subj?.practiceble !== false;
+      // chapter_id is now selected, but rows written before it was populated
+      // still have none — fall back to matching the display label, the same way
+      // getUpcoming() always has.
+      const chapId = e.chapter_id || (_resolveChapter(e).chapter || {}).id || '';
+      const isDone = isToday && chapId && doneToday.has(chapId);
 
       let actionBtn = '';
-      if (e.entry_type === 'study' && subj) {
+      if (isDone) {
+        actionBtn = `<div class="mt-2 inline-flex items-center gap-1.5 text-xs bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-semibold px-3 py-1.5 rounded-lg">
+          ✅ Done today</div>`;
+      } else if (e.entry_type === 'study' && subj) {
         if (notesBased) {
-          actionBtn = `<button onclick="Calendar.showNotes('${e.subject_id}','${e.chapter_id}')"
+          actionBtn = `<button onclick="Calendar.showNotes('${e.subject_id}','${chapId}')"
             class="mt-2 text-xs bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 font-semibold px-3 py-1.5 rounded-lg hover:bg-indigo-200 transition-colors">
             📖 View Notes</button>`;
         } else if (practiceble) {
-          actionBtn = `<button onclick="Calendar.startPractice('${e.subject_id}','${e.chapter_id}')"
+          actionBtn = `<button onclick="Calendar.startPractice('${e.subject_id}','${chapId}')"
             class="mt-2 text-xs bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-300 font-semibold px-3 py-1.5 rounded-lg hover:bg-green-200 transition-colors">
             ✅ Practice Now</button>`;
         }
       }
 
       return `
-        <div class="flex items-start gap-3 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+        <div class="flex items-start gap-3 p-3 rounded-xl shadow-sm border ${isDone
+          ? 'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800/50'
+          : 'bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700'}">
           <span class="text-2xl select-none mt-0.5">${subj ? subj.icon : meta.icon}</span>
           <div class="flex-1 min-w-0">
             ${subj ? `<div class="text-xs font-bold text-indigo-500 mb-0.5">${subj.name}</div>` : ''}
@@ -1081,9 +1532,11 @@ const Calendar = (() => {
     showAddEvent, closeAddEvent, saveEvent,
     editEntry, deleteEntry,
     confirmReset,
-    showGenModal, closeGenModal, generateTimetable,
+    showGenModal, closeGenModal, generateTimetable, genPreview, genSyncFromWeeks, genSyncFromEnd, genUntilExam, genStyleChanged,
     showNotes, closeNotes,
     renderTodayPlan, startPractice,
+    getRecentActivity, doneTodayChapterIds,
+    toggleFilter,
     print,
   };
 })();

@@ -266,11 +266,14 @@ const Search = (() => {
   function _fillSubjectFilter() {
     const sel = document.getElementById('search-subject-filter');
     if (!sel || sel.dataset.filled) return;
-    const grades = [...new Set(SUBJECT_PACKS.map(p => p.grade))].sort();
+    // comingSoon packs have no questions in the index, so an optgroup for one
+    // would be a filter that always returns nothing.
+    const livePacks = SUBJECT_PACKS.filter(p => !p.comingSoon);
+    const grades = [...new Set(livePacks.map(p => p.grade))].sort();
     for (const g of grades) {
       const grp = document.createElement('optgroup');
       grp.label = `Grade ${g}`;
-      SUBJECT_PACKS.filter(p => p.grade === g).forEach(p => {
+      livePacks.filter(p => p.grade === g).forEach(p => {
         const opt = document.createElement('option');
         opt.value = p.id;
         opt.textContent = `${p.icon} ${p.name}`;

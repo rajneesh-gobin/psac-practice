@@ -2,6 +2,7 @@
 // Reads question JS files server-side and returns filtered JSON.
 // Browser never sees the raw source files.
 
+const { resolveStudent } = require('../lib/student-auth');
 const vm   = require('vm');
 const fs   = require('fs');
 const path = require('path');
@@ -408,11 +409,17 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers, body: '' };
   }
 
-  // ── Auth: require either a valid Supabase JWT or a known student UUID ──
-  const authHeader = (event.headers['authorization'] || '').replace('Bearer ', '').trim();
-  const studentId  = (event.headers['x-student-id']  || '').trim();
+  // ── Auth: a valid Supabase JWT, or a valid STUDENT SESSION TOKEN ──
+  // ⚠ X-Student-Id is no longer accepted as authentication. It used to be: the
+  // handler checked only that the UUID existed in students, so whoever held a
+  // child's id — a permanent identifier in client state, never rotated — could
+  // read that child's plan-gated and reward-gated question set. Existence is
+  // not proof of possession. X-Student-Token is, and it is the same credential
+  // RLS already resolves through current_student_id().
+  const authHeader   = (event.headers['authorization'] || '').replace('Bearer ', '').trim();
+  const studentToken = (event.headers['x-student-token'] || '').trim();
 
-  if (!authHeader && !studentId) {
+  if (!authHeader && !studentToken) {
     return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
   }
 
@@ -432,25 +439,26 @@ exports.handler = async (event) => {
       try { _uid = (await r.json()).id || null; } catch(_) { _uid = null; }
       _authCacheSet('jwt:' + authHeader, _uid);
     }
-  } else if (studentId) {
-    // Validate student UUID format first (fast, no DB call)
-    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    if (!UUID_RE.test(studentId)) {
-      return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid session' }) };
-    }
-    // Verify student exists in DB (requires SUPABASE_SERVICE_ROLE_KEY env var)
-    if (SB_SRK && _authCacheGet('stu:' + studentId) === undefined) {
-      const res  = await fetch(`${SB_URL}/rest/v1/students?id=eq.${studentId}&select=id&limit=1`, {
-        headers: { apikey: SB_SRK, Authorization: `Bearer ${SB_SRK}` },
-      });
-      const rows = res.ok ? await res.json() : [];
-      if (!Array.isArray(rows) || !rows.length) {
-        return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid session' }) };
+  } else if (studentToken) {
+    // Cached on the TOKEN, not the student id, so revoking a session (logout
+    // everywhere, or the anti-sharing session bump) stops working within the
+    // cache TTL rather than never — the same property the JWT branch has.
+    _uid = _authCacheGet('tok:' + studentToken);
+    if (_uid === undefined) {
+      const r = await resolveStudent(event.headers, { supabaseUrl: SB_URL, serviceKey: SB_SRK });
+      if (!r.ok) {
+        // 503 (cannot check) is NOT cached: caching it would lock a child out
+        // for the whole TTL over one transient failure.
+        return { statusCode: r.status, headers, body: JSON.stringify({ error: r.error }) };
       }
-      _authCacheSet('stu:' + studentId, studentId);
+      _uid = r.studentId;
+      _authCacheSet('tok:' + studentToken, _uid);
     }
-    _uid = studentId;
   }
+
+  // Everything downstream asks "is this a student request?". It used to read
+  // the presence of the id header; it is now the presence of a verified token.
+  const studentId = studentToken ? _uid : null;
 
   if (_isRateLimited(_uid)) {
     return { statusCode: 429, headers, body: JSON.stringify({ error: 'Too many requests. Please slow down and try again shortly.' }) };
