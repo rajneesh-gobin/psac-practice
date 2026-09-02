@@ -219,9 +219,21 @@ BEGIN
     -- Read side widens to any member. The WRITE side deliberately does NOT:
     -- renaming the family or changing family_code stays with the owner, and
     -- a co-parent must never be able to re-point parent_id at themselves.
+    --
+    -- ⚠ The owner term is ADDED TO, never replaced. Replacing it — which is what
+    -- this did — broke creating a family outright: PostgREST inserts with
+    -- INSERT ... RETURNING, RETURNING is checked against the USING clause, and
+    -- is_family_member() has to LOOK THE NEW ROW UP. It is STABLE, so the row it
+    -- is being asked about is not yet in its snapshot, it answers false, and the
+    -- insert dies with "new row violates row-level security policy for table
+    -- families" — while the WITH CHECK it names was passing all along. Keeping
+    -- `parent_id = auth.uid()` as a SAME-ROW predicate costs nothing (it is
+    -- already one of is_family_member's two branches, so this widens nothing for
+    -- an existing row) and needs no lookup.
     EXECUTE format(
       'ALTER POLICY families_own ON public.families USING (%s) WITH CHECK (%s)',
-      replace(v_qual, 'parent_id = auth.uid()', 'public.is_family_member(id)'),
+      replace(v_qual, 'parent_id = auth.uid()',
+              '(parent_id = auth.uid() OR public.is_family_member(id))'),
       coalesce(v_check, 'true')
     );
     RAISE NOTICE 'widened policy families_own (read side only)';

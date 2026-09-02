@@ -317,7 +317,15 @@ exports.handler = async () => {
   </div>
 </body></html>`;
 
-      await sendEmail(parentEmail, `PSAC Exam Practice - Weekly Report (${weekStr})`, html);
+      // Same reason as notify.js: the result used to be discarded, so a digest
+      // Resend refused was indistinguishable from one it delivered - across
+      // every parent, every week, with nothing in the logs.
+      const _res = await sendEmail(parentEmail, `PSAC Exam Practice - Weekly Report (${weekStr})`, html);
+      if (_res && !_res.ok) {
+        const _detail = await _res.text().catch(() => '');
+        console.error('[weekly-digest] Resend refused the send:', _res.status,
+          _detail.slice(0, 300), '| from =', FROM_EMAIL);
+      }
       sent++;
     } catch (err) {
       console.error('[weekly-digest] Error for family', family.id, err.message);

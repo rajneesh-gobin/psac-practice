@@ -11,13 +11,15 @@ and avoid duplicate question text.
 
 ### Completed in this pass
 
-Grade 4 English has been completed through Reading Comprehension:
+Grade 4 English is now fully complete:
 
 - Nouns, Pronouns & Articles — all 9 subsections are at 20+.
 - Verbs & Tenses — all 8 subsections are at 20+.
 - Adjectives & Adverbs — all 5 subsections are at 20+.
 - Sentences & Punctuation — all 3 subsections are at 20+.
 - Reading Comprehension — all 6 subsections are at 20+.
+- Vocabulary & Word Study — all 6 subsections are at 20+.
+- Passages & Text Types — all 4 subsections are at 20+.
 
 New source banks added in this pass:
 
@@ -26,20 +28,23 @@ New source banks added in this pass:
 - `subjects/grade4-english/questions/coverage_verbs.js`
 - `subjects/grade4-english/questions/coverage_adjectives_sentences.js`
 - `subjects/grade4-english/questions/coverage_comprehension.js`
+- `subjects/grade4-english/questions/coverage_vocabulary.js`
+- `subjects/grade4-english/questions/coverage_passages.js`
 
 All five are registered in `engine/question_loader.js`.
 
+Grade 4 French is now fully complete:
+
+- Every syllabus subchapter now has 20 or more questions.
+- The generated Grade 4 French bank contains 1,851 questions.
+- New coverage banks include vocabulary, articles, adjective/adverb practice,
+  sentence grammar, past tenses, reading and text types.
+
 ### Immediate next batch
 
-Finish Grade 4 English:
+Next, work grade by grade, one subject at a time:
 
-1. Vocabulary & Word Study: `synonyms`, `antonyms`, `prefix_suffix`,
-   `homophones`, `meaning`, `context_clues`.
-2. Passages & Text Types: `letter`, `advert`, `story`, `instructions`.
-
-Then work grade by grade, one subject at a time:
-
-1. Grade 4: French, History, Mathematics, Science.
+1. Grade 4: History, Mathematics, Science.
 2. Grade 5: English, French, History, Mathematics, Science.
 3. Grade 6: English, French, History, Mathematics, Science.
 

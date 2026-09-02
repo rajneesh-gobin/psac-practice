@@ -123,5 +123,18 @@ exports.handler = async (event) => {
     }),
   });
 
+  // ⚠ Say WHY it failed. This used to return a bare 502 and drop Resend's
+  // response, and the caller is fire-and-forget - so a send that Resend refused
+  // outright looked exactly like a send that worked. The 403 it returns for an
+  // unverified FROM domain ("You can only send testing emails to your own
+  // email address") is the single most likely failure here, because
+  // NOTIFY_FROM_EMAIL defaults to Resend's shared test address, which delivers
+  // to the account owner and nobody else.
+  if (!sendRes.ok) {
+    const detail = await sendRes.text().catch(() => '');
+    console.error('[notify] Resend refused the send:', sendRes.status, detail.slice(0, 300),
+      '| from =', FROM_EMAIL, '- set NOTIFY_FROM_EMAIL to an address on a domain '
+      + 'verified at resend.com/domains.');
+  }
   return { statusCode: sendRes.ok ? 200 : 502 };
 };

@@ -351,6 +351,40 @@ credential** — it is permanent client state; only the token proves possession.
 ⚠ The questions auth cache is keyed on the **token**, not the student id, so
 revocation actually takes effect. A 503 is never cached.
 
+### ⚠ Email is a scarce, shared resource
+- **Password recovery has two routes, and only one needs email.** A parent still
+  signed in changes their password in Account & Settings (`Auth.changePassword`
+  → `updateUser`) with no email at all. A parent who is signed out needs the
+  reset link, which **is** capped — so `admin-account-recovery.js` also takes
+  `action:'set_password'`: the server generates a temporary password, sets it
+  through the service role, and returns it **once** to the administrator, who
+  passes it on out of band. Nothing is emailed.
+  ⚠ The password is in the response and **nowhere else** — not the log line, not
+  the `security_events` row. ⚠ An admin may not set a **peer admin's** password
+  unless they are super admin; that would be a straight privilege grab between
+  equals. Every use writes `security_events kind='admin:password_set'`
+  (`service_role` has the INSERT grant — checked, not assumed).
+- ⚠ **The parent PIN can NEVER be a password-reset credential.** It is
+  `btoa(pin + ':psac_v1')` in `localStorage` — base64, not a hash, browser-local,
+  and the server has never seen it, so there is nothing to verify against. It is
+  4 digits against a guessable email, and on a new device (the actual "I forgot
+  my password" case) it is not there at all. It gates a UI switch. That is all
+  it is for.
+- ⚠ **`emailSignUp()` routes off the RESULT, never a stored assumption about the
+  project's email setting.** `signUp()` returns a live session when
+  `mailer_autoconfirm` is on and none when it sends a link, so the branch is
+  `if (data?.session)` → `_handleParentSessionGated`, else the check-email
+  screen. Hard-coding either one strands every new parent on the wrong screen the
+  day that setting is flipped.
+- ⚠ **Every sign-up, resend and password reset spends ONE email from ONE shared
+  quota.** `_emailErrorText()` separates the two situations GoTrue returns behind
+  the same 429 — `over_request_rate_limit` (the 60s per-address floor, the
+  caller's own doing) from `over_email_send_rate_limit` (the project-wide cap,
+  which no amount of retrying clears) — and leaves anything it does not recognise
+  with its ORIGINAL wording, because an invented friendly message over an unknown
+  fault is how a real bug becomes unreportable.
+  `scripts/test-email-errors.js`.
+
 ### ⚠ `x-student-token` must never touch `/auth/v1/`
 It is not CORS-safelisted, so it turns the parent's token refresh into a
 preflighted request GoTrue rejects — the parent's session then dies silently
@@ -399,12 +433,32 @@ a private window, or Safari's 7-day eviction all lose it.
 - `psac_known_students` (cap 8) remembers family name + username per child for
   quick sign-in. ⚠ **Never the PIN.** The fields are *hidden, not emptied* —
   `checkStudentReady()` / `studentSignIn()` still read them.
+- ⚠ **A parent previewing a child is NOT a student login.** `pdSwitchStudent()`
+  reaches `_loginStudentRow()` with **no token**, and that path must not persist
+  a student session or stamp `_markActiveMode('student')` — a tokenless session
+  is a credential nobody can use, so the next reload resumed it, found no token
+  and answered "Please sign in again to continue." on **every** refresh. One tap
+  on a child's card in the parent dashboard poisoned the device permanently.
+  Routing therefore reads a tokenless stored session as **absent**
+  (`_storedStudentSession()`), which also heals installs already poisoned.
 - The student-switch PIN pad holds **no auth logic** — it fills the same three
   fields and calls the same `studentSignIn()`. ⚠ `_showAuthError()` is routed
   into the modal while it is open, or the wrong-PIN message is written to a
   screen nobody can see.
 - Referrals: `?ref=CODE` captured before routing. `referral_code` (public, for
   WhatsApp) is deliberately **not** `families.family_code` (private join secret).
+- ⚠ **Forum ownership is `author_id`, never the display NAME.** `canDel` compared
+  `author_name` to the caller's own name, which gave two parents with the same
+  name a delete button on each other's posts (the database refused, so the button
+  was simply a lie) and gave an **admin** no delete button at all — while
+  `posts_delete`/`replies_delete` have allowed `is_admin()` the whole time.
+  Being an admin is a property of the ACCOUNT, not of which screen they are on,
+  so `Auth.isAdmin()` applies in the ordinary parent view too.
+  ⚠ **41 of the 42 live forum rows have `author_id = NULL`** — written before the
+  `forum_set_author` trigger — so their authors can never satisfy the ownership
+  arm of the policy and `is_admin()` is the only way they can ever be removed.
+  Verified as `authenticated` in a rolled-back transaction: a parent's DELETE of
+  someone else's post matches **no rows and raises nothing**; the admin's removes it.
 - **The forum is adults-only, in the database** (`auth.uid() IS NOT NULL`), not
   by hiding the button. A child session is anon and is excluded by construction.
   `_ADULT_ONLY_SCREENS` in `showScreen()` covers every route in.
@@ -412,7 +466,7 @@ a private window, or Safari's 7-day eviction all lose it.
 ---
 
 ## Database
-⚠ **`ls supabase-*.sql` is the authority** on which files exist — there are **14
+⚠ **`ls supabase-*.sql` is the authority** on which files exist — there are **16
 today**, one per change, and any list written here goes stale. The table below
 covers only the ones that still need a decision; the rest
 (`supabase-plan-enforcement`, `-question-reports`, `-questions-admin-policies`,
@@ -420,7 +474,8 @@ covers only the ones that still need a decision; the rest
 
 | File | What it is |
 |---|---|
-| `supabase-coparent.sql` | **Outstanding.** Co-parent access: a second/third adult login on one family. Rewrites the ownership predicate **from the live definitions**, never from the dump. Tested by `scripts/sql-tests/run-coparent.sh`. |
+| `supabase-families-returning.sql` | **Applied to production 2026-09-02.** Restores the owner as a same-row predicate in `families_own`'s USING clause — see rule 2 above. Kept because `supabase-coparent.sql` skips a policy it has already widened, so any database that ran the old version stays broken. Tested by `scripts/sql-tests/run-families-returning.sh`. |
+| `supabase-coparent.sql` | **APPLIED** — confirmed live 2026-09-02 (`families_own` reads `is_family_member`, `family_members` exists). Its `families_own` rewrite is corrected in this repo; the deployed policy was repaired in place by `supabase-families-returning.sql`. Co-parent access: a second/third adult login on one family. Rewrites the ownership predicate **from the live definitions**, never from the dump. Tested by `scripts/sql-tests/run-coparent.sh`. |
 | `supabase-forum-author.sql` | **Outstanding — run first.** Trigger deriving forum author identity from the session. |
 | `supabase-geo-map.sql` | **Outstanding.** One additive SELECT policy so `mm_data.geo_map_content` (the published interactive-map content) is readable by a child's anon session. Purely additive; writes stay `is_admin()`. |
 | `supabase-migration.sql` | Outstanding. Parts 1–4 unattended; **Part 5 is destructive and stays commented out**. |
@@ -428,22 +483,58 @@ covers only the ones that still need a decision; the rest
 | `supabase-indexes.sql`, `supabase-forum-adults.sql`, `supabase-grades-1-9.sql` | Applied. Idempotent. |
 | `supabase-schema.sql` | Generated dump. Reference only. |
 
-### ⚠ Three rules that have each cost real damage
+### ⚠ Four rules that have each cost real damage
 1. **Never author a policy change from `supabase-schema.sql`.** It is stale.
    Query `pg_policies` on the live database first — writing against the dump once
    produced a policy that would have silently un-restricted the forum.
-2. **`public.students` has COLUMN-LEVEL SELECT grants** (so `pin`, `pin_hash`,
+2. ⚠ **A policy's USING clause is checked on INSERT too — whenever the statement
+   carries a `RETURNING`**, which PostgREST emits for every `.insert().select()`.
+   So a USING predicate that has to **look the row up** answers false for a row
+   being created in that same statement: it is `STABLE`, and the new tuple is not
+   in its snapshot. `supabase-coparent.sql` rewrote `families_own` USING from
+   `parent_id = auth.uid()` to `is_family_member(id)` and broke creating a family
+   outright — for two days, four real parents, while every existing family still
+   read back fine. ⚠ **The 42501 names the wrong half**: "new row violates
+   row-level security policy" reads as a WITH CHECK failure and the WITH CHECK
+   was passing throughout. Tell them apart by running both forms as
+   `authenticated` in a rolled-back transaction — plain `INSERT` succeeded,
+   `INSERT … RETURNING` did not. **Always keep a same-row column predicate in a
+   USING clause you widen.**
+3. **`public.students` has COLUMN-LEVEL SELECT grants** (so `pin`, `pin_hash`,
    `pin_attempts`, `pin_locked_until` stay unreadable). **Any new column inherits
    no grant**: every query touching it fails `42501 permission denied for table
    students`, a message that never names the column, and the client turns that
    into an empty result. Put a `GRANT SELECT (col)` beside every `ADD COLUMN`.
    (This is how adding `deleted_at` emptied the parent dashboard.)
-3. **Grant `TO anon, authenticated` for anything a child calls.** A child session
+4. **Grant `TO anon, authenticated` for anything a child calls.** A child session
    is `anon` + a token header. The friend RPCs were `authenticated`-only and dead.
    And check every function in a `revoke … from public` block actually has a
    matching grant — `purchase_subject()` did not.
 
 ### Other database facts worth keeping
+- ⚠ **`public.profiles` has NO email column** — the address is in `auth.users`,
+  which the browser cannot read and should not. So the admin members list could
+  only identify an account by a display name the member typed themselves, which
+  is worthless for telling two test accounts apart.
+  `admin-member-emails.js` resolves them through the service role: **only for
+  the ids asked for, only for an admin**, with no list/search/page, so it cannot
+  enumerate the user base. Failures are logged and leave the line blank rather
+  than toasting on every render.
+- ⚠ **Deleting an account does NOT delete everything it owns.** `auth.users`
+  cascades cleanly down `profiles → families → students →` sessions,
+  submissions, enrolments, push subs, friends, invites (verified against the
+  live constraints, not the dump). But **five tables key their owner as `text`
+  with no foreign key**, so the cascade cannot see them and every row survives:
+  `student_progress`, `schedule_entries`, `study_schedules`,
+  `student_assignments`, `login_events`. Production already carries one
+  orphaned `student_progress` row. `admin-delete-account.js` purges them
+  explicitly, and **collects the student ids BEFORE the cascade** — afterwards
+  there is no way left to know which rows belonged to whom.
+  ⚠ `security_events` is deliberately NOT purged: its `user_id`/`student_id`
+  carry no FK precisely so the audit trail outlives its subject.
+  ⚠ Admin delete is **permanent**; `Store.deleteMyAccount()` is the soft one
+  (`profiles.deleted_at`, `auth.users` kept so a parent can restore). Do not
+  confuse them, and keep Disable as the reversible option in the UI.
 - A `DELETE` whose RLS policy matches no row returns **no error and no rows**.
   Use `.delete().select('id')` and treat zero rows as failure — reading that as
   success is how a deleted child came back and became a duplicate.
@@ -465,6 +556,21 @@ covers only the ones that still need a decision; the rest
 - `credit_ledger`, `chapter_entitlements` and `security_events` have **no
   insert/update/delete grant at all** — stronger than a policy, because a later
   policy mistake cannot open a hole with no grant behind it.
+- ⚠ **Family setup is a three-step wizard with no transaction** — profile, then
+  family, then the first child. A failure at step 2 or 3 leaves earlier rows
+  written, so `createProfile()` and `createFamily()` **resume on 23505** rather
+  than failing: the profile PK can only be the caller's own row, and
+  `families.parent_id` is UNIQUE, so "you already have one" is probed via
+  `getMyFamily()` and never confused with the family-NAME collision that shares
+  the same SQLSTATE. Both now return `{_error:{code,message}}`; a bare null hid
+  a `42501` behind "Error creating profile. Please try again."
+  A **profile with no family is that interrupted setup**, and
+  `_handleParentSession()` routes it back to family-setup — but only when
+  `Store.lastFamilyError()` is empty (the query *answered* "none") and only for
+  `role === 'parent'`. Routing a failed READ there would write a second family
+  over one that exists; an admin legitimately has no family of their own, and a
+  co-parent's arrives via `my_member_family()`. Covered by
+  `scripts/test-setup-recovery.js`.
 - `Store.getMyEntitlements()` / `getFamilyEntitlements()` return **null** on
   failure, never `[]`. `[]` is a real answer ("owns nothing") and conflating them
   made a flaky network silently re-lock chapters.
@@ -495,6 +601,16 @@ covers only the ones that still need a decision; the rest
 - ⚠ **`body { overflow-x: clip }` behind `@supports`**, not `hidden`: `hidden`
   propagates to the viewport, makes it a scroll container, and breaks the sticky
   header in Safari.
+- ⚠ **An `<option>` is painted by the PLATFORM, not by the page.** It inherits
+  the select’s `color` and **never** its `background`, which computes to
+  `rgba(0,0,0,0)` on every option unless something sets it — so the popup list is
+  drawn on whatever ground the platform picks. `bg-white/10 text-white` on the
+  family-setup grade picker therefore rendered "Grade 4 / 5 / 6" white on white,
+  and all 31 selects in index.html carried the same latent defect. `style.css`
+  now gives `option`/`optgroup` an explicit opaque pair per theme, plus
+  `color-scheme` **scoped to `select`** (on `:root` it would repaint every native
+  control in the app). Guarded by `scripts/test-select-contrast.js`, which
+  measures all 31 in both themes and fails below 4.5:1.
 - ⚠ **Do not share a class name between two components.** `.nav-btn` was both the
   exam question-navigator cell (32×32) and the student tab bar, so tab labels
   spilled out of their buttons on every phone. The tab bar is `.tabbar-btn`.
@@ -544,7 +660,27 @@ two surfaces disagreeing.
   and is each base image's own ratio (755×874, 1700×1600). `object-fit: contain`
   then fills the box exactly, so *a percentage of the box is a percentage of the
   artwork* — on both surfaces. A second copy in `style.css` is how they drift.
-- **Catalogue size: 58 Mauritius · 23 Rodrigues · 20 world**, every one on real lon/lat. Categories are
+- **Catalogue size: 88 Mauritius · 25 Rodrigues · 20 world**, every one on real
+  lon/lat. Island categories: mountain · **crater** · river · waterfall · water ·
+  coast · island · **plain** · reserve · cave · port · town · heritage.
+- ⚠ **A river is a LINE, not a point.** Fifteen carry `line: [[lon,lat],…]`
+  straight from OpenStreetMap, plus `labelAt` (0–1) saying how far along that
+  course the pin and caption sit. `markerPosition()` walks the course by
+  DISTANCE, so `labelAt` means "half way down the river" and not "half way
+  through the point list" — otherwise the caption bunches wherever OSM happened
+  to record detail. Everything else — labels, selection, the info card, the
+  editor form — then treats a river exactly like a place.
+- ⚠ **Dragging a river's pin slides the name ALONG it; dragging a course point
+  reshapes it.** The course is surveyed data and the caption position is ours,
+  so `setPosition()` on a line writes `labelAt`, never coordinates. Course
+  points get handles only on the SELECTED river — every course at once is a few
+  hundred overlapping targets.
+- ⚠ **Two Mauritian rivers can share a name.** "Rivière du Rempart" names one
+  river in the west and the northern one the district is named after; "Rivière
+  du Poste" is in the south while the Flacq river is "Rivière du Poste de
+  Flacq". Taking the longest stitched chain silently picked the wrong river and
+  attached the wrong fact to it. `build-rivers2.js` therefore chooses a chain
+  by a `near` point and **throws if the nearest match is over 12 km away**. Categories are
   mountain · river · waterfall · water · coast · island · reserve · cave · port
   · town · heritage (plus the world map's continent/region/ocean/volcano/
   latitude/longitude). Adding one is content work — write the row, re-run the
@@ -610,7 +746,8 @@ two surfaces disagreeing.
   `map-editor-harness.html` — 33 self-asserting checks on the editor ↔ child
   correspondence · `map-calibration.html` — rasterises each base map and checks
   every pin samples the right ground (a reservoir marker SHOULD be on water; a
-  mountain should not), falls in the right district, and — for the world map,
+  mountain should not), checks every river along its WHOLE course rather than at
+  one point, falls in the right district, and — for the world map,
   which has no district layer — pushes 47 known land and ocean coordinates
   through the shipped projection to confirm it still agrees with the artwork ·
   `map-label-solver.html` — recomputes `lx`/`ly` from the measured caption
@@ -675,7 +812,7 @@ two surfaces disagreeing.
 
 ### Version bumps
 - **`SHELL_VERSION` (`sw.js`)** — bump on any change to a shell-cached engine
-  file, or returning users never receive it. Currently **v64**.
+  file, or returning users never receive it. Currently **v73**.
 - **`_CACHE_VERSION` (`question_loader.js`)** — bump when question content or the
   cache envelope changes. Currently **v14**.
 - ⚠ The SW shell list is all-or-nothing (`cache.addAll` rejects wholesale on one
@@ -706,6 +843,25 @@ minutes.
   cache-busting query string.
 - ⚠ **Production builds from `main`.** If a fix is reported as still broken,
   check which branch is deployed before concluding the fix is wrong.
+- ⚠⚠ **MEASURED 2026-09-02: production is FAR behind this repo, and `main` is
+  behind too.** Do not assume anything here is live.
+
+  | | `SHELL_VERSION` | `admin-account-recovery` |
+  |---|---|---|
+  | `psac-practice.netlify.app` | **v23** | 404 — not deployed |
+  | `main` | **v15** | not in the branch |
+  | `codex` (HEAD) | v65 | present |
+  | working tree | v74 | present |
+
+  Four commits sit on `codex` and have never reached `main`. Probe it, never
+  infer it — `curl -s <site>/sw.js | grep SHELL_VERSION` and POST to an `/api/`
+  route (**401 means deployed**, 404 means missing).
+  ⚠ **An undeployed `/api/` route returns the SPA fallback: HTML with status
+  404, not an error.** `response.json()` then throws, and code that treats that
+  as `{}` reports the server's own refusal message for a request the server
+  never saw. `AdminPanel._adminApi()` checks the content type first and says
+  "not available (HTTP 404)" instead. The same is true on a plain local static
+  server, where no function runs at all — every `/api/` call fails there.
 
 ### Netlify env vars (dashboard only, never in the repo)
 `SUPABASE_SERVICE_ROLE_KEY` (⚠ its absence used to fail *open*),
@@ -756,49 +912,88 @@ This project's fixes are **measured, not eyeballed**. Repeat that, and know thes
   fill in from each child's next session after deploy.
 
 ## Pending / not yet done
-1. ⚠ **Run `supabase-forum-author.sql`** — the only outstanding migration from the
-   security review, and the server half of the forum impersonation fix. Until it
-   runs, a crafted request can still mint a teacher badge.
-2. ⚠ **Re-run `supabase-credits-shop.sql`**, then Admin → Content → 🛒 Credit Shop
-   → **Publish catalogue** once. `purchase_subject()` / `shop_subject_price()` are
-   confirmed missing on the live database, and whole-subject buying refuses
-   outright without a published catalogue.
-3. ⚠ **Run `supabase-geo-map.sql`**, then Admin → 🗺️ Maps → **Publish to
-   children** once. Until it runs, `mm_data`'s read policy allows only
-   `global_settings`, so a published map edit is readable by nobody but the
-   admin who made it. The editor probes the row as an anonymous caller after
-   publishing and says so in its status line. The client ships safely without
-   it: an unreadable key falls back to the local cache, then to the built-in
-   catalogue.
-4. **`supabase-migration.sql`** — PIN-counter move, ambiguous-family-name guard,
-   push-subscription cleanup on delete.
-5. **Run `supabase-coparent.sql`** to switch co-parent access on. The client
-   ships safely without it: `getMyFamily()` tries ownership first and only then
-   `my_member_family()`, so an un-migrated database behaves exactly as today.
-6. ⚠ **Rotate the VAPID keypair** — the private key is in git history (`dba9b8e`)
+⚠ **Verified against the live database 2026-09-02, not copied forward.** Every
+SQL migration this list used to name as outstanding — `forum-author`,
+`credits-shop`, `geo-map`, `coparent`, `migration`,
+`20260902_extend_student_sessions` — is **applied**. The list had been wrong for
+long enough that it sent a whole debugging session down the wrong path; re-check
+with `pg_policies` / `pg_proc` before trusting any line of it again.
+
+1. ⚠⚠ **`mailer_autoconfirm` is ON — a deliberate, TEMPORARY bridge** (set
+   2026-09-02 at the user's explicit request, after the cost was stated). New
+   accounts activate with **no email verification at all**: a typo in an address
+   becomes an unrecoverable account, and nothing stops junk signups. It exists
+   because the project is still on Supabase's **built-in** email sender — a
+   shared test service hard-capped at **2 emails/hour**, which
+   `rate_limit_email_sent` cannot raise; only custom SMTP can.
+   **Turn it back off the moment SMTP is configured.** Resend is already used by
+   `notify.js` / `weekly-digest.js`: `smtp.resend.com:465`, user `resend`,
+   password = the Resend API key, plus a verified sending domain
+   (`psac-practice.netlify.app` cannot be one). Then raise
+   `rate_limit_email_sent` from 2 to 30–100.
+   ⚠ Password reset **still** sends email and is still capped at 2/hour — the
+   bridge does not cover it.
+   ⚠ **BLOCKED ON ONE THING: no verified domain in Resend.** The API key works
+   and can send, but the account (owner `rajneeshgobin@gmail.com`) has no
+   verified domain, so Resend refuses every `from` address — measured: an
+   unverified domain → 403 "domain is not verified", and
+   `onboarding@resend.dev` → 403 "you can only send testing emails to your own
+   email address". Wiring SMTP up in that state would be **worse than the
+   autoconfirm bridge**: every sign-up email would fail outright instead of
+   merely being rate-limited. Verify a domain at resend.com/domains first.
+   ⚠ **DECIDED 2026-09-02: stay on the autoconfirm bridge; SMTP is deferred.**
+   The costs above were put to the owner alongside three ways to get a sender
+   (register a domain · Brevo's single verified sender address · Gmail SMTP with
+   an app password) and they chose to change nothing for now. **Do not re-open
+   this unprompted** — but do not let the ⚠⚠ above rot either: it is still a
+   temporary state with real costs.
+   ⚠ **`psac-practice.netlify.app` can NEVER be the sending domain**, and it was
+   proposed once. Verification needs SPF/DKIM records in the `netlify.app` DNS
+   zone, which Netlify owns — measured: 403 "the domain is not verified", and no
+   amount of configuration changes that. The sending domain is also **not** the
+   one the owner's own address is on; they ruled it out explicitly. Ask; never
+   guess a `from`.
+   ⚠ **Same cause, already biting:** `notify.js` and `weekly-digest.js` both
+   default `NOTIFY_FROM_EMAIL` to `onboarding@resend.dev`, so every parent
+   assignment email and every weekly digest has been refused with that same 403
+   for every address except the owner's. Both now log Resend's reply instead of
+   discarding it — the failure used to be indistinguishable from success.
+2. ⚠ **Publish the shop catalogue** — Admin → Content → 🛒 Credit Shop →
+   **Publish catalogue**. Not SQL: `purchase_subject()` and
+   `shop_subject_price()` both exist, but `mm_data.shop_settings.catalog` is
+   still `[]`, and that is what `purchase_subject()` validates against — so
+   whole-subject buying refuses today.
+3. ⚠ **Two families are both named "gobin"** (`B48C5A`, `4B2D15`), so
+   `supabase-migration.sql`'s `families_name_key` cannot apply and
+   `verify_student_pin` can answer `ambiguous_family` to a child in either.
+   family_name is one of the three things a child types to log in, so renaming
+   one is a **decision about real children's credentials** — it is not a
+   migration to run unattended. The rest of `supabase-migration.sql` is applied
+   (`students_live_username_key` exists).
+4. ⚠ **Rotate the VAPID keypair** — the private key is in git history (`dba9b8e`)
    permanently. Update the Netlify vars and `VAPID_PUBLIC_KEY` in `engine/app.js`.
    Costs nothing now: there are no real subscribers yet.
-7. **Push notifications for assignments** — infrastructure ready, `push-send.js`
+5. **Push notifications for assignments** — infrastructure ready, `push-send.js`
    not wired to assignment creation. Badge API not started.
-8. **Lazy per-grade manifest loading** — required before any placeholder pack is
+6. **Lazy per-grade manifest loading** — required before any placeholder pack is
    filled in (see load order).
-9. **Split `admin.js` (133 KB) + `teacher.js` (28 KB) behind a role check** —
+7. **Split `admin.js` (133 KB) + `teacher.js` (28 KB) behind a role check** —
    every child parses them on first load for screens they can never open.
-10. **Grades 1–2 need a picture-first question mode** — the renderer assumes the
+8. **Grades 1–2 need a picture-first question mode** — the renderer assumes the
    child can read the question *and* all four options.
-11. **Confirm the MIE lower-secondary subject list for grades 7–9** before writing
+9. **Confirm the MIE lower-secondary subject list for grades 7–9** before writing
    any NCE content.
-12. Still open from the security review, none as exploitable as the five fixed:
+10. Still open from the security review, none as exploitable as the five fixed:
     parent PIN stored as base64 under `_getStoredPinHash`, missing SRI on three
     CDN scripts with a floating `@2` major, CSP `'unsafe-inline'` (311 inline
     handlers), and the dormant plaintext-equality branch in `verify_student_pin`.
-13. Content gaps: English "Vocabulary Builder", maths "Shapes Around Us",
+11. Content gaps: English "Vocabulary Builder", maths "Shapes Around Us",
     grade-6 maths enrichment. Illustration coverage in grade5-maths is still only
     ~1.4% of a 1,045-question pool.
-14. **`daily` would be better as its own table** than a key in the rewritten-whole
+12. **`daily` would be better as its own table** than a key in the rewritten-whole
     blob (~2.4 MB uploaded per 30-minute session at current caps). A migration
     plus a rewrite of every reader — not a quick change.
-15. Payments are not wired: `openPlansModal()` is the single place to add them,
+13. Payments are not wired: `openPlansModal()` is the single place to add them,
     and `payment-webhook.js` verifiers **fail closed** on purpose — enabling
     payments must break loudly until real signature checks are written.
 

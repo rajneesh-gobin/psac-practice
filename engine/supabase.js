@@ -82,7 +82,9 @@ function _sbFetch(input, init = {}) {
 
 const _sb = (typeof supabase !== 'undefined')
   ? supabase.createClient(SB_URL, SB_KEY, {
-      auth: { persistSession: true, storageKey: 'mm_sb_auth' },
+      // Keep a familiar device signed in across ordinary browser restarts and
+      // explicitly refresh its short-lived access token in the background.
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'mm_sb_auth' },
       global: { fetch: _sbFetch },
     })
   : null;

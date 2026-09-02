@@ -128,6 +128,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-science/questions/past_paper_2016.js',
       // top-up
       'subjects/grade5-science/questions/topup_g5_science.js',
+      'subjects/grade5-science/questions/coverage_min5.js',
     ],
     'grade5-history': [
       'subjects/grade5-history/questions/ch01_discovery.js',
@@ -151,6 +152,9 @@ const QuestionLoader = (() => {
       'subjects/grade5-history/questions/past_paper_2020.js',
       // top-up
       'subjects/grade5-history/questions/topup_g5_history.js',
+      'subjects/grade5-history/questions/coverage_discovery_portlouis.js',
+      'subjects/grade5-history/questions/coverage_settlement.js',
+      'subjects/grade5-history/questions/coverage_min5.js',
     ],
     'grade6-science': [
       'subjects/grade6-science/questions/ch01_g6_air.js',
@@ -277,6 +281,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-english/questions/coverage_verbs.js',
       'subjects/grade4-english/questions/coverage_adjectives_sentences.js',
       'subjects/grade4-english/questions/coverage_comprehension.js',
+      'subjects/grade4-english/questions/coverage_vocabulary.js',
+      'subjects/grade4-english/questions/coverage_passages.js',
     ],
     'grade4-science': [
       'subjects/grade4-science/questions/ch01_g4_living_things.js',
@@ -308,6 +314,13 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/topup_g4_french.js',
       'subjects/grade4-french/questions/extended_practice_bank.js',
       'subjects/grade4-french/questions/image_photo_activities.js',
+      'subjects/grade4-french/questions/coverage_vocabulaire.js',
+      'subjects/grade4-french/questions/coverage_noms_propres.js',
+      'subjects/grade4-french/questions/coverage_articles.js',
+      'subjects/grade4-french/questions/coverage_pronominaux.js',
+      'subjects/grade4-french/questions/coverage_adjectifs.js',
+      'subjects/grade4-french/questions/coverage_phrase_passe.js',
+      'subjects/grade4-french/questions/coverage_imparfait_lecture.js',
     ],
     'grade4-history': [
       'subjects/grade4-history/questions/ch01_g4_locality.js',
@@ -322,6 +335,9 @@ const QuestionLoader = (() => {
       'subjects/grade4-history/questions/enrichment_g4_world.js',
       // top-up
       'subjects/grade4-history/questions/topup_g4_history.js',
+      'subjects/grade4-history/questions/coverage_locality_community.js',
+      'subjects/grade4-history/questions/coverage_voyages_environment.js',
+      'subjects/grade4-history/questions/coverage_weather_maps.js',
     ],
   };
 

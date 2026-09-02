@@ -1753,6 +1753,13 @@ function showScreen(id) {
       try { sessionStorage.setItem('psac-last-screen', id); } catch (_) {}
     }
   }
+  if (id === 'landing') {
+    try {
+      if (!localStorage.getItem('psac_service_notice_dismissed')) {
+        setTimeout(() => document.getElementById('modal-service-notice')?.classList.remove('hidden'), 250);
+      }
+    } catch (_) {}
+  }
   _prevScreen = id;
   _updateBottomNav(id);
   if (_currentHintTarget && _currentHintTarget.screen !== id) _hideHint();
@@ -1833,6 +1840,11 @@ function showScreen(id) {
 
   // Last, so the render calls above have put the target on the page already.
   _armIdleNudge(id);
+}
+
+function dismissServiceNotice() {
+  try { localStorage.setItem('psac_service_notice_dismissed', '1'); } catch (_) {}
+  document.getElementById('modal-service-notice')?.classList.add('hidden');
 }
 
 function _updateBreadcrumb(screenId) {
@@ -3086,10 +3098,14 @@ async function renderParentDashboard() {
   // and invites them to create duplicates.
   // A signed-in parent with no family row is the same kind of failure one step
   // earlier - the children query never even ran, so it left no error behind.
+  // ⚠ Only ever a READ failure now. "This parent never finished setup" no
+  // longer reaches this screen at all - _handleParentSession() routes it back
+  // to family-setup, because there is nothing here for them to retry. So say
+  // what the database actually said rather than a sentence that fits both.
   const loadError   = !hasStudents
     ? (Store.lastFamilyStudentsError?.()
        || ((Auth.getParentProfile?.() && !Auth.getFamily?.())
-             ? 'Your family record could not be loaded.' : null))
+             ? (Store.lastFamilyError?.() || 'Your family record could not be loaded.') : null))
     : null;
 
   if (_el('pd-load-error'))    _el('pd-load-error').classList.toggle('hidden', !loadError);
@@ -4436,7 +4452,10 @@ function _renderSubjectProgress(acct) {
     const dbCh   = DB.chapters || {};
     const total   = chs.reduce((s, ch) => s + ((dbCh[ch.id]?.attempted) || 0), 0);
     const correct = chs.reduce((s, ch) => s + ((dbCh[ch.id]?.correct)   || 0), 0);
+    // This is accuracy, not subject completion. A child can answer a handful
+    // of familiar questions correctly and still have most of a subject unseen.
     const pct = total ? Math.round(correct / total * 100) : 0;
+    const chaptersTried = chs.filter(ch => ((dbCh[ch.id]?.attempted) || 0) > 0).length;
     const col = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#3b82f6';
     const chapRows = chs.map(ch => {
       const c  = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
@@ -4464,14 +4483,15 @@ function _renderSubjectProgress(acct) {
             <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
               <div style="width:${pct}%;height:100%;background:${col};border-radius:3px"></div>
             </div>
-            <span class="text-xs font-bold" style="color:${col}">${pct}%</span>
+            <span class="text-xs font-bold" style="color:${col}">${pct}% accurate</span>
           </div>
         </div>
-        <span class="text-xs text-gray-500 dark:text-gray-400">${total} Q done ▾</span>
+        <span class="text-xs text-gray-500 dark:text-gray-400 text-right">${total} answers<br>${chaptersTried}/${chs.length} chapters tried ▾</span>
       </button>
       <div class="hidden px-4 py-2">
+        <p class="text-xs text-gray-500 dark:text-gray-400 py-1.5">Accuracy shows how often answers were correct — it is not subject completion. More practice questions remain in each chapter.</p>
         <div class="flex text-xs text-gray-500 dark:text-gray-400 uppercase border-b border-gray-100 dark:border-gray-700 pb-1 mb-1">
-          <span class="flex-1">Chapter</span><span class="w-8 text-center">Tried</span><span style="width:90px" class="ml-3">Score</span>
+          <span class="flex-1">Chapter</span><span class="w-8 text-center">Answers</span><span style="width:90px" class="ml-3">Accuracy</span>
         </div>
         ${chapRows}
       </div>

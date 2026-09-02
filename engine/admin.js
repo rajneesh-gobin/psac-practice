@@ -298,6 +298,204 @@ const AdminPanel = (() => {
     }
   }
 
+  // The way back in when email is not available. The project sends auth mail
+  // through Supabase's built-in service (2/hour), so "send a reset link" can
+  // simply not work at the moment somebody needs it. The server generates the
+  // password, returns it once, and it is shown here once - there is no second
+  // chance to read it, which is said before the request is made, not after.
+  // Every admin action that needs a Netlify function goes through here.
+  //
+  // ⚠ A missing function does NOT look like an error. Netlify answers an
+  // unknown /api/ path with the SPA fallback - HTML, status 404 - so
+  // response.json() throws, the old code turned that into {} and reported
+  // "Could not delete the account", which reads as a refusal BY the server.
+  // It is not: the endpoint was never reached. That is the normal state on a
+  // plain local static server, where no function runs at all, and on any
+  // deploy predating the function - and telling those apart is the difference
+  // between "try again" and "you need to deploy".
+  // id -> email, filled in after the list paints. Kept across renders so
+  // expanding a row, changing a filter or paging does not re-ask for addresses
+  // already known.
+  const _memberEmails = {};
+  // Set once the endpoint proves to be missing rather than merely failing. The
+  // members list re-renders on every filter, page and expand, so without this a
+  // deploy that predates the function produces a fresh 404 and a fresh console
+  // warning every single time - dozens of them, all saying the same thing.
+  let _memberEmailsUnavailable = false;
+
+  // ⚠ Deliberately quiet. This runs on every members render, and an admin who
+  // has not deployed the function yet would otherwise get a toast every single
+  // time the list paints. The console still says exactly what happened, and the
+  // address line simply stays blank - which is what it looked like before.
+  async function _loadMemberEmails(ids) {
+    if (_memberEmailsUnavailable) return;
+    const missing = [...new Set(ids)].filter(id => id && !(id in _memberEmails));
+    if (!missing.length) return;
+    let result;
+    try {
+      result = await _adminApi("/api/admin-member-emails", { user_ids: missing });
+    } catch (e) {
+      // "not available" is permanent for this session; anything else (a dropped
+      // connection, an expired token) is worth retrying on the next render.
+      if (/not available/.test(e.message || "")) {
+        _memberEmailsUnavailable = true;
+        console.warn("[AdminPanel] member emails need /api/admin-member-emails to be "
+          + "deployed. Reload this page after deploying.", e.message);
+      } else {
+        console.warn("[AdminPanel] could not load member emails:", e.message);
+      }
+      return;
+    }
+    // Remember the misses too, as null, so a member whose auth row is gone is
+    // not re-requested on every render for the rest of the session.
+    missing.forEach(id => { _memberEmails[id] = result.emails?.[id] || null; });
+    missing.forEach(id => {
+      const el = document.getElementById("member-email-" + id);
+      if (el) el.textContent = _memberEmails[id] || "";
+    });
+  }
+
+  async function _adminApi(path, body) {
+    const { data: sessionData } = await _sb.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) throw new Error("Your sign-in session has expired. Please refresh and sign in again.");
+
+    let response;
+    try {
+      response = await fetch(path, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+    } catch (e) {
+      throw new Error("Could not reach the server. Check your connection.");
+    }
+
+    const ctype = (response.headers.get("content-type") || "").toLowerCase();
+    if (!ctype.includes("application/json")) {
+      console.error("[AdminPanel] " + path + " did not return JSON:", response.status, ctype);
+      throw new Error(`${path} is not available (HTTP ${response.status}). `
+        + "This action needs its Netlify function, which does not run on a plain "
+        + "local server and is not on this deploy yet.");
+    }
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.ok) throw new Error(result.error || "The server refused the request.");
+    return result;
+  }
+
+  async function setTemporaryPassword(userId) {
+    const m = _members.find(x => x.id === userId);
+    const displayName = m?.full_name || 'this account';
+    if (!confirm(
+      `Set a NEW temporary password for ${displayName}?
+
+`
+      + `Their current password stops working immediately, and no email is sent - `
+      + `you must pass the new password to them yourself.
+
+`
+      + `It is shown ONCE and cannot be retrieved afterwards.`)) return;
+    try {
+      const result = await _adminApi('/api/admin-account-recovery',
+        { user_id: userId, action: 'set_password' });
+      if (!result.password) throw new Error('The server did not return a password.');
+      _showTempPassword(displayName, result.email, result.password);
+    } catch (error) {
+      console.error("[AdminPanel.setTemporaryPassword]", error);
+      toast(error.message || 'Could not set a new password.', 7000);
+    }
+  }
+
+  // A toast is the wrong container for something that must be copied down
+  // before it disappears - this one does not close on a stray click, and it
+  // says the password is unrecoverable while it is still on screen.
+  function _showTempPassword(name, email, password) {
+    const wrap = document.createElement('div');
+    wrap.className = 'fixed inset-0 z-[95] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm';
+    wrap.innerHTML = `
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 my-auto max-h-full overflow-y-auto">
+        <div class="text-4xl text-center mb-2 select-none">🔑</div>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white text-center mb-1">Temporary password set</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 text-center mb-4">
+          for ${_esc(name)}${email ? ' · ' + _esc(email) : ''}
+        </p>
+        <div class="rounded-xl border-2 border-dashed border-indigo-300 dark:border-indigo-700 bg-indigo-50 dark:bg-indigo-950/40 px-3 py-4 mb-3 text-center">
+          <code id="tmp-pw-value" class="select-all font-mono text-lg font-bold tracking-wider text-indigo-800 dark:text-indigo-200 break-all">${_esc(password)}</code>
+        </div>
+        <p class="text-xs text-red-600 dark:text-red-400 text-center mb-4">
+          This is shown once. It cannot be retrieved later — copy it now, and ask
+          them to change it after signing in.
+        </p>
+        <div class="flex gap-2">
+          <button id="tmp-pw-copy" class="flex-1 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-sm transition-colors">Copy</button>
+          <button id="tmp-pw-done" class="flex-1 py-2.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-bold rounded-xl text-sm transition-colors">Done</button>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+    wrap.querySelector('#tmp-pw-copy').onclick = async () => {
+      try { await navigator.clipboard.writeText(password); toast('Copied.', 1500); }
+      catch (_) {
+        // Clipboard access is refused outright in some browsers and over
+        // http://. Selecting the text is then the only thing left that works.
+        const el = document.getElementById('tmp-pw-value');
+        if (el) { const r = document.createRange(); r.selectNodeContents(el);
+          const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+        toast('Could not copy automatically — select the text and copy it.', 3500);
+      }
+    };
+    wrap.querySelector('#tmp-pw-done').onclick = () => wrap.remove();
+  }
+
+  // ⚠ PERMANENT. Store.deleteMyAccount() is the soft one - it sets
+  // profiles.deleted_at and keeps auth.users precisely so a parent can sign in
+  // and get everything back. This erases the row and there is nothing to
+  // restore from. The Disable button beside it is the reversible answer and is
+  // almost always the right one for a real family; this is for accounts that
+  // should never have existed.
+  async function deleteMemberAccount(userId) {
+    const m = _members.find(x => x.id === userId);
+    const name = m?.full_name || "this account";
+    if (m?.role === "admin") {
+      // Said before the typing, not after: an administrator deleting another
+      // administrator is a different act from clearing out a test family.
+      if (!confirm(`${name} is an ADMINISTRATOR account. Delete it permanently?`)) return;
+    }
+    if (!confirm(
+      `Permanently delete ${name}?
+
+`
+      + `This also deletes every child on the account and all of their progress, `
+      + `exam history, assignments and timetable. It cannot be undone and there `
+      + `is no backup to restore from.
+
+`
+      + `If you only want to stop them signing in, cancel and use Disable instead.`)) return;
+    const typed = prompt(`Type DELETE (in capitals) to permanently delete ${name}.`);
+    if ((typed || "").trim() !== "DELETE") { toast("Cancelled — nothing was deleted.", 2500); return; }
+
+    try {
+      // The server demands the confirmation too. A browser confirm is not a
+      // safeguard on an irreversible server action.
+      const result = await _adminApi("/api/admin-delete-account",
+        { user_id: userId, confirm: "DELETE" });
+      const kids = result.students
+        ? ` and ${result.students} child account${result.students === 1 ? "" : "s"}`
+        : "";
+      toast(`Deleted ${name}${kids}. 🗑`, 4000);
+      // ⚠ Reported, not swallowed. A purge that half worked leaves orphaned
+      // rows behind, which is the exact failure this endpoint exists to avoid
+      // creating - so it must not be reported as a clean delete.
+      if (result.purge_failures?.length) {
+        console.error("[AdminPanel] leftover rows after delete:", result.purge_failures);
+        toast("Some related records could not be removed — check the console.", 6000);
+      }
+      await loadMembers(true);
+    } catch (error) {
+      console.error("[AdminPanel.deleteMemberAccount]", error);
+      toast(error.message || "Could not delete the account.", 7000);
+    }
+  }
+
   async function loadMembers(reset = true) {
     if (!_sb) return;
     if (_memberStatusFilter === 'pending') {
@@ -562,6 +760,7 @@ const AdminPanel = (() => {
               ${m.created_at ? 'Joined ' + _fmtJoined(m.created_at) : ''}
             </p>
             ${_memberAccountLabel(m)}
+            <p id="member-email-${m.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[m.id] || '')}</p>
             <p class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
           </div>
           <span class="hidden sm:block">${_memberChildrenSummary(m)}</span>
@@ -586,6 +785,16 @@ const AdminPanel = (() => {
             <button onclick="AdminPanel.sendPasswordReset('${m.id}')"
               class="text-xs px-3 py-1 rounded-lg font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200">
               📧 Send password-reset link
+            </button>
+            <button onclick="AdminPanel.setTemporaryPassword('${m.id}')"
+              title="No email involved — you read the new password out to them"
+              class="text-xs px-3 py-1 rounded-lg font-semibold bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200">
+              🔑 Set temporary password
+            </button>
+            <button onclick="AdminPanel.deleteMemberAccount('${m.id}')"
+              title="Permanent. Use Disable if you only want to stop them signing in."
+              class="text-xs px-3 py-1 rounded-lg font-semibold bg-red-600 text-white hover:bg-red-700">
+              🗑 Delete permanently
             </button>
             ${isParent ? `
             <button onclick="AdminPanel.toggleChildren('${m.id}')" id="btn-children-${m.id}"
@@ -654,6 +863,11 @@ const AdminPanel = (() => {
         </div>
       </div>`;
     }).join('');
+
+    // profiles has no email column, so the address has to come from the server.
+    // Not awaited: the list is already on screen and useful, and one slow
+    // function call must not hold the whole panel blank.
+    _loadMemberEmails(list.map(m => m.id));
 
     // The plan label lives in the SUMMARY row now, so it is readable without
     // expanding anything - that is the point of having a Plan column at all.
@@ -2638,7 +2852,8 @@ const AdminPanel = (() => {
   }
 
   return { render, showTab, loadMembers, loadMoreMembers, filterMembers, setMemberStatusFilter, setMemberVisibilityFilters,
-    loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset, changeRole, toggleMemberRow,
+    loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
+    setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,

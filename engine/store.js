@@ -194,15 +194,38 @@ const Store = (() => {
   //   my_member_family() is absent until supabase-coparent.sql has been run.
   //   The rpc then errors, this returns null, and behaviour is exactly what it
   //   is today - so the client can ship before the migration.
+  // ⚠ null means TWO different things and the caller MUST be able to tell them
+  // apart. "This parent has not created a family yet" is a normal, finishable
+  // state — family setup writes the profile row before the family row, with no
+  // transaction, so an interrupted setup leaves exactly that. "The families
+  // query failed" is not: routing a failed read into family setup would create
+  // a second family on top of one that already exists, and a parent cannot undo
+  // that. Same rule, and the same shape, as lastFamilyStudentsError().
+  let _familyError = null;
+  function lastFamilyError() { return _familyError; }
+
   async function getMyFamily(parentId) {
-    if (!_sb || !parentId) return null;
+    _familyError = null;
+    if (!_sb || !parentId) { _familyError = 'Not connected.'; return null; }
     const { data, error } = await _sb.from('families').select('id, family_name, family_code, parent_id, created_at').eq('parent_id', parentId).maybeSingle();
-    if (error) console.warn('[Store.getMyFamily]', error.message);
-    if (data) return data;
+    if (error) {
+      console.warn('[Store.getMyFamily]', error.code, error.message);
+      _familyError = error.message || 'Unknown database error.';
+    }
+    if (data) { _familyError = null; return data; }
 
     try {
       const { data: mine, error: mErr } = await _sb.rpc('my_member_family');
-      if (mErr) { console.warn('[Store.getMyFamily/member]', mErr.message); return null; }
+      if (mErr) {
+        console.warn('[Store.getMyFamily/member]', mErr.code, mErr.message);
+        // PGRST202 = supabase-coparent.sql has not been run yet. That is not a
+        // read failure — this account simply cannot be a co-parent on this
+        // database — so it must not mask the clean "no family yet" answer the
+        // owned-family query already gave.
+        if (mErr.code !== 'PGRST202' && !_familyError) _familyError = mErr.message || 'Unknown database error.';
+        return null;
+      }
+      if (mine) _familyError = null;
       return mine || null;
     } catch (_) { return null; }
   }
@@ -256,9 +279,19 @@ const Store = (() => {
       .insert({ parent_id: parentId, family_name: familyName })
       .select('id, family_name, family_code, parent_id').single();
     if (error) {
-      console.error("[Store.createFamily]", error);
-      // 23505 = the family name is already in use. Children log in with it, so
-      // two families cannot share one; the caller has to say which name to change.
+      console.error("[Store.createFamily]", error.code, error.message);
+      // ⚠ 23505 here is TWO different constraints. families_name_key means the
+      // name is taken and the parent has to choose another; families_parent_id_key
+      // means this parent already has a family — a half-finished setup being
+      // retried — and the right answer is to carry on with the one they own, not
+      // to tell them to rename a family that is already theirs.
+      // Probed rather than matched on the constraint name in the message: the
+      // name index only exists once supabase-migration.sql has been able to
+      // apply it, so the message text is not something to depend on.
+      if (error.code === '23505') {
+        const mine = await getMyFamily(parentId);
+        if (mine) return mine;
+      }
       return { _error: { code: error.code, message: error.message } };
     }
     return data;
@@ -680,6 +713,8 @@ const Store = (() => {
   }
 
   // ── Profiles (parent / teacher) ───────────────
+  const _PROFILE_COLS = 'id, role, full_name, disabled, expires_at, is_super_admin, teacher_status, teacher_tier';
+
   async function getProfile(userId) {
     if (!_sb) return null;
     // maybeSingle: "no profile yet" is the NORMAL path for a freshly verified
@@ -693,9 +728,9 @@ const Store = (() => {
     // adds but the live DB doesn't have yet (migration not run) would error the
     // whole fetch and bounce every returning user into family-setup again.
     const { data, error } = await _sb.from('profiles')
-      .select('id, role, full_name, disabled, expires_at, is_super_admin, teacher_status, teacher_tier')
+      .select(_PROFILE_COLS)
       .eq('id', userId).maybeSingle();
-    if (error) console.error('[Store.getProfile]', error.message);
+    if (error) console.error('[Store.getProfile]', error.code, error.message);
     return data || null;
   }
 
@@ -914,12 +949,31 @@ const Store = (() => {
     return data?.deleted_at || null;
   }
 
+  // ⚠ Idempotent, and it reports WHY it failed. Family setup is a three-step
+  // wizard — profile, then family, then the first child — with no transaction
+  // behind it, so a failure at step 2 or 3 leaves the profile row already
+  // written. Insert-only meant every retry died on a duplicate primary key and
+  // the parent was told "Error creating profile" while they were trying to
+  // create a FAMILY, with no way out but a new email address.
+  //
+  // A row that already exists IS the success case here: profiles_insert only
+  // ever allows id = auth.uid(), so a 23505 on this insert can only be the
+  // caller's own profile. Anything else comes back as _error rather than a bare
+  // null — swallowing the code turned "permission denied for table profiles"
+  // (which never names the column, see CLAUDE.md) into a dead end nobody could
+  // diagnose from the screen.
   async function createProfile(userId, role, fullName) {
-    if (!_sb) return null;
+    if (!_sb) return { _error: { code: 'offline', message: 'No connection to the server.' } };
     const { data, error } = await _sb.from('profiles')
       .insert({ id: userId, role, full_name: fullName })
-      .select('id, role, full_name, disabled, expires_at, is_super_admin, teacher_status, teacher_tier').single();
-    return error ? null : data;
+      .select(_PROFILE_COLS).single();
+    if (!error) return data;
+    console.error('[Store.createProfile]', error.code, error.message);
+    if (error.code === '23505') {
+      const existing = await getProfile(userId);
+      if (existing) return existing;
+    }
+    return { _error: { code: error.code, message: error.message } };
   }
 
   // ── mm_data (teacher assignments sync) ────────
@@ -1166,7 +1220,7 @@ const Store = (() => {
     saveStudentSession, getStudentSession, clearStudentSession,
     restoreStudentToken, endStudentSession,
     // Families
-    lookupFamily, getMyFamily, createFamily, updateFamilyName,
+    lookupFamily, getMyFamily, lastFamilyError, createFamily, updateFamilyName,
     listFamilyMembers, createCoparentInvite, revokeCoparentInvite,
     acceptCoparentInvite, removeFamilyMember,
     // Students

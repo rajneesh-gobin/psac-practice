@@ -334,6 +334,46 @@ const Auth = (() => {
     return !last || last.who !== 'parent';
   }
 
+  // ⚠ A stored student session with NO token cannot authorise anything, so it
+  // is not a session — every routing decision must read it as absent, and it is
+  // dropped on sight. Without this, an install poisoned by the parent-preview
+  // bug above stays poisoned: init() would resume it, find no token, and send a
+  // perfectly valid parent session to the sign-in screen on every single reload.
+  function _storedStudentSession() {
+    const sess = Store.getStudentSession();
+    if (sess && !sess.token) { Store.clearStudentSession(); return null; }
+    return sess;
+  }
+
+  // Mobile browsers may freeze a PWA for hours. On a normal return, refresh a
+  // parent token that is close to expiry instead of treating the saved sign-in
+  // as lost. A network failure deliberately leaves the stored session alone.
+  async function _refreshParentSessionIfNeeded(session) {
+    if (!_sb || !session || !navigator.onLine) return session;
+    const expiresMs = Number(session.expires_at || 0) * 1000;
+    if (expiresMs && expiresMs > Date.now() + 10 * 60 * 1000) return session;
+    try {
+      const { data, error } = await _sb.auth.refreshSession();
+      if (!error && data?.session) return data.session;
+    } catch (_) {}
+    return session;
+  }
+
+  let _parentRefreshHooksBound = false;
+  function _keepParentSessionFresh() {
+    if (!_sb || _parentRefreshHooksBound) return;
+    _parentRefreshHooksBound = true;
+    const refreshOnReturn = async () => {
+      if (document.hidden || !navigator.onLine) return;
+      try {
+        const { data: { session } } = await _sb.auth.getSession();
+        if (session) await _refreshParentSessionIfNeeded(session);
+      } catch (_) {}
+    };
+    window.addEventListener('online', refreshOnReturn);
+    document.addEventListener('visibilitychange', refreshOnReturn);
+  }
+
   // ── App init ───────────────────────────────────
   async function init() {
     _captureReferralFromUrl();
@@ -349,6 +389,8 @@ const Auth = (() => {
 
     // 1. Listen for Supabase auth state changes (email verification callback lands here)
     if (_sb) {
+      _sb.auth.startAutoRefresh?.();
+      _keepParentSessionFresh();
       _sb.auth.onAuthStateChange(async (event, session) => {
         if (event === 'PASSWORD_RECOVERY') {
           showScreen('reset-password');
@@ -360,19 +402,25 @@ const Auth = (() => {
           // back to the parent milliseconds after init() gave it to the child.
           // SIGNED_IN from a real sign-in is unaffected: that path stamps
           // 'parent' before the event lands.
-          if (_studentOwnsDevice(!!Store.getStudentSession(), true)) return;
+          if (_studentOwnsDevice(!!_storedStudentSession(), true)) return;
           await _handleParentSessionGated(session);
         } else if (event === 'SIGNED_OUT') {
+          // A parent and child can have separate saved credentials on one
+          // device. An automatic parent-token sign-out must not erase a
+          // child's still-valid PIN session. Explicit logout clears it first.
+          const keepStudentSession = !!_activeAccount && !!_storedStudentSession();
           _parentUser    = null;
           _parentProfile = null;
           _family        = null;
           _familyStudents = [];
-          Store.clearStudentSession();
-          _activeAccount = null;
+          if (!keepStudentSession) {
+            Store.clearStudentSession();
+            _activeAccount = null;
+          }
           _biometricGateResolved  = false;
           _pendingBiometricSession = null;
           _pendingBiometricKind    = null;
-          showScreen('auth');
+          if (!keepStudentSession) showScreen('auth');
         }
       });
 
@@ -389,7 +437,8 @@ const Auth = (() => {
         const retry = await _sb.auth.getSession();
         session = retry?.data?.session || null;
       }
-      const storedStudent = Store.getStudentSession();
+      session = await _refreshParentSessionIfNeeded(session);
+      const storedStudent = _storedStudentSession();
 
       if (_studentOwnsDevice(!!storedStudent, !!session)) {
         document.body.style.opacity = '1';
@@ -405,7 +454,7 @@ const Auth = (() => {
 
     // 3. No Supabase client, or no parent session: the stored student session
     //    (PIN login persists across refresh) is the only candidate left.
-    const studentSess = Store.getStudentSession();
+    const studentSess = _storedStudentSession();
     if (studentSess) {
       document.body.style.opacity = '1';
       await _resumeStudentGated(studentSess);
@@ -546,6 +595,45 @@ const Auth = (() => {
   }
 
   // ── Handle parent/teacher Supabase session ─────
+  function _showFamilySetup() {
+    _buildSetupAvatarGrid();
+    const refField = _el('setup-referral-code');
+    const pending  = getPendingReferralCode();
+    if (refField && pending) refField.value = pending;
+    showScreen('family-setup');
+  }
+
+  // ⚠ A profile with no family is an INTERRUPTED SETUP, not a broken account.
+  // completeSetup() writes the profile row, then the family, then the first
+  // child, with no transaction behind it — so anything that went wrong after
+  // step 1 leaves precisely this state. Nothing used to route it anywhere: the
+  // parent landed on a dashboard whose only message was "Your family record
+  // could not be loaded", on every reload, with no way back to the setup
+  // screen. Both steps are idempotent now (see Store.createProfile /
+  // createFamily), so sending them back finishes the job.
+  //
+  // Two guards, and neither is optional:
+  //   • only when the query ANSWERED "no family" — Store.lastFamilyError()
+  //     empty. Routing a failed READ into setup would write a second family
+  //     over one that already exists, which a parent cannot undo.
+  //   • only role 'parent' — an admin lands on this dashboard with no family of
+  //     their own by design, and a co-parent's family arrives through
+  //     my_member_family() inside getMyFamily().
+  //   • only an account that is actually a FAMILY. A teacher who signs up on
+  //     the teacher tab gets role 'parent' on purpose (see _bootstrapTeacherProfile
+  //     — the role only becomes 'teacher' when an admin approves) and has no
+  //     family and no children, so the role test alone sent them to a screen
+  //     demanding a child's name, username and 4-digit PIN before they could go
+  //     anywhere. teacher_status is the signal that separates them; the
+  //     user_metadata check is the belt to its braces, because
+  //     request_teacher_access() is non-fatal and can leave the status at 'none'.
+  function _needsFamilySetup(profile) {
+    if (profile?.role !== 'parent') return false;
+    if ((profile.teacher_status || 'none') !== 'none') return false;
+    if (_parentUser?.user_metadata?.role === 'teacher') return false;
+    return !(typeof Store.lastFamilyError === 'function' && Store.lastFamilyError());
+  }
+
   async function _handleParentSession(session) {
     _parentUser = session.user;
 
@@ -560,11 +648,7 @@ const Auth = (() => {
 
     if (!profile) {
       // Brand-new user after email verification - needs family setup
-      _buildSetupAvatarGrid();
-      const refField = _el('setup-referral-code');
-      const pending  = getPendingReferralCode();
-      if (refField && pending) refField.value = pending;
-      showScreen('family-setup');
+      _showFamilySetup();
       return;
     }
 
@@ -642,6 +726,9 @@ const Auth = (() => {
     if (_family) {
       _familyStudents = await Store.getFamilyStudents(_family.id);
       _cacheAccountsLocally(_familyStudents);
+    } else if (_needsFamilySetup(profile)) {
+      _showFamilySetup();
+      return;
     }
 
     // Parents/teachers have no per-user saved theme, so this keeps whatever is
@@ -677,8 +764,8 @@ const Auth = (() => {
     const name = _parentUser.user_metadata?.full_name
               || _parentUser.email?.split('@')[0] || 'Teacher';
     const created = await Store.createProfile(_parentUser.id, 'parent', name);
-    if (!created) {
-      console.error('[auth] could not create teacher profile');
+    if (!created || created._error) {
+      console.error('[auth] could not create teacher profile:', created && created._error);
       return null;
     }
     await _consumePendingReferral();
@@ -936,10 +1023,31 @@ const Auth = (() => {
     };
     // saveStudentSession installs the x-student-token header, so it MUST run
     // before the first student-scoped query below.
-    Store.saveStudentSession(sess);
-    // A PIN login is the clearest statement there is about who is using this
-    // device — see _markActiveMode().
-    _markActiveMode('student');
+    //
+    // ⚠ Only for a REAL login. A parent previewing a child (pdSwitchStudent)
+    // arrives here with NO token, and a preview is not a sign-in. Persisting a
+    // tokenless session — and stamping the device 'student' — meant every later
+    // reload resumed a session that carries no credential, which _resumeStudent()
+    // can only answer with "Please sign in again to continue.". One tap on a
+    // child's card in the parent dashboard poisoned the stored session for good,
+    // and the parent was bounced to the sign-in screen on every refresh from then
+    // on. store.js's _flushProgressToSupabase() already documents the intended
+    // contract: a parent previewing a child has no student session at all.
+    //
+    // A preview still needs the two SIDE-EFFECTS of saveStudentSession — flush
+    // the outgoing child's pending write, and drop any x-student-token so no
+    // query leaves under a different child's credential — but a real signed-in
+    // child's stored session is left untouched, so handing the phone back does
+    // not cost them their PIN.
+    if (token) {
+      Store.saveStudentSession(sess);
+      // A PIN login is the clearest statement there is about who is using this
+      // device — see _markActiveMode().
+      _markActiveMode('student');
+    } else {
+      try { await Store.flushPendingProgress(); } catch (_) {}
+      if (typeof setStudentToken === 'function') setStudentToken(null);
+    }
     // Remember what this child had to type, so next time they only need the PIN.
     // ⚠ Family name and username only — never the PIN, which is the credential.
     _rememberKnownStudent(studentRow);
@@ -1248,6 +1356,40 @@ const Auth = (() => {
     }
   }
 
+  // ⚠ Every sign-up, resend and password reset costs ONE email, and they all
+  // share one quota. GoTrue answers 429 with two very different situations
+  // behind the same status, and its own wording ("email rate limit exceeded")
+  // means nothing to a parent and does not say whether the problem is theirs or
+  // ours:
+  //   • over_request_rate_limit  — the per-ADDRESS floor (smtp_max_frequency,
+  //     60s live). This one is the caller's own doing and clears in a minute.
+  //   • over_email_send_rate_limit — the PROJECT-WIDE hourly cap, which is
+  //     Supabase's built-in test sender at 2/hour until custom SMTP is
+  //     configured. Nothing the caller does clears it, and telling them to
+  //     "try again" makes them retry immediately and consume the next slot.
+  // Anything else keeps its original wording: a made-up friendly message over
+  // an unknown error is how a real fault becomes unreportable.
+  // `what` names the thing that could not be sent. The same mapper serves
+  // sign-up and password recovery, and one generic sentence gets one of them
+  // wrong: it said "we will activate your account by hand" on the FORGOT
+  // PASSWORD screen, which answers a question nobody there asked.
+  function _emailErrorText(error, what) {
+    const thing = what || 'email';
+    const msg  = String(error?.message || '');
+    const code = String(error?.code || '');
+    const secs = (msg.match(/after (\d+) seconds?/) || [])[1];
+    if (code === 'over_request_rate_limit' || secs) {
+      return secs
+        ? `Please wait ${secs} seconds before asking for another ${thing}.`
+        : `Please wait a minute before asking for another ${thing}.`;
+    }
+    if (code === 'over_email_send_rate_limit' || /email rate limit|rate limit exceeded/i.test(msg)) {
+      return `We could not send your ${thing} — our mail service has hit its hourly limit. `
+           + 'This is on our side, not yours. Please try again in an hour, or contact us for help.';
+    }
+    return msg || 'Something went wrong. Please try again.';
+  }
+
   async function emailSignUp() {
     if (!_sb) { _showAuthError('Supabase not loaded.'); return; }
     const name  = (_el('auth-name')?.value         || '').trim();
@@ -1308,7 +1450,21 @@ const Auth = (() => {
       return;
     }
 
-    if (error) { _showAuthError(error.message); return; }
+    if (error) { _showAuthError(_emailErrorText(error, 'activation email')); return; }
+
+    // ⚠ Read the RESULT, never a stored assumption about how this project is
+    // configured. signUp() returns a live session when the project confirms
+    // email automatically (mailer_autoconfirm), and none when it sends a link.
+    // Sending someone who is already signed in to "click the link in the email"
+    // leaves them staring at an inbox that will never receive anything — which
+    // is exactly what turning autoconfirm on does to this screen. Routing off
+    // the session covers both settings, so flipping it back needs no code
+    // change either.
+    if (data?.session) {
+      _clearAuthError();
+      await _handleParentSessionGated(data.session);
+      return;
+    }
 
     // Show check-email screen
     _pendingVerifyEmail = email;
@@ -1353,7 +1509,7 @@ const Auth = (() => {
     });
     _setAuthLoading(false);
 
-    if (error) { _showAuthError(error.message); return; }
+    if (error) { _showAuthError(_emailErrorText(error, 'password-reset link')); return; }
     _clearAuthError();
     const panel = _el('auth-forgot-panel');
     if (panel) panel.innerHTML = `
@@ -1371,7 +1527,7 @@ const Auth = (() => {
     const email = _pendingVerifyEmail || (_el('verify-email-addr')?.textContent || '').trim();
     if (!email) { toast('Could not find email address. Please go back and sign up again.', 4000); return; }
     const { error } = await _sb.auth.resend({ type: 'signup', email });
-    if (error) toast(`Error: ${error.message}`, 4000);
+    if (error) toast(_emailErrorText(error, 'activation email'), 6000);
     else toast('Verification email resent! Check your inbox.', 4000);
   }
 
@@ -1380,7 +1536,7 @@ const Auth = (() => {
     const { error } = await _sb.auth.resetPasswordForEmail(_pendingVerifyEmail, {
       redirectTo: 'https://psac-practice.netlify.app/',
     });
-    if (error) { toast(`Could not send reset link: ${error.message}`, 4000); return; }
+    if (error) { toast(_emailErrorText(error, 'password-reset link'), 6000); return; }
     toast('Password-reset email sent. Check your inbox.', 4000);
   }
 
@@ -1837,21 +1993,39 @@ const Auth = (() => {
     const role = _parentUser.user_metadata?.role || 'parent';
     const name = _parentUser.user_metadata?.full_name || _parentUser.email;
 
-    // Create profile
+    // Create profile. createProfile() hands back the EXISTING row when there
+    // already is one, so re-running a setup that fell over at the family or
+    // child step now resumes instead of dying on a duplicate primary key.
     const profile = await Store.createProfile(_parentUser.id, role, name);
-    if (!profile) { toast('Error creating profile. Please try again.', 3000); return; }
+    if (!profile || profile._error) {
+      const e = profile && profile._error;
+      // ⚠ The code, on screen. This is a dead end for whoever hits it, and
+      // "please try again" is unactionable for both them and anyone debugging
+      // it — a 42501 (a column with no GRANT) and a dropped connection need
+      // completely different answers and used to look identical here.
+      toast(e && e.code === 'offline'
+        ? 'No connection to the server. Check your internet and try again.'
+        : 'Could not create your profile' + (e && e.code ? ' (' + e.code + ')' : '')
+          + '. ' + ((e && e.message) || 'Please try again.'), 6000);
+      return;
+    }
     _parentProfile = profile;
     await _consumePendingReferral(_el('setup-referral-code')?.value);
 
     // Create family
+    // Like the profile above, this returns the family this parent ALREADY owns
+    // rather than failing, so a retry picks up where the last attempt stopped.
     const family = await Store.createFamily(_parentUser.id, familyName);
     if (!family || family._error) {
-      // 23505: another family already answers to this name, and children log in
-      // with it - so it has to be unique. Name the real problem; "try again"
-      // would have them retry the same name for ever.
-      toast(family?._error?.code === '23505'
+      const fe = family && family._error;
+      // 23505 that survived createFamily's own probe: another family already
+      // answers to this name, and children log in with it - so it has to be
+      // unique. Name the real problem; "try again" would have them retry the
+      // same name for ever.
+      toast(fe && fe.code === '23505'
         ? 'Another family already uses that name. Please choose a different family name.'
-        : 'Error creating family. Please try again.', 4000);
+        : 'Could not create your family' + (fe && fe.code ? ' (' + fe.code + ')' : '')
+          + '. ' + ((fe && fe.message) || 'Please try again.'), 6000);
       return;
     }
     _family = family;
@@ -1976,6 +2150,12 @@ const Auth = (() => {
     if (_family) {
       _familyStudents = await Store.getFamilyStudents(_family.id);
       _cacheAccountsLocally(_familyStudents);
+    } else if (_parentUser && _needsFamilySetup(_parentProfile)) {
+      // Same reasoning as _handleParentSession(): there is nothing to retry,
+      // the family was never created. Finish the setup instead of redrawing
+      // the same error.
+      _showFamilySetup();
+      return;
     }
     renderParentDashboard();
   }
@@ -2000,8 +2180,12 @@ const Auth = (() => {
         const name = _parentProfile?.full_name || _parentUser.email?.split('@')[0] || 'My Family';
         const made = await Store.createFamily(_parentUser.id, `${name}'s Family`);
         _family = made?._error ? null : made;
-        if (made?._error?.code === '23505') {
-          toast('A family already uses that name. Open Settings → Family Login and pick one.', 4500);
+        const mkErr = made && made._error;
+        if (mkErr) {
+          toast(mkErr.code === '23505'
+            ? 'Another family already uses that name. Open Account & Settings → Family Login to set yours.'
+            : 'Could not set up your family' + (mkErr.code ? ' (' + mkErr.code + ')' : '')
+              + '. ' + (mkErr.message || 'Please try again.'), 6000);
           return;
         }
       }
@@ -2016,7 +2200,9 @@ const Auth = (() => {
     _fillFamilyField();
     // Pre-fill a secure suggested PIN and show it in plain text so the parent can note it down
     const _suggested = _suggestPin();
-    if (_el('add-child-pin'))            _el('add-child-pin').value          = _suggested;
+    // A suggested PIN is helpful, but the parent must deliberately type the
+    // PIN they choose. Never pre-fill a secret into the new-child form.
+    if (_el('add-child-pin'))            _el('add-child-pin').value          = '';
     if (_el('pin-suggestion-display'))   _el('pin-suggestion-display').textContent = _suggested;
     if (_el('pin-suggestion-row'))       _el('pin-suggestion-row').classList.remove('hidden');
   }
@@ -2135,9 +2321,12 @@ const Auth = (() => {
     toast(`${target.display_name}'s account removed.`, 2500);
   }
 
+  // ⚠ ACTIVE_STUDENT_ID, not the stored student session. This is the ✏️ Edit
+  // button in the parent dashboard's child panel, and a parent previewing a
+  // child deliberately has no student session — see _loginStudentRow(). Matches
+  // deleteCurrentStudent() right below, which always read it from there.
   function editCurrentStudent() {
-    const sess = Store.getStudentSession();
-    if (sess?.id) editStudent(sess.id);
+    if (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID) editStudent(ACTIVE_STUDENT_ID);
   }
 
   async function editStudent(id) {
@@ -2943,6 +3132,10 @@ const Auth = (() => {
     openParentPinSetup, hasParentPin, clearParentPin,
     pdTab, pdSwitchStudent,
     getStudents: () => _familyStudents,
+    // Being an admin is a property of the ACCOUNT, not of which screen they
+    // happen to be on. A moderator browsing the forum in the ordinary parent
+    // view is still a moderator, and is_admin() in the database agrees.
+    isAdmin: () => _isAdminUser,
     isSuperAdmin: () => _isSuperAdmin,
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,

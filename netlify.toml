@@ -307,6 +307,16 @@
   to     = "/.netlify/functions/admin-account-recovery"
   status = 200
 
+[[redirects]]
+  from   = "/api/admin-delete-account"
+  to     = "/.netlify/functions/admin-delete-account"
+  status = 200
+
+[[redirects]]
+  from   = "/api/admin-member-emails"
+  to     = "/.netlify/functions/admin-member-emails"
+  status = 200
+
 # ── Guest assignment mode ────────────────────────────────────────────────
 # /a/<CODE> serves the lightweight guest page. status 200 = rewrite, so the
 # URL the child received on WhatsApp stays in the address bar and guest.js can

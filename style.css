@@ -1224,7 +1224,7 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
 
 /* ── Tool row ── */
 .pr-tools {
-  display: grid; gap: 0.4rem; grid-template-columns: 1.25fr 1fr;
+  display: grid; gap: 0.4rem; grid-template-columns: 1.25fr 1fr 1fr;
 }
 .pr-help-tray {
   display: grid; gap: 0.4rem;
@@ -1265,6 +1265,9 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
 .dark .pr-tool.is-on { background: rgba(49,46,129,0.5); color: #c7d2fe; border-color: #4f46e5; }
 .pr-tool.is-report:hover { border-color: #fca5a5; color: #b91c1c; background: #fef2f2; }
 .dark .pr-tool.is-report:hover { background: rgba(69,10,10,0.4); color: #f87171; }
+.pr-tool-report-visible { border-color: #fecaca; color: #b91c1c; background: #fff7f7; }
+.pr-tool-report-visible:hover:not(:disabled) { border-color: #f87171; color: #991b1b; background: #fef2f2; }
+.dark .pr-tool-report-visible { border-color: #7f1d1d; color: #fca5a5; background: rgba(69,10,10,0.28); }
 .pr-tool.muted { color: #64748b; }
 
 /* ── Scratchpad panel ── */
@@ -1418,6 +1421,8 @@ body.has-bottom-nav .pr-wrap    { padding-bottom: 4rem; }
 .dark .geo-map-head p,.dark .geo-map-note { color:#99f6e4; }
 .geo-map-bonus { flex:0 0 auto; font-size:.65rem; font-weight:800; white-space:nowrap; padding:.25rem .5rem; border-radius:99px; color:#0f766e; background:#ccfbf1; }
 .dark .geo-map-bonus { background:rgba(13,148,136,.25); color:#99f6e4; }
+.geo-map-construction { display:flex; align-items:flex-start; gap:.45rem; margin:0 0 .7rem; padding:.55rem .65rem; border:1px solid #fcd34d; border-radius:.75rem; background:#fffbeb; color:#92400e; font-size:.72rem; line-height:1.42; }
+.geo-map-construction > span:first-child { font-size:1rem; line-height:1.1; }.dark .geo-map-construction { background:rgba(120,53,15,.25); border-color:rgba(251,191,36,.5); color:#fde68a; }
 .geo-island-tabs { display:flex; gap:.4rem; margin-bottom:.65rem; }
 .geo-island-tab { border:1px solid #99f6e4; background:rgba(255,255,255,.7); color:#115e59; border-radius:.65rem; padding:.4rem .65rem; font-size:.72rem; font-weight:800; transition:transform .15s,background .15s,color .15s; }
 .geo-island-tab:hover,.geo-island-tab.is-active { background:#115e59; border-color:#115e59; color:#fff; transform:translateY(-1px); }
@@ -1497,11 +1502,31 @@ body.has-bottom-nav .pr-wrap    { padding-bottom: 4rem; }
 .geo-ed-row-icon.geo-town { background:#7c3aed; }
 .geo-ed-row-icon.geo-cave { background:#57534e; }
 
+.geo-crater .geo-marker-pin { background:#b91c1c; }
+.geo-plain .geo-marker-pin { background:#4d7c0f; }
+.geo-ed-row-icon.geo-crater { background:#b91c1c; }
+.geo-ed-row-icon.geo-plain { background:#4d7c0f; }
 /* World graticule — drawn by GeoMap from the fitted Robinson projection, not by
    evenly spaced CSS gradients. Meridians curve; parallels are straight. */
 .geo-world-grid { position:absolute; inset:0; z-index:1; pointer-events:none; overflow:visible; }
 .geo-grat { fill:none; stroke:rgba(14,116,144,.34); stroke-width:1; vector-effect:non-scaling-stroke; }
 .geo-grat.is-equator, .geo-grat.is-prime { stroke:rgba(190,24,93,.62); stroke-width:2; }
+
+/* River courses. Drawn in the same stretched viewBox as the districts so a
+   percentage means one point on every layer; non-scaling-stroke keeps the line
+   an even width despite that non-uniform scale. */
+.geo-lines { position:absolute; inset:0; z-index:2; overflow:visible; pointer-events:none; }
+.geo-line { fill:none; stroke:#0284c7; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+            vector-effect:non-scaling-stroke; opacity:.85; pointer-events:stroke; cursor:pointer; }
+.geo-line:hover { stroke:#0369a1; stroke-width:3.5; }
+.geo-line.is-selected { stroke:#0369a1; stroke-width:3.5; filter:drop-shadow(0 0 3px rgba(255,255,255,.9)); }
+.dark .geo-line { stroke:#38bdf8; }
+/* Course points, shown only for the river being edited. */
+.geo-ed-vertex { position:absolute; z-index:4; width:.7rem; height:.7rem; transform:translate(-50%,-50%);
+                 border:2px solid #fff; border-radius:999px; background:#0369a1; padding:0;
+                 box-shadow:0 1px 3px rgba(15,23,42,.5); cursor:grab; touch-action:none; }
+.geo-ed-vertex:hover { background:#f59e0b; transform:translate(-50%,-50%) scale(1.35); }
+.geo-ed-along { width:100%; display:block; margin:.15rem 0 .1rem; }
 
 /* ── Admin map editor ──────────────────────────────────────────────────────
    The canvas deliberately reuses .geo-map-marker, .geo-marker-label and
@@ -2096,6 +2121,25 @@ body.has-bottom-nav main {
   background: linear-gradient(135deg, var(--kid-accent-1, #6366f1), var(--kid-accent-2, #ec4899));
 }
 
+/* A child should arrive somewhere that feels inviting, not on the same flat
+   dark canvas used for adult tools. These are child-only screens; cards keep
+   their existing contrast and every chosen colour vibe still applies. */
+#screen-dashboard,
+#screen-subject-select {
+  background:
+    radial-gradient(circle at 8% 5%, rgba(253,224,71,.28), transparent 22rem),
+    radial-gradient(circle at 92% 12%, rgba(45,212,191,.22), transparent 24rem),
+    linear-gradient(145deg, #effcf8 0%, #eef8ff 48%, #f8f1ff 100%);
+  border-radius: 1.5rem;
+}
+.dark #screen-dashboard,
+.dark #screen-subject-select {
+  background:
+    radial-gradient(circle at 8% 5%, rgba(250,204,21,.15), transparent 22rem),
+    radial-gradient(circle at 92% 12%, rgba(45,212,191,.14), transparent 24rem),
+    linear-gradient(145deg, #12334b 0%, #173553 48%, #2b2450 100%);
+}
+
 @keyframes kidWiggle {
   0%, 100% { transform: rotate(0deg); }
   25%      { transform: rotate(-8deg); }
@@ -2574,4 +2618,35 @@ label.exam-opt.plan-locked { cursor: not-allowed; }
   font-weight: 700;
   color: #94a3b8;
   align-self: center;
+}
+
+/* ── <select> dropdown legibility ─────────────────────────────────────────
+   ⚠ An <option> is painted by the PLATFORM, not by the page. It inherits the
+   select's `color` but never its `background`: measured, every option in this
+   app computes to `rgba(0, 0, 0, 0)` on all four combinations of the two
+   child-creation screens x light/dark. So the popup list is drawn on whatever
+   ground the platform picks, in whatever colour the control inherited — and
+   `text-white` on the family-setup grade picker made the entire grade list
+   white-on-white and literally unreadable. The 29 other `dark:text-white`
+   selects in index.html have the same defect the moment the popup is light.
+
+   Two halves, both needed. The explicit OPTION pair is the deterministic one:
+   it does not depend on what the platform decides to paint behind the text.
+   `color-scheme` is what makes the popup CHROME (its ground, border and
+   scrollbar) match, and it is scoped to `select` on purpose — on :root it
+   would repaint every native control in the app, which is not what was asked
+   for and not what was measured. The closed control keeps whatever the markup
+   gives it either way: this touches the dropdown only. */
+select { color-scheme: light; }
+html.dark select { color-scheme: dark; }
+
+select option,
+select optgroup {
+  background-color: #ffffff;
+  color: #111827;
+}
+html.dark select option,
+html.dark select optgroup {
+  background-color: #1f2937;
+  color: #f9fafb;
 }

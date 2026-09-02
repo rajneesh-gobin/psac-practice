@@ -28,14 +28,11 @@ const GeoMap = (() => {
   // FEATURES.indexOf(f), so every feature the editor appended inherited one
   // fallback offset and stacked its label on its own pin.
   const DEFAULTS = [
-    { id:'grse', type:'river', lon:57.7587, lat:-20.2889, icon:'💧', name:'Grand River South East', label:'Grand River S.E.', lx:-125, ly:-10, fact:'One of Mauritius’s important rivers. It flows in the south-east and is known for the Grand River South East waterfall.' },
-    { id:'black-river', type:'river', lon:57.3738, lat:-20.362, icon:'💧', name:'Black River', label:'Black River', lx:-39, ly:-40, fact:'A river in the south-west of Mauritius, near the Black River Gorges area.' },
-    { id:'rempart-river', type:'river', lon:57.6927, lat:-20.1082, icon:'💧', name:'Rivière du Rempart', label:'Rivière du Rempart', lx:-61, ly:-40, fact:'A river in northern Mauritius. Rivers carry fresh water from higher land towards the sea.' },
     { id:'petite-riviere', type:'mountain', lon:57.4077, lat:-20.4088, icon:'⛰️', name:'Piton de la Petite Rivière Noire', label:'Highest peak', lx:-44, ly:-40, fact:'At about 828 metres, this is the highest mountain peak in Mauritius. It lies in the south-west.' },
     { id:'pieter-both', type:'mountain', lon:57.5561, lat:-20.1913, icon:'⛰️', name:'Pieter Both', label:'Pieter Both', lx:-38, ly:21, fact:'A well-known mountain in the Moka Range. Its unusual rounded summit makes it easy to recognise.' },
     { id:'le-morne', type:'mountain', lon:57.3213, lat:-20.4541, icon:'⛰️', name:'Le Morne Brabant', label:'Le Morne', lx:21, ly:-10, fact:'A mountain on the south-west coast. Le Morne Cultural Landscape is a UNESCO World Heritage site linked to the history of slavery.' },
     { id:'mare-vacoas', type:'water', lon:57.5051, lat:-20.374, icon:'💦', name:'Mare aux Vacoas Reservoir', label:'Mare aux Vacoas', lx:-55, ly:-40, fact:'The largest reservoir in Mauritius. It stores fresh water for homes, farms and other uses.' },
-    { id:'midlands', type:'water', lon:57.5885, lat:-20.3215, icon:'💦', name:'Midlands Dam', label:'Midlands Dam', lx:-46, ly:35, fact:'A reservoir in the central part of Mauritius. Dams collect and store water.' },
+    { id:'midlands', type:'water', lon:57.5885, lat:-20.3215, icon:'💦', name:'Midlands Dam', label:'Midlands Dam', lx:21, ly:-10, fact:'A reservoir in the central part of Mauritius. Dams collect and store water.' },
     { id:'grand-bassin', type:'water', lon:57.4923, lat:-20.4182, icon:'💦', name:'Grand Bassin', label:'Grand Bassin', lx:-44, ly:21, fact:'A lake in a volcanic crater. It is also an important place of worship, known as Ganga Talao.' },
     { id:'port-louis', type:'port', lon:57.5028, lat:-20.1625, icon:'⚓', name:'Port Louis Harbour', label:'Port Louis', lx:-35, ly:-40, fact:'Mauritius’s main port and capital city. It is a major place for trade, ships and businesses.' },
     { id:'mahebourg', type:'port', lon:57.7061, lat:-20.4111, icon:'⚓', name:'Mahébourg / Grand Port', label:'Mahébourg', lx:-38, ly:-40, fact:'A historic south-east coastal town near Grand Port, an important harbour area in Mauritian history.' },
@@ -49,12 +46,12 @@ const GeoMap = (() => {
     { id:'rodrigues-ile-cocos', island:'rodrigues', type:'island', lon:63.2998, lat:-19.7221, icon:'🐦', name:'Île aux Cocos', label:'Île aux Cocos', lx:-45, ly:21, fact:'A small islet in the Rodrigues lagoon, known for seabirds and its natural environment.' },
     { id:'rodrigues-lagoon', island:'rodrigues', type:'water', lon:63.42, lat:-19.795, icon:'💦', name:'Rodrigues Lagoon & Coral Reef', label:'Lagoon & reef', lx:-47, ly:-40, fact:'Rodrigues is surrounded by a very large lagoon and coral reef. The reef helps protect the coast and provides a habitat for sea life.' },
     { id:'rodrigues-tortoise', island:'rodrigues', type:'heritage', lon:63.37, lat:-19.7563, icon:'🐢', name:'François Leguat Giant Tortoise Reserve', label:'Tortoise reserve', lx:-53, ly:-40, fact:'A nature reserve where visitors can learn about giant tortoises, caves and the protection of Rodrigues’ wildlife.' },
-    { id:'le-pouce', type:'mountain', lon:57.5288172, lat:-20.198113, icon:'⛰️', name:'Le Pouce', label:'Le Pouce', lx:-85, ly:-10, fact:'At 812 metres, Le Pouce is the third highest mountain in Mauritius. Its summit looks like a thumb pointing at the sky, which is how it got its name.' },
+    { id:'le-pouce', type:'mountain', lon:57.5288172, lat:-20.198113, icon:'⛰️', name:'Le Pouce', label:'Le Pouce', lx:-32, ly:35, fact:'At 812 metres, Le Pouce is the third highest mountain in Mauritius. Its summit looks like a thumb pointing at the sky, which is how it got its name.' },
     { id:'montagne-cocotte', type:'mountain', lon:57.4673346, lat:-20.43959, icon:'⛰️', name:'Montagne Cocotte', label:'Mt Cocotte', lx:-38, ly:-40, fact:'At 780 metres this is one of the highest points on the island. It stands on the wet central plateau, where a great deal of rain falls.' },
-    { id:'corps-de-garde', type:'mountain', lon:57.4522647, lat:-20.259758, icon:'⛰️', name:'Corps de Garde', label:'Corps de Garde', lx:-51, ly:-40, fact:'A 740-metre mountain above Quatre Bornes. Its long ridge is a landmark of the Plaines Wilhems district.' },
+    { id:'corps-de-garde', type:'mountain', lon:57.4522647, lat:-20.259758, icon:'⛰️', name:'Corps de Garde', label:'Corps de Garde', lx:-122, ly:-10, fact:'A 740-metre mountain above Quatre Bornes. Its long ridge is a landmark of the Plaines Wilhems district.' },
     { id:'deux-mamelles', type:'mountain', lon:57.56815, lat:-20.197305, icon:'⛰️', name:'Les Deux Mamelles', label:'Deux Mamelles', lx:-50, ly:-40, fact:'Two peaks of the Moka Range that rise side by side, close to Pieter Both and Le Pouce.' },
-    { id:'trois-mamelles', type:'mountain', lon:57.449655, lat:-20.310622, icon:'⛰️', name:'Les Trois Mamelles', label:'Trois Mamelles', lx:-49, ly:21, fact:'Three sharp peaks that rise together in the west. They are what remains of very old volcanic rock, worn down over millions of years.' },
-    { id:'montagne-rempart', type:'mountain', lon:57.4311341, lat:-20.303021, icon:'⛰️', name:'Montagne du Rempart', label:'Mt du Rempart', lx:35, ly:-10, fact:'A steep, pointed mountain in the west, often photographed with Les Trois Mamelles behind it.' },
+    { id:'trois-mamelles', type:'mountain', lon:57.449655, lat:-20.310622, icon:'⛰️', name:'Les Trois Mamelles', label:'Trois Mamelles', lx:21, ly:-10, fact:'Three sharp peaks that rise together in the west. They are what remains of very old volcanic rock, worn down over millions of years.' },
+    { id:'montagne-rempart', type:'mountain', lon:57.4311341, lat:-20.303021, icon:'⛰️', name:'Montagne du Rempart', label:'Mt du Rempart', lx:9, ly:-28, fact:'A steep, pointed mountain in the west, often photographed with Les Trois Mamelles behind it.' },
     { id:'lion-mountain', type:'mountain', lon:57.7252789, lat:-20.36115, icon:'⛰️', name:'Lion Mountain', label:'Lion Mountain', lx:-46, ly:21, fact:'A mountain near Vieux Grand Port in the south-east. Seen from the coast, its shape looks like a resting lion.' },
     { id:'chat-souris', type:'mountain', lon:57.755824, lat:-20.31349, icon:'⛰️', name:'Le Chat et La Souris', label:'Chat et Souris', lx:-114, ly:-10, fact:'Two peaks in the east whose names mean “the cat and the mouse”, because a smaller peak sits beside a larger one.' },
     { id:'signal-mountain', type:'mountain', lon:57.491308, lat:-20.171925, icon:'⛰️', name:'Signal Mountain', label:'Signal Mountain', lx:-52, ly:-40, fact:'A hill above Port Louis. Long ago, flags were raised here to signal to the town that ships were arriving.' },
@@ -109,6 +106,41 @@ const GeoMap = (() => {
     { id:'rodrigues-ile-sables', island:'rodrigues', type:'island', lon:63.3057654, lat:-19.701843, icon:'🏝️', name:'Île aux Sables', label:'Île aux Sables', lx:-47, ly:-40, fact:'A sand islet in the western lagoon, next to Île aux Cocos. Seabirds nest on both.' },
     { id:'rodrigues-ile-gombrani', island:'rodrigues', type:'island', lon:63.41749, lat:-19.769415, icon:'🏝️', name:'Île Gombrani', label:'Île Gombrani', lx:-43, ly:21, fact:'An islet in the lagoon to the south of Rodrigues.' },
     { id:'rodrigues-musee', island:'rodrigues', type:'heritage', lon:63.4277606, lat:-19.677827, icon:'🏛️', name:'Musée de Rodrigues', label:'Musée de Rodrigues', lx:-64, ly:-40, fact:'A museum in Port Mathurin about the history, the people and the nature of Rodrigues.' },
+    { id:'grse', type:'river', line:[[57.5942,-20.3168],[57.5983,-20.3203],[57.6016,-20.3166],[57.6086,-20.3176],[57.6148,-20.3141],[57.6211,-20.3168],[57.6246,-20.314],[57.6296,-20.3157],[57.6304,-20.3125],[57.6326,-20.3155],[57.6348,-20.311],[57.6455,-20.315],[57.6547,-20.3077],[57.6652,-20.3159],[57.675,-20.3082],[57.6794,-20.31],[57.6807,-20.3152],[57.6911,-20.318],[57.7038,-20.3148],[57.7121,-20.3159],[57.7257,-20.3111],[57.7309,-20.314],[57.7426,-20.3097],[57.7495,-20.3007],[57.758,-20.2959],[57.7586,-20.291],[57.7619,-20.2917],[57.7644,-20.2862],[57.7633,-20.28],[57.7686,-20.2745],[57.7747,-20.2804]], labelAt:0.5, icon:'💧', name:'Grand River South East', label:'Grand River S.E.', lx:-125, ly:-10, fact:'The longest river in Mauritius, running about 34 km from the central plateau to the east coast, where it drops into the sea as a waterfall.' },
+    { id:'riviere-du-poste', type:'river', line:[[57.694,-20.2024],[57.7022,-20.1956],[57.7035,-20.1974],[57.7063,-20.1965],[57.7065,-20.1935],[57.7142,-20.1924],[57.713,-20.1872],[57.7168,-20.1836],[57.7158,-20.1812],[57.7228,-20.1773]], labelAt:0.5, icon:'💧', name:'Rivière du Poste de Flacq', label:'Rivière du Poste', lx:-53, ly:-40, fact:'A river of the east that crosses the sugar-cane country of Flacq before reaching the lagoon.' },
+    { id:'rempart-river', type:'river', line:[[57.6229,-20.1621],[57.629,-20.162],[57.6304,-20.1597],[57.6343,-20.161],[57.6357,-20.1583],[57.6387,-20.1597],[57.6469,-20.1486],[57.6463,-20.1435],[57.6494,-20.1423],[57.6488,-20.1404],[57.6532,-20.1416],[57.6568,-20.1389],[57.6615,-20.1287],[57.6738,-20.1232],[57.68,-20.116],[57.6915,-20.1135],[57.6923,-20.1103],[57.7038,-20.104],[57.7005,-20.0928],[57.7047,-20.0919]], labelAt:0.5, icon:'💧', name:'Rivière du Rempart', label:'Rivière du Rempart', lx:-61, ly:-40, fact:'A river of the north, flowing down from the Nicolière hills and across the northern plains to the sea. The whole district is named after it.' },
+    { id:'riviere-la-chaux', type:'river', line:[[57.6045,-20.3936],[57.6096,-20.4015],[57.6213,-20.4014],[57.627,-20.4],[57.6278,-20.3973],[57.6315,-20.3986],[57.6337,-20.3949],[57.6366,-20.3967],[57.6399,-20.3946],[57.6389,-20.3974],[57.6462,-20.398],[57.6459,-20.4006],[57.648,-20.3994],[57.6494,-20.4024],[57.6507,-20.4001],[57.6549,-20.4014],[57.6595,-20.4066],[57.6617,-20.4053],[57.6619,-20.4129],[57.6642,-20.4117],[57.6649,-20.4151],[57.6705,-20.4142],[57.6754,-20.4231],[57.6793,-20.4205],[57.6831,-20.4236]], labelAt:0.5, icon:'💧', name:'Rivière La Chaux', label:'Rivière La Chaux', lx:-55, ly:21, fact:'A river of the south-east that reaches the sea beside Mahébourg, in the bay where the naval battle of Grand Port was fought in 1810.' },
+    { id:'tamarin-river', type:'river', line:[[57.4675,-20.3558],[57.4634,-20.3528],[57.4672,-20.3458],[57.4666,-20.3421],[57.4606,-20.3426],[57.4531,-20.3346],[57.4467,-20.3318],[57.4366,-20.331],[57.4341,-20.3278],[57.4228,-20.3274],[57.4146,-20.33],[57.3971,-20.3272],[57.3897,-20.3313],[57.3896,-20.3353],[57.3794,-20.3334],[57.3805,-20.3259],[57.3783,-20.3252]], labelAt:0.5, icon:'💧', name:'Tamarin River', label:'Tamarin River', lx:-46, ly:-40, fact:'A river of the west, fed from the Mare aux Vacoas plateau. It falls over the seven steps of Tamarin Falls before reaching the sea at Tamarin Bay.' },
+    { id:'riviere-savanne', type:'river', line:[[57.5111,-20.4418],[57.5132,-20.4463],[57.5197,-20.448],[57.5231,-20.4563],[57.5196,-20.4611],[57.5217,-20.465],[57.5197,-20.4673],[57.5203,-20.4694],[57.5251,-20.4694],[57.517,-20.4809],[57.521,-20.4894],[57.518,-20.4924],[57.5163,-20.5057],[57.5132,-20.5086],[57.519,-20.5167]], labelAt:0.5, icon:'💧', name:'Rivière Savanne', label:'Rivière Savanne', lx:-52, ly:-54, fact:'A river of the south, flowing down from the plateau to the coast near Souillac. The Savanne district takes its name from it.' },
+    { id:'deep-river', type:'river', line:[[57.7042,-20.3038],[57.7097,-20.3087],[57.7185,-20.3061],[57.7225,-20.3081],[57.7265,-20.3029],[57.7251,-20.3015],[57.7361,-20.2925],[57.7372,-20.2876],[57.7347,-20.2822],[57.7439,-20.2717],[57.7488,-20.2723],[57.7487,-20.2752],[57.7516,-20.2733],[57.7561,-20.2782],[57.7652,-20.2785]], labelAt:0.5, icon:'💧', name:'Deep River (Rivière Profonde)', label:'Deep River', lx:-37, ly:-40, fact:'A river of the east, named for the deep gorge it has cut through the volcanic rock. Rivers carve valleys slowly, over a very long time.' },
+    { id:'riviere-terre-rouge', type:'river', line:[[57.5289,-20.2627],[57.5242,-20.2479],[57.5186,-20.2483],[57.5165,-20.2445],[57.5106,-20.2473],[57.5043,-20.2465],[57.4997,-20.2428],[57.5008,-20.2408],[57.4946,-20.238],[57.4925,-20.2401],[57.4837,-20.2359],[57.4834,-20.2228],[57.4793,-20.2202]], labelAt:0.5, icon:'💧', name:'Rivière Terre Rouge', label:'Rivière Terre Rouge', lx:-63, ly:21, fact:'A river of the centre that flows north-west towards Port Louis, ending in a wide estuary where migrating birds feed. Its name means “red earth”, after the colour of the soil.' },
+    { id:'riviere-des-anguilles', type:'river', line:[[57.5535,-20.458],[57.557,-20.4605],[57.5552,-20.4628],[57.5579,-20.465],[57.5553,-20.4695],[57.5582,-20.4715],[57.554,-20.4762],[57.5564,-20.4773],[57.5555,-20.4932],[57.5523,-20.5006],[57.5502,-20.5003],[57.5531,-20.5165]], labelAt:0.5, icon:'💧', name:'Rivière des Anguilles', label:'Rivière des Anguilles', lx:-66, ly:-40, fact:'A river of the south named after the eels once caught in it. It flows through the Savanne district to the southern coast.' },
+    { id:'black-river', type:'river', line:[[57.4278,-20.3899],[57.404,-20.3715],[57.3993,-20.3714],[57.3927,-20.3634],[57.379,-20.3677],[57.3711,-20.3668]], labelAt:0.5, icon:'💧', name:'Black River (Rivière Noire)', label:'Black River', lx:-39, ly:21, fact:'The river of the south-west that runs out of the Black River Gorges. The district, the mountains and the national park all share its name.' },
+    { id:'grand-river-north-west', type:'river', line:[[57.4793,-20.2202],[57.4717,-20.1992],[57.4745,-20.1929],[57.4708,-20.1885],[57.4741,-20.1854],[57.4718,-20.1752]], labelAt:0.5, icon:'💧', name:'Grand River North West', label:'Grand River N.W.', lx:-54, ly:-40, fact:'A river of the west flowing north towards Port Louis, where it meets the sea in the harbour. The capital grew up around that meeting point.' },
+    { id:'riviere-des-creoles', type:'river', line:[[57.6605,-20.3788],[57.6603,-20.3824],[57.6674,-20.3893],[57.6646,-20.3912],[57.6673,-20.3934],[57.6699,-20.3883],[57.6726,-20.3888],[57.6774,-20.3956],[57.6761,-20.3983],[57.6781,-20.3977],[57.6796,-20.4008],[57.6888,-20.4007],[57.6927,-20.3969],[57.6965,-20.3971]], labelAt:0.5, icon:'💧', name:'Rivière des Créoles', label:'Rivière des Créoles', lx:-62, ly:-40, fact:'A river of the south-east flowing down to Grand Port. Its name recalls the Creole communities that settled along it.' },
+    { id:'baie-du-cap-river', type:'river', line:[[57.397,-20.4453],[57.3887,-20.4411],[57.3846,-20.4463],[57.3762,-20.4498],[57.375,-20.4567],[57.3786,-20.457],[57.3801,-20.4629],[57.3775,-20.4651],[57.3853,-20.4714],[57.38,-20.4794],[57.374,-20.4769],[57.3721,-20.4857]], labelAt:0.5, icon:'💧', name:'Baie du Cap River', label:'Baie du Cap River', lx:-57, ly:-40, fact:'A short river of the south-west that ends at Baie du Cap, one of the most sheltered bays on that coast.' },
+    { id:'riviere-cascade', type:'river', line:[[57.5429,-20.2392],[57.5283,-20.2434],[57.5231,-20.2419],[57.5235,-20.2398],[57.5211,-20.2422],[57.5175,-20.2397],[57.5185,-20.2381],[57.5119,-20.24],[57.5065,-20.2377]], labelAt:0.5, icon:'💧', name:'Rivière Cascade', label:'Rivière Cascade', lx:21, ly:-10, fact:'A river of the central plateau in the Moka district, named for the small waterfalls where it crosses steps of harder rock.' },
+    { id:'riviere-des-galets', type:'river', line:[[57.4575,-20.4739],[57.4694,-20.4832],[57.4684,-20.4879],[57.4626,-20.4905],[57.4627,-20.4979],[57.4588,-20.4984],[57.4549,-20.5034]], labelAt:0.5, icon:'💧', name:'Rivière des Galets', label:'Rivière des Galets', lx:-137, ly:-10, fact:'A river of the south-west whose name means “river of pebbles”, after the smooth round stones rolled along its bed.' },
+    { id:'trou-aux-cerfs', type:'crater', lon:57.5115, lat:-20.3179, icon:'🌋', name:'Trou aux Cerfs', label:'Trou aux Cerfs', lx:-48, ly:-40, fact:'A volcanic crater about 300 m wide in the middle of Curepipe. Mauritius was built by volcanoes, and this is the clearest one left to see.' },
+    { id:'bassin-blanc', type:'crater', lon:57.476, lat:-20.4534, icon:'🌋', name:'Bassin Blanc', label:'Bassin Blanc', lx:-43, ly:21, fact:'A crater in the south that has filled with water to make a lake, ringed by native forest.' },
+    { id:'trou-kanaka', type:'crater', lon:57.5187, lat:-20.4057, icon:'🌋', name:'Trou Kanaka', label:'Trou Kanaka', lx:-43, ly:-40, fact:'A crater 570 m up on the southern plateau. Craters like this one mark where lava once reached the surface.' },
+    { id:'mont-bar-le-duc', type:'crater', lon:57.5872, lat:-20.2076, icon:'🌋', name:'Mont Bar le Duc', label:'Bar le Duc', lx:-36, ly:-40, fact:'An old volcanic cone in the centre of the island, now covered in vegetation and hard to recognise as a volcano.' },
+    { id:'mount-piton', type:'crater', lon:57.6274, lat:-20.1196, icon:'🌋', name:'Mount Piton', label:'Mount Piton', lx:-40, ly:-40, fact:'A small volcanic peak of 267 m in the north-east. A “piton” is a steep, pointed hill left behind by a volcano.' },
+    { id:'plaine-champagne', type:'plain', lon:57.426, lat:-20.4245, icon:'🌾', name:'Plaine Champagne', label:'Plaine Champagne', lx:-59, ly:21, fact:'The highest plateau on the island, about 700 m up. It is the wettest and coolest place in Mauritius, and its native forest is protected.' },
+    { id:'plaine-des-roches', type:'plain', lon:57.6983, lat:-20.1178, icon:'🌾', name:'Plaine des Roches', label:'Plaine des Roches', lx:-58, ly:-40, fact:'A flat, stony plain in the north-east, spread over old lava flows. Its name means “plain of rocks”.' },
+    { id:'plaine-magnien', type:'plain', lon:57.6612, lat:-20.432, icon:'🌾', name:'Plaine Magnien', label:'Plaine Magnien', lx:-50, ly:-40, fact:'A low plain in the south-east beside the international airport, surrounded by fields of sugar cane.' },
+    { id:'plaine-des-papayes', type:'plain', lon:57.5809, lat:-20.0633, icon:'🌾', name:'Plaine des Papayes', label:'Plaine des Papayes', lx:-61, ly:-40, fact:'A plain of the north where papaya trees once grew in numbers. The northern plains are the flattest, driest part of the island.' },
+    { id:'plaine-lauzun', type:'plain', lon:57.4798, lat:-20.1728, icon:'🌾', name:'Plaine Lauzun', label:'Plaine Lauzun', lx:-46, ly:-40, fact:'A plain beside Port Louis, once planted with sugar cane and now one of the island’s main working and industrial areas.' },
+    { id:'plaine-sophie', type:'plain', lon:57.485, lat:-20.3774, icon:'🌾', name:'Plaine Sophie', label:'Plaine Sophie', lx:-45, ly:-40, fact:'A highland plain on the edge of the Black River Gorges, and the starting point for several forest walks.' },
+    { id:'belle-mare-plain', type:'plain', lon:57.7747, lat:-20.1983, icon:'🌾', name:'Plaine de Belle Mare', label:'Belle Mare', lx:-94, ly:-10, fact:'A flat coastal plain on the east coast, known for its long white beach and the wide lagoon in front of it.' },
+    { id:'la-nicoliere', type:'water', lon:57.6157, lat:-20.1577, icon:'💦', name:'La Nicolière Reservoir', label:'La Nicolière', lx:-41, ly:-40, fact:'A reservoir in the northern hills that stores water for the dry plains below and feeds the Rivière du Rempart.' },
+    { id:'eau-bleue', type:'water', lon:57.6052, lat:-20.3506, icon:'💦', name:'Eau Bleue Reservoir', label:'Eau Bleue', lx:-35, ly:21, fact:'A reservoir in the centre-east surrounded by forest. Its name means “blue water”.' },
+    { id:'mare-longue', type:'water', lon:57.4587, lat:-20.3807, icon:'💦', name:'Mare Longue Reservoir', label:'Mare Longue', lx:-107, ly:-40, fact:'A long, narrow reservoir on the central plateau, one of several that catch the heavy highland rainfall.' },
+    { id:'mare-aux-joncs', type:'water', lon:57.4367, lat:-20.3879, icon:'💦', name:'Mare aux Joncs', label:'Mare aux Joncs', lx:-111, ly:-28, fact:'A small highland lake whose name means “pool of rushes”, after the reeds growing round its edge.' },
+    { id:'tourelle-tamarin', type:'mountain', lon:57.3761, lat:-20.3478, icon:'⛰️', name:'Tourelle du Tamarin', label:'Tourelle du Tamarin', lx:21, ly:-10, fact:'A 563-metre peak above Tamarin Bay whose steep tower of rock can be seen from much of the west coast.' },
+    { id:'mount-ory', type:'mountain', lon:57.4945, lat:-20.2107, icon:'⛰️', name:'Mount Ory', label:'Mount Ory', lx:-92, ly:-10, fact:'A peak of the Moka Range in the centre of the island, on the chain of mountains that forms its backbone.' },
+    { id:'rodrigues-saint-gabriel', island:'rodrigues', type:'heritage', lon:63.4382, lat:-19.7179, icon:'🏛️', name:'Saint Gabriel Church', label:'Saint Gabriel', lx:-43, ly:-40, fact:'One of the largest churches in the Indian Ocean, built by hand by the people of Rodrigues, who carried the stone and coral themselves.' },
+    { id:'rodrigues-anse-mourouk', island:'rodrigues', type:'coast', lon:63.4589, lat:-19.7428, icon:'🏖️', name:'Anse Mourouk', label:'Anse Mourouk', lx:-47, ly:-40, fact:'A bay on the south coast of Rodrigues. The wind blows steadily here, so it is the island’s best-known place for kitesurfing.' },
     // World map: real lon/lat through the Robinson projection fitted above.
     // These were a hand-placed percentage grid, and it put Vesuvius in the
     // Sahara, Kilimanjaro in the Congo, Fuji in the Philippine Sea, Everest in
@@ -135,8 +167,8 @@ const GeoMap = (() => {
     { id:'world-prime-meridian', island:'world', type:'longitude', lon:0, lat:51.4779, icon:'↕️', name:'Prime Meridian (0° longitude)', label:'0° longitude', lx:-40, ly:-40, fact:'The Prime Meridian is an imaginary line at 0° longitude. It passes through Greenwich in the United Kingdom and divides east from west.' },
   ];
 
-  const TYPES = [['all','✨','All features'],['mountain','⛰️','Mountains'],['river','💧','Rivers'],['waterfall','🏞️','Waterfalls'],['water','💦','Lakes & reservoirs'],['coast','🏖️','Bays & beaches'],['island','🏝️','Islands & islets'],['reserve','🌿','Parks & reserves'],['cave','🕳️','Caves'],['port','⚓','Ports'],['town','🏘️','Towns & villages'],['heritage','🏛️','Heritage & museums'],['continent','🟨','Continents'],['region','🏝️','World regions'],['ocean','🌊','Oceans'],['volcano','🌋','Volcanoes'],['latitude','↔️','Latitude lines'],['longitude','↕️','Longitude lines']];
-  const TYPE_ICONS = { river:['💧','🌊','🏞️'], mountain:['⛰️','🏔️','🗻'], water:['💦','🏞️','🛶'], coast:['🏝️','🌊','🐚','🐦'], port:['⚓','🚢','🛳️'], heritage:['🏛️','🏰','🗿','🐢','📜'], waterfall:['🏞️','💧'], island:['🏝️','🏖️','🐦'], reserve:['🌿','🌳','🦜'], cave:['🕳️','🦇'], town:['🏘️','🏙️','🏠'], continent:['🟨','🗺️'], region:['🏝️','🌏'], ocean:['🌊','🐋'], volcano:['🌋'], latitude:['↔️','🌐'], longitude:['↕️','🌐'] };
+  const TYPES = [['all','✨','All features'],['mountain','⛰️','Mountains'],['crater','🌋','Volcanic craters'],['river','💧','Rivers'],['waterfall','🏞️','Waterfalls'],['water','💦','Lakes & reservoirs'],['coast','🏖️','Bays & beaches'],['island','🏝️','Islands & islets'],['plain','🌾','Plains & plateaux'],['reserve','🌿','Parks & reserves'],['cave','🕳️','Caves'],['port','⚓','Ports'],['town','🏘️','Towns & villages'],['heritage','🏛️','Heritage & museums'],['continent','🟨','Continents'],['region','🏝️','World regions'],['ocean','🌊','Oceans'],['volcano','🌋','Volcanoes'],['latitude','↔️','Latitude lines'],['longitude','↕️','Longitude lines']];
+  const TYPE_ICONS = { river:['💧','🌊','🏞️'], mountain:['⛰️','🏔️','🗻'], water:['💦','🏞️','🛶'], coast:['🏝️','🌊','🐚','🐦'], port:['⚓','🚢','🛳️'], heritage:['🏛️','🏰','🗿','🐢','📜'], waterfall:['🏞️','💧'], island:['🏝️','🏖️','🐦'], reserve:['🌿','🌳','🦜'], cave:['🕳️','🦇'], crater:['🌋','🕳️'], plain:['🌾','🌱','🏞️'], town:['🏘️','🏙️','🏠'], continent:['🟨','🗺️'], region:['🏝️','🌏'], ocean:['🌊','🐋'], volcano:['🌋'], latitude:['↔️','🌐'], longitude:['↕️','🌐'] };
 
   // ⚠ `aspect` is width ÷ height of the painted box and is defined HERE, not in
   // style.css, because the editor and the child's map must letterbox the base
@@ -241,7 +273,7 @@ const GeoMap = (() => {
   const LEGACY_KEY    = 'psac-geo-map-features-v1';
   // Every field the editor may override. Anything absent from this list is
   // owned by the code and keeps flowing to published installs on deploy.
-  const OVERRIDABLE = ['island','type','icon','name','label','fact','lon','lat','x','y','lx','ly','hidden'];
+  const OVERRIDABLE = ['island','type','icon','name','label','fact','lon','lat','x','y','line','labelAt','lx','ly','hidden'];
 
   const esc      = v => String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const clamp    = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
@@ -255,6 +287,9 @@ const GeoMap = (() => {
   // made Rodrigues unfixable: two maps, two extents, one projection.
   function markerPosition(f) {
     const P = projectionOf(islandOf(f));
+    // A line feature's marker rides its own course, so it can never drift off
+    // the river it is labelling.
+    if (P && isLine(f)) { const p = pointAlong(f, f.labelAt ?? 0.5); return P.toPct(p[0], p[1]); }
     if (P && f.lon != null && f.lat != null) return P.toPct(f.lon, f.lat);
     const scale = scaleOf(islandOf(f));
     return { left:(f.x || 0) / scale.x, top:(f.y || 0) / scale.y };
@@ -262,6 +297,13 @@ const GeoMap = (() => {
   function setPosition(f, island, left, top) {
     left = clamp(left, 0, 100); top = clamp(top, 0, 100);
     const P = projectionOf(island);
+    // Dragging a river's marker slides it ALONG the river rather than moving
+    // the river. The course is surveyed data; where its name sits is ours.
+    if (P && isLine(f)) {
+      const g = P.toGeo(left, top);
+      f.labelAt = nearestAlong(f, g.lon, g.lat);
+      return;
+    }
     if (P) {
       const g = P.toGeo(left, top);
       f.lon = g.lon; f.lat = g.lat;
@@ -277,6 +319,61 @@ const GeoMap = (() => {
   function pointerPct(event, layer) {
     const r = layer.getBoundingClientRect();
     return { left:clamp((event.clientX - r.left) / r.width * 100, 0, 100), top:clamp((event.clientY - r.top) / r.height * 100, 0, 100) };
+  }
+
+  // ── Line features ─────────────────────────────────────────────────────────
+  // A river is a line, not a point. `line` is [[lon,lat], …] straight from
+  // OpenStreetMap; `labelAt` is how far along that course (0–1) its pin and
+  // caption sit. Everything else — labels, selection, the info card, the editor
+  // form — then works on a river exactly as it does on a place.
+  const isLine = f => Array.isArray(f.line) && f.line.length > 1;
+
+  // Distance along the course, so labelAt means "half way down the river" and
+  // not "half way through the list of points", which would bunch the caption
+  // wherever OpenStreetMap happened to record detail.
+  function lineMetrics(f) {
+    const pts = f.line, seg = [];
+    let total = 0;
+    for (let i = 1; i < pts.length; i++) {
+      const d = Math.hypot((pts[i][0] - pts[i-1][0]) * 0.94, pts[i][1] - pts[i-1][1]);
+      seg.push(d); total += d;
+    }
+    return { seg, total };
+  }
+  function pointAlong(f, t) {
+    const { seg, total } = lineMetrics(f);
+    let want = clamp(t, 0, 1) * total;
+    for (let i = 0; i < seg.length; i++) {
+      if (want <= seg[i] || i === seg.length - 1) {
+        const k = seg[i] ? want / seg[i] : 0;
+        return [f.line[i][0] + (f.line[i+1][0] - f.line[i][0]) * k,
+                f.line[i][1] + (f.line[i+1][1] - f.line[i][1]) * k];
+      }
+      want -= seg[i];
+    }
+    return f.line[0];
+  }
+  // Where along the course is the point nearest this one? Used when an admin
+  // drags a river's caption: it slides along the river instead of leaving it.
+  function nearestAlong(f, lon, lat) {
+    const { seg, total } = lineMetrics(f);
+    let best = { d:Infinity, t:0 }, walked = 0;
+    for (let i = 0; i < seg.length; i++) {
+      const a = f.line[i], b = f.line[i+1];
+      const dx = (b[0]-a[0]) * 0.94, dy = b[1]-a[1];
+      const len2 = dx*dx + dy*dy;
+      const k = len2 ? clamp(((lon-a[0])*0.94*dx + (lat-a[1])*dy) / len2, 0, 1) : 0;
+      const d = Math.hypot((lon - (a[0] + (b[0]-a[0])*k)) * 0.94, lat - (a[1] + (b[1]-a[1])*k));
+      if (d < best.d) best = { d, t: total ? (walked + seg[i]*k) / total : 0 };
+      walked += seg[i];
+    }
+    return best.t;
+  }
+  function linePathD(f, P) {
+    return f.line.map((p, i) => {
+      const q = P.toPct(p[0], p[1]);
+      return (i ? 'L' : 'M') + q.left.toFixed(3) + ',' + q.top.toFixed(3);
+    }).join(' ');
   }
 
   // ── Published content ─────────────────────────────────────────────────────
@@ -457,6 +554,32 @@ const GeoMap = (() => {
   // category filters become the way to read a whole group at once.
   const LABEL_LIMIT = 15;
 
+  // ⚠ Same projection trick as the district layer: viewBox 0 0 100 100 with
+  // preserveAspectRatio="none", so a percentage here is the same percentage the
+  // markers use. `vector-effect: non-scaling-stroke` keeps the line an even
+  // width despite the non-uniform scale — without it a river would be thick
+  // one way and hairline the other.
+  function linesSvg(rows, island, selectedId) {
+    const P = projectionOf(island);
+    const lines = rows.filter(isLine);
+    if (!P || !lines.length) return '';
+    const paths = lines.map(f =>
+      `<path class="geo-line geo-line-${esc(f.type)} ${f.id === selectedId ? 'is-selected' : ''}" `
+      + `data-line-id="${esc(f.id)}" d="${linePathD(f, P)}" />`).join('');
+    return `<svg class="geo-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">${paths}</svg>`;
+  }
+  function paintLines(root, st, rows) {
+    const wrap = root.querySelector('.geo-map-wrap');
+    if (!wrap) return;
+    wrap.querySelector('.geo-lines')?.remove();
+    const html = linesSvg(rows, st.island, st.selectedId);
+    if (!html) return;
+    root.querySelector('[data-geo-markers]').insertAdjacentHTML('beforebegin', html);
+    wrap.querySelectorAll('[data-line-id]').forEach(path => path.addEventListener('click', () => {
+      st.selectedId = path.dataset.lineId; st.district = null; paint(root, st); paintDistricts(root, st);
+    }));
+  }
+
   function paint(root, st) {
     const rows = visibleIn(st);
     if (!rows.some(f => f.id === st.selectedId)) st.selectedId = rows[0]?.id || null;
@@ -468,6 +591,7 @@ const GeoMap = (() => {
     if (hint) hint.textContent = quiet
       ? `Showing ${rows.length} places — tap any marker for its name, or pick a category above to label a group.`
       : '';
+    paintLines(root, st, rows);
     markers.innerHTML = rows.map(f => markerHtml(f, { selected:f.id === st.selectedId })).join('');
     markers.querySelectorAll('[data-feature-id]').forEach(btn => btn.addEventListener('click', () => {
       st.selectedId = btn.dataset.featureId; st.district = null; paint(root, st); paintDistricts(root, st);
@@ -520,6 +644,7 @@ const GeoMap = (() => {
 
     container.innerHTML = `<section class="geo-map-card" aria-label="${esc(isle.name)} interactive map">`
       + `<div class="geo-map-head"><div><h3>🗺️ Interactive Maps</h3><p>Choose an island and feature, then tap a marker to discover why it matters.</p></div><span class="geo-map-bonus">✨ Bonus explorer</span></div>`
+      + `<div class="geo-map-construction" role="status"><span aria-hidden="true">🛠️</span><span><b>Maps are still being improved.</b> A few locations may not be in exactly the right place yet. Our admins are checking and fixing them.</span></div>`
       + `<div class="geo-island-tabs" role="group" aria-label="Choose an island">${tabs}</div>`
       + `<div class="geo-map-filters" role="group" aria-label="Filter map features">${typesOn(st).map(([id, icon, label]) => `<button type="button" class="geo-filter" data-geo-filter="${id}" aria-pressed="false">${icon} ${esc(label)}</button>`).join('')}</div>`
       + `<div class="geo-map-layout"><div class="geo-map-wrap" style="aspect-ratio:${isle.aspect.toFixed(5)}"><div class="geo-north">N ↑</div>${shape}<div class="geo-markers" data-geo-markers></div></div>`
@@ -701,10 +826,15 @@ const GeoMap = (() => {
     const el = ed.root.querySelector('[data-ed-hint]');
     if (!el) return;
     const f = edSelected();
-    const where = !f ? '—' : (isGeographic(islandOf(f)) && f.lon != null)
+    const where = !f ? '—'
+      : isLine(f) ? `a course of ${f.line.length} points · name at ${Math.round((f.labelAt ?? 0.5) * 100)}% along it`
+      : (isGeographic(islandOf(f)) && f.lon != null)
       ? `lon ${Number(f.lon).toFixed(4)}, lat ${Number(f.lat).toFixed(4)}`
       : `x ${Math.round(f.x || 0)}, y ${Math.round(f.y || 0)}`;
-    el.innerHTML = `Drag a <b>pin</b> to move the place · drag its <b>label</b> to move the caption${ed.placeMode ? ' · click the map to place the selected pin' : ''} — <span class="geo-ed-coord">${esc(where)}</span>`;
+    const how = f && isLine(f)
+      ? 'Drag a <b>course point</b> to reshape the river · drag its <b>pin</b> to slide the name along it'
+      : 'Drag a <b>pin</b> to move the place · drag its <b>label</b> to move the caption';
+    el.innerHTML = `${how}${ed.placeMode ? ' · click the map to place the selected pin' : ''} — <span class="geo-ed-coord">${esc(where)}</span>`;
   }
 
   function applyZoom() {
@@ -720,6 +850,57 @@ const GeoMap = (() => {
   // a percentage still means the same point. The old editor scaled the <img>
   // alone and left the pins where they were: at any zoom but 100% it showed a
   // placement that existed nowhere.
+  // Only the SELECTED course gets handles. Every course at once would be a few
+  // hundred targets on top of each other, and the one being edited would be the
+  // hardest of them to hit.
+  function vertexHandlesHtml() {
+    const f = edSelected();
+    if (!f || !isLine(f) || islandOf(f) !== ed.island) return '';
+    const P = projectionOf(ed.island);
+    if (!P) return '';
+    return f.line.map((p, i) => {
+      const q = P.toPct(p[0], p[1]);
+      return `<button type="button" class="geo-ed-vertex" data-ed-vertex="${i}"`
+           + ` style="left:${q.left.toFixed(2)}%;top:${q.top.toFixed(2)}%"`
+           + ` aria-label="Course point ${i + 1} of ${f.line.length}"></button>`;
+    }).join('');
+  }
+  function bindVertex(handle, layer) {
+    const i = Number(handle.dataset.edVertex);
+    handle.addEventListener('pointerdown', event => {
+      event.preventDefault(); event.stopPropagation();
+      endDrag();
+      const f = edSelected();
+      if (!f || !isLine(f)) return;
+      pushUndo();
+      const P = projectionOf(ed.island);
+      let moved = false;
+      try { handle.setPointerCapture(event.pointerId); } catch (_) {}
+      const move = e => {
+        moved = true;
+        const p = pointerPct(e, layer);
+        const g = P.toGeo(p.left, p.top);
+        f.line[i] = [+g.lon.toFixed(4), +g.lat.toFixed(4)];
+        handle.style.left = p.left.toFixed(2) + '%';
+        handle.style.top  = p.top.toFixed(2) + '%';
+        // Redraw only the one path, so a drag never rebuilds the canvas and
+        // pulls this handle out from under the pointer.
+        const path = layer.querySelector(`[data-line-id="${CSS.escape(f.id)}"]`);
+        if (path) path.setAttribute('d', linePathD(f, P));
+      };
+      const end = () => {
+        endDrag();
+        if (!moved) { ed.undo.pop(); paintStatus(); return; }
+        markDirty(); paintCanvas(); paintForm(); paintStatus();
+        edStatus(`Reshaped the course of “${f.name}”.`, 'info');
+      };
+      _drag = { el:handle, move, end };
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', end);
+      handle.addEventListener('pointercancel', end);
+    });
+  }
+
   function paintCanvas() {
     const isle  = ISLANDS[ed.island];
     const layer = ed.root.querySelector('[data-ed-zoomlayer]');
@@ -731,13 +912,19 @@ const GeoMap = (() => {
     layer.innerHTML = `<img class="geo-source-map${ed.island === 'world' ? ' geo-world-source' : ''}" src="${isle.src}" alt="${esc(isle.alt)}" draggable="false">`
       + (ed.island === 'world' ? worldGridHtml() : '')
       + (isle.districts && ed.districts ? districtSvg(ed.district) : '')
-      + `<div class="geo-markers">${rows.map(f => markerHtml(f, { selected:f.id === ed.selectedId, editor:true })).join('')}</div>`;
+      + linesSvg(rows, ed.island, ed.selectedId)
+      + `<div class="geo-markers">${rows.map(f => markerHtml(f, { selected:f.id === ed.selectedId, editor:true })).join('')}${vertexHandlesHtml()}</div>`;
     applyZoom();
 
     layer.querySelectorAll('[data-district]').forEach(path => path.addEventListener('click', () => {
       if (ed.placeMode) return;
       ed.district = ed.district === path.dataset.district ? null : path.dataset.district; paintCanvas();
     }));
+    layer.querySelectorAll('[data-line-id]').forEach(path => path.addEventListener('click', () => {
+      if (ed.placeMode) return;
+      ed.selectedId = path.dataset.lineId; paintCanvas(); paintList(); paintForm(); paintHint();
+    }));
+    layer.querySelectorAll('[data-ed-vertex]').forEach(h => bindVertex(h, layer));
     layer.querySelectorAll('[data-ed-feature]').forEach(btn => bindMarker(btn, layer));
     // Do not redraw merely because the request settled. When the district file
     // is unavailable (offline, stale cache, or a bad deployment), loadDistricts
@@ -871,7 +1058,7 @@ const GeoMap = (() => {
     // Mauritius and Rodrigues carry real lon/lat; the world map is a percentage
     // grid. The numeric fields follow whichever this feature actually uses, so
     // the boxes never invite a coordinate the projection would ignore.
-    const onMauritius = isGeographic(islandOf(f)) && f.lon != null;
+    const onMauritius = isGeographic(islandOf(f)) && f.lon != null && !isLine(f);
     const icons = [...new Set([...(TYPE_ICONS[f.type] || []), f.icon])];
     box.innerHTML = `
       <div class="geo-ed-form-head"><span class="geo-ed-row-icon geo-${esc(f.type)}">${esc(f.icon)}</span><b>${esc(f.name)}</b></div>
@@ -887,11 +1074,15 @@ const GeoMap = (() => {
       <select data-f="island" class="geo-editor-input">${Object.entries(ISLANDS).map(([id, m]) => `<option value="${id}" ${islandOf(f) === id ? 'selected' : ''}>${m.tab}</option>`).join('')}</select>
       <label class="geo-ed-label">Learning fact</label>
       <textarea data-f="fact" class="geo-editor-input geo-ed-fact">${esc(f.fact)}</textarea>
+      ${isLine(f) ? `
+      <label class="geo-ed-label">Name position along the course — ${f.line.length} points, drag any to reshape</label>
+      <input data-f="labelAt" type="range" min="0" max="1" step="0.01" class="geo-ed-along" value="${(f.labelAt ?? 0.5).toFixed(2)}">`
+      : `
       <label class="geo-ed-label">Position${onMauritius ? ' — longitude, latitude' : ' — x, y'}</label>
       <div class="geo-ed-pair">
         <input data-f="${onMauritius ? 'lon' : 'x'}" type="number" step="${onMauritius ? '0.0001' : '1'}" class="geo-editor-input" value="${onMauritius ? Number(f.lon).toFixed(4) : Math.round(f.x || 0)}">
         <input data-f="${onMauritius ? 'lat' : 'y'}" type="number" step="${onMauritius ? '0.0001' : '1'}" class="geo-editor-input" value="${onMauritius ? Number(f.lat).toFixed(4) : Math.round(f.y || 0)}">
-      </div>
+      </div>`}
       <label class="geo-ed-label">Label offset from the pin — px across, px down</label>
       <div class="geo-ed-pair">
         <input data-f="lx" type="number" step="1" class="geo-editor-input" value="${Math.round(Number(f.lx ?? 16))}">
@@ -922,7 +1113,7 @@ const GeoMap = (() => {
           markDirty(); paintAll();
           return;
         }
-        if (['lon','lat','x','y','lx','ly'].includes(key)) {
+        if (['lon','lat','x','y','lx','ly','labelAt'].includes(key)) {
           const n = Number(input.value);
           if (!Number.isFinite(n)) return;
           cur[key] = n;

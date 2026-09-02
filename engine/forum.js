@@ -256,7 +256,7 @@ const Forum = (() => {
 
     const orderField = _sortBy === 'popular' ? 'reply_count' : 'created_at';
     const { data } = await _sb.from('forum_posts')
-      .select('id,title,body,author_name,author_type,created_at,reply_count,status')
+      .select('id,title,body,author_id,author_name,author_type,created_at,reply_count,status')
       .eq('category', catId)
       .order(orderField, { ascending: false })
       .limit(50);
@@ -270,10 +270,10 @@ const Forum = (() => {
       return;
     }
 
-    const { name: myName } = _author();
+    const { uid, isAdmin } = await _viewer();
 
     list.innerHTML = sortBtns + data.map(p => {
-      const canDel = p.author_name === myName;
+      const canDel = (!!uid && p.author_id === uid) || isAdmin;
       return `
         <div class="relative group mb-3">
           <button onclick="Forum.openPost('${p.id}')"
@@ -321,26 +321,19 @@ const Forum = (() => {
     if (bodyEl)    bodyEl.innerHTML    = '<p class="text-sm text-gray-500 dark:text-gray-400 py-4">Loading…</p>';
     if (repliesEl) repliesEl.innerHTML = '';
 
-    const [pr, rr, gur] = await Promise.all([
-      _sb.from('forum_posts').select('id, title, body, author_name, author_type, created_at, status').eq('id', postId).maybeSingle(),
-      _sb.from('forum_replies').select('id, body, author_name, author_type, created_at').eq('post_id', postId).order('created_at', { ascending: true }),
-      _sb.auth.getUser(),
+    const [pr, rr, viewer] = await Promise.all([
+      _sb.from('forum_posts').select('id, title, body, author_id, author_name, author_type, created_at, status').eq('id', postId).maybeSingle(),
+      _sb.from('forum_replies').select('id, body, author_id, author_name, author_type, created_at').eq('post_id', postId).order('created_at', { ascending: true }),
+      _viewer(),
     ]);
 
     const post    = pr.data;
     const replies = rr.data || [];
-    const authUser = gur.data?.user;
+    const { uid, isAdmin } = viewer;
 
     if (!post) { bodyEl.innerHTML = '<p class="text-sm text-red-400 py-4">Post not found.</p>'; return; }
 
-    let isAdmin = false;
-    if (authUser?.id) {
-      const { data: prof } = await _sb.from('profiles').select('role,is_super_admin').eq('id', authUser.id).maybeSingle();
-      isAdmin = prof?.role === 'admin' || prof?.is_super_admin === true;
-    }
-
-    const { name: myName } = _author();
-    const canDelPost = post.author_name === myName;
+    const canDelPost = (!!uid && post.author_id === uid) || isAdmin;
     const isClosed   = post.status === 'closed';
 
     const replyBox     = _el('forum-reply-box');
@@ -375,7 +368,7 @@ const Forum = (() => {
     repliesEl.innerHTML = replies.length
       ? `<h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3 mt-4">${replies.length} repl${replies.length === 1 ? 'y' : 'ies'}</h4>` +
         replies.map(r => {
-          const canDelReply = r.author_name === myName;
+          const canDelReply = (!!uid && r.author_id === uid) || isAdmin;
           return `
           <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 mb-3 border border-gray-100 dark:border-gray-600">
             <p class="text-sm text-gray-700 dark:text-gray-200 whitespace-pre-wrap leading-relaxed mb-2">${_esc(r.body)}</p>
@@ -409,6 +402,38 @@ const Forum = (() => {
     openPost(id);
   }
 
+  // Who is looking, and may they moderate?
+  //
+  // ⚠ Ownership is decided by author_id, NEVER by comparing display names.
+  // Two people called "Rajneesh" each saw a delete button on the other's
+  // posts - the database refused, so nothing was lost, but the button was a
+  // lie either way. It also meant an ADMIN saw no delete button on anybody
+  // else's post, while posts_delete has allowed is_admin() all along.
+  //
+  // ⚠ 41 of the 42 rows on production were written before the
+  // forum_set_author trigger existed and carry author_id = NULL, so their
+  // authors can never satisfy the policy. is_admin() is the ONLY way those
+  // are ever removable - which is the whole point of this.
+  //
+  // getSession() reads the stored session locally. getUser(), which the
+  // detail view used, is a network round trip on every post opened, and the
+  // profile lookup beside it was a second one. Auth already knows.
+  async function _viewer() {
+    let uid = null, isAdmin = false;
+    try {
+      const { data: { session } } = await _sb.auth.getSession();
+      uid = session?.user?.id || null;
+      if (typeof Auth !== 'undefined' && typeof Auth.isAdmin === 'function') {
+        isAdmin = !!Auth.isAdmin();
+      } else if (uid) {
+        const { data: prof } = await _sb.from('profiles')
+          .select('role,is_super_admin').eq('id', uid).maybeSingle();
+        isAdmin = prof?.role === 'admin' || prof?.is_super_admin === true;
+      }
+    } catch (_) {}
+    return { uid, isAdmin };
+  }
+
   // ── Delete ────────────────────────────────────
   async function deletePost(postId) {
     if (!_sb) return;
@@ -423,9 +448,12 @@ const Forum = (() => {
       const { data, error } = await _sb.from('forum_posts')
         .delete().eq('id', postId).select('id');
       if (error || !data?.length) {
-        if (error) console.error('[Forum.deletePost]', error.message);
+        if (error) console.error('[Forum.deletePost]', error.code, error.message);
         if (typeof toast !== 'undefined') {
-          toast('Could not delete that post - you can only delete your own posts.', 3500);
+          const { isAdmin } = await _viewer();
+          toast(isAdmin
+            ? 'Could not delete that post. Check the browser console for the reason.'
+            : 'Could not delete that post - you can only delete your own posts.', 4000);
         }
         return;
       }
@@ -445,9 +473,12 @@ const Forum = (() => {
       const { data, error } = await _sb.from('forum_replies')
         .delete().eq('id', replyId).select('id');
       if (error || !data?.length) {
-        if (error) console.error('[Forum.deleteReply]', error.message);
+        if (error) console.error('[Forum.deleteReply]', error.code, error.message);
         if (typeof toast !== 'undefined') {
-          toast('Could not delete that reply - you can only delete your own replies.', 3500);
+          const { isAdmin } = await _viewer();
+          toast(isAdmin
+            ? 'Could not delete that reply. Check the browser console for the reason.'
+            : 'Could not delete that reply - you can only delete your own replies.', 4000);
         }
         return;
       }
