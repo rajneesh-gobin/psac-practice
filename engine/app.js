@@ -288,6 +288,32 @@ function _floatXP(amount) {
 
 const _COMBO_MSGS = { 2:'🔥 2 in a row!', 3:'🔥🔥 3 in a row!', 4:'💪 4 in a row!', 5:'🔥🔥🔥 On fire!', 7:'⚡ 7 in a row!', 10:'🏆 10 in a row! LEGENDARY!' };
 
+const _PRAISE_REACTIONS = [
+  ['🌟', 'Brilliant thinking!'], ['🦊', 'You got it!'], ['🚀', 'Great job!'],
+  ['🎈', 'That was spot on!'], ['🐼', 'Clever answer!'], ['✨', 'Yes! Keep going!'],
+];
+const _TRY_AGAIN_REACTIONS = [
+  ['🐢', 'That one was tricky — let’s learn it together.'],
+  ['🦉', 'Nearly there. Have a look at the helpful steps below.'],
+  ['🌱', 'Mistakes help your brain grow. Let’s try the next one.'],
+  ['🧩', 'Good try. This is a puzzle we can solve step by step.'],
+];
+
+function _celebrationMotionAllowed() {
+  if (document.documentElement.classList.contains('kid-calm')) return false;
+  return !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+}
+
+function _practiceReaction(correct, streak) {
+  if (correct && streak >= 10) return { icon: '🏆', text: 'Legendary streak! You are on fire!', confetti: 120 };
+  if (correct && streak >= 5)  return { icon: '🔥', text: `${streak} in a row — amazing focus!`, confetti: 75 };
+  const choices = correct ? _PRAISE_REACTIONS : _TRY_AGAIN_REACTIONS;
+  const [icon, text] = choices[Math.floor(Math.random() * choices.length)];
+  // A small surprise roughly once every five correct answers keeps delight
+  // without turning each question into an interruption.
+  return { icon, text, confetti: correct && Math.random() < 0.2 ? 34 : 0 };
+}
+
 function _showCombo(n) {
   const msg = _COMBO_MSGS[n];
   if (!msg) return;
@@ -359,6 +385,12 @@ function activateSubjectPack(packId, { allowComingSoon = false } = {}) {
 
   ACTIVE_PACK    = pack;
   SELECTED_GRADE = pack.grade;
+  // Subject selection should survive a normal refresh. Scope it to the child
+  // rather than the device, because families can switch between siblings here.
+  try {
+    const key = `psac-active-subject:${typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID ? ACTIVE_STUDENT_ID : 'current'}`;
+    sessionStorage.setItem(key, pack.id);
+  } catch (_) {}
 
   const chs = pack._chapters || pack.chapters || [];
   CHAPTERS.length = 0;
@@ -1639,7 +1671,7 @@ function _launchConfetti() {
 // nobody was ever studying. Patching each button was a losing game (there are
 // a dozen entry points into these screens); this catches all of them at once.
 const _KID_ONLY_SCREENS = new Set([
-  'dashboard', 'chapter-select', 'syllabus', 'past-papers', 'analytics',
+  'dashboard', 'chapter-select', 'syllabus', 'interactive-map', 'past-papers', 'analytics',
   'subject-select', 'grade-select', 'practice', 'exam-config', 'exam',
   'results', 'assignment-complete', 'search', 'schedule',
 ]);
@@ -1713,6 +1745,13 @@ function showScreen(id) {
     if (isForward)      sc.classList.add('screen-enter-right');
     else if (isBack)    sc.classList.add('screen-enter-left');
     S.currentScreen = id;
+    // Authentication re-hydrates asynchronously after a full refresh. Keep the
+    // user's last real workspace so that flow can return them there afterwards.
+    // Entry/lock screens are deliberately excluded: restoring one of those can
+    // bypass a sign-in or leave a valid session looking logged out.
+    if (!['landing', 'auth', 'verify-email', 'reset-password', 'biometric-lock'].includes(id)) {
+      try { sessionStorage.setItem('psac-last-screen', id); } catch (_) {}
+    }
   }
   _prevScreen = id;
   _updateBottomNav(id);
@@ -1769,6 +1808,7 @@ function showScreen(id) {
   if (id === 'analytics')       renderAnalytics();
   if (id === 'chapter-select')  renderChapterSelect();
   if (id === 'syllabus')        renderSyllabus();
+  if (id === 'interactive-map') renderInteractiveMap();
   if (id === 'past-papers')     renderPastPapers();
   if (id === 'parent')          renderParentDashboard();
   if (id === 'shop')            renderShop();
@@ -1805,7 +1845,7 @@ function _updateBreadcrumb(screenId) {
   // subject picker is where a child LANDS, and the results screen is where they
   // end up after an exam — the two moments they are most likely to want a way
   // back — and both showed no trail at all.
-  const studentScreens = ['dashboard','chapter-select','syllabus','analytics','practice',
+  const studentScreens = ['dashboard','chapter-select','syllabus','interactive-map','analytics','practice',
                           'exam-config','exam','results','subject-select','grade-select','past-papers'];
   if (!studentScreens.includes(screenId)) { bar.classList.add('hidden'); return; }
 
@@ -1851,8 +1891,8 @@ function _updateBreadcrumb(screenId) {
     parts += link(packLabel, `showScreen('dashboard')`) + curr('Past papers');
   } else if (screenId === 'dashboard') {
     parts += curr(packLabel);
-  } else if (['chapter-select','syllabus','analytics','exam-config'].includes(screenId)) {
-    const label = screenId === 'syllabus' ? 'Syllabus' : screenId === 'analytics' ? 'Analytics' : screenId === 'exam-config' ? 'Exam' : 'Chapters';
+  } else if (['chapter-select','syllabus','interactive-map','analytics','exam-config'].includes(screenId)) {
+    const label = screenId === 'syllabus' ? 'Syllabus' : screenId === 'interactive-map' ? 'Interactive maps' : screenId === 'analytics' ? 'Analytics' : screenId === 'exam-config' ? 'Exam' : 'Chapters';
     parts += link(packLabel, `showScreen('dashboard')`) + curr(label);
   } else if (screenId === 'practice') {
     parts += link(packLabel, `showScreen('dashboard')`) + link('Chapters', `showScreen('chapter-select')`) + curr(chLabel);
@@ -2223,6 +2263,13 @@ function checkAnswer(q, userAnswer) {
       return ans.every(([r,c]) => selSet.has(`${r},${c}`));
     } catch { return false; }
   }
+  if (q.type === 'multi') {
+    try {
+      const selected = JSON.parse(userAnswer || '[]').map(normalise).sort();
+      const answers = (Array.isArray(q.answer) ? q.answer : []).map(normalise).sort();
+      return selected.length === answers.length && selected.every((v, i) => v === answers[i]);
+    } catch { return false; }
+  }
   const ua = normalise(userAnswer);
   const accepted = [q.answer, ...(q.acceptableAnswers || [])];
   return accepted.some(a => normalise(a) === ua || _sameNumber(a, userAnswer));
@@ -2354,16 +2401,23 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
     renderSymmetryGrid(q, cont, selectedAnswer, disabled);
     return;
   }
-  if (q.type === 'mcq') {
+  if (q.type === 'mcq' || q.type === 'multi') {
+    const multi = q.type === 'multi';
+    let selectedValues = [];
+    if (multi && selectedAnswer) {
+      try { selectedValues = JSON.parse(selectedAnswer || '[]'); } catch {}
+    }
+    const correctValues = multi ? (Array.isArray(q.answer) ? q.answer : []) : [q.answer];
     cont.innerHTML = (q.options || []).map((opt, i) => {
       let cls = 'mcq-opt';
+      const chosen = multi ? selectedValues.includes(opt) : opt === selectedAnswer;
+      const correct = correctValues.includes(opt);
       if (disabled) {
         cls += ' disabled';
-        if (opt === q.answer) cls += ' correct';
-        else if (opt === selectedAnswer && opt !== q.answer) cls += ' wrong';
-        else if (opt === selectedAnswer) cls += ' selected';
+        if (correct) cls += ' correct';
+        else if (chosen) cls += ' wrong';
       } else {
-        if (opt === selectedAnswer) cls += ' selected';
+        if (chosen) cls += ' selected';
       }
       // q.answer used to be interpolated into the onclick as a single-quoted JS
       // string. Any answer containing an apostrophe - "c'est", "l'école", most
@@ -2373,8 +2427,8 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
       // selectMCQ never read the argument anyway, so it is gone rather than
       // escaped. data-value is the real data path (getSelectedAnswer reads it)
       // and is now escaped properly.
-      return `<button class="${cls}" data-value="${_attr(opt)}" onclick="this.classList.add('mcq-spring');this.onanimationend=()=>this.classList.remove('mcq-spring');selectMCQ(this,'${containerId}',${disabled})">
-        <span class="opt-letter">${String.fromCharCode(65+i)}</span>
+      return `<button class="${cls}" data-value="${_attr(opt)}" ${multi ? 'role="checkbox" aria-checked="' + chosen + '"' : ''} onclick="this.classList.add('mcq-spring');this.onanimationend=()=>this.classList.remove('mcq-spring');${multi ? 'selectMultiMCQ' : 'selectMCQ'}(this,'${containerId}',${disabled})">
+        <span class="opt-letter">${multi ? (chosen ? '☑' : '☐') : String.fromCharCode(65+i)}</span>
         <span>${_prettyMath(opt)}</span>
       </button>`;
     }).join('');
@@ -2453,10 +2507,21 @@ window.selectMCQ = (btn, containerId, disabled) => {
   btn.classList.add('selected');
 };
 
+window.selectMultiMCQ = (btn, containerId, disabled) => {
+  if (disabled) return;
+  const selected = btn.classList.toggle('selected');
+  btn.setAttribute('aria-checked', String(selected));
+  const mark = btn.querySelector('.opt-letter');
+  if (mark) mark.textContent = selected ? '☑' : '☐';
+};
+
 function getSelectedAnswer(containerId, qType) {
   if (qType === 'mcq') {
     const sel = document.querySelector(`#${containerId} .mcq-opt.selected`);
     return sel ? sel.dataset.value : null;
+  }
+  if (qType === 'multi') {
+    return JSON.stringify([...document.querySelectorAll(`#${containerId} .mcq-opt.selected`)].map(b => b.dataset.value).sort());
   }
   if (qType === 'symmetry') {
     const selected = [];
@@ -2471,14 +2536,15 @@ function getSelectedAnswer(containerId, qType) {
 }
 
 // ── CONFETTI ──────────────────────────────────
-function launchConfetti() {
+function launchConfetti(count = 160) {
+  if (!_celebrationMotionAllowed()) return;
   const canvas = document.getElementById('confetti-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const cols = ['#ff6b6b','#feca57','#48dbfb','#ff9ff3','#54a0ff','#5f27cd','#00d2d3','#ff9f43'];
-  const particles = Array.from({length:160}, () => ({
+  const particles = Array.from({length:count}, () => ({
     x: Math.random() * canvas.width, y: -20,
     r: rnd(4, 10), col: cols[rnd(0, cols.length-1)],
     vx: (Math.random()-0.5)*5, vy: rnd(2, 5),
@@ -5204,19 +5270,31 @@ async function _removeFriend(friendId, btn) {
 let _friendCode = null;
 
 // ── Lazy CDN scripts ──────────────────────────
-// The two QR libraries are ~370 KB of blocking JS that used to load on every
-// cold start, on phones this app already had display problems on, for a
-// feature reached from one button in one modal. They are fetched on demand
-// instead. Both call sites already guarded `typeof X === "undefined"`, so a
-// blocked/offline/slow CDN degrades to exactly the same fallback as before.
+// The scanner library is large and only needed from one button in one modal,
+// so it is fetched on demand. The much smaller QR encoder is bundled locally
+// below so creating an invite does not depend on a third-party CDN.
 //
 // Never rejects: callers branch on the global, not on a thrown error. A
 // failed load is evicted from the cache so an explicit retry can re-attempt.
 // The cache hangs off the function object rather than a module-level const,
 // so there is no temporal dead zone to fall into if this ever gets called
 // from something that runs earlier than it looks.
-const _CDN_QRCODE      = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
 const _CDN_QR_SCANNER  = 'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js';
+
+// Keep invite creation reliable: the QR encoder ships with the app instead of
+// relying on a CDN URL which can be blocked by a phone, school network, or an
+// offline service-worker session. Dynamic import keeps this code out of the
+// normal startup path; it is only fetched when the share dialog is opened.
+function _loadLocalQRCode() {
+  _loadLocalQRCode._promise = _loadLocalQRCode._promise || import('../assets/vendor/qrcode.mjs')
+    .then(module => module.default || module)
+    .catch(error => {
+      console.warn('[QR] Could not load local encoder:', error);
+      _loadLocalQRCode._promise = null;
+      return null;
+    });
+  return _loadLocalQRCode._promise;
+}
 
 function _loadScriptOnce(src) {
   _loadScriptOnce._cache = _loadScriptOnce._cache || new Map();
@@ -5268,11 +5346,11 @@ async function openFriendInviteModal() {
   if (canvas)  canvas.classList.remove('hidden');
   if (qrFail)  qrFail.classList.add('hidden');
 
-  if (canvas) await _loadScriptOnce(_CDN_QRCODE);
+  const qrEncoder = canvas ? await _loadLocalQRCode() : null;
 
-  if (canvas && typeof QRCode !== 'undefined') {
+  if (canvas && qrEncoder?.toCanvas) {
     const link = `${location.origin}${location.pathname}?friend=${_friendCode}`;
-    QRCode.toCanvas(canvas, link, { width: 180, margin: 1, color: { dark: '#1e293b', light: '#ffffff' } }, err => {
+    qrEncoder.toCanvas(canvas, link, { width: 180, margin: 1, color: { dark: '#1e293b', light: '#ffffff' } }, err => {
       if (err) {
         console.warn('[QR] toCanvas failed:', err);
         canvas.classList.add('hidden');
@@ -5281,8 +5359,7 @@ async function openFriendInviteModal() {
       }
     });
   } else {
-    // qrcode CDN script never loaded (blocked, offline, slow network) -
-    // typeof QRCode === 'undefined' used to fail this exact same way: silently.
+    // The local QR module could not load. Keep a clear, usable link fallback.
     if (canvas)  canvas.classList.add('hidden');
     if (qrLabel) qrLabel.classList.add('hidden');
     if (qrFail)  qrFail.classList.remove('hidden');
@@ -5395,6 +5472,24 @@ function togglePracticeScratchpad() {
   }
 }
 
+// Keep the practice page focused on answering. The full help set is available
+// when wanted, but it should not be seven equally prominent choices for a
+// child who has just read a question.
+function _setPracticeHelpOpen(open) {
+  const tray = document.getElementById('practice-help-tray');
+  const btn  = document.getElementById('practice-help-toggle');
+  if (!tray || !btn) return;
+  tray.classList.toggle('hidden', !open);
+  btn.classList.toggle('is-on', open);
+  btn.setAttribute('aria-expanded', String(open));
+}
+
+function togglePracticeHelp() {
+  const tray = document.getElementById('practice-help-tray');
+  if (!tray) return;
+  _setPracticeHelpOpen(tray.classList.contains('hidden'));
+}
+
 function initScratchpad(id) {
   const canvas = document.getElementById(id);
   if (!canvas || canvas._initialized) return;
@@ -5497,6 +5592,14 @@ function renderDashboard() {
     taglineEl.textContent = `Ready to master Grade ${grade} ${name}? Let's go!`;
   }
 
+  // Keep this discovery card on the subject home, rather than making children
+  // hunt through the syllabus browser for the optional geography activity.
+  const mapCard = document.getElementById('btn-interactive-map');
+  if (mapCard) {
+    const hasGeoMap = /history\s*&?\s*geography/i.test(ACTIVE_PACK?.subject || ACTIVE_PACK?.name || '');
+    mapCard.classList.toggle('hidden', !hasGeoMap);
+  }
+
   // Stats bar
   const acc = DB.stats.totalAttempted ? Math.round(DB.stats.totalCorrect / DB.stats.totalAttempted * 100) : 0;
   document.getElementById('dash-total-q').textContent = DB.stats.totalAttempted;
@@ -5504,9 +5607,18 @@ function renderDashboard() {
   document.getElementById('dash-exams').textContent = DB.stats.examCount;
   _setStreakDisplay(DB.stats.streak);
 
-  // "Start here" nudge for brand-new students
+  // The dashboard always gives a child one clear next step.  It is intentionally
+  // not a replacement for chapter / subject selection: the secondary action in
+  // the card and the Subjects button still expose every existing route.
   const startHere = document.getElementById('dash-start-here');
-  if (startHere) startHere.classList.toggle('hidden', DB.stats.totalAttempted > 0);
+  if (startHere) startHere.classList.remove('hidden');
+  const missionTitle = document.getElementById('dash-mission-title');
+  const missionCopy = document.getElementById('dash-mission-copy');
+  const isFirstVisit = !DB.stats.totalAttempted;
+  if (missionTitle) missionTitle.textContent = isFirstVisit ? 'Your first mission' : 'A quick mission';
+  if (missionCopy) missionCopy.textContent = isFirstVisit
+    ? 'Try 5 friendly warm-up questions. You can ask for a hint any time.'
+    : 'Keep your skills sharp with 5 quick questions. Hints and working space are always ready.';
 
   // Expired-access notice, above the resume banner: a child whose access has
   // lapsed needs to know why most chapters stopped opening.
@@ -5991,6 +6103,58 @@ let _practiceMode = null;
 // just adopts them instead of the usual qs:[]/idx:0 reset.
 let _practiceResume = null;
 
+// ── CHILD DASHBOARD MISSION ───────────────────────────────────────────────
+// A five-question mission is an on-ramp, not a second practice system.  By
+// handing its small, ordinary question list through startChapterDirect(), every
+// established behaviour still applies: parent chapter locks, plan access,
+// hints, scratchpad, answer review, XP, progress and the normal pause/resume
+// system.  A child can always choose another subject from the dashboard card.
+window.startKidMission = async function() {
+  const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
+    .filter(p => !p.comingSoon);
+  if (!packs.length) { toast('Your subjects are being set up. Please try again soon.', 3000); return; }
+
+  const acct = (typeof Auth !== 'undefined') ? Auth.getActiveAccount() : null;
+  const grade = acct?.grade || SELECTED_GRADE;
+  const gradePacks = grade ? packs.filter(p => String(p.grade) === String(grade)) : packs;
+  const choices = (gradePacks.length ? gradePacks : packs).slice().sort((a, b) => {
+    // Maths is a dependable first subject for this app, but retain the child's
+    // already-selected subject as their first choice on later visits.
+    const score = p => p.id === ACTIVE_PACK?.id ? 0 : (/math/i.test(`${p.subject || ''} ${p.name || ''}`) ? 1 : 2);
+    return score(a) - score(b);
+  });
+  const previousPackId = ACTIVE_PACK?.id;
+
+  for (const candidate of choices) {
+    const pack = activateSubjectPack(candidate.id);
+    if (!pack) continue;
+    try {
+      if (typeof QuestionLoader !== 'undefined') await QuestionLoader.loadSubject(pack.id);
+    } catch (_) {
+      // Try the next available subject; a child should get a useful next step,
+      // not a technical loading error, whenever another pack is ready.
+      continue;
+    }
+
+    const locked = DB.restrictions?.lockedChapters || [];
+    const chapter = CHAPTERS.find(ch => !locked.includes(ch.id) && _planAllowsChapter(ch.id));
+    if (!chapter) continue;
+
+    const questions = getQuestionsForChapter(chapter.id, 1, 5);
+    if (!questions.length) continue;
+
+    _practiceResume = { qs: questions, idx: 0, answers: {} };
+    startChapterDirect(chapter.id, 1);
+    return;
+  }
+
+  // Do not leave the child in a different, unusable subject after a loading
+  // failure. Their previous choice remains intact and all normal navigation is
+  // still available.
+  if (previousPackId) activateSubjectPack(previousPackId);
+  toast('We could not find an open mission yet. Pick a subject to explore instead.', 3500);
+};
+
 // ⚠ _attempt is INTERNAL. It exists because the "questions are not loaded yet"
 // branch below re-calls this function, and that retry was unbounded.
 //
@@ -6322,6 +6486,9 @@ document.getElementById('btn-exam-mode').addEventListener('click', () => {
 });
 document.getElementById('btn-chapter-mode').addEventListener('click', () => { showScreen('chapter-select'); });
 document.getElementById('btn-syllabus-mode').addEventListener('click', () => showScreen('syllabus'));
+document.getElementById('btn-interactive-map').addEventListener('click', () => {
+  showScreen('interactive-map');
+});
 document.getElementById('btn-weak-areas').addEventListener('click', startWeakAreaDrill);
 
 document.getElementById('start-exam-btn').addEventListener('click', () => {
@@ -6416,15 +6583,47 @@ function _groupByPassage(questions) {
   return [...groups.values()].filter(g => g.items.length > 1);
 }
 
+// Printable papers are often generated several times in one revision week.
+// Remembering the last three papers, per child and subject, makes the second
+// and third download genuinely useful practice rather than a reshuffle which
+// happens to repeat the same memorable graph or diagram. This is local-only:
+// no student data or paper content is sent anywhere.
+const _PRINT_HISTORY_LIMIT = 3;
+function _printHistoryKey() {
+  const subject = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.id) || 'unknown-subject';
+  return `mm_print_history_${ACTIVE_STUDENT_ID || 'guest'}_${subject}`;
+}
+function _recentPrintableQuestionIds() {
+  try {
+    const papers = JSON.parse(localStorage.getItem(_printHistoryKey()) || '[]');
+    return new Set(Array.isArray(papers) ? papers.flat().filter(id => typeof id === 'string') : []);
+  } catch (_) { return new Set(); }
+}
+function _rememberPrintablePaper(questions) {
+  try {
+    const previous = JSON.parse(localStorage.getItem(_printHistoryKey()) || '[]');
+    const papers = Array.isArray(previous) ? previous : [];
+    papers.unshift(questions.map(q => q?.id).filter(Boolean));
+    localStorage.setItem(_printHistoryKey(), JSON.stringify(papers.slice(0, _PRINT_HISTORY_LIMIT)));
+  } catch (_) {}
+}
+
 function generatePrintablePaper() {
   const year = new Date().getFullYear();
+  const isMathsPaper = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.subject === 'Maths');
+  // Maths benefits from a longer applied-reasoning section. Other subjects keep
+  // their established 30 short + 10 extended format.
+  const sectionACount = isMathsPaper ? 20 : 30;
+  const sectionBCount = isMathsPaper ? 15 : 10;
+  const sectionAMarks = sectionACount * 2;
+  const sectionBMarks = sectionBCount * 4;
 
   // Same restrictions startChapterDirect()/assembleExamPaper() enforce — a
   // locked chapter or a difficulty cap must hold for the printable paper too.
   const lockedChs = new Set(DB.restrictions?.lockedChapters || []);
   const maxDiff   = Math.min(4, Math.max(1, DB.restrictions?.maxDifficulty ?? 4));
 
-  // Build pools: Section A (Q1-30 mixed difficulty), Section B (Q31-40 hardest)
+  // Build pools: Section A is short/mixed; Section B is extended reasoning.
   // Filter by the active subject's chapters so Science exam doesn't pull maths questions
   const _activeChs = new Set(CHAPTERS.filter(c => !lockedChs.has(c.id)).map(c => c.id));
   const _allSubjectQs = STATIC_QUESTIONS.filter(q => _activeChs.has(q.chapterId) && q.difficulty <= maxDiff);
@@ -6433,16 +6632,27 @@ function generatePrintablePaper() {
   // rest of the passage questions are removed from the pools below, so no
   // passage prose can reach Section A or B.
   const passageGroups = _groupByPassage(_allSubjectQs);
-  const chosenGroup   = passageGroups.length ? shuffle(passageGroups)[0] : null;
+  // A shared comprehension passage is just as repetitive as a chart. Prefer a
+  // passage whose questions were not on one of the recent printed papers.
+  const recentPassageIds = _recentPrintableQuestionIds();
+  const freshPassageGroups = passageGroups.filter(g => g.items.every(it => !recentPassageIds.has(it.q.id)));
+  const chosenGroup   = passageGroups.length ? shuffle(freshPassageGroups.length ? freshPassageGroups : passageGroups)[0] : null;
   const comp          = chosenGroup ? shuffle(chosenGroup.items).slice(0, 5) : [];
   const compIds       = new Set(comp.map(c => c.q.id));
   const passageIds    = new Set();
   for (const g of passageGroups) for (const it of g.items) passageIds.add(it.q.id);
 
   const _subjectQs = _allSubjectQs.filter(q => !passageIds.has(q.id));
-  const secAPool = shuffle(_subjectQs.filter(q => q.difficulty <= Math.min(3, maxDiff)));
+  const recentIds = _recentPrintableQuestionIds();
+  // Use unseen questions first; fall back to the whole pool only when a small
+  // subject cannot fill a 40-question paper without reuse.
+  const preferFresh = pool => {
+    const fresh = pool.filter(q => !recentIds.has(q.id));
+    return shuffle(fresh.length ? fresh : pool);
+  };
+  const secAPool = preferFresh(_subjectQs.filter(q => q.difficulty <= Math.min(3, maxDiff)));
   // Section B is L4 word problems - only offer it once the cap actually allows L4.
-  const secBPool = maxDiff >= 4 ? shuffle(_subjectQs.filter(q => q.difficulty === 4)) : [];
+  const secBPool = maxDiff >= 4 ? preferFresh(_subjectQs.filter(q => q.difficulty === 4)) : [];
 
   if (!secAPool.length && !comp.length) {
     toast('🔒 Not enough unlocked chapters/questions to build a printable paper. Ask your parent to review chapter locks.', 4000);
@@ -6450,8 +6660,8 @@ function generatePrintablePaper() {
   }
 
   // The comprehension questions occupy the first slots of Section A rather than
-  // adding a section, so the paper stays 30 + 10 questions for 100 marks.
-  const secATarget = Math.max(0, 30 - comp.length);
+  // adding a section, so the paper stays within its planned marks total.
+  const secATarget = Math.max(0, sectionACount - comp.length);
 
   // Ensure chapter spread for Section A
   const secA = [];
@@ -6470,21 +6680,36 @@ function generatePrintablePaper() {
   }
   secA.sort((a, b) => a.difficulty - b.difficulty);
 
-  // Section B: 10 L4 word problems from varied chapters
+  // A full-page SVG/graph at Q1 makes different papers look identical at a
+  // glance and can push the first answer line onto the next page. Keep the
+  // paper's easiest difficulty first, but choose a non-visual question as Q1
+  // whenever that difficulty has one available.
+  const hasVisual = q => /<svg\b|<img\b/i.test(q?.question || '');
+  const firstDifficulty = secA.length ? secA[0].difficulty : null;
+  const firstTextIndex = secA.findIndex(q => q.difficulty === firstDifficulty && !hasVisual(q));
+  if (firstTextIndex > 0) {
+    const [firstText] = secA.splice(firstTextIndex, 1);
+    secA.unshift(firstText);
+  }
+
+  // Section B: L4 word problems from varied chapters. Maths has 15 to give
+  // children more genuine PSAC-style reading and multi-step practice.
   const secB = [];
   const usedB = new Set();
   for (const ch of shuffle(chapters)) {
     const pick = secBPool.find(q => q.chapterId === ch && !usedB.has(q.id));
     if (pick) { secB.push(pick); usedB.add(pick.id); }
-    if (secB.length >= 10) break;
+    if (secB.length >= sectionBCount) break;
   }
   // Top up if needed from L3
-  if (secB.length < 10) {
-    for (const q of shuffle(_subjectQs.filter(q => q.difficulty === 3))) {
-      if (secB.length >= 10) break;
+  if (secB.length < sectionBCount) {
+    for (const q of preferFresh(_subjectQs.filter(q => q.difficulty === 3))) {
+      if (secB.length >= sectionBCount) break;
       if (!usedB.has(q.id) && !usedIds.has(q.id)) { secB.push(q); usedB.add(q.id); }
     }
   }
+
+  _rememberPrintablePaper([...comp.map(c => c.q), ...secA, ...secB]);
 
   const diffLabel = d => ['','⭐ Basic','⭐⭐ Medium','⭐⭐⭐ Hard','🏆 Challenge'][d] || '';
   const chName = id => (CHAPTERS.find(c => c.id === id) || {}).name || id;
@@ -6495,7 +6720,7 @@ function generatePrintablePaper() {
   function renderQ(q, num, marks, overrideHtml) {
     const stripHTML = s => s.replace(/<[^>]+>/g, '');
     let body = `<div class="q-text">${_prettyMath(overrideHtml != null ? overrideHtml : q.question)}`;
-    if (q.type === 'mcq' && q.options) {
+    if ((q.type === 'mcq' || q.type === 'multi') && q.options) {
       body += `<div class="mcq-opts">`;
       ['A','B','C','D'].forEach((ltr, i) => {
         body += `<span class="mcq-opt"><span class="bubble"></span> <b>${ltr}.</b> ${_prettyMath(q.options[i] || '')}</span>`;
@@ -6527,7 +6752,25 @@ function generatePrintablePaper() {
 
   const secARows = compRows + secA.slice(0, secATarget)
     .map((q, i) => renderQ(q, comp.length + i + 1, 2)).join('');
-  const secBRows = secB.slice(0, 10).map((q, i) => renderQ(q, i + 31, 4)).join('');
+  const secBRows = secB.slice(0, sectionBCount).map((q, i) => renderQ(q, i + sectionACount + 1, 4)).join('');
+
+  // Keep the marking material separate from the child paper. The key is a
+  // second print window, deliberately opened only by the adult-facing button.
+  const answerRows = [
+    ...comp.map((c, i) => ({ q:c.q, num:i + 1, marks:2, ask:c.ask })),
+    ...secA.slice(0, secATarget).map((q, i) => ({ q, num:comp.length + i + 1, marks:2 })),
+    ...secB.slice(0, sectionBCount).map((q, i) => ({ q, num:sectionACount + i + 1, marks:4 })),
+  ].map(({ q, num, marks, ask }) => `
+    <article class="answer">
+      <div class="answer-head"><b>Question ${num}</b> · ${chName(q.chapterId)} · ${marks} marks</div>
+      <div class="answer-question">${_prettyMath(ask != null ? ask : q.question)}</div>
+      <div><b>Answer:</b> ${_prettyMath(String(q.answer))}</div>
+      <div class="answer-working"><b>Working / explanation:</b> ${_prettyMath(q.explanation || 'No worked explanation is available for this question.')}</div>
+    </article>`).join('');
+  const answerKeyHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+    <title>Answer Key — Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} Practice Paper ${year}</title>
+    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}@media print{body{margin:10px}.no-print{display:none}}</style>
+    </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key — Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p></div>${answerRows}</body></html>`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -6537,7 +6780,7 @@ function generatePrintablePaper() {
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #111; padding: 20px; background: #fff; }
-  .no-print { background:#1d4ed8; color:#fff; border:none; padding:10px 22px; font-size:13pt; border-radius:6px; cursor:pointer; margin-bottom:18px; display:inline-block; }
+  .no-print { background:#1d4ed8; color:#fff; border:none; padding:10px 22px; font-size:13pt; border-radius:6px; cursor:pointer; margin:0 10px 18px 0; display:inline-block; }
   .no-print:hover { background:#1e40af; }
   @media print { .no-print { display:none; } body { padding:10px; } }
 
@@ -6601,6 +6844,7 @@ function generatePrintablePaper() {
 <body>
 <div class="paper">
   <button class="no-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+  <button class="no-print" style="background:#166534" onclick="openAnswerKey()">🔐 Open answer key</button>
 
   <!-- ⚠ The letterhead used to read "Republic of Mauritius - Ministry of
        Education" above "End-of-Year Assessment". Printed out and handed to a
@@ -6633,21 +6877,21 @@ function generatePrintablePaper() {
   </div>
 
   <!-- SECTION A -->
-  <div class="section-head">SECTION A &nbsp;-&nbsp; 60 Marks &nbsp;(Questions 1–30)</div>
-  <div class="section-sub">Answer all 30 questions. Each question carries <b>2 marks</b>. Write your answer on the line provided. For MCQ, circle or fill in the correct letter.</div>
+  <div class="section-head">SECTION A &nbsp;-&nbsp; ${sectionAMarks} Marks &nbsp;(Questions 1–${sectionACount})</div>
+  <div class="section-sub">Answer all ${sectionACount} questions. Each question carries <b>2 marks</b>. Write your answer on the line provided. For MCQ, circle or fill in the correct letter.</div>
   <table>
     <tr><td></td><td></td><td class="marks-header">Marks</td></tr>
     ${secARows}
-    <tr class="total-row"><td colspan="2" style="text-align:right;padding-right:8px;">Section A Total</td><td style="text-align:center;">/ 60</td></tr>
+    <tr class="total-row"><td colspan="2" style="text-align:right;padding-right:8px;">Section A Total</td><td style="text-align:center;">/ ${sectionAMarks}</td></tr>
   </table>
 
   <!-- SECTION B -->
-  <div class="section-head">SECTION B &nbsp;-&nbsp; 40 Marks &nbsp;(Questions 31–40)</div>
-  <div class="section-sub">Answer all 10 questions. Each question carries <b>4 marks</b>. Show all working. Read each problem carefully.</div>
+  <div class="section-head">SECTION B &nbsp;-&nbsp; ${sectionBMarks} Marks &nbsp;(Questions ${sectionACount + 1}–${sectionACount + sectionBCount})</div>
+  <div class="section-sub">Answer all ${sectionBCount} questions. Each question carries <b>4 marks</b>. Show all working. Read each problem carefully.</div>
   <table>
     <tr><td></td><td></td><td class="marks-header">Marks</td></tr>
     ${secBRows}
-    <tr class="total-row"><td colspan="2" style="text-align:right;padding-right:8px;">Section B Total</td><td style="text-align:center;">/ 40</td></tr>
+    <tr class="total-row"><td colspan="2" style="text-align:right;padding-right:8px;">Section B Total</td><td style="text-align:center;">/ ${sectionBMarks}</td></tr>
   </table>
 
   <table style="margin-top:14px;">
@@ -6663,6 +6907,14 @@ function generatePrintablePaper() {
     an MIE or Ministry of Education document.
   </div>
 </div>
+<script>
+const ANSWER_KEY_HTML = ${JSON.stringify(answerKeyHtml).replace(/<\/script/gi, '<\\/script')};
+function openAnswerKey() {
+  const key = window.open('', '_blank');
+  if (!key) { alert('Please allow pop-ups to open the answer key.'); return; }
+  key.document.write(ANSWER_KEY_HTML); key.document.close();
+}
+</script>
 </body>
 </html>`;
 
@@ -7090,6 +7342,7 @@ function loadPracticeQuestion() {
   _saveResume();
 
   document.getElementById('practice-hint-box').classList.add('hidden');
+  _setPracticeHelpOpen(false);
   S.practice.hintShown = false;
   S.practice.hintIdx   = 0;
   const _hintBtn = document.getElementById('practice-hint-btn');
@@ -7310,15 +7563,21 @@ function practiceSubmit() {
   // would push them to guess rather than skip.
   if (!_assignmentActive) _usageBump('questions');
 
-  // Combo + sounds (before rendering so float appears at correct time)
+  // A short, varied reaction makes success feel noticed without treating every
+  // question like a full-screen reward. Wrong answers get a calm, encouraging
+  // companion rather than a sad/punishing animation.
+  let reaction;
   if (ok) {
     _comboStreak++;
     _floatXP(XP_PER_ANSWER);
     _playSound('correct'); _haptic('correct');
     _showCombo(_comboStreak);
+    reaction = _practiceReaction(true, _comboStreak);
+    if (reaction.confetti) launchConfetti(reaction.confetti);
   } else {
     _comboStreak = 0;
     _playSound('wrong'); _haptic('wrong');
+    reaction = _practiceReaction(false, 0);
   }
 
   // show correct/wrong state
@@ -7330,8 +7589,8 @@ function practiceSubmit() {
   if (S.practice.showAnswers === false) {
     fb.innerHTML = `
       <div class="flex items-center gap-3">
-        <span class="text-2xl">${ok ? '🎉' : '❌'}</span>
-        <div class="font-bold">${ok ? 'Correct! Well done!' : 'Not quite - keep trying!'}</div>
+        <span class="text-3xl feedback-buddy" aria-hidden="true">${reaction.icon}</span>
+        <div class="font-bold">${reaction.text}</div>
       </div>`;
   } else {
     const answerLine = q.type === 'symmetry'
@@ -7339,18 +7598,19 @@ function practiceSubmit() {
       : `Not quite. Correct answer: <b>${_prettyMath(String(q.answer))}</b>`;
     fb.innerHTML = `
       <div class="flex items-start gap-3">
-        <span class="text-2xl">${ok ? '🎉' : '💡'}</span>
+        <span class="text-3xl feedback-buddy" aria-hidden="true">${reaction.icon}</span>
         <div class="flex-1 min-w-0">
-          <div class="font-bold mb-1">${ok ? 'Correct! Well done!' : answerLine}</div>
+          <div class="font-bold mb-1">${reaction.text}</div>
+          ${ok ? '' : `<div class="font-semibold mb-1">${answerLine}</div>`}
           <div class="text-sm">${_prettyMath(q.explanation || "")}</div>
           ${_learnMoreHTML(q)}
         </div>
       </div>`;
   }
   // Entrance animation - remove old class first, force reflow, re-add
-  fb.classList.remove('hidden', 'feedback-pop', 'feedback-shake');
+  fb.classList.remove('hidden', 'feedback-pop', 'feedback-shake', 'feedback-encourage');
   void fb.offsetWidth;
-  fb.classList.add(ok ? 'feedback-pop' : 'feedback-shake');
+  fb.classList.add(ok ? 'feedback-pop' : 'feedback-encourage');
 
   // Stats
   _logPracticeAnswer(q, ua, ok, false);
@@ -8123,6 +8383,20 @@ function renderSyllabus() {
   }).join('');
 }
 
+// Maps are a stand-alone exploration activity, rather than a large card above
+// a course outline. Keeping the mount point on its own screen gives the map
+// enough room for its labels, filters and fact panel on phones as well.
+function renderInteractiveMap() {
+  const panel = document.getElementById('interactive-map-page');
+  if (!panel) return;
+  const hasGeoMap = /history\s*&?\s*geography/i.test(ACTIVE_PACK?.subject || ACTIVE_PACK?.name || '');
+  if (!hasGeoMap) {
+    panel.innerHTML = '<div class="rounded-2xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-5 text-sm text-amber-800 dark:text-amber-200">Interactive Maps are available from History &amp; Geography. Choose that subject to explore.</div>';
+    return;
+  }
+  if (typeof GeoMap !== 'undefined') GeoMap.render(panel);
+}
+
 window.startSubsectionPractice = function(chapterId, subsectionId, subsectionName) {
   // Ordinary practice, whatever ran before it - see _setAssignmentContext.
   _setAssignmentContext(false);
@@ -8781,6 +9055,16 @@ async function showProfile() {
   }
 }
 
+// A parent should not have to infer that sharing family access lives under a
+// generic account screen. This shortcut opens the exact card that creates the
+// one-use co-parent link.
+async function openCoparentSettings() {
+  await showProfile();
+  requestAnimationFrame(() => {
+    document.getElementById('coparent-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
 function _isParentSession() {
   return typeof Auth !== 'undefined' && !!Auth.getParentProfile();
 }
@@ -9083,7 +9367,10 @@ async function _renderParentProfile(container) {
 
   const family   = (typeof Auth !== 'undefined' && Auth.getFamily) ? Auth.getFamily() : null;
   const children = (typeof Auth !== 'undefined' && Auth.getStudents) ? (Auth.getStudents() || []) : [];
-  const isParent = profile.role === 'parent';
+  // Admins and approved teachers can also own a family. Access to family
+  // controls is determined by that family relationship, not by the account's
+  // moderation role badge.
+  const isParent = profile.role === 'parent' || !!family;
 
   // Only offered on a touch device that actually has a platform authenticator
   // (Face/Touch ID, fingerprint reader) set up - see engine/biometric.js.
@@ -9447,13 +9734,20 @@ async function _renderCoparents() {
     actions = `<p class="text-xs text-gray-500 dark:text-gray-400">This account is full (${cap} parents).</p>`;
   } else {
     actions = `
-      <button onclick="_shareCoparentLink(this)" data-label="➕ Invite another parent"
-        class="w-full px-4 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">
-        ➕ Invite another parent
+      <div class="rounded-xl bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/50 p-3">
+        <p class="text-sm font-bold text-indigo-900 dark:text-indigo-100 mb-2">Share this family account in 3 steps</p>
+        <ol class="space-y-1 text-xs text-indigo-800 dark:text-indigo-200 list-decimal list-inside">
+          <li>Create a secure invite link below.</li>
+          <li>Send it to the other parent (WhatsApp works well).</li>
+          <li>They open it, then sign in or create their own account.</li>
+        </ol>
+      </div>
+      <button onclick="_shareCoparentLink(this)" data-label="Invite another parent — create secure link"
+        class="w-full px-4 py-3 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">
+        1. Invite another parent — create secure link
       </button>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        They sign in with their own email and password and see exactly what you see.
-        The link works once and expires in 48 hours.
+        They use their own email and password, not yours. The link works once and expires in 48 hours.
       </p>`;
   }
 
@@ -9463,7 +9757,8 @@ async function _renderCoparents() {
 }
 
 function _coparentShell(inner) {
-  return `<h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Parents on this account</h3>
+  return `<h3 class="text-sm font-bold text-gray-800 dark:text-white mb-1">👨‍👩‍👧‍👦 Share parent access</h3>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Give another parent their own secure login to this family's children and progress.</p>
     <div class="space-y-3">${inner}</div>`;
 }
 

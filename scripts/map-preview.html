@@ -1,0 +1,40 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><base href="../"><title>map preview</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { margin:0; padding:14px; font:13px system-ui; background:#f8fafc; }
+  h2 { font:700 13px system-ui; margin:14px 0 6px; color:#334155; }
+  .row { display:flex; gap:14px; flex-wrap:wrap; align-items:flex-start; }
+  .col { width:760px; }
+</style>
+</head><body>
+<!-- Renders the child's map for every island at once, with no interaction, so a
+     screenshot shows exactly what a child sees. Label collisions are the thing
+     to look for: pin positions are geographic and checked by map-calibration,
+     but where a caption sits is a judgement call. -->
+<div class="row" id="wrap"></div>
+<script>
+  const SB_URL='https://example.invalid', SB_KEY='k';
+  window.Store = { mmGet: async () => null };
+  window.toast = () => {};
+  try { localStorage.clear(); } catch (_) {}
+</script>
+<script src="engine/interactive_map.js"></script>
+<script>
+// island, or island + a category filter. The filtered views are the ones where
+// every caption in a group is on screen at once, so they are what the label
+// solver optimises and what needs looking at.
+const VIEWS = (new URLSearchParams(location.search).get('views') || 'mauritius,rodrigues,world')
+  .split(',').map(v => v.split(':'));
+const wrap = document.getElementById('wrap');
+VIEWS.forEach(([id, type]) => {
+  const h = document.createElement('h2'); h.textContent = id + (type ? ' · ' + type : '');
+  const d = document.createElement('div'); d.className = 'col';
+  const c = document.createElement('div');
+  d.appendChild(h); d.appendChild(c); wrap.appendChild(d);
+  GeoMap.render(c, { island:id });
+  if (type) { c.__geo.type = type; GeoMap.render(c, { island:id }); }
+});
+setTimeout(() => { document.title = 'ready'; }, 1500);
+</script>
+</body></html>

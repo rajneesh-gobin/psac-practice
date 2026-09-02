@@ -11,6 +11,7 @@ const Calendar = (() => {
   let _viewMonth       = new Date().getMonth();
   let _selectedDate    = null;
   let _editingEntryId  = null;
+  let _calendarSwipeBound = false;
 
   let _gen = {
     startDate:        null,
@@ -422,6 +423,70 @@ const Calendar = (() => {
     return _filters.planned ? _entries.filter(e => e.date === dateStr) : [];
   }
 
+  // The grid deliberately compresses activity into dots, which is useful for a
+  // month but poor at answering the question a parent asks on opening the
+  // scheduler: "what did my child do today?"  Keep a plain-language, always-on
+  // summary above it. It ignores display filters so an adult cannot accidentally
+  // hide completed work after turning a calendar layer off.
+  function _renderTodayActivity() {
+    const box = _el('cal-today-activity');
+    if (!box) return;
+
+    const today = _toDateStr(new Date());
+    const actual = _activity.filter(a => a.date === today);
+    const planned = _entries.filter(e => e.date === today && e.entry_type === 'study');
+    const completedChapterIds = new Set(actual.map(a => a.chapterId).filter(Boolean));
+    const plannedWithChapter = [...new Set(planned.map(e => {
+      const resolved = e.chapter_id || (_resolveChapter(e).chapter || {}).id || '';
+      return resolved;
+    }).filter(Boolean))];
+    const plannedDone = plannedWithChapter.filter(id => completedChapterIds.has(id)).length;
+    const childName = _esc(_studentName || 'Your child');
+
+    if (!actual.length) {
+      box.innerHTML = `<section class="rounded-2xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-900/15 p-4">
+        <div class="flex items-start gap-3">
+          <span class="text-2xl select-none">⏳</span>
+          <div>
+            <h3 class="text-sm font-bold text-amber-900 dark:text-amber-200">${childName}'s work today</h3>
+            <p class="text-xs text-amber-800/80 dark:text-amber-300/80 mt-1">No completed practice, assignments, or exams have been recorded yet today.</p>
+            ${planned.length ? `<p class="text-xs text-amber-800/70 dark:text-amber-300/70 mt-1.5">${planned.length} study session${planned.length === 1 ? '' : 's'} planned for today.</p>` : ''}
+          </div>
+        </div>
+      </section>`;
+      return;
+    }
+
+    const rows = actual.map(a => {
+      const meta = ACT_META[a.kind] || ACT_META.practice;
+      const pctCol = a.pct == null ? '' : a.pct >= 80 ? 'text-emerald-600 dark:text-emerald-400' : a.pct >= 50 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400';
+      // Assignment notes were escaped when they entered the activity history;
+      // escaping them a second time would visibly turn apostrophes / symbols
+      // into entities. Other activity details are generated locally, so escape
+      // them here before placing them in the summary.
+      const detail = a.kind === 'assignment' ? a.detail : _esc(a.detail || meta.label);
+      return `<div class="flex items-center gap-3 rounded-xl bg-white/80 dark:bg-gray-800/60 px-3 py-2 border border-emerald-100 dark:border-emerald-900/40">
+        <span class="text-lg select-none">${meta.icon}</span>
+        <div class="min-w-0 flex-1">
+          <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(a.title)}</div>
+          <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${a.subject ? _esc((a.subject.icon || '') + ' ' + (a.subject.subject || a.subject.name || '')) + ' · ' : ''}${detail}</div>
+        </div>
+        ${a.pct == null ? `<span class="text-[10px] font-semibold uppercase tracking-wide text-gray-400">${meta.label}</span>` : `<span class="text-sm font-bold shrink-0 ${pctCol}">${a.pct}%</span>`}
+      </div>`;
+    }).join('');
+
+    box.innerHTML = `<section class="rounded-2xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-900/15 p-4">
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <div>
+          <h3 class="text-sm font-bold text-emerald-900 dark:text-emerald-200">✅ ${childName}'s completed work today</h3>
+          <p class="text-xs text-emerald-800/80 dark:text-emerald-300/80 mt-1">This is actual work recorded by the app, not just the timetable.</p>
+        </div>
+        ${plannedWithChapter.length ? `<span class="shrink-0 text-xs font-bold bg-white dark:bg-gray-800 text-emerald-700 dark:text-emerald-300 rounded-full px-2.5 py-1">${plannedDone}/${plannedWithChapter.length} planned topics</span>` : ''}
+      </div>
+      <div class="space-y-2">${rows}</div>
+    </section>`;
+  }
+
   function _renderCalendar() {
     const title = _el('cal-month-title');
     if (title) title.textContent = new Date(_viewYear, _viewMonth, 1)
@@ -429,6 +494,8 @@ const Calendar = (() => {
 
     const grid = _el('cal-grid');
     if (!grid) return;
+
+    _renderTodayActivity();
 
     const today = _toDateStr(new Date());
 
@@ -476,6 +543,33 @@ const Calendar = (() => {
     }
     html += '</div>';
     grid.innerHTML = html;
+    _bindMonthSwipe(grid);
+  }
+
+  // Mobile parents naturally swipe a calendar. Bind to the stable grid wrapper
+  // once, and leave vertical swipes alone so the page can still scroll.
+  function _bindMonthSwipe(grid) {
+    if (_calendarSwipeBound || !grid) return;
+    _calendarSwipeBound = true;
+    let startX = 0, startY = 0, tracking = false, suppressClick = false;
+    grid.addEventListener('pointerdown', event => {
+      if (event.pointerType !== 'touch') return;
+      startX = event.clientX; startY = event.clientY; tracking = true;
+    }, { passive:true });
+    grid.addEventListener('pointerup', event => {
+      if (!tracking || event.pointerType !== 'touch') return;
+      tracking = false;
+      const dx = event.clientX - startX, dy = event.clientY - startY;
+      if (Math.abs(dx) < 52 || Math.abs(dx) <= Math.abs(dy)) return;
+      suppressClick = true;
+      if (dx < 0) nextMonth(); else prevMonth();
+      setTimeout(() => { suppressClick = false; }, 250);
+    }, { passive:true });
+    grid.addEventListener('pointercancel', () => { tracking = false; }, { passive:true });
+    grid.addEventListener('click', event => {
+      if (!suppressClick) return;
+      event.preventDefault(); event.stopImmediatePropagation();
+    }, true);
   }
 
   function prevMonth() { _viewMonth--; if (_viewMonth < 0) { _viewMonth = 11; _viewYear--; } _renderCalendar(); }

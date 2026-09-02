@@ -7,7 +7,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v25';
+const SHELL_VERSION = 'shell-v65';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -27,6 +27,16 @@ const SHELL_FILES = [
   '/style.css',
   '/manifest.json',
   '/icons/icon.svg',
+  '/assets/mauritius-blank-map.svg',
+  '/assets/rodrigues-location-map.svg',
+  '/assets/world-map.svg',
+  '/assets/mauritius-districts.geojson',
+  '/assets/historical-personalities/mahe-de-labourdonnais.jpg',
+  '/assets/historical-personalities/pierre-poivre.jpg',
+  '/assets/french-image-scenes/children-playing.jpg',
+  '/assets/french-image-scenes/classroom.jpg',
+  '/assets/french-image-scenes/market.jpg',
+  '/assets/vendor/qrcode.mjs',
   '/engine/events.js',
   '/engine/helpers.js',
   '/engine/protect.js',
@@ -36,6 +46,7 @@ const SHELL_FILES = [
   '/engine/shop.js',
   '/engine/supabase.js',
   '/engine/question_loader.js',
+  '/engine/interactive_map.js',
   '/engine/auth.js',
   '/engine/app.js',
   '/engine/biometric.js',

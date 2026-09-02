@@ -5,7 +5,18 @@
 // ══════════════════════════════════════════════
 
 const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
-const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+// Fisher–Yates is an unbiased shuffle. `sort(() => Math.random() - 0.5)` is
+// not: browser sort implementations repeatedly favour some early elements,
+// which made the same question disproportionately likely to lead an exam or
+// printable paper.
+const shuffle = arr => {
+  const out = [...arr];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+};
 const fmt = n => n.toLocaleString('en-GB');
 
 // Accuracy % for one chapter's { attempted, correct } record.

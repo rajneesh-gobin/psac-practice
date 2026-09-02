@@ -1,0 +1,132 @@
+'use strict';
+// Grade 5 Maths — extended reasoning bank
+// Original, multi-step contexts aligned to the chapter structure in _manifest.js.
+// These sit at Level 4 so a child meets them after building procedural fluency.
+
+STATIC_QUESTIONS.push(
+  makeNum({ id:'g5r-num-01', chapterId:'numeration', subsection:'word_probs', difficulty:4,
+    question:'At a two-day book fair, <b>48,765</b> visitors came on Saturday and <b>37,489</b> came on Sunday. Estimate the total number of visitors by rounding each day to the nearest thousand.',
+    answer:'86000', acceptableAnswers:['86000','86,000'], hint:'Round 48,765 and 37,489 first. Then add the two rounded numbers.', explanation:'48,765 rounds to 49,000 and 37,489 rounds to 37,000. Estimated total = 49,000 + 37,000 = <b>86,000 visitors</b>.' }),
+  makeNum({ id:'g5r-num-02', chapterId:'numeration', subsection:'word_probs', difficulty:4,
+    question:'A library labels a new shipment with the number <b>70,000 + 4,000 + 300 + 20 + 6</b>. It has already catalogued <b>18,975</b> books. How many books from the shipment are still not catalogued?',
+    answer:'55351', acceptableAnswers:['55351','55,351'], hint:'Write the shipment number in figures first, then subtract 18,975.', explanation:'The shipment has 74,326 books. 74,326 − 18,975 = <b>55,351 books</b> still to catalogue.' }),
+
+  makeNum({ id:'g5r-ops-01', chapterId:'four_ops', subsection:'word_probs', difficulty:4,
+    question:'A school buys <b>36 packs</b> of pencils. Each pack has <b>24 pencils</b>. It keeps <b>96 pencils</b> for the art room and shares the rest equally among <b>16 classes</b>. How many pencils does each class receive?',
+    answer:'48', acceptableAnswers:['48'], hint:'Find total pencils, subtract the 96 kept aside, then divide by 16.', explanation:'36 × 24 = 864 pencils. 864 − 96 = 768. 768 ÷ 16 = <b>48 pencils per class</b>.' }),
+  makeNum({ id:'g5r-ops-02', chapterId:'four_ops', subsection:'word_probs', difficulty:4,
+    question:'A fundraiser sells <b>275 tickets</b> at <b>Rs 80</b> each. It spends <b>Rs 4,650</b> on prizes and decorations. How much money is left for the school library?',
+    answer:'17350', acceptableAnswers:['17350','17,350','Rs 17350','Rs 17,350'], hint:'Income = number of tickets × price. Then subtract the expenses.', explanation:'Income = 275 × 80 = Rs 22,000. Money left = 22,000 − 4,650 = <b>Rs 17,350</b>.' }),
+
+  makeNum({ id:'g5r-square-01', chapterId:'square_nums', subsection:'word_probs', difficulty:4,
+    question:'A square display has <b>196</b> identical square cards arranged with no gaps. How many cards are along one side of the display?',
+    answer:'14', acceptableAnswers:['14'], hint:'The number along one side multiplied by itself gives 196.', explanation:'√196 = <b>14</b>, because 14 × 14 = 196.' }),
+  makeNum({ id:'g5r-square-02', chapterId:'square_nums', subsection:'patterns', difficulty:4,
+    question:'A stadium makes square seating blocks. Block 1 has 1 seat, block 2 has 4 seats, block 3 has 9 seats and so on. How many seats are in block <b>12</b>?',
+    answer:'144', acceptableAnswers:['144'], hint:'The block number is squared: 12 × 12.', explanation:'The pattern is square numbers. 12² = 12 × 12 = <b>144 seats</b>.' }),
+
+  makeNum({ id:'g5r-geo-01', chapterId:'geometry', subsection:'angles', difficulty:4,
+    question:'A triangular kite has angles of <b>48°</b>, <b>67°</b> and one unknown angle. What is the unknown angle?',
+    answer:'65', acceptableAnswers:['65','65°'], hint:'Angles in a triangle add to 180°.', explanation:'Unknown angle = 180° − (48° + 67°) = 180° − 115° = <b>65°</b>.' }),
+  makeNum({ id:'g5r-geo-02', chapterId:'geometry', subsection:'perimeter', difficulty:4,
+    question:'A rectangular play area is <b>18 m</b> long and <b>11 m</b> wide. A rope goes once all the way around it, then needs an extra <b>4 m</b> to tie the ends. How much rope is needed?',
+    answer:'62', acceptableAnswers:['62','62m','62 m'], hint:'Find the perimeter first: 2 × (length + width). Then add 4 m.', explanation:'Perimeter = 2 × (18 + 11) = 58 m. With the extra 4 m, <b>62 m</b> of rope is needed.' }),
+
+  makeNum({ id:'g5r-frac-01', chapterId:'fractions', subsection:'word_probs', difficulty:4,
+    question:'A recipe uses <b>3/4 kg</b> of flour for one batch of bread. A baker makes <b>6 batches</b> and has <b>5 kg</b> of flour. How much flour is left?',
+    answer:'0.5', acceptableAnswers:['0.5','1/2','0.50'], hint:'Find the flour used: 6 × 3/4 kg. Then subtract from 5 kg.', explanation:'6 × 3/4 = 18/4 = 4½ kg. 5 − 4½ = <b>½ kg</b> (0.5 kg) left.' }),
+  makeNum({ id:'g5r-frac-02', chapterId:'fractions', subsection:'word_probs', difficulty:4,
+    question:'Maya read <b>2/5</b> of a book on Monday and <b>1/4</b> of the book on Tuesday. What fraction of the book is left unread?',
+    answer:'7/20', acceptableAnswers:['7/20'], hint:'Use twentieths: 2/5 = 8/20 and 1/4 = 5/20.', explanation:'Read = 8/20 + 5/20 = 13/20. Left = 20/20 − 13/20 = <b>7/20</b>.' }),
+
+  makeNum({ id:'g5r-dec-01', chapterId:'decimals', subsection:'word_probs', difficulty:4,
+    question:'A runner completes <b>2.75 km</b> before school and <b>3.6 km</b> after school. Her weekly target is <b>8 km</b>. How many more kilometres does she need to run?',
+    answer:'1.65', acceptableAnswers:['1.65','1.650'], hint:'Add the two distances first, then subtract from 8 km.', explanation:'2.75 + 3.60 = 6.35 km. 8.00 − 6.35 = <b>1.65 km</b>.' }),
+  makeNum({ id:'g5r-dec-02', chapterId:'decimals', subsection:'word_probs', difficulty:4,
+    question:'A shop sells juice at <b>Rs 18.75</b> a bottle. Kavi buys <b>4</b> bottles and pays with <b>Rs 100</b>. What change should he receive?',
+    answer:'25', acceptableAnswers:['25','25.00','Rs 25','Rs 25.00'], hint:'Multiply 18.75 by 4, then subtract the cost from Rs 100.', explanation:'4 × 18.75 = Rs 75.00. Change = 100.00 − 75.00 = <b>Rs 25.00</b>.' }),
+
+  makeNum({ id:'g5r-power-01', chapterId:'powers', subsection:'word_probs', difficulty:4,
+    question:'A square mosaic has a side length of <b>9 tiles</b>. Each tile costs <b>Rs 12</b>. What is the total cost of all the tiles?',
+    answer:'972', acceptableAnswers:['972','Rs 972'], hint:'First find the number of tiles: 9². Then multiply by Rs 12.', explanation:'9² = 81 tiles. 81 × Rs 12 = <b>Rs 972</b>.' }),
+  makeNum({ id:'g5r-power-02', chapterId:'powers', subsection:'word_probs', difficulty:4,
+    question:'A cube-shaped gift box has an edge of <b>5 cm</b>. How many <b>1 cm³</b> cubes would completely fill it?',
+    answer:'125', acceptableAnswers:['125'], hint:'The volume of a cube is side × side × side.', explanation:'5³ = 5 × 5 × 5 = <b>125 cm³</b>, so 125 unit cubes fit.' }),
+
+  makeNum({ id:'g5r-avg-01', chapterId:'average', subsection:'word_probs', difficulty:4,
+    question:'Four friends collected <b>18</b>, <b>24</b>, <b>21</b> and <b>29</b> shells. How many shells must a fifth friend collect so that the average becomes <b>25</b> shells?',
+    answer:'33', acceptableAnswers:['33'], hint:'An average of 25 for 5 friends means a total of 25 × 5 shells.', explanation:'Needed total = 25 × 5 = 125. Current total = 18 + 24 + 21 + 29 = 92. The fifth friend needs <b>33 shells</b>.' }),
+  makeNum({ id:'g5r-avg-02', chapterId:'average', subsection:'word_probs', difficulty:4,
+    question:'A plant grew <b>12 cm</b>, <b>15 cm</b>, <b>18 cm</b> and <b>11 cm</b> in four weeks. What was its average growth per week?',
+    answer:'14', acceptableAnswers:['14','14cm','14 cm'], hint:'Add the four weekly amounts, then divide by 4.', explanation:'Total growth = 12 + 15 + 18 + 11 = 56 cm. 56 ÷ 4 = <b>14 cm</b> per week.' }),
+
+  makeNum({ id:'g5r-ratio-01', chapterId:'ratio', subsection:'word_probs', difficulty:4,
+    question:'Red and blue beads are shared in the ratio <b>3 : 5</b>. There are <b>64</b> beads altogether. How many are blue?',
+    answer:'40', acceptableAnswers:['40'], hint:'There are 3 + 5 = 8 equal parts. Find one part, then find 5 parts.', explanation:'64 ÷ 8 = 8 per part. Blue beads = 5 × 8 = <b>40</b>.' }),
+  makeNum({ id:'g5r-ratio-02', chapterId:'ratio', subsection:'word_probs', difficulty:4,
+    question:'For every <b>2 cups</b> of concentrate, a drink needs <b>7 cups</b> of water. How many cups of water are needed for <b>10 cups</b> of concentrate?',
+    answer:'35', acceptableAnswers:['35'], hint:'10 cups is 5 times as much concentrate as 2 cups. Multiply the water by 5 too.', explanation:'10 ÷ 2 = 5. Water needed = 7 × 5 = <b>35 cups</b>.' }),
+
+  makeNum({ id:'g5r-pct-01', chapterId:'percentage', subsection:'word_probs', difficulty:4,
+    question:'A class has <b>40</b> pupils. <b>65%</b> chose football for sports day. How many pupils chose a different sport?',
+    answer:'14', acceptableAnswers:['14'], hint:'Find 65% of 40, then subtract it from 40.', explanation:'65% of 40 = 26 pupils. 40 − 26 = <b>14 pupils</b> chose another sport.' }),
+  makeNum({ id:'g5r-pct-02', chapterId:'percentage', subsection:'word_probs', difficulty:4,
+    question:'A Rs <b>800</b> school bag is reduced by <b>15%</b>. What is its sale price?',
+    answer:'680', acceptableAnswers:['680','Rs 680'], hint:'Find 15% of Rs 800, then subtract that discount.', explanation:'15% of 800 = Rs 120. Sale price = 800 − 120 = <b>Rs 680</b>.' }),
+
+  makeNum({ id:'g5r-len-01', chapterId:'length', subsection:'word_probs', difficulty:4,
+    question:'A walking trail is <b>2 km 350 m</b> long. A family walks the trail there and back, then walks an extra <b>600 m</b>. What total distance do they walk in metres?',
+    answer:'5300', acceptableAnswers:['5300','5,300'], hint:'Convert 2 km 350 m to metres, double it, then add 600 m.', explanation:'2 km 350 m = 2,350 m. There and back = 4,700 m. 4,700 + 600 = <b>5,300 m</b>.' }),
+  makeNum({ id:'g5r-len-02', chapterId:'length', subsection:'word_probs', difficulty:4,
+    question:'A rectangular garden is <b>12.5 m</b> long and <b>8 m</b> wide. Fence panels are <b>2.5 m</b> long. How many panels are needed to go once around the garden?',
+    answer:'17', acceptableAnswers:['17'], hint:'Find the perimeter: 2 × (12.5 + 8), then divide by 2.5.', explanation:'Perimeter = 2 × 20.5 = 41 m. 41 ÷ 2.5 = 16.4, so <b>17 panels</b> are needed to cover the whole boundary.' }),
+
+  makeNum({ id:'g5r-area-01', chapterId:'area', subsection:'word_probs', difficulty:4,
+    question:'A classroom floor is <b>9 m</b> by <b>7 m</b>. A rectangular reading mat measuring <b>3 m</b> by <b>2 m</b> covers part of it. What area of floor is not covered by the mat?',
+    answer:'57', acceptableAnswers:['57','57m2','57 m²'], hint:'Find the classroom area and the mat area, then subtract.', explanation:'Floor area = 9 × 7 = 63 m². Mat area = 3 × 2 = 6 m². Uncovered area = <b>57 m²</b>.' }),
+  makeNum({ id:'g5r-area-02', chapterId:'area', subsection:'word_probs', difficulty:4,
+    question:'A triangular flag has a base of <b>16 cm</b> and a perpendicular height of <b>9 cm</b>. What is its area?',
+    answer:'72', acceptableAnswers:['72','72cm2','72 cm²'], hint:'Area of a triangle = base × height ÷ 2.', explanation:'16 × 9 ÷ 2 = 144 ÷ 2 = <b>72 cm²</b>.' }),
+
+  makeNum({ id:'g5r-cap-01', chapterId:'capacity', subsection:'word_probs', difficulty:4,
+    question:'A caterer has <b>18 L</b> of juice. She fills bottles of <b>750 mL</b> each. How many full bottles can she fill?',
+    answer:'24', acceptableAnswers:['24'], hint:'Convert 18 L to millilitres, then divide by 750.', explanation:'18 L = 18,000 mL. 18,000 ÷ 750 = <b>24 bottles</b>.' }),
+  makeNum({ id:'g5r-cap-02', chapterId:'capacity', subsection:'word_probs', difficulty:4,
+    question:'A water tank contains <b>12.5 L</b>. In the morning, <b>3.75 L</b> is used and in the afternoon another <b>2.6 L</b> is used. How much water remains?',
+    answer:'6.15', acceptableAnswers:['6.15','6.150'], hint:'Add the two amounts used, then subtract from 12.5 L.', explanation:'Used = 3.75 + 2.60 = 6.35 L. Remaining = 12.50 − 6.35 = <b>6.15 L</b>.' }),
+
+  makeNum({ id:'g5r-mass-01', chapterId:'mass', subsection:'word_probs', difficulty:4,
+    question:'A grocer receives <b>6 bags</b> of rice weighing <b>2.5 kg</b> each. He sells <b>4.75 kg</b>. How much rice remains?',
+    answer:'10.25', acceptableAnswers:['10.25','10.250'], hint:'Find the mass received, then subtract the mass sold.', explanation:'Received = 6 × 2.5 = 15 kg. Remaining = 15 − 4.75 = <b>10.25 kg</b>.' }),
+  makeNum({ id:'g5r-mass-02', chapterId:'mass', subsection:'word_probs', difficulty:4,
+    question:'A lorry can carry <b>2 tonnes</b>. It already has <b>1,350 kg</b> loaded. What is the greatest additional mass it can carry in kilograms?',
+    answer:'650', acceptableAnswers:['650'], hint:'Convert 2 tonnes to kilograms before subtracting.', explanation:'2 tonnes = 2,000 kg. 2,000 − 1,350 = <b>650 kg</b>.' }),
+
+  makeNum({ id:'g5r-money-01', chapterId:'money', subsection:'word_probs', difficulty:4,
+    question:'A shopkeeper buys <b>45</b> umbrellas for <b>Rs 270</b> each and sells each for <b>Rs 325</b>. What total profit does the shopkeeper make?',
+    answer:'2475', acceptableAnswers:['2475','2,475','Rs 2475','Rs 2,475'], hint:'Find profit on one umbrella, then multiply by 45.', explanation:'Profit per umbrella = 325 − 270 = Rs 55. Total profit = 45 × 55 = <b>Rs 2,475</b>.' }),
+  makeNum({ id:'g5r-money-02', chapterId:'money', subsection:'word_probs', difficulty:4,
+    question:'A family budget is <b>Rs 5,000</b>. They spend Rs <b>1,275.50</b> on food and Rs <b>980.75</b> on transport. They save one quarter of what remains. Give their saving <b>to the nearest cent</b>.',
+    answer:'685.94', acceptableAnswers:['685.94','Rs 685.94'], hint:'Subtract both expenses from the budget, then find one quarter of the remainder.', explanation:'Remaining = 5,000 − 1,275.50 − 980.75 = Rs 2,743.75. One quarter is Rs 685.9375, which rounds to <b>Rs 685.94</b>.' }),
+
+  makeNum({ id:'g5r-time-01', chapterId:'time', subsection:'word_probs', difficulty:4,
+    question:'A film starts at <b>14:35</b> and lasts <b>1 hour 48 minutes</b>. There is then a <b>17-minute</b> break. At what 24-hour time does the next programme begin?',
+    answer:'1640', acceptableAnswers:['1640','16:40','16h40'], hint:'Add the film duration to 14:35, then add the break.', explanation:'14:35 + 1 h 48 min = 16:23. Add 17 min: <b>16:40</b>.' }),
+  makeNum({ id:'g5r-time-02', chapterId:'time', subsection:'word_probs', difficulty:4,
+    question:'A three-day camp begins on Monday at <b>09:00</b> and ends on Wednesday at <b>15:30</b>. How many hours and minutes does it last?',
+    answer:'54.5', acceptableAnswers:['54.5','54 h 30 min','54h30min'], hint:'Monday 09:00 to Wednesday 09:00 is 48 hours. Then add the remaining time.', explanation:'48 hours to Wednesday 09:00, plus 6 hours 30 minutes = <b>54 hours 30 minutes</b> (54.5 hours).' }),
+
+  makeNum({ id:'g5r-graph-01', chapterId:'graphs', subsection:'mean', difficulty:4,
+    question:'The numbers of books borrowed by four classes are <b>18, 25, 21 and 28</b>. A fifth class borrows some books so that the mean becomes <b>24</b>. How many books does the fifth class borrow?',
+    answer:'28', acceptableAnswers:['28'], hint:'A mean of 24 for 5 classes means a total of 120 books.', explanation:'Target total = 5 × 24 = 120. Current total = 18 + 25 + 21 + 28 = 92. Fifth class = <b>28 books</b>.' }),
+  makeNum({ id:'g5r-graph-02', chapterId:'graphs', subsection:'frequency', difficulty:4,
+    question:'A survey records the number of pets owned: <b>0 pets: 6 pupils, 1 pet: 9 pupils, 2 pets: 5 pupils</b>. How many pets are owned altogether by the pupils surveyed?',
+    answer:'19', acceptableAnswers:['19'], hint:'Multiply each number of pets by its frequency, then add.', explanation:'0 × 6 + 1 × 9 + 2 × 5 = 0 + 9 + 10 = <b>19 pets</b>.' }),
+
+  makeNum({ id:'g5r-conv-01', chapterId:'conversions', subsection:'mixed', difficulty:4,
+    question:'A shop has <b>3 m 45 cm</b> of red ribbon and <b>275 cm</b> of blue ribbon. It cuts both into pieces of <b>40 cm</b>. How many complete 40 cm pieces can it make altogether?',
+    answer:'15', acceptableAnswers:['15'], hint:'Convert both lengths to centimetres, add, then divide by 40.', explanation:'3 m 45 cm = 345 cm. Total = 345 + 275 = 620 cm. 620 ÷ 40 = 15 remainder 20, so <b>15 complete pieces</b>.' }),
+  makeNum({ id:'g5r-conv-02', chapterId:'conversions', subsection:'mixed', difficulty:4,
+    question:'A tank is filled with <b>1.8 L</b> in the morning and <b>650 mL</b> in the afternoon. It holds <b>3 L</b> when full. How many millilitres are still needed?',
+    answer:'550', acceptableAnswers:['550'], hint:'Use millilitres throughout.', explanation:'1.8 L = 1,800 mL. Total = 1,800 + 650 = 2,450 mL. Full tank = 3,000 mL. Needed = <b>550 mL</b>.' })
+);

@@ -1,0 +1,260 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><base href="../"><title>map calibration</title></head><body>
+<pre id="out">measuring…</pre>
+<script>
+  // GeoMap reaches for these at load; none of them are used by this harness.
+  const SB_URL='https://example.invalid', SB_KEY='k';
+  window.Store = { mmGet: async () => null };
+  window.toast = () => {};
+  try { localStorage.clear(); } catch (_) {}
+</script>
+<script src="engine/interactive_map.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+//  Two questions this answers, both by measurement:
+//    1. Does each base image span the bounding box the projection assumes?
+//       (Rasterise it, take the bbox of the land colours, compare.)
+//    2. Does every feature's pin land on the right ground — land vs sea — and
+//       inside the right district?
+//  A pin "looking about right" is not evidence; a pin sampling a sea-coloured
+//  pixel is.
+// ═══════════════════════════════════════════════════════════════════════════
+const SPECS = {
+  // ⚠ #fefefe is the SEA on the Mauritius map, not a neutral background. Filing
+  // it as "background" made every genuinely offshore feature — a bay, a lagoon
+  // islet, a marine reserve — read as an unclassifiable error.
+  mauritius: { src:'assets/mauritius-blank-map.svg', w:755, h:874,
+               land:['8ddc8d','fefe7f','7f7f7f','eaf987'], water:['01b6f1','3dccfc','1fbfdd','25c0db','fefefe'], bg:[] },
+  rodrigues: { src:'assets/rodrigues-location-map.svg', w:1700, h:1600,
+               land:['fefee4','f7f7de','d7d7c4','b1b1a4','646464','6a6a69','6b6b6a'], water:['c6ecff'], bg:[] },
+  // The world artwork fills land with #cccccc and leaves the sea transparent.
+  // ⚠ Antarctica is the exception — it carries its own `fill:#ffffff` (ice), so
+  // white counts as land here. White is also the thin country-border stroke,
+  // which the neighbourhood majority absorbs.
+  world:     { src:'assets/world-map.svg', w:2753, h:1538,
+               land:['cccccc','cbcbcb','cdcdcd','cecece','ffffff'], water:[], bg:[], seaIsTransparent:true },
+};
+// Neither base map draws lagoon islets, so an island marker legitimately samples
+// open water; a marine reserve is water by definition.
+const SHORE_PX = 4;   // this close to land counts as "on the shoreline"
+// What ground a feature SHOULD sample. A reservoir marker landing on water is
+// correct, not a fault; a mountain landing on water is a real error. Judging
+// every pin against "must be land" produced three false alarms on the first run.
+const EXPECT = {
+  mountain:['land'], heritage:['land'], port:['land'], town:['land'], cave:['land'],
+  continent:['land'], volcano:['land'], ocean:['water'],
+  region:['land','water'],                      // Oceania is islands and sea
+  latitude:['land','water'], longitude:['land','water'],
+
+  water:['water','land'],          // small crater lakes are not always drawn
+  river:['water','land'],          // river lines are 1–2 px wide
+  waterfall:['water','land'],
+  coast:['land','water'],          // a bay or a headland is legitimately offshore
+  island:['land','water'],         // lagoon islets are not drawn on either map
+  reserve:['land','water'],        // a marine reserve is water on purpose
+};
+const hex = (r,g,b) => [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+const load = src => new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=()=>rej(new Error('load '+src)); i.src=src; });
+
+async function raster(spec, scale) {
+  const img = await load(spec.src);
+  const W = Math.round(spec.w*scale), H = Math.round(spec.h*scale);
+  const c = document.createElement('canvas'); c.width=W; c.height=H;
+  const g = c.getContext('2d', { willReadFrequently:true });
+  g.drawImage(img, 0, 0, W, H);
+  return { W, H, data:g.getImageData(0,0,W,H).data };
+}
+const classify = (spec, r, g, b, a) => {
+  if (a < 40) return spec.seaIsTransparent ? 'water' : 'transparent';
+  const match = list => list.some(h => {
+    const R=parseInt(h.slice(0,2),16), G=parseInt(h.slice(2,4),16), B=parseInt(h.slice(4,6),16);
+    return Math.abs(r-R)<=24 && Math.abs(g-G)<=24 && Math.abs(b-B)<=24;
+  });
+  if (match(spec.water)) return 'water';
+  if (match(spec.land))  return 'land';
+  if (match(spec.bg))    return 'background';
+  return 'other:#'+hex(r,g,b);
+};
+// Nearest pixel of a wanted class, in px, searched outwards in rings.
+function nearest(ras, spec, px, py, want, maxR) {
+  for (let r = 1; r <= maxR; r++) {
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+      const x = px+dx, y = py+dy;
+      if (x<0 || y<0 || x>=ras.W || y>=ras.H) continue;
+      const i = (y*ras.W + x)*4;
+      if (classify(spec, ras.data[i], ras.data[i+1], ras.data[i+2], ras.data[i+3]) === want) return r;
+    }
+  }
+  return null;
+}
+// Ray casting; rings are [ [lon,lat], … ].
+function inPolygon(lon, lat, rings) {
+  let inside = false;
+  for (const ring of rings) {
+    for (let i=0, j=ring.length-1; i<ring.length; j=i++) {
+      const [xi,yi] = ring[i], [xj,yj] = ring[j];
+      if ((yi>lat) !== (yj>lat) && lon < (xj-xi)*(lat-yi)/(yj-yi)+xi) inside = !inside;
+    }
+  }
+  return inside;
+}
+
+(async () => {
+  const lines = [];
+  const districts = await fetch('assets/mauritius-districts.geojson').then(r=>r.json());
+
+  // ── 1. Does the artwork span the projection's bounding box? ───────────────
+  const ras = {};
+  for (const [island, spec] of Object.entries(SPECS)) {
+    const r = await raster(spec, 1); ras[island] = r;
+    let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9,n=0;
+    for (let y=0;y<r.H;y++) for (let x=0;x<r.W;x++) {
+      const i=(y*r.W+x)*4;
+      if (classify(spec, r.data[i], r.data[i+1], r.data[i+2], r.data[i+3]) === 'land') {
+        n++; if(x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y;
+      }
+    }
+    lines.push(`${island}: raster ${r.W}x${r.H}, land ${n} px, land bbox `
+      + `L ${(minX/r.W*100).toFixed(2)}%  R ${((maxX+1)/r.W*100).toFixed(2)}%  `
+      + `T ${(minY/r.H*100).toFixed(2)}%  B ${((maxY+1)/r.H*100).toFixed(2)}%`);
+  }
+  lines.push('');
+
+  // ── 2. Where does every pin actually land? ────────────────────────────────
+  const polys = districts.features.filter(f => f?.geometry?.type === 'Polygon');
+  let bad = 0;
+  lines.push('id                            island     %x     %y     ground        district / note');
+  lines.push('─'.repeat(104));
+  for (const f of GeoMap.DEFAULTS) {
+    const island = f.island || 'mauritius';
+    const p = GeoMap.markerPosition(f);
+    let ground = 'n/a', note = '', wrong = false;
+    // ⚠ markerPosition clamps nothing, but the marker's left/top are percentages
+    // and CSS pins it to the edge — so a feature outside its map's extent looks
+    // like a coastal feature instead of the error it is. Coin de Mire, Flat
+    // Island and Round Island are all north of the Mauritius artwork, which is
+    // exactly the trap this catches.
+    if (p.left < 0 || p.left > 100 || p.top < 0 || p.top > 100) {
+      wrong = true;
+      note = `OUTSIDE THE MAP (${p.left.toFixed(1)}%, ${p.top.toFixed(1)}%) — this island's artwork does not reach it`;
+    }
+    if (ras[island]) {
+      const r = ras[island], spec = SPECS[island];
+      const px = Math.min(r.W-1, Math.max(0, Math.round(p.left/100*r.W)));
+      const py = Math.min(r.H-1, Math.max(0, Math.round(p.top /100*r.H)));
+      // A 3x3 majority, because a coastline pixel is an anti-aliased blend of
+      // land and sea and classifies as neither.
+      const tally = {};
+      for (let dy=-1; dy<=1; dy++) for (let dx=-1; dx<=1; dx++) {
+        const x=Math.min(r.W-1,Math.max(0,px+dx)), y=Math.min(r.H-1,Math.max(0,py+dy));
+        const i=(y*r.W+x)*4;
+        let k = classify(spec, r.data[i], r.data[i+1], r.data[i+2], r.data[i+3]);
+        if (k.startsWith('other')) {
+          // Blends: decide by which pure colour they sit closer to.
+          const nl = nearest(r, spec, x, y, 'land', 2), nw = nearest(r, spec, x, y, 'water', 2);
+          k = (nl != null && (nw == null || nl <= nw)) ? 'land' : (nw != null ? 'water' : k);
+        }
+        tally[k] = (tally[k]||0)+1;
+      }
+      ground = Object.entries(tally).sort((a,b)=>b[1]-a[1])[0][0];
+      const want = EXPECT[f.type] || ['land'];
+      wrong = !want.includes(ground);
+      if (wrong) {
+        const d = nearest(r, spec, px, py, want[0], 80);
+        // A coastal building sits ON the shoreline, and the shoreline is one or
+        // two anti-aliased pixels wide. Only a marker well away from what it
+        // should be standing on is an error.
+        if (d !== null && d <= SHORE_PX) { wrong = false; note = `on the shoreline (${d}px)`; }
+        else note = d === null ? `NO ${want[0].toUpperCase()} within 80px` : `nearest ${want[0]} ${d}px`;
+      }
+      // A pin this near an edge is half-clipped by the wrap's overflow:hidden.
+      if (p.left < 1.5 || p.left > 98.5 || p.top < 1.5 || p.top > 98.5) {
+        note = (note ? note + ' · ' : '') + 'at the very edge of the artwork';
+      }
+    }
+    if (island === 'mauritius') {
+      const hit = polys.find(poly => inPolygon(f.lon, f.lat, poly.geometry.coordinates));
+      let d = '';
+      if (!hit) {
+        // Distance to the nearest district vertex, in metres, tells a boundary
+        // gap in generalised polygons apart from a pin that is off the island.
+        let best = 1e9, who = '';
+        for (const poly of polys) for (const ring of poly.geometry.coordinates) for (const [x,y] of ring) {
+          const m = Math.hypot((x-f.lon)*104400, (y-f.lat)*110600);
+          if (m < best) { best = m; who = poly.properties.STATE_NAME; }
+        }
+        d = `outside districts (nearest ${who}, ${Math.round(best)} m)`;
+        // An offshore island or a marine reserve is SUPPOSED to be far from the
+        // mainland districts. The distance rule only means anything for a
+        // feature that should be standing on the island itself.
+        const offshoreOk = ['island', 'coast', 'reserve', 'water'].includes(f.type);
+        if (best > 1500 && !offshoreOk) { wrong = true; d = 'OFF THE DISTRICT MAP — ' + d; }
+      }
+      note = (hit ? hit.properties.STATE_NAME : d) + (note ? ' · ' + note : '');
+    }
+    if (wrong) bad++;
+    lines.push(
+      (wrong ? '! ' : '  ') + f.id.padEnd(28) + island.padEnd(11)
+      + p.left.toFixed(1).padStart(5) + '  ' + p.top.toFixed(1).padStart(5) + '  '
+      + ground.padEnd(12) + note);
+  }
+  // ── 3. Does the shipped world projection agree with the artwork? ──────────
+  // The pins are only as good as the projection under them, and unlike the two
+  // island maps there is no district layer to check it against. So: push known
+  // land and known ocean coordinates through GeoMap's OWN projection and see
+  // what kind of ground they land on. All of these are far from any coastline
+  // at this map scale.
+  const WORLD_LAND = [
+    [-149,64,'Alaska'],[-106,56,'Canada'],[-98,39,'Kansas'],[-99,19,'Mexico'],[-75,5,'Colombia'],
+    [-60,-5,'Amazon'],[-55,-20,'Brazil'],[-64,-35,'Argentina'],[-40,75,'Greenland'],[-19,65,'Iceland'],
+    [-4,40,'Spain'],[10,51,'Germany'],[25,55,'Belarus'],[37,56,'Moscow'],[15,-4,'Congo'],
+    [25,10,'Chad'],[31,30,'Egypt'],[25,-25,'Botswana'],[47,25,'Saudi Arabia'],[60,40,'Turkmenistan'],
+    [73,19,'India'],[83,55,'Siberia'],[105,60,'Siberia E'],[116,40,'Beijing'],[100,15,'Thailand'],
+    [115,-25,'W Australia'],[135,-25,'C Australia'],[150,-30,'E Australia'],[168,65,'Chukotka'],
+  ];
+  const WORLD_SEA = [
+    [-140,0,'mid Pacific'],[-120,-20,'SE Pacific'],[-160,-40,'S Pacific'],[-150,40,'N Pacific'],
+    [-30,0,'mid Atlantic'],[-40,-30,'S Atlantic'],[-25,40,'N Atlantic'],[-20,-45,'S Atlantic'],
+    [70,-30,'Indian'],[90,-10,'Indian N'],[60,0,'Arabian Sea'],[170,-25,'S Pacific W'],
+    [175,-50,'S Pacific S'],[0,-50,'Southern'],[100,-50,'Southern E'],[-30,-60,'Southern W'],
+    [-170,20,'N Pacific W'],[170,30,'N Pacific E'],
+  ];
+  if (ras.world) {
+    const r = ras.world, spec = SPECS.world;
+    const groundAt = (lon, lat) => {
+      const p = GeoMap.markerPosition({ island:'world', lon, lat });
+      const px = Math.min(r.W-1, Math.max(0, Math.round(p.left/100*r.W)));
+      const py = Math.min(r.H-1, Math.max(0, Math.round(p.top /100*r.H)));
+      const tally = {};
+      for (let dy=-2; dy<=2; dy++) for (let dx=-2; dx<=2; dx++) {
+        const x=Math.min(r.W-1,Math.max(0,px+dx)), y=Math.min(r.H-1,Math.max(0,py+dy));
+        const i=(y*r.W+x)*4;
+        const k = classify(spec, r.data[i], r.data[i+1], r.data[i+2], r.data[i+3]);
+        tally[k]=(tally[k]||0)+1;
+      }
+      return Object.entries(tally).sort((a,b)=>b[1]-a[1])[0][0];
+    };
+    const misses = [];
+    for (const [lon, lat, nm] of WORLD_LAND) { const k = groundAt(lon, lat); if (k !== 'land')  misses.push(`${nm} (${lon},${lat}) → ${k}`); }
+    for (const [lon, lat, nm] of WORLD_SEA)  { const k = groundAt(lon, lat); if (k !== 'water') misses.push(`${nm} (${lon},${lat}) → ${k}`); }
+    const n = WORLD_LAND.length + WORLD_SEA.length;
+    lines.push('');
+    lines.push(`world projection check: ${n - misses.length}/${n} known coordinates land on the right ground`);
+    misses.forEach(m => lines.push('  ! ' + m));
+    if (misses.length > 3) bad++;
+    const eq = GeoMap.markerPosition({ island:'world', lon:-180, lat:0 });
+    const pm = GeoMap.markerPosition({ island:'world', lon:0, lat:90 });
+    const np = GeoMap.markerPosition({ island:'world', lon:0, lat:90 });
+    const sp = GeoMap.markerPosition({ island:'world', lon:0, lat:-90 });
+    lines.push(`  Equator at ${eq.top.toFixed(2)}% of height · Prime Meridian at ${pm.left.toFixed(2)}% of width`);
+    lines.push(`  poles at ${np.top.toFixed(2)}% and ${sp.top.toFixed(2)}% (artwork land runs 6.95%..97.72%)`);
+  }
+
+  lines.push('');
+  lines.push(bad === 0 ? 'ALL PINS OK' : bad + ' PIN(S) NEED ATTENTION');
+  document.getElementById('out').textContent = lines.join('\n');
+  document.title = bad === 0 ? 'OK' : 'CHECK';
+})().catch(e => { document.getElementById('out').textContent = 'ERROR ' + (e && e.stack || e); });
+</script>
+</body></html>

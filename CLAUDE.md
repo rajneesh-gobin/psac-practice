@@ -51,6 +51,7 @@ subjects/grade[1-9]-[subject]/
 | localStorage + Supabase data layer, progress blob | `engine/store.js` |
 | Question fetching + 7-day localStorage cache | `engine/question_loader.js` |
 | Timetable, calendar, activity layer | `engine/calendar.js` |
+| Interactive map — the child's map AND the admin editor | `engine/interactive_map.js` |
 | Credits + entitlement model, `sellableChapters/Subjects` | `engine/shop.js` (the shop *screen* — `renderShop()` — lives in `app.js`) |
 | Admin panel, shop settings, security log | `engine/admin.js` |
 | Server-side entitlement enforcement | `netlify/functions/questions.js` |
@@ -421,6 +422,7 @@ covers only the ones that still need a decision; the rest
 |---|---|
 | `supabase-coparent.sql` | **Outstanding.** Co-parent access: a second/third adult login on one family. Rewrites the ownership predicate **from the live definitions**, never from the dump. Tested by `scripts/sql-tests/run-coparent.sh`. |
 | `supabase-forum-author.sql` | **Outstanding — run first.** Trigger deriving forum author identity from the session. |
+| `supabase-geo-map.sql` | **Outstanding.** One additive SELECT policy so `mm_data.geo_map_content` (the published interactive-map content) is readable by a child's anon session. Purely additive; writes stay `is_admin()`. |
 | `supabase-migration.sql` | Outstanding. Parts 1–4 unattended; **Part 5 is destructive and stays commented out**. |
 | `supabase-credits-shop.sql` | Re-run needed (see Pending). Idempotent; **backfills** settings. |
 | `supabase-indexes.sql`, `supabase-forum-adults.sql`, `supabase-grades-1-9.sql` | Applied. Idempotent. |
@@ -533,6 +535,107 @@ grid opens in the last one's state:
 function, or the reference hits the temporal dead zone) · the round-review
 collapsed state.
 
+### The interactive map — one module, two surfaces
+`engine/interactive_map.js` renders both the child's map (`GeoMap.render`) and
+the admin editor (`GeoMap.renderEditor`) from one catalogue, one projection and
+one set of marker markup. Keep it that way — every bug it has had came from the
+two surfaces disagreeing.
+- ⚠ **The box's `aspect-ratio` is defined in `ISLANDS` in the JS, not in CSS**,
+  and is each base image's own ratio (755×874, 1700×1600). `object-fit: contain`
+  then fills the box exactly, so *a percentage of the box is a percentage of the
+  artwork* — on both surfaces. A second copy in `style.css` is how they drift.
+- **Catalogue size: 58 Mauritius · 23 Rodrigues · 20 world**, every one on real lon/lat. Categories are
+  mountain · river · waterfall · water · coast · island · reserve · cave · port
+  · town · heritage (plus the world map's continent/region/ocean/volcano/
+  latitude/longitude). Adding one is content work — write the row, re-run the
+  three harnesses, done.
+- ⚠ **Filter chips are island-aware** (`typesOn()`): only categories that
+  island actually has. Eleven categories is already three chip rows on a phone,
+  and offering "Caves" on the world map is a filter that can only empty the map.
+- ⚠ **Above `LABEL_LIMIT` (15) visible pins the markers layer goes
+  `.labels-quiet`**: only the selected or hovered caption is drawn. Fifty-eight
+  captions at once is a wall of text, not a map — the category filters are how a
+  child reads a group, tapping is how they read one place, and a hint line says
+  so. **Therefore label offsets are solved PER CATEGORY**, because a filtered
+  view is the only time a group's captions share the screen.
+- ⚠ **Pin positions are real coordinates, and every one is sourced.** All
+  came from OpenStreetMap (peaks carry a matching `ele`; reservoirs, parks and
+  islands are the polygon's centre) — Wikipedia rounds several to 0.1°, i.e.
+  11 km. One deliberate exception: **Gris Gris** is the island's southernmost
+  point and sits ~40 m beyond the district bbox the artwork covers, so it is
+  placed at the southern limit the artwork reaches.
+  **Do not nudge a pin to make a label fit**; move the label (`lx`/`ly`).
+- ⚠ **Each island has its OWN projection**, picked by island in
+  `PROJECTIONS` — never by "this row happens to have a lon". Mauritius and
+  Rodrigues are rectangular lon/lat boxes; **the world map is Robinson**.
+  Mauritius = the district GeoJSON's bbox, and the base image's land spans it to
+  within 1px (rasterised and measured). Rodrigues = the extent its Commons file
+  page declares, and the island fills only 14.5–92.8% × 20.1–71.8% of that
+  image. Both were hand-placed x/y grids with no geographic meaning before.
+- ⚠ **The world artwork is Robinson, established by measurement.** Its SVG
+  carries eight id'd country paths (Iceland, Czechia, Mongolia, Uzbekistan,
+  Madagascar, Eswatini, Lesotho, Tasmania); fitting those against candidates
+  picks Robinson by an order of magnitude — y rms **0.58px** on a 1538px canvas
+  against 3.0 (plate carrée), 5.2 (Mollweide), 10.3 (Eckert IV). It also puts
+  the poles at 6.95% and 97.72% of the height, which is exactly where the
+  artwork's land starts and stops. Longitude is fitted to ~0.2% of width.
+  **The Equator is at 52.33% of the height and the Prime Meridian at 47.54% of
+  the width** — not 50/50, which is what the graticule used to assume.
+- ⚠ **The world graticule is drawn FROM the projection**, not from evenly
+  spaced CSS gradients: Robinson's parallels are not evenly spaced and its
+  meridians curve. A card that names the Equator was pointing at the wrong line.
+  `map-calibration` re-checks the Equator, Prime Meridian and pole positions on
+  every run.
+- ⚠ **Markers and districts project through `MAURITIUS_BOUNDS` only**, and the
+  district `<svg>` is `viewBox="0 0 100 100" preserveAspectRatio="none"`. It used
+  to derive its own bbox and fit uniformly, letterboxing the districts 6.8%
+  against markers that fill the box — every coastal pin sat ~15px off its
+  district. `MAURITIUS_BOUNDS` **is** the GeoJSON's bbox; verified, not assumed.
+- ⚠ **A drag never repaints the canvas.** Repainting replaces the markers'
+  innerHTML and destroys the button the pointer is on, so pointerup lands
+  nowhere, the move listener survives, and the *next* drag moves two features.
+  Selection mid-drag toggles a class and repaints the side panel only.
+- Label offsets (`lx`/`ly`) live **on the feature**, not in a positional array
+  indexed by `indexOf` — that gave every added feature one shared offset.
+- Editor edits are a **draft** (localStorage, `psac-geo-map-draft-v2`) and never
+  touch the array the child's map paints. **Publish** writes a *diff against the
+  built-in catalogue* to `mm_data.geo_map_content`, so later code changes to a
+  built-in fact still reach installs that have published something else. A
+  built-in is `hidden`, never deleted.
+- Publishing goes through `Store.mmSave` (awaited, returns `{ok,error}`), not
+  `Store.mmSet` (fire-and-forget). Reporting "saved" for a write nobody waited
+  for is how the old editor claimed success on a refused upsert.
+- Three harnesses, all headless Chrome over a local static server, all under
+  `/scripts/` (which 404s on Netlify):
+  `map-editor-harness.html` — 33 self-asserting checks on the editor ↔ child
+  correspondence · `map-calibration.html` — rasterises each base map and checks
+  every pin samples the right ground (a reservoir marker SHOULD be on water; a
+  mountain should not), falls in the right district, and — for the world map,
+  which has no district layer — pushes 47 known land and ocean coordinates
+  through the shipped projection to confirm it still agrees with the artwork ·
+  `map-label-solver.html` — recomputes `lx`/`ly` from the measured caption
+  sizes · `map-world-fit.html` — re-derives the world projection from scratch;
+  run it if the world artwork is ever replaced. Re-run the solver
+  after adding or renaming a feature: offsets are absolute px against a
+  percentage-positioned pin, so they do not survive a text change.
+- ⚠ **A feature outside its island's bounds is silently clamped to the edge** by
+  the percentage positioning, so it reads as a coastal feature rather than the
+  error it is. Coin de Mire, Flat Island and Round Island are all north of the
+  Mauritius artwork; the calibration harness fails any such pin outright.
+- ⚠ **Land is a different colour on every base map.** `#fefefe` is the SEA on
+  Mauritius; on the world map the sea is **transparent**, land is `#cccccc`, and
+  **Antarctica carries its own `fill:#ffffff`** (ice) so white counts as land
+  there. Each is a fact about that one file, not a convention.
+- ⚠ **`#fefefe` is the SEA on the Mauritius base map**, not a neutral
+  background — a bay, a lagoon islet and a marine reserve all legitimately
+  sample it. The harness judges by feature type (a reservoir marker SHOULD be on
+  water) and treats anything within 4px of land as "on the shoreline".
+- ⚠ **Do not read a pin being "outside every district" as an error on its own.**
+  The district polygons are generalised and do not quite tile; Pieter Both sits
+  338 m outside the nearest one while being demonstrably on land and on its own
+  peak. The calibration harness prints the distance so the two cases are
+  distinguishable.
+
 ### Child-facing vs parent-facing, deliberately
 - The child's activity recap is **unfiltered** — the parent's `_filters` live in
   `localStorage` per browser, and on a shared phone would silently blank the
@@ -572,7 +675,7 @@ collapsed state.
 
 ### Version bumps
 - **`SHELL_VERSION` (`sw.js`)** — bump on any change to a shell-cached engine
-  file, or returning users never receive it. Currently **v24**.
+  file, or returning users never receive it. Currently **v64**.
 - **`_CACHE_VERSION` (`question_loader.js`)** — bump when question content or the
   cache envelope changes. Currently **v14**.
 - ⚠ The SW shell list is all-or-nothing (`cache.addAll` rejects wholesale on one
@@ -660,35 +763,42 @@ This project's fixes are **measured, not eyeballed**. Repeat that, and know thes
    → **Publish catalogue** once. `purchase_subject()` / `shop_subject_price()` are
    confirmed missing on the live database, and whole-subject buying refuses
    outright without a published catalogue.
-3. **`supabase-migration.sql`** — PIN-counter move, ambiguous-family-name guard,
+3. ⚠ **Run `supabase-geo-map.sql`**, then Admin → 🗺️ Maps → **Publish to
+   children** once. Until it runs, `mm_data`'s read policy allows only
+   `global_settings`, so a published map edit is readable by nobody but the
+   admin who made it. The editor probes the row as an anonymous caller after
+   publishing and says so in its status line. The client ships safely without
+   it: an unreadable key falls back to the local cache, then to the built-in
+   catalogue.
+4. **`supabase-migration.sql`** — PIN-counter move, ambiguous-family-name guard,
    push-subscription cleanup on delete.
-4. **Run `supabase-coparent.sql`** to switch co-parent access on. The client
+5. **Run `supabase-coparent.sql`** to switch co-parent access on. The client
    ships safely without it: `getMyFamily()` tries ownership first and only then
    `my_member_family()`, so an un-migrated database behaves exactly as today.
-5. ⚠ **Rotate the VAPID keypair** — the private key is in git history (`dba9b8e`)
+6. ⚠ **Rotate the VAPID keypair** — the private key is in git history (`dba9b8e`)
    permanently. Update the Netlify vars and `VAPID_PUBLIC_KEY` in `engine/app.js`.
    Costs nothing now: there are no real subscribers yet.
-6. **Push notifications for assignments** — infrastructure ready, `push-send.js`
+7. **Push notifications for assignments** — infrastructure ready, `push-send.js`
    not wired to assignment creation. Badge API not started.
-7. **Lazy per-grade manifest loading** — required before any placeholder pack is
+8. **Lazy per-grade manifest loading** — required before any placeholder pack is
    filled in (see load order).
-8. **Split `admin.js` (133 KB) + `teacher.js` (28 KB) behind a role check** —
+9. **Split `admin.js` (133 KB) + `teacher.js` (28 KB) behind a role check** —
    every child parses them on first load for screens they can never open.
-9. **Grades 1–2 need a picture-first question mode** — the renderer assumes the
+10. **Grades 1–2 need a picture-first question mode** — the renderer assumes the
    child can read the question *and* all four options.
-10. **Confirm the MIE lower-secondary subject list for grades 7–9** before writing
+11. **Confirm the MIE lower-secondary subject list for grades 7–9** before writing
    any NCE content.
-11. Still open from the security review, none as exploitable as the five fixed:
+12. Still open from the security review, none as exploitable as the five fixed:
     parent PIN stored as base64 under `_getStoredPinHash`, missing SRI on three
     CDN scripts with a floating `@2` major, CSP `'unsafe-inline'` (311 inline
     handlers), and the dormant plaintext-equality branch in `verify_student_pin`.
-12. Content gaps: English "Vocabulary Builder", maths "Shapes Around Us",
+13. Content gaps: English "Vocabulary Builder", maths "Shapes Around Us",
     grade-6 maths enrichment. Illustration coverage in grade5-maths is still only
     ~1.4% of a 1,045-question pool.
-13. **`daily` would be better as its own table** than a key in the rewritten-whole
+14. **`daily` would be better as its own table** than a key in the rewritten-whole
     blob (~2.4 MB uploaded per 30-minute session at current caps). A migration
     plus a rewrite of every reader — not a quick change.
-14. Payments are not wired: `openPlansModal()` is the single place to add them,
+15. Payments are not wired: `openPlansModal()` is the single place to add them,
     and `payment-webhook.js` verifiers **fail closed** on purpose — enabling
     payments must break loudly until real signature checks are written.
 

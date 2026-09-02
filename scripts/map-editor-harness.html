@@ -1,0 +1,185 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><base href="../"><title>map editor harness</title>
+<link rel="stylesheet" href="style.css">
+<style>body{margin:0;padding:12px;font:13px system-ui} #view{max-width:760px} #edit{max-width:1100px;margin-top:20px}</style>
+</head><body>
+<pre id="results">running…</pre>
+<div id="view"></div>
+<div id="edit"></div>
+
+<script>
+  // Stand-ins for the app globals interactive_map.js reaches for.
+  const SB_URL = 'https://example.invalid';
+  const SB_KEY = 'test-key';
+  window.toast = () => {};
+  window.Store = {
+    mmGet: async () => null,
+    mmSave: async (k, v) => { window.__published = v; return { ok: true }; },
+  };
+  window.__errors = [];
+  window.addEventListener('error', e => window.__errors.push(String(e.message)));
+  window.addEventListener('unhandledrejection', e => window.__errors.push('rejection: ' + ((e.reason && e.reason.stack) || e.reason)));
+  try { localStorage.clear(); } catch (_) {}
+</script>
+<script src="engine/interactive_map.js"></script>
+<script>
+const out = [];
+let fails = 0;
+const ok = (name, cond, extra) => { out.push((cond ? 'PASS  ' : 'FAIL  ') + name + (extra ? '  [' + extra + ']' : '')); if (!cond) fails++; };
+const near = (a, b, tol) => Math.abs(a - b) <= tol;
+
+function pct(el, parent) {
+  const r = el.getBoundingClientRect(), p = parent.getBoundingClientRect();
+  return { x: (r.left + r.width / 2 - p.left) / p.width * 100, y: (r.top + r.height / 2 - p.top) / p.height * 100 };
+}
+function pointer(el, type, x, y) {
+  el.dispatchEvent(new PointerEvent(type, { clientX: x, clientY: y, bubbles: true, cancelable: true, pointerId: 1, isPrimary: true }));
+}
+
+async function run() {
+  GeoMap.render(document.getElementById('view'));
+  GeoMap.renderEditor(document.getElementById('edit'));
+  await new Promise(r => setTimeout(r, 1200));   // districts fetch + repaint
+
+  // ── 1. The child's map paints ────────────────────────────────────────────
+  const view = document.getElementById('view');
+  // Counts come from the catalogue, never hard-coded: adding a feature is
+  // routine content work and must not "fail" a structural harness.
+  const N_MU = GeoMap.DEFAULTS.filter(f => !f.island).length;
+  const N_RO = GeoMap.DEFAULTS.filter(f => f.island === 'rodrigues').length;
+  const vMarkers = view.querySelectorAll('.geo-map-marker');
+  ok('child map renders every Mauritius marker', vMarkers.length === N_MU, vMarkers.length + '/' + N_MU);
+  ok('child map has an info card', !!view.querySelector('.geo-map-info h4'));
+  const wrap = view.querySelector('.geo-map-wrap');
+  ok('child map wrap uses the image aspect ratio', wrap.style.aspectRatio.startsWith('0.86'), wrap.style.aspectRatio);
+
+  // ── 2. Districts share the marker projection ─────────────────────────────
+  const svg = view.querySelector('.geo-district-svg');
+  ok('district overlay rendered', !!svg);
+  if (svg) {
+    ok('district svg uses the marker projection', svg.getAttribute('viewBox') === '0 0 100 100' && svg.getAttribute('preserveAspectRatio') === 'none',
+        svg.getAttribute('viewBox') + ' / ' + svg.getAttribute('preserveAspectRatio'));
+    // Port Louis must land inside the PortLouis district polygon.
+    const pl = view.querySelector('[data-feature-id="port-louis"] .geo-marker-pin');
+    const plr = pl.getBoundingClientRect();
+    const hit = document.elementsFromPoint(plr.left + plr.width / 2, plr.top + plr.height / 2)
+      .filter(e => e.dataset && e.dataset.district).map(e => e.dataset.district);
+    ok('Port Louis pin sits inside the Port Louis district', hit.includes('PortLouis'), hit.join(',') || 'none');
+    const mb = view.querySelector('[data-feature-id="mahebourg"] .geo-marker-pin').getBoundingClientRect();
+    const hit2 = document.elementsFromPoint(mb.left + mb.width / 2, mb.top + mb.height / 2)
+      .filter(e => e.dataset && e.dataset.district).map(e => e.dataset.district);
+    ok('Mahebourg pin sits inside the Grand Port district', hit2.includes('GrandPort'), hit2.join(',') || 'none');
+  }
+
+  // ── 3. Editor canvas agrees with the child's map ─────────────────────────
+  const edit = document.getElementById('edit');
+  const layer = edit.querySelector('[data-ed-zoomlayer]');
+  ok('editor canvas uses the same aspect ratio', layer.style.aspectRatio === wrap.style.aspectRatio, layer.style.aspectRatio + ' vs ' + wrap.style.aspectRatio);
+  const edPin = edit.querySelector('[data-ed-feature="port-louis"]');
+  const vwPin = view.querySelector('[data-feature-id="port-louis"]');
+  const a = pct(edPin.querySelector('.geo-marker-pin'), layer);
+  const b = pct(vwPin.querySelector('.geo-marker-pin'), wrap);
+  ok('same feature is at the same % on both maps', near(a.x, b.x, 0.4) && near(a.y, b.y, 0.4),
+      `editor ${a.x.toFixed(2)},${a.y.toFixed(2)} vs child ${b.x.toFixed(2)},${b.y.toFixed(2)}`);
+  ok('editor draws real labels', !!edPin.querySelector('.geo-marker-label'));
+  ok('editor lists every Mauritius feature', edit.querySelectorAll('[data-ed-pick]').length === N_MU, edit.querySelectorAll('[data-ed-pick]').length + '/' + N_MU);
+
+  // ── 4. Zoom keeps pins and image together ────────────────────────────────
+  const zoom = edit.querySelector('[data-ed-zoom]');
+  zoom.value = 250; zoom.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise(r => setTimeout(r, 50));
+  const z = pct(edit.querySelector('[data-ed-feature="port-louis"] .geo-marker-pin'), layer);
+  ok('pin holds its % position at 250% zoom', near(z.x, a.x, 0.4) && near(z.y, a.y, 0.4), `${z.x.toFixed(2)},${z.y.toFixed(2)}`);
+  ok('zoom layer actually grew', layer.getBoundingClientRect().height > 1.5 * edit.querySelector('[data-ed-canvas]').getBoundingClientRect().height);
+  zoom.value = 100; zoom.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise(r => setTimeout(r, 50));
+
+  // ── 5. Drag a pin: form follows the dragged feature, not the last one ────
+  edit.querySelector('[data-ed-pick="grse"]').click();
+  await new Promise(r => setTimeout(r, 30));
+  const target = edit.querySelector('[data-ed-feature="le-morne"]');
+  const lr = layer.getBoundingClientRect();
+  const dropX = lr.left + lr.width * 0.30, dropY = lr.top + lr.height * 0.70;
+  const tp = target.querySelector('.geo-marker-pin').getBoundingClientRect();
+  pointer(target, 'pointerdown', tp.left + tp.width / 2, tp.top + tp.height / 2);
+  pointer(target, 'pointermove', dropX, dropY);
+  pointer(target, 'pointerup', dropX, dropY);
+  await new Promise(r => setTimeout(r, 60));
+  const nameField = edit.querySelector('[data-f="name"]');
+  ok('drag selects the dragged feature in the form', nameField.value === 'Le Morne Brabant', nameField.value);
+  const moved = pct(edit.querySelector('[data-ed-feature="le-morne"] .geo-marker-pin'), layer);
+  ok('dragged pin landed where it was dropped', near(moved.x, 30, 0.6) && near(moved.y, 70, 0.6), `${moved.x.toFixed(2)},${moved.y.toFixed(2)}`);
+  ok('editor is marked dirty after a drag', edit.querySelector('[data-ed-dirty]').classList.contains('is-dirty'));
+
+  // ── 6. Drag a label ──────────────────────────────────────────────────────
+  const lbl = edit.querySelector('[data-ed-feature="le-morne"] .geo-marker-label');
+  const lb = lbl.getBoundingClientRect();
+  pointer(lbl, 'pointerdown', lb.left + 5, lb.top + 5);
+  pointer(lbl, 'pointermove', lb.left + 45, lb.top + 25);
+  pointer(lbl, 'pointerup', lb.left + 45, lb.top + 25);
+  await new Promise(r => setTimeout(r, 60));
+  const lx = Number(edit.querySelector('[data-f="lx"]').value), ly = Number(edit.querySelector('[data-f="ly"]').value);
+  // Read the starting offset from the catalogue rather than hard-coding it:
+  // label offsets are tuned content and change whenever they are re-solved.
+  const base = GeoMap.DEFAULTS.find(f => f.id === 'le-morne');
+  ok('label drag moved the offset by the drag distance',
+     near(lx, base.lx + 40, 2) && near(ly, base.ly + 20, 2), `lx=${lx} ly=${ly} from ${base.lx},${base.ly}`);
+
+  // ── 7. Typing a fact does not steal focus or reset the form ─────────────
+  const fact = edit.querySelector('[data-f="fact"]');
+  fact.focus(); fact.value = 'Edited fact.'; fact.dispatchEvent(new Event('input', { bubbles: true }));
+  await new Promise(r => setTimeout(r, 30));
+  ok('textarea keeps focus while typing', document.activeElement === fact, document.activeElement.tagName);
+
+  // ── 8. The child's map is untouched until publish ────────────────────────
+  const before = pct(view.querySelector('[data-feature-id="le-morne"] .geo-marker-pin'), wrap);
+  GeoMap.render(view);
+  await new Promise(r => setTimeout(r, 200));
+  const after = pct(view.querySelector('[data-feature-id="le-morne"] .geo-marker-pin'), view.querySelector('.geo-map-wrap'));
+  ok('draft edits do not leak into the child map', near(after.x, before.x, 0.2) && near(after.y, before.y, 0.2),
+      `${after.x.toFixed(2)},${after.y.toFixed(2)}`);
+
+  // ── 9. Publish sends a DIFF and updates the child's map ─────────────────
+  edit.querySelector('[data-ed-publish]').click();
+  await new Promise(r => setTimeout(r, 400));
+  const pub = window.__published;
+  ok('publish sent a payload', !!pub && Array.isArray(pub.markers));
+  if (pub) {
+    ok('published payload is a diff, not the whole catalogue', pub.markers.length === 1, pub.markers.length + ' rows');
+    ok('published row is the edited feature', pub.markers[0].id === 'le-morne', pub.markers[0].id);
+    ok('published row carries only changed fields', !('name' in pub.markers[0]) && 'lon' in pub.markers[0] && 'fact' in pub.markers[0],
+        Object.keys(pub.markers[0]).join(','));
+  }
+  const afterPub = pct(document.querySelector('#view [data-feature-id="le-morne"] .geo-marker-pin'), document.querySelector('#view .geo-map-wrap'));
+  ok('child map picks up the published move', near(afterPub.x, 30, 0.6) && near(afterPub.y, 70, 0.6), `${afterPub.x.toFixed(2)},${afterPub.y.toFixed(2)}`);
+  ok('editor is clean after publishing', !edit.querySelector('[data-ed-dirty]').classList.contains('is-dirty'));
+
+  // ── 10. Rodrigues ───────────────────────────────────────────────────────
+  const isl = edit.querySelector('[data-ed-island]');
+  isl.value = 'rodrigues'; isl.dispatchEvent(new Event('change', { bubbles: true }));
+  await new Promise(r => setTimeout(r, 80));
+  ok('editor switches to Rodrigues', edit.querySelectorAll('[data-ed-feature]').length === N_RO, edit.querySelectorAll('[data-ed-feature]').length + '/' + N_RO);
+  ok('Rodrigues aspect ratio applied', edit.querySelector('[data-ed-zoomlayer]').style.aspectRatio.startsWith('1.06'), edit.querySelector('[data-ed-zoomlayer]').style.aspectRatio);
+  ok('districts toggle disabled off Mauritius', edit.querySelector('[data-ed-districts]').disabled);
+
+  // ── 11. Add a feature ───────────────────────────────────────────────────
+  edit.querySelector('[data-ed-add]').click();
+  await new Promise(r => setTimeout(r, 60));
+  ok('added feature appears on the canvas', edit.querySelectorAll('[data-ed-feature]').length === N_RO + 1, edit.querySelectorAll('[data-ed-feature]').length);
+  const added = pct(edit.querySelector('[data-ed-feature].is-selected .geo-marker-pin'), edit.querySelector('[data-ed-zoomlayer]'));
+  ok('added feature starts at the centre', near(added.x, 50, 0.6) && near(added.y, 50, 0.6), `${added.x.toFixed(2)},${added.y.toFixed(2)}`);
+  ok('added feature gets its own label offset', edit.querySelector('[data-f="lx"]').value === '16');
+
+  // ── 12. Undo ────────────────────────────────────────────────────────────
+  edit.querySelector('[data-ed-undo]').click();
+  await new Promise(r => setTimeout(r, 60));
+  ok('undo removes the added feature', edit.querySelectorAll('[data-ed-feature]').length === N_RO, edit.querySelectorAll('[data-ed-feature]').length);
+
+  ok('no uncaught errors', window.__errors.length === 0, window.__errors.join(' | '));
+  out.unshift(fails === 0 ? '=== ALL ' + out.length + ' CHECKS PASSED ===' : '=== ' + fails + ' FAILURE(S) ===');
+  document.getElementById('results').textContent = out.join('\n');
+  document.title = fails === 0 ? 'OK' : 'FAIL';
+}
+run().catch(e => { document.getElementById('results').textContent = 'HARNESS ERROR: ' + (e && e.stack || e); document.title = 'FAIL'; });
+</script>
+</body></html>

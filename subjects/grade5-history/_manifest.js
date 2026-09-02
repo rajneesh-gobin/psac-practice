@@ -56,7 +56,7 @@ const G5HG_SYLLABUS = {
     { id:'elements',        name:'Elements of Weather' },  // 10
   ]},
   'g5enr-personalities': { subsections: [
-    { id:'portraits',       name:'Who Is This? (Photos)' },  // 2
+    { id:'portraits',       name:'Who Is This? (Portrait Quiz)' },  // 8
     { id:'independence',    name:'Independence & Leaders' },  // 11
     { id:'colonial',        name:'The Colonial Era' },  // 8
   ]},

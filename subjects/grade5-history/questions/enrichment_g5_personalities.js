@@ -168,17 +168,56 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Labourdonnais</b> governed 1735–1746, <b>Decaen</b> (last French governor) ruled 1803–1810, and <b>Farquhar</b> (first British governor) served 1810–1823.' }),
 
   makeMCQ({ id:'g5enr-per-020', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:14px"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Bertrand_Fran%C3%A7ois_Mah%C3%A9_de_La_Bourdonnais.jpg/250px-Bertrand_Fran%C3%A7ois_Mah%C3%A9_de_La_Bourdonnais.jpg" alt="Portrait of a historical governor" style="max-height:200px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Qui est ce gouverneur français qui transforma Port Louis en capitale et y développa le port ?</b>',
+    question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/mahe-de-labourdonnais.jpg" alt="Portrait of Mahé de Labourdonnais" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Qui est ce gouverneur français qui transforma Port Louis en capitale et y développa le port ?</b>',
     options:['Mahé de Labourdonnais','Pierre Poivre','Charles Decaen','Sir Robert Farquhar'],
     answer:'Mahé de Labourdonnais',
     hint:'Il gouverna l\'île de France (Mauritius) de 1735 à 1746 et fit de Port Louis une grande ville portuaire.',
     explanation:'<b>Mahé de Labourdonnais</b> (1699–1753) was the French governor who transformed Port Louis into a thriving capital and harbour between 1735 and 1746, building roads, fortifications and the port that made Mauritius a major Indian Ocean base.' }),
 
   makeMCQ({ id:'g5enr-per-021', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:14px"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Pierre_Poivre_1783.jpg/250px-Pierre_Poivre_1783.jpg" alt="Portrait of a historical botanist" style="max-height:200px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Who is this French botanist and administrator who introduced spice cultivation to Mauritius and helped create Pamplemousses Botanical Garden?</b>',
+    question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/pierre-poivre.jpg" alt="Portrait of Pierre Poivre" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Who is this French botanist and administrator who introduced spice cultivation to Mauritius and helped create Pamplemousses Botanical Garden?</b>',
     options:['Pierre Poivre','Mahé de Labourdonnais','Charles Decaen','Sir Robert Farquhar'],
     answer:'Pierre Poivre',
     hint:'His surname means "pepper" in French - fitting for someone who smuggled spice plants from Dutch colonies.',
-    explanation:'<b>Pierre Poivre</b> (1719–1786) was a French missionary turned botanist who smuggled nutmeg and clove plants out of Dutch-controlled islands and introduced them to Mauritius, while also developing the <b>Pamplemousses Botanical Garden</b>.' })
+    explanation:'<b>Pierre Poivre</b> (1719–1786) was a French missionary turned botanist who smuggled nutmeg and clove plants out of Dutch-controlled islands and introduced them to Mauritius, while also developing the <b>Pamplemousses Botanical Garden</b>.' }),
+
+  makeMCQ({ id:'g5enr-per-022', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/mahe-de-labourdonnais.jpg" alt="Portrait of Mahé de Labourdonnais" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>This is Mahé de Labourdonnais. Which important contribution is he best known for in Mauritius?</b>',
+    options:['Developing Port Louis harbour and making it the capital','Introducing cloves and nutmeg to the island','Becoming the first British governor','Leading the Dutch settlement in 1638'],
+    answer:'Developing Port Louis harbour and making it the capital',
+    hint:'Think of the harbour and capital city.',
+    explanation:'Mahé de Labourdonnais developed <b>Port Louis harbour</b> and made Port Louis the capital of Isle de France.' }),
+
+  makeMCQ({ id:'g5enr-per-023', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/mahe-de-labourdonnais.jpg" alt="Portrait of Mahé de Labourdonnais" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Look carefully at this portrait. Was this governor linked mainly with Dutch, French or British rule?</b>',
+    options:['French rule','Dutch rule','British rule','Portuguese rule'], answer:'French rule',
+    hint:'He governed Isle de France between 1735 and 1746.',
+    explanation:'Mahé de Labourdonnais was a <b>French</b> governor of Isle de France.' }),
+
+  makeMCQ({ id:'g5enr-per-024', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:1,
+    question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/pierre-poivre.jpg" alt="Portrait of Pierre Poivre" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>This is Pierre Poivre. Which plants is he especially remembered for introducing to Mauritius?</b>',
+    options:['Spice plants such as cloves and nutmeg','Tea and coffee only','Potatoes and wheat','Sugar cane and tobacco'],
+    answer:'Spice plants such as cloves and nutmeg', hint:'His surname means “pepper” in French.',
+    explanation:'Pierre Poivre introduced valuable <b>spice plants</b>, including cloves and nutmeg, to Mauritius.' }),
+
+  makeMCQ({ id:'g5enr-per-025', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:2,
+    question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/pierre-poivre.jpg" alt="Portrait of Pierre Poivre" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Which famous Mauritian garden is closely linked with the work of the person in this portrait?</b>',
+    options:['Pamplemousses Botanical Garden','The Royal Botanic Garden at Kew','The Château de Labourdonnais garden','The Curepipe town garden'],
+    answer:'Pamplemousses Botanical Garden', hint:'It is one of the best-known gardens in Mauritius.',
+    explanation:'Pierre Poivre helped develop the <b>Pamplemousses Botanical Garden</b>, where many exotic plants were grown.' }),
+
+  makeMCQ({ id:'g5enr-per-026', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:3,
+    question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/mahe-de-labourdonnais.jpg" alt="Portrait of Mahé de Labourdonnais" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Identify this person, then choose the correct pair of achievements.</b>',
+    options:['Mahé de Labourdonnais — Port Louis harbour and roads','Pierre Poivre — Port Louis harbour and roads','Charles Decaen — spice gardens and nutmeg','Robert Farquhar — Dutch settlement and the island’s name'],
+    answer:'Mahé de Labourdonnais — Port Louis harbour and roads',
+    hint:'He was the French governor who transformed Port Louis.',
+    explanation:'Mahé de Labourdonnais developed Port Louis harbour and built roads and other infrastructure.' }),
+
+  makeMCQ({ id:'g5enr-per-027', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:3,
+    question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/pierre-poivre.jpg" alt="Portrait of Pierre Poivre" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Identify this person, then choose the best reason his work mattered.</b>',
+    options:['Pierre Poivre — it helped Mauritius grow valuable spices','Mahé de Labourdonnais — it made Mauritius a Dutch colony','Charles Decaen — it ended British rule','Robert Farquhar — it created the first Portuguese settlement'],
+    answer:'Pierre Poivre — it helped Mauritius grow valuable spices',
+    hint:'Think of the cloves and nutmeg he brought to the island.',
+    explanation:'Pierre Poivre’s work made it possible to cultivate valuable spices in Mauritius.' })
 
 );

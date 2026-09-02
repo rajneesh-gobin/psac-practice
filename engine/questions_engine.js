@@ -71,7 +71,10 @@ function getQuestionsForSubsection(chapterId, subsectionId, count = 15) {
   const pool = shuffle(STATIC_QUESTIONS.filter(q =>
     q.chapterId === chapterId && q.subsection === subsectionId
   ));
-  if (pool.length >= 3) return pool.slice(0, count);
+  // A small, deliberately focused subsection (for example a portrait quiz)
+  // must remain focused. Falling back to the whole chapter made the two-photo
+  // quiz begin with unrelated Battle of Grand Port questions.
+  if (pool.length) return pool.slice(0, count);
   return getQuestionsForChapter(chapterId, 2, count);
 }
 

@@ -1,0 +1,150 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><base href="../"><title>world map fit</title>
+<style>body{margin:0;padding:12px;font:12px ui-monospace,monospace}pre{white-space:pre-wrap}</style>
+</head><body>
+<pre id="o">measuring…</pre>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+//  Establishes the world artwork's projection, then checks it against the
+//  artwork's own coastlines.
+//
+//  The vertical half is settled from the SVG itself: fitting the id'd country
+//  paths (Iceland, Mongolia, Madagascar, Tasmania, Czechia, Uzbekistan,
+//  Lesotho, Eswatini) against candidate projections picks ROBINSON with a
+//  latitude residual of 0.58px on a 1538px map — and puts the poles at 6.9% and
+//  97.7%, which is where the artwork's land actually starts and stops.
+//
+//  The horizontal half cannot be settled by extrapolating from those landmarks:
+//  they only span -25°..+149°, and stretching that to ±180° disagreed with the
+//  artwork. So it is fitted directly against the picture — search the longitude
+//  scale and central meridian that best sort a set of unambiguous land and
+//  ocean coordinates onto the artwork's own land and sea pixels.
+// ═══════════════════════════════════════════════════════════════════════════
+const SVG_W = 2752.766, SVG_H = 1537.631;
+// From the SVG-path fit (scripts note above): y = 697.8696·(−Y(lat)) + 804.68
+const FY_A = 697.8696, FY_B = 804.68;
+
+const ROBINSON = [
+  [1.0000,0.0000],[0.9986,0.0620],[0.9954,0.1240],[0.9900,0.1860],[0.9822,0.2480],
+  [0.9730,0.3100],[0.9600,0.3720],[0.9427,0.4340],[0.9216,0.4958],[0.8962,0.5571],
+  [0.8679,0.6176],[0.8350,0.6769],[0.7986,0.7346],[0.7597,0.7903],[0.7186,0.8435],
+  [0.6732,0.8936],[0.6213,0.9394],[0.5722,0.9761],[0.5322,1.0000],
+];
+const rob = (lat, k) => {
+  const a = Math.min(Math.abs(lat), 90) / 5, i = Math.min(Math.floor(a), 17), t = a - i;
+  return ROBINSON[i][k] * (1 - t) + ROBINSON[i + 1][k] * t;
+};
+const RX = lat => rob(lat, 0);
+const RY = lat => Math.sign(lat) * rob(lat, 1);
+const yFrac = lat => (FY_A * (-RY(lat)) + FY_B) / SVG_H;
+const xFrac = (lon, lat, a, b) => (a * lon * RX(lat) + b) / SVG_W;
+
+// Coordinates far enough from any coast to be unambiguous at this map scale.
+const LAND = [
+  [-149,64],[-106,56],[-98,39],[-99,19],[-75,5],[-60,-5],[-55,-20],[-64,-35],[-68,-22],
+  [-40,75],[-19,65],[-4,40],[10,51],[25,55],[37,56],[15,-4],[25,10],[31,30],[25,-25],
+  [47,25],[60,40],[73,19],[83,55],[105,60],[116,40],[100,15],[115,-25],[135,-25],
+  [150,-30],[168,65],[177,66],[20,-70],[90,-72],[-60,-78],
+];
+const OCEAN = [
+  [-140,0],[-120,-20],[-160,-40],[-150,40],[-30,0],[-40,-30],[-25,40],[-20,-45],
+  [70,-30],[90,-10],[60,0],[170,-25],[175,-50],[0,-50],[100,-50],[-30,-60],
+  [-170,20],[-175,-20],[170,30],[-40,-15],[-90,-40],[140,-50],
+];
+
+const out = [];
+const img = new Image();
+img.onload = () => {
+  const W = 2000, H = Math.round(W * img.height / img.width);
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const g = c.getContext('2d', { willReadFrequently: true });
+  g.drawImage(img, 0, 0, W, H);
+  const d = g.getImageData(0, 0, W, H).data;
+  // Land is the fill (#cccccc); sea is transparent. White is the border stroke,
+  // so it counts as neither and is resolved by the 3x3 majority below.
+  const at = (x, y) => {
+    x = Math.round(x); y = Math.round(y);
+    if (x < 0 || y < 0 || x >= W || y >= H) return 'off';
+    let land = 0, sea = 0;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+      const xx = Math.min(W-1, Math.max(0, x+dx)), yy = Math.min(H-1, Math.max(0, y+dy));
+      const i = (yy*W + xx)*4, a = d[i+3];
+      if (a < 40) sea++;
+      else if (Math.abs(d[i]-204) < 26 && Math.abs(d[i+1]-204) < 26 && Math.abs(d[i+2]-204) < 26) land++;
+    }
+    return land > sea ? 'land' : sea > land ? 'sea' : 'edge';
+  };
+
+  // ── Grid search the longitude scale and central meridian ──────────────────
+  let best = null;
+  const score = (a, b) => {
+    let s = 0;
+    for (const [lon, lat] of LAND)  if (at(xFrac(lon,lat,a,b)*W, yFrac(lat)*H) === 'land') s++;
+    for (const [lon, lat] of OCEAN) if (at(xFrac(lon,lat,a,b)*W, yFrac(lat)*H) === 'sea')  s++;
+    return s;
+  };
+  for (let a = 6.2; a <= 8.6; a += 0.02) {
+    for (let b = 1200; b <= 1500; b += 2) {
+      const s = score(a, b);
+      if (!best || s > best.s) best = { s, a, b };
+    }
+  }
+  // Refine around the winner.
+  for (let a = best.a - 0.05; a <= best.a + 0.05; a += 0.005) {
+    for (let b = best.b - 6; b <= best.b + 6; b += 0.5) {
+      const s = score(a, b);
+      if (s > best.s) best = { s, a, b };
+    }
+  }
+  const total = LAND.length + OCEAN.length;
+  out.push(`raster ${W}x${H}`);
+  out.push(`\nbest longitude fit: a = ${best.a.toFixed(4)} px/deg (SVG units), central meridian x = ${best.b.toFixed(1)} (${(best.b/SVG_W*100).toFixed(2)}% of width)`);
+  out.push(`  classifies ${best.s}/${total} test coordinates correctly`);
+  out.push(`  → ±180° lands at ${(xFrac(-180,0,best.a,best.b)*100).toFixed(2)}% and ${(xFrac(180,0,best.a,best.b)*100).toFixed(2)}% of width`);
+  out.push(`  → equator at ${(yFrac(0)*100).toFixed(2)}% of height; poles at ${(yFrac(90)*100).toFixed(2)}% and ${(yFrac(-90)*100).toFixed(2)}%`);
+
+  const wrong = [];
+  for (const [lon, lat] of LAND)  { const k = at(xFrac(lon,lat,best.a,best.b)*W, yFrac(lat)*H); if (k !== 'land') wrong.push(`land  ${lon},${lat} → ${k}`); }
+  for (const [lon, lat] of OCEAN) { const k = at(xFrac(lon,lat,best.a,best.b)*W, yFrac(lat)*H); if (k !== 'sea')  wrong.push(`ocean ${lon},${lat} → ${k}`); }
+  out.push(wrong.length ? '\nmisclassified:\n  ' + wrong.join('\n  ') : '\nevery test coordinate lands on the right kind of ground.');
+
+  // ── Inverse, then read back what each world feature's x/y actually means ──
+  const latFromYFrac = yf => {
+    let lo = -90, hi = 90;
+    for (let i = 0; i < 60; i++) { const m = (lo+hi)/2; if (yFrac(m) > yf) lo = m; else hi = m; }
+    return (lo+hi)/2;
+  };
+  const invert = (xPct, yPct) => {
+    const lat = latFromYFrac(yPct/100);
+    const lon = ((xPct/100)*SVG_W - best.b) / (best.a * RX(lat));
+    return { lon, lat };
+  };
+  out.push('\n\nWHAT EACH WORLD FEATURE\'S POSITION ACTUALLY MEANS');
+  out.push('id                        %x     %y      implied lon/lat        ground');
+  out.push('─'.repeat(84));
+  const rows = [];
+  for (const f of GeoMap.DEFAULTS.filter(f => f.island === 'world')) {
+    const p = GeoMap.markerPosition(f);
+    const q = invert(p.left, p.top);
+    const ground = at(p.left/100*W, p.top/100*H);
+    rows.push({ id:f.id, type:f.type, p, q, ground });
+    out.push('  ' + f.id.replace('world-','').padEnd(22)
+      + p.left.toFixed(1).padStart(5) + p.top.toFixed(1).padStart(7) + '   '
+      + `${q.lon >= 0 ? q.lon.toFixed(1)+'°E' : (-q.lon).toFixed(1)+'°W'}`.padStart(8)
+      + ` ${q.lat >= 0 ? q.lat.toFixed(1)+'°N' : (-q.lat).toFixed(1)+'°S'}`.padStart(9)
+      + '      ' + ground);
+  }
+  window.__worldFit = { a:best.a, b:best.b, rows };
+  document.getElementById('o').textContent = out.join('\n');
+  document.title = 'done';
+};
+img.onerror = () => { document.getElementById('o').textContent = 'could not load assets/world-map.svg'; };
+</script>
+<script>
+  const SB_URL='https://example.invalid', SB_KEY='k';
+  window.Store = { mmGet: async () => null }; window.toast = () => {};
+  try { localStorage.clear(); } catch (_) {}
+</script>
+<script src="engine/interactive_map.js"></script>
+<script>img.src = 'assets/world-map.svg';</script>
+</body></html>

@@ -76,6 +76,8 @@ const QuestionLoader = (() => {
       'subjects/grade5-maths/questions/questions_challenge2.js',
       'subjects/grade5-maths/questions/questions_audit.js',
       'subjects/grade5-maths/questions/illustrated_diagrams.js',
+      'subjects/grade5-maths/questions/reasoning_word_problems.js',
+      'subjects/grade5-maths/questions/extended_reasoning_bank.js',
     ],
     'grade5-french': [
       'subjects/grade5-french/questions/ch01_vocabulaire.js',
@@ -90,6 +92,7 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/ch10_subjonctif.js',
       'subjects/grade5-french/questions/ch11_textes.js',
       'subjects/grade5-french/questions/ch12_images.js',
+      'subjects/grade5-french/questions/extended_practice_bank.js',
     ],
     'grade5-english': [
       'subjects/grade5-english/questions/ch01_nouns.js',
@@ -210,6 +213,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/past_paper_2019.js',
       // top-up
       'subjects/grade6-maths/questions/topup_g6_maths.js',
+      'subjects/grade6-maths/questions/reasoning_word_problems.js',
+      'subjects/grade6-maths/questions/extended_reasoning_bank.js',
     ],
     'grade6-english': [
       'subjects/grade6-english/questions/ch01_nouns.js',
@@ -239,6 +244,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/ch08_pqp.js',
       'subjects/grade6-french/questions/ch09_g6_textes.js',
       'subjects/grade6-french/questions/ch10_g6_images.js',
+      'subjects/grade6-french/questions/extended_practice_bank.js',
       // past papers
       'subjects/grade6-french/questions/past_paper_2024.js',
       'subjects/grade6-french/questions/past_paper_2023.js',
@@ -266,6 +272,11 @@ const QuestionLoader = (() => {
       'subjects/grade4-english/questions/ch07_g4_passages.js',
       // top-up
       'subjects/grade4-english/questions/topup_g4_english.js',
+      'subjects/grade4-english/questions/coverage_articles.js',
+      'subjects/grade4-english/questions/coverage_nouns.js',
+      'subjects/grade4-english/questions/coverage_verbs.js',
+      'subjects/grade4-english/questions/coverage_adjectives_sentences.js',
+      'subjects/grade4-english/questions/coverage_comprehension.js',
     ],
     'grade4-science': [
       'subjects/grade4-science/questions/ch01_g4_living_things.js',
@@ -295,6 +306,8 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/ch10_g4_images.js',
       // top-up
       'subjects/grade4-french/questions/topup_g4_french.js',
+      'subjects/grade4-french/questions/extended_practice_bank.js',
+      'subjects/grade4-french/questions/image_photo_activities.js',
     ],
     'grade4-history': [
       'subjects/grade4-history/questions/ch01_g4_locality.js',

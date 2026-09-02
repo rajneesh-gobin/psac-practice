@@ -55,6 +55,7 @@ const AdminPanel = (() => {
     if (name === 'roles')     loadRoles();
     if (name === 'plans')     loadPlans();
     if (name === 'questions') QM.tabOpen();
+    if (name === 'maps' && typeof GeoMap !== 'undefined') GeoMap.renderEditor(document.getElementById('admin-map-editor'));
     // The security log is on the Content tab and is a per-visit read: an admin
     // opening it wants what has happened since, not what was cached at render.
     if (name === 'content')   loadSecurityEvents();
@@ -164,23 +165,163 @@ const AdminPanel = (() => {
   let _membersOffset  = 0;
   let _membersQuery   = '';
   let _membersFilterTimer = null;
+  let _memberStatusFilter = 'active'; // active | pending | all
+  let _pendingRegistrations = [];
+  let _pendingCursor = null;
+
+  function _memberVisibility() {
+    return {
+      admins: document.getElementById('admin-member-show-admins')?.checked !== false,
+      expired: document.getElementById('admin-member-show-expired')?.checked !== false,
+      disabled: document.getElementById('admin-member-show-disabled')?.checked !== false,
+    };
+  }
+
+  async function _pendingRegistrationRequest(method = 'GET', body = null, params = '') {
+    const { data: sessionData } = await _sb.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) throw new Error('Your sign-in session has expired. Please refresh and sign in again.');
+    const response = await fetch(`/api/pending-registrations${params}`, {
+      method,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
+      },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.ok) throw new Error(result.error || 'Could not load pending registrations.');
+    return result;
+  }
+
+  function _renderPendingRegistrations({ inMainList = false } = {}) {
+    const main = document.getElementById('admin-members-list');
+    const panel = document.getElementById('admin-pending-registrations');
+    const target = inMainList ? main : panel;
+    if (!target) return;
+    const rows = _pendingRegistrations;
+    const body = !rows.length
+      ? '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5">No registrations are waiting for email confirmation.</p>'
+      : `<div class="space-y-2">${rows.map(r => `
+        <div class="flex flex-wrap items-center gap-2 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/15 px-3 py-2.5">
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(r.full_name || 'Name not provided')}</p>
+            <p class="text-xs text-gray-600 dark:text-gray-300 truncate">${_esc(r.email)}</p>
+            <p class="text-[11px] text-amber-700 dark:text-amber-300">Registered ${r.created_at ? _fmtJoined(r.created_at) : 'recently'} · awaiting email confirmation</p>
+          </div>
+          <button onclick="AdminPanel.activatePendingRegistration('${r.id}')"
+            class="shrink-0 text-xs font-bold px-3 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white">
+            ✅ Activate manually
+          </button>
+        </div>`).join('')}</div>`;
+    const more = _pendingCursor
+      ? `<div class="text-center mt-3"><button onclick="AdminPanel.loadMorePendingRegistrations()" class="border border-amber-300 dark:border-amber-700 rounded-lg px-4 py-2 text-xs font-semibold text-amber-700 dark:text-amber-300">Load more pending registrations</button></div>`
+      : '';
+    target.innerHTML = (inMainList
+      ? `<p class="text-[11px] text-gray-500 dark:text-gray-400 mb-2">These people registered but have not clicked their email confirmation link. Manually activating lets them sign in and finish family setup.</p>${body}${more}`
+      : `<div class="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50/70 dark:bg-amber-900/10 p-3"><div class="flex items-center justify-between gap-2 mb-2"><p class="text-sm font-bold text-amber-800 dark:text-amber-200">✉️ Awaiting email confirmation (${rows.length}${_pendingCursor ? '+' : ''})</p><span class="text-[11px] text-amber-700 dark:text-amber-300">Shown alongside activated accounts</span></div>${body}${more}</div>`);
+    if (panel) panel.classList.toggle('hidden', inMainList || _memberStatusFilter !== 'all');
+  }
+
+  async function loadPendingRegistrations(reset = true, inMainList = (_memberStatusFilter === 'pending')) {
+    if (!_sb) return;
+    if (reset) { _pendingRegistrations = []; _pendingCursor = null; }
+    const target = inMainList ? document.getElementById('admin-members-list') : document.getElementById('admin-pending-registrations');
+    if (reset && target) target.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-5 animate-pulse">Loading pending registrations…</p>';
+    try {
+      const search = encodeURIComponent(_membersQuery);
+      const cursor = _pendingCursor ? `&cursor=${encodeURIComponent(_pendingCursor)}` : '';
+      const result = await _pendingRegistrationRequest('GET', null, `?limit=${MEMBERS_PAGE}&search=${search}${cursor}`);
+      _pendingRegistrations = reset ? result.registrations : _pendingRegistrations.concat(result.registrations || []);
+      _pendingCursor = result.next_cursor || null;
+      _renderPendingRegistrations({ inMainList });
+      if (inMainList) {
+        _setCount('admin-members-count', _pendingRegistrations.length, null, 'pending registrations');
+        document.getElementById('admin-members-more')?.classList.add('hidden');
+      }
+    } catch (error) {
+      if (target) target.innerHTML = `<p class="text-sm text-red-500 text-center py-5">${_esc(error.message)}</p>`;
+    }
+  }
+
+  async function loadMorePendingRegistrations() {
+    await loadPendingRegistrations(false, _memberStatusFilter === 'pending');
+  }
+
+  function setMemberStatusFilter(filter) {
+    _memberStatusFilter = ['active', 'pending', 'all'].includes(filter) ? filter : 'active';
+    _membersOffset = 0;
+    _members = [];
+    _pendingRegistrations = [];
+    _pendingCursor = null;
+    loadMembers(true);
+  }
+
+  function setMemberVisibilityFilters() {
+    // These filters apply to activated profiles. Pending registrations have no
+    // profile, expiry or disabled state yet, so they remain visible in the
+    // dedicated confirmation queue.
+    _membersOffset = 0;
+    _members = [];
+    loadMembers(true);
+  }
+
+  async function activatePendingRegistration(userId) {
+    const email = _pendingRegistrations.find(r => r.id === userId)?.email || 'this account';
+    if (!confirm(`Activate ${email} without email confirmation? They will be able to sign in with their existing password and complete family setup.`)) return;
+    try {
+      await _pendingRegistrationRequest('POST', { action: 'activate', user_id: userId });
+      toast(`${email} has been activated.`, 2500);
+      await loadPendingRegistrations(true, _memberStatusFilter === 'pending');
+    } catch (error) {
+      toast(error.message || 'Could not activate this account.', 3500);
+    }
+  }
+
+  async function sendPasswordReset(userId) {
+    const displayName = _members.find(m => m.id === userId)?.full_name || 'this account';
+    if (!confirm(`Send a password-reset link to ${displayName || 'this account'}? The link goes only to their registered email address.`)) return;
+    try {
+      const { data: sessionData } = await _sb.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) throw new Error('Your sign-in session has expired. Please refresh and sign in again.');
+      const response = await fetch('/api/admin-account-recovery', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) throw new Error(result.error || 'Could not send the reset email.');
+      toast('Password-reset link sent to the account email. 📧', 3000);
+    } catch (error) {
+      toast(error.message || 'Could not send the reset email.', 3500);
+    }
+  }
 
   async function loadMembers(reset = true) {
     if (!_sb) return;
+    if (_memberStatusFilter === 'pending') {
+      await loadPendingRegistrations(reset, true);
+      return;
+    }
     if (reset) { _membersOffset = 0; _members = []; }
     const el = document.getElementById('admin-members-list');
     if (reset && el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
+    const visibility = _memberVisibility();
+    const visibleRoles = visibility.admins ? ['parent', 'admin'] : ['parent'];
     let membersQuery = _sb.from('profiles')
       // credits/blocked_until are read here rather than per-row: the admin needs to
       // SEE a balance to spot a farm, and one extra column beats N extra queries.
       // ⚠ A database that has not run supabase-credits-shop.sql has neither column,
       // which would 42703 the whole query and empty the members list — hence the
       // retry below with the original column list.
-      .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code, credits, blocked_until',
+      .select('id, full_name, role, is_super_admin, disabled, expires_at, created_at, teacher_status, referral_code, credits, blocked_until',
               { count: 'exact' })
-      .eq('role', 'parent')
+      .in('role', visibleRoles)
       .order('created_at', { ascending: false })
       .range(_membersOffset, _membersOffset + MEMBERS_PAGE - 1);
+    if (!visibility.expired) membersQuery = membersQuery.or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`);
+    if (!visibility.disabled) membersQuery = membersQuery.eq('disabled', false);
     // full_name only - the "or email" in the placeholder is aspirational,
     // profiles carries no email column (auth.users does, and isn't queryable
     // from here); id is a UUID so a name search covers the realistic case.
@@ -199,11 +340,13 @@ const AdminPanel = (() => {
       if (profilesRes.error.code === '42703') {
         _creditColumnsMissing = true;
         let retry = _sb.from('profiles')
-          .select('id, full_name, role, disabled, expires_at, created_at, teacher_status, referral_code',
+          .select('id, full_name, role, is_super_admin, disabled, expires_at, created_at, teacher_status, referral_code',
                   { count: 'exact' })
-          .eq('role', 'parent')
+          .in('role', visibleRoles)
           .order('created_at', { ascending: false })
           .range(_membersOffset, _membersOffset + MEMBERS_PAGE - 1);
+        if (!visibility.expired) retry = retry.or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`);
+        if (!visibility.disabled) retry = retry.eq('disabled', false);
         if (_membersQuery) retry = retry.ilike('full_name', `%${_membersQuery}%`);
         const again = await retry;
         if (!again.error) { profilesRes.data = again.data; profilesRes.count = again.count; profilesRes.error = null; }
@@ -215,15 +358,19 @@ const AdminPanel = (() => {
     }
     _plansForSelect = plansRes.data || _plansForSelect;
     const rows = profilesRes.data || [];
+    await _attachMemberFamilySummaries(rows);
     _members = reset ? rows : _members.concat(rows);
     _membersOffset += rows.length;
     _renderMembers(_members);
-    _setCount('admin-members-count', _members.length, profilesRes.count, 'parents');
+    _setCount('admin-members-count', _members.length, profilesRes.count, 'accounts');
     const moreBtn = document.getElementById('admin-members-more');
     if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < MEMBERS_PAGE);
+    if (_memberStatusFilter === 'all') await loadPendingRegistrations(reset, false);
+    else document.getElementById('admin-pending-registrations')?.classList.add('hidden');
   }
 
   async function loadMoreMembers() {
+    if (_memberStatusFilter === 'pending') { await loadMorePendingRegistrations(); return; }
     await loadMembers(false);
   }
 
@@ -247,6 +394,58 @@ const AdminPanel = (() => {
       if ((exp - now) < 7 * 24 * 3600 * 1000) return '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400">🟡 Expires soon</span>';
     }
     return '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400">🟢 Active</span>';
+  }
+
+  // Collapsed cards are the overview an admin actually scans. Fetch the child
+  // counts in two batched reads (not one request per parent), so 30 members do
+  // not become 60 extra network calls. A parent with no family is deliberately
+  // distinct from a family that simply has no children yet.
+  async function _attachMemberFamilySummaries(rows) {
+    if (!rows.length) return;
+    const parentIds = rows.map(m => m.id).filter(Boolean);
+    try {
+      const { data: families, error: familyError } = await _sb.from('families')
+        .select('id,parent_id,family_name').in('parent_id', parentIds);
+      if (familyError) throw familyError;
+      const byParent = new Map((families || []).map(f => [f.parent_id, f]));
+      const familyIds = (families || []).map(f => f.id);
+      let children = [];
+      if (familyIds.length) {
+        let result = await _sb.from('students').select('family_id').in('family_id', familyIds).is('deleted_at', null);
+        // Older databases pre-date soft deletion. Their roster is still more
+        // useful than a blank count, so retry without that optional column.
+        if (result.error && (result.error.code === '42703' || result.error.code === 'PGRST204')) {
+          result = await _sb.from('students').select('family_id').in('family_id', familyIds);
+        }
+        if (result.error) throw result.error;
+        children = result.data || [];
+      }
+      const counts = new Map();
+      children.forEach(child => counts.set(child.family_id, (counts.get(child.family_id) || 0) + 1));
+      rows.forEach(member => {
+        const family = byParent.get(member.id);
+        member.has_family = !!family;
+        member.family_name = family?.family_name || '';
+        member.child_count = family ? (counts.get(family.id) || 0) : 0;
+      });
+    } catch (error) {
+      // Do not lose the member list because an older schema is missing one of
+      // these optional overview fields. The detail panel continues to work.
+      console.warn('[AdminPanel] could not load child counts:', error.message || error);
+      rows.forEach(member => { member.has_family = null; member.child_count = null; });
+    }
+  }
+
+  function _memberChildrenSummary(m) {
+    if (m.has_family === false) return '<span class="text-xs text-gray-400 dark:text-gray-500">No family yet</span>';
+    if (m.child_count == null) return '<span class="text-xs text-gray-400 dark:text-gray-500">Children —</span>';
+    const n = m.child_count;
+    return `<span class="text-xs font-semibold text-indigo-600 dark:text-indigo-300">👶 ${n} ${n === 1 ? 'child' : 'children'}</span>`;
+  }
+
+  function _memberAccountLabel(m) {
+    if (m.role !== 'admin') return '';
+    return `<span class="text-[10px] font-bold ${m.is_super_admin ? 'text-rose-600 dark:text-rose-300' : 'text-indigo-600 dark:text-indigo-300'}">${m.is_super_admin ? '👑 Super admin' : '🛡️ Admin'}</span>`;
   }
 
   // children cached by parent profile id
@@ -329,7 +528,7 @@ const AdminPanel = (() => {
     const COLS = 'grid-cols-[1.6rem_1fr] sm:grid-cols-[1.6rem_2.2fr_1fr_1fr_1.1fr]';
     const header = `
       <div class="hidden sm:grid grid-cols-[1.6rem_2.2fr_1fr_1fr_1.1fr] gap-2 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
-        <span></span><span>Name</span><span>Role</span><span>Status</span><span>Plan</span>
+        <span></span><span>Parent</span><span>Children</span><span>Status</span><span>Plan</span>
       </div>`;
 
     el.innerHTML = header + list.map(m => {
@@ -362,24 +561,31 @@ const AdminPanel = (() => {
             <p class="text-[11px] text-gray-400 dark:text-gray-500 truncate">
               ${m.created_at ? 'Joined ' + _fmtJoined(m.created_at) : ''}
             </p>
+            ${_memberAccountLabel(m)}
             <p class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
           </div>
-          <span class="hidden sm:block">${roleSelect('w-full')}</span>
+          <span class="hidden sm:block">${_memberChildrenSummary(m)}</span>
           <span class="hidden sm:block">${_memberStatusBadge(m)}</span>
           <span class="hidden sm:block text-xs truncate" id="plan-label-${m.id}">${isParent ? 'loading…' : '—'}</span>
           <div class="col-span-2 sm:hidden flex flex-wrap items-center gap-1.5">
-            ${roleSelect()}${_memberStatusBadge(m)}
+            ${_memberChildrenSummary(m)}${_memberStatusBadge(m)}
           </div>
         </div>
 
         <div id="member-detail-${m.id}" class="${open ? '' : 'hidden'} border-t border-gray-100 dark:border-gray-700 px-3 py-3 bg-gray-50/60 dark:bg-gray-900/20">
 
           <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs text-gray-500 dark:text-gray-400">Account type</span>
+            ${roleSelect()}
             <button onclick="AdminPanel.toggleDisable('${m.id}', ${!m.disabled})"
               class="text-xs px-3 py-1 rounded-lg font-semibold transition-colors ${m.disabled
                 ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200'
                 : 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200'}">
               ${m.disabled ? '✅ Enable' : '🚫 Disable'}
+            </button>
+            <button onclick="AdminPanel.sendPasswordReset('${m.id}')"
+              class="text-xs px-3 py-1 rounded-lg font-semibold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200">
+              📧 Send password-reset link
             </button>
             ${isParent ? `
             <button onclick="AdminPanel.toggleChildren('${m.id}')" id="btn-children-${m.id}"
@@ -2431,7 +2637,8 @@ const AdminPanel = (() => {
     loadSecurityEvents();
   }
 
-  return { render, showTab, loadMembers, loadMoreMembers, filterMembers, changeRole, toggleMemberRow,
+  return { render, showTab, loadMembers, loadMoreMembers, filterMembers, setMemberStatusFilter, setMemberVisibilityFilters,
+    loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,

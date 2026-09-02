@@ -71,6 +71,8 @@ const MIME = {
 const API_REDIRECTS = {
   '/api/questions':          'questions',
   '/api/create-user':        'create-user',
+  '/api/pending-registrations': 'pending-registrations',
+  '/api/admin-account-recovery': 'admin-account-recovery',
   '/api/assignment-open':    'assignment-open',
   '/api/assignment-submit':  'assignment-submit',
 };

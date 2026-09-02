@@ -379,7 +379,16 @@ const Auth = (() => {
       // 2. Both sessions can exist at once on a shared family device. Resolve
       //    WHO OWNS IT before routing, instead of letting the parent win by
       //    virtue of being checked first — see _studentOwnsDevice().
-      const { data: { session } } = await _sb.auth.getSession();
+      let { data: { session } } = await _sb.auth.getSession();
+      // On a cold mobile start Supabase can still be restoring/refreshing its
+      // persisted token when the first read happens. A missing first read is
+      // not enough reason to send a parent back to sign-in; retry once after
+      // the auth client has had a short turn to finish initialisation.
+      if (!session && navigator.onLine) {
+        await new Promise(resolve => setTimeout(resolve, 350));
+        const retry = await _sb.auth.getSession();
+        session = retry?.data?.session || null;
+      }
       const storedStudent = Store.getStudentSession();
 
       if (_studentOwnsDevice(!!storedStudent, !!session)) {
@@ -595,6 +604,15 @@ const Auth = (() => {
       const adminBtn = document.getElementById('btn-open-admin');
       if (adminBtn) adminBtn.classList.remove('hidden');
       _refreshAdminBadge();
+      // Return an administrator to the tool they were actively working in
+      // before a browser/PWA refresh, rather than forcing a dashboard detour.
+      let lastScreen = null;
+      try { lastScreen = sessionStorage.getItem('psac-last-screen'); } catch (_) {}
+      if (lastScreen === 'admin') {
+        showScreen('admin');
+        if (typeof AdminPanel !== 'undefined') AdminPanel.render();
+        return;
+      }
     }
 
     // Teacher access requires BOTH the role AND an approved status. A pending
@@ -802,8 +820,18 @@ const Auth = (() => {
       QuestionLoader.loadForStudent(resumeGrade).catch(() => {});
     }
 
+    // Restore the subject the child was using before the refresh. Subject
+    // choice used to be memory-only, so a refresh always dropped them back at
+    // "Pick a subject" even after they had opened History & Geography.
+    let previousSubject = null;
+    try { previousSubject = sessionStorage.getItem(`psac-active-subject:${sess.id}`); } catch (_) {}
+    const restoredPack = previousSubject && typeof activateSubjectPack === 'function'
+      ? activateSubjectPack(previousSubject) : null;
+    if (restoredPack) {
+      renderDashboard();
+      showScreen('dashboard');
     // Skip grade select - go straight to subject picker with the stored grade
-    if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
+    } else if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
       SELECTED_GRADE = resumeGrade;
       showScreen('subject-select');
     } else {
@@ -1271,9 +1299,12 @@ const Auth = (() => {
       (!error && Array.isArray(data?.user?.identities) && data.user.identities.length === 0);
 
     if (alreadyRegistered) {
-      _showAuthError('You already have an account with this email. Sign in instead — if you closed it, signing in lets you restore everything.');
-      const signInBtn = _el('auth-goto-signin');
-      if (signInBtn) signInBtn.classList.remove('hidden');
+      _pendingVerifyEmail = email;
+      if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
+      const msg = _el('verify-email-message');
+      if (msg) msg.textContent = 'An account already exists for this email. If it is still waiting for verification, resend the activation email. If it is already activated, reset the password instead.';
+      _el('verify-reset-password')?.classList.remove('hidden');
+      showScreen('verify-email');
       return;
     }
 
@@ -1284,6 +1315,9 @@ const Auth = (() => {
     if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
     const note = _el('verify-teacher-note');
     if (note) note.classList.toggle('hidden', role !== 'teacher');
+    const msg = _el('verify-email-message');
+    if (msg) msg.textContent = 'Click the link in the email to activate your account. Check your spam folder if you do not see it within a minute.';
+    _el('verify-reset-password')?.classList.add('hidden');
     showScreen('verify-email');
   }
 
@@ -1339,6 +1373,15 @@ const Auth = (() => {
     const { error } = await _sb.auth.resend({ type: 'signup', email });
     if (error) toast(`Error: ${error.message}`, 4000);
     else toast('Verification email resent! Check your inbox.', 4000);
+  }
+
+  async function sendRecoveryForPending() {
+    if (!_sb || !_pendingVerifyEmail) return;
+    const { error } = await _sb.auth.resetPasswordForEmail(_pendingVerifyEmail, {
+      redirectTo: 'https://psac-practice.netlify.app/',
+    });
+    if (error) { toast(`Could not send reset link: ${error.message}`, 4000); return; }
+    toast('Password-reset email sent. Check your inbox.', 4000);
   }
 
   // ── Reset password (from email link) ───────────
@@ -2875,7 +2918,7 @@ const Auth = (() => {
     // Auth screen
     setRole, showSignIn, showSignUp, emailSignIn, emailSignUp,
     showForgotPassword, backToSignIn, forgotPassword, backToSignUp,
-    resendVerification, setNewPassword, togglePass,
+    resendVerification, sendRecoveryForPending, setNewPassword, togglePass,
     googleSignIn, openAdminPanel, openTeacherDashboard,
     requestTeacherAccess, getTeacherStatus, restoreAccount, refreshAdminBadge: _refreshAdminBadge,
     isTeacher: () => _isTeacherUser,

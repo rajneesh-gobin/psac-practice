@@ -111,6 +111,40 @@ function _loadSubject(subjectId) {
   return buf;
 }
 
+// The deploy build normally writes question-bundles/past-papers.json.  Local
+// development (and an interrupted deploy build) may not have that generated
+// file, even though the source packs are present.  Keep this fallback separate
+// from practice-question loading so these unmarked questions can only ever be
+// returned by the dedicated past-papers endpoint.
+let _sourcePapersCache = null;
+function _loadPastPapersFromSource() {
+  if (_sourcePapersCache) return _sourcePapersCache;
+
+  const subjectsDir = path.join(ROOT, 'subjects');
+  const papers = [];
+  if (!fs.existsSync(subjectsDir)) return papers;
+
+  for (const subjectId of fs.readdirSync(subjectsDir)) {
+    const dir = path.join(subjectsDir, subjectId, 'questions');
+    if (!fs.existsSync(dir)) continue;
+
+    const captured = [];
+    const ctx = vm.createContext(_buildContext([], captured));
+    for (const file of fs.readdirSync(dir).filter(f => f.endsWith('.js')).sort()) {
+      try {
+        const code = fs.readFileSync(path.join(dir, file), 'utf8');
+        new vm.Script(code, { filename: file }).runInContext(ctx);
+      } catch (e) {
+        console.warn(`[questions] ${file}: ${e.message}`);
+      }
+    }
+    papers.push(...captured.map(question => ({ ...question, subjectId })));
+  }
+
+  _sourcePapersCache = papers;
+  return papers;
+}
+
 // ── Plan enforcement cache (module-level, survives warm Lambda re-use) ────────
 const _settingsCache = { data: null, at: 0 };
 const _planCache     = new Map(); // userId → { data: allowed_chapters|null, at }
@@ -600,6 +634,7 @@ exports.handler = async (event) => {
   if (p.papers === '1') {
     let all = await _dbQueryPastPapers(batchGrade || null, SB_URL, SB_SRK);
     if (!all) all = _readBundle('past-papers') || [];
+    if (!all.length) all = _loadPastPapersFromSource();
     const list = (batchGrade && all.some(q => q.grade)) ? all.filter(q => String(q.grade) === batchGrade) : all;
     return { statusCode: 200, headers, body: JSON.stringify(list) };
   }

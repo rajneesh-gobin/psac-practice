@@ -940,6 +940,17 @@ const Store = (() => {
     _sb.from('mm_data').upsert({ key, value, updated_at: new Date().toISOString() }).then(() => {}).catch(() => {});
   }
 
+  // mmSet is fire-and-forget, which is right for a hint and wrong for anything
+  // whose caller reports success to a human. This awaits the write and hands
+  // back what actually happened, so a refused upsert cannot be announced as
+  // "saved" — which is exactly how the map editor used to behave.
+  async function mmSave(key, value) {
+    if (!_sb) return { ok: false, error: 'not signed in' };
+    const { error } = await _sb.from('mm_data')
+      .upsert({ key, value, updated_at: new Date().toISOString() });
+    return error ? { ok: false, error: error.message || String(error) } : { ok: true };
+  }
+
   function generateId() {
     return 'stu_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
   }
@@ -1175,7 +1186,7 @@ const Store = (() => {
     purchaseChapter, purchaseSubject, recordStudentActivity, flagSecurityEvent,
     createStudentInvite, redeemStudentInvite,
     // mm_data (teacher + global settings)
-    getGlobalSettings, mmGet, mmSet,
+    getGlobalSettings, mmGet, mmSet, mmSave,
     generateId,
     // Question reports
     reportQuestion, loadReports, countReports, resolveReport,

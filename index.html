@@ -1684,7 +1684,7 @@
         <h2 class="text-2xl font-black text-white mb-2">Check your email!</h2>
         <p class="text-indigo-200 text-sm mb-2">We sent a verification link to</p>
         <p class="text-white font-semibold mb-5" id="verify-email-addr"></p>
-        <p class="text-white/50 text-xs mb-5">Click the link in the email to activate your account. Check your spam folder if you don't see it within a minute.</p>
+        <p class="text-white/50 text-xs mb-5" id="verify-email-message">Click the link in the email to activate your account. Check your spam folder if you don't see it within a minute.</p>
         <!-- Shown only for teacher sign-ups: verification alone does not grant
              teacher powers, so say so before they wonder why nothing appeared. -->
         <div id="verify-teacher-note" class="hidden bg-amber-500/15 border border-amber-400/30 rounded-xl p-3 mb-5 text-left">
@@ -1695,6 +1695,9 @@
         <button onclick="Auth.resendVerification()"
           class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl transition-colors text-sm mb-3">
           Resend verification email
+        </button>
+        <button id="verify-reset-password" onclick="Auth.sendRecoveryForPending()" class="hidden w-full py-2.5 border border-indigo-300/50 text-indigo-100 hover:bg-white/10 font-bold rounded-xl transition-colors text-sm mb-3">
+          Already activated? Reset my password
         </button>
         <button onclick="showScreen('auth')" class="text-indigo-300 text-sm hover:text-white transition-colors">← Back to Sign In</button>
         <p class="text-white/70 text-xs mt-3">Wrong email? <button onclick="Auth.backToSignUp()" class="underline hover:text-white/60 transition-colors">Go back and sign up again</button></p>
@@ -1974,17 +1977,22 @@
         </div>
       </div>
 
-      <!-- Assignments from parent -->
-      <!-- Start-here nudge - visible only for brand-new students (0 questions attempted) -->
-      <div id="dash-start-here" class="hidden bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl p-5 mb-5 text-white shadow-xl">
+      <!-- A single, low-pressure first step for children.  The subject picker
+           remains available here and in the hero, so this adds guidance rather
+           than taking away free choice. -->
+      <div id="dash-start-here" class="bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl p-5 mb-5 text-white shadow-xl">
         <div class="flex items-center gap-4">
           <div class="text-5xl select-none">🚀</div>
           <div class="flex-1">
-            <div class="font-bold text-lg mb-0.5">Ready to begin?</div>
-            <div class="text-sm opacity-90 mb-3">Start with Level 1 practice - it's easy and fun!</div>
-            <button onclick="showScreen('chapter-select')"
+            <div id="dash-mission-title" class="font-bold text-lg mb-0.5">Your first mission</div>
+            <div id="dash-mission-copy" class="text-sm opacity-90 mb-3">Try 5 friendly warm-up questions. You can ask for a hint any time.</div>
+            <button onclick="startKidMission()"
               class="bg-white text-indigo-600 font-bold text-sm px-5 py-2 rounded-xl hover:bg-indigo-50 transition-colors shadow">
-              Start Practising →
+              Start my 5-question mission →
+            </button>
+            <button onclick="showScreen('subject-select')"
+              class="ml-2 mt-2 sm:mt-0 text-sm font-semibold text-white/95 hover:text-white hover:underline">
+              Choose a subject instead
             </button>
           </div>
         </div>
@@ -2093,6 +2101,17 @@
             <span class="chip blue">📚 All Topics</span>
             <span class="chip green">🎯 Click-to-Practice</span>
             <span class="chip gray">📈 Progress Tracking</span>
+          </div>
+        </button>
+
+        <button id="btn-interactive-map" class="track-card group hidden">
+          <div class="text-4xl mb-3">🗺️</div>
+          <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Interactive Maps</h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Explore Mauritius, Rodrigues and the world: continents, oceans, mountains, landmarks and more. Tap a feature to discover it.</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="chip blue">🇲🇺 Mauritius</span>
+            <span class="chip green">🏝️ Rodrigues</span>
+            <span class="chip gray">🌍 World</span>
           </div>
         </button>
 
@@ -2449,30 +2468,37 @@
           <div id="practice-feedback" class="hidden pr-feedback"></div>
         </div>
 
-        <!-- Tools: one row of identical boxes instead of buttons scattered
-             across the header and a sidebar card. -->
+        <!-- Help is deliberately progressive: a child answering a question
+             sees just the two actions they are most likely to need. The
+             less-frequent tools are still one tap away, rather than competing
+             with the answer choices on every question. -->
         <div class="pr-tools">
-          <button id="practice-hint-btn" class="pr-tool" title="Get a hint">
-            <span class="pr-tool-ico">💡</span><span class="pr-tool-lbl">Hint</span>
+          <button id="practice-help-toggle" type="button" onclick="togglePracticeHelp()" class="pr-tool pr-tool-primary" aria-controls="practice-help-tray" aria-expanded="false">
+            <span class="pr-tool-ico">🛟</span><span class="pr-tool-lbl">Need help?</span>
+          </button>
+          <button id="scratch-toggle-btn" type="button" onclick="togglePracticeScratchpad()" class="pr-tool" title="Write or draw your working">
+            <span class="pr-tool-ico">✏️</span><span class="pr-tool-lbl">My working</span>
+          </button>
+        </div>
+        <div id="practice-help-tray" class="pr-help-tray hidden" aria-label="Question help tools">
+          <button id="practice-hint-btn" type="button" class="pr-tool" title="Get a hint">
+            <span class="pr-tool-ico">💡</span><span class="pr-tool-lbl">Give me a hint</span>
             <span id="hint-count-badge" class="pr-tool-badge">3</span>
           </button>
-          <button id="scratch-toggle-btn" onclick="togglePracticeScratchpad()" class="pr-tool" title="Rough working">
-            <span class="pr-tool-ico">✏️</span><span class="pr-tool-lbl">Scratchpad</span>
+          <button id="practice-tts-btn" type="button" onclick="speakQuestion('practice')" class="pr-tool" title="Read the question aloud">
+            <span class="pr-tool-ico">🔊</span><span class="pr-tool-lbl">Read it to me</span>
           </button>
-          <button id="formula-btn" onclick="showFormulaModal()" class="pr-tool" title="Key formulas and facts">
-            <span class="pr-tool-ico">📐</span><span class="pr-tool-lbl">Formulas</span>
+          <button id="formula-btn" type="button" onclick="showFormulaModal()" class="pr-tool" title="Key formulas and facts">
+            <span class="pr-tool-ico">📐</span><span class="pr-tool-lbl">Facts to remember</span>
           </button>
-          <button id="help-btn" onclick="showHelpModal()" class="pr-tool" title="Video help">
-            <span class="pr-tool-ico">🎬</span><span class="pr-tool-lbl">Video</span>
+          <button id="help-btn" type="button" onclick="showHelpModal()" class="pr-tool" title="Video help">
+            <span class="pr-tool-ico">🎬</span><span class="pr-tool-lbl">Watch a video</span>
           </button>
-          <button id="practice-tts-btn" onclick="speakQuestion('practice')" class="pr-tool" title="Read the question aloud">
-            <span class="pr-tool-ico">🔊</span><span class="pr-tool-lbl">Read</span>
-          </button>
-          <button id="sound-toggle-btn" onclick="toggleSound()" class="pr-tool" title="Sound effects">
+          <button id="sound-toggle-btn" type="button" onclick="toggleSound()" class="pr-tool" title="Sound effects">
             <span class="pr-tool-ico">🔔</span><span class="pr-tool-lbl">Sound on</span>
           </button>
-          <button id="practice-report-btn" onclick="openReportModal()" class="pr-tool is-report" title="Report a problem with this question">
-            <span class="pr-tool-ico">🚩</span><span class="pr-tool-lbl">Report</span>
+          <button id="practice-report-btn" type="button" onclick="openReportModal()" class="pr-tool is-report" title="Report a problem with this question">
+            <span class="pr-tool-ico">🚩</span><span class="pr-tool-lbl">Report a problem</span>
           </button>
         </div>
 
@@ -2494,7 +2520,7 @@
              Next appears somewhere Check has never been, and a second tap on
              the spot you just pressed cannot skip past the explanation. -->
         <div class="pr-actions-inner">
-          <button id="practice-skip-btn" class="pr-skip" title="Show the answer without scoring">Skip</button>
+          <button id="practice-skip-btn" class="pr-skip" title="See the answer and learn how to solve it">I'm not sure</button>
           <button id="practice-submit-btn" class="pr-primary">✅ Check Answer</button>
           <span id="practice-verdict" class="pr-verdict hidden" role="status" aria-live="polite"></span>
           <button id="practice-next-btn" class="pr-next hidden">Next →</button>
@@ -2551,6 +2577,14 @@
         <span class="text-gray-500 dark:text-gray-400 shrink-0">→</span>
       </button>
       <div id="syllabus-list" class="space-y-4"></div>
+    </div>
+
+    <!-- ══════════ INTERACTIVE MAPS ══════════ -->
+    <div id="screen-interactive-map" class="screen hidden">
+      <button class="back-btn mb-4" data-target="dashboard">← Back to subject</button>
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-1">🗺️ Interactive Maps</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mb-5">Explore places at your own pace. Use the tabs and filters, then tap a marker to learn more.</p>
+      <div id="interactive-map-page"></div>
     </div>
 
     <!-- ══════════ PAST PAPERS ══════════
@@ -2623,6 +2657,14 @@
           class="admin-tab hidden flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🎁 Create</button>
         <button onclick="AdminPanel.showTab('questions')" data-tab="questions"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">❓ Questions<span id="admin-reports-badge" class="hidden ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold align-middle">0</span></button>
+        <button onclick="AdminPanel.showTab('maps')" data-tab="maps"
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🗺️ Maps</button>
+      </div>
+
+      <!-- Map editor is deliberately admin-only: it changes learning content
+           seen by all children, so it is never exposed in the teacher area. -->
+      <div id="admin-tab-maps" class="admin-tab-panel hidden">
+        <div id="admin-map-editor"></div>
       </div>
 
       <!-- Members tab -->
@@ -2630,19 +2672,33 @@
         <!-- Teacher approval queue. Sits above the member list so pending
              applications are seen rather than sitting unnoticed. -->
         <div id="admin-teacher-queue" class="mb-4"></div>
+        <!-- Unconfirmed accounts live in Supabase Auth rather than profiles, so
+             this separate server-backed queue makes them visible without ever
+             exposing Auth data to ordinary browser users. -->
+        <div id="admin-pending-registrations" class="hidden mb-4"></div>
         <div class="flex justify-between items-center mb-3">
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">All registered accounts</p>
           <button onclick="AdminPanel.loadMembers()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
-        <div class="mb-3">
-          <input id="admin-member-search" type="text" placeholder="Search parents by name…"
+        <div class="flex gap-2 mb-3">
+          <select id="admin-member-status-filter" onchange="AdminPanel.setMemberStatusFilter(this.value)"
+            aria-label="Member confirmation status"
+            class="w-44 shrink-0 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <option value="active">Activated only</option>
+            <option value="pending">Awaiting email confirmation</option>
+            <option value="all">All accounts</option>
+          </select>
+          <input id="admin-member-search" type="text" placeholder="Search by name or email…"
             oninput="AdminPanel.filterMembers(this.value)"
-            class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            class="min-w-0 flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        </div>
+        <div class="flex flex-wrap gap-x-4 gap-y-2 mb-3 px-1 text-xs font-semibold text-gray-600 dark:text-gray-300">
+          <label class="inline-flex items-center gap-1.5 cursor-pointer"><input id="admin-member-show-admins" type="checkbox" checked onchange="AdminPanel.setMemberVisibilityFilters()" class="accent-indigo-600"> 🛡️ Show administrators</label>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer"><input id="admin-member-show-expired" type="checkbox" checked onchange="AdminPanel.setMemberVisibilityFilters()" class="accent-indigo-600"> ⏰ Show expired accounts</label>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer"><input id="admin-member-show-disabled" type="checkbox" checked onchange="AdminPanel.setMemberVisibilityFilters()" class="accent-indigo-600"> 🚫 Show disabled accounts</label>
         </div>
         <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1 leading-relaxed">
-          This list shows <b>parents only</b>. Expand a row to change someone's role —
-          but once they are no longer a parent they leave this list, so use the
-          <b>👑 Roles</b> tab to change a teacher or admin back.
+          Activated accounts show <b>parents and administrators</b>; teachers remain in the separate <b>👩‍🏫 Teachers</b> tab. Awaiting confirmation shows new sign-ups that have not created a profile yet. Expand a row to manage its account type and family.
         </p>
         <p id="admin-members-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-members-list" class="space-y-2"></div>
@@ -3227,6 +3283,7 @@
           <button onclick="Auth.addStudent()" class="pd-action is-primary"><span class="ico">➕</span><span>Add child</span></button>
           <button onclick="Auth.switchToStudentSelect()" class="pd-action"><span class="ico">👦</span><span>Student view</span></button>
           <button onclick="showScreen('calendar')" class="pd-action"><span class="ico">📅</span><span>Calendar</span></button>
+          <button onclick="openCoparentSettings()" class="pd-action"><span class="ico">👨‍👩‍👧‍👦</span><span>Add parent</span></button>
           <button onclick="Auth.openInviteModal()" class="pd-action"><span class="ico">🎁</span><span>Invite</span></button>
           <!-- The balance is painted in by _renderShopChip() so a parent sees
                what they have without opening anything. -->
@@ -3946,6 +4003,11 @@
          localStorage under mm_cal_filters so it survives a reload. -->
     <div id="cal-filters" class="cal-filters mb-3"></div>
 
+    <!-- Filled from the same immutable activity history as the calendar dots.
+         This answers the parent's first question without making them hunt for
+         today's square or open a modal. -->
+    <div id="cal-today-activity" class="mb-4"></div>
+
     <!-- Month nav -->
     <div class="flex items-center justify-between mb-3">
       <button onclick="Calendar.prevMonth()" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 font-bold">‹</button>
@@ -4306,6 +4368,7 @@
   <script src="subjects/grade5-maths/help.js"></script>
   <!-- Question loader - fetches questions from server (production) or local files (file://) -->
   <script src="engine/question_loader.js"></script>
+  <script src="engine/interactive_map.js"></script>
   <!-- App + Auth (auth loads after app so DB/save are available) -->
   <script src="engine/app.js"></script>
   <script src="engine/biometric.js"></script>
