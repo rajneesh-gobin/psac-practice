@@ -12,22 +12,22 @@ const ROOT = path.resolve(__dirname, '..', '..');
 
 // ── Helper functions that mirror helpers.js ────
 // Run inside the vm context so question files can call them normally.
-function _buildContext(buf) {
+function _buildContext(buf, papers = []) {
   const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
   const rnd     = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
   const fmt     = n => n.toLocaleString('en-GB');
 
-  function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation }) {
+  function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
     const others   = shuffle((options || []).filter(o => o !== answer));
     const finalOpts = shuffle([answer, ...others.slice(0, 3)]);
-    return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts, answer, acceptableAnswers: [answer], hint, explanation };
+    return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts, answer, acceptableAnswers: [answer], hint, explanation, learnMore };
   }
 
-  function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation }) {
+  function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation, learnMore }) {
     return { id, chapterId, difficulty, subsection, type: 'numeric', question,
       answer: String(answer),
       acceptableAnswers: (acceptableAnswers || [String(answer)]).map(String),
-      hint, explanation };
+      hint, explanation, learnMore };
   }
 
   // Mirrors engine/helpers.js, including `subsection` — the one field this
@@ -70,7 +70,20 @@ function _buildContext(buf) {
     return this.length;
   };
 
+  // ⚠ `window` MUST exist here. 39 past_paper_*.js files end with
+  // `window.PSAC_PDF_QUESTIONS.push(...)`, and without it every one of them
+  // threw ReferenceError and was abandoned at that line. Today the throw lands
+  // on the file's LAST statement, so the practice questions pushed above it had
+  // already landed and nothing was visibly missing — which is exactly why this
+  // went unnoticed. One new push added below that block would vanish silently.
+  // build-questions.js has always supplied it (see _withPdfCapture); these two
+  // copies never did, so "fixed in all three copies" was only half true.
+  //
+  // The papers go into their OWN buffer and are deliberately NOT merged into
+  // STATIC_QUESTIONS: a past-paper item has no `answer`, and must never reach
+  // code that expects to grade one.
   return { rnd, shuffle, fmt, makeMCQ, makeNum, makeTF, makeMatch, makeSymmetry, STATIC_QUESTIONS,
+           window: { PSAC_PDF_QUESTIONS: papers },
            'use strict': undefined }; // suppress strict-mode header errors
 }
 
@@ -375,6 +388,22 @@ async function _resolveOwner(userId, isStudentId, sbUrl, sbSrk) {
   }
 }
 
+// ── WHICH GRADES ARE FREE ────────────────────────────────────────────────
+// Grades 1-2 are free for every family, permanently; grades 3-9 are the paid
+// tiers. Applied BELOW the account block and BELOW the admin kill switches
+// (those are moderation, not pricing) but ABOVE the plan list and the expiry
+// restriction — so a free grade is served on a lapsed account and on the Free
+// plan, exactly as the UI promises.
+//
+// ⚠ DUPLICATED from engine/helpers.js — Lambda vs browser, no shared module.
+// Change one and you must change the other, or the padlocks the UI draws and
+// the questions this function releases will disagree.
+const FREE_GRADES = [1, 2];
+function _isFreeSubjectId(subjectId) {
+  const m = /^grade(\d+)-/.exec(String(subjectId || ''));
+  return !!m && FREE_GRADES.includes(Number(m[1]));
+}
+
 // The plan's own chapter list. null = unlimited.
 async function _getAllowedChapters(parentId, sbUrl, sbSrk) {
   if (!sbSrk || !parentId) return null;
@@ -405,6 +434,22 @@ exports.handler = async (event) => {
     'Cache-Control':               'public, s-maxage=86400, stale-while-revalidate=3600',
   };
 
+  // ⚠ Auth failures must NEVER inherit the cacheable header above.
+  //
+  // Every response used to share that object, so a 401 was returned with
+  // `public, s-maxage=86400`. Netlify's CDN caches on URL alone — it does not
+  // vary on Authorization or X-Student-Token — so the FIRST unauthenticated
+  // request to a URL poisoned it for 24 hours, and every legitimate child
+  // asking for that same subject afterwards was served the cached 401. Proved
+  // in production: identical requests differing only in credentials all came
+  // back 401 with `Age: 2`, and adding a cache-busting query string
+  // immediately produced the correct, different answers.
+  //
+  // Errors are per-caller by definition, so they are no-store. The success
+  // path keeps its own Cache-Control, set further down (and already dropped to
+  // `private` whenever a plan or entitlement filter applies).
+  const errHeaders = Object.assign({}, headers, { 'Cache-Control': 'no-store' });
+
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
@@ -420,7 +465,7 @@ exports.handler = async (event) => {
   const studentToken = (event.headers['x-student-token'] || '').trim();
 
   if (!authHeader && !studentToken) {
-    return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
+    return { statusCode: 401, headers: errHeaders, body: JSON.stringify({ error: 'Unauthorized' }) };
   }
 
   const SB_URL  = process.env.SUPABASE_URL  || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
@@ -435,7 +480,7 @@ exports.handler = async (event) => {
       const r = await fetch(`${SB_URL}/auth/v1/user`, {
         headers: { Authorization: `Bearer ${authHeader}`, apikey: SB_ANON },
       });
-      if (!r.ok) return { statusCode: 401, headers, body: JSON.stringify({ error: 'Invalid token' }) };
+      if (!r.ok) return { statusCode: 401, headers: errHeaders, body: JSON.stringify({ error: 'Invalid token' }) };
       try { _uid = (await r.json()).id || null; } catch(_) { _uid = null; }
       _authCacheSet('jwt:' + authHeader, _uid);
     }
@@ -449,7 +494,7 @@ exports.handler = async (event) => {
       if (!r.ok) {
         // 503 (cannot check) is NOT cached: caching it would lock a child out
         // for the whole TTL over one transient failure.
-        return { statusCode: r.status, headers, body: JSON.stringify({ error: r.error }) };
+        return { statusCode: r.status, headers: errHeaders, body: JSON.stringify({ error: r.error }) };
       }
       _uid = r.studentId;
       _authCacheSet('tok:' + studentToken, _uid);
@@ -461,7 +506,7 @@ exports.handler = async (event) => {
   const studentId = studentToken ? _uid : null;
 
   if (_isRateLimited(_uid)) {
-    return { statusCode: 429, headers, body: JSON.stringify({ error: 'Too many requests. Please slow down and try again shortly.' }) };
+    return { statusCode: 429, headers: errHeaders, body: JSON.stringify({ error: 'Too many requests. Please slow down and try again shortly.' }) };
   }
 
   // ── Admin + plan enforcement ───────────────────────────────────────────────
@@ -518,9 +563,12 @@ exports.handler = async (event) => {
   const _blockedSet = new Set(_gs.disabled_chapters || []);
   const _blockedSubjects = new Set(_gs.disabled_subjects || []);
 
-  const _planFilter = (qs) => {
+  // subjectId is REQUIRED: it is the only thing that says which grade these
+  // questions belong to (a question object carries chapterId, not a grade), and
+  // grades 1-2 skip the plan/expiry list entirely.
+  const _planFilter = (qs, subjectId) => {
     let out = qs;
-    if (_allowedSet) out = out.filter(q => _allowedSet.has(q.chapterId));
+    if (_allowedSet && !_isFreeSubjectId(subjectId)) out = out.filter(q => _allowedSet.has(q.chapterId));
     if (_blockedSet.size) out = out.filter(q => !_blockedSet.has(q.chapterId));
     return out;
   };
@@ -565,7 +613,7 @@ exports.handler = async (event) => {
         const out = {};
         for (const [key, qs] of Object.entries(dbBundle)) {
           if (_blockedSubjects.has(key)) continue;
-          out[key] = _planFilter(qs);
+          out[key] = _planFilter(qs, key);
         }
         return { statusCode: 200, headers, body: JSON.stringify(out) };
       }
@@ -578,7 +626,7 @@ exports.handler = async (event) => {
         const out = {};
         for (const [key, qs] of Object.entries(cachedBundle)) {
           if (_blockedSubjects.has(key)) continue;
-          out[key] = _planFilter(qs);
+          out[key] = _planFilter(qs, key);
         }
         return { statusCode: 200, headers, body: JSON.stringify(out) };
       }
@@ -589,12 +637,12 @@ exports.handler = async (event) => {
       const result = {};
       for (const dir of allDirs) {
         if (_blockedSubjects.has(dir)) continue;
-        result[dir] = _planFilter(_loadSubject(dir));
+        result[dir] = _planFilter(_loadSubject(dir), dir);
       }
       return { statusCode: 200, headers, body: JSON.stringify(result) };
     } catch(e) {
       console.error('[questions batch]', e);
-      return { statusCode: 500, headers, body: JSON.stringify({ error: 'Server error' }) };
+      return { statusCode: 500, headers: errHeaders, body: JSON.stringify({ error: 'Server error' }) };
     }
   }
 
@@ -624,18 +672,18 @@ exports.handler = async (event) => {
     }
 
     if (subjectQs) {
-      let questions = _planFilter(subjectQs);
+      let questions = _planFilter(subjectQs, subjectId);
       if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);
       if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
       return { statusCode: 200, headers, body: JSON.stringify(questions) };
     }
     // Last fallback: build dynamically
-    let questions = _planFilter(_loadSubject(subjectId));
+    let questions = _planFilter(_loadSubject(subjectId), subjectId);
     if (chapterId)  questions = questions.filter(q => q.chapterId  === chapterId);
     if (difficulty) questions = questions.filter(q => q.difficulty === difficulty);
     return { statusCode: 200, headers, body: JSON.stringify(questions) };
   } catch(e) {
     console.error('[questions]', e);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Server error' }) };
+    return { statusCode: 500, headers: errHeaders, body: JSON.stringify({ error: 'Server error' }) };
   }
 };

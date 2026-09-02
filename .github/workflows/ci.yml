@@ -41,6 +41,16 @@ jobs:
         run: node scripts/check.js
 
       # A secret in the repo is worth failing the build over.
+      # The error boundary is the only thing standing between a top-level
+      # throw and a permanently blank page. Its decision logic is easy to
+      # break in a way nothing else would notice.
+      - name: Error-boundary behaviour
+        run: node scripts/test-error-boundary.js
+      # Renders the co-parent settings card against stubbed responses. The
+      # case that matters is F: a failed request must not render as "just you".
+      - name: Co-parent settings UI
+        run: node scripts/test-coparent-ui.js
+
       - name: Scan for committed credentials
         run: |
           fail=0

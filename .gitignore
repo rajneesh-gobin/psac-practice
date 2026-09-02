@@ -14,5 +14,10 @@ Thumbs.db
 *.swp
 *.swo
 
+# Installed dependencies. Needed on disk for a LOCAL netlify build (the
+# functions bundle @supabase/supabase-js), but never committed — and with
+# publish = "." they must not be served as static files either.
+node_modules/
+
 # Local Netlify folder
 .netlify

@@ -2,7 +2,7 @@
 // Grade 6 Science - Chapter: Energy (electricity generation, national grid)
 // IDs format: g6sci-en-NNN
 
-const _SVG_GRID = `<svg viewBox="0 0 300 70" width="300" height="70" style="display:block;margin:6px auto;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd">
+const _SVG_NATGRID = `<svg viewBox="0 0 300 70" width="300" height="70" style="display:block;margin:6px auto;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd">
   <rect x="5" y="20" width="55" height="32" rx="4" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.5"/>
   <text x="32" y="34" text-anchor="middle" font-size="7.5" fill="#1e40af" font-weight="bold">Power</text>
   <text x="32" y="44" text-anchor="middle" font-size="7.5" fill="#1e40af" font-weight="bold">Station</text>
@@ -57,7 +57,7 @@ STATIC_QUESTIONS.push(
     explanation:'A <b>generator</b> converts mechanical (kinetic) energy - from a spinning turbine - into <b>electrical energy</b>. It works using the principle of electromagnetic induction (a coil spinning in a magnetic field).' }),
 
   makeMCQ({ id:'g6sci-en-004', chapterId:'g6-energy', subsection:'photos', difficulty:2,
-    question:`${_SVG_GRID}Looking at the diagram of the national grid, what does a TRANSFORMER do?`,
+    question:`${_SVG_NATGRID}Looking at the diagram of the national grid, what does a TRANSFORMER do?`,
     options:[
       'It generates the electricity',
       'It stores electricity for later use',

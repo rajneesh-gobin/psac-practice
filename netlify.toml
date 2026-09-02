@@ -67,6 +67,200 @@
 [functions."assignment-cleanup"]
   schedule = "17 2 * * *"
 
+
+# ── Block source docs and SQL from the public site ────────────────────────
+# publish = "." serves the ENTIRE repo root, so every file here was reachable.
+# Verified live on 2026-08-30: /supabase-schema.sql returned 200 with the full
+# text of every RLS policy in the system, and /CLAUDE.md returned 200 with the
+# architecture notes — including where enforcement lives and what is known-weak.
+# Neither contains a credential, but together they are a map for an attacker.
+#
+# ⚠ Listed one by one because Netlify wildcards only match a TRAILING splat —
+# "/*.md" does not work, so a pattern rule would silently match nothing and
+# leave everything exposed. Add a line here whenever a doc or .sql is added at
+# the root; the check is:
+#   curl -o /dev/null -w '%{http_code}' https://<site>/CLAUDE.md   -> expect 404
+#
+# The longer-term fix is to publish a assembled directory containing only the
+# app, rather than the repo root.
+
+[[redirects]]
+  from   = "/ARCHITECTURE.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/CLAUDE.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/ENGINEERING-NOTES.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/CONTRIBUTING.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/DB_IMPORT_GUIDE.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/DB_IMPORT_PROMPT.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/HOW_TO_PUBLISH.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/HOW_TO_RUN_LOCALLY.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/PLAN.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/PROJECT_OVERVIEW.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-coparent.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+# ⚠ This one was MISSING while every other root doc had a rule. It is a full
+# schema + RLS + RPC reference whose own header says to delete it before going
+# public, and publish = "." was serving it.
+[[redirects]]
+  from   = "/DB_RESTORE_REFERENCE.txt"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-credits-shop.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-forum-adults.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-forum-author.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-grades-1-9.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-indexes.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-migration.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-plan-enforcement.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-question-reports.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-questions-admin-policies.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-questions-protected.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-questions-table.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-schema.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-storage-setup.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/package.json"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/package-lock.json"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/dev-server.js"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/.env"
+  to     = "/"
+  status = 404
+  force  = true
+
 # ── Block direct browser access to question source files ──────────────
 # The /subjects/*/questions/* path is served by the Netlify Function instead.
 # These redirects only apply to Netlify hosting, not local file:// access.

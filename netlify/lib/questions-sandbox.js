@@ -37,21 +37,21 @@ function findRoot() {
 }
 
 // ── Sandbox context: mirrors engine/helpers.js ────────────────────────────
-function buildContext(buf) {
+function buildContext(buf, papers = []) {
   const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
   const rnd     = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
   const fmt     = n => n.toLocaleString('en-GB');
 
-  function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation }) {
+  function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
     const others    = shuffle((options || []).filter(o => o !== answer));
     const finalOpts = shuffle([answer, ...others.slice(0, 3)]);
     return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts,
-             answer, acceptableAnswers: [answer], hint, explanation };
+             answer, acceptableAnswers: [answer], hint, explanation, learnMore };
   }
-  function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation }) {
+  function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation, learnMore }) {
     return { id, chapterId, difficulty, subsection, type: 'numeric', question,
              answer: String(answer),
-             acceptableAnswers: (acceptableAnswers || [String(answer)]).map(String), hint, explanation };
+             acceptableAnswers: (acceptableAnswers || [String(answer)]).map(String), hint, explanation, learnMore };
   }
   // French packs need French answer labels; the g4fr-/g5fr-/g6fr-/fr- id prefix is
   // the only language marker a question factory can see.
@@ -87,8 +87,21 @@ function buildContext(buf) {
     return this.length;
   };
 
+  // ⚠ `window` MUST exist here. 39 past_paper_*.js files end with
+  // `window.PSAC_PDF_QUESTIONS.push(...)`, and without it every one of them
+  // threw ReferenceError and was abandoned at that line. Today the throw lands
+  // on the file's LAST statement, so the practice questions pushed above it had
+  // already landed and nothing was visibly missing — which is exactly why this
+  // went unnoticed. One new push added below that block would vanish silently.
+  // build-questions.js has always supplied it (see _withPdfCapture); these two
+  // copies never did, so "fixed in all three copies" was only half true.
+  //
+  // The papers go into their OWN buffer and are deliberately NOT merged into
+  // STATIC_QUESTIONS: a past-paper item has no `answer`, and must never reach
+  // code that expects to grade one.
   return { rnd, shuffle, fmt, makeMCQ, makeNum, makeTF, makeMatch, makeSymmetry,
-           STATIC_QUESTIONS, 'use strict': undefined };
+           STATIC_QUESTIONS, window: { PSAC_PDF_QUESTIONS: papers },
+           'use strict': undefined };
 }
 
 // ── Load every question in a subject pack ─────────────────────────────────

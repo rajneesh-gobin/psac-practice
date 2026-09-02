@@ -11,18 +11,18 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 function _buildContext(buf) {
   const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
 
-  function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation }) {
+  function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
     const others    = shuffle((options || []).filter(o => o !== answer));
     const finalOpts = shuffle([answer, ...others.slice(0, 3)]);
     return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts, answer,
-             acceptableAnswers: [answer], hint, explanation };
+             acceptableAnswers: [answer], hint, explanation, learnMore };
   }
 
-  function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation }) {
+  function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation, learnMore }) {
     return { id, chapterId, difficulty, subsection, type: 'numeric', question,
              answer: String(answer),
              acceptableAnswers: (acceptableAnswers || [String(answer)]).map(String),
-             hint, explanation };
+             hint, explanation, learnMore };
   }
 
   function makeSymmetry({ id, chapterId, difficulty, subsection, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {

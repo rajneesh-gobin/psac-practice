@@ -419,6 +419,20 @@ body.is-parent-session #xp-display { display: none !important; }
 .mcq-opt.wrong { border-color: #ef4444; background: #fef2f2 !important; }
 .dark .mcq-opt.wrong { background: #450a0a !important; }
 .mcq-opt.disabled { cursor: not-allowed; pointer-events: none; }
+
+/* Correct/wrong must NOT be signalled by colour alone: red/green is the exact
+   pair a deuteranope cannot separate, and prefers-reduced-motion (below)
+   strips the pulse/shake, leaving hue as the only channel. The glyph is a
+   flex child pushed to the trailing edge, so it never reflows option text. */
+.mcq-opt.correct::after,
+.mcq-opt.wrong::after {
+  margin-left: auto; flex-shrink: 0;
+  font-weight: 800; font-size: 1.05rem; line-height: 1;
+}
+.mcq-opt.correct::after { content: '\2713'; color: #16a34a; }
+.mcq-opt.wrong::after   { content: '\2717'; color: #dc2626; }
+.dark .mcq-opt.correct::after { color: #4ade80; }
+.dark .mcq-opt.wrong::after   { color: #f87171; }
 .opt-letter {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.6rem; height: 1.6rem; border-radius: 50%;

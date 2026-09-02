@@ -68,6 +68,11 @@ function _playSound(type) {
 //     plan says and whether or not plan enforcement is switched on. That is the
 //     point of the 30-day window: it outlives the account it was bought on.
 function _planAllowsChapter(chapterId) {
+  // Grades 1-2 are free for everyone, permanently — above plan, expiry and
+  // credits alike. Checked FIRST so a lapsed account still opens them, which
+  // is what the server does too (see questions.js). Kill switches are not
+  // bypassed here: those are handled by _adminBlocksChapter().
+  if (typeof isFreeChapter === 'function' && isFreeChapter(chapterId)) return true;
   const bought = (typeof Shop !== 'undefined') && Shop.isUnlocked(chapterId);
   if (typeof Auth !== 'undefined' && Auth.isAccessExpired && Auth.isAccessExpired()) return bought;
   if (bought) return true;
@@ -2909,10 +2914,17 @@ function _renderLevelChip() {
 window._renderLevelChip = _renderLevelChip;
 
 // ── Parent PIN row (Account & Settings → Security) ──
-// ⚠ The PIN is stored on THIS DEVICE (localStorage), not on the account. It
-// guards the switch from a child's session back to the parent dashboard on the
-// phone or tablet the family shares — so the copy says so, rather than letting
-// a parent assume it followed them to their laptop.
+// ⚠ The PIN is stored in localStorage, which is scoped to the ORIGIN and the
+// browser profile — NOT to the device. The copy says "in this browser" for
+// that reason, and the distinction is not pedantic: a parent who set a PIN on
+// a dev/preview deploy URL and then opens production gets asked to create one
+// again, and so does anyone switching browser or opening a private window.
+// Safari also deletes script-writable storage after 7 days without a visit.
+// "On this device" told them none of that could have happened.
+//
+// It guards the switch from a child's session back to the parent dashboard on
+// a shared phone or tablet. Deliberately NOT an account setting — see the PIN
+// notes in CLAUDE.md before moving it.
 function _renderParentPinRow() {
   const state = document.getElementById('prof-pin-state');
   const setBtn = document.getElementById('prof-pin-set');
@@ -2921,8 +2933,8 @@ function _renderParentPinRow() {
   const has = typeof Auth !== 'undefined' && Auth.hasParentPin && Auth.hasParentPin();
 
   state.textContent = has
-    ? 'Set on this device. You type it to switch back from your child’s view.'
-    : 'Not set on this device. Without one, switching back needs your email and password.';
+    ? 'Set in this browser. You type it to switch back from your child’s view.'
+    : 'Not set in this browser. Without one, switching back needs your email and password.';
   setBtn.textContent = has ? 'Change' : 'Set a PIN';
   clrBtn.classList.toggle('hidden', !has);
 }
@@ -2935,12 +2947,12 @@ window._setParentPinFromSettings = function () {
 
 window._clearParentPinFromSettings = function () {
   _confirmModal(
-    'Remove the parent PIN from this device?\n\n'
+    'Remove the parent PIN from this browser?\n\n'
     + 'Switching back from your child’s view will then need your email and password.',
     () => {
       Auth.clearParentPin();
       _renderParentPinRow();
-      toast('Parent PIN removed from this device.', 3000);
+      toast('Parent PIN removed from this browser.', 3000);
     },
     { icon: '🔢', okLabel: 'Remove it', danger: true }
   );
@@ -3619,6 +3631,14 @@ async function renderShop() {
     showScreen(ACTIVE_STUDENT_ID ? 'dashboard' : 'landing');
     return;
   }
+  // Always opens tidy. Which subjects are expanded is a browsing state, not
+  // a preference — returning to the shop and finding six subjects still open
+  // would undo the point of grouping them. Same rule as _examReviewWrongOnly
+  // and _repShowAllMistakes: module-level view state resets where the screen
+  // is built, never in the toggle.
+  _shopOpen.clear();
+  const _srch = document.getElementById('shop-search');
+  if (_srch) _srch.value = '';
   const body = document.getElementById('shop-body');
   if (body) body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">Loading…</p>';
   if (typeof Shop !== 'undefined') await Shop.refresh();
@@ -3686,10 +3706,40 @@ function renderShopList() {
 }
 window.renderShopList = renderShopList;
 
+// ── Shop list rendering ───────────────────────────────────────────────────
+// Reorganised: the old version rendered ONE flat list of every sellable
+// chapter — 148 rows of "name / subject / price" with nothing but a search box
+// between the parent and the thing they wanted. Now everything is grouped by
+// GRADE, and within a grade each SUBJECT is a collapsed row that opens to show
+// its chapters. 45 tidy rows instead of 148 loose ones, and the grade a parent
+// cares about is one tap away.
+//
+// Searching deliberately FLATTENS the grouping: someone typing "fractions"
+// wants the matches, not a tree to dig through. The groups come back when the
+// box is cleared.
+let _shopOpen = new Set();   // subjectIds whose chapter list is expanded
+
+window.shopToggleSubject = function (subjectId) {
+  if (_shopOpen.has(subjectId)) _shopOpen.delete(subjectId);
+  else _shopOpen.add(subjectId);
+  renderShopList();
+};
+
+function _shopGradeLabel(g) { return Number.isFinite(g) ? `Grade ${g}` : 'Other'; }
+
+// One grade heading. Free grades never reach here (they are not sellable), so
+// this is only ever a paid grade.
+function _shopGradeHeader(grade, sub) {
+  return `<div class="flex items-baseline gap-2 mt-4 first:mt-0 mb-1.5 pb-1 border-b border-gray-200 dark:border-gray-700">
+    <span class="text-sm font-black text-gray-800 dark:text-white">${_profEsc(_shopGradeLabel(grade))}</span>
+    <span class="text-[11px] text-gray-400 dark:text-gray-500">${_profEsc(sub)}</span>
+  </div>`;
+}
+
 function _renderShopSubjects(body, bal, days, q) {
   const all = Shop.sellableSubjects();
   if (!all.length) {
-    body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">Subjects are still loading — come back in a moment.</p>';
+    body.innerHTML = _shopEmpty('Subjects are still loading — come back in a moment.');
     return;
   }
   const list = q ? all.filter(s => s.name.toLowerCase().includes(q)) : all;
@@ -3697,13 +3747,14 @@ function _renderShopSubjects(body, bal, days, q) {
     body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No subject matches that search.</p>';
     return;
   }
-  body.innerHTML = list.map(sub => {
+
+  const rowFor = (sub) => {
     const afford = bal >= sub.price;
     const full   = sub.chapters > 0 && sub.unlocked === sub.chapters;
-    return `<div class="flex items-center gap-3 py-3 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
+    return `<div class="flex items-center gap-3 py-2.5 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
       <span class="text-2xl select-none shrink-0">${sub.icon}</span>
       <div class="flex-1 min-w-0">
-        <div class="text-sm font-bold text-gray-800 dark:text-white truncate">${_profEsc(sub.name)}</div>
+        <div class="text-sm font-bold text-gray-800 dark:text-white truncate">${_profEsc(sub.shortName || sub.name)}</div>
         <div class="text-[11px] text-gray-500 dark:text-gray-400">
           ${sub.chapters} chapter${sub.chapters === 1 ? '' : 's'}${sub.unlocked
             ? ` · <span class="text-green-600 dark:text-green-400 font-semibold">${sub.unlocked} already unlocked</span>` : ''}
@@ -3716,31 +3767,57 @@ function _renderShopSubjects(body, bal, days, q) {
           : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'}">
         ${full ? '+' + days + 'd' : 'Unlock'}</button>
     </div>`;
-  }).join('');
+  };
+
+  if (q) { body.innerHTML = list.map(rowFor).join(''); return; }
+
+  let html = '';
+  for (const grade of _shopGrades(list)) {
+    const rows = list.filter(s => s.grade === grade);
+    const chapters = rows.reduce((n, s) => n + s.chapters, 0);
+    html += _shopGradeHeader(grade, `${rows.length} subject${rows.length === 1 ? '' : 's'} · ${chapters} chapters`);
+    html += rows.map(rowFor).join('');
+  }
+  body.innerHTML = html + _shopFreeFootnote();
+}
+
+function _shopGrades(rows) {
+  return [...new Set(rows.map(r => r.grade))].sort((a, b) => a - b);
+}
+
+function _shopEmpty(msg) {
+  return `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">${_profEsc(msg)}</p>`;
+}
+
+// Stated once at the bottom of each tab rather than as a row per grade: a
+// parent scanning prices should not have to wonder why grades 1 and 2 are
+// missing from a shop.
+function _shopFreeFootnote() {
+  if (typeof FREE_GRADES === 'undefined' || !FREE_GRADES.length) return '';
+  const names = FREE_GRADES.map(g => 'Grade ' + g);
+  const label = names.length === 2 ? names.join(' and ') : names.join(', ');
+  return `<p class="text-[11px] text-green-700 dark:text-green-400 mt-4 pt-3 border-t border-gray-100 dark:border-gray-700/60 text-center leading-snug">
+    ✅ <b>${_profEsc(label)}</b> are free for everyone — they are not sold here and never expire.
+  </p>`;
 }
 
 function _renderShopChapters(body, bal, days, q) {
   const all = Shop.sellableChapters();
   if (!all.length) {
-    body.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-8">Chapters are still loading — come back in a moment.</p>';
+    body.innerHTML = _shopEmpty('Chapters are still loading — come back in a moment.');
     return;
   }
-  const list = q ? all.filter(c => (c.name + ' ' + c.subjectName).toLowerCase().includes(q)) : all;
 
-  // What a family already holds goes first, with its remaining days: "what have
-  // I got and when does it run out" is what a returning parent opens this for.
-  const ownedRows = list.filter(c => Shop.isUnlocked(c.id));
-  const buyRows   = list.filter(c => !Shop.isUnlocked(c.id));
-
-  const row = (c, isOwned) => {
-    const price  = Shop.priceFor(c.id);
-    const left   = Shop.daysLeft(c.id);
-    const afford = bal >= price;
-    return `<div class="flex items-center gap-3 py-2.5 border-b border-gray-100 dark:border-gray-700/60 last:border-0">
-      <span class="text-xl select-none shrink-0">${c.icon}</span>
+  const chapterRow = (c) => {
+    const isOwned = Shop.isUnlocked(c.id);
+    const price   = Shop.priceFor(c.id);
+    const left    = Shop.daysLeft(c.id);
+    const afford  = bal >= price;
+    return `<div class="flex items-center gap-3 py-2 pl-2 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
+      <span class="text-lg select-none shrink-0">${c.icon}</span>
       <div class="flex-1 min-w-0">
         <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_profEsc(c.name)}</div>
-        <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${_profEsc(c.subjectName)}</div>
+        ${q ? `<div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${_profEsc(c.subjectName)}</div>` : ''}
       </div>
       ${isOwned ? _shopBadge(left + ' day' + (left === 1 ? '' : 's') + ' left', 'owned')
                 : _shopBadge(price + ' 🪙', afford ? 'price' : 'poor')}
@@ -3752,17 +3829,68 @@ function _renderShopChapters(body, bal, days, q) {
     </div>`;
   };
 
-  const section = (title, rows, isOwned) => rows.length
-    ? `<div class="mb-4 last:mb-0">
-         <h4 class="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1">${title}</h4>
-         ${rows.map(c => row(c, isOwned)).join('')}
-       </div>`
-    : '';
+  // Search flattens: matches, not a tree.
+  if (q) {
+    const hits = all.filter(c => (c.name + ' ' + c.subjectName).toLowerCase().includes(q));
+    body.innerHTML = hits.length
+      ? hits.map(chapterRow).join('')
+      : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No chapter matches that search.</p>';
+    return;
+  }
 
-  body.innerHTML =
-    section(`Active now (${ownedRows.length})`, ownedRows, true) +
-    section('Available', buyRows, false) +
-    (list.length ? '' : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No chapter matches that search.</p>');
+  // What the family already holds, pinned to the top with its remaining days:
+  // "what have I got and when does it run out" is what a returning parent
+  // opens this tab for, and it must not be buried inside a collapsed subject.
+  const owned = all.filter(c => Shop.isUnlocked(c.id));
+  let html = '';
+  if (owned.length) {
+    html += `<div class="mb-3">
+      <h4 class="text-xs font-bold uppercase tracking-wide text-green-700 dark:text-green-400 mb-1">Active now (${owned.length})</h4>
+      ${owned.map(c => `<div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700/50 last:border-0">
+        <span class="text-lg select-none shrink-0">${c.icon}</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_profEsc(c.name)}</div>
+          <div class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${_profEsc(c.subjectName)}</div>
+        </div>
+        ${_shopBadge(Shop.daysLeft(c.id) + ' day' + (Shop.daysLeft(c.id) === 1 ? '' : 's') + ' left', 'owned')}
+        <button onclick="shopBuy('${_attr(c.id)}', this)"
+          class="shrink-0 text-xs font-bold px-3 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white transition-colors">+${days}d</button>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  // Grade → subject (collapsed) → chapters.
+  const bySubject = new Map();
+  for (const c of all) {
+    if (!bySubject.has(c.subjectId)) {
+      bySubject.set(c.subjectId, { id: c.subjectId, name: c.subjectName, grade: c.grade, icon: c.subjectIcon || '📚', rows: [] });
+    }
+    bySubject.get(c.subjectId).rows.push(c);
+  }
+  const subjects = [...bySubject.values()];
+
+  for (const grade of _shopGrades(subjects)) {
+    const inGrade = subjects.filter(s => s.grade === grade);
+    const chCount = inGrade.reduce((n, s) => n + s.rows.length, 0);
+    html += _shopGradeHeader(grade, `${chCount} chapters`);
+    for (const s of inGrade) {
+      const open   = _shopOpen.has(s.id);
+      const mine   = s.rows.filter(c => Shop.isUnlocked(c.id)).length;
+      html += `<button type="button" onclick="shopToggleSubject('${_attr(s.id)}')"
+          class="w-full flex items-center gap-3 py-2.5 text-left border-b border-gray-100 dark:border-gray-700/60 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors rounded-lg px-1"
+          aria-expanded="${open ? 'true' : 'false'}">
+        <span class="text-xl select-none shrink-0">${s.icon}</span>
+        <span class="flex-1 min-w-0">
+          <span class="block text-sm font-bold text-gray-800 dark:text-white truncate">${_profEsc(s.shortName || s.name)}</span>
+          <span class="block text-[11px] text-gray-500 dark:text-gray-400">${s.rows.length} chapter${s.rows.length === 1 ? '' : 's'}${
+            mine ? ` · <span class="text-green-600 dark:text-green-400 font-semibold">${mine} unlocked</span>` : ''}</span>
+        </span>
+        <span class="text-gray-400 dark:text-gray-500 text-xs shrink-0 transition-transform ${open ? 'rotate-90' : ''}">▶</span>
+      </button>`;
+      if (open) html += `<div class="pl-3 border-l-2 border-indigo-100 dark:border-indigo-900/40 ml-2 mb-2">${s.rows.map(chapterRow).join('')}</div>`;
+    }
+  }
+  body.innerHTML = html + _shopFreeFootnote();
 }
 
 // One reporter for both purchase kinds — the server returns the same shapes.
@@ -5075,6 +5203,36 @@ async function _removeFriend(friendId, btn) {
 // ── FRIEND INVITE MODAL ───────────────────────
 let _friendCode = null;
 
+// ── Lazy CDN scripts ──────────────────────────
+// The two QR libraries are ~370 KB of blocking JS that used to load on every
+// cold start, on phones this app already had display problems on, for a
+// feature reached from one button in one modal. They are fetched on demand
+// instead. Both call sites already guarded `typeof X === "undefined"`, so a
+// blocked/offline/slow CDN degrades to exactly the same fallback as before.
+//
+// Never rejects: callers branch on the global, not on a thrown error. A
+// failed load is evicted from the cache so an explicit retry can re-attempt.
+// The cache hangs off the function object rather than a module-level const,
+// so there is no temporal dead zone to fall into if this ever gets called
+// from something that runs earlier than it looks.
+const _CDN_QRCODE      = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+const _CDN_QR_SCANNER  = 'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js';
+
+function _loadScriptOnce(src) {
+  _loadScriptOnce._cache = _loadScriptOnce._cache || new Map();
+  const cache = _loadScriptOnce._cache;
+  if (cache.has(src)) return cache.get(src);
+  const p = new Promise(resolve => {
+    const el = document.createElement('script');
+    el.src = src;
+    el.async = true;
+    el.onload  = () => resolve(true);
+    el.onerror = () => { cache.delete(src); resolve(false); };
+    document.head.appendChild(el);
+  });
+  cache.set(src, p);
+  return p;
+}
 async function openFriendInviteModal() {
   const modal = document.getElementById('modal-friend-invite');
   if (!modal) return;
@@ -5109,6 +5267,8 @@ async function openFriendInviteModal() {
   if (qrLabel) qrLabel.classList.remove('hidden');
   if (canvas)  canvas.classList.remove('hidden');
   if (qrFail)  qrFail.classList.add('hidden');
+
+  if (canvas) await _loadScriptOnce(_CDN_QRCODE);
 
   if (canvas && typeof QRCode !== 'undefined') {
     const link = `${location.origin}${location.pathname}?friend=${_friendCode}`;
@@ -5177,6 +5337,7 @@ async function openQRScanner() {
   closeFriendInviteModal();
   overlay.classList.remove('hidden');
 
+  await _loadScriptOnce(_CDN_QR_SCANNER);
   if (typeof Html5Qrcode === 'undefined') { toast('Scanner not available.', 2000); return; }
 
   try {
@@ -8045,16 +8206,32 @@ function startWeakAreaDrill() {
   if (!_planAllowsFeature('weak_area_drill')) { _showFeatureModal('weak_area_drill'); return; }
   if (_capReached('exams')) { _showCapModal('exams'); return; }
 
-  // Find chapters with accuracy < 60% (or never attempted → treat as 0%)
-  const weakChapters = CHAPTERS
-    .map(ch => ({ id: ch.id, pct: getChapterPct(ch.id) }))
-    .filter(ch => ch.pct < 60)
+  // A chapter is weak only once there is enough evidence to call it weak.
+  // getChapterPct() returns 0 for a chapter with NO attempts, so the old
+  // `pct < 60` filter swept up every chapter the child had never opened and
+  // announced them as weaknesses - a child three chapters into a fresh pack
+  // got "Targeting: <three chapters they have never seen>", and it spent one
+  // of their capped exams doing it. Same rule the parent-facing "Needs
+  // Attention" card already applies (_renderWeakChapters): no attempts means
+  // NOT STARTED, never 0%.
+  const _WEAK_MIN_ATTEMPTS = 4;
+  const answered = CHAPTERS
+    .map(ch => ({ id: ch.id, att: (DB.chapters && DB.chapters[ch.id] && DB.chapters[ch.id].attempted) || 0 }))
+    .filter(c => c.att >= _WEAK_MIN_ATTEMPTS);
+
+  const weakChapters = answered
+    .map(c => ({ id: c.id, pct: getChapterPct(c.id) }))
+    .filter(c => c.pct < 60)
     .sort((a, b) => a.pct - b.pct)
     .slice(0, 3); // target 3 weakest
 
   if (!weakChapters.length) {
-    // All strong - just do a random drill
-    toast('Great job! No weak areas found. Starting random drill.', 2500);
+    // Two different situations, and telling a beginner "no weak areas found"
+    // is both untrue and hides why the drill targeted nothing.
+    toast(answered.length
+      ? 'Great job — no weak areas right now. Starting a mixed drill.'
+      : 'Practise a few chapters first, then this drill can target your weak spots. Starting a mixed drill.',
+      3000);
     startExam('drill');
     return;
   }
@@ -8125,7 +8302,7 @@ const _GRADE_STAGES = [
   { id: 'primary',   from: 1, to: _PSAC_MAX_GRADE, name: 'Primary',         exam: 'PSAC',
     note: 'Grades 1-6 · ends with the PSAC' },
   { id: 'secondary', from: _PSAC_MAX_GRADE + 1, to: 99, name: 'Lower secondary', exam: 'NCE',
-    note: 'Grades 7-9 · ends with the NCE, not the PSAC' },
+    note: 'Grades 7-9 · ends with the NCE' },
 ];
 function _gradeStage(grade) {
   return _GRADE_STAGES.find(s => grade >= s.from && grade <= s.to) || _GRADE_STAGES[0];
@@ -8187,10 +8364,14 @@ function _gradeCard(grade, packs) {
       ? `toast('Grade ${grade} is coming soon! 🚀', 2000)`
       : `selectGrade(${grade})`;
 
-    return `
+          const free = (typeof isFreeGrade === 'function') && isFreeGrade(grade);
+      return `
       <button type="button" class="track-card ${soon ? 'opacity-70 cursor-default' : 'cursor-pointer group'} relative text-left"
         onclick="${click}" ${soon ? 'disabled' : ''}>
-        ${soon ? '<div class="absolute top-3 right-3 text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Coming Soon</div>' : ''}
+        <div class="absolute top-3 right-3 flex flex-col items-end gap-1">
+          ${soon ? '<span class="text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Coming Soon</span>' : ''}
+          ${free ? '<span class="text-xs bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 px-2 py-0.5 rounded-full font-bold">Always free</span>' : ''}
+        </div>
         <div class="text-4xl mb-3 select-none">${soon ? '🔜' : '🎓'}</div>
         <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-1 ${soon ? '' : 'group-hover:text-blue-600 dark:group-hover:text-blue-400'} transition-colors">
           Grade ${grade}
@@ -8957,6 +9138,16 @@ async function _renderParentProfile(container) {
       <p class="text-xs text-gray-500 dark:text-gray-400">Private family code: <span class="font-mono font-bold select-all">${_profEsc(family.family_code || '—')}</span></p>
     </div>` : '';
 
+  // ── Parents on this account ──
+  // Filled in by _renderCoparents() after the markup exists: it needs a round
+  // trip, and blocking the whole settings screen on it would make every other
+  // setting wait for a list most families will never have more than one row in.
+  const coparentHtml = (isParent && family) ? `
+    <div id="coparent-card" class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow space-y-3">
+      <h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Parents on this account</h3>
+      <p class="text-xs text-gray-500 dark:text-gray-400">Loading…</p>
+    </div>` : '';
+
   // ── Appearance ──
   const themePref = getThemePreference();
   const themeBtn = (val, icon, label) => `
@@ -9149,10 +9340,11 @@ async function _renderParentProfile(container) {
              prompt meant never being able to set one, and setting one meant never
              being able to change it. This is that control.
 
-             It is device-local (localStorage), not an account setting: it guards
-             the switch from a child's session back to the parent dashboard ON
-             THIS DEVICE, which is why the row says so rather than letting a
-             parent assume it followed them to their laptop. -->
+             It lives in localStorage, which is scoped to the ORIGIN and the
+             browser profile — not to the device — so the row says "in this
+             browser". A parent who set a PIN on a preview deploy URL and then
+             opens production is asked to create one again, and so is anyone
+             who switches browser or opens a private window. -->
         <div class="pt-3 mt-1 border-t border-gray-100 dark:border-gray-700">
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
@@ -9171,6 +9363,7 @@ async function _renderParentProfile(container) {
       </div>
 
       ${familyHtml}
+      ${coparentHtml}
       ${appearanceHtml}
       ${notifyHtml}
       ${defaultsHtml}
@@ -9178,10 +9371,175 @@ async function _renderParentProfile(container) {
       ${dangerHtml}
     </div>`;
 
-  // After the markup exists: this row reports DEVICE-LOCAL state (whether a
-  // PIN is stored in this browser), so it cannot be baked into the template
-  // string above with the rest of the account settings.
+  // After the markup exists: this row reports BROWSER-LOCAL state (whether a
+  // PIN is stored in this browser's localStorage), so it cannot be baked into
+  // the template string above with the rest of the account settings.
   _renderParentPinRow();
+  _renderCoparents();
+}
+
+// ── Parents on this account ────────────────────────────────────────────────
+// A family has one owner (families.parent_id) and up to two co-parents. A
+// co-parent signs in with THEIR OWN email and password and gets the same
+// dashboard, the same children and the same reports - the alternative people
+// actually resort to is sharing one password, which also hands over the forum
+// identity, the credits balance and the ability to delete the account.
+//
+// The one asymmetry: only the owner manages membership. Otherwise a co-parent
+// could remove the owner from the family that is keyed on their own user id.
+async function _renderCoparents() {
+  const card = document.getElementById('coparent-card');
+  if (!card) return;
+
+  const info = await Store.listFamilyMembers();
+
+  // null is a transport failure, not an empty family. Rendering "just you" on
+  // a dropped request would invite a second invite for a co-parent who is
+  // already there, and the cap would then refuse it with no explanation.
+  if (!info || !info.ok) {
+    card.innerHTML = _coparentShell(`
+      <p class="text-xs text-gray-500 dark:text-gray-400">Could not load this list.</p>
+      <button onclick="_renderCoparents()" class="text-xs font-semibold text-indigo-500 hover:text-indigo-400">Try again</button>`);
+    return;
+  }
+
+  const members = Array.isArray(info.members) ? info.members : [];
+  const isOwner = !!info.is_owner;
+  const cap     = info.cap || 3;
+  const full    = members.length >= cap;
+
+  const rows = members.map(m => {
+    const owner = m.role === 'owner';
+    const badge = owner
+      ? '<span class="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">Owner</span>'
+      : '<span class="text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">Parent</span>';
+    // The owner can remove any co-parent; anyone can remove themselves (leave).
+    const canRemove = !owner && (isOwner || m.is_me);
+    const label = m.is_me ? 'Leave this account' : 'Remove';
+    return `
+      <div class="flex items-center justify-between gap-3 py-2">
+        <div class="min-w-0">
+          <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">
+            ${_attr(m.name || 'Parent')}${m.is_me ? ' <span class="font-normal text-gray-400">(you)</span>' : ''}
+          </div>
+          <div class="mt-0.5">${badge}</div>
+        </div>
+        ${canRemove ? `<button onclick="_removeCoparent('${_attr(m.user_id)}', this)"
+          class="shrink-0 text-xs font-semibold text-red-500 hover:text-red-400 px-2 py-1">${label}</button>` : ''}
+      </div>`;
+  }).join('');
+
+  let actions = '';
+  if (!isOwner) {
+    actions = '<p class="text-xs text-gray-500 dark:text-gray-400">Only the account owner can invite or remove parents.</p>';
+  } else if (info.pending) {
+    const exp = new Date(info.pending.expires_at);
+    const when = isNaN(exp) ? '' : ` It stops working on ${exp.toLocaleDateString()}.`;
+    actions = `
+      <div class="bg-amber-50 dark:bg-amber-900/20 rounded-xl p-3 space-y-2">
+        <p class="text-xs text-amber-800 dark:text-amber-300">An invite link is waiting to be used.${when}</p>
+        <div class="flex gap-2">
+          <button onclick="_shareCoparentLink(this)" class="flex-1 px-3 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-xs transition-colors">Send a new link</button>
+          <button onclick="_revokeCoparent(this)" class="px-3 py-2 border border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 font-semibold rounded-xl text-xs">Cancel it</button>
+        </div>
+      </div>`;
+  } else if (full) {
+    actions = `<p class="text-xs text-gray-500 dark:text-gray-400">This account is full (${cap} parents).</p>`;
+  } else {
+    actions = `
+      <button onclick="_shareCoparentLink(this)" data-label="➕ Invite another parent"
+        class="w-full px-4 py-2.5 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">
+        ➕ Invite another parent
+      </button>
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        They sign in with their own email and password and see exactly what you see.
+        The link works once and expires in 48 hours.
+      </p>`;
+  }
+
+  card.innerHTML = _coparentShell(`
+    <div class="divide-y divide-gray-100 dark:divide-gray-700">${rows}</div>
+    ${actions}`);
+}
+
+function _coparentShell(inner) {
+  return `<h3 class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">Parents on this account</h3>
+    <div class="space-y-3">${inner}</div>`;
+}
+
+// The link carries a one-shot token, never a password, so it is safe to send
+// over WhatsApp - which is how it will actually be sent here. Copy is the
+// fallback wherever navigator.share is missing.
+async function _shareCoparentLink(btn) {
+  const old = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Creating…'; }
+
+  const res = await Store.createCoparentInvite(48);
+  if (btn) { btn.disabled = false; btn.textContent = old; }
+
+  if (!res || !res.ok) {
+    toast({
+      not_owner:   'Only the account owner can invite another parent.',
+      cap_reached: 'This account already has the maximum number of parents.',
+      offline:     'Could not create the link. Check your connection.',
+    }[res && res.error] || 'Could not create the invite link.', 4000);
+    return;
+  }
+
+  const link = `${location.origin}${location.pathname}?coparent=${res.token}`;
+  const fam  = (typeof Auth !== 'undefined' && Auth.getFamily) ? Auth.getFamily() : null;
+  const msg  = `Join me on PSAC Practice so we can both follow the children's revision.\n\n`
+             + `Open this link, then sign in or create your own account:\n${link}\n\n`
+             + `It works once and expires in 48 hours.`;
+
+  if (navigator.share) {
+    try { await navigator.share({ title: `${fam?.family_name || 'Our family'} on PSAC Practice`, text: msg }); _renderCoparents(); return; }
+    catch (e) { if (e.name === 'AbortError') { _renderCoparents(); return; } }
+  }
+  try { await navigator.clipboard.writeText(link); toast('Invite link copied — send it to them. 📋', 3500); }
+  catch (_) { prompt('Copy this invite link and send it to them:', link); }
+  _renderCoparents();
+}
+
+async function _revokeCoparent(btn) {
+  if (btn) { btn.disabled = true; }
+  const res = await Store.revokeCoparentInvite();
+  if (btn) { btn.disabled = false; }
+  toast(res && res.ok ? 'Invite link cancelled.' : 'Could not cancel that link.', 3000);
+  _renderCoparents();
+}
+
+// _confirmModal is callback-based, not a promise.
+function _removeCoparent(userId, btn) {
+  const leaving = !!btn && /Leave/i.test(btn.textContent);
+  _confirmModal(
+    leaving
+      ? 'Leave this account? You will lose access to these children and their reports. The account owner can invite you back.'
+      : 'Remove this parent? They will immediately lose access to the children and reports on this account.',
+    () => _doRemoveCoparent(userId, leaving),
+    { icon: leaving ? '👋' : '⚠️', okLabel: leaving ? 'Leave' : 'Remove', danger: true }
+  );
+}
+
+async function _doRemoveCoparent(userId, leaving) {
+  const res = await Store.removeFamilyMember(userId);
+  if (!res || !res.ok) {
+    toast({
+      cannot_remove_owner: 'The account owner cannot be removed.',
+      not_authorised:      'Only the account owner can remove another parent.',
+      offline:             'Could not save that. Check your connection.',
+    }[res && res.error] || 'Could not remove that parent.', 4000);
+    return;
+  }
+
+  // Leaving revokes this session's own access, so there is nothing left to
+  // render - send them back out rather than to a dashboard that is now empty.
+  if (res.left) {
+    toast('You have left the account.', 3000);
+    if (typeof Auth !== 'undefined' && Auth.logout) { await Auth.logout(); return; }
+  }
+  toast('Parent removed.', 2500);
+  _renderCoparents();
 }
 
 // ── Parent settings handlers ───────────────────────────────────────────────

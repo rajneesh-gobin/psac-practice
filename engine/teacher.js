@@ -227,12 +227,12 @@ const TeacherMode = (() => {
               <span class="text-sm font-semibold text-gray-800 dark:text-white">${a.label}</span>
               ${modeBadge}
             </div>
-            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${chNames} · ${diffLabel} · ${a.count}Q${a.random ? ' · 🎲' : ''}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${chNames} · ${diffLabel} · ${a.count}Q${a.random ? ' · 🎲' : ''}${a.code ? ` · code <b>${a.code}</b>` : ''}</div>
           </div>
           <div class="flex gap-1 shrink-0">
-            <button onclick="TeacherMode.copyLink('${a.id}')"
+            <button onclick="TeacherMode.shareAssignment('${a.id}')"
               class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/60 px-2.5 py-1.5 rounded-lg transition-colors font-medium">
-              📋 Copy
+              📤 Share
             </button>
             <button onclick="TeacherMode.deleteAssignment('${a.id}')"
               class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/60 px-2 py-1.5 rounded-lg transition-colors">
@@ -397,39 +397,181 @@ const TeacherMode = (() => {
       return;
     }
 
+    // ⚠ The link has to point at something the app can actually open.
+    // /a/<CODE> is rewritten to guest.html by netlify.toml and is backed by
+    // guest_assignment_create() — a real row, a real code, a real PIN, with
+    // results coming back to the Results tab.
+    //
+    // The previous link was `?assign=<base64 of the config>`, and NOTHING in
+    // this repo has ever read an `assign` parameter — no commit in the history
+    // adds a handler, and the only URL params the app parses are join, ref and
+    // friend. Every link this button produced was inert: a student opening one
+    // just landed on the normal home screen. That is why sharing it "later
+    // from the list" felt broken too.
+    const chosen      = (random ? _shuffled(pool) : pool.slice()).slice(0, count);
+    const questionIds = chosen.map(q => q.id).filter(Boolean);
+    if (!questionIds.length) { toast('No questions matched these settings.', 3000); return; }
+
+    // The guest page asks the child for this PIN, so it cannot be blank. A
+    // teacher who does not care gets one generated rather than a validation
+    // error on a form they thought they had finished.
+    let pin = (_el('ta-pin')?.value || '').trim();
+    if (!pin) pin = String(Math.floor(1000 + Math.random() * 9000));
+    if (!/^\d{4}$/.test(pin)) { toast('The PIN must be exactly 4 digits.', 2500); return; }
+
+    const btn = _el('ta-build-btn');
+    const restore = () => { if (btn) { btn.disabled = false; btn.textContent = '🔗 Generate Assignment Link'; } };
+    if (btn) { btn.disabled = true; btn.textContent = 'Creating…'; }
+
+    let res = null, rpcErr = null;
+    try {
+      if (typeof _sb === 'undefined' || !_sb) throw new Error('offline');
+      const r = await _sb.rpc('guest_assignment_create', {
+        p_title:           label,
+        p_subject_pack_id: pack.id,
+        p_chapter_ids:     chapters,
+        p_question_ids:    questionIds,
+        p_pin:             pin,
+        // A test is timed, practice is not. count*2 minutes is the same
+        // allowance the exam screen gives per question.
+        p_duration_mins:   mode === 'test' ? Math.max(5, count * 2) : null,
+      });
+      res = r.data; rpcErr = r.error;
+    } catch (e) { rpcErr = e; }
+
+    if (rpcErr || !res || res.ok !== true) {
+      restore();
+      toast(_createError(res, rpcErr), 4500);
+      return;
+    }
+
     const id     = 'ta_' + Date.now();
-    const config = { id, label, subject: pack.id, chapters, difficulty, count, random, mode };
+    const config = { id, label, subject: pack.id, chapters, difficulty, count, random, mode,
+                     code: res.code, pin, serverId: res.id, createdAt: Date.now() };
 
     const data = _getData();
     data.assignments = data.assignments || [];
     data.assignments.unshift(config);
     _saveData(data);
 
-    // Clear form
     if (_el('ta-label')) _el('ta-label').value = '';
+    if (_el('ta-pin'))   _el('ta-pin').value   = '';
     document.querySelectorAll('#ta-chapter-opts-container input[type=checkbox]').forEach(cb => cb.checked = false);
 
     _renderAssignmentList();
-    toast(`Assignment "${label}" created! 📋`, 2000);
+    restore();
+
+    // The point of this change: the link is in front of the teacher NOW, with
+    // WhatsApp one tap away, instead of two navigations into the Assignments
+    // tab to find the row they just created.
+    shareAssignment(id);
+    if (typeof res.assignments_left_today === 'number' && res.assignments_left_today <= 1) {
+      toast(res.assignments_left_today === 0
+        ? 'That was your last assignment for today.'
+        : 'One more assignment available today.', 3500);
+    }
     return config;
   }
 
-  // ── Generate + copy shareable link ────────────
-  function copyLink(id) {
-    const data = _getData();
-    const asgn = data.assignments.find(a => a.id === id);
-    if (!asgn) return;
-
-    const encoded = btoa(JSON.stringify(asgn));
-    const pageUrl = `${location.origin}${location.pathname}?assign=${encoded}`;
-
-    navigator.clipboard.writeText(pageUrl)
-      .then(() => toast('Link copied! 📋 Share it with your students.', 3000))
-      .catch(() => {
-        // Fallback: prompt
-        prompt('Copy this link and share it with students:', pageUrl);
-      });
+  // Order matters: a local shuffle rather than the global shuffle() the file
+  // header claims, because no such global is actually defined anywhere.
+  function _shuffled(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
   }
+
+  // Every failure guest_assignment_create() can return, in words a teacher can
+  // act on. A generic "could not create" would leave someone who hit the daily
+  // cap pressing the same button all afternoon.
+  function _createError(res, err) {
+    const code = res && res.error;
+    if (code === 'pending_approval')  return 'Your teacher account is still awaiting approval.';
+    if (code === 'not_a_teacher' ||
+        code === 'not_approved')      return 'Only an approved teacher account can create shareable assignments.';
+    if (code === 'not_authenticated') return 'Please sign in again to create an assignment.';
+    if (code === 'daily_limit')       return `Daily limit reached (${res.limit} per day). Try again tomorrow.`;
+    if (code === 'invalid_pin')       return 'The PIN must be exactly 4 digits.';
+    if (code === 'no_questions')      return 'No questions matched these settings.';
+    const msg = (err && err.message) || '';
+    if (/PGRST202|42883|does not exist/i.test(msg))
+      return 'Assignment sharing is not set up on this database yet — run supabase-migration.sql.';
+    if (/offline|fetch|network/i.test(msg))
+      return 'No connection — an assignment link has to be created online.';
+    return 'Could not create the assignment. Please try again.';
+  }
+
+  // ── Generate + copy shareable link ────────────
+  // ── Sharing a saved assignment ─────────────────
+  // /a/<CODE> is the real, working link (netlify.toml rewrites it to
+  // guest.html). The child needs the PIN as well, so every share path carries
+  // both — a link on its own would strand them on the PIN prompt.
+  function _shareUrl(code) { return `${location.origin}/a/${code}`; }
+
+  function _shareMessage(a) {
+    const what = a.mode === 'test' ? 'test' : 'practice';
+    return `📋 ${a.label}\n\nYour ${what} (${a.count} questions):\n${_shareUrl(a.code)}\n\nPIN: ${a.pin}`;
+  }
+
+  let _shareId = null;
+
+  function shareAssignment(id) {
+    const a = (_getData().assignments || []).find(x => x.id === id);
+    if (!a) return;
+    // Assignments saved before the link was wired to a real code cannot be
+    // shared - and saying so is better than copying a link that goes nowhere,
+    // which is exactly what this feature used to do.
+    if (!a.code) {
+      toast('This assignment was created before sharing worked — please create a new one.', 4500);
+      return;
+    }
+    _shareId = id;
+    const set = (elId, val) => { const el = _el(elId); if (el) el.textContent = val; };
+    set('ta-share-title', a.label);
+    set('ta-share-pin',   a.pin || '----');
+    set('ta-share-meta',  `${a.count} questions · ${a.mode === 'test' ? '📝 Test' : '🔍 Practice'}`);
+    const linkEl = _el('ta-share-link');
+    if (linkEl) linkEl.value = _shareUrl(a.code);
+    const nativeBtn = _el('ta-share-native');
+    if (nativeBtn) nativeBtn.classList.toggle('hidden', !navigator.share);
+    _el('modal-share-assignment')?.classList.remove('hidden');
+  }
+
+  function closeShare() {
+    _el('modal-share-assignment')?.classList.add('hidden');
+    _shareId = null;
+  }
+
+  function _current() {
+    return (_getData().assignments || []).find(x => x.id === _shareId) || null;
+  }
+
+  function shareCopy() {
+    const a = _current(); if (!a) return;
+    const text = _shareMessage(a);
+    navigator.clipboard.writeText(text)
+      .then(() => toast('Link and PIN copied! 📋', 2500))
+      .catch(() => prompt('Copy this and send it to your students:', text));
+  }
+
+  function shareWhatsApp() {
+    const a = _current(); if (!a) return;
+    window.open('https://wa.me/?text=' + encodeURIComponent(_shareMessage(a)), '_blank', 'noopener');
+  }
+
+  async function shareNative() {
+    const a = _current(); if (!a) return;
+    if (!navigator.share) return shareCopy();
+    try {
+      await navigator.share({ title: a.label, text: _shareMessage(a) });
+    } catch (_) { /* the user dismissed the sheet - not an error */ }
+  }
+
+  // Kept because older markup and any saved page may still call it by name.
+  function copyLink(id) { shareAssignment(id); }
 
   // ── Delete a saved assignment ──────────────────
   function deleteAssignment(id) {
@@ -444,6 +586,7 @@ const TeacherMode = (() => {
   return {
     isTeacher, render, switchTab, subjectChange,
     buildAssignment, copyLink, deleteAssignment,
+    shareAssignment, closeShare, shareCopy, shareWhatsApp, shareNative,
     saveResult, getAttemptCount, hasRetry, allowRetry, removeResult, showAnswers,
   };
 })();

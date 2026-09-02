@@ -1615,7 +1615,7 @@ const AdminPanel = (() => {
             ${studentName ? `<p class="text-xs text-gray-500 dark:text-gray-400">Reported by: <span class="font-medium">${_esc(studentName)}</span></p>` : ''}
             <p class="text-xs text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleString()}</p>
           </div>
-          ${isOpen ? `<button onclick="Admin.resolveReport('${_esc(r.id)}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">Mark resolved</button>` : ''}
+          ${isOpen ? `<button onclick="AdminPanel.resolveReport('${_esc(r.id)}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">Mark resolved</button>` : ''}
         </div>
       </div>`;
     }).join('');
@@ -2195,7 +2195,12 @@ const AdminPanel = (() => {
   function _allChapters() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
     const out = [];
-    SUBJECT_PACKS.filter(p => !p.comingSoon).forEach(p => (p._chapters || p.chapters || []).forEach(ch => out.push({
+    // Free grades are excluded here as well as in the Shop UI: this list is
+    // what publishCatalog() writes, and purchase_chapter()/purchase_subject()
+    // validate against it. Leaving them in would let a crafted request buy a
+    // 30-day unlock for a grade that is already free forever.
+    SUBJECT_PACKS.filter(p => !p.comingSoon && !(typeof isFreeGrade === 'function' && isFreeGrade(p.grade)))
+      .forEach(p => (p._chapters || p.chapters || []).forEach(ch => out.push({
       id: ch.id, name: ch.name, icon: ch.icon || '📘',
       // subjectId is the PACK id and is what purchase_subject() matches on;
       // subject is the human label. They were one field until subjects became
@@ -2209,7 +2214,7 @@ const AdminPanel = (() => {
 
   function _allSubjects() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
-    return SUBJECT_PACKS.filter(p => !p.comingSoon).map(p => ({
+    return SUBJECT_PACKS.filter(p => !p.comingSoon && !(typeof isFreeGrade === 'function' && isFreeGrade(p.grade))).map(p => ({
       id: p.id,
       name: `Grade ${p.grade} ${p.subject || p.name || ''}`.trim(),
       icon: p.icon || '📚',

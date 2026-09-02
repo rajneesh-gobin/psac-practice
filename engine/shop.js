@@ -208,16 +208,30 @@ const Shop = (() => {
   // whole of Grade 1 Maths for 1500 — a real charge for one placeholder
   // question. Same filter in _allChapters()/_allSubjects() in admin.js, which
   // is what publishCatalog() writes to the database.
+  // ⚠ Two exclusions, for different reasons.
+  //   · comingSoon packs are placeholders — offering "Grade 1 Maths · Sample
+  //     Chapter" for 250 credits would be charging for one stub question.
+  //   · FREE GRADES are free. Selling a 30-day unlock for something a family
+  //     already has, permanently and for nothing, is the one thing a shop must
+  //     never do. Kept out of the ADMIN CATALOGUE too (_allChapters/_allSubjects
+  //     in admin.js), which is what purchase_chapter()/purchase_subject()
+  //     validate against — so this is not merely a hidden button.
+  const _sellablePack = p => !p.comingSoon && !(typeof isFreeGrade === 'function' && isFreeGrade(p.grade));
   function sellableChapters() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
     const out = [];
-    SUBJECT_PACKS.filter(p => !p.comingSoon).forEach(pack => {
+    SUBJECT_PACKS.filter(_sellablePack).forEach(pack => {
       (pack._chapters || pack.chapters || []).forEach(ch => {
         out.push({
           id: ch.id,
           name: ch.name,
           icon: ch.icon || '📘',
           subjectId: pack.id,
+          // grade + a short label so the shop can group by grade without
+          // re-parsing "Grade 5 Maths" back out of the display string.
+          grade: pack.grade,
+          subjectIcon: pack.icon || '📚',
+          shortName: (pack.subject || pack.name || '').trim(),
           subjectName: `Grade ${pack.grade} ${pack.subject || pack.name || ''}`.trim(),
         });
       });
@@ -230,7 +244,7 @@ const Shop = (() => {
   // published — see publishCatalog() in admin.js.
   function sellableSubjects() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
-    return SUBJECT_PACKS.filter(p => !p.comingSoon).map(p => {
+    return SUBJECT_PACKS.filter(_sellablePack).map(p => {
       const chapters = (p._chapters || p.chapters || []).map(c => c.id);
       const live = chapters.filter(isUnlocked).length;
       return {
@@ -238,6 +252,7 @@ const Shop = (() => {
         name: `Grade ${p.grade} ${p.subject || p.name || ''}`.trim(),
         icon: p.icon || '📚',
         grade: p.grade,
+        shortName: (p.subject || p.name || '').trim(),
         chapters: chapters.length,
         unlocked: live,
         price: priceForSubject(p.id),

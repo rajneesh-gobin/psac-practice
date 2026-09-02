@@ -169,6 +169,56 @@ const Auth = (() => {
     } catch(_) {}
   }
 
+  // ── Co-parent invite capture ───────────────────
+  // Runs before every routing decision, like ?ref= and ?join=. The token is
+  // parked rather than redeemed on the spot: the second parent almost never
+  // has a session yet, and accept_coparent_invite() requires one - the link
+  // says WHICH family to join, it is never itself a credential. That is also
+  // why, unlike ?join=, this must NOT sign out an existing session: the
+  // invitee signing in as themselves is the entire point.
+  const _PENDING_COPARENT_KEY = 'psac_pending_coparent';
+
+  function _captureCoparentLink() {
+    try {
+      const params = new URLSearchParams(location.search);
+      const tok = (params.get('coparent') || '').trim();
+      if (!tok || !/^[0-9a-f]{64}$/.test(tok)) return;
+      localStorage.setItem(_PENDING_COPARENT_KEY, tok);
+      params.delete('coparent');
+      const rest = params.toString();
+      history.replaceState(null, '', location.pathname + (rest ? `?${rest}` : '') + location.hash);
+    } catch (_) {}
+  }
+
+  // Redeemed once a parent session exists, from the parent load path below.
+  // Cleared on every outcome except a transport failure, so a flaky network
+  // retries on the next sign-in but a used or expired link does not nag.
+  async function _redeemPendingCoparent() {
+    let tok = '';
+    try { tok = localStorage.getItem(_PENDING_COPARENT_KEY) || ''; } catch (_) { return; }
+    if (!tok) return;
+
+    const res = await Store.acceptCoparentInvite(tok);
+    if (res && res.error === 'offline') return;   // keep it, try again next time
+    try { localStorage.removeItem(_PENDING_COPARENT_KEY); } catch (_) {}
+
+    if (res && res.ok) {
+      if (typeof toast === 'function') {
+        toast(res.already ? 'You already have access to this account.'
+                          : 'You now have access to this family account. 🎉', 4000);
+      }
+      return;
+    }
+
+    const msg = {
+      self:               'That invite is for a different parent - you already own this account.',
+      already_in_a_family:'Your account is already linked to a family. Leave it first in Account & Settings.',
+      cap_reached:        'That family already has the maximum number of parents.',
+      invalid_link:       'That invite link has already been used or has expired. Ask for a new one.',
+    }[res && res.error] || 'Could not use that invite link.';
+    if (typeof toast === 'function') toast(msg, 5000);
+  }
+
   function getPendingReferralCode() {
     try { return localStorage.getItem(REF_STORAGE_KEY) || ''; } catch(_) { return ''; }
   }
@@ -287,6 +337,7 @@ const Auth = (() => {
   // ── App init ───────────────────────────────────
   async function init() {
     _captureReferralFromUrl();
+    _captureCoparentLink();
     _tryFriendLink();
     // Show a loading state so there's no blank flash
     document.body.style.opacity = '0';
@@ -564,6 +615,11 @@ const Auth = (() => {
     }
 
     // Parent - load family + students (pass parent ID as fallback if RLS query returns null)
+    //
+    // A pending co-parent invite is redeemed FIRST: getMyFamily() is what
+    // decides which family this session sees, so redeeming after it would
+    // show the invitee an empty dashboard until they reloaded.
+    await _redeemPendingCoparent();
     _family = await Store.getMyFamily(_parentUser.id);
     if (_family) {
       _familyStudents = await Store.getFamilyStudents(_family.id);
@@ -2407,14 +2463,14 @@ const Auth = (() => {
     if (_activeAccount) {
       const who = _activeAccount.name ? ` ${_activeAccount.name} stays signed in here.` : '';
       _confirmModal(
-        `Your parent sign-in has expired on this device.\n\n`
+        `Your parent sign-in has expired in this browser.\n\n`
         + `Your PIN was correct — but signing in again needs your email and password.${who}`,
         () => { showScreen('auth'); setRole('parent'); },
         { icon: '🔑', okLabel: 'Sign in', danger: false, cancelLabel: 'Not now' }
       );
       return;
     }
-    toast('Your parent sign-in has expired — please sign in with your email.', 4000);
+    toast('Your parent sign-in has expired in this browser — please sign in with your email.', 4000);
     showScreen('auth');
     setRole('parent');
   }

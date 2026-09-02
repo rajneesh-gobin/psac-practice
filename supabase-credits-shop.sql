@@ -902,6 +902,11 @@ grant execute on function public.my_credits()                          to authen
 grant execute on function public.my_credit_ledger(integer)             to authenticated;
 grant execute on function public.my_entitlements()                     to authenticated;
 grant execute on function public.purchase_chapter(text)                to authenticated;
+-- Whole-subject buying. Revoked from public above like every other function here,
+-- but the matching grant was missing, so purchase_subject() answered 42501
+-- permission denied for every caller - and _rpcMissing() only recognises
+-- PGRST202/42883, so the parent saw the raw Postgres error, not the friendly one.
+grant execute on function public.purchase_subject(text)                to authenticated;
 grant execute on function public.admin_block_user(uuid, integer, text) to authenticated;
 grant execute on function public.admin_security_events(integer)        to authenticated;
 grant execute on function public.admin_adjust_credits(uuid, integer, text) to authenticated;

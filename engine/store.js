@@ -182,11 +182,72 @@ const Store = (() => {
     return error ? null : data;
   }
 
+  // The family this adult belongs to - as its OWNER first, then as a co-parent.
+  //
+  // ⚠ The ownership query stays exactly as it was and still runs first, so the
+  //   login path of every existing parent is byte-for-byte unchanged and the
+  //   co-parent lookup is pure addition. That ordering matters more than it
+  //   looks: auth.js addStudent() CREATES A NEW FAMILY when this returns null,
+  //   so a co-parent silently getting null here would fork the account into a
+  //   second, empty family instead of joining the real one.
+  //
+  //   my_member_family() is absent until supabase-coparent.sql has been run.
+  //   The rpc then errors, this returns null, and behaviour is exactly what it
+  //   is today - so the client can ship before the migration.
   async function getMyFamily(parentId) {
     if (!_sb || !parentId) return null;
     const { data, error } = await _sb.from('families').select('id, family_name, family_code, parent_id, created_at').eq('parent_id', parentId).maybeSingle();
     if (error) console.warn('[Store.getMyFamily]', error.message);
+    if (data) return data;
+
+    try {
+      const { data: mine, error: mErr } = await _sb.rpc('my_member_family');
+      if (mErr) { console.warn('[Store.getMyFamily/member]', mErr.message); return null; }
+      return mine || null;
+    } catch (_) { return null; }
+  }
+
+  // ── Co-parents ─────────────────────────────────
+  // Every one of these is a SECURITY DEFINER rpc: family_members and
+  // family_invites have no table grant at all, so there is no direct-query
+  // path to add here later by mistake.
+  //
+  // ⚠ They return null on a transport failure, never a shaped object - the
+  //   same rule as getMyEntitlements(). "Nobody else is on this account" and
+  //   "the request did not arrive" must not render the same.
+  async function listFamilyMembers() {
+    if (!_sb) return null;
+    const { data, error } = await _sb.rpc('list_family_members');
+    if (error) { console.warn('[Store.listFamilyMembers]', error.message); return null; }
     return data || null;
+  }
+
+  async function createCoparentInvite(hours) {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('create_coparent_invite', { p_hours: hours || 48 });
+    if (error) { console.warn('[Store.createCoparentInvite]', error.message); return { ok: false, error: 'offline' }; }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  async function revokeCoparentInvite() {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('revoke_coparent_invite');
+    if (error) { console.warn('[Store.revokeCoparentInvite]', error.message); return { ok: false, error: 'offline' }; }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  async function acceptCoparentInvite(token) {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('accept_coparent_invite', { p_token: token });
+    if (error) { console.warn('[Store.acceptCoparentInvite]', error.message); return { ok: false, error: 'offline' }; }
+    return data || { ok: false, error: 'unknown' };
+  }
+
+  async function removeFamilyMember(userId) {
+    if (!_sb) return { ok: false, error: 'offline' };
+    const { data, error } = await _sb.rpc('remove_family_member', { p_user: userId });
+    if (error) { console.warn('[Store.removeFamilyMember]', error.message); return { ok: false, error: 'offline' }; }
+    return data || { ok: false, error: 'unknown' };
   }
 
   async function createFamily(parentId, familyName) {
@@ -1095,6 +1156,8 @@ const Store = (() => {
     restoreStudentToken, endStudentSession,
     // Families
     lookupFamily, getMyFamily, createFamily, updateFamilyName,
+    listFamilyMembers, createCoparentInvite, revokeCoparentInvite,
+    acceptCoparentInvite, removeFamilyMember,
     // Students
     getFamilyStudents, lastFamilyStudentsError,
     createStudent, updateStudent, deleteStudent, setStudentPin,

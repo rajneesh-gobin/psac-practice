@@ -685,7 +685,7 @@ BEGIN
 END$$;
 
 -- Allow the authenticated role to read this column.
-GRANT SELECT (friend_code) ON public.students TO authenticated;
+GRANT SELECT (friend_code) ON public.students TO anon, authenticated;
 
 -- 6-B  student_friends table
 CREATE TABLE IF NOT EXISTS public.student_friends (
@@ -790,7 +790,7 @@ BEGIN
 END;
 $$;
 
-GRANT EXECUTE ON FUNCTION public.add_friend(text) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.add_friend(text) TO anon, authenticated;
 
 -- 6-D  get_my_friends() → setof record
 --      Returns the leaderboard data for every friend of the calling student.
@@ -838,7 +838,7 @@ AS $$
   ORDER BY xp DESC;
 $$;
 
-GRANT EXECUTE ON FUNCTION public.get_my_friends() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_my_friends() TO anon, authenticated;
 
 -- 6-E  get_my_friend_code() → text
 CREATE OR REPLACE FUNCTION public.get_my_friend_code()
@@ -853,7 +853,7 @@ AS $$
     AND  deleted_at IS NULL;
 $$;
 
-GRANT EXECUTE ON FUNCTION public.get_my_friend_code() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.get_my_friend_code() TO anon, authenticated;
 
 -- 6-F  remove_friend(p_friend_id uuid) → void
 CREATE OR REPLACE FUNCTION public.remove_friend(p_friend_id uuid)
@@ -867,7 +867,7 @@ AS $$
      OR (student_id_b = public.current_student_id() AND student_id_a = p_friend_id);
 $$;
 
-GRANT EXECUTE ON FUNCTION public.remove_friend(uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.remove_friend(uuid) TO anon, authenticated;
 
 -- ═══════════════════════════════════════════════════════════════════════════
 --  VERIFY Part 6 (run after)

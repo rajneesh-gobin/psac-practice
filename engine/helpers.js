@@ -13,6 +13,50 @@ const fmt = n => n.toLocaleString('en-GB');
 // Null-safe: `pct(chapters.fractions)` is fine even if that chapter is untouched.
 function pct(c) { return (c && c.attempted) ? Math.round(c.correct / c.attempted * 100) : 0; }
 
+// ── WHICH GRADES ARE FREE ────────────────────────────────────────────────
+// Grades 1-2 are free for every family, permanently. Grades 3-9 are the paid
+// tiers. This is a PRICING rule, so it deliberately sits above plans, expiry
+// and the credit shop: a free grade is open on a lapsed account, on the Free
+// plan, and with a zero credit balance.
+//
+// It is NOT above moderation. An admin kill switch (disabled_chapters /
+// disabled_subjects) and an account block still apply to grades 1-2, because
+// those are safety decisions rather than commercial ones.
+//
+// ⚠ DUPLICATED in netlify/functions/questions.js — Lambda vs browser, no shared
+// module, the same standing duplication as the Mauritius day-key helpers. If
+// this list changes, BOTH copies must change together, or the padlocks the UI
+// draws and the questions the server actually releases will disagree.
+const FREE_GRADES = Object.freeze([1, 2]);
+
+function gradeOfSubjectId(subjectId) {
+  const m = /^grade(\d+)-/.exec(String(subjectId || ''));
+  return m ? Number(m[1]) : null;
+}
+function isFreeGrade(grade) {
+  const n = Number(grade);
+  return Number.isFinite(n) && FREE_GRADES.includes(n);
+}
+function isFreeSubjectId(subjectId) { return isFreeGrade(gradeOfSubjectId(subjectId)); }
+
+// chapterId → is it in a free grade? Resolved through the loaded packs rather
+// than the id, because chapter ids carry no grade (g5m-…, eng-passages, …) and
+// several are not prefixed at all.
+//
+// `typeof SUBJECT_PACKS` is safe even though registry.js loads AFTER this file:
+// a classic script's lexical bindings are only created when that script runs,
+// so before then the name is *undeclared* (typeof → 'undefined'), not in TDZ.
+// Nothing here executes at load time anyway.
+function isFreeChapter(chapterId) {
+  if (!chapterId || typeof SUBJECT_PACKS === 'undefined') return false;
+  for (const p of SUBJECT_PACKS) {
+    if (!isFreeGrade(p.grade)) continue;
+    const chs = p._chapters || p.chapters || [];
+    for (const c of chs) if (c && c.id === chapterId) return true;
+  }
+  return false;
+}
+
 function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
   const shuffled = shuffle(options.filter(o => o !== answer));
   const finalOpts = shuffle([answer, ...shuffled.slice(0, 3)]);
