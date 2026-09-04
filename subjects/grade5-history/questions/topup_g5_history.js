@@ -201,9 +201,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-enr-wld-056', chapterId:'g5enr-world', subsection:'world', difficulty:1,
     question:'Which is the largest ocean in the world?',
-    options:['The smallest ocean','The second-largest ocean','The largest ocean','The shallowest ocean'], answer:'The largest ocean',
-    hint:'It covers more area than all the world\'s landmasses combined.',
-    explanation:'The Pacific Ocean is the largest ocean, covering approximately 165 million km² — greater than the combined area of all the world\'s landmasses. It is also the deepest ocean.' }),
+    options:['Atlantic Ocean','Indian Ocean','Pacific Ocean','Arctic Ocean'], answer:'Pacific Ocean',
+    hint:'Look for the ocean between Asia and Australia on one side and the Americas on the other.',
+    explanation:'The Pacific Ocean is the largest ocean by surface area. It lies between Asia and Australia to the west and the Americas to the east. The Atlantic, Indian and Arctic oceans are smaller.' }),
 
   makeMCQ({ id:'g5h-enr-wld-057', chapterId:'g5enr-world', subsection:'world', difficulty:1,
     question:'Mount Kilimanjaro, the highest mountain in Africa, is located in which country?',

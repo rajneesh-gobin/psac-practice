@@ -62,8 +62,8 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g4fr-imparfait-009', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:2,
     question:'"Nous mangions" est la forme correcte de "manger" à l\'imparfait pour "nous".',
     answer:true,
-    hint:'Manger → nous mangeons → radical mange- → nous mange-ions.',
-    explanation:'<b>Vrai.</b> Manger → nous mangeons → radical <b>mange-</b> → nous <b>mang-e-ions</b>. On garde le "e" avant -ions pour préserver le son /ʒ/. C\'est correct.' }),
+    hint:'Le "e" de "manger" ne se garde que devant a ou o (je mangeais). Devant -ions, pas de "e".',
+    explanation:'<b>Vrai.</b> Manger → nous <b>mangions</b>. Le "e" ne se garde que devant a ou o, pour préserver le son /ʒ/ (je mangeais, il mangeait, nous mangeons). Devant -ions et -iez, pas de "e" : nous mangions, vous mangiez.' }),
 
   makeMCQ({ id:'g4fr-imparfait-010', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:2,
     question:'Quelle phrase utilise l\'imparfait CORRECTEMENT ?',
@@ -175,11 +175,11 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Vrai.</b> Terminaisons de l\'imparfait : je -ais, tu -ais, il/elle -ait, nous -ions, vous -iez, ils/elles <b>-aient</b>. Exemple : parler → ils parl-<b>aient</b>.' }),
 
   makeMCQ({ id:'g4fr-imparfait-023', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:2,
-    question:'Conjugue PARLER à l\'imparfait pour toutes les personnes. Laquelle est INCORRECTE ?',
-    options:['je parlais','tu parlais','nous parlions','vous parliez - INCORRECT'],
-    answer:'vous parliez - INCORRECT',
-    hint:'Parler → nous parlons → parl- + -iez. "Parliez" est correct. Mais est-ce bien la forme incorrecte ici ?',
-    explanation:'En réalité, toutes ces formes sont <b>correctes</b>. Je parlais ✓, tu parlais ✓, nous parlions ✓, vous parliez ✓. La question demande laquelle semble incorrecte - aucune ne l\'est ! Cette question teste ton attention : souvent "parliez" semble bizarre mais est bien la bonne forme.' }),
+    question:'Conjugue PARLER à l\'imparfait. Laquelle de ces formes n\'est PAS de l\'imparfait ?',
+    options:['je parlais','tu parlais','nous parlions','vous parlez'],
+    answer:'vous parlez',
+    hint:'Parler → radical parl- + -iez pour "vous" : vous parliez. Quelle forme est au présent ?',
+    explanation:'"<b>Vous parlez</b>" est le présent, pas l\'imparfait : la forme correcte à l\'imparfait est vous <b>parliez</b>. Les autres formes sont justes : je parlais ✓, tu parlais ✓, nous parlions ✓. Terminaisons de l\'imparfait : -ais, -ais, -ait, -ions, -iez, -aient.' }),
 
   makeMCQ({ id:'g4fr-imparfait-024', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:2,
     question:'Conjugue JOUER à l\'imparfait : "Ils ___ au foot chaque après-midi."',
@@ -214,7 +214,7 @@ STATIC_QUESTIONS.push(
     options:['brillait / jouaient / lisait','a brillé / ont joué / a lu','brillera / joueront / lira','brillait / ont joué / lisait'],
     answer:'brillait / jouaient / lisait',
     hint:'Description d\'un état passé (tableau, scène) → imparfait pour tous les verbes.',
-    explanation:'"Le soleil <b>brillait</b>" (briller → radicale brille- → brillait), "les enfants <b>jouaient</b>" (jouer → jouaient), "une dame <b>lisait</b>" (lire → nous lisons → lis-ait). Description d\'une scène → <b>imparfait</b> pour tout.' }),
+    explanation:'"Le soleil <b>brillait</b>" (briller → nous brillons → radical brill- → brillait), "les enfants <b>jouaient</b>" (jouer → jouaient), "une dame <b>lisait</b>" (lire → nous lisons → lis-ait). Description d\'une scène → <b>imparfait</b> pour tout.' }),
 
   makeMCQ({ id:'g4fr-imparfait-029', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:3,
     question:'Choisis le bon temps : "Je ___ (dormir) quand le chien ___ (aboyer)."',
@@ -225,10 +225,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4fr-imparfait-030', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:3,
     question:'MANGER à l\'imparfait : "Nous ___ des mangues chaque été."',
-    options:['mangions','mangeons','mangions - avec e supplémentaire ?','manger - INCORRECT'],
+    options:['mangions','mangeons','mangeions','mangeaient'],
     answer:'mangions',
-    hint:'Manger → nous mangeons → mange- + -ions = mangeions. Mais la vraie forme est...',
-    explanation:'"Nous <b>mangions</b>" - manger → nous mangeons → radical mange- → nous mang-<b>ions</b>. Attention : on garde le "e" (mangeions) pour conserver le son /ʒ/ devant -a, -o (nous mangeons, je mangeais) mais devant -i le son est préservé : nous mang<b>ions</b> est la forme standard.' }),
+    hint:'Manger → nous mangions : pas de "e" devant -ions.',
+    explanation:'"Nous <b>mangions</b>" - le "e" de "manger" ne se garde que devant a ou o, pour conserver le son /ʒ/ (nous mangeons, je mangeais, ils mangeaient). Devant -ions et -iez, le "i" suffit : nous <b>mangions</b>, vous mangiez. "Mangeions" n\'existe pas ; "mangeaient" est la forme de ils/elles.' }),
 
   makeTF({ id:'g4fr-imparfait-031', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:3,
     question:'"Nous buvions de l\'eau fraîche" est correct. Le radical de "boire" à l\'imparfait est "buv-".',

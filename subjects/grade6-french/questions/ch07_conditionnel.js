@@ -36,14 +36,14 @@ STATIC_QUESTIONS.push(
     options:['nous avions','nous aurions','nous avons','nous aurons'],
     answer:'nous aurions',
     hint:'Avoir → radical conditionnel = aur-. Nous aur + -ions = aurions.',
-    explanation:'"Nous <b>aurions</b>" - avoir au conditionnel : radical <b>aur-</b>. Je aurais, tu aurais, il aurait, nous <b>aurions</b>, vous auriez, ils auraient.' }),
+    explanation:'"Nous <b>aurions</b>" - avoir au conditionnel : radical <b>aur-</b>. J\'aurais, tu aurais, il aurait, nous <b>aurions</b>, vous auriez, ils auraient.' }),
 
   makeMCQ({ id:'g6fr-conditionnel-006', chapterId:'g6fr-conditionnel', subsection:'si_clauses', difficulty:2,
     question:'Complète l\'hypothèse : "Si j\'avais de l\'argent, j\'___ (acheter) un vélo."',
     options:['achetrais','achetais','achèterais','achetterai'],
     answer:'achèterais',
-    hint:'Si + imparfait → conditionnel. Acheter → je achèterais.',
-    explanation:'"Si j\'avais de l\'argent, j\'<b>achèterais</b> un vélo" - structure : <b>si + imparfait → conditionnel</b>. Acheter → infinitif acheter → je achèter<b>ais</b>. Attention à l\'accent grave : achèterais.' }),
+    hint:'Si + imparfait → conditionnel. Acheter → j\'achèterais.',
+    explanation:'"Si j\'avais de l\'argent, j\'<b>achèterais</b> un vélo" - structure : <b>si + imparfait → conditionnel</b>. Acheter → infinitif acheter → j\'achèter<b>ais</b>. Attention à l\'accent grave : achèterais.' }),
 
   makeMCQ({ id:'g6fr-conditionnel-007', chapterId:'g6fr-conditionnel', subsection:'irreguliers', difficulty:2,
     question:'Quel est le conditionnel de FAIRE pour "tu" ?',
@@ -70,7 +70,7 @@ STATIC_QUESTIONS.push(
     options:['iraient','allaient','iront','vont'],
     answer:'iraient',
     hint:'Aller → radical du conditionnel/futur = ir-. Ils ir + -aient = iraient.',
-    explanation:'"Ils <b>iraient</b>" - aller est irrégulier : radical <b>ir-</b> (même qu\'au futur). Je irais, tu irais, il irait, nous irions, vous iriez, ils/elles <b>iraient</b>.' }),
+    explanation:'"Ils <b>iraient</b>" - aller est irrégulier : radical <b>ir-</b> (même qu\'au futur). J\'irais, tu irais, il irait, nous irions, vous iriez, ils/elles <b>iraient</b>.' }),
 
   makeMCQ({ id:'g6fr-conditionnel-011', chapterId:'g6fr-conditionnel', subsection:'formation', difficulty:2,
     question:'Complète la phrase de souhait : "J\'___ (aimer) visiter Paris un jour."',
@@ -142,7 +142,7 @@ STATIC_QUESTIONS.push(
       'étais / achèterai / voyagerai / ferai'
     ],
     answer:'étais / achèterais / voyagerais / ferais',
-    hint:'"Si j\'étais" (imparfait de être) + conditionnel (x3). Faire irrégulier = ferais.',
+    hint:'"Si j\'étais" (imparfait d’être) + conditionnel (x3). Faire irrégulier = ferais.',
     explanation:'"Si j\'<b>étais</b>" (être, imparfait = étais). "<b>Achèterais</b>" (acheter, conditionnel). "<b>Voyagerais</b>" (voyager, conditionnel). "<b>Ferais</b>" (faire, conditionnel irrégulier : radical fer-). Toutes les conséquences = conditionnel.' }),
 
   makeMCQ({ id:'g6fr-conditionnel-020', chapterId:'g6fr-conditionnel', subsection:'irreguliers', difficulty:1,
@@ -163,7 +163,7 @@ STATIC_QUESTIONS.push(
     question:'"Nous irions" est le conditionnel de ALLER pour "nous".',
     answer:true,
     hint:'Aller → radical conditionnel = ir-. Nous ir + -ions = irions.',
-    explanation:'<b>Vrai.</b> Aller → conditionnel : radical <b>ir-</b>. Je irais, tu irais, il irait, <b>nous irions</b>, vous iriez, ils iraient.' }),
+    explanation:'<b>Vrai.</b> Aller → conditionnel : radical <b>ir-</b>. J\'irais, tu irais, il irait, <b>nous irions</b>, vous iriez, ils iraient.' }),
 
   makeMCQ({ id:'g6fr-conditionnel-023', chapterId:'g6fr-conditionnel', subsection:'irreguliers', difficulty:2,
     question:'Quel est le conditionnel de SAVOIR pour "tu" ?',
@@ -190,8 +190,8 @@ STATIC_QUESTIONS.push(
     question:'Transforme en souhait avec le conditionnel : "Je veux aller à Paris." →',
     options:['Je voulais aller à Paris.','J\'aimerais aller à Paris.','J\'allais à Paris.','Je suis allé à Paris.'],
     answer:'J\'aimerais aller à Paris.',
-    hint:'Souhait = conditionnel de aimer → j\'aimerais.',
-    explanation:'"J\'<b>aimerais</b> aller à Paris" - pour exprimer un <b>souhait</b>, on utilise le conditionnel de aimer (j\'<b>aimerais</b>) ou de vouloir (je <b>voudrais</b>). C\'est plus doux et poli que "je veux".' }),
+    hint:'Souhait = conditionnel d’aimer → j\'aimerais.',
+    explanation:'"J\'<b>aimerais</b> aller à Paris" - pour exprimer un <b>souhait</b>, on utilise le conditionnel d’aimer (j\'<b>aimerais</b>) ou de vouloir (je <b>voudrais</b>). C\'est plus doux et poli que "je veux".' }),
 
   makeMCQ({ id:'g6fr-conditionnel-027', chapterId:'g6fr-conditionnel', subsection:'irreguliers', difficulty:3,
     question:'Quel est le conditionnel de TENIR pour "ils" ?',
@@ -205,20 +205,20 @@ STATIC_QUESTIONS.push(
     options:['Si j\'avais su, je serais venu.','Si j\'avais su, je venais.','Si je savais, je serais venu.','Si j\'ai su, je suis venu.'],
     answer:'Si j\'avais su, je serais venu.',
     hint:'Hypothèse passée non réalisée = si + plus-que-parfait → conditionnel passé.',
-    explanation:'"Si j\'<b>avais su</b> (PQP), je <b>serais venu</b> (conditionnel passé)." - Hypothèse sur le passé (non réalisée) : <b>si + PQP → conditionnel passé</b>. Formation du conditionnel passé : <b>conditionnel de avoir/être + participe passé</b>. Venir + être → je <b>serais venu</b>.' }),
+    explanation:'"Si j\'<b>avais su</b> (PQP), je <b>serais venu</b> (conditionnel passé)." - Hypothèse sur le passé (non réalisée) : <b>si + PQP → conditionnel passé</b>. Formation du conditionnel passé : <b>conditionnel d’avoir/être + participe passé</b>. Venir + être → je <b>serais venu</b>.' }),
 
   makeMCQ({ id:'g6fr-conditionnel-029', chapterId:'g6fr-conditionnel', subsection:'si_clauses', difficulty:3,
     question:'Complète le conditionnel passé : "Si elle avait étudié, elle ___ (réussir) l\'examen."',
     options:['aurait réussi','avait réussi','aurait réussie','avait réussit'],
     answer:'aurait réussi',
-    hint:'Conditionnel passé = conditionnel de avoir + participe passé. Réussir → réussi.',
-    explanation:'"Elle <b>aurait réussi</b>" - conditionnel passé de réussir (avec avoir) : conditionnel de avoir (aurait) + participe passé (réussi) = <b>aurait réussi</b>. Structure hypothèse passée : si + PQP (avait étudié) → conditionnel passé (aurait réussi).' }),
+    hint:'Conditionnel passé = conditionnel d’avoir + participe passé. Réussir → réussi.',
+    explanation:'"Elle <b>aurait réussi</b>" - conditionnel passé de réussir (avec avoir) : conditionnel d’avoir (aurait) + participe passé (réussi) = <b>aurait réussi</b>. Structure hypothèse passée : si + PQP (avait étudié) → conditionnel passé (aurait réussi).' }),
 
   makeTF({ id:'g6fr-conditionnel-030', chapterId:'g6fr-conditionnel', subsection:'si_clauses', difficulty:3,
     question:'"Elle serait arrivée plus tôt si elle avait pris le bus." est un exemple de conditionnel passé correctement formé.',
     answer:true,
-    hint:'"Serait arrivée" = conditionnel passé de arriver (avec être, accord féminin).',
-    explanation:'<b>Vrai.</b> "Elle <b>serait arrivée</b>" = conditionnel passé de arriver. Arriver utilise <b>être</b> → conditionnel de être (<b>serait</b>) + participe passé accordé (<b>arrivée</b>, féminin singulier). Structure : si + PQP (avait pris) → conditionnel passé (serait arrivée).' }),
+    hint:'"Serait arrivée" = conditionnel passé d’arriver (avec être, accord féminin).',
+    explanation:'<b>Vrai.</b> "Elle <b>serait arrivée</b>" = conditionnel passé d’arriver. Arriver utilise <b>être</b> → conditionnel d’être (<b>serait</b>) + participe passé accordé (<b>arrivée</b>, féminin singulier). Structure : si + PQP (avait pris) → conditionnel passé (serait arrivée).' }),
 
   makeMCQ({ id:'g6fr-conditionnel-031', chapterId:'g6fr-conditionnel', subsection:'formation', difficulty:3,
     question:'Quelle est la différence entre le conditionnel présent et le conditionnel passé ?',
@@ -249,7 +249,7 @@ STATIC_QUESTIONS.push(
     options:['achèterais','achèterai','achetais','aurais acheté'],
     answer:'achèterais',
     hint:'Si + imparfait → conditionnel présent (hypothèse irréelle du présent).',
-    explanation:'"j\'<b>achèterais</b>" - Si + <b>imparfait</b> → <b>conditionnel présent</b> (hypothèse irréelle, présent). Structure : "Si j\'<b>étais</b> riche (imparfait), j\'<b>achèterais</b> (conditionnel présent)." Acheter → j\'achèterais, tu achèterais, il achèterait (radical achet- + terminaisons : -ais, -ais, -ait, -ions, -iez, -aient).' }),
+    explanation:'"j\'<b>achèterais</b>" - Si + <b>imparfait</b> → <b>conditionnel présent</b> (hypothèse irréelle, présent). Structure : "Si j\'<b>étais</b> riche (imparfait), j\'<b>achèterais</b> (conditionnel présent)." Acheter → j\'achèterais, tu achèterais, il achèterait (radical achèter- : l\'infinitif avec accent grave + terminaisons : -ais, -ais, -ait, -ions, -iez, -aient).' }),
 
   makeMCQ({ id:'g6fr-conditionnel-034', chapterId:'g6fr-conditionnel', subsection:'formation', difficulty:3,
     question:'Quel temps est utilisé pour atténuer une demande formellement ? "Je ___ vous demander un service."',
@@ -268,6 +268,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Conditionnel passé / Conditionnel passé',
     hint:'Les deux propositions principales (sans "si") expriment des conséquences passées hypothétiques.',
-    explanation:'"le match <b>aurait été</b> annulé" + "les joueurs <b>auraient</b> quand même <b>été</b> déçus" = deux <b>conditionnels passés</b> (avoir/être à l\'imparfait + participe passé). La proposition en "si" (S\'il avait plu = PQP) est la condition ; les deux propositions principales (aurait été, auraient été) sont les conséquences au conditionnel passé.' })
+    explanation:'"le match <b>aurait été</b> annulé" + "les joueurs <b>auraient</b> quand même <b>été</b> déçus" = deux <b>conditionnels passés</b> (avoir/être au conditionnel présent + participe passé). La proposition en "si" (S\'il avait plu = PQP) est la condition ; les deux propositions principales (aurait été, auraient été) sont les conséquences au conditionnel passé.' })
 
 );

@@ -160,7 +160,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-writ-014', chapterId:'eng-writing', subsection:'planning', difficulty:2,
     question:'Which is a better way to say "He said" in a story to show the character spoke quietly?',
-    options:['He said loudly','He whispered','He said quietly quietly','He talked'],
+    options:['He said loudly','He whispered','He said quietly','He talked'],
     answer:'He whispered',
     hint:'Precise vocabulary replaces weak phrases - instead of "said + adverb", use a specific verb.',
     explanation:'"<b>He whispered</b>" is more precise and powerful than "he said quietly". Good writers replace weak verbs + adverbs with specific verbs that carry the meaning themselves. Other examples: shouted, muttered, exclaimed, announced, replied, gasped, snapped.' }),

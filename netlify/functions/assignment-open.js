@@ -59,7 +59,7 @@ exports.handler = async (event) => {
   const name = String(body.name || '').trim().slice(0, 40);
   const pin  = String(body.pin  || '').trim();
 
-  if (!code || !name) {
+  if (!code) {
     return { statusCode: 400, headers: HEADERS,
       body: JSON.stringify({ ok: false, error: 'bad_request', message: MESSAGES.name_required }) };
   }
@@ -70,7 +70,11 @@ exports.handler = async (event) => {
 
   let result;
   try {
-    result = await rpc('guest_open', { p_code: code, p_name: name, p_pin: pin, p_ip: ip, p_ua: ua });
+    result = await rpc('teacher_guest_entry', { p_code: code, p_name: name, p_pin: pin, p_ip: ip, p_info: body.info === true });
+    if (body.info === true) {
+      return { statusCode: 200, headers: HEADERS, body: JSON.stringify(result) };
+    }
+    if (result?.legacy) result = await rpc('guest_open', { p_code: code, p_name: name, p_pin: pin, p_ip: ip, p_ua: ua });
   } catch (e) {
     console.error('[assignment-open]', e.message);
     return { statusCode: 502, headers: HEADERS, body: JSON.stringify({ ok: false, error: 'server_error' }) };
@@ -105,6 +109,7 @@ exports.handler = async (event) => {
     body: JSON.stringify({
       ok: true,
       name: result.name,
+      submitName: result.submit_name || result.name,
       // Per-attempt token. Only the browser that answered the PIN correctly
       // gets it, and assignment-submit requires it - otherwise any classmate
       // who knows the shared code and a first name could overwrite that

@@ -41,7 +41,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Est-ce que</b> tu aimes le chocolat ?" - "Est-ce que" est la façon la plus facile de poser une question. On garde l\'ordre sujet + verbe. Les trois façons : 1) intonation montante, 2) est-ce que + sujet + verbe, 3) inversion verbe-sujet : "Aimes-<b>tu</b> le chocolat ?"' }),
 
   makeMCQ({ id:'g5fr-gr-004', chapterId:'fr-grammaire', subsection:'prepositions', difficulty:2,
-    question:'Complétez avec la bonne préposition : "Le chat est ___ la table." (sous)',
+    question:'Complétez avec la bonne préposition : "Le chat est ___ la table." (under)',
     options:['sur','dans','sous','devant'],
     answer:'sous',
     hint:'"Sous" = under/beneath en anglais.',
@@ -136,7 +136,7 @@ STATIC_QUESTIONS.push(
     question:'"Au futur simple, le verbe \'aller\' est irrégulier : j\'irai, tu iras, il ira…"',
     answer:true,
     hint:'"Aller" n\'utilise pas "all-" comme radical au futur - il utilise "ir-".',
-    explanation:'<b>Vrai.</b> Futur simple de "aller" : j\'irai, tu iras, il ira, nous irons, vous irez, ils iront (radical : <b>ir-</b>). Autres futurs irréguliers : être → je serai, avoir → j\'aurai, faire → je ferai, venir → je viendrai, pouvoir → je pourrai, vouloir → je voudrai.' }),
+    explanation:'<b>Vrai.</b> Futur simple d\'"aller" : j\'irai, tu iras, il ira, nous irons, vous irez, ils iront (radical : <b>ir-</b>). Autres futurs irréguliers : être → je serai, avoir → j\'aurai, faire → je ferai, venir → je viendrai, pouvoir → je pourrai, vouloir → je voudrai.' }),
 
   makeMCQ({ id:'g5fr-gr-017', chapterId:'fr-grammaire', subsection:'divers', difficulty:3,
     question:'"Ne… que" exprime quelle idée ?',
@@ -158,23 +158,23 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Est-ce qu\'elle travaille dans une usine ?</b>" - est-ce que + sujet + verbe (ordre normal). Pour l\'inversion : "Travaille-<b>t</b>-elle ?" (pas "Travaille-elle" - il faut -t- entre deux voyelles). "Elle travaille ?" fonctionne à l\'oral (intonation). (Question type testée au PSAC 2025 Q2A.)' }),
 
   makeMCQ({ id:'g5fr-gr-019', chapterId:'fr-grammaire', subsection:'divers', difficulty:4,
-    question:'Corrigez les erreurs : "Hier, Sophie et moi avons allé au marché et j\'ai acheter des fruits."',
+    question:'Corrigez les erreurs : "Hier, Paul et moi avons allé au marché et j\'ai acheter des fruits."',
     options:[
-      'Hier, Sophie et moi sommes allées au marché et j\'ai acheté des fruits.',
-      'Hier, Sophie et moi sont allés au marché et j\'ai acheter des fruits.',
-      'Hier, Sophie et moi avons allé au marché et j\'ai acheté des fruits.',
-      'Hier, Sophie et moi sommes allés au marché et j\'ai acheté des fruits.'
+      'Hier, Paul et moi sommes allées au marché et j\'ai acheté des fruits.',
+      'Hier, Paul et moi sont allés au marché et j\'ai acheter des fruits.',
+      'Hier, Paul et moi avons allé au marché et j\'ai acheté des fruits.',
+      'Hier, Paul et moi sommes allés au marché et j\'ai acheté des fruits.'
     ],
-    answer:'Hier, Sophie et moi sommes allés au marché et j\'ai acheté des fruits.',
+    answer:'Hier, Paul et moi sommes allés au marché et j\'ai acheté des fruits.',
     hint:'Deux erreurs : (1) aller utilise être, pas avoir ; (2) "acheter" au passé composé → participe passé.',
-    explanation:'Deux corrections : (1) "<b>avons allé</b>" → "<b>sommes allés</b>" (aller + être ; "Sophie et moi" = groupe mixte → -és) ; (2) "<b>j\'ai acheter</b>" → "<b>j\'ai acheté</b>" (participe passé, pas infinitif). "Sommes allées" serait correct seulement si Sophie et moi sommes toutes les deux féminines. Ce type de question teste deux compétences clés du PSAC : choix être/avoir + forme correcte du participe passé.' }),
+    explanation:'Deux corrections : (1) "<b>avons allé</b>" → "<b>sommes allés</b>" (aller + être ; avec Paul dans le groupe, le masculin l\'emporte → -és) ; (2) "<b>j\'ai acheter</b>" → "<b>j\'ai acheté</b>" (participe passé, pas infinitif). "Sommes allées" ne conviendrait que pour un groupe entièrement féminin. Ce type de question teste deux compétences clés du PSAC : choix être/avoir + forme correcte du participe passé.' }),
 
   makeMCQ({ id:'g5fr-gr-020', chapterId:'fr-grammaire', subsection:'divers', difficulty:2,
     question:'Complétez la phrase conditionnelle : "Si tu étudies, tu ___ (réussir)."',
     options:['réussiras','réussirais','réussirait','réussis'],
     answer:'réussiras',
     hint:'Si + présent → futur (hypothèse réelle/possible).',
-    explanation:'"Si tu étudies, tu <b>réussiras</b>." - Règle : Si + <b>présent</b> → <b>futur simple</b>. Cette structure exprime une hypothèse réelle (il est possible que tu étudies). Exemples : Si il fait beau → nous irons. Si tu manges bien → tu seras en forme.' }),
+    explanation:'"Si tu étudies, tu <b>réussiras</b>." - Règle : Si + <b>présent</b> → <b>futur simple</b>. Cette structure exprime une hypothèse réelle (il est possible que tu étudies). Exemples : S\'il fait beau → nous irons. Si tu manges bien → tu seras en forme.' }),
 
   makeMCQ({ id:'g5fr-gr-021', chapterId:'fr-grammaire', subsection:'divers', difficulty:2,
     question:'"Si j\'avais de l\'argent, j\'___ (acheter) un vélo."',
@@ -198,7 +198,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-gr-024', chapterId:'fr-grammaire', subsection:'conjugaison', difficulty:1,
     question:'Formez l\'adverbe à partir de "doux" :',
-    options:['doucement','doucement','douxement','douce'],
+    options:['doucement','doucément','douxement','douce'],
     answer:'doucement',
     hint:'Doux → douce (féminin) + -ment.',
     explanation:'"<b>doucement</b>" - doux → douce → douce + ment = <b>doucement</b>. Employé dans : "Parle doucement, le bébé dort." Autres adverbes irréguliers notables : vite (pas de féminin + -ment), bien → bien (invariable), mal → mal (invariable).' }),
@@ -227,15 +227,15 @@ STATIC_QUESTIONS.push(
     question:'Quelle conjonction de coordination exprime LA CAUSE ?',
     options:['mais','ou','donc','car'],
     answer:'car',
-    hint:'Pensez à MOEDONIC (Mais, Ou, Et, Donc, Or, Ni, Car).',
-    explanation:'"<b>car</b>" exprime la cause (because). Les 7 conjonctions de coordination MOEDONIC : <b>M</b>ais (but), <b>O</b>u (or), <b>E</b>t (and), <b>D</b>onc (so/therefore), <b>O</b>r (now/however), <b>N</b>i (neither/nor), <b>C</b>ar (because/for). "Il ne vient pas, <b>car</b> il est malade."' }),
+    hint:'Pensez à "Mais Où Est Donc Or Ni Car" (mais, ou, et, donc, or, ni, car).',
+    explanation:'"<b>car</b>" exprime la cause (because). Les 7 conjonctions de coordination - "Mais Où Est Donc Or Ni Car" : <b>M</b>ais (but), <b>O</b>u (or), <b>E</b>t (and), <b>D</b>onc (so/therefore), <b>O</b>r (now/however), <b>N</b>i (neither/nor), <b>C</b>ar (because/for). "Il ne vient pas, <b>car</b> il est malade."' }),
 
   makeMCQ({ id:'g5fr-gr-029', chapterId:'fr-grammaire', subsection:'divers', difficulty:2,
     question:'Quelle conjonction de coordination exprime LA CONSÉQUENCE ?',
     options:['mais','ou','donc','car'],
     answer:'donc',
     hint:'"Donc" = so, therefore (conséquence/résultat).',
-    explanation:'"<b>donc</b>" exprime la conséquence (so, therefore). "Il est malade, <b>donc</b> il ne vient pas." MOEDONIC : Mais (opposition), Ou (choix), Et (addition), <b>Donc</b> (conséquence), Or (transition), Ni (négation double), Car (cause).' }),
+    explanation:'"<b>donc</b>" exprime la conséquence (so, therefore). "Il est malade, <b>donc</b> il ne vient pas." "Mais Où Est Donc Or Ni Car" : Mais (opposition), Ou (choix), Et (addition), <b>Donc</b> (conséquence), Or (transition), Ni (négation double), Car (cause).' }),
 
   makeMCQ({ id:'g5fr-gr-030', chapterId:'fr-grammaire', subsection:'divers', difficulty:2,
     question:'Complétez : "Je suis fatigué ___ j\'ai travaillé toute la nuit."',
@@ -259,7 +259,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-gr-033', chapterId:'fr-grammaire', subsection:'conjugaison', difficulty:2,
     question:'Complétez : "Parle ___ (doux → adverbe) - le bébé dort."',
-    options:['doucèment','doucement','douxment','doucement'],
+    options:['doucèment','doucement','douxment','douceument'],
     answer:'doucement',
     hint:'Doux → douce → doucement.',
     explanation:'"Parle <b>doucement</b> - le bébé dort." - doux → douce (féminin) → douce + ment = <b>doucement</b>. Synonymes : à voix basse, tout bas. Antonyme : fort, bruyamment.' }),
@@ -276,6 +276,6 @@ STATIC_QUESTIONS.push(
     options:['travaillais / obtiendrais','travailles / obtiendras','travaillais / obtiendras','travaillas / obtiendrais'],
     answer:'travaillais / obtiendrais',
     hint:'Si + imparfait → conditionnel (hypothèse imaginaire).',
-    explanation:'"Si tu <b>travaillais</b> plus, tu <b>obtiendrais</b> de meilleures notes." - Hypothèse imaginaire/irréelle : si + <b>imparfait</b> → <b>conditionnel présent</b>. "Travaillais" = imparfait de travailler. "Obtiendrais" = conditionnel de obtenir (radical: obtiendr- + -ais).' })
+    explanation:'"Si tu <b>travaillais</b> plus, tu <b>obtiendrais</b> de meilleures notes." - Hypothèse imaginaire/irréelle : si + <b>imparfait</b> → <b>conditionnel présent</b>. "Travaillais" = imparfait de travailler. "Obtiendrais" = conditionnel d\'obtenir (radical: obtiendr- + -ais).' })
 
 );

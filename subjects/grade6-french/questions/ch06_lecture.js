@@ -113,7 +113,7 @@ const _TEXTE_DODO_FR = `<div style="background:#f8fafc;border-left:4px solid #7c
 <b style="color:#5b21b6">Lisez attentivement le texte, puis répondez aux questions.</b><br><br>
 <b>Le dodo : l\'oiseau disparu de Maurice</b><br><br>
 Le dodo était un grand oiseau incapable de voler qui vivait uniquement sur l\'île Maurice. Mesurant près d\'un mètre de hauteur et pesant jusqu\'à vingt-trois kilogrammes, cet oiseau étrange possédait des ailes si petites qu\'elles lui étaient totalement inutiles pour s\'élever dans les airs. Les scientifiques pensent que le dodo a perdu la faculté de voler parce que l\'île ne comptait aucun prédateur terrestre - il n\'avait donc aucun besoin de fuir par les airs.<br><br>
-Lorsque les marins hollandais débarquèrent à Maurice à la fin du XVIIe siècle, le sort du dodo fut scellé. Ces oiseaux étaient faciles à attraper car ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger. Les marins les chassaient pour se nourrir, mais la menace la plus grave provenait des animaux introduits par les colons : des rats, des cochons et des singes qui pillaient les nids et dévoraient les œufs. En moins de quatre-vingts ans après l\'arrivée des premiers hommes, le dodo était éteint.<br><br>
+Lorsque les marins hollandais débarquèrent à Maurice à la fin du XVIe siècle, le sort du dodo fut scellé. Ces oiseaux étaient faciles à attraper car ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger. Les marins les chassaient pour se nourrir, mais la menace la plus grave provenait des animaux introduits par les colons : des rats, des cochons et des singes qui pillaient les nids et dévoraient les œufs. En moins de quatre-vingts ans après l\'arrivée des premiers hommes, le dodo était éteint.<br><br>
 Aujourd\'hui, le dodo est devenu un puissant symbole. On utilise l\'expression "mort comme un dodo" pour désigner quelque chose de complètement et irrémédiablement disparu. Mais son histoire nous adresse également un avertissement : les mêmes facteurs - chasse, destruction des habitats et espèces envahissantes - continuent d\'entraîner l\'extinction d\'autres animaux de nos jours. À Maurice, des efforts de conservation protègent désormais des espèces endémiques comme le Pigeon Rose et la Perruche de Maurice.
 </div>`;
 
@@ -192,7 +192,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Le passé composé ou le passé simple, pour des actions précises et terminées dans le passé',
     hint:'Les marins "débarquèrent", le sort "fut scellé", ils "chassaient" - identifiez les temps utilisés.',
-    explanation:'Le deuxième paragraphe utilise principalement le <b>passé simple</b> (débarquèrent, fut, provenait) pour des <b>actions précises et achevées</b> dans le passé. L\'imparfait est aussi utilisé ("n\'avaient aucune peur", "chassaient") pour des <b>états ou habitudes passés</b>. En lecture, reconnaître les temps verbaux aide à comprendre la structure temporelle du récit - compétence clé dans les épreuves PSAC de français de 6e.' }),
+    explanation:'Le deuxième paragraphe utilise principalement le <b>passé simple</b> (débarquèrent, fut) pour des <b>actions précises et achevées</b> dans le passé. L\'imparfait est aussi utilisé ("provenait", "n\'avaient aucune peur", "chassaient") pour des <b>états ou habitudes passés</b>. En lecture, reconnaître les temps verbaux aide à comprendre la structure temporelle du récit - compétence clé dans les épreuves PSAC de français de 6e.' }),
 
   makeMCQ({ id:'g6fr-lec-019', chapterId:'g6fr-lecture', subsection:'interpretation', difficulty:4,
     question:`${_TEXTE_DODO_FR}En utilisant la méthode "Relevé → Interprétation", quelle citation du texte illustre MIEUX l'idée que le dodo était vulnérable face aux humains ?`,
@@ -551,7 +551,7 @@ const _TEXTE_G6_D = `<div style="background:#f8fafc;border-left:4px solid #16a34
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-lec-059', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
-    question:`${_TEXTE_G6_D}Combien de pigeons roses restaient-il à l'état sauvage à la fin des années 1990 ?`,
+    question:`${_TEXTE_G6_D}Combien de pigeons roses restait-il à l'état sauvage à la fin des années 1990 ?`,
     options:['Quatre','Douze','Quarante','Quatre cents'],
     answer:'Douze',
     hint:'Cherchez le chiffre dans le premier paragraphe.',
@@ -644,12 +644,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-lec-067', chapterId:'g6fr-lecture', subsection:'idee_principale', difficulty:4,
     question:`${_TEXTE_G6_D}Le titre "du bord de l'extinction à la renaissance" résume l'évolution décrite dans le texte. Justifiez ce titre en citant des données précises du texte.`,
     options:[
-      '"Bord de l\'extinction" = douze individus sauvages en 1990 ; "renaissance" = plus de quatre cents individus aujourd\'hui',
+      '"Bord de l\'extinction" = douze individus sauvages à la fin des années 1990 ; "renaissance" = plus de quatre cents individus aujourd\'hui',
       '"Bord de l\'extinction" = le pigeon était chassé ; "renaissance" = il est maintenant protégé par la loi',
       '"Bord de l\'extinction" = la déforestation ; "renaissance" = la replantation d\'arbres',
       '"Bord de l\'extinction" = les prédateurs ; "renaissance" = l\'absence de prédateurs dans le parc'
     ],
-    answer:'"Bord de l\'extinction" = douze individus sauvages en 1990 ; "renaissance" = plus de quatre cents individus aujourd\'hui',
+    answer:'"Bord de l\'extinction" = douze individus sauvages à la fin des années 1990 ; "renaissance" = plus de quatre cents individus aujourd\'hui',
     hint:'Cherchez les deux chiffres de population donnés dans le texte.',
     explanation:'Le titre est justifié par deux données chiffrées : <b>"douze individus"</b> à la fin des années 1990 (= bord de l\'extinction, situation critique) et <b>"plus de quatre cents individus"</b> aujourd\'hui (= renaissance, retour à la vie). Le programme de conservation a donc permis une multiplication par plus de trente de la population sauvage.' })
 

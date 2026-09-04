@@ -177,7 +177,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-pro-024', chapterId:'fr-pronoms', subsection:'possessifs', difficulty:2,
     question:'"Ces stylos sont ___ ." (tu, possessif pluriel)',
-    options:['les tiens','les tiens','le tien','les tiennes'],
+    options:['les tiens','la tienne','le tien','les tiennes'],
     answer:'les tiens',
     hint:'"Stylos" = masculin pluriel → les tiens.',
     explanation:'"Ces stylos sont <b>les tiens</b>." - "Stylos" = masculin pluriel → <b>les tiens</b>. Tableau pour "tu" : le tien (masc. sing.) / la tienne (fém. sing.) / les tiens (masc. plur.) / les tiennes (fém. plur.).' }),

@@ -110,7 +110,7 @@ STATIC_QUESTIONS.push(
     question:'<em>Quand l\'escargot parvenait enfin à rejoindre le groupe, les autres petites bêtes s\'étaient déjà bien reposées et avaient bien mangé. Et comme il n\'y avait plus de place, l\'escargot devait coucher à la belle étoile.</em><br><br>Quand l\'escargot rejoignait ses compagnons, tous',
     options:['mangeaient.','l\'attendaient.','jouaient.','dormaient.'], answer:'dormaient.',
     hint:'Le texte dit qu\'ils avaient déjà mangé et se reposaient — que faisaient-ils ?',
-    explanation:'Le texte précise qu\'ils « dormaient depuis bien longtemps » quand l\'escargot arrivait → ils <em>dormaient</em>.' }),
+    explanation:'Les autres « s\'étaient déjà bien reposées et avaient bien mangé », et il ne restait plus de place pour se coucher : quand l\'escargot arrivait, tous <em>dormaient</em> déjà.' }),
 
   makeMCQ({ id:'g6fr-pp19-019', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>L\'escargot alla voir le coquillage de plus près et inspecta l\'intérieur attentivement. Curieux, et comme la chose ne bougeait pas, il y pénétra.</em><br><br>L\'escargot entra dans le coquillage parce qu\'il était',

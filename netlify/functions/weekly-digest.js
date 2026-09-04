@@ -4,13 +4,16 @@
 //
 // Required Netlify environment variables:
 //   SUPABASE_SERVICE_ROLE_KEY
-//   RESEND_API_KEY
-//   NOTIFY_FROM_EMAIL  (optional, defaults to Resend test address)
+//   GMAIL_USER / GMAIL_APP_PASSWORD - see ../lib/mailer.js
+//
+// ⚠ This used to POST to api.resend.com. RESEND_API_KEY was never set on the
+// Netlify site (measured 2026-09-04), so every Sunday this logged
+// 'Skipped - email not configured' and returned. No parent has ever received
+// a digest. It now goes through the shared Gmail sender, same as notify.js.
 
 const SUPABASE_URL = 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const RESEND_KEY   = process.env.RESEND_API_KEY;
-const FROM_EMAIL   = process.env.NOTIFY_FROM_EMAIL || 'PSAC Exam Practice <onboarding@resend.dev>';
+const { sendMail, isConfigured, logFailure } = require('../lib/mailer');
 
 async function sbGet(path) {
   const res = await fetch(`${SUPABASE_URL}${path}`, {
@@ -19,12 +22,11 @@ async function sbGet(path) {
   return res.ok ? res.json() : null;
 }
 
+// ⚠ Gmail's ceiling is ~500 recipients/day for the whole account, and this
+// cron fans out over every family at once. Nothing throttles that today; if the
+// family count ever approaches it, this loop is where a delay belongs.
 async function sendEmail(to, subject, html) {
-  return fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: FROM_EMAIL, to, subject, html }),
-  });
+  return sendMail({ to, subject, html });
 }
 
 function _bar(pct, color) {
@@ -87,7 +89,7 @@ function _delta(now, prev, unit) {
 }
 
 exports.handler = async () => {
-  if (!RESEND_KEY || !SUPABASE_KEY) {
+  if (!isConfigured() || !SUPABASE_KEY) {
     console.log('[weekly-digest] Skipped - email not configured');
     return { statusCode: 200 };
   }
@@ -136,7 +138,7 @@ exports.handler = async () => {
     console.warn('[weekly-digest] plan gate skipped:', e.message);
   }
 
-  let sent = 0;
+  let sent = 0, failed = 0;
   for (const family of families) {
     if (optedOut.has(family.parent_id)) continue;
     if (notIncluded.has(family.parent_id)) continue;
@@ -318,20 +320,20 @@ exports.handler = async () => {
 </body></html>`;
 
       // Same reason as notify.js: the result used to be discarded, so a digest
-      // Resend refused was indistinguishable from one it delivered - across
+      // the server refused was indistinguishable from one it delivered - across
       // every parent, every week, with nothing in the logs.
       const _res = await sendEmail(parentEmail, `PSAC Exam Practice - Weekly Report (${weekStr})`, html);
-      if (_res && !_res.ok) {
-        const _detail = await _res.text().catch(() => '');
-        console.error('[weekly-digest] Resend refused the send:', _res.status,
-          _detail.slice(0, 300), '| from =', FROM_EMAIL);
-      }
-      sent++;
+      // ⚠ Count DELIVERED, not attempted. `sent++` ran unconditionally, so the
+      // closing log line reported a full run whether or not one email left the
+      // building - which is the same defect that hid this bug in the first place.
+      if (_res.ok) sent++;
+      else { failed++; logFailure('weekly-digest', _res, parentEmail); }
     } catch (err) {
       console.error('[weekly-digest] Error for family', family.id, err.message);
     }
   }
 
-  console.log(`[weekly-digest] Sent ${sent} digest emails`);
+  console.log(`[weekly-digest] Sent ${sent} digest emails`
+    + (failed ? `, ${failed} FAILED` : ''));
   return { statusCode: 200 };
 };

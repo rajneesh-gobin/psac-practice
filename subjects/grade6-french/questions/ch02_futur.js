@@ -64,7 +64,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-fut-008', chapterId:'g6fr-futur', subsection:'formation', difficulty:2,
     question:'Complétez : "Si tu travailles bien, tu ___ (réussir) ton examen."',
-    options:['réussirais','réussiras','réussiras','as réussi'],
+    options:['réussirais','réussiras','réussira','as réussi'],
     answer:'réussiras',
     hint:'Si + présent → futur simple dans la principale.',
     explanation:'"Si tu travailles bien, tu <b>réussiras</b> ton examen." - Structure conditionnelle : <b>si + présent</b> dans la subordonnée → <b>futur simple</b> dans la principale. <b>Attention</b> : on ne met JAMAIS le futur après "si" conditionnel.' }),
@@ -77,7 +77,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-fut-010', chapterId:'g6fr-futur', subsection:'irreguliers', difficulty:2,
     question:'Conjuguez "faire" au futur simple pour "vous" :',
-    options:['vous ferez','vous farez','vous ferez','vous feriez'],
+    options:['vous ferez','vous farez','vous fairez','vous feriez'],
     answer:'vous ferez',
     hint:'Faire → radical irrégulier fer- + terminaison pour "vous".',
     explanation:'Faire → radical irrégulier <b>fer-</b> + <b>-ez</b> → <b>vous ferez</b>. Conjugaison : je ferai, tu feras, il fera, nous ferons, <b>vous ferez</b>, ils feront.' })
@@ -103,8 +103,8 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6fr-fut-013', chapterId:'g6fr-futur', subsection:'irreguliers', difficulty:1,
     question:'Le radical du futur simple de "aller" est "ir-".',
     answer:true,
-    hint:'Je ___ → je irai. Que donne "ir-" + "-ai" ?',
-    explanation:'<b>Vrai.</b> Aller → radical irrégulier <b>ir-</b> au futur simple. Conjugaison : <b>j\'irai</b>, tu iras, il ira, nous irons, vous irez, ils iront. Ne pas confondre avec "je vais" (présent) ou "je suis allé" (passé composé). "Ir-" est aussi le début de "il" en futur proche : "il va aller" ≠ "il ira" (futur simple).' }),
+    hint:'J\'___ → j\'irai. Que donne "ir-" + "-ai" ?',
+    explanation:'<b>Vrai.</b> Aller → radical irrégulier <b>ir-</b> au futur simple. Conjugaison : <b>j\'irai</b>, tu iras, il ira, nous irons, vous irez, ils iront. Ne pas confondre avec "je vais" (présent) ou "je suis allé" (passé composé). "Il va aller" (futur proche) ≠ "il ira" (futur simple).' }),
 
   makeMCQ({ id:'g6fr-fut-014', chapterId:'g6fr-futur', subsection:'formation', difficulty:2,
     question:'Complétez : "L\'année prochaine, nous ___ (étudier) à l\'université."',
@@ -147,7 +147,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-fut-019', chapterId:'g6fr-futur', subsection:'irreguliers', difficulty:3,
     question:'Conjuguez "recevoir" au futur simple pour "nous" :',
-    options:['nous recevrons','nous recevrions','nous recevrons','nous recerons'],
+    options:['nous recevrons','nous recevrions','nous recevoirons','nous recerons'],
     answer:'nous recevrons',
     hint:'Recevoir → radical irrégulier recevr- + terminaison -ons.',
     explanation:'Recevoir → radical irrégulier <b>recevr-</b> → + terminaison <b>-ons</b> → <b>nous recevrons</b>. Conjugaison : je recevrai, tu recevras, il recevra, <b>nous recevrons</b>, vous recevrez, ils recevront. De même : apercevoir → nous apercevrons, décevoir → nous décevrons. Groupe des verbes en -cevoir : radical = -cevr-.' }),
@@ -174,7 +174,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-fut-023', chapterId:'g6fr-futur', subsection:'irreguliers', difficulty:2,
     question:'Conjugue FAIRE au futur simple pour "vous" :',
-    options:['vous faites','vous feriez','vous ferez','vous faites'],
+    options:['vous faites','vous feriez','vous ferez','vous faisiez'],
     answer:'vous ferez',
     hint:'Faire → radical irrégulier au futur = fer-.',
     explanation:'Faire → radical irrégulier au futur : <b>fer-</b> → vous <b>ferez</b>. Conjugaison : je ferai, tu feras, il fera, nous ferons, <b>vous ferez</b>, ils feront.' }),
@@ -246,7 +246,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-fut-032', chapterId:'g6fr-futur', subsection:'irreguliers', difficulty:3,
     question:'Complète la série : "Dès que tu ___ (finir), tu ___ (pouvoir) sortir jouer."',
-    options:['finiras / pourras','finiras / pourrais','finisses / pourras','auras fini / pourras'],
+    options:['finiras / pourras','finiras / pourrais','finisses / pourras','finiras / pouvras'],
     answer:'finiras / pourras',
     hint:'"Dès que" + futur → futur. Finir futur = finiras. Pouvoir futur = pourras.',
     explanation:'"Dès que tu <b>finiras</b> (futur), tu <b>pourras</b> (futur) sortir." Après <b>dès que</b> dans un contexte futur → futur simple. Pouvoir → radical irrégulier <b>pourr-</b> → tu <b>pourras</b>.' }),
@@ -261,7 +261,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'n\'existeront plus / se déplaceront / alimentera',
     hint:'"Dans vingt ans" = futur éloigné. Trois conséquences = futur simple (x3).',
-    explanation:'"<b>n\'existeront plus</b>" (futur de exister, négatif), "<b>se déplaceront</b>" (futur de se déplacer), "<b>alimentera</b>" (futur de alimenter). Tous les trois sont au futur simple car "dans vingt ans" projette dans le futur.' }),
+    explanation:'"<b>n\'existeront plus</b>" (futur d\'exister, négatif), "<b>se déplaceront</b>" (futur de se déplacer), "<b>alimentera</b>" (futur d\'alimenter). Tous les trois sont au futur simple car "dans vingt ans" projette dans le futur.' }),
 
   makeMCQ({ id:'g6fr-fut-034', chapterId:'g6fr-futur', subsection:'formation', difficulty:4,
     question:'Identifie le futur antérieur : "J\'aurai terminé mon travail avant que tu rentres." Que signifie "j\'aurai terminé" ?',
@@ -273,7 +273,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Je finirai mon travail avant ton retour (action future antérieure à une autre action future).',
     hint:'Futur antérieur = action future qui sera terminée AVANT une autre action future.',
-    explanation:'Le <b>futur antérieur</b> ("j\'<b>aurai terminé</b>") exprime une action future qui sera <b>achevée avant</b> une autre action future. Ici : (1) je termine mon travail → futur antérieur ; (2) tu rentres → futur simple. Formation : <b>futur de avoir/être + participe passé</b>.' }),
+    explanation:'Le <b>futur antérieur</b> ("j\'<b>aurai terminé</b>") exprime une action future qui sera <b>achevée avant</b> une autre action future. Ici : (1) je termine mon travail → futur antérieur ; (2) tu rentres → futur simple. Formation : <b>futur d’avoir/être + participe passé</b>.' }),
 
   makeMCQ({ id:'g6fr-fut-035', chapterId:'g6fr-futur', subsection:'irreguliers', difficulty:4,
     question:'Priya planifie ses vacances : "Si les billets ___ (coûter) moins cher, nous ___ (prendre) l\'avion ; sinon, nous ___ (voyager) en bateau et nous ___ (voir) les dauphins !" Bonne série ?',

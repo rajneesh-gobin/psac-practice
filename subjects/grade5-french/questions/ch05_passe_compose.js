@@ -48,7 +48,7 @@ STATIC_QUESTIONS.push(
     options:['avé','avait','eu','avoir'],
     answer:'eu',
     hint:'"Avoir" → participe passé = "eu" (ça ne ressemble pas à l\'infinitif !)',
-    explanation:'"<b>Eu</b>" est le participe passé irrégulier de "avoir" : j\'<b>ai eu</b>. Participes passés irréguliers à connaître : avoir → eu, être → été, faire → fait, prendre → pris, voir → vu, boire → bu.' }),
+    explanation:'"<b>Eu</b>" est le participe passé irrégulier d\'"avoir" : j\'<b>ai eu</b>. Participes passés irréguliers à connaître : avoir → eu, être → été, faire → fait, prendre → pris, voir → vu, boire → bu.' }),
 
   makeMCQ({ id:'g5fr-pc-007', chapterId:'fr-passe-compose', subsection:'participe', difficulty:2,
     question:'Quel est le participe passé de "faire" ?',
@@ -115,10 +115,10 @@ STATIC_QUESTIONS.push(
     explanation:'"Il <b>n\'a pas mangé</b>." - La négation au passé composé : sujet + <b>ne</b> + auxiliaire + <b>pas</b> + participe passé. "Ne" et "pas" encadrent l\'auxiliaire. Exemples : Elle n\'est pas venue. / Nous n\'avons pas fini.' }),
 
   makeMCQ({ id:'g5fr-pc-015', chapterId:'fr-passe-compose', subsection:'formation', difficulty:2,
-    question:'Complétez : "Nous ___ (aller) à la plage samedi dernier."',
+    question:'Complétez : "Mon frère et moi, nous ___ (aller) à la plage samedi dernier." (celui qui parle est un garçon)',
     options:['avons allé','sommes allés','sommes allées','avons allés'],
     answer:'sommes allés',
-    hint:'"Aller" utilise être. Sujet = "nous" (groupe masculin ou mixte → -és).',
+    hint:'"Aller" utilise être. Sujet = deux garçons (groupe masculin → -és).',
     explanation:'"Nous <b>sommes allés</b> à la plage." - aller → être. Pour "nous" (masculin ou mixte) : sommes + allés. Pour un groupe féminin : nous sommes allées. Avec être, le participe s\'accorde avec le sujet.' }),
 
   makeMCQ({ id:'g5fr-pc-016', chapterId:'fr-passe-compose', subsection:'participe', difficulty:2,
@@ -179,7 +179,7 @@ STATIC_QUESTIONS.push(
     options:['D','M','V','T'],
     answer:'V',
     hint:'Cherchez la première lettre de "Venir" dans l\'acronyme.',
-    explanation:'"<b>V</b>" pour Venir. DR MRS VANDERTRAMP : <b>D</b>escendre, <b>R</b>entrer, <b>M</b>ourir, <b>R</b>ester, <b>S</b>ortir, <b>V</b>enir, <b>A</b>rriver, <b>N</b>aître, <b>D</b>evenir, <b>E</b>ntrer, <b>R</b>etourner, <b>T</b>omber, <b>R</b>etourner, <b>A</b>ller, <b>M</b>onter, <b>P</b>artir. Tous ces verbes utilisent être au passé composé.' }),
+    explanation:'"<b>V</b>" pour Venir. DR MRS VANDERTRAMP : <b>D</b>escendre, <b>R</b>entrer, <b>M</b>ourir, <b>R</b>ester, <b>S</b>ortir, <b>V</b>enir, <b>A</b>rriver, <b>N</b>aître, <b>D</b>evenir, <b>E</b>ntrer, <b>R</b>etourner, <b>T</b>omber, <b>R</b>evenir, <b>A</b>ller, <b>M</b>onter, <b>P</b>artir. Tous ces verbes utilisent être au passé composé.' }),
 
   makeMCQ({ id:'g5fr-pc-024', chapterId:'fr-passe-compose', subsection:'formation', difficulty:2,
     question:'Verbe pronominal : "Les enfants ___ (s\'amuser) au parc."',
@@ -210,7 +210,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-pc-028', chapterId:'fr-passe-compose', subsection:'formation', difficulty:2,
     question:'Complétez : "Il ___ (revenir) de vacances hier."',
-    options:['a revenu','est revenu','est revenu','a reveni'],
+    options:['a revenu','est revenu','est revenus','a reveni'],
     answer:'est revenu',
     hint:'"Revenir" = re + venir → utilise être.',
     explanation:'"Il <b>est revenu</b> de vacances." - revenir = re- + venir. Tous les composés de "venir" utilisent être : revenir, devenir, parvenir, survenir. Accord : il est revenu, elle est revenue, ils sont revenus.' }),
@@ -259,7 +259,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Parce qu\'il y a un COD (les poubelles) → avoir',
     hint:'"Sortir" utilise être (sens intransitif) ou avoir (avec COD).',
-    explanation:'"Il <b>a sorti</b> les poubelles" - "les poubelles" est le COD (complement d\'objet direct). Quand "sortir" a un COD, il utilise <b>avoir</b>. Sans COD → être : "Il est sorti." Même règle pour descendre, monter, rentrer, retourner.' }),
+    explanation:'"Il <b>a sorti</b> les poubelles" - "les poubelles" est le COD (complément d\'objet direct). Quand "sortir" a un COD, il utilise <b>avoir</b>. Sans COD → être : "Il est sorti." Même règle pour descendre, monter, rentrer, retourner.' }),
 
   makeMCQ({ id:'g5fr-pc-035', chapterId:'fr-passe-compose', subsection:'formation', difficulty:4,
     question:'Complétez : "Hier, ma mère ___ (aller) au marché, ___ (acheter) des légumes, ___ (rentrer) à la maison et ___ (préparer) un bon repas."',

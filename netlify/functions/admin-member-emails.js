@@ -36,6 +36,7 @@ exports.handler = async (event) => {
   if (!clean.length) return json(200, { ok: true, emails: {} });
 
   const emails = {};
+  let lookupFailed = false;
   for (let i = 0; i < clean.length; i += BATCH) {
     const slice = clean.slice(i, i + BATCH);
     const results = await Promise.all(slice.map(async id => {
@@ -43,12 +44,18 @@ exports.handler = async (event) => {
         const { data, error } = await sb.auth.admin.getUserById(id);
         // A missing user is a normal answer here, not a failure: profiles can
         // outlive auth.users if one was ever removed directly.
-        if (error || !data?.user) return [id, null];
+        if (error) {
+          if (error.status !== 404 && error.code !== 'user_not_found') lookupFailed = true;
+          return [id, null];
+        }
+        if (!data?.user) return [id, null];
         return [id, data.user.email || null];
-      } catch (_) { return [id, null]; }
+      } catch (_) { lookupFailed = true; return [id, null]; }
     }));
     results.forEach(([id, email]) => { if (email) emails[id] = email; });
   }
+
+  if (lookupFailed) return json(502, { error: 'Some email lookups failed. Please retry; no complete email list is available yet.' });
 
   return json(200, { ok: true, emails });
 };

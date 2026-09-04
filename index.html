@@ -131,7 +131,13 @@
         <h3 class="text-lg font-bold text-gray-800 dark:text-white">📲 Send <span id="cl-child-name">your child</span> their login</h3>
         <button onclick="closeChildLoginModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-xl leading-none">✕</button>
       </div>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">One tap signs them in — no typing. The link works once and expires in 48 hours.</p>
+      <div class="bg-indigo-50 dark:bg-indigo-900/25 border border-indigo-100 dark:border-indigo-800/50 rounded-xl p-3 mb-4 text-left">
+        <p class="text-sm font-bold text-indigo-900 dark:text-indigo-100">Your child’s learning space is ready! 🎉</p>
+        <p class="text-xs text-indigo-700 dark:text-indigo-300 mt-1">If they are using this phone, tablet or computer now, start their child-friendly practice view. If they use another device, share their login below.</p>
+        <button onclick="startChildPracticeFromWelcome()" class="w-full mt-3 py-2.5 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl text-sm transition-colors">🎒 Start practising as <span id="cl-start-child-name">your child</span></button>
+        <button onclick="closeChildLoginModal(); showStudentViewGuide();" class="w-full mt-1.5 py-2 text-indigo-600 dark:text-indigo-300 hover:text-indigo-800 dark:hover:text-indigo-100 font-semibold text-xs transition-colors">Stay in parent view for now</button>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Or send a one-tap sign-in link — it works once and expires in 48 hours.</p>
 
       <div class="bg-gray-50 dark:bg-gray-900/40 border border-gray-200 dark:border-gray-700 rounded-xl p-3 mb-3 space-y-1.5 text-sm">
         <div class="flex justify-between gap-3"><span class="text-gray-500 dark:text-gray-400">Family</span><span id="cl-family" class="font-semibold text-gray-800 dark:text-white text-right break-all"></span></div>
@@ -476,6 +482,7 @@
         </div>
         <div class="flex items-center flex-wrap gap-2 w-full sm:w-auto justify-center sm:justify-end">
           <button onclick="showScreen('info')" class="text-indigo-200/80 hover:text-white text-xs sm:text-sm font-semibold px-2 sm:px-3 py-2 transition-colors whitespace-nowrap">How it works</button>
+          <button onclick="showScreen('contact')" class="text-indigo-200/80 hover:text-white text-xs sm:text-sm font-semibold px-2 sm:px-3 py-2 transition-colors whitespace-nowrap">Contact</button>
           <a href="#plans" class="hidden sm:inline text-indigo-200/80 hover:text-white text-sm font-semibold px-3 py-2 transition-colors">Pricing</a>
           <button onclick="shareAppWhatsApp()" title="Share via WhatsApp" aria-label="Share via WhatsApp"
             class="w-9 h-9 flex items-center justify-center bg-green-500 hover:bg-green-400 active:scale-95 text-white rounded-full transition-all shadow-lg shrink-0">
@@ -527,7 +534,7 @@
         </div>
 
         <p class="text-indigo-300/70 text-sm mb-10 max-w-md">
-          XP points, streaks, leaderboards &amp; real-time parent tracking. Learning that actually feels like a game.
+          XP points, streaks, learning games, leaderboards &amp; real-time parent tracking. Learning that actually feels like a game.
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
           <button onclick="showScreen('auth'); setTimeout(()=>{Auth.setRole('parent');Auth.showSignUp();},60)"
@@ -646,6 +653,72 @@
             <p class="text-sm text-indigo-200/70">Students log in with a simple username + PIN - no email needed. Parents control access, assignments, and restrictions.</p>
           </div>
 
+          <div class="bg-white/5 hover:bg-white/8 border border-white/10 rounded-2xl p-5 transition-colors">
+            <div class="text-3xl mb-3 select-none">🕹️ <span class="inline-block text-2xl animate-bounce" style="animation-duration:1.4s">⚽</span></div>
+            <h3 class="font-bold text-white mb-1">Game Zone</h3>
+            <p class="text-sm text-indigo-200/70">Five learning games - a quiz ladder to Rs 1 Billion, Quick Fire, Word Builder, Island Explorer and Number Ninja. Games never affect progress reports, and parents can switch them off per child.</p>
+          </div>
+
+          <div class="bg-white/5 hover:bg-white/8 border border-white/10 rounded-2xl p-5 transition-colors">
+            <div class="text-3xl mb-3">🗺️</div>
+            <h3 class="font-bold text-white mb-1">Interactive Maps</h3>
+            <p class="text-sm text-indigo-200/70">Explore Mauritius, Rodrigues and the world on real maps - mountains, rivers, districts and heritage sites, every pin placed on real coordinates.</p>
+          </div>
+
+          <div class="bg-white/5 hover:bg-white/8 border border-white/10 rounded-2xl p-5 transition-colors">
+            <div class="text-3xl mb-3">📄</div>
+            <h3 class="font-bold text-white mb-1">Real Past Papers</h3>
+            <p class="text-sm text-indigo-200/70">Browse genuine PSAC exam questions from past years (2016–2024), transcribed faithfully, with mark schemes for self-checking.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ══ Game Zone showcase ══ -->
+      <section class="px-4 pb-16 max-w-6xl mx-auto w-full">
+        <div class="text-center mb-3">
+          <span class="inline-block bg-white/10 border border-white/20 text-white/90 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full">🎮 Game Zone</span>
+        </div>
+        <h2 class="text-center text-2xl sm:text-3xl font-black mb-3 text-white">Learning that plays like an arcade</h2>
+        <p class="text-center text-indigo-200/70 text-sm sm:text-base mb-10 max-w-2xl mx-auto">
+          Five original games turn revision into play. Every question is pulled from your child’s own grade, so they are learning the whole time—they just won’t notice.
+        </p>
+        <div data-carousel class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <div class="bg-gradient-to-br from-amber-500/20 to-yellow-500/10 border border-amber-400/30 rounded-2xl p-5 hover:scale-[1.02] transition-transform">
+            <div class="text-4xl mb-3 select-none">💰</div>
+            <h3 class="font-bold text-amber-200 mb-1.5">Who Wants to Be a Billionaire?</h3>
+            <p class="text-sm text-indigo-100/70 leading-relaxed">Climb a 20-question prize ladder all the way to Rs 1 Billion. Four lifelines  50:50, Ask the Crowd, Wise Owl and Safety Rope  and brainy general-knowledge questions near the top.</p>
+          </div>
+          <div class="bg-gradient-to-br from-orange-500/20 to-red-500/10 border border-orange-400/30 rounded-2xl p-5 hover:scale-[1.02] transition-transform">
+            <div class="text-4xl mb-3 select-none">⚡</div>
+            <h3 class="font-bold text-orange-200 mb-1.5">Quick Fire</h3>
+            <p class="text-sm text-indigo-100/70 leading-relaxed">60 seconds on the clock  how many can you answer? Build a combo streak for bonus points, then share your score with friends.</p>
+          </div>
+          <div class="bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-400/30 rounded-2xl p-5 hover:scale-[1.02] transition-transform">
+            <div class="text-4xl mb-3 select-none">🧩</div>
+            <h3 class="font-bold text-emerald-200 mb-1.5">Word Builder</h3>
+            <p class="text-sm text-indigo-100/70 leading-relaxed">Spell your way across the lagoon on stepping stones. Ten words, three lives, and a friendly crab who hands out hints when you are stuck.</p>
+          </div>
+          <div class="bg-gradient-to-br from-sky-500/20 to-blue-500/10 border border-sky-400/30 rounded-2xl p-5 hover:scale-[1.02] transition-transform">
+            <div class="text-4xl mb-3 select-none">🗺️</div>
+            <h3 class="font-bold text-sky-200 mb-1.5">Island Explorer</h3>
+            <p class="text-sm text-indigo-100/70 leading-relaxed">Take a bus tour of 12 real places around Mauritius, crack the geography clues, and collect a gold passport stamp at every stop.</p>
+          </div>
+          <div class="bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 border border-violet-400/30 rounded-2xl p-5 hover:scale-[1.02] transition-transform">
+            <div class="text-4xl mb-3 select-none">🥷</div>
+            <h3 class="font-bold text-violet-200 mb-1.5">Number Ninja</h3>
+            <p class="text-sm text-indigo-100/70 leading-relaxed">Slice through quick mental-maths sums before the timer runs out. Keep your streak alive to earn belts, all the way from White to Black.</p>
+          </div>
+          <div class="bg-white/5 border border-dashed border-white/20 rounded-2xl p-5 flex flex-col justify-center">
+            <div class="text-3xl mb-2 select-none">⚔️ 🕰️</div>
+            <h3 class="font-bold text-white/80 mb-1.5">More on the way</h3>
+            <p class="text-sm text-indigo-100/60 leading-relaxed">Brain Battle (a pass-the-phone duel) and Time Traveller (put Mauritian history in order) are coming soon.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-indigo-200/60">
+          <span class="flex items-center gap-1.5">✅ Questions from your child’s grade</span>
+          <span class="flex items-center gap-1.5">📊 Never affects progress reports</span>
+          <span class="flex items-center gap-1.5">🛡️ Parents can switch games off per child</span>
         </div>
       </section>
 
@@ -672,6 +745,8 @@
               <li class="flex gap-2"><span>💪</span><span><b>Weak-area drill</b> — automatically targets the chapters they score lowest in</span></li>
               <li class="flex gap-2"><span>✏️</span><span><b>Scratchpad &amp; number pad</b> — draw your working, type answers with unit keys (cm², kg, h)</span></li>
               <li class="flex gap-2"><span>🔊</span><span><b>Read-aloud</b> — any question can be spoken out loud</span></li>
+              <li class="flex gap-2"><span>🕹️</span><span><b>Game Zone</b> — five learning games with prize ladders, ninja belts and travel stamps; share your best score with friends</span></li>
+              <li class="flex gap-2"><span>🗺️</span><span><b>Interactive maps</b> — tap mountains, rivers and islands on real maps of Mauritius, Rodrigues and the world</span></li>
               <li class="flex gap-2"><span>🔍</span><span><b>Search</b> — find any topic by keyword; typos are fine</span></li>
               <li class="flex gap-2"><span>📲</span><span><b>Install it like an app</b> — keeps working when the connection drops</span></li>
             </ul>
@@ -685,7 +760,8 @@
             <ul class="space-y-2.5 text-sm text-indigo-100/85 flex-1">
               <li class="flex gap-2"><span>📊</span><span><b>See everything</b> — accuracy per subject and per chapter, questions attempted, streaks, XP</span></li>
               <li class="flex gap-2"><span>📋</span><span><b>Set homework</b> — assign a chapter and difficulty, add a note, choose whether answers are revealed</span></li>
-              <li class="flex gap-2"><span>🔒</span><span><b>Parent controls</b> — lock chapters, cap the difficulty level, disable exam mode</span></li>
+              <li class="flex gap-2"><span>🔒</span><span><b>Parent controls</b> — lock chapters, cap the difficulty level, disable exam mode or the Game Zone</span></li>
+              <li class="flex gap-2"><span>🧭</span><span><b>Weekly learning coach</b> — short check-ins that target weak topics and schedule follow-ups (starting with Grade 5 Maths)</span></li>
               <li class="flex gap-2"><span>📅</span><span><b>Study timetable</b> — auto-generate a revision plan weighted to your child's weakest topics, then print it</span></li>
               <li class="flex gap-2"><span>🔔</span><span><b>Daily reminders</b> — pick a time; your child gets a push notification to practise</span></li>
               <li class="flex gap-2"><span>👥</span><span><b>Multiple children</b> — each with their own progress, plus a friendly family leaderboard</span></li>
@@ -702,6 +778,7 @@
             <ul class="space-y-2.5 text-sm text-indigo-100/85 flex-1">
               <li class="flex gap-2"><span>💬</span><span><b>Homework over WhatsApp</b> — share a code and a PIN; pupils just tap the link</span></li>
               <li class="flex gap-2"><span>🚫</span><span><b>No accounts for pupils</b> — they enter a first name and PIN. Nothing to sign up for, no email collected</span></li>
+              <li class="flex gap-2"><span>🏫</span><span><b>Guest classrooms</b> — organise pupils into classes, each with their own PIN, and see a private class leaderboard</span></li>
               <li class="flex gap-2"><span>🎯</span><span><b>Pick the content</b> — choose subject, chapters, how many questions, a timer and a deadline</span></li>
               <li class="flex gap-2"><span>📈</span><span><b>Live results</b> — scores as they come in, class average, and the question most pupils got wrong</span></li>
               <li class="flex gap-2"><span>🔁</span><span><b>Grant a retry</b> — per pupil, when someone deserves another go</span></li>
@@ -863,12 +940,31 @@
       <footer class="text-center pb-10 text-indigo-400/40 text-xs px-4">
         <p>PSAC Exam Practice · Mauritius · Grades 4–6 (Grades 1–3 &amp; 7–9 coming) · Maths · English · French · Science · History &amp; Geography</p>
         <p class="mt-1">Progress saved securely in the cloud · Installable app · Aligned to the MIE curriculum</p>
+        <button onclick="showScreen('contact')" class="mt-2 text-indigo-300/70 hover:text-white underline underline-offset-2 transition-colors">Contact the admins</button>
         <p class="mt-2 text-indigo-400/30">
           Currently being revamped — all tiers free until <span data-free-until>30 September 2026</span> for the 2026 exams.
           Not affiliated with the Mauritius Institute of Education or the Ministry of Education.
         </p>
       </footer>
 
+    </div>
+  </div>
+
+  <!-- ══════════ CONTACT ═══════════════════════════════════════════════════ -->
+  <div id="screen-contact" class="screen hidden" data-hide-header="true">
+    <div class="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-blue-950 text-white flex items-center justify-center px-4 py-10">
+      <div class="w-full max-w-lg rounded-3xl border border-white/15 bg-white/10 backdrop-blur-sm p-7 sm:p-10 text-center shadow-2xl">
+        <div class="text-5xl mb-5" aria-hidden="true">💌</div>
+        <h1 class="text-3xl font-black">Contact the admins</h1>
+        <p class="mt-4 text-indigo-100 leading-relaxed">
+          For suggestions, problems, improvements, or any issues with PSAC Exam Practice, please contact our administrators.
+        </p>
+        <a href="mailto:psacpractice@gmail.com" class="inline-flex items-center justify-center mt-7 px-5 py-3 rounded-2xl bg-white text-indigo-900 font-black hover:bg-indigo-100 transition-colors break-all">
+          psacpractice@gmail.com
+        </a>
+        <p class="mt-4 text-xs text-indigo-200/70">Please include the grade, subject, and a short description if your message is about a question or feature.</p>
+        <button onclick="showScreen('landing')" class="mt-8 text-sm font-bold text-indigo-200 hover:text-white transition-colors">← Back to home</button>
+      </div>
     </div>
   </div>
 
@@ -1553,6 +1649,26 @@
               <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
               Continue with Google
             </button>
+            <!-- No password to type, and none to forget. Uses the email already
+                 in the field above, so it is one tap from the normal sign-in. -->
+            <button onclick="Auth.magicLinkSignIn()"
+              class="w-full py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold rounded-xl transition-colors text-sm flex items-center justify-center gap-2">
+              <span class="text-base leading-none select-none">✉️</span>
+              Email me a sign-in link
+            </button>
+          </div>
+
+          <!-- Magic-link confirmation. Mirrors the forgot-password panel so the
+               two email-round-trip flows look and behave the same. -->
+          <div class="space-y-3 hidden" id="auth-magic-panel">
+            <div class="text-center">
+              <div class="text-4xl mb-3 select-none">📧</div>
+              <p class="text-white font-semibold mb-2">Sign-in link sent!</p>
+              <p class="text-white/60 text-sm mb-1">We sent a link to</p>
+              <p class="text-white text-sm font-semibold mb-3 break-all" id="auth-magic-addr"></p>
+              <p class="text-white/60 text-sm mb-4">Tap it on this device and you're straight in — no password needed. It expires in 1 hour. Check your spam folder if it hasn't arrived in a minute.</p>
+              <button type="button" onclick="Auth.backToSignIn()" class="text-indigo-300 text-sm hover:text-white transition-colors">← Back to Sign In</button>
+            </div>
           </div>
 
           <!-- Forgot password panel -->
@@ -1920,6 +2036,12 @@
 
     <!-- ══════════ DASHBOARD ══════════ -->
     <div id="screen-dashboard" class="screen">
+      <section id="coach-child-home" class="coach-card hidden"></section>
+      <button onclick="Auth.enterParentMode()" class="pd-switch student-parent-switch mb-4">
+        <span class="pd-switch-ico" aria-hidden="true">🔒</span>
+        <span class="pd-switch-text"><span class="pd-switch-title">Switch to parent mode</span><span class="pd-switch-sub">For grown-ups — use parent access to review progress and settings</span></span>
+        <span class="pd-switch-go" aria-hidden="true">→</span>
+      </button>
       <!-- kid-hero paints this in the child's chosen "My Colours" vibe.
            ⚠ The Tailwind `bg-gradient-to-br from-blue-500 …` that used to be
            here is deliberately gone rather than kept as a fallback: the Play CDN
@@ -1937,10 +2059,6 @@
             <button id="btn-change-subject" onclick="showScreen('subject-select')"
               class="hidden text-xs font-semibold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
               📚 Subjects
-            </button>
-            <button onclick="Auth.enterParentMode()"
-              class="text-xs font-semibold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
-              🔒 Parent
             </button>
           </div>
         </div>
@@ -2089,6 +2207,18 @@
         <span class="text-blue-400 dark:text-blue-500 text-2xl shrink-0">›</span>
       </button>
 
+      <!-- Game Zone - hidden by MiniGames.syncTile() when the parent switches
+           minigames off for this child or the plan excludes them. -->
+      <button id="dash-games-tile" onclick="MiniGames.open()" class="w-full mb-6 flex items-center gap-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-5 shadow hover:shadow-md border border-amber-200 dark:border-amber-700/50 hover:border-amber-400 transition-all text-left group">
+        <div class="text-4xl select-none group-hover:scale-110 transition-transform">🎮</div>
+        <div class="flex-1">
+          <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-1 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Game Zone <span class="inline-block animate-bounce select-none" style="animation-duration:1.4s">⚽</span></h3>
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Win Rs 1 Billion 💰, beat the clock ⚡, duel a friend ⚔️, tour Mauritius 🗺️ — and more!</p>
+        </div>
+        <span class="text-amber-400 text-2xl shrink-0">›</span>
+      </button>
+
+
       <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-6">
         <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-4">📈 Chapter Mastery</h3>
         <div id="mastery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
@@ -2173,6 +2303,12 @@
          see the .kid-* rules in style.css - without touching the rest of the
          app's visual language, which stays as-is. -->
     <div id="screen-subject-select" class="screen hidden">
+      <section id="coach-child-subject" class="coach-card hidden"></section>
+      <button onclick="Auth.enterParentMode()" class="pd-switch student-parent-switch mb-4">
+        <span class="pd-switch-ico" aria-hidden="true">🔒</span>
+        <span class="pd-switch-text"><span class="pd-switch-title">Switch to parent mode</span><span class="pd-switch-sub">For grown-ups — review progress and settings with parent access</span></span>
+        <span class="pd-switch-go" aria-hidden="true">→</span>
+      </button>
       <div class="kid-hero rounded-3xl p-6 mb-5 text-white shadow-xl relative overflow-hidden">
         <div class="absolute -right-4 -top-4 text-8xl opacity-20 pointer-events-none select-none rotate-12">🎈</div>
         <div class="absolute right-16 bottom-0 text-6xl opacity-10 pointer-events-none select-none">✨</div>
@@ -2221,6 +2357,16 @@
         <p class="text-gray-500 dark:text-gray-400 text-sm">Tap one to start practising!</p>
       </div>
       <div id="subject-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto mb-6"></div>
+      <section id="student-games-section" class="student-games-section hidden" aria-labelledby="student-games-heading">
+        <button type="button" onclick="MiniGames.open()" class="student-games-link">
+          <span class="student-games-icon" aria-hidden="true">🎮</span>
+          <span class="student-games-copy">
+            <strong id="student-games-heading">GAME ZONE</strong>
+            <span>Win Rs 1 Billion 💰 · Beat the clock ⚡ · Cross the lagoon 🧩 · Tour Mauritius 🗺️ — and more!</span>
+          </span>
+          <span class="student-games-go">PLAY ›</span>
+        </button>
+      </section>
       <div class="text-center space-y-2">
         <button class="back-btn" onclick="showScreen('grade-select')">← Back to Grades</button>
         <br>
@@ -2313,7 +2459,7 @@
                 <span id="exam-q-chapter" class="text-xs text-gray-500 dark:text-gray-400"></span>
                 <span id="exam-q-level" class="chip gray text-xs"></span>
               </div>
-              <div class="flex gap-2">
+              <div class="flex flex-wrap justify-end gap-2">
                 <button id="exam-flag-btn" class="btn-ghost text-sm">🚩</button>
                 <button id="exam-hint-btn" class="btn-ghost text-sm">💡 Hint</button>
                 <button onclick="openReportModal()" title="Report a problem with this question" class="btn-ghost text-sm text-gray-500 dark:text-gray-400 hover:text-red-500">⚑ Report</button>
@@ -2339,6 +2485,7 @@
                    what it promised. See renderExamQuestion(). -->
               <button id="exam-next-btn" class="btn-primary">Next →</button>
             </div>
+            <p id="exam-error-note" class="text-xs text-gray-500 dark:text-gray-400 text-center mt-3 px-1">⚙️ The site is being updated, so some questions may still contain small errors. If one looks wrong, please tap <b>⚑ Report</b> above so an admin can fix it. 🙏</p>
           </div>
         </div>
 
@@ -2504,6 +2651,8 @@
           </button>
         </div>
 
+        <p id="practice-error-note" class="text-xs text-gray-500 dark:text-gray-400 text-center mt-1 px-2">⚙️ The site is being updated, so some questions may still contain small errors. If one looks wrong, please tap <b>🚩 Report question</b> above so an admin can fix it. 🙏</p>
+
         <!-- Scratchpad: collapsed by default, opened from the toolbar. -->
         <div id="practice-scratch-wrap" class="hidden pr-scratch">
           <div class="pr-scratch-head">
@@ -2531,6 +2680,16 @@
     </div>
 
     <!-- ══════════ ANALYTICS ══════════ -->
+    <!-- ══════════ MINIGAMES ══════════ -->
+    <div id="screen-minigames" class="screen hidden">
+      <button class="back-btn mb-4" data-target="dashboard">← Back</button>
+      <div class="mg-hero">
+        <h2>🎮 Game Zone <span class="inline-block animate-bounce select-none" style="animation-duration:1.4s">⚽</span></h2>
+        <p>Learn while you play - stars, lifelines and bragging rights!</p>
+      </div>
+      <div id="mg-hub"></div>
+      <div id="mg-game" class="hidden"></div>
+    </div>
     <div id="screen-analytics" class="screen hidden">
       <button class="back-btn mb-4" data-target="dashboard">← Back</button>
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-5">📊 Analytics Dashboard</h2>
@@ -2596,7 +2755,7 @@
     <div id="screen-past-papers" class="screen hidden">
       <button class="back-btn mb-4" data-target="syllabus">← Back</button>
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-1">📄 Past Papers</h2>
-      <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Real questions from past PSAC exams.</p>
+      <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">Real questions from past PSAC exams. ⚙️ The site is being updated, and these are transcribed by hand, so a few may contain small errors.</p>
       <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/40 rounded-2xl p-4 mb-5 flex gap-3">
         <span class="text-xl select-none shrink-0">✍️</span>
         <p class="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
@@ -2650,7 +2809,7 @@
         <button onclick="AdminPanel.showTab('stats')" data-tab="stats"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">📊 Stats</button>
         <button onclick="AdminPanel.showTab('reports')" data-tab="reports"
-          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🚩 Reports</button>
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🚩 Reports<span id="admin-reports-badge" class="hidden ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold align-middle">0 open</span></button>
         <button id="admin-tab-roles-btn" onclick="AdminPanel.showTab('roles')" data-tab="roles"
           class="admin-tab hidden flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">👑 Roles</button>
         <button id="admin-tab-plans-btn" onclick="AdminPanel.showTab('plans')" data-tab="plans"
@@ -2658,7 +2817,7 @@
         <button id="admin-tab-create-btn" onclick="AdminPanel.showTab('create')" data-tab="create"
           class="admin-tab hidden flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🎁 Create</button>
         <button onclick="AdminPanel.showTab('questions')" data-tab="questions"
-          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">❓ Questions<span id="admin-reports-badge" class="hidden ml-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold align-middle">0</span></button>
+          class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">❓ Questions</button>
         <button onclick="AdminPanel.showTab('maps')" data-tab="maps"
           class="admin-tab flex-1 text-xs font-bold py-2 px-3 rounded-lg text-gray-500 dark:text-gray-400 transition-all whitespace-nowrap">🗺️ Maps</button>
       </div>
@@ -2702,6 +2861,12 @@
         <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-1 leading-relaxed">
           Activated accounts show <b>parents and administrators</b>; teachers remain in the separate <b>👩‍🏫 Teachers</b> tab. Awaiting confirmation shows new sign-ups that have not created a profile yet. Expand a row to manage its account type and family.
         </p>
+        <div class="mb-3">
+          <button id="admin-copy-emails" onclick="AdminPanel.copyMemberEmails()" class="rounded-lg px-3 py-2 text-sm font-semibold bg-indigo-600 text-white disabled:opacity-50">📋 Copy emails</button>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Copies all accounts matching these filters, including unloaded pages. Use Bcc when emailing a group.</p>
+          <p id="admin-copy-emails-status" role="status" class="text-xs text-gray-600 dark:text-gray-300 mt-1"></p>
+          <textarea id="admin-copy-emails-output" readonly aria-label="Matching email addresses, separated by commas" class="hidden w-full mt-2 p-2 rounded-lg border bg-white dark:bg-gray-700 dark:text-white" rows="3"></textarea>
+        </div>
         <p id="admin-members-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-members-list" class="space-y-2"></div>
         <div class="text-center mt-4">
@@ -2760,6 +2925,40 @@
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
           <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-4">📚 Subjects by Grade</h3>
           <div id="admin-subjects-list"></div>
+        </div>
+
+        <!-- ── Teacher assignment caps ──
+             Read server-side by guest_assignment_create() on every create, so
+             lowering a number here takes effect on the next attempt with no
+             deploy. The browser copy is a form, never the rule. -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
+          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">🔗 Teacher Assignment Caps</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">How many shareable assignments a teacher can create per day, and how many pupils each one holds. Admins use the verified limits.</p>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+            <label class="block">
+              <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Unverified · per day</span>
+              <input id="admin-gal-unv-day" type="number" min="0" max="1000" oninput="AdminPanel.previewGuestLimits()"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            </label>
+            <label class="block">
+              <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Unverified · pupils each</span>
+              <input id="admin-gal-unv-stu" type="number" min="1" max="500" oninput="AdminPanel.previewGuestLimits()"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            </label>
+            <label class="block">
+              <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Verified · per day</span>
+              <input id="admin-gal-ver-day" type="number" min="0" max="1000" oninput="AdminPanel.previewGuestLimits()"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            </label>
+            <label class="block">
+              <span class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Verified · pupils each</span>
+              <input id="admin-gal-ver-stu" type="number" min="1" max="500" oninput="AdminPanel.previewGuestLimits()"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 bg-white dark:bg-gray-700 dark:text-white">
+            </label>
+          </div>
+          <p id="admin-gal-preview" class="text-xs text-gray-500 dark:text-gray-400 mb-3"></p>
+          <button onclick="AdminPanel.saveGuestLimits()"
+            class="text-sm font-bold text-white bg-indigo-500 hover:bg-indigo-600 px-4 py-2 rounded-xl transition-colors">Save caps</button>
         </div>
 
         <!-- ── Credit shop ──
@@ -3045,23 +3244,36 @@
 
       <!-- Questions tab -->
       <div id="admin-tab-questions" class="admin-tab-panel hidden">
+        <div class="qm-heading">
+          <div><h2>Question bank</h2><p>Find a question, check its answers and explanations, or add new practice material.</p></div>
+          <button onclick="AdminPanel.qmOpenForm(null)" class="qm-edit-button">+ Add question</button>
+        </div>
         <div id="qm-reports-section"></div>
-        <div class="flex flex-wrap gap-2 mb-4">
-          <select id="qm-grade" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm" onchange="AdminPanel.qmGradeFilter()" data-grade-select="all"><option value="">All grades</option>
-          </select>
-          <select id="qm-subject" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm">
+        <div class="qm-filter-panel">
+          <h3>Find questions</h3>
+          <p>Start with a grade, then choose a subject and chapter. Filters update the list automatically.</p>
+          <div class="qm-filter-grid">
+          <label for="qm-grade">Grade
+          <select id="qm-grade" onchange="AdminPanel.qmGradeFilter()" data-grade-select="all"><option value="">All grades</option>
+          </select></label>
+          <label for="qm-subject">Subject
+          <select id="qm-subject" onchange="AdminPanel.qmSubjectFilter()">
             <option value="">All subjects</option>
-          </select>
-          <select id="qm-chapter" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm">
+          </select></label>
+          <label for="qm-chapter">Chapter
+          <select id="qm-chapter" disabled onchange="AdminPanel.qmSearch()">
             <option value="">All chapters</option>
-          </select>
-          <select id="qm-difficulty" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm">
+          </select></label>
+          <label for="qm-difficulty">Difficulty
+          <select id="qm-difficulty" onchange="AdminPanel.qmSearch()">
             <option value="">Any difficulty</option>
             <option value="1">1 — Basic</option>
             <option value="2">2 — Medium</option>
             <option value="3">3 — Hard</option>
-            <option value="4">4 — Challenge</option>
-          </select>
+            <option value="4">4 — Word problems / applied</option>
+          </select></label>
+          </div>
+          <div class="qm-extra-filters">
           <label class="flex items-center gap-1.5 text-sm cursor-pointer select-none border dark:border-gray-600 rounded px-2 py-1 dark:text-gray-300">
             <input id="qm-has-image" type="checkbox" class="rounded" onchange="AdminPanel.qmSearch()">
             🖼 Has image
@@ -3070,12 +3282,17 @@
             <input id="qm-protected" type="checkbox" class="rounded" onchange="AdminPanel.qmSearch()">
             🔒 Protected only
           </label>
-          <input id="qm-search" type="text" placeholder="Search question text…" class="border dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded px-2 py-1 text-sm flex-1 min-w-32">
-          <button onclick="AdminPanel.qmSearch()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Search</button>
-          <button onclick="AdminPanel.qmOpenForm(null)" class="bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold">+ Add Question</button>
+          <label><input id="qm-include-unpublished" type="checkbox" onchange="AdminPanel.qmGradeFilter()"> Include unpublished packs / placeholders</label>
+          </div>
+          <p>Published Grade 4–6 packs are shown by default. Other grades remain available using “Include unpublished packs”.</p>
+          <label for="qm-search">Question text</label>
+          <form class="qm-search-row" onsubmit="event.preventDefault(); AdminPanel.qmSearch()">
+            <input id="qm-search" type="search" placeholder="Search words in a question…">
+            <button type="submit" class="qm-edit-button">Search</button>
+          </form>
         </div>
         <p id="qm-count" class="text-sm text-gray-500 dark:text-gray-400 mb-2"></p>
-        <div id="qm-list" class="space-y-1"></div>
+        <div id="qm-list" class="space-y-3" aria-live="polite"></div>
         <div class="text-center mt-4">
           <button id="qm-load-more" onclick="AdminPanel.qmLoadMore()" class="hidden border dark:border-gray-600 rounded px-4 py-2 text-sm text-gray-600 dark:text-gray-300">Load more</button>
         </div>
@@ -3083,7 +3300,7 @@
 
     <div id="screen-teacher" class="screen hidden">
       <div class="flex justify-between items-center mb-5 flex-wrap gap-2">
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-white">👩‍🏫 Teacher Dashboard</h2>
+        <div><h2 class="text-2xl font-bold text-gray-800 dark:text-white">👩‍🏫 Your teaching workspace</h2><p class="teacher-intro">Set work, share one link, and see how your pupils are doing.</p></div>
         <div class="flex gap-2 flex-wrap">
           <button onclick="Auth.openInviteModal()"
             class="text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800/60 px-3 py-1.5 rounded-full font-semibold transition-colors">
@@ -3091,22 +3308,39 @@
           </button>
           <button onclick="Auth.switchToStudentSelect()"
             class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 px-3 py-1.5 rounded-full font-semibold transition-colors">
-            👦 Student View
+            🎒 Switch to student mode
           </button>
         </div>
       </div>
 
       <!-- Tabs -->
-      <div class="flex gap-1 mb-5 bg-gray-100 dark:bg-gray-700/50 p-1 rounded-xl">
-        <button class="ta-tab flex-1 text-sm py-2 rounded-lg bg-white dark:bg-gray-700 shadow-sm font-semibold text-gray-800 dark:text-white" data-tab="create" onclick="TeacherMode.switchTab('create')">➕ Create</button>
-        <button class="ta-tab flex-1 text-sm py-2 rounded-lg text-gray-500" data-tab="assignments" onclick="TeacherMode.switchTab('assignments')">📋 Assignments</button>
-        <button class="ta-tab flex-1 text-sm py-2 rounded-lg text-gray-500" data-tab="results" onclick="TeacherMode.switchTab('results')">📊 Results</button>
+      <div class="teacher-navigation" role="tablist" aria-label="Teaching workspace">
+        <button role="tab" aria-selected="true" class="ta-tab" data-tab="create" onclick="TeacherMode.switchTab('create')"><strong>➕ Set work</strong><span>Create and share an assignment</span></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="classes" onclick="TeacherMode.switchTab('classes')"><strong>🏫 Classrooms</strong><span>Pupils, private PINs and class work</span></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="assignments" onclick="TeacherMode.switchTab('assignments')"><strong>📋 Assignments</strong><span>Active work, links and archives</span></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="results" onclick="TeacherMode.switchTab('results')"><strong>📊 Results</strong><span>Submissions and pupil progress</span></button>
+      </div>
+
+      <div class="ta-tab-content hidden bg-white dark:bg-gray-800 dark:text-gray-200 rounded-2xl p-5" data-tab="classes">
+        <h3 class="font-bold text-lg">Your classrooms</h3>
+        <p class="teacher-intro">Keep each class’s work together. Pupils do not need an account.</p>
+        <div class="teacher-tip">Start with a classroom name. Add pupils if you want to identify their submissions using private 4-digit PINs. Give each PIN to its pupil in person—never share the PIN list with the class.</div>
+        <div class="teacher-class-create">
+        <label for="tc-name">Classroom name</label>
+        <input id="tc-name" maxlength="80" placeholder="Grade 5 — Blue" class="border rounded p-2 dark:bg-gray-700">
+        <button onclick="TeacherGuestClasses.create(this)" class="p-2 text-blue-600">Create classroom</button>
+        <button onclick="TeacherGuestClasses.refresh()" class="p-2 text-blue-600">Refresh</button>
+        </div>
+        <p id="tc-status" role="status" class="text-sm my-3"></p>
+        <div id="tc-list"></div><div id="tc-workspace"></div><div id="tc-roster"></div>
       </div>
 
       <!-- ── TAB: CREATE ── -->
       <div class="ta-tab-content" data-tab="create">
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
-          <h3 class="font-bold text-gray-800 dark:text-white mb-4">➕ Create Assignment</h3>
+          <h3 class="font-bold text-gray-800 dark:text-white mb-4">Create an assignment</h3>
+          <p class="teacher-intro">No need to enter every pupil to get started. Choose “Open link” to share work immediately, or use a classroom’s private pupil PINs for identified results.</p>
+          <h4 class="teacher-step">1 <span>Choose the work</span></h4>
 
           <div class="mb-3">
             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Assignment Name</label>
@@ -3115,7 +3349,9 @@
           </div>
 
           <div class="mb-3">
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Subject</label>
+            <label for="ta-grade" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Grade</label>
+            <select id="ta-grade" onchange="TeacherMode.gradeChange()" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 dark:bg-gray-700 dark:text-white"></select>
+            <label for="ta-subject" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Subject</label>
             <select id="ta-subject" onchange="TeacherMode.subjectChange()"
               class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400"></select>
           </div>
@@ -3125,6 +3361,7 @@
             <div id="ta-chapter-opts-container" class="grid grid-cols-2 sm:grid-cols-3 gap-1 max-h-48 overflow-y-auto p-1 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600"></div>
           </div>
 
+          <h4 class="teacher-step">2 <span>Set the practice</span></h4>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
             <div>
               <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Difficulty</label>
@@ -3149,7 +3386,7 @@
               <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Mode</label>
               <select id="ta-mode" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
                 <option value="practice">🔍 Practice</option>
-                <option value="test">📝 Test</option>
+                <option value="test">⏱ Timed practice</option>
               </select>
             </div>
             <div class="flex items-end pb-1">
@@ -3161,8 +3398,19 @@
           </div>
 
           <div class="mb-3">
+            <h4 class="teacher-step">3 <span>Choose who can answer</span></h4>
+            <label for="ta-access" class="block font-semibold dark:text-white">How will pupils identify themselves?</label>
+            <select id="ta-access" onchange="TeacherGuestClasses.accessChanged()" class="w-full border rounded-xl p-2 dark:bg-gray-700 dark:text-white">
+              <option value="nickname">Open link — nickname, no PIN</option>
+              <option value="classroom_pin">My classroom — each pupil’s private PIN</option>
+              <option value="legacy">Shared assignment PIN + name (legacy)</option>
+            </select>
+            <p id="ta-access-help" class="text-sm text-gray-500 my-2">Anyone with the link can enter a nickname. No PIN or account. Nicknames are unverified and results belong only to this assignment.</p>
+            <div id="ta-classroom-wrap"><label for="ta-classroom" class="dark:text-white">Save assignment under</label><select id="ta-classroom" class="w-full border rounded p-2 dark:bg-gray-700 dark:text-white"><option value="">Standalone — not tied to a classroom</option></select><p class="text-sm text-gray-500">A classroom is optional for nickname homework, even if it has no pupils. Private pupil PINs require a classroom with pupils. All work also appears in Assignments.</p></div>
+          </div>
+          <div class="mb-3" id="ta-legacy-pin-wrap" hidden>
             <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
-              Student PIN <span class="font-normal text-gray-400">(4 digits — leave blank and one is generated for you)</span>
+              Assignment PIN <span class="font-normal text-gray-400">(4 digits — leave blank and one is generated for you)</span>
             </label>
             <input id="ta-pin" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 4821"
               class="w-32 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
@@ -3170,9 +3418,10 @@
 
           <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
             <b>🔍 Practice:</b> Students see correct or incorrect feedback after each question.<br>
-            <b>📝 Test:</b> Students answer all questions and submit at the end. Results are saved here automatically. You can allow retries.
+            <b>⏱ Timed practice:</b> Includes a timer and feedback after each answer. Both modes save results online. Formal test mode without early feedback is coming in the assessment update.
           </div>
 
+          <p id="ta-quota" class="text-xs text-gray-500 dark:text-gray-400 mb-2 hidden"></p>
           <button id="ta-build-btn" onclick="TeacherMode.buildAssignment()"
             class="w-full py-2.5 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors shadow">
             🔗 Generate Assignment Link
@@ -3184,6 +3433,7 @@
       <div class="ta-tab-content hidden" data-tab="assignments">
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
           <h3 class="font-bold text-gray-800 dark:text-white mb-3">📋 Saved Assignments</h3>
+          <button onclick="TeacherWorkspace.refresh()" class="text-blue-600 text-sm p-2 mb-2">Refresh assignments and results</button>
           <div id="ta-asgn-list" class="space-y-2"></div>
         </div>
       </div>
@@ -3192,7 +3442,8 @@
       <div class="ta-tab-content hidden" data-tab="results">
         <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow mb-4">
           <h3 class="font-bold text-gray-800 dark:text-white mb-3">📊 Student Results</h3>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Only <b>Test mode</b> assignments collect results. Results are saved on this device - once connected to Supabase they will sync automatically.</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Homework and timed practice results are saved online, including work submitted on other devices. Select an assignment below.</p>
+          <button onclick="TeacherWorkspace.results(document.getElementById('ta-results-assign-sel').value)" class="text-blue-600 text-sm p-2 mb-2">Refresh results</button>
           <select id="ta-results-assign-sel" onchange="taSelectResultsAssign(this)"
             class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 mb-4">
             <option value="">- Select a test assignment -</option>
@@ -3271,8 +3522,30 @@
       <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
         <div>
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🔒 Parent Dashboard</h2>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Tap a child to see details &amp; manage assignments</p>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">See what your children did today, then choose their next step.</p>
           <p class="text-xs text-indigo-500 dark:text-indigo-400 mt-1">Your family login name: <strong id="pd-family-name-display" class="font-mono"></strong></p>
+        </div>
+        <!-- ⚠ Promoted OUT of the action row on purpose. Handing the device to a
+             child is the most frequent thing a parent does on this screen and the
+             one they most often could not find: as one of seven identical tiles it
+             read as a settings item rather than the way in. Making it a louder
+             tile INSIDE the row would have broken the single shape language that
+             row exists to have, so it sits above the row instead — a different
+             altitude, not a competing colour. See .pd-switch in style.css. -->
+        <div class="relative mb-3">
+          <button id="pd-student-view-btn" onclick="Auth.switchToStudentSelect()" class="pd-switch">
+            <span class="pd-switch-ico" aria-hidden="true">🎒</span>
+            <span class="pd-switch-text">
+              <span class="pd-switch-title">Switch to student mode</span>
+              <span class="pd-switch-sub">Hand the device over — your child signs in with their PIN</span>
+            </span>
+            <span class="pd-switch-go" aria-hidden="true">→</span>
+          </button>
+          <div id="pd-student-view-callout" class="hidden absolute z-20 top-full left-0 mt-2 w-64 rounded-xl bg-indigo-600 text-white text-xs leading-relaxed p-3 shadow-xl">
+            <button onclick="dismissStudentViewGuide()" class="absolute top-1.5 right-2 text-white/70 hover:text-white" aria-label="Close">×</button>
+            <b>Ready for your child?</b><br>Tap <b>Switch to student mode</b> to hand the device over and start practising. 🎒
+            <span class="absolute -top-1 left-6 w-3 h-3 bg-indigo-600 rotate-45"></span>
+          </div>
         </div>
         <!-- One neutral surface, icon over label — same shape language as the
              student bottom nav. See .pd-action in style.css. -->
@@ -3283,7 +3556,6 @@
           Filled by Auth._refreshAdminBadge(); hidden when the count is zero.
        --><span id="admin-pending-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold shadow">0</span></button>
           <button onclick="Auth.addStudent()" class="pd-action is-primary"><span class="ico">➕</span><span>Add child</span></button>
-          <button onclick="Auth.switchToStudentSelect()" class="pd-action"><span class="ico">👦</span><span>Student view</span></button>
           <button onclick="showScreen('calendar')" class="pd-action"><span class="ico">📅</span><span>Calendar</span></button>
           <button onclick="openCoparentSettings()" class="pd-action"><span class="ico">👨‍👩‍👧‍👦</span><span>Add parent</span></button>
           <button onclick="Auth.openInviteModal()" class="pd-action"><span class="ico">🎁</span><span>Invite</span></button>
@@ -3331,9 +3603,9 @@
       <!-- ── Children grid ── -->
       <!-- Family overview: rendered by _renderFamilyOverview() in engine/app.js.
            Stays hidden with fewer than two children. -->
-      <div id="pd-family-overview" class="hidden mb-6"></div>
-
+      <h3 id="pd-children-heading" class="font-bold text-lg text-gray-800 dark:text-white mb-3">Your children · today at a glance</h3>
       <div id="pd-children-grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"></div>
+      <details id="pd-weekly-details" class="pd-weekly-details mb-6"><summary>Family weekly report — trends and activity</summary><div id="pd-family-overview" class="hidden mt-4"></div></details>
 
       <!-- ── Child detail panel (hidden until a card is tapped) ── -->
       <div id="pd-detail-panel" class="hidden">
@@ -3373,6 +3645,7 @@
 
         <!-- ── TAB: PROGRESS ── -->
         <div class="pd-tab-content" data-tab="progress">
+          <section id="coach-parent-summary" class="coach-card coach-parent hidden"></section>
           <div id="pd-today-status" class="mb-4"></div>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
             <div class="stat-tile"><div id="pd-total"  class="stat-num text-blue-600 dark:text-blue-400">0</div><div class="stat-label">Questions Done</div></div>
@@ -3575,6 +3848,18 @@
             </div>
           </div>
 
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-bold text-gray-800 dark:text-white text-sm">🎮 Game Zone</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Educational minigames (quiz ladder, Quick Fire, Word Builder, Island Explorer). The crowd-vote lifeline shares a question - never the answer - via a 3-minute public link.</div>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="pd-games-toggle" class="sr-only peer" onchange="Auth.toggleMinigamesDisabled()">
+                <div class="w-11 h-6 bg-gray-200 peer-checked:bg-blue-500 rounded-full peer transition-colors peer-focus:ring-2 peer-focus:ring-blue-300 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-5"></div>
+              </label>
+            </div>
+          </div>
           <!-- Study reminder -->
           <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm">
             <div class="font-bold text-gray-800 dark:text-white text-sm mb-1">🔔 Daily Study Reminder</div>
@@ -3813,18 +4098,6 @@
     </div>
 
   </main>
-
-  <!-- ══ SERVICE NOTICE (public home page) ══ -->
-  <div id="modal-service-notice" class="hidden fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="service-notice-title">
-    <div class="relative w-full max-w-md rounded-3xl bg-white dark:bg-slate-800 p-6 shadow-2xl">
-      <button onclick="dismissServiceNotice()" aria-label="Close notice" class="absolute right-3 top-3 rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-700 dark:hover:text-white">✕</button>
-      <div class="mb-3 text-3xl">📣</div>
-      <h2 id="service-notice-title" class="text-lg font-bold text-slate-800 dark:text-white">Important registration update</h2>
-      <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">Due to unusually high demand, our registration and email services have recently experienced delays. To avoid holding up new families, email confirmation has been temporarily disabled.</p>
-      <p class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">New accounts will be approved automatically while we complete our next server upgrade. We apologise for any inconvenience and thank you for your patience.</p>
-      <button onclick="dismissServiceNotice()" class="mt-5 w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-bold text-white hover:bg-indigo-500">I understand</button>
-    </div>
-  </div>
 
   <!-- ══ REPORT QUESTION MODAL ══ -->
   <div id="modal-report" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
@@ -4388,6 +4661,9 @@
   <script src="engine/biometric.js"></script>
   <script src="engine/auth.js"></script>
   <!-- Teacher mode (loads last - uses globals from app + auth) -->
+  <script src="engine/teacher_workspace.js"></script>
+  <script src="engine/learning_coach.js"></script>
+  <script src="engine/teacher_guest_classes.js"></script>
   <script src="engine/teacher.js"></script>
   <!-- Admin panel (loads after auth) -->
   <script src="engine/admin.js"></script>
@@ -4396,6 +4672,11 @@
   <script src="engine/search.js"></script>
   <!-- Classrooms / enrollments data layer (teacher role) -->
   <script src="engine/classroom.js"></script>
+  <script src="engine/minigame_gk.js"></script>
+  <script src="engine/minigame_words.js"></script>
+  <script src="engine/minigame_geo.js"></script>
+  <script src="engine/minigame_time.js"></script>
+  <script src="engine/minigame.js"></script>
 
   <!-- ── Exam review sheet ──
        Reached from "Review →", the label the Next button takes on the last
@@ -4496,7 +4777,7 @@
        the correct PIN or "Forgot PIN?", which signs the student out. Tapping the
        backdrop, the ✕, Cancel or Escape all just close it. -->
   <!-- ══════════ SWITCH TO A CHILD ══════════
-       "Student view" used to drop the parent on the full sign-in screen, where
+       "Switch to student mode" used to drop the parent on the full sign-in screen, where
        the family name and the child's username had to be typed again — on a
        device where the parent was already signed in and the app knew every
        child by name. Pick a face, tap four digits.
@@ -4563,6 +4844,7 @@
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="pin-dot-3"></div>
       </div>
       <p id="pin-entry-error" class="hidden text-xs text-red-500 text-center mb-3">Incorrect PIN. Try again.</p>
+      <p id="pin-entry-busy" class="hidden text-xs text-indigo-600 dark:text-indigo-300 text-center mb-3">PIN correct — reconnecting your parent sign-in…</p>
       <div class="grid grid-cols-3 gap-2 mb-4">
         <button onclick="Auth._pinKey('1')" class="pin-key-btn">1</button>
         <button onclick="Auth._pinKey('2')" class="pin-key-btn">2</button>

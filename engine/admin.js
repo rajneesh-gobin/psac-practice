@@ -22,7 +22,8 @@ const AdminPanel = (() => {
   // ── Entry point called by auth.js ───────────
   async function render() {
     showTab('members');
-    await Promise.all([loadMembers(), loadTeachers(), loadSettings(), loadShopSettings(), loadTeacherQueue()]);
+    await Promise.all([loadMembers(), loadTeachers(), loadSettings(), loadShopSettings(),
+                       loadGuestLimits(), loadTeacherQueue()]);
     _renderContent();
     await loadStats();
     // Show super-admin-only tabs
@@ -581,6 +582,119 @@ const AdminPanel = (() => {
       _membersQuery = (query || '').trim();
       loadMembers(true);
     }, 300);
+  }
+
+  async function _copyEmailBatch(ids) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const { data, error } = await _sb.auth.getSession();
+      const token = data?.session?.access_token;
+      if (error || !token) throw new Error('Your admin session has expired. Please sign in again before copying emails.');
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
+      let response;
+      try {
+        // The direct function route also works when a local server lacks the /api alias.
+        const route = attempt ? '/.netlify/functions/admin-member-emails' : '/api/admin-member-emails';
+        response = await fetch(route, {
+          method: 'POST', signal: controller.signal,
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_ids: ids }),
+        });
+        const json = (response.headers.get('content-type') || '').includes('application/json');
+        const result = json ? await response.json() : null;
+        if (response.ok && result?.ok && result.emails) return result;
+        if ([401, 403].includes(response.status)) {
+          throw Object.assign(new Error(result?.error || 'Please sign in with an authorised admin account.'), { permanent: true });
+        }
+        if (attempt === 2) {
+          throw Object.assign(new Error(json ? (result?.error || `Email service returned HTTP ${response.status}.`) :
+            'The email service is unavailable on this server. Use the deployed website or restart the project development server (npm run dev).'), { permanent: true });
+        }
+      } catch (error) {
+        if (error.permanent) throw error;
+        if (attempt === 2) throw new Error('The email service could not be reached after 3 attempts. No incomplete list was copied. Check your connection and retry; if it continues, check the server logs.');
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+  }
+
+  async function copyMemberEmails() {
+    const button = document.getElementById('admin-copy-emails');
+    if (!_sb || button?.disabled) return;
+    const status = _memberStatusFilter;
+    const visibility = _memberVisibility();
+    const search = (document.getElementById('admin-member-search')?.value || '').trim();
+    const output = document.getElementById('admin-copy-emails-output');
+    const message = document.getElementById('admin-copy-emails-status');
+    if (button) button.disabled = true;
+    if (output) { output.value = ''; output.classList.add('hidden'); }
+    if (message) message.textContent = 'Collecting all matching emails…';
+    try {
+      const emails = new Map();
+      let missing = 0;
+      const add = value => {
+        const email = String(value || '').trim();
+        if (email) emails.set(email.toLowerCase(), email);
+      };
+      const now = new Date().toISOString();
+      if (status !== 'pending') {
+        for (let offset = 0; ; offset += 100) {
+          let query = _sb.from('profiles').select('id')
+            .in('role', visibility.admins ? ['parent', 'admin'] : ['parent'])
+            .order('created_at', { ascending: false }).order('id')
+            .range(offset, offset + 99);
+          if (!visibility.expired) query = query.or(`expires_at.is.null,expires_at.gte.${now}`);
+          if (!visibility.disabled) query = query.eq('disabled', false);
+          if (search) query = query.ilike('full_name', `%${search}%`);
+          const { data, error } = await query;
+          if (error) throw new Error('Could not load all matching members. Please try again.');
+          const rows = data || [];
+          if (rows.length) {
+            for (let start = 0; start < rows.length; start += 20) {
+              const batch = rows.slice(start, start + 20);
+              if (message) message.textContent = `Collecting emails for matching accounts ${offset + start + 1}–${offset + start + batch.length}…`;
+              const result = await _copyEmailBatch(batch.map(r => r.id));
+              batch.forEach(r => {
+                const email = result.emails?.[r.id];
+                if (email) add(email); else missing++;
+              });
+            }
+          }
+          if (rows.length < 100) break;
+        }
+      }
+      if (status !== 'active') {
+        let cursor = null;
+        do {
+          const result = await _pendingRegistrationRequest('GET', null,
+            `?limit=100&search=${encodeURIComponent(search)}${cursor ? '&cursor=' + encodeURIComponent(cursor) : ''}`);
+          (result.registrations || []).forEach(r => add(r.email));
+          const next = result.next_cursor || null;
+          if (next && next === cursor) throw new Error('Could not finish collecting emails. Please try again.');
+          cursor = next;
+        } while (cursor);
+      }
+      const text = [...emails.values()].join(', ');
+      if (!text) {
+        if (message) message.textContent = missing ? `No emails available; ${missing} matching accounts had no retrievable email.` : 'No emails match these filters.';
+        return;
+      }
+      if (output) { output.value = text; output.classList.remove('hidden'); }
+      const note = `${emails.size} unique emails${missing ? `; ${missing} accounts had no retrievable email` : ''}. Use Bcc to keep recipients’ addresses private.`;
+      try {
+        await navigator.clipboard.writeText(text);
+        if (message) message.textContent = 'Copied ' + note;
+      } catch (_) {
+        output?.focus();
+        output?.select();
+        if (message) message.textContent = 'Select and copy the list below: ' + note;
+      }
+    } catch (error) {
+      if (message) message.textContent = error.message || 'Could not collect emails. Please try again.';
+    } finally {
+      if (button) button.disabled = false;
+    }
   }
 
   function _memberStatusBadge(m) {
@@ -1726,6 +1840,7 @@ const AdminPanel = (() => {
             ${capB('question_search',     '🔍 Search all questions')}
             ${capB('community_forum',     '💬 Community forum')}
             ${capB('study_calendar',      '🗓️ Study calendar')}
+            ${capB('minigames',           '🎮 Game Zone (minigames)')}
             ${capB('weak_area_drill',     '💪 Weak-area drills')}
           </div>
           <p class="text-[11px] text-gray-400 dark:text-gray-500 mt-3 leading-relaxed">
@@ -2145,7 +2260,7 @@ const AdminPanel = (() => {
       .select('*', { count: 'exact', head: true }).eq('status', 'open');
     const n = error ? 0 : (count || 0);
     const badge = document.getElementById('admin-reports-badge');
-    if (badge) { badge.textContent = n; badge.classList.toggle('hidden', n === 0); }
+    if (badge) { badge.textContent = `${n} open`; badge.classList.toggle('hidden', n === 0); }
   }
 
   function _escRpt(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -2153,33 +2268,50 @@ const AdminPanel = (() => {
   async function _loadPendingReports() {
     const el = document.getElementById('qm-reports-section');
     if (!el) return;
-    const { data, error } = await _sb.from('question_reports')
-      .select('id,question_id,message,created_at')
+    const { data, error, count } = await _sb.from('question_reports')
+      .select('id,question_id,question_text,message,created_at', { count: 'exact' })
       .eq('status', 'open')
       .order('created_at', { ascending: false })
       .limit(10);
-    if (error || !data || !data.length) { el.innerHTML = ''; return; }
+    if (error) { el.innerHTML = '<p class="text-sm text-red-600 dark:text-red-400 mb-3">Could not load question reports. Please refresh to try again.</p>'; return; }
+    if (!data || !data.length) { el.innerHTML = ''; return; }
     el.innerHTML = `<div class="mb-4 border border-red-200 dark:border-red-800 rounded-xl p-3 bg-red-50 dark:bg-red-900/20">
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="font-semibold text-sm text-red-600 dark:text-red-400">🚩 ${data.length} pending report${data.length > 1 ? 's' : ''}</h3>
-        <button onclick="AdminPanel.showTab('reports')" class="text-xs text-red-600 dark:text-red-400 underline">See all →</button>
+      <div class="flex flex-wrap gap-2 items-center justify-between mb-2">
+        <h3 class="font-semibold text-sm text-red-600 dark:text-red-400">🚩 ${count ?? data.length} question reports awaiting review</h3>
+        <button onclick="AdminPanel.showTab('reports')" class="text-xs text-red-600 dark:text-red-400 underline">Review all reports →</button>
       </div>
-      <div class="space-y-2">${data.map(r => `
-        <div class="flex items-start gap-2 text-sm">
-          <span class="font-mono text-xs text-gray-500 dark:text-gray-400 shrink-0 mt-0.5">${_escRpt(r.question_id)}</span>
-          <span class="flex-1 text-gray-700 dark:text-gray-200 truncate">${_escRpt((r.message||'').split('\n__meta__')[0])}</span>
-          <div class="flex gap-1 shrink-0">
-            <button onclick="AdminPanel.qmOpenForm('${_escRpt(r.question_id)}')" class="text-xs bg-blue-600 text-white px-2 py-0.5 rounded">Edit Q</button>
-            <button onclick="AdminPanel.qmResolveReport('${_escRpt(r.id)}')" class="text-xs bg-green-600 text-white px-2 py-0.5 rounded">Resolve</button>
+      <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">Users flagged these questions for an administrator to check. A report does not necessarily mean the question is wrong. Mark it resolved after reviewing the issue; this does not edit the question.</p>
+      ${(count || 0) > data.length ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Showing the latest ${data.length} of ${count} open reports.</p>` : ''}
+      <div class="space-y-3">${data.map((r, i) => `
+        <div class="rounded-lg border border-red-100 dark:border-gray-600 bg-white dark:bg-gray-800 p-3 text-sm text-gray-800 dark:text-gray-100 break-words">
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Question ID: <span class="font-mono">${_escRpt(r.question_id || 'Not recorded')}</span></p>
+          <p class="font-semibold">Question</p>
+          <p class="mb-3 whitespace-pre-wrap">${_escRpt(_parseReportMeta(r.question_text).text || 'Question preview unavailable. Open Reports to investigate this ID.')}</p>
+          <p class="font-semibold">Reported issue</p>
+          <p class="mb-3 whitespace-pre-wrap">${_escRpt(_parseReportMeta(r.message).text || 'No comment provided.')}</p>
+          <div class="flex flex-wrap gap-2">
+            <button data-report-edit="${i}" class="text-xs bg-blue-600 text-white px-3 py-2 rounded-lg">Edit question</button>
+            <button data-report-resolve="${i}" class="text-xs bg-green-600 text-white px-3 py-2 rounded-lg disabled:opacity-50">Mark as resolved</button>
           </div>
         </div>`).join('')}
       </div>
     </div>`;
+    el.querySelectorAll('[data-report-edit]').forEach(button => {
+      button.onclick = () => QM.qmOpenForm(data[Number(button.dataset.reportEdit)].question_id);
+    });
+    el.querySelectorAll('[data-report-resolve]').forEach(button => {
+      button.onclick = async () => {
+        button.disabled = true;
+        try { await qmResolveReport(data[Number(button.dataset.reportResolve)].id); }
+        finally { button.disabled = false; }
+      };
+    });
   }
 
   async function qmResolveReport(id) {
-    await _sb.from('question_reports').update({ status: 'resolved' }).eq('id', id);
-    _loadPendingReports(); _loadReportBadge();
+    const ok = await Store.resolveReport(id);
+    if (!ok) { toast('Could not resolve this report. Please try again.', 3000); return; }
+    await Promise.all([_loadPendingReports(), _loadReportBadge()]);
     if (typeof toast === 'function') toast('Report resolved ✅', 1500);
   }
 
@@ -2190,6 +2322,7 @@ const AdminPanel = (() => {
     let _qmTotal   = null;
     let _editingId = null;
     let _idCounter = 0;
+    let _listRequest = 0;
 
     function _el(id) { return document.getElementById(id); }
 
@@ -2198,7 +2331,7 @@ const AdminPanel = (() => {
     }
 
     function _getPack(subjectId) {
-      return (window.SUBJECT_PACKS || []).find(p => p.id === subjectId);
+      return SUBJECT_PACKS.find(p => p.id === subjectId);
     }
 
     // ── Filter bar: grade cascade ────────────────────────────────────────
@@ -2207,23 +2340,39 @@ const AdminPanel = (() => {
       const subSel = _el('qm-subject');
       subSel.innerHTML = '<option value="">All subjects</option>';
       _el('qm-chapter').innerHTML = '<option value="">All chapters</option>';
-      (window.SUBJECT_PACKS || [])
-        .filter(p => !grade || String(p.grade) === grade)
+      _el('qm-chapter').disabled = true;
+      SUBJECT_PACKS
+        .filter(p => (!grade || String(p.grade) === grade) && (_el('qm-include-unpublished')?.checked || !p.comingSoon))
         .forEach(p => {
           const o = document.createElement('option');
-          o.value = p.id; o.textContent = p.name;
+          o.value = p.id; o.textContent = grade ? p.name : `Grade ${p.grade} — ${p.name}`;
           subSel.appendChild(o);
         });
+      qmSearch();
     }
 
     function _populateSubjectFilter() {
       const subSel = _el('qm-subject');
       if (subSel.options.length > 1) return; // already populated
-      (window.SUBJECT_PACKS || []).forEach(p => {
+      SUBJECT_PACKS.filter(p => _el('qm-include-unpublished')?.checked || !p.comingSoon).forEach(p => {
         const o = document.createElement('option');
         o.value = p.id; o.textContent = `Grade ${p.grade} — ${p.name}`;
         subSel.appendChild(o);
       });
+    }
+
+    function qmSubjectFilter() {
+      const chapter = _el('qm-chapter');
+      chapter.innerHTML = '<option value="">All chapters</option>';
+      const pack = _getPack(_el('qm-subject').value);
+      chapter.disabled = !pack;
+      (pack?._chapters || pack?.chapters || []).forEach(ch => {
+        const option = document.createElement('option');
+        option.value = ch.id;
+        option.textContent = `${ch.name}${ch.enrichment ? ' (Bonus)' : ''}`;
+        chapter.appendChild(option);
+      });
+      qmSearch();
     }
 
     // ── Search / list ────────────────────────────────────────────────────
@@ -2240,6 +2389,7 @@ const AdminPanel = (() => {
     }
 
     async function _fetchAndRender(replace) {
+      const request = ++_listRequest;
       const grade    = _el('qm-grade').value;
       const subject  = _el('qm-subject').value;
       const chapter  = _el('qm-chapter').value;
@@ -2254,10 +2404,11 @@ const AdminPanel = (() => {
         // not render it anyway.
         .select('id,subject_id,chapter_id,difficulty,data,protected', { count: 'exact' })
         .eq('is_past_paper', false)
-        .order('subject_id').order('chapter_id').order('difficulty')
+        .order('subject_id').order('chapter_id').order('difficulty').order('id')
         .range(_offset, _offset + PAGE - 1);
 
       if (grade)   q = q.eq('grade', parseInt(grade));
+      if (!_el('qm-include-unpublished')?.checked) q = q.in('subject_id', SUBJECT_PACKS.filter(p => !p.comingSoon).map(p => p.id));
       if (subject) q = q.eq('subject_id', subject);
       if (chapter) q = q.eq('chapter_id', chapter);
       if (diff)    q = q.eq('difficulty', parseInt(diff));
@@ -2266,9 +2417,10 @@ const AdminPanel = (() => {
       if (_el('qm-protected')?.checked)  q = q.eq('protected', true);
 
       const { data, error, count } = await q;
+      if (request !== _listRequest) return;
 
       if (error) {
-        _el('qm-list').innerHTML = `<p class="text-sm text-red-500 p-4">Error: ${error.message}</p>`;
+        _el('qm-list').innerHTML = `<p class="text-sm text-red-500 p-4">Could not load questions: ${_esc(error.message)}</p>`;
         return;
       }
 
@@ -2280,18 +2432,26 @@ const AdminPanel = (() => {
       _setCount('qm-count', _offset + rows.length, _qmTotal, 'questions');
 
       const html = rows.map(r => {
-        const preview = _stripHtml(r.data?.question || '').slice(0, 80) || '(no text)';
-        const safeId  = r.id.replace(/'/g, "\\'");
-        return `<div class="flex items-center gap-2 p-2 border dark:border-gray-600 rounded text-sm hover:bg-gray-50 dark:hover:bg-gray-700/40">
-          <span class="font-mono text-xs text-gray-400 w-36 shrink-0 truncate">${r.id}</span>
-          <span class="flex-1 truncate text-gray-700 dark:text-gray-300">${preview}</span>
-          <span class="text-xs bg-gray-100 dark:bg-gray-600 dark:text-gray-300 rounded px-1 shrink-0">${r.chapter_id}</span>
-          <span class="text-xs text-gray-400 shrink-0">L${r.difficulty}</span>
-          ${r.protected ? `<span title="Protected — import script will not overwrite" class="text-xs shrink-0">🔒</span>` : ''}
-          <button onclick="AdminPanel.qmToggleProtection('${safeId}',${!r.protected})" class="text-xs text-gray-400 border dark:border-gray-500 rounded px-1.5 py-0.5 shrink-0" title="${r.protected ? 'Remove protection' : 'Protect from import'}">${r.protected ? 'Unprotect' : 'Protect'}</button>
-          <button onclick="AdminPanel.qmOpenForm('${safeId}')" class="text-blue-600 text-xs px-2 py-1 border dark:border-gray-500 rounded shrink-0">Edit</button>
-          <button onclick="AdminPanel.qmDelete('${safeId}')" class="text-red-500 text-xs px-2 py-1 border dark:border-gray-500 rounded shrink-0">Delete</button>
-        </div>`;
+        const preview = _stripHtml(r.data?.question || '').slice(0, 360) || 'Visual or interactive question — open to review.';
+        const safeId = _esc(JSON.stringify(r.id));
+        const pack = _getPack(r.subject_id);
+        const ch = (pack?._chapters || pack?.chapters || []).find(c => c.id === r.chapter_id);
+        const difficulty = {1:'Basic',2:'Medium',3:'Hard',4:'Word problems / applied'}[r.difficulty] || 'Not specified';
+        return `<article class="qm-question-card">
+          <div class="qm-question-meta"><span>${_esc(pack ? `Grade ${pack.grade} · ${pack.name}` : r.subject_id)}</span><span>${_esc(difficulty)}</span>${pack?.comingSoon ? '<span>Unpublished pack</span>' : ''}${r.protected ? '<span>🔒 Protected from imports</span>' : ''}</div>
+          <h3>${_esc(ch?.name || r.chapter_id)}${ch?.enrichment ? ' · Bonus' : ''}</h3>
+          <p class="qm-question-preview">${_esc(preview)}</p>
+          <div class="qm-question-footer"><span class="qm-question-id">ID: ${_esc(r.id)}</span>
+            <div class="qm-question-actions">
+              <button onclick="AdminPanel.qmOpenForm(${safeId})" class="qm-edit-button">Review / edit question</button>
+              <details><summary>More actions</summary><div class="qm-secondary-actions">
+                <p>Protection keeps imports from overwriting your edits.</p>
+                <button onclick="AdminPanel.qmToggleProtection(${safeId},${!r.protected})">${r.protected ? 'Remove import protection' : 'Protect from imports'}</button>
+                <button onclick="AdminPanel.qmDelete(${safeId})" class="qm-delete-button">Delete question…</button>
+              </div></details>
+            </div>
+          </div>
+        </article>`;
       }).join('');
 
       const list = _el('qm-list');
@@ -2356,7 +2516,7 @@ const AdminPanel = (() => {
       const grade   = _el('qmf-grade').value;
       const subSel  = _el('qmf-subject');
       subSel.innerHTML = '';
-      (window.SUBJECT_PACKS || [])
+      SUBJECT_PACKS
         .filter(p => String(p.grade) === grade)
         .forEach(p => {
           const o = document.createElement('option');
@@ -2511,12 +2671,94 @@ const AdminPanel = (() => {
       _loadReportBadge();
     }
 
-    return { tabOpen, qmSearch, qmLoadMore, qmGradeFilter, qmOpenForm, qmCloseForm,
+    return { tabOpen, qmSearch, qmLoadMore, qmGradeFilter, qmSubjectFilter, qmOpenForm, qmCloseForm,
              qmFormGradeChange, qmFormSubjectChange, qmFormChapterChange,
              qmFormTypeChange, qmUpdatePreview, qmInsertImage, qmUploadImage, qmSave, qmDelete,
              qmToggleProtection };
   })();
 
+  // ══════════════════════════════════════════════
+  //  Teacher assignment caps (Content tab)
+  //
+  //  mm_data.guest_assignment_limits. guest_assignment_create() re-reads this
+  //  row on every create and clamps what it finds, so these fields decide what
+  //  the SERVER allows - not what this screen draws.
+  // ══════════════════════════════════════════════
+  let _guestLimits = null;
+
+  // ⚠ Keep in step with the coalesce() fallbacks in
+  // supabase-guest-assignment-limits.sql and with the row it seeds. This copy
+  // exists only so the form is populated before the row loads.
+  const GUEST_LIMIT_DEFAULTS = {
+    unverified: { per_day: 1, max_students: 15 },
+    verified:   { per_day: 3, max_students: 40 },
+  };
+
+  async function loadGuestLimits() {
+    if (!_sb) return;
+    const { data } = await _sb.from('mm_data').select('value').eq('key', 'guest_assignment_limits').maybeSingle();
+    const v = data?.value || {};
+    _guestLimits = {
+      unverified: Object.assign({}, GUEST_LIMIT_DEFAULTS.unverified, v.unverified || {}),
+      verified:   Object.assign({}, GUEST_LIMIT_DEFAULTS.verified,   v.verified   || {}),
+    };
+    _renderGuestLimits();
+  }
+
+  function _renderGuestLimits() {
+    if (!_guestLimits) return;
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+    set('admin-gal-unv-day', _guestLimits.unverified.per_day);
+    set('admin-gal-unv-stu', _guestLimits.unverified.max_students);
+    set('admin-gal-ver-day', _guestLimits.verified.per_day);
+    set('admin-gal-ver-stu', _guestLimits.verified.max_students);
+    previewGuestLimits();
+  }
+
+  // Reads the FIELDS, not the saved row, so the consequence of a number is
+  // visible before Save - same reason as previewShopEconomy(). 0 is a real
+  // setting and has to read as one, because it silently stops every teacher in
+  // that tier from creating anything.
+  function previewGuestLimits() {
+    const el = document.getElementById('admin-gal-preview');
+    if (!el) return;
+    const n = (id) => parseInt(document.getElementById(id)?.value, 10);
+    const ud = n('admin-gal-unv-day'), vd = n('admin-gal-ver-day');
+    const us = n('admin-gal-unv-stu'), vs = n('admin-gal-ver-stu');
+    const say = (d, s) => !Number.isFinite(d) ? '?'
+      : d === 0 ? 'cannot create any'
+      : d + ' per day ' + '\u00d7' + ' up to ' + (Number.isFinite(s) ? s : '?') + ' pupils';
+    el.innerHTML = 'An <b>unverified</b> teacher ' + _esc(say(ud, us))
+      + '. A <b>verified</b> teacher or admin ' + _esc(say(vd, vs)) + '.';
+  }
+
+  async function saveGuestLimits() {
+    if (!_guestLimits) return;
+    // A blank or out-of-range field falls back to the CURRENT saved value, not
+    // to the built-in default - an admin who clears one box by accident should
+    // not have last month's tuning silently reverted underneath them.
+    const num = (id, min, max, fallback) => {
+      const v = parseInt(document.getElementById(id)?.value, 10);
+      return Number.isFinite(v) && v >= min && v <= max ? v : fallback;
+    };
+    const prev = JSON.stringify(_guestLimits);
+    const next = {
+      unverified: {
+        per_day:      num('admin-gal-unv-day', 0, 1000, _guestLimits.unverified.per_day),
+        max_students: num('admin-gal-unv-stu', 1, 500,  _guestLimits.unverified.max_students),
+      },
+      verified: {
+        per_day:      num('admin-gal-ver-day', 0, 1000, _guestLimits.verified.per_day),
+        max_students: num('admin-gal-ver-stu', 1, 500,  _guestLimits.verified.max_students),
+      },
+    };
+    _guestLimits = next;
+    const { error } = await _sb.from('mm_data')
+      .upsert({ key: 'guest_assignment_limits', value: next, updated_at: new Date().toISOString() });
+    if (error) { console.error('[Admin.saveGuestLimits]', error.message); _guestLimits = JSON.parse(prev); }
+    _renderGuestLimits();
+    toast(error ? 'Could not save — NOT applied.' : 'Assignment caps saved.', error ? 4000 : 2500);
+  }
   // ══════════════════════════════════════════════
   //  Credit shop settings + security log
   //
@@ -2851,16 +3093,17 @@ const AdminPanel = (() => {
     loadSecurityEvents();
   }
 
-  return { render, showTab, loadMembers, loadMoreMembers, filterMembers, setMemberStatusFilter, setMemberVisibilityFilters,
+  return { render, showTab, loadMembers, loadMoreMembers, filterMembers, copyMemberEmails, setMemberStatusFilter, setMemberVisibilityFilters,
     loadMorePendingRegistrations, activatePendingRegistration, sendPasswordReset,
     setTemporaryPassword, deleteMemberAccount, changeRole, toggleMemberRow,
     loadShopSettings, saveShopBasics, setShopEnabled, setChapterPrice, renderShopPrices,
+    loadGuestLimits, saveGuestLimits, previewGuestLimits,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
     loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, resolveReport, loadRoles, loadMoreRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier,
     qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
-    qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,
+    qmSubjectFilter: QM.qmSubjectFilter, qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,
     qmFormGradeChange: QM.qmFormGradeChange, qmFormSubjectChange: QM.qmFormSubjectChange,
     qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,
     qmUpdatePreview: QM.qmUpdatePreview, qmInsertImage: QM.qmInsertImage,

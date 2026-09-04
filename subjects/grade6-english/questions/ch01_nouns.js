@@ -91,7 +91,7 @@ STATIC_QUESTIONS.push(
     options:['Her','kindness','inspired','everyone'],
     answer:'kindness',
     hint:'Abstract nouns name qualities, emotions or ideas - things you cannot touch.',
-    explanation:'"<b>Kindness</b>" is an abstract noun - it names a quality that cannot be physically seen or touched. The MIE Grade 6 English textbook teaches that abstract nouns often end in suffixes like <b>-ness</b> (kindness, darkness), <b>-ity</b> (equality, honesty), <b>-tion</b> (education, imagination), <b>-ment</b> (excitement, achievement), <b>-ance/-ence</b> (elegance, patience). Other examples: courage, freedom, sadness, wisdom, justice.' }),
+    explanation:'"<b>Kindness</b>" is an abstract noun - it names a quality that cannot be physically seen or touched. The MIE Grade 6 English textbook teaches that abstract nouns often end in suffixes like <b>-ness</b> (kindness, darkness), <b>-ity</b> (equality, curiosity), <b>-tion</b> (education, imagination), <b>-ment</b> (excitement, achievement), <b>-ance/-ence</b> (elegance, patience). Other examples: courage, freedom, sadness, wisdom, justice.' }),
 
   makeMCQ({ id:'g6eng-noun-012', chapterId:'g6eng-nouns', subsection:'collective', difficulty:1,
     question:'What is the collective noun for a group of FISH swimming together?',

@@ -21,6 +21,10 @@ priorities change; completed items should retain a short outcome note.
 
 ## Next
 
+Teacher work has a separate phased [teacher revamp plan](teacher-revamp-plan.md):
+reliable assignments/results first, then easier setup, classes, reports and
+printable resources. Status: planned; implementation has not started.
+
 4. **Friendly parent onboarding.**
    - Three clear setup steps: add child, choose grade, choose a daily goal.
    - Explain Parent PIN, child PIN, shared-device switching, and separate
@@ -39,6 +43,10 @@ priorities change; completed items should retain a short outcome note.
 
 7. **Personalised revision plans.**
    - Convert weaknesses and an exam date into short daily tasks.
+   - 2026-09-04: [Grade 5 Maths learning-coach pilot](learning-coach-pilot.md)
+     implemented locally: daily check/practice missions, delayed fresh checks and
+     parent evidence summaries. Not deployed; exam-date planning and other grades
+     remain future work. No paid gate enabled yet.
 
 8. **Parent reports and printable revision packs.**
    - Weekly progress summary, targeted worksheets, timed papers, answer sheets,

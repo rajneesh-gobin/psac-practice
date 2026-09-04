@@ -117,7 +117,7 @@ const _PASSAGE_DODO = `<div style="background:#f8fafc;border-left:4px solid #089
 <b style="color:#0e7490">Read the passage carefully, then answer the questions.</b><br><br>
 <b>The Dodo - Mauritius's Lost Bird</b><br><br>
 The dodo was a large, flightless bird that lived only on the island of Mauritius. Standing nearly a metre tall and weighing up to twenty-three kilograms, it had short, stubby wings that were completely useless for flight. Its rounded body and peculiar beak gave it an appearance unlike any other bird on Earth. Scientists believe the dodo evolved without the ability to fly because Mauritius had no land predators - there was simply no need to escape from danger by air.<br><br>
-When Dutch sailors arrived in Mauritius in the late 1600s, the dodo's fate was sealed. The birds were easy to catch because they had no fear of humans - they had never learned to run from predators. Sailors hunted them for food, but the greater threat came from the animals the settlers brought with them: rats, pigs and monkeys that raided dodo nests and ate the eggs. Within less than eighty years of human arrival, the dodo was extinct.<br><br>
+When Dutch sailors arrived in Mauritius around 1600, the dodo's fate was sealed. The birds were easy to catch because they had no fear of humans - they had never learned to run from predators. Sailors hunted them for food, but the greater threat came from the animals the settlers brought with them: rats, pigs and monkeys that raided dodo nests and ate the eggs. Within less than a century of human arrival, the dodo was extinct.<br><br>
 Today, the dodo has become a powerful symbol. Scientists use the phrase "dead as a dodo" to describe anything completely and irreversibly gone. Yet the dodo's story is also a warning: the same combination of hunting, habitat destruction and introduced species continues to drive other animals to extinction today. In Mauritius, conservation efforts now protect surviving endemic species such as the Pink Pigeon and the Echo Parakeet, determined that history shall not repeat itself.
 </div>`;
 
@@ -158,7 +158,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-015', chapterId:'g6eng-comprehension', subsection:'vocabulary', difficulty:2,
     question:`${_PASSAGE_DODO}What does the phrase "dead as a dodo" mean, according to the passage?`,
     options:[
-      'Extinct and gone forever',
+      'Very old and forgotten',
       'Completely and irreversibly gone',
       'Something that has been hunted to near extinction',
       'A bird that cannot fly'
@@ -169,10 +169,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-comp-016', chapterId:'g6eng-comprehension', subsection:'language', difficulty:2,
     question:`${_PASSAGE_DODO}What literary technique is used in "determined that history shall not repeat itself" (paragraph 3)?`,
-    options:['simile','alliteration','personification','idiom/figurative language'],
+    options:['simile','alliteration','onomatopoeia','idiom/figurative language'],
     answer:'idiom/figurative language',
     hint:'"History repeating itself" - can history literally repeat? This is a common English expression.',
-    explanation:'"History shall not repeat itself" is an <b>idiom / figurative expression</b> - history cannot literally repeat; the phrase means "the same mistake (extinction) should not happen again." Recognising figurative language is a key comprehension skill in MIE Grade 6. Contrast: a <b>simile</b> uses "like/as"; a <b>metaphor</b> states something IS something else; <b>alliteration</b> repeats consonant sounds.' }),
+    explanation:'"History shall not repeat itself" is an <b>idiom / figurative expression</b> - history cannot literally repeat; the phrase means "the same mistake (extinction) should not happen again." Recognising figurative language is a key comprehension skill in MIE Grade 6. Contrast: a <b>simile</b> uses "like/as"; a <b>metaphor</b> states something IS something else; <b>alliteration</b> repeats consonant sounds; <b>onomatopoeia</b> imitates sounds (buzz, crash).' }),
 
   makeMCQ({ id:'g6eng-comp-017', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:2,
     question:`${_PASSAGE_DODO}Why were dodo birds "easy to catch" when sailors arrived?`,

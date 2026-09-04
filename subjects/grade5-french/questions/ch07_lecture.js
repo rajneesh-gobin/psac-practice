@@ -159,7 +159,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g5fr-lec-016', chapterId:'fr-lecture', subsection:'vrai_faux', difficulty:1,
     question:`${_TEXTE_FR_B}Vrai ou Faux : Sanjeev et Marcelin ont pu rentrer chez eux avant la tempête.`,
     answer:false,
-    hint:'Que s\'est-il passé à leur barque ?',
+    hint:'Qu\'est-il arrivé à leur barque ?',
     explanation:'<b>Faux.</b> La barque a chaviré pendant la tempête : "Leur barque finit par <b>chavirer</b>." Les deux garçons ont dû être secourus par hélicoptère. Ils n\'ont pas pu rentrer seuls - ils ont été ramenés sur la plage par les secours.' }),
 
   makeMCQ({ id:'g5fr-lec-017', chapterId:'fr-lecture', subsection:'vocabulaire', difficulty:2,
@@ -327,7 +327,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Nadia et Samuel se promenaient sur <b>la plage de Belle Mare</b>…" — La première phrase indique clairement le lieu.' }),
 
   makeMCQ({ id:'g5fr-lec-037', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
-    question:`${_TEXTE_FR_C}Combien de kilos de déchets les élèves ont-ils ramassé ?`,
+    question:`${_TEXTE_FR_C}Combien de kilos de déchets les élèves ont-ils ramassés ?`,
     options:['Dix kilos','Vingt kilos','Plus de cinquante kilos','Exactement cent kilos'],
     answer:'Plus de cinquante kilos',
     hint:'Cherchez le chiffre mentionné lors de la journée de nettoyage.',

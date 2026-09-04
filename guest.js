@@ -18,7 +18,7 @@ const show = id => document.querySelectorAll('.screen')
   .forEach(s => s.classList.toggle('on', s.id === id));
 
 const S = {
-  code: '', name: '', token: '', assignment: null, questions: [],
+  code: '', name: '', submitName: '', access: null, token: '', assignment: null, questions: [],
   idx: 0, answers: [], answered: false, endAt: null, timer: null, result: null,
 };
 
@@ -73,15 +73,28 @@ function isCorrect(q, ua) {
 // ══════════════════════════════════════════════════════════════════════════
 //  SCREEN 1 · Gate
 // ══════════════════════════════════════════════════════════════════════════
-function initGate() {
+async function initGate() {
   if (!S.code) {
     $('g-title').textContent = 'Link not complete';
     $('g-sub').textContent = 'Ask your teacher to resend the homework link.';
     $('g-go').disabled = true;
     return;
   }
-  $('g-sub').textContent = 'Code ' + S.code + ' · enter your name and PIN';
-  $('g-name').focus();
+  $('g-go').disabled = true;
+  $('g-sub').textContent = 'Loading homework…';
+  try {
+    const info = await api('/api/assignment-open', {code:S.code, info:true});
+    if (!info.ok) throw new Error('unavailable');
+    S.access = info.access_mode || 'legacy';
+    $('g-title').textContent = info.title || 'Homework';
+    $('g-name-wrap').hidden = S.access === 'classroom_pin';
+    $('g-pin-wrap').hidden = S.access === 'nickname';
+    $('g-sub').textContent = S.access === 'classroom_pin' ? 'Enter your own private pupil PIN. No account needed.' : S.access === 'nickname' ? 'Enter a nickname for this assignment. No PIN needed.' : 'Enter your name and the assignment PIN.';
+    $('g-go').disabled = false;
+  } catch (_) {
+    err('Could not load this homework. Check your connection or ask your teacher whether it is still open. Refresh to try again.');
+    return;
+  }
 
   $('g-pin').addEventListener('input', e => {
     e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
@@ -95,8 +108,9 @@ function initGate() {
 async function openAssignment() {
   const name = $('g-name').value.trim();
   const pin  = $('g-pin').value.trim();
-  if (!name)            { err('Please enter your first name.'); $('g-name').focus(); return; }
-  if (!/^\d{4}$/.test(pin)) { err('The PIN is 4 digits.'); $('g-pin').focus(); return; }
+  if (!S.access) return;
+  if (S.access !== 'classroom_pin' && !name) { err('Please enter your nickname.'); $('g-name').focus(); return; }
+  if (S.access !== 'nickname' && !/^\d{4}$/.test(pin)) { err('The PIN is 4 digits.'); $('g-pin').focus(); return; }
 
   err('');
   const btn = $('g-go');
@@ -119,6 +133,7 @@ async function openAssignment() {
     // A duplicate first name is usually a DIFFERENT child, not a repeat attempt,
     // so offer the standard classroom fix rather than a dead end.
     if (r.error === 'name_taken') {
+      if (S.access === 'classroom_pin') { err('You have already submitted this homework. Ask your teacher if you need another attempt.'); return; }
       err('Someone called "' + name + '" already did this. If that is not you, '
         + 'add your surname initial - e.g. "' + name + ' B".');
       $('g-name').focus();
@@ -139,6 +154,8 @@ async function openAssignment() {
   }
 
   S.name       = r.name;
+  S.submitName = r.submitName || r.name;
+  $('g-pin').value = '';
   // Per-attempt token from assignment-open. Held in memory only - it proves
   // THIS browser passed the PIN, and the submit endpoint refuses without it.
   S.token      = r.token || '';
@@ -263,7 +280,7 @@ async function finish() {
   let r;
   try {
     r = await api('/api/assignment-submit',
-      { code: S.code, name: S.name, token: S.token, answers: S.answers });
+      { code: S.code, name: S.submitName, token: S.token, answers: S.answers });
   } catch (e) {
     // Never lose the child's work to a flaky connection - let them retry.
     $('d-pct').textContent = '⚠️';

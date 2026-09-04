@@ -162,9 +162,11 @@ const _PLAN_GATED_SCREENS = {
   search:        'question_search',
   forum:         'community_forum',
   calendar:      'study_calendar',
+  minigames:     'minigames',
 };
 
 const _FEATURE_COPY = {
+  minigames:           'The Game Zone is part of a paid plan.\n\nAsk a parent about upgrading to unlock Peak Quest and the games that follow it.',
   advanced_analytics:  'Advanced analytics is part of a paid plan.\n\nIt shows chapter-by-chapter progress over time. Ask a parent about upgrading to switch it on.',
   printable_papers:    'Printable exam papers are part of a paid plan.\n\nYou can still take the exam on screen. Ask a parent about upgrading to print papers.',
   timetable_generator: 'The study timetable generator is part of a paid plan.\n\nAsk a parent about upgrading to build a revision timetable automatically.',
@@ -445,6 +447,7 @@ let _assignmentActive = false;
 // belongs to the guest/teacher ASSIGNMENT_MODE flow; a PARENT-assigned round
 // finishes through the round-complete modal instead and never reached it.
 function _setAssignmentContext(on) {
+  S.practice.coachMission = null;
   _assignmentActive = !!on;
   document.getElementById('practice-pause-btn')?.classList.toggle('hidden', _assignmentActive);
   // Leaving an assignment also has to hand back the two things an assignment is
@@ -675,6 +678,7 @@ function _pruneResumeStore(store) {
 }
 
 function _saveResume() {
+  if (S.practice?.coachMission) return;
   if (!ACTIVE_STUDENT_ID) return;
   const store = _pruneResumeStore(_readResumeStore());
   if (S.exam && S.exam.qs && S.exam.qs.length) {
@@ -1129,6 +1133,7 @@ async function openChildLoginModal(student, pin) {
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('cl-child-name', _childLogin.name);
+  set('cl-start-child-name', _childLogin.name);
   set('cl-family',     _childLogin.family || '—');
   set('cl-username',   _childLogin.username);
   set('cl-pin',        _childLogin.pin || 'unchanged');
@@ -1191,6 +1196,32 @@ function _childLoginMessage() {
 function closeChildLoginModal() {
   document.getElementById('modal-child-login')?.classList.add('hidden');
   _childLogin = null;
+}
+
+// First-child handoff: a parent may be holding the same tablet their child
+// will use. Make that route explicit instead of expecting them to infer what
+// “Switch to student mode” means from a dashboard action.
+function startChildPracticeFromWelcome() {
+  closeChildLoginModal();
+  if (typeof Auth !== 'undefined' && Auth.switchToStudentSelect) {
+    Auth.switchToStudentSelect();
+  }
+}
+
+function showStudentViewGuide() {
+  const callout = document.getElementById('pd-student-view-callout');
+  const button = document.getElementById('pd-student-view-btn');
+  if (!callout || !button) return;
+  try { localStorage.setItem('psac_student_view_guide_seen', '1'); } catch (_) {}
+  callout.classList.remove('hidden');
+  button.classList.remove('student-view-nudge');
+  // Restart the short animation even if the parent just added a second child.
+  void button.offsetWidth;
+  button.classList.add('student-view-nudge');
+}
+
+function dismissStudentViewGuide() {
+  document.getElementById('pd-student-view-callout')?.classList.add('hidden');
 }
 
 function shareChildLoginWhatsApp() {
@@ -1681,6 +1712,13 @@ const _ADULT_ONLY_SCREENS = new Set(['forum']);
 function _isParentContext() {
   return !!(typeof _isParentSession === 'function' && _isParentSession());
 }
+function _updateTeacherModeButton() {
+  const btn = document.getElementById('btn-open-teacher');
+  if (!btn) return;
+  const allowed = _isParentContext() && typeof Auth !== 'undefined' && Auth.isTeacher();
+  btn.classList.toggle('hidden', !allowed);
+  btn.classList.toggle('flex', !!allowed);
+}
 function _returnToParentDashboard() {
   const id = ACTIVE_STUDENT_ID;
   showScreen('parent');
@@ -1753,13 +1791,6 @@ function showScreen(id) {
       try { sessionStorage.setItem('psac-last-screen', id); } catch (_) {}
     }
   }
-  if (id === 'landing') {
-    try {
-      if (!localStorage.getItem('psac_service_notice_dismissed')) {
-        setTimeout(() => document.getElementById('modal-service-notice')?.classList.remove('hidden'), 250);
-      }
-    } catch (_) {}
-  }
   _prevScreen = id;
   _updateBottomNav(id);
   if (_currentHintTarget && _currentHintTarget.screen !== id) _hideHint();
@@ -1784,6 +1815,7 @@ function showScreen(id) {
       b.classList.toggle('flex',  !isAuthScreen);
     });
   }
+  _updateTeacherModeButton();
   // Forum: adult sessions only, same rule the screen guard applies.
   const forumBtn = document.getElementById('btn-open-forum');
   if (forumBtn) {
@@ -1813,6 +1845,7 @@ function showScreen(id) {
   if (id === 'dashboard')       renderDashboard();
   if (id === 'schedule')        renderSchedule();
   if (id === 'analytics')       renderAnalytics();
+  if (id === 'minigames' && typeof MiniGames !== 'undefined') MiniGames.renderHub();
   if (id === 'chapter-select')  renderChapterSelect();
   if (id === 'syllabus')        renderSyllabus();
   if (id === 'interactive-map') renderInteractiveMap();
@@ -1840,11 +1873,6 @@ function showScreen(id) {
 
   // Last, so the render calls above have put the target on the page already.
   _armIdleNudge(id);
-}
-
-function dismissServiceNotice() {
-  try { localStorage.setItem('psac_service_notice_dismissed', '1'); } catch (_) {}
-  document.getElementById('modal-service-notice')?.classList.add('hidden');
 }
 
 function _updateBreadcrumb(screenId) {
@@ -2143,7 +2171,7 @@ function _plainText(html) {
   return (d.textContent || '').replace(/\s+/g, ' ').trim();
 }
 
-function recordAnswer(chapterId, correct, source) {
+function recordAnswer(chapterId, correct, source, questionId) {
   _recordDaily(correct, chapterId, source);
   if (ASSIGNMENT_MODE) {
     ASSIGNMENT_SCORE.attempted++;
@@ -2158,6 +2186,10 @@ function recordAnswer(chapterId, correct, source) {
   if (!DB.chapters[chapterId]) DB.chapters[chapterId] = { attempted: 0, correct: 0 };
   DB.chapters[chapterId].attempted++;
   if (correct) DB.chapters[chapterId].correct++;
+  if (questionId && STATIC_QUESTIONS.some(q => q.id === questionId && q.chapterId === chapterId)) {
+    const chapter = DB.chapters[chapterId];
+    chapter.answeredIds = [...new Set([...(Array.isArray(chapter.answeredIds) ? chapter.answeredIds : []), questionId])];
+  }
   // WHEN, not just how much. Without this a child looking at the chapter grid
   // can tell that a chapter has been touched but not whether that was this
   // afternoon or in March, which is most of what "have I done this one?" means.
@@ -3112,6 +3144,8 @@ async function renderParentDashboard() {
   if (_el('pd-load-error-msg')) _el('pd-load-error-msg').textContent = loadError || '';
   if (_el('pd-no-children'))   _el('pd-no-children').classList.toggle('hidden', hasStudents || !!loadError);
   if (_el('pd-children-grid')) _el('pd-children-grid').classList.toggle('hidden', !hasStudents);
+  _el('pd-children-heading')?.classList.toggle('hidden', !hasStudents);
+  _el('pd-weekly-details')?.classList.toggle('hidden', students.length < 2);
   if (_el('pd-detail-panel'))  _el('pd-detail-panel').classList.add('hidden');
 
   // Plan banner - load async, non-blocking
@@ -3149,7 +3183,7 @@ async function renderParentDashboard() {
 
   // Render skeleton cards first for instant paint
   grid.innerHTML = students.map(s => `
-    <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border-2 border-transparent
+    <div role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" aria-label="View ${_profEsc(s.display_name || s.username)} — progress and controls" class="pd-child-card bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border-2 border-transparent
       hover:border-indigo-300 dark:hover:border-indigo-600 cursor-pointer transition-all active:scale-95"
       onclick="PD.selectChild('${s.id}')">
       <div class="flex items-center gap-3 mb-3">
@@ -3186,12 +3220,12 @@ async function renderParentDashboard() {
   for (const s of students) {
     (prog => {
       const statsEl = document.getElementById(`pd-card-stats-${s.id}`);
-      if (!statsEl || !prog) return;
+      if (!statsEl) return;
+      if (!prog) { statsEl.innerHTML='<p class="text-sm text-gray-600 dark:text-gray-300">Progress could not be loaded. Open this child to try again.</p>'; return; }
       const st  = prog.stats || {};
-      const acc = st.totalAttempted ? Math.round(st.totalCorrect / st.totalAttempted * 100) : 0;
-      const col = acc >= 80 ? '#22c55e' : acc >= 50 ? '#f59e0b' : '#3b82f6';
-      const today = new Date().toDateString();
-      const studiedToday = st.lastDate === today;
+      const todayData = prog.daily?.[_muDayKey()] || {};
+      const week = _repWindow(0,6,prog.daily || {});
+      const studiedToday = (todayData.a || 0) > 0;
       const lastDate  = st.lastDate ? new Date(st.lastDate) : null;
       const daysSince = lastDate ? Math.floor((Date.now() - lastDate.getTime()) / 86400000) : null;
       const activityPill = studiedToday
@@ -3199,21 +3233,15 @@ async function renderParentDashboard() {
         : (daysSince !== null && daysSince > 3)
           ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">⚠️ Last active ${daysSince}d ago</span>`
           : '<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">⏳ No activity yet today</span>';
-      const chips = _subjectChips(prog);
+      const chips = _subjectChips(prog, s.grade);
       statsEl.innerHTML = `
         <div class="flex items-center gap-2 mb-2">${activityPill}</div>
-        <div class="flex gap-3 text-xs text-gray-500 dark:text-gray-400 mb-1.5">
-          <span>📝 ${st.totalAttempted || 0}</span>
-          <span>🎯 ${acc}%</span>
-          <span>🔥 ${st.streak || 0}d streak</span>
-        </div>
-        <div class="flex items-center gap-2 mb-2">
-          <div style="flex:1;height:5px;background:#e2e8f0;border-radius:3px;overflow:hidden">
-            <div style="width:${acc}%;height:100%;background:${col};border-radius:3px"></div>
-          </div>
-          <span class="text-xs font-bold shrink-0" style="color:${col}">${acc}%</span>
-        </div>
-        ${chips ? `<div class="flex flex-wrap gap-1">${chips}</div>` : ''}`;
+        <div class="pd-child-today"><strong>Today</strong><p>${todayData.a ? `${todayData.a} answer attempts · ${todayData.c || 0} correct` : 'No practice recorded today yet.'}</p></div>
+        <p class="text-sm text-gray-700 dark:text-gray-200 my-3"><strong>Last 7 days:</strong> ${week.a} answer attempts · ${week.days}/7 days practised${week.a ? ` · ${week.c} correct` : ''}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-300 mb-3">All time: ${st.totalAttempted || 0} answer attempts${st.totalAttempted ? ` · ${st.totalCorrect || 0} correct` : ''}. Repeats count as attempts, not completed work.</p>
+        ${chips ? `<div class="pd-child-subjects"><p class="text-xs font-semibold mb-2">Grade ${_profEsc(String(s.grade || '?'))} subjects · all-time attempts</p><div class="flex flex-wrap gap-2">${chips}</div></div>` : ''}
+        <p class="pd-child-next">${studiedToday ? 'See today’s work and choose what comes next.' : 'Open to choose a short practice task for today.'}</p>
+        <span class="pd-child-open">View progress &amp; manage homework →</span>`;
     })(progressById[s.id]);
   }
 }
@@ -4285,6 +4313,7 @@ const PD = (() => {
   }
 
   function renderDetail() {
+    if (typeof LearningCoach !== 'undefined') LearningCoach.renderParent();
     const acct  = Auth.getActiveAccount() || {};
     const _el   = id => document.getElementById(id);
     const stats = DB.stats || {};
@@ -5009,6 +5038,8 @@ function _renderParentControls(acct) {
   if (cpToggle) cpToggle.checked = crossPractice;
   const hintsToggle = _el('pd-hints-toggle');
   if (hintsToggle) hintsToggle.checked = !(DB.restrictions?.hintsDisabled ?? false);
+  const gamesToggle = _el('pd-games-toggle');
+  if (gamesToggle) gamesToggle.checked = !(DB.restrictions?.minigamesDisabled ?? false);
 
   const chLocks = _el('pd-chapter-locks');
   if (!chLocks) return;
@@ -5574,6 +5605,7 @@ function _greeting() {
 }
 
 function renderDashboard() {
+  if (typeof LearningCoach !== 'undefined') LearningCoach.renderChild();
   if (!ACTIVE_STUDENT_ID) return; // guard: no student loaded yet
   const _acct  = (typeof Auth !== 'undefined') && Auth.getActiveAccount();
 
@@ -5626,6 +5658,7 @@ function renderDashboard() {
   document.getElementById('dash-accuracy').textContent = acc;
   document.getElementById('dash-exams').textContent = DB.stats.examCount;
   _setStreakDisplay(DB.stats.streak);
+  if (typeof MiniGames !== 'undefined') MiniGames.syncTile();
 
   // The dashboard always gives a child one clear next step.  It is intentionally
   // not a replacement for chapter / subject selection: the secondary action in
@@ -5766,24 +5799,16 @@ function _renderWeakChapters(studentData) {
     </div>`;
 }
 
-function _subjectChips(studentData) {
-  // One chip PER PACK, so comingSoon packs have to go: 45 registered packs
-  // would print 30 grey "not started" chips onto a child's card, for grades
-  // they are not in and cannot open.
+function _subjectChips(studentData, grade) {
+  // Keep each child's card scoped to their grade, not every registered pack.
   const packs = Object.values(typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : {})
-    .filter(p => !p.comingSoon);
+    .filter(p => !p.comingSoon && String(p.grade) === String(grade));
   if (!packs.length) return '';
   return packs.map(pack => {
     const chs = pack._chapters || pack.chapters || [];
     let att = 0, cor = 0;
     chs.forEach(c => { const p = studentData.chapters?.[c.id]; if (p) { att += p.attempted||0; cor += p.correct||0; } });
-    const pct   = att > 0 ? Math.round(cor / att * 100) : null;
-    const color = pct === null ? 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
-                : pct >= 70   ? 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400'
-                : pct >= 45   ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400'
-                :               'bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400';
-    const abbr  = pack.name.replace('History & Geography','H&G').slice(0,3);
-    return `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full ${color}">${abbr}${pct !== null ? ' '+pct+'%' : ''}</span>`;
+    return `<span class="pd-subject-chip">${_profEsc(pack.name)}: ${att ? `${att} attempts` : 'Not started'}</span>`;
   }).join('');
 }
 
@@ -5822,19 +5847,17 @@ function toggleChapterFlag(chapterId) {
 //  That is why "I cannot see which chapters I have already done" was a fair
 //  complaint about a screen that already showed numbers.
 //
-//  Effort and accuracy are now separate readings, and stars need BOTH.
-//
-//  ⚠ `attempted` counts ANSWERS GIVEN, not distinct questions seen — nothing in
-//  the app records which questions a child has met, and a random 10 from the
-//  pool repeats. So this deliberately never claims "12 of 19 questions done".
-//  It says "12 answers" against a chapter of 19, which is true.
+//  Historical totals include repeats and skipped answers. Stable bank question
+//  IDs are tracked from this update onward, without inventing historical IDs.
+//  Neither loaded-bank coverage nor answer accuracy proves syllabus mastery.
 // ══════════════════════════════════════════════
 function _chapterProgress(chId) {
   const c = (DB.chapters || {})[chId] || {};
   const attempted = c.attempted || 0;
   const correct   = c.correct || 0;
-  const total = (typeof STATIC_QUESTIONS !== 'undefined')
-    ? STATIC_QUESTIONS.filter(q => q && q.chapterId === chId).length : 0;
+  const bankIds = new Set((typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
+    .filter(q => q && q.id && q.chapterId === chId).map(q => q.id));
+  const total = bankIds.size;
   const acc = attempted ? Math.round(correct / attempted * 100) : 0;
 
   // ⚠ `total` is 0 whenever the question pool has not loaded yet — the grid can
@@ -5844,22 +5867,13 @@ function _chapterProgress(chId) {
   // the pool was slow. That is the exact bug this function exists to kill, so
   // an unknown denominator has to withhold the claim rather than assume it.
   const known  = total > 0;
-  const effort = known ? Math.min(1, attempted / total) : null;
-
-  // "Worked through" = at least as many answers as the chapter has questions.
-  // Not proof every question was seen (a random 10 repeats), but it is the
-  // honest bar for effort and it cannot be reached by answering two.
-  let stars = 0;
-  if (attempted > 0)                              stars = 1;
-  if (attempted >= 5 && acc >= 50)                stars = 2;
-  if (known && effort >= 0.8 && acc >= 80)        stars = 3;
+  const unique = new Set((Array.isArray(c.answeredIds) ? c.answeredIds : []).filter(id => bankIds.has(id))).size;
+  const effort = known ? unique / total : null;
 
   let state = 'new';
   if (attempted > 0)                state = 'started';
-  if (known && effort >= 0.8)       state = 'worked';
-  if (stars === 3)                  state = 'mastered';
 
-  return { attempted, correct, acc, total, effort, known, stars, state, last: c.last || 0 };
+  return { attempted, correct, acc, total, unique, effort, known, state, last: c.last || 0 };
 }
 
 // "Today" / "Yesterday" / "3 days ago". Uses the Mauritius day key rather than
@@ -5900,9 +5914,6 @@ function _chapterCard(ch, borderColor) {
   const total = prog.total;
 
   const tone  = pct >= 80 ? 'good' : pct >= 50 ? 'mid' : 'low';
-  const stars = prog.stars;
-  const starHtml = [1, 2, 3].map(i =>
-    `<span class="${i <= stars ? 'ch-star on' : 'ch-star'}">★</span>`).join('');
 
   const style = borderColor ? ` style="--ch-accent:${borderColor}"` : '';
   const cls   = ['ch-card', isEnr ? 'is-bonus' : '', locked ? 'is-locked' : '', resume ? 'is-paused' : ''].filter(Boolean).join(' ');
@@ -5916,13 +5927,11 @@ function _chapterCard(ch, borderColor) {
   // ⚠ "correct", not "mastery". It is accuracy, and calling it mastery told a
   // child who had answered two questions that they had mastered the chapter.
   // Effort sits beside it so the two can be read apart.
-  else                   status = `<span class="ch-status ${tone}">${pct}% correct · ${attempted} answer${attempted === 1 ? '' : 's'}</span>`;
+  else                   status = `<span class="ch-status">${prog.correct} correct out of ${attempted} answer${attempted === 1 ? '' : 's'}${attempted < 5 ? ' · small sample' : ''}</span>`;
 
   // The line that actually answers "have I done this one?" — a done-ness badge
   // and when it was last touched.
   const doneBadge = locked ? ''
-    : prog.state === 'mastered' ? '<span class="ch-done is-mastered">✓ Mastered</span>'
-    : prog.state === 'worked'   ? '<span class="ch-done is-worked">✓ Worked through</span>'
     : prog.state === 'started'  ? '<span class="ch-done is-started">In progress</span>'
     : '';
   const whenTxt = (!locked && prog.last) ? _chapterWhen(prog.last) : '';
@@ -5953,11 +5962,8 @@ function _chapterCard(ch, borderColor) {
       <div class="ch-spacer"></div>
       ${metaRow}
       ${status}
-      <div class="ch-bar" role="img" aria-label="${pct}% correct">
-        <div class="ch-bar-fill ${tone}" style="width:${locked ? 0 : pct}%"></div>
-      </div>
+      ${locked ? '' : `<p class="ch-status">${prog.known ? `${prog.unique} different questions recorded · ${total} questions in the loaded bank` : 'Question bank not loaded yet'}</p>`}
       <div class="ch-foot">
-        <span class="ch-stars" title="${stars} of 3">${starHtml}</span>
         <span class="ch-cta">${locked ? 'Locked' : resume ? '▶ Resume →' : attempted ? 'Continue →' : 'Start →'}</span>
       </div>
     </div>
@@ -5993,7 +5999,7 @@ function renderChapterSelect() {
       <p class="font-semibold text-gray-700 dark:text-gray-200">No chapters here yet</p>
       <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Pick a different subject from the Subjects screen.</p>
     </div>`;
-    _renderChapterSummary(regular);
+    _renderChapterSummary(CHAPTERS);
     return;
   }
 
@@ -6035,7 +6041,7 @@ function renderChapterSelect() {
   }
 
   grid.innerHTML = html;
-  _renderChapterSummary(regular);
+  _renderChapterSummary(CHAPTERS);
 }
 
 window.setChapterFilter = function (f) {
@@ -6072,9 +6078,9 @@ function _renderChapterSummary(chapters) {
   // effort as well — see _chapterProgress().
   const prog     = chapters.map(ch => _chapterProgress(ch.id));
   const done     = prog.filter(p => p.attempted > 0);
-  const mastered = prog.filter(p => p.state === 'mastered');
-  const worked   = prog.filter(p => p.state === 'worked' || p.state === 'mastered');
-  const pct      = Math.round((worked.length / chapters.length) * 100);
+  const answers = prog.reduce((sum,p) => sum + p.attempted, 0);
+  const unique = prog.reduce((sum,p) => sum + p.unique, 0);
+  const available = prog.reduce((sum,p) => sum + p.total, 0);
 
   // "When did I last touch this subject" — the other half of "what have I done".
   const lastMs   = Math.max(0, ...prog.map(p => p.last || 0));
@@ -6084,14 +6090,13 @@ function _renderChapterSummary(chapters) {
 
   el.innerHTML = `
     <div class="ch-sum-tile"><span class="ch-sum-num">${done.length}<span class="ch-sum-of">/${chapters.length}</span></span><span class="ch-sum-lbl">Started</span></div>
-    <div class="ch-sum-tile"><span class="ch-sum-num good">${mastered.length}</span><span class="ch-sum-lbl">Mastered</span></div>
-    <div class="ch-sum-tile"><span class="ch-sum-num${doneToday ? ' good' : ''}">${doneToday}</span><span class="ch-sum-lbl">Done today</span></div>
+    <div class="ch-sum-tile"><span class="ch-sum-num">${answers}</span><span class="ch-sum-lbl">Answers given</span></div>
+    <div class="ch-sum-tile"><span class="ch-sum-num${doneToday ? ' good' : ''}">${doneToday}</span><span class="ch-sum-lbl">Practised today</span></div>
     <div class="ch-sum-bar">
       <div class="ch-sum-bar-head">
-        <span>Worked through</span>
-        <span class="ch-sum-pct">${pct}%</span>
+        <span>${unique} different bank questions recorded${available ? ` · ${available} questions currently loaded` : ''}</span>
       </div>
-      <div class="ch-bar"><div class="ch-bar-fill good" style="width:${pct}%"></div></div>
+      <p class="ch-sum-last">Includes bonus chapters. Answers may include repeats, not chapter completion. Different-question tracking starts with this update; earlier answers are kept but cannot be reconstructed. Counts refer to the loaded bank, not syllabus mastery.</p>
       <div class="ch-sum-last">${lastMs ? `Last practised: ${_chapterWhen(lastMs)}` : 'Nothing practised yet — pick any chapter to begin.'}</div>
     </div>`;
 }
@@ -6262,10 +6267,11 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
 
 // ── SEARCH PRACTICE LAUNCH ────────────────────
 // Called by Search.practiceOwn / practiceOther with a pre-built question array
-function startSearchPractice(questions, label) {
+function startSearchPractice(questions, label, coachMission = null) {
   if (!questions || !questions.length) { toast('No questions to practise. Try a different search.', 2500); return; }
   // Ordinary practice, whatever ran before it - see _setAssignmentContext.
   _setAssignmentContext(false);
+  S.practice.coachMission = coachMission;
   S.practice.chapterId  = 'search-results';
   S.practice.difficulty = null;
   S.practice.qs         = shuffle(questions.slice());
@@ -6273,7 +6279,8 @@ function startSearchPractice(questions, label) {
   S.practice.answers    = {};
   S.practice.hintShown  = false;
   S.practice.session    = { attempted: 0, correct: 0 };
-  S.practice.showAnswers = true;
+  S.practice.showAnswers = !coachMission || coachMission.kind === 'practice';
+  S.practice.showHints = !coachMission || coachMission.kind === 'practice';
   showScreen('practice');
   const nameEl = document.getElementById('practice-ch-name');
   if (nameEl) nameEl.textContent = `🔍 ${label || 'Search Results'}`;
@@ -7145,7 +7152,7 @@ function submitExam() {
     const ok = ans != null && checkAnswer(q, ans);
     if (ok) { correct++; chapterStats[q.chapterId].correct++; }
     else if (ans != null) _recordMistake(q, ans, q.chapterId, 'exam');
-    recordAnswer(q.chapterId, ok, 'exam');
+    recordAnswer(q.chapterId, ok, 'exam', ans != null && ans !== '' ? q.id : undefined);
   });
   const total = S.exam.qs.length;
   const pct = Math.round(correct / total * 100);
@@ -7275,6 +7282,7 @@ document.getElementById('results-home-btn').addEventListener('click', () => show
 
 // ── PRACTICE MODE ─────────────────────────────
 document.getElementById('practice-back-btn').addEventListener('click', () => {
+  if (S.practice.coachMission) { showScreen('subject-select'); return; }
   _clearPracticeResume(S.practice.chapterId);
   showScreen('chapter-select');
 });
@@ -7636,7 +7644,8 @@ function practiceSubmit() {
   _logPracticeAnswer(q, ua, ok, false);
   S.practice.session.attempted++;
   if (ok) S.practice.session.correct++;
-  recordAnswer(S.practice.chapterId, ok);
+  recordAnswer(q.chapterId || S.practice.chapterId, ok, undefined, q.id);
+  if (typeof LearningCoach !== 'undefined') LearningCoach.record(q, ok);
   updateSessionStats();
 
   document.getElementById('practice-submit-btn').classList.add('hidden');
@@ -7702,6 +7711,7 @@ function practiceSkip() {
   _logPracticeAnswer(q, '', false, true);
   S.practice.session.attempted++;
   recordAnswer(S.practice.chapterId, false);
+  if (typeof LearningCoach !== 'undefined') LearningCoach.record(q, false);
   updateSessionStats();
   document.getElementById("practice-submit-btn").classList.add("hidden");
   document.getElementById("practice-skip-btn").classList.add("hidden");
@@ -7872,6 +7882,7 @@ function _roundCompleteBack() {
 function practiceNext() {
   S.practice.idx++;
   if (S.practice.idx >= S.practice.qs.length) {
+    if (S.practice.coachMission) { LearningCoach.finish(); return; }
     if (ASSIGNMENT_MODE) {
       showAssignmentComplete();
       return;
@@ -8079,6 +8090,14 @@ function updateSessionStats() {
 
 
 function renderAnalytics() {
+  // ⚠ `DB` is `{}` until a student loads (declared that way at the top of this
+  // file), so every DB.stats read below throws on a bare boot. The three routes
+  // in - the header level chip, the Progress tab, the dashboard tile - are all
+  // hidden until then, so no tap reaches this today. But showScreen() is a
+  // global, and the screen white-screens if a future caller gets here first.
+  // Measured: renderAnalytics() on a cold boot threw
+  // "Cannot read properties of undefined (reading 'totalAttempted')".
+  if (typeof DB === 'undefined' || !DB.stats) return;
   const acc = DB.stats.totalAttempted ? Math.round(DB.stats.totalCorrect / DB.stats.totalAttempted * 100) : 0;
   document.getElementById('a-total').textContent = DB.stats.totalAttempted;
   document.getElementById('a-acc').textContent   = acc + '%';
@@ -8728,6 +8747,8 @@ function _kidHomeHero() {
 }
 
 function renderSubjectSelect() {
+  if (typeof MiniGames !== 'undefined') MiniGames.syncTile();
+  if (typeof LearningCoach !== 'undefined') LearningCoach.renderChild();
   const container = document.getElementById('subject-cards');
   if (!container) return;
 

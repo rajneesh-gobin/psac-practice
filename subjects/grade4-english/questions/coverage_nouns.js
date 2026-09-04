@@ -15,13 +15,13 @@
     'A noun names a person, place, animal or thing.', `<b>${noun}</b> is a naming word, so it is a noun.`));
 
   const plurals = [
-    ['baby','babies','babys'], ['knife','knives','knifes'], ['bus','buses','buss'], ['tomato','tomatoes','tomatos'],
-    ['wolf','wolves','wolfs'], ['city','cities','citys'], ['potato','potatoes','potatos'], ['box','boxes','boxs'],
-    ['woman','women','womans'], ['mouse','mice','mouses'], ['tooth','teeth','tooths'], ['foot','feet','foots'],
-    ['sheep','sheep','sheeps'], ['goose','geese','gooses'], ['half','halves','halfs'], ['dish','dishes','dishs'], ['cherry','cherries','cherrys']
+    ['baby','babies','babys','babyes'], ['knife','knives','knifes','knifees'], ['bus','buses','buss','bus’s'], ['tomato','tomatoes','tomatos','tomato’s'],
+    ['wolf','wolves','wolfs','wolfes'], ['city','cities','citys','cityes'], ['potato','potatoes','potatos','potato’s'], ['box','boxes','boxs','box’s'],
+    ['woman','women','womans','womanes'], ['mouse','mice','mouses','mousees'], ['tooth','teeth','tooths','toothes'], ['foot','feet','foots','footes'],
+    ['sheep','sheep','sheeps','sheepes','sheeves'], ['goose','geese','gooses','goosees'], ['half','halves','halfs','halfes'], ['dish','dishes','dishs','dish’s'], ['cherry','cherries','cherrys','cherryes']
   ];
-  plurals.forEach(([single, plural, wrong], i) => add(`g4eng-cover-plural-${String(i + 1).padStart(2,'0')}`, 'plurals',
-    `What is the plural of “${single}”?`, [wrong, plural, `${single}es`, single], plural,
+  plurals.forEach(([single, plural, wrong, wrong2, wrong3], i) => add(`g4eng-cover-plural-${String(i + 1).padStart(2,'0')}`, 'plurals',
+    `What is the plural of “${single}”?`, [wrong, plural, wrong2, wrong3 || single], plural,
     'Think about the spelling rule, or remember whether this is an irregular plural.', `<b>${plural}</b> is the correct plural of <b>${single}</b>.`));
 
   const groups = [
@@ -30,17 +30,17 @@
     ['singers','choir'], ['kittens','litter'], ['flowers','bouquet'], ['people','crowd']
   ];
   groups.forEach(([noun, group], i) => add(`g4eng-cover-group-${String(i + 1).padStart(2,'0')}`, 'collective',
-    `Choose the collective noun: a ___ of ${noun}.`, ['pack', group, 'single', 'little'], group,
+    `Choose the collective noun: a ___ of ${noun}.`, [group === 'pack' ? 'flock' : 'pack', group, 'single', 'little'], group,
     'A collective noun names a group of people, animals or things.', `We say a <b>${group}</b> of ${noun}. <b>${group}</b> is a collective noun.`));
 
   const abstracts = [
     ['kindness','a feeling or quality'], ['bravery','a quality'], ['joy','a feeling'], ['honesty','a quality'], ['freedom','an idea'],
-    ['anger','a feeling'], ['friendship','a relationship'], ['hope','a feeling'], ['wisdom','a quality'], ['peace','an idea'],
-    ['laughter','a feeling or sound'], ['beauty','a quality'], ['fear','a feeling'], ['love','a feeling'], ['pride','a feeling'],
-    ['patience','a quality'], ['hunger','a feeling'], ['surprise','a feeling'], ['confidence','a quality']
+    ['anger','a feeling','Anger can make a calm person shout loudly.',['person','calm','shout']], ['friendship','a relationship'], ['hope','a feeling'], ['wisdom','a quality'], ['peace','an idea'],
+    ['laughter','a feeling or sound'], ['beauty','a quality'], ['fear','a feeling','Fear can make a brave person tremble.',['person','brave','tremble']], ['love','a feeling'], ['pride','a feeling'],
+    ['patience','a quality'], ['hunger','a feeling','Hunger can make a quiet baby cry loudly.',['baby','quiet','cry']], ['surprise','a feeling'], ['confidence','a quality']
   ];
-  abstracts.forEach(([word, meaning], i) => add(`g4eng-cover-abstract-${String(i + 1).padStart(2,'0')}`, 'abstract',
-    `Which word is an abstract noun in this sentence: “${word[0].toUpperCase() + word.slice(1)} can make a difficult task easier.”`, [word, 'task', 'difficult', 'easier'], word,
+  abstracts.forEach(([word, meaning, sentence, wrongs], i) => add(`g4eng-cover-abstract-${String(i + 1).padStart(2,'0')}`, 'abstract',
+    `Which word is an abstract noun in this sentence: “${sentence || `${word[0].toUpperCase() + word.slice(1)} can make a difficult task easier.`}”`, wrongs ? [word, ...wrongs] : [word, 'task', 'difficult', 'easier'], word,
     'An abstract noun names something you cannot usually touch or hold.', `<b>${word}</b> is ${meaning}; you cannot hold it in your hand, so it is an abstract noun.`));
 
   const genders = [

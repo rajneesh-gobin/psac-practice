@@ -13,7 +13,7 @@ const _G4TXT_RECIT = _g4txtBox(`
 <b style="color:#1e40af">Lis le texte, puis réponds à la question.</b><br><br>
 <b>Le chien de Maya</b><br><br>
 Maya habite à Curepipe avec ses parents et son petit frère Yash. Devant la maison, il y a un grand jardin et un manguier.<br><br>
-Un samedi matin, Maya trouve un petit chien noir sous le manguier. Le chien est maigre et il a très soif. Maya court à la cuisine et lui apporte un bol d'eau.<br><br>
+Un samedi matin, Maya trouve un petit chien brun foncé sous le manguier. Le chien est maigre et il a très soif. Maya court à la cuisine et lui apporte un bol d'eau.<br><br>
 - Maman, est-ce que je peux le garder ? demande Maya.<br>
 - D'abord, nous devons chercher son propriétaire, répond sa mère.<br><br>
 Pendant deux semaines, personne ne vient chercher le chien. Alors le père de Maya dit :<br><br>
@@ -76,7 +76,7 @@ STATIC_QUESTIONS.push(
     options:[`Sous le manguier`, `Dans la cuisine`, `Sur la plage`, `Sous le lit de Yash`],
     answer:`Sous le manguier`,
     hint:`La réponse est dans la deuxième partie du texte.`,
-    explanation:`« Un samedi matin, Maya trouve un petit chien noir <b>sous le manguier</b>. » Attention : le chien dort sous le lit de Yash <i>aujourd'hui</i>, mais ce n'est pas là qu'elle l'a trouvé.` }),
+    explanation:`« Un samedi matin, Maya trouve un petit chien brun foncé <b>sous le manguier</b>. » Attention : le chien dort sous le lit de Yash <i>aujourd'hui</i>, mais ce n'est pas là qu'elle l'a trouvé.` }),
 
   makeMCQ({ id:`g4fr-txt-002`, chapterId:'g4fr-textes', subsection:'recit', difficulty:1,
     question:`${_G4TXT_RECIT}Qui est Yash ?`,

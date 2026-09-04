@@ -116,9 +116,9 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-cls-012', chapterId:'g6eng-clauses', subsection:'punctuation', difficulty:2,
     question:'Report the command: The teacher said to us, "Open your books to page 10."',
     options:[
-      'The teacher said that we should open our books to page 10.',
+      'The teacher told that we open our books to page 10.',
       'The teacher told us to open our books to page 10.',
-      'The teacher asked that we open our books to page 10.',
+      'The teacher asked to us open our books to page 10.',
       'The teacher said us to open our books to page 10.'
     ],
     answer:'The teacher told us to open our books to page 10.',

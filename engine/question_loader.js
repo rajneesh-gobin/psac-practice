@@ -95,6 +95,8 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/extended_practice_bank.js',
     ],
     'grade5-english': [
+      'subjects/grade5-english/questions/coverage_nouns_context.js',
+      'subjects/grade5-english/questions/coverage_noun_meanings.js',
       'subjects/grade5-english/questions/ch01_nouns.js',
       'subjects/grade5-english/questions/ch02_verbs.js',
       'subjects/grade5-english/questions/ch03_adjectives.js',
@@ -105,6 +107,10 @@ const QuestionLoader = (() => {
       'subjects/grade5-english/questions/ch08_spelling.js',
       'subjects/grade5-english/questions/ch09_passages.js',
       'subjects/grade5-english/questions/topup_g5_english.js',
+      'subjects/grade5-english/questions/coverage_nouns_verbs.js',
+      'subjects/grade5-english/questions/coverage_adjectives_sentences.js',
+      'subjects/grade5-english/questions/coverage_comprehension_writing.js',
+      'subjects/grade5-english/questions/coverage_vocabulary_spelling.js',
     ],
     'grade5-science': [
       'subjects/grade5-science/questions/ch02_plants.js',
@@ -221,6 +227,8 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/extended_reasoning_bank.js',
     ],
     'grade6-english': [
+      'subjects/grade6-english/questions/coverage_links_perfect.js',
+      'subjects/grade6-english/questions/coverage_noun_precision.js',
       'subjects/grade6-english/questions/ch01_nouns.js',
       'subjects/grade6-english/questions/ch02_verbs.js',
       'subjects/grade6-english/questions/ch03_clauses.js',
@@ -265,6 +273,11 @@ const QuestionLoader = (() => {
       'subjects/grade4-maths/questions/ch06_g4_data.js',
       // top-up
       'subjects/grade4-maths/questions/topup_g4_maths.js',
+      'subjects/grade4-maths/questions/coverage_numeration.js',
+      'subjects/grade4-maths/questions/coverage_four_ops.js',
+      'subjects/grade4-maths/questions/coverage_fractions.js',
+      'subjects/grade4-maths/questions/coverage_measures.js',
+      'subjects/grade4-maths/questions/coverage_data_reasoning.js',
     ],
     'grade4-english': [
       'subjects/grade4-english/questions/ch01_g4_nouns.js',
@@ -362,17 +375,55 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 14;
-  const _cacheKey = subjectId => `mm_qc_v${_CACHE_VERSION}_${subjectId}`;
+  const _CACHE_VERSION = 21;
+
+  // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
+  // The key used to be the subject alone, on a device where a whole family
+  // shares one browser — so the first child to open Maths cached the set the
+  // server had filtered for THEM, and the next child, and the parent, read it
+  // back. That is the same defect the service worker was stopped from having
+  // (see the note above _LRU_KEY); this copy simply outlived the fix.
+  //
+  // The owner is whatever actually authorised the request, so the two can never
+  // drift: a child's own session id, or 'adult' for a parent/teacher/admin JWT.
+  // The slot - owner + subject - is the cache's unit of identity from here down;
+  // subject ids carry no '|', so it parses back unambiguously.
+  const _cacheKey = slot => `mm_qc_v${_CACHE_VERSION}_${slot}`;
+
+  // ⚠ The stored session must belong to the child being served. A parent
+  // previewing a child (pdSwitchStudent) has ACTIVE_STUDENT_ID pointing at that
+  // child while the LAST real PIN login's session is still in storage - sending
+  // that token would fetch one sibling's set while displaying another's. Same
+  // discriminator Store.saveStudentProgress() uses to drop a stale write.
+  function _activeStudentSession() {
+    try {
+      const sess = (typeof Store !== 'undefined') ? Store.getStudentSession() : null;
+      if (!sess || !sess.token || !sess.id) return null;
+      if (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID && sess.id !== ACTIVE_STUDENT_ID) return null;
+      return sess;
+    } catch (_) { return null; }
+  }
+  function _cacheOwner() {
+    const sess = _activeStudentSession();
+    return sess ? sess.id : 'adult';
+  }
+  const _slot = subjectId => `${_cacheOwner()}|${subjectId}`;
 
   // Drop caches written by any earlier version, so a bump reclaims the space
   // instead of leaving a dead copy of every subject behind.
+  //
+  // ⚠ 'mm_qc_v', not 'mm_qc_'. The recency index lives at `mm_qc_lru` and shares
+  // the shorter prefix, so the broader test deleted it on EVERY page load — the
+  // counter that decides which subject to evict was therefore empty every time,
+  // and _cachedSubjectsLRUFirst treats "not in the index" as oldest, making
+  // eviction order arbitrary. It matters more now that two children on one
+  // device hold separate entries and evict each other.
   (function _purgeStaleCaches() {
     try {
       const keep = `mm_qc_v${_CACHE_VERSION}_`;
       for (let i = localStorage.length - 1; i >= 0; i--) {
         const k = localStorage.key(i);
-        if (k && k.startsWith('mm_qc_') && !k.startsWith(keep)) localStorage.removeItem(k);
+        if (k && k.startsWith('mm_qc_v') && !k.startsWith(keep)) localStorage.removeItem(k);
       }
     } catch {}
   })();
@@ -399,6 +450,12 @@ const QuestionLoader = (() => {
   // Six subjects covers one full grade (five) with room to spare, and keeps the
   // cache near 1.6 MB rather than 4.3 MB. A seventh evicts the least recently
   // used, which is exactly the cross-grade case.
+  //
+  // ⚠ The cap counts SLOTS, not subjects, so two children practising on one
+  // device now compete for the same six. That is deliberate: the alternative is
+  // six per child against a ~5 MB quota shared with the progress blobs and the
+  // session token, and a lost cache entry costs one refetch whereas a lost
+  // session token reads to a parent as "it keeps logging me out".
   const _LRU_MAX  = 6;
 
   function _lruRead() {
@@ -415,6 +472,8 @@ const QuestionLoader = (() => {
   // order them. Eviction then picked arbitrarily among the tied entries — which
   // showed up as a test that passed twice and failed the third time. A counter
   // gives a strict total order and does not care about clock resolution.
+  // ⚠ Keyed on the SLOT (owner + subject), not the subject - two children on
+  // one device hold two independent entries and evict independently.
   function _lruTouch(subjectId) {
     try {
       const m = _lruRead();
@@ -485,19 +544,21 @@ const QuestionLoader = (() => {
   // per subject load for a family that really is entitled to nothing. That is
   // the cheaper mistake by a wide margin.
   function _readCache(subjectId) {
+    const slot = _slot(subjectId);
     try {
-      const raw = localStorage.getItem(_cacheKey(subjectId));
+      const raw = localStorage.getItem(_cacheKey(slot));
       if (!raw) return null;
       const { ts, data } = JSON.parse(raw);
-      if (Date.now() - ts > _CACHE_TTL) { localStorage.removeItem(_cacheKey(subjectId)); _lruForget(subjectId); return null; }
-      if (!Array.isArray(data) || !data.length) { localStorage.removeItem(_cacheKey(subjectId)); _lruForget(subjectId); return null; }
-      _lruTouch(subjectId);
+      if (Date.now() - ts > _CACHE_TTL) { localStorage.removeItem(_cacheKey(slot)); _lruForget(slot); return null; }
+      if (!Array.isArray(data) || !data.length) { localStorage.removeItem(_cacheKey(slot)); _lruForget(slot); return null; }
+      _lruTouch(slot);
       return data;
     } catch { return null; }
   }
 
   function _writeCache(subjectId, data) {
     if (!Array.isArray(data) || !data.length) return;
+    const slot = _slot(subjectId);
     const payload = JSON.stringify({ ts: Date.now(), data });
 
     // Stay under the cap BEFORE writing, so the common case never has to fail a
@@ -505,8 +566,8 @@ const QuestionLoader = (() => {
     // the total after this write is always its length + 1 — whether this is a
     // new entry or a refresh of an existing one.
     try {
-      const others = _cachedSubjectsLRUFirst(subjectId).length;
-      if (others + 1 > _LRU_MAX) _evictOldest(subjectId, others + 1 - _LRU_MAX);
+      const others = _cachedSubjectsLRUFirst(slot).length;
+      if (others + 1 > _LRU_MAX) _evictOldest(slot, others + 1 - _LRU_MAX);
     } catch {}
 
     // Up to three attempts: the first may still fail if OTHER origins' data —
@@ -514,32 +575,40 @@ const QuestionLoader = (() => {
     // eviction may not free enough for a 473 KB bundle.
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        localStorage.setItem(_cacheKey(subjectId), payload);
-        _lruTouch(subjectId);
+        localStorage.setItem(_cacheKey(slot), payload);
+        _lruTouch(slot);
         return;
       } catch (e) {
         if (!_isQuotaError(e)) return;          // not a space problem — give up
-        if (!_evictOldest(subjectId, 2)) return; // nothing left to evict
+        if (!_evictOldest(slot, 2)) return;     // nothing left to evict
       }
     }
     // Still no room: leave the cache alone rather than thrashing. The subject
     // simply refetches next time, which is the pre-existing behaviour.
   }
 
+  // ⚠ The CHILD's credential wins whenever a child is the one being served.
+  //
+  // This used to prefer the parent's JWT whenever one existed, and on a shared
+  // family phone one always does - both sessions live on the device at once, by
+  // design. So a child practising beside a signed-in parent was authorised as
+  // the PARENT, and questions.js resolves the owner from whoever asked: a JWT
+  // carries no studentExpiresAt, so that child's own expiry date was never
+  // applied and they were served the full plan set. The server was answering
+  // the question it was asked; the browser was asking it as the wrong person.
+  //
+  // The TOKEN, not the id. The id only ever identified the child; the function
+  // used to accept it as proof of who was asking, which meant anyone holding a
+  // child's UUID could pull that child's gated question set. This is the same
+  // opaque session token RLS already checks through current_student_id(), and
+  // it expires and can be revoked.
   async function _buildAuthHeaders() {
     const headers = {};
+    const sess = _activeStudentSession();
+    if (sess) { headers['X-Student-Token'] = sess.token; return headers; }
     if (typeof _sb !== 'undefined' && _sb) {
       const { data: { session } } = await _sb.auth.getSession().catch(() => ({ data: {} }));
       if (session?.access_token) headers['Authorization'] = `Bearer ${session.access_token}`;
-    }
-    if (!headers['Authorization'] && typeof Store !== 'undefined') {
-      const sess = Store.getStudentSession();
-      // The TOKEN, not the id. The id only ever identified the child; the
-      // function used to accept it as proof of who was asking, which meant
-      // anyone holding a child's UUID could pull that child's gated question
-      // set. This is the same opaque session token RLS already checks through
-      // current_student_id(), and it expires and can be revoked.
-      if (sess?.token) headers['X-Student-Token'] = sess.token;
     }
     return headers;
   }
@@ -735,5 +804,35 @@ const QuestionLoader = (() => {
     }
   }
 
-  return { loadSubject, loadForStudent, loadAllForGrade, loadPastPapers };
+  // ── Handover ────────────────────────────────────────────────────────────
+  // ⚠ STATIC_QUESTIONS is a module-level array and _done a module-level Set, and
+  // switching child NEVER reloads the page (openStudentSwitch and pdSwitchStudent
+  // are both in-page). Without this the next child inherits the previous one's
+  // pool outright, and _done tells every loader there is nothing left to fetch -
+  // which defeats the owner-scoped cache above entirely.
+  //
+  // The baseline is captured at module load: this file runs after every
+  // _manifest.js, so anything already in the array was put there by the packs
+  // themselves and must survive. Everything above it is ours to drop.
+  const _baseCount = (typeof STATIC_QUESTIONS !== 'undefined') ? STATIC_QUESTIONS.length : 0;
+  let _poolOwner = null;
+
+  function reset() {
+    _done.clear();
+    _papersCache = null;
+    if (typeof STATIC_QUESTIONS !== 'undefined' && STATIC_QUESTIONS.length > _baseCount) {
+      STATIC_QUESTIONS.length = _baseCount;
+    }
+  }
+
+  // Called on every handover. A no-op when the same child signs back in, so an
+  // ordinary re-login still costs nothing; `null` (logout) also parks the pool.
+  function useStudent(studentId) {
+    const next = studentId || null;
+    if (next === _poolOwner) return;
+    _poolOwner = next;
+    reset();
+  }
+
+  return { loadSubject, loadForStudent, loadAllForGrade, loadPastPapers, useStudent, reset };
 })();

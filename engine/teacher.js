@@ -116,8 +116,9 @@ const TeacherMode = (() => {
     _buildSubjectSelect();
     _buildChapterCheckboxes();
     _ensureSubjectLoaded();          // not awaited: the list below must paint now
-    _renderAssignmentList();
-    _renderResultsAssignSelector();
+    TeacherWorkspace.refresh();
+    TeacherGuestClasses.refresh();
+    TeacherGuestClasses.accessChanged();
   }
 
   // Every registered pack, not just the active one. This used to read the
@@ -133,23 +134,37 @@ const TeacherMode = (() => {
 
   function _selectedPack() {
     const id = _el('ta-subject')?.value;
-    return _packs().find(p => p.id === id) || _packs()[0] || null;
+    const grade = _el('ta-grade')?.value;
+    return _packs().find(p => p.id === id && String(p.grade) === grade) || null;
   }
 
   function _buildSubjectSelect() {
     const sel = _el('ta-subject');
-    if (!sel) return;
+    const gradeSel = _el('ta-grade');
+    if (!sel || !gradeSel) return;
     const packs = _packs();
-    if (!packs.length) return;
     const keep = sel.value;
-    sel.innerHTML = packs.map(p =>
-      `<option value="${p.id}">Grade ${p.grade} — ${p.icon || ''} ${p.name}</option>`
+    const grades = [...new Set(packs.map(p => String(p.grade)))].sort((a,b) => Number(a)-Number(b));
+    const previousGrade = gradeSel.value;
+    const active = typeof ACTIVE_PACK !== 'undefined' ? ACTIVE_PACK : null;
+    const preferred = packs.find(p => p.id === keep) || packs.find(p => p.id === active?.id);
+    gradeSel.innerHTML = grades.map(g => `<option value="${g}">Grade ${g}</option>`).join('');
+    gradeSel.value = grades.includes(previousGrade) ? previousGrade : String(preferred?.grade ?? grades[0] ?? '');
+    const filtered = packs.filter(p => String(p.grade) === gradeSel.value);
+    sel.innerHTML = filtered.map(p =>
+      `<option value="${p.id}">${p.icon || ''} ${p.name}</option>`
     ).join('');
-    // Default to the pack already in view so the tab opens on something
-    // familiar rather than always snapping back to the first grade.
-    sel.value = (keep && packs.some(p => p.id === keep)) ? keep
-      : (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK && packs.some(p => p.id === ACTIVE_PACK.id))
-        ? ACTIVE_PACK.id : packs[0].id;
+    const subjectKey = id => String(id || '').replace(/^grade\d+-/, '');
+    sel.value = (filtered.find(p => p.id === keep) ||
+      filtered.find(p => subjectKey(p.id) === subjectKey(preferred?.id)) || filtered[0])?.id || '';
+    gradeSel.disabled = !grades.length;
+    sel.disabled = !filtered.length;
+    if (!filtered.length) sel.innerHTML = '<option value="">No subjects available</option>';
+  }
+
+  async function gradeChange() {
+    _buildSubjectSelect();
+    await subjectChange();
   }
 
   function _buildChapterCheckboxes() {
@@ -245,8 +260,10 @@ const TeacherMode = (() => {
 
   // ── Tab switching ──────────────────────────────
   function switchTab(tab) {
+    if (tab === 'classes') TeacherGuestClasses.refresh();
     document.querySelectorAll('.ta-tab').forEach(b => {
       const on = b.dataset.tab === tab;
+      b.setAttribute('aria-selected', String(on));
       b.classList.toggle('bg-white',         on);
       b.classList.toggle('dark:bg-gray-700', on);
       b.classList.toggle('shadow-sm',        on);
@@ -332,7 +349,7 @@ const TeacherMode = (() => {
   }
 
   window.taSelectResultsAssign = function(sel) {
-    _renderResults(sel.value);
+    TeacherWorkspace.results(sel.value);
   };
 
   function showAnswers(assignId, studentName, attempt) {
@@ -358,6 +375,14 @@ const TeacherMode = (() => {
 
   // ── Build + save an assignment ─────────────────
   async function buildAssignment() {
+    if (_creating) return;
+    _creating = true;
+    try { return await _buildAssignment(); }
+    finally { _creating = false; }
+  }
+
+  let _creating = false;
+  async function _buildAssignment() {
     const label = (_el('ta-label')?.value || '').trim();
     if (!label) { toast('Please enter a name for this assignment.', 2000); return; }
 
@@ -369,6 +394,9 @@ const TeacherMode = (() => {
     const count      = parseInt(_el('ta-count')?.value || '10');
     const random     = _el('ta-random')?.checked ?? true;
     const mode       = _el('ta-mode')?.value || 'practice';
+    const access     = _el('ta-access')?.value || 'legacy';
+    const classroom  = _el('ta-classroom')?.value || null;
+    if (access === 'classroom_pin' && !classroom) { toast('Choose a classroom, or create one in the Classes tab.', 3500); return; }
 
     const pack = _selectedPack();
     if (!pack) { toast('Please pick a subject first.', 2500); return; }
@@ -394,6 +422,11 @@ const TeacherMode = (() => {
     if (difficulty)      pool = pool.filter(q => q.difficulty === difficulty);
     if (!pool.length) {
       toast('No questions found for these settings. Try different topics or difficulty.', 3000);
+      return;
+    }
+    pool = Array.from(new Map(pool.filter(q => q.id).map(q => [q.id, q])).values());
+    if (pool.length < count) {
+      toast(`Only ${pool.length} questions match. Choose fewer questions or broaden the topics/difficulty.`, 4500);
       return;
     }
 
@@ -426,7 +459,10 @@ const TeacherMode = (() => {
     let res = null, rpcErr = null;
     try {
       if (typeof _sb === 'undefined' || !_sb) throw new Error('offline');
-      const r = await _sb.rpc('guest_assignment_create', {
+      const before = await _sb.auth.getSession();
+      const creator = before.data?.session?.user?.id;
+      if (!creator || !isTeacher()) throw new Error('Sign in required');
+      const args = {
         p_title:           label,
         p_subject_pack_id: pack.id,
         p_chapter_ids:     chapters,
@@ -435,7 +471,18 @@ const TeacherMode = (() => {
         // A test is timed, practice is not. count*2 minutes is the same
         // allowance the exam screen gives per question.
         p_duration_mins:   mode === 'test' ? Math.max(5, count * 2) : null,
-      });
+      };
+      if (access !== 'legacy') {
+        delete args.p_pin;
+        args.p_access = access;
+        args.p_classroom = classroom;
+      }
+      const r = await _sb.rpc(access === 'legacy' ? 'guest_assignment_create' : 'teacher_guest_create_assignment', args);
+      const after = await _sb.auth.getSession();
+      if (after.data?.session?.user?.id !== creator || !isTeacher()) {
+        restore();
+        return;
+      }
       res = r.data; rpcErr = r.error;
     } catch (e) { rpcErr = e; }
 
@@ -447,18 +494,16 @@ const TeacherMode = (() => {
 
     const id     = 'ta_' + Date.now();
     const config = { id, label, subject: pack.id, chapters, difficulty, count, random, mode,
-                     code: res.code, pin, serverId: res.id, createdAt: Date.now() };
+                     code: res.code, pin: access === 'legacy' ? pin : null, access, serverId: res.id, createdAt: Date.now() };
 
-    const data = _getData();
-    data.assignments = data.assignments || [];
-    data.assignments.unshift(config);
-    _saveData(data);
+    _newShare = config;
 
     if (_el('ta-label')) _el('ta-label').value = '';
     if (_el('ta-pin'))   _el('ta-pin').value   = '';
     document.querySelectorAll('#ta-chapter-opts-container input[type=checkbox]').forEach(cb => cb.checked = false);
 
-    _renderAssignmentList();
+    TeacherWorkspace.rememberPin(res.id, pin);
+    TeacherWorkspace.refresh();
     restore();
 
     // The point of this change: the link is in front of the teacher NOW, with
@@ -493,12 +538,23 @@ const TeacherMode = (() => {
     if (code === 'not_a_teacher' ||
         code === 'not_approved')      return 'Only an approved teacher account can create shareable assignments.';
     if (code === 'not_authenticated') return 'Please sign in again to create an assignment.';
-    if (code === 'daily_limit')       return `Daily limit reached (${res.limit} per day). Try again tomorrow.`;
+    if (code === 'daily_limit')       return res.limit === 0
+      ? 'Creating assignments is switched off at the moment. Please contact an administrator.'
+      : `Daily limit reached (${res.limit} per day). Try again tomorrow.`;
     if (code === 'invalid_pin')       return 'The PIN must be exactly 4 digits.';
     if (code === 'no_questions')      return 'No questions matched these settings.';
-    const msg = (err && err.message) || '';
-    if (/PGRST202|42883|does not exist/i.test(msg))
-      return 'Assignment sharing is not set up on this database yet — run supabase-migration.sql.';
+    // ⚠ PostgREST puts PGRST202 in err.CODE, not err.message - a missing
+    // function reads "Could not find the function ... in the schema cache", which
+    // matched nothing here and fell through to the generic "try again". Pressing
+    // the button again then reproduced it forever with no clue why.
+    const msg = [err && err.code, err && err.message, err && err.details].filter(Boolean).join(' ');
+    if (/PGRST202|PGRST205|42883|42P01|does not exist|schema cache/i.test(msg))
+      return 'Assignment sharing needs a database update that has not been applied yet. Please contact an administrator.';
+    // ⚠ teacher_guest_create_assignment reports its refusals with RAISE
+    // EXCEPTION, not {ok:false}. Those arrive as P0001 with the message already
+    // written for a teacher ('Add pupils first or choose nickname entry'), so
+    // showing it beats replacing it with 'please try again'.
+    if ((err && err.code) === 'P0001' && err.message && err.message.length < 120) return err.message;
     if (/offline|fetch|network/i.test(msg))
       return 'No connection — an assignment link has to be created online.';
     return 'Could not create the assignment. Please try again.';
@@ -512,14 +568,19 @@ const TeacherMode = (() => {
   function _shareUrl(code) { return `${location.origin}/a/${code}`; }
 
   function _shareMessage(a) {
-    const what = a.mode === 'test' ? 'test' : 'practice';
-    return `📋 ${a.label}\n\nYour ${what} (${a.count} questions):\n${_shareUrl(a.code)}\n\nPIN: ${a.pin}`;
+    const what = a.mode === 'test' ? 'timed practice' : 'practice';
+    const entry = a.access === 'classroom_pin' ? 'Enter your own private 4-digit pupil PIN.' : a.access === 'nickname' ? 'Enter your nickname. No PIN needed.' : `PIN: ${a.pin}`;
+    return `📋 ${a.label}\n\nYour ${what} (${a.count} questions):\n${_shareUrl(a.code)}\n\n${entry}`;
   }
 
   let _shareId = null;
+  let _newShare = null;
+  if (typeof _sb !== 'undefined' && _sb) _sb.auth.onAuthStateChange((event) => {
+    if (event === 'SIGNED_OUT') { _newShare = null; closeShare(); }
+  });
 
   function shareAssignment(id) {
-    const a = (_getData().assignments || []).find(x => x.id === id);
+    const a = _newShare?.id === id ? _newShare : null;
     if (!a) return;
     // Assignments saved before the link was wired to a real code cannot be
     // shared - and saying so is better than copying a link that goes nowhere,
@@ -531,8 +592,8 @@ const TeacherMode = (() => {
     _shareId = id;
     const set = (elId, val) => { const el = _el(elId); if (el) el.textContent = val; };
     set('ta-share-title', a.label);
-    set('ta-share-pin',   a.pin || '----');
-    set('ta-share-meta',  `${a.count} questions · ${a.mode === 'test' ? '📝 Test' : '🔍 Practice'}`);
+    set('ta-share-pin', a.access === 'classroom_pin' ? 'Your own pupil PIN' : a.access === 'nickname' ? 'No PIN needed' : a.pin || '----');
+    set('ta-share-meta',  `${a.count} questions · ${a.mode === 'test' ? '⏱ Timed practice' : '🔍 Practice'}`);
     const linkEl = _el('ta-share-link');
     if (linkEl) linkEl.value = _shareUrl(a.code);
     const nativeBtn = _el('ta-share-native');
@@ -546,12 +607,13 @@ const TeacherMode = (() => {
   }
 
   function _current() {
-    return (_getData().assignments || []).find(x => x.id === _shareId) || null;
+    return _newShare?.id === _shareId ? _newShare : null;
   }
 
   function shareCopy() {
     const a = _current(); if (!a) return;
     const text = _shareMessage(a);
+    if (!navigator.clipboard?.writeText) { prompt('Copy this and send it to your students:', text); return; }
     navigator.clipboard.writeText(text)
       .then(() => toast('Link and PIN copied! 📋', 2500))
       .catch(() => prompt('Copy this and send it to your students:', text));
@@ -584,7 +646,7 @@ const TeacherMode = (() => {
   }
 
   return {
-    isTeacher, render, switchTab, subjectChange,
+    isTeacher, render, switchTab, subjectChange, gradeChange,
     buildAssignment, copyLink, deleteAssignment,
     shareAssignment, closeShare, shareCopy, shareWhatsApp, shareNative,
     saveResult, getAttemptCount, hasRetry, allowRetry, removeResult, showAnswers,

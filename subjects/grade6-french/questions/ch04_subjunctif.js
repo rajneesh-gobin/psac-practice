@@ -86,7 +86,7 @@ STATIC_QUESTIONS.push(
     options:['que nous prenons','que nous prenions','que nous prennions','que nous prendrons'],
     answer:'que nous prenions',
     hint:'Prendre → ils prennent → prenn- (pour je/tu/il/ils) MAIS pour nous/vous : nous prenons → pren-.',
-    explanation:'"Que nous <b>prenions</b>." - Prendre a deux radicaux au subjonctif : radical <b>prenn-</b> (de ils prennent) pour je/tu/il/ils, et radical <b>pren-</b> (de nous prenons) pour nous/vous. Conjugaison : que je prenne, tu prennes, il prenne, <b>nous prenions</b>, vous preniez, ils prennent. De même pour : venir, tenir, boire, croire.' }),
+    explanation:'"Que nous <b>prenions</b>." - Prendre a deux radicaux au subjonctif : radical <b>prenn-</b> (formé sur "ils prennent") pour je/tu/il/ils, et radical <b>pren-</b> (formé sur "nous prenons") pour nous/vous. Conjugaison : que je prenne, tu prennes, il prenne, <b>nous prenions</b>, vous preniez, ils prennent. De même pour : venir, tenir, boire, croire.' }),
 
   makeTF({ id:'g6fr-sjv-012', chapterId:'g6fr-subjunctif', subsection:'declencheurs', difficulty:1,
     question:'"Pour que" est toujours suivi du subjonctif.',
@@ -105,7 +105,7 @@ STATIC_QUESTIONS.push(
     question:'Quelle est la forme correcte de "aller" au subjonctif pour "que tu" ?',
     options:['que tu ailles','que tu iras','que tu vas','que tu aillais'],
     answer:'que tu ailles',
-    hint:'Aller est totalement irrégulier au subjonctif : ill- (je/tu/il/ils) et all- (nous/vous).',
+    hint:'Aller est totalement irrégulier au subjonctif : aill- (je/tu/il/ils) et all- (nous/vous).',
     explanation:'"Que tu <b>ailles</b>" - aller est irrégulier : que j\'aille, que tu <b>ailles</b>, qu\'il aille, que nous allions, que vous alliez, qu\'ils aillent. Deux radicaux : <b>aill-</b> (je, tu, il, ils) et <b>all-</b> (nous, vous). Exemple : "Il faut que tu <b>ailles</b> chez le médecin."' }),
 
   makeMCQ({ id:'g6fr-sjv-015', chapterId:'g6fr-subjunctif', subsection:'formation', difficulty:2,
@@ -126,7 +126,7 @@ STATIC_QUESTIONS.push(
     question:'"Avant que" est suivi du subjonctif, mais "après que" est suivi de l\'indicatif.',
     answer:true,
     hint:'Avant que = action qui n\'a pas encore eu lieu (incertitude) → subjonctif. Après que = action passée et certaine → indicatif.',
-    explanation:'<b>Vrai.</b> "<b>Avant que</b>" + subjonctif : "Pars <b>avant qu\'il</b> <b>parte</b>." - l\'action est à venir, donc incertaine. "<b>Après que</b>" + indicatif (en principe) : "Je partirai <b>après qu\'il</b> <b>est</b> arrivé." - l\'action est passée et réelle. Attention : dans la pratique, "après que" + subjonctif est de plus en plus courant dans la langue parlée, mais les règles scolaires du manuel MIE maintiennent l\'indicatif.' }),
+    explanation:'<b>Vrai.</b> "<b>Avant que</b>" + subjonctif : "Pars <b>avant qu\'il</b> <b>parte</b>." - l\'action est à venir, donc incertaine. "<b>Après que</b>" + indicatif (en principe) : "Je partirai <b>après qu\'il sera arrivé</b>." - le futur antérieur est un temps de l\'indicatif, jamais le subjonctif. Attention : dans la pratique, "après que" + subjonctif est de plus en plus courant dans la langue parlée, mais les règles scolaires du manuel MIE maintiennent l\'indicatif.' }),
 
   makeMCQ({ id:'g6fr-sjv-018', chapterId:'g6fr-subjunctif', subsection:'formation', difficulty:2,
     question:'Complétez avec le bon mode : "Il est important que chacun ___ (respecter) l\'environnement."',
@@ -139,11 +139,11 @@ STATIC_QUESTIONS.push(
     question:'Dans quelle phrase le subjonctif est-il utilisé INCORRECTEMENT ?',
     options:[
       '"Il faut que tu finisses tes devoirs."',
-      '"Je suis sûr qu\'il soit là." ✗',
+      '"Je suis sûr qu\'il soit là."',
       '"Bien qu\'il soit fatigué, il continue."',
       '"Je veux que vous veniez."'
     ],
-    answer:'"Je suis sûr qu\'il soit là." ✗',
+    answer:'"Je suis sûr qu\'il soit là."',
     hint:'"Je suis sûr que" exprime une certitude → indicatif, pas subjonctif.',
     explanation:'"Je suis sûr qu\'il <b>est</b> là" est la forme correcte - pas le subjonctif. "<b>Je suis sûr que</b>" exprime une certitude → <b>indicatif</b>. Règle générale : <b>certitude → indicatif</b> (je suis sûr que, je sais que, il est évident que, il est certain que) ; <b>doute/émotion/volonté/nécessité → subjonctif</b>. C\'est l\'une des erreurs les plus fréquentes dans les rédactions de 6e.' }),
 
@@ -193,7 +193,7 @@ STATIC_QUESTIONS.push(
     options:['ai vu','verrai','aie vu','voyais'],
     answer:'aie vu',
     hint:'Superlatif + que → subjonctif passé (que + j\'aie + participe passé).',
-    explanation:'"C\'est le plus beau pays que j\'<b>aie vu</b>" - après un <b>superlatif</b> (le plus… que), on utilise le <b>subjonctif passé</b> : que j\'<b>aie</b> (subjonctif de avoir) + vu (participe passé). Formation : subjonctif présent de avoir/être + participe passé.' }),
+    explanation:'"C\'est le plus beau pays que j\'<b>aie vu</b>" - après un <b>superlatif</b> (le plus… que), on utilise le <b>subjonctif passé</b> : que j\'<b>aie</b> (subjonctif d’avoir) + vu (participe passé). Formation : subjonctif présent d’avoir/être + participe passé.' }),
 
   makeMCQ({ id:'g6fr-sjv-027', chapterId:'g6fr-subjunctif', subsection:'declencheurs', difficulty:3,
     question:'Quelle expression fixe utilise le subjonctif de ALLER ?',
@@ -205,8 +205,8 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6fr-sjv-028', chapterId:'g6fr-subjunctif', subsection:'declencheurs', difficulty:3,
     question:'"Quoi qu\'il arrive, nous serons là." est une expression fixe avec le subjonctif.',
     answer:true,
-    hint:'"Quoi que" = whatever → subjonctif. "Arrive" = subjonctif de arriver.',
-    explanation:'<b>Vrai.</b> "<b>Quoi qu\'il arrive</b>" (= whatever happens) est une expression fixe avec le subjonctif de arriver. Arriver au subjonctif présent : qu\'il <b>arrive</b>. C\'est l\'une des expressions figées importantes : quoi qu\'il arrive, qui que ce soit, où que tu sois.' }),
+    hint:'"Quoi que" = whatever → subjonctif. "Arrive" = subjonctif d\'arriver.',
+    explanation:'<b>Vrai.</b> "<b>Quoi qu\'il arrive</b>" (= whatever happens) est une expression fixe avec le subjonctif d\'arriver. Arriver au subjonctif présent : qu\'il <b>arrive</b>. C\'est l\'une des expressions figées importantes : quoi qu\'il arrive, qui que ce soit, où que tu sois.' }),
 
   makeMCQ({ id:'g6fr-sjv-029', chapterId:'g6fr-subjunctif', subsection:'irreguliers', difficulty:3,
     question:'Choisis indicatif ou subjonctif : "Je pense qu\'il ___ (avoir) raison."',
@@ -227,7 +227,7 @@ STATIC_QUESTIONS.push(
     options:['ne soit pas venue','ne soit pas venu','n\'est pas venue','ne viendrait pas'],
     answer:'ne soit pas venue',
     hint:'"Il est dommage que" → subjonctif. Venir + être → subjonctif passé = soit + venue (accord).',
-    explanation:'"Il est dommage qu\'elle <b>ne soit pas venue</b>" - subjonctif <b>passé</b> de venir (être + venir → être au subjonctif + participe passé accordé) : que elle <b>soit venue</b>. La négation : ne... pas → "ne <b>soit pas</b> venue". Accord féminin : venue.' }),
+    explanation:'"Il est dommage qu\'elle <b>ne soit pas venue</b>" - subjonctif <b>passé</b> de venir (être + venir → être au subjonctif + participe passé accordé) : qu\'elle <b>soit venue</b>. La négation : ne... pas → "ne <b>soit pas</b> venue". Accord féminin : venue.' }),
 
   makeMCQ({ id:'g6fr-sjv-032', chapterId:'g6fr-subjunctif', subsection:'declencheurs', difficulty:4,
     question:'Distingue les déclencheurs : laquelle de ces expressions utilise l\'INDICATIF (pas le subjonctif) ?',

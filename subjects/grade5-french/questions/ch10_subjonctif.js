@@ -39,14 +39,14 @@ STATIC_QUESTIONS.push(
     explanation:'"Je veux que vous <b>arriviez</b>" - arriver → ils arrivent → radical arriv- → vous arriv-<b>iez</b>. Terminaison subjonctif "vous" = <b>-iez</b>.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-006', chapterId:'g5fr-subjonctif', subsection:'irreguliers', difficulty:2,
-    question:'Quel est le subjonctif de ÊTRE pour "il" ?',
+    question:'Quel est le subjonctif d\'ÊTRE pour "il" ?',
     options:['est','soit','serait','étant'],
     answer:'soit',
     hint:'Être est irrégulier au subjonctif : que je sois, que tu sois, qu\'il soit…',
     explanation:'"Qu\'il <b>soit</b>" - être est irrégulier au subjonctif : que je sois, que tu sois, qu\'il/elle <b>soit</b>, que nous soyons, que vous soyez, qu\'ils/elles soient.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-007', chapterId:'g5fr-subjonctif', subsection:'irreguliers', difficulty:2,
-    question:'Quel est le subjonctif de AVOIR pour "tu" ?',
+    question:'Quel est le subjonctif d\'AVOIR pour "tu" ?',
     options:['as','aies','avais','auras'],
     answer:'aies',
     hint:'Avoir est irrégulier au subjonctif : que j\'aie, que tu aies…',
@@ -66,7 +66,7 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Vrai.</b> "Il est possible que" déclenche le subjonctif. Venir est irrégulier : que je vienne, que tu viennes, qu\'il/elle <b>vienne</b>. C\'est correct.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-010', chapterId:'g5fr-subjonctif', subsection:'irreguliers', difficulty:2,
-    question:'Quel est le subjonctif de ALLER pour "ils" ?',
+    question:'Quel est le subjonctif d\'ALLER pour "ils" ?',
     options:['vont','allaient','aillent','iraient'],
     answer:'aillent',
     hint:'Aller est irrégulier au subjonctif : que j\'aille, que tu ailles, qu\'il aille, qu\'ils aillent.',
@@ -159,7 +159,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Il faut que je <b>sois</b> là." - être (irrégulier) au subjonctif : que je sois, que tu sois, qu\'il soit, que nous soyons, que vous soyez, qu\'ils soient. "Suis" est l\'indicatif présent ; "sois" est le subjonctif.' }),
 
   makeTF({ id:'g5fr-subjonctif-022', chapterId:'g5fr-subjonctif', subsection:'irreguliers', difficulty:2,
-    question:'"Que j\'aille" est le subjonctif présent de "aller".',
+    question:'"Que j\'aille" est le subjonctif présent d\'"aller".',
     answer:true,
     hint:'"Aller" est irrégulier au subjonctif : que j\'aille.',
     explanation:'<b>Vrai.</b> aller (irrégulier) : que j\'<b>aille</b>, que tu ailles, qu\'il aille, que nous <b>allions</b>, que vous alliez, qu\'ils aillent. Note : nous allions / vous alliez sont réguliers (radical "all-"). Les autres formes utilisent "aill-".' }),
@@ -216,7 +216,7 @@ STATIC_QUESTIONS.push(
     question:'Quand les deux sujets sont identiques, on utilise "vouloir + infinitif" au lieu de "que + subjonctif".',
     answer:true,
     hint:'"Je veux partir" (je = je → infinitif). "Je veux qu\'il parte" (je ≠ il → subjonctif).',
-    explanation:'<b>Vrai.</b> Même sujet = <b>infinitif</b> : "Je veux partir." / "Tu veux manger." Sujets différents = <b>que + subjonctif</b> : "Je veux qu\'il parte." / "Tu veux qu\'elle mange." Cette règle s\'applique aussi avec : espérer, préférer, souhaiter.' }),
+    explanation:'<b>Vrai.</b> Même sujet = <b>infinitif</b> : "Je veux partir." / "Tu veux manger." Sujets différents = <b>que + subjonctif</b> : "Je veux qu\'il parte." / "Tu veux qu\'elle mange." Cette règle s\'applique aussi avec : préférer, souhaiter, aimer mieux. (Attention : "espérer que" se construit avec l\'indicatif : "J\'espère qu\'il viendra.")' }),
 
   makeMCQ({ id:'g5fr-subjonctif-031', chapterId:'g5fr-subjonctif', subsection:'irreguliers', difficulty:2,
     question:'"Avoir peur que" se construit avec...',

@@ -261,14 +261,14 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4fr-verb-032', chapterId:'g4fr-verbes', subsection:'adverbes', difficulty:3,
     question:'Quelle phrase exprime une habitude avec "souvent" ?',
     options:[
-      'Je joue souvent au football le weekend.',
+      'Je joue souvent au football le week-end.',
       'Je jouerai souvent au football maintenant.',
       'Souvent je jouais hier.',
       'Je jouais toujours jamais.'
     ],
-    answer:'Je joue souvent au football le weekend.',
+    answer:'Je joue souvent au football le week-end.',
     hint:'"Souvent" + présent pour une habitude.',
-    explanation:'"Je joue <b>souvent</b> au football le weekend." - <b>souvent</b> (often) + présent = habitude régulière. "Le weekend" confirme la régularité. Les autres options mélangent les temps de façon incorrecte.' }),
+    explanation:'"Je joue <b>souvent</b> au football le week-end." - <b>souvent</b> (often) + présent = habitude régulière. "Le week-end" confirme la régularité. Les autres options mélangent les temps de façon incorrecte.' }),
 
   makeMCQ({ id:'g4fr-verb-033', chapterId:'g4fr-verbes', subsection:'irreguliers', difficulty:4,
     question:'Priya demande à son frère : "Est-ce que tu ___ (vouloir) venir au parc ? Nous ___ (pouvoir) y aller ensemble. Tu ___ (savoir) que c\'est amusant !" Bonne série ?',

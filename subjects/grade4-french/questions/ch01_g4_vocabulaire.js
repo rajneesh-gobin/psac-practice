@@ -58,7 +58,7 @@ STATIC_QUESTIONS.push(
     options:['rose','jaune','vert','orange'],
     answer:'jaune',
     hint:'C\'est la couleur du soleil et des bananes.',
-    explanation:'"<b>Jaune</b>" = yellow. "Jaune" does not change for feminine (une robe jaune, un pantalon jaune). Compare: rouge, vert/verte, bleu/bleue change for feminine. "Jaune" and "orange" are invariable (never add -e for feminine).' }),
+    explanation:'"<b>Jaune</b>" = yellow. "Jaune" ne change pas au féminin car il se termine déjà par -e (une robe jaune, un pantalon jaune), mais il prend un -s au pluriel : des bananes jaunes. "Orange", lui, est invariable (des robes orange). Comparez : vert/verte, bleu/bleue changent au féminin.' }),
 
   makeMCQ({ id:'g4fr-voc-009', chapterId:'g4fr-vocabulaire', subsection:'jours_mois', difficulty:2,
     question:'Quel est le jour du week-end après "samedi" ?',

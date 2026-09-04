@@ -18,7 +18,7 @@ function _buildContext(buf, papers = []) {
   const fmt     = n => n.toLocaleString('en-GB');
 
   function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
-    const others   = shuffle((options || []).filter(o => o !== answer));
+    const others   = shuffle([...new Set((options || []).filter(o => o !== answer))]);
     const finalOpts = shuffle([answer, ...others.slice(0, 3)]);
     return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts, answer, acceptableAnswers: [answer], hint, explanation, learnMore };
   }

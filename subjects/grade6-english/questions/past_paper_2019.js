@@ -113,7 +113,7 @@ STATIC_QUESTIONS.push(
     explanation:'A tomb is completely silent and lifeless — "quiet" is the closest meaning in this context.' }),
 
   makeMCQ({ id:'g6eng-pp19-019', chapterId:'g6eng-comprehension', subsection:'inference', difficulty:2,
-    question:'In "A Puppy for Poppy": To cheer Poppy up, Mum suggested to __________.',
+    question:'In "A Puppy for Poppy": To cheer Poppy up, Mum suggested that they __________.',
     options:['call Ryan back','take Poppy for a walk','give Poppy more food','get a new dog'], answer:'get a new dog',
     hint:'What was Mum\'s idea to solve Poppy\'s loneliness?',
     explanation:'"Maybe we need one more dog to keep Poppy company since she might be feeling lonely" — Mum suggested a new dog.' }),

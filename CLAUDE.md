@@ -186,6 +186,7 @@ bitten this project at least once:
 | Mauritius day-key helpers (`_muDayKey`) | `engine/app.js`, `engine/store.js`, `netlify/functions/weekly-digest.js` |
 | Student-token resolution | `netlify/lib/student-auth.js` ↔ Postgres `current_student_id()` |
 | Shop defaults | `SHOP_DEFAULTS` (admin.js), `DEFAULTS` (shop.js), the SQL `coalesce()`s |
+| Teacher assignment caps | `GUEST_LIMIT_DEFAULTS` (admin.js), the `coalesce()`s in `guest_assignment_limits()`, the seeded `mm_data` row |
 | `REWARD_SLOTS` | app.js ↔ functions/questions.js |
 | Kid vibe list | `KID_VIBES` (app.js) ↔ `:root[data-kid-vibe=…]` (style.css) |
 | `FREE_UNTIL_LABEL` | `app.js` constant ↔ 8 `<span data-free-until>` in index.html (first-paint fallback) |
@@ -308,7 +309,30 @@ so steady practice produced **zero** server writes and only exam submit
 - `_cancelPendingFlush()` now genuinely means *discard*; nothing in the session
   path calls it.
 
-### Question cache (`mm_qc_v<N>_<subject>`, 7 days)
+### Question cache (`mm_qc_v<N>_<owner>|<subject>`, 7 days)
+⚠ **The key carries the OWNER, and the owner is whoever authorised the fetch** —
+a child's session id, or `adult`. It was the subject alone, on a device a whole
+family shares, so the first child to open Maths cached the set the server had
+filtered for *them* and the next child read it straight back. Same defect the
+service worker was stopped from having; this copy simply outlived that fix.
+- ⚠ **A handover must call `QuestionLoader.useStudent(id)`.** `STATIC_QUESTIONS`
+  and `_done` are module state and **switching child never reloads the page**
+  (`openStudentSwitch` and `pdSwitchStudent` are both in-page), so without it the
+  next child inherits the pool outright and `_done` reports every subject already
+  loaded — which defeats the owner-scoped key entirely. `reset()` truncates to the
+  count captured at module load, so whatever the manifests pushed survives.
+- ⚠ **The child's token beats the parent's JWT in `_buildAuthHeaders()`.** It
+  preferred the JWT whenever one existed — and on a shared phone one always does,
+  by design — so a child practising beside a signed-in parent was authorised as
+  the *parent*, and `_resolveOwner()` gives a JWT no `studentExpiresAt`. That
+  child's own expiry was never applied. A stored session belonging to a *different*
+  child is ignored (the `pdSwitchStudent` preview case).
+- ⚠ The purge tests `mm_qc_v`, **not** `mm_qc_` — `mm_qc_lru` shares the shorter
+  prefix and was deleted on every page load, leaving eviction order arbitrary.
+- `_LRU_MAX = 6` counts **slots, not subjects**: two children on one device
+  compete for the same six. Deliberate — a lost bundle costs one refetch; losing
+  the session token to the quota reads as "it keeps logging me out".
+- `scripts/test-question-pool-isolation.js` (25 checks).
 ⚠ **This is the ONLY offline copy of the questions** — the SW deliberately no
 longer caches `/functions/questions` (that response varies per caller).
 - One subject ≈ 272 KB (max 473 KB); a whole grade 1.1–1.66 MB; all three grades
@@ -420,6 +444,38 @@ localStorage is per origin + browser profile, so a preview URL, another browser,
 a private window, or Safari's 7-day eviction all lose it.
 `openParentPinSetup()` is the unguarded entry (Account & Settings → Security);
 `_promptSetParentPin()` keeps its once-only first-run guard.
+
+⚠ **A correct PIN must never dead-end on "your sign-in expired".** The PIN
+cannot mint a session, but a **refresh token** can — and supabase-js deletes its
+own persisted one the first time a refresh fails (a tunnel, a sleeping phone),
+which is indistinguishable from a revoked session. `_ensureParentSession()`
+escalates instead: read → re-read (still restoring) → `refreshSession()` →
+**`refreshSession({refresh_token})` from our own copy** in `psac_parent_sess_v1`,
+rewritten on every auth event because rotation makes a stale copy worse than
+none. Same origin, same localStorage, no new exposure — `persistSession` already
+writes that value under `mm_sb_auth`.
+- ⚠ Step 4 runs **only last, and only once**: replaying a rotated-out token can
+  revoke the whole family server-side. A refusal drops the stash.
+- ⚠ The stash is cleared **only on a deliberate sign-out**, never in the
+  `SIGNED_OUT` handler — supabase-js emits that for a dropped refresh too, which
+  is the exact case being recovered from.
+- ⚠ A successful re-mint **emits `SIGNED_IN`**, so `_suppressAuthEvents` keeps
+  `onAuthStateChange` out of the routing the caller is already awaiting. It is
+  scoped to **that arm only** — `SIGNED_OUT` is always honoured, including the
+  one `_handleParentSession()` raises for a disabled account, or `_parentUser`
+  survives the refusal and the next sign-in opens the dashboard anyway.
+- ⚠ **Offline is not "signed out"** — the ladder stops at the first read and the
+  copy says so; the token may be perfectly good and merely unverifiable.
+- ⚠ **`session-invalid` is not always the CHILD's session.** `_activeAccount` is
+  set for a parent *previewing* a child too, and that path has no student token —
+  its writes go through the parent's JWT. The handler used to answer a refusal
+  there by clearing the child's session and dropping the parent onto the student
+  PIN screen reading "Your session has expired". It now renews the parent's
+  session in place and says nothing; `_parentProfile` is the discriminator.
+- `init()` consults the stash too, gated on it existing so a first-time visitor
+  makes no network call — otherwise the same lapse still logged a parent out on a
+  plain reload, with no PIN involved to hint why.
+- `scripts/test-parent-pin-recovery.js` (25 checks, scripted `_sb` stub).
 
 ### Other session rules
 - Every fresh student PIN login bumps `session_version`; a 5-minute guard logs out
@@ -611,6 +667,19 @@ covers only the ones that still need a decision; the rest
   `color-scheme` **scoped to `select`** (on `:root` it would repaint every native
   control in the app). Guarded by `scripts/test-select-contrast.js`, which
   measures all 31 in both themes and fails below 4.5:1.
+- **`.pd-switch` is the promoted "Switch to student mode" bar**, and it sits
+  **above** the `.pd-action` row rather than inside it. Handing the device over is
+  the most frequent thing a parent does on that screen and the one they could not
+  find — as one of eight identical tiles labelled "Student view" it read as a
+  settings item, which is why the app carries a one-time nudge pointing at it.
+  ⚠ Promote by **altitude, not by colour**: a louder tile inside the row would
+  break the single shape language that row exists to have, and put a second CTA
+  beside "Add child". Measured by `scripts/test-switch-mode-button.js` — at 360px
+  it is 328px wide and **6.8x the area** of the largest tile, clears 4.5:1 on both
+  gradient stops, and adds no horizontal scroll.
+  ⚠ The ids stay `pd-student-view-*` and the seen-flag stays
+  `psac_student_view_guide_seen` — renaming that key would re-show the onboarding
+  nudge to every existing parent.
 - ⚠ **Do not share a class name between two components.** `.nav-btn` was both the
   exam question-navigator cell (32×32) and the student tab bar, so tab labels
   spilled out of their buttons on every phone. The tab bar is `.tabbar-btn`.
@@ -635,10 +704,18 @@ covers only the ones that still need a decision; the rest
 - ⚠ **No regex lookbehind anywhere.** `(?<=…)` is a *parse* error on Safari <16.4
   and would take the whole file down, not one feature. (`_syllabusPoints` uses
   `.match(/[^.!?]+[.!?]*/g)` for exactly this reason.)
-- ⚠ `engine/calendar.js`, `style.css` and `weekly-digest.js` are **CRLF**;
-  `engine/app.js` is LF. A multi-line search string written with `\n` matches
-  nothing in a CRLF file and reports "anchor not found" as though the code had
-  changed. Normalise in memory, restore the file's own convention on write.
+- ⚠ `engine/calendar.js`, `engine/auth.js`, `engine/question_loader.js`,
+  `style.css` and `weekly-digest.js` are **CRLF**; `engine/app.js` is LF; and
+  **`index.html` is MIXED** — ~4830 CRLF lines and ~41 LF ones, sometimes
+  adjacent (the parent-dashboard action row is an LF island). A multi-line search
+  string written with `\n` matches nothing in a CRLF file and reports "anchor not
+  found" as though the code had changed. Normalise in memory, restore the file's
+  own convention on write, and in `index.html` detect the convention **per
+  anchor**.
+  ⚠ Not theoretical: `scripts/test-family-setup-routing.js` extracted
+  `_needsFamilySetup` with a `\n  }\n` pattern and had been reporting "could not
+  extract" — which reads as "the function is gone" — while the function was
+  present and correct the whole time.
 - Everything user-supplied goes through `_attr()` / escaping — mistake rows,
   child display names and the digest email all carry typed input.
 
@@ -812,9 +889,9 @@ two surfaces disagreeing.
 
 ### Version bumps
 - **`SHELL_VERSION` (`sw.js`)** — bump on any change to a shell-cached engine
-  file, or returning users never receive it. Currently **v73**.
+  file, or returning users never receive it. Currently **v141**.
 - **`_CACHE_VERSION` (`question_loader.js`)** — bump when question content or the
-  cache envelope changes. Currently **v14**.
+  cache envelope changes. Currently **v20**.
 - ⚠ The SW shell list is all-or-nothing (`cache.addAll` rejects wholesale on one
   404). **Re-check `<script src="engine/…">` tags against `SHELL_FILES` on every
   deploy that touches them.**
@@ -843,26 +920,27 @@ minutes.
   cache-busting query string.
 - ⚠ **Production builds from `main`.** If a fix is reported as still broken,
   check which branch is deployed before concluding the fix is wrong.
-- ⚠⚠ **MEASURED 2026-09-02: production is FAR behind this repo, and `main` is
-  behind too.** Do not assume anything here is live.
+- ⚠ **MEASURED 2026-09-04: production, `main` and `dev` HEAD are all on
+  `shell-v88`; only the working tree is ahead (v106).** The older note here
+  claimed production was on v23 with `admin-account-recovery` returning 404 —
+  both were stale, and that staleness once sent a whole debugging session the
+  wrong way. Re-measure; never carry these numbers forward.
 
   | | `SHELL_VERSION` | `admin-account-recovery` |
   |---|---|---|
-  | `psac-practice.netlify.app` | **v23** | 404 — not deployed |
-  | `main` | **v15** | not in the branch |
-  | `codex` (HEAD) | v65 | present |
-  | working tree | v74 | present |
+  | `psac-practice.netlify.app` | v88 | **401 — deployed** |
+  | `main` | v88 | present |
+  | `dev` HEAD | v88 | present |
+  | working tree | **v106** | present |
 
-  Four commits sit on `codex` and have never reached `main`. Probe it, never
-  infer it — `curl -s <site>/sw.js | grep SHELL_VERSION` and POST to an `/api/`
-  route (**401 means deployed**, 404 means missing).
+  Probe it, never infer it — `curl -s <site>/sw.js | grep SHELL_VERSION` and
+  POST to an `/api/` route (**401 means deployed**, 404 means missing).
   ⚠ **An undeployed `/api/` route returns the SPA fallback: HTML with status
   404, not an error.** `response.json()` then throws, and code that treats that
-  as `{}` reports the server's own refusal message for a request the server
+  as `{}` reports the server’s own refusal message for a request the server
   never saw. `AdminPanel._adminApi()` checks the content type first and says
   "not available (HTTP 404)" instead. The same is true on a plain local static
   server, where no function runs at all — every `/api/` call fails there.
-
 ### Netlify env vars (dashboard only, never in the repo)
 `SUPABASE_SERVICE_ROLE_KEY` (⚠ its absence used to fail *open*),
 `SUPABASE_ANON_KEY`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_EMAIL`.
@@ -870,6 +948,12 @@ minutes.
 ---
 
 ## Verifying work — traps in the harnesses
+- `scripts/audit-mobile-screens.js [width]` reveals every `.screen` at 360px and
+  320px and reports elements that visibly protrude past the viewport. It judges
+  per-element rects (a scrollWidth check is blinded by body's `overflow-x:
+  clip`), skips children of clipping/scrolling ancestors and pure-emoji
+  decorations, and covers **static markup only** — dynamically rendered
+  content needs its own probe.
 This project's fixes are **measured, not eyeballed**. Repeat that, and know these:
 - ⚠ **The service worker serves a stale shell.** A CDP run must
   `Page.setBypassServiceWorker` **and** `Page.reload {ignoreCache:true}`, or you
@@ -896,6 +980,109 @@ This project's fixes are **measured, not eyeballed**. Repeat that, and know thes
 ---
 
 ## Current state
+## The Game Zone (minigames) — added 2026-09-04
+`engine/minigame.js` (the `MiniGames` module), reached from the kid dashboard
+`#dash-games-tile` and `#screen-minigames`. Seven live games:
+- **Who Wants to Be a Billionaire?** 💰 (was "Peak Quest") — a 20-question prize
+  ladder to Rs 1 Billion, TV-quiz styled (dark set, lozenge answers, prize
+  ladder, 4 lifelines: 50:50, Ask the Crowd, Wise Owl, Safety Rope). Q1–10 are
+  the child's grade easy→medium, Q11–15 the hardest textbook questions, and
+  **Q16–20 are general knowledge** from `engine/minigame_gk.js` (37 curated
+  MCQs, same subjects, beyond the book) — each question shows its subject +
+  chapter/topic. Safe havens at Q5/Q10/Q15. Synthesised WebAudio sounds
+  (correct/wrong/lock-in/win) — **no audio files, no copyright**. A distinct
+  name and look on purpose; no show logo/music/wording. `startBillionaire`.
+- **Quick Fire** ⚡ — a 60-second MCQ blitz with a combo multiplier (×1–5), a
+  time penalty on wrong answers, and a shareable score.
+- **Word Builder** 🧩 (added 2026-09-04) — spell 10 clued words to cross the
+  lagoon on stepping stones; tap scrambled letter tiles into slots, auto-check
+  on full, 3 lives, 3 hints (each locks in the next correct letter, clearing any
+  wrong prefix first). Words come from `engine/minigame_words.js` —
+  `window.MINIGAME_WORDS`, 90 curated words in 3 bands, mixed by the child's own
+  grade. ⚠ A clue must never contain its own word; words are A–Z only (tiles).
+  `startWords`.
+- **Island Explorer** 🗺️ (added 2026-09-04) — a 12-stop geography tour of real
+  Mauritius places (Port Louis → clockwise → Curepipe) from
+  `engine/minigame_geo.js` (`window.MINIGAME_GEO`, ~40 curated fact MCQs, one
+  drawn per stop per tour). First try = 🏅 gold stamp, second = ⭐ silver, two
+  wrongs = the guide explains and the tour **continues** — a child always
+  finishes the trip. ⚠ Every fact is real, verifiable geography; keep it that
+  way. `startExplorer`.
+- **Number Ninja** 🥷 (added 2026-09-04) — mental-maths belts, white → black:
+  7 belts × 5 sums, per-question timer tightening 12s → 7s, 3 lives. ⚠ Sums are
+  **GENERATED** per belt (`_njGen`), never drawn from the question bank; the
+  harness `scripts/test-number-ninja.js` re-derives every answer from the
+  question text and simulates full win/loss runs through the real module (29
+  checks). Bests in `DB.games.ninja` `{plays,bestBelts,bestScore}`. `startNinja`.
+  The hub shows four `mg-card-soon` teasers (Memory Reef, Potion Lab, Écoute!,
+  Story Sprint) — **each has a full design-intent comment block above
+  `renderHub()` in `minigame.js`** (mechanics, data file to create, DB.games
+  key, traps); read it before building one.
+- **Brain Battle** ⚔️ (added 2026-09-04) — pass-the-phone duel: 5 rounds, one
+  question EACH per round, both drawn from the **same difficulty band** but
+  never the same question (the second player would inherit the answer). A
+  handover screen hides the question until the player taps Ready — and a resume
+  after reload always lands on that handover, never mid-question. 25s/question,
+  speed bonus; tie → sudden death (max 3 extra rounds) → draw. Tallies in
+  `DB.games.battle` `{plays,p1Wins,p2Wins,draws}`.
+  `scripts/test-brain-battle.js` (11 checks: same-band pairing measured over
+  240 rounds, crown/draw paths, phase guards). `startBattle`.
+- **Time Traveller** 🕰️ (added 2026-09-04) — history sequencing: 8 rounds of
+  3–4 real dated events (`engine/minigame_time.js`, `window.MINIGAME_TIME`,
+  38 curated facts, Mauritius core + world anchors) TAPPED into chronological
+  order before a rewind timer; years stay hidden until the reveal, which waits
+  for a tap (the learning moment). ⚠ Every fact real and verifiable; ⚠ a label
+  must never contain a 3+ digit number (it would leak the order); ⚠ never two
+  same-year events in one round (their order would be unknowable). Bests in
+  `DB.games.timetravel` `{plays,bestScore,bestPerfect}`.
+  `scripts/test-time-traveller.js` (20 checks). `startTimeTravel`.
+⚠ **Game answers NEVER call recordAnswer()/_recordDaily().** A replay must not
+distort the mastery, mistake and daily reporting parents rely on. Game bests
+live in `DB.games.{billionaire,quickfire,wordbuilder,explorer,ninja,battle,timetravel}`
+(`games` key seeded in `Store._defaultStudent`, so existing children backfill for
+free — no schema change). The four data files (`minigame_gk/words/geo/time.js`)
+are blocking script tags before `minigame.js` and listed in `SHELL_FILES`. In-progress games persist to
+sessionStorage per student (`_persist`/`resumeOrHub`) — the explorer stash
+stores indices into `MINIGAME_GEO`, so it is only resumed while the catalogue
+shape still matches. `scripts/test-minigame-arcade.js` (789 checks: bank
+integrity, full win/lose playthroughs of both new games in a VM, wiring).
+
+⚠ **Confetti is `launchConfetti(count)` (app.js), NOT the canvas-confetti
+`confetti({...})` API** — that library is not loaded. The first cut of Peak
+Quest called the library form guarded by `typeof confetti === "function"`, so
+every burst silently no-opped until this was fixed.
+
+### Ask the Crowd — live public voting
+`supabase-minigame-crowd.sql` (**applied**): `minigame_polls` + three RPCs
+(`minigame_poll_create/vote/results`), granted `anon, authenticated`. The child
+creates a 3-minute poll and shares `/v/<CODE>` (`vote.html`, standalone like
+`guest.html`); anyone votes, the child watches counts live.
+⚠ **The CORRECT ANSWER IS NEVER STORED** — the row holds question + options
+only, so neither a voter nor the child can read the answer back from the server.
+⚠ `minigame_polls` FKs `students(id) ON DELETE CASCADE`, so the account-delete
+cascade takes polls with it — nothing added to `admin-delete-account.js`. (Unlike
+the five text-keyed orphan tables.)
+
+### Score sharing
+Quick Fire shares via `navigator.share` (native sheet → WhatsApp/Instagram/…),
+preferring a **canvas-rendered 1080×1080 PNG** score card where
+`navigator.canShare({files})` allows, else WhatsApp/Facebook/X intent links or
+clipboard. Landing page `score.html?s=&c=&a=` shows the score and a play CTA.
+⚠ **A share carries a score and a challenge — never the child’s name, id, or any
+profile link.** A game score is the one thing safe to post; keep it that way.
+
+### Gates
+- Parent: `DB.restrictions.minigamesDisabled` (per-child toggle on the parent
+  dashboard, `Auth.toggleMinigamesDisabled`). `MiniGames.syncTile()` (called from
+  `renderDashboard`) hides the tile live.
+- Plan: `_PLAN_GATED_SCREENS.minigames = 'minigames'` + the `minigames` capB
+  switch in the admin Plans tab. Unlike a feature that opens an upsell, an
+  excluded games tile simply hides rather than teasing the child.
+
+⚠ Verified end to end in headless Chrome as a real child (14/14 Peak Quest incl.
+a second tab voting on `vote.html`; 8/8 Quick Fire incl. `score.html`). All
+throwaway data purged; `minigame.js`/`style.css` are shell-cached (SHELL bumped).
+
 - **15 live packs, 148 chapters, 5,428 questions, 100% subsection-tagged**, plus
   162 past-paper items and 30 `comingSoon` placeholder packs.
 - Per-pack counts: grade5-maths 1,023 · grade6-maths 432 · grade4-maths 186 ·
@@ -919,45 +1106,91 @@ SQL migration this list used to name as outstanding — `forum-author`,
 long enough that it sent a whole debugging session down the wrong path; re-check
 with `pg_policies` / `pg_proc` before trusting any line of it again.
 
-1. ⚠⚠ **`mailer_autoconfirm` is ON — a deliberate, TEMPORARY bridge** (set
-   2026-09-02 at the user's explicit request, after the cost was stated). New
-   accounts activate with **no email verification at all**: a typo in an address
-   becomes an unrecoverable account, and nothing stops junk signups. It exists
-   because the project is still on Supabase's **built-in** email sender — a
-   shared test service hard-capped at **2 emails/hour**, which
-   `rate_limit_email_sent` cannot raise; only custom SMTP can.
-   **Turn it back off the moment SMTP is configured.** Resend is already used by
-   `notify.js` / `weekly-digest.js`: `smtp.resend.com:465`, user `resend`,
-   password = the Resend API key, plus a verified sending domain
-   (`psac-practice.netlify.app` cannot be one). Then raise
-   `rate_limit_email_sent` from 2 to 30–100.
-   ⚠ Password reset **still** sends email and is still capped at 2/hour — the
-   bridge does not cover it.
-   ⚠ **BLOCKED ON ONE THING: no verified domain in Resend.** The API key works
-   and can send, but the account (owner `rajneeshgobin@gmail.com`) has no
-   verified domain, so Resend refuses every `from` address — measured: an
-   unverified domain → 403 "domain is not verified", and
-   `onboarding@resend.dev` → 403 "you can only send testing emails to your own
-   email address". Wiring SMTP up in that state would be **worse than the
-   autoconfirm bridge**: every sign-up email would fail outright instead of
-   merely being rate-limited. Verify a domain at resend.com/domains first.
-   ⚠ **DECIDED 2026-09-02: stay on the autoconfirm bridge; SMTP is deferred.**
-   The costs above were put to the owner alongside three ways to get a sender
-   (register a domain · Brevo's single verified sender address · Gmail SMTP with
-   an app password) and they chose to change nothing for now. **Do not re-open
-   this unprompted** — but do not let the ⚠⚠ above rot either: it is still a
-   temporary state with real costs.
-   ⚠ **`psac-practice.netlify.app` can NEVER be the sending domain**, and it was
-   proposed once. Verification needs SPF/DKIM records in the `netlify.app` DNS
-   zone, which Netlify owns — measured: 403 "the domain is not verified", and no
-   amount of configuration changes that. The sending domain is also **not** the
-   one the owner's own address is on; they ruled it out explicitly. Ask; never
-   guess a `from`.
-   ⚠ **Same cause, already biting:** `notify.js` and `weekly-digest.js` both
-   default `NOTIFY_FROM_EMAIL` to `onboarding@resend.dev`, so every parent
-   assignment email and every weekly digest has been refused with that same 403
-   for every address except the owner's. Both now log Resend's reply instead of
-   discarding it — the failure used to be indistinguishable from success.
+1. **Email is SOLVED — custom SMTP is live on Gmail, verified 2026-09-04.**
+   `smtp.gmail.com:465`, user and `smtp_admin_email` both
+   `psacpractice@gmail.com`, sender name "PSAC Exam Practice", authenticated
+   with a Google **App Password** (not the account password — Google has refused
+   those over SMTP since 2022; measured: `535-5.7.8 Username and Password not
+   accepted`). `mailer_autoconfirm` is **OFF** and `rate_limit_email_sent` is
+   **30**, up from the built-in sender’s hard cap of 2/hour.
+   ⚠ **`smtp_port` must be sent to the Management API as a STRING** (`"465"`).
+   A number is rejected: `smtp_port: Invalid input: expected string, received
+   number`.
+   ⚠ **`smtp_admin_email` must BE the Gmail account.** Gmail rewrites `From`
+   to the authenticated user, so any other sender address is replaced or
+   refused. Mail visibly comes from `psacpractice@gmail.com`.
+   ⚠ **Gmail’s own ceiling is ~500 recipients/day**, account-wide, and no
+   Supabase setting raises it. That is the limit now — not `rate_limit_email_sent`.
+   ⚠ Verified end to end, not assumed: a real recovery email was delivered and
+   confirmed received, then a real sign-up returned **no session** with
+   `confirmed_at: null` — which is what keeps `emailSignUp()`’s
+   `if (data?.session)` branch landing on the check-email screen. The test
+   user was deleted; `auth.users` was re-counted to prove it.
+   ⚠ **Resend is now legacy for auth mail and was never the blocker’s fix.**
+   The old plan (verify a domain at resend.com) is moot for GoTrue. It still
+   matters for the two Netlify functions below.
+   ⚠ **`psac-practice.netlify.app` can NEVER be a sending domain** — SPF/DKIM
+   would have to live in a DNS zone Netlify owns. Still true, still worth not
+   re-proposing.
+
+1b. **`notify.js` and `weekly-digest.js` now send through the same Gmail
+   account** — 2026-09-04. Both call the shared `netlify/lib/mailer.js`
+   (nodemailer over `smtp.gmail.com:465`), reading `GMAIL_USER` /
+   `GMAIL_APP_PASSWORD`, which are set on the Netlify site. Resend is gone from
+   both. ⚠ **NOT DEPLOYED YET** — see the deploy note below.
+   ⚠ **MEASURED: `RESEND_API_KEY` was never set on the Netlify site at all.**
+   The site held only `SUPABASE_URL`, `SUPABASE_ANON_KEY` and
+   `SUPABASE_SERVICE_ROLE_KEY`. So both functions were hitting their own
+   `not_configured` guard and **never attempted a send** — no parent has ever
+   received an assignment notification or a weekly digest. The 403
+   unverified-domain finding recorded here previously was real, but it was
+   measured against the Resend API directly and is **not** what production hit.
+   The lesson is the one this file keeps re-learning: a guard that returns
+   "not configured" and a send that fails look identical from outside.
+   ⚠ **`VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` / `VAPID_EMAIL` are also absent**
+   from the site env, so `push-*.js` is equally inert. Pending item 4 (rotate
+   the leaked keypair) is therefore free to do — nothing is using them.
+   ⚠ **`sent++` in the digest counted ATTEMPTS, not deliveries**, so the closing
+   log line reported a full run whether or not one email left the building.
+   It now counts only `ok` sends and logs `N FAILED` beside them.
+   ⚠ The from-address is deliberately **not** configurable any more. Gmail
+   rewrites `From` to the authenticated account, so `NOTIFY_FROM_EMAIL` could
+   only ever be wrong; `mailer.js` builds it from `GMAIL_USER`.
+   ⚠ `nodemailer` is the first new runtime dependency in a long while. Verified
+   it survives the esbuild bundler Netlify uses (488 KB, handler loads and
+   runs) — a dynamic require would have failed only in production.
+1c. **Child sessions can load their plan again — fixed 2026-09-04**, via
+   `supabase-student-plan-features.sql` (applied). Found by signing in as a
+   real child in a browser: `_loginStudentRow()` read `families.parent_id` to
+   reach the plan, but `families_own` is
+   `parent_id = auth.uid() OR is_family_member(id) OR is_admin()` and all three
+   arms need `auth.uid()` — a child is **anon + a token header**. The read
+   returned nothing, `_planFeaturesState` went to `failed`, and every child
+   login logged *"plan limits are NOT being applied this session"*. It had
+   never once succeeded. The family rows were fine; the child could not see them.
+   ⚠ **THE OBVIOUS FIX WAS THE WRONG ONE.** Adding a child arm to `families_own`
+   would let a child SELECT the whole row — including **`family_code`, the
+   private join secret** (deliberately not the public `referral_code`), on the
+   least trusted device in the family. The policy is therefore UNCHANGED, and
+   the child calls `student_plan_features()` instead: SECURITY DEFINER, returns
+   `{ok, plan_id, features}` and nothing else — no family_code, no parent_id,
+   no credits, no family name.
+   ⚠ Leaving the policy alone also sidesteps rule 2 above entirely: widening a
+   USING clause with a predicate that must look the row up is what broke family
+   creation for two days. Touching no policy cannot reintroduce it.
+   ⚠ `p_student` is optional. A child omits it (the token answers); a parent
+   PREVIEWING a child passes it, because that path has **no student token** and
+   authorises through the parent’s JWT. Asking about a child that is not the
+   token holder requires an adult of that family — verified: parent→own child
+   `ok`, stranger→`not_authorized`, anon→`no_student`, anon naming a child
+   →`not_authorized`.
+   ⚠ Granted to **anon AND authenticated**. An authenticated-only grant is how
+   the friend RPCs ended up dead (rule 4).
+   ⚠ Verified in a browser on a **pure child session with no parent JWT in it**
+   — that distinction matters, because a parent signed in on the same device
+   answers these queries as the parent and hides the bug. Result: RPC `ok:true`,
+   `plan_id "free"`, 12 features, **no console warning**, and a direct
+   `families` select still returns **0 rows**.
 2. ⚠ **Publish the shop catalogue** — Admin → Content → 🛒 Credit Shop →
    **Publish catalogue**. Not SQL: `purchase_subject()` and
    `shop_subject_price()` both exist, but `mm_data.shop_settings.catalog` is

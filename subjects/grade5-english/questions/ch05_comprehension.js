@@ -116,7 +116,7 @@ const _PASSAGE_B = `<div style="background:#f8fafc;border-left:4px solid #10b981
 One Saturday morning, Nico and Tony, two good friends, decided to go fishing at a nearby pond. They got their fishing lines and bait ready and also packed utensils and ingredients, as they wanted to have fresh fish for lunch.<br><br>
 Once they arrived at the pond, they sat far from each other to fish from different areas. Within a few minutes, Nico caught a big and beautiful fish. He was overjoyed. He placed the fish in a bucket and continued fishing to bring some home for dinner.<br><br>
 On the other side, Tony's bucket was empty. Nico offered to help Tony, but Tony politely refused. He said, "Don't worry, Nico! I will soon catch the kind of fish I need. I just need to be patient." Some minutes later, Tony managed to catch a large fish - but to Nico's surprise, Tony threw it back into the pond. Nico watched in silence as Tony caught many big fish and threw them all back.<br><br>
-After a while, Nico got annoyed and asked, "Why are you throwing the fish back? They were big and beautiful!" Tony calmly replied, "I know they were big. Unfortunately, I did not bring a big pan, so I am looking for a smaller fish to fit my cooking pan." Nico laughed, then advised his friend, "You just have to cut the big fish into smaller pieces!"
+After a while, Nico got annoyed and asked, "Why are you throwing the fish back? They were big and beautiful!" Tony calmly replied, "I know they were big. Unluckily, I did not bring a big pan, so I am looking for a smaller fish to fit my cooking pan." Nico laughed, then advised his friend, "You just have to cut the big fish into smaller pieces!"
 </div>`;
 
 STATIC_QUESTIONS.push(
@@ -138,7 +138,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Because they wanted to cook and eat fresh fish for lunch',
     hint:'Look at the reason given in the first paragraph.',
-    explanation:'The passage says they packed utensils and ingredients "as they wanted to have <b>fresh fish for lunch</b> on that day." They planned to cook the fish they caught right there.' }),
+    explanation:'The passage says they packed utensils and ingredients "as they wanted to have <b>fresh fish for lunch</b>." They planned to cook the fish they caught right there.' }),
 
   makeMCQ({ id:'g5eng-comp-013', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:1,
     question:`${_PASSAGE_B}What does "overjoyed" mean in the passage?`,
@@ -206,6 +206,6 @@ STATIC_QUESTIONS.push(
     options:['overjoyed','politely','unluckily','calmly'],
     answer:'unluckily',
     hint:'Look for a word in Tony\'s speech that means "sadly" or "what a pity".',
-    explanation:'"<b>Unluckily</b>" is used by Tony: "Unluckily, I did not bring a big pan." In the full past paper text, Tony says "Unluckily" - it is a synonym of "unfortunately", both meaning "sadly" or "it is a pity that". Synonyms: unfortunately, unluckily, regrettably, sadly.' })
+    explanation:'"<b>Unluckily</b>" is used by Tony: "Unluckily, I did not bring a big pan." It is a synonym of "unfortunately", both meaning "sadly" or "it is a pity that". Synonyms: unfortunately, unluckily, regrettably, sadly.' })
 
 );

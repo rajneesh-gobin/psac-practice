@@ -41,7 +41,7 @@ STATIC_QUESTIONS.push(
     question:'Quelle expression annonce correctement la CONCLUSION d\'un texte ?',
     options:['De plus','Bien que','En conclusion','Certes'],
     answer:'En conclusion',
-    hint:'Cette expression signal le dernier paragraphe.',
+    hint:'Cette expression signale le dernier paragraphe.',
     explanation:'"<b>En conclusion</b>" annonce la conclusion. Autres expressions : En résumé, Pour conclure, En définitive, En somme. La conclusion résume les idées principales et propose une réflexion finale - elle n\'introduit pas de nouvelles idées.' }),
 
   makeTF({ id:'g6fr-arg-006', chapterId:'g6fr-argumentation', subsection:'vocabulaire', difficulty:2,

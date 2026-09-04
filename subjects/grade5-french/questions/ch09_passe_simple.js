@@ -26,13 +26,13 @@ STATIC_QUESTIONS.push(
     explanation:'"Il <b>parla</b>" - parler → radical parl- + terminaison -a → parla. C\'est le passé simple d\'un verbe en -ER.' }),
 
   makeTF({ id:'g5fr-passe-simple-004', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:1,
-    question:'Le passé simple de "aller" pour "il" est "alla".',
+    question:'Le passé simple d\'"aller" pour "il" est "alla".',
     answer:true,
     hint:'Aller est un verbe en -ER → terminaisons en -a/-as/-a…',
     explanation:'<b>Vrai.</b> Aller → passé simple : j\'allai, tu allas, il/elle <b>alla</b>, nous allâmes, vous allâtes, ils/elles allèrent. "Alla" est correct.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-005', chapterId:'g5fr-passe-simple', subsection:'irreguliers', difficulty:1,
-    question:'Quel est le passé simple de ÊTRE pour "il" ?',
+    question:'Quel est le passé simple d\'ÊTRE pour "il" ?',
     options:['était','a été','fut','serait'],
     answer:'fut',
     hint:'Être est irrégulier au passé simple. Radical = f-.',
@@ -46,7 +46,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Ils <b>mangèrent</b>" - verbe en -ER, terminaison pour ils/elles = <b>-èrent</b>. Attention : manger → ils mang<b>è</b>rent (accent grave). Autres exemples : parler → ils parlèrent, aimer → ils aimèrent.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-007', chapterId:'g5fr-passe-simple', subsection:'irreguliers', difficulty:2,
-    question:'Quel est le passé simple de AVOIR pour "elle" ?',
+    question:'Quel est le passé simple d\'AVOIR pour "elle" ?',
     options:['avait','a eu','eut','aurait'],
     answer:'eut',
     hint:'Avoir est irrégulier. Radical = e- : j\'eus, tu eus, il/elle eut…',
@@ -159,7 +159,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-passe-simple-021', chapterId:'g5fr-passe-simple', subsection:'irreguliers', difficulty:2,
     question:'Conjuguez "voir" au passé simple pour "il" :',
-    options:['il voyait','il vera','il vit','il voyait'],
+    options:['il voyait','il verra','il vit','il voit'],
     answer:'il vit',
     hint:'Voir est irrégulier : je vis, il vit.',
     explanation:'"<b>il vit</b>" - voir (irrégulier) : je vis, tu vis, il/elle <b>vit</b>, nous vîmes, vous vîtes, ils virent. Exemple classique : "Il vit la princesse et tomba amoureux."' }),
@@ -172,7 +172,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>ils firent</b>" - faire (irrégulier) : je fis, tu fis, il fit, nous fîmes, vous fîtes, ils/elles <b>firent</b>. Exemple : "Ils firent le tour du monde en 80 jours."' }),
 
   makeTF({ id:'g5fr-passe-simple-023', chapterId:'g5fr-passe-simple', subsection:'irreguliers', difficulty:2,
-    question:'Le passé simple de "avoir" pour "il" est "il eut".',
+    question:'Le passé simple d\'"avoir" pour "il" est "il eut".',
     answer:true,
     hint:'Avoir est irrégulier : j\'eus, tu eus, il eut.',
     explanation:'<b>Vrai.</b> avoir (passé simple) : j\'eus, tu eus, il/elle <b>eut</b>, nous eûmes, vous eûtes, ils/elles eurent. Exemple littéraire : "Le roi eut une brillante idée."' }),
@@ -216,7 +216,7 @@ STATIC_QUESTIONS.push(
     options:['tendit / offrit','tendait / offrait','tendu / offert','tendra / offrira'],
     answer:'tendit / offrit',
     hint:'Actions dans un récit littéraire = passé simple. Tendre → tendit ; offrir → offrit.',
-    explanation:'"La sorcière <b>tendit</b> la main et <b>offrit</b> une pomme." - tendre (-RE) passé simple : je tendis, il tendit. Offrir (-IR irrégulier) : je offris, il offrit. Dans les contes, les actions principales = passé simple.' }),
+    explanation:'"La sorcière <b>tendit</b> la main et <b>offrit</b> une pomme." - tendre (-RE) passé simple : je tendis, il tendit. Offrir (-IR irrégulier) : j\'offris, il offrit. Dans les contes, les actions principales = passé simple.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-030', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:2,
     question:'Passé simple des verbes en -RE : "attendre" pour "ils" ?',
@@ -229,7 +229,7 @@ STATIC_QUESTIONS.push(
     question:'Pour les verbes en -IR réguliers, les terminaisons du passé simple sont : -is, -is, -it, -îmes, -îtes, -irent.',
     answer:true,
     hint:'Finir → je finis, tu finis, il finit, nous finîmes, vous finîtes, ils finirent.',
-    explanation:'<b>Vrai.</b> Verbes en -IR réguliers : finir → je finis, tu finis, il <b>finit</b>, nous <b>finîmes</b>, vous <b>finîtes</b>, ils <b>finirent</b>. Attention aux accents circonflexes : fînmes/fîtes. Même conjugaison : choisir → il choisit, nous choisîmes.' }),
+    explanation:'<b>Vrai.</b> Verbes en -IR réguliers : finir → je finis, tu finis, il <b>finit</b>, nous <b>finîmes</b>, vous <b>finîtes</b>, ils <b>finirent</b>. Attention aux accents circonflexes : finîmes/finîtes. Même conjugaison : choisir → il choisit, nous choisîmes.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-032', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:2,
     question:'Conjuguez "tenir" au passé simple pour "il" :',

@@ -50,7 +50,7 @@ STATIC_QUESTIONS.push(
     options:['bleu','bleus','bleue','bleues'],
     answer:'bleue',
     hint:'"Voiture" est féminin singulier. L\'adjectif doit être au féminin singulier.',
-    explanation:'"Une voiture <b>bleue</b>" - "voiture" est féminin singulier, donc "bleu" → "<b>bleue</b>" (ajoute -e pour le féminin). Formes de "bleu" : bleu (m.sg.), blue (f.sg.), bleus (m.pl.), bleues (f.pl.).' }),
+    explanation:'"Une voiture <b>bleue</b>" - "voiture" est féminin singulier, donc "bleu" → "<b>bleue</b>" (ajoute -e pour le féminin). Formes de "bleu" : bleu (m.sg.), bleue (f.sg.), bleus (m.pl.), bleues (f.pl.).' }),
 
   makeMCQ({ id:'g4fr-adj-008', chapterId:'g4fr-adjectifs', subsection:'accord', difficulty:2,
     question:'Quelle phrase utilise l\'adjectif CORRECTEMENT ?',
@@ -141,16 +141,16 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>De beaux garçons</b>" - deux règles : (1) Pluriel de "beau" = "<b>beaux</b>". (2) Quand l\'adjectif PRÉCÈDE le nom au pluriel, "des" → "<b>de</b>" : des garçons mais <b>de</b> beaux garçons. C\'est une règle avancée !' }),
 
   makeMCQ({ id:'g4fr-adj-018', chapterId:'g4fr-adjectifs', subsection:'accord', difficulty:3,
-    question:'Réécris au FÉMININ SINGULIER : "Le petit garçon a un nouveau livre blanc."',
+    question:'Réécris avec un sujet FÉMININ : "Le petit garçon a un nouveau livre blanc."',
     options:[
+      'La petite fille a un nouveau livre blanc.',
       'La petite fille a une nouvelle livre blanche.',
-      'La petite fille a un nouvelle livre blanche.',
-      'La petite fille a une nouvelle livre blanc.',
-      'La petite filles a une nouvelle livre blanche.'
+      'La petite fille a un nouvelle livre blanc.',
+      'La petit fille a un nouveau livre blanc.'
     ],
-    answer:'La petite fille a une nouvelle livre blanche.',
-    hint:'Change : le → la, garçon → fille, petit → petite, un → une, nouveau → nouvelle, blanc → blanche.',
-    explanation:'"<b>La petite fille a une nouvelle livre blanche.</b>" - Changements : le → la, garçon → fille, petit → petite (+e), un → une, nouveau → nouvelle (irrégulier), blanc → blanche (irrégulier, +che). Chaque mot s\'accorde avec le genre féminin.' }),
+    answer:'La petite fille a un nouveau livre blanc.',
+    hint:'Change : le → la, garçon → fille, petit → petite. "Livre" (book) reste MASCULIN : son article et ses adjectifs ne changent pas.',
+    explanation:'"<b>La petite fille a un nouveau livre blanc.</b>" - Seuls les mots qui décrivent la personne changent : le → la, garçon → fille, petit → petite (+e). "Livre" (book) est un nom masculin : il garde "un nouveau… blanc" même si le sujet devient féminin. ("Une livre" = une unité de poids !)' }),
 
   makeMCQ({ id:'g4fr-adj-019', chapterId:'g4fr-adjectifs', subsection:'possessifs', difficulty:4,
     question:'Layla décrit sa maison : "J\'ai ___ chambre bleue. Dans ma chambre, il y a ___ lit confortable et ___ jolis rideaux blancs." Quelle série est correcte ?',
@@ -215,7 +215,7 @@ STATIC_QUESTIONS.push(
     options:['une étudiante indien','une étudiante indienne','une étudiant indienne','un étudiante indien'],
     answer:'une étudiante indienne',
     hint:'"Étudiant" f. = étudiante. "Indien" f. = indienne.',
-    explanation:'"<b>une étudiante indienne</b>" - Deux accords : (1) "étudiante" (féminin de étudiant). (2) "indienne" (féminin de indien → -ien + -ne = -ienne). Les deux mots s\'accordent en genre avec le sujet féminin.' }),
+    explanation:'"<b>une étudiante indienne</b>" - Deux accords : (1) "étudiante" (féminin d\'étudiant). (2) "indienne" (féminin d\'indien → -ien + -ne = -ienne). Les deux mots s\'accordent en genre avec le sujet féminin.' }),
 
   makeMCQ({ id:'g4fr-adj-027', chapterId:'g4fr-adjectifs', subsection:'demonstratifs', difficulty:2,
     question:'Quel adjectif démonstratif complète : "___ arbre est très grand."',
@@ -263,7 +263,7 @@ STATIC_QUESTIONS.push(
     explanation:'"C\'est un <b>petit</b> enfant <b>intelligent</b>." - <b>petit</b> (Size = BAGS) se place <b>avant</b> le nom. <b>intelligent</b> (qualité non-BAGS) se place <b>après</b> le nom. Quand il y a deux adjectifs : BAGS + nom + non-BAGS.' }),
 
   makeMCQ({ id:'g4fr-adj-032', chapterId:'g4fr-adjectifs', subsection:'possessifs', difficulty:4,
-    question:'Priya décrit sa classe : "Dans ma classe, il y a ___ (this) professeur chinoise et ___ (some) élèves mauriciens et ___ (some) élèves français." Bonne série ?',
+    question:'Priya décrit sa classe : "Dans ma classe, il y a ___ (this) professeure chinoise et ___ (some) élèves mauriciens et ___ (some) élèves français." Bonne série ?',
     options:[
       'cette / des / des',
       'cet / les / les',
@@ -271,8 +271,8 @@ STATIC_QUESTIONS.push(
       'ce / des / des'
     ],
     answer:'cette / des / des',
-    hint:'"Professeur" f. sg → ? "Élèves" pluriel indéfini → ?',
-    explanation:'"<b>cette</b> professeur" (féminin singulier → cette). "<b>des</b> élèves mauriciens" (pluriel indéfini → des). "<b>des</b> élèves français" (pluriel indéfini → des). Démonstratif pour "cette" puis article indéfini pluriel pour les deux groupes.' }),
+    hint:'"Professeure" f. sg → ? "Élèves" pluriel indéfini → ?',
+    explanation:'"<b>cette</b> professeure" (féminin singulier → cette). "<b>des</b> élèves mauriciens" (pluriel indéfini → des). "<b>des</b> élèves français" (pluriel indéfini → des). Démonstratif pour "cette" puis article indéfini pluriel pour les deux groupes.' }),
 
   makeMCQ({ id:'g4fr-adj-033', chapterId:'g4fr-adjectifs', subsection:'possessifs', difficulty:4,
     question:'Décris ta famille : "Mon grand-père est ___ (Chinese). Ma grand-mère est ___. Mon père est ___ (Mauritian, masc.). Ma mère est ___." Bonne série ?',
@@ -287,7 +287,7 @@ STATIC_QUESTIONS.push(
     explanation:'Grand-père (m.) → <b>chinois</b>, grand-mère (f.) → <b>chinoise</b> (+e). Père (m.) → <b>mauricien</b>, mère (f.) → <b>mauricienne</b> (+ne). Chaque adjectif de nationalité s\'accorde avec le genre du nom de la personne.' }),
 
   makeMCQ({ id:'g4fr-adj-034', chapterId:'g4fr-adjectifs', subsection:'accord', difficulty:4,
-    question:'Complète la description : "___ (this) nouvelle école a ___ (old, m.) bâtiments et un ___ (new, m.) jardin. ___ (these) professeurs sont excellents !"',
+    question:'Complète la description : "___ (this) nouvelle école a de ___ (old, m.) bâtiments et un ___ (new, m.) jardin. ___ (these) professeurs sont excellents !"',
     options:[
       'Cette / vieux / nouveau / Ces',
       'Cet / vieux / nouveau / Ces',
@@ -296,18 +296,18 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Cette / vieux / nouveau / Ces',
     hint:'"École" f. → cette. "Bâtiments" m.pl. → vieux (BAGS). "Jardin" m.sg. → nouveau (BAGS). "Professeurs" pl. → ces.',
-    explanation:'"<b>Cette</b> nouvelle école" (f.sg. → cette). "<b>vieux</b> bâtiments" (BAGS, m.pl. → vieux, invariable en genre). "un <b>nouveau</b> jardin" (BAGS, m.sg. → nouveau). "<b>Ces</b> professeurs" (pluriel → ces). Quatre règles en une phrase !' }),
+    explanation:'"<b>Cette</b> nouvelle école" (f.sg. → cette). "de <b>vieux</b> bâtiments" (des → de devant un adjectif placé avant le nom ; m.pl. → vieux, invariable). "un <b>nouveau</b> jardin" (BAGS, m.sg. → nouveau). "<b>Ces</b> professeurs" (pluriel → ces). Quatre règles en une phrase !' }),
 
   makeMCQ({ id:'g4fr-adj-035', chapterId:'g4fr-adjectifs', subsection:'possessifs', difficulty:4,
-    question:'Shanvi écrit une carte postale : "___ (this, f.) île est magnifique ! Les plages sont belles et les gens sont très accueillants. Mon ___ (French, m.) ami dit que c\'est ___ (better, m.) que les ___ (French, f.pl.) plages !" Bonne série ?',
+    question:'Shanvi écrit une carte postale : "___ (this, f.) île est magnifique ! Les gens sont très accueillants. Mon ___ (French, m.) ami dit que les plages ici sont ___ (better, f.pl.) que les plages ___ (French, f.pl.) !" Bonne série ?',
     options:[
-      'Cette / français / meilleur / françaises',
-      'Cet / français / meilleur / françaises',
-      'Cette / françaises / meilleur / français',
+      'Cette / français / meilleures / françaises',
+      'Cet / français / meilleures / françaises',
+      'Cette / françaises / meilleures / français',
       'Ces / français / meilleurs / françaises'
     ],
-    answer:'Cette / français / meilleur / françaises',
-    hint:'"Île" = f.sg. "ami" = m.sg. "que" modifie m.sg. "plages" = f.pl.',
-    explanation:'"<b>Cette</b> île" (f.sg. → cette). "Mon ami <b>français</b>" (m.sg. → français). "c\'est <b>meilleur</b>" (better, m.sg. → meilleur). "les plages <b>françaises</b>" (f.pl. → françaises). Quatre accords d\'adjectifs de nationalité et démonstratif !' })
+    answer:'Cette / français / meilleures / françaises',
+    hint:'"Île" = f.sg. "Ami" = m.sg. "Plages" = f.pl. (deux fois).',
+    explanation:'"<b>Cette</b> île" (f.sg. → cette). "Mon ami <b>français</b>" (m.sg. → français). "les plages ici sont <b>meilleures</b>" (better, f.pl. → meilleures). "les plages <b>françaises</b>" (f.pl. → françaises, placé APRÈS le nom). Quatre accords d\'adjectifs de nationalité et démonstratif !' })
 
 );

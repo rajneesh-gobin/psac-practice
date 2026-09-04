@@ -170,7 +170,7 @@ STATIC_QUESTIONS.push(
       'was enjoying / was giving / was learning / was bringing'
     ],
     answer:'enjoyed / gave / learnt / brought',
-    hint:'Check each verb: enjoy (regular: +ed), give (irregular: gave), learn (regular: learnt or learned), bring (irregular: brought).',
-    explanation:'"<b>Enjoyed</b>" (enjoy+ed, regular), "<b>gave</b>" (irregular: give→gave), "<b>learnt</b>" (learn+t, regular - "learned" also accepted), "<b>brought</b>" (irregular: bring→brought). Four different verb forms tested in one passage.' })
+    hint:'Check each verb: enjoy (regular: +ed), give (irregular: gave), learn (irregular: learnt - the regular form "learned" is also correct), bring (irregular: brought).',
+    explanation:'"<b>Enjoyed</b>" (enjoy+ed, regular), "<b>gave</b>" (irregular: give→gave), "<b>learnt</b>" (irregular: learn→learnt - the regular form "learned" is also accepted), "<b>brought</b>" (irregular: bring→brought). Four different verb forms tested in one passage.' })
 
 );

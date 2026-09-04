@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   const add = (id, chapterId, subsection, question, options, answer, hint, explanation) => STATIC_QUESTIONS.push(makeMCQ({ id, chapterId, subsection, difficulty: 2, question, options, answer, hint, explanation }));
-  const rows = (prefix, chapterId, subsection, data, options, hint, explanation) => data.forEach(([question, answer], i) => add(`g4fr-cov-${prefix}-${i}`, chapterId, subsection, prefix === 'usage' ? `${question} (indice : ${answer})` : question, options, answer, hint, explanation(answer)));
+  const rows = (prefix, chapterId, subsection, data, options, hint, explanation) => data.forEach(([question, answer], i) => add(`g4fr-cov-${prefix}-${i}`, chapterId, subsection, question, options, answer, hint, explanation(answer)));
 
   rows('vs', 'g4fr-imparfait', 'vs_passe_comp', [
     ['Hier, pendant que je ___ (lire), le téléphone a sonné.', 'lisais'], ['Chaque été, nous ___ (aller) à la mer.', 'allions'],
@@ -9,7 +9,7 @@
     ['Tous les soirs, papa ___ (raconter) une histoire.', 'racontait'], ['Quand il était petit, Sami ___ (jouer) au football.', 'jouait'],
     ['Tout à coup, la pluie ___ (commencer).', 'a commencé'], ['Le soleil ___ (briller) quand nous sommes sortis.', 'brillait'],
     ['Hier, nous ___ (finir) le puzzle.', 'avons fini'], ['Chaque matin, je ___ (prendre) le bus.', 'prenais'],
-    ['Pendant que maman cuisait, je ___ (mettre) la table.', 'mettais'], ['Un jour, elle ___ (trouver) une coquille rare.', 'a trouvé'],
+    ['Pendant que maman cuisinait, je ___ (mettre) la table.', 'mettais'], ['Un jour, elle ___ (trouver) une coquille rare.', 'a trouvé'],
     ['La mer ___ (être) calme ce matin-là.', 'était'], ['La semaine dernière, vous ___ (visiter) le musée.', 'avez visité'],
     ['Quand nous étions jeunes, nous ___ (aimer) danser.', 'aimions'], ['Soudain, le ballon ___ (tomber) dans l’eau.', 'est tombé'],
     ['Tous les dimanches, ils ___ (rendre) visite à grand-mère.', 'rendaient'], ['Hier soir, tu ___ (regarder) un film.', 'as regardé'],
@@ -24,15 +24,24 @@
     ['Vous lis___ le journal.', 'iez'], ['Les enfants jou___ dehors.', 'aient']
   ], ['ais', 'ait', 'ions', 'iez', 'aient'], 'Les terminaisons de l’imparfait sont -ais, -ais, -ait, -ions, -iez, -aient.', a => `Ici, la terminaison est <b>-${a}</b>.`);
 
-  rows('usage', 'g4fr-imparfait', 'usage', [
-    ['Quel indice indique souvent l’imparfait ?', 'Chaque jour'], ['Quel indice indique souvent l’imparfait ?', 'Souvent'], ['Quel indice indique souvent l’imparfait ?', 'Quand j’étais petit'],
-    ['L’imparfait sert surtout à décrire…', 'une habitude dans le passé'], ['L’imparfait peut décrire…', 'le temps qu’il faisait'],
-    ['Dans « Je lisais quand il est entré », « lisais » exprime…', 'une action en cours'], ['Quel groupe convient avec l’imparfait ?', 'Tous les soirs'],
-    ['Dans « La mer était calme », l’imparfait décrit…', 'une situation'], ['Dans « Nous jouions souvent », l’imparfait exprime…', 'une habitude'],
-    ['Quel mot n’indique pas forcément l’imparfait ?', 'Soudain'], ['Dans « Il faisait chaud », l’imparfait sert à…', 'décrire le temps'],
-    ['Avant, elle habitait ici. « habitait » indique…', 'une situation passée'], ['Quand j’étais jeune, je nageais. « nageais » indique…', 'une habitude passée'],
-    ['L’imparfait est utile pour raconter…', 'le décor d’une histoire'], ['Dans « Les oiseaux chantaient », l’action est…', 'en cours dans le passé']
-  ], ['Chaque jour', 'Souvent', 'Quand j’étais petit', 'une habitude dans le passé', 'le temps qu’il faisait', 'une action en cours', 'Tous les soirs', 'une situation', 'une habitude', 'Soudain', 'décrire le temps', 'une situation passée', 'une habitude passée', 'le décor d’une histoire', 'en cours dans le passé'], 'Pense aux habitudes, descriptions et actions en cours.', a => `La bonne idée est <b>${a}</b>.`);
+  [
+    ['Quel indice indique souvent l’imparfait ?', 'Chaque jour', ['Soudain', 'Tout à coup', 'Un jour']],
+    ['Quel indice indique souvent l’imparfait ?', 'Souvent', ['Soudain', 'Hier à midi', 'Tout à coup']],
+    ['Quel indice indique souvent l’imparfait ?', 'Quand j’étais petit', ['Tout à coup', 'Un jour', 'Soudain']],
+    ['L’imparfait sert surtout à décrire…', 'une habitude dans le passé', ['une action soudaine', 'un ordre', 'un projet futur']],
+    ['L’imparfait peut décrire…', 'le temps qu’il faisait', ['un ordre', 'un projet futur', 'une action soudaine']],
+    ['Dans « Je lisais quand il est entré », « lisais » exprime…', 'une action en cours', ['une action soudaine', 'un ordre', 'une action future']],
+    ['Quel groupe convient avec l’imparfait ?', 'Tous les soirs', ['Soudain', 'Tout à coup', 'Hier à midi']],
+    ['Dans « La mer était calme », l’imparfait décrit…', 'une situation', ['un ordre', 'une action soudaine', 'un projet futur']],
+    ['Dans « Nous jouions souvent », l’imparfait exprime…', 'une habitude', ['un ordre', 'une action soudaine', 'une action future']],
+    ['Quel mot n’indique pas forcément l’imparfait ?', 'Soudain', ['Chaque jour', 'Souvent', 'Tous les soirs']],
+    ['Dans « Il faisait chaud », l’imparfait sert à…', 'décrire le temps', ['donner un ordre', 'annoncer le futur', 'raconter une action soudaine']],
+    ['Avant, elle habitait ici. « habitait » indique…', 'une situation passée', ['un ordre', 'une action future', 'une action soudaine']],
+    ['Quand j’étais jeune, je nageais. « nageais » indique…', 'une habitude passée', ['un ordre', 'une action future', 'une action soudaine']],
+    ['L’imparfait est utile pour raconter…', 'le décor d’une histoire', ['le futur', 'un ordre', 'une seule action rapide']],
+    ['Dans « Les oiseaux chantaient », l’action est…', 'en cours dans le passé', ['terminée en un instant', 'dans le futur', 'un ordre']]
+  ].forEach(([question, answer, wrong], i) => add(`g4fr-cov-usage-${i}`, 'g4fr-imparfait', 'usage', question,
+    [answer].concat(wrong), answer, 'Pense aux habitudes, descriptions et actions en cours.', `La bonne idée est <b>${answer}</b>.`));
 
   rows('fact', 'g4fr-lecture', 'fait_opinion', [
     ['« Maurice est une île de l’océan Indien. » Est-ce un fait ou une opinion ?', 'Un fait'], ['« Les mangues sont les meilleurs fruits. » Est-ce un fait ou une opinion ?', 'Une opinion'],
@@ -47,24 +56,36 @@
     ['« La lune tourne autour de la Terre. » Est-ce un fait ou une opinion ?', 'Un fait']
   ], ['Un fait', 'Une opinion'], 'Un fait peut être vérifié; une opinion exprime ce que quelqu’un pense.', a => `<b>${a}</b> est la bonne réponse.`);
 
-  rows('conn', 'g4fr-lecture', 'connecteurs', [
-    ['Le mot « d’abord » annonce…', 'la première étape'], ['Le mot « ensuite » annonce…', 'la suite'], ['Le mot « enfin » annonce…', 'la dernière étape'],
-    ['« Parce que » donne souvent…', 'une raison'], ['« Mais » montre souvent…', 'une opposition'], ['« Donc » annonce souvent…', 'une conséquence'],
-    ['« Puis » veut dire…', 'après'], ['« Cependant » veut dire souvent…', 'mais'], ['« Par exemple » introduit…', 'un exemple'],
-    ['« Ainsi » peut introduire…', 'une conséquence'], ['« Pourtant » annonce…', 'une opposition'], ['« Grâce à » explique…', 'une cause positive'],
-    ['« Après cela » indique…', 'la suite'], ['« Car » signifie souvent…', 'parce que'], ['« Finalement » indique…', 'la fin'],
-    ['« D’un côté… de l’autre… » aide à…', 'comparer deux idées'], ['« En effet » aide à…', 'expliquer une idée']
-  ], ['la première étape', 'la suite', 'la dernière étape', 'une raison', 'une opposition', 'une conséquence', 'après', 'mais', 'un exemple', 'une cause positive', 'comparer deux idées', 'expliquer une idée', 'la fin', 'parce que'], 'Un connecteur montre le lien entre les idées.', a => `<b>${a}</b> est le rôle de ce connecteur.`);
+  [
+    ['Le mot « d’abord » annonce…', 'la première étape', ['la fin', 'une opposition', 'un exemple']],
+    ['Le mot « ensuite » annonce…', 'la suite', ['la première étape', 'une opposition', 'une raison']],
+    ['Le mot « enfin » annonce…', 'la dernière étape', ['la première étape', 'une raison', 'une opposition']],
+    ['« Parce que » donne souvent…', 'une raison', ['une opposition', 'un exemple', 'la première étape']],
+    ['« Mais » montre souvent…', 'une opposition', ['une raison', 'un exemple', 'la suite']],
+    ['« Donc » annonce souvent…', 'une conséquence', ['une opposition', 'un exemple', 'la première étape']],
+    ['« Puis » veut dire…', 'après', ['avant', 'mais', 'parce que']],
+    ['« Cependant » veut dire souvent…', 'mais', ['parce que', 'donc', 'après']],
+    ['« Par exemple » introduit…', 'un exemple', ['une raison', 'une opposition', 'une conséquence']],
+    ['« Ainsi » peut introduire…', 'une conséquence', ['une opposition', 'une raison', 'la première étape']],
+    ['« Pourtant » annonce…', 'une opposition', ['une raison', 'un exemple', 'la suite']],
+    ['« Grâce à » explique…', 'une cause positive', ['une opposition', 'un exemple', 'la dernière étape']],
+    ['« Après cela » indique…', 'la suite', ['la première étape', 'une raison', 'une opposition']],
+    ['« Car » signifie souvent…', 'parce que', ['mais', 'donc', 'après']],
+    ['« Finalement » indique…', 'la fin', ['le début', 'une raison', 'une opposition']],
+    ['« D’un côté… de l’autre… » aide à…', 'comparer deux idées', ['annoncer la fin', 'donner une raison', 'donner un exemple']],
+    ['« En effet » aide à…', 'expliquer une idée', ['comparer deux idées', 'annoncer la fin', 'donner un ordre']]
+  ].forEach(([question, answer, wrong], i) => add(`g4fr-cov-conn-${i}`, 'g4fr-lecture', 'connecteurs', question,
+    [answer].concat(wrong), answer, 'Un connecteur montre le lien entre les idées.', `La bonne réponse est <b>${answer}</b>.`));
 
   rows('sens', 'g4fr-lecture', 'vocabulaire', [
     ['Dans « Le chemin est étroit », « étroit » veut dire…', 'pas large'], ['Dans « Le lapin est rapide », « rapide » veut dire…', 'vite'],
-    ['Dans « La mer est calme », « calme » veut dire…', 'sans grandes vagues'], ['Dans « Il est affamé », « affamé » veut dire…', 'très faim'],
+    ['Dans « La mer est calme », « calme » veut dire…', 'sans grandes vagues'], ['Dans « Il est affamé », « affamé » veut dire…', 'qui a très faim'],
     ['Dans « Le trésor est caché », « caché » veut dire…', 'qu’on ne voit pas'], ['Dans « La fleur est parfumée », « parfumée » veut dire…', 'qui sent bon'],
     ['Dans « Le garçon est courageux », « courageux » veut dire…', 'brave'], ['Dans « Le sac est lourd », « lourd » veut dire…', 'difficile à porter'],
     ['Dans « Le vieux pont est solide », « solide » veut dire…', 'qui ne se casse pas facilement'], ['Dans « La forêt est sombre », « sombre » veut dire…', 'peu éclairée'],
     ['Dans « La réponse est exacte », « exacte » veut dire…', 'correcte'], ['Dans « Le chien est fidèle », « fidèle » veut dire…', 'qui reste avec son maître'],
     ['Dans « Le paysage est magnifique », « magnifique » veut dire…', 'très beau']
-  ], ['pas large', 'vite', 'sans grandes vagues', 'très faim', 'qu’on ne voit pas', 'qui sent bon', 'brave', 'difficile à porter', 'qui ne se casse pas facilement', 'peu éclairée', 'correcte', 'qui reste avec son maître', 'très beau'], 'Utilise les autres mots de la phrase pour comprendre.', a => `Dans ce contexte, cela veut dire <b>${a}</b>.`);
+  ], ['pas large', 'vite', 'sans grandes vagues', 'qui a très faim', 'qu’on ne voit pas', 'qui sent bon', 'brave', 'difficile à porter', 'qui ne se casse pas facilement', 'peu éclairée', 'correcte', 'qui reste avec son maître', 'très beau'], 'Utilise les autres mots de la phrase pour comprendre.', a => `Dans ce contexte, cela veut dire <b>${a}</b>.`);
 
   rows('legend', 'g4fr-textes', 'legende', [
     ['Une légende raconte souvent…', 'une histoire ancienne et merveilleuse'], ['Dans une légende, on peut rencontrer…', 'un personnage extraordinaire'],

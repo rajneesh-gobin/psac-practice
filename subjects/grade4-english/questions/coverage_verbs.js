@@ -18,15 +18,15 @@
     ['They','should','share the crayons'], ['I','will','visit Grandma tomorrow'], ['The dog','can','catch the ball'], ['We','should','keep the beach clean']
   ];
   auxiliaries.forEach(([subject, word, ending], i) => add(`g4eng-cover-aux-${String(i+1).padStart(2,'0')}`, 'auxiliary',
-    `Choose the helping word: “${subject} ___ ${ending}.”`, [word, 'was', 'do', 'has'], word,
+    `Choose ${i < 10 ? 'the helping word for an action happening now' : 'the modal helping verb'}: “${subject} ___ ${ending}.”`, [word, 'was', 'do', 'has'], word,
     'A helping verb works with the main verb or shows what someone can, must or should do.', `<b>${word}</b> is the correct helping word in this sentence.`));
   const past = [
     ['Yesterday, Asha','walked','walk'], ['Last night, we','watched','watch'], ['On Saturday, I','visited','visit'], ['The baby','slept','sleep'],
     ['Ravi','ate','eat'], ['The team','won','win'], ['Mum','bought','buy'], ['The kite','flew','fly'], ['They','went','go'], ['The bell','rang','ring']
   ];
   past.forEach(([subject, answer, base], i) => add(`g4eng-cover-past-${String(i+1).padStart(2,'0')}`, 'past_tense',
-    `Choose the past-tense verb: “${subject} ___ yesterday.”`, [base, answer, `${base}ing`, 'will'], answer,
-    'The word “yesterday” tells you the action happened in the past.', `<b>${answer}</b> is the past tense of <b>${base}</b>.`));
+    `Choose the past-tense verb: “${subject} ___${i < 3 ? '' : ' yesterday'}.”`, [base, answer, `${base}ing`, 'will'], answer,
+    'The instruction asks for the past tense: an action that has already happened.', `<b>${answer}</b> is the past tense of <b>${base}</b>.`));
   const future = [
     ['Tomorrow, I','will tidy my room'], ['Next week, we','will plant seeds'], ['On Sunday, Dad','will cook lunch'], ['Later, the class','will visit the museum'],
     ['Tonight, she','will finish her book'], ['In July, they','will travel to Rodrigues'], ['After school, I','will feed the cat'], ['Next month, Mum','will start a garden'],
@@ -44,7 +44,7 @@
     ['The children','are','watching the play'], ['The frog','is','hopping near the pond'], ['We','are','waiting for the bus'], ['Grandpa','is','watering the plants']
   ];
   continuous.forEach(([subject, helper, ending], i) => add(`g4eng-cover-cont-${String(i+1).padStart(2,'0')}`, 'continuous',
-    `Choose the correct words: “${subject} ___ ${ending} now.”`, [`${helper} ${ending}`, `was ${ending}`, `will ${ending}`, ending], `${helper} ${ending}`,
+    `Choose the present continuous: “${subject} ___ now.”`, [`${helper} ${ending}`, `was ${ending}`, `will ${ending}`, ending], `${helper} ${ending}`,
     'The present continuous uses am, is or are + a verb ending in -ing.', `<b>${helper} ${ending}</b> describes an action happening now.`));
   const perfect = [
     ['I','have','finished my homework'], ['She','has','lost her pencil'], ['We','have','cleaned the tables'], ['The dog','has','eaten its food'], ['They','have','seen the rainbow'],
@@ -53,15 +53,17 @@
     ['We','have','learned a new poem'], ['The baby','has','fallen asleep'], ['The players','have','won the match'], ['Grandma','has','baked biscuits']
   ];
   perfect.forEach(([subject, helper, ending], i) => add(`g4eng-cover-perfect-${String(i+1).padStart(2,'0')}`, 'perfect',
-    `Choose the correct words: “${subject} ___ already ${ending}.”`, [`${helper} ${ending}`, `is ${ending}`, `will ${ending}`, ending], `${helper} ${ending}`,
+    `Choose the present perfect: “${subject} ___.”`, [`${helper} ${ending}`, `is ${ending}`, `will ${ending}`, ending], `${helper} ${ending}`,
     'The present perfect uses have or has with a past participle.', `<b>${helper} ${ending}</b> shows that the action is completed.`));
   const present = [
-    ['Every morning, I','brush','brushes'], ['Each day, she','walks','walk'], ['On Fridays, we','play','plays'], ['My cat','sleeps','sleep'], ['The shops','open','opens'], ['Ravi','washes','wash'],
-    ['The sun','rises','rise'], ['My friends','enjoy','enjoys'], ['A bee','buzzes','buzz'], ['I','carry','carries'], ['The children','learn','learns'], ['Mum','packs','pack']
+    ['Every morning, I ___ my teeth.','brush','brushes','brushed'], ['Each day, she ___ to school.','walks','walk','walked'], ['On Fridays, we ___ football.','play','plays','played'],
+    ['My cat ___ all afternoon.','sleeps','sleep','slept'], ['The shops ___ at nine o’clock every day.','open','opens','opened'], ['Ravi ___ the dishes every evening.','washes','wash','washed'],
+    ['The sun ___ every morning.','rises','rise','rose'], ['My friends ___ reading stories.','enjoy','enjoys','enjoyed'], ['A bee ___ around the flowers.','buzzes','buzz','buzzed'],
+    ['I ___ my bag to school every day.','carry','carries','carried'], ['The children ___ new words every day.','learn','learns','learned'], ['Mum ___ my lunch every day.','packs','pack','packed']
   ];
-  present.forEach(([subject, answer, wrong], i) => add(`g4eng-cover-present-${String(i+1).padStart(2,'0')}`, 'present_tense',
-    `Choose the present-tense verb: “${subject} ___ to school every day.”`, [answer, wrong, 'went', 'will go'], answer,
-    '“Every day” tells you this is a present-tense habit.', `<b>${subject} ${answer}</b> is correct in the present tense.`));
+  present.forEach(([sentence, answer, wrong, past], i) => add(`g4eng-cover-present-${String(i+1).padStart(2,'0')}`, 'present_tense',
+    `Choose the present-tense verb: “${sentence}”`, [answer, wrong, past, `will ${answer.endsWith('s') ? wrong : answer}`], answer,
+    'These sentences describe habits or facts that happen regularly, so use the present tense.', `“${sentence.replace('___', `<b>${answer}</b>`)}” is correct in the present tense.`));
   const findVerb = [
     ['The sailor steered the boat safely.','steered'], ['Ayesha sings in the choir.','sings'], ['The rain fell all afternoon.','fell'], ['Our neighbours are painting their gate.','painting'],
     ['The baby laughed at the puppet.','laughed'], ['We will visit the aquarium.','visit'], ['The bees collect nectar.','collect'], ['The boys carried the boxes.','carried'],

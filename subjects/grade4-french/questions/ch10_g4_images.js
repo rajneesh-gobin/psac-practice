@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
     options:[`sur`, `sous`, `dans le ciel`, `derrière`],
     answer:`sur`,
     hint:`Ils sont posés dessus, pas enterrés dessous.`,
-    explanation:`On dit « les enfants jouent <b>sur</b> le sable » : ils sont <b>à la surface</b>. Les prépositions de lieu sont indispensables pour décrire une image : <b>sur, sous, dans, devant, derrière, à côté de, entre</b>.` }),
+    explanation:`« Les enfants jouent <b>sur</b> le sable » : ils sont <b>à la surface</b>. (On peut aussi dire « dans le sable » — mais jamais « sous » ni « derrière » !) Les prépositions de lieu sont indispensables pour décrire une image : <b>sur, sous, dans, devant, derrière, à côté de, entre</b>.` }),
 
   makeMCQ({ id:`g4fr-img-006`, chapterId:'g4fr-images', subsection:'une_image', difficulty:2,
     question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Qu'y a-t-il derrière les enfants, tout au fond ?`,

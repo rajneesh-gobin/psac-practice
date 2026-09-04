@@ -16,7 +16,7 @@ STATIC_QUESTIONS.push(
     options:['mange','manges','mangeons','mangez'],
     answer:'mangeons',
     hint:'Verbes en -ger : on ajoute un "e" avant -ons pour garder le son doux.',
-    explanation:'"Nous <b>mangeons</b>" - les verbes en -ger (manger, nager, voyager) gardent le "e" avant -ons pour que le "g" reste doux : nous mangeons, nous nageons. Sans le "e", on dirait "mangnons" - incorrect.' }),
+    explanation:'"Nous <b>mangeons</b>" - les verbes en -ger (manger, nager, voyager) gardent le "e" avant -ons pour que le "g" reste doux : nous mangeons, nous nageons. Sans le "e", on écrirait "mangons" et le "g" se prononcerait dur - incorrect.' }),
 
   makeMCQ({ id:'g5fr-vb-003', chapterId:'fr-verbes-present', subsection:'conjugaison', difficulty:1,
     question:'Quelle est la forme correcte de "être" pour "nous" ?',
@@ -60,7 +60,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Ils <b>font</b>" - faire est totalement irrégulier : je fais, tu fais, il/elle fait, nous faisons, vous faites, ils/elles <b>font</b>. "Faire du sport" = to play/do sport.' }),
 
   makeMCQ({ id:'g5fr-vb-009', chapterId:'fr-verbes-present', subsection:'etre_avoir', difficulty:2,
-    question:'Complétez avec la bonne forme de "avoir" : "Tu ___ douze ans."',
+    question:'Complétez avec la bonne forme d\'"avoir" : "Tu ___ douze ans."',
     options:['est','a','as','avez'],
     answer:'as',
     hint:'On utilise "avoir" pour l\'âge en français. "Tu" + avoir = ?',
@@ -167,7 +167,7 @@ STATIC_QUESTIONS.push(
     question:'Conjuguez "vouloir" à la troisième personne plurielle : "Ils ___ partir tôt."',
     options:['voulont','veulent','voulissent','veuillent'],
     answer:'veulent',
-    hint:'La 3ème personne plurielle de vouloir a un radical différent : veuil-.',
+    hint:'La 3ème personne plurielle de vouloir a un radical différent : veul-.',
     explanation:'"Ils <b>veulent</b> partir." - Conjugaison de vouloir : je veux, tu veux, il veut, nous voulons, vous voulez, ils/elles <b>veulent</b>. Notez la différence de radical : je/tu/il = veu-, nous/vous = voul-, ils = veul-.' }),
 
   makeTF({ id:'g5fr-vb-023', chapterId:'fr-verbes-present', subsection:'irreguliers', difficulty:1,

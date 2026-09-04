@@ -99,14 +99,14 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-verb-011', chapterId:'g6eng-verbs', subsection:'continuous', difficulty:2,
     question:'Which sentence uses the PRESENT PERFECT CONTINUOUS tense correctly?',
     options:[
-      '"She has finished her homework."',
-      '"She was finishing her homework for two hours."',
-      '"She has been finishing her homework for two hours."',
-      '"She had been finishing her homework."'
+      '"She has done her homework."',
+      '"She was doing her homework for two hours."',
+      '"She has been doing her homework for two hours."',
+      '"She had been doing her homework."'
     ],
-    answer:'"She has been finishing her homework for two hours."',
+    answer:'"She has been doing her homework for two hours."',
     hint:'Present perfect continuous = have/has been + verb-ing.',
-    explanation:'"She <b>has been finishing</b> her homework for two hours." - <b>Present perfect continuous</b> (have/has + been + -ing) emphasises the ongoing duration of an activity that started in the past and is still happening now. Key signal words: <b>for</b> (duration), <b>since</b> (starting point), <b>all day/all morning</b>. Compare: "has finished" (present perfect simple) = the action is now complete.' }),
+    explanation:'"She <b>has been doing</b> her homework for two hours." - <b>Present perfect continuous</b> (have/has + been + -ing) emphasises the ongoing duration of an activity that started in the past and is still happening now. Key signal words: <b>for</b> (duration), <b>since</b> (starting point), <b>all day/all morning</b>. Compare: "has done" (present perfect simple) = the action is now complete.' }),
 
   makeMCQ({ id:'g6eng-verb-012', chapterId:'g6eng-verbs', subsection:'auxiliary', difficulty:2,
     question:'Which modal verb expresses CERTAIN DEDUCTION about the past - you are sure something happened?',

@@ -19,9 +19,23 @@ const vm = require('vm');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 
-const SRC = fs.readFileSync(path.join(ROOT, 'engine/auth.js'), 'utf8');
+// ⚠ Normalise the line endings BEFORE matching. engine/auth.js is CRLF, and a
+// pattern anchored on `\n  }\n` matches nothing in it — which this file then
+// reported as "could not extract _needsFamilySetup", i.e. as though the function
+// had been renamed or deleted. It had not; the harness had simply gone blind,
+// and stayed that way. Exactly the trap CLAUDE.md records for multi-line
+// searches in CRLF files.
+const SRC = fs.readFileSync(path.join(ROOT, 'engine/auth.js'), 'utf8')
+  .replace(/^﻿/, '').replace(/\r\n/g, '\n');
 const block = SRC.match(/  function _needsFamilySetup\(profile\) \{[\s\S]*?\n  \}\n/);
-if (!block) { console.error('could not extract _needsFamilySetup'); process.exit(1); }
+if (!block) {
+  console.error('could not extract _needsFamilySetup from engine/auth.js.');
+  console.error(SRC.includes('_needsFamilySetup')
+    ? '  The name is still there, so it is the SHAPE that moved (signature, indentation,\n'
+      + '  or the closing brace) - update the pattern above, do not delete the checks.'
+    : '  The name is gone entirely - the gate was renamed or removed.');
+  process.exit(1);
+}
 
 // The function reads two things from its closure: _parentUser and Store.
 function make(familyError, parentUser) {

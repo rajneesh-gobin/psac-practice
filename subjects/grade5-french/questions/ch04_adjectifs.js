@@ -41,10 +41,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-adj-006', chapterId:'fr-adjectifs', subsection:'accord', difficulty:2,
     question:'Quel est le pluriel de "un nouveau livre" ?',
-    options:['des nouveaux livres','des nouvelles livres','des nouveau livres','des nouvel livres'],
-    answer:'des nouveaux livres',
-    hint:'"Nouveau" → pluriel masculin = nouveaux. "Livre" est masculin.',
-    explanation:'"<b>Des nouveaux livres</b>" - "nouveau" (masc. sing.) → <b>nouveaux</b> (masc. plur.). Tableau : nouveau → nouveaux, nouvelle → nouvelles. Devant voyelle : bel, nouvel, vieil (singulier masculin seulement).' }),
+    options:['de nouveaux livres','des nouvelles livres','des nouveau livres','des nouvel livres'],
+    answer:'de nouveaux livres',
+    hint:'"Nouveau" → pluriel masculin = nouveaux. Devant un adjectif placé avant le nom, "des" devient "de".',
+    explanation:'"<b>De nouveaux livres</b>" - "nouveau" (masc. sing.) → <b>nouveaux</b> (masc. plur.), et devant un adjectif placé avant le nom, "des" devient "de" : de nouveaux livres, de beaux yeux. Tableau : nouveau → nouveaux, nouvelle → nouvelles. Devant voyelle : bel, nouvel, vieil (singulier masculin seulement).' }),
 
   makeTF({ id:'g5fr-adj-007', chapterId:'fr-adjectifs', subsection:'accord', difficulty:1,
     question:'En français, les adjectifs s\'accordent en genre et en nombre avec le nom qu\'ils décrivent.',
@@ -54,7 +54,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-adj-008', chapterId:'fr-adjectifs', subsection:'accord', difficulty:2,
     question:'Complétez : "Les enfants sont ___." (heureux)',
-    options:['heureuse','heureux','heureuses','heureux'],
+    options:['heureuse','heureux','heureuses','heureuxs'],
     answer:'heureux',
     hint:'"Enfants" est masculin pluriel. La forme masculine de "heureux" ne change pas au pluriel.',
     explanation:'"Les enfants sont <b>heureux</b>." - "Heureux" est masculin pluriel (et aussi masculin singulier - la forme ne change pas). Féminin singulier/pluriel : heureus<b>e</b> / heureus<b>es</b>. Les adjectifs en -eux/-euse suivent ce modèle.' }),
@@ -86,14 +86,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-adj-012', chapterId:'fr-adjectifs', subsection:'accord', difficulty:1,
     question:'Quelle est la forme féminine de "sportif" ?',
-    options:['sportive','sportife','sportiève','sportife'],
+    options:['sportive','sportife','sportiève','sportif'],
     answer:'sportive',
     hint:'Les adjectifs en -if changent en -ive au féminin.',
     explanation:'"<b>sportive</b>" - -if → -ive : sportif → sportive. Autres exemples : actif → active, naïf → naïve, attentif → attentive, négatif → négative. Question type très courante au PSAC !' }),
 
   makeMCQ({ id:'g5fr-adj-013', chapterId:'fr-adjectifs', subsection:'demonstratifs', difficulty:2,
     question:'Complétez : "Cette fille est très ___ ." (heureux)',
-    options:['heureux','heureuse','heureuses','heureux'],
+    options:['heureux','heureuse','heureuses','heureuxes'],
     answer:'heureuse',
     hint:'"Fille" est féminin singulier → forme féminine singulière de l\'adjectif.',
     explanation:'"<b>heureuse</b>" - heureux (masc.) → heureuse (fém.). Schéma -eux → -euse : heureux/heureuse, courageux/courageuse, sérieux/sérieuse, dangereux/dangereuse. L\'adjectif doit s\'accorder en genre et en nombre avec le nom qu\'il qualifie.' }),
@@ -199,7 +199,7 @@ STATIC_QUESTIONS.push(
     question:'"Neigeux" est un adjectif formé à partir du nom "neige".',
     answer:true,
     hint:'"Neige" + -eux/-euse.',
-    explanation:'<b>Vrai.</b> neige → <b>neigeux/neigeuse</b>. Même formation : nuage → nuageux, pluie → pluvieux (irrégulier), brouillard → brumeux (irrégulier), chaleur → chaud (irrégulier). En météo, ces adjectifs décrivent les conditions climatiques.' }),
+    explanation:'<b>Vrai.</b> neige → <b>neigeux/neigeuse</b>. Même formation : nuage → nuageux, pluie → pluvieux (irrégulier), brouillard → brumeux (irrégulier), vent → venteux. En météo, ces adjectifs décrivent les conditions climatiques.' }),
 
   makeMCQ({ id:'g5fr-adj-027', chapterId:'fr-adjectifs', subsection:'accord', difficulty:2,
     question:'Accordez le participe passé : "une porte ___" (fermer)',
@@ -230,11 +230,11 @@ STATIC_QUESTIONS.push(
     explanation:'"Cette route est <b>moins dangereuse que</b> celle d\'hier." - Route = féminin → dangereuse (fém.). Comparatif d\'infériorité : <b>moins + adjectif + que</b>. Exemples : moins grand que, moins belle que, moins intelligents que.' }),
 
   makeMCQ({ id:'g5fr-adj-031', chapterId:'fr-adjectifs', subsection:'comparatif', difficulty:3,
-    question:'Superlatif irrégulier : "C\'est la ___ note possible." (mauvais)',
-    options:['la plus mauvaise','la pire','la plus pire','la moins bonne'],
+    question:'Superlatif irrégulier : "C\'est ___ note possible." (mauvais)',
+    options:['la plus mal','la pire','la plus pire','la moins bonne'],
     answer:'la pire',
     hint:'"Mauvais" a un superlatif irrégulier.',
-    explanation:'"C\'est <b>la pire</b> note." - mauvais → comparatif : pire / superlatif : la pire. "La pire note" = the worst mark. On dit aussi "la plus mauvaise" (acceptable mais moins courant). Exemples : le pire cauchemar, la pire journée.' }),
+    explanation:'"C\'est <b>la pire</b> note." - mauvais → comparatif : pire / superlatif : la pire. "La pire note" = the worst mark. La forme régulière "la plus mauvaise" existe aussi, mais le superlatif irrégulier demandé est "la pire". Exemples : le pire cauchemar, la pire journée.' }),
 
   makeTF({ id:'g5fr-adj-032', chapterId:'fr-adjectifs', subsection:'accord', difficulty:2,
     question:'"Mieux" est la forme comparative de l\'adverbe "bien".',

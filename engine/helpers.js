@@ -69,7 +69,7 @@ function isFreeChapter(chapterId) {
 }
 
 function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
-  const shuffled = shuffle(options.filter(o => o !== answer));
+  const shuffled = shuffle([...new Set(options.filter(o => o !== answer))]);
   const finalOpts = shuffle([answer, ...shuffled.slice(0, 3)]);
   return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts, answer, acceptableAnswers: [answer], hint, explanation, learnMore };
 }

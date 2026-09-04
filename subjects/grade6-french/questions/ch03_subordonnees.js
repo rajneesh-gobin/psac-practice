@@ -39,11 +39,11 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Vrai.</b> Dans le discours indirect au passé : présent → <b>imparfait</b>. "Je suis fatigué." → Il a dit qu\'il <b>était</b> fatigué. Autres changements : passé composé → plus-que-parfait ; futur → conditionnel.' }),
 
   makeMCQ({ id:'g6fr-sub-006', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
-    question:'Mettez au discours indirect : Marie dit : "Je viendrai demain." → Marie dit qu\'elle ___.',
+    question:'Mettez au discours indirect : Marie a dit : "Je viendrai demain." → Marie a dit qu\'elle ___.',
     options:['viendra demain','viendrait le lendemain','vient demain','venait le lendemain'],
     answer:'viendrait le lendemain',
-    hint:'Verbe principal au présent → … Mais ici : "Marie dit" (présent), donc le futur peut rester futur. Attention : choisissez selon le contexte de concordance.',
-    explanation:'Si "Marie dit" (présent), le futur peut rester : "Marie dit qu\'elle <b>viendra le lendemain</b>." Mais si c\'est au passé ("Marie a dit"), le futur → conditionnel : "Marie a dit qu\'elle <b>viendrait le lendemain</b>". Ici le seul choix correct proposé est "viendrait le lendemain".' }),
+    hint:'Verbe introducteur au passé ("a dit") → le futur devient conditionnel, et "demain" devient "le lendemain".',
+    explanation:'"Marie <b>a dit</b>" est au passé : le futur devient <b>conditionnel</b> → "Marie a dit qu\'elle <b>viendrait le lendemain</b>." "Demain" devient "<b>le lendemain</b>" au discours indirect. Si le verbe introducteur était au présent ("Marie dit"), on garderait le futur : "Marie dit qu\'elle viendra demain."' }),
 
   makeMCQ({ id:'g6fr-sub-007', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
     question:'Quel connecteur exprime la CAUSE ?',
@@ -66,7 +66,7 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Faux.</b> "Bien que" est toujours suivi du <b>subjonctif</b> : "Bien qu\'il <b>soit</b> fatigué, il continue." Autres conjonctions + subjonctif : pour que, avant que, à moins que. Connecteurs + indicatif : parce que, car, puisque, comme.' }),
 
   makeMCQ({ id:'g6fr-sub-010', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
-    question:'Transformez en discours indirect : Paul demande : "Est-ce que tu as faim ?" → Paul demande ___.',
+    question:'Transformez en discours indirect : Paul me demande : "Est-ce que tu as faim ?" → Paul me demande ___.',
     options:[
       'qu\'il a faim',
       'si tu as faim',
@@ -75,7 +75,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'si j\'ai faim',
     hint:'Les questions avec "est-ce que" → "si" dans le discours indirect. Le "tu" de Paul devient "je" du point de vue de la personne interrogée.',
-    explanation:'Paul demande <b>si j\'ai faim</b>. - Les questions oui/non (est-ce que…) → <b>si</b> dans le discours indirect. Le pronom change selon la perspective : "tu" (Paul parle à moi) → "je" (moi, celui qui rapporte). Si le verbe principal est au passé : "Paul a demandé si j\'<b>avais</b> faim" (imparfait).' })
+    explanation:'Paul me demande <b>si j\'ai faim</b>. - Les questions oui/non (est-ce que…) → <b>si</b> dans le discours indirect. Le pronom change selon la perspective : "tu" (Paul parle à moi) → "je" (moi, celui qui rapporte). Si le verbe principal est au passé : "Paul m\'a demandé si j\'<b>avais</b> faim" (imparfait).' })
 
 );
 
@@ -98,7 +98,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6fr-sub-013', chapterId:'g6fr-subordonnees', subsection:'relatives', difficulty:1,
     question:'"Que" s\'élide en "qu\'" devant une voyelle ou un h muet.',
     answer:true,
-    hint:'Le livre que il lit → le livre qu\'il lit.',
+    hint:'On ne dit pas "le livre que il lit" mais "le livre qu\'il lit".',
     explanation:'<b>Vrai.</b> "Que" → "qu\'" devant une voyelle ou un h muet : "le livre <b>qu\'</b>il lit", "la chanson <b>qu\'</b>elle chante", "l\'histoire <b>qu\'</b>on raconte". En revanche, "qui" ne s\'élide jamais : "l\'homme <b>qui</b> arrive" (jamais "qu\'arrive"). "Dont" et "où" ne s\'élident jamais non plus.' }),
 
   makeMCQ({ id:'g6fr-sub-014', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
@@ -175,16 +175,16 @@ STATIC_QUESTIONS.push(
     explanation:'"Une chanteuse <b>dont</b> j\'admire le talent" - "j\'admire <b>le talent de</b> la chanteuse" → complément avec "de" → <b>dont</b>. Structure : [nom] + dont + sujet + verbe + nom (sans "de" répété).' }),
 
   makeMCQ({ id:'g6fr-sub-024', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
-    question:'Transforme au discours indirect : "Il dit : \'Je viendrai demain.\'" →',
+    question:'Transforme au discours indirect : "Il a dit : \'Je viendrai demain.\'" →',
     options:[
-      'Il dit qu\'il viendrait le lendemain.',
-      'Il dit qu\'il vient demain.',
-      'Il dit qu\'il viendra le lendemain.',
+      'Il a dit qu\'il viendrait le lendemain.',
+      'Il a dit qu\'il vient demain.',
+      'Il a dit qu\'il viendra le lendemain.',
       'Il a dit qu\'il viendrait demain.'
     ],
-    answer:'Il dit qu\'il viendrait le lendemain.',
-    hint:'Verbe principal au présent (dit) → pas de changement de temps. Futur → conditionnel si verbe introducteur est au passé. Attend - "dit" = présent, donc futur reste futur... Mais la forme standard enseigne : futur → conditionnel.',
-    explanation:'"Il dit (présent) qu\'il <b>viendrait</b> le lendemain." - Quand le verbe introducteur est au <b>passé</b>, futur → conditionnel. Ici "dit" est au présent, donc on peut garder le futur, mais la règle générale enseignée : <b>futur → conditionnel</b>. "Demain" → "<b>le lendemain</b>" (changement d\'expression temporelle).' }),
+    answer:'Il a dit qu\'il viendrait le lendemain.',
+    hint:'Verbe introducteur au passé ("a dit") → le futur devient conditionnel, et "demain" devient "le lendemain".',
+    explanation:'"Il <b>a dit</b> (passé) qu\'il <b>viendrait</b> le lendemain." - Quand le verbe introducteur est au <b>passé</b>, le futur → <b>conditionnel</b>. "Demain" → "<b>le lendemain</b>" (changement d\'expression temporelle).' }),
 
   makeMCQ({ id:'g6fr-sub-025', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
     question:'Quelle phrase introduit une question indirecte avec "si" ?',
@@ -283,7 +283,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'afin de / Bien que',
     hint:'1ère lacune : but + infinitif (même sujet). 2ème lacune : concession (il est fatigué MAIS il n\'abandonne pas).',
-    explanation:'"<b>afin de</b> réussir" (but, même sujet → afin de + infinitif). "<b>Bien que</b> il soit fatigué" (concession → bien que + subjonctif). Pour = but + infinitif (synonyme). Pourtant = opposition mais relie deux propositions indépendantes, pas une subordonnée.' }),
+    explanation:'"<b>afin de</b> réussir" (but, même sujet → afin de + infinitif). "<b>Bien qu\'</b>il soit fatigué" (concession → bien que + subjonctif). Pour = but + infinitif (synonyme). Pourtant = opposition mais relie deux propositions indépendantes, pas une subordonnée.' }),
 
   makeMCQ({ id:'g6fr-sub-035', chapterId:'g6fr-subordonnees', subsection:'conjonctions', difficulty:4,
     question:'Restructure la phrase avec "si bien que" : "Il pleuvait beaucoup. La rivière a débordé." → ?',

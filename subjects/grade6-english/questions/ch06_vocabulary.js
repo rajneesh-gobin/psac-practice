@@ -6,10 +6,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-voc-001', chapterId:'g6eng-vocabulary', subsection:'homophones', difficulty:2,
     question:'Which pair are HOMOPHONES?',
-    options:['affect / effect','fast / slow','write / right','bear / bare bear'],
+    options:['quiet / quite','fast / slow','write / right','lose / loose'],
     answer:'write / right',
     hint:'Homophones sound the same but have different spellings and meanings.',
-    explanation:'"<b>Write / right</b>" are homophones - they sound identical but have different meanings (write = to pen words; right = correct, or direction). "Affect/effect" are not homophones (they sound slightly different and are commonly confused). "Bear/bare" are also homophones.' }),
+    explanation:'"<b>Write / right</b>" are homophones - they sound identical but have different meanings (write = to pen words; right = correct, or direction). "Quiet/quite" and "lose/loose" look similar but are pronounced differently, and "fast/slow" are opposites - none of those pairs sound the same.' }),
 
   makeMCQ({ id:'g6eng-voc-002', chapterId:'g6eng-vocabulary', subsection:'confusables', difficulty:2,
     question:'"Stationary" and "stationery" are easily confused. Which is CORRECT: "The car remained ___ at the red light."',

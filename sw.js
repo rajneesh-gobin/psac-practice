@@ -7,7 +7,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v88';
+const SHELL_VERSION = 'shell-v141';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -52,10 +52,18 @@ const SHELL_FILES = [
   '/engine/biometric.js',
   '/engine/admin.js',
   '/engine/teacher.js',
+  '/engine/teacher_workspace.js',
+  '/engine/learning_coach.js',
+  '/engine/teacher_guest_classes.js',
   '/engine/forum.js',
   '/engine/calendar.js',
   '/engine/search.js',
   '/engine/classroom.js',
+  '/engine/minigame_gk.js',
+  '/engine/minigame_words.js',
+  '/engine/minigame_geo.js',
+  '/engine/minigame_time.js',
+  '/engine/minigame.js',
 ];
 
 // ── Install: pre-cache the shell ─────────────────────────────────────────────

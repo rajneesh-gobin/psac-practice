@@ -225,14 +225,14 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:`g6fr-img-013`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Comment se termine l'histoire ?`,
     options:[
-      `L'oiseau guéri s'envole et la famille lui fait au revoir`,
+      `L'oiseau guéri s'envole et la famille lui dit au revoir`,
       `L'oiseau reste dans sa boîte pour toujours`,
       `La famille offre l'oiseau à un voisin`,
       `L'oiseau s'échappe pendant la nuit`
     ],
-    answer:`L'oiseau guéri s'envole et la famille lui fait au revoir`,
+    answer:`L'oiseau guéri s'envole et la famille lui dit au revoir`,
     hint:`Sur l'image 3, où se trouve l'oiseau, et que fait la main levée ?`,
-    explanation:`Sur l'image 3, on est de retour dehors : l'oiseau <b>vole dans le ciel</b> et la famille <b>fait au revoir</b> de la main. C'est la <b>situation finale</b> : le problème est résolu et la situation a changé pour de bon.` }),
+    explanation:`Sur l'image 3, on est de retour dehors : l'oiseau <b>vole dans le ciel</b> et la famille <b>fait un signe d'au revoir</b> de la main. C'est la <b>situation finale</b> : le problème est résolu et la situation a changé pour de bon.` }),
 
   makeMCQ({ id:`g6fr-img-014`, chapterId:'g6fr-images', subsection:'trois_images', difficulty:2,
     question:`${_G6IMG_C3}${_G6IMG_OISEAU}Quel changement de LIEU se produit entre les trois images ?`,

@@ -1,17 +1,22 @@
 ﻿// Netlify Function - Assignment Completion Notifier
 // Called by the student's browser when they finish an assignment.
-// Looks up the parent's email and sends a summary via Resend.
+// Looks up the parent's email and sends a summary through the shared Gmail
+// sender in ../lib/mailer.js - the same account GoTrue authenticates as.
 //
 // Required Netlify environment variables:
 //   SUPABASE_SERVICE_ROLE_KEY  - service role key (never in frontend)
-//   RESEND_API_KEY             - from resend.com (free tier available)
-//   NOTIFY_FROM_EMAIL          - e.g. "PSAC Exam Practice <no-reply@yourdomain.com>"
-//                                Defaults to Resend test address if unset.
+//   GMAIL_USER / GMAIL_APP_PASSWORD - see ../lib/mailer.js
+//
+// ⚠ This used to POST to api.resend.com. RESEND_API_KEY was never set on the
+// Netlify site (measured 2026-09-04), so the guard below answered
+// 'not_configured' and this function has never sent a single notification.
+// The from-address is no longer a variable here: Gmail rewrites From to the
+// authenticated account, so there is only one correct answer and mailer.js
+// holds it.
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://xawvjwsiqhtxgpocdqgm.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const RESEND_KEY   = process.env.RESEND_API_KEY;
-const FROM_EMAIL   = process.env.NOTIFY_FROM_EMAIL || 'PSAC Exam Practice <onboarding@resend.dev>';
+const { sendMail, isConfigured, logFailure } = require('../lib/mailer');
 
 function _he(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -30,7 +35,7 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405 };
 
   // Silently skip when email is not configured - never crash the student's flow
-  if (!RESEND_KEY || !SUPABASE_KEY) return { statusCode: 200, body: 'not_configured' };
+  if (!isConfigured() || !SUPABASE_KEY) return { statusCode: 200, body: 'not_configured' };
 
   let body;
   try { body = JSON.parse(event.body || '{}'); } catch { return { statusCode: 400 }; }
@@ -112,29 +117,15 @@ exports.handler = async (event) => {
   </div>
 </body></html>`;
 
-  const sendRes = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      from:    FROM_EMAIL,
-      to:      parentEmail,
-      subject: `${safeDisplayName} completed: ${safeLabel} - ${safePct}%`,
-      html,
-    }),
+  const res = await sendMail({
+    to:      parentEmail,
+    subject: `${safeDisplayName} completed: ${safeLabel} - ${safePct}%`,
+    html,
   });
 
-  // ⚠ Say WHY it failed. This used to return a bare 502 and drop Resend's
-  // response, and the caller is fire-and-forget - so a send that Resend refused
-  // outright looked exactly like a send that worked. The 403 it returns for an
-  // unverified FROM domain ("You can only send testing emails to your own
-  // email address") is the single most likely failure here, because
-  // NOTIFY_FROM_EMAIL defaults to Resend's shared test address, which delivers
-  // to the account owner and nobody else.
-  if (!sendRes.ok) {
-    const detail = await sendRes.text().catch(() => '');
-    console.error('[notify] Resend refused the send:', sendRes.status, detail.slice(0, 300),
-      '| from =', FROM_EMAIL, '- set NOTIFY_FROM_EMAIL to an address on a domain '
-      + 'verified at resend.com/domains.');
-  }
-  return { statusCode: sendRes.ok ? 200 : 502 };
+  // ⚠ Say WHY it failed. This used to return a bare 502 and drop the provider's
+  // response, and the caller is fire-and-forget - so a send the server refused
+  // outright looked exactly like a send that worked.
+  if (!res.ok) logFailure('notify', res, parentEmail);
+  return { statusCode: res.ok ? 200 : 502 };
 };

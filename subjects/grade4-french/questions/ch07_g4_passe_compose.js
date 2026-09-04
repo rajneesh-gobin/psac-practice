@@ -188,16 +188,16 @@ STATIC_QUESTIONS.push(
     explanation:'"Vous <b>êtes venus</b> à ma fête ?" - <b>venir</b> utilise être. "Vous" pluriel → venus. Attention : "vous" peut être singulier (poli) ou pluriel. Ici, pluriel → <b>êtes venus</b>.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-026', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:3,
-    question:'Quelle question au passé composé est correcte (inversion) ?',
+    question:'Pour demander "Did you eat?" au passé composé, quelle affirmation est vraie ?',
     options:[
-      'Est-ce que tu as mangé ?',
-      'Tu as mangé est-ce que ?',
-      'As-tu mangé ?',
-      'A et C sont correctes.'
+      'Seule la forme "Est-ce que tu as mangé ?" est correcte.',
+      'Seule la forme "As-tu mangé ?" est correcte.',
+      'Les deux formes "Est-ce que tu as mangé ?" et "As-tu mangé ?" sont correctes.',
+      'La forme correcte est "Tu as mangé est-ce que ?".'
     ],
-    answer:'A et C sont correctes.',
+    answer:'Les deux formes "Est-ce que tu as mangé ?" et "As-tu mangé ?" sont correctes.',
     hint:'Il y a deux façons de poser une question au passé composé.',
-    explanation:'Il y a deux formes correctes : (A) "<b>Est-ce que</b> tu as mangé ?" (avec est-ce que) et (C) "<b>As</b>-tu mangé ?" (inversion sujet-auxiliaire). Les deux sont correctes. En inversion, l\'auxiliaire se met avant le sujet avec un trait d\'union : as-tu, a-t-il, avez-vous.' }),
+    explanation:'Il y a deux formes correctes : "<b>Est-ce que</b> tu as mangé ?" (avec est-ce que) et "<b>As</b>-tu mangé ?" (inversion sujet-auxiliaire). En inversion, l\'auxiliaire se met avant le sujet avec un trait d\'union : as-tu, a-t-il, avez-vous. "Tu as mangé est-ce que ?" n\'existe pas.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-027', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:3,
     question:'Conjugue NAÎTRE au passé composé : "Je ___ à Curepipe."',
@@ -231,16 +231,16 @@ STATIC_QUESTIONS.push(
     explanation:'"Ma famille <b>est allée</b>" (aller+être, famille=f.sg. → allée). "Mon père <b>a choisi</b>" (choisir→choisi, avoir). "Ma mère <b>a pris</b>" (prendre→pris, irrégulier, avoir). "J\'<b>ai mangé</b>" (manger→mangé, avoir, pas de -e car avoir). Quatre règles en une phrase !' }),
 
   makeMCQ({ id:'g4fr-passe-comp-030', chapterId:'g4fr-passe-comp', subsection:'auxiliaire', difficulty:4,
-    question:'Lesquelles de ces phrases sont correctes au passé composé avec être ? (Deux réponses correctes)',
+    question:'Laquelle de ces phrases est correcte au passé composé avec être ?',
     options:[
       'Elle est tombée de son vélo.',
       'Il a tombé de son vélo.',
-      'Nous sommes restés à la maison.',
+      'Nous sommes resté à la maison.',
       'Nous avons restés à la maison.'
     ],
     answer:'Elle est tombée de son vélo.',
     hint:'"Tomber" et "rester" utilisent être. Mais vérifiez les accords.',
-    explanation:'"<b>Elle est tombée</b>" ✓ (tomber = être, f.sg. → tombée). "Il a tombé" ✗ (tomber utilise être, pas avoir). "Nous sommes restés" ✓ (rester = être, m.pl. → restés). "Nous avons restés" ✗ (rester = être, pas avoir). Question : la réponse demande de choisir une parmi les options données → elle est tombée.' }),
+    explanation:'"<b>Elle est tombée</b>" ✓ (tomber = être, f.sg. → tombée). "Il a tombé" ✗ (tomber utilise être, pas avoir). "Nous sommes resté" ✗ (avec être, le participe s\'accorde : nous → restés). "Nous avons restés" ✗ (rester = être, pas avoir).' }),
 
   makeMCQ({ id:'g4fr-passe-comp-031', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:4,
     question:'Traduis : "Did you (tu) open the window and go out?" (passé composé)',
@@ -255,7 +255,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Est-ce que tu <b>as ouvert</b> la fenêtre et <b>es sorti(e)</b> ?" - "ouvrir" (→ avoir : tu as ouvert). "sortir" (→ être : tu es sorti/sortie). Deux verbes en une question : l\'un avec avoir, l\'autre avec être. "Ouverte" serait incorrect (avoir ne s\'accorde pas avec le sujet).' }),
 
   makeMCQ({ id:'g4fr-passe-comp-032', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:4,
-    question:'Shanvi écrit dans son journal : "Aujourd\'hui ___ une bonne journée ! Ce matin, je ___ (se réveiller) tôt. Mes amis ___ (venir) chez moi. Nous ___ (jouer) et ___ (rire) beaucoup." Bonne série ?',
+    question:'Shanvi écrit dans son journal : "Aujourd\'hui, ça ___ (être) une bonne journée ! Ce matin, je ___ (se réveiller) tôt. Mes amis ___ (venir) chez moi. Nous ___ (jouer) et ___ (rire) beaucoup." Bonne série ?',
     options:[
       'a été / me suis réveillée / sont venus / avons joué / avons ri',
       'était / me suis réveillée / sont venus / avons joué / avons ri',
@@ -264,7 +264,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'a été / me suis réveillée / sont venus / avons joué / avons ri',
     hint:'"Être" → a été. "Se réveiller" → être réfléchi. "Venir" → être. "Jouer/rire" → avoir.',
-    explanation:'"<b>a été</b>" (être → avoir : ça a été). "<b>me suis réveillée</b>" (se réveiller = réfléchi → être, f. → -ée). "<b>sont venus</b>" (venir → être, ils m.pl. → venus). "<b>avons joué</b>" (jouer → avoir). "<b>avons ri</b>" (rire → ri, avoir). Cinq verbes, trois règles différentes !' }),
+    explanation:'"<b>a été</b>" (ça <b>a été</b> : passé composé d\'être, avec l\'auxiliaire avoir ; "ça était" est impossible). "<b>me suis réveillée</b>" (se réveiller = réfléchi → être, f. → -ée). "<b>sont venus</b>" (venir → être, ils m.pl. → venus). "<b>avons joué</b>" (jouer → avoir). "<b>avons ri</b>" (rire → ri, avoir). Cinq verbes, trois règles différentes !' }),
 
   makeMCQ({ id:'g4fr-passe-comp-033', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:3,
     question:'Conjugue RESTER au passé composé : "Elles ___ à la maison tout le week-end."',
@@ -295,6 +295,6 @@ STATIC_QUESTIONS.push(
     ],
     answer:'as fait / suis allée / avons joué / avons mangé',
     hint:'"Faire" = avoir (tu as fait). "Aller" = être (je suis allée - Priya est fille). "Jouer/manger" = avoir.',
-    explanation:'"tu <b>as fait</b>" (faire→avoir, tu). "j\'<b>suis allée</b>" (aller→être, je f. → allée). "<b>avons joué</b>" (jouer→avoir, nous - pas d\'accord). "<b>avons mangé</b>" (manger→avoir, nous). Avec avoir, pas d\'accord sauf COD placé avant !' })
+    explanation:'"tu <b>as fait</b>" (faire→avoir, tu). "je <b>suis allée</b>" (aller→être, je f. → allée). "<b>avons joué</b>" (jouer→avoir, nous - pas d\'accord). "<b>avons mangé</b>" (manger→avoir, nous). Avec avoir, pas d\'accord sauf COD placé avant !' })
 
 );

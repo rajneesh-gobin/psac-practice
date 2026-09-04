@@ -326,6 +326,14 @@
   to     = "/guest.html"
   status = 200
 
+# /v/<CODE> serves the standalone Ask-the-Crowd voting page (minigame
+# lifeline). Same rewrite trick as /a/: the shared URL stays in the address
+# bar and vote.html reads the code from location.pathname.
+[[redirects]]
+  from   = "/v/*"
+  to     = "/vote.html"
+  status = 200
+
 [[redirects]]
   from   = "/api/assignment-open"
   to     = "/.netlify/functions/assignment-open"

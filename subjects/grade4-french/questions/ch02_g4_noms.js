@@ -165,7 +165,7 @@ STATIC_QUESTIONS.push(
     options:['du','de la','de l\'','des'],
     answer:"de l'",
     hint:'"Eau" commence par une voyelle.',
-    explanation:'"Je bois <b>de l\'</b>eau." - Devant un mot commençant par une voyelle ou un h muet, on utilise <b>de l\'</b> (partitif). Exemples : de l\'eau (water), de l\'orange (orange juice), de l\'huile (oil). La règle s\'applique aux deux genres.' }),
+    explanation:'"Je bois <b>de l\'</b>eau." - Devant un mot commençant par une voyelle ou un h muet, on utilise <b>de l\'</b> (partitif). Exemples : de l\'eau (water), de l\'huile (oil), de l\'ananas (pineapple). La règle s\'applique aux deux genres.' }),
 
   makeTF({ id:'g4fr-nom-022', chapterId:'g4fr-noms', subsection:'contractions', difficulty:1,
     question:'"Au" est la contraction de "à + le".',
@@ -253,11 +253,11 @@ STATIC_QUESTIONS.push(
     explanation:'"Journal" → <b>journaux</b>. Règle : noms en <b>-al</b> → <b>-aux</b> au pluriel : journal → journaux, animal → animaux, cheval → chevaux, hôpital → hôpitaux. Exception notable : bal → bals, festival → festivals.' }),
 
   makeMCQ({ id:'g4fr-nom-033', chapterId:'g4fr-noms', subsection:'partitifs', difficulty:4,
-    question:'Lina écrit : "Ce matin, je mange ___ céréales et je bois ___ jus d\'orange. Ma mère mange ___ yaourt." Bonne série d\'articles partitifs ?',
+    question:'Lina écrit : "Ce matin, je mange ___ céréales et je bois ___ jus d\'orange. Ma mère mange ___ yaourt." Quelle série d\'articles complète correctement ces phrases ?',
     options:[
       'des / du / un',
       'les / le / le',
-      'des / du / du',
+      'du / des / une',
       'de la / de l\' / de la'
     ],
     answer:'des / du / un',
@@ -277,7 +277,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Je vais <b>au</b> supermarché" (à + le = au). "j\'achète <b>des</b> légumes" (pluriel indéfini = des). "pour <b>la</b> soupe de ma grand-mère" (défini - on sait de quelle soupe il s\'agit → la). Trois règles différentes en une phrase !' }),
 
   makeMCQ({ id:'g4fr-nom-035', chapterId:'g4fr-noms', subsection:'articles_def', difficulty:4,
-    question:'Priya fait ses devoirs : "Les ___ (horse-PL) de la ferme mangent ___ herbe. Le ___ (eye) du cheval est très grand." Bonne série ?',
+    question:'Priya fait ses devoirs : "Les ___ (horse-PL) de la ferme mangent ___ herbe. L\'___ (eye) du cheval est très grand." Bonne série ?',
     options:[
       'chevals / de l\' / yeux',
       'chevaux / de l\' / œil',
@@ -286,7 +286,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:"chevaux / de l' / œil",
     hint:'"Horse" pluriel = ? (irrégulier). "Herbe" commence par une voyelle. "Eye" singulier = ?',
-    explanation:'"Les <b>chevaux</b>" (cheval → chevaux, pluriel en -aux). "mangent <b>de l\'</b>herbe" (herbe = f., commence par h muet → de l\'). "Le <b>œil</b> du cheval" - singulier → œil (le pluriel serait yeux). Trois irrégularités en une phrase !' })
+    explanation:'"Les <b>chevaux</b>" (cheval → chevaux, pluriel en -aux). "mangent <b>de l\'</b>herbe" (herbe = f., commence par h muet → de l\'). "L\'<b>œil</b> du cheval" - singulier → œil (le pluriel serait yeux), avec élision obligatoire devant la voyelle : l\'œil. Trois irrégularités en une phrase !' })
 
 );
 

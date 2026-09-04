@@ -28,6 +28,10 @@ const Store = (() => {
       level:        1,
       assignments:  [],
       restrictions: { lockedChapters:[], maxDifficulty:4, examDisabled:false },
+      // Minigame bests (MiniGames in engine/minigame.js). Game answers stay
+      // out of stats/daily/mistakes on purpose - replays must never distort
+      // the mastery reporting parents rely on.
+      games:        {},
       // Purely cosmetic, student-chosen customisation for their own kid-home
       // and dashboard screens (My Settings). Rides along in the same jsonb
       // blob as everything else here, so it needs no schema change and syncs
@@ -207,7 +211,13 @@ const Store = (() => {
   async function getMyFamily(parentId) {
     _familyError = null;
     if (!_sb || !parentId) { _familyError = 'Not connected.'; return null; }
-    const { data, error } = await _sb.from('families').select('id, family_name, family_code, parent_id, created_at').eq('parent_id', parentId).maybeSingle();
+    let data, error;
+    try {
+      ({ data, error } = await _sb.from('families').select('id, family_name, family_code, parent_id, created_at').eq('parent_id', parentId).maybeSingle());
+    } catch (failure) {
+      _familyError = failure.message || 'Could not load your family. Please try again.';
+      return null;
+    }
     if (error) {
       console.warn('[Store.getMyFamily]', error.code, error.message);
       _familyError = error.message || 'Unknown database error.';
@@ -227,7 +237,7 @@ const Store = (() => {
       }
       if (mine) _familyError = null;
       return mine || null;
-    } catch (_) { return null; }
+    } catch (error) { _familyError = error.message || 'Could not load your family. Please try again.'; return null; }
   }
 
   // ── Co-parents ─────────────────────────────────

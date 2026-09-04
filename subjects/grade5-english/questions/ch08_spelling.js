@@ -27,7 +27,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-spell-004', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,
     question:'How do you spell the -ing form of "run"?',
-    options:['runing','running','runing','runeing'],
+    options:['runing','running','runnning','runeing'],
     answer:'running',
     hint:'For short words ending in a single consonant after a single vowel, double the final consonant before -ing.',
     explanation:'"<b>Running</b>" - when a short word (1 syllable) ends in consonant-vowel-consonant (CVC), double the final consonant before -ing or -ed: run→running, sit→sitting, swim→swimming, stop→stopped.' }),
@@ -98,7 +98,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-spell-013', chapterId:'eng-spelling', subsection:'common_errors', difficulty:1,
     question:'Choose the CORRECTLY spelled word.',
-    options:['beautifull','beautifull','beautiful','beutiful'],
+    options:['beautifull','beautifal','beautiful','beutiful'],
     answer:'beautiful',
     hint:'"Beauty" + ful → remember to change the y to i.',
     explanation:'"<b>Beautiful</b>" - beauty → beautiful. The -y changes to -i before -ful. Memory trick: "B-E-A-U-T-I-F-U-L". Other beauty-family words: beautifully, beautify, beautician. "Beautiful" is one of the most commonly misspelled words.' }),
@@ -137,22 +137,22 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Wrap</b>" - the w is silent (we say "rap"). Other silent-w words: write, wrong, wrist, wreck, wrinkle, wrestle. Note that "rap" (also spelled correctly) means to knock or a style of music - context tells you which to use.' }),
 
   makeMCQ({ id:'g5eng-spell-018', chapterId:'eng-spelling', subsection:'common_errors', difficulty:3,
-    question:'A student writes: "I definately recomend this book - its wonderfull!" Find ALL spelling errors.',
+    question:'A student writes: "I definately recomend this wonderfull book!" Find ALL spelling errors.',
     options:[
       'No errors',
       '"definately" → "definitely"; "recomend" → "recommend"; "wonderfull" → "wonderful"',
       'Only "definately" is wrong',
-      '"its" → "it\'s" and "wonderfull" → "wonderful"'
+      'Only "recomend" and "wonderfull" are wrong'
     ],
     answer:'"definately" → "definitely"; "recomend" → "recommend"; "wonderfull" → "wonderful"',
     hint:'Check each word carefully: the -ly adverb of "definite", double letters in recommend, and one "l" in wonderful.',
-    explanation:'Three spelling errors: (1) "definately" → "<b>definitely</b>" (definite + ly - keep the e); (2) "recomend" → "<b>recommend</b>" (double c, double m: re-<b>cc</b>o-<b>mm</b>end); (3) "wonderfull" → "<b>wonderful</b>" (only one l in the suffix -ful). Note: "its" is correct here (possessive, no apostrophe needed).' }),
+    explanation:'Three spelling errors: (1) "definately" → "<b>definitely</b>" (definite + ly - keep the e); (2) "recomend" → "<b>recommend</b>" (one c, double m: re-<b>c</b>o-<b>mm</b>end); (3) "wonderfull" → "<b>wonderful</b>" (only one l in the suffix -ful).' }),
 
   makeMCQ({ id:'g5eng-spell-019', chapterId:'eng-spelling', subsection:'common_errors', difficulty:4,
     question:'Which word correctly completes: "The scientist made an important ___." (The act of discovering something)',
     options:['discovry','discovery','discoverey','discoverie'],
     answer:'discovery',
-    hint:'Discover + y = ? Remember the rule for words ending in consonant + e + ry.',
-    explanation:'"<b>Discovery</b>" - discover + y. When forming nouns from verbs ending in -er, simply add -y: discover → discovery. Other examples: deliver → delivery, recover → recovery, bakery (bake+ery). The common error is adding extra letters or changing the vowels.' })
+    hint:'Discover + y = ? For verbs ending in -er, just add -y (deliver → delivery).',
+    explanation:'"<b>Discovery</b>" - discover + y. When forming nouns from verbs ending in -er, simply add -y: discover → discovery. Other examples: deliver → delivery, recover → recovery. The common error is adding extra letters or changing the vowels.' })
 
 );

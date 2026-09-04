@@ -87,11 +87,11 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>My friend Priya lives in Port Louis.</b>" is correct. Rules applied: capital letter at the start of the sentence, "Priya" (person\'s name) has a capital, "Port Louis" (place name) has capitals, and the sentence ends with a full stop.' }),
 
   makeMCQ({ id:'g4eng-sent-010', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:4,
-    question:'A student wrote: "yesterday i went to the market with my mother we bought fish vegetables and fruit it was a fun day." How many punctuation marks are MISSING from this passage?',
+    question:'A student wrote: "yesterday i went to the market with my mother we bought fish vegetables eggs and fruit it was a fun day." How many punctuation marks (full stops and commas) are MISSING from this passage?',
     options:['2','3','4','5'],
     answer:'4',
-    hint:'Count: capital letters at the start of sentences, full stops to separate sentences, and any commas needed.',
-    explanation:'4 corrections needed: (1) Capital "Y" for "Yesterday". (2) Full stop after "mother" (new sentence). (3) Capital "W" for "We". (4) Comma after "fish" and after "vegetables" in the list - or at minimum one comma. The corrected version: "Yesterday I went to the market with my mother. We bought fish, vegetables and fruit. It was a fun day."' })
+    hint:'Count the full stops needed to separate the sentences and the commas needed in the list. Capital letters are not punctuation marks.',
+    explanation:'4 punctuation marks are missing: (1) a full stop after "mother" (end of the first sentence), (2) a comma after "fish", (3) a comma after "vegetables", (4) a full stop after "fruit" (end of the second sentence). The corrected passage: "Yesterday I went to the market with my mother. We bought fish, vegetables, eggs and fruit. It was a fun day." (Some capital letters also need fixing, but capital letters are not punctuation marks.)' })
 
 );
 

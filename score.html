@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>⚡ Quick Fire score · PSAC Practice</title>
+<meta name="theme-color" content="#4f46e5">
+<!-- Social preview. The numbers are also injected into the text below from the
+     query string, but these give link unfurlers something even before JS runs. -->
+<meta property="og:title" content="⚡ Quick Fire — PSAC Exam Practice">
+<meta property="og:description" content="I set a Quick Fire high score on PSAC Practice. Can you beat me?">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<!--
+  Landing page for a shared Quick Fire score. Standalone (a few KB), no personal
+  data: the URL carries only s= score, c= correct, a= accuracy %. Its whole job
+  is to show the score nicely and invite the opener to play.
+-->
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;
+    background:linear-gradient(160deg,#312e81,#4f46e5 55%,#7c3aed);color:#fff;
+    display:flex;align-items:center;justify-content:center;padding:24px 16px;-webkit-text-size-adjust:100%}
+  .wrap{max-width:440px;width:100%;text-align:center}
+  .kicker{font-weight:700;letter-spacing:.04em;opacity:.85;font-size:14px}
+  .card{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:26px;
+    padding:30px 22px;margin:16px 0;backdrop-filter:blur(6px);animation:pop .5s ease}
+  @keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+  .bolt{font-size:52px;line-height:1}
+  .score{font-size:88px;font-weight:800;color:#fde047;line-height:1;margin:6px 0 2px}
+  .plabel{font-weight:700;opacity:.9;letter-spacing:.08em;font-size:13px}
+  .meta{display:flex;gap:10px;justify-content:center;margin-top:18px}
+  .chip{background:rgba(255,255,255,.14);border-radius:14px;padding:10px 14px;min-width:80px}
+  .chip b{display:block;font-size:22px;font-weight:800}
+  .chip span{font-size:12px;opacity:.85}
+  .challenge{font-size:20px;font-weight:800;margin-top:18px}
+  .cta{display:block;background:#fff;color:#4f46e5;font-weight:800;font-size:17px;text-decoration:none;
+    border-radius:16px;padding:15px;margin-top:8px;transition:transform .12s}
+  .cta:active{transform:scale(.98)}
+  .sub{opacity:.8;font-size:13px;margin-top:14px}
+  .sub a{color:#fff;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">⚡ QUICK FIRE · PSAC EXAM PRACTICE</div>
+  <div class="card">
+    <div class="bolt">⚡</div>
+    <div class="score" id="score">—</div>
+    <div class="plabel">POINTS</div>
+    <div class="meta">
+      <div class="chip"><b id="correct">—</b><span>correct</span></div>
+      <div class="chip"><b id="acc">—</b><span>accuracy</span></div>
+    </div>
+    <div class="challenge">Can you beat this? 🎯</div>
+  </div>
+  <a class="cta" href="/">🚀 Play Quick Fire free</a>
+  <p class="sub">Free exam revision for Mauritian primary students — <a href="/">psac-practice</a></p>
+</div>
+<script>
+  const p = new URLSearchParams(location.search);
+  const clamp = (v, max) => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= 0 && n <= max ? n : null; };
+  const s = clamp(p.get('s'), 100000), c = clamp(p.get('c'), 10000), a = clamp(p.get('a'), 100);
+  const set = (id, v, suf) => { const el = document.getElementById(id); if (el) el.textContent = v === null ? '—' : v + (suf || ''); };
+  set('score', s); set('correct', c); set('acc', a, '%');
+  document.title = s !== null ? `⚡ ${s} points on Quick Fire · PSAC Practice` : document.title;
+</script>
+</body>
+</html>

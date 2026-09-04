@@ -17,6 +17,7 @@ if (!globalThis.fetch) {
 const fs   = require('fs');
 const path = require('path');
 const vm   = require('vm');
+const { createImporter, newStats, printSummary } = require('./lib/question-import');
 
 const ROOT = path.resolve(__dirname, '..');
 
@@ -48,18 +49,18 @@ if (!SB_SRK) {
 function _buildContext(buf) {
   const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
 
-  function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation }) {
-    const others    = shuffle((options || []).filter(o => o !== answer));
+  function makeMCQ({ id, chapterId, difficulty, subsection, question, options, answer, hint, explanation, learnMore }) {
+    const others    = shuffle([...new Set((options || []).filter(o => o !== answer))]);
     const finalOpts = shuffle([answer, ...others.slice(0, 3)]);
     return { id, chapterId, difficulty, subsection, type: 'mcq', question, options: finalOpts, answer,
-             acceptableAnswers: [answer], hint, explanation };
+             acceptableAnswers: [answer], hint, explanation, learnMore };
   }
 
-  function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation }) {
+  function makeNum({ id, chapterId, difficulty, subsection, question, answer, acceptableAnswers, hint, explanation, learnMore }) {
     return { id, chapterId, difficulty, subsection, type: 'numeric', question,
              answer: String(answer),
              acceptableAnswers: (acceptableAnswers || [String(answer)]).map(String),
-             hint, explanation };
+             hint, explanation, learnMore };
   }
 
   function makeSymmetry({ id, chapterId, difficulty, subsection, question, rows, cols, axis, axisPos, given, answer, hint, explanation }) {
@@ -102,48 +103,6 @@ function _buildContext(buf) {
 function _withPdfCapture(ctx, pdfBuf) {
   ctx.window = { PSAC_PDF_QUESTIONS: pdfBuf };
   return ctx;
-}
-
-// ── Upsert helpers ────────────────────────────────────────────────────────────
-async function upsertBatch(rows) {
-  const r = await fetch(`${SB_URL}/rest/v1/questions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      apikey: SB_SRK,
-      Authorization: `Bearer ${SB_SRK}`,
-      Prefer: 'resolution=merge-duplicates,return=minimal',
-    },
-    body: JSON.stringify(rows),
-  });
-  if (!r.ok) {
-    const msg = await r.text().catch(() => String(r.status));
-    throw new Error(msg);
-  }
-}
-
-// Fetch protected questions from DB — returns a Map of id → data.
-// Returns an empty Map on any error so a missing column or unreachable DB
-// never aborts the import; it just stops protecting (fail-open).
-async function fetchProtectedQuestions(ids) {
-  if (!ids.length) return new Map();
-  try {
-    const inList = ids.map(id => encodeURIComponent(id)).join(',');
-    const r = await fetch(
-      `${SB_URL}/rest/v1/questions?id=in.(${inList})&protected=eq.true&select=id,data&limit=${ids.length}`,
-      { headers: { apikey: SB_SRK, Authorization: `Bearer ${SB_SRK}` } }
-    );
-    if (!r.ok) return new Map();
-    const rows = await r.json().catch(() => []);
-    return new Map(rows.map(r => [r.id, r.data]));
-  } catch(_) { return new Map(); }
-}
-
-// Compare the content fields that matter — NOT options (shuffled on every import).
-function _questionsMatch(jsQ, dbQ) {
-  if (!dbQ) return false;
-  const fields = ['question', 'answer', 'hint', 'explanation', 'difficulty', 'subsection', 'type', 'chapterId'];
-  return fields.every(f => (jsQ[f] ?? '') === (dbQ[f] ?? ''));
 }
 
 // Find the make*({...}) block containing the given question ID in a file's content.
@@ -195,6 +154,7 @@ function _generateBlock(data) {
   }
   if (data.hint)        out += `,\n    hint:${J(data.hint)}`;
   if (data.explanation) out += `,\n    explanation:${J(data.explanation)}`;
+  if (data.learnMore)   out += `,\n    learnMore:${J(data.learnMore)}`;
   out += ` })`;
   return out;
 }
@@ -225,24 +185,32 @@ function _writeBackToJs(qid, dbData, qDir) {
   return true;
 }
 
-async function upsertAll(rows, label) {
-  const BATCH = 200;
-  for (let i = 0; i < rows.length; i += BATCH) {
-    const slice = rows.slice(i, i + BATCH);
-    try {
-      await upsertBatch(slice);
-    } catch (e) {
-      console.error(`  ERROR in ${label} batch ${i}–${i + slice.length - 1}: ${e.message}`);
-    }
-  }
-}
-
 // ── Main ──────────────────────────────────────────────────────────────────────
 (async () => {
   const subjectsDir = path.join(ROOT, 'subjects');
-  let totalPractice = 0;
-  let totalPapers   = 0;
+  const started = Date.now();
+  const importer = createImporter({ url: SB_URL, key: SB_SRK });
+  const totals = { practice: newStats(), papers: newStats() };
+  let skippedFiles = 0;
+  let aborted = false;
   const allPapers   = [];
+  const seenIds = new Set();
+  const addStats = (kind, stats) => {
+    for (const key of Object.keys(stats)) totals[kind][key] += stats[key];
+  };
+  async function importGroup(rows, kind, label, onProtected) {
+    // Catch cross-subject collisions rather than silently replacing another pack.
+    if (rows.some(row => seenIds.has(row.id))) {
+      totals[kind].scanned += rows.length;
+      totals[kind].failed += rows.length;
+      console.error(`  ${label}: BLOCKED — question ID already used by another group.`);
+      return;
+    }
+    rows.forEach(row => seenIds.add(row.id));
+    addStats(kind, await importer.importRows(rows, label, onProtected));
+  }
+
+  try {
 
   // Discovered from subjects/, not hardcoded — see build-questions.js.
   const GRADES = [...new Set(
@@ -267,10 +235,14 @@ async function upsertAll(rows, label) {
 
       const files = fs.readdirSync(qDir).filter(f => f.endsWith('.js')).sort();
       for (const file of files) {
+        const practiceLength = buf.length, paperLength = pdfBuf.length;
         try {
           const code = fs.readFileSync(path.join(qDir, file), 'utf8');
           new vm.Script(code, { filename: file }).runInContext(ctx);
         } catch (e) {
+          buf.length = practiceLength;
+          pdfBuf.length = paperLength;
+          skippedFiles++;
           console.warn(`  skip ${subjectId}/${file}: ${e.message}`);
         }
       }
@@ -278,44 +250,22 @@ async function upsertAll(rows, label) {
       const gradeNum = parseInt(subjectId.match(/grade(\d)/)?.[1] || '0');
       const now      = new Date().toISOString();
 
-      // Skip questions marked protected in DB (admin-edited).
-      // Warn only when the JS file version actually differs from the DB version —
-      // if they match, the protection is silent (no noise for unchanged questions).
-      const allIds       = buf.map(q => q.id);
-      const protectedMap = await fetchProtectedQuestions(allIds);
-      const protectedIds = new Set(protectedMap.keys());
-
-      for (const q of buf) {
-        if (!protectedIds.has(q.id)) continue;
-        const dbData = protectedMap.get(q.id);
-        if (!_questionsMatch(q, dbData)) {
-          const patched = _writeBackToJs(q.id, dbData, qDir);
-          if (patched) {
-            console.log(`  ✏ PATCHED: ${q.id} — JS file updated to match DB version (.bak created)`);
-          } else {
-            console.log(`  ⚠ PROTECTED (differs, JS not patched): ${q.id} — DB version kept`);
-          }
-        }
-        // If content matches: skip silently
-      }
-
-      const toImport = buf.filter(q => !protectedIds.has(q.id));
-
-      const practiceRows = toImport.map(q => ({
+      const practiceRows = buf.map(q => ({
         id:            q.id,
         subject_id:    subjectId,
         chapter_id:    q.chapterId || null,
         grade:         gradeNum,
         difficulty:    q.difficulty || 1,
         is_past_paper: false,
-        protected:     false,
         data:          q,
         imported_at:   now,
       }));
 
-      console.log(`  ${subjectId}: ${toImport.length} questions, ${pdfBuf.length} past-papers`);
-      await upsertAll(practiceRows, subjectId);
-      totalPractice += buf.length;
+      await importGroup(practiceRows, 'practice', subjectId, (id, data) => {
+        const patched = _writeBackToJs(id, data, qDir);
+        console.log(`  ${id}: ${patched ? 'local JS synced from protected DB question (.bak created)' : 'protected DB question kept; local JS needs manual sync'}`);
+        return patched;
+      });
 
       for (const q of pdfBuf) {
         allPapers.push({
@@ -334,10 +284,13 @@ async function upsertAll(rows, label) {
   }
 
   if (allPapers.length) {
-    console.log(`Upserting ${allPapers.length} past-paper rows…`);
-    await upsertAll(allPapers, 'past-papers');
-    totalPapers = allPapers.length;
+    await importGroup(allPapers, 'papers', 'past-papers');
   }
-
-  console.log(`\nDone. Run count: ${totalPractice} practice + ${totalPapers} past-papers upserted.`);
+  } catch (error) {
+    aborted = true;
+    console.error(`Import aborted: ${error.message}`);
+    process.exitCode = 1;
+  } finally {
+    if (printSummary(totals, skippedFiles, Math.round((Date.now() - started) / 1000), console, aborted)) process.exitCode = 1;
+  }
 })();

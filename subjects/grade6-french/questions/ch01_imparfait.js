@@ -78,7 +78,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-imp-011', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:1,
     question:'Conjuguez "finir" à l\'imparfait pour "nous" :',
-    options:['nous finissions','nous finissons','nous finirons','nous finissions'],
+    options:['nous finissions','nous finissons','nous finirons','nous finisions'],
     answer:'nous finissions',
     hint:'Finir → nous finissons → finiss- → + terminaison -ions pour "nous".',
     explanation:'Finir → forme "nous" au présent : <b>nous finissons</b> → radical : <b>finiss-</b> → + terminaison <b>-ions</b> → <b>nous finissions</b>. Rappel des terminaisons complètes de l\'imparfait : -ais, -ais, -ait, <b>-ions</b>, -iez, -aient. Attention à bien garder le double -ss- pour les verbes en -ir comme "finir" et "choisir".' }),
@@ -93,7 +93,7 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6fr-imp-013', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:1,
     question:'Pour les verbes en -ger comme "manger", on écrit "nous mangions" à l\'imparfait.',
     answer:true,
-    hint:'Manger → nous mangeons → mange- (on garde le -e pour conserver le son /dʒ/) → +ions.',
+    hint:'Manger → nous mangeons → le -e s\'efface devant -ions : nous mangions (mais je mangeais).',
     explanation:'<b>Vrai.</b> Pour "manger" : présent "nous" = nous mang<b>e</b>ons → radical : <b>mange-</b> → nous <b>mangions</b>. Le -e- se conserve à toutes les personnes de l\'imparfait sauf "nous" et "vous" : je mangeais, tu mangeais, il mangeait, <b>nous mangions</b>, <b>vous mangiez</b>, ils mangeaient. De même : voyager → nous voyagions, nager → nous nagions.' }),
 
   makeMCQ({ id:'g6fr-imp-014', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:2,
@@ -159,8 +159,8 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6fr-imp-022', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:1,
     question:'L\'expression "Il était une fois…" au début d\'un conte utilise l\'imparfait.',
     answer:true,
-    hint:'"Il était" = imparfait de être. Les contes commencent par une description = imparfait.',
-    explanation:'<b>Vrai.</b> "Il <b>était</b> une fois…" est l\'imparfait de être (il <b>était</b>). Dans les contes, l\'imparfait sert à décrire le <b>cadre</b> (personnages, décors, situation initiale). C\'est l\'imparfait de <b>description</b>.' }),
+    hint:'"Il était" = imparfait d’être. Les contes commencent par une description = imparfait.',
+    explanation:'<b>Vrai.</b> "Il <b>était</b> une fois…" est l\'imparfait d’être (il <b>était</b>). Dans les contes, l\'imparfait sert à décrire le <b>cadre</b> (personnages, décors, situation initiale). C\'est l\'imparfait de <b>description</b>.' }),
 
   makeMCQ({ id:'g6fr-imp-023', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:2,
     question:'Conjugue PRENDRE à l\'imparfait pour "nous" :',
@@ -206,7 +206,7 @@ STATIC_QUESTIONS.push(
     question:'"Je mangeais" et "je téléphonais" sont tous les deux à l\'imparfait.',
     answer:true,
     hint:'Les deux finissent en -ais = terminaison de l\'imparfait pour "je".',
-    explanation:'<b>Vrai.</b> Les deux formes se terminent par <b>-ais</b>, terminaison de l\'imparfait pour "je". Manger → je manger + <b>ais</b> = mangeais. Téléphoner → je téléphon + <b>ais</b> = téléphonais.' }),
+    explanation:'<b>Vrai.</b> Les deux formes se terminent par <b>-ais</b>, terminaison de l\'imparfait pour "je". Manger → radical mange- + <b>ais</b> = mangeais. Téléphoner → radical téléphon- + <b>ais</b> = téléphonais.' }),
 
   makeMCQ({ id:'g6fr-imp-029', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:3,
     question:'Complète la phrase d\'interruption : "Je ___ (lire) un livre quand le tonnerre ___ (éclater)."',
@@ -239,31 +239,31 @@ STATIC_QUESTIONS.push(
     question:'Quel est l\'imparfait de ÊTRE ASSIS pour "elle" ? (description physique)',
     options:['elle s\'asseyait','elle était assise','elle asseyait','elle a été assise'],
     answer:'elle était assise',
-    hint:'"Être assis(e)" est une locution = être + adjectif. Description d\'état = imparfait de être.',
+    hint:'"Être assis(e)" est une locution = être + adjectif. Description d\'état = imparfait d’être.',
     explanation:'"Elle <b>était assise</b>" - pour décrire une position ou un état physique dans le passé, on utilise <b>être à l\'imparfait + adjectif</b>. "Elle était assise sur le banc, les yeux fermés…" C\'est une description typique du roman ou du conte.' }),
 
   makeMCQ({ id:'g6fr-imp-034', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:4,
     question:'Complète le passage : "Ce soir-là, le ciel ___ (être) nuageux, le vent ___ (souffler) fort et les vagues ___ (claquer) contre les rochers, quand soudain un bateau ___ (apparaître) à l\'horizon."',
     options:[
-      'était / soufflait / claquaient / a apparu',
-      'a été / a soufflé / ont claqué / a apparu',
+      'était / soufflait / claquaient / est apparu',
+      'a été / a soufflé / ont claqué / est apparu',
       'était / soufflait / claquaient / apparaissait',
       'était / souffla / claquèrent / apparut'
     ],
-    answer:'était / soufflait / claquaient / a apparu',
+    answer:'était / soufflait / claquaient / est apparu',
     hint:'Descriptions de décors = imparfait (x3). Événement soudain = passé composé (x1).',
-    explanation:'"<b>était</b> / <b>soufflait</b> / <b>claquaient</b>" = descriptions du cadre → <b>imparfait</b>. "<b>a apparu</b>" = événement soudain qui rompt le décor → <b>passé composé</b>. Structure narrative : imparfait (arrière-plan) + passé composé (événement de premier plan).' }),
+    explanation:'"<b>était</b> / <b>soufflait</b> / <b>claquaient</b>" = descriptions du cadre → <b>imparfait</b>. "<b>est apparu</b>" = événement soudain qui rompt le décor → <b>passé composé</b> (apparaître se conjugue ici avec être). Structure narrative : imparfait (arrière-plan) + passé composé (événement de premier plan).' }),
 
   makeMCQ({ id:'g6fr-imp-035', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:4,
-    question:'Shanvi écrit dans son journal : "Quand j\'___ (avoir) 6 ans, je n\'___ (pas savoir) nager, je ___ (avoir peur) de l\'eau mais j\'___ (adorer) regarder la mer de loin." Bonne série ?',
+    question:'Shanvi écrit dans son journal : "Quand j\'___ (avoir) 6 ans, je ___ (ne pas savoir) nager, je ___ (avoir peur) de l\'eau mais j\'___ (adorer) regarder la mer de loin." Bonne série ?',
     options:[
-      'avais / ne savais / avais peur / adorais',
+      'avais / ne savais pas / avais peur / adorais',
       'ai eu / n\'ai pas su / ai eu peur / ai adoré',
-      'avais / ne savais / ai eu peur / adorais',
-      'étais / ne savait / avais peur / adorais'
+      'avais / ne savais pas / ai eu peur / adorais',
+      'étais / ne savait pas / avais peur / adorais'
     ],
-    answer:'avais / ne savais / avais peur / adorais',
+    answer:'avais / ne savais pas / avais peur / adorais',
     hint:'Journal intime = souvenirs d\'enfance = habitudes et états dans le passé = imparfait (x4).',
-    explanation:'"<b>avais</b>" (état : avoir 6 ans), "<b>ne savais</b> pas" (état : ne pas savoir), "<b>avais peur</b>" (état émotionnel), "<b>adorais</b>" (goût habituel) - tous ces états et habitudes de l\'enfance sont à l\'<b>imparfait</b>. Le passé composé serait pour des événements précis et ponctuels.' })
+    explanation:'"<b>avais</b>" (état : avoir 6 ans), "<b>ne savais pas</b>" (état : ne pas savoir), "<b>avais peur</b>" (état émotionnel), "<b>adorais</b>" (goût habituel) - tous ces états et habitudes de l\'enfance sont à l\'<b>imparfait</b>. Le passé composé serait pour des événements précis et ponctuels.' })
 
 );

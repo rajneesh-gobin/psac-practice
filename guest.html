@@ -103,12 +103,12 @@
       <div class="meta" id="g-meta"></div>
     </div>
     <div class="card">
-      <label for="g-name">Your first name</label>
+      <div id="g-name-wrap"><label for="g-name">Your nickname</label>
       <input id="g-name" type="text" autocomplete="given-name" enterkeyhint="next"
-             placeholder="e.g. John" maxlength="40">
-      <label for="g-pin">4-digit PIN from your teacher</label>
+             placeholder="e.g. John B" maxlength="40"></div>
+      <div id="g-pin-wrap"><label for="g-pin">4-digit PIN from your teacher</label>
       <input id="g-pin" class="pin" type="tel" inputmode="numeric" maxlength="4"
-             enterkeyhint="go" placeholder="••••">
+             enterkeyhint="go" placeholder="••••" autocomplete="off"></div>
       <div id="g-err" class="err"></div>
       <button id="g-go" class="btn">Start homework →</button>
       <p class="muted" style="margin-top:12px;text-align:center">
@@ -130,6 +130,7 @@
       <div id="q-answers"></div>
       <div class="fb" id="q-fb"></div>
       <button id="q-btn" class="btn">Check answer</button>
+      <p id="q-errnote" style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px">⚙️ This site is being updated, so a question may contain a small error. If one looks wrong, please tell your teacher so it can be fixed. 🙏</p>
     </div>
     <div class="foot" id="q-who"></div>
   </section>

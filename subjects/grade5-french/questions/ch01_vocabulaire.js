@@ -42,8 +42,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-voc-006', chapterId:'fr-vocabulaire', subsection:'politesse', difficulty:1,
     question:'Que signifie "s\'il vous plaît" ?',
-    options:['merci','au revoir','please / s\'il te plaît (formel)','bonjour'],
-    answer:'please / s\'il te plaît (formel)',
+    options:['merci','au revoir','please (demande polie)','bonjour'],
+    answer:'please (demande polie)',
     hint:'On l\'utilise pour faire une demande poliment.',
     explanation:'"<b>S\'il vous plaît</b>" = please (forme formelle ou pluriel). "S\'il te plaît" = please (forme informelle, à un ami). "Merci" = thank you. "De rien" = you\'re welcome.' }),
 
@@ -233,7 +233,7 @@ STATIC_QUESTIONS.push(
     options:['la géographie','les sciences','l\'histoire','les maths'],
     answer:'l\'histoire',
     hint:'Cette matière parle de ce qui s\'est passé dans le passé.',
-    explanation:'"<b>l\'histoire</b>" = history. On étudie les événements passés, les grands personnages et les civilisations. En Île Maurice, l\'histoire inclut la colonisation hollandaise, française et britannique.' }),
+    explanation:'"<b>l\'histoire</b>" = history. On étudie les événements passés, les grands personnages et les civilisations. À l\'île Maurice, l\'histoire inclut la colonisation hollandaise, française et britannique.' }),
 
   makeMCQ({ id:'g5fr-voc-034', chapterId:'fr-vocabulaire', subsection:'traduction', difficulty:3,
     question:'"Généreux/généreuse" est l\'opposé de...',

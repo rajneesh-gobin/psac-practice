@@ -153,12 +153,12 @@ STATIC_QUESTIONS.push(
     options:[
       '"Come here," she said.',
       '"Come here" she said.',
-      '"Come here" She said.',
+      '"Come here", she said.',
       'She said "come here".'
     ],
     answer:'"Come here," she said.',
     hint:'The comma (or full stop) always goes INSIDE the closing speech mark.',
-    explanation:'"<b>"Come here," she said</b>" - rules for direct speech: (1) Opening speech mark before the spoken words; (2) Comma/full stop INSIDE the closing speech mark; (3) Reporting clause (she said) follows with a lower-case letter. "She said \'come here\'." is also acceptable with the full stop inside: She said, "Come here."' }),
+    explanation:'"<b>"Come here," she said</b>" - rules for direct speech: (1) Opening speech mark before the spoken words; (2) Comma/full stop INSIDE the closing speech mark; (3) Reporting clause (she said) follows with a lower-case letter. With the reporting clause first, write: She said, "Come here."' }),
 
   makeMCQ({ id:'g5eng-sent-018', chapterId:'eng-sentences', subsection:'punctuation', difficulty:3,
     question:'Combine into ONE sentence using "although": "It was raining." "They played outside."',
