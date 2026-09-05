@@ -19,7 +19,7 @@ STATIC_QUESTIONS.push(
     hint:'Urban means city or town - think of lots of buildings and people.',
     explanation:'<b>Urban localities</b> are towns and cities - they have many buildings, busy roads, shops and offices. <b>Port Louis</b> is the main urban locality in Mauritius. A fishing village and a farm are rural localities; a forest reserve is neither urban nor a residential locality.' }),
 
-  makeMCQ({ id:'g4h-loc-003', chapterId:'g4hist-locality', subsection:'buildings', difficulty:1,
+  makeMCQ({ id:'g4h-loc-003', chapterId:'g4hist-locality', subsection:'types_locality', difficulty:1,
     question:'What type of locality has farms, open fields and few buildings?',
     options:['Urban','Rural','Industrial','Commercial'],
     answer:'Rural',

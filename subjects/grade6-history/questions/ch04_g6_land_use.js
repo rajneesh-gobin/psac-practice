@@ -11,7 +11,7 @@ STATIC_QUESTIONS.push(
     hint:'Large areas of flat land in Mauritius are still covered with this crop.',
     explanation:'<b>Sugar cane</b> has been the backbone of the Mauritian economy since the French colonial period. Although its dominance has declined, sugar and its by-products (rum, molasses, bagasse electricity) remain important.' }),
 
-  makeMCQ({ id:'g6hg-lu-002', chapterId:'g6-land-use', subsection:'industry', difficulty:1,
+  makeMCQ({ id:'g6hg-lu-002', chapterId:'g6-land-use', subsection:'tourism', difficulty:1,
     question:'Tourism is one of the most important industries in Mauritius today. What does Mauritius mainly offer tourists?',
     options:[
       'Alpine skiing and snow sports',
@@ -53,7 +53,7 @@ STATIC_QUESTIONS.push(
     hint:'Many workers - mostly women - found employment in these factories in the 1970s–1990s.',
     explanation:'True. <b>Export Processing Zones (EPZ)</b> were set up in the 1970s to attract foreign investment in labour-intensive industries, mainly <b>textile and clothing manufacturing</b> for export. They created thousands of jobs and helped transform Mauritius from a mono-crop economy.' }),
 
-  makeMCQ({ id:'g6hg-lu-006', chapterId:'g6-land-use', subsection:'industry', difficulty:2,
+  makeMCQ({ id:'g6hg-lu-006', chapterId:'g6-land-use', subsection:'tourism', difficulty:2,
     question:'Why is eco-tourism growing as an important part of the tourism industry in Mauritius?',
     options:[
       'Because it is cheaper than standard beach holidays',

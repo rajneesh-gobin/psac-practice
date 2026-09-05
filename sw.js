@@ -7,7 +7,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v141';
+const SHELL_VERSION = 'shell-v143';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -55,6 +55,7 @@ const SHELL_FILES = [
   '/engine/teacher_workspace.js',
   '/engine/learning_coach.js',
   '/engine/teacher_guest_classes.js',
+  '/engine/teacher_classroom_detail.js',
   '/engine/forum.js',
   '/engine/calendar.js',
   '/engine/search.js',

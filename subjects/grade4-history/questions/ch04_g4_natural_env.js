@@ -70,8 +70,8 @@ STATIC_QUESTIONS.push(
       'A beach in Port Louis'
     ],
     answer:'A small island that is part of the Republic of Mauritius',
-    hint:'It is about 650 km east of Mauritius in the Indian Ocean.',
-    explanation:'<b>Rodrigues</b> is a small island located about 650 km east of Mauritius in the Indian Ocean. It is part of the <b>Republic of Mauritius</b>, with its own regional government. It has its own hills, coral reef and lagoon.' }),
+    hint:'It is about 560 km north-east of Mauritius in the Indian Ocean.',
+    explanation:'<b>Rodrigues</b> is a small island located about 560 km north-east of Mauritius in the Indian Ocean. It is part of the <b>Republic of Mauritius</b>, with its own regional government. It has its own hills, coral reef and lagoon.' }),
 
   makeMCQ({ id:'g4ge-natenv-009', chapterId:'g4ge-natural-env', subsection:'coast', difficulty:2,
     question:'What type of landform is found along the coast of Mauritius that protects it from ocean waves?',

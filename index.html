@@ -30,6 +30,9 @@
       theme: { extend: {} }
     }
   </script>
+  <!-- Chalk handwriting font for blackboard cards -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 
   <!-- Register service worker -->
@@ -3313,12 +3316,13 @@
         </div>
       </div>
 
-      <!-- Tabs -->
+      <!-- Tabs — folder tab style -->
       <div class="teacher-navigation" role="tablist" aria-label="Teaching workspace">
-        <button role="tab" aria-selected="true" class="ta-tab" data-tab="create" onclick="TeacherMode.switchTab('create')"><strong>➕ Set work</strong><span>Create and share an assignment</span></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="classes" onclick="TeacherMode.switchTab('classes')"><strong>🏫 Classrooms</strong><span>Pupils, private PINs and class work</span></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="assignments" onclick="TeacherMode.switchTab('assignments')"><strong>📋 Assignments</strong><span>Active work, links and archives</span></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="results" onclick="TeacherMode.switchTab('results')"><strong>📊 Results</strong><span>Submissions and pupil progress</span></button>
+        <button role="tab" aria-selected="true" class="ta-tab" data-tab="create" onclick="TeacherMode.switchTab('create')"><strong>➕ Set work</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="classes" onclick="TeacherMode.switchTab('classes')"><strong>🏫 Classrooms</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="assignments" onclick="TeacherMode.switchTab('assignments')"><strong>📋 Assignments</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="results" onclick="TeacherMode.switchTab('results')"><strong>📊 Results</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="materials" onclick="TeacherMode.switchTab('materials')"><strong>📁 Materials</strong></button>
       </div>
 
       <div class="ta-tab-content hidden bg-white dark:bg-gray-800 dark:text-gray-200 rounded-2xl p-5" data-tab="classes">
@@ -3326,104 +3330,121 @@
         <p class="teacher-intro">Keep each class’s work together. Pupils do not need an account.</p>
         <div class="teacher-tip">Start with a classroom name. Add pupils if you want to identify their submissions using private 4-digit PINs. Give each PIN to its pupil in person—never share the PIN list with the class.</div>
         <div class="teacher-class-create">
-        <label for="tc-name">Classroom name</label>
-        <input id="tc-name" maxlength="80" placeholder="Grade 5 — Blue" class="border rounded p-2 dark:bg-gray-700">
-        <button onclick="TeacherGuestClasses.create(this)" class="p-2 text-blue-600">Create classroom</button>
-        <button onclick="TeacherGuestClasses.refresh()" class="p-2 text-blue-600">Refresh</button>
+        <label for="tc-name" class="text-sm font-semibold text-gray-700 dark:text-gray-300">Classroom name</label>
+        <input id="tc-name" maxlength="80" placeholder="e.g. Grade 5 Blue"
+          class="border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <button onclick="TeacherGuestClasses.create(this)"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors">
+          + Create classroom
+        </button>
+        <button onclick="TeacherGuestClasses.refresh()"
+          class="px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 text-sm rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+          Refresh
+        </button>
         </div>
         <p id="tc-status" role="status" class="text-sm my-3"></p>
         <div id="tc-list"></div><div id="tc-workspace"></div><div id="tc-roster"></div>
       </div>
 
       <!-- ── TAB: CREATE ── -->
-      <div class="ta-tab-content" data-tab="create">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow">
-          <h3 class="font-bold text-gray-800 dark:text-white mb-4">Create an assignment</h3>
-          <p class="teacher-intro">No need to enter every pupil to get started. Choose “Open link” to share work immediately, or use a classroom’s private pupil PINs for identified results.</p>
-          <h4 class="teacher-step">1 <span>Choose the work</span></h4>
+      <div class=”ta-tab-content” data-tab=”create”>
 
-          <div class="mb-3">
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Assignment Name</label>
-            <input id="ta-label" type="text" maxlength="60" placeholder="e.g. Chapter 1 Homework"
-              class="selectable w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
+        <!-- No classroom yet — shown until teacher creates one -->
+        <div id=”ta-no-classroom” class=”ta-no-classroom-notice hidden”>
+          <div class=”ta-thumbtack”></div>
+          <div class=”ta-notice-pin-icon”>📌</div>
+          <p class=”ta-notice-title”>Create your first classroom</p>
+          <p class=”ta-notice-body”>Before setting work, set up a classroom so you can assign homework to your pupils. It only takes a moment.</p>
+          <button onclick=”TeacherMode.switchTab(‘classes’)” class=”ta-notice-btn”>🏫 Create a classroom →</button>
+        </div>
+
+        <!-- Main form — shown when at least one classroom exists -->
+        <div id=”ta-create-form” class=”hidden”>
+          <!-- Step 1: Who is this for? -->
+          <h4 class=”teacher-step”>1 <span>Who is this for?</span></h4>
+          <div id=”ta-class-picker” class=”ta-class-picker-wrap”></div>
+
+          <!-- Hidden selects kept for backwards-compat with buildAssignment() -->
+          <select id=”ta-access” onchange=”TeacherGuestClasses.accessChanged()” style=”display:none”>
+            <option value=”nickname”>Open link — nickname, no PIN</option>
+            <option value=”classroom_pin”>My classroom — each pupil’s private PIN</option>
+            <option value=”legacy”>Shared assignment PIN + name (legacy)</option>
+          </select>
+          <div id=”ta-classroom-wrap” style=”display:none”>
+            <select id=”ta-classroom” class=”w-full border rounded p-2 dark:bg-gray-700 dark:text-white”>
+              <option value=””>Standalone — not tied to a classroom</option>
+            </select>
+          </div>
+          <p id=”ta-access-help” class=”hidden”></p>
+          <div id=”ta-legacy-pin-wrap” hidden>
+            <input id=”ta-pin” type=”text” inputmode=”numeric” maxlength=”4” placeholder=”e.g. 4821”
+              class=”w-32 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white”>
           </div>
 
-          <div class="mb-3">
-            <label for="ta-grade" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Grade</label>
-            <select id="ta-grade" onchange="TeacherMode.gradeChange()" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 dark:bg-gray-700 dark:text-white"></select>
-            <label for="ta-subject" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Subject</label>
-            <select id="ta-subject" onchange="TeacherMode.subjectChange()"
-              class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400"></select>
+          <!-- Step 2: What is the work? -->
+          <h4 class=”teacher-step”>2 <span>What is the work?</span></h4>
+          <div class=”mb-3”>
+            <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Assignment Name</label>
+            <input id=”ta-label” type=”text” maxlength=”60” placeholder=”e.g. Chapter 1 Homework”
+              class=”selectable w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”>
+          </div>
+          <div class=”mb-3”>
+            <label for=”ta-grade” class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Grade</label>
+            <select id=”ta-grade” onchange=”TeacherMode.gradeChange()” class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 dark:bg-gray-700 dark:text-white”></select>
+            <label for=”ta-subject” class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Subject</label>
+            <select id=”ta-subject” onchange=”TeacherMode.subjectChange()”
+              class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”></select>
+          </div>
+          <div class=”mb-3”>
+            <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2”>Topics <span class=”font-normal text-gray-500 dark:text-gray-400”>(leave unchecked = all)</span></label>
+            <div id=”ta-chapter-opts-container” class=”grid grid-cols-2 sm:grid-cols-3 gap-1 max-h-48 overflow-y-auto p-1 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600”></div>
           </div>
 
-          <div class="mb-3">
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Topics <span class="font-normal text-gray-500 dark:text-gray-400">(leave unchecked = all)</span></label>
-            <div id="ta-chapter-opts-container" class="grid grid-cols-2 sm:grid-cols-3 gap-1 max-h-48 overflow-y-auto p-1 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600"></div>
-          </div>
-
-          <h4 class="teacher-step">2 <span>Set the practice</span></h4>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+          <!-- Step 3: Set the practice -->
+          <h4 class=”teacher-step”>3 <span>Set the practice</span></h4>
+          <div class=”grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4”>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Difficulty</label>
-              <select id="ta-difficulty" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
-                <option value="0">🔀 Mixed</option>
-                <option value="1">⭐ Level 1</option>
-                <option value="2">⭐⭐ Level 2</option>
-                <option value="3">⭐⭐⭐ Level 3</option>
-                <option value="4">🏆 Level 4</option>
+              <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Difficulty</label>
+              <select id=”ta-difficulty” class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”>
+                <option value=”0”>🔀 Mixed</option>
+                <option value=”1”>⭐ Level 1</option>
+                <option value=”2”>⭐⭐ Level 2</option>
+                <option value=”3”>⭐⭐⭐ Level 3</option>
+                <option value=”4”>🏆 Level 4</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Questions</label>
-              <select id="ta-count" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
-                <option value="5">5</option>
-                <option value="10" selected>10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
+              <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Questions</label>
+              <select id=”ta-count” class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”>
+                <option value=”5”>5</option>
+                <option value=”10” selected>10</option>
+                <option value=”15”>15</option>
+                <option value=”20”>20</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Mode</label>
-              <select id="ta-mode" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
-                <option value="practice">🔍 Practice</option>
-                <option value="test">⏱ Timed practice</option>
+              <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Mode</label>
+              <select id=”ta-mode” class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”>
+                <option value=”practice”>🔍 Practice</option>
+                <option value=”test”>⏱ Timed practice</option>
               </select>
             </div>
-            <div class="flex items-end pb-1">
-              <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300">
-                <input type="checkbox" id="ta-random" checked class="w-4 h-4 rounded accent-green-500">
+            <div class=”flex items-end pb-1”>
+              <label class=”flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300”>
+                <input type=”checkbox” id=”ta-random” checked class=”w-4 h-4 rounded accent-green-500”>
                 🎲 Random
               </label>
             </div>
           </div>
 
-          <div class="mb-3">
-            <h4 class="teacher-step">3 <span>Choose who can answer</span></h4>
-            <label for="ta-access" class="block font-semibold dark:text-white">How will pupils identify themselves?</label>
-            <select id="ta-access" onchange="TeacherGuestClasses.accessChanged()" class="w-full border rounded-xl p-2 dark:bg-gray-700 dark:text-white">
-              <option value="nickname">Open link — nickname, no PIN</option>
-              <option value="classroom_pin">My classroom — each pupil’s private PIN</option>
-              <option value="legacy">Shared assignment PIN + name (legacy)</option>
-            </select>
-            <p id="ta-access-help" class="text-sm text-gray-500 my-2">Anyone with the link can enter a nickname. No PIN or account. Nicknames are unverified and results belong only to this assignment.</p>
-            <div id="ta-classroom-wrap"><label for="ta-classroom" class="dark:text-white">Save assignment under</label><select id="ta-classroom" class="w-full border rounded p-2 dark:bg-gray-700 dark:text-white"><option value="">Standalone — not tied to a classroom</option></select><p class="text-sm text-gray-500">A classroom is optional for nickname homework, even if it has no pupils. Private pupil PINs require a classroom with pupils. All work also appears in Assignments.</p></div>
-          </div>
-          <div class="mb-3" id="ta-legacy-pin-wrap" hidden>
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
-              Assignment PIN <span class="font-normal text-gray-400">(4 digits — leave blank and one is generated for you)</span>
-            </label>
-            <input id="ta-pin" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 4821"
-              class="w-32 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
+          <div class=”text-xs text-gray-500 dark:text-gray-400 mb-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl”>
+            <b>🔍 Practice:</b> Students see feedback after each question.<br>
+            <b>⏱ Timed practice:</b> Includes a timer and feedback after each answer.
           </div>
 
-          <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-            <b>🔍 Practice:</b> Students see correct or incorrect feedback after each question.<br>
-            <b>⏱ Timed practice:</b> Includes a timer and feedback after each answer. Both modes save results online. Formal test mode without early feedback is coming in the assessment update.
-          </div>
-
-          <p id="ta-quota" class="text-xs text-gray-500 dark:text-gray-400 mb-2 hidden"></p>
-          <button id="ta-build-btn" onclick="TeacherMode.buildAssignment()"
-            class="w-full py-2.5 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors shadow">
+          <p id=”ta-quota” class=”text-xs text-gray-500 dark:text-gray-400 mb-2 hidden”></p>
+          <button id=”ta-build-btn” onclick=”TeacherMode.buildAssignment()”
+            class=”w-full py-2.5 text-sm font-bold text-white bg-green-500 hover:bg-green-600 rounded-xl transition-colors shadow”>
             🔗 Generate Assignment Link
           </button>
         </div>
@@ -3458,6 +3479,107 @@
             <button onclick="document.getElementById('ta-answer-panel')?.classList.add('hidden')" class="text-gray-500 dark:text-gray-400 hover:text-gray-600 text-lg leading-none">✕</button>
           </div>
           <div class="ta-answer-body space-y-2 max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
+
+      <!-- ── TAB: MATERIALS ── -->
+      <div class="ta-tab-content hidden bg-white dark:bg-gray-800 rounded-2xl p-5 shadow" data-tab="materials">
+        <h3 class="font-bold text-lg text-gray-800 dark:text-white mb-1">📁 Learning Materials</h3>
+        <p class="teacher-intro mb-4">Upload PDFs or images for your students. Files are private — only teachers can upload.</p>
+
+        <!-- Upload form -->
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 mb-5 border border-gray-200 dark:border-gray-600">
+          <h4 class="font-semibold text-sm text-gray-700 dark:text-gray-300 mb-3">Upload a new file</h4>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Title</label>
+              <input id="tm-title" type="text" maxlength="80" placeholder="e.g. Chapter 3 Notes"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Description (optional)</label>
+              <input id="tm-description" type="text" maxlength="160" placeholder="e.g. Revision notes for the test"
+                class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Grade</label>
+                <select id="tm-grade" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
+                  <option value="">All grades</option>
+                  <option value="4">Grade 4</option>
+                  <option value="5">Grade 5</option>
+                  <option value="6">Grade 6</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Subject</label>
+                <select id="tm-subject" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
+                  <option value="">All subjects</option>
+                  <option value="maths">Maths</option>
+                  <option value="english">English</option>
+                  <option value="french">French</option>
+                  <option value="science">Science</option>
+                  <option value="history">History &amp; Geography</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">File (PDF or image, max 10 MB)</label>
+              <input id="tm-file" type="file" accept="application/pdf,image/*"
+                class="w-full text-sm text-gray-600 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
+            </div>
+            <p id="tm-upload-status" role="status" class="text-xs text-gray-500 dark:text-gray-400 min-h-[1.2em]"></p>
+            <button onclick="TeacherMaterials.upload()"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 rounded-xl transition-colors">
+              Upload file
+            </button>
+          </div>
+        </div>
+
+        <!-- File list -->
+        <div class="flex justify-between items-center mb-2">
+          <h4 class="font-semibold text-sm text-gray-700 dark:text-gray-300">Your uploaded files</h4>
+          <button onclick="TeacherMaterials.load()" class="text-xs text-blue-600 dark:text-blue-400">Refresh</button>
+        </div>
+        <div id="tm-list" class="space-y-2">
+          <p class="text-sm text-gray-400 dark:text-gray-500">Loading…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CLASSROOM DETAIL OVERLAY ── -->
+    <div id="tc-classroom-detail" class="tc-cd-overlay hidden">
+      <!-- Blackboard header bar -->
+      <div class="tc-cd-header">
+        <button class="tc-cd-back" onclick="TeacherClassroomDetail.close()">← Classrooms</button>
+        <div class="tc-cd-title">
+          <span id="tc-cd-emoji">🏫</span>
+          <span id="tc-cd-name">Classroom</span>
+        </div>
+        <button class="tc-cd-share-btn" onclick="TeacherClassroomDetail.shareLink()" title="Share classroom link">📱 Share</button>
+      </div>
+      <!-- Quick stats row -->
+      <div class="tc-cd-stats">
+        <div class="tc-cd-stat"><strong id="tc-cd-stat-pupils">—</strong><span>pupils</span></div>
+        <div class="tc-cd-stat"><strong id="tc-cd-stat-assignments">—</strong><span>assignments</span></div>
+        <div class="tc-cd-stat"><strong id="tc-cd-stat-materials">—</strong><span>materials</span></div>
+        <div class="tc-cd-stat"><strong id="tc-cd-stat-results">—</strong><span>submitted</span></div>
+      </div>
+      <!-- Body: sidebar nav + content -->
+      <div class="tc-cd-body">
+        <nav class="tc-cd-nav" role="tablist">
+          <button class="tc-cd-nav-btn" data-sec="work"      onclick="TeacherClassroomDetail.showSection('work')">📋<span>Work</span></button>
+          <button class="tc-cd-nav-btn" data-sec="pupils"    onclick="TeacherClassroomDetail.showSection('pupils')">👥<span>Pupils</span></button>
+          <button class="tc-cd-nav-btn" data-sec="materials" onclick="TeacherClassroomDetail.showSection('materials')">📁<span>Materials</span></button>
+          <button class="tc-cd-nav-btn" data-sec="results"   onclick="TeacherClassroomDetail.showSection('results')">📊<span>Results</span></button>
+          <button class="tc-cd-nav-btn" data-sec="settings"  onclick="TeacherClassroomDetail.showSection('settings')">⚙️<span>Settings</span></button>
+        </nav>
+        <div class="tc-cd-content">
+          <div id="tc-cd-work"      class="tc-cd-section"></div>
+          <div id="tc-cd-pupils"    class="tc-cd-section hidden"></div>
+          <div id="tc-cd-materials" class="tc-cd-section hidden"></div>
+          <div id="tc-cd-results"   class="tc-cd-section hidden"></div>
+          <div id="tc-cd-settings"  class="tc-cd-section hidden"></div>
         </div>
       </div>
     </div>
@@ -4665,6 +4787,7 @@
   <script src="engine/learning_coach.js"></script>
   <script src="engine/teacher_guest_classes.js"></script>
   <script src="engine/teacher.js"></script>
+  <script src="engine/teacher_classroom_detail.js"></script>
   <!-- Admin panel (loads after auth) -->
   <script src="engine/admin.js"></script>
   <script src="engine/forum.js"></script>

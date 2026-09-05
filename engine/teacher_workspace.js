@@ -124,26 +124,63 @@ const TeacherWorkspace = (() => {
       .map(([v,label]) => `<option value="${v}" ${value===v?'selected':''}>${label}</option>`).join('');
   }
 
+  function _statusLabel(a) {
+    if (a.archived) return 'archived';
+    if (a.status !== 'active' || (a.expires_at && Date.parse(a.expires_at) <= Date.now())) return 'closed';
+    return 'active';
+  }
+
+  function _shortDate(val) {
+    if (!val) return '';
+    const d = new Date(val);
+    return d.toLocaleDateString('en-GB', {day:'numeric', month:'short'});
+  }
+
+  function _packLabel(id) {
+    if (!id) return '';
+    return id.replace(/^grade(\d+)-/, 'G$1 ').replace(/-/g, ' ');
+  }
+
   function drawCards(list, rows, inClass) {
     if (!rows.length) { message(list, 'No assignments in this view.'); return; }
-    list.innerHTML = rows.map((a, i) => `<div class="p-4 rounded-xl border dark:border-gray-600 mb-3">
-      <h4 class="font-bold dark:text-white">${esc(a.title)}</h4>
-      <p class="text-sm dark:text-gray-300">${a.classroom_id ? esc(a.classroom_name || 'Classroom') : 'Standalone assignment'}${a.archived ? ' · Archived' : ''}</p>
-      <p class="text-sm dark:text-gray-300">${a.access_mode === 'classroom_pin' ? 'Private pupil PINs' : a.access_mode === 'nickname' ? 'Open nicknames — unverified identities' : 'Shared assignment PIN'}</p>
-      <p class="text-sm dark:text-gray-300">${esc(a.subject_pack_id)} · ${esc(a.question_count)} questions · ${a.duration_mins ? 'Timed practice' : 'Practice'}</p>
-      <p class="text-sm dark:text-gray-300">${esc(a.submissions ?? 0)} submitted · capacity ${esc(a.max_students)} · ${esc(a.status)}</p>
-      <p class="text-xs text-gray-500">Closes: ${esc(date(a.expires_at))}${a.due_at ? ` · Due: ${esc(date(a.due_at))}` : ''}</p>
-      <div class="flex flex-wrap gap-3 mt-2"><button data-results="${i}" class="text-blue-600 text-sm p-2">View results</button><button data-share="${i}" class="text-blue-600 text-sm p-2" ${a.archived ? 'disabled' : ''}>Share link</button><button data-archive="${i}" class="text-blue-600 text-sm p-2">${a.archived ? 'Restore' : 'Archive'}</button></div>
-    </div>`).join('');
-    list.querySelectorAll('[data-results]').forEach(b => b.onclick = () => {
+    list.innerHTML = `<div class="ta-copybook-wrap">` + rows.map((a, i) => {
+      const status = _statusLabel(a);
+      return `<div class="ta-copybook" data-open="${i}" title="${esc(a.title)}">
+        <div class="ta-copybook-fold"></div>
+        <div class="ta-copybook-date">${_shortDate(a.expires_at)}</div>
+        <div class="ta-copybook-page">
+          ${a.classroom_id ? `<div class="ta-copybook-class">🏫 ${esc(a.classroom_name || 'Classroom')}</div>` : ''}
+          <div class="ta-copybook-subject">${_packLabel(a.subject_pack_id)}</div>
+          <div class="ta-copybook-title">${esc(a.title)}</div>
+          <div class="ta-copybook-meta">
+            ${esc(a.question_count)} questions<br>
+            ${a.duration_mins ? '⏱ Timed' : '🔍 Practice'} ·
+            ${a.access_mode === 'classroom_pin' ? '🔑 PIN' : a.access_mode === 'nickname' ? '👤 Open' : '🔒 Shared'}<br>
+            ${esc(a.submissions ?? 0)} submitted
+          </div>
+          <div class="ta-copybook-status ${status}">${status}</div>
+        </div>
+        <div class="ta-copybook-actions">
+          <button data-results="${i}">📊 Results</button>
+          <button data-share="${i}" ${a.archived ? 'disabled' : ''}>🔗 Share</button>
+          <button data-archive="${i}">${a.archived ? '♻️' : '📦'}</button>
+        </div>
+      </div>`;
+    }).join('') + `</div>`;
+
+    list.querySelectorAll('[data-open]').forEach(b => b.onclick = e => {
+      if (e.target.closest('button')) return;
+    });
+    list.querySelectorAll('[data-results]').forEach(b => b.onclick = e => {
+      e.stopPropagation();
       const a = rows[Number(b.dataset.results)];
       if (inClass) { results(a.id, 'tc-assignment-results'); return; }
       TeacherMode.switchTab('results');
       el('ta-results-assign-sel').value = a.id;
       results(a.id);
     });
-    list.querySelectorAll('[data-share]').forEach(b => b.onclick = () => share(rows[Number(b.dataset.share)]));
-    list.querySelectorAll('[data-archive]').forEach(b => b.onclick = () => archive(rows[Number(b.dataset.archive)], b));
+    list.querySelectorAll('[data-share]').forEach(b => b.onclick = e => { e.stopPropagation(); share(rows[Number(b.dataset.share)]); });
+    list.querySelectorAll('[data-archive]').forEach(b => b.onclick = e => { e.stopPropagation(); archive(rows[Number(b.dataset.archive)], b); });
   }
 
   async function archive(a, button) {

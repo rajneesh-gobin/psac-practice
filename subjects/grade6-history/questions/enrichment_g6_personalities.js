@@ -19,7 +19,7 @@ STATIC_QUESTIONS.push(
     hint:'Independence Day is celebrated on 12 March every year.',
     explanation:'Mauritius became independent on <b>12 March 1968</b>, ending over 150 years of British rule; the date is now celebrated as a national public holiday.' }),
 
-  makeMCQ({ id:'g6enr-per-003', chapterId:'g6enr-personalities', subsection:'independence', difficulty:1,
+  makeMCQ({ id:'g6enr-per-003', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:1,
     question:'What does the name "Aapravasi Ghat" mean in Hindi?',
     options:['Place of Freedom','Immigration Depot','Sugar Landing Stage','Harbour of Slaves'],
     answer:'Immigration Depot',
@@ -33,7 +33,7 @@ STATIC_QUESTIONS.push(
     hint:'He is the longest-serving Prime Minister in Mauritius\'s history and later became Head of State.',
     explanation:'<b>Sir Anerood Jugnauth</b> served as Prime Minister for the longest cumulative period in Mauritian history and later served as President, making him the only person to have held both of Mauritius\'s top offices.' }),
 
-  makeMCQ({ id:'g6enr-per-005', chapterId:'g6enr-personalities', subsection:'independence', difficulty:1,
+  makeMCQ({ id:'g6enr-per-005', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:1,
     question:'In which year did Indian indentured labourers first arrive in Mauritius through Aapravasi Ghat?',
     options:['1810','1825','1834','1850'],
     answer:'1834',
@@ -47,14 +47,14 @@ STATIC_QUESTIONS.push(
     hint:'The Governor-General was the representative of the British Crown after independence.',
     explanation:'<b>Abdool Raman Osman</b> became the first Governor-General of Mauritius after independence in 1968, serving as the representative of the British monarch in the newly independent country.' }),
 
-  makeMCQ({ id:'g6enr-per-007', chapterId:'g6enr-personalities', subsection:'independence', difficulty:2,
+  makeMCQ({ id:'g6enr-per-007', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:2,
     question:'The island of Mauritius takes its name from Prince Maurits of Nassau. Which European nation did this prince lead?',
     options:['France','Portugal','Spain','The Netherlands (Dutch Republic)'],
     answer:'The Netherlands (Dutch Republic)',
     hint:'The Dutch were the first Europeans to permanently settle Mauritius, in 1638.',
     explanation:'Mauritius was named after <b>Prince Maurits van Nassau</b>, the leader of the <b>Dutch Republic</b>, when Dutch sailors claimed the island in 1598 and then settled it permanently in 1638.' }),
 
-  makeMCQ({ id:'g6enr-per-008', chapterId:'g6enr-personalities', subsection:'independence', difficulty:2,
+  makeMCQ({ id:'g6enr-per-008', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:2,
     question:'Rémy Ollier was a Mauritian journalist who fought for the rights of which group in colonial Mauritius?',
     options:['Indian indentured labourers','British settlers','Free coloureds (gens de couleur libres)','Dutch planters'],
     answer:'Free coloureds (gens de couleur libres)',
@@ -75,14 +75,14 @@ STATIC_QUESTIONS.push(
     hint:'Most Mauritian Indians trace their ancestry to this large South Asian country.',
     explanation:'<b>Mahatma Gandhi</b> led the independence movement of <b>India</b>, and because the majority of Mauritian Indians trace their roots to India, Gandhi is deeply honoured in Mauritius as a symbol of freedom and dignity.' }),
 
-  makeMCQ({ id:'g6enr-per-011', chapterId:'g6enr-personalities', subsection:'independence', difficulty:3,
+  makeMCQ({ id:'g6enr-per-011', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:3,
     question:'The period of Indian indentured labour in Mauritius lasted from 1834 to 1924 - a total of how many years?',
     options:['70 years','80 years','90 years','100 years'],
     answer:'90 years',
     hint:'Subtract the start year from the end year to find the duration.',
     explanation:'Indian indentured labour in Mauritius lasted from <b>1834 to 1924</b>, a period of <b>90 years</b>, during which approximately half a million labourers arrived from India to work on the sugar plantations.' }),
 
-  makeMCQ({ id:'g6enr-per-012', chapterId:'g6enr-personalities', subsection:'independence', difficulty:3,
+  makeMCQ({ id:'g6enr-per-012', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:3,
     question:'Why was Aapravasi Ghat inscribed as a UNESCO World Heritage Site in 2006?',
     options:[
       'Because it is the oldest building in Mauritius',
@@ -113,7 +113,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about why written words published widely are harder to suppress than one person\'s spoken voice.',
     explanation:'<b>Rémy Ollier</b> used a newspaper to spread his ideas because the <b>printed word could reach a wide audience</b> and create public debate - making it far harder for colonial authorities to silence than a single individual\'s spoken protests.' }),
 
-  makeMCQ({ id:'g6enr-per-015', chapterId:'g6enr-personalities', subsection:'independence', difficulty:3,
+  makeMCQ({ id:'g6enr-per-015', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:3,
     question:'John Mauritius van Nassau (Moritz of Nassau) is historically linked to Mauritius. What was his role in relation to the island?',
     options:[
       'He was the first European to set foot on Mauritius',
@@ -149,7 +149,7 @@ STATIC_QUESTIONS.push(
     hint:'Consider what he had to gain or lose personally by championing abolition.',
     explanation:'<b>Adrien d\'Epinay\'s</b> support for abolition is historically significant because he came from the <b>planter class</b> that economically benefited from slavery, meaning his advocacy went against his own class interests and reflected genuine moral conviction.' }),
 
-  makeMCQ({ id:'g6enr-per-018', chapterId:'g6enr-personalities', subsection:'independence', difficulty:4,
+  makeMCQ({ id:'g6enr-per-018', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:4,
     question:'Indian indentured labourers who arrived at Aapravasi Ghat came mainly from the Indian states of Bihar and Uttar Pradesh. Why did so many labourers come from these specific regions?',
     options:[
       'These were the only Indian states that spoke French, the official language of Mauritius at the time',

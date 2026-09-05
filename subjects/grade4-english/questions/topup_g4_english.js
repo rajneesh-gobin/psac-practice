@@ -22,14 +22,14 @@ STATIC_QUESTIONS.push(
     hint:'"Yesterday" signals the past tense. "Go" is an irregular verb.',
     explanation:'"Go" becomes "went" in the past tense — it is irregular and does not add -ed.' }),
 
-  makeMCQ({ id:'g4eng-verb-052', chapterId:'g4eng-verbs', subsection:'present_tense', difficulty:1,
+  makeMCQ({ id:'g4eng-verb-052', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:1,
     question:'She ___ a rainbow in the sky this morning.',
     options:['see','sees','saw','seeing'],
     answer:'saw',
     hint:'"This morning" is already over — use the past tense. "See" is an irregular verb.',
     explanation:'"See" becomes "saw" in the past tense — it is an irregular verb.' }),
 
-  makeMCQ({ id:'g4eng-verb-053', chapterId:'g4eng-verbs', subsection:'present_tense', difficulty:1,
+  makeMCQ({ id:'g4eng-verb-053', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:1,
     question:'The dog ___ after the ball and caught it.',
     options:['run','runs','running','ran'],
     answer:'ran',
@@ -78,7 +78,7 @@ STATIC_QUESTIONS.push(
     hint:'"Eat" is irregular — it does not add -ed in the past tense.',
     explanation:'"Ate" is the correct irregular past tense of "eat". Never write "eated" — irregular verbs have their own special past forms.' }),
 
-  makeMCQ({ id:'g4eng-verb-060', chapterId:'g4eng-verbs', subsection:'present_tense', difficulty:2,
+  makeMCQ({ id:'g4eng-verb-060', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:2,
     question:'He ___ his homework before he watched television.',
     options:['finish','finishes','finishing','finished'],
     answer:'finished',

@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
     hint:'This modal gives advice or a recommendation.',
     explanation:'<b>Should</b> expresses advice or a recommendation. "Might" and "could" express possibility; "would" expresses willingness or a conditional situation.' }),
 
-  makeMCQ({ id:'g5eng-v-054', chapterId:'eng-verbs', subsection:'present_tense', difficulty:2,
+  makeMCQ({ id:'g5eng-v-054', chapterId:'eng-verbs', subsection:'auxiliary', difficulty:2,
     question:'What does the phrasal verb "give up" mean?',
     options:['stop trying', 'give a gift', 'hand something over', 'move higher'],
     answer:'stop trying',
@@ -147,7 +147,7 @@ STATIC_QUESTIONS.push(
     hint:'This modal is used when something is possible but not certain.',
     explanation:'<b>Might</b> expresses possibility — the rain is uncertain. "Must" expresses obligation, "should" advice, and "would" a conditional or willingness.' }),
 
-  makeMCQ({ id:'g5eng-v-058', chapterId:'eng-verbs', subsection:'present_tense', difficulty:2,
+  makeMCQ({ id:'g5eng-v-058', chapterId:'eng-verbs', subsection:'auxiliary', difficulty:2,
     question:'What does the phrasal verb "look after" mean?',
     options:['take care of', 'search behind', 'observe closely', 'follow someone'],
     answer:'take care of',
@@ -161,7 +161,7 @@ STATIC_QUESTIONS.push(
     hint:'"By the time" signals that one past event happened before another — use past perfect for the earlier event.',
     explanation:'"The show <b>had started</b>" (past perfect) correctly shows that the show began before we arrived. "By the time" is a key signal for the past perfect.' }),
 
-  makeMCQ({ id:'g5eng-v-060', chapterId:'eng-verbs', subsection:'present_tense', difficulty:3,
+  makeMCQ({ id:'g5eng-v-060', chapterId:'eng-verbs', subsection:'past_tense', difficulty:3,
     question:'Which sentence is correct?',
     options:['I saw that film yesterday.', 'I have seen that film yesterday.', 'I have saw that film yesterday.', 'I seen that film yesterday.'],
     answer:'I saw that film yesterday.',

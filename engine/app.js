@@ -5552,31 +5552,38 @@ function initScratchpad(id) {
   canvas._initialized = true;
   canvas.width = canvas.offsetWidth || 240;
   canvas.height = parseInt(canvas.getAttribute('height')) || 200;
+  // Prevents the browser treating finger draws as scroll gestures.
+  // Must be set before any pointer event fires on this element.
+  canvas.style.touchAction = 'none';
   const ctx = canvas.getContext('2d');
   canvas._ctx = ctx;
   ctx.strokeStyle = DB.theme === 'dark' ? '#fff' : '#1e293b';
   ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   let drawing = false, lx = 0, ly = 0;
+  // Pointer events (mouse + touch + stylus) share clientX/clientY directly.
   const pos = (e) => {
     const r = canvas.getBoundingClientRect();
-    const src = e.touches ? e.touches[0] : e;
-    return { x: (src.clientX - r.left) * (canvas.width / r.width), y: (src.clientY - r.top) * (canvas.height / r.height) };
+    return { x: (e.clientX - r.left) * (canvas.width / r.width),
+             y: (e.clientY - r.top)  * (canvas.height / r.height) };
   };
-  const start = e => { drawing = true; const p = pos(e); lx = p.x; ly = p.y; };
+  const start = e => {
+    drawing = true;
+    const p = pos(e); lx = p.x; ly = p.y;
+    // Capture keeps pointermove arriving even when the finger leaves the canvas.
+    canvas.setPointerCapture(e.pointerId);
+  };
   const draw = e => {
-    if (!drawing) return; e.preventDefault();
+    if (!drawing) return;
     const p = pos(e);
     ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(p.x, p.y); ctx.stroke();
     lx = p.x; ly = p.y;
   };
   const stop = () => drawing = false;
-  canvas.addEventListener('mousedown', start);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stop);
-  canvas.addEventListener('mouseleave', stop);
-  canvas.addEventListener('touchstart', start, { passive: false });
-  canvas.addEventListener('touchmove', draw, { passive: false });
-  canvas.addEventListener('touchend', stop);
+  canvas.addEventListener('pointerdown', start);
+  canvas.addEventListener('pointermove', draw);
+  canvas.addEventListener('pointerup',     stop);
+  // pointercancel fires when the OS interrupts (notification, call, screenshot).
+  canvas.addEventListener('pointercancel', stop);
 
   // Faint placeholder text
   ctx.save();
@@ -5588,8 +5595,9 @@ function initScratchpad(id) {
   ctx.restore();
   canvas._hasPlaceholder = true;
 
-  canvas.addEventListener('mousedown', () => { if (canvas._hasPlaceholder) { canvas._hasPlaceholder = false; ctx.clearRect(0,0,canvas.width,canvas.height); } }, { once: true });
-  canvas.addEventListener('touchstart', () => { if (canvas._hasPlaceholder) { canvas._hasPlaceholder = false; ctx.clearRect(0,0,canvas.width,canvas.height); } }, { once: true });
+  canvas.addEventListener('pointerdown', () => {
+    if (canvas._hasPlaceholder) { canvas._hasPlaceholder = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }
+  }, { once: true });
 }
 function clearScratch(id) {
   const c = document.getElementById(id);

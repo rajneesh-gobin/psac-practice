@@ -116,8 +116,9 @@ const TeacherMode = (() => {
     _buildSubjectSelect();
     _buildChapterCheckboxes();
     _ensureSubjectLoaded();          // not awaited: the list below must paint now
+    _renderClassPicker();            // show form immediately with whatever is cached
     TeacherWorkspace.refresh();
-    TeacherGuestClasses.refresh();
+    TeacherGuestClasses.refresh().then(() => _renderClassPicker()).catch(() => _renderClassPicker());
     TeacherGuestClasses.accessChanged();
   }
 
@@ -259,8 +260,63 @@ const TeacherMode = (() => {
   }
 
   // ── Tab switching ──────────────────────────────
+  function _renderClassPicker() {
+    const picker = _el('ta-class-picker');
+    const noClass = _el('ta-no-classroom');
+    const form = _el('ta-create-form');
+    if (!picker) return;
+    const classes = (typeof TeacherGuestClasses !== 'undefined') ? TeacherGuestClasses.getClasses() : [];
+    const active = classes.filter(c => c.active);
+
+    // Always show the form so the teacher can set work even without classrooms.
+    if (noClass) noClass.classList.add('hidden');
+    if (form) form.classList.remove('hidden');
+
+    const current = _el('ta-classroom')?.value || '';
+    picker.innerHTML = active.map(c => {
+      const sel = current === c.id;
+      return `<button type="button" class="ta-class-chip ${sel ? 'ta-class-chip-sel' : ''}"
+        data-cid="${c.id}" data-pupils="${c.pupils}" title="${c.name}">
+        <span class="ta-chip-name">&#x1F3EB; ${c.name}</span>
+        <span class="ta-chip-pupils">${c.pupils} pupil${c.pupils===1?'':'s'}</span>
+      </button>`;
+    }).join('') +
+    `<button type="button" class="ta-class-chip ${!current ? 'ta-class-chip-sel' : ''}"
+      data-cid="" data-pupils="0" title="No classroom — open link">
+      <span class="ta-chip-name">&#x1F517; Open link</span>
+      <span class="ta-chip-pupils">no classroom</span>
+    </button>`;
+
+    if (!active.length) {
+      picker.insertAdjacentHTML('beforeend',
+        '<p class="ta-chip-hint">No classrooms yet. Create one in the &#x1F3EB; Classrooms tab to assign work by pupil PIN.</p>');
+    }
+
+    picker.querySelectorAll('[data-cid]').forEach(btn => {
+      btn.onclick = () => {
+        const cid = btn.dataset.cid;
+        const pupils = Number(btn.dataset.pupils);
+        const classEl = _el('ta-classroom');
+        const accessEl = _el('ta-access');
+        if (classEl) classEl.value = cid;
+        if (accessEl) accessEl.value = cid ? (pupils > 0 ? 'classroom_pin' : 'nickname') : 'nickname';
+        picker.querySelectorAll('[data-cid]').forEach(b => b.classList.remove('ta-class-chip-sel'));
+        btn.classList.add('ta-class-chip-sel');
+        if (typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.accessChanged();
+      };
+    });
+
+    // Auto-select first classroom if nothing chosen yet
+    if (!current) {
+      const firstBtn = picker.querySelector('[data-cid]');
+      firstBtn?.click();
+    }
+  }
+
   function switchTab(tab) {
-    if (tab === 'classes') TeacherGuestClasses.refresh();
+    if (tab === 'classes' && typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.refresh();
+    if (tab === 'materials') TeacherMaterials.load();
+    if (tab === 'create')    _renderClassPicker();
     document.querySelectorAll('.ta-tab').forEach(b => {
       const on = b.dataset.tab === tab;
       b.setAttribute('aria-selected', String(on));
@@ -651,4 +707,124 @@ const TeacherMode = (() => {
     shareAssignment, closeShare, shareCopy, shareWhatsApp, shareNative,
     saveResult, getAttemptCount, hasRetry, allowRetry, removeResult, showAnswers,
   };
+})();
+
+// ── Teacher Materials (Supabase Storage) ──────────────────────────────────────
+const TeacherMaterials = (() => {
+  const BUCKET = 'learning-materials';
+
+  function _status(msg, color) {
+    const el = document.getElementById('tm-upload-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.color = color || '';
+  }
+
+  async function upload() {
+    const title = document.getElementById('tm-title')?.value.trim();
+    const file  = document.getElementById('tm-file')?.files[0];
+
+    if (!title) { _status('Please enter a title.', '#e53e3e'); return; }
+    if (!file)  { _status('Please choose a file.', '#e53e3e'); return; }
+    if (file.size > 10 * 1024 * 1024) { _status('File must be under 10 MB.', '#e53e3e'); return; }
+
+    _status('Uploading…');
+
+    const user = _sb.auth.getUser ? (await _sb.auth.getUser()).data?.user : null;
+    if (!user) { _status('You must be signed in.', '#e53e3e'); return; }
+
+    const ext      = file.name.split('.').pop();
+    const filePath = `${user.id}/${Date.now()}.${ext}`;
+
+    const { error: upErr } = await _sb.storage.from(BUCKET).upload(filePath, file);
+    if (upErr) { _status('Upload failed: ' + upErr.message, '#e53e3e'); return; }
+
+    const description = document.getElementById('tm-description')?.value.trim() || null;
+    const grade       = parseInt(document.getElementById('tm-grade')?.value) || null;
+    const subject     = document.getElementById('tm-subject')?.value || null;
+
+    const { error: dbErr } = await _sb.from('learning_materials').insert({
+      teacher_id: user.id,
+      title,
+      description,
+      subject,
+      grade,
+      file_path: filePath,
+      file_name: file.name,
+      file_size: file.size,
+    });
+
+    if (dbErr) {
+      await _sb.storage.from(BUCKET).remove([filePath]);
+      _status('Could not save file info: ' + dbErr.message, '#e53e3e');
+      return;
+    }
+
+    _status('Uploaded successfully!', '#276749');
+    document.getElementById('tm-title').value       = '';
+    document.getElementById('tm-description').value = '';
+    document.getElementById('tm-file').value         = '';
+    load();
+  }
+
+  async function load() {
+    const list = document.getElementById('tm-list');
+    if (!list) return;
+    list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500">Loading…</p>';
+
+    const { data, error } = await _sb.from('learning_materials')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) { list.innerHTML = '<p class="text-sm text-red-500">Could not load files.</p>'; return; }
+    if (!data?.length) { list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500">No files uploaded yet.</p>'; return; }
+
+    list.innerHTML = data.map(f => `
+      <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-xl px-4 py-3 border border-gray-200 dark:border-gray-600">
+        <div class="min-w-0 flex-1">
+          <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_attr(f.title)}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">
+            ${f.subject ? f.subject + ' · ' : ''}${f.grade ? 'Grade ' + f.grade + ' · ' : ''}${_fmtSize(f.file_size)}
+          </p>
+          ${f.description ? `<p class="text-xs text-gray-400 dark:text-gray-500 truncate">${_attr(f.description)}</p>` : ''}
+        </div>
+        <div class="flex gap-2 ml-3 shrink-0">
+          <button onclick="TeacherMaterials.getLink('${_attr(f.file_path)}')"
+            class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-lg font-semibold">
+            🔗 Link
+          </button>
+          <button onclick="TeacherMaterials.remove('${_attr(f.id)}','${_attr(f.file_path)}')"
+            class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg font-semibold">
+            Delete
+          </button>
+        </div>
+      </div>`).join('');
+  }
+
+  async function getLink(filePath) {
+    const { data, error } = await _sb.storage.from(BUCKET).createSignedUrl(filePath, 3600);
+    if (error || !data?.signedUrl) { toast('Could not generate link.', 2000); return; }
+    try {
+      await navigator.clipboard.writeText(data.signedUrl);
+      toast('Link copied! Valid for 1 hour.', 2500);
+    } catch {
+      prompt('Copy this link (valid 1 hour):', data.signedUrl);
+    }
+  }
+
+  async function remove(id, filePath) {
+    if (!confirm('Delete this file? This cannot be undone.')) return;
+    await _sb.storage.from(BUCKET).remove([filePath]);
+    await _sb.from('learning_materials').delete().eq('id', id);
+    load();
+  }
+
+  function _fmtSize(bytes) {
+    if (!bytes) return '';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  return { upload, load, getLink, remove };
 })();

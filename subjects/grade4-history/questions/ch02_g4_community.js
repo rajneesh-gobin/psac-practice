@@ -129,7 +129,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about the holidays in the Mauritian school calendar.',
     explanation:'<b>True.</b> Mauritius celebrates festivals from <b>multiple religions</b> as national public holidays: Divali (Hindu), Eid ul-Fitr (Muslim), Christmas (Christian), Chinese Spring Festival (Chinese/Buddhist), Maha Shivaratri (Hindu), and others. This is a unique feature of Mauritius\'s multicultural society and reflects the government\'s commitment to respecting all religious communities.' }),
 
-  makeMCQ({ id:'g4h-com-016', chapterId:'g4hist-community', subsection:'languages', difficulty:2,
+  makeMCQ({ id:'g4h-com-016', chapterId:'g4hist-community', subsection:'diversity', difficulty:2,
     question:'The CREOLE community in Mauritius descends mainly from...',
     options:['Chinese traders who came for business','African and Malagasy people brought as enslaved workers during the colonial period','Portuguese explorers who settled permanently','French noblemen who stayed after independence'],
     answer:'African and Malagasy people brought as enslaved workers during the colonial period',

@@ -11,7 +11,7 @@ STATIC_QUESTIONS.push(
     hint:'The verb is the action word - what did the children do?',
     explanation:'"<b>Played</b>" is the verb - it tells us the action the children performed. It is in the past tense (past simple) because the action has already happened.' }),
 
-  makeMCQ({ id:'g5eng-verb-002', chapterId:'eng-verbs', subsection:'present_tense', difficulty:1,
+  makeMCQ({ id:'g5eng-verb-002', chapterId:'eng-verbs', subsection:'past_tense', difficulty:1,
     question:'Which sentence is in the PAST SIMPLE tense?',
     options:[
       'She walks to school every day.',
@@ -23,7 +23,7 @@ STATIC_QUESTIONS.push(
     hint:'Past simple usually ends in -ed for regular verbs, or uses an irregular past form.',
     explanation:'"<b>They cooked dinner last night</b>" is past simple - "cooked" is the regular past form of "cook". The clue word "last night" also tells us it happened in the past.' }),
 
-  makeMCQ({ id:'g5eng-verb-003', chapterId:'eng-verbs', subsection:'present_tense', difficulty:2,
+  makeMCQ({ id:'g5eng-verb-003', chapterId:'eng-verbs', subsection:'continuous', difficulty:2,
     question:'Choose the correct form: "She ___ to the shop when it started raining."',
     options:['walks','is walking','was walking','will walk'],
     answer:'was walking',
@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
     hint:'"Write" is an irregular verb. Its past simple form changes the vowel.',
     explanation:'"<b>Wrote</b>" is the past simple of "write". Note: "written" is the past participle (used with has/have: "She has written a letter"). Past simple = "She wrote a letter yesterday."' }),
 
-  makeMCQ({ id:'g5eng-verb-009', chapterId:'eng-verbs', subsection:'present_tense', difficulty:2,
+  makeMCQ({ id:'g5eng-verb-009', chapterId:'eng-verbs', subsection:'perfect', difficulty:2,
     question:'Identify the verb phrase in: "The students have finished their homework."',
     options:['students','have finished','finished','homework'],
     answer:'have finished',
@@ -148,14 +148,14 @@ STATIC_QUESTIONS.push(
     hint:'Passive = object becomes subject + is/are + past participle + by + agent.',
     explanation:'"<b>The homework is corrected by the teacher every day</b>" - present simple passive: is/are + past participle. The object "the homework" becomes the subject. "By the teacher" names who does the action. "Was corrected" would be past tense - wrong here.' }),
 
-  makeMCQ({ id:'g5eng-verb-017', chapterId:'eng-verbs', subsection:'present_tense', difficulty:3,
+  makeMCQ({ id:'g5eng-verb-017', chapterId:'eng-verbs', subsection:'perfect', difficulty:3,
     question:'Choose the correct verb form: "By the time she arrived, the film ___."',
     options:['already started','has already started','had already started','already starts'],
     answer:'had already started',
     hint:'One action happened BEFORE another in the past. Which tense shows the earlier action?',
     explanation:'"<b>Had already started</b>" is the past perfect - it shows an action completed BEFORE another past action. She arrived (past simple) - but the film had started even earlier. Past perfect = had + past participle. Sequence: film started → she arrived.' }),
 
-  makeMCQ({ id:'g5eng-verb-018', chapterId:'eng-verbs', subsection:'present_tense', difficulty:3,
+  makeMCQ({ id:'g5eng-verb-018', chapterId:'eng-verbs', subsection:'past_tense', difficulty:3,
     question:'Which sentence correctly uses "used to"?',
     options:[
       'I use to play football when I was young.',

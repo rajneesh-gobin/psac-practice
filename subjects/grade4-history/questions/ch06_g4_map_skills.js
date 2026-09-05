@@ -152,7 +152,7 @@ STATIC_QUESTIONS.push(
     hint:'If maps were the same size as real places, they would be impossible to use!',
     explanation:'Maps are always <b>smaller</b> than the real areas they show. The <b>scale</b> tells us how much smaller the map is compared to reality. For example, a map of all of Mauritius fits on one page, but the real island is 65 km long.' }),
 
-  makeMCQ({ id:'g4ge-maps-018', chapterId:'g4ge-map-skills', subsection:'directions', difficulty:3,
+  makeMCQ({ id:'g4ge-maps-018', chapterId:'g4ge-map-skills', subsection:'using_map', difficulty:3,
     question:'A map shows Blue Bay (south-east coast) and Grand Baie (north coast). The scale is 1 cm = 5 km. On the map, the two places are 8 cm apart. What is the real distance between them?',
     options:['8 km','13 km','40 km','5 km'],
     answer:'40 km',
@@ -178,14 +178,14 @@ const _SVG_G4_MUS_PHYS = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g4ge-maps-020', chapterId:'g4ge-map-skills', subsection:'directions', difficulty:1,
+  makeMCQ({ id:'g4ge-maps-020', chapterId:'g4ge-map-skills', subsection:'using_map', difficulty:1,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G4_MUS_PHYS}</div><b>Which river on the map flows towards the SOUTH-EAST coast?</b>`,
     options:['Black River (Rivière Noire)','Rivière du Rempart','Grand River South East','Grand River North West'],
     answer:'Grand River South East',
     hint:'Look at the river that flows from the central area toward the bottom-right of the map.',
     explanation:'The <b>Grand River South East</b> (Grande Rivière Sud-Est) flows from the central highlands toward the south-east coast. It is one of the most important rivers in Mauritius and flows into the sea near Mahebourg in the south-east.' }),
 
-  makeMCQ({ id:'g4ge-maps-021', chapterId:'g4ge-map-skills', subsection:'directions', difficulty:1,
+  makeMCQ({ id:'g4ge-maps-021', chapterId:'g4ge-map-skills', subsection:'using_map', difficulty:1,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G4_MUS_PHYS}</div><b>Which river on the map flows towards Port Louis in the NORTH-WEST?</b>`,
     options:['Black River (Rivière Noire)','Rivière du Rempart','Grand River South East','Grand River North West'],
     answer:'Grand River North West',

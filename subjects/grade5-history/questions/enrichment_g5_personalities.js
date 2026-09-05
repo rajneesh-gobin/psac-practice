@@ -4,14 +4,14 @@
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5enr-per-001', chapterId:'g5enr-personalities', subsection:'independence', difficulty:1,
+  makeMCQ({ id:'g5enr-per-001', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:1,
     question:'Which Dutch admiral led the first settlement of Mauritius in 1638?',
     options:['Wybrandt Van Warwyck','Diogo Fernandes Pereira','Robert Farquhar','Pierre Poivre'],
     answer:'Wybrandt Van Warwyck',
     hint:'He arrived with the Dutch East India Company and named the island after a Dutch prince.',
     explanation:'<b>Wybrandt Van Warwyck</b> led the Dutch expedition that established the first settlement in Mauritius in 1638 and named the island after Prince Moritz of Nassau.' }),
 
-  makeMCQ({ id:'g5enr-per-002', chapterId:'g5enr-personalities', subsection:'independence', difficulty:1,
+  makeMCQ({ id:'g5enr-per-002', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:1,
     question:'Which Dutch prince gave his name to the island of Mauritius?',
     options:['Moritz of Nassau','William of Orange','Louis of Nassau','Frederick Henry of Nassau'],
     answer:'Moritz of Nassau',
@@ -32,7 +32,7 @@ STATIC_QUESTIONS.push(
     hint:'His surname means "pepper" in French - fitting for a man who loved spices.',
     explanation:'<b>Pierre Poivre</b> smuggled precious spice plants - nutmeg, cloves, cinnamon and pepper - from the Dutch East Indies and cultivated them in Mauritius, partly at Pamplemousses Botanical Garden.' }),
 
-  makeMCQ({ id:'g5enr-per-005', chapterId:'g5enr-personalities', subsection:'independence', difficulty:1,
+  makeMCQ({ id:'g5enr-per-005', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:1,
     question:'Which nationality were the FIRST Europeans to officially record the existence of Mauritius?',
     options:['Portuguese','Dutch','French','British'],
     answer:'Portuguese',
@@ -53,21 +53,21 @@ STATIC_QUESTIONS.push(
     hint:'He governed until the British captured the island in 1810.',
     explanation:'<b>Charles Decaen</b> was the last French governor of Mauritius (Isle de France), holding the island until the British conquest in December <b>1810</b>.' }),
 
-  makeMCQ({ id:'g5enr-per-008', chapterId:'g5enr-personalities', subsection:'independence', difficulty:2,
+  makeMCQ({ id:'g5enr-per-008', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:2,
     question:'In which year did Van Warwyck\'s Dutch expedition first settle Mauritius?',
     options:['1638','1715','1810','1505'],
     answer:'1638',
     hint:'This was more than 150 years before the French took control of the island.',
     explanation:'<b>Van Warwyck</b> arrived in <b>1638</b>, establishing the Dutch colony. The Dutch later abandoned the island, and France took control in 1715.' }),
 
-  makeMCQ({ id:'g5enr-per-009', chapterId:'g5enr-personalities', subsection:'independence', difficulty:2,
+  makeMCQ({ id:'g5enr-per-009', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:2,
     question:'The Battle of Grand Port (1810) is famous because it was the only Napoleonic naval battle engraved on which monument?',
     options:['The Arc de Triomphe in Paris','The Eiffel Tower in Paris','Napoleon\'s tomb at Les Invalides','The Palace of Versailles'],
     answer:'The Arc de Triomphe in Paris',
     hint:'This Parisian monument lists the names of Napoleon\'s great victories.',
     explanation:'The <b>Battle of Grand Port</b> (August 1810) - a French naval victory over the British - is the only Napoleonic naval battle engraved on the <b>Arc de Triomphe</b> in Paris.' }),
 
-  makeMCQ({ id:'g5enr-per-010', chapterId:'g5enr-personalities', subsection:'independence', difficulty:2,
+  makeMCQ({ id:'g5enr-per-010', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:2,
     question:'Pierre Poivre held the title of Intendant of Isle de France. What does an Intendant do?',
     options:[
       'Acts as a senior civil administrator responsible for finance, trade and agriculture',
@@ -86,7 +86,7 @@ STATIC_QUESTIONS.push(
     hint:'He governed for about 11 years during the 18th century.',
     explanation:'<b>Mahé de Labourdonnais</b> governed Isle de France from <b>1735 to 1746</b>, a period during which he transformed the island\'s infrastructure and economy.' }),
 
-  makeMCQ({ id:'g5enr-per-012', chapterId:'g5enr-personalities', subsection:'independence', difficulty:3,
+  makeMCQ({ id:'g5enr-per-012', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:3,
     question:'What is Diogo Fernandes Pereira\'s main historical significance in relation to Mauritius?',
     options:[
       'He was among the first Europeans to sight and map Mauritius',
@@ -105,14 +105,14 @@ STATIC_QUESTIONS.push(
     hint:'This crop had already been grown under French rule and became even more important under the British.',
     explanation:'<b>Sir Robert Farquhar</b> promoted and expanded the <b>sugar industry</b> in Mauritius, encouraging the growth of plantations that made sugar the backbone of the island\'s economy under British rule.' }),
 
-  makeMCQ({ id:'g5enr-per-014', chapterId:'g5enr-personalities', subsection:'independence', difficulty:3,
+  makeMCQ({ id:'g5enr-per-014', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:3,
     question:'Van Warwyck named the island Mauritius after Prince Moritz of Nassau. Which country did Moritz of Nassau represent?',
     options:['The Netherlands','France','Germany','Spain'],
     answer:'The Netherlands',
     hint:'The Dutch East India Company sent Van Warwyck on his voyage.',
     explanation:'Prince <b>Moritz of Nassau</b> was the ruler of the <b>Netherlands</b> (the Dutch Republic), which is why Dutch admiral Van Warwyck named the island Mauritius in his honour.' }),
 
-  makeMCQ({ id:'g5enr-per-015', chapterId:'g5enr-personalities', subsection:'independence', difficulty:3,
+  makeMCQ({ id:'g5enr-per-015', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:3,
     question:'What was Pierre Poivre\'s lasting achievement that visitors can still see in Mauritius today?',
     options:[
       'He developed Pamplemousses Botanical Garden and introduced spices from the East Indies',
@@ -124,7 +124,7 @@ STATIC_QUESTIONS.push(
     hint:'The garden he helped develop is one of the oldest botanical gardens in the southern hemisphere.',
     explanation:'<b>Pierre Poivre</b> introduced spice plants from the East Indies and helped develop the <b>Pamplemousses Botanical Garden</b>, which still exists today as one of the southern hemisphere\'s oldest botanical gardens.' }),
 
-  makeMCQ({ id:'g5enr-per-016', chapterId:'g5enr-personalities', subsection:'independence', difficulty:4,
+  makeMCQ({ id:'g5enr-per-016', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:4,
     question:'At the Battle of Grand Port in August 1810, which side won the naval battle?',
     options:[
       'The French defeated the British fleet',
@@ -143,7 +143,7 @@ STATIC_QUESTIONS.push(
     hint:'The Battle of Grand Port was in August; the island fell just months later.',
     explanation:'Despite the French naval victory at Grand Port in August 1810, Britain launched a land invasion and captured Mauritius in <b>December 1810</b>, ending French rule of the island.' }),
 
-  makeMCQ({ id:'g5enr-per-018', chapterId:'g5enr-personalities', subsection:'independence', difficulty:4,
+  makeMCQ({ id:'g5enr-per-018', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:4,
     question:'Why did the Portuguese NOT establish a permanent settlement in Mauritius after discovering it?',
     options:[
       'The island had no natural harbour suitable for a permanent base and they had better-placed bases elsewhere',

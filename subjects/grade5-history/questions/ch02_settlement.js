@@ -5,7 +5,7 @@
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5hg-sett-001', chapterId:'settlement', subsection:'french', difficulty:1,
+  makeMCQ({ id:'g5hg-sett-001', chapterId:'settlement', subsection:'dutch', difficulty:1,
     question:'Which European nation was the FIRST to settle permanently in Mauritius?',
     options:['The Portuguese','The French','The British','The Dutch'],
     answer:'The Dutch',
@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
     hint:'This sheltered harbour is on the south-east coast of the island.',
     explanation:'The Dutch settled at <b>Vieux Grand Port</b> (Old Great Harbour) on the south-east coast of Mauritius in 1638. It offered a sheltered natural harbour suitable for their ships.' }),
 
-  makeMCQ({ id:'g5hg-sett-009', chapterId:'settlement', subsection:'french', difficulty:1,
+  makeMCQ({ id:'g5hg-sett-009', chapterId:'settlement', subsection:'dutch', difficulty:1,
     question:'What was Fort Frederick Hendrik?',
     options:[
       'A lighthouse built by the Portuguese',

@@ -31,7 +31,7 @@ STATIC_QUESTIONS.push(
     hint:'Erosion means wearing away - something is being removed.',
     explanation:'<b>Beach erosion</b> is the gradual removal of sand and rock from a beach by wave action, currents and wind. Over time, this can cause beaches to shrink and disappear.' }),
 
-  makeMCQ({ id:'g5hg-ep-002', chapterId:'env-problems', subsection:'pollution', difficulty:2,
+  makeMCQ({ id:'g5hg-ep-002', chapterId:'env-problems', subsection:'beach_erosion', difficulty:2,
     question:`${_SVG_EROSION}Looking at the diagram, what is causing the beach sand to be removed?`,
     options:[
       'Heavy rainfall from above',
@@ -137,7 +137,7 @@ STATIC_QUESTIONS.push(
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5hg-ep-011', chapterId:'env-problems', subsection:'pollution', difficulty:1,
+  makeMCQ({ id:'g5hg-ep-011', chapterId:'env-problems', subsection:'beach_erosion', difficulty:1,
     question:'What is a CYCLONE?',
     options:[
       'A very cold snowstorm that occurs in winter',

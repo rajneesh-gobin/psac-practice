@@ -56,7 +56,7 @@ STATIC_QUESTIONS.push(
     hint:'The prefix "en-" can mean "within" - within one specific place.',
     explanation:'<b>Endemic</b> means <b>found naturally only in one specific place</b> and nowhere else on Earth. Mauritius has many endemic species - animals and plants that evolved on the island over millions of years and are unique to Mauritius. Examples: the <b>Dodo, Echo Parakeet, Pink Pigeon</b> (birds), the <b>Ebony tree</b> and <b>Trochetia</b> (plants). Protecting endemic species is crucial because if they disappear from Mauritius, they are gone forever.' }),
 
-  makeMCQ({ id:'g4h-voy-007', chapterId:'g4hist-voyages', subsection:'reasons', difficulty:2,
+  makeMCQ({ id:'g4h-voy-007', chapterId:'g4hist-voyages', subsection:'traders', difficulty:2,
     question:'The DODO was a large flightless bird that was endemic to Mauritius. Why did the Dodo become EXTINCT?',
     options:[
       'It flew away to another island',
