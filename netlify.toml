@@ -33,6 +33,8 @@
 [functions."assignment-submit"]
   included_files = ["subjects/**"]
 
+[functions."classroom-materials"]
+
 # ── Security headers ──────────────────────────────────────────────────────────
 [[headers]]
   for = "/*"
@@ -66,6 +68,9 @@
 
 [functions."assignment-cleanup"]
   schedule = "17 2 * * *"
+
+[functions."classroom-purge"]
+  schedule = "@daily"
 
 
 # ── Block source docs and SQL from the public site ────────────────────────
@@ -140,6 +145,18 @@
 
 [[redirects]]
   from   = "/PROJECT_OVERVIEW.md"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-classroom-delete.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-classroom-pins.sql"
   to     = "/"
   status = 404
   force  = true
@@ -221,6 +238,18 @@
 
 [[redirects]]
   from   = "/supabase-questions-table.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-parent-reports.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-forum-author-fix.sql"
   to     = "/"
   status = 404
   force  = true
@@ -342,4 +371,9 @@
 [[redirects]]
   from   = "/api/assignment-submit"
   to     = "/.netlify/functions/assignment-submit"
+  status = 200
+
+[[redirects]]
+  from   = "/api/classroom-materials"
+  to     = "/.netlify/functions/classroom-materials"
   status = 200

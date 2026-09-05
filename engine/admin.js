@@ -2032,6 +2032,46 @@ const AdminPanel = (() => {
     else toast('Could not update — try again.', 2500);
   }
 
+  async function setReportStatus(id, status) {
+    const ok = await Store.setReportStatus(id, status);
+    if (ok) { toast(`Status set to "${status}".`, 1800); loadReports(); }
+    else toast('Could not update — try again.', 2500);
+  }
+
+  async function sendAdminReply(id) {
+    const inp = document.getElementById(`report-reply-${id}`);
+    const msg = (inp?.value || '').trim();
+    if (!msg) { toast('Please type a reply first.', 2000); return; }
+    const btn = document.getElementById(`report-reply-btn-${id}`);
+    if (btn) btn.textContent = 'Sending…';
+    const res = await Store.replyToReport(id, msg);
+    if (res.ok) {
+      toast('Reply sent to student. ✅', 2000);
+      loadReports();
+    } else {
+      if (btn) btn.textContent = 'Send';
+      toast('Could not send reply — try again.', 2500);
+    }
+  }
+
+  async function loadReportThread(id) {
+    const container = document.getElementById(`report-thread-${id}`);
+    if (!container) return;
+    container.innerHTML = '<p class="text-xs text-gray-400 animate-pulse py-2">Loading thread…</p>';
+    const msgs = await Store.loadReportMessages(id);
+    if (!msgs.length) {
+      container.innerHTML = '<p class="text-xs text-gray-400 py-1">No follow-up messages yet.</p>';
+      return;
+    }
+    container.innerHTML = msgs.map(m => `
+      <div class="flex ${m.author_type === 'admin' ? 'justify-end' : 'justify-start'} mb-1">
+        <div class="max-w-[85%] px-3 py-2 rounded-2xl text-sm ${m.author_type === 'admin' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-tl-none'}">
+          <p>${_esc(m.message)}</p>
+          <p class="text-xs opacity-60 mt-0.5">${m.author_type === 'admin' ? 'You (admin)' : 'Student'} · ${new Date(m.created_at).toLocaleString()}</p>
+        </div>
+      </div>`).join('');
+  }
+
   const REPORTS_PAGE = 30;
   let _reportsOffset  = 0;
   let _reportsAll     = [];
@@ -2070,8 +2110,17 @@ const AdminPanel = (() => {
     }
     if (el) el.innerHTML = _reportsAll.map(r => {
       const { text: qText, meta } = _parseReportMeta(r.question_text);
-      const isOpen   = (r.status || 'open') === 'open';
-      const statusCls = isOpen ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700';
+      const status   = r.status || 'open';
+      const isOpen   = status === 'open' || status === 'in_review';
+      const statusCls = status === 'resolved' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+        : status === 'in_review'  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+        : status === 'wont_fix'   ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'
+        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400';
+      const borderCls = status === 'resolved' ? 'border-green-400'
+        : status === 'in_review' ? 'border-blue-400'
+        : status === 'wont_fix'  ? 'border-gray-300'
+        : 'border-amber-400';
+      const reportTypeLabel = { wrong_answer:'❌ Wrong answer', unclear:'❓ Unclear', typo:'✏️ Typo', wrong_options:'🔄 Options', other:'💬 Other' }[r.report_type || ''] || '';
 
       // Look up full question object from loaded question bank
       const fullQ = (typeof STATIC_QUESTIONS !== 'undefined')
@@ -2083,21 +2132,24 @@ const AdminPanel = (() => {
 
       // Look up chapter & subject by searching all registered packs
       let chapter = null, subjectPack = null;
-      if (fullQ?.chapterId && typeof SUBJECT_PACKS !== 'undefined') {
+      const chapterIdLookup = r.chapter_id || fullQ?.chapterId;
+      if (chapterIdLookup && typeof SUBJECT_PACKS !== 'undefined') {
         for (const p of SUBJECT_PACKS) {
           const chs = p._chapters || p.chapters || [];
-          const found = chs.find(c => c.id === fullQ.chapterId);
+          const found = chs.find(c => c.id === chapterIdLookup);
           if (found) { chapter = found; subjectPack = p; break; }
         }
       }
-      const chapterName = chapter?.name || fullQ?.chapterId || '';
+      const chapterName = chapter?.name || chapterIdLookup || '';
       const subjectLabel = subjectPack
         ? `${subjectPack.name} — Grade ${subjectPack.grade}`
         : (r.question_id || '').slice(0, 6);
 
       // Student name: from joined row, or from meta for older reports
       const studentName = r.students?.display_name || meta.studentName || null;
+      const studentGrade = r.students?.grade ? ` (Grade ${r.students.grade})` : '';
       const mode        = meta.mode || null;
+      const safeId      = r.id.replace(/[^a-zA-Z0-9-]/g, '');
 
       // Options rows with correct answer highlighted
       const optionLetters = ['A','B','C','D','E'];
@@ -2111,14 +2163,15 @@ const AdminPanel = (() => {
       }).join('') : '';
 
       return `
-      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3 border-l-4 ${isOpen ? 'border-amber-400' : 'border-green-400'}">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3 border-l-4 ${borderCls}">
         <!-- Header row -->
         <div class="flex justify-between items-start gap-2 mb-3">
-          <div>
+          <div class="flex flex-wrap gap-1.5 items-center">
             <span class="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">${_esc(r.question_id || '-')}</span>
-            ${mode ? `<span class="ml-1 text-xs text-gray-500 dark:text-gray-400">(${_esc(mode)} mode)</span>` : ''}
+            ${mode ? `<span class="text-xs text-gray-500 dark:text-gray-400">(${_esc(mode)})</span>` : ''}
+            ${reportTypeLabel ? `<span class="text-xs text-gray-600 dark:text-gray-300">${_esc(reportTypeLabel)}</span>` : ''}
           </div>
-          <span class="text-xs ${statusCls} px-2 py-0.5 rounded-full shrink-0">${_esc(r.status || 'open')}</span>
+          <span class="text-xs ${statusCls} px-2 py-0.5 rounded-full shrink-0 font-medium">${_esc(status)}</span>
         </div>
 
         <!-- Subject / chapter / difficulty -->
@@ -2144,13 +2197,32 @@ const AdminPanel = (() => {
           <p class="text-sm text-gray-800 dark:text-white">${_esc(r.message || '-')}</p>
         </div>
 
+        <!-- Thread (follow-up messages) -->
+        <div id="report-thread-${safeId}" class="mb-3"></div>
+        <button onclick="AdminPanel.loadReportThread('${safeId}')" class="text-xs text-indigo-500 dark:text-indigo-400 underline mb-3">Load message thread</button>
+
+        <!-- Admin reply form -->
+        ${isOpen ? `<div class="mb-3">
+          <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Reply to student</p>
+          <div class="flex gap-2">
+            <textarea id="report-reply-${safeId}" rows="2" maxlength="1000" placeholder="Type a reply — the student will see this in their inbox…"
+              class="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"></textarea>
+            <button id="report-reply-btn-${safeId}" onclick="AdminPanel.sendAdminReply('${safeId}')"
+              class="shrink-0 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-colors self-end">Send</button>
+          </div>
+        </div>` : ''}
+
         <!-- Footer -->
         <div class="flex justify-between items-center flex-wrap gap-2">
           <div>
-            ${studentName ? `<p class="text-xs text-gray-500 dark:text-gray-400">Reported by: <span class="font-medium">${_esc(studentName)}</span></p>` : ''}
+            ${studentName ? `<p class="text-xs text-gray-500 dark:text-gray-400">Reported by: <span class="font-medium">${_esc(studentName)}${_esc(studentGrade)}</span></p>` : ''}
             <p class="text-xs text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleString()}</p>
           </div>
-          ${isOpen ? `<button onclick="AdminPanel.resolveReport('${_esc(r.id)}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">Mark resolved</button>` : ''}
+          <div class="flex flex-wrap gap-1.5">
+            ${isOpen ? `<button onclick="AdminPanel.resolveReport('${safeId}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">✅ Resolved</button>` : ''}
+            ${status !== 'wont_fix' ? `<button onclick="AdminPanel.setReportStatus('${safeId}','wont_fix')" class="text-xs bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg transition-colors">⚪ Won't fix</button>` : ''}
+            ${status !== 'open' ? `<button onclick="AdminPanel.setReportStatus('${safeId}','open')" class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded-lg transition-colors">🔁 Reopen</button>` : ''}
+          </div>
         </div>
       </div>`;
     }).join('');
@@ -3100,7 +3172,7 @@ const AdminPanel = (() => {
     loadGuestLimits, saveGuestLimits, previewGuestLimits,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
-    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, resolveReport, loadRoles, loadMoreRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, resolveReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier,
     qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
     qmSubjectFilter: QM.qmSubjectFilter, qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,

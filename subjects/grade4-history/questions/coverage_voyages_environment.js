@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 (function () {
   const add = (id, chapterId, subsection, question, options, answer, hint, explanation) => STATIC_QUESTIONS.push(makeMCQ({ id, chapterId, subsection, difficulty: 2, question, options, answer, hint, explanation }));
   const rows = (prefix, chapterId, subsection, data, options, hint) => data.forEach(([question, answer], i) => add(`g4hg-cov-${prefix}-${i}`, chapterId, subsection, question, options, answer, hint, `<b>${answer}</b> is correct.`));
@@ -22,7 +22,7 @@
     ['Stars could help sailors at night to…', 'find direction'], ['A harbour is a place where ships can…', 'shelter safely'],
     ['What should sailors take on a long trip?', 'fresh water and food'], ['A map used at sea is called a…', 'chart'],
     ['Why did sailors watch the weather?', 'storms could be dangerous'], ['A crew is…', 'the people who work on a ship'],
-    ['What can a compass show?', 'directions'], ['A ship’s anchor helps it…', 'stay in one place'],
+    ['What can a compass show?', 'directions'], ['A ship\'s anchor helps it…', 'stay in one place'],
     ['Why did sailors repair sails?', 'damaged sails cannot catch wind well'], ['Which is safest in rough weather?', 'listen to the captain and secure the ship']
   ], ['a compass', 'wind', 'catch the wind', 'leads a ship', 'to travel safely on water', 'finding the way when travelling', 'find direction', 'shelter safely', 'fresh water and food', 'chart', 'storms could be dangerous', 'the people who work on a ship', 'directions', 'stay in one place', 'damaged sails cannot catch wind well', 'listen to the captain and secure the ship'], 'Think about what a ship and its crew need at sea.');
 

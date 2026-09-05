@@ -273,7 +273,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Je finirai mon travail avant ton retour (action future antérieure à une autre action future).',
     hint:'Futur antérieur = action future qui sera terminée AVANT une autre action future.',
-    explanation:'Le <b>futur antérieur</b> ("j\'<b>aurai terminé</b>") exprime une action future qui sera <b>achevée avant</b> une autre action future. Ici : (1) je termine mon travail → futur antérieur ; (2) tu rentres → futur simple. Formation : <b>futur d’avoir/être + participe passé</b>.' }),
+    explanation:'Le <b>futur antérieur</b> ("j\'<b>aurai terminé</b>") exprime une action future qui sera <b>achevée avant</b> une autre action future. Ici : (1) je termine mon travail → futur antérieur ; (2) tu rentres → futur simple. Formation : <b>futur d\'avoir/être + participe passé</b>.' }),
 
   makeMCQ({ id:'g6fr-fut-035', chapterId:'g6fr-futur', subsection:'irreguliers', difficulty:4,
     question:'Priya planifie ses vacances : "Si les billets ___ (coûter) moins cher, nous ___ (prendre) l\'avion ; sinon, nous ___ (voyager) en bateau et nous ___ (voir) les dauphins !" Bonne série ?',

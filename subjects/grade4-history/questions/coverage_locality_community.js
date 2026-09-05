@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 (function () {
   const add = (id, chapterId, subsection, question, options, answer, hint, explanation) =>
     STATIC_QUESTIONS.push(makeMCQ({ id, chapterId, subsection, difficulty: 2, question, options, answer, hint, explanation }));
@@ -56,7 +56,7 @@
 
   rows('food', 'g4hist-community', 'food_dress', [
     ['Different families may eat different traditional foods because of…', 'their culture and traditions'], ['A respectful response to unfamiliar food is to…', 'ask politely about it'],
-    ['Clothing worn at a celebration can show…', 'a cultural tradition'], ['Why should we never make fun of someone’s clothes?', 'everyone deserves respect'],
+    ['Clothing worn at a celebration can show…', 'a cultural tradition'], ['Why should we never make fun of someone\'s clothes?', 'everyone deserves respect'],
     ['Food from different communities lets us…', 'discover new tastes and traditions'], ['Traditional dress may be worn especially for…', 'a special occasion'],
     ['What is a good way to describe food you have not tried?', 'It is new to me.'], ['Families may prepare special dishes for…', 'festivals'],
     ['What can food tell us about a family?', 'some of their traditions'], ['It is good to share meals with others because it can…', 'bring people together'],
@@ -68,10 +68,10 @@
   rows('lang', 'g4hist-community', 'languages', [
     ['Mauritian Creole is spoken by many people in…', 'Mauritius'], ['English is used officially in many Mauritian schools and offices.', 'True'],
     ['French is one of the languages many Mauritians use.', 'True'], ['Which action helps a friend who is learning a language?', 'speak kindly and clearly'],
-    ['Knowing more than one language can help us…', 'communicate with more people'], ['Should we laugh at someone’s accent?', 'No'],
+    ['Knowing more than one language can help us…', 'communicate with more people'], ['Should we laugh at someone\'s accent?', 'No'],
     ['Language diversity means people may speak…', 'different languages'], ['A respectful way to ask about a language is…', 'How do you say this in your language?'],
     ['Why can families use different languages at home?', 'they have different backgrounds'], ['What can you do if you do not understand a word?', 'ask politely for an explanation'],
-    ['A language can be part of a person’s…', 'identity'], ['Learning greetings in another language shows…', 'respect'],
+    ['A language can be part of a person\'s…', 'identity'], ['Learning greetings in another language shows…', 'respect'],
     ['Which is a good classroom rule?', 'Let everyone speak without being teased.'], ['Can one person speak several languages?', 'Yes'],
     ['Languages help people share…', 'ideas and stories'], ['Why do we value language diversity?', 'it helps us understand one another'],
     ['A translation tells us…', 'the meaning in another language'], ['When a classmate speaks differently, you should…', 'listen respectfully']
@@ -79,11 +79,11 @@
 
   rows('diversity', 'g4hist-community', 'diversity', [
     ['Diversity means that people can have…', 'different cultures and traditions'], ['A diverse classroom can include children who…', 'celebrate different festivals'],
-    ['What helps a community live happily together?', 'respecting differences'], ['If a friend’s tradition is new to you, you can…', 'ask kind questions'],
+    ['What helps a community live happily together?', 'respecting differences'], ['If a friend\'s tradition is new to you, you can…', 'ask kind questions'],
     ['Why is Mauritius described as diverse?', 'people have many cultural backgrounds'], ['Which word means treating everyone fairly?', 'respect'],
     ['Sharing stories about families can help classmates…', 'understand each other'], ['What should you do when someone is left out?', 'invite them to join'],
     ['Different traditions are something to…', 'appreciate'], ['Diversity can make a country…', 'richer in ideas and customs'],
-    ['What is an inclusive action?', 'making space for everyone'], ['A person’s culture may include their…', 'language, food and celebrations'],
-    ['Why should we listen to others’ experiences?', 'to learn and show respect']
+    ['What is an inclusive action?', 'making space for everyone'], ['A person\'s culture may include their…', 'language, food and celebrations'],
+    ['Why should we listen to others' experiences?', 'to learn and show respect']
   ], ['different cultures and traditions', 'celebrate different festivals', 'respecting differences', 'ask kind questions', 'people have many cultural backgrounds', 'respect', 'understand each other', 'invite them to join', 'appreciate', 'richer in ideas and customs', 'making space for everyone', 'language, food and celebrations', 'to learn and show respect'], 'Look for the answer that includes and respects everyone.', a => `<b>${a}</b> is correct.`);
 })();

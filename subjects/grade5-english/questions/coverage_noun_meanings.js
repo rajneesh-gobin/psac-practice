@@ -12,7 +12,7 @@
     ['The shepherd guided a ___ of sheep into the field.','flock',['crew','bouquet','library'],'Which group word suits sheep?','Flock names a group of sheep, as well as certain birds.'],
     ['The farmer moved a ___ of cattle away from the broken fence.','herd',['choir','fleet','pack'],'Think of large grazing animals together.','A herd is a group of cattle or other large grazing animals.'],
     ['Our school sent a ___ of players to the football tournament.','team',['litter','swarm','bouquet'],'These people play a sport together.','Team names players who work together in a sport.'],
-    ['The captain thanked the ship’s ___ for their work during the storm.','crew',['flock','bouquet','herd'],'Which word names people working on a ship?','The crew consists of the people who operate and work on a ship.'],
+    ['The captain thanked the ship\'s ___ for their work during the storm.','crew',['flock','bouquet','herd'],'Which word names people working on a ship?','The crew consists of the people who operate and work on a ship.'],
     ['A ___ of puppies slept beside their mother.','litter',['fleet','class','choir'],'These young animals were born to the same mother at one time.','Litter names young animals born to the same mother together.'],
     ['Grandmother placed a ___ of grapes in the fruit bowl.','bunch',['crew','team','flock'],'The grapes are attached together on stems.','A bunch is a group of things growing or fastened together, such as grapes.'],
     ['The guide showed us a ___ of ants carrying food to their nest.','colony',['fleet','bouquet','choir'],'Think of insects living together in an organised group.','Colony is used for ants living and working together.'],

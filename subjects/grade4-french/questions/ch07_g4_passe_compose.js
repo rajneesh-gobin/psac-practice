@@ -55,7 +55,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4fr-passe-comp-008', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:2,
     question:'Complète la négation : "Je ___ pas mangé de pizza." (passé composé)',
     options:['n\'ai','ne ai','n\'a','n\'avons'],
-    answer:"n'ai",
+    answer:"n\'ai",
     hint:'Négation au passé composé : ne + auxiliaire + pas. Sujet = "je".',
     explanation:'"Je <b>n\'ai</b> pas mangé" - au passé composé, la négation encadre l\'<b>auxiliaire</b> : <b>ne</b> + auxiliaire + <b>pas</b>. Je n\'ai pas mangé. Tu n\'as pas parlé. Il n\'a pas joué.' }),
 
@@ -108,8 +108,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4fr-passe-comp-016', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:3,
     question:'Complète la phrase négative : "Ils ___ ___ regardé le match."',
-    options:["n'ont pas","ne ont pas","n'avons pas","n'ont point"],
-    answer:"n'ont pas",
+    options:["n\'ont pas","ne ont pas","n\'avons pas","n\'ont point"],
+    answer:"n\'ont pas",
     hint:'Négation : ne + auxiliaire (ils → ont) + pas.',
     explanation:'"Ils <b>n\'ont pas</b> regardé le match." - la négation encadre l\'auxiliaire : <b>n\'</b> + ont + <b>pas</b>. Rappel : "ne" devient "n\'" devant une voyelle.' }),
 

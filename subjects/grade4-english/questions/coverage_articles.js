@@ -9,9 +9,9 @@
   const qs = [];
   words.forEach(([word, article], i) => {
     const sentence = word === 'hour' ? 'The journey takes ___ hour.' : `I can see ___ ${word} ${places[i]}.`;
-    qs.push({ question:`Choose the indefinite article (a or an): “${sentence}”`, answer:article,
-      hint:`Listen to the first sound in “${word}”.`, explanation:`We say <b>${article} ${word}</b>. Use <b>an</b> before a vowel sound and <b>a</b> before a consonant sound.` });
-    qs.push({ question:`Which phrase uses the correct indefinite article before “${word}”?`, answer:`${article} ${word}`,
+    qs.push({ question:`Choose the indefinite article (a or an): "${sentence}"`, answer:article,
+      hint:`Listen to the first sound in "${word}".`, explanation:`We say <b>${article} ${word}</b>. Use <b>an</b> before a vowel sound and <b>a</b> before a consonant sound.` });
+    qs.push({ question:`Which phrase uses the correct indefinite article before "${word}"?`, answer:`${article} ${word}`,
       options:[`${article} ${word}`, article === 'a' ? `an ${word}` : `a ${word}`, `the ${word} always`, `some ${word}`],
       hint:'Say both articles aloud before the word.', explanation:`The correct phrase is <b>${article} ${word}</b>. The choice depends on the sound at the beginning of the word, not only the first letter.` });
   });

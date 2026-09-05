@@ -186,7 +186,7 @@ STATIC_QUESTIONS.push(
     explanation:'Covering S leaves D above T, which means <b>Distance ÷ Time</b>. The same triangle also gives: Distance = Speed × Time (cover D), and Time = Distance ÷ Speed (cover T).' }),
 
   makeNum({ id:'g6m-ts-021', chapterId:'g6-time-speed', subsection:'speed', difficulty:2,
-    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_JOURNEY}</div>A car travels from Town A to Town B, as shown in the diagram. Using the distance and time marked, calculate the car's AVERAGE SPEED in km/h.`,
+    question:`<div style="text-align:center;margin-bottom:8px">${_G6M_SVG_JOURNEY}</div>A car travels from Town A to Town B, as shown in the diagram. Using the distance and time marked, calculate the car\'s AVERAGE SPEED in km/h.`,
     answer:'60', acceptableAnswers:['60','60 km/h'],
     hint:'Speed = Distance ÷ Time.',
     explanation:'Speed = Distance ÷ Time = 180 ÷ 3 = <b>60 km/h</b>.' }),

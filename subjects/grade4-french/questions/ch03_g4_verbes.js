@@ -60,7 +60,7 @@ STATIC_QUESTIONS.push(
       'Je suis onze ans.',
       'Il a suis dix ans.'
     ],
-    answer:"J'ai onze ans.",
+    answer:"J\'ai onze ans.",
     hint:'Pour dire son âge en français, on utilise "avoir" (to have), pas "être" (to be).',
     explanation:'"<b>J\'ai onze ans.</b>" = I am eleven years old (literally: I have eleven years). En français, on utilise <b>avoir</b> pour l\'âge - pas être. "J\'ai onze ans", "Tu as dix ans", "Il a douze ans". Erreur classique : "Je suis onze ans" ✗.' }),
 
@@ -250,11 +250,11 @@ STATIC_QUESTIONS.push(
     question:'Quelle phrase utilise un verbe réfléchi correctement ?',
     options:[
       'Elles se appellent Marie et Sophie.',
-      "Elles s'appellent Marie et Sophie.",
+      "Elles s\'appellent Marie et Sophie.",
       'Elles appellent se Marie et Sophie.',
       'Elles me appellent Marie et Sophie.'
     ],
-    answer:"Elles s'appellent Marie et Sophie.",
+    answer:"Elles s\'appellent Marie et Sophie.",
     hint:'"S\'appeler" → le pronom "se" s\'élide devant une voyelle.',
     explanation:'"Elles <b>s\'appellent</b> Marie et Sophie." - Le pronom réfléchi <b>se</b> devient <b>s\'</b> devant une voyelle (s\'appeler, s\'habiller, s\'arrêter). On ne peut pas dire "se appellent" (élision obligatoire). Structure : elles + s\' + appellent.' }),
 

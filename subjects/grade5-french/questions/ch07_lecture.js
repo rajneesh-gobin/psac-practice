@@ -5,9 +5,9 @@
 const _TEXTE_FR = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a">
 <b style="color:#5b21b6">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
 <b>Une journée à Maurice</b><br><br>
-Demain, c'est samedi. La famille Dupont va passer la journée à la mer. Le père, Monsieur Dupont, prépare le pique-nique dans la cuisine. Il fait des sandwichs au fromage et au jambon. La mère, Madame Dupont, met les serviettes et les maillots de bain dans un grand sac bleu.<br><br>
-Les deux enfants, Luc et Sophie, sont très contents. Luc a neuf ans et Sophie a sept ans. Luc veut faire du snorkeling parce qu'il adore les poissons. Sophie préfère construire des châteaux de sable avec ses amies.<br><br>
-Ils partent à huit heures du matin. La plage se trouve à vingt kilomètres de leur maison, à Flic en Flac. L'eau est chaude et cristalline. Toute la famille passe une magnifique journée ensemble.
+Demain, c\'est samedi. La famille Dupont va passer la journée à la mer. Le père, Monsieur Dupont, prépare le pique-nique dans la cuisine. Il fait des sandwichs au fromage et au jambon. La mère, Madame Dupont, met les serviettes et les maillots de bain dans un grand sac bleu.<br><br>
+Les deux enfants, Luc et Sophie, sont très contents. Luc a neuf ans et Sophie a sept ans. Luc veut faire du snorkeling parce qu\'il adore les poissons. Sophie préfère construire des châteaux de sable avec ses amies.<br><br>
+Ils partent à huit heures du matin. La plage se trouve à vingt kilomètres de leur maison, à Flic en Flac. L\'eau est chaude et cristalline. Toute la famille passe une magnifique journée ensemble.
 </div>`;
 
 STATIC_QUESTIONS.push(
@@ -20,7 +20,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Samedi</b>" - Le texte commence : "Demain, c\'est <b>samedi</b>. La famille Dupont va passer la journée à la mer."' }),
 
   makeMCQ({ id:'g5fr-lec-002', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
-    question:`${_TEXTE_FR}Qu'est-ce que Monsieur Dupont prépare ?`,
+    question:`${_TEXTE_FR}Qu\'est-ce que Monsieur Dupont prépare ?`,
     options:['une salade','un pique-nique','du jus d\'orange','des gâteaux'],
     answer:'un pique-nique',
     hint:'Le texte dit ce que le père prépare dans la cuisine.',
@@ -53,7 +53,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>À vingt kilomètres, à Flic en Flac</b>" - "La plage se trouve à <b>vingt kilomètres</b> de leur maison, <b>à Flic en Flac</b>." Flic en Flac est une plage célèbre de Maurice.' }),
 
   makeMCQ({ id:'g5fr-lec-006', chapterId:'fr-lecture', subsection:'reperage', difficulty:2,
-    question:`${_TEXTE_FR}Qu'est-ce que Madame Dupont met dans le sac ?`,
+    question:`${_TEXTE_FR}Qu\'est-ce que Madame Dupont met dans le sac ?`,
     options:[
       'Des sandwichs et de l\'eau.',
       'Des serviettes et des maillots de bain.',
@@ -71,7 +71,7 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Faux.</b> C\'est <b>Luc</b> qui veut faire du snorkeling. "<b>Sophie préfère construire des châteaux de sable</b> avec ses amies." Il ne faut pas confondre les deux enfants.' }),
 
   makeMCQ({ id:'g5fr-lec-008', chapterId:'fr-lecture', subsection:'reperage', difficulty:2,
-    question:`${_TEXTE_FR}Comment est l'eau à la plage ?`,
+    question:`${_TEXTE_FR}Comment est l\'eau à la plage ?`,
     options:['froide et sale','chaude et cristalline','profonde et dangereuse','bleue et agitée'],
     answer:'chaude et cristalline',
     hint:'La description de l\'eau est dans le dernier paragraphe.',
@@ -97,11 +97,11 @@ STATIC_QUESTIONS.push(
 const _TEXTE_FR_B = `<div style="background:#f8fafc;border-left:4px solid #f59e0b;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a">
 <b style="color:#92400e">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
 <b>Une sortie pas comme les autres</b><br><br>
-Très tôt le matin, alors que le soleil ne s'est même pas encore levé, deux amis, Sanjeev et Marcelin, vont faire une partie de pêche.<br><br>
-La mer est très calme, l'air doux et toutes les conditions sont réunies pour passer une belle journée.<br><br>
-Les deux gamins montent à bord de leur petite barque en bois et s'éloignent lentement du rivage. Tout semble parfait. Les poissons mordent rapidement à l'hameçon. En quelques heures, leur seau est presque rempli. Ravis, ils s'amusent et parlent même de revenir le lendemain.<br><br>
+Très tôt le matin, alors que le soleil ne s\'est même pas encore levé, deux amis, Sanjeev et Marcelin, vont faire une partie de pêche.<br><br>
+La mer est très calme, l\'air doux et toutes les conditions sont réunies pour passer une belle journée.<br><br>
+Les deux gamins montent à bord de leur petite barque en bois et s\'éloignent lentement du rivage. Tout semble parfait. Les poissons mordent rapidement à l\'hameçon. En quelques heures, leur seau est presque rempli. Ravis, ils s\'amusent et parlent même de revenir le lendemain.<br><br>
 Mais, soudain, le ciel devient sombre. De gros nuages gris apparaissent et un vent violent se lève. La mer, qui plus tôt était paisible, se transforme en vagues déchaînées. Leur barque finit par chavirer.<br><br>
-Sur la plage, quelques personnes assistent à la scène. Affolées, elles appellent immédiatement les secours. En quelques minutes, un hélicoptère de sauvetage arrive et survole la zone. Heureusement, Sanjeev et Marcelin sont secourus et ramenés sur la plage. Là, des gardes-côtes leur donnent les premiers soins, une boisson chaude et des couvertures car ils tremblent de froid. Leurs parents, inquiets, arrivent en courant et poussent un ouf de soulagement dès qu'ils réalisent que les enfants sont sains et saufs.
+Sur la plage, quelques personnes assistent à la scène. Affolées, elles appellent immédiatement les secours. En quelques minutes, un hélicoptère de sauvetage arrive et survole la zone. Heureusement, Sanjeev et Marcelin sont secourus et ramenés sur la plage. Là, des gardes-côtes leur donnent les premiers soins, une boisson chaude et des couvertures car ils tremblent de froid. Leurs parents, inquiets, arrivent en courant et poussent un ouf de soulagement dès qu\'ils réalisent que les enfants sont sains et saufs.
 </div>`;
 
 STATIC_QUESTIONS.push(
@@ -315,12 +315,12 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Passage C : La plage polluée ────────────────────────────────────────────
-const _TEXTE_FR_C = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La plage polluée</b><br><br>Un mardi matin, Nadia et Samuel se promenaient sur la plage de Belle Mare quand ils ont remarqué quelque chose d'inquiétant : des bouteilles en plastique, des sacs et des emballages jonchaient le sable blanc. La plage, qui ressemblait normalement à un paradis, avait l'air d'une décharge.<br><br>Profondément choqués, ils ont décidé de parler à leur professeur, M. Bérenger. Celui-ci a organisé une grande journée de nettoyage avec toute la classe. Armés de gants et de sacs poubelle, les élèves ont ramassé plus de cinquante kilos de déchets en une seule matinée.<br><br>Ce soir-là, M. Bérenger a expliqué que les plastiques rejetés en mer empoisonnent les poissons et les oiseaux marins. Il a demandé à chacun de vérifier la plage tous les mois.<br><br>Depuis, Nadia et Samuel n'ont plus jamais jeté un seul déchet sur la plage.</div>`;
+const _TEXTE_FR_C = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La plage polluée</b><br><br>Un mardi matin, Nadia et Samuel se promenaient sur la plage de Belle Mare quand ils ont remarqué quelque chose d\'inquiétant : des bouteilles en plastique, des sacs et des emballages jonchaient le sable blanc. La plage, qui ressemblait normalement à un paradis, avait l\'air d\'une décharge.<br><br>Profondément choqués, ils ont décidé de parler à leur professeur, M. Bérenger. Celui-ci a organisé une grande journée de nettoyage avec toute la classe. Armés de gants et de sacs poubelle, les élèves ont ramassé plus de cinquante kilos de déchets en une seule matinée.<br><br>Ce soir-là, M. Bérenger a expliqué que les plastiques rejetés en mer empoisonnent les poissons et les oiseaux marins. Il a demandé à chacun de vérifier la plage tous les mois.<br><br>Depuis, Nadia et Samuel n\'ont plus jamais jeté un seul déchet sur la plage.</div>`;
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-lec-036', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
-    question:`${_TEXTE_FR_C}Où se trouvaient Nadia et Samuel au début de l'histoire ?`,
+    question:`${_TEXTE_FR_C}Où se trouvaient Nadia et Samuel au début de l\'histoire ?`,
     options:['À Port Louis','À la plage de Belle Mare','Dans leur salle de classe','Dans un parc national'],
     answer:'À la plage de Belle Mare',
     hint:'Lisez la première phrase du texte.',
@@ -360,7 +360,7 @@ STATIC_QUESTIONS.push(
     explanation:'M. Bérenger a expliqué les dangers du plastique, puis "<b>demandé à chacun de vérifier la plage tous les mois</b>". Une surveillance régulière permet d\'agir tôt si des déchets réapparaissent, évitant ainsi une nouvelle accumulation.' }),
 
   makeMCQ({ id:'g5fr-lec-041', chapterId:'fr-lecture', subsection:'figures_style', difficulty:3,
-    question:`${_TEXTE_FR_C}"La plage, qui ressemblait normalement à un paradis, avait l'air d'une décharge." Quel est l'effet de ce contraste sur le lecteur ?`,
+    question:`${_TEXTE_FR_C}"La plage, qui ressemblait normalement à un paradis, avait l\'air d\'une décharge." Quel est l\'effet de ce contraste sur le lecteur ?`,
     options:[
       'Il montre que les plages mauriciennes sont toujours propres',
       'Il souligne le choc causé par la pollution en opposant l\'idéal à la réalité',
@@ -384,7 +384,7 @@ STATIC_QUESTIONS.push(
     explanation:'M. Bérenger a expliqué que "<b>les plastiques rejetés en mer empoisonnent les poissons et les oiseaux marins</b>" et a demandé à chacun de surveiller la plage. Sa leçon va au-delà du nettoyage : il s\'agit de <b>responsabilité individuelle</b> face à la pollution.' }),
 
   makeMCQ({ id:'g5fr-lec-043', chapterId:'fr-lecture', subsection:'idee_principale', difficulty:4,
-    question:`${_TEXTE_FR_C}En quoi le comportement de Nadia et Samuel à la fin du texte montre-t-il l'effet de leur expérience ?`,
+    question:`${_TEXTE_FR_C}En quoi le comportement de Nadia et Samuel à la fin du texte montre-t-il l\'effet de leur expérience ?`,
     options:[
       'Ils ont créé une association officielle contre la pollution',
       'Ils ont décidé de ne plus jamais aller à la plage',
@@ -398,7 +398,7 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Passage D : La fête des moissons ────────────────────────────────────────
-const _TEXTE_FR_D = `<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête des moissons</b><br><br>Chaque année au mois d'avril, le village de Rivière du Rempart célèbre la fête des moissons. Les agriculteurs remercient la terre pour ses richesses : la canne à sucre, les légumes et les fruits qui ont nourri leurs familles toute l'année.<br><br>Le matin, les habitants cuisinent ensemble. Des marmites de briani, de dholl puri et de gâteaux au miel embaument les ruelles. Chacun apporte quelque chose et les voisins partagent leurs plats avec entrain.<br><br>L'après-midi, le grand-père de Leila, un vieil homme aux mains calleuses, s'assoit sous les filaos et raconte l'histoire de la première fête : comment les ancêtres ont survécu à une sécheresse grâce à une récolte miraculeuse. Les enfants écoutent, les yeux grands ouverts.<br><br>Au coucher du soleil, musique et danses emplissent la place du village. Ce soir-là, tout le monde est une grande famille.</div>`;
+const _TEXTE_FR_D = `<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête des moissons</b><br><br>Chaque année au mois d\'avril, le village de Rivière du Rempart célèbre la fête des moissons. Les agriculteurs remercient la terre pour ses richesses : la canne à sucre, les légumes et les fruits qui ont nourri leurs familles toute l\'année.<br><br>Le matin, les habitants cuisinent ensemble. Des marmites de briani, de dholl puri et de gâteaux au miel embaument les ruelles. Chacun apporte quelque chose et les voisins partagent leurs plats avec entrain.<br><br>L\'après-midi, le grand-père de Leila, un vieil homme aux mains calleuses, s\'assoit sous les filaos et raconte l\'histoire de la première fête : comment les ancêtres ont survécu à une sécheresse grâce à une récolte miraculeuse. Les enfants écoutent, les yeux grands ouverts.<br><br>Au coucher du soleil, musique et danses emplissent la place du village. Ce soir-là, tout le monde est une grande famille.</div>`;
 
 STATIC_QUESTIONS.push(
 
@@ -484,7 +484,7 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Passage E : Le jardin scolaire ──────────────────────────────────────────
-const _TEXTE_FR_E = `<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le jardin scolaire</b><br><br>Cette année, les élèves de la classe de Mme Ramkissoon ont décidé de créer un jardin potager dans un coin inutilisé de la cour d'école.<br><br>Au mois de mars, ils ont préparé la terre, enlevé les mauvaises herbes et creusé des sillons. Ils ont planté des tomates, des haricots et des herbes aromatiques comme la coriandre et le thym.<br><br>Chaque groupe d'élèves est responsable d'un jour d'arrosage. « Comme de vrais petits agriculteurs ! » plaisante Mme Ramkissoon. Elle leur explique aussi comment les plantes fabriquent leur propre nourriture grâce à la photosynthèse.<br><br>En juin, la première récolte a été magnifique. Les tomates bien rouges et les haricots verts ont été confiés à la cantine. Le chef cuisinier les a utilisés pour préparer un rougail tomates pour toute l'école.<br><br>Si chaque école à Maurice créait son jardin, les enfants apprendraient à respecter la nature et à mieux manger.</div>`;
+const _TEXTE_FR_E = `<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le jardin scolaire</b><br><br>Cette année, les élèves de la classe de Mme Ramkissoon ont décidé de créer un jardin potager dans un coin inutilisé de la cour d\'école.<br><br>Au mois de mars, ils ont préparé la terre, enlevé les mauvaises herbes et creusé des sillons. Ils ont planté des tomates, des haricots et des herbes aromatiques comme la coriandre et le thym.<br><br>Chaque groupe d\'élèves est responsable d\'un jour d\'arrosage. « Comme de vrais petits agriculteurs ! » plaisante Mme Ramkissoon. Elle leur explique aussi comment les plantes fabriquent leur propre nourriture grâce à la photosynthèse.<br><br>En juin, la première récolte a été magnifique. Les tomates bien rouges et les haricots verts ont été confiés à la cantine. Le chef cuisinier les a utilisés pour préparer un rougail tomates pour toute l\'école.<br><br>Si chaque école à Maurice créait son jardin, les enfants apprendraient à respecter la nature et à mieux manger.</div>`;
 
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5fr-lec-051', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
@@ -538,7 +538,7 @@ STATIC_QUESTIONS.push(
     explanation:'Un <b>sillon</b> est une petite rainure ou tranchée creusée dans la terre dans laquelle on dépose les graines. Cette technique permet d\'aligner les plantations et de contrôler l\'espacement entre les plantes.' }),
 
   makeMCQ({ id:'g5fr-lec-056', chapterId:'fr-lecture', subsection:'inference', difficulty:2,
-    question:`${_TEXTE_FR_E}Pourquoi chaque groupe est-il "responsable d'un jour d'arrosage" ?`,
+    question:`${_TEXTE_FR_E}Pourquoi chaque groupe est-il "responsable d\'un jour d\'arrosage" ?`,
     options:[
       'Parce qu\'il n\'y a pas assez d\'eau pour arroser tous les jours',
       'Pour partager le travail équitablement et apprendre la responsabilité',
@@ -557,7 +557,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Comme de vrais petits agriculteurs" est une <b>comparaison</b> : elle utilise le mot "<b>comme</b>" pour rapprocher les élèves et de vrais agriculteurs. Si le texte avait dit "Ce sont de vrais petits agriculteurs", ce serait une métaphore.' }),
 
   makeMCQ({ id:'g5fr-lec-058', chapterId:'fr-lecture', subsection:'inference', difficulty:3,
-    question:`${_TEXTE_FR_E}Qu'est devenue la récolte de juin selon le texte ?`,
+    question:`${_TEXTE_FR_E}Qu\'est devenue la récolte de juin selon le texte ?`,
     options:[
       'Les élèves l\'ont rapportée chez eux',
       'Elle a été vendue au marché pour financer le jardin',
@@ -581,7 +581,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Si chaque école <b>créait</b>" → l\'imparfait après "si" indique une <b>hypothèse</b> (ce n\'est pas encore réel). Le conditionnel "apprendraient" montre la conséquence possible. Cette structure (Si + imparfait → conditionnel présent) exprime un <b>souhait ou une suggestion</b> de l\'auteur.' }),
 
   makeMCQ({ id:'g5fr-lec-060', chapterId:'fr-lecture', subsection:'idee_principale', difficulty:4,
-    question:`${_TEXTE_FR_E}Selon ce texte, quels sont les deux bénéfices principaux d'un jardin scolaire ?`,
+    question:`${_TEXTE_FR_E}Selon ce texte, quels sont les deux bénéfices principaux d\'un jardin scolaire ?`,
     options:[
       'Gagner de l\'argent en vendant les légumes et réduire les dépenses de la cantine',
       'Apprendre des connaissances scientifiques (photosynthèse, agriculture) et développer de bonnes habitudes alimentaires',

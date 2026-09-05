@@ -26,12 +26,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5eng-sent-003', chapterId:'eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Which sentence uses an APOSTROPHE correctly?',
     options:[
-      "The dog's are barking.",
-      "Tom's bicycle is new.",
-      "The girl's are playing.",
+      "The dog\'s are barking.",
+      "Tom\'s bicycle is new.",
+      "The girl\'s are playing.",
       "Its' a beautiful day."
     ],
-    answer:"Tom's bicycle is new.",
+    answer:"Tom\'s bicycle is new.",
     hint:"Apostrophe + s ('s) shows possession. It is NOT used to make plurals.",
     explanation:'"<b>Tom\'s bicycle is new</b>" - the apostrophe shows possession (the bicycle belongs to Tom). We do NOT use apostrophes to make plurals (dogs not dog\'s). "Its\'" is never correct; "it\'s" = it is, while "its" = belonging to it.' }),
 
@@ -74,8 +74,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-sent-008', chapterId:'eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Where should the apostrophe go in: "the boys shoes"? (shoes belonging to one boy)',
-    options:["boy's shoes","boys' shoes","boys shoes'","boys's shoes"],
-    answer:"boy's shoes",
+    options:["boy\'s shoes","boys' shoes","boys shoes'","boys\'s shoes"],
+    answer:"boy\'s shoes",
     hint:"One boy owns the shoes. Singular possession: noun + 's",
     explanation:'"<b>Boy\'s shoes</b>" - for singular possession, add apostrophe + s: boy\'s. If it were several boys: "the boys\' shoes" (apostrophe after the s for plural nouns ending in s).' }),
 
@@ -98,8 +98,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-sent-011', chapterId:'eng-sentences', subsection:'types', difficulty:2,
     question:'Complete the TAG QUESTION: "They are going to the park, ___ they?"',
-    options:["aren't","isn't","weren't","don't"],
-    answer:"aren't",
+    options:["aren\'t","isn\'t","weren\'t","don\'t"],
+    answer:"aren\'t",
     hint:'Positive "are" → negative tag "aren\'t". Match the auxiliary.',
     explanation:'"<b>Aren\'t</b> they?" - the statement uses "are" (positive) so the tag is "aren\'t" (negative) + subject pronoun "they". Rule: positive statement → negative tag; use the same auxiliary verb.' }),
 

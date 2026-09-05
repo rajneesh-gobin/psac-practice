@@ -6,17 +6,17 @@
 // ─────────────────────────────────────────────────────────────────────
 // MA FAMILLE (MIE Grade 4 French - contexte mauricien)
 //
-// Je m'appelle Priya. J'ai dix ans. J'habite à Curepipe avec ma famille.
+// Je m\'appelle Priya. J\'ai dix ans. J\'habite à Curepipe avec ma famille.
 // Nous sommes quatre dans ma famille : mon père, ma mère, ma petite sœur
 // et moi.
 //
-// Mon père s'appelle Ravi. Il est médecin. Ma mère s'appelle Anita. Elle
-// est professeur. Ma petite sœur s'appelle Mia. Elle a cinq ans.
+// Mon père s\'appelle Ravi. Il est médecin. Ma mère s\'appelle Anita. Elle
+// est professeur. Ma petite sœur s\'appelle Mia. Elle a cinq ans.
 //
 // Le matin, je me lève à six heures. Je mange du pain et je bois du lait.
-// Ensuite, je vais à l'école à pied avec ma sœur.
+// Ensuite, je vais à l\'école à pied avec ma sœur.
 //
-// J'aime beaucoup ma famille.
+// J\'aime beaucoup ma famille.
 // ─────────────────────────────────────────────────────────────────────
 
 const _PASSAGE_G4FR = '<b>MA FAMILLE</b><br><br>Je m\'appelle Priya. J\'ai dix ans. J\'habite à Curepipe avec ma famille. Nous sommes quatre dans ma famille : mon père, ma mère, ma petite sœur et moi.<br><br>Mon père s\'appelle Ravi. Il est médecin. Ma mère s\'appelle Anita. Elle est professeur. Ma petite sœur s\'appelle Mia. Elle a cinq ans.<br><br>Le matin, je me lève à six heures. Je mange du pain et je bois du lait. Ensuite, je vais à l\'école à pied avec ma sœur.<br><br>J\'aime beaucoup ma famille.';
@@ -182,7 +182,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4fr-comp-020', chapterId:'g4fr-lecture', subsection:'connecteurs', difficulty:1,
     question:'Quel connecteur logique signifie "first of all" ?',
     options:['ensuite','enfin','d\'abord','donc'],
-    answer:"d'abord",
+    answer:"d\'abord",
     hint:'Pour commencer une liste d\'actions ou d\'étapes.',
     explanation:'"First of all" = <b>d\'abord</b>. L\'ordre des connecteurs de séquence : <b>d\'abord</b> (first), <b>ensuite/puis</b> (then/next), <b>enfin</b> (finally). Ces mots structurent un texte narratif ou des instructions.' }),
 

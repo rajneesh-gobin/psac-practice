@@ -647,7 +647,7 @@ const GeoMap = (() => {
       + `<div class="geo-map-construction" role="status"><span aria-hidden="true">🛠️</span><span><b>Maps are still being improved.</b> A few locations may not be in exactly the right place yet. Our admins are checking and fixing them.</span></div>`
       + `<div class="geo-island-tabs" role="group" aria-label="Choose an island">${tabs}</div>`
       + `<div class="geo-map-filters" role="group" aria-label="Filter map features">${typesOn(st).map(([id, icon, label]) => `<button type="button" class="geo-filter" data-geo-filter="${id}" aria-pressed="false">${icon} ${esc(label)}</button>`).join('')}</div>`
-      + `<div class="geo-map-layout"><div class="geo-map-wrap" style="aspect-ratio:${isle.aspect.toFixed(5)}"><div class="geo-north">N ↑</div>${shape}<div class="geo-markers" data-geo-markers></div></div>`
+      + `<div class="geo-map-layout"><div class="geo-map-wrap" style="aspect-ratio:${isle.aspect.toFixed(5)}"><div class="geo-north">N ↑</div>${shape}<div class="geo-markers" data-geo-markers></div><div class="geo-map-spinner" data-geo-spinner aria-label="Loading map…"><div class="geo-spinner-ring"></div><span>Loading map…</span></div></div>`
       + `<aside class="geo-map-info" data-geo-info aria-live="polite"></aside></div>`
       + `<p class="geo-map-hint" data-geo-hint></p>`
       + `<p class="geo-map-note">Each connector line joins a label to its marked location. Use an atlas for exact coordinates.${isle.credit}</p></section>`;
@@ -657,6 +657,22 @@ const GeoMap = (() => {
       st.island = btn.dataset.geoIsland || 'mauritius'; st.type = 'all'; st.district = null; st.selectedId = null; render(container, {});
     }));
     paint(container, st);
+    // Hide markers until the base-map image is decoded — without this the pins
+    // float over a blank box for a second before the SVG appears underneath.
+    const baseImg   = container.querySelector('.geo-source-map');
+    const markersEl = container.querySelector('[data-geo-markers]');
+    const spinnerEl = container.querySelector('[data-geo-spinner]');
+    if (baseImg && !baseImg.complete) {
+      if (markersEl) markersEl.style.opacity = '0';
+      const reveal = () => {
+        if (markersEl) markersEl.style.opacity = '';
+        if (spinnerEl) spinnerEl.remove();
+      };
+      baseImg.addEventListener('load',  reveal, { once: true });
+      baseImg.addEventListener('error', reveal, { once: true });
+    } else {
+      if (spinnerEl) spinnerEl.remove();
+    }
     if (isle.districts) loadDistricts().then(() => paintDistricts(container, st));
     if (!st.features) loadPublished();
   }

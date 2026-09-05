@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 4 French - L'Imparfait
+// Grade 4 French - L\'Imparfait
 // IDs format: g4fr-imparfait-NNN
 
 STATIC_QUESTIONS.push(
@@ -126,7 +126,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4fr-imparfait-017', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:3,
     question:'Transforme au passé : "Tous les dimanches, nous allons à l\'église." →',
     options:['Tous les dimanches, nous allions à l\'église.','Tous les dimanches, nous sommes allés à l\'église.','Tous les dimanches, nous irons à l\'église.','Tous les dimanches, nous aillons à l\'église.'],
-    answer:"Tous les dimanches, nous allions à l'église.",
+    answer:"Tous les dimanches, nous allions à l\'église.",
     hint:'"Tous les dimanches" = habitude passée → imparfait. Aller → nous allons → all- + -ions.',
     explanation:'"Nous <b>allions</b>" - habitude passée → imparfait. Aller → nous allons → radical all- → nous all-<b>ions</b>.' }),
 
@@ -250,8 +250,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4fr-imparfait-033', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:3,
     question:'"Il n\'___ pas de bonbons à la maison." (avoir - imparfait, négation)',
-    options:["n'avait","n'avais","n'avaient","n'aviez"],
-    answer:"n'avait",
+    options:["n\'avait","n\'avais","n\'avaient","n\'aviez"],
+    answer:"n\'avait",
     hint:'Sujet = "il". Avoir imparfait pour "il" = avait. Négation : ne...pas encadre le verbe.',
     explanation:'"Il <b>n\'avait</b> pas de bonbons" - avoir à l\'imparfait pour "il" = <b>avait</b>. Négation : <b>n\'</b> + avait + <b>pas</b>. "N\'" remplace "ne" devant une voyelle.' }),
 

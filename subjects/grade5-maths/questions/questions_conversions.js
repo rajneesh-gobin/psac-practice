@@ -381,7 +381,7 @@ const CONV_QS = [
 ];
 
 // Fix CV_MX03 - answer was wrong; correct answer is 200 minutes, not hours
-// Let's replace it with a better-formed question:
+// Let\'s replace it with a better-formed question:
 const mxFix = CONV_QS.findIndex(q => q && q.id === 'CV_MX03');
 if (mxFix !== -1) {
   CONV_QS[mxFix] = makeNum({ id:'CV_MX03', chapterId:'conversions', subsection:'mixed', difficulty:3,

@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // Grade 5 French — varied, syllabus-aligned revision questions.
 // Generated from validated Grade 5 forms with per-verb completions so every
 // sentence reads as real French (a verb like « aimer » always gets an object,

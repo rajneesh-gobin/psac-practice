@@ -8,7 +8,7 @@
 //
 // Every morning before sunrise, fishermen in Mauritius set out to sea
 // in their colourful boats. They cast their nets and wait patiently for
-// fish to swim inside. By seven o'clock, they return to the beach with
+// fish to swim inside. By seven o\'clock, they return to the beach with
 // their catch.
 //
 // At the market, vendors arrange the fresh fish on long tables of ice.

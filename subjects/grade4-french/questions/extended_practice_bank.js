@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // Grade 4 French — large varied revision bank.
 //
 // These are deliberately generated from carefully curated Grade 4 language

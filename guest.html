@@ -80,6 +80,21 @@
   .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(255,255,255,.4);
         border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
   @keyframes sp{to{transform:rotate(360deg)}}
+  /* ── Resources / home screen ─────────────────────────────────────── */
+  .res-section{margin-top:14px}
+  .res-section h2{font-size:15px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .res-card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+            padding:14px;margin-bottom:10px;display:flex;align-items:flex-start;gap:12px}
+  .res-icon{font-size:22px;flex-shrink:0;padding-top:1px}
+  .res-body{flex:1;min-width:0}
+  .res-title{font-size:15px;font-weight:700;margin-bottom:2px}
+  .res-sub{font-size:12px;color:var(--muted);margin-bottom:6px}
+  .res-open{display:inline-flex;align-items:center;gap:5px;background:var(--brand);
+            color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;
+            font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none}
+  .res-open:active{opacity:.85}
+  .res-empty{color:var(--muted);font-size:13px;text-align:center;padding:10px 0}
+  .res-loading{color:var(--muted);font-size:13px;padding:8px 0}
   @media (prefers-color-scheme:dark){
     :root{--bg:#12141c;--card:#1b1e29;--ink:#eef0f6;--muted:#9aa1b1;--line:#2b3040;
           --okbg:#0f2f22;--badbg:#361a1a}
@@ -118,6 +133,23 @@
     <div class="foot">PSAC Practice</div>
   </section>
 
+  <!-- ══ 1b · HOME — shown after PIN, before quiz ══ -->
+  <section id="s-home" class="screen">
+    <div class="brandbar">
+      <div class="t" id="h-title">Homework</div>
+      <div class="s" id="h-who"></div>
+    </div>
+    <div class="card">
+      <button id="h-start" class="btn">▶ Start homework</button>
+    </div>
+    <!-- Class resources — loaded async from /api/classroom-materials -->
+    <div class="res-section" id="h-res" style="display:none">
+      <h2>📁 Resources from your teacher</h2>
+      <div id="h-res-list"><p class="res-loading">Loading…</p></div>
+    </div>
+    <div class="foot">PSAC Practice</div>
+  </section>
+
   <!-- ══ 2 · QUIZ ══ -->
   <section id="s-quiz" class="screen">
     <div class="bar"><i id="q-bar" style="width:0%"></i></div>
@@ -144,6 +176,7 @@
       <button id="d-share" class="btn wa">📤 Share my result</button>
       <button id="d-review" class="btn sec">Review my answers</button>
       <div class="review" id="d-reviewlist" style="display:none"></div>
+      <button id="d-resources" class="btn sec" style="display:none">📁 Class resources</button>
     </div>
 
     <div class="conv">

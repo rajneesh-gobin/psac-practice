@@ -60,7 +60,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-sjv-008', chapterId:'g6fr-subjunctif', subsection:'irreguliers', difficulty:2,
     question:'Quelle est la forme correcte de "avoir" au subjonctif pour "qu\'il" ?',
     options:['qu\'il a','qu\'il ait','qu\'il avait','qu\'il aura'],
-    answer:"qu'il ait",
+    answer:"qu\'il ait",
     hint:'Avoir est irrégulier au subjonctif : aie, aies, ait, ayons, ayez, aient.',
     explanation:'"<b>Qu\'il ait</b>" - avoir est irrégulier au subjonctif : que j\'aie, que tu aies, qu\'il/elle <b>ait</b>, que nous ayons, que vous ayez, qu\'ils/elles aient. Exemple : "Il est possible qu\'il <b>ait</b> raison."' }),
 
@@ -193,7 +193,7 @@ STATIC_QUESTIONS.push(
     options:['ai vu','verrai','aie vu','voyais'],
     answer:'aie vu',
     hint:'Superlatif + que → subjonctif passé (que + j\'aie + participe passé).',
-    explanation:'"C\'est le plus beau pays que j\'<b>aie vu</b>" - après un <b>superlatif</b> (le plus… que), on utilise le <b>subjonctif passé</b> : que j\'<b>aie</b> (subjonctif d’avoir) + vu (participe passé). Formation : subjonctif présent d’avoir/être + participe passé.' }),
+    explanation:'"C\'est le plus beau pays que j\'<b>aie vu</b>" - après un <b>superlatif</b> (le plus… que), on utilise le <b>subjonctif passé</b> : que j\'<b>aie</b> (subjonctif d\'avoir) + vu (participe passé). Formation : subjonctif présent d\'avoir/être + participe passé.' }),
 
   makeMCQ({ id:'g6fr-sjv-027', chapterId:'g6fr-subjunctif', subsection:'declencheurs', difficulty:3,
     question:'Quelle expression fixe utilise le subjonctif de ALLER ?',

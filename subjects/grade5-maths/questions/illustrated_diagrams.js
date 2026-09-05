@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // Grade 5 Maths - Illustrated diagrams (geometry, graphs, time)
 // IDs format: g5m-illus-NNN
 // Fills the "Maths has no illustrated questions" gap - shapes, angle
@@ -74,8 +74,8 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Bar chart + pictogram helpers (same pattern as Grade 4's Data Handling
-//    chapter, renamed for this file so there's no ambiguity about which
-//    grade's chart is being built).
+//    chapter, renamed for this file so there\'s no ambiguity about which
+//    grade\'s chart is being built).
 function _g5mBarChart(title, cats, vals, opts) {
   opts = opts || {};
   const max = opts.max || 20, step = opts.step || 5;
@@ -221,7 +221,7 @@ STATIC_QUESTIONS.push(
 );
 
 // ── More illustrated diagrams: angles around a point (reuses the reflex
-//    angle's wedge-fan technique - sampled points via Math.cos/sin, already
+//    angle\'s wedge-fan technique - sampled points via Math.cos/sin, already
 //    verified above), fraction bars, a percentage grid, decimal number
 //    lines, grid-square areas and a labelled perimeter shape. Straight
 //    lines/rects/circles/sampled-polygon-fans only, computed by code.

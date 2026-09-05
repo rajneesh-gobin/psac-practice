@@ -204,6 +204,39 @@ const Calendar = (() => {
       });
   }
 
+  // Mirror of getUpcoming() but for today + past dates (backlog view).
+  // Returns newest-first so today appears at the top.
+  async function getBacklog(studentId) {
+    if (!studentId) return [];
+    try {
+      if (_studentId !== studentId) {
+        _studentId  = studentId;
+        _scheduleId = null;
+        _entries    = [];
+      }
+      if (!_entries.length) await _loadEntries();
+    } catch (_) { return []; }
+
+    const today = _toDateStr(new Date());
+
+    return (_entries || [])
+      .filter(e => e.entry_type === 'study' && e.date <= today)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .map(e => {
+        const { pack, chapter } = _resolveChapter(e);
+        return {
+          id: e.id, date: e.date, label: e.topic_label || 'Study session',
+          minutes: e.duration_mins || null, notes: e.notes || null,
+          subjectId: pack?.id || e.subject_id || null,
+          subjectName: pack?.subject || pack?.name || null,
+          chapterId: chapter?.id || null,
+          icon: chapter?.icon || '📚',
+          isToday: e.date === today,
+          isPast: e.date < today,
+        };
+      });
+  }
+
   async function _ensureSchedule() {
     if (_scheduleId) return _scheduleId;
     // Try to find an existing schedule first (in case _loadEntries failed silently)
@@ -1620,7 +1653,7 @@ const Calendar = (() => {
   }
 
   return {
-    render, setStudent, getUpcoming,
+    render, setStudent, getUpcoming, getBacklog,
     prevMonth, nextMonth,
     openDay, closeDayModal,
     showAddEvent, closeAddEvent, saveEvent,

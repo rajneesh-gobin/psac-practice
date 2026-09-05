@@ -53,12 +53,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4eng-sent-007', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Which sentence uses the APOSTROPHE for POSSESSION correctly?',
     options:[
-      "The dog's bowl is empty.",
+      "The dog\'s bowl is empty.",
       "The dogs bowl is empty.",
       "The dogs' bowl is empty.",
       "The dog is bowl is empty."
     ],
-    answer:"The dog's bowl is empty.",
+    answer:"The dog\'s bowl is empty.",
     hint:'There is one dog. To show that the bowl belongs to the dog, add apostrophe + s.',
     explanation:'"<b>The dog\'s bowl</b>" - for a singular noun, add apostrophe + s to show possession (belonging). If plural: the dogs\' bowls (apostrophe after the s). Possession apostrophe: Tom\'s book, the cat\'s tail, the teacher\'s pen.' }),
 
@@ -132,7 +132,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4eng-sent-015', chapterId:'g4eng-sentences', subsection:'in_context', difficulty:2,
     question:'Which sentence correctly shows POSSESSION for MULTIPLE dogs?',
     options:[
-      "The dog's kennel is dirty.",
+      "The dog\'s kennel is dirty.",
       "The dogs' kennel is dirty.",
       "The dogs kennel is dirty.",
       "The dogs is kennel dirty."

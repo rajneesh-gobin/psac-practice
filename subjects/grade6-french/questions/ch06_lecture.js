@@ -4,17 +4,17 @@
 
 const _TEXTE_G6 = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a">
 <b style="color:#5b21b6">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
-<b>L'Île Maurice et l'environnement</b><br><br>
-L'île Maurice est connue pour ses plages de sable blanc, ses lagons aux eaux cristallines et sa biodiversité exceptionnelle. Cependant, cet écrin de nature est aujourd'hui menacé par plusieurs problèmes environnementaux graves.<br><br>
-La pollution des océans constitue l'une des principales menaces. Des milliers de bouteilles en plastique et de sacs jetables se retrouvent dans nos lagons, mettant en danger les poissons, les coraux et les tortues marines. En 2020, le gouvernement mauricien a interdit les sacs en plastique à usage unique - une mesure saluée par les écologistes.<br><br>
-De plus, le réchauffement climatique provoque le blanchissement des coraux. Les coraux, qui abritent une grande variété d'espèces marines, blanchissent et meurent lorsque la température de l'eau augmente. La perte des récifs coralliens aurait des conséquences désastreuses pour le tourisme et la pêche, deux piliers essentiels de l'économie mauricienne.<br><br>
+<b>L\'Île Maurice et l\'environnement</b><br><br>
+L\'île Maurice est connue pour ses plages de sable blanc, ses lagons aux eaux cristallines et sa biodiversité exceptionnelle. Cependant, cet écrin de nature est aujourd\'hui menacé par plusieurs problèmes environnementaux graves.<br><br>
+La pollution des océans constitue l\'une des principales menaces. Des milliers de bouteilles en plastique et de sacs jetables se retrouvent dans nos lagons, mettant en danger les poissons, les coraux et les tortues marines. En 2020, le gouvernement mauricien a interdit les sacs en plastique à usage unique - une mesure saluée par les écologistes.<br><br>
+De plus, le réchauffement climatique provoque le blanchissement des coraux. Les coraux, qui abritent une grande variété d\'espèces marines, blanchissent et meurent lorsque la température de l\'eau augmente. La perte des récifs coralliens aurait des conséquences désastreuses pour le tourisme et la pêche, deux piliers essentiels de l\'économie mauricienne.<br><br>
 Face à ces défis, il est impératif que les citoyens, les entreprises et le gouvernement unissent leurs efforts pour protéger ce patrimoine naturel exceptionnel.
 </div>`;
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-lec-001', chapterId:'g6fr-lecture', subsection:'inference', difficulty:1,
-    question:`${_TEXTE_G6}Selon le texte, pourquoi l'île Maurice est-elle célèbre ?`,
+    question:`${_TEXTE_G6}Selon le texte, pourquoi l\'île Maurice est-elle célèbre ?`,
     options:[
       'Pour ses montagnes et ses forêts tropicales uniquement',
       'Pour ses plages de sable blanc, ses lagons et sa biodiversité exceptionnelle',
@@ -26,7 +26,7 @@ STATIC_QUESTIONS.push(
     explanation:'Le texte dit : "L\'île Maurice est connue pour ses <b>plages de sable blanc, ses lagons aux eaux cristallines et sa biodiversité exceptionnelle</b>."' }),
 
   makeMCQ({ id:'g6fr-lec-002', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
-    question:`${_TEXTE_G6}Que signifie le mot "menacé" dans la phrase "cet écrin de nature est aujourd'hui menacé" ?`,
+    question:`${_TEXTE_G6}Que signifie le mot "menacé" dans la phrase "cet écrin de nature est aujourd\'hui menacé" ?`,
     options:['protégé','célébré','en danger','admirable'],
     answer:'en danger',
     hint:'Le contexte parle de "problèmes environnementaux graves". Quelle est la conséquence pour l\'île ?',
@@ -45,14 +45,14 @@ STATIC_QUESTIONS.push(
     explanation:'"En 2020, le gouvernement mauricien a <b>interdit les sacs en plastique à usage unique</b> - une mesure saluée par les écologistes." "Saluée" = welcomed/praised.' }),
 
   makeMCQ({ id:'g6fr-lec-004', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
-    question:`${_TEXTE_G6}Qu'est-ce que le blanchissement des coraux et quelle en est la cause selon le texte ?`,
+    question:`${_TEXTE_G6}Qu\'est-ce que le blanchissement des coraux et quelle en est la cause selon le texte ?`,
     options:[
       'Les coraux deviennent blancs à cause de la pollution plastique.',
       'Les coraux blanchissent et meurent quand la température de l\'eau augmente.',
       'Les coraux blancs sont une espèce rare et protégée.',
       'Les coraux blanchissent à cause du manque de lumière.'
     ],
-    answer:"Les coraux blanchissent et meurent quand la température de l'eau augmente.",
+    answer:"Les coraux blanchissent et meurent quand la température de l\'eau augmente.",
     hint:'Cherchez la définition et la cause dans le troisième paragraphe.',
     explanation:'Le texte explique : "Les coraux... <b>blanchissent et meurent lorsque la température de l\'eau augmente</b>." Le réchauffement climatique est donc la cause du blanchissement des coraux.' }),
 
@@ -76,7 +76,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Cet <b>écrin</b> de nature" est une <b>métaphore</b> - l\'île est comparée à un écrin (jewellery box) qui protège des bijoux précieux, mais sans utiliser les mots comparatifs "comme" ou "tel que". Si on disait "comme un écrin", ce serait une comparaison.' }),
 
   makeTF({ id:'g6fr-lec-007', chapterId:'g6fr-lecture', subsection:'vrai_faux', difficulty:1,
-    question:`${_TEXTE_G6}Vrai ou Faux : Les récifs coralliens n'ont aucune importance économique pour Maurice.`,
+    question:`${_TEXTE_G6}Vrai ou Faux : Les récifs coralliens n\'ont aucune importance économique pour Maurice.`,
     answer:false,
     hint:'Regardez la fin du troisième paragraphe.',
     explanation:'<b>Faux.</b> Le texte dit que le tourisme et la pêche sont "<b>deux piliers essentiels de l\'économie mauricienne</b>". Les récifs coralliens soutiennent ces deux secteurs - ils ont donc une importance économique majeure.' }),
@@ -96,7 +96,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Cependant</b>" est le connecteur de concession dans le texte : "L\'île Maurice est connue pour sa beauté. <b>Cependant</b>, cet écrin de nature est menacé." Il introduit l\'idée contraire (le danger) après l\'idée positive (la beauté).' }),
 
   makeMCQ({ id:'g6fr-lec-010', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
-    question:`${_TEXTE_G6}Selon le dernier paragraphe, qui doit agir pour protéger l'environnement mauricien ?`,
+    question:`${_TEXTE_G6}Selon le dernier paragraphe, qui doit agir pour protéger l\'environnement mauricien ?`,
     options:[
       'Uniquement le gouvernement',
       'Uniquement les écologistes et les scientifiques',
@@ -139,13 +139,13 @@ STATIC_QUESTIONS.push(
     explanation:'"Son sort fut <b>scellé</b>" = son destin fut définitivement et irrévocablement fixé. L\'expression "sceller le sort" est une expression figurée signifiant rendre quelque chose inévitable. Le manuel MIE de 6e demande aux élèves d\'expliquer le sens de mots ou d\'expressions en utilisant le contexte environnant - ici le contexte (l\'arrivée des marins, la disparition du dodo) confirme la notion de fin inévitable.' }),
 
   makeTF({ id:'g6fr-lec-013', chapterId:'g6fr-lecture', subsection:'vrai_faux', difficulty:1,
-    question:`${_TEXTE_DODO_FR}Vrai ou Faux : La principale raison de l'extinction du dodo était la chasse par les marins.`,
+    question:`${_TEXTE_DODO_FR}Vrai ou Faux : La principale raison de l\'extinction du dodo était la chasse par les marins.`,
     answer:false,
     hint:'Relisez attentivement le deuxième paragraphe - quelle menace l\'auteur qualifie de "la plus grave" ?',
     explanation:'<b>Faux.</b> Le texte précise : "les marins les chassaient pour se nourrir, mais <b>la menace la plus grave</b> provenait des animaux introduits par les colons : des rats, des cochons et des singes qui <b>pillaient les nids et dévoraient les œufs</b>." Les espèces envahissantes (invasive species) ont donc causé plus de dégâts que la chasse directe.' }),
 
   makeMCQ({ id:'g6fr-lec-014', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
-    question:`${_TEXTE_DODO_FR}Quel est le sens de l'expression "mort comme un dodo" d'après le texte ?`,
+    question:`${_TEXTE_DODO_FR}Quel est le sens de l\'expression "mort comme un dodo" d\'après le texte ?`,
     options:[
       'Quelque chose qui est en danger mais peut encore être sauvé',
       'Quelque chose de complètement et irrémédiablement disparu',
@@ -157,14 +157,14 @@ STATIC_QUESTIONS.push(
     explanation:'Le texte explique : "On utilise l\'expression \'mort comme un dodo\' pour désigner quelque chose de <b>complètement et irrémédiablement disparu</b>." C\'est une expression idiomatique dont le sens est ancré dans l\'histoire réelle de l\'extinction du dodo. "Irrémédiablement" = sans remède possible, de manière définitive.' }),
 
   makeMCQ({ id:'g6fr-lec-015', chapterId:'g6fr-lecture', subsection:'figures_style', difficulty:2,
-    question:`${_TEXTE_DODO_FR}Identifiez une figure de style dans "cet oiseau étrange possédait des ailes si petites qu'elles lui étaient totalement inutiles."`,
+    question:`${_TEXTE_DODO_FR}Identifiez une figure de style dans "cet oiseau étrange possédait des ailes si petites qu\'elles lui étaient totalement inutiles."`,
     options:['une métaphore','une personnification','une hyperbole','une comparaison avec "comme"'],
     answer:'une hyperbole',
     hint:'L\'auteur exagère pour renforcer l\'idée que les ailes ne servaient absolument à rien.',
     explanation:'"Des ailes <b>totalement</b> inutiles" est une légère <b>hyperbole</b> - exagération pour souligner l\'inutilité complète des ailes. En réalité, les ailes jouaient peut-être un rôle d\'équilibre ou de séduction, mais l\'auteur les décrit comme "totalement" inutiles pour créer un effet de surprise. Le manuel MIE de 6e liste les figures de style : comparaison, métaphore, personnification, hyperbole, anaphore.' }),
 
   makeMCQ({ id:'g6fr-lec-016', chapterId:'g6fr-lecture', subsection:'idee_principale', difficulty:2,
-    question:`${_TEXTE_DODO_FR}Selon le dernier paragraphe, quelle est la leçon que l'on peut tirer de l'histoire du dodo ?`,
+    question:`${_TEXTE_DODO_FR}Selon le dernier paragraphe, quelle est la leçon que l\'on peut tirer de l\'histoire du dodo ?`,
     options:[
       'Les oiseaux qui ne peuvent pas voler sont tous destinés à disparaître',
       'La chasse est toujours la principale cause d\'extinction des animaux',
@@ -195,7 +195,7 @@ STATIC_QUESTIONS.push(
     explanation:'Le deuxième paragraphe utilise principalement le <b>passé simple</b> (débarquèrent, fut) pour des <b>actions précises et achevées</b> dans le passé. L\'imparfait est aussi utilisé ("provenait", "n\'avaient aucune peur", "chassaient") pour des <b>états ou habitudes passés</b>. En lecture, reconnaître les temps verbaux aide à comprendre la structure temporelle du récit - compétence clé dans les épreuves PSAC de français de 6e.' }),
 
   makeMCQ({ id:'g6fr-lec-019', chapterId:'g6fr-lecture', subsection:'interpretation', difficulty:4,
-    question:`${_TEXTE_DODO_FR}En utilisant la méthode "Relevé → Interprétation", quelle citation du texte illustre MIEUX l'idée que le dodo était vulnérable face aux humains ?`,
+    question:`${_TEXTE_DODO_FR}En utilisant la méthode "Relevé → Interprétation", quelle citation du texte illustre MIEUX l\'idée que le dodo était vulnérable face aux humains ?`,
     options:[
       '"Mesurant près d\'un mètre de hauteur"',
       '"ils n\'avaient aucune peur des humains, n\'ayant jamais appris à fuir un danger"',
@@ -465,7 +465,7 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Passage E : Le projet du nouveau stade ──────────────────────────────────
-const _TEXTE_G6_C = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>UN NOUVEAU STADE POUR VACOAS ?</b><br><br>Un projet de construction d'un stade sportif multidisciplinaire à Vacoas fait couler beaucoup d'encre. Selon des sources proches du gouvernement, les travaux pourraient débuter dès l'an prochain, pour un coût estimé à deux cents millions de roupies.<br><br>Les partisans du projet se réjouissent. « Ce stade va créer au moins trois cents emplois et permettre à nos jeunes de pratiquer des sports dans de bonnes conditions », affirme un élu local. Pour lui, la fierté nationale justifie l'investissement.<br><br>Cependant, plusieurs agriculteurs de la région s'y opposent fermement. « On va perdre nos terres cultivées depuis trois générations », dénonce un riziculteur dont le champ jouxte le terrain prévu. Les riverains craignent également les nuisances sonores lors des grandes compétitions.<br><br>Une association de citoyens a lancé une pétition qui a déjà recueilli deux mille signatures. Elle réclame une étude d'impact environnemental complète avant tout démarrage des travaux.<br><br>Le ministère des Sports n'a pas répondu à nos sollicitations.</div>`;
+const _TEXTE_G6_C = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>UN NOUVEAU STADE POUR VACOAS ?</b><br><br>Un projet de construction d\'un stade sportif multidisciplinaire à Vacoas fait couler beaucoup d\'encre. Selon des sources proches du gouvernement, les travaux pourraient débuter dès l\'an prochain, pour un coût estimé à deux cents millions de roupies.<br><br>Les partisans du projet se réjouissent. « Ce stade va créer au moins trois cents emplois et permettre à nos jeunes de pratiquer des sports dans de bonnes conditions », affirme un élu local. Pour lui, la fierté nationale justifie l\'investissement.<br><br>Cependant, plusieurs agriculteurs de la région s\'y opposent fermement. « On va perdre nos terres cultivées depuis trois générations », dénonce un riziculteur dont le champ jouxte le terrain prévu. Les riverains craignent également les nuisances sonores lors des grandes compétitions.<br><br>Une association de citoyens a lancé une pétition qui a déjà recueilli deux mille signatures. Elle réclame une étude d\'impact environnemental complète avant tout démarrage des travaux.<br><br>Le ministère des Sports n\'a pas répondu à nos sollicitations.</div>`;
 
 STATIC_QUESTIONS.push(
 
@@ -484,7 +484,7 @@ STATIC_QUESTIONS.push(
     explanation:'"une pétition qui a déjà recueilli <b>deux mille signatures</b>" — Le chiffre est explicitement mentionné dans le texte.' }),
 
   makeMCQ({ id:'g6fr-lec-054', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
-    question:`${_TEXTE_G6_C}Que signifie l'expression "fait couler beaucoup d'encre" dans ce texte ?`,
+    question:`${_TEXTE_G6_C}Que signifie l\'expression "fait couler beaucoup d\'encre" dans ce texte ?`,
     options:[
       'Le projet a causé une inondation',
       'Le projet fait l\'objet de nombreuses discussions et controverses',
@@ -520,7 +520,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>selon des sources proches du gouvernement</b>" est une technique journalistique qui protège l\'identité d\'un informateur qui a parlé sous condition d\'anonymat. Cette personne partage une information sensible mais ne veut pas être identifiée, pour se protéger professionnellement.' }),
 
   makeMCQ({ id:'g6fr-lec-057', chapterId:'g6fr-lecture', subsection:'figures_style', difficulty:3,
-    question:`${_TEXTE_G6_C}Quel est le rôle de la dernière phrase : "Le ministère des Sports n'a pas répondu à nos sollicitations." ?`,
+    question:`${_TEXTE_G6_C}Quel est le rôle de la dernière phrase : "Le ministère des Sports n\'a pas répondu à nos sollicitations." ?`,
     options:[
       'Elle indique que le ministère n\'a pas de téléphone',
       'Elle souligne le refus du gouvernement de s\'expliquer, ce qui renforce le doute du lecteur',
@@ -546,19 +546,19 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Passage F : La conservation du Pigeon Rose ──────────────────────────────
-const _TEXTE_G6_D = `<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le Pigeon Rose : du bord de l'extinction à la renaissance</b><br><br>À la fin des années 1990, le pigeon rose (Nesoenas mayeri) frôlait la disparition. Il ne restait plus que douze individus à l'état sauvage dans les forêts de la Gorge de la Rivière Noire. Cette espèce endémique de Maurice, menacée par la déforestation, les prédateurs introduits et la destruction de son habitat, semblait condamnée.<br><br>C'est alors que la Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien, a lancé un programme d'élevage en captivité. Des œufs ont été prélevés, des poussins élevés en sécurité, puis réintroduits progressivement dans leur milieu naturel. Parallèlement, des pièges ont été installés pour contrôler les rats et les mangoustes qui pillaient les nids.<br><br>Aujourd'hui, la population sauvage dépasse quatre cents individus. Le pigeon rose est considéré comme l'un des plus grands succès mondiaux en matière de conservation d'espèces.<br><br>Les visiteurs du parc national peuvent l'apercevoir dans la canopée, reconnaissable à sa couleur rose pâle et à son roucoulement doux.</div>`;
+const _TEXTE_G6_D = `<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le Pigeon Rose : du bord de l\'extinction à la renaissance</b><br><br>À la fin des années 1990, le pigeon rose (Nesoenas mayeri) frôlait la disparition. Il ne restait plus que douze individus à l\'état sauvage dans les forêts de la Gorge de la Rivière Noire. Cette espèce endémique de Maurice, menacée par la déforestation, les prédateurs introduits et la destruction de son habitat, semblait condamnée.<br><br>C\'est alors que la Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien, a lancé un programme d\'élevage en captivité. Des œufs ont été prélevés, des poussins élevés en sécurité, puis réintroduits progressivement dans leur milieu naturel. Parallèlement, des pièges ont été installés pour contrôler les rats et les mangoustes qui pillaient les nids.<br><br>Aujourd\'hui, la population sauvage dépasse quatre cents individus. Le pigeon rose est considéré comme l\'un des plus grands succès mondiaux en matière de conservation d\'espèces.<br><br>Les visiteurs du parc national peuvent l\'apercevoir dans la canopée, reconnaissable à sa couleur rose pâle et à son roucoulement doux.</div>`;
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-lec-059', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
-    question:`${_TEXTE_G6_D}Combien de pigeons roses restait-il à l'état sauvage à la fin des années 1990 ?`,
+    question:`${_TEXTE_G6_D}Combien de pigeons roses restait-il à l\'état sauvage à la fin des années 1990 ?`,
     options:['Quatre','Douze','Quarante','Quatre cents'],
     answer:'Douze',
     hint:'Cherchez le chiffre dans le premier paragraphe.',
     explanation:'"Il ne restait plus que <b>douze individus</b> à l\'état sauvage dans les forêts de la Gorge de la Rivière Noire." — Ce chiffre alarmant est donné dans le premier paragraphe.' }),
 
   makeMCQ({ id:'g6fr-lec-060', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
-    question:`${_TEXTE_G6_D}Quelle organisation a lancé le programme d'élevage en captivité ?`,
+    question:`${_TEXTE_G6_D}Quelle organisation a lancé le programme d\'élevage en captivité ?`,
     options:[
       'Le gouvernement mauricien seul',
       'La Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien',
@@ -582,7 +582,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Cette espèce <b>endémique</b> de Maurice" signifie que le pigeon rose est une espèce <b>propre à Maurice</b>, qu\'on ne trouve nulle part ailleurs dans le monde. Une espèce endémique est indigène d\'un lieu précis. C\'est le contraire d\'une espèce introduite ou cosmopolite.' }),
 
   makeMCQ({ id:'g6fr-lec-062', chapterId:'g6fr-lecture', subsection:'inference', difficulty:2,
-    question:`${_TEXTE_G6_D}Citez DEUX menaces qui ont mis le pigeon rose en danger d'extinction selon le texte.`,
+    question:`${_TEXTE_G6_D}Citez DEUX menaces qui ont mis le pigeon rose en danger d\'extinction selon le texte.`,
     options:[
       'Le tourisme et la chaleur climatique',
       'La déforestation et les prédateurs introduits',
@@ -606,7 +606,7 @@ STATIC_QUESTIONS.push(
     explanation:'Le programme comportait deux volets : 1) <b>"élevage en captivité"</b> puis réintroduction dans le milieu naturel ; 2) installation de <b>"pièges pour contrôler les rats et les mangoustes"</b>. Cette double approche s\'attaquait à la fois au problème de reproduction et à celui des prédateurs.' }),
 
   makeMCQ({ id:'g6fr-lec-064', chapterId:'g6fr-lecture', subsection:'figures_style', difficulty:3,
-    question:`${_TEXTE_G6_D}"Le pigeon rose frôlait la disparition." Quelle figure de style est utilisée et quel en est l'effet ?`,
+    question:`${_TEXTE_G6_D}"Le pigeon rose frôlait la disparition." Quelle figure de style est utilisée et quel en est l\'effet ?`,
     options:[
       'Une comparaison — elle compare le pigeon à un autre animal en danger',
       'Une personnification — elle donne au pigeon rose une action humaine pour souligner son danger imminent',
@@ -642,7 +642,7 @@ STATIC_QUESTIONS.push(
     explanation:'Trois facteurs de succès ressortent du texte : 1) <b>le partenariat</b> Durrell + gouvernement mauricien (expertise internationale + volonté politique) ; 2) la <b>double stratégie</b> : élevage en captivité ET contrôle des prédateurs ; 3) la <b>réintroduction "progressive"</b> dans le milieu naturel pour maximiser les chances de survie.' }),
 
   makeMCQ({ id:'g6fr-lec-067', chapterId:'g6fr-lecture', subsection:'idee_principale', difficulty:4,
-    question:`${_TEXTE_G6_D}Le titre "du bord de l'extinction à la renaissance" résume l'évolution décrite dans le texte. Justifiez ce titre en citant des données précises du texte.`,
+    question:`${_TEXTE_G6_D}Le titre "du bord de l\'extinction à la renaissance" résume l\'évolution décrite dans le texte. Justifiez ce titre en citant des données précises du texte.`,
     options:[
       '"Bord de l\'extinction" = douze individus sauvages à la fin des années 1990 ; "renaissance" = plus de quatre cents individus aujourd\'hui',
       '"Bord de l\'extinction" = le pigeon était chassé ; "renaissance" = il est maintenant protégé par la loi',
@@ -656,18 +656,18 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Passage E : La disparition des coraux à Maurice ─────────────────────────
-const _TEXTE_G6_E = `<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La disparition des coraux à Maurice</b><br><br>Depuis plusieurs années, les récifs coralliens qui entourent l'île Maurice sont en danger. Selon les scientifiques de l'Université de Maurice, la température de l'eau de mer a augmenté d'un degré et demi en trente ans. Ce réchauffement provoque le blanchiment des coraux : les polypes expulsent les algues colorées qui les nourrissent, et le récif devient blanc comme de la craie.<br><br>Les conséquences sont alarmantes. Les coraux servent d'abri et de nurserie à des centaines d'espèces de poissons. Sans eux, les bancs de poissons diminuent. « Notre prise a baissé de quarante pour cent en cinq ans », témoigne Jean-Marie, pêcheur à Mahébourg, dont le nom a été changé à sa demande.<br><br>Le gouvernement a annoncé un plan de protection des récifs, mais plusieurs organisations environnementales estiment que les mesures proposées sont insuffisantes. « Les restrictions sur la pêche sont nécessaires, mais tant que les émissions mondiales de carbone ne baissent pas, les coraux continueront à mourir », avertit une biologiste marine dont l'université préfère ne pas être citée.<br><br>Les touristes, eux, remarquent déjà la différence. Les fonds marins qui faisaient la réputation de Maurice ressemblent, dans certaines zones, à des déserts sous-marins.</div>`;
+const _TEXTE_G6_E = `<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La disparition des coraux à Maurice</b><br><br>Depuis plusieurs années, les récifs coralliens qui entourent l\'île Maurice sont en danger. Selon les scientifiques de l\'Université de Maurice, la température de l\'eau de mer a augmenté d\'un degré et demi en trente ans. Ce réchauffement provoque le blanchiment des coraux : les polypes expulsent les algues colorées qui les nourrissent, et le récif devient blanc comme de la craie.<br><br>Les conséquences sont alarmantes. Les coraux servent d\'abri et de nurserie à des centaines d\'espèces de poissons. Sans eux, les bancs de poissons diminuent. « Notre prise a baissé de quarante pour cent en cinq ans », témoigne Jean-Marie, pêcheur à Mahébourg, dont le nom a été changé à sa demande.<br><br>Le gouvernement a annoncé un plan de protection des récifs, mais plusieurs organisations environnementales estiment que les mesures proposées sont insuffisantes. « Les restrictions sur la pêche sont nécessaires, mais tant que les émissions mondiales de carbone ne baissent pas, les coraux continueront à mourir », avertit une biologiste marine dont l\'université préfère ne pas être citée.<br><br>Les touristes, eux, remarquent déjà la différence. Les fonds marins qui faisaient la réputation de Maurice ressemblent, dans certaines zones, à des déserts sous-marins.</div>`;
 
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-lec-068', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
-    question:`${_TEXTE_G6_E}De combien la température de l'eau de mer a-t-elle augmenté en trente ans ?`,
+    question:`${_TEXTE_G6_E}De combien la température de l\'eau de mer a-t-elle augmenté en trente ans ?`,
     options:['D\'un demi-degré','D\'un degré','D\'un degré et demi','De deux degrés'],
     answer:'D\'un degré et demi',
     hint:'Cherchez le chiffre précis dans le premier paragraphe.',
     explanation:'"la température de l\'eau de mer a augmenté d\'<b>un degré et demi</b> en trente ans." — Cette précision chiffrée vient des scientifiques de l\'Université de Maurice et donne de la crédibilité à l\'article.' }),
 
   makeMCQ({ id:'g6fr-lec-069', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
-    question:`${_TEXTE_G6_E}Qu'est-ce que le blanchiment des coraux, selon le texte ?`,
+    question:`${_TEXTE_G6_E}Qu\'est-ce que le blanchiment des coraux, selon le texte ?`,
     options:[
       'Les coraux sont peints en blanc par les plongeurs',
       'Les polypes expulsent leurs algues et le récif devient blanc',
@@ -734,7 +734,7 @@ STATIC_QUESTIONS.push(
     explanation:'"ressemblent <b>à</b> des déserts sous-marins" — Le mot "<b>ressemblent à</b>" est un outil de comparaison (comme "comme" ou "tel que"). C\'est donc une <b>comparaison</b>. Elle évoque la désolation et l\'absence de vie dans les zones où les coraux ont disparu.' }),
 
   makeMCQ({ id:'g6fr-lec-075', chapterId:'g6fr-lecture', subsection:'source_anonyme', difficulty:3,
-    question:`${_TEXTE_G6_E}Pourquoi le nom de Jean-Marie "a été changé à sa demande" et l'université de la biologiste "préfère ne pas être citée" ?`,
+    question:`${_TEXTE_G6_E}Pourquoi le nom de Jean-Marie "a été changé à sa demande" et l\'université de la biologiste "préfère ne pas être citée" ?`,
     options:[
       'Parce que le journaliste a oublié leurs vrais noms',
       'Parce que ces personnes souhaitent témoigner sans être identifiées publiquement',

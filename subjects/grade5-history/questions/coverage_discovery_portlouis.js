@@ -11,7 +11,7 @@
     ['Why is the Dutch period important?', 'it was the first permanent European settlement'],['The Dutch came mainly from…','the Netherlands'],
     ['What happened to much native forest during early settlement?', 'some was cut down'],['What can we learn from the Dutch period?', 'human actions can affect nature'],
     ['Which is a source about Dutch settlement?', 'an old map or written record'],['Before Dutch settlement, Mauritius had many…','endemic plants and animals'],
-    ['What does “settlement” mean?', 'a place where people begin to live'],['Why did ships need an island stop on long voyages?', 'to repair and resupply'],
+    ['What does "settlement" mean?', 'a place where people begin to live'],['Why did ships need an island stop on long voyages?', 'to repair and resupply'],
     ['The Dutch period came before which settlement?', 'the French settlement']
   ],['the Dutch','Prince Maurits of Nassau','1598','1638','to get fresh food and water','the Dodo','ebony','cyclones, droughts and shortages','1710','rats','it was the first permanent European settlement','the Netherlands','some was cut down','human actions can affect nature','an old map or written record','endemic plants and animals','a place where people begin to live','to repair and resupply','the French settlement'],'Think about the first settlers, their reasons for stopping, and their impact.');
   rows('port-history','port-louis','history',[
@@ -19,7 +19,7 @@
     ['Why was Port Louis a useful place for a harbour?', 'it has a sheltered bay'],['A harbour allows ships to…','load, unload and shelter'],
     ['What was Mauritius called during French rule?', 'Île de France'],['Why did the French develop Port Louis?', 'for trade and naval ships'],
     ['Which mountain overlooks Port Louis?', 'Le Pouce'],['What is a capital city?', 'the main city where government is based'],
-    ['How did a harbour help the island’s trade?', 'goods could arrive and leave by ship'],['A port is important because it connects Mauritius with…','other countries'],
+    ['How did a harbour help the island\'s trade?', 'goods could arrive and leave by ship'],['A port is important because it connects Mauritius with…','other countries'],
     ['Which was built to protect Port Louis?', 'Fort Adelaide (the Citadel)'],['Why are old Port Louis buildings important?', 'they tell us about the past'],
     ['Government House is linked with…','government and administration'],['What can a museum help visitors understand?', 'history and heritage'],
     ['Port Louis grew because of…','shipping, trade and government'],['A historical building should be cared for because…','it is part of our heritage']

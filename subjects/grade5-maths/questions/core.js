@@ -671,7 +671,7 @@ STATIC_QUESTIONS.push(
     explanation:'40 − 25 = <b>15 more</b> on Monday.' }),
 
   makeMCQ({ id:'GR03', chapterId:'graphs', subsection:'pictogram', difficulty:2,
-    question:`A pictogram shows children's favourite fruit:
+    question:`A pictogram shows children\'s favourite fruit:
 <div class="picto-wrap">
 <table class="picto-table">
   <tr><th>Fruit</th><th>Symbols</th></tr>

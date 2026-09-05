@@ -1020,16 +1020,20 @@ const Store = (() => {
   }
 
   // ── Question reports ──────────────────────────
-  async function reportQuestion(questionId, questionText, message, studentId, studentName, mode, options, answer) {
-    if (!_sb || !questionId) return { ok: false, sessionExpired: false };
-    // Pack extra context into question_text as JSON suffix (no schema change needed)
+  async function reportQuestion(questionId, questionText, message, studentId, studentName, mode, options, answer, chapterId, reportType) {
+    if (!_sb) return { ok: false, sessionExpired: false };
+    const qid = questionId || '__general__';
+    // Pack legacy context into question_text so the existing admin UI still reads
+    // studentName/mode/options/answer from older rows without a schema change.
     const meta = JSON.stringify({ studentName: studentName || null, mode: mode || 'practice', options: options || null, answer: answer || null });
     const { error } = await _sb.from('question_reports').insert({
-      question_id:   questionId,
+      question_id:   qid,
       question_text: (questionText || '').slice(0, 400) + '\n__meta__' + meta,
       message:       (message || '').trim().slice(0, 1000),
       student_id:    studentId || null,
       status:        'open',
+      chapter_id:    chapterId || null,
+      report_type:   reportType || 'other',
     });
     let sessionExpired = false;
     if (error) {
@@ -1052,7 +1056,7 @@ const Store = (() => {
     if (!_sb) return [];
     const { data } = await _sb.from('question_reports')
       .select('*, students!student_id(display_name, grade)')
-      .order('created_at', { ascending: false })
+      .order('updated_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + limit - 1);
     return data || [];
   }
@@ -1071,8 +1075,90 @@ const Store = (() => {
   async function resolveReport(id) {
     if (!_sb || !id) return false;
     const { error } = await _sb.from('question_reports')
-      .update({ status: 'resolved' }).eq('id', id);
+      .update({ status: 'resolved', updated_at: new Date().toISOString() }).eq('id', id);
     return !error;
+  }
+
+  async function setReportStatus(id, status, adminNote) {
+    if (!_sb || !id) return false;
+    const update = { status, updated_at: new Date().toISOString() };
+    if (adminNote !== undefined) update.admin_note = (adminNote || '').trim().slice(0, 2000) || null;
+    const { error } = await _sb.from('question_reports').update(update).eq('id', id);
+    return !error;
+  }
+
+  // Admin sends a reply message to a report.
+  async function replyToReport(reportId, message) {
+    if (!_sb || !reportId || !message) return { ok: false };
+    const { error } = await _sb.from('question_report_messages').insert({
+      report_id:   reportId,
+      author_type: 'admin',
+      message:     message.trim().slice(0, 2000),
+    });
+    return { ok: !error };
+  }
+
+  // Admin reads the full message thread for a report.
+  async function loadReportMessages(reportId) {
+    if (!_sb || !reportId) return [];
+    const { data } = await _sb.from('question_report_messages')
+      .select('id, author_type, message, created_at')
+      .eq('report_id', reportId)
+      .order('created_at', { ascending: true });
+    return data || [];
+  }
+
+  // Student reads their own reports via a SECURITY DEFINER RPC (no JWT needed).
+  async function loadStudentReports(studentId) {
+    if (!_sb) return [];
+    const { data, error } = await _sb.rpc('get_student_reports',
+      studentId ? { p_student_id: studentId } : {});
+    if (error) { console.error('[Store.loadStudentReports]', error.message); return []; }
+    return data || [];
+  }
+
+  // Student adds a follow-up message via a SECURITY DEFINER RPC.
+  async function sendReportFollowup(reportId, message) {
+    if (!_sb || !reportId || !message) return { ok: false };
+    const { data, error } = await _sb.rpc('add_report_message', {
+      p_report_id: reportId,
+      p_message:   message.trim(),
+    });
+    if (error) { console.error('[Store.sendReportFollowup]', error.message); }
+    return { ok: !error, id: data };
+  }
+
+  // Student marks a report as seen so the unread badge clears.
+  async function markReportSeen(reportId) {
+    if (!_sb || !reportId) return;
+    await _sb.rpc('mark_report_seen', { p_report_id: reportId });
+  }
+
+  // Authenticated parents/teachers read their own reports by reporter_id.
+  // Uses a direct table query (JWT present) instead of the SECURITY DEFINER RPC
+  // that students need (students are anon — no JWT).
+  async function loadParentReports() {
+    if (!_sb) return [];
+    const { data, error } = await _sb
+      .from('question_reports')
+      .select('id, message, status, created_at, updated_at, report_type, admin_note, reporter_id')
+      .order('updated_at', { ascending: false, nullsFirst: false })
+      .limit(50);
+    if (error) { console.error('[Store.loadParentReports]', error.message); return []; }
+    return data || [];
+  }
+
+  // Parent submits a report. reporter_id is filled by the DB DEFAULT auth.uid().
+  async function submitParentReport(message, reportType) {
+    if (!_sb) return { ok: false };
+    const { error } = await _sb.from('question_reports').insert({
+      question_id:  '__parent__',
+      message:      (message || '').trim().slice(0, 1000),
+      status:       'open',
+      report_type:  reportType || 'other',
+    });
+    if (error) { console.error('[Store.submitParentReport]', error.message); }
+    return { ok: !error };
   }
 
   // ── Student assignments (Supabase) ────────────
@@ -1253,7 +1339,9 @@ const Store = (() => {
     getGlobalSettings, mmGet, mmSet, mmSave,
     generateId,
     // Question reports
-    reportQuestion, loadReports, countReports, resolveReport,
+    reportQuestion, loadReports, countReports, resolveReport, setReportStatus,
+    replyToReport, loadReportMessages, loadStudentReports, sendReportFollowup, markReportSeen,
+    loadParentReports, submitParentReport,
     // Assignments
     loadAssignments, createAssignment, deleteAssignment, completeAssignment,
     // Friends

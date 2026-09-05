@@ -317,6 +317,8 @@ const TeacherMode = (() => {
     if (tab === 'classes' && typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.refresh();
     if (tab === 'materials') TeacherMaterials.load();
     if (tab === 'create')    _renderClassPicker();
+    if (tab === 'gradebook') _renderGradebook();
+    if (tab === 'messages')  _renderTeacherMessages();
     document.querySelectorAll('.ta-tab').forEach(b => {
       const on = b.dataset.tab === tab;
       b.setAttribute('aria-selected', String(on));
@@ -677,7 +679,15 @@ const TeacherMode = (() => {
 
   function shareWhatsApp() {
     const a = _current(); if (!a) return;
-    window.open('https://wa.me/?text=' + encodeURIComponent(_shareMessage(a)), '_blank', 'noopener');
+    const wa = 'https://wa.me/?text=' + encodeURIComponent(_shareMessage(a));
+    // Use an <a> tag click so the browser treats it as a navigation, not a
+    // programmatic popup — popup blockers cannot intercept anchor navigations.
+    const link = document.createElement('a');
+    link.href = wa; link.target = '_blank'; link.rel = 'noopener';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
 
   async function shareNative() {
@@ -701,17 +711,169 @@ const TeacherMode = (() => {
     toast('Assignment deleted.', 1500);
   }
 
+  // ── Gradebook ──────────────────────────────────
+  let _gbClassId = null;
+  let _gbLoading = false;
+  const _gbEsc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function _renderGradebook() {
+    const root = _el('ta-gradebook-root');
+    if (!root) return;
+    const classes = (typeof TeacherGuestClasses !== 'undefined' ? TeacherGuestClasses.getClasses() : []).filter(c => c.active);
+    if (!classes.length) {
+      root.innerHTML = '<p class="ta-gb-msg">No active classrooms yet — create one in the Classrooms tab first.</p>';
+      return;
+    }
+    if (!_gbClassId || !classes.find(c => c.id === _gbClassId)) _gbClassId = classes[0].id;
+    root.innerHTML = `
+      <div class="ta-gb-toolbar">
+        <select id="ta-gb-class-sel" class="ta-gb-sel" onchange="TeacherMode.gbSelectClass(this.value)">
+          ${classes.map(c => `<option value="${_gbEsc(c.id)}"${c.id === _gbClassId ? ' selected' : ''}>${_gbEsc(c.name)} (${c.pupils} pupil${c.pupils === 1 ? '' : 's'})</option>`).join('')}
+        </select>
+        <button onclick="TeacherMode.loadGradebook()" class="ta-gb-btn">🔄 Refresh</button>
+      </div>
+      <div id="ta-gb-body"></div>
+    `;
+    _loadGradebook(_gbClassId);
+  }
+
+  async function _loadGradebook(classId) {
+    if (classId) _gbClassId = classId;
+    const box = _el('ta-gb-body');
+    if (!box || !_gbClassId) return;
+    if (_gbLoading) return;
+    _gbLoading = true;
+    box.innerHTML = '<p class="ta-gb-msg">Loading…</p>';
+    try {
+      const [{ data: asgData, error: asgErr }, { data: modeData }] = await Promise.all([
+        _sb.rpc('guest_my_assignments'),
+        _sb.rpc('teacher_guest_assignment_modes').catch(() => ({ data: null })),
+      ]);
+      if (asgErr) throw asgErr;
+      const modes = new Map((modeData?.modes || []).map(a => [a.id, a]));
+      const assignments = (asgData?.assignments || [])
+        .filter(a => modes.get(a.id)?.classroom_id === _gbClassId && !modes.get(a.id)?.archived)
+        .map(a => ({ ...a }));
+      if (!assignments.length) {
+        box.innerHTML = '<p class="ta-gb-msg">No active assignments for this classroom yet — set some work first.</p>';
+        return;
+      }
+      const resultsArr = await Promise.all(
+        assignments.map(a =>
+          _sb.rpc('teacher_guest_results', { p_assignment_id: a.id })
+            .then(r => ({ assignId: a.id, rows: r.data?.submissions || [] }))
+            .catch(() => ({ assignId: a.id, rows: [] }))
+        )
+      );
+      // Build student map: name → {assignId → {score,total,pct} | null (enrolled, not submitted)}
+      const students = {};
+      resultsArr.forEach(({ assignId, rows }) => {
+        rows.forEach(r => {
+          if (!students[r.name]) students[r.name] = {};
+          students[r.name][assignId] = r.submitted_at
+            ? { score: Number(r.score), total: Number(r.total), pct: Number(r.pct) }
+            : null;
+        });
+      });
+      const names = Object.keys(students).sort((a, b) => a.localeCompare(b));
+      if (!names.length) {
+        box.innerHTML = '<p class="ta-gb-msg">No pupils have started any assignment yet.</p>';
+        return;
+      }
+      const pctCls = p => p == null ? 'ta-gb-nd' : p >= 70 ? 'ta-gb-pass' : p >= 50 ? 'ta-gb-mid' : 'ta-gb-fail';
+      const pctTxt = cell => cell == null ? '—' : cell.pct + '%';
+      const trunc  = s => (s || '').length > 18 ? (s || '').slice(0, 17) + '…' : (s || '');
+      const colAvg = assignments.map(a => {
+        const vals = names.map(n => students[n][a.id]).filter(s => s != null);
+        return vals.length ? Math.round(vals.reduce((sum, r) => sum + r.pct, 0) / vals.length) : null;
+      });
+      box.innerHTML = `
+        <div class="ta-gb-scroll">
+          <table class="ta-gb-table" role="grid">
+            <thead><tr>
+              <th class="ta-gb-th ta-gb-th-name">Pupil</th>
+              ${assignments.map(a => `<th class="ta-gb-th ta-gb-th-asgn" title="${_gbEsc(a.title || a.label || '')}">${_gbEsc(trunc(a.title || a.label || ''))}</th>`).join('')}
+              <th class="ta-gb-th ta-gb-th-avg">Avg</th>
+            </tr></thead>
+            <tbody>
+              ${names.map(name => {
+                const cells = assignments.map(a => students[name][a.id] ?? null);
+                const done  = cells.filter(s => s != null);
+                const avg   = done.length ? Math.round(done.reduce((s, r) => s + r.pct, 0) / done.length) : null;
+                return `<tr>
+                  <td class="ta-gb-td ta-gb-td-name">${_gbEsc(name)}</td>
+                  ${cells.map(cell => `<td class="ta-gb-td ta-gb-cell ${pctCls(cell?.pct ?? null)}" title="${cell ? cell.score + '/' + cell.total : '—'}">${pctTxt(cell)}</td>`).join('')}
+                  <td class="ta-gb-td ta-gb-cell ${pctCls(avg)} ta-gb-td-avg">${avg != null ? avg + '%' : '—'}</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+            <tfoot><tr class="ta-gb-foot">
+              <td class="ta-gb-td ta-gb-td-name ta-gb-td-avg">Class avg</td>
+              ${colAvg.map(avg => `<td class="ta-gb-td ta-gb-cell ${pctCls(avg)} ta-gb-td-avg">${avg != null ? avg + '%' : '—'}</td>`).join('')}
+              <td class="ta-gb-td"></td>
+            </tr></tfoot>
+          </table>
+        </div>
+        <p class="ta-gb-legend">
+          <span class="ta-gb-dot ta-gb-pass"></span>≥70%
+          <span class="ta-gb-dot ta-gb-mid"></span>50–69%
+          <span class="ta-gb-dot ta-gb-fail"></span>&lt;50%
+          <span class="ta-gb-dot ta-gb-nd"></span>not started
+        </p>
+      `;
+    } catch (e) {
+      console.error('[gradebook]', e);
+      box.innerHTML = '<p class="ta-gb-msg ta-gb-err">Could not load gradebook. Check your connection.</p>';
+    } finally {
+      _gbLoading = false;
+    }
+  }
+
+  async function _renderTeacherMessages() {
+    const list  = document.getElementById('tc-msg-list');
+    const badge = document.getElementById('tc-msg-badge');
+    if (!list) return;
+    list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-10 animate-pulse">Loading…</p>';
+    const reports = await Store.loadParentReports();
+    if (!reports.length) {
+      list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-10">No messages yet. Tap ＋ New Message to get started.</p>';
+      if (badge) badge.classList.add('hidden');
+      return;
+    }
+    const hasNew = reports.some(r => r.admin_note && r.updated_at && r.created_at && r.updated_at !== r.created_at);
+    if (badge) badge.classList.toggle('hidden', !hasNew);
+    const types = { topic_question: '🙋 Question', app_problem: '🐛 Bug', content_issue: '📚 Content', other: '💬 Other' };
+    list.innerHTML = reports.map(r => {
+      const label     = types[r.report_type] || '💬 Message';
+      const statusCls = r.status === 'resolved' ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400';
+      const statusTxt = r.status === 'resolved' ? 'Resolved' : 'Open';
+      return `<div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15)" class="rounded-xl p-4 mb-3">
+        <div class="flex justify-between items-start mb-2 gap-2">
+          <span class="text-xs font-semibold">${label}</span>
+          <span class="text-xs ${statusCls}">${statusTxt}</span>
+        </div>
+        <p class="text-sm mb-2" style="white-space:pre-wrap">${_attr(r.message)}</p>
+        ${r.admin_note ? `<div style="background:rgba(255,255,255,.1);border-left:3px solid rgba(100,200,100,.6)" class="rounded p-3 mt-2 text-sm"><span class="text-xs font-semibold block mb-1">Admin reply</span>${_attr(r.admin_note)}</div>` : ''}
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-2">${new Date(r.created_at).toLocaleDateString()}</p>
+      </div>`;
+    }).join('');
+  }
+
   return {
     isTeacher, render, switchTab, subjectChange, gradeChange,
     buildAssignment, copyLink, deleteAssignment,
     shareAssignment, closeShare, shareCopy, shareWhatsApp, shareNative,
     saveResult, getAttemptCount, hasRetry, allowRetry, removeResult, showAnswers,
+    gbSelectClass: id => { _gbClassId = id; _loadGradebook(id); },
+    loadGradebook: () => _loadGradebook(_gbClassId),
+    renderMessages: _renderTeacherMessages,
   };
 })();
 
 // ── Teacher Materials (Supabase Storage) ──────────────────────────────────────
 const TeacherMaterials = (() => {
   const BUCKET = 'learning-materials';
+  let _classes = []; // cached list of this teacher's classrooms for the assign picker
 
   function _status(msg, color) {
     const el = document.getElementById('tm-upload-status');
@@ -720,12 +882,25 @@ const TeacherMaterials = (() => {
     el.style.color = color || '';
   }
 
+  function _onFileChosen(source) {
+    const cameraInput = document.getElementById('tm-camera');
+    const fileInput   = document.getElementById('tm-file');
+    // Clear the other input so only one source is active at a time
+    if (source === 'camera') { if (fileInput)   fileInput.value = ''; }
+    else                     { if (cameraInput) cameraInput.value = ''; }
+    const file = (source === 'camera' ? cameraInput : fileInput)?.files[0];
+    const hint = document.getElementById('tm-filename');
+    if (hint) hint.textContent = file ? file.name : 'No file chosen';
+  }
+
   async function upload() {
     const title = document.getElementById('tm-title')?.value.trim();
-    const file  = document.getElementById('tm-file')?.files[0];
+    // Accept a file from either the regular picker or the camera capture
+    const file  = document.getElementById('tm-camera')?.files[0]
+               || document.getElementById('tm-file')?.files[0];
 
     if (!title) { _status('Please enter a title.', '#e53e3e'); return; }
-    if (!file)  { _status('Please choose a file.', '#e53e3e'); return; }
+    if (!file)  { _status('Please choose a file or take a photo.', '#e53e3e'); return; }
     if (file.size > 10 * 1024 * 1024) { _status('File must be under 10 MB.', '#e53e3e'); return; }
 
     _status('Uploading…');
@@ -772,33 +947,110 @@ const TeacherMaterials = (() => {
     if (!list) return;
     list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500">Loading…</p>';
 
-    const { data, error } = await _sb.from('learning_materials')
-      .select('*')
-      .order('created_at', { ascending: false });
+    // Fetch materials and classroom assignments in parallel.
+    // Classrooms are fetched via the managed RPC to ensure teacher-scoped results.
+    const [matsRes, assignRes, classRpc] = await Promise.all([
+      _sb.from('learning_materials').select('*').order('created_at', { ascending: false }),
+      _sb.from('classroom_materials').select('material_id, classroom_id'),
+      _sb.rpc('teacher_guest_manage', { p_action: 'list' }),
+    ]);
 
-    if (error) { list.innerHTML = '<p class="text-sm text-red-500">Could not load files.</p>'; return; }
-    if (!data?.length) { list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500">No files uploaded yet.</p>'; return; }
+    if (matsRes.error) { list.innerHTML = '<p class="text-sm text-red-500">Could not load files.</p>'; return; }
+    if (!matsRes.data?.length) { list.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500">No files uploaded yet.</p>'; return; }
 
-    list.innerHTML = data.map(f => `
-      <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-700/50 rounded-xl px-4 py-3 border border-gray-200 dark:border-gray-600">
-        <div class="min-w-0 flex-1">
-          <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_attr(f.title)}</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400">
-            ${f.subject ? f.subject + ' · ' : ''}${f.grade ? 'Grade ' + f.grade + ' · ' : ''}${_fmtSize(f.file_size)}
-          </p>
-          ${f.description ? `<p class="text-xs text-gray-400 dark:text-gray-500 truncate">${_attr(f.description)}</p>` : ''}
-        </div>
-        <div class="flex gap-2 ml-3 shrink-0">
-          <button onclick="TeacherMaterials.getLink('${_attr(f.file_path)}')"
-            class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-lg font-semibold">
-            🔗 Link
-          </button>
-          <button onclick="TeacherMaterials.remove('${_attr(f.id)}','${_attr(f.file_path)}')"
-            class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg font-semibold">
-            Delete
-          </button>
-        </div>
-      </div>`).join('');
+    _classes = (classRpc.data?.classes || []).filter(c => c.active);
+
+    // Build a map: material_id → Set of classroom_ids
+    const assignMap = {};
+    if (!assignRes.error) {
+      for (const row of (assignRes.data || [])) {
+        if (!assignMap[row.material_id]) assignMap[row.material_id] = [];
+        assignMap[row.material_id].push(row.classroom_id);
+      }
+    }
+    // Build classroom id → name lookup
+    const classNames = Object.fromEntries(_classes.map(c => [c.id, c.name]));
+
+    list.innerHTML = matsRes.data.map(f => {
+      const assignedIds = assignMap[f.id] || [];
+      const badges = assignedIds.length
+        ? assignedIds.map(cid => `<span class="tm-classroom-badge">${_attr(classNames[cid] || '?')}</span>`).join('')
+        : '<span class="tm-classroom-badge tm-badge-none">Unassigned</span>';
+      return `
+        <div class="tm-file-row">
+          <div class="min-w-0 flex-1">
+            <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_attr(f.title)}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              ${f.subject ? _attr(f.subject) + ' · ' : ''}${f.grade ? 'Grade ' + f.grade + ' · ' : ''}${_fmtSize(f.file_size)}
+            </p>
+            ${f.description ? `<p class="text-xs text-gray-400 dark:text-gray-500 truncate">${_attr(f.description)}</p>` : ''}
+            <div class="tm-classrooms-row">${badges}
+              <button onclick="TeacherMaterials.showAssign('${_attr(f.id)}')" class="tm-assign-btn">🏫 Assign</button>
+            </div>
+            <div id="tm-assign-${_attr(f.id)}" class="tm-assign-picker hidden"></div>
+          </div>
+          <div class="flex gap-2 ml-3 shrink-0">
+            <button onclick="TeacherMaterials.getLink('${_attr(f.file_path)}')"
+              class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-lg font-semibold">
+              🔗 Link
+            </button>
+            <button onclick="TeacherMaterials.remove('${_attr(f.id)}','${_attr(f.file_path)}')"
+              class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 px-3 py-1 rounded-lg font-semibold">
+              Delete
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  async function showAssign(materialId) {
+    // Close all other open pickers first
+    document.querySelectorAll('.tm-assign-picker').forEach(p => {
+      if (p.id !== 'tm-assign-' + materialId) p.classList.add('hidden');
+    });
+    const picker = document.getElementById('tm-assign-' + materialId);
+    if (!picker) return;
+    if (!picker.classList.contains('hidden')) { picker.classList.add('hidden'); return; }
+
+    if (!_classes.length) {
+      picker.innerHTML = '<p class="tm-assign-note">No classrooms yet. Create one in the Classrooms tab.</p>';
+      picker.classList.remove('hidden');
+      return;
+    }
+
+    picker.innerHTML = '<p class="tm-assign-note">Loading…</p>';
+    picker.classList.remove('hidden');
+
+    const { data, error } = await _sb.from('classroom_materials')
+      .select('classroom_id').eq('material_id', materialId);
+    if (error) { picker.innerHTML = '<p class="tm-assign-note" style="color:#e53e3e">Failed to load</p>'; return; }
+    const assigned = new Set((data || []).map(r => r.classroom_id));
+
+    picker.innerHTML =
+      '<div class="tm-assign-list">' +
+      _classes.map(c => `
+        <label class="tm-assign-item">
+          <input type="checkbox" ${assigned.has(c.id) ? 'checked' : ''}
+            onchange="TeacherMaterials.toggleAssign('${_attr(materialId)}','${_attr(c.id)}',this.checked)">
+          <span>${_attr(c.name)}</span>
+        </label>`).join('') +
+      '</div>' +
+      '<p class="tm-assign-note">Tick a classroom to give its students access to this material.</p>';
+  }
+
+  async function toggleAssign(materialId, classroomId, assign) {
+    if (assign) {
+      const { error } = await _sb.from('classroom_materials')
+        .insert({ material_id: materialId, classroom_id: classroomId });
+      if (error) { toast('Could not assign: ' + error.message, 2500); }
+      else toast('Assigned to classroom ✓', 1500);
+    } else {
+      const { error } = await _sb.from('classroom_materials')
+        .delete().eq('material_id', materialId).eq('classroom_id', classroomId);
+      if (error) { toast('Could not remove: ' + error.message, 2500); }
+      else toast('Removed from classroom', 1500);
+    }
+    await load();
   }
 
   async function getLink(filePath) {
@@ -826,5 +1078,42 @@ const TeacherMaterials = (() => {
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   }
 
-  return { upload, load, getLink, remove };
+  return { upload, load, getLink, remove, showAssign, toggleAssign, _onFileChosen };
 })();
+
+// ── Teacher message compose ───────────────────────────────────────────────────
+function openTeacherMessageModal() {
+  const modal = document.getElementById('modal-teacher-message');
+  if (!modal) return;
+  const msgEl  = document.getElementById('tc-msg-text');
+  const typeEl = document.getElementById('tc-msg-type');
+  if (msgEl)  msgEl.value  = '';
+  if (typeEl) typeEl.value = 'topic_question';
+  const btn = document.getElementById('tc-msg-submit-btn');
+  if (btn) { btn.textContent = 'Send'; btn.disabled = false; }
+  modal.classList.remove('hidden');
+}
+
+function closeTeacherMessageModal() {
+  const modal = document.getElementById('modal-teacher-message');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function submitTeacherMessage() {
+  const msg  = (document.getElementById('tc-msg-text')?.value || '').trim();
+  const type = document.getElementById('tc-msg-type')?.value || 'other';
+  if (!msg) { toast('Please describe your question or problem.', 2500); return; }
+
+  const btn = document.getElementById('tc-msg-submit-btn');
+  if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+
+  const res = await Store.submitParentReport(msg, type);
+  closeTeacherMessageModal();
+
+  if (res.ok) {
+    toast('Message sent! We\'ll reply in the Messages tab. 💬', 3000);
+    await TeacherMode.renderMessages();
+  } else {
+    toast('Could not send. Check your connection.', 3000);
+  }
+}

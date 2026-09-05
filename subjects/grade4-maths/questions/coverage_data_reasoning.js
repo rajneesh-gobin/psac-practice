@@ -19,9 +19,9 @@
     add('tally',`${i}-total`,`${stimulus}<p>How many ${unit} are recorded altogether?</p>`,v.reduce((a,b)=>a+b,0),
       'Read each tally row first. Then add all three counts.',`${labels[0]}: ${v[0]}, ${labels[1]}: ${v[1]}, ${labels[2]}: ${v[2]}. Total = ${v.join(' + ')} = <b>${v.reduce((a,b)=>a+b,0)}</b>.`);
     add('tally',`${i}-compare`,`${stimulus}<p>How many more ${unit} are in ${labels[0]} than in ${labels[2]}?</p>`,v[0]-v[2],
-      '“How many more” asks for the difference, not the total.',`${labels[0]} has ${v[0]} and ${labels[2]} has ${v[2]}. Subtract: ${v[0]} − ${v[2]} = <b>${v[0]-v[2]}</b>.`);
+      '"How many more" asks for the difference, not the total.',`${labels[0]} has ${v[0]} and ${labels[2]} has ${v[2]}. Subtract: ${v[0]} − ${v[2]} = <b>${v[0]-v[2]}</b>.`);
     add('tally',`${i}-update`,`${stimulus}<p>Three more ${unit} are added to ${labels[1]}. What is the new count for this group?</p>`,v[1]+3,
-      'Only the second row changes. Add three to that row’s count.',`${labels[1]} originally has ${v[1]}. Its new count is ${v[1]} + 3 = <b>${v[1]+3}</b>.`);
+      'Only the second row changes. Add three to that row\'s count.',`${labels[1]} originally has ${v[1]}. Its new count is ${v[1]} + 3 = <b>${v[1]+3}</b>.`);
   });
   const pictures = [
     ['Books read by three reading groups',['Red','Blue','Green'],4,[3,2,4]],

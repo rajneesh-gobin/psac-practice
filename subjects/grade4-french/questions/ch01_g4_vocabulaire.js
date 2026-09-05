@@ -95,7 +95,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4fr-voc-013', chapterId:'g4fr-vocabulaire', subsection:'politesse', difficulty:1,
     question:'Comment dit-on "please" en français (forme formelle, avec un adulte) ?',
     options:['Merci','Au revoir','S\'il vous plaît','De rien'],
-    answer:"S'il vous plaît",
+    answer:"S\'il vous plaît",
     hint:'"Please" en s\'adressant à un adulte - forme formelle (vous).',
     explanation:'"<b>S\'il vous plaît</b>" = please (formal - avec un adulte qu\'on vouvoie). "S\'il te plaît" = please (informal - avec un ami). "Merci" = thank you. "De rien" = you\'re welcome.' }),
 
@@ -142,7 +142,7 @@ STATIC_QUESTIONS.push(
       'Excusez-moi, s\'il vous plaît, avez-vous un stylo ?',
       'Au revoir, avez-vous un stylo ?'
     ],
-    answer:"Excusez-moi, s'il vous plaît, avez-vous un stylo ?",
+    answer:"Excusez-moi, s\'il vous plaît, avez-vous un stylo ?",
     hint:'Elle interrompt son professeur pour demander quelque chose. Quels mots de politesse utilise-t-on ?',
     explanation:'"<b>Excusez-moi, s\'il vous plaît</b>, avez-vous un stylo ?" est la phrase la plus polie. "Excusez-moi" (Excuse me) pour interrompre poliment + "s\'il vous plaît" (please, forme formelle). "Merci" se dit après avoir reçu quelque chose. "Bonjour" est une salutation, pas une demande.' }),
 

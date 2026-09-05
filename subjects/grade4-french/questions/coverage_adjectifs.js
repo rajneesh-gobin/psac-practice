@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // Targeted practice to give the smaller Grade 4 adjective and adverb sections
 // enough varied, age-appropriate questions for repeat practice.
 (function () {
@@ -7,7 +7,7 @@
   };
 
   [
-    ['Je lis presque chaque soir : je lis ___ avant de dormir.', 'souvent'], ['Mina arrive à l’heure tous les jours : elle arrive ___ à l’heure à l’école.', 'toujours'],
+    ['Je lis presque chaque soir : je lis ___ avant de dormir.', 'souvent'], ['Mina arrive à l\'heure tous les jours : elle arrive ___ à l\'heure à l\'école.', 'toujours'],
     ['Nous jouons dans le jardin presque chaque jour : nous jouons ___ dans le jardin.', 'souvent'], ['Il ne mange ___ de bonbons.', 'jamais'],
     ['Tu aides ta grand-mère presque chaque semaine : tu aides ___ ta grand-mère.', 'souvent'], ['Le bus est en retard une ou deux fois par mois : il est ___ en retard.', 'parfois'],
     ['Mes amis sont gentils en toute occasion : ils sont ___ gentils.', 'toujours'], ['On va à la plage presque tous les dimanches : on va ___ à la plage le dimanche.', 'souvent'],
@@ -17,7 +17,7 @@
     ['Ils ne sont ___ absents.', 'jamais'], ['Tu dis bonjour chaque fois que tu arrives : tu dis ___ bonjour en arrivant.', 'toujours']
   ].forEach(([question, answer], i) => add(`g4fr-cov-adv-${i}`, 'g4fr-verbes', 'adverbes', question,
     ['toujours', 'souvent', 'parfois', 'jamais'], answer, 'Cherche un mot qui indique la fréquence.',
-    `<b>${answer}</b> indique à quelle fréquence se passe l’action.`));
+    `<b>${answer}</b> indique à quelle fréquence se passe l\'action.`));
 
   [
     ['Voici ___ chat. (à moi)', 'mon'], ['Voici ___ trousse. (à moi)', 'ma'],
@@ -29,7 +29,7 @@
     ['Je présente ___ sœur. (à moi)', 'ma']
   ].forEach(([question, answer], i) => add(`g4fr-cov-pos-${i}`, 'g4fr-adjectifs', 'possessifs', question,
     ['mon', 'ma', 'mes', 'ton', 'ta', 'tes', 'son', 'sa', 'ses', 'notre', 'vos', 'leurs'], answer,
-    'L’adjectif possessif indique à qui appartient le nom.', `<b>${answer}</b> convient au propriétaire et au nom.`));
+    'L\'adjectif possessif indique à qui appartient le nom.', `<b>${answer}</b> convient au propriétaire et au nom.`));
 
   [
     ['___ livre est passionnant.', 'Ce'], ['___ arbre est très haut.', 'Cet'],
@@ -40,7 +40,7 @@
     ['___ jeu est facile.', 'Ce']
   ].forEach(([question, answer], i) => add(`g4fr-cov-dem-${i}`, 'g4fr-adjectifs', 'demonstratifs', question,
     ['Ce', 'Cet', 'Cette', 'Ces'], answer, 'Observe le genre et le nombre du nom.',
-    `« <b>${answer}</b> » est l’adjectif démonstratif qui convient ici.`));
+    `« <b>${answer}</b> » est l\'adjectif démonstratif qui convient ici.`));
 
   [
     ['Choisis le groupe nominal correct.', 'un grand jardin', 'un jardin grand'],
@@ -64,5 +64,5 @@
     ['Choisis le groupe nominal correct.', 'une maison calme', 'une calme maison']
   ].forEach(([question, answer, distractor], i) => add(`g4fr-cov-place-${i}`, 'g4fr-adjectifs', 'place', `${question} « ${answer} » ou « ${distractor} » ?`,
     [answer, distractor], answer, 'Certains adjectifs vont avant le nom; beaucoup de couleurs vont après.',
-    `On dit <b>${answer}</b>. La place de l’adjectif dépend souvent de son sens.`));
+    `On dit <b>${answer}</b>. La place de l\'adjectif dépend souvent de son sens.`));
 })();

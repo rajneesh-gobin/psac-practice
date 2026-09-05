@@ -11,12 +11,12 @@ function _g4psgBox(inner, accent) {
 
 const _G4PSG_STORY = _g4psgBox(`
 <b style="color:#1e40af">Read the story, then answer the question.</b><br><br>
-<b>Rajen's Lost Kite</b><br><br>
+<b>Rajen\'s Lost Kite</b><br><br>
 Every Sunday, Rajen went to the big field near his house in Vacoas to fly his kite. The kite was red and yellow and it had a long tail made from strips of old cloth.<br><br>
 One windy Sunday in July, Rajen ran across the grass and let the kite climb high into the sky. Suddenly the string snapped. The kite sailed away over the trees and disappeared.<br><br>
 Rajen walked home slowly with the empty reel in his hand. He did not eat much that evening.<br><br>
 The next morning, his neighbour Mrs Appadoo knocked at the door. In her hands was the red and yellow kite. "I found it in my mango tree," she said with a smile.<br><br>
-That afternoon, Rajen's father helped him tie a new string to the kite - a much thicker one this time.
+That afternoon, Rajen\'s father helped him tie a new string to the kite - a much thicker one this time.
 `, '#3b82f6');
 
 const _G4PSG_POSTER = _g4psgBox(`
@@ -103,7 +103,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>He did not eat much that evening</b>" shows his feelings through his behaviour. Good writers <i>show</i> a feeling instead of naming it - this is called "show, don\'t tell".' }),
 
   makeMCQ({ id:'g4eng-psg-005', chapterId:'g4eng-passages', subsection:'story', difficulty:3,
-    question:`${_G4PSG_STORY}Why did Rajen's father use a MUCH THICKER string?`,
+    question:`${_G4PSG_STORY}Why did Rajen\'s father use a MUCH THICKER string?`,
     options:[
       'Thicker string is cheaper to buy',
       'So that the string would not snap again',

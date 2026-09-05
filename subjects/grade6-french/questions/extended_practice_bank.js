@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // Grade 6 French — revision questions kept at Grade 6 difficulty.
 // Each verb carries its own completions so every generated sentence reads as
 // real French. Tense questions offer the SAME verb with different endings, so
@@ -89,7 +89,7 @@
 
   // Subordinate clauses and connectors: 6 connectors × 5 real sentences = 30.
   // « parce que »/« puisque » and « lorsque »/« si » can both fit some frames,
-  // so each question's options exclude the connector's rival.
+  // so each question\'s options exclude the connector\'s rival.
   const connect = [
     ['parce que','la cause','puisque',[
       'Nous sommes restés à la maison ___ la pluie était trop forte.',

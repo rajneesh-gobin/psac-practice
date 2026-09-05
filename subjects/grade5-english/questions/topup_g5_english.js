@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 // Grade 5 English — top-up questions (12 per chapter, bringing each to 30+).
 
 STATIC_QUESTIONS.push(
@@ -21,8 +21,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-n-052', chapterId:'eng-nouns', subsection:'common_proper', difficulty:2,
     question:'Which sentence uses a possessive noun correctly for one dog?',
-    options:["The dog's bone is here.", 'The dogs bone is here.', "The dogs' bone is here.", 'The dogs bones is here.'],
-    answer:"The dog's bone is here.",
+    options:["The dog\'s bone is here.", 'The dogs bone is here.', "The dogs' bone is here.", 'The dogs bones is here.'],
+    answer:"The dog\'s bone is here.",
     hint:'A possessive noun for a single owner takes apostrophe + s.',
     explanation:'"<b>The dog\'s bone</b>" is correct — apostrophe + s shows the bone belongs to one dog. "The dogs\' bone" would mean the bone belongs to several dogs.' }),
 
@@ -56,8 +56,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-n-057', chapterId:'eng-nouns', subsection:'common_proper', difficulty:2,
     question:'Which sentence uses the possessive noun correctly for more than one child?',
-    options:["The children's toys are here.", "The childrens' toys are here.", 'The childrens toys are here.', 'The children toys are here.'],
-    answer:"The children's toys are here.",
+    options:["The children\'s toys are here.", "The childrens' toys are here.", 'The childrens toys are here.', 'The children toys are here.'],
+    answer:"The children\'s toys are here.",
     hint:'"Children" is already an irregular plural — it does not end in s, so add apostrophe + s.',
     explanation:'"<b>The children\'s</b> toys" is correct. Because "children" is an irregular plural (not ending in s), we add \'s to show possession. "Childrens\'" is not a real word.' }),
 
@@ -84,7 +84,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-n-061', chapterId:'eng-nouns', subsection:'plurals', difficulty:3,
     question:'Which sentence correctly shows possession for a group of teachers (plural, ends in s)?',
-    options:["The teachers' meeting lasted an hour.", "The teachers's meeting lasted an hour.", 'The teachers meeting lasted an hour.', "The teacher's meeting lasted an hour."],
+    options:["The teachers' meeting lasted an hour.", "The teachers\'s meeting lasted an hour.", 'The teachers meeting lasted an hour.', "The teacher\'s meeting lasted an hour."],
     answer:"The teachers' meeting lasted an hour.",
     hint:'For plural nouns already ending in s, add only an apostrophe after the s.',
     explanation:'"<b>The teachers\'</b> meeting" is correct. For plural nouns ending in s, add only an apostrophe — no extra s. "The teacher\'s meeting" would mean only one teacher.' }),
@@ -464,8 +464,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-wr-051', chapterId:'eng-writing', subsection:'formal_letter', difficulty:1,
     question:'Which feature is found in a FORMAL letter but NOT in a friendly letter?',
-    options:["Recipient's address", 'Date', 'A greeting', 'A closing'],
-    answer:"Recipient's address",
+    options:["Recipient\'s address", 'Date', 'A greeting', 'A closing'],
+    answer:"Recipient\'s address",
     hint:'A formal letter is posted to an official address, so it must show where it is going.',
     explanation:'A formal letter includes the <b>recipient\'s full postal address</b> at the top. A friendly letter does not need this — you already know your friend\'s address. Both types include a date, greeting, and closing.' }),
 
@@ -540,8 +540,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-wr-059', chapterId:'eng-writing', subsection:'formal_letter', difficulty:3,
     question:'Which feature is essential in a formal letter but NOT needed in a formal email?',
-    options:["The recipient's full postal address", 'A greeting', 'A closing', 'The date'],
-    answer:"The recipient's full postal address",
+    options:["The recipient\'s full postal address", 'A greeting', 'A closing', 'The date'],
+    answer:"The recipient\'s full postal address",
     hint:'A formal letter is sent by post; an email uses a digital address field instead.',
     explanation:'A formal letter includes the <b>recipient\'s full postal address</b> at the top. An email does not need this because the email address is entered in the "To:" field. Both use a greeting, closing, and date.' }),
 
@@ -573,21 +573,21 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5eng-sp-050', chapterId:'eng-spelling', subsection:'common_errors', difficulty:1,
     question:'Choose the correct word: "___ going to the market today."',
-    options:["They're",'Their','There','Thier'],
-    answer:"They're",
+    options:["They\'re",'Their','There','Thier'],
+    answer:"They\'re",
     hint:'Expand the word to check: "They are going to the market." Which word is the contraction?',
     explanation:'"<b>They\'re</b>" = they are, which fits the sentence. "Their" shows possession (their bags); "there" refers to a place (over there); "thier" is a misspelling.' }),
 
   makeMCQ({ id:'g5eng-sp-051', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,
     question:'Choose the correct word: "Is this ___ book or mine?"',
-    options:['your',"you're",'yore','yor'],
+    options:['your',"you\'re",'yore','yor'],
     answer:'your',
     hint:'Test by expanding "you\'re" to "you are" — does it make sense in the sentence?',
     explanation:'"<b>Your</b>" is the possessive form meaning "belonging to you." "You\'re" = you are, which gives "Is this you are book?" — clearly wrong. "Yore" means long ago and is unrelated.' }),
 
   makeMCQ({ id:'g5eng-sp-052', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,
     question:'Choose the correct word: "The cat hurt ___ paw."',
-    options:['its',"it's","its'","its's"],
+    options:['its',"it\'s","its'","its\'s"],
     answer:'its',
     hint:'Test by expanding "it\'s" to "it is" — does "The cat hurt it is paw" make sense?',
     explanation:'"<b>Its</b>" (no apostrophe) is the possessive pronoun meaning "belonging to it." "It\'s" = it is, which does not fit. "Its\'" and "its\'s" are not real words.' }),

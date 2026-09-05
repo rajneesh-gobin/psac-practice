@@ -5,7 +5,7 @@
 const _PASSAGE_G6 = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
 <b style="color:#0e7490">Read the passage carefully, then answer the question.</b><br><br>
 <b>Plastic - A Modern Menace</b><br><br>
-Every year, over eight million tonnes of plastic waste enter the world's oceans. Marine creatures such as sea turtles, dolphins and seabirds often mistake plastic bags for food. When they swallow plastic, it blocks their digestive systems and can be fatal. Tiny fragments called microplastics have been found in fish that humans eat, raising serious concerns about the food chain.<br><br>
+Every year, over eight million tonnes of plastic waste enter the world\'s oceans. Marine creatures such as sea turtles, dolphins and seabirds often mistake plastic bags for food. When they swallow plastic, it blocks their digestive systems and can be fatal. Tiny fragments called microplastics have been found in fish that humans eat, raising serious concerns about the food chain.<br><br>
 Plastic is inexpensive to produce and incredibly versatile, which explains why it is used in almost every industry. However, most plastic is designed for single use - a straw used for five minutes may take five hundred years to decompose. Unlike organic materials, plastic does not biodegrade; it merely breaks into smaller and smaller fragments.<br><br>
 Governments worldwide are beginning to act. Several countries have banned single-use plastics such as straws, bags and cutlery. Mauritius introduced a ban on single-use plastic bags in 2020. Environmental groups urge individuals to adopt the three Rs: Reduce, Reuse and Recycle. Yet campaigners warn that individual action alone is not enough - systemic change from manufacturers and policymakers is essential.
 </div>`;
@@ -39,7 +39,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Versatile</b>" means able to be used for many different purposes. The context - "used in almost every industry" - confirms this meaning. A versatile material adapts to many needs.' }),
 
   makeMCQ({ id:'g6eng-comp-004', chapterId:'g6eng-comprehension', subsection:'authors_view', difficulty:2,
-    question:`${_PASSAGE_G6}The author describes plastic as "A Modern Menace". What does "menace" suggest about the author's attitude?`,
+    question:`${_PASSAGE_G6}The author describes plastic as "A Modern Menace". What does "menace" suggest about the author\'s attitude?`,
     options:[
       'The author is neutral and presents only facts.',
       'The author views plastic as a serious threat or danger.',
@@ -70,7 +70,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Mauritius introduced a ban on single-use plastic bags in 2020.</b>" This is stated directly in paragraph 3, as part of the wider global response to the plastic crisis.' }),
 
   makeMCQ({ id:'g6eng-comp-007', chapterId:'g6eng-comprehension', subsection:'authors_view', difficulty:2,
-    question:`${_PASSAGE_G6}What is the author's MAIN PURPOSE in writing this passage?`,
+    question:`${_PASSAGE_G6}What is the author\'s MAIN PURPOSE in writing this passage?`,
     options:[
       'To entertain readers with a story about ocean animals',
       'To inform and persuade readers about the dangers of plastic and the need for action',
@@ -115,10 +115,10 @@ STATIC_QUESTIONS.push(
 
 const _PASSAGE_DODO = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
 <b style="color:#0e7490">Read the passage carefully, then answer the questions.</b><br><br>
-<b>The Dodo - Mauritius's Lost Bird</b><br><br>
+<b>The Dodo - Mauritius\'s Lost Bird</b><br><br>
 The dodo was a large, flightless bird that lived only on the island of Mauritius. Standing nearly a metre tall and weighing up to twenty-three kilograms, it had short, stubby wings that were completely useless for flight. Its rounded body and peculiar beak gave it an appearance unlike any other bird on Earth. Scientists believe the dodo evolved without the ability to fly because Mauritius had no land predators - there was simply no need to escape from danger by air.<br><br>
-When Dutch sailors arrived in Mauritius around 1600, the dodo's fate was sealed. The birds were easy to catch because they had no fear of humans - they had never learned to run from predators. Sailors hunted them for food, but the greater threat came from the animals the settlers brought with them: rats, pigs and monkeys that raided dodo nests and ate the eggs. Within less than a century of human arrival, the dodo was extinct.<br><br>
-Today, the dodo has become a powerful symbol. Scientists use the phrase "dead as a dodo" to describe anything completely and irreversibly gone. Yet the dodo's story is also a warning: the same combination of hunting, habitat destruction and introduced species continues to drive other animals to extinction today. In Mauritius, conservation efforts now protect surviving endemic species such as the Pink Pigeon and the Echo Parakeet, determined that history shall not repeat itself.
+When Dutch sailors arrived in Mauritius around 1600, the dodo\'s fate was sealed. The birds were easy to catch because they had no fear of humans - they had never learned to run from predators. Sailors hunted them for food, but the greater threat came from the animals the settlers brought with them: rats, pigs and monkeys that raided dodo nests and ate the eggs. Within less than a century of human arrival, the dodo was extinct.<br><br>
+Today, the dodo has become a powerful symbol. Scientists use the phrase "dead as a dodo" to describe anything completely and irreversibly gone. Yet the dodo\'s story is also a warning: the same combination of hunting, habitat destruction and introduced species continues to drive other animals to extinction today. In Mauritius, conservation efforts now protect surviving endemic species such as the Pink Pigeon and the Echo Parakeet, determined that history shall not repeat itself.
 </div>`;
 
 STATIC_QUESTIONS.push(
@@ -187,7 +187,7 @@ STATIC_QUESTIONS.push(
     explanation:'The passage says the dodo had "<b>no fear of humans</b> - they had never learned to run from predators." Because Mauritius had no land predators before human arrival, dodos had never developed the instinct to flee. This made them tragically vulnerable when hunters arrived.' }),
 
   makeMCQ({ id:'g6eng-comp-018', chapterId:'g6eng-comprehension', subsection:'authors_view', difficulty:3,
-    question:`${_PASSAGE_DODO}What is the AUTHOR'S PURPOSE in paragraph three?`,
+    question:`${_PASSAGE_DODO}What is the AUTHOR\'S PURPOSE in paragraph three?`,
     options:[
       'To entertain readers with facts about a famous extinct bird',
       'To use the dodo\'s story as a warning about current extinction threats and inspire conservation',

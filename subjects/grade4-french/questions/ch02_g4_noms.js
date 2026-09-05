@@ -218,11 +218,11 @@ STATIC_QUESTIONS.push(
     question:'Choisissez la phrase correcte :',
     options:[
       'Je bois de la eau.',
-      "Je bois de l'eau.",
+      "Je bois de l\'eau.",
       'Je bois du eau.',
       'Je bois des eaux.'
     ],
-    answer:"Je bois de l'eau.",
+    answer:"Je bois de l\'eau.",
     hint:'"Eau" commence par une voyelle → article partitif = ?',
     explanation:'"Je bois <b>de l\'</b>eau." - devant une voyelle (ici "e" de "eau"), l\'article partitif devient <b>de l\'</b>. "De la eau" est impossible (élision obligatoire). "Du eau" aussi impossible (eau = féminin). "Des eaux" = pluriel (plusieurs types d\'eau) - rare dans ce contexte.' }),
 

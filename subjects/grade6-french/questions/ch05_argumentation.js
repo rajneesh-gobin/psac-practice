@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 6 French - Chapitre : L'Expression Écrite & Argumentation
+// Grade 6 French - Chapitre : L\'Expression Écrite & Argumentation
 // IDs format: g6fr-arg-NNN
 
 STATIC_QUESTIONS.push(

@@ -88,7 +88,7 @@ STATIC_QUESTIONS.push(
       'To list all the arguments against your thesis',
       'To provide a definition of all key terms'
     ],
-    answer:"To grab the reader's attention at the very start",
+    answer:"To grab the reader\'s attention at the very start",
     hint:'The hook is the very first sentence - it must make the reader want to continue.',
     explanation:'A <b>hook</b> is the opening sentence designed to immediately engage the reader. Effective hooks include: a striking statistic ("Over 8 million tonnes of plastic enter our oceans each year."), a rhetorical question, a vivid description, or a bold statement. It draws the reader in before the thesis is stated.' })
 

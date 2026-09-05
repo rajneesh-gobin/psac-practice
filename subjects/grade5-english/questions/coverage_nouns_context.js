@@ -26,8 +26,8 @@
     ['Two ___ spoke to the headteacher.','woman','women',['womans','womanes','womens'],'Woman changes to women, without adding s.']
   ];
   plurals.forEach(([sentence,singular,answer,wrong,rule],i)=>add('plurals',i,
-    `Choose the plural of <b>${singular}</b> to complete this sentence: “${sentence}”`,[answer,...wrong],answer,
-    'The sentence refers to more than one. Check the spelling of the plural.',`${rule} The correct form is <b>${answer}</b>: “${sentence.replace('___',answer)}”`));
+    `Choose the plural of <b>${singular}</b> to complete this sentence: "${sentence}"`,[answer,...wrong],answer,
+    'The sentence refers to more than one. Check the spelling of the plural.',`${rule} The correct form is <b>${answer}</b>: "${sentence.replace('___',answer)}"`));
   const pronouns=[
     ['Maya is my sister. ___ enjoys drawing.','She',['Her','Hers','Herself'],'Use a subject pronoun for Maya.'],
     ['Ravi is my brother. I gave ___ a new pencil.','him',['he','his','himself'],'The pronoun receives the pencil, so use an object pronoun.'],
@@ -51,6 +51,6 @@
     ['You have a message, Sam. The teacher wants to speak to ___.','you',['your','yours','yourself'],'After speak to, use the object pronoun for the person being addressed.']
   ];
   pronouns.forEach(([sentence,answer,wrong,rule],i)=>add('pronouns',i,
-    `Choose the pronoun that fits: “${sentence}”`,[answer,...wrong],answer,
-    'Decide whether the word names the doer, receives the action, or shows ownership.',`${rule} Write <b>${answer}</b>: “${sentence.replace('___',answer)}”`));
+    `Choose the pronoun that fits: "${sentence}"`,[answer,...wrong],answer,
+    'Decide whether the word names the doer, receives the action, or shows ownership.',`${rule} Write <b>${answer}</b>: "${sentence.replace('___',answer)}"`));
 })();

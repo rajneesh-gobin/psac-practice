@@ -197,7 +197,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-per-024', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:1,
     question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/pierre-poivre.jpg" alt="Portrait of Pierre Poivre" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>This is Pierre Poivre. Which plants is he especially remembered for introducing to Mauritius?</b>',
     options:['Spice plants such as cloves and nutmeg','Tea and coffee only','Potatoes and wheat','Sugar cane and tobacco'],
-    answer:'Spice plants such as cloves and nutmeg', hint:'His surname means “pepper” in French.',
+    answer:'Spice plants such as cloves and nutmeg', hint:'His surname means "pepper" in French.',
     explanation:'Pierre Poivre introduced valuable <b>spice plants</b>, including cloves and nutmeg, to Mauritius.' }),
 
   makeMCQ({ id:'g5enr-per-025', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:2,
@@ -208,7 +208,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5enr-per-026', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:3,
     question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/mahe-de-labourdonnais.jpg" alt="Portrait of Mahé de Labourdonnais" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>Identify this person, then choose the correct pair of achievements.</b>',
-    options:['Mahé de Labourdonnais — Port Louis harbour and roads','Pierre Poivre — Port Louis harbour and roads','Charles Decaen — spice gardens and nutmeg','Robert Farquhar — Dutch settlement and the island’s name'],
+    options:['Mahé de Labourdonnais — Port Louis harbour and roads','Pierre Poivre — Port Louis harbour and roads','Charles Decaen — spice gardens and nutmeg','Robert Farquhar — Dutch settlement and the island\'s name'],
     answer:'Mahé de Labourdonnais — Port Louis harbour and roads',
     hint:'He was the French governor who transformed Port Louis.',
     explanation:'Mahé de Labourdonnais developed Port Louis harbour and built roads and other infrastructure.' }),
@@ -218,6 +218,6 @@ STATIC_QUESTIONS.push(
     options:['Pierre Poivre — it helped Mauritius grow valuable spices','Mahé de Labourdonnais — it made Mauritius a Dutch colony','Charles Decaen — it ended British rule','Robert Farquhar — it created the first Portuguese settlement'],
     answer:'Pierre Poivre — it helped Mauritius grow valuable spices',
     hint:'Think of the cloves and nutmeg he brought to the island.',
-    explanation:'Pierre Poivre’s work made it possible to cultivate valuable spices in Mauritius.' })
+    explanation:'Pierre Poivre\'s work made it possible to cultivate valuable spices in Mauritius.' })
 
 );

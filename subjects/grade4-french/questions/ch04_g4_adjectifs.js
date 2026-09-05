@@ -258,7 +258,7 @@ STATIC_QUESTIONS.push(
       'C\'est un enfant petit intelligent.',
       'C\'est intelligent petit enfant.'
     ],
-    answer:"C'est un petit enfant intelligent.",
+    answer:"C\'est un petit enfant intelligent.",
     hint:'"Petit" = BAGS (Size) → avant. "Intelligent" = hors BAGS → après.',
     explanation:'"C\'est un <b>petit</b> enfant <b>intelligent</b>." - <b>petit</b> (Size = BAGS) se place <b>avant</b> le nom. <b>intelligent</b> (qualité non-BAGS) se place <b>après</b> le nom. Quand il y a deux adjectifs : BAGS + nom + non-BAGS.' }),
 

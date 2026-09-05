@@ -3,7 +3,7 @@
 // IDs format: g6eng-psg-NNN
 // Five MIE Grade 6 text types: formal letter, newspaper report, advertisement,
 // legend/folktale, factual report with a data table. Grade 6 questions push
-// past literal retrieval into inference, tone, bias and writer's purpose.
+// past literal retrieval into inference, tone, bias and writer\'s purpose.
 
 function _g6psgBox(inner, accent) {
   return `<div style="background:#f8fafc;border-left:4px solid ${accent};border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.92em;line-height:1.65;color:#0f172a">${inner}</div>`;
@@ -18,9 +18,9 @@ Rose Hill<br><br>
 Dear Sir or Madam,<br><br>
 <b>RE: Request for two additional bins at Balfour Garden</b><br><br>
 We are writing on behalf of the thirty members of our school Environment Club.<br><br>
-On Saturday 2 May we spent two hours collecting litter in Balfour Garden. In that time we filled eleven bags, mostly with plastic bottles and food wrappers. We counted only <b>two</b> bins in the whole garden, both of them beside the main gate and both overflowing by ten o'clock in the morning.<br><br>
+On Saturday 2 May we spent two hours collecting litter in Balfour Garden. In that time we filled eleven bags, mostly with plastic bottles and food wrappers. We counted only <b>two</b> bins in the whole garden, both of them beside the main gate and both overflowing by ten o\'clock in the morning.<br><br>
 We believe the litter problem is not caused by carelessness alone. Visitors who sit on the far side of the garden must walk more than two hundred metres to reach a bin.<br><br>
-We therefore respectfully request that two additional bins be placed near the children's play area and near the viewpoint. We would also be glad to design and paint signs encouraging visitors to use them, at no cost to the Council.<br><br>
+We therefore respectfully request that two additional bins be placed near the children\'s play area and near the viewpoint. We would also be glad to design and paint signs encouraging visitors to use them, at no cost to the Council.<br><br>
 We look forward to your reply.<br><br>
 Yours faithfully,<br>
 <b>Kavisha Ramdhany</b><br>
@@ -62,14 +62,14 @@ const _G6PSG_LEGEND = _g6psgBox(`
 Long ago, so the old people of Mauritius say, a milkman climbed the mountain path each dawn with two heavy cans, one on each shoulder.<br><br>
 Halfway up he came upon a circle of fairies dancing in the mist. They stopped, and their queen stepped forward. "You may watch us," she said, "and we shall fill your cans with silver each morning. But if you ever speak of what you have seen, you will be turned to stone."<br><br>
 For many months the milkman kept the bargain and grew rich. Then one evening, warm with the praise of his neighbours, he began to boast in the village square of the little dancers on the mountain.<br><br>
-He did not finish the sentence. In the morning the villagers looked up and saw, balanced on the summit, a great round boulder shaped like a man's head.<br><br>
-It stands there still, and the mountain carries the milkman's name.
+He did not finish the sentence. In the morning the villagers looked up and saw, balanced on the summit, a great round boulder shaped like a man\'s head.<br><br>
+It stands there still, and the mountain carries the milkman\'s name.
 `, '#8b5cf6');
 
 const _G6PSG_REPORT = _g6psgBox(`
 <b style="color:#15803d">Read the report and the table, then answer the question.</b><br><br>
 <b>Rainfall and the Mauritian school year</b><br><br>
-Mauritius has two seasons. The warm, wet summer runs from November to April; the cooler, drier winter runs from May to October. Most of the island's rain falls on the central plateau, and far less falls along the west coast. The difference matters: the plateau supplies much of the water that reservoirs store for the dry months.<br><br>
+Mauritius has two seasons. The warm, wet summer runs from November to April; the cooler, drier winter runs from May to October. Most of the island\'s rain falls on the central plateau, and far less falls along the west coast. The difference matters: the plateau supplies much of the water that reservoirs store for the dry months.<br><br>
 The table shows average monthly rainfall recorded at two stations.<br><br>
 <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
 <table style="border-collapse:collapse;width:100%;max-width:420px;min-width:280px;font-size:0.95em">
@@ -223,7 +223,7 @@ STATIC_QUESTIONS.push(
     explanation:'The small print says "Survey of <b>40 parents at one launch event</b>". People who attend a product launch are already interested in the product, so the sample is <b>small and biased</b>. A statistic is only as strong as the group it came from.' }),
 
   makeMCQ({ id:'g6eng-psg-014', chapterId:'g6eng-passages', subsection:'advert', difficulty:4,
-    question:`${_G6PSG_ADVERT}Your friend says, "It's a bargain - it's guaranteed, so if anything breaks they'll fix it." How would you correct her using the advert?`,
+    question:`${_G6PSG_ADVERT}Your friend says, "It\'s a bargain - it\'s guaranteed, so if anything breaks they\'ll fix it." How would you correct her using the advert?`,
     options:[
       'The warranty lasts 6 months and does not cover screen damage - the most likely fault',
       'There is no warranty at all',

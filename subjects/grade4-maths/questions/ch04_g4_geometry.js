@@ -138,7 +138,7 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Illustrated questions: angles drawn, triangles marked with tick marks,
-//    a square's lines of symmetry drawn — actual diagrams, not just words.
+//    a square\'s lines of symmetry drawn — actual diagrams, not just words.
 //    Coordinates are hand-fixed (no elliptical-arc trig) so they render
 //    exactly as intended on every device.
 const _G4M_SVG_ANGLE_RIGHT = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="max-width:220px;max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white"><line x1="40" y1="160" x2="170" y2="160" stroke="#1e293b" stroke-width="3"/><line x1="40" y1="160" x2="40" y2="30" stroke="#1e293b" stroke-width="3"/><path d="M40,144 L56,144 L56,160" fill="none" stroke="#dc2626" stroke-width="2"/><circle cx="40" cy="160" r="3" fill="#1e293b"/></svg>`;

@@ -36,7 +36,7 @@ const _G5PSG_LETTER = _g5psgBox(`
 <div style="text-align:right">17, Avenue des Flamboyants<br>Quatre Bornes<br>8 August</div><br>
 Dear Grandma,<br><br>
 Thank you so much for the birthday parcel. The blue notebook is beautiful and I have already started writing my stories in it.<br><br>
-School is going well, but Maths is hard this term. We began long division last week and I got the first four sums wrong. Papa sat with me on Sunday and now I understand where the remainder goes. I got eight out of ten in Tuesday's test!<br><br>
+School is going well, but Maths is hard this term. We began long division last week and I got the first four sums wrong. Papa sat with me on Sunday and now I understand where the remainder goes. I got eight out of ten in Tuesday\'s test!<br><br>
 Do you remember the guava tree behind our kitchen? It is full of fruit again. Mama says we will make jam and keep a jar for you.<br><br>
 Please write and tell me how your knee is. Is it still painful when it rains?<br><br>
 With lots of love,<br>
@@ -46,7 +46,7 @@ With lots of love,<br>
 const _G5PSG_NARR = _g5psgBox(`
 <b style="color:#0e7490">Read the passage, then answer the question.</b><br><br>
 <b>The Night of the Cyclone</b><br><br>
-I was nine years old the night Cyclone Berguitta passed over Mauritius. By six o'clock the sky had turned the colour of wet cement and the mango tree outside my window was bending like a bow.<br><br>
+I was nine years old the night Cyclone Berguitta passed over Mauritius. By six o\'clock the sky had turned the colour of wet cement and the mango tree outside my window was bending like a bow.<br><br>
 Papa nailed a sheet of plywood across the kitchen window while Mama filled every bucket and basin with water. My little brother Kiran thought it was a game and kept switching the torch on and off until Mama took it away from him.<br><br>
 At half past eight the lights went out. The whole street went dark at the same moment, and for a second nobody spoke. Then Papa laughed, lit two candles, and said, "Now we tell stories."<br><br>
 The wind screamed all night. I did not sleep much. But in the morning the sun came out, the neighbours came out with brooms, and by lunchtime the road was clear again. I remember the candles better than the wind.
@@ -148,7 +148,7 @@ STATIC_QUESTIONS.push(
 
   // ── TEXT B: informal letter ────────────────────────────────────────
   makeMCQ({ id:'g5eng-psg-006', chapterId:'eng-passages', subsection:'letter', difficulty:1,
-    question:`${_G5PSG_LETTER}Where on the page is the writer's address placed in this letter?`,
+    question:`${_G5PSG_LETTER}Where on the page is the writer\'s address placed in this letter?`,
     options:['Top right','Top left','Bottom right','Under the signature'],
     answer:'Top right',
     hint:'Look at how the address and the date are lined up.',
@@ -162,7 +162,7 @@ STATIC_QUESTIONS.push(
     explanation:'"The <b>blue notebook</b> is beautiful and I have already started writing my stories in it." The guava jam is something Yashna will send TO Grandma later - not something she received.' }),
 
   makeMCQ({ id:'g5eng-psg-008', chapterId:'eng-passages', subsection:'letter', difficulty:2,
-    question:`${_G5PSG_LETTER}How do we know Yashna's Maths has improved?`,
+    question:`${_G5PSG_LETTER}How do we know Yashna\'s Maths has improved?`,
     options:[
       'She says long division is now easy for everyone',
       'She scored eight out of ten in Tuesday\'s test',
@@ -224,7 +224,7 @@ STATIC_QUESTIONS.push(
     explanation:'Storing water is standard <b>cyclone preparation</b> - during a cyclone the electricity and the water supply often stop. The text does not spell this out, so you infer it from what you know about cyclones.' }),
 
   makeMCQ({ id:'g5eng-psg-014', chapterId:'eng-passages', subsection:'story', difficulty:3,
-    question:`${_G5PSG_NARR}The passage ends: "I remember the candles better than the wind." What does this suggest about the writer's memory of that night?`,
+    question:`${_G5PSG_NARR}The passage ends: "I remember the candles better than the wind." What does this suggest about the writer\'s memory of that night?`,
     options:[
       'She has forgotten most of what happened',
       'What stayed with her was the family being together, not the danger',
@@ -256,7 +256,7 @@ STATIC_QUESTIONS.push(
     explanation:'Coaching is on <b>Wednesday and Saturday</b>, 2.00 p.m. to 4.00 p.m. Advertisements put the key facts in bold so a reader skimming the notice board still catches them.' }),
 
   makeMCQ({ id:'g5eng-psg-017', chapterId:'eng-passages', subsection:'story', difficulty:2,
-    question:`${_G5PSG_ADVERT}Rahul's older sister is already a member of the club. How much will Rahul pay each month?`,
+    question:`${_G5PSG_ADVERT}Rahul\'s older sister is already a member of the club. How much will Rahul pay each month?`,
     options:['Rs 150','Rs 100','Rs 50','Nothing'],
     answer:'Rs 100',
     hint:'Read the words in brackets after the fee.',

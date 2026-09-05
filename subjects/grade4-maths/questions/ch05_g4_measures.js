@@ -164,7 +164,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4m-meas-020', chapterId:'g4-measures', subsection:'time', difficulty:1,
     question:`<div style="text-align:center;margin-bottom:10px">${_g4mClockFace(3, 0)}</div>What time does this clock show?`,
     options:['2 o\'clock','3 o\'clock','4 o\'clock','9 o\'clock'],
-    answer:"3 o'clock",
+    answer:"3 o\'clock",
     hint:'The minute hand points to the 12, so it is exactly on the hour. Read the hour hand.',
     explanation:'The minute hand points to <b>12</b> (exactly on the hour) and the hour hand points to <b>3</b>. The time is <b>3 o\'clock</b>.' }),
 

@@ -10,7 +10,7 @@
     ['What happened to the Dutch settlement in 1710?', 'it was abandoned'],['Why could rats be harmful to native birds?', 'they ate eggs on the ground'],
     ['Which is one reason the Dutch settlement did not last?', 'shortages and difficult weather'],['The Dutch came from…','the Netherlands'],
     ['A settlement needs reliable supplies of…','food and water'],['What did the cutting of forests reduce?', 'native habitats'],
-    ['Which lesson comes from the Dodo’s extinction?', 'protect animals and habitats'],['The Dutch period came before the…','French period'],
+    ['Which lesson comes from the Dodo\'s extinction?', 'protect animals and habitats'],['The Dutch period came before the…','French period'],
     ['Why did settlers build shelters?', 'to live safely on the island'],['Which resource did sailors need to find on an island?', 'fresh water'],
     ['Old objects from a settlement are useful because they are…','evidence from the past'],['The Dutch were the first Europeans to make a…','permanent settlement in Mauritius']
   ],['1638','south-east of Mauritius','ebony','for food and work','the Dodo','cyclones and droughts','to resupply ships on long journeys','Prince Maurits of Nassau','it was abandoned','they ate eggs on the ground','shortages and difficult weather','the Netherlands','food and water','native habitats','protect animals and habitats','French period','to live safely on the island','fresh water','evidence from the past','permanent settlement in Mauritius'],'Think about why people settled, and why that settlement was difficult.');
@@ -19,7 +19,7 @@
     ['Why did the French improve Port Louis?', 'to create a safe harbour and capital'],['What was an important crop during French rule?', 'sugar cane'],
     ['Pierre Poivre is remembered for…','developing spice plants and gardens'],['Which garden is linked with Pierre Poivre?', 'Pamplemousses Botanical Garden'],
     ['Why did the French want a strong harbour?', 'for trade and naval ships'],['What did roads help farmers and traders do?', 'move goods more easily'],
-    ['The French period came after the…','Dutch period'],['What does “Île de France” mean?', 'the French name for Mauritius'],
+    ['The French period came after the…','Dutch period'],['What does "Île de France" mean?', 'the French name for Mauritius'],
     ['Which activity increased during the French period?', 'trade through Port Louis'],['Why were plantations important?', 'they grew crops to sell'],
     ['A governor is a person who…','helps govern a colony'],['Why do historical gardens matter?', 'they show how plants and trade developed'],
     ['Which city became the capital during French rule?', 'Port Louis'],['The French settled Mauritius partly because it was on…','Indian Ocean sea routes'],
@@ -34,8 +34,8 @@
     ['Abolition means…','the ending of slavery by law'],['Why is 1835 an important year in Mauritian history?', 'slavery was abolished'],
     ['The British period came after the…','French period'],['Which country ruled Mauritius before independence?', 'Britain'],
     ['Why did people from India come to Mauritius after abolition?', 'to work as indentured labourers'],['Aapravasi Ghat is linked with…','the arrival of indentured labourers'],
-    ['What is an indentured labourer?', 'a worker under a contract for a set time'],['Why do we study the British period?', 'it changed laws and people’s lives'],
+    ['What is an indentured labourer?', 'a worker under a contract for a set time'],['Why do we study the British period?', 'it changed laws and people\'s lives'],
     ['What did the British keep to help administration?', 'some French laws and customs'],['In 1810, Britain and France were fighting over…','control of the island'],
-    ['Which value should we use when studying difficult history?', 'respect for people’s experiences'],['British rule ended when Mauritius became independent in…','1968']
-  ],[‘Britain’,’the Battle of Grand Port’,’French’,’Mauritius’,’Sir Robert Farquhar’,’to control an important Indian Ocean route’,’1810’,’the abolition of slavery’,’the ending of slavery by law’,’slavery was abolished’,’French period’,’to work as indentured labourers’,’the arrival of indentured labourers’,’a worker under a contract for a set time’,’it changed laws and people’s lives’,’some French laws and customs’,’control of the island’,’respect for people’s experiences’,’1968’],’Think about the change from French to British rule and the important dates.’);
+    ['Which value should we use when studying difficult history?', 'respect for people\'s experiences'],['British rule ended when Mauritius became independent in…','1968']
+  ],['Britain','the Battle of Grand Port','French','Mauritius','Sir Robert Farquhar','to control an important Indian Ocean route','1810','the abolition of slavery','the ending of slavery by law','slavery was abolished','French period','to work as indentured labourers','the arrival of indentured labourers','a worker under a contract for a set time','it changed laws and people\'s lives','some French laws and customs','control of the island','respect for people\'s experiences','1968'],'Think about the change from French to British rule and the important dates.');
 })();

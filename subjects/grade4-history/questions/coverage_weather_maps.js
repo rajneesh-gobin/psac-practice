@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 (function () {
   const add = (id, c, s, question, options, answer, hint) => STATIC_QUESTIONS.push(makeMCQ({ id, chapterId:c, subsection:s, difficulty:2, question, options, answer, hint, explanation:`<b>${answer}</b> is correct.` }));
   const rows = (p,c,s,data,options,hint) => data.forEach(([q,a],i)=>add(`g4hg-cov-${p}-${i}`,c,s,q,options,a,hint));
@@ -7,7 +7,7 @@
     ['Mauritian summer is usually…','hot and rainy'],['Mauritian winter is usually…','cooler and drier'],['During which season are cyclones more likely?','summer'],
     ['What should you take when rain is forecast?','an umbrella or raincoat'],['Why do farmers watch the seasons?','weather affects crops'],['Which season comes after April?','winter'],
     ['A hot, humid day is more common in…','summer'],['A cooler, dry day is more common in…','winter'],['Why can weather vary from one place to another?','some areas are higher or nearer the coast'],['A season is…','a time of year with usual weather patterns']
-  ],['November to April','May to October','hot and rainy','cooler and drier','summer','an umbrella or raincoat','weather affects crops','winter','some areas are higher or nearer the coast','a time of year with usual weather patterns'],'Think about Mauritius’s two main seasons.');
+  ],['November to April','May to October','hot and rainy','cooler and drier','summer','an umbrella or raincoat','weather affects crops','winter','some areas are higher or nearer the coast','a time of year with usual weather patterns'],'Think about Mauritius\'s two main seasons.');
   rows('instrument','g4ge-weather','instruments',[
     ['Which instrument measures temperature?','thermometer'],['Which instrument measures rainfall?','rain gauge'],['Which instrument shows wind direction?','wind vane'],
     ['Which instrument measures wind speed?','anemometer'],['Which measurement is written in degrees Celsius?','temperature'],['Which instrument might be outside in the rain?','rain gauge'],
@@ -42,12 +42,12 @@
   ],['to show features simply','in the key or legend','a river','an airport','a hospital','a capital or important place','symbols can have different meanings','a line','find the school quickly','river — blue line','clear and easy to recognise','a forest or park','legend','a wave symbol','there is not room to draw everything'],'Look at what each symbol represents.');
   rows('part','g4ge-map-skills','parts_of_map',[
     ['What tells you what a map is about?','the title'],['What explains symbols on a map?','the key or legend'],['What shows north on a map?','the north arrow'],
-    ['What helps compare map distance with real distance?','the scale'],['Why is a title important?','it tells the map’s subject'],['Why is a north arrow important?','it helps you know direction'],
-    ['A scale helps you estimate…','real distance'],['Which part would say “Map of Mauritius”?','the title'],['Which part might show “1 cm = 1 km”?','the scale'],
+    ['What helps compare map distance with real distance?','the scale'],['Why is a title important?','it tells the map\'s subject'],['Why is a north arrow important?','it helps you know direction'],
+    ['A scale helps you estimate…','real distance'],['Which part would say "Map of Mauritius"?','the title'],['Which part might show "1 cm = 1 km"?','the scale'],
     ['Which map part should every map have?','a title'],['What does a legend explain?','map symbols'],['A north arrow is a type of…','direction guide'],
     ['Why use a scale?','to work out distance'],['A map without a key can be…','hard to understand'],['What should a clear title be?','short and accurate'],
     ['The compass on a map helps a reader…','orient the map']
-  ],[‘the title’,’the key or legend’,’the north arrow’,’the scale’,’it tells the map\’s subject’,’it helps you know direction’,’real distance’,’a title’,’map symbols’,’direction guide’,’to work out distance’,’hard to understand’,’short and accurate’,’orient the map’],’Think about what each map part helps a reader do.’);
+  ],['the title','the key or legend','the north arrow','the scale','it tells the map\'s subject','it helps you know direction','real distance','a title','map symbols','direction guide','to work out distance','hard to understand','short and accurate','orient the map'],'Think about what each map part helps a reader do.');
   rows('usemap','g4ge-map-skills','using_map',[
     ['Before using a map, what should you read first?','the title and key'],['If a shop is north of the school, which direction do you travel from school?','north'],
     ['To find a feature, look for its…','symbol in the key'],['Why draw a simple map of your route?','to help others follow it'],['A map can help a visitor…','find places'],

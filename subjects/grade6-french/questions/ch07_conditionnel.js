@@ -142,7 +142,7 @@ STATIC_QUESTIONS.push(
       'étais / achèterai / voyagerai / ferai'
     ],
     answer:'étais / achèterais / voyagerais / ferais',
-    hint:'"Si j\'étais" (imparfait d’être) + conditionnel (x3). Faire irrégulier = ferais.',
+    hint:'"Si j\'étais" (imparfait d\'être) + conditionnel (x3). Faire irrégulier = ferais.',
     explanation:'"Si j\'<b>étais</b>" (être, imparfait = étais). "<b>Achèterais</b>" (acheter, conditionnel). "<b>Voyagerais</b>" (voyager, conditionnel). "<b>Ferais</b>" (faire, conditionnel irrégulier : radical fer-). Toutes les conséquences = conditionnel.' }),
 
   makeMCQ({ id:'g6fr-conditionnel-020', chapterId:'g6fr-conditionnel', subsection:'irreguliers', difficulty:1,
@@ -190,8 +190,8 @@ STATIC_QUESTIONS.push(
     question:'Transforme en souhait avec le conditionnel : "Je veux aller à Paris." →',
     options:['Je voulais aller à Paris.','J\'aimerais aller à Paris.','J\'allais à Paris.','Je suis allé à Paris.'],
     answer:'J\'aimerais aller à Paris.',
-    hint:'Souhait = conditionnel d’aimer → j\'aimerais.',
-    explanation:'"J\'<b>aimerais</b> aller à Paris" - pour exprimer un <b>souhait</b>, on utilise le conditionnel d’aimer (j\'<b>aimerais</b>) ou de vouloir (je <b>voudrais</b>). C\'est plus doux et poli que "je veux".' }),
+    hint:'Souhait = conditionnel d\'aimer → j\'aimerais.',
+    explanation:'"J\'<b>aimerais</b> aller à Paris" - pour exprimer un <b>souhait</b>, on utilise le conditionnel d\'aimer (j\'<b>aimerais</b>) ou de vouloir (je <b>voudrais</b>). C\'est plus doux et poli que "je veux".' }),
 
   makeMCQ({ id:'g6fr-conditionnel-027', chapterId:'g6fr-conditionnel', subsection:'irreguliers', difficulty:3,
     question:'Quel est le conditionnel de TENIR pour "ils" ?',
@@ -205,20 +205,20 @@ STATIC_QUESTIONS.push(
     options:['Si j\'avais su, je serais venu.','Si j\'avais su, je venais.','Si je savais, je serais venu.','Si j\'ai su, je suis venu.'],
     answer:'Si j\'avais su, je serais venu.',
     hint:'Hypothèse passée non réalisée = si + plus-que-parfait → conditionnel passé.',
-    explanation:'"Si j\'<b>avais su</b> (PQP), je <b>serais venu</b> (conditionnel passé)." - Hypothèse sur le passé (non réalisée) : <b>si + PQP → conditionnel passé</b>. Formation du conditionnel passé : <b>conditionnel d’avoir/être + participe passé</b>. Venir + être → je <b>serais venu</b>.' }),
+    explanation:'"Si j\'<b>avais su</b> (PQP), je <b>serais venu</b> (conditionnel passé)." - Hypothèse sur le passé (non réalisée) : <b>si + PQP → conditionnel passé</b>. Formation du conditionnel passé : <b>conditionnel d\'avoir/être + participe passé</b>. Venir + être → je <b>serais venu</b>.' }),
 
   makeMCQ({ id:'g6fr-conditionnel-029', chapterId:'g6fr-conditionnel', subsection:'si_clauses', difficulty:3,
     question:'Complète le conditionnel passé : "Si elle avait étudié, elle ___ (réussir) l\'examen."',
     options:['aurait réussi','avait réussi','aurait réussie','avait réussit'],
     answer:'aurait réussi',
-    hint:'Conditionnel passé = conditionnel d’avoir + participe passé. Réussir → réussi.',
-    explanation:'"Elle <b>aurait réussi</b>" - conditionnel passé de réussir (avec avoir) : conditionnel d’avoir (aurait) + participe passé (réussi) = <b>aurait réussi</b>. Structure hypothèse passée : si + PQP (avait étudié) → conditionnel passé (aurait réussi).' }),
+    hint:'Conditionnel passé = conditionnel d\'avoir + participe passé. Réussir → réussi.',
+    explanation:'"Elle <b>aurait réussi</b>" - conditionnel passé de réussir (avec avoir) : conditionnel d\'avoir (aurait) + participe passé (réussi) = <b>aurait réussi</b>. Structure hypothèse passée : si + PQP (avait étudié) → conditionnel passé (aurait réussi).' }),
 
   makeTF({ id:'g6fr-conditionnel-030', chapterId:'g6fr-conditionnel', subsection:'si_clauses', difficulty:3,
     question:'"Elle serait arrivée plus tôt si elle avait pris le bus." est un exemple de conditionnel passé correctement formé.',
     answer:true,
-    hint:'"Serait arrivée" = conditionnel passé d’arriver (avec être, accord féminin).',
-    explanation:'<b>Vrai.</b> "Elle <b>serait arrivée</b>" = conditionnel passé d’arriver. Arriver utilise <b>être</b> → conditionnel d’être (<b>serait</b>) + participe passé accordé (<b>arrivée</b>, féminin singulier). Structure : si + PQP (avait pris) → conditionnel passé (serait arrivée).' }),
+    hint:'"Serait arrivée" = conditionnel passé d\'arriver (avec être, accord féminin).',
+    explanation:'<b>Vrai.</b> "Elle <b>serait arrivée</b>" = conditionnel passé d\'arriver. Arriver utilise <b>être</b> → conditionnel d\'être (<b>serait</b>) + participe passé accordé (<b>arrivée</b>, féminin singulier). Structure : si + PQP (avait pris) → conditionnel passé (serait arrivée).' }),
 
   makeMCQ({ id:'g6fr-conditionnel-031', chapterId:'g6fr-conditionnel', subsection:'formation', difficulty:3,
     question:'Quelle est la différence entre le conditionnel présent et le conditionnel passé ?',

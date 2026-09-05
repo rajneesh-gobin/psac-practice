@@ -497,6 +497,8 @@ function applyTheme(t) {
   t = t || DEFAULT_THEME;
   document.documentElement.classList.toggle('dark', t === 'dark');
   document.getElementById('theme-icon').textContent = t === 'dark' ? '☀️' : '🌙';
+  const shThemeIcon = document.getElementById('sh-theme-icon');
+  if (shThemeIcon) shThemeIcon.textContent = t === 'dark' ? '🌙' : '💡';
   try { localStorage.setItem('mm_global_theme', t); } catch(e) {}
   // Only a child's OWN session may write a theme into their progress. A parent
   // viewing a child also has ACTIVE_STUDENT_ID set (pdSwitchStudent), and their
@@ -776,22 +778,21 @@ function _resumeSubjectLabel(subjectId) {
 }
 
 function _renderResumeBanner() {
-  // Two slots share the same markup: the dashboard's (subject already picked)
-  // and the kid-home/subject-select one (shown before a subject is even
-  // picked - a paused session belongs on whichever screen the student sees
-  // first). Both live in the DOM at once (showScreen only hides screens, it
-  // doesn't remove them), so writing to every slot that exists is simpler and
-  // safer than tracking which one is currently visible.
+  // Three slots: the dashboard, the old kid-home, and the new student-home.
+  // The student-home slot gets chalk-themed markup; the other two get the
+  // standard card. All live in the DOM at once — writing to every existing
+  // slot is simpler than tracking which is currently visible.
   const slots = ['resume-banner-slot', 'resume-banner-slot-kidhome']
     .map(id => document.getElementById(id)).filter(Boolean);
-  if (!slots.length) return;
-  const setHtml = html => slots.forEach(s => { s.innerHTML = html; });
+  const shSlot = document.getElementById('resume-banner-slot-studenthome');
+  const setHtml    = html => slots.forEach(s => { s.innerHTML = html; });
+  const setShHtml  = html => { if (shSlot) shSlot.innerHTML = html; };
   const store = _pruneResumeStore(_readResumeStore());
   _writeResumeStore(store); // persist the prune so a stale entry doesn't keep reappearing
   const practiceEntries = Object.entries(store.practice); // [chapterId, saved][]
 
   if (store.exam || practiceEntries.length) {
-    let title, detail, continueOnclick, dismissOnclick, extra = '';
+    let title, detail, continueOnclick, dismissOnclick, extra = '', icon;
 
     if (store.exam) {
       const s = store.exam;
@@ -800,6 +801,7 @@ function _renderResumeBanner() {
       detail = `${s.examType === 'quick' ? 'Quick Exam' : 'Full Exam'} · Question ${(s.idx || 0) + 1} of ${(s.qIds || []).length}`;
       continueOnclick = `_doResume('exam')`;
       dismissOnclick  = `_clearExamResume(); _renderResumeBanner();`;
+      icon = '📝';
       if (practiceEntries.length) {
         extra = `+ ${practiceEntries.length} paused practice chapter${practiceEntries.length > 1 ? 's' : ''} — see Chapter Practice`;
       }
@@ -814,6 +816,7 @@ function _renderResumeBanner() {
       detail = `${chName} · Question ${(s.idx || 0) + 1} of ${(s.qIds || []).length}`;
       continueOnclick = `_doResume('practice','${chapterId}')`;
       dismissOnclick  = `_clearPracticeResume('${chapterId}'); _renderResumeBanner();`;
+      icon = '✏️';
       if (practiceEntries.length > 1) {
         const rest = practiceEntries.length - 1;
         extra = `+ ${rest} more paused chapter${rest > 1 ? 's' : ''} — see Chapter Practice`;
@@ -839,11 +842,54 @@ function _renderResumeBanner() {
           </button>
         </div>
       </div>`);
+
+    // Chalkboard-themed version for the student home board — shows ALL paused
+    // sessions so a student who paused several chapters can continue any of them.
+    const shItems = [];
+    if (store.exam) {
+      const es = store.exam;
+      const eSubj = _resumeSubjectLabel(es.subjectId);
+      shItems.push({
+        icon: '📝',
+        label: `${es.examType === 'quick' ? 'Quick Exam' : 'Full Exam'}${eSubj ? ' · ' + eSubj : ''}`,
+        detail: `Question ${(es.idx || 0) + 1} of ${(es.qIds || []).length}`,
+        go: `_doResume('exam')`,
+        dismiss: `_clearExamResume(); _renderResumeBanner();`,
+      });
+    }
+    practiceEntries.sort((a, b) => b[1].ts - a[1].ts).forEach(([cid, ps]) => {
+      const chName = (typeof CHAPTERS !== 'undefined' ? CHAPTERS : []).find(c => c.id === cid)?.name || 'Practice';
+      const pSubj  = _resumeSubjectLabel(ps.subjectId);
+      shItems.push({
+        icon: '✏️',
+        label: `${chName}${pSubj ? ' · ' + pSubj : ''}`,
+        detail: `Question ${(ps.idx || 0) + 1} of ${(ps.qIds || []).length}`,
+        go: `_doResume('practice','${cid}')`,
+        dismiss: `_clearPracticeResume('${cid}'); _renderResumeBanner();`,
+      });
+    });
+    setShHtml(`
+      <div class="sh-resume-card">
+        <div class="sh-resume-header">📌 Pick up where you left off</div>
+        <div class="sh-resume-list">
+          ${shItems.map(it => `
+            <div class="sh-resume-item">
+              <span class="sh-resume-item-icon">${it.icon}</span>
+              <div class="sh-resume-item-info">
+                <span class="sh-resume-item-label">${it.label}</span>
+                <span class="sh-resume-item-detail">${it.detail}</span>
+              </div>
+              <button onclick="${it.go}" class="sh-resume-go">▶</button>
+              <button onclick="${it.dismiss}" class="sh-resume-dismiss" aria-label="Dismiss">✕</button>
+            </div>`).join('')}
+        </div>
+      </div>`);
     return;
   }
 
   if (typeof DB === 'undefined' || !DB.stats || DB.stats.totalAttempted < 1) {
     setHtml('');
+    setShHtml('');
     return;
   }
   // ACTIVE_PACK-dependent, so it only ever makes sense once a subject is
@@ -854,6 +900,7 @@ function _renderResumeBanner() {
   const dashSlot = document.getElementById('resume-banner-slot');
   const kidSlot  = document.getElementById('resume-banner-slot-kidhome');
   if (kidSlot) kidSlot.innerHTML = '';
+  if (shSlot) shSlot.innerHTML = '';
   if (!dashSlot) return;
   const pack = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK)
     || (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.find(p => !p.comingSoon))
@@ -868,7 +915,7 @@ function _renderResumeBanner() {
           <div class="text-sm opacity-90">${subjectLabel}</div>
         </div>
       </div>
-      <button onclick="showScreen('chapter-select')" class="w-full mt-4 bg-white text-blue-700 font-bold py-3 rounded-xl hover:bg-blue-50 transition-colors shadow text-sm">
+      <button onclick="PracticeHub.open()" class="w-full mt-4 bg-white text-blue-700 font-bold py-3 rounded-xl hover:bg-blue-50 transition-colors shadow text-sm">
         Start Practice →
       </button>
     </div>`;
@@ -1004,6 +1051,9 @@ function _dismissHint() {
 //   · Calm Mode (My Settings) and the OS reduced-motion setting drop the shake
 //     and keep the words — the help is the sentence, the motion is decoration.
 const _IDLE_NUDGES = {
+  'student-home':   { target: 'sh-notes-grid',           text: 'Tap any sticky note to get started! 📌' },
+  'practice-hub':   { target: 'prac-books-grid',         text: 'Tap a subject book to start practising. 📚' },
+  'subject-hub':    { target: 'sh-chapter-panel',        text: 'Tap a chapter to begin — any one is fine! ✨' },
   dashboard:        { target: 'btn-chapter-mode',        text: 'Ready when you are — tap here to practise a chapter. 📚' },
   'subject-select': { target: 'subject-cards',           text: 'Pick a subject to get started. Tap any card! 👆' },
   'grade-select':   { target: 'grade-cards',             text: 'Choose your grade to see your subjects. 🎯' },
@@ -1633,10 +1683,24 @@ function _closeConfirmModal(confirmed) {
 const _SCREEN_ORDER = ['dashboard','subject-select','chapter-select','practice','exam'];
 let _prevScreen = null;
 
-const _BOTTOM_NAV_SCREENS = new Set(['dashboard','subject-select','chapter-select','practice','exam','exam-config','analytics','results']);
+const _BOTTOM_NAV_SCREENS = new Set([
+  'student-home','dashboard','subject-select','chapter-select','practice',
+  'exam','exam-config','analytics','results',
+  // screens reachable via sticky notes that previously hid the nav
+  'schedule','inbox','search','interactive-map','syllabus','past-papers',
+  'assignment-complete',
+  // new chalkboard practice flow
+  'practice-hub','subject-hub',
+]);
 const _NAV_MAP = {
-  'dashboard':'home','subject-select':'practice','chapter-select':'practice',
-  'practice':'practice','exam-config':'exam','exam':'exam','results':'exam','analytics':'progress',
+  'student-home':'home','dashboard':'home',
+  'subject-select':'practice','chapter-select':'practice','syllabus':'practice',
+  'interactive-map':'practice','past-papers':'practice','search':'practice',
+  'practice':'practice',
+  'practice-hub':'practice','subject-hub':'practice',
+  'exam-config':'exam','exam':'exam','results':'exam',
+  'analytics':'progress',
+  'schedule':'home','inbox':'home','assignment-complete':'home',
 };
 
 function _updateBottomNav(screenId) {
@@ -1702,12 +1766,13 @@ function _launchConfetti() {
 // nobody was ever studying. Patching each button was a losing game (there are
 // a dozen entry points into these screens); this catches all of them at once.
 const _KID_ONLY_SCREENS = new Set([
-  'dashboard', 'chapter-select', 'syllabus', 'interactive-map', 'past-papers', 'analytics',
+  'student-home', 'dashboard', 'chapter-select', 'syllabus', 'interactive-map', 'past-papers', 'analytics',
   'subject-select', 'grade-select', 'practice', 'exam-config', 'exam',
-  'results', 'assignment-complete', 'search', 'schedule',
+  'results', 'assignment-complete', 'search', 'schedule', 'inbox',
+  'practice-hub', 'subject-hub',
 ]);
 // Screens only an adult session may open. See the guard in showScreen().
-const _ADULT_ONLY_SCREENS = new Set(['forum']);
+const _ADULT_ONLY_SCREENS = new Set(['forum', 'parent-messages']);
 
 function _isParentContext() {
   return !!(typeof _isParentSession === 'function' && _isParentSession());
@@ -1748,8 +1813,8 @@ function showScreen(id) {
   // child could read AND post. Hiding the button would have hidden a door that
   // was still unlocked.
   if (_ADULT_ONLY_SCREENS.has(id) && !_isParentContext()) {
-    toast('The community forum is for parents and teachers.', 3000);
-    showScreen(ACTIVE_STUDENT_ID ? 'dashboard' : 'landing');
+    toast(id === 'forum' ? 'The community forum is for parents and teachers.' : 'This section is for parents and teachers.', 3000);
+    showScreen(ACTIVE_STUDENT_ID ? 'student-home' : 'landing');
     return;
   }
 
@@ -1816,6 +1881,17 @@ function showScreen(id) {
     });
   }
   _updateTeacherModeButton();
+  // Student home has its own parent-mode button in the sh-header just above
+  // the board — the global header one is redundant there only. Similarly, the
+  // settings (profile) and theme buttons are replicated below the board, so the
+  // header copies hide on that screen.
+  const onStudentHome = id === 'student-home';
+  const hdrParentBtn = document.querySelector('.hdr-btn.is-parent');
+  if (hdrParentBtn) hdrParentBtn.classList.toggle('hidden', onStudentHome);
+  const hdrProfileBtn = document.getElementById('header-profile-btn');
+  if (hdrProfileBtn) hdrProfileBtn.classList.toggle('hidden', onStudentHome);
+  const hdrThemeBtn = document.getElementById('theme-toggle');
+  if (hdrThemeBtn) hdrThemeBtn.classList.toggle('hidden', onStudentHome);
   // Forum: adult sessions only, same rule the screen guard applies.
   const forumBtn = document.getElementById('btn-open-forum');
   if (forumBtn) {
@@ -1845,12 +1921,14 @@ function showScreen(id) {
   if (id === 'dashboard')       renderDashboard();
   if (id === 'schedule')        renderSchedule();
   if (id === 'analytics')       renderAnalytics();
+  if (id === 'inbox')           renderStudentInbox();
   if (id === 'minigames' && typeof MiniGames !== 'undefined') MiniGames.renderHub();
   if (id === 'chapter-select')  renderChapterSelect();
   if (id === 'syllabus')        renderSyllabus();
   if (id === 'interactive-map') renderInteractiveMap();
   if (id === 'past-papers')     renderPastPapers();
   if (id === 'parent')          renderParentDashboard();
+  if (id === 'parent-messages') renderParentMessages();
   if (id === 'shop')            renderShop();
   if (id === 'subject-select')  renderSubjectSelect();
   if (id === 'student-select')  renderStudentSelect();
@@ -1858,13 +1936,11 @@ function showScreen(id) {
   if (id === 'teacher' && typeof TeacherMode !== 'undefined') TeacherMode.render();
   if (id === 'forum'     && typeof Forum     !== 'undefined') Forum.render();
   if (id === 'calendar'  && typeof Calendar  !== 'undefined') Calendar.render();
-  // Search button in header: visible only when a student grade is active
-  const searchBtn = document.getElementById('search-btn');
-  if (searchBtn) {
-    const isAuth = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
-    const hasStudent = typeof SELECTED_GRADE !== 'undefined' && !!SELECTED_GRADE;
-    searchBtn.classList.toggle('hidden', isAuth || !hasStudent);
-  }
+  const searchBtn  = document.getElementById('search-btn');
+  const isAuth     = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
+  const hasStudent = typeof SELECTED_GRADE !== 'undefined' && !!SELECTED_GRADE;
+  const isStudent  = hasStudent && !_isParentSession();
+  if (searchBtn)  searchBtn.classList.toggle('hidden',  isAuth || !hasStudent || isStudent);
 
   _renderCreditChip();
   _renderLevelChip();
@@ -1886,7 +1962,8 @@ function _updateBreadcrumb(screenId) {
   // end up after an exam — the two moments they are most likely to want a way
   // back — and both showed no trail at all.
   const studentScreens = ['dashboard','chapter-select','syllabus','interactive-map','analytics','practice',
-                          'exam-config','exam','results','subject-select','grade-select','past-papers'];
+                          'exam-config','exam','results','subject-select','grade-select','past-papers',
+                          'practice-hub','subject-hub'];
   if (!studentScreens.includes(screenId)) { bar.classList.add('hidden'); return; }
 
   const grade    = (typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : null) || 5;
@@ -1909,14 +1986,21 @@ function _updateBreadcrumb(screenId) {
   // to pick — the screen the child said they could not get back to. Same
   // reachability the "← Back to Grades" button on the subject picker already
   // has, so this opens nothing that was not already open.
-  const gradeCount = (typeof SUBJECT_PACKS !== 'undefined')
-    ? new Set(SUBJECT_PACKS.map(p => p.grade)).size : 1;
-  const gradeCrumb = gradeCount > 1
-    ? link(`Grade ${grade}`, `showScreen('grade-select')`)
-    : link(`Grade ${grade}`, `showScreen('subject-select')`);
+  const gradeCrumb = link(`🏠 Home`, `StudentHome.open()`);
 
   if (screenId === 'grade-select') {
     inner.innerHTML = curr('Choose your grade');
+    bar.classList.remove('hidden');
+    return;
+  }
+  if (screenId === 'practice-hub') {
+    inner.innerHTML = gradeCrumb + curr('Start Practicing');
+    bar.classList.remove('hidden');
+    return;
+  }
+  if (screenId === 'subject-hub') {
+    const subjName = (packIcon + ' ' + packName).trim() || 'Subject';
+    inner.innerHTML = gradeCrumb + link('Start Practicing', `PracticeHub.open()`) + curr(subjName);
     bar.classList.remove('hidden');
     return;
   }
@@ -1933,11 +2017,11 @@ function _updateBreadcrumb(screenId) {
     parts += curr(packLabel);
   } else if (['chapter-select','syllabus','interactive-map','analytics','exam-config'].includes(screenId)) {
     const label = screenId === 'syllabus' ? 'Syllabus' : screenId === 'interactive-map' ? 'Interactive maps' : screenId === 'analytics' ? 'Analytics' : screenId === 'exam-config' ? 'Exam' : 'Chapters';
-    parts += link(packLabel, `showScreen('dashboard')`) + curr(label);
+    parts += link('Start Practicing', `PracticeHub.open()`) + link(packLabel, `SubjectHub.back()`) + curr(label);
   } else if (screenId === 'practice') {
-    parts += link(packLabel, `showScreen('dashboard')`) + link('Chapters', `showScreen('chapter-select')`) + curr(chLabel);
+    parts += link('Start Practicing', `PracticeHub.open()`) + link(packLabel, `SubjectHub.back()`) + curr(chLabel);
   } else if (screenId === 'exam') {
-    parts += link(packLabel, `showScreen('dashboard')`) + curr('Exam in progress');
+    parts += link('Start Practicing', `PracticeHub.open()`) + curr('Exam in progress');
   } else {
     bar.classList.add('hidden'); return;
   }
@@ -1948,7 +2032,13 @@ function _updateBreadcrumb(screenId) {
 
 // back buttons
 document.querySelectorAll('.back-btn[data-target]').forEach(btn => {
-  btn.addEventListener('click', () => showScreen(btn.dataset.target));
+  btn.addEventListener('click', () => {
+    const t = btn.dataset.target;
+    if (t === 'student-home' && typeof StudentHome !== 'undefined') StudentHome.open();
+    else if (t === 'practice-hub' && typeof PracticeHub !== 'undefined') PracticeHub.open();
+    else if (t === 'subject-hub' && typeof SubjectHub !== 'undefined') SubjectHub.back();
+    else showScreen(t);
+  });
 });
 
 // ── STREAK ────────────────────────────────────
@@ -2909,7 +2999,7 @@ function renderResumeTasks() {
 window.renderResumeTasks = renderResumeTasks;
 
 
-const _GOAL_SLOTS = ['goal-slot-kidhome', 'goal-slot-dashboard'];
+const _GOAL_SLOTS = ['goal-slot-kidhome', 'goal-slot-dashboard', 'sh-goal-slot'];
 
 function _renderDailyGoal() {
   const slots = _GOAL_SLOTS.map(id => document.getElementById(id)).filter(Boolean);
@@ -3122,6 +3212,7 @@ async function renderParentDashboard() {
   const _el = id => document.getElementById(id);
   _renderShopChip();
   _renderExpiredBanner('pd-expired-slot');
+  _refreshParentMessageBadge();
 
   const students    = Auth.getStudents() || [];
   const hasStudents = students.length > 0;
@@ -3738,7 +3829,7 @@ async function renderShop() {
   // be wrong.
   if (typeof _isParentSession === 'function' && !_isParentSession()) {
     toast('Only a parent can open the shop.', 2500);
-    showScreen(ACTIVE_STUDENT_ID ? 'dashboard' : 'landing');
+    showScreen(ACTIVE_STUDENT_ID ? 'student-home' : 'landing');
     return;
   }
   // Always opens tidy. Which subjects are expanded is a browsing state, not
@@ -4313,7 +4404,6 @@ const PD = (() => {
   }
 
   function renderDetail() {
-    if (typeof LearningCoach !== 'undefined') LearningCoach.renderParent();
     const acct  = Auth.getActiveAccount() || {};
     const _el   = id => document.getElementById(id);
     const stats = DB.stats || {};
@@ -5613,11 +5703,11 @@ function _greeting() {
 }
 
 function renderDashboard() {
-  if (typeof LearningCoach !== 'undefined') LearningCoach.renderChild();
   if (!ACTIVE_STUDENT_ID) return; // guard: no student loaded yet
   const _acct  = (typeof Auth !== 'undefined') && Auth.getActiveAccount();
 
   _renderNotifyOptIn();
+  _refreshInboxBadge();
 
   // ⚠ The two schedule panels are deliberately NOT painted here any more.
   // #dash-today-plan (Calendar.renderTodayPlan) and #dash-schedule stacked a
@@ -6367,7 +6457,7 @@ async function renderDashSchedule(studentId) {
   list.innerHTML = items.slice(0, 4).map(e => _scheduleRow(e, true)).join('');
 }
 
-// Full screen: everything ahead, grouped by day.
+// Full screen: backlog (today + past) at top, then upcoming, grouped by day.
 async function renderSchedule() {
   const body = document.getElementById('schedule-body');
   if (!body) return;
@@ -6376,12 +6466,13 @@ async function renderSchedule() {
     body.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">No timetable yet.</p>';
     return;
   }
-  let items = [];
-  try { items = await Calendar.getUpcoming(sid, 60); } catch (_) { }
-  // Before the early return below: a child with no timetable at all still has a
-  // record of their own work, and that is exactly who most needs to see it.
+  let upcoming = [], backlog = [];
+  try { [upcoming, backlog] = await Promise.all([Calendar.getUpcoming(sid, 60), Calendar.getBacklog(sid)]); } catch (_) { }
+  // Filter today out of upcoming (it already appears in backlog) to avoid duplicates.
+  const todayStr = backlog.find(e => e.isToday)?.date || '';
+  const futureItems = upcoming.filter(e => !e.isToday);
   renderMyActivity(sid);
-  if (!items.length) {
+  if (!backlog.length && !futureItems.length) {
     body.innerHTML = `<div class="text-center py-10">
       <div class="text-4xl mb-3 select-none">🗓️</div>
       <p class="text-sm text-gray-500 dark:text-gray-400">Nothing scheduled yet.</p>
@@ -6390,21 +6481,57 @@ async function renderSchedule() {
     </div>`;
     return;
   }
-  const byDay = new Map();
-  for (const e of items) {
-    if (!byDay.has(e.date)) byDay.set(e.date, []);
-    byDay.get(e.date).push(e);
-  }
-  body.innerHTML = [...byDay.entries()].map(([date, rows]) => {
-    const total = rows.reduce((n, r) => n + (r.minutes || 0), 0);
-    return `<div>
-      <div class="flex items-baseline justify-between mb-2">
-        <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200">${_scheduleDayLabel(date)}</h3>
-        ${total ? `<span class="text-[11px] text-gray-400">${total} min</span>` : ''}
-      </div>
-      <div class="space-y-2">${rows.map(e => _scheduleRow(e, false)).join('')}</div>
+
+  let html = '';
+
+  // ── Backlog (today + past) ──
+  if (backlog.length) {
+    const byDay = new Map();
+    for (const e of backlog) {
+      if (!byDay.has(e.date)) byDay.set(e.date, []);
+      byDay.get(e.date).push(e);
+    }
+    html += `<div class="sch-section-head sch-section-backlog">
+      <span>📌 Today &amp; Backlog</span>
+      <span class="sch-section-count">${backlog.length} session${backlog.length !== 1 ? 's' : ''}</span>
     </div>`;
-  }).join('');
+    html += [...byDay.entries()].map(([date, rows]) => {
+      const isToday = rows[0].isToday;
+      const total   = rows.reduce((n, r) => n + (r.minutes || 0), 0);
+      return `<div class="${isToday ? '' : 'sch-backlog-day'}">
+        <div class="flex items-baseline justify-between mb-2">
+          <h3 class="text-sm font-bold ${isToday ? 'text-amber-600 dark:text-amber-400' : 'text-rose-500 dark:text-rose-400'}">
+            ${isToday ? '📅 Today' : '⏰ ' + _scheduleDayLabel(date)}
+            ${!isToday ? '<span class="sch-overdue-tag">overdue</span>' : ''}
+          </h3>
+          ${total ? `<span class="text-[11px] text-gray-400">${total} min</span>` : ''}
+        </div>
+        <div class="space-y-2">${rows.map(e => _scheduleRow(e, false)).join('')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Upcoming (future only) ──
+  if (futureItems.length) {
+    const byDay = new Map();
+    for (const e of futureItems) {
+      if (!byDay.has(e.date)) byDay.set(e.date, []);
+      byDay.get(e.date).push(e);
+    }
+    if (backlog.length) html += `<div class="sch-section-head sch-section-upcoming"><span>📆 Upcoming</span></div>`;
+    html += [...byDay.entries()].map(([date, rows]) => {
+      const total = rows.reduce((n, r) => n + (r.minutes || 0), 0);
+      return `<div>
+        <div class="flex items-baseline justify-between mb-2">
+          <h3 class="text-sm font-bold text-gray-700 dark:text-gray-200">${_scheduleDayLabel(date)}</h3>
+          ${total ? `<span class="text-[11px] text-gray-400">${total} min</span>` : ''}
+        </div>
+        <div class="space-y-2">${rows.map(e => _scheduleRow(e, false)).join('')}</div>
+      </div>`;
+    }).join('');
+  }
+
+  body.innerHTML = html;
   renderMyActivity(sid);
 }
 
@@ -7113,6 +7240,403 @@ function openExamReview() {
 }
 window.openExamReview = openExamReview;
 
+// ── Student Home — mission + badge helpers ────────────────────────────────────
+function _renderShMissions() {
+  const slot = document.getElementById('sh-missions-slot');
+  if (!slot || !ACTIVE_STUDENT_ID) { if (slot) slot.innerHTML = ''; return; }
+  const isFirst = !DB?.stats?.totalAttempted;
+  const mTitle = isFirst ? 'Your first mission' : 'Quick mission';
+  const mSub   = isFirst
+    ? 'Try 5 warm-up questions. Hints are always ready.'
+    : 'Keep sharp with 5 quick questions.';
+  const weakOk = _planAllowsFeature('weak_area_drill');
+  slot.innerHTML = `
+    <div class="sh-mission-row">
+      <button class="sh-mission-card" onclick="startKidMission()">
+        <span class="sh-mission-icon">🚀</span>
+        <div class="sh-mission-info">
+          <span class="sh-mission-title">${mTitle}</span>
+          <span class="sh-mission-sub">${mSub}</span>
+        </div>
+      </button>
+      <button class="sh-mission-card" onclick="startWeakAreaDrill()">
+        <span class="sh-mission-icon">💪</span>
+        <div class="sh-mission-info">
+          <span class="sh-mission-title">Weak area drill</span>
+          <span class="sh-mission-sub">Targets the chapters you find hardest.</span>
+        </div>
+        ${!weakOk ? '<span class="sh-mission-lock">🔒</span>' : ''}
+      </button>
+    </div>
+    <button class="sh-mission-card sh-mission-schedule" id="sh-schedule-card" onclick="showScreen('schedule')" style="width:100%;margin-top:.55rem">
+      <span class="sh-mission-icon">🗓️</span>
+      <div class="sh-mission-info">
+        <span class="sh-mission-title">Today's Schedule</span>
+        <span class="sh-mission-sub" id="sh-schedule-sub">Loading…</span>
+      </div>
+      <span class="sh-mission-arrow">›</span>
+    </button>`;
+  if (typeof Calendar !== 'undefined' && Calendar.getBacklog) {
+    Calendar.getBacklog(ACTIVE_STUDENT_ID).then(items => {
+      const sub = document.getElementById('sh-schedule-sub');
+      if (!sub) return;
+      const todayItems   = items.filter(e => e.isToday);
+      const backlogItems = items.filter(e => e.isPast);
+      if (!items.length) { sub.textContent = 'No sessions planned yet'; return; }
+      const parts = [];
+      if (todayItems.length)   parts.push(`${todayItems.length} today`);
+      if (backlogItems.length) parts.push(`${backlogItems.length} overdue`);
+      sub.textContent = parts.join(' · ') || 'See your plan';
+    }).catch(() => {
+      const sub = document.getElementById('sh-schedule-sub');
+      if (sub) sub.textContent = 'Tap to see your plan';
+    });
+  } else {
+    const sub = document.getElementById('sh-schedule-sub');
+    if (sub) sub.textContent = 'Tap to see your plan';
+  }
+}
+
+function _renderShBadges() {
+  const slot = document.getElementById('sh-badges-slot');
+  if (!slot || typeof packBadges !== 'function') { if (slot) slot.innerHTML = ''; return; }
+  const earned = packBadges().filter(b => (DB?.badges || []).includes(b.id));
+  if (!earned.length) { slot.innerHTML = ''; return; }
+  slot.innerHTML = `
+    <div class="sh-badges-section">
+      <div class="sh-badges-header">🏅 Badges earned</div>
+      <div class="sh-badges-strip">
+        ${earned.map(b => `
+          <div class="sh-badge-item" title="${b.desc}">
+            <span class="sh-badge-icon">${b.icon}</span>
+            <span class="sh-badge-name">${b.name}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ── Student Home Hub ──────────────────────────────────────────────────────────
+const StudentHome = (() => {
+  function tab(name) {
+    const screen = document.getElementById('screen-student-home');
+    if (!screen) return;
+    screen.querySelectorAll('.ta-tab[data-tab]').forEach(b =>
+      b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false')
+    );
+    screen.querySelectorAll('.ta-tab-content[data-tab]').forEach(p =>
+      p.classList.toggle('hidden', p.dataset.tab !== name)
+    );
+    if (name === 'missions') _renderShMissions();
+    if (name === 'badges')   _renderShBadges();
+  }
+
+  function open() {
+    const nameEl = document.getElementById('sh-greeting');
+    if (nameEl) {
+      const kidName = typeof DB !== 'undefined' && DB?.name;
+      nameEl.textContent = kidName ? `Hey, ${kidName}! 👋` : 'Hey there! 👋';
+    }
+    tab('board');
+    showScreen('student-home');
+  }
+
+  function startExam() {
+    if (typeof DB !== 'undefined' && DB?.restrictions?.examDisabled) {
+      toast('🔒 Exam mode is locked by your parent.', 2000);
+      return;
+    }
+    showScreen('exam-config');
+  }
+
+  return { tab, open, startExam };
+})();
+window.StudentHome = StudentHome;
+
+// ── Practice Hub ─────────────────────────────────────────────────────────────
+const PracticeHub = (() => {
+  const BOOK_COLORS = {
+    'maths':               { from:'rgba(37,99,235,.55)',  to:'rgba(14,40,100,.6)',   border:'rgba(96,165,250,.55)',  glow:'59,130,246' },
+    'mathematics':         { from:'rgba(37,99,235,.55)',  to:'rgba(14,40,100,.6)',   border:'rgba(96,165,250,.55)',  glow:'59,130,246' },
+    'english':             { from:'rgba(180,110,0,.55)',  to:'rgba(90,50,0,.6)',     border:'rgba(251,191,36,.55)',  glow:'245,158,11' },
+    'french':              { from:'rgba(185,28,28,.55)',  to:'rgba(90,10,10,.6)',    border:'rgba(252,165,165,.55)', glow:'239,68,68'  },
+    'science':             { from:'rgba(5,140,90,.55)',   to:'rgba(2,60,40,.6)',     border:'rgba(52,211,153,.55)',  glow:'16,185,129' },
+    'history':             { from:'rgba(120,50,200,.55)', to:'rgba(55,15,100,.6)',   border:'rgba(196,181,253,.55)', glow:'168,85,247' },
+    'history & geography': { from:'rgba(120,50,200,.55)', to:'rgba(55,15,100,.6)',   border:'rgba(196,181,253,.55)', glow:'168,85,247' },
+    'geography':           { from:'rgba(120,50,200,.55)', to:'rgba(55,15,100,.6)',   border:'rgba(196,181,253,.55)', glow:'168,85,247' },
+  };
+  const BOOK_ICONS = {
+    'maths':'🔢', 'mathematics':'🔢', 'english':'📖', 'french':'🗣️',
+    'science':'🔬', 'history':'🏛️', 'history & geography':'🌍', 'geography':'🗺️',
+  };
+  const BOOK_TAGLINES = {
+    'maths':'Numbers, shapes & problem solving',
+    'mathematics':'Numbers, shapes & problem solving',
+    'english':'Reading, writing & grammar',
+    'french':'Langue et grammaire française',
+    'science':'Nature, matter & living things',
+    'history':'History & geography of Mauritius',
+    'history & geography':'History & geography of Mauritius',
+    'geography':'History & geography of Mauritius',
+  };
+  function _bookStyle(subject) {
+    const k = (subject || '').toLowerCase();
+    return BOOK_COLORS[k] || { from:'rgba(255,255,255,.15)', to:'rgba(0,0,0,.2)', border:'rgba(255,255,255,.3)', glow:'255,255,255' };
+  }
+  function _bookIcon(subject) {
+    const k = (subject || '').toLowerCase();
+    return BOOK_ICONS[k] || '📚';
+  }
+  function _bookTagline(subject) {
+    const k = (subject || '').toLowerCase();
+    return BOOK_TAGLINES[k] || '';
+  }
+  function _liveGrades() {
+    return [...new Set(
+      Object.values(SUBJECT_PACKS || {})
+        .filter(p => !p.comingSoon)
+        .map(p => Number(p.grade))
+    )].sort((a, b) => a - b);
+  }
+  function _renderGradeBar() {
+    const sel = document.getElementById('prac-grade-sel');
+    const note = document.getElementById('prac-locked-note');
+    if (!sel) return;
+    const currentGrade = Number((typeof DB !== 'undefined' && DB?.grade) || 5);
+    const locked = !!(typeof DB !== 'undefined' && (DB?.restrictions?.gradeRestricted || DB?.restrictions?.lockedGrade));
+    const grades = _liveGrades();
+    sel.innerHTML = grades.map(g =>
+      `<option value="${g}"${g === currentGrade ? ' selected' : ''}>Grade ${g}</option>`
+    ).join('');
+    sel.disabled = locked || grades.length < 2;
+    if (note) note.style.display = locked ? '' : 'none';
+  }
+  function _renderBooks(grade) {
+    const grid = document.getElementById('prac-books-grid');
+    if (!grid) return;
+    const sel = document.getElementById('prac-grade-sel');
+    const g = grade !== undefined ? Number(grade) : Number(sel?.value || (typeof DB !== 'undefined' && DB?.grade) || 5);
+    const packs = Object.values(SUBJECT_PACKS || {})
+      .filter(p => Number(p.grade) === g && !p.comingSoon)
+      .sort((a, b) => (a.subject || a.name || '').localeCompare(b.subject || b.name || ''));
+    if (!packs.length) {
+      grid.innerHTML = '<p style="color:rgba(240,236,220,.7);text-align:center;padding:2rem 0">No subjects available for this grade yet.</p>';
+      return;
+    }
+    grid.innerHTML = packs.map(pack => {
+      const subj = pack.subject || pack.name || '';
+      const s = _bookStyle(subj);
+      const icon = _bookIcon(subj);
+      const tagline = _bookTagline(subj);
+      const count = pack.questionCount || pack.questions || '';
+      const countBadge = count ? `<span class="ph-book-count">${count} questions</span>` : '';
+      return `<button class="ph-book" data-pack-id="${_attr(pack.id)}"
+        style="--bk-from:${s.from};--bk-to:${s.to};--bk-border:${s.border};--bk-glow:${s.glow}">
+        <span class="ph-book-icon">${icon}</span>
+        <span class="ph-book-name">${_attr(subj)}</span>
+        ${tagline ? `<span class="ph-book-tag">${tagline}</span>` : ''}
+        ${countBadge}
+      </button>`;
+    }).join('');
+    grid.querySelectorAll('.ph-book').forEach(btn =>
+      btn.addEventListener('click', () => SubjectHub.open(btn.dataset.packId))
+    );
+  }
+  function open() {
+    _renderGradeBar();
+    _renderBooks();
+    showScreen('practice-hub');
+  }
+  function onGradeChange(grade) {
+    _renderBooks(Number(grade));
+  }
+  return { open, onGradeChange };
+})();
+window.PracticeHub = PracticeHub;
+
+// ── Subject Hub ───────────────────────────────────────────────────────────────
+const SubjectHub = (() => {
+  let _packId = null;
+  let _shFilter = 'all';
+
+  function open(packId) {
+    if (packId) { _packId = packId; _shFilter = 'all'; }
+    const pack = (typeof SUBJECT_PACKS !== 'undefined') && SUBJECT_PACKS?.find(p => p.id === _packId);
+    if (!pack) { PracticeHub.open(); return; }
+    activateSubjectPack(_packId);
+    const crumbSubj = document.getElementById('subj-hub-crumb-subject');
+    if (crumbSubj) crumbSubj.textContent = pack.subject || pack.name || '';
+    tab('chapters');
+    showScreen('subject-hub');
+    _renderChapters();
+  }
+
+  function back() { open(_packId); }
+
+  function tab(name) {
+    const screen = document.getElementById('screen-subject-hub');
+    if (!screen) return;
+    screen.querySelectorAll('.ta-tab[data-sh-tab]').forEach(b =>
+      b.setAttribute('aria-selected', b.dataset.shTab === name ? 'true' : 'false')
+    );
+    screen.querySelectorAll('.ta-tab-content[data-sh-tab]').forEach(p =>
+      p.classList.toggle('hidden', p.dataset.shTab !== name)
+    );
+    if (name === 'syllabus') _renderSyllabusTab();
+    if (name === 'exam') _renderExamTab();
+  }
+
+  function _renderChapters() {
+    const panel = document.getElementById('sh-chapter-panel');
+    if (!panel) return;
+    if (!CHAPTERS || !CHAPTERS.length) {
+      panel.innerHTML = '<p style="color:rgba(240,236,220,.7);padding:1rem 0">No chapters found for this subject.</p>';
+      return;
+    }
+    const accent = _SUBJECT_BORDER_COLOR[ACTIVE_PACK?.subject] || '';
+    const regular = CHAPTERS.filter(ch => !ch.enrichment);
+    const enrichment = CHAPTERS.filter(ch => ch.enrichment);
+    const all = regular.concat(enrichment);
+
+    const prog = all.map(ch => _chapterProgress(ch.id));
+    const done = prog.filter(p => p.attempted > 0);
+    const answers = prog.reduce((sum, p) => sum + p.attempted, 0);
+    const unique = prog.reduce((sum, p) => sum + p.unique, 0);
+    const available = prog.reduce((sum, p) => sum + p.total, 0);
+    const lastMs = Math.max(0, ...prog.map(p => p.last || 0));
+    const todayKey = _muDayKey();
+    const doneToday = prog.filter(p => p.last &&
+      new Date(p.last + _MU_OFFSET_MS).toISOString().slice(0, 10) === todayKey).length;
+    const summary = `<div class="ch-sum">
+      <div class="ch-sum-tile"><span class="ch-sum-num">${done.length}<span class="ch-sum-of">/${all.length}</span></span><span class="ch-sum-lbl">Started</span></div>
+      <div class="ch-sum-tile"><span class="ch-sum-num">${answers}</span><span class="ch-sum-lbl">Answers given</span></div>
+      <div class="ch-sum-tile"><span class="ch-sum-num${doneToday ? ' good' : ''}">${doneToday}</span><span class="ch-sum-lbl">Practised today</span></div>
+      <div class="ch-sum-bar">
+        <div class="ch-sum-bar-head"><span>${unique} different bank questions recorded${available ? ` · ${available} questions currently loaded` : ''}</span></div>
+        <div class="ch-sum-last">${lastMs ? `Last practised: ${_chapterWhen(lastMs)}` : 'Nothing practised yet — pick any chapter to begin.'}</div>
+      </div>
+    </div>`;
+
+    const counts = { all: all.length, todo: 0, doing: 0, weak: 0 };
+    all.forEach(ch => {
+      const p = _chapterProgress(ch.id);
+      if (p.attempted === 0) counts.todo++;
+      else if (p.state !== 'mastered') counts.doing++;
+      if (p.attempted >= 5 && p.acc < 60) counts.weak++;
+    });
+    const ftab = (id, label) => `<button class="ch-filter${_shFilter === id ? ' on' : ''}"
+      onclick="SubjectHub.setFilter('${id}')">${label} <span class="ch-filter-n">${counts[id]}</span></button>`;
+    const filters = `<div class="ch-filters">${ftab('all','All')}${ftab('todo','Not started')}${ftab('doing','In progress')}${counts.weak ? ftab('weak','Needs work') : ''}</div>`;
+
+    const keep = ch => {
+      const p = _chapterProgress(ch.id);
+      if (_shFilter === 'todo')  return p.attempted === 0;
+      if (_shFilter === 'doing') return p.attempted > 0 && p.state !== 'mastered';
+      if (_shFilter === 'weak')  return p.attempted >= 5 && p.acc < 60;
+      return true;
+    };
+    const shownRegular = regular.filter(keep);
+    const shownEnrichment = enrichment.filter(keep);
+
+    let grid = '';
+    if (!shownRegular.length && !shownEnrichment.length) {
+      grid = `<div class="ch-empty"><div class="text-4xl mb-2">🎉</div>
+        <p class="font-semibold">Nothing in this list</p>
+        <p class="text-sm" style="opacity:.7;margin-top:.25rem">${
+          _shFilter === 'todo' ? 'You have started every chapter here. Nice.'
+          : _shFilter === 'weak' ? 'No chapter is giving you trouble right now.'
+          : 'Try another filter.'}</p></div>`;
+    } else {
+      grid = `<div class="ch-grid">${shownRegular.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
+      if (shownEnrichment.length) {
+        grid += `<div class="ch-section"><span class="ch-section-line"></span><span class="ch-section-label">✨ Bonus topics</span><span class="ch-section-line"></span></div>
+          <p class="ch-section-note">Extra themes drawn from the syllabus — great once the main chapters feel easy.</p>
+          <div class="ch-grid">${shownEnrichment.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
+      }
+    }
+    panel.innerHTML = summary + filters + grid;
+  }
+
+  function setFilter(f) {
+    _shFilter = f;
+    _renderChapters();
+  }
+
+  function _renderSyllabusTab() {
+    const panel = document.getElementById('sh-syllabus-panel');
+    if (!panel || panel.dataset.rendered === _packId) return;
+    const orig = document.getElementById('syllabus-list');
+    if (orig && typeof renderSyllabus === 'function') {
+      panel.innerHTML = '<div></div>';
+      const fake = panel.firstElementChild;
+      fake.id = 'syllabus-list';
+      orig.id = '_syllabus-list-tmp';
+      renderSyllabus();
+      fake.id = '';
+      orig.id = 'syllabus-list';
+    } else {
+      panel.innerHTML = '<p style="color:rgba(240,236,220,.7)">Syllabus not available.</p>';
+    }
+    panel.dataset.rendered = _packId || '';
+  }
+
+  function _renderExamTab() {
+    const panel = document.getElementById('sh-exam-panel');
+    if (!panel) return;
+    panel.innerHTML = `<div class="sh-exam-opts">
+      <button class="sh-exam-card" onclick="SubjectHub._startMockExam()">
+        <div class="sh-paper">
+          <div class="sh-paper-header"><span class="sh-paper-lines"></span></div>
+          <div class="sh-paper-icon">📄</div>
+          <div class="sh-paper-corner"></div>
+        </div>
+        <strong class="sh-exam-label">Mock Exam</strong>
+        <span class="sh-exam-meta">40 Qs · 45 min · Timed</span>
+        <span class="sh-exam-tag sh-exam-tag-gold">⭐ Full paper</span>
+      </button>
+      <button class="sh-exam-card" onclick="showScreen('exam-config')">
+        <div class="sh-paper sh-paper-blue">
+          <div class="sh-paper-header"><span class="sh-paper-lines"></span></div>
+          <div class="sh-paper-icon">⚙️</div>
+          <div class="sh-paper-corner"></div>
+        </div>
+        <strong class="sh-exam-label">Custom Exam</strong>
+        <span class="sh-exam-meta">Choose type &amp; length</span>
+        <span class="sh-exam-tag sh-exam-tag-blue">🎯 Your way</span>
+      </button>
+      <button class="sh-exam-card sh-exam-card-soon" disabled>
+        <div class="sh-paper sh-paper-dim">
+          <div class="sh-paper-header"><span class="sh-paper-lines"></span></div>
+          <div class="sh-paper-icon">🗂️</div>
+          <div class="sh-paper-corner"></div>
+        </div>
+        <strong class="sh-exam-label">Past Papers</strong>
+        <span class="sh-exam-meta">2016 – 2024</span>
+        <span class="sh-exam-tag">🔜 Coming Soon</span>
+      </button>
+    </div>`;
+  }
+
+  function _startMockExam() {
+    if (typeof DB !== 'undefined' && DB?.restrictions?.examDisabled) {
+      toast('🔒 Exam mode is locked by your parent.', 2000);
+      return;
+    }
+    if (typeof startExam === 'function') {
+      startExam('mock');
+    } else {
+      showScreen('exam-config');
+    }
+  }
+
+  return { open, back, tab, setFilter, _startMockExam };
+})();
+window.SubjectHub = SubjectHub;
+
+// Wire Subject Hub tab clicks
+document.querySelectorAll('.ta-tab[data-sh-tab]').forEach(btn => {
+  btn.addEventListener('click', () => SubjectHub.tab(btn.dataset.shTab));
+});
+
 window.closeExamReview = function () {
   document.getElementById('modal-exam-review')?.classList.add('hidden');
 };
@@ -7286,13 +7810,13 @@ function _toggleExamReviewWrongOnly() {
 }
 
 document.getElementById('new-exam-btn').addEventListener('click', () => showScreen('exam-config'));
-document.getElementById('results-home-btn').addEventListener('click', () => showScreen('dashboard'));
+document.getElementById('results-home-btn').addEventListener('click', () => StudentHome.open());
 
 // ── PRACTICE MODE ─────────────────────────────
 document.getElementById('practice-back-btn').addEventListener('click', () => {
-  if (S.practice.coachMission) { showScreen('subject-select'); return; }
   _clearPracticeResume(S.practice.chapterId);
-  showScreen('chapter-select');
+  if (typeof SubjectHub !== 'undefined' && ACTIVE_PACK) SubjectHub.back();
+  else showScreen('chapter-select');
 });
 
 function _updateDiffBadge(q) {
@@ -7653,7 +8177,6 @@ function practiceSubmit() {
   S.practice.session.attempted++;
   if (ok) S.practice.session.correct++;
   recordAnswer(q.chapterId || S.practice.chapterId, ok, undefined, q.id);
-  if (typeof LearningCoach !== 'undefined') LearningCoach.record(q, ok);
   updateSessionStats();
 
   document.getElementById('practice-submit-btn').classList.add('hidden');
@@ -7719,7 +8242,6 @@ function practiceSkip() {
   _logPracticeAnswer(q, '', false, true);
   S.practice.session.attempted++;
   recordAnswer(S.practice.chapterId, false);
-  if (typeof LearningCoach !== 'undefined') LearningCoach.record(q, false);
   updateSessionStats();
   document.getElementById("practice-submit-btn").classList.add("hidden");
   document.getElementById("practice-skip-btn").classList.add("hidden");
@@ -7884,13 +8406,13 @@ function _roundCompleteBack() {
   // without this a completed round left a stale resume record pointing at its
   // own last, fully-answered question.
   _clearPracticeResume(S.practice.chapterId);
-  showScreen('chapter-select');
+  if (typeof SubjectHub !== 'undefined' && ACTIVE_PACK) SubjectHub.back();
+  else showScreen('chapter-select');
 }
 
 function practiceNext() {
   S.practice.idx++;
   if (S.practice.idx >= S.practice.qs.length) {
-    if (S.practice.coachMission) { LearningCoach.finish(); return; }
     if (ASSIGNMENT_MODE) {
       showAssignmentComplete();
       return;
@@ -8436,11 +8958,6 @@ function renderSyllabus() {
 function renderInteractiveMap() {
   const panel = document.getElementById('interactive-map-page');
   if (!panel) return;
-  const hasGeoMap = /history\s*&?\s*geography/i.test(ACTIVE_PACK?.subject || ACTIVE_PACK?.name || '');
-  if (!hasGeoMap) {
-    panel.innerHTML = '<div class="rounded-2xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-5 text-sm text-amber-800 dark:text-amber-200">Interactive Maps are available from History &amp; Geography. Choose that subject to explore.</div>';
-    return;
-  }
   if (typeof GeoMap !== 'undefined') GeoMap.render(panel);
 }
 
@@ -8756,7 +9273,6 @@ function _kidHomeHero() {
 
 function renderSubjectSelect() {
   if (typeof MiniGames !== 'undefined') MiniGames.syncTile();
-  if (typeof LearningCoach !== 'undefined') LearningCoach.renderChild();
   const container = document.getElementById('subject-cards');
   if (!container) return;
 
@@ -9027,6 +9543,8 @@ function openReportModal() {
   const modal = document.getElementById('modal-report');
   if (modal) {
     document.getElementById('report-message').value = '';
+    const sel = document.getElementById('report-type');
+    if (sel) sel.value = 'wrong_answer';
     modal.classList.remove('hidden');
   }
 }
@@ -9038,7 +9556,9 @@ function closeReportModal() {
 
 async function submitReport() {
   const msg = (document.getElementById('report-message')?.value || '').trim();
-  if (!msg) { toast('Please describe the issue first.', 2000); return; }
+  const reportType = document.getElementById('report-type')?.value || 'other';
+  // The type alone is enough to file a report; the message field is optional.
+  if (!reportType) { toast('Please choose a report type.', 2000); return; }
 
   const q = S.practice?.qs?.[S.practice?.idx] ?? S.exam?.qs?.[S.exam?.idx];
   if (!q) { closeReportModal(); return; }
@@ -9057,23 +9577,353 @@ async function submitReport() {
   const res = await Store.reportQuestion(
     q.id,
     questionText.slice(0, 300),
-    msg,
+    msg || reportType,
     typeof ACTIVE_STUDENT_ID !== 'undefined' ? ACTIVE_STUDENT_ID : null,
     studentName,
     mode,
     q.options || null,
-    q.answer || null
+    q.answer || null,
+    q.chapterId || null,
+    reportType
   );
 
   closeReportModal();
   if (res.ok) {
-    toast('Report sent - thank you! 🙏', 2500);
+    toast('Report sent - thank you! 🙏 Check My Reports for updates.', 3000);
+    // Refresh inbox badge if already loaded
+    _refreshInboxBadge();
   } else if (!res.sessionExpired) {
     // A session-expired failure already got its own, more useful toast from
     // the 'session-invalid' handler in auth.js (and already sent the student
     // back to the login screen) - piling this generic one on top would just
     // overwrite it, since toast() is a single slot, not a queue.
     toast('Could not send report. Check your connection.', 3000);
+  }
+}
+
+// ── Student Report Inbox ─────────────────────────────────────────────────────
+const _REPORT_TYPE_LABELS = {
+  wrong_answer:   '❌ Wrong answer',
+  unclear:        '❓ Unclear question',
+  typo:           '✏️ Typo / grammar',
+  wrong_options:  '🔄 Wrong options',
+  other:          '💬 Other',
+  topic_question: '🙋 Topic question',
+  app_problem:    '🐛 App problem',
+  content_issue:  '📖 Content issue',
+};
+
+const _REPORT_STATUS_LABELS = {
+  open:      '🟡 Open',
+  in_review: '🔵 In review',
+  resolved:  '✅ Resolved',
+  wont_fix:  '⚪ No change needed',
+};
+
+let _inboxCache = null;
+
+async function _refreshInboxBadge() {
+  if (!ACTIVE_STUDENT_ID) return;
+  const reports = await Store.loadStudentReports();
+  _inboxCache = reports;
+  // Unread = admin replied after student last saw the report
+  const hasUnread = reports.some(r =>
+    r.reply_count > 0 &&
+    (!r.student_last_seen_at || new Date(r.updated_at) > new Date(r.student_last_seen_at))
+  );
+  // Dashboard tile badge
+  const badge = document.getElementById('inbox-badge');
+  if (badge) { badge.textContent = 'new'; badge.classList.toggle('hidden', !hasUnread); }
+}
+
+async function renderStudentInbox() {
+  const el = document.getElementById('inbox-list');
+  if (!el) return;
+
+  el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-10 animate-pulse">Loading…</p>';
+
+  // Always reload when opening the screen so the student sees fresh data.
+  const reports = await Store.loadStudentReports();
+  _inboxCache = reports;
+
+  if (!reports.length) {
+    el.innerHTML = `
+      <div class="text-center py-10">
+        <div class="text-5xl mb-4">📭</div>
+        <p class="text-gray-500 dark:text-gray-400 font-semibold mb-1">No reports yet</p>
+        <p class="text-sm text-gray-400 dark:text-gray-500 max-w-xs mx-auto">Tap the <strong>🚩 flag</strong> icon while practising to report a question problem, or tap <strong>＋ New Ticket</strong> above to ask us anything.</p>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">Admin replies appear here and in the 📬 header button.</p>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = reports.map(r => {
+    const typeLabel   = _REPORT_TYPE_LABELS[r.report_type] || '💬 Report';
+    const statusLabel = _REPORT_STATUS_LABELS[r.status] || r.status;
+    const hasNew = r.reply_count > 0 &&
+      (!r.student_last_seen_at || new Date(r.updated_at) > new Date(r.student_last_seen_at));
+    const borderCls = hasNew ? 'border-indigo-400' : (r.status === 'resolved' ? 'border-green-400' : 'border-gray-200 dark:border-gray-700');
+    const safeId = r.id.replace(/[^a-zA-Z0-9-]/g, '');
+    const questionPreview = (r.question_text || '').split('\n__meta__')[0].slice(0, 120);
+
+    return `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3 border-l-4 ${borderCls}">
+      <div class="flex justify-between items-start gap-2 mb-2">
+        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">${_attr(typeLabel)}</span>
+        <span class="text-xs font-semibold ${r.status === 'resolved' ? 'text-green-600 dark:text-green-400' : r.status === 'in_review' ? 'text-blue-600 dark:text-blue-400' : 'text-amber-600 dark:text-amber-400'}">${_attr(statusLabel)}</span>
+      </div>
+      ${questionPreview ? `<p class="text-xs text-gray-600 dark:text-gray-300 mb-1 leading-relaxed line-clamp-2">${_attr(questionPreview)}</p>` : ''}
+      <p class="text-sm text-gray-800 dark:text-white mb-2">${_attr(r.message || '')}</p>
+      ${r.last_admin_message ? `
+        <div class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 rounded-xl px-3 py-2 mb-2">
+          <p class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-0.5">Admin replied:</p>
+          <p class="text-sm text-gray-800 dark:text-white">${_attr(r.last_admin_message)}</p>
+        </div>` : ''}
+      <div class="flex justify-between items-center mt-2 gap-2 flex-wrap">
+        <p class="text-xs text-gray-400 dark:text-gray-500">${new Date(r.created_at).toLocaleDateString()}</p>
+        <button onclick="openReportThread('${safeId}')"
+          class="text-xs text-indigo-600 dark:text-indigo-400 underline font-medium">
+          ${hasNew ? '🔵 View reply' : 'View / reply'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Mark all as seen (fire-and-forget — we have their attention now)
+  reports.forEach(r => {
+    if (r.reply_count > 0) Store.markReportSeen(r.id);
+  });
+  if (document.getElementById('inbox-badge')) {
+    document.getElementById('inbox-badge').classList.add('hidden');
+  }
+}
+
+// Thread modal — inline expand rather than a separate screen keeps the back nav simple
+async function openReportThread(reportId) {
+  const report = (_inboxCache || []).find(r => r.id === reportId);
+  if (!report) return;
+
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 z-[120] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm';
+  modal.id = 'modal-report-thread';
+  modal.innerHTML = `
+    <div class="bg-white dark:bg-gray-900 rounded-t-2xl sm:rounded-2xl shadow-2xl w-full sm:max-w-md max-h-[80vh] flex flex-col">
+      <div class="flex items-center gap-3 p-4 border-b border-gray-100 dark:border-gray-700 shrink-0">
+        <button onclick="document.getElementById('modal-report-thread').remove()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">✕</button>
+        <div class="flex-1">
+          <p class="font-semibold text-gray-800 dark:text-white text-sm">${_attr(_REPORT_TYPE_LABELS[report.report_type] || 'Report')}</p>
+          <p class="text-xs text-gray-400">${_attr(_REPORT_STATUS_LABELS[report.status] || report.status)}</p>
+        </div>
+      </div>
+      <div id="thread-messages" class="flex-1 overflow-y-auto p-4 space-y-3">
+        <p class="text-xs text-gray-400 text-center animate-pulse">Loading…</p>
+      </div>
+      <div id="thread-reply-area" class="p-4 border-t border-gray-100 dark:border-gray-700 shrink-0 ${report.status === 'resolved' || report.status === 'wont_fix' ? 'hidden' : ''}">
+        <div class="flex gap-2">
+          <textarea id="thread-reply-input" rows="2" maxlength="500" placeholder="Add a follow-up message…"
+            class="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"></textarea>
+          <button onclick="_sendThreadReply('${reportId}')"
+            class="shrink-0 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors self-end">Send</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+
+  // Mark as seen now that the student is viewing the thread.
+  Store.markReportSeen(reportId);
+
+  // Student inbox uses the data from get_student_reports (last_admin_message + reply_count).
+  // Direct access to question_report_messages requires authenticated (admin) — the student
+  // reads the thread through the RPC-provided summary. Show initial report + latest reply.
+  const threadEl = document.getElementById('thread-messages');
+  if (!threadEl) return;
+
+  const qPreview = (report.question_text || '').split('\n__meta__')[0].slice(0, 200);
+  let html = '';
+  if (qPreview) {
+    html += `<div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-3 mb-1">
+      <p class="text-xs text-gray-400 mb-1">Question</p>
+      <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed">${_attr(qPreview)}</p>
+    </div>`;
+  }
+  html += `<div class="flex justify-end">
+    <div class="max-w-[85%] bg-indigo-600 text-white rounded-2xl rounded-tr-none px-3 py-2">
+      <p class="text-sm">${_attr(report.message || '')}</p>
+      <p class="text-xs opacity-70 mt-1 text-right">${new Date(report.created_at).toLocaleString()} · You</p>
+    </div>
+  </div>`;
+  if (report.last_admin_message) {
+    html += `<div class="flex justify-start">
+      <div class="max-w-[85%] bg-gray-100 dark:bg-gray-700 rounded-2xl rounded-tl-none px-3 py-2">
+        <p class="text-sm text-gray-800 dark:text-white">${_attr(report.last_admin_message)}</p>
+        <p class="text-xs text-gray-400 mt-1">Admin</p>
+      </div>
+    </div>`;
+  } else {
+    html += `<p class="text-xs text-gray-400 text-center">No admin reply yet — we'll update this when we review it.</p>`;
+  }
+  threadEl.innerHTML = html;
+}
+
+async function _sendThreadReply(reportId) {
+  const input = document.getElementById('thread-reply-input');
+  const msg = (input?.value || '').trim();
+  if (!msg) { toast('Please type a message first.', 2000); return; }
+
+  const btn = document.querySelector('#modal-report-thread button.bg-indigo-600');
+  if (btn) btn.textContent = 'Sending…';
+
+  const res = await Store.sendReportFollowup(reportId, msg);
+  if (res.ok) {
+    if (input) input.value = '';
+    toast('Follow-up sent! 🙏', 2000);
+    document.getElementById('modal-report-thread')?.remove();
+    _inboxCache = null;
+    await renderStudentInbox();
+  } else {
+    if (btn) btn.textContent = 'Send';
+    toast('Could not send. Check your connection.', 3000);
+  }
+}
+
+// ── New general ticket (from My Reports screen) ──────────────────────────────
+function openNewTicketModal() {
+  const modal = document.getElementById('modal-new-ticket');
+  if (!modal) return;
+  document.getElementById('ticket-message').value = '';
+  document.getElementById('ticket-type').value = 'topic_question';
+  const btn = document.getElementById('ticket-submit-btn');
+  if (btn) { btn.textContent = 'Send'; btn.disabled = false; }
+  modal.classList.remove('hidden');
+}
+
+function closeNewTicketModal() {
+  const modal = document.getElementById('modal-new-ticket');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function submitNewTicket() {
+  const msg = (document.getElementById('ticket-message')?.value || '').trim();
+  if (!msg) { toast('Please describe your question or problem.', 2500); return; }
+
+  const btn = document.getElementById('ticket-submit-btn');
+  if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+
+  const ticketType = document.getElementById('ticket-type')?.value || 'other';
+  const sess = Store.getStudentSession ? Store.getStudentSession() : null;
+  const studentName = sess?.displayName || null;
+
+  const res = await Store.reportQuestion(
+    null,          // no question — sentinel '__general__' applied inside Store
+    '',            // no question text
+    msg,
+    typeof ACTIVE_STUDENT_ID !== 'undefined' ? ACTIVE_STUDENT_ID : null,
+    studentName,
+    'ticket',
+    null, null, null,
+    ticketType
+  );
+
+  closeNewTicketModal();
+  if (res.ok) {
+    toast('Ticket sent! We\'ll reply in My Reports. 🎫', 3000);
+    _inboxCache = null;
+    await renderStudentInbox();
+  } else if (!res.sessionExpired) {
+    toast('Could not send ticket. Check your connection.', 3000);
+  }
+}
+
+// ── PARENT MESSAGES ──────────────────────────────────────────────────────────
+
+async function _refreshParentMessageBadge() {
+  const badge = document.getElementById('pd-msg-badge');
+  if (!badge) return;
+  const reports = await Store.loadParentReports().catch(() => []);
+  // "new" = has an admin reply (admin_note non-null) and the report was updated
+  // after it was created (meaning the admin touched it after the parent submitted).
+  const hasNew = reports.some(r => r.admin_note && r.updated_at && r.created_at && r.updated_at !== r.created_at);
+  badge.classList.toggle('hidden', !hasNew);
+}
+
+async function renderParentMessages() {
+  const el = document.getElementById('pm-list');
+  if (!el) return;
+  el.innerHTML = '<p class="text-sm text-gray-400 dark:text-gray-500 text-center py-10 animate-pulse">Loading…</p>';
+
+  const reports = await Store.loadParentReports();
+
+  // Refresh the badge in the parent dashboard tab (clear it — they're looking at it now)
+  const badge = document.getElementById('pd-msg-badge');
+  if (badge) badge.classList.add('hidden');
+
+  if (!reports.length) {
+    el.innerHTML = `
+      <div class="text-center py-10">
+        <div class="text-5xl mb-4">📭</div>
+        <p class="text-gray-500 dark:text-gray-400 font-semibold mb-1">No messages yet</p>
+        <p class="text-sm text-gray-400 dark:text-gray-500 max-w-xs mx-auto">Tap <strong>＋ New Message</strong> to send us a bug report, ask about content, or get help with anything.</p>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = reports.map(r => {
+    const typeLabel   = _REPORT_TYPE_LABELS[r.report_type] || '💬 Message';
+    const statusLabel = _REPORT_STATUS_LABELS[r.status]   || r.status;
+    const hasReply    = !!r.admin_note;
+    const isNew       = hasReply && r.updated_at && r.created_at && r.updated_at !== r.created_at;
+    const borderCls   = isNew  ? 'border-indigo-400' :
+                        r.status === 'resolved' ? 'border-green-400' : 'border-gray-200 dark:border-gray-700';
+    return `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3 border-l-4 ${borderCls}">
+      <div class="flex justify-between items-start gap-2 mb-2">
+        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">${_attr(typeLabel)}</span>
+        <span class="text-xs font-semibold ${r.status === 'resolved' ? 'text-green-600 dark:text-green-400' : r.status === 'in_review' ? 'text-blue-600 dark:text-blue-400' : 'text-amber-600 dark:text-amber-400'}">${_attr(statusLabel)}</span>
+      </div>
+      <p class="text-sm text-gray-800 dark:text-white mb-2">${_attr(r.message || '')}</p>
+      ${r.admin_note ? `
+        <div class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 rounded-xl px-3 py-2 mb-2">
+          <p class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-0.5">Admin replied:</p>
+          <p class="text-sm text-gray-800 dark:text-white">${_attr(r.admin_note)}</p>
+        </div>` : `<p class="text-xs text-gray-400 dark:text-gray-500 italic mb-2">No reply yet — we'll update this when we review it.</p>`}
+      <p class="text-xs text-gray-400 dark:text-gray-500">${new Date(r.created_at).toLocaleDateString()}</p>
+    </div>`;
+  }).join('');
+}
+
+function openParentMessageModal() {
+  const modal = document.getElementById('modal-parent-message');
+  if (!modal) return;
+  const msgEl = document.getElementById('pm-message');
+  const typeEl = document.getElementById('pm-type');
+  if (msgEl) msgEl.value = '';
+  if (typeEl) typeEl.value = 'topic_question';
+  const btn = document.getElementById('pm-submit-btn');
+  if (btn) { btn.textContent = 'Send'; btn.disabled = false; }
+  modal.classList.remove('hidden');
+}
+
+function closeParentMessageModal() {
+  const modal = document.getElementById('modal-parent-message');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function submitParentMessage() {
+  const msg      = (document.getElementById('pm-message')?.value || '').trim();
+  const type     = document.getElementById('pm-type')?.value || 'other';
+  if (!msg) { toast('Please describe your question or problem.', 2500); return; }
+
+  const btn = document.getElementById('pm-submit-btn');
+  if (btn) { btn.textContent = 'Sending…'; btn.disabled = true; }
+
+  const res = await Store.submitParentReport(msg, type);
+  closeParentMessageModal();
+
+  if (res.ok) {
+    toast('Message sent! We\'ll reply in the Messages tab. 💬', 3000);
+    await renderParentMessages();
+  } else {
+    toast('Could not send. Check your connection.', 3000);
   }
 }
 

@@ -447,6 +447,18 @@ const MiniGames = (() => {
   }
 
   // ── Question sourcing ──────────────────────────
+
+  // Returns false for questions that don't belong in timed games:
+  //   • comprehension passages (huge question text with the whole extract embedded)
+  //   • subsections explicitly labelled as reading/passage/comprehension
+  // Uses two independent signals so either one is enough to exclude.
+  const _PASSAGE_RE = /\b(comprehension|passage|reading|texte|extrait|prose|paragraphe|paragraph)\b/i;
+  function _timedSafe(q) {
+    if (_PASSAGE_RE.test(q.subsection || '')) return false;
+    const plain = (q.question || '').replace(/<[^>]*>/g, '').trim();
+    return plain.length <= 280;
+  }
+
   function _gradePool() {
     const grade = (typeof Auth !== 'undefined' && Auth.getActiveAccount?.()?.grade)
       || (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
@@ -454,9 +466,9 @@ const MiniGames = (() => {
       .filter(p => p.grade === grade && !p.comingSoon);
     const chapterIds = new Set(packs.flatMap(p => (p._chapters || p.chapters || []).map(c => c.id)));
     let pool = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length === 4 && q.id && chapterIds.has(q.chapterId));
+      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length === 4 && q.id && chapterIds.has(q.chapterId) && _timedSafe(q));
     if (pool.length < 40) pool = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length === 4 && q.id);
+      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length === 4 && q.id && _timedSafe(q));
     return { pool, grade, packs };
   }
 
@@ -634,11 +646,22 @@ const MiniGames = (() => {
     }, 1600);
   }
 
+  function _flashLadder() {
+    const ladder = document.querySelector('.bq-ladder');
+    if (!ladder) return;
+    ladder.classList.add('bq-ladder-peek');
+    const now = ladder.querySelector('.bq-rung.now');
+    if (now) now.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    clearTimeout(_flashLadder._t);
+    _flashLadder._t = setTimeout(() => ladder.classList.remove('bq-ladder-peek'), 2200);
+  }
+
   function _correct(i) {
     const btn = $('mg-opt-' + i);
     btn?.classList.remove('picked');
     btn?.classList.add('right', 'pulse');
     _sfx.correct();
+    _flashLadder();
     const safeNow = SAFE.includes(_g.rung);
     _msg(`✅ <b>Correct!</b> You've won <b>${_money(PRIZES[_g.rung])}</b>!${safeNow ? ' 🔒 This prize is now guaranteed!' : ''}`);
     if (_g.rung >= 9 && typeof launchConfetti === 'function') launchConfetti(40 + _g.rung * 8);
@@ -656,6 +679,7 @@ const MiniGames = (() => {
     const rightIdx = q.options.findIndex(o => o === q.answer);
     $('mg-opt-' + rightIdx)?.classList.add('right');
     _sfx.wrong();
+    _flashLadder();
     _g.banked = _lockedPrize();
     setTimeout(() => _finish(false, q), 900);
   }
@@ -894,9 +918,9 @@ const MiniGames = (() => {
       .filter(p => p.grade === grade && !p.comingSoon);
     const chapterIds = new Set(packs.flatMap(p => (p._chapters || p.chapters || []).map(c => c.id)));
     let pool = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length >= 2 && q.id && chapterIds.has(q.chapterId));
+      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length >= 2 && q.id && chapterIds.has(q.chapterId) && _timedSafe(q));
     if (pool.length < 20) pool = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length >= 2 && q.id);
+      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length >= 2 && q.id && _timedSafe(q));
     // Easy-first so the clock feels beatable, then let it drift harder.
     pool.sort((a, b) => (a.difficulty || 2) - (b.difficulty || 2) || Math.random() - 0.5);
     return pool;

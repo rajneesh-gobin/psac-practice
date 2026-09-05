@@ -7,7 +7,7 @@
     ['The match continued ___ the rain was heavy.','although',['because','so that','unless'],'contrast','The match continuing is unexpected in heavy rain.'],
     ['The seedlings died ___ nobody watered them.','because',['although','unless','so that'],'reason','The lack of water explains why the seedlings died.'],
     ['Take a torch ___ you can see the path after sunset.','so that',['although','because','unless'],'purpose','Seeing the path is the purpose of taking a torch.'],
-    ['You cannot borrow the book ___ you return the overdue one.','unless',['because','although','so that'],'condition meaning “except if”','Returning the overdue book is the condition for borrowing another.'],
+    ['You cannot borrow the book ___ you return the overdue one.','unless',['because','although','so that'],'condition meaning "except if"','Returning the overdue book is the condition for borrowing another.'],
     ['Wash the fruit ___ you eat it.','before',['although','because','unless'],'time: washing must happen first','Before puts washing earlier than eating.'],
     ['We waited inside ___ the storm ended.','until',['because','although','so that'],'time: waiting ended at that point','Until marks the point when the waiting stopped.'],
     ['___ the bus was late, the pupils arrived before the bell.','Although',['Because','Unless','So that'],'contrast','Arriving before the bell is unexpected when the bus is late.'],
@@ -17,7 +17,7 @@
     ['The pupils spoke softly ___ the baby would not wake up.','so that',['although','unless','because'],'purpose','Keeping the baby asleep was the purpose of speaking softly.'],
     ['We could not use the computer ___ the electricity supply had failed.','because',['although','unless','so that'],'reason','The power failure explains why the computer could not be used.'],
     ['___ the bag looked small, it held all the equipment.','Although',['Because','Unless','So that'],'contrast','Holding all the equipment contrasts with looking small.'],
-    ['You will miss the rehearsal ___ you leave now.','unless',['because','although','so that'],'condition meaning “if you do not”','Unless you leave now means if you do not leave now.'],
+    ['You will miss the rehearsal ___ you leave now.','unless',['because','although','so that'],'condition meaning "if you do not"','Unless you leave now means if you do not leave now.'],
     ['The class checked every window ___ they locked the room.','before',['although','unless','because'],'time: checking came first','Before shows that checking the windows preceded locking the room.'],
     ['The road was blocked, ___ the driver chose another route.','so',['although','unless','until'],'result','Choosing another route resulted from the blocked road.'],
     ['I will keep your painting safe ___ you collect it.','until',['although','because','so that'],'time: keeping it safe continues up to collection','Until links the action to the time when you collect it.'],
@@ -26,8 +26,8 @@
     ['Amir labelled each container ___ the younger pupils could sort the materials.','so that',['although','unless','because'],'purpose','Helping the younger pupils sort materials was the purpose of the labels.']
   ];
   links.forEach(([sentence,answer,wrong,relation,why],i)=>add('g6eng-clauses','conjunctions',i,
-    `Choose the linking word or phrase that expresses <b>${relation}</b>: “${sentence}”`,answer,wrong,
-    `Look for a link expressing ${relation}.`,`${why} Use <b>${answer}</b>: “${sentence.replace('___',answer)}”`));
+    `Choose the linking word or phrase that expresses <b>${relation}</b>: "${sentence}"`,answer,wrong,
+    `Look for a link expressing ${relation}.`,`${why} Use <b>${answer}</b>: "${sentence.replace('___',answer)}"`));
   const perfect=[
     ['By the time the visitors arrived, the pupils had ___ their display.','finish','finished',['finish','finishing','finishes'],'past','The display was completed before the visitors arrived.'],
     ['Rina has already ___ the invitation to her aunt.','write','written',['wrote','writing','writes'],'present','Already describes a completed action connected with the present.'],
@@ -51,7 +51,7 @@
     ['I have ___ my spelling list, so I can practise without looking.','learn','learned',['learn','learning','learns'],'present','Learning the list has a present result. Learnt is also a standard participle, but is not one of these options.']
   ];
   perfect.forEach(([sentence,verb,answer,wrong,tense,why],i)=>add('g6eng-verbs','perfect',i,
-    `Complete the ${tense} perfect verb phrase using the correct form of <b>${verb}</b>: “${sentence}”`,answer,wrong,
+    `Complete the ${tense} perfect verb phrase using the correct form of <b>${verb}</b>: "${sentence}"`,answer,wrong,
     'After has, have or had, use the past participle, not the -ing form or a simple-past form that differs from it.',
     `${why} The ${tense} perfect uses ${tense==='past'?'had':'has or have'} + past participle. The participle of ${verb} is <b>${answer}</b>.`));
 })();

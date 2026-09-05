@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 6 French - Chapitre : L'Imparfait
+// Grade 6 French - Chapitre : L\'Imparfait
 // IDs format: g6fr-imp-NNN
 
 STATIC_QUESTIONS.push(
@@ -159,8 +159,8 @@ STATIC_QUESTIONS.push(
   makeTF({ id:'g6fr-imp-022', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:1,
     question:'L\'expression "Il était une fois…" au début d\'un conte utilise l\'imparfait.',
     answer:true,
-    hint:'"Il était" = imparfait d’être. Les contes commencent par une description = imparfait.',
-    explanation:'<b>Vrai.</b> "Il <b>était</b> une fois…" est l\'imparfait d’être (il <b>était</b>). Dans les contes, l\'imparfait sert à décrire le <b>cadre</b> (personnages, décors, situation initiale). C\'est l\'imparfait de <b>description</b>.' }),
+    hint:'"Il était" = imparfait d\'être. Les contes commencent par une description = imparfait.',
+    explanation:'<b>Vrai.</b> "Il <b>était</b> une fois…" est l\'imparfait d\'être (il <b>était</b>). Dans les contes, l\'imparfait sert à décrire le <b>cadre</b> (personnages, décors, situation initiale). C\'est l\'imparfait de <b>description</b>.' }),
 
   makeMCQ({ id:'g6fr-imp-023', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:2,
     question:'Conjugue PRENDRE à l\'imparfait pour "nous" :',
@@ -239,7 +239,7 @@ STATIC_QUESTIONS.push(
     question:'Quel est l\'imparfait de ÊTRE ASSIS pour "elle" ? (description physique)',
     options:['elle s\'asseyait','elle était assise','elle asseyait','elle a été assise'],
     answer:'elle était assise',
-    hint:'"Être assis(e)" est une locution = être + adjectif. Description d\'état = imparfait d’être.',
+    hint:'"Être assis(e)" est une locution = être + adjectif. Description d\'état = imparfait d\'être.',
     explanation:'"Elle <b>était assise</b>" - pour décrire une position ou un état physique dans le passé, on utilise <b>être à l\'imparfait + adjectif</b>. "Elle était assise sur le banc, les yeux fermés…" C\'est une description typique du roman ou du conte.' }),
 
   makeMCQ({ id:'g6fr-imp-034', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:4,

@@ -5,9 +5,9 @@
 
 const _PASSAGE_A = `<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
 <b style="color:#1e40af">Read the passage carefully, then answer the question.</b><br><br>
-<b>The Dodo - Mauritius's Lost Bird</b><br><br>
+<b>The Dodo - Mauritius\'s Lost Bird</b><br><br>
 The dodo was a large, flightless bird that lived only on the island of Mauritius. It stood about one metre tall and weighed roughly 10 to 18 kilograms. Because it had evolved on an island with no natural predators, the dodo had no fear of humans and could not fly to escape danger.<br><br>
-When Dutch sailors arrived in Mauritius in 1598, they found the dodo easy to catch. The sailors hunted the birds for food, and the animals they brought with them - such as rats, pigs and monkeys - destroyed the dodo's nests and eggs. Within less than a century, by around 1680, the dodo had become completely extinct.<br><br>
+When Dutch sailors arrived in Mauritius in 1598, they found the dodo easy to catch. The sailors hunted the birds for food, and the animals they brought with them - such as rats, pigs and monkeys - destroyed the dodo\'s nests and eggs. Within less than a century, by around 1680, the dodo had become completely extinct.<br><br>
 Today, the dodo is a national symbol of Mauritius. Its image appears on the Coat of Arms of the country. Scientists have studied dodo bones found on the island to learn more about this remarkable bird. Although it is gone forever, the dodo serves as a powerful reminder of how human activity can threaten wildlife.
 </div>`;
 
@@ -115,7 +115,7 @@ const _PASSAGE_B = `<div style="background:#f8fafc;border-left:4px solid #10b981
 <b>The Fishing Trip</b><br><br>
 One Saturday morning, Nico and Tony, two good friends, decided to go fishing at a nearby pond. They got their fishing lines and bait ready and also packed utensils and ingredients, as they wanted to have fresh fish for lunch.<br><br>
 Once they arrived at the pond, they sat far from each other to fish from different areas. Within a few minutes, Nico caught a big and beautiful fish. He was overjoyed. He placed the fish in a bucket and continued fishing to bring some home for dinner.<br><br>
-On the other side, Tony's bucket was empty. Nico offered to help Tony, but Tony politely refused. He said, "Don't worry, Nico! I will soon catch the kind of fish I need. I just need to be patient." Some minutes later, Tony managed to catch a large fish - but to Nico's surprise, Tony threw it back into the pond. Nico watched in silence as Tony caught many big fish and threw them all back.<br><br>
+On the other side, Tony\'s bucket was empty. Nico offered to help Tony, but Tony politely refused. He said, "Don\'t worry, Nico! I will soon catch the kind of fish I need. I just need to be patient." Some minutes later, Tony managed to catch a large fish - but to Nico\'s surprise, Tony threw it back into the pond. Nico watched in silence as Tony caught many big fish and threw them all back.<br><br>
 After a while, Nico got annoyed and asked, "Why are you throwing the fish back? They were big and beautiful!" Tony calmly replied, "I know they were big. Unluckily, I did not bring a big pan, so I am looking for a smaller fish to fit my cooking pan." Nico laughed, then advised his friend, "You just have to cut the big fish into smaller pieces!"
 </div>`;
 
@@ -172,7 +172,7 @@ STATIC_QUESTIONS.push(
     explanation:'Nico advised: "You just have to <b>cut the big fish into smaller pieces</b> to fit them into your pan." This was the practical solution Tony had not thought of.' }),
 
   makeTF({ id:'g5eng-comp-016', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:1,
-    question:`${_PASSAGE_B}True or False: Tony accepted Nico's offer to help him fish.`,
+    question:`${_PASSAGE_B}True or False: Tony accepted Nico\'s offer to help him fish.`,
     answer:false,
     hint:'Look at what Tony said when Nico offered to help.',
     explanation:'<b>False.</b> The passage says Tony "<b>politely refused</b>" Nico\'s offer to help. He said "Don\'t worry, Nico!" and insisted he just needed to be patient.' }),

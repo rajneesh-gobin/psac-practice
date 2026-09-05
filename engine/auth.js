@@ -1071,6 +1071,26 @@ const Auth = (() => {
       return;
     }
 
+    // Auto-resume practice or exam if the child refreshed mid-session.
+    // _saveResume() fires on every question render, so the data is already
+    // written to localStorage before the reload happens.
+    if ((lastKidScreen === 'practice' || lastKidScreen === 'exam') &&
+        typeof _readResumeStore === 'function' && typeof _doResume === 'function') {
+      const store = _pruneResumeStore(_readResumeStore());
+      if (lastKidScreen === 'exam' && store.exam) {
+        await _doResume('exam');
+        return;
+      }
+      if (lastKidScreen === 'practice') {
+        const entries = Object.entries(store.practice || {});
+        if (entries.length) {
+          entries.sort((a, b) => b[1].ts - a[1].ts);
+          await _doResume('practice', entries[0][0]);
+          return;
+        }
+      }
+    }
+
     // Restore the subject the child was using before the refresh. Subject
     // choice used to be memory-only, so a refresh always dropped them back at
     // "Pick a subject" even after they had opened History & Geography.
@@ -1078,15 +1098,12 @@ const Auth = (() => {
     try { previousSubject = sessionStorage.getItem(`psac-active-subject:${sess.id}`); } catch (_) {}
     const restoredPack = previousSubject && typeof activateSubjectPack === 'function'
       ? activateSubjectPack(previousSubject) : null;
-    if (restoredPack) {
-      renderDashboard();
-      showScreen('dashboard');
-    // Skip grade select - go straight to subject picker with the stored grade
-    } else if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
-      SELECTED_GRADE = resumeGrade;
-      showScreen('subject-select');
+    // Always land on the student home hub regardless of restored subject.
+    // The hub's sticky notes let the child jump straight into wherever they left off.
+    if (typeof StudentHome !== 'undefined') {
+      StudentHome.open();
     } else {
-      showScreen('dashboard');
+      showScreen('student-home');
     }
   }
 
@@ -1356,11 +1373,10 @@ const Auth = (() => {
       // enterParentMode() restores _parentProfile via _handleParentSession().
       _parentProfile = null;
       _handovers++;
-      if (typeof SUBJECT_PACKS !== 'undefined' && SUBJECT_PACKS.length > 1) {
-        SELECTED_GRADE = studentGrade;
-        showScreen('subject-select');
+      if (typeof StudentHome !== 'undefined') {
+        StudentHome.open();
       } else {
-        showScreen('dashboard');
+        showScreen('student-home');
       }
     }
   }
@@ -2840,6 +2856,7 @@ const Auth = (() => {
   const _PARENT_PIN_KEY = 'psac_parent_pin_v1';
   let _parentPinBusy = false;
   let _dbPinHash = null; // cached parent_pin_hash from profiles; '' = confirmed absent
+  let _dbPinFetchFailed = false; // true when the last fetch threw (network unavailable)
 
   function _getStoredPinHash() {
     try { return localStorage.getItem(_PARENT_PIN_KEY) || null; } catch(_) { return null; }
@@ -2852,14 +2869,15 @@ const Auth = (() => {
     } catch (_) { return null; }
   }
 
-  async function _fetchDbPinHash() {
-    if (_dbPinHash !== null) return _dbPinHash || null;
+  async function _fetchDbPinHash(force) {
+    if (!force && _dbPinHash !== null) return _dbPinHash || null;
     if (!_parentUser) return null;
     try {
       const { data } = await _sb.from('profiles').select('parent_pin_hash').eq('id', _parentUser.id).single();
       _dbPinHash = data?.parent_pin_hash || '';
+      _dbPinFetchFailed = false;
       return _dbPinHash || null;
-    } catch (_) { return null; }
+    } catch (_) { _dbPinFetchFailed = true; return null; }
   }
 
   function _storePin(pin) {
@@ -2873,15 +2891,28 @@ const Auth = (() => {
   }
 
   async function _pinMatches(pin) {
+    // DB is authoritative. localStorage is only a fallback when the network is
+    // unavailable (offline, expired session, timeout).
+    const inputHash = await _hashPinForDb(pin);
+    if (!inputHash) return false;
+    const dbHash = await _fetchDbPinHash(true); // always fetch fresh
+
+    if (!_dbPinFetchFailed) {
+      // DB reachable. No hash in DB = PIN predates the DB column; check localStorage.
+      if (!dbHash) {
+        const local = _getStoredPinHash();
+        if (!local) return false;
+        return local === btoa(pin + ':psac_v1');
+      }
+      const ok = inputHash === dbHash;
+      if (ok) _storePin(pin); // keep localStorage in sync for offline use
+      return ok;
+    }
+
+    // DB unreachable — localStorage is the only option.
     const local = _getStoredPinHash();
-    if (local !== null) return local === btoa(pin + ':psac_v1');
-    // localStorage was cleared — fall back to DB
-    const [inputHash, dbHash] = await Promise.all([_hashPinForDb(pin), _fetchDbPinHash()]);
-    if (!inputHash || !dbHash) return false;
-    const ok = inputHash === dbHash;
-    // Repopulate localStorage on match so next check is offline-capable
-    if (ok) _storePin(pin);
-    return ok;
+    if (!local) return false;
+    return local === btoa(pin + ':psac_v1');
   }
 
   function _updatePinDots(prefix, filled) {
@@ -3178,7 +3209,11 @@ const Auth = (() => {
       _openParentDashboard();
       return;
     }
-    if (_getStoredPinHash()) {
+    const hasLocalPin = !!_getStoredPinHash();
+    // Check DB too so a PIN set from another device still shows the modal here.
+    // Use the cached value if already fetched; only hit the network if needed.
+    const hasDbPin = !hasLocalPin && !!await _fetchDbPinHash();
+    if (hasLocalPin || hasDbPin) {
       _showParentPinModal();
       return;
     }
@@ -3199,7 +3234,8 @@ const Auth = (() => {
       // and without it the next reload would still route to the dashboard the
       // parent had merely visited.
       _markActiveMode('student');
-      showScreen('dashboard');
+      if (typeof StudentHome !== 'undefined') StudentHome.open();
+      else showScreen('student-home');
     } else {
       showScreen('auth');
     }

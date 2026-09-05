@@ -18,9 +18,19 @@ const show = id => document.querySelectorAll('.screen')
   .forEach(s => s.classList.toggle('on', s.id === id));
 
 const S = {
-  code: '', name: '', submitName: '', access: null, token: '', assignment: null, questions: [],
+  code: '', name: '', submitName: '', access: null, classroomId: null,
+  token: '', assignment: null, questions: [],
   idx: 0, answers: [], answered: false, endAt: null, timer: null, result: null,
 };
+
+// localStorage helpers for shared-PIN classroom nicknames
+function _nickKey(id) { return 'psac_guest_nick_' + String(id || ''); }
+function _loadNick(id) {
+  try { return id ? (localStorage.getItem(_nickKey(id)) || '') : ''; } catch(_) { return ''; }
+}
+function _saveNick(id, name) {
+  try { if (id && name) localStorage.setItem(_nickKey(id), String(name).slice(0, 40)); } catch(_) {}
+}
 
 // ── Share code: /a/ABC123 , or ?code=ABC123 ───────────────────────────────
 (function readCode() {
@@ -86,10 +96,23 @@ async function initGate() {
     const info = await api('/api/assignment-open', {code:S.code, info:true});
     if (!info.ok) throw new Error('unavailable');
     S.access = info.access_mode || 'legacy';
+    S.classroomId = info.classroom_id || null;
     $('g-title').textContent = info.title || 'Homework';
+    // shared_pin: PIN + name (name pre-filled from localStorage if known)
     $('g-name-wrap').hidden = S.access === 'classroom_pin';
-    $('g-pin-wrap').hidden = S.access === 'nickname';
-    $('g-sub').textContent = S.access === 'classroom_pin' ? 'Enter your own private pupil PIN. No account needed.' : S.access === 'nickname' ? 'Enter a nickname for this assignment. No PIN needed.' : 'Enter your name and the assignment PIN.';
+    $('g-pin-wrap').hidden  = S.access === 'nickname';
+    if (S.access === 'shared_pin') {
+      // Both PIN and name visible; pre-fill name from localStorage if saved
+      $('g-name-wrap').hidden = false;
+      $('g-pin-wrap').hidden  = false;
+      const savedNick = _loadNick(S.classroomId || S.code);
+      if (savedNick) $('g-name').value = savedNick;
+    }
+    $('g-sub').textContent =
+      S.access === 'classroom_pin' ? 'Enter your own private pupil PIN. No account needed.'
+      : S.access === 'shared_pin'  ? 'Enter the class PIN, then your name. Your name will be remembered on this device.'
+      : S.access === 'nickname'    ? 'Enter a nickname for this assignment. No PIN needed.'
+      : 'Enter your name and the assignment PIN.';
     $('g-go').disabled = false;
   } catch (_) {
     err('Could not load this homework. Check your connection or ask your teacher whether it is still open. Refresh to try again.');
@@ -109,8 +132,10 @@ async function openAssignment() {
   const name = $('g-name').value.trim();
   const pin  = $('g-pin').value.trim();
   if (!S.access) return;
-  if (S.access !== 'classroom_pin' && !name) { err('Please enter your nickname.'); $('g-name').focus(); return; }
-  if (S.access !== 'nickname' && !/^\d{4}$/.test(pin)) { err('The PIN is 4 digits.'); $('g-pin').focus(); return; }
+  const needsName = S.access !== 'classroom_pin';
+  const needsPin  = S.access !== 'nickname';
+  if (needsName && !name) { err('Please enter your name.'); $('g-name').focus(); return; }
+  if (needsPin  && !/^\d{4}$/.test(pin)) { err('The PIN is 4 digits.'); $('g-pin').focus(); return; }
 
   err('');
   const btn = $('g-go');
@@ -155,6 +180,8 @@ async function openAssignment() {
 
   S.name       = r.name;
   S.submitName = r.submitName || r.name;
+  // Persist name for shared_pin classrooms so the student doesn't re-enter it
+  if (S.access === 'shared_pin' && r.name) _saveNick(S.classroomId || S.code, r.name);
   $('g-pin').value = '';
   // Per-attempt token from assignment-open. Held in memory only - it proves
   // THIS browser passed the PIN, and the submit endpoint refuses without it.
@@ -164,13 +191,63 @@ async function openAssignment() {
   S.answers    = [];
   S.idx        = 0;
 
-  if (S.assignment.durationMins) {
+  // Show the home screen (assignment summary + class resources) before the quiz.
+  $('h-title').textContent = S.assignment.title || 'Homework';
+  $('h-who').textContent   = 'Hi ' + S.name + ' 👋 — ' + S.questions.length + ' question' + (S.questions.length === 1 ? '' : 's');
+  show('s-home');
+
+  // Load classroom materials in the background.
+  if (S.classroomId) {
+    $('h-res').style.display = '';
+    loadMaterials(S.classroomId);
+  }
+}
+
+function _startQuiz() {
+  if (S.assignment && S.assignment.durationMins) {
     S.endAt = Date.now() + S.assignment.durationMins * 60000;
     S.timer = setInterval(tickTimer, 1000);
   }
   $('q-who').textContent = S.name + ' · ' + (S.assignment.title || 'Homework');
   show('s-quiz');
   renderQuestion();
+}
+
+$('h-start') && $('h-start').addEventListener('click', _startQuiz);
+
+async function loadMaterials(classroomId) {
+  const list = $('h-res-list');
+  if (!list) return;
+  try {
+    const r = await api('/api/classroom-materials', { classroom_id: classroomId });
+    if (!r.ok || !r.materials || !r.materials.length) {
+      $('h-res').style.display = 'none'; // nothing to show
+      return;
+    }
+    list.innerHTML = r.materials.map(m => {
+      const icon = m.file_name && m.file_name.endsWith('.pdf') ? '📄' : '🖼️';
+      const sub  = [m.subject, m.description].filter(Boolean).join(' · ');
+      const btn  = m.url
+        ? `<a href="${esc(m.url)}" target="_blank" rel="noopener" class="res-open">Open ↗</a>`
+        : '';
+      return `<div class="res-card">
+        <div class="res-icon">${icon}</div>
+        <div class="res-body">
+          <div class="res-title">${esc(m.title)}</div>
+          ${sub ? `<div class="res-sub">${esc(sub)}</div>` : ''}
+          ${btn}
+        </div>
+      </div>`;
+    }).join('');
+    // Wire up done screen "Class resources" button now that we know there are some.
+    const dresBtn = $('d-resources');
+    if (dresBtn) {
+      dresBtn.style.display = '';
+      dresBtn.onclick = () => show('s-home');
+    }
+  } catch (_) {
+    $('h-res').style.display = 'none'; // network issue — hide silently
+  }
 }
 
 function tickTimer() {

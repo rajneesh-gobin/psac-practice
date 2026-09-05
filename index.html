@@ -1358,7 +1358,7 @@
             <ul class="info-list">
               <li><b>Pick the subject and the chapter</b> — or leave the chapter open and assign the whole subject.</li>
               <li><b>Choose the difficulty</b>, or leave it mixed so they get a spread.</li>
-              <li><b>Add a note</b> — “do this before Friday”, “the ones we did on Sunday”. They see it with the task.</li>
+              <li><b>Add a note</b> — "do this before Friday", "the ones we did on Sunday". They see it with the task.</li>
               <li><b>Show answers: on or off.</b> Off turns it into a test — they still get a score, but not the answers to copy.</li>
               <li><b>Allow hints: on or off.</b> Off means no three-step help on this particular piece of work.</li>
               <li><b>Assign as many as you like</b>, and delete one that is no longer relevant.</li>
@@ -1480,7 +1480,7 @@
             <div class="mock">
               <div class="mock-bar"><span>Hi Emma 👋</span><span class="mock-dim">🔥 6 · Level 7</span></div>
               <div class="mock-body">
-                <div class="mock-task">📋 <b>Homework from Mum</b><br><span class="mock-tiny">Maths · Fractions · “Before Friday please 🙂”</span></div>
+                <div class="mock-task">📋 <b>Homework from Mum</b><br><span class="mock-tiny">Maths · Fractions · "Before Friday please 🙂"</span></div>
                 <div class="mock-row"><span class="mock-btn">📚 Practise</span><span class="mock-btn-ghost">📝 Mock exam</span></div>
                 <div class="mock-row"><span class="mock-btn-ghost">💪 Weak areas</span><span class="mock-btn-ghost">🔍 Search</span></div>
                 <div class="mock-note">⏸️ Continue where you left off — Decimals, question 12.</div>
@@ -2016,17 +2016,17 @@
   <!-- ── Student bottom navigation bar ── -->
   <nav id="student-bottom-nav" class="hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700" style="padding-bottom: env(safe-area-inset-bottom)">
     <div class="max-w-lg mx-auto w-full flex items-stretch">
-    <button onclick="showScreen('dashboard')" data-nav="home" class="tabbar-btn">
+    <button onclick="StudentHome.open()" data-nav="home" class="tabbar-btn">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
       <span class="text-[10px] font-semibold">Home</span>
     </button>
-    <button onclick="showScreen('subject-select')" data-nav="practice" class="tabbar-btn">
+    <button onclick="PracticeHub.open()" data-nav="practice" class="tabbar-btn">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
       <span class="text-[10px] font-semibold">Practice</span>
     </button>
-    <button onclick="showScreen('exam-config')" data-nav="exam" class="tabbar-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-      <span class="text-[10px] font-semibold">Exam</span>
+    <button onclick="MiniGames.open()" data-nav="games" class="tabbar-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+      <span class="text-[10px] font-semibold">Games</span>
     </button>
     <button onclick="showScreen('analytics')" data-nav="progress" class="tabbar-btn">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
@@ -2039,7 +2039,6 @@
 
     <!-- ══════════ DASHBOARD ══════════ -->
     <div id="screen-dashboard" class="screen">
-      <section id="coach-child-home" class="coach-card hidden"></section>
       <button onclick="Auth.enterParentMode()" class="pd-switch student-parent-switch mb-4">
         <span class="pd-switch-ico" aria-hidden="true">🔒</span>
         <span class="pd-switch-text"><span class="pd-switch-title">Switch to parent mode</span><span class="pd-switch-sub">For grown-ups — use parent access to review progress and settings</span></span>
@@ -2059,7 +2058,7 @@
         <div class="flex items-start justify-between gap-2 mb-1">
           <h2 id="dashboard-greeting" class="text-2xl font-bold">Welcome! 👋</h2>
           <div class="flex gap-2 shrink-0">
-            <button id="btn-change-subject" onclick="showScreen('subject-select')"
+            <button id="btn-change-subject" onclick="PracticeHub.open()"
               class="hidden text-xs font-semibold bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors whitespace-nowrap">
               📚 Subjects
             </button>
@@ -2113,7 +2112,7 @@
               class="bg-white text-indigo-600 font-bold text-sm px-5 py-2 rounded-xl hover:bg-indigo-50 transition-colors shadow">
               Start my 5-question mission →
             </button>
-            <button onclick="showScreen('subject-select')"
+            <button onclick="PracticeHub.open()"
               class="ml-2 mt-2 sm:mt-0 text-sm font-semibold text-white/95 hover:text-white hover:underline">
               Choose a subject instead
             </button>
@@ -2221,8 +2220,8 @@
         <span class="text-amber-400 text-2xl shrink-0">›</span>
       </button>
 
-      <!-- Reports inbox tile: only shown when the student has at least one report -->
-      <button id="dash-inbox-tile" onclick="showScreen('inbox')" class="hidden w-full mb-4 flex items-center gap-3 bg-white dark:bg-gray-800 rounded-2xl px-4 py-3 shadow border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all text-left">
+      <!-- Reports inbox tile: always visible so students can find their replies -->
+      <button id="dash-inbox-tile" onclick="showScreen('inbox')" class="w-full mb-4 flex items-center gap-3 bg-white dark:bg-gray-800 rounded-2xl px-4 py-3 shadow border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all text-left">
         <span class="text-2xl select-none">📬</span>
         <div class="flex-1">
           <span class="font-semibold text-gray-800 dark:text-white text-sm">My Reports</span>
@@ -2291,6 +2290,54 @@
       </div>
     </div>
 
+    <!-- ══════════ PRACTICE HUB ══════════ -->
+    <div id="screen-practice-hub" class="screen hidden">
+      <div class="prac-hub-outer">
+        <div class="prac-hub-crumb">
+          <button onclick="StudentHome.open()">🏠 Home</button>
+          <span class="crumb-sep">›</span>
+          <span>Start Practicing</span>
+        </div>
+        <h2 class="prac-hub-title">📚 Start Practicing</h2>
+        <div class="prac-hub-search-row">
+          <button class="prac-hub-search-btn" onclick="Search.open()">🔍 Search questions</button>
+        </div>
+        <div class="prac-grade-bar">
+          <label class="prac-grade-label" for="prac-grade-sel">Grade</label>
+          <select id="prac-grade-sel" class="prac-grade-dropdown" onchange="PracticeHub.onGradeChange(this.value)"></select>
+          <span class="prac-locked-note" id="prac-locked-note" style="display:none">🔒 Set by parent</span>
+        </div>
+        <div class="prac-books-grid" id="prac-books-grid"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ SUBJECT HUB ══════════ -->
+    <div id="screen-subject-hub" class="screen hidden">
+      <div class="subj-hub-outer">
+        <div class="subj-hub-crumb">
+          <button onclick="StudentHome.open()">🏠 Home</button>
+          <span class="crumb-sep">›</span>
+          <button onclick="PracticeHub.open()">Start Practicing</button>
+          <span class="crumb-sep">›</span>
+          <span id="subj-hub-crumb-subject"></span>
+        </div>
+        <div class="teacher-navigation">
+          <button class="ta-tab" data-sh-tab="chapters" aria-selected="true">📖 Chapters</button>
+          <button class="ta-tab" data-sh-tab="exam" aria-selected="false">📝 Exam</button>
+          <button class="ta-tab" data-sh-tab="syllabus" aria-selected="false">🗒️ Syllabus</button>
+        </div>
+        <div class="ta-tab-content" data-sh-tab="chapters">
+          <div id="sh-chapter-panel"></div>
+        </div>
+        <div class="ta-tab-content hidden" data-sh-tab="exam">
+          <div id="sh-exam-panel"></div>
+        </div>
+        <div class="ta-tab-content hidden" data-sh-tab="syllabus">
+          <div id="sh-syllabus-panel"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ══════════ GRADE SELECTOR ══════════ -->
     <div id="screen-grade-select" class="screen hidden">
       <div class="text-center mb-8 pt-4">
@@ -2306,6 +2353,149 @@
       </div>
     </div>
 
+    <!-- ══════════ STUDENT HOME — Chalkboard Hub ══════════ -->
+    <div id="screen-student-home" class="screen hidden">
+      <!-- Header: greeting + parent mode switch -->
+      <div class="sh-header">
+        <div>
+          <h2 id="sh-greeting" class="sh-title">Hey there! 👋</h2>
+          <p class="sh-subtitle">What are we doing today?</p>
+        </div>
+        <button onclick="Auth.enterParentMode()" class="ta-btn-eraser" style="font-size:.85rem;padding:.4rem .9rem">
+          🔒 Parent mode
+        </button>
+      </div>
+
+      <!-- Tabs — same folder-tab structure as the teacher screen -->
+      <div class="teacher-navigation" role="tablist" aria-label="Student home">
+        <button role="tab" aria-selected="true"  class="ta-tab" data-tab="board"    onclick="StudentHome.tab('board')"   ><strong>📌 My Board</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="progress" onclick="StudentHome.tab('progress')"><strong>📊 Progress</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="inbox"    onclick="StudentHome.tab('inbox')"   ><strong>📬 Messages</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="missions" onclick="StudentHome.tab('missions')"><strong>🎯 Missions</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="badges"   onclick="StudentHome.tab('badges')"  ><strong>🏅 Badges</strong></button>
+      </div>
+
+      <!-- Board tab: sticky notes grid -->
+      <div class="ta-tab-content" data-tab="board">
+        <!-- The blackboard frame -->
+        <div class="sh-board-frame">
+          <div id="resume-banner-slot-studenthome"></div>
+          <div class="sh-notes-grid" id="sh-notes-grid">
+            <button class="sh-note sh-note-yellow" onclick="PracticeHub.open()">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">📚</div>
+              <div class="sh-note-title">Start Practicing</div>
+              <div class="sh-note-desc">Questions · Exam · Syllabus</div>
+            </button>
+            <button class="sh-note sh-note-green" onclick="MiniGames.open()">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">🎮</div>
+              <div class="sh-note-title">Game Zone</div>
+              <div class="sh-note-desc">Rs 1 Billion quiz, Quick Fire, Island Explorer &amp; more!</div>
+            </button>
+            <button class="sh-note sh-note-pink" onclick="showScreen('interactive-map')">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">🗺️</div>
+              <div class="sh-note-title">Maps</div>
+              <div class="sh-note-desc">Rivers, mountains, districts — tap to explore</div>
+            </button>
+            <button class="sh-note sh-note-blue" onclick="showScreen('schedule')">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">📅</div>
+              <div class="sh-note-title">My Timetable</div>
+              <div class="sh-note-desc">Your study plan and upcoming sessions</div>
+            </button>
+            <button class="sh-note sh-note-green" onclick="showScreen('analytics')">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">📊</div>
+              <div class="sh-note-title">My Progress</div>
+              <div class="sh-note-desc">Accuracy, streaks and performance by subject</div>
+            </button>
+            <button class="sh-note sh-note-pink" onclick="showScreen('dashboard')">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">🏠</div>
+              <div class="sh-note-title">Dashboard</div>
+              <div class="sh-note-desc">Stats overview, assignments and chapter mastery</div>
+            </button>
+            <button class="sh-note sh-note-yellow" onclick="surpriseMe()">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">🎲</div>
+              <div class="sh-note-title">Surprise Me!</div>
+              <div class="sh-note-desc">Random question from any chapter</div>
+            </button>
+            <button class="sh-note sh-note-green" onclick="openFriendInviteModal()">
+              <div class="sh-note-tape"></div>
+              <div class="sh-note-icon">🤝</div>
+              <div class="sh-note-title">Invite a Friend</div>
+              <div class="sh-note-desc">Challenge a friend and climb the leaderboard</div>
+            </button>
+          </div>
+        </div>
+        <!-- Below the blackboard frame -->
+        <div class="sh-below-board">
+          <div id="sh-goal-slot"></div>
+          <div class="sh-board-actions">
+            <button class="sh-board-action-btn" onclick="showProfile()" title="Settings &amp; profile">
+              <span class="sh-board-action-icon">⚙️</span>
+            </button>
+            <button class="sh-board-action-btn" id="sh-theme-btn" onclick="setThemePreference((DB.theme||localStorage.getItem('mm_global_theme')||'light')==='dark'?'light':'dark')" title="Toggle theme">
+              <span class="sh-board-action-icon" id="sh-theme-icon">💡</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress tab -->
+      <div class="ta-tab-content hidden" data-tab="progress">
+        <h3>My Progress</h3>
+        <p style="color:rgba(240,236,220,.78);margin:.4rem 0 1.25rem">See how you're doing across all your subjects and chapters.</p>
+        <div class="sh-link-cards">
+          <button onclick="showScreen('analytics')" class="sh-link-card">
+            <span class="sh-link-ico">📊</span>
+            <div><strong>Analytics Dashboard</strong><span>Accuracy, streaks and time on task</span></div>
+            <span class="sh-link-arrow">›</span>
+          </button>
+          <button onclick="showScreen('dashboard')" class="sh-link-card">
+            <span class="sh-link-ico">📈</span>
+            <div><strong>Chapter Mastery</strong><span>See how far you've come per chapter</span></div>
+            <span class="sh-link-arrow">›</span>
+          </button>
+          <button onclick="showScreen('syllabus')" class="sh-link-card">
+            <span class="sh-link-ico">📋</span>
+            <div><strong>Syllabus Browser</strong><span>Progress by topic and subsection</span></div>
+            <span class="sh-link-arrow">›</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages / inbox tab -->
+      <div class="ta-tab-content hidden" data-tab="inbox">
+        <h3>Messages &amp; Reports</h3>
+        <p style="color:rgba(240,236,220,.78);margin:.4rem 0 1.25rem">Questions you've flagged and replies from your teachers.</p>
+        <div class="sh-link-cards">
+          <button onclick="showScreen('inbox')" class="sh-link-card">
+            <span class="sh-link-ico">📬</span>
+            <div><strong>My Reports Inbox</strong><span>See replies to your flagged questions</span></div>
+            <span id="sh-inbox-arrow" class="sh-link-arrow">›</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Missions tab -->
+      <div class="ta-tab-content hidden" data-tab="missions">
+        <h3>Missions</h3>
+        <p style="color:rgba(240,236,220,.78);margin:.4rem 0 1.25rem">Quick challenges and targeted practice to level up fast.</p>
+        <div id="sh-missions-slot"></div>
+      </div>
+
+      <!-- Badges tab -->
+      <div class="ta-tab-content hidden" data-tab="badges">
+        <h3>Badges Earned</h3>
+        <p style="color:rgba(240,236,220,.78);margin:.4rem 0 1.25rem">Collect badges as you master chapters and hit milestones.</p>
+        <div id="sh-badges-slot"></div>
+      </div>
+    </div>
+
     <!-- ══════════ SUBJECT SELECTOR / KID HOME ══════════
          The first screen a student sees after PIN login (their grade is fixed
          by their parent, so there's no grade step to show - see the comment on
@@ -2316,7 +2506,6 @@
          see the .kid-* rules in style.css - without touching the rest of the
          app's visual language, which stays as-is. -->
     <div id="screen-subject-select" class="screen hidden">
-      <section id="coach-child-subject" class="coach-card hidden"></section>
       <button onclick="Auth.enterParentMode()" class="pd-switch student-parent-switch mb-4">
         <span class="pd-switch-ico" aria-hidden="true">🔒</span>
         <span class="pd-switch-text"><span class="pd-switch-title">Switch to parent mode</span><span class="pd-switch-sub">For grown-ups — review progress and settings with parent access</span></span>
@@ -2381,7 +2570,7 @@
         </button>
       </section>
       <div class="text-center space-y-2">
-        <button class="back-btn" onclick="showScreen('grade-select')">← Back to Grades</button>
+        <button class="back-btn" onclick="StudentHome.open()">← Home</button>
         <br>
         <button onclick="Auth.enterParentMode()" class="text-sm text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">🔒 Parent Access</button>
       </div>
@@ -2389,47 +2578,59 @@
 
     <!-- ══════════ EXAM CONFIG ══════════ -->
     <div id="screen-exam-config" class="screen hidden">
-      <div class="max-w-lg mx-auto">
-        <button class="back-btn mb-4" data-target="dashboard">← Back</button>
-        <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md">
-          <div class="text-4xl mb-2">📝</div>
-          <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-1">Exam Paper Mode</h2>
-          <p class="text-gray-500 dark:text-gray-400 text-sm mb-6">Choose your exam type, then begin. A unique paper is generated every time!</p>
-          <div class="space-y-3 mb-6" id="exam-type-options">
-            <label class="exam-opt">
-              <input type="radio" name="exam-type" value="drill" checked>
-              <div class="flex-1">
-                <div class="flex items-center gap-2">
-                  <span class="font-semibold text-gray-800 dark:text-white">⚡ Quick Drill</span>
-                  <span class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 font-bold px-2 py-0.5 rounded-full">⭐ Start here</span>
-                </div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">15 questions · 10 minutes · Mixed topics</div>
-              </div>
-            </label>
-            <label class="exam-opt">
-              <input type="radio" name="exam-type" value="short">
-              <div class="flex-1">
-                <div class="font-semibold text-gray-800 dark:text-white">📋 Short Test</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">25 questions · 25 minutes · Balanced coverage</div>
-              </div>
-            </label>
-            <label class="exam-opt">
-              <input type="radio" name="exam-type" value="full">
-              <div class="flex-1">
-                <div class="font-semibold text-gray-800 dark:text-white">🏆 45-min Question Paper (MCQ)</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">40 questions · All chapters covered</div>
-              </div>
-            </label>
-            <label class="exam-opt">
-              <input type="radio" name="exam-type" value="print">
-              <div class="flex-1">
-                <div class="font-semibold text-gray-800 dark:text-white">📄 Printable Exam Paper</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">40 questions · exam-style layout · Print or save as PDF · No timer</div>
-              </div>
-            </label>
-          </div>
-          <button id="start-exam-btn" class="btn-primary w-full text-base py-3">🚀 Start Exam</button>
+      <div class="exam-cfg-outer">
+        <div class="prac-hub-crumb">
+          <button onclick="StudentHome.open()">🏠 Home</button>
+          <span class="crumb-sep">›</span>
+          <button onclick="SubjectHub.back()">← Back</button>
+          <span class="crumb-sep">›</span>
+          <span>Custom Exam</span>
         </div>
+        <h2 class="prac-hub-title">📝 Custom Exam</h2>
+        <p class="exam-cfg-intro">Choose your exam type. A unique paper is generated every time!</p>
+        <div class="exam-cfg-list" id="exam-type-options">
+          <label class="exam-cfg-card">
+            <input type="radio" name="exam-type" value="drill" checked>
+            <div class="exam-cfg-body">
+              <span class="exam-cfg-icon">⚡</span>
+              <div class="exam-cfg-text">
+                <div class="exam-cfg-name">Quick Drill <span class="exam-cfg-badge">⭐ Start here</span></div>
+                <div class="exam-cfg-desc">15 questions · 10 minutes · Mixed topics</div>
+              </div>
+            </div>
+          </label>
+          <label class="exam-cfg-card">
+            <input type="radio" name="exam-type" value="short">
+            <div class="exam-cfg-body">
+              <span class="exam-cfg-icon">📋</span>
+              <div class="exam-cfg-text">
+                <div class="exam-cfg-name">Short Test</div>
+                <div class="exam-cfg-desc">25 questions · 25 minutes · Balanced coverage</div>
+              </div>
+            </div>
+          </label>
+          <label class="exam-cfg-card">
+            <input type="radio" name="exam-type" value="full">
+            <div class="exam-cfg-body">
+              <span class="exam-cfg-icon">🏆</span>
+              <div class="exam-cfg-text">
+                <div class="exam-cfg-name">45-min Question Paper</div>
+                <div class="exam-cfg-desc">40 questions · All chapters covered</div>
+              </div>
+            </div>
+          </label>
+          <label class="exam-cfg-card">
+            <input type="radio" name="exam-type" value="print">
+            <div class="exam-cfg-body">
+              <span class="exam-cfg-icon">📄</span>
+              <div class="exam-cfg-text">
+                <div class="exam-cfg-name">Printable Exam Paper</div>
+                <div class="exam-cfg-desc">40 questions · exam-style layout · Print or save as PDF · No timer</div>
+              </div>
+            </div>
+          </label>
+        </div>
+        <button id="start-exam-btn" class="exam-cfg-start">🚀 Start Exam</button>
       </div>
     </div>
 
@@ -2553,7 +2754,7 @@
 
         <div class="flex gap-3">
           <button id="new-exam-btn" class="btn-primary flex-1">📝 New Exam</button>
-          <button id="results-home-btn" class="btn-secondary flex-1">🏠 Dashboard</button>
+          <button id="results-home-btn" class="btn-secondary flex-1">🏠 Home</button>
         </div>
         <button id="share-result-btn" class="hidden w-full btn-ghost text-sm text-gray-500 dark:text-gray-400">📤 Share my result</button>
       </div>
@@ -2561,7 +2762,7 @@
 
     <!-- ══════════ CHAPTER SELECTOR ══════════ -->
     <div id="screen-chapter-select" class="screen hidden">
-      <button class="back-btn mb-4" data-target="subject-select">← Subjects</button>
+      <button class="back-btn mb-4" data-target="subject-hub">← Subjects</button>
 
       <div class="ch-header">
         <div class="ch-header-text">
@@ -2695,7 +2896,7 @@
     <!-- ══════════ ANALYTICS ══════════ -->
     <!-- ══════════ MINIGAMES ══════════ -->
     <div id="screen-minigames" class="screen hidden">
-      <button class="back-btn mb-4" data-target="dashboard">← Back</button>
+      <button class="back-btn mb-4" data-target="student-home">← Home</button>
       <div class="mg-hero">
         <h2>🎮 Game Zone <span class="inline-block animate-bounce select-none" style="animation-duration:1.4s">⚽</span></h2>
         <p>Learn while you play - stars, lifelines and bragging rights!</p>
@@ -2704,7 +2905,7 @@
       <div id="mg-game" class="hidden"></div>
     </div>
     <div id="screen-analytics" class="screen hidden">
-      <button class="back-btn mb-4" data-target="dashboard">← Back</button>
+      <button class="back-btn mb-4" data-target="student-home">← Home</button>
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-5">📊 Analytics Dashboard</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         <div class="stat-tile"><div id="a-total" class="stat-num text-blue-600 dark:text-blue-400">0</div><div class="stat-label">Questions Done</div></div>
@@ -2738,24 +2939,22 @@
 
     <!-- ══════════ SYLLABUS BROWSER ══════════ -->
     <div id="screen-syllabus" class="screen hidden">
-      <button class="back-btn mb-4" data-target="dashboard">← Back</button>
+      <button class="back-btn mb-4" data-target="student-home">← Home</button>
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-1">📋 Syllabus Browser</h2>
       <p class="text-gray-500 dark:text-gray-400 text-sm mb-5">Click any topic to start a targeted practice session.</p>
-      <button onclick="showScreen('past-papers')"
-        class="w-full mb-5 flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-gray-800 shadow border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition-colors text-left">
+      <div class="w-full mb-5 flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-gray-800 shadow border border-gray-100 dark:border-gray-700 opacity-50 cursor-not-allowed text-left">
         <span class="text-2xl select-none">📄</span>
         <span class="flex-1 min-w-0">
-          <span class="block font-bold text-gray-800 dark:text-white text-sm">Real PSAC Past Papers</span>
+          <span class="block font-bold text-gray-800 dark:text-white text-sm">Real PSAC Past Papers <span class="ml-1 text-xs font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full">Coming Soon</span></span>
           <span class="block text-xs text-gray-500 dark:text-gray-400">Questions from the real exam, 2016–2024 — to try on paper</span>
         </span>
-        <span class="text-gray-500 dark:text-gray-400 shrink-0">→</span>
-      </button>
+      </div>
       <div id="syllabus-list" class="space-y-4"></div>
     </div>
 
     <!-- ══════════ INTERACTIVE MAPS ══════════ -->
     <div id="screen-interactive-map" class="screen hidden">
-      <button class="back-btn mb-4" data-target="dashboard">← Back to subject</button>
+      <button class="back-btn mb-4" data-target="student-home">← Home</button>
       <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-1">🗺️ Interactive Maps</h2>
       <p class="text-gray-500 dark:text-gray-400 text-sm mb-5">Explore places at your own pace. Use the tabs and filters, then tap a marker to learn more.</p>
       <div id="interactive-map-page"></div>
@@ -3297,7 +3496,7 @@
           </label>
           <label><input id="qm-include-unpublished" type="checkbox" onchange="AdminPanel.qmGradeFilter()"> Include unpublished packs / placeholders</label>
           </div>
-          <p>Published Grade 4–6 packs are shown by default. Other grades remain available using “Include unpublished packs”.</p>
+          <p>Published Grade 4–6 packs are shown by default. Other grades remain available using "Include unpublished packs".</p>
           <label for="qm-search">Question text</label>
           <form class="qm-search-row" onsubmit="event.preventDefault(); AdminPanel.qmSearch()">
             <input id="qm-search" type="search" placeholder="Search words in a question…">
@@ -3326,14 +3525,16 @@
 
       <!-- Tabs — folder tab style -->
       <div class="teacher-navigation" role="tablist" aria-label="Teaching workspace">
-        <button role="tab" aria-selected="true" class="ta-tab" data-tab="create" onclick="TeacherMode.switchTab('create')"><strong>✏️ Set Work</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" data-tab="classes" onclick="TeacherMode.switchTab('classes')"><strong>🏫 Classrooms</strong></button>
+        <button role="tab" aria-selected="true" class="ta-tab" data-tab="classes" onclick="TeacherMode.switchTab('classes')"><strong>🏫 Classrooms</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="assignments" onclick="TeacherMode.switchTab('assignments')"><strong>📓 Assignments</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="create" onclick="TeacherMode.switchTab('create')"><strong>✏️ Set Work</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="results" onclick="TeacherMode.switchTab('results')"><strong>📊 Results</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" data-tab="materials" onclick="TeacherMode.switchTab('materials')"><strong>📂 Materials</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="gradebook" onclick="TeacherMode.switchTab('gradebook')"><strong>📋 Gradebook</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" data-tab="messages" onclick="TeacherMode.switchTab('messages')"><strong>💬 Messages</strong><span id="tc-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
       </div>
 
-      <div class="ta-tab-content hidden" data-tab="classes">
+      <div class="ta-tab-content" data-tab="classes">
         <h3 class="font-bold text-lg">Your classrooms</h3>
         <p class="teacher-intro">Keep each class’s work together. Pupils do not need an account.</p>
         <div class="teacher-tip">Start with a classroom name. Add pupils if you want to identify their submissions using private 4-digit PINs. Give each PIN to its pupil in person—never share the PIN list with the class.</div>
@@ -3353,103 +3554,103 @@
       </div>
 
       <!-- ── TAB: CREATE ── -->
-      <div class=”ta-tab-content” data-tab=”create”>
+      <div class="ta-tab-content hidden" data-tab="create">
 
         <!-- No classroom yet — shown until teacher creates one -->
-        <div id=”ta-no-classroom” class=”ta-no-classroom-notice hidden”>
-          <div class=”ta-thumbtack”></div>
-          <div class=”ta-notice-pin-icon”>📌</div>
-          <p class=”ta-notice-title”>Create your first classroom</p>
-          <p class=”ta-notice-body”>Before setting work, set up a classroom so you can assign homework to your pupils. It only takes a moment.</p>
-          <button onclick=”TeacherMode.switchTab(‘classes’)” class=”ta-notice-btn”>🏫 Create a classroom →</button>
+        <div id="ta-no-classroom" class="ta-no-classroom-notice hidden">
+          <div class="ta-thumbtack"></div>
+          <div class="ta-notice-pin-icon">📌</div>
+          <p class="ta-notice-title">Create your first classroom</p>
+          <p class="ta-notice-body">Before setting work, set up a classroom so you can assign homework to your pupils. It only takes a moment.</p>
+          <button onclick="TeacherMode.switchTab('classes')" class="ta-notice-btn">🏫 Create a classroom →</button>
         </div>
 
         <!-- Main form — shown when at least one classroom exists -->
-        <div id=”ta-create-form” class=”hidden”>
+        <div id="ta-create-form" class="hidden">
           <!-- Step 1: Who is this for? -->
-          <h4 class=”teacher-step” data-step=”1”><span>Who is this for?</span></h4>
-          <div id=”ta-class-picker” class=”ta-class-picker-wrap”></div>
+          <h4 class="teacher-step" data-step="1"><span>Who is this for?</span></h4>
+          <div id="ta-class-picker" class="ta-class-picker-wrap"></div>
 
           <!-- Hidden selects kept for backwards-compat with buildAssignment() -->
-          <select id=”ta-access” onchange=”TeacherGuestClasses.accessChanged()” style=”display:none”>
-            <option value=”nickname”>Open link — nickname, no PIN</option>
-            <option value=”classroom_pin”>My classroom — each pupil’s private PIN</option>
-            <option value=”legacy”>Shared assignment PIN + name (legacy)</option>
+          <select id="ta-access" onchange="TeacherGuestClasses.accessChanged()" style="display:none">
+            <option value="nickname">Open link - nickname, no PIN</option>
+            <option value="classroom_pin">My classroom - each pupil’s private PIN</option>
+            <option value="legacy">Shared assignment PIN + name (legacy)</option>
           </select>
-          <div id=”ta-classroom-wrap” style=”display:none”>
-            <select id=”ta-classroom” class=”w-full border rounded p-2 dark:bg-gray-700 dark:text-white”>
-              <option value=””>Standalone — not tied to a classroom</option>
+          <div id="ta-classroom-wrap" style="display:none">
+            <select id="ta-classroom" class="w-full border rounded p-2 dark:bg-gray-700 dark:text-white">
+              <option value="">Standalone - not tied to a classroom</option>
             </select>
           </div>
-          <p id=”ta-access-help” class=”hidden”></p>
-          <div id=”ta-legacy-pin-wrap” hidden>
-            <input id=”ta-pin” type=”text” inputmode=”numeric” maxlength=”4” placeholder=”e.g. 4821”
-              class=”w-32 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white”>
+          <p id="ta-access-help" class="hidden"></p>
+          <div id="ta-legacy-pin-wrap" hidden>
+            <input id="ta-pin" type="text" inputmode="numeric" maxlength="4" placeholder="e.g. 4821"
+              class="w-32 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white">
           </div>
 
           <!-- Step 2: What is the work? -->
-          <h4 class=”teacher-step” data-step=”2”><span>What is the work?</span></h4>
-          <div class=”mb-3”>
-            <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Assignment Name</label>
-            <input id=”ta-label” type=”text” maxlength=”60” placeholder=”e.g. Chapter 1 Homework”
-              class=”selectable w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”>
+          <h4 class="teacher-step" data-step="2"><span>What is the work?</span></h4>
+          <div class="mb-3">
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Assignment Name</label>
+            <input id="ta-label" type="text" maxlength="60" placeholder="e.g. Chapter 1 Homework"
+              class="selectable w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
           </div>
-          <div class=”mb-3”>
-            <label for=”ta-grade” class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Grade</label>
-            <select id=”ta-grade” onchange=”TeacherMode.gradeChange()” class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 dark:bg-gray-700 dark:text-white”></select>
-            <label for=”ta-subject” class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Subject</label>
-            <select id=”ta-subject” onchange=”TeacherMode.subjectChange()”
-              class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”></select>
+          <div class="mb-3">
+            <label for="ta-grade" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Grade</label>
+            <select id="ta-grade" onchange="TeacherMode.gradeChange()" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 dark:bg-gray-700 dark:text-white"></select>
+            <label for="ta-subject" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Subject</label>
+            <select id="ta-subject" onchange="TeacherMode.subjectChange()"
+              class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400"></select>
           </div>
-          <div class=”mb-3”>
-            <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2”>Topics <span class=”font-normal text-gray-500 dark:text-gray-400”>(leave unchecked = all)</span></label>
-            <div id=”ta-chapter-opts-container” class=”grid grid-cols-2 sm:grid-cols-3 gap-1 max-h-48 overflow-y-auto p-1 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600”></div>
+          <div class="mb-3">
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Topics <span class="font-normal text-gray-500 dark:text-gray-400">(leave unchecked = all)</span></label>
+            <div id="ta-chapter-opts-container" class="grid grid-cols-2 sm:grid-cols-3 gap-1 max-h-48 overflow-y-auto p-1 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600"></div>
           </div>
 
           <!-- Step 3: Set the practice -->
-          <h4 class=”teacher-step” data-step=”3”><span>Set the practice</span></h4>
-          <div class=”grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4”>
+          <h4 class="teacher-step" data-step="3"><span>Set the practice</span></h4>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
             <div>
-              <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Difficulty</label>
-              <select id=”ta-difficulty” class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”>
-                <option value=”0”>🔀 Mixed</option>
-                <option value=”1”>⭐ Level 1</option>
-                <option value=”2”>⭐⭐ Level 2</option>
-                <option value=”3”>⭐⭐⭐ Level 3</option>
-                <option value=”4”>🏆 Level 4</option>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Difficulty</label>
+              <select id="ta-difficulty" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
+                <option value="0">🔀 Mixed</option>
+                <option value="1">⭐ Level 1</option>
+                <option value="2">⭐⭐ Level 2</option>
+                <option value="3">⭐⭐⭐ Level 3</option>
+                <option value="4">🏆 Level 4</option>
               </select>
             </div>
             <div>
-              <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Questions</label>
-              <select id=”ta-count” class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”>
-                <option value=”5”>5</option>
-                <option value=”10” selected>10</option>
-                <option value=”15”>15</option>
-                <option value=”20”>20</option>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Questions</label>
+              <select id="ta-count" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
               </select>
             </div>
             <div>
-              <label class=”block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1”>Mode</label>
-              <select id=”ta-mode” class=”w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400”>
-                <option value=”practice”>🔍 Practice</option>
-                <option value=”test”>⏱ Timed practice</option>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Mode</label>
+              <select id="ta-mode" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400">
+                <option value="practice">🔍 Practice</option>
+                <option value="test">⏱ Timed practice</option>
               </select>
             </div>
-            <div class=”flex items-end pb-1”>
-              <label class=”flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300”>
-                <input type=”checkbox” id=”ta-random” checked class=”w-4 h-4 rounded accent-green-500”>
+            <div class="flex items-end pb-1">
+              <label class="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300">
+                <input type="checkbox" id="ta-random" checked class="w-4 h-4 rounded accent-green-500">
                 🎲 Random
               </label>
             </div>
           </div>
 
-          <div class=”mb-3 p-3 rounded-xl” style=”background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:.85rem”>
+          <div class="mb-3 p-3 rounded-xl" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);font-size:.85rem">
             <b>🔍 Practice:</b> Students see feedback after each question.<br>
             <b>⏱ Timed practice:</b> Includes a timer and feedback after each answer.
           </div>
 
-          <p id=”ta-quota” class=”text-xs text-gray-500 dark:text-gray-400 mb-2 hidden”></p>
-          <button id=”ta-build-btn” onclick=”TeacherMode.buildAssignment()”>
+          <p id="ta-quota" class="text-xs text-gray-500 dark:text-gray-400 mb-2 hidden"></p>
+          <button id="ta-build-btn" onclick="TeacherMode.buildAssignment()">
             📋 Write on the Board
           </button>
         </div>
@@ -3484,6 +3685,13 @@
           </div>
           <div class="ta-answer-body space-y-2 max-h-96 overflow-y-auto"></div>
         </div>
+      </div>
+
+      <!-- ── TAB: GRADEBOOK ── -->
+      <div class="ta-tab-content hidden" data-tab="gradebook">
+        <h3 class="font-bold text-lg mb-1">📋 Gradebook</h3>
+        <p class="teacher-intro mb-4">Cross-assignment scores for each classroom. Select a classroom to view.</p>
+        <div id="ta-gradebook-root"></div>
       </div>
 
       <!-- ── TAB: MATERIALS ── -->
@@ -3529,8 +3737,17 @@
             </div>
             <div>
               <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">File (PDF or image, max 10 MB)</label>
-              <input id="tm-file" type="file" accept="application/pdf,image/*"
-                class="w-full text-sm text-gray-600 dark:text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
+              <!-- Hidden inputs — one for file picker, one for camera capture -->
+              <input id="tm-file"   type="file" accept="application/pdf,image/*" class="hidden"
+                onchange="TeacherMaterials._onFileChosen('file')">
+              <input id="tm-camera" type="file" accept="image/*" capture="environment" class="hidden"
+                onchange="TeacherMaterials._onFileChosen('camera')">
+              <div class="tm-pick-row">
+                <label for="tm-file" class="tm-pick-btn">📎 Choose file</label>
+                <button type="button" class="tm-pick-btn tm-pick-camera"
+                  onclick="document.getElementById('tm-camera').click()">📷 Camera</button>
+                <span id="tm-filename" class="tm-filename-hint">No file chosen</span>
+              </div>
             </div>
             <p id="tm-upload-status" role="status" class="text-xs text-gray-500 dark:text-gray-400 min-h-[1.2em]"></p>
             <button onclick="TeacherMaterials.upload()" class="ta-btn-pencil w-full justify-center">
@@ -3546,6 +3763,17 @@
         </div>
         <div id="tm-list" class="space-y-2">
           <p class="text-sm text-gray-400 dark:text-gray-500">Loading…</p>
+        </div>
+      </div>
+
+      <!-- ── TAB: MESSAGES ── -->
+      <div class="ta-tab-content hidden" data-tab="messages">
+        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
+          <p class="teacher-intro">Send us a bug report, content question, or feedback. An admin will reply here.</p>
+          <button onclick="openTeacherMessageModal()" class="ta-btn-pencil text-sm">＋ New Message</button>
+        </div>
+        <div id="tc-msg-list">
+          <p class="text-sm text-gray-400 dark:text-gray-500 text-center py-10 animate-pulse">Loading…</p>
         </div>
       </div>
     </div>
@@ -3643,53 +3871,50 @@
     <!-- ══════════ PARENT DASHBOARD ══════════ -->
     <div id="screen-parent" class="screen hidden">
 
-      <!-- Top bar -->
-      <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
+      <!-- Top bar: title + admin/add-child in the corner -->
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
           <h2 class="text-2xl font-bold text-gray-800 dark:text-white">🔒 Parent Dashboard</h2>
           <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">See what your children did today, then choose their next step.</p>
           <p class="text-xs text-indigo-500 dark:text-indigo-400 mt-1">Your family login name: <strong id="pd-family-name-display" class="font-mono"></strong></p>
         </div>
-        <!-- ⚠ Promoted OUT of the action row on purpose. Handing the device to a
-             child is the most frequent thing a parent does on this screen and the
-             one they most often could not find: as one of seven identical tiles it
-             read as a settings item rather than the way in. Making it a louder
-             tile INSIDE the row would have broken the single shape language that
-             row exists to have, so it sits above the row instead — a different
-             altitude, not a competing colour. See .pd-switch in style.css. -->
-        <div class="relative mb-3">
-          <button id="pd-student-view-btn" onclick="Auth.switchToStudentSelect()" class="pd-switch">
-            <span class="pd-switch-ico" aria-hidden="true">🎒</span>
-            <span class="pd-switch-text">
-              <span class="pd-switch-title">Switch to student mode</span>
-              <span class="pd-switch-sub">Hand the device over — your child signs in with their PIN</span>
-            </span>
-            <span class="pd-switch-go" aria-hidden="true">→</span>
-          </button>
-          <div id="pd-student-view-callout" class="hidden absolute z-20 top-full left-0 mt-2 w-64 rounded-xl bg-indigo-600 text-white text-xs leading-relaxed p-3 shadow-xl">
-            <button onclick="dismissStudentViewGuide()" class="absolute top-1.5 right-2 text-white/70 hover:text-white" aria-label="Close">×</button>
-            <b>Ready for your child?</b><br>Tap <b>Switch to student mode</b> to hand the device over and start practising. 🎒
-            <span class="absolute -top-1 left-6 w-3 h-3 bg-indigo-600 rotate-45"></span>
-          </div>
-        </div>
-        <!-- One neutral surface, icon over label — same shape language as the
-             student bottom nav. See .pd-action in style.css. -->
-        <div class="flex gap-2 items-stretch flex-wrap">
+        <div class="flex gap-2 items-center flex-wrap">
           <button id="btn-open-admin" onclick="Auth.openAdminPanel()" title="Admin panel" class="pd-action is-alert hidden">
-            <span class="ico">🛡️</span><span>Admin</span><!--
-          Pending-work badge: teacher applications + open question reports.
-          Filled by Auth._refreshAdminBadge(); hidden when the count is zero.
-       --><span id="admin-pending-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold shadow">0</span></button>
+            <span class="ico">🛡️</span><span>Admin</span><span id="admin-pending-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-amber-500 text-white text-[10px] font-bold shadow">0</span></button>
           <button onclick="Auth.addStudent()" class="pd-action is-primary"><span class="ico">➕</span><span>Add child</span></button>
-          <button onclick="showScreen('calendar')" class="pd-action"><span class="ico">📅</span><span>Calendar</span></button>
-          <button onclick="openCoparentSettings()" class="pd-action"><span class="ico">👨‍👩‍👧‍👦</span><span>Add parent</span></button>
-          <button onclick="Auth.openInviteModal()" class="pd-action"><span class="ico">🎁</span><span>Invite</span></button>
-          <!-- The balance is painted in by _renderShopChip() so a parent sees
-               what they have without opening anything. -->
-          <button onclick="showScreen('shop')" class="pd-action"><span class="ico">🛒</span><span>Shop</span><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
-          <button onclick="showProfile()" class="pd-action"><span class="ico">⚙️</span><span>Settings</span></button>
         </div>
       </div>
+
+      <!-- Switch-to-student bar — promoted above the tabs, most frequent parent action -->
+      <div class="relative mb-3">
+        <button id="pd-student-view-btn" onclick="Auth.switchToStudentSelect()" class="pd-switch">
+          <span class="pd-switch-ico" aria-hidden="true">🎒</span>
+          <span class="pd-switch-text">
+            <span class="pd-switch-title">Switch to student mode</span>
+            <span class="pd-switch-sub">Hand the device over — your child signs in with their PIN</span>
+          </span>
+          <span class="pd-switch-go" aria-hidden="true">→</span>
+        </button>
+        <div id="pd-student-view-callout" class="hidden absolute z-20 top-full left-0 mt-2 w-64 rounded-xl bg-indigo-600 text-white text-xs leading-relaxed p-3 shadow-xl">
+          <button onclick="dismissStudentViewGuide()" class="absolute top-1.5 right-2 text-white/70 hover:text-white" aria-label="Close">×</button>
+          <b>Ready for your child?</b><br>Tap <b>Switch to student mode</b> to hand the device over and start practising. 🎒
+          <span class="absolute -top-1 left-6 w-3 h-3 bg-indigo-600 rotate-45"></span>
+        </div>
+      </div>
+
+      <!-- Navigation tabs — folder-tab style matching the student home screen -->
+      <div class="teacher-navigation" role="tablist" aria-label="Parent dashboard">
+        <button role="tab" aria-selected="true"  class="ta-tab"><strong>👨‍👩‍👧 My Children</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" onclick="showScreen('calendar')"><strong>📅 Calendar</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" onclick="openCoparentSettings()"><strong>👨‍👩‍👦 Add Parent</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" onclick="Auth.openInviteModal()"><strong>🎁 Invite</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" onclick="showScreen('shop')"><strong>🛒 Shop</strong><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
+        <button role="tab" aria-selected="false" class="ta-tab" onclick="showScreen('parent-messages')"><strong>💬 Messages</strong><span id="pd-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
+        <button role="tab" aria-selected="false" class="ta-tab" onclick="showProfile()"><strong>⚙️ Settings</strong></button>
+      </div>
+
+      <!-- Board frame — same chalkboard aesthetic as the student home -->
+      <div class="sh-board-frame">
 
       <!-- ── My Plan banner ── -->
       <div id="pd-expired-slot"></div>
@@ -3770,7 +3995,6 @@
 
         <!-- ── TAB: PROGRESS ── -->
         <div class="pd-tab-content" data-tab="progress">
-          <section id="coach-parent-summary" class="coach-card coach-parent hidden"></section>
           <div id="pd-today-status" class="mb-4"></div>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-3">
             <div class="stat-tile"><div id="pd-total"  class="stat-num text-blue-600 dark:text-blue-400">0</div><div class="stat-label">Questions Done</div></div>
@@ -4007,6 +4231,8 @@
         </div>
       </div><!-- /pd-detail-panel -->
 
+      </div><!-- /sh-board-frame -->
+
     </div>
 
     <!-- ══════════ FORUM ══════════ -->
@@ -4225,11 +4451,14 @@
     <!-- ── My Reports inbox ───────────────────────────────────────────────── -->
     <div id="screen-inbox" class="screen hidden">
       <div class="flex items-center gap-3 mb-5">
-        <button onclick="showScreen('dashboard')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl leading-none">‹</button>
-        <div>
+        <button onclick="StudentHome.open()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl leading-none">‹</button>
+        <div class="flex-1">
           <h2 class="text-xl font-bold text-gray-800 dark:text-white">My Reports</h2>
           <p class="text-xs text-gray-500 dark:text-gray-400">Questions you've flagged and admin replies</p>
         </div>
+        <button onclick="openNewTicketModal()" class="flex items-center gap-1.5 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors shrink-0">
+          <span aria-hidden="true">＋</span> New Ticket
+        </button>
       </div>
       <div id="inbox-list">
         <p class="text-sm text-gray-400 dark:text-gray-500 text-center py-10 animate-pulse">Loading…</p>
@@ -4258,6 +4487,90 @@
       <div class="flex gap-3">
         <button onclick="closeReportModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white rounded-xl text-sm font-semibold transition-colors">Cancel</button>
         <button onclick="submitReport()" class="flex-1 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-semibold transition-colors">Send Report</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PARENT MESSAGES SCREEN ══ -->
+  <div id="screen-parent-messages" class="screen hidden p-4 max-w-2xl mx-auto pb-24">
+    <div class="flex items-center gap-3 mb-5 flex-wrap">
+      <button onclick="showScreen('parent')" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold">← Back</button>
+      <h2 class="text-xl font-bold text-gray-800 dark:text-white flex-1">💬 Messages</h2>
+      <button onclick="openParentMessageModal()" class="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors">
+        <span aria-hidden="true">＋</span> New Message
+      </button>
+    </div>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">Send us a bug report, a question about content, or anything else. An admin will reply here.</p>
+    <div id="pm-list">
+      <p class="text-sm text-gray-400 dark:text-gray-500 text-center py-10 animate-pulse">Loading…</p>
+    </div>
+  </div>
+
+  <!-- ══ PARENT NEW MESSAGE MODAL ══ -->
+  <div id="modal-parent-message" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-2xl">💬</span>
+        <h3 class="font-bold text-gray-800 dark:text-white text-lg">New Message</h3>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Ask us anything — a content question, a bug, or feedback. An admin will reply in Messages.</p>
+      <select id="pm-type" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-3">
+        <option value="topic_question">🙋 Question about a topic</option>
+        <option value="app_problem">🐛 App problem / bug</option>
+        <option value="content_issue">📖 Content or answer issue</option>
+        <option value="other">💬 Something else</option>
+      </select>
+      <textarea id="pm-message" rows="4" maxlength="1000" placeholder="Describe your question or problem…"
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-4 resize-none"></textarea>
+      <div class="flex gap-3">
+        <button onclick="closeParentMessageModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white rounded-xl text-sm font-semibold transition-colors">Cancel</button>
+        <button id="pm-submit-btn" onclick="submitParentMessage()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TEACHER NEW MESSAGE MODAL ══ -->
+  <div id="modal-teacher-message" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-2xl">💬</span>
+        <h3 class="font-bold text-gray-800 dark:text-white text-lg">New Message</h3>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Ask us anything — a content question, a bug, or feedback. An admin will reply in Messages.</p>
+      <select id="tc-msg-type" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-3">
+        <option value="topic_question">🙋 Question about a topic</option>
+        <option value="app_problem">🐛 App problem / bug</option>
+        <option value="content_issue">📖 Content or answer issue</option>
+        <option value="other">💬 Something else</option>
+      </select>
+      <textarea id="tc-msg-text" rows="4" maxlength="1000" placeholder="Describe your question or problem…"
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-4 resize-none"></textarea>
+      <div class="flex gap-3">
+        <button onclick="closeTeacherMessageModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white rounded-xl text-sm font-semibold transition-colors">Cancel</button>
+        <button id="tc-msg-submit-btn" onclick="submitTeacherMessage()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ NEW TICKET MODAL ══ -->
+  <div id="modal-new-ticket" class="hidden fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm p-6">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-2xl">🎫</span>
+        <h3 class="font-bold text-gray-800 dark:text-white text-lg">New Ticket</h3>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Ask us anything — a question about a topic, a problem with the app, or anything else. An admin will reply in your My Reports inbox.</p>
+      <select id="ticket-type" class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-3">
+        <option value="topic_question">🙋 Question about a topic</option>
+        <option value="app_problem">🐛 App problem</option>
+        <option value="content_issue">📖 Content or answer issue</option>
+        <option value="other">💬 Something else</option>
+      </select>
+      <textarea id="ticket-message" rows="4" maxlength="1000" placeholder="Describe your question or problem…"
+        class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 mb-4 resize-none"></textarea>
+      <div class="flex gap-3">
+        <button onclick="closeNewTicketModal()" class="flex-1 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white rounded-xl text-sm font-semibold transition-colors">Cancel</button>
+        <button id="ticket-submit-btn" onclick="submitNewTicket()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors">Send</button>
       </div>
     </div>
   </div>
@@ -4385,7 +4698,7 @@
        be visible to them. -->
   <div id="screen-schedule" class="screen hidden p-4 max-w-2xl mx-auto pb-24">
     <div class="flex items-center gap-3 mb-1">
-      <button onclick="showScreen('dashboard')" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white text-xl">←</button>
+      <button onclick="StudentHome.open()" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white text-xl">←</button>
       <h2 class="text-xl font-bold text-gray-800 dark:text-white">🗓️ My timetable</h2>
     </div>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 pl-9">
@@ -4808,7 +5121,6 @@
   <script src="engine/auth.js"></script>
   <!-- Teacher mode (loads last - uses globals from app + auth) -->
   <script src="engine/teacher_workspace.js"></script>
-  <script src="engine/learning_coach.js"></script>
   <script src="engine/teacher_guest_classes.js"></script>
   <script src="engine/teacher.js"></script>
   <script src="engine/teacher_classroom_detail.js"></script>
@@ -4979,10 +5291,10 @@
         class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-lg leading-none">✕</button>
       <div class="text-4xl text-center mb-2 select-none">🔒</div>
       <h3 class="text-lg font-bold text-gray-900 dark:text-white text-center mb-1">Parent settings</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-3">Enter your 4-digit Parent PIN to switch safely back from your child’s view.</p>
-      <div class="mb-5 rounded-2xl border border-indigo-100 dark:border-indigo-800/60 bg-indigo-50 dark:bg-indigo-950/35 px-3 py-2.5 text-left">
-        <p class="text-xs font-bold text-indigo-800 dark:text-indigo-200 mb-1">Why do I need this?</p>
-        <p class="text-xs leading-relaxed text-indigo-700 dark:text-indigo-300">It keeps parent settings and progress private when a child uses the same phone, tablet or computer. This is a quick switch-only PIN — <b>not</b> your account password.</p>
+      <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-3">Enter your <b>Parent PIN</b> — the 4-digit code <b>you</b> set for switching back to the parent area.</p>
+      <div class="mb-5 rounded-2xl border border-amber-100 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/35 px-3 py-2.5 text-left">
+        <p class="text-xs font-bold text-amber-800 dark:text-amber-200 mb-1">⚠️ This is NOT your child’s login PIN</p>
+        <p class="text-xs leading-relaxed text-amber-700 dark:text-amber-300">Your child’s login PIN opens their practice view. The Parent PIN is a separate 4-digit code you chose for yourself when you first set up parent access. Forgotten it? Use "Sign in with your email" below.</p>
       </div>
       <div class="flex justify-center gap-3 mb-6">
         <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" id="pin-dot-0"></div>
