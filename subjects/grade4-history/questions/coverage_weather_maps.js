@@ -47,7 +47,7 @@
     ['Which map part should every map have?','a title'],['What does a legend explain?','map symbols'],['A north arrow is a type of…','direction guide'],
     ['Why use a scale?','to work out distance'],['A map without a key can be…','hard to understand'],['What should a clear title be?','short and accurate'],
     ['The compass on a map helps a reader…','orient the map']
-  ],['the title','the key or legend','the north arrow','the scale','it tells the map’s subject','it helps you know direction','real distance','the scale','a title','map symbols','direction guide','to work out distance','hard to understand','short and accurate','orient the map'],'Think about what each map part helps a reader do.');
+  ],[‘the title’,’the key or legend’,’the north arrow’,’the scale’,’it tells the map\’s subject’,’it helps you know direction’,’real distance’,’a title’,’map symbols’,’direction guide’,’to work out distance’,’hard to understand’,’short and accurate’,’orient the map’],’Think about what each map part helps a reader do.’);
   rows('usemap','g4ge-map-skills','using_map',[
     ['Before using a map, what should you read first?','the title and key'],['If a shop is north of the school, which direction do you travel from school?','north'],
     ['To find a feature, look for its…','symbol in the key'],['Why draw a simple map of your route?','to help others follow it'],['A map can help a visitor…','find places'],

@@ -71,10 +71,10 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeNum({ id:'g6m-meas-011', chapterId:'g6-measure', subsection:'conversion', difficulty:1,
-    question:'Convert 3.5 km to METRES.',
-    answer:'3500', acceptableAnswers:['3500','3500 m'],
+    question:'Convert 8.25 km to METRES.',
+    answer:'8250', acceptableAnswers:['8250','8250 m'],
     hint:'1 km = 1000 m. Multiply by 1000.',
-    explanation:'3.5 km × 1000 = <b>3500 m</b>. Key conversions from MIE Grade 6: 1 km = 1000 m, 1 m = 100 cm, 1 cm = 10 mm. To convert from larger to smaller units, multiply.' }),
+    explanation:'8.25 km × 1000 = <b>8250 m</b>. Key conversions from MIE Grade 6: 1 km = 1000 m, 1 m = 100 cm, 1 cm = 10 mm. To convert from larger to smaller units, multiply.' }),
 
   makeNum({ id:'g6m-meas-012', chapterId:'g6-measure', subsection:'conversion', difficulty:1,
     question:'Convert 4500 g to KILOGRAMS.',

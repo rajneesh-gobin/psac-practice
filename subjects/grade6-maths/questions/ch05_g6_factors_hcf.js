@@ -102,13 +102,13 @@ STATIC_QUESTIONS.push(
 
   makeNum({ id:'g6m-hcf-011', chapterId:'g6-factors-hcf', subsection:'factors', difficulty:2,
     question:'Write down ALL the factors of 60.',
-    answer:'1,2,3,4,5,6,10,12,15,20,30,60', acceptableAnswers:['1,2,3,4,5,6,10,12,15,20,30,60','12'],
+    answer:'1,2,3,4,5,6,10,12,15,20,30,60', acceptableAnswers:['1,2,3,4,5,6,10,12,15,20,30,60'],
     hint:'Check every number from 1 to 60. A factor divides evenly with no remainder.',
     explanation:'Factors of 60: <b>1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60</b>. There are 12 factors. Tip: work in pairs - 1×60, 2×30, 3×20, 4×15, 5×12, 6×10. The total number of factors of 60 is 12.' }),
 
   makeNum({ id:'g6m-hcf-012', chapterId:'g6-factors-hcf', subsection:'prime_factors', difficulty:2,
     question:'Find the prime factorisation of 60. (Write as: 2 × 2 × 3 × 5)',
-    answer:'2 × 2 × 3 × 5', acceptableAnswers:['2 × 2 × 3 × 5','2×2×3×5','2^2 × 3 × 5','4'],
+    answer:'2 × 2 × 3 × 5', acceptableAnswers:['2 × 2 × 3 × 5','2×2×3×5','2^2 × 3 × 5'],
     hint:'Start dividing by the smallest prime (2), then continue: 60 → 30 → 15 → 5.',
     explanation:'60 ÷ 2 = 30. 30 ÷ 2 = 15. 15 ÷ 3 = 5. 5 ÷ 5 = 1. So 60 = <b>2 × 2 × 3 × 5</b> = 2² × 3 × 5. All factors at the end of the tree are prime numbers.' }),
 

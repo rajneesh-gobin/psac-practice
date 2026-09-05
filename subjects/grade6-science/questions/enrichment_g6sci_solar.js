@@ -128,15 +128,10 @@ STATIC_QUESTIONS.push(
     explanation:'In 2006, the IAU defined a planet as an object that: (1) orbits the Sun; (2) has enough mass to be nearly round; and (3) has <b>cleared its orbital neighbourhood</b> of other objects. Pluto meets criteria 1 and 2, but <b>not 3</b> — it shares its region of space (the Kuiper Belt) with many other similar objects. So Pluto was reclassified as a <b>dwarf planet</b>. The Solar System now officially has <b>8 planets</b>.' }),
 
   makeMCQ({ id:'g6sci-enr-sol-015', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:1,
-    question:'What causes DAY and NIGHT on Earth?',
-    options:[
-      'Earth moves towards and away from the Sun each day',
-      'The Sun rises and sets by moving around Earth once per day',
-      'Earth rotates (spins) on its own axis once every 24 hours, so different parts face the Sun at different times',
-      'The Moon blocks the Sun at night, causing darkness on Earth'
-    ],
-    answer:'Earth rotates (spins) on its own axis once every 24 hours, so different parts face the Sun at different times',
-    hint:'The Sun does not move — it is Earth itself that spins, bringing different parts into and out of sunlight.',
-    explanation:'Day and night are caused by <b>Earth\'s rotation</b> (spinning) on its own axis. Earth completes one full rotation every <b>24 hours</b>. The side of Earth facing the Sun experiences <b>day</b>; the side facing away from the Sun experiences <b>night</b>. The Sun does not move around Earth — this is a common misconception. Earth spins from west to east, which is why the Sun appears to rise in the east and set in the west.' })
+    question:'Earth completes one full rotation on its own axis in approximately ___.',
+    options:['24 hours','365 days','28 days','12 hours'],
+    answer:'24 hours',
+    hint:'This is the length of one full day.',
+    explanation:'Earth takes approximately <b>24 hours</b> to complete one full rotation on its own axis. This rotation causes the cycle of day and night. Earth also takes 365 days to orbit the Sun (one year), and the Moon takes about 28 days to orbit Earth.' })
 
 );

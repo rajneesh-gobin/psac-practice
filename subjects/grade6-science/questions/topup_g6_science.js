@@ -88,15 +88,15 @@ STATIC_QUESTIONS.push(
     explanation:'A lunar eclipse occurs when Earth moves directly between the Sun and the Moon, casting Earth\'s shadow on the Moon. The Moon can appear red-orange during a total lunar eclipse.' }),
 
   makeMCQ({ id:'g6sc-sol-053', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
-    question:'What causes day and night on Earth?',
+    question:'Which motion of Earth causes the seasons — NOT day and night?',
     options:[
-      'Earth revolving around the Sun once a year',
-      'The Moon blocking sunlight from reaching Earth',
-      'Earth rotating on its own axis once every 24 hours',
-      'Clouds covering the Sun at night'],
-    answer:'Earth rotating on its own axis once every 24 hours',
-    hint:'This movement takes 24 hours to complete.',
-    explanation:'Earth spins (rotates) on its axis once every 24 hours. The side of Earth facing the Sun experiences day; the side facing away from the Sun experiences night.' }),
+      'Rotation on its own axis',
+      'Revolution around the Sun',
+      'The Moon\'s orbit around Earth',
+      'The Sun\'s movement across the sky'],
+    answer:'Revolution around the Sun',
+    hint:'Seasons change over months, not hours.',
+    explanation:'Earth\'s <b>revolution around the Sun</b> (taking 365 days) and the tilt of Earth\'s axis cause the seasons. <b>Rotation</b> (spinning every 24 hours) causes day and night. These two motions are often confused in exams.' }),
 
   makeMCQ({ id:'g6sc-sol-054', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
     question:'How many planets are currently recognised in our Solar System?',

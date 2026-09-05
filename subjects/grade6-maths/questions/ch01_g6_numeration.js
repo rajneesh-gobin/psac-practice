@@ -56,7 +56,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6m-num-008', chapterId:'g6-numeration', subsection:'expanded', difficulty:2,
     question:'What is the number 700,000 + 40,000 + 3,000 + 200 + 80 + 5?',
-    options:['743,285','743,825','740,285','743,285'],
+    options:['743,285','743,825','740,285','743,205'],
     answer:'743,285',
     hint:'Add each part: 700,000 + 40,000 = 740,000; + 3,000 = 743,000; + 200 = 743,200; + 80 = 743,280; + 5 = 743,285.',
     explanation:'700,000 + 40,000 + 3,000 + 200 + 80 + 5 = <b>743,285</b>.' }),
@@ -69,8 +69,8 @@ STATIC_QUESTIONS.push(
 
   makeNum({ id:'g6m-num-010', chapterId:'g6-numeration', subsection:'compare_order', difficulty:2,
     question:'What is the DIFFERENCE between the largest and smallest 6-digit numbers you can make using the digits 3, 0, 7, 1, 5, 9 (each used once)?',
-    answer:'753084', acceptableAnswers:['753084','753,084'],
-    hint:'Largest: arrange digits from biggest to smallest (970,531). Smallest: arrange from smallest (non-zero first) to biggest (103,579). Subtract.',
+    answer:'871731', acceptableAnswers:['871731','871,731'],
+    hint:'Largest: arrange digits from biggest to smallest (975,310). Smallest: arrange from smallest (non-zero first) to biggest (103,579). Subtract.',
     explanation:'Largest: <b>975,310</b>. Smallest: <b>103,579</b> (0 cannot lead). Difference: 975,310 − 103,579 = <b>871,731</b>. (Note: if puzzle digits allow 0 to lead this answer will differ. Correct difference: 975,310 − 103,579 = 871,731.)' })
 
 );

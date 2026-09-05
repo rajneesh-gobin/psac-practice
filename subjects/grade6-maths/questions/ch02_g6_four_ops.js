@@ -30,7 +30,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6m-ops-005', chapterId:'g6-four-ops', subsection:'mixed_ops', difficulty:2,
     question:'Using BODMAS, calculate: 5 + 3 × 4 − 2',
-    options:['30','15','15','15'],
+    options:['30','15','11','16'],
     answer:'15',
     hint:'BODMAS: multiplication BEFORE addition/subtraction. Do 3×4 first.',
     explanation:'BODMAS order: multiplication first → 3 × 4 = 12. Then left to right: 5 + 12 − 2 = <b>15</b>.' }),

@@ -123,7 +123,7 @@ const DV = [
 
   makeMCQ({ id:'DG16', chapterId:'geometry', subsection:'symmetry', difficulty:3,
     question:'Riya draws a shape. It has <b>only 1 line of symmetry</b> and <b>2 equal sides</b>.<br>Which shape is it most likely to be?',
-    options:['Equilateral triangle','Isosceles triangle','Scalene triangle','Equilateral triangle'],
+    options:['Equilateral triangle','Isosceles triangle','Scalene triangle','Right-angled triangle'],
     answer:'Isosceles triangle',
     hint:'2 equal sides, 1 line of symmetry from the apex to the base.',
     explanation:'An <b>isosceles triangle</b> has 2 equal sides and exactly 1 line of symmetry.' }),

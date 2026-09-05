@@ -90,10 +90,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6m-dec-014', chapterId:'g6-decimals', subsection:'ordering', difficulty:2,
     question:'Which decimal is the GREATEST?',
-    options:['0.45','0.405','0.450','0.045'],
-    answer:'0.45',
-    hint:'0.45 and 0.450 are the same. Compare 0.45 with 0.405: look at the hundredths digit.',
-    explanation:'0.45 = 0.450 (adding a zero after the last decimal place doesn\'t change the value). Compare 0.450 with 0.405: tenths are the same (4), but hundredths: 5 > 0. So 0.45 = 0.450 > 0.405 > 0.045. The greatest is <b>0.45</b>.' }),
+    options:['0.45','0.405','0.5','0.045'],
+    answer:'0.5',
+    hint:'Compare tenths digits first: 0.5 has 5 in the tenths place, all others have 4 or 0. The greatest tenths digit wins.',
+    explanation:'Tenths digits: 0.5 → 5; 0.45 and 0.405 → 4; 0.045 → 0. Since 5 > 4 > 0, <b>0.5 is the greatest</b>. Order from smallest: 0.045 < 0.405 < 0.45 < 0.5.' }),
 
   makeNum({ id:'g6m-dec-015', chapterId:'g6-decimals', subsection:'conversion', difficulty:2,
     question:'Convert the fraction 7/20 to a DECIMAL.',
@@ -126,9 +126,9 @@ STATIC_QUESTIONS.push(
     explanation:'Tenths: 0.06 has 0 tenths; others have 6 tenths. So 0.06 is smallest. Among 0.6, 0.609, 0.61: all have 6 tenths; compare hundredths: 0 vs 0 vs 1. 0.609 vs 0.610: thousandths 9 < 0 - wait: 0.610 > 0.609. So order: <b>0.06, 0.6, 0.609, 0.61</b>.' }),
 
   makeNum({ id:'g6m-dec-019', chapterId:'g6-decimals', subsection:'word_probs', difficulty:4,
-    question:'A car travels 38.4 km on 3.2 litres of petrol. How many km does it travel per LITRE? If petrol costs Rs 52.50 per litre, what is the cost of petrol for a 192 km journey? (Answer: cost in Rs)',
+    question:'A car travels 38.4 km on 3.2 litres of petrol. How many km does it travel per LITRE? If petrol costs Rs 52.50 per litre, what is the cost of petrol for a 72 km journey? (Answer: cost in Rs)',
     answer:'315', acceptableAnswers:['315','Rs 315'],
-    hint:'km per litre = 38.4 ÷ 3.2. Litres for 192 km = 192 ÷ km per litre. Cost = litres × Rs 52.50.',
-    explanation:'km per litre = 38.4 ÷ 3.2 = 12 km/litre. Litres for 192 km = 192 ÷ 12 = 6 litres. Cost = 6 × 52.50 = <b>Rs 315</b>.' })
+    hint:'km per litre = 38.4 ÷ 3.2. Litres for 72 km = 72 ÷ km per litre. Cost = litres × Rs 52.50.',
+    explanation:'km per litre = 38.4 ÷ 3.2 = 12 km/litre. Litres for 72 km = 72 ÷ 12 = 6 litres. Cost = 6 × 52.50 = <b>Rs 315</b>.' })
 
 );

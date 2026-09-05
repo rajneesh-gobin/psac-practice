@@ -61,11 +61,11 @@ STATIC_QUESTIONS.push(
   /* ── TEXT-BASED MCQs (questions 006–019) ─────────────────────────────── */
 
   makeMCQ({ id:'g5sci-enr-ene-006', chapterId:'g5sci-enr-energy', subsection:'renewable', difficulty:1,
-    question:'Which of the following is a NON-RENEWABLE energy source?',
+    question:'Which of the following is a fossil fuel formed from ancient plant matter compressed over millions of years?',
     options:['Coal','Wind energy','Solar energy','Water (hydropower)'],
     answer:'Coal',
-    hint:'Non-renewable means it was formed millions of years ago and cannot be quickly replaced.',
-    explanation:'<b>Coal</b> is a <b>non-renewable</b> fossil fuel formed from ancient plants over millions of years. Once the coal deposits are burned and used up, they cannot be replaced within a human lifetime. Wind, solar and water energy are all renewable — they are continuously replenished by natural processes.' }),
+    hint:'Fossil fuels come from the remains of living things buried long ago.',
+    explanation:'<b>Coal</b> is a <b>fossil fuel</b> formed from ancient plant remains compressed underground over millions of years. It is non-renewable — once burned, it cannot be replaced quickly. Wind, solar and water energy are all renewable because they are continuously replenished by nature.' }),
 
   makeMCQ({ id:'g5sci-enr-ene-007', chapterId:'g5sci-enr-energy', subsection:'renewable', difficulty:2,
     question:'Why are fossil fuels (coal, oil and gas) described as NON-RENEWABLE?',

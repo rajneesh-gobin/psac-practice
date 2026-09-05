@@ -227,7 +227,7 @@ STATIC_QUESTIONS.push(
     hint:'Temperature drops as you go higher above sea level.',
     explanation:'As altitude increases, air temperature decreases. The Central Plateau (towns like Curepipe and Vacoas) is significantly cooler and receives more rainfall than the low-lying coastal areas.' }),
 
-  makeMCQ({ id:'g4h-env-056', chapterId:'g4ge-natural-env', subsection:'water', difficulty:1,
+  makeMCQ({ id:'g4h-env-056', chapterId:'g4ge-natural-env', subsection:'relief', difficulty:1,
     question:'Black River Gorges National Park is located in which part of Mauritius?',
     options:['North-east','South-east','South-west','North-west'], answer:'South-west',
     hint:'The Black River (Rivière Noire) district is in the west.',
@@ -520,10 +520,11 @@ STATIC_QUESTIONS.push(
     explanation:'Mauritius is an island nation in the Indian Ocean, located approximately 2 000 km off the south-east coast of Africa.' }),
 
   makeMCQ({ id:'g4h-enr-wld-053', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
-    question:'The Equator is a line of latitude at ___.',
-    options:['90° North','0°','90° South','23.5° North'], answer:'0°',
-    hint:'It is the middle line dividing the globe into two equal halves.',
-    explanation:'The Equator is at 0° latitude. It is an imaginary circle around the middle of the Earth, equidistant from both poles, dividing the globe into the Northern and Southern Hemispheres.' }),
+    question:'The Equator divides the Earth into the ___ and ___ Hemispheres.',
+    options:['Northern and Southern','Eastern and Western','Arctic and Antarctic','Tropic and Temperate'],
+    answer:'Northern and Southern',
+    hint:'The Equator runs east–west around the middle of the globe.',
+    explanation:'The Equator divides the Earth into the <b>Northern Hemisphere</b> (above) and the <b>Southern Hemisphere</b> (below). Mauritius lies in the Southern Hemisphere.' }),
 
   makeMCQ({ id:'g4h-enr-wld-054', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
     question:'Which is the highest mountain in the world?',
