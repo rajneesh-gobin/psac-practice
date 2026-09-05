@@ -3037,8 +3037,6 @@ html.dark select optgroup {
   background: rgba(255,255,255,.13) !important;
 }
 #screen-teacher input::placeholder { color: rgba(240,236,220,.4) !important; font-style: italic; }
-/* option elements need a solid background so they're legible in the browser picker */
-#screen-teacher select option { background: #2e5230; color: #f0ece0; }
 .dark #screen-teacher input:not([type=checkbox]),
 .dark #screen-teacher select {
   border-bottom-color: rgba(232,220,200,.35) !important;
@@ -3049,7 +3047,6 @@ html.dark select optgroup {
 .dark #screen-teacher select:focus {
   border-bottom-color: rgba(232,220,200,.8) !important;
 }
-.dark #screen-teacher select option { background: #111; color: #e8dcc8; }
 
 /* The "topics" checkbox grid keeps its box style */
 #ta-chapter-opts-container {
