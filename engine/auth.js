@@ -2839,15 +2839,49 @@ const Auth = (() => {
   // ── Parent PIN helpers ─────────────────────────
   const _PARENT_PIN_KEY = 'psac_parent_pin_v1';
   let _parentPinBusy = false;
+  let _dbPinHash = null; // cached parent_pin_hash from profiles; '' = confirmed absent
 
   function _getStoredPinHash() {
     try { return localStorage.getItem(_PARENT_PIN_KEY) || null; } catch(_) { return null; }
   }
+
+  async function _hashPinForDb(pin) {
+    try {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin + ':psac_v1_db'));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    } catch (_) { return null; }
+  }
+
+  async function _fetchDbPinHash() {
+    if (_dbPinHash !== null) return _dbPinHash || null;
+    if (!_parentUser) return null;
+    try {
+      const { data } = await _sb.from('profiles').select('parent_pin_hash').eq('id', _parentUser.id).single();
+      _dbPinHash = data?.parent_pin_hash || '';
+      return _dbPinHash || null;
+    } catch (_) { return null; }
+  }
+
   function _storePin(pin) {
     try { localStorage.setItem(_PARENT_PIN_KEY, btoa(pin + ':psac_v1')); } catch(_) {}
+    // Also save SHA-256 hash to DB so the PIN survives localStorage clears
+    _hashPinForDb(pin).then(hash => {
+      if (!hash || !_parentUser) return;
+      _sb.from('profiles').update({ parent_pin_hash: hash }).eq('id', _parentUser.id)
+        .then(() => { _dbPinHash = hash; }).catch(() => {});
+    });
   }
-  function _pinMatches(pin) {
-    return _getStoredPinHash() === btoa(pin + ':psac_v1');
+
+  async function _pinMatches(pin) {
+    const local = _getStoredPinHash();
+    if (local !== null) return local === btoa(pin + ':psac_v1');
+    // localStorage was cleared — fall back to DB
+    const [inputHash, dbHash] = await Promise.all([_hashPinForDb(pin), _fetchDbPinHash()]);
+    if (!inputHash || !dbHash) return false;
+    const ok = inputHash === dbHash;
+    // Repopulate localStorage on match so next check is offline-capable
+    if (ok) _storePin(pin);
+    return ok;
   }
 
   function _updatePinDots(prefix, filled) {
@@ -2903,7 +2937,7 @@ const Auth = (() => {
   }
 
   async function _submitParentPin() {
-    if (!_pinMatches(_parentPinEntry)) {
+    if (!await _pinMatches(_parentPinEntry)) {
       _parentPinEntry = '';
       _updatePinDots('pin-dot-', 0);
       document.getElementById('pin-entry-error')?.classList.remove('hidden');
@@ -3021,8 +3055,13 @@ const Auth = (() => {
   // only caller of the setup modal, so once a hash existed nothing could ever
   // open it again. Settings calls openParentPinSetup() instead, which does not
   // guard.
-  function _promptSetParentPin() {
+  async function _promptSetParentPin() {
     if (_getStoredPinHash()) return;
+    // Check DB before prompting setup — the parent may already have a PIN set on
+    // another device. If so, skip the prompt; they'll enter their existing PIN
+    // the first time they tap 🔒 Parent and it will repopulate localStorage.
+    const dbHash = await _fetchDbPinHash();
+    if (dbHash) return;
     setTimeout(() => { _showPinSetupModal(); }, 1800);
   }
 
@@ -3030,10 +3069,14 @@ const Auth = (() => {
   // Account & Settings to set a first PIN or replace an existing one.
   function openParentPinSetup() { _showPinSetupModal(); }
 
-  function hasParentPin() { return !!_getStoredPinHash(); }
+  function hasParentPin() { return !!_getStoredPinHash() || !!_dbPinHash; }
 
   function clearParentPin() {
     try { localStorage.removeItem(_PARENT_PIN_KEY); } catch (_) {}
+    _dbPinHash = null;
+    if (_parentUser) {
+      _sb.from('profiles').update({ parent_pin_hash: null }).eq('id', _parentUser.id).catch(() => {});
+    }
   }
 
   function _showPinSetupModal() {
