@@ -133,10 +133,25 @@ const Forum = (() => {
     _el('forum-back-btn')?.classList.toggle('hidden', id === 'forum-categories');
   }
 
+  // ── Nickname sync (DB → localStorage, once per session) ──────────────────
+  let _nickSynced = false;
+  async function _syncNickFromDb() {
+    if (_nickSynced || !_sb) return;
+    _nickSynced = true;
+    const p = (typeof Auth !== 'undefined') ? Auth.getParentProfile?.() : null;
+    if (!p?.id) return;
+    const { data } = await _sb.from('profiles').select('forum_nickname').eq('id', p.id).maybeSingle();
+    if (!data) return;
+    if (data.forum_nickname) localStorage.setItem(NICK_KEY, data.forum_nickname);
+    else localStorage.removeItem(NICK_KEY);
+  }
+
   // ── Category list ─────────────────────────────
   async function render() {
     _sub('forum-categories');
     const si = _el('forum-search-input'); if (si) si.value = '';
+    // Sync nickname from DB first so the display name is accurate.
+    await _syncNickFromDb();
     const displayEl = _el('forum-display-name');
     if (displayEl) displayEl.textContent = _author().name;
 
@@ -275,7 +290,7 @@ const Forum = (() => {
     list.innerHTML = sortBtns + data.map(p => {
       const canDel = (!!uid && p.author_id === uid) || isAdmin;
       return `
-        <div class="relative group mb-3">
+        <div class="relative mb-3">
           <button onclick="Forum.openPost('${p.id}')"
             class="w-full text-left p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all">
             <div class="font-semibold text-gray-800 dark:text-white mb-1 flex items-center gap-1.5 ${canDel ? 'pr-7' : ''}">
@@ -296,7 +311,7 @@ const Forum = (() => {
           </button>
           ${canDel ? `
           <button onclick="event.stopPropagation();Forum.deletePost('${p.id}')" title="Delete post"
-            class="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors opacity-0 group-hover:opacity-100 text-sm">🗑</button>` : ''}
+            class="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors text-sm">🗑</button>` : ''}
         </div>`;
     }).join('');
   }
@@ -568,13 +583,22 @@ const Forum = (() => {
     _el('forum-nick-panel')?.classList.add('hidden');
   }
 
-  function saveNickname() {
+  async function saveNickname() {
     const val = _el('forum-nick-input')?.value.trim() || '';
-    if (val) {
-      localStorage.setItem(NICK_KEY, val);
-    } else {
-      localStorage.removeItem(NICK_KEY);
+    if (_sb) {
+      const p = (typeof Auth !== 'undefined') ? Auth.getParentProfile?.() : null;
+      if (p?.id) {
+        const { error } = await _sb.from('profiles')
+          .update({ forum_nickname: val || null })
+          .eq('id', p.id);
+        if (error) {
+          if (typeof toast !== 'undefined') toast('Could not save display name. Please try again.', 2000);
+          return;
+        }
+      }
     }
+    if (val) localStorage.setItem(NICK_KEY, val);
+    else localStorage.removeItem(NICK_KEY);
     hideNicknameSettings();
     const displayEl = _el('forum-display-name');
     if (displayEl) displayEl.textContent = _author().name;

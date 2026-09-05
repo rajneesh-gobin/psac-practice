@@ -2565,6 +2565,181 @@ html:not(.dark) #screen-parent .pd-child-next  { color: rgba(240,236,220,.6) !im
 /* ── Tab row: tighter top margin since screen already has padding ── */
 #screen-parent .teacher-navigation { margin-top: .5rem; }
 
+/* ── Inline parent dashboard panels (calendar, shop, messages, settings) ── */
+#pd-panel-calendar,
+#pd-panel-shop,
+#pd-panel-messages,
+#pd-panel-settings { padding-top: .5rem; }
+
+/* Remove the screen-level max-width caps; board frame handles layout */
+#pd-panel-calendar .max-w-2xl,
+#pd-panel-shop .max-w-3xl,
+#pd-panel-messages .max-w-2xl,
+#pd-panel-settings .max-w-2xl { max-width: 100%; }
+
+/* Calendar back button is hidden inline (tab bar is the nav) */
+#pd-panel-calendar .pd-cal-back { display: none; }
+
+/* Headings & text inherit chalk palette */
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) h2,
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) h3 { color: #f0ece8; }
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .text-gray-800,
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .text-gray-700 { color: #f0ece8 !important; }
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .text-gray-600,
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .text-gray-500,
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .text-gray-400 { color: rgba(240,236,220,.6) !important; }
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .bg-gray-100,
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .bg-white,
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .dark\:bg-gray-700,
+:is(#pd-panel-calendar, #pd-panel-shop, #pd-panel-messages, #pd-panel-settings) .dark\:bg-gray-800 { background: rgba(240,236,220,.1) !important; }
+
+/* ── Child detail panel header: wrap on small phones so buttons don't overflow ── */
+@media (max-width: 480px) {
+  #pd-detail-panel > div:first-child { flex-wrap: wrap; }
+}
+
+/* ══ Parent-mode screens — chalkboard theme ════════════════════════
+   All screens a parent navigates to from #screen-parent share the
+   same dark charcoal + ruled-lines background and chalk text as the
+   parent dashboard itself.  Overrides are scoped so student-only
+   screens (practice, dashboard, games) are never touched.
+   ══════════════════════════════════════════════════════════════ */
+#screen-calendar,
+#screen-shop,
+#screen-analytics,
+#screen-forum,
+#screen-inbox,
+#screen-profile,
+#screen-parent-messages,
+#screen-add-student,
+#screen-schedule {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 34px,
+      rgba(180,180,180,.07) 34px,
+      rgba(180,180,180,.07) 35px
+    ),
+    #1e1e1e;
+  min-height: 100vh;
+  color: #f0ece8;
+}
+
+/* ── Headings & body text ── */
+#screen-calendar h2, #screen-calendar h3,
+#screen-shop h2, #screen-shop h3,
+#screen-analytics h2, #screen-analytics h3,
+#screen-forum h2, #screen-forum h3,
+#screen-inbox h2, #screen-inbox h3,
+#screen-profile h2, #screen-profile h3,
+#screen-parent-messages h2, #screen-parent-messages h3,
+#screen-add-student h2, #screen-add-student h3,
+#screen-schedule h2, #screen-schedule h3 { color: #f0ece8; }
+
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule) p { color: rgba(240,236,220,.72); }
+
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule) label { color: rgba(240,236,220,.85); }
+
+/* ── Common Tailwind text overrides ── */
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(.text-gray-800, .text-gray-700, .dark\:text-white) { color: #f0ece8 !important; }
+
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(.text-gray-600, .text-gray-500, .text-gray-400,
+      .dark\:text-gray-300, .dark\:text-gray-400, .dark\:text-gray-500) { color: rgba(240,236,220,.58) !important; }
+
+/* ── Cards / panels (bg-white, bg-gray-50, dark:bg-gray-800) ── */
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(.bg-white, .bg-gray-50, .dark\:bg-gray-800, .dark\:bg-gray-700\/50) {
+    background: rgba(240,236,220,.07) !important;
+    color: #f0ece8 !important;
+  }
+
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(.bg-gray-100, .bg-gray-50, .dark\:bg-gray-700) {
+    background: rgba(240,236,220,.10) !important;
+    color: #f0ece8 !important;
+  }
+
+/* ── Borders ── */
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(.border-gray-200, .border-gray-300, .dark\:border-gray-700, .dark\:border-gray-600) {
+    border-color: rgba(240,236,220,.18) !important;
+  }
+
+/* ── Inputs, textareas, selects ── */
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(input, textarea, select) {
+    background: rgba(240,236,220,.08) !important;
+    border-color: rgba(240,236,220,.25) !important;
+    color: #f0ece8 !important;
+  }
+
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(input::placeholder, textarea::placeholder) { color: rgba(240,236,220,.35) !important; }
+
+/* ── Back / utility buttons (bg-gray-100 style) ── */
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(.bg-gray-100, .dark\:bg-gray-700):is(button, a) {
+    background: rgba(240,236,220,.10) !important;
+    color: #f0ece8 !important;
+    border-color: rgba(240,236,220,.2) !important;
+  }
+
+/* ── Stat tiles (analytics) ── */
+:is(#screen-analytics) .stat-tile {
+  background: rgba(240,236,220,.07);
+  border-color: rgba(240,236,220,.14);
+}
+
+/* ── Info banners (green/amber/blue) keep tint but on dark base ── */
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  .bg-green-50   { background: rgba(34,197,94,.1) !important; }
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  .bg-amber-50, .bg-yellow-50 { background: rgba(245,158,11,.1) !important; }
+:is(#screen-calendar, #screen-shop, #screen-analytics, #screen-forum,
+    #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  .bg-blue-50    { background: rgba(59,130,246,.1) !important; }
+
+/* ── Schedule section dividers already chalk-styled via .sch-* ── */
+
+/* ── Light-mode force: override the day-theme block for these screens ── */
+html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
+    #screen-forum, #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  :is(.bg-white, .bg-gray-50) { background: rgba(240,236,220,.07) !important; color: #f0ece8 !important; }
+
+html:not(.dark) :is(#screen-calendar, #screen-shop, #screen-analytics,
+    #screen-forum, #screen-inbox, #screen-profile, #screen-parent-messages,
+    #screen-add-student, #screen-schedule)
+  .stat-tile { background: rgba(240,236,220,.08) !important; }
+
 /* ── Practice Hub ──────────────────────────────────────────────── */
 #screen-practice-hub {
   background:
@@ -4283,11 +4458,24 @@ html.dark select optgroup {
 }
 
 @media (max-width:700px) {
-  #screen-teacher .teacher-navigation { gap: 2px; }
-  #screen-teacher .ta-tab { min-width: 60px; padding: .45rem .7rem .4rem; font-size: .95rem; }
+  #screen-teacher .teacher-navigation,
+  #screen-student-home .teacher-navigation,
+  #screen-subject-hub .teacher-navigation,
+  #screen-parent .teacher-navigation { gap: 2px; }
+  #screen-teacher .ta-tab,
+  #screen-student-home .ta-tab,
+  #screen-subject-hub .ta-tab,
+  #screen-parent .ta-tab { min-width: 60px; padding: .45rem .7rem .4rem; font-size: .95rem; }
   .ta-copybook { width: 158px; min-height: 200px; }
   .ta-copybook-title { font-size: 1rem; }
   .ta-copybook-wrap { gap: 12px; }
+}
+/* On very small phones (≤420px) squeeze tabs further so 5 still fit in one row */
+@media (max-width:420px) {
+  #screen-teacher .ta-tab,
+  #screen-student-home .ta-tab,
+  #screen-subject-hub .ta-tab,
+  #screen-parent .ta-tab { min-width: 50px; padding: .38rem .5rem .35rem; font-size: .85rem; }
 }
 .coach-card.hidden { display:none !important; }
 
@@ -4710,7 +4898,7 @@ html:not(.dark) :is(button,a,input,select,textarea,summary):focus-visible { outl
     z-index: 9999;
     background: rgba(8,16,42,.97);
     border-top: 2px solid rgba(245,158,11,.5);
-    padding: 8px 10px 12px;
+    padding: 8px 10px calc(12px + env(safe-area-inset-bottom));
     gap: 4px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -4749,6 +4937,23 @@ html:not(.dark) :is(button,a,input,select,textarea,summary):focus-visible { outl
 
 .bq-best { font-size:.85rem; color:#b45309; font-weight:700; margin-top:-8px; margin-bottom:12px; }
 .dark .bq-best { color:#fbbf24; }
+
+.bq-prize-flash {
+  position:fixed; top:50%; left:50%;
+  transform:translate(-50%,-50%) scale(1);
+  z-index:10001; pointer-events:none;
+  background:linear-gradient(135deg,#f59e0b,#d97706);
+  border-radius:22px; padding:22px 36px; text-align:center;
+  box-shadow:0 8px 48px rgba(245,158,11,.65);
+  animation:bq-pf-pop .28s cubic-bezier(.34,1.56,.64,1);
+}
+.bq-prize-flash .bq-pf-label { font-size:.78rem; color:#1f1300; font-weight:700; margin-bottom:2px; }
+.bq-prize-flash .bq-pf-amount { font-size:2.1rem; font-weight:900; color:#1f1300; line-height:1.1; }
+.bq-prize-flash .bq-pf-safe { font-size:.72rem; color:#1f1300; margin-top:6px; opacity:.85; }
+@keyframes bq-pf-pop {
+  from { transform:translate(-50%,-50%) scale(.55); opacity:0; }
+  to   { transform:translate(-50%,-50%) scale(1);   opacity:1; }
+}
 
 /* the shared message + poll panels sit on the dark stage now */
 .bq-stage .mg-msg { background:rgba(251,191,36,.12); border-color:rgba(251,191,36,.5); color:#fde68a; }

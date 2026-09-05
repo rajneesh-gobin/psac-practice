@@ -71,7 +71,7 @@ const TeacherClassroomDetail = (() => {
     document.querySelectorAll('.tc-cd-section').forEach(s => s.classList.add('hidden'));
     el('tc-cd-' + sec)?.classList.remove('hidden');
     if (sec === 'settings') _renderSettings();
-    if (sec === 'results')  _renderResults();
+    if (sec === 'results')  _renderResults(_resultsAssignId);
   }
 
   // ── Work / Assignments ────────────────────────────────────────────
@@ -91,6 +91,8 @@ const TeacherClassroomDetail = (() => {
         .map(a => ({...a, access_mode: modes.get(a.id)?.mode || 'legacy', archived: !!modes.get(a.id)?.archived}));
       _physicalHomework = phRes.error ? [] : (phRes.data || []);
       el('tc-cd-stat-assignments').textContent = _assignments.length + _physicalHomework.length;
+      const statRes = el('tc-cd-stat-results');
+      if (statRes && statRes.textContent !== '—') statRes.textContent = '—';
       _renderWork();
     } catch(_e) {
       console.error('[classroom-detail] _loadWork failed:', _e);
@@ -434,9 +436,9 @@ const TeacherClassroomDetail = (() => {
 
   async function deletePhysicalHW(id, filePath) {
     if (!confirm('Delete this worksheet assignment? Students will no longer see it.')) return;
-    if (filePath) await _sb.storage.from('learning-materials').remove([filePath]);
     const {error} = await _sb.from('physical_homework').delete().eq('id', id);
     if (error) { if (typeof toast === 'function') toast('Could not delete: ' + error.message, 2500); return; }
+    if (filePath) await _sb.storage.from('learning-materials').remove([filePath]);
     if (typeof toast === 'function') toast('Deleted.', 1500);
     await _loadWork();
   }
@@ -549,8 +551,22 @@ const TeacherClassroomDetail = (() => {
   function _applyRevealedPins(pupils) {
     const btn = document.getElementById('tc-cd-reveal-all-btn');
     const note = btn?.parentElement?.querySelector('.tc-cd-pins-note');
+    let copyAllBtn = document.getElementById('tc-cd-copy-all-pins-btn');
     if (btn) { btn.textContent = '🙈 Hide PINs'; btn.classList.add('tc-cd-pill-active'); btn.onclick = () => _hidePins(); }
     if (note) note.textContent = 'PINs visible — tap to hide';
+    if (!copyAllBtn && btn) {
+      copyAllBtn = document.createElement('button');
+      copyAllBtn.id = 'tc-cd-copy-all-pins-btn';
+      copyAllBtn.className = 'tc-cd-pill';
+      copyAllBtn.textContent = '📋 Copy all PINs';
+      copyAllBtn.onclick = async () => {
+        const lines = _pupils.filter(p => p.active && p.pin).map(p => `${p.name}: ${p.pin}`).join('\n');
+        if (!lines) return;
+        try { await navigator.clipboard.writeText(lines); copyAllBtn.textContent = 'Copied ✓'; setTimeout(() => { copyAllBtn.textContent = '📋 Copy all PINs'; }, 2000); }
+        catch { prompt('Copy these PINs:', lines); }
+      };
+      btn.insertAdjacentElement('afterend', copyAllBtn);
+    }
     pupils.forEach(p => {
       if (!p.pin) return;
       const badge = document.querySelector(`[data-pin-badge="${_pupils.indexOf(p)}"]`);
@@ -563,8 +579,10 @@ const TeacherClassroomDetail = (() => {
     _pupils.forEach(p => delete p.pin);
     const btn = document.getElementById('tc-cd-reveal-all-btn');
     const note = btn?.parentElement?.querySelector('.tc-cd-pins-note');
+    const copyAllBtn = document.getElementById('tc-cd-copy-all-pins-btn');
     if (btn) { btn.textContent = '🔑 Show all PINs'; btn.classList.remove('tc-cd-pill-active'); btn.onclick = () => revealAllPins(); }
     if (note) note.textContent = 'Tap to reveal all PINs at once';
+    if (copyAllBtn) copyAllBtn.remove();
     document.querySelectorAll('[data-pin-badge]').forEach(b => { b.textContent = '––––'; b.classList.add('hidden'); });
   }
 
@@ -587,6 +605,57 @@ const TeacherClassroomDetail = (() => {
     }
   }
 
+  function _promptInline(title, label, defaultVal) {
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:10002;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)';
+      const card = document.createElement('div');
+      card.style.cssText = 'background:#fff;border-radius:20px;padding:28px 24px;max-width:320px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.3)';
+      card.innerHTML = `
+        <p style="font-size:1rem;font-weight:700;color:#111827;margin-bottom:14px">${esc(title)}</p>
+        <label style="font-size:.85rem;color:#6b7280;display:block;margin-bottom:6px">${esc(label)}</label>
+        <input id="_pi-input" value="${esc(defaultVal || '')}" style="width:100%;padding:10px 12px;border:1.5px solid #d1d5db;border-radius:10px;font-size:1rem;outline:none;box-sizing:border-box" />
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
+          <button id="_pi-cancel" style="padding:9px 18px;border-radius:10px;border:1px solid #e5e7eb;background:#f9fafb;color:#374151;font-weight:600;cursor:pointer">Cancel</button>
+          <button id="_pi-ok" style="padding:9px 18px;border-radius:10px;border:none;background:#1d4ed8;color:#fff;font-weight:700;cursor:pointer">Save</button>
+        </div>`;
+      overlay.appendChild(card);
+      document.body.appendChild(overlay);
+      const input = card.querySelector('#_pi-input');
+      input.focus(); input.select();
+      const done = val => { overlay.remove(); resolve(val); };
+      card.querySelector('#_pi-cancel').onclick = () => done(null);
+      card.querySelector('#_pi-ok').onclick = () => done(input.value);
+      input.onkeydown = e => { if (e.key === 'Enter') done(input.value); if (e.key === 'Escape') done(null); };
+      overlay.addEventListener('click', e => { if (e.target === overlay) done(null); });
+    });
+  }
+
+  function _showPinModal(name, pin) {
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:10002;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)';
+    const card = document.createElement('div');
+    card.style.cssText = 'background:#fff;border-radius:20px;padding:32px 28px;max-width:320px;width:90%;text-align:center;box-shadow:0 16px 48px rgba(0,0,0,.3)';
+    card.innerHTML = `
+      <p style="font-size:.9rem;color:#6b7280;margin-bottom:6px">📌 PIN for</p>
+      <p style="font-size:1.1rem;font-weight:700;color:#111827;margin-bottom:16px">${esc(name)}</p>
+      <div style="font-family:monospace;font-size:2.4rem;font-weight:900;letter-spacing:.2em;color:#1d4ed8;background:#eff6ff;border-radius:12px;padding:14px 0;margin-bottom:8px">${esc(pin)}</div>
+      <p style="font-size:.78rem;color:#9ca3af;margin-bottom:20px">Give this PIN only to the pupil — do not share it with the class.</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button id="_pm-copy" style="flex:1;padding:10px;border-radius:12px;border:none;background:#1d4ed8;color:#fff;font-weight:700;cursor:pointer;font-size:.9rem">📋 Copy PIN</button>
+        <button id="_pm-close" style="flex:1;padding:10px;border-radius:12px;border:1px solid #e5e7eb;background:#f9fafb;color:#374151;font-weight:600;cursor:pointer;font-size:.9rem">Close</button>
+      </div>`;
+    overlay.appendChild(card);
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    card.querySelector('#_pm-close').onclick = () => overlay.remove();
+    const copyBtn = card.querySelector('#_pm-copy');
+    copyBtn.onclick = async () => {
+      try { await navigator.clipboard.writeText(pin); copyBtn.textContent = 'Copied ✓'; setTimeout(() => { copyBtn.textContent = '📋 Copy PIN'; }, 2000); }
+      catch { copyBtn.textContent = pin; }
+    };
+  }
+
   async function _pupilAction(action, pi) {
     const p = _pupils[pi];
     if (!p) return;
@@ -594,20 +663,20 @@ const TeacherClassroomDetail = (() => {
     if (action === 'reveal_pin') {
       try {
         const {data} = await _sb.rpc('teacher_guest_manage', args);
-        if (data?.pin) alert(`${p.name}'s PIN: ${data.pin}\nGive this only to the pupil.`);
+        if (data?.pin) _showPinModal(p.name, data.pin);
       } catch(_e) { toast('Could not retrieve PIN.', 2500); }
       return;
     }
     if (action === 'reset_pin'    && !confirm(`Reset ${p.name}'s PIN? The current PIN will stop working.`)) return;
     if (action === 'toggle_pupil' && p.active && !confirm(`Remove ${p.name}? Past results are kept.`)) return;
     if (action === 'rename_pupil') {
-      const name = prompt('New name:', p.name);
+      const name = await _promptInline('Rename pupil', 'New name:', p.name);
       if (!name?.trim()) return;
       args.p_name = name.trim();
     }
     try {
       const {data} = await _sb.rpc('teacher_guest_manage', args);
-      if (data?.pin) alert(`${p.name}'s new PIN: ${data.pin}\nGive this only to the pupil.`);
+      if (data?.pin) _showPinModal(p.name, data.pin);
       await _loadPupils();
     } catch(_e) { toast('Action failed. Please try again.', 2500); }
   }
@@ -620,7 +689,7 @@ const TeacherClassroomDetail = (() => {
     try {
       const {data, error} = await _sb.rpc('teacher_guest_manage', {p_action: 'add_pupil', p_classroom: _classId, p_name: name});
       if (error || !data?.ok) throw new Error(error?.message || 'Failed');
-      if (data.pin) alert(`${name}'s PIN: ${data.pin}\nGive this only to the pupil.`);
+      if (data.pin) _showPinModal(name, data.pin);
       if (input)  input.value = '';
       if (status) status.textContent = '';
       await _loadPupils();
@@ -707,6 +776,7 @@ const TeacherClassroomDetail = (() => {
               ${f.description ? `<p class="tc-cd-file-desc">${esc(f.description)}</p>` : ''}
             </div>
             <div class="tc-cd-file-btns">
+              <button onclick="TeacherClassroomDetail.openFile('${esc(f.file_path)}',${Number(f.link_expiry_seconds)||3600})" class="tc-cd-pill">📂 Open</button>
               <button onclick="TeacherClassroomDetail.copyFileLink('${esc(f.file_path)}',${Number(f.link_expiry_seconds)||3600})" class="tc-cd-pill">🔗 Link</button>
               <button onclick="TeacherClassroomDetail.deleteFile('${esc(f.id)}','${esc(f.file_path)}')" class="tc-cd-pill tc-cd-pill-red">Delete</button>
             </div>
@@ -758,19 +828,32 @@ const TeacherClassroomDetail = (() => {
     await _loadMaterials();
   }
 
+  async function _getSignedUrl(filePath, expirySeconds) {
+    const {data, error} = await _sb.storage.from('learning-materials').createSignedUrl(filePath, expirySeconds || 3600);
+    if (error || !data?.signedUrl) return null;
+    return data.signedUrl;
+  }
+
   async function copyFileLink(filePath, expirySeconds) {
     const secs = expirySeconds || 3600;
-    const {data, error} = await _sb.storage.from('learning-materials').createSignedUrl(filePath, secs);
-    if (error || !data?.signedUrl) { toast('Could not generate link.', 2000); return; }
+    const url = await _getSignedUrl(filePath, secs);
+    if (!url) { toast('Could not generate link.', 2000); return; }
     const label = _fmtExpiry(secs);
-    try { await navigator.clipboard.writeText(data.signedUrl); toast(`Link copied! Valid for ${label}.`, 2500); }
-    catch { prompt(`Copy this link (valid ${label}):`, data.signedUrl); }
+    try { await navigator.clipboard.writeText(url); toast(`Link copied! Valid for ${label}.`, 2500); }
+    catch { prompt(`Copy this link (valid ${label}):`, url); }
+  }
+
+  async function openFile(filePath, expirySeconds) {
+    const url = await _getSignedUrl(filePath, expirySeconds || 3600);
+    if (!url) { toast('Could not open file.', 2000); return; }
+    window.open(url, '_blank', 'noopener');
   }
 
   async function deleteFile(id, filePath) {
     if (!confirm('Delete this file? This cannot be undone.')) return;
+    const {error: dbErr} = await _sb.from('learning_materials').delete().eq('id', id);
+    if (dbErr) { toast('Could not delete: ' + dbErr.message, 2500); return; }
     await _sb.storage.from('learning-materials').remove([filePath]);
-    await _sb.from('learning_materials').delete().eq('id', id);
     await _loadMaterials();
   }
 
@@ -810,6 +893,7 @@ const TeacherClassroomDetail = (() => {
     box.innerHTML = `
       <div class="tc-cd-section-header">
         <h3 class="tc-cd-section-title">📊 Results &amp; Marks</h3>
+        <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.refreshResults()">🔄 Refresh</button>
       </div>
       <select id="tc-cd-results-sel" class="tc-cd-input" style="margin-bottom:1rem;max-width:360px">
         <option value="">Select an assignment…</option>
@@ -826,6 +910,8 @@ const TeacherClassroomDetail = (() => {
 
   async function _loadResultsFor(assignId) {
     _resultsAssignId = assignId;
+    const sel = el('tc-cd-results-sel');
+    if (sel && assignId) sel.value = assignId;
     const box = el('tc-cd-results-body');
     if (!box || !assignId) { if (box) box.innerHTML = ''; return; }
     box.innerHTML = '<p class="tc-cd-loading">Loading results…</p>';
@@ -1091,8 +1177,9 @@ const TeacherClassroomDetail = (() => {
     showHomeworkChoice, _chooseDigital, _chooseWorksheet,
     _onPhysicalFileChosen, _submitPhysical, downloadPhysicalHW, deletePhysicalHW,
     createWork, addPupil, revealAllPins,
-    uploadMaterial, _onMatFileChosen, copyFileLink, deleteFile,
+    uploadMaterial, _onMatFileChosen, copyFileLink, openFile, deleteFile,
     saveName, setEmoji, archiveClass, deleteClassroom, shareLink,
-    savePref, saveNotes, getPrefs
+    savePref, saveNotes, getPrefs,
+    refreshResults: () => { if (_resultsAssignId) _loadResultsFor(_resultsAssignId); }
   };
 })();

@@ -25,13 +25,13 @@
 # subjects/** stays as the fallback's safety net, for a deploy where the build
 # step produced no bundles.
 [functions."questions"]
-  included_files = ["subjects/**", "netlify/question-bundles/**"]
+  included_files = ["subjects/**/*.js", "netlify/question-bundles/**"]
 
 [functions."assignment-open"]
-  included_files = ["subjects/**"]
+  included_files = ["subjects/**/*.js"]
 
 [functions."assignment-submit"]
-  included_files = ["subjects/**"]
+  included_files = ["subjects/**/*.js"]
 
 [functions."classroom-materials"]
 
@@ -250,6 +250,12 @@
 
 [[redirects]]
   from   = "/supabase-forum-author-fix.sql"
+  to     = "/"
+  status = 404
+  force  = true
+
+[[redirects]]
+  from   = "/supabase-material-expiry.sql"
   to     = "/"
   status = 404
   force  = true

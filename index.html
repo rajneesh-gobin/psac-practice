@@ -3904,17 +3904,20 @@
 
       <!-- Navigation tabs — folder-tab style matching the student home screen -->
       <div class="teacher-navigation" role="tablist" aria-label="Parent dashboard">
-        <button role="tab" aria-selected="true"  class="ta-tab"><strong>👨‍👩‍👧 My Children</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" onclick="showScreen('calendar')"><strong>📅 Calendar</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" onclick="openCoparentSettings()"><strong>👨‍👩‍👦 Add Parent</strong></button>
+        <button id="pd-tab-children" role="tab" aria-selected="true"  class="ta-tab" onclick="PD.mainTab('children')"><strong>👨‍👩‍👧 My Children</strong></button>
+        <button id="pd-tab-calendar" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('calendar')"><strong>📅 Calendar</strong></button>
+        <button role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('settings','coparent-card')"><strong>👨‍👩‍👦 Add Parent</strong></button>
         <button role="tab" aria-selected="false" class="ta-tab" onclick="Auth.openInviteModal()"><strong>🎁 Invite</strong></button>
-        <button role="tab" aria-selected="false" class="ta-tab" onclick="showScreen('shop')"><strong>🛒 Shop</strong><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
-        <button role="tab" aria-selected="false" class="ta-tab" onclick="showScreen('parent-messages')"><strong>💬 Messages</strong><span id="pd-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
-        <button role="tab" aria-selected="false" class="ta-tab" onclick="showProfile()"><strong>⚙️ Settings</strong></button>
+        <button id="pd-tab-shop" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('shop')"><strong>🛒 Shop</strong><span id="pd-credit-chip" class="pd-badge hidden"></span></button>
+        <button id="pd-tab-messages" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('messages')"><strong>💬 Messages</strong><span id="pd-msg-badge" class="hidden ml-1 bg-red-500 text-white text-[10px] rounded-full px-1.5 py-0.5 font-bold align-middle">new</span></button>
+        <button id="pd-tab-settings" role="tab" aria-selected="false" class="ta-tab" onclick="PD.mainTab('settings')"><strong>⚙️ Settings</strong></button>
       </div>
 
       <!-- Board frame — same chalkboard aesthetic as the student home -->
       <div class="sh-board-frame">
+
+      <!-- ── My Children panel (default view) ── -->
+      <div id="pd-panel-children">
 
       <!-- ── My Plan banner ── -->
       <div id="pd-expired-slot"></div>
@@ -4231,6 +4234,22 @@
         </div>
       </div><!-- /pd-detail-panel -->
 
+      </div><!-- /pd-panel-children -->
+
+      <!-- ── Calendar panel (shown when Calendar tab is active) ── -->
+      <div id="pd-panel-calendar" class="hidden"></div>
+
+      <!-- ── Shop panel ── -->
+      <div id="pd-panel-shop" class="hidden"></div>
+
+      <!-- ── Messages panel ── -->
+      <div id="pd-panel-messages" class="hidden"></div>
+
+      <!-- ── Settings panel ── -->
+      <div id="pd-panel-settings" class="hidden">
+        <div id="pd-profile-content" class="py-4"></div>
+      </div>
+
       </div><!-- /sh-board-frame -->
 
     </div>
@@ -4389,7 +4408,7 @@
     <div id="screen-shop" class="screen hidden">
       <div class="max-w-3xl mx-auto">
         <div class="flex items-center gap-3 mb-4">
-          <button onclick="showScreen('parent')" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Back">
+          <button onclick="PD.mainTab('children')" class="pd-panel-back p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors" aria-label="Back">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
           </button>
           <h2 class="text-xl font-bold text-gray-800 dark:text-white">🛒 Credit Shop</h2>
@@ -4494,7 +4513,7 @@
   <!-- ══ PARENT MESSAGES SCREEN ══ -->
   <div id="screen-parent-messages" class="screen hidden p-4 max-w-2xl mx-auto pb-24">
     <div class="flex items-center gap-3 mb-5 flex-wrap">
-      <button onclick="showScreen('parent')" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold">← Back</button>
+      <button onclick="PD.mainTab('children')" class="pd-panel-back p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold">← Back</button>
       <h2 class="text-xl font-bold text-gray-800 dark:text-white flex-1">💬 Messages</h2>
       <button onclick="openParentMessageModal()" class="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-colors">
         <span aria-hidden="true">＋</span> New Message
@@ -4718,7 +4737,7 @@
 
     <!-- Header -->
     <div class="flex items-center gap-3 mb-4 flex-wrap">
-      <button onclick="showScreen('parent')" class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold">← Back</button>
+      <button onclick="showScreen('parent')" class="pd-cal-back p-2 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-300 text-sm font-semibold">← Back</button>
       <h2 class="text-xl font-bold text-gray-800 dark:text-white flex-1">📅 Study Calendar</h2>
       <select id="cal-student-select" onchange="Calendar.setStudent(this.value)"
         class="text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-400">

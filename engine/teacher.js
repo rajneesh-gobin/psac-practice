@@ -250,6 +250,11 @@ const TeacherMode = (() => {
               class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/60 px-2.5 py-1.5 rounded-lg transition-colors font-medium">
               📤 Share
             </button>
+            <button onclick="TeacherMode.duplicateAssignment('${a.id}')"
+              title="Duplicate — opens form pre-filled"
+              class="text-xs bg-gray-100 dark:bg-gray-700/60 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 px-2 py-1.5 rounded-lg transition-colors">
+              📋
+            </button>
             <button onclick="TeacherMode.deleteAssignment('${a.id}')"
               class="text-xs bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/60 px-2 py-1.5 rounded-lg transition-colors">
               🗑
@@ -371,7 +376,11 @@ const TeacherMode = (() => {
       grouped[k].push(r);
     });
 
-    container.innerHTML = Object.values(grouped).map(attempts => {
+    container.innerHTML = `<div class="mb-3 flex justify-end">
+      <button onclick="TeacherMode.exportResultsCsv('${assignId}')"
+        class="text-xs bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800/60 px-3 py-1.5 rounded-lg transition-colors font-medium">
+        ⬇️ Export CSV</button>
+    </div>` + Object.values(grouped).map(attempts => {
       const latest  = attempts.sort((a, b) => b.attempt - a.attempt)[0];
       const name    = latest.studentName;
       const canRetry = !latest.retryAllowed;
@@ -714,6 +723,8 @@ const TeacherMode = (() => {
   // ── Gradebook ──────────────────────────────────
   let _gbClassId = null;
   let _gbLoading = false;
+  let _gbShowArchived = false;
+  let _gbLastData = null;
   const _gbEsc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
   function _renderGradebook() {
@@ -731,6 +742,8 @@ const TeacherMode = (() => {
           ${classes.map(c => `<option value="${_gbEsc(c.id)}"${c.id === _gbClassId ? ' selected' : ''}>${_gbEsc(c.name)} (${c.pupils} pupil${c.pupils === 1 ? '' : 's'})</option>`).join('')}
         </select>
         <button onclick="TeacherMode.loadGradebook()" class="ta-gb-btn">🔄 Refresh</button>
+        <button onclick="TeacherMode.toggleGbArchived()" class="ta-gb-btn" id="ta-gb-archived-btn">${_gbShowArchived ? '📦 Hide archived' : '📦 Show archived'}</button>
+        <button onclick="TeacherMode.exportGradebookCsv()" class="ta-gb-btn">⬇️ Export CSV</button>
       </div>
       <div id="ta-gb-body"></div>
     `;
@@ -745,14 +758,19 @@ const TeacherMode = (() => {
     _gbLoading = true;
     box.innerHTML = '<p class="ta-gb-msg">Loading…</p>';
     try {
-      const [{ data: asgData, error: asgErr }, { data: modeData }] = await Promise.all([
-        _sb.rpc('guest_my_assignments'),
-        _sb.rpc('teacher_guest_assignment_modes').catch(() => ({ data: null })),
-      ]);
+      const asgResp = await _sb.rpc('guest_my_assignments');
+      const { data: asgData, error: asgErr } = asgResp;
       if (asgErr) throw asgErr;
+      let modeData = null;
+      try {
+        const modeResp = await _sb.rpc('teacher_guest_assignment_modes');
+        modeData = modeResp.data;
+      } catch (modeErr) {
+        console.warn('[gradebook] modes RPC failed:', modeErr);
+      }
       const modes = new Map((modeData?.modes || []).map(a => [a.id, a]));
       const assignments = (asgData?.assignments || [])
-        .filter(a => modes.get(a.id)?.classroom_id === _gbClassId && !modes.get(a.id)?.archived)
+        .filter(a => modes.get(a.id)?.classroom_id === _gbClassId && (_gbShowArchived || !modes.get(a.id)?.archived))
         .map(a => ({ ...a }));
       if (!assignments.length) {
         box.innerHTML = '<p class="ta-gb-msg">No active assignments for this classroom yet — set some work first.</p>';
@@ -787,6 +805,9 @@ const TeacherMode = (() => {
         const vals = names.map(n => students[n][a.id]).filter(s => s != null);
         return vals.length ? Math.round(vals.reduce((sum, r) => sum + r.pct, 0) / vals.length) : null;
       });
+      const allClasses = typeof TeacherGuestClasses !== 'undefined' ? TeacherGuestClasses.getClasses() : [];
+      const cls = allClasses.find(c => c.id === _gbClassId);
+      _gbLastData = { names, assignments, students, colAvg, className: cls?.name || 'gradebook' };
       box.innerHTML = `
         <div class="ta-gb-scroll">
           <table class="ta-gb-table" role="grid">
@@ -822,11 +843,88 @@ const TeacherMode = (() => {
         </p>
       `;
     } catch (e) {
-      console.error('[gradebook]', e);
+      console.error('[gradebook] ERROR:', e?.message || e, e?.code, e?.details, e);
       box.innerHTML = '<p class="ta-gb-msg ta-gb-err">Could not load gradebook. Check your connection.</p>';
     } finally {
       _gbLoading = false;
     }
+  }
+
+  function _toggleGbArchived() {
+    _gbShowArchived = !_gbShowArchived;
+    const btn = _el('ta-gb-archived-btn');
+    if (btn) btn.textContent = _gbShowArchived ? '📦 Hide archived' : '📦 Show archived';
+    _loadGradebook(_gbClassId);
+  }
+
+  function _exportGradebookCsv() {
+    if (!_gbLastData) { toast('Load the gradebook first.', 2000); return; }
+    const { names, assignments, students, colAvg, className } = _gbLastData;
+    const header = ['Pupil', ...assignments.map(a => a.title || a.label || a.id), 'Average'];
+    const rows = [header];
+    names.forEach(name => {
+      const cells = assignments.map(a => students[name][a.id] ?? null);
+      const done  = cells.filter(s => s != null);
+      const avg   = done.length ? Math.round(done.reduce((s, r) => s + r.pct, 0) / done.length) : null;
+      rows.push([name, ...cells.map(c => c == null ? '—' : c.pct + '%'), avg != null ? avg + '%' : '—']);
+    });
+    rows.push(['Class avg', ...colAvg.map(avg => avg != null ? avg + '%' : '—'), '']);
+    const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = className.replace(/[^a-z0-9\-_.]/gi, '_') + '-gradebook.csv';
+    a.click();
+  }
+
+  function _exportResultsCsv(assignId) {
+    const data = _getData();
+    const asgn = (data.assignments || []).find(a => a.id === assignId);
+    const results = data.results?.[assignId] || [];
+    if (!results.length) { toast('No results to export.', 2000); return; }
+    const rows = [['Name', 'Attempt', 'Score', 'Total', 'Percentage', 'Date']];
+    results.slice()
+      .sort((a, b) => a.studentName.localeCompare(b.studentName) || a.attempt - b.attempt)
+      .forEach(r => rows.push([r.studentName, r.attempt, r.score, r.total, r.pct + '%', new Date(r.timestamp).toLocaleString()]));
+    const csv = rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = ((asgn?.label || 'results') + '-results.csv').replace(/[^a-z0-9\-_.]/gi, '_');
+    a.click();
+  }
+
+  function _duplicateAssignment(id) {
+    const data = _getData();
+    const a = (data.assignments || []).find(x => x.id === id);
+    if (!a) return;
+    switchTab('create');
+    const set = (elId, val) => { const el = _el(elId); if (el) el.value = val; };
+    set('ta-label', 'Copy of ' + a.label);
+    set('ta-count', a.count || 10);
+    set('ta-difficulty', a.difficulty || 0);
+    set('ta-mode', a.mode || 'practice');
+    const randEl = _el('ta-random');
+    if (randEl) randEl.checked = a.random !== false;
+    if (a.subject) {
+      const pack = Object.values(typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : {}).find(p => p.id === a.subject);
+      if (pack) {
+        const gradeEl = _el('ta-grade');
+        if (gradeEl) { gradeEl.value = pack.grade; TeacherMode.gradeChange(gradeEl); }
+        setTimeout(() => {
+          set('ta-subject', a.subject);
+          const subEl = _el('ta-subject');
+          if (subEl) TeacherMode.subjectChange(subEl);
+          if (a.chapters?.length) {
+            setTimeout(() => {
+              a.chapters.forEach(cid => {
+                const cb = document.querySelector(`#ta-chapter-opts-container input[value="${cid}"]`);
+                if (cb) cb.checked = true;
+              });
+            }, 400);
+          }
+        }, 150);
+      }
+    }
+    toast('Form pre-filled — adjust and generate.', 2500);
   }
 
   async function _renderTeacherMessages() {
@@ -866,6 +964,10 @@ const TeacherMode = (() => {
     saveResult, getAttemptCount, hasRetry, allowRetry, removeResult, showAnswers,
     gbSelectClass: id => { _gbClassId = id; _loadGradebook(id); },
     loadGradebook: () => _loadGradebook(_gbClassId),
+    toggleGbArchived: _toggleGbArchived,
+    exportGradebookCsv: _exportGradebookCsv,
+    exportResultsCsv: _exportResultsCsv,
+    duplicateAssignment: _duplicateAssignment,
     renderMessages: _renderTeacherMessages,
   };
 })();

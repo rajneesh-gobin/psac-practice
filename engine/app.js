@@ -1802,6 +1802,18 @@ function showScreen(id) {
     return;
   }
 
+  // Screens that are now rendered inline inside the parent dashboard board frame.
+  // When the parent dashboard is the current screen, redirect to the inline tab
+  // instead of navigating away. showScreen('parent') is the reset path — let it
+  // through so renderParentDashboard() can restore the children panel.
+  if (id !== 'parent' && typeof PD !== 'undefined') {
+    const _pdInlineMap = { 'shop': 'shop', 'calendar': 'calendar', 'parent-messages': 'messages' };
+    if (_pdInlineMap[id] && !document.getElementById('screen-parent')?.classList.contains('hidden')) {
+      PD.mainTab(_pdInlineMap[id]);
+      return;
+    }
+  }
+
   // ── Adult-only screens ──
   // The mirror of _KID_ONLY_SCREENS above. The forum is for parents and
   // teachers: children do not need it, and a community board is not something
@@ -3210,6 +3222,13 @@ function _renderExpiredBanner(slotId) {
 
 async function renderParentDashboard() {
   const _el = id => document.getElementById(id);
+  // Reset to the My Children panel on every open
+  ['calendar','shop','messages','settings'].forEach(p =>
+    _el(`pd-panel-${p}`)?.classList.add('hidden'));
+  _el('pd-panel-children')?.classList.remove('hidden');
+  const _nav = document.querySelector('#screen-parent .teacher-navigation');
+  if (_nav) _nav.querySelectorAll('.ta-tab').forEach(btn =>
+    btn.setAttribute('aria-selected', btn.id === 'pd-tab-children' ? 'true' : 'false'));
   _renderShopChip();
   _renderExpiredBanner('pd-expired-slot');
   _refreshParentMessageBadge();
@@ -4537,6 +4556,62 @@ const PD = (() => {
   }
 
   // Load reminder when detail panel opens
+  const _mounted = {};
+  const _PD_PANELS = ['children', 'calendar', 'shop', 'messages', 'settings'];
+
+  function _mountPanel(name, srcId) {
+    if (_mounted[name]) return;
+    const dest = document.getElementById(`pd-panel-${name}`);
+    const src  = document.getElementById(srcId);
+    if (!dest || !src) return;
+    while (src.firstChild) dest.appendChild(src.firstChild);
+    _mounted[name] = true;
+  }
+
+  async function _activatePanel(name, scrollTo) {
+    switch (name) {
+      case 'calendar':
+        _mountPanel('calendar', 'screen-calendar');
+        if (typeof Calendar !== 'undefined') Calendar.render();
+        break;
+      case 'shop':
+        _mountPanel('shop', 'screen-shop');
+        renderShop();
+        break;
+      case 'messages':
+        _mountPanel('messages', 'screen-parent-messages');
+        renderParentMessages();
+        break;
+      case 'settings': {
+        const container = document.getElementById('pd-profile-content');
+        if (container) {
+          container.innerHTML = '<div class="flex justify-center py-10"><div class="w-8 h-8 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin"></div></div>';
+          await _renderParentProfile(container);
+          if (scrollTo) requestAnimationFrame(() =>
+            document.getElementById(scrollTo)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+        }
+        break;
+      }
+      case 'children':
+      default:
+        renderParentDashboard();
+    }
+  }
+
+  function mainTab(name, scrollTo) {
+    const nav = document.querySelector('#screen-parent .teacher-navigation');
+    if (nav) {
+      nav.querySelectorAll('.ta-tab').forEach(btn => {
+        const isMe = btn.id === `pd-tab-${name}`;
+        btn.setAttribute('aria-selected', isMe ? 'true' : 'false');
+      });
+    }
+    _PD_PANELS.forEach(p => {
+      document.getElementById(`pd-panel-${p}`)?.classList.toggle('hidden', p !== name);
+    });
+    _activatePanel(name, scrollTo);
+  }
+
   const _origSelectChild = selectChild;
   async function selectChildWithReminder(id) {
     await _origSelectChild(id);
@@ -4552,7 +4627,7 @@ const PD = (() => {
   }
 
   return { selectChild: selectChildWithReminder, closeDetail, pdTab, renderDetail,
-           saveReminder, clearReminder, refreshControls,
+           saveReminder, clearReminder, refreshControls, mainTab,
            renderLoginTab, openPinSetter, suggestLoginPin, saveLoginPin, copyLoginField,
            activeId: () => _activeId };
 })();
@@ -9937,6 +10012,13 @@ let _profileFromScreen = null;
 let _parentPrefs = {};
 
 async function showProfile() {
+  // When the parent dashboard is the current screen, render Settings inline
+  // instead of navigating to a separate screen.
+  if (_isParentSession() && !document.getElementById('screen-parent')?.classList.contains('hidden')
+      && typeof PD !== 'undefined') {
+    PD.mainTab('settings');
+    return;
+  }
   _profileFromScreen = S.currentScreen;
   showScreen('profile');
   const container = document.getElementById('profile-content');
@@ -9958,10 +10040,14 @@ async function showProfile() {
 // generic account screen. This shortcut opens the exact card that creates the
 // one-use co-parent link.
 async function openCoparentSettings() {
-  await showProfile();
-  requestAnimationFrame(() => {
-    document.getElementById('coparent-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+  if (document.getElementById('pd-panel-settings')) {
+    PD.mainTab('settings', 'coparent-card');
+  } else {
+    await showProfile();
+    requestAnimationFrame(() => {
+      document.getElementById('coparent-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 }
 
 function _isParentSession() {

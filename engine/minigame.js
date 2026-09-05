@@ -663,6 +663,7 @@ const MiniGames = (() => {
     _sfx.correct();
     _flashLadder();
     const safeNow = SAFE.includes(_g.rung);
+    _showPrizeFlash(PRIZES[_g.rung], safeNow);
     _msg(`✅ <b>Correct!</b> You've won <b>${_money(PRIZES[_g.rung])}</b>!${safeNow ? ' 🔒 This prize is now guaranteed!' : ''}`);
     if (_g.rung >= 9 && typeof launchConfetti === 'function') launchConfetti(40 + _g.rung * 8);
     _g.rung++;
@@ -752,6 +753,16 @@ const MiniGames = (() => {
   function _msg(html) {
     const m = $('mg-msg');
     if (m) { m.innerHTML = html; m.classList.remove('hidden'); }
+  }
+
+  function _showPrizeFlash(prize, isSafe) {
+    const el = document.createElement('div');
+    el.className = 'bq-prize-flash';
+    el.innerHTML = `<div class="bq-pf-label">✅ Correct! You won</div>
+      <div class="bq-pf-amount">${_money(prize)}</div>
+      ${isSafe ? '<div class="bq-pf-safe">🔒 This prize is now guaranteed!</div>' : ''}`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2000);
   }
 
   // ── Lifelines ──────────────────────────────────
