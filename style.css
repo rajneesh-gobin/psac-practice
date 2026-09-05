@@ -2761,128 +2761,218 @@ html.dark select optgroup {
 .dark .coach-kicker { color:#c7d2fe; }
 .dark .coach-note, .dark .coach-topic small { color:#cbd5e1; }
 /* ══ Teacher Screen ══════════════════════════════════════════════════ */
+/* ══ Teacher workspace — classroom theme ═══════════════════════════ */
 #screen-teacher {
-  background: #f0f7ff;
+  background: #f2ebe0;
   min-height: 100vh;
   padding: 0 0 4rem;
 }
-.dark #screen-teacher { background: #0f1623; }
+.dark #screen-teacher { background: #1a1208; }
 
-/* Teacher screen header */
 #screen-teacher > .flex { margin-bottom: .5rem; }
 #screen-teacher h2 {
   font-family: 'Caveat', cursive;
-  font-size: 1.9rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: #1e3a5f;
+  color: #2a4d28;
+  letter-spacing: .01em;
 }
-.dark #screen-teacher h2 { color: #bfdbfe; }
+.dark #screen-teacher h2 { color: #86efac; }
 
 #screen-teacher .teacher-intro {
   font-size: .95rem;
   line-height: 1.6;
-  color: #475569;
+  color: #5c4a2a;
   margin: .4rem 0 .8rem;
 }
-.dark #screen-teacher .teacher-intro { color: #94a3b8; }
+.dark #screen-teacher .teacher-intro { color: #a3855a; }
 
-/* ── Pill tab navigation ─────────────────────────────────────────── */
+/* ── Chalkboard tab navigation ───────────────────────────────────── */
 #screen-teacher .teacher-navigation {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 1rem 0 .5rem;
-  align-items: center;
+  gap: 2px;
+  align-items: flex-end;
+  background: linear-gradient(180deg, #2a4d28 0%, #1c3619 100%);
+  border-radius: 8px 8px 0 0;
+  padding: 10px 10px 0;
+  margin: 1.2rem 0 0;
+  box-shadow:
+    0 -1px 0 #4a7a40 inset,
+    0 4px 0 #3d2208;
+  position: relative;
+}
+/* chalk tray bottom ledge */
+#screen-teacher .teacher-navigation::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(to bottom, #5c3810, #3a2008);
+  border-radius: 0 0 3px 3px;
 }
 
 #screen-teacher .ta-tab {
   position: relative;
-  padding: .5rem 1.1rem;
+  padding: .55rem 1.2rem .5rem;
   border: none;
-  border-radius: 999px;
-  text-align: center;
-  background: #e2e8f0;
-  color: #475569;
+  border-radius: 5px 5px 0 0;
+  background: rgba(255,255,255,.06);
+  color: rgba(240,236,220,.5);
   cursor: pointer;
-  font-size: .9rem;
-  font-weight: 600;
-  transition: background .15s, color .15s;
-  min-width: 80px;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  transition: background .14s, color .14s;
+  min-width: 72px;
+  text-align: center;
+  margin-bottom: 0;
 }
 #screen-teacher .ta-tab strong {
   display: block;
-  font-size: .9rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Caveat', cursive;
   line-height: 1.2;
 }
 #screen-teacher .ta-tab span { display: none; }
-#screen-teacher .ta-tab:hover { background: #cbd5e1; color: #1e3a5f; }
-#screen-teacher .ta-tab[aria-selected="true"] {
-  background: #2563eb;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(37,99,235,.3);
+#screen-teacher .ta-tab:hover {
+  background: rgba(255,255,255,.12);
+  color: rgba(240,236,220,.85);
 }
-.dark #screen-teacher .ta-tab { background: #1e293b; color: #94a3b8; }
-.dark #screen-teacher .ta-tab[aria-selected="true"] { background: #2563eb; color: #fff; }
+#screen-teacher .ta-tab[aria-selected="true"] {
+  background: #f2ebe0;
+  color: #2a4d28;
+  box-shadow: 0 -2px 0 #4a7a40 inset;
+  z-index: 2;
+}
+.dark #screen-teacher .ta-tab { background: rgba(0,0,0,.2); color: rgba(200,220,180,.4); }
+.dark #screen-teacher .ta-tab[aria-selected="true"] { background: #1a1208; color: #86efac; }
 
-/* ── Tab content panels ──────────────────────────────────────────── */
+/* ── Tab content panels — notebook paper ─────────────────────────── */
 #screen-teacher .ta-tab-content {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1.4rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  background: #fefcf7;
+  /* faint ruled horizontal lines + left margin line */
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 31px,
+      rgba(100,150,255,.18) 31px, rgba(100,150,255,.18) 32px
+    ),
+    linear-gradient(to right,
+      transparent 52px,
+      rgba(210,70,70,.3) 52px, rgba(210,70,70,.3) 53px,
+      transparent 53px
+    );
+  border-radius: 0 8px 8px 8px;
+  padding: 1.6rem 1.4rem 1.4rem 1.4rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,.1), 0 1px 0 rgba(45,90,35,.15);
   line-height: 1.6;
   position: relative;
-  margin-top: .5rem;
+  margin-top: 4px;
+  border: 1px solid rgba(150,120,60,.2);
+  border-top: none;
 }
 .dark #screen-teacher .ta-tab-content {
-  background: #1e293b;
-  color: #e2e8f0;
+  background: #1e1a12;
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 31px,
+      rgba(80,120,200,.12) 31px, rgba(80,120,200,.12) 32px
+    ),
+    linear-gradient(to right,
+      transparent 52px,
+      rgba(180,60,60,.25) 52px, rgba(180,60,60,.25) 53px,
+      transparent 53px
+    );
+  border-color: rgba(80,60,20,.4);
+  color: #e8dcc8;
 }
 
-/* ── Access-mode help text ───────────────────────────────────────── */
+/* ── Access-mode help text — chalk note ──────────────────────────── */
 #ta-access-help {
-  font-size: .82rem;
-  color: #2563eb;
-  background: #eff6ff;
-  border-radius: 8px;
-  padding: .45rem .75rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  color: #1c3619;
+  background: rgba(200,240,180,.4);
+  border: 1.5px solid rgba(70,130,60,.35);
+  border-radius: 6px;
+  padding: .4rem .8rem;
   margin: .3rem 0 .6rem;
   line-height: 1.5;
 }
-.dark #ta-access-help { color: #93c5fd; background: #1e2d4a; }
+.dark #ta-access-help { color: #86efac; background: rgba(30,60,25,.5); border-color: rgba(70,130,60,.4); }
 #ta-access-help.hidden { display: none; }
 
-/* ── Step labels (1, 2, 3 inside create form) ────────────────────── */
+/* ── Step labels — chalk circles ─────────────────────────────────── */
 #screen-teacher .teacher-step {
   display: flex;
-  gap: .6rem;
+  gap: .7rem;
   align-items: center;
-  font-size: 1rem;
   font-weight: 700;
-  color: #2563eb;
-  padding: .4rem 0;
-  margin: 1.1rem 0 .6rem;
-  border-bottom: 1.5px solid #dbeafe;
+  color: #2a4d28;
+  padding: .3rem 0 .6rem;
+  margin: 1.2rem 0 .6rem;
+  border-bottom: 1.5px solid rgba(42,77,40,.2);
+  font-family: 'Caveat', cursive;
+  font-size: 1.15rem;
 }
-#screen-teacher .teacher-step span { color: #1e3a5f; }
-.dark #screen-teacher .teacher-step { color: #60a5fa; border-color: rgba(96,165,250,.2); }
-.dark #screen-teacher .teacher-step span { color: #e2e8f0; }
+/* The step number — chalk circle */
+#screen-teacher .teacher-step::before {
+  content: attr(data-step);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2a4d28;
+  color: #f0ece0;
+  font-size: 1rem;
+  font-weight: 800;
+  font-family: 'Caveat', cursive;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(240,236,220,.3), 0 2px 4px rgba(0,0,0,.2);
+}
+#screen-teacher .teacher-step span { color: #3d2208; font-size: 1.05rem; }
+.dark #screen-teacher .teacher-step { color: #86efac; border-color: rgba(134,239,172,.2); }
+.dark #screen-teacher .teacher-step::before { background: #86efac; color: #1a1208; }
+.dark #screen-teacher .teacher-step span { color: #e8dcc8; }
 
-/* ── Tip box ─────────────────────────────────────────────────────── */
+/* ── Tip box — yellow sticky note ───────────────────────────────── */
 #screen-teacher .teacher-tip {
-  background: #eff6ff;
-  color: #1e40af;
-  border-left: 4px solid #2563eb;
-  border-radius: 0 8px 8px 0;
-  padding: .85rem 1rem;
+  background: linear-gradient(160deg, #fef9c3 0%, #fef08a 100%);
+  color: #713f12;
+  border-radius: 4px 12px 12px 4px;
+  padding: .9rem 1.1rem .9rem 1.4rem;
   font-size: .88rem;
   margin: .8rem 0;
+  position: relative;
+  box-shadow: 2px 3px 8px rgba(0,0,0,.12), -1px -1px 0 rgba(234,179,8,.3) inset;
+}
+/* Corner fold */
+#screen-teacher .teacher-tip::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 18px; height: 18px;
+  background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,.1) 50%);
+  border-radius: 0 0 12px 0;
+}
+/* Thumbtack pin */
+#screen-teacher .teacher-tip::before {
+  content: '📌';
+  position: absolute;
+  top: -10px; left: 10px;
+  font-size: 1.2rem;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.3));
 }
 .dark #screen-teacher .teacher-tip {
-  background: #1e2d4a;
-  color: #93c5fd;
-  border-left-color: #3b82f6;
+  background: linear-gradient(160deg, #3b2f02 0%, #4a3a05 100%);
+  color: #fde68a;
+  box-shadow: 2px 3px 8px rgba(0,0,0,.3);
 }
 
 /* ── Create classroom input row ──────────────────────────────────── */
@@ -2894,13 +2984,140 @@ html.dark select optgroup {
   padding: .8rem 0;
 }
 #screen-teacher .teacher-class-create input { flex: 1; min-width: 150px; }
-#screen-teacher input:not([type=checkbox]), #screen-teacher select { min-height: 44px; }
-#screen-teacher button:focus-visible, .coach-card button:focus-visible {
-  outline: 3px solid #2563eb;
+
+/* ── All inputs & selects — pencil-on-paper style ────────────────── */
+#screen-teacher input:not([type=checkbox]),
+#screen-teacher select {
+  min-height: 44px;
+  border: none !important;
+  border-bottom: 2px solid #94a3b8 !important;
+  border-radius: 0 !important;
+  background: rgba(255,255,255,.6) !important;
+  padding: .5rem .3rem !important;
+  font-size: 1rem;
+  color: #1e3a1c;
+  transition: border-color .15s;
+  outline: none !important;
+  box-shadow: none !important;
+}
+#screen-teacher input:not([type=checkbox]):focus,
+#screen-teacher select:focus {
+  border-bottom-color: #2a4d28 !important;
+  background: rgba(255,255,255,.85) !important;
+}
+#screen-teacher input::placeholder { color: #94a3b8; font-style: italic; }
+.dark #screen-teacher input:not([type=checkbox]),
+.dark #screen-teacher select {
+  border-bottom-color: #4b5563 !important;
+  background: rgba(0,0,0,.2) !important;
+  color: #e8dcc8;
+}
+.dark #screen-teacher input:not([type=checkbox]):focus,
+.dark #screen-teacher select:focus {
+  border-bottom-color: #86efac !important;
+  background: rgba(0,0,0,.3) !important;
+}
+
+/* The "topics" checkbox grid keeps its box style */
+#ta-chapter-opts-container {
+  background: rgba(255,255,255,.7) !important;
+  border: 1.5px solid rgba(150,120,60,.25) !important;
+  border-radius: 8px !important;
+}
+.dark #ta-chapter-opts-container {
+  background: rgba(0,0,0,.3) !important;
+  border-color: rgba(80,60,20,.4) !important;
+}
+
+#screen-teacher button:focus-visible,
+.coach-card button:focus-visible {
+  outline: 3px solid #2a4d28;
   outline-offset: 3px;
 }
 
-/* ── Assignment cards ────────────────────────────────────────────── */
+/* ── Primary chalkboard button (Generate Link) ───────────────────── */
+#ta-build-btn {
+  width: 100%;
+  padding: .85rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: #f0ece0;
+  background: linear-gradient(160deg, #2a4d28 0%, #1c3619 100%);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 0 #0f2010,
+    0 6px 12px rgba(0,0,0,.2);
+  transition: transform .1s, box-shadow .1s;
+  text-shadow: 0 0 12px rgba(240,236,220,.25), 1px 1px 0 rgba(0,0,0,.4);
+  position: relative;
+  overflow: hidden;
+}
+#ta-build-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    92deg,
+    transparent 0px, transparent 4px,
+    rgba(255,255,255,.025) 4px, rgba(255,255,255,.025) 5px
+  );
+  pointer-events: none;
+}
+#ta-build-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #0f2010, 0 10px 18px rgba(0,0,0,.25);
+}
+#ta-build-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #0f2010, 0 3px 6px rgba(0,0,0,.15);
+}
+
+/* ── Pencil-style button (Create classroom / Upload) ─────────────── */
+.ta-btn-pencil {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .6rem 1.2rem;
+  background: linear-gradient(160deg, #e5bd3a 0%, #c89e20 100%);
+  color: #2d1f04;
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #8a6a10, 0 4px 8px rgba(0,0,0,.15);
+  transition: transform .1s, box-shadow .1s;
+  letter-spacing: .01em;
+}
+.ta-btn-pencil:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #8a6a10, 0 6px 12px rgba(0,0,0,.18); }
+.ta-btn-pencil:active { transform: translateY(1px); box-shadow: 0 1px 0 #8a6a10; }
+
+/* ── Eraser-style button (Refresh / secondary) ───────────────────── */
+.ta-btn-eraser {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .55rem 1rem;
+  background: linear-gradient(160deg, #e8c8c0 0%, #d4a89c 100%);
+  color: #4a2020;
+  font-family: 'Caveat', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #a06860, 0 4px 8px rgba(0,0,0,.12);
+  transition: transform .1s, box-shadow .1s;
+}
+.ta-btn-eraser:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #a06860, 0 6px 12px rgba(0,0,0,.15); }
+.ta-btn-eraser:active { transform: translateY(1px); box-shadow: 0 1px 0 #a06860; }
+
+/* ── Assignment cards — exercise book covers ─────────────────────── */
 .ta-copybook-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -2912,62 +3129,90 @@ html.dark select optgroup {
   position: relative;
   width: 180px;
   min-height: 220px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.1);
+  background: #fefcf7;
+  border-radius: 3px 10px 10px 3px;
+  box-shadow:
+    0 3px 10px rgba(0,0,0,.14),
+    2px 0 0 rgba(0,0,0,.06) inset;
   cursor: pointer;
   transition: transform .15s, box-shadow .15s;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(150,120,60,.2);
 }
 .ta-copybook:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(37,99,235,.15);
-  border-color: #2563eb;
+  transform: translateY(-4px) rotate(.5deg);
+  box-shadow: 0 10px 24px rgba(42,77,40,.2), 2px 0 0 rgba(0,0,0,.06) inset;
 }
-.dark .ta-copybook { background: #1e293b; border-color: #334155; }
-.dark .ta-copybook:hover { border-color: #2563eb; }
+.dark .ta-copybook {
+  background: #1e1a12;
+  border-color: rgba(80,60,20,.4);
+}
 
-/* Accent bar on the left */
+/* Coloured spine on the left — cycles through subject colours */
 .ta-copybook::before {
   content: '';
   position: absolute;
-  top: 0; bottom: 0;
-  left: 0;
-  width: 4px;
-  background: linear-gradient(180deg, #2563eb, #7c3aed);
-  border-radius: 0;
+  top: 0; bottom: 0; left: 0;
+  width: 8px;
+  background: linear-gradient(180deg, #2a4d28, #1c3619);
+  border-radius: 3px 0 0 3px;
+}
+.ta-copybook:nth-child(4n+1)::before { background: linear-gradient(180deg,#2a4d28,#1c3619); }
+.ta-copybook:nth-child(4n+2)::before { background: linear-gradient(180deg,#1e3a8a,#1e2d70); }
+.ta-copybook:nth-child(4n+3)::before { background: linear-gradient(180deg,#7c2d12,#5a1a08); }
+.ta-copybook:nth-child(4n+0)::before { background: linear-gradient(180deg,#713f12,#5a2e08); }
+
+/* Spiral binding holes */
+.ta-copybook::after {
+  content: '';
+  position: absolute;
+  top: 12px; bottom: 12px; left: 2px;
+  width: 8px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 14px,
+    rgba(0,0,0,.25) 14px, rgba(0,0,0,.25) 20px,
+    transparent 20px, transparent 22px
+  );
+  pointer-events: none;
 }
 
-.ta-copybook::after { display: none; }
+.ta-copybook-fold { display: none; }
 
 .ta-copybook-page {
   position: relative;
   flex: 1;
-  padding: 12px 10px 8px 16px;
+  padding: 12px 10px 8px 18px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px, transparent 19px,
+    rgba(100,150,255,.18) 19px, rgba(100,150,255,.18) 20px
+  );
 }
 
 .ta-copybook-subject {
-  font-size: .72rem;
-  color: #2563eb;
+  font-family: 'Caveat', cursive;
+  font-size: .85rem;
+  color: #2a4d28;
   font-weight: 700;
   letter-spacing: .04em;
   margin-bottom: 2px;
   text-transform: uppercase;
 }
-.dark .ta-copybook-subject { color: #60a5fa; }
+.dark .ta-copybook-subject { color: #86efac; }
 
 .ta-copybook-title {
-  font-size: 1rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: #1e3a5f;
+  color: #1e3a1c;
   line-height: 1.3;
   margin-bottom: 6px;
   word-break: break-word;
 }
-.dark .ta-copybook-title { color: #e2e8f0; }
+.dark .ta-copybook-title { color: #e8dcc8; }
 
 .ta-copybook-meta {
   font-size: .82rem;
@@ -2978,11 +3223,12 @@ html.dark select optgroup {
 .dark .ta-copybook-meta { color: #94a3b8; }
 
 .ta-copybook-status {
-  font-size: .72rem;
+  font-family: 'Caveat', cursive;
+  font-size: .82rem;
   font-weight: 700;
   margin-top: 6px;
-  padding: 2px 8px;
-  border-radius: 10px;
+  padding: 2px 10px;
+  border-radius: 4px;
   display: inline-block;
   background: #dcfce7;
   color: #166534;
@@ -2993,29 +3239,28 @@ html.dark select optgroup {
 .ta-copybook-actions {
   display: flex;
   gap: 0;
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
+  border-top: 1px solid rgba(150,120,60,.2);
+  background: rgba(242,235,224,.8);
 }
-.dark .ta-copybook-actions { border-color: #334155; background: #0f172a; }
+.dark .ta-copybook-actions { border-color: rgba(80,60,20,.3); background: rgba(0,0,0,.2); }
 .ta-copybook-actions button {
   flex: 1;
-  font-size: .8rem;
-  font-weight: 600;
-  color: #2563eb;
+  font-family: 'Caveat', cursive;
+  font-size: .9rem;
+  font-weight: 700;
+  color: #2a4d28;
   background: none;
   border: none;
   padding: 7px 4px;
   cursor: pointer;
-  border-right: 1px solid #e2e8f0;
+  border-right: 1px solid rgba(150,120,60,.2);
   transition: background .12s;
 }
-.dark .ta-copybook-actions button { color: #60a5fa; border-color: #334155; }
+.dark .ta-copybook-actions button { color: #86efac; border-color: rgba(80,60,20,.3); }
 .ta-copybook-actions button:last-child { border-right: none; }
-.ta-copybook-actions button:hover { background: #eff6ff; }
-.dark .ta-copybook-actions button:hover { background: #1e293b; }
+.ta-copybook-actions button:hover { background: rgba(42,77,40,.1); }
+.dark .ta-copybook-actions button:hover { background: rgba(134,239,172,.08); }
 .ta-copybook-actions button:disabled { color: #94a3b8; cursor: default; }
-
-.ta-copybook-fold { display: none; }
 
 .ta-copybook-date {
   position: absolute;
@@ -3025,20 +3270,21 @@ html.dark select optgroup {
 }
 
 .ta-copybook-class {
-  font-size: .72rem;
-  color: #1d4ed8;
-  background: #dbeafe;
-  border-radius: 8px;
+  font-family: 'Caveat', cursive;
+  font-size: .82rem;
+  color: #2a4d28;
+  background: rgba(42,77,40,.12);
+  border-radius: 4px;
   padding: 1px 7px;
   margin-bottom: 4px;
   display: inline-block;
 }
 
-@media(max-width:700px) {
-  #screen-teacher .teacher-navigation { gap: 4px; }
-  #screen-teacher .ta-tab { min-width: 72px; padding: .45rem .7rem; }
+@media (max-width:700px) {
+  #screen-teacher .teacher-navigation { gap: 2px; }
+  #screen-teacher .ta-tab { min-width: 60px; padding: .45rem .7rem .4rem; font-size: .95rem; }
   .ta-copybook { width: 158px; min-height: 200px; }
-  .ta-copybook-title { font-size: .95rem; }
+  .ta-copybook-title { font-size: 1rem; }
   .ta-copybook-wrap { gap: 12px; }
 }
 .coach-card.hidden { display:none !important; }
@@ -3738,100 +3984,155 @@ html:not(.dark) :is(button,a,input,select,textarea,summary):focus-visible { outl
   .mg-card-go, .mg-card-lock { margin-left:auto; }
 }
 
-/* ── No-classroom notice ─────────────────────────────────────────── */
+/* ── No-classroom notice — cork pin style ────────────────────────── */
 .ta-no-classroom-notice {
   position: relative;
-  background: #fff;
-  border-radius: 12px;
+  background: linear-gradient(160deg, #fef9c3 0%, #fef08a 100%);
+  border-radius: 4px 12px 12px 4px;
   padding: 2rem 1.6rem 1.6rem;
   text-align: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  box-shadow: 2px 4px 12px rgba(0,0,0,.15);
   margin-bottom: 1rem;
-  border: 1px solid #e2e8f0;
 }
-.ta-thumbtack { display: none; }
-.ta-thumbtack::after { display: none; }
-.ta-notice-pin-icon { font-size: 2rem; margin-bottom: .5rem; }
+.ta-thumbtack {
+  display: block;
+  position: absolute;
+  top: -12px; left: 50%;
+  transform: translateX(-50%);
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f44 0%, #c00 55%, #800 100%);
+  box-shadow: 0 2px 5px rgba(0,0,0,.4), 0 -1px 0 rgba(255,255,255,.25) inset;
+  z-index: 2;
+}
+.ta-thumbtack::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 18px; left: 50%;
+  transform: translateX(-50%);
+  width: 2px; height: 10px;
+  background: linear-gradient(to bottom, #888, #555);
+}
+.ta-notice-pin-icon { display: none; }
 .ta-notice-title {
-  font-size: 1.25rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: #1e3a5f;
+  color: #713f12;
   margin-bottom: .4rem;
 }
 .ta-notice-body {
   font-size: .95rem;
-  color: #475569;
+  color: #92400e;
   line-height: 1.5;
   margin-bottom: 1.2rem;
 }
 .ta-notice-btn {
-  background: #2563eb;
-  color: #fff;
+  background: linear-gradient(160deg, #2a4d28 0%, #1c3619 100%);
+  color: #f0ece0;
+  font-family: 'Caveat', cursive;
+  font-size: 1.1rem;
+  font-weight: 700;
   border: none;
-  border-radius: 8px;
-  padding: .65rem 1.4rem;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 5px;
+  padding: .6rem 1.4rem;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(37,99,235,.3);
-  transition: background .15s, transform .1s;
+  box-shadow: 0 3px 0 #0f2010, 0 5px 10px rgba(0,0,0,.2);
+  transition: transform .1s, box-shadow .1s;
+  letter-spacing: .01em;
 }
-.ta-notice-btn:hover { background: #1d4ed8; transform: translateY(-1px); }
-.dark .ta-no-classroom-notice { background: #1e293b; border-color: #334155; }
-.dark .ta-notice-title { color: #bfdbfe; }
-.dark .ta-notice-body { color: #94a3b8; }
+.ta-notice-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 0 #0f2010, 0 8px 14px rgba(0,0,0,.25); }
+.dark .ta-no-classroom-notice {
+  background: linear-gradient(160deg, #3b2f02 0%, #4a3a05 100%);
+}
+.dark .ta-notice-title { color: #fde68a; }
+.dark .ta-notice-body { color: #fef3c7; }
 
-/* ── Classroom chip picker (Step 1 of Set Work) ───────────────────── */
+/* ── Classroom chip picker — mini chalkboard labels ──────────────── */
 .ta-class-picker-wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 1rem;
 }
+
 .ta-class-chip {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  padding: .55rem .9rem;
-  border-radius: 10px;
-  border: 2px solid #e2e8f0;
-  background: #f8fafc;
+  padding: .6rem 1rem;
+  border-radius: 4px;
+  border: 2px solid rgba(42,77,40,.3);
+  background: linear-gradient(160deg, #2a4d28 0%, #1c3619 100%);
   cursor: pointer;
-  transition: border-color .14s, background .14s, transform .1s;
+  transition: transform .12s, box-shadow .12s;
   text-align: left;
+  box-shadow: 0 2px 0 #0f2010, 0 3px 6px rgba(0,0,0,.15);
+  position: relative;
+  overflow: hidden;
+}
+/* chalk texture */
+.ta-class-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    92deg, transparent 0, transparent 5px,
+    rgba(255,255,255,.02) 5px, rgba(255,255,255,.02) 6px
+  );
+  pointer-events: none;
 }
 .ta-class-chip:hover {
-  border-color: #93c5fd;
-  background: #eff6ff;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 #0f2010, 0 6px 12px rgba(0,0,0,.2);
 }
 .ta-class-chip-sel {
-  border-color: #2563eb !important;
-  background: #eff6ff !important;
-  box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important;
+  border-color: #e5bd3a !important;
+  box-shadow: 0 2px 0 #8a6a10, 0 0 0 3px rgba(229,189,58,.25) !important;
 }
+
 .ta-chip-name {
-  font-size: 1rem;
+  font-family: 'Caveat', cursive;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: #1e3a5f;
+  color: #f0ece0;
   line-height: 1.2;
+  position: relative;
+  text-shadow: 0 0 8px rgba(240,236,220,.2), 1px 1px 0 rgba(0,0,0,.4);
 }
-.ta-chip-pupils { font-size: .78rem; color: #64748b; }
-.ta-class-chip-sel .ta-chip-name { color: #1d4ed8; }
-.dark .ta-class-chip { background: #1e293b; border-color: #334155; }
-.dark .ta-class-chip:hover { background: #1e2d4a; border-color: #3b82f6; }
-.dark .ta-class-chip-sel { background: #1e2d4a !important; border-color: #2563eb !important; }
-.dark .ta-chip-name { color: #bfdbfe; }
-.dark .ta-chip-pupils { color: #94a3b8; }
+.ta-chip-pupils {
+  font-family: 'Caveat', cursive;
+  font-size: .82rem;
+  color: rgba(200,220,180,.6);
+  position: relative;
+}
+.ta-class-chip-sel .ta-chip-name { color: #fef9c3; }
+.ta-class-chip-sel .ta-chip-pupils { color: rgba(254,249,195,.7); }
+
+/* Open-link chip differs — lighter/cream */
+.ta-class-chip[data-cid=""] {
+  background: linear-gradient(160deg, #f2ebe0 0%, #e8dcc8 100%);
+  border-color: rgba(100,70,30,.3);
+  box-shadow: 0 2px 0 #8a6040, 0 3px 6px rgba(0,0,0,.1);
+}
+.ta-class-chip[data-cid=""] .ta-chip-name { color: #3d2208; text-shadow: none; }
+.ta-class-chip[data-cid=""] .ta-chip-pupils { color: #78583c; }
+.ta-class-chip[data-cid=""].ta-class-chip-sel {
+  border-color: #2a4d28 !important;
+  box-shadow: 0 2px 0 #0f2010, 0 0 0 3px rgba(42,77,40,.2) !important;
+}
+
 .ta-chip-hint {
   width: 100%;
-  font-size: .82rem;
-  color: #64748b;
+  font-family: 'Caveat', cursive;
+  font-size: .95rem;
+  color: #5c4a2a;
   padding: .35rem .2rem 0;
   line-height: 1.5;
 }
-.dark .ta-chip-hint { color: #94a3b8; }
+.dark .ta-chip-hint { color: #a3855a; }
 
 /* Tab content must stay hidden when .hidden is present — defensive override
    because style.css loads after the Tailwind CDN and a display rule here
@@ -4136,8 +4437,8 @@ html:not(.dark) :is(button,a,input,select,textarea,summary):focus-visible { outl
   align-items: center;
   gap: .8rem;
   padding: .75rem 1.2rem;
-  background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 100%);
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  background: linear-gradient(135deg, #2a4d28 0%, #1c3619 100%);
+  box-shadow: 0 2px 8px rgba(0,0,0,.2), 0 3px 0 #0f2010;
   flex-shrink: 0;
 }
 .tc-cd-back {
