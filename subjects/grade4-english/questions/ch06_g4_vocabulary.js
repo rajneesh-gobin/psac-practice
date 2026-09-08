@@ -127,7 +127,7 @@ STATIC_QUESTIONS.push(
     question:'What does the prefix "pre-" mean in the word "preview"?',
     options:['not','again','before','after'],
     answer:'before',
-    hint:'A preview lets you see something BEFORE it is officially released.',
+    hint:'A preview happens ahead of the main event. What does "pre-" do to the word it joins?',
     explanation:'"<b>pre-</b>" means <b>before</b>. Preview = view before. Other pre- words: prepay (pay before), prepare (get ready before), prehistoric (before history), predict (say before it happens). Compare: pre- (before) vs re- (again) vs un- (not).' }),
 
   makeMCQ({ id:'g4eng-vocab-017', chapterId:'g4eng-vocabulary', subsection:'antonyms', difficulty:2,

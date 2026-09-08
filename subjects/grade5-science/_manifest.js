@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Trailing comments are the count at generation time.
 const G5SC_SYLLABUS = {
   'plants': { subsections: [
@@ -64,26 +64,43 @@ registerSubject({
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: false, noDifficulty: true,
   syllabus: G5SC_SYLLABUS,
+  // examWeight is a chapter's share of a 40-question exam. These are measured
+  // from the real 2024 and 2025 papers, question by question: every
+  // mark goes to the chapter that teaches it. Papers used: 2024 and 2025 (50 marks each).
+  //
+  //   electricity            20 marks   20.0%  ->  weight 8
+  //   energy                 20 marks   20.0%  ->  weight 8
+  //   plants                 19 marks   19.0%  ->  weight 7
+  //   water-matter           18 marks   18.0%  ->  weight 7
+  //   conservation            9 marks    9.0%  ->  weight 4
+  //   animals                 9 marks    9.0%  ->  weight 3
+  //   g5sci-enr-endemic       5 marks    5.0%  ->  weight 2
+  //
+  //   g5sci-enr-energy    not scored           ->  weight 1
+  //
+  // ⚠ g5sci-enr-energy scores nothing directly - its content is inside the
+  // core energy chapter, which earns 20%. It keeps the floor of 1.
+  // scripts/test-exam-paper-shape.js holds the delivered mix against these.
   chapters: [
-    { id: 'plants',           name: 'Plants',                              icon: '🌱', examWeight: 4,
+    { id: 'plants',           name: 'Plants',                              icon: '🌱', examWeight: 7,
       syllabus: 'Flowering and non-flowering plants. Parts of a plant (root, stem, leaf, flower, fruit, seed) and their functions. Functions of root and stem (absorb/transport water). Germination - conditions needed. Conditions for plants to grow well. Soil erosion: causes and measures.' },
-    { id: 'animals',          name: 'Animals & Habitats',                  icon: '🐾', examWeight: 4,
+    { id: 'animals',          name: 'Animals & Habitats',                  icon: '🐾', examWeight: 3,
       syllabus: 'Different habitats and the animals that live in them. Endangered and rare animals of Mauritius and Rodrigues (Dodo, Pink Pigeon, Echo Parakeet, Rodrigues Solitaire). Endemic animals. Measures to protect endangered animals. Nature reserves.' },
-    { id: 'energy',           name: 'Energy Sources',                      icon: '⚡', examWeight: 4,
+    { id: 'energy',           name: 'Energy Sources',                      icon: '⚡', examWeight: 8,
       syllabus: 'Types of energy: solar (sun), wind, water, fossil fuels (petrol, coal). Renewable vs non-renewable energy sources. Energy transformation (one form to another). Ways to conserve energy. Solar panels. Thermal power stations.' },
-    { id: 'water-matter',     name: 'Water & States of Matter',            icon: '💧', examWeight: 3,
+    { id: 'water-matter',     name: 'Water & States of Matter',            icon: '💧', examWeight: 7,
       syllabus: 'Three states of matter: solid, liquid, gas. Changes of state: melting (solid→liquid), freezing (liquid→solid), boiling/evaporation (liquid→gas), condensation (gas→liquid). Temperature and state changes. Water cycle. Conserving water.' },
-    { id: 'electricity',      name: 'Simple Electric Circuit',             icon: '🔋', examWeight: 3,
+    { id: 'electricity',      name: 'Simple Electric Circuit',             icon: '🔋', examWeight: 8,
       syllabus: 'Components of a simple circuit: battery, bulb, wire, switch. Open and closed circuits. Conductors and insulators. Safety with electricity.' },
-    { id: 'conservation',     name: 'Protection & Conservation',           icon: '♻️', examWeight: 2,
+    { id: 'conservation',     name: 'Protection & Conservation',           icon: '♻️', examWeight: 4,
       syllabus: 'Importance of protecting the environment. Pollution: types (water, air, land), causes and effects. Ways to protect and conserve habitats. Recycling. Deforestation and consequences.' },
 
     // ── ENRICHMENT ────────────────────────────────────────────────────────────────
-    // @enrichment — These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
-    // DO NOT remove during syllabus alignment audits — they are intentional bonus content.
+    // @enrichment - These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
+    // DO NOT remove during syllabus alignment audits - they are intentional bonus content.
     { id: 'g5sci-enr-endemic', name: 'Mauritius Endemic Species',  icon: '🦜', enrichment: true, examWeight: 2,
-      enrichmentNote: 'Photo identification of rare and endemic Mauritius animals and plants — derived from the Animals & Habitats and Conservation chapters.' },
-    { id: 'g5sci-enr-energy',  name: 'Energy Sources in Pictures', icon: '⚡', enrichment: true, examWeight: 2,
-      enrichmentNote: 'Identify renewable and non-renewable energy sources by photo — derived from the Energy Sources chapter.' },
+      enrichmentNote: 'Rare and endemic Mauritian animals and plants - identified from photographs, plus habitats, adaptation and the conservation work that protects them - derived from the Animals & Habitats and Conservation chapters.' },
+    { id: 'g5sci-enr-energy',  name: 'Energy Sources & Transformations', icon: '⚡', enrichment: true, examWeight: 1,
+      enrichmentNote: 'Renewable and non-renewable energy sources, identified from photographs and named from description, plus the energy transformations behind them - derived from the Energy Sources chapter.' },
   ],
 });

@@ -49,7 +49,7 @@ STATIC_QUESTIONS.push(
     question:'Quel est le passé simple d\'AVOIR pour "elle" ?',
     options:['avait','a eu','eut','aurait'],
     answer:'eut',
-    hint:'Avoir est irrégulier. Radical = e- : j\'eus, tu eus, il/elle eut…',
+    hint:'« Avoir » est irrégulier au passé simple et son radical se réduit à une seule lettre. C\'est un temps simple : un seul mot, sans auxiliaire.',
     explanation:'Avoir → passé simple : j\'eus, tu eus, il/elle <b>eut</b>, nous eûmes, vous eûtes, ils/elles eurent. "Eut" est le passé simple de "il/elle a".' }),
 
   makeMCQ({ id:'g5fr-passe-simple-008', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:2,
@@ -63,7 +63,7 @@ STATIC_QUESTIONS.push(
     question:'Conjugue VENIR au passé simple pour "il" : Il ___ me voir.',
     options:['venait','est venu','vint','viendra'],
     answer:'vint',
-    hint:'Venir est irrégulier au passé simple. Radical = v- : il vint.',
+    hint:'« Venir » a un passé simple irrégulier en -in-. C\'est un temps simple : un seul mot, sans auxiliaire.',
     explanation:'Venir → passé simple : je vins, tu vins, il/elle <b>vint</b>, nous vînmes, vous vîntes, ils/elles vinrent. "Vint" est irrégulier - à apprendre par cœur.' }),
 
   makeTF({ id:'g5fr-passe-simple-010', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:2,
@@ -76,7 +76,7 @@ STATIC_QUESTIONS.push(
     question:'Quel est le passé simple de FAIRE pour "il" ?',
     options:['faisait','a fait','fit','ferait'],
     answer:'fit',
-    hint:'Faire est irrégulier. Radical = f- : je fis, tu fis, il fit…',
+    hint:'« Faire » est irrégulier : au passé simple son radical se réduit à une seule lettre. Cherche la forme la plus courte.',
     explanation:'Faire → passé simple : je fis, tu fis, il/elle <b>fit</b>, nous fîmes, vous fîtes, ils/elles firent. Mémorisez : être → fut, avoir → eut, faire → fit.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-012', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:3,
@@ -161,14 +161,14 @@ STATIC_QUESTIONS.push(
     question:'Conjuguez "voir" au passé simple pour "il" :',
     options:['il voyait','il verra','il vit','il voit'],
     answer:'il vit',
-    hint:'Voir est irrégulier : je vis, il vit.',
+    hint:'« Voir » est irrégulier au passé simple, et sa forme ressemble à celle d\'un autre verbe très courant.',
     explanation:'"<b>il vit</b>" - voir (irrégulier) : je vis, tu vis, il/elle <b>vit</b>, nous vîmes, vous vîtes, ils virent. Exemple classique : "Il vit la princesse et tomba amoureux."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-022', chapterId:'g5fr-passe-simple', subsection:'irreguliers', difficulty:2,
     question:'Conjuguez "faire" au passé simple pour "ils" :',
     options:['ils faisaient','ils feront','ils firent','ils faisèrent'],
     answer:'ils firent',
-    hint:'Faire est irrégulier : je fis, il fit, ils firent.',
+    hint:'À la 3e personne du pluriel, le passé simple se termine par -rent. Ajoute-la au radical irrégulier de « faire ».',
     explanation:'"<b>ils firent</b>" - faire (irrégulier) : je fis, tu fis, il fit, nous fîmes, vous fîtes, ils/elles <b>firent</b>. Exemple : "Ils firent le tour du monde en 80 jours."' }),
 
   makeTF({ id:'g5fr-passe-simple-023', chapterId:'g5fr-passe-simple', subsection:'irreguliers', difficulty:2,
@@ -181,7 +181,7 @@ STATIC_QUESTIONS.push(
     question:'Conjuguez "prendre" au passé simple pour "nous" :',
     options:['nous prenions','nous prîmes','nous prissions','nous avons pris'],
     answer:'nous prîmes',
-    hint:'Prendre est irrégulier : je pris, il prit, nous prîmes (accent circonflexe).',
+    hint:'Avec « nous » au passé simple, la terminaison porte un accent circonflexe. Le radical de « prendre » est irrégulier.',
     explanation:'"<b>nous prîmes</b>" - prendre (irrégulier) : je pris, tu pris, il prit, nous <b>prîmes</b>, vous prîtes, ils prirent. Note l\'accent circonflexe sur le i de prîmes/prîtes. Même conjugaison : apprendre → nous apprîmes, comprendre → nous comprîmes.' }),
 
   makeMCQ({ id:'g5fr-passe-simple-025', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:2,
@@ -201,14 +201,14 @@ STATIC_QUESTIONS.push(
     question:'Conjuguez "pouvoir" au passé simple pour "je" :',
     options:['je pouvais','je pourrai','je pus','je pusse'],
     answer:'je pus',
-    hint:'Pouvoir est irrégulier : je pus, tu pus, il put.',
+    hint:'« Pouvoir » fait son passé simple en -u-. C\'est un temps simple, d\'un seul mot.',
     explanation:'"<b>je pus</b>" - pouvoir (irrégulier) : je pus, tu pus, il/elle put, nous pûmes, vous pûtes, ils/elles purent. Exemple : "Il ne put pas ouvrir la porte."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-028', chapterId:'g5fr-passe-simple', subsection:'irreguliers', difficulty:2,
     question:'Conjuguez "savoir" au passé simple pour "elle" :',
     options:['elle savait','elle saura','elle sut','elle sûte'],
     answer:'elle sut',
-    hint:'Savoir est irrégulier : je sus, tu sus, il/elle sut.',
+    hint:'« Savoir » fait son passé simple en -u-, sans accent circonflexe au singulier.',
     explanation:'"<b>elle sut</b>" - savoir (irrégulier) : je sus, tu sus, il/elle <b>sut</b>, nous sûmes, vous sûtes, ils surent. Exemple : "Elle sut immédiatement que quelque chose clochait."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-029', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:3,
@@ -249,7 +249,7 @@ STATIC_QUESTIONS.push(
     question:'Conjuguez "vouloir" au passé simple pour "tu" :',
     options:['tu voulais','tu voudrais','tu voulus','tu voulûtes'],
     answer:'tu voulus',
-    hint:'Vouloir est irrégulier : je voulus, tu voulus.',
+    hint:'« Vouloir » fait son passé simple en -u-. Avec « tu », la terminaison se termine par -s.',
     explanation:'"<b>tu voulus</b>" - vouloir (irrégulier) : je voulus, tu <b>voulus</b>, il voulut, nous voulûmes, vous voulûtes, ils voulurent. Exemple : "Tu voulus partir mais il était trop tard."' }),
 
   makeMCQ({ id:'g5fr-passe-simple-035', chapterId:'g5fr-passe-simple', subsection:'formation', difficulty:4,

@@ -1,11 +1,11 @@
 'use strict';
-// PSAC Grade 6 History & Geography August 2019 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 History & Geography August 2019 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6h-pp19-001', chapterId:'g6-land-use', subsection:'agriculture', difficulty:1,
     question:'A stadium is an example of which type of land use?',
     options:['Agricultural','Industrial','Recreational','Residential'], answer:'Recreational',
-    hint:'A stadium is used for sports and entertainment — what category is this?',
-    explanation:'A stadium is an example of recreational land use — land used for sport, leisure, and entertainment activities.' }),
+    hint:'A stadium is used for sports and entertainment - what category is this?',
+    explanation:'A stadium is an example of recreational land use - land used for sport, leisure, and entertainment activities.' }),
   makeMCQ({ id:'g6h-pp19-002', chapterId:'g6-land-use', subsection:'agriculture', difficulty:1,
     question:'The growing of crops <b>and</b> the rearing of animals together on the same farm is called ____________.',
     options:['market gardening','mixed farming','pastoral farming','plantation agriculture'], answer:'mixed farming',
@@ -54,7 +54,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6h-pp19-011', chapterId:'g6-slaves-immigrants', subsection:'chinese', difficulty:2,
     question:'Chinese immigrants first came to Port Louis towards the end of the ____________ century.',
     options:['16th century','17th century','18th century','19th century'], answer:'18th century',
-    hint:'Chinese merchants arrived in Mauritius during the colonial period — think about when French rule was at its peak.',
+    hint:'Chinese merchants arrived in Mauritius during the colonial period - think about when French rule was at its peak.',
     explanation:'Chinese immigrants first arrived in Port Louis towards the end of the 18th century (late 1700s). More came during the British period in the 19th century.' }),
   makeMCQ({ id:'g6h-pp19-012', chapterId:'g6-slaves-immigrants', subsection:'chinese', difficulty:1,
     question:'In Port Louis, Chinese immigrants settled in an area now called ____________.',
@@ -63,18 +63,18 @@ STATIC_QUESTIONS.push(
     explanation:'Chinese immigrants settled in Port Louis in an area called China Town, where they set up shops and businesses. China Town still exists in Port Louis today.' }),
   makeMCQ({ id:'g6h-pp19-013', chapterId:'g6-slaves-immigrants', subsection:'colonial_rule', difficulty:2,
     question:'Why did the British bring many Indian workers to Mauritius <b>after 1840</b>?',
-    options:['To build the railways in Mauritius','To work on the sugar cane plantations after the abolition of slavery','To fight in the British army','To set up a new government administration'], answer:'To work on the sugar cane plantations after the abolition of slavery',
-    hint:'Slavery had been abolished in 1835 — planters needed new workers.',
+    options:['To work on the sugar plantations', 'To build the railways of Mauritius', 'To set up a new administration', 'To fight in the British army'], answer:'To work on the sugar plantations',
+    hint:'Slavery had been abolished in 1835 - planters needed new workers.',
     explanation:'After the abolition of slavery in 1835, planters needed workers for the sugar cane fields. The British brought Indian indentured labourers to fill this need, especially as sugar cane cultivation expanded.' }),
   makeMCQ({ id:'g6h-pp19-014', chapterId:'g6-slaves-immigrants', subsection:'slavery', difficulty:2,
     question:'What does the word <b>"immigrant"</b> mean?',
-    options:['A person born in Mauritius','A person who moves from one country to live in another country','A person who travels as a tourist','A person who works at sea'], answer:'A person who moves from one country to live in another country',
+    options:['Someone who settles in another country', 'Someone who travels abroad as a tourist', 'Someone born in Mauritius', 'Someone who works at sea'], answer:'Someone who settles in another country',
     hint:'The prefix "im-" means coming into a place.',
     explanation:'An immigrant is a person who moves from their own country to settle in another country. Indian labourers and Chinese traders who came to Mauritius were immigrants.' }),
   makeMCQ({ id:'g6h-pp19-015', chapterId:'g6-independence', subsection:'coat_of_arms', difficulty:2,
     question:'What does the Latin motto <b>"Stella Clavisque Maris Indici"</b> on the Coat of Arms of Mauritius mean?',
     options:['Land of the free and the brave','Our strength is our diversity','Star and Key of the Indian Ocean','Peace, justice and liberty'], answer:'Star and Key of the Indian Ocean',
-    hint:'Think of the nickname for Mauritius — it suggests importance for navigation.',
+    hint:'Think of the nickname for Mauritius - it suggests importance for navigation.',
     explanation:'"Stella Clavisque Maris Indici" is Latin for "Star and Key of the Indian Ocean," reflecting Mauritius\'s strategic importance as a key port on Indian Ocean trade routes.' }),
   makeMCQ({ id:'g6h-pp19-016', chapterId:'g6-independence', subsection:'coat_of_arms', difficulty:2,
     question:'Which feature on the Coat of Arms of Mauritius shows that Mauritius is a <b>tropical island</b>?',
@@ -89,10 +89,10 @@ STATIC_QUESTIONS.push(
 );
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g6h-pp19-pdf-001', needsArtwork:true, chapterId:'g6-natural-hazards', marks:9, year:2019, grade:6, subject:'History & Geography',
+  { id:'g6h-pp19-pdf-001', image:'assets/past-papers/g6-history-2019/d1-tsunami.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-natural-hazards', marks:9, year:2019, grade:6, subject:'History & Geography',
     question:'Study Diagram 1 (tsunami occurring). (a) A tsunami is a giant ___ caused by a powerful ___ below the ocean floor. (b) Give one reason why Area X (coastal area) will be affected. (c) Which cyclone passed near Rodrigues in January 1991? (Bella) (d) In which direction did Céline 2 move after passing over Rodrigues? (e) Give one condition for cyclone formation. (f) Give two precautions after a cyclone.', type:'diagram-and-map' },
-  { id:'g6h-pp19-pdf-002', needsArtwork:true, chapterId:'g6-land-use', marks:6, year:2019, grade:6, subject:'History & Geography',
+  { id:'g6h-pp19-pdf-002', image:'assets/past-papers/g6-history-2019/map2-landuse.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-land-use', marks:6, year:2019, grade:6, subject:'History & Geography',
     question:'Study Map 2 (grid map showing land use: Houses A1/A2, Sugar cane C1, Stadium A3, Commercial Centre B4, Nature Park D3/D4). (i) Name the type of land use in section A2. (ii) In which section is a commercial centre found? (iii) Suggest one reason why there is no road in section D4.', type:'map-grid' },
   { id:'g6h-pp19-pdf-003', chapterId:'g6-cultural-heritage', marks:4, year:2019, grade:6, subject:'History & Geography',
-    question:'Complete the table of museums/monuments: Slave Route Monument (Le Morne) — reminds of countries where slaves came from; François Leguat Monument (place?) — reminds of first settlement in Rodrigues; Aapravasi Ghat (Port Louis) — importance?; Fort Frederik Hendrik Museum (place?) — Dutch settlement; Monument at Pointe Canon (Mahebourg) — importance?', type:'table-completion' }
+    question:'Complete the table of museums/monuments: Slave Route Monument (Le Morne) - reminds of countries where slaves came from; François Leguat Monument (place?) - reminds of first settlement in Rodrigues; Aapravasi Ghat (Port Louis) - importance?; Fort Frederik Hendrik Museum (place?) - Dutch settlement; Monument at Pointe Canon (Mahebourg) - importance?', type:'table-completion' }
 );

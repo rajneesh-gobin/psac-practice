@@ -172,7 +172,7 @@ STATIC_QUESTIONS.push(
       'There is no real difference - both systems are identical in practice'
     ],
     answer:'Indentured workers have a legal contract specifying their period of work and pay - the owner must fulfil these terms or face legal consequences',
-    hint:'What does the word "indentured" (a legal contract) imply for the employer?',
+    hint:'The word "indentured" comes from a document that both sides signed. What difference would that make?',
     explanation:'Unlike <b>enslaved workers</b> who had no legal rights or pay, <b>indentured workers</b> had a formal contract specifying the work period, wages and conditions. This gave them some legal protection - employers who broke the terms could face legal action. In practice many abuses still occurred, but the legal framework was fundamentally different.' }),
 
   makeMCQ({ id:'g5hg-ta-018', chapterId:'trade-agri', subsection:'crops', difficulty:4,

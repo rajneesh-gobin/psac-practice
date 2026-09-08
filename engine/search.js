@@ -49,7 +49,7 @@ const Search = (() => {
 
   function matchesQuery(entry, normQ, qWords) {
     if (_mode === 'exact') return entry.searchText.includes(normQ);
-    // Short words (≤ 2 chars) like "de", "la", "le" are connectors — skip as required
+    // Short words (≤ 2 chars) like "de", "la", "le" are connectors - skip as required
     const required = qWords.filter(w => w.length >= 3);
     if (!required.length) return qWords.some(w => wordMatches(w, entry.words));
     return required.every(qw => wordMatches(qw, entry.words));
@@ -472,7 +472,8 @@ const Search = (() => {
     startSearchPractice(STATIC_QUESTIONS.filter(q => ids.includes(q.id)), `Revision - ${label}`);
   }
 
-  function practiceChapter(packId, chapterId) {
+  async function practiceChapter(packId, chapterId) {
+    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(packId).catch(() => {});
     const pack = activateSubjectPack(packId);
     if (!pack) { toast('Chapter not available.', 2000); return; }
     const go = () => startChapterDirect(chapterId, null);

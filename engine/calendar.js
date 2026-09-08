@@ -243,7 +243,7 @@ const Calendar = (() => {
     const { data: existing, error: selErr } = await _sb.from('study_schedules')
       .select('id').eq('student_id', _studentId).limit(1).maybeSingle();
     if (selErr) {
-      console.error('[Calendar] study_schedules query failed - table may not exist yet. Run supabase-migration.sql in your Supabase SQL editor.', selErr);
+      console.error('[Calendar] study_schedules query failed - table may not exist yet. Run supabase-schema.sql in your Supabase SQL editor.', selErr);
       return null;
     }
     if (existing?.id) { _scheduleId = existing.id; return _scheduleId; }
@@ -255,7 +255,7 @@ const Calendar = (() => {
       settings:   _gen,
     }).select('id').single();
     if (error) {
-      console.error('[Calendar] study_schedules insert failed - run supabase-migration.sql in your Supabase SQL editor.', error);
+      console.error('[Calendar] study_schedules insert failed - run supabase-schema.sql in your Supabase SQL editor.', error);
       return null;
     }
     if (!data) return null;
@@ -267,7 +267,7 @@ const Calendar = (() => {
   // ── WHAT ACTUALLY HAPPENED ────────────────────────────────────────────
   // The calendar above is the PLAN: parent-authored rows in schedule_entries.
   // These are the ACTUALS, derived from history the app already keeps. They are
-  // deliberately NOT written into schedule_entries — that table is editable, and
+  // deliberately NOT written into schedule_entries - that table is editable, and
   // a parent being able to edit or delete "she sat a mock on Tuesday" would be
   // both meaningless and a way to quietly lose the record. Activity rows carry
   // no edit or delete button for the same reason.
@@ -350,7 +350,7 @@ const Calendar = (() => {
     if (prog) {
       // Per chapter per day, from BOTH buckets. `ch` is self-directed practice;
       // `asg` is work done inside an assignment. They are recorded separately so
-      // this can label them differently — a parent looking for "did the homework
+      // this can label them differently - a parent looking for "did the homework
       // get done" should not have to infer it from a generic practice row.
       const _pushChapterRows = (date, map, kind) => {
         Object.entries(map || {}).forEach(([chId, pair]) => {
@@ -379,7 +379,7 @@ const Calendar = (() => {
       // exams
       (prog.examHistory || []).forEach(e => {
         // Rows written before the iso field existed carry only a locale date
-        // string, which is unparseable on an en-GB browser — see the digest
+        // string, which is unparseable on an en-GB browser - see the digest
         // note in CLAUDE.md. Those simply do not get a calendar square rather
         // than being dropped onto the wrong one.
         const date = e.iso ? _localDateStr(e.iso) : null;
@@ -423,7 +423,7 @@ const Calendar = (() => {
 
     // The same assignment can arrive twice: once as the local per-chapter record
     // written while the child answered, and once as a completed_at row from the
-    // server. Keep the server row — it carries the parent's note — and drop the
+    // server. Keep the server row - it carries the parent's note - and drop the
     // local one for that chapter and day. A local row with no server twin still
     // shows, which is the whole point: it covers an assignment the child sat but
     // never had marked complete, and one done offline.
@@ -688,9 +688,14 @@ const Calendar = (() => {
     // Dropping it from _entries before knowing the delete landed makes a
     // refused delete look like it worked until the next page load brings the
     // event back.
-    const { error } = await _sb.from('schedule_entries').delete().eq('id', id);
-    if (error) {
-      console.error('[Calendar.deleteEntry]', error.message);
+    // ⚠ `error` alone is not enough: a DELETE whose RLS policy matches no row
+    //   returns no error and no rows, which is exactly the refusal this comment
+    //   is about. Count the rows.
+    const { data, error } = await _sb.from('schedule_entries')
+      .delete().eq('id', id).select('id');
+    if (error || !data?.length) {
+      if (error) console.error('[Calendar.deleteEntry]', error.message);
+      else console.error('[Calendar.deleteEntry] refused — no row deleted for', id);
       if (typeof toast !== 'undefined') toast('Could not remove that event. Please try again.', 3000);
       return;
     }
@@ -782,7 +787,7 @@ const Calendar = (() => {
 
     // ── INSERT new entry ───────────────────────────
     const sid = await _ensureSchedule();
-    if (!sid)   { _showErr(errEl, 'Database not ready - please run supabase-migration.sql in your Supabase SQL editor, then refresh the page.'); return; }
+    if (!sid)   { _showErr(errEl, 'Database not ready - please run supabase-schema.sql in your Supabase SQL editor, then refresh the page.'); return; }
 
     const { data, error } = await _sb.from('schedule_entries').insert({
       schedule_id: sid, student_id: _studentId,
@@ -819,8 +824,17 @@ const Calendar = (() => {
 
   async function _doResetSchedule() {
     if (!_sb || !_studentId) return;
-    await _sb.from('schedule_entries')
+    // ⚠ Zero rows is fine here — a child with no study sessions has nothing to
+    //   clear — but an ERROR must not be swallowed. Clearing the local copy and
+    //   the in-memory list after a failed delete makes the sessions look gone
+    //   until the next load brings every one of them back.
+    const { error } = await _sb.from('schedule_entries')
       .delete().eq('student_id', _studentId).eq('entry_type', 'study');
+    if (error) {
+      console.error('[Calendar._doResetSchedule]', error.message);
+      if (typeof toast !== 'undefined') toast('Could not clear the study sessions. Please try again.', 3000);
+      return;
+    }
     try { localStorage.removeItem(`mm_schedule_${_studentId}`); } catch(e) {}
     _entries = _entries.filter(e => e.entry_type !== 'study');
     _renderCalendar();
@@ -1194,7 +1208,7 @@ const Calendar = (() => {
 
     const allStudyDates = _genStudyDates(cfg);
     if (!allStudyDates.length) {
-      _showErr(errEl, 'Every day in this range is marked Holiday/No Study — pick different dates or study days.');
+      _showErr(errEl, 'Every day in this range is marked Holiday/No Study - pick different dates or study days.');
       reset(); return;
     }
 
@@ -1260,7 +1274,7 @@ const Calendar = (() => {
     // Persist
     const sid = await _ensureSchedule();
     if (!sid) {
-      _showErr(errEl, 'Database not ready - please run supabase-migration.sql in your Supabase SQL editor, then refresh the page.');
+      _showErr(errEl, 'Database not ready - please run supabase-schema.sql in your Supabase SQL editor, then refresh the page.');
       reset(); return;
     }
 
@@ -1275,7 +1289,7 @@ const Calendar = (() => {
       .delete().eq('schedule_id', sid).eq('entry_type', 'study');
     if (clearErr) {
       console.error('[Calendar.generate] clear', clearErr.message);
-      _showErr(errEl, 'Could not clear the previous timetable — nothing was changed. Please try again.');
+      _showErr(errEl, 'Could not clear the previous timetable - nothing was changed. Please try again.');
       reset(); return;
     }
 
@@ -1309,7 +1323,7 @@ const Calendar = (() => {
     if (insertErr) {
       console.error('[Calendar.generate] insert', insertErr.message);
       if (typeof toast !== 'undefined') {
-        toast(`Only ${saved} of ${rows.length} sessions could be saved — generate again to complete the timetable.`, 5000);
+        toast(`Only ${saved} of ${rows.length} sessions could be saved - generate again to complete the timetable.`, 5000);
       }
       reset(); return;
     }
@@ -1329,7 +1343,7 @@ const Calendar = (() => {
   // whose elements do not exist on a child's screen.
   //
   // ⚠ Returns activity UNFILTERED. _filters is the parent's auditing choice,
-  // stored per browser under mm_cal_filters — on a shared phone a parent who
+  // stored per browser under mm_cal_filters - on a shared phone a parent who
   // hid exams to read something would otherwise silently blank a chunk of the
   // child's own record of their work.
   //
@@ -1465,7 +1479,7 @@ const Calendar = (() => {
                               <div style="font-size:11.5px;color:#1e293b;margin-top:1px;line-height:1.3">${_esc(e.topic_label)}</div>
                             </div>`;
                           }).join('')
-                        : `<div style="font-size:10.5px;color:#cbd5e1;text-align:center;padding-top:18px">—</div>`}
+                        : `<div style="font-size:10.5px;color:#cbd5e1;text-align:center;padding-top:18px">-</div>`}
                   </div>
                 </div>`;
               }).join('')}
@@ -1474,7 +1488,7 @@ const Calendar = (() => {
         }).join('')}
 
         <p style="margin-top:18px;font-size:10px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:8px">
-          Generated by PSAC Practice · Times are a guide — adjust freely to fit the evening.
+          Generated by PSAC Practice · Times are a guide - adjust freely to fit the evening.
         </p>
       </div>`;
 
@@ -1591,7 +1605,7 @@ const Calendar = (() => {
       const notesBased   = subj?.notesBased || false;
       const practiceble  = subj?.practiceble !== false;
       // chapter_id is now selected, but rows written before it was populated
-      // still have none — fall back to matching the display label, the same way
+      // still have none - fall back to matching the display label, the same way
       // getUpcoming() always has.
       const chapId = e.chapter_id || (_resolveChapter(e).chapter || {}).id || '';
       const isDone = isToday && chapId && doneToday.has(chapId);
@@ -1631,7 +1645,7 @@ const Calendar = (() => {
   }
 
   // ── Practice link ─────────────────────────────────
-  function startPractice(subjectId, chapterId) {
+  async function startPractice(subjectId, chapterId) {
     const packs = typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [];
     const pack  = packs.find(p => p.id === subjectId);
     if (!pack || pack.comingSoon) {
@@ -1640,6 +1654,7 @@ const Calendar = (() => {
     }
 
     // Activate the pack globally so the chapter-select and quiz screens use it
+    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(pack.id).catch(() => {});
     activateSubjectPack(pack.id);
     const chs = pack._chapters || pack.chapters || [];
     if (typeof QuestionLoader !== 'undefined') QuestionLoader.loadSubject(pack.id).catch(() => {});

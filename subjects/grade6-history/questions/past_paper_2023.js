@@ -1,10 +1,10 @@
 'use strict';
-// PSAC Grade 6 History & Geography August 2023 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 History & Geography August 2023 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6h-pp23-001', chapterId:'g6-land-use', subsection:'tourism', difficulty:1,
     question:'Using land to build tourist hotels is known as ____________ land use.',
     options:['industrial','infrastructural','recreational','residential'], answer:'recreational',
-    hint:'Think about what tourists do — they use this land for leisure and enjoyment.',
+    hint:'Think about what tourists do - they use this land for leisure and enjoyment.',
     explanation:'Building tourist hotels is recreational land use because hotels are used for rest, leisure, and enjoyment by tourists.' }),
   makeMCQ({ id:'g6h-pp23-002', chapterId:'g6-land-use', subsection:'agriculture', difficulty:1,
     question:'The growing of <b>one</b> crop on a large area is called ____________.',
@@ -78,7 +78,7 @@ STATIC_QUESTIONS.push(
     explanation:'In 1992, Mauritius became a Republic, replacing the Queen with a President as Head of State. Sir Veerasamy Ringadoo became the first President.' }),
   makeMCQ({ id:'g6h-pp23-016', chapterId:'g6-independence', subsection:'flag', difficulty:2,
     question:'What does the colour <b>green</b> in the National Flag of Mauritius represent?',
-    options:['The Indian Ocean','The hope of the people','The vegetation and agriculture of Mauritius','The golden sunshine of the island'], answer:'The vegetation and agriculture of Mauritius',
+    options:['The vegetation and agriculture', 'The golden sunshine of the island', 'The hope of the people', 'The Indian Ocean'], answer:'The vegetation and agriculture',
     hint:'This colour reminds us of the natural environment and farming of Mauritius.',
     explanation:'The green stripe in the Mauritian flag represents the vegetation (nature) and agriculture of Mauritius, especially the sugar cane fields that cover much of the island.' }),
   makeMCQ({ id:'g6h-pp23-017', chapterId:'g6-natural-hazards', subsection:'cyclones', difficulty:2,
@@ -89,11 +89,11 @@ STATIC_QUESTIONS.push(
 );
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g6h-pp23-pdf-001', needsArtwork:true, chapterId:'g6-natural-hazards', marks:1, year:2023, grade:6, subject:'History & Geography',
+  { id:'g6h-pp23-pdf-001', image:'assets/past-papers/g6-history-2023/map1-cyclones.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-natural-hazards', marks:1, year:2023, grade:6, subject:'History & Geography',
     question:'In which month were there the highest number of tropical cyclones affecting Mauritius? (Read Map 1 showing cyclone tracks: Claudette Dec 1979, Carol Feb 1960, Dina Jan 2002, Hollanda Feb 1994, Gervaise Feb 1975, Daniella Dec 1995)', type:'map-read' },
-  { id:'g6h-pp23-pdf-002', needsArtwork:true, chapterId:'g6-natural-hazards', marks:1, year:2023, grade:6, subject:'History & Geography',
+  { id:'g6h-pp23-pdf-002', image:'assets/past-papers/g6-history-2023/map1-cyclones.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-natural-hazards', marks:1, year:2023, grade:6, subject:'History & Geography',
     question:'Name ONE tropical cyclone that did NOT pass directly over Mauritius. (Study Map 1 showing cyclone tracks)', type:'map-read' },
-  { id:'g6h-pp23-pdf-003', needsArtwork:true, chapterId:'g6-land-use', marks:1, year:2023, grade:6, subject:'History & Geography',
+  { id:'g6h-pp23-pdf-003', image:'assets/past-papers/g6-history-2023/map2-rodrigues.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-land-use', marks:1, year:2023, grade:6, subject:'History & Geography',
     question:'On Map 2 (Rodrigues), shade a river valley where market gardening is practised.', type:'draw' },
   { id:'g6h-pp23-pdf-004', chapterId:'g6-cultural-heritage', marks:1, year:2023, grade:6, subject:'History & Geography',
     question:'Where is the Frederick Hendrick Museum found? Tick: Mahebourg / Port-Louis / Vieux Grand Port', type:'tick' }

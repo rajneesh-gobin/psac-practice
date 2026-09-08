@@ -154,7 +154,7 @@ STATIC_QUESTIONS.push(
     question:'Which LINKING WORD correctly shows that the second idea contrasts with the first?',
     options:['Furthermore','Therefore','Nevertheless','In addition'],
     answer:'Nevertheless',
-    hint:'"Nevertheless" means "in spite of that" - it introduces a contrasting or unexpected idea.',
+    hint:'Three of these add to the previous idea or draw a conclusion from it. Only one pushes against it.',
     explanation:'"<b>Nevertheless</b>" shows contrast or concession: "The weather was terrible. <b>Nevertheless</b>, we enjoyed the trip." Linking words by function: <b>Adding</b>: Furthermore, In addition, Moreover, Also. <b>Contrast</b>: However, Nevertheless, On the other hand, Yet, Despite this. <b>Consequence</b>: Therefore, As a result, Consequently. <b>Conclusion</b>: In conclusion, To summarise.' }),
 
   makeMCQ({ id:'g6eng-writ-017', chapterId:'g6eng-writing', subsection:'planning', difficulty:2,

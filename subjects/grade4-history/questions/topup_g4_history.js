@@ -1,5 +1,5 @@
 'use strict';
-// Grade 4 History & Geography — top-up questions.
+// Grade 4 History & Geography - top-up questions.
 
 STATIC_QUESTIONS.push(
 
@@ -75,7 +75,7 @@ STATIC_QUESTIONS.push(
     question:'Sam\'s house is next to the school. His neighbour on the left lives next to the post office. On the right is a clinic. What can you say about Sam\'s neighbourhood?',
     options:['It has no community services','It has education, postal and health services nearby','It is far from all community helpers','It only has a school'], answer:'It has education, postal and health services nearby',
     hint:'List all the services mentioned.',
-    explanation:'The school provides education, the post office provides postal services, and the clinic provides healthcare — three community services close to Sam.' }),
+    explanation:'The school provides education, the post office provides postal services, and the clinic provides healthcare - three community services close to Sam.' }),
 
   // --- g4hist-community (12) ---
 
@@ -137,7 +137,7 @@ STATIC_QUESTIONS.push(
     question:'Which of the following best shows that Mauritius respects all its communities?',
     options:['Only one religion is allowed to celebrate in public','National holidays include festivals from several different communities','Schools teach only one language','Only one type of food is sold at the market'], answer:'National holidays include festivals from several different communities',
     hint:'Look at the national calendar of public holidays.',
-    explanation:'Mauritius recognises public holidays for festivals across communities — Divali, Eid, Christmas and Chinese New Year — showing respect for its cultural diversity.' }),
+    explanation:'Mauritius recognises public holidays for festivals across communities - Divali, Eid, Christmas and Chinese New Year - showing respect for its cultural diversity.' }),
 
   makeMCQ({ id:'g4h-com-060', chapterId:'g4hist-community', subsection:'diversity', difficulty:3,
     question:'Priya\'s family does not eat beef; Ali\'s family does not eat pork; Marie\'s family eats all meats. What does this show about Mauritius?',
@@ -162,7 +162,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4h-voy-051', chapterId:'g4hist-voyages', subsection:'traders', difficulty:1,
     question:'In which year did Christopher Columbus first reach the Americas?',
     options:['1488','1492','1498','1519'], answer:'1492',
-    hint:'Columbus sailed for Spain. Think: 1492 Columbus sailed the ocean blue.',
+    hint:'There is a well-known rhyme pairing the year with "sailed the ocean blue". Can you finish it?',
     explanation:'Christopher Columbus reached the Caribbean islands in 1492, believing he had found a route to Asia. He had in fact reached the Americas.' }),
 
   makeMCQ({ id:'g4h-voy-052', chapterId:'g4hist-voyages', subsection:'ships', difficulty:2,
@@ -187,7 +187,7 @@ STATIC_QUESTIONS.push(
     question:'Pedro Mascarenhas gave his name to the island group that includes Mauritius, Réunion and Rodrigues. These are called the ___ Islands.',
     options:['Caribbean Islands','Canary Islands','Mascarene Islands','Maldive Islands'], answer:'Mascarene Islands',
     hint:'The name comes directly from the explorer\'s surname.',
-    explanation:'Pedro Mascarenhas, a Portuguese explorer of the early 16th century, lent his name to the Mascarene Islands — the group that includes Mauritius, Réunion and Rodrigues.' }),
+    explanation:'Pedro Mascarenhas, a Portuguese explorer of the early 16th century, lent his name to the Mascarene Islands - the group that includes Mauritius, Réunion and Rodrigues.' }),
 
   // --- g4ge-natural-env (12) ---
 
@@ -237,7 +237,7 @@ STATIC_QUESTIONS.push(
     question:'The mountains and hills of Mauritius are mainly made of which type of rock?',
     options:['Limestone','Granite','Basalt (volcanic rock)','Sandstone'], answer:'Basalt (volcanic rock)',
     hint:'Mauritius was formed by volcanic eruptions millions of years ago.',
-    explanation:'Mauritius is a volcanic island. Its mountains, hills and much of its landscape are composed of basalt — a dark, fine-grained volcanic rock.' }),
+    explanation:'Mauritius is a volcanic island. Its mountains, hills and much of its landscape are composed of basalt - a dark, fine-grained volcanic rock.' }),
 
   makeMCQ({ id:'g4h-env-058', chapterId:'g4ge-natural-env', subsection:'coast', difficulty:1,
     question:'Which natural feature protects Mauritius\'s beaches from large, powerful ocean waves?',
@@ -305,12 +305,12 @@ STATIC_QUESTIONS.push(
     question:'A barometer is a weather instrument used to measure ___.',
     options:['rainfall','wind speed','temperature','air pressure'], answer:'air pressure',
     hint:'A falling reading often means bad weather is coming.',
-    explanation:'A barometer measures atmospheric (air) pressure. Meteorologists use changes in air pressure to help forecast the weather — falling pressure often indicates an approaching storm.' }),
+    explanation:'A barometer measures atmospheric (air) pressure. Meteorologists use changes in air pressure to help forecast the weather - falling pressure often indicates an approaching storm.' }),
 
   makeMCQ({ id:'g4h-wea-057', chapterId:'g4ge-weather', subsection:'cyclones', difficulty:1,
     question:'Cyclones in Mauritius are most likely to occur during which months?',
     options:['May to October (winter)','November to April (summer)','March to August','June to September'], answer:'November to April (summer)',
-    hint:'Warm sea water fuels cyclones — this happens in the warmer months.',
+    hint:'Warm sea water fuels cyclones - this happens in the warmer months.',
     explanation:'Cyclones form over warm tropical seas and are most frequent in Mauritius during the summer season, November to April, when sea temperatures are highest.' }),
 
   makeMCQ({ id:'g4h-wea-058', chapterId:'g4ge-weather', subsection:'cyclones', difficulty:2,
@@ -337,7 +337,7 @@ STATIC_QUESTIONS.push(
     question:'What does the abbreviation NE stand for on a compass?',
     options:['North East','Near East','No Exit','Normal East'], answer:'North East',
     hint:'It is halfway between North and East.',
-    explanation:'NE stands for North East — an intercardinal (or intermediate) direction exactly halfway between North and East on a compass.' }),
+    explanation:'NE stands for North East - an intercardinal (or intermediate) direction exactly halfway between North and East on a compass.' }),
 
   makeMCQ({ id:'g4h-map-051', chapterId:'g4ge-map-skills', subsection:'using_map', difficulty:1,
     question:'The Equator is a line of latitude that circles the Earth at ___.',
@@ -442,7 +442,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4h-enr-mau-052', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:1,
     question:'From top to bottom, the four stripes on the Mauritius national flag are in which order?',
     options:['Red, blue, yellow, green','Blue, red, green, yellow','Green, yellow, blue, red','Yellow, blue, red, green'], answer:'Red, blue, yellow, green',
-    hint:'The topmost stripe represents the independence struggle — think about which colour symbolises that.',
+    hint:'The topmost stripe represents the independence struggle - think about which colour symbolises that.',
     explanation:'The Mauritius flag has four stripes from top to bottom: red, blue, yellow and green. Red symbolises the independence struggle, blue the Indian Ocean, yellow the new light of independence, and green the agriculture of the island.' }),
 
   makeMCQ({ id:'g4h-enr-mau-053', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:1,
@@ -453,7 +453,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-mau-054', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:1,
     question:'The Dodo, which is the national bird of Mauritius, is ___.',
-    options:['endangered and protected in a national park','still found on Rodrigues Island','extinct — it no longer exists','a type of colourful parrot'], answer:'extinct — it no longer exists',
+    options:['endangered and protected in a national park','still found on Rodrigues Island','extinct - it no longer exists','a type of colourful parrot'], answer:'extinct - it no longer exists',
     hint:'Sailors and introduced animals wiped it out centuries ago.',
     explanation:'The Dodo (Raphus cucullatus) was a large flightless bird unique to Mauritius. It became extinct in the late 17th century due to hunting and the introduction of predators by settlers.' }),
 
@@ -466,7 +466,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4h-enr-mau-056', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:1,
     question:'Which of these features appears on the coat of arms of Mauritius?',
     options:['A lion and a unicorn','A key, a star, a ship, sugarcane and a dodo','A crown and a cross','An eagle and a globe'], answer:'A key, a star, a ship, sugarcane and a dodo',
-    hint:'The dodo appears even though it is extinct — it is a national symbol.',
+    hint:'The dodo appears even though it is extinct - it is a national symbol.',
     explanation:'The coat of arms of Mauritius features a key, a star, a ship, sugarcane stalks, a palm tree, a dodo and a deer, along with the national motto "Stella Clavisque Maris Indici" (Star and Key of the Indian Ocean).' }),
 
   makeMCQ({ id:'g4h-enr-mau-057', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:2,
@@ -482,10 +482,10 @@ STATIC_QUESTIONS.push(
     explanation:'Mauritius\'s main towns besides Port Louis include Curepipe, Quatre Bornes, Vacoas-Phoenix and Rose Hill, which are all situated on or near the Central Plateau.' }),
 
   makeMCQ({ id:'g4h-enr-mau-059', chapterId:'g4enr-mauritius', subsection:'facts', difficulty:1,
-    question:'Mauritius became a Republic (with a President as head of state instead of the British monarch) in which year?',
-    options:['1968','1982','1992','2000'], answer:'1992',
-    hint:'This was exactly 24 years after independence.',
-    explanation:'Mauritius became a Republic on 12 March 1992, 24 years after independence in 1968. The President replaced the British monarch as head of state.' }),
+    question:'How was the island of Mauritius formed millions of years ago?',
+    options:['By volcanoes erupting under the sea','By a large river carrying mud into the ocean','By a piece breaking away from Africa','By coral slowly piling up above the water'], answer:'By volcanoes erupting under the sea',
+    hint:'Think about what made the craters and mountains you can still see today.',
+    explanation:'Mauritius is a <b>volcanic island</b>. Volcanoes erupting on the sea floor built the island up above the water, which is why it still has craters such as Trou aux Cerfs and steep mountains.' }),
 
   makeMCQ({ id:'g4h-enr-mau-060', chapterId:'g4enr-mauritius', subsection:'facts', difficulty:2,
     question:'Why is the motto of Mauritius "Stella Clavisque Maris Indici" (Star and Key of the Indian Ocean)?',
@@ -495,7 +495,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-mau-061', chapterId:'g4enr-mauritius', subsection:'facts', difficulty:3,
     question:'A visitor asks: "Which city is the capital of Mauritius, and where on the island is it located?" What is the correct answer?',
-    options:['Curepipe — in the centre of the island','Port Louis — on the north-west coast','Mahébourg — on the south-east coast','Vacoas — on the Central Plateau'], answer:'Port Louis — on the north-west coast',
+    options:['Curepipe - in the centre of the island','Port Louis - on the north-west coast','Mahébourg - on the south-east coast','Vacoas - on the Central Plateau'], answer:'Port Louis - on the north-west coast',
     hint:'The capital is also the main port.',
     explanation:'Port Louis is the capital of Mauritius. It is situated on the north-west coast of the island, sheltered by a natural harbour, and serves as the political, economic and commercial heart of the country.' }),
 
@@ -519,14 +519,14 @@ STATIC_QUESTIONS.push(
     hint:'This ocean lies between Africa, Asia and Australia.',
     explanation:'Mauritius is an island nation in the Indian Ocean, located approximately 2 000 km off the south-east coast of Africa.' }),
 
-  makeMCQ({ id:'g4h-enr-wld-053', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
+  makeMCQ({ id:'g4h-enr-wld-053', chapterId:'g4enr-world', subsection:'coordinates', difficulty:1,
     question:'The Equator divides the Earth into the ___ and ___ Hemispheres.',
     options:['Northern and Southern','Eastern and Western','Arctic and Antarctic','Tropic and Temperate'],
     answer:'Northern and Southern',
     hint:'The Equator runs east–west around the middle of the globe.',
     explanation:'The Equator divides the Earth into the <b>Northern Hemisphere</b> (above) and the <b>Southern Hemisphere</b> (below). Mauritius lies in the Southern Hemisphere.' }),
 
-  makeMCQ({ id:'g4h-enr-wld-054', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
+  makeMCQ({ id:'g4h-enr-wld-054', chapterId:'g4enr-world', subsection:'rivers', difficulty:1,
     question:'Which is the highest mountain in the world?',
     options:['Mont Blanc','K2','Mount Kilimanjaro','Mount Everest'], answer:'Mount Everest',
     hint:'It is in the Himalayan mountain range in Asia.',
@@ -538,23 +538,23 @@ STATIC_QUESTIONS.push(
     hint:'One of the options is the name of a body of water, not a landmass.',
     explanation:'The Atlantic is one of the world\'s five oceans, not a continent. The seven continents are Africa, Antarctica, Asia, Australia (Oceania), Europe, North America and South America.' }),
 
-  makeMCQ({ id:'g4h-enr-wld-056', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
+  makeMCQ({ id:'g4h-enr-wld-056', chapterId:'g4enr-world', subsection:'coordinates', difficulty:1,
     question:'The Prime Meridian (0° longitude) passes through which city?',
     options:['Paris','New York','Greenwich (London)','Cairo'], answer:'Greenwich (London)',
     hint:'The line passes through the Royal Observatory in this city.',
     explanation:'The Prime Meridian at 0° longitude passes through Greenwich, London. It was chosen as the starting line for measuring longitude east and west, and gives its name to Greenwich Mean Time (GMT).' }),
 
-  makeMCQ({ id:'g4h-enr-wld-057', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
+  makeMCQ({ id:'g4h-enr-wld-057', chapterId:'g4enr-world', subsection:'coordinates', difficulty:1,
     question:'The Tropic of Cancer is the line of latitude at 23.5° ___.',
     options:['South','East','North','West'], answer:'North',
-    hint:'It is north of the Equator; its southern partner is the Tropic of Capricorn.',
-    explanation:'The Tropic of Cancer is at 23.5° North latitude. It is the northern boundary of the tropics — the region between it and the Tropic of Capricorn (23.5° South) that receives direct overhead sunlight.' }),
+    hint:'The Tropic of Capricorn is its matching partner in the southern hemisphere.',
+    explanation:'The Tropic of Cancer is at 23.5° North latitude. It is the northern boundary of the tropics - the region between it and the Tropic of Capricorn (23.5° South) that receives direct overhead sunlight.' }),
 
-  makeMCQ({ id:'g4h-enr-wld-058', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
+  makeMCQ({ id:'g4h-enr-wld-058', chapterId:'g4enr-world', subsection:'rivers', difficulty:1,
     question:'Which two rivers are often considered the longest rivers in the world?',
     options:['Amazon and Congo','Nile and Amazon','Rhine and Danube','Mississippi and Niger'], answer:'Nile and Amazon',
     hint:'One is in Africa, one is in South America.',
-    explanation:'The Nile (Africa) and the Amazon (South America) are considered the world\'s longest rivers — their exact ranking varies depending on how the source is measured, but both exceed 6 400 km.' }),
+    explanation:'The Nile (Africa) and the Amazon (South America) are considered the world\'s longest rivers - their exact ranking varies depending on how the source is measured, but both exceed 6 400 km.' }),
 
   makeMCQ({ id:'g4h-enr-wld-059', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
     question:'Which continent is located at the South Pole?',
@@ -562,7 +562,7 @@ STATIC_QUESTIONS.push(
     hint:'It is the coldest, windiest and driest continent.',
     explanation:'Antarctica surrounds the South Pole and is the coldest continent on Earth. It is covered by a thick ice sheet and has no permanent human population.' }),
 
-  makeMCQ({ id:'g4h-enr-wld-060', chapterId:'g4enr-world', subsection:'continents', difficulty:2,
+  makeMCQ({ id:'g4h-enr-wld-060', chapterId:'g4enr-world', subsection:'coordinates', difficulty:2,
     question:'Both Australia and Mauritius are located in the ___ Hemisphere.',
     options:['Northern','Eastern only','Southern','Western only'], answer:'Southern',
     hint:'Both are below the Equator.',

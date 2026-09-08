@@ -200,14 +200,14 @@ STATIC_QUESTIONS.push(
     explanation:'This is a <b>fair test</b> - the only variable that differed was sunlight. Pot A (with sunlight) was healthy; Pot B (without sunlight) turned yellow because chlorophyll breaks down without light and photosynthesis cannot occur. Sasha concludes: <b>sunlight is essential for plant health</b>.' }),
 
   makeMCQ({ id:'g4s-plt-020', chapterId:'g4sci-plants', subsection:'diagrams', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Diagram_showing_the_parts_of_a_plant_CRUK_371.svg" alt="a plant diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>Look at the plant diagram. Which part of the plant is used for REPRODUCTION — producing seeds so new plants can grow?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><svg viewBox="0 0 220 230" width="220" height="230" role="img" style="display:block;margin:8px auto;max-width:100%;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px"><rect x="1" y="150" width="218" height="79" fill="#f5e6d3"/><line x1="1" y1="150" x2="219" y2="150" stroke="#a16207" stroke-width="2"/><line x1="110" y1="150" x2="110" y2="52" stroke="#15803d" stroke-width="5"/><ellipse cx="78" cy="96" rx="26" ry="12" fill="#22c55e" stroke="#15803d" stroke-width="2" transform="rotate(-18 78 96)"/><ellipse cx="142" cy="114" rx="26" ry="12" fill="#22c55e" stroke="#15803d" stroke-width="2" transform="rotate(18 142 114)"/><circle cx="110" cy="34" r="11" fill="#facc15" stroke="#a16207" stroke-width="2"/><circle cx="110" cy="16" r="9" fill="#f472b6" stroke="#be185d" stroke-width="1.5"/><circle cx="128" cy="34" r="9" fill="#f472b6" stroke="#be185d" stroke-width="1.5"/><circle cx="110" cy="52" r="9" fill="#f472b6" stroke="#be185d" stroke-width="1.5"/><circle cx="92" cy="34" r="9" fill="#f472b6" stroke="#be185d" stroke-width="1.5"/><path d="M110 150 L110 178" stroke="#92400e" stroke-width="4" fill="none"/><path d="M110 178 L86 206" stroke="#92400e" stroke-width="3" fill="none"/><path d="M110 178 L134 206" stroke="#92400e" stroke-width="3" fill="none"/><path d="M110 166 L80 186" stroke="#92400e" stroke-width="2.5" fill="none"/><path d="M110 166 L140 186" stroke="#92400e" stroke-width="2.5" fill="none"/><path d="M86 206 L74 218" stroke="#92400e" stroke-width="2" fill="none"/><path d="M134 206 L146 218" stroke="#92400e" stroke-width="2" fill="none"/></svg></div><b>Look at the plant diagram. Which part of the plant is used for REPRODUCTION - producing seeds so new plants can grow?</b>',
     options:['Root','Stem','Leaf','Flower'],
     answer:'Flower',
     hint:'This brightly coloured part at the top attracts insects for pollination.',
-    explanation:'The <b>flower</b> is the reproductive organ of the plant. It attracts insects with its bright colours and sweet scent. After insects carry pollen from flower to flower (pollination), seeds develop — and seeds grow into new plants.' }),
+    explanation:'The <b>flower</b> is the reproductive organ of the plant. It attracts insects with its bright colours and sweet scent. After insects carry pollen from flower to flower (pollination), seeds develop - and seeds grow into new plants.' }),
 
   makeMCQ({ id:'g4s-plt-021', chapterId:'g4sci-plants', subsection:'diagrams', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Maize_seeds_germination.jpg" alt="a germinating seed photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows seeds beginning to sprout roots and shoots. What THREE conditions are needed for this process (germination) to happen?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/maize-seeds-germination.jpg" alt="a germinating seed photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows seeds beginning to sprout roots and shoots. What THREE conditions are needed for this process (germination) to happen?</b>',
     options:[
       'Sunlight, soil and fertiliser',
       'Water, warmth and air (oxygen)',
@@ -215,11 +215,11 @@ STATIC_QUESTIONS.push(
       'Light, cold and salt water'
     ],
     answer:'Water, warmth and air (oxygen)',
-    hint:'Notice that sunlight is NOT needed — the seed uses its own stored food to begin growing.',
-    explanation:'Seeds need: (1) <b>Water</b> — to activate growth enzymes; (2) <b>Warmth</b> — for chemical reactions to work; (3) <b>Air (oxygen)</b> — for respiration. Sunlight is NOT needed for germination — the seedling uses food stored inside the seed until it grows leaves.' }),
+    hint:'Notice that sunlight is NOT needed - the seed uses its own stored food to begin growing.',
+    explanation:'Seeds need: (1) <b>Water</b> - to activate growth enzymes; (2) <b>Warmth</b> - for chemical reactions to work; (3) <b>Air (oxygen)</b> - for respiration. Sunlight is NOT needed for germination - the seedling uses food stored inside the seed until it grows leaves.' }),
 
   makeMCQ({ id:'g4s-plt-022', chapterId:'g4sci-plants', subsection:'diagrams', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Simple_photosynthesis_overview.svg" alt="a photosynthesis diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The diagram shows photosynthesis in a leaf. Which THREE things does a leaf take IN to carry out photosynthesis?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/simple-photosynthesis-overview.png" alt="a photosynthesis diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The diagram shows photosynthesis in a leaf. Which THREE things does a leaf take IN to carry out photosynthesis?</b>',
     options:[
       'Oxygen, nitrogen and warmth',
       'Sunlight, water and carbon dioxide',
@@ -227,19 +227,19 @@ STATIC_QUESTIONS.push(
       'Oxygen, sugar and sunlight'
     ],
     answer:'Sunlight, water and carbon dioxide',
-    hint:'The leaf is the plant\'s food factory — what goes IN to make food (glucose)?',
+    hint:'The leaf is the plant\'s food factory - what goes IN to make food (glucose)?',
     explanation:'For photosynthesis, a leaf takes in: <b>sunlight</b> (energy from the sun), <b>water</b> (from the roots via the stem) and <b>carbon dioxide</b> (from the air through tiny pores called stomata). The leaf uses these three things to produce glucose (food) and releases <b>oxygen</b> as a by-product.' }),
 
   makeMCQ({ id:'g4s-plt-023', chapterId:'g4sci-plants', subsection:'diagrams', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Prop_roots_of_Maize_plant.jpg" alt="a plant root system photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows the root system of a plant. What would happen if all the roots were removed?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/prop-roots-of-maize-plant.jpg" alt="a plant root system photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows the root system of a plant. What would happen if all the roots were removed?</b>',
     options:[
-      'Nothing — roots are not important for survival',
+      'Nothing - roots are not important for survival',
       'The plant would fall over and could not absorb water, so it would die',
       'The plant would grow faster without the weight of the roots',
       'The leaves would start absorbing water directly from the air instead'
     ],
     answer:'The plant would fall over and could not absorb water, so it would die',
-    hint:'Remember the two functions of roots — what would be lost if they were gone?',
-    explanation:'Roots <b>anchor</b> the plant in the soil AND <b>absorb water and minerals</b>. Without roots, the plant would topple over and have no way to obtain water — it could not photosynthesise or carry out life processes, and would die.' })
+    hint:'Remember the two functions of roots - what would be lost if they were gone?',
+    explanation:'Roots <b>anchor</b> the plant in the soil AND <b>absorb water and minerals</b>. Without roots, the plant would topple over and have no way to obtain water - it could not photosynthesise or carry out life processes, and would die.' })
 
 );

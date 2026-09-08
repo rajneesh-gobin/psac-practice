@@ -2,12 +2,17 @@
 // Grade 5 French - Chapter: Lecture & Compréhension
 // IDs format: g5fr-lec-NNN
 
-const _TEXTE_FR = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a">
+const _TEXTE_FR = `<div style="background:#f8fafc;border-left:4px solid #7c3aed;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
 <b style="color:#5b21b6">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
 <b>Une journée à Maurice</b><br><br>
-Demain, c\'est samedi. La famille Dupont va passer la journée à la mer. Le père, Monsieur Dupont, prépare le pique-nique dans la cuisine. Il fait des sandwichs au fromage et au jambon. La mère, Madame Dupont, met les serviettes et les maillots de bain dans un grand sac bleu.<br><br>
-Les deux enfants, Luc et Sophie, sont très contents. Luc a neuf ans et Sophie a sept ans. Luc veut faire du snorkeling parce qu\'il adore les poissons. Sophie préfère construire des châteaux de sable avec ses amies.<br><br>
-Ils partent à huit heures du matin. La plage se trouve à vingt kilomètres de leur maison, à Flic en Flac. L\'eau est chaude et cristalline. Toute la famille passe une magnifique journée ensemble.
+Demain, c\'est samedi. La famille Dupont va passer la journée à la mer.<br><br>
+Tout a commencé la veille au soir. Madame Dupont a regardé le ciel par la fenêtre de la cuisine pendant un long moment, puis elle a dit un seul mot : « Demain. » Les enfants ont compris tout de suite et ils ont eu du mal à s\'endormir.<br><br>
+Le père, Monsieur Dupont, prépare le pique-nique dans la cuisine. Il fait des sandwichs au fromage et au jambon. Il les coupe toujours en triangles, parce que son propre père les coupait ainsi, et il refuse d\'expliquer pourquoi cela change quelque chose. La mère, Madame Dupont, met les serviettes et les maillots de bain dans un grand sac bleu. Elle ajoute aussi une bouteille d\'eau glacée, une trousse de premiers soins et un chapeau pour chaque enfant, car le soleil de midi ne pardonne rien.<br><br>
+Les deux enfants, Luc et Sophie, sont très contents. Luc a neuf ans et Sophie a sept ans. Luc veut faire du snorkeling parce qu\'il adore les poissons. Il a appris leurs noms dans un vieux livre de la bibliothèque de l\'école et il les récite à sa sœur, qui ne l\'écoute pas. Sophie préfère construire des châteaux de sable avec ses amies. Elle a apporté deux seaux, une pelle et une petite fourchette, et elle explique sérieusement que la fourchette sert à dessiner les fenêtres.<br><br>
+Ils partent à huit heures du matin. La plage se trouve à vingt kilomètres de leur maison, à Flic en Flac. Sur la route, on voit d\'abord les champs de canne, puis les premières maisons du village, puis, entre deux arbres, une bande bleue qui apparaît et disparaît. Chaque fois qu\'elle apparaît, Sophie la montre du doigt.<br><br>
+L\'eau est chaude et cristalline. Luc met son masque avant même de poser sa serviette. Sophie choisit un endroit à l\'ombre d\'un filao et commence à creuser. À midi, tout le monde mange les sandwichs en triangles, assis sur une natte, et personne ne dit rien pendant quelques minutes parce que tout le monde a faim.<br><br>
+Vers quatre heures, le vent se lève un peu et le sable commence à piquer les jambes. Il faut rentrer. Luc n\'a pas envie. Sophie non plus. Mais dans la voiture, ils dorment tous les deux avant même d\'avoir quitté le village.<br><br>
+Toute la famille passe une magnifique journée ensemble.
 </div>`;
 
 STATIC_QUESTIONS.push(
@@ -256,14 +261,14 @@ STATIC_QUESTIONS.push(
     question:'"Vous devez remettre votre rapport demain." C\'est un registre...',
     options:['informel','familier','formel','vulgaire'],
     answer:'formel',
-    hint:'"Vous" (et non "tu") + vocabulaire soutenu = registre formel.',
+    hint:'Regarde le pronom employé et le niveau de vocabulaire : on s\'adresse à quelqu\'un avec distance.',
     explanation:'"<b>formel</b>" - Le registre <b>formel/soutenu</b> utilise "vous", un vocabulaire précis et des phrases complètes. Le registre <b>informel/familier</b> utilise "tu", des abréviations, du slang : "T\'as fini ton truc ?"' }),
 
   makeMCQ({ id:'g5fr-lec-029', chapterId:'fr-lecture', subsection:'type_ton', difficulty:1,
     question:'"T\'as vu le film ?" C\'est un registre...',
     options:['formel','soutenu','informel','professionnel'],
     answer:'informel',
-    hint:'Abréviation de "tu as" + langage parlé = registre informel.',
+    hint:'« T\'as » est une abréviation de la langue parlée. Quel registre cela indique-t-il ?',
     explanation:'"<b>informel</b>" - "T\'as" = tu as (forme parlée abrégée). Le registre informel s\'utilise entre amis et en famille. La version formelle serait : "Avez-vous vu le film ?" ou "As-tu vu le film ?"' }),
 
   makeMCQ({ id:'g5fr-lec-030', chapterId:'fr-lecture', subsection:'vocabulaire', difficulty:2,
@@ -295,7 +300,7 @@ STATIC_QUESTIONS.push(
     question:'Quel est l\'antonyme de "courageux" ?',
     options:['brave','timide','lâche','généreux'],
     answer:'lâche',
-    hint:'"Lâche" = quelqu\'un qui manque de courage, qui a peur.',
+    hint:'Cherche le contraire de « courageux » : celui qui recule devant le danger.',
     explanation:'"<b>lâche</b>" = cowardly (the opposite of courageous). Courageux ↔ lâche. Ne pas confondre avec "timide" (shy) qui est une caractéristique de personnalité différente. Un pompier est courageux. Quelqu\'un qui fuit le danger est lâche.' }),
 
   makeMCQ({ id:'g5fr-lec-034', chapterId:'fr-lecture', subsection:'reperage', difficulty:2,
@@ -315,7 +320,18 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Passage C : La plage polluée ────────────────────────────────────────────
-const _TEXTE_FR_C = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#164e63">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La plage polluée</b><br><br>Un mardi matin, Nadia et Samuel se promenaient sur la plage de Belle Mare quand ils ont remarqué quelque chose d\'inquiétant : des bouteilles en plastique, des sacs et des emballages jonchaient le sable blanc. La plage, qui ressemblait normalement à un paradis, avait l\'air d\'une décharge.<br><br>Profondément choqués, ils ont décidé de parler à leur professeur, M. Bérenger. Celui-ci a organisé une grande journée de nettoyage avec toute la classe. Armés de gants et de sacs poubelle, les élèves ont ramassé plus de cinquante kilos de déchets en une seule matinée.<br><br>Ce soir-là, M. Bérenger a expliqué que les plastiques rejetés en mer empoisonnent les poissons et les oiseaux marins. Il a demandé à chacun de vérifier la plage tous les mois.<br><br>Depuis, Nadia et Samuel n\'ont plus jamais jeté un seul déchet sur la plage.</div>`;
+const _TEXTE_FR_C = `<div style="background:#f8fafc;border-left:4px solid #0891b2;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
+<b style="color:#155e75">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
+<b>La plage polluée</b><br><br>
+Un mardi matin, Nadia et Samuel se promenaient sur la plage de Belle Mare quand ils ont remarqué quelque chose d\'inquiétant : des bouteilles en plastique, des sacs et des emballages jonchaient le sable blanc.<br><br>
+Ils venaient sur cette plage depuis qu\'ils étaient tout petits. Nadia a dit qu\'elle ne reconnaissait plus l\'endroit. Samuel n\'a rien dit du tout ; il a simplement ramassé une bouteille, puis une deuxième, et il s\'est arrêté en comprenant qu\'à deux, ce matin-là, ils n\'y arriveraient jamais.<br><br>
+La plage, qui ressemblait normalement à un paradis, avait l\'air d\'une décharge.<br><br>
+Profondément choqués, ils ont décidé de parler à leur professeur, M. Bérenger. Celui-ci a écouté sans les interrompre, puis il a posé une seule question : « Et vous, qu\'est-ce que vous proposez ? » Ce n\'était pas la réponse qu\'ils attendaient.<br><br>
+Deux jours plus tard, M. Bérenger a organisé une grande journée de nettoyage avec toute la classe. Armés de gants et de sacs poubelle, les élèves ont ramassé plus de cinquante kilos de déchets en une seule matinée. Ils ont tout trié : le plastique d\'un côté, le verre de l\'autre, le métal à part. Certains déchets étaient là depuis si longtemps que le sable les avait à moitié recouverts.<br><br>
+Ce soir-là, M. Bérenger a expliqué que les plastiques rejetés en mer empoisonnent les poissons et les oiseaux marins. Un sac flottant, a-t-il dit, ressemble beaucoup à une méduse quand on est une tortue. Personne dans la classe n\'a plus fait de bruit après cette phrase.<br><br>
+Il a demandé à chacun de vérifier la plage tous les mois. Au début, les élèves étaient nombreux à venir. Après quelques mois, ils étaient moins nombreux, ce qui arrive presque toujours. Mais ceux qui venaient encore ont commencé à emmener leurs petits frères et leurs petites sœurs, et le groupe s\'est reformé autrement.<br><br>
+Depuis, Nadia et Samuel n\'ont plus jamais jeté un seul déchet sur la plage. Ils disent tous les deux que ce n\'est pas grand-chose. Leur professeur, lui, pense que c\'est exactement l\'inverse.
+</div>`;
 
 STATIC_QUESTIONS.push(
 
@@ -324,28 +340,28 @@ STATIC_QUESTIONS.push(
     options:['À Port Louis','À la plage de Belle Mare','Dans leur salle de classe','Dans un parc national'],
     answer:'À la plage de Belle Mare',
     hint:'Lisez la première phrase du texte.',
-    explanation:'"Nadia et Samuel se promenaient sur <b>la plage de Belle Mare</b>…" — La première phrase indique clairement le lieu.' }),
+    explanation:'"Nadia et Samuel se promenaient sur <b>la plage de Belle Mare</b>…" - La première phrase indique clairement le lieu.' }),
 
   makeMCQ({ id:'g5fr-lec-037', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
     question:`${_TEXTE_FR_C}Combien de kilos de déchets les élèves ont-ils ramassés ?`,
     options:['Dix kilos','Vingt kilos','Plus de cinquante kilos','Exactement cent kilos'],
     answer:'Plus de cinquante kilos',
     hint:'Cherchez le chiffre mentionné lors de la journée de nettoyage.',
-    explanation:'"les élèves ont ramassé <b>plus de cinquante kilos</b> de déchets en une seule matinée" — Le texte donne ce chiffre précis.' }),
+    explanation:'"les élèves ont ramassé <b>plus de cinquante kilos</b> de déchets en une seule matinée" - Le texte donne ce chiffre précis.' }),
 
   makeMCQ({ id:'g5fr-lec-038', chapterId:'fr-lecture', subsection:'vocabulaire', difficulty:2,
     question:`${_TEXTE_FR_C}Que veut dire le mot "jonchaient" dans "des emballages jonchaient le sable" ?`,
     options:['Nettoyaient','Étaient éparpillés sur','Enterraient','Comptaient'],
     answer:'Étaient éparpillés sur',
     hint:'Imaginez le sable couvert de déchets partout.',
-    explanation:'"des emballages <b>jonchaient</b> le sable blanc" — "Joncher" signifie <b>couvrir en étant éparpillé</b>. On dit aussi "Les feuilles mortes jonchent le sol en automne." C\'est une image forte qui montre l\'étendue de la pollution.' }),
+    explanation:'"des emballages <b>jonchaient</b> le sable blanc" - "Joncher" signifie <b>couvrir en étant éparpillé</b>. On dit aussi "Les feuilles mortes jonchent le sol en automne." C\'est une image forte qui montre l\'étendue de la pollution.' }),
 
   makeMCQ({ id:'g5fr-lec-039', chapterId:'fr-lecture', subsection:'figures_style', difficulty:2,
     question:`${_TEXTE_FR_C}Dans le texte, on compare la plage polluée à une décharge. Quelle figure de style est utilisée ?`,
     options:['Une métaphore','Une comparaison','Une personnification','Une répétition'],
     answer:'Une comparaison',
     hint:'Le texte utilise "avait l\'air de" pour relier deux choses différentes.',
-    explanation:'"La plage… avait l\'air d\'<b>une décharge</b>" — C\'est une <b>comparaison</b> (le mot comparatif est "avait l\'air de"). Elle met en contraste la beauté habituelle de la plage avec son état pollué. Une métaphore dirait directement "la plage était une décharge" sans mot comparatif.' }),
+    explanation:'"La plage… avait l\'air d\'<b>une décharge</b>" - C\'est une <b>comparaison</b> (le mot comparatif est "avait l\'air de"). Elle met en contraste la beauté habituelle de la plage avec son état pollué. Une métaphore dirait directement "la plage était une décharge" sans mot comparatif.' }),
 
   makeMCQ({ id:'g5fr-lec-040', chapterId:'fr-lecture', subsection:'inference', difficulty:2,
     question:`${_TEXTE_FR_C}Pourquoi M. Bérenger a-t-il demandé aux élèves de vérifier la plage tous les mois ?`,
@@ -393,12 +409,23 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Leur expérience a changé leur comportement : ils ne jettent plus jamais de déchets',
     hint:'Lisez la dernière phrase du texte.',
-    explanation:'"Depuis, Nadia et Samuel <b>n\'ont plus jamais jeté un seul déchet</b> sur la plage." — Cette phrase montre que leur expérience a eu un impact durable sur leurs habitudes. L\'éducation a transformé leur comportement, ce qui est le vrai message du texte.' }),
+    explanation:'"Depuis, Nadia et Samuel <b>n\'ont plus jamais jeté un seul déchet</b> sur la plage." - Cette phrase montre que leur expérience a eu un impact durable sur leurs habitudes. L\'éducation a transformé leur comportement, ce qui est le vrai message du texte.' }),
 
 );
 
 // ── Passage D : La fête des moissons ────────────────────────────────────────
-const _TEXTE_FR_D = `<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#14532d">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>La fête des moissons</b><br><br>Chaque année au mois d\'avril, le village de Rivière du Rempart célèbre la fête des moissons. Les agriculteurs remercient la terre pour ses richesses : la canne à sucre, les légumes et les fruits qui ont nourri leurs familles toute l\'année.<br><br>Le matin, les habitants cuisinent ensemble. Des marmites de briani, de dholl puri et de gâteaux au miel embaument les ruelles. Chacun apporte quelque chose et les voisins partagent leurs plats avec entrain.<br><br>L\'après-midi, le grand-père de Leila, un vieil homme aux mains calleuses, s\'assoit sous les filaos et raconte l\'histoire de la première fête : comment les ancêtres ont survécu à une sécheresse grâce à une récolte miraculeuse. Les enfants écoutent, les yeux grands ouverts.<br><br>Au coucher du soleil, musique et danses emplissent la place du village. Ce soir-là, tout le monde est une grande famille.</div>`;
+const _TEXTE_FR_D = `<div style="background:#f8fafc;border-left:4px solid #ea580c;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
+<b style="color:#9a3412">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
+<b>La fête des moissons</b><br><br>
+Chaque année au mois d\'avril, le village de Rivière du Rempart célèbre la fête des moissons.<br><br>
+On prépare la fête pendant toute la semaine qui précède. Les hommes montent une grande tente sur la place, les femmes vérifient les marmites, et les enfants sont chargés des chaises, ce qui prend beaucoup plus de temps que nécessaire.<br><br>
+Les agriculteurs remercient la terre pour ses richesses : la canne à sucre, les légumes et les fruits qui ont nourri leurs familles toute l\'année. Certains apportent une petite partie de leur récolte et la déposent devant la tente, non pas pour la vendre, mais pour la montrer.<br><br>
+Le matin, les habitants cuisinent ensemble. Des marmites de briani, de dholl puri et de gâteaux au miel embaument les ruelles. Chacun apporte quelque chose et les voisins partagent leurs plats avec entrain. Personne ne compte ce qu\'il a donné et personne ne compte ce qu\'il a reçu, et c\'est justement la règle de la journée.<br><br>
+L\'après-midi, le grand-père de Leila, un vieil homme aux mains calleuses, s\'assoit sous les filaos et raconte l\'histoire de la première fête : comment les ancêtres ont survécu à une sécheresse grâce à une récolte miraculeuse. Il la raconte chaque année et il ne la raconte jamais exactement de la même manière. Les plus vieux du village s\'en aperçoivent et ne disent rien.<br><br>
+Les enfants écoutent, les yeux grands ouverts. Leila connaît l\'histoire par cœur. Elle l\'écoute quand même, assise le plus près possible, parce qu\'elle a compris quelque chose que les autres n\'ont pas encore compris : un jour, ce sera à quelqu\'un d\'autre de la raconter.<br><br>
+Au coucher du soleil, musique et danses emplissent la place du village. Les tambours commencent doucement, puis plus fort, et les grands-parents dansent les premiers, ce qui fait toujours rire les petits.<br><br>
+Ce soir-là, tout le monde est une grande famille.
+</div>`;
 
 STATIC_QUESTIONS.push(
 
@@ -407,7 +434,7 @@ STATIC_QUESTIONS.push(
     options:['En janvier','En mars','En avril','En décembre'],
     answer:'En avril',
     hint:'Lisez la première phrase du texte.',
-    explanation:'"Chaque année <b>au mois d\'avril</b>, le village de Rivière du Rempart célèbre la fête des moissons." — La date est indiquée dès le début.' }),
+    explanation:'"Chaque année <b>au mois d\'avril</b>, le village de Rivière du Rempart célèbre la fête des moissons." - La date est indiquée dès le début.' }),
 
   makeMCQ({ id:'g5fr-lec-045', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
     question:`${_TEXTE_FR_D}Citez deux plats mentionnés dans le texte.`,
@@ -419,7 +446,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Le briani et le dholl puri',
     hint:'Lisez le deuxième paragraphe sur la cuisine.',
-    explanation:'"Des marmites de <b>briani</b>, de <b>dholl puri</b> et de gâteaux au miel embaument les ruelles." — Le briani et le dholl puri sont deux plats traditionnels mauriciens mentionnés explicitement.' }),
+    explanation:'"Des marmites de <b>briani</b>, de <b>dholl puri</b> et de gâteaux au miel embaument les ruelles." - Le briani et le dholl puri sont deux plats traditionnels mauriciens mentionnés explicitement.' }),
 
   makeMCQ({ id:'g5fr-lec-046', chapterId:'fr-lecture', subsection:'vocabulaire', difficulty:2,
     question:`${_TEXTE_FR_D}Que veut dire "mains calleuses" pour décrire le grand-père ?`,
@@ -430,8 +457,8 @@ STATIC_QUESTIONS.push(
       'Des mains froides et pâles'
     ],
     answer:'Des mains dures et rugueuses à cause du travail manuel',
-    hint:'Le grand-père est agriculteur — pensez à quel type de mains on a quand on travaille la terre.',
-    explanation:'"un vieil homme aux <b>mains calleuses</b>" — Des <b>mains calleuses</b> sont dures et rugueuses, résultat d\'années de travail manuel. Les agriculteurs développent des callosités à force de manier des outils. Cela montre que le grand-père a travaillé dur toute sa vie.' }),
+    hint:'Le grand-père est agriculteur - pensez à quel type de mains on a quand on travaille la terre.',
+    explanation:'"un vieil homme aux <b>mains calleuses</b>" - Des <b>mains calleuses</b> sont dures et rugueuses, résultat d\'années de travail manuel. Les agriculteurs développent des callosités à force de manier des outils. Cela montre que le grand-père a travaillé dur toute sa vie.' }),
 
   makeMCQ({ id:'g5fr-lec-047', chapterId:'fr-lecture', subsection:'inference', difficulty:2,
     question:`${_TEXTE_FR_D}Pourquoi les agriculteurs célèbrent-ils la fête des moissons ?`,
@@ -443,18 +470,18 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Pour remercier la terre pour les richesses qu\'elle leur a données',
     hint:'Lisez la fin de la première phrase du texte.',
-    explanation:'"Les agriculteurs <b>remercient la terre</b> pour ses richesses : la canne à sucre, les légumes et les fruits qui ont nourri leurs familles toute l\'année." — La fête est un acte de <b>gratitude envers la nature</b>.' }),
+    explanation:'"Les agriculteurs <b>remercient la terre</b> pour ses richesses : la canne à sucre, les légumes et les fruits qui ont nourri leurs familles toute l\'année." - La fête est un acte de <b>gratitude envers la nature</b>.' }),
 
   makeMCQ({ id:'g5fr-lec-048', chapterId:'fr-lecture', subsection:'figures_style', difficulty:3,
     question:`${_TEXTE_FR_D}"Ce soir-là, tout le monde est une grande famille." Identifiez la figure de style et expliquez son sens.`,
     options:[
-      'Une comparaison — les gens ont tous les mêmes parents',
-      'Une métaphore — elle exprime la solidarité et l\'unité des habitants du village',
-      'Une personnification — la famille prend la parole dans le texte',
-      'Une hyperbole — les habitants ont vraiment trop de familles'
+      'Une comparaison - les gens ont tous les mêmes parents',
+      'Une métaphore - elle exprime la solidarité et l\'unité des habitants du village',
+      'Une personnification - la famille prend la parole dans le texte',
+      'Une hyperbole - les habitants ont vraiment trop de familles'
     ],
-    answer:'Une métaphore — elle exprime la solidarité et l\'unité des habitants du village',
-    hint:'Le texte ne dit pas "comme une famille" — c\'est une affirmation directe.',
+    answer:'Une métaphore - elle exprime la solidarité et l\'unité des habitants du village',
+    hint:'Le texte ne dit pas "comme une famille" - c\'est une affirmation directe.',
     explanation:'"tout le monde est <b>une grande famille</b>" est une <b>métaphore</b> (affirmation directe sans "comme" ni "ressemble à"). Elle exprime l\'idée que lors de cette fête, les habitants du village partagent, s\'entraident et vivent comme une seule famille unie, même s\'ils n\'ont pas de lien de sang.' }),
 
   makeMCQ({ id:'g5fr-lec-049', chapterId:'fr-lecture', subsection:'inference', difficulty:3,
@@ -467,7 +494,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Il transmet l\'histoire et les traditions orales aux jeunes générations',
     hint:'Que fait-il l\'après-midi, sous les filaos ?',
-    explanation:'"le grand-père de Leila… <b>raconte l\'histoire de la première fête</b> : comment les ancêtres ont survécu à une sécheresse…" — Son rôle est de <b>transmettre la mémoire collective</b> et les traditions aux enfants qui "écoutent, les yeux grands ouverts". C\'est la tradition de la transmission orale.' }),
+    explanation:'"le grand-père de Leila… <b>raconte l\'histoire de la première fête</b> : comment les ancêtres ont survécu à une sécheresse…" - Son rôle est de <b>transmettre la mémoire collective</b> et les traditions aux enfants qui "écoutent, les yeux grands ouverts". C\'est la tradition de la transmission orale.' }),
 
   makeMCQ({ id:'g5fr-lec-050', chapterId:'fr-lecture', subsection:'idee_principale', difficulty:4,
     question:`${_TEXTE_FR_D}En quoi cette fête illustre-t-elle les valeurs de la société mauricienne selon le texte ?`,
@@ -484,7 +511,18 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Passage E : Le jardin scolaire ──────────────────────────────────────────
-const _TEXTE_FR_E = `<div style="background:#f8fafc;border-left:4px solid #a855f7;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.7;color:#0f172a"><b style="color:#6b21a8">Lisez le texte attentivement, puis répondez aux questions.</b><br><br><b>Le jardin scolaire</b><br><br>Cette année, les élèves de la classe de Mme Ramkissoon ont décidé de créer un jardin potager dans un coin inutilisé de la cour d\'école.<br><br>Au mois de mars, ils ont préparé la terre, enlevé les mauvaises herbes et creusé des sillons. Ils ont planté des tomates, des haricots et des herbes aromatiques comme la coriandre et le thym.<br><br>Chaque groupe d\'élèves est responsable d\'un jour d\'arrosage. « Comme de vrais petits agriculteurs ! » plaisante Mme Ramkissoon. Elle leur explique aussi comment les plantes fabriquent leur propre nourriture grâce à la photosynthèse.<br><br>En juin, la première récolte a été magnifique. Les tomates bien rouges et les haricots verts ont été confiés à la cantine. Le chef cuisinier les a utilisés pour préparer un rougail tomates pour toute l\'école.<br><br>Si chaque école à Maurice créait son jardin, les enfants apprendraient à respecter la nature et à mieux manger.</div>`;
+const _TEXTE_FR_E = `<div style="background:#f8fafc;border-left:4px solid #16a34a;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
+<b style="color:#166534">Lisez le texte attentivement, puis répondez aux questions.</b><br><br>
+<b>Le jardin scolaire</b><br><br>
+Cette année, les élèves de la classe de Mme Ramkissoon ont décidé de créer un jardin potager dans un coin inutilisé de la cour d\'école.<br><br>
+Ce coin ne servait à rien depuis des années. Il y avait là un vieux banc cassé, quelques pierres et beaucoup d\'herbes hautes. Quand les élèves ont proposé leur idée, le directeur a demandé qui s\'occuperait du jardin pendant les vacances. Personne n\'avait pensé à cette question. Ils sont revenus une semaine plus tard avec un calendrier écrit à la main.<br><br>
+Au mois de mars, ils ont préparé la terre, enlevé les mauvaises herbes et creusé des sillons. Le travail a été plus dur que prévu. La terre était sèche et pleine de cailloux, et il a fallu trois après-midi entiers avant de pouvoir planter quoi que ce soit.<br><br>
+Ils ont planté des tomates, des haricots et des herbes aromatiques comme la coriandre et le thym. Chaque groupe d\'élèves est responsable d\'un jour d\'arrosage. « Comme de vrais petits agriculteurs ! » plaisante Mme Ramkissoon.<br><br>
+Elle leur explique aussi comment les plantes fabriquent leur propre nourriture grâce à la photosynthèse. Les élèves ont mesuré les plants toutes les semaines et noté les hauteurs dans un cahier. Au bout d\'un mois, ils ont pu dessiner une courbe, et cette courbe leur a appris plus de choses que bien des leçons.<br><br>
+Tout n\'a pas réussi. Les haricots ont bien poussé, mais les premiers plants de tomates ont été mangés par des insectes, et il a fallu recommencer. Mme Ramkissoon n\'a pas remplacé les plants elle-même : elle a demandé aux élèves de chercher pourquoi.<br><br>
+En juin, la première récolte a été magnifique. Les tomates bien rouges et les haricots verts ont été confiés à la cantine. Le chef cuisinier les a utilisés pour préparer un rougail tomates pour toute l\'école. Ce jour-là, plusieurs élèves ont repris du riz deux fois.<br><br>
+Si chaque école à Maurice créait son jardin, les enfants apprendraient à respecter la nature et à mieux manger.
+</div>`;
 
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5fr-lec-051', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
@@ -497,21 +535,21 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Des tomates, des haricots et des herbes aromatiques',
     hint:'Cherchez la liste dans le deuxième paragraphe.',
-    explanation:'"Ils ont planté des <b>tomates</b>, des <b>haricots</b> et des <b>herbes aromatiques</b> comme la coriandre et le thym." — La liste est donnée clairement dans le deuxième paragraphe.' }),
+    explanation:'"Ils ont planté des <b>tomates</b>, des <b>haricots</b> et des <b>herbes aromatiques</b> comme la coriandre et le thym." - La liste est donnée clairement dans le deuxième paragraphe.' }),
 
   makeMCQ({ id:'g5fr-lec-052', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
     question:`${_TEXTE_FR_E}En quel mois les élèves ont-ils préparé la terre ?`,
     options:['En janvier','En mars','En juin','En septembre'],
     answer:'En mars',
     hint:'Le deuxième paragraphe mentionne le mois précis.',
-    explanation:'"<b>Au mois de mars</b>, ils ont préparé la terre…" — Mars marque le début des travaux de jardinage. La récolte a eu lieu en juin, trois mois plus tard.' }),
+    explanation:'"<b>Au mois de mars</b>, ils ont préparé la terre…" - Mars marque le début des travaux de jardinage. La récolte a eu lieu en juin, trois mois plus tard.' }),
 
   makeMCQ({ id:'g5fr-lec-053', chapterId:'fr-lecture', subsection:'reperage', difficulty:1,
     question:`${_TEXTE_FR_E}Quel processus Mme Ramkissoon explique-t-elle aux élèves ?`,
     options:['La germination des graines','La rotation des cultures','La photosynthèse','Le compostage'],
     answer:'La photosynthèse',
     hint:'Cherchez le mot scientifique utilisé dans le troisième paragraphe.',
-    explanation:'"Elle leur explique aussi comment les plantes fabriquent leur propre nourriture grâce à la <b>photosynthèse</b>." — Ce processus transforme la lumière du soleil, l\'eau et le dioxyde de carbone en sucres nourrissants.' }),
+    explanation:'"Elle leur explique aussi comment les plantes fabriquent leur propre nourriture grâce à la <b>photosynthèse</b>." - Ce processus transforme la lumière du soleil, l\'eau et le dioxyde de carbone en sucres nourrissants.' }),
 
   makeMCQ({ id:'g5fr-lec-054', chapterId:'fr-lecture', subsection:'vocabulaire', difficulty:2,
     question:`${_TEXTE_FR_E}Que veut dire "un jardin potager" dans ce texte ?`,
@@ -522,8 +560,8 @@ STATIC_QUESTIONS.push(
       'Un jardin avec des plantes médicinales uniquement'
     ],
     answer:'Un jardin où l\'on cultive des légumes',
-    hint:'Le texte mentionne des tomates, des haricots et des herbes — des aliments.',
-    explanation:'"Potager" vient du mot "potage" (soupe). Un <b>jardin potager</b> est un jardin où l\'on fait pousser des <b>légumes et des herbes</b> destinés à la consommation. Le contexte confirme : tomates, haricots, coriandre, thym — tous des aliments.' }),
+    hint:'Le texte mentionne des tomates, des haricots et des herbes - des aliments.',
+    explanation:'"Potager" vient du mot "potage" (soupe). Un <b>jardin potager</b> est un jardin où l\'on fait pousser des <b>légumes et des herbes</b> destinés à la consommation. Le contexte confirme : tomates, haricots, coriandre, thym - tous des aliments.' }),
 
   makeMCQ({ id:'g5fr-lec-055', chapterId:'fr-lecture', subsection:'vocabulaire', difficulty:2,
     question:`${_TEXTE_FR_E}Dans "ils ont creusé des sillons", que veut dire "des sillons" ?`,
@@ -547,10 +585,10 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Pour partager le travail équitablement et apprendre la responsabilité',
     hint:'Pensez à ce que ce projet d\'école cherche à apprendre aux élèves.',
-    explanation:'Le texte précise que ce jardin est un projet d\'apprentissage. Chaque groupe ayant son jour d\'arrosage, c\'est une façon de <b>partager les tâches équitablement</b> et de donner à chaque élève le sens de la <b>responsabilité</b> — si son groupe n\'arrose pas, les plantes souffrent.' }),
+    explanation:'Le texte précise que ce jardin est un projet d\'apprentissage. Chaque groupe ayant son jour d\'arrosage, c\'est une façon de <b>partager les tâches équitablement</b> et de donner à chaque élève le sens de la <b>responsabilité</b> - si son groupe n\'arrose pas, les plantes souffrent.' }),
 
   makeMCQ({ id:'g5fr-lec-057', chapterId:'fr-lecture', subsection:'figures_style', difficulty:3,
-    question:`${_TEXTE_FR_E}"Comme de vrais petits agriculteurs !" — quelle figure de style est utilisée ici ?`,
+    question:`${_TEXTE_FR_E}"Comme de vrais petits agriculteurs !" - quelle figure de style est utilisée ici ?`,
     options:['Une métaphore','Une comparaison','Une personnification','Une hyperbole'],
     answer:'Une comparaison',
     hint:'Le mot "comme" est la clé pour identifier cette figure de style.',
@@ -566,17 +604,17 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Elle a été donnée à la cantine pour préparer un plat pour toute l\'école',
     hint:'Lisez le quatrième paragraphe pour trouver ce qu\'il est advenu des légumes.',
-    explanation:'"Les tomates bien rouges et les haricots verts ont été confiés à <b>la cantine</b>. Le chef cuisinier les a utilisés pour préparer un <b>rougail tomates pour toute l\'école</b>." — La récolte a profité à l\'ensemble de l\'établissement, pas seulement à la classe.' }),
+    explanation:'"Les tomates bien rouges et les haricots verts ont été confiés à <b>la cantine</b>. Le chef cuisinier les a utilisés pour préparer un <b>rougail tomates pour toute l\'école</b>." - La récolte a profité à l\'ensemble de l\'établissement, pas seulement à la classe.' }),
 
   makeMCQ({ id:'g5fr-lec-059', chapterId:'fr-lecture', subsection:'grammaire', difficulty:4,
     question:`${_TEXTE_FR_E}Dans la dernière phrase "Si chaque école créait son jardin, les enfants apprendraient…", quel temps est utilisé après "si" et que cela exprime-t-il ?`,
     options:[
-      'Le présent — une action qui se passe maintenant',
-      'L\'imparfait — une hypothèse sur quelque chose qui pourrait arriver',
-      'Le passé composé — une action déjà réalisée',
-      'Le futur — une certitude sur ce qui se passera'
+      'Le présent - une action qui se passe maintenant',
+      'L\'imparfait - une hypothèse sur quelque chose qui pourrait arriver',
+      'Le passé composé - une action déjà réalisée',
+      'Le futur - une certitude sur ce qui se passera'
     ],
-    answer:'L\'imparfait — une hypothèse sur quelque chose qui pourrait arriver',
+    answer:'L\'imparfait - une hypothèse sur quelque chose qui pourrait arriver',
     hint:'La structure "Si + imparfait + conditionnel" exprime une condition hypothétique.',
     explanation:'"Si chaque école <b>créait</b>" → l\'imparfait après "si" indique une <b>hypothèse</b> (ce n\'est pas encore réel). Le conditionnel "apprendraient" montre la conséquence possible. Cette structure (Si + imparfait → conditionnel présent) exprime un <b>souhait ou une suggestion</b> de l\'auteur.' }),
 

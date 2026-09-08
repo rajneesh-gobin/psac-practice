@@ -93,8 +93,28 @@
             color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;
             font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none}
   .res-open:active{opacity:.85}
+  /* "I have done this". A secondary control on purpose: opening the worksheet
+     is the action, ticking it is the afterthought. 44px tall like every other
+     tap target on this page — a child on a phone is the only user here. */
+  .res-done{display:inline-flex;align-items:center;justify-content:center;gap:5px;
+            margin-left:8px;min-height:44px;background:transparent;color:var(--muted);
+            border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:13px;
+            font-weight:700;font-family:inherit;cursor:pointer}
+  .res-done:active{opacity:.85}
+  .res-done[disabled]{opacity:.6;cursor:default}
+  /* ⚠ Green AND a tick AND the words change. Colour alone would say nothing to
+     a colour-blind child, and nothing at all in a screenshot sent to a parent. */
+  .res-done.on{background:#dcfce7;border-color:#86efac;color:#14532d}
   .res-empty{color:var(--muted);font-size:13px;text-align:center;padding:10px 0}
   .res-loading{color:var(--muted);font-size:13px;padding:8px 0}
+  .res-date{font-size:12px;color:var(--muted);margin-bottom:8px}
+  /* Sort control - 44px targets, wraps rather than scrolling on a phone. */
+  .res-sort{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:10px}
+  .res-sort-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .res-sort-btn{min-height:44px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);
+                background:var(--card);color:inherit;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer}
+  .res-sort-btn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .res-sort-btn:active{opacity:.85}
   @media (prefers-color-scheme:dark){
     :root{--bg:#12141c;--card:#1b1e29;--ink:#eef0f6;--muted:#9aa1b1;--line:#2b3040;
           --okbg:#0f2f22;--badbg:#361a1a}
@@ -133,16 +153,19 @@
     <div class="foot">PSAC Practice</div>
   </section>
 
-  <!-- ══ 1b · HOME — shown after PIN, before quiz ══ -->
+  <!-- ══ 1b · HOME - shown after PIN, before quiz ══ -->
   <section id="s-home" class="screen">
     <div class="brandbar">
       <div class="t" id="h-title">Homework</div>
       <div class="s" id="h-who"></div>
+      <!-- Shown only when the pupil signed in with their OWN PIN: that is the
+           mode where the name is a label rather than the identity key. -->
+      <button type="button" id="h-rename" class="res-done" hidden>✏️ Not my name?</button>
     </div>
     <div class="card">
       <button id="h-start" class="btn">▶ Start homework</button>
     </div>
-    <!-- Class resources — loaded async from /api/classroom-materials -->
+    <!-- Class resources - loaded async from /api/classroom-materials -->
     <div class="res-section" id="h-res" style="display:none">
       <h2>📁 Resources from your teacher</h2>
       <div id="h-res-list"><p class="res-loading">Loading…</p></div>

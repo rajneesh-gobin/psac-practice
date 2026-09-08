@@ -98,7 +98,7 @@ exports.handler = async () => {
   if (!families?.length) return { statusCode: 200 };
 
   // Parents who switched this off in Account & Settings. Absence of the key -
-  // and a database that has not run supabase-migration.sql at all, where
+  // and a database that has not run supabase-schema.sql at all, where
   // this select errors and sbGet returns null - both mean "opted in", which is
   // the behaviour this function had before the setting existed.
   const optedOut = new Set();
@@ -113,7 +113,7 @@ exports.handler = async () => {
   // notIncluded stays empty on any failure, which means everyone gets their
   // digest. Same direction as the opt-out logic above: the pre-existing
   // behaviour of this cron was "send", and a database that has not run
-  // supabase-plan-enforcement.sql must not silently stop sending.
+  // supabase-schema.sql must not silently stop sending.
   const notIncluded = new Set();
   try {
     const gs  = await sbGet(`/rest/v1/mm_data?key=eq.global_settings&select=value&limit=1`);

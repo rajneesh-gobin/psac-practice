@@ -1,0 +1,172 @@
+[
+ {
+  "subject": "english",
+  "year": "2025",
+  "file": "2025-Grade 5 English 2025.pdf",
+  "status": "OK",
+  "bytes": 369661,
+  "sourcePage": 5480,
+  "categoryId": 583,
+  "fileId": 12463
+ },
+ {
+  "subject": "french",
+  "year": "2025",
+  "file": "2025-Grade 5 French 2025.pdf",
+  "status": "OK",
+  "bytes": 299116,
+  "sourcePage": 5480,
+  "categoryId": 583,
+  "fileId": 12465
+ },
+ {
+  "subject": "mathematics",
+  "year": "2025",
+  "file": "2025-Grade 5 Mathematics 2025.pdf",
+  "status": "OK",
+  "bytes": 696513,
+  "sourcePage": 5480,
+  "categoryId": 583,
+  "fileId": 12464
+ },
+ {
+  "subject": "science",
+  "year": "2025",
+  "file": "2025-Grade 5 Science 2025.pdf",
+  "status": "OK",
+  "bytes": 645730,
+  "sourcePage": 5480,
+  "categoryId": 583,
+  "fileId": 12467
+ },
+ {
+  "subject": "history-geography",
+  "year": "2025",
+  "file": "2025-Grade 5 Hist and Geo 2025.pdf",
+  "status": "OK",
+  "bytes": 735033,
+  "sourcePage": 5480,
+  "categoryId": 583,
+  "fileId": 12466
+ },
+ {
+  "subject": "english",
+  "year": "2024",
+  "file": "2024-Grade 5 English 2024.pdf",
+  "status": "OK",
+  "bytes": 354375,
+  "sourcePage": 5480,
+  "categoryId": 511,
+  "fileId": 12487
+ },
+ {
+  "subject": "french",
+  "year": "2024",
+  "file": "2024-Grade 5 French 2024.pdf",
+  "status": "OK",
+  "bytes": 507828,
+  "sourcePage": 5480,
+  "categoryId": 511,
+  "fileId": 12486
+ },
+ {
+  "subject": "mathematics",
+  "year": "2024",
+  "file": "2024-Grade 5 Mathematics 2024.pdf",
+  "status": "OK",
+  "bytes": 545323,
+  "sourcePage": 5480,
+  "categoryId": 511,
+  "fileId": 12493
+ },
+ {
+  "subject": "english",
+  "year": "2023",
+  "file": "2023-Grade 5 English 2023.pdf",
+  "status": "OK",
+  "bytes": 364391,
+  "sourcePage": 5480,
+  "categoryId": 486,
+  "fileId": 12476
+ },
+ {
+  "subject": "french",
+  "year": "2023",
+  "file": "2023-Grade 5 French 2023.pdf",
+  "status": "OK",
+  "bytes": 536599,
+  "sourcePage": 5480,
+  "categoryId": 486,
+  "fileId": 12475
+ },
+ {
+  "subject": "mathematics",
+  "year": "2023",
+  "file": "2023-Grade 5 Maths 2023.pdf",
+  "status": "OK",
+  "bytes": 648336,
+  "sourcePage": 5480,
+  "categoryId": 486,
+  "fileId": 12481
+ },
+ {
+  "subject": "science",
+  "year": "2024",
+  "file": "2024-Modular Grade 5 Science 2024.pdf",
+  "status": "OK",
+  "bytes": 1625607,
+  "sourcePage": 12504,
+  "categoryId": 586,
+  "fileId": 12511
+ },
+ {
+  "subject": "history-geography",
+  "year": "2024",
+  "file": "2024-Modular Grade 5 Hist Geo Mauritius 2024.pdf",
+  "status": "OK",
+  "bytes": 1105056,
+  "sourcePage": 12504,
+  "categoryId": 586,
+  "fileId": 12507
+ },
+ {
+  "subject": "history-geography",
+  "year": "2024",
+  "file": "2024-Modular Grade 5 Hist Geo Rodrigues 2024.pdf",
+  "status": "OK",
+  "bytes": 1190467,
+  "sourcePage": 12504,
+  "categoryId": 586,
+  "fileId": 11249
+ },
+ {
+  "subject": "science",
+  "year": "2023",
+  "file": "2023-Modular Grade 5 Science 2023.pdf",
+  "status": "OK",
+  "bytes": 1709139,
+  "sourcePage": 12504,
+  "categoryId": 585,
+  "fileId": 12512
+ },
+ {
+  "subject": "history-geography",
+  "year": "2023",
+  "file": "2023-Modular Grade 5 Hist Geo Mauritius 2023.pdf",
+  "status": "OK",
+  "bytes": 894013,
+  "sourcePage": 12504,
+  "categoryId": 585,
+  "fileId": 12513
+ },
+ {
+  "subject": "history-geography",
+  "year": "2023",
+  "file": "2023-Modular Grade 5 Hist Geo Rodrigues 2023.pdf",
+  "status": "OK",
+  "bytes": 894715,
+  "sourcePage": 12504,
+  "categoryId": 585,
+  "fileId": 12514
+ }
+]

@@ -47,7 +47,7 @@ STATIC_QUESTIONS.push(
     question:'What is the sum of angles in ANY triangle?',
     options:['90°','180°','270°','360°'],
     answer:'180°',
-    hint:'A straight line = 180°. A triangle fits neatly into this.',
+    hint:'Tear the three corners off a paper triangle and lay them side by side. What shape do they make together?',
     explanation:'The three interior angles of any triangle always add up to <b>180°</b>. This is true for equilateral, isosceles, scalene, and right-angled triangles.' }),
 
   makeNum({ id:'g6m-geo-003', chapterId:'g6-geometry', subsection:'2d_shapes', difficulty:2,
@@ -153,7 +153,7 @@ STATIC_QUESTIONS.push(
     question:'A shape has 4 lines of symmetry. Which shape could it be?',
     options:['Rectangle','Equilateral triangle','Square','Regular pentagon'],
     answer:'Square',
-    hint:'Count lines of symmetry: square has 4 (2 through midpoints of sides, 2 through corners).',
+    hint:'For each shape, count the folds that work: through the midpoints of opposite sides, and through opposite corners.',
     explanation:'A <b>square</b> has <b>4 lines of symmetry</b>: 2 through midpoints of opposite sides, and 2 through opposite corners. A rectangle has 2, an equilateral triangle has 3, a regular pentagon has 5, a regular hexagon has 6.' }),
 
   makeNum({ id:'g6m-geo-018', chapterId:'g6-geometry', subsection:'angles', difficulty:2,

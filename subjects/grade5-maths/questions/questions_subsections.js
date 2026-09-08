@@ -32,7 +32,7 @@ const QS2 = [
     question:'What is the value of the Roman numeral <b>XIV</b>?',
     options:['9','14','15','16'],
     answer:'14',
-    hint:'X=10, IV=4 (4 = 5−1 written as IV). 10+4=14.',
+    hint:'X is ten, and a smaller numeral before a larger one means subtract. Work out IV, then add.',
     explanation:'XIV = X(10) + IV(4) = <b>14</b>.' }),
 
   makeNum({ id:'ROM02', chapterId:'numeration', subsection:'roman', difficulty:2,
@@ -320,7 +320,7 @@ const QS2 = [
     question:'What is <b>3/8</b> as a decimal?',
     options:['0.375','0.38','0.3','0.25'],
     answer:'0.375',
-    hint:'Divide 3 by 8. 3.000 ÷ 8 = 0.375.',
+    hint:'A fraction is a division. Divide the top number by the bottom one, adding decimal places as you go.',
     explanation:'3÷8 = <b>0.375</b>.' }),
 
   makeNum({ id:'DCO03', chapterId:'decimals', subsection:'conversion', difficulty:2,
@@ -336,7 +336,7 @@ const QS2 = [
     question:'What does <b>%</b> mean?',
     options:['Per ten','Per hundred','Per thousand','Per million'],
     answer:'Per hundred',
-    hint:'The word "percent" comes from Latin "per centum" meaning "per hundred".',
+    hint:'"Percent" comes from the Latin "per centum" - the same root you meet in "century" and "centimetre".',
     explanation:'% means <b>per hundred</b>. So 45% = 45 out of 100.' }),
 
   makeMCQ({ id:'PC02', chapterId:'percentage', subsection:'conversion', difficulty:1,
@@ -432,7 +432,7 @@ const QS2 = [
     question:'Shop A sells pens at <b>Rs 5 each</b>. Shop B sells <b>8 pens for Rs 36</b>.<br>Which is the <b>better buy</b>?',
     options:['Shop A (Rs 5 each)','Shop B (Rs 4.50 each)','Both the same price','Cannot tell'],
     answer:'Shop B (Rs 4.50 each)',
-    hint:'Shop B: 36÷8=Rs 4.50 per pen. Compare with Rs 5.',
+    hint:'To compare fairly, work out what ONE pen costs at each shop.',
     explanation:'Shop B: 36÷8=Rs 4.50 per pen < Rs 5. <b>Shop B is better</b>.' }),
 
   makeNum({ id:'DISC03', chapterId:'money', subsection:'discount', difficulty:3,
@@ -481,7 +481,7 @@ const QS2 = [
     question:'If today is <b>Wednesday 5th March</b>, what day is <b>14th March</b>?',
     options:['Monday','Tuesday','Friday','Thursday'],
     answer:'Friday',
-    hint:'14 − 5 = 9 days later. 9 ÷ 7 = 1 week + 2 days. Wednesday + 2 = Friday.',
+    hint:'Count the days between the two dates, take out the whole weeks, then move on by whatever is left.',
     explanation:'9 days later: 9÷7=1r2. Wednesday+2=<b>Friday</b>.' }),
 
   makeNum({ id:'CAL02', chapterId:'time', subsection:'calendar', difficulty:2,

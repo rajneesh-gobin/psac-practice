@@ -155,7 +155,7 @@ STATIC_QUESTIONS.push(
       'Adding salt to purify water'
     ],
     answer:'Passing water through layers of material (sand, gravel) to remove particles and impurities',
-    hint:'Imagine pouring muddy water through layers of sand and gravel - what comes out?',
+    hint:'One of these separates dirt out physically; the others change the water with chemicals or heat.',
     explanation:'<b>Filtration</b> removes solid particles and impurities from water by passing it through layers of sand, gravel and charcoal. It is one step in making water safe to drink. Filtration is followed by <b>disinfection</b> (adding chlorine or using UV light) to kill germs.' }),
 
   makeMCQ({ id:'g4s-wat-018', chapterId:'g4sci-water', subsection:'water_cycle', difficulty:3,

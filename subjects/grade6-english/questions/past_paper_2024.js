@@ -1,6 +1,14 @@
 'use strict';
-// PSAC Grade 6 English 2024 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 English 2024 - past-paper questions adapted to MCQ format.
 // Source: Mauritius Examinations Syndicate (mauritiuspapers.co.mu).
+//
+// Q8A is a picture story: three panels the child writes one sentence about
+// each. It cannot become an MCQ, so it lives in the read-only viewer with the
+// artwork cropped from the paper (assets/past-papers/g6-english-2024/).
+const _g6e24 = (file, alt) =>
+  `<img src="assets/past-papers/g6-english-2024/${file}.png" alt="${alt}"` +
+  ` style="display:block;margin:8px auto;max-width:min(100%,340px);height:auto;` +
+  `border-radius:6px;background:#fff">`;
 // Q2: grammar fill-in MCQ (10 items) | Q3B: vocabulary MCQ (5) | Q4B: comprehension MCQ (5)
 
 STATIC_QUESTIONS.push(
@@ -10,7 +18,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-pp24-001', chapterId:'g6eng-nouns', subsection:'common_proper', difficulty:1,
     question:'My mother is going to Port Louis. <b>___</b> will be back at 13 00.',
     options:['She','He','It','They'], answer:'She',
-    hint:'"My mother" is a female singular noun — use the matching pronoun.',
+    hint:'"My mother" is a female singular noun - use the matching pronoun.',
     explanation:'"She" replaces "my mother" (female, singular).' }),
 
   makeMCQ({ id:'g6eng-pp24-002', chapterId:'g6eng-verbs', subsection:'past_tense', difficulty:1,
@@ -59,9 +67,9 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-pp24-009', chapterId:'g6eng-clauses', subsection:'clause_types', difficulty:2,
     question:'The pupil <b>___</b> bag was lost was crying.',
     options:['which','whom','who','whose'], answer:'whose',
-    hint:'We are talking about the pupil\'s bag — a possessive relationship. Which relative pronoun shows possession?',
+    hint:'We are talking about the pupil\'s bag - a possessive relationship. Which relative pronoun shows possession?',
     explanation:'"Whose" is the possessive relative pronoun. "The pupil whose bag was lost" = the bag belongs to the pupil.',
-    learnMore:'The four key relative pronouns and when to use them:<br><br>• <b>who</b> — for people as the subject: "the boy <u>who</u> ran"<br>• <b>whom</b> — for people as the object: "the girl <u>whom</u> I met"<br>• <b>whose</b> — for possession (people or things): "the pupil <u>whose</u> bag was lost"<br>• <b>which</b> — for things/animals: "the car <u>which</u> broke down"<br><br>Quick test for <b>whose</b>: replace it with "his/her/its" — if the sentence still makes sense, "whose" is correct.' }),
+    learnMore:'The four key relative pronouns and when to use them:<br><br>• <b>who</b> - for people as the subject: "the boy <u>who</u> ran"<br>• <b>whom</b> - for people as the object: "the girl <u>whom</u> I met"<br>• <b>whose</b> - for possession (people or things): "the pupil <u>whose</u> bag was lost"<br>• <b>which</b> - for things/animals: "the car <u>which</u> broke down"<br><br>Quick test for <b>whose</b>: replace it with "his/her/its" - if the sentence still makes sense, "whose" is correct.' }),
 
   makeMCQ({ id:'g6eng-pp24-010', chapterId:'g6eng-clauses', subsection:'clause_types', difficulty:1,
     question:'Yohan is excited <b>___</b> he has received his favourite toy.',
@@ -74,7 +82,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-pp24-011', chapterId:'g6eng-vocabulary', subsection:'meaning', difficulty:2,
     question:'"Start running when I blow the whistle!" <b>___</b> the teacher.',
     options:['spoke','told','ordered','asked'], answer:'ordered',
-    hint:'The teacher is giving a direct command — which reporting verb matches a command?',
+    hint:'The teacher is giving a direct command - which reporting verb matches a command?',
     explanation:'"Ordered" is the correct reporting verb for a command or instruction.' }),
 
   makeMCQ({ id:'g6eng-pp24-012', chapterId:'g6eng-vocabulary', subsection:'meaning', difficulty:1,
@@ -93,7 +101,7 @@ STATIC_QUESTIONS.push(
     question:'Ryan was very <b>___</b> because his brother had torn his book.',
     options:['generous','selfish','angry','honest'], answer:'angry',
     hint:'How would you feel if someone destroyed something of yours?',
-    explanation:'"Angry" fits the context — someone destroyed his property. The other words describe character traits, not an emotional reaction.' }),
+    explanation:'"Angry" fits the context - someone destroyed his property. The other words describe character traits, not an emotional reaction.' }),
 
   makeMCQ({ id:'g6eng-pp24-015', chapterId:'g6eng-vocabulary', subsection:'meaning', difficulty:1,
     question:'He shouted as <b>___</b> as he could to call for help.',
@@ -101,7 +109,7 @@ STATIC_QUESTIONS.push(
     hint:'Shouting relates to the volume of a voice.',
     explanation:'"Loudly" describes the manner of shouting. You shout loudly to be heard.' }),
 
-  // ── Q4B: Comprehension MCQ — Story: Mia and the unicorn ─────────────────
+  // ── Q4B: Comprehension MCQ - Story: Mia and the unicorn ─────────────────
   // Passage summary embedded in each question for standalone practice.
 
   makeMCQ({ id:'g6eng-pp24-016', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:1,
@@ -126,13 +134,13 @@ STATIC_QUESTIONS.push(
     question:'<b>Passage (Mia and the unicorn):</b> <i>"The unicorn jumped in the air with excitement because she was very happy to be free."</i><br><br>The unicorn jumped in the air because <b>___</b>.',
     options:['Mia whispered to her','Mia was playing with her','she had helped Mia','Mia had set her free'], answer:'Mia had set her free',
     hint:'The passage directly states the reason.',
-    explanation:'The text says "she was very happy to be free" — Mia had freed her from the branches.' }),
+    explanation:'The text says "she was very happy to be free" - Mia had freed her from the branches.' }),
 
   makeMCQ({ id:'g6eng-pp24-020', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:2,
     question:'<b>Passage (Mia and the unicorn):</b> Mia frees a trapped baby unicorn named Unibel from a plant. Later, Mia gets stuck in a tree and calls Unibel, who flies her to safety.<br><br>An appropriate <b>title</b> for this passage would be <b>___</b>.',
     options:['A day out with family','A scary experience','An unexpected friend','A fragile tree'], answer:'An unexpected friend',
     hint:'Think about the central theme: Mia meets a magical creature who later helps her.',
-    explanation:'"An unexpected friend" best captures the story — Mia makes an unlikely friend (a unicorn) who saves her.' })
+    explanation:'"An unexpected friend" best captures the story - Mia makes an unlikely friend (a unicorn) who saves her.' })
 
 );
 
@@ -152,6 +160,12 @@ window.PSAC_PDF_QUESTIONS.push(
     question:'True or False: (i) Mia was six years old. (ii) Mia saw that a bird was in difficulty. (iii) Daddy brought Mia down from the tree.',
     type:'true-false' },
   { id:'g6eng-pp24-pdf-q4b-open', chapterId:'g6eng-comprehension', marks:4, year:2024, grade:6, subject:'English',
-    question:'(7) Why did Mia think the noise could not be that of a baby horse? (8) Mia screamed at the top of her lungs — say why. (9i) How did Mia feel after she told her parents about Unibel? (9ii) How did she feel when her parents had to believe her? (10) Match each character to their actions.',
-    type:'short' }
+    question:'(7) Why did Mia think the noise could not be that of a baby horse? (8) Mia screamed at the top of her lungs - say why. (9i) How did Mia feel after she told her parents about Unibel? (9ii) How did she feel when her parents had to believe her? (10) Match each character to their actions.',
+    type:'short' },
+  { id:'g6eng-pp24-pdf-q8a', chapterId:'g6eng-writing', marks:6, year:2024, grade:6, subject:'English',
+    question:'Write <b>one sentence</b> on each picture below to make a short story. Use the words given to you: ' +
+      '<b>(1)</b> last week &ndash; seaside &nbsp; <b>(2)</b> after some time &ndash; friend &nbsp; <b>(3)</b> then &ndash; picnic &ndash; together.' +
+      _g6e24('q8a-picture-story', 'Three drawings in a column showing a family at the beach at three moments'),
+    markScheme:'2 marks per picture: one complete, correct sentence that uses the given words and follows the story.',
+    type:'picture-story' }
 );

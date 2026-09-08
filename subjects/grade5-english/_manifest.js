@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Adding a subsection means tagging questions for it.
 // Trailing comments are the question count at the time of generation.
 const G5ENG_SYLLABUS = {
@@ -71,6 +71,13 @@ const G5ENG_SYLLABUS = {
     { id:'recount',         name:'Recounts, Diaries & Postcards' },  // 1
     { id:'poem',            name:'Poems' },  // 2
   ]},
+  'eng-enr-joining': { subsections: [
+    { id:'relative',        name:'Relative pronouns' },  // 10
+    { id:'cause',           name:'Cause & reason' },  // 10
+    { id:'contrast',        name:'Contrast' },  // 10
+    { id:'time',            name:'Time' },  // 10
+    { id:'purpose_result',  name:'Purpose & result' },  // 10
+  ]},
 };
 
 
@@ -99,9 +106,29 @@ registerSubject({
   practiceble: true, notesBased: true, noDifficulty: true,
   badges: G5E_BADGES,
   syllabus: G5ENG_SYLLABUS,
+  // examWeight is a chapter's share of a 40-question exam. These are measured
+  // from the real 2023, 2024 and 2025 papers, question by question: every
+  // mark goes to the chapter that teaches it. Papers used: 2023, 2024 and 2025 (51 scoring items).
+  //
+  //   eng-verbs              12 marks   23.5%  ->  weight 9
+  //   eng-writing             8 marks   15.7%  ->  weight 6
+  //   eng-sentences           7 marks   13.7%  ->  weight 5
+  //   eng-comprehension       7 marks   13.7%  ->  weight 5
+  //   eng-vocabulary          7 marks   13.7%  ->  weight 5
+  //   eng-nouns               6 marks   11.8%  ->  weight 4
+  //   eng-passages            3 marks    5.9%  ->  weight 2
+  //   eng-adjectives          1 marks    2.0%  ->  weight 2
+  //
+  //   eng-spelling        not scored           ->  weight 1
+  //   eng-enr-joining     not scored           ->  weight 1
+  //
+  // ⚠ The paper never tests spelling as its own question, and Grade 5 has no
+  // sentence-joining question (Grade 6 does). Both keep the floor of 1.
+  // ⚠ Marks are ITEM COUNTS: this paper prints no mark allocation anywhere.
+  // scripts/test-exam-paper-shape.js holds the delivered mix against these.
   chapters: [
     {
-      id: 'eng-nouns', name: 'Nouns, Pronouns & Articles', icon: '📝',
+      id: 'eng-nouns', examWeight: 4, name: 'Nouns, Pronouns & Articles', icon: '📝',
       notes: [
         'A **noun** names a person, place, thing or idea. e.g. *teacher, Mauritius, book, happiness*',
         '**Common nouns** are general (dog, city). **Proper nouns** are specific names (Max, Port Louis).',
@@ -111,7 +138,7 @@ registerSubject({
       ],
     },
     {
-      id: 'eng-verbs', name: 'Verbs & Tenses', icon: '🏃',
+      id: 'eng-verbs', examWeight: 9, name: 'Verbs & Tenses', icon: '🏃',
       notes: [
         'A **verb** shows an action or state of being: *run, think, is, was*.',
         '**Present simple**: He *walks* to school every day.',
@@ -122,7 +149,7 @@ registerSubject({
       ],
     },
     {
-      id: 'eng-adjectives', name: 'Adjectives & Adverbs', icon: '🎨',
+      id: 'eng-adjectives', examWeight: 2, name: 'Adjectives & Adverbs', icon: '🎨',
       notes: [
         'An **adjective** describes a noun: the *tall* tree, a *blue* sky.',
         'An **adverb** describes a verb, adjective or another adverb: she runs *quickly*.',
@@ -132,7 +159,7 @@ registerSubject({
       ],
     },
     {
-      id: 'eng-sentences', name: 'Sentences & Punctuation', icon: '❓',
+      id: 'eng-sentences', examWeight: 5, name: 'Sentences & Punctuation', icon: '❓',
       notes: [
         'A **sentence** must have a subject and a verb. "The cat sat." ✓ / "The cat." ✗',
         'Types: **Statement** (.), **Question** (?), **Exclamation** (!), **Command** (.)',
@@ -143,7 +170,7 @@ registerSubject({
       ],
     },
     {
-      id: 'eng-comprehension', name: 'Reading Comprehension', icon: '🔍',
+      id: 'eng-comprehension', examWeight: 5, name: 'Reading Comprehension', icon: '🔍',
       notes: [
         'Read the passage **at least twice** before answering.',
         'For "find" questions: use exact words from the text.',
@@ -154,7 +181,7 @@ registerSubject({
       ],
     },
     {
-      id: 'eng-writing', name: 'Creative Writing', icon: '✏️',
+      id: 'eng-writing', examWeight: 6, name: 'Creative Writing', icon: '✏️',
       notes: [
         'Plan before you write: **Beginning** (introduce setting & character), **Middle** (problem/event), **End** (resolution).',
         'Use **AFOREST** techniques: Alliteration, Facts, Opinions, Rhetorical questions, Emotive language, Statistics, Triples.',
@@ -165,7 +192,7 @@ registerSubject({
       ],
     },
     {
-      id: 'eng-vocabulary', name: 'Vocabulary & Word Study', icon: '🔤',
+      id: 'eng-vocabulary', examWeight: 5, name: 'Vocabulary & Word Study', icon: '🔤',
       notes: [
         'A **synonym** is a word with a similar meaning: happy → joyful, big → enormous.',
         'An **antonym** is a word with the opposite meaning: hot ↔ cold, love ↔ hate.',
@@ -175,7 +202,7 @@ registerSubject({
       ],
     },
     {
-      id: 'eng-spelling', name: 'Spelling & Dictation', icon: '🔡',
+      id: 'eng-spelling', examWeight: 1, name: 'Spelling & Dictation', icon: '🔡',
       notes: [
         'Learn the **ie/ei** rule: i before e except after c (believe, receive).',
         'Silent letters: know, wrap, knight, write, gnat, bomb.',
@@ -185,7 +212,7 @@ registerSubject({
       ],
     },
     {
-      id: 'eng-passages', name: 'Passages & Text Types', icon: '📄',
+      id: 'eng-passages', examWeight: 2, name: 'Passages & Text Types', icon: '📄',
       notes: [
         '**Email**: From / To / Cc / Subject. The **Subject** line states the purpose in a few words. **Cc** = people who get a copy.',
         '**Informal letter**: writer\'s address top right, "Dear …", personal news, ends "With love". Formal letters end "Yours sincerely/faithfully".',
@@ -195,6 +222,14 @@ registerSubject({
         'When a question asks *how do we know*, point to the **evidence** - a number, a date, a quoted phrase.',
         'Match every number in a text to the noun it belongs to. Papers set traps with two similar figures.',
       ],
+    },
+    // @enrichment - DERIVED from the syllabus (relative pronouns, conjunctions,
+    // subordinate clauses), NOT a direct MIE chapter. DO NOT remove during
+    // syllabus alignment audits. Shows as a gold "BONUS" card.
+    {
+      id: 'eng-enr-joining', name: 'Joining Sentences', icon: '🔗',
+      enrichment: true, examWeight: 1,
+      enrichmentNote: 'The PSAC task "Join the two sentences using the word given". Adds "whose" and "that", although / while / since, "so that" versus "to + verb", and the comma after a fronted clause.',
     },
   ],
 });

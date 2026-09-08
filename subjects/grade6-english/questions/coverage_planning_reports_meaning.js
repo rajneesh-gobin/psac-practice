@@ -1,0 +1,39 @@
+'use strict';
+// Grade 6 English - purposeful writing plans, report reading and word meaning.
+(function () {
+  const add = (key, chapterId, subsection, rows) => rows.forEach((r, i) => STATIC_QUESTIONS.push(makeMCQ({
+    id: `g6eng-prm-${key}-${String(i + 1).padStart(2, '0')}`,
+    chapterId, subsection, difficulty: 3,
+    question: r[0], options: r[1], answer: r[1][0], hint: r[2], explanation: r[3]
+  })));
+
+  add('plan', 'g6eng-writing', 'planning', [
+    ['You are planning a persuasive letter asking for more shade in the playground. Which note belongs in the “evidence” part of the plan?',['At lunchtime, all four benches are in direct sunlight.','Dear Head Teacher,','Please consider my request.','Yours sincerely, Asha'],'Evidence should be an observable fact supporting the request.','<b>All four benches are in direct sunlight</b> is relevant evidence for needing shade.'],
+    ['Which is the best order for planning a narrative?',['setting and characters → problem → key events → resolution','resolution → title → unrelated facts → problem','problem → greeting → address → signature','characters → conclusion → recipe → warning'],'A narrative plan should follow the story’s logical development.','A clear narrative introduces the setting and characters, develops a problem and events, then resolves it.'],
+    ['Before writing an information report about cyclones, what should the writer decide first?',['the purpose and intended readers','the colour of the final page border','the exact number of adjectives to use','the handwriting style for the title'],'Planning begins with why the text is written and who will read it.','The <b>purpose and audience</b> guide the content, vocabulary and structure.'],
+    ['Which planning note is too broad for one paragraph about saving water at school?',['Everything about protecting Earth','repairing dripping taps','turning taps off while soaping hands','collecting rainwater for the garden'],'A paragraph needs a focused idea that can be supported clearly.','<b>Everything about protecting Earth</b> is too broad for a focused water-saving paragraph.'],
+    ['A pupil is planning instructions for planting a seed. Which feature is most important to include in the plan?',['steps in chronological order','a surprise ending','arguments for and against gardening','dialogue between two characters'],'Instructions must tell the reader what to do in sequence.','A chronological sequence makes the procedure possible to follow.']
+  ]);
+
+  add('report', 'g6eng-passages', 'report', [
+    ['Read the report extract: “Thirty pupils joined the clean-up on Friday. Together, they collected twelve bags of litter.” What is the main achievement?',['Thirty pupils collected twelve bags of litter.','The clean-up was cancelled on Friday.','Twelve pupils planted thirty trees.','Only teachers joined the clean-up.'],'Combine the two factual sentences without changing the numbers.','The extract reports that <b>thirty pupils collected twelve bags of litter</b>.'],
+    ['Read the report extract: “The survey included 60 pupils. Forty-two said they walked or travelled by bus.” Which statement is supported?',['Most surveyed pupils used walking or the bus.','Exactly half of the pupils travelled by car.','All sixty pupils walked to school.','Eighteen pupils travelled by bus.'],'Compare 42 with half of 60, but do not invent how the 42 split into groups.','Because 42 is more than 30, <b>most</b> used walking or the bus.'],
+    ['A school report states: “The match began at 10:00. Heavy rain stopped play at 10:35.” Which heading best fits?',['Interruption to the Match','How to Train Every Day','The Winning Team’s Prize','Rules of Basketball'],'A heading should summarise the central event in the extract.','<b>Interruption to the Match</b> accurately describes the rain stopping play.'],
+    ['Read the report sentence: “According to the attendance register, 118 of 120 pupils were present.” Why is the source named?',['to show where the attendance figure came from','to make the report sound like a fairy tale','to hide the number of pupils present','to give an opinion about the pupils'],'Reports strengthen factual claims by identifying their evidence.','Naming the <b>attendance register</b> makes the figure traceable and reliable.'],
+    ['Which sentence is most suitable for an objective report?',['The exhibition opened at 9:00 and received 240 visitors.','The exhibition was absolutely the most amazing event ever!','I adored every single brilliant display.','You really should feel sorry if you missed it.'],'Objective reports favour verifiable facts over personal excitement.','The opening time and visitor total are factual, measurable details.'],
+    ['Read the report extract: “Two taps were leaking on Monday. Both washers were replaced on Tuesday, and no leak was observed on Wednesday.” What conclusion is justified?',['Replacing the washers appears to have stopped the leaks.','The school will never have another leak.','The taps were removed from the school.','The leaks became worse on Wednesday.'],'Choose only a conclusion supported by the sequence of observations.','No leak after the repair supports the cautious conclusion that the washers <b>appear to have stopped</b> it.']
+  ]);
+
+  add('meaning', 'g6eng-vocabulary', 'meaning', [
+    ['In “The path was concealed by thick leaves”, what does “concealed” mean?',['hidden','widened','measured','decorated'],'Use the clue that the leaves prevented the path from being seen.','<b>Concealed</b> means hidden from view.'],
+    ['In “The glass ornament is fragile”, what does “fragile” mean?',['easily broken','very expensive','brightly coloured','unusually heavy'],'Think about how the object must be handled.','<b>Fragile</b> means easily damaged or broken.'],
+    ['In “The teacher gave a concise explanation”, what does “concise” mean?',['brief but clear','long and confusing','spoken very loudly','copied word for word'],'A concise explanation uses few words effectively.','<b>Concise</b> means brief while still clear.'],
+    ['In “The stream became shallow near the bank”, what does “shallow” mean?',['not deep','very cold','fast-moving','unsafe to cross'],'The word describes depth.','<b>Shallow</b> means having little depth.'],
+    ['In “The committee rejected the proposal”, what does “rejected” mean?',['refused to accept','carefully copied','immediately published','quietly discussed'],'Consider what happens when a proposal is not approved.','<b>Rejected</b> means refused or declined.'],
+    ['In “The witness gave a vague description”, what does “vague” mean?',['not clear or detailed','completely accurate','full of measurements','easy to picture'],'The description did not provide enough precise information.','<b>Vague</b> means unclear or lacking detail.'],
+    ['In “The drought caused a severe shortage of water”, what does “severe” mean?',['very serious','short-lived','unexpectedly helpful','easy to solve'],'The word intensifies the seriousness of the shortage.','<b>Severe</b> means very serious or extreme.'],
+    ['In “The hikers were reluctant to cross the damaged bridge”, what does “reluctant” mean?',['unwilling or hesitant','eager and excited','unable to see','ordered to hurry'],'A damaged bridge would make someone pause rather than rush forward.','<b>Reluctant</b> means unwilling or hesitant.'],
+    ['In “The new evidence altered our conclusion”, what does “altered” mean?',['changed','proved','repeated','removed'],'The conclusion became different after the evidence appeared.','<b>Altered</b> means changed.'],
+    ['In “The coral reef supports a diverse range of life”, what does “diverse” mean?',['varied','tiny','dangerous','hidden'],'A range containing many different kinds has variety.','<b>Diverse</b> means varied or made up of different kinds.']
+  ]);
+})();

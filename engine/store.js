@@ -32,6 +32,25 @@ const Store = (() => {
       // out of stats/daily/mistakes on purpose - replays must never distort
       // the mastery reporting parents rely on.
       games:        {},
+      // The unfinished practice set, so it can be resumed on ANOTHER DEVICE.
+      // { practice: { chapterId: { subjectId, qIds, idx, answers, ts } } }
+      // ⚠ Deliberately bounded and deliberately in the blob: it is one small
+      //   record per paused chapter, pruned by the same TTL as the localStorage
+      //   copy, and it rides the existing throttled save instead of costing a
+      //   request per question. Last-write-wins is the right semantics for
+      //   "where was I" - unlike per-question progress, which is why THAT
+      //   lives in student_question_progress instead.
+      resume:       { practice: {} },
+      // Per-text best score for the Textes a Trous chapters (ClozeText in
+      // engine/cloze.js): { textId: {best,last,gaps,tries,at} }. Unlike games,
+      // these answers DO count toward mastery - one gap is one mark on the
+      // real paper - so recordAnswer() runs too; this key only remembers the
+      // best score per text so the list screen can show it.
+      cloze:        {},
+      // Per-text best score for the Chasse aux Erreurs chapters (ErrorHunt in
+      // engine/errorhunt.js): { textId: {best,last,errors,tries,at} }. Like
+      // cloze and unlike the games, these answers DO count toward mastery.
+      hunt:         {},
       // Purely cosmetic, student-chosen customisation for their own kid-home
       // and dashboard screens (My Settings). Rides along in the same jsonb
       // blob as everything else here, so it needs no schema change and syncs
@@ -54,7 +73,7 @@ const Store = (() => {
       // every existing child for free.
       //
       // daily: { 'YYYY-MM-DD': { a: attempted, c: correct, e: exams } }, capped
-      // at _DAILY_KEEP days. Mauritius date keys, same as usage — NEVER the
+      // at _DAILY_KEEP days. Mauritius date keys, same as usage - NEVER the
       // device clock, or a child who changes the timezone rewrites their own
       // history, and the parent's week-on-week comparison with it.
       daily:        {},
@@ -83,12 +102,12 @@ const Store = (() => {
   // every twenty seconds reset the timer on every answer, so it NEVER fired and
   // nothing reached Supabase for the whole session. Everything looked right on
   // screen (localStorage is written synchronously) and the next login read the
-  // server row back — which is how a subject tile could sit at "56 done" while
+  // server row back - which is how a subject tile could sit at "56 done" while
   // the child kept working.
   const _SAVE_MAX_WAIT_MS = 30_000;
 
   // Drops the pending write. Only correct where the data has already been
-  // flushed or genuinely belongs to nobody — see flushPendingProgress(), which
+  // flushed or genuinely belongs to nobody - see flushPendingProgress(), which
   // is what the session helpers now call instead.
   function _cancelPendingFlush() {
     clearTimeout(_saveDebounceTimer);
@@ -98,7 +117,7 @@ const Store = (() => {
   }
 
   // Send whatever is waiting, now. Returns a promise so callers that are about
-  // to invalidate the credential (endStudentSession) can await it — once the
+  // to invalidate the credential (endStudentSession) can await it - once the
   // server session is deleted or the x-student-token header is gone, RLS
   // rejects the write and the work is lost for good.
   function flushPendingProgress() {
@@ -127,14 +146,20 @@ const Store = (() => {
   function saveStudentSession(sess) {
     // Flush BEFORE the new session is written: _flushProgressToSupabase checks
     // the stored session id against the row it is writing, and the header still
-    // installed is the outgoing student's. Cancelling here — which is what this
-    // used to do — silently threw away the last stretch of their practice.
+    // installed is the outgoing student's. Cancelling here - which is what this
+    // used to do - silently threw away the last stretch of their practice.
     flushPendingProgress();
     try { localStorage.setItem(STUDENT_SESS, JSON.stringify(sess)); } catch(e) {}
     if (typeof setStudentToken === 'function') setStudentToken(sess?.token || null);
   }
 
   function getStudentSession() {
+    // Personal PWAs share one browser origin. Read the session associated with
+    // THIS icon's random profile key so two children opening their own icons in
+    // separate windows cannot overwrite one another's active identity.
+    if (typeof ProfileInstall !== 'undefined' && ProfileInstall.isStudentLaunch?.()) {
+      return ProfileInstall.getLaunchStudentSession?.() || null;
+    }
     try { return JSON.parse(localStorage.getItem(STUDENT_SESS)) || null; } catch(e) { return null; }
   }
 
@@ -195,12 +220,12 @@ const Store = (() => {
   //   so a co-parent silently getting null here would fork the account into a
   //   second, empty family instead of joining the real one.
   //
-  //   my_member_family() is absent until supabase-coparent.sql has been run.
+  //   my_member_family() is absent until supabase-schema.sql has been run.
   //   The rpc then errors, this returns null, and behaviour is exactly what it
   //   is today - so the client can ship before the migration.
   // ⚠ null means TWO different things and the caller MUST be able to tell them
   // apart. "This parent has not created a family yet" is a normal, finishable
-  // state — family setup writes the profile row before the family row, with no
+  // state - family setup writes the profile row before the family row, with no
   // transaction, so an interrupted setup leaves exactly that. "The families
   // query failed" is not: routing a failed read into family setup would create
   // a second family on top of one that already exists, and a parent cannot undo
@@ -228,9 +253,9 @@ const Store = (() => {
       const { data: mine, error: mErr } = await _sb.rpc('my_member_family');
       if (mErr) {
         console.warn('[Store.getMyFamily/member]', mErr.code, mErr.message);
-        // PGRST202 = supabase-coparent.sql has not been run yet. That is not a
-        // read failure — this account simply cannot be a co-parent on this
-        // database — so it must not mask the clean "no family yet" answer the
+        // PGRST202 = supabase-schema.sql has not been run yet. That is not a
+        // read failure - this account simply cannot be a co-parent on this
+        // database - so it must not mask the clean "no family yet" answer the
         // owned-family query already gave.
         if (mErr.code !== 'PGRST202' && !_familyError) _familyError = mErr.message || 'Unknown database error.';
         return null;
@@ -292,11 +317,11 @@ const Store = (() => {
       console.error("[Store.createFamily]", error.code, error.message);
       // ⚠ 23505 here is TWO different constraints. families_name_key means the
       // name is taken and the parent has to choose another; families_parent_id_key
-      // means this parent already has a family — a half-finished setup being
-      // retried — and the right answer is to carry on with the one they own, not
+      // means this parent already has a family - a half-finished setup being
+      // retried - and the right answer is to carry on with the one they own, not
       // to tell them to rename a family that is already theirs.
       // Probed rather than matched on the constraint name in the message: the
-      // name index only exists once supabase-migration.sql has been able to
+      // name index only exists once supabase-schema.sql has been able to
       // apply it, so the message text is not something to depend on.
       if (error.code === '23505') {
         const mine = await getMyFamily(parentId);
@@ -323,7 +348,7 @@ const Store = (() => {
   }
 
   // ── Students (children) ───────────────────────
-  // Deleting a child is a soft delete (see supabase-migration.sql), so
+  // Deleting a child is a soft delete (see supabase-schema.sql), so
   // every read path has to skip the dead rows. The retry is for a database that
   // has not run that migration yet: `deleted_at` would be an unknown column and
   // the query would 42703, leaving a parent staring at an empty dashboard.
@@ -349,13 +374,13 @@ const Store = (() => {
 
     // ⚠ ONLY fall back when the column genuinely does not exist yet (42703 /
     //   PGRST204). The first version of this retried on ANY error and dropped
-    //   the `deleted_at IS NULL` filter to do it — which meant a transient
+    //   the `deleted_at IS NULL` filter to do it - which meant a transient
     //   failure silently returned the DELETED children too, and the parent saw
     //   a child they had just removed sitting next to the one they recreated.
     //   Any other error is a real failure and must look like one.
     // 42501 belongs here too, and it is not obvious why. students has
-    // COLUMN-LEVEL grants (supabase-migration.sql), so a column added
-    // later is unreadable rather than absent — same practical state, completely
+    // COLUMN-LEVEL grants (supabase-schema.sql), so a column added
+    // later is unreadable rather than absent - same practical state, completely
     // different error code, and the message says "permission denied for table
     // students" without ever naming the column. Treating it as a hard failure
     // is what turned a missing GRANT into an empty parent dashboard.
@@ -367,10 +392,10 @@ const Store = (() => {
       return [];
     }
     console.warn(error.code === '42501'
-      ? '[Store.getFamilyStudents] deleted_at is not readable — run: GRANT SELECT (deleted_at) '
-        + 'ON public.students TO anon, authenticated; (see supabase-migration.sql). '
+      ? '[Store.getFamilyStudents] deleted_at is not readable - run: GRANT SELECT (deleted_at) '
+        + 'ON public.students TO anon, authenticated; (see supabase-schema.sql). '
         + 'Falling back to the unfiltered list, so a soft-deleted child may appear until then.'
-      : '[Store.getFamilyStudents] no deleted_at column — run supabase-migration.sql.');
+      : '[Store.getFamilyStudents] no deleted_at column - run supabase-schema.sql.');
     const { data: legacy, error: legacyErr } = await _sb.from('students').select(_STUDENT_COLS)
       .eq('family_id', familyId).order('created_at');
     if (legacyErr) {
@@ -382,7 +407,7 @@ const Store = (() => {
   }
 
   // Hash a PIN into students.pin via the bcrypt RPC (pgcrypto crypt(), runs
-  // inside the database). This is the ONLY way a PIN may be written — a
+  // inside the database). This is the ONLY way a PIN may be written - a
   // plaintext PIN must never reach a column, in any environment.
   async function setStudentPin(studentId, pin) {
     if (!_sb || !studentId || !pin) return false;
@@ -467,13 +492,13 @@ const Store = (() => {
     return { ok: true };
   }
 
-  // Soft delete. The row and all its progress stay in the database — the child
+  // Soft delete. The row and all its progress stay in the database - the child
   // disappears from the app and their username is freed so the family can
   // recreate a child with the same name, but nothing is destroyed.
   //
   // Falls back to the old hard delete ONLY when the RPC does not exist, i.e. a
-  // database that has not run supabase-migration.sql. That is exactly the
-  // behaviour such a database had yesterday, so nothing regresses — but the
+  // database that has not run supabase-schema.sql. That is exactly the
+  // behaviour such a database had yesterday, so nothing regresses - but the
   // delete is irreversible there, hence the warning.
   async function deleteStudent(studentId) {
     if (!_sb) return { ok: false };
@@ -486,8 +511,16 @@ const Store = (() => {
       console.error('[Store.deleteStudent]', error.message);
       return { ok: false, error: error.message };
     }
-    console.warn('[Store.deleteStudent] soft_delete_student missing — run supabase-migration.sql. Falling back to a HARD delete.');
-    await _sb.from('student_progress').delete().eq('student_id', studentId);
+    console.warn('[Store.deleteStudent] soft_delete_student missing - run supabase-schema.sql. Falling back to a HARD delete.');
+    // ⚠ Zero rows is fine (a child who never practised has no row), but the
+    //   error is logged rather than dropped: student_progress is one of the
+    //   five text-keyed tables the account cascade cannot reach, so a failure
+    //   here is the difference between a cleanup and a permanent orphan row.
+    {
+      const { error: progErr } = await _sb.from('student_progress')
+        .delete().eq('student_id', studentId);
+      if (progErr) console.warn('[Store.deleteStudent] progress row not removed for', studentId, progErr.message);
+    }
 
     // .select() is not decoration. Under RLS a DELETE whose policy matches no
     // row is a SILENT no-op: no error, no rows, and the old code took that as
@@ -547,7 +580,7 @@ const Store = (() => {
     let raw = data?.data || {};
 
     // ⚠ The server row is not automatically the newer one. Any write that never
-    // landed — offline, a dropped request, a tab closed mid-flush — leaves the
+    // landed - offline, a dropped request, a tab closed mid-flush - leaves the
     // local cache ahead, and blindly taking the server copy (and then writing it
     // back over the cache, as this function does below) makes that loss
     // permanent. Total answers only ever goes up, so it is a safe ordering.
@@ -672,7 +705,7 @@ const Store = (() => {
   // Closing the tab, locking the phone, or the OS evicting a backgrounded PWA
   // all kill the pending timer with no other warning, and there was nothing
   // listening for any of them. 'hidden' is the only one of these that fires
-  // reliably on mobile Safari and Chrome — 'beforeunload' does not.
+  // reliably on mobile Safari and Chrome - 'beforeunload' does not.
   //
   // Fire-and-forget by necessity: the page may be gone before the request
   // completes. It usually is not, and a write that sometimes lands beats one
@@ -719,7 +752,18 @@ const Store = (() => {
 
   function clearStudent(id) {
     try { localStorage.removeItem(_sKey(id)); } catch(e) {}
-    if (_sb) _sb.from('student_progress').delete().eq('student_id', id).then(() => {}).catch(() => {});
+    // ⚠ Fire-and-forget on purpose (the caller is removing the student and must
+    //   not block on this), but the outcome is LOGGED rather than thrown away.
+    //   `.then(()=>{}).catch(()=>{})` discarded both halves, so a refused delete
+    //   left the progress row on the server with nothing anywhere to say so —
+    //   and student_progress is one of the five text-keyed tables the account
+    //   cascade cannot reach, so nothing else would ever clean it up.
+    if (_sb) {
+      _sb.from('student_progress').delete().eq('student_id', id)
+        .then(({ error }) => {
+          if (error) console.warn('[Store.clearStudent] server progress not deleted for', id, error.message);
+        }, err => console.warn('[Store.clearStudent] server progress not deleted for', id, err && err.message));
+    }
   }
 
   // ── Profiles (parent / teacher) ───────────────
@@ -805,8 +849,8 @@ const Store = (() => {
 
   // ── Credits & shop ─────────────────────────────
   // Every one of these degrades quietly on a database that has not run
-  // supabase-credits-shop.sql yet: PGRST202 is "that function does not exist",
-  // which for this feature means "no credits, no shop" — exactly the state
+  // supabase-schema.sql yet: PGRST202 is "that function does not exist",
+  // which for this feature means "no credits, no shop" - exactly the state
   // every family is in before it is deployed. Nothing here may throw into a
   // login path or a practice answer.
   function _rpcMissing(error) {
@@ -833,8 +877,8 @@ const Store = (() => {
     return data || null;
   }
 
-  // ⚠ Returns NULL on failure, never []. An empty array is a real answer —
-  // "this family owns nothing" — and the caller acts on it by clearing what it
+  // ⚠ Returns NULL on failure, never []. An empty array is a real answer -
+  // "this family owns nothing" - and the caller acts on it by clearing what it
   // has. Conflating a dropped request with that answer made a flaky network, or
   // a database without these RPCs, silently wipe the local list of unlocked
   // chapters and re-lock them in the UI. (It could never unlock anything it
@@ -851,7 +895,7 @@ const Store = (() => {
 
   // The child's view of the same list. They are not the account holder, so this
   // is a SECURITY DEFINER RPC keyed off their session token that returns chapter
-  // ids and expiry dates only — nothing about credits or money.
+  // ids and expiry dates only - nothing about credits or money.
   // Same null-on-failure contract as getMyEntitlements above.
   async function getFamilyEntitlements() {
     if (!_sb) return null;
@@ -910,7 +954,7 @@ const Store = (() => {
 
   // ── Parent preferences (profiles.preferences jsonb) ──
   // Isolated from getProfile() for exactly the reason spelled out there: a
-  // database that has not run supabase-migration.sql yet must degrade to
+  // database that has not run supabase-schema.sql yet must degrade to
   // "no saved preferences" instead of erroring the query that gates login.
   async function getMyPreferences(userId) {
     if (!_sb || !userId) return {};
@@ -920,7 +964,7 @@ const Store = (() => {
     return data?.preferences || {};
   }
 
-  // Whole-blob write. Callers pass the merged object, not a patch — these are
+  // Whole-blob write. Callers pass the merged object, not a patch - these are
   // a handful of scalar settings edited one screen at a time, so a read-modify-
   // write race would need two parent devices on the same page at once.
   async function saveMyPreferences(userId, prefs) {
@@ -932,7 +976,7 @@ const Store = (() => {
   }
 
   // Soft-deletes the signed-in parent, their family and every child under it.
-  // Always acts on auth.uid() - it takes no target - see supabase-migration.sql.
+  // Always acts on auth.uid() - it takes no target - see supabase-schema.sql.
   // The auth user survives, which is what makes restoreMyAccount() possible.
   async function deleteMyAccount() {
     if (!_sb) return { ok: false, error: 'offline' };
@@ -960,7 +1004,7 @@ const Store = (() => {
   }
 
   // ⚠ Idempotent, and it reports WHY it failed. Family setup is a three-step
-  // wizard — profile, then family, then the first child — with no transaction
+  // wizard - profile, then family, then the first child - with no transaction
   // behind it, so a failure at step 2 or 3 leaves the profile row already
   // written. Insert-only meant every retry died on a duplicate primary key and
   // the parent was told "Error creating profile" while they were trying to
@@ -969,7 +1013,7 @@ const Store = (() => {
   // A row that already exists IS the success case here: profiles_insert only
   // ever allows id = auth.uid(), so a 23505 on this insert can only be the
   // caller's own profile. Anything else comes back as _error rather than a bare
-  // null — swallowing the code turned "permission denied for table profiles"
+  // null - swallowing the code turned "permission denied for table profiles"
   // (which never names the column, see CLAUDE.md) into a dead end nobody could
   // diagnose from the screen.
   async function createProfile(userId, role, fullName) {
@@ -1007,7 +1051,7 @@ const Store = (() => {
   // mmSet is fire-and-forget, which is right for a hint and wrong for anything
   // whose caller reports success to a human. This awaits the write and hands
   // back what actually happened, so a refused upsert cannot be announced as
-  // "saved" — which is exactly how the map editor used to behave.
+  // "saved" - which is exactly how the map editor used to behave.
   async function mmSave(key, value) {
     if (!_sb) return { ok: false, error: 'not signed in' };
     const { error } = await _sb.from('mm_data')
@@ -1052,10 +1096,21 @@ const Store = (() => {
   // offset/limit, not a flat .limit(100): at ~1000 users/month the report
   // queue would eventually exceed 100 open items and the tab would silently
   // stop showing anything past that, with no "load more" to reach the rest.
-  async function loadReports(offset = 0, limit = 30) {
+  // kind: 'all' | 'contact' | 'questions' - filtered in the DATABASE, not after
+  // the fact. A client-side filter over one page would make "showing N of M"
+  // lie and hide everything past the first 30 rows.
+  function _reportKindFilter(q, kind) {
+    if (kind === 'contact')   return q.eq('report_type', 'contact');
+    if (kind === 'questions') return q.or('report_type.is.null,report_type.neq.contact');
+    return q;
+  }
+
+  async function loadReports(offset = 0, limit = 30, kind = 'all') {
     if (!_sb) return [];
-    const { data } = await _sb.from('question_reports')
-      .select('*, students!student_id(display_name, grade)')
+    let q = _sb.from('question_reports')
+      .select('*, students!student_id(display_name, grade)');
+    q = _reportKindFilter(q, kind);
+    const { data } = await q
       .order('updated_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + limit - 1);
     return data || [];
@@ -1065,10 +1120,11 @@ const Store = (() => {
   // rather than a second return value: the total only has to be fetched when
   // the list resets, not on every Load more page.
   // head:true means the rows are not transferred, only the count header.
-  async function countReports() {
+  async function countReports(kind = 'all') {
     if (!_sb) return null;
-    const { count, error } = await _sb.from('question_reports')
-      .select('id', { count: 'exact', head: true });
+    let q = _sb.from('question_reports').select('id', { count: 'exact', head: true });
+    q = _reportKindFilter(q, kind);
+    const { count, error } = await q;
     return error ? null : (count ?? null);
   }
 
@@ -1077,6 +1133,36 @@ const Store = (() => {
     const { error } = await _sb.from('question_reports')
       .update({ status: 'resolved', updated_at: new Date().toISOString() }).eq('id', id);
     return !error;
+  }
+
+  // Permanent admin cleanup. Request the deleted ID back so an RLS policy that
+  // silently affects zero rows cannot be mistaken for success.
+  async function deleteReport(id) {
+    if (!_sb || !id) return false;
+    const { data, error } = await _sb.from('question_reports')
+      .delete().eq('id', id).select('id');
+    if (error) {
+      console.error('[Store.deleteReport]', error.message);
+      return false;
+    }
+    return Array.isArray(data) && data.some(row => row.id === id);
+  }
+
+  // Clearing out a spam run one row at a time is what makes spam expensive for
+  // the admin rather than for the sender.
+  // ⚠ .select('id') and count the rows back: a DELETE whose policy matches
+  // nothing returns no error and no rows, and reading that as success is how a
+  // deleted child once came back.
+  async function deleteReports(ids) {
+    const list = (Array.isArray(ids) ? ids : []).filter(Boolean);
+    if (!_sb || !list.length) return { deleted: 0, requested: list.length };
+    const { data, error } = await _sb.from('question_reports')
+      .delete().in('id', list).select('id');
+    if (error) {
+      console.error('[Store.deleteReports]', error.message);
+      return { deleted: 0, requested: list.length, error: error.message };
+    }
+    return { deleted: Array.isArray(data) ? data.length : 0, requested: list.length };
   }
 
   async function setReportStatus(id, status, adminNote) {
@@ -1136,7 +1222,7 @@ const Store = (() => {
 
   // Authenticated parents/teachers read their own reports by reporter_id.
   // Uses a direct table query (JWT present) instead of the SECURITY DEFINER RPC
-  // that students need (students are anon — no JWT).
+  // that students need (students are anon - no JWT).
   async function loadParentReports() {
     if (!_sb) return [];
     const { data, error } = await _sb
@@ -1163,7 +1249,7 @@ const Store = (() => {
 
   // ── Student assignments (Supabase) ────────────
   // show_hints arrived after this table shipped, so the select falls back to the
-  // older column list if the database has not run supabase-migration.sql
+  // older column list if the database has not run supabase-schema.sql
   // yet. Without the retry an un-migrated database returns 42703 and the parent
   // sees "no assignments" for work that exists.
   const _ASGN_COLS     = 'id, subject_id, chapter_id, difficulty, note, show_answers, created_at';
@@ -1203,8 +1289,15 @@ const Store = (() => {
 
   async function deleteAssignment(id) {
     if (!_sb) return { ok: false, error: 'offline' };
-    const { error } = await _sb.from('student_assignments').delete().eq('id', id);
+    // ⚠ Zero rows means the policy matched nothing, which PostgREST reports as
+    //   success with no error. `{ ok: true }` there is a lie the caller acts on.
+    const { data, error } = await _sb.from('student_assignments')
+      .delete().eq('id', id).select('id');
     if (error) { console.error('[Store.deleteAssignment]', error.message); return { ok: false, error: error.message }; }
+    if (!data?.length) {
+      console.error('[Store.deleteAssignment] refused — no row deleted for', id);
+      return { ok: false, error: 'not found or not allowed' };
+    }
     return { ok: true };
   }
 
@@ -1339,7 +1432,7 @@ const Store = (() => {
     getGlobalSettings, mmGet, mmSet, mmSave,
     generateId,
     // Question reports
-    reportQuestion, loadReports, countReports, resolveReport, setReportStatus,
+    reportQuestion, loadReports, countReports, resolveReport, deleteReport, deleteReports, setReportStatus,
     replyToReport, loadReportMessages, loadStudentReports, sendReportFollowup, markReportSeen,
     loadParentReports, submitParentReport,
     // Assignments

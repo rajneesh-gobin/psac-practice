@@ -46,7 +46,7 @@ for (const q of select('g4eng-cover-adjective-')) {
   assert(!/___ a /.test(q.question), q.id);
   assert(!/the a /.test(q.explanation), q.id);
 }
-assert(complete(byId.get('g4eng-cover-adjective-09')).includes('an exciting story'));
+assert(complete(byId.get('g4eng-cover-adjective-09')).includes('The story is exciting.'));
 assert(complete(byId.get('g4eng-cover-art-07')).includes('The journey takes an hour.'));
 assert(select('g4eng-cover-art-').every(q => /indefinite article/.test(q.question)));
 assert(select('g4eng-cover-adverb-').every(q => q.question.includes('adverb of manner')));

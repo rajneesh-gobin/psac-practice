@@ -107,7 +107,7 @@ const WP = [
     question:'Rajan says: <i>"The sum of 4² and 3² equals 5²."</i><br>Is he correct?',
     options:['Yes - 16 + 9 = 25','No - 16 + 9 = 30','No - 16 + 9 = 20','Yes - 4 + 3 = 5'],
     answer:'Yes - 16 + 9 = 25',
-    hint:'Calculate each: 4²=16, 3²=9, 5²=25. Check if 16+9=25.',
+    hint:'Work out each square separately, then add the first two and compare the total with the third.',
     explanation:'4²=16, 3²=9, 5²=25. 16+9=25 ✓. Rajan is <b>correct</b>.' }),
 
   makeNum({ id:'S_W04', chapterId:'square_nums', subsection:'square_nums', difficulty:4,

@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 History & Geography 2019–2020 (assessed March 2021) — curriculum-aligned past-paper style questions.
+// PSAC Grade 5 History & Geography 2019–2020 (assessed March 2021) - curriculum-aligned past-paper style questions.
 // Note: The 2019-2020 PSAC assessment was delayed to March 2021 due to COVID-19.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-pp20-001', chapterId:'discovery', subsection:'routes', difficulty:1,
@@ -82,8 +82,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp20-014', chapterId:'g5ge-weather', subsection:'cyclones', difficulty:2,
     question:'A Cyclone Class 3 signal is issued in Mauritius. What does this mean?',
-    options:['A cyclone is far away — just a watch is needed','Moderate gusts — stay indoors but danger is limited','Dangerous winds are expected soon — all outdoor activity must stop','The cyclone has passed — all clear'], answer:'Dangerous winds are expected soon — all outdoor activity must stop',
-    hint:'Class 3 is serious — most schools and businesses close.',
+    options:['A cyclone is far away - just a watch is needed','Moderate gusts - stay indoors but danger is limited','Dangerous winds are expected soon - all outdoor activity must stop','The cyclone has passed - all clear'], answer:'Dangerous winds are expected soon - all outdoor activity must stop',
+    hint:'Class 3 is serious - most schools and businesses close.',
     explanation:'Cyclone Class 3 means dangerous gale force winds are expected or already being felt. Schools and most businesses close, and people must remain indoors. Class 4 signals destructive winds already on the island.' }),
 
   makeMCQ({ id:'g5h-pp20-015', chapterId:'g5ge-weather', subsection:'instruments', difficulty:1,
@@ -95,14 +95,14 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-pp20-016', chapterId:'map-skills', subsection:'coordinates', difficulty:2,
     question:'Mauritius is located at approximately which latitude in the Southern Hemisphere?',
     options:['5°S','10°S','20°S','35°S'], answer:'20°S',
-    hint:'Mauritius is subtropical — south of the equator but north of the Tropic of Capricorn (23½°S).',
+    hint:'Mauritius is subtropical - south of the equator but north of the Tropic of Capricorn (23½°S).',
     explanation:'Mauritius is located at approximately 20°S latitude, placing it in the Southern Hemisphere just north of the Tropic of Capricorn (23½°S). This gives it a subtropical climate.' }),
 
   makeMCQ({ id:'g5h-pp20-017', chapterId:'map-skills', subsection:'coordinates', difficulty:2,
     question:'The Tropic of Capricorn is an important line of latitude. Where is it located?',
     options:['0° (Equator)','23½°N','23½°S','66½°S'], answer:'23½°S',
     hint:'It is the southern counterpart of the Tropic of Cancer.',
-    explanation:'The Tropic of Capricorn is at 23½°S. Mauritius (at 20°S) is just north of this line. At the December solstice, the sun is directly overhead at the Tropic of Capricorn — the southern summer.' }),
+    explanation:'The Tropic of Capricorn is at 23½°S. Mauritius (at 20°S) is just north of this line. At the December solstice, the sun is directly overhead at the Tropic of Capricorn - the southern summer.' }),
 
   makeMCQ({ id:'g5h-pp20-018', chapterId:'port-louis', subsection:'buildings', difficulty:2,
     question:'The Aapravasi Ghat in Port Louis is a UNESCO World Heritage Site. What was its original purpose?',
@@ -113,15 +113,15 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g5h-pp20-pdf-001', needsArtwork:true, chapterId:'volcanism', marks:9, year:2020, grade:5, subject:'History & Geography',
+  { id:'g5h-pp20-pdf-001', image:'assets/past-papers/g5-history-2020/d1-volcano.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'volcanism', marks:9, year:2020, grade:5, subject:'History & Geography',
     question:'Diagram shows a volcano in eruption (A=Crater given). (a) Label: B=magma/lava channel, C=ash cloud, D=lava bombs, E=lava flow. (b) When lava cools it becomes ___ rocks. (c) What is magma? (d) Describe how tuffs are formed.', type:'written' },
   { id:'g5h-pp20-pdf-002', chapterId:'discovery', marks:7, year:2020, grade:5, subject:'History & Geography',
     question:'About 500 years ago European explorers used Mauritius as a stopover for the spice trade. (a) How are the East Indies known today? (b) Name two spices bought from the East Indies. (c) Give one reason why spices were important long ago. (d) Give two reasons why Portuguese sailors used Mauritius as a stopover.', type:'written' },
   { id:'g5h-pp20-pdf-003', chapterId:'settlement', marks:7, year:2020, grade:5, subject:'History & Geography',
     // Part (b) arrived with the pairs already matched, i.e. with its own answer
     // printed in the prompt. Question and mark scheme separated.
-    question:'In 1638, the Dutch decided to settle in Mauritius. (a) Name the fort built by the Dutch at Vieux Grand Port. (b) Match each thing the Dutch found to the reason it was useful to them: <b>Flat land</b>, <b>The bay</b>, <b>Animals</b> — choose from: to build houses, to keep ships safe, to get fresh meat. (c)(i) Give one use of ebony logs in Holland. (c)(ii) Give one reason why ebony logs were sold at a high price.',
+    question:'In 1638, the Dutch decided to settle in Mauritius. (a) Name the fort built by the Dutch at Vieux Grand Port. (b) Match each thing the Dutch found to the reason it was useful to them: <b>Flat land</b>, <b>The bay</b>, <b>Animals</b> - choose from: to build houses, to keep ships safe, to get fresh meat. (c)(i) Give one use of ebony logs in Holland. (c)(ii) Give one reason why ebony logs were sold at a high price.',
     markScheme:'(a) Fort Frederik Hendrik. (b) Flat land → to build houses; The bay → to keep ships safe; Animals → to get fresh meat. (c)(i) Ebony was used to make fine furniture and ornaments. (c)(ii) Ebony is a very hard, dark, long-lasting wood that was rare in Europe, so it sold at a high price.', type:'written' },
-  { id:'g5h-pp20-pdf-004', needsArtwork:true, chapterId:'g5ge-weather', marks:6, year:2020, grade:5, subject:'History & Geography',
+  { id:'g5h-pp20-pdf-004', image:'assets/past-papers/g5-history-2020/map2-rainfall.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g5ge-weather', marks:6, year:2020, grade:5, subject:'History & Geography',
     question:'Map 2 shows annual rainfall isohyets for Mauritius. (a) What is the amount of rainfall that Rose Belle receives? (b) Shade the region that receives less than 800mm of annual rainfall. (c) Name the town that receives the highest annual rainfall. (d) Give one reason why the central plateau receives more rainfall than the west coast.', type:'written' }
 );

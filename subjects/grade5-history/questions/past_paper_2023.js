@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 History & Geography 2023 — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 History & Geography 2023 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-pp23-001', chapterId:'map-skills', subsection:'coordinates', difficulty:2,
     question:'The line of latitude 66½°N is known as the ___.',
@@ -95,7 +95,7 @@ STATIC_QUESTIONS.push(
     question:'Corsairs were active in the Indian Ocean during the French period. What was their main activity?',
     options:['Exploring new islands','Fishing for food','Attacking and capturing enemy merchant ships','Building ports and harbours'], answer:'Attacking and capturing enemy merchant ships',
     hint:'They were officially authorised to attack certain ships.',
-    explanation:'Corsairs were privateers — sailors with a licence from the French government to attack and capture enemy (mainly British) merchant ships and seize their cargo.' }),
+    explanation:'Corsairs were privateers - sailors with a licence from the French government to attack and capture enemy (mainly British) merchant ships and seize their cargo.' }),
 
   makeMCQ({ id:'g5h-pp23-017', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
     question:'Curepipe (on the central plateau at 550m) is cooler than Mahebourg (at sea level, 5m). Why?',
@@ -112,12 +112,12 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g5h-pp23-pdf-001', needsArtwork:true, chapterId:'natural-env', marks:8, year:2023, grade:5, subject:'History & Geography',
+  { id:'g5h-pp23-pdf-001', image:'assets/past-papers/g5-history-2023/map1-relief.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'natural-env', marks:8, year:2023, grade:5, subject:'History & Geography',
     question:'Study Map 1 (relief features of Mauritius, with labels E, K, L, M). (a)(i) Name mountain range E. (a)(ii) Name one mountain found in range E. (b) The relief feature shaded with diagonal lines is the ___. (c) Relief feature K is the ___ plain. (d) Name river L. (e) Mountain M is ___ (Tourelle du Tamarin / Corps de Garde). (f) Name one dormant volcano in the northern part of Mauritius. (g) Which is the oldest relief feature in Mauritius?', type:'written' },
   { id:'g5h-pp23-pdf-002', chapterId:'settlement', marks:7, year:2023, grade:5, subject:'History & Geography',
     question:'(a) Dutch settlers faced many difficulties. Describe two difficulties. (b) During the French period, plants and animals were brought to Mauritius from other countries. Name the country of origin for: Tea, Cattle, Coffee, Spices, Ayapana. Choose from: East Indies, Brazil, Madagascar, France, Arabia, China.', type:'written' },
   { id:'g5h-pp23-pdf-003', chapterId:'g5ge-weather', marks:6, year:2023, grade:5, subject:'History & Geography',
     question:'Table 1 shows temperature and altitude at three places in Rodrigues (Plaine Corail 25m, Citronelle 275m, Pointe Canon 58m). (i) Temperature at Plaine Corail in January? (ii) At which place is temperature lowest in both January and July? (iii) Give one reason why this place has the lowest temperature. (b) Rodrigues receives less rainfall on the leeward side. Explain why.', type:'written' },
-  { id:'g5h-pp23-pdf-004', needsArtwork:true, chapterId:'port-louis', marks:4, year:2023, grade:5, subject:'History & Geography',
+  { id:'g5h-pp23-pdf-004', image:'assets/past-papers/g5-history-2023/pic1-portlouis.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'port-louis', marks:4, year:2023, grade:5, subject:'History & Geography',
     question:'Picture 1 shows a place in Port Louis in the past. (a) Name the place shown. (b) For what purpose did Mahé de Labourdonnais use this place during French rule? (c) Name the recreational activity for which this place is well known today.', type:'written' }
 );

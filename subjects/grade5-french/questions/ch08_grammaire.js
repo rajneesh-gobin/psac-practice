@@ -78,7 +78,7 @@ STATIC_QUESTIONS.push(
     question:'Complétez avec la bonne préposition : "Le stylo est ___ la trousse et le livre."',
     options:['dans','derrière','entre','sur'],
     answer:'entre',
-    hint:'"Entre" = between - entre deux objets.',
+    hint:'Deux objets sont nommés, et le stylo se trouve au milieu des deux.',
     explanation:'"Le stylo est <b>entre</b> la trousse et le livre." - <b>Entre</b> + deux éléments = between. On dit toujours "entre A <b>et</b> B". Ne pas confondre avec "parmi" (among/amongst - plus de deux éléments).' }),
 
   makeMCQ({ id:'g5fr-gr-010', chapterId:'fr-grammaire', subsection:'divers', difficulty:2,
@@ -234,7 +234,7 @@ STATIC_QUESTIONS.push(
     question:'Quelle conjonction de coordination exprime LA CONSÉQUENCE ?',
     options:['mais','ou','donc','car'],
     answer:'donc',
-    hint:'"Donc" = so, therefore (conséquence/résultat).',
+    hint:'Cherche la conjonction qui introduit un résultat, et non une cause ou une opposition.',
     explanation:'"<b>donc</b>" exprime la conséquence (so, therefore). "Il est malade, <b>donc</b> il ne vient pas." "Mais Où Est Donc Or Ni Car" : Mais (opposition), Ou (choix), Et (addition), <b>Donc</b> (conséquence), Or (transition), Ni (négation double), Car (cause).' }),
 
   makeMCQ({ id:'g5fr-gr-030', chapterId:'fr-grammaire', subsection:'divers', difficulty:2,

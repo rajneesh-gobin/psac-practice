@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Trailing comments are the count at generation time.
 const G4SC_SYLLABUS = {
   'g4sci-living': { subsections: [
@@ -93,11 +93,11 @@ registerSubject({
     { id: 'g4sci-protect',  name: 'Protection & Conservation',    icon: '♻️', examWeight: 3,
       syllabus: 'Human activities that harm the environment: cutting trees, dumping rubbish, burning, using chemicals. Types of pollution: air pollution, water/sea pollution, land/soil pollution. Effects of pollution on plants, animals and people. What we can do: reduce, reuse, recycle; picking up litter; planting trees; saving water.' },
     // ── ENRICHMENT ────────────────────────────────────────────────────────────────
-    // @enrichment — These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
-    // DO NOT remove during syllabus alignment audits — they are intentional bonus content.
-    { id: 'g4sci-enr-animals',   name: 'Animals in Pictures',       icon: '🦜', enrichment: true, examWeight: 2,
-      enrichmentNote: 'Photo identification of Mauritius endemic and common animals — derived from the Living Things and Animals chapters.' },
+    // @enrichment - These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
+    // DO NOT remove during syllabus alignment audits - they are intentional bonus content.
+    { id: 'g4sci-enr-animals',   name: 'Animals, Habitats & Food Chains', icon: '🦜', enrichment: true, examWeight: 2,
+      enrichmentNote: 'Identify Mauritian animals from photographs, then food chains, feeding types, habitats, adaptation, and why species such as the Dodo were lost - derived from the Living Things and Animals chapters.' },
     { id: 'g4sci-enr-equipment', name: 'Science Tools & Instruments', icon: '🔬', enrichment: true, examWeight: 2,
-      enrichmentNote: 'Identify weather and science instruments by photo — derived from Weather and Science Process chapters.' },
+      enrichmentNote: 'Weather and science instruments - identified from photographs and chosen for a measuring job - derived from Weather and Science Process chapters.' },
   ],
 });

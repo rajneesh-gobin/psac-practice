@@ -1,5 +1,5 @@
 'use strict';
-// Grade 5 Science — top-up questions.
+// Grade 5 Science - top-up questions.
 
 // --- conservation (8 questions: g5sc-cons-050..057) ---
 STATIC_QUESTIONS.push(
@@ -19,7 +19,7 @@ STATIC_QUESTIONS.push(
       'Roots provide shade which lowers the soil temperature'],
     answer:'Roots hold soil particles together and prevent erosion by rain and wind',
     hint:'What happens to bare soil on a hillside during heavy rain?',
-    explanation:'Tree roots bind soil particles together. Without trees, heavy rainfall washes the topsoil away — a process called soil erosion. This damages farmland, causes flooding, and destroys habitats.' }),
+    explanation:'Tree roots bind soil particles together. Without trees, heavy rainfall washes the topsoil away - a process called soil erosion. This damages farmland, causes flooding, and destroys habitats.' }),
 
   makeMCQ({ id:'g5sc-cons-052', chapterId:'conservation', subsection:'recycling', difficulty:1,
     question:'Which of the 3 Rs means finding a new use for something rather than throwing it away?',
@@ -40,14 +40,14 @@ STATIC_QUESTIONS.push(
     options:['Pamplemousses Botanical Garden','Black River Gorges National Park','Rodrigues Marine Park','Mahebourg Waterfront'],
     answer:'Black River Gorges National Park',
     hint:'This national park is Mauritius\'s main wildlife sanctuary.',
-    explanation:'Black River Gorges National Park is Mauritius\'s most important nature reserve. It protects many endemic species — animals and plants found only in Mauritius — including these three endangered birds.' }),
+    explanation:'Black River Gorges National Park is Mauritius\'s most important nature reserve. It protects many endemic species - animals and plants found only in Mauritius - including these three endangered birds.' }),
 
   makeMCQ({ id:'g5sc-cons-055', chapterId:'conservation', subsection:'pollution', difficulty:2,
     question:'Coral bleaching in Mauritius\'s lagoons is mainly caused by which change in the environment?',
     options:['An increase in the fish population','A rise in sea-water temperature linked to climate change','A decrease in sunlight reaching the sea','An increase in rainfall and river water'],
     answer:'A rise in sea-water temperature linked to climate change',
     hint:'This threat is linked to global warming.',
-    explanation:'When sea temperatures rise above normal (due to climate change), coral expels the algae living inside it, turning white — this is bleaching. Without the algae, coral loses its colour and may die.' }),
+    explanation:'When sea temperatures rise above normal (due to climate change), coral expels the algae living inside it, turning white - this is bleaching. Without the algae, coral loses its colour and may die.' }),
 
   makeMCQ({ id:'g5sc-cons-056', chapterId:'conservation', subsection:'recycling', difficulty:3,
     question:'A school collects 240 plastic bottles for recycling. If each bottle weighs 50 grams, what is the total mass of plastic collected, in kilograms?',
@@ -65,5 +65,5 @@ STATIC_QUESTIONS.push(
       'Cutting down trees leads to more rainfall and lower temperatures'],
     answer:'Cutting down trees leads to soil erosion and loss of habitat for wildlife',
     hint:'Think about what happens to the soil and the animals when trees are removed.',
-    explanation:'When trees are cut, their roots no longer hold the soil — causing erosion. Animals that depended on those trees lose their homes — causing habitat loss. Both consequences reduce biodiversity.' })
+    explanation:'When trees are cut, their roots no longer hold the soil - causing erosion. Animals that depended on those trees lose their homes - causing habitat loss. Both consequences reduce biodiversity.' })
 );

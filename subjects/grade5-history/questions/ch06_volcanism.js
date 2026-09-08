@@ -227,14 +227,14 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5hg-vol-020', chapterId:'volcanism', subsection:'formation', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Trou_aux_Cerfs.jpg" alt="a bowl-shaped depression in a green landscape" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What type of volcanic feature is shown in this photo, located in Curepipe, Mauritius?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/trou-aux-cerfs-crater.jpg" alt="a landscape seen from above" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What type of volcanic feature is shown in this photo, located in Curepipe, Mauritius?</b>',
     options:['A lava tube','An active volcano crater','An extinct volcanic crater','A river gorge'],
     answer:'An extinct volcanic crater',
     hint:'This bowl-shaped hollow was formed by volcanic eruptions millions of years ago.',
     explanation:'This is <b>Trou aux Cerfs</b>, an <b>extinct volcanic crater</b> in the town of Curepipe in central Mauritius. It last erupted millions of years ago. The crater shape is still clearly visible and it is a popular viewpoint, confirming that Mauritius was formed entirely by volcanic activity.' }),
 
   makeMCQ({ id:'g5hg-vol-021', chapterId:'volcanism', subsection:'craters', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Grand_Bassin_Mauritius.jpg" alt="a lake inside a crater surrounded by forested hills" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Grand Bassin (Ganga Talao) is a crater lake in Mauritius. For what is it primarily famous?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/grand-bassin-ganga-talao.jpg" alt="a lake inside a crater surrounded by forested hills" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Grand Bassin (Ganga Talao) is a crater lake in Mauritius. For what is it primarily famous?</b>',
     options:[
       'It is the largest freshwater reservoir used for drinking water',
       'It is a sacred Hindu site where devotees collect water for the Maha Shivaratri festival',
@@ -243,33 +243,33 @@ STATIC_QUESTIONS.push(
     ],
     answer:'It is a sacred Hindu site where devotees collect water for the Maha Shivaratri festival',
     hint:'Thousands of pilgrims walk barefoot to this lake every year.',
-    explanation:'<b>Grand Bassin</b> (also called <b>Ganga Talao</b>) is a natural crater lake in the mountains of Mauritius. It is a sacred Hindu site — during the annual <b>Maha Shivaratri</b> festival, thousands of Hindu pilgrims walk barefoot for many kilometres to collect water from the lake and carry it in colourful structures called <i>kanwar</i> to offer at temples.' }),
+    explanation:'<b>Grand Bassin</b> (also called <b>Ganga Talao</b>) is a natural crater lake in the mountains of Mauritius. It is a sacred Hindu site - during the annual <b>Maha Shivaratri</b> festival, thousands of Hindu pilgrims walk barefoot for many kilometres to collect water from the lake and carry it in colourful structures called <i>kanwar</i> to offer at temples.' }),
 
   makeMCQ({ id:'g5hg-vol-022', chapterId:'volcanism', subsection:'active', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Piton_de_la_Fournaise_eruptive_fissure.jpg" alt="a volcano erupting with lava flows" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This volcano (Piton de la Fournaise) is located on which island near Mauritius — and is it active or extinct?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/piton-de-la-fournaise-eruption.jpg" alt="a volcanic landscape" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This volcano (Piton de la Fournaise) is located on which island near Mauritius - and is it active or extinct?</b>',
     options:[
-      'Rodrigues — it is extinct',
-      'Réunion — it is one of the world\'s most active volcanoes',
-      'Madagascar — it last erupted in 1902',
-      'Comoros — it is dormant'
+      'Rodrigues - it is extinct',
+      'Réunion - it is one of the world\'s most active volcanoes',
+      'Madagascar - it last erupted in 1902',
+      'Comoros - it is dormant'
     ],
-    answer:'Réunion — it is one of the world\'s most active volcanoes',
+    answer:'Réunion - it is one of the world\'s most active volcanoes',
     hint:'This French overseas territory is about 170 km south-west of Mauritius.',
     explanation:'<b>Piton de la Fournaise</b> (meaning "Peak of the Furnace") is located on the island of <b>Réunion</b>, a French overseas territory near Mauritius. It is one of the <b>world\'s most active volcanoes</b>, erupting regularly. Unlike Mauritius\'s extinct volcanoes, Réunion still sits directly over the volcanic hot spot.' }),
 
   makeMCQ({ id:'g5hg-vol-023', chapterId:'volcanism', subsection:'active', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Karthala_from_north.jpg" alt="a large volcanic mountain rising above clouds" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This is Karthala — an active volcano in the Indian Ocean region. On which island is it found?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/karthala-volcano-comoros.jpg" alt="a large volcanic mountain rising above clouds" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This is Karthala - an active volcano in the Indian Ocean region. On which island is it found?</b>',
     options:['Rodrigues','Réunion','Grand Comore (Comoros)','Agalega'],
     answer:'Grand Comore (Comoros)',
     hint:'The Comoro Islands are located north of Madagascar.',
-    explanation:'<b>Karthala</b> is an active volcano on <b>Grand Comore</b>, the largest of the Comoro Islands, located north of Madagascar in the Indian Ocean. It is one of the world\'s most active volcanoes and erupts regularly — in contrast to the extinct volcanic features of Mauritius such as Trou aux Cerfs.' })
+    explanation:'<b>Karthala</b> is an active volcano on <b>Grand Comore</b>, the largest of the Comoro Islands, located north of Madagascar in the Indian Ocean. It is one of the world\'s most active volcanoes and erupts regularly - in contrast to the extinct volcanic features of Mauritius such as Trou aux Cerfs.' })
 
 );
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5hg-vol-024', chapterId:'volcanism', subsection:'formation', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Volcano.jpg" alt="a mountain with a wide crater at its summit" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Mauritius was formed by this type of natural feature. What is it called?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/volcano.jpg" alt="a mountain with a wide crater at its summit" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Mauritius was formed by this type of natural feature. What is it called?</b>',
     options:['A canyon','A volcano','A glacier','A plateau'],
     answer:'A volcano',
     hint:'It forms when hot molten rock (magma) erupts from deep inside the Earth.',

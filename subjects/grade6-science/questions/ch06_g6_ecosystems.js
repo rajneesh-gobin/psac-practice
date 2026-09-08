@@ -21,20 +21,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-eco-001', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:1,
     question:'What is an ECOSYSTEM?',
-    options:[
-      'A single animal living in a forest',
-      'A community of living things (plants and animals) interacting with each other and their non-living environment',
-      'Only the non-living parts of a habitat (water, soil, air)',
-      'A zoo where animals are kept and studied'
-    ],
-    answer:'A community of living things (plants and animals) interacting with each other and their non-living environment',
+    options:['Living things and their surroundings', 'Only the non-living parts of a place', 'A single animal living in a forest', 'A zoo where animals are studied'],
+    answer:'Living things and their surroundings',
     hint:'An ecosystem includes BOTH the living things AND the environment they live in.',
     explanation:'An <b>ecosystem</b> consists of all the living organisms (plants, animals, fungi, bacteria) in an area, together with the non-living (abiotic) factors (water, soil, temperature, sunlight) and all the interactions between them.' }),
 
   makeMCQ({ id:'g6sci-eco-002', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:1,
     question:'Which of the following is an example of a FOREST ecosystem found in Mauritius?',
-    options:['Blue Bay Lagoon','Aapravasi Ghat','Black River Gorges National Park','Trou aux Cerfs crater'],
-    answer:'Black River Gorges National Park',
+    options:['Black River Gorges', 'Trou aux Cerfs crater', 'Blue Bay Lagoon', 'Aapravasi Ghat'],
+    answer:'Black River Gorges',
     hint:'This is Mauritius\'s only national park, protecting the island\'s remaining native forest.',
     explanation:'The <b>Black River Gorges National Park</b> in the south-west of Mauritius contains the largest remaining area of native forest and is a key forest ecosystem. It is home to many endemic birds and plants.' }),
 
@@ -60,37 +55,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-eco-006', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:2,
     question:'What is BIODIVERSITY?',
-    options:[
-      'The number of humans living in an ecosystem',
-      'The variety of different species of living things in an area',
-      'The amount of water available in an ecosystem',
-      'The size of the largest animal in an ecosystem'
-    ],
-    answer:'The variety of different species of living things in an area',
+    options:['The variety of living species', 'The number of people living there', 'The size of the largest animal', 'The amount of water available'],
+    answer:'The variety of living species',
     hint:'"Bio" = life, "diversity" = variety.',
     explanation:'<b>Biodiversity</b> is the variety of living species - plants, animals, fungi and microorganisms - in an ecosystem or on Earth. High biodiversity makes ecosystems more stable and resilient. Mauritius has significant biodiversity due to its isolation and tropical climate.' }),
 
   makeMCQ({ id:'g6sci-eco-007', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:2,
-    question:'Why is the coral reef lagoon ecosystem important for Mauritius?',
-    options:[
-      'The coral reef produces fresh water for drinking',
-      'The reef protects the coast from large waves, supports tourism and provides habitat for fish',
-      'The reef produces the electricity for the island',
-      'The reef is only important for scientists and has no practical value'
-    ],
-    answer:'The reef protects the coast from large waves, supports tourism and provides habitat for fish',
+    question:'Why is the coral reef lagoon important for Mauritius?',
+    options:['It shelters the coast and the fish', 'It generates the island\'s electricity', 'It provides our drinking water', 'It matters only to scientists'],
+    answer:'It shelters the coast and the fish',
     hint:'Think about what the reef does for the coastline, the economy and marine life.',
     explanation:'The coral reef: (1) <b>protects the coastline</b> from large ocean waves, preventing beach erosion; (2) <b>supports tourism</b> - snorkelling, diving and beaches attract visitors; (3) provides <b>habitat for fish</b>, supporting fishing communities.' }),
 
-  makeMCQ({ id:'g6sci-eco-008', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:2,
-    question:'What would happen to a lagoon ecosystem if all the algae and seagrass were destroyed by pollution?',
-    options:[
-      'Fish would grow larger because they have more space',
-      'The food web would collapse - fish and other consumers would have no food source',
-      'Coral reefs would grow faster without competition',
-      'Nothing would change - fish can survive without producers'
-    ],
-    answer:'The food web would collapse - fish and other consumers would have no food source',
+  makeMCQ({ id:'g6sci-eco-008', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:3,
+    question:'What would happen to a lagoon if all the algae and seagrass were destroyed?',
+    options:['The food web would collapse', 'Coral would grow faster without them', 'Fish would grow larger with more space', 'Nothing - fish live without producers'],
+    answer:'The food web would collapse',
     hint:'Producers are the base of every food web.',
     explanation:'Algae and seagrass are the <b>producers</b> of the lagoon. Without them, the entire food web collapses: fish that eat algae would have no food and die, and then their predators would also die. This shows the interdependence of species in an ecosystem.' }),
 
@@ -101,14 +81,9 @@ STATIC_QUESTIONS.push(
     explanation:'True. <b>Blue Bay Marine Park</b> is a protected area on the south-east coast of Mauritius, designated to conserve its coral reef and lagoon ecosystem. It has some of the most diverse coral formations in the Indian Ocean.' }),
 
   makeMCQ({ id:'g6sci-eco-010', chapterId:'g6-ecosystems', subsection:'food_webs', difficulty:2,
-    question:'What is the role of DECOMPOSERS in a forest ecosystem?',
-    options:[
-      'They photosynthesise sunlight into food for other animals',
-      'They hunt and eat the top predators in the forest',
-      'They break down dead organic matter, recycling nutrients back into the soil',
-      'They transport water from the roots to the canopy'
-    ],
-    answer:'They break down dead organic matter, recycling nutrients back into the soil',
+    question:'What is the role of DECOMPOSERS in a forest?',
+    options:['They recycle nutrients into the soil', 'They hunt the top forest predators', 'They carry water up to the canopy', 'They make food from the sunlight'],
+    answer:'They recycle nutrients into the soil',
     hint:'Think about dead leaves and fallen trees on the forest floor.',
     explanation:'<b>Decomposers</b> (bacteria, fungi) break down dead leaves, fallen trees and animal remains. They release the nutrients locked in this dead matter back into the soil, where plant roots can absorb them again - completing the nutrient cycle.' })
 
@@ -117,14 +92,9 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-eco-011', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:1,
-    question:'What is BEACH EROSION? (PSAC 2025 Q9b)',
-    options:[
-      'The process of sand being added to a beach from the sea',
-      'The wearing away and removal of sand and soil from the beach by waves, wind or human activities',
-      'The pollution of beach water by oil spills',
-      'The building of hotels and roads on the beach'
-    ],
-    answer:'The wearing away and removal of sand and soil from the beach by waves, wind or human activities',
+    question:'What is BEACH EROSION?',
+    options:['Sand being worn away by waves', 'Hotels being built on the beach', 'Sand being added to the beach', 'Oil spilling into beach water'],
+    answer:'Sand being worn away by waves',
     hint:'Think about what "erosion" means - material being worn away and carried off.',
     explanation:'<b>Beach erosion</b> is the gradual wearing away of the beach - sand, rocks and soil are loosened and carried away by <b>waves, wind, currents or human activities</b>. It is a major threat to Mauritius\'s coastline and lagoon ecosystems. When the beach narrows, the coral reef behind it loses its natural protection.' }),
 
@@ -141,14 +111,9 @@ STATIC_QUESTIONS.push(
     explanation:'A natural cause of beach erosion is <b>powerful waves and storms</b> (cyclones). Wave energy removes sand from the beach and carries it offshore. In Mauritius, tropical cyclones are particularly destructive. Human causes include: removal of sand for construction, anchoring boats on reefs, and removing coastal vegetation.' }),
 
   makeMCQ({ id:'g6sci-eco-013', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:2,
-    question:'How does beach erosion affect the LAGOON ECOSYSTEM? (PSAC 2025 Q9b)',
-    options:[
-      'It makes the lagoon water warmer',
-      'Sediment (sand/soil) washed into the lagoon smothers coral reefs and blocks sunlight, killing marine life',
-      'It increases the number of fish in the lagoon',
-      'It creates more habitat for seagrass to grow'
-    ],
-    answer:'Sediment (sand/soil) washed into the lagoon smothers coral reefs and blocks sunlight, killing marine life',
+    question:'How does beach erosion affect the LAGOON ecosystem?',
+    options:['Sediment smothers the coral reefs', 'It creates new habitat for seagrass', 'It makes the lagoon water warmer', 'It increases the number of fish'],
+    answer:'Sediment smothers the coral reefs',
     hint:'Think about what happens to coral when sand gets dumped on top of it.',
     explanation:'When beach erosion occurs, <b>sediment</b> (sand, soil, mud) is washed into the lagoon. This: (1) <b>smothers coral reefs</b> - corals are buried and die; (2) <b>reduces water clarity</b>, blocking the sunlight that corals and seagrass need for photosynthesis; (3) disrupts the entire lagoon food web. Protecting beaches directly protects the lagoon ecosystem.' }),
 
@@ -164,7 +129,7 @@ STATIC_QUESTIONS.push(
     hint:'Plant roots hold soil in place - how might this help a beach?',
     explanation:'<b>Planting coastal vegetation</b> (mangroves, casuarinas/filaos) is a natural way to prevent beach erosion. Their roots stabilise the sand and soil, and their stems reduce wave energy. Other measures include: building sea walls and groynes (barriers to trap sand), and restricting activities that damage the reef (which naturally protects beaches from waves).' }),
 
-  makeMCQ({ id:'g6sci-eco-015', chapterId:'g6-ecosystems', subsection:'food_webs', difficulty:2,
+  makeMCQ({ id:'g6sci-eco-015', chapterId:'g6-ecosystems', subsection:'food_webs', difficulty:3,
     question:'In a food chain: Aquatic plants → Fish M → Shark. If ALL of Fish M are caught by fishermen, what happens to the SHARK? (PSAC 2025 Q9c)',
     options:[
       'The shark population increases because there is more space',
@@ -177,14 +142,9 @@ STATIC_QUESTIONS.push(
     explanation:'If all <b>Fish M</b> are removed, the <b>shark</b> loses its only food source and its population will <b>decline</b> (it may eventually disappear from that area). Meanwhile, the <b>aquatic plants</b> would <b>increase</b> - because nothing is eating them any more. This demonstrates how removing one link disrupts the entire food chain. (PSAC 2025 Q9c)' }),
 
   makeMCQ({ id:'g6sci-eco-016', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:2,
-    question:'What is the WATER CYCLE? (PSAC 2025 Q8a)',
-    options:[
-      'The process of water being added to the Earth from outer space',
-      'The continuous movement of water through evaporation, condensation and precipitation',
-      'The process of plants making water during photosynthesis',
-      'Only the movement of water in rivers to the sea'
-    ],
-    answer:'The continuous movement of water through evaporation, condensation and precipitation',
+    question:'What is the WATER CYCLE?',
+    options:['Water moving between sea, air and land', 'Only water flowing in rivers to the sea', 'Water reaching Earth from outer space', 'Water made by plants during the day'],
+    answer:'Water moving between sea, air and land',
     hint:'Water changes state and moves between the land, sea and sky in a continuous loop.',
     explanation:'The <b>water cycle</b>: (1) <b>Evaporation</b> - sun heats water in oceans/lakes → water vapour rises; (2) <b>Condensation</b> - water vapour cools → forms clouds (tiny droplets); (3) <b>Precipitation</b> - clouds become heavy → rain falls. Rain either flows into rivers/sea or soaks into the ground. The cycle then repeats continuously. (PSAC 2025 Q8a tested all three terms)' }),
 
@@ -201,7 +161,7 @@ STATIC_QUESTIONS.push(
     hint:'Habitat provides food, water, shelter and space for an organism.',
     explanation:'<b>True.</b> A <b>habitat</b> is the natural environment where an organism lives. It provides all the organism\'s basic needs: food, water, shelter and space to reproduce. Different organisms are adapted to different habitats - fish to water, camels to deserts, bats to caves and trees. Destroying a habitat threatens all the species that depend on it.' }),
 
-  makeMCQ({ id:'g6sci-eco-019', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:3,
+  makeMCQ({ id:'g6sci-eco-019', chapterId:'g6-ecosystems', subsection:'habitats', difficulty:1,
     question:'The WATER CYCLE process that forms clouds is called: (PSAC 2025 Q8a)',
     options:['Evaporation','Condensation','Precipitation','Transpiration'],
     answer:'Condensation',

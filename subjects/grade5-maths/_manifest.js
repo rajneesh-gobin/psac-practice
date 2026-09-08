@@ -9,34 +9,64 @@
 // ⚠ CHAPTERS (the GLOBAL every screen renders from) starts EMPTY, and is
 // filled IN PLACE by activateSubjectPack() when a subject is chosen. It used to
 // be declared here already holding this pack's eighteen chapters, so until a
-// subject was activated every screen reading CHAPTERS showed Grade 5 Maths — to
+// subject was activated every screen reading CHAPTERS showed Grade 5 Maths - to
 // a Grade 4 child, inside Science, whatever they had actually tapped. That is
 // the "I clicked a subject and maths material loaded" report.
 //
-// The declaration stays in THIS file at THIS point in the load order: app.js
-// references CHAPTERS at top level and the manifests load before it (see the
-// load-order note in CLAUDE.md). Only its initial contents moved.
-const CHAPTERS = [];
+// ⚠ CHAPTERS IS NO LONGER DECLARED HERE. It moved to engine/registry.js when
+// pack loading became lazy: this manifest is now fetched on demand, and a
+// deferred file cannot declare a global that app.js references at top level.
+// Re-adding it here would throw "Identifier 'CHAPTERS' has already been
+// declared" the moment this pack is loaded.
 
+// examWeight is a chapter's share of a 40-question exam. These are measured
+// from the real 2024 and 2025 papers, question by question: every
+// mark goes to the chapter that teaches it. Papers used: 2024 and 2025 (100 marks each).
+//
+//   four_ops         28 marks   14.0%  ->  weight 5
+//   money            27 marks   13.5%  ->  weight 5
+//   fractions        23 marks   11.5%  ->  weight 4
+//   geometry         16 marks    8.0%  ->  weight 3
+//   ratio            16 marks    8.0%  ->  weight 3
+//   length           15 marks    7.5%  ->  weight 3
+//   graphs           13 marks    6.5%  ->  weight 2
+//   numeration       13 marks    6.5%  ->  weight 2
+//   area             10 marks    5.0%  ->  weight 2
+//   decimals          8 marks    4.0%  ->  weight 1
+//   time              8 marks    4.0%  ->  weight 1
+//   capacity          7 marks    3.5%  ->  weight 1
+//   average           5 marks    2.5%  ->  weight 2
+//   mass              5 marks    2.5%  ->  weight 2
+//   conversions       2 marks    1.0%  ->  weight 1
+//   square_nums       2 marks    1.0%  ->  weight 1
+//   powers            2 marks    1.0%  ->  weight 1
+//
+//   percentage    not scored           ->  weight 1
+//
+// ⚠ percentage scores ZERO in both 2024 and 2025 - it is a Grade 6 topic
+// (g6-ratio-pct earns 16.5% there). It keeps the floor of 1, no more.
+// ⚠ money is the second-largest topic (13.5%) and was weighted 3; graphs
+// earns 6.5% and was weighted 1, the lowest in the pack.
+// scripts/test-exam-paper-shape.js holds the delivered mix against these.
 const G5M_CHAPTERS = [
-  { id:'numeration',  name:'Numeration & Notation',   icon:'🔢', color:'blue',   part:1, examWeight:3 },
+  { id:'numeration',  name:'Numeration & Notation',   icon:'🔢', color:'blue',   part:1, examWeight:2 },
   { id:'four_ops',    name:'Four Operations',          icon:'➕', color:'purple', part:1, examWeight:5 },
-  { id:'square_nums', name:'Square Numbers & Patterns',icon:'⬜', color:'indigo', part:1, examWeight:2 },
-  { id:'geometry',    name:'Geometry & Angles',        icon:'📐', color:'teal',   part:1, examWeight:4 },
+  { id:'square_nums', name:'Square Numbers & Patterns',icon:'⬜', color:'indigo', part:1, examWeight:1 },
+  { id:'geometry',    name:'Geometry & Angles',        icon:'📐', color:'teal',   part:1, examWeight:3 },
   { id:'fractions',   name:'Fractions',                icon:'½',  color:'orange', part:1, examWeight:4 },
-  { id:'decimals',    name:'Decimals',                 icon:'•',  color:'amber',  part:1, examWeight:3 },
-  { id:'powers',      name:'Powers & Exponents',       icon:'²',  color:'red',    part:1, examWeight:2 },
+  { id:'decimals',    name:'Decimals',                 icon:'•',  color:'amber',  part:1, examWeight:1 },
+  { id:'powers',      name:'Powers & Exponents',       icon:'²',  color:'red',    part:1, examWeight:1 },
   { id:'average',     name:'Average',                  icon:'📊', color:'green',  part:2, examWeight:2 },
   { id:'ratio',       name:'Ratio & Proportion',       icon:'⚖️', color:'cyan',   part:2, examWeight:3 },
-  { id:'percentage',  name:'Percentage',               icon:'%',  color:'pink',   part:2, examWeight:3 },
+  { id:'percentage',  name:'Percentage',               icon:'%',  color:'pink',   part:2, examWeight:1 },
   { id:'length',      name:'Length & Perimeter',       icon:'📏', color:'lime',   part:2, examWeight:3 },
-  { id:'area',        name:'Area',                     icon:'▭',  color:'yellow', part:2, examWeight:3 },
-  { id:'capacity',    name:'Capacity',                 icon:'🧪', color:'sky',    part:2, examWeight:2 },
+  { id:'area',        name:'Area',                     icon:'▭',  color:'yellow', part:2, examWeight:2 },
+  { id:'capacity',    name:'Capacity',                 icon:'🧪', color:'sky',    part:2, examWeight:1 },
   { id:'mass',        name:'Mass',                     icon:'⚖️', color:'violet', part:2, examWeight:2 },
-  { id:'money',       name:'Money & Profit/Loss',      icon:'💰', color:'emerald',part:2, examWeight:3 },
-  { id:'time',        name:'Time',                     icon:'⏰', color:'rose',   part:2, examWeight:3 },
-  { id:'graphs',      name:'Graphs & Data',            icon:'📈', color:'fuchsia',part:2, examWeight:1 },
-  { id:'conversions', name:'Unit Conversions',          icon:'🔄', color:'teal',   part:2, examWeight:2 },
+  { id:'money',       name:'Money & Profit/Loss',      icon:'💰', color:'emerald',part:2, examWeight:5 },
+  { id:'time',        name:'Time',                     icon:'⏰', color:'rose',   part:2, examWeight:1 },
+  { id:'graphs',      name:'Graphs & Data',            icon:'📈', color:'fuchsia',part:2, examWeight:2 },
+  { id:'conversions', name:'Unit Conversions',          icon:'🔄', color:'teal',   part:2, examWeight:1 },
 ];
 
 // ── SYLLABUS ───────────────────────────────────
@@ -296,7 +326,7 @@ const G5M_BADGES = [
 // ── DYNAMIC GENERATORS ──────────────────────────
 // Every generated question needs a unique id. `Date.now()` on its own repeats
 // for every call inside the same millisecond, and getMixedQuestions() de-dupes
-// by id — so a run of generated questions collapsed to one and the padding
+// by id - so a run of generated questions collapsed to one and the padding
 // largely did not work.
 let _g5mGenSeq = 0;
 const genId = prefix => `${prefix}${Date.now()}_${++_g5mGenSeq}`;
@@ -452,7 +482,7 @@ const G5M_GENERATORS = {
     // n numbers whose mean is EXACTLY avg.
     //
     // The old version generated the numbers, clamped them to >= 5 (which threw
-    // the total off), then dumped the whole rounding difference into nums[0] —
+    // the total off), then dumped the whole rounding difference into nums[0] -
     // and if that pushed nums[0] below 1, RESET it to `avg`. That reset silently
     // destroyed the total it had just balanced, so the "average" came out as
     // 25.333333333333332: correct arithmetic for the numbers shown, but not an
@@ -488,7 +518,7 @@ const G5M_GENERATORS = {
       const avg = rnd(20, 70);
       const total = avg * count;
       // Retry rather than give up. The old version drew the known numbers once
-      // and returned null if that left an implausible missing value — which
+      // and returned null if that left an implausible missing value - which
       // happened 48% of the time, and a null makes getQuestionsForChapter stop
       // padding altogether rather than try again.
       let known = null, missing = 0;
@@ -567,7 +597,7 @@ const G5M_GENERATORS = {
 
   // ── Moved here from questions/questions_extra.js ─────────────────────────
   // They used to sit in that question file behind `Object.assign(GENERATORS, …)`
-  // — a global no file has ever defined, so the line threw a ReferenceError and
+  // - a global no file has ever defined, so the line threw a ReferenceError and
   // none of these six generators had ever run. They belong in the MANIFEST
   // regardless: in production the browser fetches question files as JSON from
   // netlify/functions/questions, so nothing in a questions/*.js file is ever

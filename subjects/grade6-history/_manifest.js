@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Trailing comments are the count at generation time.
 const G6HG_SYLLABUS = {
   'g6-slaves-immigrants': { subsections: [
@@ -77,20 +77,41 @@ registerSubject({
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: false, noDifficulty: true,
   syllabus: G6HG_SYLLABUS,
+  // examWeight is a chapter's share of a 40-question exam. These are measured
+  // from the real 2022, 2023 and 2024 papers, question by question: every
+  // mark goes to the chapter that teaches it. Papers used: 2022, 2023 and 2024 (50 marks each).
+  //
+  //   g6-land-use               43 marks   28.7%  ->  weight 11
+  //   g6-slaves-immigrants      30 marks   20.0%  ->  weight 8
+  //   g6-natural-hazards        24 marks   16.0%  ->  weight 6
+  //   g6-cultural-heritage      16 marks   10.7%  ->  weight 4
+  //   g6enr-symbols             14 marks    9.3%  ->  weight 3
+  //   g6-map-skills             11 marks    7.3%  ->  weight 3
+  //   g6-independence            9 marks    6.0%  ->  weight 2
+  //   g6enr-personalities        3 marks    2.0%  ->  weight 2
+  //
+  //   g6enr-world            not scored           ->  weight 1
+  //
+  // ⚠ g6enr-symbols is a ✨ BONUS chapter and earns 9.3% of the marks - the
+  // national flag, coat of arms and anthem are asked EVERY year, more often
+  // than Map Skills or Independence. The bonus label is wrong for it.
+  // ⚠ Waste, recycling and pollution have no chapter of their own; those marks
+  // are counted under Land Use, which is where the syllabus puts them.
+  // scripts/test-exam-paper-shape.js holds the delivered mix against these.
   chapters: [
     // ── HISTORY ────────────────────────────────────────────────────────────────
-    { id: 'g6-slaves-immigrants', name: 'Settlers, Slaves & Immigrants',       icon: '📜', examWeight: 5,
+    { id: 'g6-slaves-immigrants', name: 'Settlers, Slaves & Immigrants',       icon: '📜', examWeight: 8,
       syllabus: 'Where settlers, slaves and immigrants came from (India, China, Africa, Madagascar). Life and work of slaves: sugar cane fields, harsh conditions, abolition 1835. Indian indentured labourers (1834–1924): life, work, contributions to agriculture and culture. Chinese immigrants: trade, contribution. Aapravasi Ghat (UNESCO). Social and cultural life during Dutch, French and British rule.' },
-    { id: 'g6-independence',      name: 'Celebrating Independence',             icon: '🎊', examWeight: 4,
+    { id: 'g6-independence',      name: 'Celebrating Independence',             icon: '🎊', examWeight: 2,
       syllabus: 'Why Mauritius is called "the Star and Key of the Indian Ocean". National Flag of Mauritius: four colours and their meanings (red=freedom, blue=Indian Ocean, yellow=light/independence, green=agriculture). Coat of Arms of Mauritius: features and symbols. Coat of Arms of Rodrigues. National flower (Trochetia boutoniana). Significance of national symbols in building identity.' },
     { id: 'g6-cultural-heritage', name: 'Our Cultural Heritage',               icon: '🏛️', examWeight: 4,
       syllabus: 'Places of historical interest in Mauritius: Aapravasi Ghat (Port Louis), Le Morne Brabant (UNESCO), Eureka House, Pamplemousses Botanical Garden, Citadel/Fort Adelaide, Blue Penny Museum. Places of historical interest in Rodrigues. Why historical sites need to be protected and preserved. Cultural diversity of Mauritius.' },
     // ── GEOGRAPHY ──────────────────────────────────────────────────────────────
-    { id: 'g6-land-use',          name: 'Land Use in Mauritius & Rodrigues',   icon: '🌾', examWeight: 4,
+    { id: 'g6-land-use',          name: 'Land Use in Mauritius & Rodrigues',   icon: '🌾', examWeight: 11,
       syllabus: 'Types of land use: agriculture (sugar cane, vegetables, fruits), agro-industry (sugar factories, tea factories), tourism (hotels, beaches). How land use has changed over time. Impact of tourism on the environment. Sustainable land use. Comparison of land use in Mauritius and Rodrigues.' },
-    { id: 'g6-natural-hazards',   name: 'Natural Hazards',                     icon: '🌀', examWeight: 3,
+    { id: 'g6-natural-hazards',   name: 'Natural Hazards',                     icon: '🌀', examWeight: 6,
       syllabus: 'Cyclones: what they are, how they form in the Indian Ocean, cyclone warning signals in Mauritius (Class 1–4), precautions. Earthquakes: causes (tectonic plates), effects. Tsunamis: causes and effects. Floods: causes in Mauritius, effects, precautions. Drought and its effects. Disaster preparedness.' },
-    { id: 'g6-map-skills',        name: 'Map Skills',                           icon: '🗺️', examWeight: 2,
+    { id: 'g6-map-skills',        name: 'Map Skills',                           icon: '🗺️', examWeight: 3,
       syllabus: 'Reading a relief map: contour lines, spot heights. Identifying relief features from a map. Latitude, longitude and coordinates. Scale and distance. Grid references. Maps of Mauritius, Rodrigues and the Indian Ocean region. Compass directions and bearings.' },
 
     // ── ENRICHMENT ────────────────────────────────────────────────────────────────
@@ -99,9 +120,9 @@ registerSubject({
     // They are recognisable by enrichment:true and display with a gold "✨ BONUS" badge in the UI.
     { id: 'g6enr-personalities', name: 'Famous Figures of Mauritius',      icon: '👤', enrichment: true, examWeight: 2,
       enrichmentNote: 'Independence leaders (Sir Seewoosagur Ramgoolam), historical figures from slaves/immigration era, cultural contributors - derived from Grade 6 History chapters.' },
-    { id: 'g6enr-symbols',       name: 'Mauritius: Identity & Symbols',    icon: '🏝', enrichment: true, examWeight: 2,
+    { id: 'g6enr-symbols',       name: 'Mauritius: Identity & Symbols',    icon: '🏝', enrichment: true, examWeight: 3,
       enrichmentNote: 'National flag colours, coat of arms, national flower, UNESCO sites (Aapravasi Ghat, Le Morne), national motto - derived from Independence and Cultural Heritage chapters.' },
-    { id: 'g6enr-world',         name: 'Global Connections',               icon: '🌐', enrichment: true, examWeight: 2,
+    { id: 'g6enr-world',         name: 'Global Connections',               icon: '🌐', enrichment: true, examWeight: 1,
       enrichmentNote: 'How Mauritius connects to India, Africa and China through immigration and trade; natural hazards around the world - derived from Settlers/Immigrants and Natural Hazards chapters.' },
   ],
 });

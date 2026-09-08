@@ -179,7 +179,7 @@ STATIC_QUESTIONS.push(
     question:'"Ces stylos sont ___ ." (tu, possessif pluriel)',
     options:['les tiens','la tienne','le tien','les tiennes'],
     answer:'les tiens',
-    hint:'"Stylos" = masculin pluriel → les tiens.',
+    hint:'Le pronom possessif s\'accorde avec « stylos ». Quel est son genre et son nombre ?',
     explanation:'"Ces stylos sont <b>les tiens</b>." - "Stylos" = masculin pluriel → <b>les tiens</b>. Tableau pour "tu" : le tien (masc. sing.) / la tienne (fém. sing.) / les tiens (masc. plur.) / les tiennes (fém. plur.).' }),
 
   makeMCQ({ id:'g5fr-pro-025', chapterId:'fr-pronoms', subsection:'personnels', difficulty:2,
@@ -199,7 +199,7 @@ STATIC_QUESTIONS.push(
     question:'Remplacez "à ma mère" : "Je parle ___ chaque soir."',
     options:['la','le','lui','leur'],
     answer:'lui',
-    hint:'"Lui" = pronom COI (indirect object) pour une personne singulière.',
+    hint:'« à ma mère » est un complément d\'objet INDIRECT, au singulier. Quel pronom le remplace ?',
     explanation:'"Je <b>lui</b> parle chaque soir." - "à ma mère" = COI (complément d\'objet indirect) → lui (pour une personne singulière, masc. ou fém.). Pour une personne plurielle → leur. Exemples : Je parle à Marie → Je lui parle. Je parle aux enfants → Je leur parle.' }),
 
   makeMCQ({ id:'g5fr-pro-028', chapterId:'fr-pronoms', subsection:'personnels', difficulty:2,
@@ -240,14 +240,14 @@ STATIC_QUESTIONS.push(
     question:'"___ qui travaille bien réussit." (The one who works well succeeds.)',
     options:['Lui','Celui','Cela','Il'],
     answer:'Celui',
-    hint:'"Celui qui" = "the one who" (masculin).',
+    hint:'Il faut un pronom démonstratif masculin singulier, suivi de « qui ».',
     explanation:'"<b>Celui qui</b> travaille bien réussit." - "Celui qui" = the one who (masculin). Féminin : "<b>Celle qui</b> travaille bien réussit." Cette structure est très courante en français : celui qui/celle qui + verbe.' }),
 
   makeMCQ({ id:'g5fr-pro-034', chapterId:'fr-pronoms', subsection:'personnels', difficulty:3,
     question:'Complétez : "J\'aime les pommes. ___ que tu m\'as données étaient délicieuses."',
     options:['Celles','Ceux','Celle','Ceci'],
     answer:'Celles',
-    hint:'"Les pommes" = féminin pluriel → celles.',
+    hint:'Le pronom démonstratif reprend « les pommes » : accorde-le en genre et en nombre.',
     explanation:'"<b>Celles</b> que tu m\'as données" - "les pommes" est féminin pluriel → celles. "Celles que tu m\'as données" = the ones (f. plur.) that you gave me. Notez aussi l\'accord : "données" (fém. plur. car le COD "que" = les pommes précède).' }),
 
   makeMCQ({ id:'g5fr-pro-035', chapterId:'fr-pronoms', subsection:'personnels', difficulty:4,

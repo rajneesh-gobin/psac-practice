@@ -191,7 +191,7 @@ STATIC_QUESTIONS.push(
     question:'Conjugue PRENDRE : "Nous ___ le bus chaque matin."',
     options:['prenons','prennent','prenez','prend'],
     answer:'prenons',
-    hint:'Prendre : nous prenons.',
+    hint:'Au présent, la terminaison qui va avec « nous » est presque toujours -ons.',
     explanation:'"Nous <b>prenons</b> le bus." - Conjugaison de <b>prendre</b> (to take) : je <b>prends</b>, tu <b>prends</b>, il <b>prend</b>, nous <b>prenons</b>, vous <b>prenez</b>, ils <b>prennent</b>. Attention : "ils prennent" (double n).' }),
 
   makeMCQ({ id:'g4fr-verb-025', chapterId:'g4fr-verbes', subsection:'adverbes', difficulty:2,
@@ -224,7 +224,7 @@ STATIC_QUESTIONS.push(
     question:'Conjugue SAVOIR : "Vous ___ parler français ?"',
     options:['savez','savent','sais','sait'],
     answer:'savez',
-    hint:'Savoir pour "vous" = savez.',
+    hint:'Au présent, la terminaison qui va avec « vous » est -ez.',
     explanation:'"Vous <b>savez</b> parler français ?" - Savoir : je sais, tu sais, il sait, nous savons, <b>vous savez</b>, ils savent. "Savoir + infinitif" = to know how to : je sais <b>nager</b>, tu sais <b>chanter</b>.' }),
 
   makeMCQ({ id:'g4fr-verb-029', chapterId:'g4fr-verbes', subsection:'adverbes', difficulty:3,
@@ -243,7 +243,7 @@ STATIC_QUESTIONS.push(
     question:'Conjugue POUVOIR à la 3ème personne du pluriel :',
     options:['ils peut','ils pouvent','ils peuvent','ils peux'],
     answer:'ils peuvent',
-    hint:'Pouvoir : ils peuvent (avec -ent).',
+    hint:'À la 3e personne du pluriel la terminaison est -ent, et le radical de « pouvoir » change.',
     explanation:'"Ils <b>peuvent</b>." - Attention : "ils peuvent" ≠ "ils pouvent" (fausse forme). Conjugaison complète de pouvoir : je peux, tu peux, il peut, nous pouvons, vous pouvez, <b>ils peuvent</b>. La forme "ils peuvent" vient du radical "peuv-".' }),
 
   makeMCQ({ id:'g4fr-verb-031', chapterId:'g4fr-verbes', subsection:'conjugaison', difficulty:3,

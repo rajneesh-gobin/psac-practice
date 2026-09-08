@@ -76,7 +76,7 @@ psac-practice/
 │
 ├── netlify/functions/            9 serverless functions (see §10)
 │
-├── SQL:  supabase-migration.sql (the one file to run), supabase-schema.sql
+├── SQL:  supabase-schema.sql (the one file to run), supabase-schema.sql
 │         (live-schema dump, rebuild reference). The 24 incremental
 │         supabase-*.sql files were consolidated into these two on 2026-08-26
 │         and live in git history — filenames mentioned later in this document

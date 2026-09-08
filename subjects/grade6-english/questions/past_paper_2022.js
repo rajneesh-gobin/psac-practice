@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 English 2022 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 English 2022 - past-paper questions adapted to MCQ format.
 // Source: Mauritius Examinations Syndicate (MES PSAC 2021-2022, Subject code P110).
 
 STATIC_QUESTIONS.push(
@@ -10,13 +10,13 @@ STATIC_QUESTIONS.push(
     question:'Yesterday, Grandma __________ some cakes for us.',
     options:['will make','made','makes','has made'], answer:'made',
     hint:'"Yesterday" is the time clue. What tense does it signal?',
-    explanation:'"Yesterday" signals simple past tense — "made" is the past form of "make".' }),
+    explanation:'"Yesterday" signals simple past tense - "made" is the past form of "make".' }),
 
   makeMCQ({ id:'g6eng-pp22-002', chapterId:'g6eng-vocabulary', subsection:'cloze', difficulty:1,
     question:'Preety\'s birthday is __________ the 29th of May.',
     options:['on','for','with','at'], answer:'on',
     hint:'Which preposition is used with specific dates?',
-    explanation:'"On" is used with specific days and dates — "on the 29th of May".' }),
+    explanation:'"On" is used with specific days and dates - "on the 29th of May".' }),
 
   makeMCQ({ id:'g6eng-pp22-003', chapterId:'g6eng-nouns', subsection:'cloze', difficulty:1,
     question:'My uncle is proud of __________ daughter.',
@@ -45,14 +45,14 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-pp22-007', chapterId:'g6eng-verbs', subsection:'cloze', difficulty:2,
     question:'When I opened my eyes, I __________ someone smiling at me.',
     options:['am seeing','see','saw','will see'], answer:'saw',
-    hint:'"When I opened" is past simple — what tense fits an action at that same past moment?',
-    explanation:'"Saw" is simple past — it describes what the speaker perceived at a specific moment in the past.' }),
+    hint:'"When I opened" is past simple - what tense fits an action at that same past moment?',
+    explanation:'"Saw" is simple past - it describes what the speaker perceived at a specific moment in the past.' }),
 
   makeMCQ({ id:'g6eng-pp22-008', chapterId:'g6eng-verbs', subsection:'cloze', difficulty:1,
     question:'Did your brother __________ football last week?',
     options:['play','played','playing','plays'], answer:'play',
     hint:'After the auxiliary "did", what form of the main verb do you use?',
-    explanation:'After "did", the main verb must be in the base (infinitive) form — "play".' }),
+    explanation:'After "did", the main verb must be in the base (infinitive) form - "play".' }),
 
   makeMCQ({ id:'g6eng-pp22-009', chapterId:'g6eng-clauses', subsection:'cloze', difficulty:2,
     question:'This is the place __________ we stayed last time.',
@@ -72,13 +72,13 @@ STATIC_QUESTIONS.push(
     question:'Can you please turn down the radio? It is too __________.',
     options:['expensive','loud','new','broken'], answer:'loud',
     hint:'Why would someone ask you to turn down the volume?',
-    explanation:'"Loud" means producing a lot of noise — you turn down a radio that is too loud.' }),
+    explanation:'"Loud" means producing a lot of noise - you turn down a radio that is too loud.' }),
 
   makeMCQ({ id:'g6eng-pp22-012', chapterId:'g6eng-vocabulary', subsection:'cloze', difficulty:1,
     question:'We could not get a seat because the cinema was __________.',
     options:['full','large','wide','beautiful'], answer:'full',
     hint:'If there are no seats, what does that say about the cinema?',
-    explanation:'A cinema with no seats available is "full" — all seats have been taken.' }),
+    explanation:'A cinema with no seats available is "full" - all seats have been taken.' }),
 
   makeMCQ({ id:'g6eng-pp22-013', chapterId:'g6eng-vocabulary', subsection:'cloze', difficulty:2,
     question:'"Can you please lend me your pen?" I __________ Mary.',
@@ -90,15 +90,15 @@ STATIC_QUESTIONS.push(
     question:'The sea is very dangerous here. People who go swimming might __________.',
     options:['fall','drown','jump','run'], answer:'drown',
     hint:'What is the specific danger of swimming in a dangerous sea?',
-    explanation:'"Drown" means to die from sinking under water — the logical risk of swimming in a dangerous sea.' }),
+    explanation:'"Drown" means to die from sinking under water - the logical risk of swimming in a dangerous sea.' }),
 
   makeMCQ({ id:'g6eng-pp22-015', chapterId:'g6eng-vocabulary', subsection:'cloze', difficulty:2,
     question:'Mother did not want us to eat a lot of chocolates. She __________ them in the cupboard.',
     options:['bought','collected','hid','cooked'], answer:'hid',
     hint:'If she didn\'t want you to find them, what would she do with them?',
-    explanation:'"Hid" means put out of sight — she hid the chocolates so the children could not find and eat them.' }),
+    explanation:'"Hid" means put out of sight - she hid the chocolates so the children could not find and eat them.' }),
 
-  // --- Question 4B: Comprehension MCQs — story "Swami and Mr Samuel" ---
+  // --- Question 4B: Comprehension MCQs - story "Swami and Mr Samuel" ---
 
   makeMCQ({ id:'g6eng-pp22-016', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:1,
     question:'In the story "Swami and Mr Samuel" (adapted from Malgudi Days): At the time of the school assembly, Swami was in __________.',
@@ -110,19 +110,19 @@ STATIC_QUESTIONS.push(
     question:'In the story "Swami and Mr Samuel": According to Swami, Mr Samuel severely punished children who were __________.',
     options:['late','absent','inattentive','talkative'], answer:'late',
     hint:'Think about what Swami claimed would happen to him because of the time he arrived.',
-    explanation:'"He punishes children who come in late very severely" — that was Swami\'s excuse.' }),
+    explanation:'"He punishes children who come in late very severely" - that was Swami\'s excuse.' }),
 
   makeMCQ({ id:'g6eng-pp22-018', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:2,
     question:'In the story "Swami and Mr Samuel": Swami changed his excuses because __________.',
     options:['the head teacher was cruel','his father was strict','his mother was kind','Mr Samuel was gentle'], answer:'his father was strict',
     hint:'Why did Swami stop using the headache excuse and try a different story?',
-    explanation:'"Swami knew how strict his father could be. So, he changed his excuses." — his father\'s strictness made Swami try harder.' }),
+    explanation:'"Swami knew how strict his father could be. So, he changed his excuses." - his father\'s strictness made Swami try harder.' }),
 
   makeMCQ({ id:'g6eng-pp22-019', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:2,
     question:'In the story "Swami and Mr Samuel": When Swami said he had not done his homework, Mr Samuel was __________.',
     options:['disappointed with him','kind to him','angry with him','proud of him'], answer:'kind to him',
     hint:'What did Mr Samuel say when Swami admitted he hadn\'t done his homework?',
-    explanation:'"No problem. You can submit the work tomorrow," Mr Samuel said gently — he was kind.' }),
+    explanation:'"No problem. You can submit the work tomorrow," Mr Samuel said gently - he was kind.' }),
 
   makeMCQ({ id:'g6eng-pp22-020', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:2,
     question:'In the story "Swami and Mr Samuel": Swami went to the head teacher\'s office at __________.',
@@ -139,7 +139,7 @@ window.PSAC_PDF_QUESTIONS.push(
   { id:'g6eng-pp22-pdf-002', chapterId:'g6eng-vocabulary', marks:5, year:2022, grade:6, subject:'English',
     question:'Question 3A: Find a word from the description and first letter. (i) Z__ you visit to see animals (ii) R____ instrument to draw straight lines (iii) B___ place where people keep money (iv) K______ baby of a cat (v) P_______ person who repairs taps', type:'word-definition' },
   { id:'g6eng-pp22-pdf-003', chapterId:'g6eng-comprehension', marks:10, year:2022, grade:6, subject:'English',
-    question:'Question 4A (Reading: Spiders): Complete 10 short-answer items — types, body parts, legs, diet, silk webs, lifespan, Black Widow, garden protection.', type:'short-answer' },
+    question:'Question 4A (Reading: Spiders): Complete 10 short-answer items - types, body parts, legs, diet, silk webs, lifespan, Black Widow, garden protection.', type:'short-answer' },
   { id:'g6eng-pp22-pdf-004', chapterId:'g6eng-comprehension', marks:3, year:2022, grade:6, subject:'English',
     question:'Question 4B True/False: (i) Swami liked going to school. (ii) Swami had a headache. (iii) Swami said the head teacher was scared of Mr Samuel.', type:'true-false' },
   { id:'g6eng-pp22-pdf-005', chapterId:'g6eng-writing', marks:6, year:2022, grade:6, subject:'English',

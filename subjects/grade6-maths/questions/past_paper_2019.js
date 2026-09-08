@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 Mathematics October 2019 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 Mathematics October 2019 - past-paper questions adapted to MCQ format.
 // Source: Mauritius Examinations Syndicate (MES), October 2019.
 
 STATIC_QUESTIONS.push(
@@ -54,7 +54,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6m-pp19-009', chapterId:'g6-fractions', subsection:'add_sub', difficulty:1,
     question:'Work out: <sup>7</sup>/<sub>11</sub> − <sup>2</sup>/<sub>11</sub>',
     options:['5/22','5/11','5/0','9/11'], answer:'5/11',
-    hint:'Same denominator — subtract numerators only.',
+    hint:'Same denominator - subtract numerators only.',
     explanation:'7/11 − 2/11 = 5/11.' }),
 
   makeMCQ({ id:'g6m-pp19-010', chapterId:'g6-factors-hcf', subsection:'hcf', difficulty:2,
@@ -234,15 +234,15 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g6m-pp19-pdf-001', needsArtwork:true, chapterId:'g6-geometry', marks:1, year:2019, grade:6, subject:'Maths',
-    question:'Q3: A quadrilateral shape is shown with 4 sides of 2 equal pairs — no right angles. What is the name of the shape?', type:'short' },
-  { id:'g6m-pp19-pdf-002', needsArtwork:true, chapterId:'g6-fractions', marks:1, year:2019, grade:6, subject:'Maths',
+  { id:'g6m-pp19-pdf-001', image:'assets/past-papers/g6-maths-2019/q3-shape.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-geometry', marks:1, year:2019, grade:6, subject:'Maths',
+    question:'Q3: A quadrilateral shape is shown with 4 sides of 2 equal pairs - no right angles. What is the name of the shape?', type:'short' },
+  { id:'g6m-pp19-pdf-002', image:'assets/past-papers/g6-maths-2019/q5-shaded.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-fractions', marks:1, year:2019, grade:6, subject:'Maths',
     question:'Q5: A diagram shows a rectangle divided into triangular sections, some shaded. What fraction of the diagram is shaded?', type:'short' },
   { id:'g6m-pp19-pdf-003', chapterId:'g6-numeration', marks:2, year:2019, grade:6, subject:'Maths',
-    question:'Q10: Fill in the table — (a) 742 in words; (b) One thousand three hundred and eight in figures.', type:'short' },
-  { id:'g6m-pp19-pdf-004', needsArtwork:true, chapterId:'g6-geometry', marks:1, year:2019, grade:6, subject:'Maths',
+    question:'Q10: Fill in the table - (a) 742 in words; (b) One thousand three hundred and eight in figures.', type:'short' },
+  { id:'g6m-pp19-pdf-004', image:'assets/past-papers/g6-maths-2019/q15-symmetry.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-geometry', marks:1, year:2019, grade:6, subject:'Maths',
     question:'Q15: A figure with only one line of symmetry is shown. Draw the line of symmetry.', type:'draw' },
-  { id:'g6m-pp19-pdf-005', needsArtwork:true, chapterId:'g6-time-speed', marks:1, year:2019, grade:6, subject:'Maths',
+  { id:'g6m-pp19-pdf-005', image:'assets/past-papers/g6-maths-2019/q23-clocks.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-time-speed', marks:1, year:2019, grade:6, subject:'Maths',
     question:'Q23 MCQ: Four clock faces are shown. Which one displays the time 19 20?', type:'short' },
   { id:'g6m-pp19-pdf-006', chapterId:'g6-geometry', marks:3, year:2019, grade:6, subject:'Maths',
     question:'Q29: A square pyramid is shown. Complete the table: (i) Name of 3-D shape; (ii) Number of faces; (iii) Number of edges.', type:'short' },
@@ -250,7 +250,7 @@ window.PSAC_PDF_QUESTIONS.push(
     question:'Q32: Given 124 443 ÷ 419 = 297. Without calculating: (a) 419 × 297 = ?; (b) 4.19 × ? = 12.4443; (c) 297 × ? = 124 443 − 297.', type:'short' },
   { id:'g6m-pp19-pdf-008', chapterId:'g6-area-vol', marks:4, year:2019, grade:6, subject:'Maths',
     question:'Q37: PQRS is a rectangle (SR=8 cm, SP=6 cm). Triangle PRT where QT=3 cm. Calculate the area of the shaded triangle PRT.', type:'short' },
-  { id:'g6m-pp19-pdf-009', needsArtwork:true, chapterId:'g6-ratio-pct', marks:3, year:2019, grade:6, subject:'Maths',
+  { id:'g6m-pp19-pdf-009', image:'assets/past-papers/g6-maths-2019/q34-squares.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-ratio-pct', marks:3, year:2019, grade:6, subject:'Maths',
     question:'Q34: 30 small squares arranged in a rectangular shape. A diagram shows 11 squares already shaded. How many MORE must be shaded so that 60% of the figure is shaded?', type:'short' },
   { id:'g6m-pp19-pdf-010', chapterId:'g6-graphs', marks:5, year:2019, grade:6, subject:'Maths',
     question:'Q42(b): 200 pupils prefer fish. 91 like Goldfish and the rest like Tilapia. What fraction of the TOTAL number of pupils (1350) like Tilapia?', type:'short' }

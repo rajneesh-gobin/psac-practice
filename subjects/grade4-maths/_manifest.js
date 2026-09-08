@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. Every entry here has questions tagged
-// with the matching `subsection:` in questions/ — the screen shows a live count
+// with the matching `subsection:` in questions/ - the screen shows a live count
 // per row, so an id with nothing behind it would advertise a topic that opens
 // empty. Keep the two in step: adding a subsection means tagging questions for
 // it, and renaming an id means re-tagging.
@@ -68,7 +68,7 @@ registerSubject({
   // Each chapter also carries a prose `syllabus`. It is the fallback the
   // Syllabus screen shows when a chapter has no subsections, and it is what the
   // student sees described in one place. Each sentence becomes one bullet (see
-  // _syllabusPoints in app.js), so keep one idea per sentence — and keep it
+  // _syllabusPoints in app.js), so keep one idea per sentence - and keep it
   // matching what questions/ actually tests, not the syllabus document alone.
   chapters: [
     { id: 'g4-numeration', name: 'Numeration & Place Value', icon: '🔢',

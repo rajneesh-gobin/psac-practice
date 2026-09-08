@@ -242,7 +242,7 @@ STATIC_QUESTIONS.push(
     question:'Identifie la conjonction correcte : "Je n\'aime ___ le poisson ___ la viande." (neither...nor)',
     options:['ni / ni','ou / ou','et / et','mais / mais'],
     answer:'ni / ni',
-    hint:'"Neither...nor" en français = ni...ni.',
+    hint:'Dans une double négation, on répète la même petite conjonction deux fois.',
     explanation:'"Je n\'aime <b>ni</b> le poisson <b>ni</b> la viande." - <b>ni...ni</b> = neither...nor. On utilise toujours "ne" devant le verbe : "je <b>n\'</b>aime ni... ni...". Structure : ne + verbe + ni + X + ni + Y.' }),
 
   makeMCQ({ id:'g4fr-phr-031', chapterId:'g4fr-phrase', subsection:'cod_coi', difficulty:3,

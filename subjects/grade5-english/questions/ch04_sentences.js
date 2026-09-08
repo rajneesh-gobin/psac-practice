@@ -100,7 +100,7 @@ STATIC_QUESTIONS.push(
     question:'Complete the TAG QUESTION: "They are going to the park, ___ they?"',
     options:["aren\'t","isn\'t","weren\'t","don\'t"],
     answer:"aren\'t",
-    hint:'Positive "are" → negative tag "aren\'t". Match the auxiliary.',
+    hint:'Find the auxiliary in the statement, then make the tag its negative.',
     explanation:'"<b>Aren\'t</b> they?" - the statement uses "are" (positive) so the tag is "aren\'t" (negative) + subject pronoun "they". Rule: positive statement → negative tag; use the same auxiliary verb.' }),
 
   makeMCQ({ id:'g5eng-sent-012', chapterId:'eng-sentences', subsection:'types', difficulty:2,

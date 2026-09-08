@@ -65,14 +65,9 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Canines</b> are the pointed, sharp teeth next to the incisors. They are used to <b>tear</b> food - especially meat. There are 4 canines in total (one in each corner of the mouth).' }),
 
   makeMCQ({ id:'g6sci-an-007', chapterId:'g6-animals', subsection:'habitats', difficulty:2,
-    question:'Why is WATER considered an essential nutrient even though it provides no energy?',
-    options:[
-      'Because it makes food taste better',
-      'Because it carries nutrients around the body, regulates temperature and removes waste',
-      'Because it is needed only when exercising',
-      'Because it stops hunger'
-    ],
-    answer:'Because it carries nutrients around the body, regulates temperature and removes waste',
+    question:'Why is WATER an essential nutrient, even though it gives no energy?',
+    options:['It carries nutrients and removes waste', 'It is only needed when exercising', 'It stops us from feeling hungry', 'It makes our food taste better'],
+    answer:'It carries nutrients and removes waste',
     hint:'About 60% of the human body is made of water.',
     explanation:'<b>Water</b> is vital for almost all body functions: it transports nutrients and oxygen in the blood, regulates body temperature through sweating, removes waste products in urine, and lubricates joints. We must drink about 2 litres of water per day.' }),
 
@@ -101,21 +96,16 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-an-011', chapterId:'g6-animals', subsection:'classification', difficulty:1,
-    question:'The Grade 6 Science Pupil\'s Book classifies food into THREE groups. Which group does FISH belong to?',
+    question:'Food is classified into THREE groups. Which group does FISH belong to?',
     options:['Food for Energy','Food for Growth','Food for Health','Food for Strength'],
     answer:'Food for Growth',
     hint:'Fish is rich in protein - which food group is protein linked to?',
     explanation:'The MIE Grade 6 Science Pupil\'s Book classifies food into three groups: <b>Food for Energy</b> (starchy/sugary foods like rice, bread, sugar - provide carbohydrates and fats), <b>Food for Growth</b> (protein-rich foods like fish, meat, eggs, beans - build and repair the body), and <b>Food for Health</b> (vitamins/minerals from fruits and vegetables - protect the body from disease).' }),
 
   makeMCQ({ id:'g6sci-an-012', chapterId:'g6-animals', subsection:'habitats', difficulty:1,
-    question:'According to the Grade 6 textbook, a BALANCED MEAL must contain:',
-    options:[
-      'Only proteins and carbohydrates',
-      'At least one food from each of the three food groups (Energy, Growth, Health)',
-      'Five different types of vegetables',
-      'Only food for health and food for growth'
-    ],
-    answer:'At least one food from each of the three food groups (Energy, Growth, Health)',
+    question:'What must a BALANCED MEAL contain?',
+    options:['Food from each of the three groups', 'Five different kinds of vegetables', 'Only foods for health and growth', 'Only proteins and carbohydrates'],
+    answer:'Food from each of the three groups',
     hint:'The word "balanced" means including ALL three groups.',
     explanation:'The Grade 6 Science Pupil\'s Book states: a <b>balanced meal</b> must contain <b>at least one food from each of the three groups</b>: Food for Energy + Food for Growth + Food for Health. Example: rice (energy) + fish (growth) + carrots (health) = balanced meal. This matches the PSAC 2024 Q3 format where food items are classified into the three groups.' }),
 
@@ -155,18 +145,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-an-018', chapterId:'g6-animals', subsection:'habitats', difficulty:1,
     question:'What is the function of INCISORS? (PSAC 2024 Q3d)',
-    options:[
-      'To grind and crush food',
-      'To tear and rip meat',
-      'To bite, cut and tear food into pieces',
-      'To crush seeds and grains'
-    ],
-    answer:'To bite, cut and tear food into pieces',
+    options:['To bite and cut food', 'To crush seeds and grains', 'To grind and crush food', 'To tear and rip meat'],
+    answer:'To bite and cut food',
     hint:'These are the front teeth - you use them to take a bite of an apple.',
     explanation:'The Grade 6 Science Pupil\'s Book states that <b>incisors</b> (the front teeth) are used to <b>bite, cut and tear food</b>. Humans have 8 incisors (4 upper, 4 lower). Their sharp, chisel-shaped edges allow them to cut efficiently. Canines tear; premolars and molars crush and grind.' }),
 
   makeMCQ({ id:'g6sci-an-019', chapterId:'g6-animals', subsection:'classification', difficulty:3,
-    question:'The Grade 6 Science Pupil\'s Book lists characteristics of MAMMALS. Which statement is NOT a characteristic of all mammals?',
+    question:'Which statement is NOT a characteristic of all mammals?',
     options:[
       'Mammals feed their young with milk',
       'Most mammals have hair or fur on their body',

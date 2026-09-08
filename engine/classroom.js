@@ -4,7 +4,7 @@
 //  Data layer for the teacher role. Follows the Store pattern:
 //  every Supabase call lives here, callers get plain objects back.
 //
-//  Requires: supabase-migration.sql
+//  Requires: supabase-schema.sql
 //  Uses _sb (global from supabase.js).
 // ══════════════════════════════════════════════
 
@@ -59,8 +59,13 @@ const Classroom = (() => {
   async function remove(classroomId) {
     if (!_sb || !classroomId) return false;
     // enrollments + submissions cascade via FK ON DELETE CASCADE
-    const { error } = await _sb.from('classrooms').delete().eq('id', classroomId);
+    // ⚠ Zero rows is a refusal, not a success — RLS answers a non-matching
+    //   DELETE with no error and no rows. Returning true there tells the caller
+    //   a classroom is gone while it is still on the server.
+    const { data, error } = await _sb.from('classrooms')
+      .delete().eq('id', classroomId).select('id');
     if (error) { console.error('[Classroom.remove]', error.message); return false; }
+    if (!data?.length) { console.error('[Classroom.remove] refused — no row deleted for', classroomId); return false; }
     return true;
   }
 

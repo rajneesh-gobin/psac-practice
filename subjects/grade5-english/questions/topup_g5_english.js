@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 5 English — top-up questions (12 per chapter, bringing each to 30+).
+// Grade 5 English - top-up questions (12 per chapter, bringing each to 30+).
 
 STATIC_QUESTIONS.push(
 
@@ -17,14 +17,14 @@ STATIC_QUESTIONS.push(
     options:['courage','table','river','teacher'],
     answer:'courage',
     hint:'Abstract nouns name qualities or feelings you cannot see or touch.',
-    explanation:'<b>Courage</b> is an abstract noun — it names a quality felt inside, not a physical object. Table, river, and teacher are all concrete nouns you can observe.' }),
+    explanation:'<b>Courage</b> is an abstract noun - it names a quality felt inside, not a physical object. Table, river, and teacher are all concrete nouns you can observe.' }),
 
   makeMCQ({ id:'g5eng-n-052', chapterId:'eng-nouns', subsection:'common_proper', difficulty:2,
     question:'Which sentence uses a possessive noun correctly for one dog?',
     options:["The dog\'s bone is here.", 'The dogs bone is here.', "The dogs' bone is here.", 'The dogs bones is here.'],
     answer:"The dog\'s bone is here.",
     hint:'A possessive noun for a single owner takes apostrophe + s.',
-    explanation:'"<b>The dog\'s bone</b>" is correct — apostrophe + s shows the bone belongs to one dog. "The dogs\' bone" would mean the bone belongs to several dogs.' }),
+    explanation:'"<b>The dog\'s bone</b>" is correct - apostrophe + s shows the bone belongs to one dog. "The dogs\' bone" would mean the bone belongs to several dogs.' }),
 
   makeMCQ({ id:'g5eng-n-053', chapterId:'eng-nouns', subsection:'collective', difficulty:1,
     question:'Choose the correct collective noun: "A ___ of ships."',
@@ -37,7 +37,7 @@ STATIC_QUESTIONS.push(
     question:'Which of these is an uncountable noun?',
     options:['water','book','chair','apple'],
     answer:'water',
-    hint:'Uncountable nouns cannot be counted individually — you cannot say "one water, two waters."',
+    hint:'Try putting "one" and "two" in front of each option in turn. Which one sounds wrong?',
     explanation:'<b>Water</b> is uncountable. You cannot say "one water" or "two waters." Book, chair, and apple are all countable nouns because you can say "one book, two books."' }),
 
   makeMCQ({ id:'g5eng-n-055', chapterId:'eng-nouns', subsection:'abstract', difficulty:1,
@@ -45,7 +45,7 @@ STATIC_QUESTIONS.push(
     options:['freedom','forest','fence','friend'],
     answer:'freedom',
     hint:'This noun ends in -dom and names something you can experience but not touch.',
-    explanation:'<b>Freedom</b> is an abstract noun. It names the state of being free — something felt and valued, but not physically touchable. Other abstract nouns with -dom: wisdom, boredom.' }),
+    explanation:'<b>Freedom</b> is an abstract noun. It names the state of being free - something felt and valued, but not physically touchable. Other abstract nouns with -dom: wisdom, boredom.' }),
 
   makeMCQ({ id:'g5eng-n-056', chapterId:'eng-nouns', subsection:'collective', difficulty:1,
     question:'Choose the correct collective noun: "A ___ of kittens."',
@@ -58,14 +58,14 @@ STATIC_QUESTIONS.push(
     question:'Which sentence uses the possessive noun correctly for more than one child?',
     options:["The children\'s toys are here.", "The childrens' toys are here.", 'The childrens toys are here.', 'The children toys are here.'],
     answer:"The children\'s toys are here.",
-    hint:'"Children" is already an irregular plural — it does not end in s, so add apostrophe + s.',
+    hint:'"Children" is already an irregular plural - it does not end in s, so add apostrophe + s.',
     explanation:'"<b>The children\'s</b> toys" is correct. Because "children" is an irregular plural (not ending in s), we add \'s to show possession. "Childrens\'" is not a real word.' }),
 
   makeMCQ({ id:'g5eng-n-058', chapterId:'eng-nouns', subsection:'common_proper', difficulty:2,
     question:'Which sentence uses the noun "advice" correctly?',
     options:['She gave me three advices.', 'She gave me three pieces of advice.', 'She gave me much books.', 'She gave me a few informations.'],
     answer:'She gave me three pieces of advice.',
-    hint:'"Advice" is uncountable — it cannot be counted directly.',
+    hint:'"Advice" is uncountable - it cannot be counted directly.',
     explanation:'"<b>Three pieces of advice</b>" is correct. "Advice" is an uncountable noun, so you say "a piece of advice" or "some advice," never "three advices." Books are countable, but "much books" is wrong.' }),
 
   makeMCQ({ id:'g5eng-n-059', chapterId:'eng-nouns', subsection:'collective', difficulty:1,
@@ -87,7 +87,7 @@ STATIC_QUESTIONS.push(
     options:["The teachers' meeting lasted an hour.", "The teachers\'s meeting lasted an hour.", 'The teachers meeting lasted an hour.', "The teacher\'s meeting lasted an hour."],
     answer:"The teachers' meeting lasted an hour.",
     hint:'For plural nouns already ending in s, add only an apostrophe after the s.',
-    explanation:'"<b>The teachers\'</b> meeting" is correct. For plural nouns ending in s, add only an apostrophe — no extra s. "The teacher\'s meeting" would mean only one teacher.' }),
+    explanation:'"<b>The teachers\'</b> meeting" is correct. For plural nouns ending in s, add only an apostrophe - no extra s. "The teacher\'s meeting" would mean only one teacher.' }),
 
   // ── eng-verbs ────────────────────────────────────────────────────────────
 
@@ -103,14 +103,14 @@ STATIC_QUESTIONS.push(
     options:['They had left before we arrived.', 'They left before we arrived.', 'They have left before we arrived.', 'They were left before we arrived.'],
     answer:'They had left before we arrived.',
     hint:'Past perfect = had + past participle. It shows one past action happened before another.',
-    explanation:'"<b>They had left</b> before we arrived" is the past perfect. It shows that leaving happened before arriving — both in the past, but leaving came first.' }),
+    explanation:'"<b>They had left</b> before we arrived" is the past perfect. It shows that leaving happened before arriving - both in the past, but leaving came first.' }),
 
   makeMCQ({ id:'g5eng-v-052', chapterId:'eng-verbs', subsection:'voice', difficulty:2,
     question:'Which sentence is in the passive voice?',
     options:['The meal was cooked by the chef.', 'The chef cooked the meal.', 'The chef is cooking the meal.', 'The chef had cooked the meal.'],
     answer:'The meal was cooked by the chef.',
     hint:'In the passive voice, the subject receives the action rather than performing it.',
-    explanation:'"<b>The meal was cooked by the chef</b>" is passive — the subject (meal) receives the action. The active version is "The chef cooked the meal" (subject does the action).' }),
+    explanation:'"<b>The meal was cooked by the chef</b>" is passive - the subject (meal) receives the action. The active version is "The chef cooked the meal" (subject does the action).' }),
 
   makeMCQ({ id:'g5eng-v-053', chapterId:'eng-verbs', subsection:'auxiliary', difficulty:2,
     question:'Which modal verb best completes the sentence: "You ___ brush your teeth twice a day."',
@@ -124,7 +124,7 @@ STATIC_QUESTIONS.push(
     options:['stop trying', 'give a gift', 'hand something over', 'move higher'],
     answer:'stop trying',
     hint:'Athletes are told never to do this during a race.',
-    explanation:'"<b>Give up</b>" means to stop trying or to quit. It is a phrasal verb — the two words together carry a meaning different from each word on its own.' }),
+    explanation:'"<b>Give up</b>" means to stop trying or to quit. It is a phrasal verb - the two words together carry a meaning different from each word on its own.' }),
 
   makeMCQ({ id:'g5eng-v-055', chapterId:'eng-verbs', subsection:'perfect', difficulty:1,
     question:'Complete the present perfect sentence: "We ___ already ___ our homework."',
@@ -145,7 +145,7 @@ STATIC_QUESTIONS.push(
     options:['Might','Must','Should','Would'],
     answer:'Might',
     hint:'This modal is used when something is possible but not certain.',
-    explanation:'<b>Might</b> expresses possibility — the rain is uncertain. "Must" expresses obligation, "should" advice, and "would" a conditional or willingness.' }),
+    explanation:'<b>Might</b> expresses possibility - the rain is uncertain. "Must" expresses obligation, "should" advice, and "would" a conditional or willingness.' }),
 
   makeMCQ({ id:'g5eng-v-058', chapterId:'eng-verbs', subsection:'auxiliary', difficulty:2,
     question:'What does the phrasal verb "look after" mean?',
@@ -158,21 +158,21 @@ STATIC_QUESTIONS.push(
     question:'Which sentence uses the past perfect correctly to show the order of two past events?',
     options:['By the time we arrived, the show had started.', 'By the time we arrived, the show started.', 'By the time we arrived, the show has started.', 'By the time we arrived, the show was starting.'],
     answer:'By the time we arrived, the show had started.',
-    hint:'"By the time" signals that one past event happened before another — use past perfect for the earlier event.',
+    hint:'"By the time" signals that one past event happened before another - use past perfect for the earlier event.',
     explanation:'"The show <b>had started</b>" (past perfect) correctly shows that the show began before we arrived. "By the time" is a key signal for the past perfect.' }),
 
   makeMCQ({ id:'g5eng-v-060', chapterId:'eng-verbs', subsection:'past_tense', difficulty:3,
     question:'Which sentence is correct?',
     options:['I saw that film yesterday.', 'I have seen that film yesterday.', 'I have saw that film yesterday.', 'I seen that film yesterday.'],
     answer:'I saw that film yesterday.',
-    hint:'When a specific time in the past is mentioned (yesterday), use simple past — not present perfect.',
-    explanation:'"<b>I saw</b> that film yesterday" is correct. Simple past is used with a specific past time (yesterday). Present perfect cannot be used with "yesterday" — you would say "I have seen that film" (no time given).' }),
+    hint:'When a specific time in the past is mentioned (yesterday), use simple past - not present perfect.',
+    explanation:'"<b>I saw</b> that film yesterday" is correct. Simple past is used with a specific past time (yesterday). Present perfect cannot be used with "yesterday" - you would say "I have seen that film" (no time given).' }),
 
   makeMCQ({ id:'g5eng-v-061', chapterId:'eng-verbs', subsection:'auxiliary', difficulty:2,
     question:'Which modal verb expresses a strong obligation in: "You ___ wear a helmet when cycling."',
     options:['must','might','could','would'],
     answer:'must',
-    hint:'This modal is the strongest — it means the action is necessary or required.',
+    hint:'This modal is the strongest - it means the action is necessary or required.',
     explanation:'<b>Must</b> expresses a strong obligation or rule. "Could" and "might" express possibility; "would" expresses willingness or a conditional. "Must" is stronger than "should."' }),
 
   // ── eng-adjectives ───────────────────────────────────────────────────────
@@ -202,7 +202,7 @@ STATIC_QUESTIONS.push(
     question:'Which adjective of quantity is correct in: "There is ___ milk left in the bottle."',
     options:['little','many','few','a few'],
     answer:'little',
-    hint:'"Milk" is uncountable — use an adjective suited to uncountable nouns.',
+    hint:'"Milk" is uncountable - use an adjective suited to uncountable nouns.',
     explanation:'"<b>Little</b>" is used with uncountable nouns like milk (meaning "not much"). "Many" and "few/a few" go with countable nouns (many bottles, a few drops).' }),
 
   makeMCQ({ id:'g5eng-adj-054', chapterId:'eng-adjectives', subsection:'adjectives', difficulty:2,
@@ -210,13 +210,13 @@ STATIC_QUESTIONS.push(
     options:['boring','bored','bore','bores'],
     answer:'boring',
     hint:'Use the -ing form to describe something that causes a feeling.',
-    explanation:'"<b>Boring</b>" describes the film — it causes boredom. Use <b>-ing</b> adjectives to describe the cause of a feeling, and <b>-ed</b> adjectives (bored) to describe the person who feels it.' }),
+    explanation:'"<b>Boring</b>" describes the film - it causes boredom. Use <b>-ing</b> adjectives to describe the cause of a feeling, and <b>-ed</b> adjectives (bored) to describe the person who feels it.' }),
 
   makeMCQ({ id:'g5eng-adj-055', chapterId:'eng-adjectives', subsection:'comparatives', difficulty:2,
     question:'Choose the correct comparative: "Meera is ___ than her sister at painting."',
     options:['better','more better','gooder','more good'],
     answer:'better',
-    hint:'"Good" has an irregular comparative form — it does not follow the normal rules.',
+    hint:'"Good" has an irregular comparative form - it does not follow the normal rules.',
     explanation:'"<b>Better</b>" is the irregular comparative of "good." The forms are: good → <b>better</b> → best. You cannot say "more good" or "gooder."' }),
 
   makeMCQ({ id:'g5eng-adj-056', chapterId:'eng-adjectives', subsection:'comparatives', difficulty:1,
@@ -231,14 +231,14 @@ STATIC_QUESTIONS.push(
     options:['I have few friends.', 'I have a little friends.', 'I have a few informations.', 'I have little books.'],
     answer:'I have few friends.',
     hint:'"Few" (without "a") is for countable nouns and suggests "not enough." "Little" is for uncountable nouns.',
-    explanation:'"<b>I have few friends</b>" is correct — "few" goes with the countable noun "friends." "A little" goes with uncountable nouns. "Information" is uncountable (not "informations"). "Little books" is wrong because "books" is countable.' }),
+    explanation:'"<b>I have few friends</b>" is correct - "few" goes with the countable noun "friends." "A little" goes with uncountable nouns. "Information" is uncountable (not "informations"). "Little books" is wrong because "books" is countable.' }),
 
   makeMCQ({ id:'g5eng-adj-058', chapterId:'eng-adjectives', subsection:'adjectives', difficulty:2,
     question:'Choose the correct participle adjective: "The children were very ___ about the school trip."',
     options:['excited','exciting','excite','excites'],
     answer:'excited',
     hint:'Use the -ed form to describe how a person feels.',
-    explanation:'"<b>Excited</b>" describes how the children feel (they feel excitement). Use <b>-ed</b> adjectives for the person experiencing the feeling. "Exciting" would describe the trip itself — the cause of the feeling.' }),
+    explanation:'"<b>Excited</b>" describes how the children feel (they feel excitement). Use <b>-ed</b> adjectives for the person experiencing the feeling. "Exciting" would describe the trip itself - the cause of the feeling.' }),
 
   makeMCQ({ id:'g5eng-adj-059', chapterId:'eng-adjectives', subsection:'order', difficulty:3,
     question:'Which phrase has the adjectives in the correct order?',
@@ -252,7 +252,7 @@ STATIC_QUESTIONS.push(
     options:['how the runner feels', 'how the finish line looks', 'what the runner did', 'how fast the runner ran'],
     answer:'how the runner feels',
     hint:'"Exhausted" is an -ed participle adjective describing a person.',
-    explanation:'"<b>Exhausted</b>" is a participle adjective that describes the state of the runner — the runner is very tired. <b>-ed</b> adjectives describe how a person (or thing) feels or appears.' }),
+    explanation:'"<b>Exhausted</b>" is a participle adjective that describes the state of the runner - the runner is very tired. <b>-ed</b> adjectives describe how a person (or thing) feels or appears.' }),
 
   makeMCQ({ id:'g5eng-adj-061', chapterId:'eng-adjectives', subsection:'adjectives', difficulty:2,
     question:'Which sentence uses "much" and "many" correctly?',
@@ -267,7 +267,7 @@ STATIC_QUESTIONS.push(
     question:'Which word joins two independent clauses to make a COMPOUND sentence: "I wanted to go to the park, ___ it was raining."',
     options:['but','because','who','when'],
     answer:'but',
-    hint:'A compound sentence is joined by a coordinating conjunction: and / but / or / so.',
+    hint:'A compound sentence needs a coordinating conjunction (the FANBOYS group), not a subordinating one. Which option is a coordinator?',
     explanation:'"<b>But</b>" is a coordinating conjunction that joins two independent clauses to form a compound sentence. "Because" and "when" are subordinating conjunctions that form complex sentences.' }),
 
   makeMCQ({ id:'g5eng-sent-051', chapterId:'eng-sentences', subsection:'punctuation', difficulty:2,
@@ -275,7 +275,7 @@ STATIC_QUESTIONS.push(
     options:['because','and','but','or'],
     answer:'because',
     hint:'A complex sentence has a main clause joined to a subordinate clause by a subordinating conjunction.',
-    explanation:'"<b>Because</b>" is a subordinating conjunction that introduces a dependent clause and forms a complex sentence. "And," "but," and "or" are coordinating conjunctions — they form compound sentences.' }),
+    explanation:'"<b>Because</b>" is a subordinating conjunction that introduces a dependent clause and forms a complex sentence. "And," "but," and "or" are coordinating conjunctions - they form compound sentences.' }),
 
   makeMCQ({ id:'g5eng-sent-052', chapterId:'eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Choose the correct relative pronoun: "The woman ___ lives next door is a doctor."',
@@ -382,15 +382,15 @@ STATIC_QUESTIONS.push(
     question:'Read the passage: "Maya finished her homework quickly, then went to the kitchen. She opened the fridge, stared inside for a moment, and closed it without taking anything. She sat by the window and watched the rain." What can we INFER about Maya\'s mood?',
     options:['She is bored or restless.', 'She is happy and excited.', 'She is hungry and thirsty.', 'She is angry at someone.'],
     answer:'She is bored or restless.',
-    hint:'Maya is not really doing anything — notice the things she starts but does not follow through on.',
-    explanation:'Maya\'s actions — opening the fridge without taking anything, then just watching the rain — suggest she is <b>bored or restless</b>. There is no evidence she is happy, hungry, or angry.' }),
+    hint:'Maya is not really doing anything - notice the things she starts but does not follow through on.',
+    explanation:'Maya\'s actions - opening the fridge without taking anything, then just watching the rain - suggest she is <b>bored or restless</b>. There is no evidence she is happy, hungry, or angry.' }),
 
   makeMCQ({ id:'g5eng-comp-053', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:2,
     question:'Read the sentence: "The scientist made a groundbreaking discovery." What does the word "groundbreaking" most likely mean?',
     options:['completely new and important', 'related to breaking the ground', 'done underground', 'very dangerous'],
     answer:'completely new and important',
     hint:'Think about what kind of discovery a scientist would be celebrated for.',
-    explanation:'"<b>Groundbreaking</b>" means completely new and important — it figuratively "breaks new ground," like an explorer entering uncharted territory. It is not used literally here.' }),
+    explanation:'"<b>Groundbreaking</b>" means completely new and important - it figuratively "breaks new ground," like an explorer entering uncharted territory. It is not used literally here.' }),
 
   makeMCQ({ id:'g5eng-comp-054', chapterId:'eng-comprehension', subsection:'authors_view', difficulty:3,
     question:'Read the passage: "Eat five portions of fruit and vegetables a day. Walk for at least 30 minutes. Drink plenty of water and get enough sleep." What is the AUTHOR\'S PURPOSE?',
@@ -404,21 +404,21 @@ STATIC_QUESTIONS.push(
     options:['Coral reefs are vital ecosystems that are under threat.', 'Coral reefs cover most of the ocean floor.', 'Coral reefs are colourful and beautiful.', 'Marine animals do not need coral to survive.'],
     answer:'Coral reefs are vital ecosystems that are under threat.',
     hint:'The main idea must cover BOTH the importance of coral reefs AND the problem mentioned.',
-    explanation:'The passage highlights that coral reefs support vast marine life (their importance) but are being damaged by rising temperatures (the threat). The main idea must include both — not just one side.' }),
+    explanation:'The passage highlights that coral reefs support vast marine life (their importance) but are being damaged by rising temperatures (the threat). The main idea must include both - not just one side.' }),
 
   makeMCQ({ id:'g5eng-comp-056', chapterId:'eng-comprehension', subsection:'inference', difficulty:3,
     question:'Read the passage: "Ravi studied every night for two weeks. On the morning of the test, he woke up early, had a good breakfast, and felt calm as he walked into the exam hall." What can we INFER about how Ravi did on the test?',
     options:['Ravi probably did well on the test.', 'Ravi probably failed the test.', 'Ravi was not prepared for the test.', 'Ravi forgot everything he had studied.'],
     answer:'Ravi probably did well on the test.',
     hint:'Think about what his preparation and calm attitude suggest.',
-    explanation:'Ravi studied for two weeks and was calm and well-rested on test day — all signs of good preparation. We can <b>infer</b> he probably did well. This is not stated directly but is strongly suggested.' }),
+    explanation:'Ravi studied for two weeks and was calm and well-rested on test day - all signs of good preparation. We can <b>infer</b> he probably did well. This is not stated directly but is strongly suggested.' }),
 
   makeMCQ({ id:'g5eng-comp-057', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:3,
     question:'Read the sentence: "The athlete\'s victory was a testament to her perseverance." What does the word "testament" most likely mean?',
     options:['a clear sign or proof', 'a legal document', 'a type of medal', 'a surprise event'],
     answer:'a clear sign or proof',
     hint:'What does the victory show or prove about her perseverance?',
-    explanation:'"<b>Testament</b>" means a clear sign or proof. The victory is proof of her perseverance. In this context it is used figuratively — not as a legal document.' }),
+    explanation:'"<b>Testament</b>" means a clear sign or proof. The victory is proof of her perseverance. In this context it is used figuratively - not as a legal document.' }),
 
   makeMCQ({ id:'g5eng-comp-058', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
     question:'Read the passage: "Mauritius was uninhabited until the Dutch arrived in 1598. It later became a French colony, then a British colony. It gained independence in 1968." Which detail BEST supports the idea that Mauritius had multiple rulers?',
@@ -432,26 +432,26 @@ STATIC_QUESTIONS.push(
     options:['To describe the lighthouse and create a mood of change', 'To explain how a lighthouse works', 'To persuade people to repair lighthouses', 'To inform readers about shipping routes'],
     answer:'To describe the lighthouse and create a mood of change',
     hint:'Notice the descriptive language and the contrast between the lighthouse\'s active past and its silent present.',
-    explanation:'The author uses descriptive language and contrasts the lighthouse\'s active past with its silent present to <b>create a mood</b> — this is descriptive writing with an emotional tone, not a factual report or persuasive text.' }),
+    explanation:'The author uses descriptive language and contrasts the lighthouse\'s active past with its silent present to <b>create a mood</b> - this is descriptive writing with an emotional tone, not a factual report or persuasive text.' }),
 
   makeMCQ({ id:'g5eng-comp-060', chapterId:'eng-comprehension', subsection:'inference', difficulty:3,
     question:'Read the passage: "Every year, millions of tonnes of plastic enter the ocean. Sea turtles mistake plastic bags for jellyfish and eat them. Seabirds feed plastic pieces to their chicks. Scientists warn that by 2050 there may be more plastic than fish in the ocean." What INFERENCE can be made?',
     options:['Plastic pollution seriously threatens ocean wildlife.', 'Plastic is harmless to marine animals.', 'Marine animals are not affected by plastic.', 'Scientists enjoy studying plastic in the ocean.'],
     answer:'Plastic pollution seriously threatens ocean wildlife.',
     hint:'What do all the examples in the passage have in common?',
-    explanation:'Every example (turtles eating bags, seabirds feeding plastic to chicks, the 2050 prediction) points to plastic being a serious threat to ocean wildlife. This is an <b>inference</b> — the text does not use those exact words, but all the evidence leads to that conclusion.' }),
+    explanation:'Every example (turtles eating bags, seabirds feeding plastic to chicks, the 2050 prediction) points to plastic being a serious threat to ocean wildlife. This is an <b>inference</b> - the text does not use those exact words, but all the evidence leads to that conclusion.' }),
 
   makeMCQ({ id:'g5eng-comp-061', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:4,
     question:'Read the passage: "The school tuck shop sells crisps, sweets, and fizzy drinks. A local health group wants it closed. The headmistress says the tuck shop teaches children about money. The canteen offers hot meals at a fixed price." A student argues: "The tuck shop should stay open because it teaches us about money." Is this a STRONG argument?',
     options:[
-      'No — buying at the canteen also involves handling money, so the reason is not unique to the tuck shop.',
-      'Yes — the tuck shop sells food the children enjoy.',
-      'Yes — the headmistress supports it, so it must be right.',
-      'No — the health group said it should close, so it must be unhealthy.'
+      'No - buying at the canteen also involves handling money, so the reason is not unique to the tuck shop.',
+      'Yes - the tuck shop sells food the children enjoy.',
+      'Yes - the headmistress supports it, so it must be right.',
+      'No - the health group said it should close, so it must be unhealthy.'
     ],
-    answer:'No — buying at the canteen also involves handling money, so the reason is not unique to the tuck shop.',
+    answer:'No - buying at the canteen also involves handling money, so the reason is not unique to the tuck shop.',
     hint:'A strong argument needs a reason that only applies to the tuck shop, not to the canteen as well.',
-    explanation:'The money-skills reason is weak because <b>the canteen also involves paying for food</b>. A strong argument needs a reason unique to the tuck shop. Options C and D rely on authority or the other side\'s view — neither is good reasoning.' }),
+    explanation:'The money-skills reason is weak because <b>the canteen also involves paying for food</b>. A strong argument needs a reason unique to the tuck shop. Options C and D rely on authority or the other side\'s view - neither is good reasoning.' }),
 
   // ── eng-writing ──────────────────────────────────────────────────────────
 
@@ -467,7 +467,7 @@ STATIC_QUESTIONS.push(
     options:["Recipient\'s address", 'Date', 'A greeting', 'A closing'],
     answer:"Recipient\'s address",
     hint:'A formal letter is posted to an official address, so it must show where it is going.',
-    explanation:'A formal letter includes the <b>recipient\'s full postal address</b> at the top. A friendly letter does not need this — you already know your friend\'s address. Both types include a date, greeting, and closing.' }),
+    explanation:'A formal letter includes the <b>recipient\'s full postal address</b> at the top. A friendly letter does not need this - you already know your friend\'s address. Both types include a date, greeting, and closing.' }),
 
   makeMCQ({ id:'g5eng-wr-052', chapterId:'eng-writing', subsection:'formal_letter', difficulty:2,
     question:'Which closing is correct for a formal letter when you do NOT know the recipient\'s name?',
@@ -504,8 +504,8 @@ STATIC_QUESTIONS.push(
       'To give background information about the characters'
     ],
     answer:'The most exciting or tense moment of the story',
-    hint:'The climax is the turning point — the peak of tension before the problem is resolved.',
-    explanation:'The <b>climax</b> is the peak of tension or excitement — the moment the main conflict reaches its highest point, before the resolution begins. It is not the ending, the introduction, or the background.' }),
+    hint:'The climax is the turning point - the peak of tension before the problem is resolved.',
+    explanation:'The <b>climax</b> is the peak of tension or excitement - the moment the main conflict reaches its highest point, before the resolution begins. It is not the ending, the introduction, or the background.' }),
 
   makeMCQ({ id:'g5eng-wr-056', chapterId:'eng-writing', subsection:'formal_letter', difficulty:2,
     question:'Which closing is correct for a formal letter when you know the recipient\'s name?',
@@ -524,7 +524,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"Bright golden sunlight warmed my skin as birdsong filled the air, and happiness bubbled up inside me."',
     hint:'Good descriptive writing combines sensory details, specific adjectives, and figurative language.',
-    explanation:'The best revision uses specific adjectives (bright, golden), sensory detail (warmed my skin), and a metaphor (happiness bubbled up) — all hallmarks of effective descriptive writing. Simply adding "brightly" or "loudly" is a minor improvement, not a transformation.' }),
+    explanation:'The best revision uses specific adjectives (bright, golden), sensory detail (warmed my skin), and a metaphor (happiness bubbled up) - all hallmarks of effective descriptive writing. Simply adding "brightly" or "loudly" is a minor improvement, not a transformation.' }),
 
   makeMCQ({ id:'g5eng-wr-058', chapterId:'eng-writing', subsection:'planning', difficulty:3,
     question:'What is the correct ORDER of the stages in a narrative story?',
@@ -558,7 +558,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>The jungle swallowed Amir whole</b>" uses a vivid metaphor and drops the reader straight into the action (called <i>in medias res</i>). It is far more engaging than simply stating what the story is about.' }),
 
   makeMCQ({ id:'g5eng-wr-061', chapterId:'eng-writing', subsection:'planning', difficulty:4,
-    question:'Shanvi is writing a formal letter to her headmistress to request permission for a science competition. Which opening sentence is MOST appropriate?',
+    question:'Kavya is writing a formal letter to her headmistress to request permission for a science competition. Which opening sentence is MOST appropriate?',
     options:[
       'Dear Madam Headmistress, I am writing to respectfully request permission to represent our school at the inter-school science competition.',
       'Hey Miss! I want to go to the science thing.',
@@ -567,7 +567,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Dear Madam Headmistress, I am writing to respectfully request permission to represent our school at the inter-school science competition.',
     hint:'A formal letter uses a proper salutation, polite language, and states the purpose clearly in the first sentence.',
-    explanation:'Option A uses the correct formal salutation ("Dear Madam Headmistress"), polite language ("respectfully request"), and states the purpose clearly — all essential features of a formal letter opening. The other options are too informal or vague.' }),
+    explanation:'Option A uses the correct formal salutation ("Dear Madam Headmistress"), polite language ("respectfully request"), and states the purpose clearly - all essential features of a formal letter opening. The other options are too informal or vague.' }),
 
   // ── eng-spelling ─────────────────────────────────────────────────────────
 
@@ -582,14 +582,14 @@ STATIC_QUESTIONS.push(
     question:'Choose the correct word: "Is this ___ book or mine?"',
     options:['your',"you\'re",'yore','yor'],
     answer:'your',
-    hint:'Test by expanding "you\'re" to "you are" — does it make sense in the sentence?',
-    explanation:'"<b>Your</b>" is the possessive form meaning "belonging to you." "You\'re" = you are, which gives "Is this you are book?" — clearly wrong. "Yore" means long ago and is unrelated.' }),
+    hint:'Test by expanding "you\'re" to "you are" - does it make sense in the sentence?',
+    explanation:'"<b>Your</b>" is the possessive form meaning "belonging to you." "You\'re" = you are, which gives "Is this you are book?" - clearly wrong. "Yore" means long ago and is unrelated.' }),
 
   makeMCQ({ id:'g5eng-sp-052', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,
     question:'Choose the correct word: "The cat hurt ___ paw."',
     options:['its',"it\'s","its'","its\'s"],
     answer:'its',
-    hint:'Test by expanding "it\'s" to "it is" — does "The cat hurt it is paw" make sense?',
+    hint:'Test by expanding "it\'s" to "it is" - does "The cat hurt it is paw" make sense?',
     explanation:'"<b>Its</b>" (no apostrophe) is the possessive pronoun meaning "belonging to it." "It\'s" = it is, which does not fit. "Its\'" and "its\'s" are not real words.' }),
 
   makeMCQ({ id:'g5eng-sp-053', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,
@@ -603,22 +603,22 @@ STATIC_QUESTIONS.push(
     question:'Choose the correct word: "The heavy rain will ___ our plans for the picnic."',
     options:['affect','effect','affekt','efect'],
     answer:'affect',
-    hint:'"Affect" is usually a verb meaning to have an impact on something.',
-    explanation:'"<b>Affect</b>" is the verb — it means to influence or impact. "Effect" is usually the noun (the effect of the rain). Use <b>affect</b> (verb) when the word follows "will." Also: "affect" → action, "effect" → end result.' }),
+    hint:'One spelling is the verb (to have an impact on), the other the noun (the result). Decide which the sentence needs, then check the spelling letter by letter.',
+    explanation:'"<b>Affect</b>" is the verb - it means to influence or impact. "Effect" is usually the noun (the effect of the rain). Use <b>affect</b> (verb) when the word follows "will." Also: "affect" → action, "effect" → end result.' }),
 
   makeMCQ({ id:'g5eng-sp-055', chapterId:'eng-spelling', subsection:'common_errors', difficulty:3,
     question:'Choose the correct word: "My teacher gave me some helpful ___ about my essay."',
     options:['advice','advise','advyce','advisement'],
     answer:'advice',
     hint:'"Advice" is the noun (a piece of advice). "Advise" is the verb (to advise someone).',
-    explanation:'"<b>Advice</b>" is the noun — it is the information given. "Advise" is the verb: "She will advise me." In this sentence, "some advice" (noun after "some") is correct.' }),
+    explanation:'"<b>Advice</b>" is the noun - it is the information given. "Advise" is the verb: "She will advise me." In this sentence, "some advice" (noun after "some") is correct.' }),
 
   makeMCQ({ id:'g5eng-sp-056', chapterId:'eng-spelling', subsection:'common_errors', difficulty:3,
     question:'Choose the correct word to complete: "I need to ___ my spelling every day." (verb needed)',
     options:['practise','practice','practiss','pracktice'],
     answer:'practise',
-    hint:'In British/Mauritian English, the noun and verb spellings differ — think about which form is needed here.',
-    explanation:'"<b>Practise</b>" is the verb in British/Mauritian English. "Practice" is the noun: "my practice session." Memory tip: ad<b>v</b>ice (noun) / ad<b>v</b>ise (verb) — the c/s pattern works the same way.' }),
+    hint:'In British/Mauritian English, the noun and verb spellings differ - think about which form is needed here.',
+    explanation:'"<b>Practise</b>" is the verb in British/Mauritian English. "Practice" is the noun: "my practice session." Memory tip: ad<b>v</b>ice (noun) / ad<b>v</b>ise (verb) - the c/s pattern works the same way.' }),
 
   makeMCQ({ id:'g5eng-sp-057', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,
     question:'Which is the correct word family for the adjective "happy"?',
@@ -639,13 +639,13 @@ STATIC_QUESTIONS.push(
     options:['darkness','darkeness','darkyness','darknness'],
     answer:'darkness',
     hint:'Simply add -ness to "dark" with no spelling change needed.',
-    explanation:'"<b>Darkness</b>" is correct — dark + ness. No spelling change is needed because "dark" does not end in y or e. The suffix -ness forms an abstract noun meaning "the state of being dark."' }),
+    explanation:'"<b>Darkness</b>" is correct - dark + ness. No spelling change is needed because "dark" does not end in y or e. The suffix -ness forms an abstract noun meaning "the state of being dark."' }),
 
   makeMCQ({ id:'g5eng-sp-060', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,
     question:'Which word uses the prefix "mis-" correctly, meaning "wrongly understood"?',
     options:['misunderstood','missunderstood','mis-understood','misunderstanded'],
     answer:'misunderstood',
-    hint:'"Mis-" attaches directly to the base word — no hyphen, no double s.',
+    hint:'"Mis-" attaches directly to the base word - no hyphen, no double s.',
     explanation:'"<b>Misunderstood</b>" is correct: mis + understood. The prefix "mis-" attaches directly without a hyphen and without doubling the s. "Missunderstood" and "mis-understood" are both misspellings.' }),
 
   makeMCQ({ id:'g5eng-sp-061', chapterId:'eng-spelling', subsection:'common_errors', difficulty:2,

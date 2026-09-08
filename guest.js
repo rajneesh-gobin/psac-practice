@@ -21,6 +21,11 @@ const S = {
   code: '', name: '', submitName: '', access: null, classroomId: null,
   token: '', assignment: null, questions: [],
   idx: 0, answers: [], answered: false, endAt: null, timer: null, result: null,
+  materials: [], matSort: 'recent',
+  // material_id -> true. What this pupil says they have done. Held in memory
+  // and echoed by the server on every tap, so the button never shows a state
+  // the database has not actually accepted.
+  doneMaterials: {},
 };
 
 // localStorage helpers for shared-PIN classroom nicknames
@@ -30,6 +35,37 @@ function _loadNick(id) {
 }
 function _saveNick(id, name) {
   try { if (id && name) localStorage.setItem(_nickKey(id), String(name).slice(0, 40)); } catch(_) {}
+}
+
+// ── This device's code ────────────────────────────────────────────────────
+// ⚠ A DEVICE code, not a person. 32 random hex characters from
+// crypto.getRandomValues, kept in this browser only. Nothing in it is derived
+// from the child or the hardware — it is not a fingerprint, and it cannot be
+// re-derived if cleared. Two children sharing a tablet share one code; one
+// child on two tablets has two.
+//
+// It exists because a shared-PIN class identifies children BY NAME, and
+// teacher_guest_open() therefore cannot tell "another child claiming this name"
+// from "the same child who reloaded the page" — it refused both. The code is
+// what separates them.
+//
+// ⚠ Per browser, not per classroom: the same tablet in two classes is the same
+// tablet, and the server scopes the row by classroom anyway.
+const DEVICE_KEY = 'psac_guest_device_v1';
+function _deviceCode() {
+  try {
+    let v = localStorage.getItem(DEVICE_KEY);
+    if (v && /^[0-9a-f]{32}$/.test(v)) return v;
+    const b = new Uint8Array(16);
+    (self.crypto || window.crypto).getRandomValues(b);
+    v = Array.from(b).map(x => x.toString(16).padStart(2, '0')).join('');
+    localStorage.setItem(DEVICE_KEY, v);
+    return v;
+  } catch (_) {
+    // Private mode, or storage refused. The flow still works — the child simply
+    // gets the old behaviour, so this must never throw into sign-in.
+    return '';
+  }
 }
 
 // ── Share code: /a/ABC123 , or ?code=ABC123 ───────────────────────────────
@@ -142,6 +178,29 @@ async function openAssignment() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spin"></span> Opening…';
 
+  // ⚠ Claim the name for THIS device before opening. Two things depend on it:
+  // the teacher gets a list of who is actually in a shared-PIN class, and this
+  // child's own abandoned attempt is cleared so a reload does not answer
+  // "Someone with that name has already done this assignment".
+  // ⚠ Best effort. If it fails — private browsing, storage refused, the
+  // endpoint not deployed yet — sign-in carries on exactly as before rather
+  // than blocking a child out of their homework over a nicety. The one refusal
+  // that IS surfaced is a name genuinely held by another device.
+  if (S.access === 'shared_pin') {
+    const device = _deviceCode();
+    if (device) {
+      try {
+        const claim = await api('/api/guest-device', { code: S.code, device, name });
+        if (claim && claim.ok === false && claim.error === 'name_taken') {
+          err('Somebody else in your class is already using that name. Try adding your surname.');
+          btn.disabled = false; btn.textContent = 'Start';
+          $('g-name').focus();
+          return;
+        }
+      } catch (_) { /* carry on: the claim is an improvement, not a gate */ }
+    }
+  }
+
   let r;
   try {
     r = await api('/api/assignment-open', { code: S.code, name, pin });
@@ -193,7 +252,19 @@ async function openAssignment() {
 
   // Show the home screen (assignment summary + class resources) before the quiz.
   $('h-title').textContent = S.assignment.title || 'Homework';
-  $('h-who').textContent   = 'Hi ' + S.name + ' 👋 — ' + S.questions.length + ' question' + (S.questions.length === 1 ? '' : 's');
+  $('h-who').textContent   = 'Hi ' + S.name + ' 👋 - ' + S.questions.length + ' question' + (S.questions.length === 1 ? '' : 's');
+  // ⚠ Only offered when this pupil signed in with their OWN PIN. In that mode
+  // teacher_guest_open() sets the identity key to the pupil's UUID, so the name
+  // is a label and changing it moves nothing. Under a SHARED class PIN the name
+  // IS the key and renaming would strand the pupil's work — the server refuses
+  // it, and the button is not drawn either, so a child is never offered
+  // something that will fail.
+  const canRename = S.access === 'classroom_pin' && !!S.token;
+  const renameBtn = $('h-rename');
+  if (renameBtn) {
+    renameBtn.hidden = !canRename;
+    if (canRename && !renameBtn._wired) { renameBtn._wired = true; renameBtn.addEventListener('click', changeMyName); }
+  }
   show('s-home');
 
   // Load classroom materials in the background.
@@ -215,6 +286,42 @@ function _startQuiz() {
 
 $('h-start') && $('h-start').addEventListener('click', _startQuiz);
 
+// ── Class resources ───────────────────────────────────────────────────────
+// ⚠ This page loads NO engine file by design, so the sort here is its own copy
+// of engine/helpers.js's sortMaterials(). Keep the two in step.
+const MAT_SORTS = [['recent', '🕑 Newest'], ['subject', '📚 Subject'], ['title', '🔤 Name']];
+const MAT_SORT_STORE = 'psac_guest_mat_sort';
+
+function matSortRead() {
+  try {
+    const v = localStorage.getItem(MAT_SORT_STORE);
+    if (v && MAT_SORTS.some(s => s[0] === v)) return v;
+  } catch (_) { }
+  return 'recent';
+}
+// shared_at is when the teacher shared the file with this class; created_at is
+// only the fallback for a row from before the junction table carried a date.
+function matWhen(m) { return Date.parse((m && (m.shared_at || m.created_at)) || '') || 0; }
+function matTitleCmp(a, b) {
+  return String(a.title || '').localeCompare(String(b.title || ''), undefined, { sensitivity: 'base' });
+}
+function sortMats(list, key) {
+  const rows = (list || []).slice();
+  // ⚠ A file with no subject sorts LAST, never first.
+  const subj = m => String(m.subject || '￿').toLowerCase();
+  if (key === 'subject') return rows.sort((a, b) => subj(a).localeCompare(subj(b)) || matTitleCmp(a, b));
+  if (key === 'title')   return rows.sort(matTitleCmp);
+  return rows.sort((a, b) => matWhen(b) - matWhen(a) || matTitleCmp(a, b));
+}
+function matDateText(m) {
+  const t = matWhen(m);
+  if (!t) return '';
+  const d = new Date(t);
+  const o = { day: 'numeric', month: 'short' };
+  if (d.getFullYear() !== new Date().getFullYear()) o.year = 'numeric';
+  return d.toLocaleDateString('en-GB', o);
+}
+
 async function loadMaterials(classroomId) {
   const list = $('h-res-list');
   if (!list) return;
@@ -224,21 +331,9 @@ async function loadMaterials(classroomId) {
       $('h-res').style.display = 'none'; // nothing to show
       return;
     }
-    list.innerHTML = r.materials.map(m => {
-      const icon = m.file_name && m.file_name.endsWith('.pdf') ? '📄' : '🖼️';
-      const sub  = [m.subject, m.description].filter(Boolean).join(' · ');
-      const btn  = m.url
-        ? `<a href="${esc(m.url)}" target="_blank" rel="noopener" class="res-open">Open ↗</a>`
-        : '';
-      return `<div class="res-card">
-        <div class="res-icon">${icon}</div>
-        <div class="res-body">
-          <div class="res-title">${esc(m.title)}</div>
-          ${sub ? `<div class="res-sub">${esc(sub)}</div>` : ''}
-          ${btn}
-        </div>
-      </div>`;
-    }).join('');
+    S.materials = r.materials;
+    S.matSort   = matSortRead();
+    renderMaterials();
     // Wire up done screen "Class resources" button now that we know there are some.
     const dresBtn = $('d-resources');
     if (dresBtn) {
@@ -246,8 +341,148 @@ async function loadMaterials(classroomId) {
       dresBtn.onclick = () => show('s-home');
     }
   } catch (_) {
-    $('h-res').style.display = 'none'; // network issue — hide silently
+    $('h-res').style.display = 'none'; // network issue - hide silently
   }
+}
+
+function renderMaterials() {
+  const list = $('h-res-list');
+  if (!list) return;
+  // One file needs no sort control - it would only be something else to read.
+  const bar = S.materials.length > 1
+    ? '<div class="res-sort" role="group" aria-label="Sort resources">'
+      + '<span class="res-sort-label">Sort</span>'
+      + MAT_SORTS.map(function (s) {
+          return '<button type="button" class="res-sort-btn' + (s[0] === S.matSort ? ' on' : '')
+            + '" data-sort="' + s[0] + '" aria-pressed="' + (s[0] === S.matSort) + '">' + s[1] + '</button>';
+        }).join('')
+      + '</div>'
+    : '';
+
+  list.innerHTML = bar + sortMats(S.materials, S.matSort).map(function (m) {
+    // ⚠ A material is a stored file OR a link the teacher pasted. This page
+    //   loads no engine file by design, so materialKind()/materialIcon() from
+    //   engine/helpers.js are re-implemented here - the same deliberate copy the
+    //   sort comparator above already is. Change both together.
+    const isLink = m.source_type === 'link';
+    const ytId   = isLink && /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/.test(String(m.url || ''));
+    const icon = isLink
+      ? (ytId ? '▶️' : (/\.pdf(\?|#|$)/i.test(String(m.url || '')) ? '📄' : '🔗'))
+      : (m.file_name && m.file_name.toLowerCase().endsWith('.pdf') ? '📄' : '🖼️');
+    // Where a link goes, so a pupil can see before tapping. Never the full URL.
+    let host = '';
+    if (isLink) { try { host = new URL(m.url).hostname.replace(/^www\./, ''); } catch (_) { } }
+    const sub  = [m.subject, host, m.description].filter(Boolean).join(' · ');
+    const when = matDateText(m);
+    // ⚠ http/https only. This is the third check (teacher form, database CHECK,
+    //   here) and it is the one that guards the href actually written to the DOM.
+    const safe = /^https?:\/\//i.test(String(m.url || '')) ? m.url : '';
+    const btn  = safe
+      ? '<a href="' + esc(safe) + '" target="_blank" rel="noopener noreferrer" class="res-open">'
+        + (isLink ? (ytId ? 'Watch ↗' : 'Open link ↗') : 'Open ↗') + '</a>'
+      : '';
+    // ⚠ A CLAIM, not a mark. Nobody can grade a worksheet or a video from here,
+    //   so the wording is "I have done this" and the confirmation says the
+    //   teacher can SEE it — never that it has been marked or scored.
+    // ⚠ Needs the PIN token. Without it (the info-only preview before sign-in)
+    //   the control is not drawn at all, rather than drawn and failing on tap.
+    const doneMark = S.token && m.id
+      ? '<button type="button" class="res-done' + (S.doneMaterials[m.id] ? ' on' : '') + '"'
+        + ' data-done="' + esc(m.id) + '" aria-pressed="' + (S.doneMaterials[m.id] ? 'true' : 'false') + '">'
+        + (S.doneMaterials[m.id] ? '✓ I have done this' : 'Mark as done') + '</button>'
+      : '';
+    return '<div class="res-card">'
+      + '<div class="res-icon">' + icon + '</div>'
+      + '<div class="res-body">'
+      + '<div class="res-title">' + esc(m.title) + '</div>'
+      + (sub ? '<div class="res-sub">' + esc(sub) + '</div>' : '')
+      + (when ? '<div class="res-date">📅 Shared ' + esc(when) + '</div>' : '')
+      + btn + doneMark
+      + '</div></div>';
+  }).join('');
+
+  // Listeners, not inline onclick: everything in this file lives inside an IIFE
+  // and is not reachable from markup.
+  list.querySelectorAll('.res-sort-btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      S.matSort = b.getAttribute('data-sort') || 'recent';
+      try { localStorage.setItem(MAT_SORT_STORE, S.matSort); } catch (_) { }
+      renderMaterials();
+    });
+  });
+
+  list.querySelectorAll('.res-done').forEach(function (b) {
+    b.addEventListener('click', function () { markMaterialDone(b); });
+  });
+}
+
+// ⚠ Renames the LABEL, never the identity. name_key stays the pupil's UUID, so
+// every submission, PIN attempt and material tick they already have follows
+// them. The teacher sees the change and who made it — a child quietly taking
+// another child's name must not be invisible, which is why this is recorded
+// rather than silently allowed.
+async function changeMyName() {
+  const current = S.name || '';
+  const next = prompt('What should your teacher call you?', current);
+  if (next === null) return;                       // cancelled
+  const clean = String(next).replace(/\s+/g, ' ').trim();
+  if (clean === current) return;                   // nothing to do
+  if (clean.length < 2 || clean.length > 40) {
+    alert('Please use between 2 and 40 letters.');
+    return;
+  }
+  let r = null;
+  try {
+    r = await api('/api/pupil-name', {
+      code: S.code, name: S.submitName || S.name, token: S.token, new_name: clean,
+    });
+  } catch (_) { r = null; }
+  if (!r || !r.ok) {
+    alert(r && r.error === 'bad_token'
+      ? 'Your sign-in has expired. Enter your PIN again to change your name.'
+      : r && r.error === 'not_supported'
+        ? 'Your class signs in with one shared PIN, so your teacher looks after names here.'
+        : 'Could not change your name just now. Please try again.');
+    return;
+  }
+  // The SERVER's cleaned-up version, not the raw text — it collapses spaces and
+  // strips control characters, and the teacher will see exactly this.
+  S.name = r.name || clean;
+  S.submitName = S.submitName || S.name;
+  const who = $('h-who');
+  if (who) who.textContent = 'Hi ' + S.name + ' 👋 - ' + S.questions.length + ' question' + (S.questions.length === 1 ? '' : 's');
+  alert('Thanks — your teacher will see you as ' + S.name + '.');
+}
+
+// ⚠ The button only changes after the SERVER agrees. An optimistic tick that
+// silently failed would tell a child their teacher can see work the teacher has
+// no record of — the one lie this feature must not tell. The control is
+// disabled while in flight so a double tap cannot toggle it twice.
+async function markMaterialDone(btn) {
+  const id = btn.getAttribute('data-done');
+  if (!id || btn.disabled) return;
+  const want = !S.doneMaterials[id];
+  const label = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = want ? 'Saving…' : 'Removing…';
+  let r = null;
+  try {
+    r = await api('/api/material-done', {
+      code: S.code, name: S.submitName || S.name, token: S.token,
+      material_id: id, done: want,
+    });
+  } catch (_) { r = null; }
+  btn.disabled = false;
+  if (!r || !r.ok) {
+    btn.textContent = label;
+    // Say what to do next, and do not pretend it saved.
+    alert(r && r.error === 'bad_token'
+      ? 'Your sign-in has expired. Enter your PIN again to save this.'
+      : 'Could not save that just now. Please check your connection and try again.');
+    return;
+  }
+  if (want) S.doneMaterials[id] = true; else delete S.doneMaterials[id];
+  renderMaterials();
 }
 
 function tickTimer() {
@@ -401,7 +636,7 @@ function buildReview(detail) {
     const q = byId[d.id] || {};
     return '<div class="rv"><span class="ic">' + (d.correct ? '✅' : '❌') + '</span>'
       + '<span><b>Q' + (i + 1) + '.</b> ' + esc(String(q.question || '').replace(/<[^>]*>/g, ' ')).slice(0, 120)
-      + (d.correct ? '' : '<br><span class="muted">You: ' + esc(d.userAnswer || '—')
+      + (d.correct ? '' : '<br><span class="muted">You: ' + esc(d.userAnswer || '-')
           + ' · Correct: ' + esc(d.correctAnswer) + '</span>')
       + '</span></div>';
   }).join('');
@@ -500,7 +735,7 @@ function waFallback(text) {
   } catch (e) {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text)
-        .then(() => alert('Result copied — paste it into WhatsApp.'))
+        .then(() => alert('Result copied - paste it into WhatsApp.'))
         .catch(() => {});
     }
   }

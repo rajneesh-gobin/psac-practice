@@ -1,5 +1,5 @@
 'use strict';
-// Grade 6 Maths — top-up questions.
+// Grade 6 Maths - top-up questions.
 
 // --- g6-decimals (8 questions: g6m-dec-050..057) ---
 STATIC_QUESTIONS.push(

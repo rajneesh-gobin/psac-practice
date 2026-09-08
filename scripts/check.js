@@ -129,18 +129,72 @@ function checkLocalFiles() {
   note(`checked LOCAL_FILES against ${packs.length} subject packs`);
 }
 
-// ── 4 · Every registered subject pack must be loaded by index.html ────────
+// ── 4 · Subject packs: one generated index, and it must not have drifted ──
+// index.html loads subjects/_index.js and NOTHING else from subjects/. Each
+// pack's own _manifest.js is fetched by PackLoader.ensure() when that subject
+// is opened. The index is generated, so what is worth checking is drift: a new
+// pack, a renamed or reordered chapter, or a deleted directory that never made
+// it back into the index. A stale index shows a child chapters that no longer
+// exist, and it fails silently because the lite entry looks perfectly valid.
 function checkManifests() {
   const html = read(path.join(ROOT, 'index.html')) || '';
-  let packs;
-  try { packs = fs.readdirSync(path.join(ROOT, 'subjects'), { withFileTypes: true })
-                 .filter(d => d.isDirectory()).map(d => d.name); }
-  catch { return; }
-  for (const p of packs) {
-    if (!exists(path.posix.join('subjects', p, '_manifest.js'))) continue;
-    if (!html.includes(`subjects/${p}/_manifest.js`)) fail(`subjects/${p}/_manifest.js exists but index.html never loads it`);
+  if (!html.includes('subjects/_index.js')) fail('index.html does not load subjects/_index.js');
+  for (const m of html.matchAll(/<script src="(subjects\/[^"]+)"><\/script>/g)) {
+    if (m[1] !== 'subjects/_index.js') {
+      fail(`index.html loads ${m[1]} eagerly — subject packs must be lazy (see PackLoader in engine/registry.js)`);
+    }
   }
-  note(`checked ${packs.length} subject manifests are loaded`);
+
+  let dirs;
+  try { dirs = fs.readdirSync(path.join(ROOT, 'subjects'), { withFileTypes: true })
+                 .filter(d => d.isDirectory()).map(d => d.name).sort(); }
+  catch { return; }
+  const onDisk = dirs.filter(d => exists(path.posix.join('subjects', d, '_manifest.js')));
+
+  // ⚠ EXECUTE both sides rather than reading them with a regex. A regex passes
+  // happily on an index that no longer parses, which is the one failure that
+  // would take every subject down at once.
+  const vm = require('vm');
+  const run = files => {
+    const packs = [];
+    const ctx = {
+      STATIC_QUESTIONS: [], console: { log() {}, warn() {}, error() {} },
+      registerSubject: p => { packs.push(p); return p; }, extendSubject: () => null,
+      makeMCQ: o => o, makeNum: o => o, makeTF: o => o,
+      makeMatch: o => o, makeSymmetry: o => o, makeCloze: o => o,
+    };
+    ctx.window = ctx;
+    vm.createContext(ctx);
+    for (const f of files) vm.runInContext(read(path.join(ROOT, f)) || '', ctx, { filename: f });
+    return packs;
+  };
+
+  let idxPacks, manPacks;
+  try { idxPacks = run(['subjects/_index.js']); }
+  catch (e) { fail(`subjects/_index.js does not execute: ${e.message}`); return; }
+  try { manPacks = run(onDisk.map(d => path.posix.join('subjects', d, '_manifest.js'))); }
+  catch (e) { fail(`a subject manifest does not execute: ${e.message}`); return; }
+
+  const REGEN = 'run: node scripts/build-subject-index.js';
+  const idxIds = new Set(idxPacks.map(p => p.id));
+  const manIds = new Set(manPacks.map(p => p.id));
+  for (const id of manIds) if (!idxIds.has(id)) fail(`pack ${id} is missing from subjects/_index.js — ${REGEN}`);
+  for (const id of idxIds) if (!manIds.has(id)) fail(`subjects/_index.js lists ${id}, which has no manifest — ${REGEN}`);
+
+  const byId = new Map(manPacks.map(p => [p.id, p]));
+  for (const p of idxPacks) {
+    const m = byId.get(p.id);
+    if (m) {
+      const a = (p.chapters || []).map(c => c.id).join(',');
+      const b = (m.chapters || []).map(c => c.id).join(',');
+      if (a !== b) fail(`pack ${p.id}: chapters in subjects/_index.js differ from its manifest — ${REGEN}`);
+    }
+    // PackLoader fetches these by path at runtime; a wrong one is a subject
+    // that opens with no syllabus and no generators, and only console.warns.
+    if (!p._src || !exists(p._src)) fail(`pack ${p.id}: _src "${p._src}" does not exist`);
+    for (const extra of p._extra || []) if (!exists(extra)) fail(`pack ${p.id}: _extra "${extra}" does not exist`);
+  }
+  note(`checked subjects/_index.js against ${onDisk.length} lazily-loaded manifests`);
 }
 
 // ── 5 · Badge ids must be unique and never reused ─────────────────────────
@@ -167,13 +221,70 @@ function checkSqlSearchPath() {
   let sqls;
   try { sqls = fs.readdirSync(ROOT).filter(f => f.endsWith('.sql')); } catch { return; }
   for (const f of sqls) {
-    if (f === 'supabase-migration.sql' || f === 'supabase-schema.sql') continue;  // legacy / generated
+    // supabase-schema.sql is the generated dump of the live database — the
+    // pinning it records is whatever is actually deployed, so flagging it here
+    // would only ever report on a database this check cannot change. It is
+    // covered instead by scripts/sql-tests/run-schema-tests.sh.
+    if (f === 'supabase-schema.sql') continue;
     const src = read(path.join(ROOT, f)) || '';
     if (!/\b(crypt|gen_salt|digest|gen_random_bytes)\s*\(/.test(src)) continue;
     if (/SET\s+search_path\s*=\s*public\s+AS/.test(src))
       fail(`${f}: a function uses pgcrypto but pins "SET search_path = public" (needs ", extensions")`);
   }
   note(`checked ${sqls.length} SQL files for the pgcrypto search_path trap`);
+}
+
+// ── 7 · Every screen's own panels must be INSIDE that screen ─────────────
+// showScreen() hides screens by toggling .hidden on `.screen` elements, so a
+// panel that has escaped its screen through an unbalanced </div> is never
+// hidden by anything. #admin-tab-questions did exactly that: one </div> at
+// indent 4 closed #screen-admin a panel early, so opening the Question bank
+// and then tapping 🔒 Parent hid the admin header and tab bar and left the
+// Question bank painted over the parent dashboard. It read as a dead button.
+// ⚠ The DOM is the authority here, not the indentation — the file looked
+// perfectly tidy, and nine of the ten panels were nested correctly.
+function checkScreenNesting() {
+  const html = read(path.join(ROOT, 'index.html'));
+  if (!html) { fail('index.html not readable'); return; }
+  const lines = html.split(/\r?\n/);
+
+  // Match a <div id="..."> to its </div> by depth, ignoring HTML comments.
+  const spanOf = needle => {
+    const open = lines.findIndex(l => l.includes(needle));
+    if (open < 0) return null;
+    let depth = 0, inComment = false;
+    for (let i = open; i < lines.length; i++) {
+      let bare = '';
+      const s = lines[i];
+      for (let k = 0; k < s.length; k++) {
+        if (!inComment && s.startsWith('<!--', k)) { inComment = true; k += 3; continue; }
+        if (inComment) { if (s.startsWith('-->', k)) { inComment = false; k += 2; } continue; }
+        bare += s[k];
+      }
+      for (const m of bare.matchAll(/<div\b|<\/div>/g)) depth += m[0] === '</div>' ? -1 : 1;
+      if (depth === 0) return { open, close: i };
+    }
+    return { open, close: -1 };
+  };
+
+  const groups = [
+    { screen: 'id="screen-admin"', panel: /id="(admin-tab-[a-z-]+)"/g, label: 'admin tab panel' },
+  ];
+  let checked = 0;
+  for (const g of groups) {
+    const span = spanOf(g.screen);
+    if (!span || span.close < 0) { fail(`index.html: could not find the extent of ${g.screen}`); continue; }
+    for (let i = 0; i < lines.length; i++) {
+      for (const m of lines[i].matchAll(g.panel)) {
+        checked++;
+        if (i < span.open || i > span.close) {
+          fail(`index.html: #${m[1]} (line ${i + 1}) is OUTSIDE ${g.screen} `
+            + `(lines ${span.open + 1}-${span.close + 1}) — showScreen() will never hide it`);
+        }
+      }
+    }
+  }
+  note(`checked ${checked} admin tab panels are nested inside their screen`);
 }
 
 // ── run ───────────────────────────────────────────────────────────────────
@@ -183,6 +294,7 @@ checkLocalFiles();
 checkManifests();
 checkBadgeIds();
 checkSqlSearchPath();
+checkScreenNesting();
 
 for (const n of notes) console.log('  ok  ' + n);
 if (problems.length) {

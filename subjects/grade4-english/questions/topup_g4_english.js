@@ -1,5 +1,5 @@
 'use strict';
-// Grade 4 English — top-up questions (050-series).
+// Grade 4 English - top-up questions (050-series).
 // Chapters: g4eng-verbs, g4eng-sentences, g4eng-comprehension, g4eng-vocabulary, g4eng-passages.
 // IDs: g4eng-verb-050..061, g4eng-sent-050..061, g4eng-comp-050..061,
 //      g4eng-vocab-050..061, g4eng-psg-050..061.
@@ -12,78 +12,78 @@ STATIC_QUESTIONS.push(
     question:'He ___ to the library every Friday.',
     options:['go','goes','going','went'],
     answer:'goes',
-    hint:'The subject is "he" — third person singular. Add -s to the verb in the present simple.',
-    explanation:'"He goes" — with he/she/it we add -s or -es to the base verb in the present simple.' }),
+    hint:'The subject is "he" - third person singular. Add -s to the verb in the present simple.',
+    explanation:'"He goes" - with he/she/it we add -s or -es to the base verb in the present simple.' }),
 
   makeMCQ({ id:'g4eng-verb-051', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:1,
     question:'Yesterday, they ___ to the market.',
     options:['go','goes','going','went'],
     answer:'went',
     hint:'"Yesterday" signals the past tense. "Go" is an irregular verb.',
-    explanation:'"Go" becomes "went" in the past tense — it is irregular and does not add -ed.' }),
+    explanation:'"Go" becomes "went" in the past tense - it is irregular and does not add -ed.' }),
 
   makeMCQ({ id:'g4eng-verb-052', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:1,
     question:'She ___ a rainbow in the sky this morning.',
     options:['see','sees','saw','seeing'],
     answer:'saw',
-    hint:'"This morning" is already over — use the past tense. "See" is an irregular verb.',
-    explanation:'"See" becomes "saw" in the past tense — it is an irregular verb.' }),
+    hint:'"This morning" is already over - use the past tense. "See" is an irregular verb.',
+    explanation:'"See" becomes "saw" in the past tense - it is an irregular verb.' }),
 
   makeMCQ({ id:'g4eng-verb-053', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:1,
     question:'The dog ___ after the ball and caught it.',
     options:['run','runs','running','ran'],
     answer:'ran',
-    hint:'The second verb "caught" is already in the past — the first must match. "Run" is irregular.',
-    explanation:'"Run" becomes "ran" in the past tense — both verbs describe the same past event.' }),
+    hint:'The second verb "caught" is already in the past - the first must match. "Run" is irregular.',
+    explanation:'"Run" becomes "ran" in the past tense - both verbs describe the same past event.' }),
 
   makeMCQ({ id:'g4eng-verb-054', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:1,
     question:'She ___ a letter to her pen pal last week.',
     options:['write','writes','writing','wrote'],
     answer:'wrote',
     hint:'"Last week" signals the past tense. "Write" is an irregular verb.',
-    explanation:'"Write" becomes "wrote" in the past tense — it is an irregular verb.' }),
+    explanation:'"Write" becomes "wrote" in the past tense - it is an irregular verb.' }),
 
   makeMCQ({ id:'g4eng-verb-055', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:1,
     question:'My mother ___ mangoes from the market yesterday.',
     options:['buy','buys','buying','bought'],
     answer:'bought',
     hint:'"Yesterday" signals the past tense. "Buy" is an irregular verb.',
-    explanation:'"Buy" becomes "bought" in the past tense — it is an irregular verb.' }),
+    explanation:'"Buy" becomes "bought" in the past tense - it is an irregular verb.' }),
 
   makeMCQ({ id:'g4eng-verb-056', chapterId:'g4eng-verbs', subsection:'continuous', difficulty:2,
     question:'The children ___ in the pool right now.',
     options:['swim','swims','are swimming','swam'],
     answer:'are swimming',
-    hint:'"Right now" means it is happening at this moment — use the present continuous.',
-    explanation:'"Are swimming" is correct — present continuous (are + verb-ing) for an action happening now. With a plural subject (children) we use "are".' }),
+    hint:'"Right now" means it is happening at this moment - use the present continuous.',
+    explanation:'"Are swimming" is correct - present continuous (are + verb-ing) for an action happening now. With a plural subject (children) we use "are".' }),
 
   makeMCQ({ id:'g4eng-verb-057', chapterId:'g4eng-verbs', subsection:'future_tense', difficulty:1,
     question:'Tomorrow, we ___ our grandparents.',
     options:['visit','visits','visited','will visit'],
     answer:'will visit',
     hint:'"Tomorrow" points to the future. Use will + the base form of the verb.',
-    explanation:'"Will visit" — for the future tense, use will + the base verb (no -s, no -ed).' }),
+    explanation:'"Will visit" - for the future tense, use will + the base verb (no -s, no -ed).' }),
 
   makeMCQ({ id:'g4eng-verb-058', chapterId:'g4eng-verbs', subsection:'present_tense', difficulty:2,
     question:'My friends ___ football every Saturday morning.',
     options:['plays','play','is playing','played'],
     answer:'play',
-    hint:'"My friends" is a plural subject — do not add -s to the verb in the present simple.',
-    explanation:'"Play" (no -s) — with a plural subject (friends = they) we use the base verb without -s.' }),
+    hint:'"My friends" is a plural subject - do not add -s to the verb in the present simple.',
+    explanation:'"Play" (no -s) - with a plural subject (friends = they) we use the base verb without -s.' }),
 
   makeMCQ({ id:'g4eng-verb-059', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:2,
     question:'Choose the sentence that uses the <b>past tense</b> correctly.',
     options:['I eated my lunch quickly.','I ate my lunch quickly.','I eating my lunch quickly.','I was eat my lunch quickly.'],
     answer:'I ate my lunch quickly.',
-    hint:'"Eat" is irregular — it does not add -ed in the past tense.',
-    explanation:'"Ate" is the correct irregular past tense of "eat". Never write "eated" — irregular verbs have their own special past forms.' }),
+    hint:'"Eat" is irregular - it does not add -ed in the past tense.',
+    explanation:'"Ate" is the correct irregular past tense of "eat". Never write "eated" - irregular verbs have their own special past forms.' }),
 
   makeMCQ({ id:'g4eng-verb-060', chapterId:'g4eng-verbs', subsection:'past_tense', difficulty:2,
     question:'He ___ his homework before he watched television.',
     options:['finish','finishes','finishing','finished'],
     answer:'finished',
-    hint:'Both actions happened in the past. "Finish" is a regular verb — add -ed.',
-    explanation:'"Finished" — regular past tense (add -ed). The clue "watched" confirms everything is in the past.' }),
+    hint:'Both actions happened in the past. "Finish" is a regular verb - add -ed.',
+    explanation:'"Finished" - regular past tense (add -ed). The clue "watched" confirms everything is in the past.' }),
 
   makeMCQ({ id:'g4eng-verb-061', chapterId:'g4eng-verbs', subsection:'in_context', difficulty:3,
     question:'Which sentence uses verbs correctly throughout?',
@@ -111,7 +111,7 @@ STATIC_QUESTIONS.push(
     options:['She has long hair.','How well she sings!','Does he live nearby?','Please sit down and be quiet.'],
     answer:'Please sit down and be quiet.',
     hint:'A command tells or asks someone to do something. It often begins with a verb.',
-    explanation:'"Please sit down and be quiet." gives an instruction — that makes it a command.' }),
+    explanation:'"Please sit down and be quiet." gives an instruction - that makes it a command.' }),
 
   makeMCQ({ id:'g4eng-sent-052', chapterId:'g4eng-sentences', subsection:'types', difficulty:1,
     question:'Which sentence should end with an <b>exclamation mark (!)</b>?',
@@ -125,21 +125,21 @@ STATIC_QUESTIONS.push(
     options:['the children played in the garden.','The children played In the garden.','The children played in the garden.','the Children played in the garden.'],
     answer:'The children played in the garden.',
     hint:'Every sentence starts with a capital letter. Only proper nouns use capitals in the middle.',
-    explanation:'"The children played in the garden." — capital T at the start, full stop at the end, no unnecessary capitals inside.' }),
+    explanation:'"The children played in the garden." - capital T at the start, full stop at the end, no unnecessary capitals inside.' }),
 
   makeMCQ({ id:'g4eng-sent-054', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Join these sentences using <b>because</b>: "She brought an umbrella. It was raining."',
     options:['She brought an umbrella but it was raining.','She brought an umbrella or it was raining.','She brought an umbrella because it was raining.','She brought an umbrella and it was raining.'],
     answer:'She brought an umbrella because it was raining.',
     hint:'"Because" gives the reason for something.',
-    explanation:'"She brought an umbrella because it was raining." — "because" shows that rain was the reason she brought the umbrella.' }),
+    explanation:'"She brought an umbrella because it was raining." - "because" shows that rain was the reason she brought the umbrella.' }),
 
   makeMCQ({ id:'g4eng-sent-055', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Choose the best word to join these ideas: "I love mangoes ___ I do not like papaya."',
     options:['and','so','or','but'],
     answer:'but',
-    hint:'The two ideas are opposite — liking one fruit and not liking the other.',
-    explanation:'"I love mangoes but I do not like papaya." — "but" joins two contrasting (opposite) ideas.' }),
+    hint:'The two ideas are opposite - liking one fruit and not liking the other.',
+    explanation:'"I love mangoes but I do not like papaya." - "but" joins two contrasting (opposite) ideas.' }),
 
   makeMCQ({ id:'g4eng-sent-056', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:1,
     question:'What punctuation mark ends a question?',
@@ -153,7 +153,7 @@ STATIC_QUESTIONS.push(
     options:['He was hungry but he made a sandwich.','He was hungry so he made a sandwich.','He was hungry because he made a sandwich.','He was hungry and he made a sandwich.'],
     answer:'He was hungry so he made a sandwich.',
     hint:'"So" shows a result. The second action is the result of the first.',
-    explanation:'"He was hungry so he made a sandwich." — "so" shows that making the sandwich was the result of being hungry.' }),
+    explanation:'"He was hungry so he made a sandwich." - "so" shows that making the sandwich was the result of being hungry.' }),
 
   makeMCQ({ id:'g4eng-sent-058', chapterId:'g4eng-sentences', subsection:'types', difficulty:1,
     question:'Which sentence is an <b>exclamation</b>?',
@@ -167,14 +167,14 @@ STATIC_QUESTIONS.push(
     options:['but','so','because','or'],
     answer:'or',
     hint:'The sentence offers two things to choose between.',
-    explanation:'"You can drink water or juice with your lunch." — "or" is used when giving a choice between two things.' }),
+    explanation:'"You can drink water or juice with your lunch." - "or" is used when giving a choice between two things.' }),
 
   makeMCQ({ id:'g4eng-sent-060', chapterId:'g4eng-sentences', subsection:'types', difficulty:2,
     question:'Which of the following is a <b>statement</b>?',
     options:['Pick up your pencil.','How hot it is today!','The river flows into the sea.','Can you hear the music?'],
     answer:'The river flows into the sea.',
     hint:'A statement gives information calmly and ends with a full stop.',
-    explanation:'"The river flows into the sea." — it gives information and ends with a full stop, making it a statement.' }),
+    explanation:'"The river flows into the sea." - it gives information and ends with a full stop, making it a statement.' }),
 
   makeMCQ({ id:'g4eng-sent-061', chapterId:'g4eng-sentences', subsection:'in_context', difficulty:3,
     question:'Which sentence is written <b>correctly</b> with the right joining word?',
@@ -186,7 +186,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'She was tired so she went to bed early.',
     hint:'"So" shows a result. Being tired led to going to bed early.',
-    explanation:'"She was tired so she went to bed early." — tiredness caused her to go to bed early. "So" correctly shows this cause-and-result link.' }),
+    explanation:'"She was tired so she went to bed early." - tiredness caused her to go to bed early. "So" correctly shows this cause-and-result link.' }),
 
   // ── Reading Comprehension ──────────────────────────────────────────────────
 
@@ -202,7 +202,7 @@ STATIC_QUESTIONS.push(
     options:['At school','In the garden','At the park','On the street'],
     answer:'At the park',
     hint:'Find the place Ravi ran to after breakfast.',
-    explanation:'Ravi "ran to the park" — that is where they played football.' }),
+    explanation:'Ravi "ran to the park" - that is where they played football.' }),
 
   makeMCQ({ id:'g4eng-comp-052', chapterId:'g4eng-comprehension', subsection:'retrieval', difficulty:1,
     question:'<div style="background:#f0f9ff;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65"><b>Read the passage, then answer the question.</b><br><br>Ravi woke up early on Saturday morning. He ate his breakfast quickly and ran to the park. His friends were already there. They played football until lunchtime.</div>What did Ravi and his friends do at the park?',
@@ -215,15 +215,15 @@ STATIC_QUESTIONS.push(
     question:'<div style="background:#f0f9ff;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65"><b>Read the passage, then answer the question.</b><br><br>Ravi woke up early on Saturday morning. He ate his breakfast quickly and ran to the park. His friends were already there. They played football until lunchtime. Then they all went home for lunch.</div>Which statement is TRUE?',
     options:['Ravi went to the park before eating breakfast.','Ravi played cricket with his friends.','Ravi had breakfast before going to the park.','Ravi stayed at the park for dinner.'],
     answer:'Ravi had breakfast before going to the park.',
-    hint:'Check the order of events — what did Ravi do first?',
-    explanation:'He "ate his breakfast quickly and ran to the park" — breakfast came before the park.' }),
+    hint:'Check the order of events - what did Ravi do first?',
+    explanation:'He "ate his breakfast quickly and ran to the park" - breakfast came before the park.' }),
 
   makeMCQ({ id:'g4eng-comp-054', chapterId:'g4eng-comprehension', subsection:'retrieval', difficulty:1,
     question:'<div style="background:#f0f9ff;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65"><b>Read the passage, then answer the question.</b><br><br>Maya loves reading books. Every evening, she sits under the mango tree in her garden. She reads for one hour before dinner. Her favourite books are about animals.</div>When does Maya read?',
     options:['Every morning','Every afternoon','Every evening','Every night'],
     answer:'Every evening',
     hint:'Look for the time word in the passage.',
-    explanation:'The passage says "Every evening, she sits under the mango tree" — that is when she reads.' }),
+    explanation:'The passage says "Every evening, she sits under the mango tree" - that is when she reads.' }),
 
   makeMCQ({ id:'g4eng-comp-055', chapterId:'g4eng-comprehension', subsection:'retrieval', difficulty:1,
     question:'<div style="background:#f0f9ff;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65"><b>Read the passage, then answer the question.</b><br><br>Maya loves reading books. Every evening, she sits under the mango tree in her garden. She reads for one hour before dinner. Her favourite books are about animals.</div>Where does Maya sit to read?',
@@ -265,14 +265,14 @@ STATIC_QUESTIONS.push(
     options:['Because school was cancelled','Because they had no homework','Because they were learning to grow plants','Because they got new books'],
     answer:'Because they were learning to grow plants',
     hint:'Think about what was happening in the garden that could make them happy.',
-    explanation:'The children were learning to water plants and plant seeds — this is what made them happy.' }),
+    explanation:'The children were learning to water plants and plant seeds - this is what made them happy.' }),
 
   makeMCQ({ id:'g4eng-comp-061', chapterId:'g4eng-comprehension', subsection:'main_idea', difficulty:3,
     question:'<div style="background:#f0f9ff;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65"><b>Read the passage, then answer the question.</b><br><br>The school garden was full of colourful flowers. The children watered the plants every morning. Mrs. Sharma taught them how to plant seeds. The children were very happy to learn.</div>What is the <b>best title</b> for this passage?',
     options:['A Day at the Beach','Looking After Our School Garden','Mrs. Sharma\'s Science Class','Colourful Flowers of Mauritius'],
     answer:'Looking After Our School Garden',
     hint:'A title must cover what the whole passage is about, not just one detail.',
-    explanation:'The whole passage describes how the children look after plants in the school garden — that is the best title.' }),
+    explanation:'The whole passage describes how the children look after plants in the school garden - that is the best title.' }),
 
   // ── Vocabulary & Word Study ────────────────────────────────────────────────
 
@@ -295,14 +295,14 @@ STATIC_QUESTIONS.push(
     options:['tiny','round','large','dark'],
     answer:'large',
     hint:'A synonym is a word with a very similar meaning.',
-    explanation:'"Large" means the same as "big" — both describe something of great size.' }),
+    explanation:'"Large" means the same as "big" - both describe something of great size.' }),
 
   makeMCQ({ id:'g4eng-vocab-053', chapterId:'g4eng-vocabulary', subsection:'synonyms', difficulty:1,
     question:'Which word means the <b>same</b> (synonym) as "fast"?',
     options:['slow','quiet','quick','soft'],
     answer:'quick',
     hint:'Think of another word for someone who moves with speed.',
-    explanation:'"Quick" means the same as "fast" — both mean moving or happening with speed.' }),
+    explanation:'"Quick" means the same as "fast" - both mean moving or happening with speed.' }),
 
   makeMCQ({ id:'g4eng-vocab-054', chapterId:'g4eng-vocabulary', subsection:'meaning', difficulty:1,
     question:'A <b>farmer</b> ___.',
@@ -344,7 +344,7 @@ STATIC_QUESTIONS.push(
     options:['cold and clean','very plentiful and fresh','very little, not enough','deep underground'],
     answer:'very little, not enough',
     hint:'Think about what a long dry season does to the water supply in a village.',
-    explanation:'"Scarce" means there is very little of something — not enough to meet the need.' }),
+    explanation:'"Scarce" means there is very little of something - not enough to meet the need.' }),
 
   makeMCQ({ id:'g4eng-vocab-060', chapterId:'g4eng-vocabulary', subsection:'meaning', difficulty:2,
     question:'Read the sentence. What does the underlined word mean?<br><br><i>"The children were <u>exhausted</u> after the long sports day."</i>',
@@ -357,7 +357,7 @@ STATIC_QUESTIONS.push(
     question:'Choose the <b>antonym</b> of the underlined word:<br><br><i>"The path through the forest was very <u>narrow</u>."</i>',
     options:['thin','long','wide','dark'],
     answer:'wide',
-    hint:'If a path is narrow, it is not very wide — what is the opposite?',
+    hint:'Narrow means there is very little space across. Which word means the opposite of that?',
     explanation:'The antonym (opposite) of "narrow" is "wide".' }),
 
   // ── Passages & Text Types ──────────────────────────────────────────────────
@@ -374,7 +374,7 @@ STATIC_QUESTIONS.push(
     options:['On Saturday','On a school day','On Sunday','Every weekend'],
     answer:'On Sunday',
     hint:'The very first sentence of the passage gives you the day.',
-    explanation:'The passage begins "Last Sunday, Meera\'s family drove to the beach" — it was a Sunday.' }),
+    explanation:'The passage begins "Last Sunday, Meera\'s family drove to the beach" - it was a Sunday.' }),
 
   makeMCQ({ id:'g4eng-psg-052', chapterId:'g4eng-passages', subsection:'story', difficulty:1,
     question:'<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a"><b style="color:#1e40af">Read the story, then answer the question.</b><br><br>Meera and her brother built a sandcastle near the water. When the waves came in, the sandcastle fell apart.</div>What happened to the sandcastle?',
@@ -387,7 +387,7 @@ STATIC_QUESTIONS.push(
     question:'<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a"><b style="color:#1e40af">Read the story, then answer the question.</b><br><br>When the waves came in, the sandcastle fell apart. Meera laughed and said, "Let us build another one!" By the end of the day, they had built three sandcastles.</div>What does Meera\'s reaction tell us about her?',
     options:['She was angry that the sandcastle broke.','She was upset and wanted to go home.','She was cheerful and did not give up easily.','She was tired and stopped playing.'],
     answer:'She was cheerful and did not give up easily.',
-    hint:'She laughed and wanted to try again — what does that show about her character?',
+    hint:'She laughed and wanted to try again - what does that show about her character?',
     explanation:'Meera laughed and wanted to build another castle, showing she was cheerful and persistent (she did not give up).' }),
 
   makeMCQ({ id:'g4eng-psg-054', chapterId:'g4eng-passages', subsection:'story', difficulty:2,
@@ -395,7 +395,7 @@ STATIC_QUESTIONS.push(
     options:['rough and stormy','still and peaceful, without big waves','very deep and cold','warm and sunny'],
     answer:'still and peaceful, without big waves',
     hint:'Think about what the sea looks like when there are no storms or strong winds.',
-    explanation:'"Calm" means still and peaceful — the sea had no big waves, storms, or strong winds.' }),
+    explanation:'"Calm" means still and peaceful - the sea had no big waves, storms, or strong winds.' }),
 
   makeMCQ({ id:'g4eng-psg-055', chapterId:'g4eng-passages', subsection:'story', difficulty:1,
     question:'<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a"><b style="color:#1e40af">Read the story, then answer the question.</b><br><br>Last Sunday, Meera\'s family drove to the beach at Blue Bay. Her father packed sandwiches and cold drinks in a big bag.</div>Who packed the food and drinks?',
@@ -430,20 +430,20 @@ STATIC_QUESTIONS.push(
     options:['very quickly, without stopping','carefully and softly, so as not to hurt it','loudly and roughly','slowly but carelessly'],
     answer:'carefully and softly, so as not to hurt it',
     hint:'Think about how you would handle a small, cold, frightened animal.',
-    explanation:'"Gently" means carefully and softly, without causing pain or fear — perfect for handling a small animal.' }),
+    explanation:'"Gently" means carefully and softly, without causing pain or fear - perfect for handling a small animal.' }),
 
   makeMCQ({ id:'g4eng-psg-060', chapterId:'g4eng-passages', subsection:'story', difficulty:2,
     question:'<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a"><b style="color:#1e40af">Read the story, then answer the question.</b><br><br>Tom found a small puppy near the school gate. The puppy was wet and shivering. Tom picked it up gently and carried it inside his jacket. He went straight to his teacher and asked for help.</div>What does Tom\'s behaviour tell us about him?',
     options:['He was afraid of animals.','He wanted to show the puppy to his friends.','He was kind and cared about the puppy.','He was in a hurry to get to his lesson.'],
     answer:'He was kind and cared about the puppy.',
     hint:'Why would someone carry a wet, shivering puppy gently in their jacket?',
-    explanation:'Tom handled the puppy carefully and went straight to get help — his actions show he was kind and cared about the animal.' }),
+    explanation:'Tom handled the puppy carefully and went straight to get help - his actions show he was kind and cared about the animal.' }),
 
   makeMCQ({ id:'g4eng-psg-061', chapterId:'g4eng-passages', subsection:'story', difficulty:3,
     question:'<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a"><b style="color:#1e40af">Read the story, then answer the question.</b><br><br><b>Tom and the Puppy</b><br><br>Tom found a small puppy near the school gate one morning. The puppy was wet and shivering from the cold rain. Tom picked it up gently and carried it inside his jacket. He went straight to his teacher, Mrs. Lee, and asked for help. Mrs. Lee let him put the puppy in a warm box lined with an old blanket. The puppy soon stopped shivering and fell fast asleep.</div>Which sentence best gives the <b>main idea</b> of this story?',
     options:['A puppy was left at a school gate in the rain.','Tom and his teacher helped a cold, wet puppy feel safe and warm.','Mrs. Lee gave Tom a box and a blanket for the puppy.','School animals are good for children to learn from.'],
     answer:'Tom and his teacher helped a cold, wet puppy feel safe and warm.',
     hint:'The main idea covers the whole story, not just one small detail.',
-    explanation:'The story is about how Tom found a cold puppy and, with Mrs. Lee\'s help, made it warm and safe — that is the main idea.' })
+    explanation:'The story is about how Tom found a cold puppy and, with Mrs. Lee\'s help, made it warm and safe - that is the main idea.' })
 
 );

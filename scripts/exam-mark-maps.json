@@ -1,0 +1,184 @@
+{
+ "grade6-science": {
+  "papers": "2022, 2023 and 2024 (50 marks each)",
+  "marks": {
+   "g6-animals": 40,
+   "g6-materials": 34,
+   "g6-air": 18,
+   "g6-energy": 16,
+   "g6-conservation": 13,
+   "g6-plants": 13,
+   "g6-ecosystems": 10,
+   "g6-solar-system": 6
+  },
+  "floor": {
+   "g6sci-enr-ecosystems": 1,
+   "g6sci-enr-solar": 1
+  }
+ },
+ "grade6-history": {
+  "papers": "2022, 2023 and 2024 (50 marks each)",
+  "marks": {
+   "g6-land-use": 43,
+   "g6-slaves-immigrants": 30,
+   "g6-natural-hazards": 24,
+   "g6-cultural-heritage": 16,
+   "g6enr-symbols": 14,
+   "g6-map-skills": 11,
+   "g6-independence": 9,
+   "g6enr-personalities": 3
+  },
+  "floor": {
+   "g6enr-world": 1
+  }
+ },
+ "grade6-maths": {
+  "papers": "2023 and 2024 (100 marks each)",
+  "marks": {
+   "g6-ratio-pct": 33,
+   "g6-four-ops": 29,
+   "g6-time-speed": 23,
+   "g6-measure": 21,
+   "g6-area-vol": 20,
+   "g6-graphs": 19,
+   "g6-numeration": 15,
+   "g6-geometry": 14,
+   "g6-fractions": 11,
+   "g6-factors-hcf": 8,
+   "g6-decimals": 7
+  },
+  "floor": {}
+ },
+ "grade5-science": {
+  "papers": "2024 and 2025 (50 marks each)",
+  "marks": {
+   "electricity": 20,
+   "energy": 20,
+   "plants": 19,
+   "water-matter": 18,
+   "conservation": 9,
+   "animals": 9,
+   "g5sci-enr-endemic": 5
+  },
+  "floor": {
+   "g5sci-enr-energy": 1
+  }
+ },
+ "grade5-history": {
+  "papers": "2024 and 2025 (50 marks each)",
+  "marks": {
+   "settlement": 24,
+   "g5ge-weather": 14,
+   "map-skills": 9,
+   "discovery": 9,
+   "port-louis": 9,
+   "volcanism": 8,
+   "env-problems": 8,
+   "g5enr-world": 8,
+   "natural-env": 7,
+   "g5enr-personalities": 3,
+   "trade-agri": 1
+  },
+  "floor": {
+   "g5enr-landmarks": 1
+  }
+ },
+ "grade5-maths": {
+  "papers": "2024 and 2025 (100 marks each)",
+  "marks": {
+   "four_ops": 28,
+   "money": 27,
+   "fractions": 23,
+   "geometry": 16,
+   "ratio": 16,
+   "length": 15,
+   "graphs": 13,
+   "numeration": 13,
+   "area": 10,
+   "decimals": 8,
+   "time": 8,
+   "capacity": 7,
+   "average": 5,
+   "mass": 5,
+   "conversions": 2,
+   "square_nums": 2,
+   "powers": 2
+  },
+  "floor": {
+   "percentage": 1
+  }
+ },
+ "grade5-english": {
+  "papers": "2023, 2024 and 2025 (51 scoring items)",
+  "marks": {
+   "eng-verbs": 12,
+   "eng-sentences": 7,
+   "eng-comprehension": 7,
+   "eng-vocabulary": 7,
+   "eng-writing": 8,
+   "eng-nouns": 6,
+   "eng-passages": 3,
+   "eng-adjectives": 1
+  },
+  "floor": {
+   "eng-spelling": 1,
+   "eng-enr-joining": 1
+  }
+ },
+ "grade5-french": {
+  "papers": "2025 (100 marks, 90 of them reachable)",
+  "marks": {
+   "fr-lecture": 14,
+   "fr-images": 15,
+   "fr-vocabulaire": 10,
+   "g5fr-formation": 10,
+   "fr-enr-relier": 10,
+   "fr-grammaire": 8,
+   "fr-textes": 6,
+   "fr-verbes-present": 4.25,
+   "fr-passe-compose": 4.25,
+   "g5fr-passe-simple": 4.25,
+   "g5fr-subjonctif": 4.25
+  },
+  "floor": {
+   "fr-noms": 1,
+   "fr-adjectifs": 1,
+   "fr-pronoms": 1,
+   "g5fr-textes-trous": 0
+  }
+ },
+ "grade6-french": {
+  "papers": "2024 (100 marks, 90 of them reachable)",
+  "marks": {
+   "g6fr-formation": 20,
+   "g6fr-lecture": 18,
+   "g6fr-argumentation": 10,
+   "g6fr-enr-relier": 9,
+   "g6fr-textes": 7,
+   "g6fr-subordonnees": 6,
+   "g6fr-images": 6,
+   "g6fr-imparfait": 2.8,
+   "g6fr-futur": 2.8,
+   "g6fr-conditionnel": 2.8,
+   "g6fr-pqp": 2.8,
+   "g6fr-subjunctif": 2.8
+  },
+  "floor": {
+   "g6fr-textes-trous": 0
+  }
+ },
+ "grade6-english": {
+  "papers": "2024 (100 marks)",
+  "marks": {
+   "g6eng-comprehension": 18,
+   "g6eng-writing": 16,
+   "g6eng-vocabulary": 15,
+   "g6eng-clauses": 14,
+   "g6eng-verbs": 12,
+   "g6eng-nouns": 9,
+   "g6eng-enr-joining": 9,
+   "g6eng-passages": 7
+  },
+  "floor": {}
+ }
+}

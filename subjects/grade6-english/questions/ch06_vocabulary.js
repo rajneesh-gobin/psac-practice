@@ -80,7 +80,7 @@ STATIC_QUESTIONS.push(
     question:'The Greek root "bio" means LIFE. In which word is this root NOT present?',
     options:['biology','biography','biosphere','bibliography'],
     answer:'bibliography',
-    hint:'"Bibliography" - break it apart: biblio + graphy. What does "biblio" mean?',
+    hint:'Break each word into its roots. One of them opens with a root meaning "book", not "life".',
     explanation:'"<b>Bibliography</b>" - "biblio" comes from Greek "biblion" (book), not "bios" (life). So bibliography = list of books, not related to "life". Biology (study of life), biography (writing about a life), biosphere (the sphere of life on Earth) - all from bios.' })
 
 );
@@ -91,7 +91,7 @@ STATIC_QUESTIONS.push(
     question:'The Latin root "dict" means SAY or SPEAK. Which word does NOT come from this root?',
     options:['dictate','dictionary','predict','depict'],
     answer:'depict',
-    hint:'"Depict" - think about what it means. Does it relate to speaking?',
+    hint:'Three of these are about saying or telling. One is about showing a picture.',
     explanation:'"<b>Depict</b>" does NOT come from "dict" (say) - it comes from Latin "depingere" (to paint). Words from "dict": <b>dictate</b> (to say aloud for someone to write), <b>dictionary</b> (a book of words/sayings), <b>predict</b> (to say in advance), <b>contradict</b> (to say the opposite), <b>verdict</b> (true saying in court). The MIE Grade 6 textbook teaches Latin and Greek roots as a vocabulary strategy.' }),
 
   makeMCQ({ id:'g6eng-voc-012', chapterId:'g6eng-vocabulary', subsection:'prefix_suffix', difficulty:2,
@@ -125,7 +125,7 @@ STATIC_QUESTIONS.push(
     question:'What does the SUFFIX "-ology" mean? (e.g., biology, geology, archaeology)',
     options:['the practice of','the study of','the fear of','the love of'],
     answer:'the study of',
-    hint:'"Bio" (life) + "ology" = biology = the study of life.',
+    hint:'Biology, geology and archaeology are all subjects you could study at school or university. What do they have in common?',
     explanation:'The suffix "<b>-ology</b>" means <b>the study of</b>: <b>bio</b>logy (study of life), <b>geo</b>logy (study of the Earth), <b>archaeo</b>logy (study of ancient things), <b>psycho</b>logy (study of the mind), <b>zoo</b>logy (study of animals). Other important suffixes from MIE Grade 6: <b>-ist</b> (one who does: scientist), <b>-tion</b> (act of: education), <b>-ful</b> (full of: helpful), <b>-less</b> (without: helpless).' }),
 
   makeMCQ({ id:'g6eng-voc-017', chapterId:'g6eng-vocabulary', subsection:'confusables', difficulty:2,
@@ -139,7 +139,7 @@ STATIC_QUESTIONS.push(
     question:'The word "METAMORPHOSIS" comes from Greek "meta" (change) + "morphe" (form/shape). Which word shares the root "morph"?',
     options:['metaphor','morphology','microphone','magnificent'],
     answer:'morphology',
-    hint:'"Morphology" - look for the "morph" root meaning shape/form.',
+    hint:'Look inside each option for the root "morph", meaning shape or form.',
     explanation:'"<b>Morphology</b>" (the study of word forms/shapes) contains the root "morph" (form/shape). Other words with this root: <b>morph</b> (to transform), <b>amorphous</b> (shapeless), <b>poly</b>morph (many forms). "Metaphor" contains "meta" but uses a different root for the second part (phor = to carry). Knowing Greek roots helps decode unfamiliar words in PSAC comprehension passages.' }),
 
   makeMCQ({ id:'g6eng-voc-019', chapterId:'g6eng-vocabulary', subsection:'meaning', difficulty:3,
@@ -159,70 +159,70 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-voc-020', chapterId:'g6eng-vocabulary', subsection:'meaning', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg" alt="a large government building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name for a building where a country\'s elected representatives meet to debate and make laws?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/palace-of-westminster-from-the-dome-on-methodist-central-hal.jpg" alt="a large government building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name for a building where a country\'s elected representatives meet to debate and make laws?</b>',
     options:['cathedral','embassy','palace','parliament'],
     answer:'parliament',
     hint:'In Mauritius, this institution is called the National Assembly.',
     explanation:'"<b>Parliament</b>" is the institution (and building) where elected representatives gather to debate and create laws. In Mauritius it is called the <b>National Assembly</b>. In the United Kingdom it is the <b>Houses of Parliament</b>. The word comes from Old French "parler" (to speak).' }),
 
   makeMCQ({ id:'g6eng-voc-021', chapterId:'g6eng-vocabulary', subsection:'meaning', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Iceberg_in_the_Arctic_with_its_surrounding_sea.jpg" alt="a large mass of ice" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is a large mass of ice floating in the ocean called?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/iceberg-greenland-sea.jpg" alt="a large mass of ice" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is a large mass of ice floating in the ocean called?</b>',
     options:['glacier','avalanche','blizzard','iceberg'],
     answer:'iceberg',
-    hint:'Only about 10% of this is visible above water — the rest is hidden below the surface.',
-    explanation:'An "<b>iceberg</b>" is a large floating mass of ice broken off from a glacier. About 90% of an iceberg is below the water surface — this gave rise to the idiom "tip of the iceberg" (a small visible part of a much larger problem). A <b>glacier</b> is a slow-moving mass of ice on land.' }),
+    hint:'Only about 10% of this is visible above water - the rest is hidden below the surface.',
+    explanation:'An "<b>iceberg</b>" is a large floating mass of ice broken off from a glacier. About 90% of an iceberg is below the water surface - this gave rise to the idiom "tip of the iceberg" (a small visible part of a much larger problem). A <b>glacier</b> is a slow-moving mass of ice on land.' }),
 
   makeMCQ({ id:'g6eng-voc-022', chapterId:'g6eng-vocabulary', subsection:'picture_words', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lighthouse.jpg" alt="a tall tower by the sea" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the purpose of this structure found on coastlines?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/lighthouse.jpg" alt="a tall tower by the sea" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the purpose of this structure found on coastlines?</b>',
     options:['to store fresh water','to house a coast guard station','to measure wind speed','to guide ships safely with a light signal'],
     answer:'to guide ships safely with a light signal',
     hint:'It flashes a powerful light at night to warn sailors of rocks and coastlines.',
-    explanation:'A "<b>lighthouse</b>" is a tower with a powerful light that <b>guides ships safely</b> — warning them of rocks, reefs and coastlines, especially at night or in fog. It is a compound noun: light + house. Mauritius has several historic lighthouses, including the one at Île aux Fouquets.' }),
+    explanation:'A "<b>lighthouse</b>" is a tower with a powerful light that <b>guides ships safely</b> - warning them of rocks, reefs and coastlines, especially at night or in fog. It is a compound noun: light + house. Mauritius has several historic lighthouses, including the one at Île aux Fouquets.' }),
 
   makeMCQ({ id:'g6eng-voc-023', chapterId:'g6eng-vocabulary', subsection:'picture_words', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cracked_earth.jpg" alt="a dry landscape" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What word describes a long period with little or no rainfall, causing conditions like those shown?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/cracked-earth.jpg" alt="a dry landscape" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What word describes a long period with little or no rainfall, causing conditions like those shown?</b>',
     options:['flood','blizzard','hurricane','drought'],
     answer:'drought',
     hint:'The cracked, dry soil tells you there has been no rain for a very long time.',
     explanation:'A "<b>drought</b>" is a prolonged period of <b>abnormally low rainfall</b>, leading to water shortages and dried-out land. The cracked earth in the picture is a classic sign of drought. A drought affects agriculture, wildlife and water supply. Antonym: flood. Related adjective: <b>arid</b> (very dry climate).' }),
 
   makeMCQ({ id:'g6eng-voc-024', chapterId:'g6eng-vocabulary', subsection:'picture_words', difficulty:3,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Barometer.jpg" alt="a scientific instrument" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What does this instrument measure?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/barometer.jpg" alt="a scientific instrument" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What does this instrument measure?</b>',
     options:['temperature','wind speed','rainfall','atmospheric pressure'],
     answer:'atmospheric pressure',
-    hint:'Meteorologists use it to predict weather — falling readings often mean rain is coming.',
-    explanation:'A "<b>barometer</b>" measures <b>atmospheric pressure</b> — the weight of air pressing down on the Earth\'s surface. When pressure falls, unsettled or rainy weather is likely; when it rises, fair weather is expected. From Greek: <i>baros</i> (weight) + <i>metron</i> (measure). Used daily by meteorologists to forecast weather.' }),
+    hint:'Meteorologists use it to predict weather - falling readings often mean rain is coming.',
+    explanation:'A "<b>barometer</b>" measures <b>atmospheric pressure</b> - the weight of air pressing down on the Earth\'s surface. When pressure falls, unsettled or rainy weather is likely; when it rises, fair weather is expected. From Greek: <i>baros</i> (weight) + <i>metron</i> (measure). Used daily by meteorologists to forecast weather.' }),
 
   makeMCQ({ id:'g6eng-voc-025', chapterId:'g6eng-vocabulary', subsection:'picture_words', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Solar_eclipse_1999_4.jpg" alt="an astronomical event" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this astronomical event called?</b>',
-    options:['lunar eclipse','aurora borealis','solar flare','solar eclipse'],
+    question:'Fill in the blank with the correct word.<br>"The sky darkened at midday as the moon passed in front of the sun - a total ................ ."',
+    options:['solar eclipse','solar flare','lunar eclipse','aurora borealis'],
     answer:'solar eclipse',
-    hint:'The Moon passes between the Earth and the Sun, temporarily blocking the Sun\'s light.',
-    explanation:'A "<b>solar eclipse</b>" occurs when the Moon passes between the Earth and the Sun, blocking sunlight and casting a shadow on Earth. "Solar" comes from Latin <i>sol</i> (sun). A <b>lunar eclipse</b> is different — it happens when the Earth blocks sunlight from reaching the Moon. A <b>total</b> solar eclipse completely blocks the Sun; a <b>partial</b> eclipse blocks only part of it.' })
+    hint:'Which body is being hidden - the sun or the moon?',
+    explanation:'When the moon hides the sun it is a <b>solar eclipse</b>. In a lunar eclipse it is the moon that is darkened, by the Earth\'s shadow.' })
 
 );
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-voc-026', chapterId:'g6eng-vocabulary', subsection:'picture_words', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shirt.jpg" alt="an item of clothing" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this item of clothing called?</b>',
-    options:['jacket','shirt','sweater','vest'],
+    question:'Fill in the blank with the correct word.<br>"He buttoned his ................ at the collar and tucked it in neatly."',
+    options:['shirt','vest','sweater','jacket'],
     answer:'shirt',
-    hint:'It is worn on the upper body and usually has a collar and buttons.',
-    explanation:'A "<b>shirt</b>" is a garment worn on the upper body, typically with a collar, sleeves and a full or partial opening down the front fastened with buttons.' }),
+    hint:'Which of these has a collar and buttons all the way down?',
+    explanation:'A <b>shirt</b> has a collar and buttons down the front. A vest is worn underneath and a sweater is pulled over the head.' }),
 
   makeMCQ({ id:'g6eng-voc-027', chapterId:'g6eng-vocabulary', subsection:'picture_words', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shoe.jpg" alt="a piece of footwear" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this piece of footwear called?</b>',
-    options:['sandal','boot','shoe','slipper'],
+    question:'Fill in the blank with the correct word.<br>"Unlike a boot, a ................ does not cover the ankle."',
+    options:['shoe','sandal','slipper','sock'],
     answer:'shoe',
-    hint:'It is worn on the foot for walking and usually has laces or a fastening.',
-    explanation:'A "<b>shoe</b>" is an item of footwear designed to protect and support the foot while walking. Related footwear words: "boot" (covers the ankle too), "sandal" (open-toed), "slipper" (worn indoors).' }),
+    hint:'It is worn outdoors, is closed at the toe, and stops below the ankle.',
+    explanation:'A <b>shoe</b> is closed footwear that stops below the ankle. A sandal is open, and a slipper is worn indoors.' }),
 
   makeMCQ({ id:'g6eng-voc-028', chapterId:'g6eng-vocabulary', subsection:'picture_words', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Trousers.jpg" alt="an item of clothing" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is this item of clothing called (in British English)?</b>',
+    question:'Fill in the blank with the correct word.<br>"In British English, the garment covering both legs to the ankle is called ................ , not pants."',
     options:['trousers','shorts','skirt','dress'],
     answer:'trousers',
-    hint:'They are a two-legged garment worn from the waist to the ankles. In American English, this word is different.',
-    explanation:'"<b>Trousers</b>" is the British English word for this garment covering both legs separately, from the waist to the ankles. In American English, the same item is called "pants". Like "scissors" and "glasses", "trousers" is always plural — we say "a pair of trousers".' })
+    hint:'The clue is "to the ankle" - and that Americans call them something else.',
+    explanation:'British English calls them <b>trousers</b>; American English calls them pants. Shorts stop above the knee.' })
 
 );

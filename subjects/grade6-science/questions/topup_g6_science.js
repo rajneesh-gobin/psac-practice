@@ -1,5 +1,5 @@
 'use strict';
-// Grade 6 Science — top-up questions.
+// Grade 6 Science - top-up questions.
 
 // --- g6-conservation (8 questions: g6sc-cons-050..057) ---
 STATIC_QUESTIONS.push(
@@ -22,7 +22,7 @@ STATIC_QUESTIONS.push(
     options:['The soil becomes more fertile','Soil erosion increases','More water is stored in the soil','The soil temperature decreases'],
     answer:'Soil erosion increases',
     hint:'Without tree roots, what holds the soil in place during heavy rain?',
-    explanation:'Tree roots bind soil particles together. When trees are removed, rainfall washes the topsoil away — a process called soil erosion. This damages farmland and causes flooding.' }),
+    explanation:'Tree roots bind soil particles together. When trees are removed, rainfall washes the topsoil away - a process called soil erosion. This damages farmland and causes flooding.' }),
 
   makeMCQ({ id:'g6sc-cons-053', chapterId:'g6-conservation', subsection:'pollution', difficulty:1,
     question:'Which type of pollution is caused by oil spills at sea?',
@@ -32,7 +32,7 @@ STATIC_QUESTIONS.push(
     explanation:'Oil spills pollute water, coating the feathers of seabirds, clogging the gills of fish, and smothering coral reefs. They are a major form of water pollution.' }),
 
   makeMCQ({ id:'g6sc-cons-054', chapterId:'g6-conservation', subsection:'recycling', difficulty:2,
-    question:'Of the 3 Rs — Reduce, Reuse, Recycle — which is considered the MOST effective way to conserve resources?',
+    question:'Of the 3 Rs - Reduce, Reuse, Recycle - which is considered the MOST effective way to conserve resources?',
     options:['Recycle','Reuse','Reduce','All three are equally effective'],
     answer:'Reduce',
     hint:'The best approach is to avoid creating waste in the first place.',
@@ -43,18 +43,14 @@ STATIC_QUESTIONS.push(
     options:['Plastic waste','Water used','Greenhouse gases','Noise'],
     answer:'Greenhouse gases',
     hint:'It is measured in tonnes of CO₂ equivalent.',
-    explanation:'A carbon footprint measures the total greenhouse gases (mainly CO₂) released by a person\'s actions — such as travel, electricity use, and food choices. Reducing it helps slow climate change.' }),
+    explanation:'A carbon footprint measures the total greenhouse gases (mainly CO₂) released by a person\'s actions - such as travel, electricity use, and food choices. Reducing it helps slow climate change.' }),
 
   makeMCQ({ id:'g6sc-cons-056', chapterId:'g6-conservation', subsection:'pollution', difficulty:3,
-    question:'Which of the following best explains how the greenhouse effect leads to global warming?',
-    options:[
-      'The ozone layer reflects sunlight back into space, heating the surface',
-      'Carbon dioxide in the atmosphere traps heat that would otherwise escape into space',
-      'The Sun produces more energy than it did in the past',
-      'Oceans absorb all the heat from the Sun and then release it'],
-    answer:'Carbon dioxide in the atmosphere traps heat that would otherwise escape into space',
+    question:'How does the greenhouse effect lead to global warming?',
+    options:['CO₂ traps heat that would escape', 'The Sun makes more energy than before', 'Oceans absorb and re-release all heat', 'The ozone layer reflects light down'],
+    answer:'CO₂ traps heat that would escape',
     hint:'Think about what CO₂ does to heat trying to leave Earth\'s atmosphere.',
-    explanation:'CO₂ and other greenhouse gases act like a blanket — they let sunlight through to warm Earth\'s surface, but trap the resulting heat (infrared radiation) so it cannot escape into space, causing temperatures to rise.' }),
+    explanation:'CO₂ and other greenhouse gases act like a blanket - they let sunlight through to warm Earth\'s surface, but trap the resulting heat (infrared radiation) so it cannot escape into space, causing temperatures to rise.' }),
 
   makeMCQ({ id:'g6sc-cons-057', chapterId:'g6-conservation', subsection:'pollution', difficulty:4,
     question:'A factory produces 120 kg of waste per day. After introducing a recycling programme, it recycles 35% of its waste. How many kilograms of waste does it now send to landfill each day?',
@@ -78,17 +74,17 @@ STATIC_QUESTIONS.push(
     options:['7 days','14 days','28 days','365 days'],
     answer:'28 days',
     hint:'This is approximately one lunar month.',
-    explanation:'The Moon takes about 28 days (roughly 4 weeks) to orbit Earth once. This is why we see a complete cycle of moon phases — from new moon to full moon and back — each month.' }),
+    explanation:'The Moon takes about 28 days (roughly 4 weeks) to orbit Earth once. This is why we see a complete cycle of moon phases - from new moon to full moon and back - each month.' }),
 
   makeMCQ({ id:'g6sc-sol-052', chapterId:'g6-solar-system', subsection:'sun_moon', difficulty:2,
     question:'During a lunar eclipse, which object comes between the Sun and the Moon?',
     options:['Venus','Mars','Earth','A comet'],
     answer:'Earth',
-    hint:'The Moon passes through Earth\'s shadow.',
+    hint:'Something must block the sunlight to cast a shadow on the Moon. Which of these is both big enough and in the right place?',
     explanation:'A lunar eclipse occurs when Earth moves directly between the Sun and the Moon, casting Earth\'s shadow on the Moon. The Moon can appear red-orange during a total lunar eclipse.' }),
 
   makeMCQ({ id:'g6sc-sol-053', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
-    question:'Which motion of Earth causes the seasons — NOT day and night?',
+    question:'Which motion of Earth causes the seasons - NOT day and night?',
     options:[
       'Rotation on its own axis',
       'Revolution around the Sun',
@@ -105,7 +101,7 @@ STATIC_QUESTIONS.push(
     hint:'Pluto was reclassified as a dwarf planet in 2006.',
     explanation:'There are 8 planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune. Pluto was reclassified as a dwarf planet in 2006 and is no longer counted.' }),
 
-  makeMCQ({ id:'g6sc-sol-055', chapterId:'g6-solar-system', subsection:'planets', difficulty:3,
+  makeMCQ({ id:'g6sc-sol-055', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
     question:'During which phase of the Moon can we NOT see it from Earth, because its unlit side faces us?',
     options:['Full Moon','First Quarter','New Moon','Last Quarter'],
     answer:'New Moon',
@@ -120,7 +116,7 @@ STATIC_QUESTIONS.push(
     options:['Bougainvillea','Trochetia boutoniana','Latania palm','Tambourissa'],
     answer:'Trochetia boutoniana',
     hint:'Look for the option that is a native Mauritian endemic species rather than an introduced ornamental plant.',
-    explanation:'Trochetia boutoniana is the national flower of Mauritius. It is an endemic species — found only in Mauritius — and grows mainly in the Black River Gorges region.' }),
+    explanation:'Trochetia boutoniana is the national flower of Mauritius. It is an endemic species - found only in Mauritius - and grows mainly in the Black River Gorges region.' }),
 
   makeMCQ({ id:'g6sc-plt-051', chapterId:'g6-plants', subsection:'growth', difficulty:2,
     question:'In a food chain, what term is used for plants that make their own food using sunlight?',
@@ -131,13 +127,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sc-plt-052', chapterId:'g6-plants', subsection:'parts', difficulty:2,
     question:'What is the role of decomposers such as fungi and bacteria in an ecosystem?',
-    options:[
-      'They produce food using sunlight',
-      'They hunt and eat other animals',
-      'They break down dead organisms and return nutrients to the soil',
-      'They pollinate flowers so that plants can reproduce'],
-    answer:'They break down dead organisms and return nutrients to the soil',
-    hint:'They "decompose" — they break things down.',
+    options:['They return nutrients to the soil', 'They pollinate flowers for plants', 'They produce food using sunlight', 'They hunt and eat other animals'],
+    answer:'They return nutrients to the soil',
+    hint:'They "decompose" - they break things down.',
     explanation:'Decomposers break down dead plants and animals, releasing nutrients back into the soil. These nutrients are then absorbed by plants, completing the nutrient cycle in an ecosystem.' }),
 
   makeMCQ({ id:'g6sc-plt-053', chapterId:'g6-plants', subsection:'photosynthesis', difficulty:1,
@@ -153,7 +145,7 @@ STATIC_QUESTIONS.push(
       'The grass would die because frogs fertilise it',
       'Grasshopper numbers would increase and snake numbers would decrease',
       'Snake numbers would increase because they now eat more grasshoppers',
-      'Nothing would change — each organism feeds independently'],
+      'Nothing would change - each organism feeds independently'],
     answer:'Grasshopper numbers would increase and snake numbers would decrease',
     hint:'Who eats grasshoppers? What do snakes eat in this chain?',
     explanation:'Without frogs, grasshoppers have no predator, so their numbers rise. Snakes lose their main food source (frogs), so their numbers fall. This demonstrates interdependence in food chains.' })
@@ -170,19 +162,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sc-enr-eco-051', chapterId:'g6sci-enr-ecosystems', subsection:'habitats', difficulty:1,
     question:'What does the term "endemic" mean when describing a plant or animal?',
-    options:[
-      'Found all over the world',
-      'Endangered and nearly extinct',
-      'Found naturally only in one specific place on Earth',
-      'Imported from another country'],
-    answer:'Found naturally only in one specific place on Earth',
-    hint:'The Pink Pigeon is endemic to Mauritius — it lives nowhere else.',
+    options:['Found naturally in only one place', 'Imported from another country', 'Endangered and nearly extinct', 'Found all over the world'],
+    answer:'Found naturally in only one place',
+    hint:'The Pink Pigeon is endemic to Mauritius - it lives nowhere else.',
     explanation:'"Endemic" means a species occurs naturally only in one particular region. The Mauritius Kestrel, Echo Parakeet, and Pink Pigeon are all endemic to Mauritius.' }),
 
   makeMCQ({ id:'g6sc-enr-eco-052', chapterId:'g6sci-enr-ecosystems', subsection:'habitats', difficulty:2,
     question:'What is the main cause of coral bleaching in Mauritius\'s lagoons?',
-    options:['Overfishing reducing the number of fish','Rising sea-water temperature linked to climate change','Underwater earthquakes shaking the reef','Excess sunlight during summer'],
-    answer:'Rising sea-water temperature linked to climate change',
+    options:['Rising sea temperature from warming', 'Underwater earthquakes shaking reefs', 'Overfishing reducing the fish stocks', 'Too much sunshine during summer'],
+    answer:'Rising sea temperature from warming',
     hint:'This threat is linked to global warming.',
     explanation:'Coral bleaching occurs when ocean temperatures rise above normal. The coral expels the colourful algae living inside it, turning white (bleaching). Without the algae, coral may die.' }),
 
@@ -201,13 +189,9 @@ STATIC_QUESTIONS.push(
     explanation:'Black River Gorges National Park covers about 6,500 hectares of native forest. It is the last refuge for endemic birds like the Echo Parakeet, Pink Pigeon, and Mauritius Kestrel.' }),
 
   makeMCQ({ id:'g6sc-enr-eco-055', chapterId:'g6sci-enr-ecosystems', subsection:'habitats', difficulty:2,
-    question:'What is an invasive species?',
-    options:[
-      'A species that has lived in Mauritius since before humans arrived',
-      'A non-native species introduced from elsewhere that spreads and harms native wildlife',
-      'A species that is endangered and needs legal protection',
-      'A species that only survives in ocean ecosystems'],
-    answer:'A non-native species introduced from elsewhere that spreads and harms native wildlife',
+    question:'What is an INVASIVE species?',
+    options:['A non-native species that harms wildlife', 'A species living here before humans', 'A species that is endangered by law', 'A species found only in the ocean'],
+    answer:'A non-native species that harms wildlife',
     hint:'They come from outside and outcompete native species.',
     explanation:'Invasive species are non-native organisms introduced to an area (often by humans) that spread rapidly and damage local ecosystems by competing for food, space, and resources.' }),
 
@@ -230,15 +214,11 @@ STATIC_QUESTIONS.push(
     explanation:'Fewer Echo Parakeets means caterpillars have less predation, so they increase. Hawks lose a food source, so their numbers fall. This shows how interdependence links every level of a food chain.' }),
 
   makeMCQ({ id:'g6sc-enr-eco-058', chapterId:'g6sci-enr-ecosystems', subsection:'habitats', difficulty:2,
-    question:'Fertiliser from farmland runs into a lagoon, causing a rapid algae bloom. What problem does this create for the lagoon ecosystem?',
-    options:[
-      'More fish can live in the lagoon because algae is a food source',
-      'The water becomes cleaner and clearer',
-      'Algae blocks sunlight, killing seagrass, and uses up oxygen as it decomposes',
-      'Coral reefs grow faster when nutrients increase'],
-    answer:'Algae blocks sunlight, killing seagrass, and uses up oxygen as it decomposes',
+    question:'Fertiliser runs off farmland into a lagoon and algae bloom. What problem does this cause?',
+    options:['Algae blocks light and uses up oxygen', 'Coral reefs grow faster with nutrients', 'More fish live there because of algae', 'The water becomes cleaner and clearer'],
+    answer:'Algae blocks light and uses up oxygen',
     hint:'Too much algae prevents light from reaching the seabed.',
-    explanation:'Dense algae blocks sunlight needed by seagrass. When the algae dies and decomposes, bacteria use up oxygen in the water, suffocating fish and other marine life — a process called eutrophication.' }),
+    explanation:'Dense algae blocks sunlight needed by seagrass. When the algae dies and decomposes, bacteria use up oxygen in the water, suffocating fish and other marine life - a process called eutrophication.' }),
 
   makeMCQ({ id:'g6sc-enr-eco-059', chapterId:'g6sci-enr-ecosystems', subsection:'food_webs', difficulty:1,
     question:'In the food chain "Seagrass → Sea turtle → Tiger shark", which organism is the primary consumer?',
@@ -249,12 +229,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sc-enr-eco-060', chapterId:'g6sci-enr-ecosystems', subsection:'habitats', difficulty:2,
     question:'Why is biodiversity important in an ecosystem?',
-    options:[
-      'It makes ecosystems look more colourful and attractive',
-      'A greater variety of species makes an ecosystem more stable and resilient to change',
-      'It reduces competition so individual species grow larger',
-      'It means there are always more predators than prey'],
-    answer:'A greater variety of species makes an ecosystem more stable and resilient to change',
+    options:['A variety of species makes it stable', 'It reduces competition between species', 'It makes an ecosystem look colourful', 'It means predators outnumber prey'],
+    answer:'A variety of species makes it stable',
     hint:'Think about what happens when one species disappears in a diverse ecosystem versus a simple one.',
     explanation:'High biodiversity means if one species disappears, others can partially fill its role, keeping the ecosystem functioning. A low-biodiversity ecosystem collapses more easily when one species is lost.' }),
 
@@ -273,17 +249,13 @@ STATIC_QUESTIONS.push(
       'Treating sewage properly and reducing fertiliser run-off from farmland',
       'Removing all fish from the lagoon so coral is undisturbed'],
     answer:'Treating sewage properly and reducing fertiliser run-off from farmland',
-    hint:'Pollution is the main threat — so reducing it is the solution.',
+    hint:'Pollution is the main threat - so reducing it is the solution.',
     explanation:'Treating sewage and managing fertiliser run-off prevents excess nutrients from entering the lagoon, protecting seagrass and coral from algae blooms and chemical pollution.' }),
 
   makeMCQ({ id:'g6sc-enr-eco-063', chapterId:'g6sci-enr-ecosystems', subsection:'habitats', difficulty:3,
-    question:'Which example BEST demonstrates the concept of interdependence in an ecosystem?',
-    options:[
-      'A plant grows towards sunlight',
-      'Bees pollinate flowers; without bees, flowers cannot seed; without seeds, many animals lose their food source',
-      'A fish swims away quickly when a shark approaches',
-      'A tree drops its leaves during the dry season'],
-    answer:'Bees pollinate flowers; without bees, flowers cannot seed; without seeds, many animals lose their food source',
+    question:'Which example BEST shows interdependence in an ecosystem?',
+    options:['Bees pollinate flowers that feed animals', 'A tree drops its leaves in the dry season', 'A plant grows towards the sunlight', 'A fish swims away from a shark'],
+    answer:'Bees pollinate flowers that feed animals',
     hint:'Which option shows a chain of effects linking multiple different species?',
     explanation:'The bee-flower example shows interdependence across species: bees need nectar, flowers need pollination, and animals need the resulting fruit. Remove one, and the whole chain is affected.' })
 );
@@ -320,12 +292,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sc-enr-sol-054', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:2,
     question:'Why does Uranus appear blue-green in colour when viewed from space?',
-    options:[
-      'It is covered with shallow liquid oceans',
-      'Methane in its atmosphere absorbs red light and reflects blue-green light',
-      'Its icy surface reflects only blue and green wavelengths',
-      'It reflects light from the blue planet Neptune beside it'],
-    answer:'Methane in its atmosphere absorbs red light and reflects blue-green light',
+    options:['Methane in its atmosphere absorbs red light', 'Its icy surface reflects only blue light', 'It reflects light from Neptune nearby', 'It is covered by shallow blue oceans'],
+    answer:'Methane in its atmosphere absorbs red light',
     hint:'The same gas gives Neptune its deep blue colour.',
     explanation:'Uranus contains methane (CH₄) in its upper atmosphere. Methane absorbs red wavelengths of sunlight and reflects blue-green wavelengths back, giving Uranus its distinctive colour.' }),
 
@@ -365,7 +333,7 @@ STATIC_QUESTIONS.push(
     question:'Mars has two small moons. What are their names?',
     options:['Io and Europa','Titan and Triton','Phobos and Deimos','Ganymede and Callisto'],
     answer:'Phobos and Deimos',
-    hint:'Both names come from Greek mythology — they are the sons of Ares (Mars).',
+    hint:'Both names come from Greek mythology - they are the sons of Ares (Mars).',
     explanation:'Mars\'s two moons are Phobos (fear) and Deimos (dread), named after the sons of Ares, the Greek god of war. They are much smaller and less regular in shape than Earth\'s Moon.' }),
 
   makeMCQ({ id:'g6sc-enr-sol-060', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:2,
@@ -375,12 +343,12 @@ STATIC_QUESTIONS.push(
     hint:'This storm feature has been observed through telescopes since the 1600s.',
     explanation:'Jupiter\'s Great Red Spot is a giant anticyclonic storm wider than Earth. It has been observed by astronomers for at least 350 years and is one of the most recognisable features in the Solar System.' }),
 
-  makeMCQ({ id:'g6sc-enr-sol-061', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:3,
+  makeMCQ({ id:'g6sc-enr-sol-061', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:2,
     question:'Which planet rotates on its side, with its axis tilted at nearly 98° to its orbital plane, so it essentially rolls around the Sun?',
     options:['Neptune','Saturn','Uranus','Jupiter'],
     answer:'Uranus',
     hint:'Scientists believe a giant collision knocked it over long ago.',
-    explanation:'Uranus has an extreme axial tilt of about 98°, meaning it rotates nearly on its side. Its poles receive more sunlight over a full orbit than its equator — the opposite of most other planets.' }),
+    explanation:'Uranus has an extreme axial tilt of about 98°, meaning it rotates nearly on its side. Its poles receive more sunlight over a full orbit than its equator - the opposite of most other planets.' }),
 
   makeMCQ({ id:'g6sc-enr-sol-062', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:1,
     question:'What force keeps the planets in orbit around the Sun?',
@@ -391,21 +359,17 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sc-enr-sol-063', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:3,
     question:'Venus is closer to the Sun than Mercury, yet Venus is hotter. What best explains this?',
-    options:[
-      'Venus is much larger than Mercury, so it holds more heat',
-      'Venus has a thick CO₂ atmosphere that traps heat through the greenhouse effect, while Mercury has almost no atmosphere',
-      'Venus orbits the Sun faster, so it absorbs more energy per day',
-      'The Sun emits more energy in the direction of Venus than Mercury'],
-    answer:'Venus has a thick CO₂ atmosphere that traps heat through the greenhouse effect, while Mercury has almost no atmosphere',
-    hint:'Mercury has almost no atmosphere, so any heat it gains escapes immediately.',
+    options:['Its thick atmosphere traps the heat', 'It orbits the Sun far more quickly', 'The Sun sends more energy its way', 'It is much larger than Mercury'],
+    answer:'Its thick atmosphere traps the heat',
+    hint:'Compare what surrounds each of the two planets, rather than how far each one is from the Sun.',
     explanation:'Venus\'s thick CO₂ atmosphere creates an extreme greenhouse effect, trapping solar heat and raising surface temperatures to ≈465°C. Mercury has almost no atmosphere, so heat escapes into space easily, giving it very cold nights.' }),
 
   makeMCQ({ id:'g6sc-enr-sol-064', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:2,
     question:'Saturn is the least dense planet in the Solar System. If you could find a large enough bathtub, Saturn would ______.',
-    options:['Sink immediately because of its great size','Dissolve slowly in the water','Float on water because its density is less than water\'s','Turn to solid ice in cold water'],
-    answer:'Float on water because its density is less than water\'s',
+    options:['Float, because it is less dense than water', 'Sink at once because of its great size', 'Turn into solid ice in the cold water', 'Dissolve slowly into the water'],
+    answer:'Float, because it is less dense than water',
     hint:'Water has a density of 1.0 g/cm³. Saturn\'s average density is about 0.69 g/cm³.',
-    explanation:'Saturn\'s average density (≈0.69 g/cm³) is less than that of water (1.0 g/cm³). This means Saturn would float — it is the only planet in the Solar System less dense than water.' }),
+    explanation:'Saturn\'s average density (≈0.69 g/cm³) is less than that of water (1.0 g/cm³). This means Saturn would float - it is the only planet in the Solar System less dense than water.' }),
 
   makeMCQ({ id:'g6sc-enr-sol-065', chapterId:'g6sci-enr-solar', subsection:'planets', difficulty:4,
     question:'Earth takes 365.25 days to orbit the Sun. Every 4 years, the extra quarter-days add up to give a leap year of 366 days. How many leap years occur in a 40-year period?',

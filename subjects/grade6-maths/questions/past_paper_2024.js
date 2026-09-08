@@ -1,7 +1,18 @@
 'use strict';
-// PSAC Grade 6 Mathematics 2024 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 Mathematics 2024 - past-paper questions adapted to MCQ format.
 // Source: Mauritius Examinations Syndicate (mauritiuspapers.co.mu).
 // Unanswerable drawing/shading questions are collected at the bottom in PSAC_PDF_QUESTIONS.
+
+// Diagrams cropped from the MES paper into assets/past-papers/g6-maths-2024/.
+// Several of these questions ("which of the diagrams shows a parallelogram",
+// "use the graph to answer") cannot be asked at all without the artwork, and
+// the line-graph pair used to state the rate in words, which removed the
+// graph-reading step the paper is testing.
+// ⚠ Alt text and file names must never give the answer away.
+const _g6m24 = (file, alt) =>
+  `<img src="assets/past-papers/g6-maths-2024/${file}.png" alt="${alt}"` +
+  ` style="display:block;margin:8px auto;max-width:min(100%,420px);height:auto;` +
+  `border-radius:6px;background:#fff">`;
 
 // ── SVG helpers (self-contained, unique names) ─────────────────────────────
 function _g6ppClockSvg(h, m) {
@@ -71,7 +82,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6m-pp24-003', chapterId:'g6-geometry', subsection:'symmetry', difficulty:1,
     question:'How many lines of symmetry does an <b>equilateral triangle</b> have?',
     options:['1','2','3','6'], answer:'3',
-    hint:'An equilateral triangle has 3 equal sides and 3 equal angles.',
+    hint:'Each line of symmetry runs from a corner to the middle of the opposite side. Count the corners.',
     explanation:'An equilateral triangle has 3 lines of symmetry, one from each vertex to the midpoint of the opposite side.' }),
 
   makeMCQ({ id:'g6m-pp24-004', chapterId:'g6-four-ops', subsection:'multiplication', difficulty:1,
@@ -113,7 +124,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6m-pp24-010', chapterId:'g6-fractions', subsection:'add_sub', difficulty:1,
     question:'Work out:&nbsp; <sup>5</sup>&frasl;<sub>7</sub> − <sup>2</sup>&frasl;<sub>7</sub>',
     options:['<sup>3</sup>&frasl;<sub>14</sub>','<sup>3</sup>&frasl;<sub>7</sub>','<sup>7</sup>&frasl;<sub>7</sub>','<sup>7</sup>&frasl;<sub>14</sub>'], answer:'<sup>3</sup>&frasl;<sub>7</sub>',
-    hint:'Same denominator — just subtract the numerators.',
+    hint:'Same denominator - just subtract the numerators.',
     explanation:'5/7 − 2/7 = 3/7.' }),
 
   makeMCQ({ id:'g6m-pp24-011', chapterId:'g6-geometry', subsection:'angles', difficulty:1,
@@ -158,10 +169,11 @@ STATIC_QUESTIONS.push(
     hint:'21 = 3 × 7. 35 = 5 × 7. LCM uses each prime factor at its highest power.',
     explanation:'LCM(21, 35) = 3 × 5 × 7 = 105.' }),
 
-  // ── Section 2: MCQ (Qs 19–28) — as printed in paper ───────────────────
+  // ── Section 2: MCQ (Qs 19–28) - as printed in paper ───────────────────
 
   makeMCQ({ id:'g6m-pp24-019', chapterId:'g6-geometry', subsection:'3d_shapes', difficulty:1,
-    question:'How many <b>faces</b> does a <b>triangular prism</b> have?',
+    question:'How many <b>faces</b> does the prism below have?' +
+      _g6m24('q19-prism', 'A drawing of a solid with a triangular cross-section'),
     options:['9','7','6','5'], answer:'5',
     hint:'A triangular prism has two triangular faces and three rectangular faces.',
     explanation:'2 triangles + 3 rectangles = 5 faces.' }),
@@ -208,7 +220,7 @@ STATIC_QUESTIONS.push(
     question:'Which of the following is a <b>prime</b> number?',
     options:['51','79','87','91'], answer:'79',
     hint:'A prime number has exactly 2 factors: 1 and itself. Check by dividing by small primes.',
-    explanation:'79 is prime. 51=3×17, 87=3×29, 91=7×13 — all composite.' }),
+    explanation:'79 is prime. 51=3×17, 87=3×29, 91=7×13 - all composite.' }),
 
   makeMCQ({ id:'g6m-pp24-030', chapterId:'g6-four-ops', subsection:'word_probs', difficulty:3,
     question:'Ali has <b>96</b> stickers in his collection. Ben has <b>6 times</b> as many stickers as Ali. How many stickers does Ben have?',
@@ -283,13 +295,17 @@ STATIC_QUESTIONS.push(
     explanation:'Lorry time: 126 ÷ 42 = 3 hours. Extra time: 3 − 2 = 1 hour.' }),
 
   makeMCQ({ id:'g6m-pp24-040a', chapterId:'g6-graphs', subsection:'line_graph', difficulty:2,
-    question:'A line graph shows the cost of lentils. The line passes through (0, Rs 0) and (5 kg, Rs 100). What is the cost of <b>4 kg</b> of lentils?',
+    question:'The line graph below shows the cost of lentils in a supermarket.' +
+      _g6m24('q40-line-graph', 'A line graph with mass in kilograms along the bottom and cost in rupees up the side') +
+      'Use the graph. What is the cost of <b>4 kg</b> of lentils?',
     options:['Rs 60','Rs 70','Rs 80','Rs 100'], answer:'Rs 80',
     hint:'The graph is a straight line through the origin. Find the cost per kg first.',
     explanation:'Rs 100 ÷ 5 kg = Rs 20/kg. 4 kg × Rs 20 = Rs 80.' }),
 
   makeMCQ({ id:'g6m-pp24-040b', chapterId:'g6-graphs', subsection:'line_graph', difficulty:3,
-    question:'Lentils cost Rs 20 per kg (from a line graph). Rita buys <b>7 kg</b> and pays with a <b>Rs 200</b> note. How much <b>change</b> does she receive?',
+    question:'The line graph below shows the cost of lentils in a supermarket.' +
+      _g6m24('q40-line-graph', 'A line graph with mass in kilograms along the bottom and cost in rupees up the side') +
+      'Rita buys <b>7 kg</b> of lentils and pays with a <b>Rs 200</b> note. How much <b>change</b> does she receive?',
     options:['Rs 40','Rs 60','Rs 70','Rs 80'], answer:'Rs 60',
     hint:'Cost of 7 kg = 7 × Rs 20. Change = Rs 200 − cost.',
     explanation:'7 × Rs 20 = Rs 140. Change: Rs 200 − Rs 140 = Rs 60.' }),
@@ -318,7 +334,7 @@ STATIC_QUESTIONS.push(
     hint:'Orange price = Rs 5 + Rs 3.50 = Rs 8.50. Find total cost, then add 25%.',
     explanation:'Cost: 250×5 + 300×8.50 = 1 250 + 2 550 = Rs 3 800. Selling price = 3 800 × 1.25 = Rs 4 750.' }),
 
-  // ── Q27: Bar chart (Phase 3 — SVG recreation) ──────────────────────────
+  // ── Q27: Bar chart (Phase 3 - SVG recreation) ──────────────────────────
   makeMCQ({ id:'g6m-pp24-027', chapterId:'g6-graphs', subsection:'bar_chart', difficulty:2,
     question:'The bar chart below represents the preferred ice cream flavour of a group of children.<br>' +
       _g6ppHBarChart('Ice Cream Flavour',
@@ -328,10 +344,63 @@ STATIC_QUESTIONS.push(
     options:['Almond','Chocolate','Strawberry','Vanilla'], answer:'Chocolate',
     hint:'Look at which bar is the longest.',
     explanation:'Chocolate has the highest bar (9 children), making it the most popular.' })
+,
+  // ── Items that only a diagram makes askable. Q26 is deliberately NOT here:
+  //    both C and D can be read as half from the artwork and there is no mark
+  //    scheme in the repo to settle it, so it stays a read-only viewer item
+  //    rather than a graded question with a guessed key.
+
+  makeMCQ({ id:'g6m-pp24-020', chapterId:'g6-geometry', subsection:'2d_shapes', difficulty:1,
+    question:'Which of the following shapes is a <b>parallelogram</b>?' +
+      _g6m24('q20-quadrilaterals', 'Four quadrilaterals labelled A to D, some with tick marks or arrows on their sides'),
+    options:['B','A','C','D'], answer:'B',
+    hint:'A parallelogram has TWO pairs of parallel sides. The arrows on a side show which sides are parallel.',
+    explanation:'Shape <b>B</b> has arrows on both pairs of opposite sides, showing that both pairs are parallel - that is a parallelogram. A is a kite (equal adjacent sides), and D has only one pair of parallel sides, so it is a trapezium.' }),
+
+  makeNum({ id:'g6m-pp24-038a', chapterId:'g6-area-vol', subsection:'compound', difficulty:3,
+    question:'The figure below is made up of <b>seven identical</b> right-angled triangles. ED = 18 cm and AE = 8 cm.' +
+      _g6m24('q38-triangles', 'A figure made of repeated right-angled triangles, with the base and the height marked') +
+      'Find the length of <b>CD</b>, in cm.',
+    answer:6, acceptableAnswers:['6','6 cm'],
+    hint:'ED is made up of the bases of the triangles. Count how many equal bases fit between E and D.',
+    explanation:'Between E and D the figure is three squares-worth of base, each split into two identical triangles - six triangles in all, so three equal bases span 18 cm. Each base is 18 ÷ 3 = <b>6 cm</b>, and CD is one more of those bases, so CD = 6 cm.' }),
+
+  makeMCQ({ id:'g6m-pp24-041a', chapterId:'g6-graphs', subsection:'pictogram', difficulty:1,
+    question:'The pictogram below shows the number of customers who visited a restaurant. The key is <b>not</b> given.' +
+      _g6m24('q41-pictogram', 'A pictogram with one labelled row per day, drawn with whole and half circle symbols') +
+      'On which <b>two days</b> were there the same number of customers?',
+    options:['Wednesday and Friday','Tuesday and Thursday','Thursday and Saturday','Tuesday and Friday'],
+    answer:'Wednesday and Friday',
+    hint:'Count the symbols in each row, remembering that a half symbol counts as a half.',
+    explanation:'Wednesday and Friday each show 2 whole symbols and 1 half symbol - 2½ each. Tuesday has 3½, Thursday 4 and Saturday 5½.' }),
+
+  makeMCQ({ id:'g6m-pp24-041b', chapterId:'g6-graphs', subsection:'pictogram', difficulty:1,
+    question:'The pictogram below shows the number of customers who visited a restaurant.' +
+      _g6m24('q41-pictogram', 'A pictogram with one labelled row per day, drawn with whole and half circle symbols') +
+      'On which day did the restaurant have the <b>greatest</b> number of customers?',
+    options:['Saturday','Thursday','Tuesday','Wednesday'], answer:'Saturday',
+    hint:'Which row is the longest?',
+    explanation:'Saturday shows 5 whole symbols and 1 half symbol - 5½, more than any other day.' }),
+
+  makeNum({ id:'g6m-pp24-041c', chapterId:'g6-graphs', subsection:'pictogram', difficulty:2,
+    question:'The pictogram below shows the number of customers who visited a restaurant. The key is <b>not</b> given.' +
+      _g6m24('q41-pictogram', 'A pictogram with one labelled row per day, drawn with whole and half circle symbols') +
+      '250 customers visited the restaurant on <b>Friday</b>. How many customers does one whole symbol represent?',
+    answer:100, acceptableAnswers:['100'],
+    hint:'Count Friday\'s symbols first, then share the 250 customers between them.',
+    explanation:'Friday shows 2½ symbols. 250 ÷ 2.5 = <b>100</b>, so one whole symbol stands for 100 customers.' }),
+
+  makeMCQ({ id:'g6m-pp24-041d', chapterId:'g6-graphs', subsection:'pictogram', difficulty:3,
+    question:'The pictogram below shows the number of customers who visited a restaurant.' +
+      _g6m24('q41-pictogram', 'A pictogram with one labelled row per day, drawn with whole and half circle symbols') +
+      'Write down the ratio of the customers on <b>Tuesday</b> to the customers on <b>Saturday</b>, in its simplest form.',
+    options:['7 : 11','3 : 5','1 : 2','5 : 7'], answer:'7 : 11',
+    hint:'Tuesday is 3½ symbols and Saturday is 5½. Double both to clear the halves, then simplify.',
+    explanation:'Tuesday 3½ : Saturday 5½. Doubling gives 7 : 11, and 7 and 11 share no common factor, so <b>7 : 11</b> is simplest form.' })
 
 );
 
-// ── PDF-only pool (questions needing drawing/shading — no auto-grade answer) ──
+// ── PDF-only pool (questions needing drawing/shading - no auto-grade answer) ──
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
   { id:'g6m-pp24-pdf-007b', chapterId:'g6-numeration', marks:1, year:2024, grade:6, subject:'Maths',
@@ -340,19 +409,26 @@ window.PSAC_PDF_QUESTIONS.push(
   { id:'g6m-pp24-pdf-017', chapterId:'g6-measure', marks:1, year:2024, grade:6, subject:'Maths',
     question:'Maya has a Rs 50 note, a Rs 25 note, a 20-rupee coin, a 10-rupee coin and a 5-rupee coin. A book costs Rs 70. Tick (✓) the correct notes and/or coins to pay the exact amount.',
     type:'tick' },
-  { id:'g6m-pp24-pdf-020', needsArtwork:true, chapterId:'g6-geometry', marks:1, year:2024, grade:6, subject:'Maths',
-    question:'Which of the diagrams labelled A, B, C, D shows a parallelogram? (Diagrams show four quadrilaterals with tick-mark annotations.)',
+  { id:'g6m-pp24-pdf-020', chapterId:'g6-geometry', marks:1, year:2024, grade:6, subject:'Maths',
+    question:'Which of the shapes labelled A, B, C, D is a <b>parallelogram</b>?' +
+      _g6m24('q20-quadrilaterals', 'Four quadrilaterals labelled A to D, some with tick marks or arrows on their sides'),
+    markScheme:'B - both pairs of opposite sides are marked parallel.',
     type:'mcq-diagram' },
-  { id:'g6m-pp24-pdf-026', needsArtwork:true, chapterId:'g6-fractions', marks:1, year:2024, grade:6, subject:'Maths',
-    question:'In which of the following diagrams (A, B, C, D) is HALF of the figure shaded?',
+  { id:'g6m-pp24-pdf-026', chapterId:'g6-fractions', marks:1, year:2024, grade:6, subject:'Maths',
+    question:'In which of the following diagrams is <b>half</b> of the figure shaded?' +
+      _g6m24('q26-shaded-figures', 'Four squares labelled A to D, each divided up with some parts shaded'),
     type:'mcq-diagram' },
   { id:'g6m-pp24-pdf-033', chapterId:'g6-four-ops', marks:3, year:2024, grade:6, subject:'Maths',
     question:'Given that 356 × 283 = 100 748, without doing any calculation write the missing numbers: (a) 100 748 ÷ 283 = ? (b) ? × 283 = 100 748 + 283 (c) 35.6 × 2.83 = ?',
     type:'short' },
-  { id:'g6m-pp24-pdf-038', needsArtwork:true, chapterId:'g6-geometry', marks:5, year:2024, grade:6, subject:'Maths',
-    question:'A figure is made up of 7 identical right-angled triangles (ED = 18 cm, AE = 8 cm). (a) Find the length of CD. (b) Calculate the area of the shaded part.',
+  { id:'g6m-pp24-pdf-038', chapterId:'g6-geometry', marks:5, year:2024, grade:6, subject:'Maths',
+    question:'The figure below is made up of seven identical right-angled triangles. ED = 18 cm and AE = 8 cm. (a) Find the length of CD. (b) Calculate the area of the shaded part.' +
+      _g6m24('q38-triangles', 'A figure made of repeated right-angled triangles, with the base and the height marked'),
+    markScheme:'(a) CD = 6 cm.',
     type:'short' },
   { id:'g6m-pp24-pdf-041', chapterId:'g6-graphs', marks:7, year:2024, grade:6, subject:'Maths',
-    question:'A pictogram shows restaurant customers Tue–Sat. The key is not given. (a) Which two days had the same number of customers? (b) Which day had the greatest number? (c) 250 customers visited on Friday — how many does each symbol represent? (d) Write the ratio Tuesday:Saturday in simplest form.',
+    question:'The pictogram below represents the number of customers who visited a restaurant from Tuesday to Saturday. The key is not given. (a) On which two days were there the same number of customers? (b) On which day was the number greatest? (c) 250 customers visited on Friday - how many customers does the key represent? (d) Write the ratio of Tuesday to Saturday in its simplest form.' +
+      _g6m24('q41-pictogram', 'A pictogram with one labelled row per day, drawn with whole and half circle symbols'),
+    markScheme:'(a) Wednesday and Friday. (b) Saturday. (c) 100 customers. (d) 7 : 11.',
     type:'short' }
 );

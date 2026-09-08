@@ -163,56 +163,56 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4eng-adj-020', chapterId:'g4eng-adjectives', subsection:'picture_words', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Loxodonta_africana.jpg" alt="a large animal" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which adjective best describes the SIZE of the animal shown in this picture?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/loxodonta-africana.jpg" alt="a large animal" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which adjective best describes the SIZE of the animal shown in this picture?</b>',
     options:['small','tiny','flat','big'],
     answer:'big',
     hint:'An adjective describes a noun. This animal is one of the largest land animals on Earth.',
-    explanation:'"<b>Big</b>" (or large/huge) is the size adjective that describes the elephant. Adjectives telling us about size include: big, small, tall, short, wide, narrow, enormous, tiny. The elephant is big — its comparative form is "bigger" and superlative is "the biggest".' }),
+    explanation:'"<b>Big</b>" (or large/huge) is the size adjective that describes the elephant. Adjectives telling us about size include: big, small, tall, short, wide, narrow, enormous, tiny. The elephant is big - its comparative form is "bigger" and superlative is "the biggest".' }),
 
   makeMCQ({ id:'g4eng-adj-021', chapterId:'g4eng-adjectives', subsection:'adjectives', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Red_Apple.jpg" alt="a fruit" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What COLOUR adjective describes the apple in this picture?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/red-apple.jpg" alt="a fruit" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What COLOUR adjective describes the apple in this picture?</b>',
     options:['green','yellow','purple','red'],
     answer:'red',
     hint:'Look carefully at the colour of the fruit in the picture.',
     explanation:'"<b>Red</b>" is a colour adjective describing the apple. Colour adjectives describe the appearance of a noun: red, blue, green, yellow, purple, orange. We can say "a red apple" (adjective before noun) or "the apple is red" (adjective after a linking verb).' }),
 
   makeMCQ({ id:'g4eng-adj-022', chapterId:'g4eng-adjectives', subsection:'picture_words', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Happy_child.jpg" alt="a child smiling" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which EMOTION adjective best describes the child shown in this picture?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/happy-child.jpg" alt="a child smiling" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which EMOTION adjective best describes the child shown in this picture?</b>',
     options:['sad','angry','tired','happy'],
     answer:'happy',
     hint:'The child is smiling broadly. What adjective describes this feeling?',
-    explanation:'"<b>Happy</b>" is an emotion adjective — it describes how the child feels. Emotion adjectives include: happy, sad, angry, excited, scared, bored, surprised, proud. Comparative: happier. Superlative: the happiest.' }),
+    explanation:'"<b>Happy</b>" is an emotion adjective - it describes how the child feels. Emotion adjectives include: happy, sad, angry, excited, scared, bored, surprised, proud. Comparative: happier. Superlative: the happiest.' }),
 
   makeMCQ({ id:'g4eng-adj-023', chapterId:'g4eng-adjectives', subsection:'adjectives', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Burj_Khalifa.jpg" alt="a very tall building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SIZE adjective best describes this building?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/burj-khalifa-tower.jpg" alt="a building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SIZE adjective best describes this building?</b>',
     options:['short','wide','flat','tall'],
     answer:'tall',
     hint:'This is the world\'s tallest skyscraper. Which adjective describes its HEIGHT?',
     explanation:'"<b>Tall</b>" is the size adjective describing height. We say "a tall building" or "the building is tall". Comparative: taller. Superlative: the tallest. Other size adjectives for height and size: big, large, short, small, wide, narrow, deep, shallow.' }),
 
   makeMCQ({ id:'g4eng-adj-024', chapterId:'g4eng-adjectives', subsection:'picture_words', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Football_(Soccer_ball).jpg" alt="a sports object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SHAPE adjective describes the object shown in this picture?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/soccer-ball-on-grass.jpg" alt="a sports object" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SHAPE adjective describes the object shown in this picture?</b>',
     options:['square','flat','oval','round'],
     answer:'round',
-    hint:'Look at the shape of the ball — it is perfectly circular.',
-    explanation:'"<b>Round</b>" is a shape adjective describing the ball. Shape adjectives describe the outline or form of a noun: round, square, oval, flat, triangular, rectangular, curved. We can say "a round ball" — the adjective comes before the noun it describes.' })
+    hint:'Look at the shape of the ball - it is perfectly circular.',
+    explanation:'"<b>Round</b>" is a shape adjective describing the ball. Shape adjectives describe the outline or form of a noun: round, square, oval, flat, triangular, rectangular, curved. We can say "a round ball" - the adjective comes before the noun it describes.' })
 
 );
 
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4eng-adj-025', chapterId:'g4eng-adjectives', subsection:'picture_words', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cottage.jpg" alt="a building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SIZE adjective best describes the building shown in this picture, compared to a large mansion?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/cottage.jpg" alt="a building" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which SIZE adjective best describes the building shown in this picture, compared to a large mansion?</b>',
     options:['huge','enormous','small','tall'],
     answer:'small',
     hint:'This is a modest cottage, not a giant palace.',
-    explanation:'"<b>Small</b>" is a size adjective describing this modest cottage. Size adjectives include: big, small, tiny, huge, enormous, tall, short. A cottage is a small, simple house — the opposite of "huge" or "enormous".' }),
+    explanation:'"<b>Small</b>" is a size adjective describing this modest cottage. Size adjectives include: big, small, tiny, huge, enormous, tall, short. A cottage is a small, simple house - the opposite of "huge" or "enormous".' }),
 
   makeMCQ({ id:'g4eng-adj-026', chapterId:'g4eng-adjectives', subsection:'picture_words', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Rainbow.jpg" alt="a sky phenomenon" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which adjective best describes what is shown in this picture, in terms of colour?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/rainbow.jpg" alt="a sky phenomenon" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Which adjective best describes what is shown in this picture, in terms of colour?</b>',
     options:['plain','colourful','dull','pale'],
     answer:'colourful',
     hint:'This natural phenomenon shows many different colours at once.',
-    explanation:'"<b>Colourful</b>" describes something with many bright colours — exactly what a rainbow shows. The opposite adjectives would be "plain", "dull" or "pale", which describe a lack of strong colour.' })
+    explanation:'"<b>Colourful</b>" describes something with many bright colours - exactly what a rainbow shows. The opposite adjectives would be "plain", "dull" or "pale", which describe a lack of strong colour.' })
 
 );

@@ -1,5 +1,5 @@
 'use strict';
-// Grade 6 English — top-up questions.
+// Grade 6 English - top-up questions.
 // Writing  g6eng-wr-050..054   chapterId: g6eng-writing
 // Passages g6eng-pass-050..059 chapterId: g6eng-passages
 
@@ -63,7 +63,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'The key facts: Who, What, Where and When',
     hint:'Think about a reader who only has time to read one paragraph.',
-    explanation:'News reports use the <b>inverted pyramid</b>: the opening paragraph carries the most important facts (Who, What, Where, When — and often Why and How) so a reader who stops there still knows the story. Detail, quotes and background fill the later paragraphs.' }),
+    explanation:'News reports use the <b>inverted pyramid</b>: the opening paragraph carries the most important facts (Who, What, Where, When - and often Why and How) so a reader who stops there still knows the story. Detail, quotes and background fill the later paragraphs.' }),
 
   makeMCQ({ id:'g6eng-wr-051', chapterId:'g6eng-writing', subsection:'formal_letter', difficulty:2,
     question:'Which feature is found in an <b>email</b> but NOT in a printed formal letter?',
@@ -82,24 +82,24 @@ STATIC_QUESTIONS.push(
     options:[
       'A rhetorical question',
       'An expert opinion',
-      'Bandwagon appeal — implying that everyone else has already joined',
+      'Bandwagon appeal - implying that everyone else has already joined',
       'A simile comparing the product to something bright'
     ],
-    answer:'Bandwagon appeal — implying that everyone else has already joined',
+    answer:'Bandwagon appeal - implying that everyone else has already joined',
     hint:'The word "already" and "thousands" are doing most of the persuasive work.',
     explanation:'"<b>Bandwagon</b>" is a persuasive technique that makes the reader feel left out if they do not join the crowd. "Thousands" overstates the scale and "already" implies the reader is behind everyone else. MIE Grade 6 lists bandwagon, expert opinion, emotional appeal, statistics and repetition as key advertising techniques.' }),
 
   makeMCQ({ id:'g6eng-wr-053', chapterId:'g6eng-writing', subsection:'planning', difficulty:3,
     question:'Read this extract: <br><i>"The fire broke out at 03:00 on Tuesday. Firefighters from Curepipe station arrived within eight minutes and brought the blaze under control. No injuries were reported."</i><br>Which text type does this best match, and why?',
     options:[
-      'A formal letter — because it is written in the third person',
-      'A narrative story — because it describes a dramatic event',
-      'A newspaper report — because it states precise facts in the past tense with named sources and times',
-      'A factual report — because it uses subheadings'
+      'A formal letter - because it is written in the third person',
+      'A narrative story - because it describes a dramatic event',
+      'A newspaper report - because it states precise facts in the past tense with named sources and times',
+      'A factual report - because it uses subheadings'
     ],
-    answer:'A newspaper report — because it states precise facts in the past tense with named sources and times',
+    answer:'A newspaper report - because it states precise facts in the past tense with named sources and times',
     hint:'Notice the specific time, the named fire station and the measured response time.',
-    explanation:'A <b>newspaper report</b> answers Who/What/Where/When/How with verifiable details — times, numbers and named organisations — written in the <b>past tense, third person</b>, without the author\'s personal feelings. A narrative would include character thoughts and dialogue; a factual report would have subheadings and typically uses the present tense.' }),
+    explanation:'A <b>newspaper report</b> answers Who/What/Where/When/How with verifiable details - times, numbers and named organisations - written in the <b>past tense, third person</b>, without the author\'s personal feelings. A narrative would include character thoughts and dialogue; a factual report would have subheadings and typically uses the present tense.' }),
 
   makeMCQ({ id:'g6eng-wr-054', chapterId:'g6eng-writing', subsection:'planning', difficulty:4,
     question:'A student drafts the opening of a <b>formal letter of application</b> for a library volunteer role: <br><i>"Hi, I\'d love to work at your library cos I really like books."</i><br>Which rewrite corrects ALL the problems?',
@@ -142,7 +142,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'To show that the verbal report produced no result, strengthening the case for a written complaint',
     hint:'Why would someone write a formal letter rather than just tell a staff member?',
-    explanation:'"Four days later, the handrails remain unrepaired" shows that the verbal report to the staff member had <b>no effect</b>. This strengthens the written complaint: the writer is not being hasty — they waited and nothing happened. In formal writing, showing that an earlier, simpler attempt failed makes a stronger case for action.' }),
+    explanation:'"Four days later, the handrails remain unrepaired" shows that the verbal report to the staff member had <b>no effect</b>. This strengthens the written complaint: the writer is not being hasty - they waited and nothing happened. In formal writing, showing that an earlier, simpler attempt failed makes a stronger case for action.' }),
 
   makeMCQ({ id:'g6eng-pass-052', chapterId:'g6eng-passages', subsection:'letter', difficulty:3,
     question:`${_G6TP_LETTER}The letter ends: "A child could be seriously injured." What is the persuasive purpose of this sentence?`,
@@ -153,7 +153,7 @@ STATIC_QUESTIONS.push(
       'To explain why the writer\'s daughter is afraid of rope bridges'
     ],
     answer:'To appeal to the manager\'s sense of responsibility by raising the consequence of inaction',
-    hint:'The sentence does not make a threat — it paints a picture of what could happen if nothing is done.',
+    hint:'The sentence does not make a threat - it paints a picture of what could happen if nothing is done.',
     explanation:'By ending with a <b>consequence of inaction</b> ("A child could be seriously injured"), the writer appeals to the manager\'s duty of care without making a direct threat. This combines an <b>emotional appeal</b> with a logical argument: fix it now, or something worse will happen. It is more powerful than simply repeating the request.' }),
 
   // ── Passage B: newspaper report ──────────────────────────────────────
@@ -161,7 +161,7 @@ STATIC_QUESTIONS.push(
     question:`${_G6TP_NEWS}How much produce did the pupils donate to families in the area?`,
     options:['Rs 8,000 worth of vegetables','40 kg of produce','A full growing cycle worth','One basket per family'],
     answer:'40 kg of produce',
-    hint:'Be careful — the report contains several numbers that mean different things.',
+    hint:'Be careful - the report contains several numbers that mean different things.',
     explanation:'"They donated <b>40 kg of produce</b> to families in the area." Rs 8,000 is the grant the school received; "a full growing cycle" is what Mrs Dupont doubted they could manage. News reports often pack many figures into one paragraph, so match each number carefully to its noun.' }),
 
   makeMCQ({ id:'g6eng-pass-054', chapterId:'g6eng-passages', subsection:'report', difficulty:2,
@@ -173,8 +173,8 @@ STATIC_QUESTIONS.push(
       'The head teacher does not support the project'
     ],
     answer:'The expansion is planned but not guaranteed because the money has not been found',
-    hint:'Focus on the word "yet" — what does it imply about the future?',
-    explanation:'"Had not yet been secured" means the money is <b>not in place</b>. "Yet" implies it may come, but the plan cannot go ahead without it. This hedges the positive story of the first two paragraphs — a sign of <b>balanced reporting</b>. Contrast this with "has been secured", which would confirm the funding exists.' }),
+    hint:'Focus on the word "yet" - what does it imply about the future?',
+    explanation:'"Had not yet been secured" means the money is <b>not in place</b>. "Yet" implies it may come, but the plan cannot go ahead without it. This hedges the positive story of the first two paragraphs - a sign of <b>balanced reporting</b>. Contrast this with "has been secured", which would confirm the funding exists.' }),
 
   makeMCQ({ id:'g6eng-pass-055', chapterId:'g6eng-passages', subsection:'report', difficulty:3,
     question:`${_G6TP_NEWS}Why does the reporter include Mrs Dupont\'s quotation?`,
@@ -211,7 +211,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'"the old people say"',
     hint:'Which phrase admits the story is passed down by word of mouth rather than verified?',
-    explanation:'"<b>The old people say</b>" marks the tale as <b>oral tradition</b> — handed down through generations, not documented or verified. A factual account would give a named source, a date or a reference. The formula "Long ago, the old people say…" is a classic opening for legends in many cultures, signalling that what follows cannot be checked as fact.' }),
+    explanation:'"<b>The old people say</b>" marks the tale as <b>oral tradition</b> - handed down through generations, not documented or verified. A factual account would give a named source, a date or a reference. The formula "Long ago, the old people say…" is a classic opening for legends in many cultures, signalling that what follows cannot be checked as fact.' }),
 
   // ── Passage D: factual report with table ─────────────────────────────
   makeMCQ({ id:'g6eng-pass-058', chapterId:'g6eng-passages', subsection:'report', difficulty:2,
@@ -219,18 +219,18 @@ STATIC_QUESTIONS.push(
     options:['3.0 litres','3.6 litres','4.2 litres','7.8 litres'],
     answer:'3.6 litres',
     hint:'Subtract the smaller figure from the larger one.',
-    explanation:'7.8 &minus; 4.2 = <b>3.6 litres</b> per pupil per day. Reading a table means matching the correct row to the correct column and performing whatever calculation the question requires — here, a simple subtraction.' }),
+    explanation:'7.8 &minus; 4.2 = <b>3.6 litres</b> per pupil per day. Reading a table means matching the correct row to the correct column and performing whatever calculation the question requires - here, a simple subtraction.' }),
 
   makeMCQ({ id:'g6eng-pass-059', chapterId:'g6eng-passages', subsection:'report', difficulty:4,
     question:`${_G6TP_REPORT}The report claims a 300-pupil school could save "more than 1,000 litres every day". Does the table support this claim?`,
     options:[
-      'No — 300 × 3.6 = 1,080, which is more than 1,000, so the claim is exaggerated',
-      'Yes — 300 × 3.6 = 1,080, which is more than 1,000, so the table confirms the claim',
-      'Yes — 300 × 7.8 = 2,340, so the school already saves 2,340 litres',
-      'No — the table gives per-pupil data only, so no school total can be calculated'
+      'No - 300 × 3.6 = 1,080, which is more than 1,000, so the claim is exaggerated',
+      'Yes - 300 × 3.6 = 1,080, which is more than 1,000, so the table confirms the claim',
+      'Yes - 300 × 7.8 = 2,340, so the school already saves 2,340 litres',
+      'No - the table gives per-pupil data only, so no school total can be calculated'
     ],
-    answer:'Yes — 300 × 3.6 = 1,080, which is more than 1,000, so the table confirms the claim',
+    answer:'Yes - 300 × 3.6 = 1,080, which is more than 1,000, so the table confirms the claim',
     hint:'Use the saving per pupil (the difference between the two rows) and multiply by 300.',
-    explanation:'Saving per pupil = 7.8 &minus; 4.2 = 3.6 litres. For 300 pupils: 300 &times; 3.6 = <b>1,080 litres</b>, which is indeed more than 1,000. The table <b>supports</b> the report\'s claim. Reading a factual report critically means checking the text\'s claims against the data — not just accepting them at face value.' }),
+    explanation:'Saving per pupil = 7.8 &minus; 4.2 = 3.6 litres. For 300 pupils: 300 &times; 3.6 = <b>1,080 litres</b>, which is indeed more than 1,000. The table <b>supports</b> the report\'s claim. Reading a factual report critically means checking the text\'s claims against the data - not just accepting them at face value.' }),
 
 );

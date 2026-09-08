@@ -1,211 +1,269 @@
-﻿'use strict';
+'use strict';
 // Grade 5 English - Chapter: Reading Comprehension
 // IDs format: g5eng-comp-NNN
-// Passage is embedded as HTML - renders via innerHTML in both practice and exam modes.
+//
+// ⚠ IDS ARE PRESERVED, CONTENT IS REPLACED. netlify/import-questions.js upserts
+//   and never deletes, so a question dropped from source would linger in the
+//   Supabase `questions` table forever. All 19 ids (001-019) keep their number
+//   and their subsection; only the stimulus, options and difficulty changed.
+//   Unlike exam_depth.js and the coverage_*.js files, ids here are LITERAL, so
+//   editing this file cannot renumber anything.
+//
+// ⚠ WHAT CHANGED AND WHY. The 19 questions hung off just two texts of about 180
+//   and 248 words, against 413-447 in the MES Grade 5 English papers 2023-2025;
+//   eighteen were flagged by scripts/floor-check.js, and the nineteenth escaped
+//   only because its stimulus was 251 words - one word over the rule's floor.
+//   Both texts are now full length, and difficulty starts at L2.
+//
+// ⚠ RETRIEVAL IS 14 OF THE 19 AND IT IS THE HARD PART. "Find it in the text" is
+//   trivial when the text is short and the answer is the only number in it. At
+//   full length it can be made demanding without ceasing to be retrieval: the
+//   distractors here are all real details FROM the passage, several answers have
+//   to be assembled from two separate places, and two require arithmetic on
+//   figures that appear paragraphs apart. A retrieval item should reward careful
+//   reading, not keyword-spotting.
+//
+// TEXT 1 is informational and TEXT 2 is narrative, on purpose: the paper's own
+// Question 1 is always narrative, but this chapter is skill-tagged rather than
+// text-type-tagged, and an informational text gives retrieval and vocabulary
+// far more to bite on.
 
-const _PASSAGE_A = `<div style="background:#f8fafc;border-left:4px solid #3b82f6;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
-<b style="color:#1e40af">Read the passage carefully, then answer the question.</b><br><br>
-<b>The Dodo - Mauritius\'s Lost Bird</b><br><br>
-The dodo was a large, flightless bird that lived only on the island of Mauritius. It stood about one metre tall and weighed roughly 10 to 18 kilograms. Because it had evolved on an island with no natural predators, the dodo had no fear of humans and could not fly to escape danger.<br><br>
-When Dutch sailors arrived in Mauritius in 1598, they found the dodo easy to catch. The sailors hunted the birds for food, and the animals they brought with them - such as rats, pigs and monkeys - destroyed the dodo\'s nests and eggs. Within less than a century, by around 1680, the dodo had become completely extinct.<br><br>
-Today, the dodo is a national symbol of Mauritius. Its image appears on the Coat of Arms of the country. Scientists have studied dodo bones found on the island to learn more about this remarkable bird. Although it is gone forever, the dodo serves as a powerful reminder of how human activity can threaten wildlife.
-</div>`;
+function _g5compBox(inner, accent) {
+  return `<div style="background:#f8fafc;border-left:4px solid ${accent};border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">${inner}</div>`;
+}
+
+// ══ TEXT 1 · informational ════════════════════════════════════════════════
+const _G5C_BAKERY = _g5compBox(`
+<b style="color:#92400e">Read the passage carefully, then answer the question.</b><br><br>
+<b>The Bakery on Royal Road</b><br><br>
+The bakery on Royal Road opens at half past four in the morning, which is two
+hours before the first bus.<br><br>
+Mr Sooriah has run it for thirty-one years. His father ran it before him, in the
+same room, using the same oven, which is built of brick and takes four hours to
+reach the right heat. Mr Sooriah lights it at half past midnight. He says the
+oven is the only thing in the building older than he is.<br><br>
+The dough is mixed the night before and left to rise in wooden troughs under damp
+cloths. There are six troughs, and each one holds enough for about two hundred
+loaves. By three in the morning the dough has doubled, and it is turned out, cut
+and shaped by hand. Nobody weighs it. Mr Sooriah's daughter, Anjali, can cut a
+two-hundred-gram piece of dough to within five grams, every time, and she learned
+this by doing it wrong for a year.<br><br>
+The first batch is baked at four. The bread is out by twenty past, the shutters go
+up at half past, and by then there are usually eleven or twelve people waiting
+outside. Most of them are the same people. Mr Sooriah knows what each one wants
+and often has it wrapped before they reach the counter.<br><br>
+Between five and seven the shop sells roughly six hundred loaves. After seven it
+is quieter, and this is when the bakery makes the sweet things: napolitaines,
+gateaux coco, and the almond biscuits that appear only on Fridays, because
+almonds are expensive.<br><br>
+Nothing is left at the end of the day. Whatever has not sold by four in the
+afternoon goes to the primary school across the road, where it becomes the next
+morning's breakfast for children who arrive without one. Mr Sooriah has done this
+since 1996 and does not like being asked about it.<br><br>
+The bakery closes at five. The floor is swept, the troughs are washed, the dough
+for the next day is mixed, and the oven is allowed to go out. It takes eleven
+hours to cool completely.<br><br>
+Anjali will take over one day. She has said so since she was nine. Her father
+tells people that she is better at the counter than he is, which is true, and
+that she is not yet better at the oven, which is also true, and which she does
+not accept.
+`, '#d97706');
+
+// ══ TEXT 2 · narrative ════════════════════════════════════════════════════
+const _G5C_BICYCLE = _g5compBox(`
+<b style="color:#065f46">Read the passage carefully, then answer the question.</b><br><br>
+<b>The Borrowed Bicycle</b><br><br>
+The bicycle belonged to Mrs Ramgoolam next door, and it had not been ridden for
+eleven years.<br><br>
+It stood in her back yard under a sheet of plastic. When Devika finally asked
+about it, in the last week of the August holidays, Mrs Ramgoolam said yes before
+the question was finished.<br><br>
+The tyres were flat and the chain had rusted into one stiff loop. Devika's uncle
+put air in the tyres and soaked the chain in oil overnight, and in the morning it
+turned, though it complained.<br><br>
+She was eleven, and she could not ride.<br><br>
+Her cousins had all learned at five or six, on the flat road behind the church,
+with somebody running alongside holding the saddle. Devika had not, for a reason
+nobody in the family could now remember, and by eleven it had become the kind of
+thing that is easier not to mention.<br><br>
+She decided to learn where nobody would see.<br><br>
+The lane behind the sugar factory is four hundred metres long and slopes very
+slightly downhill. She went there every morning at six, for nine days.<br><br>
+On the first three mornings she did not get on the bicycle at all. She walked
+beside it, then sat on it with both feet on the ground, then pushed off and put
+her feet down again immediately, over and over, until the sun was properly up and
+it was time to go home for breakfast.<br><br>
+On the fourth morning she travelled about six metres and fell into the
+grass.<br><br>
+On the sixth morning she reached the end of the lane without stopping, turned
+round, and could not do it again.<br><br>
+On the ninth morning she rode the lane four times, and then out onto the road,
+and then all the way to the church and back, which is two kilometres.<br><br>
+Mrs Ramgoolam was standing at her gate when Devika came round the corner. She did
+not wave and she did not call out. She watched her go past, and was still there
+when Devika came back the other way, and then she went inside.<br><br>
+Devika understood two things that morning that she had not understood
+before.<br><br>
+The first was that the bicycle had been offered so quickly because Mrs Ramgoolam
+had been waiting years for somebody to ask.<br><br>
+The second was that she had chosen the lane behind the factory so that nobody
+would see her fall, and that she would have to find somewhere else to practise
+now, because she had run out of things to be afraid of.
+`, '#059669');
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5eng-comp-001', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:1,
-    question:`${_PASSAGE_A}Where did the dodo live?`,
-    options:['On every island in the Indian Ocean','Only on the island of Mauritius','In the forests of Africa','On the island of Rodrigues'],
-    answer:'Only on the island of Mauritius',
-    hint:'The answer is in the very first sentence of the passage.',
-    explanation:'The passage states: "The dodo was a large, flightless bird that lived <b>only on the island of Mauritius</b>." It was found nowhere else in the world.' }),
+  // ══ TEXT 1 · 10 questions ═══════════════════════════════════════════════
+  makeMCQ({ id:'g5eng-comp-001', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
+    question:_G5C_BAKERY + '<p>How long does the brick oven take to reach the right heat?</p>',
+    options:['Four hours', 'Two hours', 'Eleven hours', 'Thirty-one hours'],
+    answer:'Four hours',
+    hint:'The oven is described in the second paragraph.',
+    explanation:'The oven <i>takes four hours to reach the right heat</i>. Two hours is how long before the first bus the shop opens, and eleven hours is how long the oven takes to cool again.' }),
 
-  makeMCQ({ id:'g5eng-comp-002', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:1,
-    question:`${_PASSAGE_A}Why was the dodo easy to catch?`,
-    options:[
-      'It was very slow at running.',
-      'It had no fear of humans because it had no natural predators.',
-      'It was too fat to move quickly.',
-      'It always slept during the day.'
-    ],
-    answer:'It had no fear of humans because it had no natural predators.',
-    hint:'Look at what the passage says about predators and fear.',
-    explanation:'The passage explains: "Because it had evolved on an island with <b>no natural predators</b>, the dodo had <b>no fear of humans</b> and could not fly to escape danger." It was unfamiliarity with danger - not slowness - that made it easy to catch.' }),
+  makeMCQ({ id:'g5eng-comp-002', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:3,
+    question:_G5C_BAKERY + '<p>Why must Mr Sooriah light the oven at half past midnight?</p>',
+    options:['It needs four hours to be ready for the four o\'clock batch',
+             'He begins mixing the dough for the next day at that time',
+             'The bread must be out of the oven by twenty past four',
+             'He has to be finished before the first customers arrive'],
+    answer:'It needs four hours to be ready for the four o\'clock batch',
+    hint:'Two facts have to be put together - when the first batch is baked, and how long the oven takes.',
+    explanation:'The first batch is baked at four, and the oven needs four hours. Half past midnight is <b>exactly four hours earlier</b>, so the two facts explain each other.' }),
 
   makeMCQ({ id:'g5eng-comp-003', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
-    question:`${_PASSAGE_A}Name TWO ways the dodo became extinct, according to the passage.`,
-    options:[
-      'Disease and drought',
-      'Hunting by sailors AND destruction of nests by introduced animals',
-      'Volcanic eruptions and flooding',
-      'Competition with other birds and lack of food'
-    ],
-    answer:'Hunting by sailors AND destruction of nests by introduced animals',
-    hint:'Look at the second paragraph for two distinct causes.',
-    explanation:'The passage gives two causes: (1) "<b>The sailors hunted the birds for food</b>" and (2) "<b>the animals they brought with them</b> - such as rats, pigs and monkeys - <b>destroyed the dodo\'s nests and eggs</b>."' }),
+    question:_G5C_BAKERY + '<p>How many wooden troughs does the bakery use for the rising dough?</p>',
+    options:['Six', 'Eleven', 'Twelve', 'Two'],
+    answer:'Six',
+    hint:'Careful - several other numbers appear in the same paragraph.',
+    explanation:'There are <b>six troughs</b>. Eleven or twelve is the number of people waiting outside when the shutters go up, and two hundred is what one trough holds.' }),
 
-  makeMCQ({ id:'g5eng-comp-004', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:1,
-    question:`${_PASSAGE_A}Approximately when did the dodo become extinct?`,
-    options:['Around 1598','Around 1650','Around 1680','Around 1700'],
-    answer:'Around 1680',
-    hint:'The passage mentions a specific date in the second paragraph.',
-    explanation:'The passage states: "by around <b>1680</b>, the dodo had become completely extinct." Dutch sailors arrived in 1598 - so the dodo survived less than a century after first human contact.' }),
+  makeMCQ({ id:'g5eng-comp-004', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:4,
+    question:_G5C_BAKERY + '<p>About how many loaves can be made from the dough in all the troughs together?</p>',
+    options:['About 1,200', 'About 600', 'About 200', 'About 800'],
+    answer:'About 1,200',
+    hint:'The passage gives the number of troughs and what one trough holds. You must do the rest.',
+    explanation:'Six troughs, each holding enough for about two hundred loaves: 6 × 200 = <b>about 1,200</b>. The six hundred is a different figure - that is what the shop sells between five and seven.' }),
 
-  makeMCQ({ id:'g5eng-comp-005', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:2,
-    question:`${_PASSAGE_A}What does the word "extinct" mean as used in the passage?`,
-    options:[
-      'Endangered and nearly dying out',
-      'No longer existing anywhere - all members of the species have died',
-      'Living in a different place',
-      'Sleeping for a very long time'
-    ],
-    answer:'No longer existing anywhere - all members of the species have died',
-    hint:'Look at the context: "the dodo had become completely extinct" - is it still alive anywhere?',
-    explanation:'"<b>Extinct</b>" means a species no longer exists anywhere in the world - every individual has died. The passage confirms this: "Although it is <b>gone forever</b>..." An endangered species is threatened but still alive.' }),
+  makeMCQ({ id:'g5eng-comp-005', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:3,
+    question:_G5C_BAKERY + '<p>"By three in the morning the dough has doubled." This means the dough has</p>',
+    options:['grown to twice its original size', 'been divided into two equal halves',
+             'been mixed together a second time', 'become twice as heavy as before'],
+    answer:'grown to twice its original size',
+    hint:'It has been left to rise under damp cloths. What does rising do?',
+    explanation:'To <b>double</b> is to become twice as large. Note that it does not become heavier - nothing has been added; the dough has simply filled with air while rising.' }),
 
-  makeMCQ({ id:'g5eng-comp-006', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
-    question:`${_PASSAGE_A}How does the dodo continue to be remembered in Mauritius today?`,
-    options:[
-      'There is a museum dedicated only to the dodo.',
-      'Its image appears on the Coat of Arms of Mauritius.',
-      'Live dodos are kept in the national zoo.',
-      'The dodo\'s name is given to the national currency.'
-    ],
-    answer:'Its image appears on the Coat of Arms of Mauritius.',
-    hint:'The last paragraph explains the dodo\'s current significance.',
-    explanation:'The passage states: "<b>Its image appears on the Coat of Arms</b> of the country." The dodo is also described as "a national symbol of Mauritius".' }),
+  makeMCQ({ id:'g5eng-comp-006', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:3,
+    question:_G5C_BAKERY + '<p>How accurately can Anjali cut a piece of dough by hand?</p>',
+    options:['To within five grams of two hundred', 'To within two hundred grams exactly',
+             'To within five grams of five hundred', 'To within one gram of two hundred'],
+    answer:'To within five grams of two hundred',
+    hint:'The passage names both the target weight and how close she gets to it.',
+    explanation:'She can cut <i>a two-hundred-gram piece of dough to within five grams</i>, and the passage adds that she learned it by getting it wrong for a year - nobody weighs anything.' }),
 
   makeMCQ({ id:'g5eng-comp-007', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
-    question:`${_PASSAGE_A}What is the main MESSAGE of this passage?`,
-    options:[
-      'The dodo tasted delicious and that is why sailors ate it.',
-      'Human activity can have a devastating impact on wildlife.',
-      'Scientists should try to bring the dodo back to life.',
-      'Mauritius had many types of flightless birds.'
-    ],
-    answer:'Human activity can have a devastating impact on wildlife.',
-    hint:'Look at the final sentence of the passage - it usually contains the author\'s main point.',
-    explanation:'The passage ends with: "the dodo serves as a powerful reminder of how <b>human activity can threaten wildlife</b>." This is the main theme - the dodo\'s extinction was caused entirely by human action (hunting, introduced predators).' }),
+    question:_G5C_BAKERY + '<p>What happens to the bread that has not been sold by four in the afternoon?</p>',
+    options:['It goes to the primary school across the road', 'It is sold cheaply before the shop closes',
+             'It is kept and sold again the next morning', 'It is given to the people who are waiting'],
+    answer:'It goes to the primary school across the road',
+    hint:'The passage says nothing is left at the end of the day. Where does it go?',
+    explanation:'It goes to the <b>primary school across the road</b>, where it becomes breakfast for children who arrive without one - something Mr Sooriah has done since 1996.' }),
 
-  makeTF({ id:'g5eng-comp-008', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:1,
-    question:`${_PASSAGE_A}True or False: The dodo could fly short distances to escape predators.`,
-    answer:false,
-    hint:'Look for the word "flightless" in the passage.',
-    explanation:'<b>False.</b> The passage clearly calls the dodo a "<b>flightless bird</b>" and states it "could <b>not fly</b> to escape danger". It was unable to fly at all.' }),
+  makeMCQ({ id:'g5eng-comp-008', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:3,
+    question:_G5C_BAKERY + '<p>Why are the almond biscuits made only on Fridays?</p>',
+    options:['Almonds cost a great deal', 'Fridays are the shop\'s busiest day',
+             'There is no time on other days', 'They keep for only one day'],
+    answer:'Almonds cost a great deal',
+    hint:'The reason is given in the same sentence, after the word "because".',
+    explanation:'They appear only on Fridays <i>because almonds are expensive</i>. The sweet things are made after seven, when the shop is quieter, so time is not the reason.' }),
 
-  makeMCQ({ id:'g5eng-comp-009', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:2,
-    question:`${_PASSAGE_A}The author describes the dodo as a "remarkable bird". What does remarkable most likely mean here?`,
-    options:['very ordinary and common','extraordinary and worth noting','ugly and unpleasant','dangerous and fierce'],
-    answer:'extraordinary and worth noting',
-    hint:'The whole passage is dedicated to the dodo - would the author write so much about an ordinary bird?',
-    explanation:'"<b>Remarkable</b>" means extraordinary, noteworthy or deserving of attention. The context - a whole passage celebrating the dodo - shows the author finds it exceptional, not ordinary.' }),
+  makeMCQ({ id:'g5eng-comp-009', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:3,
+    question:_G5C_BAKERY + '<p>"The first batch is baked at four." A <b>batch</b> is</p>',
+    options:['a quantity baked together at one time', 'the shelf where the bread is cooled',
+             'the earliest customer of the morning', 'a type of loaf sold in the shop'],
+    answer:'a quantity baked together at one time',
+    hint:'The word "first" tells you that more will follow.',
+    explanation:'A <b>batch</b> is an amount made or baked together in one go. Calling it the <i>first</i> batch tells us the oven is filled and emptied several times.' }),
 
-  makeMCQ({ id:'g5eng-comp-010', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
-    question:`${_PASSAGE_A}Which paragraph explains what scientists do to study the dodo today?`,
-    options:['Paragraph 1','Paragraph 2','Paragraph 3','There is no such information in the passage.'],
-    answer:'Paragraph 3',
-    hint:'Scan each paragraph for mentions of scientists.',
-    explanation:'<b>Paragraph 3</b> (the last paragraph) states: "Scientists have studied <b>dodo bones</b> found on the island to learn more about this remarkable bird." Studying fossilised bones (fossil record) is how we know about extinct species.' })
+  makeMCQ({ id:'g5eng-comp-010', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:4,
+    question:_G5C_BAKERY + '<p>The oven is allowed to go out when the bakery closes at five. Roughly what time will it be completely cold?</p>',
+    options:['Around four in the morning', 'Around midnight the same night',
+             'Around noon the following day', 'Around nine in the evening'],
+    answer:'Around four in the morning',
+    hint:'The passage gives the closing time and the cooling time. Add them.',
+    explanation:'Five in the afternoon plus eleven hours is <b>about four in the morning</b>. That is roughly when the next day\'s first batch goes in - the oven barely gets cold before it is needed again.' }),
 
-);
+  // ══ TEXT 2 · 9 questions ════════════════════════════════════════════════
+  makeMCQ({ id:'g5eng-comp-011', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
+    question:_G5C_BICYCLE + '<p>How long had the bicycle stood unused?</p>',
+    options:['Eleven years', 'Nine years', 'Six years', 'Four years'],
+    answer:'Eleven years',
+    hint:'The first sentence gives it. Other numbers in the passage are distances and days.',
+    explanation:'It <i>had not been ridden for eleven years</i>. Nine is the number of mornings Devika practised, and eleven is also her age - the passage repeats the number deliberately.' }),
 
-// Second passage - Nico and Tony (based on Grade 5 End of Year Assessment 2023)
-const _PASSAGE_B = `<div style="background:#f8fafc;border-left:4px solid #10b981;border-radius:6px;padding:10px 14px;margin:8px 0;font-size:0.93em;line-height:1.65;color:#0f172a">
-<b style="color:#065f46">Read the passage carefully, then answer the question.</b><br><br>
-<b>The Fishing Trip</b><br><br>
-One Saturday morning, Nico and Tony, two good friends, decided to go fishing at a nearby pond. They got their fishing lines and bait ready and also packed utensils and ingredients, as they wanted to have fresh fish for lunch.<br><br>
-Once they arrived at the pond, they sat far from each other to fish from different areas. Within a few minutes, Nico caught a big and beautiful fish. He was overjoyed. He placed the fish in a bucket and continued fishing to bring some home for dinner.<br><br>
-On the other side, Tony\'s bucket was empty. Nico offered to help Tony, but Tony politely refused. He said, "Don\'t worry, Nico! I will soon catch the kind of fish I need. I just need to be patient." Some minutes later, Tony managed to catch a large fish - but to Nico\'s surprise, Tony threw it back into the pond. Nico watched in silence as Tony caught many big fish and threw them all back.<br><br>
-After a while, Nico got annoyed and asked, "Why are you throwing the fish back? They were big and beautiful!" Tony calmly replied, "I know they were big. Unluckily, I did not bring a big pan, so I am looking for a smaller fish to fit my cooking pan." Nico laughed, then advised his friend, "You just have to cut the big fish into smaller pieces!"
-</div>`;
+  makeMCQ({ id:'g5eng-comp-012', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
+    question:_G5C_BICYCLE + '<p>Where did Devika choose to practise?</p>',
+    options:['The lane behind the sugar factory', 'The flat road behind the church',
+             'The back yard of her neighbour', 'The road between the two villages'],
+    answer:'The lane behind the sugar factory',
+    hint:'The road behind the church appears too - but who used that one?',
+    explanation:'She practised in <b>the lane behind the sugar factory</b>. The flat road behind the church is where her cousins learned years earlier, and where she finally rides on the ninth morning.' }),
 
-STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g5eng-comp-013', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:3,
+    question:_G5C_BICYCLE + '<p>"In the morning it turned, though it complained." What does this tell us about the chain?</p>',
+    options:['It worked, but stiffly and noisily', 'It was still completely stuck fast',
+             'It had been replaced with a new one', 'It broke as soon as it was used'],
+    answer:'It worked, but stiffly and noisily',
+    hint:'A chain cannot really complain. What is the writer describing?',
+    explanation:'The chain is given a human action to describe a sound and a stiffness: it <b>worked, but grudgingly</b>. If it were still stuck it would not have turned at all.' }),
 
-  makeMCQ({ id:'g5eng-comp-011', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:1,
-    question:`${_PASSAGE_B}When did Nico and Tony go fishing?`,
-    options:['On a Sunday afternoon','On a Saturday morning','On a weekday evening','On a Friday at lunchtime'],
-    answer:'On a Saturday morning',
-    hint:'The answer is in the very first sentence.',
-    explanation:'The passage begins: "One <b>Saturday morning</b>, Nico and Tony... decided to go fishing." Always check the first paragraph for basic facts about time and place.' }),
+  makeMCQ({ id:'g5eng-comp-014', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:3,
+    question:_G5C_BICYCLE + '<p>What did Devika do on the first three mornings?</p>',
+    options:['She practised without ever riding the bicycle', 'She rode a few metres and then fell over',
+             'She reached the end of the lane and turned', 'She waited for her uncle to fix the chain'],
+    answer:'She practised without ever riding the bicycle',
+    hint:'The passage is explicit that something did not happen on those mornings.',
+    explanation:'She <i>did not get on the bicycle at all</i> - walking beside it, sitting with both feet down, pushing off and putting her feet straight back. Falling into the grass came on the fourth morning.' }),
 
-  makeMCQ({ id:'g5eng-comp-012', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:1,
-    question:`${_PASSAGE_B}Why did Nico and Tony pack utensils and ingredients?`,
-    options:[
-      'To sell them at the market',
-      'To give to other fishermen',
-      'Because they wanted to cook and eat fresh fish for lunch',
-      'Because they forgot to leave them at home'
-    ],
-    answer:'Because they wanted to cook and eat fresh fish for lunch',
-    hint:'Look at the reason given in the first paragraph.',
-    explanation:'The passage says they packed utensils and ingredients "as they wanted to have <b>fresh fish for lunch</b>." They planned to cook the fish they caught right there.' }),
+  makeMCQ({ id:'g5eng-comp-015', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:3,
+    question:_G5C_BICYCLE + '<p>On which morning did Devika first reach the end of the lane without stopping?</p>',
+    options:['The sixth', 'The fourth', 'The ninth', 'The third'],
+    answer:'The sixth',
+    hint:'Four separate mornings are described. Match the event to the right one.',
+    explanation:'On the <b>sixth</b> morning she reached the end without stopping - and then could not repeat it. The fourth was six metres and a fall; the ninth was the long ride.' }),
 
-  makeMCQ({ id:'g5eng-comp-013', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:1,
-    question:`${_PASSAGE_B}What does "overjoyed" mean in the passage?`,
-    options:['very tired','very angry','very worried','very happy'],
-    answer:'very happy',
-    hint:'Nico had just caught a big, beautiful fish - how would he feel?',
-    explanation:'"<b>Overjoyed</b>" means <b>extremely happy or delighted</b>. The prefix "over-" here means "to an extreme degree". Context: Nico had just caught a big beautiful fish - a great success that would naturally make him very happy.' }),
+  makeMCQ({ id:'g5eng-comp-016', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:3,
+    question:_G5C_BICYCLE + '<p>What did Mrs Ramgoolam do when Devika rode past her gate?</p>',
+    options:['She watched without waving or calling out', 'She waved and called out to congratulate her',
+             'She walked out into the road to meet her', 'She went indoors before Devika reached her'],
+    answer:'She watched without waving or calling out',
+    hint:'The passage says twice what she did not do.',
+    explanation:'She <i>did not wave and she did not call out</i>. She watched Devika pass, waited for her to come back, and only then went inside - the silence is the point.' }),
 
-  makeMCQ({ id:'g5eng-comp-014', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
-    question:`${_PASSAGE_B}Why did Tony throw the big fish back into the pond?`,
-    options:[
-      'He was being kind to the fish',
-      'The fish were too ugly to eat',
-      'He had not brought a big enough pan to cook large fish',
-      'He wanted to keep fishing for sport'
-    ],
-    answer:'He had not brought a big enough pan to cook large fish',
-    hint:'Tony explains his reason directly to Nico - find that explanation.',
-    explanation:'Tony explains: "I did not bring a big pan, so I am looking for a <b>smaller fish to fit my cooking pan</b>." He needed a fish small enough to fit the pan he had brought.' }),
+  makeMCQ({ id:'g5eng-comp-017', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:3,
+    question:_G5C_BICYCLE + '<p>Not being able to ride "had become the kind of thing that is easier not to mention". This means Devika</p>',
+    options:['had grown embarrassed about it over the years', 'had genuinely forgotten that she could not ride',
+             'had been told by her family not to discuss it', 'had never once thought about learning before'],
+    answer:'had grown embarrassed about it over the years',
+    hint:'Why would something become harder to talk about the longer it goes on?',
+    explanation:'Her cousins learned at five or six; she is eleven. The longer it lasted the more <b>awkward</b> it became, until silence was simpler than explaining - which is why she practises where nobody can see.' }),
 
-  makeMCQ({ id:'g5eng-comp-015', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:2,
-    question:`${_PASSAGE_B}What advice did Nico give Tony at the end?`,
-    options:[
-      'To bring a bigger fishing rod next time',
-      'To cut the big fish into smaller pieces to fit the pan',
-      'To go home and come back with a bigger pan',
-      'To stop fishing and just eat sandwiches'
-    ],
-    answer:'To cut the big fish into smaller pieces to fit the pan',
-    hint:'Nico laughed and then offered a practical solution.',
-    explanation:'Nico advised: "You just have to <b>cut the big fish into smaller pieces</b> to fit them into your pan." This was the practical solution Tony had not thought of.' }),
+  makeMCQ({ id:'g5eng-comp-018', chapterId:'eng-comprehension', subsection:'inference', difficulty:4,
+    question:_G5C_BICYCLE + '<p>Why did Mrs Ramgoolam say yes "before the question was finished"?</p>',
+    options:['She had hoped for years that someone would ask to use it',
+             'She had been trying to give the old bicycle away',
+             'She did not want to hear the whole of the question',
+             'She was worried that Devika would change her mind'],
+    answer:'She had hoped for years that someone would ask to use it',
+    hint:'Devika works this out herself at the very end of the passage.',
+    explanation:'Devika realises it later: the bicycle <i>had been offered so quickly because Mrs Ramgoolam had been waiting years for somebody to ask</i>. She wanted it <b>ridden</b>, not removed.' }),
 
-  makeTF({ id:'g5eng-comp-016', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:1,
-    question:`${_PASSAGE_B}True or False: Tony accepted Nico\'s offer to help him fish.`,
-    answer:false,
-    hint:'Look at what Tony said when Nico offered to help.',
-    explanation:'<b>False.</b> The passage says Tony "<b>politely refused</b>" Nico\'s offer to help. He said "Don\'t worry, Nico!" and insisted he just needed to be patient.' }),
-
-  makeMCQ({ id:'g5eng-comp-017', chapterId:'eng-comprehension', subsection:'vocabulary', difficulty:2,
-    question:`${_PASSAGE_B}What does the word "patient" mean as used by Tony in the passage?`,
-    options:[
-      'a person receiving medical treatment',
-      'able to wait calmly without becoming annoyed or upset',
-      'very fast and energetic',
-      'very strong and powerful'
-    ],
-    answer:'able to wait calmly without becoming annoyed or upset',
-    hint:'Tony says he needs to be patient while waiting for the right fish to come.',
-    explanation:'In this context, "<b>patient</b>" means <b>able to wait calmly</b> without frustration. Tony was waiting for a small fish - he needed to stay calm. (Note: "patient" also means someone receiving medical treatment - this is a multiple-meaning word; context tells us which meaning is correct here.)' }),
-
-  makeMCQ({ id:'g5eng-comp-018', chapterId:'eng-comprehension', subsection:'inference', difficulty:3,
-    question:`${_PASSAGE_B}What does this story suggest about problem-solving?`,
-    options:[
-      'If you fail, you should give up and ask for help',
-      'Sometimes we miss a simple solution because we think too narrowly - a fresh perspective (like Nico\'s advice) can reveal an easy answer',
-      'Fishing is the best way to solve problems',
-      'You should always bring extra equipment in case something goes wrong'
-    ],
-    answer:'Sometimes we miss a simple solution because we think too narrowly - a fresh perspective (like Nico\'s advice) can reveal an easy answer',
-    hint:'Tony had a problem, and Nico found the solution immediately. Why could Tony not see it himself?',
-    explanation:'Tony was so focused on finding a small fish that he could not see the obvious solution: cut the big fish into smaller pieces. The story illustrates how a <b>different perspective</b> - in this case from a friend - can reveal a simple answer that we miss when we are too close to the problem.' }),
-
-  makeMCQ({ id:'g5eng-comp-019', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:3,
-    question:`${_PASSAGE_B}Which word from the passage is a synonym of "unfortunately"?`,
-    options:['overjoyed','politely','unluckily','calmly'],
-    answer:'unluckily',
-    hint:'Look for a word in Tony\'s speech that means "sadly" or "what a pity".',
-    explanation:'"<b>Unluckily</b>" is used by Tony: "Unluckily, I did not bring a big pan." It is a synonym of "unfortunately", both meaning "sadly" or "it is a pity that". Synonyms: unfortunately, unluckily, regrettably, sadly.' })
+  makeMCQ({ id:'g5eng-comp-019', chapterId:'eng-comprehension', subsection:'retrieval', difficulty:4,
+    question:_G5C_BICYCLE + '<p>Roughly how far did Devika ride altogether on the ninth morning?</p>',
+    options:['About 3.6 kilometres', 'About 2 kilometres',
+             'About 1.6 kilometres', 'About 400 metres'],
+    answer:'About 3.6 kilometres',
+    hint:'The lane is 400 metres. She rode it four times, and then did something else as well.',
+    explanation:'Four times a 400-metre lane is 1,600 metres, and the ride to the church and back is two kilometres: <b>about 3.6 km in total</b>. Each of the wrong options is one part of the journey on its own.' })
 
 );

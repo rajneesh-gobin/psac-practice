@@ -5,13 +5,13 @@
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g5sci-pl-001', chapterId:'plants', subsection:'parts', difficulty:1,
-    question:'What is the main function of the leaf in a plant?',
-    options:['It absorbs water from the soil','It makes food for the plant','It holds the plant firmly in the soil','It protects the seed'],
-    answer:'It makes food for the plant',
-    hint:'The leaf carries out photosynthesis.',
-    explanation:'The leaf makes food for the plant through photosynthesis - using sunlight, water and carbon dioxide to produce glucose and oxygen.',
-    learnMore:'The word equation for photosynthesis: <b>Carbon dioxide + Water → Glucose + Oxygen</b> (using sunlight and chlorophyll).<br><br>Chlorophyll is the green pigment inside leaf cells that captures sunlight energy. This is why leaves are green! Glucose is used by the plant for energy and to build new cells; oxygen is released as a by-product — which is why plants are essential for life on Earth. A single large tree can produce enough oxygen for two people to breathe for a year.' }),
+  makeMCQ({ id:'g5sci-pl-001', chapterId:'plants', subsection:'parts', difficulty:2,
+    question:'Why are the leaves of most plants broad and flat?',
+    options:['To catch as much sunlight as possible','To store water for the dry season','To protect the stem from hungry insects','To hold the plant upright in the wind'],
+    answer:'To catch as much sunlight as possible',
+    hint:'Think about what a leaf needs in order to make food.',
+    explanation:'A broad, flat leaf gives the largest possible surface for catching <b>sunlight</b>, which the plant needs for photosynthesis. Roots take up the water, and the stem holds the plant up.',
+    learnMore:'The word equation for photosynthesis: <b>Carbon dioxide + Water → Glucose + Oxygen</b> (using sunlight and chlorophyll).<br><br>Chlorophyll is the green pigment inside leaf cells that captures sunlight energy. This is why leaves are green! Glucose is used by the plant for energy and to build new cells; oxygen is released as a by-product - which is why plants are essential for life on Earth. A single large tree can produce enough oxygen for two people to breathe for a year.' }),
 
   makeMCQ({ id:'g5sci-pl-002', chapterId:'plants', subsection:'growth', difficulty:1,
     question:'Which part of the plant anchors it firmly in the soil AND absorbs water and minerals?',
@@ -39,7 +39,7 @@ STATIC_QUESTIONS.push(
     answer:'Water, warmth and air',
     hint:'A seed does not need light to germinate.',
     explanation:'Seeds need water (to activate enzymes), warmth (for chemical reactions) and air/oxygen (for respiration) to germinate. Sunlight is NOT needed for germination.',
-    learnMore:'You can prove seeds don\'t need light to germinate by planting one in a dark cupboard — it will sprout just as well as one on a windowsill. Once the seedling\'s first leaves appear, it urgently needs light to begin photosynthesis, or it will run out of stored food energy and die.<br><br>The food energy a seedling uses before its first leaves open comes from the <b>seed\'s own food store</b> (cotyledons, or "seed leaves"). This is why bigger seeds (like beans) can survive longer underground than tiny seeds.' }),
+    learnMore:'You can prove seeds don\'t need light to germinate by planting one in a dark cupboard - it will sprout just as well as one on a windowsill. Once the seedling\'s first leaves appear, it urgently needs light to begin photosynthesis, or it will run out of stored food energy and die.<br><br>The food energy a seedling uses before its first leaves open comes from the <b>seed\'s own food store</b> (cotyledons, or "seed leaves"). This is why bigger seeds (like beans) can survive longer underground than tiny seeds.' }),
 
   makeTF({ id:'g5sci-pl-006', chapterId:'plants', subsection:'reproduction', difficulty:1,
     question:'Sunlight is needed for a seed to germinate.',
@@ -47,17 +47,12 @@ STATIC_QUESTIONS.push(
     hint:'Think about what a seed buried deep in the ground needs to start growing.',
     explanation:'Seeds do not need sunlight to germinate. They need water, warmth and air. Sunlight is needed later, for the seedling to make food.' }),
 
-  makeMCQ({ id:'g5sci-pl-007', chapterId:'plants', subsection:'growth', difficulty:1,
-    question:'What is soil erosion?',
-    options:[
-      'The process of planting new trees',
-      'The removal of topsoil by wind or water',
-      'The mixing of soil with fertilisers',
-      'The process of soil becoming hard'
-    ],
-    answer:'The removal of topsoil by wind or water',
-    hint:'Erosion means wearing away - something is being removed.',
-    explanation:'Soil erosion is the removal and transport of topsoil by wind, running water or waves, leaving the land less fertile.' }),
+  makeMCQ({ id:'g5sci-pl-007', chapterId:'plants', subsection:'growth', difficulty:3,
+    question:'A hillside is cleared of all its trees. What is most likely to happen when heavy rain falls?',
+    options:['Topsoil will be washed down the slope','The soil will become richer in minerals','The soil will harden and never absorb water','The rain will soak in faster than before'],
+    answer:'Topsoil will be washed down the slope',
+    hint:'What was holding the soil in place before the trees were removed?',
+    explanation:'Tree roots bind the soil, and leaves break the force of the rain before it lands. With both gone, water runs straight over the surface and carries the <b>topsoil</b> away downhill. That is soil erosion.' }),
 
   makeMCQ({ id:'g5sci-pl-008', chapterId:'plants', subsection:'growth', difficulty:2,
     question:'Which measure helps to PREVENT soil erosion on slopes?',
@@ -224,40 +219,40 @@ STATIC_QUESTIONS.push(
     explanation:'The grassy field is protected in two ways: (1) The <b>roots bind soil particles together</b>, making it harder for water to wash the soil away; (2) The <b>leaves/blades of grass slow the rain drops</b> as they fall, reducing the force with which they hit the soil surface.' }),
 
   makeMCQ({ id:'g5sci-pl-026', chapterId:'plants', subsection:'diagrams', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Diagram_showing_the_parts_of_a_plant_CRUK_371.svg" alt="a plant diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>In the diagram above, which part absorbs water and minerals from the soil?</b>',
+    question:'<svg viewBox="0 0 220 230" width="220" height="230" role="img" style="display:block;margin:8px auto;max-width:100%;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px"><rect x="1" y="150" width="218" height="79" fill="#f5e6d3"/><line x1="1" y1="150" x2="219" y2="150" stroke="#a16207" stroke-width="2"/><line x1="110" y1="150" x2="110" y2="52" stroke="#15803d" stroke-width="5"/><ellipse cx="78" cy="96" rx="26" ry="12" fill="#22c55e" stroke="#15803d" stroke-width="2" transform="rotate(-18 78 96)"/><ellipse cx="142" cy="114" rx="26" ry="12" fill="#22c55e" stroke="#15803d" stroke-width="2" transform="rotate(18 142 114)"/><circle cx="110" cy="34" r="11" fill="#facc15" stroke="#a16207" stroke-width="2"/><circle cx="110" cy="16" r="9" fill="#f472b6" stroke="#be185d" stroke-width="1.5"/><circle cx="128" cy="34" r="9" fill="#f472b6" stroke="#be185d" stroke-width="1.5"/><circle cx="110" cy="52" r="9" fill="#f472b6" stroke="#be185d" stroke-width="1.5"/><circle cx="92" cy="34" r="9" fill="#f472b6" stroke="#be185d" stroke-width="1.5"/><path d="M110 150 L110 178" stroke="#92400e" stroke-width="4" fill="none"/><path d="M110 178 L86 206" stroke="#92400e" stroke-width="3" fill="none"/><path d="M110 178 L134 206" stroke="#92400e" stroke-width="3" fill="none"/><path d="M110 166 L80 186" stroke="#92400e" stroke-width="2.5" fill="none"/><path d="M110 166 L140 186" stroke="#92400e" stroke-width="2.5" fill="none"/><path d="M86 206 L74 218" stroke="#92400e" stroke-width="2" fill="none"/><path d="M134 206 L146 218" stroke="#92400e" stroke-width="2" fill="none"/><line x1="150" y1="192" x2="170" y2="192" stroke="#b91c1c" stroke-width="1.5"/><text x="180" y="197" font-size="15" font-weight="bold" fill="#b91c1c">X</text></svg><p>The diagram shows a plant. Which part of the plant is labelled <b>X</b>?</p>',
     options:['Stem','Leaf','Root','Flower'],
     answer:'Root',
     hint:'This part grows underground and holds the plant firmly in place.',
     explanation:'The <b>root</b> absorbs water and minerals from the soil and also anchors the plant. In the diagram it is the underground part at the base of the plant.' }),
 
   makeMCQ({ id:'g5sci-pl-027', chapterId:'plants', subsection:'diagrams', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Maize_seeds_germination.jpg" alt="a germinating seed photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo above shows seeds that have started to sprout tiny roots and shoots. What is this process called?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/maize-seeds-germination.jpg" alt="a germinating seed photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo above shows seeds that have started to sprout tiny roots and shoots. What is this process called?</b>',
     options:['Germination','Pollination','Photosynthesis','Erosion'],
     answer:'Germination',
-    hint:'This process requires water, warmth and air — NOT sunlight — to begin.',
+    hint:'This process requires water, warmth and air - NOT sunlight - to begin.',
     explanation:'<b>Germination</b> is the process by which a seed sprouts and begins to grow into a new plant. The root (radicle) appears first, pushing into the soil to anchor the seedling and absorb water, before the shoot emerges.' }),
 
   makeMCQ({ id:'g5sci-pl-028', chapterId:'plants', subsection:'diagrams', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Erosion.jpg" alt="a field with eroded bare soil" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo above shows bare soil being stripped away by rain and wind. What is this process called, and what would PREVENT it?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/erosion.jpg" alt="a field with eroded bare soil" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo above shows bare soil being stripped away by rain and wind. What is this process called, and what would PREVENT it?</b>',
     options:[
-      'Pollination — prevented by adding fertiliser',
-      'Soil erosion — prevented by planting trees and grass whose roots bind the soil',
-      'Photosynthesis — prevented by removing leaves',
-      'Germination — prevented by watering crops'
+      'Pollination - prevented by adding fertiliser',
+      'Soil erosion - prevented by planting trees and grass whose roots bind the soil',
+      'Photosynthesis - prevented by removing leaves',
+      'Germination - prevented by watering crops'
     ],
-    answer:'Soil erosion — prevented by planting trees and grass whose roots bind the soil',
-    hint:'Plant roots act like anchors — they hold soil particles together.',
+    answer:'Soil erosion - prevented by planting trees and grass whose roots bind the soil',
+    hint:'Plant roots act like anchors - they hold soil particles together.',
     explanation:'<b>Soil erosion</b> is the removal of topsoil by wind or running water. Bare fields with no plant roots to hold soil in place are very vulnerable. <b>Planting trees and grasses</b> helps prevent erosion because their roots bind soil particles and their leaves slow the impact of raindrops.' }),
 
   makeMCQ({ id:'g5sci-pl-029', chapterId:'plants', subsection:'diagrams', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Simple_photosynthesis_overview.svg" alt="a photosynthesis diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The diagram shows photosynthesis taking place in a leaf. Which gas does the leaf RELEASE as a by-product of this process?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/simple-photosynthesis-overview.png" alt="a photosynthesis diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The diagram shows photosynthesis taking place in a leaf. Which gas does the leaf RELEASE as a by-product of this process?</b>',
     options:['Carbon dioxide','Nitrogen','Oxygen','Hydrogen'],
     answer:'Oxygen',
-    hint:'We need this gas to breathe — plants release it while making food.',
+    hint:'We need this gas to breathe - plants release it while making food.',
     explanation:'During photosynthesis, leaves use sunlight, water and carbon dioxide to make food (glucose). <b>Oxygen</b> is released as a by-product through the stomata. This is why plants are essential for producing the air we breathe.' }),
 
   makeMCQ({ id:'g5sci-pl-030', chapterId:'plants', subsection:'diagrams', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Prop_roots_of_Maize_plant.jpg" alt="a plant root system photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows the root system of a plant. What are the TWO main functions of roots?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/prop-roots-of-maize-plant.jpg" alt="a plant root system photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows the root system of a plant. What are the TWO main functions of roots?</b>',
     options:[
       'They absorb water and minerals from the soil, AND anchor the plant firmly in the soil',
       'They make food through photosynthesis AND transport it to the leaves',

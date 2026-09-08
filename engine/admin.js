@@ -8,7 +8,7 @@ const AdminPanel = (() => {
   let _members    = [];   // cached parent profiles
   let _teachers   = [];   // cached teacher profiles
   let _settings   = null; // global_settings from mm_data
-  // True once a query has proved this database predates supabase-credits-shop.sql,
+  // True once a query has proved this database predates supabase-schema.sql,
   // so the credit controls are hidden instead of failing on every click.
   let _creditColumnsMissing = false;
 
@@ -36,6 +36,105 @@ const AdminPanel = (() => {
     if (createBtn) createBtn.classList.toggle('hidden', !isSA);
   }
 
+  // ── Syllabus preview (read-only) ───────────────
+  // ⚠ The only place in the app that shows a comingSoon pack. Authoring view,
+  // so it does NOT filter !p.comingSoon - the packs hidden everywhere else are
+  // exactly the ones worth previewing here.
+  const Syllabus = (() => {
+    const _byId = id => document.getElementById(id);
+    const _packs = grade => ((typeof SUBJECT_PACKS !== 'undefined') ? SUBJECT_PACKS : [])
+      .filter(p => !grade || String(p.grade) === String(grade));
+
+    function open() {
+      const gSel = _byId('asyl-grade');
+      if (!gSel) return;
+      const grades = [...new Set(_packs().map(p => p.grade))].sort((a, b) => a - b);
+      const prev = gSel.value;
+      gSel.innerHTML = grades.map(g => {
+        const stage = (typeof _gradeStage === 'function') ? _gradeStage(g) : null;
+        const tag = stage ? ` - ${stage.exam}` : '';
+        return `<option value="${g}">Grade ${g}${_esc(tag)}</option>`;
+      }).join('');
+      if (prev && grades.some(g => String(g) === prev)) gSel.value = prev;
+      gradeChange();
+    }
+
+    function gradeChange() {
+      const sSel = _byId('asyl-subject');
+      const grade = _byId('asyl-grade')?.value;
+      if (!sSel) return;
+      const packs = _packs(grade);
+      const prev = sSel.value;
+      sSel.innerHTML = packs.map(p =>
+        `<option value="${_esc(p.id)}">${_esc(p.subject || p.name || p.id)}${p.comingSoon ? ' (Coming Soon)' : ''}</option>`
+      ).join('');
+      if (prev && packs.some(p => p.id === prev)) sSel.value = prev;
+      show();
+    }
+
+    function _chapterHtml(ch) {
+      // A chapter carries its prose in exactly one of three shapes; the
+      // Syllabus screen reads all three and so must this.
+      const prose = ch.syllabus || ch.notes || ch.enrichmentNote || '';
+      const kind = ch.notes ? 'Notes' : (ch.enrichmentNote ? 'Enrichment note' : '');
+      const bits = [];
+      if (ch.examWeight != null) bits.push(`weight ${ch.examWeight}`);
+      if (ch.enrichment) bits.push('✨ bonus');
+      if (kind) bits.push(kind);
+      bits.push(_esc(ch.id));
+      return `<div class="asyl-ch">
+        <div class="asyl-ch-head"><span class="asyl-ch-icon">${_esc(ch.icon || '📘')}</span>
+          <span class="asyl-ch-name">${_esc(ch.name || ch.id)}</span></div>
+        <div class="asyl-ch-meta">${bits.join(' · ')}</div>
+        ${prose ? `<p class="asyl-ch-prose">${_esc(prose)}</p>`
+                : '<p class="asyl-ch-prose asyl-empty">No syllabus text for this chapter.</p>'}
+      </div>`;
+    }
+
+    async function show() {
+      const body = _byId('asyl-body');
+      if (!body) return;
+      const packId = _byId('asyl-subject')?.value;
+      if (!packId) { body.innerHTML = ''; return; }
+
+      body.innerHTML = '<p class="asyl-note">Loading syllabus…</p>';
+
+      // ⚠ subjects/_index.js carries chapter NAMES but not prose - that is the
+      // whole point of the lazy split. Without this every chapter would render
+      // "No syllabus text" and read as missing content rather than unloaded.
+      if (typeof PackLoader !== 'undefined') {
+        try { await PackLoader.ensure(packId); }
+        catch {
+          body.innerHTML = '<p class="asyl-note">Could not load this pack\u2019s syllabus. Check the network tab and try again.</p>';
+          return;
+        }
+      }
+
+      // ⚠ Re-read the pack AFTER the await: registerSubject() merges the real
+      // manifest over the lite entry, and the admin may have changed the
+      // dropdown while the fetch was in flight.
+      const pack = ((typeof SUBJECT_PACKS !== 'undefined') ? SUBJECT_PACKS : []).find(p => p.id === packId);
+      if (!pack) { body.innerHTML = ''; return; }
+      if (_byId('asyl-subject')?.value !== packId) return;
+
+      const chs = pack._chapters || pack.chapters || [];
+      const subs = pack.syllabus || {};
+      const subCount = Object.values(subs).reduce((n, v) => n + ((v && v.subsections || []).length), 0);
+
+      const head = `<div class="asyl-head">
+        <h3>${_esc(pack.icon || '📚')} Grade ${_esc(pack.grade)} ${_esc(pack.subject || pack.name || '')}</h3>
+        <p>${chs.length} chapters${subCount ? ` · ${subCount} declared subsections` : ''}${pack.comingSoon ? ' · <b>Coming Soon</b> (hidden from parents and children)' : ''}</p>
+        <p class="asyl-src">${_esc(pack.curriculum || '')}${pack._src ? ` · ${_esc(pack._src)}` : ''}</p>
+      </div>`;
+
+      body.innerHTML = head + (chs.length
+        ? chs.map(_chapterHtml).join('')
+        : '<p class="asyl-note">This pack has no chapters.</p>');
+    }
+
+    return { open, gradeChange, show };
+  })();
+
   // ── Tab switching ───────────────────────────
   function showTab(name) {
     document.querySelectorAll('.admin-tab-panel').forEach(p => p.classList.add('hidden'));
@@ -56,10 +155,16 @@ const AdminPanel = (() => {
     if (name === 'roles')     loadRoles();
     if (name === 'plans')     loadPlans();
     if (name === 'questions') QM.tabOpen();
+    if (name === 'syllabus')  Syllabus.open();
     if (name === 'maps' && typeof GeoMap !== 'undefined') GeoMap.renderEditor(document.getElementById('admin-map-editor'));
     // The security log is on the Content tab and is a per-visit read: an admin
     // opening it wants what has happened since, not what was cached at render.
     if (name === 'content')   loadSecurityEvents();
+    // ⚠ Rendered on every visit, not once at init: the seed box and the
+    //   generated-paper panel are module state, and per this project's rule
+    //   module state resets in the RENDER. Otherwise the tab reopens showing
+    //   the previous paper's links, whose blob urls have been revoked.
+    if (name === 'content' && typeof NcePaperAdmin !== 'undefined') NcePaperAdmin.render();
   }
 
   // ── Teacher approval queue ─────────────────
@@ -369,6 +474,10 @@ const AdminPanel = (() => {
         body: JSON.stringify(body),
       });
     } catch (e) {
+      if (location.protocol === 'file:') {
+        throw new Error("This action needs the app to be served, not opened as a file. "
+          + "Run `npm run dev` (or `netlify dev`) and open http://localhost:8888, or use the deployed site.");
+      }
       throw new Error("Could not reach the server. Check your connection.");
     }
 
@@ -424,7 +533,7 @@ const AdminPanel = (() => {
           <code id="tmp-pw-value" class="select-all font-mono text-lg font-bold tracking-wider text-indigo-800 dark:text-indigo-200 break-all">${_esc(password)}</code>
         </div>
         <p class="text-xs text-red-600 dark:text-red-400 text-center mb-4">
-          This is shown once. It cannot be retrieved later — copy it now, and ask
+          This is shown once. It cannot be retrieved later - copy it now, and ask
           them to change it after signing in.
         </p>
         <div class="flex gap-2">
@@ -441,7 +550,7 @@ const AdminPanel = (() => {
         const el = document.getElementById('tmp-pw-value');
         if (el) { const r = document.createRange(); r.selectNodeContents(el);
           const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
-        toast('Could not copy automatically — select the text and copy it.', 3500);
+        toast('Could not copy automatically - select the text and copy it.', 3500);
       }
     };
     wrap.querySelector('#tmp-pw-done').onclick = () => wrap.remove();
@@ -472,7 +581,7 @@ const AdminPanel = (() => {
 `
       + `If you only want to stop them signing in, cancel and use Disable instead.`)) return;
     const typed = prompt(`Type DELETE (in capitals) to permanently delete ${name}.`);
-    if ((typed || "").trim() !== "DELETE") { toast("Cancelled — nothing was deleted.", 2500); return; }
+    if ((typed || "").trim() !== "DELETE") { toast("Cancelled - nothing was deleted.", 2500); return; }
 
     try {
       // The server demands the confirmation too. A browser confirm is not a
@@ -488,7 +597,7 @@ const AdminPanel = (() => {
       // creating - so it must not be reported as a clean delete.
       if (result.purge_failures?.length) {
         console.error("[AdminPanel] leftover rows after delete:", result.purge_failures);
-        toast("Some related records could not be removed — check the console.", 6000);
+        toast("Some related records could not be removed - check the console.", 6000);
       }
       await loadMembers(true);
     } catch (error) {
@@ -511,8 +620,8 @@ const AdminPanel = (() => {
     let membersQuery = _sb.from('profiles')
       // credits/blocked_until are read here rather than per-row: the admin needs to
       // SEE a balance to spot a farm, and one extra column beats N extra queries.
-      // ⚠ A database that has not run supabase-credits-shop.sql has neither column,
-      // which would 42703 the whole query and empty the members list — hence the
+      // ⚠ A database that has not run supabase-schema.sql has neither column,
+      // which would 42703 the whole query and empty the members list - hence the
       // retry below with the original column list.
       .select('id, full_name, role, is_super_admin, disabled, expires_at, created_at, teacher_status, referral_code, credits, blocked_until',
               { count: 'exact' })
@@ -532,7 +641,7 @@ const AdminPanel = (() => {
         _sb.from('plans').select('id, name, price_mur').order('price_mur'),
     ]);
     if (profilesRes.error) {
-      // 42703 = unknown column, i.e. supabase-credits-shop.sql has not been run
+      // 42703 = unknown column, i.e. supabase-schema.sql has not been run
       // on this database. Retry without the two credit columns rather than
       // showing an admin an empty member list over a feature they have not
       // deployed yet. Anything else is a real failure and is reported.
@@ -750,7 +859,7 @@ const AdminPanel = (() => {
 
   function _memberChildrenSummary(m) {
     if (m.has_family === false) return '<span class="text-xs text-gray-400 dark:text-gray-500">No family yet</span>';
-    if (m.child_count == null) return '<span class="text-xs text-gray-400 dark:text-gray-500">Children —</span>';
+    if (m.child_count == null) return '<span class="text-xs text-gray-400 dark:text-gray-500">Children -</span>';
     const n = m.child_count;
     return `<span class="text-xs font-semibold text-indigo-600 dark:text-indigo-300">👶 ${n} ${n === 1 ? 'child' : 'children'}</span>`;
   }
@@ -879,7 +988,7 @@ const AdminPanel = (() => {
           </div>
           <span class="hidden sm:block">${_memberChildrenSummary(m)}</span>
           <span class="hidden sm:block">${_memberStatusBadge(m)}</span>
-          <span class="hidden sm:block text-xs truncate" id="plan-label-${m.id}">${isParent ? 'loading…' : '—'}</span>
+          <span class="hidden sm:block text-xs truncate" id="plan-label-${m.id}">${isParent ? 'loading…' : '-'}</span>
           <div class="col-span-2 sm:hidden flex flex-wrap items-center gap-1.5">
             ${_memberChildrenSummary(m)}${_memberStatusBadge(m)}
           </div>
@@ -901,7 +1010,7 @@ const AdminPanel = (() => {
               📧 Send password-reset link
             </button>
             <button onclick="AdminPanel.setTemporaryPassword('${m.id}')"
-              title="No email involved — you read the new password out to them"
+              title="No email involved - you read the new password out to them"
               class="text-xs px-3 py-1 rounded-lg font-semibold bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 hover:bg-orange-200">
               🔑 Set temporary password
             </button>
@@ -1034,7 +1143,7 @@ const AdminPanel = (() => {
     const { data: kids } = await _sb.from('students').select('id, display_name, username, grade, session_version, expires_at, created_at').eq('family_id', fam.id);
     _familyStudents[profileId] = kids || [];
     _renderChildren(profileId);
-    // Paint the roster first, then fill the numbers in — a family list should
+    // Paint the roster first, then fill the numbers in - a family list should
     // not wait on a progress query.
     _loadChildStats(_familyStudents[profileId]).then(() => _renderChildren(profileId));
   }
@@ -1042,7 +1151,7 @@ const AdminPanel = (() => {
   // ══════════════════════════════════════════════
   //  CHILD PROGRESS FOR ADMINS
   //
-  //  The children panel listed name, username, grade and expiry — nothing about
+  //  The children panel listed name, username, grade and expiry - nothing about
   //  whether the child had ever used the app. student_progress.data is the same
   //  jsonb blob the child's own session reads, and progress_rw already grants
   //  is_admin() read access, so this needs no new table, RPC or policy.
@@ -1088,7 +1197,7 @@ const AdminPanel = (() => {
     const totalCor = stats.totalCorrect   || correct;
 
     // Seconds, from the day buckets. Absent for every child until they next
-    // practise — see _recordTimeOnTask(); rendered as "—", never as "0m",
+    // practise - see _recordTimeOnTask(); rendered as "-", never as "0m",
     // because "no data" and "no time" are different claims.
     let seconds = 0, hasTime = false, activeDays = 0;
     Object.values(daily).forEach(v => {
@@ -1156,11 +1265,11 @@ const AdminPanel = (() => {
     return `<div class="mt-1.5">
       <div class="flex flex-wrap gap-1.5">
         ${pill('answered', s.answered)}
-        ${pill('accuracy', s.accuracy === null ? '—' : s.accuracy + '%')}
+        ${pill('accuracy', s.accuracy === null ? '-' : s.accuracy + '%')}
         ${pill('chapters', s.chapters)}
         ${pill('exams', s.exams)}
-        ${pill('best', s.best ? s.best + '%' : '—')}
-        ${pill('time', s.hasTime ? _fmtDuration(s.seconds) : '—')}
+        ${pill('best', s.best ? s.best + '%' : '-')}
+        ${pill('time', s.hasTime ? _fmtDuration(s.seconds) : '-')}
         ${pill('days', s.activeDays)}
       </div>
       ${subjects}
@@ -1310,7 +1419,7 @@ const AdminPanel = (() => {
     const res = await _saveSettings();
     if (!res.ok) _settings = JSON.parse(prevJson);
     if (repaint) repaint();
-    toast(res.ok ? okMsg : 'Could not save — the change was NOT applied.', res.ok ? 3000 : 4000);
+    toast(res.ok ? okMsg : 'Could not save - the change was NOT applied.', res.ok ? 3000 : 4000);
     return res.ok;
   }
 
@@ -1511,6 +1620,7 @@ const AdminPanel = (() => {
     _teachersOffset += rows.length;
     _renderTeachers(_teachers);
     _setCount('admin-teachers-count', _teachers.length, count, 'teachers');
+    _loadTeacherActivity(rows.map(t => t.id));
     const moreBtn = document.getElementById('admin-teachers-more');
     if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < TEACHERS_PAGE);
   }
@@ -1526,7 +1636,7 @@ const AdminPanel = (() => {
       el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No teacher accounts found.</p>';
       return;
     }
-    el.innerHTML = list.map(t => {
+    el.innerHTML = _sortedTeachers(list).map(t => {
       const st     = _TSTATUS[t.teacher_status] || _TSTATUS.pending;
       const joined = t.created_at ? new Date(t.created_at).toLocaleDateString() : '-';
       const tier   = t.teacher_tier || 'free';
@@ -1571,8 +1681,149 @@ const AdminPanel = (() => {
               title="Click to edit display name"
               class="flex-1 min-w-0 text-xs border border-gray-200 dark:border-gray-600 rounded-lg px-2 py-1 bg-transparent dark:text-white focus:outline-none focus:ring-1 focus:ring-indigo-400">
           </div>
+          ${_teacherActivityHtml(t.id)}
         </div>`;
     }).join('');
+    _renderTeacherActivityHeadline();
+  }
+
+  // ── Teacher activity ────────────────────────────
+  // profiles says who a teacher IS (name, status, tier); nothing in it says
+  // what they DO. The admin could approve a teacher and never learn whether
+  // they set a single piece of work. /api/admin-teacher-activity folds ten
+  // tables plus the auth sign-in time into one summary per id (service role -
+  // most of those tables are teacher-owned under RLS, and last_sign_in_at is
+  // not readable from the browser at all). Cached per id for the tab's life;
+  // ↻ Refresh clears it.
+  const _teacherActivity = {};      // id -> summary, or { error } while unavailable
+  let _teacherActivityWindow = 30;
+  let _teacherActivityNote = null;  // one line when the endpoint is missing
+  let _teacherSort = 'status';
+
+  async function _loadTeacherActivity(ids) {
+    const missing = ids.filter(id => !_teacherActivity[id]);
+    if (!missing.length) return;
+    missing.forEach(id => { _teacherActivity[id] = { pending: true }; });
+    _renderTeachers(_teachers);
+    try {
+      const result = await _adminApi('/api/admin-teacher-activity', { user_ids: missing });
+      _teacherActivityWindow = result.window_days || 30;
+      _teacherActivityNote = (result.partial && result.partial.length)
+        ? 'Some sources could not be read (' + result.partial.join(', ') + '); those counts show as unknown.'
+        : null;
+      missing.forEach(id => { _teacherActivity[id] = result.teachers[id] || { empty: true }; });
+    } catch (e) {
+      _teacherActivityNote = 'Activity summary unavailable: ' + (e.message || e);
+      missing.forEach(id => { delete _teacherActivity[id]; });
+    }
+    _renderTeachers(_teachers);
+  }
+
+  function refreshTeacherActivity() {
+    Object.keys(_teacherActivity).forEach(k => { delete _teacherActivity[k]; });
+    _teacherActivityNote = null;
+    _loadTeacherActivity(_teachers.map(t => t.id));
+  }
+
+  function sortTeachers(mode) {
+    _teacherSort = mode || 'status';
+    _renderTeachers(_teachers);
+  }
+
+  // Sorting on activity only makes sense once it has arrived; until then the
+  // server's status order stands. Unknown activity sorts as "quietest".
+  function _sortedTeachers(list) {
+    const act = id => _teacherActivity[id];
+    const last = id => { const a = act(id); return a && !a.pending && !a.error ? Math.max(Date.parse(a.last_activity_at || 0) || 0, Date.parse(a.last_sign_in_at || 0) || 0) : 0; };
+    const arr = list.slice();
+    if (_teacherSort === 'recent') arr.sort((a, b) => last(b.id) - last(a.id));
+    else if (_teacherSort === 'quiet') arr.sort((a, b) => last(a.id) - last(b.id));
+    else if (_teacherSort === 'newest') arr.sort((a, b) => (Date.parse(b.created_at || 0) || 0) - (Date.parse(a.created_at || 0) || 0));
+    return arr;
+  }
+
+  function _agoText(iso) {
+    const t = iso ? Date.parse(iso) : NaN;
+    if (!Number.isFinite(t)) return 'never';
+    const days = Math.floor((Date.now() - t) / 86400000);
+    if (days <= 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days < 14) return days + ' days ago';
+    if (days < 60) return Math.round(days / 7) + ' weeks ago';
+    if (days < 365) return Math.round(days / 30) + ' months ago';
+    return Math.round(days / 365 * 10) / 10 + ' years ago';
+  }
+
+  const _TACT = {
+    active:          { label: 'Active',            cls: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300' },
+    dormant:         { label: 'Dormant',           cls: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300' },
+    signed_in_only:  { label: 'Signed in, no work set', cls: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300' },
+    never_signed_in: { label: 'Never signed in',   cls: 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400' },
+  };
+
+  function _teacherActivityHtml(id) {
+    const a = _teacherActivity[id];
+    const W = _teacherActivityWindow;
+    if (!a) {
+      return _teacherActivityNote
+        ? `<p class="tch-act-note">${_esc(_teacherActivityNote)}</p>`
+        : '';
+    }
+    if (a.pending) return '<p class="tch-act-note animate-pulse">Loading activity…</p>';
+    if (a.empty)   return '<p class="tch-act-note">No activity data for this account.</p>';
+    const tag = _TACT[a.status] || _TACT.signed_in_only;
+    const n = v => (typeof v === 'number' ? v.toLocaleString('en-GB') : '?');
+    const chip = (icon, txt, title) => `<span class="tch-act-chip" title="${_esc(title || '')}">${icon} ${txt}</span>`;
+    const summary = `
+      <div class="tch-act">
+        <div class="tch-act-head">
+          <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${tag.cls}">${tag.label}</span>
+          <span class="tch-act-when"><b>Last did something:</b> ${_esc(_agoText(a.last_activity_at))}${a.last_activity_what ? ' (' + _esc(a.last_activity_what) + ')' : ''}</span>
+          <span class="tch-act-when"><b>Last sign-in:</b> ${_esc(_agoText(a.last_sign_in_at))}${a.sign_ins && a.sign_ins.total ? ' · ' + n(a.sign_ins.total) + ' sign-ins, ' + n(a.sign_ins.recent) + ' in the last ' + W + ' days' : ''}</span>
+          ${a.email ? `<span class="tch-act-when tch-act-email">${_esc(a.email)}</span>` : ''}
+        </div>
+        <div class="tch-act-chips">
+          ${chip('🏫', n(a.classrooms.length) + (a.classrooms.length === 1 ? ' class' : ' classes'), 'Classrooms with enrolled pupils')}
+          ${chip('👥', n(a.pupils) + ' pupils', 'Active enrolments across their classrooms')}
+          ${chip('🎟️', n(a.guest_classes.length) + ' guest ' + (a.guest_classes.length === 1 ? 'class' : 'classes') + ' · ' + n(a.guest_pupils) + ' pupils', 'Guest classes (PIN-based, no family account)')}
+          ${chip('📝', n(a.assignments.total) + ' assignments set' + (a.assignments.recent ? ', ' + n(a.assignments.recent) + ' in ' + W + 'd' : ''), a.assignments.classroom + ' classroom + ' + a.assignments.guest + ' guest')}
+          ${chip('📥', n(a.results.total) + ' results received' + (a.results.recent ? ', ' + n(a.results.recent) + ' in ' + W + 'd' : ''), 'Pupil submissions, last one ' + _agoText(a.last_result_at))}
+          ${chip('📎', n(a.content.materials + a.content.posts + a.content.homework) + ' materials & posts', a.content.materials + ' uploads, ' + a.content.posts + ' posts, ' + a.content.homework + ' homework sheets')}
+        </div>
+        ${_teacherActivityDetail(a)}
+      </div>`;
+    return summary;
+  }
+
+  function _teacherActivityDetail(a) {
+    const rows = [];
+    a.classrooms.forEach(c => rows.push(`<li><b>${_esc(c.name || 'Class')}</b>${c.subject ? ' · ' + _esc(c.subject) : ''}${c.grade != null ? ' · Grade ' + _esc(c.grade) : ''}${c.active ? '' : ' · <i>archived</i>'} - ${c.pupils} pupils, ${c.assignments} assignments, ${c.submissions} results · last activity ${_esc(_agoText(c.last_activity_at))}</li>`));
+    a.guest_classes.forEach(c => rows.push(`<li><b>${_esc(c.name || 'Guest class')}</b> (guest)${c.active ? '' : ' · <i>closed</i>'} - ${c.pupils} pupils · created ${_esc(_agoText(c.created_at))}</li>`));
+    const asg = (a.recent_guest_assignments || []).map(g => `<li>📝 <b>${_esc(g.title || 'Assignment')}</b>${g.classroom ? ' · ' + _esc(g.classroom) : ''} - set ${_esc(_agoText(g.created_at))}, ${g.submitted} handed in${g.started > g.submitted ? ' (' + (g.started - g.submitted) + ' started, not finished)' : ''}${g.status !== 'active' ? ' · <i>' + _esc(g.status) + '</i>' : ''}</li>`);
+    if (!rows.length && !asg.length) return '';
+    return `
+      <details class="tch-act-detail">
+        <summary>What they have done</summary>
+        ${rows.length ? '<ul>' + rows.join('') + '</ul>' : ''}
+        ${asg.length ? '<p class="tch-act-sub">Most recent guest assignments</p><ul>' + asg.join('') + '</ul>' : ''}
+      </details>`;
+  }
+
+  function _renderTeacherActivityHeadline() {
+    const el = document.getElementById('admin-teachers-activity');
+    if (!el) return;
+    const got = _teachers.map(t => _teacherActivity[t.id]).filter(a => a && !a.pending && !a.empty);
+    if (!got.length) { el.classList.toggle('hidden', !_teacherActivityNote); el.textContent = _teacherActivityNote || ''; return; }
+    const c = { active: 0, dormant: 0, signed_in_only: 0, never_signed_in: 0 };
+    got.forEach(a => { c[a.status] = (c[a.status] || 0) + 1; });
+    const W = _teacherActivityWindow;
+    const parts = [];
+    parts.push(`<b>${c.active}</b> of ${got.length} loaded teachers active in the last ${W} days`);
+    if (c.dormant)         parts.push(`<b>${c.dormant}</b> dormant`);
+    if (c.signed_in_only)  parts.push(`<b>${c.signed_in_only}</b> signed in but never set work`);
+    if (c.never_signed_in) parts.push(`<b>${c.never_signed_in}</b> never signed in`);
+    el.innerHTML = parts.join(' · ') + (_teacherActivityNote ? ` <span class="text-amber-600 dark:text-amber-400">· ${_esc(_teacherActivityNote)}</span>` : '');
+    el.classList.remove('hidden');
   }
 
   async function teacherApprove(userId) {
@@ -1675,7 +1926,7 @@ const AdminPanel = (() => {
     loadRoles();
     if (error || !data?.length) {
       console.error('[Admin.setRole]', error?.message || 'no row updated');
-      toast('Could not change that role — nothing was changed.', 3500);
+      toast('Could not change that role - nothing was changed.', 3500);
       return;
     }
     toast(newRole === 'admin' ? 'User promoted to Admin. ✅' : 'Admin rights removed.', 2000);
@@ -1720,7 +1971,7 @@ const AdminPanel = (() => {
                   class="plan-pack-all w-3.5 h-3.5 accent-indigo-600" ${allChecked ? 'checked' : ''}
                   onchange="AdminPanel.togglePackAll('${plan.id}','${pack.id}',this.checked)">
               </label>
-              ${pack.icon || ''} Grade ${g} — ${_esc(pack.name)}
+              ${pack.icon || ''} Grade ${g} - ${_esc(pack.name)}
             </summary>
             <div class="pl-8 mt-1">${chBoxes}</div>
           </details>`;
@@ -1770,7 +2021,7 @@ const AdminPanel = (() => {
       return `<div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow border border-gray-100 dark:border-gray-700">
         <div class="flex items-center justify-between mb-3">
           <div>
-            <div class="font-bold text-gray-800 dark:text-white">${_esc(plan.name)} Plan ${plan.price_mur === 0 ? '— Free' : `— Rs ${plan.price_mur}/mo`}</div>
+            <div class="font-bold text-gray-800 dark:text-white">${_esc(plan.name)} Plan ${plan.price_mur === 0 ? '- Free' : `- Rs ${plan.price_mur}/mo`}</div>
             <div class="text-xs text-gray-500 dark:text-gray-400">max ${plan.max_children || 1} child${(plan.max_children || 1) > 1 ? 'ren' : ''}</div>
           </div>
           <label class="flex items-center gap-2 cursor-pointer select-none">
@@ -1823,7 +2074,7 @@ const AdminPanel = (() => {
             Blank = unlimited. Nothing here applies until <b>Plan enforcement</b>
             is switched on in the Settings tab.<br>
             <b>Was price</b> only shows a struck-out promo when it is higher than
-            the live price — blank or lower means no promotion.
+            the live price - blank or lower means no promotion.
           </p>
           ${capN('daily_question_cap', 'Daily questions')}
           ${capN('weekly_exam_cap',    'Weekly exams')}
@@ -1913,7 +2164,7 @@ const AdminPanel = (() => {
 
     toast(`${ticked} chapter${ticked === 1 ? '' : 's'} ticked`
       + (bonus ? ` · ${bonus} bonus chapter${bonus === 1 ? '' : 's'} left locked` : '')
-      + ' — press Save Plan to apply.', 4500);
+      + ' - press Save Plan to apply.', 4500);
   }
 
   function togglePackAll(planId, packId, checked) {
@@ -2005,7 +2256,7 @@ const AdminPanel = (() => {
     loadPlans();
     if (error) {
       console.error('[Admin.togglePlan]', error.message);
-      toast('Could not change that plan — nothing was changed.', 3500);
+      toast('Could not change that plan - nothing was changed.', 3500);
       return;
     }
     toast(active ? `${planId} plan is now live!` : `${planId} plan disabled.`, 2000);
@@ -2029,13 +2280,38 @@ const AdminPanel = (() => {
   async function resolveReport(id) {
     const ok = await Store.resolveReport(id);
     if (ok) { toast('Report marked resolved.', 1800); loadReports(); }
-    else toast('Could not update — try again.', 2500);
+    else toast('Could not update - try again.', 2500);
+  }
+
+  function deleteReport(id) {
+    const report = _reportsAll.find(r => r.id === id);
+    const question = report?.question_id || 'this report';
+    _confirmModal(
+      `Permanently delete the report for “${question}”?\n\nIts conversation and replies will also be deleted. This cannot be undone. Deleting the report does not delete the question itself.`,
+      async () => {
+        const btn = document.getElementById(`report-delete-${id}`);
+        if (btn) { btn.disabled = true; btn.textContent = 'Deleting…'; }
+        const ok = await Store.deleteReport(id);
+        if (!ok) {
+          if (btn) { btn.disabled = false; btn.textContent = '🗑 Delete'; }
+          toast('Could not delete this report - nothing was removed.', 3500);
+          return;
+        }
+        toast('Report and its conversation deleted.', 2200);
+        await Promise.all([
+          loadReports(true),
+          _loadReportBadge(),
+          _loadPendingReports(),
+        ]);
+      },
+      { icon: '🗑️', okLabel: 'Delete report', danger: true }
+    );
   }
 
   async function setReportStatus(id, status) {
     const ok = await Store.setReportStatus(id, status);
     if (ok) { toast(`Status set to "${status}".`, 1800); loadReports(); }
-    else toast('Could not update — try again.', 2500);
+    else toast('Could not update - try again.', 2500);
   }
 
   async function sendAdminReply(id) {
@@ -2050,7 +2326,7 @@ const AdminPanel = (() => {
       loadReports();
     } else {
       if (btn) btn.textContent = 'Send';
-      toast('Could not send reply — try again.', 2500);
+      toast('Could not send reply - try again.', 2500);
     }
   }
 
@@ -2076,6 +2352,75 @@ const AdminPanel = (() => {
   let _reportsOffset  = 0;
   let _reportsAll     = [];
   let _reportsTotal   = null;
+  // 'all' | 'questions' | 'contact'. Reset lives in loadReports(), not in the
+  // chip handler, so opening the tab never inherits the last admin's filter.
+  let _reportKind     = 'all';
+  const _reportsSelected = new Set();
+
+  function _syncReportTools() {
+    [['all', 'rep-kind-all'], ['questions', 'rep-kind-questions'], ['contact', 'rep-kind-contact']]
+      .forEach(([kind, id]) => {
+        const b = document.getElementById(id);
+        if (!b) return;
+        const on = _reportKind === kind;
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    const del = document.getElementById('rep-bulk-delete');
+    const n = _reportsSelected.size;
+    if (del) {
+      del.disabled = n === 0;
+      del.textContent = n ? `🗑 Delete ${n} selected` : '🗑 Delete selected';
+    }
+  }
+
+  function setReportKind(kind) {
+    _reportKind = ['all', 'questions', 'contact'].includes(kind) ? kind : 'all';
+    _syncReportTools();
+    loadReports(true);
+  }
+
+  function toggleReportPick(id, on) {
+    if (on) _reportsSelected.add(id); else _reportsSelected.delete(id);
+    _syncReportTools();
+  }
+
+  function toggleSelectAllReports() {
+    const shown = _reportsAll.map(r => r.id);
+    const allOn = shown.length > 0 && shown.every(id => _reportsSelected.has(id));
+    shown.forEach(id => { if (allOn) _reportsSelected.delete(id); else _reportsSelected.add(id); });
+    document.querySelectorAll('#admin-reports-list .rep-pick').forEach(cb => { cb.checked = !allOn; });
+    _syncReportTools();
+  }
+
+  // ⚠ Deletes only ids that are on screen right now. The Set can outlive a
+  // filter change, and sending an id the admin can no longer see would be a
+  // delete they never chose.
+  function deleteSelectedReports() {
+    const ids = _reportsAll.map(r => r.id).filter(id => _reportsSelected.has(id));
+    if (!ids.length) return;
+    _confirmModal(
+      `Permanently delete ${ids.length} report${ids.length === 1 ? '' : 's'}?\n\nTheir conversations and replies go too. This cannot be undone.`,
+      async () => {
+        const btn = document.getElementById('rep-bulk-delete');
+        if (btn) { btn.disabled = true; btn.textContent = 'Deleting…'; }
+        const res = await Store.deleteReports(ids);
+        if (!res.deleted) {
+          toast('Nothing was deleted - check your connection and try again.', 4000);
+          _syncReportTools();
+          return;
+        }
+        // "Rows written" is never taken on trust: the count comes back from the
+        // delete itself, and a partial result says so rather than claiming all.
+        toast(res.deleted === res.requested
+          ? `${res.deleted} report${res.deleted === 1 ? '' : 's'} deleted.`
+          : `${res.deleted} of ${res.requested} deleted - the rest were already gone or refused.`, 3500);
+        _reportsSelected.clear();
+        await Promise.all([loadReports(true), _loadReportBadge(), _loadPendingReports()]);
+      },
+      { icon: '🗑', okLabel: `Delete ${ids.length}`, danger: true }
+    );
+  }
 
   async function loadReports(reset = true) {
     const el = document.getElementById('admin-reports-list');
@@ -2085,7 +2430,7 @@ const AdminPanel = (() => {
       // Ensure question bank is fully loaded across all grades so the live lookup
       // works. loadAllForGrade, NOT loadForStudent: the latter now resolves once
       // the child's active subject is in and prefetches the rest in the
-      // background, which is right for a child and wrong here — a report can name
+      // background, which is right for a child and wrong here - a report can name
       // a question in any subject, and the lookup runs the moment this resolves.
       // Only needed once, not on every "load more" page.
       if (typeof QuestionLoader !== 'undefined') {
@@ -2097,11 +2442,12 @@ const AdminPanel = (() => {
       }
     }
     // Total fetched only on reset - a Load more page does not change it.
-    if (reset) _reportsTotal = await Store.countReports();
-    const page = await Store.loadReports(_reportsOffset, REPORTS_PAGE);
+    if (reset) { _reportsTotal = await Store.countReports(_reportKind); _reportsSelected.clear(); }
+    const page = await Store.loadReports(_reportsOffset, REPORTS_PAGE, _reportKind);
     _reportsOffset += page.length;
     _reportsAll = reset ? page : _reportsAll.concat(page);
     _setCount('admin-reports-count', _reportsAll.length, _reportsTotal, 'reports');
+    _syncReportTools();
     const moreBtn = document.getElementById('admin-reports-more');
     if (moreBtn) moreBtn.classList.toggle('hidden', page.length < REPORTS_PAGE);
     if (!_reportsAll.length) {
@@ -2120,7 +2466,12 @@ const AdminPanel = (() => {
         : status === 'in_review' ? 'border-blue-400'
         : status === 'wont_fix'  ? 'border-gray-300'
         : 'border-amber-400';
-      const reportTypeLabel = { wrong_answer:'❌ Wrong answer', unclear:'❓ Unclear', typo:'✏️ Typo', wrong_options:'🔄 Options', other:'💬 Other' }[r.report_type || ''] || '';
+      const reportTypeLabel = { wrong_answer:'❌ Wrong answer', unclear:'❓ Unclear', typo:'✏️ Typo', wrong_options:'🔄 Options', other:'💬 Other',
+        contact:'🌐 Guest contact', ticket:'🎫 Ticket' }[r.report_type || ''] || '';
+      // A contact-form message comes from somebody with NO account: no student
+      // row to join, no inbox to reply into. The card says so and gives the one
+      // route back to them there is - their email address.
+      const isContact = r.report_type === 'contact' || r.question_id === '__contact__';
 
       // Look up full question object from loaded question bank
       const fullQ = (typeof STATIC_QUESTIONS !== 'undefined')
@@ -2141,9 +2492,11 @@ const AdminPanel = (() => {
         }
       }
       const chapterName = chapter?.name || chapterIdLookup || '';
-      const subjectLabel = subjectPack
-        ? `${subjectPack.name} — Grade ${subjectPack.grade}`
-        : (r.question_id || '').slice(0, 6);
+      const subjectLabel = isContact
+        ? `🌐 From the contact form${meta.contactType ? ' - ' + meta.contactType : ''}`
+        : subjectPack
+          ? `${subjectPack.name} - Grade ${subjectPack.grade}`
+          : (r.question_id || '').slice(0, 6);
 
       // Student name: from joined row, or from meta for older reports
       const studentName = r.students?.display_name || meta.studentName || null;
@@ -2167,6 +2520,8 @@ const AdminPanel = (() => {
         <!-- Header row -->
         <div class="flex justify-between items-start gap-2 mb-3">
           <div class="flex flex-wrap gap-1.5 items-center">
+            <input type="checkbox" class="rep-pick" data-rep="${safeId}" ${_reportsSelected.has(r.id) ? 'checked' : ''}
+              onchange="AdminPanel.toggleReportPick('${safeId}', this.checked)" aria-label="Select this report for deletion">
             <span class="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">${_esc(r.question_id || '-')}</span>
             ${mode ? `<span class="text-xs text-gray-500 dark:text-gray-400">(${_esc(mode)})</span>` : ''}
             ${reportTypeLabel ? `<span class="text-xs text-gray-600 dark:text-gray-300">${_esc(reportTypeLabel)}</span>` : ''}
@@ -2181,7 +2536,7 @@ const AdminPanel = (() => {
 
         <!-- Question text -->
         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 mb-3">
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Question</p>
+          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">${isContact ? 'About' : 'Question'}</p>
           <p class="text-sm text-gray-800 dark:text-white leading-relaxed">${_esc(qText.slice(0, 400))}${qText.length > 400 ? '…' : ''}</p>
         </div>
 
@@ -2193,7 +2548,7 @@ const AdminPanel = (() => {
 
         <!-- Reporter's comment -->
         <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
-          <p class="text-xs font-semibold text-red-500 mb-1">Reporter's comment</p>
+          <p class="text-xs font-semibold text-red-500 mb-1">${isContact ? 'Their message' : "Reporter's comment"}</p>
           <p class="text-sm text-gray-800 dark:text-white">${_esc(r.message || '-')}</p>
         </div>
 
@@ -2201,11 +2556,22 @@ const AdminPanel = (() => {
         <div id="report-thread-${safeId}" class="mb-3"></div>
         <button onclick="AdminPanel.loadReportThread('${safeId}')" class="text-xs text-indigo-500 dark:text-indigo-400 underline mb-3">Load message thread</button>
 
+        <!-- Guest sender: the only way back to them is the address they left -->
+        ${isContact ? `<div class="border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-3 mb-3">
+          <p class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 mb-1">Sent from the contact form - no account</p>
+          ${meta.guestEmail
+            ? `<a href="mailto:${_esc(meta.guestEmail)}?subject=${encodeURIComponent('Re: your message to PSAC Exam Practice')}"
+                 class="text-sm font-semibold text-indigo-600 dark:text-indigo-300 underline break-all">✉️ ${_esc(meta.guestEmail)}</a>
+               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Replying in the app will not reach them - use this address.</p>`
+            : '<p class="text-sm text-amber-600 dark:text-amber-400">No email address left - there is no way to reply to this one.</p>'}
+          ${meta.ua ? `<p class="text-[11px] text-gray-400 dark:text-gray-500 mt-2 break-all">Browser: ${_esc(meta.ua)}</p>` : ''}
+        </div>` : ''}
+
         <!-- Admin reply form -->
-        ${isOpen ? `<div class="mb-3">
+        ${isOpen && !isContact ? `<div class="mb-3">
           <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Reply to student</p>
           <div class="flex gap-2">
-            <textarea id="report-reply-${safeId}" rows="2" maxlength="1000" placeholder="Type a reply — the student will see this in their inbox…"
+            <textarea id="report-reply-${safeId}" rows="2" maxlength="1000" placeholder="Type a reply - the student will see this in their inbox…"
               class="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"></textarea>
             <button id="report-reply-btn-${safeId}" onclick="AdminPanel.sendAdminReply('${safeId}')"
               class="shrink-0 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-colors self-end">Send</button>
@@ -2222,6 +2588,7 @@ const AdminPanel = (() => {
             ${isOpen ? `<button onclick="AdminPanel.resolveReport('${safeId}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">✅ Resolved</button>` : ''}
             ${status !== 'wont_fix' ? `<button onclick="AdminPanel.setReportStatus('${safeId}','wont_fix')" class="text-xs bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg transition-colors">⚪ Won't fix</button>` : ''}
             ${status !== 'open' ? `<button onclick="AdminPanel.setReportStatus('${safeId}','open')" class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded-lg transition-colors">🔁 Reopen</button>` : ''}
+            <button id="report-delete-${safeId}" onclick="AdminPanel.deleteReport('${safeId}')" class="text-xs border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 px-3 py-1 rounded-lg transition-colors disabled:opacity-50">🗑 Delete</button>
           </div>
         </div>
       </div>`;
@@ -2406,44 +2773,91 @@ const AdminPanel = (() => {
       return SUBJECT_PACKS.find(p => p.id === subjectId);
     }
 
-    // ── Filter bar: grade cascade ────────────────────────────────────────
+    // ── Filter bar: grade → subject → chapter ────────────────────────────
+    // One builder for the subject list, used on tab open and on every grade
+    // change. There used to be two, and _populateSubjectFilter() refused to run
+    // a second time (`options.length > 1`), so a list a grade had narrowed
+    // never widened back.
+    function _qmPacksFor(grade) {
+      const wantAll = !!_el('qm-include-unpublished')?.checked;
+      return SUBJECT_PACKS.filter(p => (!grade || String(p.grade) === grade)
+                                    && (wantAll || !p.comingSoon));
+    }
+
+    function _qmFillSubjects(grade) {
+      const subSel = _el('qm-subject');
+      const prev   = subSel.value;
+      subSel.innerHTML = '<option value="">All subjects</option>';
+      _qmPacksFor(grade).forEach(p => {
+        const o = document.createElement('option');
+        o.value = p.id;
+        // The grade prefix is what makes the unfiltered list unreadable, so it
+        // is only carried while no grade has been chosen.
+        o.textContent = grade ? p.name : `Grade ${p.grade} - ${p.name}`;
+        subSel.appendChild(o);
+      });
+      // Keep the subject already being looked at when it survives the new
+      // grade. Clearing it on every touch of the grade control is what made the
+      // two dropdowns feel unrelated.
+      subSel.value = [...subSel.options].some(o => o.value === prev) ? prev : '';
+      _qmFillChapters();
+    }
+
+    function _qmFillChapters() {
+      const chSel = _el('qm-chapter');
+      const prev  = chSel.value;
+      chSel.innerHTML = '<option value="">All chapters</option>';
+      const pack = _getPack(_el('qm-subject').value);
+      chSel.disabled = !pack;
+      (pack?._chapters || pack?.chapters || []).forEach(ch => {
+        const o = document.createElement('option');
+        o.value = ch.id;
+        o.textContent = `${ch.name}${ch.enrichment ? ' (Bonus)' : ''}`;
+        chSel.appendChild(o);
+      });
+      chSel.value = [...chSel.options].some(o => o.value === prev) ? prev : '';
+    }
+
+    function _qmHint(msg) {
+      const el = _el('qm-filter-hint');
+      if (!el) return;
+      el.textContent = msg || '';
+      el.classList.toggle('hidden', !msg);
+    }
+
     function qmGradeFilter() {
       const grade = _el('qm-grade').value;
-      const subSel = _el('qm-subject');
-      subSel.innerHTML = '<option value="">All subjects</option>';
-      _el('qm-chapter').innerHTML = '<option value="">All chapters</option>';
-      _el('qm-chapter').disabled = true;
-      SUBJECT_PACKS
-        .filter(p => (!grade || String(p.grade) === grade) && (_el('qm-include-unpublished')?.checked || !p.comingSoon))
-        .forEach(p => {
-          const o = document.createElement('option');
-          o.value = p.id; o.textContent = grade ? p.name : `Grade ${p.grade} — ${p.name}`;
-          subSel.appendChild(o);
-        });
+      // Six of the nine registered grades are comingSoon placeholders. With
+      // "include unpublished" off, choosing one left an EMPTY subject dropdown
+      // and an empty list, with nothing on screen to say why - which reads as a
+      // grade control that does nothing. Open that grade's placeholders
+      // instead, and say so.
+      let note = '';
+      if (grade && !_qmPacksFor(grade).length
+          && SUBJECT_PACKS.some(p => String(p.grade) === grade)) {
+        const box = _el('qm-include-unpublished');
+        if (box) box.checked = true;
+        note = `Grade ${grade} has no published packs yet - showing its placeholder packs.`;
+      }
+      _qmFillSubjects(grade);
+      _qmHint(note);
       qmSearch();
     }
 
-    function _populateSubjectFilter() {
-      const subSel = _el('qm-subject');
-      if (subSel.options.length > 1) return; // already populated
-      SUBJECT_PACKS.filter(p => _el('qm-include-unpublished')?.checked || !p.comingSoon).forEach(p => {
-        const o = document.createElement('option');
-        o.value = p.id; o.textContent = `Grade ${p.grade} — ${p.name}`;
-        subSel.appendChild(o);
-      });
-    }
-
     function qmSubjectFilter() {
-      const chapter = _el('qm-chapter');
-      chapter.innerHTML = '<option value="">All chapters</option>';
-      const pack = _getPack(_el('qm-subject').value);
-      chapter.disabled = !pack;
-      (pack?._chapters || pack?.chapters || []).forEach(ch => {
-        const option = document.createElement('option');
-        option.value = ch.id;
-        option.textContent = `${ch.name}${ch.enrichment ? ' (Bonus)' : ''}`;
-        chapter.appendChild(option);
-      });
+      // Picking a subject while the grade still reads "All grades" sets the
+      // grade to match, so the two controls never disagree about what is on
+      // screen and the long combined list shortens to that grade at once.
+      const pack     = _getPack(_el('qm-subject').value);
+      const gradeSel = _el('qm-grade');
+      if (pack && gradeSel && !gradeSel.value
+          && [...gradeSel.options].some(o => o.value === String(pack.grade))) {
+        gradeSel.value = String(pack.grade);
+        _qmFillSubjects(gradeSel.value);
+        _el('qm-subject').value = pack.id;
+        _qmHint('');
+      }
+      _qmFillChapters();
       qmSearch();
     }
 
@@ -2504,7 +2918,7 @@ const AdminPanel = (() => {
       _setCount('qm-count', _offset + rows.length, _qmTotal, 'questions');
 
       const html = rows.map(r => {
-        const preview = _stripHtml(r.data?.question || '').slice(0, 360) || 'Visual or interactive question — open to review.';
+        const preview = _stripHtml(r.data?.question || '').slice(0, 360) || 'Visual or interactive question - open to review.';
         const safeId = _esc(JSON.stringify(r.id));
         const pack = _getPack(r.subject_id);
         const ch = (pack?._chapters || pack?.chapters || []).find(c => c.id === r.chapter_id);
@@ -2615,7 +3029,7 @@ const AdminPanel = (() => {
       const subjectId  = _el('qmf-subject').value;
       const chapterId  = _el('qmf-chapter').value;
       const subSel     = _el('qmf-subsection');
-      subSel.innerHTML = '<option value="">— none —</option>';
+      subSel.innerHTML = '<option value="">- none -</option>';
       const pack       = _getPack(subjectId);
       const syllabus   = pack?.SYLLABUS?.[chapterId];
       (syllabus?.subsections || []).forEach(s => {
@@ -2730,14 +3144,18 @@ const AdminPanel = (() => {
     // ── Delete ────────────────────────────────────────────────────────────
     async function qmDelete(id) {
       if (!confirm(`Delete question "${id}"?\nThis cannot be undone.`)) return;
-      const { error } = await _sb.from('questions').delete().eq('id', id);
+      // ⚠ .select('id'), and zero rows is a FAILURE. A DELETE whose RLS policy
+      //   matches no row returns no error and no rows, so checking `error`
+      //   alone reports a refusal as a success.
+      const { data, error } = await _sb.from('questions').delete().eq('id', id).select('id');
       if (error) { toast('Delete failed: ' + error.message, 3000); return; }
+      if (!data?.length) { toast('Delete refused — the question is still there.', 3500); return; }
       toast('Deleted ✅', 1500);
       qmSearch();
     }
 
     function tabOpen() {
-      _populateSubjectFilter();
+      _qmFillSubjects(_el('qm-grade').value);
       qmSearch();
       _loadPendingReports();
       _loadReportBadge();
@@ -2759,7 +3177,7 @@ const AdminPanel = (() => {
   let _guestLimits = null;
 
   // ⚠ Keep in step with the coalesce() fallbacks in
-  // supabase-guest-assignment-limits.sql and with the row it seeds. This copy
+  // supabase-schema.sql and with the row it seeds. This copy
   // exists only so the form is populated before the row loads.
   const GUEST_LIMIT_DEFAULTS = {
     unverified: { per_day: 1, max_students: 15 },
@@ -2829,7 +3247,7 @@ const AdminPanel = (() => {
       .upsert({ key: 'guest_assignment_limits', value: next, updated_at: new Date().toISOString() });
     if (error) { console.error('[Admin.saveGuestLimits]', error.message); _guestLimits = JSON.parse(prev); }
     _renderGuestLimits();
-    toast(error ? 'Could not save — NOT applied.' : 'Assignment caps saved.', error ? 4000 : 2500);
+    toast(error ? 'Could not save - NOT applied.' : 'Assignment caps saved.', error ? 4000 : 2500);
   }
   // ══════════════════════════════════════════════
   //  Credit shop settings + security log
@@ -2842,7 +3260,7 @@ const AdminPanel = (() => {
   let _shop = null;
 
   // ⚠ Keep in step with the defaults row at the bottom of
-  // supabase-credits-shop.sql AND with the fallbacks each SQL function uses.
+  // supabase-schema.sql AND with the fallbacks each SQL function uses.
   // These three copies exist because the value has to be readable before the
   // settings row loads (here), when the row is missing entirely (the SQL
   // coalesce), and in the browser's own shop UI (engine/shop.js).
@@ -2891,14 +3309,14 @@ const AdminPanel = (() => {
   // is seventeen successful referrals, which is easy to set by accident.
   //
   // Reads the FIELDS, not the saved settings, so it updates as the numbers are
-  // typed — the point is to see the consequence before pressing Save.
+  // typed - the point is to see the consequence before pressing Save.
   function previewShopEconomy() { _renderShopPreview(true); }
 
   function _renderShopPreview(fromFields) {
     const el = document.getElementById('admin-shop-preview');
     if (!el) return;
     // ⚠ No `!_shop` guard. When called from an input handler this reads the
-    // FIELDS, which are on screen whether or not the settings row has loaded —
+    // FIELDS, which are on screen whether or not the settings row has loaded -
     // requiring _shop made the preview silently do nothing on a database with
     // no shop_settings row yet, which is exactly when an admin is setting the
     // numbers for the first time.
@@ -2984,7 +3402,7 @@ const AdminPanel = (() => {
     else _shop.subject_prices[subjectId] = n;
     const res = await _saveShop();
     if (!res.ok) { _shop = JSON.parse(prev); renderSubjectPrices(); }
-    toast(res.ok ? 'Subject price saved.' : 'Could not save — NOT applied.', res.ok ? 1800 : 4000);
+    toast(res.ok ? 'Subject price saved.' : 'Could not save - NOT applied.', res.ok ? 1800 : 4000);
   }
 
   function renderShopPrices() {
@@ -3016,14 +3434,14 @@ const AdminPanel = (() => {
     const prev = JSON.stringify(_shop);
     if (!_shop.chapter_prices) _shop.chapter_prices = {};
     const n = parseInt(value, 10);
-    // Blank clears the override rather than storing 0 — "free" and "use the
+    // Blank clears the override rather than storing 0 - "free" and "use the
     // default" are different things and storing 0 for a cleared field would
     // silently give every chapter away.
     if (value === '' || !Number.isFinite(n) || n < 0) delete _shop.chapter_prices[chapterId];
     else _shop.chapter_prices[chapterId] = n;
     const res = await _saveShop();
     if (!res.ok) { _shop = JSON.parse(prev); renderShopPrices(); }
-    toast(res.ok ? 'Price saved.' : 'Could not save — NOT applied.', res.ok ? 1800 : 4000);
+    toast(res.ok ? 'Price saved.' : 'Could not save - NOT applied.', res.ok ? 1800 : 4000);
   }
 
   async function saveShopBasics() {
@@ -3044,7 +3462,7 @@ const AdminPanel = (() => {
     const res = await _saveShop();
     if (!res.ok) _shop = JSON.parse(prev);
     _renderShopSettings();
-    toast(res.ok ? 'Shop settings saved.' : 'Could not save — NOT applied.', res.ok ? 2500 : 4000);
+    toast(res.ok ? 'Shop settings saved.' : 'Could not save - NOT applied.', res.ok ? 2500 : 4000);
   }
 
   async function setShopEnabled(on) {
@@ -3053,21 +3471,21 @@ const AdminPanel = (() => {
     _shop.shop_enabled = !!on;
     const res = await _saveShop();
     if (!res.ok) { _shop = JSON.parse(prev); _renderShopSettings(); }
-    toast(res.ok ? (on ? 'Shop opened.' : 'Shop closed.') : 'Could not save — NOT applied.', res.ok ? 2500 : 4000);
+    toast(res.ok ? (on ? 'Shop opened.' : 'Shop closed.') : 'Could not save - NOT applied.', res.ok ? 2500 : 4000);
   }
 
   // Writes the chapter list this browser has loaded into shop_settings.catalog.
-  // purchase_chapter() then refuses anything not in it — which is what stops a
+  // purchase_chapter() then refuses anything not in it - which is what stops a
   // crafted RPC call from creating an entitlement row for a made-up id.
   async function publishCatalog() {
     if (!_shop) return;
     const cat = _allChapters().map(c => ({ id: c.id, name: c.name, subject: c.subjectId, subjectName: c.subject }));
-    if (!cat.length) { toast('No subject packs loaded — cannot publish.', 3500); return; }
+    if (!cat.length) { toast('No subject packs loaded - cannot publish.', 3500); return; }
     const prev = JSON.stringify(_shop);
     _shop.catalog = cat;
     const res = await _saveShop();
     if (!res.ok) _shop = JSON.parse(prev);
-    toast(res.ok ? `Catalogue published — ${cat.length} chapters.` : 'Could not save — NOT applied.', res.ok ? 3000 : 4000);
+    toast(res.ok ? `Catalogue published - ${cat.length} chapters.` : 'Could not save - NOT applied.', res.ok ? 3000 : 4000);
   }
 
   async function loadSecurityEvents() {
@@ -3077,7 +3495,7 @@ const AdminPanel = (() => {
     const { data, error } = await _sb.rpc('admin_security_events', { p_limit: 100 });
     if (error) {
       box.innerHTML = `<p class="text-xs text-gray-400 py-3 text-center">${
-        error.code === 'PGRST202' ? 'Run supabase-credits-shop.sql to switch this on.' : 'Could not load.'}</p>`;
+        error.code === 'PGRST202' ? 'Run supabase-schema.sql to switch this on.' : 'Could not load.'}</p>`;
       return;
     }
     if (!data?.length) {
@@ -3096,7 +3514,7 @@ const AdminPanel = (() => {
           ${blocked ? '<span class="text-[10px] font-bold text-red-500">BLOCKED</span>' : ''}
         </div>
         <div class="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5 truncate">
-          ${_esc(e.user_name || e.user_id || e.student_id || '—')}
+          ${_esc(e.user_name || e.user_id || e.student_id || '-')}
         </div>
         <div class="text-[10px] text-gray-400 font-mono truncate">${_esc(JSON.stringify(e.detail || {}))}</div>
         ${e.user_id ? `<div class="flex gap-2 mt-1.5">
@@ -3110,7 +3528,7 @@ const AdminPanel = (() => {
 
   // Hand-adjust one account's balance: support, a refund, or clawing back a
   // farmed balance. Goes through admin_adjust_credits(), which writes the
-  // ledger, so a manual change is as auditable as an earned one — there is
+  // ledger, so a manual change is as auditable as an earned one - there is
   // deliberately no path that moves credits without leaving a row behind.
   async function adjustCredits(userId) {
     if (!_sb) return;
@@ -3122,7 +3540,7 @@ const AdminPanel = (() => {
     const { data, error } = await _sb.rpc('admin_adjust_credits',
       { p_user: userId, p_delta: n, p_reason: reason });
     if (error || !data?.ok) {
-      toast(error?.code === 'PGRST202' ? 'Run supabase-credits-shop.sql first.' : 'Could not adjust credits.', 4000);
+      toast(error?.code === 'PGRST202' ? 'Run supabase-schema.sql first.' : 'Could not adjust credits.', 4000);
       return;
     }
     const bal = document.getElementById(`credits-bal-${userId}`);
@@ -3131,7 +3549,7 @@ const AdminPanel = (() => {
     if (row) row.credits = data.balance;
     const d = document.getElementById(`credits-delta-${userId}`);   if (d) d.value = '';
     const r = document.getElementById(`credits-reason-${userId}`);  if (r) r.value = '';
-    toast(`${n > 0 ? '+' : ''}${n} credits — new balance ${data.balance}.`, 3000);
+    toast(`${n > 0 ? '+' : ''}${n} credits - new balance ${data.balance}.`, 3000);
   }
 
   async function showCreditLedger(userId) {
@@ -3172,13 +3590,14 @@ const AdminPanel = (() => {
     loadGuestLimits, saveGuestLimits, previewGuestLimits,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
-    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, resolveReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
-    loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier,
+    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, setReportKind, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+    loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier, sortTeachers, refreshTeacherActivity,
     qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
     qmSubjectFilter: QM.qmSubjectFilter, qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,
     qmFormGradeChange: QM.qmFormGradeChange, qmFormSubjectChange: QM.qmFormSubjectChange,
     qmFormChapterChange: QM.qmFormChapterChange, qmFormTypeChange: QM.qmFormTypeChange,
     qmUpdatePreview: QM.qmUpdatePreview, qmInsertImage: QM.qmInsertImage,
     qmUploadImage: QM.qmUploadImage, qmSave: QM.qmSave, qmDelete: QM.qmDelete,
-    qmToggleProtection: QM.qmToggleProtection, qmResolveReport, applyFirstNChapters };
+    qmToggleProtection: QM.qmToggleProtection, qmResolveReport, applyFirstNChapters,
+    syllabusGradeChange: Syllabus.gradeChange, syllabusShow: Syllabus.show };
 })();

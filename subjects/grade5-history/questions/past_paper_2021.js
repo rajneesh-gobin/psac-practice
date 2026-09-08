@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 History & Geography March 2021 — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 History & Geography March 2021 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-pp21-001', chapterId:'map-skills', subsection:'coordinates', difficulty:2,
     question:'The line of longitude 0° is known as the ___.',
@@ -34,7 +34,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-pp21-006', chapterId:'trade-agri', subsection:'crops', difficulty:2,
     question:'Mahé de Labourdonnais introduced manioc (cassava) to Île de France. From which country did he bring it?',
     options:['Arabia','Brazil','China','Mozambique'], answer:'Brazil',
-    hint:'Manioc is a New World crop — think of which continent is most famous for tropical root crops that shaped the world.',
+    hint:'Manioc is a New World crop - think of which continent is most famous for tropical root crops that shaped the world.',
     explanation:'Manioc (cassava) originates from Brazil in South America. Labourdonnais introduced it to Île de France to feed the growing population of soldiers and settlers.' }),
 
   makeMCQ({ id:'g5h-pp21-007', chapterId:'settlement', subsection:'french', difficulty:2,
@@ -101,7 +101,7 @@ STATIC_QUESTIONS.push(
     question:'Why did British Governor Sir Robert Farquhar encourage the cultivation of sugar cane in Mauritius?',
     options:['To replace the ebony trees that had all been cut down','Sugar cane was very profitable and Britain had a huge demand for it','To provide food for the poor population','Because ebony prices had fallen and planters needed another crop'], answer:'Sugar cane was very profitable and Britain had a huge demand for it',
     hint:'Britain\'s growing population needed this commodity from its colonies.',
-    explanation:'Farquhar encouraged sugar cane because it was highly profitable — Britain\'s industrial population demanded large quantities of sugar, and Mauritius\'s climate was ideal. Sugar became the backbone of Mauritius\'s economy for over 150 years.' }),
+    explanation:'Farquhar encouraged sugar cane because it was highly profitable - Britain\'s industrial population demanded large quantities of sugar, and Mauritius\'s climate was ideal. Sugar became the backbone of Mauritius\'s economy for over 150 years.' }),
 
   makeMCQ({ id:'g5h-pp21-018', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
     question:'On a rainfall map of Mauritius, Curepipe receives about 4000mm per year while Médine (west coast) receives under 800mm. Why does the central plateau get so much more rain?',
@@ -112,10 +112,10 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g5h-pp21-pdf-001', needsArtwork:true, chapterId:'volcanism', marks:9, year:2021, grade:5, subject:'History & Geography',
+  { id:'g5h-pp21-pdf-001', image:'assets/past-papers/g5-history-2021/d1-volcano.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'volcanism', marks:9, year:2021, grade:5, subject:'History & Geography',
     question:'Diagram 1 shows a volcano in eruption (A=Crater is given). Label features B (lava/magma channel), C (ash/smoke cloud), D (lava bombs), E (lava flow). (b) When lava cools it solidifies into ___ rocks. (c) What is magma? (d) Describe how tuffs are formed.', type:'written' },
-  { id:'g5h-pp21-pdf-002', needsArtwork:true, chapterId:'map-skills', marks:5, year:2021, grade:5, subject:'History & Geography',
+  { id:'g5h-pp21-pdf-002', image:'assets/past-papers/g5-history-2021/map1-contour.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'map-skills', marks:5, year:2021, grade:5, subject:'History & Geography',
     question:'Study Map 1 (contour map of Le Morne area, Mauritius). (a) What is the approximate straight-line distance between Pointe Pêcheurs and Pointe Marron? (b) What is the height of the mountain peak? (c) What is the direction of Le Morne Village from the mountain peak? (d) Is Trou Chenille above or below 50 metres? (e) Shade the area of land between 100m and 200m above sea level.', type:'written' },
-  { id:'g5h-pp21-pdf-003', needsArtwork:true, chapterId:'g5ge-weather', marks:6, year:2021, grade:5, subject:'History & Geography',
+  { id:'g5h-pp21-pdf-003', image:'assets/past-papers/g5-history-2021/map2-rainfall.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g5ge-weather', marks:6, year:2021, grade:5, subject:'History & Geography',
     question:'Map 2 shows annual rainfall isohyets for Mauritius. (a) What is the amount of rainfall that Rose Belle receives? (b) Shade the region on Map 2 that receives less than 800mm annual rainfall. (c) Give two reasons why Curepipe receives more rainfall than the west coast.', type:'written' }
 );

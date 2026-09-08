@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 History & Geography 2024 — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 History & Geography 2024 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-pp24-001', chapterId:'map-skills', subsection:'using_map', difficulty:1,
     question:'The biggest continent in the world is ___.',
@@ -112,12 +112,12 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g5h-pp24-pdf-001', needsArtwork:true, chapterId:'natural-env', marks:8, year:2024, grade:5, subject:'History & Geography',
+  { id:'g5h-pp24-pdf-001', image:'assets/past-papers/g5-history-2024/map2-rodrigues.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'natural-env', marks:8, year:2024, grade:5, subject:'History & Geography',
     question:'Study Map 2 (relief features of Rodrigues). (i) Name the relief feature shown by diagonal shading. (ii) Name the plain X. (iii) What is plain X made of? (iv) Name one heritage site at plain X. (v) Name one river in Rodrigues. (vi) What is the main activity on alluvial lands? (vii) Which is the highest mount in Rodrigues? (viii) Which environmental problem is caused by cutting trees on steep slopes of Rodrigues?', type:'written' },
   { id:'g5h-pp24-pdf-002', chapterId:'settlement', marks:7, year:2024, grade:5, subject:'History & Geography',
     question:'The Dutch settled at Vieux Grand Port in the South East of Mauritius in 1638. (a) Give two advantages that Vieux Grand Port provided to the Dutch. (b)(i) Name the fort built by the Dutch. (b)(ii) Why did they build this fort? (c)(i) Which tree did the Dutch cut down for exportation? (c)(ii) Give one reason why these trees were exported.', type:'written' },
   { id:'g5h-pp24-pdf-003', chapterId:'trade-agri', marks:9, year:2024, grade:5, subject:'History & Geography',
     question:'The French ruled Île de France from 1715 to 1810. (a)(i) Tortoises were brought from ___; Cattle and rice were brought from ___. (a)(ii) Give two ways people travelled in Île de France during the French period. (a)(iii) Give one way Governor Charles Decaen helped develop Île de France. (b)(i) Name the Mascarene island that did not become a British Colony. (b)(ii) What were coconuts from Agalega used for? (b)(iii) Give one reason Farquhar encouraged planters to grow more sugar cane.', type:'written' },
-  { id:'g5h-pp24-pdf-004', needsArtwork:true, chapterId:'g5ge-weather', marks:7, year:2024, grade:5, subject:'History & Geography',
+  { id:'g5h-pp24-pdf-004', image:'assets/past-papers/g5-history-2024/d1-rainfall.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g5ge-weather', marks:7, year:2024, grade:5, subject:'History & Geography',
     question:'Study Diagram 1 (convectional rainfall). (a)(i) Name the type of rainfall shown. (a)(ii) In which season does this type mostly occur? (a)(iii) This rainfall is usually ___ (heavy/light) and of ___ (long/short) duration. (b)(i) What is the name for a line joining places of same rainfall? (b)(ii) Why does rainfall in Mauritius vary from place to place?', type:'written' }
 );

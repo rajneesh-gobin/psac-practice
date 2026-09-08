@@ -35,6 +35,7 @@ const ctx = {
   DB: { stats: { totalAttempted: 0 }, games: {}, restrictions: {} },
 };
 vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'engine', 'game_settings.js'), 'utf8'), ctx, { filename: 'game_settings.js' });
 vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'engine', 'minigame.js'), 'utf8'), ctx, { filename: 'minigame.js' });
 // top-level `const MiniGames` lives in the script scope, not on the context
 const MG = vm.runInContext('MiniGames', ctx);

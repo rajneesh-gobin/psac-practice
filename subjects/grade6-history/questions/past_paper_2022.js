@@ -1,10 +1,10 @@
 'use strict';
-// PSAC Grade 6 History & Geography 2021-2022 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 History & Geography 2021-2022 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6h-pp22-001', chapterId:'g6-land-use', subsection:'agriculture', difficulty:1,
     question:'Land used to build houses is known as ____________ land use.',
     options:['commercial','industrial','recreational','residential'], answer:'residential',
-    hint:'People live in houses — think about what we call the area where people live.',
+    hint:'People live in houses - think about what we call the area where people live.',
     explanation:'Residential land use refers to land used for building houses and homes where people live.' }),
   makeMCQ({ id:'g6h-pp22-002', chapterId:'g6-cultural-heritage', subsection:'sites', difficulty:1,
     question:'The Beau Plan sugar mill in the north of Mauritius has been converted into a ____________.',
@@ -53,9 +53,9 @@ STATIC_QUESTIONS.push(
     explanation:'The 1st of February is celebrated as Abolition of Slavery Day in Mauritius, marking the end of slavery on 1 February 1835.' }),
   makeMCQ({ id:'g6h-pp22-011', chapterId:'g6-slaves-immigrants', subsection:'abolition', difficulty:2,
     question:'After the abolition of slavery in 1835, many freed slaves went to live in the interior of Mauritius. How did they earn their living there?',
-    options:['They worked in sugar factories','They became fishermen in the lagoons','They grew vegetables and became craftsmen or fishermen','They opened shops in Port Louis'], answer:'They grew vegetables and became craftsmen or fishermen',
+    options:['They grew vegetables and fished', 'They worked in the sugar factories', 'They opened shops in Port Louis', 'They joined the colonial police'], answer:'They grew vegetables and fished',
     hint:'They chose occupations that gave them more freedom and independence.',
-    explanation:'After abolition, freed slaves moved to the interior and earned their living through vegetable growing, fishing, and crafts — occupations that gave them more freedom than plantation work.' }),
+    explanation:'After abolition, freed slaves moved to the interior and earned their living through vegetable growing, fishing, and crafts - occupations that gave them more freedom than plantation work.' }),
   makeMCQ({ id:'g6h-pp22-012', chapterId:'g6-slaves-immigrants', subsection:'slavery', difficulty:2,
     question:'Which of the following statements about life in 19th century Mauritius is <b>TRUE</b>?',
     options:['All children were required by law to go to school','Malaria was a disease that killed many people','Reverend Jean Lebrun introduced railways to Mauritius','Indian immigrants were not allowed to practise their religion'], answer:'Malaria was a disease that killed many people',
@@ -89,10 +89,10 @@ STATIC_QUESTIONS.push(
 );
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g6h-pp22-pdf-001', needsArtwork:true, chapterId:'g6-land-use', marks:7, year:2022, grade:6, subject:'History & Geography',
+  { id:'g6h-pp22-pdf-001', image:'assets/past-papers/g6-history-2022/d1-farming.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-land-use', marks:7, year:2022, grade:6, subject:'History & Geography',
     question:'Study Diagram 1 (shows different types of farming in Rodrigues with areas X, Y, Z). (a) What type of farming is carried out in area X? (b) What is market gardening? Name two crops grown in area Z. Give one reason why these crops grow in area Z. (c) What has been done to the sloping land in area Y to facilitate growing crops?', type:'diagram-analysis' },
-  { id:'g6h-pp22-pdf-002', needsArtwork:true, chapterId:'g6-natural-hazards', marks:9, year:2022, grade:6, subject:'History & Geography',
+  { id:'g6h-pp22-pdf-002', image:'assets/past-papers/g6-history-2022/pic4-floods.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-natural-hazards', marks:9, year:2022, grade:6, subject:'History & Geography',
     question:'Picture 4 shows flash floods in Mauritius. (a) Complete: Flash floods occur during (summer/winter); caused by (light/heavy) rain falling (suddenly/slowly). (b) Give two reasons why flash floods are more frequent in Mauritius nowadays. (c) Name two other natural hazards.', type:'picture-analysis' },
-  { id:'g6h-pp22-pdf-003', needsArtwork:true, chapterId:'g6-cultural-heritage', marks:5, year:2022, grade:6, subject:'History & Geography',
-    question:'Study Map 1 showing Port Louis. (i) Name historical site 1 (Aapravasi Ghat). (ii) Which event is commemorated at site 1? (iii) Which museum is Museum A — Natural History Museum, Folk Museum, or Martello Tower Museum?', type:'map-read' }
+  { id:'g6h-pp22-pdf-003', image:'assets/past-papers/g6-history-2022/map1-portlouis.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-cultural-heritage', marks:5, year:2022, grade:6, subject:'History & Geography',
+    question:'Study Map 1 showing Port Louis. (i) Name historical site 1 (Aapravasi Ghat). (ii) Which event is commemorated at site 1? (iii) Which museum is Museum A - Natural History Museum, Folk Museum, or Martello Tower Museum?', type:'map-read' }
 );

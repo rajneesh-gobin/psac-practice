@@ -16,15 +16,36 @@ let SRC = fs.readFileSync(path.join(ROOT, 'engine/question_loader.js'), 'utf8')
   .replace(/^﻿/, '').replace(/\r/g, '');
 const EXPORT = '  return { loadSubject, loadForStudent, loadAllForGrade, loadPastPapers, useStudent, reset };';
 if (SRC.indexOf(EXPORT) === -1) throw new Error('export anchor moved');
+
+// Read the live cache version out of the source. Hard-coding it here left this
+// harness asserting 'mm_qc_v15_…' long after the constant had moved on, so the
+// check reported a cross-child leak that was not there.
+const CACHE_V = (SRC.match(/_CACHE_VERSION\s*=\s*(\d+)/) || [])[1];
+if (!CACHE_V) throw new Error('_CACHE_VERSION anchor moved');
 SRC = SRC.replace(EXPORT,
   '  return { loadSubject, loadForStudent, loadAllForGrade, loadPastPapers, useStudent, reset,\n'
-  + '           _readCache, _writeCache, _buildAuthHeaders, _cacheOwner };');
+  + '           _readCache, _writeCache, _buildAuthHeaders, _cacheOwner,\n'
+  + '           _BYTE_BUDGET, _LRU_MAX, _cachedSizes };');
 
-function makeStorage() {
+// `limit` caps the total characters held, so the quota branch can be driven.
+// Without it every write succeeds and the eviction code is never reached -
+// a test that passes by never running the thing it claims to check.
+function makeStorage(limit) {
   const m = new Map();
+  const used = (skip) => {
+    let n = 0;
+    for (const [k, v] of m) if (k !== skip) n += k.length + v.length;
+    return n;
+  };
   const api = {
     getItem: k => (m.has(k) ? m.get(k) : null),
-    setItem: (k, v) => { m.set(k, String(v)); },
+    setItem: (k, v) => {
+      v = String(v);
+      if (limit && used(k) + k.length + v.length > limit) {
+        const e = new Error('quota'); e.name = 'QuotaExceededError'; e.code = 22; throw e;
+      }
+      m.set(k, v);
+    },
     removeItem: k => { m.delete(k); },
     key: i => Array.from(m.keys())[i] ?? null,
     _map: m,
@@ -186,10 +207,129 @@ function check(name, ok, detail) {
     check('_done was cleared, so the new child really fetches', statics.length === 1, 'len=' + statics.length);
     check('and gets THEIR questions', statics[0] && statics[0].id === 'y1');
     check('the previous child\'s bundle is still there, under their own key',
-      storage.getItem('mm_qc_v15_kid-a|grade5-maths') !== null,
+      storage.getItem('mm_qc_v' + CACHE_V + '_kid-a|grade5-maths') !== null,
       Array.from(storage._map.keys()).join(','));
   }
 
+
+  // ── 9. The cache is budgeted in BYTES, not slots ───────────────────
+  //    Six slots was fine while every subject was about the same size. Measured
+  //    2026-09-07: grade6-french is 1,412 KB against grade4-science's 237 KB, so
+  //    six slots is 5.4 MB - over the quota on its own, and the write that loses
+  //    that race is often the session token.
+  const bulky = (id, chars) => {
+    // One question whose text is `chars` long: a payload of a known size, with
+    // the same shape as a real one.
+    const q = Q(id);
+    q.question = 'x'.repeat(chars);
+    return [q];
+  };
+  const cacheKeys = (storage) => Array.from(storage._map.keys())
+    .filter(k => k.startsWith('mm_qc_v' + CACHE_V + '_'));
+  const cacheChars = (storage) => cacheKeys(storage)
+    .reduce((n, k) => n + storage.getItem(k).length, 0);
+
+  {
+    const storage = makeStorage();
+    const a = load({ storage, studentSession: SESS('kid-a'), activeStudentId: 'kid-a' });
+    const BUDGET = a.QL._BYTE_BUDGET;
+    check('the budget is a byte count, not a slot count', typeof BUDGET === 'number' && BUDGET > 100000,
+      String(BUDGET));
+
+    // Four subjects at 40% of the budget each. Slot-counting would keep all
+    // four (4 <= _LRU_MAX); a byte budget must not.
+    const each = Math.floor(BUDGET * 0.4);
+    for (const s of ['s1', 's2', 's3', 's4']) a.QL._writeCache(s, bulky(s, each));
+    check('four oversized subjects do not all survive', cacheKeys(storage).length < 4,
+      cacheKeys(storage).length + ' kept');
+    check('the cache stays inside its byte budget', cacheChars(storage) <= BUDGET,
+      cacheChars(storage) + ' > ' + BUDGET);
+    check('the most recent write is the one kept',
+      storage.getItem('mm_qc_v' + CACHE_V + '_kid-a|s4') !== null);
+    check('the least recently used was evicted first',
+      storage.getItem('mm_qc_v' + CACHE_V + '_kid-a|s1') === null);
+  }
+
+  {
+    // Small subjects must still be capped by the SLOT count - the byte budget
+    // replaces nothing, it is a second limit.
+    const storage = makeStorage();
+    const a = load({ storage, studentSession: SESS('kid-a'), activeStudentId: 'kid-a' });
+    for (let i = 0; i < a.QL._LRU_MAX + 3; i++) a.QL._writeCache('tiny' + i, [Q('q' + i)]);
+    check('the slot cap still applies to small subjects',
+      cacheKeys(storage).length === a.QL._LRU_MAX,
+      cacheKeys(storage).length + ' vs ' + a.QL._LRU_MAX);
+  }
+
+  {
+    // A single bundle larger than the whole budget is still cached, alone.
+    // Caching the subject the child is using right now beats caching nothing.
+    const storage = makeStorage();
+    const a = load({ storage, studentSession: SESS('kid-a'), activeStudentId: 'kid-a' });
+    a.QL._writeCache('small', [Q('s')]);
+    a.QL._writeCache('huge', bulky('h', a.QL._BYTE_BUDGET + 50000));
+    check('an over-budget bundle is still cached',
+      storage.getItem('mm_qc_v' + CACHE_V + '_kid-a|huge') !== null);
+    check('...and it is the only one left', cacheKeys(storage).length === 1,
+      cacheKeys(storage).join(','));
+  }
+
+  // ── 10. Sizes the index does not know are MEASURED, not assumed zero ───
+  //     An index written before sizes existed holds bare numbers. Reading those
+  //     as 'size 0' would make the budget count an existing 1.4 MB entry as
+  //     free space - the budget would still be there, and still do nothing.
+  {
+    const storage = makeStorage();
+    const a = load({ storage, studentSession: SESS('kid-a'), activeStudentId: 'kid-a' });
+    const BUDGET = a.QL._BYTE_BUDGET;
+    a.QL._writeCache('legacy', bulky('L', Math.floor(BUDGET * 0.7)));
+    // Downgrade the index to the OLD shape, as an existing install has it.
+    storage.setItem('mm_qc_lru', JSON.stringify({ 'kid-a|legacy': 1 }));
+    const sizes = a.QL._cachedSizes('kid-a|other');
+    check('an unknown size is measured from storage',
+      sizes.length === 1 && sizes[0].b > BUDGET * 0.6, JSON.stringify(sizes));
+    check('the measured size is written back into the index',
+      (JSON.parse(storage.getItem('mm_qc_lru'))['kid-a|legacy'] || {}).b > 0,
+      storage.getItem('mm_qc_lru'));
+
+    a.QL._writeCache('next', bulky('N', Math.floor(BUDGET * 0.7)));
+    check('the legacy entry is counted, so the new write evicts it',
+      storage.getItem('mm_qc_v' + CACHE_V + '_kid-a|legacy') === null);
+    check('and the total is still inside the budget', cacheChars(storage) <= BUDGET,
+      cacheChars(storage) + ' > ' + BUDGET);
+  }
+
+  // ── 11. A read keeps the recorded size ─────────────────────────
+  //     _lruTouch runs on every cache HIT. If that reset the size to unknown,
+  //     the budget would be re-measuring the whole cache on every read.
+  {
+    const storage = makeStorage();
+    const a = load({ storage, studentSession: SESS('kid-a'), activeStudentId: 'kid-a' });
+    a.QL._writeCache('m', bulky('m', 5000));
+    const before = JSON.parse(storage.getItem('mm_qc_lru'))['kid-a|m'].b;
+    a.QL._readCache('m');
+    const after = JSON.parse(storage.getItem('mm_qc_lru'))['kid-a|m'];
+    check('a hit keeps the recorded size', after.b === before && before > 4000,
+      JSON.stringify({ before, after }));
+    check('a hit still advances recency', after.u > 1, JSON.stringify(after));
+  }
+
+  // ── 12. Eviction never touches another tenant of the quota ──────────
+  //     The session token shares this origin. Losing a question bundle costs a
+  //     refetch; losing the token reads to a parent as "it keeps logging me out".
+  {
+    const storage = makeStorage(600000);   // a deliberately tight quota
+    storage.setItem('mm_student_session', 'THE-TOKEN');
+    storage.setItem('psac_known_students', '["kid-a"]');
+    const a = load({ storage, studentSession: SESS('kid-a'), activeStudentId: 'kid-a' });
+    for (const s of ['a', 'b', 'c', 'd']) a.QL._writeCache(s, bulky(s, 200000));
+    check('the session token survived a full cache', storage.getItem('mm_student_session') === 'THE-TOKEN');
+    check('so did the other tenant', storage.getItem('psac_known_students') !== null);
+    check('the cache fitted itself into the real quota', cacheChars(storage) <= 600000,
+      String(cacheChars(storage)));
+    check('and something was actually cached', cacheKeys(storage).length >= 1,
+      cacheKeys(storage).length + ' entries');
+  }
   console.log(failures ? '\n' + failures + ' check(s) failed' : '\nall checks passed');
   process.exit(failures ? 1 : 0);
 })();

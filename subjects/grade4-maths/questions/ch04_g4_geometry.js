@@ -18,7 +18,7 @@ STATIC_QUESTIONS.push(
     answer:'Cylinder',
     hint:'Think of a tin can or a drinking glass.',
     explanation:'A <b>cylinder</b> has 2 flat circular faces (top and bottom) and 1 curved lateral surface. Examples: a tin can, a battery, a drum.',
-    learnMore:'A cylinder is essentially a <b>circle stretched along a straight axis</b>. If you "unroll" the curved surface of a cylinder, it becomes a rectangle — this is why the label on a tin can is rectangular.<br><br>Real-world cylinders: tin cans, toilet rolls, coins, rolling pins, a flagpole. Notice that coins are very <b>thin</b> cylinders — the same shape, just with a very small height.' }),
+    learnMore:'A cylinder is essentially a <b>circle stretched along a straight axis</b>. If you "unroll" the curved surface of a cylinder, it becomes a rectangle - this is why the label on a tin can is rectangular.<br><br>Real-world cylinders: tin cans, toilet rolls, coins, rolling pins, a flagpole. Notice that coins are very <b>thin</b> cylinders - the same shape, just with a very small height.' }),
 
   makeMCQ({ id:'g4m-geo-003', chapterId:'g4-geometry', subsection:'lines', difficulty:1,
     question:'What type of lines NEVER MEET, no matter how far they are extended?',
@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
     question:'Which 3-D shape has a CIRCULAR base and comes to a POINT (apex) at the top?',
     options:['Cylinder','Sphere','Cone','Pyramid'],
     answer:'Cone',
-    hint:'Think of an ice cream cone or a traffic cone.',
+    hint:'Picture an ice-cream wafer or a traffic bollard: round at the bottom, a single point at the top.',
     explanation:'A <b>cone</b> has a circular base, 1 curved lateral surface and 1 apex (point) at the top. It has 2 faces (1 flat circle + 1 curved), 1 edge and 1 vertex. Examples: ice cream cone, party hat, traffic cone.' })
 
 );
@@ -138,7 +138,7 @@ STATIC_QUESTIONS.push(
 );
 
 // ── Illustrated questions: angles drawn, triangles marked with tick marks,
-//    a square\'s lines of symmetry drawn — actual diagrams, not just words.
+//    a square\'s lines of symmetry drawn - actual diagrams, not just words.
 //    Coordinates are hand-fixed (no elliptical-arc trig) so they render
 //    exactly as intended on every device.
 const _G4M_SVG_ANGLE_RIGHT = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="max-width:220px;max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:white"><line x1="40" y1="160" x2="170" y2="160" stroke="#1e293b" stroke-width="3"/><line x1="40" y1="160" x2="40" y2="30" stroke="#1e293b" stroke-width="3"/><path d="M40,144 L56,144 L56,160" fill="none" stroke="#dc2626" stroke-width="2"/><circle cx="40" cy="160" r="3" fill="#1e293b"/></svg>`;

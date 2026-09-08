@@ -1,5 +1,5 @@
 'use strict';
-// Grade 3 Science — PLACEHOLDER. Delete this file when real questions land.
+// Grade 3 Science - PLACEHOLDER. Delete this file when real questions land.
 // IDs format: g3s-samp-NNN
 //
 // This exists so the questions/ directory is not empty and the file shape is
@@ -10,7 +10,7 @@
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g3s-samp-001', chapterId:'g3s-sample', difficulty:1,
-    question:'Placeholder — this pack has no real questions yet.',
+    question:'Placeholder - this pack has no real questions yet.',
     options:['A','B','C','D'],
     answer:'A',
     hint:'Replace this file with real Grade 3 Science questions.',

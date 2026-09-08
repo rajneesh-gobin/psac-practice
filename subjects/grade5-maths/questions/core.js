@@ -134,7 +134,7 @@ STATIC_QUESTIONS.push(
     question:'Which of these is a <b>perfect square number</b>?',
     options:['50','36','72','45'],
     answer:'36',
-    hint:'A perfect square is the result of a whole number multiplied by itself. Check: 6 × 6 = 36.',
+    hint:'A perfect square is a whole number multiplied by itself. Work through 4×4, 5×5, 6×6, 7×7 and compare with the options.',
     explanation:'6 × 6 = 36, so <b>36</b> is a perfect square. (50, 72, 45 are not perfect squares.)' }),
 
   makeNum({ id:'S04', chapterId:'square_nums', subsection:'square_roots', difficulty:2,
@@ -181,14 +181,14 @@ STATIC_QUESTIONS.push(
     question:'How many lines of symmetry does an <b>equilateral triangle</b> have?',
     options:['1','2','3','4'],
     answer:'3',
-    hint:'An equilateral triangle has 3 equal sides. Each line of symmetry goes from a vertex to the midpoint of the opposite side.',
+    hint:'Each line of symmetry runs from a corner to the middle of the opposite side. How many corners does the triangle have?',
     explanation:'An equilateral triangle has <b>3</b> lines of symmetry.' }),
 
   makeMCQ({ id:'G03', chapterId:'geometry', subsection:'angles', difficulty:1,
     question:'An angle of <b>90°</b> is called a ___ angle.',
     options:['Acute','Obtuse','Right','Straight'],
     answer:'Right',
-    hint:'A right angle looks like the corner of a square and is exactly 90°.',
+    hint:'This is the angle you see at the corner of a square or a sheet of paper.',
     explanation:'An angle of exactly 90° is called a <b>right angle</b>.' }),
 
   makeMCQ({ id:'G04', chapterId:'geometry', subsection:'directions', difficulty:2,
@@ -215,7 +215,7 @@ STATIC_QUESTIONS.push(
     question:'How many <b>sides</b> does a pentagon have?',
     options:['4','5','6','7'],
     answer:'5',
-    hint:'Penta = 5 in Greek. Pentagon = 5-sided shape.',
+    hint:'"Penta-" is the Greek prefix you also meet in "pentathlon". What number does it stand for?',
     explanation:'A pentagon has <b>5</b> sides.' }),
 
   makeNum({ id:'G08', chapterId:'geometry', subsection:'angles', difficulty:4,

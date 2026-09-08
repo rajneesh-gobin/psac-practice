@@ -16,7 +16,14 @@ const VAPID_PUBLIC  = process.env.VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE = process.env.VAPID_PRIVATE_KEY;
 const VAPID_EMAIL   = process.env.VAPID_EMAIL || 'mailto:admin@psacpractice.mu';
 
-webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC, VAPID_PRIVATE);
+// ⚠ Guarded, and NOT at import time. setVapidDetails() throws when a key is
+//   missing, and a throw at module scope makes the whole function 500 before
+//   the handler runs — an unreadable failure for a missing config value.
+//   Measured 2026-09-08: all three VAPID vars were absent from the Netlify
+//   site, so every push invocation failed this way rather than reporting it.
+const VAPID_READY = !!(VAPID_PUBLIC && VAPID_PRIVATE);
+if (VAPID_READY) webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC, VAPID_PRIVATE);
+else console.error('[push] VAPID keys are not configured — push is disabled.');
 
 function sb(path) {
   return fetch(`${SUPABASE_URL}${path}`, {

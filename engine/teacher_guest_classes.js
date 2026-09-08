@@ -2,7 +2,7 @@
 const TeacherGuestClasses = (() => {
   const el = id => document.getElementById(id);
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let classes = [], current = '', epoch = 0, identity = null;
+  let classes = [], current = '', epoch = 0, identity = null, _inflight = null, _loadedOnce = false;
 
   async function call(action, extra) {
     const { data, error } = await _sb.rpc('teacher_guest_manage', Object.assign({ p_action: action }, extra || {}));
@@ -21,7 +21,16 @@ const TeacherGuestClasses = (() => {
     notice('');
   }
 
-  async function refresh() {
+  function refresh() {
+    const p = _refresh();
+    _inflight = p;
+    p.finally(() => { if (_inflight === p) _inflight = null; });
+    return p;
+  }
+  // Home waits on this rather than racing the list RPC.
+  async function ready() { if (_inflight) await _inflight; else if (!_loadedOnce) await refresh(); return classes; }
+
+  async function _refresh() {
     const token = ++epoch;
     notice('Loading classrooms...');
     try {
@@ -34,6 +43,7 @@ const TeacherGuestClasses = (() => {
       const data = await call('list');
       if (token !== epoch) return;
       classes = data.classes;
+      _loadedOnce = true;
       const select = el('ta-classroom'), keep = select?.value;
       if (select) {
         select.innerHTML = '<option value="">Standalone - not tied to a classroom</option>' +
@@ -48,7 +58,10 @@ const TeacherGuestClasses = (() => {
     } catch (err) {
       if (token !== epoch) return;
       console.error('[TeacherGuestClasses.refresh]', err);
-      notice('Could not load classrooms: ' + (err?.message || err));
+      notice('');
+      const list = el('tc-list');
+      if (list && !classes.length) list.innerHTML = '<div class="tc-cd-inline-error"><p>Could not load your classrooms. Check your connection - nothing has been deleted.</p><button type="button" onclick="TeacherGuestClasses.refresh()">Try again</button></div>';
+      else if (typeof toast === 'function') toast('Could not refresh classrooms. Showing what was loaded before.', 3000);
     }
   }
 
@@ -58,43 +71,67 @@ const TeacherGuestClasses = (() => {
     // Only show active classrooms in the main view; archived ones are hidden.
     // The teacher can archive/restore from inside the classroom's Settings tab.
     const visible = classes.filter(c => c.active);
-    list.innerHTML = '<div class="tc-boards-wrap">' +
+    const totalPupils = visible.reduce((sum, c) => sum + Number(c.pupils || 0), 0);
+    const pinClasses = visible.filter(c => c.access_type !== 'shared').length;
+    const icons = ['📘','✏️','🔬','🌍','🎨','📐'];
+    list.innerHTML =
+      '<div class="tc-class-overview" aria-label="Classroom overview">' +
+        '<div><span class="tc-overview-icon">🏫</span><strong>' + visible.length + '</strong><small>active classroom' + (visible.length === 1 ? '' : 's') + '</small></div>' +
+        '<div><span class="tc-overview-icon">👥</span><strong>' + totalPupils + '</strong><small>pupil' + (totalPupils === 1 ? '' : 's') + ' managed</small></div>' +
+        '<div><span class="tc-overview-icon">🔑</span><strong>' + pinClasses + '</strong><small>with individual PINs</small></div>' +
+      '</div>' +
+      (!visible.length ? '<div class="tc-class-empty"><span>✨</span><div><strong>Your first classroom starts here</strong><p>Create a class, add your pupils and keep their homework and results together.</p></div></div>' : '') +
+      '<div class="tc-boards-wrap">' +
       visible.map((c) => {
         const i = classes.indexOf(c);
-        return '<div class="tc-board-hanger">' +
-          '<div class="tc-board-nail"></div>' +
-          '<div class="tc-board-strings"><div class="tc-board-string"></div><div class="tc-board-string"></div></div>' +
-          '<div class="tc-board" data-open="' + i + '" title="Open ' + esc(c.name) + '">' +
-            '<div class="tc-board-inner">' +
-              '<div class="tc-board-emoji">&#x1F3EB;</div>' +
-              '<div class="tc-board-name">' + esc(c.name) + '</div>' +
-              '<div class="tc-board-pupils">' + c.pupils + ' pupil' + (c.pupils === 1 ? '' : 's') + '</div>' +
+        const pupils = Number(c.pupils || 0);
+        const access = c.access_type === 'shared' ? 'Shared class PIN' : 'Private pupil PINs';
+        return '<article class="tc-board-hanger tc-class-tone-' + (i % 6) + '" data-open="' + i + '" title="Open ' + esc(c.name) + '" role="button" tabindex="0" aria-label="Open classroom ' + esc(c.name) + '">' +
+            '<span class="tc-board-nail" aria-hidden="true"></span>' +
+            '<span class="tc-board-strings" aria-hidden="true"><i class="tc-board-string"></i><i class="tc-board-string"></i></span>' +
+            '<div class="tc-board">' +
+              '<div class="tc-board-inner">' +
+                '<span class="tc-board-active"><i></i> Active</span>' +
+                '<span class="tc-board-emoji">' + icons[i % icons.length] + '</span>' +
+                '<strong class="tc-board-name">' + esc(c.name) + '</strong>' +
+                '<span class="tc-board-pupils">' + pupils + ' pupil' + (pupils === 1 ? '' : 's') + '</span>' +
+                '<span class="tc-board-access">🔐 ' + access + '</span>' +
+              '</div>' +
+              '<div class="tc-board-tray">' +
+                '<button data-open-button="' + i + '">Open →</button>' +
+                '<button data-rename="' + i + '" title="Rename ' + esc(c.name) + '" aria-label="Rename ' + esc(c.name) + '">✏️</button>' +
+                '<button data-archive="' + i + '" title="Archive ' + esc(c.name) + '" aria-label="Archive ' + esc(c.name) + '">📦</button>' +
+              '</div>' +
             '</div>' +
-            '<div class="tc-board-tray" onclick="event.stopPropagation()">' +
-              '<button data-rename="' + i + '">rename</button>' +
-              '<button data-archive="' + i + '">archive</button>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
+          '</article>';
       }).join('') +
-      '<div class="tc-board-hanger">' +
-        '<div class="tc-board-nail" style="opacity:.25"></div>' +
-        '<div class="tc-board-strings" style="opacity:.25"><div class="tc-board-string"></div><div class="tc-board-string"></div></div>' +
-        '<div class="tc-board tc-board-add" id="tc-add-board" title="Create a new classroom">' +
-          '<div class="tc-board-inner"><div class="tc-board-name">+ new classroom</div></div>' +
-        '</div>' +
-      '</div>' +
+      '<button class="tc-board-hanger tc-board-add-hanger" id="tc-add-board" type="button">' +
+        '<span class="tc-board-nail" aria-hidden="true"></span>' +
+        '<span class="tc-board-strings" aria-hidden="true"><i class="tc-board-string"></i><i class="tc-board-string"></i></span>' +
+        '<span class="tc-board tc-board-add"><span class="tc-board-inner">' +
+          '<span class="tc-board-emoji">＋</span>' +
+          '<strong class="tc-board-name">Create classroom</strong>' +
+          '<span class="tc-board-pupils">Add pupils and set work</span>' +
+        '</span></span>' +
+      '</button>' +
     '</div>';
 
-    list.querySelectorAll('[data-open]').forEach(b =>
-      b.onclick = () => open(classes[Number(b.dataset.open)].id)
-    );
-    list.querySelectorAll('[data-rename]').forEach(b =>
-      b.onclick = () => renameClass(classes[Number(b.dataset.rename)])
-    );
-    list.querySelectorAll('[data-archive]').forEach(b =>
-      b.onclick = () => mutate('toggle_class', { p_classroom: classes[Number(b.dataset.archive)].id }, b)
-    );
+    list.querySelectorAll('[data-open]').forEach(card => {
+      card.onclick = e => { if (!e.target.closest('button')) open(classes[Number(card.dataset.open)].id); };
+      card.onkeydown = e => {
+        if (e.target.closest('button') || !['Enter', ' '].includes(e.key)) return;
+        e.preventDefault(); open(classes[Number(card.dataset.open)].id);
+      };
+    });
+    list.querySelectorAll('[data-open-button]').forEach(b => b.onclick = e => {
+      e.stopPropagation(); open(classes[Number(b.dataset.openButton)].id);
+    });
+    list.querySelectorAll('[data-rename]').forEach(b => b.onclick = e => {
+      e.stopPropagation(); renameClass(classes[Number(b.dataset.rename)]);
+    });
+    list.querySelectorAll('[data-archive]').forEach(b => b.onclick = e => {
+      e.stopPropagation(); mutate('toggle_class', { p_classroom: classes[Number(b.dataset.archive)].id }, b);
+    });
     const addBtn = document.getElementById('tc-add-board');
     if (addBtn) addBtn.onclick = () => NewClassroomForm.open();
   }
@@ -166,6 +203,7 @@ const TeacherGuestClasses = (() => {
   }
 
   function getClasses() { return classes; }
+  function openById(id) { if (classes.some(c => c.id === id)) open(id); else refresh().then(() => { if (classes.some(c => c.id === id)) open(id); }); }
 
   function clearCurrent() { current = ''; }
 
@@ -176,7 +214,7 @@ const TeacherGuestClasses = (() => {
     });
   }
 
-  return { refresh, create, accessChanged, reset, createAssignment, getClasses, clearCurrent };
+  return { refresh, ready, create, accessChanged, reset, createAssignment, getClasses, clearCurrent, openById };
 })();
 
 // ── New Classroom Form ─────────────────────────────────────────────────────
@@ -232,7 +270,7 @@ const NewClassroomForm = (() => {
           &#x1F4CB; You will need to share each student's PIN individually. After creating the classroom, all PINs appear in the student list so you can print or share them easily.
         </div>
         <div class="ncf-pin-preview hidden" id="ncf-shared-pin-wrap">
-          <label>Class PIN &mdash; write this on the board or share with the class</label>
+          <label>Class PIN - write this on the board or share with the class</label>
           <div class="ncf-big-pin" id="ncf-shared-pin">${_esc(_sharedPin)}</div>
           <button class="ncf-btn-ghost" type="button" onclick="NewClassroomForm._refreshPin()">&#x1F504; New PIN</button>
         </div>
@@ -301,7 +339,7 @@ const NewClassroomForm = (() => {
     _setErr('');
     try {
       let data, error;
-      // Try the extended RPC first (requires supabase-classroom-pins.sql to be applied).
+      // Try the extended RPC first (requires supabase-schema.sql to be applied).
       // If Postgres rejects the extra params (function overload not found), fall back
       // to the original create_class call so the name is never silently dropped.
       ({ data, error } = await _sb.rpc('teacher_guest_manage', {
@@ -323,6 +361,9 @@ const NewClassroomForm = (() => {
       const quickName = document.getElementById('tc-name');
       if (quickName) quickName.value = '';
       if (typeof TeacherGuestClasses !== 'undefined') await TeacherGuestClasses.refresh();
+      // Do not leave a first-time teacher wondering where the classroom went.
+      // Open the newly created class directly into its data-driven setup guide.
+      if (data.id && typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.openById(data.id);
     } catch (e) {
       const msg = e.message || 'Something went wrong. Please try again.';
       _setErr(msg);

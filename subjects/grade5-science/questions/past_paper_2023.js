@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 Science 2023 — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 Science 2023 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp23-001', chapterId:'energy', subsection:'renewable', difficulty:1,
     question:'Which one of the following is a <strong>fossil fuel</strong>?',
@@ -46,7 +46,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp23-008', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'What is the function of the <strong>cell (battery)</strong> in an electric circuit?',
     options:['It allows the circuit to open and close.','It opens and closes the circuit.','It produces light energy.','It provides electrical energy.'], answer:'It provides electrical energy.',
-    hint:'The cell is like the engine of the circuit — without it, nothing works.',
+    hint:'The cell is like the engine of the circuit - without it, nothing works.',
     explanation:'A cell (battery) provides the electrical energy needed to drive the current around the circuit. Without it, the bulb would not light up.' }),
 
   makeMCQ({ id:'g5sc-pp23-009', chapterId:'animals', subsection:'habitats', difficulty:1,

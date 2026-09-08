@@ -20,25 +20,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6hg-si-003', chapterId:'g6-slaves-immigrants', subsection:'indentured', difficulty:2,
     question:'What was an INDENTURED worker?',
-    options:[
-      'A skilled craftsman who chose freely to work anywhere',
-      'An enslaved person who had no rights',
-      'A worker who signed a contract to work for a fixed period in exchange for passage and wages',
-      'A government official who managed plantations'
-    ],
-    answer:'A worker who signed a contract to work for a fixed period in exchange for passage and wages',
+    options:['A worker under a fixed-term contract', 'A worker owned by a plantation owner', 'A government officer on the estates', 'A craftsman free to work anywhere'],
+    answer:'A worker under a fixed-term contract',
     hint:'"Indenture" means a contract or agreement.',
     explanation:'An <b>indentured worker</b> was a person who signed a legal contract (indenture) to work for an employer for a fixed period (usually 5 years) in exchange for their passage to Mauritius and a wage. Though legally different from slavery, conditions were often harsh.' }),
 
   makeMCQ({ id:'g6hg-si-004', chapterId:'g6-slaves-immigrants', subsection:'aapravasi', difficulty:1,
     question:'What is Aapravasi Ghat in Port Louis?',
-    options:[
-      'A French colonial fort on a hill',
-      'The immigration depot where indentured workers first landed in Mauritius',
-      'A Hindu temple built by the first Indian immigrants',
-      'The site where enslaved people were first brought ashore'
-    ],
-    answer:'The immigration depot where indentured workers first landed in Mauritius',
+    options:['The depot where indentured workers landed', 'The place where slaves were brought ashore', 'A French colonial fort built on a hill', 'A Hindu temple built by immigrants'],
+    answer:'The depot where indentured workers landed',
     hint:'Its name means "immigration depot" in Hindi.',
     explanation:'<b>Aapravasi Ghat</b> (meaning "Immigration Depot" in Hindi) in Port Louis was where indentured workers were processed and registered after arriving in Mauritius. It is now a UNESCO World Heritage Site, recognising its role in the global history of labour migration.' }),
 
@@ -49,26 +39,16 @@ STATIC_QUESTIONS.push(
     explanation:'True. <b>Aapravasi Ghat</b> was inscribed as a UNESCO World Heritage Site in 2006. UNESCO recognised it as a key site in the history of the modern world - it was the first destination of the largest migration of indentured labour in history.' }),
 
   makeMCQ({ id:'g6hg-si-006', chapterId:'g6-slaves-immigrants', subsection:'aapravasi', difficulty:2,
-    question:'Why is Le Morne Brabant Peninsula a UNESCO World Heritage Site?',
-    options:[
-      'It is the site of the first sugar mill in Mauritius',
-      'It symbolises the resistance of enslaved people who used its caves as refuge',
-      'It is where the first Indian indentured workers landed',
-      'It is the highest mountain in Mauritius'
-    ],
-    answer:'It symbolises the resistance of enslaved people who used its caves as refuge',
+    question:'Why is Le Morne Brabant a UNESCO World Heritage Site?',
+    options:['It was a refuge for runaway slaves', 'It was the first sugar mill in Mauritius', 'It is the highest mountain in Mauritius', 'It is where indentured workers landed'],
+    answer:'It was a refuge for runaway slaves',
     hint:'Many enslaved people fled to this remote, rocky mountain to escape.',
     explanation:'<b>Le Morne Brabant</b> was inscribed as a UNESCO World Heritage Site in 2008. Enslaved people who escaped (maroons) hid in its caves, using the rugged mountain as a place of refuge. It is now a powerful symbol of the struggle for freedom and resistance against slavery.' }),
 
   makeMCQ({ id:'g6hg-si-007', chapterId:'g6-slaves-immigrants', subsection:'slavery', difficulty:2,
-    question:'Which communities make up Mauritius\'s diverse population today, partly as a result of its history of slavery and immigration?',
-    options:[
-      'Only descendants of French settlers',
-      'Indo-Mauritians, Creoles, Sino-Mauritians and Franco-Mauritians',
-      'Only descendants of African slaves',
-      'Only British and Indian communities'
-    ],
-    answer:'Indo-Mauritians, Creoles, Sino-Mauritians and Franco-Mauritians',
+    question:'Which of these is one of the main communities of Mauritius?',
+    options:['Sino-Mauritians', 'Anglo-Australians', 'Franco-Canadians', 'Luso-Brazilians'],
+    answer:'Sino-Mauritians',
     hint:'Mauritius is often called a "rainbow nation" due to its cultural diversity.',
     explanation:'Mauritius\'s diverse population reflects its complex history: <b>Indo-Mauritians</b> (descendants of Indian indentured workers), <b>Creoles</b> (descendants of African and Malagasy enslaved people), <b>Sino-Mauritians</b> (Chinese immigrants), and <b>Franco-Mauritians</b> (descendants of French settlers).' }),
 
@@ -141,50 +121,30 @@ STATIC_QUESTIONS.push(
     explanation:'<b>True.</b> The system of Indian indentured labour in Mauritius began in <b>1834</b> (the year after the Slavery Abolition Act) and officially ended in <b>1924</b>. During this 90-year period, over 450,000 workers came from India. Many chose to stay after completing their contracts, becoming permanent residents.' }),
 
   makeMCQ({ id:'g6hg-si-016', chapterId:'g6-slaves-immigrants', subsection:'slavery', difficulty:2,
-    question:'What were the living conditions like for enslaved people on Mauritian plantations during French rule?',
-    options:[
-      'Comfortable - they were paid well and had free time',
-      'Harsh - they worked long hours in the fields, had poor food and shelter, and were frequently punished',
-      'Equal to French colonists - they shared the same rights',
-      'Good - they were protected by strict laws against mistreatment'
-    ],
-    answer:'Harsh - they worked long hours in the fields, had poor food and shelter, and were frequently punished',
+    question:'What were living conditions like for enslaved people on Mauritian plantations?',
+    options:['Harsh, with long hours and poor food', 'Comfortable, with good pay and rest', 'Equal to those of French colonists', 'Safe, protected by strict laws'],
+    answer:'Harsh, with long hours and poor food',
     hint:'Enslaved people had no rights or freedom under the plantation system.',
     explanation:'Enslaved people endured extremely <b>harsh conditions</b>: they worked from dawn to dusk in sugar cane fields, received minimal food and poor shelter, had no legal rights, could not marry without permission, and faced violent punishment if they disobeyed. This is why many escaped to become maroons, seeking freedom in remote areas like Le Morne Brabant.' }),
 
   makeMCQ({ id:'g6hg-si-017', chapterId:'g6-slaves-immigrants', subsection:'indentured', difficulty:2,
-    question:'What important cultural contribution did Indian indentured workers bring to Mauritius?',
-    options:[
-      'They introduced the French language and culture',
-      'They brought Hinduism, Islam, Hindi/Bhojpuri language, music, food, and festivals like Diwali and Eid',
-      'They introduced the Christian religion to Mauritius',
-      'They brought the Dutch language and traditions'
-    ],
-    answer:'They brought Hinduism, Islam, Hindi/Bhojpuri language, music, food, and festivals like Diwali and Eid',
+    question:'What did Indian indentured workers bring to Mauritian culture?',
+    options:['Hinduism, Bhojpuri and Diwali', 'The Dutch language and customs', 'The French language and cuisine', 'Christianity and the Creole language'],
+    answer:'Hinduism, Bhojpuri and Diwali',
     hint:'Indian workers brought their entire cultural heritage with them on the journey.',
     explanation:'Indian indentured workers made enormous cultural contributions: <b>Hinduism and Islam</b> became the major religions of Mauritius; <b>Hindi and Bhojpuri</b> are widely spoken; festivals like <b>Diwali</b> (Hindu) and <b>Eid</b> (Muslim) are public holidays; Indian <b>cuisine, music and art</b> became central to Mauritian identity.' }),
 
-  makeMCQ({ id:'g6hg-si-018', chapterId:'g6-slaves-immigrants', subsection:'colonial_rule', difficulty:3,
-    question:'What does the CAPITULATION OF MAURITIUS (1810) refer to?',
-    options:[
-      'The agreement by which France took the island from the Dutch',
-      'The formal surrender of Mauritius by France to Britain, ending French rule',
-      'The treaty that abolished slavery in Mauritius',
-      'The agreement that ended the indentured labour system'
-    ],
-    answer:'The formal surrender of Mauritius by France to Britain, ending French rule',
+  makeMCQ({ id:'g6hg-si-018', chapterId:'g6-slaves-immigrants', subsection:'colonial_rule', difficulty:2,
+    question:'What was the CAPITULATION of 1810?',
+    options:['France surrendered Mauritius to Britain', 'Britain abolished slavery in Mauritius', 'France took the island from the Dutch', 'The end of the indentured labour system'],
+    answer:'France surrendered Mauritius to Britain',
     hint:'A "capitulation" in history means a formal surrender.',
     explanation:'The <b>Capitulation of Mauritius (December 1810)</b> was the formal document by which the French colonial government surrendered the island to Britain. Crucially, the capitulation guaranteed that the French colonists could keep their language, laws, religion (Catholicism) and property - which is why French culture, the Civil Code (Code Napoléon) and Catholicism remain important in Mauritius today.' }),
 
-  makeMCQ({ id:'g6hg-si-019', chapterId:'g6-slaves-immigrants', subsection:'aapravasi', difficulty:4,
-    question:'Why is Aapravasi Ghat important for WORLD history, not just Mauritian history?',
-    options:[
-      'Because it was the largest fort built by any colonial power',
-      'Because Mauritius was the starting point of the largest slave trade in history',
-      'Because it was the first site in the world to receive indentured labourers and represents the beginning of the global modern labour migration system',
-      'Because it was used as a model for building airports around the world'
-    ],
-    answer:'Because it was the first site in the world to receive indentured labourers and represents the beginning of the global modern labour migration system',
+  makeMCQ({ id:'g6hg-si-019', chapterId:'g6-slaves-immigrants', subsection:'aapravasi', difficulty:3,
+    question:'Why is Aapravasi Ghat important to WORLD history, not only to Mauritius?',
+    options:['It began the global indentured labour system', 'It was the largest colonial fort ever built', 'It was the main port of the Atlantic slave trade', 'It was the first airport in the Indian Ocean'],
+    answer:'It began the global indentured labour system',
     hint:'UNESCO inscribed it for its "outstanding universal value" - not just its local value.',
     explanation:'UNESCO inscribed Aapravasi Ghat in 2006 because Mauritius was <b>the first destination of the largest migration of indentured labour in history</b>. The indenture system that started here spread across the British Empire - to Trinidad, Guyana, Fiji, South Africa, Natal - reshaping the demographics of much of the world. Aapravasi Ghat is where this transformative global history began.' })
 

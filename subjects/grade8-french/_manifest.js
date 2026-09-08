@@ -1,57 +1,50 @@
 'use strict';
 // ══════════════════════════════════════════════════════════════════════════
-//  Grade 8 — Français   ·   PLACEHOLDER PACK
+//  Grade 8 - Français   ·   SYLLABUS ONLY, NO QUESTIONS YET
 //
-//  Registered so the plumbing exists: the grade picker, the admin Content tab,
-//  the shop catalogue, the question bundler and the DB importer all discover
-//  grades from SUBJECT_PACKS / the subjects/ directory, so nothing else has to
-//  be edited when this is filled in.
+//  Chapters below are the real MIE lower-secondary syllabus, taken from the
+//  National Curriculum Framework / Teaching and Learning Syllabus, Grades 7 to 9
+//  (Nine-Year Continuous Basic Education, MIE). The exam at the end of Grade 9
+//  is the NCE, not the PSAC.
 //
-//  ⚠ comingSoon: true is what makes this safe to ship empty. It makes
+//  ⚠ comingSoon STAYS true until real questions land. It makes
 //    activateSubjectPack() refuse the pack, keeps it out of QuestionLoader's
 //    per-grade fetch and out of assembleExamPaper(), and renders the grade card
-//    as "Coming Soon" and disabled. Flip it to false ONLY when this pack has
-//    real chapters and real questions.
-//
-// STAGE: lower secondary. ⚠ TWO THINGS TO SETTLE BEFORE FILLING THIS IN:
-//   1. The exam at the end of Grade 9 is the NCE, NOT the PSAC. The app's
-//      branding, the past-papers screen and `curriculum` below all say PSAC.
-//   2. The subject list here is a PLACEHOLDER copy of the primary five. The
-//      real MIE lower-secondary list differs (Science splits, and Computer
-//      Science / Business / Design & Technology enter). Confirm against the
-//      MIE syllabus and add or remove packs before writing any questions.
+//    as "Coming Soon" and disabled. Real chapters are NOT on their own a reason
+//    to flip it - a child opening a chapter with no questions is worse than a
+//    card that says the pack is not ready.
 //
 //  TO FILL THIS IN
-//    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` —
-//       one idea per sentence (_syllabusPoints splits on sentences).
-//    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
-//       model. IDs: g8fr-samp-001 style. Every question needs a `subsection:`
-//       tag that matches an id declared in G8FR_SYLLABUS below.
-//    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only — production auto-discovers) and bump _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
+//    1. Write questions/ch01_*.js files, using subjects/grade4-maths as the
+//       model. IDs: g8fr-<chapter>-001 style. Every question needs a
+//       `subsection:` tag, and every tagged id must also be declared in
+//       G8FR_SYLLABUS below - the two must match exactly per chapter.
+//    2. Add each new file to LOCAL_FILES in engine/question_loader.js (file://
+//       dev only - production auto-discovers) and bump _CACHE_VERSION.
+//    3. Delete questions/ch01_sample.js.
+//    4. Set comingSoon: false only once every chapter above has questions.
 // ══════════════════════════════════════════════════════════════════════════
 
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: an id declared here
-// with no questions behind it advertises a topic that opens empty, which is
-// worse than no subsections at all. Add ids only as questions are tagged.
+// Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
+// declared here with no questions behind it advertises a topic that opens
+// empty. Add ids only as questions are written and tagged.
 const G8FR_SYLLABUS = {};
 
 registerSubject({
-  id:         'grade8-french',
-  name:       'Français',
-  grade:      8,
-  icon:       '🇫🇷',
-  subject:    'French',
-  curriculum: 'MIE Mauritius',
-  comingSoon: true,
-  syllabus:   G8FR_SYLLABUS,
+  id: 'grade8-french', name: 'Français', grade: 8, icon: '🇫🇷', subject: 'French',
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  practiceble: true, notesBased: false, level4Label: 'Word Problems',
+  syllabus: G8FR_SYLLABUS,
   chapters: [
-    // One placeholder so the shape is copyable. examWeight: 0 keeps it out of
-    // exam papers even if comingSoon is flipped before real content lands.
-    { id: 'g8fr-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g8fr-co',                    name: 'Compréhension orale',    icon: '👂', examWeight: 3,
+      syllabus: 'Différencier les types de textes écoutés. Dégager le sens et les paramètres de la communication. Préciser les éléments du schéma de communication. Suivre des discussions entre plusieurs locuteurs.' },
+    { id: 'g8fr-eo',                    name: 'Expression orale',       icon: '🗣️', examWeight: 3,
+      syllabus: 'Lire à voix haute différents types de textes. Converser clairement avec plusieurs interlocuteurs. Traiter une problématique à l\'oral. Utiliser un lexique varié et précis.' },
+    { id: 'g8fr-ce',                    name: 'Compréhension écrite',   icon: '📖', examWeight: 4,
+      syllabus: 'Comparer et analyser différents types de production écrite. Identifier les registres de langue utilisés. Dégager judicieusement l\'idée principale d\'un texte. Repérer les informations implicites.' },
+    { id: 'g8fr-ee',                    name: 'Expression écrite',      icon: '✍️', examWeight: 4,
+      syllabus: 'Produire seul ou en groupe des textes fonctionnels divers. Résumer les éléments clés d\'un texte. Exprimer son opinion par écrit. Structurer un texte cohérent.' },
+    { id: 'g8fr-litterature',           name: 'Littérature',            icon: '📚', examWeight: 2,
+      syllabus: 'Identifier les genres littéraires et leurs caractéristiques. Apprécier des textes littéraires variés. Réagir à un texte littéraire à l\'oral et à l\'écrit.' },
   ],
 });

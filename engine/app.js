@@ -60,7 +60,7 @@ function _playSound(type) {
   } catch (_) {}
 }
 
-// ⚠ UI only, and it always has been — the enforcement that counts is in
+// ⚠ UI only, and it always has been - the enforcement that counts is in
 // netlify/functions/questions.js. Two things now override the plan list:
 //
 //   · A chapter bought with referral credits is open regardless of tier.
@@ -68,7 +68,7 @@ function _playSound(type) {
 //     plan says and whether or not plan enforcement is switched on. That is the
 //     point of the 30-day window: it outlives the account it was bought on.
 function _planAllowsChapter(chapterId) {
-  // Grades 1-2 are free for everyone, permanently — above plan, expiry and
+  // Grades 1-2 are free for everyone, permanently - above plan, expiry and
   // credits alike. Checked FIRST so a lapsed account still opens them, which
   // is what the server does too (see questions.js). Kill switches are not
   // bypassed here: those are handled by _adminBlocksChapter().
@@ -178,7 +178,7 @@ const _FEATURE_COPY = {
   // Parent-facing wording: the forum is adult-only now (see
   // _ADULT_ONLY_SCREENS), so a child never reaches this modal.
   community_forum:     'The community forum is part of a paid plan.\n\nUpgrade to ask questions and compare notes with other parents and teachers.',
-  study_calendar:      'The study calendar is part of a paid plan.\n\nAsk a parent about upgrading to plan revision with it.',
+  study_calendar:      'The study timetable is part of a paid plan.\n\nAsk a parent about upgrading to plan revision with it.',
   weak_area_drill:     'Weak-area drills are part of a paid plan.\n\nThey pick the topics you find hardest. Ask a parent about upgrading.',
 };
 
@@ -239,7 +239,7 @@ function _showCapModal(kind) {
 // Switched off by an administrator, either for everyone (global settings) or
 // for this family's plan tier. Distinct from a PARENT's own lock: a parent can
 // undo their own lock, but not this one. Mirrored server-side in
-// netlify/functions/questions.js, which simply does not serve these questions —
+// netlify/functions/questions.js, which simply does not serve these questions -
 // so editing the DOM or localStorage buys a cheat nothing.
 function _adminBlocksChapter(chapterId) {
   const gs = window.GLOBAL_SETTINGS || {};
@@ -266,7 +266,7 @@ function toggleSound() {
 }
 
 // The streak is shown twice in the header: with the branding on a phone, in the
-// action row from `sm:` up. One writer for both, so they can never disagree —
+// action row from `sm:` up. One writer for both, so they can never disagree -
 // the alternative was three call sites each remembering two element ids.
 function _setStreakDisplay(n) {
   ['streak-count', 'streak-count-m'].forEach(id => {
@@ -295,7 +295,7 @@ const _PRAISE_REACTIONS = [
   ['🎈', 'That was spot on!'], ['🐼', 'Clever answer!'], ['✨', 'Yes! Keep going!'],
 ];
 const _TRY_AGAIN_REACTIONS = [
-  ['🐢', 'That one was tricky — let’s learn it together.'],
+  ['🐢', 'That one was tricky - let’s learn it together.'],
   ['🦉', 'Nearly there. Have a look at the helpful steps below.'],
   ['🌱', 'Mistakes help your brain grow. Let’s try the next one.'],
   ['🧩', 'Good try. This is a puzzle we can solve step by step.'],
@@ -308,7 +308,7 @@ function _celebrationMotionAllowed() {
 
 function _practiceReaction(correct, streak) {
   if (correct && streak >= 10) return { icon: '🏆', text: 'Legendary streak! You are on fire!', confetti: 120 };
-  if (correct && streak >= 5)  return { icon: '🔥', text: `${streak} in a row — amazing focus!`, confetti: 75 };
+  if (correct && streak >= 5)  return { icon: '🔥', text: `${streak} in a row - amazing focus!`, confetti: 75 };
   const choices = correct ? _PRAISE_REACTIONS : _TRY_AGAIN_REACTIONS;
   const [icon, text] = choices[Math.floor(Math.random() * choices.length)];
   // A small surprise roughly once every five correct answers keeps delight
@@ -343,7 +343,7 @@ let ACTIVE_PACK    = null; // set when student selects a subject; defaults to fi
 
 // ⚠ Returns null when no subject has been chosen, and that is deliberate.
 //
-// It used to fall back to `SUBJECT_PACKS.find(p => !p.comingSoon)` — the first
+// It used to fall back to `SUBJECT_PACKS.find(p => !p.comingSoon)` - the first
 // pack registered, which is grade4-maths. So before a child picked anything,
 // the breadcrumb said "Grade 4 Mathematics", the syllabus screen showed maths,
 // packBadges() offered maths badges and _ttsLang() answered for maths. Combined
@@ -374,7 +374,7 @@ function _activePack() {
 // uses it. It is a `let`, so a reference from activateSubjectPack() while the
 // declaration was still below would sit in the temporal dead zone and throw
 // ReferenceError rather than reading undefined. Nothing calls that function
-// during app.js's own top-level run today — but auth.js and the resume path
+// during app.js's own top-level run today - but auth.js and the resume path
 // both call it, and the ordering is not something a future edit should have to
 // know about.
 let _chapterFilter = 'all';
@@ -400,7 +400,7 @@ function activateSubjectPack(packId, { allowComingSoon = false } = {}) {
 
   // ⚠ Reset here, not in the filter bar. A filter left on "Not started" would
   // otherwise follow the child into the next subject, where it can legitimately
-  // match nothing — and an empty chapter grid reads as a broken app, not as an
+  // match nothing - and an empty chapter grid reads as a broken app, not as an
   // active filter.
   _chapterFilter = 'all';
 
@@ -414,7 +414,7 @@ function _activeSubjectLabel() {
   const grade = acct?.grade || pack?.grade || 5;
   // ⚠ Not 'Maths'. With no subject chosen this string went into the breadcrumb
   // and the dashboard tagline, so a child who had picked nothing was told they
-  // were in Maths — the same guess _activePack() used to make, one level up.
+  // were in Maths - the same guess _activePack() used to make, one level up.
   const name  = pack?.name  || 'your subject';
   return { grade, name, chosen: !!pack };
 }
@@ -567,6 +567,14 @@ function setThemePreference(pref) {
   applyTheme(pref === 'system' ? _systemTheme() : pref);
 }
 
+// Toggle from what is ACTUALLY painted, not DB.theme. DB belongs to the active
+// child and is deliberately not rewritten while a parent/teacher is using the
+// app. Reading it here made an adult's button request the same theme forever.
+function toggleTheme() {
+  const isDark = document.documentElement.classList.contains('dark');
+  setThemePreference(isDark ? 'light' : 'dark');
+}
+
 try {
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     if (getThemePreference() === 'system') applyTheme(_systemTheme());
@@ -575,7 +583,7 @@ try {
 
 // The header toggle is a deliberate concrete choice, so it also drops the
 // device out of 'system' - otherwise the next OS flip would silently undo it.
-document.getElementById('theme-toggle').addEventListener('click', () => setThemePreference((DB.theme || localStorage.getItem('mm_global_theme') || DEFAULT_THEME) === 'dark' ? 'light' : 'dark'));
+document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 // One-time migration. The old default wrote 'light' into mm_global_theme on
 // every single boot, so every existing device now stores a "preference" nobody
 // actually chose - and it would keep beating DEFAULT_THEME forever. Clear it
@@ -656,11 +664,21 @@ function _resumeKey() { return 'mm_resume_' + ACTIVE_STUDENT_ID; }
 
 function _readResumeStore() {
   if (!ACTIVE_STUDENT_ID) return { exam: null, practice: {} };
+  let local = { exam: null, practice: {} };
   try {
     const raw = localStorage.getItem(_resumeKey());
     const parsed = raw ? JSON.parse(raw) : {};
-    return { exam: parsed.exam || null, practice: parsed.practice || {} };
-  } catch(e) { return { exam: null, practice: {} }; }
+    local = { exam: parsed.exam || null, practice: parsed.practice || {} };
+  } catch(e) {}
+  // The blob carries the same records so an unfinished set can be picked up on
+  // another device. Per chapter, the newer timestamp wins; the exam slot stays
+  // device-local because an exam has a running clock that cannot migrate.
+  const remote = (DB && DB.resume && DB.resume.practice) || {};
+  for (const chId of Object.keys(remote)) {
+    const r = remote[chId], l = local.practice[chId];
+    if (r && (!l || (r.ts || 0) > (l.ts || 0))) local.practice[chId] = r;
+  }
+  return local;
 }
 
 function _writeResumeStore(store) {
@@ -679,6 +697,20 @@ function _pruneResumeStore(store) {
   return store;
 }
 
+// ── Fix My Mistakes ───────────────────────────
+// The synthetic chapter id a mistake-drill round runs under. It IS the flag for
+// that mode - deliberately, rather than a separate S.practice boolean: every
+// launch path already assigns S.practice.chapterId, so this can never be left
+// set from the previous round the way a stray flag would be.
+// ⚠ Declared here, above _saveResume, not beside _MISTAKE_KEEP further down:
+// a const referenced by a function defined earlier in the file is exactly the
+// temporal-dead-zone trap this project has already hit once.
+const _FIX_CHAPTER_ID = 'fix-mistakes';
+// A mistake is not fixed by getting it right once - on a 4-option MCQ that is a
+// 1-in-4 guess. Two correct answers, from anywhere in the app, retire it.
+const _FIX_TO_RETIRE  = 2;
+const _FIX_ROUND_MAX  = 10;
+
 function _saveResume() {
   if (S.practice?.coachMission) return;
   if (!ACTIVE_STUDENT_ID) return;
@@ -690,7 +722,13 @@ function _saveResume() {
       answers: S.exam.answers, flagged: [...(S.exam.flagged || [])],
       endTime: S.exam.endTime, ts: Date.now()
     };
-  } else if (!_assignmentActive && S.practice && S.practice.chapterId && S.practice.qs && S.practice.qs.length) {
+  } else if (!_assignmentActive && S.practice && S.practice.chapterId
+             && S.practice.chapterId !== _FIX_CHAPTER_ID
+             && S.practice.qs && S.practice.qs.length) {
+    // A mistake drill is never resumable: the store is keyed by chapter and
+    // resolves its ids against ACTIVE_PACK alone, while a drill is a snapshot
+    // of a list that changes every time a question is fixed and can span
+    // several subjects. Rebuilding it from DB.mistakes costs one tap.
     // Never for an assignment (teacher/test OR parent-assigned) - see
     // _assignmentActive's own comment for why: it runs on a real chapterId
     // and would silently collide with that chapter's genuine practice-resume
@@ -702,6 +740,14 @@ function _saveResume() {
     };
   }
   _writeResumeStore(store);
+  // Mirror into the progress blob so another device can resume this set. Only
+  // the practice slots: the exam slot holds a running endTime that would be
+  // wrong the moment it arrived somewhere else.
+  if (DB) {
+    if (!DB.resume) DB.resume = { practice: {} };
+    DB.resume.practice = store.practice || {};
+    save(DB);
+  }
 }
 
 // Each clears exactly the one thing its caller means to abandon (exiting an
@@ -741,6 +787,7 @@ async function _doResume(kind, chapterId) {
   // saved subject too, or resuming a session started in another subject renders
   // the chapter name, badges and help from whichever subject is open now.
   if (saved.subjectId && typeof activateSubjectPack === 'function') {
+    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(saved.subjectId).catch(() => {});
     activateSubjectPack(saved.subjectId);
   }
   if (saved.subjectId && typeof QuestionLoader !== 'undefined') {
@@ -749,7 +796,7 @@ async function _doResume(kind, chapterId) {
   const qMap = {};
   STATIC_QUESTIONS.forEach(q => { if (q) qMap[q.id] = q; });
   const qs = (saved.qIds || []).map(id => qMap[id]).filter(Boolean);
-  if (!qs.length) { toast('Could not restore that session — please start again.', 3000); return; }
+  if (!qs.length) { toast('Could not restore that session - please start again.', 3000); return; }
 
   if (kind === 'practice') {
     // Handed to startChapterDirect via the one-shot _practiceResume - it adopts
@@ -780,7 +827,7 @@ function _resumeSubjectLabel(subjectId) {
 function _renderResumeBanner() {
   // Three slots: the dashboard, the old kid-home, and the new student-home.
   // The student-home slot gets chalk-themed markup; the other two get the
-  // standard card. All live in the DOM at once — writing to every existing
+  // standard card. All live in the DOM at once - writing to every existing
   // slot is simpler than tracking which is currently visible.
   const slots = ['resume-banner-slot', 'resume-banner-slot-kidhome']
     .map(id => document.getElementById(id)).filter(Boolean);
@@ -797,13 +844,13 @@ function _renderResumeBanner() {
     if (store.exam) {
       const s = store.exam;
       const subj = _resumeSubjectLabel(s.subjectId);
-      title  = `Continue where you left off${subj ? ` — ${subj}` : ''}`;
+      title  = `Continue where you left off${subj ? ` - ${subj}` : ''}`;
       detail = `${s.examType === 'quick' ? 'Quick Exam' : 'Full Exam'} · Question ${(s.idx || 0) + 1} of ${(s.qIds || []).length}`;
       continueOnclick = `_doResume('exam')`;
       dismissOnclick  = `_clearExamResume(); _renderResumeBanner();`;
       icon = '📝';
       if (practiceEntries.length) {
-        extra = `+ ${practiceEntries.length} paused practice chapter${practiceEntries.length > 1 ? 's' : ''} — see Chapter Practice`;
+        extra = `+ ${practiceEntries.length} paused practice chapter${practiceEntries.length > 1 ? 's' : ''} - see Chapter Practice`;
       }
     } else {
       // Most recently paused chapter leads; the rest are still each individually
@@ -812,14 +859,14 @@ function _renderResumeBanner() {
       const [chapterId, s] = practiceEntries[0];
       const subj = _resumeSubjectLabel(s.subjectId);
       const chName = (typeof CHAPTERS !== 'undefined' ? CHAPTERS : []).find(c => c.id === chapterId)?.name || 'Practice';
-      title  = `Continue where you left off${subj ? ` — ${subj}` : ''}`;
+      title  = `Continue where you left off${subj ? ` - ${subj}` : ''}`;
       detail = `${chName} · Question ${(s.idx || 0) + 1} of ${(s.qIds || []).length}`;
       continueOnclick = `_doResume('practice','${chapterId}')`;
       dismissOnclick  = `_clearPracticeResume('${chapterId}'); _renderResumeBanner();`;
       icon = '✏️';
       if (practiceEntries.length > 1) {
         const rest = practiceEntries.length - 1;
-        extra = `+ ${rest} more paused chapter${rest > 1 ? 's' : ''} — see Chapter Practice`;
+        extra = `+ ${rest} more paused chapter${rest > 1 ? 's' : ''} - see Chapter Practice`;
       }
     }
 
@@ -843,7 +890,7 @@ function _renderResumeBanner() {
         </div>
       </div>`);
 
-    // Chalkboard-themed version for the student home board — shows ALL paused
+    // Chalkboard-themed version for the student home board - shows ALL paused
     // sessions so a student who paused several chapters can continue any of them.
     const shItems = [];
     if (store.exam) {
@@ -1037,30 +1084,30 @@ function _dismissHint() {
 // ══════════ IDLE NUDGE ══════════
 // The one-off "Tap here to start practising" callout is only ever shown once, to
 // a brand-new student, on the dashboard. But someone who has stalled on a screen
-// is not necessarily new — they are just unsure which of six things to press,
+// is not necessarily new - they are just unsure which of six things to press,
 // and there was nothing in the app that noticed. This watches for a stall on any
 // screen with an obvious next action and gives that control a small shake plus a
 // one-line prompt.
 //
 // Deliberate constraints, all of them there so it stays helpful and not naggy:
-//   · Never during an exam or a practice question — a timed paper does not need
+//   · Never during an exam or a practice question - a timed paper does not need
 //     something twitching in the corner of a child's eye.
 //   · Never while a modal is open; the thing to do is already on screen.
 //   · Never when the parent has turned tips off, and never in a parent session.
 //   · Twice per screen per page load, then that screen goes quiet for good.
 //   · Calm Mode (My Settings) and the OS reduced-motion setting drop the shake
-//     and keep the words — the help is the sentence, the motion is decoration.
+//     and keep the words - the help is the sentence, the motion is decoration.
 const _IDLE_NUDGES = {
   'student-home':   { target: 'sh-notes-grid',           text: 'Tap any sticky note to get started! 📌' },
   'practice-hub':   { target: 'prac-books-grid',         text: 'Tap a subject book to start practising. 📚' },
-  'subject-hub':    { target: 'sh-chapter-panel',        text: 'Tap a chapter to begin — any one is fine! ✨' },
-  dashboard:        { target: 'btn-chapter-mode',        text: 'Ready when you are — tap here to practise a chapter. 📚' },
+  'subject-hub':    { target: 'sh-chapter-panel',        text: 'Tap a chapter to begin - any one is fine! ✨' },
+  dashboard:        { target: 'btn-chapter-mode',        text: 'Ready when you are - tap here to practise a chapter. 📚' },
   'subject-select': { target: 'subject-cards',           text: 'Pick a subject to get started. Tap any card! 👆' },
   'grade-select':   { target: 'grade-cards',             text: 'Choose your grade to see your subjects. 🎯' },
   'student-select': { target: 'student-cards',           text: 'Tap your name to sign in. 👋' },
-  'chapter-select': { target: 'chapter-grid',            text: 'Tap a chapter to start — any one of them is fine. ✨' },
+  'chapter-select': { target: 'chapter-grid',            text: 'Tap a chapter to start - any one of them is fine. ✨' },
   'exam-config':    { target: 'start-exam-btn',          text: 'All set? Tap here to begin your mock exam. 📝' },
-  results:          { target: 'results-review',          text: 'Scroll down to see which ones you got wrong — that is the useful bit. 🔍' },
+  results:          { target: 'results-review',          text: 'Scroll down to see which ones you got wrong - that is the useful bit. 🔍' },
   syllabus:         { target: 'syllabus-list',           text: 'Tap a chapter to see what it covers, then practise it. 📖' },
   parent:           { target: 'pd-no-children-add-btn',  text: 'Add your child here to start tracking their revision. 👶' },
 };
@@ -1077,7 +1124,7 @@ function _idleNudgeAllowed() {
   //
   // ⚠ `.fixed` is load-bearing, not decoration. A bare [id^="modal-"] also
   // matches #modal-confirm-msg, which is a text div INSIDE #modal-confirm and
-  // is never given .hidden — so the plain selector matched on every single
+  // is never given .hidden - so the plain selector matched on every single
   // page and the nudge could never fire at all. Only the full-screen overlays
   // carry `fixed inset-0`.
   return !document.querySelector('div[id^="modal-"].fixed:not(.hidden)');
@@ -1159,7 +1206,7 @@ function _checkAssignHint() {
   const firstId = students[0].id;
   const key = 'parent_first_assign_' + firstId;
   setTimeout(() => _showHint('pd-assign-btn',
-    'Set a chapter for your child to practice — they\'ll see it when they log in! 📋',
+    'Set a chapter for your child to practice - they\'ll see it when they log in! 📋',
     key, { screen: 'parent' }), 400);
 }
 
@@ -1184,7 +1231,7 @@ async function openChildLoginModal(student, pin) {
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('cl-child-name', _childLogin.name);
   set('cl-start-child-name', _childLogin.name);
-  set('cl-family',     _childLogin.family || '—');
+  set('cl-family',     _childLogin.family || '-');
   set('cl-username',   _childLogin.username);
   set('cl-pin',        _childLogin.pin || 'unchanged');
   // A PIN the parent did not just type is not ours to reveal - in edit mode we
@@ -1200,8 +1247,8 @@ async function openChildLoginModal(student, pin) {
     // stays open and degrades to a details-only message.
     _childLogin.url = '';
     set('cl-link', res?.error === 'not_deployed'
-      ? 'One-tap link unavailable (run supabase-migration.sql). The details below still work.'
-      : 'Could not create the link — the details below still work.');
+      ? 'One-tap link unavailable (run supabase-schema.sql). The details below still work.'
+      : 'Could not create the link - the details below still work.');
     return;
   }
   _childLogin.url = `${location.origin}${location.pathname}?join=${res.token}`;
@@ -1258,20 +1305,39 @@ function startChildPracticeFromWelcome() {
   }
 }
 
+let _studentViewGuideTimer = null;
+
+function _studentViewGuideKey() {
+  const parentId = typeof Auth !== 'undefined' ? Auth.getParentProfile?.()?.id : null;
+  return `psac_student_view_guide_seen:${parentId || 'device'}`;
+}
+
 function showStudentViewGuide() {
   const callout = document.getElementById('pd-student-view-callout');
   const button = document.getElementById('pd-student-view-btn');
   if (!callout || !button) return;
-  try { localStorage.setItem('psac_student_view_guide_seen', '1'); } catch (_) {}
+  // The old unscoped key is honoured so existing parents who already saw this
+  // guide are not shown it again after this upgrade. New state is per parent,
+  // allowing two families that share a browser to each receive their own help.
+  try {
+    if (localStorage.getItem('psac_student_view_guide_seen') ||
+        localStorage.getItem(_studentViewGuideKey())) return;
+    localStorage.setItem(_studentViewGuideKey(), '1');
+  } catch (_) {}
   callout.classList.remove('hidden');
   button.classList.remove('student-view-nudge');
-  // Restart the short animation even if the parent just added a second child.
+  // Restart the short, finite animation without leaving a constantly moving UI.
   void button.offsetWidth;
   button.classList.add('student-view-nudge');
+  clearTimeout(_studentViewGuideTimer);
+  _studentViewGuideTimer = setTimeout(dismissStudentViewGuide, 12000);
 }
 
 function dismissStudentViewGuide() {
+  clearTimeout(_studentViewGuideTimer);
+  _studentViewGuideTimer = null;
   document.getElementById('pd-student-view-callout')?.classList.add('hidden');
+  document.getElementById('pd-student-view-btn')?.classList.remove('student-view-nudge');
 }
 
 function shareChildLoginWhatsApp() {
@@ -1283,7 +1349,7 @@ function shareChildLoginWhatsApp() {
 // for by name as a WhatsApp button, and wa.me works for a visitor who isn't
 // signed in yet (no referral code, no Auth dependency at all).
 function _appShareText() {
-  return 'PSAC Exam Practice 🎓 — free, fun revision for Grades 4–6! Maths, English, French, '
+  return 'PSAC Exam Practice 🎓 - free, fun revision for Grades 4–6! Maths, English, French, '
     + 'Science and History & Geography, all aligned with the Mauritius MIE curriculum. XP, '
     + 'streaks and real-time parent tracking built in. Worth a look:';
 }
@@ -1291,6 +1357,116 @@ function _appShareText() {
 function shareAppWhatsApp() {
   const msg = `${_appShareText()}\n\n${location.origin}${location.pathname}`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+}
+
+// ── CONTACT THE ADMINS (open to anyone, signed in or not) ──────────────────
+// Posts to /api/contact-message, which holds the service role and does the
+// validating, the honeypot and the throttling server-side.
+// ⚠ MEASURED: anon can currently INSERT into question_reports directly (policy
+// "anon can insert question reports", WITH CHECK (true), plus a full grant), so
+// this is the THROTTLED way in, not the only one. See CLAUDE.md → Pending.
+const _CONTACT_ERRORS = {
+  message_too_short: 'Please write a little more so we can understand the problem.',
+  not_enough_words: 'Please describe the problem in a sentence or two so an admin can act on it.',
+  too_many_links: 'That message has too many links in it. Please describe the problem in words instead.',
+  too_fast: 'That was sent before the form finished loading. Please try again.',
+  bad_email: 'That email address does not look right - check it, or clear it and send anyway.',
+  rate_limited: 'You have already sent a few messages. Please wait about 15 minutes, or email us directly.',
+  busy: 'We cannot take messages at this moment. Please try again shortly, or email psacpractice@gmail.com.',
+  not_configured: 'The message service is not switched on right now. Please email psacpractice@gmail.com instead.',
+  save_failed: 'We could not save your message. Please email psacpractice@gmail.com instead.',
+};
+
+// When the form was last put on screen. The server refuses anything sent in
+// under 3 seconds - a person cannot type a bug report that fast, and a bot
+// posts the moment it parses the page.
+let _contactShownAt = 0;
+
+// Called from showScreen('contact') - the render, per the module-state rule.
+// Without it a visitor who sent a message once could never reach the form again.
+function _resetContactForm() {
+  _contactShownAt = Date.now();
+  const form = document.getElementById('contact-form');
+  const done = document.getElementById('contact-done');
+  if (done) { done.innerHTML = ''; done.classList.add('hidden'); }
+  if (form) form.classList.remove('hidden');
+  const msg = document.getElementById('contact-message');
+  if (msg) msg.value = '';
+  const btn = document.getElementById('contact-submit');
+  if (btn) { btn.disabled = false; btn.textContent = 'Send to the admins'; }
+  const status = document.getElementById('contact-status');
+  if (status) { status.textContent = ''; status.className = 'text-sm font-semibold hidden'; }
+}
+
+function _contactSay(text, ok) {
+  const el = document.getElementById('contact-status');
+  if (!el) return;
+  el.textContent = text;
+  el.className = `text-sm font-semibold ${ok ? 'text-emerald-300' : 'text-amber-300'}`;
+}
+
+async function submitContactMessage(ev) {
+  if (ev && ev.preventDefault) ev.preventDefault();
+  const btn  = document.getElementById('contact-submit');
+  const msg  = (document.getElementById('contact-message')?.value || '').trim();
+  const mail = (document.getElementById('contact-email')?.value || '').trim();
+  if (msg.length < 5) {
+    _contactSay(_CONTACT_ERRORS.message_too_short, false);
+    document.getElementById('contact-message')?.focus();
+    return;
+  }
+
+  const label = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  _contactSay('Sending your message…', true);
+
+  try {
+    const res = await fetch('/api/contact-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type:    document.getElementById('contact-type')?.value || 'message',
+        message: msg,
+        name:    (document.getElementById('contact-name')?.value || '').trim(),
+        email:   mail,
+        website: (document.getElementById('contact-website')?.value || ''),
+        elapsedMs: _contactShownAt ? Date.now() - _contactShownAt : 0,
+      }),
+    });
+    // ⚠ An undeployed /api route answers with the SPA fallback: HTML, status
+    // 404. res.json() then throws, and treating that as {} would report the
+    // server's own refusal for a request no server ever saw.
+    const ct = res.headers.get('content-type') || '';
+    if (!ct.includes('application/json')) {
+      _contactSay(`The message service is not available here (HTTP ${res.status}). Please email psacpractice@gmail.com.`, false);
+      if (btn) { btn.disabled = false; btn.textContent = label; }
+      return;
+    }
+    const out = await res.json();
+    if (!out.ok) {
+      _contactSay(_CONTACT_ERRORS[out.error] || 'Could not send your message. Please email psacpractice@gmail.com instead.', false);
+      if (btn) { btn.disabled = false; btn.textContent = label; }
+      return;
+    }
+    // ⚠ HIDE the form, never overwrite it. Replacing its innerHTML left a
+    // visitor who sent one message looking at the receipt for the rest of the
+    // session - reopening the screen could not bring the form back.
+    const form = document.getElementById('contact-form');
+    const done = document.getElementById('contact-done');
+    if (done) {
+      done.innerHTML = `<div class="text-4xl mb-3" aria-hidden="true">✅</div>
+        <p class="font-black text-lg">Message sent</p>
+        <p class="mt-2 text-sm text-indigo-100 leading-relaxed">${out.replyByEmail
+          ? 'An administrator will read it and reply to your email address.'
+          : 'An administrator will read it. You did not leave an email address, so we have no way to reply - send another message with one if you need an answer.'}</p>
+        <button type="button" onclick="_resetContactForm()" class="mt-4 text-sm font-bold text-indigo-200 hover:text-white underline">Write another message</button>`;
+      done.classList.remove('hidden');
+    }
+    if (form) form.classList.add('hidden');
+  } catch (_) {
+    _contactSay('No connection. Check your internet, or email psacpractice@gmail.com.', false);
+    if (btn) { btn.disabled = false; btn.textContent = label; }
+  }
 }
 
 async function shareChildLogin() {
@@ -1304,14 +1480,14 @@ async function shareChildLogin() {
 async function copyChildLoginMessage() {
   try {
     await navigator.clipboard.writeText(_childLoginMessage());
-    toast('Message copied — paste it to your child. 📋', 2500);
+    toast('Message copied - paste it to your child. 📋', 2500);
   } catch(_) {
     toast('Could not copy. Select the link above and copy it manually.', 3000);
   }
 }
 
 // ── Push notifications ──────────────────────────────────────────────────────
-const VAPID_PUBLIC_KEY = 'BExWCMEBx-MGkPCv6tm0nC-DebalPys64ivbkWnWN7pxZuHQqUNtuZ85HehLssxBddlvjGB1d99IgtALRFZo8kc';
+const VAPID_PUBLIC_KEY = 'BCVzi3znFHmX6CYjtL9zO9jc0QGuPUgNACidVVETF35RpxJTu2adr3aERkKBiYLe_6iU0zxEb9PK2UL_DEXgIuQ';
 
 function _urlB64ToUint8Array(b64) {
   const pad  = '='.repeat((4 - b64.length % 4) % 4);
@@ -1323,7 +1499,7 @@ function _urlB64ToUint8Array(b64) {
 // actually owns the studentId in the payload before touching the row. Send
 // whichever credentials this device has: a student proves ownership with the
 // session token, a parent with their Supabase JWT. Both are sent when both
-// exist — the function accepts either, and which one is valid depends on who
+// exist - the function accepts either, and which one is valid depends on who
 // is driving the UI.
 async function _pushAuthHeaders() {
   const h = { 'Content-Type': 'application/json' };
@@ -1357,6 +1533,32 @@ async function setupPushNotifications(studentId, { prompt = false } = {}) {
     const reg = await navigator.serviceWorker.ready;
     // Check if already subscribed
     let sub = await reg.pushManager.getSubscription();
+    // ⚠ A subscription is bound to the applicationServerKey it was created
+    //   with. After a VAPID rotation an OLD subscription still exists and still
+    //   looks valid here, so `if (!sub)` alone would keep re-sending a dead one
+    //   forever — the server can only answer 403 VapidPkHashMismatch, which is
+    //   not a code anything prunes on. Compare the key and re-subscribe when it
+    //   has moved. Measured: 2 live subscriptions were created under the key
+    //   that leaked in git history (dba9b8e) and had to be replaced.
+    // ⚠ Only drop the old one when it can be replaced IMMEDIATELY. Permission
+    //   is already 'granted' for a device that is subscribed, so
+    //   pushManager.subscribe() needs no gesture and cannot fail for want of
+    //   one — but unsubscribing first and then hitting the `!prompt` guard
+    //   below would leave the device with NO subscription at all, which is
+    //   worse than the stale one it started with.
+    let stale = false;
+    if (sub) {
+      const want = _urlB64ToUint8Array(VAPID_PUBLIC_KEY);
+      const have = new Uint8Array(sub.options?.applicationServerKey || new ArrayBuffer(0));
+      stale = !(have.length === want.length && have.every((b, i) => b === want[i]));
+      if (stale && Notification.permission === 'granted') {
+        try { await sub.unsubscribe(); } catch (_) {}
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: want,
+        });
+      }
+    }
     if (!sub) {
       if (!prompt) return false;                          // no gesture - stay silent
       if (Notification.permission === 'denied') return false;
@@ -1477,7 +1679,7 @@ function _ttsLang() {
 // Android): the list is fetched asynchronously and only announced via
 // `voiceschanged`. Reading it at the moment the child taps 🔊 therefore returned
 // [] for the first tap after every page load, no voice was chosen, and the
-// engine fell back to its default — an English voice reading French.
+// engine fell back to its default - an English voice reading French.
 //
 // So the list is warmed at load and kept current, rather than asked for at the
 // worst possible moment. Nothing is deferred: the tap still calls speak()
@@ -1489,14 +1691,14 @@ function _refreshTtsVoices() {
 if (typeof window !== 'undefined' && window.speechSynthesis) {
   _refreshTtsVoices();
   // addEventListener where it exists; onvoiceschanged is the only hook in older
-  // Safari. Assigning both is safe — the property form simply never fires there.
+  // Safari. Assigning both is safe - the property form simply never fires there.
   try { window.speechSynthesis.addEventListener('voiceschanged', _refreshTtsVoices); } catch (_) {}
   if (!window.speechSynthesis.onvoiceschanged) window.speechSynthesis.onvoiceschanged = _refreshTtsVoices;
 }
 
 // Best voice for a language tag. An exact region match first (fr-FR over fr-CA
 // for a Mauritian child, whose French is metropolitan), then any voice for the
-// language, then nothing — in which case utt.lang is the only hint left and
+// language, then nothing - in which case utt.lang is the only hint left and
 // some engines will ignore it.
 function _pickVoice(lang) {
   const voices = _ttsVoices.length ? _ttsVoices : (() => { _refreshTtsVoices(); return _ttsVoices; })();
@@ -1542,7 +1744,7 @@ function speakQuestion(mode) {
   const utt   = new SpeechSynthesisUtterance(text);
   utt.rate    = 0.88;
   utt.lang    = lang;
-  // Setting .lang alone is not always enough — some engines keep the default
+  // Setting .lang alone is not always enough - some engines keep the default
   // voice unless one is named, which is how a French question ended up being
   // read aloud by an English voice. See _pickVoice / _refreshTtsVoices.
   try {
@@ -1644,6 +1846,8 @@ function toast(msg, dur = 2500) {
   if (!el) {
     el = document.createElement('div');
     el.id = 'toast';
+    el.setAttribute('role', 'status');
+    el.setAttribute('aria-live', 'polite');
     document.body.appendChild(el);
   }
   el.textContent = msg;
@@ -1651,6 +1855,106 @@ function toast(msg, dur = 2500) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), dur);
 }
+
+// ── DIALOG SEMANTICS FOR EVERY #modal-* OVERLAY ─────────────────
+// 26 modals are opened from 15 call sites in four files, all by toggling
+// .hidden on a fixed inset-0 wrapper, and 23 of them declared no role, none
+// trapped focus, none returned it, and 5 closed on Escape. Rather than touch
+// every call site, this watches the class attribute of any #modal-* overlay and
+// applies the dialog contract when it opens or closes:
+//   - role="dialog" aria-modal="true" on the panel, labelled by its first heading
+//   - focus moves INTO the dialog (the opener's own .focus(), if any, wins)
+//   - Tab / Shift+Tab cycle inside it
+//   - Escape closes it through the modal's OWN close control (a backdrop-tap
+//     handler, a ✕, or a Cancel/Close/Not now button) - never by hiding the
+//     wrapper directly, so whatever cleanup that control does still runs
+//   - focus returns to the element that opened it
+// A modal with its own Escape handler (student switch, parent PIN) closes once
+// through that handler; the extra click here lands on an already-hidden
+// control and does nothing.
+const _Dialogs = (() => {
+  const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  const CLOSE_RX = /^(✕|×|✖|❌)|^(close|cancel|not now|later|maybe later|no thanks|got it|ok|okay|done|dismiss|skip)\b/i;
+  const stack = [];
+  const isOverlay = el => el.nodeType === 1 && /^modal-/.test(el.id || '') && el.classList.contains('fixed') && el.classList.contains('inset-0');
+  const visible = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+  const focusables = m => [...m.querySelectorAll(FOCUSABLE)].filter(visible);
+  const panelOf = m => m.firstElementChild || m;
+
+  function opened(m) {
+    if (stack.some(s => s.el === m)) return;
+    const panel = panelOf(m);
+    if (!panel.hasAttribute('role')) panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
+    if (!panel.hasAttribute('aria-labelledby') && !panel.hasAttribute('aria-label')) {
+      const h = panel.querySelector('h1, h2, h3, h4, [id$="-title"], [id$="-msg"]');
+      if (h) { if (!h.id) h.id = m.id + '-title'; panel.setAttribute('aria-labelledby', h.id); }
+    }
+    if (!panel.hasAttribute('tabindex')) panel.setAttribute('tabindex', '-1');
+    stack.push({ el: m, opener: document.activeElement });
+    setTimeout(() => {
+      if (m.classList.contains('hidden') || m.contains(document.activeElement)) return;
+      const f = focusables(m);
+      try { (f[0] || panel).focus({ preventScroll: true }); } catch (_) {}
+    }, 0);
+    _labelUnlabelledFields(m);
+  }
+
+  function closed(m) {
+    const i = stack.findIndex(s => s.el === m);
+    if (i === -1) return;
+    const [{ opener }] = stack.splice(i, 1);
+    if (stack.length) return;
+    if (opener && opener !== document.body && document.contains(opener) && visible(opener)) {
+      try { opener.focus({ preventScroll: true }); } catch (_) {}
+    }
+  }
+
+  function closeControl(m) {
+    const explicit = m.querySelector('[data-close], [aria-label="Close"], [aria-label="close"], [title="Close"]');
+    if (explicit) return explicit;
+    const btns = [...m.querySelectorAll('button, a')].filter(visible);
+    return btns.find(b => CLOSE_RX.test((b.getAttribute('aria-label') || b.textContent || '').trim())) || null;
+  }
+
+  function onKey(e) {
+    const top = stack.length ? stack[stack.length - 1] : null;
+    if (!top || top.el.classList.contains('hidden')) return;
+    const m = top.el;
+    if (e.key === 'Escape') {
+      const c = closeControl(m);
+      if (c) { c.click(); e.preventDefault(); }
+      else if (typeof m.onclick === 'function') { m.click(); e.preventDefault(); }
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    const f = focusables(m);
+    if (!f.length) { e.preventDefault(); return; }
+    const first = f[0], last = f[f.length - 1], cur = document.activeElement;
+    if (!m.contains(cur)) { e.preventDefault(); (e.shiftKey ? last : first).focus(); return; }
+    if (e.shiftKey && cur === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && cur === last) { e.preventDefault(); first.focus(); }
+  }
+
+  function watch() {
+    if (!window.MutationObserver) return;
+    new MutationObserver(recs => {
+      for (const r of recs) {
+        const el = r.target;
+        if (!isOverlay(el)) continue;
+        const hidden = el.classList.contains('hidden');
+        const was = stack.some(s => s.el === el);
+        if (!hidden && !was) opened(el);
+        else if (hidden && was) closed(el);
+      }
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'], subtree: true });
+    document.addEventListener('keydown', onKey, true);
+    document.querySelectorAll('[id^="modal-"]').forEach(el => { if (isOverlay(el) && !el.classList.contains('hidden')) opened(el); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watch);
+  else watch();
+  return { _stack: stack, _closeControl: closeControl };
+})();
 
 // ── CONFIRM MODAL (replaces browser confirm() dialogs) ───────────
 let _confirmCallback = null;
@@ -1666,7 +1970,7 @@ function _confirmModal(msg, onConfirm, { icon = '⚠️', okLabel = 'Confirm', d
   const cancelBtn = document.getElementById('modal-confirm-cancel');
   if (cancelBtn) {
     cancelBtn.textContent = cancelLabel;
-    // An empty label means "this is a notice, not a choice" — otherwise the
+    // An empty label means "this is a notice, not a choice" - otherwise the
     // dialog shows a blank second button next to the only real one.
     cancelBtn.classList.toggle('hidden', !cancelLabel);
   }
@@ -1683,20 +1987,25 @@ function _closeConfirmModal(confirmed) {
 const _SCREEN_ORDER = ['dashboard','subject-select','chapter-select','practice','exam'];
 let _prevScreen = null;
 
+// ⚠ 'practice' is deliberately absent. With the tab bar AND the fixed
+// Check/Next bar both on screen, the bottom 155px of a 740px phone was chrome:
+// two of four options were hidden on first paint and the explanation landed
+// under the bars after Check (measured, not reasoned). The practice screen has
+// its own way out (← Chapters, Pause), and the tab bar returns on the next screen.
 const _BOTTOM_NAV_SCREENS = new Set([
-  'student-home','dashboard','subject-select','chapter-select','practice',
+  'student-home','dashboard','subject-select','chapter-select',
   'exam','exam-config','analytics','results',
   // screens reachable via sticky notes that previously hid the nav
   'schedule','inbox','search','interactive-map','syllabus','past-papers',
   'assignment-complete',
   // new chalkboard practice flow
-  'practice-hub','subject-hub',
+  'practice-hub','subject-hub','cloze-list','cloze-play',
 ]);
 const _NAV_MAP = {
   'student-home':'home','dashboard':'home',
   'subject-select':'practice','chapter-select':'practice','syllabus':'practice',
   'interactive-map':'practice','past-papers':'practice','search':'practice',
-  'practice':'practice',
+  'practice':'practice','cloze-list':'practice','cloze-play':'practice',
   'practice-hub':'practice','subject-hub':'practice',
   'exam-config':'exam','exam':'exam','results':'exam',
   'analytics':'progress',
@@ -1769,10 +2078,55 @@ const _KID_ONLY_SCREENS = new Set([
   'student-home', 'dashboard', 'chapter-select', 'syllabus', 'interactive-map', 'past-papers', 'analytics',
   'subject-select', 'grade-select', 'practice', 'exam-config', 'exam',
   'results', 'assignment-complete', 'search', 'schedule', 'inbox',
-  'practice-hub', 'subject-hub',
+  'practice-hub', 'subject-hub', 'cloze-list', 'cloze-play',
 ]);
 // Screens only an adult session may open. See the guard in showScreen().
-const _ADULT_ONLY_SCREENS = new Set(['forum', 'parent-messages']);
+const _ADULT_ONLY_SCREENS = new Set(['forum', 'parent-messages', 'teacher']);
+
+// ── Returning a child to where they were after a full refresh ─────────────
+// showScreen() already records `psac-last-screen`, and auth.js already restores
+// a game (minigames) and an in-flight round (practice/exam) from it. Everything
+// else fell through to the student home hub, so refreshing while browsing a
+// subject's chapters read as being thrown out of the subject - even though the
+// pack itself had already been restored two lines earlier in that same block.
+//
+// ⚠ ALLOWLIST, not a denylist. A screen may only be restored if it repaints
+// itself from stored state on the way in: `subject-hub` and `practice-hub` do
+// that through their own modules, the rest through the render dispatch at the
+// foot of showScreen(). `search`, `cloze-play` and `results` are deliberately
+// absent - they are painted by whatever opened them, so restoring one shows an
+// empty panel or the previous round's answers.
+const _REFRESH_RESTORE_SCREENS = new Set([
+  'subject-hub', 'practice-hub', 'chapter-select', 'subject-select', 'dashboard',
+  'syllabus', 'analytics', 'schedule', 'inbox', 'past-papers', 'interactive-map',
+]);
+// These paint from CHAPTERS / ACTIVE_PACK. Without a restored pack they open
+// empty, and an empty chapter list is worse than the hub.
+const _PACK_DEPENDENT_SCREENS = new Set(['subject-hub', 'chapter-select', 'syllabus']);
+
+// Returns true only if it actually put the child somewhere. Every caller must
+// fall back to the hub on false - never assume this succeeded.
+async function restoreKidScreen(id, packId) {
+  if (!id || !_REFRESH_RESTORE_SCREENS.has(id)) return false;
+  if (_PACK_DEPENDENT_SCREENS.has(id) && !packId) return false;
+  try {
+    // SubjectHub.open() re-ensures the pack and repaints before showing, which
+    // is exactly what a cold restore needs; showScreen() alone would leave the
+    // chapter grid holding the previous subject.
+    if (id === 'subject-hub') {
+      if (typeof SubjectHub === 'undefined') return false;
+      await SubjectHub.open(packId);
+      return true;
+    }
+    if (id === 'practice-hub') {
+      if (typeof PracticeHub === 'undefined') return false;
+      PracticeHub.open();
+      return true;
+    }
+    showScreen(id);
+    return true;
+  } catch (e) { return false; }
+}
 
 function _isParentContext() {
   return !!(typeof _isParentSession === 'function' && _isParentSession());
@@ -1804,7 +2158,7 @@ function showScreen(id) {
 
   // Screens that are now rendered inline inside the parent dashboard board frame.
   // When the parent dashboard is the current screen, redirect to the inline tab
-  // instead of navigating away. showScreen('parent') is the reset path — let it
+  // instead of navigating away. showScreen('parent') is the reset path - let it
   // through so renderParentDashboard() can restore the children panel.
   if (id !== 'parent' && typeof PD !== 'undefined') {
     const _pdInlineMap = { 'shop': 'shop', 'calendar': 'calendar', 'parent-messages': 'messages' };
@@ -1820,7 +2174,7 @@ function showScreen(id) {
   // to hand a nine-year-old alongside their homework.
   //
   // ⚠ This is the UI half only. The half that counts is the RLS in
-  // supabase-forum-adults.sql — before it, `posts_read` was `USING (true)` and
+  // supabase-schema.sql - before it, `posts_read` was `USING (true)` and
   // `posts_insert` explicitly allowed `current_student_id() IS NOT NULL`, so a
   // child could read AND post. Hiding the button would have hidden a door that
   // was still unlocked.
@@ -1841,9 +2195,27 @@ function showScreen(id) {
   if (_hc && !_hc.classList.contains('hint-hidden')) _dismissHint();
 
   // A menu row that navigates leaves the sheet sitting over the new screen
-  // otherwise. Belt and braces — the row handler closes it too, but Logout and
+  // otherwise. Belt and braces - the row handler closes it too, but Logout and
   // the parent-mode switch also route through here from other places.
   if (typeof closeHeaderMenu === 'function') closeHeaderMenu();
+
+  // ⚠ #tc-classroom-detail is a full-page overlay that is NOT a .screen, so
+  // the loop below never touches it. A teacher with a classroom open who
+  // tapped 🔒 Parent got the parent dashboard rendered UNDERNEATH a 1394x900
+  // panel, with document.body.style.overflow still locked to 'hidden' so the
+  // page could not even be scrolled. Measured, not guessed. It is the same
+  // defect that stranded #admin-tab-questions outside #screen-admin.
+  // ⚠ Hide it, but do NOT call TeacherClassroomDetail.close(): that clears the
+  // remembered classroom, and returning to teacher mode is supposed to restore
+  // exactly where the teacher was (psac_teacher_loc_v1). Navigating INTO
+  // teacher mode is left alone for the same reason.
+  if (id !== 'teacher') {
+    const _tcd = document.getElementById('tc-classroom-detail');
+    if (_tcd && !_tcd.classList.contains('hidden')) {
+      _tcd.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
 
   const prevIdx = _SCREEN_ORDER.indexOf(_prevScreen);
   const nextIdx = _SCREEN_ORDER.indexOf(id);
@@ -1865,12 +2237,25 @@ function showScreen(id) {
     // Entry/lock screens are deliberately excluded: restoring one of those can
     // bypass a sign-in or leave a valid session looking logged out.
     if (!['landing', 'auth', 'verify-email', 'reset-password', 'biometric-lock'].includes(id)) {
-      try { sessionStorage.setItem('psac-last-screen', id); } catch (_) {}
+      try {
+        sessionStorage.setItem('psac-last-screen', id);
+        // ⚠ WHOSE screen it was. This key is per device, and a phone is shared
+        // between siblings - without the owner, child B refreshing after child
+        // A would be dropped into A's subject. The pack key beside it
+        // (psac-active-subject:<id>) has been child-scoped from the start for
+        // exactly this reason. The minigames and practice/exam restores need no
+        // such check: both resolve their state through ACTIVE_STUDENT_ID and so
+        // are already scoped downstream.
+        sessionStorage.setItem('psac-last-screen-owner',
+          (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID) ? String(ACTIVE_STUDENT_ID) : '');
+      } catch (_) {}
     }
   }
+  const _screenChanged = _prevScreen !== id;
   _prevScreen = id;
   _updateBottomNav(id);
   if (_currentHintTarget && _currentHintTarget.screen !== id) _hideHint();
+  if (sc && _screenChanged) _focusScreen(sc);
 
   // Hide header on full-page assignment screens
   const hideHeader = sc?.dataset?.hideHeader === 'true';
@@ -1881,7 +2266,7 @@ function showScreen(id) {
   // Two logout buttons, one rule. #header-logout-btn is the labelled pill shown
   // from 1100px up; #header-logout-mobile is its always-visible twin below that
   // (see the comment on it in index.html). Whether EITHER is on screen is
-  // decided by width in CSS — this only decides whether logging out makes sense
+  // decided by width in CSS - this only decides whether logging out makes sense
   // at all, which is a property of the screen, not the viewport.
   {
     const isAuthScreen = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
@@ -1894,7 +2279,7 @@ function showScreen(id) {
   }
   _updateTeacherModeButton();
   // Student home has its own parent-mode button in the sh-header just above
-  // the board — the global header one is redundant there only. Similarly, the
+  // the board - the global header one is redundant there only. Similarly, the
   // settings (profile) and theme buttons are replicated below the board, so the
   // header copies hide on that screen.
   const onStudentHome = id === 'student-home';
@@ -1922,14 +2307,10 @@ function showScreen(id) {
 
   _updateBreadcrumb(id);
   _applyPlanGates(id);
-  // Cheap (a querySelectorAll over 8 spans) and screen-agnostic: the date
-  // appears on the landing page, the auth screen and inside the plans modal,
-  // so tying it to one screen id would leave the others stale.
-  _applyFreeUntilLabel();
-
   // Not awaited, and failure is silent: the markup ships with real prices in
   // it, so a slow or unreachable database just leaves those on screen.
   if (id === 'landing')         hydrateLandingPrices();
+  if (id === 'contact')         _resetContactForm();
   if (id === 'dashboard')       renderDashboard();
   if (id === 'schedule')        renderSchedule();
   if (id === 'analytics')       renderAnalytics();
@@ -1945,8 +2326,14 @@ function showScreen(id) {
   if (id === 'subject-select')  renderSubjectSelect();
   if (id === 'student-select')  renderStudentSelect();
   if (id === 'grade-select')    renderGradeSelect();
-  if (id === 'teacher' && typeof TeacherMode !== 'undefined') TeacherMode.render();
-  if (id === 'forum'     && typeof Forum     !== 'undefined') Forum.render();
+  // ⚠ These two are fetched on demand (RoleModules), so the render has to wait
+  //   for the code. showScreen stays SYNCHRONOUS - it is called from everywhere
+  //   and dozens of callers focus a field or read the DOM straight afterwards -
+  //   so the screen is shown now and fills in when its module lands, exactly as
+  //   a lazily-loaded subject pack does. On a repeat visit the module is already
+  //   there and withGroup resolves on a microtask.
+  if (id === 'teacher') RoleModules.withGroup('teacher', () => TeacherMode.render());
+  if (id === 'forum')   RoleModules.withGroup('forum',   () => Forum.render());
   if (id === 'calendar'  && typeof Calendar  !== 'undefined') Calendar.render();
   const searchBtn  = document.getElementById('search-btn');
   const isAuth     = ['landing','auth','verify-email','reset-password','family-setup'].includes(id);
@@ -1963,6 +2350,44 @@ function showScreen(id) {
   _armIdleNudge(id);
 }
 
+// A screen change used to leave BOTH the scroll position and keyboard focus
+// wherever the previous screen had them: a child arriving from a long chapter
+// grid landed mid-page, and a screen-reader user was still "on" a button that
+// no longer existed. Focus goes to the screen's first heading (tabindex=-1, so
+// it is programmatically focusable and never in the Tab order); it is not
+// keyboard-initiated, so no ring is drawn. Runs synchronously inside
+// showScreen, so a caller that focuses its own field straight after still wins.
+function _focusScreen(sc) {
+  try { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); } catch (_) { window.scrollTo(0, 0); }
+  const h = sc.querySelector('h1, h2, h3');
+  if (!h) return;
+  if (!h.hasAttribute('tabindex')) h.setAttribute('tabindex', '-1');
+  try { h.focus({ preventScroll: true }); } catch (_) {}
+  _labelUnlabelledFields(sc);
+}
+
+// Fallback accessible names. 68 text inputs and 33 selects in index.html had
+// no <label>, aria-label or aria-labelledby - most rely on a placeholder, which
+// disappears the moment the user types and is not a name for most screen
+// readers. This takes the placeholder (or title, or a short label-like element
+// just before the control) as the name. A real <label for> or aria-label in the
+// markup always wins; this only fills gaps.
+function _labelUnlabelledFields(root) {
+  const fields = (root || document).querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), select, textarea');
+  fields.forEach(f => {
+    if (f.hasAttribute('aria-label') || f.hasAttribute('aria-labelledby') || f.closest('label')) return;
+    if (f.id && document.querySelector('label[for="' + CSS.escape(f.id) + '"]')) return;
+    let name = (f.getAttribute('placeholder') || f.getAttribute('title') || '').trim();
+    if (!name) {
+      const prev = f.previousElementSibling;
+      if (prev && !prev.matches('input, select, textarea, button') && (prev.textContent || '').trim().length <= 60) {
+        name = prev.textContent.trim().replace(/\s+/g, ' ');
+      }
+    }
+    if (name) f.setAttribute('aria-label', name);
+  });
+}
+
 function _updateBreadcrumb(screenId) {
   const bar   = document.getElementById('breadcrumb-bar');
   const inner = document.getElementById('breadcrumb-inner');
@@ -1971,8 +2396,8 @@ function _updateBreadcrumb(screenId) {
   // ⚠ subject-select, grade-select, results and past-papers were missing, which
   // is most of the "the breadcrumb does not show at all times" report: the
   // subject picker is where a child LANDS, and the results screen is where they
-  // end up after an exam — the two moments they are most likely to want a way
-  // back — and both showed no trail at all.
+  // end up after an exam - the two moments they are most likely to want a way
+  // back - and both showed no trail at all.
   const studentScreens = ['dashboard','chapter-select','syllabus','interactive-map','analytics','practice',
                           'exam-config','exam','results','subject-select','grade-select','past-papers',
                           'practice-hub','subject-hub'];
@@ -1995,7 +2420,7 @@ function _updateBreadcrumb(screenId) {
     `<span class="text-gray-700 dark:text-gray-300 font-semibold whitespace-nowrap">${label}</span>`;
 
   // The grade crumb goes to the grade picker when there is more than one grade
-  // to pick — the screen the child said they could not get back to. Same
+  // to pick - the screen the child said they could not get back to. Same
   // reachability the "← Back to Grades" button on the subject picker already
   // has, so this opens nothing that was not already open.
   const gradeCrumb = link(`🏠 Home`, `StudentHome.open()`);
@@ -2089,7 +2514,7 @@ function _dayBucket() {
   if (!DB.daily[k]) {
     DB.daily[k] = { a: 0, c: 0, e: 0 };
     const keys = Object.keys(DB.daily).sort();
-    // Lexicographic sort IS chronological for YYYY-MM-DD — that is the whole
+    // Lexicographic sort IS chronological for YYYY-MM-DD - that is the whole
     // reason the key is this format and not a locale date string.
     if (keys.length > _DAILY_KEEP) {
       keys.slice(0, keys.length - _DAILY_KEEP).forEach(k2 => delete DB.daily[k2]);
@@ -2099,7 +2524,7 @@ function _dayBucket() {
 }
 
 // Recorded even in ASSIGNMENT_MODE. A parent-set assignment is the activity a
-// parent most wants to see, and recordAnswer() returns early for it — so this
+// parent most wants to see, and recordAnswer() returns early for it - so this
 // has to run BEFORE that early return, and must not touch DB.chapters, which
 // assignment mode deliberately leaves alone.
 // ⚠ chapterId is recorded per day as well as the totals. "How many questions
@@ -2115,7 +2540,7 @@ const _DAY_CH_KEEP = 12;
 
 // `source` attributes the answer so the calendar does not report the same work
 // twice. An exam already gets one row of its own from examHistory, and an
-// assignment one from student_assignments.completed_at — so neither writes into
+// assignment one from student_assignments.completed_at - so neither writes into
 // the per-chapter map. Without this a 40-question mock showed up as five
 // "practised X" lines AND an exam line, for one sitting.
 // The day totals (a / c) still count every answer, whatever its source: those
@@ -2155,7 +2580,7 @@ function _goalToday() {
 }
 
 // Fires once, on the answer that completes the goal. `d.g` is the latch, written
-// into the same day bucket the parent reports read — so it survives a reload and
+// into the same day bucket the parent reports read - so it survives a reload and
 // cannot celebrate twice.
 function _checkDailyGoal(d) {
   if (d.g || (d.a || 0) < _dailyGoal()) return;
@@ -2167,13 +2592,13 @@ function _checkDailyGoal(d) {
     launchConfetti();
     _playSound('levelup');
     if (navigator.vibrate) { try { navigator.vibrate([60, 40, 60, 40, 120]); } catch (_) {} }
-    toast(`🎯 Today's goal done — ${_dailyGoal()} questions! See you tomorrow.`, 4500);
+    toast(`🎯 Today's goal done - ${_dailyGoal()} questions! See you tomorrow.`, 4500);
     _renderDailyGoal();
   }, 900);
 }
 
 // ── Time on task ──────────────────────────────
-// ⚠ Measured as the GAP BETWEEN CONSECUTIVE ANSWERS, capped — not by a timer.
+// ⚠ Measured as the GAP BETWEEN CONSECUTIVE ANSWERS, capped - not by a timer.
 //
 // A wall-clock timer is the obvious implementation and it is the wrong one: a
 // tab left open on the practice screen over lunch would report an hour of study
@@ -2181,7 +2606,7 @@ function _checkDailyGoal(d) {
 // administrator as if it were real. The gap between two answers cannot run away:
 // anything longer than the cap is a child who wandered off, and is discarded.
 //
-// It therefore UNDER-reports slightly — the reading time before the first answer
+// It therefore UNDER-reports slightly - the reading time before the first answer
 // of a session is never counted, because nothing knows when they started. An
 // honest floor beats a flattering guess.
 const _TIME_GAP_CAP_MS = 3 * 60 * 1000;   // a hard word problem, generously
@@ -2210,12 +2635,12 @@ function _recordDaily(correct, chapterId, source) {
   // per-chapter breakdown at all.
   if (source === 'exam') return;
 
-  // ⚠ Assignment work goes in its OWN bucket — not in `ch`, and not nowhere.
+  // ⚠ Assignment work goes in its OWN bucket - not in `ch`, and not nowhere.
   //
   // This used to `return` for ASSIGNMENT_MODE, on the assumption that
   // student_assignments.completed_at would supply the row instead. It does not:
   // completed_at is written ONLY by the manual "✓ Done" button in the parent's
-  // list, so a child who actually sat the assignment left no completion record —
+  // list, so a child who actually sat the assignment left no completion record -
   // and with that early return, no practice record either. A finished assignment
   // was invisible on the calendar, which is precisely what a parent goes there
   // to check.
@@ -2228,7 +2653,7 @@ function _recordDaily(correct, chapterId, source) {
   const bucket = (_assignmentActive || ASSIGNMENT_MODE) ? 'asg' : 'ch';
   if (!d[bucket]) d[bucket] = {};
   if (!d[bucket][chapterId] && Object.keys(d[bucket]).length >= _DAY_CH_KEEP) return;
-  // [attempted, correct] — two-element array rather than {a,c} because this is
+  // [attempted, correct] - two-element array rather than {a,c} because this is
   // the most-repeated structure in the whole blob.
   const row = d[bucket][chapterId] || (d[bucket][chapterId] = [0, 0]);
   row[0]++;
@@ -2243,23 +2668,59 @@ function _recordMistake(q, userAnswer, chapterId, source) {
   const ch   = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
     .flatMap(p => (p._chapters || p.chapters || []).map(c => ({ c, p })))
     .find(x => x.c.id === chId);
+  // The same question missed again moves its existing row to the front and
+  // counts the miss, instead of being stored twice. _MISTAKE_KEEP is 60, and a
+  // child who keeps missing one question used to push every OTHER mistake out
+  // of their own list with copies of it.
+  const qid  = q.id || '';
+  const prev = qid ? DB.mistakes.findIndex(m => m && m.id === qid) : -1;
+  const misses = prev >= 0 ? ((DB.mistakes[prev].n || 1) + 1) : 1;
+  if (prev >= 0) DB.mistakes.splice(prev, 1);
   DB.mistakes.unshift({
     d:   new Date().toISOString(),
     ch:  chId,
     chn: ch ? ch.c.name : chId,
     sub: ch ? (ch.p.subject || ch.p.name || '') : '',
+    // id and pack are what make a mistake PRACTISABLE rather than merely
+    // readable: without them the row describes a question with no way back to
+    // it. Rows written before this existed carry neither - they are still
+    // listed, and simply never drilled.
+    id:  qid,
+    pk:  ch ? ch.p.id : '',
+    n:   misses,
+    fix: 0,
     // Strip markup and cap the length: a comprehension question embeds a whole
     // passage (see the subsection-tagging notes in CLAUDE.md), and storing that
     // verbatim on every wrong answer would bloat the blob by kilobytes at a time.
     q:   _plainText(q.question).slice(0, 160),
-    // A symmetry grid has no typeable answer — same reasoning as
+    // A symmetry grid has no typeable answer - same reasoning as
     // _logPracticeAnswer(), which says so in words rather than printing coordinates.
-    ua:  q.type === 'symmetry' ? '' : String(userAnswer ?? '').slice(0, 60),
-    ca:  q.type === 'symmetry' ? '' : String(q.answer ?? '').slice(0, 60),
+    ua:  (q.type === 'symmetry' || q.type === 'symmetry-line') ? '' : String(userAnswer ?? '').slice(0, 60),
+    ca:  (q.type === 'symmetry' || q.type === 'symmetry-line') ? '' : String(q.answer ?? '').slice(0, 60),
     dif: q.difficulty || 0,
     src: source || 'practice',
   });
   if (DB.mistakes.length > _MISTAKE_KEEP) DB.mistakes.length = _MISTAKE_KEEP;
+}
+
+// Answering a recorded mistake correctly. Called from every place an answer is
+// marked - practice, a mistake drill and exam grading alike - so a question
+// fixed anywhere counts, and the list empties by being learned rather than by
+// ageing out. Returns true only on the answer that actually retires the row.
+function _retireMistake(questionId) {
+  if (!questionId || !Array.isArray(DB.mistakes)) return false;
+  const i = DB.mistakes.findIndex(m => m && m.id === questionId);
+  if (i < 0) return false;
+  const row = DB.mistakes[i];
+  row.fix = (row.fix || 0) + 1;
+  if (row.fix < _FIX_TO_RETIRE) return false;
+  DB.mistakes.splice(i, 1);
+  return true;
+}
+
+// Only rows carrying a question id can be served back (see _recordMistake).
+function _practisableMistakes() {
+  return (DB.mistakes || []).filter(m => m && m.id);
 }
 
 // Question text is innerHTML by design (see the question file pattern), so it
@@ -2278,7 +2739,7 @@ function recordAnswer(chapterId, correct, source, questionId) {
   if (ASSIGNMENT_MODE) {
     ASSIGNMENT_SCORE.attempted++;
     if (correct) ASSIGNMENT_SCORE.correct++;
-    // This branch used to return without saving — correct when the only thing
+    // This branch used to return without saving - correct when the only thing
     // it touched was in-memory ASSIGNMENT_SCORE, but _recordDaily() above now
     // writes to DB, and a whole assignment's activity would be lost on reload.
     // save() is debounced in Store, so this costs nothing per answer.
@@ -2291,12 +2752,22 @@ function recordAnswer(chapterId, correct, source, questionId) {
   if (questionId && STATIC_QUESTIONS.some(q => q.id === questionId && q.chapterId === chapterId)) {
     const chapter = DB.chapters[chapterId];
     chapter.answeredIds = [...new Set([...(Array.isArray(chapter.answeredIds) ? chapter.answeredIds : []), questionId])];
+    // Per-question state goes to its own table, not into this blob. The blob is
+    // upserted whole on every save, so two devices practising one chapter would
+    // destroy each other's per-question history; a (student_id, question_id)
+    // row conflicts only with itself. answeredIds stays as it is - it remains
+    // the legacy coverage source during rollout and the backfill reads it.
+    // ⚠ This line is never reached in ASSIGNMENT_MODE: that branch returns
+    //   above, which is the boundary assignment work must keep.
+    if (typeof QuestionProgress !== 'undefined') {
+      QuestionProgress.record(ACTIVE_STUDENT_ID, { id: questionId, chapterId }, correct);
+    }
   }
   // WHEN, not just how much. Without this a child looking at the chapter grid
   // can tell that a chapter has been touched but not whether that was this
   // afternoon or in March, which is most of what "have I done this one?" means.
   // One number per chapter, so the blob grows by ~20 bytes per chapter ever
-  // practised — cheap enough not to need its own table.
+  // practised - cheap enough not to need its own table.
   DB.chapters[chapterId].last = Date.now();
   DB.stats.totalAttempted++;
   if (correct) DB.stats.totalCorrect++;
@@ -2315,7 +2786,7 @@ function normalise(v) {
 }
 // Two answers that are the SAME NUMBER written differently: 12.5 / 12.50,
 // 0.5 / .5, 007 / 7, 1,200 / 1200. normalise() is a string comparison, so it
-// marked every one of those wrong — the child is right and the app says no,
+// marked every one of those wrong - the child is right and the app says no,
 // which teaches them to distrust it. Only used when BOTH sides parse cleanly
 // as a bare number, so "3 apples" vs "3" still needs the unit.
 function _sameNumber(a, b) {
@@ -2338,16 +2809,16 @@ function _sameNumber(a, b) {
 // This is DISPLAY ONLY. q.answer, the option values and everything checkAnswer
 // touches stay exactly as authored.
 //
-// ⚠ No lookbehind. A (?<!…) is a PARSE error on Safari before 16.4 — it would
+// ⚠ No lookbehind. A (?<!…) is a PARSE error on Safari before 16.4 - it would
 // take the whole of app.js down, not just this function. The leading boundary
 // is captured and re-emitted instead.
 // ⚠ The trailing guard used to be a flat `(?![\w\/.])`, which excluded a
-// following full stop — so "Shade 2/5." and "The answer is 3/4." (a sentence
+// following full stop - so "Shade 2/5." and "The answer is 3/4." (a sentence
 // ending in a fraction, which is most of the explanations and a good share of
 // the questions) were left as raw "2/5" while the same fraction mid-sentence was
 // stacked. Two identical fractions rendering differently on one screen is worse
 // than neither being stacked. A `.` is only disqualifying when a DIGIT follows
-// it, i.e. the "/5.5" of a decimal — that is what `\.\d` tests.
+// it, i.e. the "/5.5" of a decimal - that is what `\.\d` tests.
 const _FRAC_RE = /(^|[^\w\/.])(\d{1,3}|□)\s*\/\s*(\d{1,3}|□)(?=$|[^\w\/]|\.(?!\d))/g;
 const _BOX_NUMERALS = ['①', '②', '③', '④'];
 
@@ -2362,7 +2833,7 @@ function _prettyMath(html) {
   // Diagrams label themselves; never rewrite anything inside one.
   if (html.indexOf('<svg') >= 0) return html;
 
-  // Only text between tags — never an attribute value.
+  // Only text between tags - never an attribute value.
   // aria-label carries the spoken form: the stacked markup is a column flexbox,
   // so innerText reads it as "1 5" and every screen reader and the app's own
   // read-aloud button would say "one five" instead of "one fifth". See _ttsText.
@@ -2371,7 +2842,7 @@ function _prettyMath(html) {
   // value and break the tag. "2/□" is a real, common question shape.
   //
   // ⚠ And the words have to be in the language being READ. "2 over 5" handed to
-  // a French voice comes out "deux ovair cinq" — the read-aloud button was
+  // a French voice comes out "deux ovair cinq" - the read-aloud button was
   // saying an English word in the middle of a French sentence. The active pack
   // is what _ttsLang() keys off and it is active at render time, which is the
   // only moment this markup is built.
@@ -2400,6 +2871,9 @@ function _prettyMath(html) {
 }
 
 function checkAnswer(q, userAnswer) {
+  if (q.type === 'symmetry-line') {
+    return typeof SymmetryLine !== 'undefined' && SymmetryLine.checkAnswer(q, userAnswer);
+  }
   if (q.type === 'symmetry') {
     try {
       const selected = JSON.parse(userAnswer || '[]');
@@ -2415,6 +2889,30 @@ function checkAnswer(q, userAnswer) {
       const answers = (Array.isArray(q.answer) ? q.answer : []).map(normalise).sort();
       return selected.length === answers.length && selected.every((v, i) => v === answers[i]);
     } catch { return false; }
+  }
+  // ⚠ Typed French, not a number. normalise() is the MATHS normaliser: it
+  // strips "rs" anywhere in the string (written to drop "Rs." from money
+  // answers), so through it "cours" and "cou" are the same word and
+  // "toujours" becomes "toujou". matchTypedAnswer() is the French rule.
+  if (q.type === 'text') {
+    return matchTypedAnswer(q.acceptableAnswers || [q.answer], userAnswer, q).ok;
+  }
+  // ⚠ Algebra, not arithmetic. normalise() below strips "rs" anywhere in the
+  // string and is built for money and units; through it "4x + 8" and "8 + 4x"
+  // are different answers. markExpression() is the rule that knows they are
+  // the same, and it lives in ONE place.
+  if (q.type === 'expr') {
+    if (typeof Assessment === 'undefined') return false;
+    return Assessment.markExpression(
+      { answer: q.answer, accept: (q.acceptableAnswers || []).slice(1) }, userAnswer).correct;
+  }
+  // ⚠ A multi-blank answer is marked BLANK BY BLANK by markSlots(), which
+  //   also knows the three ways the papers share marks across them. Joining
+  //   the boxes into one string and comparing it would lose partial credit
+  //   and would fail a child who wrote the two roots in the other order.
+  if (q.type === 'slots') {
+    if (typeof Assessment === 'undefined') return false;
+    return Assessment.markPart({ marks: q.marks || 1, response: q.slotResponse }, userAnswer).correct;
   }
   const ua = normalise(userAnswer);
   const accepted = [q.answer, ...(q.acceptableAnswers || [])];
@@ -2484,6 +2982,217 @@ function renderSymmetryGrid(q, cont, selectedAnswer, disabled) {
     </div>`;
 }
 
+// ── EXAM-STYLE LINE OF SYMMETRY ──────────────────────────────────────────
+// This is deliberately a different type from the shaded-cell mirror puzzle.
+// A straight SVG stroke behaves like a ruler, is usable by touch, and can be
+// marked geometrically without punishing a child for a few pixels.
+const _symLineStates = new Map();
+
+const _symLineNum = (v, fallback = 0) => Number.isFinite(Number(v)) ? Number(v) : fallback;
+const _symLinePointList = points => (Array.isArray(points) ? points : [])
+  .filter(p => Array.isArray(p) && p.length === 2)
+  .map(p => `${_symLineNum(p[0])},${_symLineNum(p[1])}`).join(' ');
+
+function _symLineShapeMarkup(q) {
+  return (q.shapes || []).map(shape => {
+    if (!shape || typeof shape !== 'object') return '';
+    const cls = shape.accent ? 'symline-shape symline-shape-accent' : 'symline-shape';
+    if (shape.kind === 'polygon') {
+      return `<polygon class="${cls}" points="${_attr(_symLinePointList(shape.points))}"></polygon>`;
+    }
+    if (shape.kind === 'rect') {
+      return `<rect class="${cls}" x="${_symLineNum(shape.x)}" y="${_symLineNum(shape.y)}" width="${_symLineNum(shape.width)}" height="${_symLineNum(shape.height)}" rx="${_symLineNum(shape.rx)}"></rect>`;
+    }
+    if (shape.kind === 'ellipse') {
+      return `<ellipse class="${cls}" cx="${_symLineNum(shape.cx)}" cy="${_symLineNum(shape.cy)}" rx="${_symLineNum(shape.rx)}" ry="${_symLineNum(shape.ry)}"></ellipse>`;
+    }
+    if (shape.kind === 'circle') {
+      return `<circle class="${cls}" cx="${_symLineNum(shape.cx)}" cy="${_symLineNum(shape.cy)}" r="${_symLineNum(shape.r)}"></circle>`;
+    }
+    return '';
+  }).join('');
+}
+
+function _symLineStaticSvg(q, showAnswers, extraClass = '') {
+  const width = _symLineNum(q.canvas?.width, 320);
+  const height = _symLineNum(q.canvas?.height, 240);
+  const answers = typeof SymmetryLine !== 'undefined' ? SymmetryLine.parseLines(q.answer) : [];
+  const lines = showAnswers ? answers.map(l =>
+    `<line class="symline-answer" x1="${l[0]}" y1="${l[1]}" x2="${l[2]}" y2="${l[3]}"></line>`
+  ).join('') : '';
+  return `<svg class="symline-svg ${_attr(extraClass)}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${_attr(q.imageAlt || 'Shape for drawing lines of symmetry')}">
+    <rect class="symline-paper" x="1" y="1" width="${width - 2}" height="${height - 2}" rx="12"></rect>
+    ${_symLineShapeMarkup(q)}${lines}</svg>`;
+}
+
+function _symLineSvgPoint(event, svg, q) {
+  const rect = svg.getBoundingClientRect();
+  const width = _symLineNum(q.canvas?.width, 320), height = _symLineNum(q.canvas?.height, 240);
+  return {
+    x: Math.max(0, Math.min(width, (event.clientX - rect.left) * width / Math.max(1, rect.width))),
+    y: Math.max(0, Math.min(height, (event.clientY - rect.top) * height / Math.max(1, rect.height))),
+  };
+}
+
+function _symLineSnap(start, end, q) {
+  const dx = end.x - start.x, dy = end.y - start.y, len = Math.hypot(dx, dy);
+  if (len < 0.01) return end;
+  const snap = Array.isArray(q.snapAngles) ? q.snapAngles : [0, 45, 90, 135];
+  const raw = ((Math.atan2(dy, dx) * 180 / Math.PI) % 180 + 180) % 180;
+  let best = raw, distance = Infinity;
+  for (const angle of snap) {
+    const d0 = Math.abs(raw - angle) % 180, d = Math.min(d0, 180 - d0);
+    if (d < distance) { distance = d; best = angle; }
+  }
+  if (distance > _symLineNum(q.snapTolerance, 7)) return end;
+  const rad = best * Math.PI / 180;
+  const direction = dx * Math.cos(rad) + dy * Math.sin(rad) < 0 ? -1 : 1;
+  return { x: start.x + Math.cos(rad) * len * direction, y: start.y + Math.sin(rad) * len * direction };
+}
+
+function _symLinePaint(key) {
+  const state = _symLineStates.get(key), host = document.getElementById(key);
+  if (!state || !host) return;
+  const group = host.querySelector('[data-symline-user]');
+  if (group) group.innerHTML = state.lines.map((l, i) =>
+    `<line class="symline-user" data-line="${i}" x1="${l[0]}" y1="${l[1]}" x2="${l[2]}" y2="${l[3]}"></line>`
+  ).join('');
+  const count = host.querySelector('[data-symline-count]');
+  if (count) count.textContent = state.lines.length
+    ? `${state.lines.length} line${state.lines.length === 1 ? '' : 's'} drawn`
+    : 'No lines drawn yet';
+  const undo = host.querySelector('[data-symline-undo]');
+  const clear = host.querySelector('[data-symline-clear]');
+  if (undo) undo.disabled = !state.lines.length;
+  if (clear) clear.disabled = !state.lines.length;
+}
+
+function _symLinePreview(key, start, end) {
+  const preview = document.getElementById(key)?.querySelector('[data-symline-preview]');
+  if (!preview) return;
+  if (!start || !end) { preview.setAttribute('visibility', 'hidden'); return; }
+  preview.setAttribute('x1', start.x); preview.setAttribute('y1', start.y);
+  preview.setAttribute('x2', end.x); preview.setAttribute('y2', end.y);
+  preview.setAttribute('visibility', 'visible');
+}
+
+window.symLinePointerDown = function (event, key) {
+  const state = _symLineStates.get(key);
+  if (!state || state.disabled || event.button > 0) return;
+  event.preventDefault();
+  const svg = event.currentTarget, p = _symLineSvgPoint(event, svg, state.q);
+  // If the child already placed the first point by tapping, the next pointer
+  // begins at that saved point. A tap, short drag or stylus movement can all
+  // finish the same line without abandoning the visible first endpoint.
+  state.down = state.tapStart || p;
+  state.moved = !!state.tapStart && Math.hypot(p.x - state.down.x, p.y - state.down.y) > 6;
+  try { svg.setPointerCapture(event.pointerId); } catch (_) {}
+  _symLinePreview(key, state.down, p);
+};
+
+window.symLinePointerMove = function (event, key) {
+  const state = _symLineStates.get(key);
+  if (!state?.down || state.disabled) return;
+  event.preventDefault();
+  const p = _symLineSnap(state.down, _symLineSvgPoint(event, event.currentTarget, state.q), state.q);
+  if (Math.hypot(p.x - state.down.x, p.y - state.down.y) > 6) state.moved = true;
+  _symLinePreview(key, state.down, p);
+};
+
+window.symLinePointerUp = function (event, key) {
+  const state = _symLineStates.get(key);
+  if (!state?.down || state.disabled) return;
+  event.preventDefault();
+  const end = _symLineSnap(state.down, _symLineSvgPoint(event, event.currentTarget, state.q), state.q);
+  const start = state.down, dragged = state.moved && Math.hypot(end.x - start.x, end.y - start.y) >= 18;
+  state.down = null; state.moved = false;
+  if (dragged) {
+    state.tapStart = null;
+    state.lines.push([start.x, start.y, end.x, end.y].map(n => Math.round(n * 10) / 10));
+  } else if (!state.tapStart) {
+    state.tapStart = start;
+    const status = document.getElementById(key)?.querySelector('[data-symline-status]');
+    if (status) status.textContent = 'First point placed. Tap the other end of the line.';
+    _symLinePreview(key, start, start);
+    return;
+  } else {
+    const first = state.tapStart;
+    state.tapStart = null;
+    if (Math.hypot(end.x - first.x, end.y - first.y) >= 18) {
+      const snapped = _symLineSnap(first, end, state.q);
+      state.lines.push([first.x, first.y, snapped.x, snapped.y].map(n => Math.round(n * 10) / 10));
+    }
+  }
+  _symLinePreview(key, null, null);
+  _symLinePaint(key);
+};
+
+window.symLinePointerCancel = function (event, key) {
+  const state = _symLineStates.get(key);
+  if (!state) return;
+  state.down = null; state.moved = false;
+  _symLinePreview(key, null, null);
+};
+
+window.symLineUndo = key => {
+  const state = _symLineStates.get(key);
+  if (!state || state.disabled) return;
+  state.lines.pop(); state.tapStart = null; _symLinePreview(key, null, null); _symLinePaint(key);
+};
+window.symLineClear = key => {
+  const state = _symLineStates.get(key);
+  if (!state || state.disabled) return;
+  state.lines = []; state.tapStart = null; _symLinePreview(key, null, null); _symLinePaint(key);
+};
+window.symLineToggleHelp = (button, key) => {
+  const help = document.getElementById(key)?.querySelector('[data-symline-help]');
+  if (!help) return;
+  const open = help.classList.toggle('hidden') === false;
+  button.setAttribute('aria-expanded', String(open));
+};
+
+function renderSymmetryLine(q, cont, selectedAnswer, disabled) {
+  const key = `${cont.id}-symline`;
+  const width = _symLineNum(q.canvas?.width, 320), height = _symLineNum(q.canvas?.height, 240);
+  const drawn = typeof SymmetryLine !== 'undefined' ? SymmetryLine.parseLines(selectedAnswer) : [];
+  const result = disabled && typeof SymmetryLine !== 'undefined'
+    ? SymmetryLine.gradeDetailed(q, selectedAnswer) : null;
+  const matchedDrawn = new Set((result?.pairs || []).map(pair => pair[0]));
+  const matchedExpected = new Set((result?.pairs || []).map(pair => pair[1]));
+  const userLines = drawn.map((l, i) => `<line class="symline-user ${disabled ? (matchedDrawn.has(i) ? 'is-correct' : 'is-wrong') : ''}"
+    x1="${l[0]}" y1="${l[1]}" x2="${l[2]}" y2="${l[3]}"></line>`).join('');
+  const missed = disabled ? (result?.expected || []).map((l, i) => matchedExpected.has(i) ? '' :
+    `<line class="symline-answer is-missed" x1="${l[0]}" y1="${l[1]}" x2="${l[2]}" y2="${l[3]}"></line>`
+  ).join('') : '';
+  const controls = disabled ? `<div class="symline-legend">
+      <span><i class="is-correct"></i>Your correct line</span>
+      ${result?.correct ? '' : '<span><i class="is-wrong"></i>Your misplaced line</span><span><i class="is-missed"></i>Correct line</span>'}
+    </div>` : `<div class="symline-tools">
+      <button type="button" data-symline-undo onclick="symLineUndo('${_attr(key)}')" disabled>↶ Undo</button>
+      <button type="button" data-symline-clear onclick="symLineClear('${_attr(key)}')" disabled>Clear</button>
+      <button type="button" onclick="symLineToggleHelp(this,'${_attr(key)}')" aria-expanded="false">? How to draw</button>
+    </div>
+    <div class="symline-help hidden" data-symline-help>Drag across the shape like a ruler. You can also tap once at each end. Draw every line that folds the shape into two matching halves.</div>`;
+
+  cont.innerHTML = `<div class="symline-wrap" id="${_attr(key)}">
+    <div class="symline-heading"><span>📏 Draw on the shape</span><span data-symline-count>${drawn.length ? drawn.length + ' line' + (drawn.length === 1 ? '' : 's') + ' drawn' : 'No lines drawn yet'}</span></div>
+    <svg class="symline-svg${disabled ? ' is-disabled' : ''}" viewBox="0 0 ${width} ${height}"
+      style="aspect-ratio:${width}/${height}" role="img" aria-label="${_attr(q.imageAlt || 'Shape on which to draw lines of symmetry')}"
+      onpointerdown="symLinePointerDown(event,'${_attr(key)}')"
+      onpointermove="symLinePointerMove(event,'${_attr(key)}')"
+      onpointerup="symLinePointerUp(event,'${_attr(key)}')"
+      onpointercancel="symLinePointerCancel(event,'${_attr(key)}')">
+      <rect class="symline-paper" x="1" y="1" width="${width - 2}" height="${height - 2}" rx="12"></rect>
+      ${_symLineShapeMarkup(q)}
+      <g data-symline-user>${userLines}</g>${missed}
+      <line class="symline-preview" data-symline-preview visibility="hidden"></line>
+    </svg>
+    ${controls}<div class="sr-only" aria-live="polite" data-symline-status></div>
+  </div>`;
+  _symLineStates.set(key, { q, lines: drawn.slice(), disabled: !!disabled, down: null, moved: false, tapStart: null });
+  if (!disabled) _symLinePaint(key);
+}
+
 // ── SYMBOL KEYBOARD ───────────────────────────
 // Extra symbol rows appended to the number pad, keyed by chapterId.
 // Each entry is an array of { d: display label, v: value to insert }.
@@ -2543,6 +3252,14 @@ function _attr(s) {
 function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
   const cont = document.getElementById(containerId);
   if (!cont) return;
+  // Cleared in the RENDER, not in the branch that sets it: every other type
+  // returns early below, so a numeric or typed question following an MCQ would
+  // otherwise inherit the previous question's two-column layout.
+  cont.classList.remove('pr-answers-pair');
+  if (q.type === 'symmetry-line') {
+    renderSymmetryLine(q, cont, selectedAnswer, disabled);
+    return;
+  }
   if (q.type === 'symmetry') {
     renderSymmetryGrid(q, cont, selectedAnswer, disabled);
     return;
@@ -2578,6 +3295,98 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
         <span>${_prettyMath(opt)}</span>
       </button>`;
     }).join('');
+    // ⚠ Pair SHORT options into two columns on a wide screen, and only then.
+    // .mcq-opt is width:100%, so on a desktop browser four numeric options
+    // became four 736px-wide bars each holding two characters - a column of
+    // letterboxes, and 4 x 56px of height for content that needs 2 x 56px.
+    // The test is on the CONTENT, not on the viewport alone: a French
+    // comprehension option is a whole sentence, and half a column would wrap it
+    // to four lines and make a ragged grid. Measured against the live bank:
+    // 24 chars keeps every numeric/word option in and every sentence out.
+    const shortOpts = (q.options || []).length > 2
+      && (q.options || []).every(o => _plainText(String(o)).length <= 24);
+    cont.classList.toggle('pr-answers-pair', shortOpts);
+  } else if (q.type === 'text') {
+    // ⚠ inputmode="text", NOT the numeric branch below - that one sets
+    // inputmode="decimal" and draws a digit pad, which under a French sentence
+    // is the same defect a cloze item hits when it falls through to it.
+    // ⚠ spellcheck="false" is load-bearing: a French spellchecker underlining
+    // the child's misspelling hands them the answer before they press Check.
+    // autocorrect/autocapitalize likewise - the phone must not answer for them.
+    const m   = disabled ? matchTypedAnswer(q.acceptableAnswers || [q.answer], selectedAnswer, q) : null;
+    const cls = disabled ? (m.ok ? 'num-input correct' : 'num-input wrong') : 'num-input';
+    const enter = containerId === 'exam-answer-area' ? 'saveCurrentExamAnswer()' : 'practiceSubmit()';
+    cont.innerHTML = `<input type="text" class="${cls}" id="num-ans-${containerId}" value="${_attr(selectedAnswer || '')}"
+      placeholder="Écris le mot…" lang="fr" inputmode="text" spellcheck="false"
+      autocapitalize="off" autocorrect="off" autocomplete="off" ${disabled ? 'disabled' : ''}
+      onkeydown="if(event.key==='Enter'){${enter}}">`
+      + (m && m.ok && m.slip
+        ? `<p class="txt-slip">Juste - attention à l\u2019accent : <b>${_attr(q.answer)}</b></p>`
+        : '');
+  } else if (q.type === 'slots') {
+    // ⚠ One input per blank, laid out as the paper prints them: a label
+    //   before each box where the question names an unknown ("x = ......"),
+    //   and a unit after it where the paper pre-prints one.
+    // ⚠ EVERY BOX IS THE SAME WIDTH. Sizing a box to its answer prints the
+    //   answer's length on screen - the same rule the French cloze gaps follow.
+    const r = q.slotResponse || {};
+    const vals = (() => { try { return JSON.parse(selectedAnswer || '[]'); } catch { return []; } })();
+    const marks = disabled && typeof Assessment !== 'undefined'
+      ? Assessment.markPart({ marks: q.marks || 1, response: r }, selectedAnswer) : null;
+    const labels = r.labels || [];
+    const n = (r.answer || []).length;
+    const enter = containerId === 'exam-answer-area' ? 'saveCurrentExamAnswer()' : 'practiceSubmit()';
+    let html = '<div class="slot-row">';
+    for (let i = 0; i < n; i++) {
+      const lab = labels[i] ? `<span class="slot-label"><i>${_attr(labels[i])}</i> =</span>` : '';
+      html += `${lab}<input type="text" class="slot-input" value="${_attr(vals[i] || '')}"
+        inputmode="text" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off"
+        aria-label="Answer box ${i + 1} of ${n}" ${disabled ? 'disabled' : ''}
+        onkeydown="if(event.key==='Enter'){${enter}}">`;
+    }
+    html += '</div>';
+    if (marks) {
+      // Partial credit is REPORTED, not hidden behind a plain right/wrong.
+      html += `<p class="slot-score">${marks.earned} of ${q.marks || 1} mark`
+        + `${(q.marks || 1) === 1 ? '' : 's'}.</p>`;
+    }
+    cont.innerHTML = html;
+  } else if (q.type === 'expr') {
+    // ⚠ An ALGEBRAIC answer: "a^8", "4x + 8", "y = 2x + 1". inputmode="text",
+    //   never the numeric branch below - that one draws a digit pad, which
+    //   cannot type a letter, a caret or a plus. spellcheck/autocorrect are off
+    //   for the same reason the French text input turns them off: a phone that
+    //   "corrects" 2x to 2X or capitalises the line is answering for the child.
+    const okNow = disabled && typeof Assessment !== 'undefined'
+      ? Assessment.markExpression({ answer: q.answer, accept: (q.acceptableAnswers || []).slice(1) }, selectedAnswer).correct
+      : false;
+    const cls = disabled ? (okNow ? 'num-input correct' : 'num-input wrong') : 'num-input';
+    const enter = containerId === 'exam-answer-area' ? 'saveCurrentExamAnswer()' : 'practiceSubmit()';
+    cont.innerHTML = `<input type="text" class="${cls}" id="num-ans-${containerId}" value="${_attr(selectedAnswer || '')}"
+      placeholder="Type your answer, e.g. 4x + 8" inputmode="text" spellcheck="false"
+      autocapitalize="off" autocorrect="off" autocomplete="off" ${disabled ? 'disabled' : ''}
+      onkeydown="if(event.key==='Enter'){${enter}}">
+      <p class="expr-hint">Use <b>^</b> for a power - type <b>a^8</b> for a<sup>8</sup>.</p>`;
+  } else if (q.type && q.type !== 'numeric') {
+    // ⚠ THIS BRANCH IS THE POINT. Everything below used to be the `else`, so a
+    // question whose type nothing here recognised was drawn as a NUMBER PAD -
+    // inputmode="decimal", digit keys and all. That is not a cosmetic slip: it
+    // is how a French cloze passage got a digit keypad under it, and it is what
+    // every NCE Grade 9 format (blanks, cells, drawing, construction) would do
+    // the moment one reached practice. isPoolQuestion() is supposed to keep
+    // those out, but a filter that is the ONLY thing standing between a child
+    // and a nonsense screen is one edit away from not being there.
+    //
+    // So an unrecognised type now says so, loudly and in one place, instead of
+    // silently pretending to be arithmetic. The ordinary answer-area types are
+    // mcq, numeric, text, multi, symmetry-grid and symmetry-line. `cloze` is
+    // absent on purpose:
+    // it has its own renderer in engine/cloze.js and never arrives here.
+    console.warn(`renderAnswerArea: no renderer for question type "${q.type}" (${q.id}) - refusing rather than drawing a number pad`);
+    cont.innerHTML = `<div class="answer-unsupported" role="status">
+      <p><b>This question can’t be answered on screen.</b></p>
+      <p>It needs to be done on paper - print the practice paper to try it.</p>
+    </div>`;
   } else {
     const cls = disabled ? (checkAnswer(q, selectedAnswer) ? 'num-input correct' : 'num-input wrong') : 'num-input';
     const inputExtra = disabled ? 'disabled' : 'inputmode="decimal"';
@@ -2608,7 +3417,7 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
             return `<button type="button" class="num-pad-btn${isSym?' num-pad-sym':''}" onclick="insertSymbol('${containerId}','${k}')">${k}</button>`;
           }).join('')).join('')}
         </div>
-        <p class="sym-hint">Tap <b>^</b> then the exponent &mdash; e.g. <b>5^2</b> means 5²</p>`;
+        <p class="sym-hint">Tap <b>^</b> then the exponent - e.g. <b>5^2</b> means 5²</p>`;
       } else {
         // Standard 3-column pad
         const numRows = [['7','8','9'],['4','5','6'],['1','2','3'],['.','0','⌫']];
@@ -2676,6 +3485,18 @@ function getSelectedAnswer(containerId, qType) {
     });
     selected.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
     return JSON.stringify(selected);
+  }
+  if (qType === 'symmetry-line') {
+    const state = _symLineStates.get(`${containerId}-symline`);
+    return JSON.stringify(state?.lines || []);
+  }
+  // ⚠ 'slots' is `blanks` and `cells`: several small inputs answering one
+  //   question - "x = ......, y = ......" and a table row to complete. The
+  //   value is a JSON array in the boxes' printed order, because markSlots()
+  //   marks each blank against its own position.
+  if (qType === 'slots') {
+    const boxes = [...document.querySelectorAll('#' + containerId + ' .slot-input')];
+    return JSON.stringify(boxes.map(b => b.value.trim()));
   }
   const inp = document.getElementById('num-ans-' + containerId);
   return inp ? inp.value.trim() : null;
@@ -2765,7 +3586,7 @@ function updateXPBar() {
   const xp = DB.xp || 0;
   const lv = DB.level || 1;
   // The header chip is the only place a child on a phone sees their level, and
-  // #xp-display below is display:none there — so it has to be refreshed from
+  // #xp-display below is display:none there - so it has to be refreshed from
   // the same place, not left to the next navigation.
   _renderLevelChip();
   const el = document.getElementById('xp-display');
@@ -2831,7 +3652,7 @@ function _renderShopChip() {
 // The header credit balance.
 //
 // Parent sessions only, and deliberately so: a child has no balance of their
-// own — the credits belong to the account holder — and putting a number they
+// own - the credits belong to the account holder - and putting a number they
 // cannot spend in front of them only invites "can I have 250 credits". A parent
 // previewing a child (pdSwitchStudent) is still a parent session, so they keep
 // seeing theirs.
@@ -2843,7 +3664,7 @@ function _renderShopChip() {
 // Rendered into both landing screens: a child with more than one subject lands
 // on the kid home, a child with one lands on the dashboard.
 // ══════════════════════════════════════════════
-//  TASK BUTTONS — today's plan, and anything paused
+//  TASK BUTTONS - today's plan, and anything paused
 //
 //  The dashboard used to carry two full schedule panels: "Today's Study Plan"
 //  and a 14-day upcoming list. A child who had just tapped a subject in order to
@@ -2853,7 +3674,7 @@ function _renderShopChip() {
 //  answered a question nobody had asked.
 //
 //  Both are now one small button with a count and a one-line summary. The detail
-//  did not go anywhere — it is on the Schedule screen, one tap away, which is
+//  did not go anywhere - it is on the Schedule screen, one tap away, which is
 //  where a child goes when they actually want to know what is planned.
 // ══════════════════════════════════════════════
 const _TASK_SLOTS = ['task-slot-kidhome', 'task-slot-dashboard'];
@@ -3042,7 +3863,7 @@ function _renderDailyGoal() {
     ? `${g.raw} question${g.raw === 1 ? '' : 's'} today. Come back tomorrow to keep it up.`
     : `${g.left} more question${g.left === 1 ? '' : 's'} to finish today.`;
 
-  // Level line — the other half of the fix. XP was already awarded on every
+  // Level line - the other half of the fix. XP was already awarded on every
   // correct answer and shown nowhere a child on a phone could see it.
   const xp   = DB.xp || 0;
   const lv   = DB.level || 1;
@@ -3050,8 +3871,8 @@ function _renderDailyGoal() {
   const next = XP_THRESHOLDS[lv] || null;
   const lvName = LEVEL_NAMES[lv - 1] || '';
   const lvLine = next
-    ? `⭐ Level ${lv} · ${lvName} — ${Math.max(0, next - xp)} XP to Level ${lv + 1}`
-    : `⭐ Level ${lv} · ${lvName} — top level reached!`;
+    ? `⭐ Level ${lv} · ${lvName} - ${Math.max(0, next - xp)} XP to Level ${lv + 1}`
+    : `⭐ Level ${lv} · ${lvName} - top level reached!`;
   const lvPct = next && next > curr ? Math.min(100, Math.round((xp - curr) / (next - curr) * 100)) : 100;
 
   const html = `<div class="goal-card${g.met ? ' is-done' : ''}">
@@ -3088,25 +3909,25 @@ function _goalWeekStrip() {
     const isMet = !!d.g || (a > 0 && a >= _dailyGoal());
     if (isMet) met++;
     if (a > 0) active++;
-    // Day-of-week from the key by hand — new Date('YYYY-MM-DD') parses as UTC
+    // Day-of-week from the key by hand - new Date('YYYY-MM-DD') parses as UTC
     // midnight and prints in the device timezone, shifting the letter for
     // anyone west of Greenwich.
     const [y, m, dd] = key.split('-').map(Number);
     const dow = new Date(Date.UTC(y, m - 1, dd)).getUTCDay();
     const cls = isMet ? 'is-met' : a > 0 ? 'is-part' : '';
-    const title = `${_repNiceDate(key)} — ${a ? `${a} question${a === 1 ? '' : 's'}` : 'nothing'}`;
+    const title = `${_repNiceDate(key)} - ${a ? `${a} question${a === 1 ? '' : 's'}` : 'nothing'}`;
     cells.push(`<span class="goal-day ${cls}" title="${_attr(title)}"><i>${LETTER[dow]}</i></span>`);
   }
   return `<div class="goal-week">
     <div class="goal-week-days">${cells.join('')}</div>
     <div class="goal-week-note">${
       met ? `Goal met on ${met} of the last 7 days.`
-          : active ? `Practised ${active} of the last 7 days — finish today's goal to fill a circle.`
+          : active ? `Practised ${active} of the last 7 days - finish today's goal to fill a circle.`
                    : 'Finish today to start filling in your week.'}</div>
   </div>`;
 }
 
-// The header level chip — the mobile-visible half of the XP system.
+// The header level chip - the mobile-visible half of the XP system.
 // ⚠ Student sessions only, and the mirror image of _renderCreditChip(): a child
 // sees their level where a parent sees their credits, and neither sees the
 // other's. A parent previewing a child has that child's DB loaded, so without
@@ -3120,14 +3941,14 @@ function _renderLevelChip() {
   if (show) {
     const n = document.getElementById('hdr-level-n');
     if (n) n.textContent = String(DB.level || 1);
-    chip.title = `Level ${DB.level || 1} · ${LEVEL_NAMES[(DB.level || 1) - 1] || ''} — tap to see your progress`;
+    chip.title = `Level ${DB.level || 1} · ${LEVEL_NAMES[(DB.level || 1) - 1] || ''} - tap to see your progress`;
   }
 }
 window._renderLevelChip = _renderLevelChip;
 
 // ── Parent PIN row (Account & Settings → Security) ──
 // ⚠ The PIN is stored in localStorage, which is scoped to the ORIGIN and the
-// browser profile — NOT to the device. The copy says "in this browser" for
+// browser profile - NOT to the device. The copy says "in this browser" for
 // that reason, and the distinction is not pedantic: a parent who set a PIN on
 // a dev/preview deploy URL and then opens production gets asked to create one
 // again, and so does anyone switching browser or opening a private window.
@@ -3135,7 +3956,7 @@ window._renderLevelChip = _renderLevelChip;
 // "On this device" told them none of that could have happened.
 //
 // It guards the switch from a child's session back to the parent dashboard on
-// a shared phone or tablet. Deliberately NOT an account setting — see the PIN
+// a shared phone or tablet. Deliberately NOT an account setting - see the PIN
 // notes in CLAUDE.md before moving it.
 function _renderParentPinRow() {
   const state = document.getElementById('prof-pin-state');
@@ -3177,8 +3998,8 @@ function _renderCreditChip() {
   // ⚠ Also fixes something that predates credits: the streak and XP chips read
   // DB, and in a parent session DB holds whichever CHILD is loaded. A parent has
   // been looking at "🔥 12 day streak" that was never theirs. One reading of the
-  // header per session type — a child sees their streak, a parent sees their
-  // credits — and as a bonus the two no longer compete for the same row, which
+  // header per session type - a child sees their streak, a parent sees their
+  // credits - and as a bonus the two no longer compete for the same row, which
   // is what pushed the desktop header onto a second line.
   document.body.classList.toggle('is-parent-session', isParent);
 
@@ -3272,7 +4093,7 @@ async function renderParentDashboard() {
       if (expEl) {
         expEl.textContent = subscription?.expires_at
           ? `Active until ${new Date(subscription.expires_at).toLocaleDateString()}`
-          : `Everything is free until ${FREE_UNTIL_LABEL}`;
+          : 'Everything is free right now';
       }
     }).catch(() => {});
   }
@@ -3293,7 +4114,7 @@ async function renderParentDashboard() {
 
   // Render skeleton cards first for instant paint
   grid.innerHTML = students.map(s => `
-    <div role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" aria-label="View ${_profEsc(s.display_name || s.username)} — progress and controls" class="pd-child-card bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border-2 border-transparent
+    <div role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" aria-label="View ${_profEsc(s.display_name || s.username)} - progress and controls" class="pd-child-card bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border-2 border-transparent
       hover:border-indigo-300 dark:hover:border-indigo-600 cursor-pointer transition-all active:scale-95"
       onclick="PD.selectChild('${s.id}')">
       <div class="flex items-center gap-3 mb-3">
@@ -3358,8 +4179,8 @@ async function renderParentDashboard() {
 
 // ══════════════════════════════════════════════
 //  FAMILY OVERVIEW  (parent dashboard, above the children grid)
-//  The one view that reads ALL children at once. Everything else in the app —
-//  the detail panel, the Reports tab, the global DB itself — holds exactly one
+//  The one view that reads ALL children at once. Everything else in the app -
+//  the detail panel, the Reports tab, the global DB itself - holds exactly one
 //  child, so this is the only place a parent can see the household.
 //  Fed by the same Store.loadFamilyProgress() result as the child cards, so the
 //  two can never disagree about a child's numbers.
@@ -3404,10 +4225,10 @@ function _famStrip(daily) {
     const k = _muDayKeyBack(i);
     const d = daily[k];
     if (!d || !d.a) {
-      cells.push(`<span class="fam-cell" data-empty="1" title="${_attr(_repNiceDate(k))} — nothing"></span>`);
+      cells.push(`<span class="fam-cell" data-empty="1" title="${_attr(_repNiceDate(k))} - nothing"></span>`);
     } else {
       const pct = Math.round(d.c / d.a * 100);
-      cells.push(`<span class="fam-cell" style="background:${_repAccColour(pct)}" title="${_attr(`${_repNiceDate(k)} — ${d.a} question${d.a > 1 ? 's' : ''}, ${pct}%`)}"></span>`);
+      cells.push(`<span class="fam-cell" style="background:${_repAccColour(pct)}" title="${_attr(`${_repNiceDate(k)} - ${d.a} question${d.a > 1 ? 's' : ''}, ${pct}%`)}"></span>`);
     }
   }
   return `<span class="fam-strip">${cells.join('')}</span>`;
@@ -3443,7 +4264,7 @@ function _renderFamilyOverview(students, progressById) {
   const famPrev = rows.reduce((t, r) => ({ a: t.a + r.prev.a, c: t.c + r.prev.c, e: t.e + r.prev.e }), { a: 0, c: 0, e: 0 });
   const famAcc     = fam.a ? Math.round(fam.c / fam.a * 100) : null;
   const famPrevAcc = famPrev.a ? Math.round(famPrev.c / famPrev.a * 100) : null;
-  // Days on which ANY child did something — "was this a week where the house
+  // Days on which ANY child did something - "was this a week where the house
   // revised", which is not the same as any one child's day count.
   let famDays = 0;
   for (let i = 0; i < 7; i++) {
@@ -3457,7 +4278,7 @@ function _renderFamilyOverview(students, progressById) {
   const quiet = rows.filter(r => r.quietFor === null ? r.everDid > 0 : r.quietFor >= _FAMILY_QUIET_DAYS);
   const alerts = quiet.map(r => r.quietFor === null
     ? `${r.name} has not practised in a while`
-    : `${r.name} — nothing for ${r.quietFor} day${r.quietFor > 1 ? 's' : ''}`);
+    : `${r.name} - nothing for ${r.quietFor} day${r.quietFor > 1 ? 's' : ''}`);
 
   const table = rows.map(r => {
     const accCol = r.now.acc == null ? '' : `color:${_repAccColour(r.now.acc)}`;
@@ -3474,7 +4295,7 @@ function _renderFamilyOverview(students, progressById) {
       </span>
       ${_famStrip((progressById[r.id] || {}).daily || {})}
       <span class="fam-num text-gray-700 dark:text-gray-300">${r.now.a}<span class="fam-unit">Q</span></span>
-      <span class="fam-num font-bold" style="${accCol}">${r.now.acc == null ? '—' : r.now.acc + '%'}</span>
+      <span class="fam-num font-bold" style="${accCol}">${r.now.acc == null ? '-' : r.now.acc + '%'}</span>
       <span class="fam-num text-gray-500 dark:text-gray-400">${r.now.days}<span class="fam-unit">/7d</span></span>
       <span class="fam-num text-orange-500">${r.streak}<span class="fam-unit">🔥</span></span>
       <span class="fam-num">${trend}</span>
@@ -3489,7 +4310,7 @@ function _renderFamilyOverview(students, progressById) {
        </p>`
     : `<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
         ${_repStatCard('Questions',       fam.a, _repDelta(fam.a, famPrev.a), '#2563eb')}
-        ${_repStatCard('Family accuracy', famAcc == null ? '—' : famAcc + '%', _repDelta(famAcc, famPrevAcc, '%'), famAcc == null ? '' : _repAccColour(famAcc))}
+        ${_repStatCard('Family accuracy', famAcc == null ? '-' : famAcc + '%', _repDelta(famAcc, famPrevAcc, '%'), famAcc == null ? '' : _repAccColour(famAcc))}
         ${_repStatCard('Practising',      `${fam.active}/${rows.length}`, `<span class="text-[11px] text-gray-400">children this week</span>`, '#7c3aed')}
         ${_repStatCard('Days covered',    `${famDays}/7`, `<span class="text-[11px] text-gray-400">someone revised</span>`, '#f97316')}
       </div>
@@ -3498,7 +4319,7 @@ function _renderFamilyOverview(students, progressById) {
       </div>` : ''}
       <!-- Labels are short because the columns are fixed-width and shared with
            the rows below; a longer word does not widen the column, it overflows
-           it. No inline display here either — the mobile rule hides this cell. -->
+           it. No inline display here either - the mobile rule hides this cell. -->
       <div class="fam-head">
         <span></span>
         <span class="fam-name text-[10px] uppercase tracking-wide">Child</span>
@@ -3512,7 +4333,7 @@ function _renderFamilyOverview(students, progressById) {
       <div class="divide-y divide-gray-100 dark:divide-gray-700">${table}</div>
       <p class="text-[10px] text-gray-400 dark:text-gray-500 mt-2.5 leading-relaxed">
         Questions, accuracy and days are the last 7 days; the bars are the last 14.
-        Listed by who has been quietest, not by score — children in different grades are answering
+        Listed by who has been quietest, not by score - children in different grades are answering
         different questions, so their accuracy is not a like-for-like comparison. Tap a row for the full report.
       </p>`;
 
@@ -3597,21 +4418,12 @@ function _renderTeacherApplyCard() {
 // know they are not about to be charged; every purchase control in it is
 // disabled and nothing here talks to a payment provider. When payment does open,
 // this is the one place to wire it up.
-// THE date string. index.html repeats it in 8 places for people with JS off
-// and for the first paint, but every one of those is wrapped in
-// <span data-free-until> and overwritten by _applyFreeUntilLabel() below - so
-// this constant is what actually decides, and the markup is only the fallback.
-//
-// It was previously duplicated as 8 independent literals with nothing tying
-// them together, which is how a date change becomes a find-and-replace that
-// misses one and leaves two different promises on the same page.
-const FREE_UNTIL_LABEL = '30 September 2026';
-
-function _applyFreeUntilLabel() {
-  document.querySelectorAll('[data-free-until]').forEach(el => {
-    if (el.textContent !== FREE_UNTIL_LABEL) el.textContent = FREE_UNTIL_LABEL;
-  });
-}
+// There is deliberately no end-date constant here any more. The app is free,
+// full stop, and paid plans arrive when they arrive - so FREE_UNTIL_LABEL, the
+// <span data-free-until> fallbacks it overwrote and _applyFreeUntilLabel() were
+// all removed together. A promise with a date on it has to be maintained on
+// every surface at once or the app tells two stories; "free right now, paid
+// plans later" needs no maintenance and stays true.
 
 // ── Pricing ───────────────────────────────────
 // features.price_was_mur, not a plans column: listPlans() selects explicit
@@ -3701,7 +4513,7 @@ async function hydrateLandingPrices() {
 //  "☰ Menu" button. This builds the sheet.
 //
 //  ⚠ The rows are read OFF the real buttons rather than listed here. Which
-//  controls exist at any moment is decided in half a dozen places — auth.js
+//  controls exist at any moment is decided in half a dozen places - auth.js
 //  reveals Teacher only for an approved teacher, the beforeinstallprompt
 //  handler reveals Install, showScreen() shows Account and Logout everywhere
 //  except the auth screens, and Search only once a grade is active. A second
@@ -3719,6 +4531,25 @@ function _headerMenuButtons() {
     .filter(b => !_MENU_EXCLUDED.has(b.id) && !b.classList.contains('hidden'));
 }
 
+// A header control that kicks off async work has to say it heard the tap.
+// Marks the button AND the ☰ sheet row bound to it, because below 1100px the
+// row is the only one of the two a person can see.
+function setHeaderBtnBusy(selector, busy) {
+  const btn = document.querySelector(selector);
+  if (!btn) return;
+  btn.classList.toggle('is-busy', !!busy);
+  btn.setAttribute('aria-busy', busy ? 'true' : 'false');
+  if (busy) btn.setAttribute('aria-disabled', 'true'); else btn.removeAttribute('aria-disabled');
+  // Rows are bound to these buttons BY INDEX (see below), so the same index
+  // is the only correct way back from a button to its row.
+  const idx = _headerMenuButtons().indexOf(btn);
+  if (idx < 0) return;
+  const row = document.querySelector('.hdr-menu-item[data-menu-idx="' + idx + '"]');
+  if (!row) return;
+  row.classList.toggle('is-busy', !!busy);
+  row.setAttribute('aria-busy', busy ? 'true' : 'false');
+}
+
 function _buildHeaderMenu() {
   const list = document.getElementById('hdr-menu-list');
   if (!list) return;
@@ -3732,7 +4563,7 @@ function _buildHeaderMenu() {
     let   desc  = btn.dataset.menuDesc || '';
     if (btn.id === 'theme-toggle') {
       desc = document.documentElement.classList.contains('dark')
-        ? 'Currently dark — tap for light' : 'Currently light — tap for dark';
+        ? 'Currently dark - tap for light' : 'Currently light - tap for dark';
     }
     const danger = btn.id === 'header-logout-btn';
     return `<button type="button" class="hdr-menu-item${danger ? ' is-danger' : ''}" data-menu-idx="${i}">
@@ -3817,7 +4648,7 @@ function _headerMenuEsc(e) { if (e.key === 'Escape') closeHeaderMenu(); }
 // "Upgrade your plan" toast: with credits there is now something a family can
 // actually DO about it, and the price is a concrete thing to go and ask for.
 //
-// Only a parent can buy — this is a kid screen (see _KID_ONLY_SCREENS), so the
+// Only a parent can buy - this is a kid screen (see _KID_ONLY_SCREENS), so the
 // job here is to tell the child what to ask for, not to offer a Buy button
 // they cannot use.
 function _showChapterLockedModal(chapterId) {
@@ -3829,15 +4660,15 @@ function _showChapterLockedModal(chapterId) {
 
   const msg = expired
     ? `${name} is paused because your access has expired.\n\nChapters your parent unlocked with credits still work until they run out.`
-    : `${name} is not unlocked yet.\n\nYour parent can open it for ${price} credits — that keeps it open for ${days} days. They earn credits by inviting other families.`;
+    : `${name} is not unlocked yet.\n\nYour parent can open it for ${price} credits - that keeps it open for ${days} days. They earn credits by inviting other families.`;
 
   _confirmModal(msg, () => {}, { icon: '🔒', okLabel: 'OK', cancelLabel: '' });
 }
 
 // ── The Shop page ──────────────────────────────
 // Two things are sold: a whole SUBJECT (every chapter in it) and a single
-// CHAPTER. Both grant the same thing underneath — a row in
-// chapter_entitlements with an expiry — so the server-side check in
+// CHAPTER. Both grant the same thing underneath - a row in
+// chapter_entitlements with an expiry - so the server-side check in
 // questions.js needs no idea that subjects exist at all.
 let _shopTab = 'subjects';
 
@@ -3852,7 +4683,7 @@ async function renderShop() {
     return;
   }
   // Always opens tidy. Which subjects are expanded is a browsing state, not
-  // a preference — returning to the shop and finding six subjects still open
+  // a preference - returning to the shop and finding six subjects still open
   // would undo the point of grouping them. Same rule as _examReviewWrongOnly
   // and _repShowAllMistakes: module-level view state resets where the screen
   // is built, never in the toggle.
@@ -3911,7 +4742,7 @@ function renderShopList() {
   }
   const note = document.getElementById('shop-note');
   if (note) {
-    note.textContent = `Buying something you already have adds another ${days} days to it — `
+    note.textContent = `Buying something you already have adds another ${days} days to it - `
       + 'you never lose time by unlocking early.';
   }
 
@@ -3928,7 +4759,7 @@ window.renderShopList = renderShopList;
 
 // ── Shop list rendering ───────────────────────────────────────────────────
 // Reorganised: the old version rendered ONE flat list of every sellable
-// chapter — 148 rows of "name / subject / price" with nothing but a search box
+// chapter - 148 rows of "name / subject / price" with nothing but a search box
 // between the parent and the thing they wanted. Now everything is grouped by
 // GRADE, and within a grade each SUBJECT is a collapsed row that opens to show
 // its chapters. 45 tidy rows instead of 148 loose ones, and the grade a parent
@@ -3959,7 +4790,7 @@ function _shopGradeHeader(grade, sub) {
 function _renderShopSubjects(body, bal, days, q) {
   const all = Shop.sellableSubjects();
   if (!all.length) {
-    body.innerHTML = _shopEmpty('Subjects are still loading — come back in a moment.');
+    body.innerHTML = _shopEmpty('Subjects are still loading - come back in a moment.');
     return;
   }
   const list = q ? all.filter(s => s.name.toLowerCase().includes(q)) : all;
@@ -4017,14 +4848,14 @@ function _shopFreeFootnote() {
   const names = FREE_GRADES.map(g => 'Grade ' + g);
   const label = names.length === 2 ? names.join(' and ') : names.join(', ');
   return `<p class="text-[11px] text-green-700 dark:text-green-400 mt-4 pt-3 border-t border-gray-100 dark:border-gray-700/60 text-center leading-snug">
-    ✅ <b>${_profEsc(label)}</b> are free for everyone — they are not sold here and never expire.
+    ✅ <b>${_profEsc(label)}</b> are free for everyone - they are not sold here and never expire.
   </p>`;
 }
 
 function _renderShopChapters(body, bal, days, q) {
   const all = Shop.sellableChapters();
   if (!all.length) {
-    body.innerHTML = _shopEmpty('Chapters are still loading — come back in a moment.');
+    body.innerHTML = _shopEmpty('Chapters are still loading - come back in a moment.');
     return;
   }
 
@@ -4113,7 +4944,7 @@ function _renderShopChapters(body, bal, days, q) {
   body.innerHTML = html + _shopFreeFootnote();
 }
 
-// One reporter for both purchase kinds — the server returns the same shapes.
+// One reporter for both purchase kinds - the server returns the same shapes.
 function _shopPurchaseResult(res) {
   if (res && res.ok) {
     toast(`Unlocked! ${res.balance} credits left. 🎉`, 3000);
@@ -4123,11 +4954,11 @@ function _shopPurchaseResult(res) {
     // instantly. Saying so beats them thinking the purchase failed.
     setTimeout(() => toast('It can take a few minutes to appear on your child’s device.', 5000), 3200);
   } else if (res && res.error === 'insufficient_credits') {
-    toast(`Not enough credits — that one costs ${res.price}.`, 3500);
+    toast(`Not enough credits - that one costs ${res.price}.`, 3500);
   } else if (res && res.error === 'not_deployed') {
     toast('The shop is not switched on yet. Ask the administrator.', 4000);
   } else if (res && res.error === 'catalog_not_published') {
-    toast('Whole subjects are not on sale yet — the administrator needs to publish the catalogue.', 5000);
+    toast('Whole subjects are not on sale yet - the administrator needs to publish the catalogue.', 5000);
   } else if (res && res.error === 'account_blocked') {
     toast('Purchases are paused on this account. Please contact support.', 4000);
   } else if (res && res.error === 'shop_closed') {
@@ -4181,8 +5012,8 @@ function renderInviteCredits() {
     // while the database is paying none would be a straight lie to the parent
     // doing the inviting.
     rule.textContent = Shop.settings().referral_earning_enabled === false
-      ? 'Referral credits are paused at the moment — your invites still count and we will let you know when they pay again.'
-      : `You earn ${Shop.creditsPerRef()} credits for every family that joins with your link — `
+      ? 'Referral credits are paused at the moment - your invites still count and we will let you know when they pay again.'
+      : `You earn ${Shop.creditsPerRef()} credits for every family that joins with your link - `
         + `counted once their child has answered their first practice question.`;
   }
 
@@ -4190,7 +5021,7 @@ function renderInviteCredits() {
   if (pending) {
     const n = Shop.pendingReferrals();
     pending.textContent = n
-      ? `${n} friend${n === 1 ? ' has' : 's have'} signed up but not started practising yet — you'll get the credits when they do.`
+      ? `${n} friend${n === 1 ? ' has' : 's have'} signed up but not started practising yet - you'll get the credits when they do.`
       : '';
   }
 }
@@ -4237,7 +5068,7 @@ async function openPlansModal() {
       </div>
       <div class="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-1">${price}</div>
       <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Up to ${kids}</div>
-      ${isCurrent ? '' : `<button disabled class="mt-2 w-full py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed">Available after ${FREE_UNTIL_LABEL}</button>`}
+      ${isCurrent ? '' : '<button disabled class="mt-2 w-full py-2 rounded-xl text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed">Available later</button>'}
     </div>`;
   }).join('');
 }
@@ -4272,8 +5103,8 @@ async function _submitTeacherApplication(btn) {
 const PD = (() => {
   let _activeId = null;
 
-  // MUST await pdSwitchStudent. It is async — it loads THIS child's progress
-  // blob into the global DB — and nothing re-renders the panel when it lands.
+  // MUST await pdSwitchStudent. It is async - it loads THIS child's progress
+  // blob into the global DB - and nothing re-renders the panel when it lands.
   // Called without await, every renderDetail() below read the PREVIOUS child's
   // data, so a parent who tapped child A, went back, then tapped child B saw
   // A's questions, accuracy, streak and weak chapters under B's name.
@@ -4289,7 +5120,7 @@ const PD = (() => {
     if (panel) panel.classList.remove('hidden');
 
     // Name and avatar come from the already-cached family row, so they can paint
-    // immediately — the panel should not sit blank while the blob loads.
+    // immediately - the panel should not sit blank while the blob loads.
     if (s) {
       if (_el('pd-detail-avatar')) _el('pd-detail-avatar').textContent = s.avatar || '🧒';
       if (_el('pd-detail-name'))   _el('pd-detail-name').textContent   = s.display_name || s.username;
@@ -4351,13 +5182,13 @@ const PD = (() => {
     const family  = (Auth.getFamily && Auth.getFamily()) || {};
 
     const set = (elId, v) => { const el = document.getElementById(elId); if (el) el.textContent = v; };
-    set('pd-login-family',   family.family_name || '—');
+    set('pd-login-family',   family.family_name || '-');
     // NEVER fall back to the display name here. _activeAccount.name is
     // display_name, not username, and the two routinely differ ("Emma" vs
     // "emma2025"). Printing one as the other under the heading "what your child
     // types on the login screen" hands the parent a credential that cannot log
     // in, with nothing to indicate it is wrong. A dash is the honest answer.
-    set('pd-login-username', student?.username || '—');
+    set('pd-login-username', student?.username || '-');
     if (!student) {
       console.warn('[renderLoginTab] no student row for', id,
         '- sign-in details cannot be shown. Family students loaded:', (Auth.getStudents() || []).length);
@@ -4416,7 +5247,7 @@ const PD = (() => {
 
   function copyLoginField(elId) {
     const text = document.getElementById(elId)?.textContent || '';
-    if (!text || text === '—') return;
+    if (!text || text === '-') return;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text).then(() => toast('Copied ✓', 1200), () => toast('Could not copy.', 1500));
     }
@@ -4453,7 +5284,7 @@ const PD = (() => {
     if (_el('pd-acc'))        _el('pd-acc').textContent        = acc + '%';
     if (_el('pd-streak'))     _el('pd-streak').textContent     = (stats.streak || 0) + ' 🔥';
     if (_el('pd-badges'))     _el('pd-badges').textContent     = (DB.badges || []).length;
-    if (_el('pd-best-exam'))  _el('pd-best-exam').textContent  = stats.bestScore ? stats.bestScore + '%' : '—';
+    if (_el('pd-best-exam'))  _el('pd-best-exam').textContent  = stats.bestScore ? stats.bestScore + '%' : '-';
     if (_el('pd-exam-count')) _el('pd-exam-count').textContent = stats.examCount || 0;
 
     _renderExamTimeline(DB);
@@ -4532,12 +5363,12 @@ const PD = (() => {
         body: JSON.stringify({ studentId: _activeId, reminderTime: time }),
       });
       // 402 is this feature's own signal from push-subscribe.js, distinct from
-      // a genuine failure — the server had the final say and said no.
+      // a genuine failure - the server had the final say and said no.
       if (statusEl) statusEl.textContent = res.ok
         ? `Reminder saved for ${time} MU time. ✅`
         : res.status === 402
           ? 'Daily reminders are not included in your plan.'
-          : 'Save failed — make sure the student has notifications enabled.';
+          : 'Save failed - make sure the student has notifications enabled.';
     } catch(_) { if (statusEl) statusEl.textContent = 'Network error.'; }
   }
 
@@ -4619,7 +5450,7 @@ const PD = (() => {
   }
 
   // Flipping one switch in the Controls tab used to call renderParentDashboard(),
-  // which hides pd-detail-panel — so every toggle threw the parent back out to
+  // which hides pd-detail-panel - so every toggle threw the parent back out to
   // the children grid and they had to tap back in. Only the controls actually
   // changed, so only the controls are re-rendered.
   function refreshControls() {
@@ -4683,7 +5514,7 @@ function _renderSubjectProgress(acct) {
         <span class="text-xs text-gray-500 dark:text-gray-400 text-right">${total} answers<br>${chaptersTried}/${chs.length} chapters tried ▾</span>
       </button>
       <div class="hidden px-4 py-2">
-        <p class="text-xs text-gray-500 dark:text-gray-400 py-1.5">Accuracy shows how often answers were correct — it is not subject completion. More practice questions remain in each chapter.</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 py-1.5">Accuracy shows how often answers were correct - it is not subject completion. More practice questions remain in each chapter.</p>
         <div class="flex text-xs text-gray-500 dark:text-gray-400 uppercase border-b border-gray-100 dark:border-gray-700 pb-1 mb-1">
           <span class="flex-1">Chapter</span><span class="w-8 text-center">Answers</span><span style="width:90px" class="ml-3">Accuracy</span>
         </div>
@@ -4700,7 +5531,7 @@ function _renderSubjectProgress(acct) {
 // ══════════════════════════════════════════════
 
 // i days before today, as a Mauritius day key. Built by subtracting whole days
-// from the MU-shifted clock, NOT with setDate() on a local Date — Mauritius has
+// from the MU-shifted clock, NOT with setDate() on a local Date - Mauritius has
 // no DST so a fixed offset is exact, and a local Date would drift for a parent
 // checking in from a country that does.
 function _muDayKeyBack(i) {
@@ -4709,7 +5540,7 @@ function _muDayKeyBack(i) {
 
 // Sums a daily map over [fromDaysAgo, toDaysAgo] inclusive, counting back from
 // today. `dailyMap` defaults to the currently-loaded child, but the family
-// overview passes each sibling's own map — only one child's blob is ever in the
+// overview passes each sibling's own map - only one child's blob is ever in the
 // global DB, so anything comparing children must pass it explicitly.
 function _repWindow(fromDaysAgo, toDaysAgo, dailyMap) {
   const daily = dailyMap || DB.daily || {};
@@ -4724,14 +5555,14 @@ function _repWindow(fromDaysAgo, toDaysAgo, dailyMap) {
 }
 
 // Deltas are shown against the previous window so a parent sees a direction,
-// not just a number. A previous window of zero must render as "new"/"—" and
+// not just a number. A previous window of zero must render as "new"/"-" and
 // NOT as a triumphant +100%.
 function _repDelta(now, prev, unit) {
-  if (now == null) return '<span class="text-[11px] text-gray-400">—</span>';
+  if (now == null) return '<span class="text-[11px] text-gray-400">-</span>';
   if (prev == null || prev === 0) {
     return now > 0
       ? '<span class="text-[11px] font-semibold text-green-600 dark:text-green-400">new</span>'
-      : '<span class="text-[11px] text-gray-400">—</span>';
+      : '<span class="text-[11px] text-gray-400">-</span>';
   }
   const d = now - prev;
   if (d === 0) return '<span class="text-[11px] text-gray-400">no change</span>';
@@ -4767,7 +5598,7 @@ function _repNiceDate(key) {
 // in this tab is a trend; this is the one card that answers it in plain terms.
 //
 // Reads daily[key].ch, which only exists from the update that started recording
-// it — an older day shows its totals and says the breakdown was not kept, which
+// it - an older day shows its totals and says the breakdown was not kept, which
 // is honest and stops the card looking broken for the first two days.
 function _repRecentDays() {
   const daily = DB.daily || {};
@@ -4821,7 +5652,7 @@ function _repRecentDays() {
 }
 
 // ── 30-day activity strip ─────────────────────
-// Answers "does she actually sit down and do it?" — the question a parent asks
+// Answers "does she actually sit down and do it?" - the question a parent asks
 // first, and the one no cumulative total can answer.
 function _repActivityStrip() {
   const daily = DB.daily || {};
@@ -4836,12 +5667,12 @@ function _repActivityStrip() {
   const active = days.filter(d => d.a).length;
 
   const bars = days.map(d => {
-    if (!d.a) return `<div class="rep-day" data-empty="1" title="${_attr(_repNiceDate(d.k))} — nothing"></div>`;
+    if (!d.a) return `<div class="rep-day" data-empty="1" title="${_attr(_repNiceDate(d.k))} - nothing"></div>`;
     const pct = Math.round(d.c / d.a * 100);
     // Floor of 8% so a 2-question day still reads as a day she showed up,
     // instead of a sliver indistinguishable from the empty marker.
     const h = Math.max(8, Math.round(d.a / max * 100));
-    const t = `${_repNiceDate(d.k)} — ${d.a} question${d.a > 1 ? 's' : ''}, ${pct}%${d.e ? `, ${d.e} exam${d.e > 1 ? 's' : ''}` : ''}`;
+    const t = `${_repNiceDate(d.k)} - ${d.a} question${d.a > 1 ? 's' : ''}, ${pct}%${d.e ? `, ${d.e} exam${d.e > 1 ? 's' : ''}` : ''}`;
     return `<div class="rep-day" style="height:${h}%;background:${_repAccColour(pct)}" title="${_attr(t)}"></div>`;
   }).join('');
 
@@ -4878,7 +5709,7 @@ function _repTrend() {
   const x = i => PAD + (i / (pts.length - 1)) * (W - PAD * 2);
   const y = v => PAD + (1 - v / 100) * (H - PAD * 2);
 
-  // Two lines, deliberately. A SOLID segment joins consecutive active weeks —
+  // Two lines, deliberately. A SOLID segment joins consecutive active weeks -
   // that stretch is measured. A faint DASHED line spans the whole series so a
   // gap still reads as continuous, without claiming an improvement she was not
   // there to make. Solid-only was wrong: a single silent week between two
@@ -4977,7 +5808,7 @@ function _repSubjects(acct) {
     const chs = pack._chapters || pack.chapters || [];
     const a = chs.reduce((s, ch) => s + ((dbCh[ch.id] && dbCh[ch.id].attempted) || 0), 0);
     const c = chs.reduce((s, ch) => s + ((dbCh[ch.id] && dbCh[ch.id].correct) || 0), 0);
-    // An untouched chapter is a gap, not a weakness — a more useful and more
+    // An untouched chapter is a gap, not a weakness - a more useful and more
     // honest thing to tell a parent than a 0% that looks like failure.
     const touched = chs.filter(ch => ((dbCh[ch.id] && dbCh[ch.id].attempted) || 0) > 0).length;
     return { name: pack.subject || pack.name, icon: pack.icon, a, touched, total: chs.length,
@@ -5017,7 +5848,7 @@ function _repSubjects(acct) {
 }
 
 // ── Recent mistakes ───────────────────────────
-// Module-level, and reset in _renderReports() rather than in the toggle — the
+// Module-level, and reset in _renderReports() rather than in the toggle - the
 // same rule as _examReviewWrongOnly, or the next child's panel opens expanded.
 let _repShowAllMistakes = false;
 function _repToggleMistakes() { _repShowAllMistakes = !_repShowAllMistakes; _renderReports(true); }
@@ -5101,7 +5932,7 @@ function _renderReports(keepState) {
   const name = String(acct.name || 'Your child').trim().split(/\s+/)[0];
 
   // A child with no dated history. This is also EVERY existing child on the day
-  // this ships — DB.daily starts empty and fills from the next answer on — so
+  // this ships - DB.daily starts empty and fills from the next answer on - so
   // the empty state has to say that, not read as "no data, something is broken".
   const hasAny = Object.keys(DB.daily || {}).length > 0;
   if (!hasAny) {
@@ -5132,7 +5963,7 @@ function _renderReports(keepState) {
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
       ${_repStatCard('Questions',   now.a, _repDelta(now.a, prev.a), '#2563eb')}
-      ${_repStatCard('Accuracy',    now.acc == null ? '—' : now.acc + '%', _repDelta(now.acc, prev.acc, '%'), now.acc == null ? '' : _repAccColour(now.acc))}
+      ${_repStatCard('Accuracy',    now.acc == null ? '-' : now.acc + '%', _repDelta(now.acc, prev.acc, '%'), now.acc == null ? '' : _repAccColour(now.acc))}
       ${_repStatCard('Days active', now.days + '/7', _repDelta(now.days, prev.days), '#f97316')}
       ${_repStatCard('Exams',       now.e, _repDelta(now.e, prev.e), '#0d9488')}
     </div>
@@ -5152,7 +5983,7 @@ function _renderReports(keepState) {
     + `<button onclick="_repShare()" class="w-full text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 shadow rounded-2xl py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">📤 Share this summary</button>`;
 }
 
-// Same Web Share / clipboard pattern as shareResult(). Plain text on purpose —
+// Same Web Share / clipboard pattern as shareResult(). Plain text on purpose -
 // this gets pasted into WhatsApp to a tutor or to the other parent.
 async function _repShare() {
   const acct = (typeof Auth !== 'undefined' && Auth.getActiveAccount()) || {};
@@ -5160,9 +5991,9 @@ async function _repShare() {
   const now = _repWindow(0, 6), prev = _repWindow(7, 13);
   const spots = (DB.mistakes || []).slice(0, 3).map(m => `  - ${m.chn || m.ch}`).join('\n');
   const text = [
-    `${name} — last 7 days`,
+    `${name} - last 7 days`,
     `Questions: ${now.a}${prev.a ? ` (was ${prev.a})` : ''}`,
-    `Accuracy: ${now.acc == null ? '—' : now.acc + '%'}${prev.acc != null ? ` (was ${prev.acc}%)` : ''}`,
+    `Accuracy: ${now.acc == null ? '-' : now.acc + '%'}${prev.acc != null ? ` (was ${prev.acc}%)` : ''}`,
     `Days practised: ${now.days} of 7`,
     now.e ? `Exams taken: ${now.e}` : '',
     spots ? `\nRecent trouble spots:\n${spots}` : '',
@@ -5170,10 +6001,10 @@ async function _repShare() {
   ].filter(Boolean).join('\n');
 
   try {
-    if (navigator.share) { await navigator.share({ title: `${name} — progress`, text }); return; }
+    if (navigator.share) { await navigator.share({ title: `${name} - progress`, text }); return; }
     await navigator.clipboard.writeText(text);
     toast('Summary copied! 📋', 2000);
-  } catch (_) { /* dismissed share sheet, or clipboard denied — not an error */ }
+  } catch (_) { /* dismissed share sheet, or clipboard denied - not an error */ }
 }
 
 function _renderParentAssignDropdown(acct) {
@@ -5205,6 +6036,7 @@ function _renderParentControls(acct) {
   if (hintsToggle) hintsToggle.checked = !(DB.restrictions?.hintsDisabled ?? false);
   const gamesToggle = _el('pd-games-toggle');
   if (gamesToggle) gamesToggle.checked = !(DB.restrictions?.minigamesDisabled ?? false);
+  if (typeof GameSettings !== 'undefined') GameSettings.renderParentCard(acct);
 
   const chLocks = _el('pd-chapter-locks');
   if (!chLocks) return;
@@ -5381,7 +6213,7 @@ async function _renderFriendsLeaderboard(studentId) {
     const name = all[myRank - 1].display_name;
     callout = `<div class="mb-3 rounded-xl px-3 py-2 text-xs text-center text-indigo-700 dark:text-indigo-300"
       style="background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25)">
-      You're <strong>#${myRank + 1}</strong> — earn <strong>${gap} more XP</strong> to beat ${name}! 💪
+      You're <strong>#${myRank + 1}</strong> - earn <strong>${gap} more XP</strong> to beat ${name}! 💪
     </div>`;
   }
 
@@ -5471,7 +6303,7 @@ async function _connectByCode() {
   if (btn) { btn.disabled = false; btn.textContent = 'Connect'; }
   if (data?.ok)                           { input.value = ''; toast('Friend connected! 🎉🎉', 3000); if (typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } }); _renderFriendsLeaderboard(ACTIVE_STUDENT_ID); }
   else if (data?.error === 'self')        toast("That's your own code!", 2000);
-  else if (data?.error === 'not_found')   toast('Code not found — check and try again.', 2500);
+  else if (data?.error === 'not_found')   toast('Code not found - check and try again.', 2500);
   else if (data?.error === 'max_friends') toast('Friend list is full (max 20).', 2500);
   else                                    toast('Could not connect. Try again.', 2000);
 }
@@ -5606,7 +6438,7 @@ async function shareFriendLink() {
   if (!_friendCode) { toast('Loading your code…', 1500); return; }
   const link = _friendInviteLink();
   if (navigator.share) {
-    try { await navigator.share({ title: 'PSAC Practice — Friend Challenge', text: _friendInviteText(), url: link }); return; }
+    try { await navigator.share({ title: 'PSAC Practice - Friend Challenge', text: _friendInviteText(), url: link }); return; }
     catch(e) { if (e.name === 'AbortError') return; }
   }
   try { await navigator.clipboard.writeText(link); toast('Link copied! 📋', 2000); }
@@ -5750,7 +6582,16 @@ function initScratchpad(id) {
   // pointercancel fires when the OS interrupts (notification, call, screenshot).
   canvas.addEventListener('pointercancel', stop);
 
-  // Faint placeholder text
+  _scratchPlaceholder(canvas);
+}
+
+// The faint prompt, plus the one-shot listener that wipes it on the first
+// stroke. Extracted because a reset has to put BOTH back: clearing the canvas
+// without re-arming the listener leaves a pad that erases the child's first
+// stroke of the next session.
+function _scratchPlaceholder(canvas) {
+  const ctx = canvas && canvas._ctx;
+  if (!ctx) return;
   ctx.save();
   ctx.globalAlpha = 0.18;
   ctx.font = '13px sans-serif';
@@ -5760,13 +6601,46 @@ function initScratchpad(id) {
   ctx.restore();
   canvas._hasPlaceholder = true;
 
-  canvas.addEventListener('pointerdown', () => {
+  if (canvas._wipeOnFirstStroke) canvas.removeEventListener('pointerdown', canvas._wipeOnFirstStroke);
+  canvas._wipeOnFirstStroke = () => {
     if (canvas._hasPlaceholder) { canvas._hasPlaceholder = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }
-  }, { once: true });
+  };
+  canvas.addEventListener('pointerdown', canvas._wipeOnFirstStroke, { once: true });
 }
 function clearScratch(id) {
   const c = document.getElementById(id);
-  if (c && c._ctx) c._ctx.clearRect(0, 0, c.width, c.height);
+  if (c && c._ctx) { c._ctx.clearRect(0, 0, c.width, c.height); c._hasPlaceholder = false; }
+}
+
+// ── A NEW SESSION STARTS ON A BLANK PAD ───────────────────────────────────────
+// The canvas lives in index.html and is never rebuilt, so working stayed on it
+// for the rest of the visit: leave a chapter, open another, and last chapter's
+// sums were still there under the new question.
+//
+// ⚠ The reset is keyed on the SESSION OBJECT, not on the screen becoming
+//   visible. Every practice start assigns a fresh `S.practice.session` literal
+//   (and every exam a fresh `S.exam.qs` array) immediately before showScreen, so
+//   identity alone separates "a new session began" from "the child came back to
+//   the one they were already in". Clearing on visibility would wipe the pad on
+//   any return to the screen; clearing per question would wipe it mid-question,
+//   and working is exactly what a child needs to keep while answering.
+// ⚠ It also means a sixth practice entry point gets this for free — it cannot
+//   start a session without resetting those counters.
+// ⚠ Clear whenever a context exists, visible or not. A pad initialised in an
+//   earlier session still holds its strokes while its wrapper is collapsed, and
+//   `clearRect` works on a hidden canvas — the dimensions are the backing
+//   store's, not the layout's.
+let _scratchSessionPractice = null;
+let _scratchSessionExam = null;
+
+function _resetScratchpadForSession(id, token, last) {
+  if (token === last) return last;
+  const canvas = document.getElementById(id);
+  if (canvas && canvas._ctx) {
+    canvas._ctx.clearRect(0, 0, canvas.width, canvas.height);
+    _scratchPlaceholder(canvas);
+  }
+  return token;
 }
 
 // ── DASHBOARD ─────────────────────────────────
@@ -5787,7 +6661,7 @@ function renderDashboard() {
   // ⚠ The two schedule panels are deliberately NOT painted here any more.
   // #dash-today-plan (Calendar.renderTodayPlan) and #dash-schedule stacked a
   // study plan and a fortnight's outlook on the screen a child reaches
-  // immediately after tapping a subject TO PRACTISE — a wall of suggestions
+  // immediately after tapping a subject TO PRACTISE - a wall of suggestions
   // about something else, in front of the thing they came to do. Both are
   // summarised on the "Today's plan" task button now, with the full detail one
   // tap away on the Schedule screen. renderTodayPlan() and renderDashSchedule()
@@ -5991,7 +6865,7 @@ function toggleChapterFlag(chapterId) {
   DB.chapters[chapterId].flagged = !DB.chapters[chapterId].flagged;
   save(DB);
   renderChapterSelect();
-  toast(DB.chapters[chapterId].flagged ? '🚩 Flagged — your parent will see this.' : 'Flag removed.', 1800);
+  toast(DB.chapters[chapterId].flagged ? '🚩 Flagged - your parent will see this.' : 'Flag removed.', 1800);
 }
 
 // ── CHAPTER SELECT ─────────────────────────────
@@ -6010,12 +6884,12 @@ function toggleChapterFlag(chapterId) {
 // tap target and still keyboard-reachable, while the flag sits above it as a
 // separate, valid button.
 // ══════════════════════════════════════════════
-//  CHAPTER PROGRESS — one reading, used by the card AND the summary
+//  CHAPTER PROGRESS - one reading, used by the card AND the summary
 //
 //  ⚠ getChapterPct() is ACCURACY (correct / attempted), and the chapter card
 //  had been printing it as "% mastery" with a three-star rating beside it. So a
 //  child who answered two questions and got both right saw "100% mastery ★★★"
-//  on a nineteen-question chapter they had barely opened — and every chapter
+//  on a nineteen-question chapter they had barely opened - and every chapter
 //  they had actually worked through looked the same as one they had glanced at.
 //  That is why "I cannot see which chapters I have already done" was a fair
 //  complaint about a screen that already showed numbers.
@@ -6033,7 +6907,7 @@ function _chapterProgress(chId) {
   const total = bankIds.size;
   const acc = attempted ? Math.round(correct / attempted * 100) : 0;
 
-  // ⚠ `total` is 0 whenever the question pool has not loaded yet — the grid can
+  // ⚠ `total` is 0 whenever the question pool has not loaded yet - the grid can
   // paint before QuestionLoader has answered. Effort must then be UNKNOWN, not
   // 1: an earlier version fell back to `attempted ? 1 : 0`, which handed a
   // "✓ Mastered ★★★" badge to any chapter with two correct answers the moment
@@ -6095,14 +6969,20 @@ function _chapterCard(ch, borderColor) {
   let status;
   if (planLocked)        status = '<span class="ch-status lock">🔒 Upgrade to unlock</span>';
   else if (parentLocked) status = '<span class="ch-status lock">🔒 Locked by your parent</span>';
-  else if (resume)       status = `<span class="ch-status resume">⏸ Paused · Question ${(resume.idx || 0) + 1} of ${(resume.qIds || []).length}</span>`;
+  // ⚠ "resumes at", not "Question N of M". `resume.idx` is a BOOKMARK, not a
+  // score - it only moves when the child presses Next, so a round paused on an
+  // unanswered first question read "Question 1 of 20" directly above
+  // "0 of 125 questions explored" and the two looked like they contradicted
+  // each other. They never did: one is where the round restarts, the other is
+  // distinct questions in the whole chapter that carry a recorded answer.
+  else if (resume)       status = `<span class="ch-status resume">⏸ Paused · resumes at question ${(resume.idx || 0) + 1} of ${(resume.qIds || []).length}</span>`;
   else if (!attempted)   status = `<span class="ch-status new">Not started${total ? ` · ${total} questions` : ''}</span>`;
   // ⚠ "correct", not "mastery". It is accuracy, and calling it mastery told a
   // child who had answered two questions that they had mastered the chapter.
   // Effort sits beside it so the two can be read apart.
   else                   status = `<span class="ch-status">${prog.correct} correct out of ${attempted} answer${attempted === 1 ? '' : 's'}${attempted < 5 ? ' · small sample' : ''}</span>`;
 
-  // The line that actually answers "have I done this one?" — a done-ness badge
+  // The line that actually answers "have I done this one?" - a done-ness badge
   // and when it was last touched.
   const doneBadge = locked ? ''
     : prog.state === 'started'  ? '<span class="ch-done is-started">In progress</span>'
@@ -6113,7 +6993,7 @@ function _chapterCard(ch, borderColor) {
     : '';
 
   const hit = locked
-    ? `<button class="ch-hit" onclick="toast('${planLocked ? '⭐ Upgrade your plan to access this chapter.' : '🔒 This chapter is locked by your parent.'}', 2500)" aria-label="${_profEsc(ch.name)} — locked"></button>`
+    ? `<button class="ch-hit" onclick="toast('${planLocked ? '⭐ Upgrade your plan to access this chapter.' : '🔒 This chapter is locked by your parent.'}', 2500)" aria-label="${_profEsc(ch.name)} - locked"></button>`
     : resume
     ? `<button class="ch-hit" onclick="_doResume('practice','${ch.id}')" aria-label="Resume ${_profEsc(ch.name)}"></button>`
     : `<button class="ch-hit" onclick="startChapterDirect('${ch.id}')" aria-label="Practise ${_profEsc(ch.name)}"></button>`;
@@ -6123,6 +7003,8 @@ function _chapterCard(ch, borderColor) {
     ${locked ? '' : `<button class="ch-flag${isFlagged ? ' on' : ''}" onclick="toggleChapterFlag('${ch.id}')"
       title="${isFlagged ? 'Remove flag' : 'Flag this chapter for your parent'}"
       aria-label="${isFlagged ? 'Remove flag' : 'Flag for parent'}">${isFlagged ? '🚩' : '⚐'}</button>`}
+    ${locked ? '' : `<button class="ch-options" onclick="event.stopPropagation();PracticeJourney.openOptions('${ch.id}')"
+      aria-label="Practice options for ${_profEsc(ch.name)}" title="Practice options">⚙ Options</button>`}
     ${resume ? `<button class="ch-restart" onclick="event.stopPropagation();_discardChapterResume('${ch.id}')"
       title="Discard paused progress and start fresh" aria-label="Discard paused progress and start fresh">↺</button>` : ''}
     <div class="ch-body">
@@ -6135,17 +7017,42 @@ function _chapterCard(ch, borderColor) {
       <div class="ch-spacer"></div>
       ${metaRow}
       ${status}
-      ${locked ? '' : `<p class="ch-status">${prog.known ? `${prog.unique} different questions recorded · ${total} questions in the loaded bank` : 'Question bank not loaded yet'}</p>`}
+      ${locked ? '' : `<p class="ch-status">${_journeyCoverage(ch.id, prog, total)}</p>`}
       <div class="ch-foot">
-        <span class="ch-cta">${locked ? 'Locked' : resume ? '▶ Resume →' : attempted ? 'Continue →' : 'Start →'}</span>
+        <span class="ch-cta">${locked ? 'Locked' : _journeyCta(ch.id, resume, attempted)}</span>
       </div>
     </div>
   </article>`;
 }
 
+// The chapter card's label and coverage line, both truthful.
+//
+// ⚠ These read only what is ALREADY cached. The grid draws every chapter at
+//   once, so asking the server for per-question progress here would be one
+//   request per chapter on every render. The full picture is loaded when a
+//   chapter is actually opened, or when the Question Map is asked for.
+// ⚠ Falls back to the old wording whenever PracticeJourney is not loaded, so a
+//   failed script tag degrades to the previous behaviour rather than a blank card.
+function _journeyCta(chapterId, resume, attempted) {
+  if (typeof PracticeJourney === 'undefined') {
+    return resume ? '▶ Resume →' : attempted ? 'Continue →' : 'Start →';
+  }
+  try { return _profEsc(PracticeJourney.cardLabel(chapterId).label) + ' →'; }
+  catch (e) { return resume ? '▶ Resume →' : attempted ? 'Continue →' : 'Start →'; }
+}
+
+function _journeyCoverage(chapterId, prog, total) {
+  if (typeof PracticeJourney !== 'undefined') {
+    try { return _profEsc(PracticeJourney.coverageLine(chapterId)); } catch (e) {}
+  }
+  return prog.known
+    ? `${prog.unique} of ${total} questions explored`
+    : 'Question bank not loaded yet';
+}
+
 function _discardChapterResume(chapterId) {
   _clearPracticeResume(chapterId);
-  toast('Paused progress discarded — next tap starts fresh.', 2200);
+  toast('Paused progress discarded - next tap starts fresh.', 2200);
   renderChapterSelect();
 }
 
@@ -6208,7 +7115,7 @@ function renderChapterSelect() {
           <span class="ch-section-label">✨ Bonus topics</span>
           <span class="ch-section-line"></span>
         </div>
-        <p class="ch-section-note">Extra themes drawn from the syllabus — great once the main chapters feel easy.</p>
+        <p class="ch-section-note">Extra themes drawn from the syllabus - great once the main chapters feel easy. Some questions here also appear in the main chapters, gathered together by theme.</p>
         <div class="ch-grid">${shownEnrichment.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
     }
   }
@@ -6248,14 +7155,14 @@ function _renderChapterSummary(chapters) {
   // ⚠ Same correction as the card: "Mastered" used to be accuracy >= 80% with a
   // single answer, so a child who got two lucky questions right was told they
   // had mastered the chapter and the tile was meaningless. It now needs real
-  // effort as well — see _chapterProgress().
+  // effort as well - see _chapterProgress().
   const prog     = chapters.map(ch => _chapterProgress(ch.id));
   const done     = prog.filter(p => p.attempted > 0);
   const answers = prog.reduce((sum,p) => sum + p.attempted, 0);
   const unique = prog.reduce((sum,p) => sum + p.unique, 0);
   const available = prog.reduce((sum,p) => sum + p.total, 0);
 
-  // "When did I last touch this subject" — the other half of "what have I done".
+  // "When did I last touch this subject" - the other half of "what have I done".
   const lastMs   = Math.max(0, ...prog.map(p => p.last || 0));
   const todayKey = _muDayKey();
   const doneToday = prog.filter(p => p.last &&
@@ -6270,7 +7177,7 @@ function _renderChapterSummary(chapters) {
         <span>${unique} different bank questions recorded${available ? ` · ${available} questions currently loaded` : ''}</span>
       </div>
       <p class="ch-sum-last">Includes bonus chapters. Answers may include repeats, not chapter completion. Different-question tracking starts with this update; earlier answers are kept but cannot be reconstructed. Counts refer to the loaded bank, not syllabus mastery.</p>
-      <div class="ch-sum-last">${lastMs ? `Last practised: ${_chapterWhen(lastMs)}` : 'Nothing practised yet — pick any chapter to begin.'}</div>
+      <div class="ch-sum-last">${lastMs ? `Last practised: ${_chapterWhen(lastMs)}` : 'Nothing practised yet - pick any chapter to begin.'}</div>
     </div>`;
 }
 
@@ -6290,8 +7197,13 @@ window.startAssignment = function(assignId) {
 // startChapterDirect(chapterId, forceDiff) is called from a dozen places and
 // from inline onclick handlers in index.html, so its signature is effectively
 // public API. Anything that is NOT an assignment therefore gets the normal
-// defaults — which also fixes showAnswers:false leaking from a finished
+// defaults - which also fixes showAnswers:false leaking from a finished
 // assignment into the next ordinary practice session.
+// Plain names for the four levels, for messages that must tell a child which
+// level is thin. _updateDiffBadge has its own richer LEVELS map for the badge;
+// this is deliberately just the words, so a toast reads as a sentence.
+const _DIFF_NAMES = { 1: 'Basic', 2: 'Medium', 3: 'Hard', 4: 'Challenge' };
+
 let _practiceMode = null;
 
 // Same one-shot handover pattern as _practiceMode, set by _doResume() right
@@ -6358,9 +7270,9 @@ window.startKidMission = async function() {
 //
 // QuestionLoader.loadSubject() short-circuits on its _done set, so the second
 // call resolves INSTANTLY doing no work at all. If the chapter's questions were
-// still missing — a subject the server filtered out, a chapter with no question
+// still missing - a subject the server filtered out, a chapter with no question
 // file, or a first load that failed and marked the subject done with nothing in
-// it — hasQs stayed false and this recursed through resolved promises as fast as
+// it - hasQs stayed false and this recursed through resolved promises as fast as
 // the event loop would go, running STATIC_QUESTIONS.some() over ~5,400 questions
 // and firing a toast on every pass. That is a pegged CPU and a dead tab, and it
 // is what a child saw as the browser crashing shortly after tapping a chapter.
@@ -6375,13 +7287,24 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
   const locked = DB.restrictions?.lockedChapters || [];
   if (locked.includes(chapterId)) { toast('🔒 This chapter is locked by your parent.', 2000); return; }
   if (!_planAllowsChapter(chapterId)) { _showChapterLockedModal(chapterId); return; }
+  // A Textes a Trous chapter opens its own screen, not the practice flow.
+  // MUST be after the lock/plan checks above, and BEFORE the pool lookup below:
+  // getStaticQs() excludes type 'cloze', so hasQs is false for these chapters
+  // for ever and the one-shot retry would end on "These questions could not be
+  // loaded" every single time.
+  if (typeof ClozeText !== 'undefined' && ClozeText.isClozeChapter(chapterId) && ClozeText.open(chapterId)) return;
+  // A Chasse aux Erreurs chapter opens its own screen too, and for the same
+  // reason: getStaticQs() excludes type 'errorhunt', so hasQs below is false
+  // for these chapters for ever and the one-shot retry would end on "These
+  // questions could not be loaded" every single time.
+  if (typeof ErrorHunt !== 'undefined' && ErrorHunt.isHuntChapter(chapterId) && ErrorHunt.open(chapterId)) return;
   const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
 
   // If questions for this chapter aren't loaded yet, wait for the active subject to load first
   const hasQs = STATIC_QUESTIONS.some(q => q && q.chapterId === chapterId);
   if (!hasQs && !(resume && resume.qs.length) && typeof QuestionLoader !== 'undefined' && typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) {
-    // ONE retry. A second failure is a real answer — the questions are not
-    // coming — and must be said out loud rather than tried again for ever.
+    // ONE retry. A second failure is a real answer - the questions are not
+    // coming - and must be said out loud rather than tried again for ever.
     if (_attempt) {
       console.warn('[startChapterDirect] no questions for', chapterId,
         'after reloading', ACTIVE_PACK.id, '- giving up rather than retrying.');
@@ -6423,6 +7346,7 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
   showScreen('practice');
   const ch = CHAPTERS.find(c => c.id === chapterId);
   document.getElementById('practice-ch-name').textContent = ch ? `${ch.icon} ${ch.name}` : chapterId;
+  _setPracticeBackLabel('← Chapters', 'Back to chapters');
   _updateDiffBadge(null);
 
   // Disable video help button when no CHAPTER_HELP entry exists for this chapter
@@ -6436,6 +7360,22 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
   }
 
   setTimeout(() => { initScratchpad('scratchpad-practice'); }, 100);
+}
+
+// Hands startChapterDirect() an explicit, already-chosen question list.
+//
+// PracticeJourney selects the set (see engine/practice_selector.js); this only
+// carries it across. It deliberately reuses _practiceResume rather than setting
+// S.practice itself, so the parent lock, the plan check, the cloze redirect,
+// the "questions not loaded yet" retry and the assignment-context reset all
+// still run exactly once, in one place. startSearchPractice() bypasses them and
+// can afford to, because it runs on the synthetic 'search-results' chapter;
+// this runs on a REAL chapter id and must not.
+function startChapterWithSet(chapterId, questions, startIdx) {
+  if (!Array.isArray(questions) || !questions.length) return false;
+  _practiceResume = { qs: questions.slice(), idx: startIdx || 0, answers: {} };
+  startChapterDirect(chapterId);
+  return true;
 }
 
 // ── SEARCH PRACTICE LAUNCH ────────────────────
@@ -6472,12 +7412,15 @@ function startSearchPractice(questions, label, coachMission = null) {
 // as ordinary practice: no _practiceMode, which means hints and answers stay
 // on, it counts toward the daily cap, and the round is resumable. That is the
 // whole difference from startAssignmentDirect below.
-async function startScheduledSession(subjectId, chapterId) {
+// forceDiff is optional and defaults to the mixed round this has always
+// started; the calendar day popup passes a level when the child picks one.
+async function startScheduledSession(subjectId, chapterId, forceDiff) {
   if (!subjectId || !chapterId) { toast('This session has no topic set. 📚', 2500); return; }
+  if (typeof PackLoader !== 'undefined') await PackLoader.ensure(subjectId).catch(() => {});
   const pack = activateSubjectPack(subjectId);
   if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
   if (typeof QuestionLoader !== 'undefined') await QuestionLoader.loadSubject(pack.id);
-  startChapterDirect(chapterId, null);
+  startChapterDirect(chapterId, forceDiff || null);
 }
 
 // "Mon 15 Sep", plus a friendlier word for the two days that matter most.
@@ -6532,34 +7475,159 @@ async function renderDashSchedule(studentId) {
   list.innerHTML = items.slice(0, 4).map(e => _scheduleRow(e, true)).join('');
 }
 
-// Full screen: backlog (today + past) at top, then upcoming, grouped by day.
+// ── MY TIMETABLE (child view) ─────────────────────────────────────────────
+// Two readings of the same rows, chosen by the toggle above the body:
+//   list     - backlog first, then upcoming grouped by day ("what do I do next")
+//   calendar - a month grid with big dates and the sessions written into the
+//              squares ("where does my week go"), each square opening a popup
+//              with the day's detail and its practice options.
+// Both start work through startScheduledSession(), so a session can never
+// behave differently depending on which view a child tapped it in.
+const _TT_VIEW_KEY  = 'psac_timetable_view_v1';
+const _TT_LIST_DAYS = 60;
+const _TT_DOW    = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const _TT_MONTHS = ['January','February','March','April','May','June','July',
+                    'August','September','October','November','December'];
+const _TT_DIFF_ICON = { 1: '🟢', 2: '🟡', 3: '🟠', 4: '🧠' };
+
+// ⚠ Module-level UI state, reset in the RENDER (renderSchedule), never in the
+// toggle: opening the screen must land on the current month whatever month the
+// last visit - or the last child on this shared device - happened to browse to.
+let _ttView  = 'list';
+let _ttMonth = null;
+let _ttData  = { backlog: [], future: [], byDate: new Map(), actByDate: new Map() };
+
+// One colour per subject for the grid chips. Only the chip's rule and dot are
+// tinted; the LABEL keeps the theme's own ink, so a chip's contrast never
+// depends on which subject the session happens to be.
+const _TT_COLORS   = { maths:'#6366f1', english:'#0ea5e9', french:'#a855f7', science:'#10b981', history:'#f59e0b' };
+const _TT_FALLBACK = ['#0891b2','#c026d3','#65a30d','#ea580c','#0369a1','#7c3aed'];
+function _ttColor(e) {
+  const key = `${e.subjectName || ''} ${e.subjectId || ''}`.toLowerCase();
+  for (const k of Object.keys(_TT_COLORS)) if (key.includes(k)) return _TT_COLORS[k];
+  let hash = 0;
+  for (const ch of (e.subjectId || 'x')) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+  return _TT_FALLBACK[hash % _TT_FALLBACK.length];
+}
+
+// ⚠ LOCAL date key, not _muDayKey. A calendar square IS a local date - the same
+// deliberate exception the parent's calendar makes - and schedule_entries.date
+// is written from the same local reading.
+function _ttDayKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function _ttStoredView() {
+  try {
+    const v = localStorage.getItem(_TT_VIEW_KEY);
+    if (v === 'calendar' || v === 'list') return v;
+  } catch (_) { }
+  return 'list';
+}
+
+function _ttSyncToggle() {
+  [['list','tt-view-list'], ['calendar','tt-view-calendar']].forEach(([view, id]) => {
+    const b = document.getElementById(id);
+    if (!b) return;
+    const on = _ttView === view;
+    b.classList.toggle('is-on', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
+
+function setTimetableView(view) {
+  _ttView = view === 'calendar' ? 'calendar' : 'list';
+  try { localStorage.setItem(_TT_VIEW_KEY, _ttView); } catch (_) { }
+  _ttSyncToggle();
+  _ttPaint();
+}
+window.setTimetableView = setTimetableView;
+
+// Full screen. Loads once, then either view paints from _ttData without going
+// back to the network - switching view is a repaint, not a refetch.
 async function renderSchedule() {
   const body = document.getElementById('schedule-body');
   if (!body) return;
+  const now = new Date();
+  _ttMonth = { y: now.getFullYear(), m: now.getMonth() };
+  _ttView  = _ttStoredView();
+  _ttSyncToggle();
+
   const sid = ACTIVE_STUDENT_ID;
   if (!sid || typeof Calendar === 'undefined') {
+    _ttData = { backlog: [], future: [], byDate: new Map(), actByDate: new Map() };
     body.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">No timetable yet.</p>';
     return;
   }
-  let upcoming = [], backlog = [];
-  try { [upcoming, backlog] = await Promise.all([Calendar.getUpcoming(sid, 60), Calendar.getBacklog(sid)]); } catch (_) { }
-  // Filter today out of upcoming (it already appears in backlog) to avoid duplicates.
-  const todayStr = backlog.find(e => e.isToday)?.date || '';
-  const futureItems = upcoming.filter(e => !e.isToday);
-  renderMyActivity(sid);
+
+  // 400 days so the month grid can be paged through a whole year. The LIST is
+  // still cut to _TT_LIST_DAYS below, which is exactly what it showed before.
+  let upcoming = [], backlog = [], activity = [];
+  try {
+    [upcoming, backlog, activity] = await Promise.all([
+      Calendar.getUpcoming(sid, 400),
+      Calendar.getBacklog(sid),
+      Calendar.getRecentActivity ? Calendar.getRecentActivity(sid, 120) : Promise.resolve([]),
+    ]);
+  } catch (_) { }
+
+  const until = new Date(); until.setDate(until.getDate() + _TT_LIST_DAYS);
+  const untilStr = _ttDayKey(until);
+
+  // getBacklog covers <= today and getUpcoming covers >= today, so today's rows
+  // arrive twice - deduped by id here rather than dropped from either list,
+  // which is what the list view has always had to do for itself.
+  const byDate = new Map(), seen = new Set();
+  for (const e of [...(backlog || []), ...(upcoming || [])]) {
+    const key = e.id != null ? `id:${e.id}` : `${e.date}|${e.label}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    if (!byDate.has(e.date)) byDate.set(e.date, []);
+    byDate.get(e.date).push(e);
+  }
+  const actByDate = new Map();
+  for (const a of (activity || [])) {
+    if (!actByDate.has(a.date)) actByDate.set(a.date, []);
+    actByDate.get(a.date).push(a);
+  }
+
+  _ttData = {
+    backlog: backlog || [],
+    future: (upcoming || []).filter(e => !e.isToday && e.date <= untilStr),
+    byDate, actByDate,
+  };
+  _ttPaint();
+}
+
+function _ttPaint() {
+  const body = document.getElementById('schedule-body');
+  const done = document.getElementById('schedule-done');
+  if (!body) return;
+  if (_ttView === 'calendar') {
+    body.innerHTML = _ttCalendarHtml();
+    // The recap has its own home in the calendar view: each day's popup shows
+    // what was done on that day, next to what was planned for it.
+    if (done) done.innerHTML = '';
+    return;
+  }
+  body.innerHTML = _ttListHtml();
+  renderMyActivity(ACTIVE_STUDENT_ID);
+}
+
+// ── List view: backlog (today + past) at top, then upcoming, grouped by day ──
+function _ttListHtml() {
+  const backlog = _ttData.backlog, futureItems = _ttData.future;
   if (!backlog.length && !futureItems.length) {
-    body.innerHTML = `<div class="text-center py-10">
+    return `<div class="text-center py-10">
       <div class="text-4xl mb-3 select-none">🗓️</div>
       <p class="text-sm text-gray-500 dark:text-gray-400">Nothing scheduled yet.</p>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Ask a parent to build you a study timetable — or just pick a chapter yourself.</p>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Ask a parent to build you a study timetable - or just pick a chapter yourself.</p>
       <button onclick="showScreen('subject-select')" class="btn-primary text-sm mt-4">📚 Choose a chapter</button>
     </div>`;
-    return;
   }
 
   let html = '';
 
-  // ── Backlog (today + past) ──
   if (backlog.length) {
     const byDay = new Map();
     for (const e of backlog) {
@@ -6586,7 +7654,6 @@ async function renderSchedule() {
     }).join('');
   }
 
-  // ── Upcoming (future only) ──
   if (futureItems.length) {
     const byDay = new Map();
     for (const e of futureItems) {
@@ -6606,16 +7673,214 @@ async function renderSchedule() {
     }).join('');
   }
 
-  body.innerHTML = html;
-  renderMyActivity(sid);
+  return html;
 }
+
+// ── Calendar view: a real month grid ──────────────────────────────────────
+// Monday-first, big dates, sessions written into the square. Past days are
+// simply muted: an overdue TAG belongs in the list (where a child can act on
+// it), not spread across a month of red squares - see renderMyActivity's note
+// on why a child's screen never lists their failures.
+function _ttCalendarHtml() {
+  // A tap on the toggle can land before renderSchedule() has run at all - the
+  // buttons are static markup, the render is not.
+  if (!_ttMonth) { const n = new Date(); _ttMonth = { y: n.getFullYear(), m: n.getMonth() }; }
+  const { y, m }  = _ttMonth;
+  const todayKey  = _ttDayKey(new Date());
+  const lead      = (new Date(y, m, 1).getDay() + 6) % 7;
+  const daysIn    = new Date(y, m + 1, 0).getDate();
+
+  const cells = [];
+  for (let i = 0; i < lead; i++) cells.push('<span class="tt-day is-blank" aria-hidden="true"></span>');
+
+  let monthSessions = 0;
+  for (let d = 1; d <= daysIn; d++) {
+    const key  = _ttDayKey(new Date(y, m, d));
+    const rows = _ttData.byDate.get(key) || [];
+    const acts = _ttData.actByDate.get(key) || [];
+    monthSessions += rows.length;
+    const isToday = key === todayKey;
+    const isPast  = key < todayKey;
+    const chips = rows.slice(0, 2).map(e =>
+      `<span class="tt-chip" style="--tt-c:${_ttColor(e)}">
+        <span class="tt-chip-ico">${e.icon || '📚'}</span><span class="tt-chip-txt">${_profEsc(e.label)}</span>
+      </span>`).join('');
+    const more = rows.length > 2
+      ? `<span class="tt-more">+${rows.length - 2}<span class="tt-more-word"> more</span></span>` : '';
+    const aria = `${d} ${_TT_MONTHS[m]} ${y}${isToday ? ', today' : ''}. ` +
+      (rows.length ? `${rows.length} session${rows.length === 1 ? '' : 's'} planned.` : 'Nothing planned.') +
+      (acts.length ? ` ${acts.length} thing${acts.length === 1 ? '' : 's'} done.` : '');
+    cells.push(`<button type="button" onclick="openTimetableDay('${key}')" aria-label="${_attr(aria)}"
+      class="tt-day${isToday ? ' is-today' : ''}${isPast ? ' is-past' : ''}${rows.length ? ' has-work' : ''}">
+      <span class="tt-date">${d}</span>
+      ${acts.length ? '<span class="tt-done-mark" aria-hidden="true">✓</span>' : ''}
+      <span class="tt-chips">${chips}${more}</span>
+    </button>`);
+  }
+
+  const subjects = new Map();
+  for (const rows of _ttData.byDate.values())
+    for (const e of rows) if (e.subjectName) subjects.set(e.subjectName, _ttColor(e));
+
+  return `<div class="tt-cal">
+    <div class="tt-cal-head">
+      <button type="button" class="tt-nav" onclick="ttShiftMonth(-1)" aria-label="Previous month">‹</button>
+      <div class="tt-cal-title">${_TT_MONTHS[m]} ${y}</div>
+      <button type="button" class="tt-nav" onclick="ttShiftMonth(1)" aria-label="Next month">›</button>
+    </div>
+    <div class="tt-cal-bar">
+      <span class="tt-cal-count">${monthSessions ? `${monthSessions} session${monthSessions === 1 ? '' : 's'} this month` : 'Nothing planned this month'}</span>
+      <button type="button" class="tt-today-btn" onclick="ttGoToday()">Today</button>
+    </div>
+    <div class="tt-dow" aria-hidden="true">${_TT_DOW.map(d => `<span>${d}</span>`).join('')}</div>
+    <div class="tt-grid" role="grid">${cells.join('')}</div>
+    <p class="tt-hint">Tap any day to see what is on and start practising.</p>
+    ${subjects.size ? `<div class="tt-legend">${[...subjects.entries()].map(([name, c]) =>
+      `<span class="tt-legend-item"><span class="tt-legend-dot" style="background:${c}"></span>${_profEsc(name)}</span>`).join('')}</div>` : ''}
+  </div>`;
+}
+
+function ttShiftMonth(delta) {
+  if (!_ttMonth) return;
+  const d = new Date(_ttMonth.y, _ttMonth.m + delta, 1);
+  _ttMonth = { y: d.getFullYear(), m: d.getMonth() };
+  const body = document.getElementById('schedule-body');
+  if (body) body.innerHTML = _ttCalendarHtml();
+}
+window.ttShiftMonth = ttShiftMonth;
+
+function ttGoToday() {
+  const n = new Date();
+  _ttMonth = { y: n.getFullYear(), m: n.getMonth() };
+  const body = document.getElementById('schedule-body');
+  if (body) body.innerHTML = _ttCalendarHtml();
+}
+window.ttGoToday = ttGoToday;
+
+// ── One day, opened from a square ─────────────────────────────────────────
+// Everything planned for that day, what was already done on it, and the
+// practice options for each topic - so a child starts work from the calendar
+// instead of going away to hunt for the chapter.
+function openTimetableDay(dateKey) {
+  const modal = document.getElementById('modal-tt-day');
+  const title = document.getElementById('tt-day-title');
+  const sub   = document.getElementById('tt-day-sub');
+  const body  = document.getElementById('tt-day-body');
+  if (!modal || !body) return;
+
+  const rows = _ttData.byDate.get(dateKey) || [];
+  const acts = _ttData.actByDate.get(dateKey) || [];
+  const d    = new Date(dateKey + 'T00:00:00');
+  const todayKey = _ttDayKey(new Date());
+
+  if (title) {
+    title.textContent = isNaN(d) ? dateKey
+      : d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  if (sub) {
+    const mins = rows.reduce((n, r) => n + (r.minutes || 0), 0);
+    const bits = [];
+    if (dateKey === todayKey) bits.push('Today');
+    bits.push(rows.length ? `${rows.length} session${rows.length === 1 ? '' : 's'}` : 'Nothing planned');
+    if (mins) bits.push(`about ${mins} min`);
+    sub.textContent = bits.join(' · ');
+  }
+
+  let html = rows.length
+    ? `<div class="tt-sessions">${rows.map(_ttSessionCard).join('')}</div>`
+    : `<div class="tt-empty">
+         <div class="tt-empty-ico" aria-hidden="true">🌤️</div>
+         <p class="tt-empty-msg">Nothing is planned for this day.</p>
+         <p class="tt-empty-sub">You can still practise anything you like.</p>
+       </div>`;
+
+  if (acts.length) {
+    html += `<div class="tt-didsec">
+      <h4 class="tt-didsec-head">✅ What you did</h4>
+      ${acts.map(a => {
+        const col = a.pct == null ? '' : a.pct >= 80 ? '#22c55e' : a.pct >= 50 ? '#f59e0b' : '#ef4444';
+        return `<div class="tt-did">
+          <span class="tt-did-ico">${a.icon}</span>
+          <span class="tt-did-body">
+            <span class="tt-did-title">${_profEsc(a.title)}</span>
+            <span class="tt-did-meta">${a.subjectName ? _profEsc(a.subjectIcon + ' ' + a.subjectName) + ' · ' : ''}${_profEsc(a.detail || '')}</span>
+          </span>
+          ${a.pct == null ? '' : `<span class="tt-did-pct" style="color:${col}">${a.pct}%</span>`}
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  html += `<button type="button" class="tt-choose" onclick="ttChooseChapter()">📚 Choose any chapter</button>`;
+
+  body.innerHTML = html;
+  body.scrollTop = 0;
+  modal.classList.remove('hidden');
+}
+window.openTimetableDay = openTimetableDay;
+
+function closeTimetableDay() {
+  document.getElementById('modal-tt-day')?.classList.add('hidden');
+}
+window.closeTimetableDay = closeTimetableDay;
+
+function ttChooseChapter() {
+  closeTimetableDay();
+  showScreen('subject-select');
+}
+window.ttChooseChapter = ttChooseChapter;
+
+// Ids reach an inline onclick here exactly as they do in _scheduleRow, so the
+// same slug requirement applies: anything that is not a manifest slug simply
+// gets no buttons rather than being escaped into one.
+function _ttSessionCard(e) {
+  const startable = _SLUG_RE.test(e.subjectId || '') && _SLUG_RE.test(e.chapterId || '');
+  const prog = (startable && typeof _chapterProgress === 'function') ? _chapterProgress(e.chapterId) : null;
+  // ⚠ "correct", never "mastery" - _chapterProgress().acc is accuracy.
+  const progTxt = !prog ? '' : prog.attempted ? `${prog.acc}% correct so far` : 'Not started yet';
+  const meta = [e.subjectName ? _profEsc(e.subjectName) : '', e.minutes ? `${e.minutes} min` : '', progTxt]
+    .filter(Boolean).join(' · ');
+
+  // Levels above the parent's cap are not offered: startChapterDirect clamps
+  // them silently, and a button that quietly does something else is worse than
+  // no button.
+  const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
+  const diffs = [1, 2, 3, 4].filter(n => n <= maxDiff);
+
+  const opts = startable
+    ? `<button type="button" class="tt-start" onclick="startTimetableSession('${e.subjectId}','${e.chapterId}',0)">▶ Start practice</button>
+       <div class="tt-diffs">
+         <span class="tt-diffs-label">or pick a level</span>
+         ${diffs.map(n => `<button type="button" class="tt-diff"
+            onclick="startTimetableSession('${e.subjectId}','${e.chapterId}',${n})">${_TT_DIFF_ICON[n]} ${_DIFF_NAMES[n]}</button>`).join('')}
+       </div>`
+    : `<p class="tt-sess-note">This one has no topic set - open your subject list to practise it.</p>`;
+
+  return `<div class="tt-sess">
+    <div class="tt-sess-head">
+      <span class="tt-sess-ico">${e.icon || '📚'}</span>
+      <span class="tt-sess-info">
+        <span class="tt-sess-title">${_profEsc(e.label)}</span>
+        ${meta ? `<span class="tt-sess-meta">${meta}</span>` : ''}
+      </span>
+    </div>
+    ${e.notes ? `<p class="tt-sess-note">${_profEsc(e.notes)}</p>` : ''}
+    <div class="tt-opts">${opts}</div>
+  </div>`;
+}
+
+function startTimetableSession(subjectId, chapterId, diff) {
+  closeTimetableDay();
+  startScheduledSession(subjectId, chapterId, diff || null);
+}
+window.startTimetableSession = startTimetableSession;
 
 // ── WHAT I HAVE DONE (child timetable screen) ──
 // The child's half of the calendar activity layer. The parent gets filters and
 // a month grid to audit with; a child gets a short, recent, encouraging recap.
 //
 // ⚠ Only what they DID. There is no "missed sessions" counterpart here on
-// purpose — on a parent's calendar an unticked plan row is information; on a
+// purpose - on a parent's calendar an unticked plan row is information; on a
 // child's own screen it is a list of their failures, served every time they
 // open it. Nothing here should make a child avoid this screen.
 async function renderMyActivity(studentId) {
@@ -6673,6 +7938,7 @@ async function renderMyActivity(studentId) {
 }
 
 async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswers, showHints, assignmentId) {
+  if (typeof PackLoader !== 'undefined') await PackLoader.ensure(subjectId).catch(() => {});
   const pack = activateSubjectPack(subjectId);
   if (!pack) { toast('Subject coming soon! 📚', 2500); return; }
 
@@ -6682,7 +7948,7 @@ async function startAssignmentDirect(subjectId, chapterId, difficulty, showAnswe
   }
 
   // Which assignment this round IS. Without it, finishing the questions could
-  // never mark the assignment done — completed_at was only ever written by the
+  // never mark the assignment done - completed_at was only ever written by the
   // parent's manual "✓ Done" button, so a child who actually did the work left
   // no completion record anywhere.
   _activeAssignmentId = assignmentId || null;
@@ -6797,14 +8063,14 @@ function _splitPassage(q) {
   return { passage, ask };
 }
 
-// Questions sharing a stem are grouped by the stem itself, not by chapter —
+// Questions sharing a stem are grouped by the stem itself, not by chapter -
 // one chapter holds several unrelated texts.
 //
 // ⚠ SHARED stems only (2+ questions). The same "big block then a question"
 // shape also describes a single illustrated maths question, where the <div>
 // holds one SVG diagram belonging to that one question. Those are singletons:
 // they cannot repeat, so they are not a problem, and treating them as passages
-// would have pulled every illustrated question but one OUT of the paper —
+// would have pulled every illustrated question but one OUT of the paper -
 // grade 5 maths alone has 21 such stems, 19 of them singletons.
 // Genuine shared stems: the English/French comprehension texts, and the
 // map-skills SVG that six history questions all read from.
@@ -6855,7 +8121,7 @@ function generatePrintablePaper() {
   const sectionAMarks = sectionACount * 2;
   const sectionBMarks = sectionBCount * 4;
 
-  // Same restrictions startChapterDirect()/assembleExamPaper() enforce — a
+  // Same restrictions startChapterDirect()/assembleExamPaper() enforce - a
   // locked chapter or a difficulty cap must hold for the printable paper too.
   const lockedChs = new Set(DB.restrictions?.lockedChapters || []);
   const maxDiff   = Math.min(4, Math.max(1, DB.restrictions?.maxDifficulty ?? 4));
@@ -6900,17 +8166,40 @@ function generatePrintablePaper() {
   // adding a section, so the paper stays within its planned marks total.
   const secATarget = Math.max(0, sectionACount - comp.length);
 
-  // Ensure chapter spread for Section A
+  // Ensure chapter spread for Section A.
+  //
+  // ⚠ The tail used to be filled straight from one flat pool, which meant the
+  //   BIGGEST chapter supplied most of it. grade5-french holds 515 present-tense
+  //   questions out of 2,060 - a quarter of the pack, and revision of Grades 3-4
+  //   at that - so a quarter of every paper's tail was present tense however
+  //   many chapters the first pass had already covered.
+  //
+  //   The fill is now round-robin over the chapters, so a chapter's SIZE stops
+  //   deciding how much of the paper it gets. How much it deserves is
+  //   examWeight's job, and a chapter weighted 3 takes a turn three times as
+  //   often as one weighted 1.
   const secA = [];
   const usedIds = new Set();
   const chapters = [...new Set(_subjectQs.map(q => q.chapterId))];
-  // 1-2 questions per chapter first pass
-  for (const ch of chapters) {
-    const pick = secAPool.find(q => q.chapterId === ch && !usedIds.has(q.id));
-    if (pick) { secA.push(pick); usedIds.add(pick.id); }
-    if (secA.length >= secATarget) break;
+  const _chWeight = id => {
+    const ch = (typeof CHAPTERS !== 'undefined' ? CHAPTERS : []).find(c => c.id === id);
+    const w = ch && Number.isFinite(ch.examWeight) ? ch.examWeight : 1;
+    return Math.max(1, w);   // 0 means "not in exams", and such a chapter is not in the pool anyway
+  };
+  // Chapters take turns; a heavier chapter simply appears more than once in the
+  // rota. Shuffled so the same manifest order does not open every paper.
+  const rota = shuffle(chapters.flatMap(id => Array(_chWeight(id)).fill(id)));
+  let guard = 0;
+  while (secA.length < secATarget && guard++ < secATarget * 40) {
+    let tookOne = false;
+    for (const ch of rota) {
+      if (secA.length >= secATarget) break;
+      const pick = secAPool.find(q => q.chapterId === ch && !usedIds.has(q.id));
+      if (pick) { secA.push(pick); usedIds.add(pick.id); tookOne = true; }
+    }
+    if (!tookOne) break;   // every chapter is exhausted
   }
-  // Fill remaining from pool, sorted easy→hard
+  // Last resort only: a subject too small to fill the paper by rota.
   for (const q of secAPool) {
     if (secA.length >= secATarget) break;
     if (!usedIds.has(q.id)) { secA.push(q); usedIds.add(q.id); }
@@ -6957,7 +8246,10 @@ function generatePrintablePaper() {
   function renderQ(q, num, marks, overrideHtml) {
     const stripHTML = s => s.replace(/<[^>]+>/g, '');
     let body = `<div class="q-text">${_prettyMath(overrideHtml != null ? overrideHtml : q.question)}`;
-    if ((q.type === 'mcq' || q.type === 'multi') && q.options) {
+    if (q.type === 'symmetry-line') {
+      body += _symLineStaticSvg(q, false, 'symline-print');
+      body += `<div class="draw-note">Draw directly on the shape using a ruler.</div>`;
+    } else if ((q.type === 'mcq' || q.type === 'multi') && q.options) {
       body += `<div class="mcq-opts">`;
       ['A','B','C','D'].forEach((ltr, i) => {
         body += `<span class="mcq-opt"><span class="bubble"></span> <b>${ltr}.</b> ${_prettyMath(q.options[i] || '')}</span>`;
@@ -6982,7 +8274,7 @@ function generatePrintablePaper() {
   // columns so the prose gets the full width of the sheet.
   const compRows = comp.length ? `
       <tr class="comp-block"><td colspan="3" style="padding:4px 0 2px">
-        <div class="comp-intro">Comprehension — read the passage, then answer questions 1–${comp.length}.</div>
+        <div class="comp-intro">Comprehension - read the passage, then answer questions 1–${comp.length}.</div>
         ${chosenGroup.passage}
       </td></tr>
       ${comp.map((c, i) => renderQ(c.q, i + 1, 2, c.ask)).join('')}` : '';
@@ -7001,13 +8293,15 @@ function generatePrintablePaper() {
     <article class="answer">
       <div class="answer-head"><b>Question ${num}</b> · ${chName(q.chapterId)} · ${marks} marks</div>
       <div class="answer-question">${_prettyMath(ask != null ? ask : q.question)}</div>
-      <div><b>Answer:</b> ${_prettyMath(String(q.answer))}</div>
+      <div><b>Answer:</b> ${q.type === 'symmetry-line'
+        ? _symLineStaticSvg(q, true, 'symline-print symline-key')
+        : _prettyMath(String(q.answer))}</div>
       <div class="answer-working"><b>Working / explanation:</b> ${_prettyMath(q.explanation || 'No worked explanation is available for this question.')}</div>
     </article>`).join('');
   const answerKeyHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
-    <title>Answer Key — Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} Practice Paper ${year}</title>
-    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}@media print{body{margin:10px}.no-print{display:none}}</style>
-    </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key — Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p></div>${answerRows}</body></html>`;
+    <title>Answer Key - Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} Practice Paper ${year}</title>
+    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}@media print{body{margin:10px}.no-print{display:none}}</style>
+    </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key - Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p></div>${answerRows}</body></html>`;
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -7055,11 +8349,16 @@ function generatePrintablePaper() {
   .ans-line { display: flex; align-items: flex-end; gap: 6px; margin-top: 8px; }
   .ans-label { font-size: 9pt; color: #555; white-space: nowrap; }
   .ans-blank { flex: 1; max-width: 200px; border-bottom: 1px solid #444; height: 18px; }
+  .symline-print { display:block; width:280px; max-width:100%; margin:8px auto; background:#fff; }
+  .symline-paper { fill:#fff; stroke:#cbd5e1; }
+  .symline-shape { fill:#fff; stroke:#111; stroke-width:3; }
+  .symline-answer { stroke:#15803d; stroke-width:4; stroke-dasharray:9 5; }
+  .draw-note { text-align:center; font-size:8.5pt; color:#555; margin-top:3px; }
 
   .marks-header { text-align:right; font-size:9pt; color:#555; padding: 3px 4px 3px 0; font-style:italic; }
 
   /* The paper is a separate document, so _prettyMath()'s markup needs its own
-     copy of these rules — style.css is not loaded in the print window. */
+     copy of these rules - style.css is not loaded in the print window. */
   .frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:-0.55em; margin:0 .18em; line-height:1.05; font-weight:bold; }
   .frac .fr-n { padding:0 .28em; }
   .frac .fr-d { padding:0 .28em; border-top:1.5px solid currentColor; }
@@ -7086,11 +8385,11 @@ function generatePrintablePaper() {
   <!-- ⚠ The letterhead used to read "Republic of Mauritius - Ministry of
        Education" above "End-of-Year Assessment". Printed out and handed to a
        child, or left on a teacher's desk, that is a generated practice sheet
-       presenting itself as a government document — the small-print disclaimer
+       presenting itself as a government document - the small-print disclaimer
        at the very bottom does not undo the top of the page. It also is not the
        PSAC format; it is this app's own layout. Both now say so. -->
   <div class="header-box">
-    <div class="ministry">PSAC Exam Practice &mdash; practice paper</div>
+    <div class="ministry">PSAC Exam Practice - practice paper</div>
     <div class="title">Exam-Style Practice Paper ${year}</div>
     <div class="subtitle">${_activeSubjectLabel().name} &nbsp;|&nbsp; Grade ${_activeSubjectLabel().grade}</div>
     <div class="meta">
@@ -7202,7 +8501,7 @@ function renderExamQuestion() {
   // Nav
   document.getElementById('exam-prev-btn').disabled = S.exam.idx === 0;
   // ⚠ NOT "Review". A child at the end of an exam wants their score, and
-  // "Review" promises exactly that — but the only review worth the name is on
+  // "Review" promises exactly that - but the only review worth the name is on
   // the results screen, after submitting. Labelling the last-question button
   // "Review" sent children tapping something that could never do what it said,
   // while the control they actually needed (Submit) was a small pill in the top
@@ -7250,7 +8549,7 @@ document.getElementById('exam-prev-btn').addEventListener('click', () => {
   saveCurrentExamAnswer(); if (S.exam.idx > 0) { S.exam.idx--; renderExamQuestion(); }
 });
 // ⚠ On the LAST question the body used to be `if (idx < len-1) { idx++ }`,
-// which is false there — so the tap did nothing whatsoever, silently, on the one
+// which is false there - so the tap did nothing whatsoever, silently, on the one
 // screen where a child is most anxious to move on. It opens the check sheet now,
 // which is one tap from submitting and their score.
 document.getElementById('exam-next-btn').addEventListener('click', () => {
@@ -7281,7 +8580,7 @@ function openExamReview() {
   if (sum) {
     sum.textContent = blanks.length
       ? `${total - blanks.length} of ${total} answered`
-      : `All ${total} questions answered — nice work!`;
+      : `All ${total} questions answered - nice work!`;
   }
 
   // The warning a child needs BEFORE submitting, in their own terms. Silence
@@ -7315,7 +8614,7 @@ function openExamReview() {
 }
 window.openExamReview = openExamReview;
 
-// ── Student Home — mission + badge helpers ────────────────────────────────────
+// ── Student Home - mission + badge helpers ────────────────────────────────────
 function _renderShMissions() {
   const slot = document.getElementById('sh-missions-slot');
   if (!slot || !ACTIVE_STUDENT_ID) { if (slot) slot.innerHTML = ''; return; }
@@ -7325,6 +8624,9 @@ function _renderShMissions() {
     ? 'Try 5 warm-up questions. Hints are always ready.'
     : 'Keep sharp with 5 quick questions.';
   const weakOk = _planAllowsFeature('weak_area_drill');
+  // Only offered when there is something to fix. A permanent "0 to fix" card
+  // would be a standing reminder of failure on a nine-year-old's home screen.
+  const toFix = _practisableMistakes().length;
   slot.innerHTML = `
     <div class="sh-mission-row">
       <button class="sh-mission-card" onclick="startKidMission()">
@@ -7343,10 +8645,18 @@ function _renderShMissions() {
         ${!weakOk ? '<span class="sh-mission-lock">🔒</span>' : ''}
       </button>
     </div>
+    ${toFix ? `<button class="sh-mission-card sh-mission-fix" onclick="startMistakeDrill()" style="width:100%;margin-top:.55rem">
+      <span class="sh-mission-icon">🩹</span>
+      <div class="sh-mission-info">
+        <span class="sh-mission-title">Fix my mistakes</span>
+        <span class="sh-mission-sub">${toFix} question${toFix === 1 ? '' : 's'} you got wrong. Get one right twice and it's gone.</span>
+      </div>
+      <span class="sh-mission-arrow">›</span>
+    </button>` : ''}
     <button class="sh-mission-card sh-mission-schedule" id="sh-schedule-card" onclick="showScreen('schedule')" style="width:100%;margin-top:.55rem">
       <span class="sh-mission-icon">🗓️</span>
       <div class="sh-mission-info">
-        <span class="sh-mission-title">Today's Schedule</span>
+        <span class="sh-mission-title">Today's Timetable</span>
         <span class="sh-mission-sub" id="sh-schedule-sub">Loading…</span>
       </div>
       <span class="sh-mission-arrow">›</span>
@@ -7410,6 +8720,11 @@ const StudentHome = (() => {
     if (nameEl) {
       const kidName = typeof DB !== 'undefined' && DB?.name;
       nameEl.textContent = kidName ? `Hey, ${kidName}! 👋` : 'Hey there! 👋';
+    }
+    const installBtn = document.getElementById('sh-install-profile');
+    if (installBtn) {
+      const kidName = typeof Auth !== 'undefined' ? (Auth.getActiveAccount?.()?.name || 'me') : 'me';
+      installBtn.textContent = `📲 Install for ${kidName}`;
     }
     tab('board');
     showScreen('student-home');
@@ -7533,10 +8848,11 @@ const SubjectHub = (() => {
   let _packId = null;
   let _shFilter = 'all';
 
-  function open(packId) {
+  async function open(packId) {
     if (packId) { _packId = packId; _shFilter = 'all'; }
     const pack = (typeof SUBJECT_PACKS !== 'undefined') && SUBJECT_PACKS?.find(p => p.id === _packId);
     if (!pack) { PracticeHub.open(); return; }
+    if (typeof PackLoader !== 'undefined') await PackLoader.ensure(_packId).catch(() => {});
     activateSubjectPack(_packId);
     const crumbSubj = document.getElementById('subj-hub-crumb-subject');
     if (crumbSubj) crumbSubj.textContent = pack.subject || pack.name || '';
@@ -7587,7 +8903,7 @@ const SubjectHub = (() => {
       <div class="ch-sum-tile"><span class="ch-sum-num${doneToday ? ' good' : ''}">${doneToday}</span><span class="ch-sum-lbl">Practised today</span></div>
       <div class="ch-sum-bar">
         <div class="ch-sum-bar-head"><span>${unique} different bank questions recorded${available ? ` · ${available} questions currently loaded` : ''}</span></div>
-        <div class="ch-sum-last">${lastMs ? `Last practised: ${_chapterWhen(lastMs)}` : 'Nothing practised yet — pick any chapter to begin.'}</div>
+        <div class="ch-sum-last">${lastMs ? `Last practised: ${_chapterWhen(lastMs)}` : 'Nothing practised yet - pick any chapter to begin.'}</div>
       </div>
     </div>`;
 
@@ -7624,7 +8940,7 @@ const SubjectHub = (() => {
       grid = `<div class="ch-grid">${shownRegular.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
       if (shownEnrichment.length) {
         grid += `<div class="ch-section"><span class="ch-section-line"></span><span class="ch-section-label">✨ Bonus topics</span><span class="ch-section-line"></span></div>
-          <p class="ch-section-note">Extra themes drawn from the syllabus — great once the main chapters feel easy.</p>
+          <p class="ch-section-note">Extra themes drawn from the syllabus - great once the main chapters feel easy. Some questions here also appear in the main chapters, gathered together by theme.</p>
           <div class="ch-grid">${shownEnrichment.map(ch => _chapterCard(ch, accent)).join('')}</div>`;
       }
     }
@@ -7757,7 +9073,9 @@ function submitExam() {
     chapterStats[q.chapterId].total++;
     const ans = S.exam.answers[i];
     const ok = ans != null && checkAnswer(q, ans);
-    if (ok) { correct++; chapterStats[q.chapterId].correct++; }
+    // Getting it right in an exam retires a recorded mistake too - the child
+    // learned it, and where they proved it does not matter.
+    if (ok) { correct++; chapterStats[q.chapterId].correct++; _retireMistake(q.id); }
     else if (ans != null) _recordMistake(q, ans, q.chapterId, 'exam');
     recordAnswer(q.chapterId, ok, 'exam', ans != null && ans !== '' ? q.id : undefined);
   });
@@ -7767,7 +9085,7 @@ function submitExam() {
   if (pct > DB.stats.bestScore) DB.stats.bestScore = pct;
   _dayBucket().e++;
   // `date` was toLocaleDateString() ONLY, and _renderExamTimeline read it back
-  // with new Date(e.date) — which is Invalid Date for every en-GB browser,
+  // with new Date(e.date) - which is Invalid Date for every en-GB browser,
   // because "30/08/2026" is not a format Date can parse. So the parent's exam
   // chips printed "Invalid Date" on exactly the devices this app targets.
   // `iso` is the machine-readable one; `date` stays for rows already written
@@ -7838,23 +9156,23 @@ function _renderExamReview() {
   if (toggle) {
     toggle.classList.toggle('hidden', wrong.length === 0);
     toggle.textContent = _examReviewWrongOnly
-      ? `Showing your ${wrong.length} mistake${wrong.length === 1 ? '' : 's'} — show all ${rows.length}`
+      ? `Showing your ${wrong.length} mistake${wrong.length === 1 ? '' : 's'} - show all ${rows.length}`
       : `Show only what I got wrong (${wrong.length})`;
   }
 
   const shown = _examReviewWrongOnly ? wrong : rows;
   if (!shown.length) {
     box.innerHTML = `<p class="text-sm text-gray-400 text-center py-6">
-      Nothing wrong to review — every question correct. 🎉</p>`;
+      Nothing wrong to review - every question correct. 🎉</p>`;
     return;
   }
 
   box.innerHTML = shown.map(({ q, i, ua, ok, answered, flagged }) => {
     const ch = CHAPTERS.find(c => c.id === q.chapterId);
     // A symmetry answer is an array of [row,col] pairs. Interpolating it printed
-    // "Correct: 1,4,2,6,2,5" — a run of coordinates that means nothing to a
+    // "Correct: 1,4,2,6,2,5" - a run of coordinates that means nothing to a
     // child. Say what happened in words instead.
-    const isSym = q.type === 'symmetry';
+    const isSym = q.type === 'symmetry' || q.type === 'symmetry-line';
     const yours = isSym ? '' : _profEsc(String(ua ?? ''));
     return `<div class="border-l-4 ${ok ? 'border-green-400' : 'border-red-400'} pl-4 py-2">
       <div class="flex items-start gap-2">
@@ -7865,7 +9183,7 @@ function _renderExamReview() {
           </div>
           <div class="font-medium text-gray-800 dark:text-gray-200">${_prettyMath(q.question)}</div>
           ${ok ? '' : (isSym
-            ? `<div class="mt-1 text-red-600 dark:text-red-400">${answered ? 'Not quite' : 'Not answered'} — the correct cells are shown on the grid during practice.</div>`
+            ? `<div class="mt-1 text-red-600 dark:text-red-400">${answered ? 'Not quite' : 'Not answered'} - the correct ${q.type === 'symmetry-line' ? 'line or lines' : 'cells'} are shown during practice.</div>`
             : `<div class="mt-1 text-red-600 dark:text-red-400">Your answer: ${answered ? yours : '<i>(not answered)</i>'}</div>`)}
           ${isSym ? '' : `<div class="mt-1 text-green-600 dark:text-green-400 font-medium">✓ Correct: ${_prettyMath(_profEsc(String(q.answer ?? '')))}</div>`}
           <div class="mt-1 text-gray-500 dark:text-gray-400 text-xs">${q.explanation || ''}</div>
@@ -7889,6 +9207,10 @@ document.getElementById('results-home-btn').addEventListener('click', () => Stud
 
 // ── PRACTICE MODE ─────────────────────────────
 document.getElementById('practice-back-btn').addEventListener('click', () => {
+  // A mistake drill has no chapter to go back to. Branch HERE rather than
+  // assigning .onclick at launch: this listener would still fire as well, and
+  // the round would navigate twice.
+  if (S.practice.chapterId === _FIX_CHAPTER_ID) { _fixBackToHome(); return; }
   _clearPracticeResume(S.practice.chapterId);
   if (typeof SubjectHub !== 'undefined' && ACTIVE_PACK) SubjectHub.back();
   else showScreen('chapter-select');
@@ -7984,7 +9306,7 @@ function loadPracticeQuestion() {
   if (_hintBtn) {
     _hintBtn.disabled = false;
     _hintBtn.classList.remove('opacity-50');
-    // Per-assignment only. NOT restrictions.hintsDisabled — that one governs the
+    // Per-assignment only. NOT restrictions.hintsDisabled - that one governs the
     // first-time onboarding tip callouts, which are a different feature.
     _hintBtn.classList.toggle('hidden', S.practice.showHints === false);
   }
@@ -8025,10 +9347,15 @@ function _renderPracticeReviewAnswer(q, saved) {
   const fb = document.getElementById('practice-feedback');
   fb.className = `pr-feedback ${saved.correct ? 'feedback-correct' : 'feedback-wrong'}`;
   if (saved.skipped) {
+    const skippedAnswer = q.type === 'symmetry-line'
+      ? 'You skipped this - the correct line or lines are shown on the diagram.'
+      : q.type === 'symmetry'
+      ? 'You skipped this - the correct cells are shown on the grid.'
+      : `You skipped this - answer: <span class="text-green-600 dark:text-green-400">${_prettyMath(String(q.answer))}</span>`;
     fb.innerHTML = S.practice.showAnswers === false
       ? `<div class="flex items-center gap-3"><span class="text-2xl">⏭️</span><div class="font-bold">You skipped this one.</div></div>`
       : `<div class="flex items-start gap-3"><span class="text-2xl">💡</span><div class="flex-1 min-w-0">
-           <div class="font-bold mb-1">You skipped this - answer: <span class="text-green-600 dark:text-green-400">${_prettyMath(String(q.answer))}</span></div>
+           <div class="font-bold mb-1">${skippedAnswer}</div>
            <div class="text-sm">${_prettyMath(q.explanation || "")}</div>${_learnMoreHTML(q)}</div></div>`;
   } else if (S.practice.showAnswers === false) {
     fb.innerHTML = `<div class="flex items-center gap-3"><span class="text-2xl">${saved.correct ? '🎉' : '❌'}</span>
@@ -8036,6 +9363,8 @@ function _renderPracticeReviewAnswer(q, saved) {
   } else {
     const answerLine = q.type === 'symmetry'
       ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
+      : q.type === 'symmetry-line'
+      ? 'Your correctly placed lines are green. The correct line or lines you missed are shown as orange dashes.'
       : `Your answer wasn't quite right. Correct answer: <b>${_prettyMath(String(q.answer))}</b>`;
     fb.innerHTML = `<div class="flex items-start gap-3"><span class="text-2xl">${saved.correct ? '🎉' : '💡'}</span>
       <div class="flex-1 min-w-0"><div class="font-bold mb-1">${saved.correct ? 'Correct! Well done!' : answerLine}</div>
@@ -8047,16 +9376,72 @@ function _renderPracticeReviewAnswer(q, saved) {
   _revealNextButton(saved.correct, saved.skipped ? '👀 Reviewed' : undefined);
 }
 
+const _hintWords = s => String(s == null ? '' : s)
+  .replace(/<[^>]+>/g, ' ')
+  .toLowerCase()
+  .replace(/[\u2018\u2019]/g, "'")
+  .replace(/[\u201c\u201d]/g, '"')
+  // The apostrophe SPLITS words rather than joining them: French elision writes
+  // the answer as j'aimerais / l'oiseau / qu'il, and keeping each of those as a
+  // single token hid the leak completely - hint 2 could read "J'aimerais visiter
+  // Paris" and still be judged clean.
+  .replace(/[^a-z0-9\u00e0-\u00ff]+/g, ' ')
+  .trim()
+  .split(/\s+/)
+  .filter(Boolean);
+
+// Does this sentence let a child pick the right option without knowing the
+// topic? True when it quotes a run of words that occurs in the answer and in
+// NO distractor - recognising it in the list is then the whole task. A run of 3
+// is enough on a four-option list; shorter answers are matched whole.
+function _sentenceGivesAnswer(sentence, q) {
+  const ans = _hintWords(q.answer);
+  if (!ans.length) return false;
+  const n = Math.min(3, ans.length);
+  const hay = ' ' + _hintWords(sentence).join(' ') + ' ';
+  const others = (q.options || [])
+    .filter(o => o !== q.answer)
+    .map(o => ' ' + _hintWords(o).join(' ') + ' ');
+  for (let i = 0; i + n <= ans.length; i++) {
+    const run = ' ' + ans.slice(i, i + n).join(' ') + ' ';
+    if (hay.includes(run) && !others.some(o => o.includes(run))) return true;
+  }
+  return false;
+}
+
+function _explanationSentences(html) {
+  if (!html) return [];
+  const plain = String(html).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  return (plain.match(/[^.!?]+[.!?]*/g) || [])
+    .map(t => t.trim())
+    .filter(t => t.length > 12);
+}
+
 function _buildHints(q) {
   const ch = CHAPTERS.find(c => c.id === q.chapterId);
   const h1 = q.hint || `Think about what you know about ${ch ? ch.name : 'this topic'}.`;
-  let h2 = '';
-  if (q.explanation) {
-    const plain = q.explanation.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-    const firstDot = plain.search(/[.!?]/);
-    h2 = firstDot > 0 ? plain.slice(0, firstDot + 1) : plain.slice(0, 120);
+  if (q.type === 'symmetry-line') {
+    return [
+      h1,
+      'Imagine folding the shape. A correct line makes both halves cover each other exactly.',
+      'Look for matching corners and equal distances on both sides, then drag a straight line through the centre.',
+    ];
   }
-  h2 = h2 || 'Re-read the question slowly and identify the key numbers.';
+
+  // Hint 2 is not authored - it is lifted from the explanation. On a
+  // multiple-choice question the explanation almost always OPENS by quoting the
+  // correct option ("<b>He sometimes eats</b>" is correct...), so taking the
+  // first sentence handed the answer over on 81% of them, measured. Take the
+  // first sentence that does not identify an option instead: still a real step
+  // up from the rule in hint 1, but the child still has to choose.
+  const sentences = _explanationSentences(q.explanation);
+  let h2 = q.type === 'mcq'
+    ? sentences.find(t => !_sentenceGivesAnswer(t, q)) || ''
+    : sentences[0] || '';
+  h2 = h2 || (q.type === 'mcq'
+    ? 'Check each option against the rule above - the ones that break it can go.'
+    : 'Re-read the question slowly and identify the key numbers.');
+
   const h3 = q.type === 'mcq'
     ? 'Try eliminating options you know are wrong - that narrows it down quickly.'
     : `The answer is <b>${q.answer}</b> - try to understand why before moving on.`;
@@ -8113,12 +9498,22 @@ document.getElementById('practice-prev-btn').addEventListener('click', () => {
 // only exists on the subject dashboard, so that is what "select this subject
 // and see the continue option" actually means - chapter-select is one tap
 // further in and would not show it at all.
+// ⚠ Goes back to the CHAPTER LIST, not the dashboard. Sending a child who
+// paused mid-chapter to the top-level home screen threw away the one thing they
+// still had - their place in the subject - and made "continue later" feel like
+// being ejected from the app. This is the same destination the "← Chapters"
+// button uses, minus the _clearPracticeResume() that button calls: the whole
+// point here is that the resume slot survives.
 function pausePracticeForLater() {
-  if (!S.practice.qs.length) { showScreen('dashboard'); return; }
+  const backToChapters = () => {
+    if (S.practice.chapterId === _FIX_CHAPTER_ID) { _fixBackToHome(); return; }
+    if (typeof SubjectHub !== 'undefined' && ACTIVE_PACK) SubjectHub.back();
+    else showScreen('chapter-select');
+  };
+  if (!S.practice.qs.length) { backToChapters(); return; }
   _saveResume();
-  const subj = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.subject) || 'this subject';
-  toast(`Saved — pick up where you left off next time you open ${subj}.`, 3500);
-  showScreen('dashboard');
+  toast('Saved - tap this chapter again to pick up where you left off.', 3500);
+  backToChapters();
 }
 
 function pauseExamForLater() {
@@ -8134,7 +9529,7 @@ function pauseExamForLater() {
   _releaseWakeLock(); _unlockOrientation();
   S.exam.qs = []; S.exam.answers = {}; S.exam.flagged = new Set();
   const subj = (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK?.subject) || 'this subject';
-  toast(`Saved — pick up where you left off next time you open ${subj}.`, 3500);
+  toast(`Saved - pick up where you left off next time you open ${subj}.`, 3500);
   showScreen('dashboard');
 }
 
@@ -8155,7 +9550,7 @@ function practiceSubmit() {
   const ok = checkAnswer(q, ua);
 
   // This is the event that turns the child's family's referral into credits for
-  // whoever invited them — the anti-abuse rule is that a sign-up alone earns
+  // whoever invited them - the anti-abuse rule is that a sign-up alone earns
   // nothing, a child actually practising does. Fire-and-forget and idempotent:
   // the RPC takes no arguments, works out who is calling from the session token,
   // and short-circuits after the first success. It must never delay or block the
@@ -8230,6 +9625,8 @@ function practiceSubmit() {
   } else {
     const answerLine = q.type === 'symmetry'
       ? 'The correct cells are shown in <b style="color:#22c55e">green</b>. Missed cells in orange, wrong selections in red.'
+      : q.type === 'symmetry-line'
+      ? 'Your correctly placed lines are green. The correct line or lines you missed are shown as orange dashes.'
       : `Not quite. Correct answer: <b>${_prettyMath(String(q.answer))}</b>`;
     fb.innerHTML = `
       <div class="flex items-start gap-3">
@@ -8262,7 +9659,7 @@ function practiceSubmit() {
 // Check Answer and Next used to occupy the SAME spot, so the instant feedback
 // rendered, the button under the child's thumb changed meaning and a second tap
 // skipped the explanation. The action bar now has three fixed lanes and Next
-// lives in its own — a repeat tap lands on nothing.
+// lives in its own - a repeat tap lands on nothing.
 //
 // The short disable is belt to that braces (a fast double-tap while the browser
 // is still painting), not the fix itself, so it is brief enough not to feel
@@ -8280,8 +9677,24 @@ function _revealNextButton(wasCorrect, verdict) {
   next.classList.remove('hidden');
   next.disabled = true;
   setTimeout(() => { next.disabled = false; }, 250);
-  document.getElementById('practice-feedback')
-    ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  _scrollPracticeFeedbackIntoView();
+}
+
+// 'nearest' only brings the feedback inside the VIEWPORT - the fixed action
+// bar then covered it (bottom 727px vs bar top 679px at 360×740), so the
+// explanation, the one thing a wrong answer is for, was hidden until the child
+// scrolled. Measure against the bar and move exactly as far as needed.
+function _scrollPracticeFeedbackIntoView() {
+  const fb = document.getElementById('practice-feedback');
+  if (!fb || fb.classList.contains('hidden')) return;
+  const bar = document.querySelector('#screen-practice .pr-actions');
+  const limit = bar ? bar.getBoundingClientRect().top - 12 : window.innerHeight;
+  const r = fb.getBoundingClientRect();
+  if (r.bottom <= limit) return;
+  const hdr = document.querySelector('header');
+  const minTop = (hdr ? hdr.getBoundingClientRect().bottom : 0) + 12;
+  const by = Math.min(r.bottom - limit, Math.max(0, r.top - minTop));
+  if (by > 0) window.scrollBy({ top: by, behavior: 'smooth' });
 }
 
 function practiceSkip() {
@@ -8301,11 +9714,16 @@ function practiceSkip() {
         <div class="font-bold">Skipped - keep going!</div>
       </div>`;
   } else {
+    const skippedAnswer = q.type === 'symmetry-line'
+      ? 'The correct line or lines are shown on the diagram.'
+      : q.type === 'symmetry'
+      ? 'The correct cells are shown on the grid.'
+      : `Answer: <span class="text-green-600 dark:text-green-400">${_prettyMath(String(q.answer))}</span>`;
     fb.innerHTML = `
       <div class="flex items-start gap-3">
         <span class="text-2xl">💡</span>
         <div class="flex-1 min-w-0">
-          <div class="font-bold mb-1">Answer: <span class="text-green-600 dark:text-green-400">${_prettyMath(String(q.answer))}</span></div>
+          <div class="font-bold mb-1">${skippedAnswer}</div>
           <div class="text-sm">${_prettyMath(q.explanation || "")}</div>
           ${_learnMoreHTML(q)}
         </div>
@@ -8316,7 +9734,7 @@ function practiceSkip() {
   fb.classList.add('feedback-shake');
   _logPracticeAnswer(q, '', false, true);
   S.practice.session.attempted++;
-  recordAnswer(S.practice.chapterId, false);
+  recordAnswer(q.chapterId || S.practice.chapterId, false);
   updateSessionStats();
   document.getElementById("practice-submit-btn").classList.add("hidden");
   document.getElementById("practice-skip-btn").classList.add("hidden");
@@ -8333,10 +9751,10 @@ function _logPracticeAnswer(q, userAnswer, correct, skipped) {
   const log = (S.practice.session.log = S.practice.session.log || []);
   log.push({
     question:      q.question,
-    // A symmetry grid has no typeable answer — the result is shown on the grid
+    // A symmetry grid has no typeable answer - the result is shown on the grid
     // itself, so the review says so in words rather than printing coordinates.
-    userAnswer:    q.type === 'symmetry' ? '' : String(userAnswer ?? ''),
-    correctAnswer: q.type === 'symmetry' ? '' : String(q.answer ?? ''),
+    userAnswer:    (q.type === 'symmetry' || q.type === 'symmetry-line') ? '' : String(userAnswer ?? ''),
+    correctAnswer: (q.type === 'symmetry' || q.type === 'symmetry-line') ? '' : String(q.answer ?? ''),
     explanation:   q.explanation || '',
     type:          q.type,
     correct:       !!correct,
@@ -8346,7 +9764,13 @@ function _logPracticeAnswer(q, userAnswer, correct, skipped) {
   // patience; putting those in the parent's "what she's getting wrong" list
   // would drown the answers she actually got wrong, which are the teachable ones.
   if (!correct && !skipped) {
-    _recordMistake(q, userAnswer, S.practice.chapterId, 'practice');
+    // q.chapterId first, matching recordAnswer() below: a mixed round runs
+    // under a synthetic S.practice.chapterId, and filing the mistake under
+    // that would name a chapter the child has never heard of - and make it
+    // unresolvable when the drill tries to serve it back.
+    _recordMistake(q, userAnswer, q.chapterId || S.practice.chapterId, 'practice');
+  } else if (correct && !skipped && _retireMistake(q.id)) {
+    S.practice.session.fixed = (S.practice.session.fixed || 0) + 1;
   }
 }
 
@@ -8367,21 +9791,75 @@ function toggleLearnMore(btn) {
 }
 
 function _showRoundComplete() {
-  // A PARENT assignment finishes here, not in showAssignmentComplete() — that
+  // A PARENT assignment finishes here, not in showAssignmentComplete() - that
   // one belongs to the guest/teacher ASSIGNMENT_MODE flow. This is the only
   // point at which "the child actually did the assignment" becomes known.
   _finishAssignmentIfAny();
   const { attempted, correct } = S.practice.session;
   const acc = attempted ? Math.round(correct / attempted * 100) : 0;
   const stars = acc >= 80 ? '⭐⭐⭐' : acc >= 50 ? '⭐⭐' : '⭐';
-  const chName = CHAPTERS.find(c => c.id === S.practice.chapterId)?.name || 'Practice';
+  const chName = S.practice.chapterId === _FIX_CHAPTER_ID
+    ? 'Fix My Mistakes'
+    : (CHAPTERS.find(c => c.id === S.practice.chapterId)?.name || 'Practice');
   const xpEarned = correct * XP_PER_ANSWER;
+  // A drill's real score is not the percentage - it is how many questions
+  // left the list for good. Reported wherever the round happened, because a
+  // mistake can be retired in ordinary practice too.
+  const fixed = S.practice.session.fixed || 0;
   const el = id => document.getElementById(id);
   if (el('rc-stars'))    el('rc-stars').textContent    = stars;
   if (el('rc-chapter'))  el('rc-chapter').textContent  = chName;
   if (el('rc-score'))    el('rc-score').textContent    = `${correct}/${attempted}`;
   if (el('rc-accuracy')) el('rc-accuracy').textContent = `${acc}%`;
   if (el('rc-xp'))       el('rc-xp').textContent       = `+${xpEarned}`;
+  const fixEl = el('rc-fixed');
+  if (fixEl) {
+    fixEl.textContent = fixed ? `\u{1FA79} ${fixed} mistake${fixed === 1 ? '' : 's'} fixed for good` : '';
+    fixEl.classList.toggle('hidden', !fixed);
+  }
+  // Both buttons are relabelled on EVERY round, which is what keeps a drill's
+  // wording from surviving into the next chapter round.
+  const isFix = S.practice.chapterId === _FIX_CHAPTER_ID;
+
+  // What this set actually did to the chapter, in the chapter's own terms.
+  // \u26a0 Never "mastered", and never a completion percentage read off one set:
+  // the sentence is explored-of-available plus how many still need practice.
+  // A 20-question set is a practice set, and the copy has to say so.
+  const covEl = el('rc-coverage');
+  if (covEl) {
+    let covTxt = '';
+    if (!isFix && typeof PracticeJourney !== 'undefined' && typeof PracticeSelector !== 'undefined') {
+      try {
+        const qs = PracticeJourney.eligible(S.practice.chapterId);
+        const cov = PracticeSelector.coverage(qs, QuestionProgress.forChapter(S.practice.chapterId));
+        if (cov.known) {
+          covTxt = cov.allExplored
+            ? `You have explored all ${cov.total} questions in this chapter \u2014 revision still helps.`
+            : `${cov.explored} of ${cov.total} chapter questions explored`;
+          if (cov.needs) covTxt += ` \u00b7 ${cov.needs} still need practice`;
+        }
+      } catch (e) {}
+    }
+    covEl.textContent = covTxt;
+    covEl.classList.toggle('hidden', !covTxt);
+  }
+
+  const nextBtn = el('rc-next-btn'), rcBackBtn = el('rc-back-btn');
+  // Context-aware, and never more than the two on screen: unseen questions
+  // first while any remain, then mistakes, then revision.
+  let nextLabel = 'Practice Again \u2192';
+  if (isFix) nextLabel = 'Fix more \u2192';
+  else if (typeof PracticeJourney !== 'undefined' && typeof PracticeSelector !== 'undefined') {
+    try {
+      const qs = PracticeJourney.eligible(S.practice.chapterId);
+      const bkt = PracticeSelector.bucket(qs, QuestionProgress.forChapter(S.practice.chapterId));
+      if (bkt.unseen.length)     nextLabel = 'Continue with new questions \u2192';
+      else if (bkt.needs.length) nextLabel = 'Fix my mistakes \u2192';
+      else                       nextLabel = 'Revise this chapter \u2192';
+    } catch (e) {}
+  }
+  if (nextBtn)   nextBtn.textContent   = nextLabel;
+  if (rcBackBtn) rcBackBtn.textContent = isFix ? '\u2190 Back to Home' : '\u2190 Take a break';
   _renderRoundReview();
   document.getElementById('modal-round-complete')?.classList.remove('hidden');
   _haptic('levelup');
@@ -8406,7 +9884,7 @@ function _renderRoundReview() {
   btn.textContent = `Review my answers (${log.length})`;
 
   // The parent can turn answers off for an assignment. That setting has to hold
-  // here too — otherwise the review hands over every answer they chose to hide.
+  // here too - otherwise the review hands over every answer they chose to hide.
   const showAnswers = S.practice.showAnswers !== false;
 
   box.innerHTML = log.map((r, i) => {
@@ -8420,13 +9898,13 @@ function _renderRoundReview() {
       detail = `<div class="text-green-700 dark:text-green-400">Your answer: <b>${_prettyMath(_profEsc(r.userAnswer))}</b></div>`;
     } else if (!showAnswers) {
       detail = `<div class="text-gray-500 dark:text-gray-400">${r.skipped ? 'Skipped.' : 'Not correct.'}</div>`;
-    } else if (r.type === 'symmetry') {
-      detail = `<div class="text-gray-600 dark:text-gray-400">${r.skipped ? 'Skipped' : 'Not quite'} — the correct cells were shown on the grid.</div>`;
+    } else if (r.type === 'symmetry' || r.type === 'symmetry-line') {
+      detail = `<div class="text-gray-600 dark:text-gray-400">${r.skipped ? 'Skipped' : 'Not quite'} - the correct ${r.type === 'symmetry-line' ? 'line or lines were' : 'cells were'} shown on the diagram.</div>`;
     } else {
       detail = `
         ${r.skipped
           ? '<div class="text-gray-500 dark:text-gray-400">Skipped</div>'
-          : `<div class="text-red-700 dark:text-red-400">You said: <b>${_prettyMath(_profEsc(r.userAnswer)) || '—'}</b></div>`}
+          : `<div class="text-red-700 dark:text-red-400">You said: <b>${_prettyMath(_profEsc(r.userAnswer)) || '-'}</b></div>`}
         <div class="text-green-700 dark:text-green-400">Correct answer: <b>${_prettyMath(_profEsc(r.correctAnswer))}</b></div>`;
     }
 
@@ -8462,6 +9940,11 @@ function _roundCompleteNext() {
   // practice and must count against the daily cap like any other.
   _setAssignmentContext(false);
   S.practice.session = { attempted: 0, correct: 0 };
+  // A drill is rebuilt from DB.mistakes, never re-dealt from a chapter:
+  // getMixedQuestions('fix-mistakes') matches nothing, so "Practice Again"
+  // would have handed the child an empty round. Rebuilding also drops
+  // whatever the round just retired, so the second pass is genuinely shorter.
+  if (S.practice.chapterId === _FIX_CHAPTER_ID) { startMistakeDrill(); return; }
   if (S.practice.difficulty !== null) {
     S.practice.qs = getQuestionsForChapter(S.practice.chapterId, S.practice.difficulty, 20);
   } else if (S.practice.chapterId) {
@@ -8480,6 +9963,7 @@ function _roundCompleteBack() {
   // so there is nothing left to offer "Continue where you left off" for -
   // without this a completed round left a stale resume record pointing at its
   // own last, fully-answered question.
+  if (S.practice.chapterId === _FIX_CHAPTER_ID) { _fixBackToHome(); return; }
   _clearPracticeResume(S.practice.chapterId);
   if (typeof SubjectHub !== 'undefined' && ACTIVE_PACK) SubjectHub.back();
   else showScreen('chapter-select');
@@ -8817,7 +10301,7 @@ document.getElementById('reset-btn').addEventListener('click', () => {
 // ── SYLLABUS BROWSER ──────────────────────────
 // A chapter's `syllabus` is authored as one paragraph whose sentences ARE its
 // sub-topics, so listing them turns a wall of prose into something that reads
-// like a syllabus. Split on sentence enders only — these strings contain no
+// like a syllabus. Split on sentence enders only - these strings contain no
 // decimals, and their number ranges use dashes (1834–1924, Class 1–4).
 //
 // ⚠ Deliberately `.match()` and NOT a lookbehind split. A lookbehind regex is a
@@ -8842,7 +10326,7 @@ function _notesToHtml(note) {
 // ── PAST PAPERS ────────────────────────────────
 // Read-only. Every item here is a written or drawn response with a mark
 // allocation and NO answer field, so nothing on this screen can be marked and
-// the screen must never imply otherwise — no "check", no score, no streak.
+// the screen must never imply otherwise - no "check", no score, no streak.
 let _ppQuestions = null;
 let _ppYear = null;
 
@@ -8877,7 +10361,7 @@ async function renderPastPapers() {
   }
 
   // needsArtwork means the question refers to a diagram, map or picture that was
-  // never captured — "Study Map 2 … name the feature shown by diagonal shading"
+  // never captured - "Study Map 2 … name the feature shown by diagonal shading"
   // with no Map 2. Unanswerable and confusing, so it is not shown at all until
   // the artwork is drawn. Counted in the footer so it is hidden, not lost.
   const usable = _ppQuestions.filter(q => !q.needsArtwork);
@@ -8909,6 +10393,8 @@ async function renderPastPapers() {
               <span class="text-xs font-bold text-indigo-400 shrink-0 mt-0.5">${i + 1}.</span>
               <div class="flex-1 min-w-0">
                 <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${q.question}</p>
+                ${q.image ? `<img src="${_profEsc(q.image)}" alt="${_profEsc(q.imageAlt || 'The diagram printed with this question in the exam paper')}"
+                  loading="lazy" style="display:block;margin:8px auto;max-width:min(100%,420px);height:auto;border-radius:6px;background:#fff">` : ''}
                 <div class="flex items-center gap-2 flex-wrap mt-1.5">
                   ${q.marks ? `<span class="text-[11px] font-bold text-gray-500 dark:text-gray-400">[${q.marks} mark${q.marks === 1 ? '' : 's'}]</span>` : ''}
                   ${ch ? `<span class="text-[11px] text-gray-500 dark:text-gray-400">${_profEsc(ch)}</span>` : ''}
@@ -8936,7 +10422,7 @@ async function renderPastPapers() {
 function _ppSetYear(y) { _ppYear = y; renderPastPapers(); }
 
 // Self-marking: the child writes on paper, then reveals the mark scheme and
-// checks their own work. Nothing is scored or stored — these questions cannot
+// checks their own work. Nothing is scored or stored - these questions cannot
 // be marked by the app, and the screen must not pretend they can.
 function _ppToggleScheme(id, btn) {
   const box = document.getElementById('ms-' + id);
@@ -8979,12 +10465,12 @@ function renderSyllabus() {
 
     // Only grade5-maths defines a real `subsections` array. The rest of the app
     // stores a chapter's content in one of three other shapes, and this screen
-    // read NONE of them — which is how English and French ended up with an
+    // read NONE of them - which is how English and French ended up with an
     // entirely blank syllabus and every bonus chapter said "No subsections
     // defined yet.":
-    //   ch.syllabus       — prose paragraph  (History, Science, G6 Maths)
-    //   ch.notes          — revision points  (English, French: notesBased packs)
-    //   ch.enrichmentNote — bonus chapters   (History, Science)
+    //   ch.syllabus       - prose paragraph  (History, Science, G6 Maths)
+    //   ch.notes          - revision points  (English, French: notesBased packs)
+    //   ch.enrichmentNote - bonus chapters   (History, Science)
     const chQs = STATIC_QUESTIONS.filter(q => q.chapterId === ch.id).length;
     const points = (ch.notes || []).length
       ? ch.notes.map(_notesToHtml)
@@ -8996,10 +10482,14 @@ function renderSyllabus() {
       </li>`).join('')}</ul>` : '';
 
     const enrNote = ch.enrichment
-      ? `<p class="text-xs text-amber-600 dark:text-amber-400 pt-2 pb-1">✨ Bonus topic — drawn from the syllabus, not a separate MIE chapter.</p>`
+      ? `<p class="text-xs text-amber-600 dark:text-amber-400 pt-2 pb-1">✨ Bonus topic - drawn from the syllabus, not a separate MIE chapter. Some questions here also appear in the main chapters, gathered together by theme.</p>`
       : '';
 
-    const bodyHTML = subsHTML || ((enrNote + pointsHTML) || `
+    // ⚠ enrNote is prepended, NOT or-ed. It used to sit inside the middle arm
+    // of `subsHTML || ((enrNote + pointsHTML) || fallback)`, so any chapter
+    // with subsections dropped it - which is every enrichment chapter there is,
+    // leaving the note dead for the only chapters it describes.
+    const bodyHTML = enrNote + (subsHTML || pointsHTML || `
       <p class="text-sm text-gray-500 dark:text-gray-400 py-3">${chQs
         ? `${chQs} practice question${chQs === 1 ? '' : 's'} in this chapter.`
         : 'Questions for this chapter are still being written.'}</p>`);
@@ -9112,6 +10602,98 @@ document.getElementById('help-modal').addEventListener('click', function(e) {
 });
 
 // ── WEAK AREA DRILL ───────────────────────────
+// ── FIX MY MISTAKES ───────────────────────────
+// Every wrong answer has been recorded since this app shipped, and then only
+// ever LISTED. This serves those exact questions back.
+//
+// It is deliberately NOT the weak-area drill. That one works at chapter
+// granularity - the 3 weakest chapters, 15 RANDOM questions from them - so a
+// child who has missed one particular question five times may well never see it
+// again. This is the opposite: the same question, until they can do it.
+//
+// Order is newest-first, never shuffled: the freshest mistake is the one still
+// worth teaching, and a stable order means a child who repeats the drill is
+// working the same short list down rather than sampling a bag.
+function _fixBackToHome() {
+  if (typeof StudentHome !== 'undefined') StudentHome.open();
+  else showScreen('dashboard');
+}
+
+// One place sets this label, and startChapterDirect resets it on every ordinary
+// round - a render-time reset, not a cleanup call anyone can forget.
+function _setPracticeBackLabel(text, aria) {
+  const btn = document.getElementById('practice-back-btn');
+  if (!btn) return;
+  btn.textContent = text;
+  btn.setAttribute('aria-label', aria);
+}
+
+async function startMistakeDrill() {
+  const rows = _practisableMistakes();
+  if (!rows.length) {
+    toast((DB.mistakes || []).length
+      ? 'Your older mistakes were saved before this could re-ask them. New ones can be practised. ✏️'
+      : 'Nothing to fix - you have no mistakes saved. 🎉', 4000);
+    return;
+  }
+  // A child's mistakes can span several subjects, and STATIC_QUESTIONS only
+  // holds the packs loaded THIS session, so ids from a subject they have not
+  // opened today would silently resolve to nothing.
+  const packs = [...new Set(rows.map(m => m.pk).filter(Boolean))];
+  const missing = packs.filter(p => !rows.some(m => m.pk === p && STATIC_QUESTIONS.some(q => q && q.id === m.id)));
+  if (missing.length && typeof QuestionLoader !== 'undefined') {
+    toast('⏳ Fetching your mistakes…', 1500);
+    // One failed subject must not lose the whole round: whatever loads is
+    // served, and anything still unresolved is simply left out below.
+    await Promise.all(missing.map(p => QuestionLoader.loadSubject(p).catch(() => {})));
+  }
+
+  const locked  = DB.restrictions?.lockedChapters || [];
+  const maxDiff = DB.restrictions?.maxDifficulty ?? 4;
+  const byId = new Map();
+  STATIC_QUESTIONS.forEach(q => { if (q && q.id && !byId.has(q.id)) byId.set(q.id, q); });
+
+  const qs = [];
+  let blocked = 0, unresolved = 0;
+  for (const m of rows) {
+    if (qs.length >= _FIX_ROUND_MAX) break;
+    const q = byId.get(m.id);
+    if (!q) { unresolved++; continue; }
+    // The same gates ordinary practice applies. A chapter the child could
+    // answer last week may have been locked by their parent since.
+    if (locked.includes(q.chapterId) || !_planAllowsChapter(q.chapterId)) { blocked++; continue; }
+    if ((q.difficulty || 1) > maxDiff) { blocked++; continue; }
+    qs.push(q);
+  }
+
+  if (!qs.length) {
+    toast(blocked
+      ? '🔒 Your saved mistakes are in chapters that are locked right now.'
+      : 'Those questions could not be loaded. Check your connection and try again.', 4000);
+    if (unresolved && !blocked) console.warn('[fix-mistakes]', unresolved, 'saved mistakes could not be resolved to a question');
+    return;
+  }
+
+  _setAssignmentContext(false);
+  S.practice.coachMission = null;
+  S.practice.chapterId    = _FIX_CHAPTER_ID;
+  S.practice.difficulty   = null;
+  S.practice.qs           = qs;
+  S.practice.idx          = 0;
+  S.practice.answers      = {};
+  S.practice.hintShown    = false;
+  S.practice.session      = { attempted: 0, correct: 0, fixed: 0 };
+  S.practice.showAnswers  = true;
+  S.practice.showHints    = true;
+  showScreen('practice');
+  const nameEl = document.getElementById('practice-ch-name');
+  if (nameEl) nameEl.textContent = '🩹 Fix My Mistakes';
+  _setPracticeBackLabel('← Home', 'Back to home');
+  document.getElementById('practice-back-btn')?.classList.remove('hidden');
+  _updateDiffBadge(qs[0]);
+  loadPracticeQuestion();
+}
+
 function startWeakAreaDrill() {
   // Checked HERE as well as in startExam(): the pooled path below builds and
   // runs a full timed exam without ever calling startExam, so without this a
@@ -9142,7 +10724,7 @@ function startWeakAreaDrill() {
     // Two different situations, and telling a beginner "no weak areas found"
     // is both untrue and hides why the drill targeted nothing.
     toast(answered.length
-      ? 'Great job — no weak areas right now. Starting a mixed drill.'
+      ? 'Great job - no weak areas right now. Starting a mixed drill.'
       : 'Practise a few chapters first, then this drill can target your weak spots. Starting a mixed drill.',
       3000);
     startExam('drill');
@@ -9202,7 +10784,7 @@ function renderStudentSelect() {
 //  PSAC YEARS vs NCE YEARS
 //
 //  Grades 1-6 are Mauritian primary and end in the PSAC. Grades 7-9 are
-//  lower secondary and end in the NCE — a different exam, a different
+//  lower secondary and end in the NCE - a different exam, a different
 //  syllabus, and (once the packs are filled in) a different subject list.
 //  Listing all nine as one flat run of cards invites a parent to read
 //  "Grade 8" as more of the same PSAC preparation, which it is not.
@@ -9233,7 +10815,7 @@ function renderGradeSelect() {
 
   // A heading is emitted before the first grade of each stage. It spans the
   // whole grid (sm:col-span-2) so it reads as a divider and not as a card.
-  // Only rendered when BOTH stages are present — with 4-6 alone a lone
+  // Only rendered when BOTH stages are present - with 4-6 alone a lone
   // "Primary" header would be labelling the only thing on screen.
   const stagesPresent = new Set(grades.map(g => _gradeStage(g).id));
   const showHeads = stagesPresent.size > 1;
@@ -9247,7 +10829,7 @@ function renderGradeSelect() {
       lastStage = stage.id;
       // ⚠ grid-column via an INLINE STYLE, not Tailwind's sm:col-span-2.
       // The Play CDN generates rules from the classes it finds in the document,
-      // and this markup is injected by innerHTML long after its initial scan —
+      // and this markup is injected by innerHTML long after its initial scan -
       // the class landed in the attribute and no rule was ever produced for it.
       // Measured: the heading rendered 328px wide inside a 672px two-column
       // grid at 768px and up, i.e. sitting in one column with a grade card
@@ -9398,11 +10980,11 @@ function renderSubjectSelect() {
   }).join('');
 }
 
-// ── "Surprise Me!" — a random unlocked chapter from any of the student's
+// ── "Surprise Me!" - a random unlocked chapter from any of the student's
 // subjects. Reuses the exact same gating startChapterDirect already enforces
 // (_adminBlocksChapter + the parent's own lockedChapters), so it can never
 // hand out a chapter the student wouldn't otherwise be allowed to open.
-function surpriseMe() {
+async function surpriseMe() {
   const grade = (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE)
     || (typeof Auth !== 'undefined' && Auth.getActiveAccount?.()?.grade) || 5;
   const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
@@ -9421,6 +11003,7 @@ function surpriseMe() {
 
   const pick = candidates[Math.floor(Math.random() * candidates.length)];
   toast(`🎲 Surprise! ${pick.pack.icon} ${pick.chapter.icon || ''} ${pick.chapter.name}`, 2200);
+  if (typeof PackLoader !== 'undefined') await PackLoader.ensure(pick.pack.id).catch(() => {});
   activateSubjectPack(pick.pack.id);
   if (typeof QuestionLoader !== 'undefined') {
     QuestionLoader.loadSubject(pick.pack.id)
@@ -9431,9 +11014,10 @@ function surpriseMe() {
   }
 }
 
-window.selectSubject = function(id) {
+window.selectSubject = async function(id) {
   const known = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : []).find(p => p.id === id);
   if (known && known.comingSoon) { toast(`${known.subject || known.name} is coming soon! 🚀`, 2500); return; }
+  if (typeof PackLoader !== 'undefined') await PackLoader.ensure(id).catch(() => {});
   const pack = activateSubjectPack(id);
   if (pack && typeof QuestionLoader !== 'undefined') {
     // Load questions for this subject if not already loaded
@@ -9451,15 +11035,20 @@ document.getElementById('clear-scratch-exam').addEventListener('click', () => cl
 // Animate mastery bars after a short delay (so CSS transition fires)
 setTimeout(() => { document.querySelectorAll('.mastery-bar-fill').forEach(el => { el.style.width = el.style.width; }); }, 100);
 
-// Init scratchpads when their screen becomes visible
+// Init scratchpads when their screen becomes visible, and blank them when the
+// session behind them has changed - see _resetScratchpadForSession.
 const practiceObserver = new MutationObserver(() => {
   if (!document.getElementById('screen-practice')?.classList.contains('hidden')) {
     initScratchpad('scratchpad-practice');
+    _scratchSessionPractice = _resetScratchpadForSession(
+      'scratchpad-practice', S.practice.session, _scratchSessionPractice);
   }
 });
 const examObserver = new MutationObserver(() => {
   if (!document.getElementById('screen-exam')?.classList.contains('hidden')) {
     initScratchpad('scratchpad-exam');
+    _scratchSessionExam = _resetScratchpadForSession(
+      'scratchpad-exam', S.exam.qs, _scratchSessionExam);
   }
 });
 const pScreen = document.getElementById('screen-practice');
@@ -9476,22 +11065,22 @@ if (eScreen) examObserver.observe(eScreen, { attributes: true, attributeFilter: 
 //
 //  They are filled from SUBJECT_PACKS now, which is the same source
 //  renderGradeSelect(), the admin Content tab and the shop catalogue already
-//  read — so a new pack reaches every one of them together, or none.
+//  read - so a new pack reaches every one of them together, or none.
 //
 //  ⚠ TWO MODES, and the difference is deliberate:
-//    data-grade-select="live" — only grades with at least one pack that is NOT
+//    data-grade-select="live" - only grades with at least one pack that is NOT
 //      comingSoon. These are the PARENT-facing ones (family setup, add child).
 //      Enrolling a child into a grade with no content gives them an app of
 //      "Coming Soon" cards and nothing to do, which is worse than not offering
 //      the grade at all. This list opens by itself the moment a pack flips to
-//      comingSoon: false — there is no second place to edit.
-//    data-grade-select="all" — every registered grade. These are the AUTHORING
+//      comingSoon: false - there is no second place to edit.
+//    data-grade-select="all" - every registered grade. These are the AUTHORING
 //      ones (admin question filter and question form): you have to be able to
 //      file a question under Grade 2 before Grade 2 opens to anyone.
 //
 //  ⚠ Run TWICE, and the second one is not belt-and-braces. The <script> tags
-//  sit in the middle of <body>, so a good part of the markup — including
-//  #modal-qm-form, which holds #qmf-grade — has not been parsed yet when app.js
+//  sit in the middle of <body>, so a good part of the markup - including
+//  #modal-qm-form, which holds #qmf-grade - has not been parsed yet when app.js
 //  executes. Filling only at that point left the admin question form with an
 //  EMPTY grade dropdown (measured: 0 options), while #qm-grade higher up the
 //  document filled correctly. DOMContentLoaded catches the rest.
@@ -9510,12 +11099,12 @@ function _populateGradeSelects() {
     const grades = sel.dataset.gradeSelect === 'all' ? all : live;
     if (!grades.length) return;
     // An "All grades" row (or any other authored option with no value) is part
-    // of the control, not part of the grade list — keep it and rebuild the rest.
+    // of the control, not part of the grade list - keep it and rebuild the rest.
     const keep = [...sel.options].filter(o => o.value === '');
     const prev = sel.value;
     sel.innerHTML = '';
     keep.forEach(o => sel.appendChild(o));
-    // Same split as the grade picker, and for the same reason — but only
+    // Same split as the grade picker, and for the same reason - but only
     // when both stages are actually on offer. A single <optgroup> around
     // every option is noise.
     const stages = [...new Set(grades.map(g => _gradeStage(g).id))];
@@ -9764,7 +11353,7 @@ async function renderStudentInbox() {
     </div>`;
   }).join('');
 
-  // Mark all as seen (fire-and-forget — we have their attention now)
+  // Mark all as seen (fire-and-forget - we have their attention now)
   reports.forEach(r => {
     if (r.reply_count > 0) Store.markReportSeen(r.id);
   });
@@ -9773,7 +11362,7 @@ async function renderStudentInbox() {
   }
 }
 
-// Thread modal — inline expand rather than a separate screen keeps the back nav simple
+// Thread modal - inline expand rather than a separate screen keeps the back nav simple
 async function openReportThread(reportId) {
   const report = (_inboxCache || []).find(r => r.id === reportId);
   if (!report) return;
@@ -9808,7 +11397,7 @@ async function openReportThread(reportId) {
   Store.markReportSeen(reportId);
 
   // Student inbox uses the data from get_student_reports (last_admin_message + reply_count).
-  // Direct access to question_report_messages requires authenticated (admin) — the student
+  // Direct access to question_report_messages requires authenticated (admin) - the student
   // reads the thread through the RPC-provided summary. Show initial report + latest reply.
   const threadEl = document.getElementById('thread-messages');
   if (!threadEl) return;
@@ -9835,7 +11424,7 @@ async function openReportThread(reportId) {
       </div>
     </div>`;
   } else {
-    html += `<p class="text-xs text-gray-400 text-center">No admin reply yet — we'll update this when we review it.</p>`;
+    html += `<p class="text-xs text-gray-400 text-center">No admin reply yet - we'll update this when we review it.</p>`;
   }
   threadEl.innerHTML = html;
 }
@@ -9889,7 +11478,7 @@ async function submitNewTicket() {
   const studentName = sess?.displayName || null;
 
   const res = await Store.reportQuestion(
-    null,          // no question — sentinel '__general__' applied inside Store
+    null,          // no question - sentinel '__general__' applied inside Store
     '',            // no question text
     msg,
     typeof ACTIVE_STUDENT_ID !== 'undefined' ? ACTIVE_STUDENT_ID : null,
@@ -9928,7 +11517,7 @@ async function renderParentMessages() {
 
   const reports = await Store.loadParentReports();
 
-  // Refresh the badge in the parent dashboard tab (clear it — they're looking at it now)
+  // Refresh the badge in the parent dashboard tab (clear it - they're looking at it now)
   const badge = document.getElementById('pd-msg-badge');
   if (badge) badge.classList.add('hidden');
 
@@ -9960,7 +11549,7 @@ async function renderParentMessages() {
         <div class="bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 rounded-xl px-3 py-2 mb-2">
           <p class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-0.5">Admin replied:</p>
           <p class="text-sm text-gray-800 dark:text-white">${_attr(r.admin_note)}</p>
-        </div>` : `<p class="text-xs text-gray-400 dark:text-gray-500 italic mb-2">No reply yet — we'll update this when we review it.</p>`}
+        </div>` : `<p class="text-xs text-gray-400 dark:text-gray-500 italic mb-2">No reply yet - we'll update this when we review it.</p>`}
       <p class="text-xs text-gray-400 dark:text-gray-500">${new Date(r.created_at).toLocaleDateString()}</p>
     </div>`;
   }).join('');
@@ -10095,6 +11684,8 @@ async function _renderStudentProfile(container) {
   const hapticOn = localStorage.getItem(_prefKey('haptic')) !== 'false';
   const soundOn  = localStorage.getItem(_prefKey('sound'))  !== 'false';
   const kidPrefs = Object.assign({ vibe: 'default', bigText: false, calm: false }, DB.kidPrefs);
+  const hasPersonalShortcut = typeof ProfileInstall !== 'undefined' &&
+    ProfileInstall.hasStudentBinding?.(ACTIVE_STUDENT_ID);
 
   const toggleHtml = (id, checked, key, label, sub) => `
     <label class="flex items-center justify-between gap-3 cursor-pointer" onclick="_togglePref('${key}')">
@@ -10134,7 +11725,7 @@ async function _renderStudentProfile(container) {
           <div>
             <div class="font-bold text-gray-800 dark:text-white text-sm">🔒 Fingerprint sign-in</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${bioOn
-              ? 'Enabled on this device — unlock instead of typing your PIN.'
+              ? 'Enabled on this device - unlock instead of typing your PIN.'
               : 'Skip typing your PIN on this phone next time.'}</div>
           </div>
           <button onclick="${bioOn ? 'Auth.disableStudentBiometricLogin()' : 'Auth.enableStudentBiometricLogin(this)'}"
@@ -10187,6 +11778,17 @@ async function _renderStudentProfile(container) {
         </label>
         <p class="text-base font-medium text-gray-800 dark:text-white">${_profEsc(name)}</p>
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">To change your name, ask your parent.</p>
+      </div>
+
+      <!-- A personal launcher remembers identity, never the four-digit PIN. -->
+      <div class="profile-install-card">
+        <div class="profile-install-card-icon">📲</div>
+        <div class="profile-install-card-copy">
+          <h3>${hasPersonalShortcut ? 'Your personal shortcut is ready' : `Install for ${_profEsc(name)}`}</h3>
+          <p>Get an icon with your name. It opens your practice space directly, or asks only for your PIN when needed.</p>
+          <span>🔒 Your PIN is never saved</span>
+        </div>
+        <button onclick="ProfileInstall.installStudent()">${hasPersonalShortcut ? 'Install again' : 'Add my icon'} →</button>
       </div>
 
       <!-- My Colours - purely cosmetic, kid-home only (see .kid-* rules in
@@ -10367,7 +11969,7 @@ async function _renderParentProfile(container) {
           <div>
             <div class="font-bold text-gray-800 dark:text-white text-sm">🔒 Fingerprint / Face unlock</div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${bioOn
-              ? 'Enabled on this device — unlock the app here instead of typing your password.'
+              ? 'Enabled on this device - unlock the app here instead of typing your password.'
               : 'Skip typing your password on this phone next time.'}</div>
           </div>
           <button onclick="${bioOn ? 'Auth.disableBiometricLogin()' : 'Auth.enableBiometricLogin(this)'}"
@@ -10407,7 +12009,7 @@ async function _renderParentProfile(container) {
         <button data-label="Save" onclick="_saveFamilyName(this)"
           class="px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">Save</button>
       </div>
-      <p class="text-xs text-gray-500 dark:text-gray-400">Private family code: <span class="font-mono font-bold select-all">${_profEsc(family.family_code || '—')}</span></p>
+      <p class="text-xs text-gray-500 dark:text-gray-400">Private family code: <span class="font-mono font-bold select-all">${_profEsc(family.family_code || '-')}</span></p>
     </div>` : '';
 
   // ── Parents on this account ──
@@ -10529,7 +12131,7 @@ async function _renderParentProfile(container) {
       <button onclick="Auth.logout()" class="w-full py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white font-semibold rounded-xl text-sm transition-colors">🚪 Sign out</button>
       ${isParent ? `
       <div class="pt-2 border-t border-gray-100 dark:border-gray-700">
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Closes your account${children.length ? ` and all ${children.length} ${children.length === 1 ? 'child account' : 'child accounts'}` : ''}. Nothing is erased — sign in again with the same email and you can restore everything.</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Closes your account${children.length ? ` and all ${children.length} ${children.length === 1 ? 'child account' : 'child accounts'}` : ''}. Nothing is erased - sign in again with the same email and you can restore everything.</p>
         <button onclick="_confirmDeleteAccount()" class="btn-danger w-full text-sm">🗑️ Close my account</button>
       </div>` : ''}
     </div>`;
@@ -10559,7 +12161,7 @@ async function _renderParentProfile(container) {
             ${_profEsc((profile.full_name || '?')[0].toUpperCase())}
           </div>
           <div class="flex-1 min-w-0">
-            <p class="font-bold text-gray-800 dark:text-white text-base truncate">${_profEsc(profile.full_name || '—')}</p>
+            <p class="font-bold text-gray-800 dark:text-white text-base truncate">${_profEsc(profile.full_name || '-')}</p>
             <p class="text-xs text-gray-500 dark:text-gray-400 truncate">${_profEsc(email)}</p>
             <span class="inline-flex items-center mt-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${roleColour}">${roleLabel}</span>
           </div>
@@ -10579,7 +12181,7 @@ async function _renderParentProfile(container) {
           <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
             Email <span class="text-gray-500 dark:text-gray-400 font-normal normal-case ml-1">🔒 cannot be changed here</span>
           </label>
-          <p class="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-xl break-all">${_profEsc(email) || '—'}</p>
+          <p class="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-xl break-all">${_profEsc(email) || '-'}</p>
         </div>
       </div>
 
@@ -10608,12 +12210,12 @@ async function _renderParentProfile(container) {
 
         <!-- ⚠ The parent PIN had NO control anywhere. _promptSetParentPin() was
              its only entry point, it ran once from _openParentDashboard(), and it
-             returns early when a PIN already exists — so dismissing that one
+             returns early when a PIN already exists - so dismissing that one
              prompt meant never being able to set one, and setting one meant never
              being able to change it. This is that control.
 
              It lives in localStorage, which is scoped to the ORIGIN and the
-             browser profile — not to the device — so the row says "in this
+             browser profile - not to the device - so the row says "in this
              browser". A parent who set a PIN on a preview deploy URL and then
              opens production is asked to create one again, and so is anyone
              who switches browser or opens a private window. -->
@@ -10727,9 +12329,9 @@ async function _renderCoparents() {
           <li>They open it, then sign in or create their own account.</li>
         </ol>
       </div>
-      <button onclick="_shareCoparentLink(this)" data-label="Invite another parent — create secure link"
+      <button onclick="_shareCoparentLink(this)" data-label="Invite another parent - create secure link"
         class="w-full px-4 py-3 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-xl text-sm transition-colors">
-        1. Invite another parent — create secure link
+        1. Invite another parent - create secure link
       </button>
       <p class="text-xs text-gray-500 dark:text-gray-400">
         They use their own email and password, not yours. The link works once and expires in 48 hours.
@@ -10776,7 +12378,7 @@ async function _shareCoparentLink(btn) {
     try { await navigator.share({ title: `${fam?.family_name || 'Our family'} on PSAC Practice`, text: msg }); _renderCoparents(); return; }
     catch (e) { if (e.name === 'AbortError') { _renderCoparents(); return; } }
   }
-  try { await navigator.clipboard.writeText(link); toast('Invite link copied — send it to them. 📋', 3500); }
+  try { await navigator.clipboard.writeText(link); toast('Invite link copied - send it to them. 📋', 3500); }
   catch (_) { prompt('Copy this invite link and send it to them:', link); }
   _renderCoparents();
 }
@@ -10852,7 +12454,7 @@ async function _toggleWeeklyDigest(el) {
   const res = await _savePrefs({ weekly_digest: on });
   if (!res.ok) {
     el.checked = !on;
-    toast('Could not save — check your connection.', 2500);
+    toast('Could not save - check your connection.', 2500);
     return;
   }
   toast(on ? '📧 Weekly email on.' : '📧 Weekly email off.', 1800);
@@ -10875,14 +12477,14 @@ async function _saveFamilyName(btn) {
     // than blaming the connection.
     toast(res?.code === '23505'
       ? 'Another family already uses that name. Please choose a different one.'
-      : 'Could not save the family name — check your connection and try again.', 4000);
+      : 'Could not save the family name - check your connection and try again.', 4000);
     return;
   }
   family.family_name = name;
   const disp = document.getElementById('pd-family-name-display');
   if (disp) disp.textContent = name;
   _profileSaved(btn);
-  toast('Family name updated — tell your children the new name. 👨‍👩‍👧', 3500);
+  toast('Family name updated - tell your children the new name. 👨‍👩‍👧', 3500);
 }
 
 // Loops the children rather than doing one bulk write: push-subscribe is a
@@ -10967,7 +12569,7 @@ async function _applyDefaultsToAll(btn) {
   await _savePrefs({ child_defaults: defaults });
   if (failed.length) {
     if (statusEl) statusEl.textContent = `Could not apply to ${failed.join(', ')}. Please try again. ⚠️`;
-    toast('Some children could not be updated — check your connection.', 3500);
+    toast('Some children could not be updated - check your connection.', 3500);
     return;
   }
   if (statusEl) statusEl.textContent = `Applied to all ${children.length} ${children.length === 1 ? 'child' : 'children'}. ✅`;
@@ -10981,10 +12583,10 @@ async function _confirmDeleteAccount() {
   const kids = children.length
     ? `\n\nThis also closes ${children.length} child ${children.length === 1 ? 'account' : 'accounts'}: ${children.map(c => c.display_name || c.username).join(', ')}.`
     : '';
-  if (!confirm(`Close your account?${kids}\n\nYou will be signed out and the app will look empty. Nothing is erased — sign in again with the same email and you can restore everything.`)) return;
+  if (!confirm(`Close your account?${kids}\n\nYou will be signed out and the app will look empty. Nothing is erased - sign in again with the same email and you can restore everything.`)) return;
 
   const typed = prompt('Type DELETE (in capitals) to confirm.');
-  if ((typed || '').trim() !== 'DELETE') { toast('Cancelled — your account is untouched.', 2500); return; }
+  if ((typed || '').trim() !== 'DELETE') { toast('Cancelled - your account is untouched.', 2500); return; }
 
   toast('Closing your account…', 3000);
   const res = await Store.deleteMyAccount();
@@ -11028,6 +12630,12 @@ async function _saveProfilePassword(btn) {
   if (errEl) errEl.classList.add('hidden');
   if (pass.length < 6) { showErr('Password must be at least 6 characters.'); return; }
   if (pass !== conf)   { showErr('Passwords do not match.'); return; }
+  // - The second of the two password forms. A session minted from four digits
+  // must not be able to replace the password those digits stood in for - see
+  // Auth.isPinOnlySession(). Both copies check, or the guard is decorative.
+  if (typeof Auth !== 'undefined' && Auth.isPinOnlySession?.()) {
+    showErr(Auth.pinOnlyPasswordMessage()); return;
+  }
   const { error } = await _sb.auth.updateUser({ password: pass });
   if (error) { showErr(error.message); return; }
   const pwNew  = document.getElementById('prof-pw-new');

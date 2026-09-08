@@ -53,7 +53,7 @@ CHALLENGE_QS2.push(
     question:'A map uses the scale 1:50,000. A road on the map is 4 cm. How long is the actual road?',
     options:['2 km','2.5 km','20 km','200 km'],
     answer:'2 km',
-    hint:'4 cm × 50,000 = 200,000 cm = 2,000 m = 2 km.',
+    hint:'Multiply the map distance by the scale factor to get real centimetres, then convert cm → m → km.',
     explanation:'4 × 50,000 = 200,000 cm = 2 km.' }),
 
   makeNum({ id:'CH_RAT08', chapterId:'ratio', subsection:'writing', difficulty:3,
@@ -523,7 +523,7 @@ CHALLENGE_QS2.push(
     question:'A factory fills 5,000 bottles of 750 mL each day. How many kilolitres (1 kL = 1000 L) does it bottle per day?',
     options:['3.5 kL','3.75 kL','4.0 kL','4.25 kL'],
     answer:'3.75 kL',
-    hint:'5000×750=3,750,000 mL=3750 L=3.75 kL.',
+    hint:'Multiply bottles by millilitres first, then step down the units: mL → L → kL, dividing by 1000 each time.',
     explanation:'5000×750=3,750,000 mL=3,750 L=3.75 kL.' }),
 
   makeNum({ id:'CH_CAP19', chapterId:'capacity', subsection:'conversion', difficulty:3,
@@ -883,7 +883,7 @@ CHALLENGE_QS2.push(
     question:'Mia takes 45 min to cycle to town and 30 min to walk back. She leaves at 09:15. What time does she return home?',
     options:['10:15','10:30','11:00','11:15'],
     answer:'10:30',
-    hint:'09:15 + 45 min = 10:00 arrival. 10:00 + 30 min = 10:30.',
+    hint:'Add each leg of the journey to the start time in turn - she does not wait in between.',
     explanation:'09:15 + 45min = 10:00. 10:00 + 30min = 10:30.' }),
 
   makeNum({ id:'CH_TIM13', chapterId:'time', subsection:'reading', difficulty:4,

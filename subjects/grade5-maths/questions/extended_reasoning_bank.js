@@ -1,5 +1,5 @@
 'use strict';
-// Grade 5 Maths — 20 deterministic Level-4 reasoning variants per chapter.
+// Grade 5 Maths - 20 deterministic Level-4 reasoning variants per chapter.
 // Values and contexts deliberately vary while every question keeps a complete
 // worked route. IDs are stable: database imports update rather than duplicate.
 
@@ -63,7 +63,12 @@
         `Cost = ${qty} × Rs ${price.toFixed(2)} = Rs ${(price*qty).toFixed(2)}. Change = ${paid.toFixed(2)} − ${(price*qty).toFixed(2)} = <b>Rs ${(paid-price*qty).toFixed(2)}</b>.`);
     }
     { // Powers: cube volume in a packing context
-      const side = 2 + (n%8);
+      // ⚠ Was 2 + (n%8). With n running 1..20 that cycles every eight, so the
+      // twenty "variants" were eight questions repeated - sides 3,4,5 and 6 each
+      // appeared three times with identical wording and identical answers.
+      // Every other block here combines its modulo with an n term, so this was
+      // the only expression that depended on the modulo alone.
+      const side = 2 + n;
       add('powers','word_probs',n,
         `A cube-shaped storage box has an inside edge of <b>${side} cm</b>. How many <b>1 cm³</b> cubes can fit inside it?`, side**3,
         'Volume of a cube = side × side × side.',

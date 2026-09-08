@@ -63,13 +63,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-sol-004', chapterId:'g6-solar-system', subsection:'photos', difficulty:1,
     question:`${_SVG_DAY_NIGHT}According to the diagram, what causes DAY and NIGHT on Earth?`,
-    options:[
-      'The Sun moving around the Earth',
-      'The Earth rotating (spinning) on its own axis every 24 hours',
-      'Clouds blocking the Sun at night',
-      'The Moon blocking the Sun\'s light'
-    ],
-    answer:'The Earth rotating (spinning) on its own axis every 24 hours',
+    options:['The Earth spinning on its axis', 'Clouds covering the Sun at night', 'The Sun moving around the Earth', 'The Moon blocking the sunlight'],
+    answer:'The Earth spinning on its axis',
     hint:'One half of Earth faces the Sun (day), the other half faces away (night).',
     explanation:'The Earth <b>rotates</b> on its own axis once every 24 hours. The side facing the Sun experiences <b>day</b>, while the opposite side, in shadow, experiences <b>night</b>. The Sun does not move - Earth spins.' }),
 
@@ -82,14 +77,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-sol-006', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
     question:'What causes the SEASONS (summer and winter) on Earth?',
-    options:[
-      'Earth getting closer to and further from the Sun during its orbit',
-      'The Earth\'s axis being tilted as it orbits the Sun, causing different parts to receive more direct sunlight at different times of year',
-      'The Moon blocking sunlight during winter',
-      'The Sun getting hotter in summer and cooler in winter'
-    ],
-    answer:'The Earth\'s axis being tilted as it orbits the Sun, causing different parts to receive more direct sunlight at different times of year',
-    hint:'Earth\'s axis is tilted at 23.5°.',
+    options:['The tilt of the Earth as it orbits', 'The Earth moving nearer the Sun', 'The Sun getting hotter in summer', 'The Moon blocking the sunlight'],
+    answer:'The tilt of the Earth as it orbits',
+    hint:'Earth does not travel upright around the Sun. What difference would a tilt make to how much light each half receives?',
     explanation:'Earth\'s axis is <b>tilted 23.5°</b>. As Earth orbits the Sun, different hemispheres receive more direct sunlight at different times. When the Southern Hemisphere tilts toward the Sun (November–March), Mauritius has summer; when it tilts away, it has winter.' }),
 
   makeTF({ id:'g6sci-sol-007', chapterId:'g6-solar-system', subsection:'sun_moon', difficulty:1,
@@ -99,14 +89,9 @@ STATIC_QUESTIONS.push(
     explanation:'The Moon does <b>not</b> produce its own light. It <b>reflects</b> sunlight. The Moon appears bright because its surface reflects light from the Sun. The phases of the Moon (new moon, crescent, full moon) occur as the angle between the Sun, Moon and Earth changes.' }),
 
   makeMCQ({ id:'g6sci-sol-008', chapterId:'g6-solar-system', subsection:'sun_moon', difficulty:2,
-    question:'Why does the Moon appear to change shape from night to night (phases of the Moon)?',
-    options:[
-      'The Moon actually shrinks and grows in size',
-      'Clouds cover different parts of the Moon each night',
-      'We see different amounts of the Moon\'s sunlit surface as it orbits Earth each month',
-      'The Earth\'s shadow falls on different parts of the Moon each night'
-    ],
-    answer:'We see different amounts of the Moon\'s sunlit surface as it orbits Earth each month',
+    question:'Why does the Moon appear to change shape from night to night?',
+    options:['We see different parts lit by the Sun', 'Clouds cover parts of it each night', 'Earth\'s shadow falls on it nightly', 'The Moon really shrinks and grows'],
+    answer:'We see different parts lit by the Sun',
     hint:'The Moon is always half lit by the Sun - we just see different portions of the lit half.',
     explanation:'As the Moon orbits Earth (taking ~28 days), our angle of view of the sunlit half changes. When the lit half faces us directly, we see a <b>full moon</b>; when the lit half faces away, we see a <b>new moon</b>. These changing views are the <b>lunar phases</b>.' }),
 
@@ -136,27 +121,17 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Revolution</b> is Earth\'s orbit around the Sun, which takes <b>365.25 days (1 year)</b>. <b>Rotation</b> is Earth spinning on its own axis, which takes <b>24 hours (1 day)</b>. The two movements are different: rotation causes day/night; revolution causes years and (combined with axial tilt) the seasons. (PSAC 2025 Q2b tested this exact distinction.)' }),
 
   makeMCQ({ id:'g6sci-sol-012', chapterId:'g6-solar-system', subsection:'planets', difficulty:1,
-    question:'What causes DAY and NIGHT on Earth? (PSAC 2025 Q2b)',
-    options:[
-      'The Sun moving around the Earth once every 24 hours',
-      'Earth rotating on its axis - one side faces the Sun (day), the other is in shadow (night)',
-      'Clouds blocking the Sun at night',
-      'The Moon moving between the Earth and the Sun'
-    ],
-    answer:'Earth rotating on its axis - one side faces the Sun (day), the other is in shadow (night)',
+    question:'What causes DAY and NIGHT on Earth?',
+    options:['The Earth rotating on its axis', 'Clouds blocking the Sun at night', 'The Moon passing in front of us', 'The Sun moving around the Earth'],
+    answer:'The Earth rotating on its axis',
     hint:'The Sun does not move around Earth - Earth spins.',
     explanation:'<b>Earth rotates</b> on its axis once every <b>24 hours</b>. The half facing the Sun experiences <b>day</b>; the half facing away is in <b>night</b>. As Earth rotates, locations move from day to night and back again. In Mauritius (Southern Hemisphere), when it is midday, the opposite side of the world is having midnight. (PSAC 2025 Q2b)' }),
 
-  makeMCQ({ id:'g6sci-sol-013', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
-    question:'Give TWO reasons why life can exist on planet EARTH but not on Mercury or Venus. (PSAC 2025 Q2d)',
-    options:[
-      'Earth is the largest planet and has the most gravity',
-      'Earth has liquid water and a protective atmosphere with oxygen at the right temperature range',
-      'Earth is closest to the Sun and receives the most sunlight',
-      'Earth has two moons that provide extra gravitational pull'
-    ],
-    answer:'Earth has liquid water and a protective atmosphere with oxygen at the right temperature range',
-    hint:'Think about what living things NEED: water, air (oxygen), and the right temperature.',
+  makeMCQ({ id:'g6sci-sol-013', chapterId:'g6-solar-system', subsection:'planets', difficulty:3,
+    question:'Why can life exist on Earth but not on Mercury or Venus?',
+    options:['It has water, air and mild temperatures', 'It is the largest planet in the system', 'It is the closest planet to the Sun', 'It has two moons pulling on it'],
+    answer:'It has water, air and mild temperatures',
+    hint:'Think about everything a living thing needs to survive, then check which planet actually has all of it.',
     explanation:'Life exists on Earth because: (1) <b>Liquid water</b> - essential for all life; Earth\'s temperature keeps water liquid (unlike Mercury/Venus which are too hot); (2) <b>Atmosphere with oxygen</b> - our atmosphere has 21% oxygen for breathing, plus protects us from UV radiation; (3) <b>Right temperature range</b> - not too hot or too cold. Venus is too hot (~465°C), Mercury has extreme temperatures and almost no atmosphere. (PSAC 2025 Q2d)' }),
 
   makeMCQ({ id:'g6sci-sol-014', chapterId:'g6-solar-system', subsection:'planets', difficulty:2,
@@ -181,37 +156,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-sol-017', chapterId:'g6-solar-system', subsection:'sun_moon', difficulty:2,
     question:'A SOLAR ECLIPSE occurs when:',
-    options:[
-      'The Earth moves between the Sun and the Moon',
-      'The Moon moves between the Earth and the Sun, blocking the Sun\'s light',
-      'The Sun moves behind Jupiter',
-      'The Earth\'s shadow falls on the Moon'
-    ],
-    answer:'The Moon moves between the Earth and the Sun, blocking the Sun\'s light',
+    options:['The Moon passes between Earth and Sun', 'The Sun passes behind the planet Jupiter', 'The Earth passes between Sun and Moon', 'The Earth\'s shadow falls on the Moon'],
+    answer:'The Moon passes between Earth and Sun',
     hint:'Think about what "solar" means - it relates to the Sun being blocked.',
     explanation:'A <b>solar eclipse</b> occurs when the <b>Moon passes between the Earth and the Sun</b>, casting a shadow on part of Earth\'s surface. People in the shadow see the Sun partially or totally blocked by the Moon. A <b>lunar eclipse</b> is the reverse: Earth\'s shadow falls on the Moon. Solar eclipses only occur during a new moon phase.' }),
 
   makeMCQ({ id:'g6sci-sol-018', chapterId:'g6-solar-system', subsection:'planets', difficulty:3,
-    question:'In Mauritius, the HOTTEST months are November to March. Which statement BEST explains why?',
-    options:[
-      'Mauritius is closer to the Sun during those months',
-      'The Southern Hemisphere tilts toward the Sun during November–March, so Mauritius receives more direct sunlight',
-      'The Sun produces more energy during Mauritian summer',
-      'Mauritius moves to a higher position in the solar system during summer'
-    ],
-    answer:'The Southern Hemisphere tilts toward the Sun during November–March, so Mauritius receives more direct sunlight',
-    hint:'Mauritius is in the Southern Hemisphere - its summer is opposite to that of Europe.',
+    question:'In Mauritius the hottest months are November to March. Why?',
+    options:['Our hemisphere tilts towards the Sun', 'We move higher in the solar system', 'The Sun gives out more energy then', 'Mauritius is nearer the Sun then'],
+    answer:'Our hemisphere tilts towards the Sun',
+    hint:'Seasons come from the tilt of the Earth, not from how far it is from the Sun. Which way is Mauritius tilted in December?',
     explanation:'Earth\'s axis is <b>tilted 23.5°</b>. When the <b>Southern Hemisphere tilts toward the Sun</b> (November–March), Mauritius receives more <b>direct sunlight</b> at a higher angle → <b>summer</b>. When the Southern Hemisphere tilts away (June–August), sunlight arrives at a lower angle → <b>winter</b>. The distance to the Sun is NOT the main cause of seasons.' }),
 
   makeMCQ({ id:'g6sci-sol-019', chapterId:'g6-solar-system', subsection:'planets', difficulty:4,
-    question:'A student says: "We don\'t feel the weight of the atmosphere because air has no mass." Is this correct, and why?',
-    options:[
-      'Correct - air is weightless and exerts no pressure',
-      'Incorrect - air has mass and weight; we don\'t notice it because atmospheric pressure pushes equally from all directions',
-      'Correct - only water has mass, not air',
-      'Incorrect - air has mass, but it only pushes downward, not upward'
-    ],
-    answer:'Incorrect - air has mass and weight; we don\'t notice it because atmospheric pressure pushes equally from all directions',
+    question:'A pupil says: "We do not feel the air above us because air has no mass." Is this right?',
+    options:['Incorrect - air has mass and pushes all ways', 'Incorrect - air pushes only downwards', 'Correct - only water has mass', 'Correct - air is weightless'],
+    answer:'Incorrect - air has mass and pushes all ways',
     hint:'The Grade 6 textbook states air pressure is ~10 tonnes per m² - that\'s definitely not weightless!',
     explanation:'The student is <b>incorrect</b>. Air definitely has mass and weight - the Grade 6 Science Pupil\'s Book states atmospheric pressure is about <b>10 tonnes (10,000 kg) per m²</b>. We don\'t feel it being crushed because the pressure acts <b>equally in all directions</b> (up, down, sideways), so the forces balance out on our body. Astronauts in space (no atmosphere) experience zero atmospheric pressure - a very different sensation.' })
 

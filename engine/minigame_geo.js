@@ -1,13 +1,13 @@
 'use strict';
 // ══════════════════════════════════════════════
-//  Tour data for the "Island Explorer" minigame — race around Mauritius.
+//  Tour data for the "Island Explorer" minigame - race around Mauritius.
 //
 //  Twelve real stops, roughly clockwise from Port Louis, each with a short
 //  blurb and its own bank of geography-clue MCQs (one is drawn at random per
 //  visit, so replays vary). This is the syllabus's Mauritius geography made
 //  playable: districts, landmarks, rivers, mountains, heritage sites.
 //
-//  ⚠ Shown to children as fact — every answer here is real, verifiable
+//  ⚠ Shown to children as fact - every answer here is real, verifiable
 //  Mauritius geography. Keep it that way when adding stops or questions.
 //  Each stop: { id, name, icon, district, blurb, qs:[{question, options[4],
 //  answer, explanation}] }. scripts/test-minigame-arcade.js checks structure.
@@ -27,7 +27,7 @@ window.MINIGAME_GEO = [
       { question:'The Champ de Mars in Port Louis is the oldest one of these in the Southern Hemisphere. The oldest what?',
         options:['Horse-racing track','Airport','Football stadium','Swimming pool'],
         answer:'Horse-racing track',
-        explanation:'Races have been run at the Champ de Mars since 1812 — the oldest racecourse in the Southern Hemisphere.' },
+        explanation:'Races have been run at the Champ de Mars since 1812 - the oldest racecourse in the Southern Hemisphere.' },
       { question:'Which fort looks down over Port Louis from its hill?',
         options:['The Citadel (Fort Adelaide)','Fort Frederik Hendrik','The Martello Tower','Fort William'],
         answer:'The Citadel (Fort Adelaide)',
@@ -41,14 +41,14 @@ window.MINIGAME_GEO = [
         options:['Water lilies','Sunflowers','Cactus plants','Rose bushes'],
         answer:'Water lilies',
         explanation:'Its ponds of giant water lilies, with leaves like huge trays, are the garden’s most famous sight.' },
-      { question:'What does "SSR" stand for in the garden’s name — and in the airport’s name too?',
+      { question:'What does "SSR" stand for in the garden’s name - and in the airport’s name too?',
         options:['Sir Seewoosagur Ramgoolam','South Sea Region','Sugar and Sea Route','Société de la Réunion'],
         answer:'Sir Seewoosagur Ramgoolam',
         explanation:'Sir Seewoosagur Ramgoolam was the first Prime Minister of independent Mauritius.' },
       { question:'At Beau Plan, near Pamplemousses, an old factory is now a museum about which crop?',
         options:['Sugar cane','Tea','Coffee','Cotton'],
         answer:'Sugar cane',
-        explanation:'L’Aventure du Sucre, in an old sugar mill, tells the story of sugar — the crop that shaped Mauritius.' },
+        explanation:'L’Aventure du Sucre, in an old sugar mill, tells the story of sugar - the crop that shaped Mauritius.' },
     ] },
 
   { id:'capmalheureux', name:'Cap Malheureux', icon:'⛪', district:'Rivière du Rempart',
@@ -78,7 +78,7 @@ window.MINIGAME_GEO = [
       { question:'Centre de Flacq is known for having the largest one of these in Mauritius. The largest what?',
         options:['Open-air market','Football stadium','Harbour','Sugar factory'],
         answer:'Open-air market',
-        explanation:'The Flacq market is the biggest open-air market on the island — busiest on market days!' },
+        explanation:'The Flacq market is the biggest open-air market on the island - busiest on market days!' },
       { question:'Grand River South East, which reaches the sea on this coast, holds which island record?',
         options:['The longest river','The widest waterfall','The deepest lake','The biggest lagoon'],
         answer:'The longest river',
@@ -91,7 +91,7 @@ window.MINIGAME_GEO = [
       { question:'In 1810, the Battle of Grand Port was fought in the bay near Mahébourg. What kind of battle was it?',
         options:['A naval (sea) battle','A battle between two forts','An air battle','A cavalry battle'],
         answer:'A naval (sea) battle',
-        explanation:'French and British ships fought among the reefs of Grand Port bay — a rare French naval victory.' },
+        explanation:'French and British ships fought among the reefs of Grand Port bay - a rare French naval victory.' },
       { question:'The international airport of Mauritius, at Plaine Magnien near Mahébourg, is named after whom?',
         options:['Sir Seewoosagur Ramgoolam','Mahé de La Bourdonnais','Queen Elizabeth II','Paul et Virginie'],
         answer:'Sir Seewoosagur Ramgoolam',
@@ -112,7 +112,7 @@ window.MINIGAME_GEO = [
       { question:'Why do big waves crash straight onto the cliffs at Gris Gris?',
         options:['There is no coral reef protecting this coast','The sea is deeper there','The wind only blows in the south','The cliffs attract the waves'],
         answer:'There is no coral reef protecting this coast',
-        explanation:'Almost all of Mauritius is ringed by a reef and calm lagoons — but at Gris Gris the reef breaks off, so the open ocean hits the shore.' },
+        explanation:'Almost all of Mauritius is ringed by a reef and calm lagoons - but at Gris Gris the reef breaks off, so the open ocean hits the shore.' },
       { question:'Gris Gris, near Souillac, is close to which point of the island?',
         options:['Its southernmost point','Its northernmost point','Its exact centre','Its westernmost point'],
         answer:'Its southernmost point',
@@ -120,7 +120,7 @@ window.MINIGAME_GEO = [
       { question:'At La Vanille Nature Park in the south, you can walk among hundreds of giant… what?',
         options:['Tortoises','Elephants','Ostriches','Kangaroos'],
         answer:'Tortoises',
-        explanation:'La Vanille breeds giant Aldabra tortoises — and keeps Nile crocodiles too, behind fences!' },
+        explanation:'La Vanille breeds giant Aldabra tortoises - and keeps Nile crocodiles too, behind fences!' },
     ] },
 
   { id:'gangatalao', name:'Ganga Talao', icon:'🛕', district:'Savanne',
@@ -137,7 +137,7 @@ window.MINIGAME_GEO = [
       { question:'Ganga Talao is named after which great river of India?',
         options:['The Ganges','The Nile','The Amazon','The Thames'],
         answer:'The Ganges',
-        explanation:'"Ganga Talao" means "Lake of the Ganges" — the lake is sacred, like the great Indian river.' },
+        explanation:'"Ganga Talao" means "Lake of the Ganges" - the lake is sacred, like the great Indian river.' },
     ] },
 
   { id:'gorges', name:'Black River Gorges', icon:'🌳', district:'Rivière Noire',
@@ -154,7 +154,7 @@ window.MINIGAME_GEO = [
       { question:'Which Mauritian bird of prey, once almost extinct, was saved in these forests?',
         options:['Mauritius kestrel','Dodo','Owl','Albatross'],
         answer:'Mauritius kestrel',
-        explanation:'In 1974 only four Mauritius kestrels were left in the wild — careful protection brought them back.' },
+        explanation:'In 1974 only four Mauritius kestrels were left in the wild - careful protection brought them back.' },
     ] },
 
   { id:'chamarel', name:'Chamarel', icon:'🌈', district:'Rivière Noire',
@@ -167,7 +167,7 @@ window.MINIGAME_GEO = [
       { question:'The Chamarel waterfall holds which record in Mauritius?',
         options:['It is the highest waterfall','It is the widest river','It is the warmest spring','It is the oldest bridge'],
         answer:'It is the highest waterfall',
-        explanation:'The Chamarel falls drop around 100 metres in a single leap — the island’s highest.' },
+        explanation:'The Chamarel falls drop around 100 metres in a single leap - the island’s highest.' },
       { question:'The colours of the Chamarel earths come from…',
         options:['Volcanic rock that weathered into different minerals','Paint added for tourists','Coloured sea sand blown inland','Flowers that stain the soil'],
         answer:'Volcanic rock that weathered into different minerals',
@@ -192,7 +192,7 @@ window.MINIGAME_GEO = [
     ] },
 
   { id:'tamarin', name:'Flic en Flac & Tamarin', icon:'🐬', district:'Rivière Noire',
-    blurb:'The sunset coast — long beaches, salt pans and dolphins in the bay.',
+    blurb:'The sunset coast - long beaches, salt pans and dolphins in the bay.',
     qs:[
       { question:'Early in the morning at Tamarin Bay, boats take visitors to watch which animals?',
         options:['Dolphins','Penguins','Whalesharks only','Sea lions'],
@@ -205,7 +205,7 @@ window.MINIGAME_GEO = [
       { question:'Why does the west coast, like Flic en Flac, get such famous sunsets?',
         options:['It faces west, where the sun goes down over the sea','The sun sets in the east there','Its sand glows at night','The reef reflects the moon'],
         answer:'It faces west, where the sun goes down over the sea',
-        explanation:'Facing west means the sun sinks straight into the sea — perfect sunset watching.' },
+        explanation:'Facing west means the sun sinks straight into the sea - perfect sunset watching.' },
     ] },
 
   { id:'curepipe', name:'Curepipe & Trou aux Cerfs', icon:'🌋', district:'Plaines Wilhems',
@@ -214,7 +214,7 @@ window.MINIGAME_GEO = [
       { question:'Trou aux Cerfs, in the middle of Curepipe, is a…',
         options:['Dormant volcanic crater','Meteorite hole','Man-made quarry','Sinkhole in limestone'],
         answer:'Dormant volcanic crater',
-        explanation:'It is the crater of a volcano that has slept for thousands of years — now full of trees.' },
+        explanation:'It is the crater of a volcano that has slept for thousands of years - now full of trees.' },
       { question:'Why is Curepipe cooler and rainier than the coast?',
         options:['It sits high on the central plateau','It is further from the Equator','Its buildings block the sun','The crater makes its own clouds'],
         answer:'It sits high on the central plateau',
@@ -223,7 +223,7 @@ window.MINIGAME_GEO = [
         options:['Reservoir','Sugar estate','Forest','Stadium'],
         answer:'Reservoir',
         explanation:'Mare aux Vacoas is the biggest reservoir in Mauritius, storing water for much of the island.' },
-      { question:'Curepipe belongs to which district — the most crowded one in Mauritius?',
+      { question:'Curepipe belongs to which district - the most crowded one in Mauritius?',
         options:['Plaines Wilhems','Savanne','Moka','Flacq'],
         answer:'Plaines Wilhems',
         explanation:'Plaines Wilhems, with its chain of towns from Beau Bassin to Curepipe, has the most people of the nine districts.' },

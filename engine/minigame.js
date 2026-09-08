@@ -1,34 +1,38 @@
 'use strict';
 // ══════════════════════════════════════════════
-//  MiniGames — the kids' arcade. Seven games:
-//    💰 Who Wants to Be a Billionaire? — 20-question prize ladder, lifelines
-//    ⚡ Quick Fire — 60-second MCQ blitz with a combo multiplier
-//    🧩 Word Builder — spell 10 clued words to cross the lagoon
+//  MiniGames - the kids' arcade. Seven games:
+//    💰 Who Wants to Be a Billionaire? - 20-question prize ladder, lifelines
+//    ⚡ Quick Fire - 60-second MCQ blitz with a combo multiplier
+//    🧩 Word Builder - spell 10 clued words to cross the lagoon
 //       (curated bank: engine/minigame_words.js, banded by grade)
-//    🗺️ Island Explorer — a 12-stop Mauritius geography tour
+//    🗺️ Island Explorer - a 12-stop Mauritius geography tour
 //       (curated real-place bank: engine/minigame_geo.js)
-//    🥷 Number Ninja — mental-maths belts, white → black; sums are
+//    🥷 Number Ninja - mental-maths belts, white → black; sums are
 //       GENERATED per belt, never drawn from the question bank
-//    ⚔️ Brain Battle — pass-the-phone duel: 5 rounds, one question each per
+//    ⚔️ Brain Battle - pass-the-phone duel: 5 rounds, one question each per
 //       round from the same difficulty band, sudden death on a tie
-//    🕰️ Time Traveller — tap real dated events into chronological order
+//    🕰️ Time Traveller - tap real dated events into chronological order
 //       (curated fact bank: engine/minigame_time.js, years revealed after)
 //
 //  Billionaire lifelines (one each per game):
-//    ✂️ Half & Half   — two wrong answers vanish
-//    📣 Ask the Crowd — a live 3-minute public poll (vote.html /v/<CODE>);
+//    ✂️ Half & Half   - two wrong answers vanish
+//    📣 Ask the Crowd - a live 3-minute public poll (vote.html /v/<CODE>);
 //                       the child shares the link and watches votes arrive
-//    🦉 Wise Owl      — shows the question's own hint
-//    🪢 Safety Rope   — one wrong answer forgiven (auto-catches you)
+//    🦉 Wise Owl      - shows the question's own hint
+//    🪢 Safety Rope   - one wrong answer forgiven (auto-catches you)
 //
-//  Question pool: every loaded subject of the child's own grade, MCQs with 4
-//  options, difficulty ramping 1→4 up the mountain. Answers here deliberately
-//  do NOT touch recordAnswer()/daily stats — a game replay must never distort
+//  Question pool: every quiz game draws through GameSettings.pickForGame()
+//  (engine/game_settings.js), which applies the parent's per-child Game
+//  Settings - included subjects and their mix, the difficulty choice capped by
+//  the practice cap, weak-area focus, and recent-question avoidance - once, for
+//  all of them. GameSettings.GAMES is the capability table saying which
+//  settings each game honours. Answers here deliberately
+//  do NOT touch recordAnswer()/daily stats - a game replay must never distort
 //  the mastery and mistake reporting parents rely on. Game bests live under
 //  DB.games (key added in Store._defaultStudent, so existing children backfill).
 //
-//  Gates: parent — DB.restrictions.minigamesDisabled (per child, parent
-//  dashboard toggle); plan — _PLAN_GATED_SCREENS.minigames in app.js, switched
+//  Gates: parent - DB.restrictions.minigamesDisabled (per child, parent
+//  dashboard toggle); plan - _PLAN_GATED_SCREENS.minigames in app.js, switched
 //  per plan from the admin Plans tab like every other capB feature.
 // ══════════════════════════════════════════════
 
@@ -94,14 +98,14 @@ const MiniGames = (() => {
     $('mg-hub')?.classList.add('hidden');
     $('mg-game')?.classList.remove('hidden');
     if (canB) {
-      _g = saved.g; _g.locked = false; _g.wrongOnce = _g.wrongOnce ?? null; _g.hidden = _g.hidden || [];
+      _g = saved.g; _g.locked = false; _g.wrongOnce = _g.wrongOnce ?? null; _g.hidden = _g.hidden || []; _g.cap = _g.cap || 4;
       _muted = !!(typeof DB !== 'undefined' && DB.games?.billionaire?.muted);
       _renderQ(true);
     } else if (canQ) {
-      _qf = saved.qf; _qf.locked = false; _qfDeadline = saved.deadline;
+      _qf = saved.qf; _qf.locked = false; _qf.cap = _qf.cap || 4; _qfDeadline = saved.deadline;
       _qfRender(); _qfTick(); _qfTimer = setInterval(_qfTick, 200);
     } else if (canW) {
-      _wb = saved.wb; _wb.locked = false;
+      _wb = saved.wb; _wb.locked = false; _wb.stones = _wb.stones || _wb.words.length;
       _wbRender();
     } else if (canN) {
       // The per-question deadline is not stashed; the current sum restarts
@@ -109,9 +113,9 @@ const MiniGames = (() => {
       _nj = saved.nj; _nj.locked = false;
       _njRender(); _njStartTimer();
     } else if (canBB) {
-      // Always resume at the handover screen — never mid-question with a
+      // Always resume at the handover screen - never mid-question with a
       // ticking timer, and never showing a question to whoever reloaded.
-      _bb = saved.bb; _bb.locked = false; _bb.phase = 'ready';
+      _bb = saved.bb; _bb.locked = false; _bb.phase = 'ready'; _bb.rounds = _bb.rounds || 5;
       _bbRender();
     } else if (canT) {
       // A mid-placement round restarts with the full rewind timer.
@@ -133,21 +137,21 @@ const MiniGames = (() => {
   const HELP = {
     billionaire: { icon: '💰', title: 'Who Wants to Be a Billionaire?', lines: [
       '🎯 Answer 20 questions and climb the prize ladder all the way to Rs 1 Billion (pretend money!).',
-      '🪜 The questions get harder as you climb. The last 5 are general-knowledge brain-teasers.',
+      '🪜 The questions get harder as you climb - the top rungs are the trickiest.',
       '🆘 You have 4 helpers, each used once: <b>50:50</b> removes two wrong answers, <b>📣 Ask the Crowd</b> lets friends vote, <b>🦉 Wise Owl</b> gives a hint, <b>🪢 Safety Rope</b> forgives one wrong answer.',
-      '🔒 Reach question 5, 10 or 15 to lock in that prize — you keep it even if you slip later.',
+      '🔒 Reach question 5, 10 or 15 to lock in that prize - you keep it even if you slip later.',
       '🤝 Not sure? You can walk away any time and keep the money you have won.',
     ] },
     quickfire: { icon: '⚡', title: 'Quick Fire', lines: [
       '⏱️ The clock gives you 60 seconds. Answer as many questions as you can!',
-      '✅ Every right answer scores points — answer fast for an extra speed bonus.',
+      '✅ Every right answer scores points - answer fast for an extra speed bonus.',
       '🔥 Get several right in a row to build a <b>combo</b>. A bigger combo multiplies your points.',
       '❌ A wrong answer breaks your combo and takes 3 seconds off the clock.',
       '📣 When time runs out, you can share your score with your friends!',
     ] },
     wordbuilder: { icon: '🧩', title: 'Word Builder', lines: [
       '🧩 Spell the answer by tapping the letters in the right order.',
-      '🪨 Each word you spell correctly moves you one stepping stone closer to the island — 10 stones in all.',
+      '🪨 Each word you spell correctly moves you one stepping stone closer to the island - 10 stones in all.',
       '❤️ You have 3 lives. A wrong spelling costs one life.',
       '🦀 Stuck on a word? Tap the friendly crab for a hint.',
     ] },
@@ -160,7 +164,7 @@ const MiniGames = (() => {
     ninja: { icon: '🥷', title: 'Number Ninja', lines: [
       '🥷 Solve quick maths sums before the timer runs out.',
       '⚡ The faster you slice the right answer, the more points you score.',
-      '🥋 Keep answering to earn belts — from White all the way up to Black!',
+      '🥋 Keep answering to earn belts - from White all the way up to Black!',
       '❤️ A wrong answer costs a life. Don\'t let them run out!',
     ] },
   };
@@ -190,7 +194,7 @@ const MiniGames = (() => {
         <div class="mg-help-head"><span class="mg-help-icon">${h.icon}</span><h3>How to play</h3></div>
         <div class="mg-help-sub">${h.title}</div>
         <ul class="mg-help-list">${h.lines.map(l => `<li>${l}</li>`).join('')}</ul>
-        <button class="mg-btn-primary mg-help-close" onclick="MiniGames.closeHelp()">Got it — let's play! 🎮</button>
+        <button class="mg-btn-primary mg-help-close" onclick="MiniGames.closeHelp()">Got it - let's play! 🎮</button>
       </div>`;
     ov.onclick = (e) => { if (e.target === ov) closeHelp(); };
   }
@@ -207,7 +211,7 @@ const MiniGames = (() => {
   }
 
   // Called from renderDashboard so the tile follows the parent toggle without a
-  // reload. The plan gate hides it too — a tile that only opens an upsell modal
+  // reload. The plan gate hides it too - a tile that only opens an upsell modal
   // is fair for features, but a games arcade a plan excludes should simply not
   // tease the child.
   function syncTile() {
@@ -217,7 +221,7 @@ const MiniGames = (() => {
     }
   }
 
-  // ── COMING SOON — design intents ───────────────
+  // ── COMING SOON - design intents ───────────────
   // The mg-card-soon teasers below are commitments; when building one, this is
   // the intent. Rules every new game inherits: answers NEVER touch
   // recordAnswer()/_recordDaily(); bests self-seed under DB.games.<key> (no
@@ -226,44 +230,44 @@ const MiniGames = (() => {
   // sw.js SHELL_FILES in the same commit (cache.addAll is all-or-nothing), and
   // SHELL_VERSION bumped. Parent/plan gating comes free via the hub.
   //
-  // 🐠 MEMORY REEF — French↔English vocabulary pairs, flip-card memory.
+  // 🐠 MEMORY REEF - French↔English vocabulary pairs, flip-card memory.
   //   Play: an undersea board of face-down shells; flip two to find a
   //   French word + its English meaning. Boards 4×3 → 4×4 → 5×4 by band;
   //   fewer flips = more pearls.
-  //   Data: NEW engine/minigame_pairs.js — ~60 curated pairs in 3 bands.
+  //   Data: NEW engine/minigame_pairs.js - ~60 curated pairs in 3 bands.
   //   Don't reuse MINIGAME_WORDS (spelling clues, not translations) and don't
   //   scrape the question bank (games must not depend on a subject being
   //   loaded/entitled). ⚠ Pairs on one board must be unambiguous: one French
   //   word maps to exactly one English word on that board.
   //   Bests: DB.games.reef {plays, bestPearls, bestFlips per board size}.
   //
-  // 🧪 POTION LAB — science classification under time pressure.
+  // 🧪 POTION LAB - science classification under time pressure.
   //   Play: 3 labelled cauldrons (the round's categories) and a conveyor of
   //   items; tap the right cauldron for each item before it slides off.
   //   Round themes follow the science packs: living/non-living, solid/liquid/
   //   gas, renewable/non-renewable energy, food groups, push/pull.
-  //   Data: NEW engine/minigame_lab.js — rounds {theme, categories, items:
+  //   Data: NEW engine/minigame_lab.js - rounds {theme, categories, items:
   //   [{label, emoji, category}]}. ⚠ Classifications must be unambiguous at
   //   primary level (no edge cases like viruses in living/non-living).
   //   Bests: DB.games.lab {plays, bestScore, bestRound}.
   //
-  // 🦜 ÉCOUTE! — French listening comprehension.
+  // 🦜 ÉCOUTE! - French listening comprehension.
   //   Play: the parrot SAYS a French word/number/short sentence via
   //   speechSynthesis (fr-FR voices are already warmed at app load; ⚠ speak()
-  //   must stay synchronous inside the tap for iOS — same rule as read-aloud
+  //   must stay synchronous inside the tap for iOS - same rule as read-aloud
   //   in app.js) and the child picks what they heard from 4 close-sounding
   //   options. Curate minimal pairs on purpose (vin/vingt, chat/chaud).
   //   A 🔁 replay button capped at 2 replays; no mute (audio IS the question).
   //   ⚠ Must not dead-end when no French voice is installed: fall back to
   //   flash-card mode (show the word for 2s, hide it, then ask).
-  //   Data: NEW engine/minigame_ecoute.js — items {say, options, answer},
+  //   Data: NEW engine/minigame_ecoute.js - items {say, options, answer},
   //   banded by grade. Bests: DB.games.ecoute {plays, bestScore, bestStreak}.
   //
-  // 📖 STORY SPRINT — reading comprehension against the clock.
-  //   Play: 5 short passages; read at leisure — the timer only starts after
+  // 📖 STORY SPRINT - reading comprehension against the clock.
+  //   Play: 5 short passages; read at leisure - the timer only starts after
   //   the child taps "I've finished reading" (never punish slow readers for
-  //   reading) — then 3 quick questions per passage.
-  //   Data: NEW engine/minigame_story.js — ~15 original mini-passages with 3
+  //   reading) - then 3 quick questions per passage.
+  //   Data: NEW engine/minigame_story.js - ~15 original mini-passages with 3
   //   MCQs each, banded by grade, English and French mixed by the child's
   //   packs. Don't extract passages from the question bank: comprehension
   //   questions there embed the passage as stimulus HTML and won't split
@@ -280,6 +284,9 @@ const MiniGames = (() => {
     if (_njTimer) { clearInterval(_njTimer); _njTimer = null; }
     _stopPoll();
     if (!_allowed()) { el.innerHTML = '<p class="mg-note">🔒 Games are switched off by your parent right now.</p>'; return; }
+    _preloadGrade();
+    const gkOn = !!GameSettings.context('billionaire').settings.generalKnowledge;
+    const mixLine = GameSettings.childSummaryLine();
     const best = (typeof DB !== 'undefined' && DB.games?.billionaire) || {};
     const qf = (typeof DB !== 'undefined' && DB.games?.quickfire) || {};
     const wb = (typeof DB !== 'undefined' && DB.games?.wordbuilder) || {};
@@ -288,11 +295,12 @@ const MiniGames = (() => {
     const bb = (typeof DB !== 'undefined' && DB.games?.battle) || {};
     const tt = (typeof DB !== 'undefined' && DB.games?.timetravel) || {};
     el.innerHTML = `
+      ${mixLine ? `<p class="mg-mix-line">🎯 ${esc(mixLine)}</p>` : ''}
       <button class="mg-card mg-card-live mg-card-bq" onclick="MiniGames.startBillionaire()">
         <span class="mg-card-art">💰</span>
         <span class="mg-card-body">
           <b>Who Wants to Be a Billionaire?</b>
-          <span>20 questions, a prize ladder to Rs 1 Billion (pretend!), 4 lifelines — the last 5 are brainy general knowledge!</span>
+          <span>20 questions, a prize ladder to Rs 1 Billion (pretend!), 4 lifelines${gkOn ? ' - the last 5 are brainy general knowledge!' : ' - the top rungs are the trickiest!'}</span>
           ${best.bestPrize ? `<span class=\"mg-card-best\">🏅 Personal best: ${_money(best.bestPrize)}</span>` : '<span class=\"mg-card-best\">🌟 Can you win the billion?</span>'}
         </span>
         <span class="mg-card-go">PLAY ›</span>
@@ -301,7 +309,7 @@ const MiniGames = (() => {
         <span class="mg-card-art">⚡</span>
         <span class="mg-card-body">
           <b>Quick Fire</b>
-          <span>60 seconds on the clock — how many can you answer? Build a combo, share your score!</span>
+          <span>60 seconds on the clock - how many can you answer? Build a combo, share your score!</span>
           ${qf.bestScore ? `<span class=\"mg-card-best\">🏅 High score: ${qf.bestScore} points</span>` : '<span class=\"mg-card-best\">🌟 Set your first high score!</span>'}
         </span>
         <span class="mg-card-go">PLAY ›</span>
@@ -310,8 +318,8 @@ const MiniGames = (() => {
         <span class="mg-card-art">🧩</span>
         <span class="mg-card-body">
           <b>Word Builder</b>
-          <span>Spell your way across the lagoon — 10 stepping stones, 3 lives, and a crab with hints!</span>
-          ${wb.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${wb.bestStones}/10 stones · ${wb.bestScore} pts</span>` : '<span class=\"mg-card-best\">🌟 Can you reach the island?</span>'}
+          <span>Spell your way across the lagoon - 10 stepping stones, 3 lives, and a crab with hints!</span>
+          ${wb.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${wb.bestStones}/${wb.bestOf || 10} stones · ${wb.bestScore} pts</span>` : '<span class=\"mg-card-best\">🌟 Can you reach the island?</span>'}
         </span>
         <span class="mg-card-go">PLAY ›</span>
       </button>
@@ -328,7 +336,7 @@ const MiniGames = (() => {
         <span class="mg-card-art">🥷</span>
         <span class="mg-card-body">
           <b>Number Ninja</b>
-          <span>Slice through quick sums before the clock runs out — mental-maths reflexes, with belts to earn from white to black!</span>
+          <span>Slice through quick sums before the clock runs out - mental-maths reflexes, with belts to earn from white to black!</span>
           ${nj.bestBelts ? `<span class=\"mg-card-best\">🏅 Best: ${['White','Yellow','Orange','Green','Blue','Brown','Black'][nj.bestBelts - 1]} Belt · ${nj.bestScore} pts</span>` : '<span class=\"mg-card-best\">🌟 Earn your first belt!</span>'}
         </span>
         <span class="mg-card-go">PLAY ›</span>
@@ -337,7 +345,7 @@ const MiniGames = (() => {
         <span class="mg-card-art">⚔️</span>
         <span class="mg-card-body">
           <b>Brain Battle</b>
-          <span>Pass-the-phone duel — challenge a friend or sibling to a head-to-head quiz and see who takes the crown!</span>
+          <span>Pass-the-phone duel - challenge a friend or sibling to a head-to-head quiz and see who takes the crown!</span>
           ${bb.plays ? `<span class=\"mg-card-best\">🏅 ${bb.plays} duel${bb.plays === 1 ? '' : 's'} fought · 🦁 ${bb.p1Wins || 0} – ${bb.p2Wins || 0} 🐯</span>` : '<span class=\"mg-card-best\">🌟 Who takes the crown?</span>'}
         </span>
         <span class="mg-card-go">PLAY ›</span>
@@ -346,7 +354,7 @@ const MiniGames = (() => {
         <span class="mg-card-art">🕰️</span>
         <span class="mg-card-body">
           <b>Time Traveller</b>
-          <span>Journey through Mauritius history — put famous events, explorers and heroes back in the right order before time rewinds!</span>
+          <span>Journey through Mauritius history - put famous events, explorers and heroes back in the right order before time rewinds!</span>
           ${tt.bestScore ? `<span class=\"mg-card-best\">🏅 Best: ${tt.bestScore} pts · ${tt.bestPerfect || 0}/8 perfect rounds</span>` : '<span class=\"mg-card-best\">🌟 Take your first journey!</span>'}
         </span>
         <span class="mg-card-go">PLAY ›</span>
@@ -355,7 +363,7 @@ const MiniGames = (() => {
         <span class="mg-card-art">🐠</span>
         <span class="mg-card-body">
           <b>Memory Reef</b>
-          <span>Flip the shells and match French words to their English meanings — the fewer flips, the more pearls you keep!</span>
+          <span>Flip the shells and match French words to their English meanings - the fewer flips, the more pearls you keep!</span>
         </span>
         <span class="mg-card-lock">COMING SOON</span>
       </div>
@@ -371,7 +379,7 @@ const MiniGames = (() => {
         <span class="mg-card-art">🦜</span>
         <span class="mg-card-body">
           <b>Écoute !</b>
-          <span>The parrot speaks French — listen carefully and pick exactly what it said. Watch out for tricky sound-alikes!</span>
+          <span>The parrot speaks French - listen carefully and pick exactly what it said. Watch out for tricky sound-alikes!</span>
         </span>
         <span class="mg-card-lock">COMING SOON</span>
       </div>
@@ -379,7 +387,7 @@ const MiniGames = (() => {
         <span class="mg-card-art">📖</span>
         <span class="mg-card-body">
           <b>Story Sprint</b>
-          <span>Read a short story at your own pace, then race the clock on three questions — the timer waits until you're ready!</span>
+          <span>Read a short story at your own pace, then race the clock on three questions - the timer waits until you're ready!</span>
         </span>
         <span class="mg-card-lock">COMING SOON</span>
       </div>
@@ -389,15 +397,15 @@ const MiniGames = (() => {
   }
 
   // ══════════════════════════════════════════════
-  //  WHO WANTS TO BE A BILLIONAIRE? — the flagship quiz.
+  //  WHO WANTS TO BE A BILLIONAIRE? - the flagship quiz.
   //
   //  20 questions up a prize ladder to Rs 1 billion, TV-quiz style.
   //    Q1–10  : the child's own grade, easy → medium
   //    Q11–15 : the hardest textbook questions (word problems / level 4)
-  //    Q16–20 : GENERAL KNOWLEDGE (window.MINIGAME_GK) — the same subjects,
+  //    Q16–20 : GENERAL KNOWLEDGE (window.MINIGAME_GK) - the same subjects,
   //             reaching beyond the book; each shows its subject + topic.
   //  Safe havens at Q5, Q10 and Q15: clear one and that prize is guaranteed.
-  //  A distinct name and look on purpose — no show's logo, music or wording.
+  //  A distinct name and look on purpose - no show's logo, music or wording.
   // ══════════════════════════════════════════════
   const PRIZES = [100, 200, 300, 500, 1000,
                   2000, 4000, 8000, 16000, 50000,
@@ -459,18 +467,25 @@ const MiniGames = (() => {
     return plain.length <= 280;
   }
 
-  function _gradePool() {
-    const grade = (typeof Auth !== 'undefined' && Auth.getActiveAccount?.()?.grade)
-      || (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
-    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
-      .filter(p => p.grade === grade && !p.comingSoon);
-    const chapterIds = new Set(packs.flatMap(p => (p._chapters || p.chapters || []).map(c => c.id)));
-    let pool = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length === 4 && q.id && chapterIds.has(q.chapterId) && _timedSafe(q));
-    if (pool.length < 40) pool = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length === 4 && q.id && _timedSafe(q));
-    return { pool, grade, packs };
+  // Nothing answers a game until the bank has arrived. The hub asks the
+  // loader for the whole grade so an included subject is not missing merely
+  // because the child never opened it in Practice.
+  function _bankLoaded() {
+    return (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : []).some(q => q.type === 'mcq');
   }
+  function _preloadGrade() {
+    if (typeof QuestionLoader === 'undefined' || !QuestionLoader.loadAllForGrade) return;
+    try { const p = QuestionLoader.loadAllForGrade(_childGrade()); if (p && p.catch) p.catch(() => {}); } catch (_) {}
+  }
+  // Two different failures, two different messages: "still loading" is a
+  // wait; "not enough suitable questions" is the parent's settings.
+  function _pickFailToast(res) {
+    if (!_bankLoaded() || !res || !res.loaded) { toast('Questions are still loading - try again in a moment!', 3000); _preloadGrade(); return; }
+    toast(GameSettings.NO_QUESTIONS_MSG, 4500);
+  }
+  const _trimQ = q => ({ question: q.question, options: q.options.slice(0, 4), answer: q.answer,
+    explanation: q.explanation, hint: q.hint, _id: q._id || q.id, _level: q._level,
+    _label: _chapterLabel(q._chapterId || q.chapterId), _gk: false });
 
   // chapterId → "Subject · Chapter", built once from the packs.
   let _chLabels = null;
@@ -483,66 +498,37 @@ const MiniGames = (() => {
     return _chLabels[chapterId] || 'Textbook question';
   }
 
-  // Which GK subjects this child's grade actually studies.
-  function _gkSubjects(packs) {
-    const map = [[/math/i, 'maths'], [/english/i, 'english'], [/french|français/i, 'french'],
-                 [/science/i, 'science'], [/histor|geog/i, 'histgeo']];
-    const on = new Set();
-    packs.forEach(p => { const n = (p.subject || p.name || ''); map.forEach(([re, k]) => { if (re.test(n)) on.add(k); }); });
-    return on.size ? on : new Set(['maths', 'english', 'french', 'science', 'histgeo']);
-  }
-
+  // 15 textbook rungs (10 easy→medium, 5 hardest) plus 5 general-knowledge
+  // rungs when the parent has them on - otherwise 20 textbook rungs. Every
+  // rung must be filled: a 15-question ladder crashes at rung 16.
   function _pickBillionaire() {
-    const { pool, packs } = _gradePool();
-    if (pool.length < 10) return null;
-    const byDiff = { 1: [], 2: [], 3: [], 4: [] };
-    for (const q of pool) (byDiff[q.difficulty] || byDiff[2]).push(q);
-    const used = new Set();
-    const take = (want) => {
-      for (const d of [want, want - 1, want + 1, want - 2, want + 2]) {
-        const bucket = (byDiff[d] || []).filter(q => !used.has(q.id));
-        if (bucket.length) { const q = bucket[Math.floor(Math.random() * bucket.length)]; used.add(q.id); return q; }
-      }
-      const rest = pool.filter(q => !used.has(q.id));
-      const q = rest[Math.floor(Math.random() * rest.length)]; if (q) used.add(q.id); return q;
-    };
-    // 15 textbook questions (10 easy→medium, 5 hardest)
-    const textbook = BILL_LADDER.map(take).filter(Boolean).map(q => ({
-      question: q.question, options: q.options.slice(0, 4), answer: q.answer,
-      explanation: q.explanation, hint: q.hint, _label: _chapterLabel(q.chapterId), _gk: false,
-    }));
-    // 5 general-knowledge, one per subject where possible, from this grade's subjects
-    const bank = (window.MINIGAME_GK || []).slice();
-    const subs = _gkSubjects(packs);
-    const eligible = bank.filter(q => subs.has(q.subject));
-    const gk = [];
-    const bySub = {};
-    (eligible.length ? eligible : bank).forEach(q => (bySub[q.subject] ||= []).push(q));
-    const subOrder = Object.keys(bySub).sort(() => Math.random() - 0.5);
-    // round-robin the subjects so the last five span different subjects
-    let guard = 0;
-    while (gk.length < 5 && guard++ < 40) {
-      for (const s of subOrder) {
-        if (gk.length >= 5) break;
-        const arr = bySub[s];
-        if (arr && arr.length) {
-          const q = arr.splice(Math.floor(Math.random() * arr.length), 1)[0];
-          gk.push({ question: q.question, options: q.options.slice(0, 4), answer: q.answer,
-            explanation: q.explanation, _label: 'General knowledge · ' + q.topic, _gk: true });
-        }
+    const c = GameSettings.context('billionaire');
+    const gkOn = !!c.settings.generalKnowledge;
+    const levels = gkOn ? BILL_LADDER : BILL_LADDER.concat([4, 4, 4, 4, 4]);
+    const res = GameSettings.pickForGame('billionaire', levels.length, { levels, safe: _timedSafe });
+    let all = res.questions.map(_trimQ);
+    if (gkOn && all.length === BILL_LADDER.length) {
+      const gk = GameSettings.pickGeneralKnowledge(5, c.settings, window.MINIGAME_GK || []).map(q => ({
+        question: q.question, options: q.options.slice(0, 4), answer: q.answer,
+        explanation: q.explanation, _label: 'General knowledge · ' + q.topic, _gk: true }));
+      all = all.concat(gk);
+      if (all.length < PRIZES.length) {
+        const more = GameSettings.pickForGame('billionaire', PRIZES.length - all.length,
+          { levels: [4], safe: _timedSafe, exclude: all.map(q => q._id).filter(Boolean) });
+        all = all.concat(more.questions.map(_trimQ));
       }
     }
-    const all = textbook.concat(gk);
-    return all.length >= 15 ? all.slice(0, 20) : null;
+    return { qs: all.length >= PRIZES.length ? all.slice(0, PRIZES.length) : null, res, cap: c.cap };
   }
 
   // ── Starting a game ────────────────────────────
   function startBillionaire() {
-    const qs = _pickBillionaire();
-    if (!qs) { toast('Questions are still loading — try again in a moment!', 3000); return; }
+    const { qs, res, cap } = _pickBillionaire();
+    if (!qs) { _pickFailToast(res); return; }
+    GameSettings.markUsed(qs.map(q => q._id));
     _muted = !!(typeof DB !== 'undefined' && DB.games?.billionaire?.muted);
     _g = {
-      qs, rung: 0, banked: 0, over: false, locked: false,
+      qs, rung: 0, banked: 0, over: false, locked: false, cap,
       lifelines: { half: true, crowd: true, owl: true, rope: true },
       hidden: [], wrongOnce: null,
     };
@@ -583,7 +569,7 @@ const MiniGames = (() => {
     // keep=true on RESUME: preserve this question's 50:50 / rope state instead of
     // clearing it (a fresh question passes nothing and resets).
     if (!keep) { _g.hidden = []; _g.wrongOnce = null; }
-    const tier = _g.rung < 10 ? '' : _g.rung < 15 ? '<span class="bq-tier hard">🔥 Harder</span>' : '<span class="bq-tier gk">🧠 General knowledge</span>';
+    const tier = q._gk ? '<span class="bq-tier gk">🧠 General knowledge</span>' : _g.rung < 10 ? '' : '<span class="bq-tier hard">🔥 Harder</span>';
     game.innerHTML = `
       <div class="bq-stage">
         <div class="bq-topbar">
@@ -605,7 +591,7 @@ const MiniGames = (() => {
           </div>
           <div id="mg-msg" class="mg-msg hidden"></div>
           <div id="mg-poll" class="mg-poll hidden"></div>
-          <p class="mg-fineprint">🎓 Educational game — the rupees are pretend, no real money can be won.</p>
+          <p class="mg-fineprint">🎓 Educational game - the rupees are pretend, no real money can be won.</p>
         </div>
         ${_ladderHtml()}
       </div>`;
@@ -619,13 +605,14 @@ const MiniGames = (() => {
     if (!_g || _g.locked || _g.over || _g.hidden.includes(i) || i === _g.wrongOnce) return;
     const q = _g.qs[_g.rung];
     const correct = q.options[i] === q.answer;
+    if (!q._gk) GameSettings.adaptiveAnswer(correct, _g.cap);
     _g.locked = true;
     _stopPoll();
     const btn = $('mg-opt-' + i);
     btn?.classList.add('picked');
     document.querySelectorAll('.bq-opt').forEach(b => b.classList.add('waiting'));
     _sfx.lockin();
-    // suspense beat, then the reveal — this pause is the whole feel of the format
+    // suspense beat, then the reveal - this pause is the whole feel of the format
     setTimeout(() => {
       document.querySelectorAll('.bq-opt').forEach(b => b.classList.remove('waiting'));
       if (correct) return _correct(i);
@@ -636,7 +623,7 @@ const MiniGames = (() => {
         btn?.classList.remove('picked');
         btn?.classList.add('wrong', 'shake');
         _sfx.wrong();
-        _msg('🪢 <b>Safety Rope!</b> That was wrong — but the rope caught you. Pick again.');
+        _msg('🪢 <b>Safety Rope!</b> That was wrong - but the rope caught you. Pick again.');
         const lifes = document.querySelector('.bq-lifes');
         if (lifes) lifes.innerHTML = _lifelineHtml();
         _persist('billionaire');
@@ -708,9 +695,9 @@ const MiniGames = (() => {
     if (!game) return;
     const level = _g.rung;
     const head = how === 'jackpot'
-        ? { icon: '🏆', title: 'YOU WON THE BILLION!', sub: `All 20 questions — you're a PSAC Billionaire! Legendary.` }
+        ? { icon: '🏆', title: 'YOU WON THE BILLION!', sub: `All 20 questions - you're a PSAC Billionaire! Legendary.` }
       : how === 'walk'
-        ? { icon: '🤝', title: 'You walked away a winner', sub: `Smart move — you banked ${_money(_g.banked)} after ${level} correct.` }
+        ? { icon: '🤝', title: 'You walked away a winner', sub: `Smart move - you banked ${_money(_g.banked)} after ${level} correct.` }
         : { icon: '💥', title: 'Wrong answer!', sub: `You reached question ${level + 1}${_g.banked ? `, and a safe haven kept ${_money(_g.banked)}` : ''}.` };
     const best = (typeof DB !== 'undefined' && DB.games?.billionaire) || {};
     game.innerHTML = `
@@ -721,7 +708,7 @@ const MiniGames = (() => {
         ${q && how === false ? `<div class="mg-end-learn"><b>The answer was:</b> ${esc(q.answer)}${q.explanation ? `<br><span>${q.explanation}</span>` : ''}</div>` : ''}
         <div class="mg-end-stars">💰 ${_money(_g.banked)} banked</div>
         ${best.bestPrize ? `<p class="bq-best">🏅 Your best: ${_money(best.bestPrize)}</p>` : ''}
-        <p class="mg-fineprint">🎓 Educational game — the rupees are pretend, no real money can be won.</p>
+        <p class="mg-fineprint">🎓 Educational game - the rupees are pretend, no real money can be won.</p>
         <div class="mg-end-row">
           <button class="mg-btn-primary" onclick="MiniGames.startBillionaire()">🔁 Play again</button>
           <button class="mg-btn-ghost" onclick="MiniGames.renderHub()">🎮 All games</button>
@@ -772,7 +759,7 @@ const MiniGames = (() => {
     if (key === 'owl') return _owl();
     if (key === 'crowd') return _crowd();
     if (key === 'rope') {
-      _msg('🪢 The Safety Rope is already tied on — it catches your first wrong answer automatically!');
+      _msg('🪢 The Safety Rope is already tied on - it catches your first wrong answer automatically!');
     }
   }
 
@@ -793,7 +780,7 @@ const MiniGames = (() => {
 
   function _owl() {
     const q = _g.qs[_g.rung];
-    if (!q.hint) { _msg('🦉 The owl peers at this one… <i>"No hint for this one — trust yourself!"</i> (Your owl is saved for later.)'); return; }
+    if (!q.hint) { _msg('🦉 The owl peers at this one… <i>"No hint for this one - trust yourself!"</i> (Your owl is saved for later.)'); return; }
     _g.lifelines.owl = false;
     document.querySelector('.bq-lifes').innerHTML = _lifelineHtml();
     _persist('billionaire');
@@ -810,10 +797,10 @@ const MiniGames = (() => {
     if (error || !data || data.ok !== true) {
       const why = (data && data.error) || error?.message || '';
       _msg(why === 'not_signed_in'
-        ? '📣 The crowd poll needs a student sign-in — a parent preview can\'t open one.'
+        ? '📣 The crowd poll needs a student sign-in - a parent preview can\'t open one.'
         : why === 'too_many'
           ? '📣 The crowd needs a rest! Try this lifeline again in a little while.'
-          : '📣 Could not reach the crowd — check your connection and try again.');
+          : '📣 Could not reach the crowd - check your connection and try again.');
       return;
     }
     _g.lifelines.crowd = false;
@@ -827,10 +814,11 @@ const MiniGames = (() => {
 
   function _pollUrl() {
     // /v/<CODE> needs the Netlify rewrite; a local or file:// dev session gets
-    // the query-string form vote.html understands everywhere.
+    // the query-string form vote.html understands everywhere. That fallback is
+    // resolved against this document: location.origin is bare "file://" locally.
     return /^https?:$/.test(location.protocol) && !/localhost|127\./.test(location.hostname)
       ? `${location.origin}/v/${_pollCode}`
-      : `${location.origin}/vote.html?code=${_pollCode}`;
+      : new URL(`vote.html?code=${_pollCode}`, location.href).href;
   }
 
   function _openPollPanel(visible, q, seconds) {
@@ -848,7 +836,7 @@ const MiniGames = (() => {
         <div class="mg-bar-row"><div class="mg-bar-head"><span>${x.l}</span><span id="mg-bar-n-${i}">0</span></div>
         <div class="mg-bar-track"><div class="mg-bar-fill" id="mg-bar-${i}" style="width:0%"></div></div></div>`).join('')}
       </div>
-      <p class="mg-poll-tip">Votes appear live — but the final answer is <b>yours</b>. Tap an option above when you're ready!</p>`;
+      <p class="mg-poll-tip">Votes appear live - but the final answer is <b>yours</b>. Tap an option above when you're ready!</p>`;
     let left = seconds;
     const tick = async () => {
       left -= 3;
@@ -895,11 +883,11 @@ const MiniGames = (() => {
   // ── Entry ──────────────────────────────────────
 
   // ══════════════════════════════════════════════
-  //  QUICK FIRE ⚡ — 60 seconds, as many as you can.
+  //  QUICK FIRE ⚡ - 60 seconds, as many as you can.
   //
   //  Rapid MCQs from the child's own grade. A correct answer adds time-scaled
   //  points and grows a combo multiplier; a wrong one breaks the combo and
-  //  costs 3 seconds. No lifelines, no ladder — pure speed and streak. Same
+  //  costs 3 seconds. No lifelines, no ladder - pure speed and streak. Same
   //  rule as the ladder: nothing here touches recordAnswer()/daily, so a blitz
   //  replay never distorts a parent's mastery view. Best score lives in
   //  DB.games.quickfire.
@@ -908,11 +896,17 @@ const MiniGames = (() => {
   const QF_PENALTY = 3;
   let _qf = null, _qfTimer = null, _qfDeadline = 0;
 
+  const QF_STREAM = 40;   // more than a child answers in 60 s; the stream cycles if not
   function startQuick() {
-    if (!_gradePool().pool.length) { toast('Questions are still loading — try again in a moment!', 3000); return; }
-    // …but Quick Fire wants a big shuffled stream, not a 10-rung ladder.
-    const pool = _quickPool();
-    _qf = { pool, idx: 0, score: 0, correct: 0, answered: 0, combo: 0, bestCombo: 0, over: false, locked: false };
+    // A big easy-first stream rather than a ladder - the picker spreads the
+    // parent's subject mix through it and keeps every level under the cap.
+    const res = GameSettings.pickForGame('quickfire', QF_STREAM, { safe: _timedSafe });
+    if (!res.questions.length) { _pickFailToast(res); return; }
+    GameSettings.markUsed(res.questions.map(q => q._id));
+    const pool = res.questions.map(q => ({ question: q.question, options: q.options.slice(0, 4), answer: q.answer, _id: q._id, _level: q._level }));
+    const c = res.context;
+    _qf = { pool, idx: 0, score: 0, correct: 0, answered: 0, combo: 0, bestCombo: 0, over: false, locked: false,
+            cap: c.cap, adaptive: c.settings.difficulty === 'adaptive' };
     _qfDeadline = Date.now() + QF_SECONDS * 1000;
     $('mg-hub')?.classList.add('hidden');
     const game = $('mg-game');
@@ -922,19 +916,21 @@ const MiniGames = (() => {
     _qfTimer = setInterval(_qfTick, 200);
   }
 
-  function _quickPool() {
-    const grade = (typeof Auth !== 'undefined' && Auth.getActiveAccount?.()?.grade)
-      || (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
-    const packs = (typeof SUBJECT_PACKS !== 'undefined' ? SUBJECT_PACKS : [])
-      .filter(p => p.grade === grade && !p.comingSoon);
-    const chapterIds = new Set(packs.flatMap(p => (p._chapters || p.chapters || []).map(c => c.id)));
-    let pool = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length >= 2 && q.id && chapterIds.has(q.chapterId) && _timedSafe(q));
-    if (pool.length < 20) pool = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-      .filter(q => q.type === 'mcq' && Array.isArray(q.options) && q.options.length >= 2 && q.id && _timedSafe(q));
-    // Easy-first so the clock feels beatable, then let it drift harder.
-    pool.sort((a, b) => (a.difficulty || 2) - (b.difficulty || 2) || Math.random() - 0.5);
-    return pool;
+  // Adaptive: after each answer, bring the unseen question nearest the new
+  // level forward. The stream's contents (the parent's mix) never change -
+  // only the order the child meets them in.
+  function _qfAdapt(correct) {
+    if (!_qf) return;
+    const level = GameSettings.adaptiveAnswer(correct, _qf.cap);
+    if (!_qf.adaptive || level === undefined) return;
+    const next = _qf.idx + 1;
+    if (next >= _qf.pool.length) return;
+    let best = next, bestGap = Math.abs((_qf.pool[next]._level || 2) - level);
+    for (let i = next + 1; i < _qf.pool.length; i++) {
+      const gap = Math.abs((_qf.pool[i]._level || 2) - level);
+      if (gap < bestGap) { best = i; bestGap = gap; if (!gap) break; }
+    }
+    if (best !== next) { const t = _qf.pool[next]; _qf.pool[next] = _qf.pool[best]; _qf.pool[best] = t; }
   }
 
   function _qfMultiplier() { return 1 + Math.min(4, Math.floor(_qf.combo / 3)); }  // ×1 … ×5
@@ -978,6 +974,7 @@ const MiniGames = (() => {
     const correct = chosen === q.answer;
     _qf.locked = true;
     _qf.answered++;
+    _qfAdapt(correct);
     const btn = $('qf-opt-' + i);
     if (correct) {
       const left = Math.max(0, _qfDeadline - Date.now());
@@ -1082,20 +1079,18 @@ const MiniGames = (() => {
 
   // ── Sharing a score ────────────────────────────
   // ⚠ No child name, no account id, no link back to any profile. The share is a
-  // score and a challenge, nothing that identifies the child — a game score is
+  // score and a challenge, nothing that identifies the child - a game score is
   // the one thing safe to post, and it must stay that way.
   function _qfShareText() {
     const acc = _qf.answered ? Math.round(_qf.correct / _qf.answered * 100) : 0;
-    return `⚡ I scored ${_qf.score} in Quick Fire on PSAC Practice — ${_qf.correct} correct, ${acc}% accuracy! Can you beat me? 🎯`;
+    return `⚡ I scored ${_qf.score} in Quick Fire on PSAC Practice - ${_qf.correct} correct, ${acc}% accuracy! Can you beat me? 🎯`;
   }
   function _qfShareUrl() {
     // A score-showcase landing page (no personal data in the URL) that invites
     // the opener to play. score.html reads these params and renders a card.
     const acc = _qf.answered ? Math.round(_qf.correct / _qf.answered * 100) : 0;
     const qs = `s=${_qf.score}&c=${_qf.correct}&a=${acc}`;
-    return /^https?:$/.test(location.protocol) && !/localhost|127\./.test(location.hostname)
-      ? `${location.origin}/score.html?${qs}`
-      : `${location.origin}/score.html?${qs}`;
+    return new URL(`score.html?${qs}`, location.href).href;
   }
 
   // Turns the on-screen score card into a PNG so it lands as a real image in
@@ -1130,7 +1125,7 @@ const MiniGames = (() => {
     const text = _qfShareText(), url = _qfShareUrl();
     const file = await _qfScoreImage();
     // Native share sheet reaches Instagram/WhatsApp/Messenger/etc. Prefer a file
-    // share where the platform supports it — the score card as an image travels
+    // share where the platform supports it - the score card as an image travels
     // further than a link.
     if (navigator.share) {
       try {
@@ -1140,7 +1135,7 @@ const MiniGames = (() => {
           await navigator.share({ title: 'Quick Fire score', text, url });
         }
         return;
-      } catch (_) { /* user dismissed — not an error */ return; }
+      } catch (_) { /* user dismissed - not an error */ return; }
     }
     qfShareTo('copy');
   }
@@ -1159,7 +1154,7 @@ const MiniGames = (() => {
   }
 
   // ══════════════════════════════════════════════
-  //  WORD BUILDER 🧩 — spell your way across the lagoon.
+  //  WORD BUILDER 🧩 - spell your way across the lagoon.
   //
   //  Ten stepping stones from beach to island; each stone is one word. The
   //  crab reads a clue, the letters arrive scrambled, and the child taps tiles
@@ -1167,9 +1162,9 @@ const MiniGames = (() => {
   //  (3 lives). Three 💡 hints per crossing lock in the next correct letter.
   //  Words come from window.MINIGAME_WORDS (curated, banded 1–3) and ramp with
   //  the child's own grade. Same arcade rule as every game here: nothing
-  //  touches recordAnswer()/daily — bests live in DB.games.wordbuilder.
+  //  touches recordAnswer()/daily - bests live in DB.games.wordbuilder.
   // ══════════════════════════════════════════════
-  const WB_STONES = 10, WB_LIVES = 3, WB_HINTS = 3;
+  const WB_LIVES = 3, WB_HINTS = 3;
   let _wb = null;
 
   function _childGrade() {
@@ -1177,13 +1172,20 @@ const MiniGames = (() => {
       || (typeof SELECTED_GRADE !== 'undefined' && SELECTED_GRADE) || 5;
   }
 
+  // Stones = the parent's round length; the band mix follows the grade unless
+  // the parent chose Basic (mostly band 1) or Challenging (bands 2–3).
   function _wbPickWords() {
     const bank = (window.MINIGAME_WORDS || []);
-    if (bank.length < WB_STONES) return null;
+    const c = GameSettings.context('wordbuilder');
+    const stones = c.settings.roundLength;
+    if (bank.length < stones) return null;
     const grade = _childGrade();
-    const mix = grade <= 4 ? [1, 1, 1, 1, 1, 1, 2, 2, 2, 2]
-      : grade === 5 ? [1, 1, 1, 2, 2, 2, 2, 2, 3, 3]
-        : [1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
+    const base = grade <= 4 ? { 1: 60, 2: 40 } : grade === 5 ? { 1: 30, 2: 50, 3: 20 } : { 1: 20, 2: 40, 3: 40 };
+    const dist = c.settings.difficulty === 'basic' ? { 1: 80, 2: 20 }
+      : c.settings.difficulty === 'challenging' ? { 2: 40, 3: 60 } : base;
+    const counts = GameSettings.allocate(stones, dist);
+    const mix = [];
+    [1, 2, 3].forEach(b => { for (let i = 0; i < (counts[b] || 0); i++) mix.push(b); });
     const byBand = { 1: [], 2: [], 3: [] };
     bank.forEach(w => (byBand[w.band] || byBand[2]).push(w));
     const used = new Set();
@@ -1195,7 +1197,7 @@ const MiniGames = (() => {
       const rest = bank.filter(w => !used.has(w.word));
       const w = rest[Math.floor(Math.random() * rest.length)]; if (w) used.add(w.word); return w;
     };
-    return mix.map(take).filter(Boolean);
+    return { words: mix.map(take).filter(Boolean), stones };
   }
 
   function _wbShuffleTiles(word) {
@@ -1211,9 +1213,9 @@ const MiniGames = (() => {
   }
 
   function startWords() {
-    const words = _wbPickWords();
-    if (!words || words.length < WB_STONES) { toast('The word chest is still loading — try again in a moment!', 3000); return; }
-    _wb = { words, idx: 0, lives: WB_LIVES, hints: WB_HINTS, score: 0, tiles: [], typed: [], locked: false, over: false };
+    const picked = _wbPickWords();
+    if (!picked || picked.words.length < picked.stones) { toast('The word chest is still loading - try again in a moment!', 3000); return; }
+    _wb = { words: picked.words, stones: picked.stones, idx: 0, lives: WB_LIVES, hints: WB_HINTS, score: 0, tiles: [], typed: [], locked: false, over: false };
     _audio();
     $('mg-hub')?.classList.add('hidden');
     $('mg-game')?.classList.remove('hidden');
@@ -1229,7 +1231,7 @@ const MiniGames = (() => {
 
   function _wbLagoonHtml() {
     let s = '<div class="wb-lagoon"><span class="wb-shore">🏖️</span>';
-    for (let i = 0; i < WB_STONES; i++) {
+    for (let i = 0; i < _wb.stones; i++) {
       const cls = i < _wb.idx ? 'done' : i === _wb.idx ? 'now' : '';
       s += `<span class="wb-stone ${cls}">${i === _wb.idx && !_wb.over ? '🏊' : '🪨'}</span>`;
     }
@@ -1260,7 +1262,7 @@ const MiniGames = (() => {
           <div class="wb-score"><b id="wb-score">${_wb.score}</b><small>pts</small></div>
         </div>
         ${_wbLagoonHtml()}
-        <div class="wb-word-no">Word ${_wb.idx + 1} of ${WB_STONES}</div>
+        <div class="wb-word-no">Word ${_wb.idx + 1} of ${_wb.stones}</div>
         <div class="wb-clue mg-pop">🦀 <span>${esc(w.clue)}</span></div>
         <div class="wb-slots" id="wb-slots">${_wbSlotsHtml()}</div>
         <div class="wb-tiles" id="wb-tiles">${_wbTilesHtml()}</div>
@@ -1320,16 +1322,16 @@ const MiniGames = (() => {
       _sfx.correct();
       $('wb-slots')?.classList.add('right');
       const sc = $('wb-score'); if (sc) sc.textContent = _wb.score;
-      _msg(`✅ <b>${esc(w.word)}</b> — you hop to the next stone!`);
+      _msg(`✅ <b>${esc(w.word)}</b> - you hop to the next stone!`);
       _wb.idx++;
       if (_wb.idx > 0 && _wb.idx % 3 === 0 && typeof launchConfetti === 'function') launchConfetti(30);
-      setTimeout(() => { if (!_wb) return; _wb.idx >= WB_STONES ? _wbFinish(true) : _wbRound(); }, 1000);
+      setTimeout(() => { if (!_wb) return; _wb.idx >= _wb.stones ? _wbFinish(true) : _wbRound(); }, 1000);
     } else {
       _wb.lives--;
       _sfx.wrong();
       $('wb-slots')?.classList.add('wrong', 'shake');
       _msg(_wb.lives
-        ? `💦 <b>Splash!</b> Not quite — look at the clue again.${_wb.lives === 1 ? ' Last life!' : ''}`
+        ? `💦 <b>Splash!</b> Not quite - look at the clue again.${_wb.lives === 1 ? ' Last life!' : ''}`
         : '💦 <b>Splash!</b> That was your last life…');
       setTimeout(() => {
         if (!_wb) return;
@@ -1361,11 +1363,11 @@ const MiniGames = (() => {
         <div class="mg-end-icon">${crossed ? '🏝️' : '🌊'}</div>
         <h3>${crossed ? 'You crossed the lagoon!' : 'The tide got you!'}</h3>
         <p>${crossed
-          ? `All ${WB_STONES} words spelt — with a bonus for ${_wb.lives} ❤️ and ${_wb.hints} 💡 left over!`
-          : `You spelt ${_wb.idx} word${_wb.idx === 1 ? '' : 's'} and reached stone ${_wb.idx} of ${WB_STONES}.`}</p>
+          ? `All ${_wb.stones} words spelt - with a bonus for ${_wb.lives} ❤️ and ${_wb.hints} 💡 left over!`
+          : `You spelt ${_wb.idx} word${_wb.idx === 1 ? '' : 's'} and reached stone ${_wb.idx} of ${_wb.stones}.`}</p>
         ${missed ? `<div class="mg-end-learn"><b>The word was:</b> ${esc(missed.word)}<br><span>${esc(missed.clue)}</span></div>` : ''}
         <div class="mg-end-stars">🧩 ${_wb.score} points</div>
-        ${best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestStones}/${WB_STONES} stones · ${best.bestScore} pts</p>` : ''}
+        ${best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestStones}/${best.bestOf || 10} stones · ${best.bestScore} pts</p>` : ''}
         <div class="mg-end-row">
           <button class="mg-btn-primary" onclick="MiniGames.startWords()">🔁 Play again</button>
           <button class="mg-btn-ghost" onclick="MiniGames.renderHub()">🎮 All games</button>
@@ -1378,7 +1380,7 @@ const MiniGames = (() => {
     DB.games = DB.games || {};
     const g = DB.games.wordbuilder = DB.games.wordbuilder || { plays: 0, bestStones: 0, bestScore: 0 };
     g.plays++;
-    if (_wb.idx > (g.bestStones || 0)) g.bestStones = _wb.idx;
+    if (_wb.idx > (g.bestStones || 0)) { g.bestStones = _wb.idx; g.bestOf = _wb.stones; }
     if (_wb.score > (g.bestScore || 0)) g.bestScore = _wb.score;
     if (typeof save === 'function') save(DB);
   }
@@ -1391,13 +1393,13 @@ const MiniGames = (() => {
   }
 
   // ══════════════════════════════════════════════
-  //  ISLAND EXPLORER 🗺️ — a geography tour of Mauritius.
+  //  ISLAND EXPLORER 🗺️ - a geography tour of Mauritius.
   //
   //  Twelve real stops, roughly clockwise from Port Louis, drawn from the
   //  curated window.MINIGAME_GEO bank (one clue per stop per tour, picked at
   //  random so replays vary). First-try correct = 🏅 gold stamp; a wrong
   //  answer greys that option out and the second try earns ⭐ silver; two
-  //  wrongs and the guide explains the answer — the tour always reaches the
+  //  wrongs and the guide explains the answer - the tour always reaches the
   //  end, because a child should finish the trip and learn the fact, not get
   //  sent home. Bests live in DB.games.explorer.
   // ══════════════════════════════════════════════
@@ -1406,7 +1408,7 @@ const MiniGames = (() => {
 
   function startExplorer() {
     const stops = window.MINIGAME_GEO || [];
-    if (stops.length < 3) { toast('The tour bus is still loading — try again in a moment!', 3000); return; }
+    if (stops.length < 3) { toast('The tour bus is still loading - try again in a moment!', 3000); return; }
     _ex = {
       stops,
       qsIdx: stops.map(s => Math.floor(Math.random() * s.qs.length)),
@@ -1469,7 +1471,7 @@ const MiniGames = (() => {
       _ex.score += gold ? EX_GOLD : EX_SILVER;
       btn?.classList.add('right');
       _sfx.correct();
-      _msg(gold ? '🏅 <b>Gold stamp!</b> First try — the tour rolls on!' : '⭐ <b>Silver stamp!</b> Got there — off to the next stop!');
+      _msg(gold ? '🏅 <b>Gold stamp!</b> First try - the tour rolls on!' : '⭐ <b>Silver stamp!</b> Got there - off to the next stop!');
       setTimeout(_exNext, 1300);
     } else if (_ex.tries === 0) {
       _ex.tries = 1;
@@ -1477,7 +1479,7 @@ const MiniGames = (() => {
       btn?.classList.add('wrong');
       if (btn) btn.disabled = true;
       _sfx.wrong();
-      _msg('🙈 Not quite — have one more look and try again!');
+      _msg('🙈 Not quite - have one more look and try again!');
       _persist('explorer');
     } else {
       _ex.locked = true;
@@ -1518,9 +1520,9 @@ const MiniGames = (() => {
       <div class="mg-end mg-pop">
         <div class="mg-end-icon">${perfect ? '🏆' : '🛂'}</div>
         <h3>${perfect ? 'A PERFECT TOUR!' : 'Tour complete!'}</h3>
-        <p>You visited all ${_ex.stops.length} stops — ${golds} gold and ${silvers} silver stamp${silvers === 1 ? '' : 's'} in your passport.</p>
+        <p>You visited all ${_ex.stops.length} stops - ${golds} gold and ${silvers} silver stamp${silvers === 1 ? '' : 's'} in your passport.</p>
         <div class="ex-passport">${_ex.stops.map((s, i) => `
-          <div class="ex-pass-cell"><span>${s.icon}</span><b>${esc(s.name)}</b><span class="ex-pass-stamp">${_ex.stamps[i] === 'gold' ? '🏅' : _ex.stamps[i] === 'silver' ? '⭐' : '—'}</span></div>`).join('')}
+          <div class="ex-pass-cell"><span>${s.icon}</span><b>${esc(s.name)}</b><span class="ex-pass-stamp">${_ex.stamps[i] === 'gold' ? '🏅' : _ex.stamps[i] === 'silver' ? '⭐' : '-'}</span></div>`).join('')}
         </div>
         <div class="mg-end-stars">🗺️ ${_ex.score} points${perfect ? ' · perfect-tour bonus!' : ''}</div>
         ${best.bestScore ? `<p class="bq-best">🏅 Your best: ${best.bestGold} gold stamps · ${best.bestScore} pts</p>` : ''}
@@ -1549,7 +1551,7 @@ const MiniGames = (() => {
   }
 
   // ══════════════════════════════════════════════
-  //  NUMBER NINJA 🥷 — mental-maths belts, white to black.
+  //  NUMBER NINJA 🥷 - mental-maths belts, white to black.
   //
   //  7 belts × 5 sums. Every sum is GENERATED fresh (never from the question
   //  bank), one at a time against a per-question timer that tightens belt by
@@ -1749,7 +1751,7 @@ const MiniGames = (() => {
       <div class="mg-end mg-pop">
         <div class="mg-end-icon">${b.icon}</div>
         <h3>${b.name} Belt earned!</h3>
-        <p>Next up: ${next.icon} ${next.name} belt — trickier sums, only ${next.time} seconds each. Ready?</p>
+        <p>Next up: ${next.icon} ${next.name} belt - trickier sums, only ${next.time} seconds each. Ready?</p>
         <div class="mg-end-stars">🥷 ${_nj.score} pts</div>
       </div>`;
     setTimeout(() => {
@@ -1770,10 +1772,10 @@ const MiniGames = (() => {
     const isRecord = _nj.score > 0 && _nj.score >= (best.bestScore || 0);
     if (_nj.beltsDone > 0 && typeof launchConfetti === 'function') launchConfetti(how === 'master' ? 220 : 80);
     const head = how === 'master'
-        ? { icon: '🏆', title: 'BLACK BELT MASTER!', sub: 'All 35 sums sliced — you are a true Number Ninja. Legendary!' }
+        ? { icon: '🏆', title: 'BLACK BELT MASTER!', sub: 'All 35 sums sliced - you are a true Number Ninja. Legendary!' }
       : beltName
         ? { icon: NJ_BELTS[_nj.beltsDone - 1].icon, title: `${beltName} Belt earned!`, sub: `You sliced ${_nj.sliced} sums before running out of lives. The ${NJ_BELTS[Math.min(_nj.beltsDone, NJ_BELTS.length - 1)].name} belt awaits!` }
-        : { icon: '🥷', title: 'Keep training, ninja!', sub: `You sliced ${_nj.sliced} sums. Every ninja starts somewhere — try again!` };
+        : { icon: '🥷', title: 'Keep training, ninja!', sub: `You sliced ${_nj.sliced} sums. Every ninja starts somewhere - try again!` };
     const game = $('mg-game');
     if (!game) return;
     game.innerHTML = `
@@ -1813,10 +1815,10 @@ const MiniGames = (() => {
   }
 
   // ══════════════════════════════════════════════
-  //  BRAIN BATTLE ⚔️ — pass-the-phone duel.
+  //  BRAIN BATTLE ⚔️ - pass-the-phone duel.
   //
   //  Two players share one device: 5 rounds, one question EACH per round, both
-  //  drawn from the same difficulty band so the duel stays fair — but DIFFERENT
+  //  drawn from the same difficulty band so the duel stays fair - but DIFFERENT
   //  questions, because sharing one would hand the answer to whoever goes
   //  second. A handover screen hides the question until the player taps Ready;
   //  25s to answer, speed adds points. Tied after 5 rounds → sudden death, up
@@ -1824,40 +1826,37 @@ const MiniGames = (() => {
   //  child's grade pool like Quick Fire; nothing touches recordAnswer().
   //  Tallies live in DB.games.battle.
   // ══════════════════════════════════════════════
-  const BB_ROUNDS = 5, BB_MAX_EXTRA = 3, BB_SECONDS = 25;
-  const BB_DIFF = [1, 2, 2, 3, 4, 2, 3, 4];        // per round, incl. sudden death
+  const BB_MAX_EXTRA = 3, BB_SECONDS = 25;
+  // Rounds = half the parent's round length (one question EACH per round),
+  // never fewer than 3 nor more than 10.
+  const _bbRounds = n => Math.min(10, Math.max(3, Math.round((n || 10) / 2)));
   const BB_PLAYERS = [{ icon: '🦁', name: 'Player 1' }, { icon: '🐯', name: 'Player 2' }];
   let _bb = null, _bbTimer = null, _bbDeadline = 0;
 
-  const _bbTrim = q => ({ question: q.question, options: q.options.slice(0, 4), answer: q.answer, _label: _chapterLabel(q.chapterId) });
+  const _bbTrim = q => ({ question: q.question, options: q.options.slice(0, 4), answer: q.answer, _id: q._id || q.id, _level: q._level, _label: _chapterLabel(q._chapterId || q.chapterId) });
 
+  // Both questions of a round share one level (fairness); the ramp follows the
+  // parent's difficulty choice up to the cap, sudden death sits at the top.
   function _pickBattle() {
-    const { pool } = _gradePool();
-    if (pool.length < 10) return null;
-    const byDiff = { 1: [], 2: [], 3: [], 4: [] };
-    for (const q of pool) (byDiff[q.difficulty] || byDiff[2]).push(q);
-    const used = new Set();
-    const take = want => {
-      for (const d of [want, want - 1, want + 1, want - 2, want + 2]) {
-        const bucket = (byDiff[d] || []).filter(q => !used.has(q.id));
-        if (bucket.length) { const q = bucket[Math.floor(Math.random() * bucket.length)]; used.add(q.id); return q; }
-      }
-      const rest = pool.filter(q => !used.has(q.id));
-      const q = rest[Math.floor(Math.random() * rest.length)]; if (q) used.add(q.id); return q;
-    };
+    const c = GameSettings.context('battle');
+    const rounds = _bbRounds(c.settings.roundLength);
+    const ramp = GameSettings.levelPlan(rounds, c.settings, c.cap, GameSettings.adaptiveLevel(c.cap));
+    const extra = [Math.max(1, c.cap - 1), c.cap, c.cap];
+    const levels = [];
+    ramp.concat(extra).forEach(l => levels.push(l, l));
+    const res = GameSettings.pickForGame('battle', levels.length, { levels, safe: _timedSafe });
     const qs = [];
-    for (const d of BB_DIFF) {
-      const a = take(d), b = take(d);
-      if (!a || !b) break;                       // a short pool just means fewer spare rounds
-      qs.push(_bbTrim(a), _bbTrim(b));
-    }
-    return qs.length >= BB_ROUNDS * 2 ? qs : null;
+    for (let i = 0; i + 1 < res.questions.length; i += 2) qs.push(_bbTrim(res.questions[i]), _bbTrim(res.questions[i + 1]));
+    // A short pool just means fewer spare rounds - but never fewer than the duel itself.
+    if (qs.length < rounds * 2) return { qs: null, res, rounds };
+    return { qs, res, rounds };
   }
 
   function startBattle() {
-    const qs = _pickBattle();
-    if (!qs) { toast('Questions are still loading — try again in a moment!', 3000); return; }
-    _bb = { qs, round: 0, turn: 0, scores: [0, 0], phase: 'ready', over: false, locked: false };
+    const { qs, res, rounds } = _pickBattle();
+    if (!qs) { _pickFailToast(res); return; }
+    GameSettings.markUsed(qs.map(q => q._id));
+    _bb = { qs, rounds, round: 0, turn: 0, scores: [0, 0], phase: 'ready', over: false, locked: false };
     _audio();                                   // unlock audio inside the tap
     $('mg-hub')?.classList.add('hidden');
     $('mg-game')?.classList.remove('hidden');
@@ -1877,8 +1876,8 @@ const MiniGames = (() => {
     const game = $('mg-game');
     if (!game || !_bb) return;
     const p = BB_PLAYERS[_bb.turn];
-    const sudden = _bb.round >= BB_ROUNDS;
-    const roundLabel = sudden ? '⚡ SUDDEN DEATH!' : `Round ${_bb.round + 1} of ${BB_ROUNDS}`;
+    const sudden = _bb.round >= _bb.rounds;
+    const roundLabel = sudden ? '⚡ SUDDEN DEATH!' : `Round ${_bb.round + 1} of ${_bb.rounds}`;
     if (_bb.phase === 'ready') {
       game.innerHTML = `
         <div class="bb-stage">
@@ -1890,8 +1889,8 @@ const MiniGames = (() => {
           <div class="bb-handover mg-pop">
             <div class="bb-handover-face">${p.icon}</div>
             <h3>${_bb.round === 0 && _bb.turn === 0 && !_bb.scores[0] && !_bb.scores[1] ? `${p.name} starts!` : `Pass the phone to ${p.name}!`}</h3>
-            <p>No peeking, ${BB_PLAYERS[1 - _bb.turn].name} 🙈 — the question appears when ${p.name} is ready.</p>
-            <button class="mg-btn-primary bb-ready" onclick="MiniGames.bbReady()">I'm ready — show my question!</button>
+            <p>No peeking, ${BB_PLAYERS[1 - _bb.turn].name} 🙈 - the question appears when ${p.name} is ready.</p>
+            <button class="mg-btn-primary bb-ready" onclick="MiniGames.bbReady()">I'm ready - show my question!</button>
           </div>
         </div>`;
       _persist('battle');
@@ -1909,7 +1908,7 @@ const MiniGames = (() => {
           <div class="bb-timebar"><div class="bb-timebar-fill" id="bb-time-fill"></div></div>
           <b class="bb-time-num" id="bb-time-num">${BB_SECONDS}</b>
         </div>
-        <div class="bb-turnline">${p.icon} ${p.name} — your question:</div>
+        <div class="bb-turnline">${p.icon} ${p.name} - your question:</div>
         <div class="bb-qwrap mg-pop">
           <div class="bb-source">${q._label}</div>
           <div class="bb-qcard"><div class="bb-qtext">${q.question}</div></div>
@@ -1984,7 +1983,7 @@ const MiniGames = (() => {
     _bb.turn = 0;
     const tied = _bb.scores[0] === _bb.scores[1];
     const outOfQs = (_bb.round + 1) * 2 > _bb.qs.length;
-    if (_bb.round >= BB_ROUNDS && (!tied || _bb.round >= BB_ROUNDS + BB_MAX_EXTRA || outOfQs)) return _bbFinish();
+    if (_bb.round >= _bb.rounds && (!tied || _bb.round >= _bb.rounds + BB_MAX_EXTRA || outOfQs)) return _bbFinish();
     _bb.phase = 'ready';
     _bbRender();
   }
@@ -1998,7 +1997,7 @@ const MiniGames = (() => {
     _bbSaveTally(winner);
     if (winner != null) { _sfx.win(); if (typeof launchConfetti === 'function') launchConfetti(160); }
     const head = winner == null
-      ? { icon: '🤝', title: "It's a draw!", sub: 'Perfectly matched brains — an honourable tie. Rematch?' }
+      ? { icon: '🤝', title: "It's a draw!", sub: 'Perfectly matched brains - an honourable tie. Rematch?' }
       : { icon: '👑', title: `${BB_PLAYERS[winner].icon} ${BB_PLAYERS[winner].name} takes the crown!`, sub: `Victory by ${Math.abs(s1 - s2)} points after ${_bb.round} rounds.` };
     const game = $('mg-game');
     if (!game) return;
@@ -2035,11 +2034,11 @@ const MiniGames = (() => {
   }
 
   // ══════════════════════════════════════════════
-  //  TIME TRAVELLER 🕰️ — history sequencing.
+  //  TIME TRAVELLER 🕰️ - history sequencing.
   //
   //  8 rounds; each shows 3–4 real dated events (engine/minigame_time.js,
   //  years hidden) and the child TAPS them into chronological order before
-  //  the rewind timer runs out. Tap-in-sequence, not drag — drag is fiddly on
+  //  the rewind timer runs out. Tap-in-sequence, not drag - drag is fiddly on
   //  phones. Years are revealed with the corrections after each round; that
   //  reveal is the learning moment, so it waits for a tap, never auto-advances.
   //  +25 per correctly placed event, perfect round = +50 + seconds left.
@@ -2049,7 +2048,15 @@ const MiniGames = (() => {
   // ══════════════════════════════════════════════
   const TT_ROUNDS = 8;
   const TT_SIZE = r => r < 3 ? 3 : 4;                 // events per round
-  const TT_BAND = r => r < 2 ? 1 : r < 5 ? 2 : 3;     // difficulty ramp
+  const TT_BAND = r => r < 2 ? 1 : r < 5 ? 2 : 3;     // difficulty ramp (Medium / Adaptive)
+  // Basic keeps every round to band 1; Challenging starts at band 2. A short
+  // bank still falls back to whatever is unused, so a round is never empty.
+  function _ttBands(r) {
+    const d = GameSettings.context('timetravel').settings.difficulty;
+    if (d === 'basic') return [1, 1];
+    if (d === 'challenging') return [2, 3];
+    return [1, TT_BAND(r)];
+  }
   let _tt = null, _ttTimer = null, _ttDeadline = 0;
 
   function _pickTimeTravel() {
@@ -2059,7 +2066,8 @@ const MiniGames = (() => {
     const rounds = [];
     for (let r = 0; r < TT_ROUNDS; r++) {
       const size = TT_SIZE(r);
-      let cand = bank.filter(f => !usedLabels.has(f.label) && f.band <= TT_BAND(r));
+      const [lo, hi] = _ttBands(r);
+      let cand = bank.filter(f => !usedLabels.has(f.label) && f.band >= lo && f.band <= hi);
       if (cand.length < size) cand = bank.filter(f => !usedLabels.has(f.label));
       cand = [...cand].sort(() => Math.random() - 0.5);
       const items = [], years = new Set();
@@ -2079,7 +2087,7 @@ const MiniGames = (() => {
 
   function startTimeTravel() {
     const rounds = _pickTimeTravel();
-    if (!rounds) { toast('The time machine is warming up — try again in a moment!', 3000); return; }
+    if (!rounds) { toast('The time machine is warming up - try again in a moment!', 3000); return; }
     _tt = { rounds, round: 0, picked: [], phase: 'play', score: 0, perfect: 0, reveal: null, over: false, locked: false };
     _audio();                                   // unlock audio inside the tap
     $('mg-hub')?.classList.add('hidden');
@@ -2125,7 +2133,7 @@ const MiniGames = (() => {
           <div class="tt-timebar"><div class="tt-timebar-fill" id="tt-time-fill"></div></div>
           <b class="tt-time-num" id="tt-time-num">${_ttSeconds()}</b>
         </div>
-        <p class="tt-prompt">🕰️ Tap the events in order — <b>earliest first!</b></p>
+        <p class="tt-prompt">🕰️ Tap the events in order - <b>earliest first!</b></p>
         <div class="tt-line">${items.map((f, i) => {
           const pos = _tt.picked.indexOf(i);
           return pos === -1 ? '' : `<div class="tt-slot mg-pop"><span class="tt-no">${pos + 1}</span>${esc(f.label)}</div>`;
@@ -2225,9 +2233,9 @@ const MiniGames = (() => {
     const isRecord = _tt.score > 0 && _tt.score >= (best.bestScore || 0);
     if (_tt.score > 0 && typeof launchConfetti === 'function') launchConfetti(_tt.perfect >= TT_ROUNDS ? 220 : 90);
     const head = _tt.perfect >= TT_ROUNDS
-        ? { icon: '🏆', title: 'MASTER OF TIME!', sub: 'Every round in perfect order — history holds no secrets from you!' }
+        ? { icon: '🏆', title: 'MASTER OF TIME!', sub: 'Every round in perfect order - history holds no secrets from you!' }
       : _tt.perfect >= 5
-        ? { icon: '🕰️', title: 'History hero!', sub: `${_tt.perfect} perfect rounds — the timeline is nearly yours.` }
+        ? { icon: '🕰️', title: 'History hero!', sub: `${_tt.perfect} perfect rounds - the timeline is nearly yours.` }
         : { icon: '🕰️', title: 'Journey complete!', sub: 'Every trip through time teaches something new. Travel again?' };
     const game = $('mg-game');
     if (!game) return;
@@ -2276,6 +2284,7 @@ const MiniGames = (() => {
   // "advance never happened".
   function _debug() { return _g && { rung: _g.rung, locked: _g.locked, over: _g.over, wrongOnce: _g.wrongOnce, hidden: _g.hidden.slice() }; }
   function _njDebug() { return _nj && { belt: _nj.belt, qnum: _nj.qnum, lives: _nj.lives, score: _nj.score, sliced: _nj.sliced, beltsDone: _nj.beltsDone, locked: _nj.locked, over: _nj.over, q: _nj.q && { text: _nj.q.text, answer: _nj.q.answer, options: _nj.q.options.slice() } }; }
+  function _qfDebug() { return _qf && { idx: _qf.idx, score: _qf.score, cap: _qf.cap, adaptive: _qf.adaptive, over: _qf.over, pool: _qf.pool.map(q => ({ id: q._id, level: q._level })) }; }
   function _wbDebug() { return _wb && { idx: _wb.idx, lives: _wb.lives, hints: _wb.hints, score: _wb.score, locked: _wb.locked, over: _wb.over, typed: _wb.typed.map(i => _wb.tiles[i].ch).join(''), word: _wb.words[_wb.idx]?.word }; }
   function _exDebug() { return _ex && { idx: _ex.idx, tries: _ex.tries, score: _ex.score, locked: _ex.locked, over: _ex.over, stamps: _ex.stamps.slice() }; }
   function _bbDebug() { return _bb && { round: _bb.round, turn: _bb.turn, phase: _bb.phase, scores: _bb.scores.slice(), locked: _bb.locked, over: _bb.over, q: _bb.phase === 'q' && _bb.qs[_bb.round * 2 + _bb.turn] ? { answer: _bb.qs[_bb.round * 2 + _bb.turn].answer, options: _bb.qs[_bb.round * 2 + _bb.turn].options.slice() } : null }; }
@@ -2285,7 +2294,7 @@ const MiniGames = (() => {
            resumeOrHub,
            showHelp, closeHelp,
            shareWhatsApp, copyPollLink, syncTile, _debug, _wbDebug, _exDebug,
-           startQuick, qfAnswer, qfQuit, qfShare, qfShareTo,
+           startQuick, qfAnswer, qfQuit, qfShare, qfShareTo, _qfDebug,
            startWords, wbTap, wbUndo, wbHint, wbQuit,
            startExplorer, exAnswer, exQuit,
            startNinja, njAnswer, njQuit, _njDebug, _njMakeQ,

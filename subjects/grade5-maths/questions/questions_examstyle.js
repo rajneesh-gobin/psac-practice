@@ -157,7 +157,7 @@ const EX = [
     question:'Clarel is facing <b>East</b>. He makes a <b>¼ turn anticlockwise</b>.<br>Which direction does he face?',
     options:['North','South','West','North-East'],
     answer:'North',
-    hint:'Anticlockwise from East: East → North.',
+    hint:'Picture a compass. Anticlockwise is the opposite way to clock hands - which point comes next after East?',
     explanation:'A quarter-turn anticlockwise from East = <b>North</b>.' }),
 
   makeMCQ({ id:'EG02', chapterId:'geometry', subsection:'directions', difficulty:2,
@@ -198,7 +198,7 @@ const EX = [
     question:'How many <b>lines of symmetry</b> does an <b>equilateral triangle</b> have?',
     options:['1','2','3','4'],
     answer:'3',
-    hint:'An equilateral triangle has 3 equal sides and 3 lines of symmetry.',
+    hint:'Each line of symmetry runs from a corner to the middle of the opposite side. Count the corners.',
     explanation:'An equilateral triangle has <b>3</b> lines of symmetry.' }),
 
   // ════════════════════════════════════════════════

@@ -132,12 +132,12 @@ STATIC_QUESTIONS.push(
     hint:'Traditional thermometers use one of two special liquids that expand and contract with temperature.',
     explanation:'Thermometers use either <b>alcohol</b> (usually red-coloured) or <b>mercury</b> (shiny silver liquid). Both expand when heated and contract when cooled, causing the liquid column to rise or fall and show the temperature.' }),
 
-  makeMCQ({ id:'g5sci-wm-015', chapterId:'water-matter', subsection:'states', difficulty:2,
-    question:'What happens to the level of mercury inside a thermometer when the temperature INCREASES?',
-    options:['It falls','It stays the same','It rises','It disappears'],
-    answer:'It rises',
-    hint:'Mercury expands when heated - if it takes up more space, which way does it go in the narrow tube?',
-    explanation:'When temperature increases, the mercury (or alcohol) in the thermometer <b>expands</b> and takes up more volume. Since the tube is narrow, the liquid is pushed <b>upward</b>, causing the level to rise.' }),
+  makeMCQ({ id:'g5sci-wm-015', chapterId:'water-matter', subsection:'states', difficulty:3,
+    question:'The liquid in a thermometer rises when the thermometer is warmed. What has happened to the liquid?',
+    options:['It has expanded and now takes up more space','It has evaporated into the empty part of the tube','It has become heavier than it was before','It has changed from a liquid into a gas'],
+    answer:'It has expanded and now takes up more space',
+    hint:'Nothing has been added to the sealed tube, and nothing has left it.',
+    explanation:'Warming makes the particles move faster and spread further apart, so the liquid <b>expands</b> and is pushed up the narrow tube. The amount of liquid has not changed, so it cannot have become heavier.' }),
 
   makeMCQ({ id:'g5sci-wm-016', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'A table shows air temperatures measured at different times: 6 a.m. = 15°C, 10 a.m. = 18°C, 1 p.m. = 23°C, 4 p.m. = 21°C, 8 p.m. = 19°C. At what time was the temperature highest?',

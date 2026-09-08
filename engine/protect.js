@@ -113,7 +113,7 @@
           'This page didn’t load properly' +
         '</h1>' +
         '<p style="font-size:.875rem;line-height:1.5;margin:0 0 1.25rem;color:#94a3b8">' +
-          'Nothing has been lost — your work is saved. Try reloading. If that ' +
+          'Nothing has been lost - your work is saved. Try reloading. If that ' +
           'keeps happening, the second button clears the stored copy of the app ' +
           'and fetches a fresh one.' +
         '</p>' +

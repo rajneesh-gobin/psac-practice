@@ -169,7 +169,7 @@ const dupe = { code: '23505', message: 'duplicate key value violates unique cons
       [r, St.lastFamilyError()], [fam2, null]);
   }
   {
-    // Clean "no rows", and my_member_family() not deployed (supabase-coparent.sql
+    // Clean "no rows", and my_member_family() not deployed (supabase-schema.sql
     // is still outstanding). That is still a clean "no family yet".
     const sb = makeSb({ 'families:select': [{ data: null, error: null }] });
     const St = load(sb);

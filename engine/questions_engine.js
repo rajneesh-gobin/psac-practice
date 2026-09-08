@@ -10,8 +10,29 @@
 const STATIC_QUESTIONS = [];
 
 // ── QUESTION ACCESS FUNCTIONS ──────────────────
+// ⚠ type 'cloze' is excluded here, and this is the only place it needs to be:
+// every practice and exam pool funnels through getStaticQs. A cloze item is a
+// whole text with a shared word bank and no options - dealt into the practice
+// or exam renderer it would fall through to the numeric branch and draw a
+// number pad under a French passage. It is reached only through ClozeText,
+// from its own chapter screen.
+// ⚠ examWeight: 0 does NOT keep a chapter out of a paper - assembleExamPaper
+// clamps with Math.max(1, …), so every chapter gets at least one slot. The
+// type filter is what actually holds.
+// ⚠ 'task' joins it for the same reason, one layer up. An NCE task is a
+// stimulus plus several parts with their own marks; it has no single `answer`
+// and no renderer. Practice and the online exam consume
+// Assessment.projectToItems(task), which hands back ordinary mcq/numeric items
+// and DROPS the parts a machine cannot mark. The raw task must never be dealt.
+// ⚠ 'errorhunt' joins them for the identical reason. A Chasse aux Erreurs item
+// is a whole text whose words are the answer targets; it has no options and no
+// single answer to type. It is reached only through ErrorHunt, from its own
+// chapter screen.
+const _POOL_TYPES_EXCLUDED = new Set(['cloze', 'task', 'errorhunt']);
+function isPoolQuestion(q) { return !!q && !!q.question && !_POOL_TYPES_EXCLUDED.has(q.type); }
+
 function getStaticQs(chapterId, difficulty) {
-  return STATIC_QUESTIONS.filter(q => q && q.question && q.chapterId === chapterId && q.difficulty === difficulty);
+  return STATIC_QUESTIONS.filter(q => isPoolQuestion(q) && q.chapterId === chapterId && q.difficulty === difficulty);
 }
 
 function generateDynamic(chapterId, level) {
@@ -24,25 +45,50 @@ function generateDynamic(chapterId, level) {
   return null;
 }
 
+// How many real questions this chapter has at one level. Callers use it to say
+// something honest BEFORE a child starts a round, instead of quietly handing
+// them the wrong level.
+function countStaticQs(chapterId, difficulty) {
+  return getStaticQs(chapterId, difficulty).length;
+}
+
+// ⚠ A LEVEL MEANS THE LEVEL. This used to pad a thin level from the WHOLE
+//   chapter - every difficulty, including L1 - whenever it held fewer than
+//   `count` questions. It fired constantly, because most chapters are thin at
+//   L3: grade6-english "Nouns" has ONE L3 question against 76 easier ones, so
+//   choosing Hard delivered 1 hard question and about 6 of the easiest, and
+//   grade5-english "Nouns" delivered 3 hard and 10 easy out of 20. That is
+//   exactly what parents reported as "the questions are far too easy" - the
+//   content was fine, the level control was not.
+//
+//   Generators still pad, because a generator produces questions AT the level
+//   asked for. Only the cross-difficulty static fallback is gone.
+//
+// ⚠ This can now return FEWER than `count`, and can return an EMPTY array.
+//   That is the honest answer and callers must handle it - startChapterDirect()
+//   says so and offers mixed practice rather than showing a blank screen.
 function getQuestionsForChapter(chapterId, difficulty, count = 10) {
   let pool = getStaticQs(chapterId, difficulty);
 
   if (difficulty === 4) {
-    // Word problem mode: use ONLY L4 static questions - no generator, no L3 padding.
-    return shuffle(pool);
+    // Word problem mode: use ONLY L4 static questions - no generator, no L3
+    // padding. It must still honour the requested round size: returning the
+    // whole pool made a normal 20-question chapter practice unexpectedly run
+    // for 30, 50 or more questions as the bank grew.
+    return shuffle(pool).slice(0, count);
   }
 
-  // For L1–L3: pad with dynamic generator, then cross-difficulty static as last resort
-  while (pool.length < count) {
+  // L1–L3: top up from the pack's generator, which produces AT this level.
+  // Bounded, because generateDynamic() returning null for ever was an infinite
+  // loop waiting to happen.
+  let tries = 0;
+  while (pool.length < count && tries++ < 40) {
     const dyn = generateDynamic(chapterId, difficulty);
-    if (dyn) {
-      pool = [...pool, dyn];
-    } else {
-      const alt = STATIC_QUESTIONS.filter(q => q.chapterId === chapterId);
-      if (alt.length > pool.length) pool = [...new Set([...pool, ...alt])];
-      else break;
-    }
+    if (!dyn) break;
+    pool = [...pool, dyn];
   }
+  const seen = new Set();
+  pool = pool.filter(q => { if (!q?.id || seen.has(q.id)) return false; seen.add(q.id); return true; });
   return shuffle(pool).slice(0, count);
 }
 
@@ -69,7 +115,7 @@ function getMixedQuestions(chapterId, maxDiff, count = 20) {
 // ── SUBSECTION PRACTICE ───────────────────────
 function getQuestionsForSubsection(chapterId, subsectionId, count = 15) {
   const pool = shuffle(STATIC_QUESTIONS.filter(q =>
-    q.chapterId === chapterId && q.subsection === subsectionId
+    isPoolQuestion(q) && q.chapterId === chapterId && q.subsection === subsectionId
   ));
   // A small, deliberately focused subsection (for example a portrait quiz)
   // must remain focused. Falling back to the whole chapter made the two-photo
@@ -83,7 +129,7 @@ function assembleExamPaper(type) {
   const cfg = config[type] || config.full;
   const paper = [];
 
-  // Same restrictions startChapterDirect() enforces for practice mode — a
+  // Same restrictions startChapterDirect() enforces for practice mode - a
   // parent's chapter lock or difficulty cap must hold in exams too, or a
   // locked/capped chapter is only actually blocked in practice.
   const lockedChs = new Set(DB.restrictions?.lockedChapters || []);
@@ -95,12 +141,23 @@ function assembleExamPaper(type) {
   // and assembleExamPaper() silently returned a fully empty exam for all of
   // them. Default a missing/non-numeric weight to 1 (equal weighting) rather
   // than let it poison the whole paper.
-  const weights = CHAPTERS.filter(ch => !lockedChs.has(ch.id) && (typeof _planAllowsChapter === 'function' ? _planAllowsChapter(ch.id) : true)).map(ch => ({
+  // A chapter that cannot supply a single question still took a slot, and the
+  // slot came out of the paper: the three French packs each hold a Textes à
+  // Trous chapter whose items are all type 'cloze', which isPoolQuestion()
+  // excludes, so a "40-question" exam dealt 39 in grades 5 and 6 and 37 in
+  // grade 4. examWeight: 0 does not help - Math.max(1, …) below still buys one.
+  // Generators count as fillable; grade5-maths has 12 chapters backed by them.
+  let gens = {};
+  try { if (typeof packGenerators === 'function') gens = packGenerators() || {}; } catch(e) {}
+  const canFill = ch => !!gens[ch.id] ||
+    STATIC_QUESTIONS.some(q => isPoolQuestion(q) && q.chapterId === ch.id && q.difficulty <= maxDiff);
+
+  const weights = CHAPTERS.filter(ch => !lockedChs.has(ch.id) && canFill(ch) && (typeof _planAllowsChapter === 'function' ? _planAllowsChapter(ch.id) : true)).map(ch => ({
     chapterId: ch.id,
     n: Math.max(1, Math.round((Number.isFinite(ch.examWeight) ? ch.examWeight : 1) * cfg.count / 40))
   }));
 
-  // Every chapter locked (or none registered) — nothing to build a paper from.
+  // Every chapter locked (or none registered) - nothing to build a paper from.
   if (!weights.length) return { questions: [], durationMins: cfg.mins };
 
   let total = weights.reduce((s, w) => s + w.n, 0);
@@ -132,7 +189,7 @@ function assembleExamPaper(type) {
       const dyn = generateDynamic(chapterId, rnd(1, Math.min(3, maxDiff)));
       if (dyn) selected.push(dyn);
       else {
-        const all = STATIC_QUESTIONS.filter(q => q.chapterId === chapterId && q.difficulty <= maxDiff);
+        const all = STATIC_QUESTIONS.filter(q => isPoolQuestion(q) && q.chapterId === chapterId && q.difficulty <= maxDiff);
         selected = [...new Set([...selected, ...shuffle(all)])].slice(0, n);
         break;
       }

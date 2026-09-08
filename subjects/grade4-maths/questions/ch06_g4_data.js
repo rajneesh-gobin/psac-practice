@@ -192,7 +192,7 @@ function _g4mPictogram(title, icon, keyVal, rows) {
   </svg>`;
 }
 
-const _G4M_FRUIT_CHART = _g4mBarChart('Favourite Fruits — Class Survey', ['Apple', 'Banana', 'Mango', 'Orange'], [14, 10, 18, 6]);
+const _G4M_FRUIT_CHART = _g4mBarChart('Favourite Fruits - Class Survey', ['Apple', 'Banana', 'Mango', 'Orange'], [14, 10, 18, 6]);
 const _G4M_BOOKS_PICTO = _g4mPictogram('Books Read This Week', '📖', 2, [
   { label: 'Monday',    count: 3   },
   { label: 'Tuesday',   count: 2.5 },

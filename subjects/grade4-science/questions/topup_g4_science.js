@@ -1,5 +1,5 @@
 'use strict';
-// Grade 4 Science — top-up questions (all chapters).
+// Grade 4 Science - top-up questions (all chapters).
 // IDs start at 050 per chapter to avoid collisions with existing files.
 
 STATIC_QUESTIONS.push(
@@ -31,22 +31,22 @@ STATIC_QUESTIONS.push(
     question:'Which characteristic is shared by ALL BIRDS?',
     options:['They can fly','They have feathers','They live near water','They eat only seeds'],
     answer:'They have feathers',
-    hint:'Not all birds can fly — think of penguins and ostriches.',
+    hint:'Not all birds can fly - think of penguins and ostriches.',
     explanation:'All birds have <b>feathers</b>. Not all birds can fly (e.g., ostriches and penguins cannot). Birds also lay hard-shelled eggs, are warm-blooded, and have two wings and two legs. Feathers are unique to birds.' }),
 
   makeMCQ({ id:'g4sc-liv-054', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:2,
     question:'How do FISH breathe underwater?',
     options:['Through their skin','Through lungs they close when diving','Through gills that absorb oxygen from water','Through holes on top of their heads'],
     answer:'Through gills that absorb oxygen from water',
-    hint:'Fish do not have lungs — they have a special organ that works in water.',
-    explanation:'Fish breathe using <b>gills</b>. Water passes over the gills, and oxygen dissolved in the water is absorbed into the blood. Carbon dioxide passes back into the water. This is why fish die out of water — gills do not work in air.' }),
+    hint:'Fish do not have lungs - they have a special organ that works in water.',
+    explanation:'Fish breathe using <b>gills</b>. Water passes over the gills, and oxygen dissolved in the water is absorbed into the blood. Carbon dioxide passes back into the water. This is why fish die out of water - gills do not work in air.' }),
 
   makeMCQ({ id:'g4sc-liv-055', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:2,
     question:'REPTILES are cold-blooded. What does this mean?',
     options:['Their blood is always cold','Their body temperature changes with the surrounding environment','They can only live in cold countries','They never feel warm'],
     answer:'Their body temperature changes with the surrounding environment',
     hint:'Cold-blooded animals do not produce their own body heat.',
-    explanation:'<b>Cold-blooded</b> means a reptile\'s body temperature changes with the <b>temperature of its surroundings</b>. Reptiles need to bask in the sun to warm up and move to shade to cool down. Mammals and birds are warm-blooded — they keep a constant body temperature.' }),
+    explanation:'<b>Cold-blooded</b> means a reptile\'s body temperature changes with the <b>temperature of its surroundings</b>. Reptiles need to bask in the sun to warm up and move to shade to cool down. Mammals and birds are warm-blooded - they keep a constant body temperature.' }),
 
   makeMCQ({ id:'g4sc-liv-056', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:2,
     question:'Which feature is unique to AMPHIBIANS?',
@@ -60,14 +60,14 @@ STATIC_QUESTIONS.push(
     options:['Reptiles','Amphibians','Invertebrates','Mammals'],
     answer:'Invertebrates',
     hint:'Does an earthworm have a backbone?',
-    explanation:'An <b>earthworm is an invertebrate</b> — it has no backbone. Invertebrates include worms, insects, spiders, crabs and snails. The earthworm is in the sub-group called <b>annelids</b> (segmented worms). It moves using muscles in its long, soft body.' }),
+    explanation:'An <b>earthworm is an invertebrate</b> - it has no backbone. Invertebrates include worms, insects, spiders, crabs and snails. The earthworm is in the sub-group called <b>annelids</b> (segmented worms). It moves using muscles in its long, soft body.' }),
 
   makeMCQ({ id:'g4sc-liv-058', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:2,
     question:'Which pair of animals are BOTH vertebrates?',
     options:['Butterfly and spider','Eagle and shark','Ant and earthworm','Snail and crab'],
     answer:'Eagle and shark',
     hint:'Which two animals have a backbone?',
-    explanation:'Both an <b>eagle</b> (a bird) and a <b>shark</b> (a fish) are vertebrates — they both have a backbone. Butterflies and spiders are insects/arachnids (invertebrates); ants and earthworms are invertebrates; snails and crabs are invertebrates.' }),
+    explanation:'Both an <b>eagle</b> (a bird) and a <b>shark</b> (a fish) are vertebrates - they both have a backbone. Butterflies and spiders are insects/arachnids (invertebrates); ants and earthworms are invertebrates; snails and crabs are invertebrates.' }),
 
   makeMCQ({ id:'g4sc-liv-059', chapterId:'g4sci-living', subsection:'classification', difficulty:3,
     question:'Insects belong to which group of animals?',
@@ -80,13 +80,13 @@ STATIC_QUESTIONS.push(
     question:'A bat flies, is warm-blooded, has hair, and feeds its young on milk. To which group does the bat belong?',
     options:['Birds, because it can fly','Reptiles, because it has wings','Mammals, because it is warm-blooded, has hair and nurses its young','Insects, because it is small and flies'],
     answer:'Mammals, because it is warm-blooded, has hair and nurses its young',
-    hint:'Think about the key features of mammals — not just the ability to fly.',
+    hint:'Think about the key features of mammals - not just the ability to fly.',
     explanation:'Despite being able to fly, the bat is a <b>mammal</b> because it has <b>hair, is warm-blooded, and nurses its young on milk</b>. Birds have feathers; insects have 6 legs and 3 body parts. The Rodrigues Fruit Bat is a famous mammal of Mauritius.' }),
 
   makeMCQ({ id:'g4sc-liv-061', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:4,
     question:'Neha finds an animal in her garden. It is cold-blooded, has moist skin (no scales), and lays its eggs in water. As a young animal it had gills, but now as an adult it has lungs. Which class does it belong to?',
-    options:['Reptile — because it is cold-blooded','Fish — because it once had gills','Amphibian — because it lives in two environments and changes from a larva with gills to an adult with lungs','Bird — because it now breathes with lungs'],
-    answer:'Amphibian — because it lives in two environments and changes from a larva with gills to an adult with lungs',
+    options:['Reptile - because it is cold-blooded','Fish - because it once had gills','Amphibian - because it lives in two environments and changes from a larva with gills to an adult with lungs','Bird - because it now breathes with lungs'],
+    answer:'Amphibian - because it lives in two environments and changes from a larva with gills to an adult with lungs',
     hint:'Which class goes through a change from a water-living larva (gills) to a land-living adult (lungs)?',
     explanation:'The animal is an <b>amphibian</b> (most likely a frog or toad). Key clues: cold-blooded, moist skin (no scales), eggs laid in water, larva with gills → adult with lungs. Reptiles have scaly skin; fish keep their gills throughout life; birds are warm-blooded with feathers.' }),
 
@@ -96,7 +96,7 @@ STATIC_QUESTIONS.push(
     question:'Which gas makes up about THREE-QUARTERS (75%) of the air?',
     options:['Oxygen','Carbon dioxide','Nitrogen','Hydrogen'],
     answer:'Nitrogen',
-    hint:'Oxygen is only the second most abundant gas in air — this gas is more common.',
+    hint:'Oxygen is only the second most abundant gas in air - this gas is more common.',
     explanation:'<b>Nitrogen</b> makes up about <b>78%</b> of the air we breathe (roughly three-quarters). Oxygen is next at about 21%. Carbon dioxide is only about 0.04%. Nitrogen is mostly used for producing fertilisers and does not support burning or breathing on its own.' }),
 
   makeMCQ({ id:'g4sc-air-051', chapterId:'g4sci-air', subsection:'composition', difficulty:1,
@@ -104,7 +104,7 @@ STATIC_QUESTIONS.push(
     options:['About 1%','About 21%','About 50%','About 78%'],
     answer:'About 21%',
     hint:'Oxygen is the second most common gas in air, making up about one-fifth.',
-    explanation:'Oxygen makes up about <b>21%</b> of air — roughly one-fifth. This is the oxygen that living things use for breathing (respiration) and that is needed for burning. If the oxygen level dropped much lower, we could not breathe or start fires.' }),
+    explanation:'Oxygen makes up about <b>21%</b> of air - roughly one-fifth. This is the oxygen that living things use for breathing (respiration) and that is needed for burning. If the oxygen level dropped much lower, we could not breathe or start fires.' }),
 
   makeMCQ({ id:'g4sc-air-052', chapterId:'g4sci-air', subsection:'wind_pressure', difficulty:1,
     question:'Air exerts PRESSURE on objects. Which everyday object uses trapped air pressure to support weight?',
@@ -117,15 +117,15 @@ STATIC_QUESTIONS.push(
     question:'Which gas do PLANTS absorb from the air to make their own food?',
     options:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'],
     answer:'Carbon dioxide',
-    hint:'This gas is a waste product when we breathe out — plants use it for photosynthesis.',
-    explanation:'Plants absorb <b>carbon dioxide</b> (CO₂) from the air during photosynthesis. They use CO₂, water and sunlight to make glucose (food) and release oxygen. We breathe out CO₂, and plants use it — a perfect cycle.' }),
+    hint:'This gas is a waste product when we breathe out - plants use it for photosynthesis.',
+    explanation:'Plants absorb <b>carbon dioxide</b> (CO₂) from the air during photosynthesis. They use CO₂, water and sunlight to make glucose (food) and release oxygen. We breathe out CO₂, and plants use it - a perfect cycle.' }),
 
   makeMCQ({ id:'g4sc-air-054', chapterId:'g4sci-air', subsection:'properties', difficulty:2,
     question:'A football is fully inflated, then left in the sun for an hour. The ball feels HARDER. Why?',
     options:['The rubber expanded and became thicker','Heating the air inside the ball makes it expand and increases the pressure','The sun glued the ball shut','Cold air from shade seeped into the ball'],
     answer:'Heating the air inside the ball makes it expand and increases the pressure',
     hint:'What happens to air (like most gases) when it is heated?',
-    explanation:'When air is <b>heated</b>, its particles move faster and spread out (expand). Inside the sealed ball, they push harder on the walls, <b>increasing air pressure</b> — the ball feels harder. This also explains why car tyres can over-inflate on a hot day.' }),
+    explanation:'When air is <b>heated</b>, its particles move faster and spread out (expand). Inside the sealed ball, they push harder on the walls, <b>increasing air pressure</b> - the ball feels harder. This also explains why car tyres can over-inflate on a hot day.' }),
 
   makeMCQ({ id:'g4sc-air-055', chapterId:'g4sci-air', subsection:'properties', difficulty:2,
     question:'ACID RAIN is caused by:',
@@ -145,14 +145,14 @@ STATIC_QUESTIONS.push(
     question:'Factories often have TALL chimneys. What is the main purpose of tall chimneys?',
     options:['To make the factories look bigger','To help smoke spread higher into the atmosphere and away from nearby homes','To keep the factory cool','To collect rainwater'],
     answer:'To help smoke spread higher into the atmosphere and away from nearby homes',
-    hint:'Higher chimneys release smoke at a greater height — where does it go?',
-    explanation:'Tall chimneys release smoke and gases at a <b>greater height</b> so they are carried by wind and spread over a wider area, reducing the concentration of pollutants near the factory. However, this does not remove the pollution — it just moves it. Filters and scrubbers are better solutions.' }),
+    hint:'Higher chimneys release smoke at a greater height - where does it go?',
+    explanation:'Tall chimneys release smoke and gases at a <b>greater height</b> so they are carried by wind and spread over a wider area, reducing the concentration of pollutants near the factory. However, this does not remove the pollution - it just moves it. Filters and scrubbers are better solutions.' }),
 
   makeMCQ({ id:'g4sc-air-058', chapterId:'g4sci-air', subsection:'breathing', difficulty:2,
     question:'When we breathe IN, we take in air. When we breathe OUT, which gas increases in our exhaled breath?',
     options:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'],
     answer:'Carbon dioxide',
-    hint:'Our bodies use oxygen and release a waste gas — what is it?',
+    hint:'Our bodies use oxygen and release a waste gas - what is it?',
     explanation:'We breathe <b>in</b> oxygen-rich air. Our cells use oxygen to release energy from food (respiration) and produce <b>carbon dioxide</b> as waste. So exhaled air has more <b>CO₂</b> (about 4%) and less oxygen than inhaled air. This CO₂ is breathed out.' }),
 
   makeMCQ({ id:'g4sc-air-059', chapterId:'g4sci-air', subsection:'properties', difficulty:3,
@@ -176,8 +176,8 @@ STATIC_QUESTIONS.push(
       'The animal was frightened by its reflection in the glass'
     ],
     answer:'The animal used up the oxygen and carbon dioxide built up, making the air unbreathable',
-    hint:'Sealed means no fresh air enters — what happens to oxygen and CO₂ levels?',
-    explanation:'In a sealed container, the animal uses up <b>oxygen</b> for respiration and releases <b>carbon dioxide</b>. Eventually, oxygen levels drop too low to sustain life and CO₂ builds to toxic levels. This is why animals need fresh air (ventilation) — and why air is a shared resource that must not be polluted.' }),
+    hint:'Sealed means no fresh air enters - what happens to oxygen and CO₂ levels?',
+    explanation:'In a sealed container, the animal uses up <b>oxygen</b> for respiration and releases <b>carbon dioxide</b>. Eventually, oxygen levels drop too low to sustain life and CO₂ builds to toxic levels. This is why animals need fresh air (ventilation) - and why air is a shared resource that must not be polluted.' }),
 
   makeMCQ({ id:'g4sc-air-061', chapterId:'g4sci-air', subsection:'breathing', difficulty:4,
     question:'Dev\'s school is near a busy road. Many children in the class have coughs and breathing problems. The head teacher says the school will plant a row of tall trees along the road. How will this help?',
@@ -188,7 +188,7 @@ STATIC_QUESTIONS.push(
       'The trees will scare away cars from the road'
     ],
     answer:'Trees absorb carbon dioxide and some pollutants, and act as a barrier to reduce the amount of exhaust fumes reaching the school',
-    hint:'Trees are natural air filters — what do their leaves absorb?',
+    hint:'Trees are natural air filters - what do their leaves absorb?',
     explanation:'Planting trees helps because: (1) tree leaves <b>absorb CO₂ and some pollutants</b>; (2) the trees act as a <b>physical barrier</b>, reducing the drift of exhaust fumes into the school grounds; (3) they produce oxygen. This is a real conservation strategy used in cities worldwide.' }),
 
   // ─── WATER (g4sci-water) ─────────────────────────────────────────────────
@@ -205,7 +205,7 @@ STATIC_QUESTIONS.push(
     options:['100°C','50°C','0°C','-100°C'],
     answer:'0°C',
     hint:'Below this temperature, water becomes ice.',
-    explanation:'Water <b>freezes at 0°C</b>. Below this temperature, liquid water turns into solid ice. This process is called <b>freezing</b>. The reverse process — ice turning back into liquid water — is called <b>melting</b> and also happens at 0°C.' }),
+    explanation:'Water <b>freezes at 0°C</b>. Below this temperature, liquid water turns into solid ice. This process is called <b>freezing</b>. The reverse process - ice turning back into liquid water - is called <b>melting</b> and also happens at 0°C.' }),
 
   makeMCQ({ id:'g4sc-wat-052', chapterId:'g4sci-water', subsection:'states', difficulty:1,
     question:'What is CONDENSATION?',
@@ -219,7 +219,7 @@ STATIC_QUESTIONS.push(
     options:['Water evaporating from the sea','Water vapour rising into the sky','Water falling from clouds as rain, hail or snow','Water flowing along rivers'],
     answer:'Water falling from clouds as rain, hail or snow',
     hint:'This is any form of water that falls from the atmosphere to the ground.',
-    explanation:'<b>Precipitation</b> is any form of water — rain, hail, sleet or snow — that falls from clouds to the Earth\'s surface. In Mauritius, precipitation is mainly rain. It replenishes rivers, lakes and groundwater after water has evaporated and formed clouds.' }),
+    explanation:'<b>Precipitation</b> is any form of water - rain, hail, sleet or snow - that falls from clouds to the Earth\'s surface. In Mauritius, precipitation is mainly rain. It replenishes rivers, lakes and groundwater after water has evaporated and formed clouds.' }),
 
   makeMCQ({ id:'g4sc-wat-054', chapterId:'g4sci-water', subsection:'water_cycle', difficulty:2,
     question:'Which lists the stages of the WATER CYCLE in the correct order?',
@@ -231,14 +231,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Evaporation → Cloud formation (condensation) → Precipitation → Runoff',
     hint:'Start with water changing into vapour, then think about what happens next in the sky.',
-    explanation:'The water cycle: (1) <b>Evaporation</b> — water from oceans/lakes turns to vapour; (2) <b>Cloud formation (condensation)</b> — vapour rises, cools and forms clouds; (3) <b>Precipitation</b> — water falls as rain/snow; (4) <b>Runoff</b> — water flows back to rivers and sea. The cycle then repeats.' }),
+    explanation:'The water cycle: (1) <b>Evaporation</b> - water from oceans/lakes turns to vapour; (2) <b>Cloud formation (condensation)</b> - vapour rises, cools and forms clouds; (3) <b>Precipitation</b> - water falls as rain/snow; (4) <b>Runoff</b> - water flows back to rivers and sea. The cycle then repeats.' }),
 
   makeMCQ({ id:'g4sc-wat-055', chapterId:'g4sci-water', subsection:'uses', difficulty:2,
     question:'Wet clothes dry on a washing line even though the temperature is below 100°C. What process causes this?',
     options:['Freezing','Condensation','Evaporation','Precipitation'],
     answer:'Evaporation',
-    hint:'Water does not need to boil to turn into vapour — it can happen slowly at lower temperatures.',
-    explanation:'<b>Evaporation</b> can occur at temperatures below 100°C. Water molecules at the surface gain enough energy from sunlight and wind to escape as water vapour. This is why wet clothes dry on a line — water slowly evaporates from the fabric into the air. Boiling is rapid evaporation throughout the liquid.' }),
+    hint:'Water does not need to boil to turn into vapour - it can happen slowly at lower temperatures.',
+    explanation:'<b>Evaporation</b> can occur at temperatures below 100°C. Water molecules at the surface gain enough energy from sunlight and wind to escape as water vapour. This is why wet clothes dry on a line - water slowly evaporates from the fabric into the air. Boiling is rapid evaporation throughout the liquid.' }),
 
   makeMCQ({ id:'g4sc-wat-056', chapterId:'g4sci-water', subsection:'uses', difficulty:2,
     question:'Which is a good way to CONSERVE (save) water at home?',
@@ -263,7 +263,7 @@ STATIC_QUESTIONS.push(
       'The table was wet and the water climbed up the glass'
     ],
     answer:'Water vapour in the warm room air cooled when it touched the cold glass and condensed into liquid droplets',
-    hint:'The glass is cold; the air is warm and contains water vapour — what happens when warm vapour meets a cold surface?',
+    hint:'The glass is cold; the air is warm and contains water vapour - what happens when warm vapour meets a cold surface?',
     explanation:'This is <b>condensation</b>. The warm room air contains invisible water vapour. When the vapour contacts the <b>cold surface</b> of the glass, it loses energy, cools below its dew point and <b>condenses into liquid droplets</b>. The water comes from the air, not from inside the glass.' }),
 
   makeMCQ({ id:'g4sc-wat-059', chapterId:'g4sci-water', subsection:'states', difficulty:3,
@@ -277,8 +277,8 @@ STATIC_QUESTIONS.push(
     question:'What happens to water when it is placed in a FREEZER?',
     options:['It evaporates into the air','It condenses into a smaller amount','It freezes and changes from liquid to solid (ice)','It boils inside the freezer'],
     answer:'It freezes and changes from liquid to solid (ice)',
-    hint:'A freezer is very cold — below 0°C.',
-    explanation:'When water is placed in a freezer (temperature below 0°C), it <b>freezes</b> — it changes state from <b>liquid to solid</b> (ice). The particles slow down and arrange into a rigid crystalline structure. This is why water left in a freezer becomes ice cubes.' }),
+    hint:'A freezer is very cold - below 0°C.',
+    explanation:'When water is placed in a freezer (temperature below 0°C), it <b>freezes</b> - it changes state from <b>liquid to solid</b> (ice). The particles slow down and arrange into a rigid crystalline structure. This is why water left in a freezer becomes ice cubes.' }),
 
   makeMCQ({ id:'g4sc-wat-061', chapterId:'g4sci-water', subsection:'states', difficulty:4,
     question:'Priya\'s science teacher places a pot of water on a stove. First it gets warm. Then small bubbles form and steam rises. Later, the water level in the pot has fallen. Which THREE changes of state have occurred?',
@@ -290,7 +290,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Heating (warming as liquid), boiling (liquid to gas), evaporation (liquid to gas, removing water from the pot)',
     hint:'The water started as a liquid, stayed a liquid while warming, then turned to steam, then escaped as vapour.',
-    explanation:'(1) <b>Warming</b> — liquid water gains heat energy; (2) <b>Boiling</b> — at 100°C, rapid change from liquid to steam (gas); (3) <b>Evaporation</b> — steam escapes into the air, reducing the water level. The water has gone from liquid to gas and left the pot. If the pot had a cold lid, condensation would also occur.' }),
+    explanation:'(1) <b>Warming</b> - liquid water gains heat energy; (2) <b>Boiling</b> - at 100°C, rapid change from liquid to steam (gas); (3) <b>Evaporation</b> - steam escapes into the air, reducing the water level. The water has gone from liquid to gas and left the pot. If the pot had a cold lid, condensation would also occur.' }),
 
   // ─── MATERIALS (g4sci-materials) ─────────────────────────────────────────
 
@@ -299,14 +299,14 @@ STATIC_QUESTIONS.push(
     options:['Insulator','Transparent material','Conductor','Waterproof material'],
     answer:'Conductor',
     hint:'Metals like copper are used in wires because of this property.',
-    explanation:'A <b>conductor</b> allows electricity (or heat) to pass through it. Most metals — copper, iron, steel, aluminium — are good conductors. This is why electrical wires are made of copper. Materials that do NOT allow electricity to pass through are called <b>insulators</b>.' }),
+    explanation:'A <b>conductor</b> allows electricity (or heat) to pass through it. Most metals - copper, iron, steel, aluminium - are good conductors. This is why electrical wires are made of copper. Materials that do NOT allow electricity to pass through are called <b>insulators</b>.' }),
 
   makeMCQ({ id:'g4sc-mat-051', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:1,
     question:'Which of the following is a NATURAL material?',
     options:['Plastic','Nylon','Steel','Cotton'],
     answer:'Cotton',
-    hint:'Natural materials come from plants, animals or the Earth — not from factories.',
-    explanation:'<b>Cotton</b> is a natural material — it comes from the cotton plant. Other natural materials include wool (from sheep), wood (from trees), and stone. <b>Plastic, nylon and steel</b> are man-made (synthetic) materials — they are manufactured in factories using chemical processes.' }),
+    hint:'Natural materials come from plants, animals or the Earth - not from factories.',
+    explanation:'<b>Cotton</b> is a natural material - it comes from the cotton plant. Other natural materials include wool (from sheep), wood (from trees), and stone. <b>Plastic, nylon and steel</b> are man-made (synthetic) materials - they are manufactured in factories using chemical processes.' }),
 
   makeMCQ({ id:'g4sc-mat-052', chapterId:'g4sci-materials', subsection:'properties', difficulty:1,
     question:'A TRANSPARENT material is one that:',
@@ -319,36 +319,36 @@ STATIC_QUESTIONS.push(
     question:'An OPAQUE material is one that:',
     options:['Allows all light to pass through it','Allows some light through but cannot be seen through clearly','Does not allow light to pass through it at all','Changes colour in sunlight'],
     answer:'Does not allow light to pass through it at all',
-    hint:'You cannot see through this type of material — like a brick wall.',
-    explanation:'An <b>opaque</b> material <b>blocks light completely</b> — you cannot see through it. Examples include wood, metal, stone, and cardboard. This is why walls, doors and curtains are made from opaque materials — to give privacy and block light.' }),
+    hint:'You cannot see through this type of material - like a brick wall.',
+    explanation:'An <b>opaque</b> material <b>blocks light completely</b> - you cannot see through it. Examples include wood, metal, stone, and cardboard. This is why walls, doors and curtains are made from opaque materials - to give privacy and block light.' }),
 
   makeMCQ({ id:'g4sc-mat-054', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:2,
     question:'Which property makes rubber a good material for the COATING of electrical wires?',
     options:['It is transparent, so electricians can see inside the wire','It is a good conductor, so it carries electricity','It is an insulator, so it prevents electric shocks','It is waterproof, so wires can be used underwater only'],
     answer:'It is an insulator, so it prevents electric shocks',
     hint:'Rubber does not let electricity pass through it.',
-    explanation:'Rubber is an <b>insulator</b> — it does not allow electricity to flow through it. Coating wires in rubber <b>protects people from electric shocks</b> when they touch the wire. Inside the rubber coating, the copper wire carries the electricity. Other insulators include plastic and wood.' }),
+    explanation:'Rubber is an <b>insulator</b> - it does not allow electricity to flow through it. Coating wires in rubber <b>protects people from electric shocks</b> when they touch the wire. Inside the rubber coating, the copper wire carries the electricity. Other insulators include plastic and wood.' }),
 
   makeMCQ({ id:'g4sc-mat-055', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:2,
     question:'Why is GLASS the best material for making windows?',
     options:['It is soft and flexible','It is transparent, allowing light in while keeping wind and rain out','It is absorbent, so it soaks up rain','It is a conductor, helping keep the house warm'],
     answer:'It is transparent, allowing light in while keeping wind and rain out',
     hint:'What property allows us to see outside and let light into the room?',
-    explanation:'<b>Glass</b> is ideal for windows because it is <b>transparent</b> (light passes through, so we can see out and daylight comes in), <b>waterproof</b> (rain cannot soak through), and <b>rigid</b> (holds its shape). Its transparency is the key property — opaque materials would block light.' }),
+    explanation:'<b>Glass</b> is ideal for windows because it is <b>transparent</b> (light passes through, so we can see out and daylight comes in), <b>waterproof</b> (rain cannot soak through), and <b>rigid</b> (holds its shape). Its transparency is the key property - opaque materials would block light.' }),
 
   makeMCQ({ id:'g4sc-mat-056', chapterId:'g4sci-materials', subsection:'properties', difficulty:2,
     question:'Which property would you look for in a material used to make a RAINCOAT?',
     options:['Absorbent, so sweat is soaked in','Waterproof, so rain cannot pass through','Transparent, so the wearer can be seen','Flexible only, so it is comfortable'],
     answer:'Waterproof, so rain cannot pass through',
     hint:'The purpose of a raincoat is to keep you dry in the rain.',
-    explanation:'A raincoat must be <b>waterproof</b> — it must not allow water (rain) to pass through it. Materials like rubber and coated nylon are waterproof. An absorbent raincoat would soak up the rain and make you wet; a transparent one would let rain in.' }),
+    explanation:'A raincoat must be <b>waterproof</b> - it must not allow water (rain) to pass through it. Materials like rubber and coated nylon are waterproof. An absorbent raincoat would soak up the rain and make you wet; a transparent one would let rain in.' }),
 
   makeMCQ({ id:'g4sc-mat-057', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:2,
     question:'Which of the following is a MAN-MADE (synthetic) material?',
     options:['Wool','Wood','Nylon','Stone'],
     answer:'Nylon',
     hint:'Man-made materials are created by humans in factories using chemical processes.',
-    explanation:'<b>Nylon</b> is a man-made (synthetic) material — it is produced in factories through chemical reactions. Other man-made materials include glass, plastic and steel. <b>Wool</b> (from sheep), <b>wood</b> (from trees) and <b>stone</b> (from the Earth) are all natural materials.' }),
+    explanation:'<b>Nylon</b> is a man-made (synthetic) material - it is produced in factories through chemical reactions. Other man-made materials include glass, plastic and steel. <b>Wool</b> (from sheep), <b>wood</b> (from trees) and <b>stone</b> (from the Earth) are all natural materials.' }),
 
   makeMCQ({ id:'g4sc-mat-058', chapterId:'g4sci-materials', subsection:'properties', difficulty:3,
     question:'A builder needs a material for the ROOF of a house that is waterproof, strong and rigid. Which would be the BEST choice?',
@@ -398,14 +398,14 @@ STATIC_QUESTIONS.push(
     question:'Which of the following is a form of ENERGY?',
     options:['Water','Sunlight only','Sound','All of: light, heat, sound and movement'],
     answer:'All of: light, heat, sound and movement',
-    hint:'Energy comes in many forms — think of all the things that can do work.',
-    explanation:'Energy has many forms: <b>light</b> (from the sun, a bulb), <b>heat</b> (from a fire, the sun), <b>sound</b> (from a speaker, clapping), <b>movement/kinetic</b> (a moving ball), and <b>electrical energy</b>. Water is a substance, not a form of energy — but moving water has kinetic energy.' }),
+    hint:'Energy comes in many forms - think of all the things that can do work.',
+    explanation:'Energy has many forms: <b>light</b> (from the sun, a bulb), <b>heat</b> (from a fire, the sun), <b>sound</b> (from a speaker, clapping), <b>movement/kinetic</b> (a moving ball), and <b>electrical energy</b>. Water is a substance, not a form of energy - but moving water has kinetic energy.' }),
 
   makeMCQ({ id:'g4sc-ene-053', chapterId:'g4sci-energy', subsection:'sources', difficulty:1,
     question:'Solar panels on a roof convert sunlight into which useful form of energy?',
     options:['Sound energy','Chemical energy','Electrical energy','Nuclear energy'],
     answer:'Electrical energy',
-    hint:'Solar panels are used to power homes — what do homes need to run lights and appliances?',
+    hint:'Solar panels are used to power homes - what do homes need to run lights and appliances?',
     explanation:'Solar panels convert <b>light (solar) energy</b> from the Sun into <b>electrical energy</b>. This electricity can power lights, appliances and devices. Mauritius receives a lot of sunshine, making solar energy a very suitable renewable energy source for the island.' }),
 
   makeMCQ({ id:'g4sc-ene-054', chapterId:'g4sci-energy', subsection:'sources', difficulty:2,
@@ -418,14 +418,14 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Movement (kinetic) energy of wind → electrical energy',
     hint:'The wind turns the blades of the turbine, and the turning motion produces electricity.',
-    explanation:'In a wind turbine, the <b>kinetic (movement) energy of the wind</b> turns the turbine blades. This rotation drives a generator that converts the kinetic energy into <b>electrical energy</b>. Wind energy is renewable — it will not run out as long as wind blows.' }),
+    explanation:'In a wind turbine, the <b>kinetic (movement) energy of the wind</b> turns the turbine blades. This rotation drives a generator that converts the kinetic energy into <b>electrical energy</b>. Wind energy is renewable - it will not run out as long as wind blows.' }),
 
   makeMCQ({ id:'g4sc-ene-055', chapterId:'g4sci-energy', subsection:'renewable', difficulty:2,
     question:'Which of the following is a NON-RENEWABLE source of energy?',
     options:['Solar energy','Wind energy','Coal','Moving water (hydroelectric)'],
     answer:'Coal',
     hint:'This source took millions of years to form underground and cannot be replaced quickly.',
-    explanation:'<b>Coal</b> is a <b>non-renewable</b> energy source — once burned, it cannot be replaced. It took millions of years to form from ancient plants. Burning coal also releases CO₂, contributing to climate change. <b>Solar, wind and hydroelectric</b> are renewable — they will not run out.' }),
+    explanation:'<b>Coal</b> is a <b>non-renewable</b> energy source - once burned, it cannot be replaced. It took millions of years to form from ancient plants. Burning coal also releases CO₂, contributing to climate change. <b>Solar, wind and hydroelectric</b> are renewable - they will not run out.' }),
 
   makeMCQ({ id:'g4sc-ene-056', chapterId:'g4sci-energy', subsection:'transfer', difficulty:2,
     question:'Which energy transformation happens in a LOUDSPEAKER?',
@@ -445,7 +445,7 @@ STATIC_QUESTIONS.push(
     question:'When you rub your hands together quickly, they feel warm. Which energy transformation is happening?',
     options:['Heat energy → movement energy','Electrical energy → heat energy','Movement (kinetic) energy → heat energy','Sound energy → heat energy'],
     answer:'Movement (kinetic) energy → heat energy',
-    hint:'You are moving your hands and producing heat — which direction is the transformation?',
+    hint:'You are moving your hands and producing heat - which direction is the transformation?',
     explanation:'Rubbing your hands converts <b>movement (kinetic) energy into heat energy</b> through <b>friction</b>. Whenever surfaces rub against each other, some kinetic energy is converted to heat. This is why brakes on a bicycle get hot and why matches produce fire when struck.' }),
 
   makeMCQ({ id:'g4sc-ene-059', chapterId:'g4sci-energy', subsection:'transfer', difficulty:3,
@@ -463,15 +463,15 @@ STATIC_QUESTIONS.push(
     explanation:'Mauritius is located <b>close to the equator</b>, giving it <b>high levels of sunshine</b> for most of the year. This makes solar energy (using solar panels) highly effective. The Mauritian government has invested in solar energy as part of its plan to use more renewable energy and reduce dependence on imported fossil fuels.' }),
 
   makeMCQ({ id:'g4sc-ene-061', chapterId:'g4sci-energy', subsection:'sources', difficulty:4,
-    question:'Asha\'s family leaves all their appliances on standby overnight. The electricity bill is very high. Asha reads that standby mode still uses electricity. She suggests switching everything off completely at the socket. If their TV uses 120 W when on and 8 W on standby for 8 hours a night, how much energy is saved per night by switching it off at the socket instead of leaving it on standby? (Ignore the calculation — choose the correct reasoning.)',
+    question:'Asha\'s family leaves all their appliances on standby overnight. The electricity bill is very high. Asha reads that standby mode still uses electricity. She suggests switching everything off completely at the socket. If their TV uses 120 W when on and 8 W on standby for 8 hours a night, how much energy is saved per night by switching it off at the socket instead of leaving it on standby? (Ignore the calculation - choose the correct reasoning.)',
     options:[
-      'No energy is saved — standby uses no electricity',
+      'No energy is saved - standby uses no electricity',
       'Some energy is saved because standby mode does use electricity, even if less than when fully on',
       'More energy is used when switched off at the socket',
       'Standby uses the same electricity as being fully on'
     ],
     answer:'Some energy is saved because standby mode does use electricity, even if less than when fully on',
-    hint:'Standby mode keeps some circuits running — does that use electricity?',
+    hint:'Standby mode keeps some circuits running - does that use electricity?',
     explanation:'<b>Standby mode does use electricity</b> (just less than full power). Turning appliances off completely at the socket saves this "standby" electricity. Over a whole year, this adds up to significant savings. This is called <b>reducing phantom load</b>. Switching off is always better than standby for saving energy.' }),
 
   // ─── PROTECTION (g4sci-protect) ──────────────────────────────────────────
@@ -516,25 +516,25 @@ STATIC_QUESTIONS.push(
     options:['The number of different types of pollution in an area','The variety of different living things (plants, animals, microorganisms) found in an area','The amount of fresh water in a country','The number of humans living in a region'],
     answer:'The variety of different living things (plants, animals, microorganisms) found in an area',
     hint:'Bio = life; diversity = variety.',
-    explanation:'<b>Biodiversity</b> means the <b>variety of all living things</b> — plants, animals and microorganisms — in a place or on Earth. High biodiversity means many different species living together. Mauritius has unique biodiversity (many endemic species found nowhere else), which is threatened by habitat loss and pollution.' }),
+    explanation:'<b>Biodiversity</b> means the <b>variety of all living things</b> - plants, animals and microorganisms - in a place or on Earth. High biodiversity means many different species living together. Mauritius has unique biodiversity (many endemic species found nowhere else), which is threatened by habitat loss and pollution.' }),
 
   makeMCQ({ id:'g4sc-pro-056', chapterId:'g4sci-protect', subsection:'pollution', difficulty:2,
     question:'Which action BEST helps reduce plastic waste pollution?',
     options:['Burning all plastic waste','Using reusable bags and bottles instead of single-use plastic','Burying plastic in the garden','Throwing plastic in the sea where it dissolves'],
     answer:'Using reusable bags and bottles instead of single-use plastic',
     hint:'The best solution is to reduce the amount of plastic you use in the first place.',
-    explanation:'<b>Using reusable bags and bottles</b> reduces the amount of single-use plastic that becomes waste. Single-use plastics (straws, bags, bottles) are a major source of pollution — they do not biodegrade quickly. Mauritius has banned some single-use plastics. Burning plastic creates toxic fumes; plastic does not dissolve in the sea.' }),
+    explanation:'<b>Using reusable bags and bottles</b> reduces the amount of single-use plastic that becomes waste. Single-use plastics (straws, bags, bottles) are a major source of pollution - they do not biodegrade quickly. Mauritius has banned some single-use plastics. Burning plastic creates toxic fumes; plastic does not dissolve in the sea.' }),
 
   makeMCQ({ id:'g4sc-pro-057', chapterId:'g4sci-protect', subsection:'deforestation', difficulty:2,
     question:'Why does PLANTING TREES help protect the environment?',
     options:[
-      'Trees make an area look beautiful — only a visual benefit',
+      'Trees make an area look beautiful - only a visual benefit',
       'Trees absorb CO₂, release oxygen, prevent soil erosion, provide habitat for animals and help maintain the water cycle',
       'Trees are useful only for timber',
       'Trees cause flooding when it rains'
     ],
     answer:'Trees absorb CO₂, release oxygen, prevent soil erosion, provide habitat for animals and help maintain the water cycle',
-    hint:'Think of all the roles a tree plays in the environment — not just one.',
+    hint:'Think of all the roles a tree plays in the environment - not just one.',
     explanation:'Planting trees has <b>multiple environmental benefits</b>: (1) absorb CO₂, helping fight climate change; (2) release oxygen; (3) roots hold soil, <b>preventing erosion</b>; (4) provide <b>habitat and food</b> for birds, insects and animals; (5) promote rainfall through the water cycle. Deforestation causes the reverse of all these benefits.' }),
 
   makeMCQ({ id:'g4sc-pro-058', chapterId:'g4sci-protect', subsection:'pollution', difficulty:3,
@@ -546,7 +546,7 @@ STATIC_QUESTIONS.push(
       'Polluted soil is always too wet for plants to grow'
     ],
     answer:'Chemicals in polluted soil damage roots, reduce the nutrients plants can absorb, and may be taken up into the plant',
-    hint:'Plants absorb water and minerals from soil through their roots — what happens if the soil is contaminated?',
+    hint:'Plants absorb water and minerals from soil through their roots - what happens if the soil is contaminated?',
     explanation:'<b>Soil pollution</b> harms plants because: (1) chemicals (from pesticides, industrial waste, litter) <b>damage roots</b>; (2) they destroy soil microorganisms needed to break down nutrients; (3) plants absorb the chemicals, which can move up the food chain to animals and humans. This is why safe farming practices and no littering matter.' }),
 
   makeMCQ({ id:'g4sc-pro-059', chapterId:'g4sci-protect', subsection:'endangered', difficulty:3,
@@ -554,17 +554,17 @@ STATIC_QUESTIONS.push(
     options:['The dodo moved to another country','The species no longer exists anywhere on Earth','The dodo is endangered but still has a few members left','The dodo is only found in zoos'],
     answer:'The species no longer exists anywhere on Earth',
     hint:'When the last member of a species dies, the species is gone forever.',
-    explanation:'<b>Extinct</b> means a species has <b>completely died out</b> — there are no surviving members anywhere on Earth. The Dodo (Raphus cucullatus) became extinct around 1681, mainly due to hunting by sailors and the introduction of predators (rats, cats) by settlers to Mauritius. Extinction is permanent and irreversible.' }),
+    explanation:'<b>Extinct</b> means a species has <b>completely died out</b> - there are no surviving members anywhere on Earth. The Dodo (Raphus cucullatus) became extinct around 1681, mainly due to hunting by sailors and the introduction of predators (rats, cats) by settlers to Mauritius. Extinction is permanent and irreversible.' }),
 
   makeMCQ({ id:'g4sc-pro-060', chapterId:'g4sci-protect', subsection:'why_protect', difficulty:3,
     question:'Why is it important to PROTECT biodiversity?',
     options:[
       'So that there are more animals for hunting',
-      'Because every species plays a role in ecosystems — losing species can upset the balance of nature and reduce the resources available to all living things including humans',
+      'Because every species plays a role in ecosystems - losing species can upset the balance of nature and reduce the resources available to all living things including humans',
       'Because rare animals are worth a lot of money',
-      'Biodiversity is not important — only a few key species matter'
+      'Biodiversity is not important - only a few key species matter'
     ],
-    answer:'Because every species plays a role in ecosystems — losing species can upset the balance of nature and reduce the resources available to all living things including humans',
+    answer:'Because every species plays a role in ecosystems - losing species can upset the balance of nature and reduce the resources available to all living things including humans',
     hint:'Think about food chains and how each organism depends on others.',
     explanation:'Every species in an ecosystem has a role. Removing one can trigger a <b>cascade of changes</b> (e.g., removing predators allows prey to overpopulate and strip vegetation). Many medicines, foods and materials come from wild species. Protecting biodiversity protects the <b>ecosystem services</b> humans depend on: clean air, clean water, food and medicine.' }),
 
@@ -587,21 +587,21 @@ STATIC_QUESTIONS.push(
     options:['The process by which a plant makes its food using sunlight','The process by which a seed starts to grow into a new plant','The process by which a leaf falls from a plant','The process by which a flower produces pollen'],
     answer:'The process by which a seed starts to grow into a new plant',
     hint:'This is the very beginning of a plant\'s life, starting from a seed.',
-    explanation:'<b>Germination</b> is the process by which a <b>seed begins to grow</b> into a new plant. The seed absorbs water, swells, and the embryo inside starts to develop — first a root (radicle) grows down, then a shoot (plumule) grows upward. Germination requires water, warmth, and air (oxygen).' }),
+    explanation:'<b>Germination</b> is the process by which a <b>seed begins to grow</b> into a new plant. The seed absorbs water, swells, and the embryo inside starts to develop - first a root (radicle) grows down, then a shoot (plumule) grows upward. Germination requires water, warmth, and air (oxygen).' }),
 
   makeMCQ({ id:'g4sc-plt-051', chapterId:'g4sci-plants', subsection:'reproduction', difficulty:1,
     question:'Which TWO conditions are MOST important for a seed to GERMINATE?',
     options:['Sunlight and wind','Water and warmth','Soil and sunlight','Wind and cold temperature'],
     answer:'Water and warmth',
-    hint:'Seeds can germinate in the dark, so sunlight is NOT needed — but what is?',
-    explanation:'A seed needs <b>water</b> (to soften the seed coat and trigger chemical reactions inside) and <b>warmth</b> (for the germination reactions to work at the right speed). Seeds can germinate <b>in the dark</b> — sunlight is not needed until the seedling grows leaves and starts photosynthesising.' }),
+    hint:'Seeds can germinate in the dark, so sunlight is NOT needed - but what is?',
+    explanation:'A seed needs <b>water</b> (to soften the seed coat and trigger chemical reactions inside) and <b>warmth</b> (for the germination reactions to work at the right speed). Seeds can germinate <b>in the dark</b> - sunlight is not needed until the seedling grows leaves and starts photosynthesising.' }),
 
   makeMCQ({ id:'g4sc-plt-052', chapterId:'g4sci-plants', subsection:'parts', difficulty:2,
     question:'What is the DIFFERENCE between flowering and non-flowering plants?',
     options:['Flowering plants have leaves; non-flowering plants do not','Flowering plants reproduce using flowers and seeds; non-flowering plants reproduce using spores or cones','Flowering plants need water; non-flowering plants do not','Non-flowering plants are bigger than flowering plants'],
     answer:'Flowering plants reproduce using flowers and seeds; non-flowering plants reproduce using spores or cones',
     hint:'Think about how each group reproduces.',
-    explanation:'<b>Flowering plants</b> (angiosperms) produce <b>flowers</b> that develop into fruits and seeds. <b>Non-flowering plants</b> (ferns, mosses, conifers) do not produce flowers — they reproduce using <b>spores</b> (ferns, mosses) or <b>cones</b> (conifers). Both groups have roots, stems and leaves (except mosses).' }),
+    explanation:'<b>Flowering plants</b> (angiosperms) produce <b>flowers</b> that develop into fruits and seeds. <b>Non-flowering plants</b> (ferns, mosses, conifers) do not produce flowers - they reproduce using <b>spores</b> (ferns, mosses) or <b>cones</b> (conifers). Both groups have roots, stems and leaves (except mosses).' }),
 
   makeMCQ({ id:'g4sc-plt-053', chapterId:'g4sci-plants', subsection:'reproduction', difficulty:2,
     question:'What is POLLINATION?',
@@ -614,28 +614,28 @@ STATIC_QUESTIONS.push(
     question:'How are SEEDS dispersed (spread) by WIND?',
     options:['Seeds are heavy and fall straight down under the plant','Seeds have wings, parachutes or fluffy hairs that catch the wind and carry them away from the parent plant','Seeds are eaten by animals and fly with them','Seeds float on rivers to new places'],
     answer:'Seeds have wings, parachutes or fluffy hairs that catch the wind and carry them away from the parent plant',
-    hint:'Think of dandelion seeds — how do they travel?',
-    explanation:'Wind-dispersed seeds are <b>light and shaped</b> to catch the air — they may have wings (like maple seeds), fluffy parachutes (like dandelion seeds) or feathery structures. The wind carries them away from the parent plant, reducing competition and allowing plants to colonise new areas.' }),
+    hint:'Think of dandelion seeds - how do they travel?',
+    explanation:'Wind-dispersed seeds are <b>light and shaped</b> to catch the air - they may have wings (like maple seeds), fluffy parachutes (like dandelion seeds) or feathery structures. The wind carries them away from the parent plant, reducing competition and allowing plants to colonise new areas.' }),
 
   makeMCQ({ id:'g4sc-plt-055', chapterId:'g4sci-plants', subsection:'parts', difficulty:3,
     question:'Two seedlings are growing close together in a pot. After a few weeks, both plants are smaller and less healthy than a single seedling grown in the same size pot. Why?',
     options:['Two plants always help each other grow better','The two plants are competing for the same water, minerals, light and space, so both are weaker','The pot is too colourful for the plants','Two plants need more darkness than one plant'],
     answer:'The two plants are competing for the same water, minerals, light and space, so both are weaker',
-    hint:'Plants need water, minerals, light and space — what happens when two plants share the same supply?',
-    explanation:'When two plants grow very close together, they <b>compete</b> for the same limited resources: water, mineral nutrients, light and space for roots. Each plant gets <b>less</b> than it needs, so both grow more slowly and less healthily. This is why farmers thin out seedlings — to give each plant enough space to grow well.' }),
+    hint:'Nothing is wrong with either seedling on its own. Think about what changes when they are close together in one pot.',
+    explanation:'When two plants grow very close together, they <b>compete</b> for the same limited resources: water, mineral nutrients, light and space for roots. Each plant gets <b>less</b> than it needs, so both grow more slowly and less healthily. This is why farmers thin out seedlings - to give each plant enough space to grow well.' }),
 
   makeMCQ({ id:'g4sc-plt-056', chapterId:'g4sci-plants', subsection:'parts', difficulty:3,
     question:'Why are plants called PRODUCERS in a food chain?',
     options:['Because they produce seeds','Because they produce oxygen only','Because they produce their own food using sunlight and are the source of energy for all other organisms in the food chain','Because they produce flowers and fruits for animals'],
     answer:'Because they produce their own food using sunlight and are the source of energy for all other organisms in the food chain',
-    hint:'In a food chain, energy comes ultimately from plants — they make food from sunlight.',
+    hint:'In a food chain, energy comes ultimately from plants - they make food from sunlight.',
     explanation:'Plants are called <b>producers</b> because they <b>produce their own food</b> through photosynthesis (using sunlight, water and CO₂). All other organisms in a food chain ultimately depend on this energy. Herbivores eat plants (primary consumers), and carnivores eat herbivores (secondary consumers).' }),
 
   makeMCQ({ id:'g4sc-plt-057', chapterId:'g4sci-plants', subsection:'parts', difficulty:4,
     question:'A gardener wants to grow tomatoes. She plants seeds in rich soil, waters them daily, and keeps them near a sunny window. After two weeks, the seedlings are pale yellow instead of green. What is the MOST LIKELY explanation?',
     options:['The seeds were planted in the wrong direction','The seedlings have too much light and are being bleached','The seedlings cannot produce enough chlorophyll because they are lacking a key mineral (such as nitrogen) from the soil, even though water and light are present','The tomatoes are naturally yellow when young'],
     answer:'The seedlings cannot produce enough chlorophyll because they are lacking a key mineral (such as nitrogen) from the soil, even though water and light are present',
-    hint:'Green colour in plants comes from chlorophyll — what does a plant need to make chlorophyll?',
+    hint:'Green colour in plants comes from chlorophyll - what does a plant need to make chlorophyll?',
     explanation:'Pale/yellow leaves (chlorosis) occur when a plant cannot make enough <b>chlorophyll</b>. Even with water and light, plants need <b>mineral nutrients from soil</b> (especially nitrogen and magnesium) to produce chlorophyll. If the soil is poor in these minerals, the plant cannot photosynthesise properly and the leaves turn yellow. Adding fertiliser (with nitrogen) would help.' }),
 
   // ─── ANIMALS (g4sci-animals) ─────────────────────────────────────────────
@@ -679,14 +679,14 @@ STATIC_QUESTIONS.push(
     question:'The ECHO PARAKEET is found only in Mauritius and is endangered. Which human activity has most threatened its survival?',
     options:['Climate change melting ice in Mauritius','The destruction of native forests (its habitat) and the introduction of invasive predators','Too much rain causing flooding of nests','The parakeet choosing not to reproduce in the wild'],
     answer:'The destruction of native forests (its habitat) and the introduction of invasive predators',
-    hint:'The Echo Parakeet lives in native forests — what happens to it when forests are cleared?',
-    explanation:'The Echo Parakeet (Psittacula eques) became critically endangered mainly because of: (1) <b>deforestation</b> — clearing of native forest for farming and development destroyed its habitat and nesting sites; (2) <b>invasive predators</b> (rats, monkeys, cats) introduced by humans raided nests and ate eggs/chicks. Conservation efforts (captive breeding, predator control) have helped the population recover.' }),
+    hint:'The Echo Parakeet lives in native forests - what happens to it when forests are cleared?',
+    explanation:'The Echo Parakeet (Psittacula eques) became critically endangered mainly because of: (1) <b>deforestation</b> - clearing of native forest for farming and development destroyed its habitat and nesting sites; (2) <b>invasive predators</b> (rats, monkeys, cats) introduced by humans raided nests and ate eggs/chicks. Conservation efforts (captive breeding, predator control) have helped the population recover.' }),
 
   makeMCQ({ id:'g4sc-ani-056', chapterId:'g4sci-animals', subsection:'food_chains', difficulty:3,
     question:'What would happen to a FOOD CHAIN if all the PRODUCERS (plants) were removed?',
-    options:['Only the top predator would die','Nothing — animals can make their own food','All consumers (herbivores, carnivores) would eventually die because they depend on plants for energy, directly or indirectly','The carnivores would survive by eating other carnivores forever'],
+    options:['Only the top predator would die','Nothing - animals can make their own food','All consumers (herbivores, carnivores) would eventually die because they depend on plants for energy, directly or indirectly','The carnivores would survive by eating other carnivores forever'],
     answer:'All consumers (herbivores, carnivores) would eventually die because they depend on plants for energy, directly or indirectly',
-    hint:'Trace the energy in a food chain back to its source — what is that source?',
+    hint:'Trace the energy in a food chain back to its source - what is that source?',
     explanation:'All food chains start with <b>plants (producers)</b>. Without them: (1) herbivores lose their food source and starve; (2) carnivores lose their prey (herbivores); (3) even top predators eventually have nothing to eat. All energy in a food chain comes originally from the Sun via plants. Removing producers collapses the entire chain.' }),
 
   makeMCQ({ id:'g4sc-ani-057', chapterId:'g4sci-animals', subsection:'food_chains', difficulty:4,

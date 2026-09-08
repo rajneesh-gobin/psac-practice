@@ -12,13 +12,13 @@
 //  matters: what a child can actually DOWNLOAD is decided in
 //  netlify/functions/questions.js with the service role, against
 //  chapter_entitlements and the account's expiry. Editing anything in this file
-//  from devtools changes what a button looks like and nothing else — which is
+//  from devtools changes what a button looks like and nothing else - which is
 //  the point of putting the decision on the server instead.
 //
 //  Credits themselves can only move through two SECURITY DEFINER functions
 //  (record_student_activity, purchase_chapter). The tables have no write grant
 //  at all for anon or authenticated, so there is no PostgREST call that can
-//  touch them. See supabase-credits-shop.sql.
+//  touch them. See supabase-schema.sql.
 // ══════════════════════════════════════════════
 
 const Shop = (() => {
@@ -93,7 +93,7 @@ const Shop = (() => {
   //
   // The cache is a copy of what the server said. If it now claims an unlocked
   // chapter the server does not know about, the most likely explanation is that
-  // somebody edited localStorage to turn a padlock off — which changes nothing
+  // somebody edited localStorage to turn a padlock off - which changes nothing
   // real, because the questions still will not be served, but it is a signal an
   // administrator would want. Anyone who actually knows what they are doing
   // simply clears the cache first and this never fires. It exists to catch the
@@ -119,7 +119,7 @@ const Shop = (() => {
   }
 
   // Child session: only the entitlement list, which is what the UI needs to
-  // stop showing a chapter as locked. No balance — that is the parent's.
+  // stop showing a chapter as locked. No balance - that is the parent's.
   async function refreshFamily() {
     await loadSettings();
     const e = await Store.getFamilyEntitlements();
@@ -166,14 +166,14 @@ const Shop = (() => {
 
   // How many friends still have to get their child answering. Shown because
   // "3 invited, 0 credited" is otherwise baffling, and the rule is the whole
-  // anti-abuse design — worth stating rather than hiding.
+  // anti-abuse design - worth stating rather than hiding.
   function pendingReferrals() {
     return Math.max(0, (_credits.referred || 0) - (_credits.activated || 0));
   }
 
   // ── Buying ──────────────────────────────────
   // Deliberately thin: it asks the server and believes the answer. Nothing is
-  // decremented locally and no entitlement is invented — a purchase that the
+  // decremented locally and no entitlement is invented - a purchase that the
   // server refused must not look like it worked.
   async function buy(chapterId) {
     const res = await Store.purchaseChapter(chapterId);
@@ -188,7 +188,7 @@ const Shop = (() => {
   }
 
   // ── The child's side: earning ───────────────
-  // Called after a practice answer. Once per page load — the RPC is idempotent
+  // Called after a practice answer. Once per page load - the RPC is idempotent
   // and short-circuits after the first success, but there is no reason to ask
   // it on every question either.
   let _activityReported = false;
@@ -205,17 +205,17 @@ const Shop = (() => {
   // ⚠ comingSoon packs are EXCLUDED. Registering the grade 1-3 / 7-9
   // placeholders put 30 empty packs into SUBJECT_PACKS, and without this filter
   // the Shop offered "Grade 1 Maths · Sample Chapter" for 250 credits and the
-  // whole of Grade 1 Maths for 1500 — a real charge for one placeholder
+  // whole of Grade 1 Maths for 1500 - a real charge for one placeholder
   // question. Same filter in _allChapters()/_allSubjects() in admin.js, which
   // is what publishCatalog() writes to the database.
   // ⚠ Two exclusions, for different reasons.
-  //   · comingSoon packs are placeholders — offering "Grade 1 Maths · Sample
+  //   · comingSoon packs are placeholders - offering "Grade 1 Maths · Sample
   //     Chapter" for 250 credits would be charging for one stub question.
   //   · FREE GRADES are free. Selling a 30-day unlock for something a family
   //     already has, permanently and for nothing, is the one thing a shop must
   //     never do. Kept out of the ADMIN CATALOGUE too (_allChapters/_allSubjects
   //     in admin.js), which is what purchase_chapter()/purchase_subject()
-  //     validate against — so this is not merely a hidden button.
+  //     validate against - so this is not merely a hidden button.
   const _sellablePack = p => !p.comingSoon && !(typeof isFreeGrade === 'function' && isFreeGrade(p.grade));
   function sellableChapters() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
@@ -241,7 +241,7 @@ const Shop = (() => {
 
   // Whole subjects. The catalogue the SERVER validates against groups chapters
   // by pack id, so this list has to be built from the same packs the admin
-  // published — see publishCatalog() in admin.js.
+  // published - see publishCatalog() in admin.js.
   function sellableSubjects() {
     if (typeof SUBJECT_PACKS === 'undefined') return [];
     return SUBJECT_PACKS.filter(_sellablePack).map(p => {
@@ -261,7 +261,7 @@ const Shop = (() => {
   }
 
   // Buying a subject grants an ordinary entitlement per chapter, so the local
-  // copy has to be re-read rather than patched — the server decides how many
+  // copy has to be re-read rather than patched - the server decides how many
   // rows moved and by how much.
   async function buySubject(subjectId) {
     const res = await Store.purchaseSubject(subjectId);

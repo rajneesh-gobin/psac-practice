@@ -54,7 +54,7 @@ STATIC_QUESTIONS.push(
     question:'Which of these would NOT be attracted to a magnet?',
     options:['An iron key','A steel pin','A copper coin','A steel paper clip'],
     answer:'A copper coin',
-    hint:'Only iron and steel are magnetic. What is a copper coin made of?',
+    hint:'Only iron and steel are attracted to a magnet. Check what each of the four objects is made of.',
     explanation:'A <b>copper coin</b> is made of copper (or copper alloy), which is <b>NOT magnetic</b>. Magnets attract only iron and steel. Iron key ✓, steel pin ✓, steel paper clip ✓, copper coin ✗. Copper, aluminium, gold, silver, plastic, wood and glass are all non-magnetic.' }),
 
   makeMCQ({ id:'g4s-mat-008', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:2,

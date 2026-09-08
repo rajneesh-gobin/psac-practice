@@ -34,7 +34,7 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 // Does this student's family plan include daily reminders?
 //
 // Fails OPEN on any error, and on the RPC not existing yet
-// (supabase-plan-enforcement.sql not run). A transient database blip must not
+// (supabase-schema.sql not run). A transient database blip must not
 // take a feature away from a family that has paid for it; the cost of the
 // opposite mistake is one unpaid reminder. plan_features_for_student() also
 // returns null when enforcement is switched off, which lands in the same

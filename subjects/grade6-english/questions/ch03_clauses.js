@@ -20,7 +20,7 @@ STATIC_QUESTIONS.push(
     question:'Which conjunction introduces a CONDITIONAL sentence (Type 1)?',
     options:['although','if','because','since'],
     answer:'if',
-    hint:'Type 1 conditional: If + present simple, will + infinitive.',
+    hint:'Three of these introduce a reason or a contrast. Only one sets up a condition.',
     explanation:'"<b>If</b>" introduces Type 1 conditionals (real/likely): "If it rains, we will stay inside." Type 2 (unreal present): "If I were rich, I would travel." Type 3 (unreal past): "If I had studied, I would have passed."' }),
 
   makeMCQ({ id:'g6eng-cls-003', chapterId:'g6eng-clauses', subsection:'clause_types', difficulty:2,

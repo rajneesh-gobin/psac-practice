@@ -8,7 +8,7 @@ STATIC_QUESTIONS.push(
     question:'Après quelle expression utilise-t-on le subjonctif ?',
     options:['je pense que','il est certain que','il faut que','je sais que'],
     answer:'il faut que',
-    hint:'"Il faut que" exprime la nécessité - il déclenche toujours le subjonctif.',
+    hint:'Trois de ces expressions affirment une certitude ou une opinion ; une seule exprime une obligation.',
     explanation:'"<b>Il faut que</b>" → subjonctif : "Il faut que tu <b>viennes</b>." Expressions déclenchant le subjonctif : il faut que, je veux que, bien que, pour que, avant que, il est possible que. Expressions + indicatif : je pense que, il est certain que, je sais que.' }),
 
   makeMCQ({ id:'g6fr-sjv-002', chapterId:'g6fr-subjunctif', subsection:'formation', difficulty:2,
@@ -144,14 +144,14 @@ STATIC_QUESTIONS.push(
       '"Je veux que vous veniez."'
     ],
     answer:'"Je suis sûr qu\'il soit là."',
-    hint:'"Je suis sûr que" exprime une certitude → indicatif, pas subjonctif.',
+    hint:'Le subjonctif suit le doute, la volonté, l\'émotion ou l\'opposition - jamais la certitude. Cherche la phrase qui affirme une certitude.',
     explanation:'"Je suis sûr qu\'il <b>est</b> là" est la forme correcte - pas le subjonctif. "<b>Je suis sûr que</b>" exprime une certitude → <b>indicatif</b>. Règle générale : <b>certitude → indicatif</b> (je suis sûr que, je sais que, il est évident que, il est certain que) ; <b>doute/émotion/volonté/nécessité → subjonctif</b>. C\'est l\'une des erreurs les plus fréquentes dans les rédactions de 6e.' }),
 
   makeMCQ({ id:'g6fr-sjv-020', chapterId:'g6fr-subjunctif', subsection:'formation', difficulty:1,
     question:'Quelle conjonction déclenche TOUJOURS le subjonctif ?',
     options:['parce que','bien que','quand','si'],
     answer:'bien que',
-    hint:'"Bien que" = although → opposition → subjonctif obligatoire.',
+    hint:'Cherche la conjonction qui marque une opposition ou une concession.',
     explanation:'"<b>Bien que</b>" (= although) déclenche <b>toujours</b> le subjonctif : "Bien qu\'il <b>soit</b> fatigué, il continue." Les conjonctions "parce que", "quand", "si" utilisent l\'indicatif. Autres déclencheurs similaires : bien que, quoique, encore que, malgré que (rare).' }),
 
   makeTF({ id:'g6fr-sjv-021', chapterId:'g6fr-subjunctif', subsection:'formation', difficulty:1,
@@ -164,7 +164,7 @@ STATIC_QUESTIONS.push(
     question:'Complète : "Je téléphonerai avant que tu ___ (partir)."',
     options:['pars','partiras','partes','partais'],
     answer:'partes',
-    hint:'"Avant que" → subjonctif. Partir au subjonctif = que je parte, que tu partes.',
+    hint:'« Avant que » entraîne le subjonctif. Cherche la forme qui n\'est ni le présent, ni le futur, ni l\'imparfait.',
     explanation:'"Avant que tu <b>partes</b>" - "<b>avant que</b>" déclenche le subjonctif. Partir au subjonctif : que je parte, que tu <b>partes</b>, qu\'il parte, que nous partions, que vous partiez, qu\'ils partent.' }),
 
   makeMCQ({ id:'g6fr-sjv-023', chapterId:'g6fr-subjunctif', subsection:'formation', difficulty:2,
@@ -178,14 +178,14 @@ STATIC_QUESTIONS.push(
     question:'Complète : "De peur qu\'il ne ___ (faire) une erreur, elle a tout vérifié."',
     options:['fait','fasse','fera','faisait'],
     answer:'fasse',
-    hint:'"De peur que" → crainte → subjonctif. Faire au subjonctif = fasse.',
+    hint:'« De peur que » exprime une crainte et entraîne le subjonctif ; « faire » y est irrégulier.',
     explanation:'"De peur qu\'il ne <b>fasse</b>" - "<b>de peur que</b>" (= for fear that) déclenche le subjonctif. Faire au subjonctif : que je fasse, que tu fasses, qu\'il <b>fasse</b>, que nous fassions, que vous fassiez, qu\'ils fassent. Le "ne" après "de peur que" est explétif.' }),
 
   makeMCQ({ id:'g6fr-sjv-025', chapterId:'g6fr-subjunctif', subsection:'irreguliers', difficulty:2,
     question:'Complète : "Quoiqu\'elle ___ (être) jeune, elle est très mature."',
     options:['est','soit','sera','serait'],
     answer:'soit',
-    hint:'"Quoique" = bien que → subjonctif. Être au subjonctif = soit.',
+    hint:'« Quoique » a le même sens que « bien que » et entraîne le subjonctif ; « être » y est irrégulier.',
     explanation:'"Quoiqu\'elle <b>soit</b> jeune" - "<b>quoique</b>" (= although, variant of bien que) déclenche le subjonctif. Être au subjonctif : que je sois, que tu sois, qu\'il/<b>elle soit</b>, que nous soyons, que vous soyez, qu\'ils soient.' }),
 
   makeMCQ({ id:'g6fr-sjv-026', chapterId:'g6fr-subjunctif', subsection:'formation', difficulty:3,
@@ -199,7 +199,7 @@ STATIC_QUESTIONS.push(
     question:'Quelle expression fixe utilise le subjonctif de ALLER ?',
     options:['"il va partir"','"où que vous alliez"','"vous allez bien"','"j\'allais partir"'],
     answer:'"où que vous alliez"',
-    hint:'"Où que" = wherever → subjonctif. Aller au subjonctif = que vous alliez.',
+    hint:'Cherche l\'expression figée dans laquelle « aller » n\'est ni au présent, ni à l\'imparfait, ni au futur proche.',
     explanation:'"<b>Où que vous alliez</b>" (= wherever you go) - expression fixe avec subjonctif. Aller au subjonctif : que j\'aille, que tu ailles, qu\'il aille, que nous allions, que vous <b>alliez</b>, qu\'ils aillent. Autres expressions fixes : quoi qu\'il arrive (whatever happens), qui que vous soyez (whoever you are).' }),
 
   makeTF({ id:'g6fr-sjv-028', chapterId:'g6fr-subjunctif', subsection:'declencheurs', difficulty:3,
@@ -233,7 +233,7 @@ STATIC_QUESTIONS.push(
     question:'Distingue les déclencheurs : laquelle de ces expressions utilise l\'INDICATIF (pas le subjonctif) ?',
     options:['il est possible que','bien que','après que','avant que'],
     answer:'après que',
-    hint:'"Après que" = action déjà accomplie → indicatif (pas subjonctif). C\'est une exception importante.',
+    hint:'Trois de ces expressions marquent le doute, l\'antériorité ou l\'opposition. Une seule renvoie à un fait déjà accompli.',
     explanation:'"<b>Après que</b>" + <b>indicatif</b> - c\'est une exception : "Après qu\'il <b>est parti</b>…" / "Après qu\'elle <b>aura fini</b>…". En français correct, "après que" demande l\'indicatif car l\'action est accomplie et certaine. Comparer avec "<b>avant que</b>" → subjonctif (action non encore réalisée). Cette distinction est souvent testée au niveau PSAC.' }),
 
   makeMCQ({ id:'g6fr-sjv-033', chapterId:'g6fr-subjunctif', subsection:'irreguliers', difficulty:3,

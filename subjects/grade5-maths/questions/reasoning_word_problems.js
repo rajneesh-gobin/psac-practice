@@ -1,5 +1,5 @@
 'use strict';
-// Grade 5 Maths — extended reasoning bank
+// Grade 5 Maths - extended reasoning bank
 // Original, multi-step contexts aligned to the chapter structure in _manifest.js.
 // These sit at Level 4 so a child meets them after building procedural fluency.
 

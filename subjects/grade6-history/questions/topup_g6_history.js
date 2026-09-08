@@ -1,5 +1,5 @@
 'use strict';
-// Grade 6 History & Geography — top-up questions.
+// Grade 6 History & Geography - top-up questions.
 
 // --- g6-map-skills (6 questions: g6h-map-050..055) ---
 STATIC_QUESTIONS.push(
@@ -12,8 +12,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6h-map-051', chapterId:'g6-map-skills', subsection:'coordinates', difficulty:1,
     question:'When reading a grid reference on a map, which coordinate do you read FIRST?',
-    options:['The row number (northing — up the side)','The column number (easting — along the bottom)','The highest contour line number','The map scale'],
-    answer:'The column number (easting — along the bottom)',
+    options:['The column number (easting)', 'The row number (northing)', 'The highest contour line', 'The scale of the map'],
+    answer:'The column number (easting)',
     hint:'Remember: "along the corridor, then up the stairs."',
     explanation:'Grid references are always read easting first (the column, read along the bottom), then northing (the row, read up the side). The phrase "along the corridor, then up the stairs" helps you remember.' }),
 
@@ -44,14 +44,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6h-map-055', chapterId:'g6-map-skills', subsection:'using_map', difficulty:3,
     question:'What is the difference between a physical map and a political map?',
-    options:[
-      'A physical map shows country borders and capitals; a political map shows mountains and rivers',
-      'A physical map shows natural features such as mountains, rivers, and height; a political map shows countries, capitals, and borders',
-      'Both types of map show exactly the same information in different colours',
-      'A political map is used for navigation; a physical map is used for elections'],
-    answer:'A physical map shows natural features such as mountains, rivers, and height; a political map shows countries, capitals, and borders',
+    options:['Physical shows relief; political shows borders', 'Physical shows borders; political shows relief', 'Physical is for elections; political for travel', 'Both show exactly the same information'],
+    answer:'Physical shows relief; political shows borders',
     hint:'One shows what nature made; the other shows what humans created.',
-    explanation:'A physical map shows natural features — mountains, rivers, plains, and elevation. A political map shows human-made divisions — country borders, capitals, cities, and regions.' })
+    explanation:'A physical map shows natural features - mountains, rivers, plains, and elevation. A political map shows human-made divisions - country borders, capitals, cities, and regions.' })
 );
 
 // --- g6enr-symbols (12 questions: g6h-enr-sym-050..061) ---
@@ -93,14 +89,10 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6h-enr-sym-055', chapterId:'g6enr-symbols', subsection:'coat_of_arms', difficulty:2,
     question:'What does the Dodo on the Mauritius coat of arms represent?',
-    options:[
-      'The country\'s strength in war',
-      'Mauritius\'s unique endemic wildlife — now sadly extinct',
-      'The fishing industry of Mauritius',
-      'The island\'s connection to Africa'],
-    answer:'Mauritius\'s unique endemic wildlife — now sadly extinct',
+    options:['Our unique wildlife, now extinct', 'The island\'s links with Africa', 'The strength of the country', 'The fishing industry'],
+    answer:'Our unique wildlife, now extinct',
     hint:'The Dodo lived only in Mauritius and nowhere else on Earth.',
-    explanation:'The Dodo on the coat of arms represents Mauritius\'s unique biodiversity and its endemic heritage. It serves as a reminder of the importance of conservation — the Dodo was driven to extinction by human activity.' }),
+    explanation:'The Dodo on the coat of arms represents Mauritius\'s unique biodiversity and its endemic heritage. It serves as a reminder of the importance of conservation - the Dodo was driven to extinction by human activity.' }),
 
   makeMCQ({ id:'g6h-enr-sym-056', chapterId:'g6enr-symbols', subsection:'unesco', difficulty:2,
     question:'In which year was the Aapravasi Ghat in Port Louis declared a UNESCO World Heritage Site?',
@@ -111,12 +103,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6h-enr-sym-057', chapterId:'g6enr-symbols', subsection:'national', difficulty:2,
     question:'What is the political relationship between Rodrigues and Mauritius?',
-    options:[
-      'Rodrigues is an independent country',
-      'Rodrigues is a French overseas territory',
-      'Rodrigues is an autonomous region of the Republic of Mauritius',
-      'Rodrigues is a British crown dependency'],
-    answer:'Rodrigues is an autonomous region of the Republic of Mauritius',
+    options:['An autonomous region of Mauritius', 'A British crown dependency', 'A French overseas territory', 'A fully independent country'],
+    answer:'An autonomous region of Mauritius',
     hint:'Rodrigues has its own Regional Assembly but is part of the same republic.',
     explanation:'Rodrigues is an autonomous region of the Republic of Mauritius. It has its own Regional Assembly and Commissioner but is governed under the Mauritian constitution.' }),
 
@@ -139,13 +127,9 @@ STATIC_QUESTIONS.push(
     explanation:'The star on the coat of arms has points representing the 7 districts of mainland Mauritius plus Rodrigues, reflecting the country\'s administrative divisions and the inclusion of Rodrigues.' }),
 
   makeMCQ({ id:'g6h-enr-sym-060', chapterId:'g6enr-symbols', subsection:'national', difficulty:2,
-    question:'Why are the Blue Penny and Red Penny stamps of 1847 considered among the most valuable stamps in the world?',
-    options:[
-      'They are made of real silver and gold',
-      'They are among the world\'s rarest stamps, with very few surviving examples in existence',
-      'They were the very first postage stamps ever printed anywhere in the world',
-      'They are the largest postage stamps ever produced'],
-    answer:'They are among the world\'s rarest stamps, with very few surviving examples in existence',
+    question:'Why are the Blue Penny and Red Penny stamps of 1847 so valuable?',
+    options:['Very few of them still survive', 'They were the first stamps ever printed', 'They are the largest stamps ever made', 'They are made of silver and gold'],
+    answer:'Very few of them still survive',
     hint:'Rarity is the main reason stamps become extremely valuable.',
     explanation:'The 1847 Blue Penny and Red Penny of Mauritius are among the rarest and most valuable stamps in the world because only a very small number survive. They were among the first stamps issued in the British Empire.' }),
 
@@ -194,7 +178,7 @@ STATIC_QUESTIONS.push(
     hint:'These countries are on the left-hand (western) side of Africa, facing the Atlantic Ocean.',
     explanation:'Nigeria, Senegal, and Ghana are all located in West Africa, along the Atlantic coast. Nigeria is the most populous country in Africa. West Africa also includes countries such as Mali, Ivory Coast, and Burkina Faso.' }),
 
-  makeMCQ({ id:'g6h-enr-wld-055', chapterId:'g6enr-world', subsection:'migration', difficulty:1,
+  makeMCQ({ id:'g6h-enr-wld-055', chapterId:'g6enr-world', subsection:'geography', difficulty:1,
     question:'Which is the longest river in Africa?',
     options:['Congo','Zambezi','Niger','Nile'],
     answer:'Nile',
@@ -212,7 +196,7 @@ STATIC_QUESTIONS.push(
     question:'Which continent is the smallest in the world by area?',
     options:['Europe','Antarctica','South America','Australia/Oceania'],
     answer:'Australia/Oceania',
-    hint:'The key word is "smallest" — think about which of these options covers the least area.',
+    hint:'The key word is "smallest" - think about which of these options covers the least area.',
     explanation:'Australia/Oceania is the smallest continent by area (approximately 8.5 million km²). It includes Australia, New Zealand, Papua New Guinea, and thousands of Pacific islands.' }),
 
   makeMCQ({ id:'g6h-enr-wld-058', chapterId:'g6enr-world', subsection:'geography', difficulty:2,
@@ -220,7 +204,7 @@ STATIC_QUESTIONS.push(
     options:['Nile','Amazon','Yangtze','Mississippi'],
     answer:'Amazon',
     hint:'It flows through the world\'s largest tropical rainforest.',
-    explanation:'The Amazon in South America carries more water than any other river in the world — about 20% of all fresh water that flows into the oceans comes from the Amazon. It flows eastwards through Brazil into the Atlantic.' }),
+    explanation:'The Amazon in South America carries more water than any other river in the world - about 20% of all fresh water that flows into the oceans comes from the Amazon. It flows eastwards through Brazil into the Atlantic.' }),
 
   makeMCQ({ id:'g6h-enr-wld-059', chapterId:'g6enr-world', subsection:'migration', difficulty:1,
     question:'What is the capital city of Sri Lanka, the island nation in the Indian Ocean near southern India?',
@@ -248,23 +232,15 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6h-enr-per-050', chapterId:'g6enr-personalities', subsection:'independence', difficulty:1,
     question:'Sir Seewoosagur Ramgoolam is known as the "Father of the Nation" of Mauritius. What was his historic role?',
-    options:[
-      'First President of the Republic of Mauritius',
-      'First Prime Minister of independent Mauritius at independence in 1968',
-      'First Governor-General appointed by the British',
-      'First Mayor of Port Louis'],
-    answer:'First Prime Minister of independent Mauritius at independence in 1968',
+    options:['First Prime Minister at independence', 'First Governor-General of the island', 'First President of the Republic', 'First Mayor of Port Louis'],
+    answer:'First Prime Minister at independence',
     hint:'He led Mauritius to independence on 12 March 1968.',
     explanation:'Sir Seewoosagur Ramgoolam (SSR) was the first Prime Minister of independent Mauritius. He led the country to independence from Britain on 12 March 1968 and is celebrated as the Father of the Nation.' }),
 
   makeMCQ({ id:'g6h-enr-per-051', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:2,
-    question:'Barthélemy d\'Epinay was an important figure in Mauritian history. What is he best known for?',
-    options:[
-      'Founding the city of Port Louis as the main harbour',
-      'Defending the rights of freed slaves after the abolition of slavery in 1835',
-      'Leading Mauritius to independence from Britain in 1968',
-      'Being the first Prime Minister of Mauritius'],
-    answer:'Defending the rights of freed slaves after the abolition of slavery in 1835',
+    question:'What is Barthélemy d\'Epinay best known for?',
+    options:['Defending the rights of freed slaves', 'Leading Mauritius to independence', 'Founding the harbour of Port Louis', 'Being the first Prime Minister'],
+    answer:'Defending the rights of freed slaves',
     hint:'His work is linked to the period after slavery was abolished in 1835.',
     explanation:'Barthélemy d\'Epinay was a lawyer who played a key role defending the legal rights of freed slaves after the abolition of slavery in the British Empire in 1835, helping to shape post-slavery Mauritian society.' }),
 
@@ -287,57 +263,37 @@ STATIC_QUESTIONS.push(
     explanation:'Robert Farquhar was appointed the first British Governor of Mauritius in 1810 after Britain defeated France at the Battle of Grand Port and captured the island. He governed until 1823 and worked to abolish the slave trade.' }),
 
   makeMCQ({ id:'g6h-enr-per-054', chapterId:'g6enr-personalities', subsection:'independence', difficulty:2,
-    question:'Sookdeo Bissoondoyal was a significant leader in Mauritius. Which of the following best describes his contribution?',
-    options:[
-      'He led the campaign against deforestation in Mauritius',
-      'He promoted education and the Hindu cultural awakening, and was a key political leader',
-      'He founded the first newspaper in Mauritius',
-      'He designed the Mauritian national flag'],
-    answer:'He promoted education and the Hindu cultural awakening, and was a key political leader',
+    question:'What was Sookdeo Bissoondoyal best known for?',
+    options:['He promoted education and Hindu culture', 'He led the campaign against deforestation', 'He founded the first Mauritian newspaper', 'He designed the Mauritian national flag'],
+    answer:'He promoted education and Hindu culture',
     hint:'He worked in education and politics, especially with the Indo-Mauritian community.',
     explanation:'Sookdeo Bissoondoyal was an educator and political leader who championed the cause of Hindu cultural identity, promoted education for the working class, and founded the Independent Forward Bloc political party.' }),
 
-  makeMCQ({ id:'g6h-enr-per-055', chapterId:'g6enr-personalities', subsection:'independence', difficulty:2,
-    question:'Rémy Ollier was an important social activist in 19th-century Mauritius. What cause did he champion?',
-    options:[
-      'Independence from Britain',
-      'Equal rights and an end to racial discrimination in Mauritius',
-      'The construction of Port Louis harbour',
-      'The abolition of the sugar cane industry'],
-    answer:'Equal rights and an end to racial discrimination in Mauritius',
+  makeMCQ({ id:'g6h-enr-per-055', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:2,
+    question:'What cause did Rémy Ollier champion?',
+    options:['Equal rights and an end to discrimination', 'The building of the Port Louis harbour', 'Independence from British rule', 'The end of the sugar industry'],
+    answer:'Equal rights and an end to discrimination',
     hint:'He worked in the decades after slavery was abolished, fighting for equal treatment.',
     explanation:'Rémy Ollier was a journalist and social activist who campaigned against racial discrimination and for equal civil rights for Mauritians of all backgrounds in the 1840s. He founded a newspaper to spread his ideas.' }),
 
   makeMCQ({ id:'g6h-enr-per-056', chapterId:'g6enr-personalities', subsection:'independence', difficulty:2,
-    question:'Sir Anerood Jugnauth served Mauritius as both Prime Minister and President. Which statement about his service is correct?',
-    options:[
-      'He was the first Prime Minister of independent Mauritius',
-      'He served for only a short term as Prime Minister',
-      'He was the longest-serving Prime Minister and also served as President of Mauritius',
-      'He was only ever President and never served as Prime Minister'],
-    answer:'He was the longest-serving Prime Minister and also served as President of Mauritius',
+    question:'Which statement about Sir Anerood Jugnauth is correct?',
+    options:['He was both Prime Minister and President', 'He served one short term as Prime Minister', 'He was the first Prime Minister in 1968', 'He was only ever President of Mauritius'],
+    answer:'He was both Prime Minister and President',
     hint:'He held the top government position for many years across multiple terms.',
     explanation:'Sir Anerood Jugnauth (SAJ) served as Prime Minister of Mauritius for many years across several terms, making him the longest-serving PM. He later became President of Mauritius (2003–2012) and served again as PM thereafter.' }),
 
   makeMCQ({ id:'g6h-enr-per-057', chapterId:'g6enr-personalities', subsection:'colonial', difficulty:3,
-    question:'General Decaen and Robert Farquhar were both governors of Mauritius. Which statement correctly describes their roles?',
-    options:[
-      'Both were French governors during the colonial period',
-      'Decaen was the last French governor of the island; Farquhar was the first British governor',
-      'Both were British governors who governed the island in the 20th century',
-      'Decaen founded Port Louis; Farquhar abolished slavery across the empire'],
-    answer:'Decaen was the last French governor of the island; Farquhar was the first British governor',
+    question:'Which statement correctly describes General Decaen and Robert Farquhar?',
+    options:['The last French and the first British governor', 'One founded Port Louis, the other ended slavery', 'Both governed in the twentieth century', 'Both were French colonial governors'],
+    answer:'The last French and the first British governor',
     hint:'Think about when France and Britain each controlled the island.',
     explanation:'General Charles Decaen was the last French governor of Île de France (Mauritius). When Britain captured the island in 1810, Robert Farquhar became the first British governor. This marked the change from French to British rule.' }),
 
   makeMCQ({ id:'g6h-enr-per-058', chapterId:'g6enr-personalities', subsection:'independence', difficulty:2,
-    question:'Navin Ramgoolam has served as Prime Minister of Mauritius. What family connection does he have to another famous Mauritian leader?',
-    options:[
-      'He is the brother of Sir Anerood Jugnauth',
-      'He is the son of Sir Seewoosagur Ramgoolam, the first Prime Minister of Mauritius',
-      'He is the grandson of Barthélemy d\'Epinay',
-      'He is the nephew of Sookdeo Bissoondoyal'],
-    answer:'He is the son of Sir Seewoosagur Ramgoolam, the first Prime Minister of Mauritius',
+    question:'What is Navin Ramgoolam\'s family link to another Mauritian leader?',
+    options:['He is the son of Sir Seewoosagur Ramgoolam', 'He is the grandson of Barthélemy d\'Epinay', 'He is the brother of Sir Anerood Jugnauth', 'He is the nephew of Sookdeo Bissoondoyal'],
+    answer:'He is the son of Sir Seewoosagur Ramgoolam',
     hint:'Both share the same family name for a reason.',
     explanation:'Navin Ramgoolam is the son of Sir Seewoosagur Ramgoolam (SSR), the Father of the Nation and first Prime Minister of Mauritius. Navin has himself served as Prime Minister, continuing his father\'s political legacy.' })
 );

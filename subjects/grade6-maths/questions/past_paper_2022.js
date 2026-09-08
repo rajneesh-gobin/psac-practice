@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 Mathematics 2021–2022 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 Mathematics 2021–2022 - past-paper questions adapted to MCQ format.
 // Source: Mauritius Examinations Syndicate (MES), 2021-2022 combined paper.
 
 STATIC_QUESTIONS.push(
@@ -36,7 +36,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6m-pp22-006', chapterId:'g6-fractions', subsection:'add_sub', difficulty:1,
     question:'Work out: <sup>3</sup>/<sub>8</sub> + <sup>4</sup>/<sub>8</sub>',
     options:['7/16','7/8','1','1 1/8'], answer:'7/8',
-    hint:'Same denominator — add the numerators only.',
+    hint:'Same denominator - add the numerators only.',
     explanation:'3/8 + 4/8 = 7/8.' }),
 
   makeMCQ({ id:'g6m-pp22-007', chapterId:'g6-fractions', subsection:'proper_improper', difficulty:1,
@@ -96,7 +96,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6m-pp22-016', chapterId:'g6-four-ops', subsection:'add_sub', difficulty:1,
     question:'Which one of the following is a <b>multiple of 8</b>?',
     options:['4','6','18','24'], answer:'24',
-    hint:'Multiples of 8: 8, 16, 24, 32 …',
+    hint:'Count up in eights and see which of the four numbers you land on.',
     explanation:'24 = 8 × 3, so 24 is a multiple of 8.' }),
 
   makeMCQ({ id:'g6m-pp22-017', chapterId:'g6-numeration', subsection:'place_value', difficulty:2,
@@ -264,15 +264,15 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g6m-pp22-pdf-001', needsArtwork:true, chapterId:'g6-geometry', marks:1, year:2022, grade:6, subject:'Maths',
+  { id:'g6m-pp22-pdf-001', image:'assets/past-papers/g6-maths-2022/q3-kite.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-geometry', marks:1, year:2022, grade:6, subject:'Maths',
     question:'Q3: Draw the line(s) of symmetry of the kite shown.', type:'draw' },
   { id:'g6m-pp22-pdf-002', chapterId:'g6-numeration', marks:2, year:2022, grade:6, subject:'Maths',
     question:'Q6: Complete the table: (a) Six hundred and five → in figures; (b) 4780 → in words.', type:'short' },
-  { id:'g6m-pp22-pdf-003', needsArtwork:true, chapterId:'g6-fractions', marks:1, year:2022, grade:6, subject:'Maths',
+  { id:'g6m-pp22-pdf-003', image:'assets/past-papers/g6-maths-2022/q15-shaded.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-fractions', marks:1, year:2022, grade:6, subject:'Maths',
     question:'Q15: What fraction of the complex L-shaped diagram (made of triangles) is shaded?', type:'short' },
-  { id:'g6m-pp22-pdf-004', needsArtwork:true, chapterId:'g6-time-speed', marks:1, year:2022, grade:6, subject:'Maths',
+  { id:'g6m-pp22-pdf-004', image:'assets/past-papers/g6-maths-2022/q27-clocks.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-time-speed', marks:1, year:2022, grade:6, subject:'Maths',
     question:'Q27 MCQ: Which of the four clock faces shown displays five minutes past eleven?', type:'short' },
-  { id:'g6m-pp22-pdf-005', needsArtwork:true, chapterId:'g6-geometry', marks:3, year:2022, grade:6, subject:'Maths',
+  { id:'g6m-pp22-pdf-005', image:'assets/past-papers/g6-maths-2022/q30-shapes.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-geometry', marks:3, year:2022, grade:6, subject:'Maths',
     question:'Q30: A 3-D shape diagram shows four shapes (cylinder, cuboid, square pyramid, triangular prism). (a) Vertices of shape B? (b) Name of shape A? (c) Which has one square face and four triangular faces?', type:'short' },
   { id:'g6m-pp22-pdf-006', chapterId:'g6-four-ops', marks:3, year:2022, grade:6, subject:'Maths',
     question:'Q35: Given 486 × 38 = 18 468, fill in the missing numbers: (a) 18 468 ÷ □ = 486; (b) □ × 38 = 18 468 + 38; (c) 48.6 × 0.38 = □.', type:'short' },

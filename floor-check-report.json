@@ -1,0 +1,3442 @@
+{
+ "generatedAt": "2026-09-08T11:33:22.260Z",
+ "rule": "an item belongs in a grade only if a child two years younger would plausibly get it wrong",
+ "thresholds": {
+  "shortPrompt": 12,
+  "shortOption": 2,
+  "thinExplanation": 25,
+  "longWordLen": 7,
+  "closedSetHits": 3,
+  "trivialOperand": 20,
+  "passageFloor": 250,
+  "flagAt": 2
+ },
+ "examCalibration": {
+  "passageWords": {
+   "english": [
+    413,
+    447
+   ],
+   "french": [
+    305,
+    743
+   ]
+  },
+  "longWordRate": {
+   "english": 0.12,
+   "french": 0.19
+  }
+ },
+ "packs": [
+  {
+   "pack": "grade5-english",
+   "total": 705,
+   "flagged": 69,
+   "chapters": [
+    {
+     "chapter": "eng-nouns",
+     "total": 161,
+     "flagged": 6
+    },
+    {
+     "chapter": "eng-verbs",
+     "total": 125,
+     "flagged": 10
+    },
+    {
+     "chapter": "eng-adjectives",
+     "total": 36,
+     "flagged": 4
+    },
+    {
+     "chapter": "eng-sentences",
+     "total": 50,
+     "flagged": 3
+    },
+    {
+     "chapter": "eng-comprehension",
+     "total": 60,
+     "flagged": 1
+    },
+    {
+     "chapter": "eng-writing",
+     "total": 60,
+     "flagged": 4
+    },
+    {
+     "chapter": "eng-vocabulary",
+     "total": 50,
+     "flagged": 27
+    },
+    {
+     "chapter": "eng-spelling",
+     "total": 42,
+     "flagged": 14
+    },
+    {
+     "chapter": "eng-passages",
+     "total": 71,
+     "flagged": 0
+    },
+    {
+     "chapter": "eng-enr-joining",
+     "total": 50,
+     "flagged": 0
+    }
+   ],
+   "items": [
+    {
+     "id": "g5eng-voc-002",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 1,
+     "score": 4,
+     "prompt": "Which word is an ANTONYM of \"ancient\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 24w"
+      },
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as g5e-cov-ant-3"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-ant-3",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 4,
+     "prompt": "Which word is an antonym of \"ancient\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      },
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as g5eng-voc-002"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-comp-003",
+     "chapterId": "eng-comprehension",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Read the passage carefully, then answer the question. The Bakery on Royal Road The bakery on Royal Road opens ",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are number words (en)"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-verb-context-2",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Which word is the main verb in \"Mum will bake a cake\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 12w, all options <=2w, explanation 3w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "0% long words vs 12% in the english paper"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-v-054",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "What does the phrasal verb \"give up\" mean?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 2 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-v-058",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "What does the phrasal verb \"look after\" mean?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 3 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-003",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "What does the prefix \"un-\" mean in the word \"unhappy\"?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 1 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-004",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "What does the suffix \"-ful\" mean in \"beautiful\" or \"careful\"?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 2 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-010",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "In the sentence \"The scientist made a significant discovery\", what does \"significant\" mean?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 3 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-014",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "What does the prefix \"re-\" mean in \"rewrite, redo, rebuild\"?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 1 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-context-1",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "\"The exhausted runner rested under a tree.\" What does exhausted mean?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 2 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-context-3",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "\"The crowd cheered when the team won.\" What does cheered mean?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 2 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-context-5",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "\"The ancient fort stood above the harbour.\" What does ancient mean?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 2 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5e-dep-089",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "The shop was deserted, so Reena served herself. What does \"deserted\" mean here?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 3 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-adj-008",
+     "chapterId": "eng-adjectives",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Form an adverb from the adjective \"happy\".",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 16w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-adj-016",
+     "chapterId": "eng-adjectives",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "The adverb of the adjective \"angry\" is \"angrily\".",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 21w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-adj-context-1",
+     "chapterId": "eng-adjectives",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is the adjective in \"A cheerful crowd waited outside\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 11w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-adj-context-2",
+     "chapterId": "eng-adjectives",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is the adjective in \"We crossed a narrow bridge\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 11w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-noun-005",
+     "chapterId": "eng-nouns",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "The word \"happiness\" is a noun.",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 25w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-plural-0",
+     "chapterId": "eng-nouns",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the plural of \"leaf\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-plural-1",
+     "chapterId": "eng-nouns",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the plural of \"child\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-plural-2",
+     "chapterId": "eng-nouns",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the plural of \"tomato\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-plural-3",
+     "chapterId": "eng-nouns",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the plural of \"knife\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-abstract-0",
+     "chapterId": "eng-nouns",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is an abstract noun?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-type-0",
+     "chapterId": "eng-sentences",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What type of sentence is \"Please place your bag under the desk.\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 12w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-type-1",
+     "chapterId": "eng-sentences",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What type of sentence is \"What an amazing view!\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-dep-052",
+     "chapterId": "eng-sentences",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which mark is used at the start and end of spoken words?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 12w, all options <=2w, explanation 8w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-spell-004",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "How do you spell the -ing form of \"run\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-spell-007",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which is the correct spelling of the plural of \"leaf\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 21w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-spell-011",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Choose the correctly spelled word meaning \"the act of protecting\".",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 24w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-spell-012",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the correct PLURAL of \"child\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 18w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-rule-3",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word follows the \"i before e except after c\" rule?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 11w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-rule-5",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word correctly drops e before adding -ing?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-spellplural-0",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the correct plural of \"wolf\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-spellplural-1",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the correct plural of \"tomato\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-spellplural-2",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the correct plural of \"mouse\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-spellplural-3",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the correct plural of \"city\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-spellplural-4",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the correct plural of \"sheep\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-sp-058",
+     "chapterId": "eng-spelling",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Which prefix creates the opposite meaning of \"happy\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 22w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-sp-060",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word uses the prefix \"mis-\" correctly, meaning \"wrongly understood\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 24w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-sp-061",
+     "chapterId": "eng-spelling",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is formed correctly by adding the suffix \"-tion\" to \"educate\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 12w, all options <=2w, explanation 25w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-verb-004",
+     "chapterId": "eng-verbs",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "What is the PAST TENSE of the irregular verb \"go\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 22w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-core-agree-02",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Choose the correct verb: “The basket of mangoes ___ on the table.”",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as g5e-cov-agreement-0"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-agreement-0",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Choose the correct verb: \"The basket of mangoes ___ on the table.\"",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as g5eng-core-agree-02"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-aux-0",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is the auxiliary verb in \"She has finished her work\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 12w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-past-0",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the past tense of \"begin\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-verb-context-0",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is the verb in \"The noisy parrot squawked loudly\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 11w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-verb-context-3",
+     "chapterId": "eng-verbs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is the verb in \"Our teacher seems pleased\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-001",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Which word is a SYNONYM of \"happy\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 25w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-006",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word has the prefix \"mis-\" and means \"to understand incorrectly\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 11w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-007",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Which word is a synonym of \"enormous\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 21w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-008",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Add a suffix to \"courage\" to make a word meaning \"having courage\".",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 12w, all options <=2w, explanation 15w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-009",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "\"Rapid\" and \"swift\" are antonyms.",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 5w, all options <=2w, explanation 19w"
+      }
+     ]
+    },
+    {
+     "id": "g5eng-voc-016",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "What is the ANTONYM of \"polite\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-syn-0",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is a synonym for \"brave\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-syn-1",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is a synonym for \"silent\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-syn-2",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is a synonym for \"generous\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-syn-3",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is a synonym for \"examine\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-syn-4",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is a synonym for \"fragile\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-ant-0",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is an antonym of \"narrow\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-ant-1",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is an antonym of \"generous\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-ant-2",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is an antonym of \"arrive\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-ant-4",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is an antonym of \"victory\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-dep-087",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word means the same as \"delighted\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 13w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-dep-088",
+     "chapterId": "eng-vocabulary",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word is the opposite of \"ancient\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 13w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-cov-description-2",
+     "chapterId": "eng-writing",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which sense is used in \"The spicy aroma drifted from the kitchen\"?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 12w, all options <=2w, explanation 3w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-dep-061",
+     "chapterId": "eng-writing",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "A story should be divided into ...",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 14w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-dep-071",
+     "chapterId": "eng-writing",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Which word best describes a very old house?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 16w"
+      }
+     ]
+    },
+    {
+     "id": "g5e-dep-076",
+     "chapterId": "eng-writing",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What does \"The wind whispered through the leaves\" show?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 10w"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pack": "grade5-french",
+   "total": 2295,
+   "flagged": 89,
+   "chapters": [
+    {
+     "chapter": "fr-vocabulaire",
+     "total": 53,
+     "flagged": 6
+    },
+    {
+     "chapter": "fr-noms",
+     "total": 61,
+     "flagged": 16
+    },
+    {
+     "chapter": "fr-verbes-present",
+     "total": 515,
+     "flagged": 0
+    },
+    {
+     "chapter": "fr-adjectifs",
+     "total": 52,
+     "flagged": 7
+    },
+    {
+     "chapter": "fr-passe-compose",
+     "total": 455,
+     "flagged": 3
+    },
+    {
+     "chapter": "fr-pronoms",
+     "total": 285,
+     "flagged": 3
+    },
+    {
+     "chapter": "fr-lecture",
+     "total": 60,
+     "flagged": 12
+    },
+    {
+     "chapter": "fr-grammaire",
+     "total": 53,
+     "flagged": 1
+    },
+    {
+     "chapter": "g5fr-passe-simple",
+     "total": 185,
+     "flagged": 5
+    },
+    {
+     "chapter": "g5fr-subjonctif",
+     "total": 185,
+     "flagged": 5
+    },
+    {
+     "chapter": "fr-textes",
+     "total": 61,
+     "flagged": 16
+    },
+    {
+     "chapter": "fr-images",
+     "total": 60,
+     "flagged": 15
+    },
+    {
+     "chapter": "g5fr-formation",
+     "total": 200,
+     "flagged": 0
+    },
+    {
+     "chapter": "g5fr-textes-trous",
+     "total": 20,
+     "flagged": 0
+    },
+    {
+     "chapter": "fr-enr-relier",
+     "total": 50,
+     "flagged": 0
+    }
+   ],
+   "items": [
+    {
+     "id": "g5fr-pro-023",
+     "chapterId": "fr-pronoms",
+     "difficulty": 2,
+     "score": 4,
+     "prompt": "\"Ce livre est le mien.\" Que signifie \"le mien\" ?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 2 word(s)"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "6% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-007",
+     "chapterId": "fr-images",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Quel adjectif décrit le mieux un marché plein de monde ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 14w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "7% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-001",
+     "chapterId": "fr-lecture",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une journée à Maurice Demain, c'est samedi. La fami",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are days (fr)"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-011",
+     "chapterId": "fr-lecture",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 222w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-015",
+     "chapterId": "fr-lecture",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 222w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-017",
+     "chapterId": "fr-lecture",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 222w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-018",
+     "chapterId": "fr-lecture",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 223w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-019",
+     "chapterId": "fr-lecture",
+     "difficulty": 4,
+     "score": 3,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 222w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-005",
+     "chapterId": "fr-noms",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Quel est le pluriel de « le nez » ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 19w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "7% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-txt-001",
+     "chapterId": "fr-textes",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "Lis le courriel, puis réponds à la question. De : famille.appadoo@gmail.com À : mme.hurgobin@ecolecurepipe.mu ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 195w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-txt-003",
+     "chapterId": "fr-textes",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Lis le courriel, puis réponds à la question. De : famille.appadoo@gmail.com À : mme.hurgobin@ecolecurepipe.mu ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 193w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-txt-005",
+     "chapterId": "fr-textes",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "Lis le courriel, puis réponds à la question. De : famille.appadoo@gmail.com À : mme.hurgobin@ecolecurepipe.mu ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 199w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-058",
+     "chapterId": "fr-textes",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 170w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-060",
+     "chapterId": "fr-textes",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 173w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-063",
+     "chapterId": "fr-textes",
+     "difficulty": 4,
+     "score": 3,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 175w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-065",
+     "chapterId": "fr-textes",
+     "difficulty": 4,
+     "score": 3,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 172w vs 305-743w in the real paper"
+      },
+      {
+       "id": "answer-stands-out",
+       "why": "the correct option is guessable from its shape alone",
+       "detail": "correct option is much the longest"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-076",
+     "chapterId": "fr-textes",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Le filao Sur la plage endormie, le vieux filao chante, Ses aiguilles de vert peignent le vent salé. Il garde l",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are number words (fr)"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-voc-003",
+     "chapterId": "fr-vocabulaire",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "Comment écrit-on 280 en toutes lettres ?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 3 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-voc-004",
+     "chapterId": "fr-vocabulaire",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "Quel mois de l’année vient juste avant celui qui compte le moins de jours ?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are months (fr)"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-voc-010",
+     "chapterId": "fr-vocabulaire",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "L’école est fermée du lundi 5 au vendredi 9 inclus. Combien de jours de classe sont perdus ?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are number words (fr)"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-voc-013",
+     "chapterId": "fr-vocabulaire",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "Nous sommes vendredi. Le match aura lieu dans dix jours. Quel jour aura-t-il lieu ?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are days (fr)"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-voc-016",
+     "chapterId": "fr-vocabulaire",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "Que veut dire l’expression « avoir le cœur gros » ?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 2 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-passe-simple-004",
+     "chapterId": "g5fr-passe-simple",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "Le passé simple d'\"aller\" pour \"il\" est \"alla\".",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 18w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "0% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-passe-simple-005",
+     "chapterId": "g5fr-passe-simple",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "Quel est le passé simple d'ÊTRE pour \"il\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 23w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "0% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-passe-simple-007",
+     "chapterId": "g5fr-passe-simple",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Quel est le passé simple d'AVOIR pour \"elle\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 22w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "0% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-passe-simple-011",
+     "chapterId": "g5fr-passe-simple",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Quel est le passé simple de FAIRE pour \"il\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 22w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "7% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-passe-simple-023",
+     "chapterId": "g5fr-passe-simple",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Le passé simple d'\"avoir\" pour \"il\" est \"il eut\".",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 23w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "0% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-subjonctif-006",
+     "chapterId": "g5fr-subjonctif",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Quel est le subjonctif d'ÊTRE pour \"il\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 23w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "9% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-subjonctif-007",
+     "chapterId": "g5fr-subjonctif",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "Quel est le subjonctif d'AVOIR pour \"tu\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 21w"
+      },
+      {
+       "id": "low-lexis",
+       "why": "vocabulary well below the reading level of the real paper",
+       "detail": "9% long words vs 19% in the french paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-adj-003",
+     "chapterId": "fr-adjectifs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le féminin de \"beau\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 22w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-adj-009",
+     "chapterId": "fr-adjectifs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le féminin de \"vieux\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-adj-011",
+     "chapterId": "fr-adjectifs",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quelle est la forme féminine de \"blanc\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 24w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-adj-012",
+     "chapterId": "fr-adjectifs",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quelle est la forme féminine de \"sportif\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 21w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-adj-021",
+     "chapterId": "fr-adjectifs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le comparatif irrégulier de \"bon\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-adj-026",
+     "chapterId": "fr-adjectifs",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "\"Neigeux\" est un adjectif formé à partir du nom \"neige\".",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-029",
+     "chapterId": "fr-adjectifs",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Quel est le comparatif de supériorité de « bon » ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 15w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-gr-023",
+     "chapterId": "fr-grammaire",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Formez l'adverbe à partir de \"heureux\" :",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 25w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-002",
+     "chapterId": "fr-images",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel mot désigne le lieu d'une scène au bord de la mer ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 12w, all options <=2w, explanation 16w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-003",
+     "chapterId": "fr-images",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel mot désigne le lieu où l'on achète des légumes ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 11w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-010",
+     "chapterId": "fr-images",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Pour décrire une image, on emploie surtout le ...",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 14w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-011",
+     "chapterId": "fr-images",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quelle expression sert à situer quelque chose entre deux objets ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 16w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-015",
+     "chapterId": "fr-images",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Quel adjectif décrit le mieux une personne qui n'est pas contente ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 11w, all options <=2w, explanation 9w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-018",
+     "chapterId": "fr-images",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Pour décrire un vêtement, on emploie le verbe ...",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 12w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-020",
+     "chapterId": "fr-images",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Dans une description, l'adjectif « immense » veut dire ...",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 11w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-021",
+     "chapterId": "fr-images",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel connecteur commence une histoire en images ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 11w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-022",
+     "chapterId": "fr-images",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel connecteur termine une histoire ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 5w, all options <=2w, explanation 12w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-023",
+     "chapterId": "fr-images",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel connecteur relie la deuxième image à la première ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 9w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-030",
+     "chapterId": "fr-images",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel mot indique la cause dans une histoire ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 12w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-031",
+     "chapterId": "fr-images",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel mot indique la conséquence dans une histoire ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 13w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-036",
+     "chapterId": "fr-images",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Dans « la voisine furieuse a grondé le garçon », qui a grondé ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 11w, all options <=2w, explanation 17w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-dep-037",
+     "chapterId": "fr-images",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Quel connecteur indique que deux actions se passent en même temps ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 11w, all options <=2w, explanation 11w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-012",
+     "chapterId": "fr-lecture",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 223w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-013",
+     "chapterId": "fr-lecture",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 219w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-014",
+     "chapterId": "fr-lecture",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 219w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-016",
+     "chapterId": "fr-lecture",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Lisez le texte attentivement, puis répondez aux questions. Une sortie pas comme les autres Très tôt le matin, ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 228w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-021",
+     "chapterId": "fr-lecture",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel est le meilleur synonyme de \"magnifique\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 15w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-lec-030",
+     "chapterId": "fr-lecture",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Choisissez le meilleur synonyme pour \"immense\" : \"Le parc est immense.\"",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 14w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-001",
+     "chapterId": "fr-noms",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel article défini utilise-t-on devant un nom masculin singulier ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-003",
+     "chapterId": "fr-noms",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel est le pluriel de \"un bateau\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-004",
+     "chapterId": "fr-noms",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel est le pluriel de \"un animal\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-005",
+     "chapterId": "fr-noms",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel article indéfini utilise-t-on devant un nom féminin singulier ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 23w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-008",
+     "chapterId": "fr-noms",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le pluriel de \"le journal\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 19w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-018",
+     "chapterId": "fr-noms",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "\"Des travaux\" est le pluriel de quel mot ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 25w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-020",
+     "chapterId": "fr-noms",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel est le féminin de \"acteur\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 17w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-021",
+     "chapterId": "fr-noms",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel est le féminin de \"chanteur\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 25w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-027",
+     "chapterId": "fr-noms",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Formez un nom à partir de \"déplacer\" + le suffixe -ment.",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 22w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-028",
+     "chapterId": "fr-noms",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le féminin de \"pharmacien\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 20w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-029",
+     "chapterId": "fr-noms",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le féminin de \"boulanger\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 18w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-nom-033",
+     "chapterId": "fr-noms",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Formez un adjectif à partir du nom \"nuage\".",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 21w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-002",
+     "chapterId": "fr-noms",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le pluriel de « le bateau » ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 13w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-004",
+     "chapterId": "fr-noms",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Quel est le pluriel de « le travail » ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 20w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-006",
+     "chapterId": "fr-noms",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Quel est le pluriel de « madame » ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 6w, all options <=2w, explanation 16w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-pc-002",
+     "chapterId": "fr-passe-compose",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel est le participe passé du verbe \"parler\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 24w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-pc-007",
+     "chapterId": "fr-passe-compose",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le participe passé de \"faire\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 25w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-pc-010",
+     "chapterId": "fr-passe-compose",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le participe passé de \"prendre\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 22w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-pro-001",
+     "chapterId": "fr-pronoms",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Quel pronom sujet correspond à \"we\" en français ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 8w, all options <=2w, explanation 21w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-pro-025",
+     "chapterId": "fr-pronoms",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "\"Quel manteau préfères-tu ?\" → En montrant un manteau loin de vous :",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 10w, all options <=2w, explanation 21w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-txt-002",
+     "chapterId": "fr-textes",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Lis le courriel, puis réponds à la question. De : famille.appadoo@gmail.com À : mme.hurgobin@ecolecurepipe.mu ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 193w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-txt-004",
+     "chapterId": "fr-textes",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Lis le courriel, puis réponds à la question. De : famille.appadoo@gmail.com À : mme.hurgobin@ecolecurepipe.mu ",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 202w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-056",
+     "chapterId": "fr-textes",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 173w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-057",
+     "chapterId": "fr-textes",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 172w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-059",
+     "chapterId": "fr-textes",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 171w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-061",
+     "chapterId": "fr-textes",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 169w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-062",
+     "chapterId": "fr-textes",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 170w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-bal-064",
+     "chapterId": "fr-textes",
+     "difficulty": 4,
+     "score": 2,
+     "prompt": "De : club.nature@ecolerosehill.mu À : parents5b@ecolerosehill.mu Objet : Sortie au Jardin de Pamplemousses — s",
+     "rules": [
+      {
+       "id": "short-passage",
+       "why": "a comprehension stimulus far below exam passage length",
+       "detail": "stimulus 172w vs 305-743w in the real paper"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-voc-023",
+     "chapterId": "fr-vocabulaire",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Quel adjectif décrit quelqu’un qui ne se décourage jamais ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 20w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-subjonctif-009",
+     "chapterId": "g5fr-subjonctif",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "\"Il est possible qu'il vienne\" utilise correctement le subjonctif.",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 21w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-subjonctif-010",
+     "chapterId": "g5fr-subjonctif",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Quel est le subjonctif d'ALLER pour \"ils\" ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 7w, all options <=2w, explanation 22w"
+      }
+     ]
+    },
+    {
+     "id": "g5fr-subjonctif-027",
+     "chapterId": "g5fr-subjonctif",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "\"Avant que\" se construit avec le subjonctif ou l'indicatif ?",
+     "rules": [
+      {
+       "id": "bare-recall",
+       "why": "short prompt, no stimulus, one-word options, nothing explained",
+       "detail": "prompt 9w, all options <=2w, explanation 25w"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pack": "grade5-maths",
+   "total": 1431,
+   "flagged": 48,
+   "chapters": [
+    {
+     "chapter": "numeration",
+     "total": 90,
+     "flagged": 0
+    },
+    {
+     "chapter": "four_ops",
+     "total": 91,
+     "flagged": 1
+    },
+    {
+     "chapter": "square_nums",
+     "total": 76,
+     "flagged": 2
+    },
+    {
+     "chapter": "geometry",
+     "total": 123,
+     "flagged": 5
+    },
+    {
+     "chapter": "fractions",
+     "total": 103,
+     "flagged": 6
+    },
+    {
+     "chapter": "decimals",
+     "total": 83,
+     "flagged": 15
+    },
+    {
+     "chapter": "powers",
+     "total": 77,
+     "flagged": 8
+    },
+    {
+     "chapter": "average",
+     "total": 69,
+     "flagged": 0
+    },
+    {
+     "chapter": "ratio",
+     "total": 72,
+     "flagged": 1
+    },
+    {
+     "chapter": "length",
+     "total": 69,
+     "flagged": 0
+    },
+    {
+     "chapter": "area",
+     "total": 71,
+     "flagged": 1
+    },
+    {
+     "chapter": "capacity",
+     "total": 62,
+     "flagged": 0
+    },
+    {
+     "chapter": "mass",
+     "total": 61,
+     "flagged": 1
+    },
+    {
+     "chapter": "money",
+     "total": 72,
+     "flagged": 1
+    },
+    {
+     "chapter": "time",
+     "total": 81,
+     "flagged": 2
+    },
+    {
+     "chapter": "graphs",
+     "total": 75,
+     "flagged": 2
+    },
+    {
+     "chapter": "percentage",
+     "total": 58,
+     "flagged": 2
+    },
+    {
+     "chapter": "conversions",
+     "total": 98,
+     "flagged": 1
+    }
+   ],
+   "items": [
+    {
+     "id": "EG06",
+     "chapterId": "geometry",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "How many lines of symmetry does a square have?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are number words (en)"
+      }
+     ]
+    },
+    {
+     "id": "GR05",
+     "chapterId": "graphs",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "A pictogram shows trees planted each month: Month Symbols February ▲▲▲▲ March ▲▲ September ▲▲▲▲▲ 🔑 Key: ▲ = 3",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "3/4 options are months (en)"
+      }
+     ]
+    },
+    {
+     "id": "GR07",
+     "chapterId": "graphs",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "A bar chart shows: Mon=50, Tue=35, Wed=45, Thu=30. On which day were the fewest items sold?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are days (en)"
+      }
+     ]
+    },
+    {
+     "id": "PC01",
+     "chapterId": "percentage",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "What does % mean?",
+     "rules": [
+      {
+       "id": "translation",
+       "why": "asks for a translation or gloss rather than use of the word",
+       "detail": "prompt asks for a direct gloss; answer is 2 word(s)"
+      }
+     ]
+    },
+    {
+     "id": "CH_TIM08",
+     "chapterId": "time",
+     "difficulty": 3,
+     "score": 3,
+     "prompt": "January 15 is a Wednesday. What day of the week is February 15?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are days (en)"
+      }
+     ]
+    },
+    {
+     "id": "CAL01",
+     "chapterId": "time",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "If today is Wednesday 5th March , what day is 14th March ?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are days (en)"
+      }
+     ]
+    },
+    {
+     "id": "EAR01",
+     "chapterId": "area",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Find the area of a rectangle measuring 8 cm × 4 cm .",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CV_L05",
+     "chapterId": "conversions",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Convert 850 cm to metres.",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as DD04"
+      }
+     ]
+    },
+    {
+     "id": "D02",
+     "chapterId": "decimals",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Calculate: 3.45 + 2.30",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "D06",
+     "chapterId": "decimals",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Calculate: 4.25 × 4",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_DEC01",
+     "chapterId": "decimals",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is 3.75 + 2.48?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_DEC02",
+     "chapterId": "decimals",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is 5.4 × 0.3?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_DEC03",
+     "chapterId": "decimals",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is 12.6 ÷ 0.4?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_DEC06",
+     "chapterId": "decimals",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Which decimal is equivalent to 7/8?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_DEC10",
+     "chapterId": "decimals",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is the value of 0.4² + 0.3²?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "DD01",
+     "chapterId": "decimals",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Convert 3.5 kg to grams .",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as M02"
+      }
+     ]
+    },
+    {
+     "id": "DD04",
+     "chapterId": "decimals",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Convert 850 cm to metres .",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as CV_L05"
+      }
+     ]
+    },
+    {
+     "id": "D08",
+     "chapterId": "decimals",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "What is 0.3 as a fraction? (e.g. 3/10)",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "D09",
+     "chapterId": "decimals",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Calculate: 12.75 + 8.60",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "DOP01",
+     "chapterId": "decimals",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Calculate: 4.75 + 2.85",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "DOP03",
+     "chapterId": "decimals",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Calculate: 2.4 × 5",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "DOP04",
+     "chapterId": "decimals",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Calculate: 15.6 ÷ 4",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "DCO02",
+     "chapterId": "decimals",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is 3/8 as a decimal?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "BOD02",
+     "chapterId": "four_ops",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Calculate: (12 − 4) × 3",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "FR01",
+     "chapterId": "fractions",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Simplify 12/16 to its lowest terms.",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_FRC01",
+     "chapterId": "fractions",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is 2¾ + 1⅝?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_FRC14",
+     "chapterId": "fractions",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is 2½ × 1⅗?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "DFR07",
+     "chapterId": "fractions",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Which fraction is equivalent to 4/6 ?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "FR09",
+     "chapterId": "fractions",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Which fraction is equivalent to 2/3 ?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "FAS04",
+     "chapterId": "fractions",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Aisha has ¾ of a pizza and eats 1/3 . What fraction is left ?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "G02",
+     "chapterId": "geometry",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "How many lines of symmetry does an equilateral triangle have?",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as EG07"
+      }
+     ]
+    },
+    {
+     "id": "DG11",
+     "chapterId": "geometry",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "How many lines of symmetry does a rectangle have?",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as G09"
+      }
+     ]
+    },
+    {
+     "id": "EG07",
+     "chapterId": "geometry",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "How many lines of symmetry does an equilateral triangle have?",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as G02"
+      }
+     ]
+    },
+    {
+     "id": "G09",
+     "chapterId": "geometry",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "How many lines of symmetry does a rectangle have?",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as DG11"
+      }
+     ]
+    },
+    {
+     "id": "M02",
+     "chapterId": "mass",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Convert 3.5 kg to grams.",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as DD01"
+      }
+     ]
+    },
+    {
+     "id": "MO01",
+     "chapterId": "money",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Calculate: Rs 5.50 + Rs 3.25",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "PC03",
+     "chapterId": "percentage",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Write 3/5 as a percentage.",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "P03",
+     "chapterId": "powers",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Calculate: 3² + 2³",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "P05",
+     "chapterId": "powers",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Calculate: 2³ × 3²",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_PWR02",
+     "chapterId": "powers",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is 3⁴ + 2⁵?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_PWR05",
+     "chapterId": "powers",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is the value of 2³ × 3²?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_PWR17",
+     "chapterId": "powers",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is 2⁴ + 3³ − 5²?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "EP01",
+     "chapterId": "powers",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Find the value of 6² .",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as ES01"
+      }
+     ]
+    },
+    {
+     "id": "EP02",
+     "chapterId": "powers",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "What is the value of 2³ + 1 ?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "P09",
+     "chapterId": "powers",
+     "difficulty": 2,
+     "score": 2,
+     "prompt": "Calculate: 5² + 4²",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_RAT16",
+     "chapterId": "ratio",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "Simplify 1.5 : 2.5 to its simplest whole-number ratio.",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "CH_SQN17",
+     "chapterId": "square_nums",
+     "difficulty": 3,
+     "score": 2,
+     "prompt": "What is the value of 7² + 8² − 6²?",
+     "rules": [
+      {
+       "id": "trivial-arithmetic",
+       "why": "single small-number operation, below the grade in itself",
+       "detail": "one operation on numbers all below 20"
+      }
+     ]
+    },
+    {
+     "id": "ES01",
+     "chapterId": "square_nums",
+     "difficulty": 1,
+     "score": 2,
+     "prompt": "Find the value of 6² .",
+     "rules": [
+      {
+       "id": "duplicate-stem",
+       "why": "another question in the pack asks the same thing",
+       "detail": "same stem as EP01"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pack": "grade5-history",
+   "total": 543,
+   "flagged": 3,
+   "chapters": [
+    {
+     "chapter": "discovery",
+     "total": 49,
+     "flagged": 0
+    },
+    {
+     "chapter": "settlement",
+     "total": 96,
+     "flagged": 0
+    },
+    {
+     "chapter": "trade-agri",
+     "total": 33,
+     "flagged": 0
+    },
+    {
+     "chapter": "port-louis",
+     "total": 65,
+     "flagged": 0
+    },
+    {
+     "chapter": "natural-env",
+     "total": 34,
+     "flagged": 0
+    },
+    {
+     "chapter": "volcanism",
+     "total": 34,
+     "flagged": 0
+    },
+    {
+     "chapter": "env-problems",
+     "total": 34,
+     "flagged": 0
+    },
+    {
+     "chapter": "map-skills",
+     "total": 46,
+     "flagged": 0
+    },
+    {
+     "chapter": "g5ge-weather",
+     "total": 50,
+     "flagged": 3
+    },
+    {
+     "chapter": "g5enr-landmarks",
+     "total": 33,
+     "flagged": 0
+    },
+    {
+     "chapter": "g5enr-personalities",
+     "total": 38,
+     "flagged": 0
+    },
+    {
+     "chapter": "g5enr-world",
+     "total": 31,
+     "flagged": 0
+    }
+   ],
+   "items": [
+    {
+     "id": "g5ge-weather-001",
+     "chapterId": "g5ge-weather",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "How many seasons does Mauritius have?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are number words (en)"
+      }
+     ]
+    },
+    {
+     "id": "g5hg-dep-008",
+     "chapterId": "g5ge-weather",
+     "difficulty": 1,
+     "score": 3,
+     "prompt": "Which season in Mauritius is hot and wet?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are seasons (en)"
+      }
+     ]
+    },
+    {
+     "id": "g5hg-dep-009",
+     "chapterId": "g5ge-weather",
+     "difficulty": 2,
+     "score": 3,
+     "prompt": "In which season does Mauritius receive most of its rain?",
+     "rules": [
+      {
+       "id": "closed-set",
+       "why": "options come from a set a Grade 1-2 child already owns",
+       "detail": "4/4 options are seasons (en)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "pack": "grade5-science",
+   "total": 424,
+   "flagged": 0,
+   "chapters": [
+    {
+     "chapter": "plants",
+     "total": 70,
+     "flagged": 0
+    },
+    {
+     "chapter": "animals",
+     "total": 43,
+     "flagged": 0
+    },
+    {
+     "chapter": "energy",
+     "total": 80,
+     "flagged": 0
+    },
+    {
+     "chapter": "water-matter",
+     "total": 70,
+     "flagged": 0
+    },
+    {
+     "chapter": "electricity",
+     "total": 80,
+     "flagged": 0
+    },
+    {
+     "chapter": "conservation",
+     "total": 40,
+     "flagged": 0
+    },
+    {
+     "chapter": "g5sci-enr-endemic",
+     "total": 23,
+     "flagged": 0
+    },
+    {
+     "chapter": "g5sci-enr-energy",
+     "total": 18,
+     "flagged": 0
+    }
+   ],
+   "items": []
+  }
+ ]
+}

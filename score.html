@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#4f46e5">
 <!-- Social preview. The numbers are also injected into the text below from the
      query string, but these give link unfurlers something even before JS runs. -->
-<meta property="og:title" content="⚡ Quick Fire — PSAC Exam Practice">
+<meta property="og:title" content="⚡ Quick Fire - PSAC Exam Practice">
 <meta property="og:description" content="I set a Quick Fire high score on PSAC Practice. Can you beat me?">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -47,22 +47,22 @@
   <div class="kicker">⚡ QUICK FIRE · PSAC EXAM PRACTICE</div>
   <div class="card">
     <div class="bolt">⚡</div>
-    <div class="score" id="score">—</div>
+    <div class="score" id="score">-</div>
     <div class="plabel">POINTS</div>
     <div class="meta">
-      <div class="chip"><b id="correct">—</b><span>correct</span></div>
-      <div class="chip"><b id="acc">—</b><span>accuracy</span></div>
+      <div class="chip"><b id="correct">-</b><span>correct</span></div>
+      <div class="chip"><b id="acc">-</b><span>accuracy</span></div>
     </div>
     <div class="challenge">Can you beat this? 🎯</div>
   </div>
   <a class="cta" href="/">🚀 Play Quick Fire free</a>
-  <p class="sub">Free exam revision for Mauritian primary students — <a href="/">psac-practice</a></p>
+  <p class="sub">Free exam revision for Mauritian primary students - <a href="/">psac-practice</a></p>
 </div>
 <script>
   const p = new URLSearchParams(location.search);
   const clamp = (v, max) => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= 0 && n <= max ? n : null; };
   const s = clamp(p.get('s'), 100000), c = clamp(p.get('c'), 10000), a = clamp(p.get('a'), 100);
-  const set = (id, v, suf) => { const el = document.getElementById(id); if (el) el.textContent = v === null ? '—' : v + (suf || ''); };
+  const set = (id, v, suf) => { const el = document.getElementById(id); if (el) el.textContent = v === null ? '-' : v + (suf || ''); };
   set('score', s); set('correct', c); set('acc', a, '%');
   document.title = s !== null ? `⚡ ${s} points on Quick Fire · PSAC Practice` : document.title;
 </script>

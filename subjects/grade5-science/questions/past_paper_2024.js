@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 Science 2024 — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 Science 2024 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp24-001', chapterId:'plants', subsection:'parts', difficulty:1,
     question:'Which part of a hibiscus plant <strong>contains pollen</strong>?',
@@ -59,12 +59,12 @@ STATIC_QUESTIONS.push(
     question:'Which bird is <strong>endemic</strong> to the island of Mauritius?',
     options:['Echo parakeet','Sparrow','Peacock','Crow'], answer:'Echo parakeet',
     hint:'This bird is found only in Mauritius and is critically endangered.',
-    explanation:'The Echo parakeet (Psittacula eques) is endemic to Mauritius — it is found nowhere else in the world. It was saved from extinction by conservation efforts.' }),
+    explanation:'The Echo parakeet (Psittacula eques) is endemic to Mauritius - it is found nowhere else in the world. It was saved from extinction by conservation efforts.' }),
 
   makeMCQ({ id:'g5sc-pp24-011', chapterId:'animals', subsection:'classification', difficulty:2,
     question:'Name a bird that is endemic to the island of <strong>Rodrigues</strong>.',
     options:['Echo parakeet','Cardinal jaune (Rodrigues warbler)','Pink Pigeon','Kestrel'], answer:'Cardinal jaune (Rodrigues warbler)',
-    hint:'Rodrigues island has its own unique small songbird found nowhere else — what is its local name?',
+    hint:'Rodrigues island has its own unique small songbird found nowhere else - what is its local name?',
     explanation:'The Rodrigues warbler (Cardinal jaune / Acrocephalus rodericanus) is endemic to Rodrigues. The Echo parakeet and Kestrel are endemic to Mauritius.' }),
 
   makeMCQ({ id:'g5sc-pp24-012', chapterId:'energy', subsection:'sources', difficulty:1,
@@ -94,6 +94,6 @@ window.PSAC_PDF_QUESTIONS.push(
     question:'Match each animal (Dolphin, Camel, Deer) to its correct natural habitat (Deserts, Soil, Sea, Forest).', type:'match' },
   { id:'g5sc-pp24-pdf-003', chapterId:'energy', marks:4, year:2024, grade:5, subject:'Science',
     question:'Write down the energy transformation that occurs: (1) when a girl is running, (2) when a tree is making its food using sunlight.', type:'write' },
-  { id:'g5sc-pp24-pdf-004', needsArtwork:true, chapterId:'electricity', marks:3, year:2024, grade:5, subject:'Science',
+  { id:'g5sc-pp24-pdf-004', image:'assets/past-papers/g5-science-2024/d-circuit.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'electricity', marks:3, year:2024, grade:5, subject:'Science',
     question:'Label the components P (cell/battery), Q (wire), and R (switch) in the electric circuit diagram and state the function of each.', type:'label' }
 );

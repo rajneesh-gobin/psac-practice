@@ -115,7 +115,7 @@ STATIC_QUESTIONS.push(
     question:'Lequel de ces verbes utilise ÊTRE (et non avoir) au plus-que-parfait ?',
     options:['manger','finir','partir','voir'],
     answer:'partir',
-    hint:'Les verbes de mouvement/état utilisent être : aller, venir, partir, arriver, naître, mourir…',
+    hint:'Les verbes de mouvement et de changement d\'état prennent « être ». Lequel de ces quatre décrit un déplacement ?',
     explanation:'<b>Partir</b> utilise l\'auxiliaire <b>être</b> au plus-que-parfait (et au passé composé) : j\'étais parti. Les autres - manger (j\'avais mangé), finir (j\'avais fini), voir (j\'avais vu) - utilisent avoir.' }),
 
   makeMCQ({ id:'g6fr-pqp-017', chapterId:'g6fr-pqp', subsection:'formation', difficulty:3,
@@ -220,7 +220,7 @@ STATIC_QUESTIONS.push(
     question:'Complète la si-clause (hypothèse passée non réalisée) : "Si j\'___ (savoir), je n\'aurais pas fait cette erreur."',
     options:['savais','avais su','ai su','aurais su'],
     answer:'avais su',
-    hint:'Si + plus-que-parfait → conditionnel passé. Savoir → avais su.',
+    hint:'Après « si », l\'hypothèse passée non réalisée se met au plus-que-parfait : imparfait de l\'auxiliaire + participe passé.',
     explanation:'"Si j\'<b>avais su</b>" (si + PQP) "je n\'aurais pas fait" (conditionnel passé). Structure de l\'hypothèse passée : <b>si + PQP → conditionnel passé</b>. "Savais" = imparfait → incorrect dans cette structure.' }),
 
   makeTF({ id:'g6fr-pqp-030', chapterId:'g6fr-pqp', subsection:'formation', difficulty:3,
@@ -262,7 +262,7 @@ STATIC_QUESTIONS.push(
       'était / lu'
     ],
     answer:'avait / lu',
-    hint:'Action antérieure (avait lu avant de regarder) = PQP. Lire → participe passé irrégulier = lu.',
+    hint:'L\'action la plus ancienne se met au plus-que-parfait : imparfait de l\'auxiliaire + participe passé. Attention, « lire » a un participe irrégulier.',
     explanation:'"Elle <b>avait</b> déjà <b>lu</b> le livre" - lire → participe passé irrégulier = <b>lu</b>. Auxiliaire avoir, imparfait = <b>avait</b>. Action (lire le livre) antérieure à l\'action principale (regarder le film) → <b>PQP</b>.' }),
 
   makeMCQ({ id:'g6fr-pqp-034', chapterId:'g6fr-pqp', subsection:'concordance', difficulty:3,

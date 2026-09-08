@@ -20,7 +20,9 @@ const _G5TXT_COURRIEL = _g5txtBox(`
 <div style="padding:10px">
 Madame,<br><br>
 Je vous écris au sujet de la sortie scolaire au Jardin botanique de Pamplemousses, prévue le vendredi 3 octobre.<br><br>
-J\'autorise avec plaisir ma fille Anjali à y participer. J\'ai déjà remis les Rs 250 au secrétariat et je joins le reçu à ce message.<br><br>
+J\'autorise avec plaisir ma fille Anjali à y participer. Elle attend cette sortie depuis que vous l\'avez annoncée en classe et elle en parle tous les soirs à la maison.<br><br>
+Puis-je vous poser deux questions ? D\'abord, à quelle heure le car sera-t-il de retour à l\'école ? Ensuite, Anjali est allergique aux arachides, et je voudrais savoir si le goûter prévu en contient.<br><br>
+Si vous manquez d\'accompagnateurs, je suis libre ce jour-là et je serais heureuse de venir aider. J\'ai déjà remis les Rs 250 au secrétariat et je joins le reçu à ce message.<br><br>
 Puis-je vous poser deux questions ? D\'abord, à quelle heure le car rentrera-t-il à l\'école ? Ensuite, Anjali est allergique aux arachides : le pique-nique contiendra-t-il des cacahuètes ?<br><br>
 Je vous remercie d\'organiser cette sortie. Anjali parle du grand nénuphar depuis une semaine.<br><br>
 Veuillez agréer, Madame, mes salutations distinguées.<br><br>
@@ -46,9 +48,11 @@ const _G5TXT_RECIT = _g5txtBox(`
 <b style="color:#0e7490">Lis le texte, puis réponds à la question.</b><br><br>
 <b>La nuit du cyclone</b><br><br>
 J\'avais neuf ans la nuit où le cyclone est passé sur Maurice. Dès six heures du soir, le ciel avait la couleur du ciment mouillé et le manguier devant ma fenêtre se pliait comme un arc.<br><br>
-Papa a cloué une planche de contreplaqué devant la fenêtre de la cuisine pendant que Maman remplissait d\'eau tous les seaux et toutes les bassines. Mon petit frère Kiran croyait que c\'était un jeu : il allumait et éteignait la torche sans arrêt, jusqu\'à ce que Maman la lui prenne.<br><br>
+Papa a cloué une planche de contreplaqué devant la fenêtre de la cuisine pendant que Maman remplissait d\'eau tous les seaux et toutes les bassines. Elle a aussi sorti le riz, les allumettes et la radio à piles, et elle a posé le tout sur la table, bien au milieu, comme on prépare des choses dont on espère ne pas avoir besoin.<br><br>
+Dehors, la rue s\'était vidée d\'un coup. Monsieur Li a traversé une dernière fois pour rentrer ses chaises. Les chiens, eux, avaient disparu depuis le matin, et Papa a dit qu\'ils savent toujours avant nous. Mon petit frère Kiran croyait que c\'était un jeu : il allumait et éteignait la torche sans arrêt, jusqu\'à ce que Maman la lui prenne.<br><br>
 À huit heures et demie, la lumière s\'est éteinte. Toute la rue est devenue noire en même temps et, pendant une seconde, personne n\'a parlé. Puis Papa a ri, il a allumé deux bougies et il a dit : « Maintenant, on raconte des histoires. »<br><br>
-Le vent a hurlé toute la nuit. Je n\'ai pas beaucoup dormi. Mais le matin, le soleil est revenu, les voisins sont sortis avec leurs balais et, à midi, la route était dégagée. Je me souviens mieux des bougies que du vent.
+Nous nous sommes assis tous les quatre par terre, dans le couloir, parce que c\'est la pièce sans fenêtre. Papa a raconté le cyclone de son enfance, celui où le toit de l\'école s\'était envolé. Maman a dit qu\'il exagérait. Papa a répondu que c\'était possible, et il a continué quand même. Kiran s\'est endormi contre elle avant la fin de la deuxième histoire.<br><br>
+Le vent a hurlé toute la nuit. Je n\'ai pas beaucoup dormi. Mais le matin, le soleil est revenu, les voisins sont sortis avec leurs balais et, à midi, la route était dégagée. Il y avait des feuilles partout, des branches en travers du chemin et une tôle du garage de Monsieur Li dans notre cour, que nous lui avons rapportée. Le manguier avait perdu presque toutes ses feuilles mais il tenait encore debout. Je me souviens mieux des bougies que du vent.
 `, '#06b6d4');
 
 const _G5TXT_ANNONCE = _g5txtBox(`

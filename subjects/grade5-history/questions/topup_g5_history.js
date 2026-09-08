@@ -1,5 +1,5 @@
 'use strict';
-// Grade 5 History & Geography — top-up questions.
+// Grade 5 History & Geography - top-up questions.
 
 STATIC_QUESTIONS.push(
 
@@ -9,7 +9,7 @@ STATIC_QUESTIONS.push(
     question:'Black River Gorges National Park protects the last remaining ___ forests of Mauritius.',
     options:['mangrove','native endemic','bamboo','pine'], answer:'native endemic',
     hint:'These trees are found nowhere else on Earth.',
-    explanation:'Black River Gorges National Park was established to protect Mauritius\'s native endemic forests — trees and plants that evolved on the island and exist nowhere else naturally.' }),
+    explanation:'Black River Gorges National Park was established to protect Mauritius\'s native endemic forests - trees and plants that evolved on the island and exist nowhere else naturally.' }),
 
   makeMCQ({ id:'g5h-nenv-051', chapterId:'natural-env', subsection:'relief', difficulty:1,
     question:'Rodrigues Island, a dependency of Mauritius, is located approximately ___ km to the north-east of the main island.',
@@ -27,7 +27,7 @@ STATIC_QUESTIONS.push(
     question:'What is a marine park?',
     options:['A theme park with dolphin shows','A protected area of sea where marine life and coral reefs are conserved','A commercial fishing zone','A beach resort with water slides'], answer:'A protected area of sea where marine life and coral reefs are conserved',
     hint:'The word "marine" relates to the sea.',
-    explanation:'A marine park is a designated protected area of sea. Human activities such as fishing, anchoring and collecting coral are restricted so that marine ecosystems — fish, coral reefs and sea plants — can recover and thrive.' }),
+    explanation:'A marine park is a designated protected area of sea. Human activities such as fishing, anchoring and collecting coral are restricted so that marine ecosystems - fish, coral reefs and sea plants - can recover and thrive.' }),
 
   // --- env-problems (6) ---
 
@@ -65,14 +65,14 @@ STATIC_QUESTIONS.push(
     question:'A factory near a village releases untreated chemicals into the river. Children downstream become ill after swimming. This is an example of ___.',
     options:['air pollution','noise pollution','soil erosion','water pollution'], answer:'water pollution',
     hint:'Think about what kind of pollution affects rivers and water sources.',
-    explanation:'Water pollution occurs when harmful substances — sewage, chemicals, oil or waste — enter rivers, lakes or the sea. Untreated factory effluent is a direct cause of water pollution and poses a health risk to communities using that water.' }),
+    explanation:'Water pollution occurs when harmful substances - sewage, chemicals, oil or waste - enter rivers, lakes or the sea. Untreated factory effluent is a direct cause of water pollution and poses a health risk to communities using that water.' }),
 
   // --- port-louis (3) ---
 
   makeMCQ({ id:'g5h-pl-050', chapterId:'port-louis', subsection:'buildings', difficulty:1,
     question:'The Citadel (Fort Adelaide), which overlooks Port Louis, was built by the ___.',
     options:['French','Dutch','British','Portuguese'], answer:'British',
-    hint:'It was built in the 19th century after the British took control of Mauritius.',
+    hint:'It was built in the 19th century, after the change of colonial power in 1810.',
     explanation:'Fort Adelaide (the Citadel) was built by the British in the 1830s on a hill overlooking Port Louis. It was designed to control the town and protect the harbour.' }),
 
   makeMCQ({ id:'g5h-pl-051', chapterId:'port-louis', subsection:'buildings', difficulty:1,
@@ -117,7 +117,7 @@ STATIC_QUESTIONS.push(
     question:'What causes the spectacular different colours of the earth at Chamarel?',
     options:['Artists painted the sand in seven colours as a tourist attraction','Volcanic rock that cooled at different rates created soils rich in different minerals and pigments','Flood water repeatedly stained the soil with river sediment','Different types of plants dyed the ground with their roots'], answer:'Volcanic rock that cooled at different rates created soils rich in different minerals and pigments',
     hint:'The soil originated from lava that cooled unevenly.',
-    explanation:'The volcanic basalt at Chamarel cooled at different temperatures in different spots, producing soils with varying mineral concentrations — iron and aluminium oxides — which give the earth its red, brown, violet, green and blue hues.' }),
+    explanation:'The volcanic basalt at Chamarel cooled at different temperatures in different spots, producing soils with varying mineral concentrations - iron and aluminium oxides - which give the earth its red, brown, violet, green and blue hues.' }),
 
   makeMCQ({ id:'g5h-enr-lmk-055', chapterId:'g5enr-landmarks', subsection:'buildings', difficulty:1,
     question:'Trou aux Cerfs in Curepipe is a ___.',
@@ -185,7 +185,7 @@ STATIC_QUESTIONS.push(
     question:'Which continent has the greatest number of countries in the world?',
     options:['Asia','Africa','Europe','South America'], answer:'Africa',
     hint:'It has 54 recognised countries.',
-    explanation:'Africa has 54 recognised sovereign countries — more than any other continent. It is also the second-largest continent by land area and population.' }),
+    explanation:'Africa has 54 recognised sovereign countries - more than any other continent. It is also the second-largest continent by land area and population.' }),
 
   makeMCQ({ id:'g5h-enr-wld-054', chapterId:'g5enr-world', subsection:'world', difficulty:1,
     question:'The Amazon Rainforest, the world\'s largest tropical rainforest, is located in ___.',
@@ -196,7 +196,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-enr-wld-055', chapterId:'g5enr-world', subsection:'world', difficulty:1,
     question:'The Sahara, the world\'s largest hot desert, is located in ___.',
     options:['Asia','Australia','South America','Africa'], answer:'Africa',
-    hint:'It covers most of North Africa.',
+    hint:'Picture the top third of the second-largest continent - almost all of it is this desert.',
     explanation:'The Sahara Desert spans approximately 9 million km² across North Africa, making it the world\'s largest hot desert. It covers parts of Algeria, Libya, Egypt, Mali, Niger, Chad and other countries.' }),
 
   makeMCQ({ id:'g5h-enr-wld-056', chapterId:'g5enr-world', subsection:'world', difficulty:1,
@@ -233,6 +233,6 @@ STATIC_QUESTIONS.push(
     question:'A ship leaves Mauritius heading west, crosses the Indian Ocean to Africa, then turns north and passes through a channel between Africa and a large island before entering the Red Sea route to Europe. Which island does the ship pass?',
     options:['Sri Lanka','Madagascar','Maldives','Seychelles'], answer:'Madagascar',
     hint:'It is the fourth-largest island in the world, just off the east coast of Africa.',
-    explanation:'Sailing north along the east coast of Africa, a ship passes through the Mozambique Channel, which lies between the African mainland and Madagascar — the large island off Africa\'s south-east coast. The route continues to the Red Sea and Suez Canal to reach the Mediterranean.' })
+    explanation:'Sailing north along the east coast of Africa, a ship passes through the Mozambique Channel, which lies between the African mainland and Madagascar - the large island off Africa\'s south-east coast. The route continues to the Red Sea and Suez Canal to reach the Mediterranean.' })
 
 );

@@ -1,0 +1,380 @@
+﻿'use strict';
+// Grade 6 French - Textes à Trous (PSAC question 6, 10 marks).
+//
+// ⚠ THE GRADE 6 PAPER SPLITS QUESTION 6 IN TWO, and this file follows it:
+//     6A (5 marks) - one passage, five gaps, SIX words given, one deliberately
+//                    spare. The child places words.
+//     6B (5 marks) - the SAME story continuing, five more gaps, and NO list at
+//                    all. The child writes the word.
+//   Grades 4 and 5 stay one-part (ten gaps, one bank) because their papers are.
+//   This file used to copy that shape, so a Grade 6 child drilled 200 gaps and
+//   every one of them handed over the word - half of their real Q6 was a format
+//   they had never seen.
+//
+// ⚠ WHAT Q6 ACTUALLY TESTS. Measured across the real 2025 papers: 11 of 20 gaps
+//   are grammar words (devant, sans, très, tard, sous, sa, autour, dans, qui),
+//   and the other 9 are everyday narrative vocabulary (petit, première, ronde,
+//   commence, matin, perdu). It is grammar-in-context inside a STORY. It is not
+//   a vocabulary quiz - the previous version of this file answered with
+//   « transbordement », « blanchiment » and « écosystème », which is a different
+//   skill in a different genre. Keep new texts narrative, and keep the answers
+//   to words a child already owns.
+//
+// ⚠ type 'cloze': excluded from every practice and exam pool by isPoolQuestion()
+//   in questions_engine.js, and reached only through ClozeText (engine/cloze.js).
+// ⚠ Texts 1 and 2 are real PSAC passages, kept verbatim, bank and all.
+// ⚠ A part-B answer may be a LIST. « Je veux rentrer / retourner / revenir chez
+//   moi » are all correct French, and failing a child for choosing the better
+//   word is the one thing this exercise must never do. First entry = the model
+//   answer shown in the review.
+// ⚠ A title must never contain one of its own answers - with 'le', 'la', 'de'
+//   and 'à' now among the answers, that rules out most « Le … » titles.
+(function () {
+  const CH = 'g6fr-textes-trous';
+  const add = (n, title, text, bank, answers, notes, textB, answersB, notesB) =>
+    STATIC_QUESTIONS.push(makeCloze({
+      id: `g6fr-clz-${String(n).padStart(3, '0')}`,
+      chapterId: CH, subsection: 'texte_a_trous', difficulty: 4,
+      title, text, bank, answers, notes, textB, answersB, notesB,
+    }));
+
+  add(1, 'Jumbo l\'éléphanteau (PSAC)',
+    'Jumbo habite la grande brousse africaine. Il est encore un tout {1} éléphant. Un jour, pour la {2} fois, il décide d\'aller se promener tout seul. Le soleil se couche déjà quand il s\'arrête et regarde {3} de lui. Bientôt la lune apparaît toute {4} dans le ciel sombre. Jumbo {5} à s\'inquiéter. Il voit alors un oiseau.',
+    ['autour', 'mais', 'première', 'commence', 'ronde', 'petit'],
+    ['petit', 'première', 'autour', 'ronde', 'commence'],
+    ['« un tout ___ éléphant » : il est encore très jeune. Accord au masculin singulier.',
+     '« pour la ___ fois » : c\'est la fois numéro un. Accord au féminin.',
+     '« il regarde ___ de lui » : il tourne la tête de tous les côtés.',
+     '« la lune apparaît toute ___ » : la forme de la pleine lune. Accord avec « lune ».',
+     '« Jumbo ___ à s\'inquiéter » : présent, sujet « Jumbo ». Suivi de « à » + infinitif.'],
+    'Jumbo dit à l\'oiseau : « Sais-tu où je suis ? Je veux {6} chez moi ! » Mais l\'oiseau ne {7} pas le langage des éléphants. Fatigué, Jumbo s\'allonge par terre et s\'endort. Le lendemain {8}, quand le soleil se lève, deux cerfs s\'approchent. Un peu étonnés, ils regardent cet éléphant {9} dort.\n« J\'ai voulu aller en promenade, dit Jumbo en ouvrant les yeux, et maintenant, j\'ai {10} mon chemin. Je me suis trop éloigné de ma maman. »',
+    [['rentrer', 'retourner', 'revenir', 'aller'], ['comprend', 'parle', 'connaît'], ['matin'], ['qui'], ['perdu']],
+    ['Après « je veux », il faut un infinitif : il veut retrouver sa maison.',
+     'Présent, sujet « l\'oiseau » : il ne saisit pas ce que Jumbo lui dit.',
+     '« Le lendemain ___ » : le moment de la journée où le soleil se lève.',
+     'Ce mot relie « cet éléphant » à « dort » : c\'est l\'éléphant qui fait l\'action.',
+     'Après « j\'ai », le participe passé : il ne retrouve plus son chemin.']);
+
+  add(2, 'Alice et le terrier (PSAC)',
+    'Alice décida de suivre le lapin blanc aux yeux roses. Ce dernier venait de passer {1} elle en courant. Alice n\'eut même pas le temps de {2}. Un instant plus {3}, elle s\'enfonçait à son tour dans le terrier. Elle y entra {4} réfléchir. Comment en ressortir maintenant ? La pente était {5} abrupte.',
+    ['très', 'sans', 's\'arrêter', 'devant', 'action', 'tard'],
+    ['devant', 's\'arrêter', 'tard', 'sans', 'très'],
+    ['« venait de passer ___ elle » : le lapin est passé juste sous ses yeux.',
+     'Après « le temps de », il faut un infinitif : elle n\'a pas pu s\'immobiliser.',
+     '« un instant plus ___ » : très peu de temps après.',
+     '« Elle y entra ___ réfléchir » : elle n\'a pas pris le temps de penser.',
+     '« La pente était ___ abrupte » : un adverbe qui renforce l\'adjectif.'],
+    'Alice poursuivit son chemin sur la pente. Soudain, elle sentit le sol glisser {6} ses pieds. Elle sentait qu\'elle tombait mais {7} chute était très lente. Elle avait le temps de tout observer {8} d\'elle : les gravures, les cartes géographiques, les tasses de thé qui flottaient. Étrangement, Alice n\'avait pas peur {9} cet endroit sombre. Elle se demandait ce {10} allait se produire ensuite. Cette aventure lui semblait interminable.',
+    [['sous'], ['sa'], ['autour'], ['dans', 'malgré'], ['qui']],
+    ['« le sol glisser ___ ses pieds » : le sol est en dessous d\'elle.',
+     'Devant « chute », il faut un déterminant possessif : la chute d\'Alice.',
+     '« observer ___ d\'elle » : de tous les côtés à la fois.',
+     'Un petit mot qui situe : elle n\'a pas peur à l\'intérieur de cet endroit.',
+     '« elle se demandait ce ___ allait se produire » : le mot qui relie « ce » au verbe.']);
+
+  add(3, 'Le cerf-volant de Rahul',
+    'Le samedi matin, Rahul emporta son cerf-volant {1} la plage de Flic-en-Flac. Le vent soufflait fort ce jour-{2}. Il déroula la ficelle {3} doucement, comme son grand-père le lui avait appris. Le cerf-volant monta {4} haut dans le ciel bleu. Rahul le regardait, la tête {5} en arrière.',
+    ['vers', 'là', 'très', 'tout', 'renversée', 'pluie'],
+    ['vers', 'là', 'tout', 'très', 'renversée'],
+    ['Un petit mot qui indique la direction : il va en direction de la plage.',
+     '« ce jour-___ » : l\'expression qui désigne ce jour précis.',
+     '« ___ doucement » : un mot qui renforce « doucement ».',
+     '« monta ___ haut » : un adverbe placé devant l\'adjectif.',
+     '« la tête ___ en arrière » : participe passé, accordé avec « tête ».'],
+    'Soudain, la ficelle cassa net. Le cerf-volant partit {6} large, emporté par le vent. Rahul courut {7} le rattraper, mais il était déjà trop loin. Un vieux pêcheur {8} réparait ses filets leva la tête. « Ne pleure pas, dit-il. Je vais t\'apprendre à en fabriquer {9} autre. » Rahul sourit : sa journée n\'était pas {10} après tout.',
+    [['au'], ['pour'], ['qui'], ['un'], ['perdue', 'finie', 'gâchée']],
+    ['« partit ___ large » : vers la haute mer. Attention à l\'article contracté.',
+     'Il court dans le but de le rattraper.',
+     'Ce mot relie « un vieux pêcheur » à « réparait » : c\'est le pêcheur qui répare.',
+     '« en fabriquer ___ autre » : il en fabriquera un deuxième.',
+     'Participe passé accordé avec « sa journée », féminin singulier.']);
+
+  add(4, 'La nuit du cyclone',
+    'Le vent avait commencé à souffler {1} la tombée de la nuit. Papa ferma {2} les volets, un à un. Maman alluma une bougie et la posa {3} la table. Nous étions tous assis {4} silence dans la cuisine. La maison entière {5} sous les rafales.',
+    ['dès', 'sur', 'tremblait', 'en', 'tous', 'porte'],
+    ['dès', 'tous', 'sur', 'en', 'tremblait'],
+    ['À partir du moment précis où la nuit tombe.',
+     '« ferma ___ les volets » : il n\'en a laissé aucun ouvert. Masculin pluriel.',
+     '« la posa ___ la table » : la bougie est dessus.',
+     '« assis ___ silence » : personne ne parlait.',
+     'Imparfait, sujet « la maison entière » : le verbe reste au singulier.'],
+    'Vers minuit, l\'électricité fut coupée. On n\'entendait plus {6} le bruit de la pluie sur la tôle. Ma petite sœur s\'endormit contre {7} épaule. Papa nous racontait des histoires {8} nous rassurer. Au matin, tout était calme. L\'avocatier du voisin s\'était couché {9} travers de la route, et les oiseaux chantaient comme {10} rien ne s\'était passé.',
+    [['que'], ['mon', 'son'], ['pour'], ['en'], ['si']],
+    ['« on n\'entendait plus ___ le bruit » : rien d\'autre que ce bruit-là.',
+     'Un déterminant possessif devant « épaule ». Attention : on ne dit pas « ma épaule ».',
+     'Il raconte des histoires dans le but de nous rassurer.',
+     '« couché ___ travers de la route » : l\'expression qui dit qu\'il la barre.',
+     '« comme ___ rien ne s\'était passé » : la comparaison avec une situation imaginaire.']);
+
+  add(5, 'Premier jour au collège',
+    'Ce matin-là, Vikash se leva {1} que le réveil sonne. Il avait préparé son sac la veille, {2} il ne voulait rien oublier. Sa mère lui tendit son petit-déjeuner {3} un sourire. « Tout va bien se passer », lui dit-{4}. Vikash n\'en était pas {5} sûr.',
+    ['car', 'avec', 'avant', 'elle', 'si', 'depuis'],
+    ['avant', 'car', 'avec', 'elle', 'si'],
+    ['« se leva ___ que le réveil sonne » : il s\'est levé plus tôt que prévu.',
+     'Il donne la raison : il ne voulait rien oublier.',
+     '« lui tendit son petit-déjeuner ___ un sourire » : elle souriait en le lui donnant.',
+     '« lui dit-___ » : c\'est sa mère qui parle.',
+     '« n\'en était pas ___ sûr » : il avait encore des doutes.'],
+    'Dans la cour, il ne connaissait personne. Les grands parlaient fort et se {6} en groupes. Vikash s\'assit sur un banc, {7} regarder personne. Un garçon vint s\'asseoir à côté de {8}. « Tu es nouveau ? Moi {9}. » Ils se sourirent. À la fin de la journée, Vikash avait déjà un ami, et le collège lui paraissait beaucoup {10} grand.',
+    [['tenaient', 'regroupaient', 'rassemblaient', 'mettaient'], ['sans'], ['lui'], ['aussi'], ['moins']],
+    ['Imparfait, sujet « les grands » : ils restaient ensemble, par petits groupes.',
+     '« il s\'assit, ___ regarder personne » : il ne regardait personne.',
+     '« à côté de ___ » : le pronom qui remplace « Vikash ».',
+     '« Moi ___ » : le garçon est nouveau lui aussi.',
+     '« beaucoup ___ grand » : le collège lui fait maintenant moins peur.']);
+
+  add(6, 'Aboiements dans la rue',
+    'Le chien du voisin aboyait {1} les nuits. Personne dans la rue ne dormait {2}. Un soir, Kavi décida d\'aller voir ce qui se {3}. Il s\'approcha du portail {4} la pointe des pieds. Le chien, {5} de l\'apercevoir, se tut aussitôt.',
+    ['toutes', 'bien', 'passait', 'sur', 'content', 'niche'],
+    ['toutes', 'bien', 'passait', 'sur', 'content'],
+    ['« aboyait ___ les nuits » : chaque nuit, sans exception. Féminin pluriel.',
+     '« ne dormait ___ » : le sommeil de la rue était mauvais.',
+     '« ce qui se ___ » : imparfait du verbe « se passer ».',
+     '« ___ la pointe des pieds » : l\'expression qui veut dire sans faire de bruit.',
+     'Accord avec « le chien », masculin singulier : il est heureux de le voir.'],
+    'Kavi comprit alors que la bête était simplement seule. Le voisin travaillait la nuit et {6} laissait dehors jusqu\'au matin. Le lendemain, Kavi lui apporta une vieille couverture {7} il ne se servait plus. Il la posa près de la niche. Depuis ce jour, le chien ne réveille plus {8}. Il attend Kavi chaque soir, la queue battante, et c\'est {9} lui le meilleur moment de la journée. Le voisin, {10}, n\'a jamais su pourquoi son chien s\'était calmé.',
+    [['le'], ['dont'], ['personne'], ['pour'], ['lui']],
+    ['Le pronom qui remplace « le chien », placé devant le verbe.',
+     '« une couverture ___ il ne se servait plus » : on se sert DE quelque chose.',
+     '« ne réveille plus ___ » : plus aucun habitant de la rue.',
+     '« c\'est ___ lui le meilleur moment » : le meilleur de son point de vue.',
+     '« Le voisin, ___, n\'a jamais su » : le mot qui met le voisin en valeur, par opposition.']);
+
+  add(7, 'Ma Rani et sa marmite',
+    'Chaque matin, avant six heures, Ma Rani installe sa table {1} coin de la rue. Elle vend des gâteaux-piments {2} chauds. Les enfants s\'arrêtent {3} chemin de l\'école. « Deux roupies, pas {4} », dit-elle en riant. Sa marmite d\'huile fume {5} le petit jour.',
+    ['au', 'encore', 'en', 'plus', 'dès', 'panier'],
+    ['au', 'encore', 'en', 'plus', 'dès'],
+    ['« installe sa table ___ coin de la rue » : attention à l\'article contracté.',
+     '« des gâteaux-piments ___ chauds » : ils sortent tout juste de l\'huile.',
+     '« s\'arrêtent ___ chemin de l\'école » : pendant le trajet.',
+     '« Deux roupies, pas ___ » : elle n\'en demande pas davantage.',
+     '« fume ___ le petit jour » : à partir du lever du soleil.'],
+    'Ma Rani connaît tous ses clients {6} leur nom. Elle sait {7} aime le piment fort et qui préfère le chutney. Quand un enfant a oublié sa monnaie, elle lui donne son gâteau {8} même. « Tu me payeras demain », dit-elle. Personne n\'a jamais oublié de {9} rendre. À midi, sa marmite est vide et Ma Rani rentre chez {10}, fatiguée mais contente.',
+    [['par'], ['qui'], ['quand'], ['la', 'le'], ['elle']],
+    ['« connaît ses clients ___ leur nom » : elle sait comment chacun s\'appelle.',
+     'Le mot qui interroge sur la personne - le même que dans la suite de la phrase.',
+     '« elle lui donne son gâteau ___ même » : l\'expression qui veut dire malgré tout.',
+     '« oublié de ___ rendre » : le pronom qui remplace « la monnaie ».',
+     '« rentre chez ___ » : le pronom qui remplace « Ma Rani ».']);
+
+  add(8, 'Un match sous la pluie',
+    'Le match avait à peine commencé {1} la pluie se mit à tomber. Le terrain devint glissant {2} quelques minutes. L\'arbitre hésita, {3} il laissa jouer. Notre gardien, trempé, sautait d\'un pied {4} l\'autre pour se réchauffer. À la mi-temps, nous menions {5} un but à zéro.',
+    ['quand', 'en', 'puis', 'sur', 'par', 'maillot'],
+    ['quand', 'en', 'puis', 'sur', 'par'],
+    ['Les deux actions arrivent presque en même temps.',
+     '« devint glissant ___ quelques minutes » : il a fallu très peu de temps.',
+     '« L\'arbitre hésita, ___ il laissa jouer » : ce qui vient ensuite.',
+     '« d\'un pied ___ l\'autre » : l\'expression toute faite.',
+     '« nous menions ___ un but à zéro » : le petit mot qui annonce le score.'],
+    'En seconde mi-temps, l\'équipe adverse égalisa. Il restait dix minutes {6} la fin. Notre capitaine nous rassembla au milieu du terrain. « On ne joue pas contre la pluie, dit-il, on joue {7} elle. » Personne ne comprit vraiment, {8} tout le monde repartit en courant. À la dernière minute, Ravi marqua d\'un tir {9} personne n\'attendait. Nous avons gagné deux buts {10} un, sous une pluie battante.',
+    [['avant'], ['avec'], ['mais'], ['que'], ['à']],
+    ['« dix minutes ___ la fin » : le temps qui reste jusqu\'à la fin.',
+     'Le contraire du mot « contre », employé juste avant.',
+     'Le mot qui marque l\'opposition : ils n\'ont pas compris, et pourtant ils sont repartis.',
+     '« un tir ___ personne n\'attendait » : on attend QUELQUE CHOSE.',
+     '« deux buts ___ un » : le petit mot qui sépare les deux scores.']);
+
+  add(9, 'Une lettre dans le grenier',
+    'En rangeant le grenier, Yasmine trouva une boîte {1} fer rouillée. {2} l\'intérieur, il y avait une lettre jaunie. L\'écriture était fine et {3} penchée. La lettre {4} adressée à sa grand-mère. Yasmine hésita, {5} l\'ouvrit.',
+    ['de', 'À', 'légèrement', 'était', 'puis', 'clé'],
+    ['de', 'À', 'légèrement', 'était', 'puis'],
+    ['« une boîte ___ fer » : la matière dont elle est faite.',
+     '« ___ l\'intérieur » : en début de phrase, ce mot prend une majuscule.',
+     '« fine et ___ penchée » : un adverbe - elle ne penche pas beaucoup.',
+     '« La lettre ___ adressée » : imparfait du verbe être, singulier.',
+     '« Yasmine hésita, ___ l\'ouvrit » : ce qu\'elle fait juste après.'],
+    'La lettre venait d\'un soldat mauricien parti en Égypte pendant la guerre. Il écrivait {6} sa fiancée lui manquait. Il promettait de revenir {7} que la guerre serait finie. Yasmine descendit l\'escalier {8} courant, la lettre à la main. Sa grand-mère la prit, la lut lentement, et ne dit {9}. Puis elle sourit et murmura : « Il est revenu, tu {10}. »',
+    [['que'], ['dès'], ['en'], ['rien'], ['sais', 'vois']],
+    ['Le mot qui introduit ce qu\'il écrivait.',
+     '« revenir ___ que la guerre serait finie » : aussitôt la guerre terminée.',
+     '« descendit l\'escalier ___ courant » : elle courait en descendant.',
+     '« ne dit ___ » : elle est restée complètement silencieuse.',
+     'Présent, deuxième personne du singulier : la grand-mère s\'adresse à Yasmine.']);
+
+  add(10, 'Un manguier devant la maison',
+    'Devant la maison de mon grand-père se dressait un manguier {1} haut que le toit. Chaque année, {2} décembre, il donnait des centaines de mangues. Mon grand-père ne les cueillait {3}. « Elles tombent quand elles sont prêtes », disait-il. Nous les ramassions {4} le matin, avant l\'école. Les plus mûres étaient {5} le portail.',
+    ['plus', 'en', 'jamais', 'tôt', 'sous', 'échelle'],
+    ['plus', 'en', 'jamais', 'tôt', 'sous'],
+    ['« ___ haut que le toit » : la comparaison entre l\'arbre et le toit.',
+     '« ___ décembre » : le petit mot qui situe le mois.',
+     '« ne les cueillait ___ » : il ne le faisait à aucun moment.',
+     '« Nous les ramassions ___ le matin » : très tôt, avant l\'école.',
+     '« étaient ___ le portail » : elles étaient tombées en dessous.'],
+    'L\'année dernière, un cyclone a couché le manguier {6} le côté. Mon grand-père est resté longtemps devant lui, sans rien {7}. Puis il a ramassé un noyau tombé dans l\'herbe {8} l\'a planté un peu plus loin. « Celui-{9} donnera des mangues à tes enfants », m\'a-t-il dit. Je n\'y croyais pas. Aujourd\'hui, la jeune pousse m\'arrive déjà {10} l\'épaule.',
+    [['sur'], ['dire'], ['et'], ['là'], ['à']],
+    ['« a couché le manguier ___ le côté » : l\'arbre est tombé de travers.',
+     'Après « sans », il faut un infinitif : il n\'a pas parlé.',
+     'Le petit mot qui relie les deux actions : il a ramassé, il a planté.',
+     '« Celui-___ » : le mot qui désigne ce noyau-là précisément.',
+     '« m\'arrive déjà ___ l\'épaule » : la pousse atteint cette hauteur.']);
+
+  add(11, 'Le premier vélo de Nadia',
+    'Pour ses dix ans, Nadia reçut son premier vélo. Elle voulut l\'essayer {1} de suite. Son père tint la selle {2} derrière pendant qu\'elle pédalait. « Ne me lâche {3} ! » criait-elle. Au bout de la rue, elle se retourna : son père était resté {4} loin derrière, les bras croisés. Elle roulait {5} depuis un moment.',
+    ['tout', 'par', 'pas', 'très', 'seule', 'roue'],
+    ['tout', 'par', 'pas', 'très', 'seule'],
+    ['« ___ de suite » : immédiatement.',
+     '« tint la selle ___ derrière » : il la tenait depuis l\'arrière du vélo.',
+     '« Ne me lâche ___ ! » : la deuxième partie de la négation.',
+     '« resté ___ loin derrière » : un adverbe placé devant « loin ».',
+     '« Elle roulait ___ » : sans l\'aide de son père. Accord au féminin singulier.'],
+    'Nadia freina trop tard et tomba dans l\'herbe. Son genou saignait un peu, mais elle riait. Son père arriva {6} courant. « Tu veux qu\'on rentre ? » Elle fit non de la tête et remonta {7} le vélo. Depuis ce jour, elle va à l\'école {8} vélo, quel {9} soit le temps. Sa mère dit qu\'elle n\'a plus jamais {10} peur de rien.',
+    [['en'], ['sur'], ['à'], ['que'], ['eu']],
+    ['« arriva ___ courant » : il est arrivé en courant.',
+     '« remonta ___ le vélo » : elle est remontée dessus.',
+     '« elle va à l\'école ___ vélo » : le moyen de transport.',
+     '« quel ___ soit le temps » : l\'expression qui veut dire même s\'il pleut.',
+     '« elle n\'a plus jamais ___ peur » : participe passé du verbe avoir.']);
+
+  add(12, 'La rivière interdite',
+    'Derrière le village coulait une rivière {1} nos parents nous défendaient d\'approcher. Elle paraissait calme, {2} le fond était traître. Un dimanche, nous y sommes allés {3} même. Sami est entré le premier, {4} aux genoux. Il nous a fait signe {5} le rejoindre.',
+    ['dont', 'mais', 'quand', 'l\'eau', 'de', 'tout'],
+    ['dont', 'mais', 'quand', 'l\'eau', 'de'],
+    ['« une rivière ___ nos parents nous défendaient d\'approcher » : on approche DE quelque chose.',
+     '« L\'eau était claire, ___ le fond était traître » : l\'opposition entre les deux.',
+     '« nous y sommes allés ___ même » : malgré l\'interdiction.',
+     '« Sami est entré le premier, ___ aux genoux » : elle lui montait aux genoux.',
+     '« nous a fait signe ___ le rejoindre » : le petit mot placé devant l\'infinitif.'],
+    'Le courant était {6} fort que nous l\'avions cru. Sami a glissé et a disparu sous l\'eau une seconde. Quand il a ressurgi, il ne riait {7}. Nous sommes sortis sans un mot et nous sommes rentrés {8} nous. Ce soir-là, personne n\'a rien raconté. Mais depuis, {9} nous passons près de la rivière, nous marchons un peu plus vite. Nos parents avaient raison, et nous ne {10} avons jamais dit.',
+    [['plus'], ['plus', 'pas'], ['chez'], ['lorsque', 'quand'], ['leur']],
+    ['« était ___ fort que nous l\'avions cru » : le courant dépassait ce qu\'ils imaginaient.',
+     '« il ne riait ___ » : il avait cessé de rire.',
+     '« nous sommes rentrés ___ nous » : à la maison.',
+     '« ___ nous passons près de la rivière » : chaque fois que cela arrive.',
+     '« nous ne ___ avons jamais dit » : le pronom qui remplace « à nos parents ».']);
+
+  add(13, 'Le concours de dictée',
+    'La maîtresse annonça un concours de dictée {1} toute l\'école. Rajesh, {2} faisait toujours des fautes, décida de s\'entraîner. Chaque soir, son frère lui lisait un texte {3} haute voix. Au début, il faisait quinze fautes ; {4} la fin de la semaine, il n\'en faisait plus {5} trois.',
+    ['pour', 'qui', 'à', 'vers', 'que', 'prix'],
+    ['pour', 'qui', 'à', 'vers', 'que'],
+    ['« un concours ___ toute l\'école » : le concours est destiné à tout le monde.',
+     '« Rajesh, ___ faisait toujours des fautes » : c\'est Rajesh qui faisait les fautes.',
+     '« lui lisait un texte ___ haute voix » : l\'expression toute faite.',
+     '« ___ la fin de la semaine » : aux environs de ce moment-là.',
+     '« il n\'en faisait plus ___ trois » : seulement trois.'],
+    'Le jour du concours, Rajesh s\'assit au premier rang. Sa main tremblait {6} peu. La maîtresse commença à lire. Il écrivait lentement, en relisant chaque mot {7} son frère le lui avait appris. Quand les résultats sont sortis, il n\'était pas premier : il était troisième. Mais c\'était la première fois {8} son nom apparaissait sur la liste. Sa mère a collé le papier {9} le frigo. Il y est {10}.',
+    [['un'], ['comme'], ['que'], ['sur'], ['encore', 'toujours']],
+    ['« tremblait ___ peu » : légèrement.',
+     '« en relisant chaque mot ___ son frère le lui avait appris » : de la même manière.',
+     '« la première fois ___ son nom apparaissait » : le mot qui relie les deux parties.',
+     '« a collé le papier ___ le frigo » : le papier est dessus.',
+     '« Il y est ___ » : personne ne l\'a jamais enlevé.']);
+
+  add(14, 'L\'oiseau blessé',
+    'Sur le chemin de l\'école, Léa trouva un oiseau {1} ne pouvait plus voler. Une de ses ailes pendait {2} côté. Elle le prit délicatement {3} ses mains. À la maison, elle lui prépara une boîte {4} un vieux torchon. Toute la journée, elle {5} pensa en classe.',
+    ['qui', 'de', 'dans', 'avec', 'y', 'plume'],
+    ['qui', 'de', 'dans', 'avec', 'y'],
+    ['« un oiseau ___ ne pouvait plus voler » : c\'est l\'oiseau qui ne pouvait pas voler.',
+     '« une aile pendait ___ côté » : l\'expression toute faite.',
+     '« Elle le prit ___ ses mains » : ses mains sont autour de lui.',
+     '« une boîte ___ un vieux torchon » : le torchon est mis dedans.',
+     '« elle ___ pensa en classe » : on pense À quelque chose ; ce petit mot le remplace.'],
+    'Le soir, l\'oiseau buvait un peu d\'eau {6} une cuillère. Léa lui parlait doucement pour ne pas {7} faire peur. Au bout de trois jours, il s\'est mis debout. Le quatrième matin, la boîte était vide : il s\'était envolé par la fenêtre {8} ouverte. Léa a pleuré un peu, {9} sa mère lui a expliqué que c\'était la plus belle chose {10} pouvait arriver.',
+    [['dans', 'avec'], ['lui'], ['restée'], ['mais'], ['qui']],
+    ['« buvait un peu d\'eau ___ une cuillère » : l\'eau est dedans.',
+     '« pour ne pas ___ faire peur » : le pronom qui remplace « à l\'oiseau ».',
+     '« la fenêtre ___ ouverte » : participe passé de rester, accordé avec « fenêtre ».',
+     'Le mot qui marque l\'opposition entre pleurer et ce que dit sa mère.',
+     '« la plus belle chose ___ pouvait arriver » : c\'est la chose qui arrive.']);
+
+  add(15, 'Les dominos du samedi',
+    'Tous les samedis, mon grand-père joue aux dominos {1} la boutique du coin. Ils sont quatre, toujours les {2}. Ils jouent pendant des heures {3} dire un mot. Quand l\'un d\'eux gagne, les autres font semblant de ne pas {4} content. Puis ils recommencent une {5} fois.',
+    ['devant', 'mêmes', 'sans', 'être', 'autre', 'table'],
+    ['devant', 'mêmes', 'sans', 'être', 'autre'],
+    ['« joue aux dominos ___ la boutique » : juste en face de la boutique.',
+     '« toujours les ___ » : ce sont les quatre mêmes joueurs. Masculin pluriel.',
+     '« pendant des heures ___ dire un mot » : ils jouent en silence.',
+     'Après « de ne pas », il faut un infinitif.',
+     '« une ___ fois » : encore une fois.'],
+    'Un samedi, la place de Monsieur Louis est restée vide. Personne n\'a rien dit. Ils ont joué {6} trois, en silence. À la fin de la partie, mon grand-père a rangé les dominos {7} leur boîte, très lentement. Puis il a dit : « Il jouait mal, {8} il nous manquera. » C\'est la seule fois {9} je l\'ai vu essuyer ses yeux. Depuis, ils laissent toujours une chaise vide, et personne ne s\'y assoit {10}.',
+    [['à'], ['dans'], ['mais'], ['où', 'que'], ['jamais']],
+    ['« Ils ont joué ___ trois » : ils n\'étaient plus que trois.',
+     '« a rangé les dominos ___ leur boîte » : les dominos vont dedans.',
+     '« Il jouait mal, ___ il nous manquera » : l\'opposition entre les deux idées.',
+     '« la seule fois ___ je l\'ai vu » : le mot qui relie, en parlant d\'un moment.',
+     '« personne ne s\'y assoit ___ » : à aucun moment.']);
+
+  add(16, 'La panne d\'électricité',
+    'Un mardi soir, tout le quartier s\'est retrouvé {1} le noir. Ma mère a sorti les bougies {2} tiroir de la cuisine. Nous nous sommes assis autour de la table, {3} rien à faire. Mon père a commencé à raconter son enfance, {4} il n\'avait ni télévision ni téléphone. Nous avons écouté {5} minuit.',
+    ['dans', 'du', 'sans', 'quand', 'jusqu\'à', 'lampe'],
+    ['dans', 'du', 'sans', 'quand', 'jusqu\'à'],
+    ['« s\'est retrouvé ___ le noir » : plus aucune lumière nulle part.',
+     '« a sorti les bougies ___ tiroir » : attention à l\'article contracté.',
+     '« assis autour de la table, ___ rien à faire » : ils n\'avaient aucune occupation.',
+     '« son enfance, ___ il n\'avait ni télévision ni téléphone » : à cette époque-là.',
+     '« Nous avons écouté ___ minuit » : jusqu\'à ce moment précis.'],
+    'Quand la lumière est revenue, vers minuit, personne n\'a bougé. Ma petite sœur dormait déjà, la tête {6} la table. Mon père a éteint la lampe et a dit : « On continue ? » Nous avons ri, {7} nous avons continué. Depuis, une fois par mois, nous éteignons {8} les lumières de la maison. Ma mère appelle ça « la soirée {9} électricité ». C\'est devenu le moment {10} nous préférons tous.',
+    [['sur'], ['et', 'puis'], ['toutes'], ['sans'], ['que']],
+    ['« la tête ___ la table » : elle est posée dessus.',
+     'Le petit mot qui relie les deux actions.',
+     '« nous éteignons ___ les lumières » : aucune ne reste allumée. Féminin pluriel.',
+     '« la soirée ___ électricité » : une soirée où il n\'y en a pas.',
+     '« le moment ___ nous préférons tous » : on préfère QUELQUE CHOSE.']);
+
+  add(17, 'La course de pirogues',
+    'La course de pirogues a lieu {1} dimanche de septembre. Les équipages s\'entraînent {2} des semaines. Cette année, l\'équipe de notre village était la {3} jeune de toutes. Personne ne pariait {4} eux. Le départ fut donné {5} sept heures précises.',
+    ['chaque', 'pendant', 'plus', 'sur', 'à', 'rame'],
+    ['chaque', 'pendant', 'plus', 'sur', 'à'],
+    ['« a lieu ___ dimanche de septembre » : tous les dimanches de ce mois.',
+     '« s\'entraînent ___ des semaines » : la durée de l\'entraînement.',
+     '« la ___ jeune de toutes » : le superlatif.',
+     '« Personne ne pariait ___ eux » : on parie SUR une équipe.',
+     '« Le départ fut donné ___ sept heures » : l\'heure exacte.'],
+    'Dès les premiers mètres, notre pirogue prit du retard. Les garçons ramaient {6} vite, mais mal ensemble. Le plus âgé se mit alors à compter à voix haute, et peu à peu les rames sont tombées {7} rythme. À trois cents mètres de l\'arrivée, ils avaient rattrapé tout le monde. Ils ont terminé deuxièmes, {8} une demi-longueur. Sur le sable, tout le village criait comme {9} ils avaient gagné. Pour eux, c\'{10} le cas.',
+    [['trop'], ['en'], ['à'], ['si'], ['était']],
+    ['« ramaient ___ vite, mais mal ensemble » : ils allaient plus vite qu\'il ne fallait.',
+     '« les rames sont tombées ___ rythme » : elles se sont mises à aller ensemble.',
+     '« terminé deuxièmes, ___ une demi-longueur » : l\'écart avec le premier.',
+     '« criait comme ___ ils avaient gagné » : la comparaison avec une situation imaginaire.',
+     '« Pour eux, c\'___ le cas » : imparfait du verbe être.']);
+
+  add(18, 'Le carnet de ma mère',
+    'Ma mère garde un carnet {1} elle note tout : les anniversaires, les recettes, les rendez-vous. Il est vieux, la couverture {2} déchirée. Elle refuse d\'{3} acheter un neuf. « Celui-là me connaît », dit-elle {4} un sourire. Un jour, je l\'ai ouvert {5} le vouloir.',
+    ['où', 'est', 'en', 'avec', 'sans', 'stylo'],
+    ['où', 'est', 'en', 'avec', 'sans'],
+    ['« un carnet ___ elle note tout » : le mot qui relie, en parlant d\'un endroit.',
+     '« la couverture ___ déchirée » : présent du verbe être, singulier.',
+     '« refuse d\'___ acheter un neuf » : le petit mot qui remplace « un carnet ».',
+     '« dit-elle ___ un sourire » : elle souriait en le disant.',
+     '« je l\'ai ouvert ___ le vouloir » : sans le faire exprès.'],
+    'À la dernière page, il y avait une liste de prénoms. Je n\'{6} connaissais aucun. J\'ai demandé à ma mère {7} c\'était. Elle a mis longtemps {8} répondre. « Ce sont les élèves de ma première classe, a-t-elle dit. Je les ai tous {9} en tête depuis trente ans. » J\'ai compris ce jour-là {10} ma mère avait été maîtresse avant d\'être ma mère.',
+    [['en'], ['qui'], ['à'], ['gardés'], ['que']],
+    ['« Je n\'___ connaissais aucun » : le petit mot qui remplace « de ces prénoms ».',
+     '« J\'ai demandé ___ c\'était » : la question porte sur des personnes.',
+     '« a mis longtemps ___ répondre » : le petit mot placé devant l\'infinitif.',
+     '« Je les ai tous ___ en tête » : participe passé de garder, accordé avec « les ».',
+     '« J\'ai compris ___ ma mère avait été maîtresse » : le mot qui introduit la suite.']);
+
+  add(19, 'Une heure de marche',
+    'Autrefois, ma grand-mère marchait une heure {1} aller à l\'école. Il n\'y avait ni bus ni route goudronnée. Elle partait {2} que le jour se lève, ses chaussures {3} la main pour ne pas les abîmer. Quand il pleuvait, elle arrivait trempée, {4} elle n\'a jamais manqué un seul jour. Elle dit que c\'est {5} qu\'elle a appris à être à l\'heure.',
+    ['pour', 'avant', 'à', 'mais', 'ainsi', 'sac'],
+    ['pour', 'avant', 'à', 'mais', 'ainsi'],
+    ['« marchait une heure ___ aller à l\'école » : le but de cette marche.',
+     '« partait ___ que le jour se lève » : il faisait encore nuit.',
+     '« ses chaussures ___ la main » : elle les portait au lieu de les mettre.',
+     '« elle arrivait trempée, ___ elle n\'a jamais manqué un jour » : l\'opposition.',
+     '« c\'est ___ qu\'elle a appris » : de cette manière-là.'],
+    'Aujourd\'hui, je prends le bus scolaire. Il s\'arrête {6} bas de chez moi. Le trajet dure douze minutes, et je {7} passe à regarder mon téléphone. L\'autre jour, ma grand-mère m\'a demandé ce {8} je voyais par la fenêtre. Je n\'ai pas su {9} répondre. Le lendemain, j\'ai levé les yeux : il y avait des champs, une montagne, et un héron blanc {10} se tenait sur une patte.',
+    [['en'], ['le'], ['que'], ['quoi'], ['qui']],
+    ['« Il s\'arrête ___ bas de chez moi » : juste devant la maison.',
+     '« je ___ passe à regarder mon téléphone » : le pronom qui remplace « le trajet ».',
+     '« ce ___ je voyais » : on voit QUELQUE CHOSE.',
+     '« Je n\'ai pas su ___ répondre » : le mot interrogatif placé devant l\'infinitif.',
+     '« un héron blanc ___ se tenait sur une patte » : c\'est le héron qui se tient.']);
+
+  add(20, 'La boîte du brocanteur',
+    'Dans la vitrine du brocanteur {1} une petite boîte à musique. Elle ne coûtait pas cher, {2} elle ne jouait plus. Tania la regardait chaque fois qu\'elle passait {3} là. Un jour, le vieux brocanteur lui fit signe d\'{4}. « Prends-la, dit-il. Elle attend quelqu\'un {5} sait attendre. »',
+    ['dormait', 'car', 'par', 'entrer', 'qui', 'monnaie'],
+    ['dormait', 'car', 'par', 'entrer', 'qui'],
+    ['Imparfait, sujet « une petite boîte à musique » : elle était là, oubliée.',
+     '« Elle ne coûtait pas cher, ___ elle ne jouait plus » : la raison.',
+     '« chaque fois qu\'elle passait ___ là » : elle passait à cet endroit.',
+     'Après « fit signe d\' », il faut un infinitif.',
+     '« quelqu\'un ___ sait attendre » : c\'est cette personne qui sait attendre.'],
+    'Tania emporta la boîte chez elle. Elle l\'ouvrit, la referma, la secoua : rien. Son oncle, {6} répare les montres, l\'ouvrit avec un tournevis minuscule. À l\'intérieur, un ressort {7} cassé. Il le remplaça en une heure. Quand la boîte s\'est remise {8} jouer, Tania a reconnu l\'air : c\'était celui que sa mère lui chantait {9} elle était petite. Elle n\'{10} avait jamais parlé à personne.',
+    [['qui'], ['était'], ['à'], ['quand', 'lorsque'], ['en']],
+    ['« Son oncle, ___ répare les montres » : c\'est l\'oncle qui répare.',
+     '« un ressort ___ cassé » : imparfait du verbe être, singulier.',
+     '« s\'est remise ___ jouer » : le petit mot placé devant l\'infinitif.',
+     '« sa mère lui chantait ___ elle était petite » : à l\'époque où elle était petite.',
+     '« Elle n\'___ avait jamais parlé à personne » : on parle DE quelque chose.']);
+})();

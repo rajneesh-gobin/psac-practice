@@ -101,7 +101,7 @@ SELECT pg_temp.ck('bob via owns_student_txt (what 11 policies call)',
 SELECT pg_temp.ck('bob can set the child PIN',
   (public.set_student_pin('dddddddd-dddd-dddd-dddd-dddddddddddd','4321')->>'ok')::boolean, true);
 SELECT pg_temp.ck('bob can add a child',
-  (public.create_student_with_pin('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','kai','Kai')->>'ok')::boolean, true);
+  (public.create_student_with_pin('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','kai','Kai',NULL,5,'5678')->>'ok')::boolean, true);
 SELECT pg_temp.ck('bob can soft-delete a child',
   (public.soft_delete_student('dddddddd-dddd-dddd-dddd-dddddddddddd')->>'ok')::boolean, true);
 -- put it back for later assertions
@@ -143,18 +143,52 @@ SELECT pg_temp.cks('coparent cannot remove the owner',
 \echo ''
 \echo '=== 12. The write side of families stays with the owner ==='
 SET test.uid = '22222222-2222-2222-2222-222222222222';
+-- ⚠ THIS ASSERTION CURRENTLY FAILS AGAINST THE DEPLOYED POLICY, and the
+--   failure is real. families_own is
+--       USING      (parent_id = auth.uid() OR is_family_member(id) OR is_admin())
+--       WITH CHECK (parent_id = auth.uid() OR is_admin())
+--   A co-parent passes USING because they ARE a member, and then passes
+--   WITH CHECK because the row they are writing names THEMSELVES as parent_id.
+--   So "set parent_id to me" satisfies both halves and the co-parent becomes
+--   the owner — taking with it invite/removal rights and the whole family.
+--
+--   A stranger still cannot: USING fails for a non-member, and an UPDATE whose
+--   USING matches no row changes nothing and raises nothing. The exposure is to
+--   an invited co-parent only.
+--
+--   Confirmed against production on 2026-09-06 in a rolled-back transaction.
+--   The one-line fix is written out in §13 of supabase-schema.sql, left
+--   unapplied because changing a live policy is the owner's call, not a
+--   consolidation's.
+--
+--   It reports rather than aborts so the remaining assertions still run, and
+--   run-schema-tests.sh fails the suite on the SECURITY FINDING line.
 DO $$
+DECLARE v_owner_before uuid;
 BEGIN
-  -- WITH CHECK still requires parent_id = auth.uid(), so a co-parent cannot
-  -- seize the family by re-pointing it at themselves.
+  SELECT parent_id INTO v_owner_before
+    FROM public.families WHERE id='aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
   BEGIN
     UPDATE public.families SET parent_id = auth.uid()
      WHERE id='aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
-    RAISE EXCEPTION '  FAIL coparent was able to seize the family';
+    IF (SELECT parent_id FROM public.families
+         WHERE id='aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa') = auth.uid()
+       AND v_owner_before <> auth.uid() THEN
+      RAISE WARNING '  SECURITY FINDING coparent re-pointed parent_id at themselves and owns the family';
+    ELSE
+      RAISE NOTICE '  ok   coparent cannot re-point parent_id at themselves';
+    END IF;
   EXCEPTION WHEN insufficient_privilege THEN
     RAISE NOTICE '  ok   coparent cannot re-point parent_id at themselves';
   END;
 END $$;
+
+-- Put ownership back, or every assertion after this one is testing a family
+-- whose owner silently changed mid-file.
+RESET ROLE;
+UPDATE public.families SET parent_id = '11111111-1111-1111-1111-111111111111'
+ WHERE id='aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+SET ROLE authenticated;
 
 \echo ''
 \echo '=== 13. Bob leaves; access is revoked immediately ==='

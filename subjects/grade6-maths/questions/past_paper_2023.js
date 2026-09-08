@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 Mathematics 2023 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 Mathematics 2023 - past-paper questions adapted to MCQ format.
 // Source: Mauritius Examinations Syndicate (MES), October 2023.
 
 STATIC_QUESTIONS.push(
@@ -48,7 +48,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6m-pp23-008', chapterId:'g6-fractions', subsection:'add_sub', difficulty:1,
     question:'Work out: <sup>2</sup>/<sub>11</sub> + <sup>5</sup>/<sub>11</sub>',
     options:['7/11','7/22','10/121','7/121'], answer:'7/11',
-    hint:'Same denominator — add the numerators only.',
+    hint:'Same denominator - add the numerators only.',
     explanation:'2/11 + 5/11 = 7/11.' }),
 
   makeMCQ({ id:'g6m-pp23-009', chapterId:'g6-numeration', subsection:'powers', difficulty:1,
@@ -225,22 +225,22 @@ window.PSAC_PDF_QUESTIONS.push(
   { id:'g6m-pp23-pdf-001', chapterId:'g6-numeration', marks:2, year:2023, grade:6, subject:'Maths',
     question:'Complete the table: (a) Seven hundred and forty five → write in figures. (b) 3459 → write in words.',
     type:'short' },
-  { id:'g6m-pp23-pdf-002', needsArtwork:true, chapterId:'g6-fractions', marks:1, year:2023, grade:6, subject:'Maths',
+  { id:'g6m-pp23-pdf-002', image:'assets/past-papers/g6-maths-2023/q8-shaded.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-fractions', marks:1, year:2023, grade:6, subject:'Maths',
     question:'A diagram shows a 2×2 grid with some triangles shaded. What fraction of the diagram is shaded?',
     type:'short' },
-  { id:'g6m-pp23-pdf-003', needsArtwork:true, chapterId:'g6-geometry', marks:1, year:2023, grade:6, subject:'Maths',
+  { id:'g6m-pp23-pdf-003', image:'assets/past-papers/g6-maths-2023/q26-compass.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-geometry', marks:1, year:2023, grade:6, subject:'Maths',
     question:'Q19 MCQ: What is the direction of R on the compass diagram shown?',
     type:'short' },
-  { id:'g6m-pp23-pdf-004', needsArtwork:true, chapterId:'g6-time-speed', marks:1, year:2023, grade:6, subject:'Maths',
+  { id:'g6m-pp23-pdf-004', image:'assets/past-papers/g6-maths-2023/q28-clocks.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-time-speed', marks:1, year:2023, grade:6, subject:'Maths',
     question:'Q28 MCQ: Which one of the four clock faces shown displays the time 13 25?',
     type:'short' },
-  { id:'g6m-pp23-pdf-005', needsArtwork:true, chapterId:'g6-geometry', marks:2, year:2023, grade:6, subject:'Maths',
+  { id:'g6m-pp23-pdf-005', image:'assets/past-papers/g6-maths-2023/q39-shapes.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-geometry', marks:2, year:2023, grade:6, subject:'Maths',
     question:'Calculate the perimeter of the compound L-shaped figure (dimensions: 15 cm, 11 cm, 10 cm, 3 cm).',
     type:'short' },
   { id:'g6m-pp23-pdf-006', chapterId:'g6-graphs', marks:1, year:2023, grade:6, subject:'Maths',
     question:'Q38(a): The dot pattern grows by 2 each term (1st=4 dots, 2nd=6, 3rd=8). Draw the 4th term in the space provided.',
     type:'draw' },
-  { id:'g6m-pp23-pdf-007', needsArtwork:true, chapterId:'g6-graphs', marks:3, year:2023, grade:6, subject:'Maths',
+  { id:'g6m-pp23-pdf-007', image:'assets/past-papers/g6-maths-2023/q43-shells.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-graphs', marks:3, year:2023, grade:6, subject:'Maths',
     question:'Q43(b,c,d): Shells pictogram (key=4 shells per symbol). Find: (b) ratio of Samuel\'s shells to Jennifer\'s in simplest form; (c) total shells collected; (d) angle representing Ricardo\'s shells on a pie chart.',
     type:'short' },
   { id:'g6m-pp23-pdf-008', chapterId:'g6-graphs', marks:2, year:2023, grade:6, subject:'Maths',

@@ -90,7 +90,7 @@ const EXTRA = [
     question:'What is the <b>remainder</b> when 7,654 is divided by 9?',
     options:['1','2','4','6'],
     answer:'4',
-    hint:'9 × 850 = 7,650. 7,654 − 7,650 = 4.',
+    hint:'Find the largest multiple of 9 below 7,654 and see what is left over. Adding the digits together also helps.',
     explanation:'9 × 850 = 7,650. 7,654 − 7,650 = <b>4</b>. Remainder = 4.' }),
 
   makeNum({ id:'F15', chapterId:'four_ops', subsection:'multiplication', difficulty:3,
@@ -122,7 +122,7 @@ const EXTRA = [
     question:'Which list shows <b>only</b> square numbers?',
     options:['1, 4, 8, 16','4, 9, 16, 25','9, 18, 27, 36','1, 3, 6, 10'],
     answer:'4, 9, 16, 25',
-    hint:'Square numbers: 1, 4, 9, 16, 25, 36, 49, 64, 81, 100… Check each option.',
+    hint:'Write out the first ten square numbers for yourself, then test each option against your list.',
     explanation:'4=2², 9=3², 16=4², 25=5². All square numbers. Answer: <b>4, 9, 16, 25</b>.' }),
 
   makeNum({ id:'S11', chapterId:'square_nums', subsection:'patterns', difficulty:2,
@@ -155,7 +155,7 @@ const EXTRA = [
     question:'How many lines of symmetry does a <b>rectangle</b> have?',
     options:['0','1','2','4'],
     answer:'2',
-    hint:'A rectangle has 2 pairs of equal sides. You can fold it along the horizontal midline or the vertical midline.',
+    hint:'Try folding a rectangle in half in different directions. Careful - the diagonal folds do not work.',
     explanation:'A rectangle has <b>2</b> lines of symmetry (horizontal and vertical through the midpoints of opposite sides).' }),
 
   makeMCQ({ id:'G10', chapterId:'geometry', subsection:'angles', difficulty:1,

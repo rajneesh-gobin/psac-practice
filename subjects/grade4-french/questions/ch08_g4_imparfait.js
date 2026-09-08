@@ -8,7 +8,7 @@ STATIC_QUESTIONS.push(
     question:'L\'imparfait est utilisé pour décrire…',
     options:['une action terminée précise','une action habituelle ou continue dans le passé','une action future','une action au présent'],
     answer:'une action habituelle ou continue dans le passé',
-    hint:'L\'imparfait = durée, habitude, description dans le passé.',
+    hint:'Compare avec le passé composé : l\'un raconte une action précise et terminée, l\'autre plante le décor.',
     explanation:'L\'<b>imparfait</b> exprime : une action <b>habituelle</b> dans le passé (Chaque matin, je mangeais…), une description ou un état (Il faisait beau), ou une action <b>continue</b> (Je lisais quand…). Le passé composé exprime une action terminée à un moment précis.' }),
 
   makeMCQ({ id:'g4fr-imparfait-002', chapterId:'g4fr-imparfait', subsection:'terminaisons', difficulty:1,
@@ -199,7 +199,7 @@ STATIC_QUESTIONS.push(
     question:'Quel marqueur de temps indique une HABITUDE passée et donc l\'imparfait ?',
     options:['hier soir','soudain','autrefois','la semaine dernière'],
     answer:'autrefois',
-    hint:'"Autrefois" = "in the old days" - habitude passée.',
+    hint:'Trois de ces marqueurs désignent un moment précis du passé ; un seul évoque une époque et une habitude.',
     explanation:'"<b>Autrefois</b>" (= in the old days / formerly) indique une habitude passée → imparfait. Autres marqueurs d\'imparfait : d\'habitude, tous les jours, chaque matin, souvent, toujours, en ce temps-là. Marqueurs de passé composé : hier, soudain, un jour, la semaine dernière.' }),
 
   makeMCQ({ id:'g4fr-imparfait-027', chapterId:'g4fr-imparfait', subsection:'usage', difficulty:2,
@@ -227,7 +227,7 @@ STATIC_QUESTIONS.push(
     question:'MANGER à l\'imparfait : "Nous ___ des mangues chaque été."',
     options:['mangions','mangeons','mangeions','mangeaient'],
     answer:'mangions',
-    hint:'Manger → nous mangions : pas de "e" devant -ions.',
+    hint:'Avec « nous » à l\'imparfait la terminaison est -ions. Rappelle-toi dans quels cas le « e » de « manger » est nécessaire.',
     explanation:'"Nous <b>mangions</b>" - le "e" de "manger" ne se garde que devant a ou o, pour conserver le son /ʒ/ (nous mangeons, je mangeais, ils mangeaient). Devant -ions et -iez, le "i" suffit : nous <b>mangions</b>, vous mangiez. "Mangeions" n\'existe pas ; "mangeaient" est la forme de ils/elles.' }),
 
   makeTF({ id:'g4fr-imparfait-031', chapterId:'g4fr-imparfait', subsection:'formation', difficulty:3,

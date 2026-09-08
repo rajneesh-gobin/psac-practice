@@ -33,7 +33,7 @@ STATIC_QUESTIONS.push(
     hint:'It covers more than a third of the Earth\'s surface and lies between Asia and the Americas.',
     explanation:'The <b>Pacific Ocean</b> is the largest ocean on Earth - it covers about 165 million square kilometres, more than all the land on Earth combined. It lies between Asia/Australia and North/South America.' }),
 
-  makeMCQ({ id:'g4enr-wld-005', chapterId:'g4enr-world', subsection:'continents', difficulty:1,
+  makeMCQ({ id:'g4enr-wld-005', chapterId:'g4enr-world', subsection:'directions', difficulty:1,
     question:'On a standard map, which compass direction points towards the TOP of the map?',
     options:['South','East','West','North'],
     answer:'North',
@@ -44,7 +44,7 @@ STATIC_QUESTIONS.push(
     question:'Which of the following countries does NOT border the Indian Ocean?',
     options:['India','Australia','Brazil','South Africa'],
     answer:'Brazil',
-    hint:'Brazil is a very large country in South America - check which ocean lies to its east.',
+    hint:'Picture the Indian Ocean on a globe, then check each of the four in turn for a coastline on it.',
     explanation:'<b>Brazil</b> does not border the Indian Ocean - it borders the <b>Atlantic Ocean</b> on its eastern coast. The other three - India, Australia and South Africa - all have coastlines on the Indian Ocean.' }),
 
   makeMCQ({ id:'g4enr-wld-007', chapterId:'g4enr-world', subsection:'continents', difficulty:2,
@@ -61,7 +61,7 @@ STATIC_QUESTIONS.push(
     hint:'It is located off the east coast of Africa and is the fourth largest island in the world.',
     explanation:'<b>Madagascar</b> is the largest island country in the Indian Ocean - it is the fourth largest island in the world, located off the south-east coast of Africa. It is famous for its unique wildlife, including lemurs, which are found nowhere else on Earth.' }),
 
-  makeMCQ({ id:'g4enr-wld-009', chapterId:'g4enr-world', subsection:'continents', difficulty:2,
+  makeMCQ({ id:'g4enr-wld-009', chapterId:'g4enr-world', subsection:'rivers', difficulty:2,
     question:'Which is the LONGEST river in Africa?',
     options:['Congo River','Zambezi River','Niger River','Nile River'],
     answer:'Nile River',
@@ -82,7 +82,7 @@ STATIC_QUESTIONS.push(
     hint:'The Maldives is south-west of India and Sri Lanka.',
     explanation:'The <b>Maldives</b> is located in the <b>Indian Ocean</b>, south-west of Sri Lanka and India. It consists of about 1,200 coral islands grouped into atolls. It is one of the world\'s lowest-lying countries and is particularly vulnerable to rising sea levels caused by climate change.' }),
 
-  makeMCQ({ id:'g4enr-wld-012', chapterId:'g4enr-world', subsection:'continents', difficulty:2,
+  makeMCQ({ id:'g4enr-wld-012', chapterId:'g4enr-world', subsection:'directions', difficulty:2,
     question:'On a compass, which direction is OPPOSITE to North?',
     options:['East','West','South','North-East'],
     answer:'South',
@@ -98,10 +98,10 @@ STATIC_QUESTIONS.push(
       'Australia is a continent but is not officially recognised as an independent country'
     ],
     answer:'Australia is a single country that occupies an entire continent by itself - no other country shares its continental landmass',
-    hint:'No other country has land borders with Australia - it fills the entire continent.',
+    hint:'Think about how many borders you would cross walking from one side of Australia to the other.',
     explanation:'<b>Australia</b> is the only country that is also a <b>continent</b> in its own right. The Australian continent is entirely occupied by one nation. This means it has no land borders with any other country, making it unique among the world\'s continents.' }),
 
-  makeMCQ({ id:'g4enr-wld-014', chapterId:'g4enr-world', subsection:'continents', difficulty:3,
+  makeMCQ({ id:'g4enr-wld-014', chapterId:'g4enr-world', subsection:'rivers', difficulty:3,
     question:'The GANGES river is one of the most important rivers in Asia. In which country does it mainly flow?',
     options:['China','Japan','India','Thailand'],
     answer:'India',
@@ -124,10 +124,10 @@ STATIC_QUESTIONS.push(
       'They were all colonised by Portugal in the 1500s'
     ],
     answer:'They are all small island nations whose economies depend heavily on tourism and fishing',
-    hint:'Think about the geographic and economic similarities of small island nations in warm tropical waters.',
+    hint:'What do all four have in common in size, in where they sit, and in how they earn their money?',
     explanation:'<b>Seychelles, Maldives, Comoros and Mauritius</b> are all <b>small island nations</b> in the Indian Ocean whose economies depend heavily on <b>tourism</b> (beaches, coral reefs, wildlife) and <b>fishing</b>. They also share challenges like vulnerability to climate change, rising sea levels and dependence on imports for many goods.' }),
 
-  makeMCQ({ id:'g4enr-wld-017', chapterId:'g4enr-world', subsection:'continents', difficulty:3,
+  makeMCQ({ id:'g4enr-wld-017', chapterId:'g4enr-world', subsection:'rivers', difficulty:3,
     question:'The AMAZON River in South America is the largest river in the world by water volume. Which country does most of the Amazon flow through?',
     options:['Argentina','Chile','Brazil','Colombia'],
     answer:'Brazil',
@@ -146,7 +146,7 @@ STATIC_QUESTIONS.push(
     hint:'Think about how an island nation relates to the ocean around it - for trade, people, history, food and weather.',
     explanation:'The <b>Indian Ocean</b> is fundamental to Mauritius in multiple ways: it <b>surrounds the island</b> on all sides; it brought <b>traders, settlers and colonisers</b> who shaped Mauritius\'s diverse culture; it connects Mauritius to <b>trading partners</b> for imports and exports; its <b>fish and marine resources</b> feed the population; its <b>beaches and coral reefs</b> drive tourism; and Indian Ocean weather systems determine Mauritius\'s <b>climate and cyclone risk</b>.' }),
 
-  makeMCQ({ id:'g4enr-wld-019', chapterId:'g4enr-world', subsection:'continents', difficulty:4,
+  makeMCQ({ id:'g4enr-wld-019', chapterId:'g4enr-world', subsection:'directions', difficulty:4,
     question:'RODRIGUES island is located to the EAST of the main island of Mauritius. If you wanted to travel from Rodrigues BACK to the main island of Mauritius, which direction would you travel?',
     options:['East','North','South','West'],
     answer:'West',

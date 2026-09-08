@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 Science 2022 (paper labelled 2021-2022) — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 Science 2022 (paper labelled 2021-2022) - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp22-001', chapterId:'plants', subsection:'reproduction', difficulty:1,
     question:'Which part of a flower <strong>attracts insects</strong> for pollination?',
@@ -11,13 +11,13 @@ STATIC_QUESTIONS.push(
     question:'Which of the following plants is grown mainly for its <strong>root</strong>, which we use as food?',
     options:['Carrot','Grass','Sugarcane','Vetiver'], answer:'Carrot',
     hint:'This orange vegetable that rabbits love is the part that grows underground.',
-    explanation:'The carrot is a root vegetable — the orange part we eat is the plant\'s root. Sugarcane is grown for its stem, while grass and vetiver are grown for other purposes.' }),
+    explanation:'The carrot is a root vegetable - the orange part we eat is the plant\'s root. Sugarcane is grown for its stem, while grass and vetiver are grown for other purposes.' }),
 
   makeMCQ({ id:'g5sc-pp22-003', chapterId:'animals', subsection:'classification', difficulty:1,
     question:'Which of the following animals is an <strong>amphibian</strong>?',
     options:['Butterfly','Dog','Dolphin','Frog'], answer:'Frog',
     hint:'This animal starts its life in water and can live on land as an adult.',
-    explanation:'Frogs are amphibians — they can live both in water and on land. Butterflies are insects, dogs are mammals, and dolphins are mammals that live only in water.' }),
+    explanation:'Frogs are amphibians - they can live both in water and on land. Butterflies are insects, dogs are mammals, and dolphins are mammals that live only in water.' }),
 
   makeMCQ({ id:'g5sc-pp22-004', chapterId:'electricity', subsection:'conductors', difficulty:1,
     question:'Which of the following is an <strong>electrical conductor</strong>?',
@@ -71,7 +71,7 @@ STATIC_QUESTIONS.push(
     question:'The camel lives in the desert. Which of the following is the <strong>natural habitat</strong> of a camel?',
     options:['Deserts','Dense forests','Sea','Wetlands'], answer:'Deserts',
     hint:'Camels are adapted to live in dry, hot, sandy environments.',
-    explanation:'Camels are perfectly adapted to life in deserts — their humps store fat for energy, and they can go long periods without drinking water.' }),
+    explanation:'Camels are perfectly adapted to life in deserts - their humps store fat for energy, and they can go long periods without drinking water.' }),
 
   makeMCQ({ id:'g5sc-pp22-013', chapterId:'animals', subsection:'classification', difficulty:2,
     question:'Which bird from the list below is <strong>endemic to Mauritius</strong>?',
@@ -88,9 +88,9 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g5sc-pp22-pdf-001', needsArtwork:true, chapterId:'energy', marks:4, year:2022, grade:5, subject:'Science',
+  { id:'g5sc-pp22-pdf-001', image:'assets/past-papers/g5-science-2022/d4-beach.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'energy', marks:4, year:2022, grade:5, subject:'Science',
     question:'A diagram shows a beach scene with the sun, a solar-powered lamp, people swimming, and a boat with a sail. Name two different sources of energy visible in the diagram and state one way each is being used.', type:'write' },
-  { id:'g5sc-pp22-pdf-002', needsArtwork:true, chapterId:'plants', marks:3, year:2022, grade:5, subject:'Science',
+  { id:'g5sc-pp22-pdf-002', image:'assets/past-papers/g5-science-2022/d2-water-cycle.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'plants', marks:3, year:2022, grade:5, subject:'Science',
     question:'The diagram shows the water cycle. Name processes A (liquid to vapour) and B (vapour to liquid droplets in clouds) and explain what causes each process to happen.', type:'write' },
   { id:'g5sc-pp22-pdf-003', chapterId:'animals', marks:3, year:2022, grade:5, subject:'Science',
     question:'Ile Ronde is a nature reserve near Mauritius. Name ONE endemic animal found there and explain why it is important to protect endemic species.', type:'write' }

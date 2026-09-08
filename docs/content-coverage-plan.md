@@ -9,6 +9,288 @@ and avoid duplicate question text.
 
 ## Resume point — 2 September 2026
 
+### Latest automatic checkpoint — 8 September 2026, Grade 6 evidence and language
+
+Added 32 Grade 6 English questions in `coverage_evidence_language.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Textual evidence | 3 | 20 |
+| Language analysis | 5 | 20 |
+
+Evidence questions require selecting the detail that most directly proves an
+interpretation. Language questions explain the effect of metaphor, simile,
+personification, hyperbole, contrast, repetition and sentence length in short,
+self-contained extracts. Every item has four distinct options, one answer, a
+hint and explanation; IDs and normalised prompts are unique. Loader registered;
+cache shell v213. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-evidence-language.js`, coverage audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 sentence joining
+
+Added 50 Grade 6 English enrichment questions in `coverage_joining_extended.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Relative links | 10 | 20 |
+| Cause links | 10 | 20 |
+| Contrast links | 10 | 20 |
+| Time links | 10 | 20 |
+| Purpose and result links | 10 | 20 |
+
+Each item joins a distinct pair of ideas while preserving grammar, reference,
+event order and the intended logical relationship. Distractors deliberately
+confuse link types or duplicate relative-clause elements. All items have four
+distinct options, one answer, a targeted hint and explanation; IDs and prompts
+are unique. Loader registered; cache shell v212. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-joining-extended.js`, coverage audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 roots and contextual vocabulary
+
+Added 28 Grade 6 English questions in `coverage_roots_context_vocab.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Word roots | 7 | 20 |
+| Comprehension vocabulary | 5 | 20 |
+
+Root questions connect common Greek and Latin elements to usable word meaning.
+Comprehension vocabulary uses self-contained passage clues rather than isolated
+definitions. Every item has four distinct options, one answer, a hint and
+explanation; IDs and normalised prompts are unique. Loader registered; cache
+shell v211. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-roots-context-vocab.js`, coverage audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 confusables and affixes
+
+Added 34 Grade 6 English questions in `coverage_confusables_affixes.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Confusable words | 4 | 20 |
+| Prefixes and suffixes | 2 | 20 |
+
+Confusables use sentence grammar and meaning to distinguish pairs such as
+*affect/effect*, *advice/advise*, *complement/compliment* and
+*principal/principle*. Affix items cover meaning, spelling assimilation and
+word-class changes. Every item has four distinct options, one answer, hint and
+explanation; IDs and normalised prompts are unique. Loader registered; cache
+shell v210. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-confusables-affixes.js`, coverage audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 antonyms and homophones
+
+Added 36 Grade 6 English questions in `coverage_antonyms_homophones.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Antonyms | 1 | 20 |
+| Homophones | 3 | 20 |
+
+Antonyms use upper-primary vocabulary and sentence context rather than trivial
+word matching. Homophones are selected through grammatical and semantic clues,
+including *their/there/they’re*, *principal/principle*, *brake/break* and other
+commonly confused sound-alikes. Every item has four distinct options, one keyed
+answer, a hint and explanation; IDs and normalised prompts are unique. Loader
+registered; cache shell v209. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-antonyms-homophones.js`, coverage audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 clauses and essays
+
+Added 28 Grade 6 English questions in `coverage_clauses_essay.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Clause cloze | 9 | 20 |
+| Clause types | 18 | 20 |
+| Essay writing | 5 | 20 |
+
+Clause items cover reason, contrast, condition, purpose, time and relative
+links. Essay items test thesis and topic sentences, evidence, paragraph order,
+counterarguments, register, quotations, conclusions and coherence. Every item
+has four distinct options, one answer, a hint and explanation; IDs and
+normalised prompts are unique. Loader registered; cache shell v208. No deploy
+or database import.
+
+Validation: bundle rebuild, `test-grade6-clauses-essay.js`, coverage audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 formal and descriptive writing
+
+Added 36 Grade 6 English questions in `coverage_formal_descriptive.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Formal letters | 3 | 20 |
+| Descriptive writing | 1 | 20 |
+
+Formal-letter items cover structure, register, evidence, relevance, requests,
+openings and closings. Description items develop purposeful sensory detail,
+viewpoint, precise verbs, atmosphere, contrast and figurative language rather
+than adjective padding. Every item has four distinct options, one keyed answer,
+a hint and explanation. IDs and normalised prompts are unique. Loader
+registered; cache shell v207. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-formal-descriptive.js`, coverage audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 planning and reading
+
+Added 21 Grade 6 English questions in `coverage_planning_reports_meaning.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Writing plans | 15 | 20 |
+| Report passages | 14 | 20 |
+| Word meaning | 10 | 20 |
+
+Planning questions focus on audience, purpose, evidence, scope and sequence.
+The self-contained report extracts test supported conclusions, numerical
+evidence, source attribution, headings and objective style. Vocabulary items
+derive meaning from sentence context. Every item has four distinct options, a
+single answer, hint and explanation; IDs and normalised prompts are unique.
+Loader registered; cache shell v206. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-planning-reports-meaning.js`, coverage
+audit, `scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 continuous and cloze verbs
+
+Added 27 Grade 6 English questions in `coverage_verb_cloze_continuous.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Continuous tenses | 2 | 20 |
+| Mixed verb cloze | 11 | 20 |
+
+The continuous items distinguish actions in progress across present, past and
+future contexts, including interruptions, temporary arrangements and gradual
+change. The cloze items use conditionals, agreement, passive voice, reported
+speech and earlier-past sequencing. Every item has four distinct options, one
+keyed answer, a hint and explanation. New IDs and normalised prompts are unique.
+Loader registered; cache shell v205. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-verb-cloze-continuous.js`, all-subject
+audit, `scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 voice and auxiliaries
+
+Added 31 contextual Grade 6 English questions in `coverage_voice_auxiliary.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Active and passive voice | 6 | 20 |
+| Auxiliary verbs | 3 | 20 |
+
+Voice questions preserve tense and meaning across transformations and cover
+present, past, future, continuous, perfect and modal passives. Auxiliary
+questions cover agreement, negatives, questions, emphasis, passive/perfect
+structures and question tags. Every item has four distinct options, one keyed
+answer, a hint and explanation. New IDs and normalised prompts are unique.
+Loader registered; cache shell v204. No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-voice-auxiliary.js`, all-subject audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 present and past tense
+
+Added 33 contextual Grade 6 English questions in `coverage_present_past.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Past tense | 2 | 20 |
+| Present tense | 5 | 20 |
+
+The batch contrasts simple, continuous and perfect forms through time markers,
+interrupted actions, earlier-past events, habits, present results, facts,
+timetables, negatives, questions and subject–verb agreement. Each item has four
+distinct options, one answer, a targeted hint and explanation. New IDs and
+normalised prompts are unique. Loader registered; cache shell v203. No deploy
+or database import.
+
+Validation: bundle rebuild, `test-grade6-present-past.js`, all-subject coverage
+audit, `scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 noun precision
+
+Added 66 contextual Grade 6 English questions in `coverage_nouns_extended.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Cloze nouns | 15 | 20 |
+| Collective nouns | 3 | 20 |
+| Pronouns | 5 | 20 |
+| Determiners | 3 | 20 |
+| Common and proper nouns | 8 | 20 |
+
+The batch covers formal object and relative pronouns, singular *they*,
+possessive and reflexive forms, countability and selection, organisation/place
+capitalisation, collective vocabulary and contextual noun formation. All 66
+items have distinct four-option sets, one keyed answer, hints and explanations;
+new IDs and normalised prompts are unique. Loader registered; cache shell v202.
+No deploy or database import.
+
+Validation: bundle rebuild, `test-grade6-nouns-extended.js`, all-subject audit,
+`scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 6 future and punctuation
+
+Added 38 Grade 6 English questions in `coverage_future_punctuation.js`:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Future tense | 1 | 20 |
+| Punctuation | 1 | 20 |
+
+Future-form practice distinguishes predictions, evidence, plans, arrangements,
+offers, timetables, future continuous/perfect, conditionals and time clauses.
+Punctuation practice covers sentence boundaries, speech, lists, clauses,
+apostrophes, colons, semicolons, brackets, hyphens and direct address. Each item
+has four distinct options, one keyed answer, a hint and explanation. New IDs and
+normalised prompts are unique. Loader registered; cache shell v201. No deploy or
+database import.
+
+Validation: bundle rebuild, `test-grade6-future-punctuation.js`, all-subject
+coverage audit, `scripts/check.js`, and `git diff --check`.
+
+### Latest automatic checkpoint — 8 September 2026, Grade 5 English articles
+
+Added 30 contextual Grade 5 English questions in
+`coverage_articles_determiners.js`. Both targeted syllabus subsections now meet
+the minimum:
+
+| Subsection | Before | After |
+| --- | ---: | ---: |
+| Articles: a, an, the | 5 | 20 |
+| Determiners & quantifiers | 5 | 20 |
+
+The questions practise vowel sounds rather than first-letter guessing,
+specific versus general nouns, zero articles, countable/uncountable nouns and
+quantity or choice in realistic Grade 5 sentences. Every item has four distinct
+options, one keyed answer, a hint and an explanation. IDs and normalised prompts
+are unique in the rebuilt Grade 5 English bundle. Loader registered; cache
+shell v200. No deployment or database import.
+
+Validation: `node netlify/build-questions.js`,
+`node scripts/test-grade5-articles-determiners.js`,
+`node scripts/audit-content-coverage.js --bundles`, `node scripts/check.js`,
+and `git diff --check`.
+
+Next: continue Grade 5 English verb forms and Grade 6 English future tense /
+punctuation, then repeat the all-subject audit. The 8 September pre-batch audit
+found 47 Grade 5 English gaps requiring 602 questions; this batch removes two
+of those gaps and 30 questions of that shortfall.
+
 ### Latest automatic checkpoint — 4 September 2026, English noun batches
 
 Completed two grade-specific batches, 80 new questions total:

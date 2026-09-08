@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 History & Geography 2021–2022 Modular — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 History & Geography 2021–2022 Modular - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5h-pp22-001', chapterId:'map-skills', subsection:'using_map', difficulty:1,
     question:'Which of the following makes up approximately 70% of the Earth\'s surface area?',
@@ -45,9 +45,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp22-008', chapterId:'settlement', subsection:'british', difficulty:2,
     question:'The Battle of Grand Port (August 1810) was a naval battle between France and Britain. Which side WON this sea battle?',
-    options:['Britain','France','Both sides won','Neither side won — it was a draw'], answer:'France',
+    options:['Britain','France','Both sides won','Neither side won - it was a draw'], answer:'France',
     hint:'It is the only French naval victory inscribed on the Arc de Triomphe in Paris.',
-    explanation:'France won the Battle of Grand Port — it was the only French naval victory during the Napoleonic Wars. However, Britain captured the island of Mauritius by land shortly afterwards.' }),
+    explanation:'France won the Battle of Grand Port - it was the only French naval victory during the Napoleonic Wars. However, Britain captured the island of Mauritius by land shortly afterwards.' }),
 
   makeMCQ({ id:'g5h-pp22-009', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
     question:'A village at 800 m altitude has a ___ temperature than a village at the coast (sea level).',
@@ -59,7 +59,7 @@ STATIC_QUESTIONS.push(
     question:'Soil erosion is a major environmental problem in Rodrigues. Which of the following is a NATURAL cause of soil erosion?',
     options:['Deforestation','Overgrazing','Steep slopes','Building on hillsides'], answer:'Steep slopes',
     hint:'This is a feature of the landscape, not a human activity.',
-    explanation:'Steep slopes are a natural cause of soil erosion — rainwater flows quickly down steep land, washing away the topsoil. Deforestation and overgrazing are man-made causes.' }),
+    explanation:'Steep slopes are a natural cause of soil erosion - rainwater flows quickly down steep land, washing away the topsoil. Deforestation and overgrazing are man-made causes.' }),
 
   makeMCQ({ id:'g5h-pp22-011', chapterId:'env-problems', subsection:'soil_erosion', difficulty:1,
     question:'Which of the following is a MAN-MADE cause of soil erosion?',
@@ -95,27 +95,27 @@ STATIC_QUESTIONS.push(
     question:'Why did Sir Robert Farquhar encourage the cultivation of sugar cane in Mauritius?',
     options:['To replace the ebony trees that had been cut down','Sugar cane was very profitable and in high demand in Britain','To provide food for the growing population','To create employment for freed slaves'], answer:'Sugar cane was very profitable and in high demand in Britain',
     hint:'Britain\'s growing population had a huge demand for this product.',
-    explanation:'Farquhar encouraged sugar cane because it was highly profitable — Britain demanded large quantities of sugar, and Mauritius\'s climate and fertile soil were ideal for cultivation.' }),
+    explanation:'Farquhar encouraged sugar cane because it was highly profitable - Britain demanded large quantities of sugar, and Mauritius\'s climate and fertile soil were ideal for cultivation.' }),
 
   makeMCQ({ id:'g5h-pp22-017', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
     question:'Relief rainfall occurs when moist air is forced to rise over a mountain. On which side of the mountain does the rain fall?',
     options:['Eastern side only','Leeward (sheltered) side','Northern side only','Windward (facing the wind) side'], answer:'Windward (facing the wind) side',
     hint:'The wind carries rain to the side it first hits.',
-    explanation:'The windward side receives heavy rainfall as moist air is forced to rise, cool, and condense over the mountain. The leeward (sheltered) side is much drier, with little rainfall — this is called the "rain shadow effect".' }),
+    explanation:'The windward side receives heavy rainfall as moist air is forced to rise, cool, and condense over the mountain. The leeward (sheltered) side is much drier, with little rainfall - this is called the "rain shadow effect".' }),
 
   makeMCQ({ id:'g5h-pp22-018', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
     question:'In Mauritius, which region generally receives the HIGHEST annual rainfall?',
     options:['The northern coast near Pamplemousses','The central plateau near Curepipe','The western coast near Tamarin','The eastern coast near Mahebourg'], answer:'The central plateau near Curepipe',
     hint:'Higher altitude means more rainfall in Mauritius.',
-    explanation:'The central plateau (Curepipe, Vacoas area) receives the highest rainfall — over 3500mm annually — because the South East Trade Winds deposit moisture as they rise over the mountains. The western leeward coast gets under 800mm per year.' })
+    explanation:'The central plateau (Curepipe, Vacoas area) receives the highest rainfall - over 3500mm annually - because the South East Trade Winds deposit moisture as they rise over the mountains. The western leeward coast gets under 800mm per year.' })
 );
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g5h-pp22-pdf-001', needsArtwork:true, chapterId:'map-skills', marks:8, year:2022, grade:5, subject:'History & Geography',
+  { id:'g5h-pp22-pdf-001', image:'assets/past-papers/g5-history-2022/map1-world.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'map-skills', marks:8, year:2022, grade:5, subject:'History & Geography',
     question:'Study Map 1 (world map with labels A–Q). 1. Name continent A. 2. Name mountain range B. 3. What is the line of latitude 23½°N called? 4. Name river R. 5. Mark the Indian Ocean with letter C. 6. River Q (Yangtse Kiang) is found in which country? 7. What is the environmental importance of the conservation forest at P?', type:'written' },
   { id:'g5h-pp22-pdf-002', chapterId:'env-problems', marks:9, year:2022, grade:5, subject:'History & Geography',
     question:'Soil erosion is a major problem in Rodrigues. (a) What is soil erosion? (b) Classify as natural or man-made: Overgrazing / Steep slopes / Heavy rainfall / Deforestation. (c) What has been done to reduce soil erosion in Rodrigues? (d) How does soil erosion affect the crop production of farmers?', type:'written' },
-  { id:'g5h-pp22-pdf-003', needsArtwork:true, chapterId:'g5ge-weather', marks:8, year:2022, grade:5, subject:'History & Geography',
+  { id:'g5h-pp22-pdf-003', image:'assets/past-papers/g5-history-2022/map23-temps.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g5ge-weather', marks:8, year:2022, grade:5, subject:'History & Geography',
     question:'Maps 2 and 3 show temperatures in Mauritius in January (summer) and July (winter). (i) Fill in: temperature at Belle Rive in July; temperature at Pamplemousses in January. (ii) Shade area on July map where temperature is less than 17°C. (b) Diagram 1 shows relief rain: label windward and leeward sides. What causes air to rise from Mahebourg to Point A? Why are the South East Trade Winds called prevailing winds?', type:'written' }
 );

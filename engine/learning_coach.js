@@ -78,7 +78,7 @@ const LearningCoach = (() => {
     const week = history.filter(h=>h.day>=after(day(),-6) && h.day<=day());
     const topics = Object.entries(data?.topics || {});
     const cards = topics.map(([key,t]) => {
-      const next = t.followup ? `Follow-up: ${t.followup.correct}/6 on ${t.followup.day} — different questions at the same difficulty.`
+      const next = t.followup ? `Follow-up: ${t.followup.correct}/6 on ${t.followup.day} - different questions at the same difficulty.`
         : t.reviewOnly ? `An encouraging start. We will check retention from ${t.due}; targeted practice is not assigned from this result.`
         : t.practised ? `Practice completed. Fresh check due ${t.due}.`
         : 'Next step: 8 targeted practice questions.';
@@ -93,6 +93,7 @@ const LearningCoach = (() => {
     busy = true; renderChild();
     const child = ACTIVE_STUDENT_ID;
     try {
+      if (typeof PackLoader !== 'undefined') await PackLoader.ensure(PACK).catch(() => {});
       const pack = activateSubjectPack(PACK);
       if (!pack) throw Error('Grade 5 Maths is not available.');
       await QuestionLoader.loadSubject(PACK);

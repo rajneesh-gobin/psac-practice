@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 French March 2021 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 French March 2021 - past-paper questions adapted to MCQ format.
 // Source: MES Primary School Achievement Certificate Assessment, March 2021, French P130.
 
 STATIC_QUESTIONS.push(
@@ -63,7 +63,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-pp21-010', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:1,
     question:'Autrefois le train ……………… la canne jusqu\'au moulin.',
     options:['transporte','transportera','transporter','transportait'], answer:'transportait',
-    hint:'Quel mot-clé indique le temps et le type d\'action — habituelle ou ponctuelle — dans cette phrase ?',
+    hint:'Quel mot-clé indique le temps et le type d\'action - habituelle ou ponctuelle - dans cette phrase ?',
     explanation:'<em>Autrefois</em> exprime une habitude passée → imparfait : <em>transportait</em>.' }),
 
   // ── Q3B : Vocabulaire MCQ (5 marks) ──────────────────────────────────────
@@ -71,7 +71,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-pp21-011', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'Mon thé est trop fade. Je vais y ajouter du ……………….',
     options:['sel','poivre','sucre','piment'], answer:'sucre',
-    hint:'Le thé est fade — quelle saveur lui manque-t-il pour être plus agréable à boire ?',
+    hint:'Le thé est fade - quelle saveur lui manque-t-il pour être plus agréable à boire ?',
     explanation:'Un thé fade manque de saveur. Pour le rendre moins fade et plus agréable, on y ajoute du <em>sucre</em>.' }),
 
   makeMCQ({ id:'g6fr-pp21-012', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
@@ -98,7 +98,7 @@ STATIC_QUESTIONS.push(
     hint:'L\'école est fermée de maintenant ……… (limite) mardi prochain.',
     explanation:'<em>Jusqu\'à</em> indique la limite dans le temps : fermée <em>jusqu\'à</em> mardi prochain.' }),
 
-  // ── Q4B : Compréhension MCQ — « Renard et les marchands » ───────
+  // ── Q4B : Compréhension MCQ - « Renard et les marchands » ───────
 
   makeMCQ({ id:'g6fr-pp21-016', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>Un matin d\'hiver, Renard sort de sa tanière. L\'animal a faim, mais ne trouve rien à manger dans ce désert blanc.</em><br><br>Renard habite dans',
@@ -135,7 +135,7 @@ STATIC_QUESTIONS.push(
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
   { id:'g6fr-pp21-pdf-001', chapterId:'g6fr-textes', marks:10, year:2021, grade:6, subject:'French',
-    question:'Q4A — Lis le texte sur la Trochetia Boutoniana (fleur nationale de Maurice) et complète la fiche : nom, type de fleur, botaniste, hauteur, saison de floraison, couleur, forme, climat, lieu précis, activité organisée.', type:'short' },
+    question:'Q4A - Lis le texte sur la Trochetia Boutoniana (fleur nationale de Maurice) et complète la fiche : nom, type de fleur, botaniste, hauteur, saison de floraison, couleur, forme, climat, lieu précis, activité organisée.', type:'short' },
   { id:'g6fr-pp21-pdf-002', chapterId:'g6fr-textes', marks:15, year:2021, grade:6, subject:'French',
-    question:'Q4B — Réponds aux questions sur « Renard et les marchands » (Roman de Renart) : Q6 = pourquoi Renard marche tristement ; Q7 = comment il sait qu\'il y a du poisson ; Q8 = que vont faire les marchands de l\'animal ; Q9 = pourquoi il est prudent en se levant ; Q10 = ce qu\'il fait dans la charrette ; Q11 = mot montrant que les marchands ne s\'attendent pas à le voir vivant ; Q12 = remettre 4 actions dans l\'ordre.', type:'short' }
+    question:'Q4B - Réponds aux questions sur « Renard et les marchands » (Roman de Renart) : Q6 = pourquoi Renard marche tristement ; Q7 = comment il sait qu\'il y a du poisson ; Q8 = que vont faire les marchands de l\'animal ; Q9 = pourquoi il est prudent en se levant ; Q10 = ce qu\'il fait dans la charrette ; Q11 = mot montrant que les marchands ne s\'attendent pas à le voir vivant ; Q12 = remettre 4 actions dans l\'ordre.', type:'short' }
 );

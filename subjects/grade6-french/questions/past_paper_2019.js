@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 French October 2019 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 French October 2019 - past-paper questions adapted to MCQ format.
 // Source: MES Primary School Achievement Certificate Assessment, October 2019, French P130.
 
 STATIC_QUESTIONS.push(
@@ -37,13 +37,13 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-pp19-006', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
     question:'J\'ai lu le livre ……………… j\'ai eu en cadeau.',
     options:['que','qui','dont','où'], answer:'que',
-    hint:'Analyse le rôle de « le livre » dans la subordonnée — est-il sujet ou objet du verbe « ai eu » ?',
+    hint:'Analyse le rôle de « le livre » dans la subordonnée - est-il sujet ou objet du verbe « ai eu » ?',
     explanation:'<em>Que</em> = pronom relatif COD : le livre <em>que</em> j\'ai eu en cadeau (= j\'ai eu le livre en cadeau).' }),
 
   makeMCQ({ id:'g6fr-pp19-007', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'Les élèves sont ravis. Leur enseignant ……………… emmène en excursion.',
     options:['le','lui','les','leur'], answer:'les',
-    hint:'Le pronom COD remplace « les élèves » — pluriel.',
+    hint:'Le pronom COD remplace « les élèves » - pluriel.',
     explanation:'<em>Les élèves</em> est pluriel → pronom COD <em>les</em> : leur enseignant <em>les</em> emmène.' }),
 
   makeMCQ({ id:'g6fr-pp19-008', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
@@ -61,7 +61,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-pp19-010', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
     question:'J\'ai oublié mon crayon. J\'ai emprunté ……………… de Poonam.',
     options:['celle','ceux','celles','celui'], answer:'celui',
-    hint:'Le pronom démonstratif doit s\'accorder en genre et en nombre avec le nom qu\'il remplace — quel est le genre et le nombre de « crayon » ?',
+    hint:'Le pronom démonstratif doit s\'accorder en genre et en nombre avec le nom qu\'il remplace - quel est le genre et le nombre de « crayon » ?',
     explanation:'<em>Celui</em> remplace un nom masculin singulier (le crayon). <em>Celle</em> = féminin ; <em>ceux/celles</em> = pluriel.' }),
 
   makeMCQ({ id:'g6fr-pp19-011', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:2,
@@ -109,7 +109,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-pp19-018', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>Quand l\'escargot parvenait enfin à rejoindre le groupe, les autres petites bêtes s\'étaient déjà bien reposées et avaient bien mangé. Et comme il n\'y avait plus de place, l\'escargot devait coucher à la belle étoile.</em><br><br>Quand l\'escargot rejoignait ses compagnons, tous',
     options:['mangeaient.','l\'attendaient.','jouaient.','dormaient.'], answer:'dormaient.',
-    hint:'Le texte dit qu\'ils avaient déjà mangé et se reposaient — que faisaient-ils ?',
+    hint:'Le texte dit qu\'ils avaient déjà mangé et se reposaient - que faisaient-ils ?',
     explanation:'Les autres « s\'étaient déjà bien reposées et avaient bien mangé », et il ne restait plus de place pour se coucher : quand l\'escargot arrivait, tous <em>dormaient</em> déjà.' }),
 
   makeMCQ({ id:'g6fr-pp19-019', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
@@ -129,7 +129,7 @@ STATIC_QUESTIONS.push(
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
   { id:'g6fr-pp19-pdf-001', chapterId:'g6fr-textes', marks:10, year:2019, grade:6, subject:'French',
-    question:'Q4A — Lis le texte sur le kangourou et complète : pays, façon de se déplacer, deux rôles de la queue, célébrité de la femelle, nom du bébé, une nourriture, phrase montrant qu\'il boit peu, un ennemi, endroit où il se défend.', type:'short' },
+    question:'Q4A - Lis le texte sur le kangourou et complète : pays, façon de se déplacer, deux rôles de la queue, célébrité de la femelle, nom du bébé, une nourriture, phrase montrant qu\'il boit peu, un ennemi, endroit où il se défend.', type:'short' },
   { id:'g6fr-pp19-pdf-002', chapterId:'g6fr-textes', marks:15, year:2019, grade:6, subject:'French',
-    question:'Q4B — Réponds aux questions sur « Le petit escargot » : Q6 = ce qui montre qu\'il avançait difficilement ; Q7 = ce qu\'il faisait quand il s\'est cogné ; Q8 = deux raisons pour lesquelles le coquillage était parfait ; Q9 = deux raisons pour lesquelles les autres bêtes voulaient une maison pareille ; Q10 = remettre 4 événements dans l\'ordre.', type:'short' }
+    question:'Q4B - Réponds aux questions sur « Le petit escargot » : Q6 = ce qui montre qu\'il avançait difficilement ; Q7 = ce qu\'il faisait quand il s\'est cogné ; Q8 = deux raisons pour lesquelles le coquillage était parfait ; Q9 = deux raisons pour lesquelles les autres bêtes voulaient une maison pareille ; Q10 = remettre 4 événements dans l\'ordre.', type:'short' }
 );

@@ -17,7 +17,8 @@ const vm = require('vm');
 const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 
-const SRC = fs.readFileSync(path.join(ROOT, 'netlify/functions/admin-account-recovery.js'), 'utf8');
+const SRC = fs.readFileSync(path.join(ROOT, 'netlify/functions/admin-account-recovery.js'), 'utf8')
+  .replace(/\r\n/g, '\n');
 const block = SRC.match(/const TEMP_ALPHABET[\s\S]*?\n\}\n/);
 if (!block) { console.error('could not extract generateTempPassword'); process.exit(1); }
 

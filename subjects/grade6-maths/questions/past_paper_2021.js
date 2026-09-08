@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 Mathematics March 2021 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 Mathematics March 2021 - past-paper questions adapted to MCQ format.
 // Source: Mauritius Examinations Syndicate (MES), March 2021.
 
 STATIC_QUESTIONS.push(
@@ -48,7 +48,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6m-pp21-008', chapterId:'g6-fractions', subsection:'add_sub', difficulty:1,
     question:'Work out: <sup>3</sup>/<sub>7</sub> + <sup>1</sup>/<sub>7</sub>',
     options:['4/14','4/7','5/7','1'], answer:'4/7',
-    hint:'Same denominator — add numerators only.',
+    hint:'Same denominator - add numerators only.',
     explanation:'3/7 + 1/7 = 4/7.' }),
 
   makeMCQ({ id:'g6m-pp21-009', chapterId:'g6-numeration', subsection:'powers', difficulty:1,
@@ -235,19 +235,19 @@ STATIC_QUESTIONS.push(
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
   { id:'g6m-pp21-pdf-001', chapterId:'g6-numeration', marks:2, year:2021, grade:6, subject:'Maths',
-    question:'Q5: Complete the table — (a) 2130 in words; (b) Seven hundred and forty six in figures.', type:'short' },
-  { id:'g6m-pp21-pdf-002', needsArtwork:true, chapterId:'g6-fractions', marks:1, year:2021, grade:6, subject:'Maths',
+    question:'Q5: Complete the table - (a) 2130 in words; (b) Seven hundred and forty six in figures.', type:'short' },
+  { id:'g6m-pp21-pdf-002', image:'assets/past-papers/g6-maths-2021/q8-shaded.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-fractions', marks:1, year:2021, grade:6, subject:'Maths',
     question:'Q8: A 2×3 grid diagram has 3 squares shaded. What fraction of the diagram is shaded?', type:'short' },
   { id:'g6m-pp21-pdf-003', chapterId:'g6-time-speed', marks:1, year:2021, grade:6, subject:'Maths',
     question:'Q21 MCQ: A clock face shows the minute hand at 3 and the hour hand between 4 and 5. Which option correctly names the time?', type:'short' },
-  { id:'g6m-pp21-pdf-004', needsArtwork:true, chapterId:'g6-geometry', marks:1, year:2021, grade:6, subject:'Maths',
+  { id:'g6m-pp21-pdf-004', image:'assets/past-papers/g6-maths-2021/q25-angles.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-geometry', marks:1, year:2021, grade:6, subject:'Maths',
     question:'Q25 MCQ: Four angle diagrams are shown. Which one shows a reflex angle?', type:'short' },
-  { id:'g6m-pp21-pdf-005', needsArtwork:true, chapterId:'g6-geometry', marks:3, year:2021, grade:6, subject:'Maths',
+  { id:'g6m-pp21-pdf-005', image:'assets/past-papers/g6-maths-2021/q17-prism.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-geometry', marks:3, year:2021, grade:6, subject:'Maths',
     question:'Q17: A 3-D shape diagram shows a triangular prism. (a) Name the shape. (b) How many vertices? (c) How many edges?', type:'short' },
   { id:'g6m-pp21-pdf-006', chapterId:'g6-numeration', marks:3, year:2021, grade:6, subject:'Maths',
     question:'Q29: Match each number in Column A (17, 21, 24, 25) to the correct statement in Column B (is a factor of 7 / is a prime number / is equal to 31 minus 7 / is a square number / is a multiple of 7).', type:'match' },
   { id:'g6m-pp21-pdf-007', chapterId:'g6-four-ops', marks:3, year:2021, grade:6, subject:'Maths',
     question:'Q36: Given 67 × 93 = 6231. Without calculating, fill in: (a) 6231 ÷ 67 = ?; (b) 68 × 93 = 6231 + ?; (c) 6.231 ÷ 0.93 = ?', type:'short' },
-  { id:'g6m-pp21-pdf-008', needsArtwork:true, chapterId:'g6-graphs', marks:5, year:2021, grade:6, subject:'Maths',
+  { id:'g6m-pp21-pdf-008', image:'assets/past-papers/g6-maths-2021/q41-pictogram.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-graphs', marks:5, year:2021, grade:6, subject:'Maths',
     question:'Q41: Three schools pictogram (key = 2 pupils per symbol). (a) Which school has greatest participants? (b) Total participants? (c) Angle for Power Kids on pie chart?', type:'short' }
 );

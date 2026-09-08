@@ -6,49 +6,29 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-con-001', chapterId:'g6-conservation', subsection:'pollution', difficulty:2,
     question:'What is SUSTAINABLE DEVELOPMENT?',
-    options:[
-      'Developing as fast as possible, using all available resources now',
-      'Meeting the needs of the present without compromising the ability of future generations to meet their own needs',
-      'Stopping all development to protect nature completely',
-      'Building more factories to create jobs regardless of environmental impact'
-    ],
-    answer:'Meeting the needs of the present without compromising the ability of future generations to meet their own needs',
+    options:['Meeting our needs without harming the future', 'Stopping all development to protect nature', 'Using up all resources as fast as we can', 'Building factories whatever the cost'],
+    answer:'Meeting our needs without harming the future',
     hint:'The key word is "future generations" - we must leave resources for them too.',
     explanation:'<b>Sustainable development</b> means using resources responsibly so that the environment can support human needs now AND in the future. It balances economic growth, social well-being and environmental protection.' }),
 
   makeMCQ({ id:'g6sci-con-002', chapterId:'g6-conservation', subsection:'pollution', difficulty:2,
-    question:'What is the main aim of the Paris Agreement (2015)?',
-    options:[
-      'To stop all oil production worldwide immediately',
-      'To limit global temperature rise by reducing greenhouse gas emissions',
-      'To protect all endangered species in Africa',
-      'To build more nuclear power stations globally'
-    ],
-    answer:'To limit global temperature rise by reducing greenhouse gas emissions',
+    question:'What is the main aim of the Paris Agreement?',
+    options:['To limit the rise in global temperature', 'To protect endangered African species', 'To build more nuclear power stations', 'To halt all oil production at once'],
+    answer:'To limit the rise in global temperature',
     hint:'It was signed by nearly 200 countries in Paris to tackle climate change.',
     explanation:'The <b>Paris Agreement</b> (2015) commits signatory nations to reducing greenhouse gas emissions to limit global warming to well below 2°C above pre-industrial levels. Mauritius has signed the agreement.' }),
 
   makeMCQ({ id:'g6sci-con-003', chapterId:'g6-conservation', subsection:'pollution', difficulty:2,
-    question:'What is the IUCN Red List used for?',
-    options:[
-      'Listing countries that have signed environmental treaties',
-      'Classifying species by their risk of extinction (from Least Concern to Extinct)',
-      'Listing the most polluted countries in the world',
-      'Ranking countries by how much CO&#8322; they produce'
-    ],
-    answer:'Classifying species by their risk of extinction (from Least Concern to Extinct)',
+    question:'What does the IUCN Red List record?',
+    options:['Species at risk of extinction', 'Countries signing green treaties', 'The world\'s most polluted cities', 'Countries that pollute the most'],
+    answer:'Species at risk of extinction',
     hint:'The IUCN is the International Union for Conservation of Nature.',
     explanation:'The <b>IUCN Red List</b> is the world\'s most comprehensive inventory of species conservation status. Categories range from "Least Concern" through "Vulnerable", "Endangered" and "Critically Endangered" to "Extinct in the Wild" and "Extinct".' }),
 
   makeMCQ({ id:'g6sci-con-004', chapterId:'g6-conservation', subsection:'pollution', difficulty:2,
     question:'What is ECO-TOURISM?',
-    options:[
-      'Tourism that focuses only on luxury beach hotels',
-      'Responsible travel to natural areas that conserves the environment and benefits local communities',
-      'Tourism that uses electric vehicles instead of petrol cars',
-      'Any type of tourism in a foreign country'
-    ],
-    answer:'Responsible travel to natural areas that conserves the environment and benefits local communities',
+    options:['Travel that protects nature', 'Tourism using electric cars only', 'Any holiday in a foreign country', 'Tourism in luxury beach hotels'],
+    answer:'Travel that protects nature',
     hint:'Eco-tourism is about responsible, low-impact travel that supports conservation.',
     explanation:'<b>Eco-tourism</b> involves visiting natural areas in a way that conserves the environment, supports local economies and raises awareness about conservation. In Mauritius, whale-watching, reef snorkelling tours and forest hiking can be forms of eco-tourism.' }),
 
@@ -59,14 +39,9 @@ STATIC_QUESTIONS.push(
     explanation:'"Sustainable" means able to be maintained long-term. Sustainable development aims to <b>preserve resources for future generations</b>, NOT to exhaust them quickly.' }),
 
   makeMCQ({ id:'g6sci-con-006', chapterId:'g6-conservation', subsection:'pollution', difficulty:2,
-    question:'What is a MARINE PROTECTED AREA (MPA)?',
-    options:[
-      'A zone in the ocean where fishing is increased to feed more people',
-      'A designated area of the sea where human activities are restricted to protect marine life',
-      'An area where oil drilling is allowed under strict supervision',
-      'A beach reserved exclusively for tourists'
-    ],
-    answer:'A designated area of the sea where human activities are restricted to protect marine life',
+    question:'What is a MARINE PROTECTED AREA?',
+    options:['A sea area where activity is restricted', 'A zone where more fishing is allowed', 'An area open to supervised drilling', 'A beach reserved just for tourists'],
+    answer:'A sea area where activity is restricted',
     hint:'Blue Bay Marine Park is an example near Mauritius.',
     explanation:'A <b>Marine Protected Area (MPA)</b> is a section of the ocean where certain human activities (fishing, mining, anchoring) are restricted or banned. This allows marine ecosystems to recover and thrive. Blue Bay Marine Park is Mauritius\'s main MPA.' }),
 
@@ -84,8 +59,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-con-008', chapterId:'g6-conservation', subsection:'pollution', difficulty:2,
     question:'The Ramsar Convention is an international agreement designed to protect:',
-    options:['Mountain glaciers','Wetland habitats (marshes, mangroves, lagoons)','Rainforests in the Amazon','The ozone layer'],
-    answer:'Wetland habitats (marshes, mangroves, lagoons)',
+    options:['Wetlands such as marshes', 'Rainforests of the Amazon', 'Mountain glaciers', 'The ozone layer'],
+    answer:'Wetlands such as marshes',
     hint:'The convention was signed in Ramsar, Iran, in 1971 - focused on a specific type of habitat.',
     explanation:'The <b>Ramsar Convention</b> (1971) is an international treaty for the conservation and sustainable use of <b>wetlands</b>. Wetlands include marshes, mangroves, lagoons and floodplains - they provide crucial habitat for wildlife and services such as flood control.' }),
 
@@ -96,14 +71,9 @@ STATIC_QUESTIONS.push(
     explanation:'Individuals <b>can and do</b> make a difference. Every choice to reduce waste, conserve energy, avoid single-use plastics, and support conservation organisations contributes to protecting the environment. Governments need individual action to complement their policies.' }),
 
   makeMCQ({ id:'g6sci-con-010', chapterId:'g6-conservation', subsection:'deforestation', difficulty:2,
-    question:'Why is it important to protect mangrove forests along the coast of Mauritius?',
-    options:[
-      'Because mangroves are used to make furniture',
-      'Because mangroves protect coastlines from erosion, filter water, and provide habitat for marine life',
-      'Because mangroves produce large amounts of oxygen only for humans',
-      'Because mangroves are tourist attractions that generate revenue directly'
-    ],
-    answer:'Because mangroves protect coastlines from erosion, filter water, and provide habitat for marine life',
+    question:'Why should mangrove forests be protected?',
+    options:['They protect the coast from erosion', 'They make oxygen only for people', 'They are used to make furniture', 'They attract paying tourists'],
+    answer:'They protect the coast from erosion',
     hint:'Mangroves do several important jobs for the coastal environment.',
     explanation:'Mangrove forests: (1) <b>protect coastlines</b> from wave erosion and storm surge; (2) <b>filter pollutants</b> from runoff before they reach the lagoon; (3) provide <b>nursery habitat</b> for young fish and other marine life; (4) store large amounts of carbon.' })
 
@@ -144,20 +114,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-con-014', chapterId:'g6-conservation', subsection:'pollution', difficulty:2,
     question:'Which bird shown below is ENDEMIC to the island of RODRIGUES? (PSAC 2025 Q1f)',
-    options:['Echo Parakeet','Pink Pigeon','Dodo','Cardinal Jaune (Yellow Cardinal)'],
-    answer:'Cardinal Jaune (Yellow Cardinal)',
+    options:['Cardinal Jaune', 'Echo Parakeet', 'Pink Pigeon', 'Dodo'],
+    answer:'Cardinal Jaune',
     hint:'Each of Mauritius\'s islands has its own unique endemic species.',
     explanation:'The <b>Cardinal Jaune</b> (Yellow Cardinal / Foudia flavicans) is endemic to Rodrigues. Endemic means it is found <b>only</b> on that island and nowhere else on Earth. The <b>Echo Parakeet</b> and <b>Pink Pigeon</b> are endemic to mainland Mauritius. The <b>Dodo</b> was endemic to Mauritius but is now <b>extinct</b>.' }),
 
   makeMCQ({ id:'g6sci-con-015', chapterId:'g6-conservation', subsection:'pollution', difficulty:2,
-    question:'Why has the number of ENDEMIC BIRDS in Mauritius declined over the years? (PSAC 2025 Q5e)',
-    options:[
-      'Endemic birds migrate to other countries every year',
-      'Habitat destruction, introduction of predators (rats, mongeese) and hunting',
-      'Endemic birds lay too many eggs and overpopulate',
-      'Climate change makes Mauritius too cold for endemic birds'
-    ],
-    answer:'Habitat destruction, introduction of predators (rats, mongeese) and hunting',
+    question:'Why has the number of endemic birds in Mauritius fallen?',
+    options:['Habitat loss, predators and hunting', 'They lay too many eggs each season', 'They migrate abroad every year', 'Mauritius has become too cold'],
+    answer:'Habitat loss, predators and hunting',
     hint:'Think about what humans did to forests and what animals they brought with them when they arrived.',
     explanation:'Endemic birds in Mauritius declined because of: (1) <b>Deforestation</b> - clearing native forest for agriculture/settlements destroyed habitats; (2) <b>Introduced predators</b> - rats, cats, and mongooses eat eggs and chicks; (3) <b>Hunting</b> - humans hunted birds for food. The Dodo went extinct by 1681 due to these combined pressures. Species like the Echo Parakeet recovered through conservation efforts.' }),
 
@@ -192,14 +157,9 @@ STATIC_QUESTIONS.push(
     explanation:'<b>True.</b> An <b>extinct</b> species is one where all members have died and the species no longer exists anywhere on Earth. The <b>Dodo</b> is Mauritius\'s most famous extinct bird - last seen in 1681. Extinction is <b>permanent and irreversible</b>. This is why conservation to prevent extinction is so critical.' }),
 
   makeMCQ({ id:'g6sci-con-019', chapterId:'g6-conservation', subsection:'endangered', difficulty:4,
-    question:'A developer wants to build a resort on the last remaining nesting beach of a critically endangered sea turtle in Mauritius. Using the principles of SUSTAINABLE DEVELOPMENT, what decision is BEST?',
-    options:[
-      'Build the resort immediately - economic growth is most important',
-      'Allow limited eco-tourism on the beach but protect the nesting areas from development',
-      'Fill in the sea to create a new beach for the turtles elsewhere',
-      'Move all the turtles to a zoo and build the resort'
-    ],
-    answer:'Allow limited eco-tourism on the beach but protect the nesting areas from development',
+    question:'A developer wants to build a resort on the last nesting beach of an endangered turtle. Which decision best follows sustainable development?',
+    options:['Protect the nesting area, allow eco-tourism', 'Build the resort - growth matters most', 'Fill in the sea to make a new beach', 'Move the turtles to a zoo and build'],
+    answer:'Protect the nesting area, allow eco-tourism',
     hint:'Sustainable development balances economic, social AND environmental needs.',
     explanation:'<b>Sustainable development</b> means meeting economic needs WITHOUT destroying the environment for future generations. Building the resort destroys the only nesting site (economic gain, permanent environmental loss). Moving turtles to a zoo removes them from their natural habitat. <b>Eco-tourism with protected nesting areas</b> balances economic benefit (tourism revenue) with environmental protection (turtle conservation) - the definition of sustainable development.' })
 

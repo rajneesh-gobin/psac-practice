@@ -6,13 +6,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-mat-001', chapterId:'g6-materials', subsection:'rusting', difficulty:1,
     question:'What is RUSTING?',
-    options:[
-      'Iron becoming stronger when exposed to air',
-      'Iron reacting with water and oxygen to form iron oxide (rust)',
-      'Iron melting when heated to a high temperature',
-      'Iron becoming magnetic when left outdoors'
-    ],
-    answer:'Iron reacting with water and oxygen to form iron oxide (rust)',
+    options:['Iron reacting with air and water', 'Iron melting when heated strongly', 'Iron becoming magnetic outdoors', 'Iron growing stronger in the air'],
+    answer:'Iron reacting with air and water',
     hint:'Rust is the reddish-brown substance that forms on iron.',
     explanation:'<b>Rusting</b> is a chemical reaction between iron, water and oxygen that produces <b>iron oxide</b> (rust) - the reddish-brown, flaky substance that weakens iron and steel objects.' }),
 
@@ -68,26 +63,16 @@ STATIC_QUESTIONS.push(
     explanation:'A <b>landfill</b> is a designated site where waste is buried in layers underground. Although widely used, landfills take up land, can leak harmful chemicals into groundwater, and produce methane gas as waste decomposes.' }),
 
   makeMCQ({ id:'g6sci-mat-008', chapterId:'g6-materials', subsection:'natural_manmade', difficulty:2,
-    question:'Why is plastic harmful to the environment even after it is thrown away?',
-    options:[
-      'Plastic dissolves quickly in seawater, making it salty',
-      'Plastic is non-biodegradable - it breaks into tiny microplastics that persist for centuries',
-      'Plastic absorbs all the sunlight, making it harder for plants to grow',
-      'Plastic is magnetic and disrupts the Earth\'s magnetic field'
-    ],
-    answer:'Plastic is non-biodegradable - it breaks into tiny microplastics that persist for centuries',
+    question:'Why is plastic harmful even after it is thrown away?',
+    options:['It does not rot for centuries', 'It dissolves and salts the sea', 'It blocks sunlight from plants', 'It disturbs the magnetic field'],
+    answer:'It does not rot for centuries',
     hint:'Plastic does not rot - it just breaks into smaller and smaller pieces.',
     explanation:'Plastic is <b>non-biodegradable</b>. Instead of breaking down into harmless substances, it fragments into tiny <b>microplastics</b> that enter waterways, oceans and food chains, causing harm to marine life and potentially to humans.' }),
 
   makeMCQ({ id:'g6sci-mat-009', chapterId:'g6-materials', subsection:'natural_manmade', difficulty:2,
     question:'Which of the following best prevents a metal gate from rusting?',
-    options:[
-      'Washing it with water every day',
-      'Keeping it in a very windy place',
-      'Painting it regularly to keep moisture and air away',
-      'Placing it near a source of heat'
-    ],
-    answer:'Painting it regularly to keep moisture and air away',
+    options:['Painting it regularly', 'Washing it with water daily', 'Placing it near a heat source', 'Keeping it in a windy place'],
+    answer:'Painting it regularly',
     hint:'Rust needs both water AND oxygen to form.',
     explanation:'<b>Painting</b> the gate regularly creates a waterproof barrier between the iron and the air/water. If water and oxygen cannot reach the iron, rusting cannot occur.' }),
 
@@ -135,14 +120,9 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Silk</b> is a natural fibre produced by silkworms (caterpillars of the Bombyx mori moth) to spin their cocoons. Other materials from animals include: <b>wool</b> (from sheep), <b>leather</b> (from animal hides), <b>beeswax</b>, <b>honey</b> and <b>feathers</b>. Cotton comes from a plant, wood from trees, and brick is man-made from clay.' }),
 
   makeMCQ({ id:'g6sci-mat-015', chapterId:'g6-materials', subsection:'natural_manmade', difficulty:2,
-    question:'Gold is a metal obtained from the Earth. Give one PROPERTY of gold. (PSAC 2025 Q7d)',
-    options:[
-      'It rusts quickly in rain',
-      'It is shiny, does not rust, and is a good conductor of electricity',
-      'It is magnetic and sticks to other metals',
-      'It is cheap and found in large quantities everywhere'
-    ],
-    answer:'It is shiny, does not rust, and is a good conductor of electricity',
+    question:'Give one PROPERTY of gold.',
+    options:['It is shiny and does not rust', 'It is magnetic and sticks to iron', 'It rusts quickly in the rain', 'It is cheap and very common'],
+    answer:'It is shiny and does not rust',
     hint:'Gold jewellery stays beautiful for thousands of years - why?',
     explanation:'<b>Gold</b> is prized because it: (1) is <b>shiny and attractive</b>; (2) does <b>not rust or corrode</b> - even ancient gold artefacts stay shiny; (3) is an excellent <b>conductor of electricity</b>, making it valuable in electronics. Gold\'s uses include jewellery, coins, electronic circuits and dental fillings.' }),
 
@@ -153,18 +133,13 @@ STATIC_QUESTIONS.push(
     explanation:'<b>True.</b> Experiments show that iron does NOT rust in dry air (oxygen only) and does NOT rust in boiled water sealed from air (water only). Rusting only occurs when <b>both water AND oxygen</b> are present. Salt water speeds up rusting because salt acts as an electrolyte that accelerates the chemical reaction.' }),
 
   makeMCQ({ id:'g6sci-mat-017', chapterId:'g6-materials', subsection:'rusting', difficulty:2,
-    question:'Apart from GALVANISING, name another way to prevent iron from rusting. (PSAC 2025 Q7e)',
-    options:[
-      'Washing with water daily',
-      'Leaving it outdoors in rain',
-      'Painting it to keep water and air away from the surface',
-      'Heating it to a high temperature'
-    ],
-    answer:'Painting it to keep water and air away from the surface',
-    hint:'Both water AND oxygen must be kept away from the iron surface.',
+    question:'Apart from galvanising, how can iron be stopped from rusting?',
+    options:['By painting it', 'By heating it strongly', 'By washing it daily', 'By leaving it in the rain'],
+    answer:'By painting it',
+    hint:'Rusting needs two things to reach the metal. Which option keeps them out, rather than supplying more of one?',
     explanation:'<b>Painting</b> is a common rust prevention method. Paint forms a physical barrier that keeps both water and oxygen away from the iron surface. Other methods include: <b>oiling/greasing</b> (for moving parts), <b>galvanising</b> (zinc coating), <b>tin plating</b> (food cans), and <b>using stainless steel</b> (an alloy that resists rust).' }),
 
-  makeMCQ({ id:'g6sci-mat-018', chapterId:'g6-materials', subsection:'properties', difficulty:3,
+  makeMCQ({ id:'g6sci-mat-018', chapterId:'g6-materials', subsection:'properties', difficulty:2,
     question:'Water can exist in THREE states. Which state is water in when it forms CLOUDS in the sky?',
     options:['Solid (ice)','Liquid (water)','Gas (water vapour)','Plasma'],
     answer:'Gas (water vapour)',

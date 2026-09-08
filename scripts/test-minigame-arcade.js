@@ -25,6 +25,7 @@ const ctx = vm.createContext({
   Auth: { getActiveAccount: () => ({ grade: 5 }) },
   console,
 });
+vm.runInContext(fs.readFileSync('engine/game_settings.js', 'utf8'), ctx);
 vm.runInContext(fs.readFileSync('engine/minigame_words.js', 'utf8'), ctx);
 vm.runInContext(fs.readFileSync('engine/minigame_geo.js', 'utf8'), ctx);
 vm.runInContext(fs.readFileSync('engine/minigame.js', 'utf8'), ctx);

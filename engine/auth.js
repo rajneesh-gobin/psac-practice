@@ -15,6 +15,10 @@ const Auth = (() => {
   let _parentProfile = null;   // profiles row
   let _family        = null;   // families row
   let _familyStudents = [];    // students rows for this family
+  // While init() is deciding who owns a shared device, it is the sole router.
+  // Supabase emits INITIAL_SESSION during the same window; allowing both paths
+  // to hydrate and navigate exposed the default dashboard for a moment.
+  let _bootRouting = true;
 
   let _activeAccount       = null;  // { id, name, avatar } - current student
   let _currentRole         = 'student'; // selected tab on auth screen
@@ -91,7 +95,7 @@ const Auth = (() => {
     if (u.length > 20)    return 'Username must be 20 characters or fewer.';
     if (!/^[a-z]/.test(u)) return 'Username must start with a letter.';
     if (!_USERNAME_RE.test(u)) {
-      return 'Username can only use letters, numbers, dots and underscores — no spaces or symbols.';
+      return 'Username can only use letters, numbers, dots and underscores - no spaces or symbols.';
     }
     return null;
   }
@@ -134,7 +138,7 @@ const Auth = (() => {
   // Expiry used to be a hard door: an expired parent or child was refused at
   // sign-in. It is a soft one now, because a chapter bought with referral
   // credits stays live for its full 30 days whether or not the account behind
-  // it has lapsed — and a family who spent credits has to be able to get to
+  // it has lapsed - and a family who spent credits has to be able to get to
   // what they bought.
   //
   // So an expired account signs in and reaches a restricted app: only chapters
@@ -306,13 +310,13 @@ const Auth = (() => {
   //
   // ⚠ A shared family phone can hold BOTH a parent's Supabase session and a
   // child's PIN session at once, and init() used to check the parent's first
-  // and `return` — so every reload threw the child into the parent dashboard
+  // and `return` - so every reload threw the child into the parent dashboard
   // mid-practice. That is the "suddenly his view switched to parent view"
   // report, and in a PWA it fires on every cold start, not just a refresh.
   //
   // Neither session expiring is the right signal: both are long-lived by
   // design. What matters is who most recently signed in ON PURPOSE, so that is
-  // what gets recorded — on the two deliberate acts, never on a restore, or
+  // what gets recorded - on the two deliberate acts, never on a restore, or
   // every reload would re-crown the parent and the bug would come straight back.
   const _LAST_MODE_KEY = 'psac_last_mode';
 
@@ -336,7 +340,7 @@ const Auth = (() => {
   }
 
   // ⚠ A stored student session with NO token cannot authorise anything, so it
-  // is not a session — every routing decision must read it as absent, and it is
+  // is not a session - every routing decision must read it as absent, and it is
   // dropped on sight. Without this, an install poisoned by the parent-preview
   // bug above stays poisoned: init() would resume it, find no token, and send a
   // perfectly valid parent session to the sign-in screen on every single reload.
@@ -361,19 +365,27 @@ const Auth = (() => {
   }
 
   // ⚠ A correct Parent PIN must never dead-end on "your sign-in has expired".
-  // The PIN is browser-local and cannot mint a Supabase session — but the
+  // The PIN is browser-local and cannot mint a Supabase session - but the
   // REFRESH TOKEN can, so keep our own copy of it beside the one supabase-js
   // persists. Same origin, same localStorage, no new exposure: persistSession
   // already writes that exact value under `mm_sb_auth`. The point of a second
   // copy is that supabase-js DELETES its own the moment a refresh fails once
   // (a tunnel, a sleeping phone, one flaky 3G hop), and that deletion is
-  // indistinguishable from a genuinely revoked session — which is how a parent
+  // indistinguishable from a genuinely revoked session - which is how a parent
   // who was still signed in got sent to the email screen with a correct PIN in
   // their hand.
   const _PARENT_SESS_KEY = 'psac_parent_sess_v1';
+  // ⚠ Deliberately a SEPARATE key from the stash, and deliberately not cleared
+  // with it. The stash holds a refresh token, which can legitimately die and be
+  // dropped; this holds only WHICH parent this browser belongs to, which stays
+  // true afterwards. It is the subject the server-side PIN sign-in needs, and
+  // keeping it inside the stash is how a correct PIN ended up with a verified
+  // parent and nobody to sign in as. It is not a credential: a user id is
+  // permanent client state, and only the PIN proves possession.
+  const _PARENT_UID_KEY  = 'psac_parent_uid_v1';
 
   // ⚠ A successful re-mint EMITS SIGNED_IN, so onAuthStateChange would route
-  // the parent as well — a second, uninvited trip through the biometric gate
+  // the parent as well - a second, uninvited trip through the biometric gate
   // and the dashboard, racing the one the caller is already awaiting. The
   // caller owns the routing for as long as it is recovering; the listener is
   // told to stay out of it (the stash is still written, which is the one thing
@@ -381,7 +393,13 @@ const Auth = (() => {
   let _suppressAuthEvents = false;
 
   function _stashParentSession(session) {
-    if (!session || !session.refresh_token) return;
+    if (!session) return;
+    // Written FIRST and independently: a session with no refresh_token still
+    // tells us who this browser belongs to.
+    try {
+      if (session.user?.id) localStorage.setItem(_PARENT_UID_KEY, session.user.id);
+    } catch (_) {}
+    if (!session.refresh_token) return;
     try {
       localStorage.setItem(_PARENT_SESS_KEY, JSON.stringify({
         rt: session.refresh_token,
@@ -389,6 +407,15 @@ const Auth = (() => {
         ts: Date.now(),
       }));
     } catch (_) {}
+  }
+
+  // Who this browser last had a parent session for, in descending order of
+  // freshness. Survives the stash being dropped, which is the whole point.
+  function _parentUidHint() {
+    if (_parentUser?.id) return _parentUser.id;
+    const st = _readParentStash();
+    if (st?.uid) return st.uid;
+    try { return localStorage.getItem(_PARENT_UID_KEY) || null; } catch (_) { return null; }
   }
   function _readParentStash() {
     try {
@@ -398,7 +425,7 @@ const Auth = (() => {
       return (st && st.rt) ? st : null;
     } catch (_) { return null; }
   }
-  // ⚠ Cleared only on a DELIBERATE sign-out — never from the SIGNED_OUT
+  // ⚠ Cleared only on a DELIBERATE sign-out - never from the SIGNED_OUT
   // handler. supabase-js emits SIGNED_OUT for a dropped refresh too, and that
   // is precisely the case this stash exists to recover from.
   function _clearParentStash() {
@@ -439,17 +466,41 @@ const Auth = (() => {
     // ⚠ Only now, and only once. Presenting a rotated-out refresh token can
     // revoke the whole token family server-side, so this is reached solely
     // when the session is already gone by every other measure and there is
-    // nothing left to lose. A refusal means the token really is dead — drop
+    // nothing left to lose. A refusal means the token really is dead - drop
     // it rather than replay it on every future PIN entry.
     const stash = _readParentStash();
     if (stash) {
+      let refused = false;
       try {
         const { data, error } = await _sb.auth.refreshSession({ refresh_token: stash.rt });
         if (!error && data?.session) return alive(data.session);
-      } catch (_) {}
-      _clearParentStash();
+        refused = _isTokenRefusal(error);
+      } catch (_) { refused = false; }
+      // ⚠ Only a REFUSAL burns the stash. This used to drop it on any failure
+      // at all, so one 502 from the edge, one captive portal that answered a
+      // redirect, one connection dropped mid-flight - none of which say
+      // anything about the token - disarmed the recovery permanently, and
+      // every correct PIN afterwards dead-ended at "sign in with your email".
+      // The token is only dead when GoTrue says so.
+      if (refused) _clearParentStash();
     }
     return null;
+  }
+
+  // "GoTrue looked at this token and said no" - as opposed to "we never got an
+  // answer". Anything 5xx, 429, or with no status at all is the network, not a
+  // verdict. Erring towards KEEPING the stash is the safe direction: replaying
+  // a dead token costs one refused request, while dropping a live one costs
+  // the parent their account on this device.
+  function _isTokenRefusal(error) {
+    if (!error) return false;
+    const status = Number(error.status || error.statusCode || 0);
+    if (status >= 500 || status === 429 || status === 408) return false;
+    if (status === 400 || status === 401 || status === 403) return true;
+    // No status, or one this does not recognise. GoTrue NAMES a dead token in
+    // the message; a network failure says 'Failed to fetch', which matches none
+    // of these, so the genuinely ambiguous case still keeps the stash.
+    return /invalid|not found|expired|revoked|already used|bad_jwt/i.test(String(error.message || ''));
   }
 
   let _parentRefreshHooksBound = false;
@@ -469,6 +520,12 @@ const Auth = (() => {
 
   // ── App init ───────────────────────────────────
   async function init() {
+    _bootRouting = true;
+    // A personal home-screen icon identifies WHO should own this launch before
+    // the ordinary shared-device parent/student arbitration runs. It may stage
+    // that child's saved revocable token, but it never stores or supplies a PIN.
+    const profileLaunch = typeof ProfileInstall !== 'undefined'
+      ? ProfileInstall.prepareLaunch() : null;
     _captureReferralFromUrl();
     _captureCoparentLink();
     _tryFriendLink();
@@ -476,8 +533,11 @@ const Auth = (() => {
     document.body.style.opacity = '0';
 
     if (location.search.includes('join=')) {
-      document.body.style.opacity = '1';
-      if (await _tryJoinLink()) return;
+      if (await _tryJoinLink()) {
+        _bootRouting = false;
+        document.body.style.opacity = '1';
+        return;
+      }
     }
 
     // 1. Listen for Supabase auth state changes (email verification callback lands here)
@@ -493,9 +553,13 @@ const Auth = (() => {
           return;
         }
         if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session && !_parentUser) {
+          // init() reads this same session and performs the first route. A user
+          // cannot initiate a new sign-in while the body is still hidden, so
+          // suppressing these boot events cannot discard a real interaction.
+          if (_bootRouting) return;
           // ⚠ Suppression is scoped to THIS arm and no other. A re-mint inside
           // _ensureParentSession() emits SIGNED_IN, and routing it here would
-          // race the caller that is already awaiting the same session — but
+          // race the caller that is already awaiting the same session - but
           // SIGNED_OUT must ALWAYS be honoured, including the one
           // _handleParentSession() raises itself for a disabled account. Left
           // suppressed, that sign-out never cleared _parentUser, and the next
@@ -531,7 +595,7 @@ const Auth = (() => {
 
       // 2. Both sessions can exist at once on a shared family device. Resolve
       //    WHO OWNS IT before routing, instead of letting the parent win by
-      //    virtue of being checked first — see _studentOwnsDevice().
+      //    virtue of being checked first - see _studentOwnsDevice().
       let { data: { session } } = await _sb.auth.getSession();
       // On a cold mobile start Supabase can still be restoring/refreshing its
       // persisted token when the first read happens. A missing first read is
@@ -546,7 +610,7 @@ const Auth = (() => {
         // supabase-js drops its own copy the first time a refresh fails, which
         // is not the same as being signed out. Without this, the same lapse the
         // PIN pad now recovers from still logged a parent out on a plain reload
-        // — no PIN involved, so nothing on screen even hinted why.
+        // - no PIN involved, so nothing on screen even hinted why.
         //
         // Gated on the stash EXISTING so a first-time visitor pays no latency
         // and makes no network call on the landing page, and suppressed for the
@@ -561,14 +625,38 @@ const Auth = (() => {
       session = await _refreshParentSessionIfNeeded(session);
       const storedStudent = _storedStudentSession();
 
-      if (_studentOwnsDevice(!!storedStudent, !!session)) {
+      // A teacher icon must not reopen the last child merely because both
+      // credentials still exist on a family tablet. If the matching adult
+      // session is valid, route it now; otherwise present the teacher email
+      // form with the remembered (non-secret) address filled in.
+      if (profileLaunch?.type === 'teacher') {
+        if (session?.user?.id === profileLaunch.userId) {
+          await _handleParentSessionGated(session);
+        } else {
+          _openTeacherProfileLogin(profileLaunch);
+        }
+        _bootRouting = false;
         document.body.style.opacity = '1';
+        return;
+      }
+
+      if (profileLaunch?.type === 'student' && !storedStudent) {
+        loginStudentProfile(profileLaunch, _launchPinNote(profileLaunch));
+        _bootRouting = false;
+        document.body.style.opacity = '1';
+        return;
+      }
+
+      if (_studentOwnsDevice(!!storedStudent, !!session)) {
         await _resumeStudentGated(storedStudent);
+        _bootRouting = false;
+        document.body.style.opacity = '1';
         return;
       }
       if (session) {
-        document.body.style.opacity = '1';
         await _handleParentSessionGated(session);
+        _bootRouting = false;
+        document.body.style.opacity = '1';
         return;
       }
     }
@@ -577,13 +665,28 @@ const Auth = (() => {
     //    (PIN login persists across refresh) is the only candidate left.
     const studentSess = _storedStudentSession();
     if (studentSess) {
-      document.body.style.opacity = '1';
       await _resumeStudentGated(studentSess);
+      _bootRouting = false;
+      document.body.style.opacity = '1';
       return;
     }
 
-    document.body.style.opacity = '1';
+    if (profileLaunch?.type === 'student') {
+      loginStudentProfile(profileLaunch, _launchPinNote(profileLaunch));
+      _bootRouting = false;
+      document.body.style.opacity = '1';
+      return;
+    }
+    if (profileLaunch?.type === 'teacher') {
+      _openTeacherProfileLogin(profileLaunch);
+      _bootRouting = false;
+      document.body.style.opacity = '1';
+      return;
+    }
+
     showScreen('landing');
+    _bootRouting = false;
+    document.body.style.opacity = '1';
   }
 
   // ── Biometric lock gate ─────────────────────────
@@ -655,7 +758,7 @@ const Auth = (() => {
       if (kind === 'student') await _resumeStudent(session);
       else                    await _handleParentSession(session);
     } else if (res.error !== 'cancelled' && statusEl) {
-      statusEl.textContent = "Couldn't verify — try again, or use the fallback below.";
+      statusEl.textContent = "Couldn't verify - try again, or use the fallback below.";
     }
   }
 
@@ -727,7 +830,7 @@ const Auth = (() => {
 
   // ⚠ A profile with no family is an INTERRUPTED SETUP, not a broken account.
   // completeSetup() writes the profile row, then the family, then the first
-  // child, with no transaction behind it — so anything that went wrong after
+  // child, with no transaction behind it - so anything that went wrong after
   // step 1 leaves precisely this state. Nothing used to route it anywhere: the
   // parent landed on a dashboard whose only message was "Your family record
   // could not be loaded", on every reload, with no way back to the setup
@@ -735,15 +838,15 @@ const Auth = (() => {
   // createFamily), so sending them back finishes the job.
   //
   // Two guards, and neither is optional:
-  //   • only when the query ANSWERED "no family" — Store.lastFamilyError()
+  //   • only when the query ANSWERED "no family" - Store.lastFamilyError()
   //     empty. Routing a failed READ into setup would write a second family
   //     over one that already exists, which a parent cannot undo.
-  //   • only role 'parent' — an admin lands on this dashboard with no family of
+  //   • only role 'parent' - an admin lands on this dashboard with no family of
   //     their own by design, and a co-parent's family arrives through
   //     my_member_family() inside getMyFamily().
   //   • only an account that is actually a FAMILY. A teacher who signs up on
   //     the teacher tab gets role 'parent' on purpose (see _bootstrapTeacherProfile
-  //     — the role only becomes 'teacher' when an admin approves) and has no
+  //     - the role only becomes 'teacher' when an admin approves) and has no
   //     family and no children, so the role test alone sent them to a screen
   //     demanding a child's name, username and 4-digit PIN before they could go
   //     anywhere. teacher_status is the signal that separates them; the
@@ -765,6 +868,12 @@ const Auth = (() => {
   }
 
   async function _loadParentFamily() {
+    // ⚠ Declared INSIDE this function on purpose: scripts/test-parent-family-loading.js
+    // extracts _loadParentFamily by slicing the file, so a helper above it is
+    // outside the slice and the test dies with a ReferenceError.
+    // Unknown profile ⇒ assume parent, so an unrecognised state keeps the old,
+    // patient behaviour rather than giving up early on a family that exists.
+    const _familyExpected = () => (_parentProfile?.role || 'parent') === 'parent';
     const parentId = _parentUser?.id;
     if (!parentId) return;
     for (let attempt = 0; attempt < 3; attempt++) {
@@ -779,7 +888,18 @@ const Auth = (() => {
           _cacheAccountsLocally(_familyStudents);
           return;
         }
-      } else if (attempt === 2) {
+      } else if (attempt === 2 || !_familyExpected()) {
+        // ⚠ The retry above exists for ONE race: family setup is a three-step
+        // wizard with no transaction, so a read can land between creating the
+        // family and being able to see it. Only a PARENT walks that wizard.
+        // An admin legitimately has no family of their own, so for them a null
+        // is the final answer - and retrying it cost three round trips plus
+        // 900ms of sleeps on every single tap of 🔒 Parent, with nothing on
+        // screen meanwhile, which is how a working button gets reported dead.
+        // ⚠ Do NOT gate this on lastFamilyError() instead: a null with no
+        // error is exactly what the wizard race looks like, so that reading
+        // removes the retry in the one case it was written for.
+        // scripts/test-parent-family-loading.js asserts that race.
         _family = null;
         _familyStudents = [];
         return;
@@ -808,6 +928,11 @@ const Auth = (() => {
 
     _parentProfile = profile;
 
+    // Fire and forget: moving a legacy localStorage-only PIN onto the server is
+    // housekeeping, and a parent must never wait on it to reach their own
+    // dashboard. It is what makes the PIN sign-in reachable for them at all.
+    _backfillDbPinFromLocal();
+
     // Closed by the parent themselves (Settings → Close my account). Nothing was
     // erased, so offer it back instead of letting them in to an app that looks
     // mysteriously empty. Read separately from getProfile() so a database
@@ -830,11 +955,16 @@ const Auth = (() => {
       return;
     }
 
-    // Expired is no longer a refusal — see isAccessExpired(). The parent signs
+    // Expired is no longer a refusal - see isAccessExpired(). The parent signs
     // in, sees the banner, and can still reach anything they bought with
     // credits (and the Shop, to spend what they have left). `disabled` above
     // stays a hard stop: that is a moderation decision, not a lapsed date.
     _setAccessExpired(!!(profile.expires_at && new Date(profile.expires_at) < new Date()));
+
+    // Read once: both the admin panel and the teaching workspace return the
+    // user to whichever they were working in before a browser/PWA refresh.
+    let lastScreen = null;
+    try { lastScreen = sessionStorage.getItem('psac-last-screen'); } catch (_) {}
 
     if (profile.role === 'admin') {
       _isAdminUser = true;
@@ -843,13 +973,9 @@ const Auth = (() => {
       const adminBtn = document.getElementById('btn-open-admin');
       if (adminBtn) adminBtn.classList.remove('hidden');
       _refreshAdminBadge();
-      // Return an administrator to the tool they were actively working in
-      // before a browser/PWA refresh, rather than forcing a dashboard detour.
-      let lastScreen = null;
-      try { lastScreen = sessionStorage.getItem('psac-last-screen'); } catch (_) {}
       if (lastScreen === 'admin') {
         showScreen('admin');
-        if (typeof AdminPanel !== 'undefined') AdminPanel.render();
+        RoleModules.withGroup('admin', () => AdminPanel.render());
         return;
       }
     }
@@ -864,6 +990,26 @@ const Auth = (() => {
     if (_isTeacherUser) {
       const tBtn = document.getElementById('btn-open-teacher');
       if (tBtn) { tBtn.classList.remove('hidden'); tBtn.classList.add('flex'); }
+    }
+
+    // Same courtesy as the admin panel above, and the reason a refresh inside
+    // the teaching workspace used to land on the parent dashboard: the role
+    // test further down matches only a profile whose role is literally
+    // 'teacher', so an ADMIN teaching a class fell straight through it.
+    if (_isTeacherUser && lastScreen === 'teacher') {
+      _loadTeacherDashboard();
+      return;
+    }
+
+    // Administrators can use the teaching tools too. A teacher-specific icon
+    // therefore opens the teaching workspace for either an approved teacher or
+    // an administrator instead of falling through to the parent dashboard.
+    const profileLaunch = typeof ProfileInstall !== 'undefined'
+      ? ProfileInstall.getLaunchBinding() : null;
+    if (_isTeacherUser && profileLaunch?.type === 'teacher' &&
+        profileLaunch.userId === profile.id) {
+      _loadTeacherDashboard();
+      return;
     }
 
     if (profile.role === 'teacher' && _isTeacherUser) {
@@ -957,7 +1103,7 @@ const Auth = (() => {
   function _loadTeacherDashboard() {
     applyTheme(_preferredTheme(null));
     showScreen('teacher');
-    if (typeof TeacherMode !== 'undefined') TeacherMode.render();
+    RoleModules.withGroup('teacher', () => TeacherMode.render());
   }
 
   function _updateHeaderProfileChip(type, account) {
@@ -983,7 +1129,7 @@ const Auth = (() => {
     _markActiveMode('parent');
     renderParentDashboard();
     showScreen('parent');
-    // Both logout buttons — the labelled desktop pill and its always-visible
+    // Both logout buttons - the labelled desktop pill and its always-visible
     // mobile twin. See the comment beside #header-logout-mobile in index.html.
     _setLogoutVisible(true);
     _updateHeaderProfileChip('parent', null);
@@ -1010,20 +1156,73 @@ const Auth = (() => {
     if (!sess.token) {
       Store.clearStudentSession();
       document.body.style.opacity = '1';
-      showScreen('auth');
+      const installed = typeof ProfileInstall !== 'undefined' ? ProfileInstall.getLaunchBinding() : null;
+      if (installed?.type === 'student' && installed.studentId === sess.id) {
+        ProfileInstall.clearStudentSessions(sess.id);
+        loginStudentProfile(installed);
+      } else {
+        showScreen('auth');
+      }
       toast('Please sign in again to continue.', 4000);
       return;
     }
 
     // Admin force-expire check - validate session_version against DB
     if (_sb) {
+      // ⚠ ZERO ROWS IS A VERDICT, NOT A SHRUG - and reading it as one is what
+      //   signed a child in against a session that no longer existed.
+      //   students_self_read is `id = current_student_id()` and session_version
+      //   carries its own column grant, so a LIVE session ALWAYS reads its own
+      //   row back here. A dead, revoked or replaced x-student-token makes
+      //   current_student_id() NULL, the policy match nothing, and PostgREST
+      //   answer 200 with [] - no error at all, so .maybeSingle() hands back
+      //   { data: null, error: null }. The old `if (sv)` then skipped the whole
+      //   check and resumed: the dashboard, the streak and the questions all
+      //   render from localStorage, so everything LOOKS fine, and the first
+      //   throttled write 30s later (_SAVE_MAX_WAIT_MS) is refused, raises
+      //   'session-invalid' and drops the child on the PIN pad reading "Your
+      //   session has expired" minutes into their work - with the launcher
+      //   having restored a stale token in prepareLaunch() without ever
+      //   checking it. Same shape as the DELETE that matched no row and was
+      //   read as success.
+      // ⚠ An ERROR is NOT a verdict. A missing column grant answers 42501 and
+      //   the client turns that into an empty result too; treating that as a
+      //   dead session would log every child out on one config slip. Only a
+      //   clean, successful, empty answer counts - the same direction
+      //   _isTokenRefusal() errs in for the parent's refresh token.
+      let sv = null, svError = null, answered = false;
       try {
-        const { data: sv } = await _sb.from('students').select('session_version, expires_at').eq('id', sess.id).maybeSingle();
+        const r = await _sb.from('students').select('session_version, expires_at').eq('id', sess.id).maybeSingle();
+        sv = r.data; svError = r.error; answered = true;
+      } catch (_) { /* offline - allow resume */ }
+
+      if (answered && !svError && !sv) {
+        Store.clearStudentSession();
+        document.body.style.opacity = '1';
+        const installed = typeof ProfileInstall !== 'undefined' ? ProfileInstall.getLaunchBinding() : null;
+        if (installed?.type === 'student' && installed.studentId === sess.id) {
+          ProfileInstall.clearStudentSessions(sess.id);
+          loginStudentProfile(installed);
+        } else {
+          showScreen('auth');
+        }
+        // Said BEFORE any work is done, not after five minutes of it.
+        toast('Your secure session has ended. Type your PIN to carry on.', 5000);
+        return;
+      }
+
+      {
         if (sv) {
           if (sv.session_version !== (sess.sessionVersion || 0)) {
             Store.clearStudentSession();
             document.body.style.opacity = '1';
-            showScreen('auth');
+            const installed = typeof ProfileInstall !== 'undefined' ? ProfileInstall.getLaunchBinding() : null;
+            if (installed?.type === 'student' && installed.studentId === sess.id) {
+              ProfileInstall.clearStudentSessions(sess.id);
+              loginStudentProfile(installed);
+            } else {
+              showScreen('auth');
+            }
             toast('Your session was ended by the administrator. Please log in again.', 5000);
             return;
           }
@@ -1033,7 +1232,7 @@ const Auth = (() => {
           // is what actually withholds everything else.
           _setAccessExpired(!!(sv.expires_at && new Date(sv.expires_at) < new Date()));
         }
-      } catch (_) { /* offline - allow resume */ }
+      }
     }
 
     _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar, grade: sess.grade };
@@ -1096,10 +1295,26 @@ const Auth = (() => {
     // "Pick a subject" even after they had opened History & Geography.
     let previousSubject = null;
     try { previousSubject = sessionStorage.getItem(`psac-active-subject:${sess.id}`); } catch (_) {}
+    if (previousSubject && typeof PackLoader !== 'undefined') {
+      await PackLoader.ensure(previousSubject).catch(() => {});
+    }
     const restoredPack = previousSubject && typeof activateSubjectPack === 'function'
       ? activateSubjectPack(previousSubject) : null;
-    // Always land on the student home hub regardless of restored subject.
-    // The hub's sticky notes let the child jump straight into wherever they left off.
+    // Return the child to the screen they were actually on. The pack has just
+    // been restored above, so a subject screen has everything it needs to paint.
+    // ⚠ Owner-checked: psac-last-screen is per device and siblings share a
+    // phone. A mismatch, an unlisted screen or a failed restore all fall
+    // through to the hub below - restoreKidScreen() returning false is the
+    // normal path, not an error.
+    let lastScreenOwner = null;
+    try { lastScreenOwner = sessionStorage.getItem('psac-last-screen-owner'); } catch (_) {}
+    if (lastKidScreen && lastScreenOwner === String(sess.id) && typeof restoreKidScreen === 'function') {
+      const landed = await restoreKidScreen(lastKidScreen, restoredPack ? previousSubject : null);
+      if (landed) return;
+    }
+
+    // Otherwise land on the student home hub. Its sticky notes let the child
+    // jump straight into wherever they left off.
     if (typeof StudentHome !== 'undefined') {
       StudentHome.open();
     } else {
@@ -1124,7 +1339,7 @@ const Auth = (() => {
     Events.on('session-invalid', async () => {
       // ⚠ _activeAccount is NOT proof that a child is signed in. pdSwitchStudent
       // sets it for a parent PREVIEWING a child, and that path deliberately has
-      // no student token at all — its reads and writes are authorised by the
+      // no student token at all - its reads and writes are authorised by the
       // PARENT's own JWT through owns_student_txt(). So a refusal there means
       // the parent's session lapsed, not the child's, and the old handler
       // answered it by clearing the child's session and dropping the parent onto
@@ -1132,10 +1347,10 @@ const Auth = (() => {
       // in their own dashboard. Same root cause as a correct Parent PIN being
       // refused; a different screen to be thrown off.
       //
-      // Renew it in place instead — the whole point of _ensureParentSession().
+      // Renew it in place instead - the whole point of _ensureParentSession().
       // Nothing is said to anybody if that works.
-      // _parentProfile IS _isParentSession() — that helper in app.js is exactly
-      // `!!Auth.getParentProfile()` — read here directly rather than reaching
+      // _parentProfile IS _isParentSession() - that helper in app.js is exactly
+      // `!!Auth.getParentProfile()` - read here directly rather than reaching
       // across modules for the same value.
       if (_parentProfile || !_storedStudentSession()) {
         if (_parentRenewing || !(_parentUser || _parentProfile)) return;
@@ -1143,7 +1358,7 @@ const Auth = (() => {
         try {
           if (await _ensureParentSession()) return;
           if (!navigator.onLine) {
-            toast('You are offline — changes are saved on this device and will sync when you reconnect.', 5000);
+            toast('You are offline - changes are saved on this device and will sync when you reconnect.', 5000);
             return;
           }
           toast('Your parent sign-in has ended. Please sign in with your email to continue.', 5000);
@@ -1155,11 +1370,18 @@ const Auth = (() => {
       if (_sessionEndedHandled || !_activeAccount) return;
       _sessionEndedHandled = true;
       _stopSessionGuard();
+      const endedId = _activeAccount.id;
       Store.clearStudentSession();
       _activeAccount = null;
       ACTIVE_STUDENT_ID = null;
-      showScreen('auth');
-      setRole('student');
+      const installed = typeof ProfileInstall !== 'undefined' ? ProfileInstall.getLaunchBinding() : null;
+      if (installed?.type === 'student' && installed.studentId === endedId) {
+        ProfileInstall.clearStudentSessions(endedId);
+        loginStudentProfile(installed);
+      } else {
+        showScreen('auth');
+        setRole('student');
+      }
       toast('Your session has expired. Please sign in again.', 5000);
     });
   }
@@ -1175,10 +1397,16 @@ const Auth = (() => {
         if (data && data.session_version !== version) {
           _stopSessionGuard();
           Store.clearStudentSession();
-          if (typeof showScreen === 'function') showScreen('auth');
+          const installed = typeof ProfileInstall !== 'undefined' ? ProfileInstall.getLaunchBinding() : null;
+          if (installed?.type === 'student' && installed.studentId === studentId) {
+            ProfileInstall.clearStudentSessions(studentId);
+            loginStudentProfile(installed);
+          } else if (typeof showScreen === 'function') {
+            showScreen('auth');
+          }
           if (typeof toast === 'function') toast('⚠️ Your account was logged in on another device. You have been signed out.', 6000);
         }
-      } catch(_) { /* offline — allow to continue */ }
+      } catch(_) { /* offline - allow to continue */ }
     };
 
     _sessionGuardTimer    = setInterval(() => { if (!document.hidden) _checkVersion(); }, 30 * 60 * 1000);
@@ -1238,7 +1466,7 @@ const Auth = (() => {
     //
     // ⚠ Only for a REAL login. A parent previewing a child (pdSwitchStudent)
     // arrives here with NO token, and a preview is not a sign-in. Persisting a
-    // tokenless session — and stamping the device 'student' — meant every later
+    // tokenless session - and stamping the device 'student' - meant every later
     // reload resumed a session that carries no credential, which _resumeStudent()
     // can only answer with "Please sign in again to continue.". One tap on a
     // child's card in the parent dashboard poisoned the stored session for good,
@@ -1246,22 +1474,25 @@ const Auth = (() => {
     // on. store.js's _flushProgressToSupabase() already documents the intended
     // contract: a parent previewing a child has no student session at all.
     //
-    // A preview still needs the two SIDE-EFFECTS of saveStudentSession — flush
+    // A preview still needs the two SIDE-EFFECTS of saveStudentSession - flush
     // the outgoing child's pending write, and drop any x-student-token so no
-    // query leaves under a different child's credential — but a real signed-in
+    // query leaves under a different child's credential - but a real signed-in
     // child's stored session is left untouched, so handing the phone back does
     // not cost them their PIN.
     if (token) {
       Store.saveStudentSession(sess);
+      if (typeof ProfileInstall !== 'undefined') {
+        ProfileInstall.captureStudentSession(sess, studentRow, _signInFamilyName());
+      }
       // A PIN login is the clearest statement there is about who is using this
-      // device — see _markActiveMode().
+      // device - see _markActiveMode().
       _markActiveMode('student');
     } else {
       try { await Store.flushPendingProgress(); } catch (_) {}
       if (typeof setStudentToken === 'function') setStudentToken(null);
     }
     // Remember what this child had to type, so next time they only need the PIN.
-    // ⚠ Family name and username only — never the PIN, which is the credential.
+    // ⚠ Family name and username only - never the PIN, which is the credential.
     _rememberKnownStudent(studentRow);
 
     // Connect any pending friend invite (captured from ?friend= URL before login)
@@ -1343,9 +1574,13 @@ const Auth = (() => {
       QuestionLoader.useStudent?.(studentRow.id);
       QuestionLoader.loadForStudent(studentGrade).catch(() => {});
     }
+    // Same reason QuestionLoader.useStudent() exists: switching child never
+    // reloads the page, so a module-scoped cache would hand the next child the
+    // previous child's per-question progress.
+    if (typeof QuestionProgress !== 'undefined') QuestionProgress.reset(studentRow.id);
 
     // Show header logout button and profile chip
-    // Both logout buttons — the labelled desktop pill and its always-visible
+    // Both logout buttons - the labelled desktop pill and its always-visible
     // mobile twin. See the comment beside #header-logout-mobile in index.html.
     _setLogoutVisible(true);
     if (headerChip) _updateHeaderProfileChip('student', studentRow);
@@ -1363,7 +1598,7 @@ const Auth = (() => {
       // back to the parent dashboard.
       //
       // It lives HERE rather than in switchToStudentSelect() because it must
-      // happen only once the PIN has actually been accepted — clearing it before
+      // happen only once the PIN has actually been accepted - clearing it before
       // the attempt strands a parent who mistypes. pdSwitchStudent() passes
       // navigate:false precisely because it is the parent PREVIEWING a child and
       // must stay a parent.
@@ -1394,12 +1629,12 @@ const Auth = (() => {
   //  KNOWN STUDENTS ON THIS DEVICE
   //
   //  A returning child had to type the family name, their username AND a PIN,
-  //  every time — on a phone their family has used for months. The family name
+  //  every time - on a phone their family has used for months. The family name
   //  in particular is the same for everybody in the house and is the field they
   //  are least likely to get right.
   //
   //  ⚠ Only the two IDENTIFYING fields are remembered. The PIN is the
-  //  credential and is never stored — verify_student_pin() still checks it in
+  //  credential and is never stored - verify_student_pin() still checks it in
   //  the database exactly as before. This removes typing, not a security step.
   // ══════════════════════════════════════════════
   const _KNOWN_KEY = 'psac_known_students';
@@ -1411,11 +1646,20 @@ const Auth = (() => {
     } catch (_) { return []; }
   }
 
-  function _rememberKnownStudent(studentRow) {
-    if (!studentRow || !studentRow.id) return;
-    const family = (_family && _family.family_name)
+  // ⚠ The students row has NO family_name - that column lives on families -
+  //   so anything needing it must take it from the loaded family or from the
+  //   box the child just typed into. Two callers need it and they have to
+  //   agree, or a personal shortcut remembers a different family from the
+  //   quick-sign-in list and then offers the FULL form instead of the PIN pad.
+  function _signInFamilyName() {
+    return (_family && _family.family_name)
       || (_el('student-family-name') && _el('student-family-name').value.trim())
       || '';
+  }
+
+  function _rememberKnownStudent(studentRow) {
+    if (!studentRow || !studentRow.id) return;
+    const family = _signInFamilyName();
     const list = _knownStudents().filter(x => x.id !== studentRow.id);
     list.unshift({
       id:       studentRow.id,
@@ -1437,7 +1681,7 @@ const Auth = (() => {
   }
 
   // Collapses the student form to the PIN alone. The other two fields keep
-  // their values (checkStudentReady and studentSignIn still read them) — they
+  // their values (checkStudentReady and studentSignIn still read them) - they
   // are hidden, not emptied, so the existing sign-in path is untouched.
   function _setQuickPinMode(on, label) {
     const wrap = _el('student-quick');
@@ -1457,33 +1701,61 @@ const Auth = (() => {
     if (f) setTimeout(() => f.focus(), 60);
   }
 
-  function loginStudent(id) {
+  // A saved shortcut holds no PIN, by design - only a revocable session token.
+  // When that token is gone the child must type four digits, and this is the
+  // sentence that explains why so it does not read as the app forgetting them.
+  const _launchPinNote = b =>
+    `Welcome back, ${(b && b.name) || 'there'}! Your secure session has ended - type your PIN to carry on.`;
+
+  // ⚠ SAY SOMETHING. Opening a saved shortcut whose session has ended used to
+  //   drop the child on the sign-in screen with no message at all: they tapped
+  //   their own face, the app reloaded, and they were simply looking at a login
+  //   form. Reported exactly that way - "it tell me to choose the person and I
+  //   go back to the login screen with no warning or message". The session
+  //   ending is normal and expected; being told nothing is not.
+  function loginStudentProfile(profile, note) {
+    const id = profile?.studentId || profile?.id;
+    if (!id) return;
     const student = (_familyStudents || []).find(s => s.id === id);
-    const account = student || Store.getAccounts().find(a => a.id === id);
-    if (!account) return;
+    const account = student || Store.getAccounts().find(a => a.id === id) || profile;
 
     showScreen('auth');
     setRole('student');
 
     // Everything except the PIN comes from what this device already knows.
     const known = _knownStudents().find(k => k.id === id) || {};
-    const uname = student?.username || known.username || '';
-    const fam   = (_family && _family.family_name) || known.family || '';
+    const uname = student?.username || known.username || profile?.username || '';
+    const fam   = (_family && _family.family_name) || known.family || profile?.family || '';
 
     const el = _el('student-username');
     if (el) el.value = uname;
     const famEl = _el('student-family-name');
     if (famEl) famEl.value = fam;
 
-    const label = student?.display_name || known.name || account.name || 'your account';
-
-    // PIN-only only when we genuinely have the other two. Without them the
-    // button would sit disabled with no visible reason why.
+    const label = student?.display_name || known.name || account?.name || profile?.name || 'your account';
     _setQuickPinMode(!!(uname && fam), label);
 
     const pinEl = _el('student-pin');
     if (pinEl) { pinEl.value = ''; setTimeout(() => pinEl.focus(), 80); }
     checkStudentReady();
+    if (note && typeof toast === 'function') toast(note, 5000);
+  }
+
+  function _openTeacherProfileLogin(profile) {
+    showScreen('auth');
+    setRole('teacher');
+    showSignIn();
+    const email = _el('auth-email');
+    if (email && profile?.email) email.value = profile.email;
+    const pass = _el('auth-pass');
+    if (pass) { pass.value = ''; setTimeout(() => pass.focus(), 80); }
+  }
+
+  function loginStudent(id) {
+    const student = (_familyStudents || []).find(s => s.id === id);
+    const account = student || Store.getAccounts().find(a => a.id === id);
+    if (!account) return;
+    loginStudentProfile({...account, ...student, studentId: id});
   }
 
   // ══════════════════════════════════════════════
@@ -1494,7 +1766,7 @@ const Auth = (() => {
     _currentRole = role;
     // ⚠ Quick sign-in is entered only via loginStudent(), which knows WHO is
     // signing in. Tapping the Student tab directly is the generic route, so the
-    // full form must come back — otherwise the previous child's name would sit
+    // full form must come back - otherwise the previous child's name would sit
     // above a PIN box for whoever tapped next.
     _setQuickPinMode(false);
 
@@ -1553,6 +1825,7 @@ const Auth = (() => {
     _setAuthLoading(true);
     const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
     _setAuthLoading(false);
+    if (!error) _markPinMinted(false);
 
     if (error) {
       // ⚠ Route on the CODE first. GoTrue answers 400 with
@@ -1577,7 +1850,7 @@ const Auth = (() => {
       return;
     }
     // onAuthStateChange may handle routing, but it's async and not awaited by
-    // Supabase — if the event fires late or is missed, the user stays stuck on
+    // Supabase - if the event fires late or is missed, the user stays stuck on
     // the auth screen even though their session was stored. Drive routing here
     // directly using the session returned by signInWithPassword itself.
     // _handleParentSessionGated's own `if (_parentUser) return` guard prevents
@@ -1592,9 +1865,9 @@ const Auth = (() => {
   // behind the same status, and its own wording ("email rate limit exceeded")
   // means nothing to a parent and does not say whether the problem is theirs or
   // ours:
-  //   • over_request_rate_limit  — the per-ADDRESS floor (smtp_max_frequency,
+  //   • over_request_rate_limit  - the per-ADDRESS floor (smtp_max_frequency,
   //     60s live). This one is the caller's own doing and clears in a minute.
-  //   • over_email_send_rate_limit — the PROJECT-WIDE hourly cap, which is
+  //   • over_email_send_rate_limit - the PROJECT-WIDE hourly cap, which is
   //     Supabase's built-in test sender at 2/hour until custom SMTP is
   //     configured. Nothing the caller does clears it, and telling them to
   //     "try again" makes them retry immediately and consume the next slot.
@@ -1615,7 +1888,7 @@ const Auth = (() => {
         : `Please wait a minute before asking for another ${thing}.`;
     }
     if (code === 'over_email_send_rate_limit' || /email rate limit|rate limit exceeded/i.test(msg)) {
-      return `We could not send your ${thing} — our mail service has hit its hourly limit. `
+      return `We could not send your ${thing} - our mail service has hit its hourly limit. `
            + 'This is on our side, not yours. Please try again in an hour, or contact us for help.';
     }
     return msg || 'Something went wrong. Please try again.';
@@ -1665,7 +1938,7 @@ const Auth = (() => {
     // on the project's email-enumeration setting: as an explicit error, or as a
     // success with an EMPTY identities array and no new confirmation sent.
     // Either way, silently showing "check your email" would leave them waiting
-    // for a message that never comes — and if they closed the account earlier,
+    // for a message that never comes - and if they closed the account earlier,
     // signing in is exactly what gets it back.
     const alreadyRegistered =
       (error && /already\s*(registered|exists|been registered)|user already/i.test(error.message)) ||
@@ -1687,7 +1960,7 @@ const Auth = (() => {
     // configured. signUp() returns a live session when the project confirms
     // email automatically (mailer_autoconfirm), and none when it sends a link.
     // Sending someone who is already signed in to "click the link in the email"
-    // leaves them staring at an inbox that will never receive anything — which
+    // leaves them staring at an inbox that will never receive anything - which
     // is exactly what turning autoconfirm on does to this screen. Routing off
     // the session covers both settings, so flipping it back needs no code
     // change either.
@@ -1855,7 +2128,7 @@ const Auth = (() => {
   function openAdminPanel() {
     if (!_isAdminUser) return;
     showScreen('admin');
-    if (typeof AdminPanel !== 'undefined') AdminPanel.render();
+    RoleModules.withGroup('admin', () => AdminPanel.render());
   }
 
   // ── Teacher dashboard toggle ───────────────────
@@ -1928,7 +2201,7 @@ const Auth = (() => {
     }
 
     // Re-enter the normal login path from the top so family and children are
-    // re-fetched — they were invisible to every query a moment ago.
+    // re-fetched - they were invisible to every query a moment ago.
     const { data: { session } } = await _sb.auth.getSession();
     if (btn) { btn.disabled = false; btn.textContent = '♻️ Restore my account'; }
     _parentProfile = null;
@@ -1956,6 +2229,7 @@ const Auth = (() => {
     const showErr = msg => { if (errEl) { errEl.textContent = msg; errEl.classList.remove('hidden'); } };
     if (pass.length < 6) { showErr('Password must be at least 6 characters.'); return; }
     if (pass !== confirm){ showErr('Passwords do not match.');                  return; }
+    if (isPinOnlySession()) { showErr(_PIN_ONLY_PASSWORD_MSG); return; }
     const { error } = await _sb.auth.updateUser({ password: pass });
     if (error) { showErr(error.message); return; }
     closePasswordModal();
@@ -1973,7 +2247,7 @@ const Auth = (() => {
       : location.origin + location.pathname;
   }
   function _inviteText() {
-    return `Join me on PSAC Exam Practice — free PSAC revision for Grades 4–6! 📚`;
+    return `Join me on PSAC Exam Practice - free PSAC revision for Grades 4–6! 📚`;
   }
 
   async function openInviteModal() {
@@ -1990,7 +2264,7 @@ const Auth = (() => {
     if (m) m.classList.remove('hidden');
 
     if (!_myReferralCode && _parentUser) _myReferralCode = await Store.getMyReferralCode(_parentUser.id);
-    if (codeEl) codeEl.textContent = _myReferralCode || '—';
+    if (codeEl) codeEl.textContent = _myReferralCode || '-';
     if (linkEl) linkEl.textContent = _inviteLink();
 
     // Paint from cache first so the panel is never empty, then from the server.
@@ -2012,7 +2286,7 @@ const Auth = (() => {
               <div class="text-xs text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleDateString()}</div>
             </div>
           </div>`).join('')
-        : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No one yet — share your link to get started!</p>';
+        : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No one yet - share your link to get started!</p>';
     }
   }
   function closeInviteModal() {
@@ -2059,7 +2333,37 @@ const Auth = (() => {
     if (!confirm(`Delete ALL progress for ${studentName}?\n\nThis cannot be undone.`)) return;
     if (!confirm('Final confirmation - all chapters, XP and badges will be lost.')) return;
     if (!_sb) return;
-    await _sb.from('student_progress').delete().eq('student_id', studentId);
+
+    // ⚠ Verify by READING THE ROW BACK, and only clear the local copy once the
+    //   server row is provably gone.
+    //
+    //   A DELETE whose RLS policy matches no row returns no error and no rows,
+    //   so the old code - a bare await, then removeItem, then an unconditional
+    //   "progress has been reset" - could not tell a refusal from a success and
+    //   claimed success either way. The local wipe then made it WORSE, not
+    //   cosmetic: loadStudentProgress() keeps the local copy only while
+    //   localN > remoteN, so with local at zero the surviving server row wins
+    //   and every bit of the "deleted" progress comes back on the next sync.
+    //   The parent confirms twice, is told it worked, and watches it return.
+    //
+    //   0 rows deleted is genuinely ambiguous from here (a child who has never
+    //   practised has no row at all), which is why this re-reads instead of
+    //   guessing: a row still present after the delete is a refusal, full stop.
+    const { error } = await _sb.from('student_progress')
+      .delete().eq('student_id', studentId).select('student_id');
+    if (error) {
+      console.error('[confirmResetStudentProgress]', error.code, error.message);
+      toast(`Could not reset ${studentName}'s progress: ${error.message}`, 4000);
+      return;
+    }
+    const { data: left, error: readErr } = await _sb.from('student_progress')
+      .select('student_id').eq('student_id', studentId).limit(1);
+    if (!readErr && left && left.length) {
+      console.error('[confirmResetStudentProgress] row survived the delete for', studentId);
+      toast(`${studentName}'s progress could NOT be reset. Nothing has been changed.`, 5000);
+      return;
+    }
+
     try { localStorage.removeItem(`mathmaster_s_${studentId}`); } catch(e) {}
     toast(`${studentName}'s progress has been reset.`, 3000);
     renderParentDashboard();
@@ -2128,7 +2432,7 @@ const Auth = (() => {
     _setAuthLoading(true);
 
     // Single verification path for EVERY environment: verify_student_pin(),
-    // which (after supabase-migration.sql) delegates the credential
+    // which (after supabase-schema.sql) delegates the credential
     // check to verify_student_pin_core() and appends a session token.
     //
     // We deliberately call verify_student_pin rather than mint_student_session:
@@ -2151,7 +2455,7 @@ const Auth = (() => {
     if (error) {
       // 42883 = undefined_function. Transient right after the RPC is created,
       // while PostgREST's schema cache catches up - and permanent if
-      // supabase-migration.sql was never run at all. Distinguish it,
+      // supabase-schema.sql was never run at all. Distinguish it,
       // because "try again in a moment" and "a migration is missing" need very
       // different reactions.
       const missing = error.code === '42883'
@@ -2185,7 +2489,7 @@ const Auth = (() => {
     // and the rename is the permanent fix rather than the only one.
     if (data.error === 'ambiguous_family') {
       _showAuthError('Another family uses this name too, so we cannot tell which account is yours. '
-        + 'Type your 6-letter family code in the family box instead — your parent can '
+        + 'Type your 6-letter family code in the family box instead - your parent can '
         + 'find it in Settings → Family Login.');
       return;
     }
@@ -2224,7 +2528,7 @@ const Auth = (() => {
       // sees current_student_id() = NULL, so the student can read nothing.
       // Fail loudly rather than dropping them into a silently broken app.
       _showAuthError('Login is temporarily unavailable. Please tell your parent (session service not deployed).');
-      console.error('[auth] mint_student_session returned no session_token - run supabase-migration.sql');
+      console.error('[auth] mint_student_session returned no session_token - run supabase-schema.sql');
       return;
     }
 
@@ -2279,7 +2583,7 @@ const Auth = (() => {
       const e = profile && profile._error;
       // ⚠ The code, on screen. This is a dead end for whoever hits it, and
       // "please try again" is unactionable for both them and anyone debugging
-      // it — a 42501 (a column with no GRANT) and a dropped connection need
+      // it - a 42501 (a column with no GRANT) and a dropped connection need
       // completely different answers and used to look identical here.
       toast(e && e.code === 'offline'
         ? 'No connection to the server. Check your internet and try again.'
@@ -2328,10 +2632,17 @@ const Auth = (() => {
     toast(`Family set up! Family code: ${family.family_code} 🎉`, 5000);
     launchConfetti();
     _openParentDashboard();
+    // The parent has just created their first child. Point out the hand-over
+    // control once, after the dashboard has painted; the guide remembers that
+    // it was shown and quietly dismisses itself if untouched.
+    if (typeof showStudentViewGuide === 'function') {
+      setTimeout(showStudentViewGuide, 700);
+    }
   }
 
   // ── Logout ─────────────────────────────────────
   async function logout() {
+    const signedInStudentId = Store.getStudentSession()?.id || null;
     _stopSessionGuard();
     // Drop the server-side session before clearing the local token, otherwise
     // the RPC has no x-student-token to identify which sessions to delete.
@@ -2372,7 +2683,9 @@ const Auth = (() => {
     document.documentElement.removeAttribute('data-kid-vibe');
     document.documentElement.classList.remove('kid-calm', 'kid-text-lg');
     if (typeof QuestionLoader !== 'undefined') QuestionLoader.useStudent?.(null);
+    if (typeof QuestionProgress !== 'undefined') QuestionProgress.reset(null);
     _clearParentStash();
+    _markPinMinted(false);
     if (_sb) await _sb.auth.signOut();
     showScreen('landing');
   }
@@ -2415,7 +2728,7 @@ const Auth = (() => {
     if (!ACTIVE_STUDENT_ID) return { ok: false, error: 'Open a child first.' };
     pin = String(pin || '').trim();
     if (!/^\d{4}$/.test(pin)) return { ok: false, error: 'PIN must be exactly 4 digits.' };
-    if (_isWeakPin(pin)) return { ok: false, error: 'That PIN is too easy to guess — try something less obvious (not 1111, 1234, etc.).' };
+    if (_isWeakPin(pin)) return { ok: false, error: 'That PIN is too easy to guess - try something less obvious (not 1111, 1234, etc.).' };
     const ok = await _setStudentPin(ACTIVE_STUDENT_ID, pin);
     if (!ok) return { ok: false, error: 'Could not save the PIN. Please try again.' };
     _justSetPins[ACTIVE_STUDENT_ID] = pin;
@@ -2521,7 +2834,7 @@ const Auth = (() => {
     if (existingId) {
       // Edit mode - PIN is optional; blank = keep existing PIN
       if (pin && !/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
-      if (pin && _isWeakPin(pin)) { toast('That PIN is too easy to guess — try something less obvious (not 1111, 1234, etc.).', 3500); return; }
+      if (pin && _isWeakPin(pin)) { toast('That PIN is too easy to guess - try something less obvious (not 1111, 1234, etc.).', 3500); return; }
       const updates = { displayName: name, grade, avatar: _addAvatar,
         settings: ((_familyStudents.find(s => s.id === existingId))?.settings || { lockedChapters:[], maxDifficulty:4, examDisabled:false }) };
       await Store.updateStudent(existingId, updates);
@@ -2536,7 +2849,7 @@ const Auth = (() => {
     } else {
       // Create mode - PIN is required
       if (!/^\d{4}$/.test(pin)) { toast('PIN must be exactly 4 digits.', 2000); return; }
-      if (_isWeakPin(pin)) { toast('That PIN is too easy to guess — try something less obvious (not 1111, 1234, etc.).', 3500); return; }
+      if (_isWeakPin(pin)) { toast('That PIN is too easy to guess - try something less obvious (not 1111, 1234, etc.).', 3500); return; }
       const student = await Store.createStudent(_family.id, {
         username: uname, displayName: name, avatar: _addAvatar, grade, pin,
       });
@@ -2564,7 +2877,7 @@ const Auth = (() => {
     const fetched = await Store.getFamilyStudents(_family.id);
     if (_justCreated && !fetched.some(s => s.id === _justCreated.id)) {
       _familyStudents = [...fetched, _justCreated];
-      console.warn('[auth] new child missing from the refetch — showing the created row.',
+      console.warn('[auth] new child missing from the refetch - showing the created row.',
         Store.lastFamilyStudentsError?.() || '');
     } else {
       _familyStudents = fetched;
@@ -2574,7 +2887,7 @@ const Auth = (() => {
     _cacheAccountsLocally(_familyStudents);
     _openParentDashboard();
 
-    // Straight into "send it to them" — the moment the parent has the PIN in
+    // Straight into "send it to them" - the moment the parent has the PIN in
     // front of them is the only moment they can pass it on without resetting it.
     if (created && typeof openChildLoginModal === 'function') {
       openChildLoginModal(created, pin);
@@ -2601,7 +2914,7 @@ const Auth = (() => {
 
   // ⚠ ACTIVE_STUDENT_ID, not the stored student session. This is the ✏️ Edit
   // button in the parent dashboard's child panel, and a parent previewing a
-  // child deliberately has no student session — see _loginStudentRow(). Matches
+  // child deliberately has no student session - see _loginStudentRow(). Matches
   // deleteCurrentStudent() right below, which always read it from there.
   function editCurrentStudent() {
     if (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID) editStudent(ACTIVE_STUDENT_ID);
@@ -2658,16 +2971,23 @@ const Auth = (() => {
 
   // ── Student switches back to login (logout from student) ──
   async function switchStudent() {
+    const endedId = _activeAccount?.id || Store.getStudentSession()?.id;
     _stopSessionGuard();
     await Store.endStudentSession();
     Store.clearStudentSession();
+    if (signedInStudentId && typeof ProfileInstall !== 'undefined') {
+      ProfileInstall.clearStudentSessions(signedInStudentId);
+    }
+    if (endedId && typeof ProfileInstall !== 'undefined') {
+      ProfileInstall.clearStudentSessions(endedId);
+    }
     _activeAccount    = null;
     ACTIVE_STUDENT_ID = null;
     showScreen('landing');
   }
 
   // "Switch to student mode" from the parent dashboard. The parent is signed in on this
-  // device and the app already knows every child in the family by name — so
+  // device and the app already knows every child in the family by name - so
   // asking them to retype the family name and a username on the full sign-in
   // screen was work with no purpose. Pick a face, tap four digits.
   //
@@ -2698,7 +3018,7 @@ const Auth = (() => {
   // ══════════════════════════════════════════════
   // Incremented every time _loginStudentRow() actually hands the device over.
   // ⚠ The switch modal decides success by watching this, NOT by testing whether
-  // _parentProfile is now null — null is also the state when no parent was
+  // _parentProfile is now null - null is also the state when no parent was
   // signed in to begin with, which would read a rejected PIN as a success.
   let _handovers = 0;
 
@@ -2735,7 +3055,7 @@ const Auth = (() => {
     _el('modal-student-switch')?.classList.remove('hidden');
     _swError('');
     // One child in the family: there is nothing to choose, so choose it. The
-    // chip still renders — it is what tells them whose PIN is being asked for.
+    // chip still renders - it is what tells them whose PIN is being asked for.
     if (kids.length === 1) _swPickKid(kids[0].id);
     else { _swRenderKids(kids); _swRenderDots(); }
     document.addEventListener('keydown', _swKeydown);
@@ -2833,7 +3153,7 @@ const Auth = (() => {
       _swBusy = false;
     }
     // Success is the device actually being handed over. Checking
-    // ACTIVE_STUDENT_ID would not work — pdSwitchStudent() has usually already
+    // ACTIVE_STUDENT_ID would not work - pdSwitchStudent() has usually already
     // set it to this very child so the Controls tab has something to read.
     if (_handovers > before) {
       closeStudentSwitch();
@@ -2909,10 +3229,114 @@ const Auth = (() => {
       return ok;
     }
 
-    // DB unreachable — localStorage is the only option.
+    // DB unreachable - localStorage is the only option.
     const local = _getStoredPinHash();
     if (!local) return false;
     return local === btoa(pin + ':psac_v1');
+  }
+
+  // ── Server-side PIN sign-in ────────────────────
+  // The step AFTER _ensureParentSession() runs out of refresh tokens. The
+  // server verifies the PIN against profiles.parent_pin_hash - which the
+  // browser cannot read without a session, which is exactly what is missing -
+  // and mints a session for it.
+  //
+  // ⚠ This is why the PIN is now a real credential and not just a UI gate.
+  // The throttle that makes 4 digits defensible is server-side, in a table the
+  // browser has no grant on; nothing here may be trusted to enforce it.
+  // Said the same way in both password forms. It is not a refusal of the
+  // parent - it is a refusal of four digits standing in for a password while
+  // that password is being replaced.
+  const _PIN_ONLY_PASSWORD_MSG =
+    'You signed in with your Parent PIN. To change your password, sign out and '
+    + 'sign in with your email and password first.';
+  const _PIN_SIGNIN_URL  = '/api/parent-pin-signin';
+  const _PIN_MINTED_KEY  = 'psac_pin_session_v1';
+  let   _pinMintedSession = false;
+
+  // ⚠ An UNDEPLOYED /api/ route answers with the SPA fallback: index.html, with
+  // status 404. response.json() then throws, and code that reads that as {}
+  // reports the server's own refusal for a request the server never saw. Check
+  // the content type first - same trap AdminPanel._adminApi() carries.
+  async function _pinServerSignIn(pin) {
+    if (!_sb) return { ok: false, error: 'unavailable' };
+    const uid = _parentUidHint();
+    if (!uid) return { ok: false, error: 'unknown_parent' };
+    let res;
+    try {
+      res = await fetch(_PIN_SIGNIN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: uid, pin }),
+      });
+    } catch (_) { return { ok: false, error: 'unavailable' }; }
+
+    if (!(res.headers.get('content-type') || '').includes('application/json')) {
+      return { ok: false, error: 'unavailable' };
+    }
+    let body;
+    try { body = await res.json(); } catch (_) { return { ok: false, error: 'unavailable' }; }
+
+    if (res.status === 423) return { ok: false, error: 'locked', retry_after_s: body?.retry_after_s || 900 };
+    if (res.status === 401) return { ok: false, error: 'invalid' };
+    if (!res.ok || !body?.ok)  return { ok: false, error: 'unavailable' };
+
+    const { data, error } = await _sb.auth.setSession({
+      access_token: body.access_token,
+      refresh_token: body.refresh_token,
+    });
+    if (error || !data?.session) return { ok: false, error: 'unavailable' };
+    _stashParentSession(data.session);
+    _markPinMinted(true);
+    return { ok: true, session: data.session };
+  }
+
+  // ⚠ A session obtained with four digits must not be able to REPLACE the
+  // password those four digits were a shortcut around - that is the one path
+  // by which a child who watched their parent type the PIN could lock the
+  // parent out of their own account. Survives a reload (sessionStorage) but
+  // not a new tab-less launch, and is cleared by any full sign-in.
+  function _markPinMinted(on) {
+    _pinMintedSession = !!on;
+    try {
+      if (on) sessionStorage.setItem(_PIN_MINTED_KEY, '1');
+      else    sessionStorage.removeItem(_PIN_MINTED_KEY);
+    } catch (_) {}
+  }
+  function isPinOnlySession() {
+    if (_pinMintedSession) return true;
+    try { return sessionStorage.getItem(_PIN_MINTED_KEY) === '1'; } catch (_) { return false; }
+  }
+
+  // The PIN pad's "that is not it" state, in one place: the shake is shown from
+  // two branches now (a local miss the server also refused, and a local miss
+  // with no server to ask).
+  function _pinWrong() {
+    _parentPinEntry = '';
+    _updatePinDots('pin-dot-', 0);
+    document.getElementById('pin-entry-error')?.classList.remove('hidden');
+    if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+  }
+
+  // ⚠ btoa is not a hash - atob() gives the PIN straight back. That is a
+  // statement about how weak the localStorage copy always was, and here it is
+  // the one useful consequence: a parent who set their PIN before
+  // profiles.parent_pin_hash existed can have it moved to the server silently,
+  // on the next visit where they hold a real session, instead of discovering
+  // years later that PIN recovery never covered them.
+  async function _backfillDbPinFromLocal() {
+    try {
+      if (!_parentUser) return;
+      const local = _getStoredPinHash();
+      if (!local) return;
+      if (await _fetchDbPinHash(true)) return;
+      const plain = (atob(local) || '').split(':')[0];
+      if (!/^d{4}$/.test(plain)) return;
+      const hash = await _hashPinForDb(plain);
+      if (!hash) return;
+      await _sb.from('profiles').update({ parent_pin_hash: hash }).eq('id', _parentUser.id);
+      _dbPinHash = hash;
+    } catch (_) {}
   }
 
   function _updatePinDots(prefix, filled) {
@@ -2968,21 +3392,28 @@ const Auth = (() => {
   }
 
   async function _submitParentPin() {
-    if (!await _pinMatches(_parentPinEntry)) {
-      _parentPinEntry = '';
-      _updatePinDots('pin-dot-', 0);
-      document.getElementById('pin-entry-error')?.classList.remove('hidden');
-      if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
-      return;
-    }
+    const pin = _parentPinEntry;
+    const localOk = await _pinMatches(pin);
+    // ⚠ A local "no" is NOT a verdict any more. _pinMatches() can only compare
+    // against localStorage once the session is gone - _fetchDbPinHash() reads
+    // profiles through the browser client and profiles_select is
+    // `id = auth.uid() OR is_admin()`, so the database copy is unreachable in
+    // exactly the situation it was added for. A cleared localStorage, a
+    // different browser profile, or a PIN set on another device therefore all
+    // left a CORRECT PIN failing against nothing at all. The server holds the
+    // authoritative hash; only a refusal from there is a wrong PIN.
+    //
+    // Offline is the exception: there is no server to ask, so a local miss
+    // stays a miss rather than pretending to have checked.
+    if (!localOk && !navigator.onLine) { _pinWrong(); return; }
     // ⚠ The guard here used to be `if (session && !_parentUser)`, and that one
     // condition made the correct PIN fail for the most ordinary route back into
     // the parent dashboard.
     //
     // Handing the device to a child (_loginStudentRow with navigate:true, or
-    // _switchToFullStudentSignIn) deliberately clears _parentProfile — so
+    // _switchToFullStudentSignIn) deliberately clears _parentProfile - so
     // _isParentSession() is false and the child is not bounced off their own
-    // screens — while deliberately KEEPING _parentUser, so onAuthStateChange
+    // screens - while deliberately KEEPING _parentUser, so onAuthStateChange
     // does not re-fire mid-session. enterParentMode() restores the profile on
     // the way back.
     //
@@ -2991,7 +3422,7 @@ const Auth = (() => {
     // (because of !_parentUser), the second was skipped (because _parentProfile
     // is null), and a signed-in parent with a valid session was told "no parent
     // account is signed in on this device yet". enterParentMode() has always
-    // had this right — it checks `if (session)` and nothing else — which is why
+    // had this right - it checks `if (session)` and nothing else - which is why
     // the failure only appeared on devices that had a PIN set.
     //
     // A live session is a live session. Nothing else needs to be true.
@@ -2999,22 +3430,35 @@ const Auth = (() => {
     // ⚠ And a LAPSED access token is not a signed-out parent. A correct PIN is
     // the END of this interaction, not the start of a second one, so
     // _ensureParentSession() re-mints an access token from the refresh token
-    // before answering. The modal deliberately stays up while that happens —
-    // one that vanishes into nothing reads as a crash — and the busy line only
+    // before answering. The modal deliberately stays up while that happens -
+    // one that vanishes into nothing reads as a crash - and the busy line only
     // appears if the round trip is actually slow enough to be noticed.
     _suppressAuthEvents = true;
     const busyTimer = setTimeout(() => _setPinBusy(true), 400);
-    let session;
+    let session = null;
+    let server  = null;
     try {
-      session = await _ensureParentSession();
+      // The cheap ladder first, and only when the PIN already checked out
+      // locally: a live or renewable session costs one call and no round trip
+      // to our own function.
+      if (localOk) session = await _ensureParentSession();
+
+      // Everything the browser can do by itself has now failed. The PIN is the
+      // credential from here: the server verifies it against
+      // profiles.parent_pin_hash and mints the session. No email, no password,
+      // no prompt - which is the whole point of typing a PIN at all.
+      if (!session && navigator.onLine) {
+        server = await _pinServerSignIn(pin);
+        if (server.ok) session = server.session;
+      }
+
       clearTimeout(busyTimer);
       _setPinBusy(false);
 
-      // Via closeParentPin so the keydown listener is detached too — otherwise
-      // every digit typed on the dashboard afterwards would still feed the pad.
-      closeParentPin();
-
       if (session) {
+        // Via closeParentPin so the keydown listener is detached too - otherwise
+        // every digit typed on the dashboard afterwards would still feed the pad.
+        closeParentPin();
         if (_parentProfile) {
           if (_parentSessionLoad) await _parentSessionLoad;
           else await _loadParentFamily();
@@ -3024,6 +3468,21 @@ const Auth = (() => {
         }
         return;
       }
+
+      // ⚠ Locked out is its own answer and must not read as a wrong PIN - the
+      // parent may well be typing the right one. The pad stays up: there is
+      // nothing to navigate to and nothing they can do but wait.
+      if (server?.error === 'locked') {
+        const mins = Math.max(1, Math.round((server.retry_after_s || 900) / 60));
+        _pinWrong();
+        toast(`Too many PIN attempts. Try again in ${mins} minute${mins === 1 ? '' : 's'}, or sign in with your email.`, 6000);
+        return;
+      }
+      // The server looked at this PIN and said no, and nothing local vouched
+      // for it either. That is a wrong PIN.
+      if (!localOk) { _pinWrong(); return; }
+
+      closeParentPin();
     } finally {
       clearTimeout(busyTimer);
       _setPinBusy(false);
@@ -3044,27 +3503,33 @@ const Auth = (() => {
     // perfectly good and merely unverifiable this second. Sending that parent
     // to a sign-in form they equally cannot submit would be the worse lie.
     if (!navigator.onLine) {
-      toast('You are offline right now — reconnect, then tap 🔒 Parent again. Your PIN was correct.', 5000);
+      toast('You are offline right now - reconnect, then tap 🔒 Parent again. Your PIN was correct.', 5000);
       return;
     }
+    // - Reaching here now means BOTH routes are gone: the refresh ladder ran
+    // out AND the server could not sign this PIN in - the function is not
+    // deployed, or the account has no server-side PIN on file (one set before
+    // profiles.parent_pin_hash existed, on a device that has since been
+    // cleared). It is no longer the ordinary outcome of a lapsed token, which
+    // is why the wording no longer implies the PIN was the problem.
     if (_activeAccount) {
       const who = _activeAccount.name ? ` ${_activeAccount.name} stays signed in here.` : '';
       _confirmModal(
-        `Your parent sign-in could not be renewed in this browser.\n\n`
-        + `Your PIN was correct — but signing in again needs your email and password.${who}`,
+        `Your PIN was correct, but this browser could not reach your account.\n\n`
+        + `Check your connection and try again - or sign in with your email and password.${who}`,
         () => { showScreen('auth'); setRole('parent'); },
         { icon: '🔑', okLabel: 'Sign in', danger: false, cancelLabel: 'Not now' }
       );
       return;
     }
-    toast('Your parent sign-in could not be renewed in this browser — please sign in with your email.', 4000);
+    toast('Your PIN was correct, but this browser could not reach your account - please sign in with your email.', 4000);
     showScreen('auth');
     setRole('parent');
   }
 
   // Correct PIN, lapsed token: the pad goes quiet and says what is happening
   // rather than disappearing. Under a second on a working connection, which is
-  // why the caller only shows it after 400ms — otherwise it is a flash on
+  // why the caller only shows it after 400ms - otherwise it is a flash on
   // every single PIN entry.
   function _setPinBusy(busy) {
     _parentPinBusy = busy;
@@ -3088,7 +3553,7 @@ const Auth = (() => {
   // guard.
   async function _promptSetParentPin() {
     if (_getStoredPinHash()) return;
-    // Check DB before prompting setup — the parent may already have a PIN set on
+    // Check DB before prompting setup - the parent may already have a PIN set on
     // another device. If so, skip the prompt; they'll enter their existing PIN
     // the first time they tap 🔒 Parent and it will repopulate localStorage.
     const dbHash = await _fetchDbPinHash();
@@ -3096,7 +3561,7 @@ const Auth = (() => {
     setTimeout(() => { _showPinSetupModal(); }, 1800);
   }
 
-  // Always opens, whether or not a PIN already exists — used by
+  // Always opens, whether or not a PIN already exists - used by
   // Account & Settings to set a first PIN or replace an existing one.
   function openParentPinSetup() { _showPinSetupModal(); }
 
@@ -3117,7 +3582,7 @@ const Auth = (() => {
       _parentPinSetup2 = '';
       _updatePinDots('setup-dot-', 0);
       const label = document.getElementById('pin-setup-step-label');
-      if (label) label.textContent = 'Step 1 of 2 — Enter a 4-digit PIN';
+      if (label) label.textContent = 'Step 1 of 2 - Enter a 4-digit PIN';
       document.getElementById('pin-setup-error')?.classList.add('hidden');
       document.getElementById('pin-setup-back')?.classList.add('hidden');
       document.getElementById('modal-parent-pin-setup')?.classList.remove('hidden');
@@ -3154,7 +3619,7 @@ const Auth = (() => {
     document.getElementById('pin-setup-error')?.classList.add('hidden');
     document.getElementById('pin-setup-back')?.classList.add('hidden');
     const label = document.getElementById('pin-setup-step-label');
-    if (label) label.textContent = 'Step 1 of 2 — Enter a 4-digit PIN';
+    if (label) label.textContent = 'Step 1 of 2 - Enter a 4-digit PIN';
   }
 
   function _pinSetupKey(k) {
@@ -3169,7 +3634,7 @@ const Auth = (() => {
         _parentPinStep = 2;
         _updatePinDots('setup-dot-', 0);
         const label = document.getElementById('pin-setup-step-label');
-        if (label) label.textContent = 'Step 2 of 2 — Confirm your PIN';
+        if (label) label.textContent = 'Step 2 of 2 - Confirm your PIN';
         document.getElementById('pin-setup-back')?.classList.remove('hidden');
       }
     } else {
@@ -3196,14 +3661,37 @@ const Auth = (() => {
           _parentPinSetup1 = '';
           document.getElementById('pin-setup-back')?.classList.add('hidden');
           const label = document.getElementById('pin-setup-step-label');
-          if (label) label.textContent = 'Step 1 of 2 — Enter a 4-digit PIN';
+          if (label) label.textContent = 'Step 1 of 2 - Enter a 4-digit PIN';
         }
       }
     }
   }
 
+  // ⚠ This can await three network round trips before anything is drawn, and
+  // it used to do so with no sign it had registered the tap at all - which
+  // reads as a dead button, and gets tapped again. The busy state is the
+  // feedback; _enteringParent is what makes the second tap harmless.
+  let _enteringParent = false;
   async function enterParentMode() {
+    if (_enteringParent) return;
+    // A hydration already in flight opens the dashboard itself, so returning
+    // here is correct - it is not a swallowed click.
     if (_parentSessionLoad) { await _parentSessionLoad; return; }
+    _enteringParent = true;
+    _setParentBusy(true);
+    try {
+      return await _enterParentMode();
+    } finally {
+      _enteringParent = false;
+      _setParentBusy(false);
+    }
+  }
+
+  function _setParentBusy(on) {
+    if (typeof setHeaderBtnBusy === 'function') setHeaderBtnBusy('.hdr-btn.is-parent', on);
+  }
+
+  async function _enterParentMode() {
     if (_parentProfile) {
       await _loadParentFamily();
       _openParentDashboard();
@@ -3350,7 +3838,7 @@ const Auth = (() => {
   // ── Access controls ────────────────────────────
   // Keeps the cached student row in step with DB.restrictions and repaints ONLY
   // the Controls tab. It used to call renderParentDashboard(), which hides
-  // pd-detail-panel — so every toggle bounced the parent back to the children
+  // pd-detail-panel - so every toggle bounced the parent back to the children
   // grid mid-edit.
   function _syncCachedSettings() {
     const row = _familyStudents.find(s => s.id === ACTIVE_STUDENT_ID);
@@ -3376,7 +3864,7 @@ const Auth = (() => {
       if (!res?.ok) {
         DB.restrictions = JSON.parse(prevJson);
         if (typeof PD !== 'undefined' && PD.refreshControls) PD.refreshControls();
-        toast('Could not save that change — check your connection and try again.', 3000);
+        toast('Could not save that change - check your connection and try again.', 3000);
         return false;
       }
     }
@@ -3386,8 +3874,8 @@ const Auth = (() => {
   }
 
   async function toggleChapterLock(chapterId, lock) {
-    // A chapter the admin has switched off — globally, or for this family's plan
-    // tier — is not the parent's to unlock. The checkbox is rendered disabled,
+    // A chapter the admin has switched off - globally, or for this family's plan
+    // tier - is not the parent's to unlock. The checkbox is rendered disabled,
     // but a disabled attribute is one devtools edit away from gone, so refuse
     // here too. The real enforcement is server-side: netlify/functions/questions.js
     // never serves those questions in the first place.
@@ -3448,6 +3936,16 @@ const Auth = (() => {
     await _saveRestrictions(prev, r.minigamesDisabled ? '🎮 Game Zone locked.' : '🎮 Game Zone unlocked.');
   }
 
+  // The Game Zone card's Save: one write, the whole settings object, same
+  // rollback-on-failure as every other Controls toggle. Returns true only when
+  // the server accepted it - the card keeps its draft open otherwise.
+  async function saveGameSettings(next) {
+    const r    = _ensureRestrictions();
+    const prev = JSON.stringify(r);
+    r.games = next;
+    return _saveRestrictions(prev, '🎮 Game settings saved.');
+  }
+
   async function toggleHintsDisabled() {
     const r    = _ensureRestrictions();
     const prev = JSON.stringify(r);
@@ -3458,7 +3956,7 @@ const Auth = (() => {
   // ── Auth helpers ───────────────────────────────
   function _showAuthError(msg) {
     // While the switch modal is open the auth screen is not on screen, so an
-    // error written there is an error nobody ever sees — including the wrong-PIN
+    // error written there is an error nobody ever sees - including the wrong-PIN
     // one, which is the whole reason the modal exists.
     if (_swOpen) { _swError(msg); return; }
     const el = _el('auth-error');
@@ -3474,7 +3972,7 @@ const Auth = (() => {
   function _setAuthLoading(on) {
     const btns = document.querySelectorAll('#screen-auth button[onclick]');
     btns.forEach(b => b.disabled = on);
-    // When loading ends, re-evaluate the student button — it must only be
+    // When loading ends, re-evaluate the student button - it must only be
     // re-enabled if both fields are still filled, not unconditionally.
     if (!on) checkStudentReady();
   }
@@ -3502,7 +4000,8 @@ const Auth = (() => {
     googleSignIn, magicLinkSignIn, openAdminPanel, openTeacherDashboard,
     requestTeacherAccess, getTeacherStatus, restoreAccount, refreshAdminBadge: _refreshAdminBadge,
     isTeacher: () => _isTeacherUser,
-    openPasswordModal, closePasswordModal, changePassword,
+    openPasswordModal, closePasswordModal, changePassword, isPinOnlySession,
+    pinOnlyPasswordMessage: () => _PIN_ONLY_PASSWORD_MSG,
     openInviteModal, closeInviteModal, copyInviteLink, shareInvite, shareInviteWhatsApp,
     confirmResetStudentProgress,
     studentSignIn, onPinInput, checkStudentReady,
@@ -3514,7 +4013,7 @@ const Auth = (() => {
     reloadStudents,
     _pickAddAvatar,
     // Session
-    loginStudent, logout, switchStudent, switchToStudentSelect,
+    loginStudent, loginStudentProfile, logout, switchStudent, switchToStudentSelect,
     openStudentSwitch, closeStudentSwitch, fullStudentSignInFromSwitch,
     _swKey, _swPickKid,
     // Parent mode
@@ -3531,7 +4030,7 @@ const Auth = (() => {
     addAssignment, removeAssignment, pdUpdateAssignChapters,
     toggleChapterLock, setMaxDifficulty, toggleExamDisabled,
     toggleCrossGradeSearch, toggleCrossGradePractice, toggleHintsDisabled,
-    toggleMinigamesDisabled,
+    toggleMinigamesDisabled, saveGameSettings,
     // Biometric lock
     attemptBiometricUnlock: _attemptBiometricUnlock, biometricUsePassword,
     enableBiometricLogin, disableBiometricLogin,

@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 Science Specimen Assessment Booklet (February 2017) — the first official PSAC
+// PSAC Grade 5 Science Specimen Assessment Booklet (February 2017) - the first official PSAC
 // specimen paper for Grade 5 Science, released before the format changed. Adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp16-001', chapterId:'water-matter', subsection:'states', difficulty:1,
@@ -35,7 +35,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp16-006', chapterId:'energy', subsection:'sources', difficulty:1,
     question:'A car uses petrol to move. What is the <strong>source of energy</strong> for a car?',
     options:['Chemical energy (petrol)','Electrical energy','Solar energy','Wind energy'], answer:'Chemical energy (petrol)',
-    hint:'Petrol is burned in the engine — what type of energy is stored in petrol?',
+    hint:'Petrol is burned in the engine - what type of energy is stored in petrol?',
     explanation:'Petrol contains chemical energy. When it burns in the car\'s engine, this chemical energy is converted to movement (kinetic) energy to drive the car.' }),
 
   makeMCQ({ id:'g5sc-pp16-007', chapterId:'energy', subsection:'sources', difficulty:1,
@@ -47,14 +47,14 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp16-008', chapterId:'energy', subsection:'sources', difficulty:2,
     question:'Fishermen in Mauritius hang octopuses in the sun to dry them. Which form of energy from the sun <strong>dries the octopuses</strong>?',
     options:['Chemical energy','Electrical energy','Mechanical (movement) energy','Solar (heat) energy'], answer:'Solar (heat) energy',
-    hint:'The sun warms the octopuses — what type of energy is warmth?',
+    hint:'The sun warms the octopuses - what type of energy is warmth?',
     explanation:'The sun provides heat (solar) energy that evaporates water from the octopuses, drying them. This is the same process as drying clothes on a washing line.' }),
 
   makeMCQ({ id:'g5sc-pp16-009', chapterId:'electricity', subsection:'circuits', difficulty:2,
     question:'A circuit has a switch in the open position. The bulb does NOT light up. Why?',
     options:['An open switch breaks the circuit so no current flows.','An open switch conducts electricity directly.','An open switch is a conductor.','The battery runs out when the switch is open.'], answer:'An open switch breaks the circuit so no current flows.',
-    hint:'Open means there is a gap — can electricity jump across a gap?',
-    explanation:'When a switch is open, it creates a gap in the circuit. Electricity cannot flow across this gap, so the circuit is incomplete and no current flows — the bulb does not light up.' }),
+    hint:'Open means there is a gap - can electricity jump across a gap?',
+    explanation:'When a switch is open, it creates a gap in the circuit. Electricity cannot flow across this gap, so the circuit is incomplete and no current flows - the bulb does not light up.' }),
 
   makeMCQ({ id:'g5sc-pp16-010', chapterId:'electricity', subsection:'circuits', difficulty:2,
     question:'An iron nail is placed to bridge a gap in an electric circuit. The bulb lights up. This shows that iron is a _____ of electricity.',

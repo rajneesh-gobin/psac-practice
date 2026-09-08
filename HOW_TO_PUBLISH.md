@@ -10,8 +10,8 @@
 ### Step 2 — Deploy the site
 1. Log in to Netlify
 2. On the dashboard, find the big box that says **"Drag and drop your site folder here"**
-3. Open File Explorer and find the `shanvi` folder on your Desktop
-4. **Drag the entire `shanvi` folder** into that Netlify box
+3. Open File Explorer and find the `psac-practice` folder
+4. **Drag the entire `psac-practice` folder** into that Netlify box
 5. Wait ~10 seconds — Netlify uploads and builds everything
 6. You will get a URL like: `https://random-name-12345.netlify.app`
    - This URL works on any device, anywhere in the world
@@ -19,13 +19,13 @@
 
 ### Step 3 — Give it a custom name (optional)
 1. In Netlify, go to **Site configuration → Change site name**
-2. Type something like `mathmaster-shanvi`
-3. Your URL becomes: `https://mathmaster-shanvi.netlify.app`
+2. Type something like `psac-practice`
+3. Your URL becomes: `https://psac-practice.netlify.app`
 
 ### Step 4 — Update the site later
 Whenever you make changes to the files:
 1. Go to **Netlify → Deploys**
-2. Drag the updated `shanvi` folder again
+2. Drag the updated `psac-practice` folder again
 3. New version goes live in ~10 seconds
 
 ---
@@ -84,7 +84,7 @@ create policy "students can write own data" on students for all using (auth.uid(
 4. Claude will create a `config.js` file and update `engine/store.js` for you
 
 ### Step 4 — Redeploy to Netlify
-After Claude updates the files, drag the `shanvi` folder to Netlify again.
+After Claude updates the files, drag the `psac-practice` folder to Netlify again.
 
 ---
 

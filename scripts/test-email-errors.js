@@ -11,7 +11,11 @@
 // Extracted and run in a vm rather than loading auth.js, which needs a DOM.
 // Run: node scripts/test-email-errors.js
 const fs = require('fs'), vm = require('vm');
-const src = fs.readFileSync('engine/auth.js', 'utf8');
+// engine/auth.js is CRLF in a checked-out tree and LF in the object store, so a
+// multi-line pattern written with \n matches nothing and reports "could not
+// extract" - which reads as "the function is gone" while the function is present
+// and correct. Normalise in memory; nothing here writes the file back.
+const src = fs.readFileSync('engine/auth.js', 'utf8').replace(/\r\n/g, '\n');
 const m = src.match(/  function _emailErrorText\(error, what\) \{[\s\S]*?\n  \}\n/);
 if (!m) { console.error('could not extract _emailErrorText'); process.exit(1); }
 const ctx = vm.createContext({});

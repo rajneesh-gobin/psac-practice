@@ -52,7 +52,7 @@ STATIC_QUESTIONS.push(
     question:'"By the time the match ends, they ___ for three hours." - correct future perfect?',
     options:['will play','are playing','will have been playing','played'],
     answer:'will have been playing',
-    hint:'Future perfect continuous = will have been + -ing. Expresses an ongoing action completed at a future point.',
+    hint:'The action runs right up to a point in the future and is still going on. Which form shows both the completion and the continuing?',
     explanation:'"They <b>will have been playing</b> for three hours" - future perfect continuous (will have been + -ing) describes an action that will be ongoing and completed at a specific future time. Simple future perfect: "will have played" (also acceptable).' }),
 
   makeMCQ({ id:'g6eng-verb-007', chapterId:'g6eng-verbs', subsection:'voice', difficulty:1,
@@ -112,7 +112,7 @@ STATIC_QUESTIONS.push(
     question:'Which modal verb expresses CERTAIN DEDUCTION about the past - you are sure something happened?',
     options:['might have','could have','must have','should have'],
     answer:'must have',
-    hint:'"Must have" = I am certain this happened, based on evidence I can see now.',
+    hint:'Rank these four by how sure the speaker is. Which one leaves no room for doubt at all?',
     explanation:'"<b>Must have</b>" expresses certainty about a past event: "He must have left early - his car is gone." The evidence (no car) leads to a confident conclusion. Modal perfect forms: <b>must have + past participle</b> (certain), <b>might have / could have</b> (possible but uncertain), <b>can\'t have</b> (certain it did NOT happen): "She can\'t have passed - she didn\'t study."' }),
 
   makeMCQ({ id:'g6eng-verb-013', chapterId:'g6eng-verbs', subsection:'voice', difficulty:2,
@@ -180,7 +180,7 @@ STATIC_QUESTIONS.push(
       '(A) uses the infinitive incorrectly; only (B) is correct.'
     ],
     answer:'(A) she paused in order to have a conversation; (B) she was talking but then ceased.',
-    hint:'Stop + to-infinitive = pause in order to do something new. Stop + gerund (-ing) = cease doing the current activity.',
+    hint:'"Stop" changes meaning depending on what follows it. Work out what each sentence would mean on its own, then compare.',
     explanation:'<b>Stop + infinitive</b>: "She stopped <b>to talk</b>" = she stopped (e.g., walking) in order to start talking (purpose). <b>Stop + gerund</b>: "She stopped <b>talking</b>" = she was talking and then ceased. This pattern applies to other verbs too: <b>remember to lock</b> (don\'t forget!) vs <b>remember locking</b> (I recall past action); <b>try to lift</b> (attempt) vs <b>try lifting</b> (experiment). MIE Grade 6 covers these for comprehension questions.' })
 
 );

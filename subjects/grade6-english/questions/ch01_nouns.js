@@ -8,7 +8,7 @@ STATIC_QUESTIONS.push(
     question:'Which of these is a COLLECTIVE noun?',
     options:['happiness','pride','quickly','enormous'],
     answer:'pride',
-    hint:'A collective noun names a group. "A pride of ___".',
+    hint:'A collective noun names a group. Of these four, three are not group words at all - check which are even nouns.',
     explanation:'"<b>Pride</b>" is a collective noun - a pride of lions. Other collective nouns: a flock of birds, a swarm of bees, a class of students, a pack of wolves, a fleet of ships.' }),
 
   makeMCQ({ id:'g6eng-noun-002', chapterId:'g6eng-nouns', subsection:'pronouns', difficulty:2,
@@ -134,7 +134,7 @@ STATIC_QUESTIONS.push(
     question:'"The committee has made its decision." - what type of noun is "committee"?',
     options:['abstract noun','collective noun','proper noun','compound noun'],
     answer:'collective noun',
-    hint:'A collective noun names a group of people or things treated as a single unit.',
+    hint:'A committee is many people acting as one single body. Which type of noun describes that?',
     explanation:'"<b>Committee</b>" is a collective noun - it names a group treated as one unit. The MIE Grade 6 textbook lists common collective nouns for groups of people: committee, jury, team, crew, staff, army, audience, crowd, cabinet, parliament. In British English, collective nouns can take a singular verb (group acts as one) or plural verb (members act individually): "The team <b>is</b> winning." / "The team <b>are</b> arguing."' }),
 
   makeMCQ({ id:'g6eng-noun-017', chapterId:'g6eng-nouns', subsection:'pronouns', difficulty:2,

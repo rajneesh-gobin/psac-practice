@@ -2,17 +2,45 @@
 const TeacherClassroomDetail = (() => {
   const el = id => document.getElementById(id);
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const I = () => (typeof TeacherInsights !== 'undefined' ? TeacherInsights : null);
+  const SECTIONS = ['overview', 'work', 'pupils', 'materials', 'results', 'settings'];
+  // Materials is a PRIMARY section, not a More entry: "where do I put a file for
+  // this class" was the one question the ⋯ menu could not answer, because a
+  // teacher looking for it has no reason to open a menu labelled More.
+  const MORE_SECTIONS = ['results', 'settings'];
 
   let _classId = null;
   let _className = '';
   let _pupils = [];
+  // Rename trail for the open classroom. Reset with the rest of the state.
+  let _nameChanges = [];
+  // Self-registered devices in a SHARED-PIN classroom (name + short device tag).
+  let _devices = [];
   let _assignments = [];
   let _physicalHomework = [];
-  let _activeSection = 'work';
+  let _materials = [];
+  // Per-material completion claims for the open classroom: { expected, materials }.
+  let _matDone = { expected: 0, materials: {} };
+  // A preference, not per-classroom state, so it is read from storage rather
+  // than cleared by _reset() when another classroom opens.
+  let _matSort = readMaterialSort();
+  let _activeSection = 'overview';
   let _resultsAssignId = null;
   let _accessType = 'per_student';
   let _classPin = null;
   let _pinsRevealed = false;
+  let _signalEpoch = 0;
+  let _signals = { loading: false, activity: [], attention: [], sampled: 0, failed: 0 };
+  let _signalGroups = [];
+  let _rollup = new Map();
+  let _workFilter = 'active';
+  let _pupilQuery = '';
+  let _workError = '';
+  let _pupilError = '';
+  let _openPupilId = null;
+  let _workLoaded = false;
+  let _pupilsLoaded = false;
+  let _setupGuideForced = false;
 
   // ── Per-classroom teacher preferences (localStorage, teacher-device only) ──
   const _PREFS_KEY = id => `psac_tc_pref_${id}`;
@@ -31,103 +59,321 @@ const TeacherClassroomDetail = (() => {
     try { return JSON.parse(localStorage.getItem(_PREFS_KEY(classId || _classId)) || '{}'); } catch(_) { return {}; }
   }
 
-  async function open(classId, className) {
+  function isOpen() { return !!_classId && !el('tc-classroom-detail')?.classList.contains('hidden'); }
+
+  async function open(classId, className, opts = {}) {
+    const same = _classId === classId && isOpen();
     _classId = classId;
     _className = className;
-    _activeSection = 'work';
     _resultsAssignId = null;
     _pinsRevealed = false;
     _accessType = 'per_student';
     _classPin = null;
     _physicalHomework = [];
+    _materials = [];
+    _matDone = { expected: 0, materials: {} };
+    _pupils = [];
+    _nameChanges = [];
+    _devices = [];
+    _assignments = [];
+    _signals = { loading: true, activity: [], attention: [], sampled: 0, failed: 0 };
+    _signalGroups = []; _rollup = new Map();
+    _workFilter = 'active'; _pupilQuery = ''; _workError = ''; _pupilError = ''; _openPupilId = null;
+    _workLoaded = false; _pupilsLoaded = false; _setupGuideForced = false;
+    _signalEpoch++;
 
     el('tc-classroom-detail').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
     el('tc-cd-name').textContent = className;
-    el('tc-cd-emoji').textContent = '🏫';
-    ['pupils','assignments','materials','results'].forEach(k => el('tc-cd-stat-' + k).textContent = '—');
-    ['work','pupils','materials','results','settings'].forEach(s => {
+    el('tc-cd-emoji').textContent = _loadPrefs().emoji || '🏫';
+    ['pupils','assignments','materials','results'].forEach(k => el('tc-cd-stat-' + k).textContent = '-');
+    SECTIONS.forEach(s => {
       const sec = el('tc-cd-' + s);
-      if (sec) { sec.innerHTML = '<p class="tc-cd-loading">Loading…</p>'; sec.classList.add('hidden'); }
+      if (sec) { sec.innerHTML = _skeleton(); sec.classList.add('hidden'); }
     });
 
-    showSection('work');
+    showSection(SECTIONS.includes(opts.section) ? opts.section : 'overview');
+    if (!same && typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(classId, className, _activeSection);
     await Promise.all([_loadWork(), _loadPupils(), _loadMaterials()]);
   }
 
+  function _skeleton() {
+    return '<div class="tc-skeleton" aria-hidden="true"><div class="th-sk-line th-sk-wide"></div><div class="th-sk-line"></div><div class="th-sk-cards"><div></div><div></div></div></div>';
+  }
+
   function close() {
+    _signalEpoch++;
     el('tc-classroom-detail').classList.add('hidden');
     document.body.style.overflow = '';
     _classId = null;
     if (typeof TeacherGuestClasses !== 'undefined') TeacherGuestClasses.clearCurrent();
+    if (typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(null);
   }
 
   function showSection(sec) {
+    if (!SECTIONS.includes(sec)) sec = 'overview';
     _activeSection = sec;
+    toggleMore(false);
     document.querySelectorAll('.tc-cd-nav-btn').forEach(b => {
-      b.classList.toggle('tc-cd-nav-active', b.dataset.sec === sec);
+      const on = b.dataset.sec === sec || (b.id === 'tc-cd-more-btn' && MORE_SECTIONS.includes(sec));
+      b.classList.toggle('tc-cd-nav-active', on);
+      if (b.dataset.sec) b.setAttribute('aria-selected', String(b.dataset.sec === sec));
     });
+    document.querySelectorAll('#tc-cd-more-menu [data-sec]').forEach(b => b.setAttribute('aria-current', b.dataset.sec === sec ? 'page' : 'false'));
+    // The overview already carries the one prominent Set work button.
+    document.querySelector('.tc-cd-header .tc-cd-share-btn')?.classList.toggle('hidden', sec === 'overview');
     document.querySelectorAll('.tc-cd-section').forEach(s => s.classList.add('hidden'));
     el('tc-cd-' + sec)?.classList.remove('hidden');
+    if (sec === 'overview') _renderOverview();
+    if (sec === 'work')     _renderWork();
+    if (sec === 'pupils')   _renderPupils();
     if (sec === 'settings') _renderSettings();
     if (sec === 'results')  _renderResults(_resultsAssignId);
+    if (_classId && typeof TeacherMode !== 'undefined' && TeacherMode.rememberClassroom) TeacherMode.rememberClassroom(_classId, _className, sec);
   }
+
+  function toggleMore(force) {
+    const menu = el('tc-cd-more-menu'), btn = el('tc-cd-more-btn');
+    if (!menu || !btn) return;
+    const open = typeof force === 'boolean' ? force : menu.classList.contains('hidden');
+    menu.classList.toggle('hidden', !open);
+    btn.setAttribute('aria-expanded', String(open));
+    if (open) {
+      setTimeout(() => document.addEventListener('click', _moreOutside, { once: true }), 0);
+      document.addEventListener('keydown', _moreEscape);
+    } else document.removeEventListener('keydown', _moreEscape);
+  }
+  function _moreOutside(e) { if (!e.target.closest?.('.tc-cd-nav-more')) toggleMore(false); else if (!el('tc-cd-more-menu')?.classList.contains('hidden')) document.addEventListener('click', _moreOutside, { once: true }); }
+  function _moreEscape(e) { if (e.key === 'Escape') { toggleMore(false); el('tc-cd-more-btn')?.focus(); } }
 
   // ── Work / Assignments ────────────────────────────────────────────
   async function _loadWork() {
     const box = el('tc-cd-work');
     if (!box) return;
+    const classId = _classId;
     try {
-      const [assignRes, phRes, modeRes] = await Promise.all([
-        _sb.rpc('guest_my_assignments'),
-        _sb.from('physical_homework').select('*').eq('classroom_id', _classId).order('expires_at'),
-        (async () => { try { return await _sb.rpc('teacher_guest_assignment_modes'); } catch(_) { return {data: null}; } })(),
+      const ws = typeof TeacherWorkspace !== 'undefined' ? TeacherWorkspace : null;
+      const [all, phRes] = await Promise.all([
+        ws ? ws.ensureLoaded(true) : Promise.resolve([]),
+        _sb.from('physical_homework').select('*').eq('classroom_id', classId).order('expires_at'),
       ]);
-      if (assignRes.error) throw assignRes.error;
-      const modes = new Map((modeRes.data?.modes || []).map(a => [a.id, a]));
-      _assignments = (assignRes.data?.assignments || [])
-        .filter(a => modes.get(a.id)?.classroom_id === _classId)
-        .map(a => ({...a, access_mode: modes.get(a.id)?.mode || 'legacy', archived: !!modes.get(a.id)?.archived}));
+      if (classId !== _classId) return;
+      _assignments = all.filter(a => a.classroom_id === classId);
       _physicalHomework = phRes.error ? [] : (phRes.data || []);
-      el('tc-cd-stat-assignments').textContent = _assignments.length + _physicalHomework.length;
-      const statRes = el('tc-cd-stat-results');
-      if (statRes && statRes.textContent !== '—') statRes.textContent = '—';
-      _renderWork();
+      _workError = '';
+      _workLoaded = true;
+      el('tc-cd-stat-assignments').textContent = _assignments.filter(_isActive).length;
+      el('tc-cd-stat-results').textContent = _assignments.reduce((sum, a) => sum + Number(a.submissions || 0), 0);
+      if (_activeSection === 'work') _renderWork();
+      if (_activeSection === 'overview') _renderOverview();
+      _loadDashboardSignals();
     } catch(_e) {
+      if (classId !== _classId) return;
       console.error('[classroom-detail] _loadWork failed:', _e);
-      const msg = _e?.message || _e?.error_description || String(_e);
-      if (box) box.innerHTML = `<p class="tc-cd-err">Could not load assignments: ${msg}</p>`;
+      _workError = 'Could not load this classroom’s work. Nothing has been deleted.';
+      _workLoaded = true;
+      if (_activeSection === 'work') _renderWork();
+      if (_activeSection === 'overview') _renderOverview();
     }
   }
+
+  function _dayPart() {
+    const hour = new Date().getHours();
+    return hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
+  }
+
+  function _isActive(a) {
+    return !a.archived && a.status === 'active' && (!a.expires_at || Date.parse(a.expires_at) > Date.now());
+  }
+
+  function _relativeTime(value) {
+    const ins = I();
+    if (ins) return ins.relativeTime(value);
+    const ms = Date.now() - Date.parse(value);
+    if (!Number.isFinite(ms) || ms < 0) return 'just now';
+    const mins = Math.floor(ms / 60000);
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins} min ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return days === 1 ? 'yesterday' : `${days} days ago`;
+  }
+
+  // ── Overview ──────────────────────────────────────────────────────
+  function _renderSetupGuide(active, hasWork, submitted) {
+    const placeholders = active.filter(p => /^Student\s+\d+$/i.test(String(p.name || '').trim())).length;
+    const named = active.length - placeholders;
+    const shared = _accessType === 'shared';
+    const rosterReady = shared ? !!_classPin : active.length > 0 && placeholders === 0;
+    const step1Title = shared
+      ? (_classPin ? 'Your shared class PIN is ready' : 'Check the shared class PIN')
+      : !active.length ? 'Add your pupils'
+      : placeholders ? `Replace the ${placeholders} numbered pupil name${placeholders === 1 ? '' : 's'}`
+      : `${named} pupil${named === 1 ? '' : 's'} ready`;
+    const step1Text = shared
+      ? 'The whole class uses one four-digit PIN. You will send it together with each work link.'
+      : !active.length
+        ? 'Add each pupil by name. The app creates a private four-digit PIN for each one.'
+        : placeholders
+          ? `Your pupil slots already exist. Open Pupils and rename “Student 1”, “Student 2” and the others to the real names before sharing PINs.`
+          : 'Each pupil has a private four-digit PIN. Only that pupil and you should see it.';
+    const step1Button = shared ? 'View class PIN' : placeholders ? 'Name my pupils' : active.length ? 'Review pupils & PINs' : 'Add pupils';
+    const step = (number, state, icon, title, text, action, label) => `
+      <article class="tc-setup-step tc-setup-${state}">
+        <div class="tc-setup-step-top"><span class="tc-setup-number">${state === 'done' ? '✓' : number}</span><span class="tc-setup-icon" aria-hidden="true">${icon}</span></div>
+        <div class="tc-setup-step-copy"><small>${state === 'done' ? 'READY' : state === 'current' ? 'DO THIS NEXT' : 'THEN'}</small><h4>${title}</h4><p>${text}</p></div>
+        ${action ? `<button type="button" onclick="${action}">${label} →</button>` : '<span class="tc-setup-wait">This unlocks after you set work</span>'}
+      </article>`;
+    return `
+      <section class="tc-setup-guide" aria-label="Classroom getting started guide">
+        <div class="tc-setup-head">
+          <div><span class="tc-setup-kicker">YOUR FIRST CLASS ACTIVITY</span><h3>Let’s get ${esc(_className)} ready</h3><p>Follow these three steps. Nothing here creates a pupil account or asks families to register.</p></div>
+          <button type="button" class="tc-setup-skip" onclick="TeacherClassroomDetail.dismissSetupGuide()">Use full dashboard</button>
+        </div>
+        <div class="tc-setup-flow" aria-label="Three setup steps">
+          ${step(1, rosterReady ? 'done' : 'current', shared ? '🔑' : '👥', step1Title, step1Text, "TeacherClassroomDetail.showSection('pupils')", step1Button)}
+          ${step(2, hasWork ? 'done' : (rosterReady ? 'current' : 'upcoming'), '📝', hasWork ? 'Your first activity is ready' : 'Set the first activity', 'Choose questions for pupils to answer on screen, or upload a worksheet for paper work.', 'TeacherClassroomDetail.showHomeworkChoice()', hasWork ? 'Set another activity' : 'Choose questions or worksheet')}
+          ${step(3, submitted > 0 ? 'done' : (hasWork ? 'current' : 'upcoming'), '📤', submitted > 0 ? 'Pupil responses are arriving' : hasWork ? 'Share it with the class' : 'Share the activity', hasWork ? 'Open Work, choose Share, then send the link and the correct PIN instructions to your pupils.' : 'After you create the activity, the app prepares its link and tells pupils which PIN to enter.', hasWork ? "TeacherClassroomDetail.showSection('work')" : '', 'Open work & share')}
+        </div>
+        <p class="tc-setup-reassure"><span aria-hidden="true">💡</span><b>What happens next?</b> Pupils open the link, enter their PIN and answer. Results and pupils who may need help then appear here automatically.</p>
+      </section>`;
+  }
+
+  function _renderOverview() {
+    const box = el('tc-cd-overview');
+    if (!box) return;
+    const active = _assignments.filter(_isActive);
+    const activePupils = _pupils.filter(p => p.active);
+    const pupils = activePupils.length;
+    const submitted = active.reduce((sum, a) => sum + Number(a.submissions || 0), 0);
+    const allSubmitted = _assignments.reduce((sum, a) => sum + Number(a.submissions || 0), 0);
+    const hasWork = _assignments.length > 0 || _physicalHomework.length > 0;
+    const attention = _signals.attention;
+    const activity = _signals.activity.slice(0, 5);
+    const needHelp = [..._rollup.values()].filter(p => p.needsHelp);
+    if (!_workLoaded || !_pupilsLoaded) { box.innerHTML = _skeleton(); return; }
+    if (!_workError && (_setupGuideForced || (!hasWork && !_loadPrefs().setupDismissed))) {
+      box.innerHTML = _renderSetupGuide(activePupils, hasWork, allSubmitted);
+      return;
+    }
+    box.innerHTML = `
+      <div class="tc-today-hero">
+        <div><span class="tc-today-kicker">CLASSROOM OVERVIEW</span><h3>Good ${_dayPart()} 👋</h3><p>Here is what is happening in ${esc(_className)}.</p></div>
+        <div class="tc-today-actions"><button type="button" class="tc-setup-help" onclick="TeacherClassroomDetail.showSetupGuide()">❓ How classrooms work</button><button class="tc-cd-action-btn tc-cd-action-big" onclick="TeacherClassroomDetail.createWork()">✏️ Set work</button></div>
+      </div>
+      ${_workError ? `<div class="tc-cd-inline-error"><p>${esc(_workError)}</p><button type="button" onclick="TeacherClassroomDetail.retryWork()">Try again</button></div>` : ''}
+      <div class="tc-today-stats">
+        <button type="button" onclick="TeacherClassroomDetail.showSection('pupils')"><span class="purple">👥</span><strong>${_pupilError ? '-' : pupils}</strong><small>Pupils</small></button>
+        <button type="button" onclick="TeacherClassroomDetail.showSection('work')"><span class="blue">📋</span><strong>${active.length}</strong><small>Active assignments</small></button>
+        <button type="button" onclick="TeacherClassroomDetail.showSection('pupils')"><span class="amber">🙋</span><strong>${_signals.loading ? '…' : needHelp.length}</strong><small>May need attention</small></button>
+        <button type="button" onclick="TeacherClassroomDetail.showSection('work')"><span class="green">✓</span><strong>${submitted}</strong><small>Submissions</small></button>
+        <button type="button" onclick="TeacherClassroomDetail.showSection('materials')"><span class="blue">📁</span><strong>${_materials.length}</strong><small>Materials</small></button>
+      </div>
+      <div class="tc-today-columns">
+        <section class="tc-today-panel">
+          <div class="tc-today-panel-head"><div><span>⚡</span><h4>Recent activity</h4></div>${_signals.sampled ? `<small>Latest ${_signals.sampled} assignment${_signals.sampled === 1 ? '' : 's'}</small>` : ''}</div>
+          ${_signals.loading ? '<p class="tc-today-loading">Checking recent submissions…</p>' : activity.length ? activity.map(r => `
+            <div class="tc-activity-row"><span class="tc-activity-avatar">${esc((r.name || '?').trim().charAt(0).toUpperCase() || '?')}</span><div><strong>${esc(r.name || 'Pupil')} submitted</strong><small>${esc(r.title)} · ${esc(r.pct)}%</small></div><time>${esc(_relativeTime(r.submitted_at))}</time></div>`).join('') : '<p class="tc-today-empty">No recent submissions yet. New activity will appear here.</p>'}
+        </section>
+        <section class="tc-today-panel">
+          <div class="tc-today-panel-head"><div><span>🎯</span><h4>Needs attention</h4></div><button type="button" onclick="TeacherClassroomDetail.showSection('pupils')">All pupils</button></div>
+          ${_signals.loading ? '<p class="tc-today-loading">Looking for pupils who may need help…</p>' : attention.length ? attention.slice(0, 5).map(r => `
+            <div class="tc-attention-row"><span>${r.kind === 'not-started' ? '⏳' : r.kind === 'in-progress' ? '✏️' : '💡'}</span><div><strong>${esc(r.name || 'Pupil')}</strong><small>${esc(r.message)} · ${esc(r.title)}</small></div></div>`).join('') : `<p class="tc-today-empty tc-today-good">${_signals.sampled ? '✓ Nothing urgent in the assignments checked.' : 'Set some work and this panel will show who needs a hand.'}</p>`}
+          ${_signals.failed ? `<p class="tc-today-empty">${_signals.failed} assignment${_signals.failed === 1 ? '' : 's'} could not be checked. <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.retrySignals()">Try again</button></p>` : ''}
+        </section>
+      </div>`;
+  }
+
+  async function _loadDashboardSignals() {
+    const token = ++_signalEpoch;
+    const classroomId = _classId;
+    const relevant = _assignments.filter(_isActive).slice(0, 8);
+    _signals = { loading: relevant.length > 0, activity: [], attention: [], sampled: relevant.length, failed: 0 };
+    if (_activeSection === 'overview') _renderOverview();
+    if (!relevant.length) { _signalGroups = []; _rollup = new Map(); if (_activeSection === 'pupils') _renderPupils(); return; }
+    const ws = typeof TeacherWorkspace !== 'undefined' ? TeacherWorkspace : null;
+    const results = await Promise.all(relevant.map(async a => {
+      try {
+        const rows = ws && ws.fetchResults ? await ws.fetchResults(a.id) : (await _sb.rpc('teacher_guest_results', {p_assignment_id: a.id})).data?.submissions;
+        return Array.isArray(rows) ? { assignment: a, rows } : null;
+      } catch (_) { return null; }
+    }));
+    if (token !== _signalEpoch || classroomId !== _classId) return;
+    const valid = results.filter(Boolean);
+    const activity = valid.flatMap(group => group.rows.filter(r => r.submitted_at).map(r => ({...r, title: group.assignment.title})))
+      .sort((a, b) => Date.parse(b.submitted_at) - Date.parse(a.submitted_at));
+    const ins = I();
+    const latestByPupil = new Map();
+    valid.forEach(group => group.rows.forEach(r => {
+      const key = r.name_key || String(r.name || '').toLowerCase();
+      const current = latestByPupil.get(key);
+      const urgent = group.assignment.expires_at && Date.parse(group.assignment.expires_at) - Date.now() <= 2 * 86400000;
+      const low = ins ? ins.needsHelp(r) : (r.submitted_at && Number(r.pct) < 60);
+      const priority = r.not_started && urgent ? 3 : !r.submitted_at && !r.not_started && urgent ? 2 : low ? 1 : 0;
+      if (priority && (!current || priority > current.priority)) latestByPupil.set(key, {
+        ...r, title: group.assignment.title, priority,
+        kind: r.not_started ? 'not-started' : !r.submitted_at ? 'in-progress' : 'low-score',
+        message: r.not_started ? 'Has not started' : !r.submitted_at ? 'Started but not submitted' : `Scored ${Number(r.pct)}%`
+      });
+    }));
+    _signalGroups = valid;
+    _rollup = ins ? ins.pupilRollup(valid) : new Map();
+    _signals = { loading: false, activity, attention: [...latestByPupil.values()].sort((a,b) => b.priority-a.priority), sampled: valid.length, failed: relevant.length - valid.length };
+    if (_activeSection === 'overview') _renderOverview();
+    if (_activeSection === 'pupils') _renderPupils();
+    if (_activeSection === 'work') _renderWork();
+  }
+
+  function retrySignals() { _loadDashboardSignals(); }
+  function retryWork() { _loadWork(); }
+  function showSetupGuide() { _setupGuideForced = true; _renderOverview(); }
+  function dismissSetupGuide() { _setupGuideForced = false; _savePrefs({ setupDismissed: true }); _renderOverview(); }
+
+  // ── Work list: digital assignments + worksheets + materials ──────
+  function setWorkFilter(f) { _workFilter = f; _renderWork(); }
 
   function _renderWork() {
     const box = el('tc-cd-work');
     if (!box) return;
-    const active   = _assignments.filter(a => !a.archived);
-    const archived = _assignments.filter(a =>  a.archived);
-    const hasAnything = active.length || archived.length || _physicalHomework.length;
+    const filtered = _assignments.filter(a => _workFilter === 'active' ? _isActive(a) : _workFilter === 'closed' ? (!a.archived && !_isActive(a)) : a.archived);
+    const counts = { active: _assignments.filter(_isActive).length, closed: _assignments.filter(a => !a.archived && !_isActive(a)).length, archived: _assignments.filter(a => a.archived).length };
+    const expired = hw => hw.expires_at && Date.parse(hw.expires_at) <= Date.now();
+    const sheets = _physicalHomework.filter(hw => _workFilter === 'active' ? !expired(hw) : _workFilter === 'closed' ? expired(hw) : false);
+    const hasAnything = _assignments.length || _physicalHomework.length || _materials.length;
     box.innerHTML = `
-      <div class="tc-cd-section-header">
-        <h3 class="tc-cd-section-title">📋 Assignments</h3>
-        <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.showHomeworkChoice()">＋ Set new homework</button>
+      <div class="tc-cd-section-header tc-work-heading">
+        <div><h3 class="tc-cd-section-title">Work</h3><p>Homework, tests, worksheets and files for ${esc(_className)}.</p></div>
+        <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.showHomeworkChoice()">＋ Set work</button>
       </div>
-      ${!hasAnything ? '<p class="tc-cd-empty">No assignments yet. Click "+ Set new homework" to create one.</p>' : ''}
-      <div class="ta-copybook-wrap" id="tc-cd-work-cards"></div>
-      ${_physicalHomework.length ? '<div id="tc-cd-phw-list"></div>' : ''}
-      ${archived.length ? `<details class="tc-cd-archived-toggle"><summary>📦 ${archived.length} archived</summary><div class="ta-copybook-wrap" id="tc-cd-work-archived"></div></details>` : ''}
+      ${_workError ? `<div class="tc-cd-inline-error"><p>${esc(_workError)}</p><button type="button" onclick="TeacherClassroomDetail.retryWork()">Try again</button></div>` : ''}
+      <div class="tc-work-filters" role="tablist" aria-label="Filter work">
+        ${[['active', 'Active'], ['closed', 'Closed'], ['archived', 'Archived']].map(([k, label]) => `<button type="button" role="tab" aria-selected="${_workFilter === k}" class="tc-work-filter ${_workFilter === k ? 'on' : ''}" onclick="TeacherClassroomDetail.setWorkFilter('${k}')">${label} <span>${counts[k] + (k === 'active' ? _physicalHomework.filter(h => !expired(h)).length : k === 'closed' ? _physicalHomework.filter(expired).length : 0)}</span></button>`).join('')}
+      </div>
+      ${!hasAnything && !_workError ? '<div class="tc-work-empty"><span>📚</span><strong>No classwork yet</strong><p>Set your first homework and pupil progress will appear here automatically.</p><button type="button" onclick="TeacherClassroomDetail.showHomeworkChoice()">Set the first piece of work →</button></div>' : ''}
+      <div id="tc-cd-work-cards"></div>
+      ${sheets.length ? '<h4 class="tc-work-subhead">📄 Worksheets</h4><div id="tc-cd-phw-list"></div>' : ''}
+      ${_workFilter === 'active' ? `<h4 class="tc-work-subhead">📁 Files shared with this class <button type="button" class="ta-link-btn" onclick="TeacherClassroomDetail.showSection('materials')">${_materials.length ? 'Manage' : 'Upload one'}</button></h4>${_materials.length ? `<div class="tc-work-files">${sortMaterials(_materials, 'recent').slice(0, 6).map(f => `<button type="button" class="tc-work-file" onclick="TeacherClassroomDetail.openFile('${esc(f.file_path)}',${Number(f.link_expiry_seconds)||3600})"><span>${(f.file_name||'').endsWith('.pdf') ? '📄' : '🖼️'}</span><strong>${esc(f.title)}</strong><small>${f.subject ? esc(f.subject) + ' · ' : ''}${_fmtDate(f.shared_at || f.created_at)}</small></button>`).join('')}</div>` : `<p class="tc-cd-empty">No files yet - share a worksheet, a past paper or a photo of the board and every pupil in ${esc(_className)} can open it from their own device.</p>`}` : ''}
     `;
-    _drawCopybooks('tc-cd-work-cards', active);
-    if (archived.length) _drawCopybooks('tc-cd-work-archived', archived);
-    _renderPhysicalHomework();
+    const cards = el('tc-cd-work-cards');
+    if (hasAnything && cards) {
+      if (typeof TeacherWorkspace !== 'undefined' && TeacherWorkspace.drawCards) {
+        TeacherWorkspace.drawCards(cards, filtered, true,
+          _workFilter === 'active' ? 'No active work. Everything set for this class is finished or archived.' : _workFilter === 'closed' ? 'Nothing has closed yet.' : 'Nothing is archived.',
+          { onResults: a => { _loadResultsFor(a.id); showSection('results'); }, onArchived: () => _loadWork() });
+      }
+    }
+    _renderPhysicalHomework(sheets);
   }
 
-  function _renderPhysicalHomework() {
+  function _renderPhysicalHomework(list) {
     const box = el('tc-cd-phw-list');
-    if (!box || !_physicalHomework.length) return;
+    const rows = list || _physicalHomework;
+    if (!box || !rows.length) return;
     const fmt = iso => iso ? new Date(iso).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : '';
     const expired = hw => hw.expires_at && Date.parse(hw.expires_at) <= Date.now();
-    box.innerHTML = _physicalHomework.map(hw => `
+    box.innerHTML = rows.map(hw => `
       <div class="tc-phw-card${expired(hw) ? ' tc-phw-expired' : ''}">
         <div class="tc-phw-badge">📄 Worksheet</div>
         <div class="tc-phw-body">
@@ -135,7 +381,7 @@ const TeacherClassroomDetail = (() => {
           ${hw.subject ? `<p class="tc-phw-meta">${esc(hw.subject)}</p>` : ''}
           ${hw.description ? `<p class="tc-phw-desc">${esc(hw.description)}</p>` : ''}
           <p class="tc-phw-due ${expired(hw) ? 'tc-phw-due-expired' : ''}">
-            ${expired(hw) ? '⏰ Expired' : '📅 Due'} ${fmt(hw.expires_at)}
+            ${expired(hw) ? '⏰ Closed' : '📅 Due'} ${fmt(hw.expires_at)}
           </p>
         </div>
         <div class="tc-phw-actions">
@@ -145,74 +391,17 @@ const TeacherClassroomDetail = (() => {
       </div>`).join('');
   }
 
-  function _drawCopybooks(containerId, rows) {
-    const box = el(containerId);
-    if (!box || !rows.length) return;
-    const fmt = v => v ? new Date(v).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
-    const status = a => {
-      if (a.archived) return 'archived';
-      if (a.status !== 'active' || (a.expires_at && Date.parse(a.expires_at) <= Date.now())) return 'closed';
-      return 'active';
-    };
-    box.innerHTML = rows.map((a, i) => `
-      <div class="ta-copybook" data-idx="${i}">
-        <div class="ta-copybook-fold"></div>
-        <div class="ta-copybook-date">${fmt(a.expires_at)}</div>
-        <div class="ta-copybook-page">
-          <div class="ta-copybook-subject">${esc((a.subject_pack_id||'').replace(/^grade\d+-/,'').replace(/-/g,' '))}</div>
-          <div class="ta-copybook-title">${esc(a.title)}</div>
-          <div class="ta-copybook-meta">${esc(a.question_count)} questions · ${a.duration_mins ? '⏱ Timed' : '🔍 Practice'}<br>${esc(a.submissions ?? 0)} submitted</div>
-          <div class="ta-copybook-status ${status(a)}">${status(a)}</div>
-        </div>
-        <div class="ta-copybook-actions">
-          <button data-results="${i}">📊 Results</button>
-          <button data-share="${i}" ${a.archived ? 'disabled' : ''}>🔗 Share</button>
-          <button data-archive="${i}" title="${a.archived ? 'Restore' : 'Archive'}">${a.archived ? '♻️' : '🗑️'}</button>
-        </div>
-      </div>`).join('');
-
-    box.querySelectorAll('[data-results]').forEach(b => b.onclick = e => {
-      e.stopPropagation();
-      const a = rows[+b.dataset.results];
-      _loadResultsFor(a.id);
-      showSection('results');
-    });
-    box.querySelectorAll('[data-share]').forEach(b => b.onclick = e => {
-      e.stopPropagation();
-      _shareAssignment(rows[+b.dataset.share]);
-    });
-    box.querySelectorAll('[data-archive]').forEach(b => b.onclick = async e => {
-      e.stopPropagation();
-      const a = rows[+b.dataset.archive];
-      if (!confirm(a.archived ? 'Restore this assignment?' : 'Archive this assignment?')) return;
-      b.disabled = true;
-      try {
-        await _sb.rpc('teacher_guest_archive_assignment', {p_id: a.id, p_archive: !a.archived});
-        await _loadWork();
-      } catch(_e) { toast('Could not update assignment.', 3000); b.disabled = false; }
-    });
-  }
-
   function _shareAssignment(a) {
+    if (typeof TeacherWorkspace !== 'undefined' && TeacherWorkspace.share) { TeacherWorkspace.share(a); return; }
     const url  = `${location.origin}/a/${encodeURIComponent(a.code)}`;
     const hint = a.access_mode === 'classroom_pin' ? 'Enter your pupil PIN.'
                : a.access_mode === 'nickname'       ? 'Enter your nickname (no PIN needed).'
                : 'Assignment PIN required.';
     const closes = a.expires_at ? new Date(a.expires_at).toLocaleString() : 'No deadline';
     const text = `${a.title}\n${a.question_count} questions\n${url}\n${hint}\nCloses: ${closes}`;
-    const wa = `https://wa.me/?text=${encodeURIComponent(text)}`;
-
-    // Try the native share sheet first (mobile). If not available or dismissed,
-    // fall back to an inline share panel — window.open() is blocked by popup
-    // blockers when called inside an async catch handler.
-    if (navigator.share) {
-      navigator.share({ title: a.title, text, url }).catch(err => {
-        // AbortError = user dismissed the share sheet intentionally — do nothing.
-        if (err?.name !== 'AbortError') _showSharePanel(a.title, url, wa);
-      });
-      return;
-    }
-    _showSharePanel(a.title, url, wa);
+    // ⚠ The panel first, never navigator.share first: WhatsApp has to be on
+    // screen every time. The OS sheet lists it only where the OS knows it.
+    _showSharePanel(a.title, url, `https://wa.me/?text=${encodeURIComponent(text)}`);
   }
 
   function _showSharePanel(title, url, wa) {
@@ -228,23 +417,21 @@ const TeacherClassroomDetail = (() => {
         </div>
         <p class="tc-share-lbl">Link</p>
         <div class="tc-share-url-row">
-          <input id="tc-share-url-input" class="tc-share-url" readonly value="${url}">
-          <button id="tc-share-copy-btn" onclick="
-            navigator.clipboard.writeText('${url}').then(function(){
-              document.getElementById('tc-share-copy-btn').textContent='Copied!';
-              setTimeout(function(){ document.getElementById('tc-share-copy-btn').textContent='Copy'; },2000);
-            }).catch(function(){
-              document.getElementById('tc-share-url-input').select();
-            })
-          " class="tc-share-copy-btn">Copy</button>
+          <input id="tc-share-url-input" class="tc-share-url" readonly value="${esc(url)}">
+          <button id="tc-share-copy-btn" class="tc-share-copy-btn">Copy</button>
         </div>
-        <a href="${wa}" target="_blank" rel="noopener" class="tc-share-wa-btn">
+        <a href="${esc(wa)}" target="_blank" rel="noopener" class="tc-share-wa-btn">
           <span>&#x1F4AC;</span> Share via WhatsApp
         </a>
         <p class="tc-share-hint">WhatsApp opens in a new tab with the message pre-filled.</p>
       </div>`;
     document.body.appendChild(panel);
     panel.addEventListener('click', e => { if (e.target === panel) panel.remove(); });
+    panel.querySelector('#tc-share-copy-btn').onclick = () => {
+      const b = panel.querySelector('#tc-share-copy-btn');
+      navigator.clipboard?.writeText(url).then(() => { b.textContent = 'Copied!'; setTimeout(() => { b.textContent = 'Copy'; }, 2000); })
+        .catch(() => panel.querySelector('#tc-share-url-input').select());
+    };
   }
 
   // ── Homework type choice ──────────────────────────────────────────
@@ -254,21 +441,21 @@ const TeacherClassroomDetail = (() => {
     overlay.id = 'tc-hw-choice';
     overlay.className = 'tc-hw-overlay';
     overlay.innerHTML = `
-      <div class="tc-hw-choice-panel" role="dialog" aria-modal="true" aria-label="New homework">
+      <div class="tc-hw-choice-panel" role="dialog" aria-modal="true" aria-label="Set work">
         <div class="tc-hw-choice-header">
-          <span>New homework</span>
-          <button onclick="document.getElementById('tc-hw-choice').remove()" class="tc-hw-close">&#x2715;</button>
+          <span>What kind of work?</span>
+          <button onclick="document.getElementById('tc-hw-choice').remove()" class="tc-hw-close" aria-label="Close">&#x2715;</button>
         </div>
         <div class="tc-hw-choice-cards">
           <button class="tc-hw-choice-card" onclick="TeacherClassroomDetail._chooseDigital()">
             <span class="tc-hw-card-icon">📝</span>
-            <strong>Digital quiz</strong>
-            <small>From the question bank — students answer on screen and results are recorded automatically</small>
+            <strong>Questions on screen</strong>
+            <small>From the question bank - pupils answer on a phone or computer and results come back to you automatically</small>
           </button>
           <button class="tc-hw-choice-card" onclick="TeacherClassroomDetail._chooseWorksheet()">
             <span class="tc-hw-card-icon">📄</span>
-            <strong>Upload worksheet</strong>
-            <small>PDF or image — students work offline and hand it in physically</small>
+            <strong>Worksheet to print</strong>
+            <small>PDF or photo - pupils work on paper and hand it in</small>
           </button>
         </div>
       </div>`;
@@ -295,7 +482,7 @@ const TeacherClassroomDetail = (() => {
       <div class="tc-hw-form-panel" role="dialog" aria-modal="true" aria-label="Upload worksheet">
         <div class="tc-hw-choice-header">
           <span>📄 Upload worksheet</span>
-          <button onclick="document.getElementById('tc-phw-form').remove()" class="tc-hw-close">&#x2715;</button>
+          <button onclick="document.getElementById('tc-phw-form').remove()" class="tc-hw-close" aria-label="Close">&#x2715;</button>
         </div>
         <div class="tc-hw-form-body">
           <div class="ncf-field">
@@ -320,7 +507,7 @@ const TeacherClassroomDetail = (() => {
               class="ncf-input" autocomplete="off">
           </div>
           <div class="ncf-field">
-            <label>File (optional — PDF or image, max 10 MB)</label>
+            <label>File (optional - PDF or image, max 10 MB)</label>
             <input id="phw-file"   type="file" accept="application/pdf,image/*" class="hidden"
               onchange="TeacherClassroomDetail._onPhysicalFileChosen('file')">
             <input id="phw-camera" type="file" accept="image/*" capture="environment" class="hidden"
@@ -376,7 +563,9 @@ const TeacherClassroomDetail = (() => {
     e.classList.toggle('hidden', !msg);
   }
 
+  let _phwSubmitting = false;
   async function _submitPhysical() {
+    if (_phwSubmitting) return;
     const title   = document.getElementById('phw-title')?.value.trim();
     if (!title) { _phwSetErr('Please enter a title.'); document.getElementById('phw-title')?.focus(); return; }
     const subject = document.getElementById('phw-subject')?.value || null;
@@ -389,6 +578,7 @@ const TeacherClassroomDetail = (() => {
     const btn = document.getElementById('phw-submit');
     if (btn) { btn.disabled = true; btn.textContent = 'Assigning…'; }
     _phwSetErr('');
+    _phwSubmitting = true;
 
     try {
       const user = (await _sb.auth.getUser()).data?.user;
@@ -421,7 +611,7 @@ const TeacherClassroomDetail = (() => {
     } catch(e) {
       _phwSetErr(e.message || 'Something went wrong.');
       if (btn) { btn.disabled = false; btn.textContent = 'Assign to class →'; }
-    }
+    } finally { _phwSubmitting = false; }
   }
 
   async function downloadPhysicalHW(filePath, fileName) {
@@ -434,34 +624,45 @@ const TeacherClassroomDetail = (() => {
     document.body.appendChild(a); a.click(); a.remove();
   }
 
-  async function deletePhysicalHW(id, filePath) {
-    if (!confirm('Delete this worksheet assignment? Students will no longer see it.')) return;
-    const {error} = await _sb.from('physical_homework').delete().eq('id', id);
-    if (error) { if (typeof toast === 'function') toast('Could not delete: ' + error.message, 2500); return; }
-    if (filePath) await _sb.storage.from('learning-materials').remove([filePath]);
-    if (typeof toast === 'function') toast('Deleted.', 1500);
-    await _loadWork();
+  function deletePhysicalHW(id, filePath) {
+    const go = async () => {
+      // ⚠ Zero rows is a refusal — no error, no rows. Deleting the stored file
+      //   after an unverified row delete would strand a worksheet pupils can
+      //   still see but nobody can open.
+      const {data, error} = await _sb.from('physical_homework')
+        .delete().eq('id', id).select('id');
+      if (error || !data?.length) {
+        if (error) console.error('[deletePhysicalHW]', error.message);
+        if (typeof toast === 'function') toast(error ? 'Could not delete: ' + error.message : 'Could not delete that worksheet.', 3000);
+        return;
+      }
+      if (filePath) await _sb.storage.from('learning-materials').remove([filePath]);
+      if (typeof toast === 'function') toast('Deleted.', 1500);
+      await _loadWork();
+    };
+    const msg = 'Delete this worksheet? Pupils will no longer see it.';
+    if (typeof _confirmModal === 'function') _confirmModal(msg, go, { okLabel: 'Delete' });
+    else if (confirm(msg)) go();
   }
 
   function createWork() {
     const prefs = _loadPrefs();
     const cid   = _classId;
     close();
-    if (typeof TeacherMode !== 'undefined') TeacherMode.switchTab('create');
-    // Set classroom selector
-    const sel = document.getElementById('ta-classroom');
-    if (sel) { sel.value = cid; sel.dispatchEvent(new Event('change')); }
-    document.getElementById('ta-class-picker')?.querySelectorAll('[data-cid]').forEach(b => {
-      b.classList.toggle('ta-class-chip-sel', b.dataset.cid === cid);
-    });
-    // Apply classroom defaults
-    if (prefs.defaultMode) {
-      const modeEl = document.querySelector(`[name="ta-access"][value="${prefs.defaultMode}"]`);
-      if (modeEl) { modeEl.checked = true; modeEl.dispatchEvent(new Event('change')); }
+    if (typeof TeacherMode === 'undefined') return;
+    TeacherMode.switchTab('create');
+    if (TeacherMode.chooseClassroom) TeacherMode.chooseClassroom(cid);
+    else {
+      const sel = document.getElementById('ta-classroom');
+      if (sel) { sel.value = cid; sel.dispatchEvent(new Event('change')); }
     }
-    if (prefs.defaultTime != null) {
+    // Apply classroom defaults
+    if (prefs.defaultMode && TeacherMode.setShareMode) TeacherMode.setShareMode(prefs.defaultMode);
+    if (prefs.defaultTime) {
+      const modeEl = document.getElementById('ta-mode');
+      if (modeEl) { modeEl.value = 'test'; TeacherMode.modeChanged?.(); }
       const timeEl = document.getElementById('ta-duration');
-      if (timeEl) timeEl.value = prefs.defaultTime;
+      if (timeEl) timeEl.value = String(prefs.defaultTime);
     }
   }
 
@@ -469,69 +670,177 @@ const TeacherClassroomDetail = (() => {
   async function _loadPupils() {
     const box = el('tc-cd-pupils');
     if (!box) return;
+    const classId = _classId;
     try {
-      const { data, error } = await _sb.rpc('teacher_guest_manage', {p_action: 'roster', p_classroom: _classId});
-      if (error || !data?.ok) throw new Error('roster failed');
-      _pupils = data.pupils || [];
+      const { data, error } = await _sb.rpc('teacher_guest_manage', {p_action: 'roster', p_classroom: classId});
+      if (error || !data?.ok) throw new Error(error?.message || 'roster failed');
+      if (classId !== _classId) return;
+      // A PIN is shown only after the teacher asks for it; never trust a
+      // roster row that arrives with one attached.
+      _pupils = (data.pupils || []).map(({ pin, ...p }) => p);
+      await _loadNameHistory(_classId);
+      if (_accessType === 'shared') await _loadDevices(_classId);
       _accessType = data.access_type || 'per_student';
       _classPin = data.class_pin || null;
+      _pupilError = '';
+      _pupilsLoaded = true;
       el('tc-cd-stat-pupils').textContent = _pupils.filter(p => p.active).length;
-      _renderPupils();
+      if (_activeSection === 'pupils') _renderPupils();
+      if (_activeSection === 'overview') _renderOverview();
+      if (_activeSection === 'work') _renderWork();
     } catch(_e) {
-      if (box) box.innerHTML = '<p class="tc-cd-err">Could not load pupils.</p>';
+      if (classId !== _classId) return;
+      _pupilError = 'Could not load the pupil list. Nothing has been deleted.';
+      _pupilsLoaded = true;
+      if (_activeSection === 'pupils') _renderPupils();
+      if (_activeSection === 'overview') _renderOverview();
     }
+  }
+  function retryPupils() { const box = el('tc-cd-pupils'); if (box) box.innerHTML = _skeleton(); _loadPupils(); }
+
+  function _pupilActivity(p) {
+    const r = _rollup.get(String(p.id));
+    if (_signals.loading) return { text: 'Checking recent work…', flag: false };
+    if (!r) return { text: _signals.sampled ? 'No work opened yet' : 'No work set yet', flag: false };
+    const bits = [];
+    if (r.last) bits.push(`Last submitted ${_relativeTime(r.last)}`);
+    bits.push(`${r.completed} of ${r.assigned} completed`);
+    if (r.accuracy != null) bits.push(`${r.accuracy}% correct`);
+    return { text: bits.join(' · '), flag: !!r.needsHelp, reason: r.reason };
+  }
+
+  // ⚠ DEVICES, not pupils, and the wording says so. Two children sharing a
+  // tablet are one row here; one child on a phone and a tablet is two. The tag
+  // is the last 6 characters of the device code — enough to tell two tablets
+  // apart, useless for impersonating one.
+  function _deviceListHtml() {
+    const list = Array.isArray(_devices) ? _devices : [];
+    if (!list.length) {
+      return '<p class="tc-cd-empty">No devices have joined yet. Names appear here as pupils sign in with the class PIN.</p>';
+    }
+    const rows = list.map(d => '<li class="tc-cd-device">'
+      + '<b>' + esc(d.name || '?') + '</b>'
+      + '<span class="tc-cd-device-tag">device …' + esc(d.device_tag || '') + '</span>'
+      + '<span class="tc-cd-device-when">last seen ' + esc(_fmtDate(d.last_seen_at)) + '</span></li>').join('');
+    return '<h4 class="tc-cd-section-sub">Who has joined ('
+      + list.length + ' device' + (list.length === 1 ? '' : 's') + ')</h4>'
+      + '<ul class="tc-cd-device-list">' + rows + '</ul>'
+      + '<p class="tc-cd-empty">These are names pupils typed themselves on each device.</p>';
+  }
+
+  // Never blocks the screen: a missing list is better than a missing classroom.
+  async function _loadDevices(classroomId) {
+    _devices = [];
+    if (!classroomId || typeof _sb === 'undefined') return;
+    try {
+      const { data, error } = await _sb.rpc('teacher_guest_device_list', { p_classroom_id: classroomId });
+      if (!error && data && data.ok) _devices = data.devices || [];
+    } catch (_) { /* the PIN banner still renders */ }
+  }
+
+  // ⚠ Renames only, newest first. A trail that also listed every pupil once at
+  // creation would be noise a teacher has to read past — the RPC filters those.
+  // ⚠ It says WHO changed it. "Changed by the pupil" is the case a teacher may
+  // actually want to look at; a child quietly taking another child's name is
+  // the thing this exists to make visible.
+  function _nameHistoryHtml() {
+    const list = Array.isArray(_nameChanges) ? _nameChanges : [];
+    if (!list.length) return '';
+    const rows = list.slice(0, 20).map(h => '<li class="tc-cd-name-change">'
+      + '<b>' + esc(h.old_name || '?') + '</b> → <b>' + esc(h.new_name || '?') + '</b>'
+      + '<span class="tc-cd-name-who tc-cd-name-who-' + (h.changed_by === 'pupil' ? 'pupil' : 'teacher') + '">'
+      + (h.changed_by === 'pupil' ? 'changed by the pupil' : 'changed by you') + '</span>'
+      + '<span class="tc-cd-name-when">' + esc(_fmtDate(h.changed_at)) + '</span></li>').join('');
+    return '<details class="tc-cd-name-history"><summary>✏️ Name changes ('
+      + list.length + ')</summary><ul>' + rows + '</ul>'
+      + (list.length > 20 ? '<p class="tc-cd-empty">Showing the 20 most recent.</p>' : '')
+      + '</details>';
+  }
+
+  // Never blocks the pupil list: a missing trail is better than a missing class.
+  async function _loadNameHistory(classroomId) {
+    _nameChanges = [];
+    if (!classroomId || typeof _sb === 'undefined') return;
+    try {
+      const { data, error } = await _sb.rpc('teacher_pupil_name_history', { p_classroom_id: classroomId });
+      if (!error && data && data.ok) _nameChanges = data.changes || [];
+    } catch (_) { /* the pupil list still renders without it */ }
   }
 
   function _renderPupils() {
     const box = el('tc-cd-pupils');
     if (!box) return;
+    if (_pupilError && !_pupils.length) {
+      box.innerHTML = `<div class="tc-cd-inline-error"><p>${esc(_pupilError)}</p><button type="button" onclick="TeacherClassroomDetail.retryPupils()">Try again</button></div>`;
+      return;
+    }
     const active  = _pupils.filter(p =>  p.active);
     const removed = _pupils.filter(p => !p.active);
 
     if (_accessType === 'shared') {
-      // Shared PIN classroom — show class PIN prominently, no per-student PIN list
       box.innerHTML = `
         <div class="tc-cd-section-header">
-          <h3 class="tc-cd-section-title">🚪 Shared PIN Classroom</h3>
+          <h3 class="tc-cd-section-title">🚪 Shared PIN classroom</h3>
         </div>
         <div class="tc-cd-shared-pin-banner">
-          <div class="tc-cd-shared-pin-label">Class PIN — share this with all your students</div>
+          <div class="tc-cd-shared-pin-label">Class PIN - share this with all your pupils</div>
           <div class="tc-cd-big-pin" id="tc-cd-class-pin-display">${_classPin ? esc(_classPin) : '••••'}</div>
-          <p class="tc-cd-shared-pin-hint">Students enter this PIN on the homework link, then type their name. Their name is remembered on each device so they don't have to re-enter it.</p>
+          <p class="tc-cd-shared-pin-hint">Pupils enter this PIN on the work link, then type their name. Their name is remembered on each device so they do not have to re-enter it.</p>
         </div>
-        <div class="tc-cd-tip">📋 Write this PIN on the board or send it via your class group. Anyone with the PIN and the homework link can join.</div>
+        <div class="tc-cd-tip">📋 Write this PIN on the board or send it to your class group. Anyone with the PIN and the link can join.</div>
+        ${_deviceListHtml()}
       `;
       return;
     }
 
-    // Per-student mode
+    const query = _pupilQuery.trim().toLowerCase();
+    const needHelp = active.filter(p => _pupilActivity(p).flag).length;
     box.innerHTML = `
       <div class="tc-cd-section-header">
-        <h3 class="tc-cd-section-title">👥 Class Register</h3>
+        <div><h3 class="tc-cd-section-title">Pupils</h3><p class="tc-cd-section-sub">${active.length} pupil${active.length === 1 ? '' : 's'}${needHelp ? ` · ${needHelp} may need help` : ''}</p></div>
         <div class="tc-cd-add-pupil-row">
-          <input id="tc-cd-pupil-name" maxlength="40" placeholder="Pupil name…" class="tc-cd-input">
-          <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.addPupil()">＋ Add</button>
+          <label for="tc-cd-pupil-name" class="sr-only">New pupil name</label>
+          <input id="tc-cd-pupil-name" maxlength="40" placeholder="New pupil’s name…" class="tc-cd-input" value="">
+          <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.addPupil()">＋ Add pupil</button>
         </div>
       </div>
-      <p id="tc-cd-pupil-status" class="tc-cd-status-msg"></p>
+      <p id="tc-cd-pupil-status" class="tc-cd-status-msg" role="status"></p>
+      ${_nameHistoryHtml()}
+      ${_pupilError ? `<div class="tc-cd-inline-error"><p>${esc(_pupilError)}</p><button type="button" onclick="TeacherClassroomDetail.retryPupils()">Try again</button></div>` : ''}
       ${active.length ? `
-        <div class="tc-cd-pins-toolbar">
-          <button class="tc-cd-pill tc-cd-pill-pin-toggle" id="tc-cd-reveal-all-btn" onclick="TeacherClassroomDetail.revealAllPins()">
-            🔑 Show all PINs
-          </button>
-          <span class="tc-cd-pins-note">Tap to reveal all PINs at once</span>
-        </div>` : '<p class="tc-cd-empty">No pupils yet. Add a pupil above — each gets a private 4-digit PIN.</p>'}
+        <div class="tc-pupil-overview">
+          <label><span aria-hidden="true">🔎</span><input id="tc-cd-pupil-search" type="search" placeholder="Find a pupil…" autocomplete="off" aria-label="Find a pupil" value="${esc(_pupilQuery)}"></label>
+          <div class="tc-cd-pins-toolbar">
+            <button class="tc-cd-pill tc-cd-pill-pin-toggle" id="tc-cd-reveal-all-btn" onclick="TeacherClassroomDetail.revealAllPins()">🔑 Show all PINs</button>
+          </div>
+        </div>` : '<div class="tc-work-empty"><span>👥</span><strong>No pupils yet</strong><p>Add each pupil by name. Every pupil gets a private four-digit PIN to open work with.</p></div>'}
       <div class="tc-cd-register" id="tc-cd-register-list">
-        ${active.map(p => `
-          <div class="tc-cd-register-row" data-pi="${_pupils.indexOf(p)}">
-            <span class="tc-cd-register-name">✏️ ${esc(p.name)}</span>
-            <span class="tc-cd-student-pin-badge hidden" data-pin-badge="${_pupils.indexOf(p)}">––––</span>
-            <div class="tc-cd-register-actions">
-              <button class="tc-cd-pill" data-action="reset_pin"    data-pi="${_pupils.indexOf(p)}">↻ Reset PIN</button>
-              <button class="tc-cd-pill" data-action="rename_pupil" data-pi="${_pupils.indexOf(p)}">✏️ Rename</button>
-              <button class="tc-cd-pill tc-cd-pill-red" data-action="toggle_pupil" data-pi="${_pupils.indexOf(p)}">Remove</button>
-            </div>
-          </div>`).join('')}
+        ${active.map(p => {
+          const pi = _pupils.indexOf(p);
+          const act = _pupilActivity(p);
+          const revealed = !!p.pin;
+          return `
+          <div class="tc-cd-register-row tp-row ${act.flag ? 'tp-row-flag' : ''}" data-pi="${pi}" data-search="${esc(String(p.name).toLowerCase())}" ${query && !String(p.name).toLowerCase().includes(query) ? 'hidden' : ''}>
+            <button type="button" class="tp-open" onclick="TeacherClassroomDetail.openPupil(${pi})" aria-label="Open ${esc(p.name)}">
+              <span class="tc-pupil-avatar" aria-hidden="true">${esc(String(p.name).trim().charAt(0).toUpperCase() || '?')}</span>
+              <span class="tc-cd-register-name">${esc(p.name)}<small>${esc(act.text)}</small></span>
+            </button>
+            ${act.flag ? `<span class="tp-flag" title="${esc(act.reason || '')}">🙋 May need help</span>` : ''}
+            <span class="tp-pin">
+              <span class="tc-cd-student-pin-badge ${revealed ? '' : 'hidden'}" data-pin-badge="${pi}">${revealed ? esc(p.pin) : '––––'}</span>
+              <button type="button" class="tc-cd-pill" data-action="toggle_pin" data-pi="${pi}" aria-label="${revealed ? 'Hide' : 'Show'} PIN for ${esc(p.name)}">${revealed ? '🙈 Hide' : '🔑 PIN'}</button>
+              <button type="button" class="tc-cd-pill ${revealed ? '' : 'hidden'}" data-action="copy_pin" data-pi="${pi}" aria-label="Copy PIN for ${esc(p.name)}">📋</button>
+            </span>
+            <details class="tp-manage">
+              <summary aria-label="Manage ${esc(p.name)}">⋯</summary>
+              <div class="tp-manage-menu">
+                <button type="button" data-action="reset_pin"    data-pi="${pi}">↻ Reset PIN</button>
+                <button type="button" data-action="rename_pupil" data-pi="${pi}">✏️ Rename</button>
+                <button type="button" class="danger" data-action="toggle_pupil" data-pi="${pi}">Remove from class</button>
+              </div>
+            </details>
+          </div>`;
+        }).join('')}
         ${removed.length ? `<details class="tc-cd-archived-toggle"><summary>🗑 ${removed.length} removed</summary>
           ${removed.map(p => `
             <div class="tc-cd-register-row tc-cd-register-row-dim">
@@ -540,24 +849,28 @@ const TeacherClassroomDetail = (() => {
             </div>`).join('')}
         </details>` : ''}
       </div>
-      <div class="tc-cd-tip">📋 Each student has their own unique PIN. Share it with them so they can log in to homework links.</div>
+      ${active.length ? '<div class="tc-cd-tip">📋 Give each pupil their own PIN and nobody else’s. Tap a pupil’s name to see their work.</div>' : ''}
     `;
-    box.querySelectorAll('[data-action]').forEach(b => b.onclick = () => _pupilAction(b.dataset.action, +b.dataset.pi));
+    box.querySelectorAll('[data-action]').forEach(b => b.onclick = e => { e.stopPropagation(); _pupilAction(b.dataset.action, +b.dataset.pi, b); });
+    const search = el('tc-cd-pupil-search');
+    if (search) search.oninput = e => {
+      _pupilQuery = String(e.target.value || '');
+      const q = _pupilQuery.trim().toLowerCase();
+      box.querySelectorAll('.tc-cd-register-row[data-search]').forEach(row => { row.hidden = !!q && !row.dataset.search.includes(q); });
+    };
     el('tc-cd-pupil-name')?.addEventListener('keydown', e => { if (e.key === 'Enter') addPupil(); });
-    // Restore revealed state if "Show all PINs" was already clicked this session
     if (_pinsRevealed) _applyRevealedPins(active);
   }
 
   function _applyRevealedPins(pupils) {
     const btn = document.getElementById('tc-cd-reveal-all-btn');
-    const note = btn?.parentElement?.querySelector('.tc-cd-pins-note');
     let copyAllBtn = document.getElementById('tc-cd-copy-all-pins-btn');
-    if (btn) { btn.textContent = '🙈 Hide PINs'; btn.classList.add('tc-cd-pill-active'); btn.onclick = () => _hidePins(); }
-    if (note) note.textContent = 'PINs visible — tap to hide';
+    if (btn) { btn.textContent = '🙈 Hide all PINs'; btn.classList.add('tc-cd-pill-active'); btn.onclick = () => _hidePins(); }
     if (!copyAllBtn && btn) {
       copyAllBtn = document.createElement('button');
       copyAllBtn.id = 'tc-cd-copy-all-pins-btn';
       copyAllBtn.className = 'tc-cd-pill';
+      copyAllBtn.type = 'button';
       copyAllBtn.textContent = '📋 Copy all PINs';
       copyAllBtn.onclick = async () => {
         const lines = _pupils.filter(p => p.active && p.pin).map(p => `${p.name}: ${p.pin}`).join('\n');
@@ -569,21 +882,32 @@ const TeacherClassroomDetail = (() => {
     }
     pupils.forEach(p => {
       if (!p.pin) return;
-      const badge = document.querySelector(`[data-pin-badge="${_pupils.indexOf(p)}"]`);
-      if (badge) { badge.textContent = p.pin; badge.classList.remove('hidden'); }
+      _showPinInRow(_pupils.indexOf(p), p.pin);
     });
+  }
+
+  function _showPinInRow(pi, pin) {
+    const badge = document.querySelector(`[data-pin-badge="${pi}"]`);
+    if (badge) { badge.textContent = pin; badge.classList.remove('hidden'); }
+    const toggle = document.querySelector(`[data-action="toggle_pin"][data-pi="${pi}"]`);
+    if (toggle) { toggle.textContent = '🙈 Hide'; toggle.setAttribute('aria-label', toggle.getAttribute('aria-label').replace(/^Show/, 'Hide')); }
+    document.querySelector(`[data-action="copy_pin"][data-pi="${pi}"]`)?.classList.remove('hidden');
+  }
+  function _hidePinInRow(pi) {
+    const badge = document.querySelector(`[data-pin-badge="${pi}"]`);
+    if (badge) { badge.textContent = '––––'; badge.classList.add('hidden'); }
+    const toggle = document.querySelector(`[data-action="toggle_pin"][data-pi="${pi}"]`);
+    if (toggle) { toggle.textContent = '🔑 PIN'; toggle.setAttribute('aria-label', toggle.getAttribute('aria-label').replace(/^Hide/, 'Show')); }
+    document.querySelector(`[data-action="copy_pin"][data-pi="${pi}"]`)?.classList.add('hidden');
   }
 
   function _hidePins() {
     _pinsRevealed = false;
-    _pupils.forEach(p => delete p.pin);
+    _pupils.forEach((p, pi) => { if (p.pin) { delete p.pin; _hidePinInRow(pi); } });
     const btn = document.getElementById('tc-cd-reveal-all-btn');
-    const note = btn?.parentElement?.querySelector('.tc-cd-pins-note');
     const copyAllBtn = document.getElementById('tc-cd-copy-all-pins-btn');
     if (btn) { btn.textContent = '🔑 Show all PINs'; btn.classList.remove('tc-cd-pill-active'); btn.onclick = () => revealAllPins(); }
-    if (note) note.textContent = 'Tap to reveal all PINs at once';
     if (copyAllBtn) copyAllBtn.remove();
-    document.querySelectorAll('[data-pin-badge]').forEach(b => { b.textContent = '––––'; b.classList.add('hidden'); });
   }
 
   async function revealAllPins() {
@@ -592,12 +916,12 @@ const TeacherClassroomDetail = (() => {
     try {
       const {data, error} = await _sb.rpc('teacher_guest_manage', {p_action: 'reveal_all_pins', p_classroom: _classId});
       if (error || !data?.ok) throw new Error('Failed');
-      // Merge PINs back into _pupils array
       (data.pupils || []).forEach(rp => {
         const p = _pupils.find(p => p.id === rp.id);
         if (p) p.pin = rp.pin;
       });
       _pinsRevealed = true;
+      if (btn) btn.disabled = false;
       _applyRevealedPins(_pupils.filter(p => p.active));
     } catch(_e) {
       toast('Could not retrieve PINs. Please try again.', 2500);
@@ -608,16 +932,17 @@ const TeacherClassroomDetail = (() => {
   function _promptInline(title, label, defaultVal) {
     return new Promise(resolve => {
       const overlay = document.createElement('div');
-      overlay.style.cssText = 'position:fixed;inset:0;z-index:10002;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)';
+      overlay.className = 'tp-dialog-overlay';
       const card = document.createElement('div');
-      card.style.cssText = 'background:#fff;border-radius:20px;padding:28px 24px;max-width:320px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,.3)';
+      card.className = 'tp-dialog';
+      card.setAttribute('role', 'dialog'); card.setAttribute('aria-modal', 'true'); card.setAttribute('aria-label', title);
       card.innerHTML = `
-        <p style="font-size:1rem;font-weight:700;color:#111827;margin-bottom:14px">${esc(title)}</p>
-        <label style="font-size:.85rem;color:#6b7280;display:block;margin-bottom:6px">${esc(label)}</label>
-        <input id="_pi-input" value="${esc(defaultVal || '')}" style="width:100%;padding:10px 12px;border:1.5px solid #d1d5db;border-radius:10px;font-size:1rem;outline:none;box-sizing:border-box" />
-        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px">
-          <button id="_pi-cancel" style="padding:9px 18px;border-radius:10px;border:1px solid #e5e7eb;background:#f9fafb;color:#374151;font-weight:600;cursor:pointer">Cancel</button>
-          <button id="_pi-ok" style="padding:9px 18px;border-radius:10px;border:none;background:#1d4ed8;color:#fff;font-weight:700;cursor:pointer">Save</button>
+        <p class="tp-dialog-title">${esc(title)}</p>
+        <label class="tp-dialog-label" for="_pi-input">${esc(label)}</label>
+        <input id="_pi-input" class="tp-dialog-input" value="${esc(defaultVal || '')}" maxlength="40" />
+        <div class="tp-dialog-actions">
+          <button id="_pi-cancel" type="button" class="tp-dialog-cancel">Cancel</button>
+          <button id="_pi-ok" type="button" class="tp-dialog-ok">Save</button>
         </div>`;
       overlay.appendChild(card);
       document.body.appendChild(overlay);
@@ -633,17 +958,18 @@ const TeacherClassroomDetail = (() => {
 
   function _showPinModal(name, pin) {
     const overlay = document.createElement('div');
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:10002;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px)';
+    overlay.className = 'tp-dialog-overlay';
     const card = document.createElement('div');
-    card.style.cssText = 'background:#fff;border-radius:20px;padding:32px 28px;max-width:320px;width:90%;text-align:center;box-shadow:0 16px 48px rgba(0,0,0,.3)';
+    card.className = 'tp-dialog tp-dialog-center';
+    card.setAttribute('role', 'dialog'); card.setAttribute('aria-modal', 'true'); card.setAttribute('aria-label', 'PIN for ' + name);
     card.innerHTML = `
-      <p style="font-size:.9rem;color:#6b7280;margin-bottom:6px">📌 PIN for</p>
-      <p style="font-size:1.1rem;font-weight:700;color:#111827;margin-bottom:16px">${esc(name)}</p>
-      <div style="font-family:monospace;font-size:2.4rem;font-weight:900;letter-spacing:.2em;color:#1d4ed8;background:#eff6ff;border-radius:12px;padding:14px 0;margin-bottom:8px">${esc(pin)}</div>
-      <p style="font-size:.78rem;color:#9ca3af;margin-bottom:20px">Give this PIN only to the pupil — do not share it with the class.</p>
-      <div style="display:flex;gap:10px;justify-content:center">
-        <button id="_pm-copy" style="flex:1;padding:10px;border-radius:12px;border:none;background:#1d4ed8;color:#fff;font-weight:700;cursor:pointer;font-size:.9rem">📋 Copy PIN</button>
-        <button id="_pm-close" style="flex:1;padding:10px;border-radius:12px;border:1px solid #e5e7eb;background:#f9fafb;color:#374151;font-weight:600;cursor:pointer;font-size:.9rem">Close</button>
+      <p class="tp-dialog-label">📌 PIN for</p>
+      <p class="tp-dialog-title">${esc(name)}</p>
+      <div class="tp-dialog-pin">${esc(pin)}</div>
+      <p class="tp-dialog-hint">Give this PIN only to ${esc(name)} - not to the whole class.</p>
+      <div class="tp-dialog-actions">
+        <button id="_pm-copy" type="button" class="tp-dialog-ok">📋 Copy PIN</button>
+        <button id="_pm-close" type="button" class="tp-dialog-cancel">Close</button>
       </div>`;
     overlay.appendChild(card);
     document.body.appendChild(overlay);
@@ -654,12 +980,31 @@ const TeacherClassroomDetail = (() => {
       try { await navigator.clipboard.writeText(pin); copyBtn.textContent = 'Copied ✓'; setTimeout(() => { copyBtn.textContent = '📋 Copy PIN'; }, 2000); }
       catch { copyBtn.textContent = pin; }
     };
+    copyBtn.focus();
   }
 
-  async function _pupilAction(action, pi) {
+  async function _pupilAction(action, pi, button) {
     const p = _pupils[pi];
     if (!p) return;
     const args = {p_action: action, p_classroom: _classId, p_id: p.id};
+    if (action === 'toggle_pin') {
+      if (p.pin) { delete p.pin; _hidePinInRow(pi); return; }
+      if (button) button.disabled = true;
+      try {
+        const {data, error} = await _sb.rpc('teacher_guest_manage', {p_action: 'reveal_pin', p_classroom: _classId, p_id: p.id});
+        if (error || !data?.pin) throw new Error('no pin');
+        p.pin = data.pin;
+        _showPinInRow(pi, data.pin);
+      } catch(_e) { toast('Could not retrieve the PIN. Please try again.', 2500); }
+      finally { if (button) button.disabled = false; }
+      return;
+    }
+    if (action === 'copy_pin') {
+      if (!p.pin) return;
+      try { await navigator.clipboard.writeText(p.pin); toast(`PIN for ${p.name} copied.`, 1800); }
+      catch { prompt(`PIN for ${p.name}:`, p.pin); }
+      return;
+    }
     if (action === 'reveal_pin') {
       try {
         const {data} = await _sb.rpc('teacher_guest_manage', args);
@@ -667,25 +1012,40 @@ const TeacherClassroomDetail = (() => {
       } catch(_e) { toast('Could not retrieve PIN.', 2500); }
       return;
     }
-    if (action === 'reset_pin'    && !confirm(`Reset ${p.name}'s PIN? The current PIN will stop working.`)) return;
-    if (action === 'toggle_pupil' && p.active && !confirm(`Remove ${p.name}? Past results are kept.`)) return;
+    const run = async () => {
+      try {
+        const {data, error} = await _sb.rpc('teacher_guest_manage', args);
+        if (error) throw error;
+        if (data?.pin) _showPinModal(p.name, data.pin);
+        await _loadPupils();
+      } catch(_e) { toast('That did not work. Please try again.', 2500); }
+    };
+    if (action === 'reset_pin') {
+      const msg = `Reset ${p.name}'s PIN? The current PIN will stop working and you will see the new one.`;
+      if (typeof _confirmModal === 'function') _confirmModal(msg, run, { icon: '🔑', okLabel: 'Reset PIN', danger: false }); else if (confirm(msg)) run();
+      return;
+    }
+    if (action === 'toggle_pupil' && p.active) {
+      const msg = `Remove ${p.name} from this class? Past results are kept and you can restore them later.`;
+      if (typeof _confirmModal === 'function') _confirmModal(msg, run, { okLabel: 'Remove' }); else if (confirm(msg)) run();
+      return;
+    }
     if (action === 'rename_pupil') {
       const name = await _promptInline('Rename pupil', 'New name:', p.name);
       if (!name?.trim()) return;
       args.p_name = name.trim();
     }
-    try {
-      const {data} = await _sb.rpc('teacher_guest_manage', args);
-      if (data?.pin) _showPinModal(p.name, data.pin);
-      await _loadPupils();
-    } catch(_e) { toast('Action failed. Please try again.', 2500); }
+    await run();
   }
 
+  let _addingPupil = false;
   async function addPupil() {
+    if (_addingPupil) return;
     const input  = el('tc-cd-pupil-name');
     const name   = input?.value.trim();
     const status = el('tc-cd-pupil-status');
-    if (!name) { if (status) status.textContent = 'Enter a pupil name first.'; return; }
+    if (!name) { if (status) status.textContent = 'Type the pupil’s name first.'; input?.focus(); return; }
+    _addingPupil = true;
     try {
       const {data, error} = await _sb.rpc('teacher_guest_manage', {p_action: 'add_pupil', p_classroom: _classId, p_name: name});
       if (error || !data?.ok) throw new Error(error?.message || 'Failed');
@@ -693,8 +1053,58 @@ const TeacherClassroomDetail = (() => {
       if (input)  input.value = '';
       if (status) status.textContent = '';
       await _loadPupils();
-    } catch(e) { if (status) status.textContent = e.message; }
+    } catch(e) { if (status) status.textContent = e.message || 'Could not add the pupil. Please try again.'; }
+    finally { _addingPupil = false; }
   }
+
+  // ── One pupil: their work in this classroom ───────────────────────
+  function openPupil(pi) {
+    const p = _pupils[pi];
+    if (!p) return;
+    _openPupilId = p.id;
+    document.getElementById('tp-panel')?.remove();
+    const ins = I();
+    const key = String(p.id);
+    const rows = _signalGroups.map(g => ({ assignment: g.assignment, row: g.rows.find(r => r.name_key === key) })).filter(x => x.row);
+    const r = _rollup.get(key);
+    const act = _pupilActivity(p);
+    const overlay = document.createElement('div');
+    overlay.id = 'tp-panel';
+    overlay.className = 'ta-detail-overlay';
+    overlay.tabIndex = -1;
+    overlay.innerHTML = `<section class="ta-detail-panel" role="dialog" aria-modal="true" aria-label="Pupil details">
+      <button type="button" class="ta-detail-close" aria-label="Close" data-close>×</button>
+      <div class="ta-detail-heading"><div><span class="ta-detail-kicker">${esc(_className)}</span><h2>${esc(p.name)}</h2></div>${act.flag ? '<span class="ta-detail-state closed">May need help</span>' : ''}</div>
+      <p class="ta-detail-status-note">${esc(act.reason || act.text)}</p>
+      ${r ? `<div class="ta-detail-stats">
+        <div><strong>${r.completed}</strong><span>Completed</span></div>
+        <div><strong>${r.notStarted}</strong><span>Not started</span></div>
+        <div><strong>${r.accuracy == null ? '-' : r.accuracy + '%'}</strong><span>Correct</span></div>
+        <div><strong>${r.answered}</strong><span>Questions answered</span></div>
+      </div>` : ''}
+      <div class="ta-detail-section-head"><div><h3>Recent work</h3><p>${_signals.sampled ? `The latest ${_signals.sampled} active assignment${_signals.sampled === 1 ? '' : 's'} in this classroom.` : 'No active work in this classroom yet.'}</p></div></div>
+      ${rows.length ? `<div class="ta-detail-pupils">${rows.map(x => {
+        const st = ins ? ins.state(x.row) : (x.row.submitted_at ? 'completed' : 'not-started');
+        const label = st === 'completed' ? 'Completed' : st === 'working' ? 'Working on it' : 'Not started';
+        return `<div class="ta-detail-pupil"><span><strong>${esc(x.assignment.title)}</strong><small>${esc(label)}${x.row.submitted_at ? ' · ' + esc(_relativeTime(x.row.submitted_at)) : ''}</small></span><b class="${st === 'completed' ? 'submitted' : st === 'working' ? 'in-progress' : 'not-started'}">${st === 'completed' ? `${esc(x.row.score)}/${esc(x.row.total)} · ${esc(x.row.pct)}%` : label}</b></div>`;
+      }).join('')}</div>` : '<p class="ta-detail-empty">Nothing to show yet.</p>'}
+      <div class="ta-detail-footer">
+        <button type="button" data-practice>📝 Give ${esc(p.name.split(' ')[0])} more practice</button>
+        <button type="button" class="primary" data-close>Done</button>
+      </div>
+    </section>`;
+    document.body.appendChild(overlay);
+    overlay.onclick = e => { if (e.target === overlay) closePupil(); };
+    overlay.onkeydown = e => { if (e.key === 'Escape') closePupil(); };
+    overlay.querySelectorAll('[data-close]').forEach(b => b.onclick = closePupil);
+    overlay.querySelector('[data-practice]').onclick = () => {
+      const last = rows[0];
+      closePupil(); close();
+      if (typeof TeacherMode !== 'undefined' && TeacherMode.prefillPractice) TeacherMode.prefillPractice({ classroomId: _classId || last?.assignment.classroom_id, packId: last?.assignment.subject_pack_id, chapterIds: last?.assignment.chapter_ids || [], pupilKeys: [key], label: `Practice for ${p.name}` });
+    };
+    overlay.focus();
+  }
+  function closePupil() { _openPupilId = null; document.getElementById('tp-panel')?.remove(); }
 
   // ── Materials ─────────────────────────────────────────────────────
   async function _loadMaterials() {
@@ -704,25 +1114,59 @@ const TeacherClassroomDetail = (() => {
       // Load only materials assigned to this classroom.
       // Falls back to all-materials query if classroom_materials table doesn't exist yet.
       let files = [];
+      // assigned_at is when this file was shared with THIS class, which is the
+      // date that means something to a teacher looking at one classroom - the
+      // upload date can be months earlier and belong to another class entirely.
       const {data, error} = await _sb
         .from('classroom_materials')
-        .select('learning_materials(*)')
+        .select('assigned_at, learning_materials(*)')
         .eq('classroom_id', _classId);
       if (error && (error.code === '42P01' || error.message?.includes('does not exist'))) {
-        // Table not yet created — fall back to unfiltered list with a notice
+        // Table not yet created - fall back to the teacher's own materials.
+        // "Unfiltered" is now a misnomer: RLS scopes this to the caller's own
+        // rows (see engine/teacher.js load() and scripts/sql-tests/materials-rls.js).
         const {data: all, error: e2} = await _sb.from('learning_materials').select('*').order('created_at', {ascending: false});
         if (e2) throw e2;
         files = all || [];
       } else {
         if (error) throw error;
-        files = (data || []).map(r => r.learning_materials).filter(Boolean)
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        files = (data || []).filter(r => r.learning_materials)
+          .map(r => ({...r.learning_materials, shared_at: r.assigned_at || null}));
       }
+      files = sortMaterials(files, _matSort);
+      _materials = files;
+      await _loadMaterialDone(_classId);
       el('tc-cd-stat-materials').textContent = files.length;
       _renderMaterials(files);
+      if (_activeSection === 'work') _renderWork();
     } catch(_e) {
       if (box) box.innerHTML = '<p class="tc-cd-err">Could not load materials.</p>';
     }
+  }
+
+  // ⚠ "said they have done this", never "completed". Nothing can mark a PDF or
+  // a video, so this is the pupil's own word and the wording has to admit it.
+  // A teacher who reads it as a score would be grading a self-report.
+  function _doneChip(materialId) {
+    const info = _matDone && _matDone.materials ? _matDone.materials[materialId] : null;
+    const done = info ? Number(info.done) || 0 : 0;
+    if (!done) return '';
+    const expected = Number(_matDone.expected) || 0;
+    const names = Array.isArray(info.names) ? info.names : [];
+    // The names go in a title, not on the card: 25 of them would bury the row.
+    return `<p class="tc-cd-done-chip" title="${esc(names.slice(0, 30).join(', '))}">`
+      + `✓ ${done}${expected ? ' of ' + expected : ''} said they have done this</p>`;
+  }
+
+  // Never blocks the list. If this read fails the materials still render, just
+  // without the chips — a missing count is better than a missing worksheet.
+  async function _loadMaterialDone(classroomId) {
+    _matDone = { expected: 0, materials: {} };
+    if (!classroomId || typeof _sb === 'undefined') return;
+    try {
+      const { data, error } = await _sb.rpc('teacher_material_completions', { p_classroom_id: classroomId });
+      if (!error && data && data.ok) _matDone = data;
+    } catch (_) { /* chips stay absent */ }
   }
 
   function _renderMaterials(files) {
@@ -732,6 +1176,8 @@ const TeacherClassroomDetail = (() => {
       <div class="tc-cd-section-header">
         <h3 class="tc-cd-section-title">📁 Learning Materials</h3>
       </div>
+      ${files.length > 1 ? materialSortBar(_matSort, 'TeacherClassroomDetail.setMaterialSort',
+        ['recent', 'oldest', 'subject', 'grade', 'title']) : ''}
       <div class="tc-cd-upload-panel">
         <div class="tc-cd-upload-row">
           <input id="tc-cd-mat-title" type="text" maxlength="80"  placeholder="Title…"                   class="tc-cd-input" style="flex:2">
@@ -772,10 +1218,12 @@ const TeacherClassroomDetail = (() => {
             <div class="tc-cd-file-icon">${(f.file_name||'').endsWith('.pdf') ? '📄' : '🖼️'}</div>
             <div class="tc-cd-file-info">
               <p class="tc-cd-file-name">${esc(f.title)}</p>
-              <p class="tc-cd-file-meta">${f.subject ? esc(f.subject) + ' · ' : ''}${_fmtSize(f.file_size)} · Uploaded ${_fmtDate(f.created_at)} · Link valid ${_fmtExpiry(f.link_expiry_seconds)}</p>
+              <p class="tc-cd-file-meta">${f.subject ? esc(f.subject) + ' · ' : ''}${f.grade ? 'Grade ' + f.grade + ' · ' : ''}${_fmtSize(f.file_size)} · ${f.shared_at ? 'Shared with this class ' + _fmtDate(f.shared_at) : 'Uploaded ' + _fmtDate(f.created_at)} · Link valid ${_fmtExpiry(f.link_expiry_seconds)}</p>
+              ${_doneChip(f.id)}
               ${f.description ? `<p class="tc-cd-file-desc">${esc(f.description)}</p>` : ''}
             </div>
             <div class="tc-cd-file-btns">
+              <button onclick="TeacherClassroomDetail.shareMaterial('${esc(f.id)}')" class="tc-cd-pill tc-cd-pill-share">💬 Share</button>
               <button onclick="TeacherClassroomDetail.openFile('${esc(f.file_path)}',${Number(f.link_expiry_seconds)||3600})" class="tc-cd-pill">📂 Open</button>
               <button onclick="TeacherClassroomDetail.copyFileLink('${esc(f.file_path)}',${Number(f.link_expiry_seconds)||3600})" class="tc-cd-pill">🔗 Link</button>
               <button onclick="TeacherClassroomDetail.deleteFile('${esc(f.id)}','${esc(f.file_path)}')" class="tc-cd-pill tc-cd-pill-red">Delete</button>
@@ -783,6 +1231,26 @@ const TeacherClassroomDetail = (() => {
           </div>`).join('')}
       </div>
     `;
+  }
+
+  // Re-sorts what is already loaded. The upload form above the list is part of
+  // the same innerHTML, so anything half-typed in it would be lost - hence the
+  // repaint keeps the fields it can and the sort bar sits above them.
+  function setMaterialSort(key) {
+    _matSort = MATERIAL_SORT_LABELS[key] ? key : 'recent';
+    writeMaterialSort(_matSort);
+    const draft = {
+      title: el('tc-cd-mat-title')?.value || '',
+      desc: el('tc-cd-mat-desc')?.value || '',
+      subject: el('tc-cd-mat-subject')?.value || '',
+      expiry: el('tc-cd-mat-expiry')?.value || '',
+    };
+    _materials = sortMaterials(_materials, _matSort);
+    _renderMaterials(_materials);
+    if (el('tc-cd-mat-title'))   el('tc-cd-mat-title').value = draft.title;
+    if (el('tc-cd-mat-desc'))    el('tc-cd-mat-desc').value = draft.desc;
+    if (el('tc-cd-mat-subject')) el('tc-cd-mat-subject').value = draft.subject;
+    if (el('tc-cd-mat-expiry') && draft.expiry) el('tc-cd-mat-expiry').value = draft.expiry;
   }
 
   function _onMatFileChosen(source) {
@@ -843,6 +1311,23 @@ const TeacherClassroomDetail = (() => {
     catch { prompt(`Copy this link (valid ${label}):`, url); }
   }
 
+  // The same share panel the assignment link uses, so a file and a piece of
+  // work leave this screen the same way: WhatsApp, always on it.
+  async function shareMaterial(id) {
+    const f = _materials.find(m => String(m.id) === String(id));
+    if (!f) return;
+    const slow = setTimeout(() => toast('Preparing the link…', 1500), 400);
+    const url = await _getSignedUrl(f.file_path, Number(f.link_expiry_seconds) || 3600);
+    clearTimeout(slow);
+    if (!url) { toast('Could not create a share link. Please try again.', 3500); return; }
+    const text = materialShareMessage(f, url);
+    if (typeof TeacherWorkspace !== 'undefined' && TeacherWorkspace.shareText) {
+      TeacherWorkspace.shareText(f.title, text, url);
+      return;
+    }
+    _showSharePanel(f.title, url, `https://wa.me/?text=${encodeURIComponent(text)}`);
+  }
+
   async function openFile(filePath, expirySeconds) {
     const url = await _getSignedUrl(filePath, expirySeconds || 3600);
     if (!url) { toast('Could not open file.', 2000); return; }
@@ -851,8 +1336,15 @@ const TeacherClassroomDetail = (() => {
 
   async function deleteFile(id, filePath) {
     if (!confirm('Delete this file? This cannot be undone.')) return;
-    const {error: dbErr} = await _sb.from('learning_materials').delete().eq('id', id);
-    if (dbErr) { toast('Could not delete: ' + dbErr.message, 2500); return; }
+    // ⚠ Zero rows is a refusal — no error, no rows. Removing the object after
+    //   an unverified row delete loses the file and keeps the record.
+    const {data, error: dbErr} = await _sb.from('learning_materials')
+      .delete().eq('id', id).select('id');
+    if (dbErr || !data?.length) {
+      if (dbErr) console.error('[deleteFile]', dbErr.message);
+      toast(dbErr ? 'Could not delete: ' + dbErr.message : 'Could not delete that file.', 3000);
+      return;
+    }
     await _sb.storage.from('learning-materials').remove([filePath]);
     await _loadMaterials();
   }
@@ -892,11 +1384,11 @@ const TeacherClassroomDetail = (() => {
     const live = _assignments.filter(a => !a.archived);
     box.innerHTML = `
       <div class="tc-cd-section-header">
-        <h3 class="tc-cd-section-title">📊 Results &amp; Marks</h3>
+        <div><button type="button" class="tr-back" onclick="TeacherClassroomDetail.showSection('work')">← Work</button><h3 class="tc-cd-section-title">📊 Results</h3></div>
         <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.refreshResults()">🔄 Refresh</button>
       </div>
       <select id="tc-cd-results-sel" class="tc-cd-input" style="margin-bottom:1rem;max-width:360px">
-        <option value="">Select an assignment…</option>
+        <option value="">Choose a piece of work…</option>
         ${live.map(a => `<option value="${esc(a.id)}">${esc(a.title)}</option>`).join('')}
       </select>
       <div id="tc-cd-results-body" class="tc-cd-results-wrap"></div>
@@ -916,14 +1408,15 @@ const TeacherClassroomDetail = (() => {
     if (!box || !assignId) { if (box) box.innerHTML = ''; return; }
     box.innerHTML = '<p class="tc-cd-loading">Loading results…</p>';
     try {
-      const {data, error} = await _sb.rpc('teacher_guest_results', {p_assignment_id: assignId});
-      if (error || !data?.ok) throw new Error();
-      const rows      = data.submissions || [];
+      const rows = typeof TeacherWorkspace !== 'undefined' && TeacherWorkspace.fetchResults
+        ? await TeacherWorkspace.fetchResults(assignId, { force: true })
+        : ((await _sb.rpc('teacher_guest_results', {p_assignment_id: assignId})).data?.submissions || []);
       const submitted = rows.filter(r =>  r.submitted_at);
       const pending   = rows.filter(r => !r.submitted_at);
       el('tc-cd-stat-results').textContent = submitted.length;
       box.innerHTML = `
-        <p class="tc-cd-results-summary">${submitted.length} submitted · ${pending.length} not started</p>
+        <p class="tc-cd-results-summary">${submitted.length} completed · ${pending.filter(r => !r.not_started).length} working on it · ${pending.filter(r => r.not_started).length} not started</p>
+        <p class="tc-cd-results-summary"><button type="button" class="ta-link-btn" onclick="TeacherWorkspace.openResults('${esc(assignId)}')">Open the full results screen →</button> for “who needs my help”, reminders and export.</p>
         <div class="tc-cd-grade-book">
           <div class="tc-cd-grade-header"><span>Pupil</span><span>Score</span><span>%</span><span>Submitted</span></div>
           ${submitted.sort((a, b) => Number(b.pct) - Number(a.pct)).map(r => `
@@ -931,15 +1424,15 @@ const TeacherClassroomDetail = (() => {
               <span>${esc(r.name)}</span>
               <span>${esc(r.score)}/${esc(r.total)}</span>
               <span class="tc-cd-grade-pct ${Number(r.pct) >= 70 ? 'pass' : 'fail'}">${esc(r.pct)}%</span>
-              <span class="tc-cd-grade-date">${r.submitted_at ? new Date(r.submitted_at).toLocaleDateString('en-GB') : '—'}</span>
+              <span class="tc-cd-grade-date">${r.submitted_at ? new Date(r.submitted_at).toLocaleDateString('en-GB') : '-'}</span>
             </div>`).join('')}
           ${pending.map(r => `
             <div class="tc-cd-grade-row tc-cd-grade-pending">
-              <span>${esc(r.name)}</span><span>—</span><span>—</span><span>Not started</span>
+              <span>${esc(r.name)}</span><span>-</span><span>-</span><span>${r.not_started ? 'Not started' : 'Working on it'}</span>
             </div>`).join('')}
         </div>
       `;
-    } catch(_e) { box.innerHTML = '<p class="tc-cd-err">Could not load results.</p>'; }
+    } catch(_e) { box.innerHTML = `<div class="tc-cd-inline-error"><p>Could not load results. This does not mean nobody has submitted.</p><button type="button" onclick="TeacherClassroomDetail.refreshResults()">Try again</button></div>`; }
   }
 
   // ── Settings ──────────────────────────────────────────────────────
@@ -981,12 +1474,12 @@ const TeacherClassroomDetail = (() => {
           <label class="tc-cd-radio-opt ${mode === 'classroom_pin' ? 'tc-cd-radio-sel' : ''}">
             <input type="radio" name="tc-cd-mode" value="classroom_pin" ${mode === 'classroom_pin' ? 'checked' : ''}
               onchange="TeacherClassroomDetail.savePref('defaultMode','classroom_pin')">
-            🔐 <span><strong>Pupil PINs</strong> — each pupil enters their private 4-digit PIN</span>
+            🔐 <span><strong>Pupil PINs</strong> - each pupil enters their private 4-digit PIN</span>
           </label>
           <label class="tc-cd-radio-opt ${mode === 'nickname' ? 'tc-cd-radio-sel' : ''}">
             <input type="radio" name="tc-cd-mode" value="nickname" ${mode === 'nickname' ? 'checked' : ''}
               onchange="TeacherClassroomDetail.savePref('defaultMode','nickname')">
-            📝 <span><strong>Nickname</strong> — anyone with the link can join with a chosen name</span>
+            📝 <span><strong>Nickname</strong> - anyone with the link can join with a chosen name</span>
           </label>
         </div>
       </div>
@@ -1027,7 +1520,7 @@ const TeacherClassroomDetail = (() => {
 
       <div class="tc-cd-settings-card">
         <label class="tc-cd-settings-label">Share classroom link</label>
-        <p class="tc-cd-tip-text">Send this to pupils — they will need their private PIN to enter.</p>
+        <p class="tc-cd-tip-text">Send this to pupils - they will need their private PIN to enter.</p>
         <div class="tc-cd-upload-row">
           <input class="tc-cd-input" value="${esc(shareUrl)}" readonly style="flex:1;font-size:.8rem">
           <button class="tc-cd-action-btn" onclick="TeacherClassroomDetail.shareLink()">📱 Share</button>
@@ -1090,10 +1583,15 @@ const TeacherClassroomDetail = (() => {
     document.querySelectorAll('.tc-cd-emoji-opt').forEach(b => b.classList.remove('tc-cd-emoji-sel'));
     btn.classList.add('tc-cd-emoji-sel');
     el('tc-cd-emoji').textContent = emoji;
+    _savePrefs({ emoji });
   }
 
-  async function archiveClass() {
-    if (!confirm('Archive this classroom? It will be hidden but all data is kept. You can restore it from Settings.')) return;
+  function archiveClass() {
+    const msg = 'Archive this classroom? It will be hidden from your board but every pupil, PIN and result is kept.';
+    if (typeof _confirmModal === 'function') _confirmModal(msg, _archiveClassNow, { icon: '📦', okLabel: 'Archive', danger: false });
+    else if (confirm(msg)) _archiveClassNow();
+  }
+  async function _archiveClassNow() {
     try {
       await _sb.rpc('teacher_guest_manage', {p_action: 'toggle_class', p_classroom: _classId});
       toast('Classroom archived.', 2000);
@@ -1102,11 +1600,13 @@ const TeacherClassroomDetail = (() => {
     } catch(_e) { toast('Could not archive.', 2000); }
   }
 
-  async function deleteClassroom() {
+  function deleteClassroom() {
     const name = _className || 'this classroom';
-    if (!confirm(
-      `Delete "${name}"?\n\nThe classroom and its assignments will be removed immediately from your board.\n\nAn admin can recover it for 10 days — after that everything is permanently cleared.\n\nThis cannot be undone.`
-    )) return;
+    const msg = `Delete "${name}"? The classroom and its work disappear from your board now. An administrator can recover it for 10 days; after that it is gone for good.`;
+    if (typeof _confirmModal === 'function') _confirmModal(msg, _deleteClassroomNow, { icon: '🗑️', okLabel: 'Delete classroom' });
+    else if (confirm(msg)) _deleteClassroomNow();
+  }
+  async function _deleteClassroomNow() {
 
     const btn = el('tc-cd-delete-btn');
     if (btn) { btn.disabled = true; btn.textContent = 'Deleting…'; }
@@ -1132,12 +1632,12 @@ const TeacherClassroomDetail = (() => {
     const wa   = `https://wa.me/?text=${encodeURIComponent(text)}`;
     if (navigator.share) {
       navigator.share({ title: _className, text, url }).catch(err => {
-        // AbortError = user dismissed intentionally — do nothing.
+        // AbortError = user dismissed intentionally - do nothing.
         if (err?.name !== 'AbortError') _showClassroomSharePanel(url, wa);
       });
       return;
     }
-    // No native share API — show inline panel instead of window.open()
+    // No native share API - show inline panel instead of window.open()
     // so popup blockers cannot intercept it.
     _showClassroomSharePanel(url, wa);
   }
@@ -1173,13 +1673,14 @@ const TeacherClassroomDetail = (() => {
   }
 
   return {
-    open, close, showSection,
+    open, close, showSection, isOpen, toggleMore, setWorkFilter, retryWork, retryPupils, retrySignals, showSetupGuide, dismissSetupGuide, openPupil, closePupil,
     showHomeworkChoice, _chooseDigital, _chooseWorksheet,
     _onPhysicalFileChosen, _submitPhysical, downloadPhysicalHW, deletePhysicalHW,
     createWork, addPupil, revealAllPins,
-    uploadMaterial, _onMatFileChosen, copyFileLink, openFile, deleteFile,
+    uploadMaterial, _onMatFileChosen, setMaterialSort, shareMaterial, copyFileLink, openFile, deleteFile,
     saveName, setEmoji, archiveClass, deleteClassroom, shareLink,
     savePref, saveNotes, getPrefs,
+    openAssignmentResults: id => { _loadResultsFor(id); showSection('results'); },
     refreshResults: () => { if (_resultsAssignId) _loadResultsFor(_resultsAssignId); }
   };
 })();

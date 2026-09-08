@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Trailing comments are the count at generation time.
 const G4HG_SYLLABUS = {
   'g4hist-locality': { subsections: [
@@ -50,8 +50,11 @@ const G4HG_SYLLABUS = {
     { id:'facts',           name:'Facts About Mauritius' },  // 17
   ]},
   'g4enr-world': { subsections: [
-    { id:'continents',      name:'The Continents' },  // 22
+    { id:'continents',      name:'The Continents' },  // 10
     { id:'oceans',          name:'Oceans & Seas' },  // 9
+    { id:'rivers',          name:'Rivers & Mountains' },  // 5
+    { id:'directions',      name:'Compass Directions' },  // 3
+    { id:'coordinates',     name:'Lines on the Globe' },  // 4
   ]},
 };
 

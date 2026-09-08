@@ -35,7 +35,7 @@ STATIC_QUESTIONS.push(
     question:'The letters MRS GREN help us remember the characteristics of living things. What does the "R" stand for?',
     options:['Running','Respiration','Reproducing','Reacting'],
     answer:'Respiration',
-    hint:'MRS GREN = Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition.',
+    hint:'MRS GREN is a mnemonic for the seven characteristics. Try to recall what each letter stands for, in order.',
     explanation:'In MRS GREN, R stands for <b>Respiration</b> - living things breathe/take in air to release energy from food. MRS GREN: <b>M</b>ovement, <b>R</b>espiration, <b>S</b>ensitivity, <b>G</b>rowth, <b>R</b>eproduction, <b>E</b>xcretion, <b>N</b>utrition.' }),
 
   makeNum({ id:'g4s-liv-006', chapterId:'g4sci-living', subsection:'mrs_gren', difficulty:2,
@@ -60,7 +60,7 @@ STATIC_QUESTIONS.push(
       'They are living because they have roots'
     ],
     answer:'They show all MRS GREN characteristics: they grow, respire, reproduce, respond to light, and absorb nutrients',
-    hint:'Living things do not need to walk. What matters is showing all the MRS GREN characteristics.',
+    hint:'Movement is only one of the seven signs of life. Check a plant against the whole list, not just that one.',
     explanation:'Plants are <b>living things</b> because they show all 7 MRS GREN characteristics. They move (leaves turn towards light), respire, are sensitive (react to light and touch), grow, reproduce (seeds), excrete waste gases, and take in nutrition (photosynthesis). Movement does not have to mean walking.' }),
 
   makeMCQ({ id:'g4s-liv-009', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:3,

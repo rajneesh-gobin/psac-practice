@@ -90,14 +90,14 @@ STATIC_QUESTIONS.push(
     question:'Complete the TAG QUESTION: "Jack will go to school, ___ he?"',
     options:["doesn\'t","didn\'t","won\'t","isn\'t"],
     answer:"won\'t",
-    hint:'The main verb uses "will" (positive) - so the tag uses "won\'t" (negative), matching the auxiliary "will".',
+    hint:'A tag question repeats the auxiliary of the main clause and flips it. Find the auxiliary in "Jack will go".',
     explanation:'"<b>Won\'t</b> he?" is the correct tag. Tag questions: (1) If the main clause is positive, the tag is negative. (2) Use the same auxiliary verb: will → won\'t. "Jack will go → won\'t he?" Tag = auxiliary + pronoun.' }),
 
   makeMCQ({ id:'g5eng-verb-012', chapterId:'eng-verbs', subsection:'present_tense', difficulty:2,
     question:'Complete the TAG QUESTION: "She is a good student, ___ she?"',
     options:["isn\'t","wasn\'t","doesn\'t","didn\'t"],
     answer:"isn\'t",
-    hint:'Positive statement using "is" → negative tag using "isn\'t".',
+    hint:'A positive statement takes a negative tag built from the SAME auxiliary. Which auxiliary does this sentence use?',
     explanation:'"<b>Isn\'t</b> she?" is correct. The statement uses "is" (positive) so the tag is "isn\'t" (negative) + the same subject pronoun "she". Pattern: positive statement + negative tag OR negative statement + positive tag.' }),
 
   makeMCQ({ id:'g5eng-verb-013', chapterId:'eng-verbs', subsection:'agreement', difficulty:1,

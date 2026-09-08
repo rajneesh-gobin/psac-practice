@@ -58,7 +58,7 @@ STATIC_QUESTIONS.push(
     question:'What is the number 700,000 + 40,000 + 3,000 + 200 + 80 + 5?',
     options:['743,285','743,825','740,285','743,205'],
     answer:'743,285',
-    hint:'Add each part: 700,000 + 40,000 = 740,000; + 3,000 = 743,000; + 200 = 743,200; + 80 = 743,280; + 5 = 743,285.',
+    hint:'Line the parts up by place value - hundred thousands, ten thousands, thousands, hundreds, tens, units - then read the digits off in order.',
     explanation:'700,000 + 40,000 + 3,000 + 200 + 80 + 5 = <b>743,285</b>.' }),
 
   makeNum({ id:'g6m-num-009', chapterId:'g6-numeration', subsection:'words_digits', difficulty:2,

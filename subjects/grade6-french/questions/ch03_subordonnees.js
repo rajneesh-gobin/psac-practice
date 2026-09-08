@@ -49,14 +49,14 @@ STATIC_QUESTIONS.push(
     question:'Quel connecteur exprime la CAUSE ?',
     options:['cependant','bien que','parce que','donc'],
     answer:'parce que',
-    hint:'"Parce que" répond à la question "Pourquoi ?".',
+    hint:'Cherche le connecteur qui répond à la question « pourquoi ? ».',
     explanation:'"<b>Parce que</b>" exprime la cause. Exemples : "Il est absent <b>parce qu\'il</b> est malade." Autres connecteurs de cause : <b>car, puisque, comme</b>. Distinguer : cause (parce que) ≠ conséquence (donc, par conséquent) ≠ concession (bien que, cependant).' }),
 
   makeMCQ({ id:'g6fr-sub-008', chapterId:'g6fr-subordonnees', subsection:'analyse', difficulty:2,
     question:'Complétez : "Il a réussi ___ il a beaucoup travaillé."',
     options:['bien que','cependant','car','pourtant'],
     answer:'car',
-    hint:'"car" introduit une cause, comme "parce que".',
+    hint:'La seconde partie de la phrase explique POURQUOI il a réussi. Cherche donc un connecteur de cause.',
     explanation:'"Il a réussi <b>car</b> il a beaucoup travaillé." - <b>car</b> exprime la cause (= parce que). Différence : "parce que" peut commencer une phrase, "car" ne peut pas commencer une phrase et ne s\'utilise pas après une virgule en début de réponse.' }),
 
   makeTF({ id:'g6fr-sub-009', chapterId:'g6fr-subordonnees', subsection:'conjonctions', difficulty:2,
@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
     question:'Quel connecteur exprime la CONSÉQUENCE (consequence) ?',
     options:['puisque','bien que','donc','comme'],
     answer:'donc',
-    hint:'"Donc" = therefore/so - la conséquence résulte de ce qui précède.',
+    hint:'Cherche le connecteur qui annonce un résultat, et non une cause ou une opposition.',
     explanation:'"<b>Donc</b>" exprime la conséquence : "Il a travaillé dur, <b>donc</b> il a réussi." Autres connecteurs de conséquence : ainsi, par conséquent, c\'est pourquoi, si bien que, du coup. Distinguer : cause (parce que, car, puisque, comme) ≠ conséquence (<b>donc</b>, ainsi) ≠ concession (bien que, même si, cependant).' }),
 
   makeMCQ({ id:'g6fr-sub-017', chapterId:'g6fr-subordonnees', subsection:'relatives', difficulty:3,

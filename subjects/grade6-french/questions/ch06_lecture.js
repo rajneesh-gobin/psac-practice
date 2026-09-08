@@ -247,7 +247,7 @@ STATIC_QUESTIONS.push(
     hint:'Le chapeau est le court texte introductif entre le titre et le corps de l\'article.',
     explanation:'Le <b>chapeau</b> (ou "lead") est un court paragraphe introductif qui répond aux 5 questions de base : <b>Qui ? Quoi ? Quand ? Où ? Pourquoi ?</b> Il résume l\'essentiel pour que le lecteur comprenne l\'article en quelques lignes. Structure d\'un article : <b>Titre → Chapeau → Corps → Signature</b>.' }),
 
-  makeMCQ({ id:'g6fr-lec-026', chapterId:'g6fr-lecture', subsection:'fait_opinion', difficulty:2,
+  makeMCQ({ id:'g6fr-lec-026', chapterId:'g6fr-lecture', subsection:'esprit_critique', difficulty:2,
     question:'Dans un texte, comment reconnaît-on une OPINION (par opposition à un fait) ?',
     options:[
       'Un fait peut être vérifié et prouvé ; une opinion exprime un point de vue subjectif.',
@@ -347,42 +347,42 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Contraste + accélération du rythme</b>" - Le procédé du <b>contraste</b> (calme → tempête) crée l\'effet de surprise. "Soudain" marque la rupture. L\'<b>accélération</b> (phrases courtes, verbes d\'action rapides : s\'amassèrent, se levèrent) crée le suspense. Identifier ces procédés stylistiques est une compétence clé en lecture analytique de 6e.' }),
 
   makeMCQ({ id:'g6fr-lec-036', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Candid_girl_reading_(20946248203).jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/candid-girl-reading-20946248203.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
     options:['Elle écrit.','Elle lit.','Elle dessine.','Elle dort.'],
     answer:'Elle lit.',
     hint:'Elle regarde attentivement les pages d\'un livre.',
-    explanation:'"<b>Elle lit</b>" → verbe <b>lire</b> (to read). Conjugaison : je lis, tu lis, il/elle lit, nous lisons, vous lisez, ils/elles lisent. Verbe irrégulier du 3e groupe — à mémoriser !' }),
+    explanation:'"<b>Elle lit</b>" → verbe <b>lire</b> (to read). Conjugaison : je lis, tu lis, il/elle lit, nous lisons, vous lisez, ils/elles lisent. Verbe irrégulier du 3e groupe - à mémoriser !' }),
 
   makeMCQ({ id:'g6fr-lec-037', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Notebook-writing-man-book-person-blur-1176206.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/notebook-writing-man-book-person-blur-1176206.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il dessine.','Il lit.','Il écrit.','Il mange.'],
     answer:'Il écrit.',
     hint:'Il tient un stylo et trace des mots sur le papier.',
     explanation:'"<b>Il écrit</b>" → verbe <b>écrire</b> (to write). Conjugaison : j\'écris, tu écris, il/elle écrit, nous écrivons, vous écrivez, ils/elles écrivent. Verbe irrégulier du 3e groupe.' }),
 
   makeMCQ({ id:'g6fr-lec-038', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Eating_rice,_China_-_collected_by_Berthold_Laufer.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/eating-rice-china-collected-by-berthold-laufer.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il boit.','Il cuisine.','Il mange.','Il dort.'],
     answer:'Il mange.',
     hint:'Il porte de la nourriture à sa bouche.',
-    explanation:'"<b>Il mange</b>" → verbe <b>manger</b> (to eat). Conjugaison : je mange, tu manges, il/elle mange, nous mangeons, vous mangez, ils/elles mangent. Note : "nous mang<b>e</b>ons" garde le "e" pour préserver le son [ʒ] de "manger" — même règle pour nager, voyager, changer.' }),
+    explanation:'"<b>Il mange</b>" → verbe <b>manger</b> (to eat). Conjugaison : je mange, tu manges, il/elle mange, nous mangeons, vous mangez, ils/elles mangent. Note : "nous mang<b>e</b>ons" garde le "e" pour préserver le son [ʒ] de "manger" - même règle pour nager, voyager, changer.' }),
 
   makeMCQ({ id:'g6fr-lec-039', chapterId:'g6fr-lecture', subsection:'images', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Running.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/running.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il marche.','Il court.','Il saute.','Il nage.'],
     answer:'Il court.',
     hint:'Il se déplace très vite sur ses pieds.',
     explanation:'"<b>Il court</b>" → verbe <b>courir</b> (to run). Conjugaison : je cours, tu cours, il/elle court, nous courons, vous courez, ils/elles courent. Verbe irrégulier ! Ne pas confondre : <b>marcher</b> (walk, lentement) vs <b>courir</b> (run, vite).' }),
 
   makeMCQ({ id:'g6fr-lec-040', chapterId:'g6fr-lecture', subsection:'images', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Swimming_pool.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/swimming-pool.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il plonge.','Il nage.','Il lave.','Il pêche.'],
     answer:'Il nage.',
     hint:'Il se déplace dans l\'eau en faisant des mouvements avec les bras et les jambes.',
-    explanation:'"<b>Il nage</b>" → verbe <b>nager</b> (to swim). Conjugaison : je nage, tu nages, il/elle nage, nous nageons, vous nagez, ils/elles nagent. Note : "nous nag<b>e</b>ons" — même règle orthographique que manger pour conserver le son [ʒ].' }),
+    explanation:'"<b>Il nage</b>" → verbe <b>nager</b> (to swim). Conjugaison : je nage, tu nages, il/elle nage, nous nageons, vous nagez, ils/elles nagent. Note : "nous nag<b>e</b>ons" - même règle orthographique que manger pour conserver le son [ʒ].' }),
 
   makeMCQ({ id:'g6fr-lec-041', chapterId:'g6fr-lecture', subsection:'images', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Children_playing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'ils font ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/children-playing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'ils font ?</b>',
     options:['Ils étudient.','Ils jouent.','Ils travaillent.','Ils chantent.'],
     answer:'Ils jouent.',
     hint:'Ils s\'amusent ensemble avec énergie.',
@@ -393,70 +393,70 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6fr-lec-042', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sleeping.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/sleeping.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il mange.','Il dort.','Il lit.','Il court.'],
     answer:'Il dort.',
     hint:'Ses yeux sont fermés et il se repose.',
     explanation:'"<b>Il dort</b>" → verbe <b>dormir</b> (to sleep). Conjugaison : je dors, tu dors, il/elle dort, nous dormons, vous dormez, ils/elles dorment. Verbe irrégulier du 3e groupe.' }),
 
   makeMCQ({ id:'g6fr-lec-043', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Singing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/singing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
     options:['Elle parle.','Elle chante.','Elle crie.','Elle rit.'],
     answer:'Elle chante.',
     hint:'Elle produit une mélodie avec sa voix.',
     explanation:'"<b>Elle chante</b>" → verbe <b>chanter</b> (to sing). Conjugaison : je chante, tu chantes, il/elle chante, nous chantons, vous chantez, ils/elles chantent. Verbe régulier du 1er groupe (-er).' }),
 
   makeMCQ({ id:'g6fr-lec-044', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Drawing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/drawing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
     options:['Elle écrit.','Elle dessine.','Elle peint.','Elle lit.'],
     answer:'Elle dessine.',
     hint:'Elle utilise un crayon pour créer une image.',
     explanation:'"<b>Elle dessine</b>" → verbe <b>dessiner</b> (to draw). Conjugaison : je dessine, tu dessines, il/elle dessine, nous dessinons, vous dessinez, ils/elles dessinent. Différence : dessiner (crayon/pencil) vs peindre (peinture/paint).' }),
 
   makeMCQ({ id:'g6fr-lec-045', chapterId:'g6fr-lecture', subsection:'images', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cooking.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/cooking.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il mange.','Il cuisine.','Il lave.','Il range.'],
     answer:'Il cuisine.',
     hint:'Il prépare un repas dans la cuisine.',
     explanation:'"<b>Il cuisine</b>" → verbe <b>cuisiner</b> (to cook). Conjugaison : je cuisine, tu cuisines, il/elle cuisine, nous cuisinons, vous cuisinez, ils/elles cuisinent. Verbe régulier du 1er groupe (-er).' }),
 
   makeMCQ({ id:'g6fr-lec-046', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dancing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/dancing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
     options:['Elle marche.','Elle danse.','Elle saute.','Elle court.'],
     answer:'Elle danse.',
     hint:'Elle bouge son corps en rythme avec la musique.',
     explanation:'"<b>Elle danse</b>" → verbe <b>danser</b> (to dance). Conjugaison : je danse, tu danses, il/elle danse, nous dansons, vous dansez, ils/elles dansent. Verbe régulier du 1er groupe (-er).' }),
 
   makeMCQ({ id:'g6fr-lec-047', chapterId:'g6fr-lecture', subsection:'images', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Jumping.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/jumping.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il court.','Il saute.','Il tombe.','Il marche.'],
     answer:'Il saute.',
     hint:'Ses deux pieds ont quitté le sol en même temps.',
     explanation:'"<b>Il saute</b>" → verbe <b>sauter</b> (to jump). Conjugaison : je saute, tu sautes, il/elle saute, nous sautons, vous sautez, ils/elles sautent. Verbe régulier du 1er groupe (-er).' }),
 
   makeMCQ({ id:'g6fr-lec-048', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Smiling.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/smiling.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'elle fait ?</b>',
     options:['Elle pleure.','Elle sourit.','Elle crie.','Elle dort.'],
     answer:'Elle sourit.',
     hint:'Ses lèvres forment un sourire - elle est heureuse.',
     explanation:'"<b>Elle sourit</b>" → verbe <b>sourire</b> (to smile). Conjugaison : je souris, tu souris, il/elle sourit, nous sourions, vous souriez, ils/elles sourient. Se conjugue comme "rire" (to laugh).' }),
 
   makeMCQ({ id:'g6fr-lec-049', chapterId:'g6fr-lecture', subsection:'images', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Driving.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/driving.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il marche.','Il conduit.','Il répare.','Il lave.'],
     answer:'Il conduit.',
     hint:'Il tient le volant d\'une voiture.',
     explanation:'"<b>Il conduit</b>" → verbe <b>conduire</b> (to drive). Conjugaison : je conduis, tu conduis, il/elle conduit, nous conduisons, vous conduisez, ils/elles conduisent. Verbe irrégulier du 3e groupe.' }),
 
   makeMCQ({ id:'g6fr-lec-050', chapterId:'g6fr-lecture', subsection:'images', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fishing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/fishing.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce qu\'il fait ?</b>',
     options:['Il nage.','Il pêche.','Il navigue.','Il plonge.'],
     answer:'Il pêche.',
     hint:'Il attend patiemment avec une canne pour attraper des poissons.',
     explanation:'"<b>Il pêche</b>" → verbe <b>pêcher</b> (to fish). Conjugaison : je pêche, tu pêches, il/elle pêche, nous pêchons, vous pêchez, ils/elles pêchent. Verbe régulier du 1er groupe (-er). Ne pas confondre avec "une pêche" (a peach) !' }),
 
   makeMCQ({ id:'g6fr-lec-051', chapterId:'g6fr-lecture', subsection:'images', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Crying_baby.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que le bébé fait ?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/crying-baby.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Qu\'est-ce que le bébé fait ?</b>',
     options:['Il rit.','Il pleure.','Il dort.','Il mange.'],
     answer:'Il pleure.',
     hint:'Il verse des larmes et fait du bruit.',
@@ -474,14 +474,14 @@ STATIC_QUESTIONS.push(
     options:['Cent millions de roupies','Deux cents millions de roupies','Trois cents millions de roupies','Deux mille roupies'],
     answer:'Deux cents millions de roupies',
     hint:'Cherchez le chiffre mentionné dans le premier paragraphe.',
-    explanation:'"pour un coût estimé à <b>deux cents millions de roupies</b>" — Ce chiffre précis est donné dans le premier paragraphe.' }),
+    explanation:'"pour un coût estimé à <b>deux cents millions de roupies</b>" - Ce chiffre précis est donné dans le premier paragraphe.' }),
 
   makeMCQ({ id:'g6fr-lec-053', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:`${_TEXTE_G6_C}Combien de signatures a recueilli la pétition ?`,
     options:['Trois cents','Mille','Deux mille','Vingt mille'],
     answer:'Deux mille',
     hint:'Lisez le quatrième paragraphe sur l\'association de citoyens.',
-    explanation:'"une pétition qui a déjà recueilli <b>deux mille signatures</b>" — Le chiffre est explicitement mentionné dans le texte.' }),
+    explanation:'"une pétition qui a déjà recueilli <b>deux mille signatures</b>" - Le chiffre est explicitement mentionné dans le texte.' }),
 
   makeMCQ({ id:'g6fr-lec-054', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
     question:`${_TEXTE_G6_C}Que signifie l\'expression "fait couler beaucoup d\'encre" dans ce texte ?`,
@@ -541,7 +541,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Oui, mais l\'absence de réponse du gouvernement crée un déséquilibre d\'information entre les partisans et les décideurs',
     hint:'Les deux côtés sont-ils représentés ? Y a-t-il quelqu\'un dont on n\'entend pas vraiment la voix ?',
-    explanation:'L\'article cite <b>un partisan</b> (l\'élu local), <b>un opposant</b> (le riziculteur) et <b>une association citoyenne</b> — les deux camps sont donc représentés. Cependant, <b>le gouvernement n\'a pas répondu</b>, ce qui crée un manque : on entend des "sources proches" mais pas les décideurs officiels eux-mêmes. C\'est un déséquilibre d\'information caractéristique du journalisme d\'investigation.' }),
+    explanation:'L\'article cite <b>un partisan</b> (l\'élu local), <b>un opposant</b> (le riziculteur) et <b>une association citoyenne</b> - les deux camps sont donc représentés. Cependant, <b>le gouvernement n\'a pas répondu</b>, ce qui crée un manque : on entend des "sources proches" mais pas les décideurs officiels eux-mêmes. C\'est un déséquilibre d\'information caractéristique du journalisme d\'investigation.' }),
 
 );
 
@@ -555,7 +555,7 @@ STATIC_QUESTIONS.push(
     options:['Quatre','Douze','Quarante','Quatre cents'],
     answer:'Douze',
     hint:'Cherchez le chiffre dans le premier paragraphe.',
-    explanation:'"Il ne restait plus que <b>douze individus</b> à l\'état sauvage dans les forêts de la Gorge de la Rivière Noire." — Ce chiffre alarmant est donné dans le premier paragraphe.' }),
+    explanation:'"Il ne restait plus que <b>douze individus</b> à l\'état sauvage dans les forêts de la Gorge de la Rivière Noire." - Ce chiffre alarmant est donné dans le premier paragraphe.' }),
 
   makeMCQ({ id:'g6fr-lec-060', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:`${_TEXTE_G6_D}Quelle organisation a lancé le programme d\'élevage en captivité ?`,
@@ -567,7 +567,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'La Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien',
     hint:'Lisez le deuxième paragraphe.',
-    explanation:'"<b>la Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien</b>, a lancé un programme d\'élevage en captivité." — Les deux partenaires sont clairement nommés.' }),
+    explanation:'"<b>la Durrell Wildlife Conservation Trust, en partenariat avec le gouvernement mauricien</b>, a lancé un programme d\'élevage en captivité." - Les deux partenaires sont clairement nommés.' }),
 
   makeMCQ({ id:'g6fr-lec-061', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
     question:`${_TEXTE_G6_D}Que veut dire le mot "endémique" dans ce texte ?`,
@@ -591,7 +591,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'La déforestation et les prédateurs introduits',
     hint:'Lisez la liste des menaces dans le premier paragraphe.',
-    explanation:'"menacée par <b>la déforestation</b>, <b>les prédateurs introduits</b> et la destruction de son habitat" — Le texte liste trois menaces. La déforestation et les prédateurs introduits (rats, mangoustes) sont parmi elles.' }),
+    explanation:'"menacée par <b>la déforestation</b>, <b>les prédateurs introduits</b> et la destruction de son habitat" - Le texte liste trois menaces. La déforestation et les prédateurs introduits (rats, mangoustes) sont parmi elles.' }),
 
   makeMCQ({ id:'g6fr-lec-063', chapterId:'g6fr-lecture', subsection:'inference', difficulty:2,
     question:`${_TEXTE_G6_D}Quelle double stratégie a permis de sauver le pigeon rose ?`,
@@ -602,22 +602,22 @@ STATIC_QUESTIONS.push(
       'La sensibilisation du public et la collecte de fonds internationaux'
     ],
     answer:'L\'élevage en captivité et la réintroduction, combinés au contrôle des prédateurs',
-    hint:'Lisez le deuxième paragraphe attentivement — deux actions sont décrites.',
+    hint:'Lisez le deuxième paragraphe attentivement - deux actions sont décrites.',
     explanation:'Le programme comportait deux volets : 1) <b>"élevage en captivité"</b> puis réintroduction dans le milieu naturel ; 2) installation de <b>"pièges pour contrôler les rats et les mangoustes"</b>. Cette double approche s\'attaquait à la fois au problème de reproduction et à celui des prédateurs.' }),
 
   makeMCQ({ id:'g6fr-lec-064', chapterId:'g6fr-lecture', subsection:'figures_style', difficulty:3,
     question:`${_TEXTE_G6_D}"Le pigeon rose frôlait la disparition." Quelle figure de style est utilisée et quel en est l\'effet ?`,
     options:[
-      'Une comparaison — elle compare le pigeon à un autre animal en danger',
-      'Une personnification — elle donne au pigeon rose une action humaine pour souligner son danger imminent',
-      'Une hyperbole — elle exagère la situation pour faire peur au lecteur',
-      'Une métaphore — elle transforme la disparition en un objet physique'
+      'Une comparaison - elle compare le pigeon à un autre animal en danger',
+      'Une personnification - elle donne au pigeon rose une action humaine pour souligner son danger imminent',
+      'Une hyperbole - elle exagère la situation pour faire peur au lecteur',
+      'Une métaphore - elle transforme la disparition en un objet physique'
     ],
-    answer:'Une personnification — elle donne au pigeon rose une action humaine pour souligner son danger imminent',
+    answer:'Une personnification - elle donne au pigeon rose une action humaine pour souligner son danger imminent',
     hint:'"Frôler" est normalement une action humaine (effleurer quelque chose). Qu\'est-ce que cela apporte quand on l\'attribue à un oiseau ?',
-    explanation:'"<b>frôlait</b> la disparition" — Le verbe "frôler" (to brush against, to come close to) est normalement utilisé pour des personnes. C\'est une <b>personnification</b> : l\'oiseau est traité comme un être qui "s\'approche" du danger. Cela crée un sentiment d\'urgence et d\'humanité, rendant la situation plus émouvante pour le lecteur.' }),
+    explanation:'"<b>frôlait</b> la disparition" - Le verbe "frôler" (to brush against, to come close to) est normalement utilisé pour des personnes. C\'est une <b>personnification</b> : l\'oiseau est traité comme un être qui "s\'approche" du danger. Cela crée un sentiment d\'urgence et d\'humanité, rendant la situation plus émouvante pour le lecteur.' }),
 
-  makeMCQ({ id:'g6fr-lec-065', chapterId:'g6fr-lecture', subsection:'grammaire', difficulty:3,
+  makeMCQ({ id:'g6fr-lec-065', chapterId:'g6fr-lecture', subsection:'interpretation', difficulty:3,
     question:`${_TEXTE_G6_D}Dans le deuxième paragraphe, relevez la voix passive et transformez-la en voix active.`,
     options:[
       '"Des œufs ont été prélevés" → Passive. Active : Les scientifiques ont prélevé des œufs.',
@@ -664,7 +664,7 @@ STATIC_QUESTIONS.push(
     options:['D\'un demi-degré','D\'un degré','D\'un degré et demi','De deux degrés'],
     answer:'D\'un degré et demi',
     hint:'Cherchez le chiffre précis dans le premier paragraphe.',
-    explanation:'"la température de l\'eau de mer a augmenté d\'<b>un degré et demi</b> en trente ans." — Cette précision chiffrée vient des scientifiques de l\'Université de Maurice et donne de la crédibilité à l\'article.' }),
+    explanation:'"la température de l\'eau de mer a augmenté d\'<b>un degré et demi</b> en trente ans." - Cette précision chiffrée vient des scientifiques de l\'Université de Maurice et donne de la crédibilité à l\'article.' }),
 
   makeMCQ({ id:'g6fr-lec-069', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:`${_TEXTE_G6_E}Qu\'est-ce que le blanchiment des coraux, selon le texte ?`,
@@ -676,7 +676,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Les polypes expulsent leurs algues et le récif devient blanc',
     hint:'La définition est donnée directement après le deux-points dans le premier paragraphe.',
-    explanation:'"les <b>polypes</b> expulsent les algues colorées qui les nourrissent, et le récif devient <b>blanc comme de la craie</b>." — Le blanchiment se produit parce que les polypes perdent les algues symbiotiques qui leur donnaient leur couleur et leur nourriture.' }),
+    explanation:'"les <b>polypes</b> expulsent les algues colorées qui les nourrissent, et le récif devient <b>blanc comme de la craie</b>." - Le blanchiment se produit parce que les polypes perdent les algues symbiotiques qui leur donnaient leur couleur et leur nourriture.' }),
 
   makeMCQ({ id:'g6fr-lec-070', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:`${_TEXTE_G6_E}Selon le texte, quel est le rôle des récifs coralliens pour les poissons ?`,
@@ -688,7 +688,7 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Ils servent d\'abri et de nurserie à des centaines d\'espèces',
     hint:'Le deuxième paragraphe explique pourquoi les coraux sont importants pour les poissons.',
-    explanation:'"Les coraux servent d\'<b>abri</b> et de <b>nurserie</b> à des centaines d\'espèces de poissons." — Ils fournissent deux services essentiels : la protection (abri) et la reproduction (nurserie où les jeunes poissons grandissent).' }),
+    explanation:'"Les coraux servent d\'<b>abri</b> et de <b>nurserie</b> à des centaines d\'espèces de poissons." - Ils fournissent deux services essentiels : la protection (abri) et la reproduction (nurserie où les jeunes poissons grandissent).' }),
 
   makeMCQ({ id:'g6fr-lec-071', chapterId:'g6fr-lecture', subsection:'vocabulaire', difficulty:2,
     question:`${_TEXTE_G6_E}Que veut dire "nurserie" dans le contexte de ce texte ?`,
@@ -724,16 +724,16 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Un plan de protection des récifs',
     hint:'Le troisième paragraphe mentionne l\'action du gouvernement.',
-    explanation:'"Le gouvernement a annoncé un <b>plan de protection des récifs</b>." — Notez le connecteur "mais" qui suit immédiatement : il annonce une objection, montrant que ce plan est jugé insuffisant par certains.' }),
+    explanation:'"Le gouvernement a annoncé un <b>plan de protection des récifs</b>." - Notez le connecteur "mais" qui suit immédiatement : il annonce une objection, montrant que ce plan est jugé insuffisant par certains.' }),
 
   makeMCQ({ id:'g6fr-lec-074', chapterId:'g6fr-lecture', subsection:'figures_style', difficulty:3,
-    question:`${_TEXTE_G6_E}"Les fonds marins ressemblent à des déserts sous-marins" — quelle figure de style est employée ici ?`,
+    question:`${_TEXTE_G6_E}"Les fonds marins ressemblent à des déserts sous-marins" - quelle figure de style est employée ici ?`,
     options:['Une métaphore','Une comparaison','Une personnification','Une hyperbole'],
     answer:'Une comparaison',
     hint:'Quel mot de comparaison est utilisé dans la phrase ?',
-    explanation:'"ressemblent <b>à</b> des déserts sous-marins" — Le mot "<b>ressemblent à</b>" est un outil de comparaison (comme "comme" ou "tel que"). C\'est donc une <b>comparaison</b>. Elle évoque la désolation et l\'absence de vie dans les zones où les coraux ont disparu.' }),
+    explanation:'"ressemblent <b>à</b> des déserts sous-marins" - Le mot "<b>ressemblent à</b>" est un outil de comparaison (comme "comme" ou "tel que"). C\'est donc une <b>comparaison</b>. Elle évoque la désolation et l\'absence de vie dans les zones où les coraux ont disparu.' }),
 
-  makeMCQ({ id:'g6fr-lec-075', chapterId:'g6fr-lecture', subsection:'source_anonyme', difficulty:3,
+  makeMCQ({ id:'g6fr-lec-075', chapterId:'g6fr-lecture', subsection:'esprit_critique', difficulty:3,
     question:`${_TEXTE_G6_E}Pourquoi le nom de Jean-Marie "a été changé à sa demande" et l\'université de la biologiste "préfère ne pas être citée" ?`,
     options:[
       'Parce que le journaliste a oublié leurs vrais noms',
@@ -743,29 +743,29 @@ STATIC_QUESTIONS.push(
     ],
     answer:'Parce que ces personnes souhaitent témoigner sans être identifiées publiquement',
     hint:'Pourquoi quelqu\'un demanderait-il à ne pas être nommé dans un article ?',
-    explanation:'Les <b>sources anonymes</b> ou partiellement anonymes choisissent de ne pas être identifiées pour éviter des répercussions professionnelles ou personnelles (peur de représailles, pression de l\'employeur, etc.). Le journaliste signale l\'anonymat pour être transparent avec le lecteur — les informations sont réelles, mais les sources se protègent.' }),
+    explanation:'Les <b>sources anonymes</b> ou partiellement anonymes choisissent de ne pas être identifiées pour éviter des répercussions professionnelles ou personnelles (peur de représailles, pression de l\'employeur, etc.). Le journaliste signale l\'anonymat pour être transparent avec le lecteur - les informations sont réelles, mais les sources se protègent.' }),
 
   makeMCQ({ id:'g6fr-lec-076', chapterId:'g6fr-lecture', subsection:'inference', difficulty:4,
     question:`${_TEXTE_G6_E}Pourquoi la biologiste marine mentionne-t-elle les "émissions mondiales de carbone" plutôt que des mesures uniquement locales à Maurice ?`,
     options:[
       'Parce qu\'elle est payée par une organisation internationale',
-      'Parce que le réchauffement climatique est un problème global — les actions mauriciennes seules ne peuvent pas sauver les coraux',
+      'Parce que le réchauffement climatique est un problème global - les actions mauriciennes seules ne peuvent pas sauver les coraux',
       'Parce qu\'elle pense que Maurice ne contribue pas aux émissions de carbone',
       'Parce que les restrictions de pêche locales sont déjà suffisantes'
     ],
-    answer:'Parce que le réchauffement climatique est un problème global — les actions mauriciennes seules ne peuvent pas sauver les coraux',
+    answer:'Parce que le réchauffement climatique est un problème global - les actions mauriciennes seules ne peuvent pas sauver les coraux',
     hint:'Réfléchissez : si la cause du problème est mondiale, une solution locale peut-elle suffire ?',
     explanation:'La biologiste souligne que les coraux meurent à cause du <b>réchauffement climatique</b>, lui-même causé par les émissions de CO₂ à l\'échelle mondiale. Même si Maurice adoptait les restrictions de pêche les plus strictes, les coraux continueraient à blanchir si les températures mondiales continuent d\'augmenter. C\'est un argument pour une <b>action internationale coordonnée</b>.' }),
 
-  makeMCQ({ id:'g6fr-lec-077', chapterId:'g6fr-lecture', subsection:'biais', difficulty:4,
+  makeMCQ({ id:'g6fr-lec-077', chapterId:'g6fr-lecture', subsection:'esprit_critique', difficulty:4,
     question:`${_TEXTE_G6_E}Cet article présente-t-il le plan du gouvernement de façon équilibrée ? Justifiez votre réponse.`,
     options:[
-      'Oui — le journaliste présente les arguments du gouvernement et ceux des organisations de façon égale',
-      'Non — le journaliste donne plus de place aux critiques du plan qu\'au plan lui-même, suggérant une position plus sceptique',
-      'Oui — seul le gouvernement a le droit de s\'exprimer sur cette question',
-      'Non — le journaliste soutient ouvertement le plan et critique les organisations environnementales'
+      'Oui - le journaliste présente les arguments du gouvernement et ceux des organisations de façon égale',
+      'Non - le journaliste donne plus de place aux critiques du plan qu\'au plan lui-même, suggérant une position plus sceptique',
+      'Oui - seul le gouvernement a le droit de s\'exprimer sur cette question',
+      'Non - le journaliste soutient ouvertement le plan et critique les organisations environnementales'
     ],
-    answer:'Non — le journaliste donne plus de place aux critiques du plan qu\'au plan lui-même, suggérant une position plus sceptique',
+    answer:'Non - le journaliste donne plus de place aux critiques du plan qu\'au plan lui-même, suggérant une position plus sceptique',
     hint:'Comparez l\'espace accordé au gouvernement par rapport aux organisations environnementales et à la biologiste.',
     explanation:'Le plan gouvernemental est mentionné en une demi-phrase. En revanche, les <b>critiques</b> occupent tout le troisième paragraphe (deux sources : les organisations environnementales + la biologiste). Cette disproportion dans l\'espace accordé révèle un <b>biais éditorial</b> : l\'article est plus favorable à la position critique qu\'à celle du gouvernement, même si ce biais n\'est pas dit explicitement.' })
 );

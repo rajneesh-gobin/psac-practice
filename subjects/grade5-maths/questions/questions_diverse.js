@@ -53,7 +53,7 @@ const DV = [
     question:'Which <b>3D shape</b> has <b>1 circular flat face</b> and <b>1 curved surface</b> coming to a point?',
     options:['Cylinder','Sphere','Cone','Cuboid'],
     answer:'Cone',
-    hint:'Think of an ice-cream cone.',
+    hint:'Picture an ice-cream wafer or a party hat: one flat round face, one curved surface, one point.',
     explanation:'A <b>cone</b> has 1 circular flat face (base) and 1 curved surface ending in a point (apex).' }),
 
   makeMCQ({ id:'DG07', chapterId:'geometry', subsection:'3d_shapes', difficulty:2,
@@ -118,7 +118,7 @@ const DV = [
     question:'Which shape has <b>0 lines of symmetry</b>?',
     options:['Square','Rectangle','Parallelogram','Rhombus'],
     answer:'Parallelogram',
-    hint:'A parallelogram cannot be folded onto itself along any straight line.',
+    hint:'Try folding each shape in half in your head. Three of them match up exactly along at least one line.',
     explanation:'A <b>parallelogram</b> (non-rhombus) has <b>0</b> lines of symmetry.' }),
 
   makeMCQ({ id:'DG16', chapterId:'geometry', subsection:'symmetry', difficulty:3,
@@ -155,7 +155,7 @@ const DV = [
     question:'An angle of <b>270°</b> is called a(n) ___.',
     options:['Acute angle','Right angle','Obtuse angle','Reflex angle'],
     answer:'Reflex angle',
-    hint:'Reflex angles are greater than 180°.',
+    hint:'205° is more than a straight line but less than a full turn. Which of the four names covers that?',
     explanation:'270° is greater than 180°, so it is a <b>reflex angle</b>.' }),
 
   makeNum({ id:'DG21', chapterId:'geometry', subsection:'angles', difficulty:2,

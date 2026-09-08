@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 5 French — varied, syllabus-aligned revision questions.
+// Grade 5 French - varied, syllabus-aligned revision questions.
 // Generated from validated Grade 5 forms with per-verb completions so every
 // sentence reads as real French (a verb like « aimer » always gets an object,
 // « être » always gets a place). Practice stays fresh without introducing
@@ -15,6 +15,33 @@
     for (const v of values) if (!u.includes(v)) u.push(v);
     return u.slice(0, 4);
   };
+
+  // ── DIFFICULTY ────────────────────────────────────────────────────────────
+  // ⚠ Difficulty is derived from what the item DEMANDS. It used to be
+  //   `1 + ((vi + pi + ci) % 4)` - verb index + person index + completion index
+  //   modulo 4 - so the label was the loop counter. The identical task appeared
+  //   at all four levels (176 groups in Grade 5 alone spanned L1-L4), and the
+  //   label carried no information whatsoever.
+  //
+  //   It is not cosmetic: printable exam papers draw Section B from L4 only,
+  //   the parent's difficulty cap filters on these numbers, the weak-area drill
+  //   uses L1-L3, and the child's daily mission asks for L1.
+  //
+  // ⚠ These packs are `noDifficulty: true`, so a child never picks a level -
+  //   practice is always mixed. That is exactly why the numbers must be honest:
+  //   nothing in the UI would reveal a wrong one.
+  const _clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+  // nous / vous / ils carry the endings children actually get wrong; je / tu / il
+  // are the forms they meet first and use most.
+  const _personCost = p => ['nous', 'vous', 'ils', 'elles'].includes(String(p).trim()) ? 1 : 0;
+  // A stem that changes between singular and plural (vais/allons, suis/sommes,
+  // ai/avons) is where the real difficulty of an irregular verb sits.
+  const _stemShift = (forms, pi) =>
+    (forms[pi] || '').slice(0, 3) !== (forms[0] || '').slice(0, 3) ? 1 : 0;
+  // Regular -ER is the pattern taught first; -IR regulars next; the rest are
+  // irregular. `aller` looks like an -ER verb and is the classic trap.
+  const _verbCost = v => (/er$/.test(v) && v !== 'aller') ? 0 : 1;
+
   const subjText = (person, form) => person === 'je' && /^[aàâeéèêiîouhy]/i.test(form) ? 'j’' : `${person} `;
 
   // Present tense: 16 verbs × 6 people × 5 per-verb completions = 480.
@@ -40,7 +67,8 @@
   present.forEach(([verb, forms, completions], vi) => people.forEach((person, pi) => completions.forEach((completion, ci) => {
     const form = forms[pi];
     const sub = ['être','avoir'].includes(verb) ? 'etre_avoir' : ['aller','faire','prendre','venir','lire','mettre','écrire'].includes(verb) ? 'irreguliers' : verb.endsWith('er') ? 'verbes_er' : 'conjugaison';
-    add('fr-verbes-present', sub, 1 + ((vi + pi + ci) % 4), `Complète : « ${subjText(person, form)}___ ${completion}. » (${verb}, au présent)`, opts(form, forms), form,
+    add('fr-verbes-present', sub,
+      _clamp(1 + _verbCost(verb) + _personCost(person) + _stemShift(forms, pi), 1, 3), `Complète : « ${subjText(person, form)}___ ${completion}. » (${verb}, au présent)`, opts(form, forms), form,
       `Repère le sujet « ${person} », puis choisis la forme de « ${verb} » qui lui correspond.`, `Au présent, on écrit <b>${subjText(person, form)}${form}</b>. Le sujet et le verbe doivent toujours s’accorder.`);
   })));
 
@@ -63,7 +91,8 @@
   ];
   const aux = [['j’','ai'],['tu','as'],['il','a'],['nous','avons'],['vous','avez'],['ils','ont']];
   participles.forEach(([verb, part, completions], vi) => aux.forEach(([person, helper], pi) => completions.forEach((completion, ci) => {
-    add('fr-passe-compose', vi < 7 ? 'formation' : 'participe', 1 + ((vi + pi + ci) % 4), `Complète : « ${person} ___ ${part} ${completion}. » (${verb}, passé composé)`, opts(helper, aux.map(a => a[1])), helper,
+    add('fr-passe-compose', vi < 7 ? 'formation' : 'participe',
+      _clamp(1 + (/é$/.test(part) ? 0 : 1) + _personCost(person), 1, 3), `Complète : « ${person} ___ ${part} ${completion}. » (${verb}, passé composé)`, opts(helper, aux.map(a => a[1])), helper,
       'Au passé composé, commence par choisir la forme de « avoir » qui va avec le sujet.', `La bonne forme est <b>${person.endsWith('’') ? person + helper : person + ' ' + helper} ${part}</b>. Le passé composé = auxiliaire + participe passé.`);
   })));
 
@@ -89,7 +118,9 @@
     const sentence = pro === 'y' ? `Je vais ${noun} ${travelExtras[ai]} ${travelTimes[ci]}.`
       : object ? `${objectVerbs[noun][ai]} ${noun} ${context}.`
       : `${noun} ${pro === 'nous' ? action.nous : ['ils','elles'].includes(pro) ? action.pl : action.sg} ${context}.`;
-    add('fr-pronoms', pro === 'y' ? 'personnels' : object ? 'cod_coi' : 'personnels', 1 + ((ni + ai + ci) % 4), `Remplace « ${noun} » par le bon pronom dans : « ${sentence} »`, opts(pro, ['il','elle','ils','elles','nous','le','la','les','y']), pro,
+    const _proCost = { il: 0, elle: 0, ils: 1, elles: 1, nous: 2, le: 2, la: 2, les: 2, y: 2 };
+    add('fr-pronoms', pro === 'y' ? 'personnels' : object ? 'cod_coi' : 'personnels',
+      _clamp(1 + (_proCost[pro] ?? 1), 1, 3), `Remplace « ${noun} » par le bon pronom dans : « ${sentence} »`, opts(pro, ['il','elle','ils','elles','nous','le','la','les','y']), pro,
       'Demande-toi si le mot remplacé est le sujet, une chose, plusieurs personnes ou un lieu.', `Le bon pronom est <b>${pro}</b> pour remplacer « ${noun} ». Les pronoms évitent de répéter le même nom.`);
   })));
 
@@ -108,7 +139,8 @@
   ];
   const openers = ['Soudain','Ce jour-là','Alors'];
   simple.forEach(([verb, form, completions], vi) => completions.forEach((completion, ci) => openers.forEach((opener, di) => {
-    add('g5fr-passe-simple', ['prendre','venir','faire','être'].includes(verb) ? 'irreguliers' : 'formation', 2 + ((vi + ci + di) % 3), `Dans un récit, complète : « ${opener}, il ___ ${completion}. » (${verb}, passé simple)`, opts(form, simple.map(x => x[1])), form,
+    add('g5fr-passe-simple', ['prendre','venir','faire','être'].includes(verb) ? 'irreguliers' : 'formation',
+      ['prendre','venir','faire','être'].includes(verb) ? 3 : 2, `Dans un récit, complète : « ${opener}, il ___ ${completion}. » (${verb}, passé simple)`, opts(form, simple.map(x => x[1])), form,
       'Le passé simple est utilisé dans les récits pour raconter une action importante et terminée.', `Dans un récit, on écrit <b>il ${form}</b>. C’est le passé simple du verbe « ${verb} ».`);
   })));
   const subj = [
@@ -125,7 +157,8 @@
   ];
   const triggers = ['Il faut que','Je veux que','Il vaut mieux que','Maman souhaite que','Il est important que'];
   subj.forEach(([verb, form, completions], vi) => triggers.forEach((trigger, ti) => completions.forEach((completion, ci) => {
-    add('g5fr-subjonctif', ['être','avoir','aller','faire','venir','pouvoir','savoir'].includes(verb) ? 'irreguliers' : 'formation', 2 + ((vi + ti + ci) % 3), `Complète : « ${trigger} Léa ___ ${completion}. » (${verb}, subjonctif)`, opts(form, subj.map(x => x[1])), form,
+    add('g5fr-subjonctif', ['être','avoir','aller','faire','venir','pouvoir','savoir'].includes(verb) ? 'irreguliers' : 'formation',
+      ['être','avoir','aller','faire','venir','pouvoir','savoir'].includes(verb) ? 3 : 2, `Complète : « ${trigger} Léa ___ ${completion}. » (${verb}, subjonctif)`, opts(form, subj.map(x => x[1])), form,
       'Après cette expression, on emploie le subjonctif. Cherche la forme qui va avec « Léa » (elle).', `On écrit : « ${trigger} Léa <b>${form}</b> ${completion}. » C’est le subjonctif du verbe « ${verb} ».`);
   })));
 })();

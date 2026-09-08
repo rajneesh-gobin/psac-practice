@@ -1,0 +1,43 @@
+'use strict';
+// Grade 6 English - word roots and vocabulary inferred from short passages.
+(function () {
+  const add = (key, chapterId, subsection, rows) => rows.forEach((r, i) => STATIC_QUESTIONS.push(makeMCQ({
+    id: `g6eng-rcv-${key}-${String(i + 1).padStart(2, '0')}`,
+    chapterId, subsection, difficulty: 3,
+    question: r[0], options: r[1], answer: r[1][0], hint: r[2], explanation: r[3]
+  })));
+
+  add('roots', 'g6eng-vocabulary', 'word_roots', [
+    ['The root “aqua” means water. Which word is most closely connected to water?',['aquatic','audible','annual','angular'],'Look for the word built from the given root.','<b>Aquatic</b> describes something living or occurring in water.'],
+    ['The root “bio” means life. What is biology?',['the study of living things','the measurement of heat','the drawing of maps','the study of sound'],'Combine the root meaning with “-logy”, meaning study.','<b>Biology</b> is the study of life and living things.'],
+    ['The root “geo” means earth. Which tool-related word concerns the earth’s surface?',['geography','photography','biography','calligraphy'],'Choose the word about places and the earth.','<b>Geography</b> studies the earth, its places and people.'],
+    ['The root “tele” means far or distant. Why is a telescope so named?',['It helps us view distant objects.','It measures an object’s mass.','It records nearby smells.','It keeps water warm.'],'Connect the root to what the instrument lets us do.','A <b>telescope</b> enables viewing across a great distance.'],
+    ['The root “photo” means light. Which word literally involves recording with light?',['photograph','paragraph','autograph','seismograph'],'Only one option begins with the light root.','A <b>photograph</b> is an image made by recording light.'],
+    ['The root “therm” means heat. What does a thermometer measure?',['temperature','distance','time','speed'],'The root points to heat.','A <b>thermometer</b> measures temperature.'],
+    ['The root “aud” means hear. Which word means able to be heard?',['audible','visible','edible','flexible'],'Find the word linking hearing with “able”.','<b>Audible</b> means capable of being heard.'],
+    ['The root “port” means carry. Which word names something easily carried?',['portable','visible','edible','predictable'],'Add “-able” to the carrying root.','<b>Portable</b> means able to be carried or moved easily.'],
+    ['The root “scrib/script” means write. What is a manuscript?',['a text written or typed before publication','a map showing rainfall','a machine that measures sound','a picture of a living cell'],'Look for the idea of a written text.','A <b>manuscript</b> is an original written or typed text.'],
+    ['The root “spect” means look or see. What does an inspector do?',['examines something carefully','carries something heavy','measures temperature','writes music'],'Connect inspection with looking closely.','An <b>inspector</b> examines or looks over something carefully.'],
+    ['The root “cycle” relates to a circle or repeated round. Why is “recycle” an appropriate word?',['Material enters another cycle of use.','Material is thrown away immediately.','Material becomes invisible.','Material is measured once.'],'The prefix means again and the root suggests a repeated round.','To <b>recycle</b> is to process material so it can be used again.'],
+    ['The root “micro” means small. What does a microscope help us observe?',['objects too small to see clearly unaided','objects beyond distant stars only','sounds too quiet to hear','very large areas of land'],'Use the root meaning and the instrument’s purpose.','A <b>microscope</b> enlarges the appearance of very small objects.'],
+    ['The root “chrono” means time. Which device name is most closely linked to accurate timekeeping?',['chronometer','barometer','speedometer','odometer'],'Match the time root to the correct measuring instrument.','A <b>chronometer</b> is a highly accurate timekeeping device.']
+  ]);
+
+  add('vocab', 'g6eng-comprehension', 'vocabulary', [
+    ['Read: “The queue moved at a sluggish pace, advancing only a few steps every minute.” What does “sluggish” mean?',['slow','noisy','orderly','dangerous'],'The next phrase explains how the queue moved.','<b>Sluggish</b> means slow-moving.'],
+    ['Read: “After hours in the sun, the hikers were parched and eagerly shared the last bottle of water.” What does “parched” mean?',['very thirsty','completely lost','deeply asleep','badly injured'],'Their reaction to the water is the clue.','<b>Parched</b> means extremely thirsty or dry.'],
+    ['Read: “The crab retreated into a narrow crevice between two rocks.” What is a “crevice”?',['a narrow crack','a sandy hill','a deep ocean','a smooth shell'],'The location is between two rocks and is narrow.','A <b>crevice</b> is a narrow crack or opening.'],
+    ['Read: “Mira was meticulous: she checked every measurement twice and labelled each sample neatly.” What does “meticulous” mean?',['very careful and precise','quick but careless','angry and impatient','uncertain and confused'],'The examples show careful checking and neat labelling.','<b>Meticulous</b> means extremely careful about details.'],
+    ['Read: “The old bridge looked unstable, so the guide prevented anyone from crossing.” What does “unstable” mean?',['not firm or safe','newly painted','easy to find','very crowded'],'The guide’s safety decision reveals the meaning.','<b>Unstable</b> means not steady, firm or safe.'],
+    ['Read: “The applause gradually subsided until the hall was silent.” What does “subsided” mean?',['became less intense','grew much louder','started suddenly','changed into music'],'Follow the change from applause to silence.','<b>Subsided</b> means decreased or died down.'],
+    ['Read: “The instructions were ambiguous; two groups interpreted them differently.” What does “ambiguous” mean?',['open to more than one meaning','written in large letters','supported by evidence','arranged in time order'],'Different interpretations suggest a lack of one clear meaning.','<b>Ambiguous</b> means unclear because more than one interpretation is possible.'],
+    ['Read: “Although the first design failed, the team remained resilient and tried again.” What does “resilient” mean?',['able to recover from difficulty','unwilling to cooperate','certain to succeed immediately','unable to change'],'They continued after a setback.','<b>Resilient</b> means able to recover and keep going after difficulty.'],
+    ['Read: “The caretaker prohibited entry while the floor was wet.” What does “prohibited” mean?',['did not allow','strongly encouraged','carefully recorded','temporarily forgot'],'The wet floor caused entry to be stopped.','<b>Prohibited</b> means forbade or did not allow.'],
+    ['Read: “The evidence was insufficient, so the committee postponed its decision.” What does “insufficient” mean?',['not enough','completely false','too expensive','carefully organised'],'The committee needed more before deciding.','<b>Insufficient</b> means not enough for the purpose.'],
+    ['Read: “The guide’s account was credible because photographs and dates supported it.” What does “credible” mean?',['believable','humorous','brief','secret'],'Evidence makes the account more trustworthy.','<b>Credible</b> means believable or worthy of trust.'],
+    ['Read: “The path diverged: one branch led uphill and the other continued towards the river.” What does “diverged” mean?',['split in different directions','became completely blocked','returned to its start','grew narrower only'],'The colon describes two branches going different ways.','<b>Diverged</b> means separated or went in different directions.'],
+    ['Read: “The glass panels were translucent, allowing light through but hiding clear details.” What does “translucent” mean?',['letting some light through','blocking all light','producing its own light','reflecting every image clearly'],'Use both parts of the definition in the sentence.','<b>Translucent</b> material lets light pass through without giving a clear view.'],
+    ['Read: “The teacher commended Ravi for returning the lost wallet.” What does “commended” mean?',['praised','questioned','ignored','punished'],'Returning the wallet is a positive act.','<b>Commended</b> means praised for doing something well.'],
+    ['Read: “The rainfall was intermittent: heavy showers alternated with dry periods.” What does “intermittent” mean?',['stopping and starting','continuous without pause','too light to measure','limited to one place'],'The explanation describes alternating wet and dry periods.','<b>Intermittent</b> means occurring at intervals rather than continuously.']
+  ]);
+})();

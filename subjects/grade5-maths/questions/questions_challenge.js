@@ -444,7 +444,7 @@ CHALLENGE_QS.push(
     question:'What type of angle is 205°?',
     options:['Acute','Obtuse','Right','Reflex'],
     answer:'Reflex',
-    hint:'Reflex angles are greater than 180°.',
+    hint:'205° is more than a straight line but less than a full turn. Which of the four names covers that?',
     explanation:'205° > 180°, so it is a reflex angle.' }),
 
   makeNum({ id:'CH_GEO07', chapterId:'geometry', subsection:'angles', difficulty:3,

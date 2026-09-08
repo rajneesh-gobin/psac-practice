@@ -92,7 +92,7 @@ STATIC_QUESTIONS.push(
     question:'Which decimal is the GREATEST?',
     options:['0.45','0.405','0.5','0.045'],
     answer:'0.5',
-    hint:'Compare tenths digits first: 0.5 has 5 in the tenths place, all others have 4 or 0. The greatest tenths digit wins.',
+    hint:'Compare the tenths digit first. Only if those are equal do you go on to the hundredths.',
     explanation:'Tenths digits: 0.5 → 5; 0.45 and 0.405 → 4; 0.045 → 0. Since 5 > 4 > 0, <b>0.5 is the greatest</b>. Order from smallest: 0.045 < 0.405 < 0.45 < 0.5.' }),
 
   makeNum({ id:'g6m-dec-015', chapterId:'g6-decimals', subsection:'conversion', difficulty:2,

@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 Science October 2019 — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 Science October 2019 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp19-001', chapterId:'water-matter', subsection:'states', difficulty:1,
     question:'Which of the following is in the <strong>solid state</strong>?',
@@ -16,7 +16,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp19-003', chapterId:'plants', subsection:'growth', difficulty:2,
     question:'Which of the following actions <strong>helps prevent soil erosion</strong>?',
     options:['Burning of forests','Cutting down of trees','Growing dense vegetation','Overgrazing by animals'], answer:'Growing dense vegetation',
-    hint:'Roots hold soil in place — more plants mean more roots.',
+    hint:'Roots hold soil in place - more plants mean more roots.',
     explanation:'Growing dense vegetation (plants and trees) prevents soil erosion because plant roots bind the soil together and plant cover protects the ground from the force of rain and wind.' }),
 
   makeMCQ({ id:'g5sc-pp19-004', chapterId:'energy', subsection:'transfer', difficulty:1,
@@ -52,19 +52,19 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp19-009', chapterId:'animals', subsection:'classification', difficulty:2,
     question:'Which bird is <strong>endemic</strong> to the island of Mauritius and is known as the national bird?',
     options:['Crow','Dove','Kestrel','Sparrow'], answer:'Kestrel',
-    hint:'Mauritius chose an endemic raptor as its national symbol — which of these is a bird of prey?',
+    hint:'Mauritius chose an endemic raptor as its national symbol - which of these is a bird of prey?',
     explanation:'The Mauritius Kestrel (Falco punctatus) is endemic to Mauritius and is the national bird. It was saved from extinction through a successful breeding programme.' }),
 
   makeMCQ({ id:'g5sc-pp19-010', chapterId:'plants', subsection:'parts', difficulty:2,
     question:'What substance found in plant leaves helps them <strong>make food using sunlight</strong>?',
     options:['Carbon dioxide','Chlorophyll','Oxygen','Water'], answer:'Chlorophyll',
     hint:'This green substance is what makes leaves green.',
-    explanation:'Chlorophyll is the green pigment found in plant leaves that absorbs sunlight energy. It is essential for photosynthesis — the process by which plants make their own food.' }),
+    explanation:'Chlorophyll is the green pigment found in plant leaves that absorbs sunlight energy. It is essential for photosynthesis - the process by which plants make their own food.' }),
 
   makeMCQ({ id:'g5sc-pp19-011', chapterId:'water-matter', subsection:'states', difficulty:2,
     question:'Water evaporates from the sea to form clouds. What is the <strong>source of energy</strong> that drives evaporation?',
     options:['The moon','The rain','The sea','The sun'], answer:'The sun',
-    hint:'Evaporation needs heat — where does natural heat energy come from?',
+    hint:'Evaporation needs heat - where does natural heat energy come from?',
     explanation:'The sun provides the heat energy that drives evaporation in the water cycle. Sunlight heats the surface of oceans and lakes, causing liquid water to change into water vapour.' })
 );
 

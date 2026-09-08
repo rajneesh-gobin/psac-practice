@@ -92,7 +92,7 @@ STATIC_QUESTIONS.push(
       'It brings useful cold temperatures for vegetables'
     ],
     answer:'It destroys crops and uproots trees with strong winds and heavy rain',
-    hint:'Think about what very strong winds and heavy rain do to plants.',
+    hint:'Think about what a cyclone does to anything left standing in an open field.',
     explanation:'Cyclones can cause major damage to farming: <b>strong winds flatten and destroy crops</b> (sugar cane, vegetables), uproot trees, and flooding washes away soil. This can lead to food shortages and economic losses.' }),
 
   makeMCQ({ id:'g5ge-weather-012', chapterId:'g5ge-weather', subsection:'impact', difficulty:2,

@@ -453,7 +453,11 @@ const Forum = (() => {
   async function deletePost(postId) {
     if (!_sb) return;
     const doIt = async () => {
-      await _sb.from('forum_replies').delete().eq('post_id', postId);
+      // ⚠ Zero rows is fine — a post with no replies — but the error is logged
+      //   rather than dropped. If this is refused and the post delete below
+      //   succeeds, the replies are orphaned with nothing anywhere saying so.
+      const { error: repErr } = await _sb.from('forum_replies').delete().eq('post_id', postId);
+      if (repErr) console.warn('[Forum.deletePost] replies not removed for', postId, repErr.message);
       // RLS decides this, not the button's visibility: deletion needs
       // author_id = auth.uid(), author_student_id = current_student_id(), or
       // admin. Posts created BEFORE those columns existed have NULL authorship,
@@ -534,7 +538,7 @@ const Forum = (() => {
     const { name } = _author();
     // author_name / author_type are NOT sent. The database derives both from
     // the caller's session in the forum_set_author() trigger
-    // (supabase-forum-author.sql). They used to be client-supplied, which let any
+    // (supabase-schema.sql). They used to be client-supplied, which let any
     // parent or child post as author_type 'teacher' and collect the green (T)
     // badge _authorName() renders. A name is still passed for the one case the
     // trigger cannot cover - an account with no display name at all - and is

@@ -3,14 +3,33 @@
 // Strategy:
 //   Shell (HTML, CSS, engine JS): Cache-first — loads instantly offline
 //   Question files (subjects/**):  Stale-while-revalidate — serve cached, refresh in background
+//   Static assets (assets/**, fonts/**): Cache-first, in a cache that SURVIVES a version bump
 //   Netlify functions:             Network-first — fresh data required; fall back to cache
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v170';
+const SHELL_VERSION = 'shell-v264';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
+
+// ⚠ STATIC ASSETS ARE UNVERSIONED, AND DELIBERATELY SO.
+//   Everything under /assets/ and /fonts/ — question photographs, the map
+//   artwork, the district geojson, the two woff2 faces — is content that a
+//   FILENAME identifies. There is nothing for a version to invalidate, because
+//   a replacement gets a new name.
+//   Versioning them was actively harmful: SHELL_CACHE is deleted on every
+//   SHELL_VERSION bump, and this project bumps that constantly (v232 to v246 in
+//   one working session). Each bump would re-download every picture a child had
+//   already seen, on a connection that is often metered.
+// ⚠ They are also OUT of SHELL_FILES. `cache.addAll` is all-or-nothing, so
+//   pre-caching them charged every visitor for artwork most of them never open:
+//   measured 2026-09-08, the shell was 2.80 MB over the wire and 1.63 MB of it
+//   was media that does not compress at all. Cache-first fills this in as a
+//   child actually meets each file — the same trade the lazy subject packs make.
+//   The cost is that a brand-new install taken offline before opening the map
+//   has no map; the ordinary first visit caches what it renders.
+const ASSET_CACHE   = 'psac-static-assets';
 
 // Files to pre-cache on install (the app shell).
 //
@@ -27,43 +46,55 @@ const SHELL_FILES = [
   '/style.css',
   '/manifest.json',
   '/icons/icon.svg',
-  '/assets/mauritius-blank-map.svg',
-  '/assets/rodrigues-location-map.svg',
-  '/assets/world-map.svg',
-  '/assets/mauritius-districts.geojson',
-  '/assets/historical-personalities/mahe-de-labourdonnais.jpg',
-  '/assets/historical-personalities/pierre-poivre.jpg',
-  '/assets/french-image-scenes/children-playing.jpg',
-  '/assets/french-image-scenes/classroom.jpg',
-  '/assets/french-image-scenes/market.jpg',
-  '/assets/vendor/qrcode.mjs',
+  '/engine/assessment.js',
+  '/engine/symmetry_line.js',
   '/engine/events.js',
   '/engine/helpers.js',
+  '/engine/nce_paper.js',
+  '/engine/nce_paper_admin.js',
   '/engine/protect.js',
+  '/engine/practice_selector.js',
+  '/engine/question_progress.js',
+  '/engine/practice_journey.js',
   '/engine/questions_engine.js',
   '/engine/registry.js',
+  // ⚠ The generated subject index. Individual pack manifests are deliberately
+  // NOT precached: PackLoader fetches only the packs a child actually opens,
+  // and listing 45 of them here would put the whole 323 KB back on first load
+  // — the exact cost the index exists to remove.
+  '/subjects/_index.js',
   '/engine/store.js',
   '/engine/shop.js',
+  '/engine/profile_install.js',
   '/engine/supabase.js',
   '/engine/question_loader.js',
   '/engine/interactive_map.js',
   '/engine/auth.js',
   '/engine/app.js',
   '/engine/biometric.js',
-  '/engine/admin.js',
-  '/engine/teacher.js',
+  // ⚠ Must match the <script src="engine/…"> tags in index.html. This list is
+  //   all-or-nothing — cache.addAll rejects wholesale on a single 404 — so a
+  //   name here that is not on disk kills the whole offline shell, not one
+  //   feature. All six exist; re-check on any deploy that touches these tags.
+  '/engine/teacher_insights.js',
   '/engine/teacher_workspace.js',
   '/engine/teacher_guest_classes.js',
+  '/engine/teacher_home.js',
+  '/engine/teacher.js',
   '/engine/teacher_classroom_detail.js',
+  '/engine/admin.js',
   '/engine/forum.js',
   '/engine/calendar.js',
   '/engine/search.js',
   '/engine/classroom.js',
+  '/engine/game_settings.js',
   '/engine/minigame_gk.js',
   '/engine/minigame_words.js',
   '/engine/minigame_geo.js',
   '/engine/minigame_time.js',
   '/engine/minigame.js',
+  '/engine/cloze.js',
+  '/engine/errorhunt.js',
 ];
 
 // ── Install: pre-cache the shell ─────────────────────────────────────────────
@@ -81,7 +112,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(k => k !== SHELL_CACHE && k !== DATA_CACHE)
+          .filter(k => k !== SHELL_CACHE && k !== DATA_CACHE && k !== ASSET_CACHE)
           .map(k => caches.delete(k))
       )
     // DATA_CACHE survives a version bump by design, so it still holds
@@ -160,6 +191,12 @@ self.addEventListener('fetch', event => {
     return; // straight to the network, never cached
   }
 
+  // Personal manifests contain a device-local display name and must reflect a
+  // newly edited binding immediately. Do not put them in the shared data cache.
+  if (url.pathname.startsWith('/.netlify/functions/profile-manifest')) {
+    return;
+  }
+
   if (url.pathname.startsWith('/.netlify/functions/')) {
     event.respondWith(networkFirstWithCache(request, DATA_CACHE));
     return;
@@ -168,6 +205,15 @@ self.addEventListener('fetch', event => {
   // ── Question files (subjects/): stale-while-revalidate ──
   if (url.pathname.startsWith('/subjects/')) {
     event.respondWith(staleWhileRevalidate(request, DATA_CACHE));
+    return;
+  }
+
+  // ── Static assets: cache-first, in a cache no version bump deletes ──
+  // Question photographs, map artwork, the district geojson, the woff2 faces.
+  // None of it is pre-cached any more; it lands here the first time a child
+  // actually renders it, and survives every SHELL_VERSION bump after that.
+  if (url.pathname.startsWith('/assets/') || url.pathname.startsWith('/fonts/')) {
+    event.respondWith(cacheFirstWithNetwork(request, ASSET_CACHE));
     return;
   }
 

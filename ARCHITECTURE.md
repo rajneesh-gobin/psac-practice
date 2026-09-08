@@ -175,7 +175,7 @@ auto-discovers it; add it to `LOCAL_FILES` too if you use `file://`.
 
 | File | Purpose |
 |---|---|
-| `supabase-migration.sql` | The one file to run. Idempotent; Parts 1–4 unattended, Part 5 commented out because it is destructive or disruptive. |
+| `supabase-schema.sql` | The one file to run. Idempotent; Parts 1–4 unattended, Part 5 commented out because it is destructive or disruptive. |
 | `supabase-schema.sql` | Dump of the live schema — tables, constraints, indexes, policies, functions, grants. Rebuild reference, not for running against production. |
 
 The 24 incremental migrations they replaced are in git history. They were all

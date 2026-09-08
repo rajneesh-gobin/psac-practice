@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 4 French — top-up questions.
+// Grade 4 French - top-up questions.
 // Textes g4fr-txt-050..061  chapterId: g4fr-textes
 
 function _g4tpBox(inner, accent) {
@@ -45,9 +45,9 @@ const _G4TP_RECIT = _g4tpBox(`
 <b style="color:#1e40af">Lis le texte, puis réponds à la question.</b><br><br>
 <b>Priya et l\'oiseau</b><br><br>
 Un matin d\'octobre, Priya sortait de chez elle quand elle entendit un bruit étrange dans les buissons. Elle s\'arrêta et attendit. Soudain, un petit oiseau tomba sur l\'herbe devant elle. Il avait une aile blessée.<br><br>
-— Oh, le pauvre ! dit Priya.<br><br>
+- Oh, le pauvre ! dit Priya.<br><br>
 Elle prit doucement l\'oiseau dans ses mains et courut chez sa voisine, Mme Ramsamy, qui était vétérinaire.<br>
-— Ne t\'inquiète pas, dit Mme Ramsamy. Il va guérir.
+- Ne t\'inquiète pas, dit Mme Ramsamy. Il va guérir.
 `, '#3b82f6');
 
 STATIC_QUESTIONS.push(
@@ -57,7 +57,7 @@ STATIC_QUESTIONS.push(
     question:`${_G4TP_AFFICHE}Quel type de texte est-ce ?`,
     options:['Une recette', 'Un récit', 'Une carte postale', 'Une affiche'],
     answer:'Une affiche',
-    hint:'Cherche les réponses à QUOI ? QUAND ? OÙ ? dans le texte — quel type de document répond toujours à ces trois questions ?',
+    hint:'Cherche les réponses à QUOI ? QUAND ? OÙ ? dans le texte - quel type de document répond toujours à ces trois questions ?',
     explanation:`C\'est une <b>affiche</b> : elle annonce un événement (Journée de l\'Environnement) avec une date, une heure, un lieu et des activités. Elle s\'adresse à un groupe et utilise l\'impératif (« Apportez »). Une affiche répond toujours à : <b>QUOI ? QUAND ? OÙ ?</b>` }),
 
   makeMCQ({ id:'g4fr-txt-051', chapterId:'g4fr-textes', subsection:'affiche', difficulty:1,
@@ -98,8 +98,8 @@ STATIC_QUESTIONS.push(
     question:`${_G4TP_RECETTE}À quel mode sont les verbes « Épluche », « Coupe », « Ajoute » dans cette recette ?`,
     options:[`À l\'imparfait`, 'Au passé composé', `À l\'impératif`, 'Au futur simple'],
     answer:`À l\'impératif`,
-    hint:`Observe si ces verbes ont un pronom sujet (je, tu, il…) devant eux ou non — quel mode s\'utilise pour donner des consignes ?`,
-    explanation:`<b>Épluche, Coupe, Ajoute, Mixe, Verse</b> : ces verbes sont à l'<b>impératif</b>. À l\'impératif, il n\'y a <b>pas de pronom sujet</b> devant le verbe. On l\'utilise pour donner des ordres ou des consignes — dans les recettes, les notices et les affiches.` }),
+    hint:`Observe si ces verbes ont un pronom sujet (je, tu, il…) devant eux ou non - quel mode s\'utilise pour donner des consignes ?`,
+    explanation:`<b>Épluche, Coupe, Ajoute, Mixe, Verse</b> : ces verbes sont à l'<b>impératif</b>. À l\'impératif, il n\'y a <b>pas de pronom sujet</b> devant le verbe. On l\'utilise pour donner des ordres ou des consignes - dans les recettes, les notices et les affiches.` }),
 
   // ── CARTE POSTALE ──────────────────────────────────────────────────────
   makeMCQ({ id:'g4fr-txt-056', chapterId:'g4fr-textes', subsection:'legende', difficulty:1,

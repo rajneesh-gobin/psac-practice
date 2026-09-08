@@ -205,7 +205,7 @@ STATIC_QUESTIONS.push(
     question:'Quel auxiliaire utilise "naître" au passé composé ?',
     options:['avoir','être','aucun des deux','les deux sont possibles'],
     answer:'être',
-    hint:'"Naître" fait partie des verbes de mouvement/état avec être.',
+    hint:'« Naître » et « mourir » se comportent comme les verbes de mouvement au passé composé.',
     explanation:'"<b>être</b>" - naître utilise être : je suis né(e), il est né, elle est née, nous sommes né(e)s. Exemple : "Riya est née à Port-Louis." Ne jamais dire "j\'ai né" - c\'est une erreur fréquente.' }),
 
   makeMCQ({ id:'g5fr-pc-028', chapterId:'fr-passe-compose', subsection:'formation', difficulty:2,

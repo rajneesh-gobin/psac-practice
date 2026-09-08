@@ -1,5 +1,5 @@
 'use strict';
-// Grade 6 Maths — extended reasoning bank
+// Grade 6 Maths - extended reasoning bank
 // Original PSAC-style multi-step problems, kept in the Grade 6 chapter and
 // subsection vocabulary so they work in chapter and targeted practice.
 

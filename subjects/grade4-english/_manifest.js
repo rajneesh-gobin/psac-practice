@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Adding a subsection means tagging questions for it.
 // Trailing comments are the question count at the time of generation.
 const G4ENG_SYLLABUS = {
@@ -59,6 +59,13 @@ const G4ENG_SYLLABUS = {
     { id:'advert',          name:'Adverts, Posters & Notices' },  // 5
     { id:'story',           name:'Stories & Legends' },  // 18
     { id:'instructions',    name:'Instructions & Recipes' },  // 4
+  ]},
+  'g4eng-enr-joining': { subsections: [
+    { id:'relative',        name:'Relative pronouns' },  // 10
+    { id:'cause',           name:'Cause & reason' },  // 10
+    { id:'contrast',        name:'Contrast' },  // 10
+    { id:'time',            name:'Time' },  // 10
+    { id:'purpose_result',  name:'Purpose & result' },  // 10
   ]},
 };
 
@@ -146,6 +153,14 @@ registerSubject({
         'Words in **brackets** and **small print** usually hide the exceptions - always read them.',
         'Before you answer, ask yourself: *what kind of text is this?* The type tells you where to look.',
       ],
+    },
+    // @enrichment - DERIVED from the syllabus (relative pronouns, conjunctions,
+    // subordinate clauses), NOT a direct MIE chapter. DO NOT remove during
+    // syllabus alignment audits. Shows as a gold "BONUS" card.
+    {
+      id: 'g4eng-enr-joining', name: 'Joining Sentences', icon: '🔗',
+      enrichment: true, examWeight: 2,
+      enrichmentNote: 'The PSAC task "Join the two sentences using the word given". Here you pick the correctly joined sentence: who / which / where, and the everyday conjunctions.',
     },
   ],
 });

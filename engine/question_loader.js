@@ -53,17 +53,43 @@ const QuestionLoader = (() => {
     'grade7-english': ['subjects/grade7-english/questions/ch01_sample.js'],
     'grade7-french': ['subjects/grade7-french/questions/ch01_sample.js'],
     'grade7-science': ['subjects/grade7-science/questions/ch01_sample.js'],
-    'grade7-history': ['subjects/grade7-history/questions/ch01_sample.js'],
+    'grade7-social-modern-studies': ['subjects/grade7-social-modern-studies/questions/ch01_sample.js'],
     'grade8-maths': ['subjects/grade8-maths/questions/ch01_sample.js'],
     'grade8-english': ['subjects/grade8-english/questions/ch01_sample.js'],
     'grade8-french': ['subjects/grade8-french/questions/ch01_sample.js'],
     'grade8-science': ['subjects/grade8-science/questions/ch01_sample.js'],
-    'grade8-history': ['subjects/grade8-history/questions/ch01_sample.js'],
-    'grade9-maths': ['subjects/grade9-maths/questions/ch01_sample.js'],
+    'grade8-social-modern-studies': ['subjects/grade8-social-modern-studies/questions/ch01_sample.js'],
+    'grade9-maths': ['subjects/grade9-maths/questions/ch01_indices.js',
+                     'subjects/grade9-maths/questions/ch02_coordinates.js',
+                     'subjects/grade9-maths/questions/ch03_number_revision.js',
+                     'subjects/grade9-maths/questions/ch04_volume.js',
+                     'subjects/grade9-maths/questions/ch05_vectors.js',
+                     'subjects/grade9-maths/questions/ch06_statistics.js',
+                     'subjects/grade9-maths/questions/ch07_trigonometry.js',
+                     'subjects/grade9-maths/questions/ch08_probability.js',
+                     'subjects/grade9-maths/questions/ch09_expressions.js',
+                     'subjects/grade9-maths/questions/ch10_quadratics.js',
+                     'subjects/grade9-maths/questions/ch11_simultaneous.js',
+                     'subjects/grade9-maths/questions/ch12_surface_area.js',
+                     'subjects/grade9-maths/questions/ch13_patterns.js',
+                     'subjects/grade9-maths/questions/ch14_inequalities.js',
+                     'subjects/grade9-maths/questions/ch15_finance.js',
+                     'subjects/grade9-maths/questions/ch16_capacity.js',
+                     'subjects/grade9-maths/questions/ch17_matrices.js',
+                     'subjects/grade9-maths/questions/ch18_manipulation.js',
+                     'subjects/grade9-maths/questions/mcq_bank.js',
+                     'subjects/grade9-maths/questions/extended_bank.js',
+                     'subjects/grade9-maths/questions/ch19_geometry_revision.js',
+                     'subjects/grade9-maths/questions/extended_bank_2.js',
+                     'subjects/grade9-maths/questions/extended_bank_3.js',
+                     'subjects/grade9-maths/questions/visual_bank.js',
+                     'subjects/grade9-maths/questions/visual_bank_2.js',
+                     'subjects/grade9-maths/questions/balance_bank.js',
+                     'subjects/grade9-maths/questions/depth_bank.js'],
     'grade9-english': ['subjects/grade9-english/questions/ch01_sample.js'],
     'grade9-french': ['subjects/grade9-french/questions/ch01_sample.js'],
     'grade9-science': ['subjects/grade9-science/questions/ch01_sample.js'],
-    'grade9-history': ['subjects/grade9-history/questions/ch01_sample.js'],
+    'grade9-social-modern-studies': ['subjects/grade9-social-modern-studies/questions/ch01_sample.js'],
     'grade5-maths': [
       'subjects/grade5-maths/questions/core.js',
       'subjects/grade5-maths/questions/questions_extra.js',
@@ -78,9 +104,11 @@ const QuestionLoader = (() => {
       'subjects/grade5-maths/questions/illustrated_diagrams.js',
       'subjects/grade5-maths/questions/reasoning_word_problems.js',
       'subjects/grade5-maths/questions/extended_reasoning_bank.js',
+      'subjects/grade5-maths/questions/symmetry_line_drawing.js',
     ],
     'grade5-french': [
       'subjects/grade5-french/questions/ch01_vocabulaire.js',
+      'subjects/grade5-french/questions/exam_depth.js',
       'subjects/grade5-french/questions/ch02_noms.js',
       'subjects/grade5-french/questions/ch03_verbes_present.js',
       'subjects/grade5-french/questions/ch04_adjectifs.js',
@@ -92,9 +120,18 @@ const QuestionLoader = (() => {
       'subjects/grade5-french/questions/ch10_subjonctif.js',
       'subjects/grade5-french/questions/ch11_textes.js',
       'subjects/grade5-french/questions/ch12_images.js',
+      'subjects/grade5-french/questions/ch13_formation_mots.js',
+      'subjects/grade5-french/questions/ch14_textes_trous.js',
+      'subjects/grade5-french/questions/ch15_correction.js',
+      'subjects/grade5-french/questions/ch15_chasse_erreurs.js',
       'subjects/grade5-french/questions/extended_practice_bank.js',
+      'subjects/grade5-french/questions/enrichment_relier_phrases.js',
+      'subjects/grade5-french/questions/coverage_g5_balance.js',
     ],
     'grade5-english': [
+      'subjects/grade5-english/questions/coverage_core_grammar.js',
+      'subjects/grade5-english/questions/exam_depth.js',
+      'subjects/grade5-english/questions/coverage_articles_determiners.js',
       'subjects/grade5-english/questions/coverage_nouns_context.js',
       'subjects/grade5-english/questions/coverage_noun_meanings.js',
       'subjects/grade5-english/questions/ch01_nouns.js',
@@ -106,14 +143,23 @@ const QuestionLoader = (() => {
       'subjects/grade5-english/questions/ch07_vocabulary.js',
       'subjects/grade5-english/questions/ch08_spelling.js',
       'subjects/grade5-english/questions/ch09_passages.js',
+      'subjects/grade5-english/questions/passages_full_01_cyclone.js',
+      'subjects/grade5-english/questions/passages_full_02_purse.js',
+      'subjects/grade5-english/questions/passages_full_03_shortcut.js',
+      'subjects/grade5-english/questions/passages_full_04_deep_end.js',
+      'subjects/grade5-english/questions/passages_full_05_new_boy.js',
+      'subjects/grade5-english/questions/comprehension_full_01_tabla.js',
       'subjects/grade5-english/questions/topup_g5_english.js',
       'subjects/grade5-english/questions/coverage_nouns_verbs.js',
       'subjects/grade5-english/questions/coverage_adjectives_sentences.js',
       'subjects/grade5-english/questions/coverage_comprehension_writing.js',
       'subjects/grade5-english/questions/coverage_vocabulary_spelling.js',
+      'subjects/grade5-english/questions/enrichment_joining_sentences.js',
     ],
     'grade5-science': [
+      'subjects/grade5-science/questions/diagrams_exam_style.js',
       'subjects/grade5-science/questions/ch02_plants.js',
+      'subjects/grade5-science/questions/exam_depth.js',
       'subjects/grade5-science/questions/ch03_animals.js',
       'subjects/grade5-science/questions/ch04_energy.js',
       'subjects/grade5-science/questions/ch05_water_matter.js',
@@ -138,6 +184,7 @@ const QuestionLoader = (() => {
     ],
     'grade5-history': [
       'subjects/grade5-history/questions/ch01_discovery.js',
+      'subjects/grade5-history/questions/exam_depth.js',
       'subjects/grade5-history/questions/ch02_settlement.js',
       'subjects/grade5-history/questions/ch03_trade_agri.js',
       'subjects/grade5-history/questions/ch04_port_louis.js',
@@ -171,6 +218,9 @@ const QuestionLoader = (() => {
       'subjects/grade6-science/questions/ch06_g6_ecosystems.js',
       'subjects/grade6-science/questions/ch07_g6_conservation.js',
       'subjects/grade6-science/questions/ch08_g6_solar.js',
+      // diagram-reading items built on the cropped past-paper artwork
+      'subjects/grade6-science/questions/apply_diagrams.js',
+      'subjects/grade6-science/questions/exam_depth.js',
       // @enrichment - bonus content, derived from syllabus
       'subjects/grade6-science/questions/enrichment_g6sci_ecosystems.js',
       'subjects/grade6-science/questions/enrichment_g6sci_solar.js',
@@ -185,11 +235,14 @@ const QuestionLoader = (() => {
     ],
     'grade6-history': [
       'subjects/grade6-history/questions/ch01_g6_slaves_immigrants.js',
+      'subjects/grade6-history/questions/exam_depth.js',
       'subjects/grade6-history/questions/ch02_g6_independence.js',
       'subjects/grade6-history/questions/ch03_g6_cultural_heritage.js',
       'subjects/grade6-history/questions/ch04_g6_land_use.js',
       'subjects/grade6-history/questions/ch05_g6_natural_hazards.js',
       'subjects/grade6-history/questions/ch07_g6_map_skills.js',
+      // reason-giving items - the measured gap in this pack
+      'subjects/grade6-history/questions/reasoning_items.js',
       // @enrichment - bonus content, derived from syllabus
       'subjects/grade6-history/questions/enrichment_g6_personalities.js',
       'subjects/grade6-history/questions/enrichment_g6_symbols.js',
@@ -204,6 +257,9 @@ const QuestionLoader = (() => {
       'subjects/grade6-history/questions/topup_g6_history.js',
     ],
     'grade6-maths': [
+      // stimulus-reading items on the cropped past-paper artwork
+      'subjects/grade6-maths/questions/stimulus_reading.js',
+      'subjects/grade6-maths/questions/exam_depth.js',
       'subjects/grade6-maths/questions/ch01_g6_numeration.js',
       'subjects/grade6-maths/questions/ch02_g6_four_ops.js',
       'subjects/grade6-maths/questions/ch03_g6_fractions.js',
@@ -225,8 +281,25 @@ const QuestionLoader = (() => {
       'subjects/grade6-maths/questions/topup_g6_maths.js',
       'subjects/grade6-maths/questions/reasoning_word_problems.js',
       'subjects/grade6-maths/questions/extended_reasoning_bank.js',
+      'subjects/grade6-maths/questions/symmetry_line_drawing.js',
     ],
     'grade6-english': [
+      // comprehension on passages - the measured gap in this pack
+      'subjects/grade6-english/questions/comprehension_passages.js',
+      'subjects/grade6-english/questions/coverage_authors_view_inference.js',
+      'subjects/grade6-english/questions/coverage_evidence_language.js',
+      'subjects/grade6-english/questions/coverage_joining_extended.js',
+      'subjects/grade6-english/questions/coverage_roots_context_vocab.js',
+      'subjects/grade6-english/questions/coverage_confusables_affixes.js',
+      'subjects/grade6-english/questions/coverage_antonyms_homophones.js',
+      'subjects/grade6-english/questions/coverage_clauses_essay.js',
+      'subjects/grade6-english/questions/coverage_formal_descriptive.js',
+      'subjects/grade6-english/questions/coverage_planning_reports_meaning.js',
+      'subjects/grade6-english/questions/coverage_verb_cloze_continuous.js',
+      'subjects/grade6-english/questions/coverage_voice_auxiliary.js',
+      'subjects/grade6-english/questions/coverage_present_past.js',
+      'subjects/grade6-english/questions/coverage_nouns_extended.js',
+      'subjects/grade6-english/questions/coverage_future_punctuation.js',
       'subjects/grade6-english/questions/coverage_links_perfect.js',
       'subjects/grade6-english/questions/coverage_noun_precision.js',
       'subjects/grade6-english/questions/ch01_nouns.js',
@@ -244,8 +317,12 @@ const QuestionLoader = (() => {
       'subjects/grade6-english/questions/past_paper_2019.js',
       // top-up
       'subjects/grade6-english/questions/topup_g6_english.js',
+      'subjects/grade6-english/questions/enrichment_joining_sentences.js',
     ],
     'grade6-french': [
+      // compréhension sur textes - the measured gap in this pack
+      'subjects/grade6-french/questions/comprehension_textes.js',
+      'subjects/grade6-french/questions/exam_depth.js',
       'subjects/grade6-french/questions/ch01_imparfait.js',
       'subjects/grade6-french/questions/ch02_futur.js',
       'subjects/grade6-french/questions/ch03_subordonnees.js',
@@ -256,6 +333,10 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/ch08_pqp.js',
       'subjects/grade6-french/questions/ch09_g6_textes.js',
       'subjects/grade6-french/questions/ch10_g6_images.js',
+      'subjects/grade6-french/questions/ch11_g6_formation_mots.js',
+      'subjects/grade6-french/questions/ch12_g6_textes_trous.js',
+      'subjects/grade6-french/questions/ch13_g6_correction.js',
+      'subjects/grade6-french/questions/ch13_g6_chasse_erreurs.js',
       'subjects/grade6-french/questions/extended_practice_bank.js',
       // past papers
       'subjects/grade6-french/questions/past_paper_2024.js',
@@ -263,6 +344,7 @@ const QuestionLoader = (() => {
       'subjects/grade6-french/questions/past_paper_2022.js',
       'subjects/grade6-french/questions/past_paper_2021.js',
       'subjects/grade6-french/questions/past_paper_2019.js',
+      'subjects/grade6-french/questions/enrichment_relier_phrases.js',
     ],
     'grade4-maths': [
       'subjects/grade4-maths/questions/ch01_g4_numeration.js',
@@ -296,9 +378,11 @@ const QuestionLoader = (() => {
       'subjects/grade4-english/questions/coverage_comprehension.js',
       'subjects/grade4-english/questions/coverage_vocabulary.js',
       'subjects/grade4-english/questions/coverage_passages.js',
+      'subjects/grade4-english/questions/enrichment_joining_sentences.js',
     ],
     'grade4-science': [
       'subjects/grade4-science/questions/ch01_g4_living_things.js',
+      'subjects/grade4-science/questions/exam_depth.js',
       'subjects/grade4-science/questions/ch02_g4_plants.js',
       'subjects/grade4-science/questions/ch03_g4_animals.js',
       'subjects/grade4-science/questions/ch04_g4_air.js',
@@ -306,7 +390,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-science/questions/ch06_g4_materials.js',
       'subjects/grade4-science/questions/ch07_g4_energy.js',
       'subjects/grade4-science/questions/ch08_g4_protection.js',
-      // @enrichment — bonus content, derived from syllabus
+      // @enrichment - bonus content, derived from syllabus
       'subjects/grade4-science/questions/enrichment_g4sci_animals.js',
       'subjects/grade4-science/questions/enrichment_g4sci_equipment.js',
       // top-up
@@ -323,6 +407,10 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/ch08_g4_imparfait.js',
       'subjects/grade4-french/questions/ch09_g4_textes.js',
       'subjects/grade4-french/questions/ch10_g4_images.js',
+      'subjects/grade4-french/questions/ch11_g4_formation_mots.js',
+      'subjects/grade4-french/questions/ch12_g4_textes_trous.js',
+      'subjects/grade4-french/questions/ch13_g4_correction.js',
+      'subjects/grade4-french/questions/ch14_g4_chasse_erreurs.js',
       // top-up
       'subjects/grade4-french/questions/topup_g4_french.js',
       'subjects/grade4-french/questions/extended_practice_bank.js',
@@ -334,6 +422,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-french/questions/coverage_adjectifs.js',
       'subjects/grade4-french/questions/coverage_phrase_passe.js',
       'subjects/grade4-french/questions/coverage_imparfait_lecture.js',
+      'subjects/grade4-french/questions/enrichment_relier_phrases.js',
     ],
     'grade4-history': [
       'subjects/grade4-history/questions/ch01_g4_locality.js',
@@ -375,11 +464,11 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 31;
+  const _CACHE_VERSION = 82;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
-  // shares one browser — so the first child to open Maths cached the set the
+  // shares one browser - so the first child to open Maths cached the set the
   // server had filtered for THEM, and the next child, and the parent, read it
   // back. That is the same defect the service worker was stopped from having
   // (see the note above _LRU_KEY); this copy simply outlived the fix.
@@ -413,7 +502,7 @@ const QuestionLoader = (() => {
   // instead of leaving a dead copy of every subject behind.
   //
   // ⚠ 'mm_qc_v', not 'mm_qc_'. The recency index lives at `mm_qc_lru` and shares
-  // the shorter prefix, so the broader test deleted it on EVERY page load — the
+  // the shorter prefix, so the broader test deleted it on EVERY page load - the
   // counter that decides which subject to evict was therefore empty every time,
   // and _cachedSubjectsLRUFirst treats "not in the index" as oldest, making
   // eviction order arbitrary. It matters more now that two children on one
@@ -429,14 +518,26 @@ const QuestionLoader = (() => {
   })();
 
   // ── Cache pressure ────────────────────────────────────────────────────
-  // A subject bundle is ~272 KB and the largest is 473 KB; one grade's five
-  // subjects is up to 1.66 MB, and all three grades is 4.3 MB against a
-  // ~5 MB localStorage quota. Cross-grade practice is a real feature, so a
-  // child CAN reach the ceiling.
+  // ⚠⚠ MEASURED 2026-09-07, and the reason this budget is in BYTES:
+  //   largest subject   grade6-french  1,413 KB   (the old note here said 473 KB)
+  //   all 15 live       8.48 MB                   (the old note said 4.3 MB)
+  //   six largest       5.64 MB                   (i.e. _LRU_MAX = 6 on its own
+  //                                                is already over the quota)
+  // Re-measure with scripts/test-question-cache-budget.js, which reads the
+  // built bundles rather than trusting these three lines.
+  // The three French packs grew to ~2,100 questions each and nothing
+  // re-measured. Counting SLOTS was fine while every subject was about the same
+  // size; it stopped being fine the moment one subject was five times another.
+  //
+  // ⚠ There is nothing to strip from the payload. 74% of a French bundle is
+  // question + explanation + hint + options - the teaching content itself, and
+  // the part a child needs most when they are offline.
+  //
+  // Cross-grade practice is a real feature, so a child CAN reach the ceiling.
   //
   // Before this, every write was `catch {}` with no eviction, so hitting the
   // quota failed silently and stayed failed. Two consequences, neither visible:
-  // every subject load refetched ~272 KB for ever, and — worse — the writes
+  // every subject load refetched ~272 KB for ever, and - worse - the writes
   // that lose the race are whatever runs next, including
   // Store.saveStudentSession(). That one is also try/caught, so the token stays
   // installed on the live page and the child only discovers the session was
@@ -444,7 +545,7 @@ const QuestionLoader = (() => {
   //
   // ⚠ This cache is now the ONLY offline copy of the questions. The service
   // worker used to cache /functions/questions too, and deliberately no longer
-  // does — that response varies per caller and a shared URL-keyed cache served
+  // does - that response varies per caller and a shared URL-keyed cache served
   // one child's entitled question set to another. So this is load-bearing.
   const _LRU_KEY  = 'mm_qc_lru';
   // Six subjects covers one full grade (five) with room to spare, and keeps the
@@ -458,8 +559,62 @@ const QuestionLoader = (() => {
   // session token reads to a parent as "it keeps logging me out".
   const _LRU_MAX  = 6;
 
+  // ⚠ THE REAL LIMIT. localStorage is quota'd per origin at roughly 5 million
+  // characters, and this cache is not the only tenant: the progress blob, the
+  // student session token, the known-students list and the parent's stashed
+  // refresh token all share it. 3 million leaves ~2 million for them.
+  //
+  // ⚠ The unit is CHARACTERS (String#length), not UTF-8 bytes, because that is
+  // what the quota is actually counted in. For this content the two are within a
+  // few percent of each other anyway, and length is free where a byte count is not.
+  //
+  // Sized so that A CHILD'S OWN GRADE ALWAYS FITS WHOLE, because that is the
+  // entire offline case; cross-grade practice is the exception and evicts.
+  // ⚠ RE-MEASURED 2026-09-08 after 594 questions were added: Grade 4 2.68 MB,
+  // Grade 5 3.38 MB, Grade 6 3.14 MB. Grade 5 no longer fitted a 3.4 MB budget
+  // once the per-entry envelope is counted, and the test caught it evicting
+  // grade5-english - the exact failure the budget exists to prevent. Raised to
+  // 3.7 MB, which leaves Grade 5 about 0.3 MB of headroom and puts the origin
+  // near 4.3 MB of the 5 MB quota. Earlier totals were Grade 4 2.66, Grade 5
+  // 3.05, Grade 6 2.72; a 3.0 MB budget was tried before that and also cost
+  // Grade 5 a subject, which is the one case that must not lose one.
+  // ⚠ This number cannot keep rising. At 5 MB the origin is full, so the next
+  // grade that stops fitting needs the bundles to shrink or the cache to hold
+  // less than a whole grade - decide that deliberately rather than by nudging
+  // this constant again.
+  // ⚠ An eviction costs one refetch. An over-quota WRITE costs whatever ran
+  // next, and the write that loses that race is often
+  // Store.saveStudentSession() - which is also try/caught, so the token stays
+  // installed on the live page and the child only finds out when they reload.
+  // A dropped question bundle is invisible; a dropped session token reads to a
+  // parent as "it keeps logging me out".
+  const _BYTE_BUDGET = 3700000;
+
+  // Each entry holds BOTH facts: `u` is the monotonic use counter, `b` the size
+  // in characters of what was written. An older index stored a bare number, so
+  // that is read as { u: n, b: 0 } - b: 0 meaning "not measured yet", filled in
+  // from storage the first time a total is needed. An existing install therefore
+  // heals itself and no separate migration exists to forget.
+  function _lruNorm(v) {
+    if (typeof v === 'number') return { u: v, b: 0 };
+    if (v && typeof v === 'object' && typeof v.u === 'number') {
+      return { u: v.u, b: Number(v.b) || 0 };
+    }
+    return null;
+  }
   function _lruRead() {
-    try { return JSON.parse(localStorage.getItem(_LRU_KEY)) || {}; } catch { return {}; }
+    try {
+      const raw = JSON.parse(localStorage.getItem(_LRU_KEY)) || {};
+      const out = {};
+      for (const k of Object.keys(raw)) {
+        const v = _lruNorm(raw[k]);
+        if (v) out[k] = v;
+      }
+      return out;
+    } catch { return {}; }
+  }
+  function _lruWrite(m) {
+    try { localStorage.setItem(_LRU_KEY, JSON.stringify(m)); } catch {}
   }
   // Written on every cache HIT, so recency reflects USE, not write time. Kept in
   // its own tiny key (a few hundred bytes) rather than by rewriting the cached
@@ -469,33 +624,39 @@ const QuestionLoader = (() => {
   // wrong: several subjects are cached inside the same millisecond by
   // _loadBatchForGrade (it writes all five of a grade's subjects in one pass),
   // so they all recorded an identical time and the sort below had no way to
-  // order them. Eviction then picked arbitrarily among the tied entries — which
+  // order them. Eviction then picked arbitrarily among the tied entries - which
   // showed up as a test that passed twice and failed the third time. A counter
   // gives a strict total order and does not care about clock resolution.
   // ⚠ Keyed on the SLOT (owner + subject), not the subject - two children on
   // one device hold two independent entries and evict independently.
-  function _lruTouch(subjectId) {
+  // `bytes` is passed on a WRITE and omitted on a read, where the size has not
+  // changed and must be carried forward rather than reset to "unknown".
+  function _lruTouch(subjectId, bytes) {
     try {
       const m = _lruRead();
-      const vals = Object.values(m).filter(v => typeof v === 'number');
-      m[subjectId] = (vals.length ? Math.max(...vals) : 0) + 1;
+      const vals = Object.values(m).map(v => v.u);
+      const prev = m[subjectId];
+      m[subjectId] = {
+        u: (vals.length ? Math.max(...vals) : 0) + 1,
+        b: typeof bytes === 'number' ? bytes : (prev ? prev.b : 0),
+      };
       // Forget subjects that are no longer cached, so the index cannot grow
       // without bound across _CACHE_VERSION bumps.
       for (const k of Object.keys(m)) {
         if (k !== subjectId && localStorage.getItem(_cacheKey(k)) === null) delete m[k];
       }
-      localStorage.setItem(_LRU_KEY, JSON.stringify(m));
+      _lruWrite(m);
     } catch {}
   }
   function _lruForget(subjectId) {
     try {
       const m = _lruRead();
-      if (subjectId in m) { delete m[subjectId]; localStorage.setItem(_LRU_KEY, JSON.stringify(m)); }
+      if (subjectId in m) { delete m[subjectId]; _lruWrite(m); }
     } catch {}
   }
 
   // Cached subject ids, least recently used first. Anything cached but missing
-  // from the index is treated as oldest — it was written before the index
+  // from the index is treated as oldest - it was written before the index
   // existed, so it is the right thing to drop first.
   function _cachedSubjectsLRUFirst(exclude) {
     const ids = [];
@@ -507,7 +668,30 @@ const QuestionLoader = (() => {
       }
     } catch { return []; }
     const m = _lruRead();
-    return ids.filter(id => id !== exclude).sort((a, b) => (m[a] || 0) - (m[b] || 0));
+    const u = id => (m[id] ? m[id].u : 0);
+    return ids.filter(id => id !== exclude).sort((a, b) => u(a) - u(b));
+  }
+
+  // What every other cached slot is costing, least recently used first.
+  //
+  // ⚠ A size the index does not know is MEASURED, never assumed to be zero:
+  // guessing low is exactly how a budget silently stops being a budget. The
+  // measured value is written back, so this costs one extra read per entry once,
+  // and nothing thereafter.
+  function _cachedSizes(exclude) {
+    const ids = _cachedSubjectsLRUFirst(exclude);
+    const m = _lruRead();
+    let dirty = false;
+    const out = ids.map(id => {
+      let b = m[id] ? m[id].b : 0;
+      if (!b) {
+        try { b = (localStorage.getItem(_cacheKey(id)) || '').length; } catch { b = 0; }
+        if (b && m[id]) { m[id].b = b; dirty = true; }
+      }
+      return { id, b };
+    });
+    if (dirty) _lruWrite(m);
+    return out;
   }
 
   // Only ever removes THIS cache's own keys. Never touches the session, the
@@ -533,8 +717,8 @@ const QuestionLoader = (() => {
 
   // ⚠ An EMPTY payload is never a cache hit, and is never written.
   //
-  // A subject can legitimately answer with nothing — every chapter gated by the
-  // plan, or an expired account with no entitlements — and that answer used to
+  // A subject can legitimately answer with nothing - every chapter gated by the
+  // plan, or an expired account with no entitlements - and that answer used to
   // be cached like any other. For the next SEVEN DAYS the child then got a
   // subject with no questions in it, with nothing on screen to explain why, and
   // no way to recover even after the parent bought the chapter or renewed. It
@@ -561,25 +745,42 @@ const QuestionLoader = (() => {
     const slot = _slot(subjectId);
     const payload = JSON.stringify({ ts: Date.now(), data });
 
-    // Stay under the cap BEFORE writing, so the common case never has to fail a
-    // write first. _cachedSubjectsLRUFirst excludes this subject either way, so
-    // the total after this write is always its length + 1 — whether this is a
-    // new entry or a refresh of an existing one.
+    // Stay under BOTH caps BEFORE writing, so the common case never has to fail
+    // a write first. _cachedSizes excludes this subject either way, so the total
+    // after this write is always these entries + this payload - whether this is
+    // a new entry or a refresh of an existing one.
+    //
+    // ⚠ The byte test is what actually protects the quota; the slot count is
+    // kept as a second, cheaper guard on the number of entries. Evicting
+    // least-recently-used first means a child's current subject is the last
+    // thing to go.
     try {
-      const others = _cachedSubjectsLRUFirst(slot).length;
-      if (others + 1 > _LRU_MAX) _evictOldest(slot, others + 1 - _LRU_MAX);
+      const held = _cachedSizes(slot);
+      let bytes = held.reduce((s, e) => s + e.b, 0);
+      let count = held.length;
+      for (let i = 0; i < held.length; i++) {
+        if (bytes + payload.length <= _BYTE_BUDGET && count + 1 <= _LRU_MAX) break;
+        try { localStorage.removeItem(_cacheKey(held[i].id)); } catch {}
+        _lruForget(held[i].id);
+        bytes -= held[i].b;
+        count--;
+      }
+      // ⚠ If one bundle is bigger than the whole budget the loop above empties
+      // the cache and the write still goes ahead: caching the subject the child
+      // is using right now, alone, beats caching nothing. The quota retry below
+      // is what handles it if even that will not fit.
     } catch {}
 
-    // Up to three attempts: the first may still fail if OTHER origins' data —
-    // the progress blobs, another child's cache — has taken the space, and one
+    // Up to three attempts: the first may still fail if OTHER origins' data -
+    // the progress blobs, another child's cache - has taken the space, and one
     // eviction may not free enough for a 473 KB bundle.
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         localStorage.setItem(_cacheKey(slot), payload);
-        _lruTouch(slot);
+        _lruTouch(slot, payload.length);
         return;
       } catch (e) {
-        if (!_isQuotaError(e)) return;          // not a space problem — give up
+        if (!_isQuotaError(e)) return;          // not a space problem - give up
         if (!_evictOldest(slot, 2)) return;     // nothing left to evict
       }
     }
@@ -681,7 +882,7 @@ const QuestionLoader = (() => {
   async function loadSubject(subjectId) {
     if (!subjectId || _done.has(subjectId)) return;
     // Added BEFORE the await so two concurrent calls do not both fetch, and
-    // removed again if the load did not actually happen — see _loadFromAPI.
+    // removed again if the load did not actually happen - see _loadFromAPI.
     // Without the rollback a transient failure was permanent for the session:
     // _done said "loaded", the pool was empty, and startChapterDirect's retry
     // then spun on a promise that resolved instantly and changed nothing.
@@ -698,7 +899,7 @@ const QuestionLoader = (() => {
 
   // Which subject to fetch before the others. ACTIVE_PACK is set once the child
   // picks a subject; on a fresh login nobody has picked yet, so fall back to the
-  // one the dashboard will open by default — the same `find(!comingSoon)` rule
+  // one the dashboard will open by default - the same `find(!comingSoon)` rule
   // _activePack() uses, kept in step with it deliberately.
   function _activeSubjectId(packs) {
     if (!packs.length) return null;
@@ -747,7 +948,7 @@ const QuestionLoader = (() => {
       return;
     }
 
-    // Check if all subjects are already cached — skip the network entirely
+    // Check if all subjects are already cached - skip the network entirely
     const allCached = packs.every(p => _done.has(p.id) || _readCache(p.id) !== null);
     if (allCached) {
       for (const p of packs) await loadSubject(p.id);
@@ -757,8 +958,8 @@ const QuestionLoader = (() => {
     // Fetch the subject the child is about to use FIRST, on its own, and leave
     // the other four to load in the background.
     //
-    // The batch call is one request but it is the whole grade — 346 KB gzipped
-    // for grade 5 — so a child opening Maths waited on English, French, History
+    // The batch call is one request but it is the whole grade - 346 KB gzipped
+    // for grade 5 - so a child opening Maths waited on English, French, History
     // and Science too, on every cold cache. One subject is 26-100 KB. The rest
     // still arrive, just after the screen is usable; startChapterDirect() waits
     // on QuestionLoader anyway, so nothing can race ahead of its own questions.
@@ -784,7 +985,7 @@ const QuestionLoader = (() => {
   // ── Past papers ─────────────────────────────────────────────────────────
   // Deliberately NOT pushed into STATIC_QUESTIONS: these have no `answer` and
   // must never end up in a practice or exam pool that expects to mark them.
-  // Returned to the caller instead, and cached for the session only — they are
+  // Returned to the caller instead, and cached for the session only - they are
   // read once, on a screen the child opens on purpose.
   let _papersCache = null;
 

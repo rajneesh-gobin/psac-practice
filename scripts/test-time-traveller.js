@@ -34,6 +34,7 @@ const ctx = {
   DB: { stats: { totalAttempted: 0 }, games: {}, restrictions: {} },
 };
 vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'engine', 'game_settings.js'), 'utf8'), ctx, { filename: 'game_settings.js' });
 vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'engine', 'minigame_time.js'), 'utf8'), ctx, { filename: 'minigame_time.js' });
 vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'engine', 'minigame.js'), 'utf8'), ctx, { filename: 'minigame.js' });
 const MG = vm.runInContext('MiniGames', ctx);

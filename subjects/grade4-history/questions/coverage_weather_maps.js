@@ -37,9 +37,9 @@
     ['Why does a map use symbols?','to show features simply'],['Where do you find the meaning of map symbols?','in the key or legend'],['A blue line on a map often shows…','a river'],
     ['A small plane symbol may show…','an airport'],['A cross symbol may show…','a hospital'],['A star can be used to show…','a capital or important place'],
     ['Why must you check the map key?','symbols can have different meanings'],['A road is often shown by…','a line'],['A map symbol for a school helps you…','find the school quickly'],
-    ['Which is a good map key label?','river — blue line'],['What should a symbol be?','clear and easy to recognise'],['A green area may show…','a forest or park'],
+    ['Which is a good map key label?','river - blue line'],['What should a symbol be?','clear and easy to recognise'],['A green area may show…','a forest or park'],
     ['A map key is also called a…','legend'],['Which symbol would best suit a beach?','a wave symbol'],['Why are symbols useful on small maps?','there is not room to draw everything']
-  ],['to show features simply','in the key or legend','a river','an airport','a hospital','a capital or important place','symbols can have different meanings','a line','find the school quickly','river — blue line','clear and easy to recognise','a forest or park','legend','a wave symbol','there is not room to draw everything'],'Look at what each symbol represents.');
+  ],['to show features simply','in the key or legend','a river','an airport','a hospital','a capital or important place','symbols can have different meanings','a line','find the school quickly','river - blue line','clear and easy to recognise','a forest or park','legend','a wave symbol','there is not room to draw everything'],'Look at what each symbol represents.');
   rows('part','g4ge-map-skills','parts_of_map',[
     ['What tells you what a map is about?','the title'],['What explains symbols on a map?','the key or legend'],['What shows north on a map?','the north arrow'],
     ['What helps compare map distance with real distance?','the scale'],['Why is a title important?','it tells the map\'s subject'],['Why is a north arrow important?','it helps you know direction'],

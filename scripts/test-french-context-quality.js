@@ -8,7 +8,16 @@ const { loadSubject } = require('../netlify/lib/questions-sandbox');
 let checked = 0;
 for (const grade of [4,5,6]) {
   const bank = loadSubject(`grade${grade}-french`);
-  assert.equal(bank.length, { 4: 1851, 5: 1890, 6: 1932 }[grade], 'This repair must not silently remove existing questions');
+  // ⚠ A FLOOR, not an equality. The guard exists to catch questions being
+  //   silently REMOVED, but an equality check also fails on every legitimate
+  //   addition, which trains people to edit the number without reading it.
+  //   Raise a floor when a pack genuinely grows; never lower one to make this
+  //   pass. Grade 5 went 2060 -> 2155 on 2026-09-06 when the four starved
+  //   chapters were filled to support their new examWeight.
+  const floor = { 4: 2021, 5: 2155, 6: 2102 }[grade];
+  assert(bank.length >= floor,
+    `grade${grade}-french has ${bank.length} questions, fewer than the ${floor} recorded here — `
+    + 'this repair must not silently remove existing questions');
   checked += bank.length;
   for (const q of bank.filter(q => q.type === 'mcq')) {
     assert(q.options.includes(q.answer), q.id);

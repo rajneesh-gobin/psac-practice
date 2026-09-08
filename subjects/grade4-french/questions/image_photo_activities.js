@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 4 French — local photographic observation activities.
+// Grade 4 French - local photographic observation activities.
 // Multi-answer items deliberately use type:'multi': children must tick every
 // statement supported by the picture, not guess one answer.
 (function () {

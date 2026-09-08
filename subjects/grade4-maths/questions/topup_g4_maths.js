@@ -1,5 +1,5 @@
 'use strict';
-// Grade 4 Mathematics — top-up questions bringing each chapter to at least 30.
+// Grade 4 Mathematics - top-up questions bringing each chapter to at least 30.
 // IDs start at 050 to avoid any clash with existing questions (max 025).
 
 STATIC_QUESTIONS.push(
@@ -19,7 +19,7 @@ STATIC_QUESTIONS.push(
     options:['45,260','45,026','45,206','45,620'],
     answer:'45,206',
     hint:'Forty-five thousand = 45,000. Two hundred and six = 206. There are no tens.',
-    explanation:'45,000 + 200 + 6 = <b>45,206</b>. The tens place is 0 — do not leave it out.' }),
+    explanation:'45,000 + 200 + 6 = <b>45,206</b>. The tens place is 0 - do not leave it out.' }),
 
   makeMCQ({ id:'g4m-num-052', chapterId:'g4-numeration', subsection:'expanded', difficulty:1,
     question:'Which shows 82,503 in expanded notation?',
@@ -33,14 +33,14 @@ STATIC_QUESTIONS.push(
     options:['71,305','38,491','62,758','49,673'],
     answer:'62,758',
     hint:'An even number ends in 0, 2, 4, 6 or 8.',
-    explanation:'62,758 ends in 8, so it is <b>even</b>. The others end in 5, 1 and 3 — all odd digits.' }),
+    explanation:'62,758 ends in 8, so it is <b>even</b>. The others end in 5, 1 and 3 - all odd digits.' }),
 
   makeMCQ({ id:'g4m-num-054', chapterId:'g4-numeration', subsection:'compare_order', difficulty:2,
     question:'Which number lies between 54,000 and 55,000?',
     options:['53,999','54,050','55,001','55,500'],
     answer:'54,050',
     hint:'Check: is the number greater than 54,000 AND less than 55,000?',
-    explanation:'54,050 is greater than 54,000 and less than 55,000 — it lies <b>between</b> them. 53,999 is too small; 55,001 and 55,500 are too large.' }),
+    explanation:'54,050 is greater than 54,000 and less than 55,000 - it lies <b>between</b> them. 53,999 is too small; 55,001 and 55,500 are too large.' }),
 
   makeMCQ({ id:'g4m-num-055', chapterId:'g4-numeration', subsection:'rounding', difficulty:2,
     question:'Round 73,642 to the nearest 1,000.',
@@ -231,7 +231,7 @@ STATIC_QUESTIONS.push(
     explanation:'11 ÷ 4 = 2 remainder 3, so 11/4 = <b>2 and 3/4</b>.' }),
 
   makeMCQ({ id:'g4m-frac-057', chapterId:'g4-fractions', subsection:'word_problems', difficulty:2,
-    question:'A bag of 40 sweets is shared. Shanvi takes 3/8 of them. How many sweets does she take?',
+    question:'A bag of 40 sweets is shared. Kavya takes 3/8 of them. How many sweets does she take?',
     options:['10','12','15','20'],
     answer:'15',
     hint:'Find 1/8 of 40 first, then multiply by 3.',
@@ -241,7 +241,7 @@ STATIC_QUESTIONS.push(
     question:'Arrange these fractions from smallest to largest: &nbsp; 5/9, &nbsp; 2/9, &nbsp; 8/9, &nbsp; 1/9',
     options:['1/9, 2/9, 5/9, 8/9','2/9, 1/9, 5/9, 8/9','8/9, 5/9, 2/9, 1/9','1/9, 5/9, 2/9, 8/9'],
     answer:'1/9, 2/9, 5/9, 8/9',
-    hint:'All denominators are the same — compare the numerators.',
+    hint:'All denominators are the same - compare the numerators.',
     explanation:'1 < 2 < 5 < 8, so the order from smallest to largest is <b>1/9, 2/9, 5/9, 8/9</b>.' }),
 
   makeMCQ({ id:'g4m-frac-059', chapterId:'g4-fractions', subsection:'fraction_of', difficulty:3,
@@ -255,7 +255,7 @@ STATIC_QUESTIONS.push(
     question:'Complete the chain: &nbsp; 2/5 = 4/□ = □/15',
     options:['10 and 6','8 and 6','10 and 5','12 and 6'],
     answer:'10 and 6',
-    hint:'Multiply 5 by 2 to get 10; multiply 5 by 3 to get 15 — multiply the numerator by the same number each time.',
+    hint:'Multiply 5 by 2 to get 10; multiply 5 by 3 to get 15 - multiply the numerator by the same number each time.',
     explanation:'2/5 = 4/10 (both multiplied by 2) = 6/15 (both multiplied by 3). Missing numbers: <b>10 and 6</b>.' }),
 
   makeMCQ({ id:'g4m-frac-061', chapterId:'g4-fractions', subsection:'word_problems', difficulty:4,
@@ -271,14 +271,14 @@ STATIC_QUESTIONS.push(
     question:'How many VERTICES (corners) does a cuboid have?',
     options:['6','8','10','12'],
     answer:'8',
-    hint:'Think of a brick or a cereal box — count the corners where three faces meet.',
+    hint:'Think of a brick or a cereal box - count the corners where three faces meet.',
     explanation:'A cuboid has <b>8 vertices</b>: 4 on the top face and 4 on the bottom face. (It also has 12 edges and 6 faces.)' }),
 
   makeMCQ({ id:'g4m-geo-051', chapterId:'g4-geometry', subsection:'symmetry', difficulty:1,
     question:'How many lines of symmetry does a RECTANGLE (that is not a square) have?',
     options:['0','1','2','4'],
     answer:'2',
-    hint:'Try folding the rectangle — which folds give two matching halves?',
+    hint:'Try folding the rectangle - which folds give two matching halves?',
     explanation:'A rectangle has <b>2 lines of symmetry</b>: one through the midpoints of the longer sides and one through the midpoints of the shorter sides. The diagonals do NOT create symmetry (unlike a square).' }),
 
   makeMCQ({ id:'g4m-geo-052', chapterId:'g4-geometry', subsection:'shapes_2d', difficulty:2,
@@ -304,8 +304,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4m-geo-055', chapterId:'g4-geometry', subsection:'shapes_2d', difficulty:4,
     question:'A classroom has 6 windows, each shaped like a rectangle. Amara says: "Each window has 4 right angles, so all 6 windows together have 24 right angles." Is Amara correct?',
-    options:['Yes — 6 × 4 = 24','No — rectangles only have 2 right angles','No — 6 × 4 = 20','No — right angles only exist in squares'],
-    answer:'Yes — 6 × 4 = 24',
+    options:['Yes - 6 × 4 = 24','No - rectangles only have 2 right angles','No - 6 × 4 = 20','No - right angles only exist in squares'],
+    answer:'Yes - 6 × 4 = 24',
     hint:'How many right angles does one rectangle have? Multiply by 6.',
     explanation:'A rectangle has 4 right angles (one at each corner). 6 rectangles × 4 = <b>24</b> right angles. Amara is correct.' }),
 
@@ -405,7 +405,7 @@ STATIC_QUESTIONS.push(
     explanation:'Blue = 25, which is the highest value. <b>Blue</b> is the most common colour.' }),
 
   makeMCQ({ id:'g4m-data-054', chapterId:'g4-data', subsection:'tally', difficulty:2,
-    question:'A tally chart records goals scored per match. The total for "2 goals" has 8 tally marks — more than any other score. What does this tell us?',
+    question:'A tally chart records goals scored per match. The total for "2 goals" has 8 tally marks - more than any other score. What does this tell us?',
     options:['2 is the range','2 is the mean','2 is the mode','2 is the median'],
     answer:'2 is the mode',
     hint:'The mode is the value that appears most often (highest frequency).',

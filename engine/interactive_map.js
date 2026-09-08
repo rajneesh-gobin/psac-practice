@@ -10,12 +10,12 @@
 // used to break that correspondence and each is fixed here rather than worked
 // around:
 //   1. the editor drew a bare <img> in a fixed 28rem box while the child's map
-//      is an aspect-ratio box — the same percentage pointed at different places;
+//      is an aspect-ratio box - the same percentage pointed at different places;
 //   2. the editor's zoom scaled only the image and left the pins behind, so the
 //      editor actively lied about placement at any zoom other than 100%;
 //   3. the district overlay used its own projection (a uniform "meet" fit of a
 //      0.92-aspect viewBox inside a 0.86-aspect box), letterboxing it 6.8%
-//      vertically against markers that fill the box — measured, not guessed.
+//      vertically against markers that fill the box - measured, not guessed.
 //
 // Publishing is the other half of the coordination. Edits are a DRAFT until
 // published; publishing writes mm_data.geo_map_content and every client merges
@@ -208,7 +208,7 @@ const GeoMap = (() => {
   // Established by measurement, not assumption: the artwork's SVG carries eight
   // id'd country paths (Iceland, Czechia, Mongolia, Uzbekistan, Madagascar,
   // Eswatini, Lesotho, Tasmania), and fitting those against candidate
-  // projections picks Robinson by an order of magnitude —
+  // projections picks Robinson by an order of magnitude -
   //   Robinson  x rms 5.8px  y rms 0.58px      plate carrée  12.9 / 3.0
   //   Eckert IV      6.9 / 10.3                Mollweide     13.6 / 5.2
   // on a 2753×1538 canvas. Robinson also puts the poles at 6.95% and 97.72% of
@@ -324,8 +324,8 @@ const GeoMap = (() => {
   // ── Line features ─────────────────────────────────────────────────────────
   // A river is a line, not a point. `line` is [[lon,lat], …] straight from
   // OpenStreetMap; `labelAt` is how far along that course (0–1) its pin and
-  // caption sit. Everything else — labels, selection, the info card, the editor
-  // form — then works on a river exactly as it does on a place.
+  // caption sit. Everything else - labels, selection, the info card, the editor
+  // form - then works on a river exactly as it does on a place.
   const isLine = f => Array.isArray(f.line) && f.line.length > 1;
 
   // Distance along the course, so labelAt means "half way down the river" and
@@ -425,7 +425,7 @@ const GeoMap = (() => {
       const el = _mounted[i];
       if (!el || !el.isConnected) { _mounted.splice(i, 1); continue; }
       // A container the editor is previewing into paints from its own draft.
-      // A container app.js has emptied (the subject has no map) stays empty —
+      // A container app.js has emptied (the subject has no map) stays empty -
       // a late server answer must not put the card back on a screen that
       // deliberately took it away.
       if (el.__geo && el.__geo.features) continue;
@@ -437,7 +437,7 @@ const GeoMap = (() => {
   // Local cache first so the first paint is never blank and works offline; the
   // server answer then merges in and repaints only if it actually differs.
   // A child is `anon` and Store.mmGet answers null for them until the
-  // geo_map_content read policy has been applied — the cache and the built-in
+  // geo_map_content read policy has been applied - the cache and the built-in
   // catalogue are the fallback, so nothing breaks either way.
   function loadPublished() {
     if (_loadPromise) return _loadPromise;
@@ -492,7 +492,7 @@ const GeoMap = (() => {
   // ⚠ Projected through MAURITIUS_BOUNDS with preserveAspectRatio="none", i.e.
   // exactly the mapping markerPosition() uses. It previously derived its own
   // bounding box and used a uniform "meet" fit, which letterboxed the districts
-  // 6.8% vertically inside a box the markers fill — so every marker near the top
+  // 6.8% vertically inside a box the markers fill - so every marker near the top
   // or bottom of the island sat about 15px off its own district.
   function districtSvg(selectedDistrict) {
     if (!districtGeoJSON) return '';
@@ -542,7 +542,7 @@ const GeoMap = (() => {
 
   // Only the categories the current island actually has. Offering a child
   // "Volcanoes" on the Mauritius map, or "Caves" on the world map, is a filter
-  // that can only ever empty the map — and with eleven categories the chip row
+  // that can only ever empty the map - and with eleven categories the chip row
   // is already three lines deep on a phone.
   const typesOn = st => {
     const present = new Set(featuresFor(st).filter(f => islandOf(f) === st.island).map(f => f.type));
@@ -557,7 +557,7 @@ const GeoMap = (() => {
   // ⚠ Same projection trick as the district layer: viewBox 0 0 100 100 with
   // preserveAspectRatio="none", so a percentage here is the same percentage the
   // markers use. `vector-effect: non-scaling-stroke` keeps the line an even
-  // width despite the non-uniform scale — without it a river would be thick
+  // width despite the non-uniform scale - without it a river would be thick
   // one way and hairline the other.
   function linesSvg(rows, island, selectedId) {
     const P = projectionOf(island);
@@ -589,7 +589,7 @@ const GeoMap = (() => {
     markers.classList.toggle('labels-quiet', quiet);
     const hint = root.querySelector('[data-geo-hint]');
     if (hint) hint.textContent = quiet
-      ? `Showing ${rows.length} places — tap any marker for its name, or pick a category above to label a group.`
+      ? `Showing ${rows.length} places - tap any marker for its name, or pick a category above to label a group.`
       : '';
     paintLines(root, st, rows);
     markers.innerHTML = rows.map(f => markerHtml(f, { selected:f.id === st.selectedId })).join('');
@@ -610,7 +610,7 @@ const GeoMap = (() => {
   // used to be `background-size: 16.6667%` with the Equator and Prime Meridian
   // hard-coded at 50%/50%. On this artwork the Equator is at 52.33% and the
   // Prime Meridian at 47.54%, and Robinson's parallels are not evenly spaced at
-  // all — so a card that names the Equator was pointing a child at the wrong
+  // all - so a card that names the Equator was pointing a child at the wrong
   // line. Meridians curve in Robinson; parallels stay straight.
   function worldGridHtml() {
     const P = PROJECTIONS.world;
@@ -657,7 +657,7 @@ const GeoMap = (() => {
       st.island = btn.dataset.geoIsland || 'mauritius'; st.type = 'all'; st.district = null; st.selectedId = null; render(container, {});
     }));
     paint(container, st);
-    // Hide markers until the base-map image is decoded — without this the pins
+    // Hide markers until the base-map image is decoded - without this the pins
     // float over a blank box for a second before the SVG appears underneath.
     const baseImg   = container.querySelector('.geo-source-map');
     const markersEl = container.querySelector('[data-geo-markers]');
@@ -679,7 +679,7 @@ const GeoMap = (() => {
 
   // ══ ADMIN MAP EDITOR ══════════════════════════════════════════════════════
   //  Works on a DRAFT copy. Nothing an admin drags or types touches the array
-  //  the child's map paints until Publish — the old editor mutated the live
+  //  the child's map paints until Publish - the old editor mutated the live
   //  FEATURES on pointerdown, so an abandoned edit stayed on screen for the rest
   //  of the session, and Save wrote whatever happened to be left in the form
   //  (which, after a drag, was the previously selected feature's text).
@@ -702,7 +702,7 @@ const GeoMap = (() => {
     return edIslandRows().filter(f => (ed.filter === 'all' || f.type === ed.filter)
       && (!q || `${f.name} ${f.label || ''} ${f.type}`.toLowerCase().includes(q)));
   }
-  // The selected feature is always drawn, whatever the filter and search say —
+  // The selected feature is always drawn, whatever the filter and search say -
   // a filter that hides the pin you are dragging is a trap, not a filter.
   function edCanvasRows() {
     const q = ed.search.trim().toLowerCase();
@@ -730,7 +730,7 @@ const GeoMap = (() => {
         <div class="geo-ed-head">
           <div>
             <h3>🗺️ Interactive Map Editor</h3>
-            <p>This canvas is the child's map — same base image, same projection, same labels. A drag creates a draft; use <b>Save &amp; publish</b> to send it to students.</p>
+            <p>This canvas is the child's map - same base image, same projection, same labels. A drag creates a draft; use <b>Save &amp; publish</b> to send it to students.</p>
           </div>
           <div class="geo-ed-actions">
             <span class="geo-ed-dirty" data-ed-dirty></span>
@@ -842,7 +842,7 @@ const GeoMap = (() => {
     const el = ed.root.querySelector('[data-ed-hint]');
     if (!el) return;
     const f = edSelected();
-    const where = !f ? '—'
+    const where = !f ? '-'
       : isLine(f) ? `a course of ${f.line.length} points · name at ${Math.round((f.labelAt ?? 0.5) * 100)}% along it`
       : (isGeographic(islandOf(f)) && f.lon != null)
       ? `lon ${Number(f.lon).toFixed(4)}, lat ${Number(f.lat).toFixed(4)}`
@@ -850,7 +850,7 @@ const GeoMap = (() => {
     const how = f && isLine(f)
       ? 'Drag a <b>course point</b> to reshape the river · drag its <b>pin</b> to slide the name along it'
       : 'Drag a <b>pin</b> to move the place · drag its <b>label</b> to move the caption';
-    el.innerHTML = `${how}${ed.placeMode ? ' · click the map to place the selected pin' : ''} — <span class="geo-ed-coord">${esc(where)}</span>`;
+    el.innerHTML = `${how}${ed.placeMode ? ' · click the map to place the selected pin' : ''} - <span class="geo-ed-coord">${esc(where)}</span>`;
   }
 
   function applyZoom() {
@@ -949,7 +949,7 @@ const GeoMap = (() => {
     if (isle.districts && ed.districts && !districtGeoJSON) {
       // Capture what this paint was FOR. `root` is not in scope here, and
       // reaching for it threw on every editor open that happened before the
-      // district file was cached — which is every first open.
+      // district file was cached - which is every first open.
       const forRoot = ed.root, forIsland = ed.island;
       loadDistricts().then(data => {
         if (data && ed && ed.root === forRoot && ed.island === forIsland && ed.districts) paintCanvas();
@@ -985,7 +985,7 @@ const GeoMap = (() => {
   function bindMarker(btn, layer) {
     const id = btn.dataset.edFeature;
     const label = btn.querySelector('.geo-marker-label');
-    // A full repaint is right for a plain click — the filter may have to bring
+    // A full repaint is right for a plain click - the filter may have to bring
     // the newly selected pin back onto the canvas. In-place is right mid-drag.
     const select = () => { if (ed.selectedId !== id) { ed.selectedId = id; paintCanvas(); paintList(); paintForm(); paintHint(); } };
     const selectInPlace = () => {
@@ -1078,11 +1078,11 @@ const GeoMap = (() => {
     const icons = [...new Set([...(TYPE_ICONS[f.type] || []), f.icon])];
     box.innerHTML = `
       <div class="geo-ed-form-head"><span class="geo-ed-row-icon geo-${esc(f.type)}">${esc(f.icon)}</span><b>${esc(f.name)}</b></div>
-      <label class="geo-ed-label">Name — the heading on the fact card</label>
+      <label class="geo-ed-label">Name - the heading on the fact card</label>
       <input data-f="name" class="geo-editor-input" value="${esc(f.name)}">
-      <label class="geo-ed-label">Map label — keep it short, it sits on the map</label>
+      <label class="geo-ed-label">Map label - keep it short, it sits on the map</label>
       <input data-f="label" class="geo-editor-input" value="${esc(f.label || '')}" placeholder="${esc(f.name)}">
-      <label class="geo-ed-label">Category — sets the filter it appears under and the pin colour</label>
+      <label class="geo-ed-label">Category - sets the filter it appears under and the pin colour</label>
       <select data-f="type" class="geo-editor-input">${TYPES.slice(1).map(t => `<option value="${t[0]}" ${t[0] === f.type ? 'selected' : ''}>${t[1]} ${esc(t[2])}</option>`).join('')}</select>
       <label class="geo-ed-label">Icon</label>
       <div class="geo-ed-icons">${icons.map(ic => `<button type="button" class="geo-ed-icon ${ic === f.icon ? 'is-active' : ''}" data-ed-icon="${esc(ic)}">${esc(ic)}</button>`).join('')}<input data-f="icon" class="geo-editor-input geo-ed-icon-input" value="${esc(f.icon)}" maxlength="4" aria-label="Custom icon"></div>
@@ -1091,15 +1091,15 @@ const GeoMap = (() => {
       <label class="geo-ed-label">Learning fact</label>
       <textarea data-f="fact" class="geo-editor-input geo-ed-fact">${esc(f.fact)}</textarea>
       ${isLine(f) ? `
-      <label class="geo-ed-label">Name position along the course — ${f.line.length} points, drag any to reshape</label>
+      <label class="geo-ed-label">Name position along the course - ${f.line.length} points, drag any to reshape</label>
       <input data-f="labelAt" type="range" min="0" max="1" step="0.01" class="geo-ed-along" value="${(f.labelAt ?? 0.5).toFixed(2)}">`
       : `
-      <label class="geo-ed-label">Position${onMauritius ? ' — longitude, latitude' : ' — x, y'}</label>
+      <label class="geo-ed-label">Position${onMauritius ? ' - longitude, latitude' : ' - x, y'}</label>
       <div class="geo-ed-pair">
         <input data-f="${onMauritius ? 'lon' : 'x'}" type="number" step="${onMauritius ? '0.0001' : '1'}" class="geo-editor-input" value="${onMauritius ? Number(f.lon).toFixed(4) : Math.round(f.x || 0)}">
         <input data-f="${onMauritius ? 'lat' : 'y'}" type="number" step="${onMauritius ? '0.0001' : '1'}" class="geo-editor-input" value="${onMauritius ? Number(f.lat).toFixed(4) : Math.round(f.y || 0)}">
       </div>`}
-      <label class="geo-ed-label">Label offset from the pin — px across, px down</label>
+      <label class="geo-ed-label">Label offset from the pin - px across, px down</label>
       <div class="geo-ed-pair">
         <input data-f="lx" type="number" step="1" class="geo-editor-input" value="${Math.round(Number(f.lx ?? 16))}">
         <input data-f="ly" type="number" step="1" class="geo-editor-input" value="${Math.round(Number(f.ly ?? -22))}">
@@ -1162,7 +1162,7 @@ const GeoMap = (() => {
     ed.rows.push(f); ed.selectedId = f.id;
     markDirty(); paintAll();
     ed.root.querySelector('[data-f="name"]')?.focus();
-    edStatus('Added a feature at the centre of the map — drag its pin into place.', 'info');
+    edStatus('Added a feature at the centre of the map - drag its pin into place.', 'info');
   }
   function duplicateFeature() {
     const src = edSelected(); if (!src) return;
@@ -1203,7 +1203,7 @@ const GeoMap = (() => {
     try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
     ed = newEditor(ed.root);
     renderEditor(ed.root);
-    edStatus('Draft discarded — showing the published map.', 'info');
+    edStatus('Draft discarded - showing the published map.', 'info');
   }
 
   // The real child component, rendered from the draft: the last check before
@@ -1218,7 +1218,7 @@ const GeoMap = (() => {
   // ── Publish ───────────────────────────────────────────────────────────────
   // ⚠ The old save was fire-and-forget through Store.mmSet and toasted success
   // whatever happened. It also never reached a child: nothing on any client ever
-  // read the key back. Both halves are fixed here — this awaits the write, then
+  // read the key back. Both halves are fixed here - this awaits the write, then
   // probes the row AS AN ANONYMOUS CALLER, which is exactly what a child's
   // session is, and reports what it actually found.
   async function publish() {
@@ -1232,7 +1232,7 @@ const GeoMap = (() => {
     } catch (e) { res = { ok:false, error:e?.message || String(e) }; }
     buttons.forEach(btn => { btn.disabled = false; btn.textContent = btn.closest('.geo-ed-save-bar') ? '💾 Save & publish to student map' : '💾 Save & publish'; });
 
-    if (!res.ok) { edStatus(`Not published — ${res.error || 'the server refused the write'}. Your draft is still here.`, 'bad'); return; }
+    if (!res.ok) { edStatus(`Not published - ${res.error || 'the server refused the write'}. Your draft is still here.`, 'bad'); return; }
 
     writeJSON(PUBLISHED_KEY, { markers, updatedAt:payload.updatedAt });
     try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
@@ -1240,7 +1240,7 @@ const GeoMap = (() => {
     ed.dirty = false;
     paintStatus();
     const readable = await probePublicRead();
-    if (readable === false)     edStatus('Saved — but children cannot read it yet: the geo_map_content read policy is missing. Run supabase-geo-map.sql, then publish again to re-check.', 'warn');
+    if (readable === false)     edStatus('Saved - but children cannot read it yet: the geo_map_content read policy is missing. Run supabase-schema.sql, then publish again to re-check.', 'warn');
     else if (readable === null) edStatus('Published. The public-read check could not run (offline?).', 'good');
     else                        edStatus('Published, and confirmed readable by a child session.', 'good');
     paintAll();

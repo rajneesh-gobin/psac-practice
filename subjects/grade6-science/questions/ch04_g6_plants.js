@@ -38,13 +38,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-pl-001', chapterId:'g6-plants', subsection:'photosynthesis', difficulty:1,
     question:'What is PHOTOSYNTHESIS?',
-    options:[
-      'The process by which plants absorb water through their roots',
-      'The process by which plants use sunlight, water and carbon dioxide to make food (glucose)',
-      'The process by which plants breathe out oxygen at night',
-      'The process by which plants reproduce using pollen'
-    ],
-    answer:'The process by which plants use sunlight, water and carbon dioxide to make food (glucose)',
+    options:['How plants make food using sunlight', 'How plants take in water by the roots', 'How plants reproduce using pollen', 'How plants breathe out at night'],
+    answer:'How plants make food using sunlight',
     hint:'Think about the two words: "photo" = light, "synthesis" = making.',
     explanation:'<b>Photosynthesis</b> is the process by which green plants use the energy of <b>sunlight</b>, along with <b>water</b> (from roots) and <b>carbon dioxide</b> (from air), to make <b>glucose</b> (food) and release <b>oxygen</b>.' }),
 
@@ -56,14 +51,9 @@ STATIC_QUESTIONS.push(
     explanation:'Photosynthesis produces <b>glucose</b> (which the plant uses as food for energy and growth) and <b>oxygen</b> (which is released into the air - this is why plants are vital for maintaining oxygen levels in the atmosphere).' }),
 
   makeMCQ({ id:'g6sci-pl-003', chapterId:'g6-plants', subsection:'photosynthesis', difficulty:1,
-    question:'What is chlorophyll and why is it important for photosynthesis?',
-    options:[
-      'A type of sugar produced during photosynthesis',
-      'The green pigment in leaves that absorbs light energy for photosynthesis',
-      'A gas released by plants during respiration',
-      'The water-conducting tissue in plant stems'
-    ],
-    answer:'The green pigment in leaves that absorbs light energy for photosynthesis',
+    question:'What is CHLOROPHYLL?',
+    options:['The green pigment in leaves', 'A gas released during respiration', 'A sugar made in photosynthesis', 'The water tubes in the stem'],
+    answer:'The green pigment in leaves',
     hint:'Chlorophyll is what gives leaves their green colour.',
     explanation:'<b>Chlorophyll</b> is the green pigment found in the chloroplasts of leaf cells. It absorbs sunlight (mainly red and blue light) and uses that energy to power the photosynthesis reaction.' }),
 
@@ -76,8 +66,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-pl-005', chapterId:'g6-plants', subsection:'diagrams', difficulty:2,
     question:`${_SVG_FOOD_CHAIN}In the food chain, what is the HAWK described as?`,
-    options:['A producer','A 1st consumer (herbivore)','A 2nd consumer','A 3rd consumer (top predator)'],
-    answer:'A 3rd consumer (top predator)',
+    options:['A third consumer', 'A second consumer', 'A first consumer', 'A producer'],
+    answer:'A third consumer',
     hint:'Count how many steps the hawk is from the producer (grass).',
     explanation:'The hawk is the <b>3rd consumer (tertiary consumer)</b>. It eats the lizard (2nd consumer), which eats the grasshopper (1st consumer), which eats the grass (producer). The hawk is the top predator in this chain.' }),
 
@@ -100,38 +90,23 @@ STATIC_QUESTIONS.push(
     explanation:'True. All food chains start with a <b>producer</b> - a green plant (or alga) that captures energy from the sun through photosynthesis. All other organisms in the chain depend on this captured energy.' }),
 
   makeMCQ({ id:'g6sci-pl-008', chapterId:'g6-plants', subsection:'parts', difficulty:2,
-    question:'What is the role of DECOMPOSERS in a food chain or ecosystem?',
-    options:[
-      'They produce food through photosynthesis',
-      'They hunt and eat the top predators',
-      'They break down dead plants and animals, returning nutrients to the soil',
-      'They block sunlight from reaching producers'
-    ],
-    answer:'They break down dead plants and animals, returning nutrients to the soil',
+    question:'What is the role of DECOMPOSERS in an ecosystem?',
+    options:['They return nutrients to the soil', 'They make food by photosynthesis', 'They hunt and eat top predators', 'They block sunlight from plants'],
+    answer:'They return nutrients to the soil',
     hint:'Think about what happens to leaves and dead animals on a forest floor.',
     explanation:'<b>Decomposers</b> (bacteria and fungi) break down dead organisms and waste into simpler substances, returning nutrients to the soil. This is essential for recycling nutrients in an ecosystem - without decomposers, nutrients would be locked in dead matter.' }),
 
-  makeMCQ({ id:'g6sci-pl-009', chapterId:'g6-plants', subsection:'parts', difficulty:2,
-    question:'What would happen if all the GRASS (producer) in a food chain were removed?',
-    options:[
-      'Only the top predator would be affected',
-      'Nothing would change - animals would find other food',
-      'The entire food chain would collapse as all consumers would lose their food source',
-      'Decomposers would immediately replace the grass'
-    ],
-    answer:'The entire food chain would collapse as all consumers would lose their food source',
+  makeMCQ({ id:'g6sci-pl-009', chapterId:'g6-plants', subsection:'parts', difficulty:3,
+    question:'What would happen if all the grass in a food chain were removed?',
+    options:['All the consumers would lose their food', 'Decomposers would replace the grass', 'Only the top predator would suffer', 'Nothing - animals find other food'],
+    answer:'All the consumers would lose their food',
     hint:'Every other organism in the chain depends on the producer.',
     explanation:'If the producer (grass) is removed, the <b>entire food chain collapses</b>. The grasshoppers would have no food and die; the lizards would lose their prey and die; the hawks would also die. This shows why producers are vital to any ecosystem.' }),
 
-  makeMCQ({ id:'g6sci-pl-010', chapterId:'g6-plants', subsection:'parts', difficulty:2,
-    question:'A FOOD WEB is more realistic than a single food chain because:',
-    options:[
-      'It shows only one animal eating one type of food',
-      'It shows multiple feeding relationships between many different organisms',
-      'It is simpler and easier to understand than a food chain',
-      'It only shows producers and top predators'
-    ],
-    answer:'It shows multiple feeding relationships between many different organisms',
+  makeMCQ({ id:'g6sci-pl-010', chapterId:'g6-plants', subsection:'parts', difficulty:3,
+    question:'Why is a FOOD WEB more realistic than a single food chain?',
+    options:['It shows many feeding links at once', 'It shows only producers and predators', 'It shows one animal eating one food', 'It is simpler than a food chain'],
+    answer:'It shows many feeding links at once',
     hint:'Most animals eat more than one type of food.',
     explanation:'A <b>food web</b> shows how many food chains in an ecosystem are interconnected. Most animals eat multiple types of food and are eaten by multiple predators, so a web of interconnected chains (a food web) is more realistic than a single chain.' })
 
@@ -155,18 +130,13 @@ STATIC_QUESTIONS.push(
     question:'Which PART of a plant mainly carries out photosynthesis? (PSAC 2025 Q8c)',
     options:['Root','Stem','Leaf','Flower'],
     answer:'Leaf',
-    hint:'The Grade 6 textbook describes the leaf as a "factory" for making food.',
+    hint:'Which part of the plant is spread out wide, to catch as much light as it can?',
     explanation:'The Grade 6 Science Pupil\'s Book describes the <b>leaf</b> as the plant\'s "factory": inputs = sunlight, CO₂ and water/minerals; outputs = food (glucose) and O₂. Leaves are flat and broad to capture maximum sunlight. They contain <b>chloroplasts</b> with <b>chlorophyll</b>. Some green stems can also carry out photosynthesis, but the leaf is the main organ.' }),
 
   makeMCQ({ id:'g6sci-pl-013', chapterId:'g6-plants', subsection:'photosynthesis', difficulty:2,
-    question:'How do photosynthesis and respiration together MAINTAIN the composition of air? (PSAC 2025 Q8c)',
-    options:[
-      'Both add nitrogen to the air',
-      'Photosynthesis releases O₂ and absorbs CO₂; respiration releases CO₂ and absorbs O₂ - keeping the balance',
-      'Both processes absorb CO₂ from the air',
-      'Photosynthesis and respiration both produce water vapour only'
-    ],
-    answer:'Photosynthesis releases O₂ and absorbs CO₂; respiration releases CO₂ and absorbs O₂ - keeping the balance',
+    question:'How do photosynthesis and respiration together keep the air balanced?',
+    options:['One uses CO₂ and the other uses O₂', 'Both of them produce only water vapour', 'Both of them absorb CO₂ from the air', 'Both of them add nitrogen to the air'],
+    answer:'One uses CO₂ and the other uses O₂',
     hint:'The two processes are like opposite arrows - one produces what the other consumes.',
     explanation:'The Grade 6 Pupil\'s Book explains the balance: <b>Photosynthesis</b> (in sunlight) absorbs CO₂ and releases O₂. <b>Respiration</b> (day AND night) absorbs O₂ and releases CO₂. Plants carry out BOTH processes - but during daylight, photosynthesis dominates, releasing extra O₂. This complementary cycle <b>maintains the O₂/CO₂ balance in the atmosphere</b> that all life depends on.' }),
 
@@ -183,7 +153,7 @@ STATIC_QUESTIONS.push(
     explanation:'During <b>germination</b>, the correct sequence is: <b>seed → root → shoot → leaf</b>. The <b>root appears first</b> - it anchors the seed and absorbs water from the soil before anything else can grow. Then the shoot pushes upward, and finally leaves emerge and begin photosynthesis. The seed does NOT need sunlight to germinate (it uses stored food), but it needs water, warmth and oxygen.' }),
 
   makeMCQ({ id:'g6sci-pl-015', chapterId:'g6-plants', subsection:'parts', difficulty:2,
-    question:'The Grade 6 textbook says "the fruit protects and nourishes the seeds." Give an EXAMPLE of a fruit whose seeds are eaten. (PSAC 2025 Q4d)',
+    question:'The fruit protects and nourishes the seeds. Give an EXAMPLE of a fruit whose seeds are eaten.',
     options:['Carrot','Potato','Mango','Onion'],
     answer:'Mango',
     hint:'A fruit grows from a flower and contains seeds inside.',
@@ -202,7 +172,7 @@ STATIC_QUESTIONS.push(
     hint:'The Grade 6 textbook specifically states when respiration occurs.',
     explanation:'<b>False.</b> The Grade 6 Science Pupil\'s Book clearly states: <b>photosynthesis occurs ONLY in sunlight</b>, but <b>respiration occurs day AND night</b>. During the day, photosynthesis is much faster than respiration, so plants appear to only release O₂. At night, only respiration occurs, so plants take in O₂ and release CO₂.' }),
 
-  makeMCQ({ id:'g6sci-pl-018', chapterId:'g6-plants', subsection:'parts', difficulty:3,
+  makeMCQ({ id:'g6sci-pl-018', chapterId:'g6-plants', subsection:'parts', difficulty:2,
     question:'Why are FLOWERS usually colourful and have a scent? (PSAC 2025 Q4a)',
     options:[
       'To protect the plant from being eaten by animals',
@@ -216,13 +186,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6sci-pl-019', chapterId:'g6-plants', subsection:'parts', difficulty:4,
     question:'A student removes ALL the leaves from a healthy plant and places it in a well-lit room. Which prediction is CORRECT?',
-    options:[
-      'The plant will grow faster because it wastes no energy on leaves',
-      'The plant will survive indefinitely using stem photosynthesis',
-      'The plant will soon weaken and die because without leaves, photosynthesis almost stops and the plant cannot make food',
-      'The plant will switch to absorbing food through its roots instead'
-    ],
-    answer:'The plant will soon weaken and die because without leaves, photosynthesis almost stops and the plant cannot make food',
+    options:['It will weaken and die without leaves', 'It will live on using stem photosynthesis', 'It will absorb food through its roots', 'It will grow faster with no leaves'],
+    answer:'It will weaken and die without leaves',
     hint:'Recall that the leaf is the "factory" - what happens when you shut the factory?',
     explanation:'Leaves are the main organs of photosynthesis. Without them, the plant produces almost no glucose - its energy and food source. The Grade 6 Pupil\'s Book explains the leaf\'s role: <b>inputs (sunlight, CO₂, water) → food (glucose) + O₂</b>. Without this "factory" running, the plant exhausts its stored food reserves, cannot grow or repair itself, and eventually dies. Some green stems photosynthesise slightly but cannot compensate for the loss of all leaves.' })
 

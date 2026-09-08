@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Grade 6 French — revision questions kept at Grade 6 difficulty.
+// Grade 6 French - revision questions kept at Grade 6 difficulty.
 // Each verb carries its own completions so every generated sentence reads as
 // real French. Tense questions offer the SAME verb with different endings, so
 // they test conjugation rather than verb recognition.
@@ -21,6 +21,33 @@
   const refl = ['me','te','se','nous','vous','se'];
   const fitComp = (comp, pi) => comp.startsWith('se ') ? `${refl[pi]} ${comp.slice(3)}` : comp;
 
+
+  // ── DIFFICULTY ────────────────────────────────────────────────────────────
+  // ⚠ Difficulty is derived from what the item DEMANDS. It used to be
+  //   `1 + ((vi + pi + ci) % 4)` - verb index + person index + completion index
+  //   modulo 4 - so the label was the loop counter. The identical task appeared
+  //   at all four levels (176 groups in Grade 5 alone spanned L1-L4), and the
+  //   label carried no information whatsoever.
+  //
+  //   It is not cosmetic: printable exam papers draw Section B from L4 only,
+  //   the parent's difficulty cap filters on these numbers, the weak-area drill
+  //   uses L1-L3, and the child's daily mission asks for L1.
+  //
+  // ⚠ These packs are `noDifficulty: true`, so a child never picks a level -
+  //   practice is always mixed. That is exactly why the numbers must be honest:
+  //   nothing in the UI would reveal a wrong one.
+  const _clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+  // nous / vous / ils carry the endings children actually get wrong; je / tu / il
+  // are the forms they meet first and use most.
+  const _personCost = p => ['nous', 'vous', 'ils', 'elles'].includes(String(p).trim()) ? 1 : 0;
+  // A stem that changes between singular and plural (vais/allons, suis/sommes,
+  // ai/avons) is where the real difficulty of an irregular verb sits.
+  const _stemShift = (forms, pi) =>
+    (forms[pi] || '').slice(0, 3) !== (forms[0] || '').slice(0, 3) ? 1 : 0;
+  // Regular -ER is the pattern taught first; -IR regulars next; the rest are
+  // irregular. `aller` looks like an -ER verb and is the classic trap.
+  const _verbCost = v => (/er$/.test(v) && v !== 'aller') ? 0 : 1;
+
   // Future simple: 15 verbs × 6 people × 5 per-verb completions = 450.
   const future = [
     ['parler','parler',['au directeur demain','de la sortie lundi','français pendant le voyage','au téléphone ce soir','du projet à la classe']],
@@ -41,7 +68,8 @@
   ];
   future.forEach(([verb, stem, comps], vi) => people.forEach((person, pi) => comps.forEach((comp, ci) => {
     const form = stem + futureEnds[pi];
-    add('g6fr-futur', ['prendre','venir','voir','faire','être','avoir','aller','pouvoir','vouloir','devoir'].includes(verb) ? 'irreguliers' : 'formation', 1 + ((vi + pi + ci) % 4), `Complète : « ${subj(person, form)}___ ${fitComp(comp, pi)}. » (${verb}, futur simple)`, opts(form, futureEnds.map(e => stem + e)), form,
+    add('g6fr-futur', ['prendre','venir','voir','faire','être','avoir','aller','pouvoir','vouloir','devoir'].includes(verb) ? 'irreguliers' : 'formation',
+      _clamp(1 + (stem === verb ? 0 : 1) + _personCost(person), 1, 3), `Complète : « ${subj(person, form)}___ ${fitComp(comp, pi)}. » (${verb}, futur simple)`, opts(form, futureEnds.map(e => stem + e)), form,
       'Le futur simple utilise le radical du verbe et la terminaison qui correspond au sujet.', `Au futur simple, on écrit <b>${subj(person, form)}${form}</b>. Le radical de « ${verb} » est suivi de la bonne terminaison.`);
   })));
 
@@ -50,7 +78,8 @@
   const conditional = [['parler','parler'],['finir','finir'],['choisir','choisir'],['prendre','prendr'],['venir','viendr'],['faire','fer'],['être','ser'],['avoir','aur'],['aller','ir'],['pouvoir','pourr'],['vouloir','voudr'],['devoir','devr']];
   conditional.forEach(([verb, stem], vi) => people.forEach((person, pi) => futComps[verb].forEach((comp, ci) => {
     const form = stem + condEnds[pi];
-    add('g6fr-conditionnel', ['être','avoir','aller','pouvoir','vouloir','devoir','prendre','venir','faire'].includes(verb) ? 'irreguliers' : 'formation', 2 + ((vi + pi + ci) % 3), `Complète la phrase polie ou imaginaire : « ${subj(person, form)}___ ${fitComp(comp, pi)} si c’était possible. » (${verb}, conditionnel)`, opts(form, condEnds.map(e => stem + e)), form,
+    add('g6fr-conditionnel', ['être','avoir','aller','pouvoir','vouloir','devoir','prendre','venir','faire'].includes(verb) ? 'irreguliers' : 'formation',
+      _clamp(2 + (stem === verb ? 0 : 1) + _personCost(person), 2, 3), `Complète la phrase polie ou imaginaire : « ${subj(person, form)}___ ${fitComp(comp, pi)} si c’était possible. » (${verb}, conditionnel)`, opts(form, condEnds.map(e => stem + e)), form,
       'Le conditionnel exprime souvent un souhait, une possibilité ou une demande polie.', `La forme correcte est <b>${subj(person, form)}${form}</b>. Ici, le conditionnel montre que l’action dépend d’une condition.`);
   })));
 
@@ -64,7 +93,8 @@
   const imperfectAvoir = ['avais','avais','avait','avions','aviez','avaient'];
   pqp.forEach(([verb, part, obj], vi) => people.forEach((person, pi) => pqpContexts.forEach((context, ci) => {
     const helper = imperfectAvoir[pi];
-    add('g6fr-pqp', vi % 3 ? 'formation' : 'concordance', 2 + ((vi + pi + ci) % 3), `Complète : « Quand la cloche a sonné, ${subj(person, helper)}___ déjà ${part} ${obj} ${context}. » (${verb}, plus-que-parfait)`, opts(helper, imperfectAvoir), helper,
+    add('g6fr-pqp', vi % 3 ? 'formation' : 'concordance',
+      _clamp(2 + _personCost(person) + (vi % 3 ? 0 : 1), 2, 4), `Complète : « Quand la cloche a sonné, ${subj(person, helper)}___ déjà ${part} ${obj} ${context}. » (${verb}, plus-que-parfait)`, opts(helper, imperfectAvoir), helper,
       'Le plus-que-parfait utilise « avoir » ou « être » à l’imparfait, puis le participe passé.', `On écrit <b>${subj(person, helper)}${helper} ${part}</b>. Cette action s’était passée avant un autre moment du passé.`);
   })));
 
@@ -83,7 +113,8 @@
   ];
   const triggers = ['Il faut que','Il vaut mieux que','Le professeur veut que','Je souhaite que','Il est nécessaire que'];
   subjonctif.forEach(([verb, form, comps], vi) => triggers.forEach((trigger, ti) => comps.forEach((comp, ci) => {
-    add('g6fr-subjunctif', ['faire','aller','venir','être','avoir','pouvoir','savoir'].includes(verb) ? 'irreguliers' : 'formation', 2 + ((vi + ti + ci) % 3), `Complète : « ${trigger} tu ___ ${comp}. » (${verb}, subjonctif)`, opts(form, subjonctif.map(v => v[1])), form,
+    add('g6fr-subjunctif', ['faire','aller','venir','être','avoir','pouvoir','savoir'].includes(verb) ? 'irreguliers' : 'formation',
+      ['faire','aller','venir','être','avoir','pouvoir','savoir'].includes(verb) ? 3 : 2, `Complète : « ${trigger} tu ___ ${comp}. » (${verb}, subjonctif)`, opts(form, subjonctif.map(v => v[1])), form,
       'Après cette expression, choisis la forme « tu » au subjonctif.', `Après « ${trigger} », on utilise le subjonctif. La forme attendue de « ${verb} » pour « tu » est <b>${form}</b>.`);
   })));
 
@@ -150,7 +181,8 @@
       [`Quelle est la proposition principale dans : « ${full} » ?`, clauses.main, [clauses.subordinate, ...allClauses.map(c => c.main)], 'Cherche la proposition qui ne commence pas par le connecteur de subordination.', `La proposition principale est « ${clauses.main} ». L’autre proposition apporte une précision.`]
     ];
     tasks.forEach(([question, answer, alternatives, hint, explanation], ti) => {
-      add('g6fr-subordonnees', word === 'si' ? 'conjonctions' : 'analyse', 2 + ((wi + ci + ti) % 3), question, opts(answer, alternatives), answer, hint, explanation);
+      add('g6fr-subordonnees', word === 'si' ? 'conjonctions' : 'analyse',
+        [2, 3, 1, 3, 3][ti], question, opts(answer, alternatives), answer, hint, explanation);
     });
   }));
 })();

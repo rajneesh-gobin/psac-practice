@@ -42,7 +42,7 @@ function _g6imgPanel(x, n, skyFill, groundFill, inner) {
 // Les questions ont été écrites en regardant la photo.
 function _g6imgPhoto(file, credit) {
   return `<figure style="margin:6px 0">
-    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=900"
+    <img src="assets/questions/${file}"
       alt="Une image à décrire" loading="lazy"
       style="width:100%;max-width:520px;height:auto;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
     <figcaption style="font-size:.68em;color:#94a3b8;margin-top:3px">${credit}</figcaption>
@@ -50,7 +50,7 @@ function _g6imgPhoto(file, credit) {
 }
 
 const _G6IMG_PLANTATION = _g6imgPhoto(
-  'Children%20planting%20plants%20in%20Seychelles.jpg',
+  'scene-plantation.jpg',
   'Photo : Joena Bonnelame, Seychelles News Agency, Wikimedia Commons, CC BY 4.0');
 
 // ── SCÈNE 2 : trois images - l\'oiseau blessé ──────────────────────────

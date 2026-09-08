@@ -1,6 +1,6 @@
 'use strict';
 // ══════════════════════════════════════════════════════════════════════════
-//  Grade 3 — Français   ·   PLACEHOLDER PACK
+//  Grade 3 - Français   ·   PLACEHOLDER PACK
 //
 //  Registered so the plumbing exists: the grade picker, the admin Content tab,
 //  the shop catalogue, the question bundler and the DB importer all discover
@@ -16,18 +16,18 @@
 // STAGE: Mauritian primary, lower years. Same MIE track as Grades 4-6,
 // so the five subjects and the PSAC framing below are correct.
 // ⚠ Grades 1-2 will need a picture-first question mode before this is
-//   opened to children — the current renderer assumes the child can read
+//   opened to children - the current renderer assumes the child can read
 //   the question and all four options. See CLAUDE.md.
 //
 //  TO FILL THIS IN
 //    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` —
+//       Each needs: id, name, icon, examWeight, and a prose `syllabus` -
 //       one idea per sentence (_syllabusPoints splits on sentences).
 //    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
 //       model. IDs: g3fr-samp-001 style. Every question needs a `subsection:`
 //       tag that matches an id declared in G3FR_SYLLABUS below.
 //    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only — production auto-discovers) and bump _CACHE_VERSION.
+//       file:// dev only - production auto-discovers) and bump _CACHE_VERSION.
 //    4. Delete questions/ch01_sample.js.
 //    5. Set comingSoon: false.
 // ══════════════════════════════════════════════════════════════════════════

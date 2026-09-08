@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 French 2021-2022 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 French 2021-2022 - past-paper questions adapted to MCQ format.
 // Source: MES Primary School Achievement Certificate Assessment 2021-2022, French P130.
 // (This is the combined/delayed PSAC session. Folder year: 2022.)
 
@@ -11,7 +11,7 @@ STATIC_QUESTIONS.push(
     question:'Des pêcheurs ont vu ……………… requin dans le lagon.',
     options:['du','de','une','un'], answer:'un',
     hint:'Cherche le genre de « requin » pour choisir le bon article indéfini.',
-    explanation:'<em>Un requin</em> — masculin singulier, article indéfini : <em>un</em>.' }),
+    explanation:'<em>Un requin</em> - masculin singulier, article indéfini : <em>un</em>.' }),
 
   makeMCQ({ id:'g6fr-pp22-002', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'L\'artiste peint le portrait de Jena ……………… un pinceau fin.',
@@ -99,7 +99,7 @@ STATIC_QUESTIONS.push(
     hint:'L\'âge de ces statues te donnera un indice sur l\'adjectif qui les décrit le mieux.',
     explanation:'Mille ans d\'âge → ce sont de très <em>anciennes</em> statues.' }),
 
-  // ── Q4B : Compréhension MCQ — « Gontran le géant » ─────────────────
+  // ── Q4B : Compréhension MCQ - « Gontran le géant » ─────────────────
 
   makeMCQ({ id:'g6fr-pp22-016', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>Au château, tout le monde se réveille en sursaut. Le roi bondit. Le soldat Lucas lui explique : « C\'est Gontran le géant qui ronfle terriblement. »</em><br><br>Le bruit qui réveille tout le monde est causé par',
@@ -117,7 +117,7 @@ STATIC_QUESTIONS.push(
     question:'<em>Le roi hurle : « Il est interdit de ronfler après minuit ! »</em><br><br>Gontran ne respecte pas la loi car il',
     options:['dort trop le jour.','refuse de dormir le jour.','joue de la trompette après minuit.','ronfle terriblement après minuit.'], answer:'ronfle terriblement après minuit.',
     hint:'Que dit la loi et que fait Gontran ?',
-    explanation:'La loi interdit de <em>ronfler après minuit</em> — c\'est exactement ce que fait Gontran.' }),
+    explanation:'La loi interdit de <em>ronfler après minuit</em> - c\'est exactement ce que fait Gontran.' }),
 
   makeMCQ({ id:'g6fr-pp22-019', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>Lucas dit à Gontran : « Tes ronflements réveillent tout le monde. Le roi est en colère. Tu ferais mieux de dormir le jour. Ça t\'éviterait des ennuis ! »</em><br><br>Lucas donne des conseils à Gontran pour qu\'il ne soit pas',
@@ -136,7 +136,7 @@ STATIC_QUESTIONS.push(
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
   { id:'g6fr-pp22-pdf-001', chapterId:'g6fr-textes', marks:10, year:2022, grade:6, subject:'French',
-    question:'Q4A — Lis le texte sur l\'Île d\'Ambre et réponds : localisation, moyen de transport, superficie, ce qui borde l\'île, une plante indigène, nom du crabe, deux actions du gouvernement pour préserver l\'île, événement de 1744, nom du roman inspiré de cet événement.', type:'short' },
+    question:'Q4A - Lis le texte sur l\'Île d\'Ambre et réponds : localisation, moyen de transport, superficie, ce qui borde l\'île, une plante indigène, nom du crabe, deux actions du gouvernement pour préserver l\'île, événement de 1744, nom du roman inspiré de cet événement.', type:'short' },
   { id:'g6fr-pp22-pdf-002', chapterId:'g6fr-textes', marks:15, year:2022, grade:6, subject:'French',
-    question:'Q4B — Réponds aux questions sur « Gontran le géant » : Q6 = deux problèmes causés par Gontran (nuit/jour) ; Q7 = preuve que les soldats n\'étaient pas prêts ; Q8 = pourquoi le roi regrette d\'avoir chassé Gontran ; Q9 = cause des ronflements ; Q10 = solution trouvée ; Q11 = remettre 4 événements dans l\'ordre.', type:'short' }
+    question:'Q4B - Réponds aux questions sur « Gontran le géant » : Q6 = deux problèmes causés par Gontran (nuit/jour) ; Q7 = preuve que les soldats n\'étaient pas prêts ; Q8 = pourquoi le roi regrette d\'avoir chassé Gontran ; Q9 = cause des ronflements ; Q10 = solution trouvée ; Q11 = remettre 4 événements dans l\'ordre.', type:'short' }
 );

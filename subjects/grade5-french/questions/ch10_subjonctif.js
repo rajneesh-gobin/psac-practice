@@ -15,14 +15,14 @@ STATIC_QUESTIONS.push(
     question:'Laquelle de ces expressions DÉCLENCHE le subjonctif ?',
     options:['je sais que','il est certain que','il faut que','je pense que (affirmation positive)'],
     answer:'il faut que',
-    hint:'"Il faut que" exprime la nécessité → subjonctif obligatoire.',
+    hint:'Trois de ces expressions marquent la certitude ou une opinion affirmée ; une seule exprime une obligation.',
     explanation:'"<b>Il faut que</b>" est un déclencheur classique du subjonctif. Autres déclencheurs : vouloir que, bien que, pour que, avant que, il est possible que. "Je sais que" et "il est certain que" introduisent un fait réel → indicatif.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-003', chapterId:'g5fr-subjonctif', subsection:'declencheurs', difficulty:1,
     question:'Complète : "Il faut que tu ___ tes devoirs." (faire - subjonctif)',
     options:['fasses','fais','as fait','ferais'],
     answer:'fasses',
-    hint:'Faire est irrégulier au subjonctif : que je fasse, que tu fasses…',
+    hint:'« Il faut que » impose le subjonctif, et « faire » y est irrégulier : ce n\'est ni la forme du présent ni celle du conditionnel.',
     explanation:'"Il faut que tu <b>fasses</b>" - faire est irrégulier au subjonctif : que je fasse, que tu <b>fasses</b>, qu\'il fasse, que nous fassions, que vous fassiez, qu\'ils fassent.' }),
 
   makeTF({ id:'g5fr-subjonctif-004', chapterId:'g5fr-subjonctif', subsection:'formation', difficulty:1,
@@ -49,14 +49,14 @@ STATIC_QUESTIONS.push(
     question:'Quel est le subjonctif d\'AVOIR pour "tu" ?',
     options:['as','aies','avais','auras'],
     answer:'aies',
-    hint:'Avoir est irrégulier au subjonctif : que j\'aie, que tu aies…',
+    hint:'« Avoir » est irrégulier au subjonctif. Cherche la forme qui n\'est ni le présent, ni le futur, ni l\'imparfait.',
     explanation:'"Que tu <b>aies</b>" - avoir est irrégulier : que j\'aie, que tu <b>aies</b>, qu\'il ait, que nous ayons, que vous ayez, qu\'ils aient.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-008', chapterId:'g5fr-subjonctif', subsection:'irreguliers', difficulty:2,
     question:'Complète : "Je suis content que tu ___ là." (être - subjonctif)',
     options:['es','seras','sois','étais'],
     answer:'sois',
-    hint:'Expression d\'émotion → subjonctif. Être irrégulier : que tu sois.',
+    hint:'Une expression d\'émotion (« je suis content que ») entraîne le subjonctif, et « être » y est irrégulier.',
     explanation:'"Je suis content que tu <b>sois</b> là" - "je suis content que" exprime une émotion → subjonctif. Être → que tu <b>sois</b>.' }),
 
   makeTF({ id:'g5fr-subjonctif-009', chapterId:'g5fr-subjonctif', subsection:'formation', difficulty:2,
@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
     question:'Quel est le subjonctif d\'ALLER pour "ils" ?',
     options:['vont','allaient','aillent','iraient'],
     answer:'aillent',
-    hint:'Aller est irrégulier au subjonctif : que j\'aille, que tu ailles, qu\'il aille, qu\'ils aillent.',
+    hint:'« Aller » est très irrégulier au subjonctif : aux trois personnes du singulier et à la 3e du pluriel, son radical ne ressemble plus du tout à « all- ».',
     explanation:'"Qu\'ils <b>aillent</b>" - aller est irrégulier au subjonctif : que j\'aille, que tu ailles, qu\'il aille, que nous allions, que vous alliez, qu\'ils/elles <b>aillent</b>.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-011', chapterId:'g5fr-subjonctif', subsection:'declencheurs', difficulty:2,
@@ -102,7 +102,7 @@ STATIC_QUESTIONS.push(
     question:'Complète : "Je veux que tu ___ (venir) à ma fête." (subjonctif)',
     options:['viens','viennes','venais','es venu'],
     answer:'viennes',
-    hint:'Venir est irrégulier au subjonctif : que je vienne, que tu viennes…',
+    hint:'« Je veux que » entraîne le subjonctif, et « venir » y est irrégulier : ce n\'est ni le présent ni le passé composé.',
     explanation:'"Je veux que tu <b>viennes</b>" - venir est irrégulier : que je vienne, que tu <b>viennes</b>, qu\'il vienne, que nous venions, que vous veniez, qu\'ils viennent.' }),
 
   makeTF({ id:'g5fr-subjonctif-015', chapterId:'g5fr-subjonctif', subsection:'formation', difficulty:3,
@@ -115,7 +115,7 @@ STATIC_QUESTIONS.push(
     question:'Complète : "Il est important que vous ___ (être) à l\'heure." (subjonctif)',
     options:['êtes','soyez','serez','étiez'],
     answer:'soyez',
-    hint:'"Il est important que" → subjonctif. Être irrégulier : que vous soyez.',
+    hint:'« Il est important que » entraîne le subjonctif, et « être » y est irrégulier.',
     explanation:'"Il est important que vous <b>soyez</b> à l\'heure" - être au subjonctif : que je sois, que tu sois, qu\'il soit, que nous soyons, que vous <b>soyez</b>, qu\'ils soient.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-017', chapterId:'g5fr-subjonctif', subsection:'irreguliers', difficulty:3,
@@ -129,7 +129,7 @@ STATIC_QUESTIONS.push(
     question:'Conjugue POUVOIR au subjonctif pour "nous" : "Pour que nous ___ réussir, il faut travailler."',
     options:['pouvons','puissions','pourrions','avons pu'],
     answer:'puissions',
-    hint:'Pouvoir est irrégulier au subjonctif : que je puisse, que tu puisses, que nous puissions.',
+    hint:'« Pour que » entraîne le subjonctif, et « pouvoir » y prend un radical irrégulier, différent de « pouv- ».',
     explanation:'"Pour que nous <b>puissions</b>" - pouvoir est irrégulier : que je puisse, que tu puisses, qu\'il puisse, que nous <b>puissions</b>, que vous puissiez, qu\'ils puissent.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-019', chapterId:'g5fr-subjonctif', subsection:'declencheurs', difficulty:4,
@@ -148,7 +148,7 @@ STATIC_QUESTIONS.push(
     question:'Complétez : "Il est nécessaire que tu ___ (venir) immédiatement."',
     options:['viens','viendras','viennes','venais'],
     answer:'viennes',
-    hint:'"Il est nécessaire que" → subjonctif. Venir irrégulier : que je vienne, que tu viennes.',
+    hint:'« Il est nécessaire que » entraîne le subjonctif, et « venir » y est irrégulier.',
     explanation:'"Il est nécessaire que tu <b>viennes</b>." - venir (irrégulier) : que je vienne, que tu <b>viennes</b>, qu\'il vienne, que nous venions, que vous veniez, qu\'ils viennent. "Il est nécessaire que" = déclencheur du subjonctif.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-021', chapterId:'g5fr-subjonctif', subsection:'declencheurs', difficulty:1,
@@ -175,14 +175,14 @@ STATIC_QUESTIONS.push(
     question:'Complétez : "Pour que nous ___ (comprendre), explique lentement."',
     options:['comprenons','comprenions','comprions','comprendrons'],
     answer:'comprenions',
-    hint:'"Pour que" → subjonctif. Comprendre : que nous comprenions.',
+    hint:'« Pour que » entraîne le subjonctif. Avec « nous » la terminaison est -ions ; vérifie bien le radical de « comprendre ».',
     explanation:'"Pour que nous <b>comprenions</b>." - "pour que" = so that, in order that → toujours suivi du subjonctif. Comprendre : radical = ils comprennent → comprenn- → compreni- → que nous <b>comprenions</b>.' }),
 
   makeMCQ({ id:'g5fr-subjonctif-025', chapterId:'g5fr-subjonctif', subsection:'irreguliers', difficulty:2,
     question:'Complétez : "Je veux qu\'elle ___ (faire) ses devoirs."',
     options:['fait','ferait','fasse','faisait'],
     answer:'fasse',
-    hint:'"Je veux que" → subjonctif. Faire irrégulier : que je fasse.',
+    hint:'« Je veux que » entraîne le subjonctif, et « faire » y est irrégulier.',
     explanation:'"Je veux qu\'elle <b>fasse</b> ses devoirs." - "vouloir que" → subjonctif. Faire (irrégulier) : que je fasse, que tu fasses, qu\'il/elle <b>fasse</b>, que nous fassions, que vous fassiez, qu\'ils fassent.' }),
 
   makeTF({ id:'g5fr-subjonctif-026', chapterId:'g5fr-subjonctif', subsection:'declencheurs', difficulty:1,
@@ -202,7 +202,7 @@ STATIC_QUESTIONS.push(
     question:'"Je sache" est le subjonctif de quel verbe ?',
     options:['sauter','savoir','suivre','satisfaire'],
     answer:'savoir',
-    hint:'"Savoir" est irrégulier au subjonctif : que je sache.',
+    hint:'« Sache » ne ressemble pas à son infinitif : c\'est un subjonctif irrégulier. Lequel de ces quatre verbes se conjugue ainsi ?',
     explanation:'"je sache" = subjonctif de <b>savoir</b> (irrégulier) : que je sache, que tu saches, qu\'il sache, que nous sachions, que vous sachiez, qu\'ils sachent. Exemple : "Je ne crois pas qu\'il <b>sache</b> la réponse."' }),
 
   makeMCQ({ id:'g5fr-subjonctif-029', chapterId:'g5fr-subjonctif', subsection:'formation', difficulty:3,
@@ -236,7 +236,7 @@ STATIC_QUESTIONS.push(
     question:'Complétez : "Afin que tout le monde ___ (comprendre), répète la question."',
     options:['comprend','comprenne','comprendra','comprenait'],
     answer:'comprenne',
-    hint:'"Afin que" = in order that → subjonctif. Comprendre → qu\'il comprenne.',
+    hint:'« Afin que » entraîne le subjonctif. Cherche la forme qui n\'est ni un présent, ni un imparfait, ni un futur.',
     explanation:'"Afin que tout le monde <b>comprenne</b>." - "afin que" (so that, in order that) → subjonctif. Comprendre (irrégulier) : que je comprenne, que tu comprennes, qu\'il/elle <b>comprenne</b>, que nous comprenions.' }),
 
   makeTF({ id:'g5fr-subjonctif-034', chapterId:'g5fr-subjonctif', subsection:'formation', difficulty:2,

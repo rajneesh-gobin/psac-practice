@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 Science 2020 — questions drawn from the March 2021 paper (the same paper
+// PSAC Grade 5 Science 2020 - questions drawn from the March 2021 paper (the same paper
 // was used for the 2020 sitting). Questions are rephrased/reframed to avoid exact duplication
 // with past_paper_2021.js. Focus here is on the longer-question sections.
 STATIC_QUESTIONS.push(
@@ -18,7 +18,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp20-003', chapterId:'energy', subsection:'sources', difficulty:2,
     question:'Why do <strong>more families in Mauritius</strong> choose solar water heaters than electric ones?',
     options:['Solar heaters work better at night.','Mauritius has plenty of sunshine, so solar energy is free and renewable.','Electric heaters are more expensive to buy.','Solar heaters heat water faster.'], answer:'Mauritius has plenty of sunshine, so solar energy is free and renewable.',
-    hint:'Mauritius is a tropical island near the equator — what does it have plenty of?',
+    hint:'Mauritius is a tropical island near the equator - what does it have plenty of?',
     explanation:'Mauritius is close to the equator and receives lots of sunlight all year. Solar energy is free and renewable, making solar water heaters cheaper to run than electric ones.' }),
 
   makeMCQ({ id:'g5sc-pp20-004', chapterId:'plants', subsection:'parts', difficulty:1,
@@ -36,7 +36,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp20-006', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'In a simple circuit, the <strong>switch</strong> is open (up position). What happens to the bulb?',
     options:['The bulb lights up brightly.','The bulb flickers.','The bulb does not light up.','The bulb becomes hot only.'], answer:'The bulb does not light up.',
-    hint:'An open switch breaks the circuit — what happens to current flow?',
+    hint:'An open switch breaks the circuit - what happens to current flow?',
     explanation:'When the switch is open, it creates a break in the circuit. No current can flow, so the bulb does not light up. The circuit must be complete (closed) for current to flow.' }),
 
   makeMCQ({ id:'g5sc-pp20-007', chapterId:'electricity', subsection:'circuits', difficulty:2,
@@ -66,7 +66,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp20-011', chapterId:'energy', subsection:'transfer', difficulty:1,
     question:'A boy is cycling to school. The energy transformation taking place is:',
     options:['Chemical energy → movement energy','Electrical energy → movement energy','Solar energy → movement energy','Movement energy → chemical energy'], answer:'Chemical energy → movement energy',
-    hint:'The boy ate breakfast before cycling — food gives chemical energy.',
+    hint:'The boy ate breakfast before cycling - food gives chemical energy.',
     explanation:'When cycling, the body converts chemical energy from food into movement (kinetic) energy. The muscles use food energy to power the pedalling motion.' }),
 
   makeMCQ({ id:'g5sc-pp20-012', chapterId:'plants', subsection:'growth', difficulty:2,
@@ -78,7 +78,7 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g5sc-pp20-pdf-001', needsArtwork:true, chapterId:'electricity', marks:3, year:2020, grade:5, subject:'Science',
+  { id:'g5sc-pp20-pdf-001', image:'assets/past-papers/g5-science-2020/d2-circuit.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'electricity', marks:3, year:2020, grade:5, subject:'Science',
     question:'Draw a circuit diagram with one dry cell, one switch, and two bulbs connected in series. Show the switch in the open position.', type:'draw' },
   { id:'g5sc-pp20-pdf-002', chapterId:'animals', marks:2, year:2020, grade:5, subject:'Science',
     question:'Name two endangered animals found in Mauritius and give one reason why each is endangered.', type:'write' },

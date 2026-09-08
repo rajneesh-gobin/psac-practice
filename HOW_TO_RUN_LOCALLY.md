@@ -40,9 +40,9 @@ are served correctly via the function before deploying.
 1. Install Node.js (if not already installed):
    https://nodejs.org — download the LTS version, run the installer
 
-2. Open a terminal (PowerShell or Command Prompt) in the shanvi folder:
+2. Open a terminal (PowerShell or Command Prompt) in the psac-practice folder:
    ```
-   cd "C:\Users\deepmala.gobin\OneDrive - Accenture\Desktop\shanvi"
+   cd "D:\git-repo\psac-practice"
    ```
 
 3. Install Netlify CLI:
@@ -57,7 +57,7 @@ are served correctly via the function before deploying.
 
 ## Every time you want to test locally
 
-In the shanvi folder, run:
+In the psac-practice folder, run:
 ```
 netlify dev
 ```
@@ -87,7 +87,7 @@ No restart needed.
 
 ## Deploying to Netlify
 
-Either drag-and-drop the shanvi folder to Netlify as before,
+Either drag-and-drop the psac-practice folder to Netlify as before,
 OR link the project and use:
 ```
 netlify deploy --prod

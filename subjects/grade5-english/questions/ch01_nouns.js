@@ -85,7 +85,7 @@ STATIC_QUESTIONS.push(
     question:'Fill in the blank with the correct REFLEXIVE PRONOUN: "We really enjoyed ___ at the party."',
     options:['ourselves','themselves','himself','yourself'],
     answer:'ourselves',
-    hint:'The subject is "We" - the reflexive pronoun must match: we → ourselves.',
+    hint:'A reflexive pronoun has to match its subject. Who is the subject of this sentence?',
     explanation:'"<b>Ourselves</b>" matches the subject "We". Reflexive pronouns reflect the action back to the subject: I→myself, you→yourself, he→himself, she→herself, it→itself, we→ourselves, they→themselves.' }),
 
   makeMCQ({ id:'g5eng-noun-012', chapterId:'eng-nouns', subsection:'common_proper', difficulty:1,

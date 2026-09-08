@@ -72,7 +72,7 @@
       <div class="pill" id="timer">⏳</div>
       <div class="q" id="q"></div>
       <div id="opts"></div>
-      <p class="muted center">Tap the answer you think is right — you get one vote!</p>
+      <p class="muted center">Tap the answer you think is right - you get one vote!</p>
     </div>
     <div id="done" class="hide">
       <div class="center pop"><div class="big" id="done-icon">🗳️</div>
@@ -83,7 +83,7 @@
     </div>
   </div>
 
-  <p class="foot">Powered by <a href="/">PSAC Exam Practice</a> — free revision for Mauritian students</p>
+  <p class="foot">Powered by <a href="/">PSAC Exam Practice</a> - free revision for Mauritian students</p>
 </div>
 
 <script>
@@ -122,7 +122,7 @@ function drawBars() {
     </div>`;
   }).join('');
   $('done-timer').textContent = poll.seconds_left > 0
-    ? 'Live — updates as more people vote. ' + fmt(poll.seconds_left) + ' left.'
+    ? 'Live - updates as more people vote. ' + fmt(poll.seconds_left) + ' left.'
     : 'Voting has closed. Thanks for helping!';
 }
 
@@ -162,7 +162,7 @@ async function vote(i) {
       document.querySelectorAll('.opt').forEach(b => b.disabled = false);
     }
   } catch (_) {
-    $('status').textContent = 'No connection — check your internet and try again.';
+    $('status').textContent = 'No connection - check your internet and try again.';
     $('status').classList.remove('hide');
     document.querySelectorAll('.opt').forEach(b => b.disabled = false);
   }
@@ -172,7 +172,7 @@ async function vote(i) {
   if (!code) { $('status').textContent = 'This voting link is incomplete. Ask for a fresh one!'; return; }
   let r;
   try { r = await rpc('minigame_poll_results', { p_code: code }); }
-  catch (_) { $('status').textContent = 'No connection — check your internet and try again.'; return; }
+  catch (_) { $('status').textContent = 'No connection - check your internet and try again.'; return; }
   if (!r.ok) { $('status').textContent = 'This poll has finished and been tidied away. Ask for a fresh link!'; return; }
   poll = r;
 

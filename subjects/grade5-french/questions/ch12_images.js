@@ -44,7 +44,7 @@ function _g5imgPanel(x, n, skyFill, groundFill, inner) {
 // Les questions ont été écrites en regardant la photo.
 function _g5imgPhoto(file, credit) {
   return `<figure style="margin:6px 0">
-    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=900"
+    <img src="assets/questions/${file}"
       alt="Une image à décrire" loading="lazy"
       style="width:100%;max-width:520px;height:auto;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
     <figcaption style="font-size:.68em;color:#94a3b8;margin-top:3px">${credit}</figcaption>
@@ -52,7 +52,7 @@ function _g5imgPhoto(file, credit) {
 }
 
 const _G5IMG_MARCHE = _g5imgPhoto(
-  'DFC%201758%20Vendors%20busy%20arranging%20fresh%20vegetables%20at%20a%20lively%20outdoor%20market%20stall%20preparing%20produce%20for%20customers.jpg',
+  'scene-marche.jpg',
   'Photo : PattayaPatrol, Wikimedia Commons, CC BY-SA 4.0');
 
 // ── SCÈNE 2 : trois images - le chat dans le sac ──────────────────────

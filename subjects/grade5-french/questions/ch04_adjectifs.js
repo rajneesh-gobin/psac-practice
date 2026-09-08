@@ -29,7 +29,7 @@ STATIC_QUESTIONS.push(
     question:'Où se place généralement l\'adjectif de COULEUR en français ?',
     options:['Avant le nom','Après le nom','N\'importe où dans la phrase','Au début de la phrase'],
     answer:'Après le nom',
-    hint:'En français, la couleur vient après le nom qu\'elle décrit.',
+    hint:'Compare « une robe bleue » et « une belle robe » : les couleurs ne se placent pas comme les adjectifs BAGS.',
     explanation:'Les adjectifs de couleur se placent <b>après</b> le nom : une robe <b>rouge</b>, un chat <b>noir</b>, des yeux <b>bleus</b>. En anglais, les adjectifs sont avant le nom (a red dress), mais en français, beaucoup d\'adjectifs viennent après.' }),
 
   makeMCQ({ id:'g5fr-adj-005', chapterId:'fr-adjectifs', subsection:'accord', difficulty:2,
@@ -246,7 +246,7 @@ STATIC_QUESTIONS.push(
     question:'Choisissez l\'adjectif dérivé de "pluie" : "Une journée ___"',
     options:['pluvieuse','pluieuse','pluieuxe','pluviale'],
     answer:'pluvieuse',
-    hint:'"Pluie" → "pluvieux/pluvieuse" (attention : changement de radical).',
+    hint:'Attention, le radical se transforme : ce n\'est pas simplement « pluie » suivi d\'une terminaison.',
     explanation:'"Une journée <b>pluvieuse</b>" - pluie → <b>pluvieux/pluvieuse</b> (le radical change légèrement). Forme masculine : un temps pluvieux. Forme féminine : une journée pluvieuse.' }),
 
   makeMCQ({ id:'g5fr-adj-034', chapterId:'fr-adjectifs', subsection:'accord', difficulty:3,

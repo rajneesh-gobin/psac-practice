@@ -43,7 +43,7 @@ STATIC_QUESTIONS.push(
     question:'The Citadel (Fort Adelaide) in Port Louis was built by which colonial power?',
     options:['The British','The French','The Dutch','The Portuguese'],
     answer:'The British',
-    hint:'It was constructed after the British took control of the island in 1810.',
+    hint:'The fort is named after a queen consort, and it went up after the change of power in 1810.',
     explanation:'The <b>Citadel (Fort Adelaide)</b> is a hilltop fort built by the <b>British</b> after they captured Mauritius in 1810, designed to defend Port Louis from attack.' }),
 
   makeMCQ({ id:'g5enr-lmk-007', chapterId:'g5enr-landmarks', subsection:'buildings', difficulty:2,

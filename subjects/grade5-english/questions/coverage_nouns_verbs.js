@@ -13,7 +13,7 @@
   rows('abstract','eng-nouns','abstract', [['Which word is an abstract noun?','courage']],['courage','bicycle','teacher','garden'],'An abstract noun names an idea, quality or feeling.');
   rows('determiner','eng-nouns','determiners',[
     ['Choose the determiner meaning a small number: "There are ___ biscuits left in the tin."','a few'],['Choose the determiner meaning a large amount in this negative sentence: "I do not have ___ money with me."','much'],['Choose the best determiner: "___ pupil must bring a notebook."','Every'],['Choose the determiner normally used to offer an unspecified amount: "Would you like ___ water?"','some']
-  ],['a few','much','Every','some'],'Determiners tell us how many or how much.');
+  ],['a few','much','Every','some'],'The noun is "money", which cannot be counted one by one. Which quantity word goes with a noun like that?');
   rows('voice','eng-verbs','voice', [['Which sentence is in the passive voice?','The trophy was lifted by the captain.']],['The trophy was lifted by the captain.','The captain lifted the trophy.','The captain is lifting the trophy.','Lift the trophy, captain!'],'In passive voice, the subject receives the action.');
   rows('agreement','eng-verbs','agreement',[
     ['Choose the correct verb: "The basket of mangoes ___ on the table."','is'],['Choose the correct verb: "Neither of the boys ___ ready."','is'],['Choose the correct verb: "My friends ___ football after school."','play'],['Choose the correct verb: "The dog and its puppy ___ sleeping."','are']

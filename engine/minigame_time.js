@@ -1,6 +1,6 @@
 'use strict';
 // ══════════════════════════════════════════════
-//  Time Traveller bank — real, dated history facts for the 🕰️ minigame.
+//  Time Traveller bank - real, dated history facts for the 🕰️ minigame.
 //
 //  ⚠ EVERY fact must be real and verifiable (same rule as Island Explorer's
 //  geography). Years follow what the history packs and standard references
@@ -11,7 +11,7 @@
 //    era  : 'mu' (Mauritius) | 'world'
 //    band : 1 easy (the big story) · 2 medium · 3 finer events
 //
-//  ⚠ A label must NEVER contain its year or any 4-digit number — the game
+//  ⚠ A label must NEVER contain its year or any 4-digit number - the game
 //  hides the years until the round is resolved, and a leaked digit would give
 //  the order away. scripts/test-time-traveller.js enforces this.
 // ══════════════════════════════════════════════
@@ -37,7 +37,7 @@ window.MINIGAME_TIME = [
   { label: 'The airport at Plaisance opens', year: 1943, era: 'mu', band: 3 },
   { label: 'Cyclone Carol, one of the strongest storms ever, hits Mauritius', year: 1960, era: 'mu', band: 3 },
   { label: 'The University of Mauritius opens its doors', year: 1965, era: 'mu', band: 3 },
-  { label: 'Mauritius becomes independent — the four-band flag rises for the first time', year: 1968, era: 'mu', band: 1 },
+  { label: 'Mauritius becomes independent - the four-band flag rises for the first time', year: 1968, era: 'mu', band: 1 },
   { label: 'Mauritius becomes a Republic', year: 1992, era: 'mu', band: 1 },
   { label: 'Aapravasi Ghat becomes a UNESCO World Heritage Site', year: 2006, era: 'mu', band: 3 },
   { label: 'Le Morne mountain becomes a UNESCO World Heritage Site', year: 2008, era: 'mu', band: 3 },

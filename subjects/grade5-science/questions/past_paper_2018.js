@@ -1,10 +1,10 @@
 'use strict';
-// PSAC Grade 5 Science October 2018 — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 Science October 2018 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp18-001', chapterId:'water-matter', subsection:'properties', difficulty:1,
     question:'Which <strong>two properties</strong> of ice make it good for use on skating rinks?',
     options:['Warm and soft','Warm and slippery','Hard and slippery','Cold and rough'], answer:'Hard and slippery',
-    hint:'Skaters glide on it — think about its texture and state.',
+    hint:'Skaters glide on it - think about its texture and state.',
     explanation:'Ice is hard (solid state) and slippery (low friction at its surface). These two properties make it ideal for ice skating. It is cold, not warm.' }),
 
   makeMCQ({ id:'g5sc-pp18-002', chapterId:'plants', subsection:'reproduction', difficulty:2,
@@ -16,7 +16,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp18-003', chapterId:'plants', subsection:'parts', difficulty:2,
     question:'Which plant is well adapted to live in <strong>wetlands</strong> and marshy areas?',
     options:['Bulrush','Cactus','Fern','Papaya'], answer:'Bulrush',
-    hint:'Think about which plant from the options is specifically adapted to waterlogged, marshy areas — not just moist ones.',
+    hint:'Think about which plant from the options is specifically adapted to waterlogged, marshy areas - not just moist ones.',
     explanation:'Bulrush (cattail) is adapted to grow in waterlogged, marshy, and wetland conditions. Cactus is adapted to dry deserts; ferns prefer shaded, moist-but-not-flooded areas; papayas need well-drained soil.' }),
 
   makeMCQ({ id:'g5sc-pp18-004', chapterId:'plants', subsection:'parts', difficulty:2,
@@ -34,7 +34,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp18-006', chapterId:'electricity', subsection:'circuits', difficulty:2,
     question:'A circuit has a wire connected to only <strong>one terminal</strong> of a dry cell. This is described as a(n) _____ circuit.',
     options:['Closed circuit','Complete circuit','Open circuit','Short circuit'], answer:'Open circuit',
-    hint:'For current to flow, the circuit must be complete — connecting both terminals.',
+    hint:'For current to flow, the circuit must be complete - connecting both terminals.',
     explanation:'A circuit connected to only one terminal of the battery is an open circuit. Current cannot flow because there is no complete path from one terminal, through the circuit, back to the other terminal.' }),
 
   makeMCQ({ id:'g5sc-pp18-007', chapterId:'electricity', subsection:'circuits', difficulty:1,
@@ -58,7 +58,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp18-010', chapterId:'conservation', subsection:'deforestation', difficulty:3,
     question:'How do <strong>mangrove trees</strong> help protect coastal regions from erosion?',
     options:['By attracting large numbers of fish to the coast','By providing shade for people on the beach','By providing food and shelter for animals','Their dense roots trap sediment and prevent coastal erosion'], answer:'Their dense roots trap sediment and prevent coastal erosion',
-    hint:'Think about what mangrove roots look like above the water — they form a thick tangle.',
+    hint:'Think about what mangrove roots look like above the water - they form a thick tangle.',
     explanation:'Mangrove trees have complex root systems that trap sediment and absorb wave energy, protecting coastlines from erosion. They also act as nurseries for fish and other marine animals.' })
 );
 

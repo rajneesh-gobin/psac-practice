@@ -159,7 +159,19 @@ const PROBE = [
   await S('Emulation.setDeviceMetricsOverride',
     { width: PHONE_W, height: 900, deviceScaleFactor: 1, mobile: true });
   await S('Page.navigate', { url: 'http://127.0.0.1:' + PORT + '/index.html' });
-  await sleep(6000);
+  // index.html loads 45 blocking manifest scripts before app.js. A fixed sleep
+  // raced them on a cold profile and the probe answered 'no #screen-parent',
+  // which reads as 'the markup is gone' rather than 'the page is still parsing'.
+  // Wait for the element itself, then let layout settle.
+  let ready = false;
+  for (let i = 0; i < 60 && !ready; i++) {
+    const r = await S('Runtime.evaluate',
+      { returnByValue: true, expression: '!!document.getElementById("screen-parent")' });
+    ready = r.result.value === true;
+    if (!ready) await sleep(500);
+  }
+  if (!ready) { console.error('HARNESS FAIL: #screen-parent never appeared'); process.exit(1); }
+  await sleep(1500);
 
   const res = await S('Runtime.evaluate', { returnByValue: true, expression: PROBE });
   const m = res.result.value;

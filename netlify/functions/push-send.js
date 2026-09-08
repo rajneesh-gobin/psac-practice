@@ -10,7 +10,14 @@ const VAPID_PUBLIC  = process.env.VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE = process.env.VAPID_PRIVATE_KEY;
 const VAPID_EMAIL   = process.env.VAPID_EMAIL || 'mailto:admin@psacpractice.mu';
 
-webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC, VAPID_PRIVATE);
+// ⚠ Guarded, and NOT at import time. setVapidDetails() throws when a key is
+//   missing, and a throw at module scope makes the whole function 500 before
+//   the handler runs — an unreadable failure for a missing config value.
+//   Measured 2026-09-08: all three VAPID vars were absent from the Netlify
+//   site, so every push invocation failed this way rather than reporting it.
+const VAPID_READY = !!(VAPID_PUBLIC && VAPID_PRIVATE);
+if (VAPID_READY) webpush.setVapidDetails(VAPID_EMAIL, VAPID_PUBLIC, VAPID_PRIVATE);
+else console.error('[push] VAPID keys are not configured — push is disabled.');
 
 async function getSubscriptions(studentIds) {
   const ids = studentIds.map(id => `student_id.eq.${id}`).join(',');
@@ -30,6 +37,8 @@ async function removeStaleSubscription(studentId) {
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method not allowed' };
+  // Say so plainly, rather than throwing an unreadable error out of web-push.
+  if (!VAPID_READY) return { statusCode: 503, body: JSON.stringify({ ok: false, error: 'push_not_configured' }) };
 
   // Internal guard — only callable from other Netlify functions or with service key
   const authHeader = event.headers['x-service-key'] || '';
@@ -52,8 +61,14 @@ export async function handler(event) {
         await webpush.sendNotification(subscription, payload);
       } catch (err) {
         // 410 Gone = subscription expired or unsubscribed — clean up
-        if (err.statusCode === 410 || err.statusCode === 404) await removeStaleSubscription(student_id);
-        else throw err;
+        // ⚠ 403 too: that is VapidPkHashMismatch — the subscription was created
+        //   under a DIFFERENT VAPID public key, so it can never be delivered to
+        //   again. Without pruning it a key rotation leaves permanently failing
+        //   rows that retry forever. The browser re-subscribes under the new key
+        //   on its next visit (see the stale check in _setupPush, engine/app.js).
+        if (err.statusCode === 410 || err.statusCode === 404 || err.statusCode === 403) {
+          await removeStaleSubscription(student_id);
+        } else throw err;
       }
     })
   );

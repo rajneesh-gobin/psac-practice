@@ -40,15 +40,15 @@ let _studentToken = null;
 // x-student-token is not a CORS-safelisted header, so adding it turns that
 // refresh into a preflighted request: the browser first sends OPTIONS and will
 // only proceed if GoTrue answers with x-student-token in
-// Access-Control-Allow-Headers. PostgREST is configured to accept the header —
-// that is how student sessions work at all — but the auth service is a separate
+// Access-Control-Allow-Headers. PostgREST is configured to accept the header -
+// that is how student sessions work at all - but the auth service is a separate
 // service with its own CORS configuration and no reason to know about it.
 //
 // The failure that produces is silent and delayed, which is why it was hard to
 // see: nothing goes wrong while the access token is still valid. About an hour
 // after a student token is installed on the device, the parent's session tries
 // to refresh, the refresh cannot complete, supabase-js retries and then drops
-// the session — and the next time the parent taps 🔒 Parent and types a correct
+// the session - and the next time the parent taps 🔒 Parent and types a correct
 // PIN, getSession() returns null and they are told their sign-in has expired on
 // the only device they own. Measured: one refreshSession() call produced EIGHT
 // refresh attempts, every one of them carrying the header.

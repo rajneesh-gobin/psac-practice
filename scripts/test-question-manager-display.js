@@ -2,7 +2,15 @@
 const fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');
 const source = fs.readFileSync('engine/admin.js', 'utf8');
 const nodes = {};
-function element() { return {value:'',checked:false,innerHTML:'',options:[],classList:{add(){},remove(){}},appendChild(o){this.options.push(o);},insertAdjacentHTML(_,s){this.innerHTML+=s;}}; }
+// Setting innerHTML clears the option list, exactly as a real <select> does —
+// without that the stub accumulates every option ever appended, and a rebuilt
+// list looks like it still holds the old selection.
+function element() {
+  const el = {value:'',checked:false,options:[],classList:{add(){},remove(){},toggle(){}},appendChild(o){this.options.push(o);},insertAdjacentHTML(_,s){this._html+=s;}};
+  el._html = '';
+  Object.defineProperty(el, 'innerHTML', { get() { return this._html; }, set(v) { this._html = v; this.options.length = 0; [...String(v).matchAll(/value="([^"]*)"[^>]*>([^<]*)/g)].forEach(x => this.options.push({ value: x[1], textContent: x[2] })); } });
+  return el;
+}
 for (const id of ['qm-grade','qm-subject','qm-chapter','qm-difficulty','qm-search','qm-include-unpublished','qm-list','qm-load-more','qm-has-image','qm-protected']) nodes[id] = element();
 const filters = [];
 const packs = [{id:'grade5-english',name:'English',grade:5,chapters:[{id:'verbs',name:'Verbs'}]}, {id:'grade1-english',name:'English',grade:1,comingSoon:true,chapters:[]}];
@@ -30,9 +38,23 @@ vm.runInContext(source.slice(source.indexOf('  const QM = (() => {'), source.ind
   ctx.manager.qmSubjectFilter();
   assert(nodes['qm-chapter'].options.some(o=>o.value==='verbs' && o.textContent==='Verbs'));
   assert.equal(nodes['qm-chapter'].disabled,false);
+  // A subject that still belongs to the newly chosen grade survives it, so the
+  // chapter list stays usable. Wiping both on every touch of the grade control
+  // is what made the two dropdowns feel unrelated.
   nodes['qm-grade'].value='5';
   ctx.manager.qmGradeFilter();
+  assert.equal(nodes['qm-subject'].value,'grade5-english');
+  assert.equal(nodes['qm-chapter'].disabled,false);
+  // A subject that cannot survive the new grade is dropped, and the chapter
+  // list goes back to disabled rather than listing another grade's chapters.
+  nodes['qm-include-unpublished'].checked=true;
+  nodes['qm-grade'].value='1';
+  ctx.manager.qmGradeFilter();
+  assert.equal(nodes['qm-subject'].value,'');
   assert.equal(nodes['qm-chapter'].disabled,true);
+  nodes['qm-include-unpublished'].checked=false;
+  nodes['qm-grade'].value='5';
+  ctx.manager.qmGradeFilter();
   filters.length=0;
   nodes['qm-include-unpublished'].checked=true;
   await ctx.manager.qmSearch();

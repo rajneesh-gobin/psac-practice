@@ -4,36 +4,63 @@ Copy everything between the lines below and paste it as your first message to Cl
 
 ---
 
-Continue the PSAC project — read CLAUDE.md first.
+Continue the PSAC project — read `CLAUDE.md` first, then `DB_IMPORT_GUIDE.md`.
 
-I need to run the database import script on this machine. Here is the context:
+I need to run the question import on this machine.
 
-- Project: PSAC exam practice app for Shanvi (Mauritius primary school)
-- Repo: https://github.com/rajneesh-gobin/psac-practice (clone or pull the `dev` branch)
-- The project has ~5,400 questions in JS files under `subjects/` that need to be imported into Supabase
+- Repo: https://github.com/rajneesh-gobin/psac-practice (clone or pull `dev`)
+- Questions live as JS files under `subjects/`. The importer loads them through
+  `netlify/lib/questions-sandbox.js` and upserts them into the Supabase
+  `questions` table.
 
-## What needs to be done on this machine
+## What to do
 
-1. Make sure Node.js 18+ is installed (`node --version`)
-2. Clone or pull the repo to get the latest `dev` branch
-3. In the project root, create a `.env` file:
+1. `node --version` — must be 18 or higher.
+2. Clone or pull the latest `dev`.
+3. Create `.env` in the project root:
    ```
    SUPABASE_URL=https://xawvjwsiqhtxgpocdqgm.supabase.co
    SUPABASE_SERVICE_ROLE_KEY=<I will provide this>
    ```
-4. Run: `node netlify/import-questions.js`
-5. Verify the output shows all grades imported successfully
+4. **Run the local check first — it needs no credential and writes nothing:**
+   ```
+   node netlify/import-questions.js --check
+   ```
+   Do not go further until this exits 0. If it fails it names every file and
+   question at fault; fix those first.
+5. See what would change, without writing:
+   ```
+   node netlify/import-questions.js --dry-run
+   ```
+6. Import:
+   ```
+   node netlify/import-questions.js
+   ```
+7. Read the final summary block. The run is only good if it ends
+   `SUCCESS — all changes verified` or `NO CHANGES NEEDED` **and** exits 0.
 
-## Key files already in the repo
+## How to read the result
 
-- `netlify/import-questions.js` — the import script (already written, just run it)
-- `supabase-questions-table.sql` — SQL to create the table (run in Supabase SQL editor first if not done)
-- `DB_IMPORT_GUIDE.md` — full step-by-step instructions
+- **"Loaded" is not "written."** Unchanged rows are deliberately not rewritten;
+  that is not a failure.
+- **"Protected" is not an error** unless it says *conflicts* — that means the
+  database version differs from local source, the database version was kept, and
+  a human has to reconcile it. The report is written to `.import-conflicts/`,
+  which is gitignored because it contains correct answers.
+- A **`Database verification`** block must say every intended write was read
+  back.
+- ⚠ **A clean re-run is "0 new, ~560 updated", not zero writes.** `makeMCQ`
+  keeps a random 3 of the distractors, so 580 questions authored with more than
+  4 options change shape on every load. That is churn, not drift.
 
 ## Important
 
-- The `.env` file must NOT be committed to git (it is in `.gitignore`)
-- The service_role key is found in Supabase → Settings → API → service_role (the long `eyJ...` key, 170+ chars)
-- The import is safe to re-run — it uses upsert, no duplicates
-
-Please help me complete the import and verify all questions are in the database.
+- `.env` must never be committed (it is in `.gitignore`), and must be **moved
+  out of the tree before any CLI deploy** — a CLI deploy uploads from local disk,
+  gitignored files included.
+- The `service_role` key is Supabase → Settings → API → `service_role`
+  (~170+ chars, starts `eyJ`). The `anon` key has no write access.
+- The importer is **additive and update-only**. It never deletes a row, so
+  removing a question from `subjects/` does not remove it from the database.
+- No migration is needed for any question format: `questions.data` is `jsonb`
+  with no type column and no CHECK constraint.

@@ -35,7 +35,7 @@ STATIC_QUESTIONS.push(
     question:'Which European country sent VASCO DA GAMA on a voyage around Africa to find a sea route to India?',
     options:['Spain','France','England','Portugal'],
     answer:'Portugal',
-    hint:'Portugal is a small country in south-west Europe that was a great sea power in the 1400s-1500s.',
+    hint:'Vasco da Gama sailed for a small country in the south-west corner of Europe that was a great sea power in the 1400s-1500s.',
     explanation:'<b>Portugal</b> sent <b>Vasco da Gama</b> on a famous voyage (1497–1499) around the southern tip of Africa (Cape of Good Hope) to reach India by sea. This opened up the <b>sea route to India</b> and gave Portugal control over the spice trade. Portuguese sailors were the first Europeans to sail the Indian Ocean regularly.' }),
 
   makeTF({ id:'g4h-voy-005', chapterId:'g4hist-voyages', subsection:'traders', difficulty:1,
@@ -196,28 +196,28 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-voy-020', chapterId:'g4hist-voyages', subsection:'traders', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dodo.jpg" alt="a painting of a large flightless bird" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name of this famous extinct bird that was endemic to Mauritius?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/dodo.jpg" alt="a painting of a large flightless bird" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name of this famous extinct bird that was endemic to Mauritius?</b>',
     options:['Ostrich','Emu','Dodo','Penguin'],
     answer:'Dodo',
     hint:'This bird could not fly and was hunted to extinction around 1681.',
     explanation:'The <b>Dodo</b> (<i>Raphus cucullatus</i>) was a large flightless bird that lived only on the island of Mauritius. When humans arrived, Dodos were hunted for food and rats, pigs and monkeys introduced by settlers ate their eggs. The last Dodo was seen around <b>1681</b>. The Dodo is now one of the most famous symbols of extinction and of Mauritius.' }),
 
   makeMCQ({ id:'g4h-voy-021', chapterId:'g4hist-voyages', subsection:'traders', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pink_pigeon.jpg" alt="a pink-coloured bird perched on a branch" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This endangered endemic bird was saved from near-extinction by conservation efforts in Mauritius. What is it called?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/pink-pigeon-mauritius.jpg" alt="a bird perched on a branch" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>This endangered endemic bird was saved from near-extinction by conservation efforts in Mauritius. What is it called?</b>',
     options:['Flamingo','Pink Pigeon','Echo Parakeet','Mauritius Fody'],
     answer:'Pink Pigeon',
     hint:'By the 1990s fewer than 10 of these birds remained in the wild.',
-    explanation:'The <b>Pink Pigeon</b> (<i>Nesoenas mayeri</i>) is an endemic bird found only in Mauritius. It was nearly extinct in the early 1990s with fewer than 10 birds in the wild. Thanks to conservation efforts — breeding programmes, predator control and habitat protection — the population recovered to over 400 birds. It is one of the greatest conservation success stories in the region.' }),
+    explanation:'The <b>Pink Pigeon</b> (<i>Nesoenas mayeri</i>) is an endemic bird found only in Mauritius. It was nearly extinct in the early 1990s with fewer than 10 birds in the wild. Thanks to conservation efforts - breeding programmes, predator control and habitat protection - the population recovered to over 400 birds. It is one of the greatest conservation success stories in the region.' }),
 
   makeMCQ({ id:'g4h-voy-022', chapterId:'g4hist-voyages', subsection:'traders', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Black_River_Gorges_National_Park,_Mauritius.jpg" alt="a lush green forested gorge landscape" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name of this protected nature reserve in south-west Mauritius?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/black-river-gorges-national-park-mauritius.jpg" alt="a lush green forested gorge landscape" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the name of this protected nature reserve in south-west Mauritius?</b>',
     options:['Casela Nature Park','Ile aux Aigrettes','Black River Gorges National Park','Pamplemousses Botanical Garden'],
     answer:'Black River Gorges National Park',
     hint:'It was established in 1994 to protect Mauritius\'s last areas of native forest.',
-    explanation:'<b>Black River Gorges National Park</b> was established in 1994 and covers about 6,574 hectares in south-west Mauritius. It protects the last significant areas of native Mauritian forest and the endemic species that live there — including the Echo Parakeet, Pink Pigeon, Mauritius Kestrel and rare plants like the Mauritian ebony tree.' }),
+    explanation:'<b>Black River Gorges National Park</b> was established in 1994 and covers about 6,574 hectares in south-west Mauritius. It protects the last significant areas of native Mauritian forest and the endemic species that live there - including the Echo Parakeet, Pink Pigeon, Mauritius Kestrel and rare plants like the Mauritian ebony tree.' }),
 
   makeMCQ({ id:'g4h-voy-023', chapterId:'g4hist-voyages', subsection:'traders', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Ile_aux_Aigrettes.jpg" alt="a small coral island with trees near the sea" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What type of site is Ile aux Aigrettes, this small island off the east coast of Mauritius?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/ile-aux-aigrettes.jpg" alt="a small coral island with trees near the sea" style="max-height:220px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What type of site is Ile aux Aigrettes, this small island off the east coast of Mauritius?</b>',
     options:['A military base','A tourist hotel resort','A nature reserve being restored to its pre-human ecosystem','A sugar cane plantation'],
     answer:'A nature reserve being restored to its pre-human ecosystem',
     hint:'It is managed by the Mauritian Wildlife Foundation and giant tortoises have been reintroduced.',
@@ -228,14 +228,14 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-voy-024', chapterId:'g4hist-voyages', subsection:'traders', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sailing_ship.jpg" alt="a large wooden sailing vessel" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Early explorers like the Dutch, Portuguese and French travelled to Mauritius using vessels like this. What are they called?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/sailing-ship.jpg" alt="a large wooden sailing vessel" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Early explorers like the Dutch, Portuguese and French travelled to Mauritius using vessels like this. What are they called?</b>',
     options:['Steamships','Sailing ships','Submarines','Ferries'],
     answer:'Sailing ships',
     hint:'They use large cloth sheets, powered by wind, to move across the ocean.',
     explanation:'<b>Sailing ships</b> used large sails to catch the wind and travel across oceans. Before engines were invented, all long sea voyages - including the discovery of Mauritius - depended entirely on wind power and sailing ships.' }),
 
   makeMCQ({ id:'g4h-voy-025', chapterId:'g4hist-voyages', subsection:'traders', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Compass.jpg" alt="a navigation instrument with a needle" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Explorers used this instrument to find their direction at sea. What is it called?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/compass.jpg" alt="a navigation instrument with a needle" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Explorers used this instrument to find their direction at sea. What is it called?</b>',
     options:['Telescope','Compass','Sextant','Barometer'],
     answer:'Compass',
     hint:'Its needle always points towards magnetic North.',

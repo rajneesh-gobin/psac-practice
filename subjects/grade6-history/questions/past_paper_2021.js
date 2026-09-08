@@ -1,15 +1,15 @@
 'use strict';
-// PSAC Grade 6 History & Geography December 2020 (2021 session) — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 History & Geography December 2020 (2021 session) - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6h-pp21-001', chapterId:'g6-land-use', subsection:'agriculture', difficulty:1,
     question:'The type of land use for the setting up of <b>shops and shopping malls</b> is known as ____________ land use.',
     options:['industrial','recreational','commercial','residential'], answer:'commercial',
-    hint:'Think about commerce — buying and selling.',
+    hint:'Think about commerce - buying and selling.',
     explanation:'Commercial land use refers to land used for shops, offices, shopping malls, and other business activities.' }),
   makeMCQ({ id:'g6h-pp21-002', chapterId:'g6-land-use', subsection:'tourism', difficulty:2,
     question:'One tourist resort found in the <b>north</b> of Mauritius is ____________.',
     options:['Belle Mare','Flic en Flac','Bel Ombre','Grand Baie'], answer:'Grand Baie',
-    hint:'Mauritius has resort towns in each direction — which well-known resort town is in the north?',
+    hint:'Mauritius has resort towns in each direction - which well-known resort town is in the north?',
     explanation:'Grand Baie is a major tourist resort in the north of Mauritius, known for its beach, lagoon, and water sports. Belle Mare is in the east, Flic en Flac in the west, Bel Ombre in the south.' }),
   makeMCQ({ id:'g6h-pp21-003', chapterId:'g6-land-use', subsection:'agriculture', difficulty:1,
     question:'The rearing of animals <b>only</b> (no crops) is called ____________.',
@@ -30,7 +30,7 @@ STATIC_QUESTIONS.push(
     question:'Macchabee, Mangalkhan, and Diamamouve were well-known ____________ in Mauritius.',
     options:['slaves who ran away from plantations','pirates who attacked ships','early European settlers','French colonial governors'], answer:'slaves who ran away from plantations',
     hint:'They are celebrated as heroes who resisted the colonial system.',
-    explanation:'Macchabee, Mangalkhan, and Diamamouve were famous Maroons — slaves who escaped from plantations and hid in the forests and mountains of Mauritius, resisting the slave system.' }),
+    explanation:'Macchabee, Mangalkhan, and Diamamouve were famous Maroons - slaves who escaped from plantations and hid in the forests and mountains of Mauritius, resisting the slave system.' }),
   makeMCQ({ id:'g6h-pp21-007', chapterId:'g6-independence', subsection:'coat_of_arms', difficulty:2,
     question:'Which one of the following is found on the Coat of Arms of <b>Rodrigues</b>?',
     options:['A solitaire bird','A dodo bird','A palm tree','A ship'], answer:'A solitaire bird',
@@ -44,7 +44,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6h-pp21-009', chapterId:'g6-natural-hazards', subsection:'cyclones', difficulty:2,
     question:'During which <b>season</b> are tropical cyclones usually formed near Mauritius?',
     options:['Winter (May–October)','Summer (November–April)','Spring only','All year round equally'], answer:'Summer (November–April)',
-    hint:'Cyclones form over warm tropical seas — which season is warmest?',
+    hint:'Cyclones form over warm tropical seas - which season is warmest?',
     explanation:'Tropical cyclones form during the summer season (November to April) in the southern hemisphere, when the sea surface temperature is warm enough (above 26°C) to provide the energy for cyclone formation.' }),
   makeMCQ({ id:'g6h-pp21-010', chapterId:'g6-natural-hazards', subsection:'cyclones', difficulty:2,
     question:'Which part of a tropical cyclone has the <b>most violent winds</b> and gusts?',
@@ -74,24 +74,24 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6h-pp21-015', chapterId:'g6-land-use', subsection:'agriculture', difficulty:1,
     question:'What is the main type of farming practised in the <b>river valleys</b> of Rodrigues?',
     options:['Mixed farming','Market gardening','Pastoral farming','Plantation agriculture'], answer:'Market gardening',
-    hint:'River valleys have fertile alluvial soil and water — good for growing vegetables.',
+    hint:'River valleys have fertile alluvial soil and water - good for growing vegetables.',
     explanation:'Market gardening (growing vegetables, fruits, and herbs on small plots for sale) is the main type of farming in the river valleys of Rodrigues, where alluvial soil and water are available.' }),
   makeMCQ({ id:'g6h-pp21-016', chapterId:'g6-land-use', subsection:'agriculture', difficulty:2,
     question:'Why is <b>organic farming</b> encouraged in Mauritius and Rodrigues today?',
-    options:['It produces more food than other methods','It does not use chemical pesticides or fertilisers, protecting the environment and health','It is cheaper than conventional farming','It allows growing crops all year round without irrigation'], answer:'It does not use chemical pesticides or fertilisers, protecting the environment and health',
+    options:['It avoids chemical pesticides', 'It produces more food than other methods', 'It is cheaper than conventional farming', 'It needs no irrigation at all'], answer:'It avoids chemical pesticides',
     hint:'The key benefit is no synthetic chemicals.',
     explanation:'Organic farming is encouraged because it avoids the use of chemical pesticides and fertilisers, which can pollute water and soil. It produces healthier food and protects the environment.' }),
   makeMCQ({ id:'g6h-pp21-017', chapterId:'g6-land-use', subsection:'agriculture', difficulty:2,
     question:'What is one advantage of growing crops in a <b>greenhouse</b>?',
-    options:['Crops are protected from extreme weather conditions and pests','Crops receive less water so they grow faster','The greenhouse makes crops taste better','Greenhouses are cheaper to build than open fields'], answer:'Crops are protected from extreme weather conditions and pests',
-    hint:'A greenhouse is an enclosed structure — think about what it protects crops from.',
+    options:['Crops are protected from bad weather', 'Greenhouses cost less than open fields', 'The crops end up tasting better', 'Crops need less water to grow'], answer:'Crops are protected from bad weather',
+    hint:'A greenhouse is an enclosed structure - think about what it protects crops from.',
     explanation:'Growing crops in a greenhouse protects them from extreme weather (heavy rain, strong winds, drought) and from pests and diseases, allowing crops to grow in controlled conditions.' })
 );
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g6h-pp21-pdf-001', needsArtwork:true, chapterId:'g6-natural-hazards', marks:10, year:2021, grade:6, subject:'History & Geography',
-    question:'Study Diagram 1 (tropical cyclone cross-section with Parts X, Y, Z). (a) During which season are tropical cyclones formed? (b) Which part has most violent winds — Part X or Part Y? (c) Describe weather in Part Z. (d) Give two precautions before a cyclone. (Volcano: a) Give one reason a volcano is a natural hazard. (b) Explain how volcanoes can be an advantage to people.', type:'diagram-analysis' },
-  { id:'g6h-pp21-pdf-002', needsArtwork:true, chapterId:'g6-land-use', marks:7, year:2021, grade:6, subject:'History & Geography',
+  { id:'g6h-pp21-pdf-001', image:'assets/past-papers/g6-history-2021/d1-cyclone.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-natural-hazards', marks:10, year:2021, grade:6, subject:'History & Geography',
+    question:'Study Diagram 1 (tropical cyclone cross-section with Parts X, Y, Z). (a) During which season are tropical cyclones formed? (b) Which part has most violent winds - Part X or Part Y? (c) Describe weather in Part Z. (d) Give two precautions before a cyclone. (Volcano: a) Give one reason a volcano is a natural hazard. (b) Explain how volcanoes can be an advantage to people.', type:'diagram-analysis' },
+  { id:'g6h-pp21-pdf-002', image:'assets/past-papers/g6-history-2021/map1-rodrigues.png', imageAlt:'The diagram printed with this question in the exam paper', chapterId:'g6-land-use', marks:7, year:2021, grade:6, subject:'History & Geography',
     question:'Study Map 1 (three river valleys in Rodrigues: Rivière Malgache, Rivière Banane, Rivière Mourouk). (a)(i) What is the main type of farming in these valleys? (a)(ii) Give one reason farmers grow here. (b) Why is organic farming encouraged? (c) Give one advantage of a greenhouse.', type:'map-read' },
   { id:'g6h-pp21-pdf-003', chapterId:'g6-land-use', marks:4, year:2021, grade:6, subject:'History & Geography',
     question:'Match the actions (Column 1) with activities (Column 2): Recycling newspapers → ? ; Using food waste and garden cutting → ? ; Reusing plastic bottles → ? (choices: Growing flowers/herbs, Making paper bags, Making shirts, Making compost)', type:'matching' }

@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Trailing comments are the count at generation time.
 const G5HG_SYLLABUS = {
   'discovery': { subsections: [
@@ -80,37 +80,61 @@ registerSubject({
   curriculum: 'MIE Mauritius', comingSoon: false,
   practiceble: true, notesBased: false, noDifficulty: true,
   syllabus: G5HG_SYLLABUS,
+  // examWeight is a chapter's share of a 40-question exam. These are measured
+  // from the real 2024 and 2025 papers, question by question: every
+  // mark goes to the chapter that teaches it. Papers used: 2024 and 2025 (50 marks each).
+  //
+  //   settlement               24 marks   24.0%  ->  weight 9
+  //   g5ge-weather             14 marks   14.0%  ->  weight 5
+  //   map-skills                9 marks    9.0%  ->  weight 4
+  //   discovery                 9 marks    9.0%  ->  weight 4
+  //   port-louis                9 marks    9.0%  ->  weight 3
+  //   volcanism                 8 marks    8.0%  ->  weight 3
+  //   env-problems              8 marks    8.0%  ->  weight 3
+  //   g5enr-world               8 marks    8.0%  ->  weight 3
+  //   natural-env               7 marks    7.0%  ->  weight 3
+  //   g5enr-personalities       3 marks    3.0%  ->  weight 1
+  //   trade-agri                1 marks    1.0%  ->  weight 1
+  //
+  //   g5enr-landmarks       not scored           ->  weight 1
+  //
+  // ⚠ g5ge-weather is the second-largest topic in the paper (14%) and was
+  // weighted 3. Rainfall type, season and rainfall graphs are asked every year.
+  // ⚠ trade-agri earns 1 mark in two papers, against a weight of 4.
+  // ⚠ g5enr-world is a ✨ BONUS chapter earning 8% - continents, oceans and
+  // world volcanoes are asked every year.
+  // scripts/test-exam-paper-shape.js holds the delivered mix against these.
   chapters: [
     // ── HISTORY ────────────────────────────────────────────────────────────────
     { id: 'discovery',    name: 'Discovery of Mauritius & Rodrigues',       icon: '⛵', examWeight: 4,
       syllabus: 'Mascarene Islands (Mauritius, Réunion, Rodrigues) in the Indian Ocean. Routes taken by Europeans to reach India/East Indies. Portuguese and Dutch explorers (15th-16th century). Fauna and flora before human settlement. Arab traders and early explorers.' },
-    { id: 'settlement',   name: 'Settlement by Dutch, French & British',     icon: '⚓', examWeight: 4,
+    { id: 'settlement',   name: 'Settlement by Dutch, French & British',     icon: '⚓', examWeight: 9,
       syllabus: 'Dutch settlement 1638 in south-east (Van Warwyck). Reasons for Dutch failure. French settlement 1715 (Île de France). Reasons for each nation to settle. British conquest 1810 (Battle of Grand Port). Changes brought by each settler group.' },
-    { id: 'trade-agri',   name: 'Trade, Agriculture & Key Personalities',   icon: '🌾', examWeight: 4,
+    { id: 'trade-agri',   name: 'Trade, Agriculture & Key Personalities',   icon: '🌾', examWeight: 1,
       syllabus: 'Crops cultivated by settlers (sugar cane, spices, ebony). Trade goods. Infrastructure: roads, port development. Key personalities: Mahé de Labourdonnais (harbour, capital), Pierre Poivre (spices, Pamplemousses Gardens), Charles Decaen (French governor), Sir Robert Farquhar (British governor). Battle of Grand Port.' },
     { id: 'port-louis',   name: 'Port Louis: Capital of Mauritius',         icon: '🏛️', examWeight: 3,
       syllabus: 'History of Port Louis. French governor who made Port Louis the capital. Key historical buildings: Citadel (Fort Adelaide), Government House, Aapravasi Ghat, Blue Penny Museum, Natural History Museum, Theatre. Harbour development by Labourdonnais. Port Louis as trading and commercial centre, past and present.' },
     // ── GEOGRAPHY ──────────────────────────────────────────────────────────────
-    { id: 'natural-env',  name: 'Natural Environment of Mauritius',         icon: '🏔️', examWeight: 4,
+    { id: 'natural-env',  name: 'Natural Environment of Mauritius',         icon: '🏔️', examWeight: 3,
       syllabus: 'Natural features vs man-made features. Relief features: mountain ranges (Black River Gorges, Moka Range), peaks (Piton de la Petite Rivière Noire - highest), central plateau, plains, river valleys, gorges. Rodrigues: central ridge, sloping lands. Coastal features: beaches, lagoons, coral reefs, cliffs.' },
     { id: 'volcanism',    name: 'Volcanic Origin & Relief',                  icon: '🌋', examWeight: 3,
       syllabus: 'Mauritius and Rodrigues formed by volcanic activity. Dormant volcanoes in Mauritius: Trou aux Cerfs, Grand Bassin, Bassin Blanc. Active volcanoes in region: Karthala (Comoros), La Fournaise (Réunion). Alluvium (river deposits), limestone (Rodrigues), tuffs. Map reading: locating relief features.' },
     { id: 'env-problems', name: 'Environmental Problems & Conservation',    icon: '🌊', examWeight: 3,
       syllabus: 'Beach erosion (causes: waves, human activities; measures: groins, mangroves). Soil erosion (causes: rain, deforestation; measures: terracing, tree planting). Pollution: water, air, land (causes and effects). Natural sites and nature reserves of value. Reasons to protect them.' },
-    { id: 'map-skills',   name: 'Map Skills & Coordinates',                 icon: '🗺️', examWeight: 2,
+    { id: 'map-skills',   name: 'Map Skills & Coordinates',                 icon: '🗺️', examWeight: 4,
       syllabus: 'Reading a map: title, key/legend, scale, compass/direction. Latitude and longitude (lines on a globe). Equator (0° latitude). Greenwich Meridian (0° longitude). Locating places on a map using grid references. Mascarene Islands on a world map. Indian Ocean.' },
-    { id: 'g5ge-weather', name: 'Weather (Grade 5)',                        icon: '🌦️', examWeight: 3,
+    { id: 'g5ge-weather', name: 'Weather (Grade 5)',                        icon: '🌦️', examWeight: 5,
       syllabus: 'Revision of seasons and weather instruments. How weather affects farming, tourism and fishing. Cyclone warning signals in Mauritius (Class 1-4) and precautions. Difference between weather and climate. Climate of Rodrigues.' },
 
     // ── ENRICHMENT ────────────────────────────────────────────────────────────────
     // @enrichment - These chapters are DERIVED from syllabus topics, NOT direct MIE chapters.
     // DO NOT remove during syllabus alignment audits - they are intentional bonus content.
     // They are recognisable by enrichment:true and display with a gold "✨ BONUS" badge in the UI.
-    { id: 'g5enr-personalities', name: 'Key Historical Personalities',   icon: '👤', enrichment: true, examWeight: 2,
+    { id: 'g5enr-personalities', name: 'Key Historical Personalities',   icon: '👤', enrichment: true, examWeight: 1,
       enrichmentNote: 'Famous governors, explorers and figures from Grade 5 History: Mahé de Labourdonnais, Pierre Poivre, Farquhar, Van Warwyck, Decaen and others.' },
-    { id: 'g5enr-landmarks',     name: 'Mauritius Landmarks & Heritage', icon: '🏛️', enrichment: true, examWeight: 2,
+    { id: 'g5enr-landmarks',     name: 'Mauritius Landmarks & Heritage', icon: '🏛️', enrichment: true, examWeight: 1,
       enrichmentNote: 'Port Louis buildings, volcanic features, Trou aux Cerfs, Grand Bassin, Pamplemousses Botanical Garden - derived from Port Louis and Volcanism chapters.' },
-    { id: 'g5enr-world',         name: 'Indian Ocean & Volcanoes',       icon: '🌋', enrichment: true, examWeight: 2,
+    { id: 'g5enr-world',         name: 'Indian Ocean & Volcanoes',       icon: '🌋', enrichment: true, examWeight: 3,
       enrichmentNote: 'Mascarene Islands, active volcanoes in the region (Karthala, La Fournaise), Indian Ocean world map - derived from Volcanism and Map Skills chapters.' },
   ],
 });

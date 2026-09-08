@@ -131,7 +131,7 @@ STATIC_QUESTIONS.push(
     question:'Quel verbe utilise l\'auxiliaire ÊTRE au passé composé ?',
     options:['manger','jouer','aller','finir'],
     answer:'aller',
-    hint:'"Aller" fait partie des verbes qui utilisent "être".',
+    hint:'Les verbes de mouvement (venir, partir, entrer…) prennent « être ». Lequel des quatre est un verbe de mouvement ?',
     explanation:'"<b>Aller</b>" se conjugue avec <b>être</b> : je suis allé(e), tu es allé(e), il est allé, elle est allée. Les verbes avec être : aller, venir, partir, arriver, entrer, sortir, naître, mourir, monter, descendre, rester, tomber, retourner, passer.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-019', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:4,
@@ -157,7 +157,7 @@ STATIC_QUESTIONS.push(
     question:'Quel est le participe passé de METTRE ?',
     options:['metté','mis','mettis','mettant'],
     answer:'mis',
-    hint:'Mettre → mis (irrégulier, à apprendre).',
+    hint:'« Mettre » a un participe passé irrégulier : il ne se forme ni avec -é ni avec -ant.',
     explanation:'"Mettre" → <b>mis</b> (irrégulier). J\'ai mis mon manteau. Verbes similaires : permettre → permis, promettre → promis, admettre → admis. Mémo : "mis" ressemble à "mise" (comme "mise en scène").' }),
 
   makeMCQ({ id:'g4fr-passe-comp-022', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:2,
@@ -177,7 +177,7 @@ STATIC_QUESTIONS.push(
     question:'Quel est le participe passé de OUVRIR ?',
     options:['ouvri','ouvert','ouvris','ouvrant'],
     answer:'ouvert',
-    hint:'Ouvrir → ouvert (comme "une fenêtre ouverte").',
+    hint:'« Ouvrir » a un participe passé irrégulier qui ne se termine pas par -i.',
     explanation:'"Ouvrir" → <b>ouvert</b>. J\'ai ouvert la porte. Verbes similaires en -<b>vert</b> : couvrir → couvert, découvrir → découvert, offrir → offert, souffrir → souffert.' }),
 
   makeMCQ({ id:'g4fr-passe-comp-025', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:3,
@@ -255,7 +255,7 @@ STATIC_QUESTIONS.push(
     explanation:'"Est-ce que tu <b>as ouvert</b> la fenêtre et <b>es sorti(e)</b> ?" - "ouvrir" (→ avoir : tu as ouvert). "sortir" (→ être : tu es sorti/sortie). Deux verbes en une question : l\'un avec avoir, l\'autre avec être. "Ouverte" serait incorrect (avoir ne s\'accorde pas avec le sujet).' }),
 
   makeMCQ({ id:'g4fr-passe-comp-032', chapterId:'g4fr-passe-comp', subsection:'formation', difficulty:4,
-    question:'Shanvi écrit dans son journal : "Aujourd\'hui, ça ___ (être) une bonne journée ! Ce matin, je ___ (se réveiller) tôt. Mes amis ___ (venir) chez moi. Nous ___ (jouer) et ___ (rire) beaucoup." Bonne série ?',
+    question:'Kavya écrit dans son journal : "Aujourd\'hui, ça ___ (être) une bonne journée ! Ce matin, je ___ (se réveiller) tôt. Mes amis ___ (venir) chez moi. Nous ___ (jouer) et ___ (rire) beaucoup." Bonne série ?',
     options:[
       'a été / me suis réveillée / sont venus / avons joué / avons ri',
       'était / me suis réveillée / sont venus / avons joué / avons ri',

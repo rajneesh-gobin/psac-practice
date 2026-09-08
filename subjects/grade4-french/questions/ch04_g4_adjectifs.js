@@ -8,7 +8,7 @@ STATIC_QUESTIONS.push(
     question:'Comment dit-on "big/large" en français pour un nom masculin singulier ?',
     options:['grande','grands','grand','grandes'],
     answer:'grand',
-    hint:'"Grand" est la forme de base (masculin singulier). Les adjectifs s\'accordent avec le nom.',
+    hint:'Au masculin singulier, l\'adjectif reste à sa forme de base : il ne prend ni -e ni -s.',
     explanation:'"<b>Grand</b>" est la forme masculine singulière. Les 4 formes de "grand" : grand (m.sg.), grand<b>e</b> (f.sg.), grand<b>s</b> (m.pl.), grand<b>es</b> (f.pl.). Exemples : un grand arbre (m.), une grande maison (f.), de grands garçons (m.pl.).' }),
 
   makeMCQ({ id:'g4fr-adj-002', chapterId:'g4fr-adjectifs', subsection:'accord', difficulty:1,
@@ -188,7 +188,7 @@ STATIC_QUESTIONS.push(
     question:'Comment dit-on "French" (nationality adjective, masculine) ?',
     options:['française','français','françaises','franças'],
     answer:'français',
-    hint:'"Français" masculin = sans -e final.',
+    hint:'Au masculin, un adjectif de nationalité ne prend pas de -e final.',
     explanation:'"<b>français</b>" (masculin) / "<b>française</b>" (féminin). Les adjectifs en -<b>ais</b> : masculin = français, féminin = française (+e). Autres nationalités : anglais/anglaise, chinois/chinoise, portugais/portugaise.' }),
 
   makeMCQ({ id:'g4fr-adj-024', chapterId:'g4fr-adjectifs', subsection:'demonstratifs', difficulty:2,
@@ -240,7 +240,7 @@ STATIC_QUESTIONS.push(
     question:'Identifie l\'adjectif qui va APRÈS le nom (pas dans BAGS) :',
     options:['vieux','nouveau','rouge','bon'],
     answer:'rouge',
-    hint:'BAGS = Beauty, Age, Goodness, Size. "Rouge" n\'est dans aucune de ces catégories.',
+    hint:'BAGS = Beauty, Age, Goodness, Size. Trois de ces adjectifs entrent dans une de ces quatre catégories ; un seul n\'y entre pas.',
     explanation:'"<b>Rouge</b>" va après le nom : "un chapeau rouge", "une fleur rouge". Les adjectifs BAGS (vieux, nouveau, bon, grand, petit, beau, jeune, long...) vont avant le nom. "Rouge" décrit une couleur, qui ne fait pas partie de BAGS → après le nom.' }),
 
   makeMCQ({ id:'g4fr-adj-030', chapterId:'g4fr-adjectifs', subsection:'accord', difficulty:3,
@@ -299,7 +299,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>Cette</b> nouvelle école" (f.sg. → cette). "de <b>vieux</b> bâtiments" (des → de devant un adjectif placé avant le nom ; m.pl. → vieux, invariable). "un <b>nouveau</b> jardin" (BAGS, m.sg. → nouveau). "<b>Ces</b> professeurs" (pluriel → ces). Quatre règles en une phrase !' }),
 
   makeMCQ({ id:'g4fr-adj-035', chapterId:'g4fr-adjectifs', subsection:'possessifs', difficulty:4,
-    question:'Shanvi écrit une carte postale : "___ (this, f.) île est magnifique ! Les gens sont très accueillants. Mon ___ (French, m.) ami dit que les plages ici sont ___ (better, f.pl.) que les plages ___ (French, f.pl.) !" Bonne série ?',
+    question:'Kavya écrit une carte postale : "___ (this, f.) île est magnifique ! Les gens sont très accueillants. Mon ___ (French, m.) ami dit que les plages ici sont ___ (better, f.pl.) que les plages ___ (French, f.pl.) !" Bonne série ?',
     options:[
       'Cette / français / meilleures / françaises',
       'Cet / français / meilleures / françaises',

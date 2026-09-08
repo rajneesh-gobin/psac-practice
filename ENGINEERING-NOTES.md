@@ -12,7 +12,7 @@
 > already stale when written, and say so.
 
 ## What this is
-A vanilla JS single-page app (SPA) for Shanvi (child of deepmala.gobin@accenture.com) to revise for the Mauritius PSAC primary school exam. Grades 4, 5, 6. Subjects: Maths, English, French, Science, History & Geography.
+A vanilla JS single-page app (SPA) for Mauritian primary children revising for the PSAC exam. Grades 4, 5, 6. Subjects: Maths, English, French, Science, History & Geography.
 
 Hosted on **Netlify**. Backend: **Supabase**. No frameworks — pure HTML/CSS/JS + Tailwind CDN.
 
@@ -1300,8 +1300,8 @@ nothing") is fully explained by production data:
 
 | child | has `daily` key | days recorded | lifetime questions |
 |---|---|---|---|
-| shanvi | yes | **0** | 57 |
-| Shanvi | no | 0 | 48 |
+| kavya | yes | **0** | 57 |
+| Kavya | no | 0 | 48 |
 | Veer | no | 0 | 30 |
 | child1 | no | 0 | 26 |
 
@@ -1321,8 +1321,8 @@ from each child's next practice session after deploy.
   ones. That is `soft_delete_student()` working exactly as designed, not the
   duplicate-child bug. The 7 live children are distinct.
 - Family `gobin` legitimately has two live children whose display names differ
-  only by case (`shanvi` / `Shanvi`), on distinct usernames `@shanvi` and
-  `@shanvi1` — which is precisely why the child cards show `@username`.
+  only by case (`kavya` / `Kavya`), on distinct usernames `@kavya` and
+  `@kavya1` — which is precisely why the child cards show `@username`.
 - `verify_student_pin` still contains a plaintext-equality branch
   (`v_student.pin = p_pin`) ahead of the bcrypt comparison. Dormant: all 16
   stored PINs are bcrypt, so it never fires. Worth removing eventually — it
@@ -1728,7 +1728,7 @@ stale answer and you will conclude the wrong thing.
 
 ## File structure highlights
 ```
-shanvi/
+psac-practice/
   index.html                  ← entire app UI
   style.css                   ← custom CSS + enrichment card styles
   sw.js                       ← PWA service worker
@@ -2612,7 +2612,7 @@ The device now remembers, per child, the **family name and username** —
 removes typing, not a security step.
 
 `loginStudent()` prefills both and collapses the form to *"👋 Welcome back,
-Shanvi — just type your PIN"*, with a "Not you? Sign in another way" escape.
+Kavya — just type your PIN"*, with a "Not you? Sign in another way" escape.
 ⚠ The two fields are **hidden, not emptied** — `checkStudentReady()` and
 `studentSignIn()` still read them, so the sign-in path is untouched. Quick mode
 is entered only via `loginStudent()`, which knows who is signing in, and
@@ -3486,3 +3486,404 @@ itself still shows as checked, so nothing is unusable.
 ## How to continue
 Read `CLAUDE.md` first — it is the working brief. Come back here for the *why*
 behind a rule or the full story of a bug.
+
+## Parent-controlled Game Settings (2026-09-06)
+
+**What.** A per-child "Game settings" card in the Controls tab (collapsed
+summary + "Customise games"), stored as `DB.restrictions.games` inside the
+existing `students.settings` JSON — no new table, no migration, no new grant.
+`engine/game_settings.js` holds the settings model, the single capability
+table (`GAMES`), the shared question-selection service (`pick`/`pickForGame`),
+the parent card and the child's one-line summary.
+
+**Why one module.** The three things must agree: which settings a game
+honours, how a round is filled, and what the parent is promised. Splitting them
+is how "the mix applies to Quick Fire" and "Quick Fire ignores the mix" would
+both become true. Nothing branches on a game name; the games ask
+`GameSettings.pickForGame('<key>', count, {levels, safe})`.
+
+**Selection.** Excluded subjects are removed first and never consulted again —
+the fallback for a short subject is another INCLUDED subject, reported through
+`console.warn`. Shares are largest-remainder over the round and spread with a
+smooth weighted round-robin, so 40/30/30 on ten questions is 4/3/3 every run
+(measured 50/50) and not "maths, maths, maths, maths, then the rest". Levels are
+clamped to `min(difficulty top, restrictions.maxDifficulty)` on both the plan
+and the draw, so the practice cap the parent already set still wins.
+
+**Two orderings of "fresh vs exact level".** A game with a declared ladder
+(Billionaire rungs, Brain Battle pairs) keeps the exact level and only then
+prefers a fresh question — otherwise a full `DB.games.recent` list made the two
+questions of a Brain Battle round land on different levels, which the existing
+fairness test caught. A free-running stream (Quick Fire) does the opposite.
+
+**Grade scoping bug found while testing.** The first cut treated a chapter no
+manifest knew as "own grade", which let a grade-6 question through for a
+grade-5 child whenever only the grade's own packs were passed. Rule now: all
+packs are passed for attribution; an unknown chapter is dropped when any
+manifest is loaded, and only the manifest-less dev harness gets the
+"everything is one anonymous subject" fallback.
+
+**The chalkboard trap.** The card is injected by innerHTML into
+`#screen-parent`, which the parent-dashboard chalkboard work made dark in BOTH
+themes. A light palette measured 1.06:1 there. The `.gs-*` rules carry a
+`#screen-parent` override block; `scripts/test-game-settings-ui.js` measures
+every text style in both themes rather than trusting the class names.
+
+**RLS proof without a fixture on disk.** `scripts/sql-tests/game-settings-rls.js`
+creates a family, child and session inside one DO block against the LIVE
+database, measures child (anon + token: 0 rows updated), stranger (0) and
+parent (1), then ends with `RAISE EXCEPTION` carrying the JSON — the exception
+is the rollback, and the Management API returns the message. Nothing is
+written. Run with `SUPABASE_ACCESS_TOKEN`.
+
+**Deliberately not done.** Round length does not resize Billionaire's 20-rung
+ladder (the prizes and safe havens are the game), Quick Fire's 60 s clock, or
+Explorer's 12 real stops. Word Builder and Time Traveller keep running when
+English/History is excluded from the quiz mix: their banks are curated, not
+the question bank, and the copy says "Quiz games will only use…".
+
+## Teacher Mode → Hybrid Classroom Command Centre (2026-09-06)
+Reworked the teacher area around one rule: show the next useful action, not
+every feature. Nothing was removed; secondary tools moved behind a labelled
+**More** menu.
+
+### What changed, and where
+| Surface | Now | File |
+|---|---|---|
+| Main navigation | **Home · Classrooms · Set Work · Results** + `⋯ More` (Materials, Messages, Gradebook, Archived work, Teacher settings) | `index.html`, `TeacherMode.switchTab/toggleMore` |
+| Home | greeting + one-line summary, three big actions, cards for *Work due soon*, *Pupils who may need help*, *Recent submissions* | new `engine/teacher_home.js` |
+| Classroom screen | **Overview · Work · Pupils** + `⋯ More` (Materials, Results, Settings); Work has Active/Closed/Archived chips and mixes digital work, worksheets and files; Pupils is a searchable roster with per-pupil PIN show/hide/copy, a "may need help" flag and a `⋯` manage menu; tapping a name opens their work | `engine/teacher_classroom_detail.js` |
+| Set Work | Classroom → sharing choice → Grade/Subject → Chapter → Number of questions → Due date → **Assign to the whole class**. Difficulty, timer, time allowed, name, shuffle and *Which pupils?* sit inside `<details id="ta-more-options">` | `index.html`, `TeacherMode` |
+| Success screen | name, classroom, due date, copy link, WhatsApp / native share, QR when the bundled encoder loads, **View assignment** | `#modal-share-assignment` |
+| Results | Assigned / Completed / In progress / Not started / Average result / Average time; **Who needs my help?** with one action per line; bulk *Remind* / *Give more practice* / *Export* / *Open individual answers*; pupils grouped Completed / Working on it / Not started / May need help | `TeacherWorkspace._renderMainResults`, new `engine/teacher_insights.js` |
+| Refresh | `psac_teacher_loc_v1` (owner-scoped) remembers tab, list filter, selected results and the open classroom + section; `render()` restores them | `TeacherMode._readLoc/_saveLoc/_restoreClassroom` |
+
+### Evidence thresholds (`TeacherInsights`)
+A pupil is "may need help" only with **≥ 5 answered questions** below 50 %;
+a chapter is named only after **≥ 3 answers in it**; "very quickly" means
+under 8 s per question **and** below 60 %, again on ≥ 5 answers. One or two
+answers never produce a label — the card says so instead. Home and the
+classroom roll pupils up across the latest 8 active assignments.
+
+### Database: one migration, applied by hand
+`migrations/20260906_teacher_assignment_due_date_and_pupils.sql` replaces
+`teacher_guest_create_assignment()` with two extra optional parameters
+(`p_due_at`, `p_pupil_ids`) and makes `guest_my_assignments()` return
+`chapter_ids`. Idempotent (DROP IF EXISTS old signature + CREATE OR REPLACE +
+grants). ⚠ Until it is applied, the nine-argument call answers **PGRST202**;
+`_buildAssignment()` detects that, retries with the seven-argument form, and
+puts a warning on the success screen ("closes 48 hours from now … ask an
+administrator to apply the latest migration"). It never pretends the due
+date took. After applying, regenerate `supabase-schema.sql`.
+
+### Decisions worth knowing
+- **The sharing choice is on step 1, not under More options.** A teacher of an
+  online group needs "Anyone with the link" immediately; burying it means
+  they cannot share at all without discovering a disclosure. PIN entry is the
+  default whenever the classroom has pupils; the teacher's own tap is the only
+  thing that flips it (`_linkPreferred`), not the hidden `#ta-access` select's
+  first option — that is exactly how the first cut defaulted to the open link.
+- **Filters are Active / Closed / Archived, not "Scheduled".** Nothing in the
+  schema schedules a future start; a "Scheduled" tab would be a lie.
+- **Hints, attempt limits and answer visibility are not on the form.** The
+  guest flow has no such settings server-side; a control that changes nothing
+  is worse than none. "Allow another attempt" per pupil (the real feature)
+  stays on the Results screen.
+- **The classroom `?classroom=` share link is inert** — no code parses that
+  parameter (only `join`, `ref`, `friend`), so it was left in Settings but not
+  promoted on the Overview. Same class of bug as the old `?assign=` link.
+- **QR is opportunistic.** `assets/vendor/qrcode.mjs` imports `/npm/…` paths
+  that nothing serves, so the encoder usually fails to load; the QR block
+  stays hidden rather than showing a blank square.
+
+### Traps found while measuring
+- **The board's `p` rule outranks any single-id selector.**
+  `#screen-teacher .ta-tab-content p:not(.teacher-intro):not(.ta-chip-hint)`
+  scores **(1,3,1)** because each `:not()` adds its argument. Every paper-card
+  override at (1,2,x) silently lost and painted cream on white. The doubled
+  `#screen-teacher#screen-teacher` prefix in the command-centre CSS is
+  deliberate: (2,x,y) is the only thing above it without rewriting the board.
+- **`.teacher-intro` was brown (#5c4a2a) on the chalkboard** — 1.36:1 — a
+  pre-existing defect from the chalkboard commit, now overridden inside panels.
+- **`checkVisibility()` answers false for everything in headless Chrome 152**,
+  so a probe built on it measures nothing and reports success. The harness
+  filters closed `<details>` by walking ancestors instead, and asserts the
+  collapsed state by geometry (details box ≤ summary height).
+- **A refresh superseded by a newer refresh resolves `undefined`.**
+  `render()` started one refresh through Home and another explicitly;
+  `ensureLoaded()` read the first's `undefined` as failure and Home showed
+  the error state on every load. It now waits for the *newest* in-flight
+  refresh and judges by `loaded`.
+- **Never trust a roster row that arrives with a `pin`.** The reveal state is
+  per session; `_loadPupils` strips the field so nothing is pre-revealed.
+- **Git Bash's grep/sed/od translate CRLF on read here**, so a `\n` anchor in
+  a Node replace "was not found" while plainly present. Check and normalise
+  line endings with Node before multi-line edits.
+
+### Measured
+`scripts/test-teacher-command-centre-layout.js` drives the real app in
+headless Chrome with a scripted teacher (2 classrooms, 3 pieces of work, a
+struggling pupil) at **360 px and 1280 px, light and dark**: 11 screens each
+(Home, More, Classrooms, Set Work, Results, classroom Overview/Work/Pupils/
+More, pupil panel, success screen) with no element past the viewport, every
+visible text ≥ 4.5:1 against its composited background, every primary
+control ≥ 44 px. `scripts/test-teacher-command-centre.js` (141 checks) covers
+the markup contract, the insight thresholds, location restore, publish paths
+(PIN / open link / due date / chosen pupils / PGRST202 fallback / repeated
+clicks) and the loading / empty / failed states.
+
+---
+
+## Question importer → loader parity, fail-closed preflight (2026-09-08)
+
+### The defect
+
+`netlify/import-questions.js` carried its own private `_buildContext()`. It held
+`makeMCQ`, `makeNum`, `makeTF`, `makeMatch` and `makeSymmetry` — and nothing
+else. `makeCloze`, `makeText` and `makeTask` had been added to the loaders that
+ship (`engine/helpers.js`, `netlify/functions/questions.js`,
+`netlify/build-questions.js`, `netlify/lib/questions-sandbox.js`) and never to
+this fifth copy.
+
+Six source files therefore threw on their first factory call:
+
+    subjects/grade4-french/questions/ch12_g4_textes_trous.js  makeCloze is not defined
+    subjects/grade4-french/questions/ch13_g4_correction.js    makeText is not defined
+    subjects/grade5-french/questions/ch14_textes_trous.js     makeCloze is not defined
+    subjects/grade5-french/questions/ch15_correction.js       makeText is not defined
+    subjects/grade6-french/questions/ch12_g6_textes_trous.js  makeCloze is not defined
+    subjects/grade6-french/questions/ch13_g6_correction.js    makeText is not defined
+
+Reproduced before any edit, by driving both loaders over the same 45 packs:
+
+    production loader   mcq 12319 · numeric 2024 · cloze 60 · text 305 · multi 12 · symmetry 6 = 14726
+    importer sandbox    mcq 12319 · numeric 2024 · cloze  0 · text   0 · multi 12 · symmetry 6 = 14361
+    difference          365 = 60 cloze + 305 text, 6 files skipped, 0 extra ids
+
+The command printed `skip <file>: <message>` and then reported completion.
+
+**The production consequence was real, and was measured on the live database
+before the fix, not inferred:**
+
+    data->>type = mcq       10329
+    data->>type = numeric    2007
+    data->>type = text          0
+    data->>type = cloze         0
+    data->>type = multi        12
+    data->>type = symmetry      6
+
+Zero. Every PSAC French Q6 texte-a-trous and every Q7A correction item — the two
+formats written specifically because the bank had nothing for those exam
+questions — had never reached the database at all.
+
+⚠ The lesson is the one this codebase keeps paying for: **a skipped file that
+prints a warning and a successful run look identical from outside.** The
+importer's own regression suite (`scripts/test-question-import.js`) was green
+throughout, because it tests database accounting against a mock PostgREST and
+never loads a real source file. It could not have caught this.
+
+### The fix: one loader
+
+The private sandbox was deleted rather than extended. Copying three more
+factories into it would have made the next format drift the same way — this is
+the failure mode CLAUDE.md's duplicated-code table exists to name.
+
+`netlify/lib/questions-sandbox.js` — already the module the deployed question
+service and the assignment re-grading path share — gained a corpus API:
+
+- `loadPack(subjectId)` returns
+  `{ subjectId, grade, dir, practice, papers, files, errors }`. Errors are
+  returned as **data**, not printed. A file that throws has its partial
+  contribution rolled back: importing half a file is worse than importing none
+  of it, because nothing downstream can tell which half.
+- `loadSubject(subjectId)` keeps its exact old contract (practice pool, warn on
+  error) so the eight existing callers are untouched.
+- `listPacks()` — discovered from the directory, never listed.
+- `loadCorpus()` — every pack, with `packs`, `practice`, `papers`, `errors`.
+- `evaluateSources([{file, code}])` — run an explicit list of sources through the
+  same context. This is what lets the write-back **prove** a rewrite.
+
+⚠ Writing this patch through a shell heredoc into a JS template literal ate one
+backslash from every regex: `/^grade(\d+)-/` arrived as `/^grade(d+)-/`, so
+`listPacks()` returned 0 packs and the corpus loaded empty. Exactly the trap
+CLAUDE.md records under "Never build a regex through a shell heredoc". Caught in
+one run because the loader was measured immediately rather than assumed.
+
+### Two phases, fail-closed
+
+The old command uploaded each subject as it went and reported skipped files in
+the closing summary — *after* every group that loaded had already been written.
+A broken file near the end left the database holding a corpus nobody had
+validated as a whole.
+
+Now: **preflight, then database.** Preflight discovers packs, evaluates every
+source, builds every row, and validates:
+
+- a source-file exception is **fatal**;
+- every id is a non-empty string, unique across practice **and** past papers;
+- structure per type, from a `TYPE_RULES` table — an unknown `type` fails with
+  the id and the reason, and is never coerced to MCQ;
+- difficulty 1-4, a `chapterId`, a grade derivable from the pack name;
+- a past-paper item must **not** carry an answer (it is a transcription of a
+  printed question, and must never reach code that expects to grade it).
+
+Supabase is not contacted until all of that passes. `--check` runs the whole of
+it with no credential and no network; `--dry-run` adds a read-only
+classification; the bare command writes. An unknown flag exits 2 with usage —
+`--dry_run` is not `--dry-run`, and silently uploading 14,890 rows because a
+hyphen was typed as an underscore is not a mistake this command may make.
+
+**Preflight found two real content defects on its first run**, both pre-existing:
+`g5hg-min5-coast-0` and `g5s-min5-renew-0` were MCQs with exactly one option,
+which was the answer. The `rows()` helper in `coverage_min5.js` shares one option
+pool across a group of questions, so a group with a single row got a pool with a
+single word. A child saw one button and a free mark. Fixed with real distractors.
+
+### Protected rows: the write-back that could have destroyed source
+
+`_generateBlock()` returned `null` for symmetry, used `makeNum` for numeric, and
+**`makeMCQ` for everything else**. A protected cloze text, typed-text
+correction, multi-select item or structured task would have been rewritten into
+the source file as an MCQ — with a `.bak` beside it as the only trace.
+
+The replacement (`netlify/lib/question-writeback.js`) has two rules:
+
+1. an **exhaustive** type switch. Only `mcq`, `numeric` and `text` have a
+   lossless source form; an unlisted type is never regenerated. `TYPE_RULES`
+   carries the `regenerable` flag, so the table that validates a type is also
+   the table that decides whether it can be written back.
+2. losslessness is **proved, not assumed**. The candidate file is executed
+   *alongside its siblings* through the real loader — siblings because a
+   question file may read the pool earlier files pushed into
+   (`questions_audit.js` does) — and the rewrite is accepted only if the pack
+   still loads, the id set is unchanged, the target question now equals the
+   database version exactly, and **no neighbouring question moved**. Anything
+   else leaves the source untouched and becomes a conflict for a human.
+
+Backups and the conflict report go to `.import-conflicts/`, never beside the
+source. ⚠ That directory needed **both** a `.gitignore` entry and a
+`netlify.toml` 404 rule: `publish = "."` serves the repo root, and a CLI deploy
+uploads from local disk, so gitignored-but-present files ship. The conflict
+report contains correct answers.
+
+⚠ `.bak` files were previously written next to the source. They end `.js.bak`,
+so the loader's `.endsWith('.js')` filter excluded them — but only by luck of
+naming, and the backup directory removes the question entirely.
+
+### The summary
+
+Rewritten so a non-technical operator can tell what happened, and so the totals
+cannot contradict each other. `accountingProblems()` fails the run if:
+
+    corpus total      != practice + past papers
+    candidates        != new + updated + unchanged + protected(unchanged+conflict) + failed
+    writes attempted  != new + updated + failed
+    verified + failed != attempted
+
+The wording is deliberate, because these are not synonyms: **loaded** is not
+**written**; a **write response** is not **verified**; **protected** is not an
+error unless it *conflicts*. Protected is split into `protectedUnchanged` (the
+database agrees with local source — nothing to do) and `protectedConflict` (it
+disagrees — a human is needed), because reporting them as one number made a
+healthy import look broken and a broken one look healthy.
+
+A live import ends with a separate **`Database verification`** block that
+re-reads every row it wrote, in a fresh request, and compares canonical content.
+⚠ Deliberately **not** a table row count: the table legitimately holds protected
+and historical rows outside the corpus, so a global count proves nothing. The
+mock-database test proves the distinction matters — a write whose response looks
+correct but never lands is caught only by reading it back.
+
+Exit code is 0 only for a fully successful run. `--report <path>` / `--json`
+emit a versioned, redacted report carrying no answers, no row payloads and no
+credentials.
+
+### The live import
+
+    Preflight: PASSED — 45 packs, 316 source files, 0 skipped
+    Corpus:    14,726 practice + 164 past papers = 14,890
+    Result:    2,377 new · 3,904 updated · 8,609 unchanged · 0 protected · 0 failed
+    Writes attempted 6,281 · verified 6,281 · failed 0
+    Verification: PASSED — every intended write was read back
+    Elapsed 151s — SUCCESS
+
+Live table afterwards: **14,893 rows — 14,729 practice + 164 past papers**;
+`mcq 12,322 · numeric 2,024 · text 305 · cloze 60 · multi 12 · symmetry 6`.
+Every corpus row present; field-level round trips confirmed for cloze (gap
+counts, bank size, alternates, two-part flag, notes), text (acceptable answers,
+confusables, strictAccents), multi (option and answer arrays, image markup),
+symmetry (grid, axis, coordinates), numeric, mcq (inline SVG and `<img>`
+survived) and past papers (no answer). French accents intact.
+
+⚠ **The 3-row surplus is not an error.** `g7h-samp-001`, `g8h-samp-001` and
+`g9h-samp-001` are left over from the retired `grade{7,8,9}-history` placeholder
+packs, replaced by `-social-modern-studies`. **The importer never deletes**, so
+deleting a question from `subjects/` does not delete it from the database.
+
+### No migration, and why that is a finding rather than an omission
+
+The live schema was read, not taken from the dump: `questions.data` is
+`jsonb NOT NULL`, there is no question-type column, no CHECK constraint, and
+`id` is the primary key (which is what lets the upsert merge duplicates). The
+table **already held 12 `multi` and 6 `symmetry` rows**, which is direct evidence
+that JSONB accepts the non-MCQ shapes — a stronger argument than reading the
+DDL. No SQL was written. A ceremonial empty migration would have been worse than
+nothing.
+
+### ⚠ A clean re-import is "0 new, ~560 updated", not zero writes
+
+Measured immediately after the successful import: **0 new, 560 updated, 14,330
+unchanged.**
+
+`makeMCQ` keeps the answer plus a **random 3** of the remaining options. For a
+question authored with more than four usable options the stored option set is
+therefore drawn fresh on every load, and the importer honestly reports it as
+changed every time. **580 items are in that state** — grade4-history 277,
+grade4-french 154, grade5-history 114, grade5-english 27, grade5-science 5,
+grade5-maths 3.
+
+This is churn, not drift, and it is the one place the import is not idempotent.
+It is recorded here because "0 new, 560 updated" on a re-run is otherwise
+indistinguishable from something having gone wrong. (Whether 580 questions
+*should* be authored with a distractor pool larger than the question can show is
+a separate content question — it means two children sitting side by side see
+different distractors for the same item, which for a shared answer pool is
+arguably the point.)
+
+### Tests
+
+- `scripts/test-question-import-parity.js` (123 checks) — the importer declares
+  no factory and no `vm.createContext`; the importer and `build-questions.js`
+  return **identical** practice and past-paper id sets and per-type counts; the
+  six formerly-skipped files load and contribute; a fixture for all seven types
+  survives load to row JSON to parse with no field loss (including a `makeTask`
+  fixture keeping its parts, response kinds, rubric and per-part marks, and not
+  being projected into legacy items); option order is cosmetic while multi
+  answers, symmetry coordinates, cloze gaps and task parts are not; preflight
+  rejects source exceptions, duplicate ids across subjects **and** across
+  practice/past-paper groups, unknown types, and ten malformed shapes;
+  `--check` runs in a subprocess with the key stripped and `fetch` replaced by a
+  tripwire, proving zero network calls; the live schema claims are asserted
+  against `supabase-schema.sql`.
+- `scripts/test-question-writeback.js` (88 checks) — against a throwaway pack in
+  the OS temp directory. `generateBlock` refuses cloze, symmetry, multi, task
+  and unknown types; a protected one of those leaves the file **byte-for-byte**
+  unchanged and introduces no `makeMCQ`; a protected mcq/numeric/text is synced,
+  the pack still loads, every neighbour is untouched, the pool-reading file
+  still runs, and the backup lands outside `subjects/` with a non-`.js` name; a
+  rewrite that cannot reproduce the row is refused; `write:false` is a genuine
+  dry run.
+- `scripts/test-question-import.js` — extended for the protected split, the
+  written-row collector, `classifyRows` writing nothing, read-after-write
+  changing the outcome, bounded error output, the redacted JSON report, and
+  every summary category balancing in check / dry-run / success / failure /
+  aborted scenarios. ⚠ The accounting assertion caught the test's *own*
+  hand-written fixture first; the fixture now derives its totals.
+
+⚠ One test bug worth recording, because it is the shape that makes a harness lie:
+the parity suite first checked for `window.PSAC_PDF_QUESTIONS` by reading only
+the **first line** of the sandbox's context `return {`. That export list wraps,
+and the entry sits one line down — so the check reported a missing export that
+was present. The export line is exactly the half that ships (it is how `makeCloze`
+was lost in the first place), so a false reading there is expensive. It now reads
+the whole return statement.

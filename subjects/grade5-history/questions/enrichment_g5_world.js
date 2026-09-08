@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
     question:'Rodrigues island is politically part of which country?',
     options:['Mauritius','France','The United Kingdom','Madagascar'],
     answer:'Mauritius',
-    hint:'Together with Mauritius and Réunion, it forms the Mascarene Islands.',
+    hint:'Rodrigues is far smaller and lies about 560 km east of a much larger island - the two are governed together.',
     explanation:'<b>Rodrigues</b> is an autonomous island that is part of the Republic of <b>Mauritius</b>; it has its own Regional Assembly but remains under Mauritian sovereignty.' }),
 
   makeMCQ({ id:'g5enr-wld-010', chapterId:'g5enr-world', subsection:'volcanoes', difficulty:2,
@@ -95,7 +95,7 @@ STATIC_QUESTIONS.push(
     question:'On a world map, the Mascarene Islands are found to the east of which continent?',
     options:['Africa','Asia','Australia','South America'],
     answer:'Africa',
-    hint:'They lie in the western Indian Ocean, not far from the east coast of Africa.',
+    hint:'They lie in the WESTERN Indian Ocean. Which continent has its east coast on that ocean?',
     explanation:'The <b>Mascarene Islands</b> lie to the east of <b>Africa</b>, in the western part of the Indian Ocean, roughly east of Madagascar and south-east of Kenya and Tanzania.' }),
 
   makeMCQ({ id:'g5enr-wld-013', chapterId:'g5enr-world', subsection:'indian_ocean', difficulty:3,
@@ -174,7 +174,7 @@ STATIC_QUESTIONS.push(
       'The term means the islands produce more volcanic eruptions per year than any other island group on Earth'
     ],
     answer:'The islands were formed as the tectonic plate moved over a fixed volcanic hotspot in the Earth\'s mantle, with each island at a different stage of formation',
-    hint:'Think about how the tectonic plate moves while the hotspot stays fixed below it.',
+    hint:'One part of this stays still and one part moves. Think about what a chain of islands would look like as a result.',
     explanation:'The Mascarenes are a "<b>hotspot archipelago</b>" because they formed as the African tectonic plate moved over a fixed mantle <b>hotspot</b>; older islands like Mauritius are more eroded while younger Réunion is still volcanically active.' })
 
 );

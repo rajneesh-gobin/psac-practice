@@ -4,7 +4,7 @@ const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const nodes = new Map();
 const el = id => {
-  if (!nodes.has(id)) nodes.set(id, {value:'',innerHTML:'',disabled:false});
+  if (!nodes.has(id)) nodes.set(id, {value:'',innerHTML:'',disabled:false,classList:{add(){},remove(){},toggle(){},contains(){return true;}},querySelectorAll(){return [];},querySelector(){return null;},insertAdjacentHTML(){},setAttribute(){},dataset:{}});
   return nodes.get(id);
 };
 const packs = [
@@ -16,9 +16,9 @@ const packs = [
   {id:'grade7-maths',grade:7,name:'Mathematics',comingSoon:true}
 ];
 const loaded=[];
-const ctx=vm.createContext({document:{getElementById:el},window:{},SUBJECT_PACKS:packs,
+const ctx=vm.createContext({document:{getElementById:el,querySelectorAll(){return [];},querySelector(){return null;},addEventListener(){},removeEventListener(){}},window:{},SUBJECT_PACKS:packs,
   ACTIVE_PACK:packs[2],Auth:{isTeacher:()=>true},TeacherWorkspace:{refresh(){}},
-  TeacherGuestClasses:{refresh(){},accessChanged(){}},QuestionLoader:{async loadSubject(id){loaded.push(id);}},console});
+  TeacherGuestClasses:{refresh(){return Promise.resolve();},accessChanged(){},getClasses(){return [];}},TeacherHome:{render(){}},localStorage:{getItem(){return null;},setItem(){}},CSS:{escape:s=>s},QuestionLoader:{async loadSubject(id){loaded.push(id);}},console});
 vm.runInContext(fs.readFileSync('engine/teacher.js','utf8')+'\nthis.teacher=TeacherMode;',ctx);
 (async()=>{
   ctx.teacher.render();

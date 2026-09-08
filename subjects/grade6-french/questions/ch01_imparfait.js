@@ -112,7 +112,7 @@ STATIC_QUESTIONS.push(
       '"Il mange de la pizza maintenant."'
     ],
     answer:'"Quand il était enfant, il mangeait de la pizza chaque vendredi."',
-    hint:'Les mots "chaque vendredi" et "quand il était enfant" indiquent une habitude passée répétée.',
+    hint:'Cherche les mots qui montrent une répétition et une époque révolue, et non un moment unique.',
     explanation:'"Quand il était enfant, il <b>mangeait</b> de la pizza chaque vendredi." - L\'imparfait exprime ici une <b>habitude passée répétée</b>. Marqueurs habituels de l\'imparfait : <b>chaque semaine / jour / fois, tous les + temps, souvent, toujours, généralement, autrefois, jadis, d\'habitude</b>. Ces indicateurs temporels sont des indices importants dans les épreuves PSAC.' }),
 
   makeMCQ({ id:'g6fr-imp-016', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:2,
@@ -146,14 +146,14 @@ STATIC_QUESTIONS.push(
     question:'Conjugue ALLER à l\'imparfait pour "je" :',
     options:['j\'aillais','j\'allais','je vais','j\'allai'],
     answer:'j\'allais',
-    hint:'Aller → radical imparfait : nous allons → all- → j\'allais.',
+    hint:'Le radical de l\'imparfait se tire de la forme « nous » du présent. Trouve-la, puis ajoute la terminaison qui va avec « je ».',
     explanation:'Aller → présent "nous" : nous <b>allons</b> → radical = <b>all-</b> → imparfait : j\'<b>allais</b>, tu allais, il allait, nous allions, vous alliez, ils allaient. C\'est un verbe très fréquent : "Quand j\'étais petit, j\'<b>allais</b> à la plage chaque dimanche."' }),
 
   makeMCQ({ id:'g6fr-imp-021', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:1,
     question:'Conjugue VENIR à l\'imparfait pour "il" :',
     options:['il venait','il vient','il vint','il viendrait'],
     answer:'il venait',
-    hint:'Venir → nous venons → radical ven- → il venait.',
+    hint:'Le radical de l\'imparfait se tire de la forme « nous » du présent de « venir ». Ajoute ensuite la terminaison de « il ».',
     explanation:'Venir → présent "nous" : nous <b>venons</b> → radical = <b>ven-</b> → imparfait : je venais, tu venais, <b>il venait</b>, nous venions, vous veniez, ils venaient.' }),
 
   makeTF({ id:'g6fr-imp-022', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:1,
@@ -173,21 +173,21 @@ STATIC_QUESTIONS.push(
     question:'Conjugue VOIR à l\'imparfait pour "vous" :',
     options:['vous voyiez','vous voyez','vous viez','vous verriez'],
     answer:'vous voyiez',
-    hint:'Voir → nous voyons → radical voy- → vous voyiez.',
+    hint:'Le radical de l\'imparfait se tire de la forme « nous » du présent de « voir ». Attention au i de la terminaison avec « vous ».',
     explanation:'Voir → présent "nous" : nous <b>voyons</b> → radical = <b>voy-</b> → imparfait : je voyais, tu voyais, il voyait, nous voyions, <b>vous voyiez</b>, ils voyaient. Remarque : même radical que le présent pluriel.' }),
 
   makeMCQ({ id:'g6fr-imp-025', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:2,
     question:'Conjugue POUVOIR à l\'imparfait pour "ils" :',
     options:['ils pouvaient','ils peuvent','ils pourraient','ils purent'],
     answer:'ils pouvaient',
-    hint:'Pouvoir → nous pouvons → radical pouv- → ils pouvaient.',
+    hint:'Le radical de l\'imparfait se tire de la forme « nous » du présent de « pouvoir ». Ajoute ensuite la terminaison de « ils ».',
     explanation:'Pouvoir → présent "nous" : nous <b>pouvons</b> → radical = <b>pouv-</b> → imparfait : je pouvais, tu pouvais, il pouvait, nous pouvions, vous pouviez, <b>ils pouvaient</b>.' }),
 
   makeMCQ({ id:'g6fr-imp-026', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:2,
     question:'Conjugue VOULOIR à l\'imparfait pour "tu" :',
     options:['tu voulais','tu vouldrais','tu veux','tu voulus'],
     answer:'tu voulais',
-    hint:'Vouloir → nous voulons → radical voul- → tu voulais.',
+    hint:'Le radical de l\'imparfait se tire de la forme « nous » du présent de « vouloir ». Ajoute ensuite la terminaison de « tu ».',
     explanation:'Vouloir → présent "nous" : nous <b>voulons</b> → radical = <b>voul-</b> → imparfait : je voulais, <b>tu voulais</b>, il voulait, nous voulions, vous vouliez, ils voulaient.' }),
 
   makeMCQ({ id:'g6fr-imp-027', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:2,
@@ -255,7 +255,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>était</b> / <b>soufflait</b> / <b>claquaient</b>" = descriptions du cadre → <b>imparfait</b>. "<b>est apparu</b>" = événement soudain qui rompt le décor → <b>passé composé</b> (apparaître se conjugue ici avec être). Structure narrative : imparfait (arrière-plan) + passé composé (événement de premier plan).' }),
 
   makeMCQ({ id:'g6fr-imp-035', chapterId:'g6fr-imparfait', subsection:'formation', difficulty:4,
-    question:'Shanvi écrit dans son journal : "Quand j\'___ (avoir) 6 ans, je ___ (ne pas savoir) nager, je ___ (avoir peur) de l\'eau mais j\'___ (adorer) regarder la mer de loin." Bonne série ?',
+    question:'Kavya écrit dans son journal : "Quand j\'___ (avoir) 6 ans, je ___ (ne pas savoir) nager, je ___ (avoir peur) de l\'eau mais j\'___ (adorer) regarder la mer de loin." Bonne série ?',
     options:[
       'avais / ne savais pas / avais peur / adorais',
       'ai eu / n\'ai pas su / ai eu peur / ai adoré',

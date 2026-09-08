@@ -52,13 +52,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6hg-ms-001', chapterId:'g6-map-skills', subsection:'contours', difficulty:1,
     question:`${_SVG_CONTOUR}What are CONTOUR LINES on a map?`,
-    options:[
-      'Lines that show the direction of rivers',
-      'Lines connecting all points of equal altitude (height above sea level)',
-      'Lines showing the boundaries between countries',
-      'Lines connecting places with the same temperature'
-    ],
-    answer:'Lines connecting all points of equal altitude (height above sea level)',
+    options:['Lines joining points of equal height', 'Lines showing borders between countries', 'Lines joining places of equal temperature', 'Lines showing the direction of rivers'],
+    answer:'Lines joining points of equal height',
     hint:'Each line in the diagram is labelled with a height in metres.',
     explanation:'<b>Contour lines</b> are lines on a map that connect all points at the same <b>altitude (height)</b> above sea level. By reading the contour lines, you can work out the shape and steepness of the land.' }),
 
@@ -71,7 +66,7 @@ STATIC_QUESTIONS.push(
       'The area is below sea level'
     ],
     answer:'The slope is steep - the land rises sharply',
-    hint:'If you have to gain a lot of height in a short horizontal distance, the slope is steep.',
+    hint:'Read the note printed on the map itself: what does it say about contour lines that sit close together?',
     explanation:'<b>Closely spaced contour lines</b> show a <b>steep slope</b> - the land rises quickly over a short distance. <b>Widely spaced lines</b> show a gentle, gradual slope. This is shown in the note at the bottom of the diagram.' }),
 
   makeMCQ({ id:'g6hg-ms-003', chapterId:'g6-map-skills', subsection:'contours', difficulty:2,
@@ -116,14 +111,9 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6hg-ms-008', chapterId:'g6-map-skills', subsection:'symbols', difficulty:1,
     question:'What is a map LEGEND (key)?',
-    options:[
-      'The title of the map',
-      'A box explaining what each symbol and colour on the map means',
-      'The grid reference system',
-      'The name of the person who drew the map'
-    ],
-    answer:'A box explaining what each symbol and colour on the map means',
-    hint:'Without this, you cannot understand what the symbols on the map represent.',
+    options:['A box explaining the map symbols', 'The grid reference system used', 'The name of the map-maker', 'The title written on the map'],
+    answer:'A box explaining the map symbols',
+    hint:'Three of these are facts ABOUT the map. Only one of them helps you actually read it.',
     explanation:'A map <b>legend (key)</b> is a box that explains the meaning of all symbols, colours and patterns used on the map. For example: blue = water, green = forest, dotted line = path, triangle = peak. It is essential for correctly reading a map.' }),
 
   makeTF({ id:'g6hg-ms-009', chapterId:'g6-map-skills', subsection:'contours', difficulty:1,
@@ -173,13 +163,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6hg-ms-015', chapterId:'g6-map-skills', subsection:'contours', difficulty:2,
     question:'What does a SPOT HEIGHT on a map show?',
-    options:[
-      'The exact depth of a river at that point',
-      'The precise altitude (height above sea level) of a specific point on the land, shown as a number',
-      'The distance from that point to the nearest town',
-      'The temperature at that point on the map'
-    ],
-    answer:'The precise altitude (height above sea level) of a specific point on the land, shown as a number',
+    options:['The height of that point above sea level', 'The distance from there to the nearest town', 'The temperature recorded at that point', 'The depth of the river at that point'],
+    answer:'The height of that point above sea level',
     hint:'You often see a small dot with a number like ".643" on a topographic map - that is the height in metres.',
     explanation:'A <b>spot height</b> is a precise measurement of height above sea level at a specific point, shown as a dot (•) with a number on a topographic map. Unlike contour lines (which show height bands), spot heights give the <b>exact elevation</b> at one point. Mountain peaks and hilltops are often marked with spot heights. Example: "• 828" next to Pieter Both means it is 828 metres above sea level.' }),
 
@@ -190,7 +175,7 @@ STATIC_QUESTIONS.push(
     explanation:'<b>True.</b> The correct order for grid references is: <b>column first (left to right), then row (bottom to top)</b>. The memory phrase used in schools is "<b>along the corridor, then up the stairs.</b>" For example, if a school is in column 1, row D, the grid reference is "1D." Always give the horizontal (easting) coordinate before the vertical (northing) coordinate.' }),
 
   makeMCQ({ id:'g6hg-ms-017', chapterId:'g6-map-skills', subsection:'using_map', difficulty:2,
-    question:'The Chagos Archipelago is a group of islands in the Indian Ocean. How is it classified in the MIE Grade 6 textbook?',
+    question:'The Chagos Archipelago is a group of islands in the Indian Ocean. How is it classified?',
     options:['A volcanic island group','A coral atoll group','A continental island group','A mangrove island group'],
     answer:'A coral atoll group',
     hint:'Atolls are ring-shaped coral islands that form on the rims of underwater volcanoes.',
@@ -212,8 +197,8 @@ STATIC_QUESTIONS.push(
 
 );
 
-// ── Mauritius Physical Map — river & mountain reading questions ──────────────
-const _SVG_G6_MUS_PHYS = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 400" style="max-width:100%;max-height:280px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"><rect width="420" height="400" fill="#dbeafe"/><text x="210" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e3a8a" font-family="sans-serif">Mauritius — Physical Features</text><path d="M 85,105 Q 120,60 200,30 Q 270,20 330,75 Q 370,130 370,210 Q 365,270 335,315 Q 270,360 200,360 Q 140,355 90,290 Q 55,240 55,180 Q 58,130 85,105 Z" fill="#d1fae5" stroke="#6ee7b7" stroke-width="2"/><path d="M 210,220 Q 260,250 340,295" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="255" y="243" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Gd. R. South East</text><path d="M 140,250 Q 100,255 62,240" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="78" y="251" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Black River</text><path d="M 205,185 Q 215,120 225,45" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="220" y="115" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">R. du Rempart</text><path d="M 175,175 Q 135,145 88,118" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="105" y="137" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Gd. R. NW</text><text x="108" y="256" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="118" y="253" font-size="8" fill="#991b1b" font-weight="bold" font-family="sans-serif">Piton PNR ★</text><text x="118" y="262" font-size="7" fill="#991b1b" font-family="sans-serif">828m (highest)</text><text x="233" y="167" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="241" y="163" font-size="8" fill="#991b1b" font-family="sans-serif">Pieter Both</text><text x="241" y="172" font-size="7" fill="#991b1b" font-family="sans-serif">823m</text><text x="148" y="132" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="156" y="128" font-size="8" fill="#991b1b" font-family="sans-serif">Le Pouce</text><text x="156" y="137" font-size="7" fill="#991b1b" font-family="sans-serif">811m</text><text x="183" y="237" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="190" y="233" font-size="7" fill="#991b1b" font-family="sans-serif">Corps de Garde</text><text x="190" y="242" font-size="7" fill="#991b1b" font-family="sans-serif">720m</text><text x="151" y="212" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="122" y="210" font-size="7" fill="#991b1b" font-family="sans-serif">Trois Mamelles 629m</text><circle cx="82" cy="108" r="4" fill="#fbbf24" stroke="#92400e" stroke-width="1.2"/><text x="89" y="106" font-size="8" fill="#92400e" font-weight="bold" font-family="sans-serif">Port Louis ★</text><text x="89" y="115" font-size="7" fill="#92400e" font-family="sans-serif">Capital</text><circle cx="210" cy="248" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="216" y="252" font-size="7" fill="#374151" font-family="sans-serif">Curepipe</text><circle cx="328" cy="296" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="290" y="293" font-size="7" fill="#374151" font-family="sans-serif">Mahebourg</text><circle cx="178" cy="232" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="132" y="230" font-size="7" fill="#374151" font-family="sans-serif">Quatre Bornes</text><line x1="390" y1="22" x2="390" y2="52" stroke="#374151" stroke-width="1.2"/><line x1="375" y1="37" x2="405" y2="37" stroke="#374151" stroke-width="1.2"/><polygon points="390,22 386,32 390,28 394,32" fill="#1e3a8a"/><text x="390" y="20" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e3a8a" font-family="sans-serif">N</text><text x="407" y="40" font-size="7" fill="#374151" font-family="sans-serif">E</text><text x="373" y="40" text-anchor="end" font-size="7" fill="#374151" font-family="sans-serif">W</text><text x="390" y="60" text-anchor="middle" font-size="7" fill="#374151" font-family="sans-serif">S</text><rect x="10" y="335" width="128" height="58" rx="4" fill="white" fill-opacity="0.88" stroke="#d1d5db" stroke-width="1"/><text x="16" y="348" font-size="8" font-weight="bold" fill="#374151" font-family="sans-serif">Legend</text><line x1="16" y1="356" x2="32" y2="356" stroke="#3b82f6" stroke-width="2"/><text x="36" y="360" font-size="7" fill="#374151" font-family="sans-serif">River</text><text x="16" y="370" font-size="10" fill="#dc2626" font-family="sans-serif">▲</text><text x="28" y="371" font-size="7" fill="#374151" font-family="sans-serif">Mountain peak</text><text x="16" y="382" font-size="9" fill="#dc2626" font-family="sans-serif">▲★</text><text x="28" y="383" font-size="7" fill="#374151" font-family="sans-serif">Highest peak</text><circle cx="18" cy="390" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="24" y="393" font-size="7" fill="#374151" font-family="sans-serif">Town  ★=Capital</text></svg>`;
+// ── Mauritius Physical Map - river & mountain reading questions ──────────────
+const _SVG_G6_MUS_PHYS = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 400" style="max-width:100%;max-height:280px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"><rect width="420" height="400" fill="#dbeafe"/><text x="210" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#1e3a8a" font-family="sans-serif">Mauritius - Physical Features</text><path d="M 85,105 Q 120,60 200,30 Q 270,20 330,75 Q 370,130 370,210 Q 365,270 335,315 Q 270,360 200,360 Q 140,355 90,290 Q 55,240 55,180 Q 58,130 85,105 Z" fill="#d1fae5" stroke="#6ee7b7" stroke-width="2"/><path d="M 210,220 Q 260,250 340,295" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="255" y="243" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Gd. R. South East</text><path d="M 140,250 Q 100,255 62,240" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="78" y="251" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Black River</text><path d="M 205,185 Q 215,120 225,45" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="220" y="115" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">R. du Rempart</text><path d="M 175,175 Q 135,145 88,118" fill="none" stroke="#3b82f6" stroke-width="2"/><text x="105" y="137" font-size="7" fill="#1d4ed8" font-style="italic" font-family="sans-serif">Gd. R. NW</text><text x="108" y="256" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="118" y="253" font-size="8" fill="#991b1b" font-weight="bold" font-family="sans-serif">Piton PNR ★</text><text x="118" y="262" font-size="7" fill="#991b1b" font-family="sans-serif">828m (highest)</text><text x="233" y="167" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="241" y="163" font-size="8" fill="#991b1b" font-family="sans-serif">Pieter Both</text><text x="241" y="172" font-size="7" fill="#991b1b" font-family="sans-serif">823m</text><text x="148" y="132" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="156" y="128" font-size="8" fill="#991b1b" font-family="sans-serif">Le Pouce</text><text x="156" y="137" font-size="7" fill="#991b1b" font-family="sans-serif">811m</text><text x="183" y="237" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="190" y="233" font-size="7" fill="#991b1b" font-family="sans-serif">Corps de Garde</text><text x="190" y="242" font-size="7" fill="#991b1b" font-family="sans-serif">720m</text><text x="151" y="212" font-size="12" fill="#dc2626" font-family="sans-serif">▲</text><text x="122" y="210" font-size="7" fill="#991b1b" font-family="sans-serif">Trois Mamelles 629m</text><circle cx="82" cy="108" r="4" fill="#fbbf24" stroke="#92400e" stroke-width="1.2"/><text x="89" y="106" font-size="8" fill="#92400e" font-weight="bold" font-family="sans-serif">Port Louis ★</text><text x="89" y="115" font-size="7" fill="#92400e" font-family="sans-serif">Capital</text><circle cx="210" cy="248" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="216" y="252" font-size="7" fill="#374151" font-family="sans-serif">Curepipe</text><circle cx="328" cy="296" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="290" y="293" font-size="7" fill="#374151" font-family="sans-serif">Mahebourg</text><circle cx="178" cy="232" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="132" y="230" font-size="7" fill="#374151" font-family="sans-serif">Quatre Bornes</text><line x1="390" y1="22" x2="390" y2="52" stroke="#374151" stroke-width="1.2"/><line x1="375" y1="37" x2="405" y2="37" stroke="#374151" stroke-width="1.2"/><polygon points="390,22 386,32 390,28 394,32" fill="#1e3a8a"/><text x="390" y="20" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e3a8a" font-family="sans-serif">N</text><text x="407" y="40" font-size="7" fill="#374151" font-family="sans-serif">E</text><text x="373" y="40" text-anchor="end" font-size="7" fill="#374151" font-family="sans-serif">W</text><text x="390" y="60" text-anchor="middle" font-size="7" fill="#374151" font-family="sans-serif">S</text><rect x="10" y="335" width="128" height="58" rx="4" fill="white" fill-opacity="0.88" stroke="#d1d5db" stroke-width="1"/><text x="16" y="348" font-size="8" font-weight="bold" fill="#374151" font-family="sans-serif">Legend</text><line x1="16" y1="356" x2="32" y2="356" stroke="#3b82f6" stroke-width="2"/><text x="36" y="360" font-size="7" fill="#374151" font-family="sans-serif">River</text><text x="16" y="370" font-size="10" fill="#dc2626" font-family="sans-serif">▲</text><text x="28" y="371" font-size="7" fill="#374151" font-family="sans-serif">Mountain peak</text><text x="16" y="382" font-size="9" fill="#dc2626" font-family="sans-serif">▲★</text><text x="28" y="383" font-size="7" fill="#374151" font-family="sans-serif">Highest peak</text><circle cx="18" cy="390" r="3" fill="#fbbf24" stroke="#92400e" stroke-width="1"/><text x="24" y="393" font-size="7" fill="#374151" font-family="sans-serif">Town  ★=Capital</text></svg>`;
 
 STATIC_QUESTIONS.push(
 
@@ -222,12 +207,12 @@ STATIC_QUESTIONS.push(
     options:['Rivière du Rempart','Grand River South East','Grand River North West','Black River (Rivière Noire)'],
     answer:'Black River (Rivière Noire)',
     hint:'Black River Gorges is in the south-west. Which river on the map flows in that direction?',
-    explanation:'The <b>Black River (Rivière Noire)</b> drains the south-west highlands — including the Black River Gorges National Park area — and flows to the south-west coast. The Black River Gorges National Park, Mauritius\'s largest nature reserve, is named after this river.' }),
+    explanation:'The <b>Black River (Rivière Noire)</b> drains the south-west highlands - including the Black River Gorges National Park area - and flows to the south-west coast. The Black River Gorges National Park, Mauritius\'s largest nature reserve, is named after this river.' }),
 
   makeMCQ({ id:'g6hg-ms-021', chapterId:'g6-map-skills', subsection:'using_map', difficulty:3,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G6_MUS_PHYS}</div><b>Which TWO mountains on the map have elevations above 820 metres?</b>`,
-    options:['Le Pouce (811m) and Corps de Garde (720m)','Trois Mamelles (629m) and Le Pouce (811m)','Corps de Garde (720m) and Pieter Both (823m)','Piton de la Petite Rivière Noire (828m) and Pieter Both (823m)'],
-    answer:'Piton de la Petite Rivière Noire (828m) and Pieter Both (823m)',
+    options:['Piton PNR and Pieter Both', 'Corps de Garde and Pieter Both', 'Le Pouce and Corps de Garde', 'Trois Mamelles and Le Pouce'],
+    answer:'Piton PNR and Pieter Both',
     hint:'Read the elevation labels on the map carefully. Which two numbers are greater than 820?',
     explanation:'Only <b>Piton de la Petite Rivière Noire (828m)</b> and <b>Pieter Both (823m)</b> exceed 820m. Le Pouce is 811m (just below 820m), Corps de Garde is 720m, and Trois Mamelles is 629m. These two highest peaks dominate the central mountain range of Mauritius.' }),
 
@@ -250,18 +235,18 @@ STATIC_QUESTIONS.push(
     options:['North coast','West coast','South-West coast','South-East coast'],
     answer:'South-East coast',
     hint:'Find the dot for Mahebourg on the map and look at which edge of the island it is near.',
-    explanation:'<b>Mahebourg</b> is on the <b>south-east coast</b> of Mauritius, near the mouth of the Grand River South East. It is a historically important town — the Battle of Grand Port (1810) was fought nearby. Today it is known for its National History Museum and the Blue Bay Marine Park.' }),
+    explanation:'<b>Mahebourg</b> is on the <b>south-east coast</b> of Mauritius, near the mouth of the Grand River South East. It is a historically important town - the Battle of Grand Port (1810) was fought nearby. Today it is known for its National History Museum and the Blue Bay Marine Park.' }),
 
   makeMCQ({ id:'g6hg-ms-025', chapterId:'g6-map-skills', subsection:'using_map', difficulty:3,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G6_MUS_PHYS}</div><b>Based on this map, which statement about the rivers of Mauritius is TRUE?</b>`,
     options:[
       'All rivers flow northward because Mauritius is in the Southern Hemisphere',
       'Rivers rise in the central highlands and flow outward to all coasts',
-      'Mauritius has only one major river — the Grand River South East',
+      'Mauritius has only one major river - the Grand River South East',
       'Rivers in Mauritius flow from the coast toward the central plateau'
     ],
     answer:'Rivers rise in the central highlands and flow outward to all coasts',
-    hint:'Look at all four river paths on the map — where do they start and where do they go?',
-    explanation:'The map shows that <b>all rivers rise in the central highlands</b> and flow <b>outward</b> in different directions — north (R. du Rempart), north-west (Grand R. NW), south-west (Black River), and south-east (Grand R. SE). This radial drainage pattern is typical of volcanic islands where the central plateau is the highest point and rivers flow down in all directions to the coast.' })
+    hint:'Look at all four river paths on the map - where do they start and where do they go?',
+    explanation:'The map shows that <b>all rivers rise in the central highlands</b> and flow <b>outward</b> in different directions - north (R. du Rempart), north-west (Grand R. NW), south-west (Black River), and south-east (Grand R. SE). This radial drainage pattern is typical of volcanic islands where the central plateau is the highest point and rivers flow down in all directions to the coast.' })
 
 );

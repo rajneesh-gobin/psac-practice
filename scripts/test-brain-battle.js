@@ -39,6 +39,7 @@ const ctx = {
   STATIC_QUESTIONS: bank,
 };
 vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'engine', 'game_settings.js'), 'utf8'), ctx, { filename: 'game_settings.js' });
 vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'engine', 'minigame.js'), 'utf8'), ctx, { filename: 'minigame.js' });
 const MG = vm.runInContext('MiniGames', ctx);
 check(typeof MG.startBattle === 'function', 'minigame.js loads and exports startBattle');
@@ -47,7 +48,7 @@ check(typeof MG.startBattle === 'function', 'minigame.js loads and exports start
 const diffOf = id => +String(id).match(/^t(\d)/)[1];
 let mismatched = 0, picks = 0;
 for (let n = 0; n < 30; n++) {
-  const qs = MG._pickBattle();
+  const qs = MG._pickBattle().qs;   // { qs, res, rounds } since Game Settings
   for (let r = 0; r * 2 + 1 < qs.length; r++) {
     picks++;
     // _bbTrim drops the id, so re-pick raw: match by question text prefix instead

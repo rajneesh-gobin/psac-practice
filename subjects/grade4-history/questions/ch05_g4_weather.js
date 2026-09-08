@@ -167,7 +167,7 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4ge-weather-020', chapterId:'g4ge-weather', subsection:'elements', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Lightning.jpg" alt="a bright flash of light in a stormy sky" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What weather phenomenon is shown in this picture?</b>',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/lightning.jpg" alt="a bright flash of light in a stormy sky" style="max-height:200px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What weather phenomenon is shown in this picture?</b>',
     options:['A rainbow','Lightning','A sunset','Fog'],
     answer:'Lightning',
     hint:'It is a sudden bright flash seen during a thunderstorm, followed by thunder.',

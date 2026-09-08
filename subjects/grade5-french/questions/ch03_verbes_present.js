@@ -81,7 +81,7 @@ STATIC_QUESTIONS.push(
     question:'Conjuguez "venir" à la première personne du singulier.',
     options:['je vens','je viens','je venis','je venons'],
     answer:'je viens',
-    hint:'"Venir" est irrégulier. Je viens, tu viens, il vient, nous venons…',
+    hint:'« Venir » est irrégulier : le radical change au singulier et redevient « ven- » avec nous et vous.',
     explanation:'"<b>je viens</b>" - venir est irrégulier : je viens, tu viens, il/elle vient, nous venons, vous venez, ils/elles viennent. Verbes similaires : tenir → je tiens, devenir → je deviens, revenir → je reviens.' }),
 
   makeMCQ({ id:'g5fr-vb-012', chapterId:'fr-verbes-present', subsection:'pronominaux', difficulty:1,
@@ -160,7 +160,7 @@ STATIC_QUESTIONS.push(
     question:'Conjuguez "pouvoir" à la deuxième personne : "Tu ___ venir demain."',
     options:['peut','pouvez','peux','puisse'],
     answer:'peux',
-    hint:'Pouvoir : je peux, tu peux (attention : je/tu ont la même forme !)',
+    hint:'Avec « pouvoir », « je » et « tu » ont exactement la même forme au présent.',
     explanation:'"Tu <b>peux</b> venir." - Conjugaison de pouvoir : je <b>peux</b>, tu <b>peux</b>, il/elle <b>peut</b>, nous <b>pouvons</b>, vous <b>pouvez</b>, ils/elles <b>peuvent</b>. Pouvoir exprime la capacité ou la permission.' }),
 
   makeMCQ({ id:'g5fr-vb-022', chapterId:'fr-verbes-present', subsection:'irreguliers', difficulty:1,
@@ -194,7 +194,7 @@ STATIC_QUESTIONS.push(
     question:'Complétez : "Pour réussir à l\'examen, ___ réviser ses leçons."',
     options:['il faut','il fait','il faisait','il ferait'],
     answer:'il faut',
-    hint:'"Il faut" exprime la nécessité.',
+    hint:'Cherche la forme impersonnelle du présent qui exprime une obligation.',
     explanation:'"Pour réussir, <b>il faut</b> réviser ses leçons." - "Il faut" + infinitif = it is necessary to. Autres structures similaires : il est important de + inf., il est nécessaire de + inf. "Il faut" est la plus courante et la plus directe.' }),
 
   makeTF({ id:'g5fr-vb-027', chapterId:'fr-verbes-present', subsection:'conjugaison', difficulty:2,
@@ -241,7 +241,7 @@ STATIC_QUESTIONS.push(
     question:'"Nous allons voyager en France l\'été prochain." Quel temps est utilisé ?',
     options:['présent de l\'indicatif','futur simple','futur proche','conditionnel'],
     answer:'futur proche',
-    hint:'"Aller" au présent + infinitif = futur proche.',
+    hint:'Regarde la construction : un verbe conjugué au présent suivi d\'un infinitif. Quel temps se forme ainsi ?',
     explanation:'"<b>Futur proche</b>" - Structure : nous <b>allons</b> (présent d\'aller) + voyager (infinitif). Le futur proche exprime une action qui va se passer bientôt ou dans un avenir certain. Le futur simple utiliserait : nous voyagerons.' }),
 
   makeMCQ({ id:'g5fr-vb-034', chapterId:'fr-verbes-present', subsection:'conjugaison', difficulty:3,

@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 5 Science March 2021 — past-paper questions adapted to MCQ format.
+// PSAC Grade 5 Science March 2021 - past-paper questions adapted to MCQ format.
 STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp21-001', chapterId:'animals', subsection:'habitats', difficulty:1,
     question:'Which animal lives in a <strong>web</strong>?',
@@ -11,7 +11,7 @@ STATIC_QUESTIONS.push(
     question:'Which of the following vegetables is a <strong>root</strong> vegetable?',
     options:['Beans','Broccoli','Carrot','Celery'], answer:'Carrot',
     hint:'This orange vegetable grows underground.',
-    explanation:'A carrot is a root — it grows underground and stores nutrients for the plant. Beans and broccoli are other plant parts; celery is a stem.' }),
+    explanation:'A carrot is a root - it grows underground and stores nutrients for the plant. Beans and broccoli are other plant parts; celery is a stem.' }),
 
   makeMCQ({ id:'g5sc-pp21-003', chapterId:'energy', subsection:'forms', difficulty:1,
     question:'A fish swimming in a river has which <strong>form of energy</strong>?',
@@ -46,7 +46,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sc-pp21-008', chapterId:'plants', subsection:'growth', difficulty:2,
     question:'What is <strong>soil erosion</strong>?',
     options:['The addition of minerals to soil','The growth of plants in soil','The removal and carrying away of soil by wind or water','The mixing of different types of soil'], answer:'The removal and carrying away of soil by wind or water',
-    hint:'Erosion means wearing away — think of rain washing soil downhill.',
+    hint:'Erosion means wearing away - think of rain washing soil downhill.',
     explanation:'Soil erosion is the removal and carrying away of topsoil by agents such as wind and water. It is made worse by cutting down trees and overgrazing.' }),
 
   makeMCQ({ id:'g5sc-pp21-009', chapterId:'water-matter', subsection:'states', difficulty:2,
@@ -65,7 +65,7 @@ STATIC_QUESTIONS.push(
     question:'The Kestrel is a bird found only in Mauritius. What type of bird is the Kestrel?',
     options:['Extinct','Exotic','Endemic','Endangered'], answer:'Endemic',
     hint:'This word describes a species found naturally in one specific place and nowhere else.',
-    explanation:'The Mauritius Kestrel (Falco punctatus) is endemic to Mauritius — it is found in the wild only on the island of Mauritius. It was saved from extinction through conservation.' }),
+    explanation:'The Mauritius Kestrel (Falco punctatus) is endemic to Mauritius - it is found in the wild only on the island of Mauritius. It was saved from extinction through conservation.' }),
 
   makeMCQ({ id:'g5sc-pp21-012', chapterId:'animals', subsection:'habitats', difficulty:3,
     question:'Which feature of the <strong>chameleon</strong> helps it grip onto tree branches?',

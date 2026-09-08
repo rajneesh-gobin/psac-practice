@@ -1,0 +1,1951 @@
+{
+ "_comment": "Generated record of where each bundled question image came from. Captured from the Wikimedia Commons API — never reconstructed from the local filename, which is a lossy slug of the Commons title. This is the single source of truth; image-credits.html is generated from it.",
+ "generated": "2026-09-08",
+ "source": "Wikimedia Commons (action=query&prop=imageinfo&iiprop=url|size|mime|extmetadata)",
+ "count": 138,
+ "totalBytes": 12571760,
+ "images": [
+  {
+   "file": "9v-battery-and-led-circuit-components-wires-battery-led-resi.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 39096,
+   "commonsTitle": "File:9v battery and led circuit components (wires, battery, LED, resistor).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:9v_battery_and_led_circuit_components_(wires,_battery,_LED,_resistor).jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Mr. D.M.C. Janiththa, admin in phobia.tech",
+   "usedBy": [
+    "g5sci-el-024"
+   ]
+  },
+  {
+   "file": "aapravasi-ghat-depot.jpg",
+   "width": 960,
+   "height": 640,
+   "bytes": 306792,
+   "commonsTitle": "File:Aapravasi Ghat Museum, Mauritius (41).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Aapravasi_Ghat_Museum,_Mauritius_(41).jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Suyash Dwivedi",
+   "usedBy": [
+    "g5hg-pl-020",
+    "g6hg-ch-021"
+   ]
+  },
+  {
+   "file": "adrien-d-epinay1.jpg",
+   "width": 500,
+   "height": 659,
+   "bytes": 142957,
+   "commonsTitle": "File:Adrien d'Epinay1.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Adrien_d%27Epinay1.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Denis PIAT",
+   "usedBy": [
+    "g6enr-per-022"
+   ]
+  },
+  {
+   "file": "aerial-view-of-the-amazon-rainforest.jpg",
+   "width": 500,
+   "height": 307,
+   "bytes": 57801,
+   "commonsTitle": "File:Aerial view of the Amazon Rainforest.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Aerial_view_of_the_Amazon_Rainforest.jpg",
+   "licence": "CC BY-SA 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+   "author": "lubasi",
+   "usedBy": [
+    "g6sci-enr-eco-003"
+   ]
+  },
+  {
+   "file": "aldabra-giant-tortoise-arp.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 98744,
+   "commonsTitle": "File:Aldabra.giant.tortoise.arp.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Aldabra.giant.tortoise.arp.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Adrian Pingstone",
+   "usedBy": [
+    "g4sci-enr-ani-005"
+   ]
+  },
+  {
+   "file": "anemometer.jpg",
+   "width": 500,
+   "height": 555,
+   "bytes": 45156,
+   "commonsTitle": "File:Anemometer.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Anemometer.jpg",
+   "licence": "CC BY 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/3.0",
+   "author": "Stefan Kühn",
+   "usedBy": [
+    "g4sci-enr-equ-003"
+   ]
+  },
+  {
+   "file": "anerood-jugnauth-1980s.jpg",
+   "width": 500,
+   "height": 625,
+   "bytes": 80501,
+   "commonsTitle": "File:Anerood Jugnauth, 1980s.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Anerood_Jugnauth,_1980s.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Francois Lim",
+   "usedBy": [
+    "g6enr-per-021"
+   ]
+  },
+  {
+   "file": "backpack.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 105967,
+   "commonsTitle": "File:Backpack.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Backpack.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Joe_from_Backpack_and_Gear( BackpackandGear ( talk ))",
+   "usedBy": [
+    "g4fr-nom-040"
+   ]
+  },
+  {
+   "file": "ball.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 42083,
+   "commonsTitle": "File:Ball.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:My_Football_Dream.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "Dymo",
+   "usedBy": [
+    "g4fr-nom-039"
+   ]
+  },
+  {
+   "file": "barometer.jpg",
+   "width": 500,
+   "height": 1099,
+   "bytes": 106982,
+   "commonsTitle": "File:Barometer.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Barometer.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "George Shuklin",
+   "usedBy": [
+    "g6eng-voc-024"
+   ]
+  },
+  {
+   "file": "battery-symbols-and-circuit.jpg",
+   "width": 369,
+   "height": 238,
+   "bytes": 6380,
+   "commonsTitle": "File:Battery symbols and circuit.png",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Battery_symbols_and_circuit.png",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": null,
+   "usedBy": [
+    "g5sci-el-023"
+   ]
+  },
+  {
+   "file": "beach.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 107402,
+   "commonsTitle": "File:Beach.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Beach_at_Kingsgate,_Kent,_2005.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "Grindlesmutter 's daughter",
+   "usedBy": [
+    "g5fr-nom-041"
+   ]
+  },
+  {
+   "file": "bed.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 41407,
+   "commonsTitle": "File:Bed.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Bed.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Gausanchennai",
+   "usedBy": [
+    "g4fr-nom-037"
+   ]
+  },
+  {
+   "file": "black-river-gorges-national-park-mauritius.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 74933,
+   "commonsTitle": "File:Black River Gorges National Park, Mauritius.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Black_River_Gorges_National_Park,_Mauritius.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Adamina",
+   "usedBy": [
+    "g4h-voy-022"
+   ]
+  },
+  {
+   "file": "blue-linckia-starfish.jpg",
+   "width": 500,
+   "height": 667,
+   "bytes": 135546,
+   "commonsTitle": "File:Blue Linckia Starfish.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Blue_Linckia_Starfish.JPG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "Richard Ling &lt;wikipedia@rling.com&gt;",
+   "usedBy": [
+    "g6sci-enr-eco-001"
+   ]
+  },
+  {
+   "file": "blue-penny-museum.jpg",
+   "width": 960,
+   "height": 623,
+   "bytes": 210288,
+   "commonsTitle": "File:Blue Penny Museum.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Blue_Penny_Museum.JPG",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Martin Falbisoner",
+   "usedBy": [
+    "g5hg-pl-022",
+    "g6hg-ch-024"
+   ]
+  },
+  {
+   "file": "burj-khalifa-tower.jpg",
+   "width": 960,
+   "height": 640,
+   "bytes": 107178,
+   "commonsTitle": "File:Burj Khalifa (16260269606).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Burj_Khalifa_(16260269606).jpg",
+   "licence": "CC BY-SA 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+   "author": "Laika ac",
+   "usedBy": [
+    "g4eng-adj-023"
+   ]
+  },
+  {
+   "file": "butterfly.jpg",
+   "width": 500,
+   "height": 333,
+   "bytes": 64909,
+   "commonsTitle": "File:Butterfly.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Butterfly.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Max T-M from New York, USA",
+   "usedBy": [
+    "g4fr-nom-041"
+   ]
+  },
+  {
+   "file": "candid-girl-reading-20946248203.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 88574,
+   "commonsTitle": "File:Candid girl reading (20946248203).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Candid_girl_reading_(20946248203).jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Pedro Ribeiro Simões from Lisboa, Portugal",
+   "usedBy": [
+    "g6fr-lec-036"
+   ]
+  },
+  {
+   "file": "canis-lupus-familiaris.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 33488,
+   "commonsTitle": "File:Canis lupus familiaris.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Canis_lupus_familiaris.jpg",
+   "licence": "CC0",
+   "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "author": "Suanug",
+   "usedBy": [
+    "g4eng-noun-023"
+   ]
+  },
+  {
+   "file": "carrot.jpg",
+   "width": 500,
+   "height": 337,
+   "bytes": 58347,
+   "commonsTitle": "File:Carrot.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Carrots_with_stems.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": null,
+   "usedBy": [
+    "g5fr-voc-044"
+   ]
+  },
+  {
+   "file": "champ-de-mars-racecourse.jpg",
+   "width": 960,
+   "height": 581,
+   "bytes": 232995,
+   "commonsTitle": "File:The Champ de Mars Racecourse.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:The_Champ_de_Mars_Racecourse.JPG",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Martin Falbisoner",
+   "usedBy": [
+    "g5hg-pl-024"
+   ]
+  },
+  {
+   "file": "children-playing.jpg",
+   "width": 500,
+   "height": 333,
+   "bytes": 58887,
+   "commonsTitle": "File:Children playing.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Children_playing.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Linda Bartlett (Photographer)",
+   "usedBy": [
+    "g6fr-lec-041"
+   ]
+  },
+  {
+   "file": "classroom.jpg",
+   "width": 176,
+   "height": 108,
+   "bytes": 4230,
+   "commonsTitle": "File:Classroom.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Classroom.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Samaddo",
+   "usedBy": [
+    "g4eng-noun-024"
+   ]
+  },
+  {
+   "file": "clinical-thermometer-38-7.jpg",
+   "width": 500,
+   "height": 310,
+   "bytes": 34776,
+   "commonsTitle": "File:Clinical thermometer 38.7.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Clinical_thermometer_38.7.JPG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "Menchi",
+   "usedBy": [
+    "g4sci-enr-equ-001"
+   ]
+  },
+  {
+   "file": "coat-of-arms-of-mauritius.png",
+   "width": 500,
+   "height": 400,
+   "bytes": 165648,
+   "commonsTitle": "File:Coat of arms of Mauritius.svg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Coat_of_arms_of_Mauritius.svg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "User:Escondites",
+   "usedBy": [
+    "g6hg-ind-021"
+   ]
+  },
+  {
+   "file": "colorful-underwater-landscape-of-a-coral-reef.jpg",
+   "width": 500,
+   "height": 333,
+   "bytes": 95900,
+   "commonsTitle": "File:Colorful underwater landscape of a coral reef.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Colorful_underwater_landscape_of_a_coral_reef.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Jim E Maragos, U.S. Fish and Wildlife Service",
+   "usedBy": [
+    "g4s-ani-021",
+    "g5sci-an-021"
+   ]
+  },
+  {
+   "file": "compass.jpg",
+   "width": 485,
+   "height": 328,
+   "bytes": 170811,
+   "commonsTitle": "File:Compass.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Compass.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "User Hkpawn on zh.wikipedia",
+   "usedBy": [
+    "g4h-voy-025"
+   ]
+  },
+  {
+   "file": "cooking.jpg",
+   "width": 300,
+   "height": 293,
+   "bytes": 27857,
+   "commonsTitle": "File:Cooking.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Cooking.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "Original uploader and author is Pastorius at cs.wikipedia",
+   "usedBy": [
+    "g6fr-lec-045"
+   ]
+  },
+  {
+   "file": "cottage.jpg",
+   "width": 400,
+   "height": 267,
+   "bytes": 57470,
+   "commonsTitle": "File:Cottage.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Cottage.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Oceanroller",
+   "usedBy": [
+    "g4eng-adj-025"
+   ]
+  },
+  {
+   "file": "cow.jpg",
+   "width": 500,
+   "height": 667,
+   "bytes": 93737,
+   "commonsTitle": "File:Cow.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Cow.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "William Warby",
+   "usedBy": [
+    "g5fr-nom-039"
+   ]
+  },
+  {
+   "file": "cracked-earth.jpg",
+   "width": 500,
+   "height": 750,
+   "bytes": 195184,
+   "commonsTitle": "File:Cracked earth.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Cracked_earth.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Knowledge and philosophy",
+   "usedBy": [
+    "g6eng-voc-023"
+   ]
+  },
+  {
+   "file": "crying-baby.jpg",
+   "width": 250,
+   "height": 266,
+   "bytes": 18933,
+   "commonsTitle": "File:Crying baby.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Crying_baby.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Brazzouk",
+   "usedBy": [
+    "g6fr-lec-051"
+   ]
+  },
+  {
+   "file": "cup.jpg",
+   "width": 500,
+   "height": 669,
+   "bytes": 54765,
+   "commonsTitle": "File:Cup.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Cup.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "User:musuu",
+   "usedBy": [
+    "g4eng-noun-030"
+   ]
+  },
+  {
+   "file": "dancing.jpg",
+   "width": 250,
+   "height": 333,
+   "bytes": 25944,
+   "commonsTitle": "File:Dancing.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Dancing.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "No machine-readable author provided. Aselasash assumed (based on copyright claims).",
+   "usedBy": [
+    "g6fr-lec-046"
+   ]
+  },
+  {
+   "file": "diagram-of-a-primary-cell-battery.jpg",
+   "width": 500,
+   "height": 290,
+   "bytes": 22764,
+   "commonsTitle": "File:Diagram of a primary cell (battery).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Diagram_of_a_primary_cell_(battery).jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Bigspace4",
+   "usedBy": [
+    "g5sci-el-022"
+   ]
+  },
+  {
+   "file": "dodo.jpg",
+   "width": 500,
+   "height": 483,
+   "bytes": 31572,
+   "commonsTitle": "File:Dodo.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Dodo.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Unknown author Unknown author",
+   "usedBy": [
+    "g4h-voy-020"
+   ]
+  },
+  {
+   "file": "door.jpg",
+   "width": 500,
+   "height": 680,
+   "bytes": 154780,
+   "commonsTitle": "File:Door.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Door.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Vigen Hakhverdyan",
+   "usedBy": [
+    "g5fr-nom-036"
+   ]
+  },
+  {
+   "file": "drawing.jpg",
+   "width": 500,
+   "height": 380,
+   "bytes": 67043,
+   "commonsTitle": "File:Drawing.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Fu-Hsin_Trade_%26_Arts_School_student_drawing_20031009.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "雨川",
+   "usedBy": [
+    "g6fr-lec-044"
+   ]
+  },
+  {
+   "file": "driving.jpg",
+   "width": 500,
+   "height": 667,
+   "bytes": 60066,
+   "commonsTitle": "File:Driving.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Driving.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Travis Warford",
+   "usedBy": [
+    "g6fr-lec-049"
+   ]
+  },
+  {
+   "file": "eating-rice-china-collected-by-berthold-laufer.jpg",
+   "width": 500,
+   "height": 684,
+   "bytes": 60280,
+   "commonsTitle": "File:Eating rice, China - collected by Berthold Laufer.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Eating_rice,_China_-_collected_by_Berthold_Laufer.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Unknown photographer",
+   "usedBy": [
+    "g6fr-lec-038"
+   ]
+  },
+  {
+   "file": "echo-parakeet-psittacula-eques-echo-at-durrell-trust.jpg",
+   "width": 500,
+   "height": 354,
+   "bytes": 51562,
+   "commonsTitle": "File:Echo parakeet (Psittacula eques echo) -at Durrell Trust.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Echo_parakeet_(Psittacula_eques_echo)_-at_Durrell_Trust.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "colin houston",
+   "usedBy": [
+    "g5sci-enr-end-002"
+   ]
+  },
+  {
+   "file": "edwards-dodo.jpg",
+   "width": 500,
+   "height": 401,
+   "bytes": 82615,
+   "commonsTitle": "File:Edwards' Dodo.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Edwards%27_Dodo.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Possibly Roelant Savery / Roelant Savery",
+   "usedBy": [
+    "g4sci-enr-ani-001"
+   ]
+  },
+  {
+   "file": "elephant.jpg",
+   "width": 379,
+   "height": 478,
+   "bytes": 146075,
+   "commonsTitle": "File:Elephant.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Elephant.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Stuart Bassil",
+   "usedBy": [
+    "g4eng-noun-026"
+   ]
+  },
+  {
+   "file": "erosion.jpg",
+   "width": 500,
+   "height": 755,
+   "bytes": 208986,
+   "commonsTitle": "File:Erosion.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Erosion.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": null,
+   "usedBy": [
+    "g5sci-pl-028"
+   ]
+  },
+  {
+   "file": "eureka-house-moka-1890.jpg",
+   "width": 650,
+   "height": 442,
+   "bytes": 197414,
+   "commonsTitle": "File:Eureka, 1890.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Eureka,_1890.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Extinct Mauritius",
+   "usedBy": [
+    "g6hg-ch-023"
+   ]
+  },
+  {
+   "file": "fishing.jpg",
+   "width": 500,
+   "height": 374,
+   "bytes": 61609,
+   "commonsTitle": "File:Fishing.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Fishing.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Bobanny",
+   "usedBy": [
+    "g6fr-lec-050"
+   ]
+  },
+  {
+   "file": "flood.jpg",
+   "width": 500,
+   "height": 334,
+   "bytes": 85579,
+   "commonsTitle": "File:Flood.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Flood.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "MinnesotaNationalGuard",
+   "usedBy": [
+    "g6hg-nh-020"
+   ]
+  },
+  {
+   "file": "food-web.png",
+   "width": 500,
+   "height": 476,
+   "bytes": 81813,
+   "commonsTitle": "File:Food Web.svg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Food_Web.svg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": ".mw-parser-output .messagebox{margin:4px 0;width:auto;border-collapse:collapse;border:2px solid var(--border-color-progressive,#6485d1);background-color:var(--background-color-neutral-subtle,#fbfcff);color:var(--color-base,#202122);box-sizing:border-box;border-inline-start-width:8px}.mw-parser-output .messagebox.mbox-small{font-size:88%;line-height:1.25em}.mw-parser-output .mbox-warning,.mw-parser-output .mbox-speedy{border:2px solid var(--border-color-error,#b22222);background:var(--background-color-error-subtle,#ffdbdb);border-inline-start-width:8px}.mw-parser-output .mbox-serious,.mw-parser-output .mbox-delete,.mw-parser-output .mbox-stop{border:2px solid var(--border-color-error,#b22222);border-inline-start-width:8px}.mw-parser-output .mbox-issue,.mw-parser-output .mbox-content{border:2px solid #f28500;background:var(--background-color-warning-subtle,#ffe);border-inline-start-width:8px}.mw-parser-output .mbox-query,.mw-parser-output .mbox-style{border:2px solid #f4c430;background:var(--background-color-warning-subtle,#ffe);border-inline-start-width:8px}.mw-parser-output .mbox-shit{border:2px solid #960;border-inline-start-width:8px}.mw-parser-output .mbox-license{border:2px solid #88a;border-inline-start-width:initial}.mw-parser-output .mbox-legal{border:2px solid var(--border-color-notice,#666);background:var(--background-color-base,#fff);border-inline-start-width:8px}.mw-parser-output .mbox-honor{border:2px solid #ca3;background:var(--background-color-warning-subtle,#fcf4db);border-inline-start-width:8px}.mw-parser-output .mbox-growth{border:2px solid #8d4;background:var(--background-color-success-subtle,#d5fdf4);border-inline-start-width:8px}.mw-parser-output .mbox-move{border:2px solid #93c;border-inline-start-width:8px}.mw-parser-output .mbox-protection,.mw-parser-output .mbox-message{border:2px solid var(--border-color-base,#aaa);border-inline-start-width:8px}.mw-parser-output .messagebox .mbox-text{border:none;padding:0.25em 0.9em;width:100%}.mw-parser-output .messagebox .mbox-image{border:none;padding-top:2px;padding-bottom:2px;padding-inline-start:0.9em;padding-inline-end:0;text-align:center}.mw-parser-output .messagebox .mbox-imageright{border:none;padding-top:2px;padding-bottom:2px;padding-inline-start:0;padding-inline-end:0.9em;text-align:center}.mw-parser-output .messagebox .mbox-empty-cell{border:none;padding:0;width:1px}.mw-parser-output .messagebox .mbox-invalid-type{text-align:center}@media(min-width:720px){.mw-parser-output .messagebox{margin:4px 10%}.mw-parser-output .messagebox.mbox-small{clear:right;float:right;margin:4px 0 4px 1em;width:238px}}body.skin--responsive .mw-parser-output table.messagebox img{max-width:none!important} This image has been created during \" DensityDesign Integrated Course Final Synthesis Studio \" at Politecnico di Milano , organized by DensityDesign Research Lab in 2015. Credits goes to Roberta Rosina",
+   "usedBy": [
+    "g4s-ani-023",
+    "g5sci-an-024"
+   ]
+  },
+  {
+   "file": "foodchain.png",
+   "width": 500,
+   "height": 708,
+   "bytes": 98424,
+   "commonsTitle": "File:FoodChain.svg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:FoodChain.svg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "chris 論 (through works of J. Patrick Fischer, C. Schuhmacher, Madprime , Luis Fernández García , Luis Miguel Bugallo Sánchez, chung-tung yeh , Susanne Heyer and Simon Andrews)",
+   "usedBy": [
+    "g4s-ani-020",
+    "g5sci-an-020"
+   ]
+  },
+  {
+   "file": "fort-adelaide-citadelle.jpg",
+   "width": 960,
+   "height": 719,
+   "bytes": 328676,
+   "commonsTitle": "File:Mauritius citadelle fort adelaide.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Mauritius_citadelle_fort_adelaide.jpg",
+   "licence": "CC BY-SA 3.0 de",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+   "author": "Arne Müseler",
+   "usedBy": [
+    "g5hg-pl-021"
+   ]
+  },
+  {
+   "file": "fullmoon2010.jpg",
+   "width": 500,
+   "height": 475,
+   "bytes": 54903,
+   "commonsTitle": "File:FullMoon2010.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Gregory H. Revera",
+   "usedBy": [
+    "g6sci-enr-sol-009"
+   ]
+  },
+  {
+   "file": "government-house-port-louis.jpg",
+   "width": 960,
+   "height": 604,
+   "bytes": 239639,
+   "commonsTitle": "File:Government House Port Louis.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Government_House_Port_Louis.JPG",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Martin Falbisoner",
+   "usedBy": [
+    "g5hg-pl-023"
+   ]
+  },
+  {
+   "file": "grand-bassin-ganga-talao.jpg",
+   "width": 960,
+   "height": 720,
+   "bytes": 200883,
+   "commonsTitle": "File:Ganga Talao (5489050038).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Ganga_Talao_(5489050038).jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "carrotmadman6 from Mauritius",
+   "usedBy": [
+    "g5hg-vol-021"
+   ]
+  },
+  {
+   "file": "handmade-oil-painting-reproduction-of-ibn-battuta-in-egypt-a.jpg",
+   "width": 498,
+   "height": 718,
+   "bytes": 104362,
+   "commonsTitle": "File:Handmade oil painting reproduction of Ibn Battuta in Egypt, a painting by Hippolyte Leon Benett..jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Handmade_oil_painting_reproduction_of_Ibn_Battuta_in_Egypt,_a_painting_by_Hippolyte_Leon_Benett..jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Léon Benett",
+   "usedBy": [
+    "g4enr-exp-022"
+   ]
+  },
+  {
+   "file": "happy-child.jpg",
+   "width": 500,
+   "height": 456,
+   "bytes": 46733,
+   "commonsTitle": "File:Happy child.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Happy_child.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "امید رستمی نیا",
+   "usedBy": [
+    "g4eng-adj-022"
+   ]
+  },
+  {
+   "file": "hat.jpg",
+   "width": 500,
+   "height": 281,
+   "bytes": 39271,
+   "commonsTitle": "File:Hat.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Hat.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Deavmi",
+   "usedBy": [
+    "g4eng-noun-027"
+   ]
+  },
+  {
+   "file": "horse.jpg",
+   "width": 300,
+   "height": 450,
+   "bytes": 42648,
+   "commonsTitle": "File:Horse.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Horse.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "投稿者。the poster",
+   "usedBy": [
+    "g5fr-nom-038"
+   ]
+  },
+  {
+   "file": "hydroelectric-dam.jpg",
+   "width": 500,
+   "height": 374,
+   "bytes": 19017,
+   "commonsTitle": "File:Hydroelectric dam.png",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Hydroelectric_dam.png",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": null,
+   "usedBy": [
+    "g5sci-enr-ene-003"
+   ]
+  },
+  {
+   "file": "iceberg-greenland-sea.jpg",
+   "width": 960,
+   "height": 617,
+   "bytes": 90600,
+   "commonsTitle": "File:Iceberg, Greenland Sea (js)1.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Iceberg,_Greenland_Sea_(js)1.jpg",
+   "licence": "CC BY 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/3.0",
+   "author": "Jerzy Strzelecki",
+   "usedBy": [
+    "g6eng-voc-021"
+   ]
+  },
+  {
+   "file": "ignoto-portoghese-ritratto-di-un-cavaliere-dell-ordine-di-cr.jpg",
+   "width": 500,
+   "height": 679,
+   "bytes": 100253,
+   "commonsTitle": "File:Ignoto portoghese, ritratto di un cavaliere dell'ordine di cristo, 1525-50 ca. 02.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Ignoto_portoghese,_ritratto_di_un_cavaliere_dell%27ordine_di_cristo,_1525-50_ca._02.jpg",
+   "licence": "CC BY 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/3.0",
+   "author": "Sailko",
+   "usedBy": [
+    "g4enr-exp-020"
+   ]
+  },
+  {
+   "file": "ile-aux-aigrettes.jpg",
+   "width": 960,
+   "height": 720,
+   "bytes": 127426,
+   "commonsTitle": "File:Ile aux Aigrettes (6219450442).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Ile_aux_Aigrettes_(6219450442).jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "carrotmadman6 from Mauritius",
+   "usedBy": [
+    "g4h-voy-023"
+   ]
+  },
+  {
+   "file": "jumping.jpg",
+   "width": 500,
+   "height": 381,
+   "bytes": 72347,
+   "commonsTitle": "File:Jumping.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Jumping.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Limor Noah",
+   "usedBy": [
+    "g6fr-lec-047"
+   ]
+  },
+  {
+   "file": "jupiter-opal-2024.jpg",
+   "width": 500,
+   "height": 453,
+   "bytes": 26241,
+   "commonsTitle": "File:Jupiter OPAL 2024.png",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Jupiter_OPAL_2024.png",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "NASA/STSCI (S.T.A.R.S)",
+   "usedBy": [
+    "g6sci-enr-sol-005"
+   ]
+  },
+  {
+   "file": "karthala-volcano-comoros.jpg",
+   "width": 960,
+   "height": 720,
+   "bytes": 216848,
+   "commonsTitle": "File:Karthala volcano-Comoros.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Karthala_volcano-Comoros.jpg",
+   "licence": "CC BY-SA 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+   "author": "alKomor.com",
+   "usedBy": [
+    "g5hg-vol-023"
+   ]
+  },
+  {
+   "file": "lake-idro-italy-2005-08-16.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 61468,
+   "commonsTitle": "File:Lake Idro Italy 2005-08-16.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Lake_Idro_Italy_2005-08-16.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "No machine-readable author provided. Marius~commonswiki assumed (based on copyright claims).",
+   "usedBy": [
+    "g6sci-enr-eco-007"
+   ]
+  },
+  {
+   "file": "le-morne-brabant.jpg",
+   "width": 960,
+   "height": 643,
+   "bytes": 129101,
+   "commonsTitle": "File:Le Morne Brabant.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Le_Morne_Brabant.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "LisanneD",
+   "usedBy": [
+    "g6hg-ch-020"
+   ]
+  },
+  {
+   "file": "lighthouse.jpg",
+   "width": 350,
+   "height": 263,
+   "bytes": 11596,
+   "commonsTitle": "File:Lighthouse.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Lighthouse.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": null,
+   "usedBy": [
+    "g6eng-voc-022"
+   ]
+  },
+  {
+   "file": "lightning.jpg",
+   "width": 500,
+   "height": 242,
+   "bytes": 8231,
+   "commonsTitle": "File:Lightning.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Lightning.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": null,
+   "usedBy": [
+    "g4ge-weather-020"
+   ]
+  },
+  {
+   "file": "loxodonta-africana.jpg",
+   "width": 500,
+   "height": 402,
+   "bytes": 79603,
+   "commonsTitle": "File:Loxodonta africana.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Loxodonta_africana.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": null,
+   "usedBy": [
+    "g4eng-adj-020"
+   ]
+  },
+  {
+   "file": "magnifying-glass.jpg",
+   "width": 500,
+   "height": 793,
+   "bytes": 39142,
+   "commonsTitle": "File:Magnifying glass.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Magnifying_glass.jpg",
+   "licence": "CC BY 2.5",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.5",
+   "author": "Tomomarusan",
+   "usedBy": [
+    "g4sci-enr-equ-004"
+   ]
+  },
+  {
+   "file": "maize-seeds-germination.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 117410,
+   "commonsTitle": "File:Maize seeds germination.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Maize_seeds_germination.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "TheMbgold (MBart)",
+   "usedBy": [
+    "g4s-plt-021",
+    "g5sci-pl-027"
+   ]
+  },
+  {
+   "file": "man-running.jpg",
+   "width": 960,
+   "height": 720,
+   "bytes": 251125,
+   "commonsTitle": "File:Man runs at East River Park, December 2021.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Man_runs_at_East_River_Park,_December_2021.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Wil540 art",
+   "usedBy": [
+    "g4eng-noun-025"
+   ]
+  },
+  {
+   "file": "mars-august-30-2021-flickr-kevin-m-gill.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 21660,
+   "commonsTitle": "File:Mars - August 30 2021 - Flickr - Kevin M. Gill.png",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Mars_-_August_30_2021_-_Flickr_-_Kevin_M._Gill.png",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Kevin Gill from Los Angeles, CA, United States",
+   "usedBy": [
+    "g6sci-enr-sol-004"
+   ]
+  },
+  {
+   "file": "mauritius-kestrel-falco-punctatus-2.jpg",
+   "width": 500,
+   "height": 750,
+   "bytes": 65087,
+   "commonsTitle": "File:Mauritius kestrel (Falco punctatus) 2.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Mauritius_kestrel_(Falco_punctatus)_2.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Charles J. Sharp",
+   "usedBy": [
+    "g5sci-enr-end-006"
+   ]
+  },
+  {
+   "file": "mauritius-ornate-day-gecko-phelsuma-ornata.jpg",
+   "width": 500,
+   "height": 250,
+   "bytes": 33431,
+   "commonsTitle": "File:Mauritius ornate day gecko (Phelsuma ornata).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Mauritius_ornate_day_gecko_(Phelsuma_ornata).jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Charles J. Sharp",
+   "usedBy": [
+    "g4sci-enr-ani-006"
+   ]
+  },
+  {
+   "file": "mauritius-satellite.jpg",
+   "width": 960,
+   "height": 1372,
+   "bytes": 335068,
+   "commonsTitle": "File:Mauritius OnEarth WMS.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Mauritius_OnEarth_WMS.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Hautala",
+   "usedBy": [
+    "g6hg-ind-023"
+   ]
+  },
+  {
+   "file": "measuring-cylinder-hg.jpg",
+   "width": 500,
+   "height": 1170,
+   "bytes": 182379,
+   "commonsTitle": "File:Measuring cylinder hg.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Measuring_cylinder_hg.jpg",
+   "licence": "CC BY-SA 2.5",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+   "author": "Hannes Grobe 19:05, 3 September 2006 (UTC)",
+   "usedBy": [
+    "g4sci-enr-equ-006"
+   ]
+  },
+  {
+   "file": "mercury-in-true-color.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 54121,
+   "commonsTitle": "File:Mercury in true color.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Mercury_in_true_color.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "NASA/Johns Hopkins University Applied Physics Laboratory/Arizona State University/Carnegie Institution of Washington",
+   "usedBy": [
+    "g6sci-enr-sol-001"
+   ]
+  },
+  {
+   "file": "meteosat-12-fci-march-equinox-2025-noon.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 83205,
+   "commonsTitle": "File:Meteosat-12-fci-march-equinox-2025-noon.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Meteosat-12-fci-march-equinox-2025-noon.jpg",
+   "licence": "Attribution",
+   "licenceUrl": null,
+   "author": "EUMETSAT",
+   "usedBy": [
+    "g6sci-enr-sol-003"
+   ]
+  },
+  {
+   "file": "mountain.jpg",
+   "width": 500,
+   "height": 327,
+   "bytes": 46106,
+   "commonsTitle": "File:Mountain.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Peak_of_the_Matterhorn,_seen_from_Zermatt,_Switzerland.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Alps",
+   "usedBy": [
+    "g5fr-nom-040"
+   ]
+  },
+  {
+   "file": "neptune-voyager2-color-calibrated.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 11525,
+   "commonsTitle": "File:Neptune Voyager2 color calibrated.png",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Neptune_Voyager2_color_calibrated.png",
+   "licence": "CC0",
+   "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "author": "NASA / Voyager 2 / PDS / OPUS / Ardenau4",
+   "usedBy": [
+    "g6sci-enr-sol-008"
+   ]
+  },
+  {
+   "file": "notebook-writing-man-book-person-blur-1176206.jpg",
+   "width": 500,
+   "height": 334,
+   "bytes": 30095,
+   "commonsTitle": "File:Notebook-writing-man-book-person-blur-1176206.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Notebook-writing-man-book-person-blur-1176206.jpg",
+   "licence": "CC0",
+   "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "author": "PxHere",
+   "usedBy": [
+    "g6fr-lec-037"
+   ]
+  },
+  {
+   "file": "optical-microscope-nikon-alphaphot.jpg",
+   "width": 500,
+   "height": 757,
+   "bytes": 73604,
+   "commonsTitle": "File:Optical microscope nikon alphaphot.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Optical_microscope_nikon_alphaphot.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "GcG(jawp)",
+   "usedBy": [
+    "g4sci-enr-equ-005"
+   ]
+  },
+  {
+   "file": "optical-microscope.jpg",
+   "width": 960,
+   "height": 1280,
+   "bytes": 167177,
+   "commonsTitle": "File:Microscope optique.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Microscope_optique.JPG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Nico10310",
+   "usedBy": [
+    "g5eng-voc-023"
+   ]
+  },
+  {
+   "file": "pacific-ocean-as-viewed-from-goes-18-on-september-23-2023.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 104103,
+   "commonsTitle": "File:Pacific Ocean as viewed from GOES-18 on September 23, 2023.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Pacific_Ocean_as_viewed_from_GOES-18_on_September_23,_2023.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "ABI imagery from NOAA's GOES-18 Satellite",
+   "usedBy": [
+    "g6sci-enr-eco-006"
+   ]
+  },
+  {
+   "file": "palace-of-westminster-from-the-dome-on-methodist-central-hal.jpg",
+   "width": 500,
+   "height": 333,
+   "bytes": 65027,
+   "commonsTitle": "File:Palace of Westminster from the dome on Methodist Central Hall.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Colin",
+   "usedBy": [
+    "g6eng-voc-020"
+   ]
+  },
+  {
+   "file": "pezophaps-solitaria.jpg",
+   "width": 500,
+   "height": 569,
+   "bytes": 61016,
+   "commonsTitle": "File:Pezophaps solitaria.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Pezophaps_solitaria.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "C. L. Griesbach (d. 13-Apr-1907)",
+   "usedBy": [
+    "g5sci-enr-end-003"
+   ]
+  },
+  {
+   "file": "photovoltaic-panels.jpg",
+   "width": 500,
+   "height": 667,
+   "bytes": 91964,
+   "commonsTitle": "File:Photovoltaic Panels.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Photovoltaic_Panels.JPG",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Noggen13",
+   "usedBy": [
+    "g5sci-enr-ene-005"
+   ]
+  },
+  {
+   "file": "pink-pigeon-mauritius.jpg",
+   "width": 960,
+   "height": 808,
+   "bytes": 193796,
+   "commonsTitle": "File:Pink Pigeon (Nesoenas mayeri), Mauritius (16810225975).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Pink_Pigeon_(Nesoenas_mayeri),_Mauritius_(16810225975).jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "gailhampshire from Cradley, Malvern, U.K",
+   "usedBy": [
+    "g4h-voy-021"
+   ]
+  },
+  {
+   "file": "pink-pigeon-nesoenas-mayeri-1.jpg",
+   "width": 500,
+   "height": 392,
+   "bytes": 33443,
+   "commonsTitle": "File:Pink pigeon (Nesoenas mayeri) 1.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Pink_pigeon_(Nesoenas_mayeri)_1.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Charles J. Sharp",
+   "usedBy": [
+    "g5sci-enr-end-001"
+   ]
+  },
+  {
+   "file": "pink-pigeon-rwd2.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 43648,
+   "commonsTitle": "File:Pink Pigeon RWD2.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Pink_Pigeon_RWD2.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "DickDaniels ( http://carolinabirds.org/ )",
+   "usedBy": [
+    "g4s-ani-022",
+    "g5sci-an-023"
+   ]
+  },
+  {
+   "file": "piton-de-la-fournaise-eruption.jpg",
+   "width": 631,
+   "height": 924,
+   "bytes": 77831,
+   "commonsTitle": "File:Piton de la Fournaise 1981 eruption.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Piton_de_la_Fournaise_1981_eruption.JPG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Jean-Claude Hanon",
+   "usedBy": [
+    "g5hg-vol-022"
+   ]
+  },
+  {
+   "file": "plastic-chair.jpg",
+   "width": 960,
+   "height": 1280,
+   "bytes": 292724,
+   "commonsTitle": "File:Plastic outdoor chair 1 2017-06-14.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Plastic_outdoor_chair_1_2017-06-14.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "F ASTILY",
+   "usedBy": [
+    "g4eng-noun-022"
+   ]
+  },
+  {
+   "file": "portrait-of-zheng-he-published-about-1600.jpg",
+   "width": 500,
+   "height": 863,
+   "bytes": 132871,
+   "commonsTitle": "File:Portrait of Zheng He, published about 1600.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Portrait_of_Zheng_He,_published_about_1600.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": null,
+   "usedBy": [
+    "g4enr-exp-021"
+   ]
+  },
+  {
+   "file": "prop-roots-of-maize-plant.jpg",
+   "width": 500,
+   "height": 281,
+   "bytes": 54198,
+   "commonsTitle": "File:Prop roots of Maize plant.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Prop_roots_of_Maize_plant.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Krish Dulal",
+   "usedBy": [
+    "g4s-plt-023",
+    "g5sci-pl-030"
+   ]
+  },
+  {
+   "file": "pteropus-niger.jpg",
+   "width": 500,
+   "height": 372,
+   "bytes": 24974,
+   "commonsTitle": "File:Pteropus niger.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Pteropus_niger.JPG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Luis Correia",
+   "usedBy": [
+    "g5sci-enr-end-004"
+   ]
+  },
+  {
+   "file": "rain.jpg",
+   "width": 500,
+   "height": 317,
+   "bytes": 43932,
+   "commonsTitle": "File:Rain.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Rain.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Wolfgang Staudt",
+   "usedBy": [
+    "g5fr-voc-041"
+   ]
+  },
+  {
+   "file": "rainbow.jpg",
+   "width": 350,
+   "height": 210,
+   "bytes": 40600,
+   "commonsTitle": "File:Rainbow.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Name.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": null,
+   "usedBy": [
+    "g4eng-adj-026"
+   ]
+  },
+  {
+   "file": "red-apple.jpg",
+   "width": 500,
+   "height": 453,
+   "bytes": 47493,
+   "commonsTitle": "File:Red Apple.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Red_Apple.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Abhijit Tembhekar from Mumbai, India",
+   "usedBy": [
+    "g4eng-noun-021",
+    "g4eng-adj-021"
+   ]
+  },
+  {
+   "file": "roof.jpg",
+   "width": 250,
+   "height": 167,
+   "bytes": 13433,
+   "commonsTitle": "File:Roof.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Roof.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Mike.d.moon",
+   "usedBy": [
+    "g5fr-nom-037"
+   ]
+  },
+  {
+   "file": "rub-al-khali-002.jpg",
+   "width": 500,
+   "height": 280,
+   "bytes": 19185,
+   "commonsTitle": "File:Rub al Khali 002.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Rub_al_Khali_002.JPG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "Nepenthes",
+   "usedBy": [
+    "g6sci-enr-eco-005"
+   ]
+  },
+  {
+   "file": "ruler.jpg",
+   "width": 500,
+   "height": 667,
+   "bytes": 72903,
+   "commonsTitle": "File:Ruler.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Ruler.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "EdoardoRamalli",
+   "usedBy": [
+    "g4eng-noun-028"
+   ]
+  },
+  {
+   "file": "running.jpg",
+   "width": 500,
+   "height": 225,
+   "bytes": 35008,
+   "commonsTitle": "File:Running.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Running.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Aubrey",
+   "usedBy": [
+    "g6fr-lec-039"
+   ]
+  },
+  {
+   "file": "sailing-ship.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 68996,
+   "commonsTitle": "File:Sailing ship.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Sailing_ship.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Unknown author Unknown author",
+   "usedBy": [
+    "g4h-voy-024"
+   ]
+  },
+  {
+   "file": "saturn-global-view-from-cassini-rings-open-better-colour.jpg",
+   "width": 500,
+   "height": 200,
+   "bytes": 9696,
+   "commonsTitle": "File:Saturn global view from Cassini, rings open Better Colour.png",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Saturn_global_view_from_Cassini,_rings_open_Better_Colour.png",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "NASA / JPL-Caltech / SSI / color composite by Gordan Ugarkovic",
+   "usedBy": [
+    "g6sci-enr-sol-006"
+   ]
+  },
+  {
+   "file": "scene-marche.jpg",
+   "width": 1040,
+   "height": 693,
+   "bytes": 187026,
+   "commonsTitle": "File:DFC 1758 Vendors busy arranging fresh vegetables at a lively outdoor market stall preparing produce for customers.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:DFC_1758_Vendors_busy_arranging_fresh_vegetables_at_a_lively_outdoor_market_stall_preparing_produce_for_customers.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "PattayaPatrol",
+   "usedBy": [
+    "_G5IMG_MARCHE"
+   ]
+  },
+  {
+   "file": "scene-plage.jpg",
+   "width": 1040,
+   "height": 693,
+   "bytes": 190673,
+   "commonsTitle": "File:Children playing in the sands on a beach in the Philippines.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Children_playing_in_the_sands_on_a_beach_in_the_Philippines.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Øyvind Holmstad",
+   "usedBy": [
+    "_G4IMG_PLAGE"
+   ]
+  },
+  {
+   "file": "scene-plantation.jpg",
+   "width": 500,
+   "height": 334,
+   "bytes": 74249,
+   "commonsTitle": "File:Children planting plants in Seychelles.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Children_planting_plants_in_Seychelles.jpg",
+   "licence": "CC BY 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+   "author": "Joena Bonnelame, Seychelles News Agency",
+   "usedBy": [
+    "_G6IMG_PLANTATION"
+   ]
+  },
+  {
+   "file": "scissors.jpg",
+   "width": 300,
+   "height": 197,
+   "bytes": 14436,
+   "commonsTitle": "File:Scissors.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Scissors.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": null,
+   "usedBy": [
+    "g4eng-noun-029"
+   ]
+  },
+  {
+   "file": "seewoosagur-ramgoolam-1970.jpg",
+   "width": 290,
+   "height": 370,
+   "bytes": 83712,
+   "commonsTitle": "File:Seewoosagur Ramgoolam, 1970.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Seewoosagur_Ramgoolam,_1970.jpg",
+   "licence": "CC BY 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+   "author": "European Communities",
+   "usedBy": [
+    "g6enr-per-020"
+   ]
+  },
+  {
+   "file": "simple-photosynthesis-overview.png",
+   "width": 500,
+   "height": 619,
+   "bytes": 53956,
+   "commonsTitle": "File:Simple photosynthesis overview.svg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Simple_photosynthesis_overview.svg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Daniel Mayer (mav) - original image Vector version by Yerpo",
+   "usedBy": [
+    "g4s-plt-022",
+    "g5sci-pl-029"
+   ]
+  },
+  {
+   "file": "singing.jpg",
+   "width": 500,
+   "height": 333,
+   "bytes": 63229,
+   "commonsTitle": "File:Singing.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Singing.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Amuzujoe",
+   "usedBy": [
+    "g6fr-lec-043"
+   ]
+  },
+  {
+   "file": "sleeping.jpg",
+   "width": 250,
+   "height": 187,
+   "bytes": 11992,
+   "commonsTitle": "File:Sleeping.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Sleeping.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "Rick10us",
+   "usedBy": [
+    "g6fr-lec-042"
+   ]
+  },
+  {
+   "file": "smiling.jpg",
+   "width": 500,
+   "height": 333,
+   "bytes": 29382,
+   "commonsTitle": "File:Smiling.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Smiling.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "vïkïng from Spain",
+   "usedBy": [
+    "g6fr-lec-048"
+   ]
+  },
+  {
+   "file": "soccer-ball-on-grass.jpg",
+   "width": 960,
+   "height": 640,
+   "bytes": 86030,
+   "commonsTitle": "File:Adidas soccer ball on a grass pitch (Unsplash).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Adidas_soccer_ball_on_a_grass_pitch_(Unsplash).jpg",
+   "licence": "CC0",
+   "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "author": "Peter Glaser baraida",
+   "usedBy": [
+    "g4eng-adj-024"
+   ]
+  },
+  {
+   "file": "solar-panels.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 63389,
+   "commonsTitle": "File:Solar Panels.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Solar_Panels.jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Fernando Tomás from Zaragoza, Spain",
+   "usedBy": [
+    "g5sci-enr-ene-001"
+   ]
+  },
+  {
+   "file": "sonneratia-alba-manado-2.jpg",
+   "width": 500,
+   "height": 750,
+   "bytes": 118981,
+   "commonsTitle": "File:Sonneratia alba - Manado (2).JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Sonneratia_alba_-_Manado_(2).JPG",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Ariefrahman",
+   "usedBy": [
+    "g6sci-enr-eco-002"
+   ]
+  },
+  {
+   "file": "spring-balance.jpg",
+   "width": 250,
+   "height": 817,
+   "bytes": 18754,
+   "commonsTitle": "File:Spring balance.PNG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Spring_balance.PNG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "The original uploader was Theresa knott at English Wikibooks .",
+   "usedBy": [
+    "g4sci-enr-equ-007"
+   ]
+  },
+  {
+   "file": "stack-of-books-spines.jpg",
+   "width": 960,
+   "height": 1440,
+   "bytes": 332701,
+   "commonsTitle": "File:積ん読@Dec 5,2010 (5233729309).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:%E7%A9%8D%E3%82%93%E8%AA%AD@Dec_5,2010_(5233729309).jpg",
+   "licence": "CC BY 2.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+   "author": "Hiroshi Ishii",
+   "usedBy": [
+    "g4eng-noun-020"
+   ]
+  },
+  {
+   "file": "swimming-pool.jpg",
+   "width": 500,
+   "height": 343,
+   "bytes": 60890,
+   "commonsTitle": "File:Swimming pool.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Swimming_pool.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Gegewitak",
+   "usedBy": [
+    "g6fr-lec-040"
+   ]
+  },
+  {
+   "file": "tarangire-natpark800600.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 63712,
+   "commonsTitle": "File:Tarangire-Natpark800600.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Tarangire-Natpark800600.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "ProfessorX",
+   "usedBy": [
+    "g6sci-enr-eco-004"
+   ]
+  },
+  {
+   "file": "the-sun-in-white-light.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 31474,
+   "commonsTitle": "File:The Sun in white light.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:The_Sun_in_white_light.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Matúš Motlo",
+   "usedBy": [
+    "g6sci-enr-sol-010"
+   ]
+  },
+  {
+   "file": "thermal-power-station.jpg",
+   "width": 500,
+   "height": 333,
+   "bytes": 35190,
+   "commonsTitle": "File:Thermal Power Station.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Thermal_Power_Station.JPG",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Duke Das",
+   "usedBy": [
+    "g5sci-enr-ene-004"
+   ]
+  },
+  {
+   "file": "thermometer.jpg",
+   "width": 500,
+   "height": 667,
+   "bytes": 153894,
+   "commonsTitle": "File:Thermometer.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Thermometer.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "M.Minderhoud at Dutch Wikipedia",
+   "usedBy": [
+    "g5eng-voc-024"
+   ]
+  },
+  {
+   "file": "trochetia-boutoniana-flower.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 59806,
+   "commonsTitle": "File:Trochetia boutoniana flower.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Trochetia_boutoniana_flower.jpg",
+   "licence": "CC BY 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+   "author": "Ben Dymond",
+   "usedBy": [
+    "g5sci-enr-end-005"
+   ]
+  },
+  {
+   "file": "trochetia-boutoniana.jpg",
+   "width": 960,
+   "height": 720,
+   "bytes": 159247,
+   "commonsTitle": "File:Trochetia boutoniana flower.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Trochetia_boutoniana_flower.jpg",
+   "licence": "CC BY 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+   "author": "Ben Dymond",
+   "usedBy": [
+    "g6hg-ind-022"
+   ]
+  },
+  {
+   "file": "tropical-rainforest-agumbe.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 110415,
+   "commonsTitle": "File:Tropical rainforest Agumbe.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Tropical_rainforest_Agumbe.jpg",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Anand Osuri",
+   "usedBy": [
+    "g5sci-an-022"
+   ]
+  },
+  {
+   "file": "trou-aux-cerfs-crater.jpg",
+   "width": 960,
+   "height": 640,
+   "bytes": 260511,
+   "commonsTitle": "File:Trou aux Cerfs Volcano Mauritius.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Trou_aux_Cerfs_Volcano_Mauritius.JPG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "author": "I rishki",
+   "usedBy": [
+    "g5hg-vol-020"
+   ]
+  },
+  {
+   "file": "turtle.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 43560,
+   "commonsTitle": "File:Turtle.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Turtle.jpg",
+   "licence": "CC BY 2.5",
+   "licenceUrl": "https://creativecommons.org/licenses/by/2.5",
+   "author": "Ricardo Barreto",
+   "usedBy": [
+    "g4eng-noun-031"
+   ]
+  },
+  {
+   "file": "uranus-voyager2-color-calibrated.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 11256,
+   "commonsTitle": "File:Uranus Voyager2 color calibrated.png",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Uranus_Voyager2_color_calibrated.png",
+   "licence": "CC0",
+   "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "author": "Ardenau4",
+   "usedBy": [
+    "g6sci-enr-sol-007"
+   ]
+  },
+  {
+   "file": "venus-from-mariner-10.jpg",
+   "width": 500,
+   "height": 500,
+   "bytes": 18803,
+   "commonsTitle": "File:Venus from Mariner 10.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Venus_from_Mariner_10.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "NASA/JPL-Caltech",
+   "usedBy": [
+    "g6sci-enr-sol-002"
+   ]
+  },
+  {
+   "file": "victoria-amazonica-mauritius.jpg",
+   "width": 960,
+   "height": 640,
+   "bytes": 233298,
+   "commonsTitle": "File:Nenuphare a l'Ile Maurice.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Nenuphare_a_l%27Ile_Maurice.JPG",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "No machine-readable author provided. CaptainHaddock assumed (based on copyright claims).",
+   "usedBy": [
+    "g6hg-ch-022"
+   ]
+  },
+  {
+   "file": "volcano.jpg",
+   "width": 291,
+   "height": 400,
+   "bytes": 135127,
+   "commonsTitle": "File:Volcano.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Volcano.jpg",
+   "licence": "CC BY-SA 3.0",
+   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+   "author": "Johann Michael Rottmayr",
+   "usedBy": [
+    "g5hg-vol-024"
+   ]
+  },
+  {
+   "file": "weather-station-rain-gauge.jpg",
+   "width": 500,
+   "height": 335,
+   "bytes": 48189,
+   "commonsTitle": "File:Weather station rain gauge.JPG",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Weather_station_rain_gauge.JPG",
+   "licence": "CC BY-SA 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "Ladd Observatory",
+   "usedBy": [
+    "g4sci-enr-equ-002"
+   ]
+  },
+  {
+   "file": "wind-turbines-8426360101.jpg",
+   "width": 500,
+   "height": 375,
+   "bytes": 45571,
+   "commonsTitle": "File:Wind turbines (8426360101).jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Wind_turbines_(8426360101).jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": "U.S. Fish and Wildlife Service Headquarters",
+   "usedBy": [
+    "g5sci-enr-ene-002"
+   ]
+  },
+  {
+   "file": "window.jpg",
+   "width": 239,
+   "height": 322,
+   "bytes": 27203,
+   "commonsTitle": "File:Window.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Window.jpg",
+   "licence": "Public domain",
+   "licenceUrl": null,
+   "author": null,
+   "usedBy": [
+    "g4fr-nom-036"
+   ]
+  },
+  {
+   "file": "wooden-table.jpg",
+   "width": 500,
+   "height": 667,
+   "bytes": 105032,
+   "commonsTitle": "File:Wooden table.jpg",
+   "filePage": "https://commons.wikimedia.org/wiki/File:Wooden_table.jpg",
+   "licence": "CC BY 4.0",
+   "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+   "author": null,
+   "usedBy": [
+    "g4fr-nom-038"
+   ]
+  }
+ ]
+}

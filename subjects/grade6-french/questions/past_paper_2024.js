@@ -1,6 +1,14 @@
 'use strict';
-// PSAC Grade 6 French 2024 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 French 2024 - past-paper questions adapted to MCQ format.
 // Source: MES Primary School Achievement Certificate Assessment 2024, French P130.
+//
+// Artwork cropped from the paper into assets/past-papers/g6-french-2024/.
+// Q8A is a picture story (one sentence per image) and cannot become an MCQ, so
+// it is a read-only viewer item.
+const _g6f24 = (file, alt) =>
+  `<img src="assets/past-papers/g6-french-2024/${file}.png" alt="${alt}"` +
+  ` style="display:block;margin:8px auto;max-width:min(100%,340px);height:auto;` +
+  `border-radius:6px;background:#fff">`;
 // Q2 (grammar fill-in) → STATIC_QUESTIONS; Q4A short-answer → PSAC_PDF_QUESTIONS.
 
 STATIC_QUESTIONS.push(
@@ -28,7 +36,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-pp24-004', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'Pour les fêtes de fin d\'année, ……………… les garçons auront un cadeau.',
     options:['tout','toute','tous','toutes'], answer:'tous',
-    hint:'L\'adjectif indéfini doit s\'accorder avec le nom qui suit — cherche son genre et son nombre.',
+    hint:'L\'adjectif indéfini doit s\'accorder avec le nom qui suit - cherche son genre et son nombre.',
     explanation:'Devant un nom masculin pluriel on utilise <em>tous</em>. Toutes les filles / tous les garçons.' }),
 
   makeMCQ({ id:'g6fr-pp24-005', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
@@ -46,7 +54,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-pp24-007', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
     question:'Ce livre d\'histoire contient une ……………… image du port.',
     options:['belle','belles','beau','beaux'], answer:'belle',
-    hint:'L\'adjectif doit s\'accorder avec le nom qu\'il qualifie — cherche le genre et le nombre de « image ».',
+    hint:'L\'adjectif doit s\'accorder avec le nom qu\'il qualifie - cherche le genre et le nombre de « image ».',
     explanation:'<em>Belle</em> s\'accorde avec le nom féminin singulier <em>image</em>. (Beau/bel → masculin.)' }),
 
   makeMCQ({ id:'g6fr-pp24-008', chapterId:'g6fr-lecture', subsection:'reperage', difficulty:1,
@@ -99,7 +107,7 @@ STATIC_QUESTIONS.push(
     hint:'Pour construire un nouveau bâtiment à cet endroit, l\'ancien doit ………….',
     explanation:'<em>Démolir</em> = détruire un bâtiment. Restaurer = rénover sans détruire.' }),
 
-  // ── Q4B : Compréhension MCQ — «&nbsp;Le moulin magique&nbsp;» (contes chinois) ──
+  // ── Q4B : Compréhension MCQ - «&nbsp;Le moulin magique&nbsp;» (contes chinois) ──
 
   makeMCQ({ id:'g6fr-pp24-016', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>Il y a fort longtemps deux frères vivaient en Chine : Wang, le grand frère, s\'empara de tout l\'héritage, et Chong, le petit frère, devint pauvre.</em><br><br>Wang et Chong sont ……………….',
@@ -135,8 +143,16 @@ STATIC_QUESTIONS.push(
 
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
-  { id:'g6fr-pp24-pdf-001', needsArtwork:true, chapterId:'g6fr-textes', marks:10, year:2024, grade:6, subject:'French',
-    question:'Q4A — Lis le texte sur Le Soleil (p.6) et complète la fiche : nom de l\'étoile, nombre d\'années depuis qu\'elle brille, température à sa surface, nom d\'une planète, deux choses qu\'elle nous donne, danger si on la fixe à l\'œil nu, son diamètre, ce que serait la Terre sans elle, exemple d\'espèce vivante dépendante.', type:'short' },
+  { id:'g6fr-pp24-pdf-001', chapterId:'g6fr-textes', marks:10, year:2024, grade:6, subject:'French',
+    question:'Q4A - Lis le texte sur Le Soleil (p.6) et complète la fiche : nom de l\'étoile, nombre d\'années depuis qu\'elle brille, température à sa surface, nom d\'une planète, deux choses qu\'elle nous donne, danger si on la fixe à l\'œil nu, son diamètre, ce que serait la Terre sans elle, exemple d\'espèce vivante dépendante.' +
+      _g6f24('q4a-soleil-terre', 'Une illustration du Soleil et, à côté, une petite planète, chacun avec son étiquette'),
+    type:'short' },
   { id:'g6fr-pp24-pdf-002', chapterId:'g6fr-textes', marks:15, year:2024, grade:6, subject:'French',
-    question:'Q4B — Réponds aux questions sur le conte « Le moulin magique » (Wang et Chong) : Q6–Q10 demandent des réponses courtes sur les actions de Chong et Wang ; Q11 remet 3 événements dans l\'ordre.', type:'short' }
+    question:'Q4B - Réponds aux questions sur le conte « Le moulin magique » (Wang et Chong) : Q6–Q10 demandent des réponses courtes sur les actions de Chong et Wang ; Q11 remet 3 événements dans l\'ordre.', type:'short' },
+  { id:'g6fr-pp24-pdf-003', chapterId:'g6fr-images', marks:6, year:2024, grade:6, subject:'French',
+    question:'Q8A - Raconte l\'histoire ci-dessous en écrivant <b>une phrase par image</b> avec les mots donnés : ' +
+      '<b>(1)</b> pendant &ndash; se promener &ndash; jouet &nbsp; <b>(2)</b> heureusement &ndash; ramasser &nbsp; <b>(3)</b> immédiatement &ndash; rendre.' +
+      _g6f24('q8a-histoire-images', 'Trois dessins en colonne montrant un enfant et des adultes dans la rue à trois moments'),
+    markScheme:'2 points par image : une phrase complète et correcte qui emploie les mots donnés et suit l\'histoire.',
+    type:'picture-story' }
 );

@@ -1,7 +1,7 @@
 'use strict';
 
 // Sub-topics for the Syllabus screen. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Adding a subsection means tagging questions for it.
 // Trailing comments are the question count at the time of generation.
 const G6ENG_SYLLABUS = {
@@ -60,6 +60,13 @@ const G6ENG_SYLLABUS = {
     { id:'report',          name:'Newspaper Reports' },  // 14
     { id:'story',           name:'Stories & Legends' },  // 5
   ]},
+  'g6eng-enr-joining': { subsections: [
+    { id:'relative',        name:'Relative pronouns' },  // 10
+    { id:'cause',           name:'Cause & reason' },  // 10
+    { id:'contrast',        name:'Contrast' },  // 10
+    { id:'time',            name:'Time' },  // 10
+    { id:'purpose_result',  name:'Purpose & result' },  // 10
+  ]},
 };
 
 
@@ -84,9 +91,36 @@ registerSubject({
   practiceble: true, notesBased: true, noDifficulty: true,
   badges: G6E_BADGES,
   syllabus: G6ENG_SYLLABUS,
+  // examWeight is a chapter's share of a 40-question exam. These come from the
+  // 2024 PSAC English paper's own mark allocation, not from how many questions
+  // each chapter happens to hold. One rule: give a question's marks to the
+  // chapter that teaches it, and take a chapter the exam pool cannot reach out
+  // of the denominator as well. Nothing here is unreachable, so all 100 marks
+  // are shared out.
+  //
+  //   Q1 matching 5 + Q8B joining 4       9  -> enr-joining        4
+  //   Q2 items 1/3/4/5/7 5 + Q6 share     9  -> nouns              3
+  //   Q2 items 2/6/8 3 + Q7A 5 + Q6      12  -> verbs              5
+  //   Q2 items 9/10 2 + Q5 10 + Q6       14  -> clauses            6
+  //   Q3A 5 + Q3B 5 + Q7B 5              15  -> vocabulary         6
+  //   Q4A retrieval 10 + Q4B story 15    25  -> comprehension 7, passages 3
+  //   Q8A picture story 6 + Q9 10        16  -> writing            6
+  //                                     100 marks -> 40 slots
+  //
+  // ⚠ Q6A/Q6B (10 marks) is a gap-fill story with no chapter of its own - the
+  //   French packs have Textes à Trous, English does not. Its answers are the
+  //   same skills Q2 tests (a determiner, two verbs, an adjective, a
+  //   preposition), so its marks go to nouns / verbs / clauses rather than
+  //   being dropped, which is why those three read higher than Q2 alone.
+  //
+  // Grammar takes 44 of the 100 marks and is meant to: this paper spends Q1,
+  // Q2, Q5, Q6, Q7A and Q8B there. The bank's problem was never that grammar
+  // was over-served in the exam - it was that comprehension had almost nothing
+  // to serve (11.8% of items), which questions/comprehension_passages.js fixed.
+  // scripts/test-exam-paper-shape.js holds the mix here.
   chapters: [
     {
-      id: 'g6eng-nouns', name: 'Nouns, Pronouns & Determiners', icon: '📝',
+      id: 'g6eng-nouns', examWeight: 3, name: 'Nouns, Pronouns & Determiners', icon: '📝',
       notes: [
         '**Abstract nouns** name ideas/feelings: courage, justice, beauty.',
         '**Collective nouns**: a flock of birds, a pride of lions, a swarm of bees.',
@@ -96,7 +130,7 @@ registerSubject({
       ],
     },
     {
-      id: 'g6eng-verbs', name: 'Verbs, Tenses & Voice', icon: '🏃',
+      id: 'g6eng-verbs', examWeight: 5, name: 'Verbs, Tenses & Voice', icon: '🏃',
       notes: [
         '**Present perfect**: have/has + past participle. "She has visited Paris." (past with present relevance)',
         '**Past perfect**: had + past participle. "They had already left when I arrived."',
@@ -107,7 +141,7 @@ registerSubject({
       ],
     },
     {
-      id: 'g6eng-clauses', name: 'Clauses & Sentence Structure', icon: '🔗',
+      id: 'g6eng-clauses', examWeight: 6, name: 'Clauses & Sentence Structure', icon: '🔗',
       notes: [
         'A **main clause** can stand alone. A **subordinate clause** cannot.',
         '**Conjunctions** join clauses: *because, although, while, unless, until, since, when, if*.',
@@ -117,7 +151,7 @@ registerSubject({
       ],
     },
     {
-      id: 'g6eng-comprehension', name: 'Reading & Critical Thinking', icon: '🔍',
+      id: 'g6eng-comprehension', examWeight: 7, name: 'Reading & Critical Thinking', icon: '🔍',
       notes: [
         '**Inference** questions: The answer is not directly stated - deduce from clues.',
         '**Author\'s purpose**: to inform, to persuade, to entertain, to describe.',
@@ -128,7 +162,7 @@ registerSubject({
       ],
     },
     {
-      id: 'g6eng-writing', name: 'Essay & Formal Writing', icon: '✏️',
+      id: 'g6eng-writing', examWeight: 6, name: 'Essay & Formal Writing', icon: '✏️',
       notes: [
         '**Essay structure**: Introduction (hook + thesis) → Body paragraphs (point + evidence + explanation) → Conclusion (summary + final thought).',
         '**Formal letter**: Date | Address | Dear Sir/Madam | Body | Yours faithfully/sincerely | Name.',
@@ -138,7 +172,7 @@ registerSubject({
       ],
     },
     {
-      id: 'g6eng-vocabulary', name: 'Advanced Vocabulary', icon: '🔤',
+      id: 'g6eng-vocabulary', examWeight: 6, name: 'Advanced Vocabulary', icon: '🔤',
       notes: [
         '**Homonyms** - same spelling/sound, different meaning: bear (animal / to carry), bank (river bank / financial bank).',
         '**Homophones**: affect/effect, principle/principal, stationary/stationery, complement/compliment.',
@@ -148,7 +182,7 @@ registerSubject({
       ],
     },
     {
-      id: 'g6eng-passages', name: 'Passages & Text Types', icon: '📄',
+      id: 'g6eng-passages', examWeight: 3, name: 'Passages & Text Types', icon: '📄',
       notes: [
         '**Formal letter**: the RE: line states the request. *Dear Sir/Madam* → *Yours faithfully*; *Dear Mr Smith* → *Yours sincerely*.',
         '**Newspaper report**: written as an **inverted pyramid** - the first paragraph carries who, what, where and when.',
@@ -159,6 +193,14 @@ registerSubject({
         '**Report with a table**: check a claim against **every row**, and use the text to interpret the figures.',
         'Watch the verbs: *is considering* is not *has decided*. Whole marks turn on one word.',
       ],
+    },
+    // @enrichment - DERIVED from the syllabus (relative pronouns, conjunctions,
+    // subordinate clauses), NOT a direct MIE chapter. DO NOT remove during
+    // syllabus alignment audits. Shows as a gold "BONUS" card.
+    {
+      id: 'g6eng-enr-joining', name: 'Joining Sentences', icon: '🔗',
+      enrichment: true, examWeight: 4,
+      enrichmentNote: 'The PSAC task "Join the two sentences using the word given", at its hardest: non-defining clauses and their commas, "whom" after a preposition, participle joining, whereas / despite, and the semicolon that "however" needs.',
     },
   ],
 });

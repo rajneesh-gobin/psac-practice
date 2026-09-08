@@ -74,6 +74,7 @@ const API_REDIRECTS = {
   '/api/pending-registrations': 'pending-registrations',
   '/api/admin-account-recovery': 'admin-account-recovery',
   '/api/admin-member-emails': 'admin-member-emails',
+  '/api/admin-teacher-activity': 'admin-teacher-activity',
   '/api/assignment-open':    'assignment-open',
   '/api/assignment-submit':  'assignment-submit',
 };

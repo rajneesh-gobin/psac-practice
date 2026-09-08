@@ -54,7 +54,7 @@ STATIC_QUESTIONS.push(
     question:'Which word correctly completes: "He spoke ___ loudly that everyone could hear."',
     options:['so','such','very','too'],
     answer:'so',
-    hint:'"So + adjective/adverb" expresses degree and often pairs with "that".',
+    hint:'One of these pairs with "that" to show degree; another needs "a" and a noun after it.',
     explanation:'"<b>So</b>" is correct: "He spoke <b>so</b> loudly that everyone could hear." "So...that" shows cause and effect. "Such" is used before a noun phrase: "such a loud voice that..."' }),
 
   makeMCQ({ id:'g5eng-adj-008', chapterId:'eng-adjectives', subsection:'adverbs', difficulty:1,
@@ -93,12 +93,12 @@ STATIC_QUESTIONS.push(
     options:[
       'She always is late for school.',
       'He sometimes eats pizza for dinner.',
-      'They never do are on time.',
-      'We often to play in the park.'
+      'We go always to the beach on Sunday.',
+      'They eat never rice for breakfast.'
     ],
     answer:'He sometimes eats pizza for dinner.',
     hint:'Adverbs of frequency (always, often, sometimes, never) go BEFORE the main verb but AFTER "be".',
-    explanation:'"<b>He sometimes eats</b>" is correct - "sometimes" is placed before the main verb. With "be": "She is always late" (after be). Pattern: subject + adverb + main verb. "Always is late" is wrong (always goes after "is" with be: "is always").' }),
+    explanation:'The pattern is subject + adverb + main verb, but with "be" the adverb comes after it: "She <b>is always</b> late." So <b>He sometimes eats</b> is the right one. The other three all misplace the adverb: "always is" should be "is always", "go always" should be "always go", and "eat never" should be "never eat".' }),
 
   makeMCQ({ id:'g5eng-adj-013', chapterId:'eng-adjectives', subsection:'comparatives', difficulty:2,
     question:'What are the COMPARATIVE and SUPERLATIVE of "good"?',

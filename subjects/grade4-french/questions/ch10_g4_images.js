@@ -52,7 +52,7 @@ function _g4imgPanel(x, n, inner) {
 // alt générique : il ne doit JAMAIS donner la réponse.
 function _g4imgPhoto(file, credit) {
   return `<figure style="margin:6px 0">
-    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/${file}?width=900"
+    <img src="assets/questions/${file}"
       alt="Une image à décrire" loading="lazy"
       style="width:100%;max-width:520px;height:auto;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.15)">
     <figcaption style="font-size:.68em;color:#94a3b8;margin-top:3px">${credit}</figcaption>
@@ -60,7 +60,7 @@ function _g4imgPhoto(file, credit) {
 }
 
 const _G4IMG_PLAGE = _g4imgPhoto(
-  'Children%20playing%20in%20the%20sands%20on%20a%20beach%20in%20the%20Philippines.jpg',
+  'scene-plage.jpg',
   'Photo : Øyvind Holmstad, Wikimedia Commons, CC BY-SA 4.0');
 
 // ── SCÈNE 2 : trois images - le ballon perdu ──────────────────────────
@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
     options:[`sur`, `sous`, `dans le ciel`, `derrière`],
     answer:`sur`,
     hint:`Ils sont posés dessus, pas enterrés dessous.`,
-    explanation:`« Les enfants jouent <b>sur</b> le sable » : ils sont <b>à la surface</b>. (On peut aussi dire « dans le sable » — mais jamais « sous » ni « derrière » !) Les prépositions de lieu sont indispensables pour décrire une image : <b>sur, sous, dans, devant, derrière, à côté de, entre</b>.` }),
+    explanation:`« Les enfants jouent <b>sur</b> le sable » : ils sont <b>à la surface</b>. (On peut aussi dire « dans le sable » - mais jamais « sous » ni « derrière » !) Les prépositions de lieu sont indispensables pour décrire une image : <b>sur, sous, dans, devant, derrière, à côté de, entre</b>.` }),
 
   makeMCQ({ id:`g4fr-img-006`, chapterId:'g4fr-images', subsection:'une_image', difficulty:2,
     question:`${_G4IMG_CONS1}${_G4IMG_PLAGE}Qu\'y a-t-il derrière les enfants, tout au fond ?`,

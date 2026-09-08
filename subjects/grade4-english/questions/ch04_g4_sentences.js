@@ -28,7 +28,7 @@ STATIC_QUESTIONS.push(
     question:'What type of sentence is: "Please sit down."',
     options:['Statement','Question','Exclamation','Command'],
     answer:'Command',
-    hint:'A command gives an instruction or order. The verb often comes first.',
+    hint:'This sentence tells someone to do something. Look at where the verb sits and who the sentence is aimed at.',
     explanation:'"Please sit down" is a <b>command</b> - it gives an instruction or order. Commands often begin with a verb: "Sit down.", "Open your book.", "Come here." They can end with a full stop or exclamation mark.' }),
 
   makeMCQ({ id:'g4eng-sent-005', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:2,
@@ -51,7 +51,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>I bought milk, bread, and eggs.</b>" - Commas go between items in a list: item1, item2, and item3. The comma before "and" is optional but acceptable. Never put a comma right after the verb or before the first item.' }),
 
   makeMCQ({ id:'g4eng-sent-007', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:2,
-    question:'Which sentence uses the APOSTROPHE for POSSESSION correctly?',
+    question:'Which sentence uses the APOSTROPHE correctly to show that the bowl belongs to ONE dog?',
     options:[
       "The dog\'s bowl is empty.",
       "The dogs bowl is empty.",
@@ -59,8 +59,8 @@ STATIC_QUESTIONS.push(
       "The dog is bowl is empty."
     ],
     answer:"The dog\'s bowl is empty.",
-    hint:'There is one dog. To show that the bowl belongs to the dog, add apostrophe + s.',
-    explanation:'"<b>The dog\'s bowl</b>" - for a singular noun, add apostrophe + s to show possession (belonging). If plural: the dogs\' bowls (apostrophe after the s). Possession apostrophe: Tom\'s book, the cat\'s tail, the teacher\'s pen.' }),
+    hint:'For a singular noun, add apostrophe + s. A plural already ending in -s takes the apostrophe after the s.',
+    explanation:'For a singular noun, add apostrophe + s to show possession: Tom\'s book, the cat\'s tail, the teacher\'s pen. So <b>the dog\'s bowl</b> is the right one here. "The dogs\' bowl" would mean several dogs sharing it, and "the dogs bowl" has no apostrophe at all.' }),
 
   makeMCQ({ id:'g4eng-sent-008', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:2,
     question:'Which sentence uses INVERTED COMMAS (speech marks) correctly?',
@@ -169,7 +169,7 @@ STATIC_QUESTIONS.push(
     question:'What type of sentence is: "How amazing the view from the mountain is!"',
     options:['Statement','Question','Exclamation','Command'],
     answer:'Exclamation',
-    hint:'This sentence begins with "How" and ends with an exclamation mark. It expresses strong feeling.',
+    hint:'Look at the punctuation at the end, and at how strong the feeling is.',
     explanation:'"<b>Exclamation</b>" - sentences beginning with "What" or "How" that express strong feeling are exclamatory sentences, ending with "!". Examples: "What a wonderful day!" / "How beautiful the flowers are!" Note: commands can also end in "!" - the key is the "What/How" pattern and strong emotion.' }),
 
   makeMCQ({ id:'g4eng-sent-019', chapterId:'g4eng-sentences', subsection:'punctuation', difficulty:4,

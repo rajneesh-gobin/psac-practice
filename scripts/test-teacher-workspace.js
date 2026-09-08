@@ -64,6 +64,15 @@ vm.runInContext(fs.readFileSync('engine/teacher_workspace.js', 'utf8') + '\nthis
     {name:'C',total:10,pct:100,submitted_at:'2026-09-04'}]);
   assert.equal(ranked.map(x=>x.rank).join(','),'1,1,3');
   assert.equal(ranked.length,3);
+  const summary=w.summarizeRows([
+    {name:'Submitted',submitted_at:'2026-09-04',pct:80},
+    {name:'Working',submitted_at:null,not_started:false},
+    {name:'Waiting',submitted_at:null,not_started:true},
+    {name:'Submitted too',submitted_at:'2026-09-04',pct:100}]);
+  assert.equal(summary.submitted.length,2);
+  assert.equal(summary.inProgress.length,1);
+  assert.equal(summary.notStarted.length,1);
+  assert.equal(summary.average,90);
   await w.results('assignment-b','tc-assignment-results',true);
   assert.match(get('tc-assignment-results').children[0].textContent,/require a PIN/);
   let resolve;

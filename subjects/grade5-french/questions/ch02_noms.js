@@ -171,12 +171,12 @@ STATIC_QUESTIONS.push(
     hint:'Verbe → nom : construire + -tion.',
     explanation:'"<b>construction</b>" - Le suffixe <b>-tion</b> forme des noms à partir de verbes : construire → construction, réaliser → réalisation, utiliser → utilisation. Ces noms sont toujours féminins : la construction, une réalisation.' }),
 
-  makeMCQ({ id:'g5fr-nom-024', chapterId:'fr-noms', subsection:'pluriel', difficulty:1,
-    question:'Quel est le pluriel IRRÉGULIER de "un œil" ?',
-    options:['des œils','des œilles','des yeux','des œillets'],
-    answer:'des yeux',
-    hint:'Le pluriel de "œil" est complètement irrégulier - un mot différent !',
-    explanation:'"<b>des yeux</b>" - "un œil" → "des yeux" est un pluriel irrégulier (suppletif). Le mot change complètement. Un autre exemple irrégulier : "un monsieur" → "des messieurs" (pas "des monsieurs").' }),
+  makeMCQ({ id:'g5fr-nom-024', chapterId:'fr-noms', subsection:'pluriel', difficulty:3,
+    question:'Quel est le pluriel de « un bijou » ?',
+    options:['des bijoux','des bijous','des bijoues','des bijoies'],
+    answer:'des bijoux',
+    hint:'Sept noms en -ou prennent un x au pluriel.',
+    explanation:'Un bijou → des <b>bijoux</b>. Les sept noms en <i>-ou</i> qui prennent un <b>-x</b> sont : bijou, caillou, chou, genou, hibou, joujou, pou. Tous les autres suivent la règle et prennent un <b>-s</b> (des trous, des clous).' }),
 
   makeMCQ({ id:'g5fr-nom-025', chapterId:'fr-noms', subsection:'pluriel', difficulty:2,
     question:'Quel nom NE CHANGE PAS de forme au pluriel ?',
@@ -250,7 +250,7 @@ STATIC_QUESTIONS.push(
     question:'Trouvez le NOM DÉRIVÉ du verbe "récompenser" : "Une ___ heureuse attend les élèves qui travaillent bien."',
     options:['récompense','récompenseur','récompensement','récompensage'],
     answer:'récompense',
-    hint:'Le verbe "récompenser" donne le nom "récompense" (supprimer le suffixe verbal).',
+    hint:'Pour former ce nom, on enlève la terminaison du verbe sans rien ajouter à la place.',
     explanation:'"<b>récompense</b>" - récompenser → la récompense. Les noms dérivés de verbes par suppression du suffixe : récompenser → récompense, commencer → commencement, partir → départ. Ici, "récompense" est le nom correct (féminin : une récompense).' })
 
 );
@@ -259,42 +259,42 @@ STATIC_QUESTIONS.push(
 STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5fr-nom-036', chapterId:'fr-noms', subsection:'genre', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Door.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ porte',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/door.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ porte',
     options:['le','la','les','l\''],
     answer:'la',
     hint:'"Porte" est un nom féminin.',
     explanation:'"<b>La</b> porte" = the door. "Porte" est féminin, donc on utilise "la" (ou "une" au singulier indéfini).' }),
 
   makeMCQ({ id:'g5fr-nom-037', chapterId:'fr-noms', subsection:'genre', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Roof.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ toit',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/roof.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ toit',
     options:['le','la','les','l\''],
     answer:'le',
     hint:'"Toit" est un nom masculin.',
     explanation:'"<b>Le</b> toit" = the roof. "Toit" est masculin, donc on utilise "le" (ou "un" au singulier indéfini).' }),
 
   makeMCQ({ id:'g5fr-nom-038', chapterId:'fr-noms', subsection:'genre', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Horse.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ cheval',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/horse.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ cheval',
     options:['le','la','les','l\''],
     answer:'le',
     hint:'"Cheval" est un nom masculin (pluriel irrégulier : chevaux).',
     explanation:'"<b>Le</b> cheval" = the horse. "Cheval" est masculin, donc on utilise "le" (ou "un"). Rappel : le pluriel est irrégulier - "les chevaux".' }),
 
   makeMCQ({ id:'g5fr-nom-039', chapterId:'fr-noms', subsection:'genre', difficulty:1,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Cow.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ vache',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/cow.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ vache',
     options:['le','la','les','l\''],
     answer:'la',
     hint:'"Vache" est un nom féminin.',
     explanation:'"<b>La</b> vache" = the cow. "Vache" est féminin, donc on utilise "la" (ou "une").' }),
 
   makeMCQ({ id:'g5fr-nom-040', chapterId:'fr-noms', subsection:'genre', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mountain.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ montagne',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/mountain.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ montagne',
     options:['le','la','les','l\''],
     answer:'la',
     hint:'"Montagne" est un nom féminin.',
     explanation:'"<b>La</b> montagne" = the mountain. "Montagne" est féminin, donc on utilise "la" (ou "une").' }),
 
   makeMCQ({ id:'g5fr-nom-041', chapterId:'fr-noms', subsection:'genre', difficulty:2,
-    question:'<div style="text-align:center;margin-bottom:12px"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Beach.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ plage',
+    question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/beach.jpg" alt="une image" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>Quel article va avec ce mot ?</b><br>___ plage',
     options:['le','la','les','l\''],
     answer:'la',
     hint:'"Plage" est un nom féminin.',

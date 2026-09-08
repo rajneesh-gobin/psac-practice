@@ -1,7 +1,7 @@
 'use strict';
 
 // Sous-thèmes pour l'écran Syllabus. GENERATED from the questions' own
-// `subsection:` tags — every id here has questions behind it, and every tagged
+// `subsection:` tags - every id here has questions behind it, and every tagged
 // question has an id here. Trailing comments are the count at generation time.
 const G4FR_SYLLABUS = {
   'g4fr-vocabulaire': { subsections: [
@@ -48,6 +48,25 @@ const G4FR_SYLLABUS = {
     { id:'conjonctions',    name:'Les conjonctions' },  // 5
     { id:'ordre_mots',      name:'Ordre des mots' },  // 1
   ]},
+  'g4fr-formation': { subsections: [
+    { id:'verbe_nom',       name:'Du verbe au nom' },  // 20
+    { id:'nom_adjectif',    name:'Du nom à l\'adjectif' },  // 20
+    { id:'adjectif_adverbe', name:'De l\'adjectif à l\'adverbe' },  // 20
+    { id:'former_verbe',    name:'Former un verbe' },  // 20
+    { id:'prefixes',        name:'Préfixes & contraires' },  // 20
+    // ── Q7A : corriger les erreurs soulignées (5 des 10 points) ──
+    { id:'son_sont',       name:'Son ou sont ?' },  // 20
+    { id:'ce_se',          name:'Ce ou se ?' },  // 20
+    { id:'accord_participe', name:'Accord avec être' },  // 20
+    { id:'accord_nom_adjectif', name:'Accord du nom et de l\'adjectif' },  // 20
+    { id:'tout_leur',      name:'Tout, tous, leur, leurs' },  // 20
+  ]},
+  'g4fr-chasse-erreurs': { subsections: [
+    { id:'chasse_erreurs',  name:'Chasse aux erreurs' },  // 20
+  ]},
+  'g4fr-textes-trous': { subsections: [
+    { id:'texte_a_trous',   name:'Textes à trous (Q6)' },  // 20
+  ]},
   'g4fr-passe-comp': { subsections: [
     { id:'auxiliaire',      name:'Choisir l\'auxiliaire' },  // 3
     { id:'participe',       name:'Le participe passé' },  // 9
@@ -60,7 +79,10 @@ const G4FR_SYLLABUS = {
     { id:'formation',       name:'Comment le former' },  // 27
   ]},
   'g4fr-lecture': { subsections: [
-    { id:'fait_opinion',    name:'Fait ou opinion' },  // 1
+    { id:'fait_opinion',    name:'Fait ou opinion' },
+    { id:'figures_style',   name:'Figures de style' },
+    { id:'vrai_faux',       name:'Vrai ou faux' },
+    { id:'narration',       name:'Le récit & le narrateur' },  // 1
     { id:'connecteurs',     name:'Connecteurs logiques' },  // 3
     { id:'vocabulaire',     name:'Le sens des mots' },  // 4
     { id:'idee_principale', name:'Idée principale' },  // 3
@@ -77,6 +99,13 @@ const G4FR_SYLLABUS = {
   'g4fr-images': { subsections: [
     { id:'trois_images',    name:'Raconter en trois images' },  // 9
     { id:'une_image',       name:'Décrire une image' },  // 10
+  ]},
+  'g4fr-enr-relier': { subsections: [
+    { id:'relatifs',        name:'Pronoms relatifs (qui, que, où…)' },  // 10
+    { id:'cause',           name:'Exprimer la cause' },  // 10
+    { id:'opposition',      name:'Exprimer l’opposition' },  // 10
+    { id:'temps',           name:'Situer dans le temps' },  // 10
+    { id:'but_consequence', name:'Le but & la conséquence' },  // 10
   ]},
 };
 
@@ -139,6 +168,53 @@ registerSubject({
       ],
     },
     {
+      id: 'g4fr-formation', name: 'Mots & Corrections', icon: '🔤',
+      notes: [
+        'La **question 7** vaut **10 points** et se fait en **deux parties** : **7A** (5 points) - *corrige les erreurs soulignées* - puis **7B** (5 points) - *écris le mot entre parenthèses à la forme correcte*.',
+        'En **7B**, un mot entre parenthèses est donné et il faut écrire la **bonne forme** : « Papa a pris une bonne ______ . (décider) ».',
+        'Les mots d\'une même **famille** partagent le même **radical** : *jardin, jardinier, jardinage, jardiner*.',
+        'Verbe → **nom** : souvent avec **-age** (laver → le lavage), parfois sans rien du tout (danser → la danse).',
+        'Nom → **adjectif** : très souvent avec **-eux** (danger → dangereux, courage → courageux, joie → joyeux).',
+        'Adjectif → **adverbe** : mets l\'adjectif au **féminin**, puis ajoute **-ment**. lent → lente → **lentement**.',
+        'Nom ou adjectif → **verbe** : **-er** (sel → saler) ou **-ir** (rouge → rougir, grand → grandir).',
+        'Pour dire le **contraire**, ajoute un préfixe : **im-** (poli → impoli), **in-** (utile → inutile), **dé(s)-** (ordre → désordre), **mal-** (heureux → malheureux).',
+        'Dernier réflexe : relis la phrase avec ton mot. Il doit **s\'accorder** avec le nom qui est à côté.',
+      ],
+    },
+    {
+      id: 'g4fr-textes-trous', name: 'Textes à Trous', icon: '🧩', enrichment: true, examWeight: 0,
+      enrichmentNote: 'Entraînement à la question 6 du PSAC (texte à trous, 10 points). Chaque texte s\'ouvre dans son propre écran : on place les mots, on vérifie, on recommence.',
+      notes: [
+        'La **question 6** du PSAC donne un texte troué et un tableau de mots. Tu places chaque mot au bon endroit.',
+        '**Lis tout le texte d\'abord**, sans rien écrire. On ne peut pas choisir un mot sans savoir de quoi parle l\'histoire.',
+        'Commence par les trous **faciles**. Chaque mot placé enlève un choix pour les autres : c\'est ça, la méthode.',
+        'Regarde le **petit mot juste avant le trou** : après *le, la, un, une*, il faut un **nom** ; après *très, trop*, un **adjectif** ; après *il faut, il va*, un **verbe**.',
+        'Un mot du tableau ne sert **jamais deux fois**, et il y a **un mot en trop**. Si tu utilises tout, tu t\'es trompé quelque part.',
+        'À la fin, **relis le texte en entier** avec tes mots. Une phrase qui sonne faux cache presque toujours l\'erreur.',
+      ],
+    },
+    {
+      // ⚠ enrichment: true makes this a gold "✨ BONUS" card, which is what was
+      //   asked for. Note the tension recorded in CLAUDE.md: correction de
+      //   texte IS examined (PSAC French Q7), so the BONUS badge tells a child
+      //   an exam skill is optional. Textes à Trous carries the same tension.
+      // ⚠ examWeight: 0 does NOT keep a chapter out of an exam - assembleExamPaper
+      //   clamps every weight with Math.max(1, …). What actually holds is that
+      //   isPoolQuestion() excludes type 'errorhunt', so this chapter can fill
+      //   nothing and assembleExamPaper drops it rather than losing the slot.
+      id: 'g4fr-chasse-erreurs', name: 'Chasse aux Erreurs', icon: '🔍', enrichment: true, examWeight: 0,
+      enrichmentNote: 'Correction de texte, comme à la question 7 du PSAC. Le texte est plein d\'erreurs : à toi de cliquer sur chaque mot fautif. Vérifier ne donne que le nombre trouvé - Terminer révèle tout.',
+      notes: [
+        'Dans cette chasse, le texte est **plein d\'erreurs**. À toi de cliquer sur chaque mot qui ne va pas.',
+        '**Les majuscules d\'abord.** Une phrase commence par une majuscule, et un prénom ou un nom de lieu en prend une partout où il se trouve.',
+        '**Le point ensuite.** Chaque phrase se termine par un point. S\'il manque, clique sur le **dernier mot** de la phrase.',
+        '**Le pluriel.** Après *les, des, mes, ses, deux, trois*, le nom prend un **-s**.',
+        '**Le verbe suit son sujet.** *Je mange, tu manges, il mange, nous mangeons, vous mangez, ils mangent.*',
+        '**a ou à ?** *a* est le verbe avoir (*il a un chien*), *à* est le petit mot (*il va à l\'école*).',
+        'Astuce : **lis à voix basse**. Une erreur s\'entend souvent avant de se voir.',
+      ],
+    },
+    {
       id: 'g4fr-passe-comp', name: 'Le Passé Composé', icon: '⏰',
       notes: [
         'Used for actions **completed in the past**: "J\'ai mangé" (I ate / I have eaten).',
@@ -196,6 +272,14 @@ registerSubject({
         'Connecteurs de temps : *D\'abord, Ensuite, Puis, Soudain, Enfin, Finalement*. Sans eux, ce n\'est qu\'une liste.',
         'Respecte toujours l\'ordre 1, 2, 3 - et donne à chaque image le même nombre de phrases.',
       ],
+    },
+    // @enrichment - DERIVED from the syllabus (relative pronouns, conjunctions,
+    // subordinate clauses), NOT a direct MIE chapter. DO NOT remove during
+    // syllabus alignment audits. Shows as a gold "BONUS" card.
+    {
+      id: 'g4fr-enr-relier', name: 'Relier les Phrases', icon: '🔗',
+      enrichment: true, examWeight: 2,
+      enrichmentNote: 'La question « Relie chaque paire de phrases en te servant du mot donné entre parenthèses » du PSAC. Ici, on choisit la phrase correctement reliée : qui / que / où, et les conjonctions de base.',
     },
   ],
 });

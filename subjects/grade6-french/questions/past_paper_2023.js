@@ -1,5 +1,5 @@
 'use strict';
-// PSAC Grade 6 French 2023 — past-paper questions adapted to MCQ format.
+// PSAC Grade 6 French 2023 - past-paper questions adapted to MCQ format.
 // Source: MES Primary School Achievement Certificate Assessment 2023, French P130.
 // Q2 (grammar fill-in) + Q3B (vocabulary) + Q4B MCQs → STATIC_QUESTIONS.
 
@@ -99,7 +99,7 @@ STATIC_QUESTIONS.push(
     hint:'Ce que produit un réveille-matin pour signaler l\'heure.',
     explanation:'Un réveille-matin émet une <em>sonnerie</em> (bruit d\'alarme) pour réveiller.' }),
 
-  // ── Q4B : Compréhension MCQ — «&nbsp;Mon chou&nbsp;» (Mme Michat et Sam) ──
+  // ── Q4B : Compréhension MCQ - «&nbsp;Mon chou&nbsp;» (Mme Michat et Sam) ──
 
   makeMCQ({ id:'g6fr-pp23-016', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>Mme Michat appelle toujours son fils Sam « mon chou ». Sam a horreur de ce nom.</em><br><br>Sam n\'aime pas être comparé à ……………….',
@@ -128,7 +128,7 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6fr-pp23-020', chapterId:'g6fr-textes', subsection:'recit', difficulty:2,
     question:'<em>L\'instituteur regarde Mme Michat d\'un air surpris et dit : « Mais oui, Mme Michat. Vous feriez mieux de rentrer chez vous. »</em><br><br>Que ressent l\'instituteur en voyant le chou ?',
     options:['Il est étonné.','Il est en colère.','Il est satisfait.','Il est content.'], answer:'Il est étonné.',
-    hint:'L\'instituteur ne s\'attendait pas à voir cela — quelle réaction cela provoque-t-il ?',
+    hint:'L\'instituteur ne s\'attendait pas à voir cela - quelle réaction cela provoque-t-il ?',
     explanation:'L\'instituteur regarde d\'un <em>air surpris</em> → il est <em>étonné</em> de voir Mme Michat arriver avec un chou.' })
 
 );
@@ -136,7 +136,7 @@ STATIC_QUESTIONS.push(
 window.PSAC_PDF_QUESTIONS = window.PSAC_PDF_QUESTIONS || [];
 window.PSAC_PDF_QUESTIONS.push(
   { id:'g6fr-pp23-pdf-001', chapterId:'g6fr-textes', marks:10, year:2023, grade:6, subject:'French',
-    question:'Q4A — Lis le texte « Le jamblon » et réponds : Vrai/Faux (le jamblon est très connu), un autre nom du jamblon, une maladie traitée, deux pays d\'origine du jamelonier, taille/durée de vie du jamelonier, fruit similaire, couleur à maturité, une caractéristique de sa peau.', type:'short' },
+    question:'Q4A - Lis le texte « Le jamblon » et réponds : Vrai/Faux (le jamblon est très connu), un autre nom du jamblon, une maladie traitée, deux pays d\'origine du jamelonier, taille/durée de vie du jamelonier, fruit similaire, couleur à maturité, une caractéristique de sa peau.', type:'short' },
   { id:'g6fr-pp23-pdf-002', chapterId:'g6fr-textes', marks:15, year:2023, grade:6, subject:'French',
-    question:'Q4B — Réponds aux questions sur le texte « Mon chou » (Mme Michat et Sam) : Q6 = pourquoi se dépêcher ; Q7 = pourquoi Sam ne répond pas ; Q8 = deux raisons d\'aller à l\'école ; Q9 = un adjectif qui décrit Sam ; Q10 = un adjectif qui décrit Mme Michat ; Q11 = remettre 4 événements dans l\'ordre.', type:'short' }
+    question:'Q4B - Réponds aux questions sur le texte « Mon chou » (Mme Michat et Sam) : Q6 = pourquoi se dépêcher ; Q7 = pourquoi Sam ne répond pas ; Q8 = deux raisons d\'aller à l\'école ; Q9 = un adjectif qui décrit Sam ; Q10 = un adjectif qui décrit Mme Michat ; Q11 = remettre 4 événements dans l\'ordre.', type:'short' }
 );

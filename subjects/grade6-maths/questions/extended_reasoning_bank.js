@@ -1,5 +1,5 @@
 'use strict';
-// Grade 6 Maths — 20 deterministic Level-4 reasoning variants per chapter.
+// Grade 6 Maths - 20 deterministic Level-4 reasoning variants per chapter.
 
 (function () {
   const add = (chapterId, subsection, n, question, answer, hint, explanation) => {

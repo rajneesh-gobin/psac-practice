@@ -8,14 +8,14 @@ STATIC_QUESTIONS.push(
     question:'Quelle expression introduit une OPINION PERSONNELLE ?',
     options:['En conclusion','De plus','À mon avis','Cependant'],
     answer:'À mon avis',
-    hint:'"À mon avis" signifie "In my opinion" - c\'est une expression d\'opinion.',
+    hint:'Cherche l\'expression par laquelle on annonce que ce qui suit est un point de vue personnel.',
     explanation:'"<b>À mon avis</b>" = pour exprimer son opinion. Autres expressions d\'opinion : Je pense que, Je crois que, Il me semble que, Je suis convaincu(e) que, Selon moi. "En conclusion" = conclusion ; "De plus" = ajout d\'idée ; "Cependant" = opposition.' }),
 
   makeMCQ({ id:'g6fr-arg-002', chapterId:'g6fr-argumentation', subsection:'connecteurs', difficulty:2,
     question:'Quel connecteur AJOUTE une idée à la précédente ?',
     options:['Cependant','Pourtant','De plus','En revanche'],
     answer:'De plus',
-    hint:'"De plus" signifie "furthermore" - on ajoute une information.',
+    hint:'Trois de ces connecteurs marquent une opposition. Un seul ajoute une idée.',
     explanation:'"<b>De plus</b>" = pour ajouter une idée. Autres connecteurs d\'ajout : En outre, Par ailleurs, Non seulement… mais aussi, Également. "Cependant / Pourtant / En revanche" = opposition.' }),
 
   makeMCQ({ id:'g6fr-arg-003', chapterId:'g6fr-argumentation', subsection:'opinion', difficulty:2,
@@ -90,7 +90,7 @@ STATIC_QUESTIONS.push(
     question:'Quel connecteur indique qu\'une idée s\'ajoute à la précédente en l\'amplifiant ?',
     options:['Or','Pourtant','De surcroît','Car'],
     answer:'De surcroît',
-    hint:'"De surcroît" = moreover/on top of that - on ajoute une idée encore plus forte.',
+    hint:'Cherche le connecteur soutenu qui ajoute une idée plus forte encore, et non une cause ou une opposition.',
     explanation:'"<b>De surcroît</b>" (= moreover, on top of that) ajoute une idée en l\'amplifiant : "Ce projet est coûteux. <b>De surcroît</b>, il risque d\'être inefficace." Connecteurs d\'ajout par ordre de fréquence (manuel MIE de 6e) : de plus, en outre, par ailleurs, également, <b>de surcroît</b> (renforcé), non seulement… mais aussi.' }),
 
   makeMCQ({ id:'g6fr-arg-012', chapterId:'g6fr-argumentation', subsection:'arguments', difficulty:1,
@@ -109,7 +109,7 @@ STATIC_QUESTIONS.push(
     question:'Complétez avec le bon connecteur : "___ je comprends les inquiétudes, je pense que les bénéfices l\'emportent."',
     options:['Donc','Certes','Car','Ainsi'],
     answer:'Certes',
-    hint:'"Certes" reconnaît un point opposé avant de le dépasser avec son propre argument.',
+    hint:'La phrase admet d\'abord une objection, puis la dépasse. Cherche le connecteur de concession.',
     explanation:'"<b>Certes</b> je comprends les inquiétudes, je pense que les bénéfices l\'emportent." - <b>Certes</b> (= admittedly, granted) concède un point à l\'adversaire avant de le réfuter. Structure classique de la concession au bac de français : "Certes… mais/cependant/néanmoins…" Le manuel MIE de 6e enseigne cette structure pour les dissertations et les débats.' }),
 
   makeMCQ({ id:'g6fr-arg-014', chapterId:'g6fr-argumentation', subsection:'arguments', difficulty:2,
@@ -228,7 +228,7 @@ STATIC_QUESTIONS.push(
     question:'Quel connecteur illustre avec un exemple (= for example) ?',
     options:['Cependant','En conclusion','Par exemple / C\'est-à-dire','En outre'],
     answer:'Par exemple / C\'est-à-dire',
-    hint:'"Par exemple" introduit une illustration. "C\'est-à-dire" reformule ou précise.',
+    hint:'Cherche le connecteur qui annonce une illustration ou une reformulation, et non une conclusion.',
     explanation:'"<b>Par exemple</b>" (= for example) introduit une <b>illustration concrète</b> d\'une idée abstraite. "<b>C\'est-à-dire</b>" (= that is to say) <b>reformule ou précise</b> une idée. Ex : "Les énergies renouvelables sont importantes, <b>par exemple</b> l\'énergie solaire et l\'énergie éolienne."' }),
 
   makeMCQ({ id:'g6fr-arg-027', chapterId:'g6fr-argumentation', subsection:'structure', difficulty:3,
@@ -281,7 +281,7 @@ STATIC_QUESTIONS.push(
     explanation:'"<b>En effet</b>" (justifie l\'affirmation précédente : permet accès à l\'info), "<b>Cependant</b>" (nuance / oppose : certains copient), "<b>En conclusion</b>" (synthèse finale : il faut encadrer). Structure parfaite du paragraphe argumentatif en 3 temps.' }),
 
   makeMCQ({ id:'g6fr-arg-032', chapterId:'g6fr-argumentation', subsection:'vocabulaire', difficulty:4,
-    question:'Shanvi doit rédiger une lettre au directeur pour demander une sortie scolaire. Quel est l\'OBJET correct de la lettre ?',
+    question:'Kavya doit rédiger une lettre au directeur pour demander une sortie scolaire. Quel est l\'OBJET correct de la lettre ?',
     options:[
       '"Objet : Bonjour, je veux une sortie"',
       '"Objet : Demande d\'organisation d\'une sortie scolaire au Jardin de Pamplemousses"',
@@ -308,11 +308,11 @@ STATIC_QUESTIONS.push(
     question:'Quel connecteur introduit une CONCESSION dans un argument ?',
     options:['De plus','En conclusion','Certes','C\'est pourquoi'],
     answer:'Certes',
-    hint:'"Certes" = il est vrai que / admittedly - concède un point avant de le nuancer.',
+    hint:'Une concession commence par admettre le point de l\'adversaire. Cherche le connecteur qui fait cela.',
     explanation:'"<b>Certes</b>" = connecteur de concession (admittedly/granted). Usage : "Certes, internet présente des risques, <b>mais</b> ses avantages sont nombreux." Autres connecteurs de concession : "il est vrai que", "même si". À distinguer de "de plus" (ajout), "c\'est pourquoi" (conséquence), "en conclusion" (synthèse).' }),
 
   makeMCQ({ id:'g6fr-arg-035', chapterId:'g6fr-argumentation', subsection:'structure', difficulty:4,
-    question:'Shanvi doit écrire un paragraphe argumentatif sur les réseaux sociaux. Quelle structure est la meilleure ?',
+    question:'Kavya doit écrire un paragraphe argumentatif sur les réseaux sociaux. Quelle structure est la meilleure ?',
     options:[
       'Argument + Exemple + Explication',
       'Exemple + Argument + Exemple',
