@@ -386,3 +386,224 @@ STATIC_QUESTIONS.push(makeTask({
 }));
 
 })();
+
+// ══════════════════════════════════════════════════════════════════════════
+//  Additional questions (crd-047 – crd-066) — difficulty 2–4, matching
+//  NCE past-paper patterns:
+//    • gradient from rearranged equations (2x−3y=6, x+2y=8, 3y=6x−9)
+//    • gradient involving negative/fractional results
+//    • x-intercept and unknown coordinates on a line
+//    • equation from two points with negative gradient
+//    • multi-part "gradient → equation → point/intercept" problems
+//    • applied context (taxi fares, practical-graph pattern)
+// ══════════════════════════════════════════════════════════════════════════
+(function () {
+
+const CH = 'g9m-coordinates';
+
+// [ id, subsection, difficulty, marks, prompt, answer, accept[], hint, explanation ]
+const ITEMS2 = [
+
+  // ── gradient ────────────────────────────────────────────────────────────
+  ['g9m-crd-047', 'gradient', 2, 2,
+   'Find the gradient of the line joining (2, 1) and (6, 9).',
+   '2', [],
+   'Rise divided by run.',
+   'Gradient = (9 &minus; 1) &divide; (6 &minus; 2) = 8 &divide; 4 = 2.'],
+
+  ['g9m-crd-048', 'gradient', 3, 2,
+   'Find the gradient of the line joining (&minus;1, 3) and (5, &minus;3).',
+   '-1', [],
+   'The line falls &mdash; expect a negative answer.',
+   'Gradient = (&minus;3 &minus; 3) &divide; (5 &minus; (&minus;1)) = &minus;6 &divide; 6 = &minus;1.'],
+
+  ['g9m-crd-049', 'gradient', 3, 2,
+   'Find the gradient of the line 2<i>x</i> &minus; 3<i>y</i> = 6.',
+   '2/3', [],
+   'Make y the subject first.',
+   'Rearranging: 3y = 2x &minus; 6, so y = <sup>2</sup>&frasl;<sub>3</sub>x &minus; 2. The gradient is <sup>2</sup>&frasl;<sub>3</sub>.'],
+
+  ['g9m-crd-050', 'gradient', 3, 2,
+   'Find the gradient of the line <i>x</i> + 2<i>y</i> = 8.',
+   '-1/2', ['-0.5'],
+   'Make y the subject first.',
+   'Rearranging: 2y = &minus;x + 8, so y = &minus;<sup>1</sup>&frasl;<sub>2</sub>x + 4. The gradient is &minus;<sup>1</sup>&frasl;<sub>2</sub>.'],
+
+  ['g9m-crd-051', 'gradient', 3, 2,
+   'Find the gradient of the line joining (4, &minus;1) and (&minus;2, &minus;4).',
+   '1/2', ['0.5'],
+   'Subtract in the same order; dividing two negatives gives a positive.',
+   'Gradient = (&minus;4 &minus; (&minus;1)) &divide; (&minus;2 &minus; 4) = &minus;3 &divide; &minus;6 = <sup>1</sup>&frasl;<sub>2</sub>.'],
+
+  ['g9m-crd-058', 'gradient', 3, 2,
+   'Find the gradient of the line 3<i>y</i> = 6<i>x</i> &minus; 9.',
+   '2', [],
+   'Divide every term by 3.',
+   'Dividing throughout by 3 gives y = 2x &minus; 3, so the gradient is 2.'],
+
+  ['g9m-crd-063', 'gradient', 2, 2,
+   'Find the gradient of the line joining (0, &minus;3) and (5, 7).',
+   '2', [],
+   'One point is on the y-axis.',
+   'Gradient = (7 &minus; (&minus;3)) &divide; (5 &minus; 0) = 10 &divide; 5 = 2.'],
+
+  // ── equation_of_line ────────────────────────────────────────────────────
+  ['g9m-crd-052', 'equation_of_line', 2, 1,
+   'Find the <i>x</i>-intercept of the line <i>y</i> = 2<i>x</i> &minus; 6.',
+   '3', [],
+   'Set y = 0 and solve for x.',
+   'Setting y = 0: 0 = 2x &minus; 6, so x = 3.'],
+
+  ['g9m-crd-053', 'equation_of_line', 2, 1,
+   'Find the <i>x</i>-intercept of the line <i>y</i> = &minus;<i>x</i> + 5.',
+   '5', [],
+   'Set y = 0 and solve for x.',
+   'Setting y = 0: 0 = &minus;x + 5, so x = 5.'],
+
+  ['g9m-crd-054', 'equation_of_line', 3, 2,
+   'The point (3, <i>k</i>) lies on the line <i>y</i> = 2<i>x</i> &minus; 1. Find the value of <i>k</i>.',
+   '5', [],
+   'Substitute x = 3 into the equation.',
+   'y = 2(3) &minus; 1 = 5, so k = 5.'],
+
+  ['g9m-crd-055', 'equation_of_line', 3, 2,
+   'The point (<i>k</i>, 3) lies on the line <i>y</i> = &minus;<i>x</i> + 7. Find the value of <i>k</i>.',
+   '4', [],
+   'Substitute y = 3 and solve for x.',
+   '3 = &minus;k + 7, so k = 4.'],
+
+  ['g9m-crd-056', 'equation_of_line', 4, 3,
+   'Find the equation of the line passing through (1, 4) and (3, &minus;2).',
+   'y=-3x+7', [],
+   'Find the gradient first, then substitute one point to find c.',
+   'Gradient = (&minus;2 &minus; 4) &divide; (3 &minus; 1) = &minus;3. Substituting (1, 4): 4 = &minus;3 + c, so c = 7 and the equation is y = &minus;3x + 7.'],
+
+  ['g9m-crd-057', 'equation_of_line', 3, 2,
+   'A line has gradient &minus;1 and passes through (3, 2). Find its equation.',
+   'y=-x+5', [],
+   'Substitute m = &minus;1 and the point into y = mx + c.',
+   'Using y = &minus;x + c with (3, 2): 2 = &minus;3 + c, so c = 5 and the equation is y = &minus;x + 5.'],
+
+  ['g9m-crd-064', 'equation_of_line', 3, 2,
+   'A line has gradient &minus;3 and passes through (&minus;1, 5). Find its equation.',
+   'y=-3x+2', [],
+   'Take care with the double negative when you substitute.',
+   'Substituting: 5 = &minus;3(&minus;1) + c = 3 + c, so c = 2 and the equation is y = &minus;3x + 2.'],
+
+  ['g9m-crd-065', 'equation_of_line', 3, 2,
+   'Find the equation of the line parallel to <i>y</i> = 4<i>x</i> &minus; 1 that passes through (2, 3).',
+   'y=4x-5', [],
+   'Parallel means the same gradient; substitute the point to find c.',
+   'Gradient = 4. Substituting (2, 3): 3 = 4(2) + c = 8 + c, so c = &minus;5 and the equation is y = 4x &minus; 5.'],
+
+  ['g9m-crd-066', 'equation_of_line', 2, 1,
+   'Find the <i>y</i>-intercept of the line passing through (2, 3) and (4, 7).',
+   '-1', [],
+   'Find the gradient first, then find c.',
+   'Gradient = (7 &minus; 3) &divide; (4 &minus; 2) = 2. Substituting (2, 3): 3 = 4 + c, so c = &minus;1.'],
+];
+
+const isNumeric2 = a => /^-?[\d.\/]+$/.test(a);
+
+ITEMS2.forEach(([id, subsection, difficulty, marks, prompt, answer, accept, hint, explanation]) => {
+  STATIC_QUESTIONS.push(makeTask({
+    id, chapterId: CH, subsection, difficulty,
+    source: 'NCF Grades 7-9 §3.9 Geometry: Coordinates; NCE past-paper level.',
+    parts: [{
+      label: 'a', prompt, marks, hint, explanation,
+      response: { kind: isNumeric2(answer) ? 'number' : 'expression', answer, accept },
+    }],
+  }));
+});
+
+// ── Multi-part problems (NCE 2025 Q18 / 2024 Q26 patterns) ───────────────
+
+STATIC_QUESTIONS.push(makeTask({
+  id: 'g9m-crd-059', chapterId: CH, subsection: 'equation_of_line', difficulty: 4,
+  source: 'NCF §3.9 Coordinates; NCE 2025 Q18 "gradient → equation → point on line" pattern.',
+  parts: [
+    { label: 'a',
+      prompt: 'A line passes through <b>A</b> (1, 2) and <b>B</b> (5, 10). Find the <b>gradient</b> of <b>AB</b>.',
+      marks: 2,
+      hint: 'Subtract the y values and the x values in the same order.',
+      explanation: 'Gradient = (10 &minus; 2) &divide; (5 &minus; 1) = 8 &divide; 4 = 2.',
+      response: { kind: 'number', answer: '2' } },
+    { label: 'b',
+      prompt: 'Find the equation of the line <b>AB</b>.',
+      marks: 2, dependsOn: 'a',
+      hint: 'Use y = 2x + c and substitute one of the two points.',
+      explanation: 'With m = 2, substituting A (1, 2): 2 = 2(1) + c = 2 + c, so c = 0 and the equation is y = 2x.',
+      response: { kind: 'expression', answer: 'y=2x' } },
+    { label: 'c',
+      prompt: 'The point <b>C</b> (3, <i>k</i>) lies on the line <b>AB</b>. Find the value of <i>k</i>.',
+      marks: 1, dependsOn: 'b',
+      hint: 'Substitute x = 3 into your equation.',
+      explanation: 'Substituting x = 3 into y = 2x: k = 2(3) = 6.',
+      response: { kind: 'number', answer: '6', label: 'k' } },
+  ],
+}));
+
+STATIC_QUESTIONS.push(makeTask({
+  id: 'g9m-crd-060', chapterId: CH, subsection: 'gradient', difficulty: 4,
+  source: 'NCF §3.9 Coordinates; NCE 2024 Q26 "rearrange → gradient → parallel" pattern.',
+  parts: [
+    { label: 'a',
+      prompt: 'Find the gradient of the line 2<i>y</i> = 4<i>x</i> + 10.',
+      marks: 2,
+      hint: 'Divide every term by 2 to get the form y = mx + c.',
+      explanation: 'Dividing throughout by 2 gives y = 2x + 5, so the gradient is 2.',
+      response: { kind: 'number', answer: '2' } },
+    { label: 'b',
+      prompt: 'Find the equation of the line parallel to 2<i>y</i> = 4<i>x</i> + 10 that passes through (1, &minus;1).',
+      marks: 2, dependsOn: 'a',
+      hint: 'Parallel lines share the same gradient; substitute the point to find c.',
+      explanation: 'Gradient = 2. Substituting (1, &minus;1): &minus;1 = 2(1) + c = 2 + c, so c = &minus;3 and the equation is y = 2x &minus; 3.',
+      response: { kind: 'expression', answer: 'y=2x-3' } },
+  ],
+}));
+
+STATIC_QUESTIONS.push(makeTask({
+  id: 'g9m-crd-061', chapterId: CH, subsection: 'equation_of_line', difficulty: 4,
+  source: 'NCF §3.9 Coordinates; NCE 2025 Q18 pattern — gradient, equation, x-intercept.',
+  parts: [
+    { label: 'a',
+      prompt: 'A line passes through <b>A</b> (0, 2) and <b>B</b> (4, 6). Find the <b>gradient</b> of <b>AB</b>.',
+      marks: 1,
+      hint: 'One point is on the y-axis, so c is immediate.',
+      explanation: 'Gradient = (6 &minus; 2) &divide; (4 &minus; 0) = 4 &divide; 4 = 1.',
+      response: { kind: 'number', answer: '1' } },
+    { label: 'b',
+      prompt: 'Find the equation of the line <b>AB</b>.',
+      marks: 1, dependsOn: 'a',
+      hint: 'The point (0, 2) gives c = 2 straight away.',
+      explanation: 'With m = 1 and y-intercept 2, the equation is y = x + 2.',
+      response: { kind: 'expression', answer: 'y=x+2' } },
+    { label: 'c',
+      prompt: 'Find the coordinates of the point where <b>AB</b> crosses the <i>x</i>-axis.',
+      marks: 1, dependsOn: 'b',
+      hint: 'Set y = 0 in your equation.',
+      explanation: 'Setting y = 0: 0 = x + 2, so x = &minus;2. The line crosses the x-axis at (&minus;2, 0).',
+      response: { kind: 'expression', answer: '(-2,0)', accept: ['(-2, 0)', '-2, 0'] } },
+  ],
+}));
+
+STATIC_QUESTIONS.push(makeTask({
+  id: 'g9m-crd-062', chapterId: CH, subsection: 'equation_of_line', difficulty: 4,
+  source: 'NCF §3.9 Straight-line graphs in practical situations; NCE 2025 Q29 applied pattern.',
+  parts: [
+    { label: 'a',
+      prompt: 'A taxi charges a fixed amount plus a rate per kilometre. A 3 km journey costs Rs 150 and a 7 km journey costs Rs 290. Find the gradient of the cost&ndash;distance graph.',
+      marks: 2,
+      hint: 'Treat the two journeys as the points (3, 150) and (7, 290) on a straight line.',
+      explanation: 'Gradient = (290 &minus; 150) &divide; (7 &minus; 3) = 140 &divide; 4 = 35. The taxi charges Rs 35 per km.',
+      response: { kind: 'number', answer: '35' } },
+    { label: 'b',
+      prompt: 'Find the equation of the cost <i>C</i> (in rupees) in terms of distance <i>d</i> (in km).',
+      marks: 2, dependsOn: 'a',
+      hint: 'Use C = 35d + c and substitute one of the given journeys.',
+      explanation: 'Substituting (3, 150): 150 = 35(3) + c = 105 + c, so c = 45. The equation is C = 35d + 45.',
+      response: { kind: 'expression', answer: 'C=35d+45' } },
+  ],
+}));
+
+})();
