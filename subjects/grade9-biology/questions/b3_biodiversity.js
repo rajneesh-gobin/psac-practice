@@ -85,7 +85,7 @@ const MCQ = [
    'The dodo was endemic to Mauritius. Why did its extinction matter to the whole world?',
    ['It existed nowhere else, so the species was lost completely',
     'It was the largest bird ever to have lived',
-    'It could still be found again in several other countries',
+    'It could still be found again in several other countries today',
     'It was the only bird that could not fly'],
    'It existed nowhere else, so the species was lost completely',
    'Think about what endemic means.',

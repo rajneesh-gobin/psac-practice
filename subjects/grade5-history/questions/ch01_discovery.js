@@ -55,11 +55,11 @@ STATIC_QUESTIONS.push(
     question:'François Leguat was a French explorer who arrived in Rodrigues in 1691. What is he known for writing about?',
     options:[
       'The weather patterns of the Indian Ocean',
-      'The wildlife of Rodrigues, including the Rodrigues Solitaire',
+      'The wildlife of Rodrigues and the Solitaire',
       'The best routes from Portugal to India',
       'The arrival of enslaved workers in Mauritius'
     ],
-    answer:'The wildlife of Rodrigues, including the Rodrigues Solitaire',
+    answer:'The wildlife of Rodrigues and the Solitaire',
     hint:'He carefully wrote down what he observed about the animals of Rodrigues.',
     explanation:'François Leguat settled in Rodrigues in 1691 and wrote detailed accounts of the island\'s wildlife, including the Rodrigues Solitaire - a large flightless bird that is now extinct.' }),
 
@@ -109,11 +109,11 @@ STATIC_QUESTIONS.push(
     question:'What did the French Huguenot settler François Leguat find when he arrived on Rodrigues in 1691?',
     options:[
       'A busy trading port already established by the Dutch',
-      'An uninhabited island rich in wildlife - giant tortoises, birds and fish',
+      'An uninhabited island rich in wildlife',
       'A Dutch settlement that he joined',
       'Farmland planted by the Portuguese'
     ],
-    answer:'An uninhabited island rich in wildlife - giant tortoises, birds and fish',
+    answer:'An uninhabited island rich in wildlife',
     hint:'Rodrigues, like early Mauritius, had no human inhabitants at that time.',
     explanation:'When <b>François Leguat</b> arrived in 1691, Rodrigues was an uninhabited island with an abundance of wildlife, including giant tortoises, birds and sea life. He wrote detailed accounts of the island\'s natural richness.' }),
 
@@ -139,35 +139,35 @@ STATIC_QUESTIONS.push(
     question:'The Portuguese discovered Mauritius but never settled it permanently. What was the MOST LIKELY reason?',
     options:[
       'The Portuguese disliked islands and preferred mainland bases',
-      'The island had no strategic value at the time - Portugal already had better Indian Ocean bases elsewhere',
+      'The island had no strategic value to Portugal at the time',
       'They were prevented from landing by native inhabitants',
       'The coral reef made it impossible to reach the shore'
     ],
-    answer:'The island had no strategic value at the time - Portugal already had better Indian Ocean bases elsewhere',
+    answer:'The island had no strategic value to Portugal at the time',
     hint:'Portugal\'s main goal was reaching India and Asia for trade - what did they already have?',
     explanation:'The Portuguese focused on <b>trade routes to Asia</b>. They had bases in Goa (India) and East Africa. Mauritius had no permanent harbour, no local population to trade with, and no special resources Portugal needed. Settling a remote island would cost resources better used elsewhere.' }),
 
   makeMCQ({ id:'g5hg-disc-016', chapterId:'discovery', subsection:'mascarene', difficulty:3,
     question:'Both Mauritius and Rodrigues were uninhabited when Europeans arrived. Why do historians think no human population lived there before?',
     options:[
-      'The islands were too hot with no fresh water',
-      'The islands are remote volcanic islands far from the nearest continent - too distant for ancient peoples to reach by simple boat',
+      'The islands were too hot and had no fresh water',
+      'The islands were too remote for ancient boats to reach',
       'A disease wiped out the original population before Europeans arrived',
       'The Portuguese had already removed the original inhabitants'
     ],
-    answer:'The islands are remote volcanic islands far from the nearest continent - too distant for ancient peoples to reach by simple boat',
+    answer:'The islands were too remote for ancient boats to reach',
     hint:'Think about the geography - how far is Mauritius from Africa, India or Madagascar?',
     explanation:'Mauritius and Rodrigues are <b>isolated volcanic islands</b> hundreds of kilometres from the nearest landmasses. Unlike larger islands close to continents (such as Madagascar), they were too remote for ancient peoples using simple vessels to reach accidentally or intentionally. This explains why they remained uninhabited.' }),
 
   makeMCQ({ id:'g5hg-disc-017', chapterId:'discovery', subsection:'mascarene', difficulty:4,
     question:'François Leguat described Rodrigues tortoises as "so numerous that one can walk on their backs." Today they are extinct. What combination of factors BEST explains their disappearance?',
     options:[
-      'Sailors collected them as live food on ships, and introduced pigs and rats destroyed their eggs',
+      'Sailors took them for food and pigs ate their eggs',
       'Climate change made the island too hot over 200 years',
       'They evolved into a different species due to natural selection',
       'They migrated to Madagascar to find better food'
     ],
-    answer:'Sailors collected them as live food on ships, and introduced pigs and rats destroyed their eggs',
+    answer:'Sailors took them for food and pigs ate their eggs',
     hint:'Think about what sailors needed on long voyages, and what happens when new animals are introduced to an island.',
     explanation:'Rodrigues tortoises became extinct from two linked causes: (1) <b>Direct exploitation</b> - sailors loaded tortoises as live food (they could survive months without eating); (2) <b>Introduced predators</b> - pigs and rats brought by settlers ate eggs and hatchlings. Neither cause alone was enough, but together they eliminated the population within a few centuries.' })
 

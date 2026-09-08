@@ -101,9 +101,9 @@ STATIC_QUESTIONS.push(
     question:`${_G6PSG_FORMAL}The letter ends "Yours faithfully" rather than "Yours sincerely". Why?`,
     options:[
       'The writer does not know the name of the person she is writing to',
-      '"Yours faithfully" is used only by children',
-      'The letter is a complaint rather than a request',
-      'The letter is longer than one page'
+      '"Yours faithfully" is used only by children writing letters',
+      'The letter is a complaint rather than a polite request for help',
+      'The letter is longer than one page of writing'
     ],
     answer:'The writer does not know the name of the person she is writing to',
     hint:'Look at how the letter opens.',
@@ -124,10 +124,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-psg-004', chapterId:'g6eng-passages', subsection:'letter', difficulty:3,
     question:`${_G6PSG_FORMAL}Why do the pupils offer to design and paint the signs themselves, at no cost?`,
     options:[
-      'To show that they enjoy art lessons',
+      'To show the Council that they really enjoy their art lessons',
       'To make it easier for the Council to say yes by removing part of the cost',
-      'Because the Council has already refused a similar request',
-      'Because signs are more important than bins'
+      'Because the Council has already refused a similar request before',
+      'Because painted signs are more important than new bins'
     ],
     answer:'To make it easier for the Council to say yes by removing part of the cost',
     hint:'What is the usual reason a council refuses a request?',
@@ -136,10 +136,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-psg-005', chapterId:'g6eng-passages', subsection:'letter', difficulty:4,
     question:`${_G6PSG_FORMAL}Your class must rewrite one sentence of this letter to make it MORE persuasive. Which rewrite adds genuine force?`,
     options:[
-      'Change "eleven bags" to "lots and lots of bags".',
-      'Change "We therefore respectfully request" to "You must give us bins now".',
+      'Change "eleven bags of litter" to "lots and lots and lots of bags of rubbish".',
+      'Change "We therefore respectfully request" to "You must give us the new bins that we are asking for immediately".',
       'Add: "Eleven bags of litter were removed by thirty children in two hours - the Council\'s own cleaners visit once a week."',
-      'Add three exclamation marks after the request.'
+      'Add three large exclamation marks after the request at the end of the letter.'
     ],
     answer:'Add: "Eleven bags of litter were removed by thirty children in two hours - the Council\'s own cleaners visit once a week."',
     hint:'In formal writing, force comes from evidence and comparison, not from volume.',
@@ -163,10 +163,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-psg-008', chapterId:'g6eng-passages', subsection:'report', difficulty:3,
     question:`${_G6PSG_NEWS}Why does the reporter include the view of the conservation officer?`,
     options:[
-      'To fill space at the end of the article',
+      'To fill up space at the end of the news article',
       'To give a balanced report by including an opposing view',
-      'To prove that the pupils counted wrongly',
-      'Because the officer paid for the survey'
+      'To prove that the pupils had counted wrongly',
+      'Because the officer paid for the whole survey'
     ],
     answer:'To give a balanced report by including an opposing view',
     hint:'A report is not the same as an advertisement.',
@@ -175,10 +175,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-psg-009', chapterId:'g6eng-passages', subsection:'report', difficulty:3,
     question:`${_G6PSG_NEWS}The officer "asked not to be named". What does this tell a careful reader?`,
     options:[
-      'The officer invented the concern',
+      'The officer simply invented the whole concern',
       'The officer did not want to be identified, so the claim cannot be checked as easily',
-      'The reporter forgot to write the name down',
-      'Anonymous sources are never allowed in newspapers'
+      'The reporter simply forgot to write down the name',
+      'Anonymous sources are never allowed in newspapers or news reports of any kind'
     ],
     answer:'The officer did not want to be identified, so the claim cannot be checked as easily',
     hint:'What can a reader do with a named source that they cannot do with an unnamed one?',
@@ -194,10 +194,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-psg-011', chapterId:'g6eng-passages', subsection:'advert', difficulty:2,
     question:`${_G6PSG_ADVERT}What does the asterisk (*) after "Rs 4,999" tell the reader to do?`,
     options:[
-      'Multiply the price by the number of lessons',
+      'Multiply the price by the number of lessons taken',
       'Read the small print at the bottom, where conditions are given',
-      'Note that the price includes delivery',
-      'Ignore the price - it is only a guide'
+      'Note that the price already includes free delivery',
+      'Ignore the price - it is only a rough guide for buyers'
     ],
     answer:'Read the small print at the bottom, where conditions are given',
     hint:'The same symbol appears twice in the advert.',
@@ -213,10 +213,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-psg-013', chapterId:'g6eng-passages', subsection:'advert', difficulty:3,
     question:`${_G6PSG_ADVERT}Why is the claim "9 out of 10 parents say their child enjoys studying more" weaker than it first appears?`,
     options:[
-      'Nine out of ten is a small proportion',
+      'Nine parents out of ten is really quite a small proportion',
       'It is based on 40 parents at one launch event, who are unlikely to represent all buyers',
-      'Parents are not allowed to judge tablets',
-      'The advert does not say which grades were tested'
+      'Parents are simply not allowed to judge tablet computers',
+      'The advert does not say which school grades or which subjects were actually tested'
     ],
     answer:'It is based on 40 parents at one launch event, who are unlikely to represent all buyers',
     hint:'The footnote tells you who was actually asked, and where.',
@@ -226,9 +226,9 @@ STATIC_QUESTIONS.push(
     question:`${_G6PSG_ADVERT}Your friend says, "It\'s a bargain - it\'s guaranteed, so if anything breaks they\'ll fix it." How would you correct her using the advert?`,
     options:[
       'The warranty lasts 6 months and does not cover screen damage - the most likely fault',
-      'There is no warranty at all',
-      'The warranty only applies if you pay by instalments',
-      'The warranty covers everything but lasts only 30 days'
+      'There is no warranty at all on this tablet',
+      'The warranty only applies if you pay for the tablet by instalments',
+      'The warranty covers everything on the tablet but it lasts for only 30 days'
     ],
     answer:'The warranty lasts 6 months and does not cover screen damage - the most likely fault',
     hint:'Read the very last line of the small print.',
@@ -294,10 +294,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-psg-020', chapterId:'g6eng-passages', subsection:'report', difficulty:3,
     question:`${_G6PSG_REPORT}Which statement is supported BOTH by the text and by the table?`,
     options:[
-      'The west coast is the wettest part of Mauritius',
+      'The west coast is the wettest part of the island of Mauritius',
       'The plateau receives more rain than the west coast in every month shown',
-      'October is the wettest month of the year',
-      'Reservoirs are built on the west coast'
+      'October is the wettest month of the whole year',
+      'Reservoirs are built only on the dry west coast'
     ],
     answer:'The plateau receives more rain than the west coast in every month shown',
     hint:'Check the claim against all four rows, then against the paragraph.',
@@ -306,10 +306,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-psg-021', chapterId:'g6eng-passages', subsection:'report', difficulty:4,
     question:`${_G6PSG_REPORT}A hotel on the west coast plans an outdoor wedding and wants the lowest chance of rain. Using the report, which month should it choose, and why?`,
     options:[
-      'January, because the plateau catches the rain instead',
+      'January, because the central plateau catches all of the rain instead of the coast',
       'October, because it is in the dry winter and shows the lowest rainfall of the four months',
-      'April, because summer is ending',
-      'July, because winter has just begun'
+      'April, because the hot summer season is slowly ending',
+      'July, because the cooler winter season has only just begun'
     ],
     answer:'October, because it is in the dry winter and shows the lowest rainfall of the four months',
     hint:'Find the smallest west-coast figure, then check the text says which season that month belongs to.',

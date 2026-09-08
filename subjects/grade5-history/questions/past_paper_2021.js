@@ -87,7 +87,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp21-015', chapterId:'settlement', subsection:'dutch', difficulty:2,
     question:'The Dutch cut down ebony trees as their main activity in Mauritius. Why were ebony logs sold at a high price in Holland?',
-    options:['Because ebony was very rare in the world','Because it was used to make luxury furniture and musical instruments','Because it burned very slowly as firewood','Because it was the only usable timber available'], answer:'Because it was used to make luxury furniture and musical instruments',
+    options:['Because ebony was very rare in the world','Because it was used to make luxury furniture','Because it burned very slowly as firewood','Because it was the only usable timber available'], answer:'Because it was used to make luxury furniture',
     hint:'Ebony is a very dense, dark, and beautiful wood prized in Europe.',
     explanation:'Ebony logs were sold at high prices because the dense, black wood was prized for making luxury furniture, musical instrument keys, and decorative objects. It was in high demand among wealthy Europeans.' }),
 
@@ -105,7 +105,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp21-018', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
     question:'On a rainfall map of Mauritius, Curepipe receives about 4000mm per year while Médine (west coast) receives under 800mm. Why does the central plateau get so much more rain?',
-    options:['It is closer to the Indian Ocean','The South East Trade Winds drop their moisture as they rise over the central plateau mountains','The central plateau has more rivers and lakes','There are more trees in the central area that attract rain'], answer:'The South East Trade Winds drop their moisture as they rise over the central plateau mountains',
+    options:['It is much closer to the Indian Ocean than the west','The trade winds drop their rain as they rise over the plateau','The central plateau has more rivers and lakes','There are more trees in the central area that attract rain'], answer:'The trade winds drop their rain as they rise over the plateau',
     hint:'Think about what happens to moist air when it is forced upward.',
     explanation:'The South East Trade Winds carry moist air from the Indian Ocean. When this air hits the central plateau mountains, it is forced to rise, cool, and condense, releasing heavy relief rainfall. The leeward western coast lies in a rain shadow and stays dry.' })
 );

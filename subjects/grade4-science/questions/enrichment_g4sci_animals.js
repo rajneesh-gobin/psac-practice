@@ -30,8 +30,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sci-enr-ani-004', chapterId:'g4sci-enr-animals', subsection:'photos', difficulty:1,
     question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/questions/pteropus-niger.jpg" alt="A flying mammal" style="max-height:200px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>What animal is shown in this picture?</b>',
-    options:['Mauritian Flying Fox (Fruit Bat)','Eagle','Pink Pigeon','Barn Owl'],
-    answer:'Mauritian Flying Fox (Fruit Bat)',
+    options:['Mauritian Flying Fox','Eagle','The Pink Pigeon','Barn Owl'],
+    answer:'Mauritian Flying Fox',
     hint:'This is Mauritius\'s only native land mammal - it is a large bat that feeds on fruit.',
     explanation:'The <b>Mauritian Flying Fox</b> (Pteropus niger) is a large fruit bat and Mauritius\'s only native land mammal. It plays a vital role in pollinating plants and spreading seeds across the island\'s forests. It is active mainly at dusk and night.' }),
 
@@ -44,8 +44,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sci-enr-ani-006', chapterId:'g4sci-enr-animals', subsection:'photos', difficulty:2,
     question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/questions/mauritius-ornate-day-gecko-phelsuma-ornata.jpg" alt="A small reptile" style="max-height:200px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>What reptile endemic to Mauritius is shown here?</b>',
-    options:['Mauritius Ornate Day Gecko','Chameleon','Iguana','Common House Gecko'],
-    answer:'Mauritius Ornate Day Gecko',
+    options:['Ornate Day Gecko','Chameleon','Iguana','Common House Gecko'],
+    answer:'Ornate Day Gecko',
     hint:'This bright green gecko (Phelsuma ornata) is found only on Mauritius.',
     explanation:'The <b>Mauritius Ornate Day Gecko</b> (Phelsuma ornata) is a species of day gecko endemic to Mauritius. It is active during the day (unlike most geckos) and can be recognised by its vibrant green colour with red and blue markings. It feeds on nectar, pollen, and small insects, and is an important pollinator.' }),
 
@@ -81,8 +81,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sci-enr-ani-011', chapterId:'g4sci-enr-animals', subsection:'food_chains', difficulty:2,
     question:'In the food chain: <b>Seagrass → Sea urchin → Fish → Shark</b>, what is the role of the shark?',
-    options:['Top predator (it hunts but is not hunted in this chain)','Producer','Herbivore (first consumer)','Decomposer'],
-    answer:'Top predator (it hunts but is not hunted in this chain)',
+    options:['Top predator in the chain','Producer','Herbivore (first consumer)','Decomposer'],
+    answer:'Top predator in the chain',
     hint:'The shark is at the very end of this food chain.',
     explanation:'In the chain <b>Seagrass → Sea urchin → Fish → Shark</b>, the <b>shark</b> is the <b>top predator</b>. It hunts fish and is not hunted by anything else in this chain. The seagrass is the producer; the sea urchin and fish are consumers.' }),
 
@@ -95,22 +95,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sci-enr-ani-013', chapterId:'g4sci-enr-animals', subsection:'endangered', difficulty:2,
     question:'What does the word "<b>endemic</b>" mean when describing an animal like the Pink Pigeon?',
-    options:['Found naturally in one specific place and nowhere else in the wild','Almost extinct and nearly gone forever','Dangerous to humans and other animals','Living only in water habitats'],
-    answer:'Found naturally in one specific place and nowhere else in the wild',
+    options:['Found naturally in one place and nowhere else','Almost extinct and nearly gone forever','Dangerous to humans and other animals','Living only in water habitats'],
+    answer:'Found naturally in one place and nowhere else',
     hint:'The Pink Pigeon lives wild only on Mauritius - not on any other island or continent.',
     explanation:'"<b>Endemic</b>" means an animal (or plant) is found naturally in only one specific place - such as a single island or country - and does not exist wild anywhere else in the world. The Pink Pigeon and Echo Parakeet are endemic to Mauritius.' }),
 
   makeMCQ({ id:'g4sci-enr-ani-014', chapterId:'g4sci-enr-animals', subsection:'endangered', difficulty:2,
     question:'Why did the Dodo become extinct?',
-    options:['Hunting by humans and destruction of its habitat and eggs by introduced animals','A volcanic eruption destroyed all the forests of Mauritius','Climate change made the island too hot for the Dodo to survive','A disease spread by migrating birds wiped out the Dodo population'],
-    answer:'Hunting by humans and destruction of its habitat and eggs by introduced animals',
+    options:['Hunting, habitat loss and introduced animals','A volcanic eruption destroyed all the forests of Mauritius','Climate change made the island too hot for the Dodo to survive','A disease spread by migrating birds wiped out the Dodo population'],
+    answer:'Hunting, habitat loss and introduced animals',
     hint:'The Dodo could not fly and had no natural fear of humans - making it easy to hunt.',
     explanation:'The <b>Dodo</b> became extinct around 1681. Because it was flightless and had no natural predators before humans arrived, it had no fear of people and was easy to hunt for food. Rats, pigs, and monkeys brought by settlers destroyed its eggs and young. Deforestation also removed its forest habitat.' }),
 
   makeMCQ({ id:'g4sci-enr-ani-015', chapterId:'g4sci-enr-animals', subsection:'endangered', difficulty:2,
     question:'What is an "<b>endangered</b>" species?',
-    options:['A species at serious risk of becoming extinct if nothing is done to protect it','A species that has already become completely extinct','A species that is dangerous and harmful to humans','A species that can only be found living in zoos'],
-    answer:'A species at serious risk of becoming extinct if nothing is done to protect it',
+    options:['A species at serious risk of becoming extinct','A species that has already become completely extinct','A species that is dangerous and harmful to humans','A species that can only be found living in zoos'],
+    answer:'A species at serious risk of becoming extinct',
     hint:'Think about what "in danger" means for a living species.',
     explanation:'An <b>endangered species</b> is one whose population has fallen so low that it is at serious risk of extinction. The Pink Pigeon and Echo Parakeet of Mauritius are classified as endangered. Conservation efforts can save endangered species before they go the way of the Dodo.' }),
 

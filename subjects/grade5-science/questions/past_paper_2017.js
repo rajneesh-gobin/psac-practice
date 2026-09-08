@@ -45,13 +45,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sc-pp17-008', chapterId:'energy', subsection:'sources', difficulty:2,
     question:'Kevin is sick and cannot eat. Which source of energy does the <strong>human body use</strong> to carry out daily activities?',
-    options:['Chemical energy (from food)','Electrical energy','Nuclear energy','Solar energy'], answer:'Chemical energy (from food)',
+    options:['Chemical energy (from food)','Electrical energy (from wires)','Nuclear energy (from atoms)','Solar energy (from the Sun)'], answer:'Chemical energy (from food)',
     hint:'The body is like a machine that runs on fuel - what is its fuel?',
     explanation:'The human body obtains energy from food, which contains chemical energy. This chemical energy is released by the body\'s cells and used for movement, warmth, and other activities.' }),
 
   makeMCQ({ id:'g5sc-pp17-009', chapterId:'water-matter', subsection:'states', difficulty:3,
     question:'Salt pans produce <strong>less salt in winter</strong> than in summer. Why?',
-    options:['The sea contains less salt in winter.','There is less wind in winter.','There is more rain in winter which dilutes the salt pans.','There is less sunlight and heat in winter, so evaporation is slower.'], answer:'There is less sunlight and heat in winter, so evaporation is slower.',
+    options:['The sea water contains less salt during the winter.','There is much less wind blowing during the winter.','There is more rain in winter which dilutes the salt pans.','Less sunlight and heat in winter make evaporation slower.'], answer:'Less sunlight and heat in winter make evaporation slower.',
     hint:'Salt is obtained by evaporating sea water - what affects how fast it evaporates?',
     explanation:'Salt pans work by evaporating sea water using the sun\'s heat. In winter, there is less sunlight and lower temperatures, so evaporation is slower, and less salt is obtained than in hot, sunny summer months.' }),
 

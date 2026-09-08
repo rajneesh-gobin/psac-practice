@@ -100,15 +100,18 @@ const strip = s => String(s == null ? '' : s)
 const BASELINE = {
   'grade4-english': { leaks: 36 },
   'grade4-french':  { leaks: 74 },
-  'grade4-history': { leaks: 142, spread: 21.6 },
+  // grade4-history cleared 2026-09-08 by a parallel pass - entry deleted, not relaxed.
   'grade4-maths':   { leaks: 1, pos: 0.147 },
-  'grade4-science': { rate: 0.525, leaks: 121, spread: 22.5 },
+  // grade4-science was HERE with { rate: 0.525, leaks: 121, spread: 22.5 } and
+  // was worked off on 2026-09-08: 52.5% -> 29.5% (chance is 25%), 121 flagged
+  // items -> 0, spread 22.5 -> 10.9 chars. It needs no entry now. This is what
+  // working off a debt looks like - the line is deleted, never relaxed.
   'grade5-english': { leaks: 38 },
   'grade5-french':  { leaks: 57 },
-  'grade5-history': { leaks: 143, spread: 20.8 },
+  // grade5-history cleared 2026-09-08 by a parallel pass - entry deleted, not relaxed.
   'grade5-maths':   { leaks: 1 },
-  'grade5-science': { leaks: 76, spread: 14.0 },
-  'grade6-english': { leaks: 111 },
+  // grade5-science cleared 2026-09-08 by a parallel pass - entry deleted, not relaxed.
+  // grade6-english cleared 2026-09-08 by a parallel pass - entry deleted, not relaxed.
   'grade6-french':  { leaks: 66 },
   'grade6-maths':   { leaks: 2 },
 };
@@ -200,15 +203,27 @@ for (const pack of PACKS) {
     fail(msg);
   }
 
+  const leakCap = base.leaks === undefined ? 0 : base.leaks + Math.max(4, Math.ceil(base.leaks * 0.05));
   const leakMsg = leaks + ' question(s) where the correct answer is materially the longest: ' +
     leakIds.slice(0, 12).join(' ') + (leakIds.length > 12 ? ' …' : '');
   if (!leaks) {
     ok('no question gives its answer away by option length');
-  } else if (base.leaks !== undefined && leaks <= base.leaks) {
-    console.log('  DEBT  ' + leaks + ' pre-existing length leaks (capped at ' + base.leaks + ')');
+  // ⚠ THE LEAK COUNT IS NOT STABLE BETWEEN BUILDS, so the cap carries a small
+  //   tolerance. `makeMCQ()` keeps a RANDOM 3 of however many distractors a
+  //   question was authored with (CLAUDE.md: "a clean re-import is 0 new, ~560
+  //   updated"), so a pack whose items have five or six options gets a
+  //   different subset — and different option lengths — on every rebuild.
+  //   Measured: grade4-french moved 74 -> 75 and grade5-history 143 -> 146
+  //   across two builds with no edit to either pack. A bare `<=` therefore
+  //   fails at random, which is worse than not checking.
+  //   The band is 5% of the baseline, minimum 4 items; a real regression adds
+  //   far more than that, and anything inside it is sampling noise.
+  } else if (base.leaks !== undefined && leaks <= leakCap) {
+    console.log('  DEBT  ' + leaks + ' pre-existing length leaks (baseline ' + base.leaks +
+      ', cap ' + leakCap + ')');
     debts++;
   } else if (base.leaks !== undefined) {
-    fail(leakMsg + ' — WORSE than its recorded baseline of ' + base.leaks);
+    fail(leakMsg + ' — WORSE than its recorded baseline of ' + base.leaks + ' (cap ' + leakCap + ')');
   } else {
     fail(leakMsg);
   }
@@ -218,8 +233,10 @@ for (const pack of PACKS) {
     ' chars (papers: 6.5-6.8, limit ' + MAX_AVG_SPREAD + ')';
   if (avgSpread <= MAX_AVG_SPREAD) {
     ok(sMsg);
-  } else if (base.spread !== undefined && avgSpread <= base.spread + 0.05) {
-    console.log('  DEBT  ' + sMsg + ' - pre-existing, capped at ' + base.spread);
+  // ⚠ Same sampling wobble as the leak count above: measured 21.6 -> 22.0 on
+  //   grade4-history across two builds with no edit. Tolerance is 1 character.
+  } else if (base.spread !== undefined && avgSpread <= base.spread + 1.0) {
+    console.log('  DEBT  ' + sMsg + ' - pre-existing, baseline ' + base.spread);
     debts++;
   } else if (base.spread !== undefined) {
     fail(sMsg + ' - WORSE than its recorded baseline of ' + base.spread);
@@ -250,7 +267,18 @@ for (const pack of PACKS) {
   //   failing it would train people to ignore this check.
   //   ⚠ The floor stays 8 points so a big pack cannot drift further than before.
   const se = placed ? Math.sqrt(0.25 * 0.75 / placed) : 1;
-  const posTol = Math.max(0.08, 3 * se);
+  //   ⚠⚠ THREE SE WAS NOT ENOUGH, AND THE REASON IS MULTIPLE COMPARISONS.
+  //     This check runs on ~17 packs x 4 bins = ~68 positions per build, over an
+  //     option order that makeMCQ() re-randomises on EVERY build. At 3 SE each bin
+  //     fails about 0.3% of the time by chance, so a whole build failed roughly one
+  //     run in five - MEASURED 2026-09-08 by rebuilding the bundles four times with
+  //     no source edits between: grade6-maths 8.3% (n=288), a clean run, another
+  //     pack 8.5% (n=322), a clean run. A test that fails at random on unchanged
+  //     content is worse than no test - it gets re-run until it passes.
+  //     4 SE is ~6e-5 per bin, i.e. under half a percent across the whole build,
+  //     and still catches what this check exists for: the projected-item tell was
+  //     95.1% on position A, not a marginal drift.
+  const posTol = Math.max(0.08, 4 * se);
   const pMsg2 = pMsg + ' [tolerance ' + (100 * posTol).toFixed(1) + '% on n=' + placed + ']';
   if (worst <= posTol) {
     ok(pMsg2);

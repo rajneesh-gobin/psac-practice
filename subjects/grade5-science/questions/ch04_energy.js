@@ -87,11 +87,11 @@ STATIC_QUESTIONS.push(
     question:'When a girl runs in a park, what energy transformation takes place in her body?',
     options:[
       'Light energy → Sound energy',
-      'Chemical energy (from food) → Kinetic (movement) energy',
+      'Chemical energy → Kinetic energy',
       'Electrical energy → Heat energy',
       'Kinetic energy → Chemical energy'
     ],
-    answer:'Chemical energy (from food) → Kinetic (movement) energy',
+    answer:'Chemical energy → Kinetic energy',
     hint:'The girl gets energy from food - what type of energy does food store?',
     explanation:'When a girl runs, <b>chemical energy</b> stored in food is converted into <b>kinetic (movement) energy</b>. The body also releases some heat energy during this process.' }),
 
@@ -99,11 +99,11 @@ STATIC_QUESTIONS.push(
     question:'A tree uses sunlight to make its own food (photosynthesis). What energy transformation takes place?',
     options:[
       'Chemical energy → Light energy',
-      'Light energy → Chemical energy (stored in glucose)',
+      'Light energy → Chemical energy',
       'Kinetic energy → Electrical energy',
       'Heat energy → Sound energy'
     ],
-    answer:'Light energy → Chemical energy (stored in glucose)',
+    answer:'Light energy → Chemical energy',
     hint:'The tree captures light and stores it as food - a form of chemical energy.',
     explanation:'During photosynthesis, the tree converts <b>light energy</b> from the sun into <b>chemical energy</b> stored in glucose (sugar). This stored chemical energy is later used by the plant for growth and life processes.' }),
 
@@ -117,12 +117,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-en-014', chapterId:'energy', subsection:'sources', difficulty:2,
     question:'Solar street lamps have panels on top that charge batteries during the day, and light the street at night. What is the COMPLETE energy chain from day to night?',
     options:[
-      'Light → Electrical → Chemical (stored in battery) → Electrical → Light',
-      'Heat → Sound → Light → Kinetic',
-      'Chemical → Light → Heat → Electrical',
-      'Wind → Kinetic → Sound → Light'
+      'Light → Electrical → Chemical → Electrical → Light',
+      'Heat → Sound → Light → Kinetic → Electrical',
+      'Chemical → Light → Heat → Electrical → Kinetic',
+      'Wind → Kinetic → Sound → Light → Chemical'
     ],
-    answer:'Light → Electrical → Chemical (stored in battery) → Electrical → Light',
+    answer:'Light → Electrical → Chemical → Electrical → Light',
     hint:'During the day: sun → panels → battery. At night: battery → lamp.',
     explanation:'The complete chain is: <b>Light energy</b> (sun) → solar panels convert it to <b>Electrical energy</b> → stored as <b>Chemical energy</b> in battery → at night, battery releases <b>Electrical energy</b> → bulb produces <b>Light energy</b>.' }),
 
@@ -136,23 +136,23 @@ STATIC_QUESTIONS.push(
     question:'A drilling machine produces sound energy. The construction worker using it wears ear protection every day. Why is this precaution important?',
     options:[
       'Sound energy is too beautiful to be wasted',
-      'Continuous exposure to loud sound can cause hearing damage or deafness',
+      'Continuous loud sound can damage hearing',
       'Ear protection makes the worker work faster',
       'Sound cannot travel through ear protection'
     ],
-    answer:'Continuous exposure to loud sound can cause hearing damage or deafness',
+    answer:'Continuous loud sound can damage hearing',
     hint:'What does very loud noise do to our ears over time?',
     explanation:'The drilling machine produces very loud sound energy. <b>Continuous exposure to high levels of sound</b> can damage the sensitive cells in the inner ear, leading to partial or total hearing loss (deafness). This is why ear protection (earmuffs) must be worn.' }),
 
   makeMCQ({ id:'g5sci-en-017', chapterId:'energy', subsection:'sources', difficulty:3,
     question:'A country currently uses coal to produce all its electricity. It decides to switch entirely to solar and wind energy. Give TWO environmental advantages of this change.',
     options:[
-      'Solar and wind produce no air pollution AND they are renewable so they will not run out',
+      'Solar and wind produce no air pollution AND they are renewable',
       'Solar energy is cheaper to produce AND wind turbines are silent',
       'Coal produces more electricity AND solar panels work better at night',
       'Wind energy is stored in batteries AND coal is cleaner than oil'
     ],
-    answer:'Solar and wind produce no air pollution AND they are renewable so they will not run out',
+    answer:'Solar and wind produce no air pollution AND they are renewable',
     hint:'Think about pollution AND sustainability.',
     explanation:'Two environmental advantages: (1) Solar and wind energy produce <b>no air pollution</b> - no smoke, carbon dioxide or other harmful gases are released; (2) They are <b>renewable</b> - they will never run out because the sun and wind are continuously available, unlike coal which will eventually be exhausted.' }),
 
@@ -177,10 +177,10 @@ STATIC_QUESTIONS.push(
     options:[
       'One - the turbine converts water movement to electricity',
       'Two - the Sun heats the water, then the turbine spins',
-      'Three - light energy → potential energy (raised water) → kinetic energy (flowing water) → electrical energy',
+      'Three - light → potential → kinetic → electrical',
       'None - energy just moves without changing form'
     ],
-    answer:'Three - light energy → potential energy (raised water) → kinetic energy (flowing water) → electrical energy',
+    answer:'Three - light → potential → kinetic → electrical',
     hint:'Count every time energy changes from one form to another along the chain.',
     explanation:'The chain has <b>three transformations</b>: (1) <b>Light energy</b> from the Sun evaporates water, which rises and is stored as <b>potential energy</b> (water held at height); (2) potential energy converts to <b>kinetic energy</b> as water rushes downhill through the pipe and spins the turbine; (3) kinetic energy converts to <b>electrical energy</b> in the generator. This is how <b>hydroelectric power</b> works - tracing all the way back to the Sun as the original energy source.' })
 

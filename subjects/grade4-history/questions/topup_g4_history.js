@@ -55,25 +55,25 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-loc-058', chapterId:'g4hist-locality', subsection:'buildings', difficulty:1,
     question:'A school is a community building because it ___.',
-    options:['sells goods to make money','provides education for children in the area','belongs to one family','is only open on Saturdays'], answer:'provides education for children in the area',
+    options:['sells goods to make a profit','provides education for local children','belongs to only one family','is open only on Saturday mornings'], answer:'provides education for local children',
     hint:'Think about who uses a school.',
     explanation:'A school is a community building because it provides education and is shared by all children in the neighbourhood.' }),
 
   makeMCQ({ id:'g4h-loc-059', chapterId:'g4hist-locality', subsection:'types_locality', difficulty:2,
     question:'A street map of a neighbourhood would help you to ___.',
-    options:['find out the population of the district','check the weather forecast','locate the positions of streets and buildings','find out bus timetables'], answer:'locate the positions of streets and buildings',
+    options:['find out the district population','check the weather forecast','locate streets and buildings','find out the bus timetables'], answer:'locate streets and buildings',
     hint:'Maps show places and directions.',
     explanation:'A street map shows the layout of roads, streets and buildings, helping you navigate around a neighbourhood.' }),
 
   makeMCQ({ id:'g4h-loc-060', chapterId:'g4hist-locality', subsection:'types_locality', difficulty:2,
     question:'Which two community helpers would you call first if you saw a house on fire with someone trapped inside?',
-    options:['Doctor and teacher','Firefighter and police officer','Shopkeeper and postal worker','Teacher and nurse'], answer:'Firefighter and police officer',
+    options:['A doctor and a teacher','Firefighter and police officer','Shopkeeper and postal worker','A teacher and a nurse'], answer:'Firefighter and police officer',
     hint:'One fights the fire; the other controls the crowd and the scene.',
     explanation:'Firefighters tackle the blaze and rescue the trapped person, while police officers secure the area and direct traffic safely.' }),
 
   makeMCQ({ id:'g4h-loc-061', chapterId:'g4hist-locality', subsection:'buildings', difficulty:3,
     question:'Sam\'s house is next to the school. His neighbour on the left lives next to the post office. On the right is a clinic. What can you say about Sam\'s neighbourhood?',
-    options:['It has no community services','It has education, postal and health services nearby','It is far from all community helpers','It only has a school'], answer:'It has education, postal and health services nearby',
+    options:['It has no community services','It has school, post and health services','It is far from all community helpers','It only has a school nearby'], answer:'It has school, post and health services',
     hint:'List all the services mentioned.',
     explanation:'The school provides education, the post office provides postal services, and the clinic provides healthcare - three community services close to Sam.' }),
 
@@ -81,7 +81,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-com-050', chapterId:'g4hist-community', subsection:'festivals', difficulty:1,
     question:'Which festival is celebrated by the Hindu community with rows of oil lamps (diyas) and fireworks?',
-    options:['Eid','Christmas','Divali','Chinese New Year'], answer:'Divali',
+    options:['Eid ul-Fitr','Christmas','Divali','Chinese New Year'], answer:'Divali',
     hint:'Rows of oil lamps are lit to celebrate this Hindu festival.',
     explanation:'Divali, the Festival of Lights, is celebrated by Hindus. They light diyas and set off fireworks to mark the victory of light over darkness.' }),
 
@@ -123,25 +123,25 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-com-057', chapterId:'g4hist-community', subsection:'festivals', difficulty:1,
     question:'Diya lamps lit in rows at night are most associated with which festival?',
-    options:['Christmas','Eid','Chinese New Year','Divali'], answer:'Divali',
+    options:['Christmas','Eid ul-Fitr','Chinese New Year','Divali'], answer:'Divali',
     hint:'Think about which Hindu festival involves lighting rows of clay oil lamps.',
     explanation:'Divali is known as the Festival of Lights. Hindus light rows of clay oil lamps called diyas to celebrate.' }),
 
   makeMCQ({ id:'g4h-com-058', chapterId:'g4hist-community', subsection:'diversity', difficulty:2,
     question:'Why is Mauritius sometimes described as a multicultural country?',
-    options:['Because it has many beaches','Because people of many different cultures, religions and traditions live together there','Because it has only one language','Because it was never colonised'], answer:'Because people of many different cultures, religions and traditions live together there',
+    options:['Because it has many lovely beaches','Because many cultures live together there','Because it has only one language','Because it was never colonised'], answer:'Because many cultures live together there',
     hint:'Think about all the different communities and festivals.',
     explanation:'Mauritius is multicultural because communities of Hindu, Muslim, Christian and Chinese background, among others, live together and each celebrate their own festivals and traditions.' }),
 
   makeMCQ({ id:'g4h-com-059', chapterId:'g4hist-community', subsection:'diversity', difficulty:2,
     question:'Which of the following best shows that Mauritius respects all its communities?',
-    options:['Only one religion is allowed to celebrate in public','National holidays include festivals from several different communities','Schools teach only one language','Only one type of food is sold at the market'], answer:'National holidays include festivals from several different communities',
+    options:['Only one religion is allowed to celebrate in public','Holidays include festivals from many communities','Schools teach only one single language to all','Only one type of food is sold at the market'], answer:'Holidays include festivals from many communities',
     hint:'Look at the national calendar of public holidays.',
     explanation:'Mauritius recognises public holidays for festivals across communities - Divali, Eid, Christmas and Chinese New Year - showing respect for its cultural diversity.' }),
 
   makeMCQ({ id:'g4h-com-060', chapterId:'g4hist-community', subsection:'diversity', difficulty:3,
     question:'Priya\'s family does not eat beef; Ali\'s family does not eat pork; Marie\'s family eats all meats. What does this show about Mauritius?',
-    options:['People in Mauritius are fussy eaters','Mauritius has a food shortage','Different communities follow different religious dietary rules, showing cultural diversity','Mauritius has only three families'], answer:'Different communities follow different religious dietary rules, showing cultural diversity',
+    options:['People in Mauritius are all fussy eaters','Mauritius has a serious food shortage','Different communities follow different food rules','Mauritius has only three main families'], answer:'Different communities follow different food rules',
     hint:'These food rules are linked to religion, not personal taste.',
     explanation:'Hindus often avoid beef; Muslims avoid pork according to their religious rules. Marie\'s family may be Christian with no such restriction. This reflects Mauritius\'s cultural and religious diversity.' }),
 
@@ -167,7 +167,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-voy-052', chapterId:'g4hist-voyages', subsection:'ships', difficulty:2,
     question:'What was one main advantage of the caravel ship used by explorers?',
-    options:['It was powered by an engine','It had a flat bottom for shallow rivers','Its triangular (lateen) sails allowed it to sail in different wind directions','It could carry 2000 sailors'], answer:'Its triangular (lateen) sails allowed it to sail in different wind directions',
+    options:['It was powered by a small steam engine','It had a flat bottom for shallow rivers','Its triangular sails caught wind from any side','It could carry 2000 sailors at once'], answer:'Its triangular sails caught wind from any side',
     hint:'Triangular sails gave more control over direction.',
     explanation:'The caravel had triangular lateen sails that allowed it to sail at an angle into the wind, making it more manoeuvrable than older square-sailed ships.' }),
 
@@ -179,7 +179,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-voy-054', chapterId:'g4hist-voyages', subsection:'ships', difficulty:2,
     question:'Scurvy was a common illness among sailors on long voyages. What caused it?',
-    options:['Being hit by a storm at sea','A lack of fresh water','A lack of vitamin C from fresh fruit and vegetables','Breathing sea air for too long'], answer:'A lack of vitamin C from fresh fruit and vegetables',
+    options:['Being hit by a storm at sea','A lack of clean fresh water','A lack of vitamin C from fresh fruit','Breathing sea air for too long'], answer:'A lack of vitamin C from fresh fruit',
     hint:'Sailors ate mainly salted meat and dry biscuits for months.',
     explanation:'Scurvy is caused by a deficiency of vitamin C. On long voyages, sailors had no access to fresh fruit or vegetables, so they developed bleeding gums, weak joints and other symptoms.' }),
 
@@ -193,7 +193,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-env-050', chapterId:'g4ge-natural-env', subsection:'relief', difficulty:1,
     question:'What is the name of the highest mountain peak in Mauritius?',
-    options:['Le Morne Brabant','Piton de la Petite Rivière Noire','Corps de Garde','Trois Mamelles'], answer:'Piton de la Petite Rivière Noire',
+    options:['Le Morne Brabant in the south-west','Piton de la Petite Rivière Noire','Corps de Garde near Quatre Bornes','Trois Mamelles near Rivière Noire'], answer:'Piton de la Petite Rivière Noire',
     hint:'It stands at about 828 m above sea level.',
     explanation:'Piton de la Petite Rivière Noire, at approximately 828 m, is the highest point in Mauritius, located in the Black River Gorges area.' }),
 
@@ -217,7 +217,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-env-054', chapterId:'g4ge-natural-env', subsection:'coast', difficulty:2,
     question:'A lagoon along the coast of Mauritius is formed because ___.',
-    options:['rivers flow into the sea and dam it up','a coral reef just offshore protects the coast and creates calm, shallow water','high mountains trap rainwater near the coast','underground springs rise through the sand'], answer:'a coral reef just offshore protects the coast and creates calm, shallow water',
+    options:['rivers flow into the sea and dam it up','a coral reef offshore creates calm, shallow water','high mountains trap rainwater near the coast','underground springs rise through the sand'], answer:'a coral reef offshore creates calm, shallow water',
     hint:'The reef acts like a natural barrier.',
     explanation:'Coral reefs run parallel to much of the Mauritian coastline. They break the force of ocean waves, creating calm, shallow lagoons between the reef and the beach.' }),
 
@@ -235,7 +235,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-env-057', chapterId:'g4ge-natural-env', subsection:'relief', difficulty:2,
     question:'The mountains and hills of Mauritius are mainly made of which type of rock?',
-    options:['Limestone','Granite','Basalt (volcanic rock)','Sandstone'], answer:'Basalt (volcanic rock)',
+    options:['Limestone (from sea shells)','Granite (from deep magma)','Basalt (volcanic rock)','Sandstone (from sand)'], answer:'Basalt (volcanic rock)',
     hint:'Mauritius was formed by volcanic eruptions millions of years ago.',
     explanation:'Mauritius is a volcanic island. Its mountains, hills and much of its landscape are composed of basalt - a dark, fine-grained volcanic rock.' }),
 
@@ -253,13 +253,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-env-060', chapterId:'g4ge-natural-env', subsection:'coast', difficulty:2,
     question:'The coastal plain of Mauritius is the flat, low-lying land near the sea. What is it mainly used for?',
-    options:['Growing tea','Sugarcane cultivation','Cattle rearing on mountain slopes','Deep-sea fishing'], answer:'Sugarcane cultivation',
+    options:['Growing tea on the hills','Sugarcane cultivation','Cattle rearing on hill slopes','Deep-sea fishing ports'], answer:'Sugarcane cultivation',
     hint:'Mauritius\'s economy was historically built on this crop.',
     explanation:'The flat coastal plains of Mauritius are well-suited to large-scale sugarcane cultivation, which dominated the island\'s economy for centuries.' }),
 
   makeMCQ({ id:'g4h-env-061', chapterId:'g4ge-natural-env', subsection:'relief', difficulty:3,
     question:'Riya lives in Flacq on the east coast. She travels west across Mauritius, crosses the Central Plateau, descends to the west coast and reaches Port Louis. List two geographical features she is likely to see on her journey.',
-    options:['Only beaches and lagoons','Mountains and a plateau, then the coastal plain on the west','Only sugarcane fields the whole way','A desert and a river delta'], answer:'Mountains and a plateau, then the coastal plain on the west',
+    options:['Only beaches and blue lagoons','Mountains and then the coastal plain','Only sugarcane fields the whole way','A desert and a wide river delta'], answer:'Mountains and then the coastal plain',
     hint:'Think east coast → hills rising → plateau → west coast.',
     explanation:'Travelling from Flacq west, Riya would cross hills rising to the Central Plateau (cooler, cloudier), then descend through the western slopes to the coastal plain leading to Port Louis.' }),
 
@@ -315,7 +315,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-wea-058', chapterId:'g4ge-weather', subsection:'cyclones', difficulty:2,
     question:'When a Cyclone Warning Class 2 is announced in Mauritius, people should ___.',
-    options:['go to work and school as normal','prepare: stock food and water, and secure loose objects outdoors','evacuate to another country immediately','go to the beach to watch the waves'], answer:'prepare: stock food and water, and secure loose objects outdoors',
+    options:['go to work and school just as normal','stock food and water and secure loose objects','evacuate to another country immediately','go to the beach to watch the waves'], answer:'stock food and water and secure loose objects',
     hint:'Class 2 means the cyclone is getting closer; it is time to prepare.',
     explanation:'At Class 2, the cyclone is intensifying and moving closer. People should stock up on food, water and medicine, fasten or bring in anything that could be blown away, and prepare to shelter at home.' }),
 
@@ -327,7 +327,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-wea-060', chapterId:'g4ge-weather', subsection:'instruments', difficulty:3,
     question:'Lena checks the weather: the thermometer reads 34°C, dark clouds are forming, and she can feel strong gusts of wind. The Meteorological Services has just raised the cyclone signal to Class 2. What should Lena do?',
-    options:['Go to the beach to enjoy the waves before the storm','Stay outside and enjoy the warm temperature','Go indoors, prepare water and food supplies, and follow official advice','Fly a kite since it is windy'], answer:'Go indoors, prepare water and food supplies, and follow official advice',
+    options:['Go to the beach to enjoy the waves before the storm','Stay outside and enjoy the warm temperature','Go indoors, prepare food and water, follow advice','Fly a kite outdoors since it is very windy'], answer:'Go indoors, prepare food and water, follow advice',
     hint:'Class 2 means the cyclone is approaching; safety must come first.',
     explanation:'At Class 2, the cyclone is approaching and conditions will worsen. Lena must go indoors, secure any loose items, stock water and food, and follow advice from the Mauritius Meteorological Services.' }),
 
@@ -353,7 +353,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-map-053', chapterId:'g4ge-map-skills', subsection:'parts_of_map', difficulty:2,
     question:'What is a map scale used for?',
-    options:['To measure temperature on a map','To show how distances on the map relate to real distances on the ground','To find compass directions','To identify rivers'], answer:'To show how distances on the map relate to real distances on the ground',
+    options:['To measure the temperature on a map','To relate map distance to real distance','To find the compass directions','To identify rivers and lakes'], answer:'To relate map distance to real distance',
     hint:'A scale might say "1 cm = 10 km".',
     explanation:'A map scale shows the relationship between a distance on the map and the actual distance in the real world. For example, 1 cm on the map might equal 10 km on the ground.' }),
 
@@ -397,13 +397,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-expl-054', chapterId:'g4enr-explorers', subsection:'explorers', difficulty:2,
     question:'An astrolabe was carried on exploration ships because it helped navigators to ___.',
-    options:['catch fish','measure the position of stars and the sun to determine their location at sea','control the ship\'s sails in strong winds','communicate with ships far away'], answer:'measure the position of stars and the sun to determine their location at sea',
+    options:['catch fish for the crew to eat','measure the stars and the sun at sea','control the ship\'s sails in strong winds','communicate with ships far away'], answer:'measure the stars and the sun at sea',
     hint:'It looked up at the sky, not the sea.',
     explanation:'An astrolabe is a navigational instrument used to measure the angle of the sun or stars above the horizon. This allowed sailors to calculate their latitude and find their position at sea.' }),
 
   makeMCQ({ id:'g4h-enr-expl-055', chapterId:'g4enr-explorers', subsection:'explorers', difficulty:1,
     question:'A compass helped explorers at sea by ___.',
-    options:['always pointing north so they could find their direction','measuring water depth','predicting storms in advance','calculating their speed through the water'], answer:'always pointing north so they could find their direction',
+    options:['always pointing north to show direction','measuring the depth of the water','predicting storms well in advance','calculating their speed through the water'], answer:'always pointing north to show direction',
     hint:'A magnetic needle always aligns with the Earth\'s magnetic field.',
     explanation:'A magnetic compass always points north. Knowing north allowed explorers to determine all other directions and navigate even in cloudy weather when they could not see the stars.' }),
 
@@ -415,7 +415,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-expl-057', chapterId:'g4enr-explorers', subsection:'explorers', difficulty:2,
     question:'Why was the discovery of a direct sea route to India and Asia so important for European countries?',
-    options:['They could trade spices, silk and gems without crossing dangerous overland routes controlled by others','They wanted to swim in the warm Indian Ocean','They had run out of food in Europe and needed Asian crops immediately','They wished to find new animals for European zoos'], answer:'They could trade spices, silk and gems without crossing dangerous overland routes controlled by others',
+    options:['They could trade spices and silk without crossing land','They wanted to swim in the warm Indian Ocean','They had run out of food and needed Asian crops','They wished to find new animals for European zoos'], answer:'They could trade spices and silk without crossing land',
     hint:'Spices and silk were very valuable in Europe.',
     explanation:'Overland trade routes to Asia (the Silk Road) were controlled by powerful empires that charged high taxes. A direct sea route allowed Europeans to trade directly, gaining access to valuable spices, silk and gems.' }),
 
@@ -447,13 +447,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-mau-053', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:1,
     question:'What is the national flower of Mauritius?',
-    options:['Rose','Hibiscus','Trochetia boutoniana (Boucle d\'Oreille)','Orchid'], answer:'Trochetia boutoniana (Boucle d\'Oreille)',
+    options:['Garden rose','Red hibiscus','Trochetia boutoniana','Wild orchid'], answer:'Trochetia boutoniana',
     hint:'Its common name in French means "earring".',
     explanation:'Trochetia boutoniana, commonly called Boucle d\'Oreille (Earring) due to its drooping red and yellow flowers, is the national flower of Mauritius.' }),
 
   makeMCQ({ id:'g4h-enr-mau-054', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:1,
     question:'The Dodo, which is the national bird of Mauritius, is ___.',
-    options:['endangered and protected in a national park','still found on Rodrigues Island','extinct - it no longer exists','a type of colourful parrot'], answer:'extinct - it no longer exists',
+    options:['endangered and protected in a park','still found on Rodrigues Island','extinct - it no longer exists','a type of colourful parrot'], answer:'extinct - it no longer exists',
     hint:'Sailors and introduced animals wiped it out centuries ago.',
     explanation:'The Dodo (Raphus cucullatus) was a large flightless bird unique to Mauritius. It became extinct in the late 17th century due to hunting and the introduction of predators by settlers.' }),
 
@@ -465,19 +465,19 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-mau-056', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:1,
     question:'Which of these features appears on the coat of arms of Mauritius?',
-    options:['A lion and a unicorn','A key, a star, a ship, sugarcane and a dodo','A crown and a cross','An eagle and a globe'], answer:'A key, a star, a ship, sugarcane and a dodo',
+    options:['A lion, a unicorn and a crown','A key, a star, a ship and a dodo','A crown, a cross and a sword','An eagle, a globe and a flag'], answer:'A key, a star, a ship and a dodo',
     hint:'The dodo appears even though it is extinct - it is a national symbol.',
     explanation:'The coat of arms of Mauritius features a key, a star, a ship, sugarcane stalks, a palm tree, a dodo and a deer, along with the national motto "Stella Clavisque Maris Indici" (Star and Key of the Indian Ocean).' }),
 
   makeMCQ({ id:'g4h-enr-mau-057', chapterId:'g4enr-mauritius', subsection:'symbols', difficulty:2,
     question:'Sugar cane appears on the coat of arms of Mauritius because ___.',
-    options:['sugarcane is the national flower','sugarcane cultivation was historically the most important industry on the island','it was planted by explorers in 1492','it grows by the sea'], answer:'sugarcane cultivation was historically the most important industry on the island',
+    options:['sugarcane is the national flower','sugarcane was the island\'s main industry','it was planted by explorers in 1492','it grows well by the sea shore'], answer:'sugarcane was the island\'s main industry',
     hint:'The island\'s economy depended on this crop for centuries.',
     explanation:'Sugarcane has dominated the Mauritian economy since the 18th century, providing income and employment. Its presence on the coat of arms reflects its historical importance to the country.' }),
 
   makeMCQ({ id:'g4h-enr-mau-058', chapterId:'g4enr-mauritius', subsection:'places', difficulty:1,
     question:'Which of these is one of Mauritius\'s main towns after Port Louis?',
-    options:['Mahébourg only','Flacq only','Curepipe, Quatre Bornes, Vacoas-Phoenix and Rose Hill','Only Rodrigues'], answer:'Curepipe, Quatre Bornes, Vacoas-Phoenix and Rose Hill',
+    options:['Only Mahébourg village','Only Flacq and Souillac','Curepipe and Quatre Bornes','Only Rodrigues island'], answer:'Curepipe and Quatre Bornes',
     hint:'Several towns are on the Central Plateau.',
     explanation:'Mauritius\'s main towns besides Port Louis include Curepipe, Quatre Bornes, Vacoas-Phoenix and Rose Hill, which are all situated on or near the Central Plateau.' }),
 
@@ -489,7 +489,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-mau-060', chapterId:'g4enr-mauritius', subsection:'facts', difficulty:2,
     question:'Why is the motto of Mauritius "Stella Clavisque Maris Indici" (Star and Key of the Indian Ocean)?',
-    options:['Because Mauritius has many stars in its night sky','Because Mauritius\'s strategic location in the Indian Ocean made it an important stopping point for ships','Because it was the first island discovered in the Indian Ocean','Because it produces the most fish in the Indian Ocean'], answer:'Because Mauritius\'s strategic location in the Indian Ocean made it an important stopping point for ships',
+    options:['Because Mauritius has so many stars in its night sky','Because its position made it a stopping point for ships','Because it was the first island discovered in the Indian Ocean','Because it produces the most fish in the Indian Ocean'], answer:'Because its position made it a stopping point for ships',
     hint:'Ships sailing between Europe, Africa and Asia passed near Mauritius.',
     explanation:'Mauritius\'s position in the central Indian Ocean made it a vital supply and repair stop for ships on long voyages. Colonial powers valued it as a strategic "key" to controlling Indian Ocean trade routes.' }),
 
@@ -528,7 +528,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-wld-054', chapterId:'g4enr-world', subsection:'rivers', difficulty:1,
     question:'Which is the highest mountain in the world?',
-    options:['Mont Blanc','K2','Mount Kilimanjaro','Mount Everest'], answer:'Mount Everest',
+    options:['Mont Blanc','K2 in Pakistan','Mount Kilimanjaro','Mount Everest'], answer:'Mount Everest',
     hint:'It is in the Himalayan mountain range in Asia.',
     explanation:'Mount Everest, at 8 849 m above sea level, is the highest mountain in the world. It is on the border between Nepal and China (Tibet) in the Himalayas.' }),
 
@@ -540,7 +540,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4h-enr-wld-056', chapterId:'g4enr-world', subsection:'coordinates', difficulty:1,
     question:'The Prime Meridian (0° longitude) passes through which city?',
-    options:['Paris','New York','Greenwich (London)','Cairo'], answer:'Greenwich (London)',
+    options:['Paris, France','New York, USA','Greenwich (London)','Cairo, Egypt'], answer:'Greenwich (London)',
     hint:'The line passes through the Royal Observatory in this city.',
     explanation:'The Prime Meridian at 0° longitude passes through Greenwich, London. It was chosen as the starting line for measuring longitude east and west, and gives its name to Greenwich Mean Time (GMT).' }),
 

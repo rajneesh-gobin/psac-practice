@@ -9,8 +9,8 @@ STATIC_QUESTIONS.push(
     options:[
       '"She smiled" in "She smiled because she was happy."',
       '"because she was happy" in "She smiled because she was happy."',
-      'The whole sentence',
-      'There is no subordinate clause.'
+      'The whole sentence, "She smiled because she was happy."',
+      'There is no subordinate clause in this sentence.'
     ],
     answer:'"because she was happy" in "She smiled because she was happy."',
     hint:'A subordinate clause cannot stand alone - it depends on the main clause.',
@@ -104,10 +104,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-cls-011', chapterId:'g6eng-clauses', subsection:'clause_types', difficulty:2,
     question:'Which sentence correctly uses a TYPE 3 CONDITIONAL (unreal past)?',
     options:[
-      '"If it rains, we will cancel the match."',
-      '"If I were taller, I would play basketball."',
+      '"If it rains tomorrow, we will cancel the match."',
+      '"If I were a lot taller, I would play basketball."',
       '"If she had studied harder, she would have passed the exam."',
-      '"If you heat ice, it melts."'
+      '"If you heat ice in a pan, it melts quickly."'
     ],
     answer:'"If she had studied harder, she would have passed the exam."',
     hint:'Type 3: If + past perfect (had + past participle), would have + past participle. Refers to an unreal past situation.',

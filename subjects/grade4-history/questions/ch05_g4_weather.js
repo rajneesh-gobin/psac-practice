@@ -6,8 +6,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4ge-weather-001', chapterId:'g4ge-weather', subsection:'seasons', difficulty:1,
     question:'How many main seasons does Mauritius have?',
-    options:['Four (spring, summer, autumn, winter)','Two (summer and winter)','Three (wet, dry, cyclone)','One (it is always hot)'],
-    answer:'Two (summer and winter)',
+    options:['Four (spring, summer, autumn, winter)','Two (a summer and a winter)','Three (wet, dry and cyclone)','One (it is always hot here)'],
+    answer:'Two (a summer and a winter)',
     hint:'Mauritius is a tropical island - it does not have four seasons like countries in Europe.',
     explanation:'Mauritius has <b>two main seasons</b>: a <b>summer</b> (November to April) which is hot and rainy, and a <b>winter</b> (May to October) which is cooler and drier.' }),
 
@@ -68,12 +68,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4ge-weather-010', chapterId:'g4ge-weather', subsection:'elements', difficulty:2,
     question:'Farmers in Mauritius need to listen to the weather forecast. Why is the forecast useful to them?',
     options:[
-      'To decide what clothes to wear',
-      'To know when to plant, water or harvest crops, and to prepare for heavy rain or drought',
+      'To decide what clothes to wear each day',
+      'To know when to plant, water or harvest crops',
       'To plan which TV programmes to watch',
       'To decide which route to drive to work'
     ],
-    answer:'To know when to plant, water or harvest crops, and to prepare for heavy rain or drought',
+    answer:'To know when to plant, water or harvest crops',
     hint:'A farmer\'s work depends entirely on the weather.',
     explanation:'Weather forecasts are very important to <b>farmers</b>. Knowing about rain helps them decide when to plant or irrigate crops. Warnings of drought help them save water. Storm warnings allow them to protect crops and animals. Weather directly affects food production.' })
 
@@ -85,11 +85,11 @@ STATIC_QUESTIONS.push(
     question:'How does heavy DROUGHT affect people\'s lives in Mauritius?',
     options:[
       'It brings cool, fresh water for everyone',
-      'It causes water shortages - crops die, reservoirs dry up and people may have limited water supply',
+      'It causes water shortages, so crops die',
       'It makes rivers flood and damages buildings',
-      'It brings lots of rain that helps farmers grow more crops'
+      'It brings lots of rain that helps farmers'
     ],
-    answer:'It causes water shortages - crops die, reservoirs dry up and people may have limited water supply',
+    answer:'It causes water shortages, so crops die',
     hint:'A drought means too little rain for a long time.',
     explanation:'A <b>drought</b> is a long period with little or no rain. It causes <b>water shortages</b> - crops wither and die, reservoirs (water storage lakes) dry up, animals suffer and people may face restrictions on water use. In Mauritius, droughts can seriously damage the sugar cane and vegetable industries.' }),
 
@@ -97,11 +97,11 @@ STATIC_QUESTIONS.push(
     question:'How does a CYCLONE affect people in Mauritius?',
     options:[
       'It brings a gentle breeze and light rain that helps crops grow',
-      'It causes strong winds and heavy rain that can damage buildings, uproot trees and cause flooding',
-      'It makes the sea very calm and safe for swimming',
+      'It brings strong winds and heavy rain that damage buildings',
+      'It makes the sea very calm and safe for all swimming',
       'It makes temperatures drop below 0°C and causes snow'
     ],
-    answer:'It causes strong winds and heavy rain that can damage buildings, uproot trees and cause flooding',
+    answer:'It brings strong winds and heavy rain that damage buildings',
     hint:'Cyclones are tropical storms with very powerful spinning winds.',
     explanation:'A <b>cyclone</b> is a powerful tropical storm with violent spinning winds and heavy rain. In Mauritius, cyclones can <b>destroy buildings, uproot trees, damage crops, flood roads and cut off electricity</b>. Mauritius has a cyclone warning system to protect people.' }),
 
@@ -129,11 +129,11 @@ STATIC_QUESTIONS.push(
     question:'What does a weather forecast tell us?',
     options:[
       'What the weather was like last year',
-      'What the weather is expected to be like in the coming days',
+      'What the weather will be like in coming days',
       'The exact temperature 100 years ago',
-      'Only the wind direction'
+      'Only the wind direction for today'
     ],
-    answer:'What the weather is expected to be like in the coming days',
+    answer:'What the weather will be like in coming days',
     hint:'Forecast = prediction of future weather.',
     explanation:'A <b>weather forecast</b> predicts what the weather will be like in the near future - for example tomorrow or the next few days. It includes predictions about temperature, rainfall, wind and any severe weather like storms or cyclones.' }),
 
@@ -147,11 +147,11 @@ STATIC_QUESTIONS.push(
     question:'A school trip to the beach is planned for tomorrow. The weather forecast shows "strong south-east winds, choppy seas and heavy showers." What should the school do and why?',
     options:[
       'Go ahead - the weather usually changes anyway',
-      'Postpone the trip - strong winds and heavy showers make the sea unsafe for children and the trip unpleasant',
-      'Go ahead but bring extra food',
-      'Ignore the forecast because forecasts are always wrong'
+      'Postpone the trip - the sea will be unsafe',
+      'Go ahead but bring extra food and drinks',
+      'Ignore it because forecasts are always wrong'
     ],
-    answer:'Postpone the trip - strong winds and heavy showers make the sea unsafe for children and the trip unpleasant',
+    answer:'Postpone the trip - the sea will be unsafe',
     hint:'The weather forecast is there to help us make safe decisions.',
     explanation:'The school should <b>postpone the trip</b>. Strong winds create rough, choppy seas that are <b>dangerous for children swimming</b>. Heavy showers make outdoor activities unpleasant and could cause flash flooding. Using the weather forecast to make safety decisions is a key reason forecasts are important.' }),
 

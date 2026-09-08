@@ -70,12 +70,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-per-010', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:2,
     question:'Pierre Poivre held the title of Intendant of Isle de France. What does an Intendant do?',
     options:[
-      'Acts as a senior civil administrator responsible for finance, trade and agriculture',
+      'Acts as a senior official for finance, trade and farming',
       'Commands the military forces defending the colony',
       'Acts as a judge presiding over colonial courts',
       'Serves as a religious leader appointed by the French king'
     ],
-    answer:'Acts as a senior civil administrator responsible for finance, trade and agriculture',
+    answer:'Acts as a senior official for finance, trade and farming',
     hint:'He was not the military governor but ran the civilian affairs of the colony.',
     explanation:'An <b>Intendant</b> in French colonial administration was a senior civil official who managed finance, trade and agriculture - the role Pierre Poivre held in Isle de France.' }),
 
@@ -115,12 +115,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-per-015', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:3,
     question:'What was Pierre Poivre\'s lasting achievement that visitors can still see in Mauritius today?',
     options:[
-      'He developed Pamplemousses Botanical Garden and introduced spices from the East Indies',
+      'He developed Pamplemousses Botanical Garden and grew spices',
       'He built Port Louis harbour and established it as the island\'s capital',
       'He defeated the British fleet at the Battle of Grand Port',
       'He signed the treaty that transferred Mauritius to British rule'
     ],
-    answer:'He developed Pamplemousses Botanical Garden and introduced spices from the East Indies',
+    answer:'He developed Pamplemousses Botanical Garden and grew spices',
     hint:'The garden he helped develop is one of the oldest botanical gardens in the southern hemisphere.',
     explanation:'<b>Pierre Poivre</b> introduced spice plants from the East Indies and helped develop the <b>Pamplemousses Botanical Garden</b>, which still exists today as one of the southern hemisphere\'s oldest botanical gardens.' }),
 
@@ -146,12 +146,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-per-018', chapterId:'g5enr-personalities', subsection:'colonial', difficulty:4,
     question:'Why did the Portuguese NOT establish a permanent settlement in Mauritius after discovering it?',
     options:[
-      'The island had no natural harbour suitable for a permanent base and they had better-placed bases elsewhere',
+      'The island had no natural harbour and they had better bases elsewhere',
       'The island was already occupied by a large indigenous population that resisted them',
       'The Dutch had already claimed the island before the Portuguese arrived',
       'The French navy prevented the Portuguese from landing on the island'
     ],
-    answer:'The island had no natural harbour suitable for a permanent base and they had better-placed bases elsewhere',
+    answer:'The island had no natural harbour and they had better bases elsewhere',
     hint:'The Portuguese used the island mainly as a waypoint on their trade routes to Asia.',
     explanation:'The <b>Portuguese</b> did not settle Mauritius permanently because they had better-positioned bases elsewhere on their trade routes and the island served only as a passing waypoint, making a permanent settlement unnecessary.' }),
 
@@ -183,8 +183,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5enr-per-022', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:1,
     question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/mahe-de-labourdonnais.jpg" alt="Portrait of Mahé de Labourdonnais" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>This is Mahé de Labourdonnais. Which important contribution is he best known for in Mauritius?</b>',
-    options:['Developing Port Louis harbour and making it the capital','Introducing cloves and nutmeg to the island','Becoming the first British governor','Leading the Dutch settlement in 1638'],
-    answer:'Developing Port Louis harbour and making it the capital',
+    options:['Developing Port Louis harbour and the capital','Introducing cloves and nutmeg to the island','Becoming the first British governor','Leading the Dutch settlement in 1638'],
+    answer:'Developing Port Louis harbour and the capital',
     hint:'Think of the harbour and capital city.',
     explanation:'Mahé de Labourdonnais developed <b>Port Louis harbour</b> and made Port Louis the capital of Isle de France.' }),
 
@@ -196,8 +196,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5enr-per-024', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:1,
     question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/historical-personalities/pierre-poivre.jpg" alt="Portrait of Pierre Poivre" style="max-height:220px;max-width:100%;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>This is Pierre Poivre. Which plants is he especially remembered for introducing to Mauritius?</b>',
-    options:['Spice plants such as cloves and nutmeg','Tea and coffee only','Potatoes and wheat','Sugar cane and tobacco'],
-    answer:'Spice plants such as cloves and nutmeg', hint:'His surname means "pepper" in French.',
+    options:['Cloves, nutmeg and pepper','Tea and coffee only','Potatoes and wheat','Sugar cane and tobacco'],
+    answer:'Cloves, nutmeg and pepper', hint:'His surname means "pepper" in French.',
     explanation:'Pierre Poivre introduced valuable <b>spice plants</b>, including cloves and nutmeg, to Mauritius.' }),
 
   makeMCQ({ id:'g5enr-per-025', chapterId:'g5enr-personalities', subsection:'portraits', difficulty:2,

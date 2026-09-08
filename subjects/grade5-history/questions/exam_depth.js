@@ -161,7 +161,7 @@
     'Its name says who it stood for: working people.',
     'Sir Seewoosagur Ramgoolam led the <b>Labour Party</b>, which won the 1967 election and took Mauritius to independence in 1968.');
   q(3, 'What changed about who governed Mauritius when it became independent in 1968?',
-    ['Mauritians elected their own government instead of being ruled from Britain', 'The island was returned to France', 'The Dutch came back to govern the island', 'Britain sent a new Governor every year'],
+    ['Mauritians elected their own government', 'The island was returned to France', 'The Dutch came back to govern the island', 'Britain sent a new Governor every year'],
     'Independence is about who makes the decisions.',
     'From 1968 <b>Mauritians elected their own government</b>. Britain no longer decided the island\'s laws, and a Mauritian Prime Minister led the country.');
   q(3, 'Which title did Sir Seewoosagur Ramgoolam earn for his part in independence?',

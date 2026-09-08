@@ -57,7 +57,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4s-air-007', chapterId:'g4sci-air', subsection:'breathing', difficulty:2,
     question:'What is ONE effect of breathing POLLUTED air?',
-    options:['Much better eyesight','Coughing and breathing trouble','Stronger muscles','Much faster growth'],
+    options:['Much better eyesight at night','Coughing and breathing trouble','Stronger muscles','Much faster growth in children'],
     answer:'Coughing and breathing trouble',
     hint:'The lungs are directly exposed to whatever is in the air you breathe.',
     explanation:'Breathing polluted air causes <b>coughing, asthma attacks and breathing difficulties</b>. Pollutants irritate the lining of the airways and lungs. Long-term exposure can cause serious lung diseases. Children and the elderly are especially at risk.' }),
@@ -90,11 +90,11 @@ STATIC_QUESTIONS.push(
     question:'A factory opens near a town. Within one year, reports show a 25% increase in asthma cases among children, and measurements show high levels of sulphur dioxide in the air. What is the MOST LIKELY conclusion?',
     options:[
       'The children are getting asthma from eating too much sugar',
-      'The factory\'s sulphur dioxide emissions are likely polluting the air and contributing to the rise in asthma cases',
+      'The factory\'s sulphur dioxide is likely polluting the air',
       'The increase in asthma is unrelated to the factory because factories are far away',
       'Sulphur dioxide is harmless and the asthma increase is a coincidence'
     ],
-    answer:'The factory\'s sulphur dioxide emissions are likely polluting the air and contributing to the rise in asthma cases',
+    answer:'The factory\'s sulphur dioxide is likely polluting the air',
     hint:'Two events happened at the same time: factory opened AND asthma cases rose. What is the likely link?',
     explanation:'The timing and evidence suggest a strong link: the factory releases <b>sulphur dioxide</b> (a known air pollutant that irritates airways), and asthma cases rose after it opened. The most reasonable conclusion is that the <b>factory\'s pollution is contributing to the health problems</b>. This is why factories must have emission controls to protect public health.' })
 

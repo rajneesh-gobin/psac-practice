@@ -92,12 +92,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4enr-wld-013', chapterId:'g4enr-world', subsection:'continents', difficulty:3,
     question:'AUSTRALIA is unique because it is both a country AND a continent. What does this mean?',
     options:[
-      'Australia is divided into two separate countries that share the continent',
-      'Australia is a single country that occupies an entire continent by itself - no other country shares its continental landmass',
-      'Australia is the smallest country and the smallest continent in the world',
-      'Australia is a continent but is not officially recognised as an independent country'
+      'Australia is divided into two separate countries',
+      'Australia is one country filling a whole continent',
+      'Australia is the smallest country and continent',
+      'Australia is a continent but not a real country'
     ],
-    answer:'Australia is a single country that occupies an entire continent by itself - no other country shares its continental landmass',
+    answer:'Australia is one country filling a whole continent',
     hint:'Think about how many borders you would cross walking from one side of Australia to the other.',
     explanation:'<b>Australia</b> is the only country that is also a <b>continent</b> in its own right. The Australian continent is entirely occupied by one nation. This means it has no land borders with any other country, making it unique among the world\'s continents.' }),
 
@@ -119,11 +119,11 @@ STATIC_QUESTIONS.push(
     question:'Seychelles, Maldives, Comoros and Mauritius are all island nations in the Indian Ocean. What do they ALL share besides being islands in the same ocean?',
     options:[
       'They all use French as their only official language',
-      'They are all small island nations whose economies depend heavily on tourism and fishing',
+      'They are small islands that depend on tourism and fishing',
       'They all have large populations of over 10 million people',
       'They were all colonised by Portugal in the 1500s'
     ],
-    answer:'They are all small island nations whose economies depend heavily on tourism and fishing',
+    answer:'They are small islands that depend on tourism and fishing',
     hint:'What do all four have in common in size, in where they sit, and in how they earn their money?',
     explanation:'<b>Seychelles, Maldives, Comoros and Mauritius</b> are all <b>small island nations</b> in the Indian Ocean whose economies depend heavily on <b>tourism</b> (beaches, coral reefs, wildlife) and <b>fishing</b>. They also share challenges like vulnerability to climate change, rising sea levels and dependence on imports for many goods.' }),
 
@@ -137,12 +137,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4enr-wld-018', chapterId:'g4enr-world', subsection:'oceans', difficulty:4,
     question:'Why is the INDIAN OCEAN particularly important to the country of Mauritius - more so than any other ocean?',
     options:[
-      'Mauritius is actually located in the Atlantic Ocean, not the Indian Ocean',
-      'The Indian Ocean surrounds Mauritius, connecting it to trading partners, tourism, fish resources and its history - it shapes the island\'s economy, culture and environment',
-      'The Indian Ocean is important to Mauritius only for fishing - it has no other connection to it',
-      'Mauritius is a landlocked island and does not actually border any ocean'
+      'Mauritius is really in the Atlantic Ocean, not the Indian',
+      'It surrounds Mauritius and shapes its trade, food and weather',
+      'The Indian Ocean matters to Mauritius only for fishing',
+      'Mauritius is landlocked and does not border any ocean'
     ],
-    answer:'The Indian Ocean surrounds Mauritius, connecting it to trading partners, tourism, fish resources and its history - it shapes the island\'s economy, culture and environment',
+    answer:'It surrounds Mauritius and shapes its trade, food and weather',
     hint:'Think about how an island nation relates to the ocean around it - for trade, people, history, food and weather.',
     explanation:'The <b>Indian Ocean</b> is fundamental to Mauritius in multiple ways: it <b>surrounds the island</b> on all sides; it brought <b>traders, settlers and colonisers</b> who shaped Mauritius\'s diverse culture; it connects Mauritius to <b>trading partners</b> for imports and exports; its <b>fish and marine resources</b> feed the population; its <b>beaches and coral reefs</b> drive tourism; and Indian Ocean weather systems determine Mauritius\'s <b>climate and cyclone risk</b>.' }),
 

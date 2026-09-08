@@ -70,7 +70,66 @@ function shuffleSeeded(arr, rnd) {
 // ── Blueprints ────────────────────────────────────────────────────────────
 // Every number below is measured. See docs/nce-grade9/exam-blueprints.md for
 // the page each came from; do not "tidy" one without re-reading the papers.
+// ⚠⚠ THE PAPER GENERATOR CONSUMES TASKS, AND ONLY ONE PACK HAS ANY.
+//   assemblePaper() works on `task` items - parts, marks, response kinds -
+//   because grade9-maths was authored with makeTask(). Measured 2026-09-08:
+//       grade9-maths    667 task
+//       grade9-science    0 task  (386 mcq, 90 text, 52 numeric)
+//       grade9-ict        0 task  (405 mcq, 64 text)
+//   So a blueprint alone gives those two subjects nothing to assemble. This
+//   adapter wraps a plain bank question as a ONE-PART task worth one mark,
+//   which is exactly the shape the real papers are mostly made of: 63.4% of
+//   Biology parts, 75.0% of Chemistry and 75.5% of Physics are single-mark.
+//
+// ⚠ IT DOES NOT INVENT MARKS. Everything it produces is worth 1, because a
+//   plain question carries no mark information and guessing 3 for a long one
+//   would be fiction. A paper built this way therefore reaches its total with
+//   more parts than the real paper uses, and assemblePaper's own compliance
+//   report says so rather than hiding it.
+// ⚠ THE SOURCE ID IS PRESERVED. Repeat-avoidance, analytics and the mark
+//   scheme all trace a part back to its bank question; a synthetic id would
+//   silently break recent-paper history.
+const QTYPE_TO_KIND = {
+  mcq: 'choice', multi: 'multi', numeric: 'number', expr: 'expression',
+  text: 'blanks', slots: 'blanks',
+};
+function taskFromQuestion(q) {
+  const kind = QTYPE_TO_KIND[q.type];
+  if (!kind) return null;
+  const response = { kind };
+  if (kind === 'choice') { response.options = (q.options || []).slice(); response.answer = q.answer; }
+  else if (kind === 'multi') { response.options = (q.options || []).slice(); response.answer = (q.answer || []).slice(); }
+  else if (kind === 'blanks') { response.answer = [String(q.answer)]; }
+  else { response.answer = q.answer; }
+  return {
+    id: q.id,
+    chapterId: q.chapterId,
+    subsection: q.subsection,
+    difficulty: q.difficulty || 2,
+    type: 'task',
+    stimulus: null,
+    parts: [{
+      label: 'a', marks: 1, prompt: q.question,
+      hint: q.hint, explanation: q.explanation, response,
+    }],
+  };
+}
+
+// Wrap a whole bank. Anything already a task passes through untouched, so a
+// pack may mix authored tasks with adapted plain questions.
+function tasksFromBank(questions) {
+  const out = [];
+  for (const q of questions || []) {
+    if (!q) continue;
+    if (q.type === 'task') { out.push(q); continue; }
+    const t = taskFromQuestion(q);
+    if (t) out.push(t);
+  }
+  return out;
+}
+
 const BLUEPRINTS = {
+
   'grade9-maths': {
     subjectName: 'Mathematics',
     grade: 9,
@@ -111,6 +170,169 @@ const BLUEPRINTS = {
     // typed. Every year has one; a paper without one is not this paper.
     minManualTasks: 1,
   },
+
+  'grade9-biology': {
+    // Bank is all single-mark adapted items; gather them into numbered
+    // questions with (a)(b)(c) sub-parts, as the real paper does.
+    groupSingles: { partsPerQuestion: 8 },
+    subjectName: 'Biology',
+    grade: 9,
+    // ⚠ EVERY ONE of the 14 NCE science papers is 45 minutes and 50 marks,
+    //   candidates answering on the question paper, "Answer ALL questions",
+    //   no optionality anywhere in the corpus (blueprint-science.md §X.1).
+    durationMins: 45,
+    totalMarks: 50,
+    calculatorAllowed: true,
+    materials: ['Ruler', 'Calculator'],
+    targetTaskCount: 6,
+    sections: null,
+    instructions: [
+      'Write your name and class in the spaces provided above.',
+      'Write in dark blue or black ink.',
+      'You may use a soft pencil for any diagram, graph or rough working.',
+      'Do not use correction fluid.',
+      'Diagrams are not drawn to scale unless otherwise specified.',
+      'Answer <b>ALL</b> questions.',
+      'The number of marks is given in brackets [ ] at the end of each question or part question.',
+    ],
+    partMarkMix: { 1: 0.634, 2: 0.209, 3: 0.072, 4: 0.059, 5: 0.026 },
+    // ⚠ Question 1 is a fixed 10-mark MCQ block in ALL 14 papers - ten items,
+    //   one mark each, exactly 20% of the paper, always first (§X.2).
+    openingSingles: 0,
+    mcqBlock: { minParts: 10, maxParts: 10,
+                lead: 'Circle the correct answer. Each item carries <b>1 mark</b>.' },
+    // ⚠ NOTHING IN FIVE YEARS EXCEEDS 5 MARKS and there is no essay anywhere
+    //   in the corpus (§X.3), so there is no extended tail to ask for.
+    extendedTail: null,
+    visualTargetPct: 0.926,
+    // 25 of 27 questions carry a figure (§X.4). Biology also needs a known
+    // physical scale wherever magnification is asked (§M.6.5).
+    minManualTasks: 1,
+  },
+  'grade9-chemistry': {
+    // Bank is all single-mark adapted items; gather them into numbered
+    // questions with (a)(b)(c) sub-parts, as the real paper does.
+    groupSingles: { partsPerQuestion: 10 },
+    subjectName: 'Chemistry',
+    grade: 9,
+    // ⚠ EVERY ONE of the 14 NCE science papers is 45 minutes and 50 marks,
+    //   candidates answering on the question paper, "Answer ALL questions",
+    //   no optionality anywhere in the corpus (blueprint-science.md §X.1).
+    durationMins: 45,
+    totalMarks: 50,
+    calculatorAllowed: true,
+    materials: ['Ruler', 'Calculator', 'Periodic Table (supplied)'],
+    targetTaskCount: 5,
+    sections: null,
+    instructions: [
+      'Write your name and class in the spaces provided above.',
+      'Write in dark blue or black ink.',
+      'You may use a soft pencil for any diagram, graph or rough working.',
+      'Do not use correction fluid.',
+      'Diagrams are not drawn to scale unless otherwise specified.',
+      'Answer <b>ALL</b> questions.',
+      'The number of marks is given in brackets [ ] at the end of each question or part question.',
+    ],
+    partMarkMix: { 1: 0.750, 2: 0.159, 3: 0.028, 4: 0.045, 5: 0.017 },
+    // ⚠ Question 1 is a fixed 10-mark MCQ block in ALL 14 papers - ten items,
+    //   one mark each, exactly 20% of the paper, always first (§X.2).
+    openingSingles: 0,
+    mcqBlock: { minParts: 10, maxParts: 10,
+                lead: 'Circle the correct answer. Each item carries <b>1 mark</b>.' },
+    // ⚠ NOTHING IN FIVE YEARS EXCEEDS 5 MARKS and there is no essay anywhere
+    //   in the corpus (§X.3), so there is no extended tail to ask for.
+    extendedTail: null,
+    visualTargetPct: 0.920,
+    // ⚠ CHEMISTRY NEVER VARIES ITS QUESTION COUNT: five questions, every
+    //   year, the only one of the three that is fixed (§C.1).
+    // ⚠ The supplied Periodic Table carries NO atomic numbers and NO relative
+    //   atomic masses, and five years contain no mole, Mr or reacting-mass
+    //   work at all (§M.6.6). A paper that asks for one is not this paper.
+    minManualTasks: 1,
+  },
+  'grade9-physics': {
+    // Bank is all single-mark adapted items; gather them into numbered
+    // questions with (a)(b)(c) sub-parts, as the real paper does.
+    groupSingles: { partsPerQuestion: 8 },
+    subjectName: 'Physics',
+    grade: 9,
+    // ⚠ EVERY ONE of the 14 NCE science papers is 45 minutes and 50 marks,
+    //   candidates answering on the question paper, "Answer ALL questions",
+    //   no optionality anywhere in the corpus (blueprint-science.md §X.1).
+    durationMins: 45,
+    totalMarks: 50,
+    calculatorAllowed: true,
+    materials: ['Mathematical set', 'Calculator'],
+    targetTaskCount: 6,
+    sections: null,
+    instructions: [
+      'Write your name and class in the spaces provided above.',
+      'Write in dark blue or black ink.',
+      'You may use a soft pencil for any diagram, graph or rough working.',
+      'Do not use correction fluid.',
+      'Diagrams are not drawn to scale unless otherwise specified.',
+      'Answer <b>ALL</b> questions.',
+      'The number of marks is given in brackets [ ] at the end of each question or part question.',
+    ],
+    partMarkMix: { 1: 0.755, 2: 0.163, 3: 0.054, 4: 0.020, 5: 0.007 },
+    // ⚠ Question 1 is a fixed 10-mark MCQ block in ALL 14 papers - ten items,
+    //   one mark each, exactly 20% of the paper, always first (§X.2).
+    openingSingles: 0,
+    mcqBlock: { minParts: 10, maxParts: 10,
+                lead: 'Circle the correct answer. Each item carries <b>1 mark</b>.' },
+    // ⚠ NOTHING IN FIVE YEARS EXCEEDS 5 MARKS and there is no essay anywhere
+    //   in the corpus (§X.3), so there is no extended tail to ask for.
+    extendedTail: null,
+    visualTargetPct: 1.0,
+    // ⚠ PHYSICS IS ALWAYS SIX QUESTIONS and is the only science asking for a
+    //   MATHEMATICAL SET rather than a ruler - the protractor and set-square
+    //   are genuinely used, not nominal (§P.1, §P.6).
+    // ⚠ 100% of Physics questions carry a figure - 24 of 24 (§X.4).
+    minManualTasks: 1,
+  },
+  'grade9-ict': {
+    // Bank is all single-mark adapted items; gather them into numbered
+    // questions with (a)(b)(c) sub-parts, as the real paper does.
+    groupSingles: { partsPerQuestion: 7 },
+    subjectName: 'Information and Communication Technology',
+    grade: 9,
+    // ⚠ A DIFFERENT PAPER ENTIRELY from the sciences: N540, 1h45, 100 marks,
+    //   and the only Grade 9 subject whose papers carry NAMED SECTIONS.
+    durationMins: 105,
+    totalMarks: 100,
+    // ⚠ "Do NOT use calculators" in all five years (blueprint-ict.md §1).
+    calculatorAllowed: false,
+    materials: [],
+    // 11 questions in 2022-2025; 2021 is the nine-question outlier.
+    targetTaskCount: 11,
+    // ⚠ SECTION A IS IDENTICAL IN ALL FOUR YEARS 2022-2025: 15·10·10·10·5 = 50
+    //   objective marks, then Section B takes the other 50 as applied work.
+    sections: [
+      { name: 'SECTION A', marks: 50, note: 'Answer <b>ALL</b> questions in this section.' },
+      { name: 'SECTION B', marks: 50, note: 'Answer <b>ALL</b> questions in this section.' },
+    ],
+    instructions: [
+      'Write your name and class in the spaces provided above.',
+      'Write in dark blue or black ink.',
+      'Do not use correction fluid.',
+      'Answer <b>ALL</b> questions in <b>both</b> sections.',
+      'Calculators must <b>NOT</b> be used for this paper.',
+      'The number of marks is given in brackets [ ] at the end of each question or part question.',
+    ],
+    // 68.5% of bracketed parts are worth 1 or 2 marks; nothing exceeds 6.
+    partMarkMix: { 1: 0.50, 2: 0.185, 3: 0.13, 4: 0.10, 5: 0.05, 6: 0.035 },
+    openingSingles: 0,
+    // ⚠ Q1 is a 15-mark four-option MCQ block ("circle the letter") in every
+    //   year, the largest single question in the paper.
+    mcqBlock: { minParts: 15, maxParts: 15,
+                lead: 'Circle the correct answer. Each item carries <b>1 mark</b>.' },
+    extendedTail: null,
+    // 2023/2024 Q1 is 87% photographs; this repo has no Grade 9 artwork, so a
+    // generated ICT paper will fall short of the real visual rate and
+    // compliance will say so.
+    visualTargetPct: 0.30,
+    minManualTasks: 0,
+  },
 };
 
 // ── Assembly ──────────────────────────────────────────────────────────────
@@ -140,6 +362,59 @@ function buildMcqBlock(items, cfg, chapterId) {
     parts: items.map((t, i) => Object.assign({}, t.parts[0], { label: letters[i] })),
   };
 }
+// ⚠⚠ A REAL SCIENCE PAPER IS 5-6 QUESTIONS, NOT 41 LOOSE ONES.
+//   Every part of these banks is worth one mark (see taskFromQuestion), so an
+//   ungrouped paper reaches 50 marks with 41 separate numbered questions while
+//   the blueprint asks for 6. The real papers do the opposite: they gather
+//   single-mark parts under a handful of numbered questions with (a)(b)(c)
+//   sub-parts - Biology 2025 is 6 questions carrying 33 mark-bearing parts.
+//   This is the same move buildMcqBlock() already makes for the Q1 MCQ block,
+//   generalised to the rest of the paper.
+//
+// ⚠ GROUPING IS OPT-IN, BY BLUEPRINT. grade9-maths does NOT declare it and is
+//   completely unaffected: its bank is authored as real multi-part tasks with
+//   real mark values, so grouping there would fabricate structure the author
+//   already expressed. Only a bank of adapted single-mark items needs it.
+// ⚠ ONLY SAME-CHAPTER PARTS ARE GROUPED. A numbered question in the real paper
+//   is about one topic; bundling a circulatory-system part with a photosynthesis
+//   part would produce a question no examiner would set.
+// ⚠ sourceIds ARE PRESERVED, for the same reason buildMcqBlock preserves them:
+//   repeat-avoidance, analytics and the mark scheme all trace a part back to
+//   the bank question it came from.
+function groupSingleMarkTasks(tasks, cfg) {
+  const perQ = Math.max(2, (cfg && cfg.partsPerQuestion) || 6);
+  const letters = 'abcdefghijklmnop';
+  const single = [], rest = [];
+  for (const t of tasks) (t.parts.length === 1 && !t.sourceIds ? single : rest).push(t);
+
+  const byChapter = new Map();
+  for (const t of single) {
+    if (!byChapter.has(t.chapterId)) byChapter.set(t.chapterId, []);
+    byChapter.get(t.chapterId).push(t);
+  }
+
+  const grouped = [];
+  for (const [chapterId, list] of byChapter) {
+    for (let i = 0; i < list.length; i += perQ) {
+      const chunk = list.slice(i, i + perQ);
+      // A lone leftover stays a question of its own rather than being padded
+      // onto an unrelated one.
+      if (chunk.length === 1) { grouped.push(chunk[0]); continue; }
+      grouped.push({
+        id: 'group:' + chunk.map(t => t.id).join('+'),
+        sourceIds: chunk.map(t => t.id),
+        chapterId,
+        subsection: chunk[0].subsection,
+        difficulty: chunk[0].difficulty,
+        type: 'task',
+        stimulus: null,
+        parts: chunk.map((t, k) => Object.assign({}, t.parts[0], { label: letters[k] })),
+      });
+    }
+  }
+  return rest.concat(grouped);
+}
+
 const hasVisual = t => !!(t.stimulus && t.stimulus.html) ||
   t.parts.some(p => /<(svg|img|table)/i.test(p.prompt || ''));
 const isManual = t => t.parts.some(p => p.response && !A.isAutoMarked(p.response.kind));
@@ -398,7 +673,7 @@ function assemblePaper(o) {
   // question, then the middle, then the heaviest questions last.
   const openers = chosen.slice(0, wantSingles);
   const middle = chosen.slice(wantSingles);
-  const paperTasks = openers
+  let paperTasks = openers
     .concat(mcqBlock ? [mcqBlock] : [])
     .concat(middle)
     .concat(tail);
@@ -438,6 +713,12 @@ function assemblePaper(o) {
   if (repeats) warnings.push(`${repeats} task(s) also appeared in a recent paper - the fresh pool was too small to avoid it.`);
   if (bp.minManualTasks && paperTasks.filter(isManual).length < bp.minManualTasks) {
     warnings.push(`No drawing or construction task on this paper; every real year has at least ${bp.minManualTasks}.`);
+  }
+
+  // ⚠ Grouping runs LAST, after selection and ordering, so it cannot change
+  //   which questions were chosen - only how they are numbered on the sheet.
+  if (bp.groupSingles) {
+    paperTasks = groupSingleMarkTasks(paperTasks, bp.groupSingles);
   }
 
   return { tasks: paperTasks, totalMarks: total, warnings, compliance: compliance(paperTasks, bp) };
@@ -551,6 +832,13 @@ function taskHtml(task, number) {
 }
 
 const PAPER_CSS = `
+.short-note{font-size:9pt;font-style:italic}
+
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;border-top:2px solid #000;border-bottom:2px solid #000;margin:18px 0 4px;padding:4px 0;page-break-after:avoid}
+.sec-head h2{margin:0;font-size:13pt;letter-spacing:.06em}
+.sec-marks{font-size:10pt}
+.sec-note{margin:0 0 10px;font-size:10pt}
+
   @page { size: A4; margin: 14mm 12mm; }
   body { font-family: Arial, Helvetica, sans-serif; color:#000; font-size:11pt; line-height:1.35; margin:0; }
   .sheet { max-width: 186mm; margin: 0 auto; }
@@ -624,11 +912,42 @@ const PAPER_CSS = `
   @media print { .no-print { display:none; } }
 `;
 
+function sectionHtml(sec) {
+  return '<div class="sec-head"><h2>' + esc(sec.name) + '</h2>' +
+    (sec.marks ? '<span class="sec-marks">[' + sec.marks + ' marks]</span>' : '') +
+    '</div>' + (sec.note ? '<p class="sec-note">' + sec.note + '</p>' : '');
+}
+
 function paperHtml(paper, opts) {
   const bp = paper.blueprint || opts.blueprint;
   const year = (opts && opts.year) || new Date().getFullYear();
   let n = 0;
-  const body = paper.tasks.map(t => taskHtml(t, ++n)).join('');
+  // ⚠ NAMED SECTIONS ARE RENDERED, NOT JUST DECLARED. The header of this file
+  //   has promised since it was written that "a subject whose real papers DO
+  //   have named sections declares `sections` and gets them" - but nothing
+  //   consumed the field, so ICT would have declared SECTION A / SECTION B and
+  //   printed neither. Every one of the five NCE ICT papers prints both
+  //   headings (blueprint-ict.md §1); the sciences print none, and pass
+  //   `sections: null`, so they are unaffected.
+  // ⚠ The split is by CUMULATIVE MARKS, not by question count: the real paper
+  //   is 50 marks of Section A then 50 of Section B, and the question that
+  //   crosses the boundary belongs to the section it starts in.
+  const secs = bp.sections;
+  let body;
+  if (secs && secs.length) {
+    let acc = 0, si = 0, outHtml = '';
+    paper.tasks.forEach(t => {
+      if (si < secs.length && acc === 0) {
+        outHtml += sectionHtml(secs[si]);
+      }
+      outHtml += taskHtml(t, ++n);
+      acc += t.parts.reduce((x, q) => x + (q.marks || 0), 0);
+      if (si < secs.length - 1 && acc >= (secs[si].marks || 0)) { si++; acc = 0; }
+    });
+    body = outHtml;
+  } else {
+    body = paper.tasks.map(t => taskHtml(t, ++n)).join('');
+  }
   const pages = Math.max(1, Math.ceil(paper.tasks.length / 3));
   const grid = Array.from({ length: pages }, (_, i) => i + 1);
 
@@ -652,7 +971,18 @@ function paperHtml(paper, opts) {
     ? ' Additional materials: ' + esc(bp.materials.join(', ')) + '.' : ''}</p>
   <div class="instr"><b>READ THESE INSTRUCTIONS FIRST</b><ol>
     ${bp.instructions.map(i => `<li>${i}</li>`).join('')}
-    <li>The total number of marks for this paper is <b>${bp.totalMarks}</b>.</li>
+    <!-- ⚠⚠ THE COVER PRINTS WHAT THE PAPER ACTUALLY CONTAINS, NOT THE TARGET.
+         This read bp.totalMarks - the blueprint's figure - so a paper that
+         could only be filled to 79 marks still printed "the total number of
+         marks for this paper is 100". That is the exact failure the header of
+         this file says it exists to prevent: "Quietly dropping to 92 marks and
+         calling it a 100-mark paper is the failure this is written to avoid."
+         It never showed on Mathematics, whose bank always reaches 100.
+         When the two differ the cover now says so, in the open. -->
+    <li>The total number of marks for this paper is <b>${paper.totalMarks}</b>.${
+      paper.totalMarks !== bp.totalMarks
+        ? ` <span class="short-note">(a full ${bp.subjectName} paper carries ${bp.totalMarks};
+            the question bank could not fill this one completely)</span>` : ''}</li>
   </ol></div>
   <table class="exgrid">
     <tr><th class="lbl">For marker's use</th>${grid.map(p => `<th>${p}</th>`).join('')}<th>Total</th></tr>
@@ -770,6 +1100,7 @@ ${rows}
 }
 
 const API = { BLUEPRINTS, mulberry32, shuffleSeeded, assemblePaper, compliance,
+  taskFromQuestion, tasksFromBank,
               paperHtml, markSchemeHtml, taskMarks, hasVisual, isManual };
 if (typeof module !== 'undefined' && module.exports) module.exports = API;
 root.NcePaper = API;

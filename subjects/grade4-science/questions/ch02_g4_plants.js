@@ -29,10 +29,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Absorbs the water from the soil',
       'Makes the food using sunlight',
-      'Carries water and food, and supports the plant',
+      'Carries water and food, and supports it',
       'Produces the seeds for new plants'
     ],
-    answer:'Carries water and food, and supports the plant',
+    answer:'Carries water and food, and supports it',
     hint:'The stem connects the roots to the leaves. What must travel between them?',
     explanation:'The <b>stem</b> has two functions: (1) it <b>supports</b> the plant and holds the leaves up towards the sunlight; (2) it <b>carries</b> water and minerals (from the roots) up to the leaves, and carries food (made by the leaves) down to the rest of the plant.' }),
 

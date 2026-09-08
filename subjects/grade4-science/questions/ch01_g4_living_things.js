@@ -141,11 +141,11 @@ STATIC_QUESTIONS.push(
     question:'MICROORGANISMS (like bacteria) are:',
     options:[
       'Non-living chemicals in the soil',
-      'Living things too small to see without a microscope',
+      'Living things far too small to see',
       'Only ever found in dirty water',
       'Only ever found inside hospitals'
     ],
-    answer:'Living things too small to see without a microscope',
+    answer:'Living things far too small to see',
     hint:'Micro = very small. Organism = living thing.',
     explanation:'<b>Microorganisms</b> (microbes) are <b>living things so small they can only be seen with a microscope</b>. They include bacteria, viruses and fungi. They show MRS GREN characteristics. Some are helpful (making yoghurt); others cause disease.' }),
 

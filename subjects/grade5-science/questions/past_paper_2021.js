@@ -45,7 +45,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sc-pp21-008', chapterId:'plants', subsection:'growth', difficulty:2,
     question:'What is <strong>soil erosion</strong>?',
-    options:['The addition of minerals to soil','The growth of plants in soil','The removal and carrying away of soil by wind or water','The mixing of different types of soil'], answer:'The removal and carrying away of soil by wind or water',
+    options:['The addition of minerals to soil','The growth of new plants in the soil','The carrying away of soil by wind or water','The mixing of different types of soil'], answer:'The carrying away of soil by wind or water',
     hint:'Erosion means wearing away - think of rain washing soil downhill.',
     explanation:'Soil erosion is the removal and carrying away of topsoil by agents such as wind and water. It is made worse by cutting down trees and overgrazing.' }),
 
@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sc-pp21-012', chapterId:'animals', subsection:'habitats', difficulty:3,
     question:'Which feature of the <strong>chameleon</strong> helps it grip onto tree branches?',
-    options:['Its curly tail','Its feet with fused toes that clamp branches','Its long sticky tongue','Its rotating eyes'], answer:'Its feet with fused toes that clamp branches',
+    options:['Its long curly tail','Its feet with fused toes','Its long sticky tongue','Its two rotating eyes'], answer:'Its feet with fused toes',
     hint:'Think about what is different and useful about a chameleon\'s feet compared to other lizards.',
     explanation:'A chameleon\'s feet have toes that are fused into two opposing groups (like tongs), allowing them to grip branches firmly. Their prehensile tail also helps for balance.' })
 );

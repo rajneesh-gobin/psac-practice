@@ -14,10 +14,10 @@ STATIC_QUESTIONS.push(
     question:'Why are tree roots important for protecting soil?',
     options:[
       'Roots produce oxygen which hardens the soil into rock',
-      'Roots hold soil particles together and prevent erosion by rain and wind',
+      'Roots hold soil particles together and prevent erosion',
       'Roots attract rain which keeps the soil moist all year',
       'Roots provide shade which lowers the soil temperature'],
-    answer:'Roots hold soil particles together and prevent erosion by rain and wind',
+    answer:'Roots hold soil particles together and prevent erosion',
     hint:'What happens to bare soil on a hillside during heavy rain?',
     explanation:'Tree roots bind soil particles together. Without trees, heavy rainfall washes the topsoil away - a process called soil erosion. This damages farmland, causes flooding, and destroys habitats.' }),
 
@@ -30,8 +30,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sc-cons-053', chapterId:'conservation', subsection:'pollution', difficulty:2,
     question:'Fish are dying in a river near a factory. What is the most likely cause?',
-    options:['Too much sunlight on the water','Chemicals and untreated waste water from the factory flowing into the river','Too much rainfall filling the river','Too many water plants growing in the river'],
-    answer:'Chemicals and untreated waste water from the factory flowing into the river',
+    options:['Too much sunlight falling on the water','Chemicals and waste water from the factory','Too much rainfall filling the river','Too many water plants growing in the river'],
+    answer:'Chemicals and waste water from the factory',
     hint:'Think about water pollution from industrial sites.',
     explanation:'Factories sometimes release chemicals and untreated waste water into nearby rivers. These pollutants are toxic to fish and reduce the oxygen levels in the water, causing fish to die.' }),
 
@@ -44,8 +44,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sc-cons-055', chapterId:'conservation', subsection:'pollution', difficulty:2,
     question:'Coral bleaching in Mauritius\'s lagoons is mainly caused by which change in the environment?',
-    options:['An increase in the fish population','A rise in sea-water temperature linked to climate change','A decrease in sunlight reaching the sea','An increase in rainfall and river water'],
-    answer:'A rise in sea-water temperature linked to climate change',
+    options:['A large increase in the local fish population','A rise in sea-water temperature from climate change','A decrease in the sunlight reaching the sea','An increase in rainfall and in river water'],
+    answer:'A rise in sea-water temperature from climate change',
     hint:'This threat is linked to global warming.',
     explanation:'When sea temperatures rise above normal (due to climate change), coral expels the algae living inside it, turning white - this is bleaching. Without the algae, coral loses its colour and may die.' }),
 

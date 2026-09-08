@@ -232,7 +232,7 @@
     'They are behind the head.',
     'A fish takes in oxygen from the water <b>through its gills</b>.');
   q('g4sci-enr-animals', 'adaptation', 2, 'Why does a bird have hollow bones?',
-    ['To make it light for flying', 'To make it heavier', 'To store its food', 'To keep it warm'],
+    ['To make it light for flying', 'To make it heavier in the air', 'To store its food for winter', 'To keep it warm at night'],
     'Think about what flying needs.',
     'Hollow bones <b>make the bird light</b>, so it can fly more easily.');
   q('g4sci-enr-animals', 'adaptation', 3, 'A gecko can climb a smooth wall. Which part of its body helps it?',

@@ -57,7 +57,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp24-010', chapterId:'settlement', subsection:'dutch', difficulty:2,
     question:'Why did the Dodo bird become extinct so quickly after humans arrived in Mauritius?',
-    options:['It flew away to another island','It was easy to catch because it had no fear of humans','It died from diseases brought by ships','It could not survive cold winters'], answer:'It was easy to catch because it had no fear of humans',
+    options:['It flew away to another island','It was easy to catch and had no fear of humans','It died from diseases brought by ships','It could not survive cold winters'], answer:'It was easy to catch and had no fear of humans',
     hint:'The Dodo had never seen predators before.',
     explanation:'Dodos were easy to catch because they had no natural predators and showed no fear of humans. They were hunted to extinction by the late 17th century.' }),
 
@@ -81,7 +81,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp24-014', chapterId:'trade-agri', subsection:'crops', difficulty:1,
     question:'The French administrator Pierre Poivre cultivated spice plants in Mauritius. In which garden did he grow them?',
-    options:['Aapravasi Ghat Garden','Botanical Garden, Pamplemousses','Champ de Mars Garden','Rose Hill Garden'], answer:'Botanical Garden, Pamplemousses',
+    options:['Aapravasi Ghat Garden','Pamplemousses Garden','Champ de Mars Garden','Rose Hill Garden'], answer:'Pamplemousses Garden',
     hint:'This famous garden in the north of Mauritius is still visited today.',
     explanation:'Pierre Poivre created the Botanical Garden at Pamplemousses (now Sir Seewoosagur Ramgoolam Botanical Garden) to cultivate nutmeg, cloves, pepper, and other spices.' }),
 

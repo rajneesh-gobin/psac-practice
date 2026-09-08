@@ -62,10 +62,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Hard and cannot be bent or compressed',
       'Transparent and lets light through',
-      'Can be bent or stretched and returns to its shape',
+      'Can be bent or stretched, then returns',
       'Very heavy and sinks in water'
     ],
-    answer:'Can be bent or stretched and returns to its shape',
+    answer:'Can be bent or stretched, then returns',
     hint:'Think about what happens when you squeeze a rubber ball.',
     explanation:'<b>Flexible</b> means a material can be <b>bent, stretched or compressed and returns to its original shape</b>. Rubber is flexible and elastic. The opposite is <b>rigid</b> (stiff, cannot bend - e.g. metal rod, glass). Flexibility makes rubber useful for tyres, balls and erasers.' }),
 

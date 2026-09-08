@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp22-012', chapterId:'env-problems', subsection:'soil_erosion', difficulty:2,
     question:'How does soil erosion harm farmers in Rodrigues?',
-    options:['It makes the land flat','It removes fertile topsoil, reducing crop yields','It increases rainfall','It makes rivers flow faster'], answer:'It removes fertile topsoil, reducing crop yields',
+    options:['It makes the land flat','It removes the fertile topsoil','It increases rainfall','It makes rivers flow faster'], answer:'It removes the fertile topsoil',
     hint:'Crops need the nutrients in topsoil to grow well.',
     explanation:'Soil erosion removes the fertile topsoil that contains nutrients essential for plant growth. This leads to reduced crop yields and lower food production for farmers.' }),
 
@@ -81,13 +81,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp22-014', chapterId:'settlement', subsection:'french', difficulty:2,
     question:'Why did the French take possession of Mauritius in 1715?',
-    options:['To mine gold and silver','To use it as a naval base and control Indian Ocean trade routes','To protect it from Dutch pirates','To grow spices for France'], answer:'To use it as a naval base and control Indian Ocean trade routes',
+    options:['To mine gold and silver','To use it as a naval base for trade','To protect it from Dutch pirates','To grow spices for France'], answer:'To use it as a naval base for trade',
     hint:'Its location in the Indian Ocean made it strategically valuable.',
     explanation:'The French took Mauritius (renamed Île de France) in 1715 as a strategic naval base to control Indian Ocean trade routes and challenge British sea power. It became an important staging post for French ships.' }),
 
   makeMCQ({ id:'g5h-pp22-015', chapterId:'trade-agri', subsection:'personalities', difficulty:2,
     question:'Sir Robert Farquhar, the first British Governor, built more roads in Mauritius. What was the main purpose of these roads?',
-    options:['To prepare for military invasion','To transport sugar from estates to the port for export','To allow tourists to visit the mountains','To connect all the schools in Mauritius'], answer:'To transport sugar from estates to the port for export',
+    options:['To prepare for military invasion','To carry sugar from estates to the port','To allow tourists to visit the mountains','To connect all the schools in Mauritius'], answer:'To carry sugar from estates to the port',
     hint:'Sugar cane had to reach the port to be shipped abroad.',
     explanation:'Farquhar built roads to allow sugar cane to be transported efficiently from estates across the island to Port Louis harbour, from where it was exported to Britain and beyond.' }),
 

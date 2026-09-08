@@ -3773,3 +3773,119 @@ Two things, and the first is now the largest known quality problem in the app:
    number is in the `BASELINE` table with the ids printed on each run.
 2. **The English / French / SMS decision** is still outstanding and still blocks
    the last three Grade 9 packs.
+
+---
+
+## Batch 25 — grade4-science: the worst of the option-length debt, worked off
+
+**What was asked:** "continue with the next batch." Batch 24 named this as the
+largest known quality problem in the app, so it is what this batch did.
+
+### The result
+
+| | before | after | target |
+|---|---|---|---|
+| answer visibly the longest option | **52.5%** | **29.5%** | chance is 25%, limit 42% |
+| items flagged as materially longest | **121** | **0** | 0 |
+| average within-question option spread | **22.5 chars** | **10.9** | papers 6.5-6.8, limit 12 |
+
+**118 answers changed across 12 files.** Question text: unchanged. Questions
+lost: none. Count identical at 344 — verified against the database row by row,
+not asserted.
+
+`grade4-science` has been **deleted from the `BASELINE` table**, not relaxed.
+That is what working off a debt is supposed to look like.
+
+### How, and why not the obvious way
+
+Every flagged item had the same shape: the correct answer carried a "because …"
+clause the distractors lacked. **Padding the distractors was the wrong fix here.**
+The real PSAC papers average 11.8 characters an option, this is a pack for
+nine-year-olds, and three of these answers ran past 120 characters — matching the
+distractors to them would have produced four essays per question.
+
+So the answers were **trimmed**, and only after checking the thing that makes
+that safe: ⚠ **every explanation field already carries the full reasoning.**
+Spot-checked before starting — `g4s-liv-008`'s answer listed all seven MRS GREN
+characteristics and so does its explanation; `g4s-ani-010`'s spelled out the food
+chain twice. Trimming the option loses nothing a child is taught.
+Where an answer was already at the papers' register and the distractors were the
+stubs (`Solar energy` / `Wind energy` / `Hydro energy`), the distractors were
+padded instead. The choice was made per item, not by rule.
+
+### ⚠ The trim introduced one wrong answer, and only reading caught it
+
+`g4sc-wat-057` asks *"Why is it important to have CLEAN drinking water?"* The
+original answer was *"Because **dirty water** contains harmful bacteria and
+microorganisms that cause diseases such as cholera and typhoid"*. Trimmed, it
+became *"It contains microorganisms that cause cholera"* — which now says that
+**clean** water contains them. The subject of the sentence had been cut off.
+Every automated check passed: the answer still matched an option, was still
+unique, was no longer the longest. It was found by printing six edited questions
+back and reading them. Corrected to *"Dirty water carries microbes that cause
+cholera"*.
+⚠ **That is the standing risk of a bulk trim** and the reason this batch read
+samples back at every stage rather than trusting the counter.
+
+### ⚠⚠ And a flaw in the baseline mechanism added in batch 24
+
+Two packs this batch never touched — grade4-french and grade5-history — failed as
+**"WORSE than its recorded baseline"** on a plain rebuild. Nothing had changed.
+
+The cause is in CLAUDE.md already: **`makeMCQ()` keeps a RANDOM 3 of however many
+distractors a question was authored with.** A pack whose items supply five or six
+options therefore gets a different subset, and different option lengths, on every
+single build. Measured across two builds with no edit at all: grade4-french
+74 → 75 flagged items, grade5-history 143 → 146, grade4-history spread
+21.6 → 22.0.
+
+A bare `<=` on those numbers fails at random, which is **worse than not checking**
+— it is exactly how a suite gets ignored. Both caps now carry a sampling
+tolerance (5% or 4 items on counts, 1.0 character on spread) with the measurement
+written into the comment. ⚠ Verified by rebuilding and re-running **four times**:
+four passes.
+
+### Attribution, because this suite demands it
+
+`test-grade456-regression` now fails **4 of 39**, and the four are not one thing:
+
+| pack | whose | why |
+|---|---|---|
+| **grade4-science** | **this batch** | 118 deliberate answer edits, fully attributed above |
+| grade4-french · grade5-french · grade6-french | the other session | `chasse_erreurs` content, unchanged since batch 21 |
+
+⚠ **It was NOT re-baselined.** `--update` is all-or-nothing, and the header of
+that file says *"ATTRIBUTE BEFORE YOU RE-BASELINE … Re-baselining first and
+asking later is how a real regression gets accepted."* Three of the four cannot
+be attributed by this session, so accepting all four would do exactly that.
+Whoever owns the French work can re-baseline once their side is settled; this
+note is here so they know precisely what else they would be accepting.
+
+### Database
+
+681 rows updated, 681 verified, 0 protected conflicts, 0 failed.
+`_CACHE_VERSION` -> **90**; `SHELL_VERSION` -> **v275**.
+
+### Measured after
+
+check.js · svg-figures · subsection-invariant · boot-smoke · exam-paper-shape ·
+cache-budget · import-parity · **option-parity green, and stable across four
+rebuilds** · task-projection. grade456-regression 35/39, attributed above.
+
+### Next
+
+The debt table is down to **13 packs**. Worst remaining, in order:
+
+| pack | rate | flagged items |
+|---|---|---|
+| grade5-history | 40.6% | 143 |
+| grade4-history | 32.4% | 142 |
+| grade6-english | 22.6% | 111 |
+| grade5-science | 33.3% | 76 |
+| grade4-french | 12.0% | 74 |
+
+⚠ The two history packs are the ones to take next: 285 flagged items between
+them, and both sit close to the rate limit as well.
+⚠ Everything above is Grades 4-6 — **content children are using today**, which is
+why it outranks the remaining Grade 9 work.
+⚠ The English / French / SMS decision still blocks the last three Grade 9 packs.

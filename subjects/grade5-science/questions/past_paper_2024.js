@@ -63,7 +63,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sc-pp24-011', chapterId:'animals', subsection:'classification', difficulty:2,
     question:'Name a bird that is endemic to the island of <strong>Rodrigues</strong>.',
-    options:['Echo parakeet','Cardinal jaune (Rodrigues warbler)','Pink Pigeon','Kestrel'], answer:'Cardinal jaune (Rodrigues warbler)',
+    options:['Echo parakeet (Psittacula eques)','Cardinal jaune (Rodrigues warbler)','Pink Pigeon (Nesoenas mayeri)','Kestrel (Falco punctatus)'], answer:'Cardinal jaune (Rodrigues warbler)',
     hint:'Rodrigues island has its own unique small songbird found nowhere else - what is its local name?',
     explanation:'The Rodrigues warbler (Cardinal jaune / Acrocephalus rodericanus) is endemic to Rodrigues. The Echo parakeet and Kestrel are endemic to Mauritius.' }),
 

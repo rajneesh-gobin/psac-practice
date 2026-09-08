@@ -22,11 +22,11 @@ STATIC_QUESTIONS.push(
     question:'Pierre Poivre is famous in Mauritius for introducing which plants?',
     options:[
       'Sugar cane and rice',
-      'Spice plants such as nutmeg and cloves',
+      'Nutmeg, cloves and cinnamon',
       'Coffee and tea bushes',
       'Cotton and tobacco'
     ],
-    answer:'Spice plants such as nutmeg and cloves',
+    answer:'Nutmeg, cloves and cinnamon',
     hint:'He managed to smuggle these precious plants from their original source in the East Indies.',
     explanation:'<b>Pierre Poivre</b> introduced valuable spice plants - nutmeg, cloves, cinnamon and pepper - from the Dutch East Indies into Mauritius. The SSR Botanical Garden at Pamplemousses was partly used to grow and develop these spices.' }),
 
@@ -41,11 +41,11 @@ STATIC_QUESTIONS.push(
     question:'Where did most of the workers who worked on the sugar cane plantations come from during French rule?',
     options:[
       'They came from France as volunteers',
-      'They were enslaved people brought from Africa and Madagascar',
+      'Enslaved people from Africa and Madagascar',
       'They were paid workers from India',
       'They came from China and Southeast Asia'
     ],
-    answer:'They were enslaved people brought from Africa and Madagascar',
+    answer:'Enslaved people from Africa and Madagascar',
     hint:'The plantation system relied on forced labour.',
     explanation:'During French rule, the sugar cane plantations were worked by <b>enslaved people</b> brought mainly from Africa and Madagascar. This forced labour was the foundation of the agricultural economy at the time.' }),
 
@@ -66,11 +66,11 @@ STATIC_QUESTIONS.push(
     question:'Why was sugar cane such an important crop for the economy of Mauritius?',
     options:[
       'Because it could be used to make clothes',
-      'Because sugar was in high demand in Europe and brought great wealth',
+      'Because sugar was in high demand in Europe',
       'Because it grew naturally without needing to be farmed',
       'Because it was used as a building material'
     ],
-    answer:'Because sugar was in high demand in Europe and brought great wealth',
+    answer:'Because sugar was in high demand in Europe',
     hint:'Think about what was traded between Mauritius and Europe.',
     explanation:'Sugar was extremely valuable in Europe. By exporting sugar, Mauritius earned significant wealth. The sugar industry became the backbone of the Mauritian economy, shaping its landscape, population and society for centuries.' }),
 
@@ -101,11 +101,11 @@ STATIC_QUESTIONS.push(
     question:'Who was Robert Surcouf?',
     options:[
       'A French governor who built roads in Mauritius',
-      'A famous French corsair (privateer) based in Isle de France who attacked British ships',
+      'A famous French corsair based in Isle de France',
       'A British admiral who captured Mauritius in 1810',
       'A Portuguese explorer who discovered the Mascarene Islands'
     ],
-    answer:'A famous French corsair (privateer) based in Isle de France who attacked British ships',
+    answer:'A famous French corsair based in Isle de France',
     hint:'He was known as the "King of the Corsairs" and sailed from Mauritius.',
     explanation:'<b>Robert Surcouf</b> was a famous French corsair (licensed privateer) based in Isle de France. He attacked British merchant ships in the Indian Ocean with great success and became known as the "King of the Corsairs." His activities made Isle de France a major threat to British trade.' }),
 
@@ -113,11 +113,11 @@ STATIC_QUESTIONS.push(
     question:'What was Olivier Le Vasseur (nicknamed "La Buse") famous for?',
     options:[
       'He was a French governor who reformed trade',
-      'He was a notorious pirate who operated in the Indian Ocean around Mauritius and Réunion',
+      'He was a notorious pirate of the Indian Ocean',
       'He was an indentured worker who became a plantation owner',
       'He was the first British governor of Mauritius'
     ],
-    answer:'He was a notorious pirate who operated in the Indian Ocean around Mauritius and Réunion',
+    answer:'He was a notorious pirate of the Indian Ocean',
     hint:'His nickname "La Buse" means "The Buzzard" in French.',
     explanation:'<b>Olivier Le Vasseur</b>, nicknamed "La Buse" (The Buzzard), was a French pirate who terrorised shipping in the Indian Ocean. He operated around Madagascar, Réunion and Mauritius. He is famous for supposedly hiding a treasure before his execution in 1730.' }),
 
@@ -143,11 +143,11 @@ STATIC_QUESTIONS.push(
     question:'What is "indentured labour"?',
     options:[
       'Workers who were enslaved and forced to work for no pay',
-      'Workers who signed a contract (indenture) to work for a set period in exchange for passage and wages',
+      'Workers who signed a contract to work for a set period',
       'Workers who owned their own farms and sold produce',
       'Workers who worked for the government in public offices'
     ],
-    answer:'Workers who signed a contract (indenture) to work for a set period in exchange for passage and wages',
+    answer:'Workers who signed a contract to work for a set period',
     hint:'An indenture is a type of legal contract.',
     explanation:'<b>Indentured labour</b> involved workers signing a legal contract agreeing to work for a specific employer for a fixed period (usually 5 years). In exchange, the employer paid for their transport and provided wages, food and housing. While not slavery, conditions were often very harsh.' }),
 
@@ -155,11 +155,11 @@ STATIC_QUESTIONS.push(
     question:'Why did the sugar industry expand RAPIDLY in Mauritius after 1835?',
     options:[
       'Because sugar prices fell and more land was needed to grow higher volume',
-      'Because indentured workers from India provided a large, cheap labour force for the plantations',
+      'Because indentured workers from India provided cheap labour',
       'Because Britain gave Mauritius free machinery to produce more sugar',
       'Because the French had already built all the necessary infrastructure'
     ],
-    answer:'Because indentured workers from India provided a large, cheap labour force for the plantations',
+    answer:'Because indentured workers from India provided cheap labour',
     hint:'A growing labour supply enables more land to be cultivated and more production.',
     explanation:'After 1835, the arrival of hundreds of thousands of <b>indentured workers from India</b> gave plantation owners a large workforce. This allowed more land to be converted into sugar fields and production to scale up dramatically. By the mid-19th century, sugar dominated the entire Mauritian economy.' }),
 
@@ -167,23 +167,23 @@ STATIC_QUESTIONS.push(
     question:'A plantation owner in 1840 switches from using enslaved workers to using indentured workers. What is ONE key difference that affects how he manages his workforce?',
     options:[
       'Enslaved people owned their tools; indentured workers did not',
-      'Indentured workers have a legal contract specifying their period of work and pay - the owner must fulfil these terms or face legal consequences',
+      'Indentured workers have a legal contract setting their pay and period',
       'Indentured workers always work harder because they are paid more',
       'There is no real difference - both systems are identical in practice'
     ],
-    answer:'Indentured workers have a legal contract specifying their period of work and pay - the owner must fulfil these terms or face legal consequences',
+    answer:'Indentured workers have a legal contract setting their pay and period',
     hint:'The word "indentured" comes from a document that both sides signed. What difference would that make?',
     explanation:'Unlike <b>enslaved workers</b> who had no legal rights or pay, <b>indentured workers</b> had a formal contract specifying the work period, wages and conditions. This gave them some legal protection - employers who broke the terms could face legal action. In practice many abuses still occurred, but the legal framework was fundamentally different.' }),
 
   makeMCQ({ id:'g5hg-ta-018', chapterId:'trade-agri', subsection:'crops', difficulty:4,
     question:'By 1870, sugar cane covered 90% of Mauritius\'s cultivated land. Evaluate ONE ADVANTAGE and ONE DISADVANTAGE of this economic specialisation.',
     options:[
-      'Advantage: high export income from sugar; Disadvantage: the economy is vulnerable - a collapse in sugar prices or a cyclone destroying the crop causes a national economic crisis',
+      'Advantage: high export income; Disadvantage: the economy depends on one crop',
       'Advantage: sugar is grown all year with no seasons; Disadvantage: workers prefer other crops',
       'Advantage: sugar produces its own fuel; Disadvantage: it uses too much water',
       'Advantage: sugar is the only crop that grows in Mauritius; Disadvantage: it cannot be exported'
     ],
-    answer:'Advantage: high export income from sugar; Disadvantage: the economy is vulnerable - a collapse in sugar prices or a cyclone destroying the crop causes a national economic crisis',
+    answer:'Advantage: high export income; Disadvantage: the economy depends on one crop',
     hint:'Think about the risks of relying on ONE crop for the entire economy.',
     explanation:'<b>Advantage:</b> Concentrating on sugar brought <b>high export earnings</b> when prices were good - Mauritius developed efficient mills and plantations. <b>Disadvantage:</b> A <b>monoculture economy</b> (one crop) is extremely vulnerable - a drop in world sugar prices, a devastating cyclone or a crop disease could ruin the entire national economy at once. This is why Mauritius later diversified into tourism, textiles and financial services.' }),
 

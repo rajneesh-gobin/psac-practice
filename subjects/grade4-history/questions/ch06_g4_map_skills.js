@@ -8,23 +8,23 @@ STATIC_QUESTIONS.push(
     question:'What is a map?',
     options:[
       'A photograph taken from an aeroplane',
-      'A drawing that shows an area of land from above, with symbols to represent features',
+      'A drawing of an area of land seen from above',
       'A book about different countries',
       'A type of chart that shows the weather'
     ],
-    answer:'A drawing that shows an area of land from above, with symbols to represent features',
+    answer:'A drawing of an area of land seen from above',
     hint:'A map gives us a "bird\'s eye view" of an area.',
     explanation:'A <b>map</b> is a flat drawing or picture that represents an area of land as seen from above (a bird\'s eye view). It uses symbols and colours to show features like roads, rivers, mountains, towns and forests.' }),
 
   makeMCQ({ id:'g4ge-maps-002', chapterId:'g4ge-map-skills', subsection:'symbols', difficulty:1,
     question:'What is a map legend (or key)?',
     options:[
-      'The title of the map',
-      'A box that explains what the symbols and colours on the map mean',
+      'The title written on the map',
+      'A box explaining the symbols used',
       'The north arrow on the map',
-      'The scale of the map'
+      'The scale bar of the map'
     ],
-    answer:'A box that explains what the symbols and colours on the map mean',
+    answer:'A box explaining the symbols used',
     hint:'Without this, you would not know what the map symbols mean.',
     explanation:'A <b>legend</b> (also called a <b>key</b>) is a box or table on the map that explains what each symbol and colour represents. For example, a blue line = a river; a green area = a forest; a red dot = a town.' }),
 
@@ -51,12 +51,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4ge-maps-006', chapterId:'g4ge-map-skills', subsection:'parts_of_map', difficulty:1,
     question:'What does the SCALE on a map tell us?',
     options:[
-      'The title of the map',
+      'The title written on the map',
       'How the symbols are explained',
-      'The relationship between distance on the map and real distance on the ground',
-      'Which direction is North'
+      'How map distance matches real distance',
+      'Which direction on the map is North'
     ],
-    answer:'The relationship between distance on the map and real distance on the ground',
+    answer:'How map distance matches real distance',
     hint:'A map has to shrink a real place to fit on paper. What would you need in order to undo that shrinking?',
     explanation:'The <b>scale</b> of a map shows the relationship between map distance and real-world distance. For example, a scale of "1 cm = 5 km" means every 1 centimetre on the map represents 5 kilometres in real life. Scale helps us estimate real distances from a map.' }),
 
@@ -76,12 +76,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4ge-maps-009', chapterId:'g4ge-map-skills', subsection:'directions', difficulty:2,
     question:'Port Louis is to the NORTH-WEST of Curepipe on a map of Mauritius. What does this tell us about the direction from Curepipe to Port Louis?',
     options:[
-      'Port Louis is south of Curepipe',
-      'To travel from Curepipe to Port Louis, you would go in a north-westerly direction',
-      'Port Louis and Curepipe are the same distance from the coast',
+      'Port Louis is to the south of Curepipe',
+      'You travel in a north-westerly direction',
+      'Port Louis and Curepipe are the same distance',
       'Curepipe is north-west of Port Louis'
     ],
-    answer:'To travel from Curepipe to Port Louis, you would go in a north-westerly direction',
+    answer:'You travel in a north-westerly direction',
     hint:'If Port Louis is north-west of Curepipe, you travel north-west FROM Curepipe to GET TO Port Louis.',
     explanation:'If Port Louis is <b>north-west of Curepipe</b>, then to travel from Curepipe to Port Louis, you travel in a <b>north-westerly direction</b>. Port Louis is on the north-west coast of Mauritius, while Curepipe is on the central plateau inland.' }),
 
@@ -89,11 +89,11 @@ STATIC_QUESTIONS.push(
     question:'What is the title of a map for?',
     options:[
       'To show the scale of the map',
-      'To tell us the name of the area shown and what the map is about',
+      'To tell us what area the map shows',
       'To show compass directions',
       'To list all the symbols used'
     ],
-    answer:'To tell us the name of the area shown and what the map is about',
+    answer:'To tell us what area the map shows',
     hint:'Every good map has a title so you know what area it is showing.',
     explanation:'The <b>title</b> of a map tells us the name of the area being shown and what the map is about. For example: "Map of Mauritius - Physical Features" or "Map of Port Louis - Tourist Guide".' })
 
@@ -119,7 +119,7 @@ STATIC_QUESTIONS.push(
     options:[
       'Up, down, left, right',
       'North, South, East, West',
-      'Sunrise, Sunset, Midday, Midnight',
+      'Sunrise, Sunset, Noon, Night',
       'Hot, Cold, Wet, Dry'
     ],
     answer:'North, South, East, West',
@@ -164,8 +164,8 @@ STATIC_QUESTIONS.push(
     options:[
       'A title, a legend (key), a north arrow and a scale',
       'Only a drawing of the buildings with no labels',
-      'Only the north arrow',
-      'A photograph of the school taken from the front gate'
+      'Only the north arrow and no other details',
+      'A photograph of the school taken from the gate'
     ],
     answer:'A title, a legend (key), a north arrow and a scale',
     hint:'A good map always has these four important parts.',
@@ -194,7 +194,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4ge-maps-022', chapterId:'g4ge-map-skills', subsection:'using_map', difficulty:1,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G4_MUS_PHYS}</div><b>Which mountain on the map is the HIGHEST point in Mauritius?</b>`,
-    options:['Le Pouce (811m)','Pieter Both (823m)','Corps de Garde (720m)','Piton de la Petite Rivière Noire (828m)'],
+    options:['Le Pouce, Moka range (811m)','Pieter Both, Moka range (823m)','Corps de Garde, Quatre Bornes (720m)','Piton de la Petite Rivière Noire (828m)'],
     answer:'Piton de la Petite Rivière Noire (828m)',
     hint:'Look for the ★ symbol next to a mountain name - it marks the highest peak.',
     explanation:'<b>Piton de la Petite Rivière Noire</b> (828 metres) is the highest mountain in Mauritius. It is located in the south-west of the island in the Black River Gorges area. On the map it is marked with a ★ to show it is the highest peak.' }),

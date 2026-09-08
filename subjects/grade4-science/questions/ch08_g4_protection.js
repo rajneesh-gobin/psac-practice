@@ -20,11 +20,11 @@ STATIC_QUESTIONS.push(
     question:'What is AIR POLLUTION?',
     options:[
       'When clean air blows through the windows',
-      'When harmful gases and smoke are released into the air',
+      'When harmful gases are released into the air',
       'When water evaporates into the sky',
       'When plants release oxygen'
     ],
-    answer:'When harmful gases and smoke are released into the air',
+    answer:'When harmful gases are released into the air',
     hint:'Pollution means something harmful is added to the environment.',
     explanation:'<b>Air pollution</b> happens when harmful gases, smoke, dust or chemicals are released into the air. Main causes include vehicle exhaust fumes, factory smoke, burning of rubbish and deforestation. Polluted air can cause breathing problems, asthma and damage to plants and animals.' }),
 
@@ -39,22 +39,22 @@ STATIC_QUESTIONS.push(
     options:[
       'Rain falling into a clean river',
       'Fish swimming in a lake',
-      'A factory pouring chemical waste into a river',
+      'A factory pouring waste into a river',
       'A child drinking clean water'
     ],
-    answer:'A factory pouring chemical waste into a river',
+    answer:'A factory pouring waste into a river',
     hint:'Pollution means something harmful goes where it should not.',
     explanation:'<b>Water pollution</b> occurs when harmful substances enter rivers, lakes or the sea. A factory pouring <b>chemical waste</b> into a river kills fish and plants, makes the water unsafe to drink, and harms the entire ecosystem. Other causes of water pollution: dumping rubbish, oil spills, sewage entering the sea.' }),
 
   makeMCQ({ id:'g4sc-protect-005', chapterId:'g4sci-protect', subsection:'recycling', difficulty:1,
     question:'What does it mean to RECYCLE something?',
     options:[
-      'Throw it in the rubbish bin',
-      'Burn it to get rid of it',
-      'Process used materials (paper, glass, metal, plastic) so they can be used again',
-      'Bury it in the ground'
+      'Throw it all in the rubbish bin',
+      'Burn it all to get rid of it',
+      'Process used materials to be used again',
+      'Bury it deep in the ground'
     ],
-    answer:'Process used materials (paper, glass, metal, plastic) so they can be used again',
+    answer:'Process used materials to be used again',
     hint:'Recycling starts with "re" - meaning to do something again.',
     explanation:'<b>Recycling</b> means processing used materials so they can be made into new products. For example: old newspapers become new paper; glass bottles are melted and re-formed; aluminium cans are melted and made into new cans. Recycling reduces waste in landfills and uses fewer raw materials from nature.' }),
 
@@ -62,11 +62,11 @@ STATIC_QUESTIONS.push(
     question:'Which human activity causes LAND POLLUTION?',
     options:[
       'Planting flowers in a garden',
-      'Throwing plastic bags and bottles on the ground',
+      'Throwing bottles on the ground',
       'Walking in a forest',
       'Watering crops'
     ],
-    answer:'Throwing plastic bags and bottles on the ground',
+    answer:'Throwing bottles on the ground',
     hint:'Land pollution means harmful things are left on or in the soil.',
     explanation:'<b>Land pollution</b> (also called soil pollution) happens when rubbish, chemicals or other harmful substances are left on the ground. <b>Plastic bags and bottles</b> that are thrown away can stay in the soil for hundreds of years. They can harm animals that eat them and block drainage systems causing flooding.' }),
 
@@ -82,10 +82,10 @@ STATIC_QUESTIONS.push(
     options:[
       'It makes people run faster',
       'It has no effect on health',
-      'It can cause breathing problems, coughing and asthma',
+      'It can cause coughing and asthma',
       'It helps people sleep better'
     ],
-    answer:'It can cause breathing problems, coughing and asthma',
+    answer:'It can cause coughing and asthma',
     hint:'Your lungs breathe in whatever is in the air around you.',
     explanation:'Breathing polluted air can cause <b>coughing, difficulty breathing, and asthma attacks</b>. Children and elderly people are especially at risk. Long-term exposure to air pollution can cause serious lung and heart diseases. This is why reducing air pollution is important for public health.' }),
 
@@ -123,11 +123,11 @@ STATIC_QUESTIONS.push(
     question:'Why should we avoid POURING CHEMICALS (like pesticides or used oil) down the drain?',
     options:[
       'Because it wastes the chemicals',
-      'Because it can pollute rivers, groundwater and the sea, harming plants and animals',
+      'It can pollute rivers and harm plants and animals',
       'Because the chemicals clean the drain and that is wasteful',
       'There is no problem - chemicals disappear in water'
     ],
-    answer:'Because it can pollute rivers, groundwater and the sea, harming plants and animals',
+    answer:'It can pollute rivers and harm plants and animals',
     hint:'Where does water from the drain eventually go?',
     explanation:'Water from drains often flows into <b>rivers and eventually the sea</b>. Pouring chemicals (pesticides, used engine oil, cleaning products) down the drain causes <b>water pollution</b>. These chemicals kill aquatic plants, fish and other sea creatures. In Mauritius, this threatens the beautiful coral reefs and lagoons.' }),
 
@@ -135,11 +135,11 @@ STATIC_QUESTIONS.push(
     question:'PLANTING TREES is a good environmental action because trees:',
     options:[
       'Produce carbon dioxide and increase pollution',
-      'Absorb carbon dioxide, release oxygen, provide habitat and hold soil',
+      'Absorb carbon dioxide and hold the soil together',
       'Use up all the water in the ground',
       'Block sunlight and make it cold'
     ],
-    answer:'Absorb carbon dioxide, release oxygen, provide habitat and hold soil',
+    answer:'Absorb carbon dioxide and hold the soil together',
     hint:'Think about everything trees do for the environment.',
     explanation:'Trees provide many environmental benefits: (1) <b>Absorb CO₂</b> (reducing greenhouse gases) and release <b>oxygen</b>; (2) <b>Provide habitat</b> for birds and animals; (3) <b>Hold soil</b> together with their roots, preventing erosion; (4) Keep the air cool; (5) Store water. This is why planting trees is one of the best things we can do for the environment.' }),
 
@@ -148,10 +148,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Too much sunlight reaching the river',
       'Rainwater flowing into the river',
-      'Pollution - probably from chemicals or waste dumped upstream',
+      'Pollution from waste dumped upstream',
       'The fish left to find another river'
     ],
-    answer:'Pollution - probably from chemicals or waste dumped upstream',
+    answer:'Pollution from waste dumped upstream',
     hint:'What could make a river brown, smelly, and deadly to fish at the same time?',
     explanation:'A brown, smelly river with dead fish is a sign of <b>water pollution</b>. The most likely cause is that <b>chemicals, sewage or waste</b> have been dumped upstream. Pollutants reduce oxygen in the water (fish suffocate) and may be directly toxic. To investigate, you would look for a factory, farm using pesticides, or illegal dumping site upstream.' }),
 
@@ -163,8 +163,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-protect-016', chapterId:'g4sci-protect', subsection:'pollution', difficulty:2,
     question:'Using CHEMICALS on fields (pesticides and fertilisers) can cause environmental harm. Which type of pollution can result?',
-    options:['Only air pollution','Only sound pollution','Water and land pollution when chemicals wash into rivers and soil','No pollution - chemicals are harmless'],
-    answer:'Water and land pollution when chemicals wash into rivers and soil',
+    options:['Only air pollution','Only sound pollution','Water and land pollution','No pollution - chemicals are harmless'],
+    answer:'Water and land pollution',
     hint:'Rain washes chemicals from the field into streams and soil.',
     explanation:'When rain falls on fields treated with chemicals, it washes <b>pesticides and fertilisers</b> into streams and the groundwater (<b>water pollution</b>), and leaves chemicals in the soil (<b>land pollution</b>). This kills aquatic animals, causes algae to grow out of control in rivers, and can make groundwater unsafe to drink.' }),
 
@@ -185,10 +185,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Only air pollution',
       'Only water pollution',
-      'Both air pollution (from smoke) and water pollution (from waste in the river)',
+      'Both air and water pollution',
       'Sound pollution only'
     ],
-    answer:'Both air pollution (from smoke) and water pollution (from waste in the river)',
+    answer:'Both air and water pollution',
     hint:'Count how many types of pollution this factory is causing.',
     explanation:'This factory causes <b>two types of pollution</b>: (1) <b>Air pollution</b> from the dark smoke (harmful gases and particles released into the air); (2) <b>Water pollution</b> from waste dumped in the river (harms fish, plants and humans using that water). Factories must use filters and proper waste disposal to reduce both types of pollution.' }),
 
@@ -196,11 +196,11 @@ STATIC_QUESTIONS.push(
     question:'A student wants to help the environment at home. Which set of actions BEST applies ALL THREE of Reduce, Reuse and Recycle?',
     options:[
       'Buy new plastic bags every shopping trip, throw newspapers in the bin, and leave taps running',
-      'Use a reusable cloth bag (Reuse), turn off taps when brushing teeth (Reduce), put empty bottles in the recycling bin (Recycle)',
+      'Use a cloth bag, turn off taps, and recycle bottles',
       'Buy more clothes, throw glass bottles in the bin, and print on one side of paper only',
       'Walk to school, eat healthy food, and sleep early'
     ],
-    answer:'Use a reusable cloth bag (Reuse), turn off taps when brushing teeth (Reduce), put empty bottles in the recycling bin (Recycle)',
+    answer:'Use a cloth bag, turn off taps, and recycle bottles',
     hint:'Look for one example of each: Reduce (use less), Reuse (use again), Recycle (process to make new).',
     explanation:'The best answer applies all 3 Rs: (1) <b>Reuse</b> - cloth bag used again instead of disposable plastic; (2) <b>Reduce</b> - turning off taps saves water (uses less); (3) <b>Recycle</b> - bottles go to recycling to be made into new products. Together, these three habits significantly reduce a person\'s environmental impact.' })
 

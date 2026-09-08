@@ -33,10 +33,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-writ-004', chapterId:'g6eng-writing', subsection:'essay', difficulty:2,
     question:'Which is the BEST thesis statement for an essay arguing that school uniforms should be compulsory?',
     options:[
-      'School uniforms are a type of clothing.',
-      'Some people like uniforms and some people don\'t.',
+      'School uniforms are a type of clothing that is worn by pupils in schools.',
+      'Some people like school uniforms and some other people do not like them at all.',
       'School uniforms should be compulsory because they promote equality, reduce bullying and create a focused learning environment.',
-      'I am going to talk about school uniforms in my essay.'
+      'I am going to talk about school uniforms in this essay and I will give a number of different reasons for my own opinion.'
     ],
     answer:'School uniforms should be compulsory because they promote equality, reduce bullying and create a focused learning environment.',
     hint:'A thesis statement takes a clear position and outlines the main supporting reasons.',
@@ -69,7 +69,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-writ-008', chapterId:'g6eng-writing', subsection:'planning', difficulty:2,
     question:'A descriptive paragraph about a beach should primarily appeal to:',
-    options:['logic and statistics','the five senses (sight, sound, smell, touch, taste)','dates and historical facts','technical specifications'],
+    options:['logic, statistics and numbers','the five senses (sight, sound, smell, touch, taste)','dates and important historical facts','technical specifications and measurements'],
     answer:'the five senses (sight, sound, smell, touch, taste)',
     hint:'Descriptive writing aims to make the reader FEEL as if they are there.',
     explanation:'Effective descriptive writing engages all <b>five senses</b>: sight (sparkling turquoise water), sound (waves crashing), smell (salt air and sunscreen), touch (warm sand between fingers), taste (salt on lips). Sensory language is the hallmark of excellent descriptive writing.' }),
@@ -141,10 +141,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-writ-015', chapterId:'g6eng-writing', subsection:'planning', difficulty:2,
     question:'Which sentence best opens a BODY PARAGRAPH in an argumentative essay?',
     options:[
-      '"In this essay I will discuss why..."',
-      '"In conclusion, it is clear that..."',
+      '"In this essay I will discuss why school uniforms should be compulsory in schools..."',
+      '"In conclusion, it is clear that school uniforms should be compulsory..."',
       '"One compelling reason why school uniforms should be compulsory is that they promote equality."',
-      '"Some people think school uniforms are nice."'
+      '"Some people think that school uniforms are quite nice to wear."'
     ],
     answer:'"One compelling reason why school uniforms should be compulsory is that they promote equality."',
     hint:'A body paragraph must start with a clear TOPIC SENTENCE that states one main argument.',
@@ -160,10 +160,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-writ-017', chapterId:'g6eng-writing', subsection:'planning', difficulty:2,
     question:'In a formal letter of COMPLAINT, what should the first paragraph do?',
     options:[
-      'Apologise immediately for the inconvenience',
+      'Apologise immediately for all of the inconvenience caused',
       'Clearly state the reason for writing and identify the problem',
-      'List all your demands immediately',
-      'Thank the reader for reading the letter'
+      'List all of your demands immediately at the start',
+      'Thank the reader for reading your whole letter'
     ],
     answer:'Clearly state the reason for writing and identify the problem',
     hint:'The first paragraph of any formal letter must state its PURPOSE clearly.',
@@ -172,10 +172,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-writ-018', chapterId:'g6eng-writing', subsection:'descriptive', difficulty:3,
     question:'Which is an example of EFFECTIVE DESCRIPTIVE WRITING?',
     options:[
-      '"The beach was nice and the water was blue."',
-      '"The beach was good. Many people were there."',
+      '"The beach was nice and the water was blue and the sky was very clear."',
+      '"The beach was good. Many people were there and they all seemed to be enjoying themselves a lot."',
       '"The turquoise lagoon shimmered like glass, while the warm salt breeze carried the scent of frangipani."',
-      '"The beach had sand and waves."'
+      '"The beach had sand and waves and there were some people on it."'
     ],
     answer:'"The turquoise lagoon shimmered like glass, while the warm salt breeze carried the scent of frangipani."',
     hint:'Effective descriptive writing appeals to the senses and uses vivid, specific language.',

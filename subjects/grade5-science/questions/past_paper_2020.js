@@ -17,7 +17,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sc-pp20-003', chapterId:'energy', subsection:'sources', difficulty:2,
     question:'Why do <strong>more families in Mauritius</strong> choose solar water heaters than electric ones?',
-    options:['Solar heaters work better at night.','Mauritius has plenty of sunshine, so solar energy is free and renewable.','Electric heaters are more expensive to buy.','Solar heaters heat water faster.'], answer:'Mauritius has plenty of sunshine, so solar energy is free and renewable.',
+    options:['Solar heaters work much better at night.','Mauritius has plenty of free, renewable sunshine.','Electric heaters are much more expensive to buy.','Solar heaters heat the water much faster.'], answer:'Mauritius has plenty of free, renewable sunshine.',
     hint:'Mauritius is a tropical island near the equator - what does it have plenty of?',
     explanation:'Mauritius is close to the equator and receives lots of sunlight all year. Solar energy is free and renewable, making solar water heaters cheaper to run than electric ones.' }),
 
@@ -53,13 +53,13 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sc-pp20-009', chapterId:'water-matter', subsection:'water_cycle', difficulty:2,
     question:'During the water cycle, <strong>precipitation</strong> refers to:',
-    options:['Water vapour rising from oceans','Water vapour cooling to form clouds','Water falling from clouds as rain, hail, or snow','Water soaking into the ground'], answer:'Water falling from clouds as rain, hail, or snow',
+    options:['Water vapour rising up from the oceans','Water vapour cooling down to form clouds','Water falling from clouds as rain, hail or snow','Water soaking down into the dry ground'], answer:'Water falling from clouds as rain, hail or snow',
     hint:'This is the step where water finally comes back down to the earth\'s surface.',
     explanation:'Precipitation is any form of water that falls from clouds to the ground, including rain, hail, sleet, and snow. It is a key step in the water cycle.' }),
 
   makeMCQ({ id:'g5sc-pp20-010', chapterId:'animals', subsection:'endangered', difficulty:2,
     question:'The Mauritius Kestrel was once the <strong>world\'s rarest bird</strong>. What was the main cause of its near-extinction?',
-    options:['Hunting by fishermen','Loss of natural forest habitat and introduction of predators','Severe cyclones destroying nests','Overfishing of its food supply'], answer:'Loss of natural forest habitat and introduction of predators',
+    options:['Hunting by fishermen and farmers','Loss of forest habitat and new predators','Severe cyclones destroying nests','Overfishing of its main food supply'], answer:'Loss of forest habitat and new predators',
     hint:'Think about what happens when forests are cut down and new animals are brought to an island.',
     explanation:'The Mauritius Kestrel nearly went extinct due to destruction of its forest habitat, use of pesticides (DDT), and predation by introduced animals like rats and monkeys.' }),
 

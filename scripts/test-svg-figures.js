@@ -45,7 +45,21 @@ const ROOT = path.resolve(__dirname, '..');
 //   not in this list is not checked, and nothing anywhere else will notice.
 const PACKS = [
   'subjects/grade9-maths/questions',
-  'subjects/grade9-science/questions',
+  // ⚠ grade9-science WAS SPLIT into three packs on 2026-09-08 and this list
+  //   still named the old directory. existsSync() skips a missing one SILENTLY,
+  //   so the run went 991 questions / 159 figures -> 712 / 125 and reported
+  //   PASS: 34 science figures stopped being checked and nothing said so.
+  //   That is the same failure this file's header warns about.
+  // ⚠ grade9-ict was LIVE with 469 questions and had never been checked by
+  //   this harness at all; the three placeholder packs are listed too so the
+  //   gap cannot re-form on the day they ship content.
+  'subjects/grade9-english/questions',
+  'subjects/grade9-french/questions',
+  'subjects/grade9-ict/questions',
+  'subjects/grade9-social-modern-studies/questions',
+  'subjects/grade9-biology/questions',
+  'subjects/grade9-chemistry/questions',
+  'subjects/grade9-physics/questions',
 ];
 
 const ctx = { STATIC_QUESTIONS: [], console, Math, JSON, window: {} };
@@ -54,9 +68,32 @@ vm.createContext(ctx);
 for (const f of ['engine/helpers.js', 'engine/assessment.js']) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f });
 }
+// ⚠⚠ A NAMED PACK THAT IS GONE IS AN ERROR, NOT A SKIP, and a grade-9 pack
+//   this list does not name is an error too. The old code skipped a missing
+//   directory silently, so when grade9-science was split the harness quietly
+//   stopped checking its figures and still printed PASS. Both halves are
+//   asserted here because both halves have to hold: the list must not name a
+//   directory that has gone, and it must name every grade-9 questions
+//   directory that exists.
+{
+  const missing = PACKS.filter(p => !fs.existsSync(path.join(ROOT, p)));
+  if (missing.length) {
+    console.error("PACKS names a directory that does not exist: " + missing.join(", "));
+    process.exit(1);
+  }
+  const live = fs.readdirSync(path.join(ROOT, "subjects"))
+    .filter(d => /^grade9-/.test(d))
+    .filter(d => fs.existsSync(path.join(ROOT, "subjects", d, "questions")))
+    .map(d => "subjects/" + d + "/questions");
+  const unlisted = live.filter(p => PACKS.indexOf(p) === -1);
+  if (unlisted.length) {
+    console.error("a grade-9 pack ships questions this harness does not check: " + unlisted.join(", "));
+    process.exit(1);
+  }
+}
+
 for (const PACK of PACKS) {
   const dir = path.join(ROOT, PACK);
-  if (!fs.existsSync(dir)) continue;
   for (const f of fs.readdirSync(dir).sort()) {
     if (!f.endsWith('.js')) continue;
     vm.runInContext(fs.readFileSync(path.join(dir, f), 'utf8'), ctx, { filename: PACK + '/' + f });

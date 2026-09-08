@@ -22,10 +22,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-002', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:2,
     question:`${_PASSAGE_G6}What are "microplastics" and why are they concerning?`,
     options:[
-      'Large plastic bottles that clog ocean drains',
+      'Large plastic bottles that clog ocean drains and harm shipping',
       'Tiny plastic fragments found in fish that humans eat, raising food chain concerns',
-      'Plastic bags used by microbreweries',
-      'A type of biodegradable plastic'
+      'Plastic bags used by microbreweries to package their drinks',
+      'A type of biodegradable plastic that dissolves safely in warm sea water'
     ],
     answer:'Tiny plastic fragments found in fish that humans eat, raising food chain concerns',
     hint:'The word "micro" means very small. Read the last sentence of paragraph one.',
@@ -33,7 +33,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-comp-003', chapterId:'g6eng-comprehension', subsection:'vocabulary', difficulty:2,
     question:`${_PASSAGE_G6}What does the word "versatile" mean as used in paragraph 2?`,
-    options:['expensive','dangerous','able to be used in many different ways','biodegradable'],
+    options:['costing a great deal of money','likely to cause harm or injury','able to be used in many different ways','able to rot away naturally'],
     answer:'able to be used in many different ways',
     hint:'The passage says plastic is used in "almost every industry" - what quality allows this?',
     explanation:'"<b>Versatile</b>" means able to be used for many different purposes. The context - "used in almost every industry" - confirms this meaning. A versatile material adapts to many needs.' }),
@@ -72,10 +72,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-007', chapterId:'g6eng-comprehension', subsection:'authors_view', difficulty:2,
     question:`${_PASSAGE_G6}What is the author\'s MAIN PURPOSE in writing this passage?`,
     options:[
-      'To entertain readers with a story about ocean animals',
+      'To entertain readers with an amusing story about some ocean animals',
       'To inform and persuade readers about the dangers of plastic and the need for action',
-      'To advertise biodegradable alternatives to plastic',
-      'To explain how plastic is manufactured'
+      'To advertise biodegradable alternatives to ordinary plastic shopping bags',
+      'To explain how plastic is manufactured in modern factories'
     ],
     answer:'To inform and persuade readers about the dangers of plastic and the need for action',
     hint:'Consider the overall content, tone and conclusion. Does the author simply report, or do they urge action?',
@@ -84,10 +84,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-008', chapterId:'g6eng-comprehension', subsection:'evidence', difficulty:2,
     question:`${_PASSAGE_G6}Using PEE structure: what evidence from the passage supports the claim that plastic is dangerous to marine life?`,
     options:[
-      '"plastic is inexpensive to produce"',
+      '"Plastic is inexpensive to produce and incredibly versatile, which explains why it is used in almost every industry"',
       '"sea turtles, dolphins and seabirds often mistake plastic bags for food... it blocks their digestive systems and can be fatal"',
-      '"Several countries have banned single-use plastics"',
-      '"most plastic is designed for single use"'
+      '"Several countries have banned single-use plastics such as straws, bags and cutlery"',
+      '"However, most plastic is designed for single use - a straw used for five minutes may take five hundred years to decompose"'
     ],
     answer:'"sea turtles, dolphins and seabirds often mistake plastic bags for food... it blocks their digestive systems and can be fatal"',
     hint:'Find a quotation (Evidence) from the passage that directly shows danger to marine animals.',
@@ -102,10 +102,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-010', chapterId:'g6eng-comprehension', subsection:'vocabulary', difficulty:2,
     question:`${_PASSAGE_G6}What does "biodegrade" mean, as implied by the passage?`,
     options:[
-      'To become a bio-hazard',
+      'To become a dangerous bio-hazard',
       'To break down naturally into harmless substances',
-      'To become plastic again',
-      'To be recycled in a factory'
+      'To become hard plastic once again',
+      'To be recycled again inside a factory'
     ],
     answer:'To break down naturally into harmless substances',
     hint:'The passage says plastic does NOT biodegrade - it "merely breaks into smaller and smaller fragments." What would the opposite mean?',
@@ -133,10 +133,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-012', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:2,
     question:`${_PASSAGE_DODO}Why did the dodo evolve without the ability to fly, according to the passage?`,
     options:[
-      'Because its wings were injured by sailors',
-      'Because it was too heavy to take off',
+      'Because its wings had been badly injured by the sailors who arrived',
+      'Because it was far too heavy a bird to take off from the ground',
       'Because Mauritius had no land predators, so there was no need to escape by air',
-      'Because it preferred swimming to flying'
+      'Because it always preferred swimming in the sea to flying'
     ],
     answer:'Because Mauritius had no land predators, so there was no need to escape by air',
     hint:'The passage gives a clear scientific explanation in paragraph one.',
@@ -169,7 +169,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-comp-016', chapterId:'g6eng-comprehension', subsection:'language', difficulty:2,
     question:`${_PASSAGE_DODO}What literary technique is used in "determined that history shall not repeat itself" (paragraph 3)?`,
-    options:['simile','alliteration','onomatopoeia','idiom/figurative language'],
+    options:['simile/comparison using like','alliteration/repeated sounds','onomatopoeia/sound words','idiom/figurative language'],
     answer:'idiom/figurative language',
     hint:'"History repeating itself" - can history literally repeat? This is a common English expression.',
     explanation:'"History shall not repeat itself" is an <b>idiom / figurative expression</b> - history cannot literally repeat; the phrase means "the same mistake (extinction) should not happen again." Recognising figurative language is a key comprehension skill in MIE Grade 6. Contrast: a <b>simile</b> uses "like/as"; a <b>metaphor</b> states something IS something else; <b>alliteration</b> repeats consonant sounds; <b>onomatopoeia</b> imitates sounds (buzz, crash).' }),
@@ -177,10 +177,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-017', chapterId:'g6eng-comprehension', subsection:'retrieval', difficulty:2,
     question:`${_PASSAGE_DODO}Why were dodo birds "easy to catch" when sailors arrived?`,
     options:[
-      'Because they were very slow runners',
+      'Because they were very slow runners on the rocky ground',
       'Because they had no fear of humans - they had never encountered predators before',
-      'Because they were asleep during the day',
-      'Because they were attracted to the sailors\' food'
+      'Because they were always asleep during the middle of the day',
+      'Because they were strongly attracted to the smell of the sailors\' cooking food'
     ],
     answer:'Because they had no fear of humans - they had never encountered predators before',
     hint:'Paragraph two explains exactly why dodos were easy to catch.',
@@ -189,10 +189,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-018', chapterId:'g6eng-comprehension', subsection:'authors_view', difficulty:3,
     question:`${_PASSAGE_DODO}What is the AUTHOR\'S PURPOSE in paragraph three?`,
     options:[
-      'To entertain readers with facts about a famous extinct bird',
+      'To entertain readers with a collection of amusing facts about a famous extinct bird',
       'To use the dodo\'s story as a warning about current extinction threats and inspire conservation',
-      'To explain the scientific process of evolution',
-      'To describe what Mauritius looks like today'
+      'To explain the scientific process of evolution in detail',
+      'To describe what the island of Mauritius looks like today'
     ],
     answer:'To use the dodo\'s story as a warning about current extinction threats and inspire conservation',
     hint:'What does the author want the reader to take away from the dodo\'s story?',
@@ -201,10 +201,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-comp-019', chapterId:'g6eng-comprehension', subsection:'evidence', difficulty:4,
     question:`${_PASSAGE_DODO}Using PEE structure: which evidence from the passage BEST supports the claim "Introduced species were the greatest threat to the dodo"?`,
     options:[
-      '"Sailors hunted them for food"',
+      '"they had never learned to run from predators. Sailors hunted them for food"',
       '"rats, pigs and monkeys that raided dodo nests and ate the eggs"',
-      '"the dodo was extinct"',
-      '"Standing nearly a metre tall"'
+      '"Within less than a century of human arrival, the dodo was extinct"',
+      '"Standing nearly a metre tall and weighing up to twenty-three kilograms"'
     ],
     answer:'"rats, pigs and monkeys that raided dodo nests and ate the eggs"',
     hint:'Find the quotation that most directly shows HOW introduced species threatened the dodo.',

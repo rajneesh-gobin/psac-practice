@@ -198,7 +198,7 @@ const MCQ = [
   ['g9s-b2-017', 'stds', 1,
    'What does <b>STD</b> stand for?',
    ['Sexually transmitted disease', 'Serious tropical disease',
-    'Skin treatment drug', 'Standard test for disease'],
+    'Skin treatment drug', 'Standard test for diseases'],
    'Sexually transmitted disease',
    'It describes how the disease is passed on.',
    'STD stands for sexually transmitted disease.'],

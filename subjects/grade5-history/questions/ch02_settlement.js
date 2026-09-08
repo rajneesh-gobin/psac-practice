@@ -73,35 +73,35 @@ STATIC_QUESTIONS.push(
     question:'What was Fort Frederick Hendrik?',
     options:[
       'A lighthouse built by the Portuguese',
-      'A Dutch fort built at Vieux Grand Port in Mauritius',
+      'A Dutch fort at Vieux Grand Port',
       'A British fort in Port Louis',
       'A French government building'
     ],
-    answer:'A Dutch fort built at Vieux Grand Port in Mauritius',
+    answer:'A Dutch fort at Vieux Grand Port',
     hint:'Named after Frederick Henry, Prince of Orange.',
     explanation:'<b>Fort Frederick Hendrik</b> was a fort built by the Dutch at Vieux Grand Port. It was named after Frederick Henry (Frederik Hendrik), Prince of Orange, a Dutch ruler at the time of the settlement.' }),
 
   makeMCQ({ id:'g5hg-sett-010', chapterId:'settlement', subsection:'dutch', difficulty:2,
     question:'What were TWO natural resources the Dutch exploited in Mauritius during their settlement?',
     options:[
-      'Ebony wood (from cutting down forests) and introduced deer for hunting',
+      'Ebony wood from the forests and hunting deer',
       'Sugar and cotton from established plantations',
       'Gold and diamonds from the mountains',
       'Coconut oil and fish from the lagoon'
     ],
-    answer:'Ebony wood (from cutting down forests) and introduced deer for hunting',
+    answer:'Ebony wood from the forests and hunting deer',
     hint:'One is a valuable hardwood timber; the other are animals still seen in Mauritius today.',
     explanation:'The Dutch <b>cut down large areas of ebony forest</b> for the valuable hardwood, and <b>introduced deer</b> to the island for hunting. The deer they brought are the ancestors of the deer still found on the island today.' }),
 
   makeMCQ({ id:'g5hg-sett-011', chapterId:'settlement', subsection:'dutch', difficulty:2,
     question:'The Dutch abandoned Mauritius permanently in 1710. Which TWO difficulties made their settlement fail?',
     options:[
-      'Devastating cyclones that destroyed crops and buildings, and plagues of rats that ate food stores',
+      'Cyclones that destroyed crops and rats that ate food stores',
       'Attacks by Portuguese warships and earthquakes',
       'Disease from the Dodo bird and floods from the central plateau',
       'Attacks by local tribespeople and severe droughts'
     ],
-    answer:'Devastating cyclones that destroyed crops and buildings, and plagues of rats that ate food stores',
+    answer:'Cyclones that destroyed crops and rats that ate food stores',
     hint:'The island\'s natural hazards and introduced pests made sustaining the colony impossible.',
     explanation:'The Dutch settlement failed because of: (1) <b>Cyclones</b> - severe tropical storms repeatedly destroyed crops and buildings; (2) <b>Rat plagues</b> - rats accidentally introduced by ships destroyed food stores and crops. Together these made it impossible to sustain the colony.' }),
 
@@ -115,12 +115,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5hg-sett-013', chapterId:'settlement', subsection:'british', difficulty:2,
     question:'The Battle of Grand Port (August 1810) was significant in Mauritian history. What was unusual about its outcome?',
     options:[
-      'France won - making it the only naval victory for Napoleon against the British',
+      'France won - the only naval victory for Napoleon',
       'The British won without firing a single shot',
       'The battle ended in a draw and both sides withdrew',
       'The French surrendered immediately'
     ],
-    answer:'France won - making it the only naval victory for Napoleon against the British',
+    answer:'France won - the only naval victory for Napoleon',
     hint:'This battle is celebrated in France - it was a rare success during that era.',
     explanation:'The <b>Battle of Grand Port</b> (August 1810) was a French naval victory. British ships ran aground in the shallow sandy waters of the Grand Port lagoon. It is the only naval victory of the Napoleonic Wars inscribed on the Arc de Triomphe in Paris.' }),
 
@@ -141,11 +141,11 @@ STATIC_QUESTIONS.push(
     question:'After the British captured Mauritius in 1810, they allowed French settlers to keep their land, religion and laws. Why was this policy WISE for British rule?',
     options:[
       'The British feared the French would call Napoleon to attack if laws were changed',
-      'Allowing French settlers to keep their customs avoided rebellion, kept the colony productive and made the transition peaceful',
+      'It avoided rebellion and kept the colony productive and peaceful',
       'British law did not allow them to change French law',
       'The French had more soldiers and the British had to agree to their demands'
     ],
-    answer:'Allowing French settlers to keep their customs avoided rebellion, kept the colony productive and made the transition peaceful',
+    answer:'It avoided rebellion and kept the colony productive and peaceful',
     hint:'Governing a colony is easier when the local population cooperates.',
     explanation:'By allowing French settlers to keep their land, religion (Catholic) and legal system (<i>Code Napoléon</i>), the British <b>avoided rebellion</b> from the large French community, kept experienced planters managing productive estates, and ensured a smooth transition of power. This pragmatic approach maintained the colony\'s economy.' }),
 
@@ -153,11 +153,11 @@ STATIC_QUESTIONS.push(
     question:'Compare the Dutch and British approaches to settling Mauritius. Which statement BEST explains why the British were more successful at keeping long-term control?',
     options:[
       'The British had better weapons than the Dutch',
-      'The British established a proper civilian government, encouraged sugar production and maintained law through structures like Fort Adelaide - unlike the Dutch who had no long-term economic plan',
+      'The British set up civil government and a lasting sugar economy',
       'The British had more people so they simply outnumbered the Dutch',
       'The Dutch were only traders, not interested in governing territory'
     ],
-    answer:'The British established a proper civilian government, encouraged sugar production and maintained law through structures like Fort Adelaide - unlike the Dutch who had no long-term economic plan',
+    answer:'The British set up civil government and a lasting sugar economy',
     hint:'Think about what makes a settlement sustainable: economy, governance, security.',
     explanation:'The Dutch settlement failed because it lacked long-term economic sustainability (relying on timber and hunting) and was overwhelmed by natural difficulties. The British succeeded by: (1) encouraging profitable <b>sugar cultivation</b> as a lasting economic base; (2) establishing proper <b>civil government</b>; (3) building military infrastructure (Fort Adelaide) for security. These created a self-sustaining colony.' })
 

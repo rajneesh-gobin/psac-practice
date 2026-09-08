@@ -35,10 +35,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-voc-005', chapterId:'g6eng-vocabulary', subsection:'confusables', difficulty:2,
     question:'What is the difference between "affect" and "effect"?',
     options:[
-      'They are exactly the same word.',
+      'They are exactly the same word with two different spellings.',
       '"Affect" is usually a verb (to influence); "effect" is usually a noun (the result).',
-      '"Affect" is a noun; "effect" is a verb.',
-      'Both are adjectives meaning the same thing.'
+      '"Affect" is always a noun; "effect" is always a verb meaning to influence.',
+      'Both words are adjectives that mean exactly the same thing.'
     ],
     answer:'"Affect" is usually a verb (to influence); "effect" is usually a noun (the result).',
     hint:'"The pollution affected the river." / "The effect of pollution was devastating."',
@@ -67,10 +67,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-voc-009', chapterId:'g6eng-vocabulary', subsection:'confusables', difficulty:2,
     question:'What does "complement" mean? (Different from "compliment")',
     options:[
-      'To praise or say something nice about someone',
+      'To praise or say something very nice about someone',
       'Something that completes or goes well with something else',
-      'A type of sentence structure',
-      'An instruction to complete a task'
+      'A particular type of sentence structure',
+      'An instruction telling you to complete a task'
     ],
     answer:'Something that completes or goes well with something else',
     hint:'"Complement" contains "complete". "Compliment" contains the letter i (like "I like you").',
@@ -145,10 +145,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-voc-019', chapterId:'g6eng-vocabulary', subsection:'meaning', difficulty:3,
     question:'"The scientist\'s conclusion was AMBIGUOUS." What does ambiguous mean?',
     options:[
-      'Completely clear and easy to understand',
+      'Completely clear and very easy for anyone to understand',
       'Open to more than one interpretation; unclear or uncertain',
-      'Supported by strong evidence',
-      'Written in a foreign language'
+      'Supported by a lot of strong evidence',
+      'Written in a difficult foreign language'
     ],
     answer:'Open to more than one interpretation; unclear or uncertain',
     hint:'"Ambi-" = both/two. An ambiguous statement could mean two (or more) things.',
@@ -174,7 +174,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g6eng-voc-022', chapterId:'g6eng-vocabulary', subsection:'picture_words', difficulty:2,
     question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/lighthouse.jpg" alt="a tall tower by the sea" style="max-height:180px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.15)"></div><b>What is the purpose of this structure found on coastlines?</b>',
-    options:['to store fresh water','to house a coast guard station','to measure wind speed','to guide ships safely with a light signal'],
+    options:['to store fresh drinking water','to house a coast guard station','to measure the speed of the wind','to guide ships safely with a light signal'],
     answer:'to guide ships safely with a light signal',
     hint:'It flashes a powerful light at night to warn sailors of rocks and coastlines.',
     explanation:'A "<b>lighthouse</b>" is a tower with a powerful light that <b>guides ships safely</b> - warning them of rocks, reefs and coastlines, especially at night or in fog. It is a compound noun: light + house. Mauritius has several historic lighthouses, including the one at Île aux Fouquets.' }),

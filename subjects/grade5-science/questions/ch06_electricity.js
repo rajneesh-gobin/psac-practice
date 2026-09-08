@@ -141,11 +141,11 @@ STATIC_QUESTIONS.push(
     question:'What is the job of a SWITCH in an electric circuit?',
     options:[
       'It produces electricity for the circuit',
-      'It makes the bulb brighter',
-      'It opens or closes the circuit to control current flow',
+      'It makes the bulb shine brighter',
+      'It opens or closes the circuit',
       'It stores electricity for later use'
     ],
-    answer:'It opens or closes the circuit to control current flow',
+    answer:'It opens or closes the circuit',
     hint:'Think about what happens when you flick a light switch on and off.',
     explanation:'A switch <b>opens</b> (breaks) or <b>closes</b> (completes) a circuit. When closed, electricity flows and the bulb lights. When open, the circuit is broken and the bulb goes off.' }),
 
@@ -190,24 +190,24 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-el-010', chapterId:'electricity', subsection:'circuits', difficulty:1,
     question:'What does the BATTERY (cell) do in an electric circuit?',
     options:[
-      'It produces light energy directly',
-      'It provides the electrical energy to drive current around the circuit',
+      'It produces the light energy directly',
+      'It provides electrical energy to drive the current',
       'It acts as a switch to control the current',
-      'It stores heat energy'
+      'It stores up heat energy for later use'
     ],
-    answer:'It provides the electrical energy to drive current around the circuit',
+    answer:'It provides electrical energy to drive the current',
     hint:'Think of the battery as the "engine" or power source of the circuit.',
     explanation:'The <b>battery (cell)</b> is the energy source of the circuit. It converts stored chemical energy into electrical energy, pushing current around the circuit to power the bulb.' }),
 
   makeMCQ({ id:'g5sci-el-011', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:`${_EL_TWO_BULBS}The circuit above shows TWO bulbs connected in series with one battery. Compared to a circuit with only ONE bulb, how will each bulb appear?`,
     options:[
-      'Brighter, because there are two bulbs',
-      'Dimmer, because the battery\'s energy is shared between two bulbs',
+      'Brighter, because there are now two bulbs to shine',
+      'Dimmer - the battery\'s energy is shared between them',
       'The same brightness - it makes no difference',
       'One bulb will be bright and the other dark'
     ],
-    answer:'Dimmer, because the battery\'s energy is shared between two bulbs',
+    answer:'Dimmer - the battery\'s energy is shared between them',
     hint:'The same battery now has to power two bulbs instead of one.',
     explanation:'When two bulbs are connected in series, the battery\'s energy is <b>shared</b> between them. Each bulb receives less energy, so they both glow <b>dimmer</b> than a single bulb would.' }),
 
@@ -236,11 +236,11 @@ STATIC_QUESTIONS.push(
     question:'Lina connects a plastic spoon between two points in an electric circuit. The bulb does not light up. Why?',
     options:[
       'The plastic spoon is too big for the circuit',
-      'Plastic is an insulator - electricity cannot flow through it',
-      'The spoon broke the battery',
-      'The bulb needs to be replaced'
+      'Plastic is an insulator - electricity cannot flow',
+      'The spoon has broken the battery inside',
+      'The bulb needs to be replaced with a new one'
     ],
-    answer:'Plastic is an insulator - electricity cannot flow through it',
+    answer:'Plastic is an insulator - electricity cannot flow',
     hint:'Would electricity pass through a plastic material?',
     explanation:'Plastic is an <b>insulator</b> - it does not allow electricity to pass through it. So when the plastic spoon is placed in the circuit, the circuit remains broken and the bulb cannot light. To complete the circuit, a <b>conductor</b> (e.g. a metal spoon) must be used.' }),
 
@@ -254,12 +254,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-el-017', chapterId:'electricity', subsection:'circuits', difficulty:2,
     question:'What is the function of the WIRE in an electric circuit?',
     options:[
-      'To store electrical energy',
-      'To provide a conducting path for electricity to flow around the circuit',
-      'To open and close the circuit',
+      'To store electrical energy for later use',
+      'To provide a conducting path for the electricity',
+      'To open and close the circuit when needed',
       'To convert electrical energy into light energy'
     ],
-    answer:'To provide a conducting path for electricity to flow around the circuit',
+    answer:'To provide a conducting path for the electricity',
     hint:'Wire connects all the components - what does it allow to flow through it?',
     explanation:'Electric <b>wires</b> are made of copper (a conductor). They provide the <b>conducting path</b> through which electric current flows from the battery to the bulb and back. Without wires, the components cannot be connected.' }),
 
@@ -272,36 +272,36 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-el-019', chapterId:'electricity', subsection:'circuits', difficulty:3,
     question:'A pupil has a battery, two wires and a bulb, but no switch. She connects them all in a complete circuit. The bulb lights up. What is the DISADVANTAGE of having no switch?',
     options:[
-      'The circuit will not work without a switch',
-      'The battery will drain quickly because there is no way to break the circuit and turn it off',
+      'The circuit will not work properly without a switch',
+      'The battery will drain because you cannot turn the bulb off',
       'Without a switch, the bulb will shine too brightly and break',
-      'A circuit with no switch is not a real circuit'
+      'A circuit with no switch is not a real circuit at all'
     ],
-    answer:'The battery will drain quickly because there is no way to break the circuit and turn it off',
+    answer:'The battery will drain because you cannot turn the bulb off',
     hint:'A switch allows you to break the circuit. Without one, can you ever turn the bulb off?',
     explanation:'Without a switch, the circuit is always complete - current always flows and the bulb is always on. The battery will quickly run out of stored chemical energy because there is no way to stop the current. A <b>switch</b> allows you to <b>break the circuit</b> (open it) when power is not needed, saving the battery.' }),
 
   makeMCQ({ id:'g5sci-el-020', chapterId:'electricity', subsection:'circuits', difficulty:3,
     question:'What happens if you add MORE batteries (cells) in a circuit with a single bulb?',
     options:[
-      'The bulb gets dimmer',
-      'The bulb shines brighter because more energy is supplied',
-      'The bulb turns off',
-      'The circuit breaks'
+      'The bulb shines dimmer',
+      'The bulb shines brighter',
+      'The bulb turns off completely',
+      'The circuit breaks apart'
     ],
-    answer:'The bulb shines brighter because more energy is supplied',
+    answer:'The bulb shines brighter',
     hint:'More batteries means more electrical energy driving the current.',
     explanation:'Adding more batteries increases the total <b>electrical energy</b> (voltage) in the circuit. This pushes more current through the bulb, making it glow <b>brighter</b>. However, too many batteries could overheat and damage the bulb.' }),
 
   makeMCQ({ id:'g5sci-el-021', chapterId:'electricity', subsection:'circuits', difficulty:4,
     question:'A student builds a circuit with a battery, switch, wire and a buzzer. She says: "Chemical energy → Electrical energy → Sound energy." Is she correct? Explain.',
     options:[
-      'Yes - the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
-      'No - buzzers only convert heat to sound',
+      'Yes - the buzzer changes electrical energy into sound',
+      'No - a buzzer only changes heat energy into sound',
       'No - the wire converts chemical energy, not the battery',
       'Yes - but the wire also converts some energy to light'
     ],
-    answer:'Yes - the battery converts chemical to electrical, the wire conducts it, and the buzzer converts electrical to sound',
+    answer:'Yes - the buzzer changes electrical energy into sound',
     hint:'Trace the energy transformation step by step through each component.',
     explanation:'The student is correct. The <b>battery</b> stores chemical energy and converts it to electrical energy. The <b>wire</b> conducts the electrical energy around the circuit. The <b>buzzer</b> converts electrical energy into sound energy (vibrations). Each component has a specific role in the energy transformation chain.' }),
 
@@ -316,23 +316,23 @@ STATIC_QUESTIONS.push(
     question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/battery-symbols-and-circuit.jpg" alt="a circuit symbols diagram" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>Circuit diagrams use standard symbols. In a circuit diagram, a battery (cell) is represented by:</b>',
     options:[
       'A circle with a cross inside it',
-      'A long line and a shorter line placed parallel to each other',
-      'A zigzag line',
+      'A long line and a shorter line',
+      'A zigzag line between two dots',
       'A rectangle with an arrow through it'
     ],
-    answer:'A long line and a shorter line placed parallel to each other',
+    answer:'A long line and a shorter line',
     hint:'The longer line is the positive terminal (+) and the shorter line is the negative terminal (−).',
     explanation:'A <b>battery (cell)</b> in a circuit diagram is shown as a <b>long line</b> (positive terminal, +) next to a <b>shorter line</b> (negative terminal, −). Multiple cells in series show repeated pairs of lines. This is the standard international symbol used in circuit diagrams.' }),
 
   makeMCQ({ id:'g5sci-el-024', chapterId:'electricity', subsection:'diagrams', difficulty:2,
     question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/9v-battery-and-led-circuit-components-wires-battery-led-resi.jpg" alt="a photo of circuit components including wires and battery" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo shows circuit components including wires, a battery and an LED. The connecting wires have a copper core coated in plastic. Why is copper used for the inner core rather than plastic?</b>',
     options:[
-      'Copper is lighter and cheaper than plastic',
-      'Copper is a conductor - it allows electricity to flow; plastic is an insulator that would block the current',
-      'Plastic conducts electricity better than copper at high temperatures',
-      'Copper has a higher melting point than plastic so it is safer'
+      'Copper is much lighter and cheaper than plastic',
+      'Copper is a conductor and plastic is an insulator',
+      'Plastic conducts electricity better than copper',
+      'Copper has a higher melting point so it is safer'
     ],
-    answer:'Copper is a conductor - it allows electricity to flow; plastic is an insulator that would block the current',
+    answer:'Copper is a conductor and plastic is an insulator',
     hint:'For electricity to flow through a wire, the material must allow electrons to pass through it.',
     explanation:'The inner core of a wire is made of <b>copper</b> because copper is an excellent <b>conductor</b> - it allows electrons to flow through it easily. The outer plastic coating is an <b>insulator</b> - it prevents electric shocks when the wire is touched and stops accidental short circuits.' }),
 
@@ -347,11 +347,11 @@ STATIC_QUESTIONS.push(
     question:`${_EL_CLOSED}<b>In the closed circuit shown above, the bulb is glowing. What energy transformation is taking place inside the bulb?</b>`,
     options:[
       'Chemical energy → Heat energy',
-      'Electrical energy → Light energy (and heat energy)',
+      'Electrical energy → Light energy',
       'Light energy → Electrical energy',
       'Kinetic energy → Sound energy'
     ],
-    answer:'Electrical energy → Light energy (and heat energy)',
+    answer:'Electrical energy → Light energy',
     hint:'The bulb receives electrical energy from the battery - what does it produce?',
     explanation:'In the bulb, <b>electrical energy</b> is converted into <b>light energy</b> (and some heat energy). The full energy chain is: battery converts chemical energy → electrical energy; the wire conducts electrical energy; the bulb converts electrical energy → light + heat.' })
 

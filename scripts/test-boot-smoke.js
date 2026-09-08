@@ -141,11 +141,12 @@ function rpc(ws, method, params, timeoutMs = 10000) {
     ok(await evalIn('typeof makeMCQ === "function"'), 'helpers.js ran (makeMCQ defined)');
     ok(await evalIn('typeof isPoolQuestion === "function"'), 'questions_engine.js ran');
     ok(await evalIn('typeof Auth === "object"'), 'auth.js ran');
+    // ⚠ 48 SINCE grade9-science WAS SPLIT into Biology/Chemistry/Physics.
     // ⚠ 46 SINCE grade9-ict WAS ADDED. The count is hard-coded on purpose:
     //   a pack that silently stops registering is exactly what this catches,
     //   and the number should only ever change in the same commit that adds
     //   or removes one. It was 45 before ICT.
-    ok(await evalIn('Array.isArray(SUBJECT_PACKS) && SUBJECT_PACKS.length === 46'), '46 subject packs registered');
+    ok(await evalIn('Array.isArray(SUBJECT_PACKS) && SUBJECT_PACKS.length === 48'), '48 subject packs registered');
 
     // The new module.
     ok(await evalIn('typeof Assessment === "object"'), 'assessment.js ran (Assessment defined)');

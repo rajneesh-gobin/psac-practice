@@ -8,11 +8,11 @@ STATIC_QUESTIONS.push(
     question:'What is the difference between a natural feature and a man-made feature?',
     options:[
       'Natural features are big; man-made features are small',
-      'Natural features are created by nature; man-made features are built by people',
-      'Natural features are found only in cities; man-made features are in the countryside',
+      'Natural features are made by nature, not by people',
+      'Natural features are in cities; man-made in the countryside',
       'Natural features are underwater; man-made features are on land'
     ],
-    answer:'Natural features are created by nature; man-made features are built by people',
+    answer:'Natural features are made by nature, not by people',
     hint:'Think about who or what created the feature.',
     explanation:'<b>Natural features</b> are created by nature - for example mountains, rivers, beaches and lagoons. <b>Man-made features</b> are built by people - for example roads, buildings, bridges and dams.' }),
 
@@ -25,7 +25,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4ge-natenv-003', chapterId:'g4ge-natural-env', subsection:'relief', difficulty:1,
     question:'What is the highest mountain peak in Mauritius?',
-    options:['Corps de Garde','Piton de la Petite Rivière Noire','Pieter Both','Le Morne Brabant'],
+    options:['Corps de Garde near Quatre Bornes','Piton de la Petite Rivière Noire','Pieter Both in the Moka range','Le Morne Brabant in the south-west'],
     answer:'Piton de la Petite Rivière Noire',
     hint:'It stands 828 metres tall in the Black River district.',
     explanation:'<b>Piton de la Petite Rivière Noire</b> (828 m) in the south-west of Mauritius is the highest mountain peak on the island. It is located in the Black River district.' }),
@@ -39,12 +39,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4ge-natenv-005', chapterId:'g4ge-natural-env', subsection:'coast', difficulty:1,
     question:'What is a lagoon?',
     options:[
-      'A deep ocean trench',
+      'A deep trench in the open ocean',
       'A freshwater lake in the mountains',
-      'A shallow, calm body of sea water between the shore and a coral reef',
-      'A fast-flowing river'
+      'A calm strip of sea water inside the reef',
+      'A fast-flowing river in the hills'
     ],
-    answer:'A shallow, calm body of sea water between the shore and a coral reef',
+    answer:'A calm strip of sea water inside the reef',
     hint:'It is the beautiful, clear turquoise water you see at Mauritian beaches.',
     explanation:'A <b>lagoon</b> is a shallow, calm area of sea water enclosed between the shore and a coral reef. Mauritius is surrounded by a coral reef that creates a lagoon, protecting the beaches from rough ocean waves.' }),
 
@@ -56,7 +56,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4ge-natenv-007', chapterId:'g4ge-natural-env', subsection:'water', difficulty:2,
     question:'Which of the following is a river in Mauritius?',
-    options:['Black River (Rivière Noire)','River Nile','River Thames','Amazon River'],
+    options:['Black River (Rivière Noire)','The River Nile in Egypt','The River Thames in England','The Amazon River in Brazil'],
     answer:'Black River (Rivière Noire)',
     hint:'This river is also the name of an important district in the south-west of Mauritius.',
     explanation:'<b>Rivière Noire (Black River)</b> is one of the main rivers in Mauritius, located in the south-west of the island. Other rivers include Rivière du Rempart and Grand River South East.' }),
@@ -64,12 +64,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4ge-natenv-008', chapterId:'g4ge-natural-env', subsection:'relief', difficulty:1,
     question:'What is Rodrigues?',
     options:[
-      'A mountain in Mauritius',
+      'A mountain in the north of Mauritius',
       'A river in the south of Mauritius',
-      'A small island that is part of the Republic of Mauritius',
-      'A beach in Port Louis'
+      'A small island of the Republic of Mauritius',
+      'A long sandy beach near Port Louis'
     ],
-    answer:'A small island that is part of the Republic of Mauritius',
+    answer:'A small island of the Republic of Mauritius',
     hint:'It is about 560 km north-east of Mauritius in the Indian Ocean.',
     explanation:'<b>Rodrigues</b> is a small island located about 560 km north-east of Mauritius in the Indian Ocean. It is part of the <b>Republic of Mauritius</b>, with its own regional government. It has its own hills, coral reef and lagoon.' }),
 
@@ -100,24 +100,24 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4ge-natenv-012', chapterId:'g4ge-natural-env', subsection:'relief', difficulty:2,
     question:'Rivers in Mauritius flow FROM the central plateau TOWARDS the coast. Why is this?',
     options:[
-      'Because rain only falls on the coast',
-      'Because the central plateau is higher, so water flows downhill to the sea',
+      'Because the rain only falls on the coast',
+      'Because the plateau is higher than the coast',
       'Because the sea is higher than the land',
       'Because wind pushes water to the coast'
     ],
-    answer:'Because the central plateau is higher, so water flows downhill to the sea',
+    answer:'Because the plateau is higher than the coast',
     hint:'Water always flows from high places to low places.',
     explanation:'Water always flows downhill due to gravity. The <b>central plateau</b> is higher than the coastal plains, so rivers flow outward from the plateau toward the lower coastal areas and into the sea.' }),
 
   makeMCQ({ id:'g4ge-natenv-013', chapterId:'g4ge-natural-env', subsection:'coast', difficulty:1,
     question:'What is a beach?',
     options:[
-      'A rocky cliff above the sea',
-      'A flat area of sand or pebbles along the edge of the sea',
-      'A deep hole in the ocean',
-      'A tall mountain by the coast'
+      'A rocky cliff high above the sea',
+      'A flat area of sand or pebbles by the sea',
+      'A deep hole in the middle of the ocean',
+      'A tall mountain right by the coast'
     ],
-    answer:'A flat area of sand or pebbles along the edge of the sea',
+    answer:'A flat area of sand or pebbles by the sea',
     hint:'People love to visit beaches to swim and relax in Mauritius.',
     explanation:'A <b>beach</b> is a flat area of sand, pebbles or coral along the edge of the sea. Mauritius has many beautiful sandy beaches, most protected by its coral reef and lagoon.' }),
 
@@ -129,7 +129,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4ge-natenv-015', chapterId:'g4ge-natural-env', subsection:'water', difficulty:2,
     question:'The Grand River South East (Grande Rivière Sud-Est) is famous for which natural feature?',
-    options:['Being the longest river in Mauritius','Having a waterfall where it meets the sea','Being a dry river all year','Flowing through Port Louis'],
+    options:['Being the longest river in Mauritius','Having a waterfall where it meets the sea','Being a dry river for all of the year','Flowing right through Port Louis'],
     answer:'Having a waterfall where it meets the sea',
     hint:'This is an unusual place to find a waterfall - right where the river ends!',
     explanation:'The <b>Grand River South East</b> is notable for its <b>waterfall</b> at its mouth, where it flows into the Indian Ocean. It is also the longest river in Mauritius (about 35 km) and flows through the south-east of the island.' }),
@@ -140,7 +140,7 @@ STATIC_QUESTIONS.push(
       'A steep mountain with a sharp peak',
       'A flat or gently rolling area of high land',
       'A deep valley between two mountains',
-      'A sandy beach by the sea'
+      'A sandy beach beside the open sea'
     ],
     answer:'A flat or gently rolling area of high land',
     hint:'The central plateau of Mauritius is high but relatively flat - many towns are built on it.',
@@ -155,12 +155,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4ge-natenv-018', chapterId:'g4ge-natural-env', subsection:'natural_manmade', difficulty:3,
     question:'A student says: "All the features I see on the way to school are natural features." Name ONE natural feature AND ONE man-made feature they might actually see, and explain the difference.',
     options:[
-      'Natural: a river. Man-made: a bridge. Natural features are formed by nature; man-made features are built by people.',
-      'Natural: a road. Man-made: a beach. Both are formed by the same process.',
-      'Natural: a building. Man-made: a mountain. Buildings grow from the ground naturally.',
+      'Natural: a river. Man-made: a bridge. People build bridges.',
+      'Natural: a road. Man-made: a beach. Both are the same.',
+      'Natural: a building. Man-made: a mountain. Buildings grow.',
       'Natural: a dam. Man-made: a tree. Dams grow in forests.'
     ],
-    answer:'Natural: a river. Man-made: a bridge. Natural features are formed by nature; man-made features are built by people.',
+    answer:'Natural: a river. Man-made: a bridge. People build bridges.',
     hint:'Rivers exist without any human involvement; bridges are constructed by engineers.',
     explanation:'A <b>river</b> is a natural feature - it was formed by rainfall and flows naturally downhill. A <b>bridge</b> is man-made - engineers and workers built it across the river. The key difference: natural features exist without human involvement; man-made features are constructed by people.' }),
 
@@ -168,11 +168,11 @@ STATIC_QUESTIONS.push(
     question:'Which of these best describes the shape of Mauritius?',
     options:[
       'A long, narrow island like a thin rectangle',
-      'A roughly oval/pear-shaped island with a central plateau surrounded by coastal plains',
+      'An oval island with a central plateau',
       'A perfectly circular island with no mountains',
       'A flat, desert island with no rivers'
     ],
-    answer:'A roughly oval/pear-shaped island with a central plateau surrounded by coastal plains',
+    answer:'An oval island with a central plateau',
     hint:'Think about the shape you see on a map of Mauritius.',
     explanation:'Mauritius has a roughly <b>oval or pear shape</b>. It has a raised <b>central plateau</b> at its heart, surrounded by mountain ranges, which then slope down to <b>coastal plains</b> and finally the coast with its beaches, lagoons and coral reef.' })
 

@@ -27,8 +27,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5ge-weather-004', chapterId:'g5ge-weather', subsection:'instruments', difficulty:1,
     question:'What does a rain gauge measure?',
-    options:['Wind speed','Rainfall (the amount of rain)','Wind direction','Air pressure'],
-    answer:'Rainfall (the amount of rain)',
+    options:['Wind speed','Rainfall','Wind direction','Air pressure'],
+    answer:'Rainfall',
     hint:'The name contains "rain" - what does it measure?',
     explanation:'A <b>rain gauge</b> measures the amount of rainfall (precipitation) over a period of time. Rainfall is usually recorded in millimetres (mm).' }),
 
@@ -76,10 +76,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Slight rain and strong breezes expected',
       'Cyclone is 200 km away - watch for updates',
-      'Cyclone is about to hit with extremely strong, destructive winds',
+      'Cyclone is about to hit with destructive winds',
       'All schools are closed but shops remain open'
     ],
-    answer:'Cyclone is about to hit with extremely strong, destructive winds',
+    answer:'Cyclone is about to hit with destructive winds',
     hint:'Class 4 is the highest level - the most dangerous situation.',
     explanation:'A <b>Class 4</b> warning means the cyclone centre is about to pass over or very close to Mauritius with extremely destructive winds. Everyone must remain sheltered until the warning is lifted.' }),
 
@@ -87,11 +87,11 @@ STATIC_QUESTIONS.push(
     question:'How does a cyclone affect farming in Mauritius?',
     options:[
       'It improves crop growth by bringing extra sunshine',
-      'It destroys crops and uproots trees with strong winds and heavy rain',
-      'It has no effect on farming',
+      'It destroys crops and uproots trees with strong winds',
+      'It has no real effect on farming at all',
       'It brings useful cold temperatures for vegetables'
     ],
-    answer:'It destroys crops and uproots trees with strong winds and heavy rain',
+    answer:'It destroys crops and uproots trees with strong winds',
     hint:'Think about what a cyclone does to anything left standing in an open field.',
     explanation:'Cyclones can cause major damage to farming: <b>strong winds flatten and destroy crops</b> (sugar cane, vegetables), uproot trees, and flooding washes away soil. This can lead to food shortages and economic losses.' }),
 
@@ -111,23 +111,23 @@ STATIC_QUESTIONS.push(
     question:'How does weather affect tourism in Mauritius?',
     options:[
       'Tourists prefer Mauritius only in winter because it is cold',
-      'Bad weather such as cyclones causes tourists to cancel trips and hotels lose income',
-      'Rainy weather has no effect on tourists',
+      'Cyclones make tourists cancel trips, so hotels lose income',
+      'Rainy weather has no effect on tourist numbers',
       'Cyclones attract tourists who want to experience adventure'
     ],
-    answer:'Bad weather such as cyclones causes tourists to cancel trips and hotels lose income',
+    answer:'Cyclones make tourists cancel trips, so hotels lose income',
     hint:'Think about what tourists come to Mauritius for.',
     explanation:'Tourists come to Mauritius for <b>sunshine, beaches and warm weather</b>. Cyclones and heavy rain cause tourists to cancel holidays, flights are disrupted and hotels lose income. Good weather is essential for a healthy tourism industry.' }),
 
   makeMCQ({ id:'g5ge-weather-014', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
     question:'What is the difference between "weather" and "climate"?',
     options:[
-      'They mean exactly the same thing',
-      'Weather is what happens day to day; climate is the long-term pattern of weather in a region',
-      'Climate is what happens each day; weather is the seasonal pattern',
+      'They mean exactly the same thing in geography',
+      'Weather is day to day; climate is the long-term pattern',
+      'Climate is day to day; weather is the long-term pattern',
       'Weather only refers to rain; climate refers to sunshine'
     ],
-    answer:'Weather is what happens day to day; climate is the long-term pattern of weather in a region',
+    answer:'Weather is day to day; climate is the long-term pattern',
     hint:'One is short-term; one is long-term.',
     explanation:'<b>Weather</b> is the short-term condition of the atmosphere (today\'s rain, wind, temperature). <b>Climate</b> is the average or typical weather pattern of a region over many years. For example: "It is raining today" is weather; "Mauritius has a tropical climate" is climate.' }),
 
@@ -153,11 +153,11 @@ STATIC_QUESTIONS.push(
     question:'Why is it important for Mauritius to have an accurate weather forecast service?',
     options:[
       'So that people know what clothes to wear each day',
-      'So that farmers, fishermen, airline pilots and emergency services can plan ahead and stay safe',
+      'So that farmers, fishermen and pilots can plan and stay safe',
       'Because weather forecasting is required by law in all island nations',
-      'So that schools can plan their sports days'
+      'So that schools can plan their sports days in advance'
     ],
-    answer:'So that farmers, fishermen, airline pilots and emergency services can plan ahead and stay safe',
+    answer:'So that farmers, fishermen and pilots can plan and stay safe',
     hint:'Many different groups depend on knowing what the weather will be.',
     explanation:'Accurate weather forecasts help <b>many sectors</b>: farmers plan watering and harvesting; fishermen decide when it is safe to go to sea; airlines plan routes; emergency services prepare for cyclones and floods. Early warnings save lives and reduce economic damage.' }),
 

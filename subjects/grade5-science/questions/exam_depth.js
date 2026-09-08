@@ -234,7 +234,7 @@
     'It protects the wiring.',
     'A fuse melts and <b>breaks the circuit</b> if too much current flows, which prevents fire.');
   q('electricity', 'components', 3, 'Which drawing symbol stands for a cell in a circuit diagram?',
-    ['A long line and a short line', 'A circle with a cross', 'A zigzag line', 'A small square box'],
+    ['A long line and a short line', 'A circle with a cross inside', 'A single zigzag line', 'A small empty square box'],
     'One line is longer than the other.',
     'A cell is drawn as <b>a long line and a short line</b>. The long line is the positive terminal.');
 

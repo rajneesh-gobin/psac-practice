@@ -43,15 +43,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-liv-055', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:2,
     question:'REPTILES are cold-blooded. What does this mean?',
-    options:['Their blood is always cold','Their body temperature changes with the surrounding environment','They can only live in cold countries','They never feel warm'],
-    answer:'Their body temperature changes with the surrounding environment',
+    options:['Their blood is always cold to touch','Their temperature changes with the surroundings','They can only live in cold countries','They never feel warm to touch'],
+    answer:'Their temperature changes with the surroundings',
     hint:'Cold-blooded animals do not produce their own body heat.',
     explanation:'<b>Cold-blooded</b> means a reptile\'s body temperature changes with the <b>temperature of its surroundings</b>. Reptiles need to bask in the sun to warm up and move to shade to cool down. Mammals and birds are warm-blooded - they keep a constant body temperature.' }),
 
   makeMCQ({ id:'g4sc-liv-056', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:2,
     question:'Which feature is unique to AMPHIBIANS?',
-    options:['They have gills throughout their lives','They lay eggs that hatch into larvae that live in water before becoming adults that can live on land','They are covered in scales','They are the only animals that can swim'],
-    answer:'They lay eggs that hatch into larvae that live in water before becoming adults that can live on land',
+    options:['They have gills throughout their lives','Their larvae live in water, the adults on land','They are covered in scales','They are the only animals that can swim'],
+    answer:'Their larvae live in water, the adults on land',
     hint:'Think about how frogs change from tadpoles to frogs.',
     explanation:'Amphibians (like frogs) begin life as <b>larvae (tadpoles) in water</b>, breathing through gills. They change (metamorphose) into adults that can live <b>on land and in water</b>, breathing through lungs and moist skin. This two-stage life cycle is unique to amphibians.' }),
 
@@ -78,15 +78,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-liv-060', chapterId:'g4sci-living', subsection:'classification', difficulty:3,
     question:'A bat flies, is warm-blooded, has hair, and feeds its young on milk. To which group does the bat belong?',
-    options:['Birds, because it can fly','Reptiles, because it has wings','Mammals, because it is warm-blooded, has hair and nurses its young','Insects, because it is small and flies'],
-    answer:'Mammals, because it is warm-blooded, has hair and nurses its young',
+    options:['Birds, because it can fly','Reptiles, because it has wings','Mammals - it has hair and nurses its young','Insects, because it is small and flies'],
+    answer:'Mammals - it has hair and nurses its young',
     hint:'Think about the key features of mammals - not just the ability to fly.',
     explanation:'Despite being able to fly, the bat is a <b>mammal</b> because it has <b>hair, is warm-blooded, and nurses its young on milk</b>. Birds have feathers; insects have 6 legs and 3 body parts. The Rodrigues Fruit Bat is a famous mammal of Mauritius.' }),
 
   makeMCQ({ id:'g4sc-liv-061', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:4,
     question:'Neha finds an animal in her garden. It is cold-blooded, has moist skin (no scales), and lays its eggs in water. As a young animal it had gills, but now as an adult it has lungs. Which class does it belong to?',
-    options:['Reptile - because it is cold-blooded','Fish - because it once had gills','Amphibian - because it lives in two environments and changes from a larva with gills to an adult with lungs','Bird - because it now breathes with lungs'],
-    answer:'Amphibian - because it lives in two environments and changes from a larva with gills to an adult with lungs',
+    options:['Reptile - because it is cold-blooded','Fish - because it once had gills','Amphibian - it changes from gills to lungs','Bird - because it now breathes with lungs'],
+    answer:'Amphibian - it changes from gills to lungs',
     hint:'Which class goes through a change from a water-living larva (gills) to a land-living adult (lungs)?',
     explanation:'The animal is an <b>amphibian</b> (most likely a frog or toad). Key clues: cold-blooded, moist skin (no scales), eggs laid in water, larva with gills → adult with lungs. Reptiles have scaly skin; fish keep their gills throughout life; birds are warm-blooded with feathers.' }),
 
@@ -122,29 +122,29 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-air-054', chapterId:'g4sci-air', subsection:'properties', difficulty:2,
     question:'A football is fully inflated, then left in the sun for an hour. The ball feels HARDER. Why?',
-    options:['The rubber expanded and became thicker','Heating the air inside the ball makes it expand and increases the pressure','The sun glued the ball shut','Cold air from shade seeped into the ball'],
-    answer:'Heating the air inside the ball makes it expand and increases the pressure',
+    options:['The rubber expanded and became thicker','Heating the air inside makes it expand','The sun glued the ball shut','Cold air from shade seeped into the ball'],
+    answer:'Heating the air inside makes it expand',
     hint:'What happens to air (like most gases) when it is heated?',
     explanation:'When air is <b>heated</b>, its particles move faster and spread out (expand). Inside the sealed ball, they push harder on the walls, <b>increasing air pressure</b> - the ball feels harder. This also explains why car tyres can over-inflate on a hot day.' }),
 
   makeMCQ({ id:'g4sc-air-055', chapterId:'g4sci-air', subsection:'properties', difficulty:2,
     question:'ACID RAIN is caused by:',
-    options:['Too much oxygen in the air','Harmful gases from burning fuels mixing with rainwater to form acids','Rain that has been in a cloud for too long','Rain falling through salt water near the sea'],
-    answer:'Harmful gases from burning fuels mixing with rainwater to form acids',
+    options:['Too much oxygen in the air','Gases from burning fuels mixing with rainwater','Rain that has been in a cloud for too long','Rain falling through salt water near the sea'],
+    answer:'Gases from burning fuels mixing with rainwater',
     hint:'Factories and vehicles release sulphur and nitrogen oxides into the air.',
     explanation:'<b>Acid rain</b> forms when harmful gases (sulphur dioxide, nitrogen oxides) released by factories and vehicles mix with <b>water vapour in the atmosphere</b> to form acids. This acid falls as rain and damages trees, buildings and water bodies, harming fish and other organisms.' }),
 
   makeMCQ({ id:'g4sc-air-056', chapterId:'g4sci-air', subsection:'pollution', difficulty:2,
     question:'Which action would BEST reduce air pollution caused by vehicles?',
-    options:['Drive faster so journeys are shorter','Use public transport or walk instead of using a car','Paint cars white to reflect heat','Drive only on sunny days'],
-    answer:'Use public transport or walk instead of using a car',
+    options:['Drive faster so journeys are shorter','Use public transport or walk instead','Paint cars white to reflect heat','Drive only on sunny days'],
+    answer:'Use public transport or walk instead',
     hint:'Fewer vehicles on the road means fewer exhaust fumes.',
     explanation:'Using <b>public transport or walking</b> reduces the number of vehicles on the road and therefore reduces the amount of exhaust fumes released into the air. Other solutions include electric vehicles, car-sharing and cycling. This is a key way individuals can help reduce air pollution.' }),
 
   makeMCQ({ id:'g4sc-air-057', chapterId:'g4sci-air', subsection:'properties', difficulty:2,
     question:'Factories often have TALL chimneys. What is the main purpose of tall chimneys?',
-    options:['To make the factories look bigger','To help smoke spread higher into the atmosphere and away from nearby homes','To keep the factory cool','To collect rainwater'],
-    answer:'To help smoke spread higher into the atmosphere and away from nearby homes',
+    options:['To make the factories look bigger','To send the smoke higher up and away','To keep the factory cool','To collect rainwater'],
+    answer:'To send the smoke higher up and away',
     hint:'Higher chimneys release smoke at a greater height - where does it go?',
     explanation:'Tall chimneys release smoke and gases at a <b>greater height</b> so they are carried by wind and spread over a wider area, reducing the concentration of pollutants near the factory. However, this does not remove the pollution - it just moves it. Filters and scrubbers are better solutions.' }),
 
@@ -159,11 +159,11 @@ STATIC_QUESTIONS.push(
     question:'Which statement about the COMPOSITION of air is correct?',
     options:[
       'Oxygen is the most abundant gas in air, making up about 78%',
-      'Nitrogen is the most abundant gas, oxygen is second, and carbon dioxide is a very small fraction',
+      'Nitrogen is the most abundant, then oxygen',
       'Carbon dioxide is the second most abundant gas in air',
       'Air is made of oxygen and carbon dioxide only'
     ],
-    answer:'Nitrogen is the most abundant gas, oxygen is second, and carbon dioxide is a very small fraction',
+    answer:'Nitrogen is the most abundant, then oxygen',
     hint:'Rank the three gases from most to least abundant and judge each statement against that order.',
     explanation:'Air is a <b>mixture of gases</b>: <b>nitrogen ~78%</b> (most), <b>oxygen ~21%</b> (second), with small amounts of other gases including <b>carbon dioxide (~0.04%)</b> and noble gases (argon). Knowing this order is important for Grade 4 Science.' }),
 
@@ -171,11 +171,11 @@ STATIC_QUESTIONS.push(
     question:'A scientist seals an animal in a glass container with no opening. After a few hours, the animal is stressed and struggling. Why?',
     options:[
       'The glass made the container too dark',
-      'The animal used up the oxygen and carbon dioxide built up, making the air unbreathable',
+      'The oxygen was used up and carbon dioxide built up',
       'The container made the animal cold',
       'The animal was frightened by its reflection in the glass'
     ],
-    answer:'The animal used up the oxygen and carbon dioxide built up, making the air unbreathable',
+    answer:'The oxygen was used up and carbon dioxide built up',
     hint:'Sealed means no fresh air enters - what happens to oxygen and CO₂ levels?',
     explanation:'In a sealed container, the animal uses up <b>oxygen</b> for respiration and releases <b>carbon dioxide</b>. Eventually, oxygen levels drop too low to sustain life and CO₂ builds to toxic levels. This is why animals need fresh air (ventilation) - and why air is a shared resource that must not be polluted.' }),
 
@@ -183,11 +183,11 @@ STATIC_QUESTIONS.push(
     question:'Dev\'s school is near a busy road. Many children in the class have coughs and breathing problems. The head teacher says the school will plant a row of tall trees along the road. How will this help?',
     options:[
       'The trees will make the school look nicer and distract the children',
-      'Trees absorb carbon dioxide and some pollutants, and act as a barrier to reduce the amount of exhaust fumes reaching the school',
+      'Trees absorb pollutants and act as a barrier',
       'The trees will block all sunlight, keeping the school cool',
       'The trees will scare away cars from the road'
     ],
-    answer:'Trees absorb carbon dioxide and some pollutants, and act as a barrier to reduce the amount of exhaust fumes reaching the school',
+    answer:'Trees absorb pollutants and act as a barrier',
     hint:'Trees are natural air filters - what do their leaves absorb?',
     explanation:'Planting trees helps because: (1) tree leaves <b>absorb CO₂ and some pollutants</b>; (2) the trees act as a <b>physical barrier</b>, reducing the drift of exhaust fumes into the school grounds; (3) they produce oxygen. This is a real conservation strategy used in cities worldwide.' }),
 
@@ -216,8 +216,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-wat-053', chapterId:'g4sci-water', subsection:'water_cycle', difficulty:1,
     question:'What is PRECIPITATION in the water cycle?',
-    options:['Water evaporating from the sea','Water vapour rising into the sky','Water falling from clouds as rain, hail or snow','Water flowing along rivers'],
-    answer:'Water falling from clouds as rain, hail or snow',
+    options:['Water evaporating from the sea','Water vapour rising into the sky','Water falling as rain, hail or snow','Water flowing along rivers'],
+    answer:'Water falling as rain, hail or snow',
     hint:'This is any form of water that falls from the atmosphere to the ground.',
     explanation:'<b>Precipitation</b> is any form of water - rain, hail, sleet or snow - that falls from clouds to the Earth\'s surface. In Mauritius, precipitation is mainly rain. It replenishes rivers, lakes and groundwater after water has evaporated and formed clouds.' }),
 
@@ -242,15 +242,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-wat-056', chapterId:'g4sci-water', subsection:'uses', difficulty:2,
     question:'Which is a good way to CONSERVE (save) water at home?',
-    options:['Leaving taps running while brushing teeth','Watering the garden during the hottest part of the day','Fixing dripping taps and using a bucket instead of a hose to wash the car','Filling a bath every day instead of showering'],
-    answer:'Fixing dripping taps and using a bucket instead of a hose to wash the car',
+    options:['Leaving taps running while brushing teeth','Watering the garden during the hottest part of the day','Fixing dripping taps and using a bucket','Filling a bath every day instead of showering'],
+    answer:'Fixing dripping taps and using a bucket',
     hint:'Think about which action wastes less water.',
     explanation:'<b>Fixing dripping taps</b> prevents water being wasted continuously. <b>Using a bucket instead of a hose</b> uses far less water. Other water-saving methods: turning off taps when not in use, taking shorter showers, and collecting rainwater for garden use.' }),
 
   makeMCQ({ id:'g4sc-wat-057', chapterId:'g4sci-water', subsection:'uses', difficulty:2,
     question:'Why is it important to have CLEAN drinking water?',
-    options:['Because clean water tastes sweeter','Because dirty water contains harmful bacteria and microorganisms that cause diseases such as cholera and typhoid','Because water must be blue to be safe','Because clean water is heavier and more filling'],
-    answer:'Because dirty water contains harmful bacteria and microorganisms that cause diseases such as cholera and typhoid',
+    options:['Because clean water tastes sweeter','Dirty water carries microbes that cause cholera','Because water must be blue to be safe','Because clean water is heavier and more filling'],
+    answer:'Dirty water carries microbes that cause cholera',
     hint:'What organisms can live in dirty water and make us sick?',
     explanation:'<b>Clean drinking water</b> is essential because dirty water contains <b>harmful bacteria and microorganisms</b> that cause serious diseases such as cholera, typhoid and dysentery. Access to safe water is a basic human need. In Mauritius, the Central Water Authority treats water before it reaches homes.' }),
 
@@ -258,11 +258,11 @@ STATIC_QUESTIONS.push(
     question:'Sita puts a glass of cold water on a table in a warm room. After 10 minutes, tiny water droplets appear on the OUTSIDE of the glass. Where did this water come from?',
     options:[
       'The water seeped through the glass from inside',
-      'Water vapour in the warm room air cooled when it touched the cold glass and condensed into liquid droplets',
+      'Water vapour cooled on the cold glass and condensed',
       'The glass was not washed properly',
       'The table was wet and the water climbed up the glass'
     ],
-    answer:'Water vapour in the warm room air cooled when it touched the cold glass and condensed into liquid droplets',
+    answer:'Water vapour cooled on the cold glass and condensed',
     hint:'The glass is cold; the air is warm and contains water vapour - what happens when warm vapour meets a cold surface?',
     explanation:'This is <b>condensation</b>. The warm room air contains invisible water vapour. When the vapour contacts the <b>cold surface</b> of the glass, it loses energy, cools below its dew point and <b>condenses into liquid droplets</b>. The water comes from the air, not from inside the glass.' }),
 
@@ -275,8 +275,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-wat-060', chapterId:'g4sci-water', subsection:'states', difficulty:3,
     question:'What happens to water when it is placed in a FREEZER?',
-    options:['It evaporates into the air','It condenses into a smaller amount','It freezes and changes from liquid to solid (ice)','It boils inside the freezer'],
-    answer:'It freezes and changes from liquid to solid (ice)',
+    options:['It evaporates into the air','It condenses into a smaller amount','It freezes and changes to solid ice','It boils inside the freezer'],
+    answer:'It freezes and changes to solid ice',
     hint:'A freezer is very cold - below 0°C.',
     explanation:'When water is placed in a freezer (temperature below 0°C), it <b>freezes</b> - it changes state from <b>liquid to solid</b> (ice). The particles slow down and arrange into a rigid crystalline structure. This is why water left in a freezer becomes ice cubes.' }),
 
@@ -284,11 +284,11 @@ STATIC_QUESTIONS.push(
     question:'Priya\'s science teacher places a pot of water on a stove. First it gets warm. Then small bubbles form and steam rises. Later, the water level in the pot has fallen. Which THREE changes of state have occurred?',
     options:[
       'Condensation, freezing, precipitation',
-      'Heating (warming as liquid), boiling (liquid to gas), evaporation (liquid to gas, removing water from the pot)',
+      'Heating, boiling and evaporation',
       'Melting, condensation, freezing',
       'Precipitation, condensation, evaporation'
     ],
-    answer:'Heating (warming as liquid), boiling (liquid to gas), evaporation (liquid to gas, removing water from the pot)',
+    answer:'Heating, boiling and evaporation',
     hint:'The water started as a liquid, stayed a liquid while warming, then turned to steam, then escaped as vapour.',
     explanation:'(1) <b>Warming</b> - liquid water gains heat energy; (2) <b>Boiling</b> - at 100°C, rapid change from liquid to steam (gas); (3) <b>Evaporation</b> - steam escapes into the air, reducing the water level. The water has gone from liquid to gas and left the pot. If the pot had a cold lid, condensation would also occur.' }),
 
@@ -310,8 +310,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-mat-052', chapterId:'g4sci-materials', subsection:'properties', difficulty:1,
     question:'A TRANSPARENT material is one that:',
-    options:['Cannot be broken','Lets light pass through so you can see through it','Is very strong and hard','Does not absorb water'],
-    answer:'Lets light pass through so you can see through it',
+    options:['Cannot be broken by hand','Lets light pass straight through it','Is very strong and hard to break','Does not absorb any water'],
+    answer:'Lets light pass straight through it',
     hint:'Windows are made of this type of material.',
     explanation:'A <b>transparent</b> material allows <b>light to pass through</b> it so objects on the other side can be clearly seen. Glass and clear plastic are transparent. An <b>opaque</b> material (like wood or brick) blocks light. A <b>translucent</b> material lets some light through but you cannot see clearly through it.' }),
 
@@ -331,8 +331,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-mat-055', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:2,
     question:'Why is GLASS the best material for making windows?',
-    options:['It is soft and flexible','It is transparent, allowing light in while keeping wind and rain out','It is absorbent, so it soaks up rain','It is a conductor, helping keep the house warm'],
-    answer:'It is transparent, allowing light in while keeping wind and rain out',
+    options:['It is soft and flexible','It is transparent and keeps wind and rain out','It is absorbent, so it soaks up rain','It is a conductor, helping keep the house warm'],
+    answer:'It is transparent and keeps wind and rain out',
     hint:'What property allows us to see outside and let light into the room?',
     explanation:'<b>Glass</b> is ideal for windows because it is <b>transparent</b> (light passes through, so we can see out and daylight comes in), <b>waterproof</b> (rain cannot soak through), and <b>rigid</b> (holds its shape). Its transparency is the key property - opaque materials would block light.' }),
 
@@ -352,8 +352,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-mat-058', chapterId:'g4sci-materials', subsection:'properties', difficulty:3,
     question:'A builder needs a material for the ROOF of a house that is waterproof, strong and rigid. Which would be the BEST choice?',
-    options:['Cotton cloth, because it is a natural material','Steel sheets, because steel is strong, rigid and waterproof','Sponge, because it is soft and light','Paper, because it is cheap and easy to find'],
-    answer:'Steel sheets, because steel is strong, rigid and waterproof',
+    options:['Cotton cloth, because it is a natural material','Steel sheets - strong, rigid and waterproof','Sponge, because it is soft and light','Paper, because it is cheap and easy to find'],
+    answer:'Steel sheets - strong, rigid and waterproof',
     hint:'The roof must support weight, keep its shape, and stop rain from entering.',
     explanation:'<b>Steel sheets</b> are ideal: they are <b>strong</b> (withstand weight and wind), <b>rigid</b> (hold shape), and <b>waterproof</b> (rain runs off). Cotton cloth absorbs water; sponge is too weak; paper disintegrates in rain. Matching material properties to purpose is the key idea.' }),
 
@@ -373,8 +373,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-mat-061', chapterId:'g4sci-materials', subsection:'natural_manmade', difficulty:4,
     question:'Shiv wants to make a container to keep his cold drink cold for a long time. He can choose from: aluminium (good conductor), polystyrene (poor conductor/insulator), glass (poor conductor), or cotton cloth (poor conductor). Which material is BEST and why?',
-    options:['Aluminium, because it is a strong metal','Polystyrene, because it is a poor conductor of heat and will slow heat flowing in from outside, keeping the drink cold','Glass, because it is transparent and you can see the drink','Cotton cloth, because it is natural and soft'],
-    answer:'Polystyrene, because it is a poor conductor of heat and will slow heat flowing in from outside, keeping the drink cold',
+    options:['Aluminium, because it is a strong metal','Polystyrene - a poor conductor, so the drink stays cold','Glass, because it is transparent and you can see the drink','Cotton cloth, because it is natural and soft'],
+    answer:'Polystyrene - a poor conductor, so the drink stays cold',
     hint:'A cold drink gets warm when heat flows from the warm outside into the cold drink. Which material slows this transfer of heat?',
     explanation:'<b>Polystyrene is an insulator</b> (poor conductor of heat). It slows the flow of heat from the warm surroundings into the cold drink, so the drink stays cold longer. Aluminium would let heat flow through quickly. Glass is better than aluminium but polystyrene is the best insulator here. This is why takeaway coffee cups use polystyrene.' }),
 
@@ -396,8 +396,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-ene-052', chapterId:'g4sci-energy', subsection:'forms', difficulty:1,
     question:'Which of the following is a form of ENERGY?',
-    options:['Water','Sunlight only','Sound','All of: light, heat, sound and movement'],
-    answer:'All of: light, heat, sound and movement',
+    options:['Water and nothing else','Sunlight and nothing else','Sound and nothing else','Light, heat, sound and movement'],
+    answer:'Light, heat, sound and movement',
     hint:'Energy comes in many forms - think of all the things that can do work.',
     explanation:'Energy has many forms: <b>light</b> (from the sun, a bulb), <b>heat</b> (from a fire, the sun), <b>sound</b> (from a speaker, clapping), <b>movement/kinetic</b> (a moving ball), and <b>electrical energy</b>. Water is a substance, not a form of energy - but moving water has kinetic energy.' }),
 
@@ -413,10 +413,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Electrical energy → movement energy',
       'Heat energy → light energy',
-      'Movement (kinetic) energy of wind → electrical energy',
+      'Movement energy of wind → electrical energy',
       'Chemical energy → electrical energy'
     ],
-    answer:'Movement (kinetic) energy of wind → electrical energy',
+    answer:'Movement energy of wind → electrical energy',
     hint:'The wind turns the blades of the turbine, and the turning motion produces electricity.',
     explanation:'In a wind turbine, the <b>kinetic (movement) energy of the wind</b> turns the turbine blades. This rotation drives a generator that converts the kinetic energy into <b>electrical energy</b>. Wind energy is renewable - it will not run out as long as wind blows.' }),
 
@@ -436,8 +436,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-ene-057', chapterId:'g4sci-energy', subsection:'saving', difficulty:2,
     question:'Which is a good way to SAVE energy at home?',
-    options:['Leaving lights on in empty rooms','Turning off lights when leaving a room and using energy-saving bulbs','Using the largest TV available','Washing clothes in hot water every day'],
-    answer:'Turning off lights when leaving a room and using energy-saving bulbs',
+    options:['Leaving lights on in empty rooms','Turning off lights and using energy-saving bulbs','Using the largest TV available','Washing clothes in hot water every day'],
+    answer:'Turning off lights and using energy-saving bulbs',
     hint:'Think about reducing the amount of electricity you use.',
     explanation:'<b>Turning off lights</b> when not needed and using <b>energy-saving bulbs</b> reduces electricity use significantly. Other energy-saving measures include unplugging chargers, washing clothes in cool water, and using fans instead of air conditioning. Saving energy helps reduce electricity bills and pollution.' }),
 
@@ -450,15 +450,15 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-ene-059', chapterId:'g4sci-energy', subsection:'transfer', difficulty:3,
     question:'Which energy transformation happens in a GREEN PLANT during photosynthesis?',
-    options:['Chemical energy → light energy','Movement energy → chemical energy','Light energy (from the sun) → chemical energy (stored in glucose/food)','Electrical energy → chemical energy'],
-    answer:'Light energy (from the sun) → chemical energy (stored in glucose/food)',
+    options:['Chemical energy → light energy','Movement energy → chemical energy','Light energy → chemical energy stored in food','Electrical energy → chemical energy'],
+    answer:'Light energy → chemical energy stored in food',
     hint:'Plants use sunlight to make food (glucose). What kind of energy is stored in food?',
     explanation:'During <b>photosynthesis</b>, plants convert <b>light energy</b> (from the sun) into <b>chemical energy</b> stored in glucose (food). This chemical energy is then used by the plant for growth and released when the plant (or animals that eat it) respire.' }),
 
   makeMCQ({ id:'g4sc-ene-060', chapterId:'g4sci-energy', subsection:'sources', difficulty:3,
     question:'Why is SOLAR energy particularly suitable for Mauritius?',
-    options:['Mauritius has a lot of oil and coal underground','Mauritius is close to the equator and receives strong sunshine throughout most of the year','Mauritius is a very cold country','Solar panels work only in very cold countries'],
-    answer:'Mauritius is close to the equator and receives strong sunshine throughout most of the year',
+    options:['Mauritius has a lot of oil and coal underground','Mauritius is near the equator and gets strong sunshine','Mauritius is a very cold country','Solar panels work only in very cold countries'],
+    answer:'Mauritius is near the equator and gets strong sunshine',
     hint:'Think about where Mauritius is located and how much sunlight it receives.',
     explanation:'Mauritius is located <b>close to the equator</b>, giving it <b>high levels of sunshine</b> for most of the year. This makes solar energy (using solar panels) highly effective. The Mauritian government has invested in solar energy as part of its plan to use more renewable energy and reduce dependence on imported fossil fuels.' }),
 
@@ -466,11 +466,11 @@ STATIC_QUESTIONS.push(
     question:'Asha\'s family leaves all their appliances on standby overnight. The electricity bill is very high. Asha reads that standby mode still uses electricity. She suggests switching everything off completely at the socket. If their TV uses 120 W when on and 8 W on standby for 8 hours a night, how much energy is saved per night by switching it off at the socket instead of leaving it on standby? (Ignore the calculation - choose the correct reasoning.)',
     options:[
       'No energy is saved - standby uses no electricity',
-      'Some energy is saved because standby mode does use electricity, even if less than when fully on',
+      'Some energy is saved - standby still uses electricity',
       'More energy is used when switched off at the socket',
       'Standby uses the same electricity as being fully on'
     ],
-    answer:'Some energy is saved because standby mode does use electricity, even if less than when fully on',
+    answer:'Some energy is saved - standby still uses electricity',
     hint:'Standby mode keeps some circuits running - does that use electricity?',
     explanation:'<b>Standby mode does use electricity</b> (just less than full power). Turning appliances off completely at the socket saves this "standby" electricity. Over a whole year, this adds up to significant savings. This is called <b>reducing phantom load</b>. Switching off is always better than standby for saving energy.' }),
 
@@ -478,22 +478,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-pro-050', chapterId:'g4sci-protect', subsection:'pollution', difficulty:1,
     question:'What is POLLUTION?',
-    options:['The process of planting trees','Harmful substances released into the environment, damaging air, water or land','Using renewable energy','Recycling paper and plastic'],
-    answer:'Harmful substances released into the environment, damaging air, water or land',
+    options:['The process of planting new trees','Harmful substances let into the environment','Using renewable energy sources','Recycling paper, glass and plastic'],
+    answer:'Harmful substances let into the environment',
     hint:'Pollution makes the natural environment dirty and dangerous for living things.',
     explanation:'<b>Pollution</b> is the introduction of <b>harmful substances</b> (pollutants) into the environment. It damages air, water and land, harming plants, animals and humans. Major types are air pollution (exhaust fumes, factory smoke), water pollution (chemicals, sewage) and land/soil pollution (litter, pesticides).' }),
 
   makeMCQ({ id:'g4sc-pro-051', chapterId:'g4sci-protect', subsection:'pollution', difficulty:1,
     question:'Which of the following is an example of WATER POLLUTION?',
-    options:['Smoke from a factory','Factories dumping chemicals into a river','Litter on a road','Exhaust fumes from a car'],
-    answer:'Factories dumping chemicals into a river',
+    options:['Smoke from a factory chimney','Factories dumping waste into a river','Litter dropped on a road','Exhaust fumes from a passing car'],
+    answer:'Factories dumping waste into a river',
     hint:'Water pollution involves harmful substances entering rivers, lakes or the sea.',
     explanation:'<b>Factories dumping chemicals into a river</b> is water pollution. It kills aquatic life (fish, plants) and makes the water unsafe to drink or swim in. Other causes of water pollution: sewage discharge, oil spills, agricultural fertilisers and pesticides running into rivers.' }),
 
   makeMCQ({ id:'g4sc-pro-052', chapterId:'g4sci-protect', subsection:'recycling', difficulty:1,
     question:'What is RECYCLING?',
-    options:['Burning old materials to produce energy','Collecting used materials such as paper, glass and plastic and turning them into new products','Dropping litter in a special bin','Buying new items instead of old ones'],
-    answer:'Collecting used materials such as paper, glass and plastic and turning them into new products',
+    options:['Burning old materials to produce energy','Collecting used materials and making new products','Dropping litter in a special bin','Buying new items instead of old ones'],
+    answer:'Collecting used materials and making new products',
     hint:'Recycling gives used materials a new life instead of throwing them away.',
     explanation:'<b>Recycling</b> is the process of collecting used materials (paper, glass, plastic, metals) and <b>processing them to make new products</b>. This reduces waste, saves raw materials and uses less energy than making products from scratch. In Mauritius, recycling is encouraged to reduce pressure on landfills.' }),
 
@@ -506,22 +506,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-pro-054', chapterId:'g4sci-protect', subsection:'pollution', difficulty:2,
     question:'How does LITTERING harm the environment?',
-    options:['Litter makes the ground colourful and interesting for animals','Litter blocks drains, harms wildlife that swallows it, and pollutes soil and water','Litter helps plants grow','Litter only causes problems on roads'],
-    answer:'Litter blocks drains, harms wildlife that swallows it, and pollutes soil and water',
+    options:['Litter makes the ground colourful and interesting for animals','Litter blocks drains, harms wildlife and pollutes soil','Litter helps plants grow','Litter only causes problems on roads'],
+    answer:'Litter blocks drains, harms wildlife and pollutes soil',
     hint:'Think about what happens when plastic bags, bottles and food waste are left on the ground.',
     explanation:'Littering causes multiple problems: (1) plastic items block <b>drains and waterways</b>, causing flooding; (2) wildlife mistake litter for food and <b>swallow it</b>, which can kill them; (3) chemicals from litter leach into the <b>soil and water</b>, polluting them. Littering is illegal in Mauritius.' }),
 
   makeMCQ({ id:'g4sc-pro-055', chapterId:'g4sci-protect', subsection:'pollution', difficulty:2,
     question:'What is BIODIVERSITY?',
-    options:['The number of different types of pollution in an area','The variety of different living things (plants, animals, microorganisms) found in an area','The amount of fresh water in a country','The number of humans living in a region'],
-    answer:'The variety of different living things (plants, animals, microorganisms) found in an area',
+    options:['The number of different types of pollution in an area','The variety of different living things in an area','The amount of fresh water in a country','The number of humans living in a region'],
+    answer:'The variety of different living things in an area',
     hint:'Bio = life; diversity = variety.',
     explanation:'<b>Biodiversity</b> means the <b>variety of all living things</b> - plants, animals and microorganisms - in a place or on Earth. High biodiversity means many different species living together. Mauritius has unique biodiversity (many endemic species found nowhere else), which is threatened by habitat loss and pollution.' }),
 
   makeMCQ({ id:'g4sc-pro-056', chapterId:'g4sci-protect', subsection:'pollution', difficulty:2,
     question:'Which action BEST helps reduce plastic waste pollution?',
-    options:['Burning all plastic waste','Using reusable bags and bottles instead of single-use plastic','Burying plastic in the garden','Throwing plastic in the sea where it dissolves'],
-    answer:'Using reusable bags and bottles instead of single-use plastic',
+    options:['Burning all plastic waste','Using reusable bags instead of single-use plastic','Burying plastic in the garden','Throwing plastic in the sea where it dissolves'],
+    answer:'Using reusable bags instead of single-use plastic',
     hint:'The best solution is to reduce the amount of plastic you use in the first place.',
     explanation:'<b>Using reusable bags and bottles</b> reduces the amount of single-use plastic that becomes waste. Single-use plastics (straws, bags, bottles) are a major source of pollution - they do not biodegrade quickly. Mauritius has banned some single-use plastics. Burning plastic creates toxic fumes; plastic does not dissolve in the sea.' }),
 
@@ -529,11 +529,11 @@ STATIC_QUESTIONS.push(
     question:'Why does PLANTING TREES help protect the environment?',
     options:[
       'Trees make an area look beautiful - only a visual benefit',
-      'Trees absorb CO₂, release oxygen, prevent soil erosion, provide habitat for animals and help maintain the water cycle',
+      'Trees absorb carbon dioxide and prevent soil erosion',
       'Trees are useful only for timber',
       'Trees cause flooding when it rains'
     ],
-    answer:'Trees absorb CO₂, release oxygen, prevent soil erosion, provide habitat for animals and help maintain the water cycle',
+    answer:'Trees absorb carbon dioxide and prevent soil erosion',
     hint:'Think of all the roles a tree plays in the environment - not just one.',
     explanation:'Planting trees has <b>multiple environmental benefits</b>: (1) absorb CO₂, helping fight climate change; (2) release oxygen; (3) roots hold soil, <b>preventing erosion</b>; (4) provide <b>habitat and food</b> for birds, insects and animals; (5) promote rainfall through the water cycle. Deforestation causes the reverse of all these benefits.' }),
 
@@ -541,11 +541,11 @@ STATIC_QUESTIONS.push(
     question:'How does SOIL POLLUTION harm plants?',
     options:[
       'Soil pollution makes soil a brighter colour, which confuses plants',
-      'Chemicals in polluted soil damage roots, reduce the nutrients plants can absorb, and may be taken up into the plant',
+      'Chemicals in the soil damage roots and reduce nutrients',
       'Soil pollution only affects animals that live underground',
       'Polluted soil is always too wet for plants to grow'
     ],
-    answer:'Chemicals in polluted soil damage roots, reduce the nutrients plants can absorb, and may be taken up into the plant',
+    answer:'Chemicals in the soil damage roots and reduce nutrients',
     hint:'Plants absorb water and minerals from soil through their roots - what happens if the soil is contaminated?',
     explanation:'<b>Soil pollution</b> harms plants because: (1) chemicals (from pesticides, industrial waste, litter) <b>damage roots</b>; (2) they destroy soil microorganisms needed to break down nutrients; (3) plants absorb the chemicals, which can move up the food chain to animals and humans. This is why safe farming practices and no littering matter.' }),
 
@@ -560,11 +560,11 @@ STATIC_QUESTIONS.push(
     question:'Why is it important to PROTECT biodiversity?',
     options:[
       'So that there are more animals for hunting',
-      'Because every species plays a role in ecosystems - losing species can upset the balance of nature and reduce the resources available to all living things including humans',
+      'Every species has a role, so losing one upsets the balance',
       'Because rare animals are worth a lot of money',
       'Biodiversity is not important - only a few key species matter'
     ],
-    answer:'Because every species plays a role in ecosystems - losing species can upset the balance of nature and reduce the resources available to all living things including humans',
+    answer:'Every species has a role, so losing one upsets the balance',
     hint:'Think about food chains and how each organism depends on others.',
     explanation:'Every species in an ecosystem has a role. Removing one can trigger a <b>cascade of changes</b> (e.g., removing predators allows prey to overpopulate and strip vegetation). Many medicines, foods and materials come from wild species. Protecting biodiversity protects the <b>ecosystem services</b> humans depend on: clean air, clean water, food and medicine.' }),
 
@@ -572,11 +572,11 @@ STATIC_QUESTIONS.push(
     question:'The lagoon near Nita\'s village is polluted by fertilisers from nearby farms. The fertilisers cause algae to grow rapidly, covering the water surface. The fish in the lagoon begin to die. Which chain of events BEST explains why the fish die?',
     options:[
       'Fertilisers are directly poisonous to fish',
-      'The algae covering the water blocks sunlight, killing underwater plants; less oxygen is produced and the water oxygen level drops, suffocating the fish',
+      'The algae block sunlight, so oxygen falls and fish suffocate',
       'The fish eat the algae and become ill',
       'The fertilisers make the water too salty for fish'
     ],
-    answer:'The algae covering the water blocks sunlight, killing underwater plants; less oxygen is produced and the water oxygen level drops, suffocating the fish',
+    answer:'The algae block sunlight, so oxygen falls and fish suffocate',
     hint:'Think about what the algae cover blocks, and what effect that has on oxygen in the water.',
     explanation:'This is called <b>eutrophication</b>: (1) fertilisers cause <b>algae bloom</b> (rapid growth); (2) algae covers the surface, <b>blocking sunlight</b> from underwater plants; (3) plants die and cannot photosynthesize, so they produce <b>less oxygen</b>; (4) decaying plants also use up oxygen as bacteria break them down; (5) oxygen in water drops too low and <b>fish suffocate</b>. This is a real environmental problem in Mauritius\'s lagoons.' }),
 
@@ -598,43 +598,43 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-plt-052', chapterId:'g4sci-plants', subsection:'parts', difficulty:2,
     question:'What is the DIFFERENCE between flowering and non-flowering plants?',
-    options:['Flowering plants have leaves; non-flowering plants do not','Flowering plants reproduce using flowers and seeds; non-flowering plants reproduce using spores or cones','Flowering plants need water; non-flowering plants do not','Non-flowering plants are bigger than flowering plants'],
-    answer:'Flowering plants reproduce using flowers and seeds; non-flowering plants reproduce using spores or cones',
+    options:['Flowering plants have leaves; non-flowering plants do not','Flowering plants use seeds; non-flowering use spores','Flowering plants need water; non-flowering plants do not','Non-flowering plants are bigger than flowering plants'],
+    answer:'Flowering plants use seeds; non-flowering use spores',
     hint:'Think about how each group reproduces.',
     explanation:'<b>Flowering plants</b> (angiosperms) produce <b>flowers</b> that develop into fruits and seeds. <b>Non-flowering plants</b> (ferns, mosses, conifers) do not produce flowers - they reproduce using <b>spores</b> (ferns, mosses) or <b>cones</b> (conifers). Both groups have roots, stems and leaves (except mosses).' }),
 
   makeMCQ({ id:'g4sc-plt-053', chapterId:'g4sci-plants', subsection:'reproduction', difficulty:2,
     question:'What is POLLINATION?',
-    options:['When a seed falls to the ground','The transfer of pollen from the male part of a flower to the female part, enabling reproduction','When leaves absorb water from rain','When a plant produces its first leaves'],
-    answer:'The transfer of pollen from the male part of a flower to the female part, enabling reproduction',
+    options:['When a seed falls down to the ground','Pollen moving from the male to the female part','When the leaves absorb water from rain','When a plant produces its very first leaves'],
+    answer:'Pollen moving from the male to the female part',
     hint:'Bees visit flowers and carry a yellow powder between them.',
     explanation:'<b>Pollination</b> is the transfer of <b>pollen</b> from the stamen (male part) of one flower to the stigma (female part) of the same or another flower. This is needed for fertilisation and seed production. Pollinators include bees, butterflies, birds and wind.' }),
 
   makeMCQ({ id:'g4sc-plt-054', chapterId:'g4sci-plants', subsection:'parts', difficulty:2,
     question:'How are SEEDS dispersed (spread) by WIND?',
-    options:['Seeds are heavy and fall straight down under the plant','Seeds have wings, parachutes or fluffy hairs that catch the wind and carry them away from the parent plant','Seeds are eaten by animals and fly with them','Seeds float on rivers to new places'],
-    answer:'Seeds have wings, parachutes or fluffy hairs that catch the wind and carry them away from the parent plant',
+    options:['Seeds are heavy and fall straight down under the plant','Seeds have wings or hairs that catch the wind','Seeds are eaten by animals and fly with them','Seeds float on rivers to new places'],
+    answer:'Seeds have wings or hairs that catch the wind',
     hint:'Think of dandelion seeds - how do they travel?',
     explanation:'Wind-dispersed seeds are <b>light and shaped</b> to catch the air - they may have wings (like maple seeds), fluffy parachutes (like dandelion seeds) or feathery structures. The wind carries them away from the parent plant, reducing competition and allowing plants to colonise new areas.' }),
 
   makeMCQ({ id:'g4sc-plt-055', chapterId:'g4sci-plants', subsection:'parts', difficulty:3,
     question:'Two seedlings are growing close together in a pot. After a few weeks, both plants are smaller and less healthy than a single seedling grown in the same size pot. Why?',
-    options:['Two plants always help each other grow better','The two plants are competing for the same water, minerals, light and space, so both are weaker','The pot is too colourful for the plants','Two plants need more darkness than one plant'],
-    answer:'The two plants are competing for the same water, minerals, light and space, so both are weaker',
+    options:['Two plants always help each other grow better','They compete for the same water, light and space','The pot is too colourful for the plants','Two plants need more darkness than one plant'],
+    answer:'They compete for the same water, light and space',
     hint:'Nothing is wrong with either seedling on its own. Think about what changes when they are close together in one pot.',
     explanation:'When two plants grow very close together, they <b>compete</b> for the same limited resources: water, mineral nutrients, light and space for roots. Each plant gets <b>less</b> than it needs, so both grow more slowly and less healthily. This is why farmers thin out seedlings - to give each plant enough space to grow well.' }),
 
   makeMCQ({ id:'g4sc-plt-056', chapterId:'g4sci-plants', subsection:'parts', difficulty:3,
     question:'Why are plants called PRODUCERS in a food chain?',
-    options:['Because they produce seeds','Because they produce oxygen only','Because they produce their own food using sunlight and are the source of energy for all other organisms in the food chain','Because they produce flowers and fruits for animals'],
-    answer:'Because they produce their own food using sunlight and are the source of energy for all other organisms in the food chain',
+    options:['Because they produce seeds','Because they produce oxygen only','They make their own food and feed everything else','Because they produce flowers and fruits for animals'],
+    answer:'They make their own food and feed everything else',
     hint:'In a food chain, energy comes ultimately from plants - they make food from sunlight.',
     explanation:'Plants are called <b>producers</b> because they <b>produce their own food</b> through photosynthesis (using sunlight, water and CO₂). All other organisms in a food chain ultimately depend on this energy. Herbivores eat plants (primary consumers), and carnivores eat herbivores (secondary consumers).' }),
 
   makeMCQ({ id:'g4sc-plt-057', chapterId:'g4sci-plants', subsection:'parts', difficulty:4,
     question:'A gardener wants to grow tomatoes. She plants seeds in rich soil, waters them daily, and keeps them near a sunny window. After two weeks, the seedlings are pale yellow instead of green. What is the MOST LIKELY explanation?',
-    options:['The seeds were planted in the wrong direction','The seedlings have too much light and are being bleached','The seedlings cannot produce enough chlorophyll because they are lacking a key mineral (such as nitrogen) from the soil, even though water and light are present','The tomatoes are naturally yellow when young'],
-    answer:'The seedlings cannot produce enough chlorophyll because they are lacking a key mineral (such as nitrogen) from the soil, even though water and light are present',
+    options:['The seeds were planted in the wrong direction','The seedlings have too much light and are being bleached','They lack a key mineral from the soil, such as nitrogen','The tomatoes are naturally yellow when young'],
+    answer:'They lack a key mineral from the soil, such as nitrogen',
     hint:'Green colour in plants comes from chlorophyll - what does a plant need to make chlorophyll?',
     explanation:'Pale/yellow leaves (chlorosis) occur when a plant cannot make enough <b>chlorophyll</b>. Even with water and light, plants need <b>mineral nutrients from soil</b> (especially nitrogen and magnesium) to produce chlorophyll. If the soil is poor in these minerals, the plant cannot photosynthesise properly and the leaves turn yellow. Adding fertiliser (with nitrogen) would help.' }),
 
@@ -649,8 +649,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-ani-051', chapterId:'g4sci-animals', subsection:'food_chains', difficulty:1,
     question:'In a FOOD CHAIN, what is a PRODUCER?',
-    options:['An animal that hunts other animals','A green plant that makes its own food using sunlight','A factory that makes animal food','The top predator in a food chain'],
-    answer:'A green plant that makes its own food using sunlight',
+    options:['An animal that hunts other animals','A green plant that makes its own food','A factory that makes animal food','The top predator in a food chain'],
+    answer:'A green plant that makes its own food',
     hint:'Producers are at the START of every food chain.',
     explanation:'A <b>producer</b> is a green plant (or alga) that <b>makes its own food through photosynthesis</b>. Producers are at the beginning of every food chain because they convert the Sun\'s energy into chemical energy (food) that other organisms can eat. Examples: grass, algae, trees, crops.' }),
 
@@ -670,22 +670,22 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-ani-054', chapterId:'g4sci-animals', subsection:'habitats', difficulty:2,
     question:'What is an animal\'s HABITAT?',
-    options:['The food that an animal eats','The natural home or environment where an animal normally lives','The sound an animal makes','The colour of an animal\'s skin or fur'],
-    answer:'The natural home or environment where an animal normally lives',
+    options:['The food that an animal eats','The natural home where an animal lives','The sound an animal makes','The colour of an animal\'s skin or fur'],
+    answer:'The natural home where an animal lives',
     hint:'Different animals are adapted to live in different places.',
     explanation:'A <b>habitat</b> is the <b>natural environment</b> where an animal (or plant) normally lives and finds everything it needs to survive: food, water, shelter and space to reproduce. Examples: a pond habitat for frogs, a forest habitat for birds, a coral reef habitat for fish. Destroying habitats threatens the species that live there.' }),
 
   makeMCQ({ id:'g4sc-ani-055', chapterId:'g4sci-animals', subsection:'endangered', difficulty:3,
     question:'The ECHO PARAKEET is found only in Mauritius and is endangered. Which human activity has most threatened its survival?',
-    options:['Climate change melting ice in Mauritius','The destruction of native forests (its habitat) and the introduction of invasive predators','Too much rain causing flooding of nests','The parakeet choosing not to reproduce in the wild'],
-    answer:'The destruction of native forests (its habitat) and the introduction of invasive predators',
+    options:['Climate change melting ice in Mauritius','Destruction of its forest habitat and new predators','Too much rain causing flooding of nests','The parakeet choosing not to reproduce in the wild'],
+    answer:'Destruction of its forest habitat and new predators',
     hint:'The Echo Parakeet lives in native forests - what happens to it when forests are cleared?',
     explanation:'The Echo Parakeet (Psittacula eques) became critically endangered mainly because of: (1) <b>deforestation</b> - clearing of native forest for farming and development destroyed its habitat and nesting sites; (2) <b>invasive predators</b> (rats, monkeys, cats) introduced by humans raided nests and ate eggs/chicks. Conservation efforts (captive breeding, predator control) have helped the population recover.' }),
 
   makeMCQ({ id:'g4sc-ani-056', chapterId:'g4sci-animals', subsection:'food_chains', difficulty:3,
     question:'What would happen to a FOOD CHAIN if all the PRODUCERS (plants) were removed?',
-    options:['Only the top predator would die','Nothing - animals can make their own food','All consumers (herbivores, carnivores) would eventually die because they depend on plants for energy, directly or indirectly','The carnivores would survive by eating other carnivores forever'],
-    answer:'All consumers (herbivores, carnivores) would eventually die because they depend on plants for energy, directly or indirectly',
+    options:['Only the top predator would die','Nothing - animals can make their own food','All consumers would die - they depend on plants','The carnivores would survive by eating other carnivores forever'],
+    answer:'All consumers would die - they depend on plants',
     hint:'Trace the energy in a food chain back to its source - what is that source?',
     explanation:'All food chains start with <b>plants (producers)</b>. Without them: (1) herbivores lose their food source and starve; (2) carnivores lose their prey (herbivores); (3) even top predators eventually have nothing to eat. All energy in a food chain comes originally from the Sun via plants. Removing producers collapses the entire chain.' }),
 
@@ -694,10 +694,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Hawk population increases because there are more leaves for it to eat',
       'Hawk population is unaffected because hawks do not eat caterpillars',
-      'Hawk population decreases because fewer blue birds survive (less food for birds), so there is less prey for hawks',
+      'Hawk numbers fall because there is less prey for them',
       'Hawk population increases immediately because caterpillars competed with hawks for food'
     ],
-    answer:'Hawk population decreases because fewer blue birds survive (less food for birds), so there is less prey for hawks',
+    answer:'Hawk numbers fall because there is less prey for them',
     hint:'Hawks eat blue birds; blue birds eat caterpillars. If caterpillars decrease, what happens to blue birds, and then to hawks?',
     explanation:'This is a <b>knock-on (cascade) effect</b> in a food chain: fewer caterpillars → blue birds have <b>less food</b> → blue bird numbers fall → hawks have <b>less prey</b> → hawk numbers also fall. Hawks do not eat caterpillars directly, but they are still affected because the chain is disrupted. Changes at any level affect all others.' })
 

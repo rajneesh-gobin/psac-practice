@@ -126,11 +126,11 @@ STATIC_QUESTIONS.push(
     question:'Why must we CONSERVE water?',
     options:[
       'Water is too cold to use every day',
-      'Fresh water is limited - only a small fraction of Earth\'s water is fresh and drinkable',
+      'Fresh water is only a small fraction of the total',
       'Water is expensive because it falls as rain',
       'We only need water once a week'
     ],
-    answer:'Fresh water is limited - only a small fraction of Earth\'s water is fresh and drinkable',
+    answer:'Fresh water is only a small fraction of the total',
     hint:'Most of Earth\'s water is in the oceans. Can we drink salty ocean water?',
     explanation:'Although 70% of Earth is covered in water, over 97% is <b>salty ocean water</b> that cannot be drunk. Only about 3% is fresh water - and much of that is frozen in ice caps. <b>Fresh water is a limited resource</b>, which is why conservation matters.' }),
 
@@ -138,11 +138,11 @@ STATIC_QUESTIONS.push(
     question:'Why is dirty water DANGEROUS to drink?',
     options:[
       'Because dirty water is too cold',
-      'It contains bacteria and chemicals that cause disease',
+      'It contains bacteria that cause disease',
       'Because dirty water has no taste',
       'Because dirty water is too warm'
     ],
-    answer:'It contains bacteria and chemicals that cause disease',
+    answer:'It contains bacteria that cause disease',
     hint:'What is in dirty water that clean water does not contain?',
     explanation:'Dirty water contains <b>harmful bacteria, viruses and chemicals</b> that can cause serious diseases (diarrhoea, cholera, typhoid). Clean drinking water must be <b>treated</b> (filtered and disinfected) before it is safe to drink. In Mauritius, the Central Water Authority (CWA) treats water before it reaches homes.' }),
 

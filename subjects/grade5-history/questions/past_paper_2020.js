@@ -70,7 +70,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp20-012', chapterId:'natural-env', subsection:'relief', difficulty:1,
     question:'What is the name of the highest mountain in Mauritius?',
-    options:['Corps de Garde','Le Pouce','Pieter Both','Piton de la Petite Rivière Noire'], answer:'Piton de la Petite Rivière Noire',
+    options:['Corps de Garde, Quatre Bornes','Le Pouce, Moka Range','Pieter Both, Moka Range','Piton de la Petite Rivière Noire'], answer:'Piton de la Petite Rivière Noire',
     hint:'Mauritius\'s highest peak is over 800m and lies within the national park in the south-west.',
     explanation:'Piton de la Petite Rivière Noire, at 828 metres, is the highest mountain in Mauritius. It is located within the Black River Gorges National Park.' }),
 
@@ -82,7 +82,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp20-014', chapterId:'g5ge-weather', subsection:'cyclones', difficulty:2,
     question:'A Cyclone Class 3 signal is issued in Mauritius. What does this mean?',
-    options:['A cyclone is far away - just a watch is needed','Moderate gusts - stay indoors but danger is limited','Dangerous winds are expected soon - all outdoor activity must stop','The cyclone has passed - all clear'], answer:'Dangerous winds are expected soon - all outdoor activity must stop',
+    options:['A cyclone is far away - just a watch is needed','Moderate gusts - stay indoors but danger is limited','Dangerous winds are expected soon - stop outdoor activity','The cyclone has passed - the all clear is given'], answer:'Dangerous winds are expected soon - stop outdoor activity',
     hint:'Class 3 is serious - most schools and businesses close.',
     explanation:'Cyclone Class 3 means dangerous gale force winds are expected or already being felt. Schools and most businesses close, and people must remain indoors. Class 4 signals destructive winds already on the island.' }),
 
@@ -106,7 +106,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp20-018', chapterId:'port-louis', subsection:'buildings', difficulty:2,
     question:'The Aapravasi Ghat in Port Louis is a UNESCO World Heritage Site. What was its original purpose?',
-    options:['A market for buying and selling enslaved people','The landing depot for indentured labourers coming to work in Mauritius','A fort to defend Port Louis from attack','A warehouse for storing sugar before export'], answer:'The landing depot for indentured labourers coming to work in Mauritius',
+    options:['A market for buying and selling enslaved people','The landing depot for arriving indentured labourers','A fort to defend Port Louis from attack','A warehouse for storing sugar before export'], answer:'The landing depot for arriving indentured labourers',
     hint:'It was the first point of arrival for workers from Asia in the 19th and 20th centuries.',
     explanation:'The Aapravasi Ghat was the immigration depot where over 500,000 indentured labourers from India arrived between 1834 and 1924 to work on sugar estates after the abolition of slavery. It is now a UNESCO World Heritage Site.' })
 );

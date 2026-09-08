@@ -81,31 +81,31 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pp23-014', chapterId:'settlement', subsection:'dutch', difficulty:2,
     question:'Which of the following was a difficulty faced by Dutch settlers in Mauritius?',
-    options:['Shortage of drinking water','Cyclones and rats destroying their crops','Too many volcanoes erupting','Attacks from local people'], answer:'Cyclones and rats destroying their crops',
+    options:['Shortage of drinking water','Cyclones and rats that ruined crops','Too many volcanoes erupting','Attacks from local people'], answer:'Cyclones and rats that ruined crops',
     hint:'One was a natural disaster; the other was a pest brought by ships.',
     explanation:'The Dutch suffered from cyclones that destroyed their crops and from rats (brought accidentally by ships) that ate their food supplies. These problems contributed to their abandonment of Mauritius in 1710.' }),
 
   makeMCQ({ id:'g5h-pp23-015', chapterId:'trade-agri', subsection:'crops', difficulty:2,
     question:'Pierre Poivre cultivated spices at Pamplemousses. Why did he want to grow spices on Île de France?',
-    options:['To break the Dutch monopoly on the spice trade','To sell spices to Dutch settlers','To replace sugar cane farming','To feed the hungry population'], answer:'To break the Dutch monopoly on the spice trade',
+    options:['To break the Dutch spice monopoly','To sell spices to Dutch settlers','To replace sugar cane farming','To feed the hungry population'], answer:'To break the Dutch spice monopoly',
     hint:'Spices were extremely valuable and one nation controlled their supply.',
     explanation:'Pierre Poivre cultivated spices (nutmeg, cloves, pepper) at Pamplemousses to break the Dutch monopoly on the spice trade. He smuggled plants out of the Dutch East Indies to grow them in Mauritius.' }),
 
   makeMCQ({ id:'g5h-pp23-016', chapterId:'trade-agri', subsection:'crops', difficulty:2,
     question:'Corsairs were active in the Indian Ocean during the French period. What was their main activity?',
-    options:['Exploring new islands','Fishing for food','Attacking and capturing enemy merchant ships','Building ports and harbours'], answer:'Attacking and capturing enemy merchant ships',
+    options:['Exploring new islands','Fishing for food and trading','Attacking enemy merchant ships','Building ports and harbours'], answer:'Attacking enemy merchant ships',
     hint:'They were officially authorised to attack certain ships.',
     explanation:'Corsairs were privateers - sailors with a licence from the French government to attack and capture enemy (mainly British) merchant ships and seize their cargo.' }),
 
   makeMCQ({ id:'g5h-pp23-017', chapterId:'g5ge-weather', subsection:'elements', difficulty:2,
     question:'Curepipe (on the central plateau at 550m) is cooler than Mahebourg (at sea level, 5m). Why?',
-    options:['Curepipe is closer to the sun','The air is thinner and holds less heat at greater heights','Winds are weaker at higher altitudes','Curepipe has more trees that block the sun'], answer:'The air is thinner and holds less heat at greater heights',
+    options:['Curepipe is closer to the sun','The air is thinner and holds less heat','Winds are weaker at higher altitudes','Curepipe has more trees that block the sun'], answer:'The air is thinner and holds less heat',
     hint:'As you go higher, the atmosphere becomes less dense.',
     explanation:'Temperature decreases with altitude because the atmosphere is less dense at higher altitudes and retains less heat. In Mauritius, temperature drops approximately 6°C for every 1000m rise in altitude.' }),
 
   makeMCQ({ id:'g5h-pp23-018', chapterId:'port-louis', subsection:'buildings', difficulty:2,
     question:'The Champ de Mars in Port Louis was established during the French period. What did Mahé de Labourdonnais originally use it for?',
-    options:['As a botanical garden','As a horse-racing venue','As a military training and parade ground','As a market for selling produce'], answer:'As a military training and parade ground',
+    options:['As a large botanical garden','As a horse-racing venue','As a military training and parade ground','As a market for selling produce'], answer:'As a military training and parade ground',
     hint:'It was used to drill and assemble soldiers.',
     explanation:'Mahé de Labourdonnais established the Champ de Mars as a military training and parade ground. It later became a famous horse-racing venue and is one of the oldest racecourses in the Southern Hemisphere.' })
 );

@@ -66,10 +66,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-an-008', chapterId:'animals', subsection:'endangered', difficulty:2,
     question:'Which of the following is a main reason why animals become endangered?',
     options:[
-      'They stop eating food',
+      'They stop eating their natural food',
       'Their habitat is destroyed or they are hunted',
-      'They choose to live in cities',
-      'They reproduce too quickly'
+      'They choose to move away to the cities',
+      'They reproduce too quickly for their habitat'
     ],
     answer:'Their habitat is destroyed or they are hunted',
     hint:'What threatens the survival of wild animals?',
@@ -124,7 +124,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sci-an-015', chapterId:'animals', subsection:'habitats', difficulty:2,
     question:'Which one of the following is an endemic animal that lives on Île Ronde, a nature reserve near Mauritius?',
-    options:['Dodo','Boa constrictor (Round Island boa)','Polar bear','Cardinal Jaune'],
+    options:['Dodo (Raphus cucullatus)','Boa constrictor (Round Island boa)','Polar bear (Arctic mammal)','Cardinal Jaune (Rodrigues warbler)'],
     answer:'Boa constrictor (Round Island boa)',
     hint:'Île Ronde protects several reptiles found nowhere else on Earth.',
     explanation:'<b>Île Ronde</b> (Round Island) is a nature reserve north of Mauritius that protects several endemic reptiles found nowhere else, including the <b>Round Island boa</b> and endemic skinks and geckos. The Dodo (Mauritius mainland) and Cardinal Jaune (Rodrigues) are different.' }),
@@ -132,12 +132,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-an-016', chapterId:'animals', subsection:'endangered', difficulty:2,
     question:'Why have most endemic birds in Mauritius become rare?',
     options:[
-      'They chose to fly away to other countries',
-      'Their forest habitats were destroyed and predators (rats, cats, monkeys) were introduced',
+      'They chose to fly away to other countries to nest',
+      'Their forests were destroyed and predators were introduced',
       'They stopped breeding because of too much sunlight',
-      'The government collected them all for zoos'
+      'The government collected them all and put them in zoos'
     ],
-    answer:'Their forest habitats were destroyed and predators (rats, cats, monkeys) were introduced',
+    answer:'Their forests were destroyed and predators were introduced',
     hint:'Two key factors: habitat loss and new predators.',
     explanation:'Endemic birds became rare mainly because: (1) Their <b>forest habitat was destroyed</b> when settlers cleared land for farming and building; (2) <b>Introduced animals</b> (rats, cats, monkeys, pigs) ate their eggs, chicks and food sources. These two factors together drove many species to near-extinction.' }),
 
@@ -163,12 +163,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-an-019', chapterId:'animals', subsection:'habitats', difficulty:4,
     question:'A student argues: "Animals should be taken from nature reserves and kept in zoos, because zoos are safer." Give the BEST argument AGAINST this view.',
     options:[
-      'Zoos are too expensive to visit',
-      'In zoos, animals cannot live and behave naturally, may not reproduce well, and removing them from nature reserves reduces the wild population that conservation aims to protect',
-      'Zoos always mistreat animals',
+      'Zoos are too expensive for families to visit',
+      'In zoos, animals cannot live and behave naturally',
+      'Zoos always mistreat the animals they keep',
       'Wild animals cannot survive in zoos at all'
     ],
-    answer:'In zoos, animals cannot live and behave naturally, may not reproduce well, and removing them from nature reserves reduces the wild population that conservation aims to protect',
+    answer:'In zoos, animals cannot live and behave naturally',
     hint:'What is the purpose of a nature reserve compared to a zoo?',
     explanation:'Nature reserves are designed to allow animals to live naturally in their own habitat, hunt their own food and reproduce naturally - this is the goal of conservation. Moving animals to zoos removes them from their natural habitat, can reduce their quality of life, and depletes the very wild population that conservation programmes aim to grow. Captive breeding in zoos can play a supplementary role, but nature reserves in the wild are considered more sustainable.' }),
 
@@ -181,7 +181,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sci-an-021', chapterId:'animals', subsection:'photos', difficulty:1,
     question:'<div style="text-align:center;margin-bottom:12px"><img src="assets/questions/colorful-underwater-landscape-of-a-coral-reef.jpg" alt="an underwater habitat photo" style="max-height:220px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12)"></div><b>The photo above shows a colourful habitat full of corals, fish and other sea creatures. What type of habitat is this?</b>',
-    options:['Desert habitat','Forest habitat','Aquatic (coral reef) habitat','Grassland habitat'],
+    options:['Dry desert habitat','Tropical forest habitat','Aquatic (coral reef) habitat','Open grassland habitat'],
     answer:'Aquatic (coral reef) habitat',
     hint:'This habitat is found underwater in warm, shallow tropical seas.',
     explanation:'A <b>coral reef</b> is an aquatic (underwater) habitat found in warm, shallow tropical seas. It is one of the most biodiverse habitats on Earth, home to thousands of species of fish, invertebrates and corals. Mauritius is surrounded by coral reef lagoons.' }),

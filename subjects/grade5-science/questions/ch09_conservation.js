@@ -8,11 +8,11 @@ STATIC_QUESTIONS.push(
     question:'What does the word "conservation" mean in science?',
     options:[
       'Destroying natural habitats to build new cities',
-      'Protecting and preserving nature, animals and resources for the future',
-      'Studying animals in a laboratory',
+      'Protecting nature, animals and resources for the future',
+      'Studying wild animals in a science laboratory',
       'Collecting animals and putting them in zoos'
     ],
-    answer:'Protecting and preserving nature, animals and resources for the future',
+    answer:'Protecting nature, animals and resources for the future',
     hint:'Conservation is about looking after our natural world.',
     explanation:'<b>Conservation</b> means protecting living things and natural resources - such as forests, animals, water and soil - so that they are not destroyed and can continue to exist in the future.' }),
 
@@ -27,11 +27,11 @@ STATIC_QUESTIONS.push(
     question:'What is the MAIN reason many animal species in Mauritius have become endangered or extinct?',
     options:[
       'The animals chose to leave the island',
-      'Loss of habitat, hunting and the introduction of predators',
+      'Loss of habitat, hunting and new predators',
       'Animals were scared away by loud noises',
       'Changes in the colour of the ocean'
     ],
-    answer:'Loss of habitat, hunting and the introduction of predators',
+    answer:'Loss of habitat, hunting and new predators',
     hint:'Think about what happened to the Dodo and why the Echo Parakeet nearly disappeared.',
     explanation:'The main reasons are: <b>loss of habitat</b> (forests cut down), <b>hunting</b> by humans, and <b>introduced predators</b> (rats, monkeys, cats, dogs) that eat eggs and young animals. All three factors contributed to the extinction of the Dodo.' }),
 
@@ -56,12 +56,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-con-006', chapterId:'conservation', subsection:'pollution', difficulty:2,
     question:'Which of the following actions helps PROTECT the environment?',
     options:[
-      'Throwing rubbish on the beach',
+      'Throwing rubbish on the beach sand',
       'Cutting down trees in a nature reserve',
-      'Planting trees to replace those that have been cut down',
-      'Hunting animals for sport'
+      'Planting trees to replace those cut down',
+      'Hunting wild animals for sport'
     ],
-    answer:'Planting trees to replace those that have been cut down',
+    answer:'Planting trees to replace those cut down',
     hint:'What action replaces what has been lost and gives animals their habitat back?',
     explanation:'<b>Reforestation</b> (planting new trees) helps restore habitats, prevent soil erosion, absorb carbon dioxide and give animals a place to live. It is an important conservation action.' }),
 
@@ -69,11 +69,11 @@ STATIC_QUESTIONS.push(
     question:'What is deforestation?',
     options:[
       'The process of planting new trees in an area',
-      'The clearing of large areas of forest by cutting down trees',
+      'The clearing of forest by cutting down trees',
       'The study of trees and plants in a forest',
       'The protection of a forest as a nature reserve'
     ],
-    answer:'The clearing of large areas of forest by cutting down trees',
+    answer:'The clearing of forest by cutting down trees',
     hint:'The prefix "de-" means removing or taking away.',
     explanation:'<b>Deforestation</b> is the removal of forests, usually by cutting or burning trees, to use the land for farming, building or industry. It destroys habitats and threatens many species.' }),
 
@@ -81,11 +81,11 @@ STATIC_QUESTIONS.push(
     question:'How can a pupil help protect the environment at school or at home?',
     options:[
       'Leave taps running when not in use',
-      'Throw food wrappers on the ground',
-      'Switch off lights and taps, separate rubbish for recycling, and avoid single-use plastic',
-      'Use more plastic bags when shopping'
+      'Throw food wrappers on the school ground',
+      'Switch off lights and taps and recycle rubbish',
+      'Use more plastic bags when going shopping'
     ],
-    answer:'Switch off lights and taps, separate rubbish for recycling, and avoid single-use plastic',
+    answer:'Switch off lights and taps and recycle rubbish',
     hint:'Small everyday actions by many people add up to a big difference.',
     explanation:'Each person can help by <b>saving energy</b> (switching off lights), <b>saving water</b> (closing taps), <b>recycling</b> waste and <b>avoiding unnecessary plastic</b>. Small actions, multiplied by many people, make a large difference.' }),
 
@@ -98,12 +98,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-con-010', chapterId:'conservation', subsection:'deforestation', difficulty:2,
     question:'Why is it important to protect forests?',
     options:[
-      'Because wood is used to make furniture only',
-      'Forests provide habitat for animals, prevent soil erosion, clean the air and regulate rainfall',
+      'Because wood is used to make furniture and doors only',
+      'Forests give animals a home, hold the soil and clean the air',
       'Forests make too much shade, which is bad for crops',
-      'Forests are only important for making paper'
+      'Forests are only important for making paper and card'
     ],
-    answer:'Forests provide habitat for animals, prevent soil erosion, clean the air and regulate rainfall',
+    answer:'Forests give animals a home, hold the soil and clean the air',
     hint:'Forests do many jobs for the environment.',
     explanation:'Forests are vital ecosystems: they provide <b>habitat</b> for countless species, <b>prevent soil erosion</b> (tree roots hold soil), <b>absorb carbon dioxide</b> (cleaning the air), and <b>regulate rainfall</b> (trees release water vapour into the atmosphere).' }),
 
@@ -112,22 +112,22 @@ STATIC_QUESTIONS.push(
     options:[
       'Heavy rainfall',
       'Strong winds',
-      'Cutting down trees and deforestation',
+      'Cutting down trees',
       'Earthquakes'
     ],
-    answer:'Cutting down trees and deforestation',
+    answer:'Cutting down trees',
     hint:'Humans remove the trees that protect the soil.',
     explanation:'<b>Deforestation</b> (cutting down trees) is a major human cause of soil erosion. Without trees and their roots to hold the soil in place, rain and wind can easily wash or blow the topsoil away. Other human causes include overgrazing of land and burning of forests.' }),
 
   makeMCQ({ id:'g5sci-con-012', chapterId:'conservation', subsection:'pollution', difficulty:2,
     question:'How does soil erosion lead to FLOODING?',
     options:[
-      'Eroded soil makes rivers shallower, reducing their capacity to hold water, causing overflow',
-      'Eroded soil cracks and allows water to sink underground, filling caves',
-      'Soil erosion only affects forests, not rivers',
-      'Flooding and soil erosion are unrelated'
+      'Eroded soil makes rivers shallower so they overflow',
+      'Eroded soil cracks and lets water sink underground',
+      'Soil erosion only affects forests and never rivers',
+      'Flooding and soil erosion are not connected at all'
     ],
-    answer:'Eroded soil makes rivers shallower, reducing their capacity to hold water, causing overflow',
+    answer:'Eroded soil makes rivers shallower so they overflow',
     hint:'Where does eroded soil end up?',
     explanation:'Eroded soil is carried by rainwater into rivers and streams. This <b>sediment builds up on the riverbed</b>, making rivers shallower. A shallower river can hold less water, so during heavy rain it overflows its banks, causing <b>flooding</b> in nearby areas.' }),
 
@@ -158,24 +158,24 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-con-015', chapterId:'conservation', subsection:'why_protect', difficulty:3,
     question:'The government of Mauritius passes a law making it illegal to hunt Pink Pigeons. Why is a LAW needed - cannot conservation rely on people choosing to protect animals voluntarily?',
     options:[
-      'A law forces everyone to comply, not just those who choose to protect wildlife - and legal penalties deter poachers',
+      'A law applies to everyone, and poachers face real penalties',
       'Laws are only needed for domestic animals, not wild ones',
       'People always voluntarily protect animals, so a law is unnecessary',
-      'Laws are easier to write than education programmes'
+      'Laws are much easier to write than education programmes'
     ],
-    answer:'A law forces everyone to comply, not just those who choose to protect wildlife - and legal penalties deter poachers',
+    answer:'A law applies to everyone, and poachers face real penalties',
     hint:'What happens to someone who breaks a law compared to someone who breaks a voluntary guideline?',
     explanation:'Voluntary protection only works if everyone agrees. A <b>law</b> makes it mandatory - it <b>applies to everyone</b> and those who hunt or harm protected species face legal penalties (fines, imprisonment). This deters poachers who might otherwise not choose to protect wildlife. Laws also send a clear signal about the seriousness of conservation.' }),
 
   makeMCQ({ id:'g5sci-con-016', chapterId:'conservation', subsection:'endangered', difficulty:4,
     question:'In 1990, only 9 Pink Pigeons remained alive. A conservation programme was started: a nature reserve was set up, introduced predators were controlled, and some birds were bred in captivity then released. By 2020, the population reached 500. Which TWO factors from the programme were MOST critical to this recovery?',
     options:[
-      'Protecting habitat in the nature reserve AND controlling predators that ate eggs and chicks',
+      'Protecting habitat in the nature reserve AND controlling predators',
       'Painting the birds brighter colours AND giving them extra food',
       'Releasing them in a different country AND building bird houses',
       'Stopping all tourism on the island AND banning all farming nearby'
     ],
-    answer:'Protecting habitat in the nature reserve AND controlling predators that ate eggs and chicks',
+    answer:'Protecting habitat in the nature reserve AND controlling predators',
     hint:'The birds need a safe place to live AND their eggs/chicks need to survive to adulthood.',
     explanation:'The two most critical factors were: (1) <b>Protecting habitat</b> - the nature reserve provided food, shelter and safe nesting sites; (2) <b>Controlling predators</b> (rats, cats, monkeys) - without predators destroying eggs and chicks, more young birds survived to adulthood and could breed. Together, these two actions directly addressed the main reasons the species was declining.' })
 
@@ -187,35 +187,35 @@ STATIC_QUESTIONS.push(
     question:'What is BIODIVERSITY?',
     options:[
       'The process of growing more crops using fewer chemicals',
-      'The variety of different living things (plants, animals, fungi, microorganisms) found in a place or on Earth',
+      'The variety of different living things found in a place',
       'A type of farming that recycles nutrients back into the soil',
       'The scientific study of fossils found underground'
     ],
-    answer:'The variety of different living things (plants, animals, fungi, microorganisms) found in a place or on Earth',
+    answer:'The variety of different living things found in a place',
     hint:'"Bio" = life, "diversity" = variety. Put them together.',
     explanation:'"<b>Biodiversity</b>" means the <b>variety of all living things</b> - plants, animals, fungi and microorganisms - found in an ecosystem, a country, or on Earth as a whole. High biodiversity means many different species coexist. Mauritius has unique biodiversity because it was isolated for millions of years, producing species found <b>nowhere else on Earth</b> (endemic species like the Pink Pigeon and Echo Parakeet). When species go extinct, biodiversity is permanently reduced and can never be recovered.' }),
 
   makeMCQ({ id:'g5sci-con-018', chapterId:'conservation', subsection:'deforestation', difficulty:3,
     question:'Coral reefs are sometimes called "the rainforests of the sea" because they support so many species. Scientists warn that Mauritius\'s coral reefs are being damaged. Give TWO causes of this damage.',
     options:[
-      'Ocean water becoming warmer (causing coral bleaching) AND pollution from sewage and chemicals entering the sea',
-      'Too many fish living in the reef AND too much rainfall washing sand over the coral',
+      'Ocean water becoming warmer AND pollution from sewage and chemicals',
+      'Too many fish in the reef AND too much rain washing sand over it',
       'Coral reefs grow too fast AND need to be cut back periodically',
       'Too many sharks in the area AND a lack of sunlight reaching the seabed'
     ],
-    answer:'Ocean water becoming warmer (causing coral bleaching) AND pollution from sewage and chemicals entering the sea',
+    answer:'Ocean water becoming warmer AND pollution from sewage and chemicals',
     hint:'Think about what humans put into the sea AND how rising temperatures from global warming affect coral.',
     explanation:'Mauritius\'s coral reefs are threatened by: (1) <b>Ocean warming</b> - when sea temperatures rise, corals expel the algae that give them colour and food, turning white (<b>coral bleaching</b>); if temperatures stay high the coral dies; (2) <b>Pollution</b> - sewage, agricultural chemicals and plastic waste entering the sea smother or poison coral. Other causes include anchor damage from boats and overfishing. Protecting reefs requires reducing CO₂ emissions globally AND controlling local water pollution.' }),
 
   makeMCQ({ id:'g5sci-con-019', chapterId:'conservation', subsection:'pollution', difficulty:4,
     question:'A coastal village in Mauritius wants to build a large hotel on the beach to earn money. BUT the beach is a nesting site for sea turtles. Environmentalists warn the construction will destroy the nests. Which solution BEST shows SUSTAINABLE DEVELOPMENT?',
     options:[
-      'Build the hotel immediately - earning money is more important than turtle nests',
-      'Do nothing - never build anything near wildlife, ever',
-      'Design the hotel away from nesting areas, use eco-friendly materials, and set up a turtle protection programme - earning tourism income while protecting the turtle population',
-      'Move all the turtles to a zoo so they are safe and the hotel can be built anywhere on the beach'
+      'Build the hotel now - earning money matters more than turtle nests',
+      'Do nothing - never build anything near wildlife, ever again',
+      'Design the hotel away from the nesting areas and protect the turtles',
+      'Move all the turtles to a zoo so the hotel can be built anywhere'
     ],
-    answer:'Design the hotel away from nesting areas, use eco-friendly materials, and set up a turtle protection programme - earning tourism income while protecting the turtle population',
+    answer:'Design the hotel away from the nesting areas and protect the turtles',
     hint:'Sustainable development = meeting TODAY\'s needs without destroying nature for FUTURE generations.',
     explanation:'<b>Sustainable development</b> means meeting the needs of people today without permanently damaging the environment for future generations. The balanced solution earns <b>tourism income</b> for the village while <b>preserving turtle nesting sites</b>. Moving turtles to a zoo removes them from their natural habitat. Doing nothing ignores real human needs. Only careful planning - hotel positioned away from nests, combined with a protection programme - achieves both goals. This is the core principle of sustainable, conservation-friendly development.' })
 

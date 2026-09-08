@@ -51,8 +51,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sci-enr-equ-007', chapterId:'g4sci-enr-equipment', subsection:'photos', difficulty:2,
     question:'<div style="text-align:center;margin-bottom:14px"><img src="assets/questions/spring-balance.jpg" alt="A measuring instrument" style="max-height:200px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.18)"></div><b>What instrument is shown in this picture?</b>',
-    options:['Newton meter (spring balance)','Thermometer','Rain gauge','Ruler'],
-    answer:'Newton meter (spring balance)',
+    options:['Newton meter','A thermometer','Rain gauge','Ruler'],
+    answer:'Newton meter',
     hint:'An object hung on the hook stretches a spring inside - the stretch shows the weight.',
     explanation:'A <b>Newton meter</b> (spring balance) measures <b>force</b> and <b>weight</b>. When an object is hung on the hook, it stretches the internal spring. The reading is shown in Newtons (N), named after the scientist Sir Isaac Newton who discovered gravity.' }),
 
@@ -74,8 +74,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sci-enr-equ-010', chapterId:'g4sci-enr-equipment', subsection:'measuring', difficulty:1,
     question:'What does a <b>wind vane</b> tell us about the weather?',
-    options:['The direction the wind is blowing from','The speed of the wind','The amount of rainfall','The temperature of the air'],
-    answer:'The direction the wind is blowing from',
+    options:['The direction the wind blows from','The speed of the wind','The amount of rainfall','The temperature of the air'],
+    answer:'The direction the wind blows from',
     hint:'A wind vane is shaped like an arrow that points into the wind.',
     explanation:'A <b>wind vane</b> shows the <b>direction</b> from which the wind is blowing. It is often shaped like an arrow or a cockerel (rooster) and rotates to point toward the direction the wind is coming from. A wind blowing from the north is called a "northerly wind."' }),
 

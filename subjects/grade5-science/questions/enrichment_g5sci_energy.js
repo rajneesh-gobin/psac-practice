@@ -25,24 +25,24 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-enr-ene-003', chapterId:'g5sci-enr-energy', subsection:'photos', difficulty:2,
     question:'<img src="assets/questions/hydroelectric-dam.jpg" alt="Diagram of a hydroelectric dam showing water flow and generators" style="max-width:320px;border-radius:8px;display:block;margin:0 auto 10px"><br>This diagram shows a hydroelectric dam. What energy transformation takes place in this system?',
     options:[
-      'Potential energy (stored water) → Kinetic energy (flowing water) → Electrical energy',
+      'Potential energy → Kinetic energy → Electrical energy',
       'Solar energy → Heat energy → Electrical energy',
       'Chemical energy (fuel) → Heat energy → Kinetic energy',
       'Wind energy → Kinetic energy → Electrical energy'
     ],
-    answer:'Potential energy (stored water) → Kinetic energy (flowing water) → Electrical energy',
+    answer:'Potential energy → Kinetic energy → Electrical energy',
     hint:'The water is held high up (stored energy), then flows down and spins turbines.',
     explanation:'In a <b>hydroelectric dam</b>: (1) Water stored at height has <b>potential energy</b>; (2) When released, gravity pulls the water downhill - potential energy converts to <b>kinetic (movement) energy</b>; (3) The fast-moving water spins turbines connected to generators, producing <b>electrical energy</b>. Water power is <b>renewable</b> - it depends on the water cycle, which is powered by the sun.' }),
 
   makeMCQ({ id:'g5sci-enr-ene-004', chapterId:'g5sci-enr-energy', subsection:'photos', difficulty:1,
     question:'<img src="assets/questions/thermal-power-station.jpg" alt="A large industrial power station with cooling towers emitting steam" style="max-width:320px;border-radius:8px;display:block;margin:0 auto 10px"><br>This type of power station burns coal or oil to produce electricity. Is this a renewable or non-renewable energy source?',
     options:[
-      'Non-renewable - coal and oil are fossil fuels that will eventually run out',
-      'Renewable - the station can always burn more coal',
+      'Non-renewable - coal and oil are fossil fuels that will run out',
+      'Renewable - the station can always burn some more coal',
       'Renewable - the steam released is collected and reused',
       'Non-renewable - but only because of the large cooling towers'
     ],
-    answer:'Non-renewable - coal and oil are fossil fuels that will eventually run out',
+    answer:'Non-renewable - coal and oil are fossil fuels that will run out',
     hint:'Think about how long coal and oil take to form and whether they can be replaced quickly.',
     explanation:'This is a <b>thermal power station</b> that burns <b>fossil fuels</b> (coal, oil or gas). Fossil fuels are <b>non-renewable</b> - they were formed from the remains of ancient plants and animals over <b>millions of years</b> and cannot be replaced once used. Burning them also releases <b>carbon dioxide</b> and other pollutants into the atmosphere, contributing to climate change.' }),
 
@@ -70,12 +70,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-enr-ene-007', chapterId:'g5sci-enr-energy', subsection:'renewable', difficulty:2,
     question:'Why are fossil fuels (coal, oil and gas) described as NON-RENEWABLE?',
     options:[
-      'They formed from ancient living things over millions of years and cannot be replaced once used up',
+      'They formed over millions of years and cannot be replaced',
       'They are found only underground and are difficult to mine',
       'They produce electricity only when there is sunshine',
       'They can only be used once before they need to be recharged'
     ],
-    answer:'They formed from ancient living things over millions of years and cannot be replaced once used up',
+    answer:'They formed over millions of years and cannot be replaced',
     hint:'Think about how long it took for these fuels to form naturally.',
     explanation:'<b>Fossil fuels</b> formed from the remains of plants and animals that lived <b>hundreds of millions of years ago</b>. Heat and pressure underground slowly turned them into coal, oil and gas. This process takes far too long to happen on a human timescale - so once we burn them, they are gone. This makes them <b>non-renewable</b>.' }),
 
@@ -106,12 +106,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-enr-ene-010', chapterId:'g5sci-enr-energy', subsection:'sources', difficulty:2,
     question:'A school installs solar panels on its roof. During the day, the panels produce more electricity than the school uses, so the extra is stored in batteries. At night, the batteries power the school\'s lights. What is the complete energy chain?',
     options:[
-      'Light energy → Electrical energy → Chemical energy (in battery) → Electrical energy → Light energy',
-      'Heat energy → Chemical energy → Electrical energy → Sound energy',
-      'Kinetic energy → Light energy → Heat energy → Electrical energy',
-      'Chemical energy → Kinetic energy → Light energy → Sound energy'
+      'Light energy → Electrical energy → Chemical energy → Electrical energy → Light energy',
+      'Heat energy → Chemical energy → Electrical energy → Sound energy → Light energy',
+      'Kinetic energy → Light energy → Heat energy → Electrical energy → Sound energy',
+      'Chemical energy → Kinetic energy → Light energy → Sound energy → Heat energy'
     ],
-    answer:'Light energy → Electrical energy → Chemical energy (in battery) → Electrical energy → Light energy',
+    answer:'Light energy → Electrical energy → Chemical energy → Electrical energy → Light energy',
     hint:'Trace from the sun during the day to the school lights at night, step by step.',
     explanation:'The complete energy chain is: <b>Light energy</b> (sunlight) → solar panels convert it to <b>Electrical energy</b> → stored as <b>Chemical energy</b> in the battery → at night, the battery releases <b>Electrical energy</b> → the bulbs produce <b>Light energy</b> again. This shows how energy changes form (transforms) multiple times but is never created or destroyed.' }),
 
@@ -125,12 +125,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-enr-ene-012', chapterId:'g5sci-enr-energy', subsection:'renewable', difficulty:3,
     question:'Mauritius aims to generate 35% of its electricity from renewable sources by 2025. Which combination of renewable sources is MOST SUITABLE for a small tropical island?',
     options:[
-      'Solar energy and wind energy, which are abundant on a sunny, breezy island',
+      'Solar energy and wind energy, plentiful on a sunny, breezy island',
       'Large coal mines and hydroelectric dams on major rivers',
-      'Nuclear power stations and natural gas pipelines',
+      'Nuclear power stations and natural gas pipelines from abroad',
       'Tidal turbines using ocean temperature differences and coal'
     ],
-    answer:'Solar energy and wind energy, which are abundant on a sunny, breezy island',
+    answer:'Solar energy and wind energy, plentiful on a sunny, breezy island',
     hint:'Think about what Mauritius has plenty of - what natural conditions does a tropical island enjoy?',
     explanation:'Mauritius has <b>abundant sunshine</b> throughout the year and <b>consistent trade winds</b>, making <b>solar panels</b> and <b>wind turbines</b> the most practical renewable energy sources. The island is also too small for large hydroelectric dams. Mauritius already has wind farms (at Plaine Sophie and others) and is rapidly expanding its solar capacity as part of its national energy strategy.' }),
 
@@ -161,24 +161,24 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-enr-ene-015', chapterId:'g5sci-enr-energy', subsection:'sources', difficulty:3,
     question:'A country burns coal to produce electricity. Scientists say this causes "acid rain" that damages forests and lakes. What is the CAUSE of acid rain from coal burning?',
     options:[
-      'Coal burning releases sulfur dioxide and nitrogen oxides that combine with rainwater to form acids',
+      'Sulfur dioxide and nitrogen oxides from coal make rain acidic',
       'Coal burning makes rainwater too warm, turning it acidic',
       'The smoke from coal settles on leaves and makes water more alkaline',
       'Coal ash blows into clouds and removes the oxygen from raindrops'
     ],
-    answer:'Coal burning releases sulfur dioxide and nitrogen oxides that combine with rainwater to form acids',
+    answer:'Sulfur dioxide and nitrogen oxides from coal make rain acidic',
     hint:'Think about the chemical gases released when coal is burned.',
     explanation:'When coal burns, it releases <b>sulfur dioxide (SO₂)</b> and <b>nitrogen oxides (NOₓ)</b> into the atmosphere. These gases dissolve in water vapour in clouds, forming <b>sulfuric acid</b> and <b>nitric acid</b>. When it rains, this acidic water falls as <b>acid rain</b>, which damages forests, lakes and buildings. This is one of the major environmental disadvantages of burning fossil fuels.' }),
 
   makeMCQ({ id:'g5sci-enr-ene-016', chapterId:'g5sci-enr-energy', subsection:'sources', difficulty:3,
     question:'A scientist compares two power stations: one burns coal, one uses solar panels. The solar station costs more to build but produces no fuel costs or pollution. After 15 years, which is the better choice for a country, and why?',
     options:[
-      'Solar, because over 15 years it saves on fuel costs and avoids pollution costs, making it cheaper and cleaner overall',
+      'Solar, because it saves on fuel costs and avoids pollution costs',
       'Coal, because it is always cheaper than solar and produces more power',
-      'Solar, because it requires more workers to operate, creating more jobs in every case',
-      'Coal, because 15 years is not long enough to see any benefit from solar panels'
+      'Solar, because it needs more workers and creates many more jobs',
+      'Coal, because 15 years is too short to see any benefit from solar'
     ],
-    answer:'Solar, because over 15 years it saves on fuel costs and avoids pollution costs, making it cheaper and cleaner overall',
+    answer:'Solar, because it saves on fuel costs and avoids pollution costs',
     hint:'Consider the TOTAL cost over time: building cost + running costs + environmental costs.',
     explanation:'Although solar stations cost more to build, they have <b>zero fuel costs</b> (sunlight is free) and <b>no pollution costs</b> (no acid rain, no CO₂ damage). Over 15+ years, the <b>total cost of solar becomes lower</b> than coal when fuel and environmental damage costs are included. This is why many countries are switching from fossil fuels to renewables - the long-term economic and environmental case is strong.' }),
 

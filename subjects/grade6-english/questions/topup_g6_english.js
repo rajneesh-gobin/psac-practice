@@ -80,10 +80,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-wr-052', chapterId:'g6eng-writing', subsection:'planning', difficulty:2,
     question:'An advertisement claims: <i>"Join the thousands of happy families who already use BrightSpark!"</i> Which persuasive technique is being used?',
     options:[
-      'A rhetorical question',
-      'An expert opinion',
+      'A rhetorical question aimed at the reader',
+      'An expert opinion from a qualified teacher',
       'Bandwagon appeal - implying that everyone else has already joined',
-      'A simile comparing the product to something bright'
+      'A simile comparing the product to something very bright'
     ],
     answer:'Bandwagon appeal - implying that everyone else has already joined',
     hint:'The word "already" and "thousands" are doing most of the persuasive work.',
@@ -92,10 +92,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-wr-053', chapterId:'g6eng-writing', subsection:'planning', difficulty:3,
     question:'Read this extract: <br><i>"The fire broke out at 03:00 on Tuesday. Firefighters from Curepipe station arrived within eight minutes and brought the blaze under control. No injuries were reported."</i><br>Which text type does this best match, and why?',
     options:[
-      'A formal letter - because it is written in the third person',
-      'A narrative story - because it describes a dramatic event',
+      'A formal letter - because it is written in the third person throughout the text',
+      'A narrative story - because it describes a dramatic event in a very exciting and vivid way',
       'A newspaper report - because it states precise facts in the past tense with named sources and times',
-      'A factual report - because it uses subheadings'
+      'A factual report - because it uses subheadings and clear headings'
     ],
     answer:'A newspaper report - because it states precise facts in the past tense with named sources and times',
     hint:'Notice the specific time, the named fire station and the measured response time.',
@@ -104,10 +104,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-wr-054', chapterId:'g6eng-writing', subsection:'planning', difficulty:4,
     question:'A student drafts the opening of a <b>formal letter of application</b> for a library volunteer role: <br><i>"Hi, I\'d love to work at your library cos I really like books."</i><br>Which rewrite corrects ALL the problems?',
     options:[
-      '"Hello, I would love to work at your library because I like books."',
+      '"Hello, I would really love to work at your library because I like reading books very much."',
       '"I am writing to apply for the position of library volunteer, as I have a keen interest in reading and community service."',
-      '"Dear Library, I am applying for the job. I like books a lot."',
-      '"I\'d like to apply for the volunteer position at your library."'
+      '"Dear Library, I am applying for the job you have advertised. I like reading books a lot and I would like to help."',
+      '"I\'d like to apply for the volunteer position at your library because I really like books."'
     ],
     answer:'"I am writing to apply for the position of library volunteer, as I have a keen interest in reading and community service."',
     hint:'Check for: contractions, slang, vague language and a clearly stated purpose.',
@@ -135,10 +135,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-pass-051', chapterId:'g6eng-passages', subsection:'letter', difficulty:2,
     question:`${_G6TP_LETTER}Why does the writer mention that "four days later, the handrails remain unrepaired"?`,
     options:[
-      'To show that four days is too long to wait for any repair',
-      'To prove the staff member deliberately lied',
+      'To show that four whole days is far too long to wait for any kind of repair',
+      'To prove that the staff member deliberately lied about the repair',
       'To show that the verbal report produced no result, strengthening the case for a written complaint',
-      'To give the manager the exact date when the damage occurred'
+      'To give the manager the exact date and the exact time at which the damage first occurred'
     ],
     answer:'To show that the verbal report produced no result, strengthening the case for a written complaint',
     hint:'Why would someone write a formal letter rather than just tell a staff member?',
@@ -147,10 +147,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-pass-052', chapterId:'g6eng-passages', subsection:'letter', difficulty:3,
     question:`${_G6TP_LETTER}The letter ends: "A child could be seriously injured." What is the persuasive purpose of this sentence?`,
     options:[
-      'To threaten legal action against the park',
+      'To threaten immediate legal action against the park owners',
       'To appeal to the manager\'s sense of responsibility by raising the consequence of inaction',
-      'To provide a statistic about playground accidents in Mauritius',
-      'To explain why the writer\'s daughter is afraid of rope bridges'
+      'To provide a useful statistic about playground accidents across the whole of Mauritius',
+      'To explain why the writer\'s young daughter is afraid of all rope bridges'
     ],
     answer:'To appeal to the manager\'s sense of responsibility by raising the consequence of inaction',
     hint:'The sentence does not make a threat - it paints a picture of what could happen if nothing is done.',
@@ -167,10 +167,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-pass-054', chapterId:'g6eng-passages', subsection:'report', difficulty:2,
     question:`${_G6TP_NEWS}The head teacher says funding "had not yet been secured". What does this tell the reader about the expansion plan?`,
     options:[
-      'The expansion will definitely happen next year',
-      'The school has already received a second grant',
+      'The expansion will definitely happen early next year',
+      'The school has already received a second large grant',
       'The expansion is planned but not guaranteed because the money has not been found',
-      'The head teacher does not support the project'
+      'The head teacher does not support the expansion project in any way at all'
     ],
     answer:'The expansion is planned but not guaranteed because the money has not been found',
     hint:'Focus on the word "yet" - what does it imply about the future?',
@@ -179,10 +179,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-pass-055', chapterId:'g6eng-passages', subsection:'report', difficulty:3,
     question:`${_G6TP_NEWS}Why does the reporter include Mrs Dupont\'s quotation?`,
     options:[
-      'Because the reporter could not find any other information about the project',
+      'Because the reporter could not find any other information at all about the project',
       'To add a named, first-hand voice that confirms how impressive the pupils\' achievement was',
-      'To fill space at the end of the article',
-      'Because Mrs Dupont paid for the grant'
+      'To fill up space at the end of the news article',
+      'Because Mrs Dupont paid for the grant herself'
     ],
     answer:'To add a named, first-hand voice that confirms how impressive the pupils\' achievement was',
     hint:'Think about what a direct quote adds that a plain statement of fact cannot.',

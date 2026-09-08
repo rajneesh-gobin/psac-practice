@@ -38,7 +38,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5sci-enr-end-005', chapterId:'g5sci-enr-endemic', subsection:'photos', difficulty:1,
     question:'<img src="assets/questions/trochetia-boutoniana-flower.jpg" alt="Bright red tubular flowers with distinctive petals" style="max-width:320px;border-radius:8px;display:block;margin:0 auto 10px"><br>This beautiful red flower is the national flower of Mauritius and is endemic to the island. What is its name?',
-    options:['Trochetia boutoniana (Boucle d\'oreille)','Hibiscus','Red Anthurium','Flame of the Forest'],
+    options:['Trochetia boutoniana (Boucle d\'oreille)','Hibiscus (Rose de Chine flower)','Red Anthurium (Flamingo flower)','Flame of the Forest (Flamboyant)'],
     answer:'Trochetia boutoniana (Boucle d\'oreille)',
     hint:'Its Creole nickname means "earring". Three of the options are flowers grown in many countries; the national flower grows only here.',
     explanation:'This is <b>Trochetia boutoniana</b>, known locally as <b>Boucle d\'Oreille</b> (earring flower). It is Mauritius\'s <b>national flower</b> and is endemic to the island, meaning it is found nowhere else in the world. It is endangered in the wild, growing mainly on cliff faces in the Black River area.' }),
@@ -55,60 +55,60 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-enr-end-007', chapterId:'g5sci-enr-endemic', subsection:'habitats', difficulty:1,
     question:'What does the word "endemic" mean when describing a plant or animal?',
     options:[
-      'It is found only in one specific place in the world and nowhere else naturally',
+      'It is found only in one place in the world and nowhere else',
       'It is a dangerous species that threatens other animals',
       'It was brought to the island from another country by settlers',
-      'It is common and widespread across many countries'
+      'It is common and widespread across many other countries'
     ],
-    answer:'It is found only in one specific place in the world and nowhere else naturally',
+    answer:'It is found only in one place in the world and nowhere else',
     hint:'The prefix "en-" suggests "in" or "within" a specific place.',
     explanation:'<b>Endemic</b> means that a species is <b>native to and found only in one specific geographic location</b> - such as a single island, country, or region - and does not occur naturally anywhere else in the world. Mauritius has many endemic species because it has been isolated in the Indian Ocean for millions of years.' }),
 
   makeMCQ({ id:'g5sci-enr-end-008', chapterId:'g5sci-enr-endemic', subsection:'endangered', difficulty:2,
     question:'Which of the following is the MAIN reason why so many endemic species of Mauritius became endangered or extinct after humans arrived?',
     options:[
-      'Deforestation removed their habitat AND introduced animals (rats, cats, monkeys) preyed on their eggs and young',
+      'Deforestation removed their habitat AND new predators ate their eggs',
       'The animals were too friendly and allowed themselves to be caught easily',
       'A large volcanic eruption destroyed most of the island\'s forests',
       'Climate change caused temperatures to rise, killing off most species'
     ],
-    answer:'Deforestation removed their habitat AND introduced animals (rats, cats, monkeys) preyed on their eggs and young',
+    answer:'Deforestation removed their habitat AND new predators ate their eggs',
     hint:'Two combined threats caused the most damage: habitat loss and new predators.',
     explanation:'Endemic species of Mauritius suffered from two main threats after human settlement: (1) <b>Deforestation</b> - settlers cleared most of Mauritius\'s native forests for farming and building, destroying the habitat of native animals; (2) <b>Introduced predators</b> - rats, cats, dogs, pigs and macaque monkeys arrived with settlers and ate the eggs and chicks of ground-nesting birds that had evolved without any predators and had no natural defences.' }),
 
   makeMCQ({ id:'g5sci-enr-end-009', chapterId:'g5sci-enr-endemic', subsection:'habitats', difficulty:1,
     question:'What is the Black River Gorges National Park in Mauritius?',
     options:[
-      'A large protected area of native forest that conserves endemic plants and animals',
+      'A large protected area of native forest and endemic wildlife',
       'A tourist beach resort on the west coast of Mauritius',
-      'A factory reserve where sugar cane is processed',
+      'A factory reserve where the sugar cane is processed',
       'An underwater marine reserve protecting coral reefs'
     ],
-    answer:'A large protected area of native forest that conserves endemic plants and animals',
+    answer:'A large protected area of native forest and endemic wildlife',
     hint:'It is the largest national park in Mauritius, covering the south-west uplands.',
     explanation:'<b>Black River Gorges National Park</b> is the largest national park in Mauritius, covering over 6,500 hectares of native forest in the south-west of the island. It protects endemic species including the Pink Pigeon, Echo Parakeet, Mauritius Kestrel and many endemic plants. It is a key site for conservation and eco-tourism.' }),
 
   makeMCQ({ id:'g5sci-enr-end-010', chapterId:'g5sci-enr-endemic', subsection:'habitats', difficulty:2,
     question:'What is special about Île aux Aigrettes as a conservation site?',
     options:[
-      'It is a coral island being restored to its original state with endemic species reintroduced',
+      'It is a coral island being restored with endemic species reintroduced',
       'It is a factory island where animal food supplements are produced',
       'It is an island exclusively for tourists to see caged rare animals',
-      'It is a volcanic island with a crater lake that attracts rare birds naturally'
+      'It is a volcanic island with a crater lake that attracts rare birds'
     ],
-    answer:'It is a coral island being restored to its original state with endemic species reintroduced',
+    answer:'It is a coral island being restored with endemic species reintroduced',
     hint:'This small island off south-east Mauritius is being managed to recreate the ancient ecosystem.',
     explanation:'<b>Île aux Aigrettes</b> is a small coral island off the south-east coast of Mauritius. The Mauritian Wildlife Foundation manages it as a <b>nature restoration project</b>: introduced predators (rats, cats) have been removed, and endemic species such as Pink Pigeons and Giant Aldabra Tortoises (acting as replacements for the extinct Mauritius Giant Tortoise) have been reintroduced, recreating how the island looked before humans arrived.' }),
 
   makeMCQ({ id:'g5sci-enr-end-011', chapterId:'g5sci-enr-endemic', subsection:'endangered', difficulty:2,
     question:'Which of the following conservation measures helps protect the Echo Parakeet in Mauritius?',
     options:[
-      'Removing invasive predators from nesting areas and using nest boxes to increase breeding success',
+      'Removing invasive predators from nesting areas and using nest boxes',
       'Keeping all Echo Parakeets in large glass cages in Port Louis',
-      'Feeding them only imported food to keep them healthy',
+      'Feeding them only imported food to keep them all healthy',
       'Moving their nests from trees to underground burrows for safety'
     ],
-    answer:'Removing invasive predators from nesting areas and using nest boxes to increase breeding success',
+    answer:'Removing invasive predators from nesting areas and using nest boxes',
     hint:'Conservation involves making the wild environment safer for the birds to breed.',
     explanation:'Conservation of the Echo Parakeet involves: (1) <b>Removing invasive predators</b> (rats, macaques) from nesting areas; (2) Providing <b>nest boxes</b> in tall trees to give safe nesting sites; (3) Supplementary feeding during scarce seasons; (4) Hand-rearing chicks when parents fail. This combination of actions helped the population recover from fewer than 20 to several hundred birds.' }),
 
@@ -127,12 +127,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-enr-end-013', chapterId:'g5sci-enr-endemic', subsection:'endangered', difficulty:3,
     question:'Why do island species like those of Mauritius tend to become extinct more easily than mainland species?',
     options:[
-      'Island species evolved in isolation without predators, so they have no defences and small populations with nowhere to retreat to',
+      'Island species evolved without predators, so they have no defences',
       'Island species are much smaller than mainland species and cannot compete',
       'Islands receive less sunlight, so island plants grow more slowly',
       'Island animals reproduce less frequently than mainland animals'
     ],
-    answer:'Island species evolved in isolation without predators, so they have no defences and small populations with nowhere to retreat to',
+    answer:'Island species evolved without predators, so they have no defences',
     hint:'Islands are isolated - what pressures did species face, and what happened when new threats arrived?',
     explanation:'Island species evolve in <b>isolation</b> over millions of years. Because there were no predators, Mauritius birds (like the Dodo) lost the ability to fly and lost fear of predators. When humans arrived, these species: (1) Had <b>no natural defences</b> against new predators; (2) Lived in <b>small populations</b> on a limited island with nowhere to flee; (3) Had <b>slow reproduction rates</b>. All these factors make island endemics extremely vulnerable to extinction once new threats arrive.' }),
 
@@ -158,24 +158,24 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-enr-end-016', chapterId:'g5sci-enr-endemic', subsection:'adaptation', difficulty:2,
     question:'Mauritius\'s national flower, Trochetia boutoniana, grows mainly on cliff faces. Why does growing on cliff faces help it survive?',
     options:[
-      'Cliff faces are difficult for introduced deer, rabbits and other herbivores to reach, so the plant is protected from being eaten',
+      'Cliff faces are hard for deer and other plant-eaters to reach',
       'Cliff faces receive more rainfall so the plant grows faster',
       'Cliff faces are warmer and the plant needs heat to flower',
       'Cliff faces are near the sea and the salt air helps the plant grow'
     ],
-    answer:'Cliff faces are difficult for introduced deer, rabbits and other herbivores to reach, so the plant is protected from being eaten',
+    answer:'Cliff faces are hard for deer and other plant-eaters to reach',
     hint:'Think about what threatens plants in accessible areas of Mauritius.',
     explanation:'<i>Trochetia boutoniana</i> grows mainly on steep cliff faces because these locations are <b>inaccessible to introduced herbivores</b> such as deer and rabbits, which would otherwise eat the plant. In areas that animals can reach, the national flower has nearly disappeared. The cliff face acts as a natural refuge.' }),
 
   makeMCQ({ id:'g5sci-enr-end-017', chapterId:'g5sci-enr-endemic', subsection:'endangered', difficulty:4,
     question:'A student says: "We should spend money on human problems, not on saving rare birds." Give the BEST scientific argument for why saving endemic species matters.',
     options:[
-      'Endemic species are part of a balanced ecosystem - losing one species can trigger a chain reaction affecting plants, insects and other animals that humans also depend on',
-      'Rare birds are beautiful and tourists pay to see them, so they are economically useful',
-      'Scientists need rare birds for experiments in laboratories',
-      'It is important to save them so future generations can see them in zoos'
+      'Endemic species are part of a balanced ecosystem that humans depend on',
+      'Rare birds are beautiful and tourists will pay money to see them',
+      'Scientists need rare birds for experiments in their laboratories',
+      'It is important to save them so future generations see them in zoos'
     ],
-    answer:'Endemic species are part of a balanced ecosystem - losing one species can trigger a chain reaction affecting plants, insects and other animals that humans also depend on',
+    answer:'Endemic species are part of a balanced ecosystem that humans depend on',
     hint:'Think beyond the individual species - what role does it play in the ecosystem?',
     explanation:'Endemic species are part of <b>interconnected ecosystems</b>. For example, the Mauritius Flying Fox pollinates and disperses seeds of native trees; losing it would affect forest regeneration. The Echo Parakeet is part of forest food webs. <b>Biodiversity loss creates cascade effects</b>: when one species disappears, it can cause the decline of others, destabilising ecosystems that provide clean water, clean air, soil fertility and food - resources humans depend on. Conservation is ultimately about protecting the health of the whole system, not just individual species.' })
 

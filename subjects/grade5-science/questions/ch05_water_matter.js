@@ -150,11 +150,11 @@ STATIC_QUESTIONS.push(
     question:'The temperature was lower at 6 a.m. than at 1 p.m. What is the BEST explanation for this?',
     options:[
       'It rains in the morning, making the temperature lower',
-      'The sun has not been heating the ground for long at 6 a.m., so it is cooler',
+      'The sun has not been heating the ground for long at 6 a.m.',
       'The thermometer does not work properly in the morning',
       'Wind is stronger in the morning, making the temperature lower'
     ],
-    answer:'The sun has not been heating the ground for long at 6 a.m., so it is cooler',
+    answer:'The sun has not been heating the ground for long at 6 a.m.',
     hint:'During the night, no sunlight heats the ground. The sun only starts warming things after it rises.',
     explanation:'At <b>6 a.m.</b>, the sun has just risen (or not yet risen). The ground has been losing heat overnight with no sunlight to replace it, so the temperature is at its lowest point of the day. By 1 p.m., the sun has been heating the ground for several hours, making it the warmest time.' }),
 
@@ -162,11 +162,11 @@ STATIC_QUESTIONS.push(
     question:'Ice cubes are put in a glass of water. After some time, the ice melts. What happens to the temperature of the water as the ice melts?',
     options:[
       'It increases because ice releases heat energy',
-      'It decreases (becomes cooler) because melting ice absorbs heat from the surrounding water',
-      'It stays exactly the same throughout',
+      'It decreases because the melting ice absorbs heat',
+      'It stays exactly the same the whole time',
       'It first increases then decreases rapidly'
     ],
-    answer:'It decreases (becomes cooler) because melting ice absorbs heat from the surrounding water',
+    answer:'It decreases because the melting ice absorbs heat',
     hint:'The ice needs energy (heat) to melt - where does this energy come from?',
     explanation:'To melt, ice must <b>absorb heat energy</b>. This heat comes from the surrounding water. As heat is drawn out of the water, the water becomes <b>cooler</b>. This is why ice is used to keep drinks cold - the melting process removes heat from the liquid.' }),
 
@@ -180,12 +180,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5sci-wm-020', chapterId:'water-matter', subsection:'states', difficulty:4,
     question:'A scientist puts identical ice cubes in three containers: one in a freezer (−10°C), one in a warm room (25°C) and one in boiling water (100°C). Rank them from slowest to fastest melting and explain WHY.',
     options:[
-      'Freezer slowest (ice cannot melt at −10°C), warm room next, boiling water fastest (most heat available)',
-      'Boiling water slowest, warm room next, freezer fastest',
-      'All melt at the same speed regardless of temperature',
-      'Warm room fastest because ice melts better in still air'
+      'Freezer slowest, warm room next, boiling water fastest - more heat melts ice faster',
+      'Boiling water slowest, warm room next, freezer fastest - cold air melts ice fastest',
+      'All three melt at the same speed because temperature does not affect melting',
+      'Warm room fastest because ice melts better in still air than in hot water'
     ],
-    answer:'Freezer slowest (ice cannot melt at −10°C), warm room next, boiling water fastest (most heat available)',
+    answer:'Freezer slowest, warm room next, boiling water fastest - more heat melts ice faster',
     hint:'Ice melts when it absorbs enough heat to reach 0°C. More heat available = faster melting.',
     explanation:'In the <b>freezer</b>, the temperature is below 0°C so ice does not melt - it stays frozen. In the <b>warm room</b> (25°C), heat slowly transfers from the air to the ice, melting it gradually. In <b>boiling water</b> (100°C), a large amount of heat transfers to the ice very quickly, melting it fastest. The rate of melting depends on the temperature difference between the ice and its surroundings.' })
 

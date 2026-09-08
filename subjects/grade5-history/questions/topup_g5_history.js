@@ -25,7 +25,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-nenv-053', chapterId:'natural-env', subsection:'relief', difficulty:1,
     question:'What is a marine park?',
-    options:['A theme park with dolphin shows','A protected area of sea where marine life and coral reefs are conserved','A commercial fishing zone','A beach resort with water slides'], answer:'A protected area of sea where marine life and coral reefs are conserved',
+    options:['A theme park with dolphin shows','A protected area of sea for marine life','A commercial fishing zone','A beach resort with water slides'], answer:'A protected area of sea for marine life',
     hint:'The word "marine" relates to the sea.',
     explanation:'A marine park is a designated protected area of sea. Human activities such as fishing, anchoring and collecting coral are restricted so that marine ecosystems - fish, coral reefs and sea plants - can recover and thrive.' }),
 
@@ -33,19 +33,19 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-envp-050', chapterId:'env-problems', subsection:'beach_erosion', difficulty:1,
     question:'Which of the following is a method used to prevent beach erosion along the coast of Mauritius?',
-    options:['Removing coral reefs to allow more waves','Building gabions (large concrete blocks) along the shore','Cutting down all coastal mangrove trees','Paving the beach with tarmac'], answer:'Building gabions (large concrete blocks) along the shore',
+    options:['Removing coral reefs to allow more waves','Building gabions along the shore','Cutting down all coastal mangrove trees','Paving the beach with tarmac'], answer:'Building gabions along the shore',
     hint:'These heavy structures absorb the energy of waves.',
     explanation:'Gabions are large concrete or rock-filled wire baskets placed along eroding coastlines. They absorb wave energy and protect the beach and land behind from further erosion. Sea walls serve a similar purpose.' }),
 
   makeMCQ({ id:'g5h-envp-051', chapterId:'env-problems', subsection:'soil_erosion', difficulty:2,
     question:'Why does deforestation make soil erosion worse?',
-    options:['Trees absorb too much rainwater and flood the land','Tree roots bind the soil together, so removing trees leaves soil unprotected from rain and wind','Trees block the wind and cause storms','Trees make the soil too dry for water to wash it away'], answer:'Tree roots bind the soil together, so removing trees leaves soil unprotected from rain and wind',
+    options:['Trees absorb too much rainwater and flood the land','Tree roots bind the soil, so bare soil washes away','Trees block the wind and this causes storms','Trees make the soil too dry for water to wash it away'], answer:'Tree roots bind the soil, so bare soil washes away',
     hint:'Think about what tree roots do underground.',
     explanation:'Tree roots hold soil particles together. When forests are cleared, rain hits bare soil directly, loosening and washing it away. Wind also blows unprotected loose soil. Terracing and replanting trees are key prevention methods.' }),
 
   makeMCQ({ id:'g5h-envp-052', chapterId:'env-problems', subsection:'pollution', difficulty:1,
     question:'Which human activity is a major cause of air pollution in Mauritius\'s towns?',
-    options:['Planting trees in parks','Swimming in the sea','Vehicle exhaust fumes from cars and lorries','Eating sugarcane'], answer:'Vehicle exhaust fumes from cars and lorries',
+    options:['Planting trees in parks','Swimming in the sea','Vehicle exhaust fumes','Eating sugarcane'], answer:'Vehicle exhaust fumes',
     hint:'These fumes come from engines burning fuel.',
     explanation:'Exhaust fumes from cars, buses, lorries and motorcycles release carbon monoxide, nitrogen oxides and fine particles into the air, making vehicle traffic one of the leading causes of urban air pollution.' }),
 
@@ -83,7 +83,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-pl-052', chapterId:'port-louis', subsection:'buildings', difficulty:1,
     question:'Aapravasi Ghat in Port Louis is a UNESCO World Heritage Site. It is significant because it is where ___.',
-    options:['the first French governor built his residence','Indian indentured labourers arrived in Mauritius from 1834 onwards','the Battle of Grand Port was fought in 1810','Christopher Columbus first landed in the Indian Ocean'], answer:'Indian indentured labourers arrived in Mauritius from 1834 onwards',
+    options:['the first French governor built his residence','Indian indentured labourers arrived from 1834','the Battle of Grand Port was fought in 1810','Christopher Columbus first landed in the Indian Ocean'], answer:'Indian indentured labourers arrived from 1834',
     hint:'The name means "immigration depot" in Hindi.',
     explanation:'Aapravasi Ghat was the immigration depot where hundreds of thousands of Indian indentured labourers arrived after the abolition of slavery (from 1834). UNESCO recognised it as a site of global significance to the history of indentured labour.' }),
 
@@ -109,19 +109,19 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-enr-lmk-053', chapterId:'g5enr-landmarks', subsection:'nature', difficulty:1,
     question:'The Chamarel 7-Coloured Earths is a natural attraction located in which district of Mauritius?',
-    options:['Flacq','Pamplemousses','Black River (Rivière Noire)','Grand Port'], answer:'Black River (Rivière Noire)',
+    options:['Flacq','Pamplemousses','Black River','Grand Port'], answer:'Black River',
     hint:'This district is in the south-west of the island.',
     explanation:'The 7-Coloured Earths of Chamarel are in the Black River (Rivière Noire) district in south-west Mauritius. The different colours come from volcanic soil containing various minerals.' }),
 
   makeMCQ({ id:'g5h-enr-lmk-054', chapterId:'g5enr-landmarks', subsection:'nature', difficulty:2,
     question:'What causes the spectacular different colours of the earth at Chamarel?',
-    options:['Artists painted the sand in seven colours as a tourist attraction','Volcanic rock that cooled at different rates created soils rich in different minerals and pigments','Flood water repeatedly stained the soil with river sediment','Different types of plants dyed the ground with their roots'], answer:'Volcanic rock that cooled at different rates created soils rich in different minerals and pigments',
+    options:['Artists painted the sand in seven colours as a tourist attraction','Volcanic rock cooled at different rates, creating different minerals','Flood water repeatedly stained the soil with river sediment','Different types of plants dyed the ground with their roots'], answer:'Volcanic rock cooled at different rates, creating different minerals',
     hint:'The soil originated from lava that cooled unevenly.',
     explanation:'The volcanic basalt at Chamarel cooled at different temperatures in different spots, producing soils with varying mineral concentrations - iron and aluminium oxides - which give the earth its red, brown, violet, green and blue hues.' }),
 
   makeMCQ({ id:'g5h-enr-lmk-055', chapterId:'g5enr-landmarks', subsection:'buildings', difficulty:1,
     question:'Trou aux Cerfs in Curepipe is a ___.',
-    options:['large freshwater lake','dormant volcanic crater filled with vegetation','deep sea port','colonial-era fort'], answer:'dormant volcanic crater filled with vegetation',
+    options:['large freshwater lake','dormant volcanic crater','deep sea port','colonial-era fort'], answer:'dormant volcanic crater',
     hint:'You can walk around its rim for panoramic views of the island.',
     explanation:'Trou aux Cerfs is a dormant volcanic crater in the centre of Curepipe, on the Central Plateau. Its crater is now overgrown with vegetation and is a popular walking spot.' }),
 
@@ -139,7 +139,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-enr-lmk-058', chapterId:'g5enr-landmarks', subsection:'buildings', difficulty:1,
     question:'Eureka House in Moka is an example of a ___.',
-    options:['modern government office block','colonial-era mansion (creole architecture)','Hindu temple complex','British military barracks'], answer:'colonial-era mansion (creole architecture)',
+    options:['modern government office block','colonial-era creole mansion','Hindu temple complex','British military barracks'], answer:'colonial-era creole mansion',
     hint:'It dates from the 1830s and shows traditional Mauritian architecture.',
     explanation:'Eureka House (Maison Eureka) is a beautifully restored colonial mansion in Moka, built around 1830. It is one of the finest examples of Mauritian Creole colonial architecture and is now open to the public.' }),
 
@@ -151,7 +151,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5h-enr-lmk-060', chapterId:'g5enr-landmarks', subsection:'buildings', difficulty:1,
     question:'Rochester Falls in the Savanne district is a ___.',
-    options:['mountain peak','natural waterfall flowing over volcanic basalt columns','colonial-era building','marine protected area'], answer:'natural waterfall flowing over volcanic basalt columns',
+    options:['high mountain peak','waterfall over basalt columns','colonial-era building','marine protected area'], answer:'waterfall over basalt columns',
     hint:'The unusual shape of the rocks beneath the falls makes it distinctive.',
     explanation:'Rochester Falls is a natural waterfall in the Savanne district of south Mauritius. The water cascades over geometric basalt columns formed by ancient volcanic activity, giving the falls a dramatic, angular appearance.' }),
 

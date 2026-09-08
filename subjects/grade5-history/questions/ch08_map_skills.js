@@ -52,12 +52,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5hg-ms-001', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:'What are LINES OF LATITUDE on a map or globe?',
     options:[
-      'Vertical lines running from the North Pole to the South Pole',
-      'Horizontal lines running east-west, parallel to the Equator',
+      'Vertical lines running from pole to pole',
+      'Horizontal lines running parallel to the Equator',
       'Lines showing the height of mountains',
       'Lines showing the direction of rivers'
     ],
-    answer:'Horizontal lines running east-west, parallel to the Equator',
+    answer:'Horizontal lines running parallel to the Equator',
     hint:'Latitude lines go around the globe horizontally like the rungs of a ladder.',
     explanation:'<b>Lines of latitude</b> (also called parallels) are horizontal lines that circle the Earth parallel to the Equator. They measure how far north or south a place is from the Equator, in degrees.' }),
 
@@ -65,11 +65,11 @@ STATIC_QUESTIONS.push(
     question:'What are LINES OF LONGITUDE on a map or globe?',
     options:[
       'Horizontal lines running east-west',
-      'Lines showing ocean depth',
-      'Vertical lines running from the North Pole to the South Pole',
+      'Lines that show the depth of the ocean',
+      'Vertical lines running from pole to pole',
       'Lines connecting places with the same temperature'
     ],
-    answer:'Vertical lines running from the North Pole to the South Pole',
+    answer:'Vertical lines running from pole to pole',
     hint:'Longitude lines run up and down (north-south) on a map.',
     explanation:'<b>Lines of longitude</b> (also called meridians) are vertical lines that run from the North Pole to the South Pole. They measure how far east or west a place is from the Greenwich Meridian, in degrees.' }),
 
@@ -82,8 +82,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5hg-ms-004', chapterId:'map-skills', subsection:'coordinates', difficulty:1,
     question:`${_SVG_GRID}On the grid above, what is the thick blue VERTICAL line at 0° longitude called?`,
-    options:['The Equator','The Tropic of Capricorn','The Greenwich Meridian (Prime Meridian)','The International Date Line'],
-    answer:'The Greenwich Meridian (Prime Meridian)',
+    options:['The Equator','The Tropic of Capricorn','The Greenwich Meridian','The International Date Line'],
+    answer:'The Greenwich Meridian',
     hint:'It is named after the Royal Observatory in Greenwich, London.',
     explanation:'The thick blue vertical line at <b>0° longitude</b> is the <b>Greenwich Meridian</b> (also called the Prime Meridian). It runs through Greenwich, London, and divides the Earth into Eastern and Western hemispheres.' }),
 
@@ -127,12 +127,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5hg-ms-009', chapterId:'map-skills', subsection:'symbols', difficulty:2,
     question:'A map KEY (legend) is important because it:',
     options:[
-      'Shows the name of the map maker',
-      'Explains what the symbols and colours used on the map mean',
-      'Tells you how old the map is',
+      'Shows the name of the person who drew it',
+      'Explains what the map symbols and colours mean',
+      'Tells you how old the map is in years',
       'Shows the exact GPS coordinates of every location'
     ],
-    answer:'Explains what the symbols and colours used on the map mean',
+    answer:'Explains what the map symbols and colours mean',
     hint:'Three of these are facts ABOUT the map. Only one of them helps you actually read it.',
     explanation:'A map <b>key (legend)</b> is a box on a map that explains what each symbol, colour or line represents. For example, a blue line = river, a triangle = mountain peak, dotted line = border. Without a key, the map is very hard to read.' }),
 
@@ -171,10 +171,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Lines joining places with the same rainfall',
       'Lines joining places with the same temperature',
-      'Lines joining places at the same height (altitude) above sea level',
+      'Lines joining places at the same altitude',
       'Lines showing the borders between countries'
     ],
-    answer:'Lines joining places at the same height (altitude) above sea level',
+    answer:'Lines joining places at the same altitude',
     hint:'They show the shape and height of the land.',
     explanation:'<b>Contour lines</b> connect all points at the <b>same altitude above sea level</b>. They show the shape, height and slope of the land: contour lines close together mean a steep slope; lines far apart mean gentle or flat land.' }),
 
@@ -182,11 +182,11 @@ STATIC_QUESTIONS.push(
     question:'On a topographic map, contour lines are very CLOSE TOGETHER on the mountainside and very FAR APART on the coastal plain. What does this indicate?',
     options:[
       'The mountain is warmer than the plain',
-      'The mountain has steep slopes (height changes quickly); the plain is nearly flat',
+      'The mountain is steep and the plain is nearly flat',
       'The plain receives more rainfall than the mountain',
       'The contour lines are drawn incorrectly'
     ],
-    answer:'The mountain has steep slopes (height changes quickly); the plain is nearly flat',
+    answer:'The mountain is steep and the plain is nearly flat',
     hint:'Closely packed contour lines = height changes rapidly over a short horizontal distance.',
     explanation:'Closely spaced contour lines indicate a <b>steep slope</b> - the land rises or falls rapidly. Widely spaced contour lines indicate <b>gentle or flat land</b>. Looking at a map of Mauritius, the mountainous south-west has closely packed contours, while the northern coastal plains have widely spaced ones.' }),
 
@@ -200,11 +200,11 @@ STATIC_QUESTIONS.push(
     question:'A map has a scale of 1:50,000. What does this mean?',
     options:[
       '1 cm on the map equals 50 cm in real life',
-      '1 cm on the map equals 50,000 cm (500 metres) in real life',
+      '1 cm on the map equals 500 metres in real life',
       '1 cm on the map equals 50 km in real life',
       '50 cm on the map equals 1 cm in real life'
     ],
-    answer:'1 cm on the map equals 50,000 cm (500 metres) in real life',
+    answer:'1 cm on the map equals 500 metres in real life',
     hint:'A scale of 1:50,000 means the map is 50,000 times smaller than reality.',
     explanation:'A scale of <b>1:50,000</b> means every 1 unit on the map equals 50,000 of the same unit in reality. So 1 cm on the map = 50,000 cm = <b>500 metres</b> in real life. To find real distance: map measurement (cm) × 50,000 = real distance in cm, then convert to metres or km.' }),
 
@@ -212,11 +212,11 @@ STATIC_QUESTIONS.push(
     question:'A rainfall map shows isohyets at 1,000 mm, 2,000 mm and 3,000 mm. Port Louis falls between 1,000 and 2,000 mm. Curepipe falls between 2,000 and 3,000 mm. What can you CONCLUDE?',
     options:[
       'Port Louis receives more rainfall than Curepipe',
-      'Curepipe receives more rainfall than Port Louis, consistent with orographic rainfall on the central plateau',
-      'Both cities receive identical rainfall because they are on the same island',
-      'The isohyets must be incorrect - all of Mauritius receives the same rainfall'
+      'Curepipe receives more rainfall than Port Louis',
+      'Both cities get the same rainfall as they share an island',
+      'The isohyets must be wrong - all Mauritius gets the same rain'
     ],
-    answer:'Curepipe receives more rainfall than Port Louis, consistent with orographic rainfall on the central plateau',
+    answer:'Curepipe receives more rainfall than Port Louis',
     hint:'Higher isohyet values = more rain; higher altitude = more orographic rain.',
     explanation:'Curepipe (central plateau, ~550 m) lies between 2,000 and 3,000 mm isohyets - more than 2,000 mm per year. Port Louis (low-lying, leeward coast) lies between 1,000 and 2,000 mm - less than 2,000 mm. This is consistent with <b>orographic rainfall</b>: trade winds drop moisture on the plateau before reaching the rain shadow where Port Louis lies.' }),
 
@@ -230,12 +230,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5hg-ms-019', chapterId:'map-skills', subsection:'using_map', difficulty:4,
     question:'A geographer wants to find where in Mauritius gets the most rain, where the land is highest, and which towns are in the rain shadow. Which THREE types of map would they need?',
     options:[
-      'A rainfall map (isohyets show rainfall), a topographic map (contours show altitude) and a political/settlement map (to locate town names)',
+      'A rainfall map, a topographic map and a settlement map',
       'A population map, a road map and a temperature map',
-      'A tourist map, a road map and a language map',
+      'A tourist map, a road map and a language map of Mauritius',
       'Any single combined map - there is no need for three separate maps'
     ],
-    answer:'A rainfall map (isohyets show rainfall), a topographic map (contours show altitude) and a political/settlement map (to locate town names)',
+    answer:'A rainfall map, a topographic map and a settlement map',
     hint:'Match each question to the type of map that answers it.',
     explanation:'Three map types are needed: (1) <b>Rainfall map (isohyets)</b> - shows how much rain each area receives; (2) <b>Topographic map (contours)</b> - shows altitude and relief of the land; (3) <b>Political/settlement map</b> - names the towns so the geographer knows which communities are in the rain shadow or on high ground. Using all three together gives a complete picture of the relationship between relief, rainfall and settlement.' })
 
@@ -262,7 +262,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5hg-ms-022', chapterId:'map-skills', subsection:'using_map', difficulty:1,
     question:`<div style="text-align:center;margin-bottom:12px">${_SVG_G5_MUS_PHYS}</div><b>Which mountain on the map has an elevation of 828m?</b>`,
-    options:['Le Pouce','Corps de Garde','Pieter Both','Piton de la Petite Rivière Noire'],
+    options:['Le Pouce (Moka range)','Corps de Garde (Beau Bassin)','Pieter Both (Moka range)','Piton de la Petite Rivière Noire'],
     answer:'Piton de la Petite Rivière Noire',
     hint:'Look at the elevation labels next to each mountain triangle on the map.',
     explanation:'<b>Piton de la Petite Rivière Noire</b> (828m) is the <b>highest mountain in Mauritius</b>. It is marked with a ★ on the map to distinguish it as the highest peak. It is located in the south-west in the Black River Gorges National Park area.' }),

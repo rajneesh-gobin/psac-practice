@@ -26,10 +26,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-verb-003', chapterId:'g6eng-verbs', subsection:'perfect', difficulty:2,
     question:'Which sentence uses the PAST PERFECT tense?',
     options:[
-      'She was eating when he called.',
-      'They have visited Paris before.',
+      'She was eating her dinner when he called her.',
+      'They have visited Paris many times before.',
       'By the time we arrived, the film had already started.',
-      'He will have finished by Friday.'
+      'He will have finished the whole job by Friday.'
     ],
     answer:'By the time we arrived, the film had already started.',
     hint:'Past perfect = had + past participle. It refers to an action completed BEFORE another past action.',
@@ -162,10 +162,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-verb-018', chapterId:'g6eng-verbs', subsection:'past_tense', difficulty:3,
     question:'Identify the error: "The new bridge has been build over the river last year."',
     options:[
-      '"has been" should be "was" - wrong tense',
-      '"build" should be "built" - wrong past participle',
+      '"has been" should be "was" - the wrong tense has been used here',
+      '"build" should be "built" - the wrong form of the past participle has been used here',
       'Both errors - the correct sentence is "The new bridge was built over the river last year."',
-      'There is no error.'
+      'There is no error in the sentence at all.'
     ],
     answer:'Both errors - the correct sentence is "The new bridge was built over the river last year."',
     hint:'"Last year" = specific completed past time → past simple passive. Past participle of "build" = "built".',
@@ -174,10 +174,10 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g6eng-verb-019', chapterId:'g6eng-verbs', subsection:'present_tense', difficulty:3,
     question:'What is the difference in meaning between: (A) "She stopped to talk." and (B) "She stopped talking."',
     options:[
-      'Both sentences have the same meaning.',
+      'Both sentences have exactly the same meaning in English.',
       '(A) she paused in order to have a conversation; (B) she was talking but then ceased.',
-      '(A) she was talking but then stopped; (B) she paused to start talking.',
-      '(A) uses the infinitive incorrectly; only (B) is correct.'
+      '(A) she was talking but then stopped; (B) she paused in order to start talking.',
+      '(A) uses the infinitive incorrectly; only sentence (B) is correct English.'
     ],
     answer:'(A) she paused in order to have a conversation; (B) she was talking but then ceased.',
     hint:'"Stop" changes meaning depending on what follows it. Work out what each sentence would mean on its own, then compare.',

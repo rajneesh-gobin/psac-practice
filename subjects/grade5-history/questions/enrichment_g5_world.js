@@ -60,8 +60,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g5enr-wld-008', chapterId:'g5enr-world', subsection:'volcanoes', difficulty:2,
     question:'Karthala is an active volcano. On which island group is it located?',
-    options:['The Comoros (Grande Comore island)','Réunion','Mauritius','Madagascar'],
-    answer:'The Comoros (Grande Comore island)',
+    options:['The Comoros','Réunion','Mauritius','Madagascar'],
+    answer:'The Comoros',
     hint:'The Comoros islands are in the northern Indian Ocean, between Mozambique and Madagascar.',
     explanation:'<b>Karthala</b> is an active stratovolcano on <b>Grande Comore</b>, the main island of the Comoros archipelago in the northern Indian Ocean.' }),
 
@@ -75,12 +75,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-wld-010', chapterId:'g5enr-world', subsection:'volcanoes', difficulty:2,
     question:'A dormant volcano is best described as:',
     options:[
-      'A volcano that is not currently erupting but could erupt again in the future',
+      'A volcano that is not erupting now but could erupt again',
       'A volcano that is erupting continuously or frequently right now',
       'A volcano that scientists are certain will never erupt again',
       'A volcano that is located entirely underwater beneath the ocean'
     ],
-    answer:'A volcano that is not currently erupting but could erupt again in the future',
+    answer:'A volcano that is not erupting now but could erupt again',
     hint:'Trou aux Cerfs in Curepipe is an example of a dormant volcano in Mauritius.',
     explanation:'A <b>dormant</b> volcano is temporarily inactive - it is not erupting now but retains the potential to erupt again, unlike an <b>extinct</b> volcano which is considered permanently inactive.' }),
 
@@ -132,12 +132,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-wld-016', chapterId:'g5enr-world', subsection:'volcanoes', difficulty:4,
     question:'How does an EXTINCT volcano differ from a DORMANT volcano?',
     options:[
-      'An extinct volcano is considered permanently inactive and poses no eruption risk, while a dormant volcano is temporarily inactive but may erupt again',
-      'A dormant volcano is permanently inactive and an extinct volcano may still erupt in the near future',
-      'Both terms mean exactly the same thing - volcanologists use them interchangeably',
-      'An extinct volcano last erupted exactly 100 years ago, while a dormant volcano last erupted over 200 years ago'
+      'An extinct volcano is permanently inactive, while a dormant volcano may erupt again',
+      'A dormant volcano is permanently inactive and an extinct one may still erupt',
+      'Both terms mean exactly the same thing and volcanologists use them alike',
+      'An extinct volcano last erupted 100 years ago and a dormant one 200 years ago'
     ],
-    answer:'An extinct volcano is considered permanently inactive and poses no eruption risk, while a dormant volcano is temporarily inactive but may erupt again',
+    answer:'An extinct volcano is permanently inactive, while a dormant volcano may erupt again',
     hint:'Think about whether the volcano still has the potential to erupt.',
     explanation:'An <b>extinct</b> volcano is one scientists believe will never erupt again (its magma supply has ceased), while a <b>dormant</b> volcano is simply sleeping - it is inactive now but retains eruption potential.' }),
 
@@ -168,12 +168,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-wld-019', chapterId:'g5enr-world', subsection:'indian_ocean', difficulty:4,
     question:'The Mascarene Islands are sometimes described as a "hotspot archipelago." What does this mean?',
     options:[
-      'The islands were formed as the tectonic plate moved over a fixed volcanic hotspot in the Earth\'s mantle, with each island at a different stage of formation',
-      'The islands are called "hotspot" purely because of their extremely hot tropical climate throughout the year',
+      'The islands formed as the plate moved over a fixed volcanic hotspot in the mantle',
+      'The islands are called hotspot because their tropical climate is extremely hot',
       'The name refers to the islands being an important trading hotspot in Indian Ocean history',
-      'The term means the islands produce more volcanic eruptions per year than any other island group on Earth'
+      'The islands produce more volcanic eruptions each year than any other island group'
     ],
-    answer:'The islands were formed as the tectonic plate moved over a fixed volcanic hotspot in the Earth\'s mantle, with each island at a different stage of formation',
+    answer:'The islands formed as the plate moved over a fixed volcanic hotspot in the mantle',
     hint:'One part of this stays still and one part moves. Think about what a chain of islands would look like as a result.',
     explanation:'The Mascarenes are a "<b>hotspot archipelago</b>" because they formed as the African tectonic plate moved over a fixed mantle <b>hotspot</b>; older islands like Mauritius are more eroded while younger Réunion is still volcanically active.' })
 

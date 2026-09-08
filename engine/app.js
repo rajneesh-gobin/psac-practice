@@ -8195,7 +8195,20 @@ function generatePrintablePaper() {
   // Build pools: Section A is short/mixed; Section B is extended reasoning.
   // Filter by the active subject's chapters so Science exam doesn't pull maths questions
   const _activeChs = new Set(CHAPTERS.filter(c => !lockedChs.has(c.id)).map(c => c.id));
-  const _allSubjectQs = STATIC_QUESTIONS.filter(q => _activeChs.has(q.chapterId) && q.difficulty <= maxDiff);
+  // ⚠⚠ isPoolQuestion() IS LOAD-BEARING HERE AND WAS MISSING. Every other pool
+  //   in questions_engine.js filters through it; this one filtered on chapter
+  //   and difficulty only, so it admitted the types that have no question
+  //   field at all. Measured 2026-09-08 on the built banks:
+  //       grade9-maths   667 of 1545 admitted items (43%) are raw tasks
+  //       grade5/6-french 40 each (cloze / errorhunt)
+  //   A raw task has no question text, so _prettyMath(undefined) interpolated
+  //   the literal string "undefined", and roughly two in five questions on a printed
+  //   Grade 9 Maths paper came out blank. The projected items ARE in
+  //   STATIC_QUESTIONS alongside their parent task, so nothing is lost by
+  //   excluding the parent - it is the same rule the on-screen exam already
+  //   applies (_POOL_TYPES_EXCLUDED).
+  const _allSubjectQs = STATIC_QUESTIONS.filter(q =>
+    isPoolQuestion(q) && _activeChs.has(q.chapterId) && q.difficulty <= maxDiff);
 
   // Pick ONE passage for this paper, and take up to 5 questions from it. The
   // rest of the passage questions are removed from the pools below, so no

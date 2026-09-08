@@ -134,12 +134,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-lmk-017', chapterId:'g5enr-landmarks', subsection:'buildings', difficulty:4,
     question:'Which statement about Trou aux Cerfs is CORRECT?',
     options:[
-      'It is a dormant volcanic crater with a rim that visitors can walk around, located in Curepipe',
+      'It is a dormant volcanic crater in Curepipe with a walkable rim',
       'It is an active volcano that last erupted in 1960, found near Port Louis',
       'It is a coastal lagoon formed by coral reef erosion in the east of Mauritius',
       'It is a deep river gorge carved by the Black River over thousands of years'
     ],
-    answer:'It is a dormant volcanic crater with a rim that visitors can walk around, located in Curepipe',
+    answer:'It is a dormant volcanic crater in Curepipe with a walkable rim',
     hint:'Dormant means it is not currently active, though it was formed by volcanic activity.',
     explanation:'<b>Trou aux Cerfs</b> is a <b>dormant</b> volcanic crater in Curepipe; visitors can walk around its forested rim and enjoy panoramic views of the central plateau and surrounding mountains.' }),
 
@@ -158,12 +158,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g5enr-lmk-019', chapterId:'g5enr-landmarks', subsection:'unesco', difficulty:4,
     question:'What is the principal historical significance of Aapravasi Ghat as a UNESCO World Heritage Site?',
     options:[
-      'It was the landing point for hundreds of thousands of Indian indentured labourers who replaced enslaved workers after the abolition of slavery',
-      'It was the location where the Treaty of Paris was signed, transferring Mauritius from France to Britain in 1814',
+      'It was the landing point for hundreds of thousands of Indian indentured labourers',
+      'It was where the Treaty of Paris transferred Mauritius from France to Britain',
       'It was the site of the first sugar mill built in Mauritius during the French colonial period',
       'It was the harbour facility developed by Mahé de Labourdonnais to shelter French naval ships'
     ],
-    answer:'It was the landing point for hundreds of thousands of Indian indentured labourers who replaced enslaved workers after the abolition of slavery',
+    answer:'It was the landing point for hundreds of thousands of Indian indentured labourers',
     hint:'Consider why UNESCO gave it World Heritage status - it represents a major chapter in global labour history.',
     explanation:'<b>Aapravasi Ghat</b> received UNESCO World Heritage status because it is a globally significant site where over 450,000 <b>indentured labourers</b> - mostly from India - arrived after the abolition of slavery, shaping the modern Mauritian population.' })
 
