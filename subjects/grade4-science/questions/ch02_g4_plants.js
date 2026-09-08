@@ -27,12 +27,12 @@ STATIC_QUESTIONS.push(
   makeMCQ({ id:'g4s-plt-004', chapterId:'g4sci-plants', subsection:'parts', difficulty:1,
     question:'What does the STEM of a plant do?',
     options:[
-      'Absorbs water from the soil',
-      'Makes food using sunlight',
-      'Carries water and food through the plant and supports it',
-      'Produces seeds for new plants'
+      'Absorbs the water from the soil',
+      'Makes the food using sunlight',
+      'Carries water and food, and supports the plant',
+      'Produces the seeds for new plants'
     ],
-    answer:'Carries water and food through the plant and supports it',
+    answer:'Carries water and food, and supports the plant',
     hint:'The stem connects the roots to the leaves. What must travel between them?',
     explanation:'The <b>stem</b> has two functions: (1) it <b>supports</b> the plant and holds the leaves up towards the sunlight; (2) it <b>carries</b> water and minerals (from the roots) up to the leaves, and carries food (made by the leaves) down to the rest of the plant.' }),
 
@@ -53,10 +53,10 @@ STATIC_QUESTIONS.push(
     options:[
       'It will grow faster because it is warm inside',
       'It will stay the same - plants do not need light',
-      'It will wilt, turn yellow and die because it cannot photosynthesise',
+      'It will wilt, turn yellow and die',
       'It will grow bigger because of the darkness'
     ],
-    answer:'It will wilt, turn yellow and die because it cannot photosynthesise',
+    answer:'It will wilt, turn yellow and die',
     hint:'What does a plant need light for?',
     explanation:'Without sunlight, the plant <b>cannot photosynthesise</b> (make food). Leaves will turn yellow (chlorophyll breaks down without light), the plant will wilt and eventually die. This shows that <b>sunlight is essential</b> for plant growth.' }),
 
@@ -83,11 +83,11 @@ STATIC_QUESTIONS.push(
     question:'If the STEM of a plant is cut through, what will happen to the leaves? Why?',
     options:[
       'Nothing will happen - leaves get water directly from the air',
-      'The leaves will droop and wilt because water from the roots can no longer reach them',
+      'The leaves will droop and wilt with no water reaching them',
       'The leaves will grow faster because they are free from the stem',
       'The leaves will absorb water from the soil directly'
     ],
-    answer:'The leaves will droop and wilt because water from the roots can no longer reach them',
+    answer:'The leaves will droop and wilt with no water reaching them',
     hint:'Remember the stem\'s job - what happens if that transport route is broken?',
     explanation:'Cutting the stem breaks the <b>transport system</b>. Water absorbed by the roots can no longer travel up to the leaves. Without water, the leaves cannot photosynthesise and will <b>droop, wilt and die</b>. This demonstrates that the stem is the vital water-transport link between roots and leaves.' }),
 
@@ -95,11 +95,11 @@ STATIC_QUESTIONS.push(
     question:'Mira places two identical plants in the same room. Plant A gets water every day and sits near a sunny window. Plant B gets NO water but also sits near the window. After two weeks, Plant A is healthy and growing. Plant B has wilted and turned brown. What conclusion can Mira draw?',
     options:[
       'Sunlight alone is enough for plants to survive',
-      'Water is essential for plant survival even when sunlight is available',
+      'Water is essential even when there is sunlight',
       'Both plants will eventually grow the same way',
       'Plant B wilted because it had too much sunlight'
     ],
-    answer:'Water is essential for plant survival even when sunlight is available',
+    answer:'Water is essential even when there is sunlight',
     hint:'Both plants had the same sunlight. The only difference was water. What does that tell you?',
     explanation:'The only variable that differed between the two plants was <b>water</b>. Plant A (with water) thrived; Plant B (without water) wilted. This is a fair test and Mira can conclude that <b>water is essential for plant survival</b>, even when sunlight is present. Without water, the plant cannot photosynthesise or carry out other life processes.' })
 
@@ -118,11 +118,11 @@ STATIC_QUESTIONS.push(
     question:'What is GERMINATION?',
     options:[
       'The process of a flower producing pollen',
-      'The process of a seed sprouting and growing into a new plant',
-      'The process of leaves making food',
-      'The process of roots absorbing water'
+      'The process of a seed sprouting into a new plant',
+      'The process of the leaves making food',
+      'The process of the roots absorbing water'
     ],
-    answer:'The process of a seed sprouting and growing into a new plant',
+    answer:'The process of a seed sprouting into a new plant',
     hint:'Think about what happens when you plant a seed in soil and water it.',
     explanation:'<b>Germination</b> is the process where a <b>seed sprouts</b> and begins growing into a new plant. The seed absorbs water, swells, and a tiny root (radicle) pushes out first, followed by a tiny shoot. Germination needs water, warmth and air.' }),
 
@@ -142,11 +142,11 @@ STATIC_QUESTIONS.push(
     question:'What is POLLINATION?',
     options:[
       'The process of seeds sprouting in soil',
-      'The transfer of pollen from one flower to another, usually by insects or wind',
+      'The transfer of pollen from one flower to another',
       'The process of leaves making food',
       'The process of water moving up the stem'
     ],
-    answer:'The transfer of pollen from one flower to another, usually by insects or wind',
+    answer:'The transfer of pollen from one flower to another',
     hint:'Pollination leads to seed formation. How does pollen move between flowers?',
     explanation:'<b>Pollination</b> is the <b>transfer of pollen</b> from the male part (anther) of a flower to the female part (stigma), usually by <b>insects</b> (bees, butterflies - attracted by colour and scent) or by <b>wind</b>. After pollination, seeds develop inside the flower.' }),
 
@@ -158,20 +158,20 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4s-plt-016', chapterId:'g4sci-plants', subsection:'parts', difficulty:2,
     question:'What gives leaves their GREEN colour?',
-    options:['Water inside the leaf','Sunlight hitting the leaf','Chlorophyll - a green pigment inside leaf cells','Minerals from the soil'],
-    answer:'Chlorophyll - a green pigment inside leaf cells',
+    options:['Water stored inside the leaf','Sunlight hitting the leaf surface','Chlorophyll, a green pigment in the leaf','Minerals taken from the soil'],
+    answer:'Chlorophyll, a green pigment in the leaf',
     hint:'This green substance also captures sunlight energy for photosynthesis.',
     explanation:'Leaves are green because of <b>chlorophyll</b> - a green pigment found inside the leaf cells (in structures called chloroplasts). Chlorophyll <b>absorbs sunlight</b> and uses that energy for photosynthesis. When leaves yellow in autumn, the chlorophyll breaks down.' }),
 
   makeMCQ({ id:'g4s-plt-017', chapterId:'g4sci-plants', subsection:'parts', difficulty:2,
     question:'Leaves have tiny pores called STOMATA. What is their main function?',
     options:[
-      'To absorb water from rain',
-      'To allow gases (carbon dioxide and oxygen) to move in and out of the leaf',
-      'To trap insects for food',
+      'To absorb water from the rain',
+      'To let gases move in and out of the leaf',
+      'To trap small insects for food',
       'To reflect sunlight away from the leaf'
     ],
-    answer:'To allow gases (carbon dioxide and oxygen) to move in and out of the leaf',
+    answer:'To let gases move in and out of the leaf',
     hint:'Stomata are like tiny doors for gases. What gases does a leaf need for photosynthesis?',
     explanation:'<b>Stomata</b> are tiny pores (usually on the underside of leaves). They allow: <b>carbon dioxide</b> to enter for photosynthesis, <b>oxygen</b> to exit as a by-product, and water vapour to exit (transpiration). Stomata can open and close to control gas exchange.' }),
 
@@ -191,11 +191,11 @@ STATIC_QUESTIONS.push(
     question:'Sasha grows two identical pots of grass. Both get the same water and warmth. Pot A gets sunlight. Pot B is covered with a black cloth. After one week, Pot A is green and healthy. Pot B has turned yellow and is wilting. What can Sasha conclude?',
     options:[
       'The black cloth caused the yellowing because black is a dark colour.',
-      'Sunlight is essential for plants to make food (photosynthesis) and stay healthy.',
+      'Sunlight is essential for plants to make their food.',
       'Watering is more important than sunlight for grass.',
       'Both pots will recover equally once the cloth is removed.'
     ],
-    answer:'Sunlight is essential for plants to make food (photosynthesis) and stay healthy.',
+    answer:'Sunlight is essential for plants to make their food.',
     hint:'Everything was the same EXCEPT sunlight. What does the difference in results tell you?',
     explanation:'This is a <b>fair test</b> - the only variable that differed was sunlight. Pot A (with sunlight) was healthy; Pot B (without sunlight) turned yellow because chlorophyll breaks down without light and photosynthesis cannot occur. Sasha concludes: <b>sunlight is essential for plant health</b>.' }),
 

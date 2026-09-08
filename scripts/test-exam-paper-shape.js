@@ -160,6 +160,93 @@ for (const [pack, spec] of Object.entries(MARK_MAPS)) {
   if (worst.drift <= BAND) ok(line); else bad(line + ` — ${worst.drift.toFixed(1)} points off`);
 }
 
+// ── No chapter is gutted by the reconciliation loop ─────────────────────────
+//
+// WHY THIS EXISTS
+// The checks above ask whether a paper TOTALS 40. They do not ask how it got
+// there, and that is where a real defect hid. assembleExamPaper() gives each
+// chapter `n = max(1, round(weight * count / 40))`, then forces the total:
+//
+//     while (total > cfg.count) {
+//       const i = weights.findIndex(w => w.n > 1);
+//       weights[i].n--; total--;
+//     }
+//
+// `findIndex` always returns the FIRST chapter still above 1, so a pack whose
+// weights sum above 40 is corrected by walking down from the TOP OF ITS OWN
+// CHAPTER LIST rather than proportionally. Measured on grade9-maths 2026-09-08:
+// its weights were the paper's marks HALVED (×0.5) instead of ×0.4, summing to
+// 52, so twelve questions had to go — and `g9m-number-revision`, the heaviest
+// chapter at weight 8 and the reason the chapter exists at all (~30 of the
+// paper's 100 marks are Grade 7-8 arithmetic), was dealt ONE question per exam
+// instead of eight. Finance lost 2 of 3, geometry-revision 2 of 4. Everything
+// from `g9m-trigonometry` down got exactly its weight.
+//
+// The pack was LIVE, and every check above passed the whole time: the paper
+// really did total 40. Only the distribution was wrong.
+//
+// ⚠ A loss of 1 is tolerated. Integer weights cannot always hit 40 exactly and
+//   one question is 2.5% of a paper; a loss of 2+ means the weights are wrong,
+//   not rounded.
+// ⚠ Chapters that cannot fill a slot are excluded FIRST by canFill(), exactly as
+//   the engine does — `out.dead`. Counting them here invents phantom losses:
+//   doing it without that filter reported grade5-french and grade6-french as
+//   losing 2 questions each, when their zero-weight cloze chapters never reach
+//   the weighting at all.
+console.log('\nNo chapter loses more than one question to reconciliation');
+const MAX_LOSS = 1;
+for (const [pack, out] of Object.entries(results)) {
+  const dead = new Set(out.dead);
+  const live = out.chapters.filter(c => !dead.has(c.id)).map(c => ({ ...c, want: c.n, got: c.n }));
+  if (!live.length) continue;
+
+  // The engine's own reconciliation, mirrored.
+  let total = live.reduce((s, c) => s + c.got, 0);
+  let i = 0;
+  while (total < SIZES.full) { live[i % live.length].got++; total++; i++; }
+  while (total > SIZES.full) {
+    const k = live.findIndex(c => c.got > 1);
+    if (k === -1) break;
+    live[k].got--; total--;
+  }
+
+  const losses = live.map(c => ({ id: c.id, w: c.w, want: c.want, got: c.got, lost: c.want - c.got }))
+    .filter(c => c.lost > MAX_LOSS)
+    .sort((a, b) => b.lost - a.lost);
+
+  const wSum = live.reduce((s, c) => s + (Number.isFinite(c.w) ? c.w : 1), 0);
+  if (losses.length) {
+    const w = losses[0];
+    bad(`${pack}: weights sum to ${wSum}, so reconciliation guts ${w.id} — weight ${w.w} wants ` +
+        `${w.want} questions, gets ${w.got}` +
+        (losses.length > 1 ? ` (and ${losses.length - 1} more chapter(s) lose 2+)` : ''));
+  } else {
+    ok(`${pack}: weights sum to ${wSum} over ${live.length} chapters, every chapter within ${MAX_LOSS} of its weight`);
+  }
+
+  // ⚠ ANTI-DRIFT. The block above re-implements engine logic, so it can rot
+  //   silently and then pass forever. Check it against what was actually dealt:
+  //   a chapter may deal FEWER than its slots (a thin pool cannot fill them),
+  //   but it must never deal MORE. If it does, this model no longer matches
+  //   assembleExamPaper() and every result in this section is worthless.
+  const cap = {};
+  for (const c of live) cap[c.id] = c.got;
+  let overflow = null;
+  for (const paper of out.papers.full) {
+    const tally = {};
+    for (const q of paper) tally[q.ch] = (tally[q.ch] || 0) + 1;
+    for (const [ch, got] of Object.entries(tally)) {
+      if (cap[ch] === undefined) continue;
+      if (got > cap[ch] && (!overflow || got - cap[ch] > overflow.by))
+        overflow = { ch, got, cap: cap[ch], by: got - cap[ch] };
+    }
+  }
+  if (overflow) {
+    bad(`${pack}: this test's model of assembleExamPaper has DRIFTED — ${overflow.ch} was dealt ` +
+        `${overflow.got} questions but the model allows at most ${overflow.cap}`);
+  }
+}
+
 console.log('\nPools thin enough to repeat inside ten exams');
 let thin = 0;
 for (const [pack, out] of Object.entries(results)) {

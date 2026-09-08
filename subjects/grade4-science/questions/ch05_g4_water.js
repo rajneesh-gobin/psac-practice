@@ -49,18 +49,18 @@ STATIC_QUESTIONS.push(
     question:'In the water cycle, what happens AFTER water evaporates from the sea?',
     options:[
       'It sinks into the ground immediately',
-      'It rises as water vapour, cools to form clouds, then falls back as rain',
+      'It rises, cools into clouds and falls as rain',
       'It turns into ice in the sky',
       'It disappears permanently'
     ],
-    answer:'It rises as water vapour, cools to form clouds, then falls back as rain',
+    answer:'It rises, cools into clouds and falls as rain',
     hint:'Follow the water: sea → evaporation → ? → clouds → ?',
     explanation:'Water cycle: (1) Water <b>evaporates</b> from the sea/rivers/land. (2) Water vapour <b>rises</b> into the atmosphere. (3) It <b>cools and condenses</b> to form clouds. (4) Water falls as <b>precipitation</b> (rain, hail or snow). (5) Water flows back to rivers and sea. The cycle repeats.' }),
 
   makeMCQ({ id:'g4s-wat-008', chapterId:'g4sci-water', subsection:'states', difficulty:2,
     question:'Why does water flow DOWNHILL?',
-    options:['Because water is cold','Because of gravity pulling it downwards','Because water is a liquid','Because wind pushes it down'],
-    answer:'Because of gravity pulling it downwards',
+    options:['Because water is cold','Because gravity pulls it downwards','Because water is a liquid','Because wind pushes it down'],
+    answer:'Because gravity pulls it downwards',
     hint:'What force pulls all objects towards the ground?',
     explanation:'Water flows downhill because of <b>gravity</b> - the force that pulls everything towards the Earth\'s centre. This is why rivers always flow from high ground (mountains) down to lower ground (valleys and sea). Gravity is the reason water always flows to the lowest available point.' }),
 
@@ -68,11 +68,11 @@ STATIC_QUESTIONS.push(
     question:'A cold bottle of water is taken from the fridge and left on a table. Water droplets soon appear on the OUTSIDE of the bottle. What caused the droplets?',
     options:[
       'Water leaked from inside the bottle',
-      'Water vapour in the air condensed on the cold surface of the bottle',
+      'Water vapour condensed on the cold bottle',
       'The bottle is sweating because it is nervous',
       'The table surface is wet'
     ],
-    answer:'Water vapour in the air condensed on the cold surface of the bottle',
+    answer:'Water vapour condensed on the cold bottle',
     hint:'The bottle is cold. What happens to water vapour in the warm air when it touches something cold?',
     explanation:'The warm air around the bottle contains <b>water vapour</b>. When water vapour touches the cold surface of the bottle, it <b>cools down and condenses</b> into liquid water droplets. This is the same process that forms dew on grass in the morning. The water came from the air - not from inside the bottle.' }),
 
@@ -80,11 +80,11 @@ STATIC_QUESTIONS.push(
     question:'A village collects rainwater in a large tank. In the dry season (no rain for 3 months), the tank is their only water source. The village has 200 people and uses 5,000 litres per day. Which action would BEST help the village survive the dry season?',
     options:[
       'Use more water for washing to keep the tank full',
-      'Reduce water use and repair any leaking pipes to make the stored water last longer',
+      'Reduce water use and repair any leaking pipes',
       'Empty the tank immediately so animals can also use it',
       'Pour the water into the sea to avoid it going bad'
     ],
-    answer:'Reduce water use and repair any leaking pipes to make the stored water last longer',
+    answer:'Reduce water use and repair any leaking pipes',
     hint:'There is a fixed amount of water. What can the village do to make it last 3 months?',
     explanation:'With a fixed amount of water and no rain for 3 months, the village must <b>conserve water</b> to survive. Reducing daily use and fixing leaks are the most effective strategies to make the stored water last. This shows why <b>water conservation</b> is a critical life skill and why we should never waste water.' })
 
@@ -138,11 +138,11 @@ STATIC_QUESTIONS.push(
     question:'Why is dirty water DANGEROUS to drink?',
     options:[
       'Because dirty water is too cold',
-      'Because dirty water contains harmful bacteria and chemicals that can cause disease',
+      'It contains bacteria and chemicals that cause disease',
       'Because dirty water has no taste',
       'Because dirty water is too warm'
     ],
-    answer:'Because dirty water contains harmful bacteria and chemicals that can cause disease',
+    answer:'It contains bacteria and chemicals that cause disease',
     hint:'What is in dirty water that clean water does not contain?',
     explanation:'Dirty water contains <b>harmful bacteria, viruses and chemicals</b> that can cause serious diseases (diarrhoea, cholera, typhoid). Clean drinking water must be <b>treated</b> (filtered and disinfected) before it is safe to drink. In Mauritius, the Central Water Authority (CWA) treats water before it reaches homes.' }),
 
@@ -150,11 +150,11 @@ STATIC_QUESTIONS.push(
     question:'What is FILTRATION in water treatment?',
     options:[
       'Adding chemicals to make water taste better',
-      'Passing water through layers of material (sand, gravel) to remove particles and impurities',
+      'Passing water through sand and gravel to clean it',
       'Heating water to 100°C to kill germs',
       'Adding salt to purify water'
     ],
-    answer:'Passing water through layers of material (sand, gravel) to remove particles and impurities',
+    answer:'Passing water through sand and gravel to clean it',
     hint:'One of these separates dirt out physically; the others change the water with chemicals or heat.',
     explanation:'<b>Filtration</b> removes solid particles and impurities from water by passing it through layers of sand, gravel and charcoal. It is one step in making water safe to drink. Filtration is followed by <b>disinfection</b> (adding chlorine or using UV light) to kill germs.' }),
 
@@ -175,10 +175,10 @@ STATIC_QUESTIONS.push(
     options:[
       'No - 200 × 40 = 8,000 which is more than 10,000 litres.',
       'Yes, they have exactly enough - no changes needed.',
-      'Yes, they have enough (200 × 40 = 8,000 < 10,000) - but they should still reduce usage in case the dry season lasts longer.',
+      'Yes - 8,000 litres is less than the 10,000 stored',
       'They have enough - 200 × 50 = 10,000 litres.'
     ],
-    answer:'Yes, they have enough (200 × 40 = 8,000 < 10,000) - but they should still reduce usage in case the dry season lasts longer.',
+    answer:'Yes - 8,000 litres is less than the 10,000 stored',
     hint:'Calculate: 200 litres/day × 40 days = ? Compare with 10,000 litres.',
     explanation:'200 × 40 = 8,000 litres needed. The tank holds 10,000 litres. They <b>do have enough</b> (8,000 < 10,000). However, they should <b>still conserve water</b> because the dry season might last longer than 40 days. Water conservation is always good practice.' })
 

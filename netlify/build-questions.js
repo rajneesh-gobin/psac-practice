@@ -339,8 +339,8 @@ function _buildContext(buf) {
       question: title + ' - chasse aux erreurs : ' + errors + ' erreurs à trouver.',
       answer: errFix.join(' · '),
       acceptableAnswers: [errFix.join(' · ')],
-      hint: hint || 'Lis le texte à voix basse. Une erreur s\'entend souvent avant de se voir : majuscules, points, accords du pluriel, verbes.',
-      explanation: explanation || ('Ce texte cache ' + errors + ' erreurs : majuscules, ponctuation, accords et homophones.'),
+      hint: hint || 'Lis le texte à voix basse. Une erreur s\'entend souvent avant de se voir : majuscules, accents, accords du pluriel, verbes.',
+      explanation: explanation || ('Ce texte cache ' + errors + ' erreurs de MOTS : majuscules, accents, accords et homophones. La ponctuation, elle, est déjà correcte.'),
     };
   }
 
@@ -426,6 +426,12 @@ for (const grade of GRADES) {
         console.warn(`  skip ${subjectId}/${file}: ${e.message}`);
       }
     }
+    // ⚠ Expanded HERE, at load time, to match questions-sandbox.js. Both
+    //   loaders are compared id-for-id by test-question-import-parity.js, so
+    //   they must expand at the same stage or that guard fails on a difference
+    //   that is only about timing.
+    const _extra = _expandTasks(buf);
+    if (_extra.length) buf.push(..._extra);
     bundle[subjectId] = buf;
     totalQ += buf.length;
     for (const q of pdfBuf) PAPERS.push({ ...q, subjectId });
@@ -435,29 +441,6 @@ for (const grade of GRADES) {
   // for a single subject, and reading grade5.json to answer it meant parsing
   // 1.6 MB to return 100 KB — on every invocation, because a function container
   // starts cold and the parse is not free even when it is warm.
-  // ⚠ MULTI-PART TASKS ARE EXPANDED INTO THE BUNDLE, not left for the browser
-  //   to expand. `makeTask()` output has `type: 'task'`, which isPoolQuestion()
-  //   excludes from every pool - correctly, since a task carries parts no
-  //   machine can mark. Assessment.projectToItems() flattens the markable ones
-  //   into ordinary mcq/numeric/expr/slots items, and until this call existed
-  //   it was never invoked from anywhere: grade9-maths held 667 authored tasks
-  //   and every chapter would have opened empty.
-  //
-  // ⚠ AT BUILD TIME RATHER THAN IN THE BROWSER, so the SAME ids exist in the
-  //   bundle, in the database the importer writes, and in the sandbox that
-  //   grades an assignment. Expanding only in the browser would have left
-  //   assignment-submit.js unable to resolve any Grade 9 answer.
-  //
-  // ⚠ It roughly DOUBLES a task-heavy bundle - grade9-maths measured 710 KB
-  //   to 1,474 KB - because the prompt text appears on the task and on its
-  //   projected part. Grade 9 has one live subject and 1.80 MB of headroom
-  //   against the 3.4 MB cache budget today; revisit when it has more.
-  //   scripts/test-question-cache-budget.js fails when a grade stops fitting.
-  for (const subjectId of Object.keys(bundle)) {
-    const extra = _expandTasks(bundle[subjectId]);
-    if (extra.length) bundle[subjectId] = bundle[subjectId].concat(extra);
-  }
-
   for (const [subjectId, qs] of Object.entries(bundle)) {
     fs.writeFileSync(path.join(OUT_DIR, `${subjectId}.json`), JSON.stringify(qs));
   }

@@ -6,8 +6,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4s-air-001', chapterId:'g4sci-air', subsection:'properties', difficulty:1,
     question:'What colour is air?',
-    options:['White','Blue','Grey','It has no colour (colourless)'],
-    answer:'It has no colour (colourless)',
+    options:['White','Blue','Grey','It has no colour at all'],
+    answer:'It has no colour at all',
     hint:'Look around you - can you see air?',
     explanation:'Air is <b>colourless</b> - it has no colour, which is why we cannot see it. Air is also <b>odourless</b> (no smell) and <b>tasteless</b>. Clean air is invisible, but we know it is there because we can feel wind (moving air) and we breathe it.' }),
 
@@ -35,11 +35,11 @@ STATIC_QUESTIONS.push(
     question:'A burning candle is placed under a glass jar. After a few minutes, the flame goes out. Why?',
     options:[
       'The jar became too hot',
-      'The candle used up all the oxygen in the jar and the flame could not burn without it',
+      'The candle used up the oxygen in the jar',
       'The glass jar blew out the flame',
       'Candles can only burn for a few minutes'
     ],
-    answer:'The candle used up all the oxygen in the jar and the flame could not burn without it',
+    answer:'The candle used up the oxygen in the jar',
     hint:'What gas is needed for things to burn?',
     explanation:'Burning (combustion) requires <b>oxygen</b>. In the sealed jar, the candle used up all the available oxygen. Once the oxygen was gone, the flame could no longer burn and went out. This proves that <b>oxygen is needed for combustion</b>.' }),
 
@@ -57,8 +57,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4s-air-007', chapterId:'g4sci-air', subsection:'breathing', difficulty:2,
     question:'What is ONE effect of breathing POLLUTED air?',
-    options:['Better eyesight','Coughing and breathing problems','Stronger muscles','Faster growth'],
-    answer:'Coughing and breathing problems',
+    options:['Much better eyesight','Coughing and breathing trouble','Stronger muscles','Much faster growth'],
+    answer:'Coughing and breathing trouble',
     hint:'The lungs are directly exposed to whatever is in the air you breathe.',
     explanation:'Breathing polluted air causes <b>coughing, asthma attacks and breathing difficulties</b>. Pollutants irritate the lining of the airways and lungs. Long-term exposure can cause serious lung diseases. Children and the elderly are especially at risk.' }),
 
@@ -78,11 +78,11 @@ STATIC_QUESTIONS.push(
     question:'Why do PLANTS need air?',
     options:[
       'To cool down their leaves',
-      'To absorb carbon dioxide for photosynthesis',
+      'To absorb carbon dioxide for making food',
       'To produce oxygen for burning',
       'Plants do not need air'
     ],
-    answer:'To absorb carbon dioxide for photosynthesis',
+    answer:'To absorb carbon dioxide for making food',
     hint:'Remember what plants use as one of the three ingredients for photosynthesis.',
     explanation:'Plants need air to absorb <b>carbon dioxide (CO₂)</b>, which they use in <b>photosynthesis</b> to make food. During photosynthesis: carbon dioxide + water + sunlight → food (glucose) + oxygen. So plants take in CO₂ from air and release oxygen - the opposite of what animals do when they breathe.' }),
 
@@ -126,11 +126,11 @@ STATIC_QUESTIONS.push(
     question:'What is the ATMOSPHERE?',
     options:[
       'The water in the ocean',
-      'The layer of gases (mainly air) that surrounds the Earth',
+      'The layer of gases surrounding the Earth',
       'The soil on the Earth\'s surface',
       'The space between planets'
     ],
-    answer:'The layer of gases (mainly air) that surrounds the Earth',
+    answer:'The layer of gases surrounding the Earth',
     hint:'The atmosphere is like a blanket of air surrounding our planet.',
     explanation:'The <b>atmosphere</b> is the layer of gases surrounding the Earth. It contains the air we breathe (nitrogen, oxygen and other gases) and protects us from harmful radiation. Without the atmosphere, there would be no air, no weather, and life would be impossible.' }),
 
@@ -138,11 +138,11 @@ STATIC_QUESTIONS.push(
     question:'Why could humans NOT survive on the Moon without a spacesuit?',
     options:[
       'Because the Moon is too far from Earth',
-      'Because there is no atmosphere on the Moon, so there is no oxygen to breathe',
+      'There is no atmosphere, so no oxygen to breathe',
       'Because the Moon is too cold to walk on',
       'Because there is no gravity on the Moon'
     ],
-    answer:'Because there is no atmosphere on the Moon, so there is no oxygen to breathe',
+    answer:'There is no atmosphere, so no oxygen to breathe',
     hint:'Without an atmosphere, what essential gas would be missing?',
     explanation:'The Moon has almost no <b>atmosphere</b> - there is no air and therefore <b>no oxygen to breathe</b>. Astronauts must carry their own oxygen supply in spacesuits. The lack of breathable air is the primary reason humans cannot survive on the Moon without protection.' }),
 
@@ -151,10 +151,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Oxygen percentage increases',
       'Oxygen percentage stays the same',
-      'Oxygen percentage decreases as the candle uses it for combustion',
+      'The oxygen falls as the candle burns it',
       'Nitrogen replaces all the oxygen'
     ],
-    answer:'Oxygen percentage decreases as the candle uses it for combustion',
+    answer:'The oxygen falls as the candle burns it',
     hint:'Burning (combustion) requires oxygen and uses it up.',
     explanation:'As the candle burns, it <b>uses up oxygen</b> (combustion: fuel + oxygen → carbon dioxide + water + heat). In a sealed container, the oxygen percentage <b>decreases</b> until it is too low to support the flame - the candle goes out. This shows oxygen is consumed during combustion.' }),
 
@@ -168,11 +168,11 @@ STATIC_QUESTIONS.push(
     question:'Which statement BEST describes the relationship between plants and animals regarding AIR?',
     options:[
       'Plants and animals both take in only oxygen and release only carbon dioxide.',
-      'Animals breathe in oxygen and breathe out carbon dioxide; plants take in carbon dioxide and release oxygen during photosynthesis.',
+      'Animals breathe out the carbon dioxide that plants take in.',
       'Only animals use air - plants do not need air at all.',
       'Plants and animals both take in carbon dioxide and release oxygen.'
     ],
-    answer:'Animals breathe in oxygen and breathe out carbon dioxide; plants take in carbon dioxide and release oxygen during photosynthesis.',
+    answer:'Animals breathe out the carbon dioxide that plants take in.',
     hint:'Think about what each one takes IN and gives OUT.',
     explanation:'Animals breathe in <b>oxygen</b> and breathe out <b>carbon dioxide</b>. During photosynthesis, plants take in <b>carbon dioxide</b> and release <b>oxygen</b>. This is a complementary relationship - animals produce the CO₂ that plants need, and plants produce the O₂ that animals need.' }),
 
@@ -180,11 +180,11 @@ STATIC_QUESTIONS.push(
     question:'A city council must choose: plant 500 new trees along the main road OR build a new car park. Which option BETTER reduces air pollution, and why?',
     options:[
       'Car park - more cars can park and they produce fewer fumes when stationary',
-      'Trees - they absorb carbon dioxide, release oxygen, and filter dust particles from the air',
+      'Trees - they absorb carbon dioxide and filter dust',
       'Neither - trees and car parks have the same effect on air quality',
       'Car park - because fewer people will drive if there is parking nearby'
     ],
-    answer:'Trees - they absorb carbon dioxide, release oxygen, and filter dust particles from the air',
+    answer:'Trees - they absorb carbon dioxide and filter dust',
     hint:'Think about what trees do to air quality versus what a car park encourages.',
     explanation:'<b>Planting trees</b> directly improves air quality: trees absorb CO₂ (a greenhouse gas), release O₂, and filter dust particles through their leaves. A car park encourages more driving → more exhaust → worse air quality. Trees are a proven natural solution to urban air pollution.' })
 

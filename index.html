@@ -403,7 +403,7 @@
         <div class="text-2xl sm:text-3xl select-none shrink-0">🎓</div>
         <div class="min-w-0 flex-1">
           <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">PSAC Exam Practice</h1>
-          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6 &amp; NCE Grade 9 Maths</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6 &amp; NCE Grade 9 Maths, ICT + Science</p>
         </div>
         <!-- Stats ride with the branding, not with the actions: they are
              information, not buttons, and keeping them out of the action row is
@@ -602,10 +602,11 @@
         </button>
 
         <!-- ⚠ Measured from the BUILT question bundles and the live manifests, not
-             estimated. Re-measured 2026-09-08 when NCE Grade 9 Mathematics went live:
-             15,625 practisable questions and 182 chapters across the 16 LIVE packs
-             (Grades 4-6 plus Grade 9 Maths), 164 past-paper items, 7 games with
-             mg-card-live in minigame.js. Was 13,079 / 160 / 15 packs / 162.
+             estimated. Re-measured 2026-09-08 when NCE Grade 9 Science went live:
+             16,502 practisable questions and 210 chapters across the 18 LIVE packs
+             (Grades 4-6 plus Grade 9 Maths, ICT and Science), 164 past-paper items,
+             7 games with mg-card-live in minigame.js. Was 15,974 / 194 / 17 packs,
+             then 15,625 / 182 / 16, and 13,079 / 160 / 15 before that.
              ⚠ 833 of those questions are PROJECTED from the 667 grade9-maths tasks by
              Assessment.projectToItems(). A raw task is excluded from every pool and has
              no question text at all, so counting bundle rows would claim 667 questions
@@ -617,7 +618,7 @@
             <div class="text-[11px] text-indigo-300/70 mt-0.5 leading-tight">practice questions</div>
           </div>
           <div class="bg-white/5 border border-white/10 rounded-2xl px-3 py-4">
-            <div class="text-2xl sm:text-3xl font-black text-white">182</div>
+            <div class="text-2xl sm:text-3xl font-black text-white">210</div>
             <div class="text-[11px] text-indigo-300/70 mt-0.5 leading-tight">chapters, every one split into sub-topics</div>
           </div>
           <div class="bg-white/5 border border-white/10 rounded-2xl px-3 py-4">
@@ -683,15 +684,19 @@
 
         <!-- ⚠ NCE is a SEPARATE stage from PSAC (Grades 7-9 vs 1-6), so it gets its
              own line rather than being folded into "Five core PSAC subjects".
-             ⚠ Names the ONE subject that is live. Grade 9 has six registered packs
-             and five of them are still comingSoon - ICT has 25 questions in 1 of
-             its 12 chapters. Saying "Grade 9" or "NCE" here would promise five
-             subjects that open empty. Re-check against SUBJECT_PACKS before
-             widening this sentence. -->
+             ⚠ Names the THREE subjects that are live. Grade 9 has six registered
+             packs and THREE are still comingSoon (English, French, Social &
+             Modern Studies - one sample question each). ICT joined Mathematics
+             on 2026-09-08 (469 questions, 12 of 12 chapters) and Science the same
+             day (528 questions, 16 of 16, all 92 declared subsections tagged).
+             Saying "Grade 9" or "NCE" here would still promise three subjects
+             that open empty. Re-check against SUBJECT_PACKS before widening this
+             sentence, and change _appShareText() (app.js) and _inviteText()
+             (auth.js) in the same edit. -->
         <p class="text-center mb-7">
           <span class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 border border-emerald-400/40 px-4 py-1.5 text-sm text-emerald-200">
             <span class="rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-emerald-950">New</span>
-            NCE Grade 9 <b class="text-white">Mathematics</b> is now live — 19 chapters
+            NCE Grade 9 <b class="text-white">Mathematics</b>, <b class="text-white">ICT</b> and <b class="text-white">Science</b> are now live — 47 chapters
           </span>
         </p>
 
@@ -2360,6 +2365,9 @@
         <span class="text-blue-400 dark:text-blue-500 text-2xl shrink-0">›</span>
       </button>
 
+      <!-- Learning Coach pilot - see #coach-child-subject. -->
+      <div id="coach-child-home" class="coach-card hidden"></div>
+
       <!-- Game Zone - hidden by MiniGames.syncTile() when the parent switches
            minigames off for this child or the plan excludes them. -->
       <button id="dash-games-tile" onclick="MiniGames.open()" class="w-full mb-6 flex items-center gap-4 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-2xl p-5 shadow hover:shadow-md border border-amber-200 dark:border-amber-700/50 hover:border-amber-400 transition-all text-left group">
@@ -2683,6 +2691,11 @@
       <!-- Today's goal. A child with more than one subject lands HERE, not on
            the dashboard, so this is the first place the goal has to appear. -->
       <div id="goal-slot-kidhome"></div>
+
+      <!-- Learning Coach pilot (engine/learning_coach.js). Filled and shown
+           by LearningCoach.renderChild(), which hides it for anyone who is
+           not a Grade 5 child. -->
+      <div id="coach-child-subject" class="coach-card hidden"></div>
 
       <!-- Two compact task buttons: today's plan, and anything the child paused.
            They replaced two full schedule panels that used to sit on the screen a
@@ -4295,6 +4308,10 @@
       <!-- Teacher application card (filled by _renderTeacherApplyCard) -->
       <div id="pd-teacher-apply"></div>
 
+      <!-- Learning Coach pilot, parent view. LearningCoach.renderParent()
+           hides it unless the child in focus is in Grade 5. -->
+      <div id="coach-parent-summary" class="coach-card coach-parent hidden"></div>
+
       <!-- Shown INSTEAD of the empty state when the children query failed -
            "you have no children" and "we could not read your children" must
            never look the same. -->
@@ -5579,6 +5596,7 @@
   <script src="engine/minigame.js"></script>
   <script src="engine/cloze.js"></script>
   <script src="engine/errorhunt.js"></script>
+  <script src="engine/learning_coach.js"></script>
 
   <!-- ── Exam review sheet ──
        Reached from "Review →", the label the Next button takes on the last

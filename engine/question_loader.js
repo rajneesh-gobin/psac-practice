@@ -59,7 +59,19 @@ const QuestionLoader = (() => {
     'grade8-french': ['subjects/grade8-french/questions/ch01_sample.js'],
     'grade8-science': ['subjects/grade8-science/questions/ch01_sample.js'],
     'grade8-social-modern-studies': ['subjects/grade8-social-modern-studies/questions/ch01_sample.js'],
-    'grade9-ict':   ['subjects/grade9-ict/questions/ch01_computer_systems.js'],
+    'grade9-ict':   ['subjects/grade9-ict/questions/ch01_computer_systems.js',
+                     'subjects/grade9-ict/questions/ch02_word_processing.js',
+                     'subjects/grade9-ict/questions/ch03_spreadsheets.js',
+                     'subjects/grade9-ict/questions/ch04_algorithms.js',
+                     'subjects/grade9-ict/questions/ch05_networks.js',
+                     'subjects/grade9-ict/questions/ch06_internet.js',
+                     'subjects/grade9-ict/questions/ch07_databases.js',
+                     'subjects/grade9-ict/questions/ch08_software_os.js',
+                     'subjects/grade9-ict/questions/ch09_ethics_security.js',
+                     'subjects/grade9-ict/questions/ch10_presentation.js',
+                     'subjects/grade9-ict/questions/ch11_health_safety.js',
+                     'subjects/grade9-ict/questions/ch12_troubleshooting.js',
+                     'subjects/grade9-ict/questions/exam_depth.js'],
   'grade9-maths': ['subjects/grade9-maths/questions/ch01_indices.js',
                      'subjects/grade9-maths/questions/ch02_coordinates.js',
                      'subjects/grade9-maths/questions/ch03_number_revision.js',
@@ -89,7 +101,22 @@ const QuestionLoader = (() => {
                      'subjects/grade9-maths/questions/depth_bank.js'],
     'grade9-english': ['subjects/grade9-english/questions/ch01_sample.js'],
     'grade9-french': ['subjects/grade9-french/questions/ch01_sample.js'],
-    'grade9-science': ['subjects/grade9-science/questions/ch01_sample.js'],
+    'grade9-science': ['subjects/grade9-science/questions/b1_circulatory.js',
+                       'subjects/grade9-science/questions/b2_reproductive.js',
+                       'subjects/grade9-science/questions/b3_biodiversity.js',
+                       'subjects/grade9-science/questions/b4_plant_nutrition.js',
+                       'subjects/grade9-science/questions/c1_atmosphere.js',
+                       'subjects/grade9-science/questions/c2_mixtures.js',
+                       'subjects/grade9-science/questions/c3_language.js',
+                       'subjects/grade9-science/questions/c4_metals.js',
+                       'subjects/grade9-science/questions/c5_salts.js',
+                       'subjects/grade9-science/questions/inquiry.js',
+                       'subjects/grade9-science/questions/p1_measurements.js',
+                       'subjects/grade9-science/questions/p2_light.js',
+                       'subjects/grade9-science/questions/p3_energy.js',
+                       'subjects/grade9-science/questions/p4_motion.js',
+                       'subjects/grade9-science/questions/p5_electricity.js',
+                       'subjects/grade9-science/questions/sts.js'],
     'grade9-social-modern-studies': ['subjects/grade9-social-modern-studies/questions/ch01_sample.js'],
     'grade5-maths': [
       'subjects/grade5-maths/questions/core.js',
@@ -520,7 +547,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 83;
+  const _CACHE_VERSION = 89;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family

@@ -55,6 +55,10 @@ function run({ role, teacherStatus, lastScreen, isSuperAdmin }) {
     _parentUser: { id: 'u1', email: 'a@b.c', user_metadata: {} },
     ProfileInstall: { getLaunchBinding: () => null },
     AdminPanel: { render() {} },
+    // showScreen()/_handleParentSession() now open a role screen through
+    // RoleModules (engine/registry.js), which this VM never loads.
+    RoleModules: { isLoaded: () => true, ensure: async () => true,
+      withGroup: (g, fn) => { try { fn(); } catch (e) {} return Promise.resolve(true); } },
   };
   // Anything the function reaches that is not scripted above answers with a
   // harmless stub rather than a ReferenceError, so the test stays about routing.

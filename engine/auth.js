@@ -2247,9 +2247,11 @@ const Auth = (() => {
       : location.origin + location.pathname;
   }
   function _inviteText() {
-    // ⚠ "NCE Grade 9 Maths", not "Grade 9" — only grade9-maths is live; the
-    //   other five Grade 9 packs are still comingSoon. See _appShareText().
-    return `Join me on PSAC Exam Practice - free revision for PSAC Grades 4–6, plus NCE Grade 9 Maths! 📚`;
+    // ⚠ NAME THE SUBJECTS, never just "Grade 9" — only grade9-maths, grade9-ict
+    //   and grade9-science are live; the other three Grade 9 packs are still
+    //   comingSoon and would open empty. See _appShareText() (app.js) and the
+    //   landing page; all three carry this claim and must be changed together.
+    return `Join me on PSAC Exam Practice - free revision for PSAC Grades 4–6, plus NCE Grade 9 Maths, ICT and Science! 📚`;
   }
 
   async function openInviteModal() {

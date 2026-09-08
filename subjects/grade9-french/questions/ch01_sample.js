@@ -9,7 +9,7 @@
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g9fr-samp-001', chapterId:'g9fr-co', difficulty:1,
+  makeMCQ({ id:'g9fr-samp-001', chapterId:'g9fr-grammaire', difficulty:1,
     question:'Placeholder - this pack has no real questions yet.',
     options:['A','B','C','D'],
     answer:'A',

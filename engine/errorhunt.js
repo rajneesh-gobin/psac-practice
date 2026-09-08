@@ -203,7 +203,7 @@ const ErrorHunt = (function () {
     host.innerHTML = `
       <h3 class="eh-title">${_esc(_q.title)}</h3>
       <p class="eh-intro">${_esc(_q.intro || `Ce texte contient ${total} erreurs. Clique sur chaque mot qui te paraît faux.`)}</p>
-      <p class="eh-help">Une ponctuation qui manque ne se clique pas toute seule : clique sur le <b>mot juste avant</b>. Exemple : s'il manque le point après « cour », clique sur <b>cour</b>. Clique une deuxième fois pour désélectionner.</p>
+      <p class="eh-help">Toutes les erreurs sont des <b>mots</b> : majuscules, accents, accords, homophones. La ponctuation est déjà correcte, ne la cherche pas. Clique une deuxième fois sur un mot pour le désélectionner.</p>
       <div class="eh-text" id="eh-text" lang="fr">${_textHtml()}</div>
       ${_done ? _reviewHtml() : ''}
       <div class="eh-footer">${footer}</div>`;

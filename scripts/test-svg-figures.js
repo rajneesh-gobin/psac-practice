@@ -1,5 +1,11 @@
 'use strict';
-// Integrity checks on every inline <svg> figure in the grade9-maths bank.
+// Integrity checks on every inline <svg> figure in the Grade 9 banks.
+//
+// ⚠ THIS USED TO SCAN grade9-maths ONLY, and that is how a whole pack of new
+//   figures escaped it: the Grade 9 SCIENCE bank is ~20% inline SVG (circuit
+//   diagrams, ray diagrams, speed-time graphs, instrument scales) and this
+//   tripwire had never looked at a single one of them. PACKS is a list now, so
+//   a new pack is added by naming it rather than by remembering to.
 //
 //   node scripts/test-svg-figures.js
 //
@@ -35,7 +41,12 @@ const path = require('path');
 const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..');
-const PACK = 'subjects/grade9-maths/questions';
+// ⚠ Add a pack here the moment it starts carrying inline SVG. A pack that is
+//   not in this list is not checked, and nothing anywhere else will notice.
+const PACKS = [
+  'subjects/grade9-maths/questions',
+  'subjects/grade9-science/questions',
+];
 
 const ctx = { STATIC_QUESTIONS: [], console, Math, JSON, window: {} };
 ctx.window.STATIC_QUESTIONS = ctx.STATIC_QUESTIONS;
@@ -43,9 +54,13 @@ vm.createContext(ctx);
 for (const f of ['engine/helpers.js', 'engine/assessment.js']) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f });
 }
-for (const f of fs.readdirSync(path.join(ROOT, PACK)).sort()) {
-  if (!f.endsWith('.js')) continue;
-  vm.runInContext(fs.readFileSync(path.join(ROOT, PACK, f), 'utf8'), ctx, { filename: f });
+for (const PACK of PACKS) {
+  const dir = path.join(ROOT, PACK);
+  if (!fs.existsSync(dir)) continue;
+  for (const f of fs.readdirSync(dir).sort()) {
+    if (!f.endsWith('.js')) continue;
+    vm.runInContext(fs.readFileSync(path.join(dir, f), 'utf8'), ctx, { filename: PACK + '/' + f });
+  }
 }
 
 // The HTML spec's "any other start tag" breakout list for foreign content.
@@ -76,7 +91,8 @@ function collect(o, id) {
 }
 ctx.STATIC_QUESTIONS.forEach(q => collect(q, q.id));
 
-console.log('grade9-maths: ' + ctx.STATIC_QUESTIONS.length + ' questions, '
+console.log(PACKS.map(p => p.split('/')[1]).join(' + ') + ': '
+  + ctx.STATIC_QUESTIONS.length + ' questions, '
   + figures.size + ' distinct figures');
 
 console.log('\nno HTML breakout tag inside an svg');

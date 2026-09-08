@@ -46,8 +46,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4s-liv-007', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:2,
     question:'A fire burns, grows bigger and gives off heat. Is a fire a LIVING thing?',
-    options:['Yes - because it grows and moves','No - because it cannot feed, reproduce or excrete','Yes - because it needs oxygen','No - because it is hot'],
-    answer:'No - because it cannot feed, reproduce or excrete',
+    options:['Yes - because it grows and moves','No - it cannot feed or reproduce','Yes - because it needs oxygen','No - because it is hot'],
+    answer:'No - it cannot feed or reproduce',
     hint:'A fire grows and moves, but check all 7 characteristics of MRS GREN.',
     explanation:'A fire is <b>not living</b>. Although fire grows and moves, it cannot <b>feed</b> (take in nutrients), <b>reproduce</b> (make new fires on its own) or <b>excrete</b> waste products. It does not show all the characteristics of MRS GREN, so it is not a living thing.' }),
 
@@ -55,11 +55,11 @@ STATIC_QUESTIONS.push(
     question:'Why are plants classified as LIVING things even though they cannot walk?',
     options:[
       'They are not living - they cannot move',
-      'They show all MRS GREN characteristics: they grow, respire, reproduce, respond to light, and absorb nutrients',
+      'They show all the MRS GREN characteristics',
       'They are living only because they are green',
       'They are living because they have roots'
     ],
-    answer:'They show all MRS GREN characteristics: they grow, respire, reproduce, respond to light, and absorb nutrients',
+    answer:'They show all the MRS GREN characteristics',
     hint:'Movement is only one of the seven signs of life. Check a plant against the whole list, not just that one.',
     explanation:'Plants are <b>living things</b> because they show all 7 MRS GREN characteristics. They move (leaves turn towards light), respire, are sensitive (react to light and touch), grow, reproduce (seeds), excrete waste gases, and take in nutrition (photosynthesis). Movement does not have to mean walking.' }),
 
@@ -79,11 +79,11 @@ STATIC_QUESTIONS.push(
     question:'Priya finds an object on the beach. It is hard, has no colour, never changes shape, does not eat, and has been there for 1,000 years. Her friend says it must be living because "it has been there so long". Is her friend correct? Why?',
     options:[
       'Yes - because very old things are always living',
-      'No - because it does not show any MRS GREN characteristics such as growth, respiration or reproduction',
+      'No - it shows no MRS GREN characteristics',
       'Yes - because it is on a beach where living things are found',
       'No - because living things cannot be hard'
     ],
-    answer:'No - because it does not show any MRS GREN characteristics such as growth, respiration or reproduction',
+    answer:'No - it shows no MRS GREN characteristics',
     hint:'Age does not determine whether something is living. What characteristics must a living thing show?',
     explanation:'Her friend is <b>not correct</b>. Being very old does not make something living. The object shows <b>none of the MRS GREN characteristics</b> - it does not grow, breathe, feed, move, reproduce, excrete or respond to its environment. These characteristics are what determine if something is living, not its age.' })
 
@@ -129,23 +129,23 @@ STATIC_QUESTIONS.push(
     question:'What is the KEY difference between plants and animals regarding NUTRITION?',
     options:[
       'Animals make their own food; plants eat other organisms',
-      'Plants make their own food using sunlight; animals must eat other organisms',
+      'Plants make their own food; animals eat other organisms',
       'Both plants and animals make their own food',
       'Neither plants nor animals need food'
     ],
-    answer:'Plants make their own food using sunlight; animals must eat other organisms',
+    answer:'Plants make their own food; animals eat other organisms',
     hint:'Which group uses photosynthesis to produce food from sunlight?',
     explanation:'<b>Plants make their own food</b> using sunlight (photosynthesis - they are producers). <b>Animals cannot make food</b> - they must eat plants or other animals (they are consumers). This is why plants are the foundation of all food chains.' }),
 
   makeMCQ({ id:'g4s-liv-017', chapterId:'g4sci-living', subsection:'living_nonliving', difficulty:2,
     question:'MICROORGANISMS (like bacteria) are:',
     options:[
-      'Non-living chemicals',
-      'Living things too small to be seen without a microscope',
-      'Only found in dirty water',
-      'Only found in hospitals'
+      'Non-living chemicals in the soil',
+      'Living things too small to see without a microscope',
+      'Only ever found in dirty water',
+      'Only ever found inside hospitals'
     ],
-    answer:'Living things too small to be seen without a microscope',
+    answer:'Living things too small to see without a microscope',
     hint:'Micro = very small. Organism = living thing.',
     explanation:'<b>Microorganisms</b> (microbes) are <b>living things so small they can only be seen with a microscope</b>. They include bacteria, viruses and fungi. They show MRS GREN characteristics. Some are helpful (making yoghurt); others cause disease.' }),
 
@@ -165,11 +165,11 @@ STATIC_QUESTIONS.push(
     question:'Shan says: "A car moves, uses fuel for energy, and produces exhaust gas. It must be living." Which response CORRECTLY explains why a car is NOT living?',
     options:[
       'Cars are man-made, so they are never living.',
-      'A car does not grow, cannot reproduce, and cannot respond to its environment on its own - it fails the MRS GREN test.',
+      'A car cannot grow or reproduce, so it fails the MRS GREN test.',
       'Cars are living because they use fuel the same way animals use food.',
       'Cars are non-living because they cannot fly.'
     ],
-    answer:'A car does not grow, cannot reproduce, and cannot respond to its environment on its own - it fails the MRS GREN test.',
+    answer:'A car cannot grow or reproduce, so it fails the MRS GREN test.',
     hint:'Apply ALL of MRS GREN: does a car grow? Can it reproduce? Does it respond to stimuli independently?',
     explanation:'A car moves and uses fuel, but it is <b>not living</b> because it does not: <b>grow</b> (stays the same size), <b>reproduce</b> (cannot make baby cars on its own), or <b>respond to its environment independently</b>. It fails multiple MRS GREN checks. All 7 characteristics must be present for something to be classified as living.' })
 
