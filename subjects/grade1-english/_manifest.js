@@ -1,42 +1,5 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 1 - English   ·   PLACEHOLDER PACK
-//
-//  Registered so the plumbing exists: the grade picker, the admin Content tab,
-//  the shop catalogue, the question bundler and the DB importer all discover
-//  grades from SUBJECT_PACKS / the subjects/ directory, so nothing else has to
-//  be edited when this is filled in.
-//
-//  ⚠ comingSoon: true is what makes this safe to ship empty. It makes
-//    activateSubjectPack() refuse the pack, keeps it out of QuestionLoader's
-//    per-grade fetch and out of assembleExamPaper(), and renders the grade card
-//    as "Coming Soon" and disabled. Flip it to false ONLY when this pack has
-//    real chapters and real questions.
-//
-// STAGE: Mauritian primary, lower years. Same MIE track as Grades 4-6,
-// so the five subjects and the PSAC framing below are correct.
-// ⚠ Grades 1-2 will need a picture-first question mode before this is
-//   opened to children - the current renderer assumes the child can read
-//   the question and all four options. See CLAUDE.md.
-//
-//  TO FILL THIS IN
-//    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` -
-//       one idea per sentence (_syllabusPoints splits on sentences).
-//    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
-//       model. IDs: g1eng-samp-001 style. Every question needs a `subsection:`
-//       tag that matches an id declared in G1ENG_SYLLABUS below.
-//    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only - production auto-discovers) and bump _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
-
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: an id declared here
-// with no questions behind it advertises a topic that opens empty, which is
-// worse than no subsections at all. Add ids only as questions are tagged.
 const G1ENG_SYLLABUS = {};
-
 registerSubject({
   id:         'grade1-english',
   name:       'English',
@@ -47,9 +10,17 @@ registerSubject({
   comingSoon: true,
   syllabus:   G1ENG_SYLLABUS,
   chapters: [
-    // One placeholder so the shape is copyable. examWeight: 0 keeps it out of
-    // exam papers even if comingSoon is flipped before real content lands.
-    { id: 'g1eng-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g1eng-listening', name: 'Listening', icon: '👂', examWeight: 1,
+      syllabus: 'Recognise everyday sounds and English language sounds. Demonstrate active listening by maintaining eye contact and taking turns. Listen to and identify different types of aural texts such as poems, songs and stories. Show understanding of statements and questions by responding verbally or non-verbally.' },
+    { id: 'g1eng-speaking', name: 'Speaking', icon: '🗣️', examWeight: 1,
+      syllabus: 'Join in to recite nursery rhymes and sing songs. Respond verbally and non-verbally to input in English. Introduce oneself using name, age and class. Use simple sentences with support (e.g. I am…, She is…). Greet others and use polite forms such as please and thank you.' },
+    { id: 'g1eng-reading', name: 'Reading Readiness', icon: '📚', examWeight: 1,
+      syllabus: 'Express understanding that print contains messages. Recognise letters of the alphabet and distinguish among words, symbols and numbers. Recognise letter case such as bold and italics. Engage in picture reading including description, story telling and prediction. Match pictures with words and vice versa.' },
+    { id: 'g1eng-writing', name: 'Writing', icon: '✏️', examWeight: 1,
+      syllabus: 'Adopt appropriate seating posture and hold writing materials properly. Trace letters properly and neatly. Write capital and small letters of the alphabet properly. Copy simple written information in a left-to-right, top-to-bottom format. Copy name and familiar words.' },
+    { id: 'g1eng-grammar', name: 'Grammar', icon: '📝', examWeight: 1,
+      syllabus: 'Introduce common nouns through vocabulary building. Introduce use of s for more than one item. Introduce personal pronouns: I, you, he, she, we, they. Introduce interrogative pronouns: who, what, where. Introduce familiar adjectives. Expose to simple verbs such as come and go. Expose to Present Continuous Tense and Present Simple Tense.' },
+    { id: 'g1eng-phonics', name: 'Phonics', icon: '🔤', examWeight: 1,
+      syllabus: 'Recognise syllables in words using syllabic segmentation. Recognise word and sentence boundaries. Use phonemic awareness to decode simple words. Engage in picture reading and story prediction. Spell words phonetically as a strategy to write words.' },
   ],
 });

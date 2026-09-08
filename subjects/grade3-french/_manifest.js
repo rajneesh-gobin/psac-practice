@@ -1,45 +1,8 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 3 - Français   ·   PLACEHOLDER PACK
-//
-//  Registered so the plumbing exists: the grade picker, the admin Content tab,
-//  the shop catalogue, the question bundler and the DB importer all discover
-//  grades from SUBJECT_PACKS / the subjects/ directory, so nothing else has to
-//  be edited when this is filled in.
-//
-//  ⚠ comingSoon: true is what makes this safe to ship empty. It makes
-//    activateSubjectPack() refuse the pack, keeps it out of QuestionLoader's
-//    per-grade fetch and out of assembleExamPaper(), and renders the grade card
-//    as "Coming Soon" and disabled. Flip it to false ONLY when this pack has
-//    real chapters and real questions.
-//
-// STAGE: Mauritian primary, lower years. Same MIE track as Grades 4-6,
-// so the five subjects and the PSAC framing below are correct.
-// ⚠ Grades 1-2 will need a picture-first question mode before this is
-//   opened to children - the current renderer assumes the child can read
-//   the question and all four options. See CLAUDE.md.
-//
-//  TO FILL THIS IN
-//    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` -
-//       one idea per sentence (_syllabusPoints splits on sentences).
-//    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
-//       model. IDs: g3fr-samp-001 style. Every question needs a `subsection:`
-//       tag that matches an id declared in G3FR_SYLLABUS below.
-//    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only - production auto-discovers) and bump _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
-
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: an id declared here
-// with no questions behind it advertises a topic that opens empty, which is
-// worse than no subsections at all. Add ids only as questions are tagged.
 const G3FR_SYLLABUS = {};
-
 registerSubject({
   id:         'grade3-french',
-  name:       'Français',
+  name:       'French',
   grade:      3,
   icon:       '🇫🇷',
   subject:    'French',
@@ -47,9 +10,15 @@ registerSubject({
   comingSoon: true,
   syllabus:   G3FR_SYLLABUS,
   chapters: [
-    // One placeholder so the shape is copyable. examWeight: 0 keeps it out of
-    // exam papers even if comingSoon is flipped before real content lands.
-    { id: 'g3fr-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g3fr-comprehension-orale', name: 'Compréhension orale', icon: '👂', examWeight: 1,
+      syllabus: 'Distinguer entre deux sons phonétiquement proches et jouer avec eux. Écouter attentivement un texte et identifier l\'idée globale et le sujet. Identifier la séquence des événements dans les textes oraux courts. Comprendre le but d\'un message comme une requête, un ordre ou une suggestion et réagir de manière appropriée. Identifier le type de message en fonction de l\'intonation, du débit et du rythme.' },
+    { id: 'g3fr-expression-orale', name: 'Expression orale', icon: '🗣️', examWeight: 1,
+      syllabus: 'Raconter une situation vécue ou imaginaire avec un vocabulaire approprié. Raconter de nouveau une histoire en utilisant un vocabulaire approprié. Répondre et poser des questions simples dans une interaction. Participer verbalement dans des activités de groupe et de classe. Articuler clairement des consonnes et des voyelles. Utiliser des adjectifs usuels pour décrire des objets, des personnes et des lieux.' },
+    { id: 'g3fr-lecture', name: 'Compréhension écrite', icon: '📚', examWeight: 1,
+      syllabus: 'Lire des mots en les découpant en syllabes avec la prononciation appropriée. Reconnaître certains mots par la méthode globale. Lire des phrases courtes à haute voix en étant guidé par l\'enseignant. Comprendre des conventions de base de la mise en page des textes. Varier l\'intonation en s\'aidant des signes de ponctuation. Établir le lien entre l\'histoire et son propre vécu.' },
+    { id: 'g3fr-ecriture', name: 'Expression écrite', icon: '✏️', examWeight: 1,
+      syllabus: 'Écrire des mots en entier en employant la majuscule et la minuscule. Compléter des mots et des phrases avec l\'aide de l\'enseignant. Recopier des phrases en détachant bien les mots et en respectant les conventions de l\'écrit. Utiliser les signes de ponctuation de base comme le point final, la virgule et le point d\'interrogation. Saisir des mots simples sur le clavier de l\'ordinateur.' },
+    { id: 'g3fr-grammaire', name: 'Grammaire', icon: '📝', examWeight: 1,
+      syllabus: 'Produire des phrases grammaticalement et syntaxiquement correctes. Connaître l\'ordre des mots dans les différents types de phrase comme la phrase déclarative, négative et interrogative. Connaître les règles d\'accord de base entre le déterminant, le nom et l\'adjectif. Utiliser correctement les marques de personne, de temps et d\'espace. Connaître les règles d\'orthographe de base avec accents appropriés.' },
   ],
 });

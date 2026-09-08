@@ -1,55 +1,24 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 3 - History & Geography   ·   PLACEHOLDER PACK
-//
-//  Registered so the plumbing exists: the grade picker, the admin Content tab,
-//  the shop catalogue, the question bundler and the DB importer all discover
-//  grades from SUBJECT_PACKS / the subjects/ directory, so nothing else has to
-//  be edited when this is filled in.
-//
-//  ⚠ comingSoon: true is what makes this safe to ship empty. It makes
-//    activateSubjectPack() refuse the pack, keeps it out of QuestionLoader's
-//    per-grade fetch and out of assembleExamPaper(), and renders the grade card
-//    as "Coming Soon" and disabled. Flip it to false ONLY when this pack has
-//    real chapters and real questions.
-//
-// STAGE: Mauritian primary, lower years. Same MIE track as Grades 4-6,
-// so the five subjects and the PSAC framing below are correct.
-// ⚠ Grades 1-2 will need a picture-first question mode before this is
-//   opened to children - the current renderer assumes the child can read
-//   the question and all four options. See CLAUDE.md.
-//
-//  TO FILL THIS IN
-//    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` -
-//       one idea per sentence (_syllabusPoints splits on sentences).
-//    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
-//       model. IDs: g3h-samp-001 style. Every question needs a `subsection:`
-//       tag that matches an id declared in G3HG_SYLLABUS below.
-//    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only - production auto-discovers) and bump _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
-
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: an id declared here
-// with no questions behind it advertises a topic that opens empty, which is
-// worse than no subsections at all. Add ids only as questions are tagged.
-const G3HG_SYLLABUS = {};
-
+const G3HI_SYLLABUS = {};
 registerSubject({
   id:         'grade3-history',
   name:       'History & Geography',
   grade:      3,
-  icon:       '🌍',
+  icon:       '🏛️',
   subject:    'History & Geography',
   curriculum: 'MIE Mauritius',
   comingSoon: true,
-  syllabus:   G3HG_SYLLABUS,
+  syllabus:   G3HI_SYLLABUS,
   chapters: [
-    // One placeholder so the shape is copyable. examWeight: 0 keeps it out of
-    // exam papers even if comingSoon is flipped before real content lands.
-    { id: 'g3h-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g3hi-myself-family', name: 'Myself & My Family', icon: '👨‍👩‍👧', examWeight: 1,
+      syllabus: 'Show basic understanding of past and present by recalling and listing significant personal events and dates in sequential manner. Develop vocabulary related to time such as today and long ago. Show awareness of time and change by comparing photographs, clothes and toys from the past. Identify members of the family, compare relative ages, discuss significant family events and draw a family tree.' },
+    { id: 'g3hi-my-locality', name: 'My Locality', icon: '🏘️', examWeight: 1,
+      syllabus: 'Show an awareness of space, time, change and development in the locality. Identify and name buildings, monuments and places of worship in the school and local area. Identify old and new objects and changes in the locality such as houses, means of transport and leisure activities. Develop awareness that certain buildings in the locality should be preserved and protected. Listen, retell and record through pictures simple stories of people in the past and present.' },
+    { id: 'g3hi-natural-environment', name: 'Our Natural Environment', icon: '⛰️', examWeight: 1,
+      syllabus: 'Observe, describe and classify basic natural and man-made features in the immediate environment including locality, Mauritius and Rodrigues. Recognise and list some natural features such as mountains, hills, rivers and beaches in Mauritius and Rodrigues. Draw and label some natural features. Realise that the natural environment is precious and must be kept clean.' },
+    { id: 'g3hi-weather', name: 'Weather', icon: '🌦️', examWeight: 1,
+      syllabus: 'Observe and describe different types of weather conditions in the immediate environment. Identify the main features of weather such as sunny, rainy, windy and cloudy days. Understand how weather affects daily life and activities. Develop awareness of safety during extreme weather conditions.' },
+    { id: 'g3hi-map-skills', name: 'Map Skills', icon: '🗺️', examWeight: 1,
+      syllabus: 'Identify features in the locality from diagrams, pictures, line drawings and maps. Name features shown in the locality on a map or diagram. Observe and name natural features in the immediate environment. Develop personal safety skills near the seaside, rivers, waterfalls and forests.' },
   ],
 });
