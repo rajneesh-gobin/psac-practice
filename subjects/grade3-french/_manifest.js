@@ -1,5 +1,33 @@
 'use strict';
-const G3FR_SYLLABUS = {};
+
+const G3FR_SYLLABUS = {
+  'g3fr-comprehension-orale': { subsections: [
+    { id:'sons_phonetiques',   name:'Sons phonétiquement proches' },
+    { id:'idee_globale',       name:'Idée globale et séquence' },
+    { id:'type_message',       name:'Type de message' },
+  ]},
+  'g3fr-expression-orale': { subsections: [
+    { id:'vocabulaire_descriptif', name:'Vocabulaire descriptif' },
+    { id:'recit_oral',             name:'Raconter à l\'oral' },
+    { id:'questions_reponses',     name:'Questions et réponses' },
+  ]},
+  'g3fr-lecture': { subsections: [
+    { id:'decodage_syllabes',     name:'Lire par syllabes' },
+    { id:'lecture_comprehension', name:'Comprendre un texte lu' },
+    { id:'ponctuation_sens',      name:'Ponctuation et sens' },
+  ]},
+  'g3fr-ecriture': { subsections: [
+    { id:'majuscule_minuscule', name:'Majuscule et minuscule' },
+    { id:'ponctuation_base',    name:'Ponctuation de base' },
+    { id:'orthographe_accents', name:'Orthographe et accents' },
+  ]},
+  'g3fr-grammaire': { subsections: [
+    { id:'types_phrases',  name:'Types de phrases' },
+    { id:'accord_nom_adj', name:'Accord nom–adjectif' },
+    { id:'temps_verbes',   name:'Temps des verbes' },
+  ]},
+};
+
 registerSubject({
   id:         'grade3-french',
   name:       'French',
@@ -8,17 +36,55 @@ registerSubject({
   subject:    'French',
   curriculum: 'MIE Mauritius',
   comingSoon: true,
+  notesBased: true,
+  noDifficulty: true,
   syllabus:   G3FR_SYLLABUS,
   chapters: [
-    { id: 'g3fr-comprehension-orale', name: 'Compréhension orale', icon: '👂', examWeight: 1,
-      syllabus: 'Distinguer entre deux sons phonétiquement proches et jouer avec eux. Écouter attentivement un texte et identifier l\'idée globale et le sujet. Identifier la séquence des événements dans les textes oraux courts. Comprendre le but d\'un message comme une requête, un ordre ou une suggestion et réagir de manière appropriée. Identifier le type de message en fonction de l\'intonation, du débit et du rythme.' },
-    { id: 'g3fr-expression-orale', name: 'Expression orale', icon: '🗣️', examWeight: 1,
-      syllabus: 'Raconter une situation vécue ou imaginaire avec un vocabulaire approprié. Raconter de nouveau une histoire en utilisant un vocabulaire approprié. Répondre et poser des questions simples dans une interaction. Participer verbalement dans des activités de groupe et de classe. Articuler clairement des consonnes et des voyelles. Utiliser des adjectifs usuels pour décrire des objets, des personnes et des lieux.' },
-    { id: 'g3fr-lecture', name: 'Compréhension écrite', icon: '📚', examWeight: 1,
-      syllabus: 'Lire des mots en les découpant en syllabes avec la prononciation appropriée. Reconnaître certains mots par la méthode globale. Lire des phrases courtes à haute voix en étant guidé par l\'enseignant. Comprendre des conventions de base de la mise en page des textes. Varier l\'intonation en s\'aidant des signes de ponctuation. Établir le lien entre l\'histoire et son propre vécu.' },
-    { id: 'g3fr-ecriture', name: 'Expression écrite', icon: '✏️', examWeight: 1,
-      syllabus: 'Écrire des mots en entier en employant la majuscule et la minuscule. Compléter des mots et des phrases avec l\'aide de l\'enseignant. Recopier des phrases en détachant bien les mots et en respectant les conventions de l\'écrit. Utiliser les signes de ponctuation de base comme le point final, la virgule et le point d\'interrogation. Saisir des mots simples sur le clavier de l\'ordinateur.' },
-    { id: 'g3fr-grammaire', name: 'Grammaire', icon: '📝', examWeight: 1,
-      syllabus: 'Produire des phrases grammaticalement et syntaxiquement correctes. Connaître l\'ordre des mots dans les différents types de phrase comme la phrase déclarative, négative et interrogative. Connaître les règles d\'accord de base entre le déterminant, le nom et l\'adjectif. Utiliser correctement les marques de personne, de temps et d\'espace. Connaître les règles d\'orthographe de base avec accents appropriés.' },
+    {
+      id: 'g3fr-comprehension-orale', name: 'Compréhension orale', icon: '👂', examWeight: 1,
+      notes: [
+        'Certains sons se ressemblent : /b/ et /p/, /d/ et /t/, /f/ et /v/ — écoute bien la différence !',
+        'L\'**idée globale** est ce dont parle le texte en général.',
+        'Les mots *d\'abord, puis, ensuite, enfin* indiquent la **séquence des événements**.',
+        'Un message peut informer, demander, ordonner ou suggérer — l\'intonation aide à le comprendre.',
+      ],
+    },
+    {
+      id: 'g3fr-expression-orale', name: 'Expression orale', icon: '🗣️', examWeight: 1,
+      notes: [
+        'Utilise des **adjectifs** pour décrire : *grand, petit, rond, beau, rouge*.',
+        'Pour raconter : *D\'abord... Ensuite... Puis... Enfin...*',
+        'Pour poser une question : *Qui ? Que/Quoi ? Où ? Quand ? Pourquoi ? Comment ?*',
+        'Réponds en faisant une **phrase complète** avec un sujet et un verbe.',
+      ],
+    },
+    {
+      id: 'g3fr-lecture', name: 'Compréhension écrite', icon: '📚', examWeight: 1,
+      notes: [
+        'Découpe les mots en **syllabes** pour les lire : ta-bleau (2), pa-pi-llon (3).',
+        'La **ponctuation** t\'aide : le point (.) = pause, le point d\'interrogation (?) = question, la virgule (,) = courte pause.',
+        'Lis le texte entier, puis relis chaque question soigneusement.',
+        'Cherche les réponses dans le texte — elles sont souvent présentes mot pour mot.',
+      ],
+    },
+    {
+      id: 'g3fr-ecriture', name: 'Expression écrite', icon: '✏️', examWeight: 1,
+      notes: [
+        'Une phrase commence par une **majuscule** et se termine par un **point**, un **?** ou un **!**.',
+        'La **virgule** (,) sépare les éléments d\'une liste.',
+        'Les accents changent le son : é (école), è (mère), ê (fête), à (à côté), ù (où).',
+        'Copie soigneusement — chaque mot séparé par un espace.',
+      ],
+    },
+    {
+      id: 'g3fr-grammaire', name: 'Grammaire', icon: '📝', examWeight: 1,
+      notes: [
+        '**Phrase déclarative** : affirme quelque chose — *Le chat est gris.*',
+        '**Phrase négative** : utilise ne...pas — *Le chat n\'est pas gris.*',
+        '**Phrase interrogative** : pose une question — *Le chat est-il gris ?*',
+        'L\'adjectif s\'accorde avec le nom : *un grand arbre / une grande maison / de grands arbres*.',
+        '**Présent** : je mange. **Passé composé** : j\'ai mangé. **Futur simple** : je mangerai.',
+      ],
+    },
   ],
 });
