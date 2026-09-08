@@ -282,3 +282,191 @@ STATIC_QUESTIONS.push(makeTask({
 }));
 
 })();
+
+(function () {
+const CH = 'g9m-number-revision';
+
+// [ id, subsection, difficulty, marks, prompt, answer, accept[], hint, explanation, extra ]
+const ITEMS3 = [
+
+  // ── harder fractions, decimals and percentages ───────────────────────────
+  ['g9m-nrv-046', 'fractions_decimals_percentages', 3, 2,
+   'A pen costs Rs 40. Its price is increased by 15%. Find the new price.',
+   '46', [],
+   'Find 15% of Rs 40, then add it to the original price.',
+   '15% of 40 = Rs 6, so the new price is 40 + 6 = Rs 46.', { prefix: 'Rs' }],
+
+  ['g9m-nrv-047', 'fractions_decimals_percentages', 4, 3,
+   'After a 25% increase, a bag costs Rs 500. Find the <b>original price</b> of the bag.',
+   '400', [],
+   'The new price represents 125% of the original.',
+   '125% = Rs 500, so 1% = Rs 4 and 100% = Rs 400.', { prefix: 'Rs' }],
+
+  ['g9m-nrv-048', 'fractions_decimals_percentages', 3, 2,
+   'A television was bought for Rs 8 000 and sold for Rs 6 800. Calculate the <b>percentage loss</b>.',
+   '15', [],
+   'Percentage loss = (loss &divide; cost price) &times; 100.',
+   'Loss = 8 000 &minus; 6 800 = Rs 1 200. Percentage loss = (1 200 &divide; 8 000) &times; 100 = 15%.',
+   { unit: '%' }],
+
+  ['g9m-nrv-049', 'fractions_decimals_percentages', 3, 2,
+   'A shopkeeper buys 50 oranges for Rs 100 and sells them at Rs 3 each. Calculate the <b>percentage profit</b>.',
+   '50', [],
+   'Find the total selling price, then calculate profit as a percentage of the cost price.',
+   'Total selling price = 50 &times; Rs 3 = Rs 150. Profit = 150 &minus; 100 = Rs 50. Percentage profit = (50 &divide; 100) &times; 100 = 50%.',
+   { unit: '%' }],
+
+  ['g9m-nrv-050', 'fractions_decimals_percentages', 3, 2,
+   'A class has 45 pupils. 60% of them are girls. Find the number of <b>boys</b> in the class.',
+   '18', [],
+   'Find the number of girls first, then subtract from the total.',
+   '60% of 45 = 27 girls. Boys = 45 &minus; 27 = 18.'],
+
+  ['g9m-nrv-051', 'fractions_decimals_percentages', 4, 3,
+   'A television costs Rs 12 000 before VAT. VAT of 15% is added to the price. Find the <b>total cost</b>.',
+   '13800', [],
+   'Find 15% of Rs 12 000 and add it to the original price.',
+   'VAT = 15% of 12 000 = Rs 1 800. Total cost = 12 000 + 1 800 = Rs 13 800.', { prefix: 'Rs' }],
+
+  ['g9m-nrv-052', 'fractions_decimals_percentages', 3, 2,
+   'Evaluate 3<sup>2</sup> &times; 2 &minus; (5 + 3) &divide; 4.',
+   '16', [],
+   'Follow BODMAS: Brackets, then Orders (powers), then Divide/Multiply, then Add/Subtract.',
+   '3<sup>2</sup> = 9. Then 9 &times; 2 = 18. Brackets: (5 + 3) = 8, and 8 &divide; 4 = 2. Finally 18 &minus; 2 = 16.'],
+
+  ['g9m-nrv-053', 'fractions_decimals_percentages', 3, 2,
+   'Work out 4 &minus; 1<sup>2</sup>&frasl;<sub>3</sub>, giving your answer as a fraction.',
+   '7/3', ['2 1/3'],
+   'Convert the mixed number to an improper fraction first.',
+   '1<sup>2</sup>&frasl;<sub>3</sub> = <sup>5</sup>&frasl;<sub>3</sub>. Write 4 as <sup>12</sup>&frasl;<sub>3</sub>: <sup>12</sup>&frasl;<sub>3</sub> &minus; <sup>5</sup>&frasl;<sub>3</sub> = <sup>7</sup>&frasl;<sub>3</sub>.'],
+
+  ['g9m-nrv-054', 'fractions_decimals_percentages', 4, 3,
+   'Asha earns Rs 3 600 per month. She spends <sup>2</sup>&frasl;<sub>5</sub> on rent and <sup>1</sup>&frasl;<sub>4</sub> on food. How much money does she have <b>left</b>?',
+   '1260', [],
+   'Find the amount spent on rent and food separately, then subtract both from her earnings.',
+   'Rent = <sup>2</sup>&frasl;<sub>5</sub> &times; 3 600 = Rs 1 440. Food = <sup>1</sup>&frasl;<sub>4</sub> &times; 3 600 = Rs 900. Left = 3 600 &minus; 1 440 &minus; 900 = Rs 1 260.',
+   { prefix: 'Rs' }],
+
+  // ── harder ratio, proportion and measures ────────────────────────────────
+  ['g9m-nrv-055', 'ratio_and_measures', 3, 2,
+   'A car travels 240 km on 20 litres of petrol. How many litres of petrol are needed to travel 360 km?',
+   '30', [],
+   'Find the rate of petrol use per kilometre, then multiply.',
+   'Petrol per km = 20 &divide; 240 = <sup>1</sup>&frasl;<sub>12</sub> L. Petrol for 360 km = 360 &divide; 12 = 30 L.',
+   { unit: 'L' }],
+
+  ['g9m-nrv-056', 'ratio_and_measures', 4, 3,
+   'Three friends share a prize of Rs 2 400 in the ratio 1 : 2 : 3. Find the <b>largest share</b>.',
+   '1200', [],
+   'Find the value of one part first.',
+   '1 + 2 + 3 = 6 parts. One part = Rs 2 400 &divide; 6 = Rs 400. Largest share = 3 &times; Rs 400 = Rs 1 200.',
+   { prefix: 'Rs' }],
+
+  ['g9m-nrv-057', 'ratio_and_measures', 3, 2,
+   'A car travels at 80 km/h. How far does it travel in 1 hour 30 minutes?',
+   '120', [],
+   'Convert 1 hour 30 minutes into hours before applying distance = speed &times; time.',
+   '1 hour 30 minutes = 1.5 hours. Distance = 80 &times; 1.5 = 120 km.', { unit: 'km' }],
+
+  ['g9m-nrv-058', 'ratio_and_measures', 3, 2,
+   'A bus travels 90 km at a speed of 60 km/h. How many <b>minutes</b> does the journey take?',
+   '90', [],
+   'Find the time in hours first, then convert to minutes.',
+   'Time = 90 &divide; 60 = 1.5 hours. 1.5 &times; 60 = 90 minutes.', { unit: 'minutes' }],
+
+  ['g9m-nrv-059', 'ratio_and_measures', 3, 2,
+   'Two bells ring at the same time. After that, one rings every 20 minutes and the other every 30 minutes. After how many minutes will they ring together again?',
+   '60', [],
+   'Find the LCM of 20 and 30.',
+   'LCM(20, 30) = 60. The bells will ring together again after 60 minutes.', { unit: 'minutes' }],
+
+  ['g9m-nrv-060', 'ratio_and_measures', 4, 3,
+   '6 workers can complete a task in 10 days. How many workers are needed to complete the same task in 4 days? [Assume all workers work at the same rate.]',
+   '15', [],
+   'This is inverse proportion: fewer days means more workers are needed.',
+   'Total work = 6 &times; 10 = 60 worker-days. Workers needed for 4 days = 60 &divide; 4 = 15.'],
+
+  ['g9m-nrv-061', 'ratio_and_measures', 4, 3,
+   'The average of 4 numbers is 18. Three of the numbers are 12, 20 and 25. Find the <b>fourth number</b>.',
+   '15', [],
+   'The total sum of all 4 numbers = 4 &times; their average.',
+   'Sum of 4 numbers = 4 &times; 18 = 72. Fourth number = 72 &minus; (12 + 20 + 25) = 72 &minus; 57 = 15.'],
+
+  ['g9m-nrv-062', 'ratio_and_measures', 3, 2,
+   'Convert 3 hours 20 minutes into seconds.',
+   '12000', [],
+   'Convert to minutes first, then multiply by 60.',
+   '3 hours 20 minutes = 200 minutes. 200 &times; 60 = 12 000 seconds.', { unit: 'seconds' }],
+
+  ['g9m-nrv-063', 'ratio_and_measures', 4, 3,
+   'In a school, the ratio of boys to girls is 3 : 5. There are 240 boys. Find the <b>total number of pupils</b> in the school.',
+   '640', [],
+   'Find the value of one part first, then multiply by the total number of parts.',
+   '3 parts = 240 boys, so 1 part = 80. Total = (3 + 5) &times; 80 = 8 &times; 80 = 640.'],
+
+];
+
+const isNumeric = a => /^-?[\d.\/]+$/.test(a);
+
+ITEMS3.forEach(([id, subsection, difficulty, marks, prompt, answer, accept, hint, explanation, extra]) => {
+  STATIC_QUESTIONS.push(makeTask({
+    id, chapterId: CH, subsection, difficulty,
+    source: 'NCE past-paper number revision practice.',
+    parts: [{
+      label: 'a', prompt, marks, hint, explanation,
+      response: Object.assign(
+        { kind: isNumeric(answer) ? 'number' : 'expression', answer, accept }, extra || {}),
+    }],
+  }));
+});
+
+// ── Multi-part: savings and target ─────────────────────────────────────────
+STATIC_QUESTIONS.push(makeTask({
+  id: 'g9m-nrv-064', chapterId: CH, subsection: 'fractions_decimals_percentages', difficulty: 4,
+  source: 'NCE past-paper number revision practice.',
+  parts: [
+    {
+      label: 'a',
+      prompt: 'Raju earns Rs 5 000 per month. He saves 20% of his earnings each month.<br>Find the amount Raju saves per month.',
+      marks: 2,
+      hint: 'Find 20% of Rs 5 000.',
+      explanation: '20% of 5 000 = <sup>20</sup>&frasl;<sub>100</sub> &times; 5 000 = Rs 1 000.',
+      response: { kind: 'number', answer: '1000', prefix: 'Rs' },
+    },
+    {
+      label: 'b',
+      prompt: 'How many months will it take Raju to save Rs 6 000?',
+      marks: 2,
+      hint: 'Divide the target amount by the monthly savings you found in (a).',
+      explanation: 'Rs 6 000 &divide; Rs 1 000 = 6 months.',
+      dependsOn: 'a',
+      response: { kind: 'number', answer: '6', unit: 'months' },
+    },
+  ],
+}));
+
+// ── Multi-part: map scale ──────────────────────────────────────────────────
+STATIC_QUESTIONS.push(makeTask({
+  id: 'g9m-nrv-065', chapterId: CH, subsection: 'ratio_and_measures', difficulty: 4,
+  source: 'NCE past-paper number revision practice.',
+  parts: [
+    {
+      label: 'a',
+      prompt: 'A map has a scale of 1 : 50 000. A road is represented by a line of 8 cm on the map.<br>Find the actual length of the road, in <b>kilometres</b>.',
+      marks: 2,
+      hint: 'Multiply the map length by 50 000, then convert centimetres to kilometres.',
+      explanation: '8 &times; 50 000 = 400 000 cm. 400 000 &divide; 100 000 = 4 km.',
+      response: { kind: 'number', answer: '4', unit: 'km' },
+    },
+    {
+      label: 'b',
+      prompt: 'A forest is 15 km long. Find its length on the map, in <b>centimetres</b>.',
+      marks: 2,
+      hint: 'Convert 15 km to centimetres first, then divide by 50 000.',
+      explanation: '15 km = 1 500 000 cm. 1 500 000 &divide; 50 000 = 30 cm.',
+      response: { kind: 'number', answer: '30', unit: 'cm' },
+    },
+  ],
+}));
+
+})();
