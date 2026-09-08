@@ -191,14 +191,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-sb-025', chapterId:'g9fr-doc-authentique', subsection:'fiche_infographie', difficulty:2,
     question:'Sur une infographie, à quoi sert la <b>légende</b> ?',
-    options:['À expliquer ce que représentent les couleurs','À donner le titre du document','À indiquer le nom de l\'auteur','À numéroter les pages'],
+    options:['À expliquer ce que représentent les couleurs','À indiquer le titre exact du document présenté','À donner le nom de l’auteur et sa fonction','À numéroter les pages du document imprimé'],
     answer:'À expliquer ce que représentent les couleurs',
     hint:'C\'est la clé qui permet de lire le graphique.',
     explanation:'La <b>légende</b> explique les symboles et les couleurs employés ; sans elle, les données ne sont pas interprétables.' }),
 
   makeMCQ({ id:'g9fr-sb-026', chapterId:'g9fr-doc-authentique', subsection:'reperage_explicite', difficulty:1,
     question:'Une affiche indique : « Atelier de lecture — samedi 14 juin, 9 h, bibliothèque municipale. » Où se déroule l\'atelier ?',
-    options:['À la bibliothèque municipale','Au collège','À la mairie','Au centre sportif'],
+    options:['À la bibliothèque municipale','Au collège du quartier','À la mairie du village','Au centre sportif voisin'],
     answer:'À la bibliothèque municipale',
     hint:'L\'information est écrite telle quelle sur l\'affiche.',
     explanation:'Le lieu est donné explicitement : « <b>bibliothèque municipale</b> ». Le repérage explicite consiste à retrouver une information écrite noir sur blanc.' }),
@@ -494,8 +494,8 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g9fr-sb-069', chapterId:'g9fr-oeuvres', subsection:'question_longue', difficulty:4,
     question:'Une question longue sur une œuvre demande une réponse développée. Quelle structure convient ?',
-    options:['Une idée, un exemple tiré de l\'œuvre, une conclusion','Un résumé de toute l\'intrigue','La liste des personnages','Une opinion sans référence au texte'],
-    answer:'Une idée, un exemple tiré de l\'œuvre, une conclusion',
+    options:['Une idée, un exemple tiré de l’œuvre, une conclusion','Un résumé complet de l’intrigue de l’œuvre entière','La liste de tous les personnages de l’œuvre étudiée','Une opinion personnelle sans aucune référence au texte'],
+    answer:'Une idée, un exemple tiré de l’œuvre, une conclusion',
     hint:'La réponse doit s\'appuyer sur l\'œuvre elle-même.',
     explanation:'Une réponse longue annonce une <b>idée</b>, l\'appuie sur un <b>exemple précis</b> de l\'œuvre, puis conclut. Résumer l\'intrigue ne répond pas à la question posée.' })
 );

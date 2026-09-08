@@ -51,7 +51,13 @@ const tf = answer => ({ kind: 'choice', variant: 'tick', options: ['True', 'Fals
 const pick = (options, answer) => ({ kind: 'choice', options: options, answer: answer });
 // One or more gaps on a dotted answer line. `answer` entries may themselves be
 // arrays, which markSlots() reads as "any of these is right for that gap".
-const gaps = (answer, extra) => Object.assign({ kind: 'blanks', answer: answer }, extra || {});
+// ⚠ EVERY BLANK IS AN ARRAY OF ACCEPTED SPELLINGS, even when there is only one.
+//   markSlots() copes with a bare string, but the importer preflight does not -
+//   and the importer is two-phase and fail-closed, so one bare string here means
+//   ZERO writes for the whole 20-pack corpus, not just for this file. Wrapping
+//   here rather than at each call site is what stops the next author repeating it.
+const gaps = (answer, extra) => Object.assign({ kind: 'blanks',
+  answer: answer.map(function (a) { return Array.isArray(a) ? a : [a]; }) }, extra || {});
 
 const bank = words =>
   '<div style="border:1px solid #000;padding:6px 10px;margin:6px 0;text-align:center">'

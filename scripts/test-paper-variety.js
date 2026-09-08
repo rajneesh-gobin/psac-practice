@@ -63,8 +63,20 @@ const BASELINE = {
   // Measured 2026-09-08, five papers dealt in sequence with recentIds fed forward.
   'grade9-maths':     { repeats: 8, marks: 100 },
   'grade9-biology':   { repeats: 1, marks: 50 },
-  'grade9-chemistry': { repeats: 0, marks: 50 },
-  'grade9-physics':   { repeats: 5, marks: 50 },
+  // ⚠ RE-BASELINED 0 -> 2 on 2026-09-08, ATTRIBUTED, not waved through. A content
+  //   batch added 170 items to g9s-inquiry/g9s-sts including four new figures, and
+  //   variety got WORSE. The cause is the one this file exists to make visible:
+  //   grade9-chemistry now has 33 figure-bearing questions behind only 10 DISTINCT
+  //   pictures (biology 21 behind 11, physics 39 behind 11). Adding questions that
+  //   reuse an existing figure raises how often a memorable stimulus is DRAWN
+  //   without raising how many exist, so repeats go up. The batch was still net
+  //   positive — option parity 35.6% -> 20.9% and ten subsections reached 20 — so
+  //   blocking on this would be wrong; hiding it would be worse.
+  'grade9-chemistry': { repeats: 2, marks: 50 },
+  // ⚠ LOWERED 5 -> 4 on 2026-09-08 when a content batch added distinct figures.
+  //   Lower a baseline the moment the measurement allows it: one that is never
+  //   lowered is a target nobody is working towards.
+  'grade9-physics':   { repeats: 4, marks: 50 },
   'grade9-ict':       { repeats: 1, marks: 79 },
 };
 

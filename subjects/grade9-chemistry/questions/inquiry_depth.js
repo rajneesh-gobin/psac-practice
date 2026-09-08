@@ -60,8 +60,12 @@ const rateGraph = (two) => {
     g += '<line x1="' + (X0 - 4) + '" y1="' + y.toFixed(1) + '" x2="' + X0 + '" y2="' + y.toFixed(1) + '" stroke="#0f172a" stroke-width="1"/>';
     g += '<text x="' + (X0 - 7) + '" y="' + (y + 3).toFixed(1) + '" font-size="8" text-anchor="end" fill="#334155">' + v + '</text>';
   });
-  g += '<path d="' + curve(two ? 0.055 : 0.035) + '" fill="none" stroke="#b91c1c" stroke-width="2.5"/>';
-  if (two) g += '<path d="' + curve(0.018) + '" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-dasharray="6 4"/>';
+  g += '<path d="' + curve(two ? 0.09 : 0.05) + '" fill="none" stroke="#b91c1c" stroke-width="2.5"/>';
+  // ⚠ The slower curve must reach the SAME plateau inside the plotted window,
+  //   because c091 asks the child to read "faster, but the same total gas" off
+  //   the figure. At k = 0.018 it was still climbing at t = 120 and the figure
+  //   said the opposite of the answer.
+  if (two) g += '<path d="' + curve(0.032) + '" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-dasharray="6 4"/>';
   g += '<text x="134" y="146" font-size="8" text-anchor="middle" fill="#334155">Time / s</text>';
   g += '<text x="12" y="72" font-size="8" text-anchor="middle" fill="#334155" transform="rotate(-90 12 72)">Volume of gas / cm&sup3;</text>';
   if (two) {

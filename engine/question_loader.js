@@ -72,7 +72,8 @@ const QuestionLoader = (() => {
                      'subjects/grade9-ict/questions/ch11_health_safety.js',
                      'subjects/grade9-ict/questions/ch12_troubleshooting.js',
                      'subjects/grade9-ict/questions/exam_depth.js',
-                     'subjects/grade9-ict/questions/past_paper_2024.js'],
+                     'subjects/grade9-ict/questions/past_paper_2024.js',
+                     'subjects/grade9-ict/questions/nce_section_a.js'],
   'grade9-maths': ['subjects/grade9-maths/questions/ch01_indices.js',
                      'subjects/grade9-maths/questions/ch02_coordinates.js',
                      'subjects/grade9-maths/questions/ch03_number_revision.js',
@@ -109,7 +110,9 @@ const QuestionLoader = (() => {
                        'subjects/grade9-biology/questions/b4_plant_nutrition.js',
                        'subjects/grade9-biology/questions/inquiry.js',
                        'subjects/grade9-biology/questions/past_paper_2024.js',
-                       'subjects/grade9-biology/questions/sts.js'],
+                       'subjects/grade9-biology/questions/sts.js',
+                       'subjects/grade9-biology/questions/inquiry_depth.js',
+                       'subjects/grade9-biology/questions/sts_depth.js'],
     'grade9-chemistry': ['subjects/grade9-chemistry/questions/c1_atmosphere.js',
                          'subjects/grade9-chemistry/questions/c2_mixtures.js',
                          'subjects/grade9-chemistry/questions/c3_language.js',
@@ -117,7 +120,9 @@ const QuestionLoader = (() => {
                          'subjects/grade9-chemistry/questions/c5_salts.js',
                          'subjects/grade9-chemistry/questions/inquiry.js',
                          'subjects/grade9-chemistry/questions/past_paper_2024.js',
-                         'subjects/grade9-chemistry/questions/sts.js'],
+                         'subjects/grade9-chemistry/questions/sts.js',
+                         'subjects/grade9-chemistry/questions/inquiry_depth.js',
+                         'subjects/grade9-chemistry/questions/sts_depth.js'],
     'grade9-physics': ['subjects/grade9-physics/questions/inquiry.js',
                        'subjects/grade9-physics/questions/p1_measurements.js',
                        'subjects/grade9-physics/questions/p2_light.js',
@@ -125,7 +130,9 @@ const QuestionLoader = (() => {
                        'subjects/grade9-physics/questions/p4_motion.js',
                        'subjects/grade9-physics/questions/p5_electricity.js',
                        'subjects/grade9-physics/questions/past_paper_2024.js',
-                       'subjects/grade9-physics/questions/sts.js'],
+                       'subjects/grade9-physics/questions/sts.js',
+                       'subjects/grade9-physics/questions/inquiry_depth.js',
+                       'subjects/grade9-physics/questions/sts_depth.js'],
     'grade9-social-modern-studies': ['subjects/grade9-social-modern-studies/questions/starter_bank.js'],
     'grade5-maths': [
       'subjects/grade5-maths/questions/core.js',
@@ -556,7 +563,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 95;
+  const _CACHE_VERSION = 96;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
