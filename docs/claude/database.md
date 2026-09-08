@@ -1,0 +1,150 @@
+# Database — the generated schema, RLS, grants
+
+> Part of the PSAC brief. Start at [`CLAUDE.md`](../../CLAUDE.md) — it carries the
+> architecture, the rules that apply anywhere, and the index to these files.
+> Read this before writing SQL, a policy, a grant or a migration.
+> Long-form history and how each rule was found: grep `ENGINEERING-NOTES.md`.
+
+⚠ Nothing in any `.md` outranks the code or the live database. Measure, then edit.
+
+---
+## Database
+
+### One file: `supabase-schema.sql`
+**There is exactly one .sql file at the repo root, and it is generated, not
+written.** 31 incremental migrations were consolidated into it on 2026-09-06 (24
+more on 2026-08-26, with 31 accumulating in the eleven days after). **Expect the
+same drift, and regenerate rather than adding a file.**
+
+| Thing | Where |
+|---|---|
+| The schema | `supabase-schema.sql` — 48 tables · 144 constraints · 121 indexes · 105 functions · 10 triggers · 77 policies · 1,093 grants |
+| Regenerate | `SUPABASE_ACCESS_TOKEN=sbp_… node scripts/dump-schema.js` |
+| Test | `scripts/sql-tests/run-schema-tests.sh` |
+
+⚠ **Do not hand-edit it.** Apply the change to the database, then regenerate. Its
+whole value is that it says what is *deployed*, not what someone intended — the
+difference that has cost this project the most time. `scripts/dump-schema.js`
+carries the traps that make the dump correct (the `NOTNULL` postfix-operator
+alias that silently deleted every NOT NULL, constraint ordering by kind, deferred
+defaults found via `pg_depend`, `check_function_bodies`, the pinned
+`search_path`) — read its header before changing it.
+- ⚠ **The file is a snapshot, not a diff.** It drops nothing, but it *overwrites*
+  function, policy and trigger bodies with the ones recorded in it. **Regenerate
+  before re-running it, or you roll a later fix backwards.**
+- ⚠ **Applying it to production is no longer a pure no-op** — §12 backfills an
+  owner row per family and production is missing 9 of them.
+- ⚠ **The live database cannot tell you whether the file works.** Applying it to
+  production only proves it is idempotent against a database that already has
+  everything; both ordering bugs it has had (an FK before its target's PK, a
+  column default calling a function not yet created) were invisible until it was
+  built **from nothing**. That is what step 1 of `run-schema-tests.sh` does.
+- Two blocks at the end need a human decision: **`families_name_unique_ci`**
+  (self-skipping — see [pending.md](pending.md) item 6) and the commented-out **`families_own` fix**
+  ([pending.md](pending.md) item 0).
+
+### ⚠ Four rules that have each cost real damage
+1. **Never author a policy change from `supabase-schema.sql`** — it is stale.
+   Query `pg_policies` on the live database first; writing against the dump once
+   produced a policy that would have silently un-restricted the forum.
+2. ⚠ **A policy's USING clause is checked on INSERT too — whenever the statement
+   carries a `RETURNING`**, which PostgREST emits for every `.insert().select()`.
+   A USING predicate that has to **look the row up** answers false for a row being
+   created in that same statement (it is `STABLE`; the new tuple is not in its
+   snapshot). This broke family creation outright for two days while every
+   existing family still read back fine. ⚠ **The 42501 names the wrong half** —
+   "new row violates row-level security policy" reads as a WITH CHECK failure, and
+   the WITH CHECK was passing throughout. Tell them apart by running both forms as
+   `authenticated` in a rolled-back transaction (plain `INSERT` succeeded,
+   `INSERT … RETURNING` did not). **Always keep a same-row column predicate in a
+   USING clause you widen.**
+3. **`public.students` has COLUMN-LEVEL SELECT grants** (so `pin`, `pin_hash`,
+   `pin_attempts`, `pin_locked_until` stay unreadable). **Any new column inherits
+   no grant**: every query touching it fails `42501 permission denied for table
+   students`, a message that never names the column, and the client turns that
+   into an empty result. Put a `GRANT SELECT (col)` beside every `ADD COLUMN`.
+   (This is how adding `deleted_at` emptied the parent dashboard.)
+4. **Grant `TO anon, authenticated` for anything a child calls** — a child session
+   is `anon` + a token header; the friend RPCs were `authenticated`-only and dead.
+   Check every function in a `revoke … from public` block actually has a matching
+   grant. ⚠ And a newly created function inherits Supabase's default privileges
+   **including `anon`**; `REVOKE … FROM PUBLIC` does **not** remove that — it only
+   drops the `=X` PUBLIC entry. Check `proacl`, not the migration text, after any
+   `CREATE FUNCTION`.
+
+### Other database facts worth keeping
+- ⚠ **`public.profiles` has NO email column** — the address is in `auth.users`,
+  which the browser cannot read and should not, so the admin members list could
+  only identify an account by a self-typed display name.
+  `admin-member-emails.js` resolves them through the service role: **only for the
+  ids asked for, only for an admin**, no list/search/page, so it cannot enumerate
+  the user base. Failures leave the line blank rather than toasting every render.
+- **Admin › Teachers shows what each teacher has DONE.** `admin-teacher-activity.js`
+  (service role, `requireAdmin`, ids only, capped at 30) folds ten teacher-owned
+  tables plus `auth.users.last_sign_in_at` via `netlify/lib/teacher-activity.js`
+  into one summary per id. ⚠ A table that cannot be read is NAMED in `partial` and
+  shown as unknown, never as 0.
+- ⚠ **Deleting an account does NOT delete everything it owns.** `auth.users`
+  cascades cleanly down `profiles → families → students → …`, but **five tables
+  key their owner as `text` with no foreign key** and every row survives:
+  `student_progress`, `schedule_entries`, `study_schedules`,
+  `student_assignments`, `login_events` (production already carries one orphan).
+  `admin-delete-account.js` purges them explicitly and **collects the student ids
+  BEFORE the cascade** — afterwards there is no way to know which rows were whose.
+  ⚠ `security_events` is deliberately NOT purged — its ids carry no FK precisely
+  so the audit trail outlives its subject.
+  ⚠ Admin delete is **permanent**; `Store.deleteMyAccount()` is the soft one
+  (`profiles.deleted_at`, `auth.users` kept so a parent can restore). Keep Disable
+  as the reversible option in the UI.
+- A `DELETE` whose RLS policy matches no row returns **no error and no rows**. Use
+  `.delete().select('id')` and treat zero rows as failure — reading that as
+  success is how a deleted child came back and became a duplicate.
+- Soft delete everywhere: `profiles.deleted_at`, `students.deleted_at`, partial
+  unique index `students_live_username_key … WHERE deleted_at IS NULL`. The
+  `auth.users` row is **deliberately kept** so restore works and re-signup lands
+  on "you already have an account".
+- ⚠ Fall back to an older column list **only** on a genuine missing-column error
+  (42703 / PGRST204). Falling back on *any* error once dropped the
+  `deleted_at IS NULL` filter and resurrected deleted children.
+- Privileged columns (`role`, `is_super_admin`, `disabled`, `expires_at`,
+  `referral_code`, `credits`, `blocked_until`, `students.expires_at`) are protected
+  by BEFORE UPDATE triggers, because `profiles_update` allows a parent to update
+  their own row with **no column restriction** — a one-line PostgREST call used to
+  grant `role: 'admin'`. Deliberately unguarded, each for a reason:
+  `teacher_status`/`teacher_tier` (a non-admin applicant writes them, and `role`
+  is guarded anyway), `session_version` (anon `verify_student_pin` bumps it),
+  `profiles.deleted_at` (the owner's own).
+- `credit_ledger`, `chapter_entitlements` and `security_events` have **no
+  insert/update/delete grant at all** — stronger than a policy, because a later
+  policy mistake cannot open a hole with no grant behind it.
+- ⚠ **Family setup is a three-step wizard with no transaction** (profile, family,
+  first child). `createProfile()` and `createFamily()` **resume on 23505** rather
+  than failing: the profile PK can only be the caller's own row and
+  `families.parent_id` is UNIQUE, so "you already have one" is probed via
+  `getMyFamily()` and never confused with the family-NAME collision that shares
+  the SQLSTATE. Both return `{_error:{code,message}}` — a bare null hid a `42501`.
+  A **profile with no family is that interrupted setup**, and
+  `_handleParentSession()` routes it back to family-setup — but only when
+  `Store.lastFamilyError()` is empty (the query *answered* "none") and only for
+  `role === 'parent'`: routing a failed READ there would write a second family
+  over one that exists, an admin legitimately has no family, and a co-parent's
+  arrives via `my_member_family()`. `scripts/test-setup-recovery.js`.
+- ⚠ **A child cannot read `families`** — all three arms of `families_own` need
+  `auth.uid()`, so the plan read returned nothing and plan limits had never once
+  been applied. Plan features come from **`student_plan_features()`** instead:
+  SECURITY DEFINER, returns `{ok, plan_id, features}` and nothing else. ⚠ **The
+  obvious fix was the wrong one** — adding a child arm to the policy would let a
+  child SELECT **`family_code`, the private join secret**, on the least trusted
+  device in the family, and widening a USING clause is what broke family creation
+  (rule 2 above). `p_student` is optional: a child omits it (the token answers), a
+  parent previewing a child passes it; asking about another family's child is
+  `not_authorized`. Granted to **anon AND authenticated**.
+- `Store.getMyEntitlements()` / `getFamilyEntitlements()` return **null** on
+  failure, never `[]` — `[]` is a real answer ("owns nothing") and conflating them
+  made a flaky network silently re-lock chapters.
+- Queries that gate login must never reference a column an un-migrated database
+  might lack — hence `getMyPreferences()`, `getAccountDeletedAt()` and
+  `referral_code` are fetched **separately** from `getProfile()`.
+- Read a family's children in **one** query (`student_id=in.(…)`), and mark every
+  requested id fetched hit *or* miss so a child who has never practised is not
+  re-queried on every expand.
