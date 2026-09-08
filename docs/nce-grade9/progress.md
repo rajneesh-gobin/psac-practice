@@ -3889,3 +3889,168 @@ them, and both sit close to the rate limit as well.
 ⚠ Everything above is Grades 4-6 — **content children are using today**, which is
 why it outranks the remaining Grade 9 work.
 ⚠ The English / French / SMS decision still blocks the last three Grade 9 packs.
+
+---
+
+## Batch 26 — Science split into Biology, Chemistry and Physics
+
+**The user's correction, and the brief agreed with it.** The content had been
+written as one `grade9-science` pack of 16 chapters. `docs/implenent.md` lines
+104-118 names *"Grade 9 English, French, Mathematics, **Biology, Chemistry,
+Physics**, ICT, Social & Modern Studies"* and adds that if a Science umbrella is
+kept for navigation, *"generated exams, question banks, analytics and teacher
+assignment filters must preserve the separate NCE subjects."* `past-papers/nce/`
+holds three separate folders, and the NCE sets three independent 45-minute /
+50-mark papers. One pack could not satisfy any of that.
+
+### What moved
+
+| new pack | chapters | questions | from |
+|---|---|---|---|
+| `grade9-biology` | 6 | **189** | b1–b4 + part of inquiry/sts |
+| `grade9-chemistry` | 7 | **218** | c1–c5 + part of inquiry/sts |
+| `grade9-physics` | 7 | **178** | p1–p5 + part of inquiry/sts |
+| | | **585** | = exactly what `grade9-science` held |
+
+- `b*/c*/p*` question files moved whole.
+- `inquiry.js` and `sts.js` are cross-cutting data tables and were split **by
+  subsection affinity, not duplicated** — biology 18+11 rows, chemistry 12+18,
+  physics 6+6. A question exists once, in one pack, so no id collides.
+- `past_paper_2024.js` was split by `chapterId`: biology 25, chemistry 30,
+  physics 1, plus one inquiry-tagged item that came off the 2024 **Biology**
+  paper and followed the investigation subsections into Biology. Its ten
+  `PSAC_PDF_QUESTIONS` entries went 5 / 4 / 1.
+
+⚠ **CHAPTER AND QUESTION IDS KEEP THE `g9s-` PREFIX, DELIBERATELY.** The importer
+keys on question id and compares `subject_id`, so moving a question to a new pack
+**updates the existing row in place** — no orphan, no duplicate. Renaming 585 ids
+would have created both, and the importer never deletes (`g9m-samp-001` and
+`g9s-samp-001` both had to be removed by hand in earlier batches). The prefix
+records where the content came from; it does not mean the pack is still combined.
+
+⚠ **Each pack's `examWeight` values sum to exactly 40**, which
+`assembleExamPaper()` requires. Biology 9/9/9/9 + 2 + 2; Chemistry 9/6/9/9/3 +
+2 + 2; Physics 9/6/6/9/6 + 2 + 2. A sum over 40 is not cosmetic — the shedding
+loop always decrements the **first** chapter in list order, so one chapter gets
+starved while the paper still totals 40 and every test passes.
+
+### Three things the split broke, and only one of them announced itself
+
+**1. `const SYLLABUS` collided three ways.** `scripts/build-subject-index.js`
+executes every manifest in ONE shared context, so three packs declaring a bare
+top-level `SYLLABUS` threw *"Identifier 'SYLLABUS' has already been declared"* —
+the same collision `CHAPTERS` is recorded for in CLAUDE.md. Renamed to
+`G9BIO_SYLLABUS` / `G9CHEM_SYLLABUS` / `G9PHY_SYLLABUS`. This one failed loudly.
+
+**2. `const _g9sc24` collided the same way, and was NOT caught by the build.**
+`past_paper_2024.js` is the one question file in these packs that is not wrapped
+in an IIFE, and its image-crop helper is a top-level `const`. All three copies
+inherited the name. `build-questions.js` uses a context per pack so the bundles
+built fine; the shared-context harnesses threw. Renamed `_g9bio24` / `_g9chem24`,
+and deleted from Physics, which declared it and never used it.
+
+**3. ⚠⚠ THE SVG HARNESS WENT QUIET INSTEAD OF FAILING — the exact trap its own
+header warns about.** `scripts/test-svg-figures.js` names its packs in a list and
+skipped a missing directory with `if (!fs.existsSync(dir)) continue;`. When
+`subjects/grade9-science/questions` stopped existing the run went from **991
+questions / 159 figures to 712 / 125 and printed PASS**: 34 science figures
+stopped being checked and nothing said so. That guard was mine, written in the
+same file whose header says *"a harness that names two packs stops covering the
+project the moment a third one ships."*
+
+Both halves are now asserted, because both halves have to hold:
+
+- a listed directory that does not exist is a **hard failure**, not a skip;
+- **any `subjects/grade9-*/questions` the list does not name is a hard failure too.**
+
+⚠ **That second check fired immediately and found a real gap: `grade9-ict` has
+been LIVE with 524 questions and had never been checked by this harness at all.**
+It and the three placeholder packs are now in the list. Coverage went 712 → **1824
+questions**, 1366 checks still green.
+
+### The option-length work, and a flaky test found while doing it
+
+`grade9-biology` alone measured **42.5%** "answer is visibly the longest option"
+against a 42% limit. The combined pack had passed because Chemistry and Physics
+diluted it — splitting did not create the problem, it exposed it.
+
+Fixed by **lengthening eight distractors**, never by trimming an answer. Trimming
+is what turned *"Why is it important to have clean drinking water?"* into an
+answer that had lost its own subject in an earlier batch; a longer wrong option
+cannot become right. 42.5% → **37.3%**, spread 11.6 (limit 12).
+
+⚠ **Then a pack I had not touched failed — and it was the harness, not the
+content.** `grade6-maths` reported answer-position drift 8.3% against a 3-SE
+tolerance of 8.0%. **Measured by rebuilding the bundles four times with no source
+edit between: 8.3% (n=288) · clean · 8.5% (n=322, a different pack) · clean.**
+`makeMCQ()` re-randomises option order on every build, and this check runs on
+~17 packs × 4 bins ≈ 68 positions, so at 3 SE a whole build failed roughly one
+run in five. **A test that fails at random on unchanged content is worse than no
+test — it gets re-run until it passes.** Tolerance widened to **4 SE** (≈6e-5 per
+bin, under half a percent across the build) and verified green over four further
+rebuilds. It still catches what it exists for: the projected-item tell this
+harness was written for was **95.1% on position A**, not a marginal drift.
+
+`scripts/test-boot-smoke.js` hard-codes the pack count on purpose; 46 → **48**.
+
+### Coverage copy — all three surfaces, in one edit
+
+⚠ **"Science" is now a wrong word on every parent-facing surface**: a parent
+reading it would look for one subject and find three cards. Changed together, as
+the comments in all three demand:
+
+- the landing page badge and nav subtitle (`index.html`),
+- `_appShareText()` (`engine/app.js`),
+- `_inviteText()` (`engine/auth.js`).
+
+Landing-page numbers re-measured from the **built bundles**, counting what
+*projects* rather than what is stored: **20 live packs · 214 chapters · 17,612
+practisable questions · 194 past-paper items**. Previous: 18 / 210 / 16,502 / 164.
+
+⚠ The split accounts for +2 packs and +4 chapters (Inquiry and STS exist once per
+science pack now) and **zero** questions. The rest of the movement is **another
+session writing content in this same working tree** — grade5-english 645 → 705,
+grade4-french 2121 → 2141 and six more grew with no edit of mine. Re-count; do
+not derive a new total by adding to the one written here.
+
+`SHELL_VERSION` → **v277**. `_CACHE_VERSION` was already at **95**.
+
+### Measured after
+
+`check` · `test-subsection-invariant` · `test-exam-paper-shape` ·
+`test-question-cache-budget` · `test-question-import-parity` ·
+`test-task-projection` · `test-nce-paper` · `test-svg-figures` ·
+`test-boot-smoke` · `test-option-parity` · `test-netlify-redirects` — **all
+green**, and option-parity green across four rebuilds. Mobile audit at 640px
+finds only the deliberate off-screen contact honeypot.
+
+### ⚠ NOT IMPORTED, AND NOT BY OVERSIGHT
+
+The 585 rows still carry `subject_id = 'grade9-science'` in the database, and
+that is currently the **correct** state. Production serves the **deployed**
+subject index, which still knows only `grade9-science`. Importing now would move
+every row onto three `subject_id`s no deployed pack asks for, and the live Grade
+9 Science subject would answer with **nothing** — a subject a child can open and
+find empty, for as long as the gap lasted.
+
+**The import and the deploy are one action and must happen together**, in this
+order: `node netlify/import-questions.js --dry-run` to confirm the 585 updates,
+then the import, then `node scripts/prepare-deploy.js` and the staged deploy.
+`docs/implenent.md` says not to import into production or deploy, so both are
+left for a deliberate decision.
+
+### Next
+
+- **Blocked on the user:** the English / French / SMS written-response decision
+  (25 marks English, 25 French, all of SMS Section B). It still blocks the last
+  three Grade 9 packs. ⚠ An agent notification in an earlier batch claimed the
+  user had chosen "Option B"; **no such decision exists** and nothing has been
+  built on it.
+- Each science pack holds only **part** of Scientific Inquiry and STS — that is
+  what splitting by affinity rather than duplicating costs. Filling all three
+  back to full coverage is real remaining content work.
+- ICT reaches **79 of 100** marks on a generated paper; warned, not hidden.
+- Option-length debt: **8 packs** left, `grade4-french` next at 74 flagged items.
+- ⚠ Still outstanding from an earlier batch: **the Supabase Management API token
+  pasted in chat must be rotated.** It was never used — the importer needs
+  `SUPABASE_SERVICE_ROLE_KEY`, which is already in `.env`.

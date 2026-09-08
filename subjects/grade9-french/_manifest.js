@@ -153,7 +153,7 @@ const G9FR_SYLLABUS = {
 
 registerSubject({
   id: 'grade9-french', name: 'Français', grade: 9, icon: '🇫🇷', subject: 'French',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G9FR_SYLLABUS,
   chapters: [

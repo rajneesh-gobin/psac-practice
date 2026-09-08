@@ -179,7 +179,7 @@ const G9ENG_SYLLABUS = {
 
 registerSubject({
   id: 'grade9-english', name: 'English', grade: 9, icon: '📖', subject: 'English',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G9ENG_SYLLABUS,
   chapters: [
@@ -191,15 +191,15 @@ registerSubject({
       syllabus: 'Read and interpret complex and literary texts. Analyse how writers achieve their effects. Compare viewpoints across texts. Justify a response with evidence from the text.' },
     { id: 'g9eng-writing',              name: 'Writing',                                         icon: '✍️', examWeight: 8,
       syllabus: 'Write sustained texts in a range of genres. Craft introductions and conclusions. Use cohesive devices across paragraphs. Proofread for grammar, spelling and punctuation.' },
-    //    Added 2026-09-08 from blueprint-english.md �8.2                     
-    // � These three are "the most important finding in that section": real,
+    // ── Added 2026-09-08 from blueprint-english.md §8.2 ──────────
+    // ⚠ These three are "the most important finding in that section": real,
     //   recurring, mark-bearing tasks that NO existing chapter covered 
     //   16 marks a year, every year, with nowhere to live.
-    { id: 'g9eng-vocabulary',         name: 'Vocabulary & Word Choice',                        icon: '=�', examWeight: 3,
+    { id: 'g9eng-vocabulary',         name: 'Vocabulary & Word Choice',                        icon: '📖', examWeight: 3,
       syllabus: 'Choose the precise word for a sentence, and work out what a word means from its context. Q2 in full (5 marks) plus the vocabulary-in-context item that closes Q8 (3 marks): 8 marks a year, in all five papers.' },
-    { id: 'g9eng-word-formation',     name: 'Word Formation',                                  icon: '= ', examWeight: 2,
+    { id: 'g9eng-word-formation',     name: 'Word Formation',                                  icon: '🔡', examWeight: 2,
       syllabus: 'Form the right word from a root supplied in brackets  noun, adjective, adverb or verb. Q4 in full: 5 marks a year, in all five papers.' },
-    { id: 'g9eng-literature',         name: 'Literary Appreciation',                           icon: '=�', examWeight: 3,
+    { id: 'g9eng-literature',         name: 'Literary Appreciation',                           icon: '📚', examWeight: 3,
       syllabus: 'Read a poem or a prose extract and answer on narrative voice, rhyme, figurative devices and their effect, explain given lines, and give a supported judgement. Q10: 10 marks a year. The two options are isomorphic  both are eight parts, 1+1+1+1+1+1+1+3  so one shape prepares a child for either.' },
     { id: 'g9eng-gr-nouns',             name: 'Grammar · Nouns',                                 icon: '🔤', examWeight: 1,
       syllabus: 'Use nouns and noun phrases in apposition.' },

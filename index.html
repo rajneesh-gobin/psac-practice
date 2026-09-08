@@ -403,7 +403,7 @@
         <div class="text-2xl sm:text-3xl select-none shrink-0">🎓</div>
         <div class="min-w-0 flex-1">
           <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">PSAC Exam Practice</h1>
-          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6 &amp; NCE Grade 9 Maths, ICT + Science</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6 &amp; NCE Grade 9 Maths, ICT, Biology, Chemistry + Physics</p>
         </div>
         <!-- Stats ride with the branding, not with the actions: they are
              information, not buttons, and keeping them out of the action row is
@@ -602,11 +602,18 @@
         </button>
 
         <!-- ⚠ Measured from the BUILT question bundles and the live manifests, not
-             estimated. Re-measured 2026-09-08 when NCE Grade 9 Science went live:
-             16,502 practisable questions and 210 chapters across the 18 LIVE packs
-             (Grades 4-6 plus Grade 9 Maths, ICT and Science), 164 past-paper items,
-             7 games with mg-card-live in minigame.js. Was 15,974 / 194 / 17 packs,
-             then 15,625 / 182 / 16, and 13,079 / 160 / 15 before that.
+             estimated. Re-measured 2026-09-08 after grade9-science was SPLIT into
+             Biology, Chemistry and Physics: 17,612 practisable questions and 214
+             chapters across the 20 LIVE packs (Grades 4-6 plus Grade 9 Maths, ICT,
+             Biology, Chemistry and Physics), 194 past-paper items, 7 games with
+             mg-card-live in minigame.js. Was 16,502 / 210 / 18 packs, then
+             15,974 / 194 / 17, 15,625 / 182 / 16, and 13,079 / 160 / 15.
+             ⚠ The split added 4 chapters and no questions: Inquiry and STS exist
+             once per science pack now, and all 585 items came across intact.
+             ⚠ The other numbers moved because ANOTHER SESSION is writing content in
+             this same working tree - grade5-english 645 -> 705, grade4-french
+             2121 -> 2141 and six more grew with no edit of mine. Re-count; do not
+             derive a new total by adding to the one written here.
              ⚠ 833 of those questions are PROJECTED from the 667 grade9-maths tasks by
              Assessment.projectToItems(). A raw task is excluded from every pool and has
              no question text at all, so counting bundle rows would claim 667 questions
@@ -614,15 +621,15 @@
              Re-count before changing a number here. -->
         <div class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-2xl">
           <div class="bg-white/5 border border-white/10 rounded-2xl px-3 py-4">
-            <div class="text-2xl sm:text-3xl font-black text-white">15,000+</div>
+            <div class="text-2xl sm:text-3xl font-black text-white">17,000+</div>
             <div class="text-[11px] text-indigo-300/70 mt-0.5 leading-tight">practice questions</div>
           </div>
           <div class="bg-white/5 border border-white/10 rounded-2xl px-3 py-4">
-            <div class="text-2xl sm:text-3xl font-black text-white">210</div>
+            <div class="text-2xl sm:text-3xl font-black text-white">214</div>
             <div class="text-[11px] text-indigo-300/70 mt-0.5 leading-tight">chapters, every one split into sub-topics</div>
           </div>
           <div class="bg-white/5 border border-white/10 rounded-2xl px-3 py-4">
-            <div class="text-2xl sm:text-3xl font-black text-white">164</div>
+            <div class="text-2xl sm:text-3xl font-black text-white">194</div>
             <div class="text-[11px] text-indigo-300/70 mt-0.5 leading-tight">real past-paper questions (2016–2024)</div>
           </div>
           <div class="bg-white/5 border border-white/10 rounded-2xl px-3 py-4">
@@ -684,19 +691,28 @@
 
         <!-- ⚠ NCE is a SEPARATE stage from PSAC (Grades 7-9 vs 1-6), so it gets its
              own line rather than being folded into "Five core PSAC subjects".
-             ⚠ Names the THREE subjects that are live. Grade 9 has six registered
-             packs and THREE are still comingSoon (English, French, Social &
-             Modern Studies - one sample question each). ICT joined Mathematics
-             on 2026-09-08 (469 questions, 12 of 12 chapters) and Science the same
-             day (528 questions, 16 of 16, all 92 declared subsections tagged).
-             Saying "Grade 9" or "NCE" here would still promise three subjects
+             ⚠ Names the FIVE subjects that have real content. Grade 9 has EIGHT
+             registered packs and THREE of them hold ONE SAMPLE QUESTION EACH
+             (English, French, Social & Modern Studies). ⚠ Judge by CONTENT, not by
+             the comingSoon flag: another session flipped those three to
+             comingSoon: false on 2026-09-08 while they were still empty, and
+             test-exam-paper-shape immediately failed with "a full exam dealt 1 of
+             40 questions". A flag says what someone intended; the bundle says what
+             a child receives. ICT joined Mathematics
+             on 2026-09-08 (524 questions, 12 of 12 chapters), and Science the same
+             day - then Science was SPLIT into Biology (189), Chemistry (218) and
+             Physics (178), because the NCE sets them as three separate 50-mark
+             papers and docs/implenent.md names them individually.
+             ⚠ THE SPLIT IS WHY THIS LINE CANNOT SAY "Science": a parent reading
+             that would look for one subject and find three cards, or none.
+             Saying "Grade 9" or "NCE" would still promise three subjects
              that open empty. Re-check against SUBJECT_PACKS before widening this
              sentence, and change _appShareText() (app.js) and _inviteText()
              (auth.js) in the same edit. -->
         <p class="text-center mb-7">
           <span class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 border border-emerald-400/40 px-4 py-1.5 text-sm text-emerald-200">
             <span class="rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-emerald-950">New</span>
-            NCE Grade 9 <b class="text-white">Mathematics</b>, <b class="text-white">ICT</b> and <b class="text-white">Science</b> are now live — 47 chapters
+            NCE Grade 9 <b class="text-white">Mathematics</b>, <b class="text-white">ICT</b>, <b class="text-white">Biology</b>, <b class="text-white">Chemistry</b> and <b class="text-white">Physics</b> are now live — 51 chapters
           </span>
         </p>
 

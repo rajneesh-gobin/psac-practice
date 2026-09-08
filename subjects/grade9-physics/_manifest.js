@@ -79,9 +79,20 @@ const G9PHY_SYLLABUS = {
   ] },
   'g9s-inquiry': { subsections: [
     { id: 'formula_rearrangement', name: 'Finding a missing quantity from a simple relationship' },
+    { id: 'hypothesis_testing', name: 'Developing and testing a simple hypothesis' },
+    { id: 'recording_data', name: 'Recording data in tables, diagrams, charts and graphs' },
+    { id: 'interpreting_results', name: 'Processing, interpreting and evaluating results' },
+    { id: 'lab_safety', name: 'Conducting investigations safely and cooperatively' },
+    { id: 'reporting_findings', name: 'Communicating steps and results in reports and presentations' },
   ] },
+  // ⚠ energy_and_society IS NOT A SECOND COPY OF P3. P3 owns the classification
+  //   of sources; this owns what those choices cost the people who live with
+  //   them. justifying_views is the one STS outcome no pack had claimed after
+  //   the split - see the header of questions/sts_depth.js for the evidence.
   'g9s-sts': { subsections: [
     { id: 'optical_fibres', name: 'Optical fibres in medicine and communications' },
+    { id: 'energy_and_society', name: 'Energy choices for society: supply, land, health and cost' },
+    { id: 'justifying_views', name: 'Expressing and justifying views consistent with scientific evidence' },
   ] },
 };
 

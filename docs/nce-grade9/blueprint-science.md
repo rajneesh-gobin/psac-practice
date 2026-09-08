@@ -8,6 +8,16 @@ Everything below was **read off the paper**, page by page, from rendered images.
 figure here is inferred from text extraction, and none is carried forward from an
 earlier document.
 
+> **The packs now match this document.** Content was first written as one
+> `grade9-science` pack of 16 chapters; on 2026-09-08 it was split into
+> `grade9-biology` (6 chapters, 189 questions), `grade9-chemistry` (7, 218) and
+> `grade9-physics` (7, 178), each with its own blueprint in `engine/nce_paper.js`.
+> Chapter and question ids keep the `g9s-` prefix on purpose - they are stable
+> identifiers the importer keys on, and renaming them would orphan 585 database
+> rows. Scientific Inquiry and STS are cross-cutting and were split by subject
+> affinity rather than duplicated, so each pack currently holds only part of
+> them; filling that back out is recorded as remaining work in `progress.md`.
+
 ---
 
 ## 0. Sources, page counts and inspection record

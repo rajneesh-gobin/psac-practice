@@ -71,8 +71,10 @@ const G9BIO_SYLLABUS = {
   ] },
   'g9s-inquiry': { subsections: [
     { id: 'hypothesis_testing', name: 'Developing and testing a simple hypothesis' },
+    { id: 'lab_safety', name: 'Conducting investigations safely and cooperatively' },
     { id: 'recording_data', name: 'Recording data in tables, diagrams, charts and graphs' },
     { id: 'interpreting_results', name: 'Processing, interpreting and evaluating results' },
+    { id: 'reporting_findings', name: 'Communicating steps and results in reports and presentations' },
   ] },
   'g9s-sts': { subsections: [
     { id: 'christiaan_barnard', name: 'Heart transplant and the work of Christiaan Barnard' },

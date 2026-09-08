@@ -3,7 +3,7 @@
 ## What this is
 A vanilla JS single-page app for Mauritian primary children revising for the
 **PSAC** exam (grades 1–9 registered; **4, 5, 6 are the live ones**, plus NCE
-Grade 9 Mathematics and ICT). Subjects: Maths, English, French, Science, History
+Grade 9 Mathematics, ICT, Biology, Chemistry and Physics). Subjects: Maths, English, French, Science, History
 & Geography. Hosted on **Netlify**; backend **Supabase**
 (`https://xawvjwsiqhtxgpocdqgm.supabase.co`). No frameworks — HTML/CSS/JS +
 Tailwind CDN.
@@ -23,6 +23,7 @@ you know it exists. The area file carries the rule, its bound and its test.
 
 | Touching… | Read first |
 |---|---|
+| **NCE Grade 9 content — what to write next** | [`docs/nce-grade9/batch_plan.md`](docs/nce-grade9/batch_plan.md) |
 | a question file, a pack, `exam_depth.js`, cloze/errorhunt, exam weights, the importer | [`content-authoring.md`](docs/claude/content-authoring.md) |
 | `store.js`, `question_loader.js`, `DB`, the localStorage caches | [`data-storage.md`](docs/claude/data-storage.md) |
 | `auth.js`, the parent PIN, sessions, anything that sends email | [`auth-sessions.md`](docs/claude/auth-sessions.md) |
@@ -288,9 +289,16 @@ and 0 `cloze` rows**. It now loads through `netlify/lib/questions-sandbox.js`, a
 ---
 
 ## Grades, pricing, and `comingSoon`
-- **Registered: grades 1–9.** Live: **4, 5, 6** plus three Grade 9 packs
-  (**grade9-maths, grade9-ict, grade9-science**). Every other pack is a
-  `comingSoon: true` placeholder (one manifest + one sample question).
+- **Registered: grades 1–9.** Live: **4, 5, 6** plus five Grade 9 packs
+  (**grade9-maths, grade9-ict, grade9-biology, grade9-chemistry,
+  grade9-physics**). Every other pack is a `comingSoon: true` placeholder
+  (one manifest + one sample question).
+  ⚠ **There is no `grade9-science` pack.** It existed for one day and was split
+    on 2026-09-08, because the NCE sets Biology, Chemistry and Physics as three
+    independent 45-minute / 50-mark papers. Chapter and question ids keep the
+    `g9s-` prefix on purpose — the importer keys on them and renaming would
+    orphan 585 rows. Inquiry and STS were split by subject affinity, not
+    duplicated, so each pack holds only part of them for now.
 - **Grades 1–2 are free forever; 3–9 are paid.** Permanent, and stated separately
   from the fact that **everything is free right now** while the app is built.
   ⚠ That second promise carries **no end date anywhere** (`FREE_UNTIL_LABEL`, the
@@ -300,15 +308,22 @@ and 0 `cloze` rows**. It now loads through `netlify/lib/questions-sandbox.js`, a
   single definition. The 7–9 subject list is confirmed against the MIE NCF/TLS
   ([pending.md](docs/claude/pending.md) item 10) — but confirm which packs have real
   content before writing there.
-- ⚠ **Coverage copy is "Grades 4–6, plus NCE Grade 9 Mathematics, ICT and
-  Science"** — that, and only that, is what a child can actually practise
-  (re-measured 2026-09-08, after Science shipped). ⚠ **Name the SUBJECT, never
-  the grade**: Grade 9 registers six packs and three are still `comingSoon`,
-  holding one sample question each. "Grade 9 is live" or "NCE is live" promises
-  three subjects that open empty.
+- ⚠ **Coverage copy is "Grades 4–6, plus NCE Grade 9 Mathematics, ICT,
+  Biology, Chemistry and Physics"** — that, and only that, is what a child can
+  actually practise. **20 live packs, 214 chapters, 17,612 practisable
+  questions, 194 past-paper items** (re-measured 2026-09-08 after the science
+  split, from the built bundles). ⚠ **Name the SUBJECT, never the grade**:
+  Grade 9 registers eight packs and three hold **one sample question each**
+  (English, French, Social & Modern Studies). ⚠ **Judge by CONTENT, not by the
+  `comingSoon` flag** — those three were flipped to `comingSoon: false` on
+  2026-09-08 while still empty, and `test-exam-paper-shape` failed at once with
+  *"a full exam dealt 1 of 40 questions"*. "Grade 9 is live" or "NCE is live" promises three
+  subjects that open empty. ⚠ **"Science" is now wrong too** — a parent reading
+  it looks for one subject and finds three cards.
   The landing page, `_appShareText()` (app.js) and `_inviteText()` (auth.js) name
-  the live Grade 9 subjects, each with a comment saying why, and have twice been
-  changed **all three together** — to "and ICT", then "and Science" — because a
+  the live Grade 9 subjects, each with a comment saying why, and have been
+  changed **all three together** three times — "and ICT", "and Science", then
+  the three sciences by name — because a
   share message and an invite that disagree with the landing page is how a parent
   arrives expecting something that is not there. ⚠ A WhatsApp message cannot be corrected
   once forwarded.
@@ -330,6 +345,20 @@ against server-side), the plan chapter picker, `calendar _subjectsForGrade`,
 `search _fillSubjectFilter`, `app _subjectChips`.
 Not filtering, and must not start: `renderGradeSelect` / `renderSubjectSelect`,
 the admin Content kill switch, the admin question-manager cascades.
+
+⚠ **`comingSoon: false` is one character and used to be checked by nothing.**
+`scripts/test-live-pack-content.js` now fails if a live pack has a declared
+chapter with **no questions at all**, if it holds fewer than 40 questions (an
+exam is 40), or if any question is tagged to a chapter the pack does not
+declare. It reads **source, not the built bundles** — the question is whether
+the content has been written, and that answer must not depend on whether
+someone remembered to rebuild. A third pass **reviews without failing**, naming
+live packs averaging under 20 questions per chapter.
+⚠ Written 2026-09-08 after three Grade 9 packs were flipped live holding **one
+sample question each** against 17, 11 and 17 declared chapters. The only thing
+that noticed was `test-exam-paper-shape.js`, whose message — *"a full exam dealt
+1 of 40 questions"* — reads as a bug in the exam assembler rather than as "this
+pack should not be live yet".
 
 ### Grade dropdowns
 `_populateGradeSelects()` fills anything with `data-grade-select`: `"live"` =
@@ -483,8 +512,14 @@ Per-pack (grades 4–6, measured the same way):
 | grade4-history | 558 | grade5-history | 532 | grade6-history | 460 |
 | grade4-science | 344 | grade5-science | 424 | grade6-science | 463 |
 
-Grade 9: **grade9-maths 833 practisable items** (from 667 `task` rows via
-`Assessment.projectToItems()`) and **grade9-ict 469**; both `comingSoon: false`.
+Grade 9, all `comingSoon: false`: **grade9-maths 1,711 practisable** (1,545 rows,
+of which 667 `task`s project to 833 items via `Assessment.projectToItems()`),
+**grade9-ict 524**, **grade9-chemistry 218**, **grade9-biology 189**,
+**grade9-physics 178**.
+⚠ The Grades 4-6 table above is STALE — another session is writing content in
+this same working tree and eight of those fifteen packs grew on 2026-09-08
+(grade5-english 645 -> 705, grade4-french 2,121 -> 2,141 among them). Re-count
+from the built bundles; do not add to these numbers.
 
 The live `questions` table held **14,893 rows** at the 2026-09-08 import (14,729
 practice + 164 past papers): `mcq 12,322 · numeric 2,024 · text 305 · cloze 60 ·
@@ -565,3 +600,8 @@ measured, have **never sent a single email**.
    behaviour in this app has already been chased down once, and the full-length
    version of every rule is in there.
 4. Immediate next steps are in [`pending.md`](docs/claude/pending.md).
+5. **For NCE Grade 9 content work specifically**, the sized queue is
+   [`docs/nce-grade9/batch_plan.md`](docs/nce-grade9/batch_plan.md) — measured
+   per-chapter gaps, what is in flight, what is blocked on a product decision,
+   and the rules for running batches in parallel. ⚠ Re-measure before starting:
+   a second session writes into this same worktree.

@@ -1349,11 +1349,14 @@ function shareChildLoginWhatsApp() {
 // for by name as a WhatsApp button, and wa.me works for a visitor who isn't
 // signed in yet (no referral code, no Auth dependency at all).
 function _appShareText() {
-  // ⚠ Names the THREE Grade 9 subjects that are actually live. Three of the six
+  // ⚠ Names the FIVE Grade 9 subjects that are actually live. Three of the EIGHT
   //   Grade 9 packs are still comingSoon, so "NCE Grade 9" or "Grade 9" on its
   //   own would promise English, French and Social & Modern Studies, all of
-  //   which open empty. ICT joined Mathematics on 2026-09-08 (469 questions,
-  //   12 of 12 chapters) and Science the same day (528 questions, 16 of 16).
+  //   which open empty. ICT joined Mathematics on 2026-09-08 (524 questions,
+  //   12 of 12 chapters) and Science the same day - then Science was SPLIT into
+  //   Biology, Chemistry and Physics, which the NCE sets as three separate
+  //   50-mark papers. ⚠ SAYING "Science" HERE IS NOW WRONG: a parent would look
+  //   for one subject and find three cards.
   //   Check SUBJECT_PACKS before widening this - a WhatsApp message cannot be
   //   corrected once forwarded, and this string, _inviteText() (auth.js) and
   //   the landing page must be changed together.
@@ -1361,9 +1364,10 @@ function _appShareText() {
     + 'Science and History & Geography, all aligned with the Mauritius MIE curriculum. XP, '
     + 'streaks and real-time parent tracking built in.\n\n'
     + '🆕 Just added: NCE Grade 9 Mathematics - all 19 chapters, from Number Revision '
-    + 'and Indices through to Statistics and Probability - and NCE Grade 9 ICT, '
-    + 'all 12 chapters, from Computer Systems to Algorithms and Python, and NCE '
-    + 'Grade 9 Science, all 16 chapters across Biology, Chemistry and Physics.\n\nWorth a look:';
+    + 'and Indices through to Statistics and Probability - NCE Grade 9 ICT, '
+    + 'all 12 chapters, from Computer Systems to Algorithms and Python - and the '
+    + 'three NCE sciences as separate subjects: Biology, Chemistry and Physics, '
+    + 'just as the exam sets them.\n\nWorth a look:';
 }
 
 function shareAppWhatsApp() {

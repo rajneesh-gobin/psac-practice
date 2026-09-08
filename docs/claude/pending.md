@@ -120,13 +120,16 @@ below that touches the database is a **decision**, not a pending run.
 
 10. **The grade 7–9 subject list is CONFIRMED** against the MIE NCF/TLS Grades 7–9
     (2026-09-08): English, Français, Mathematics, Science, **Social & Modern
-    Studies** and — at Grade 9 only — **ICT**: 16 packs, 171 chapters.
+    Studies** and — at Grade 9 only — **ICT**. ⚠ At Grade 9 the science is
+    **three subjects, not one** (Biology, Chemistry, Physics), so Grade 9
+    registers **eight** packs: 18 packs across 7–9, 175 chapters.
     ⚠ **ICT was missing from this list and that was a real gap** —
     `past-papers/nce/ict/` holds five real NCE ICT papers and the NCF lists the
     subject at printed page 128; the pack was written on 2026-09-08.
-    ⚠ **Three of the sixteen are now LIVE and the other thirteen are not**:
-    grade9-maths (833 practisable items), grade9-ict (469) and grade9-science
-    (528) have `comingSoon: false`; the rest still hold one sample question each.
+    ⚠ **Five of the eighteen are now LIVE and the other thirteen are not**:
+    grade9-maths (1,711 practisable), grade9-ict (524), grade9-chemistry (218),
+    grade9-biology (189) and grade9-physics (178) have `comingSoon: false`; the
+    rest still hold one sample question each.
     ⚠ **A PACK'S examWeight VALUES MUST SUM TO 40, and grade9-science's did not**
     — they were hand-set, almost every chapter at 3, and summed to **47**. That is
     not cosmetic: `assembleExamPaper()` sheds the surplus with
@@ -136,13 +139,18 @@ below that touches the database is a **decision**, not a pending run.
     heaviest chapter was dealt **one** question instead of eight, while
     `test-exam-paper-shape.js` passed throughout because the paper still totalled
     40. **The distortion is in the distribution, and no test catches it — check
-    the sum.** Both packs were rederived 2026-09-08; the derivation is written out
-    in `subjects/grade9-science/_manifest.js`.
+    the sum.** Both packs were rederived 2026-09-08. ⚠ That derivation now lives
+    in the three science manifests, one each — `grade9-science/_manifest.js` was
+    deleted when the pack was split, and each successor sums to exactly 40 on its
+    own (Biology 9/9/9/9+2+2, Chemistry 9/6/9/9/3+2+2, Physics 9/6/6/9/6+2+2).
     ⚠ **There is no separate History or Geography at 7–9** — both live inside
     Social & Modern Studies and the NCE assesses it as one subject; the old
-    `grade{7,8,9}-history` placeholder packs were replaced. ⚠ Grade 9 Science
-    carries the exam's own **B/C/P split** (`C1…C5`, `P1…P5`, `B1…B4`), matching
-    the three separate NCE science papers.
+    `grade{7,8,9}-history` placeholder packs were replaced. ⚠ **Grade 9 science is
+    THREE PACKS, not a B/C/P split inside one** (changed 2026-09-08): the NCE sets
+    Biology, Chemistry and Physics as independent 45-minute / 50-mark papers, and
+    `docs/implenent.md` requires that generated exams, question banks, analytics
+    and teacher assignment filters preserve them as separate subjects. Chapter and
+    question ids keep the `g9s-` prefix — the importer keys on them.
     ⚠ Still to check before writing questions: the English and French **grammar**
     chapters — those syllabus tables are dense multi-column layouts and pdftotext
     interleaved some columns, so verbs, modals, pronouns and prepositions were
