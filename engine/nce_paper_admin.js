@@ -191,16 +191,33 @@ const NcePaperAdmin = (() => {
       }
 
       const own = new Set(_packChapters(subject).map(c => c && c.id).filter(Boolean));
-      const tasks = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
-        .filter(q => q && q.type === 'task' && own.has(q.chapterId)
-                  && Array.isArray(q.parts) && q.parts.length);
+      // ⚠⚠ WRAP THE WHOLE BANK; DO NOT FILTER TO type === 'task'.
+      //   This used to be `.filter(q => q.type === 'task' && ...)`, which meant the
+      //   generator could only ever see a pack whose bank was AUTHORED as
+      //   multi-part tasks - and only grade9-maths is. Measured 2026-09-08:
+      //   grade9-biology, grade9-chemistry, grade9-physics and (until that day)
+      //   grade9-ict hold zero `task` rows, so this list came back EMPTY and the
+      //   screen answered "No multi-part tasks reached the browser" for four live
+      //   subjects. Every mark total ever reported for them came from a harness
+      //   that called tasksFromBank(); the app itself could not produce their
+      //   paper at all.
+      //   ⚠ tasksFromBank() passes an authored task through untouched and adapts
+      //     everything else, which is exactly the mixed case nce_paper.js already
+      //     promises ("a pack may mix authored tasks with adapted plain
+      //     questions"). grade9-ict became that mixed pack on 2026-09-08, so
+      //     "authored if any, else wrapped" is also wrong - it would discard 524
+      //     adaptable rows the moment one authored task exists.
+      const _own = (typeof STATIC_QUESTIONS !== 'undefined' ? STATIC_QUESTIONS : [])
+        .filter(q => q && own.has(q.chapterId));
+      const tasks = NcePaper.tasksFromBank(_own)
+        .filter(t => t && Array.isArray(t.parts) && t.parts.length);
 
       // ⚠ An empty bank is a real answer, not a failure to report as one. It
       //   means the subject is gated, still `comingSoon` with no content, or
       //   the fetch was refused - and a generator that answered with a blank
       //   paper instead would look like it worked.
       if (!tasks.length) {
-        out.innerHTML = '<p class="text-sm text-rose-500">No multi-part tasks reached the browser for '
+        out.innerHTML = '<p class="text-sm text-rose-500">No usable questions reached the browser for '
           + esc(subject) + '. The pack may have no content yet, or the question service refused it '
           + 'for this session.</p>';
         return;

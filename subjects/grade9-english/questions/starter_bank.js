@@ -12,6 +12,15 @@
 //        can deal a whole 40-question paper.
 //    More to be added later - that was the explicit plan when it was written.
 //
+//  ⚠⚠ THE LISTENING AND SPEAKING QUESTIONS COST g9eng-reading TWO QUESTIONS
+//    per exam, and that was a deliberate choice. Those two chapters carry
+//    examWeight 0 (the N500 is written, with no audio component), but
+//    assembleExamPaper() clamps every weight with Math.max(1, …), so holding
+//    any poolable question buys each of them a slot and pushes the paper to 42.
+//    The reconciliation loop then takes the surplus off the first chapter with
+//    n > 1, which is reading. test-exam-paper-shape.js FAILS on this pack on
+//    purpose. See the long note in _manifest.js before changing either side.
+//
 //  ⚠ Four chapters declare NO subsections (listening, speaking, gr-determiners,
 //    gr-modals). Their questions carry no `subsection` field on purpose: the
 //    invariant is "declared ids == tagged ids", so tagging one that is not

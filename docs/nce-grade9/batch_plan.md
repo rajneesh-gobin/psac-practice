@@ -66,7 +66,17 @@ From `docs/implenent.md`, "Coverage target before enabling a subject":
 
 ---
 
-## 2. ⚠ In flight as of 2026-09-08 23:10 — do not duplicate
+## 2. ✅ ALL FOUR IN-FLIGHT BATCHES LANDED (see progress.md Batch 27)
+
+Biology +130, Chemistry +170, Physics +153 (every target subsection at 20), and
+ICT +35 authored tasks taking its paper from 79/100 to 100/100. `LOCAL_FILES` is
+synced, bundles rebuilt, `_CACHE_VERSION` 96, `SHELL_VERSION` v279.
+⚠ **§5 item counts below are now STALE for those four packs — re-run §0.**
+⚠ **§6a outranks §5.** Read it before planning another volume batch.
+
+<details><summary>the original in-flight note</summary>
+
+## 2a. In flight as of 2026-09-08 23:10
 
 Four batches were dispatched in parallel and had not reported back when this file
 was written. **Check whether they landed before starting these:**
@@ -83,33 +93,36 @@ they created still needs adding to `LOCAL_FILES[pack]`** there (`file://` dev
 only; production auto-discovers) — check for question files absent from that map
 before assuming it is done.
 
+</details>
+
 ---
 
-## 3. Measured state — 2026-09-08 23:10
+## 3. Measured state — re-measured 2026-09-09 after Batch 27
 
-`grade9-maths` is the only Grade 9 subject that meets the coverage floor:
+`grade9-maths` is still the only Grade 9 subject that meets the coverage floor:
 **1,720 items, 23 subsections, none under 20.** Leave it alone.
 
 | subject | items | subsections | under 20 | items to write |
 |---|---|---|---|---|
 | grade9-maths | 1,720 | 23 | 0 | **0 — done** |
-| grade9-biology | 189 | 29 | 29 | 391 |
-| grade9-chemistry | 218 | 32 | 32 | 422 |
-| grade9-physics | 178 | 31 | 31 | 442 |
-| grade9-ict | 524 | 73 | 73 | 936 |
+| grade9-biology | 319 | 31 | 23 | 301 |
+| grade9-chemistry | 388 | 35 | 25 | 312 |
+| grade9-physics | 346 | 38 | 29 | 414 |
+| grade9-ict | 701 | 73 | 66 | 765 |
 | grade9-english | 62 | 49 | 49 | 926 |
-| grade9-french | 1 | **0 declared** | — | not yet countable |
-| grade9-social-modern-studies | 1 | **0 declared** | — | not yet countable |
+| grade9-french | 69 | 64 | 64 | 1,211 |
+| grade9-social-modern-studies | 67 | 67 | 67 | 1,273 |
 
-⚠ **French and SMS read as "0 needed" because they declare no subsection map at
-all.** That is *nothing measured*, not *nothing to do* — they are 11 and 17
-chapters with one sample question between them. Their first batch is to derive
-the subsection maps (§5).
+**~5,200 items outstanding against the 20-per-subsection floor.**
 
-⚠ **grade9-english, grade9-french and grade9-social-modern-studies are
-`comingSoon: false` while this thin.** `scripts/test-live-pack-content.js` fails
-on them today, by design. A child opening French or SMS gets a chapter grid where
-every chapter is empty.
+⚠ **French and SMS are no longer "not countable" — the other session declared
+their subsection maps, and that is why their outstanding count JUMPED** from
+unmeasurable to 1,211 and 1,273. Declaring a map does not add work; it reveals
+work that was always there. Expect the same when English is completed.
+
+⚠ `scripts/test-live-pack-content.js` now PASSES for all three: every declared
+chapter has at least one question. That is the floor for being live, not for
+being finished — its review pass still names them as thin per chapter.
 
 ---
 
@@ -132,166 +145,207 @@ Everything in §5 marked **[GATED]** should not start until it is answered.
 
 ---
 
-## 5. The queue
+## 5. The volume queue — re-measured 2026-09-09 00:00
 
-Batch sizes are ~100–180 items, matching what this project has actually shipped
-per batch. Each row names the files that batch owns; **two batches may run in
-parallel only if their file sets do not intersect** (see §7).
+⚠ **§6a outranks everything in this section.** These batches close the
+20-per-subsection floor. They do **not** make a generated paper resemble the real
+one, and for the four science/ICT packs that is now the binding constraint.
 
-### Biology — 301 items after batch A lands
+Batch sizes are ~100–180 items, matching what this project has actually shipped.
+Each row names the files that batch owns; **two batches may run in parallel only
+if their file sets do not intersect** (§7).
 
-| # | chapters | items | files owned |
-|---|---|---|---|
-| BIO-1 | `g9s-b1-circulatory` (91) + `g9s-b2-reproductive` (81) | 172 | `subjects/grade9-biology/**` |
-| BIO-2 | `g9s-b3-biodiversity` (66) + `g9s-b4-plant-nutrition` (63) | 129 | `subjects/grade9-biology/**` |
+⚠ The sciences' `g9s-inquiry` and `g9s-sts` chapters are **finished** — every
+declared subsection reads exactly 20 after Batch 27. Nothing below touches them.
 
-### Chemistry — 312 items after batch B lands
+### Biology — 301 items · `subjects/grade9-biology/**`
 
-| # | chapters | items | files owned |
-|---|---|---|---|
-| CHEM-1 | `g9s-c1-atmosphere` (80) + `g9s-c2-mixtures` (67) + `g9s-c3-language` (35) | 182 | `subjects/grade9-chemistry/**` |
-| CHEM-2 | `g9s-c4-metals` (85) + `g9s-c5-salts` (45) | 130 | `subjects/grade9-chemistry/**` |
+| # | chapters | items |
+|---|---|---|
+| BIO-1 | `g9s-b1-circulatory` (91) + `g9s-b2-reproductive` (81) | 172 |
+| BIO-2 | `g9s-b3-biodiversity` (66) + `g9s-b4-plant-nutrition` (63) | 129 |
 
-### Physics — 414 items after batch C lands
+All four carry `examWeight: 9` — the whole of Biology's non-cross-cutting weight
+is spread evenly, so no chapter here is more urgent than another.
 
-| # | chapters | items | files owned |
-|---|---|---|---|
-| PHY-1 | `g9s-p1-measurements` (47) + `g9s-p2-light` (91) | 138 | `subjects/grade9-physics/**` |
-| PHY-2 | `g9s-p3-energy` (93) + `g9s-p4-motion` (85) | 178 | `subjects/grade9-physics/**` |
-| PHY-3 | `g9s-p5-electricity` (98) | 98 | `subjects/grade9-physics/**` |
+### Chemistry — 312 items · `subjects/grade9-chemistry/**`
 
-⚠ Physics is the pack where **numeric option-length parity** breaks first: four
-options like "2 m/s", "4 m/s", "10 m/s", "0.5 m/s" have wildly different lengths.
-Keep magnitudes and units the same shape.
+| # | chapters | items |
+|---|---|---|
+| CHEM-1 | `g9s-c1-atmosphere` (80) + `g9s-c2-mixtures` (67) + `g9s-c3-language` (35) | 182 |
+| CHEM-2 | `g9s-c4-metals` (85) + `g9s-c5-salts` (45) | 130 |
 
-### ICT — 936 items
+### Physics — 414 items · `subjects/grade9-physics/**`
 
-⚠ **ICT was enabled at 524 items across 73 subsections.** It passes every existing
-test and sits well under the brief's coverage bar. This is the largest single gap.
+| # | chapters | items |
+|---|---|---|
+| PHY-1 | `g9s-p1-measurements` (47) + `g9s-p2-light` (91) | 138 |
+| PHY-2 | `g9s-p3-energy` (93) + `g9s-p4-motion` (85) | 178 |
+| PHY-3 | `g9s-p5-electricity` (98) | 98 |
 
-| # | chapters | items | files owned |
-|---|---|---|---|
-| ICT-1 | `g9ict-presentation` (180) | 180 | `subjects/grade9-ict/**` |
-| ICT-2 | `g9ict-ethics-security` (137) | 137 | `subjects/grade9-ict/**` |
-| ICT-3 | `g9ict-word-processing` (126) | 126 | `subjects/grade9-ict/**` |
-| ICT-4 | `g9ict-networks` (74) + `g9ict-internet` (75) | 149 | `subjects/grade9-ict/**` |
-| ICT-5 | `g9ict-spreadsheets` (61) + `g9ict-algorithms` (61) | 122 | `subjects/grade9-ict/**` |
-| ICT-6 | `g9ict-databases` (67) + `g9ict-computer-systems` (37) + `g9ict-software-os` (32) + `g9ict-health-safety` (71) + `g9ict-troubleshooting` (15) | 222 → split if needed | `subjects/grade9-ict/**` |
+⚠ Physics is where **numeric option-length parity** breaks first: four options
+like "2 m/s", "4 m/s", "10 m/s", "0.5 m/s" have wildly different lengths. Keep
+magnitudes and units the same shape.
 
-⚠ `g9ict-presentation` carries `examWeight: 1` but declares **11 subsections** —
-180 of the 936. Before writing them, check against `blueprint-ict.md` whether all
-eleven are genuinely assessable, or whether the map over-declared. **Deleting an
-over-declared subsection is a legitimate outcome of that check** and is cheaper
-than writing 180 items nobody is examined on. The same question applies to
-`g9ict-ethics-security` (9 subsections at `examWeight: 3`).
+### ICT — 765 items · `subjects/grade9-ict/**`
 
-### English — 926 items · **[GATED]** for `g9eng-reading` and `g9eng-writing`
+| # | chapters | items |
+|---|---|---|
+| ICT-1 | `g9ict-presentation` (173) | 173 |
+| ICT-2 | `g9ict-ethics-security` (121) | 121 |
+| ICT-3 | `g9ict-word-processing` (106) | 106 |
+| ICT-4 | `g9ict-networks` (61) + `g9ict-internet` (59) | 120 |
+| ICT-5 | `g9ict-databases` (55) + `g9ict-health-safety` (64) | 119 |
+| ICT-6 | `g9ict-spreadsheets` (40) + `g9ict-algorithms` (39) + `g9ict-software-os` (25) + `g9ict-computer-systems` (13) + `g9ict-troubleshooting` (9) | 126 |
 
-The other session is writing this pack. Coordinate before starting; do not both
-write into it. Ungated work is the eleven grammar chapters (`g9eng-gr-*`, 15
-marks between them) plus `g9eng-vocabulary`, `g9eng-word-formation` and
-`g9eng-literature`. `g9eng-listening` and `g9eng-speaking` carry `examWeight: 0`
-— confirm against `blueprint-english.md` whether the NCE assesses them at all
-before writing a single item for either.
+⚠ **Question the map before writing ICT-1 and ICT-2.** `g9ict-presentation`
+carries `examWeight: 1` and declares **11 subsections**; `g9ict-ethics-security`
+carries 3 and declares 9. Between them that is 294 of ICT's 765 outstanding items
+for 4 of its 40 exam marks. Check both against `blueprint-ict.md` first —
+**deleting an over-declared subsection is a legitimate outcome** and is cheaper
+than writing 173 items nobody is examined on.
 
-Estimate: **~6 batches**, of which the two heaviest (`g9eng-reading` at
-`examWeight: 10`, `g9eng-writing` at 8) are gated.
+### English — 926 items · **[GATED]** on `g9eng-reading` and `g9eng-writing`
 
-### French — **[GATED]** · not yet countable
+⚠ **The other session owns this pack.** Coordinate before starting.
 
-| # | scope |
-|---|---|
-| FR-0 | **Derive the subsection map for all 11 chapters** from `syllabus-french.md` and `blueprint-french.md`, declare it, and re-run the §0 measurement. Nothing else can be sized until this exists. |
-| FR-1…n | Content, ~6 batches. `g9fr-comprehension` (w8) and `g9fr-redaction` (w6) are gated. |
+Gated (321 items, 18 of the pack's 40 marks): `g9eng-reading` (150, w10),
+`g9eng-writing` (171, w8).
 
-⚠ Three of these chapters have live PSAC equivalents whose machinery already
-exists and **must be reused, not re-invented**: `g9fr-textes-trous` is the
-`cloze` type (`engine/cloze.js`, `makeCloze`), `g9fr-correction` is `errorhunt`
+Ungated (605 items): `g9eng-literature` (114), `g9eng-word-formation` (95),
+`g9eng-gr-punctuation` (76), `g9eng-vocabulary` (57), `g9eng-gr-pronouns` (57),
+`g9eng-gr-verbs` (57), `g9eng-gr-sentence` (57), `g9eng-gr-prepositions` (38),
+`g9eng-gr-nouns` (18), `g9eng-gr-adjectives` (18), `g9eng-gr-adverbs` (18).
+Roughly **4 batches**.
+
+⚠ `g9eng-listening` and `g9eng-speaking` carry `examWeight: 0` and declare no
+subsections. Confirm against `blueprint-english.md` whether the NCE assesses them
+at all before writing a single item for either.
+
+### French — 1,211 items · **[GATED]** on `g9fr-comprehension` and `g9fr-redaction`
+
+⚠ **The other session owns this pack**, and its subsection map now exists — which
+is why this went from "not countable" to the largest single gap after SMS.
+**Declaring a map does not add work; it reveals work that was always there.**
+
+Gated (166 items): `g9fr-comprehension` (112, w8), `g9fr-redaction` (54, w6).
+
+Ungated (1,045 items), heaviest first: `g9fr-transformation` (190),
+`g9fr-grammaire` (133), `g9fr-vocabulaire` (114), `g9fr-formation-mots` (114),
+`g9fr-textes-trous` (114), `g9fr-doc-authentique` (95), `g9fr-correction` (95),
+`g9fr-ecrit-guide` (95), `g9fr-oeuvres` (95). Roughly **7 batches**.
+
+⚠ **Three of these chapters have live PSAC equivalents whose machinery already
+exists and must be reused, not re-invented**: `g9fr-textes-trous` is the `cloze`
+type (`engine/cloze.js`, `makeCloze`), `g9fr-correction` is `errorhunt`
 (`engine/errorhunt.js`, `makeErrorHunt`), and `g9fr-formation-mots` mirrors the
-Formation des Mots chapters in the Grade 4/5/6 French packs. Read those before
-writing anything. ⚠ `isPoolQuestion()` excludes `cloze` and `errorhunt` from
-every pool — dealt into practice they draw a number pad under a French passage.
+Formation des Mots chapters in the Grade 4/5/6 French packs. That is 323 of the
+1,045 ungated items. Read those implementations first.
+⚠ `isPoolQuestion()` excludes `cloze` and `errorhunt` from every pool — dealt into
+practice they draw a number pad under a French passage.
 
-### Social & Modern Studies — **[GATED]** · not yet countable
+### Social & Modern Studies — 1,273 items · **[GATED]** on Section B
 
-| # | scope |
-|---|---|
-| SMS-0 | **Derive the subsection map for all 17 chapters** from `blueprint-social-modern-studies.md` and the NCF, declare it, re-measure. ⚠ **There is no `syllabus-social-modern-studies.md`** — every other subject with content has one (`syllabus-english`, `-french`, `-ict`, `-science`). Writing it is part of this batch, from the NCF Grades 7–9 PDF, not from the blueprint alone: the blueprint says what the *papers* ask, the syllabus doc says what the *curriculum* requires, and a subsection map derived only from past papers inherits whatever those years happened to omit. |
-| SMS-1…n | Content, ~7 batches. All of Section B is gated. |
+⚠ **The other session owns this pack.** Its map now exists too. **This is the
+largest single gap in the project**, and it is unusually flat: 17 chapters each
+owing 57–95 items, none dominant.
+
+Heaviest: `g9sms-map-data-skills` (95), `g9sms-population` (95),
+`g9sms-government-welfare` (95), `g9sms-links` (95), then eleven chapters at
+57–76. Roughly **8 batches**.
 
 ⚠ `g9sms-map-data-skills` is a **visual** chapter — maps, tables and graphs. The
 brief forbids a text-only substitute for an outcome that explicitly tests reading
 a diagram, graph or map. Budget SVG time for it.
 
+⚠ **There is still no `syllabus-social-modern-studies.md`** — every other subject
+with content has one. Write it from the NCF Grades 7–9 PDF before the content
+batches, not from the blueprint alone: the blueprint says what the *papers* ask,
+the syllabus says what the *curriculum* requires, and a map derived only from past
+papers inherits whatever those years happened to omit.
+
 ---
 
 ## 6. Non-content batches
 
-| # | scope | notes |
+| # | scope | status |
 |---|---|---|
-| V-1 | ✅ **DONE 2026-09-08** — `scripts/test-paper-variety.js` + `scripts/lib/memorable.js` | Asserts the brief's five-paper rule for every pack with a blueprint, with a BASELINE debt table. **What it found is in §6a and it changes the priority order of this whole plan.** |
-| V-2 | **Visual QA** — render every new SVG question to A4 PNG and *look at it* | Programmatic existence checks are not visual QA, and the brief says so. Every defect found this way so far (clipped labels, missing arrowheads, a label overlapping a flask neck, a climate-graph axis with no title) was invisible to assertions. Update `visual-assets.md`. |
-| V-3 | Option-length debt, Grades 4–6 — **8 packs**, `grade4-french` next at 74 flagged items | The other session is working these. Coordinate. |
-| V-4 | `LOCAL_FILES` sweep in `engine/question_loader.js` | Every question file added by every batch above. `file://` dev only, but it is how a dev session silently loads a stale pack. ✅ **`scripts/check.js` already fails on this** — *"LOCAL_FILES[...] is missing inquiry_depth.js (invisible under file://)"* — so it cannot ship forgotten. It is listed here only because a parallel batch is told not to edit that shared file, so someone has to sweep it afterwards. |
+| V-1 | Five-paper stimulus-repeat check | ✅ **DONE** — `scripts/test-paper-variety.js` + `scripts/lib/memorable.js`, with an attributed BASELINE table. What it found is §6a. |
+| V-2 | **Visual QA** — render every new SVG question to A4 PNG and *look at it* | **Outstanding, and now larger**: Batch 27 added figures to all four packs. Programmatic existence checks are not visual QA and the brief says so. Every defect found this way so far (clipped labels, missing arrowheads, a label overlapping a flask neck, a climate-graph axis with no title, and a rate curve that contradicted its own answer) was invisible to assertions. Update `visual-assets.md`. |
+| V-3 | Option-length debt, Grades 4–6 — 8 packs, `grade4-french` next at 74 flagged | The other session is working these. Coordinate. |
+| V-4 | `LOCAL_FILES` sweep | ✅ **DONE and automated** — `node scripts/sync-local-files.js [--write]`. Append-only, because a name in the map with no file on disk is a deleted question file and that is a person's decision. `scripts/check.js` already fails on a missing entry, so it cannot ship stale. |
+| V-5 | **Decide which visual-share number the paper should print** | New, from §6a. Two numbers disagree for the same paper and one is printed on the cover. |
+| V-6 | **`audit-content-coverage.js` does not look at Grade 9 at all** | Found by the Chemistry batch: nothing would have reported these subsections as thin. It is the tool that calls a declared subsection under 20 "a permanent gap", and it is blind to eight live packs. |
 
 ---
 
 ## 6a. ⚠⚠ READ THIS BEFORE PLANNING ANOTHER CONTENT BATCH
 
-`scripts/test-paper-variety.js` was written on 2026-09-08 to assert the brief's
-five-paper rule. The rule itself turned out to be the least interesting thing it
-measured. **Every generated science and ICT paper is warning on four counts**, and
-none of them is fixed by reaching 20 items per subsection.
+`scripts/test-paper-variety.js` was written to assert the brief's five-paper rule.
+The rule itself turned out to be the least interesting thing it measured.
 
-Measured, seed 1, one paper per pack, every warning the assembler raised:
+### Measured 2026-09-09, after Batch 27
 
-| pack | visual target | actual | questions / target | drawing tasks | marks |
+| pack | visual target | actual (mean of 5) | marks | distinct memorable | repeats |
 |---|---|---|---|---|---|
-| grade9-biology | 93% | **2%** | 41 / 6 | 0 | 50/50 |
-| grade9-chemistry | 92% | **2%** | 41 / 5 | 0 | 50/50 |
-| grade9-physics | 100% | **12%** | 41 / 6 | 0 | 50/50 |
-| grade9-ict | 30% | **1%** | 65 / 11 | — | 79/100 |
-| grade9-maths | 26% | 23% | — | ok | 100/100 |
+| grade9-maths | 26% | **24%** | 100/100 | 52 | 7 |
+| grade9-ict | 30% | **20%** (was 1%) | 100/100 | 30 | 17 |
+| grade9-physics | 100% | **12%** | 50/50 | 9 | 4 |
+| grade9-chemistry | 92% | **7%** (was 2%) | 50/50 | 6 | 2 |
+| grade9-biology | 93% | **2%** | 50/50 | 4 | 1 |
 
 **`grade9-maths` is the only pack whose generated paper resembles the real one.**
 It is also the only pack whose bank was authored as real multi-part `task` rows
-rather than adapted one-mark questions. That is not a coincidence and it is the
-whole finding.
+rather than adapted one-mark questions. That is not a coincidence, and ICT proved
+it: 35 authored tasks moved it from 79→100 marks and 1%→20% visual in one batch.
 
-### What this means for the queue in §5
+⚠ **A generated science paper is ~41 one-mark text questions where the real paper
+is 5–6 multi-part structured questions built on diagrams.** Writing the 301 items
+Biology still owes at 20-per-subsection moves the coverage counter and **does not
+move a single number in the table above**. The volume queue in §5 is necessary; it
+is not sufficient, and for these four packs it is no longer the binding
+constraint.
 
-⚠ **A generated science paper is currently a list of ~41 one-mark text questions
-where the real paper is 5–6 multi-part structured questions built on diagrams.**
-Writing the 391 items Biology still owes at 20-per-subsection moves the coverage
-counter and leaves the paper at 2% visual with 41 questions instead of 6. The
-volume in §5 is necessary; it is not sufficient, and on its own it does not move
-any number in the table above.
+### The SHAPE batches — do these before, or alongside, §5
 
-**So each pack needs a second kind of batch, and it is the one that decides
-whether the subject is finished:**
+| # | scope | evidence of the target |
+|---|---|---|
+| SHAPE-1 | **Biology** — authored multi-part tasks built on figures. 6 questions, 93% visual, ≥1 drawing task. | `blueprint-science.md` |
+| SHAPE-2 | **Chemistry** — 5 questions, 92% visual. Apparatus, tables of results, reaction schemes. | " |
+| SHAPE-3 | **Physics** — 6 questions, 100% visual. Circuits, ray diagrams, speed–time graphs, instruments. | " |
+| SHAPE-4 | **ICT** — ~25–30 more authored tasks (~170 marks). 5 papers × ~11 memorable slots needs ~55 distinct memorable items; **30 exist**. Sized by the batch that built the first 35. | `blueprint-ict.md` |
+| SHAPE-5 | **Drawing / construction tasks** — every real science year has **at least one** and all three science banks have **zero**. | Printable-and-rubric-marked by design; the brief requires exactly that rather than an easier MCQ substitute. |
 
-| # | scope |
-|---|---|
-| SHAPE-1 | **Biology** — author real multi-part tasks built on figures, as grade9-maths does. Target the blueprint's 6 questions and 93% visual. |
-| SHAPE-2 | **Chemistry** — same, 5 questions, 92% visual. Apparatus, tables of results, reaction schemes. |
-| SHAPE-3 | **Physics** — same, 6 questions, 100% visual. Circuits, ray diagrams, speed–time graphs, measuring instruments. |
-| SHAPE-4 | **ICT** — 11 questions, 30% visual. Screenshots, flowcharts, network diagrams, spreadsheet extracts. |
-| SHAPE-5 | **Drawing / construction tasks** — every real science year has **at least one** and the banks have **zero**, in all three sciences. These are printable-and-rubric-marked by design; the brief explicitly requires that rather than an easier MCQ substitute. |
+⚠ Follow ICT's method: author with `makeTask()` so items carry **real mark
+values**. The adapter does not invent marks — a plain question can only ever
+become a 1-mark part, which is why 500 more MCQs cannot fix a mark total.
 
 ### ⚠ Counting illustrated questions is not counting pictures
 
-`grade9-physics` has **39 figure-bearing questions but only 7 distinct pictures**
-behind them — many share one alt text. Four of those seven appear in **all five**
-papers. Biology has 21 figure-bearing questions and 4 distinct pictures reachable
-over five papers; Chemistry 25 and 3; ICT 12 and 3.
+| pack | figure-bearing questions | distinct pictures |
+|---|---|---|
+| grade9-biology | 21 | 11 |
+| grade9-chemistry | 33 | 10 |
+| grade9-physics | 39 | 11 |
 
-So a SHAPE batch that adds fifty questions all using the same circuit diagram
-improves nothing a child would notice. **The unit is the distinct picture.**
+Adding a question that reuses an existing figure raises how often a memorable
+stimulus is **drawn** without raising how many **exist**. That is why Chemistry's
+variety got *worse* (0 → 2 repeats) during a batch that was otherwise clearly
+good. **The unit is the distinct picture.**
 `node scripts/nce-pool-depth.js <pack> 5` names the chapter that forces a repeat.
 
-### ⚠ An engine inconsistency found on the way, not yet fixed
+### ⚠ A metric can improve because the content got worse
 
-The same paper reports two different visual shares, and they disagree:
+ICT's repeat count was **1** when its paper was worst. Those 64 items filling the
+non-MCQ role were 1-mark, figure-less and short, so `memorableKey()` returned null
+for every one: the paper scored well by being **unmemorable**, not by being
+varied. After the fix it reads 17 repeats — and 30 distinct memorable stimuli
+against the old 3. Never re-baseline a number in that table without writing the
+reason beside it.
+
+### ⚠ An engine inconsistency, found and NOT fixed
+
+The same paper reports two different visual shares:
 
 ```
 grade9-physics, seed 1, one paper
@@ -301,13 +355,26 @@ grade9-physics, seed 1, one paper
 
 `groupSingleMarkTasks()` bundles 8–10 unrelated one-mark items under one number,
 and `hasVisual()` is true for the bundle if **any** part carries a figure — so one
-diagram makes eight text questions read as "a visual question". The footer
-printed on the paper is the flattering number. `test-paper-variety.js` counts the
-source rows instead, which is the honest denominator, and reports the range across
-the five papers.
+diagram makes eight text questions read as "a visual question". **The footer
+printed on the paper is the flattering number.** The "Paper has N questions"
+warning has the same pre-grouping problem. `test-paper-variety.js` counts source
+rows instead, which is the honest denominator. Queued as V-5.
 
-**Not fixed here**, because `engine/nce_paper.js` was owned by another batch at the
-time. Someone should decide which number the footer ought to print.
+### ✅ Fixed in Batch 27: three live subjects could not generate a paper at all
+
+Recorded here because the class of defect will recur. `engine/nce_paper_admin.js`
+built its bank with `.filter(q => q.type === 'task')`, and **only grade9-maths
+authors its bank that way** — so for Biology, Chemistry, Physics and (then) ICT
+the list came back empty and the screen said *"No multi-part tasks reached the
+browser"*. Every mark total reported for those subjects came from a harness
+calling `tasksFromBank()`; the app itself could not produce their paper.
+
+⚠ **"Authored if any, else wrapped" is equally wrong** — ICT became a genuinely
+mixed pack (35 authored tasks beside 524 adaptable rows) and the either/or
+discarded all 524. `tasksFromBank()` passes an authored task through untouched and
+adapts the rest, which is the case `nce_paper.js` already promises. Both
+`nce_paper_admin.js` and `test-paper-variety.js` had the bug; both now wrap the
+whole bank.
 
 ---
 
@@ -325,11 +392,23 @@ batch touching `engine/`**. Four ran concurrently on 2026-09-08 with no conflict
   `CLAUDE.md`, `scripts/**` or `docs/**`** — report filenames instead.
 - **Do not run `scripts/test-option-parity.js`** — it reads the built bundles,
   which are stale mid-batch. Probe parity against `loadSubject(pack)` instead.
-- Warn them which tests **currently fail for reasons that are not theirs** (today:
-  `test-subsection-invariant`, `test-exam-paper-shape` and
-  `test-live-pack-content` on grade9-french and grade9-social-modern-studies).
-  An agent that cannot tell its own failure from someone else's will either chase
-  a ghost or ignore a real one.
+- **Tell each agent to take a NON-COLLIDING ID BLOCK, and say why.** The science
+  split left `g9s-inq-NNN` / `g9s-sts-NNN` as ONE id space shared by three packs,
+  so three parallel batches continuing the numbering would have collided
+  **silently** — and the importer keys on ids. All three chose distinct blocks
+  (`g9s-inqb-`, `g9s-inq-c`, `301+`) without being told; do not rely on that twice.
+- Warn them which tests **currently fail for reasons that are not theirs.** As of
+  2026-09-09 that is `test-exam-paper-shape` on **grade9-english** only
+  (*"weights sum to 40, so reconciliation guts g9eng-reading — weight 10 wants 10
+  questions, gets 8"*). Re-check before dispatching; this line goes stale fastest
+  of anything in the file. An agent that cannot tell its own failure from someone
+  else's will either chase a ghost or ignore a real one.
+- **Tell them the preflight is fail-closed.** One malformed item blocks the import
+  of the ENTIRE corpus, not just their pack — Batch 27's ICT agent shipped three
+  `slots` blanks with bare-string answers and blocked all 20 live packs until it
+  was fixed. `node scripts/test-question-import-parity.js` catches it.
+- **Ask for the filenames back.** They cannot edit `engine/question_loader.js`, so
+  the dispatcher finishes with `node scripts/sync-local-files.js --write`.
 
 ---
 
@@ -411,8 +490,16 @@ done
 4. A generated paper reaches its blueprint's full mark total, with a mark scheme.
 5. Every visual question **rendered and looked at**, at mobile size and in print.
 6. `visual-assets.md` records every asset as original or with its licence.
-7. Option-parity, subsection-invariant, exam-paper-shape and svg-figures green for
-   the pack.
+7. Option-parity, subsection-invariant, exam-paper-shape, live-pack-content,
+   paper-variety and svg-figures green for the pack.
+8. ⚠ **The generated paper matches the blueprint's SHAPE, not just its mark
+   total** — visual share within reach of the target, question count near the
+   target rather than ~41 one-mark items, and at least one drawing/construction
+   task in each science. §6a is the measurement; today only `grade9-maths`
+   satisfies this, and no amount of §5 volume work changes it.
+9. ⚠ **The paper can be generated IN THE APP**, not only in a harness. Open
+   Admin → NCE paper for the subject and produce one. Four live subjects failed
+   this until 2026-09-09 while every harness reported them healthy.
 
 ---
 

@@ -4054,3 +4054,149 @@ left for a deliberate decision.
 - ⚠ Still outstanding from an earlier batch: **the Supabase Management API token
   pasted in chat must be rotated.** It was never used — the importer needs
   `SUPABASE_SERVICE_ROLE_KEY`, which is already in `.env`.
+
+---
+
+## Batch 27 — four parallel batches, and the paper nobody could generate
+
+Four content/engine batches ran concurrently (one per pack, plus the ICT paper),
+while this session built the harness that measures the brief's five-paper rule.
+**The harness is the reason this batch matters**: what it found reframes the
+remaining work more than the 623 items the four batches wrote.
+
+### What landed
+
+| pack | items added | subsections at 20 | option-parity rate |
+|---|---|---|---|
+| grade9-biology | 130 | 8 of 8 | 37.3% → **22.6%** |
+| grade9-chemistry | 170 | 10 of 10 | 35.6% → **20.9%** |
+| grade9-physics | 153 | 8 of 8 | 25.7% → **19.4%** |
+| grade9-ict | 35 authored tasks, 200 marks | — | 22.5% |
+
+⚠ **All three science batches independently chose non-colliding id blocks**
+(`g9s-inqb-`, `g9s-inq-c`, `301+`) rather than continuing the shared
+`g9s-inq-NNN` numbering. The split left one id space across three packs, so a
+bare numeric continuation would have collided **silently**, and the importer keys
+on ids. None of them was told to do this.
+
+### ⚠⚠ THREE LIVE SUBJECTS COULD NOT GENERATE A PAPER IN THE APP AT ALL
+
+`engine/nce_paper_admin.js` built its bank with
+`.filter(q => q.type === 'task' && …)`. **Only grade9-maths authors its bank that
+way.** grade9-biology, grade9-chemistry, grade9-physics and — until this batch —
+grade9-ict hold **zero** `task` rows, so that list came back empty and the screen
+answered *"No multi-part tasks reached the browser"*.
+
+⚠ **Every mark total ever reported for those subjects came from a harness**, which
+calls `tasksFromBank()`. The app itself could not produce their paper. The 79/100
+ICT figure and the 50/50 science figures were real measurements of something no
+child or teacher could reach.
+
+`tasksFromBank()` passes an authored task through untouched and adapts everything
+else — exactly the mixed case `nce_paper.js` already promises in its own header.
+The fix is to wrap the whole bank rather than filter it.
+
+⚠ **"Authored if any, else wrapped" is also wrong, and this harness had it too.**
+grade9-ict became a genuinely mixed pack in this batch (35 authored tasks beside
+524 adaptable rows), and the either/or silently discarded all 524. Fixed in both
+`engine/nce_paper_admin.js` and `scripts/test-paper-variety.js`.
+
+### New: `scripts/test-paper-variety.js` + `scripts/lib/memorable.js`
+
+The brief requires five blueprint-compliant papers with no repeated memorable
+stimulus. Nothing asserted it. What existed measured `grade9-maths` only, against
+a synthetic fixture bank built inline in `test-nce-paper.js`; `nce-pool-depth.js`
+measures the real bank and **could not run on four of the five subjects**:
+
+```
+grade9-maths      g9m-trigonometry ... needs about 1 more
+grade9-biology    No tasks in the built bundle for grade9-biology.
+grade9-chemistry  No tasks in the built bundle for grade9-chemistry.
+grade9-physics    No tasks in the built bundle for grade9-physics.
+grade9-ict        No tasks in the built bundle for grade9-ict.
+```
+
+Same root cause, and the message reads as *run the build* rather than *this probe
+does not understand this pack*. The definition of "memorable" now lives in one
+module both scripts read, because two scripts holding their own copy of one word
+is how they end up disagreeing about whether a subject passes.
+
+### ⚠ The finding that reframes the plan: shape, not volume
+
+Measured, seed 1, every warning the assembler raised:
+
+| pack | visual target | actual | questions / target | drawing tasks |
+|---|---|---|---|---|
+| grade9-biology | 93% | **2%** | 41 / 6 | 0 |
+| grade9-chemistry | 92% | **7%** | 41 / 5 | 0 |
+| grade9-physics | 100% | **12%** | 41 / 6 | 0 |
+| grade9-ict | 30% | 20% (was 1%) | 15 / 11 | — |
+| grade9-maths | 26% | 24% | ok | ok |
+
+**grade9-maths is the only pack whose generated paper resembles the real one, and
+the only one whose bank was authored as multi-part tasks.** That is not a
+coincidence. A generated science paper is ~41 one-mark text questions where the
+real paper is 5–6 multi-part structured questions built on diagrams — and writing
+the 391 items Biology still owes at 20-per-subsection does not move any number in
+that table. Recorded as §6a of `batch_plan.md` with five SHAPE batches.
+
+### ⚠ Counting illustrated questions is not counting pictures
+
+| pack | figure-bearing questions | distinct pictures |
+|---|---|---|
+| grade9-biology | 21 | 11 |
+| grade9-chemistry | 33 | 10 |
+| grade9-physics | 39 | 11 |
+
+Adding a question that reuses an existing figure raises how often a stimulus is
+**drawn** without raising how many **exist**. That is why grade9-chemistry's
+variety got *worse* (0 → 2 repeats) while its batch was otherwise clearly good.
+
+### Baselines — re-taken with the cause beside each one, never waved through
+
+- **chemistry 0 → 2.** Attributed to the figure-reuse mechanism above. Net
+  positive batch, so blocking would be wrong; hiding it would be worse.
+- **ict 1 → 17 repeats, 79 → 100 marks.** ⚠ **A metric can improve because the
+  content got worse.** The old "1 repeat" meant the 64 items filling the non-MCQ
+  role were 1-mark, figure-less and short, so `memorableKey()` returned null for
+  every one: the paper scored well by being **unmemorable**, not by being varied.
+  Distinct memorable stimuli went 3 → 30 at the same time.
+- **physics 5 → 4** and **maths 8 → 7**, both lowered the moment the measurement
+  allowed it. A baseline that is never lowered is a target nobody is working
+  towards.
+
+### Also this batch
+
+- **`scripts/test-live-pack-content.js`** — `comingSoon: false` is one character
+  and was checked by nothing. Fails when a live pack has a declared chapter with
+  no questions, holds under 40 items, or tags a question to an undeclared
+  chapter; reviews-without-failing on packs averaging under 20 per chapter.
+  Written after three Grade 9 packs were flipped live holding one sample question
+  each against 17, 11 and 17 chapters. It reads **source, not bundles** — whether
+  content has been written must not depend on remembering to rebuild.
+- **`scripts/sync-local-files.js`** — append-only, because a name in the map with
+  no file is a deleted question file and that is a person's decision. Cleared all
+  nine missing `LOCAL_FILES` entries.
+- **An engine inconsistency, found and NOT fixed**: the same physics paper reports
+  15% visual in `assemblePaper()`'s warning and 33% in the compliance footer —
+  grouping bundles 8–10 items under one number and `hasVisual()` is true if *any*
+  part carries a figure, so one diagram makes eight text questions read as
+  visual. The footer prints the flattering number. Someone should decide which is
+  right. Same for the "Paper has N questions" warning, computed pre-grouping.
+
+### Measured after
+
+`_CACHE_VERSION` → **96**; `SHELL_VERSION` → **v279**. Whole suite green except
+`test-exam-paper-shape`, which fails on **grade9-english** — *"weights sum to 40,
+so reconciliation guts g9eng-reading — weight 10 wants 10 questions, gets 8"* —
+the other session's pack, not this batch's.
+
+### Next
+
+`docs/nce-grade9/batch_plan.md` is the queue. The order changed: **SHAPE batches
+now outrank volume batches** for Biology, Chemistry, Physics and ICT. ICT needs
+~25–30 more authored tasks (~170 marks) to reach ~55 distinct memorable items
+against the ~30 it has.
+⚠ Still blocked on the user: the English / French / SMS written-response
+decision. ⚠ Still outstanding: rotate the Supabase Management API token pasted in
+chat, and the import + deploy, which are one action and not a batch step.

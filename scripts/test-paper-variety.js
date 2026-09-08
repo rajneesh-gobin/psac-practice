@@ -61,7 +61,9 @@ const bad = m => { fail++; console.log('  FAIL ' + m); };
 //     nobody is working towards.
 const BASELINE = {
   // Measured 2026-09-08, five papers dealt in sequence with recentIds fed forward.
-  'grade9-maths':     { repeats: 8, marks: 100 },
+  // ⚠ LOWERED 8 -> 7 on 2026-09-08 when bankFor() stopped discarding adaptable
+  //   rows on a pack that also has authored tasks.
+  'grade9-maths':     { repeats: 7, marks: 100 },
   'grade9-biology':   { repeats: 1, marks: 50 },
   // ⚠ RE-BASELINED 0 -> 2 on 2026-09-08, ATTRIBUTED, not waved through. A content
   //   batch added 170 items to g9s-inquiry/g9s-sts including four new figures, and
@@ -77,7 +79,19 @@ const BASELINE = {
   //   Lower a baseline the moment the measurement allows it: one that is never
   //   lowered is a target nobody is working towards.
   'grade9-physics':   { repeats: 4, marks: 50 },
-  'grade9-ict':       { repeats: 1, marks: 79 },
+  // ⚠ RE-BASELINED 1 -> 17 repeats and 79 -> 100 marks on 2026-09-08, ATTRIBUTED.
+  //   35 authored multi-part tasks (200 marks, 15 distinct figures) were added, and
+  //   the paper went 79/100 -> 100/100 with visual share 1% -> 20% (target 30%) and
+  //   distinct memorable stimuli 3 -> 30. Repeats rose because of what the OLD
+  //   number actually meant: the 64 items that used to fill the non-MCQ role were
+  //   1-mark, figure-less and short, so memorableKey() returned null for every one
+  //   and the paper scored 1 repeat by being UNMEMORABLE, not by being varied.
+  //   ⚠ A metric can improve because the content got worse. That is the trap this
+  //     baseline table exists to make visible, and it is why a bare number is never
+  //     re-baselined here without the reason beside it.
+  //   The real fix is ~25-30 more authored tasks: 5 papers x ~11 memorable slots
+  //   needs ~55 distinct memorable items and 30 exist. Queued as ICT SHAPE work.
+  'grade9-ict':       { repeats: 17, marks: 100 },
 };
 
 // ⚠⚠ WHAT THIS HARNESS FOUND, AND WHY IT MATTERS MORE THAN THE REPEAT COUNT.
@@ -113,10 +127,14 @@ function bankFor(pack) {
   //   multi-part `task` rows with their own mark values; the other four ship
   //   ordinary questions that are wrapped into one-mark tasks at generation
   //   time. Handling only the first is the defect this file was written for.
-  const authored = all.filter(q => q && q.type === 'task' && Array.isArray(q.parts) && q.parts.length);
-  if (authored.length) return { tasks: authored, source: new Map(authored.map(t => [t.id, t])) };
-
-  const wrapped = N.tasksFromBank(all);
+  // ⚠ "AUTHORED IF ANY, ELSE WRAPPED" WAS WRONG AND THIS FILE HAD IT TOO.
+  //   grade9-ict became a MIXED pack on 2026-09-08 - 35 authored tasks beside
+  //   524 adaptable rows - and the either/or discarded all 524. tasksFromBank()
+  //   passes an authored task through untouched and adapts the rest, which is the
+  //   case nce_paper.js already promises. The same defect was live in
+  //   engine/nce_paper_admin.js, where it meant four subjects could not generate
+  //   a paper in the app at all.
+  const wrapped = N.tasksFromBank(all).filter(t => t && Array.isArray(t.parts) && t.parts.length);
   const byId = new Map(all.map(q => [q.id, q]));
   return { tasks: wrapped, source: byId };
 }

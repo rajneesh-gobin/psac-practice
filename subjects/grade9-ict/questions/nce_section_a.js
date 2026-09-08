@@ -16,9 +16,10 @@
 //  ⚠ THE ANSWER IS TASKS, NOT MORE SHORT ANSWERS. `makeTask()` carries real
 //    mark values and real sub-parts, which is what the paper is made of;
 //    a plain question is adapted as a ONE-mark part and can never be worth
-//    more (nce_paper.js: "IT DOES NOT INVENT MARKS"). 34 tasks worth 195
-//    marks were written across this file and nce_section_b.js so the middle
-//    of the paper has multi-mark work to place.
+//    more (nce_paper.js: "IT DOES NOT INVENT MARKS"). 35 tasks worth 200
+//    marks are written across this file and nce_section_b.js - measured, not
+//    counted by hand - so the middle of the paper has multi-mark work to place.
+//    They project to 142 practisable items as well (Assessment.projectToItems).
 //
 //  ⚠ THIS FILE IS THE SECTION A HALF: the objective blocks. Measured across
 //    NCE ICT 2021-2025 (docs/nce-grade9/blueprint-ict.md §3), Section A is

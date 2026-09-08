@@ -77,6 +77,20 @@
 //   ⚠ 0 does NOT by itself keep a chapter out of an exam — assembleExamPaper()
 //   clamps with Math.max(1, …). What actually excludes them is having no
 //   poolable question, so do not write questions into them and then rely on the 0.
+//   ⚠⚠ DECIDED 2026-09-08, DELIBERATELY AGAINST THE LINE ABOVE. Four practice
+//     questions WERE written into these two chapters (starter_bank.js), so that
+//     neither opens blank on the chapter-practice screen. The cost is accepted
+//     and measured: each chapter now takes one slot in a 40-question paper, the
+//     per-chapter totals overflow to 42, and the reconciliation loop takes the
+//     surplus off the FIRST chapter with n > 1 — so g9eng-reading is dealt 8
+//     instead of its weight of 10. scripts/test-exam-paper-shape.js therefore
+//     FAILS on this pack ON PURPOSE; that failure is the record of this choice.
+//     ⚠ Do NOT "fix" it by dropping reading to 8. Measured: that puts the
+//       paper’s biggest chapter at 20% against 30% in the real N500, AND still
+//       leaves two chapters worth zero marks holding an exam slot each.
+//     ⚠ Do NOT silently delete the four questions either. Both options were
+//       costed; the blank-chapter cost was judged the worse one. Reopen the
+//       decision if you like, but say so.
 //
 // ⚠ TWO CHAPTERS HAVE NO SUBSECTIONS, deliberately: g9eng-gr-determiners and
 //   g9eng-gr-modals. The doc records that NO Grade 9 syllabus content exists
