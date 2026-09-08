@@ -158,7 +158,42 @@ function assemblePaper(o) {
   const bp = o.blueprint;
   const rnd = mulberry32(o.seed == null ? (Date.now() & 0xffffffff) : o.seed);
   const warnings = [];
-  const recent = new Set(o.recentIds || []);
+  // ⚠ FRESHNESS IS STIMULUS-AWARE, AND THIS WAS REJECTED ONCE BEFORE.
+  //   Keying only on the task id means two different tasks drawing the same
+  //   cuboid are both "fresh", and a child meets the same picture on
+  //   consecutive papers while every id is new. Measured on a 613-task bank
+  //   it made things slightly WORSE (5-paper memorable repeats 33.8% -> 35.1%)
+  //   and was not implemented.
+  //
+  //   ⚠ RE-MEASURED ON THE 671-TASK BANK AND THE ANSWER REVERSED:
+  //
+  //       variant        5 papers   10 papers   warning-free
+  //       id only          11.5%      26.8%        1/5
+  //       id + stimulus     5.0%      24.0%        2/5
+  //
+  //   The reason is that blocking a whole figure family only helps once there
+  //   is somewhere else to go. At 63 distinct families it pushed the
+  //   assembler onto a smaller pool sooner than blocking one task did; at 104
+  //   it has room. A conclusion measured against one bank is not a conclusion
+  //   about the code - re-measure it when the bank changes shape.
+  //
+  //   ⚠ The bank now holds MORE distinct families (104) than five papers ask
+  //   for (66 memorable slots), and only 54 were being reached. That is why
+  //   this is an assembler change and not another content batch: the depth
+  //   exists, the selection could not get at it.
+  const _recentIds = new Set(o.recentIds || []);
+  const _stimKey = t => (t && t.stimulus && t.stimulus.html)
+    ? (t.stimulus.altText || '') + '|' + t.stimulus.html.length : null;
+  const _byId = new Map((o.tasks || []).map(t => [t.id, t]));
+  const _recentStim = new Set();
+  _recentIds.forEach(id => { const k = _stimKey(_byId.get(id)); if (k) _recentStim.add(k); });
+  const recent = {
+    has(id) {
+      if (_recentIds.has(id)) return true;
+      const k = _stimKey(_byId.get(id));
+      return k ? _recentStim.has(k) : false;
+    },
+  };
   const bank = (o.tasks || []).filter(t => t && Array.isArray(t.parts) && t.parts.length);
 
   if (!bank.length) {

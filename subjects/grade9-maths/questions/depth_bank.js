@@ -89,11 +89,17 @@ function tank(topL, botL, depthL, lenL) {
   g += `<polyline points="${F.slice(0, 3).map(p => (x0 + p[0] + dx).toFixed(1) + ',' + (y0 + p[1] + dy).toFixed(1)).join(' ')}" fill="none" stroke="#000" stroke-width="1.2"/>`
      + `<text x="${(x0 + top / 2).toFixed(1)}" y="${y0 - 8}" font-size="12" text-anchor="middle">${topL}</text>`
      + `<text x="${(x0 + top / 2).toFixed(1)}" y="${(y0 + h + 17).toFixed(1)}" font-size="12" text-anchor="middle">${botL}</text>`
-     + `<text x="${x0 - 8}" y="${(y0 + h / 2).toFixed(1)}" font-size="12" text-anchor="end">${depthL}</text>`
+     // ⚠ The depth label used to sit beside the SLANTED left edge, so it read
+     //   as the slant length - and the area of a trapezium needs the
+     //   PERPENDICULAR height. A dashed perpendicular with a right-angle mark
+     //   now says which measurement it is. Found by rendering the sheet.
+     + `<line x1="${(x0 + off).toFixed(1)}" y1="${y0}" x2="${(x0 + off).toFixed(1)}" y2="${(y0 + h).toFixed(1)}" stroke="#000" stroke-width="1" stroke-dasharray="4 3"/>`
+     + `<path d="M ${(x0 + off).toFixed(1)} ${(y0 + h - 12).toFixed(1)} L ${(x0 + off + 12).toFixed(1)} ${(y0 + h - 12).toFixed(1)} L ${(x0 + off + 12).toFixed(1)} ${(y0 + h).toFixed(1)}" fill="none" stroke="#000" stroke-width="1.1"/>`
+     + `<text x="${(x0 + off - 8).toFixed(1)}" y="${(y0 + h / 2).toFixed(1)}" font-size="12" text-anchor="end">${depthL}</text>`
      + `<text x="${(x0 + top + dx + 6).toFixed(1)}" y="${(y0 + dy + 4).toFixed(1)}" font-size="12" text-anchor="start">${lenL}</text>`;
   return SVG(x0 + top + dx + 74, y0 + h + 30) + g + '</svg>';
 }
-const ALT_TANK = 'A tank drawn in three dimensions whose end face is a trapezium, with the two parallel edges, the depth and the length labelled.';
+const ALT_TANK = 'A tank drawn in three dimensions whose end face is a trapezium, with the longer parallel edge at the top, the shorter at the bottom, the perpendicular depth marked by a dashed line, and the length labelled.';
 
 // ── 4. A row of containers of different sizes ────────────────────────────
 function containers(spec) {

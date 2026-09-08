@@ -2492,3 +2492,112 @@ minutes before, and `check.js` was clean.
 ### Blocked
 
 Nothing.
+---
+
+## Batch 17 - the content lever runs out, and a rejected conclusion reverses
+
+### The measurement is repeatable now: `scripts/nce-pool-depth.js`
+
+Four batches each found a different cause of repeated papers, every one by hand
+from a different throwaway script. That measurement is now a tool. It reports,
+per chapter: weight, questions drawn, task pool, **distinct memorable stimuli**,
+memorable draws, repeats, and the ratio between them - plus every figure family
+shared between chapters, and a closing list of chapters that cannot avoid
+repeating.
+
+⚠ **A chapter's TASK count says nothing about this.** `g9m-volume` held 32 tasks
+and **four** distinct memorable stimuli, because most of its pool is small text
+questions and its figures are a cuboid and a cylinder - both of which
+`g9m-surface-area` also draws. The tool named it and nothing else:
+
+```
+write here first - these chapters cannot avoid repeating:
+  g9m-volume   has 4 distinct memorable stimuli, asked for 5
+```
+
+`depth_bank.js` answered exactly that: 9 tasks in six families new to the whole
+pack - a cone, an L-shaped prism, a tank with a trapezoidal cross-section, a row
+of containers, a matrix as a bracketed grid, a growing square pattern.
+⚠ `g9m-matrices` had **zero** memorable stimuli across 23 tasks; a matrix printed
+as a bracketed grid is a figure, and the papers print them that way.
+
+### ⚠ And the floor went UP: 16.7% -> 18.2%
+
+Adding memorable content raised the ratio, because a paper then draws MORE
+memorable items: 60 memorable slots became 66, distinct rose only 50 to 54, so
+repeats went 10 to 12. **More memorable tasks is not the same as more memorable
+variety**, and past a point the first makes the metric worse.
+
+That prompted the measurement that ended the content approach:
+
+| | |
+|---|---|
+| memorable TASKS in the bank | 189 |
+| distinct memorable FAMILIES | **104** |
+| memorable slots drawn by 5 papers | **66** |
+| distinct families actually reached | 54 |
+
+⚠ **The bank holds 58% more distinct families than five papers ask for, and the
+assembler reaches barely half of them.** Fifty families are never touched. So the
+constraint stopped being depth and became REACHABILITY - a family is only
+available if it sits in the chapter the paper wants, at the mark size it needs,
+on the right side of the visual split. No further content batch would have
+helped, and three more had been planned.
+
+### ⚠ A conclusion measured in batch 14 reversed on the deeper bank
+
+Batch 14 tested stimulus-aware freshness - treating a task as recently used if
+its FIGURE was, not just its id - and rejected it: 33.8% -> 35.1%, measurably
+worse. Re-measured now:
+
+| variant | 5 papers | 10 papers | warning-free |
+|---|---|---|---|
+| id only | 11.5% | 26.8% | 1/5 |
+| **id + stimulus** | **5.0%** | **24.0%** | **2/5** |
+
+⚠ Blocking a whole figure family only helps once there is somewhere else to go.
+At 63 distinct families it pushed the assembler onto a smaller pool sooner than
+blocking one task did; at 104 it has room. **A conclusion measured against one
+bank is not a conclusion about the code.** Implemented, with both measurements
+recorded at the call site so the next person sees why it was once rejected.
+
+⚠ A saturation hypothesis was then tested and **rejected**: the worry was that an
+unbounded history makes every family stale so freshness stops discriminating. The
+window sweep says otherwise - larger windows keep helping (5-paper 18.3% at no
+history, 3.1% at 120, 5.0% from 160 up; 10-paper 36.4% -> 19.0%). The admin UI's
+500-id cap already sits on that plateau and was left alone.
+
+### Ten papers, batch 16 -> batch 17
+
+| | batch 16 | batch 17 |
+|---|---|---|
+| questions (target 31) | 31-32 | 31-32 |
+| marks | 100/100 | 100/100 |
+| visual share (target 26%) | 26-28% | 26-28% |
+| numbering depth | 2 | 2 on all ten |
+| distinct opening questions | 9/10 | **10/10** |
+| 5-paper memorable repeats | 16.7% | **12.9%** |
+| chapters that cannot avoid repeating | 1 | **0** |
+
+⚠ The ten-paper `repeated-stimulus rate` in `nce-paper-report.js` moved the other
+way, 26.8% -> 33.3%. It is a different metric - it counts only figure-carrying
+tasks, keyed on alt text plus html length, over ten papers rather than five -
+and both numbers are reported rather than the flattering one.
+
+Five-paper floor across the run: 53.4 -> 51.9 -> 46.8 -> 38.8 -> 33.8 -> 21.1
+-> 16.7 -> 18.2 -> **12.9%**.
+
+### Measured after
+
+All suites green: content 711 · svg-figures 1014 · nce-paper 75 · nce-paper-admin
+63 · assessment-schema 97 · unsupported-type 54 · netlify-redirects 133 ·
+boot-smoke 18 · grade456 39 (no re-baseline needed) · `check.js` clean ·
+`git diff --check` clean. `SHELL_VERSION` -> **v265**; `_CACHE_VERSION` -> **82**.
+Bank: **671 tasks, 104 distinct memorable families**.
+
+One content error of mine, caught by reading: `g9m-dep-003(a.i)` keyed 852 where
+its own working gives 720. One caught by rendering: the tank's depth label sat
+beside the SLANTED edge, so it read as the slant when the area formula needs the
+perpendicular - now drawn as an explicit dashed perpendicular with a right-angle
+mark.
+
