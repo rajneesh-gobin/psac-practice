@@ -35,11 +35,11 @@ STATIC_QUESTIONS.push(
     question:'Why is glass the best material for WINDOWS?',
     options:[
       'Because glass is very strong and cannot break',
-      'Because glass is transparent and allows light into the room',
+      'Because glass is transparent and lets light through',
       'Because glass is cheap and easy to find',
       'Because glass is waterproof and flexible'
     ],
-    answer:'Because glass is transparent and allows light into the room',
+    answer:'Because glass is transparent and lets light through',
     hint:'What property of glass makes it useful for a window?',
     explanation:'Glass is used for windows because it is <b>transparent</b> - light passes through it, allowing daylight into the room. It also keeps out wind and rain. This shows how we choose materials based on their <b>properties</b>: the property needed for a window is transparency.' }),
 
@@ -62,10 +62,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Hard and cannot be bent or compressed',
       'Transparent and lets light through',
-      'Can be bent, stretched or compressed and returns to its original shape',
+      'Can be bent or stretched and returns to its shape',
       'Very heavy and sinks in water'
     ],
-    answer:'Can be bent, stretched or compressed and returns to its original shape',
+    answer:'Can be bent or stretched and returns to its shape',
     hint:'Think about what happens when you squeeze a rubber ball.',
     explanation:'<b>Flexible</b> means a material can be <b>bent, stretched or compressed and returns to its original shape</b>. Rubber is flexible and elastic. The opposite is <b>rigid</b> (stiff, cannot bend - e.g. metal rod, glass). Flexibility makes rubber useful for tyres, balls and erasers.' }),
 
@@ -74,10 +74,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Plastic - because it is lightweight and cheap',
       'Wood - because it is natural and strong',
-      'Metal - because it conducts heat well and can withstand high temperatures',
+      'Metal - it conducts heat and withstands high heat',
       'Glass - because it is transparent and easy to clean'
     ],
-    answer:'Metal - because it conducts heat well and can withstand high temperatures',
+    answer:'Metal - it conducts heat and withstands high heat',
     hint:'A cooking pot needs to transfer heat from the stove to the food. Which property is needed?',
     explanation:'<b>Metal</b> is the best choice because it <b>conducts heat</b> efficiently (heat from the flame transfers through the metal to cook the food) and <b>withstands very high temperatures</b> without melting or burning. Plastic would melt on a stove. Wood would catch fire. Glass can crack from heat shock.' }),
 
@@ -115,11 +115,11 @@ STATIC_QUESTIONS.push(
     question:'What is a THERMAL INSULATOR?',
     options:[
       'A material that conducts heat easily',
-      'A material that blocks or slows down the transfer of heat',
+      'A material that slows the transfer of heat',
       'A material that is very hot to touch',
       'A material used only in factories'
     ],
-    answer:'A material that blocks or slows down the transfer of heat',
+    answer:'A material that slows the transfer of heat',
     hint:'Thermal = heat. Insulator = prevents transfer. Think of oven gloves.',
     explanation:'A <b>thermal insulator</b> is a material that <b>slows or prevents heat transfer</b>. Examples: wood, plastic, rubber, foam. Oven gloves are made from thermal insulators to protect hands from heat. The opposite is a <b>thermal conductor</b> (transfers heat easily) - most metals.' }),
 
@@ -140,11 +140,11 @@ STATIC_QUESTIONS.push(
     question:'What does RECYCLING mean?',
     options:[
       'Throwing away old materials in a dustbin',
-      'Processing used materials (paper, plastic, glass, metal) into new products',
+      'Processing used materials into new products',
       'Burning rubbish in an open fire',
       'Burying waste in the ground'
     ],
-    answer:'Processing used materials (paper, plastic, glass, metal) into new products',
+    answer:'Processing used materials into new products',
     hint:'Re- means again. Recycling means using materials again.',
     explanation:'<b>Recycling</b> means collecting used materials and processing them into <b>new products</b>. Recycling reduces waste, saves natural resources, and saves energy. In Mauritius, recycling is encouraged to reduce waste going to landfills.' }),
 
@@ -153,10 +153,10 @@ STATIC_QUESTIONS.push(
     options:[
       'Because plastic burns safely in open fires',
       'Because plastic is natural and breaks down quickly in soil',
-      'Because plastic takes hundreds of years to break down and pollutes land and oceans',
+      'Plastic takes hundreds of years to break down',
       'Because plastic is rare and very expensive'
     ],
-    answer:'Because plastic takes hundreds of years to break down and pollutes land and oceans',
+    answer:'Plastic takes hundreds of years to break down',
     hint:'Plastic does not rot like food or paper. How long does it stay in the environment?',
     explanation:'Plastic can take <b>hundreds to thousands of years</b> to decompose. Plastic waste pollutes land, rivers and oceans, harming wildlife (animals eat or get tangled in plastic). Recycling plastic reduces this pollution and saves the oil used to make new plastic.' }),
 
@@ -164,11 +164,11 @@ STATIC_QUESTIONS.push(
     question:'Why is a CERAMIC (pottery) mug better than a METAL mug for drinking hot tea?',
     options:[
       'Because metal is heavier than ceramic',
-      'Because ceramic is a thermal insulator - it does not conduct heat to your hands, while a metal handle would become dangerously hot',
+      'Because ceramic is an insulator and stays cool to hold',
       'Because ceramic is more transparent than metal',
       'Because ceramic dissolves in hot water'
     ],
-    answer:'Because ceramic is a thermal insulator - it does not conduct heat to your hands, while a metal handle would become dangerously hot',
+    answer:'Because ceramic is an insulator and stays cool to hold',
     hint:'Think about what thermal conductors and insulators do when a hot liquid is inside.',
     explanation:'Ceramic is a <b>thermal insulator</b> - heat does not travel through it quickly, so the handle stays cool enough to hold. Metal is a <b>thermal conductor</b> - heat would travel rapidly from the hot tea through the metal walls to the handle, making it dangerously hot.' }),
 

@@ -40,14 +40,14 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g4sc-energy-006', chapterId:'g4sci-energy', subsection:'sources', difficulty:1,
     question:'Which energy source comes from BURNING WOOD or CHARCOAL?',
-    options:['Solar energy','Wind energy','Hydro energy','Heat energy from wood/charcoal'],
+    options:['Solar energy from the Sun','Wind energy from moving air','Hydro energy from falling water','Heat energy from wood/charcoal'],
     answer:'Heat energy from wood/charcoal',
     hint:'When wood burns in a fire, what do you feel and see?',
     explanation:'Burning <b>wood or charcoal</b> releases <b>heat energy</b> and light energy. This is called <b>biomass energy</b>. Wood and charcoal have stored chemical energy (from sunlight captured by the tree during its lifetime), which is released as heat when they burn. This is used for cooking and warmth.' }),
 
   makeMCQ({ id:'g4sc-energy-007', chapterId:'g4sci-energy', subsection:'sources', difficulty:2,
     question:'A HYDROELECTRIC DAM uses which source of energy to generate electricity?',
-    options:['Wind energy','Solar energy','Water energy (flowing water)','Petrol'],
+    options:['Wind energy from moving air','Solar energy from the Sun','Water energy (flowing water)','Petrol burned in an engine'],
     answer:'Water energy (flowing water)',
     hint:'Hydro means water. What moves through a dam?',
     explanation:'A <b>hydroelectric dam</b> uses the energy of <b>flowing water</b>. Water is held back by a dam; when released, the falling water spins turbines that generate electricity. This is called <b>hydro energy</b> or water energy. Hydroelectricity is renewable because water continuously flows from rainfall.' }),

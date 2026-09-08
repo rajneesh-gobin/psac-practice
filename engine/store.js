@@ -31,6 +31,9 @@ const Store = (() => {
       // Minigame bests (MiniGames in engine/minigame.js). Game answers stay
       // out of stats/daily/mistakes on purpose - replays must never distort
       // the mastery reporting parents rely on.
+      // Learning Coach pilot (engine/learning_coach.js): per-topic baseline,
+      // practice and follow-up state plus a 90-entry mission history.
+      learningCoach: { version:1, topics:{}, history:[], mission:null },
       games:        {},
       // The unfinished practice set, so it can be resumed on ANOTHER DEVICE.
       // { practice: { chapterId: { subjectId, qIds, idx, answers, ts } } }

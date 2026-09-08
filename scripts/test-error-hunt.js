@@ -132,7 +132,8 @@ for (const P of PACKS) {
   check(texts.every(q => q.maxChecks === 3), P.pack + ': every text caps Vérifier at 3');
 
   let wrongCount = 0, noStop = 0, noCap = 0, dbl = 0, lower = 0, selfFix = 0,
-      leak = 0, short = 0, long = 0, badKind = 0, misplaced = 0, emptyWord = 0;
+      leak = 0, short = 0, long = 0, badKind = 0, misplaced = 0, emptyWord = 0,
+      punct = 0;
   const KNOWN = new Set(['maj', 'min', 'pt', 'vrg', 'acc', 'pl', 'sg', 'vb', 'pp', 'hom', 'ort', 'det', 'tps']);
 
   for (const q of texts) {
@@ -146,7 +147,11 @@ for (const P of PACKS) {
     if ((q.correct.match(/[.!?]\s+[a-zà-ÿ]/g) || []).length) lower++;
     if (q.words.some(w => !w)) emptyWord++;
 
-    q.errKind.forEach(k => { kinds.set(k, (kinds.get(k) || 0) + 1); if (!KNOWN.has(k)) badKind++; });
+    q.errKind.forEach(k => {
+      kinds.set(k, (kinds.get(k) || 0) + 1);
+      if (!KNOWN.has(k)) badKind++;
+      if (k === 'pt' || k === 'vrg') punct++;
+    });
     q.errAt.forEach((wi, k) => {
       if (q.words[wi] === q.errFix[k]) selfFix++;
       if (wi < 0 || wi >= q.words.length) misplaced++;
@@ -179,6 +184,11 @@ for (const P of PACKS) {
   check(selfFix === 0, P.pack + ': no error corrects to itself', selfFix + ' did');
   check(emptyWord === 0, P.pack + ': no empty word token', emptyWord + ' found');
   check(badKind === 0, P.pack + ': every error kind is in the rule table', badKind + ' unknown');
+  // ⚠ WORDS ONLY. A missing mark has no word of its own, so the child had to be
+  //   told to click the word BEFORE it - and the example that instruction named
+  //   sits, correct and clickable, inside 10 of these 60 texts. Every planted
+  //   error is now a word; the punctuation in the passage is simply right.
+  check(punct === 0, P.pack + ': no error is a punctuation error (pt/vrg)', punct + ' found');
   check(misplaced === 0, P.pack + ': every error index lands on a word, with no unmarked twin', misplaced + ' problems');
   check(dbl === 0, P.pack + ': no corrected text has a doubled space', dbl + ' did');
   check(noStop === 0, P.pack + ': every corrected text ends on a full stop', noStop + ' did not');

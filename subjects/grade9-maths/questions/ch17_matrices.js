@@ -132,7 +132,7 @@ const ITEMS = [
    { kind: 'choice', variant: 'options',
      options: ['They have the same order and every matching element is equal',
                'They have the same order only',
-               'They contain the same numbers in any positions',
+               'They contain exactly the same numbers in any positions',
                'They have the same number of elements'],
      answer: 'They have the same order and every matching element is equal' },
    'Both the shape and every entry must match.',

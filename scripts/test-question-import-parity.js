@@ -96,6 +96,13 @@ const pf = preflight(corpus);
       try { new vm.Script(fs.readFileSync(path.join(pack.dir, f), 'utf8'), { filename: f }).runInContext(vmCtx); }
       catch (e) { ck('build loader: ' + pack.subjectId + '/' + f + ' loads', false, e.message); }
     }
+    // ⚠ The builder expands multi-part tasks into practisable items right
+    //   after loading a pack, and so does questions-sandbox.js. This harness
+    //   drives _buildContext directly, so it has to take the same step or the
+    //   two sides differ by exactly the projected items and this suite fails
+    //   on a difference that is only about where the harness stops.
+    const _extra = require(path.join(ROOT, 'engine/assessment.js')).expandTasks(state.buf);
+    if (_extra.length) state.buf.push(..._extra);
     for (const q of state.buf) { buildIds.add(q.id); buildTypes[q.type] = (buildTypes[q.type] || 0) + 1; }
     for (const q of state.pdf) buildPaperIds.add(q.id);
   }

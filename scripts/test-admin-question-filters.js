@@ -89,10 +89,13 @@ const ok = (label, cond, detail) => { assert(cond, label + (detail ? ' — ' + J
 
   const liveGrades = await ev('[...new Set(SUBJECT_PACKS.filter(p => !p.comingSoon).map(p => p.grade))].sort()');
   const allGrades = await ev('[...new Set(SUBJECT_PACKS.map(p => p.grade))].sort()');
+  // Derived, never a literal: publishing a pack (the Grade 9 packs went live)
+  // changes how many subjects this control offers.
+  const liveCount = await ev('SUBJECT_PACKS.filter(p => !p.comingSoon).length');
 
   await pick('qm-grade', ''); let s = await state();
   ok('no grade: every published pack is offered, grade-prefixed',
-    s.subjects.length === 16 && /^Grade \d+ - /.test(s.subjectLabel1), s);
+    s.subjects.length === liveCount + 1 && /^Grade \d+ - /.test(s.subjectLabel1), s);
 
   await pick('qm-grade', '5'); s = await state();
   ok('grade 5: subject list narrows to that grade and drops the prefix',

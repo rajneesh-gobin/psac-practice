@@ -439,6 +439,55 @@ function nextRoman(n) { return _ROMAN[n] || String(n + 1); }
 //   Those parts are not lost - the printable generator reads the task itself.
 //   Dropping them here is what stops a "draw the perpendicular bisector"
 //   instruction from reaching a child as a number pad.
+// ⚠⚠ THE ANSWER WAS IN POSITION A 95.1% OF THE TIME AND NOTHING NOTICED.
+//   makeMCQ() shuffles its options; projectToItems() did `r.options.slice()`
+//   and preserved the author's order. The house convention is to author
+//   ANSWER-FIRST (CLAUDE.md: "options[0] is then always the answer and an item
+//   can be checked at a glance") — which is safe under makeMCQ and catastrophic
+//   here. Measured on the built grade9-maths bundle 2026-09-08: of 82 projected
+//   four-option MCQs the answer sat at A in 95.1%, B 1.2%, C 2.4%, D 1.2%. A
+//   child who read nothing and always pressed A scored 95%.
+//   It survived because test-option-parity.js named two grade-6 packs and never
+//   looked at a projected item; it was found the day that list was widened.
+//
+// ⚠ THE SHUFFLE IS SEEDED ON THE ITEM ID, NOT RANDOM. Projection runs in the
+//   browser, in build-questions.js and in the sandbox, and an item must look
+//   the same in all three: a random order would make the importer rewrite every
+//   projected row on every run (the churn makeMCQ already causes — see the
+//   "0 new, ~560 updated" note) and would let two callers disagree about the
+//   same question. Same id in, same order out, for ever.
+// ⚠ Fisher-Yates, never `sort(() => Math.random() - 0.5)` — that comparator is
+//   biased and is what put the answer at A 36% of the time in the three server
+//   copies of makeMCQ.
+// ⚠ THE SEED MIXES THE ID **AND THE OPTION TEXTS**. Seeding on the id alone was
+//   uniform over 4000 synthetic ids (26.6/24.3/23.8/25.3) but landed at 40.2% on
+//   grade9-maths's 82 projected items: real ids are clustered (g9m-ineq-011-a,
+//   g9m-ineq-012-a, …) and near-identical strings gave correlated seeds. Adding
+//   the options decorrelates neighbours without costing determinism - the same
+//   item still yields the same order every time, in every caller.
+function _seedFromId(id) {
+  let h = 2166136261;
+  const str = String(id == null ? '' : id);
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function _shuffleForId(list, id) {
+  let a = _seedFromId(id);
+  const out = list.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    const r = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    const j = Math.floor(r * (i + 1));
+    const tmp = out[i]; out[i] = out[j]; out[j] = tmp;
+  }
+  return out;
+}
+
 function projectToItems(task) {
   const out = [];
   // ⚠ The intro travels with the projected item as well. Without it an online
@@ -463,12 +512,14 @@ function projectToItems(task) {
     const r = p.response;
     if (kind === 'choice') {
       out.push(Object.assign(base, {
-        type: 'mcq', options: r.options.slice(), answer: r.answer,
+        type: 'mcq', options: _shuffleForId(r.options, base.id + '|' + r.options.join('|')), answer: r.answer,
         acceptableAnswers: [r.answer],
       }));
     } else if (kind === 'multi') {
+      // ⚠ `multi` shuffles too: its answer is a list of option TEXTS, not of
+      //   positions, so reordering is safe and the same tell applies.
       out.push(Object.assign(base, {
-        type: 'multi', options: r.options.slice(), answer: r.answer.slice(),
+        type: 'multi', options: _shuffleForId(r.options, base.id + '|' + r.options.join('|')), answer: r.answer.slice(),
         acceptableAnswers: [],
       }));
     } else if (kind === 'number' || kind === 'expression') {

@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v267';
+const SHELL_VERSION = 'shell-v274';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -95,6 +95,7 @@ const SHELL_FILES = [
   '/engine/minigame.js',
   '/engine/cloze.js',
   '/engine/errorhunt.js',
+  '/engine/learning_coach.js',
 ];
 
 // ── Install: pre-cache the shell ─────────────────────────────────────────────

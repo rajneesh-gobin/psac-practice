@@ -9,7 +9,7 @@
 
 STATIC_QUESTIONS.push(
 
-  makeMCQ({ id:'g9sms-samp-001', chapterId:'g9sms-development', difficulty:1,
+  makeMCQ({ id:'g9sms-samp-001', chapterId:'g9sms-economy-1960s', difficulty:1,
     question:'Placeholder - this pack has no real questions yet.',
     options:['A','B','C','D'],
     answer:'A',

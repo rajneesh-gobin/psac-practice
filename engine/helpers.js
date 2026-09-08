@@ -231,8 +231,8 @@ function makeErrorHunt({ id, chapterId, difficulty, subsection, title, intro, te
     question: title + ' - chasse aux erreurs : ' + errors + ' erreurs à trouver.',
     answer: errFix.join(' · '),
     acceptableAnswers: [errFix.join(' · ')],
-    hint: hint || 'Lis le texte à voix basse. Une erreur s\'entend souvent avant de se voir : majuscules, points, accords du pluriel, verbes.',
-    explanation: explanation || ('Ce texte cache ' + errors + ' erreurs : majuscules, ponctuation, accords et homophones.'),
+    hint: hint || 'Lis le texte à voix basse. Une erreur s\'entend souvent avant de se voir : majuscules, accents, accords du pluriel, verbes.',
+    explanation: explanation || ('Ce texte cache ' + errors + ' erreurs de MOTS : majuscules, accents, accords et homophones. La ponctuation, elle, est déjà correcte.'),
   };
 }
 

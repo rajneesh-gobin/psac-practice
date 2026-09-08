@@ -114,5 +114,52 @@ for (const pack of LIVE) {
   else ok(`${pack}: ${p.chapters.length} chapters, every declared id has questions and every tag is declared`);
 }
 
+// ── Packs still being written ───────────────────────────────────────────────
+// ⚠ REPORTED, NEVER FAILED. A comingSoon pack has empty declared subsections by
+//   definition — that is what the flag is for — so failing here would make the
+//   test useless during exactly the phase it is most needed.
+//
+//   But the OTHER half of the invariant is already meaningful: an id tagged on
+//   real questions with no declaration behind it will hide those questions the
+//   instant the pack goes live, and the author has no way to notice. Measured
+//   2026-09-08 while grade9-ict was being written a chapter every ~45 seconds:
+//   the manifest declared `formulae_basics`/`cell_references` from the syllabus
+//   doc while the author was tagging `formulas`/`cells_ranges` from the actual
+//   papers — 16 questions already mismatched, and nothing said so.
+//
+// ⚠ Where both exist, THE AUTHOR'S TAG WINS. It is attached to real questions
+//   and is usually derived from what the papers ask; a declared id is only ever
+//   a plan. Rename the declaration, not the questions.
+const HIDDEN = (function () {
+  const idx = fs.readFileSync(path.join(ROOT, 'subjects', '_index.js'), 'utf8');
+  const out = [];
+  const re = /"id":"(grade\d-[a-z-]+)"([\s\S]{0,400}?)"comingSoon":(true|false)/g;
+  let m;
+  while ((m = re.exec(idx))) if (m[3] === 'true') out.push(m[1]);
+  return out.sort();
+})();
+
+const notes = [];
+for (const pack of HIDDEN) {
+  const p = readPack(pack);
+  if (!p) continue;
+  for (const ch of p.chapters) {
+    const declared = new Set((((p.syllabus[ch] || {}).subsections) || []).map(s => s.id));
+    const tagged = p.tagged[ch] || new Set();
+    if (!tagged.size) continue;
+    const undeclared = [...tagged].filter(id => !declared.has(id));
+    if (undeclared.length) {
+      notes.push(`${pack} / ${ch}: tagged but NOT declared — ${undeclared.join(', ')}`);
+    }
+  }
+}
+if (notes.length) {
+  console.log('\n  ⚠ still comingSoon, so not a failure — but these tags are already');
+  console.log('    orphaned and would be hidden the moment the pack goes live:');
+  for (const n of notes) console.log('      ' + n);
+} else if (HIDDEN.length) {
+  console.log(`\n  ✓ ${HIDDEN.length} comingSoon packs: no orphaned tags`);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

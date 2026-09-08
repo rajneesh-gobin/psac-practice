@@ -1349,16 +1349,21 @@ function shareChildLoginWhatsApp() {
 // for by name as a WhatsApp button, and wa.me works for a visitor who isn't
 // signed in yet (no referral code, no Auth dependency at all).
 function _appShareText() {
-  // ⚠ Names the ONE Grade 9 subject that is actually live. Five of the six
-  //   Grade 9 packs are still comingSoon, so "NCE Grade 9" or "Grade 9" without
-  //   "Mathematics" would promise four subjects that open empty and one (ICT)
-  //   with 25 questions in 1 of its 12 chapters. Check SUBJECT_PACKS before
-  //   widening this - a WhatsApp message cannot be corrected once forwarded.
+  // ⚠ Names the THREE Grade 9 subjects that are actually live. Three of the six
+  //   Grade 9 packs are still comingSoon, so "NCE Grade 9" or "Grade 9" on its
+  //   own would promise English, French and Social & Modern Studies, all of
+  //   which open empty. ICT joined Mathematics on 2026-09-08 (469 questions,
+  //   12 of 12 chapters) and Science the same day (528 questions, 16 of 16).
+  //   Check SUBJECT_PACKS before widening this - a WhatsApp message cannot be
+  //   corrected once forwarded, and this string, _inviteText() (auth.js) and
+  //   the landing page must be changed together.
   return 'PSAC Exam Practice 🎓 - free, fun revision for Grades 4–6! Maths, English, French, '
     + 'Science and History & Geography, all aligned with the Mauritius MIE curriculum. XP, '
     + 'streaks and real-time parent tracking built in.\n\n'
     + '🆕 Just added: NCE Grade 9 Mathematics - all 19 chapters, from Number Revision '
-    + 'and Indices through to Statistics and Probability.\n\nWorth a look:';
+    + 'and Indices through to Statistics and Probability - and NCE Grade 9 ICT, '
+    + 'all 12 chapters, from Computer Systems to Algorithms and Python, and NCE '
+    + 'Grade 9 Science, all 16 chapters across Biology, Chemistry and Physics.\n\nWorth a look:';
 }
 
 function shareAppWhatsApp() {
@@ -2775,6 +2780,9 @@ function recordAnswer(chapterId, correct, source, questionId) {
   // afternoon or in March, which is most of what "have I done this one?" means.
   // One number per chapter, so the blob grows by ~20 bytes per chapter ever
   // practised - cheap enough not to need its own table.
+  if (typeof LearningCoach !== 'undefined' && questionId) {
+    LearningCoach.record({ id: questionId }, correct);
+  }
   DB.chapters[chapterId].last = Date.now();
   DB.stats.totalAttempted++;
   if (correct) DB.stats.totalCorrect++;
@@ -4109,6 +4117,7 @@ async function renderParentDashboard() {
   _renderShopChip();
   _renderExpiredBanner('pd-expired-slot');
   _refreshParentMessageBadge();
+  if (typeof LearningCoach !== 'undefined') LearningCoach.renderParent();
 
   const students    = Auth.getStudents() || [];
   const hasStudents = students.length > 0;
@@ -6713,6 +6722,7 @@ function renderDashboard() {
 
   _renderNotifyOptIn();
   _refreshInboxBadge();
+  if (typeof LearningCoach !== 'undefined') LearningCoach.renderChild();
 
   // ⚠ The two schedule panels are deliberately NOT painted here any more.
   // #dash-today-plan (Calendar.renderTodayPlan) and #dash-schedule stacked a
@@ -10986,6 +10996,7 @@ function _kidHomeHero() {
 
 function renderSubjectSelect() {
   if (typeof MiniGames !== 'undefined') MiniGames.syncTile();
+  if (typeof LearningCoach !== 'undefined') LearningCoach.renderChild();
   const container = document.getElementById('subject-cards');
   if (!container) return;
 
