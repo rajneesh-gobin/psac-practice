@@ -1,42 +1,5 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 3 - Science   ·   PLACEHOLDER PACK
-//
-//  Registered so the plumbing exists: the grade picker, the admin Content tab,
-//  the shop catalogue, the question bundler and the DB importer all discover
-//  grades from SUBJECT_PACKS / the subjects/ directory, so nothing else has to
-//  be edited when this is filled in.
-//
-//  ⚠ comingSoon: true is what makes this safe to ship empty. It makes
-//    activateSubjectPack() refuse the pack, keeps it out of QuestionLoader's
-//    per-grade fetch and out of assembleExamPaper(), and renders the grade card
-//    as "Coming Soon" and disabled. Flip it to false ONLY when this pack has
-//    real chapters and real questions.
-//
-// STAGE: Mauritian primary, lower years. Same MIE track as Grades 4-6,
-// so the five subjects and the PSAC framing below are correct.
-// ⚠ Grades 1-2 will need a picture-first question mode before this is
-//   opened to children - the current renderer assumes the child can read
-//   the question and all four options. See CLAUDE.md.
-//
-//  TO FILL THIS IN
-//    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` -
-//       one idea per sentence (_syllabusPoints splits on sentences).
-//    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
-//       model. IDs: g3s-samp-001 style. Every question needs a `subsection:`
-//       tag that matches an id declared in G3SC_SYLLABUS below.
-//    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only - production auto-discovers) and bump _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
-
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: an id declared here
-// with no questions behind it advertises a topic that opens empty, which is
-// worse than no subsections at all. Add ids only as questions are tagged.
 const G3SC_SYLLABUS = {};
-
 registerSubject({
   id:         'grade3-science',
   name:       'Science',
@@ -47,9 +10,17 @@ registerSubject({
   comingSoon: true,
   syllabus:   G3SC_SYLLABUS,
   chapters: [
-    // One placeholder so the shape is copyable. examWeight: 0 keeps it out of
-    // exam papers even if comingSoon is flipped before real content lands.
-    { id: 'g3s-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g3sc-senses', name: 'The Senses', icon: '👁️', examWeight: 1,
+      syllabus: 'Identify and name the five sense organs: eyes, ears, nose, tongue and skin. Relate each sense to its function — seeing, hearing, smelling, tasting and touching. Show understanding of how we use the senses to observe and gather information from the environment around us.' },
+    { id: 'g3sc-living-nonliving', name: 'Living and Non-Living Things', icon: '🌿', examWeight: 1,
+      syllabus: 'Recognise and identify a variety of things in the immediate environment. Observe and classify things as living or non-living and state differences between them. State that there is a large variety of plants and animals around us. Show understanding that living things grow, need food and breathe.' },
+    { id: 'g3sc-materials', name: 'Materials in our Environment', icon: '🪵', examWeight: 1,
+      syllabus: 'Observe and name a variety of common materials found in everyday life such as wood, plastic, paper and glass. Identify the types of common materials. Compare and classify objects made of wood, plastic, paper and glass.' },
+    { id: 'g3sc-water', name: 'Water', icon: '💧', examWeight: 1,
+      syllabus: 'Identify and name some common sources of water. List some common uses of water. State the physical properties of water. Investigate and recognise the presence of water around us. Demonstrate understanding of the need to conserve water so we do not waste it.' },
+    { id: 'g3sc-air', name: 'Air', icon: '💨', examWeight: 1,
+      syllabus: 'State that air is all around us and that we breathe air all the time. List some common uses of air. Investigate and recognise the presence of air around us through simple observations. State that air is present in empty bottles, soil and water.' },
+    { id: 'g3sc-environment', name: 'Protecting our Environment', icon: '🌍', examWeight: 1,
+      syllabus: 'Explore and observe the given environment and list problems such as domestic waste, noise, smoke and stagnant water. Recognise ways to keep our environment clean. Explain how air and water can become dirty and suggest ways to solve the problem. Infer how problems in the environment affect people and other living things.' },
   ],
 });

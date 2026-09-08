@@ -1,42 +1,5 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 2 - English   ·   PLACEHOLDER PACK
-//
-//  Registered so the plumbing exists: the grade picker, the admin Content tab,
-//  the shop catalogue, the question bundler and the DB importer all discover
-//  grades from SUBJECT_PACKS / the subjects/ directory, so nothing else has to
-//  be edited when this is filled in.
-//
-//  ⚠ comingSoon: true is what makes this safe to ship empty. It makes
-//    activateSubjectPack() refuse the pack, keeps it out of QuestionLoader's
-//    per-grade fetch and out of assembleExamPaper(), and renders the grade card
-//    as "Coming Soon" and disabled. Flip it to false ONLY when this pack has
-//    real chapters and real questions.
-//
-// STAGE: Mauritian primary, lower years. Same MIE track as Grades 4-6,
-// so the five subjects and the PSAC framing below are correct.
-// ⚠ Grades 1-2 will need a picture-first question mode before this is
-//   opened to children - the current renderer assumes the child can read
-//   the question and all four options. See CLAUDE.md.
-//
-//  TO FILL THIS IN
-//    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` -
-//       one idea per sentence (_syllabusPoints splits on sentences).
-//    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
-//       model. IDs: g2eng-samp-001 style. Every question needs a `subsection:`
-//       tag that matches an id declared in G2ENG_SYLLABUS below.
-//    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only - production auto-discovers) and bump _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
-
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: an id declared here
-// with no questions behind it advertises a topic that opens empty, which is
-// worse than no subsections at all. Add ids only as questions are tagged.
 const G2ENG_SYLLABUS = {};
-
 registerSubject({
   id:         'grade2-english',
   name:       'English',
@@ -47,9 +10,17 @@ registerSubject({
   comingSoon: true,
   syllabus:   G2ENG_SYLLABUS,
   chapters: [
-    // One placeholder so the shape is copyable. examWeight: 0 keeps it out of
-    // exam papers even if comingSoon is flipped before real content lands.
-    { id: 'g2eng-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g2eng-listening', name: 'Listening', icon: '👂', examWeight: 1,
+      syllabus: 'Identify different types of aural texts such as weather forecasts, poems, songs and stories. Listen attentively and show understanding by responding with short answers. Enjoy listening to different aural texts and recognise rhyming words. Show understanding of key vocabulary and phrases with visual support. Listen for main ideas and some details.' },
+    { id: 'g2eng-speaking', name: 'Speaking', icon: '🗣️', examWeight: 1,
+      syllabus: 'Pronounce words accurately with support. Vary intonation according to purpose such as statement and interrogation. Give basic information about oneself and others including family and hobbies. Convey the gist of events or stories using single words or phrases with prompts. Express likes and dislikes using short responses. Use affirmative and negative forms with support.' },
+    { id: 'g2eng-reading', name: 'Reading', icon: '📚', examWeight: 1,
+      syllabus: 'Use phonemic awareness to decode words through segmenting, blending and consonant clusters. Engage in shared and individual reading activities. Read simple written instructions in class. Follow development of ideas in texts with support. Identify key ideas and some details. Read aloud with fluency under guidance.' },
+    { id: 'g2eng-writing', name: 'Writing', icon: '✏️', examWeight: 1,
+      syllabus: 'Show enthusiasm to engage in writing activities such as greetings cards, postcards and posters. Complete words with missing letters using given clues. Write common words from dictation. Use simple vocabulary related to familiar situations. Sequence words properly to form parts of sentences. Complete simple sentences given a word or picture bank.' },
+    { id: 'g2eng-grammar', name: 'Grammar', icon: '📝', examWeight: 1,
+      syllabus: 'Form plural nouns with s. Use frequently used gendered nouns such as mother/father and boy/girl. Use personal pronoun it. Use interrogative pronoun when. Extend range of frequently used adjectives and their opposites. Further expose to Present Continuous Tense and Present Simple Tense. Introduce Future Simple Tense for actions happening in the future.' },
+    { id: 'g2eng-phonics', name: 'Phonics', icon: '🔤', examWeight: 1,
+      syllabus: 'Recognise the different sounds of the English language including different consonants, vowels, consonant clusters and vowel combinations. Use phonemic awareness to decode words through segmenting and blending. Spell words phonetically as a strategy to write words. Recognise word and sentence boundaries.' },
   ],
 });
