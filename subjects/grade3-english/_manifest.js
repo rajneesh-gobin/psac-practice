@@ -1,5 +1,38 @@
 'use strict';
-const G3ENG_SYLLABUS = {};
+
+const G3ENG_SYLLABUS = {
+  'g3eng-listening': { subsections: [
+    { id:'main_idea',       name:'Main Idea & Topic' },
+    { id:'sequence_events', name:'Order of Events' },
+    { id:'purpose_message', name:'Purpose of a Message' },
+  ]},
+  'g3eng-speaking': { subsections: [
+    { id:'oral_vocabulary',      name:'Using New Words' },
+    { id:'describing_retelling', name:'Describing & Retelling' },
+    { id:'asking_answering',     name:'Questions & Answers' },
+  ]},
+  'g3eng-reading': { subsections: [
+    { id:'reading_comprehension', name:'Reading Comprehension' },
+    { id:'vocabulary_context',    name:'Word Meanings in Context' },
+    { id:'text_features',         name:'Text Features' },
+  ]},
+  'g3eng-writing': { subsections: [
+    { id:'creative_writing', name:'Creative Writing' },
+    { id:'sentence_types',   name:'Types of Sentences' },
+    { id:'punctuation',      name:'Punctuation' },
+  ]},
+  'g3eng-grammar': { subsections: [
+    { id:'parts_of_speech',     name:'Parts of Speech' },
+    { id:'verb_tenses',         name:'Verb Tenses' },
+    { id:'punctuation_grammar', name:'Punctuation in Grammar' },
+  ]},
+  'g3eng-phonics': { subsections: [
+    { id:'syllabication',  name:'Breaking Words into Syllables' },
+    { id:'word_patterns',  name:'Word Patterns & Spelling' },
+    { id:'spelling_rules', name:'Spelling Rules' },
+  ]},
+};
+
 registerSubject({
   id:         'grade3-english',
   name:       'English',
@@ -8,19 +41,63 @@ registerSubject({
   subject:    'English',
   curriculum: 'MIE Mauritius',
   comingSoon: true,
+  notesBased: true,
+  noDifficulty: true,
   syllabus:   G3ENG_SYLLABUS,
   chapters: [
-    { id: 'g3eng-listening', name: 'Listening', icon: '👂', examWeight: 1,
-      syllabus: 'Show understanding of aural texts dealing with familiar topics with visual support. Make predictions based on what has been heard. Identify information related to characters, setting and plot in fairy tales and stories. Identify the purpose of aural texts such as to instruct, inform, persuade or entertain. Listen for main ideas and additional details.' },
-    { id: 'g3eng-speaking', name: 'Speaking', icon: '🗣️', examWeight: 1,
-      syllabus: 'Pronounce words accurately without support. Narrate events and incidents from everyday life with growing independence. Talk about familiar topics giving details such as holidays, food and environment. Participate in a range of oral activities including presentation and role play. Use affirmative and negative forms more independently. Ask for permission, request information and ask for clarification.' },
-    { id: 'g3eng-reading', name: 'Reading', icon: '📚', examWeight: 1,
-      syllabus: 'Apply decoding skills including segmenting, blending and consonant clusters to read unfamiliar words. Use text attack skills to derive meaning from title, layout and paragraphing. Identify key ideas and specific information in texts. Make predictions based on information in texts with growing independence. Read aloud fluently and with growing independence.' },
-    { id: 'g3eng-writing', name: 'Writing', icon: '✏️', examWeight: 1,
-      syllabus: 'Complete words with missing letters without given clues. Write sentences from dictation. Use simple vocabulary related to familiar situations. Use common punctuation marks appropriately including full stop, question marks and commas. Use appropriate tenses to situate action in time. Write simple sentences and produce short texts with the help of a writing frame.' },
-    { id: 'g3eng-grammar', name: 'Grammar', icon: '📝', examWeight: 1,
-      syllabus: 'Use words referring to persons, animals, places and things. Introduce basic uncountable nouns such as rice, water and sugar. Introduce gendered and neutral nouns. Form plurals with es and ies. Reinforce use of personal pronouns. Reinforce use of interrogative pronouns. Introduce Present Simple Tense with es and ies endings and irregular forms. Introduce Past Simple Tense.' },
-    { id: 'g3eng-phonics', name: 'Phonics', icon: '🔤', examWeight: 1,
-      syllabus: 'Use phonemic awareness to decode words through segmenting, blending and consonant clusters. Recognise syllables in words. Recognise word and sentence boundaries. Spell high-frequency words correctly. Write grammatically correct sentences. Start to use word attack skills to derive meaning using root word, prefix, suffix and plural.' },
+    {
+      id: 'g3eng-listening', name: 'Listening', icon: '👂', examWeight: 1,
+      notes: [
+        'Find the **main idea** — what is the whole text mostly about?',
+        'Listen for the **order** — what happened first, next, last?',
+        'Notice **why** something was said: to inform, to entertain, to persuade, or to ask.',
+        'Words like *first, then, after, finally* signal the order of events.',
+      ],
+    },
+    {
+      id: 'g3eng-speaking', name: 'Speaking', icon: '🗣️', examWeight: 1,
+      notes: [
+        'Use **new and interesting words** — instead of "nice" try "wonderful" or "exciting".',
+        'When retelling, use: *First... Then... After that... Finally...*',
+        'A good **description** names the thing, its colour, its size and what it does.',
+        'Ask questions starting with: *Who? What? Where? When? Why? How?*',
+      ],
+    },
+    {
+      id: 'g3eng-reading', name: 'Reading', icon: '📚', examWeight: 1,
+      notes: [
+        'Read the whole passage, then read each question carefully.',
+        'For "find" questions, use the **exact words from the passage**.',
+        'Work out unknown words from the **context** — other words around them.',
+        '**Text features** help you: titles, headings, pictures, captions, bold words.',
+      ],
+    },
+    {
+      id: 'g3eng-writing', name: 'Writing', icon: '✏️', examWeight: 1,
+      notes: [
+        'Plan before you write: *Who? Where? What happened? How did it end?*',
+        'Statement (.): gives information. Question (?): asks something. Exclamation (!): shows strong feeling.',
+        'Use **commas** in a list: I bought apples, oranges, bananas and grapes.',
+        'Make your writing interesting — add describing words and connectives.',
+      ],
+    },
+    {
+      id: 'g3eng-grammar', name: 'Grammar', icon: '📝', examWeight: 1,
+      notes: [
+        'Parts of speech: **noun** (naming), **verb** (action), **adjective** (describing), **adverb** (how/when/where).',
+        '**Present tense**: I walk. **Past tense**: I walked. **Future tense**: I will walk.',
+        'Irregular past tenses: go→went, see→saw, eat→ate, run→ran, have→had, come→came.',
+        'A **full stop** ends a statement. A **question mark** ends a question. A **comma** separates list items.',
+      ],
+    },
+    {
+      id: 'g3eng-phonics', name: 'Phonics & Spelling', icon: '🔤', examWeight: 1,
+      notes: [
+        'Split words into syllables to spell them: *to-mor-row (3), won-der-ful (3)*.',
+        'Common patterns: *-tion (nation), -ing (running), -ed (walked), -er (teacher)*.',
+        'Double the consonant before adding -ing/-ed if the vowel is short: *run→running*.',
+        'Silent letters: kn- (knee), wr- (write), -mb (lamb). Say the whole word, then spell it.',
+      ],
+    },
   ],
 });
