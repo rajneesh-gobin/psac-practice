@@ -1099,6 +1099,11 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
 .dark .num-pad-space { color: #94a3b8; }
 .num-pad-minus { font-size: 1.3rem; }
 .num-pad-4col  { grid-template-columns: repeat(4, 1fr); max-width: 300px; }
+/* The algebra pad (type 'expr'). Five columns fit a 360px phone once main's
+   px-4 is taken off, and the taller key keeps every target over 44px on its
+   SHORTEST side - at 59px wide the height is what decides it. */
+.num-pad-5col  { grid-template-columns: repeat(5, 1fr); max-width: 320px; }
+.num-pad-5col .num-pad-btn { padding: 0.85rem 0.2rem; font-size: 1.05rem; }
 .num-pad-sym   {
   background: #fef3c7; color: #92400e !important;
   border-color: #fcd34d !important;
@@ -1647,6 +1652,12 @@ body.has-bottom-nav .pr-actions { bottom: calc(4rem + env(safe-area-inset-bottom
 #screen-practice .num-input:focus { border-color: rgba(240,236,220,.65); }
 #screen-practice .num-input.correct { border-color: #4ade80; background: rgba(34,197,94,.15); }
 #screen-practice .num-input.wrong   { border-color: #f87171; background: rgba(239,68,68,.15); }
+/* Typed-answer helpers. The board is dark in BOTH themes, so anything in the
+   answer area that inherits the sheet colour is black on a blackboard. */
+#screen-practice .expr-hint { color: rgba(240,236,220,.82); }
+#screen-practice .slot-label { color: rgba(240,236,220,.85); }
+#screen-practice .slot-score { color: #f0ece8; }
+#screen-practice .answer-unsupported { color: #f0ece8; background: rgba(240,236,220,.08); border-color: rgba(240,236,220,.4); }
 /* Feedback block */
 #screen-practice .pr-feedback { border: 1px solid rgba(240,236,220,.12); background: rgba(0,0,0,.18); color: #f0ece8; }
 /* Tools row */
@@ -8743,7 +8754,9 @@ html.dark .txt-slip { color: #9ae6b4; background: rgba(72, 187, 120, .16); borde
   border-radius: 10px;
   padding: 14px 16px;
   background: rgba(148, 163, 184, .12);
+  color: #334155;
 }
+.dark .answer-unsupported { color: #e2e8f0; border-color: rgba(148,163,184,.5); }
 .answer-unsupported p { margin: 0 0 6px; }
 .answer-unsupported p:last-child { margin-bottom: 0; opacity: .85; font-size: .95em; }
 
@@ -8879,21 +8892,24 @@ html.dark .txt-slip { color: #9ae6b4; background: rgba(72, 187, 120, .16); borde
 /* Algebraic answer input (type 'expr'). The caret hint is not decoration: a
    child who types "a8" instead of "a^8" is marked wrong for a notation they
    were never told, and there is no ^ key on a phone number pad. */
-.expr-hint { margin: 6px 2px 0; font-size: .85em; opacity: .8; }
+.expr-hint { margin: 6px 2px 0; font-size: .85em; color: #4b5563; }
+.dark .expr-hint { color: #9ca3af; }
 
 /* Multi-blank answers (type 'slots'): "x = ...., y = ...." and table
    completion. Every box is the SAME width on purpose - a box sized to its
    answer prints the answer's length on screen, which is the rule the French
    cloze gaps already follow. */
 .slot-row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
-.slot-label { font-style: italic; opacity: .9; }
+.slot-label { font-style: italic; color: #4b5563; }
+.dark .slot-label { color: #cbd5e1; }
 .slot-input {
   width: 7.5em; padding: 10px 12px; font-size: 16px;
   border: 2px solid var(--border, #cbd5e1); border-radius: 8px;
   background: var(--card, #fff); color: inherit;
 }
 .slot-input:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; }
-.slot-score { margin: 8px 2px 0; font-weight: 600; }
+.slot-score { margin: 8px 2px 0; font-weight: 600; color: #334155; }
+.dark .slot-score { color: #e2e8f0; }
 
 /* A pupil SAYS they have done a worksheet or watched a video. Green because it
    is good news, but the words carry the meaning — nothing here was marked. */

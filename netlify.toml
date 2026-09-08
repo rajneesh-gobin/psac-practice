@@ -319,6 +319,29 @@
   status = 404
   force  = true
 
+# ⚠⚠ CAUGHT BY scripts/test-netlify-redirects.js ON A REAL CHANGE, not a
+# planted one. A 31 MB `.deploy/` directory appeared in the publish root - an
+# assembled copy of the app, which is the "publish only the app" fix the note
+# at the top of this file recommends. It is gitignored, and a CLI deploy
+# uploads from local disk, so it ships.
+#
+# ⚠ IT CARRIES `.deploy/subjects/*/questions/` - the question SOURCE files,
+# with their answers. The rule that blocks those is `/subjects/*/questions/*`,
+# which does NOT match a path beginning `/.deploy/`, so shipping this
+# directory would republish every question at a second URL and step straight
+# around the existing block. Exactly the shape of the netlify/question-bundles
+# leak, and it was introduced minutes before this rule.
+#
+# ⚠ Blocking it does not conflict with using it: `netlify deploy --dir=.deploy`
+# names the directory explicitly and does not go through these redirects. This
+# rule only stops it being served as a subdirectory of the CURRENT publish
+# root, which is `publish = "."`.
+[[redirects]]
+  from   = "/.deploy/*"
+  to     = "/"
+  status = 404
+  force  = true
+
 [[redirects]]
   from   = "/ARCHITECTURE.md"
   to     = "/"

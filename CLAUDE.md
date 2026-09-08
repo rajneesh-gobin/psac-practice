@@ -359,8 +359,22 @@ nav → under-construction banner → hero → **measured stats strip** →
   the single definition. ⚠ The five subjects registered for 7–9 are a
   **placeholder copy of the primary five** and are not confirmed against the MIE
   lower-secondary syllabus. Confirm before writing any question there.
-- ⚠ **Coverage copy stays "Grades 4–6" everywhere** — that is what a child can
-  actually practise today.
+- ⚠ **Coverage copy is "Grades 4–6, plus NCE Grade 9 Mathematics"** — that, and
+  only that, is what a child can actually practise today (updated 2026-09-08).
+  **16 live packs, 182 chapters, 15,625 practisable questions.**
+  ⚠ **Name the SUBJECT, never the grade.** Grade 9 registers SIX packs and five
+  are still `comingSoon`: English, French, Science and Social & Modern Studies
+  hold one sample question each, and ICT has 25 questions in **1 of its 12
+  chapters**. "Grade 9 is live" or "NCE is live" promises five subjects that
+  open empty. The landing page, `_appShareText()` (app.js) and `_inviteText()`
+  (auth.js) all say "NCE Grade 9 Mathematics" for this reason, each with a
+  comment saying why. ⚠ A WhatsApp message cannot be corrected once forwarded.
+  ⚠ **Count what PROJECTS, not what is stored.** 833 of those 15,625 come from
+  667 grade9-maths `task` items via `Assessment.projectToItems()`. A raw task is
+  in `_POOL_TYPES_EXCLUDED` and has no `question` field at all, so counting
+  bundle rows would advertise 667 questions no child can ever be dealt.
+  Verified before publishing: all 19 chapters project to something; only 2 tasks
+  (drawing/construction) yield nothing online, by design.
 
 ### The `comingSoon` rule
 > Anything that builds a list a **parent or child** sees filters `!p.comingSoon`.
@@ -1593,8 +1607,36 @@ its licence is recorded.
 `dist/`; `publish = "."`). The build runs **locally**, so no Netlify build
 minutes.
 - ⚠ **It uploads from local disk, not git.** Everything gitignored but present
-  ships. **Move `.env` (holds `SUPABASE_SERVICE_ROLE_KEY`) out of the tree before
-  every CLI deploy.**
+  ships — `.gitignore` excludes nothing from a CLI deploy, and Netlify has no
+  publish-exclude when `publish = "."`.
+- ✅ **Stage the publish directory first — `node scripts/prepare-deploy.js`**,
+  then `netlify deploy --prod --dir=.deploy --functions=netlify/functions`.
+  Measured 2026-09-08: the repo tree is **491 MB / 8,900 files**; the site is
+  **29 MB / 682 files**. What used to ship with every deploy: `past-papers/`
+  (147 MB of copyrighted MES/MIE PDFs), `.netlify/` (60 MB of CLI cache),
+  `netlify/` (21 MB — including the question bundles that answered **200 with
+  real questions and their answers**, bypassing every entitlement check),
+  `exam_papers/`, and **`.env` with the service role key**.
+  ⚠ That last one is why this exists. "Move `.env` out of the tree before every
+  CLI deploy" was a manual step in a document, i.e. one forgotten command away
+  from publishing the service role key. The staging dir removes the footgun
+  instead of restating it.
+  - ⚠ It is an **ALLOWLIST**. A denylist ships every new scratch file at the
+    repo root by default — this root has collected `dbg18/23/25/27.js`,
+    `test.py`, `tmp/` and two stray report JSONs without anyone deciding to
+    publish them. The allowlist inverts the failure: something NEEDED goes
+    missing and the script's own checks fail loudly.
+  - ⚠ `assets/past-papers/` is **kept** — that is the cropped artwork questions
+    display, a different thing that merely shares a name with the PDF folder.
+    An unanchored `/past-papers/` rule matched it and blocked the first run.
+  - ⚠ `netlify/` is **not published**: functions ship via `--functions`, which
+    reads the repo, and `included_files` resolves against the repo root.
+    **Verify `/.netlify/functions/questions` answers 401 (not 404) right after
+    the first staged deploy** — that is the one thing here no local check can
+    prove.
+  - Verified by booting the staged directory in headless Chrome: 45 packs, 343
+    chapters, service worker active with its shell cache built (so `addAll`
+    succeeded), **0 console errors and 0 404s**.
 - ⚠ `publish = "."` serves the repo root. `netlify.toml` carries **28 explicit
   404 redirects** — explicit because Netlify wildcards match only a *trailing*
   splat, so `/*.md` matches nothing. Add one for any new sensitive root file.

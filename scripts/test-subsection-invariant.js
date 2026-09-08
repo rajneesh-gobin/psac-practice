@@ -39,8 +39,22 @@ let pass = 0, fail = 0;
 const ok = m => { pass++; console.log('  ok   ' + m); };
 const bad = m => { fail++; console.log('  FAIL ' + m); };
 
-const LIVE = [4, 5, 6].flatMap(g =>
-  ['maths', 'english', 'french', 'history', 'science'].map(s => `grade${g}-${s}`));
+// ⚠ LIVE PACKS COME FROM THE GENERATED INDEX, NOT FROM A HARD-CODED GRADE
+//   LIST AND NOT FROM MANIFEST SOURCE TEXT. A [4, 5, 6] list silently skipped
+//   grade9-maths the day it went live - this suite reported all-green while
+//   ignoring the pack that had just been enabled. And grepping the manifests
+//   for /comingSoon:\s*false/ matches the comment every placeholder pack
+//   carries ("5. Set comingSoon: false."), which reports all 30 of them live.
+//   `subjects/_index.js` is generated, holds real JSON values, and check.js
+//   already fails if it drifts from the manifests.
+const LIVE = (function () {
+  const idx = fs.readFileSync(path.join(ROOT, 'subjects', '_index.js'), 'utf8');
+  const out = [];
+  const re = /"id":"(grade\d-[a-z-]+)"([\s\S]{0,400}?)"comingSoon":(true|false)/g;
+  let m;
+  while ((m = re.exec(idx))) if (m[3] === 'false') out.push(m[1]);
+  return out.sort();
+})();
 
 function readPack(pack) {
   const bundleFile = path.join(BUNDLES, pack + '.json');

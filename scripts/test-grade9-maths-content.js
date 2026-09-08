@@ -68,23 +68,30 @@ ok(nearDup.length === 0,
 // ── The declared-vs-tagged subsection invariant ───────────────────────────
 console.log('subsections');
 const manifest = fs.readFileSync(path.join(ROOT, 'subjects', 'grade9-maths', '_manifest.js'), 'utf8');
-const declared = {};
-{
-  const block = manifest.slice(manifest.indexOf('const G9M_SYLLABUS = {'),
-                              manifest.indexOf('registerSubject('));
-  let chapter = null;
-  for (const line of block.replace(/\r\n/g, '\n').split('\n')) {
-    const ch = line.match(/^\s*'(g9m-[a-z-]+)':\s*\{/);
-    if (ch) { chapter = ch[1]; declared[chapter] = new Set(); continue; }
-    // ⚠ Digits allowed. As [a-z_]+ this silently skipped
-    //   `ratios_and_2d_problems` and then reported its questions as "tagged but
-    //   not declared" — a failure that reads like a content error and was a
-    //   regex error.
-    const sub = line.match(/^\s*([a-z0-9_]+):\s*'/);
-    if (sub && chapter) declared[chapter].add(sub[1]);
-    if (/^\s*\},?\s*$/.test(line)) chapter = null;
+// ⚠ THE MANIFEST IS EVALUATED, NOT PARSED LINE BY LINE. This used to walk
+//   the source with two regexes, and it had already been wrong once (as
+//   `[a-z_]+` it silently skipped `ratios_and_2d_problems` and reported its
+//   questions as undeclared - a failure that read like a content error and
+//   was a regex error). It then broke a second time when the subsection map
+//   moved to the canonical `{ subsections: [ {id, name} ] }` shape that
+//   app.js's renderSyllabus() actually reads: the parser found nothing and
+//   reported all 25 subsections as undeclared. Reading source text where a
+//   value is meant is the same mistake in both directions.
+const declared = (function () {
+  const i = manifest.indexOf('const G9M_SYLLABUS = {');
+  const open = manifest.indexOf('{', i);
+  let depth = 0, close = -1;
+  for (let k = open; k < manifest.length; k++) {
+    if (manifest[k] === '{') depth++;
+    else if (manifest[k] === '}') { depth--; if (depth === 0) { close = k + 1; break; } }
   }
-}
+  const obj = require('vm').runInNewContext('(' + manifest.slice(open, close) + ')');
+  const out = {};
+  for (const [ch, v] of Object.entries(obj)) {
+    out[ch] = new Set((v && v.subsections ? v.subsections : []).map(x => x.id));
+  }
+  return out;
+})();
 const tagged = {};
 for (const t of tasks) {
   (tagged[t.chapterId] = tagged[t.chapterId] || new Set()).add(t.subsection);

@@ -141,7 +141,17 @@ for (const s of subjects.slice().sort((a, b) => real[b] - real[a]).slice(0, 4)) 
 console.log('  all fifteen     ' + mb(subjects.reduce((n, s) => n + real[s], 0)));
 
 // ── A child's own grade is the whole offline case: it must fit WHOLE ────────
-for (const g of [4, 5, 6]) {
+// ⚠ DERIVED, NOT HARD-CODED. When grade9-maths went live this loop still
+//   read [4, 5, 6] and never checked whether a Grade 9 child's own subjects
+//   fit their offline cache - the exact question this file exists to answer.
+const LIVE_GRADES = [...new Set(fs.readdirSync(path.join(ROOT, 'subjects'))
+  .filter(d => /^grade\d-/.test(d))
+  .filter(d => {
+    const m = path.join(ROOT, 'subjects', d, '_manifest.js');
+    return fs.existsSync(m) && /comingSoon:\s*false/.test(fs.readFileSync(m, 'utf8'));
+  })
+  .map(d => +d.match(/^grade(\d)-/)[1]))].sort((a, b) => a - b);
+for (const g of LIVE_GRADES) {
   const set = subjects.filter(s => s.startsWith('grade' + g + '-'));
   const r = run(set);
   console.log('\nGrade ' + g + ': ' + mb(r.chars) + ' cached of a ' + mb(r.budget) + ' budget'

@@ -60,77 +60,72 @@
 // ⚠ Only chapters that have content are listed. The other 16 chapters are
 //   deliberately absent rather than declared-and-empty.
 const G9M_SYLLABUS = {
-  'g9m-indices': {
-    laws:             'Laws of indices: multiplication, division, power and zero index',
-    negative_indices: 'Negative indices',
-  },
-  'g9m-number-revision': {
-    fractions_decimals_percentages: 'Fractions, decimals and percentages',
-    ratio_and_measures:             'Ratio, proportion, conversion and number properties',
-  },
-  'g9m-vectors': {
-    column_vectors: 'Column vectors, arithmetic and magnitude',
-    translation:    'Translation: image, object and translation vector',
-  },
-  'g9m-patterns': {
-    sequences_and_figures: 'Number patterns, growing figures and the nth term',
-  },
-  'g9m-finance': {
-    salaries_and_bills: 'Salaries, hire purchase, simple interest and utility bills',
-  },
-  'g9m-capacity': {
-    units_and_problems: 'Millilitres, centilitres and litres, and capacity from volume',
-  },
-  'g9m-matrices': {
-    order_types_operations: 'Order, types of matrix, and matrix arithmetic',
-  },
-  'g9m-inequalities': {
-    solve_and_represent: 'Solving inequalities and showing them on a number line',
-  },
-  'g9m-manipulation': {
-    formulae_and_subject: 'Evaluating a formula and changing its subject',
-  },
-  'g9m-expressions': {
-    binomials_and_factorising: 'Expanding binomials, perfect squares and factorising',
-  },
-  'g9m-quadratics': {
-    factorise_and_solve: 'Factorising and solving quadratic equations',
-  },
-  'g9m-simultaneous': {
-    solve_simultaneous: 'Solving simultaneous linear equations',
-  },
-  'g9m-surface-area': {
-    nets_and_surface_area: 'Nets, circles, and the surface area of prisms and cylinders',
-  },
-  'g9m-geometry-revision': {
-    // ⚠ ONE subsection, not four. The floor is 20 items per DECLARED
-    //   subsection, and this chapter has 23 items spread across angles,
-    //   sets, compound shapes and pie charts. Declaring all four would
-    //   advertise three topics that open nearly empty. Split it when each
-    //   family can carry 20 of its own.
-    grade7_8_geometry: 'Angles, sets and Venn diagrams, compound shapes and pie charts',
-  },
-  'g9m-trigonometry': {
-    ratios_and_2d_problems: 'Sine, cosine and tangent in two dimensions',
-  },
-  'g9m-probability': {
-    simple_and_combined_events: 'Simple and combined events, and possibility diagrams',
-  },
-  'g9m-statistics': {
-    frequency_and_averages: 'Frequency tables, mean, median, mode and range',
-  },
-  'g9m-volume': {
-    prisms_and_cylinders: 'Volume of a right prism and a cylinder',
-  },
-  'g9m-coordinates': {
-    gradient:         'Gradient of a straight line',
-    equation_of_line: 'The equation y = mx + c',
-  },
+  'g9m-indices': { subsections: [
+    { id: 'laws', name: 'Laws of indices: multiplication, division, power and zero index' },
+    { id: 'negative_indices', name: 'Negative indices' },
+  ] },
+  'g9m-number-revision': { subsections: [
+    { id: 'fractions_decimals_percentages', name: 'Fractions, decimals and percentages' },
+    { id: 'ratio_and_measures', name: 'Ratio, proportion, conversion and number properties' },
+  ] },
+  'g9m-vectors': { subsections: [
+    { id: 'column_vectors', name: 'Column vectors, arithmetic and magnitude' },
+    { id: 'translation', name: 'Translation: image, object and translation vector' },
+  ] },
+  'g9m-patterns': { subsections: [
+    { id: 'sequences_and_figures', name: 'Number patterns, growing figures and the nth term' },
+  ] },
+  'g9m-finance': { subsections: [
+    { id: 'salaries_and_bills', name: 'Salaries, hire purchase, simple interest and utility bills' },
+  ] },
+  'g9m-capacity': { subsections: [
+    { id: 'units_and_problems', name: 'Millilitres, centilitres and litres, and capacity from volume' },
+  ] },
+  'g9m-matrices': { subsections: [
+    { id: 'order_types_operations', name: 'Order, types of matrix, and matrix arithmetic' },
+  ] },
+  'g9m-inequalities': { subsections: [
+    { id: 'solve_and_represent', name: 'Solving inequalities and showing them on a number line' },
+  ] },
+  'g9m-manipulation': { subsections: [
+    { id: 'formulae_and_subject', name: 'Evaluating a formula and changing its subject' },
+  ] },
+  'g9m-expressions': { subsections: [
+    { id: 'binomials_and_factorising', name: 'Expanding binomials, perfect squares and factorising' },
+  ] },
+  'g9m-quadratics': { subsections: [
+    { id: 'factorise_and_solve', name: 'Factorising and solving quadratic equations' },
+  ] },
+  'g9m-simultaneous': { subsections: [
+    { id: 'solve_simultaneous', name: 'Solving simultaneous linear equations' },
+  ] },
+  'g9m-surface-area': { subsections: [
+    { id: 'nets_and_surface_area', name: 'Nets, circles, and the surface area of prisms and cylinders' },
+  ] },
+  'g9m-geometry-revision': { subsections: [
+    { id: 'grade7_8_geometry', name: 'Angles, sets and Venn diagrams, compound shapes and pie charts' },
+  ] },
+  'g9m-trigonometry': { subsections: [
+    { id: 'ratios_and_2d_problems', name: 'Sine, cosine and tangent in two dimensions' },
+  ] },
+  'g9m-probability': { subsections: [
+    { id: 'simple_and_combined_events', name: 'Simple and combined events, and possibility diagrams' },
+  ] },
+  'g9m-statistics': { subsections: [
+    { id: 'frequency_and_averages', name: 'Frequency tables, mean, median, mode and range' },
+  ] },
+  'g9m-volume': { subsections: [
+    { id: 'prisms_and_cylinders', name: 'Volume of a right prism and a cylinder' },
+  ] },
+  'g9m-coordinates': { subsections: [
+    { id: 'gradient', name: 'Gradient of a straight line' },
+    { id: 'equation_of_line', name: 'The equation y = mx + c' },
+  ] },
 };
 
 registerSubject({
   id: 'grade9-maths', name: 'Mathematics', grade: 9, icon: '🔢', subject: 'Maths',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G9M_SYLLABUS,
   chapters: [

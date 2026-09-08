@@ -119,6 +119,11 @@ for (const p of [
   '/docs/content-coverage-plan.md',
   '/dbg18.js',
   '/test.py',
+  // ⚠ Caught live: an assembled .deploy/ directory carrying
+  //   .deploy/subjects/*/questions/ - the question SOURCE with answers. The
+  //   rule for /subjects/*/questions/* does not match a /.deploy/ prefix.
+  '/.deploy/index.html',
+  '/.deploy/subjects/grade5-maths/questions/ch01_numbers.js',
 ]) ok(blocked(p), `${p} is blocked`);
 
 console.log('\nand the ones that were unblocked but merely absent');

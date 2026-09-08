@@ -1349,9 +1349,16 @@ function shareChildLoginWhatsApp() {
 // for by name as a WhatsApp button, and wa.me works for a visitor who isn't
 // signed in yet (no referral code, no Auth dependency at all).
 function _appShareText() {
+  // ⚠ Names the ONE Grade 9 subject that is actually live. Five of the six
+  //   Grade 9 packs are still comingSoon, so "NCE Grade 9" or "Grade 9" without
+  //   "Mathematics" would promise four subjects that open empty and one (ICT)
+  //   with 25 questions in 1 of its 12 chapters. Check SUBJECT_PACKS before
+  //   widening this - a WhatsApp message cannot be corrected once forwarded.
   return 'PSAC Exam Practice 🎓 - free, fun revision for Grades 4–6! Maths, English, French, '
     + 'Science and History & Geography, all aligned with the Mauritius MIE curriculum. XP, '
-    + 'streaks and real-time parent tracking built in. Worth a look:';
+    + 'streaks and real-time parent tracking built in.\n\n'
+    + '🆕 Just added: NCE Grade 9 Mathematics - all 19 chapters, from Number Revision '
+    + 'and Indices through to Statistics and Probability.\n\nWorth a look:';
 }
 
 function shareAppWhatsApp() {
@@ -3367,6 +3374,55 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
       autocapitalize="off" autocorrect="off" autocomplete="off" ${disabled ? 'disabled' : ''}
       onkeydown="if(event.key==='Enter'){${enter}}">
       <p class="expr-hint">Use <b>^</b> for a power - type <b>a^8</b> for a<sup>8</sup>.</p>`;
+
+    // ⚠ THE PAD IS NOT A CONVENIENCE HERE, IT IS THE ONLY REACHABLE ROUTE TO ^.
+    //   inputmode="text" is right (the answer needs letters) but it hands a
+    //   phone a QWERTY, where the caret is three layers down: 123 → #+= → ^.
+    //   The hint says "use ^" and the keyboard under it cannot easily produce
+    //   one. The numeric branch has had a pad since the beginning; this branch
+    //   shipped without one, and the first child to meet it had no way in.
+    //
+    // ⚠ THE KEYS ARE MEASURED, NOT GUESSED. Counting characters across all 60
+    //   authored `expression` answers: x 36 · ( ) 30 · / 25 · - 22 · = 18 ·
+    //   + 17 · y 9 · pi 9 · ^ 7 · n 7 · sqrt 1. Everything on the pad earns
+    //   its place, and the remaining variables (r, h, l, w, A, C, F, P, t)
+    //   are one tap away on the ordinary keyboard, which is still there.
+    if (!disabled) {
+      // π and √ insert the words markExpression() actually normalises - "pi"
+      // and "sqrt(" - never the glyph, which would never match an answer.
+      const rows = [
+        ['7', '8', '9', { d: '^', v: '^', sym: true }, '⌫'],
+        ['4', '5', '6', '(', ')'],
+        ['1', '2', '3', '+', { d: '−', v: '-' }],
+        ['0', '.', '/', '=', 'x'],
+        ['y', 'n', { d: 'π', v: 'pi' }, { d: '√', v: 'sqrt(' }, 'C'],
+      ];
+      const key = k => {
+        if (k === '⌫') return `<button type="button" class="num-pad-btn num-pad-del" aria-label="Backspace" onclick="numPadBackspace('${containerId}')">⌫</button>`;
+        if (k === 'C')  return `<button type="button" class="num-pad-btn num-pad-clear" aria-label="Clear the answer" onclick="numPadClear('${containerId}')">C</button>`;
+        const d = typeof k === 'string' ? k : k.d;
+        const v = typeof k === 'string' ? k : k.v;
+        return `<button type="button" class="num-pad-btn${k.sym ? ' num-pad-sym' : ''}"`
+          + ` aria-label="Insert ${_attr(v)}" onclick="insertSymbol('${containerId}','${v}')">${d}</button>`;
+      };
+      const padId = 'numpad-' + containerId;
+      // ⚠ Open by default on a phone, exactly as the numeric pad is. Unlike
+      //   that branch this one does NOT focus the input, so the child meets
+      //   our pad rather than the OS keyboard on top of it.
+      const _isMobile = ('ontouchstart' in window) || window.matchMedia('(max-width:768px)').matches;
+      cont.innerHTML += `
+        <button type="button" class="numpad-toggle${_isMobile ? ' active' : ''}" onclick="
+          var p=document.getElementById('${padId}');
+          var show=p.style.display==='none'||!p.style.display;
+          p.style.display=show?'block':'none';
+          this.classList.toggle('active',show);
+        " title="Show / hide keypad">⌨️ Keypad</button>
+        <div id="${padId}" style="display:${_isMobile ? 'block' : 'none'}">
+          <div class="num-pad num-pad-5col" role="group" aria-label="Algebra keypad">
+            ${rows.map(r => r.map(key).join('')).join('')}
+          </div>
+        </div>`;
+    }
   } else if (q.type && q.type !== 'numeric') {
     // ⚠ THIS BRANCH IS THE POINT. Everything below used to be the `else`, so a
     // question whose type nothing here recognised was drawn as a NUMBER PAD -

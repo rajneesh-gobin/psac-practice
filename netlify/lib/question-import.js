@@ -71,6 +71,76 @@ const TYPE_RULES = {
       return null;
     },
   },
+  // ⚠ PROJECTED FROM A MULTI-PART TASK, never authored directly. `expr` and
+  //   `slots` are produced by Assessment.projectToItems() when a task is
+  //   expanded, so they arrive with a `taskId` and a `partLabel` naming the
+  //   part they came from. They are NOT regenerable: rewriting one back to
+  //   source would have to rebuild the whole task, and the source of truth is
+  //   the makeTask() call in the question file, not the projected row.
+  //
+  // ⚠ The importer refused these outright until now - correctly, since an
+  //   unknown type must never be coerced to MCQ - which is why grade9-maths
+  //   could not be imported at all. Adding a validator is what makes the type
+  //   supported, not adding it to a list.
+  expr: {
+    label: 'Algebraic expression (projected)', regenerable: false,
+    required: ['question', 'answer'],
+    check: q => {
+      if (typeof q.answer !== 'string' || !q.answer.trim()) return 'answer must be a non-empty string';
+      if (!Array.isArray(q.acceptableAnswers) || !q.acceptableAnswers.length) {
+        return 'acceptableAnswers must be a non-empty array';
+      }
+      if (!q.acceptableAnswers.includes(q.answer)) return 'answer is not among acceptableAnswers';
+      if (!q.taskId || !q.partLabel) return 'a projected item must carry taskId and partLabel';
+      return null;
+    },
+  },
+  slots: {
+    label: 'Multi-blank answer (projected)', regenerable: false,
+    required: ['question', 'answer', 'slotResponse'],
+    check: q => {
+      const r = q.slotResponse;
+      if (!r || typeof r !== 'object') return 'slotResponse must be an object';
+      // ⚠ The field is `answer`, not `answers`, and it is an ARRAY OF ARRAYS:
+      //   one list of accepted spellings per blank. Written as `answers` this
+      //   validator rejected all 26 slots items with a message describing a
+      //   field that does not exist - a validator has to be checked against
+      //   the real shape, not the shape it assumes.
+      if (!Array.isArray(r.answer) || !r.answer.length) return 'slotResponse.answer must be a non-empty array';
+      if (!r.answer.every(a => Array.isArray(a) && a.length)) {
+        return 'each blank needs a non-empty array of accepted answers';
+      }
+      if (r.labels && (!Array.isArray(r.labels) || r.labels.length !== r.answer.length)) {
+        return 'slotResponse.labels must match the number of blanks';
+      }
+      // ⚠ marksByCorrect is indexed by HOW MANY blanks are right, so it needs
+      //   one more entry than there are blanks (zero right ... all right).
+      if (r.marksByCorrect && (!Array.isArray(r.marksByCorrect)
+          || r.marksByCorrect.length !== r.answer.length + 1)) {
+        return 'marksByCorrect must have one entry per possible number correct';
+      }
+      if (!q.taskId || !q.partLabel) return 'a projected item must carry taskId and partLabel';
+      return null;
+    },
+  },
+  // ⚠ The TASK ITSELF is stored too, alongside its projected parts. The
+  //   printable NCE paper generator reads tasks, and isPoolQuestion() keeps
+  //   them out of practice and exams, so both shapes have to survive a round
+  //   trip through the database.
+  task: {
+    label: 'Multi-part task', regenerable: false,
+    required: ['parts'],
+    check: q => {
+      if (!Array.isArray(q.parts) || !q.parts.length) return 'parts must be a non-empty array';
+      const bad = q.parts.find(p => !p || !p.label || !p.prompt || typeof p.marks !== 'number');
+      if (bad) return 'every part needs a label, a prompt and numeric marks';
+      const labels = q.parts.map(p => p.label);
+      if (new Set(labels).size !== labels.length) return 'duplicate part labels';
+      const dep = q.parts.find(p => p.dependsOn && !labels.includes(p.dependsOn));
+      if (dep) return 'dependsOn "' + dep.dependsOn + '" is not a label on this task';
+      return null;
+    },
+  },
   cloze: {
     label: 'Cloze', regenerable: false,
     required: ['text', 'bank', 'gapAnswers', 'gapAlts'],

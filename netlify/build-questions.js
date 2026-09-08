@@ -15,7 +15,7 @@ const vm   = require('vm');
 // CommonJS-and-global, so Node can require it and the browser can script-tag
 // it, and there is exactly one implementation of the NCE task schema,
 // its validator and its marking rules.
-const { makeTask: _makeTask } = require("../engine/assessment.js");
+const { makeTask: _makeTask, expandTasks: _expandTasks } = require("../engine/assessment.js");
 
 
 const ROOT    = path.resolve(__dirname, '..');
@@ -435,6 +435,29 @@ for (const grade of GRADES) {
   // for a single subject, and reading grade5.json to answer it meant parsing
   // 1.6 MB to return 100 KB — on every invocation, because a function container
   // starts cold and the parse is not free even when it is warm.
+  // ⚠ MULTI-PART TASKS ARE EXPANDED INTO THE BUNDLE, not left for the browser
+  //   to expand. `makeTask()` output has `type: 'task'`, which isPoolQuestion()
+  //   excludes from every pool - correctly, since a task carries parts no
+  //   machine can mark. Assessment.projectToItems() flattens the markable ones
+  //   into ordinary mcq/numeric/expr/slots items, and until this call existed
+  //   it was never invoked from anywhere: grade9-maths held 667 authored tasks
+  //   and every chapter would have opened empty.
+  //
+  // ⚠ AT BUILD TIME RATHER THAN IN THE BROWSER, so the SAME ids exist in the
+  //   bundle, in the database the importer writes, and in the sandbox that
+  //   grades an assignment. Expanding only in the browser would have left
+  //   assignment-submit.js unable to resolve any Grade 9 answer.
+  //
+  // ⚠ It roughly DOUBLES a task-heavy bundle - grade9-maths measured 710 KB
+  //   to 1,474 KB - because the prompt text appears on the task and on its
+  //   projected part. Grade 9 has one live subject and 1.80 MB of headroom
+  //   against the 3.4 MB cache budget today; revisit when it has more.
+  //   scripts/test-question-cache-budget.js fails when a grade stops fitting.
+  for (const subjectId of Object.keys(bundle)) {
+    const extra = _expandTasks(bundle[subjectId]);
+    if (extra.length) bundle[subjectId] = bundle[subjectId].concat(extra);
+  }
+
   for (const [subjectId, qs] of Object.entries(bundle)) {
     fs.writeFileSync(path.join(OUT_DIR, `${subjectId}.json`), JSON.stringify(qs));
   }

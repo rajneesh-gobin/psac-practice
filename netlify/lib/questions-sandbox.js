@@ -26,7 +26,7 @@ const path = require('path');
 // CommonJS-and-global, so Node can require it and the browser can script-tag
 // it, and there is exactly one implementation of the NCE task schema,
 // its validator and its marking rules.
-const { makeTask: _makeTask } = require("../../engine/assessment.js");
+const { makeTask: _makeTask, expandTasks: _expandTasks } = require("../../engine/assessment.js");
 const SymmetryLine = require("../../engine/symmetry_line.js");
 
 
@@ -359,6 +359,13 @@ function loadPack(subjectId) {
   const files    = [];
   const errors   = [];
   const ctx = vm.createContext(buildContext(practice, papers));
+  // ⚠ EXPANDED HERE TOO, or the DATABASE ends up holding tasks only.
+  //   `makeTask()` output is type "task", which isPoolQuestion() excludes
+  //   from every pool. netlify/functions/questions.js serves from the
+  //   database when a service key is present, so a database of bare tasks
+  //   reproduces the empty-pack bug in production even though the built
+  //   bundle is correct. The expansion is done after the files are read,
+  //   just below.
   for (const file of fs.readdirSync(dir).filter(f => f.endsWith('.js')).sort()) {
     const beforeQ = practice.length, beforeP = papers.length;
     try {
@@ -377,6 +384,12 @@ function loadPack(subjectId) {
   }
   const pack = { subjectId: safeId, grade: Number((safeId.match(/^grade(\d+)-/) || [])[1] || 0),
                  dir, practice, papers, files, errors };
+  // ⚠ Expanded once, after every file has run. `pack.practice` is the SAME
+  //   array object, so pushing here fills it. Doing it per file would rescan a
+  //   growing list; expandTasks() is idempotent by id, but asking once when
+  //   the pack is complete is cheaper and clearer.
+  const _extra = _expandTasks(practice);
+  if (_extra.length) practice.push(..._extra);
   _subjectCache.set(safeId, pack);
   return pack;
 }
@@ -419,6 +432,13 @@ function listPacks() {
 function evaluateSources(sources) {
   const practice = [], papers = [], errors = [];
   const ctx = vm.createContext(buildContext(practice, papers));
+  // ⚠ EXPANDED HERE TOO, or the DATABASE ends up holding tasks only.
+  //   `makeTask()` output is type "task", which isPoolQuestion() excludes
+  //   from every pool. netlify/functions/questions.js serves from the
+  //   database when a service key is present, so a database of bare tasks
+  //   reproduces the empty-pack bug in production even though the built
+  //   bundle is correct. The expansion is done after the files are read,
+  //   just below.
   for (const s of sources) {
     try { new vm.Script(s.code, { filename: s.file }).runInContext(ctx); }
     catch (e) { errors.push({ file: s.file, message: e.message }); }

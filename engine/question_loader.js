@@ -59,7 +59,8 @@ const QuestionLoader = (() => {
     'grade8-french': ['subjects/grade8-french/questions/ch01_sample.js'],
     'grade8-science': ['subjects/grade8-science/questions/ch01_sample.js'],
     'grade8-social-modern-studies': ['subjects/grade8-social-modern-studies/questions/ch01_sample.js'],
-    'grade9-maths': ['subjects/grade9-maths/questions/ch01_indices.js',
+    'grade9-ict':   ['subjects/grade9-ict/questions/ch01_computer_systems.js'],
+  'grade9-maths': ['subjects/grade9-maths/questions/ch01_indices.js',
                      'subjects/grade9-maths/questions/ch02_coordinates.js',
                      'subjects/grade9-maths/questions/ch03_number_revision.js',
                      'subjects/grade9-maths/questions/ch04_volume.js',
@@ -453,9 +454,64 @@ const QuestionLoader = (() => {
     });
   }
 
+  // ── Multi-part tasks -> ordinary practisable items ────────────────────
+  // ⚠ WITHOUT THIS, A WHOLE PACK IS INVISIBLE. `makeTask()` produces
+  //   `type: "task"`, and `isPoolQuestion()` in questions_engine.js excludes
+  //   "task" from every pool - practice, subsection practice AND
+  //   assembleExamPaper. That exclusion is correct: a task carries parts a
+  //   machine cannot mark (drawing, extended written) and parts that consume
+  //   an earlier part's answer, and dealing one raw would put a number pad
+  //   under "construct the perpendicular bisector".
+  //
+  //   `Assessment.projectToItems()` was written for exactly this and was
+  //   never called from anywhere - grep found it only inside a comment. So
+  //   grade9-maths held 667 authored tasks and a child would have opened all
+  //   19 chapters empty. Measured: the 667 tasks project to 833 items
+  //   (numeric 527 · expr 189 · mcq 83 · slots 34) covering all 19 chapters,
+  //   none under 20 items, across all four difficulty levels.
+  //
+  // ⚠ THE PROJECTED ITEMS GO INTO STATIC_QUESTIONS, not into a side list.
+  //   Eight places read that array directly - pools, chapter counts, the
+  //   learning coach, the practice journey, the admin report viewer - and a
+  //   parallel pool would have to be threaded through every one of them.
+  //   The raw task stays in the array too: the printable NCE generator reads
+  //   tasks, and isPoolQuestion() keeps them out of everything else.
+  //
+  // ⚠ Idempotent by task id. A subject can be loaded more than once (a failed
+  //   load is retried, and useStudent() re-fetches), and expanding twice would
+  //   duplicate every item - which getMixedQuestions() de-dupes by id, so it
+  //   would look fine while silently halving the effective pool.
+  function _expandTasks() {
+    if (typeof STATIC_QUESTIONS === 'undefined') return 0;
+    // ⚠ LOUD, NOT SILENT. If assessment.js has not run, returning 0 quietly
+    //   reproduces the exact bug this function fixes: a pack full of tasks and
+    //   a child seeing empty chapters, with nothing anywhere saying why.
+    //   index.html loads assessment.js before this file, so this should be
+    //   unreachable - which is precisely when a silent return is worst.
+    if (typeof Assessment === 'undefined' || !Assessment.expandTasks) {
+      if (STATIC_QUESTIONS.some(q => q && q.type === 'task')) {
+        console.error('[QuestionLoader] Assessment.expandTasks is missing, so '
+          + 'multi-part tasks cannot be turned into practisable questions. '
+          + 'Check that engine/assessment.js loads before engine/question_loader.js.');
+      }
+      return 0;
+    }
+    // ⚠ THE SHARED HELPER, not a second loop. Assessment.expandTasks() is the
+    //   one implementation, used by the bundle builder and the server sandbox
+    //   too, and it is idempotent by id - which matters here because a
+    //   production bundle ALREADY carries the projected items (they are added
+    //   at build time so the browser, the database and assignment grading all
+    //   see the same ids). This call is what covers file:// dev, where the
+    //   source files are injected and carry only tasks.
+    const out = Assessment.expandTasks(STATIC_QUESTIONS);
+    if (out.length) STATIC_QUESTIONS.push(...out);
+    return out.length;
+  }
+
   async function _loadLocal(subjectId) {
     const files = LOCAL_FILES[subjectId] || [];
     for (const f of files) await _injectScript(f);
+    _expandTasks();
   }
 
   const _CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -464,7 +520,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 82;
+  const _CACHE_VERSION = 83;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
@@ -826,6 +882,10 @@ const QuestionLoader = (() => {
       if (cached) {
         const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
         STATIC_QUESTIONS.push(...cached.filter(q => !existing.has(q.id)));
+        // ⚠ The CACHE holds raw tasks too, so a cache hit needs expanding
+        //   exactly as a network fetch does. Missing this would make the
+        //   pack work on first load and vanish for the next seven days.
+        _expandTasks();
         return true;
       }
 
@@ -844,6 +904,7 @@ const QuestionLoader = (() => {
       _writeCache(subjectId, incoming);
       const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
       STATIC_QUESTIONS.push(...incoming.filter(q => !existing.has(q.id)));
+      _expandTasks();
       return true;
 
     } catch(e) {

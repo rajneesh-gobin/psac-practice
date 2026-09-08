@@ -504,11 +504,42 @@ function projectToItems(task) {
   return out;
 }
 
+// ── Expanding a whole list of questions ───────────────────────────────────
+// ⚠ ONE IMPLEMENTATION, CALLED FROM EVERY SIDE. A task is invisible to the
+//   app until it is projected, and three places need the same answer: the
+//   browser (question_loader.js), the bundle builder (netlify/build-questions
+//   .js) and the sandbox the question service, the importer and assignment
+//   re-grading all load through (netlify/lib/questions-sandbox.js). Writing
+//   the loop three times is how `learnMore` and `subsection` were silently
+//   stripped for months while every source file read correctly.
+//
+// ⚠ IDEMPOTENT BY ID, and it has to be. A bundle already carries the
+//   projected items, but file:// dev injects the SOURCE files and carries
+//   only tasks; a subject can also be re-fetched after a failed load. Adding
+//   an item twice would be de-duped later by getMixedQuestions(), which
+//   would look correct while halving the effective pool.
+function expandTasks(list) {
+  const have = new Set();
+  for (const q of list) if (q && q.id) have.add(q.id);
+  const out = [];
+  for (const q of list) {
+    if (!q || q.type !== 'task') continue;
+    let items;
+    try { items = projectToItems(q); } catch (e) { continue; }
+    for (const it of items) {
+      if (have.has(it.id)) continue;
+      have.add(it.id);
+      out.push(it);
+    }
+  }
+  return out;
+}
 const API = {
   RESPONSE_KINDS, isAutoMarked,
   normaliseText, normaliseExpression, toRational, toPiForm, ratEq,
   markPart, markNumber, markExpression, markChoice, markMulti, markSlots,
   shareMarks, validateTask, makeTask, partNotation, nextRoman, projectToItems,
+  expandTasks,
 };
 
 if (typeof module !== 'undefined' && module.exports) module.exports = API;

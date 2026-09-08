@@ -84,7 +84,24 @@ create policy "students can write own data" on students for all using (auth.uid(
 4. Claude will create a `config.js` file and update `engine/store.js` for you
 
 ### Step 4 — Redeploy to Netlify
-After Claude updates the files, drag the `psac-practice` folder to Netlify again.
+
+> ⚠ **Do not drag the whole `psac-practice` folder.** It is 491 MB and contains
+> things that must never be published: `.env` (which holds the Supabase service
+> role key), 150 MB of copyrighted MES/MIE exam PDFs, and the built question
+> bundles complete with every answer.
+>
+> Build a clean copy first:
+>
+> ```
+> node scripts/prepare-deploy.js
+> ```
+>
+> That writes a `.deploy` folder — 29 MB, just the site — and refuses to
+> continue if anything is missing or anything private slipped in. **Drag
+> `.deploy` to Netlify**, not the project folder.
+>
+> From the command line it is:
+> `netlify deploy --prod --dir=.deploy --functions=netlify/functions`
 
 ---
 

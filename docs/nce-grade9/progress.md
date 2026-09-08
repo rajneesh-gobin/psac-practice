@@ -2600,4 +2600,332 @@ its own working gives 720. One caught by rendering: the tank's depth label sat
 beside the SLANTED edge, so it read as the slant when the area formula needs the
 perpendicular - now drawn as an explicit dashed perpendicular with a right-angle
 mark.
+---
+
+## Batch 17a - four more analyses, and what I re-measured before believing them
+
+Five parallel analyses landed: the ICT, Science and English syllabus maps, the
+French syllabus map, and the Social & Modern Studies paper blueprint. Each wrote
+exactly one document and nothing else; `subjects/` outside `grade9-maths` was not
+touched by any of them.
+
+### Spot-checks I ran myself
+
+| Claim | How I checked | Result |
+|---|---|---|
+| syllabus offset is printed + 6 | rendered PDF p.17, read its footer | prints "11" - **confirmed** |
+| the same offset, second witness | rendered PDF p.66, read its footer | prints "60" - **confirmed** |
+| ICT paper is N540, 1h45, 100 marks, 11 questions | read the 2025 paper's own header | **all four exact** |
+| SMS page counts 16/20/20/16/20 | re-ran `pdfinfo` on all five | **92 total, exact match** |
+| French grammar terms absent from the syllabus | grepped all 330 pages myself | **8 of 9 return zero** |
+| the syllabus separates B/C/P at Grade 9 | rendered PDF p.66 and read it | **confirmed, verbatim** |
+
+⚠ One correction to an agent report: it listed `suffixe` among the terms
+returning zero. My sweep finds **7 hits**. `préfixe`, `subjonctif`, `imparfait`,
+`passé composé`, `futur simple`, `conditionnel`, `impératif` and
+`famille de mots` are genuinely absent.
+
+### ⚠ Science: the repo's architecture is the SYLLABUS'S OWN, verbatim
+
+This settles an open question. PDF p.66 (printed 60) states that **for Grade 9**
+the syllabus gives Biology, Chemistry and Physics content "under three different
+components referred to as B, C and P respectively... in view of helping them for
+their subject choice at Grade 10 level". Grades 7 and 8 do the opposite - the
+sciences are deliberately mixed inside five unifying themes.
+
+So `C1..C5 / P1..P5 / B1..B4` in `subjects/grade9-science/_manifest.js` are the
+source's labels, not a project invention, and the single-pack architecture is
+faithful. The 16 chapters map 1:1 onto 16 syllabus areas with nothing missing on
+either side. ⚠ The one genuine gap: `g9s-inquiry` and `g9s-sts` sit **outside**
+all three components, so a generated Biology paper needs an explicit rule about
+them.
+
+⚠ The Science syllabus carries **no assessment or weighting information at all**,
+so that pack's `examWeight` values are hand-set and unverifiable from this source
+- the same status as the Grade 4 packs. They have to come from the papers.
+
+⚠ `g9s-b3-biodiversity`'s chapter prose is **Grade 7 content** ("recognise the
+variety of living organisms / classify using observable characteristics"). Grade 9
+B3 is biodiversity's importance, **quadrat sampling**, natural calamities and
+human threats. Questions written from the current prose would test the wrong year.
+
+### ⚠ French: the grammar detail does not exist in the source
+
+CLAUDE.md carries an open task - re-read the French grammar tables because
+`pdftotext` interleaved them and the chapters were written "at a deliberately
+general level". **That task has a negative answer.** Grade 9 French grammar is six
+category headings with no sub-items, and a sweep of all 330 pages finds no named
+tense at all. English in the same document DOES get a per-grade grammar table;
+French does not.
+
+So the vagueness is faithful to the source, not an extraction defect, and Grade 9
+French grammar questions need a **second source** - the papers themselves or the
+MIE textbook. That is a materially different task from "re-read pp. 15-19".
+
+⚠ The grade columns are **shaded in two tones, not ticked** - solid = introduced
+at that grade, pale = carried forward, blank = not applicable. Extraction loses
+the shading entirely and returns objectives with no grade attribution at all.
+
+### ⚠ English: five chapters contradict the syllabus, two have EMPTY Grade 9 cells
+
+`g9eng-gr-determiners` and `g9eng-gr-modals` exist at `examWeight: 2` with
+invented syllabus prose; both stop at Grade 8 in the source. `gr-verbs` claims "a
+wide range of tenses" where the syllabus names **only Future Perfect and Future
+Perfect Continuous** - my own grep finds exactly 2 hits for "Future Perfect",
+independently consistent. `gr-pronouns` claims reported speech, which is Grade 8.
+**Conjunctions is a syllabus area with no chapter at all.**
+
+⚠ The document separates grades two different ways and only one yields Grade 9
+topics: the skills half is one shared competency list with a proficiency level per
+grade column, so Grade 9 is the same competencies at a higher level. Only the
+grammar half gives Grade 9 its own prose.
+
+### ⚠ ICT: the scope table is CUMULATIVE
+
+Every Grade 7 row is ticked in columns 7, 8 **and** 9, so a Grade 9 learner is
+accountable for the whole three-year corpus - not the short "new at Grade 9"
+list. The 2025 paper confirms it: Q1 asks input devices, bits per byte, RAM vs
+ROM, all Grade 7/8 rows. A pack built from the Grade 9 section alone would miss
+most of what the exam asks. ⚠ The tick columns are only readable from a rendered
+page - extraction emits every checkmark in one detached block.
+
+⚠ **The NCE ICT paper is written, not practical**, so software skills are
+assessable declaratively (which sign starts a formula, name the OS from a
+screenshot, complete a query-by-example grid). Only five artefact-production
+outcomes are unassessable - and a written paper cannot mark those either.
+
+The agent also recorded five defects in the source document itself, so nobody
+re-derives them: a "Grade 9" section headed "By the end of Grade 8" on both its
+pages, swapped Grade 8 Spreadsheet/Presentation rows, a duplicated outcome, a
+wrong running row-header, and an outcome present in two places but missing from
+the ACL.
+
+### ⚠ Social & Modern Studies: civics is the biggest strand and has no chapter
+
+All five papers: 2 h, 100 marks, 10 questions, Section A (50) + Section B (50),
+no optional choice. 92 of 92 pages inspected. Every one of the 500 marks was
+assigned to a strand individually:
+
+| strand | marks | share |
+|---|---|---|
+| Civics / modern studies | 212 | **42.4%** |
+| History | 160 | 32.0% |
+| Geography | 128 | 25.6% |
+
+Civics is the largest strand **in every single year** - and the current 3-chapter
+manifest omits it. Government/welfare/tax (43 marks), family (41) and media (35)
+appear in all five papers and in none of the three chapter descriptions. About
+**248 of 500 marks have nowhere to live**.
+
+⚠ **Section A is 86% machine-markable; Section B is 4.8%.** There is no essay
+anywhere in five years - the largest free response is 6 marks printed as three
+2-mark points. So an auto-marked pack can cover half this exam faithfully and
+almost none of the other half.
+
+⚠ **One paper is not a sample**, and this subject proves it: 58% of questions
+carry a map, photo, table, graph or source - but 2024 has two such questions and
+no map, table, graph or source at all. Cyclones are 10 marks in 2023 and 0 in two
+other years. Weighting from one paper would get both badly wrong.
+
+Three paper formats no existing factory can represent: shade-a-map-region,
+complete-a-pyramid-bar, and chronological ordering (10 marks between them).
+
+### The decision this forces, now across four subjects
+
+English 25 marks, French 25 marks, and SMS's whole Section B are free written
+response this engine cannot auto-grade. The schema has `written` with a rubric,
+which keeps such a question on a printed paper and out of the auto-marked pool -
+the route the Maths drawing tasks take. **Whether a quarter to a half of each
+language and humanities paper is teacher-marked, self-assessed against a rubric,
+or simply absent from the app is a product decision, and it now blocks four
+subjects rather than one.**
+---
+
+## Batch 18 - a second subject, after seventeen batches of only one
+
+⚠ **THE PRIORITISATION WAS WRONG AND THE USER WAS RIGHT TO SAY SO.** Seventeen
+batches, 667 questions, all of them Mathematics; the other four Grade 9 packs
+still held one placeholder each and ICT had no pack at all. Batches 14-17 went
+into taking the Maths memorable-repeat rate from 33.8% to 12.9% - real work, and
+the wrong work, while five subjects had nothing. The brief asks for eight
+subjects.
+
+What was genuinely shared rather than Maths-only: the assessment schema, the
+paper generator, the admin entry point, six test harnesses, the pool-depth tool
+and eight analysis documents. Those carry over to every subject. They are not
+questions.
+
+### `grade9-ict` exists
+
+ICT was the right first move: the biggest gap (no pack), fully unblocked (both
+its paper blueprint and its syllabus map landed in batch 17), and the best fit
+for an auto-marked app of anything remaining - a mean **57.4 of 100 marks are
+answered by selecting something already printed**, 68.5% of parts are worth 1 or
+2 marks, nothing exceeds 6, and there is no essay in five years.
+
+- **12 chapters**, `examWeight` summing to exactly 40, derived by
+  largest-remainder from the five-year mean of MEASURED paper marks. Not from
+  the syllabus tick-grid, which would over-weight Word Processing on row count.
+- **25 questions** in the joint-heaviest chapter (Computer Systems & Hardware,
+  weight 5, ~12 marks a paper): 20 MCQ and 5 short typed answers across five
+  subsections.
+- Registered: 45 packs -> **46**, 355 chapters.
+
+⚠ **Written against the PAPERS, not the Grade 9 syllabus section.** The ICT
+scope table is cumulative - every Grade 7 row is ticked for Grades 7, 8 and 9 -
+so 2025 Q1 asks input devices, bits per byte and RAM vs ROM, all Grade 7/8 rows.
+A pack built from the "new at Grade 9" list would have missed most of the exam.
+
+⚠ **No artwork is referenced.** 2023 and 2024 Q1 are 87% photographs and this
+repo has no bundled Grade 9 artwork. These items name the device in words
+instead; the picture-dependent formats are recorded as still needing artwork
+rather than pointed at images that do not exist.
+
+### Three defects in my own first cut
+
+- ⚠ **`source:` on every question, which neither factory accepts.** `makeMCQ`
+  and `makeText` destructure a fixed field list, so the key would have been
+  dropped in silence - the exact trap CLAUDE.md records for `learnMore` and
+  `subsection`, stripped at build time for months while the source read
+  correctly. Provenance moved into the file header where it cannot be lost.
+- ⚠ **`acceptableAnswers` where `makeText` takes `alsoAccept`.** The factory
+  builds `acceptableAnswers` itself; passing the wrong name loses every
+  alternative answer with no error. All five short answers would have accepted
+  only their exact primary spelling.
+- ⚠ **Subsections declared for all twelve chapters when one had questions.** A
+  declared id with nothing behind it opens an empty Practise screen. Reduced to
+  the single written chapter, the way `grade9-science` keeps its map empty.
+
+### ⚠ The publish-root guard caught a REAL leak, minutes old
+
+`scripts/test-netlify-redirects.js` failed on `.deploy/` - a 31 MB assembled
+copy of the app that appeared in the publish root while this batch ran. It is
+the "publish only the app" fix `netlify.toml` itself recommends, and it is
+gitignored, which a CLI deploy ships rather than excludes.
+
+⚠ **It carries `.deploy/subjects/*/questions/` - the question source, with
+answers.** The rule that blocks those is `/subjects/*/questions/*`, which does
+not match a path beginning `/.deploy/`. Shipping it would have republished every
+question at a second URL and stepped around the existing block - the same shape
+as the `netlify/question-bundles` leak found in batch 12.
+
+Blocked, and both paths are now asserted in the test. ⚠ The block does not
+conflict with using the directory: `netlify deploy --dir=.deploy` names it
+explicitly and does not pass through these redirects.
+
+This is the first time that guard has fired on something it was not shown. It
+was written in batch 13 because the 404 list is hand-maintained and goes stale
+silently; five batches later a second agent added a directory and it caught it.
+
+### Grade 9 totals
+
+| pack | questions |
+|---|---|
+| grade9-maths | 667 |
+| **grade9-ict** | **25** |
+| grade9-english | 1 |
+| grade9-french | 1 |
+| grade9-science | 1 |
+| grade9-social-modern-studies | 1 |
+| **total** | **696** |
+
+### Measured after
+
+`check.js` clean · boot-smoke 18 · netlify-redirects 136 · subsection-invariant
+15 · grade456 39 · grade9-maths-content 711 · svg-figures 1014 · nce-paper 75 ·
+nce-paper-admin 63 · assessment-schema 97 · cache-budget passed ·
+`git diff --check` clean. `SHELL_VERSION` -> **v266**; `_CACHE_VERSION` -> **83**.
+
+⚠ `test-boot-smoke.js` asserted 45 packs and now asserts 46. The count is
+hard-coded deliberately - a pack that silently stops registering is what it
+catches - so the number changes only in the commit that adds one.
+
+### What is still not true
+
+- **ICT has one chapter of twelve.** 25 questions against a ~12-mark chapter in
+  a 100-mark paper. Eleven chapters have no questions and no declared
+  subsections, and `comingSoon` stays true.
+- **English, French, Science and Social & Modern Studies still hold one
+  placeholder question each**, despite all four now having analysis documents.
+- No teacher has reviewed a single question in any pack.
+- The publish-root blocks remain unverified against a live deploy.
+
+### Remaining work
+
+1. The other eleven ICT chapters.
+2. Start content for Social & Modern Studies (86% of its Section A is
+   machine-markable) and the other three.
+3. Verify the publish-root blocks after the next deploy.
+---
+
+## Batch 18a - Science papers: the last of seven analyses
+
+`blueprint-science.md`, 704 lines. **182 of 192 page images opened and read**
+across 14 papers; the uninspected ten are trailing blanks after END OF PAPER and
+repeated Periodic Table leaves.
+
+### Verified before accepting
+
+| Claim | Result |
+|---|---|
+| Physics 2024 genuinely missing | **confirmed** - 4 PDFs, no 2024 |
+| page counts (3 spot-checked) | 16 / 12 / 16 - **exact** |
+| the examWeight inversion | **confirmed against the manifest** |
+
+### ⚠ 94.7% of questions carry a figure, and the figure is load-bearing
+
+Biology 92.6% · Chemistry 92.0% · **Physics 100%**. Only four prose-only
+questions exist in 14 papers. And in most, the answer cannot be produced without
+reading the figure: measuring a printed cell against a stated magnification,
+reading a vernier scale, measuring an angle with the protractor printed on the
+page, spotting two errors in a distillation rig.
+
+⚠ **A text-first bank cannot rehearse this exam.** Maths reached 26% visual and
+that took four batches of aimed figure work. Science needs roughly four times
+that density, and several of its figures are instruments to be READ rather than
+diagrams to be recognised. This is the hardest of the six subjects for this
+engine, not the easiest, and it should be planned as such.
+
+### ⚠ The weighting is inverted, and it is measurable
+
+`g9s-p1-measurements` is the **largest** Physics topic at 24.0% and carries the
+pack's **lowest** `examWeight` of 2; `g9s-c5-salts` is the smallest at 9.6% and
+carries 3. Confirmed by reading the manifest. Every Science weight is hand-set -
+the syllabus carries no assessment information at all - so the whole set needs
+rederiving from these measured marks.
+
+### Other findings worth keeping
+
+- **All 14 papers: 45 minutes, 50 marks, N530**, and every one reconciles to
+  exactly 50. Physics weights are out of 200 marks, not 250, because of the
+  missing year.
+- **71.4% of parts are worth one mark**; the largest award anywhere is 5, there
+  are eight of those, and **there is no extended response in the entire corpus**.
+  The heaviest arithmetic in 700 marks is 1/R = 1/2 + 1/6.
+- ⚠ **The supplied Periodic Table has no atomic numbers and no relative atomic
+  masses**, so five years of Chemistry contain zero mole, Mr or reacting-mass
+  questions. Physics supplies no formula sheet and examines formula recall
+  directly. Two facts that decide what may and may not be asked.
+- Two chapters are never tested: `g9s-sts` (no question in 14 papers) and
+  `g9s-inquiry` (never standalone, but ~8-12 marks a paper distributed as skills).
+- Four gaps in chapter prose: **refraction** absent from P2 (>=11 marks),
+  **thermal expansion** from P3 (>=6), **chromatography/filtration** from C2
+  (>=12), and magnification from every Biology chapter.
+
+### All seven analyses are in
+
+| document | pages read | status |
+|---|---|---|
+| blueprint-english.md | 116/116 | verified |
+| blueprint-french.md | 120/120 | verified |
+| blueprint-ict.md | 124/124 | verified |
+| blueprint-science.md | 182/192 | verified |
+| blueprint-social-modern-studies.md | 92/92 | verified |
+| syllabus-english.md | 13/13 | verified |
+| syllabus-french.md | 10/10 | verified |
+| syllabus-ict.md | 18/18 | verified |
+| syllabus-science.md | 16/16 | verified |
+
+Every subject now has a measured blueprint and, where a syllabus section exists,
+a syllabus map. No further paper analysis is needed before writing content.
 
