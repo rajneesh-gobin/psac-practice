@@ -6,26 +6,28 @@
 
 STATIC_QUESTIONS.push(
 
-  // ── home_safety (047–051) ─────────────────────────────────────────────────
+  // ── home_safety (057–060, 051) ────────────────────────────────────────────
+  // ⚠ 057-060, not 047-050: ch_topup.js already holds 037-050 and the two
+  //   files collided, which the importer preflight rejects fail-closed.
 
-  makeMCQ({ id:'g1he-saf-047', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
+  makeMCQ({ id:'g1he-saf-057', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'If you spill water on the floor, what should you do?',
     options:['Wipe it up straight away so no one slips','Leave it for someone else to clean','Walk around it','Tell a friend and ignore it'],
     answer:'Wipe it up straight away so no one slips',
     explanation:'Wet floors cause people to <b>slip and fall</b>. Cleaning it up right away keeps everyone safe.' }),
 
-  makeTF({ id:'g1he-saf-048', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
+  makeTF({ id:'g1he-saf-058', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'We should always go outside or upstairs if there is a fire at home.',
     answer:true,
     explanation:'<b>True.</b> In a fire, get out of the building immediately. Do not hide indoors. Go to a safe meeting place and call for help.' }),
 
-  makeMCQ({ id:'g1he-saf-049', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
+  makeMCQ({ id:'g1he-saf-059', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'If you see a dangerous dog loose in the street, what should you do?',
     options:['Stand still or walk away slowly and calmly — do not run','Run towards it','Wave your arms and shout','Try to pet it'],
     answer:'Stand still or walk away slowly and calmly — do not run',
     explanation:'Running makes dogs chase. <b>Stand still or back away slowly and calmly</b> to avoid provoking the dog.' }),
 
-  makeTF({ id:'g1he-saf-050', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
+  makeTF({ id:'g1he-saf-060', chapterId:'g1he-safety', difficulty:1, subsection:'home_safety',
     question:'It is safe to use electrical appliances with wet hands.',
     answer:false,
     explanation:'<b>False.</b> Water conducts electricity. Using electrical appliances with wet hands can cause a dangerous electric shock.' }),

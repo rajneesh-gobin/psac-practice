@@ -6,7 +6,7 @@ STATIC_QUESTIONS.push(
   // ── Molecule ball-and-stick diagram (2021 NCE Chem Fig 1.1) ───────────────
   // 4 grey (phosphorus) atoms + 6 white (oxygen) atoms bonded → P₄O₆
 
-  makeMCQ({ id: 'g9s-cdm-001', chapterId: 'g9s-c3-language', subsection: 'formulae', difficulty: 2,
+  makeMCQ({ id: 'g9s-cdm-001', chapterId: 'g9s-c3-language', subsection: 'formulae_of_compounds', difficulty: 2,
     question: 'The diagram below shows a ball-and-stick model of a molecule. The grey filled circles represent <b>Phosphorus (P)</b> atoms and the white circles represent <b>Oxygen (O)</b> atoms.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" width="200" height="160" style="display:block;margin:8px auto">' +
       '<line x1="100" y1="25" x2="60" y2="65" stroke="#555" stroke-width="2"/>' +
       '<line x1="100" y1="25" x2="140" y2="65" stroke="#555" stroke-width="2"/>' +
@@ -40,7 +40,7 @@ STATIC_QUESTIONS.push(
   // ── Simple distillation apparatus (2021 NCE Chem Fig 1.2) ─────────────────
   // Round-bottom flask with mixture + boiling chips, Bunsen burner below.
 
-  makeMCQ({ id: 'g9s-cdm-002', chapterId: 'g9s-c2-mixtures', subsection: 'separation_techniques', difficulty: 2,
+  makeMCQ({ id: 'g9s-cdm-002', chapterId: 'g9s-c2-mixtures', subsection: 'distillation', difficulty: 2,
     question: 'A diagram of a <b>simple distillation</b> apparatus shows a round-bottom flask labelled "Mixture + boiling chips" being heated by a Bunsen burner. Why are <b>boiling chips</b> added to the mixture?',
     options: [
       'To ensure smooth boiling of the mixture',
@@ -56,7 +56,7 @@ STATIC_QUESTIONS.push(
   // Funnel (inverted) over mixture on evaporating dish, burner below.
   // A = cotton wool plug (at funnel tip), B = funnel, C = NaCl (residue), D = burner.
 
-  makeMCQ({ id: 'g9s-cdm-003', chapterId: 'g9s-c2-mixtures', subsection: 'separation_techniques', difficulty: 2,
+  makeMCQ({ id: 'g9s-cdm-003', chapterId: 'g9s-c2-mixtures', subsection: 'sublimation', difficulty: 2,
     question: 'A diagram shows the separation of a mixture of sodium chloride and ammonium chloride. A large funnel is placed inverted over the mixture on a dish with a Bunsen burner below. Label <b>A</b> is at the very tip (top) of the inverted funnel. Choose from: Funnel, Burner, Cotton wool plug, Ammonium chloride, Evaporating dish. What is label A?',
     options: ['Cotton wool plug', 'Evaporating dish', 'Funnel', 'Ammonium chloride'],
     answer: 'Cotton wool plug',
@@ -66,14 +66,14 @@ STATIC_QUESTIONS.push(
   // ── Paper chromatography result (2021 NCE Chem Fig 2.2) ───────────────────
   // Paper strip with start line, spots A–D and mixtures X, Y, solvent front R.
 
-  makeMCQ({ id: 'g9s-cdm-004', chapterId: 'g9s-c2-mixtures', subsection: 'separation_techniques', difficulty: 1,
+  makeMCQ({ id: 'g9s-cdm-004', chapterId: 'g9s-c2-mixtures', subsection: 'choosing_a_technique', difficulty: 1,
     question: 'An experiment separates the components of mixtures X and Y using a paper strip. The strip is placed in a solvent. The different substances travel different distances up the paper. The results show spots at various heights. What is the name of this separation technique?',
     options: ['Paper chromatography', 'Distillation', 'Filtration', 'Evaporation'],
     answer: 'Paper chromatography',
     hint: 'It uses paper and a moving solvent to separate substances based on how far they travel.',
     explanation: '<b>Paper chromatography</b> separates mixtures based on how strongly each component is attracted to the stationary phase (paper) compared to the mobile phase (solvent). Components that are more soluble in the solvent travel farther up the paper. It is used to identify dyes, inks, pigments and other mixtures.' }),
 
-  makeMCQ({ id: 'g9s-cdm-005', chapterId: 'g9s-c2-mixtures', subsection: 'separation_techniques', difficulty: 2,
+  makeMCQ({ id: 'g9s-cdm-005', chapterId: 'g9s-c2-mixtures', subsection: 'apparatus_diagrams', difficulty: 2,
     question: 'In a chromatography diagram, a horizontal line labelled <b>R</b> is drawn across the top of the paper, above all the coloured spots. What does line R represent?',
     options: ['The solvent front', 'The start line', 'A baseline marker', 'A separation band'],
     answer: 'The solvent front',
@@ -84,7 +84,7 @@ STATIC_QUESTIONS.push(
   // Graph: x-axis = time (midnight to midnight), y-axis = concentration (ppm).
   // Peak at ~12 noon at 0.25 ppm.
 
-  makeMCQ({ id: 'g9s-cdm-006', chapterId: 'g9s-c1-atmosphere', subsection: 'air_pollution', difficulty: 2,
+  makeMCQ({ id: 'g9s-cdm-006', chapterId: 'g9s-c1-atmosphere', subsection: 'air_pollutants', difficulty: 2,
     question: 'A graph shows the concentration of oxides of nitrogen in a city over 24 hours. The concentration is lowest at midnight (~0.05 ppm), rises through the morning, reaches a <b>peak at 12 noon (~0.25 ppm)</b>, then falls through the afternoon and evening. At what time of day is the concentration of oxides of nitrogen <b>highest</b>?',
     options: ['12 noon', '4 a.m.', '4 p.m.', '12 midnight'],
     answer: '12 noon',
@@ -94,14 +94,14 @@ STATIC_QUESTIONS.push(
   // ── Metals in HCl test tubes (2021 NCE Chem Fig 5.1) ─────────────────────
   // Ca: many bubbles (most reactive), Zn: moderate, Mg: many, Fe: fewest.
 
-  makeMCQ({ id: 'g9s-cdm-007', chapterId: 'g9s-c4-metals', subsection: 'reactivity', difficulty: 2,
+  makeMCQ({ id: 'g9s-cdm-007', chapterId: 'g9s-c4-metals', subsection: 'reactivity_series', difficulty: 2,
     question: 'Four test tubes each contain the same volume of dilute hydrochloric acid. A different metal is placed in each: <b>Calcium, Zinc, Magnesium</b> and <b>Iron</b>. Calcium produces the most bubbles of gas and Iron produces the fewest. Which metal is the <b>most reactive</b>?',
     options: ['Calcium', 'Magnesium', 'Zinc', 'Iron'],
     answer: 'Calcium',
     hint: 'The number of gas bubbles produced indicates how vigorously the metal reacts.',
     explanation: '<b>Calcium</b> is the most reactive metal in this experiment, producing the most bubbles of hydrogen gas. The more vigorous the reaction with acid, the higher the metal\'s position in the reactivity series. Order from most to least reactive: Ca > Mg > Zn > Fe. Calcium reacts so vigorously it may cause the acid to froth.' }),
 
-  makeMCQ({ id: 'g9s-cdm-008', chapterId: 'g9s-c4-metals', subsection: 'reactivity', difficulty: 2,
+  makeMCQ({ id: 'g9s-cdm-008', chapterId: 'g9s-c4-metals', subsection: 'reactivity_series', difficulty: 2,
     question: 'In the same experiment with Calcium, Zinc, Magnesium and Iron in dilute hydrochloric acid, Iron produces the fewest bubbles of hydrogen gas. Which metal is the <b>least reactive</b>?',
     options: ['Iron', 'Calcium', 'Zinc', 'Magnesium'],
     answer: 'Iron',

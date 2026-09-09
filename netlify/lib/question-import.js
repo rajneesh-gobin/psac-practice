@@ -58,8 +58,25 @@ const TYPE_RULES = {
   numeric: {
     label: 'Numeric', regenerable: true,
     required: ['question', 'answer'],
-    check: q => (Array.isArray(q.acceptableAnswers) && q.acceptableAnswers.length
-      ? null : 'acceptableAnswers must be a non-empty array'),
+    // ⚠ acceptableAnswers IS OPTIONAL HERE, and an EMPTY ARRAY is the real
+    //   fault. Every grader in the app reads `q.acceptableAnswers ||
+    //   [q.answer]` (engine/app.js, netlify/lib/questions-sandbox.js), and
+    //   makeNum fills the field with [answer] anyway - so the five maths
+    //   reasoning banks delete it again when it only repeats `answer`, which
+    //   is a measured saving in the byte-budgeted offline question cache.
+    //   Requiring it here failed 653 items across grade1-5 maths and, because
+    //   preflight is fail-closed, blocked the import of the WHOLE corpus.
+    // ⚠ An empty array is still rejected: `[] || [q.answer]` evaluates to
+    //   `[]`, so the fallback never fires and the question would accept
+    //   nothing a child could type.
+    check: q => {
+      if (q.acceptableAnswers !== undefined
+        && !(Array.isArray(q.acceptableAnswers) && q.acceptableAnswers.length)) {
+        return 'acceptableAnswers, when present, must be a non-empty array';
+      }
+      if (String(q.answer ?? '').trim() === '') return 'answer must not be empty';
+      return null;
+    },
   },
   text: {
     label: 'Typed text', regenerable: true,

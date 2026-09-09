@@ -86,6 +86,10 @@ const G9CHEM_SYLLABUS = {
     { id: 'applications_of_chromatography', name: 'Chromatography: drugs in sport, pesticides, food contaminants and purity' },
     { id: 'climate_change', name: 'Global warming and climate change: impacts, hazards and measures' },
     { id: 'interpreting_climate_data', name: 'Correlating global temperature with atmospheric carbon dioxide' },
+    // The two cross-cutting STS statements this pack holds a question for; the
+    // ids are the biology pack's, reused so the same topic is one id everywhere.
+    { id: 'evaluating_information', name: 'Evaluating information from searches and investigations critically' },
+    { id: 'ethics_of_science', name: 'Ethical issues in applications of science and technology' },
   ] },
 };
 

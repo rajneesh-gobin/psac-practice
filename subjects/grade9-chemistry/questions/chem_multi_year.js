@@ -145,7 +145,7 @@ STATIC_QUESTIONS.push(makeMCQ({
 
 STATIC_QUESTIONS.push(makeMCQ({
   id: 'g9s-cmy-016', chapterId: 'g9s-c2-mixtures', difficulty: 2,
-  subsection: 'crystallisation',
+  subsection: 'crystallization',
   question: 'A student wants to obtain pure copper sulfate crystals from a copper sulfate solution. Which technique should be used?',
   options: ['Crystallisation', 'Distillation', 'Sublimation', 'Filtration'],
   answer: 'Crystallisation',

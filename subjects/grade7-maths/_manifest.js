@@ -156,52 +156,70 @@ registerSubject({
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G7M_SYLLABUS,
+  // ⚠ THE WEIGHTS SUM TO EXACTLY 40, and that is not cosmetic.
+  //   assembleExamPaper() gives each chapter n = max(1, round(w * 40 / 40)),
+  //   then forces the total down with a loop that always decrements the FIRST
+  //   chapter still above 1. These summed to 62, so 22 questions had to go and
+  //   they came off the top of this list: g7m-fractions, the pack's heaviest
+  //   chapter at weight 4, was dealt ONE question per paper while everything
+  //   from g7m-area down got exactly its weight. Every check that asks only
+  //   whether a paper totals 40 passed the whole time.
+  // ⚠ NOT DERIVED FROM A PAPER, and it cannot be: the NCE is sat at Grade 9
+  //   and scripts/exam-mark-maps.json holds Grades 5-6 only. These are the
+  //   pack's own weights rescaled with its rank order kept - the 3s halved to
+  //   2, the 2s to 1, fractions kept its 4. With 24 chapters a floor of 1
+  //   spends 24 of the 40 slots before any weighting, leaving one point over.
+  // ⚠ THAT SPARE POINT WENT TO g7m-angles ON POOL DEPTH, not preference. It
+  //   holds 70 items against 8-14 nearly everywhere else, so it can be drawn 3
+  //   times a paper without a child meeting the same question. Putting it on
+  //   fractions instead was measured first: 5 draws from a pool of 11 repeats
+  //   inside two mock papers.
   chapters: [
-    { id: 'g7m-integers',               name: 'Integers',                                   icon: '🔢', examWeight: 3,
+    { id: 'g7m-integers',               name: 'Integers',                                   icon: '🔢', examWeight: 2,
       syllabus: 'Identify even, odd, prime, composite, triangular and square numbers. Represent integers on a number line. Order and compare positive and negative integers. Add, subtract, multiply and divide integers.' },
-    { id: 'g7m-operations',             name: 'Order & Properties of Operations',           icon: '➗', examWeight: 3,
+    { id: 'g7m-operations',             name: 'Order & Properties of Operations',           icon: '➗', examWeight: 2,
       syllabus: 'Apply the order of operations to numerical expressions. Use the commutative, associative and distributive properties. Evaluate expressions involving brackets.' },
-    { id: 'g7m-indices',                name: 'Indices Convention',                         icon: '🔣', examWeight: 2,
+    { id: 'g7m-indices',                name: 'Indices Convention',                         icon: '🔣', examWeight: 1,
       syllabus: 'Write repeated multiplication in index form. Read and interpret index notation. Evaluate powers of whole numbers. Express a number as a product of prime factors in index form.' },
-    { id: 'g7m-factors',                name: 'Factors, Multiples & Prime Factorisation',   icon: '🧮', examWeight: 3,
+    { id: 'g7m-factors',                name: 'Factors, Multiples & Prime Factorisation',   icon: '🧮', examWeight: 2,
       syllabus: 'Apply common divisibility tests. Find the factors and multiples of a given number. Find the prime factors of a number. Write a number as a product of its prime factors.' },
     { id: 'g7m-fractions',              name: 'Fractions & Decimals',                       icon: '½', examWeight: 4,
       syllabus: 'Compare and order fractions and decimals. Convert between fractions and decimals. Add, subtract, multiply and divide fractions. Perform the four operations on decimals.' },
-    { id: 'g7m-percentages',            name: 'Percentages',                                icon: '％', examWeight: 3,
+    { id: 'g7m-percentages',            name: 'Percentages',                                icon: '％', examWeight: 2,
       syllabus: 'Understand percentage as a fraction out of one hundred. Convert between fractions, decimals and percentages. Find a percentage of a quantity. Solve everyday problems involving percentages.' },
-    { id: 'g7m-ratio',                  name: 'Ratio & Proportion',                         icon: '⚖️', examWeight: 3,
+    { id: 'g7m-ratio',                  name: 'Ratio & Proportion',                         icon: '⚖️', examWeight: 2,
       syllabus: 'Understand ratio and direct proportion. Compare two quantities multiplicatively. Simplify a ratio to its lowest terms. Divide a quantity in a given ratio.' },
-    { id: 'g7m-polygons',               name: 'Polygons',                                   icon: '📐', examWeight: 3,
+    { id: 'g7m-polygons',               name: 'Polygons',                                   icon: '📐', examWeight: 2,
       syllabus: 'Name and classify polygons by their number of sides. Identify the properties of triangles and quadrilaterals. Calculate unknown angles in polygons. Recognise regular and irregular polygons.' },
-    { id: 'g7m-coordinates',            name: 'Coordinates',                                icon: '📍', examWeight: 2,
+    { id: 'g7m-coordinates',            name: 'Coordinates',                                icon: '📍', examWeight: 1,
       syllabus: 'Plot and read points in the Cartesian plane. Use ordered pairs to describe position. Identify the four quadrants. Plot simple shapes from given coordinates.' },
-    { id: 'g7m-constructions',          name: 'Geometrical Constructions',                  icon: '📏', examWeight: 2,
+    { id: 'g7m-constructions',          name: 'Geometrical Constructions',                  icon: '📏', examWeight: 1,
       syllabus: 'Use ruler, set squares, protractor, compasses and dividers. Construct parallel and perpendicular lines. Construct and bisect angles. Use digital geometry tools.' },
-    { id: 'g7m-symmetry',               name: 'Symmetry',                                   icon: '🦋', examWeight: 2,
+    { id: 'g7m-symmetry',               name: 'Symmetry',                                   icon: '🦋', examWeight: 1,
       syllabus: 'Identify lines of symmetry in shapes. Complete a figure given its line of symmetry. Recognise rotational symmetry. Describe the order of rotational symmetry.' },
-    { id: 'g7m-transformation',         name: 'Transformation',                             icon: '🔄', examWeight: 2,
+    { id: 'g7m-transformation',         name: 'Transformation',                             icon: '🔄', examWeight: 1,
       syllabus: 'Describe and perform reflections. Describe and perform translations. Identify the image of a shape after a transformation. Recognise congruence under transformation.' },
-    { id: 'g7m-mass',                   name: 'Mass',                                       icon: '🏋️', examWeight: 2,
+    { id: 'g7m-mass',                   name: 'Mass',                                       icon: '🏋️', examWeight: 1,
       syllabus: 'Distinguish between milligram, gram, kilogram and tonne. Convert between units of mass. Add, subtract, multiply and divide quantities of mass. Solve everyday problems involving mass.' },
-    { id: 'g7m-length',                 name: 'Length',                                     icon: '📏', examWeight: 2,
+    { id: 'g7m-length',                 name: 'Length',                                     icon: '📏', examWeight: 1,
       syllabus: 'Convert between units of length. Estimate and measure lengths. Perform calculations with lengths. Solve problems involving perimeter and distance.' },
-    { id: 'g7m-area',                   name: 'Area',                                       icon: '▭', examWeight: 3,
+    { id: 'g7m-area',                   name: 'Area',                                       icon: '▭', examWeight: 2,
       syllabus: 'Calculate the area of rectangles, squares and triangles. Convert between units of area. Find the area of compound shapes. Solve everyday problems involving area.' },
-    { id: 'g7m-time',                   name: 'Time',                                       icon: '⏰', examWeight: 2,
+    { id: 'g7m-time',                   name: 'Time',                                       icon: '⏰', examWeight: 1,
       syllabus: 'Read and write time in 12-hour and 24-hour notation. Add and subtract intervals of time. Convert between units of time. Interpret timetables.' },
-    { id: 'g7m-speed',                  name: 'Speed',                                      icon: '🚗', examWeight: 2,
+    { id: 'g7m-speed',                  name: 'Speed',                                      icon: '🚗', examWeight: 1,
       syllabus: 'Understand speed and average speed. Convert compound units such as metres per second into kilometres per hour. Calculate speed, distance or time. Solve everyday problems involving speed.' },
-    { id: 'g7m-money',                  name: 'Money',                                      icon: '💰', examWeight: 2,
+    { id: 'g7m-money',                  name: 'Money',                                      icon: '💰', examWeight: 1,
       syllabus: 'Perform the four operations with money. Convert between currencies. Calculate profit, loss and discount. Solve everyday problems involving money.' },
-    { id: 'g7m-algebra',                name: 'Algebraic Expressions',                      icon: '🔤', examWeight: 3,
+    { id: 'g7m-algebra',                name: 'Algebraic Expressions',                      icon: '🔤', examWeight: 2,
       syllabus: 'Use letters to represent unknown numbers. Write and simplify algebraic expressions. Substitute values into an expression. Add and subtract like terms.' },
-    { id: 'g7m-equations',              name: 'Algebraic Equations',                        icon: '🟰', examWeight: 3,
+    { id: 'g7m-equations',              name: 'Algebraic Equations',                        icon: '🟰', examWeight: 2,
       syllabus: 'Distinguish between an algebraic expression and an equation. Understand additive and multiplicative inverses. Solve simple linear equations. Form and solve equations from word problems.' },
-    { id: 'g7m-sets',                   name: 'Sets',                                       icon: '🔗', examWeight: 2,
+    { id: 'g7m-sets',                   name: 'Sets',                                       icon: '🔗', examWeight: 1,
       syllabus: 'Understand the idea of a set and its elements. Recognise equal, equivalent and disjoint sets. Use set notation. Represent sets with Venn diagrams.' },
-    { id: 'g7m-statistics',             name: 'Statistics',                                 icon: '📊', examWeight: 3,
+    { id: 'g7m-statistics',             name: 'Statistics',                                 icon: '📊', examWeight: 2,
       syllabus: 'Collect and organise data into tables. Draw and interpret bar charts and pictograms. Read information from graphs. Find the mean of a set of values.' },
-    { id: 'g7m-sequences',              name: 'Sequences & Patterns',                       icon: '🔢', examWeight: 3,
+    { id: 'g7m-sequences',              name: 'Sequences & Patterns',                       icon: '🔢', examWeight: 2,
       syllabus: 'Recognise and continue number sequences. Find the rule of a sequence. Identify square and triangular number sequences. Generate a sequence from an nth term formula.' },
     { id: 'g7m-angles',                 name: 'Angles',                                     icon: '📐', examWeight: 3,
       syllabus: 'Identify acute, obtuse, right and reflex angles. Apply complementary and supplementary angle rules. Identify vertically opposite angles. Apply co-interior, corresponding and alternate angle rules with parallel lines.' },

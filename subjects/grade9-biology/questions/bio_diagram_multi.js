@@ -6,7 +6,7 @@ STATIC_QUESTIONS.push(
   // ── Eutrophication scene (2021 NCE Bio Fig 1.1) ──────────────────────────
   // Farmer releasing fertilisers → algae bloom → dead fish in river.
 
-  makeMCQ({ id: 'g9s-bdm-001', chapterId: 'g9s-b3-biodiversity', subsection: 'human_impact', difficulty: 2,
+  makeMCQ({ id: 'g9s-bdm-001', chapterId: 'g9s-b3-biodiversity', subsection: 'human_threats', difficulty: 2,
     question: 'The diagram below shows a scene near a river.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 130" width="300" height="130" style="display:block;margin:8px auto">' +
       '<rect x="0" y="0" width="300" height="130" fill="#f0f8ff" stroke="#ccc" stroke-width="1"/>' +
       '<rect x="0" y="85" width="120" height="45" fill="#8fbc8f"/>' +
@@ -33,7 +33,7 @@ STATIC_QUESTIONS.push(
   // ── Fertilisation sequence (2021 NCE Bio Fig 1.2) ──────────────────────────
   // sperm + ovum → zygote (X) → foetus
 
-  makeMCQ({ id: 'g9s-bdm-002', chapterId: 'g9s-b2-reproductive', subsection: 'fertilisation', difficulty: 2,
+  makeMCQ({ id: 'g9s-bdm-002', chapterId: 'g9s-b2-reproductive', subsection: 'reproduction_basics', difficulty: 2,
     question: 'A diagram shows the steps in the fertilisation process:<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80" width="300" height="80" style="display:block;margin:8px auto">' +
       '<circle cx="40" cy="40" r="24" fill="#ffe0f0" stroke="#cc66aa" stroke-width="2"/>' +
       '<ellipse cx="40" cy="40" rx="12" ry="9" fill="#dd88bb"/>' +
@@ -59,7 +59,7 @@ STATIC_QUESTIONS.push(
   // ── Leaf skeleton labels (2021 NCE Bio Fig 2.1) ────────────────────────────
   // A=leaf apex (given). B = midrib (central main vein).
 
-  makeMCQ({ id: 'g9s-bdm-003', chapterId: 'g9s-b4-plant-nutrition', subsection: 'leaf_structure', difficulty: 2,
+  makeMCQ({ id: 'g9s-bdm-003', chapterId: 'g9s-b4-plant-nutrition', subsection: 'leaf_adaptation', difficulty: 2,
     question: 'A diagram of a leaf skeleton shows four labelled parts. Part A is already identified as the <b>Leaf apex</b>. Part B points to the thick central vein running from the base to the tip of the leaf. What is part B called?',
     options: ['Midrib', 'Lamina', 'Petiole', 'Leaf margin'],
     answer: 'Midrib',
@@ -90,7 +90,7 @@ STATIC_QUESTIONS.push(
   // ── Sperm cells (2023 NCE Bio Fig 1.1) ────────────────────────────────────
   // Tadpole-shaped cells with oval head and long tail.
 
-  makeMCQ({ id: 'g9s-bdm-005', chapterId: 'g9s-b2-reproductive', subsection: 'reproduction', difficulty: 1,
+  makeMCQ({ id: 'g9s-bdm-005', chapterId: 'g9s-b2-reproductive', subsection: 'male_reproductive_system', difficulty: 1,
     question: 'A microscope slide shows several cells that each have an <b>oval head</b> and a long, whip-like <b>tail</b>. Which cells are these?',
     options: ['Sperm cells', 'Epidermal cells', 'Muscle cells', 'Ovum'],
     answer: 'Sperm cells',
@@ -100,7 +100,7 @@ STATIC_QUESTIONS.push(
   // ── Leaf structure X (2023 NCE Bio Fig 1.2) ───────────────────────────────
   // Arrow X points to the flat blade of the leaf = Lamina.
 
-  makeMCQ({ id: 'g9s-bdm-006', chapterId: 'g9s-b4-plant-nutrition', subsection: 'leaf_structure', difficulty: 1,
+  makeMCQ({ id: 'g9s-bdm-006', chapterId: 'g9s-b4-plant-nutrition', subsection: 'leaf_adaptation', difficulty: 1,
     question: 'A diagram of a leaf shows an arrow labelled <b>X</b> pointing to the broad, flat blade of the leaf (the main surface between the veins). What is structure X?',
     options: ['Lamina', 'Midrib', 'Leaf apex', 'Leaf margin'],
     answer: 'Lamina',
@@ -135,7 +135,7 @@ STATIC_QUESTIONS.push(
   // ── Female reproductive system (2023 NCE Bio Fig 3.1) ──────────────────────
   // Labelled diagram: Oviduct, Ovary, Uterus, Cervix, Vagina.
 
-  makeMCQ({ id: 'g9s-bdm-009', chapterId: 'g9s-b2-reproductive', subsection: 'reproductive_system', difficulty: 2,
+  makeMCQ({ id: 'g9s-bdm-009', chapterId: 'g9s-b2-reproductive', subsection: 'female_reproductive_system', difficulty: 2,
     question: 'A labelled diagram of the female reproductive system shows: Oviduct, Ovary, Uterus, Cervix and Vagina. In which structure does <b>fertilisation</b> normally take place?',
     options: ['Oviduct', 'Ovary', 'Uterus', 'Cervix'],
     answer: 'Oviduct',

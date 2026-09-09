@@ -68,6 +68,9 @@ const G9BIO_SYLLABUS = {
     { id: 'leaf_adaptation', name: 'How a leaf is adapted for photosynthesis' },
     { id: 'factors_for_photosynthesis', name: 'The factors essential for photosynthesis' },
     { id: 'photosynthesis_experiments', name: 'Simple experiments showing why those factors matter' },
+    // Beyond the syllabus statements above, but the 2025 paper asks it and the
+    // chapter is Nutrition in Plants, not photosynthesis alone.
+    { id: 'mineral_nutrition', name: 'Mineral nutrition: nitrate, magnesium and phosphate' },
   ] },
   'g9s-inquiry': { subsections: [
     { id: 'hypothesis_testing', name: 'Developing and testing a simple hypothesis' },

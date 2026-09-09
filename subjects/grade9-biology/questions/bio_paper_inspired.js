@@ -229,9 +229,9 @@ const MCQ_B1 = [
 
 ];
 
-MCQ_B1.forEach(([id, subsection, difficulty, question, options, answer, explanation]) => {
+MCQ_B1.forEach(([id, subsection, difficulty, question, options, answer, hint, explanation]) => {
   STATIC_QUESTIONS.push(makeMCQ({ id, chapterId: B1, subsection, difficulty,
-    question, options, answer, explanation }));
+    question, options, answer, hint, explanation }));
 });
 
 // ── B2: Reproductive System (IDs 021–030) ────────────────────────────────
@@ -290,7 +290,7 @@ const MCQ_B2 = [
    'The vagina is the external opening of the female reproductive tract.',
    'The vagina connects the uterus to the outside; it serves as the birth canal during labour, the passage for menstrual blood, and the entry point for sperm deposited during intercourse.'],
 
-  ['g9s-bpi-026', 'stis_and_contraception', 1,
+  ['g9s-bpi-026', 'stds', 1,
    'Which of the following sexually transmitted infections (STIs) is caused by a virus?',
    ['HIV/AIDS',
     'Gonorrhoea',
@@ -300,7 +300,7 @@ const MCQ_B2 = [
    'Some STIs are caused by bacteria and some by viruses — which of the options is viral?',
    'HIV (Human Immunodeficiency Virus) is a retrovirus that attacks the immune system; gonorrhoea, syphilis and chlamydia are all caused by bacteria and can be treated with antibiotics, which have no effect on HIV.'],
 
-  ['g9s-bpi-027', 'stis_and_contraception', 1,
+  ['g9s-bpi-027', 'stds', 1,
    'Which type of micro-organism causes gonorrhoea?',
    ['A bacterium (Neisseria gonorrhoeae)',
     'A virus',
@@ -310,7 +310,7 @@ const MCQ_B2 = [
    'Consider which class of micro-organism can be treated by antibiotics.',
    'Gonorrhoea is caused by the bacterium Neisseria gonorrhoeae; because it is bacterial, it can in principle be treated with antibiotics, although antibiotic-resistant strains are increasingly common.'],
 
-  ['g9s-bpi-028', 'stis_and_contraception', 2,
+  ['g9s-bpi-028', 'stds', 2,
    'Which of the following is NOT a route by which HIV can be transmitted from one person to another?',
    ['Sharing food or drinking from the same cup',
     'Unprotected sexual intercourse with an infected partner',
@@ -320,7 +320,7 @@ const MCQ_B2 = [
    'HIV is transmitted through body fluids — think about whether sharing food involves infectious body fluids.',
    'HIV is present in blood, semen, vaginal fluid and breast milk; it is NOT transmitted through saliva, sweat, tears, casual contact, or sharing food and drink, because virus concentrations in saliva are too low to cause infection.'],
 
-  ['g9s-bpi-029', 'stis_and_contraception', 2,
+  ['g9s-bpi-029', 'stds', 2,
    'Which method provides the most effective protection against both unintended pregnancy AND sexually transmitted infections?',
    ['Using a condom correctly during every sexual encounter',
     'Taking the combined contraceptive pill every day',
@@ -330,7 +330,7 @@ const MCQ_B2 = [
    'Think about which method creates a physical barrier to both sperm and pathogens.',
    'Condoms are the only contraceptive method that acts as a physical barrier, preventing both sperm and infectious pathogens from being transferred; other methods prevent pregnancy but offer no protection against STIs.'],
 
-  ['g9s-bpi-030', 'stis_and_contraception', 3,
+  ['g9s-bpi-030', 'interpreting_health_data', 3,
    'The table shows HIV infection rates in a country over five years.' +
    '<table class="q-table"><tr><th>Year</th><th>New cases per 1000</th></tr><tr><td>1</td><td>8.2</td></tr><tr><td>2</td><td>7.5</td></tr><tr><td>3</td><td>6.1</td></tr><tr><td>4</td><td>5.3</td></tr><tr><td>5</td><td>4.0</td></tr></table>' +
    'A health campaign was launched at the start of Year 2. What is the <b>mean</b> infection rate over all five years, and what trend does the data show?',
@@ -344,9 +344,9 @@ const MCQ_B2 = [
 
 ];
 
-MCQ_B2.forEach(([id, subsection, difficulty, question, options, answer, explanation]) => {
+MCQ_B2.forEach(([id, subsection, difficulty, question, options, answer, hint, explanation]) => {
   STATIC_QUESTIONS.push(makeMCQ({ id, chapterId: B2, subsection, difficulty,
-    question, options, answer, explanation }));
+    question, options, answer, hint, explanation }));
 });
 
 // ── B3: Biodiversity (IDs 031–040) ───────────────────────────────────────
@@ -355,7 +355,7 @@ const B3 = 'g9s-b3-biodiversity';
 
 const MCQ_B3 = [
 
-  ['g9s-bpi-031', 'quadrat_method', 1,
+  ['g9s-bpi-031', 'quadrat_sampling', 1,
    'What is a quadrat used for in a field study of biodiversity?',
    ['To count or estimate the number of organisms in a defined sample area',
     'To measure the speed at which organisms move through a habitat',
@@ -365,7 +365,7 @@ const MCQ_B3 = [
    'A quadrat is a frame placed on the ground — think about what a stationary frame can help you count.',
    'A quadrat is a square frame placed randomly in a habitat; the organisms within it are counted or estimated to give a sample from which population size can be extrapolated.'],
 
-  ['g9s-bpi-032', 'quadrat_method', 1,
+  ['g9s-bpi-032', 'quadrat_sampling', 1,
    'Why is the quadrat method best suited to studying plants and slow-moving animals rather than birds or fish?',
    ['Plants and slow-moving animals stay within the quadrat long enough to be counted accurately',
     'Plants and slow-moving animals have brighter colours that make them easier to see inside the frame',
@@ -375,7 +375,7 @@ const MCQ_B3 = [
    'Think about what happens when you put a frame on the ground and a fast-moving animal is present.',
    'Mobile organisms such as birds escape or move out of the quadrat before they can be counted; immobile or slow-moving organisms (plants, snails, limpets) remain stationary, giving an accurate count.'],
 
-  ['g9s-bpi-033', 'quadrat_method', 2,
+  ['g9s-bpi-033', 'quadrat_sampling', 2,
    'A student places five quadrats of area 0.25 m² in a meadow and counts the daisies in each: 4, 7, 3, 6, 5. What is the estimated mean number of daisies per square metre in the meadow?',
    ['20 daisies per m²',
     '5 daisies per m²',
@@ -385,7 +385,7 @@ const MCQ_B3 = [
    'First find the mean per quadrat, then scale up to 1 m².',
    'Mean per quadrat = (4+7+3+6+5) ÷ 5 = 25 ÷ 5 = 5 daisies per 0.25 m²; to convert to per m²: 5 ÷ 0.25 = 20 daisies per m².'],
 
-  ['g9s-bpi-034', 'threats_to_biodiversity', 1,
+  ['g9s-bpi-034', 'natural_threats', 1,
    'How does a severe cyclone typically affect the biodiversity of a coastal habitat?',
    ['It destroys vegetation and kills animals, reducing species variety and population sizes',
     'It increases biodiversity by mixing organisms from different habitats together',
@@ -395,7 +395,7 @@ const MCQ_B3 = [
    'Think about the physical effects of extreme wind and flooding on living organisms.',
    'Cyclones cause physical destruction of vegetation, flooding, and habitat loss; many individuals die and some species may be locally wiped out, reducing both species richness and population sizes in the affected area.'],
 
-  ['g9s-bpi-035', 'threats_to_biodiversity', 2,
+  ['g9s-bpi-035', 'human_threats', 2,
    'Which of the following best explains why deforestation is considered a major threat to biodiversity?',
    ['It permanently removes the habitat on which many species depend for food, shelter and reproduction',
     'It introduces new tree species that compete with existing plants and animals',
@@ -405,7 +405,7 @@ const MCQ_B3 = [
    'Consider what forest species rely on trees for.',
    'Forests are among the most biodiverse habitats on Earth; clearing them removes food sources, nesting sites and microhabitats, causing population crashes and local extinctions of species unable to relocate.'],
 
-  ['g9s-bpi-036', 'threats_to_biodiversity', 2,
+  ['g9s-bpi-036', 'human_threats', 2,
    'An invasive plant species is introduced to an island and spreads rapidly. What is the most likely immediate threat it poses to native species?',
    ['It out-competes native plants for light, water and nutrients, reducing their populations',
     'It provides additional food sources that allow all native animal populations to increase',
@@ -415,7 +415,7 @@ const MCQ_B3 = [
    'Invasive species succeed because they often lack natural predators and grow faster than native species.',
    'Invasive species that compete for the same resources as native species can reduce or eliminate them; without natural predators to control their numbers they spread rapidly and cause native populations to crash.'],
 
-  ['g9s-bpi-037', 'conservation', 2,
+  ['g9s-bpi-037', 'importance_of_biodiversity', 2,
    'Many modern medicines have been developed from chemicals originally found in wild plants. Which benefit of biodiversity does this illustrate?',
    ['Medical and pharmaceutical value — wild species provide compounds used in drug development',
     'Ecological value — species maintain nutrient cycling and clean water in ecosystems',
@@ -425,7 +425,7 @@ const MCQ_B3 = [
    'Think about which type of benefit is specifically related to medicines derived from nature.',
    'Many important drugs (e.g. aspirin from willow bark, penicillin from moulds, anti-malarials from plants) came from wild species; reducing biodiversity risks losing organisms whose chemical compounds could cure future diseases.'],
 
-  ['g9s-bpi-038', 'conservation', 2,
+  ['g9s-bpi-038', 'importance_of_biodiversity', 2,
    'Mauritius earns significant revenue from tourists visiting wildlife reserves to observe rare endemic species. Which benefit of biodiversity does this represent?',
    ['Economic benefit through ecotourism, where the value of wildlife attracts paying visitors',
     'Ecological benefit through nutrient cycling provided by endemic animal species',
@@ -435,7 +435,7 @@ const MCQ_B3 = [
    'Think about which category of biodiversity benefit involves people paying money to see wildlife.',
    'Ecotourism generates income directly from the existence of biodiversity; this economic incentive gives governments and local communities a financial reason to protect rather than destroy natural habitats.'],
 
-  ['g9s-bpi-039', 'food_webs', 3,
+  ['g9s-bpi-039', 'importance_of_biodiversity', 3,
    'In a food web: grass → grasshopper → lizard → hawk. The hawk population is hunted to near extinction. Predict the most likely effect on the grasshopper population.',
    ['The grasshopper population decreases, because fewer hawks means more lizards survive and eat more grasshoppers',
     'The grasshopper population increases, because hawks fed on grasshoppers and removing them relieves predation pressure',
@@ -445,7 +445,7 @@ const MCQ_B3 = [
    'Trace the chain: hawk → lizard → grasshopper. Remove the hawk and work through each link.',
    'Fewer hawks → lizard population rises (less predation) → more lizards eat more grasshoppers → grasshopper population falls; this is a trophic cascade where removing a top predator has knock-on effects down the food web.'],
 
-  ['g9s-bpi-040', 'biodiversity_overview', 3,
+  ['g9s-bpi-040', 'quadrat_sampling', 3,
    'A conservation team surveys a forest using quadrats and finds the following number of tree species in five quadrats: 12, 8, 15, 10, 10. What is the mean number of tree species per quadrat, and what does a higher mean value indicate about the forest?',
    ['Mean = 11 species per quadrat; a higher mean indicates greater species richness, suggesting a healthier and more biodiverse ecosystem',
     'Mean = 10 species per quadrat; a higher mean indicates that the forest is being degraded by human activity',
@@ -457,9 +457,9 @@ const MCQ_B3 = [
 
 ];
 
-MCQ_B3.forEach(([id, subsection, difficulty, question, options, answer, explanation]) => {
+MCQ_B3.forEach(([id, subsection, difficulty, question, options, answer, hint, explanation]) => {
   STATIC_QUESTIONS.push(makeMCQ({ id, chapterId: B3, subsection, difficulty,
-    question, options, answer, explanation }));
+    question, options, answer, hint, explanation }));
 });
 
 // ── B4: Plant Nutrition (IDs 041–060) ────────────────────────────────────
@@ -468,9 +468,9 @@ const B4 = 'g9s-b4-plant-nutrition';
 
 const MCQ_B4 = [
 
-  // ── testing_for_starch ───────────────────────────────────────────────
+  // ── photosynthesis_experiments ───────────────────────────────────────────────
 
-  ['g9s-bpi-041', 'testing_for_starch', 1,
+  ['g9s-bpi-041', 'photosynthesis_experiments', 1,
    'What colour change indicates the presence of starch when iodine solution is added?',
    ['The iodine turns from orange-brown to blue-black',
     'The iodine turns from blue-black to orange-brown',
@@ -480,7 +480,7 @@ const MCQ_B4 = [
    'Iodine is orange-brown by default — recall what colour starch turns it.',
    'Iodine solution is orange-brown; in the presence of starch it forms a blue-black complex with the amylose chains. No colour change (remains orange-brown) indicates starch is absent.'],
 
-  ['g9s-bpi-042', 'testing_for_starch', 1,
+  ['g9s-bpi-042', 'photosynthesis_experiments', 1,
    'What is the FIRST step when testing a leaf for starch using the standard iodine test?',
    ['Boil the leaf in water to kill it and stop enzyme activity',
     'Dip the leaf in iodine solution to see whether starch is present',
@@ -490,7 +490,7 @@ const MCQ_B4 = [
    'Think about why the leaf must be prepared before being placed in ethanol.',
    'The leaf is first boiled in water to kill the cells and break down cell membranes; this stops all enzyme activity and makes the leaf more permeable, allowing ethanol to extract chlorophyll in the next step.'],
 
-  ['g9s-bpi-043', 'testing_for_starch', 2,
+  ['g9s-bpi-043', 'photosynthesis_experiments', 2,
    'In the iodine starch test, why is the leaf boiled in ethanol (alcohol)?',
    ['To remove the chlorophyll so the colour change from iodine can be seen clearly',
     'To dissolve the starch out of the leaf before the iodine test is applied',
@@ -500,7 +500,7 @@ const MCQ_B4 = [
    'A green leaf would mask the blue-black colour — what must be removed first?',
    'Chlorophyll masks the blue-black colour of the starch-iodine complex; boiling in ethanol dissolves and removes the green pigment, leaving the leaf pale yellow-white so that any blue-black staining is clearly visible.'],
 
-  ['g9s-bpi-044', 'testing_for_starch', 2,
+  ['g9s-bpi-044', 'photosynthesis_experiments', 2,
    'A variegated leaf (green and white sections) is kept in light, then tested for starch with iodine. What result is expected and what does it show?',
    ['Blue-black colour only in the green sections; white sections stay orange-brown — showing that chlorophyll is needed for photosynthesis',
     'Blue-black colour only in the white sections; green sections stay orange-brown — showing that light is blocked in the white regions',
@@ -510,7 +510,7 @@ const MCQ_B4 = [
    'White sections lack chlorophyll — trace what this means for their ability to make starch.',
    'Green sections contain chlorophyll and produce starch by photosynthesis, turning blue-black with iodine; white sections lack chlorophyll, cannot photosynthesise, produce no starch, and remain orange-brown — the experiment demonstrates that chlorophyll is essential for photosynthesis.'],
 
-  ['g9s-bpi-045', 'testing_for_starch', 3,
+  ['g9s-bpi-045', 'photosynthesis_experiments', 3,
    'A student carries out a starch test on a leaf and lists the steps in this order: (P) add iodine solution, (Q) boil leaf in ethanol, (R) wash leaf in cold water, (S) boil leaf in water. What is the CORRECT sequence?',
    ['S → Q → R → P',
     'Q → S → R → P',
@@ -572,9 +572,9 @@ const MCQ_B4 = [
    'Plants photosynthesise AND respire — consider the balance between the two processes in light versus dark.',
    'In daylight, the rate of photosynthesis exceeds respiration, creating a net uptake of CO₂; at night, photosynthesis stops but respiration continues, so CO₂ accumulates in the box. Plants always respire but only photosynthesise in light.'],
 
-  // ── leaf_structure ───────────────────────────────────────────────────
+  // ── leaf_adaptation ───────────────────────────────────────────────────
 
-  ['g9s-bpi-051', 'leaf_structure', 1,
+  ['g9s-bpi-051', 'leaf_adaptation', 1,
    'How does the broad, flat shape of a leaf help it to carry out photosynthesis efficiently?',
    ['It provides a large surface area to absorb the maximum amount of light',
     'It reduces the amount of water lost through the leaf surface during the day',
@@ -584,7 +584,7 @@ const MCQ_B4 = [
    'A large, flat surface is ideal for capturing something that travels in straight lines from above.',
    'A broad, flat lamina maximises the surface area exposed to sunlight, allowing chloroplasts in the cells to absorb as much light energy as possible for photosynthesis.'],
 
-  ['g9s-bpi-052', 'leaf_structure', 1,
+  ['g9s-bpi-052', 'leaf_adaptation', 1,
    'What is the function of the stomata found on the underside of most leaves?',
    ['To allow carbon dioxide in and oxygen out, and to let water vapour escape during transpiration',
     'To absorb sunlight and convert it to chemical energy stored in glucose',
@@ -594,7 +594,7 @@ const MCQ_B4 = [
    'Stomata are pores — think about what gases need to move in and out of a leaf.',
    'Stomata are tiny pores flanked by guard cells; they allow CO₂ to diffuse in for photosynthesis, O₂ to diffuse out, and water vapour to exit during transpiration; they open in the light and close in the dark.'],
 
-  ['g9s-bpi-053', 'leaf_structure', 2,
+  ['g9s-bpi-053', 'leaf_adaptation', 2,
    'Leaves are very thin, typically less than 1 mm. How does this thinness benefit photosynthesis?',
    ['It minimises the distance that carbon dioxide must diffuse to reach the chloroplasts inside cells',
     'It reduces the mass of the leaf, allowing it to orient itself towards the sun more easily',
@@ -604,7 +604,7 @@ const MCQ_B4 = [
    'Diffusion is slow over long distances — a thin leaf means a short journey for gases.',
    'Diffusion rate is inversely related to distance; a thin leaf means CO₂ entering through stomata travels only a very short distance to the photosynthetic cells, keeping the rate of gas exchange high.'],
 
-  ['g9s-bpi-054', 'leaf_structure', 2,
+  ['g9s-bpi-054', 'leaf_adaptation', 2,
    'What do the veins (vascular bundles) in a leaf transport, and what structural role do they play?',
    ['They transport water and minerals in (xylem) and sugars out (phloem), and they support the leaf blade',
     'They transport only glucose to the stem for storage, and they contain chlorophyll for photosynthesis',
@@ -614,7 +614,7 @@ const MCQ_B4 = [
    'Veins contain xylem and phloem — recall what each tissue carries.',
    'Xylem in leaf veins supplies water (needed as a reactant in photosynthesis) and dissolved minerals; phloem carries sucrose (made from glucose) away to the rest of the plant; the veins also form a rigid framework that supports the flat leaf surface.'],
 
-  ['g9s-bpi-055', 'leaf_structure', 3,
+  ['g9s-bpi-055', 'leaf_adaptation', 3,
    'Palisade mesophyll cells are found in the upper layer of the leaf, just below the upper epidermis. Why is this position ideal for their function?',
    ['They are closest to the light source and are packed with chloroplasts to maximise the rate of photosynthesis',
     'They are closest to the stomata and absorb carbon dioxide directly before it diffuses to other cells',
@@ -678,9 +678,9 @@ const MCQ_B4 = [
 
 ];
 
-MCQ_B4.forEach(([id, subsection, difficulty, question, options, answer, explanation]) => {
+MCQ_B4.forEach(([id, subsection, difficulty, question, options, answer, hint, explanation]) => {
   STATIC_QUESTIONS.push(makeMCQ({ id, chapterId: B4, subsection, difficulty,
-    question, options, answer, explanation }));
+    question, options, answer, hint, explanation }));
 });
 
 })();

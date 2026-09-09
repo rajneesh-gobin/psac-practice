@@ -26,7 +26,7 @@ STATIC_QUESTIONS.push(
   // ── PowerPoint Notes pages layout (2021-22 NCE ICT Q1(iv)) ───────────────
   // Print layout: slide thumbnail at top + lines for speaker notes below.
 
-  makeMCQ({ id: 'g9ict-dm-002', chapterId: 'g9ict-presentation', subsection: 'presentation_printing', difficulty: 1,
+  makeMCQ({ id: 'g9ict-dm-002', chapterId: 'g9ict-presentation', subsection: 'notes_handouts', difficulty: 1,
     question: 'A PowerPoint print layout is shown. The page displays a <b>small slide image</b> in the upper half and <b>lines for speaker notes</b> in the lower half, both on the same page. Which type of print layout is this?',
     options: ['Notes pages', 'Handouts', 'Outline', 'Full page slides'],
     answer: 'Notes pages',
@@ -37,7 +37,7 @@ STATIC_QUESTIONS.push(
   // Spreadsheet: col A = Name, col B = Marks in ICT.
   // Row 5 has Malini with 56 marks → cell B5.
 
-  makeMCQ({ id: 'g9ict-dm-003', chapterId: 'g9ict-spreadsheets', subsection: 'cell_references', difficulty: 1,
+  makeMCQ({ id: 'g9ict-dm-003', chapterId: 'g9ict-spreadsheets', subsection: 'cells_ranges', difficulty: 1,
     question: 'The spreadsheet below shows student marks.<br><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 130" width="260" height="130" style="display:block;margin:8px auto">' +
       '<rect x="10" y="10" width="240" height="115" fill="#fff" stroke="#999" stroke-width="1"/>' +
       '<rect x="10" y="10" width="30" height="20" fill="#dde" stroke="#999" stroke-width="1"/>' +
@@ -110,7 +110,7 @@ STATIC_QUESTIONS.push(
   // ── Microphone hardware identification (2021-22 NCE ICT Q4(b)) ───────────
   // Image of device with flexible neck and capsule head = microphone (input device).
 
-  makeMCQ({ id: 'g9ict-dm-006', chapterId: 'g9ict-computer-systems', subsection: 'input_output_devices', difficulty: 1,
+  makeMCQ({ id: 'g9ict-dm-006', chapterId: 'g9ict-computer-systems', subsection: 'input_devices', difficulty: 1,
     question: 'A picture shows a hardware device with a <b>long, flexible neck</b> on a base and a <b>capsule-shaped head</b> at the top — designed to capture sound and convert it to an electrical signal. Which hardware device is shown?',
     options: ['Microphone', 'Router', 'Printer', 'Compact disc'],
     answer: 'Microphone',

@@ -57,21 +57,21 @@ STATIC_QUESTIONS.push(
   // ── Plane mirror: lateral inversion (2021 NCE Phy Fig 2.1) ────────────────
   // Man raises right hand; left hand appears raised in mirror image.
 
-  makeMCQ({ id: 'g9s-pdm-004', chapterId: 'g9s-p2-light', subsection: 'plane_mirrors', difficulty: 1,
+  makeMCQ({ id: 'g9s-pdm-004', chapterId: 'g9s-p2-light', subsection: 'reflection', difficulty: 1,
     question: 'A diagram shows a man raising his <b>right hand</b> in front of a plane mirror. In the mirror image, his <b>left hand</b> appears to be raised. This characteristic of a plane mirror image is known as _____ inversion.',
     options: ['Lateral', 'Vertical', 'Horizontal', 'Real'],
     answer: 'Lateral',
     hint: 'Left and right are swapped — side to side.',
     explanation: 'This is called <b>lateral inversion</b> (left-right reversal). In a plane mirror, left and right are swapped in the image but top and bottom are not. This is why text in a plane mirror appears reversed. A plane mirror image is also upright and virtual (cannot be projected on a screen).' }),
 
-  makeMCQ({ id: 'g9s-pdm-005', chapterId: 'g9s-p2-light', subsection: 'plane_mirrors', difficulty: 1,
+  makeMCQ({ id: 'g9s-pdm-005', chapterId: 'g9s-p2-light', subsection: 'reflection', difficulty: 1,
     question: 'In a plane mirror, the image of the man <b>cannot</b> be projected onto a screen. What type of image does a plane mirror produce?',
     options: ['Virtual', 'Real', 'Inverted', 'Magnified'],
     answer: 'Virtual',
     hint: 'A real image can be projected; this type cannot.',
     explanation: 'A plane mirror produces a <b>virtual image</b>. A virtual image is formed where reflected rays appear to diverge from — behind the mirror — and cannot be projected onto a screen. In contrast, a real image (formed by a converging lens or concave mirror) can be projected. The plane mirror image is also the same size as the object and the same distance behind the mirror as the object is in front.' }),
 
-  makeMCQ({ id: 'g9s-pdm-006', chapterId: 'g9s-p2-light', subsection: 'plane_mirrors', difficulty: 2,
+  makeMCQ({ id: 'g9s-pdm-006', chapterId: 'g9s-p2-light', subsection: 'reflection', difficulty: 2,
     question: 'A man who is <b>170 cm</b> tall stands in front of a plane mirror. How does the <b>height of his image</b> compare to his own height?',
     options: [
       'Equal to 170 cm',
@@ -83,7 +83,7 @@ STATIC_QUESTIONS.push(
     hint: 'A plane mirror always produces an image the same size as the object.',
     explanation: 'A plane mirror always produces an image that is the <b>same size</b> as the object. If the man is 170 cm tall, his image is also 170 cm tall. This is one of the key properties of plane mirror images: same size, same distance behind mirror as object in front, virtual, and laterally inverted.' }),
 
-  makeMCQ({ id: 'g9s-pdm-007', chapterId: 'g9s-p2-light', subsection: 'plane_mirrors', difficulty: 2,
+  makeMCQ({ id: 'g9s-pdm-007', chapterId: 'g9s-p2-light', subsection: 'reflection', difficulty: 2,
     question: 'A man stands <b>48 cm</b> in front of a plane mirror. What is the total distance between the <b>man</b> and his <b>image</b>?',
     options: ['96 cm', '48 cm', '24 cm', '192 cm'],
     answer: '96 cm',
@@ -145,7 +145,7 @@ STATIC_QUESTIONS.push(
   // Positions: A (left extreme), B (bottom/centre), C (right extreme).
   // One full oscillation starting at B.
 
-  makeMCQ({ id: 'g9s-pdm-012', chapterId: 'g9s-p4-motion', subsection: 'oscillations', difficulty: 2,
+  makeMCQ({ id: 'g9s-pdm-012', chapterId: 'g9s-p4-motion', subsection: 'motion_problems', difficulty: 2,
     question: 'A pendulum experiment shows three positions: <b>A</b> (left extreme), <b>B</b> (lowest/centre point), <b>C</b> (right extreme). The stopwatch is started when the bob passes through position B. What is the complete path of the bob in completing <b>one full oscillation</b>?',
     options: [
       'B → C → B → A → B',

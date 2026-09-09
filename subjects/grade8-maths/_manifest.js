@@ -116,32 +116,42 @@ registerSubject({
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G8M_SYLLABUS,
+  // ⚠ THE WEIGHTS SUM TO EXACTLY 40. They summed to 49, and because
+  //   assembleExamPaper() sheds the surplus off the FIRST chapter still above
+  //   1, g8m-pythagoras (weight 4) was dealt ONE question per paper while the
+  //   chapters below it kept theirs. The paper still totalled 40, so only
+  //   test-exam-paper-shape noticed.
+  // ⚠ NOT DERIVED FROM A PAPER: the NCE is sat at Grade 9. The two 4s keep
+  //   their rank; of the thirteen chapters that sat at 3, the four kept there
+  //   are the number and set/inequality strands, which are also the ones with
+  //   the depth to be drawn 3 times (55-60 items, against 10-11 in the ten
+  //   chapters now at 2). g8m-constructions keeps the 2 it always had.
   chapters: [
     { id: 'g8m-real-numbers', name: 'Real Numbers', icon: '√', examWeight: 3,
       syllabus: 'Distinguish between rational and irrational numbers. Understand that surds are irrational. Simplify surds of the form √n. Place real numbers on a number line. Convert between fractions and terminating/recurring decimals.' },
     { id: 'g8m-pythagoras', name: "Pythagoras' Theorem", icon: '📐', examWeight: 4,
       syllabus: "State and apply Pythagoras' theorem: a² + b² = c². Find the length of the hypotenuse of a right-angled triangle. Find the length of a shorter side. Verify whether a triangle is right-angled. Apply the theorem to real-life problems." },
-    { id: 'g8m-sequences',              name: 'Sequences',                            icon: '🔢', examWeight: 3,
+    { id: 'g8m-sequences',              name: 'Sequences',                            icon: '🔢', examWeight: 2,
       syllabus: 'Recognise and continue number sequences. Describe the rule of a sequence in words. Find a given term of a sequence. Generate a sequence from a given rule.' },
     { id: 'g8m-indices',                name: 'Indices, Square Roots & Cube Roots',   icon: '🔣', examWeight: 3,
       syllabus: 'Use index notation with whole numbers. Find square roots and cube roots. Apply the laws of indices. Evaluate expressions involving powers and roots.' },
-    { id: 'g8m-rate',                   name: 'Rate & Proportion',                    icon: '⚖️', examWeight: 3,
+    { id: 'g8m-rate',                   name: 'Rate & Proportion',                    icon: '⚖️', examWeight: 2,
       syllabus: 'Understand rate as a comparison of two quantities. Work with direct proportion. Solve problems involving rates such as price per unit. Use proportion in everyday contexts.' },
-    { id: 'g8m-finance',                name: 'Personal & Household Finance',         icon: '💰', examWeight: 3,
+    { id: 'g8m-finance',                name: 'Personal & Household Finance',         icon: '💰', examWeight: 2,
       syllabus: 'Calculate simple interest. Work out discount, profit and loss. Read and interpret bills and household accounts. Solve problems involving budgeting.' },
-    { id: 'g8m-polygons',               name: 'Polygons',                             icon: '📐', examWeight: 3,
+    { id: 'g8m-polygons',               name: 'Polygons',                             icon: '📐', examWeight: 2,
       syllabus: 'Calculate interior and exterior angles of polygons. Use the angle sum of a polygon. Identify the properties of regular polygons. Solve problems involving angles in polygons.' },
-    { id: 'g8m-coordinates',            name: 'Coordinates',                          icon: '📍', examWeight: 3,
+    { id: 'g8m-coordinates',            name: 'Coordinates',                          icon: '📍', examWeight: 2,
       syllabus: 'Plot points in all four quadrants. Find the midpoint of a line segment. Plot and interpret linear graphs. Use coordinates to solve geometric problems.' },
-    { id: 'g8m-circles',                name: 'Circles',                              icon: '⭕', examWeight: 3,
+    { id: 'g8m-circles',                name: 'Circles',                              icon: '⭕', examWeight: 2,
       syllabus: 'Identify the parts of a circle. Calculate the circumference of a circle. Calculate the area of a circle. Solve everyday problems involving circles.' },
-    { id: 'g8m-surface-area',           name: 'Surface Area',                         icon: '🧊', examWeight: 3,
+    { id: 'g8m-surface-area',           name: 'Surface Area',                         icon: '🧊', examWeight: 2,
       syllabus: 'Find the surface area of cubes and cuboids. Use nets to work out surface area. Calculate the surface area of prisms. Solve problems involving surface area.' },
-    { id: 'g8m-volume',                 name: 'Volume',                               icon: '📦', examWeight: 3,
+    { id: 'g8m-volume',                 name: 'Volume',                               icon: '📦', examWeight: 2,
       syllabus: 'Calculate the volume of cubes and cuboids. Convert between units of volume. Find the volume of prisms. Solve everyday problems involving volume.' },
     { id: 'g8m-algebra',                name: 'Algebraic Expressions',                icon: '🔤', examWeight: 4,
       syllabus: 'Expand brackets in algebraic expressions. Factorise simple expressions. Simplify algebraic fractions. Solve linear equations containing brackets.' },
-    { id: 'g8m-statistics',             name: 'Statistics',                           icon: '📊', examWeight: 3,
+    { id: 'g8m-statistics',             name: 'Statistics',                           icon: '📊', examWeight: 2,
       syllabus: 'Draw and interpret pie charts. Calculate the mean, median and mode. Compare two sets of data. Interpret graphs to draw conclusions.' },
     { id: 'g8m-inequalities', name: 'Inequalities', icon: '≤', examWeight: 3,
       syllabus: 'Use the symbols <, >, ≤ and ≥ correctly. Solve simple linear inequalities in one variable. Represent solution sets on a number line using open and closed circles. Solve and graph compound inequalities.' },

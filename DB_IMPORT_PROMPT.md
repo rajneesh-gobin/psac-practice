@@ -3,11 +3,13 @@
 Copy everything between the lines below and paste it as your first message to Claude.
 
 ---
-node scripts/build-subject-index.js      # regenerate _index.js cleanly
-node scripts/test-subsection-invariant.js
-node netlify/build-questions.js
-node scripts/test-live-pack-content.js
-node scripts/check.js
+node scripts/preflight.js    # runs all five below, in order, stopping at the first failure
+
+#   1 node scripts/build-subject-index.js      regenerate _index.js cleanly
+#   2 node scripts/test-subsection-invariant.js
+#   3 node netlify/build-questions.js
+#   4 node scripts/test-live-pack-content.js
+#   5 node scripts/check.js
 
 
 Continue the PSAC project — read `CLAUDE.md` first, then `DB_IMPORT_GUIDE.md`.

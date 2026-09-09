@@ -51,6 +51,8 @@ const G9PHY_SYLLABUS = {
     { id: 'reflection', name: 'Reflection of light' },
     { id: 'laws_of_reflection', name: 'The laws of reflection' },
     { id: 'ray_diagrams', name: 'Ray diagrams' },
+    // Not a syllabus statement, but the 2021 paper asks it twice (Fig 1.5, 2.2).
+    { id: 'refraction', name: 'Refraction: light bending between two media' },
   ] },
   'g9s-p3-energy': { subsections: [
     { id: 'conservation_of_energy', name: 'Conservation of energy in simple systems' },
@@ -59,6 +61,9 @@ const G9PHY_SYLLABUS = {
     { id: 'renewable_sources', name: 'Renewable energy sources' },
     { id: 'non_renewable_sources', name: 'Non-renewable energy sources' },
     { id: 'comparing_energy_sources', name: 'Polluting and non-polluting sources: advantages and drawbacks' },
+    // The chapter is Energy, Heat & Temperature; the 2021 paper asks the
+    // bimetallic strip (Fig 4.1) and no other subsection covers heat.
+    { id: 'thermal_expansion', name: 'Heat and the expansion of solids' },
   ] },
   'g9s-p4-motion': { subsections: [
     { id: 'scalars_vectors', name: 'Scalars and vectors' },
