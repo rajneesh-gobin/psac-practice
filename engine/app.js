@@ -765,6 +765,11 @@ function _clearPracticeResume(chapterId) {
   const store = _readResumeStore();
   delete store.practice[chapterId];
   _writeResumeStore(store);
+  // Also clear from the DB blob, or _readResumeStore() merges it back in.
+  if (DB && DB.resume && DB.resume.practice) {
+    delete DB.resume.practice[chapterId];
+    save(DB);
+  }
 }
 
 function _getChapterResume(chapterId) {

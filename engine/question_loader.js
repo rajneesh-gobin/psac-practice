@@ -1257,6 +1257,12 @@ const QuestionLoader = (() => {
     if (typeof STATIC_QUESTIONS !== 'undefined' && STATIC_QUESTIONS.length > _baseCount) {
       STATIC_QUESTIONS.length = _baseCount;
     }
+    // Drop in-flight question references so a parent preview of child B never
+    // serves child A's question objects from a still-open practice screen.
+    if (typeof S !== 'undefined') {
+      if (S.practice) S.practice.qs = [];
+      if (S.exam)     S.exam.qs     = [];
+    }
   }
 
   // Called on every handover. A no-op when the same child signs back in, so an
