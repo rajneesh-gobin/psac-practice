@@ -1,0 +1,48 @@
+{
+  "measured": "2026-09-09",
+  "note": "Baseline counts before book-content-implementation work. Measured from question files using makeMCQ|makeNum|makeTF|makeMatch|makeSymmetry counts.",
+  "packs": {
+    "grade1-maths": {
+      "questions": 523,
+      "files": 9,
+      "chapters_declared": 6,
+      "chapters": ["g1mth-numbers","g1mth-addition","g1mth-subtraction","g1mth-shapes","g1mth-measurement","g1mth-patterns"],
+      "missing_from_book": ["time_daily_routines","money_coins","ordinals_1_to_5"],
+      "comingSoon": false
+    },
+    "grade2-maths": {
+      "questions": 499,
+      "files": 10,
+      "chapters_declared": 8,
+      "chapters": ["g2mth-numbers","g2mth-addition","g2mth-subtraction","g2mth-multiplication","g2mth-fractions","g2mth-measurement","g2mth-time","g2mth-shapes"],
+      "missing_from_book": ["ordinals_1_to_12","money_to_100","division_by_2"],
+      "comingSoon": false
+    },
+    "grade3-maths": {
+      "questions": 541,
+      "files": 11,
+      "chapters_declared": 9,
+      "chapters": ["g3mth-numbers","g3mth-addition","g3mth-subtraction","g3mth-multiplication","g3mth-division","g3mth-fractions","g3mth-measurement","g3mth-geometry","g3mth-time"],
+      "missing_from_book": ["pictograms","ordinals_1_to_20","roman_numerals_i_to_xx","money_to_1000"],
+      "comingSoon": false
+    },
+    "grade7-maths": {
+      "questions": 203,
+      "files": 2,
+      "chapters_declared": 22,
+      "missing_from_book": ["angles_chapter","sequences_questions_sparse"],
+      "comingSoon": false
+    },
+    "grade8-maths": {
+      "questions": 115,
+      "files": 2,
+      "chapters_declared": 11,
+      "missing_from_book": ["real_numbers","pythagoras","inequalities","sets","construction_of_triangles"],
+      "comingSoon": false
+    },
+    "grade1-health": { "questions": 1, "files": 1, "comingSoon": true, "note": "Sample only" },
+    "grade2-health": { "questions": 1, "files": 1, "comingSoon": true, "note": "Sample only" },
+    "grade3-health": { "questions": 1, "files": 1, "comingSoon": true, "note": "Sample only" },
+    "grade3-ssee":   { "questions": 0, "files": 0, "comingSoon": true, "note": "Pack not yet created" }
+  }
+}

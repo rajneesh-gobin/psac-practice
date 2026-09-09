@@ -1,0 +1,84 @@
+{
+  "measured_date": "2026-09-09",
+  "note": "Question counts from file grep; exact bundled counts require `node netlify/build-questions.js`",
+  "new_question_files": {
+    "grade1-maths": {
+      "ch07_time.js": 55,
+      "ch08_money.js": 65,
+      "ch09_ordinals.js": 75,
+      "new_chapter_total": 195
+    },
+    "grade2-maths": {
+      "ch09_ordinals.js": 90,
+      "ch10_money.js": 90,
+      "ch11_division.js": 90,
+      "new_chapter_total": 270
+    },
+    "grade3-maths": {
+      "ch10_pictograms.js": 90,
+      "ch11_ordinals.js": 90,
+      "ch12_roman_numerals.js": 90,
+      "ch13_money.js": 90,
+      "new_chapter_total": 360
+    },
+    "grade7-maths": {
+      "ch03_sequences_angles.js": 135,
+      "new_chapter_total": 135
+    },
+    "grade8-maths": {
+      "ch03_real_numbers.js": 55,
+      "ch04_pythagoras.js": 60,
+      "ch05_inequalities.js": 60,
+      "ch06_sets.js": 60,
+      "ch07_constructions.js": 60,
+      "new_chapter_total": 295
+    },
+    "grade1-health": {
+      "ch01_hygiene.js": 45,
+      "ch02_nutrition.js": 45,
+      "ch03_safety.js": 36,
+      "ch_topup.js": 44,
+      "ch_topup2.js": 10,
+      "total_questions": 180,
+      "subsections_all_at_20": true,
+      "pack_status": "comingSoon changed true→false"
+    },
+    "grade2-health": {
+      "ch01_hygiene.js": 30,
+      "ch02_nutrition.js": 30,
+      "ch03_safety.js": 30,
+      "ch_topup.js": 90,
+      "total_questions": 180,
+      "subsections_all_at_20": true,
+      "pack_status": "comingSoon changed true→false"
+    },
+    "grade3-health": {
+      "ch01_hygiene.js": 30,
+      "ch02_nutrition.js": 30,
+      "ch03_safety.js": 30,
+      "ch_topup.js": 90,
+      "total_questions": 180,
+      "subsections_all_at_20": true,
+      "pack_status": "comingSoon changed true→false"
+    },
+    "grade3-ssee": {
+      "ch01_environment.js": 50,
+      "ch02_myself_family.js": 45,
+      "ch03_natural_environment.js": 45,
+      "ch04_living_things.js": 45,
+      "ch05_locality.js": 45,
+      "ch06_air.js": 40,
+      "ch07_water.js": 40,
+      "ch08_weather.js": 40,
+      "total_questions": 350,
+      "pack_status": "new pack created from scratch"
+    }
+  },
+  "summary": {
+    "new_questions_total": 2145,
+    "new_chapters_total": 34,
+    "packs_unlocked": ["grade1-health", "grade2-health", "grade3-health", "grade3-ssee"],
+    "cache_version_before": 119,
+    "cache_version_after": 122
+  }
+}

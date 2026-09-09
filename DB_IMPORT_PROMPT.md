@@ -3,6 +3,12 @@
 Copy everything between the lines below and paste it as your first message to Claude.
 
 ---
+node scripts/build-subject-index.js      # regenerate _index.js cleanly
+node scripts/test-subsection-invariant.js
+node netlify/build-questions.js
+node scripts/test-live-pack-content.js
+node scripts/check.js
+
 
 Continue the PSAC project — read `CLAUDE.md` first, then `DB_IMPORT_GUIDE.md`.
 
