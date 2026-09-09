@@ -31,7 +31,8 @@ let ACTIVE_STUDENT_ID = null;
 function _prefKey(base) {
   return `pref_${base}_${ACTIVE_STUDENT_ID || 'guest'}`;
 }
-let _soundEnabled = localStorage.getItem(_prefKey('sound')) !== 'false';
+let _soundEnabled  = localStorage.getItem(_prefKey('sound'))  !== 'false';
+let _hapticEnabled = localStorage.getItem(_prefKey('haptic')) !== 'false';
 let _comboStreak  = 0;
 let _audioCtx     = null;
 
@@ -533,7 +534,8 @@ function _applyKidPrefs() {
   // THIS student's own scoped key - otherwise a sibling logging in after
   // someone who muted sound would inherit "muted" for the rest of the
   // session (or vice versa) until they happened to tap the toggle themselves.
-  _soundEnabled = localStorage.getItem(_prefKey('sound')) !== 'false';
+  _soundEnabled  = localStorage.getItem(_prefKey('sound'))  !== 'false';
+  _hapticEnabled = localStorage.getItem(_prefKey('haptic')) !== 'false';
 }
 
 function _setKidPref(key, value) {
@@ -1651,7 +1653,7 @@ async function enableNotifications() {
 // ── Mobile: Haptic feedback ─────────────────────────────────────────────────
 function _haptic(type) {
   if (!navigator.vibrate) return;
-  if (localStorage.getItem(_prefKey('haptic')) === 'false') return;
+  if (!_hapticEnabled) return;
   if (type === 'correct')  navigator.vibrate(50);
   else if (type === 'wrong')    navigator.vibrate([80, 40, 80]);
   else if (type === 'levelup')  navigator.vibrate([50, 30, 50, 30, 150]);
@@ -12798,7 +12800,8 @@ function _togglePref(key) {
   const next = !cur;
   localStorage.setItem(storageKey, String(next));
 
-  if (key === 'sound') _soundEnabled = next;
+  if (key === 'sound')  _soundEnabled  = next;
+  if (key === 'haptic') _hapticEnabled = next;
 
   const btn  = document.getElementById(`pref-${key}-toggle`);
   if (btn) {

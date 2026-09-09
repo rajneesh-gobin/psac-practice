@@ -8,7 +8,7 @@
 //   Anything cross-origin:         NOT intercepted — see the note in the fetch handler
 // ─────────────────────────────────────────────────────────────────────────────
 
-const SHELL_VERSION = 'shell-v297';
+const SHELL_VERSION = 'shell-v298';
 const DATA_VERSION  = 'data-v13';
 const SHELL_CACHE   = `psac-shell-${SHELL_VERSION}`;
 const DATA_CACHE    = `psac-data-${DATA_VERSION}`;
@@ -72,18 +72,13 @@ const SHELL_FILES = [
   '/engine/auth.js',
   '/engine/app.js',
   '/engine/biometric.js',
-  // ⚠ Must match the <script src="engine/…"> tags in index.html. This list is
-  //   all-or-nothing — cache.addAll rejects wholesale on a single 404 — so a
-  //   name here that is not on disk kills the whole offline shell, not one
-  //   feature. All six exist; re-check on any deploy that touches these tags.
-  '/engine/teacher_insights.js',
-  '/engine/teacher_workspace.js',
-  '/engine/teacher_guest_classes.js',
-  '/engine/teacher_home.js',
-  '/engine/teacher.js',
-  '/engine/teacher_classroom_detail.js',
-  '/engine/admin.js',
-  '/engine/forum.js',
+  // Teacher, admin and forum modules are loaded on-demand by RoleModules.ensure()
+  // and cached by the shell cache-first handler on first fetch. Precaching them
+  // charged every child's install with 530 KB they can never open. Teachers who
+  // have visited those screens before going offline still have them cached;
+  // a teacher who has never opened teacher mode and then goes offline behaves the
+  // same as a child who has never opened a subject pack — the lazy load fails
+  // gracefully and retries when connectivity returns.
   '/engine/calendar.js',
   '/engine/search.js',
   '/engine/classroom.js',
