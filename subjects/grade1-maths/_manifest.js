@@ -1,41 +1,37 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 1 - Mathematics   ·   PLACEHOLDER PACK
-//
-//  Registered so the plumbing exists: the grade picker, the admin Content tab,
-//  the shop catalogue, the question bundler and the DB importer all discover
-//  grades from SUBJECT_PACKS / the subjects/ directory, so nothing else has to
-//  be edited when this is filled in.
-//
-//  ⚠ comingSoon: true is what makes this safe to ship empty. It makes
-//    activateSubjectPack() refuse the pack, keeps it out of QuestionLoader's
-//    per-grade fetch and out of assembleExamPaper(), and renders the grade card
-//    as "Coming Soon" and disabled. Flip it to false ONLY when this pack has
-//    real chapters and real questions.
-//
-// STAGE: Mauritian primary, lower years. Same MIE track as Grades 4-6,
-// so the five subjects and the PSAC framing below are correct.
-// ⚠ Grades 1-2 will need a picture-first question mode before this is
-//   opened to children - the current renderer assumes the child can read
-//   the question and all four options. See CLAUDE.md.
-//
-//  TO FILL THIS IN
-//    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` -
-//       one idea per sentence (_syllabusPoints splits on sentences).
-//    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
-//       model. IDs: g1m-samp-001 style. Every question needs a `subsection:`
-//       tag that matches an id declared in G1M_SYLLABUS below.
-//    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only - production auto-discovers) and bump _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
 
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: an id declared here
-// with no questions behind it advertises a topic that opens empty, which is
-// worse than no subsections at all. Add ids only as questions are tagged.
-const G1M_SYLLABUS = {};
+const G1M_SYLLABUS = {
+  'g1mth-numbers': { subsections: [
+    { id: 'counting_ordering', name: 'Counting & Ordering' },
+    { id: 'number_words',      name: 'Number Words' },
+    { id: 'odd_even',          name: 'Odd and Even Numbers' },
+  ]},
+  'g1mth-addition': { subsections: [
+    { id: 'adding_within_10',  name: 'Adding to 10' },
+    { id: 'adding_within_20',  name: 'Adding to 20' },
+    { id: 'number_sentences',  name: 'Number Sentences' },
+  ]},
+  'g1mth-subtraction': { subsections: [
+    { id: 'subtracting_within_10', name: 'Taking Away within 10' },
+    { id: 'subtracting_within_20', name: 'Taking Away within 20' },
+    { id: 'missing_numbers',       name: 'Finding the Missing Number' },
+  ]},
+  'g1mth-shapes': { subsections: [
+    { id: '2d_shapes',          name: '2D Shapes' },
+    { id: 'properties_shapes',  name: 'Sides and Corners' },
+    { id: 'position_direction', name: 'Position Words' },
+  ]},
+  'g1mth-measurement': { subsections: [
+    { id: 'comparing_length',   name: 'Comparing Length' },
+    { id: 'comparing_mass',     name: 'Comparing Mass' },
+    { id: 'comparing_capacity', name: 'Comparing Capacity' },
+  ]},
+  'g1mth-patterns': { subsections: [
+    { id: 'repeating_patterns', name: 'Repeating Patterns' },
+    { id: 'number_patterns',    name: 'Number Patterns' },
+    { id: 'odd_even_patterns',  name: 'Odd and Even' },
+  ]},
+};
 
 registerSubject({
   id:         'grade1-maths',
@@ -45,11 +41,20 @@ registerSubject({
   subject:    'Maths',
   curriculum: 'MIE Mauritius',
   comingSoon: true,
+  noDifficulty: false,
   syllabus:   G1M_SYLLABUS,
   chapters: [
-    // One placeholder so the shape is copyable. examWeight: 0 keeps it out of
-    // exam papers even if comingSoon is flipped before real content lands.
-    { id: 'g1m-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g1mth-numbers', name: 'Numbers to 20', icon: '🔢', examWeight: 3,
+      syllabus: 'Count, read and write numbers from 1 to 20. Order numbers — what comes before, after and between. Recognise odd and even numbers. Write number words: one to twenty.' },
+    { id: 'g1mth-addition', name: 'Addition', icon: '➕', examWeight: 3,
+      syllabus: 'Combine groups of objects and count the total. Learn addition facts to 10 and to 20. Write and solve number sentences: 5 + 3 = □. Understand the + sign and = sign.' },
+    { id: 'g1mth-subtraction', name: 'Subtraction', icon: '➖', examWeight: 3,
+      syllabus: 'Take away objects from a group and count what is left. Learn subtraction facts within 20. Write and solve subtraction sentences: 8 − 3 = □. Find the missing number.' },
+    { id: 'g1mth-shapes', name: 'Shapes and Space', icon: '🔷', examWeight: 2,
+      syllabus: 'Name and recognise 2D shapes: circle, square, rectangle and triangle. Count the sides and corners of each shape. Describe position using words: above, below, left, right, in front, behind.' },
+    { id: 'g1mth-measurement', name: 'Measurement', icon: '📏', examWeight: 2,
+      syllabus: 'Compare the length of objects: longer, shorter, tallest, shortest. Compare the mass of objects: heavier, lighter, same. Compare capacity: which container holds more, less or the same.' },
+    { id: 'g1mth-patterns', name: 'Patterns', icon: '🔁', examWeight: 2,
+      syllabus: 'Create and continue repeating patterns with shapes and colours. Count in 2s, 5s and 10s. Identify odd numbers (1, 3, 5…) and even numbers (2, 4, 6…).' },
   ],
 });

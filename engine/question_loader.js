@@ -34,7 +34,13 @@ const QuestionLoader = (() => {
     // out before it gets here, so nothing below is ever fetched for a child;
     // the entries exist so this list matches `ls subjects/*/questions/*.js`
     // and the drift check in the comment above stays usable.
-    'grade1-maths': ['subjects/grade1-maths/questions/ch01_sample.js'],
+    'grade1-maths': ['subjects/grade1-maths/questions/ch01_sample.js',
+                     'subjects/grade1-maths/questions/ch01_numbers.js',
+                     'subjects/grade1-maths/questions/ch02_addition.js',
+                     'subjects/grade1-maths/questions/ch03_subtraction.js',
+                     'subjects/grade1-maths/questions/ch04_shapes.js',
+                     'subjects/grade1-maths/questions/ch05_measurement.js',
+                     'subjects/grade1-maths/questions/ch06_patterns.js'],
     'grade1-english': ['subjects/grade1-english/questions/ch01_sample.js',
                        'subjects/grade1-english/questions/ch01_listening.js',
                        'subjects/grade1-english/questions/ch02_speaking.js',
@@ -51,7 +57,15 @@ const QuestionLoader = (() => {
                       'subjects/grade1-french/questions/topup_g1fr.js'],
     'grade1-science': ['subjects/grade1-science/questions/ch01_sample.js'],
     'grade1-history': ['subjects/grade1-history/questions/ch01_sample.js'],
-    'grade2-maths': ['subjects/grade2-maths/questions/ch01_sample.js'],
+    'grade2-maths': ['subjects/grade2-maths/questions/ch01_sample.js',
+                     'subjects/grade2-maths/questions/ch01_numbers.js',
+                     'subjects/grade2-maths/questions/ch02_addition.js',
+                     'subjects/grade2-maths/questions/ch03_subtraction.js',
+                     'subjects/grade2-maths/questions/ch04_multiplication.js',
+                     'subjects/grade2-maths/questions/ch05_fractions.js',
+                     'subjects/grade2-maths/questions/ch06_measurement.js',
+                     'subjects/grade2-maths/questions/ch07_time.js',
+                     'subjects/grade2-maths/questions/ch08_shapes.js'],
     'grade2-english': ['subjects/grade2-english/questions/ch01_sample.js',
                        'subjects/grade2-english/questions/ch01_listening.js',
                        'subjects/grade2-english/questions/ch02_speaking.js',
@@ -67,7 +81,17 @@ const QuestionLoader = (() => {
                       'subjects/grade2-french/questions/ch05_grammaire.js'],
     'grade2-science': ['subjects/grade2-science/questions/ch01_sample.js'],
     'grade2-history': ['subjects/grade2-history/questions/ch01_sample.js'],
-    'grade3-maths': ['subjects/grade3-maths/questions/ch01_sample.js'],
+    'grade3-maths': ['subjects/grade3-maths/questions/ch01_sample.js',
+                     'subjects/grade3-maths/questions/ch01_numbers.js',
+                     'subjects/grade3-maths/questions/ch02_addition.js',
+                     'subjects/grade3-maths/questions/ch03_subtraction.js',
+                     'subjects/grade3-maths/questions/ch04_multiplication.js',
+                     'subjects/grade3-maths/questions/ch05_division.js',
+                     'subjects/grade3-maths/questions/ch06_fractions.js',
+                     'subjects/grade3-maths/questions/ch07_measurement.js',
+                     'subjects/grade3-maths/questions/ch08_geometry.js',
+                     'subjects/grade3-maths/questions/ch09_time.js',
+                     'subjects/grade3-maths/questions/topup_g3mth.js'],
     'grade3-english': ['subjects/grade3-english/questions/ch01_sample.js',
                        'subjects/grade3-english/questions/ch01_listening.js',
                        'subjects/grade3-english/questions/ch02_speaking.js',
@@ -611,7 +635,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 97;
+  const _CACHE_VERSION = 98;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
