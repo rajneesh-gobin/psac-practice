@@ -1,25 +1,22 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 2 - Health Education   ·   PLACEHOLDER PACK
-//
-//  ⚠ comingSoon: true keeps this pack invisible to children and out of
-//    QuestionLoader / assembleExamPaper until real content lands.
-//    Flip it to false ONLY when this pack has real chapters and questions.
-//
-//  ⚠ Grades 1-2 will need a picture-first question mode before this is
-//    opened to children - the current renderer assumes the child can read.
-//
-//  TO FILL THIS IN
-//    1. Replace the sample chapter with real MIE chapters (id, name, icon,
-//       examWeight, syllabus prose).
-//    2. Write questions/ch01_*.js. IDs: g2he-samp-001 style.
-//    3. Add files to LOCAL_FILES in engine/question_loader.js and bump
-//       _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
 
-const G2HE_SYLLABUS = {};
+const G2HE_SYLLABUS = {
+  'g2he-hygiene': { subsections: [
+    { id: 'grooming',         name: 'Grooming and Personal Care' },
+    { id: 'hand_dental',      name: 'Hand Washing and Dental Care' },
+    { id: 'illness_hygiene',  name: 'Preventing the Spread of Illness' },
+  ]},
+  'g2he-nutrition': { subsections: [
+    { id: 'food_groups',      name: 'Food Groups and Nutrients' },
+    { id: 'balanced_meals',   name: 'Balanced Meals' },
+    { id: 'food_safety',      name: 'Clean and Safe Food' },
+  ]},
+  'g2he-safety': { subsections: [
+    { id: 'home_safety',      name: 'Keeping Safe at Home' },
+    { id: 'road_safety',      name: 'Road Safety' },
+    { id: 'first_aid_basics', name: 'Basic First Aid' },
+  ]},
+};
 
 registerSubject({
   id:         'grade2-health',
@@ -28,10 +25,14 @@ registerSubject({
   icon:       '❤️',
   subject:    'Health Education',
   curriculum: 'MIE Mauritius',
-  comingSoon: true,
+  comingSoon: false,
   syllabus:   G2HE_SYLLABUS,
   chapters: [
-    { id: 'g2he-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g2he-hygiene',   name: 'Hygiene and Grooming', icon: '🪥', examWeight: 3,
+      syllabus: 'Understand the importance of daily grooming. Learn thorough hand washing and tooth brushing technique. Know how coughs, sneezes and dirty hands spread illness. Practise habits that prevent illness spreading.' },
+    { id: 'g2he-nutrition', name: 'Food, Nutrition and Safety', icon: '🥗', examWeight: 3,
+      syllabus: 'Know the main food groups and what each provides. Understand what makes a balanced meal. Learn how to choose healthy snacks and drinks. Understand safe food handling and storage.' },
+    { id: 'g2he-safety',    name: 'Keeping Safe', icon: '⛑️', examWeight: 2,
+      syllabus: 'Identify common hazards at home. Know road safety rules. Understand what to do in simple emergencies. Learn the basics of calling for help.' },
   ],
 });

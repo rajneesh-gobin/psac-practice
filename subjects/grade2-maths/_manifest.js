@@ -41,6 +41,21 @@ const G2M_SYLLABUS = {
     { id: '3d_shapes',          name: '3D Shapes' },
     { id: 'symmetry',           name: 'Lines of Symmetry' },
   ]},
+  'g2mth-ordinals': { subsections: [
+    { id: 'positions_1_6',    name: '1st to 6th' },
+    { id: 'positions_7_12',   name: '7th to 12th' },
+    { id: 'ordinal_problems', name: 'Ordinal Word Problems' },
+  ]},
+  'g2mth-money': { subsections: [
+    { id: 'coins_notes',    name: 'Coins and Notes' },
+    { id: 'counting_money', name: 'Counting Money' },
+    { id: 'money_problems', name: 'Money Word Problems' },
+  ]},
+  'g2mth-division': { subsections: [
+    { id: 'sharing_by_2',  name: 'Sharing by 2' },
+    { id: 'dividing_by_2', name: 'Dividing by 2' },
+    { id: 'div_word_probs', name: 'Division Word Problems' },
+  ]},
 };
 
 registerSubject({
@@ -70,5 +85,11 @@ registerSubject({
       syllabus: "Name the 7 days of the week in order. Name the 12 months of the year. Read o'clock and half past on an analogue clock. Use a calendar to find dates." },
     { id: 'g2mth-shapes',         name: 'Shapes and Space',             icon: '🔷', examWeight: 2,
       syllabus: 'Describe properties of 2D shapes (sides, corners, right angles). Name 3D shapes: cube, cuboid, sphere, cylinder, cone. Identify lines of symmetry in shapes.' },
+    { id: 'g2mth-ordinals',      name: 'Ordinal Numbers',              icon: '🥇', examWeight: 2,
+      syllabus: 'Use ordinal words from first to twelfth. Identify position in a sequence. Write ordinals as words and numerals: 1st, 2nd … 12th. Solve simple ordinal word problems.' },
+    { id: 'g2mth-money',         name: 'Money',                        icon: '💰', examWeight: 3,
+      syllabus: 'Identify Mauritian coins (Re 1, Rs 2, Rs 5) and notes (Rs 10, Rs 20, Rs 50, Rs 100). Count a group of coins or notes. Calculate simple money totals and change up to Rs 100.' },
+    { id: 'g2mth-division',      name: 'Division by 2',                icon: '➗', examWeight: 2,
+      syllabus: 'Understand division as equal sharing. Divide even numbers up to 20 by 2. Understand the link between multiplication and division: 6 × 2 = 12, so 12 ÷ 2 = 6. Solve word problems.' },
   ],
 });

@@ -46,6 +46,26 @@ const G3M_SYLLABUS = {
     { id: 'elapsed_time',   name: 'Elapsed Time' },
     { id: 'calendar_dates', name: 'Calendar and Dates' },
   ]},
+  'g3mth-pictograms': { subsections: [
+    { id: 'reading_pictograms', name: 'Reading Pictograms' },
+    { id: 'interpreting_data',  name: 'Interpreting Data' },
+    { id: 'pictogram_problems', name: 'Pictogram Word Problems' },
+  ]},
+  'g3mth-ordinals': { subsections: [
+    { id: 'ordinals_1_10',   name: '1st to 10th' },
+    { id: 'ordinals_11_20',  name: '11th to 20th' },
+    { id: 'ordinal_context', name: 'Ordinals in Context' },
+  ]},
+  'g3mth-roman': { subsections: [
+    { id: 'roman_1_10',    name: 'Roman Numerals I to X' },
+    { id: 'roman_11_20',   name: 'Roman Numerals XI to XX' },
+    { id: 'roman_convert', name: 'Converting Roman Numerals' },
+  ]},
+  'g3mth-money': { subsections: [
+    { id: 'coins_notes_100', name: 'Coins and Notes to Rs 100' },
+    { id: 'money_to_1000',   name: 'Money to Rs 1000' },
+    { id: 'money_problems',  name: 'Money Word Problems' },
+  ]},
 };
 
 registerSubject({
@@ -76,5 +96,13 @@ registerSubject({
       syllabus: 'Identify right angles and types of angles. Draw lines of symmetry. Name 2D and 3D shapes and their properties. Find area by counting squares.' },
     { id: 'g3mth-time',          name: 'Time and Calendar',           icon: '🕐', examWeight: 2,
       syllabus: 'Read the time to the nearest 5 minutes. Understand a.m. and p.m. Calculate elapsed time. Use a calendar.' },
+    { id: 'g3mth-pictograms',   name: 'Pictograms',                  icon: '📊', examWeight: 2,
+      syllabus: 'Read and interpret pictograms. Find totals from pictograms. Compare data in a pictogram. Answer questions using information from a pictogram.' },
+    { id: 'g3mth-ordinals',     name: 'Ordinal Numbers',             icon: '🥇', examWeight: 2,
+      syllabus: 'Use ordinal words from first to twentieth. Write ordinals as numerals: 1st–20th. Identify position in a row. Solve ordinal word problems.' },
+    { id: 'g3mth-roman',        name: 'Roman Numerals',              icon: '🏛️', examWeight: 2,
+      syllabus: 'Read and write Roman numerals I to XX (1–20). Convert between Roman numerals and standard digits. Recognise Roman numerals on clock faces.' },
+    { id: 'g3mth-money',        name: 'Money to Rs 1000',            icon: '💰', examWeight: 3,
+      syllabus: 'Identify Mauritian coins and notes. Add and subtract amounts of money. Give change. Solve money word problems using amounts up to Rs 1000.' },
   ],
 });

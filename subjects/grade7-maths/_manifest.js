@@ -139,6 +139,16 @@ const G7M_SYLLABUS = {
     { id:'bar_charts',  name:'Bar Charts' },
     { id:'mean',        name:'The Mean' },
   ]},
+  'g7m-sequences': { subsections: [
+    { id:'continuing_sequences', name:'Continuing Sequences' },
+    { id:'sequence_rules',       name:'Sequence Rules' },
+    { id:'nth_term',             name:'The nth Term' },
+  ]},
+  'g7m-angles': { subsections: [
+    { id:'angle_types',     name:'Types of Angles' },
+    { id:'angle_rules',     name:'Complementary & Supplementary' },
+    { id:'parallel_angles', name:'Angles with Parallel Lines' },
+  ]},
 };
 
 registerSubject({
@@ -191,5 +201,9 @@ registerSubject({
       syllabus: 'Understand the idea of a set and its elements. Recognise equal, equivalent and disjoint sets. Use set notation. Represent sets with Venn diagrams.' },
     { id: 'g7m-statistics',             name: 'Statistics',                                 icon: '📊', examWeight: 3,
       syllabus: 'Collect and organise data into tables. Draw and interpret bar charts and pictograms. Read information from graphs. Find the mean of a set of values.' },
+    { id: 'g7m-sequences',              name: 'Sequences & Patterns',                       icon: '🔢', examWeight: 3,
+      syllabus: 'Recognise and continue number sequences. Find the rule of a sequence. Identify square and triangular number sequences. Generate a sequence from an nth term formula.' },
+    { id: 'g7m-angles',                 name: 'Angles',                                     icon: '📐', examWeight: 3,
+      syllabus: 'Identify acute, obtuse, right and reflex angles. Apply complementary and supplementary angle rules. Identify vertically opposite angles. Apply co-interior, corresponding and alternate angle rules with parallel lines.' },
   ],
 });

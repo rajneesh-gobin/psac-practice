@@ -1,6 +1,6 @@
 'use strict';
 // ══════════════════════════════════════════════════════════════════════════
-//  Grade 8 - Mathematics   ·   SYLLABUS ONLY, NO QUESTIONS YET
+//  Grade 8 - Mathematics   ·   11 original + 5 new chapters (2026-09-09)
 //
 //  Chapters below are the real MIE lower-secondary syllabus, taken from the
 //  National Curriculum Framework / Teaching and Learning Syllabus, Grades 7 to 9
@@ -29,6 +29,31 @@
 // declared here with no questions behind it advertises a topic that opens
 // empty. Add ids only as questions are written and tagged.
 const G8M_SYLLABUS = {
+  'g8m-real-numbers': { subsections: [
+    { id: 'rational_irrational', name: 'Rational & Irrational Numbers' },
+    { id: 'surds',               name: 'Surds and Square Roots' },
+    { id: 'real_number_line',    name: 'The Real Number Line' },
+  ]},
+  'g8m-pythagoras': { subsections: [
+    { id: 'pythagoras_theorem',  name: "Pythagoras' Theorem" },
+    { id: 'find_hypotenuse',     name: 'Finding the Hypotenuse' },
+    { id: 'find_shorter_side',   name: 'Finding a Shorter Side' },
+  ]},
+  'g8m-inequalities': { subsections: [
+    { id: 'inequality_notation',  name: 'Inequality Notation' },
+    { id: 'solving_inequalities', name: 'Solving Inequalities' },
+    { id: 'inequality_graphs',    name: 'Graphing on a Number Line' },
+  ]},
+  'g8m-sets': { subsections: [
+    { id: 'set_notation',       name: 'Set Notation' },
+    { id: 'union_intersection', name: 'Union and Intersection' },
+    { id: 'venn_diagrams',      name: 'Venn Diagrams' },
+  ]},
+  'g8m-constructions': { subsections: [
+    { id: 'construct_triangles', name: 'Constructing Triangles' },
+    { id: 'given_conditions',    name: 'Given Sides and Angles' },
+    { id: 'construct_problems',  name: 'Construction Problems' },
+  ]},
   'g8m-sequences': { subsections: [
     { id:'continuing_sequences', name:'Continuing Sequences' },
     { id:'sequence_rules',       name:'Sequence Rules' },
@@ -92,6 +117,10 @@ registerSubject({
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G8M_SYLLABUS,
   chapters: [
+    { id: 'g8m-real-numbers', name: 'Real Numbers', icon: '√', examWeight: 3,
+      syllabus: 'Distinguish between rational and irrational numbers. Understand that surds are irrational. Simplify surds of the form √n. Place real numbers on a number line. Convert between fractions and terminating/recurring decimals.' },
+    { id: 'g8m-pythagoras', name: "Pythagoras' Theorem", icon: '📐', examWeight: 4,
+      syllabus: "State and apply Pythagoras' theorem: a² + b² = c². Find the length of the hypotenuse of a right-angled triangle. Find the length of a shorter side. Verify whether a triangle is right-angled. Apply the theorem to real-life problems." },
     { id: 'g8m-sequences',              name: 'Sequences',                            icon: '🔢', examWeight: 3,
       syllabus: 'Recognise and continue number sequences. Describe the rule of a sequence in words. Find a given term of a sequence. Generate a sequence from a given rule.' },
     { id: 'g8m-indices',                name: 'Indices, Square Roots & Cube Roots',   icon: '🔣', examWeight: 3,
@@ -114,5 +143,11 @@ registerSubject({
       syllabus: 'Expand brackets in algebraic expressions. Factorise simple expressions. Simplify algebraic fractions. Solve linear equations containing brackets.' },
     { id: 'g8m-statistics',             name: 'Statistics',                           icon: '📊', examWeight: 3,
       syllabus: 'Draw and interpret pie charts. Calculate the mean, median and mode. Compare two sets of data. Interpret graphs to draw conclusions.' },
+    { id: 'g8m-inequalities', name: 'Inequalities', icon: '≤', examWeight: 3,
+      syllabus: 'Use the symbols <, >, ≤ and ≥ correctly. Solve simple linear inequalities in one variable. Represent solution sets on a number line using open and closed circles. Solve and graph compound inequalities.' },
+    { id: 'g8m-sets', name: 'Sets', icon: '∪', examWeight: 3,
+      syllabus: 'Use set notation: ∈, ⊆, ∪, ∩, ′. Draw and interpret Venn diagrams with two sets. Find n(A), n(B), n(A∪B) and n(A∩B). Apply the formula n(A∪B) = n(A) + n(B) − n(A∩B). Solve problems using Venn diagrams.' },
+    { id: 'g8m-constructions', name: 'Construction of Triangles', icon: '📏', examWeight: 2,
+      syllabus: 'Construct a triangle given three sides (SSS). Construct a triangle given two sides and an included angle (SAS). Construct a triangle given two angles and a side (ASA/AAS). State the minimum conditions needed. Verify constructions by measuring.' },
   ],
 });

@@ -31,6 +31,21 @@ const G1M_SYLLABUS = {
     { id: 'number_patterns',    name: 'Number Patterns' },
     { id: 'odd_even_patterns',  name: 'Odd and Even' },
   ]},
+  'g1mth-time': { subsections: [
+    { id: 'day_night',       name: 'Day and Night' },
+    { id: 'morning_evening', name: 'Morning, Afternoon and Evening' },
+    { id: 'ordering_events', name: 'Ordering Events' },
+  ]},
+  'g1mth-money': { subsections: [
+    { id: 'coin_names',     name: 'Coins We Use' },
+    { id: 'counting_coins', name: 'Counting Coins' },
+    { id: 'money_sums',     name: 'Simple Money Sums' },
+  ]},
+  'g1mth-ordinals': { subsections: [
+    { id: 'positions_1_3',  name: '1st, 2nd and 3rd' },
+    { id: 'positions_4_5',  name: '4th and 5th' },
+    { id: 'ordinal_words',  name: 'Ordinal Words' },
+  ]},
 };
 
 registerSubject({
@@ -56,5 +71,11 @@ registerSubject({
       syllabus: 'Compare the length of objects: longer, shorter, tallest, shortest. Compare the mass of objects: heavier, lighter, same. Compare capacity: which container holds more, less or the same.' },
     { id: 'g1mth-patterns', name: 'Patterns', icon: '🔁', examWeight: 2,
       syllabus: 'Create and continue repeating patterns with shapes and colours. Count in 2s, 5s and 10s. Identify odd numbers (1, 3, 5…) and even numbers (2, 4, 6…).' },
+    { id: 'g1mth-time', name: 'Time and Daily Routines', icon: '🌅', examWeight: 2,
+      syllabus: 'Understand day and night. Know morning, afternoon and evening. Order daily events: getting up, going to school, eating dinner. Recognise a clock face.' },
+    { id: 'g1mth-money', name: 'Money', icon: '💰', examWeight: 2,
+      syllabus: 'Recognise coins: Re 1, Rs 2, Rs 5. Count a small number of same-type coins. Add two coin values up to Rs 10. Name the price of simple objects.' },
+    { id: 'g1mth-ordinals', name: 'Ordinal Numbers', icon: '🥇', examWeight: 1,
+      syllabus: 'Use ordinal words: first, second, third, fourth, fifth. Identify position in a row of objects. Match ordinals to numerals: 1st, 2nd, 3rd, 4th, 5th.' },
   ],
 });

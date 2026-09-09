@@ -1,22 +1,22 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 3 - Health Education   ·   PLACEHOLDER PACK
-//
-//  ⚠ comingSoon: true keeps this pack invisible to children and out of
-//    QuestionLoader / assembleExamPaper until real content lands.
-//    Flip it to false ONLY when this pack has real chapters and questions.
-//
-//  TO FILL THIS IN
-//    1. Replace the sample chapter with real MIE chapters (id, name, icon,
-//       examWeight, syllabus prose).
-//    2. Write questions/ch01_*.js. IDs: g3he-samp-001 style.
-//    3. Add files to LOCAL_FILES in engine/question_loader.js and bump
-//       _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
 
-const G3HE_SYLLABUS = {};
+const G3HE_SYLLABUS = {
+  'g3he-hygiene': { subsections: [
+    { id: 'body_hygiene',     name: 'Body Hygiene' },
+    { id: 'disease_prevention', name: 'Preventing Disease' },
+    { id: 'community_hygiene', name: 'Hygiene in the Community' },
+  ]},
+  'g3he-nutrition': { subsections: [
+    { id: 'nutrients',        name: 'Nutrients and Their Functions' },
+    { id: 'food_energy',      name: 'Food for Energy, Growth and Health' },
+    { id: 'water_diet',       name: 'Water and a Balanced Diet' },
+  ]},
+  'g3he-safety': { subsections: [
+    { id: 'accident_prevention', name: 'Preventing Accidents' },
+    { id: 'road_water_safety',   name: 'Road and Water Safety' },
+    { id: 'emergency_response',  name: 'Emergency Response' },
+  ]},
+};
 
 registerSubject({
   id:         'grade3-health',
@@ -25,10 +25,14 @@ registerSubject({
   icon:       '❤️',
   subject:    'Health Education',
   curriculum: 'MIE Mauritius',
-  comingSoon: true,
+  comingSoon: false,
   syllabus:   G3HE_SYLLABUS,
   chapters: [
-    { id: 'g3he-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g3he-hygiene',   name: 'Hygiene and Disease Prevention', icon: '🧼', examWeight: 3,
+      syllabus: 'Understand personal body hygiene in detail. Know how communicable diseases spread and are prevented. Understand the importance of community hygiene: clean water, waste disposal and environment.' },
+    { id: 'g3he-nutrition', name: 'Nutrition and Healthy Eating', icon: '🥗', examWeight: 3,
+      syllabus: 'Know the main nutrients (carbohydrates, proteins, fats, vitamins, minerals, water) and their functions. Understand which foods provide energy, growth and health maintenance. Know why water is essential and what a balanced diet is.' },
+    { id: 'g3he-safety',    name: 'Safety and First Aid', icon: '⛑️', examWeight: 2,
+      syllabus: 'Identify and prevent accidents at home, school and in the community. Know road and water safety rules. Know what to do in an emergency and when to call for help.' },
   ],
 });
