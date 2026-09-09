@@ -25,6 +25,12 @@
 /* ===== RESET & BASE ===== */
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Dark-mode base colours — mirrors Tailwind's bg-slate-50 / dark:bg-gray-900.
+   Applied here so the page has the correct background even when the Tailwind
+   CDN is unavailable (offline). */
+body { background-color: #f8fafc; }
+html.dark body { background-color: #111827; }
+
 /* ===== CONTENT PROTECTION ===== */
 /* Text selection is enabled app-wide for now; individual controls
    (buttons, tabs, chips) still opt out via user-select: none below. */

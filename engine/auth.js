@@ -4350,4 +4350,7 @@ const Auth = (() => {
 })();
 
 // Start app
-Auth.init();
+Auth.init().catch(function () {
+  if (document.body && document.body.style.opacity !== '1') document.body.style.opacity = '1';
+  if (typeof showScreen === 'function') showScreen('landing');
+});

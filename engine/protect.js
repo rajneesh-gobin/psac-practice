@@ -50,7 +50,7 @@
 //       only the blank-page case.
 // ══════════════════════════════════════════════
 (function () {
-  var REVEAL_MS = 8000;   // unconditional failsafe reveal
+  var REVEAL_MS = 3000;   // unconditional failsafe reveal
   var PANEL_MS  = 10000;  // grace after an error before declaring the app dead
   var armed = false;
 
