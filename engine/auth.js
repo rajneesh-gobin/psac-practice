@@ -2309,14 +2309,9 @@ const Auth = (() => {
       : location.origin + location.pathname;
   }
   function _inviteText() {
-    // ⚠ NAME THE SUBJECTS, never just "Grade 9" — only grade9-maths, grade9-ict,
-    //   grade9-biology, grade9-chemistry and grade9-physics are live; the other
-    //   three Grade 9 packs are still comingSoon and would open empty. ⚠ It said
-    //   "Science" until the split on 2026-09-08; there is no Science subject any
-    //   more, because the NCE sets three separate papers. See _appShareText()
-    //   (app.js) and the landing page; all three carry this claim and must be
-    //   changed together.
-    return `Join me on PSAC Exam Practice - free revision for PSAC Grades 4–6, plus NCE Grade 9 Maths, ICT, Biology, Chemistry and Physics! 📚`;
+    // ⚠ All 8 Grade 9 packs live as of 2026-09-09. Keep in step with
+    //   _appShareText() (app.js) and the landing page.
+    return `Join me on PSAC Exam Practice - free revision for PSAC Grades 4–6, plus all 8 NCE Grade 9 subjects: Maths, ICT, Biology, Chemistry, Physics, English, French and Social & Modern Studies! 📚`;
   }
 
   async function openInviteModal() {

@@ -403,7 +403,7 @@
         <div class="text-2xl sm:text-3xl select-none shrink-0">🎓</div>
         <div class="min-w-0 flex-1">
           <h1 class="text-sm sm:text-xl font-bold text-blue-600 dark:text-blue-400 leading-tight truncate">PSAC Exam Practice</h1>
-          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6 &amp; NCE Grade 9 Maths, ICT, Biology, Chemistry + Physics</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">Mauritius · Grades 4–6 &amp; all 8 NCE Grade 9 subjects</p>
         </div>
         <!-- Stats ride with the branding, not with the actions: they are
              information, not buttons, and keeping them out of the action row is
@@ -691,24 +691,13 @@
 
         <!-- ⚠ NCE is a SEPARATE stage from PSAC (Grades 7-9 vs 1-6), so it gets its
              own line rather than being folded into "Five core PSAC subjects".
-             ⚠ Names the FIVE subjects that have real content. Grade 9 has EIGHT
-             registered packs and THREE of them hold ONE SAMPLE QUESTION EACH
-             (English, French, Social & Modern Studies). ⚠ Judge by CONTENT, not by
-             the comingSoon flag: another session flipped those three to
-             comingSoon: false on 2026-09-08 while they were still empty, and
-             test-exam-paper-shape immediately failed with "a full exam dealt 1 of
-             40 questions". A flag says what someone intended; the bundle says what
-             a child receives. ICT joined Mathematics
-             on 2026-09-08 (524 questions, 12 of 12 chapters), and Science the same
-             day - then Science was SPLIT into Biology (189), Chemistry (218) and
-             Physics (178), because the NCE sets them as three separate 50-mark
-             papers and docs/implenent.md names them individually.
-             ⚠ THE SPLIT IS WHY THIS LINE CANNOT SAY "Science": a parent reading
-             that would look for one subject and find three cards, or none.
-             Saying "Grade 9" or "NCE" would still promise three subjects
-             that open empty. Re-check against SUBJECT_PACKS before widening this
-             sentence, and change _appShareText() (app.js) and _inviteText()
-             (auth.js) in the same edit. -->
+             All 8 Grade 9 packs are live as of 2026-09-09:
+             grade9-maths, grade9-ict, grade9-biology, grade9-chemistry,
+             grade9-physics, grade9-english, grade9-french,
+             grade9-social-modern-studies — each with hundreds of questions.
+             ⚠ Re-check SUBJECT_PACKS before widening the sentence further.
+             _appShareText() (app.js) and _inviteText() (auth.js) must be kept
+             in step with whatever this line says. -->
         <p class="text-center mb-7">
           <span class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 border border-emerald-400/40 px-4 py-1.5 text-sm text-emerald-200">
             <span class="rounded-full bg-emerald-400 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-emerald-950">Live</span>
