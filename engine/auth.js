@@ -3990,11 +3990,25 @@ const Auth = (() => {
   }
 
   async function pdSwitchStudent(id) {
-    const student = _familyStudents.find(s => s.id === id);
+    let student = _familyStudents.find(s => s.id === id);
+    // If not in the local cache (stale _familyStudents or newly-created child),
+    // fetch the row directly. loginStudent() is wrong here: it does a full
+    // student login (PIN screen, navigation) rather than a parent preview load,
+    // so without this fetch the else branch leaves DB on the previous child's
+    // data and renderDetail() paints the wrong stats under the new child's name.
+    if (!student && _sb && _family) {
+      const { data } = await _sb.from('students')
+        .select('id, display_name, username, grade, avatar, session_version, settings, expires_at')
+        .eq('id', id).eq('family_id', _family.id).maybeSingle();
+      if (data) {
+        student = data;
+        if (!_familyStudents.some(s => s.id === id)) {
+          _familyStudents = [...(_familyStudents || []), student];
+        }
+      }
+    }
     if (student) {
       await _loginStudentRow(student, { navigate: false, bumpSession: false, applyUserTheme: false, headerChip: false });
-    } else {
-      loginStudent(id);
     }
     // Caller (PD.selectChild or _openParentDashboard) is responsible for UI update
   }

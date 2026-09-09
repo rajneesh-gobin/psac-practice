@@ -4503,6 +4503,23 @@ function _famStrip(daily) {
   return `<span class="fam-strip">${cells.join('')}</span>`;
 }
 
+// Like _repDelta but appends "vs last week" so the comparison period is visible
+// on the family overview cards (where the reader has no surrounding table header
+// to supply that context).
+function _repFamDelta(now, prev, unit) {
+  if (now == null) return '<span class="text-[11px] text-gray-400">-</span>';
+  if (prev == null || prev === 0) {
+    return now > 0
+      ? '<span class="text-[11px] font-semibold text-green-600 dark:text-green-400">new this week</span>'
+      : '<span class="text-[11px] text-gray-400">-</span>';
+  }
+  const d = now - prev;
+  if (d === 0) return '<span class="text-[11px] text-gray-400">same as last week</span>';
+  const up = d > 0;
+  const cls = up ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+  return `<span class="text-[11px] font-semibold ${cls}">${up ? '▲' : '▼'} ${Math.abs(d)}${unit || ''}</span><span class="text-[10px] text-gray-400 dark:text-gray-500"> vs last week</span>`;
+}
+
 function _renderFamilyOverview(students, progressById) {
   const slot = document.getElementById('pd-family-overview');
   if (!slot) return;
@@ -4578,8 +4595,8 @@ function _renderFamilyOverview(students, progressById) {
            : 'Day-by-day tracking starts with this update, so the week-on-week view fills in from their next practice session. Their totals are on each card below.'}
        </p>`
     : `<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-        ${_repStatCard('Questions',       fam.a, _repDelta(fam.a, famPrev.a), '#2563eb')}
-        ${_repStatCard('Family accuracy', famAcc == null ? '-' : famAcc + '%', _repDelta(famAcc, famPrevAcc, '%'), famAcc == null ? '' : _repAccColour(famAcc))}
+        ${_repStatCard('Questions answered', fam.a, _repFamDelta(fam.a, famPrev.a), '#2563eb')}
+        ${_repStatCard('Family accuracy',    famAcc == null ? '-' : famAcc + '%', _repFamDelta(famAcc, famPrevAcc, '%'), famAcc == null ? '' : _repAccColour(famAcc))}
         ${_repStatCard('Practising',      `${fam.active}/${rows.length}`, `<span class="text-[11px] text-gray-400">children this week</span>`, '#7c3aed')}
         ${_repStatCard('Days covered',    `${famDays}/7`, `<span class="text-[11px] text-gray-400">someone revised</span>`, '#f97316')}
       </div>
@@ -5397,11 +5414,25 @@ const PD = (() => {
     }
     pdTab('progress');
 
+    // Blank the stats panel immediately so the previous child's numbers never
+    // sit under the new child's name while the DB load is in flight.
+    ['pd-total','pd-acc','pd-streak','pd-badges','pd-best-exam','pd-exam-count']
+      .forEach(k => { const e = _el(k); if (e) e.textContent = '…'; });
+    const _todayEl = _el('pd-today-status');
+    if (_todayEl) _todayEl.innerHTML = '';
+
     await Auth.pdSwitchStudent(id);
     // The parent may have gone back and tapped a different child while this was
     // in flight. Whoever they picked last wins; this load is stale, and painting
     // it would put one child's numbers under another child's name.
     if (_activeId !== id) return;
+    // A concurrent load for a different child may have finished after ours and
+    // overwritten DB with the wrong student's data. ACTIVE_STUDENT_ID is set by
+    // _loginStudentRow, so if it no longer matches we re-load before painting.
+    if (typeof ACTIVE_STUDENT_ID !== 'undefined' && ACTIVE_STUDENT_ID !== id) {
+      await Auth.pdSwitchStudent(id);
+      if (_activeId !== id) return;
+    }
 
     renderDetail();
   }
