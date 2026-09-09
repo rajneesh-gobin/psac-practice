@@ -211,4 +211,22 @@
       reveal();
     }
   }, REVEAL_MS);
+
+  // Spinner crossfade: set body fade-in transition and watch for the opacity
+  // signal from Auth.init(). When it fires, remove ps-loading (hides the
+  // spinner) at the same frame so the spinner fades out while the app fades in.
+  try {
+    document.body.style.transition = 'opacity 0.35s ease-out';
+    var _spinObs = new MutationObserver(function () {
+      var op = document.body.style.opacity;
+      if (op === '1' || op === FAILSAFE_OPACITY) {
+        document.documentElement.classList.remove('ps-loading');
+        _spinObs.disconnect();
+        // Clear the inline transition after it completes so Tailwind's
+        // transition-colors class governs dark/light mode switching again.
+        setTimeout(function () { document.body.style.transition = ''; }, 450);
+      }
+    });
+    _spinObs.observe(document.body, { attributes: true, attributeFilter: ['style'] });
+  } catch (_) {}
 })();
