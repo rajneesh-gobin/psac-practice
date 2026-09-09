@@ -101,26 +101,50 @@ function load(storage) {
   return vm.runInContext('QuestionLoader', sandbox);
 }
 
+// ⚠ EVERY grade, and the count is DERIVED. This matched `grade[456]-` against a
+//   hard-coded expectation of 15, so when grades 1-3 and 7-9 went live their
+//   packs were never measured at all - each of those grades printed 0.00 MB and
+//   passed. It also has to allow hyphens inside the subject
+//   (grade9-social-modern-studies) while still excluding the per-grade
+//   aggregates (grade9.json), which the required `-` after the digit does.
+const LIVE_PACKS = (() => {
+  const out = new Set();
+  const src = fs.readFileSync(path.join(ROOT, 'subjects', '_index.js'), 'utf8');
+  new Function('registerSubject', src)(p => { if (!p.comingSoon) out.add(p.id); });
+  return out;
+})();
 const real = {};
 for (const f of fs.readdirSync(BUNDLES)) {
-  const m = /^(grade[456]-[a-z]+)\.json$/.exec(f);
-  if (m) real[m[1]] = fs.statSync(path.join(BUNDLES, f)).size;
+  const m = /^(grade[1-9]-[a-z][a-z-]*)\.json$/.exec(f);
+  if (m && LIVE_PACKS.has(m[1])) real[m[1]] = fs.statSync(path.join(BUNDLES, f)).size;
 }
 const subjects = Object.keys(real).sort();
-if (subjects.length !== 15) {
-  console.error('expected 15 live subject bundles, found ' + subjects.length);
+if (subjects.length !== LIVE_PACKS.size) {
+  console.error('expected a bundle for each of the ' + LIVE_PACKS.size
+    + ' live packs, found ' + subjects.length + ' - run `node netlify/build-questions.js`');
   process.exit(2);
 }
 
-// One question padded to the bundle's real size: same shape, same cost.
-const filler = (chars) => [{ id: 'x', chapterId: 'c', difficulty: 1, question: 'y'.repeat(Math.max(1, chars - 120)) }];
+// ⚠ THE REAL BUNDLE, never synthetic padding. This used to write one question
+//   padded with 'y'.repeat(size) - the right number of bytes, and a fair proxy
+//   right up until _writeCache started compressing (lz-string, 2026-09-09). A
+//   run of one repeated character compresses to nothing, so every grade
+//   measured 0.00 MB and every assertion passed vacuously: the guard that
+//   exists to catch "the next content addition evicts a pack" could no longer
+//   catch anything. Real question text is what the cache actually holds and
+//   the only thing that compresses like it.
+const _bundleCache = new Map();
+const bundleOf = (s) => {
+  if (!_bundleCache.has(s)) _bundleCache.set(s, JSON.parse(fs.readFileSync(path.join(BUNDLES, s + '.json'), 'utf8')));
+  return _bundleCache.get(s);
+};
 
 function run(order) {
   const storage = makeStorage();
   storage.setItem('mm_student_session', 'TOKEN');
   storage.setItem('mm_progress_blob', 'p'.repeat(OTHER));
   const QL = load(storage);
-  for (const s of order) QL._writeCache(s, filler(real[s]));
+  for (const s of order) QL._writeCache(s, bundleOf(s));
   const keys = Array.from(storage._map.keys()).filter(k => k.includes('|'));
   return {
     budget: QL._BYTE_BUDGET,

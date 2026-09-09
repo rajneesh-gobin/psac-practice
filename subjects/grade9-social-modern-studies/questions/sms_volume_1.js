@@ -285,7 +285,9 @@ STATIC_QUESTIONS.push(
     explanation:'<b>Political stability, educated professionals</b> (French and English), a competitive tax environment and a reliable legal system derived from both French and British traditions made Mauritius attractive to financial firms.' }),
 
   makeMCQ({ id:'g9sms-v040', chapterId:'g9sms-industrialisation', subsection:'sectors_over_time', difficulty:2,
-    question:'The table shows Mauritius\'s GDP by sector:\n1970: Sugar 25%, Manufacturing 14%, Tourism 2%, Services 40%\n2010: Sugar 4%, Manufacturing 19%, Tourism 8%, Services 65%\nWhat trend does this data show?',
+    question:'The table shows Mauritius\'s GDP by sector.' +
+      '<table class="q-table"><tr><th>Sector</th><th>1970</th><th>2010</th></tr><tr><td>Sugar</td><td>25%</td><td>4%</td></tr><tr><td>Manufacturing</td><td>14%</td><td>19%</td></tr><tr><td>Tourism</td><td>2%</td><td>8%</td></tr><tr><td>Services</td><td>40%</td><td>65%</td></tr></table>' +
+      'What trend does this data show?',
     options:['Declining importance of sugar and rising importance of services and manufacturing','Rising importance of sugar and declining importance of services','An economy that has not changed at all since 1970','A complete collapse of the manufacturing sector by 2010'],
     answer:'Declining importance of sugar and rising importance of services and manufacturing',
     hint:'Read each sector row from 1970 to 2010.',
@@ -529,14 +531,18 @@ STATIC_QUESTIONS.push(
     explanation:'Choropleth convention: <b>darker = higher value</b>. A higher-density north should be given the darker shade; the lower-density south gets the lighter shade.' }),
 
   makeMCQ({ id:'g9sms-v074', chapterId:'g9sms-map-data-skills', subsection:'table_reading', difficulty:2,
-    question:'The table below shows Mauritius\'s tourist arrivals:\n2010: 934,000 | 2015: 1,151,000 | 2019: 1,383,000 | 2020: 309,000.\nWhich year shows a sharp DROP and what likely caused it?',
+    question:'The table shows Mauritius\'s tourist arrivals.' +
+      '<table class="q-table"><tr><th>Year</th><th>Tourist arrivals</th></tr><tr><td>2010</td><td>934,000</td></tr><tr><td>2015</td><td>1,151,000</td></tr><tr><td>2019</td><td>1,383,000</td></tr><tr><td>2020</td><td>309,000</td></tr></table>' +
+      'Which year shows a sharp <b>DROP</b>, and what likely caused it?',
     options:['2020 — the COVID-19 pandemic closed borders worldwide','2015 — a cyclone destroyed all hotels on the island','2019 — a government ban on tourism came into force','2010 — the global financial crisis ended all travel'],
     answer:'2020 — the COVID-19 pandemic closed borders worldwide',
     hint:'Read the data first, then consider which world event matches the year.',
     explanation:'Arrivals fell from 1,383,000 in 2019 to just 309,000 in <b>2020</b> — a drop explained by the <b>COVID-19 pandemic</b>, which caused worldwide border closures and grounded international flights.' }),
 
   makeMCQ({ id:'g9sms-v075', chapterId:'g9sms-map-data-skills', subsection:'table_reading', difficulty:3,
-    question:'The table shows sugar production (tonnes) in Mauritius: 2000: 600,000 | 2005: 552,000 | 2010: 410,000 | 2015: 370,000 | 2020: 280,000.\nWhat is the overall trend and what does it suggest about the sugar industry?',
+    question:'The table shows sugar production in Mauritius, in tonnes.' +
+      '<table class="q-table"><tr><th>Year</th><th>Tonnes</th></tr><tr><td>2000</td><td>600,000</td></tr><tr><td>2005</td><td>552,000</td></tr><tr><td>2010</td><td>410,000</td></tr><tr><td>2015</td><td>370,000</td></tr><tr><td>2020</td><td>280,000</td></tr></table>' +
+      'What is the overall trend, and what does it suggest about the sugar industry?',
     options:['A steady decline suggesting the industry is shrinking as the economy diversifies','A rise followed by a fall — production peaked in 2005','Production is stable — all variations are within normal harvest fluctuations','The figures show that sugar production doubled over the period'],
     answer:'A steady decline suggesting the industry is shrinking as the economy diversifies',
     hint:'Follow the numbers from 2000 to 2020.',
@@ -585,7 +591,9 @@ STATIC_QUESTIONS.push(
     explanation:'Over 1,200mm = the highest category = <b>dark grey</b>. Using the key correctly is the skill — look up the value in the key before shading.' }),
 
   makeMCQ({ id:'g9sms-v082', chapterId:'g9sms-map-data-skills', subsection:'table_reading', difficulty:2,
-    question:'A table shows that Rodrigues had 36,000 residents in 2000 and 42,000 in 2020. By how many people did the population grow?',
+    question:'The table shows the population of Rodrigues.' +
+      '<table class="q-table"><tr><th>Year</th><th>Residents</th></tr><tr><td>2000</td><td>36,000</td></tr><tr><td>2020</td><td>42,000</td></tr></table>' +
+      'By how many people did the population grow?',
     options:['6,000','78,000','1,166,000','0 — the population stayed the same'],
     answer:'6,000',
     hint:'Subtract the earlier figure from the later figure.',
@@ -601,7 +609,9 @@ STATIC_QUESTIONS.push(
   // ── Population — additional coverage ─────────────────────────────────────
 
   makeMCQ({ id:'g9sms-v084', chapterId:'g9sms-population', subsection:'density_distribution', difficulty:3,
-    question:'The table shows population by district:\nPort Louis: 118,000 (43 km²)\nSavanne: 69,000 (244 km²)\nWhich district has the higher population density and by approximately how much?',
+    question:'The table shows the population and area of two districts.' +
+      '<table class="q-table"><tr><th>District</th><th>Population</th><th>Area</th></tr><tr><td>Port Louis</td><td>118,000</td><td>43 km²</td></tr><tr><td>Savanne</td><td>69,000</td><td>244 km²</td></tr></table>' +
+      'Which district has the higher population <b>density</b>, and by approximately how much?',
     options:['Port Louis, with about 2,744 per km² vs 283 per km² in Savanne','Savanne, which has more land and therefore higher density','Both have the same density because Mauritius is small','Port Louis, but only by about 50 people per km²'],
     answer:'Port Louis, with about 2,744 per km² vs 283 per km² in Savanne',
     hint:'Calculate density for each: population ÷ area.',

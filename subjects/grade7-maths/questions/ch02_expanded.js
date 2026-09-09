@@ -699,7 +699,9 @@ STATIC_QUESTIONS.push(
   // ── g7m-statistics ──────────────────────────────────────────────────────
   makeNum({ id:'g7m-statistics-006', chapterId:'g7m-statistics', difficulty:2,
     subsection:'data_tables',
-    question:'A frequency table shows Red=12, Blue=18, Green=9, Yellow=6. What is the total frequency?',
+    question:'A frequency table records the colour each person chose.' +
+      '<table class="q-table"><tr><th>Colour</th><th>Frequency</th></tr><tr><td>Red</td><td>12</td></tr><tr><td>Blue</td><td>18</td></tr><tr><td>Green</td><td>9</td></tr><tr><td>Yellow</td><td>6</td></tr></table>' +
+      'What is the <b>total frequency</b>?',
     answer:45, tolerance:0,
     hint:'Add all the frequencies.',
     explanation:'12 + 18 + 9 + 6 = 45.' }),

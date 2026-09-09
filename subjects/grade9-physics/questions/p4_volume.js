@@ -350,7 +350,7 @@ const MCQ = [
    'Distance 1 = 20 &times; 100 = 2 000 m. Distance 2 = 30 &times; 50 = 1 500 m. Total d = 3 500 m, total t = 150 s. Average = 3 500 &divide; 150 &asymp; 23.3 m/s.'],
 
   ['g9s-p4-v037', 'speed_velocity', 3,
-   'A car's speedometer reads 100 km/h. The car is travelling in a straight line East. Express this as a velocity.',
+   'A car\'s speedometer reads 100 km/h. The car is travelling in a straight line East. Express this as a velocity.',
    ['100 km/h East (or 27.8 m/s East)',
     '100 km/h (no direction needed for velocity)',
     '100 m/s East',

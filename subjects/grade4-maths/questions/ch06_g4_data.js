@@ -19,14 +19,14 @@ STATIC_QUESTIONS.push(
     explanation:'A <b>bar chart</b> is best for comparing quantities in different categories (e.g. favourite colours, number of pets). Line graphs show changes over time; pie charts show parts of a whole.' }),
 
   makeMCQ({ id:'g4m-data-003', chapterId:'g4-data', subsection:'bar_chart', difficulty:2,
-    question:'A bar chart shows favourite sports. The bars show: Football = 30, Cricket = 25, Swimming = 20, Badminton = 15. Which sport is LEAST popular?',
+    question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Favourite sport - class survey</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 148H354M58 110H354M58 72H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="152">10</text><text x="50" y="114">20</text><text x="50" y="76">30</text><text x="50" y="38">40</text></g><rect x="73" y="72" width="42" height="114" rx="3" fill="#3b82f6"/><rect x="145" y="91" width="42" height="95" rx="3" fill="#f59e0b"/><rect x="217" y="110" width="42" height="76" rx="3" fill="#10b981"/><rect x="289" y="129" width="42" height="57" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Football</text><text x="94" y="66">30</text><text x="166" y="203">Cricket</text><text x="166" y="85">25</text><text x="238" y="203">Swimming</text><text x="238" y="104">20</text><text x="310" y="203">Badminton</text><text x="310" y="123">15</text></g></svg>Which sport is <b>LEAST</b> popular?',
     options:['Football','Cricket','Swimming','Badminton'],
     answer:'Badminton',
     hint:'The LEAST popular has the SHORTEST bar.',
     explanation:'<b>Badminton</b> has the shortest bar (15 students). The shortest bar always represents the smallest value in a bar chart.' }),
 
   makeNum({ id:'g4m-data-004', chapterId:'g4-data', subsection:'bar_chart', difficulty:2,
-    question:'Using the same bar chart (Football=30, Cricket=25, Swimming=20, Badminton=15): How many MORE students prefer Football than Badminton?',
+    question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Favourite sport - class survey</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 148H354M58 110H354M58 72H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="152">10</text><text x="50" y="114">20</text><text x="50" y="76">30</text><text x="50" y="38">40</text></g><rect x="73" y="72" width="42" height="114" rx="3" fill="#3b82f6"/><rect x="145" y="91" width="42" height="95" rx="3" fill="#f59e0b"/><rect x="217" y="110" width="42" height="76" rx="3" fill="#10b981"/><rect x="289" y="129" width="42" height="57" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Football</text><text x="94" y="66">30</text><text x="166" y="203">Cricket</text><text x="166" y="85">25</text><text x="238" y="203">Swimming</text><text x="238" y="104">20</text><text x="310" y="203">Badminton</text><text x="310" y="123">15</text></g></svg>How many <b>MORE</b> students prefer Football than Badminton?',
     answer:'15', acceptableAnswers:['15'],
     hint:'Subtract: Football value - Badminton value.',
     explanation:'Football = 30. Badminton = 15. Difference = 30 - 15 = <b>15 more students</b> prefer Football.' }),
@@ -44,7 +44,7 @@ STATIC_QUESTIONS.push(
     explanation:'<b>True.</b> A complete bar chart must have: a title, labels on both axes (x and y), a scale on the y-axis, and bars of equal width with equal spacing. Without a title, the reader does not know what the chart is about.' }),
 
   makeNum({ id:'g4m-data-007', chapterId:'g4-data', subsection:'bar_chart', difficulty:2,
-    question:'Using the bar chart (Football=30, Cricket=25, Swimming=20, Badminton=15): How many students were surveyed in TOTAL?',
+    question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Favourite sport - class survey</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 148H354M58 110H354M58 72H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="152">10</text><text x="50" y="114">20</text><text x="50" y="76">30</text><text x="50" y="38">40</text></g><rect x="73" y="72" width="42" height="114" rx="3" fill="#3b82f6"/><rect x="145" y="91" width="42" height="95" rx="3" fill="#f59e0b"/><rect x="217" y="110" width="42" height="76" rx="3" fill="#10b981"/><rect x="289" y="129" width="42" height="57" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Football</text><text x="94" y="66">30</text><text x="166" y="203">Cricket</text><text x="166" y="85">25</text><text x="238" y="203">Swimming</text><text x="238" y="104">20</text><text x="310" y="203">Badminton</text><text x="310" y="123">15</text></g></svg>How many students were surveyed in <b>TOTAL</b>?',
     answer:'90', acceptableAnswers:['90'],
     hint:'Add all the bar values together.',
     explanation:'30 + 25 + 20 + 15 = <b>90 students</b> were surveyed in total. Finding totals from bar charts is a key MIE Grade 4 data handling skill.' }),
@@ -93,7 +93,9 @@ STATIC_QUESTIONS.push(
     explanation:'Arrange in order: 5, 6, <b>7</b>, 8, 9. The middle value (3rd of 5) is <b>7</b>. The median is found by ordering data and taking the middle value.' }),
 
   makeNum({ id:'g4m-data-014', chapterId:'g4-data', subsection:'tally', difficulty:2,
-    question:'A frequency table shows favourite colours: Red=8, Blue=5, Green=12, Yellow=3. How many students were surveyed in TOTAL?',
+    question:'A frequency table shows the favourite colour of each student.' +
+      '<table class="q-table"><tr><th>Colour</th><th>Students</th></tr><tr><td>Red</td><td>8</td></tr><tr><td>Blue</td><td>5</td></tr><tr><td>Green</td><td>12</td></tr><tr><td>Yellow</td><td>3</td></tr></table>' +
+      'How many students were surveyed in <b>TOTAL</b>?',
     answer:'28', acceptableAnswers:['28'],
     hint:'Add all the frequencies: 8 + 5 + 12 + 3.',
     explanation:'8 + 5 + 12 + 3 = <b>28 students</b>. Adding all frequencies gives the total number of items in the data set.' }),
@@ -111,7 +113,7 @@ STATIC_QUESTIONS.push(
     explanation:'<b>True.</b> Bars on a bar chart must all be the same width and equally spaced. Comparison between categories depends on HEIGHT only. Unequal bar widths would be misleading.' }),
 
   makeNum({ id:'g4m-data-017', chapterId:'g4-data', subsection:'averages', difficulty:3,
-    question:'A bar chart shows monthly rainfall (mm): Jan=80, Feb=60, Mar=100, Apr=40. What is the MEAN (average) rainfall per month?',
+    question:'<svg class="q-chart" viewBox="0 0 374 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="187" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Monthly rainfall</text><text x="6" y="18" font-size="10" fill="#64748b">mm</text><path d="M64 34V186H360" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M64 186H360M64 161H360M64 135H360M64 110H360M64 85H360M64 59H360M64 34H360" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="56" y="190">0</text><text x="56" y="165">20</text><text x="56" y="139">40</text><text x="56" y="114">60</text><text x="56" y="89">80</text><text x="56" y="63">100</text><text x="56" y="38">120</text></g><rect x="79" y="85" width="42" height="101" rx="3" fill="#3b82f6"/><rect x="151" y="110" width="42" height="76" rx="3" fill="#f59e0b"/><rect x="223" y="59" width="42" height="127" rx="3" fill="#10b981"/><rect x="295" y="135" width="42" height="51" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="100" y="203">Jan</text><text x="100" y="79">80</text><text x="172" y="203">Feb</text><text x="172" y="104">60</text><text x="244" y="203">Mar</text><text x="244" y="53">100</text><text x="316" y="203">Apr</text><text x="316" y="129">40</text></g></svg>What is the <b>MEAN</b> (average) rainfall per month?',
     answer:'70', acceptableAnswers:['70','70 mm'],
     hint:'Mean = total ÷ number of months. Add all values, then divide by 4.',
     explanation:'Total = 80 + 60 + 100 + 40 = 280 mm. Mean = 280 ÷ 4 = <b>70 mm</b>. The mean: (sum of all values) ÷ (number of values). MIE Grade 4: finding the mean/average.' }),

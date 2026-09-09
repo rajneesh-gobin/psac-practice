@@ -97,6 +97,35 @@ function check(name, ok, detail) {
 }
 
 (async () => {
+  // 0. Compression: the payload is stored compressed, round-trips, and a LEGACY
+  //    uncompressed entry is still read (format detection, so no _CACHE_VERSION
+  //    bump and nothing is purged on deploy).
+  {
+    const storage = makeStorage();
+    const a = load({ storage, studentSession: SESS('kid-a'), activeStudentId: 'kid-a' });
+    // Compressible content (repeated prose), the realistic case.
+    const many = [];
+    for (let i = 0; i < 200; i++) {
+      const q = Q('c' + i);
+      q.question = 'The cat sat on the mat and the dog ran in the park. '.repeat(3);
+      many.push(q);
+    }
+    a.QL._writeCache('grade5-french', many);
+    const key = 'mm_qc_v' + CACHE_V + '_kid-a|grade5-french';
+    const stored = storage.getItem(key);
+    const rawLen = JSON.stringify({ ts: 0, data: many }).length;
+    check('a real payload is stored compressed (marker + smaller than raw)',
+      stored && stored.charCodeAt(0) === 1 && stored.length < rawLen * 0.7,
+      stored ? (stored.length + ' vs raw ' + rawLen) : 'nothing stored');
+    check('the compressed payload round-trips to the same questions',
+      (a.QL._readCache('grade5-french') || []).length === many.length);
+
+    // A legacy entry written by the PRE-compression code is plain JSON.
+    const legacyKey = 'mm_qc_v' + CACHE_V + '_kid-a|grade4-science';
+    storage.setItem(legacyKey, JSON.stringify({ ts: Date.now(), data: [Q('legacy-1'), Q('legacy-2')] }));
+    check('a legacy uncompressed entry is still read', (a.QL._readCache('grade4-science') || []).length === 2);
+  }
+
   // 1. The cache key carries the owner, and one child cannot read the other's.
   {
     const storage = makeStorage();
@@ -206,6 +235,9 @@ function check(name, ok, detail) {
     await QL.loadSubject('grade5-maths');
     check('_done was cleared, so the new child really fetches', statics.length === 1, 'len=' + statics.length);
     check('and gets THEIR questions', statics[0] && statics[0].id === 'y1');
+    // ⚠ The cache WRITE is deferred off the render path (setTimeout 0 in
+    // _loadFromAPI), so let queued writes run before asserting the key exists.
+    await new Promise(r => setTimeout(r, 0));
     check('the previous child\'s bundle is still there, under their own key',
       storage.getItem('mm_qc_v' + CACHE_V + '_kid-a|grade5-maths') !== null,
       Array.from(storage._map.keys()).join(','));
@@ -217,11 +249,20 @@ function check(name, ok, detail) {
   //    2026-09-07: grade6-french is 1,412 KB against grade4-science's 237 KB, so
   //    six slots is 5.4 MB - over the quota on its own, and the write that loses
   //    that race is often the session token.
+  // ⚠ INCOMPRESSIBLE on purpose. _writeCache now lz-compresses the payload, so a
+  // run of one character ('x'.repeat) collapses to almost nothing and the byte
+  // budget is never pressured - the eviction this section exists to prove would
+  // never fire. Random BMP codepoints (>= 0x100, all JSON-safe, no quote or
+  // backslash) defeat the dictionary, so stored size ~= requested size and the
+  // scenarios below behave as designed against real content.
+  const randText = (n) => {
+    let o = '';
+    for (let i = 0; i < n; i++) o += String.fromCharCode(0x100 + ((Math.random() * 0x800) | 0));
+    return o;
+  };
   const bulky = (id, chars) => {
-    // One question whose text is `chars` long: a payload of a known size, with
-    // the same shape as a real one.
     const q = Q(id);
-    q.question = 'x'.repeat(chars);
+    q.question = randText(chars);
     return [q];
   };
   const cacheKeys = (storage) => Array.from(storage._map.keys())

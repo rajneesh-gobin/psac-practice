@@ -177,6 +177,24 @@ STATIC_QUESTIONS.push(
   whether a question demands reasoning is a reading, and a script can only count
   what someone has already asserted. ⚠ The labels are the AUTHOR'S assertion, not
   a measurement — L3/L4 had been diluted with plain retrieval.
+  ⚠ **It audits EVERY live pack** (derived, not a literal list) and reports two
+  more things, both added 2026-09-09:
+  - **Template runs** — stems compared with every number replaced by `#`. Two
+    questions that differ only in their numbers are ONE question for a child.
+    Measured then: grade4-maths **62%** of items shared a stem, grade3-maths had
+    a run of **48** (`# × # = ?`), and grade5-maths had **17 families of exactly
+    20, every item at L4** — half the pack's L4 stock, one sentence each with the
+    values walked upward. Rewritten to 4–6 real situations per family; the
+    biggest g5x run is now 5.
+  - **Maths L4 depth** — operands in the stem are a floor on step count, and
+    maths is the one family where L4 claims multi-step. An L4 with two numbers
+    cannot be multi-step. Still a review: "15% profit on Rs 18,000" is two
+    operands and a legitimate two-stage problem.
+- ⚠ **Varying the numbers is not varying the question.** A new situation must
+  change what the child has to *do* — withhold a quantity they must derive, ask
+  for an intermediate rather than the final total, or run the problem backwards.
+  ⚠ And check every division comes out exact: the rewrite caught 94.5° angles,
+  22.5 walkers, 568.888… seconds and "42.5 g per person" in worked routes.
 - ⚠ **`makeMCQ()` SHUFFLES its own options.** Authoring answer-first is still
   useful (`options[0]` is then always the answer, checkable at a glance) but
   positions nothing — do not believe a comment that claims it does. What needs
@@ -345,6 +363,16 @@ against server-side), the plan chapter picker, `calendar _subjectsForGrade`,
 `search _fillSubjectFilter`, `app _subjectChips`.
 Not filtering, and must not start: `renderGradeSelect` / `renderSubjectSelect`,
 the admin Content kill switch, the admin question-manager cascades.
+
+⚠⚠ **A placeholder becomes a live defect the moment the flag flips.** Nine live
+packs (grades 1–3 × maths/english/french) each shipped
+*"Placeholder - this pack has no real questions yet."* to children, on a chapter
+their manifest no longer declared, so it could be dealt into mixed practice or an
+exam. The file's own comment said *"the pack is comingSoon: true, so nothing here
+is ever served"* — true when written, false the day the pack went live. Deleted
+2026-09-09; `test-live-pack-content.js` went 75/9 to **84/0**. ⚠ Going live means
+deleting `ch01_sample.js` **and** its `LOCAL_FILES` entry — the file alone is
+enough, because production auto-discovers the directory.
 
 ⚠ **`comingSoon: false` is one character and used to be checked by nothing.**
 `scripts/test-live-pack-content.js` now fails if a live pack has a declared
@@ -536,10 +564,38 @@ which the bank previously covered with three one-off items; ⚠ deliberately **n
 enrichment, because a gold BONUS card would tell a child a numbered exam question
 is optional). Every live grade has enrichment chapters (History, Science), a Map
 Skills SVG, Passages & Text Types and Description d'Images.
-- Read-aloud speaks the **question only, not the options** (accepted). French packs
-  speak `fr-FR` with a matching voice; voices are warmed at load because
-  `getVoices()` is empty on the first tap, and `speak()` stays synchronous inside
-  the gesture for iOS.
+- Read-aloud in **practice** speaks the question **and then each MCQ option**,
+  lettered ("A. cinq"), highlighting the option being spoken (`.tts-reading`) —
+  a Grade 1 child cannot yet read the choices, so audio + highlight together are
+  the feature. ⚠ **The exam still speaks the question only**, deliberately: a
+  timed paper must not hand a child what the paper does not.
+  ⚠ **Every utterance is queued synchronously inside the tap** — chaining from
+  `onend` puts the second `speak()` outside the gesture, which iOS drops
+  silently, so the question reads and the options never do.
+  ⚠ **`_ttsStop()` on every screen and question change** — speech outlives the
+  DOM that started it. French packs speak `fr-FR` with a matching voice, options
+  included; voices are warmed at load because `getVoices()` is empty on the first
+  tap, and with no French voice installed the child is told once why it sounds
+  English.
+  ⚠ **Blanks are collapsed before speaking** (`_ttsBlanks`): a run of `___`,
+  `....` or `……` becomes one hum — `hum` in French, `hmm` in English — because
+  fr-FR reads `___` as *"tiret bas tiret bas tiret bas"*. Measured: 3,188
+  underscore runs and ~600 dot runs. ⚠ Only a RUN counts — a single `…` is prose
+  trailing off (1,419 of those). ⚠ **Never `trou`**, the exercises' own word
+  ("Textes à Trous"): it carries a vulgar reading in Mauritius. ⚠ Never a
+  content word either (`blanc`) — a child hearing "Le chat est, blanc, la
+  table" writes *blanc*. A hum can be neither.
+  ⚠ **Latency has three controllable causes** and all three are handled:
+  `_pickVoice` prefers `localService` **within** each match tier (Chrome's
+  "Google …" voices synthesise over the network — measured, `fr-FR` was picking
+  remote "Google français"), region still outranks locality; `cancel()` runs
+  only when something is actually speaking (cancel-then-speak is a Chrome
+  stall); and the question is split into sentence utterances (`_ttsSentences`)
+  so the first is short and playback starts before the rest is prepared.
+  ⚠ **The 🔊 button lives in the always-visible `.pr-tools` row, not the help
+  tray** — progressive disclosure assumes the child can read the disclosure, and
+  this is the one tool for children who cannot.
+  `scripts/test-read-aloud.js` (30 checks, real browser).
 
 ### Feature areas → [`features.md`](docs/claude/features.md)
 The landing page and its copy rules · the Game Zone (seven games) and

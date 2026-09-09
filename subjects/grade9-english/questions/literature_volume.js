@@ -48,7 +48,7 @@ STATIC_QUESTIONS.push(
     explanation:'An <b>omniscient narrator</b> has access to events and thoughts that no single character could witness. This technique lets the author build irony and suspense.' }),
 
   makeMCQ({ id:'g9eng-litv-008', chapterId:'g9eng-literature', subsection:'narrative_voice', difficulty:2,
-    question:'In a poem, the speaker says: <i>"My mother's hands, rough with work, tucked me in each night."</i> Who is the speaker most likely?',
+    question:'In a poem, the speaker says: <i>"My mother\'s hands, rough with work, tucked me in each night."</i> Who is the speaker most likely?',
     options:['A child remembering a parent','The mother speaking about herself','An observer watching from outside','An omniscient narrator'], answer:'A child remembering a parent',
     hint:'"My mother" and "me" are the clues.',
     explanation:'"My mother" and "tucked me in" show the speaker is the child — the poem is a memory spoken from the child\'s perspective.' }),
@@ -360,7 +360,7 @@ STATIC_QUESTIONS.push(
     explanation:'A still ocean suggests peace; a stormy one suggests distress. The metaphor captures the <b>range of emotional states</b> the mind can experience, more vividly than abstract language could.' }),
 
   makeMCQ({ id:'g9eng-litv-059', chapterId:'g9eng-literature', subsection:'effect_of_device', difficulty:3,
-    question:'A writer uses irony: <i>"After six hours in the waiting room, he finally declared the service 'excellent'."</i> What is the effect?',
+    question:'A writer uses irony: <i>"After six hours in the waiting room, he finally declared the service \'excellent\'."</i> What is the effect?',
     options:['It highlights the gap between the claim and the reality','It shows the man was genuinely satisfied','It suggests the wait was expected','It shows the writer agrees with the man'], answer:'It highlights the gap between the claim and the reality',
     hint:'Six hours in a waiting room — is "excellent" a sincere word here?',
     explanation:'"Excellent" after a six-hour wait creates <b>irony</b>: the word says one thing, but the reality contradicts it. The gap between the claim and the experience is the source of the criticism or humour.' }),

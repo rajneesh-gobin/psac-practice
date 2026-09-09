@@ -89,7 +89,13 @@ const QuestionProgress = (() => {
     q.push({
       question_id: id,
       chapter_id: question.chapterId,
-      subject_pack_id: (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) ? ACTIVE_PACK : null,
+      // ⚠ .id, not the pack. ACTIVE_PACK is the whole pack OBJECT - chapters,
+      //   notes, badges, syllabus prose - and every other reader in the app
+      //   spells it `ACTIVE_PACK?.id`. Sending the object put an entire
+      //   serialised manifest into a column called subject_pack_id: measured on
+      //   the live table, 25 rows held 572 KB where 25 ids would have been 325
+      //   bytes, and it grew by ~23 KB for every question a child answered.
+      subject_pack_id: (typeof ACTIVE_PACK !== 'undefined' && ACTIVE_PACK) ? (ACTIVE_PACK.id || null) : null,
       correct: !!correct,
       event_key: eventKey(studentId, id),
     });

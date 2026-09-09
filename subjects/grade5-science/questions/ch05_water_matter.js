@@ -140,7 +140,9 @@ STATIC_QUESTIONS.push(
     explanation:'Warming makes the particles move faster and spread further apart, so the liquid <b>expands</b> and is pushed up the narrow tube. The amount of liquid has not changed, so it cannot have become heavier.' }),
 
   makeMCQ({ id:'g5sci-wm-016', chapterId:'water-matter', subsection:'states', difficulty:2,
-    question:'A table shows air temperatures measured at different times: 6 a.m. = 15°C, 10 a.m. = 18°C, 1 p.m. = 23°C, 4 p.m. = 21°C, 8 p.m. = 19°C. At what time was the temperature highest?',
+    question:'A class measured the air temperature five times in one day.' +
+      '<table class="q-table"><tr><th>Time</th><th>Temperature</th></tr><tr><td>6 a.m.</td><td>15&deg;C</td></tr><tr><td>10 a.m.</td><td>18&deg;C</td></tr><tr><td>1 p.m.</td><td>23&deg;C</td></tr><tr><td>4 p.m.</td><td>21&deg;C</td></tr><tr><td>8 p.m.</td><td>19&deg;C</td></tr></table>' +
+      'At what time was the temperature <b>highest</b>?',
     options:['6 a.m.','10 a.m.','1 p.m.','8 p.m.'],
     answer:'1 p.m.',
     hint:'Find the largest number in the table.',

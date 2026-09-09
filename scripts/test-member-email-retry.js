@@ -1,11 +1,16 @@
 'use strict';
 const fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');
 const source = fs.readFileSync('engine/admin.js', 'utf8');
-const fn = source.slice(source.indexOf('  async function _copyEmailBatch('), source.indexOf('  async function copyMemberEmails('));
-async function run(sequence) {
+// Starts at _fetchBlockedReason, not _copyEmailBatch: the preflight that
+// refuses an unreachable page is part of this unit, and slicing it off made
+// the sandbox throw ReferenceError instead of testing anything.
+const fn = source.slice(source.indexOf('  function _fetchBlockedReason('), source.indexOf('  async function copyMemberEmails('));
+async function run(sequence, env = {}) {
   const routes = [];
   const ctx = vm.createContext({
     _sb: { auth: { getSession: async () => ({data:{session:{access_token:'test-only'}}}) } },
+    location: { protocol: env.protocol || 'https:' },
+    navigator: { onLine: env.onLine !== false },
     AbortController, setTimeout, clearTimeout,
     fetch: async (route, options) => {
       routes.push(route);
@@ -33,8 +38,17 @@ async function backend(failure) {
   assert.deepEqual(test.routes,['/api/admin-member-emails','/.netlify/functions/admin-member-emails']);
   test = await run([502,200]); await test.result; assert.equal(test.routes.length,2);
   test = await run([403]); await assert.rejects(test.result,/Request refused/); assert.equal(test.routes.length,1);
-  test = await run([new Error('offline'),new Error('offline'),new Error('offline')]);
-  await assert.rejects(test.result,/after 3 attempts/); assert.equal(test.routes.length,3);
+  test = await run([new Error('Failed to fetch'),new Error('Failed to fetch'),new Error('Failed to fetch')]);
+  // The cause is carried through, so "after 3 attempts" no longer hides whether
+  // the request timed out, was refused, or never left the browser.
+  await assert.rejects(test.result,/after 3 attempts \(Failed to fetch\)/); assert.equal(test.routes.length,3);
+
+  // A page with no server to ask, and a device that cannot reach one, are
+  // refused before the first request rather than after three timeouts.
+  test = await run([200],{protocol:'file:'});
+  await assert.rejects(test.result,/no server to ask/); assert.equal(test.routes.length,0);
+  test = await run([200],{onLine:false});
+  await assert.rejects(test.result,/offline/); assert.equal(test.routes.length,0);
   const failed = await backend(true);
   assert.equal(failed.statusCode,200);
   assert.equal(failed.body.partial,true);

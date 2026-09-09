@@ -292,7 +292,7 @@ const AdminPanel = (() => {
     const { data: sessionData } = await _sb.auth.getSession();
     const token = sessionData?.session?.access_token;
     if (!token) throw new Error('Your sign-in session has expired. Please refresh and sign in again.');
-    const response = await fetch(`/api/pending-registrations${params}`, {
+    const response = await _serverFetch(`/api/pending-registrations${params}`, {
       method,
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -396,7 +396,7 @@ const AdminPanel = (() => {
       const { data: sessionData } = await _sb.auth.getSession();
       const token = sessionData?.session?.access_token;
       if (!token) throw new Error('Your sign-in session has expired. Please refresh and sign in again.');
-      const response = await fetch('/api/admin-account-recovery', {
+      const response = await _serverFetch('/api/admin-account-recovery', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId }),
@@ -490,20 +490,11 @@ const AdminPanel = (() => {
     const token = sessionData?.session?.access_token;
     if (!token) throw new Error("Your sign-in session has expired. Please refresh and sign in again.");
 
-    let response;
-    try {
-      response = await fetch(path, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-    } catch (e) {
-      if (location.protocol === 'file:') {
-        throw new Error("This action needs the app to be served, not opened as a file. "
-          + "Run `npm run dev` (or `netlify dev`) and open http://localhost:8888, or use the deployed site.");
-      }
-      throw new Error("Could not reach the server. Check your connection.");
-    }
+    const response = await _serverFetch(path, {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
     const ctype = (response.headers.get("content-type") || "").toLowerCase();
     if (!ctype.includes("application/json")) {
@@ -717,7 +708,44 @@ const AdminPanel = (() => {
     }, 300);
   }
 
+  // ⚠ Every fetch rejection used to collapse into one message ending "check the
+  // server logs", which sends an admin to read logs for a request that never
+  // left the browser. A file:// page has no server to ask and an offline device
+  // cannot reach one, so both are named and neither is retried - three attempts
+  // carrying a 20-second timeout each is a minute of waiting for an answer that
+  // was knowable before the first one.
+  function _fetchBlockedReason() {
+    if (typeof location !== 'undefined' && !/^https?:$/.test(location.protocol)) {
+      return `This page is open as ${location.protocol}//, so there is no server to ask. `
+           + 'This action needs its Netlify function: run `npm run dev` (or `netlify dev`) '
+           + 'and open http://localhost:8888, or use the deployed site.';
+    }
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+      return 'This device is offline. Reconnect and try again.';
+    }
+    return '';
+  }
+
+  // ⚠ Every admin action below needs a Netlify function, and each call site used
+  // to handle a fetch rejection its own way: one named file://, one retried
+  // three times before blaming the server logs, and two rendered the browser's
+  // raw "Failed to fetch" into the panel. They now fail identically, because
+  // they fail for the same reason.
+  async function _serverFetch(path, options) {
+    const blocked = _fetchBlockedReason();
+    if (blocked) throw Object.assign(new Error(blocked), { permanent: true });
+    try {
+      return await fetch(path, options);
+    } catch (e) {
+      throw Object.assign(new Error(_fetchBlockedReason()
+        || `Could not reach ${path} (${e.message || e}). Check your connection and retry.`), { permanent: true });
+    }
+  }
+
   async function _copyEmailBatch(ids) {
+    const blocked = _fetchBlockedReason();
+    if (blocked) throw Object.assign(new Error(blocked), { permanent: true });
+    let lastFailure = '';
     for (let attempt = 0; attempt < 3; attempt++) {
       const { data, error } = await _sb.auth.getSession();
       const token = data?.session?.access_token;
@@ -745,7 +773,15 @@ const AdminPanel = (() => {
         }
       } catch (error) {
         if (error.permanent) throw error;
-        if (attempt === 2) throw new Error('The email service could not be reached after 3 attempts. No incomplete list was copied. Check your connection and retry; if it continues, check the server logs.');
+        // The cause was being discarded, so a 20-second timeout, a dropped
+        // connection and a body that was not the JSON its header promised all
+        // read identically. Carry it into the message.
+        lastFailure = error.name === 'AbortError' ? 'the request timed out after 20 seconds'
+                    : (error.message || String(error));
+        // Going offline mid-run cannot recover by retrying either.
+        const nowBlocked = _fetchBlockedReason();
+        if (nowBlocked) throw Object.assign(new Error(nowBlocked), { permanent: true });
+        if (attempt === 2) throw new Error(`The email service could not be reached after 3 attempts (${lastFailure}). No incomplete list was copied. Retry, and if it continues check the function logs for admin-member-emails.`);
       } finally {
         clearTimeout(timeout);
       }
@@ -2828,7 +2864,7 @@ const AdminPanel = (() => {
       const jwt     = session?.data?.session?.access_token;
       if (!jwt) { _showErrCA(errEl, 'Not logged in - please refresh.'); return; }
 
-      const res  = await fetch('/api/create-user', {
+      const res  = await _serverFetch('/api/create-user', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
         body:    JSON.stringify({ email, password: pwd, full_name: name, role, plan_id: plan, family_name: family, note }),
@@ -2855,6 +2891,11 @@ const AdminPanel = (() => {
       ['ca-name','ca-email','ca-password','ca-family','ca-note'].forEach(id => {
         const el = _elCA(id); if (el) el.value = '';
       });
+    } catch (error) {
+      // try/finally with no catch: an unreachable server rejected out of the
+      // whole function, so the button re-enabled and the admin was told
+      // nothing at all about why no account appeared.
+      _showErrCA(errEl, error.message || 'Could not create account.');
     } finally {
       if (btn) { btn.disabled = false; btn.textContent = '🎁 Create Account'; }
     }

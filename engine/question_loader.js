@@ -34,23 +34,21 @@ const QuestionLoader = (() => {
     // out before it gets here, so nothing below is ever fetched for a child;
     // the entries exist so this list matches `ls subjects/*/questions/*.js`
     // and the drift check in the comment above stays usable.
-    'grade1-maths': ['subjects/grade1-maths/questions/ch01_sample.js',
-                     'subjects/grade1-maths/questions/ch01_numbers.js',
+    'grade1-maths': ['subjects/grade1-maths/questions/ch01_numbers.js',
                      'subjects/grade1-maths/questions/ch02_addition.js',
                      'subjects/grade1-maths/questions/ch03_subtraction.js',
                      'subjects/grade1-maths/questions/ch04_shapes.js',
                      'subjects/grade1-maths/questions/ch04_shapes_visual.js',
                      'subjects/grade1-maths/questions/ch05_measurement.js',
-                     'subjects/grade1-maths/questions/ch06_patterns.js'],
-    'grade1-english': ['subjects/grade1-english/questions/ch01_sample.js',
-                       'subjects/grade1-english/questions/ch01_listening.js',
+                     'subjects/grade1-maths/questions/ch06_patterns.js',
+                     'subjects/grade1-maths/questions/reasoning_bank.js'],
+    'grade1-english': ['subjects/grade1-english/questions/ch01_listening.js',
                        'subjects/grade1-english/questions/ch02_speaking.js',
                        'subjects/grade1-english/questions/ch03_reading.js',
                        'subjects/grade1-english/questions/ch04_writing.js',
                        'subjects/grade1-english/questions/ch05_grammar.js',
                        'subjects/grade1-english/questions/ch06_phonics.js'],
-    'grade1-french': ['subjects/grade1-french/questions/ch01_sample.js',
-                      'subjects/grade1-french/questions/ch01_comprehension_orale.js',
+    'grade1-french': ['subjects/grade1-french/questions/ch01_comprehension_orale.js',
                       'subjects/grade1-french/questions/ch02_expression_orale.js',
                       'subjects/grade1-french/questions/ch03_lecture.js',
                       'subjects/grade1-french/questions/ch04_ecriture.js',
@@ -58,8 +56,7 @@ const QuestionLoader = (() => {
                       'subjects/grade1-french/questions/topup_g1fr.js'],
     'grade1-health': ['subjects/grade1-health/questions/ch01_sample.js'],
     'grade1-ict':    ['subjects/grade1-ict/questions/ch01_sample.js'],
-    'grade2-maths': ['subjects/grade2-maths/questions/ch01_sample.js',
-                     'subjects/grade2-maths/questions/ch01_numbers.js',
+    'grade2-maths': ['subjects/grade2-maths/questions/ch01_numbers.js',
                      'subjects/grade2-maths/questions/ch02_addition.js',
                      'subjects/grade2-maths/questions/ch03_subtraction.js',
                      'subjects/grade2-maths/questions/ch04_multiplication.js',
@@ -67,24 +64,24 @@ const QuestionLoader = (() => {
                      'subjects/grade2-maths/questions/ch06_measurement.js',
                      'subjects/grade2-maths/questions/ch07_time.js',
                      'subjects/grade2-maths/questions/ch08_shapes.js',
-                     'subjects/grade2-maths/questions/ch08_shapes_visual.js'],
-    'grade2-english': ['subjects/grade2-english/questions/ch01_sample.js',
-                       'subjects/grade2-english/questions/ch01_listening.js',
+                     'subjects/grade2-maths/questions/ch08_shapes_visual.js',
+                     'subjects/grade2-maths/questions/reasoning_bank.js'],
+    'grade2-english': ['subjects/grade2-english/questions/ch01_listening.js',
                        'subjects/grade2-english/questions/ch02_speaking.js',
                        'subjects/grade2-english/questions/ch03_reading.js',
+                       'subjects/grade2-english/questions/ch03_reading_passages.js',
                        'subjects/grade2-english/questions/ch04_writing.js',
                        'subjects/grade2-english/questions/ch05_grammar.js',
                        'subjects/grade2-english/questions/ch06_phonics.js'],
-    'grade2-french': ['subjects/grade2-french/questions/ch01_sample.js',
-                      'subjects/grade2-french/questions/ch01_comprehension_orale.js',
+    'grade2-french': ['subjects/grade2-french/questions/ch01_comprehension_orale.js',
                       'subjects/grade2-french/questions/ch02_expression_orale.js',
                       'subjects/grade2-french/questions/ch03_lecture.js',
+                      'subjects/grade2-french/questions/ch03_lecture_passages.js',
                       'subjects/grade2-french/questions/ch04_ecriture.js',
                       'subjects/grade2-french/questions/ch05_grammaire.js'],
     'grade2-health': ['subjects/grade2-health/questions/ch01_sample.js'],
     'grade2-ict':    ['subjects/grade2-ict/questions/ch01_sample.js'],
-    'grade3-maths': ['subjects/grade3-maths/questions/ch01_sample.js',
-                     'subjects/grade3-maths/questions/ch01_numbers.js',
+    'grade3-maths': ['subjects/grade3-maths/questions/ch01_numbers.js',
                      'subjects/grade3-maths/questions/ch02_addition.js',
                      'subjects/grade3-maths/questions/ch03_subtraction.js',
                      'subjects/grade3-maths/questions/ch04_multiplication.js',
@@ -93,18 +90,19 @@ const QuestionLoader = (() => {
                      'subjects/grade3-maths/questions/ch07_measurement.js',
                      'subjects/grade3-maths/questions/ch08_geometry.js',
                      'subjects/grade3-maths/questions/ch09_time.js',
-                     'subjects/grade3-maths/questions/topup_g3mth.js'],
-    'grade3-english': ['subjects/grade3-english/questions/ch01_sample.js',
-                       'subjects/grade3-english/questions/ch01_listening.js',
+                     'subjects/grade3-maths/questions/topup_g3mth.js',
+                     'subjects/grade3-maths/questions/reasoning_bank.js'],
+    'grade3-english': ['subjects/grade3-english/questions/ch01_listening.js',
                        'subjects/grade3-english/questions/ch02_speaking.js',
                        'subjects/grade3-english/questions/ch03_reading.js',
+                       'subjects/grade3-english/questions/ch03_reading_passages.js',
                        'subjects/grade3-english/questions/ch04_writing.js',
                        'subjects/grade3-english/questions/ch05_grammar.js',
                        'subjects/grade3-english/questions/ch06_phonics.js'],
-    'grade3-french': ['subjects/grade3-french/questions/ch01_sample.js',
-                      'subjects/grade3-french/questions/ch01_comprehension_orale.js',
+    'grade3-french': ['subjects/grade3-french/questions/ch01_comprehension_orale.js',
                       'subjects/grade3-french/questions/ch02_expression_orale.js',
                       'subjects/grade3-french/questions/ch03_lecture.js',
+                      'subjects/grade3-french/questions/ch03_lecture_passages.js',
                       'subjects/grade3-french/questions/ch04_ecriture.js',
                       'subjects/grade3-french/questions/ch05_grammaire.js'],
     'grade3-health': ['subjects/grade3-health/questions/ch01_sample.js'],
@@ -534,6 +532,7 @@ const QuestionLoader = (() => {
       'subjects/grade4-maths/questions/coverage_fractions.js',
       'subjects/grade4-maths/questions/coverage_measures.js',
       'subjects/grade4-maths/questions/coverage_data_reasoning.js',
+      'subjects/grade4-maths/questions/extended_reasoning_bank.js',
     ],
     'grade4-english': [
       'subjects/grade4-english/questions/ch01_g4_nouns.js',
@@ -693,7 +692,7 @@ const QuestionLoader = (() => {
   //   Without it, the 7-day cache below means a child keeps being served the
   //   old question set for up to a week after a deploy - new chapters simply
   //   do not appear, with nothing in the UI to explain why.
-  const _CACHE_VERSION = 108;
+  const _CACHE_VERSION = 115;
 
   // ⚠ A cached bundle belongs to WHOEVER IT WAS FETCHED FOR, not to the subject.
   // The key used to be the subject alone, on a device where a whole family
@@ -777,16 +776,27 @@ const QuestionLoader = (() => {
   // does - that response varies per caller and a shared URL-keyed cache served
   // one child's entitled question set to another. So this is load-bearing.
   const _LRU_KEY  = 'mm_qc_lru';
-  // Six subjects covers one full grade (five) with room to spare, and keeps the
-  // cache near 1.6 MB rather than 4.3 MB. A seventh evicts the least recently
-  // used, which is exactly the cross-grade case.
+  // ⚠ "One full grade" is no longer five subjects. Grade 9 registers EIGHT live
+  // packs (Maths, ICT, Biology, Chemistry, Physics, English, Français, Social &
+  // Modern Studies), so a cap of six evicted two of a Grade 9 child's own
+  // subjects the moment they opened the seventh - measured 2026-09-09, the
+  // budget test kept 6 of 8 and dropped Biology and Chemistry. It was invisible
+  // because that test only ever measured grades 4-6.
+  //
+  // Nine = the largest live grade plus one, keeping the original "one grade with
+  // room to spare" intent. Safe on size because _writeCache now compresses:
+  // measured, all eight Grade 9 packs together store 0.75 MB against a 3.70 MB
+  // byte budget. The BYTE budget is the real guard; the slot cap only bounds how
+  // many entries can accumulate.
+  // ⚠ Re-measure with scripts/test-question-cache-budget.js if a grade grows a
+  // ninth subject - do not raise this on reasoning alone.
   //
   // ⚠ The cap counts SLOTS, not subjects, so two children practising on one
   // device now compete for the same six. That is deliberate: the alternative is
   // six per child against a ~5 MB quota shared with the progress blobs and the
   // session token, and a lost cache entry costs one refetch whereas a lost
   // session token reads to a parent as "it keeps logging me out".
-  const _LRU_MAX  = 6;
+  const _LRU_MAX  = 9;
 
   // ⚠ THE REAL LIMIT. localStorage is quota'd per origin at roughly 5 million
   // characters, and this cache is not the only tenant: the progress blob, the
@@ -956,12 +966,256 @@ const QuestionLoader = (() => {
   // The cost of getting this wrong in the other direction is one extra request
   // per subject load for a family that really is entitled to nothing. That is
   // the cheaper mistake by a wide margin.
-  function _readCache(subjectId) {
+// ── Payload compression (lz-string, inlined) ─────────────────────────────
+  // ⚠ The cache stores the teaching content itself (74% of a French bundle is
+  // question + explanation + hint + options), so there is nothing to STRIP -
+  // but JSON of repeated keys and prose compresses ~2:1, which is the same win
+  // Netlify already gets gzipping these bundles on the wire. Halving the stored
+  // size is what keeps a whole grade inside the ~5 MB localStorage origin quota
+  // as the banks grow.
+  //
+  // compressToUTF16 is used on purpose: its output is valid, storable UTF-16
+  // (every char >= 0x20), where raw compress() emits lone surrogates localStorage
+  // can mangle. Synchronous by design - _readCache is consulted synchronously by
+  // the routing in loadForStudent, and must stay that way.
+  //
+  // Canonical lz-string (pieroxy, MIT), trimmed to the two entry points used.
+  const _LZ = (function () {
+    var f = String.fromCharCode;
+    function _compress(uncompressed, bitsPerChar, getCharFromInt) {
+      if (uncompressed == null) return '';
+      var i, value, context_dictionary = {}, context_dictionaryToCreate = {},
+          context_c = '', context_wc = '', context_w = '', context_enlargeIn = 2,
+          context_dictSize = 3, context_numBits = 2, context_data = [],
+          context_data_val = 0, context_data_position = 0, ii;
+      for (ii = 0; ii < uncompressed.length; ii += 1) {
+        context_c = uncompressed.charAt(ii);
+        if (!Object.prototype.hasOwnProperty.call(context_dictionary, context_c)) {
+          context_dictionary[context_c] = context_dictSize++;
+          context_dictionaryToCreate[context_c] = true;
+        }
+        context_wc = context_w + context_c;
+        if (Object.prototype.hasOwnProperty.call(context_dictionary, context_wc)) {
+          context_w = context_wc;
+        } else {
+          if (Object.prototype.hasOwnProperty.call(context_dictionaryToCreate, context_w)) {
+            if (context_w.charCodeAt(0) < 256) {
+              for (i = 0; i < context_numBits; i++) {
+                context_data_val = (context_data_val << 1);
+                if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+                else { context_data_position++; }
+              }
+              value = context_w.charCodeAt(0);
+              for (i = 0; i < 8; i++) {
+                context_data_val = (context_data_val << 1) | (value & 1);
+                if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+                else { context_data_position++; }
+                value = value >> 1;
+              }
+            } else {
+              value = 1;
+              for (i = 0; i < context_numBits; i++) {
+                context_data_val = (context_data_val << 1) | value;
+                if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+                else { context_data_position++; }
+                value = 0;
+              }
+              value = context_w.charCodeAt(0);
+              for (i = 0; i < 16; i++) {
+                context_data_val = (context_data_val << 1) | (value & 1);
+                if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+                else { context_data_position++; }
+                value = value >> 1;
+              }
+            }
+            context_enlargeIn--;
+            if (context_enlargeIn == 0) { context_enlargeIn = Math.pow(2, context_numBits); context_numBits++; }
+            delete context_dictionaryToCreate[context_w];
+          } else {
+            value = context_dictionary[context_w];
+            for (i = 0; i < context_numBits; i++) {
+              context_data_val = (context_data_val << 1) | (value & 1);
+              if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+              else { context_data_position++; }
+              value = value >> 1;
+            }
+          }
+          context_enlargeIn--;
+          if (context_enlargeIn == 0) { context_enlargeIn = Math.pow(2, context_numBits); context_numBits++; }
+          context_dictionary[context_wc] = context_dictSize++;
+          context_w = String(context_c);
+        }
+      }
+      if (context_w !== '') {
+        if (Object.prototype.hasOwnProperty.call(context_dictionaryToCreate, context_w)) {
+          if (context_w.charCodeAt(0) < 256) {
+            for (i = 0; i < context_numBits; i++) {
+              context_data_val = (context_data_val << 1);
+              if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+              else { context_data_position++; }
+            }
+            value = context_w.charCodeAt(0);
+            for (i = 0; i < 8; i++) {
+              context_data_val = (context_data_val << 1) | (value & 1);
+              if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+              else { context_data_position++; }
+              value = value >> 1;
+            }
+          } else {
+            value = 1;
+            for (i = 0; i < context_numBits; i++) {
+              context_data_val = (context_data_val << 1) | value;
+              if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+              else { context_data_position++; }
+              value = 0;
+            }
+            value = context_w.charCodeAt(0);
+            for (i = 0; i < 16; i++) {
+              context_data_val = (context_data_val << 1) | (value & 1);
+              if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+              else { context_data_position++; }
+              value = value >> 1;
+            }
+          }
+          context_enlargeIn--;
+          if (context_enlargeIn == 0) { context_enlargeIn = Math.pow(2, context_numBits); context_numBits++; }
+          delete context_dictionaryToCreate[context_w];
+        } else {
+          value = context_dictionary[context_w];
+          for (i = 0; i < context_numBits; i++) {
+            context_data_val = (context_data_val << 1) | (value & 1);
+            if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+            else { context_data_position++; }
+            value = value >> 1;
+          }
+        }
+        context_enlargeIn--;
+        if (context_enlargeIn == 0) { context_enlargeIn = Math.pow(2, context_numBits); context_numBits++; }
+      }
+      value = 2;
+      for (i = 0; i < context_numBits; i++) {
+        context_data_val = (context_data_val << 1) | (value & 1);
+        if (context_data_position == bitsPerChar - 1) { context_data_position = 0; context_data.push(getCharFromInt(context_data_val)); context_data_val = 0; }
+        else { context_data_position++; }
+        value = value >> 1;
+      }
+      while (true) {
+        context_data_val = (context_data_val << 1);
+        if (context_data_position == bitsPerChar - 1) { context_data.push(getCharFromInt(context_data_val)); break; }
+        else context_data_position++;
+      }
+      return context_data.join('');
+    }
+    function _decompress(length, resetValue, getNextValue) {
+      var dictionary = [], next, enlargeIn = 4, dictSize = 4, numBits = 3,
+          entry = '', result = [], i, w, bits, resb, maxpower, power, c,
+          data = { val: getNextValue(0), position: resetValue, index: 1 };
+      for (i = 0; i < 3; i += 1) dictionary[i] = i;
+      bits = 0; maxpower = Math.pow(2, 2); power = 1;
+      while (power != maxpower) {
+        resb = data.val & data.position; data.position >>= 1;
+        if (data.position == 0) { data.position = resetValue; data.val = getNextValue(data.index++); }
+        bits |= (resb > 0 ? 1 : 0) * power; power <<= 1;
+      }
+      switch (next = bits) {
+        case 0:
+          bits = 0; maxpower = Math.pow(2, 8); power = 1;
+          while (power != maxpower) {
+            resb = data.val & data.position; data.position >>= 1;
+            if (data.position == 0) { data.position = resetValue; data.val = getNextValue(data.index++); }
+            bits |= (resb > 0 ? 1 : 0) * power; power <<= 1;
+          }
+          c = f(bits); break;
+        case 1:
+          bits = 0; maxpower = Math.pow(2, 16); power = 1;
+          while (power != maxpower) {
+            resb = data.val & data.position; data.position >>= 1;
+            if (data.position == 0) { data.position = resetValue; data.val = getNextValue(data.index++); }
+            bits |= (resb > 0 ? 1 : 0) * power; power <<= 1;
+          }
+          c = f(bits); break;
+        case 2:
+          return '';
+      }
+      dictionary[3] = c; w = c; result.push(c);
+      while (true) {
+        if (data.index > length) return '';
+        bits = 0; maxpower = Math.pow(2, numBits); power = 1;
+        while (power != maxpower) {
+          resb = data.val & data.position; data.position >>= 1;
+          if (data.position == 0) { data.position = resetValue; data.val = getNextValue(data.index++); }
+          bits |= (resb > 0 ? 1 : 0) * power; power <<= 1;
+        }
+        switch (c = bits) {
+          case 0:
+            bits = 0; maxpower = Math.pow(2, 8); power = 1;
+            while (power != maxpower) {
+              resb = data.val & data.position; data.position >>= 1;
+              if (data.position == 0) { data.position = resetValue; data.val = getNextValue(data.index++); }
+              bits |= (resb > 0 ? 1 : 0) * power; power <<= 1;
+            }
+            dictionary[dictSize++] = f(bits); c = dictSize - 1; enlargeIn--; break;
+          case 1:
+            bits = 0; maxpower = Math.pow(2, 16); power = 1;
+            while (power != maxpower) {
+              resb = data.val & data.position; data.position >>= 1;
+              if (data.position == 0) { data.position = resetValue; data.val = getNextValue(data.index++); }
+              bits |= (resb > 0 ? 1 : 0) * power; power <<= 1;
+            }
+            dictionary[dictSize++] = f(bits); c = dictSize - 1; enlargeIn--; break;
+          case 2:
+            return result.join('');
+        }
+        if (enlargeIn == 0) { enlargeIn = Math.pow(2, numBits); numBits++; }
+        if (dictionary[c]) { entry = dictionary[c]; }
+        else { if (c === dictSize) { entry = w + w.charAt(0); } else { return null; } }
+        result.push(entry);
+        dictionary[dictSize++] = w + entry.charAt(0);
+        enlargeIn--;
+        w = entry;
+        if (enlargeIn == 0) { enlargeIn = Math.pow(2, numBits); numBits++; }
+      }
+    }
+    return {
+      compress: function (input) { if (input == null) return ''; return _compress(input, 15, function (a) { return f(a + 32); }) + ' '; },
+      decompress: function (compressed) { if (compressed == null) return ''; if (compressed == '') return null; return _decompress(compressed.length, 16384, function (index) { return compressed.charCodeAt(index) - 32; }); },
+    };
+  })();
+
+  // ⚠ A one-time self-test. If the inlined compressor ever fails to round-trip
+  // (a broken edit, an exotic engine), compression is disabled and payloads are
+  // stored raw - a broken compressor must never be allowed to corrupt the cache.
+  // Reads still try to decompress regardless, so entries written by a healthy
+  // earlier load stay readable.
+  let _LZ_OK = false;
+  try { const t = 'psac-cache-selftest-\u00a1\u00e9\u201c{}'; _LZ_OK = _LZ.decompress(_LZ.compress(t)) === t; } catch (_) { _LZ_OK = false; }
+
+  // Compressed entries carry a one-char marker that JSON can never begin with
+  // and that lz-string's UTF-16 output (every char >= 0x20) can never produce.
+  // So a LEGACY uncompressed entry - which begins with '{' - is still read
+  // correctly and simply rewritten compressed on its next refresh. This is why
+  // no _CACHE_VERSION bump is needed and nothing is purged on deploy.
+  const _CACHE_MARK = '\u0001';
+  function _packCache(envelope) {
+    if (_LZ_OK) {
+      try {
+        const z = _LZ.compress(envelope);
+        if (z && z.length + 1 < envelope.length) return _CACHE_MARK + z;
+      } catch (_) {}
+    }
+    return envelope;
+  }
+  function _unpackCache(raw) {
+    const s = (raw.charCodeAt(0) === 1) ? _LZ.decompress(raw.slice(1)) : raw;
+    return JSON.parse(s);
+  }
+
+    function _readCache(subjectId) {
     const slot = _slot(subjectId);
     try {
       const raw = localStorage.getItem(_cacheKey(slot));
       if (!raw) return null;
-      const { ts, data } = JSON.parse(raw);
+      const { ts, data } = _unpackCache(raw);
       if (Date.now() - ts > _CACHE_TTL) { localStorage.removeItem(_cacheKey(slot)); _lruForget(slot); return null; }
       if (!Array.isArray(data) || !data.length) { localStorage.removeItem(_cacheKey(slot)); _lruForget(slot); return null; }
       _lruTouch(slot);
@@ -969,10 +1223,17 @@ const QuestionLoader = (() => {
     } catch { return null; }
   }
 
-  function _writeCache(subjectId, data) {
+  // ⚠ `slotOverride` exists because the WRITE is now deferred off the render
+  // path (setTimeout in _loadFromAPI / _loadBatchForGrade), and between the
+  // fetch and the deferred write the active child can change (a handover). The
+  // owner must be the one who AUTHORISED THE FETCH, so the caller pins the slot
+  // at fetch time and passes it here; resolving _slot() late would file one
+  // child's bundle under whoever happens to be active when the timer fires.
+  function _writeCache(subjectId, data, slotOverride) {
     if (!Array.isArray(data) || !data.length) return;
-    const slot = _slot(subjectId);
-    const payload = JSON.stringify({ ts: Date.now(), data });
+    const slot = slotOverride || _slot(subjectId);
+    const envelope = JSON.stringify({ ts: Date.now(), data });
+    const payload = _packCache(envelope);
 
     // Stay under BOTH caps BEFORE writing, so the common case never has to fail
     // a write first. _cachedSizes excludes this subject either way, so the total
@@ -1074,10 +1335,16 @@ const QuestionLoader = (() => {
       if (!resp.ok) { console.warn('[QuestionLoader] API error', resp.status); return false; }
 
       const incoming = await resp.json();
-      _writeCache(subjectId, incoming);
       const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
       STATIC_QUESTIONS.push(...incoming.filter(q => !existing.has(q.id)));
       _expandTasks();
+      // ⚠ Cache AFTER the questions are usable, on a LATER task. Compressing a
+      // full bundle is ~0.5s of synchronous lz-string work, and blocking the
+      // first question's render on it is the one regression compression adds.
+      // The cache only serves offline / the next session, so it owes the child
+      // nothing this instant; setTimeout(0) lets the paint happen first.
+      const _slotNow = _slot(subjectId);
+      setTimeout(() => { try { _writeCache(subjectId, incoming, _slotNow); } catch (_) {} }, 0);
       return true;
 
     } catch(e) {
@@ -1100,10 +1367,16 @@ const QuestionLoader = (() => {
       const existing = new Set(STATIC_QUESTIONS.map(q => q.id));
       for (const [subjectId, questions] of Object.entries(bundle)) {
         if (!Array.isArray(questions)) continue;
-        _writeCache(subjectId, questions);
         _done.add(subjectId);
         STATIC_QUESTIONS.push(...questions.filter(q => !existing.has(q.id)));
         questions.forEach(q => existing.add(q.id));
+        // ⚠ One compression per task, not a whole grade's in one synchronous
+        // burst - see _loadFromAPI. Each setTimeout(0) is its own macrotask, so
+        // the event loop can paint and take input between subjects instead of
+        // freezing for the sum of all of them. The slot is pinned now (owner =
+        // the fetch's authoriser), not re-resolved when the timer fires.
+        const _slotNow = _slot(subjectId);
+        setTimeout(() => { try { _writeCache(subjectId, questions, _slotNow); } catch (_) {} }, 0);
       }
       return true;
     } catch(e) {

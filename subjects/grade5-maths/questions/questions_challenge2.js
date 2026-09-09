@@ -942,7 +942,7 @@ CHALLENGE_QS2.push(
 // ── GRAPHS ────────────────────────────────────
 CHALLENGE_QS2.push(
   makeMCQ({ id:'CH_GRP01', chapterId:'graphs', subsection:'bar_chart', difficulty:2,
-    question:'A bar chart shows: Jan=45, Feb=60, Mar=75, Apr=55. What is the total for all four months?',
+    question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Monthly totals</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 148H354M58 110H354M58 72H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="152">20</text><text x="50" y="114">40</text><text x="50" y="76">60</text><text x="50" y="38">80</text></g><rect x="73" y="100" width="42" height="86" rx="3" fill="#3b82f6"/><rect x="145" y="72" width="42" height="114" rx="3" fill="#f59e0b"/><rect x="217" y="43" width="42" height="143" rx="3" fill="#10b981"/><rect x="289" y="81" width="42" height="105" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Jan</text><text x="94" y="94">45</text><text x="166" y="203">Feb</text><text x="166" y="66">60</text><text x="238" y="203">Mar</text><text x="238" y="37">75</text><text x="310" y="203">Apr</text><text x="310" y="75">55</text></g></svg>What is the total for all four months?',
     options:['220','225','235','240'],
     answer:'235',
     hint:'45+60+75+55.',
@@ -955,13 +955,15 @@ CHALLENGE_QS2.push(
     explanation:'32+28+40=100. Mean=100÷3≈33.3. Let me recalculate with whole symbols.' }),
 
   makeNum({ id:'CH_GRP04', chapterId:'graphs', subsection:'frequency', difficulty:3,
-    question:'A frequency table shows: Red=12, Blue=18, Green=9, Yellow=21. What fraction of children chose Red? Give in simplest form.',
-    answer:'2/10', acceptableAnswers:['2/10','1/5'],
+    question:'A frequency table shows the colour each child chose.' +
+      '<table class="q-table"><tr><th>Colour</th><th>Children</th></tr><tr><td>Red</td><td>12</td></tr><tr><td>Blue</td><td>18</td></tr><tr><td>Green</td><td>9</td></tr><tr><td>Yellow</td><td>21</td></tr></table>' +
+      'What fraction of the children chose <b>Red</b>? Give your answer in its simplest form.',
+    answer:'1/5', acceptableAnswers:['1/5','12/60','2/10'],
     hint:'Total = 12+18+9+21=60. Red fraction = 12/60.',
     explanation:'12/60 = 1/5.' }),
 
   makeMCQ({ id:'CH_GRP05', chapterId:'graphs', subsection:'bar_chart', difficulty:3,
-    question:'In a bar chart, Sports=40, Art=30, Music=20, Drama=10. What percentage chose Sports?',
+    question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Club chosen by pupils</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 156H354M58 125H354M58 95H354M58 64H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="160">10</text><text x="50" y="129">20</text><text x="50" y="99">30</text><text x="50" y="68">40</text><text x="50" y="38">50</text></g><rect x="73" y="64" width="42" height="122" rx="3" fill="#3b82f6"/><rect x="145" y="95" width="42" height="91" rx="3" fill="#f59e0b"/><rect x="217" y="125" width="42" height="61" rx="3" fill="#10b981"/><rect x="289" y="156" width="42" height="30" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Sports</text><text x="94" y="58">40</text><text x="166" y="203">Art</text><text x="166" y="89">30</text><text x="238" y="203">Music</text><text x="238" y="119">20</text><text x="310" y="203">Drama</text><text x="310" y="150">10</text></g></svg>What <b>percentage</b> chose Sports?',
     options:['30%','35%','40%','45%'],
     answer:'40%',
     hint:'Total = 100. Sports/Total × 100.',
@@ -974,20 +976,24 @@ CHALLENGE_QS2.push(
     explanation:'80−50=30. Wait: 4×20=80; 2.5×20=50; 80-50=30. Answer=30.' }),
 
   makeNum({ id:'CH_GRP08', chapterId:'graphs', subsection:'frequency', difficulty:3,
-    question:'A tally chart shows shoe sizes: Size 4: |||| (4), Size 5: |||| | (6), Size 6: |||| |||| (9), Size 7: ||| (3). What is the modal shoe size?',
+    question:'A tally chart records shoe sizes. Each <code>||||/</code> stands for five.' +
+      '<table class="q-table"><tr><th>Shoe size</th><th>Tally marks</th></tr><tr><td>4</td><td><code>||||</code></td></tr><tr><td>5</td><td><code>||||/ |</code></td></tr><tr><td>6</td><td><code>||||/ ||||</code></td></tr><tr><td>7</td><td><code>|||</code></td></tr></table>' +
+      'What is the <b>modal</b> shoe size?',
     answer:'6',
     hint:'The mode is the value that appears most often.',
     explanation:'Size 6 has the highest frequency (9).' }),
 
   makeMCQ({ id:'CH_GRP09', chapterId:'graphs', subsection:'mean', difficulty:4,
-    question:'A bar chart records rainfall (mm): Mon=12, Tue=8, Wed=15, Thu=6, Fri=19. A gardener says "the average daily rainfall was more than 11 mm." Is she correct?',
+    question:'<svg class="q-chart" viewBox="0 0 380 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="190" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Daily rainfall</text><text x="6" y="18" font-size="10" fill="#64748b">mm</text><path d="M58 34V186H366" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H366M58 148H366M58 110H366M58 72H366M58 34H366" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="152">5</text><text x="50" y="114">10</text><text x="50" y="76">15</text><text x="50" y="38">20</text></g><rect x="70" y="95" width="36" height="91" rx="3" fill="#3b82f6"/><rect x="130" y="125" width="36" height="61" rx="3" fill="#f59e0b"/><rect x="190" y="72" width="36" height="114" rx="3" fill="#10b981"/><rect x="250" y="140" width="36" height="46" rx="3" fill="#ef4444"/><rect x="310" y="42" width="36" height="144" rx="3" fill="#8b5cf6"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="88" y="203">Mon</text><text x="88" y="89">12</text><text x="148" y="203">Tue</text><text x="148" y="119">8</text><text x="208" y="203">Wed</text><text x="208" y="66">15</text><text x="268" y="203">Thu</text><text x="268" y="134">6</text><text x="328" y="203">Fri</text><text x="328" y="36">19</text></g></svg>A gardener says "the average daily rainfall was more than 11 mm." Is she correct?',
     options:['Yes, average = 12 mm','Yes, average = 11.5 mm','No, average = 11 mm','No, average = 10.5 mm'],
     answer:'Yes, average = 12 mm',
     hint:'Sum = 12+8+15+6+19=60. Mean=60÷5.',
     explanation:'60÷5=12 mm. 12 > 11 mm, so she is correct.' }),
 
   makeMCQ({ id:'CH_GRP11', chapterId:'graphs', subsection:'frequency', difficulty:3,
-    question:'A frequency table: 1–10: 5 students; 11–20: 8 students; 21–30: 12 students; 31–40: 7 students. What percentage of students scored 21–30?',
+    question:'A frequency table shows how many students scored in each range of marks.' +
+      '<table class="q-table"><tr><th>Marks</th><th>Students</th></tr><tr><td>1&ndash;10</td><td>5</td></tr><tr><td>11&ndash;20</td><td>8</td></tr><tr><td>21&ndash;30</td><td>12</td></tr><tr><td>31&ndash;40</td><td>7</td></tr></table>' +
+      'What <b>percentage</b> of the students scored 21&ndash;30?',
     options:['30%','35%','37.5%','40%'],
     answer:'37.5%',
     hint:'Total = 5+8+12+7=32. (12÷32)×100.',
@@ -1020,7 +1026,7 @@ CHALLENGE_QS2.push(
     explanation:'Mean≈71.4. Scores above: 72,75,80,88,91 - that\'s 5. Wait: 45+52+68+72+75+80+88+91=571; 571÷8=71.375. Above: 72,75,80,88,91 = 5 students.' }),
 
   makeMCQ({ id:'CH_GRP17', chapterId:'graphs', subsection:'bar_chart', difficulty:4,
-    question:'A bar chart: Maths=72, English=68, Science=80, History=64. A student says "I scored at least 70 in half my subjects." Is this true?',
+    question:'<svg class="q-chart" viewBox="0 0 374 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="187" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">My marks</text><path d="M64 34V186H360" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M64 186H360M64 156H360M64 125H360M64 95H360M64 64H360M64 34H360" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="56" y="190">0</text><text x="56" y="160">20</text><text x="56" y="129">40</text><text x="56" y="99">60</text><text x="56" y="68">80</text><text x="56" y="38">100</text></g><rect x="79" y="77" width="42" height="109" rx="3" fill="#3b82f6"/><rect x="151" y="83" width="42" height="103" rx="3" fill="#f59e0b"/><rect x="223" y="64" width="42" height="122" rx="3" fill="#10b981"/><rect x="295" y="89" width="42" height="97" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="100" y="203">Maths</text><text x="100" y="71">72</text><text x="172" y="203">English</text><text x="172" y="77">68</text><text x="244" y="203">Science</text><text x="244" y="58">80</text><text x="316" y="203">History</text><text x="316" y="83">64</text></g></svg>A student says "I scored at least 70 in half my subjects." Is this true?',
     options:['Yes - Maths and Science are ≥70','Yes - all four are close to 70','No - only Science is ≥70','No - none are exactly 70'],
     answer:'Yes - Maths and Science are ≥70',
     hint:'Count subjects ≥70: Maths=72✓, Science=80✓. That\'s 2 out of 4 = half.',

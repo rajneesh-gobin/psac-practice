@@ -813,7 +813,9 @@ const MCQ = [
    'Hydroelectric stations need a large river and suitable valley; solar panels can be installed on rooftops and flat land almost anywhere.'],
 
   ['g9s-p3-v093', 'comparing_energy_sources', 3,
-   'A table shows the carbon emissions per kWh: coal = 820 g, gas = 490 g, nuclear = 12 g, wind = 11 g, solar = 45 g. Which two sources produce the least CO&#8322; per kWh?',
+   'A table shows the carbon emissions of five electricity sources.' +
+   '<table class="q-table"><tr><th>Source</th><th>CO&#8322; per kWh</th></tr><tr><td>Coal</td><td>820 g</td></tr><tr><td>Gas</td><td>490 g</td></tr><tr><td>Nuclear</td><td>12 g</td></tr><tr><td>Wind</td><td>11 g</td></tr><tr><td>Solar</td><td>45 g</td></tr></table>' +
+   'Which two sources produce the <b>least</b> CO&#8322; per kWh?',
    ['Nuclear and wind', 'Coal and gas', 'Solar and gas', 'Wind and solar'],
    'Nuclear and wind',
    'Find the two smallest values in the table.',

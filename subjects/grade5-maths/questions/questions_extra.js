@@ -578,7 +578,7 @@ const EXTRA = [
     explanation:'4.5 × 10 = <b>45 pupils</b>.' }),
 
   makeMCQ({ id:'GR07', chapterId:'graphs', subsection:'bar_chart', difficulty:2,
-    question:'A bar chart shows: Mon=50, Tue=35, Wed=45, Thu=30.<br>On which day were the <b>fewest</b> items sold?',
+    question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Items sold each day</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 161H354M58 135H354M58 110H354M58 85H354M58 59H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="165">10</text><text x="50" y="139">20</text><text x="50" y="114">30</text><text x="50" y="89">40</text><text x="50" y="63">50</text><text x="50" y="38">60</text></g><rect x="73" y="59" width="42" height="127" rx="3" fill="#3b82f6"/><rect x="145" y="97" width="42" height="89" rx="3" fill="#f59e0b"/><rect x="217" y="72" width="42" height="114" rx="3" fill="#10b981"/><rect x="289" y="110" width="42" height="76" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Mon</text><text x="94" y="53">50</text><text x="166" y="203">Tue</text><text x="166" y="91">35</text><text x="238" y="203">Wed</text><text x="238" y="66">45</text><text x="310" y="203">Thu</text><text x="310" y="104">30</text></g></svg>On which day were the <b>fewest</b> items sold?',
     options:['Monday','Tuesday','Wednesday','Thursday'],
     answer:'Thursday',
     hint:'Look for the smallest bar value.',

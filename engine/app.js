@@ -1721,38 +1721,177 @@ if (typeof window !== 'undefined' && window.speechSynthesis) {
 // for a Mauritian child, whose French is metropolitan), then any voice for the
 // language, then nothing - in which case utt.lang is the only hint left and
 // some engines will ignore it.
+// ⚠ LOCAL FIRST inside each match tier. Chrome's "Google <language>" voices are
+// `localService: false` - they are synthesised on Google's servers and the audio
+// is fetched before playback can begin, which is a visible pause between the tap
+// and the first word, and on a phone on mobile data a long one. Measured on this
+// machine: _pickVoice('fr-FR') chose "Google français" (remote) while three
+// local voices sat unused. Language accuracy still outranks latency, so the tier
+// order is unchanged - locality only decides WITHIN a tier.
 function _pickVoice(lang) {
   const voices = _ttsVoices.length ? _ttsVoices : (() => { _refreshTtsVoices(); return _ttsVoices; })();
   if (!voices.length) return null;
   const norm = v => (v.lang || '').replace('_', '-').toLowerCase();
   const want = lang.toLowerCase();
   const base = want.slice(0, 2);
-  return voices.find(v => norm(v) === want)
-      || voices.find(v => norm(v).startsWith(base + '-'))
-      || voices.find(v => norm(v).startsWith(base))
-      || null;
+  const tiers = [
+    v => norm(v) === want,
+    v => norm(v).startsWith(base + '-'),
+    v => norm(v).startsWith(base),
+  ];
+  for (const match of tiers) {
+    const hit = voices.filter(match);
+    if (hit.length) return hit.find(v => v.localService) || hit[0];
+  }
+  return null;
 }
 
 // A stacked fraction is a column flexbox, so innerText reads "1" then "5" and
 // the read-aloud button said "one five". Every .frac carries the spoken form in
 // data-tts (written by _prettyMath); swap it in on a CLONE so the question the
 // child is looking at is not touched.
+// ⚠ A TABLE READ IN DOCUMENT ORDER IS NOT A SENTENCE. A frequency table
+// linearises to "Fruits chosen Pupils 1 5 2 7 3 4" - the child hears eight
+// numbers and no way to pair them with their headings, on exactly the
+// questions where the table IS the question. Data questions used to spell
+// their table out in prose, which spoke perfectly and taught nothing; drawing
+// the table fixed the reading and broke the listening. So the clone rewrites
+// each row as "heading cell, heading cell", which is what a person reading a
+// table aloud to a child actually says.
+// ⚠ Header cells come from the FIRST row that has any <th>, not from a
+// <thead> - most question tables in the bank have no <thead> at all.
+function _ttsTable(table) {
+  const rows = Array.from(table.rows || []);
+  if (!rows.length) return '';
+  const cellText = c => (c.textContent || '').replace(/\s+/g, ' ').trim();
+  const headRow = rows.find(r => r.querySelector('th'));
+  const heads = headRow ? Array.from(headRow.cells).map(cellText) : [];
+  const out = [];
+  for (const row of rows) {
+    if (row === headRow) continue;
+    const cells = Array.from(row.cells).map(cellText);
+    if (!cells.join('')) continue;
+    // With no headings there is nothing to pair, so read the cells plainly
+    // rather than inventing labels for them.
+    out.push(cells.map((c, i) => (heads[i] ? heads[i] + ' ' + c : c)).join(', '));
+  }
+  return out.join('. ');
+}
+
 function _ttsText(el) {
   if (!el) return '';
   let src = el;
   try {
-    if (el.querySelector('.frac[data-tts]')) {
+    if (el.querySelector('.frac[data-tts]') || el.querySelector('table')) {
       src = el.cloneNode(true);
       src.querySelectorAll('.frac[data-tts]').forEach(f => {
         f.replaceWith(document.createTextNode(' ' + f.dataset.tts + ' '));
       });
+      src.querySelectorAll('table').forEach(t => {
+        t.replaceWith(document.createTextNode('. ' + _ttsTable(t) + '. '));
+      });
       // innerText needs a laid-out node; a detached clone only has textContent.
-      return (src.textContent || '').replace(/\s+/g, ' ').trim();
+      // A table stands in as its own sentence and brings a full stop with it, so
+      // collapse the pair when the text in front of it already ended in one.
+      return (src.textContent || '').replace(/\s+/g, ' ').replace(/\.\s*\./g, '.').trim();
     }
   } catch (_) {}
   return (src.innerText || src.textContent || '').trim();
 }
 
+// ⚠ A run of underscores, dots or ellipses is a BLANK to a reader and a
+// disaster to a speech engine: fr-FR reads "___" as "tiret bas tiret bas tiret
+// bas", so a child completing « Le chat est ___ la table » hears the gap
+// announced three times in a row and never hears the sentence. Measured across
+// the bank: 3,188 underscore runs, ~600 dot runs (« ................ ») and
+// runs of « ……………… ». They collapse to ONE word in the utterance's own
+// language, wrapped in commas so the engine leaves a real pause around it.
+// ⚠ Thresholds are deliberate. A single "…" is prose trailing off (1,419 of
+// them, "A library is a place where people can…") and "..." likewise, so only
+// a RUN counts. A single underscore can sit inside a maths variable.
+// ⚠ NOT "trou". It was the pedagogically obvious word - the exercises are
+// literally "Textes à Trous" - and it is the wrong word to say out loud to a
+// child in Mauritius, where it carries a vulgar reading. A hum has neither
+// problem and cannot be mistaken for the answer either: a child hearing
+// "Le chat est, blanc, la table" may well write "blanc".
+// ⚠ Both are ordinary interjections in their own language, so an engine
+// pronounces them rather than spelling them out. Change them here, in one
+// place, if a voice renders one badly.
+const _TTS_BLANK = { fr: 'hum', en: 'hmm' };
+function _ttsBlanks(text, lang) {
+  const word = _TTS_BLANK[(lang || 'en').slice(0, 2)] || _TTS_BLANK.en;
+  return String(text)
+    // Leading \s* absorbs the space before the gap, or "est ___ la" becomes
+    // "est , trou, la" and the engine reads the stray comma as its own beat.
+    .replace(/\s*(?:_{2,}|\.{4,}|…{2,})\s*/g, ', ' + word + ', ')
+    .replace(/\s*,(?:\s*,)+/g, ',')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/^\s*,\s*/, '')
+    .trim();
+}
+
+// ⚠ An engine prepares a WHOLE utterance before it plays a word of it, and a
+// remote voice fetches that audio over the network first, so a long
+// comprehension question has a long silent head between the tap and the first
+// word. Splitting on sentence boundaries makes the FIRST utterance short, so
+// playback starts while the rest is still being prepared - and it gives a
+// Grade 1 child a real pause between sentences, which they need anyway.
+// ⚠ No lookbehind: `(?<=[.!?])` is a PARSE error on Safari < 16.4 and would
+// take this whole file down, not just read-aloud.
+// ⚠ Merged forward by WORD COUNT, not by length. A character threshold ate
+// "Lis le texte." - a real instruction sentence, and exactly the short opener
+// worth speaking first. Only a 1-2 word fragment ("M.", "2.", "Ex.") is a
+// stutter rather than a pause.
+function _ttsSentences(text) {
+  const raw = String(text).match(/[^.!?…]+[.!?…]*\s*/g) || [text];
+  const words = s => (s.match(/\S+/g) || []).length;
+  const out = [];
+  raw.forEach(piece => {
+    const bit = piece.trim();
+    if (!bit) return;
+    if (out.length && words(out[out.length - 1]) < 3) out[out.length - 1] += ' ' + bit;
+    else out.push(bit);
+  });
+  return out.length ? out : [String(text).trim()];
+}
+
+// The child follows the audio with their eyes: the option being spoken carries
+// .tts-reading until its utterance ends. Cleared by selector, not by a held
+// reference - the answer area re-renders on submit, on Prev, and on every new
+// question, and a reference to a detached button cannot untick anything.
+function _ttsClearHighlight() {
+  document.querySelectorAll('.tts-reading').forEach(el => el.classList.remove('tts-reading'));
+}
+
+// Anything that changes what is on screen calls this. Speech outlives the DOM
+// that started it: without this, tapping Next left the previous question's
+// options being read aloud under the new one.
+function _ttsStop() {
+  _ttsSpeaking = false;
+  _ttsClearHighlight();
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (_) {}
+}
+
+// ⚠ Warned ONCE per session, not per tap. With no French voice installed the
+// engine reads French with whatever it has - "l'école" in an English accent -
+// and the child has no way to know the app is not simply wrong. utt.lang is
+// still set: some engines honour it without exposing a voice.
+let _ttsNoVoiceWarned = false;
+function _ttsApplyVoice(utt, lang) {
+  utt.lang = lang;
+  try {
+    const voice = _pickVoice(lang);
+    if (voice) { utt.voice = voice; return; }
+    if (lang.slice(0, 2) === 'fr' && !_ttsNoVoiceWarned) {
+      _ttsNoVoiceWarned = true;
+      toast('No French voice is installed on this device, so the reading may sound English.', 4500);
+    }
+  } catch (_) {}
+}
+
+// ⚠ Every utterance is queued SYNCHRONOUSLY inside the tap. Chaining them from
+// onend instead means the second speak() happens outside the user gesture,
+// which iOS refuses silently - the question reads and the options never do.
 function speakQuestion(mode) {
   if (!window.speechSynthesis) { toast('Text-to-speech not supported on this browser.', 2500); return; }
   const elId = mode === 'exam' ? 'exam-q-text' : 'practice-q-text';
@@ -1760,23 +1899,56 @@ function speakQuestion(mode) {
   if (!el) return;
   const text = _ttsText(el);
   if (!text) return;
-  if (_ttsSpeaking) { speechSynthesis.cancel(); _ttsSpeaking = false; return; }
+  // ⚠ Self-heal before trusting the flag. onend is not guaranteed - a cancelled
+  // or engine-dropped utterance can leave _ttsSpeaking stuck true, and the
+  // button then only ever stops something that finished long ago, so the child
+  // has to tap twice to hear anything. `=== false` on purpose: an engine that
+  // does not expose .speaking must keep the plain toggle.
+  if (_ttsSpeaking && speechSynthesis.speaking === false) _ttsSpeaking = false;
+  if (_ttsSpeaking) { _ttsStop(); return; }
+
   const lang  = _ttsLang();
-  const utt   = new SpeechSynthesisUtterance(text);
-  utt.rate    = 0.88;
-  utt.lang    = lang;
-  // Setting .lang alone is not always enough - some engines keep the default
-  // voice unless one is named, which is how a French question ended up being
-  // read aloud by an English voice. See _pickVoice / _refreshTtsVoices.
-  try {
-    const voice = _pickVoice(lang);
-    if (voice) utt.voice = voice;
-  } catch(e) {}
-  utt.onstart = () => { _ttsSpeaking = true; };
-  utt.onend   = () => { _ttsSpeaking = false; };
-  utt.onerror = () => { _ttsSpeaking = false; };
-  speechSynthesis.cancel();
-  speechSynthesis.speak(utt);
+  const parts = _ttsSentences(_ttsBlanks(text, lang)).map(s => ({ text: s, el: null }));
+
+  // Practice only, and deliberately: reading the choices aloud in an exam
+  // would hand a child sitting a timed paper something the paper does not.
+  // ⚠ Options are read for MCQ-shaped answers only. A numeric pad, a typed
+  // box or a cloze passage has no options to read, and the letters would be
+  // announced over nothing.
+  if (mode !== 'exam') {
+    const opts = document.querySelectorAll('#practice-answer-area .mcq-opt');
+    opts.forEach((opt, i) => {
+      const label = _ttsText(opt.querySelector('span:last-child')) || _ttsText(opt);
+      if (!label) return;
+      // The letter maps the audio to the button a child is looking at. Under
+      // fr-FR the engine reads it as a French letter name, which is why it is
+      // a separate leading word rather than "A)" glued to the option.
+      parts.push({ text: String.fromCharCode(65 + i) + '. ' + _ttsBlanks(label, lang), el: opt });
+    });
+  }
+
+  // ⚠ Only cancel when there is something TO cancel. An unconditional
+  // cancel() immediately followed by speak() is a documented Chrome stall: the
+  // queue teardown races the new utterance, and the first one is delayed or
+  // dropped outright. Nothing is speaking on the common path - the child tapped
+  // 🔊 on a fresh question - so the usual case now skips it entirely.
+  if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+  _ttsClearHighlight();
+  _ttsSpeaking = true;
+  const last = parts.length - 1;
+  parts.forEach((part, i) => {
+    const utt = new SpeechSynthesisUtterance(part.text);
+    utt.rate  = 0.88;
+    _ttsApplyVoice(utt, lang);
+    utt.onstart = () => { _ttsClearHighlight(); if (part.el) part.el.classList.add('tts-reading'); };
+    const done = () => {
+      if (part.el) part.el.classList.remove('tts-reading');
+      if (i === last) _ttsSpeaking = false;
+    };
+    utt.onend   = done;
+    utt.onerror = () => { done(); _ttsStop(); };
+    speechSynthesis.speak(utt);
+  });
 }
 
 // ── Mobile: Share exam result ───────────────────────────────────────────────
@@ -2172,6 +2344,9 @@ function _returnToParentDashboard() {
 }
 
 function showScreen(id) {
+  // Speech outlives the screen that started it - leaving a chapter mid-reading
+  // carried the options into whatever came next.
+  if (typeof _ttsStop === 'function') _ttsStop();
   if (_KID_ONLY_SCREENS.has(id) && _isParentContext()) {
     _returnToParentDashboard();
     return;
@@ -2770,6 +2945,15 @@ function recordAnswer(chapterId, correct, source, questionId) {
   if (!DB.chapters[chapterId]) DB.chapters[chapterId] = { attempted: 0, correct: 0 };
   DB.chapters[chapterId].attempted++;
   if (correct) DB.chapters[chapterId].correct++;
+  // The Subject Hub syllabus tab renders once per pack, so without this a
+  // child sees the percentage from before the round they have just finished.
+  // ⚠ try/catch, not the bare typeof guard it looks like it needs. SubjectHub is
+  // a `const` declared 6,000 lines further down this same file, so before that
+  // line has been evaluated the identifier is in the temporal dead zone and
+  // `typeof` THROWS rather than answering "undefined". Nothing should call
+  // recordAnswer that early, but the cost of being wrong is a child unable to
+  // answer a question, against a cache flag that does not matter yet.
+  try { if (typeof SubjectHub !== 'undefined' && SubjectHub.syllabusStale) SubjectHub.syllabusStale(); } catch (_) {}
   if (questionId && STATIC_QUESTIONS.some(q => q.id === questionId && q.chapterId === chapterId)) {
     const chapter = DB.chapters[chapterId];
     chapter.answeredIds = [...new Set([...(Array.isArray(chapter.answeredIds) ? chapter.answeredIds : []), questionId])];
@@ -6931,15 +7115,20 @@ function renderDashboard() {
   const locked = DB.restrictions?.lockedChapters || [];
   const mg = document.getElementById('mastery-grid');
   mg.innerHTML = CHAPTERS.map(ch => {
-    const pct     = getChapterPct(ch.id);
+    // Same rule as the syllabus screen and the chapter cards: a chapter with
+    // no attempts is not a 0% score, and an empty bar beside "0%" is the one
+    // reading a child should never be given for work they have not done yet.
+    const chProgress = _chapterProgress(ch.id);
+    const pct     = chProgress.acc;
     const col     = pct >= 80 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#3b82f6';
+    const pctText = chProgress.attempted ? pct + '%' : 'Not started';
     const isLocked = locked.includes(ch.id);
     const click   = isLocked ? `toast('🔒 This chapter is locked by your parent.', 2000)` : `startChapterDirect('${ch.id}')`;
     const lockBadge = isLocked ? '<span class="text-xs ml-1" title="Locked">🔒</span>' : '';
     return `<div class="mastery-item ${isLocked ? 'opacity-50' : 'cursor-pointer hover:opacity-80'} transition-opacity" onclick="${click}">
       <div class="flex justify-between items-center mb-1">
         <span class="text-sm font-medium text-gray-700 dark:text-gray-300">${ch.icon} ${ch.name}${lockBadge}</span>
-        <span class="text-xs font-bold text-gray-500 dark:text-gray-400">${pct}%</span>
+        <span class="text-xs font-bold text-gray-500 dark:text-gray-400">${pctText}</span>
       </div>
       <div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${pct}%;background:${col}"></div></div>
     </div>`;
@@ -8494,7 +8683,7 @@ function generatePrintablePaper() {
     </article>`).join('');
   const answerKeyHtml = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
     <title>Answer Key - Grade ${_activeSubjectLabel().grade} ${_activeSubjectLabel().name} Practice Paper ${year}</title>
-    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}@media print{body{margin:10px}.no-print{display:none}}</style>
+    <style>body{font-family:Arial,sans-serif;color:#111;margin:24px;line-height:1.45}.no-print{background:#166534;color:#fff;border:0;border-radius:6px;padding:10px 20px;font-size:12pt;cursor:pointer;margin-bottom:18px}.head{border:2px solid #111;padding:12px 16px;margin-bottom:16px}.head h1{font-size:17pt;margin:0 0 4px}.head p{margin:0;color:#444}.answer{break-inside:avoid;page-break-inside:avoid;border:1px solid #cbd5e1;border-radius:7px;padding:10px 12px;margin:10px 0}.answer-head{color:#1e3a5f;margin-bottom:6px}.answer-question{font-size:10pt;color:#334155;margin-bottom:7px}.answer-working{margin-top:7px;background:#f8fafc;padding:7px;border-radius:4px}.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:-.55em;margin:0 .18em;line-height:1.05;font-weight:bold}.frac .fr-n{padding:0 .28em}.frac .fr-d{padding:0 .28em;border-top:1.5px solid currentColor}.symline-print{display:block;width:280px;max-width:100%;margin:8px auto;background:#fff}.symline-paper{fill:#fff;stroke:#cbd5e1}.symline-shape{fill:#f8fafc;stroke:#111;stroke-width:3}.symline-answer{stroke:#15803d;stroke-width:4;stroke-dasharray:9 5}.q-table,.picto-table{border-collapse:collapse;margin:6px 0;font-size:10pt}.q-table th,.picto-table th{background:#f1f5f9;font-weight:700;text-align:left;padding:4px 10px;border:1px solid #94a3b8}.q-table td,.picto-table td{padding:4px 10px;border:1px solid #cbd5e1}@media print{body{margin:10px}.no-print{display:none}}</style>
     </head><body><button class="no-print" onclick="window.print()">🖨️ Print / Save answer key as PDF</button><div class="head"><h1>Answer Key - Practice Paper</h1><p>Grade ${_activeSubjectLabel().grade} · ${_activeSubjectLabel().name} · ${year}</p><p>For parent or teacher use. Keep this separate from the pupil paper.</p></div>${answerRows}</body></html>`;
 
   const html = `<!DOCTYPE html>
@@ -8974,6 +9163,16 @@ const PracticeHub = (() => {
     const k = (subject || '').toLowerCase();
     return BOOK_TAGLINES[k] || '';
   }
+  // The child's grade lives on the signed-in account (Auth._activeAccount),
+  // never in the progress blob. SELECTED_GRADE is the second-best answer: it
+  // follows whatever pack is open, so it is right once a subject is chosen.
+  function _practiceHomeGrade() {
+    const acct = (typeof Auth !== 'undefined' && Auth.getActiveAccount) ? Auth.getActiveAccount() : null;
+    return Number(acct?.grade)
+      || Number(typeof SELECTED_GRADE !== 'undefined' ? SELECTED_GRADE : 0)
+      || Number((typeof DB !== 'undefined' && DB?.grade) || 0)
+      || 5;
+  }
   function _liveGrades() {
     return [...new Set(
       Object.values(SUBJECT_PACKS || {})
@@ -8985,8 +9184,22 @@ const PracticeHub = (() => {
     const sel = document.getElementById('prac-grade-sel');
     const note = document.getElementById('prac-locked-note');
     if (!sel) return;
-    const currentGrade = Number((typeof DB !== 'undefined' && DB?.grade) || 5);
-    const locked = !!(typeof DB !== 'undefined' && (DB?.restrictions?.gradeRestricted || DB?.restrictions?.lockedGrade));
+    // ⚠ THE CHILD'S OWN GRADE, from the account. `DB.grade` was read here and
+    //   in _renderBooks below, and it is written NOWHERE - not by the app, not
+    //   in Store._defaultStudent(), not in a single stored blob. So it was
+    //   always undefined and this always fell through to 5: every child, in
+    //   every grade, opened Start Practicing on GRADE 5 and got Grade 5
+    //   subjects. Measured on live data - three Grade 6 children carrying
+    //   Grade 5 chapters (plants, discovery, eng-verbs, trade-agri). They did
+    //   not wander into the wrong grade; the app opened it for them.
+    const currentGrade = Number(_practiceHomeGrade());
+    // ⚠ The parent setting is `crossGradePractice`, and it is what the Parent
+    //   Controls toggle actually writes. This line used to test
+    //   `gradeRestricted || lockedGrade`, two names that appear NOWHERE else in
+    //   the codebase - nothing has ever written either - so the dropdown was
+    //   permanently unlocked and the toggle did nothing on the one screen that
+    //   matters. Locked unless the parent has opted in.
+    const locked = !(typeof DB !== 'undefined' && DB?.restrictions?.crossGradePractice);
     const grades = _liveGrades();
     sel.innerHTML = grades.map(g =>
       `<option value="${g}"${g === currentGrade ? ' selected' : ''}>Grade ${g}</option>`
@@ -8998,7 +9211,7 @@ const PracticeHub = (() => {
     const grid = document.getElementById('prac-books-grid');
     if (!grid) return;
     const sel = document.getElementById('prac-grade-sel');
-    const g = grade !== undefined ? Number(grade) : Number(sel?.value || (typeof DB !== 'undefined' && DB?.grade) || 5);
+    const g = grade !== undefined ? Number(grade) : Number(sel?.value || _practiceHomeGrade());
     const packs = Object.values(SUBJECT_PACKS || {})
       .filter(p => Number(p.grade) === g && !p.comingSoon)
       .sort((a, b) => (a.subject || a.name || '').localeCompare(b.subject || b.name || ''));
@@ -9146,6 +9359,9 @@ const SubjectHub = (() => {
     _renderChapters();
   }
 
+  // ⚠ Invalidated by _shSyllabusStale(), called from recordAnswer(). Without
+  //   that, this renders once per pack and the chapter percentages a child
+  //   has just moved by practising stay at what they were before the round.
   function _renderSyllabusTab() {
     const panel = document.getElementById('sh-syllabus-panel');
     if (!panel || panel.dataset.rendered === _packId) return;
@@ -9213,7 +9429,13 @@ const SubjectHub = (() => {
     }
   }
 
-  return { open, back, tab, setFilter, _startMockExam };
+  // Answering moves a chapter percentage, and this tab caches per pack.
+  function syllabusStale() {
+    const panel = document.getElementById('sh-syllabus-panel');
+    if (panel) delete panel.dataset.rendered;
+  }
+
+  return { open, back, tab, setFilter, syllabusStale, _startMockExam };
 })();
 window.SubjectHub = SubjectHub;
 
@@ -9449,6 +9671,7 @@ function _updateDiffBadge(q) {
 }
 
 function loadPracticeQuestion() {
+  _ttsStop();
   if (!S.practice.qs.length || S.practice.idx >= S.practice.qs.length) {
     if (S.practice.difficulty !== null) {
       // Specific difficulty assigned (parent assignment)
@@ -9729,6 +9952,7 @@ function pauseExamForLater() {
 }
 
 function practiceSubmit() {
+  _ttsStop();
   const q = S.practice.qs[S.practice.idx];
   const ua = getSelectedAnswer('practice-answer-area', q?.type);
   if (q?.type !== 'symmetry' && !ua) { toast('Please answer the question first! 📝'); return; }
@@ -9893,6 +10117,7 @@ function _scrollPracticeFeedbackIntoView() {
 }
 
 function practiceSkip() {
+  _ttsStop();
   const q = S.practice.qs[S.practice.idx];
   if (!q) return;
   // See practiceSubmit() for why - same read-only-recap-on-Prev mechanism.
@@ -10399,11 +10624,14 @@ function renderAnalytics() {
       chapEl.innerHTML = CHAPTERS.map(ch => {
         const c = (DB.chapters || {})[ch.id] || { attempted: 0, correct: 0 };
         const p = c.attempted ? Math.round(c.correct / c.attempted * 100) : 0;
-        const col = p >= 80 ? '#22c55e' : p >= 50 ? '#f59e0b' : '#ef4444';
+        // ⚠ "0/0 • 0%" for a chapter nobody has opened. The packs branch below
+        // already says "not started"; this fallback never got the same rule.
+        const col = !c.attempted ? '#94a3b8' : p >= 80 ? '#22c55e' : p >= 50 ? '#f59e0b' : '#ef4444';
+        const label = c.attempted ? c.correct + '/' + c.attempted + ' &bull; ' + p + '%' : 'not started';
         return `<div class="flex items-center gap-2 py-1.5">
           <span class="text-sm text-gray-700 dark:text-gray-300 flex-1 truncate">${ch.icon} ${ch.name}</span>
-          <span class="text-xs font-bold shrink-0" style="color:${col}">${c.correct}/${c.attempted} &bull; ${p}%</span>
-          <div class="w-20 shrink-0"><div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${p}%;background:${col}"></div></div></div>
+          <span class="text-xs font-bold shrink-0" style="color:${col}">${label}</span>
+          <div class="w-20 shrink-0"><div class="mastery-bar-bg"><div class="mastery-bar-fill" style="width:${c.attempted ? p : 0}%;background:${col}"></div></div></div>
         </div>`;
       }).join('');
     } else {
@@ -10633,8 +10861,17 @@ function renderSyllabus() {
   list.innerHTML = CHAPTERS.map(ch => {
     const syl = packSyllabus()[ch.id] || null;
     const subsections = syl ? syl.subsections : [];
-    const chPct = getChapterPct(ch.id);
-    const chColor = chPct >= 80 ? '#22c55e' : chPct >= 50 ? '#f59e0b' : '#3b82f6';
+    // ⚠ Not started is not 0%. getChapterPct() is accuracy and answers 0 for a
+    // chapter with no attempts, so an untouched chapter used to look exactly
+    // like one the child had failed - on the screen a parent opens to see what
+    // is left to do. Same rule and same words as the chapter cards.
+    const chProg = _chapterProgress(ch.id);
+    const chPct = chProg.acc;
+    const chColor = !chProg.attempted ? '#94a3b8'
+      : chPct >= 80 ? '#22c55e' : chPct >= 50 ? '#f59e0b' : '#3b82f6';
+    // ⚠ "correct", never "mastery" - it is accuracy over the answers given,
+    // and a bare "50%" beside a question count reads as "50% of them done".
+    const chLabel = chProg.attempted ? chPct + '% correct' : 'Not started';
 
     const subsHTML = subsections.map(sub => {
       const qCount = STATIC_QUESTIONS.filter(q =>
@@ -10697,11 +10934,11 @@ function renderSyllabus() {
             <span class="font-bold text-gray-800 dark:text-white">${ch.name}</span>
             ${ch.enrichment ? '<span class="ml-2 text-[10px] font-bold uppercase tracking-wide bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded-full align-middle">✨ Bonus</span>' : ''}
             ${ch.part != null ? `<span class="ml-2 text-xs text-gray-500 dark:text-gray-400">Part ${ch.part}</span>` : ''}
-            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${chQs} question${chQs === 1 ? '' : 's'}</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${chQs} question${chQs === 1 ? '' : 's'} in this chapter</div>
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <span class="text-sm font-bold" style="color:${chColor}">${chPct}%</span>
+          <span class="text-sm font-bold whitespace-nowrap" style="color:${chColor}">${chLabel}</span>
           <button class="text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors"
             onclick="event.stopPropagation();startChapterDirect('${ch.id}')">All levels →</button>
           <span class="text-gray-500 dark:text-gray-400 text-sm">▾</span>
@@ -11866,7 +12103,6 @@ async function _renderStudentProfile(container) {
   const name    = account?.name || DB.display_name || 'Student';
   const avatar  = account?.avatar || DB.avatar || '🧒';
   const grade   = account?.grade  || DB.grade  || '';
-  const restricted = !!(DB.restrictions?.disabled);
 
   let expiresAt = null;
   if (_sb && ACTIVE_STUDENT_ID) {

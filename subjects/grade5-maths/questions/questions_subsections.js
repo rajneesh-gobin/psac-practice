@@ -579,9 +579,7 @@ How many <b>more pupils</b> prefer Football than Cricket?`,
     explanation:'45 − 28 = <b>17 more pupils</b>.' }),
 
   makeNum({ id:'BAR03', chapterId:'graphs', subsection:'bar_chart', difficulty:2,
-    question:`A bar chart shows cookies sold each day:
-Mon:35, Tue:42, Wed:28, Thu:50, Fri:45
-<br>What is the <b>total cookies sold</b> for the week?`,
+    question:'<svg class="q-chart" viewBox="0 0 380 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="190" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Cookies sold each day</text><path d="M58 34V186H366" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H366M58 161H366M58 135H366M58 110H366M58 85H366M58 59H366M58 34H366" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="165">10</text><text x="50" y="139">20</text><text x="50" y="114">30</text><text x="50" y="89">40</text><text x="50" y="63">50</text><text x="50" y="38">60</text></g><rect x="70" y="97" width="36" height="89" rx="3" fill="#3b82f6"/><rect x="130" y="80" width="36" height="106" rx="3" fill="#f59e0b"/><rect x="190" y="115" width="36" height="71" rx="3" fill="#10b981"/><rect x="250" y="59" width="36" height="127" rx="3" fill="#ef4444"/><rect x="310" y="72" width="36" height="114" rx="3" fill="#8b5cf6"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="88" y="203">Mon</text><text x="88" y="91">35</text><text x="148" y="203">Tue</text><text x="148" y="74">42</text><text x="208" y="203">Wed</text><text x="208" y="109">28</text><text x="268" y="203">Thu</text><text x="268" y="53">50</text><text x="328" y="203">Fri</text><text x="328" y="66">45</text></g></svg>What is the <b>total cookies sold</b> for the week?',
     answer:'200',
     hint:'Add all 5 values: 35+42+28+50+45.',
     explanation:'35+42+28+50+45=<b>200 cookies</b>.' }),
@@ -599,12 +597,12 @@ Q1:120, Q2:150, Q3:90, Q4:180
   // ══════════════════════════════════════════════
   makeNum({ id:'FRQ01', chapterId:'graphs', subsection:'frequency', difficulty:2,
     question:`A frequency table shows test marks:
-<table style="border-collapse:collapse;margin:6px 0;font-size:13px">
-  <tr><th style="border:1px solid #ccc;padding:4px 8px">Mark</th><th style="border:1px solid #ccc;padding:4px 8px">Freq</th></tr>
-  <tr><td style="border:1px solid #ccc;padding:4px 8px">60</td><td style="border:1px solid #ccc;padding:4px 8px">4</td></tr>
-  <tr><td style="border:1px solid #ccc;padding:4px 8px">70</td><td style="border:1px solid #ccc;padding:4px 8px">7</td></tr>
-  <tr><td style="border:1px solid #ccc;padding:4px 8px">80</td><td style="border:1px solid #ccc;padding:4px 8px">5</td></tr>
-  <tr><td style="border:1px solid #ccc;padding:4px 8px">90</td><td style="border:1px solid #ccc;padding:4px 8px">4</td></tr>
+<table class="q-table">
+  <tr><th>Mark</th><th>Freq</th></tr>
+  <tr><td>60</td><td>4</td></tr>
+  <tr><td>70</td><td>7</td></tr>
+  <tr><td>80</td><td>5</td></tr>
+  <tr><td>90</td><td>4</td></tr>
 </table>
 How many pupils took the test in <b>total</b>?`,
     answer:'20',
@@ -621,13 +619,13 @@ what is the <b>mode</b> (most common mark)?`,
 
   makeNum({ id:'FRQ03', chapterId:'graphs', subsection:'frequency', difficulty:3,
     question:`A frequency table shows siblings:
-<table style="border-collapse:collapse;margin:6px 0;font-size:13px">
-  <tr><th style="border:1px solid #ccc;padding:3px 7px">Siblings</th><th style="border:1px solid #ccc;padding:3px 7px">Freq</th></tr>
-  <tr><td style="border:1px solid #ccc;padding:3px 7px">0</td><td style="border:1px solid #ccc;padding:3px 7px">5</td></tr>
-  <tr><td style="border:1px solid #ccc;padding:3px 7px">1</td><td style="border:1px solid #ccc;padding:3px 7px">12</td></tr>
-  <tr><td style="border:1px solid #ccc;padding:3px 7px">2</td><td style="border:1px solid #ccc;padding:3px 7px">8</td></tr>
-  <tr><td style="border:1px solid #ccc;padding:3px 7px">3</td><td style="border:1px solid #ccc;padding:3px 7px">3</td></tr>
-  <tr><td style="border:1px solid #ccc;padding:3px 7px">4</td><td style="border:1px solid #ccc;padding:3px 7px">2</td></tr>
+<table class="q-table">
+  <tr><th>Siblings</th><th>Freq</th></tr>
+  <tr><td>0</td><td>5</td></tr>
+  <tr><td>1</td><td>12</td></tr>
+  <tr><td>2</td><td>8</td></tr>
+  <tr><td>3</td><td>3</td></tr>
+  <tr><td>4</td><td>2</td></tr>
 </table>
 What is the <b>total number of siblings</b> across all pupils?`,
     answer:'45',

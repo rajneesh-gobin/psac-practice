@@ -364,7 +364,7 @@ STATIC_QUESTIONS.push(
 
   makeMCQ({ id:'g1fr-lec-044', chapterId:'g1fr-lecture', difficulty:1, subsection:'conscience_phonique',
     question:'Quel son entends-tu au début du mot "école" ?',
-    options:['/é/',''/b/',''/p/',''/s/'],
+    options:['/é/','/b/','/p/','/s/'],
     answer:'/é/',
     hint:'"École" commence par une voyelle. Quelle est-elle ?',
     explanation:'"<b>École</b>" commence par la voyelle <b>/é/</b>. C\'est un son de voyelle.' }),

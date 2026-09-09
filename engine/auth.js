@@ -1235,8 +1235,6 @@ const Auth = (() => {
       }
     }
 
-    _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar, grade: sess.grade };
-    ACTIVE_STUDENT_ID = sess.id;
     _updateHeaderProfileChip('student', { avatar: sess.avatar, display_name: sess.displayName });
 
     // Resume session guard so an account-sharing kick still fires on refresh
@@ -1244,6 +1242,16 @@ const Auth = (() => {
 
     // Load progress from Supabase (or localStorage cache)
     const progress = await Store.loadStudentProgress(sess.id);
+
+    // ⚠⚠ ACTIVE_STUDENT_ID MOVES WITH THE DATA, NEVER BEFORE IT. These two
+    //   assignments and the Object.assign below must sit in one synchronous
+    //   run with no await between them: save() files DB under whatever
+    //   ACTIVE_STUDENT_ID says, so an id that changes first means every save
+    //   in the gap writes the PREVIOUS child's work onto THIS child's row.
+    //   The id used to be set six lines and one network round trip earlier.
+    //   pdSwitchStudent already had this ordering; this path did not.
+    _activeAccount    = { id: sess.id, name: sess.displayName, avatar: sess.avatar, grade: sess.grade };
+    ACTIVE_STUDENT_ID = sess.id;
     Object.assign(DB, progress);
 
     applyTheme(_preferredTheme(DB.theme));
@@ -1823,8 +1831,19 @@ const Auth = (() => {
     if (!email || !pass) { _showAuthError('Please enter your email and password.'); return; }
 
     _setAuthLoading(true);
-    const { data, error } = await _sb.auth.signInWithPassword({ email, password: pass });
+    _setBtnBusy('auth-signin-btn', true);
+    _showAuthProgress('Signing you in…', 'Checking your details');
+    // ⚠ try/catch, not a bare await: a dropped connection rejects here, and
+    // an unhandled rejection would leave the overlay covering the screen with
+    // no way back. A refused sign-in must always end with the form visible.
+    let data, error;
+    try {
+      ({ data, error } = await _sb.auth.signInWithPassword({ email, password: pass }));
+    } catch (e) {
+      error = { message: 'Could not reach the server. Check your connection and try again.' };
+    }
     _setAuthLoading(false);
+    _setBtnBusy('auth-signin-btn', false);
     if (!error) _markPinMinted(false);
 
     if (error) {
@@ -1854,7 +1873,17 @@ const Auth = (() => {
     // _handleParentSessionGated's own `if (_parentUser) return` guard prevents
     // double-execution if onAuthStateChange already fired.
     if (data?.session) {
-      await _handleParentSessionGated(data.session);
+      _authProgressStep('Loading your family…');
+      // finally, not a plain await: family setup, the verify screen and the
+      // biometric lock are all reached by THROWING nothing but returning
+      // early, and an unexpected error here must still hand the screen back.
+      try {
+        await _handleParentSessionGated(data.session);
+      } finally {
+        _hideAuthProgress();
+      }
+    } else {
+      _hideAuthProgress(true);
     }
   }
 
@@ -2424,11 +2453,15 @@ const Auth = (() => {
   async function studentSignIn() {
     if (_signInBusy) return;
     _signInBusy = true;
+    _showAuthProgress('Signing you in…', 'Checking your PIN');
+    _setBtnBusy('student-signin-btn', true);
     try {
       await _studentSignIn();
     } finally {
       _signInBusy = false;
       _setAuthLoading(false);
+      _setBtnBusy('student-signin-btn', false);
+      _hideAuthProgress();
     }
   }
 
@@ -2570,6 +2603,7 @@ const Auth = (() => {
       return;
     }
 
+    _authProgressStep('Getting your practice ready…');
     await _loginStudentRow(data.student, { token: data.session_token });
   }
 
@@ -3031,9 +3065,72 @@ const Auth = (() => {
   //
   // The full screen is still the fallback, and still the route for a child
   // signing in on a device with no parent session (nothing to list).
-  function switchToStudentSelect() {
+  let _testOnSwitch = null;
+  async function switchToStudentSelect() {
+    await _offerPinBeforeSwitch(() => (_testOnSwitch || _doSwitchToStudentSelect)());
+  }
+
+  function _doSwitchToStudentSelect() {
     if (_swCandidates().length) { openStudentSwitch(); return; }
     _switchToFullStudentSignIn();
+  }
+
+  // ⚠ Offered HERE, at the moment the cost of not having a PIN is about to be
+  // paid. A parent handing the device over is one tap from a kid-only screen
+  // whose only way back is 🔒 Parent - and with no PIN that means the full
+  // email and password, on a phone, with a child waiting.
+  //
+  // ⚠ Offered ONCE per parent per browser, then never again: this sits in front
+  // of an action the parent has already chosen, so a box they have declined is
+  // an obstacle, not a nudge. Account & Settings → Security stays the unguarded
+  // way in, and declining is remembered under the same per-account scoping the
+  // PIN itself uses (a shared device must not answer for the other parent).
+  const _PIN_OFFER_PREFIX = 'psac_pin_offer_declined_v1_';
+  function _pinOfferKey() { return _parentUser ? _PIN_OFFER_PREFIX + _parentUser.id : null; }
+  function _pinOfferDeclined() {
+    const k = _pinOfferKey();
+    if (!k) return true;
+    try { return !!localStorage.getItem(k); } catch (_) { return true; }
+  }
+
+  let _pinOfferThen = null;
+  async function _offerPinBeforeSwitch(proceed) {
+    // A teacher handing a tablet to a pupil is not the parent case: the copy
+    // says "parent area", and TeacherMode has its own way back.
+    const isParent = (_parentProfile?.role || 'parent') === 'parent';
+    if (!isParent || !_parentUser || _pinOfferDeclined() || _getStoredPinHash()) { proceed(); return; }
+    // ⚠ A failed lookup is UNKNOWN, not "no PIN". Offering to set a second PIN
+    // to someone who already has one - because they happened to be on a train -
+    // is worse than not offering at all.
+    const dbHash = await _fetchDbPinHash();
+    if (dbHash || _dbPinFetchFailed) { proceed(); return; }
+    _pinOfferThen = proceed;
+    _el('modal-pin-offer')?.classList.remove('hidden');
+    document.addEventListener('keydown', _pinOfferKeydown);
+  }
+
+  function _pinOfferKeydown(e) { if (e.key === 'Escape') pinOfferDecline(); }
+
+  function _closePinOffer() {
+    _el('modal-pin-offer')?.classList.add('hidden');
+    document.removeEventListener('keydown', _pinOfferKeydown);
+  }
+
+  // "Yes" hands the setup modal a continuation, so saving the PIN drops the
+  // parent straight into the switch they asked for rather than back onto the
+  // dashboard to find the button again.
+  function pinOfferAccept() {
+    const then = _pinOfferThen; _pinOfferThen = null;
+    _closePinOffer();
+    _showPinSetupModal(then);
+  }
+
+  function pinOfferDecline() {
+    const then = _pinOfferThen; _pinOfferThen = null;
+    const k = _pinOfferKey();
+    try { if (k) localStorage.setItem(k, '1'); } catch (_) {}
+    _closePinOffer();
+    if (then) then();
   }
 
   function _switchToFullStudentSignIn() {
@@ -3251,7 +3348,14 @@ const Auth = (() => {
     if (!force && _dbPinHash !== null) return _dbPinHash || null;
     if (!_parentUser) return null;
     try {
-      const { data } = await _sb.from('profiles').select('parent_pin_hash').eq('id', _parentUser.id).single();
+      // ⚠ `error` is READ, not discarded. supabase-js does not throw on an RLS
+      // denial, a dead session or a 5xx - it returns { data: null, error }. This
+      // destructured `data` only, so every one of those was recorded as
+      // "confirmed absent": _dbPinHash = '', which is the same value as a
+      // genuine no-PIN account. A parent on a train was told they had no PIN.
+      // Same rule as the local copy: a MISS IS NOT A VERDICT.
+      const { data, error } = await _sb.from('profiles').select('parent_pin_hash').eq('id', _parentUser.id).single();
+      if (error) { _dbPinFetchFailed = true; return null; }
       _dbPinHash = data?.parent_pin_hash || '';
       _dbPinFetchFailed = false;
       return _dbPinHash || null;
@@ -3654,7 +3758,12 @@ const Auth = (() => {
     }
   }
 
-  function _showPinSetupModal() {
+  // ⚠ One-shot, and cleared before it runs. Settings opens this same modal with
+  // no continuation, and a stale one there would teleport a parent editing
+  // their PIN into a child sign-in.
+  let _pinSetupThen = null;
+  function _showPinSetupModal(then) {
+    _pinSetupThen = typeof then === 'function' ? then : null;
     {
       _parentPinStep   = 1;
       _parentPinSetup1 = '';
@@ -3679,6 +3788,11 @@ const Auth = (() => {
   // convenience shortcut, never a requirement - the parent still signs in with
   // their email either way.
   function closeParentPinSetup() {
+    // ⚠ Backing out of setup still performs the switch the parent asked for -
+    // they tapped "hand this to my child", not "set a PIN". Dropping them back
+    // on the dashboard would read as the app refusing the thing they chose.
+    const then = _pinSetupThen; _pinSetupThen = null;
+    if (then) setTimeout(then, 0);
     _parentPinStep   = 1;
     _parentPinSetup1 = '';
     _parentPinSetup2 = '';
@@ -3727,11 +3841,16 @@ const Auth = (() => {
       if (_parentPinSetup2.length === 4) {
         if (_parentPinSetup1 === _parentPinSetup2) {
           _storePin(_parentPinSetup1);
+          // Taken AND cleared before closing: closeParentPinSetup() runs the
+          // continuation itself for the backed-out case, so leaving it set here
+          // would switch to the child twice.
+          const then = _pinSetupThen; _pinSetupThen = null;
           // Via closeParentPinSetup so the keydown listener goes with it.
           closeParentPinSetup();
           toast('Parent PIN saved. Use it next time you tap 🔒 Parent.', 3000);
           // The Settings row may be on screen behind the modal.
           if (typeof window._renderParentPinRow === 'function') window._renderParentPinRow();
+          if (then) then();
         } else {
           _parentPinSetup2 = '';
           _updatePinDots('setup-dot-', 0);
@@ -4037,6 +4156,10 @@ const Auth = (() => {
     // While the switch modal is open the auth screen is not on screen, so an
     // error written there is an error nobody ever sees - including the wrong-PIN
     // one, which is the whole reason the modal exists.
+    // Every failure path in this file ends here, so this is the one place
+    // that has to uncover the message - there are eleven such returns in
+    // _studentSignIn alone.
+    _hideAuthProgress(true);
     if (_swOpen) { _swError(msg); return; }
     const el = _el('auth-error');
     if (el) { el.textContent = msg; el.classList.remove('hidden'); }
@@ -4046,6 +4169,70 @@ const Auth = (() => {
     const el = _el('auth-error');
     if (el) { el.textContent = ''; el.classList.add('hidden'); }
     _el('auth-goto-signin')?.classList.add('hidden');
+  }
+
+  // ── Sign-in progress ──────────────────────────────────────────────────
+  // A password check is only the FIRST of the round trips between tapping
+  // Sign In and seeing a dashboard: getProfile, getAccountDeletedAt, the
+  // family and its students follow, and _loadParentFamily retries the
+  // setup-wizard race with 300ms and 600ms sleeps on top. On a slow
+  // connection that is several seconds during which the auth screen did not
+  // move at all - so the app looked dead, and then signed itself in.
+  //
+  // ⚠ This must OUTLIVE showScreen(). It is hidden only once routing has
+  // finished; hiding it earlier uncovers a dashboard still fetching itself,
+  // which is the very flicker it exists to remove.
+  let _authProgressSlowTimer = null;
+
+  function _showAuthProgress(title, step) {
+    const box = _el('auth-progress');
+    if (!box) return;
+    const t = _el('auth-progress-title');
+    if (t) t.textContent = title;
+    _authProgressStep(step);
+    box.classList.remove('auth-progress-leaving');
+    box.classList.remove('hidden');
+    clearTimeout(_authProgressSlowTimer);
+    // Only after a wait worth explaining. Saying it sooner teaches a parent
+    // on a fast connection that the app is slow.
+    _authProgressSlowTimer = setTimeout(() => {
+      _authProgressStep('Still going - a slow connection can take a few seconds.');
+    }, 6000);
+  }
+
+  function _authProgressStep(step) {
+    const el = _el('auth-progress-step');
+    if (!el || step == null) return;
+    el.textContent = step;
+    // Restart the fade so a new line reads as a new line rather than as text
+    // that silently swapped underneath.
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = '';
+  }
+
+  // immediate: drop it at once, for a failure - the error message is on the
+  // screen underneath and must not spend a third of a second behind a veil.
+  function _hideAuthProgress(immediate) {
+    const box = _el('auth-progress');
+    clearTimeout(_authProgressSlowTimer);
+    if (!box || box.classList.contains('hidden')) return;
+    if (immediate) {
+      box.classList.add('hidden');
+      box.classList.remove('auth-progress-leaving');
+      return;
+    }
+    box.classList.add('auth-progress-leaving');
+    setTimeout(() => {
+      box.classList.add('hidden');
+      box.classList.remove('auth-progress-leaving');
+    }, 280);
+  }
+
+  // The label becomes a spinner without the button changing size, so the
+  // card does not reflow under the finger that just tapped it.
+  function _setBtnBusy(id, on) {
+    _el(id)?.classList.toggle('auth-btn-busy', !!on);
   }
 
   function _setAuthLoading(on) {
@@ -4099,6 +4286,19 @@ const Auth = (() => {
     enterParentMode, exitParentMode, resetProgress, confirmResetProgress,
     _pinKey, _pinSetupKey, _pinForgot, closeParentPin, closeParentPinSetup, pinSetupBack,
     openParentPinSetup, hasParentPin, clearParentPin,
+    pinOfferAccept, pinOfferDecline,
+    // ⚠ LOCALHOST ONLY, and deliberately so. A seam that lets page script set
+    // _parentUser is an account-takeover primitive; on the live site the key is
+    // not merely disabled, it is never added to the object at all.
+    ...(/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) ? {
+      __testSetup(o) {
+        _parentUser       = o.parentUser || null;
+        _parentProfile    = o.parentProfile || null;
+        _dbPinHash        = o.dbFails ? null : (o.dbHash || '');
+        _dbPinFetchFailed = false;
+        _testOnSwitch     = o.onSwitch || null;
+      },
+    } : {}),
     pdTab, pdSwitchStudent,
     getStudents: () => _familyStudents,
     // Being an admin is a property of the ACCOUNT, not of which screen they

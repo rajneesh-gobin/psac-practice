@@ -541,6 +541,31 @@ body.is-parent-session #xp-display { display: none !important; }
 .mcq-opt.wrong::after   { content: '\2717'; color: #dc2626; }
 .dark .mcq-opt.correct::after { color: #4ade80; }
 .dark .mcq-opt.wrong::after   { color: #f87171; }
+/* Read-aloud: the option currently being spoken. A Grade 1 child is following
+   the voice with their eyes, so this must read at a glance from arm's length.
+   ⚠ Amber, not blue/green/red: those three already mean chosen, right and
+   wrong on this same element, and a fourth meaning in the same hue would be
+   read as one of them. ⚠ Colour is not the only channel - the box also grows
+   and lifts, so it still reads for a child who cannot separate the hues.
+   ⚠ !important, because .correct/.wrong set background the same way: a
+   question being re-read after it was answered must still show what is being
+   spoken now. */
+.mcq-opt.tts-reading {
+  border-color: #f59e0b !important;
+  background: #fffbeb !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.28);
+  transform: scale(1.015);
+}
+.dark .mcq-opt.tts-reading {
+  border-color: #fbbf24 !important;
+  background: #422006 !important;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+}
+.mcq-opt.tts-reading .opt-letter { background: #f59e0b; color: white; }
+/* The scale is decoration; the border, ground and ring carry the meaning. */
+@media (prefers-reduced-motion: reduce) {
+  .mcq-opt.tts-reading { transform: none; }
+}
 .opt-letter {
   display: inline-flex; align-items: center; justify-content: center;
   width: 1.6rem; height: 1.6rem; border-radius: 50%;
@@ -9211,3 +9236,151 @@ html.dark .txt-slip { color: #9ae6b4; background: rgba(72, 187, 120, .16); borde
 :root:not([data-theme="light"]) .eh-correct { background: #14532d; border-color: #166534; color: #dcfce7; }
 :root[data-theme="dark"] .eh-empty,
 :root:not([data-theme="light"]) .eh-empty { color: #9ca3af; }
+
+/* ===== SIGN-IN PROGRESS OVERLAY =====
+   A password check plus the profile, family and student reads behind it is
+   several seconds on a slow connection, and the auth screen sat there
+   completely still for all of it - then the dashboard appeared by itself.
+   This covers that gap and then cross-fades: it fades OUT over 0.28s while
+   the incoming .screen fades IN over 0.3s, so one hands over to the other
+   instead of the app blinking.
+   ⚠ The transform below is safe ONLY because this element is a body-level
+   sibling of every .screen. Putting a transform on .screen, main, body or
+   the auth card is what breaks position:fixed bars and native autofill
+   popovers - see the notes at the top of this file. */
+#auth-progress {
+  position: fixed; inset: 0; z-index: 90;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #312e81, #4c1d95 55%, #1e3a8a);
+  animation: authProgressIn 0.16s ease both;
+}
+#auth-progress.auth-progress-leaving { animation: authProgressOut 0.28s ease both; }
+#auth-progress.hidden { display: none !important; }
+@keyframes authProgressIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes authProgressOut { from { opacity: 1; } to { opacity: 0; } }
+
+.auth-progress-card {
+  display: flex; flex-direction: column; align-items: center; gap: 0.9rem;
+  text-align: center; max-width: 20rem;
+  animation: authProgressCard 0.45s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes authProgressCard {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* The cap the auth screen is already showing, with an arc orbiting it: the
+   app is loading, not some widget. The ring spins; the cap must not, or it
+   reads as a page that has fallen over. */
+.auth-progress-orbit { position: relative; width: 4.5rem; height: 4.5rem; }
+.auth-progress-ring {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.15);
+  border-top-color: #a5b4fc;
+  border-right-color: rgba(165,180,252,0.45);
+  animation: authProgressSpin 0.9s linear infinite;
+}
+.auth-progress-mark {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.9rem; line-height: 1; user-select: none;
+  animation: authProgressBreathe 2.2s ease-in-out infinite;
+}
+@keyframes authProgressBreathe {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.07); }
+}
+@keyframes authProgressSpin { to { transform: rotate(360deg); } }
+
+.auth-progress-title {
+  color: #fff; font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em;
+}
+.auth-progress-step {
+  color: rgba(255,255,255,0.72); font-size: 0.8rem; line-height: 1.4;
+  min-height: 2.2em;
+  animation: authProgressStep 0.3s ease both;
+}
+@keyframes authProgressStep { from { opacity: 0; } to { opacity: 1; } }
+
+/* The button keeps its size while its label becomes a spinner, so the card
+   does not reflow under the finger that just tapped it. */
+.auth-btn-busy { position: relative; color: transparent !important; pointer-events: none; }
+.auth-btn-busy::after {
+  content: ""; position: absolute; inset: 0; margin: auto;
+  width: 1.15rem; height: 1.15rem; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff;
+  animation: authProgressSpin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #auth-progress, #auth-progress.auth-progress-leaving, .auth-progress-card,
+  .auth-progress-step { animation: none; }
+  .auth-progress-mark { animation: none; }
+  .auth-progress-ring, .auth-btn-busy::after { animation-duration: 1.6s; }
+}
+
+/* ===== QUESTION CHART FIGURES =====
+   Baked into question text as inline SVG by scripts/build-chart-figures.js.
+   The fixed chrome lives here rather than in a style="" on every figure: the
+   offline question cache is budgeted in BYTES, and 150 bytes of repeated
+   presentation per chart is 150 bytes of a child's Grade 5 cache. Only
+   max-width, which differs per chart, is still inline.
+   ⚠ A white plate on purpose. The app has a dark theme and the chart is drawn
+   in dark ink; letting it inherit the page background makes the axes and the
+   labels disappear for every child practising at night. */
+.q-chart {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin: 0.5rem auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== QUESTION DATA TABLES =====
+   Frequency tables, tally charts and any other question stimulus that is a
+   table. Paired with .q-chart above: a data question should SHOW its data.
+
+   ⚠ A fixed light plate with dark ink, in both themes, exactly like .q-chart —
+   NOT inherited colour. The practice screen is a chalkboard: #screen-practice
+   .pr-q forces color:#f0ece8 (style.css, "PRACTICE CHALKBOARD") and wins on
+   specificity over the day-theme rule, so a table that inherits its colour is
+   legible on one surface and invisible on the next. Every existing question
+   table in the bank either inherits (borderless, near-invisible on the
+   chalkboard) or repeats a style="" attribute on every single cell — which is
+   real bytes out of a child's offline cache, since that cache is budgeted in
+   bytes. One class, once.
+
+   ⚠ Deliberately NOT written as `.pr-q table` / `#exam-q-text table`: those
+   descendant selectors outrank `.picto-table th` and would silently restyle the
+   pictogram tables, including their dark-mode overrides. */
+.q-table {
+  border-collapse: collapse;
+  margin: 0.6rem 0;
+  font-size: 0.88rem;
+  background: #fff;
+  color: #1e293b;
+  text-shadow: none;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.q-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  text-align: left;
+  padding: 5px 12px;
+  border: 1px solid #cbd5e1;
+}
+.q-table td {
+  padding: 5px 12px;
+  border: 1px solid #e2e8f0;
+}
+.q-table code { font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 1px; }
+
+/* A table with more columns than a phone can hold scrolls inside its own box
+   rather than widening the question card. */
+.q-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.6rem 0; }
+.q-scroll .q-table { margin: 0; }

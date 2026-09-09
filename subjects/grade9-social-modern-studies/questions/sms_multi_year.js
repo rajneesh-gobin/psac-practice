@@ -132,7 +132,9 @@ STATIC_QUESTIONS.push(
     explanation:'Arrivals dropped from 1.4 million (2019) to 0.3 million (2020), a fall of 1.1 million — the biggest single-year drop, caused by the global Covid-19 pandemic and travel restrictions.' }),
 
   makeMCQ({ id:'g9sms-my020', chapterId:'g9sms-map-data-skills', subsection:'table_reading', difficulty:2,
-    question:'A table shows Mauritius\'s population: 1968 = 750,000; 1990 = 1,022,000; 2020 = 1,265,000. By how much did the population grow between 1968 and 2020?',
+    question:'The table shows Mauritius\'s population.' +
+      '<table class="q-table"><tr><th>Year</th><th>Population</th></tr><tr><td>1968</td><td>750,000</td></tr><tr><td>1990</td><td>1,022,000</td></tr><tr><td>2020</td><td>1,265,000</td></tr></table>' +
+      'By how much did the population grow between 1968 and 2020?',
     options:['515,000','272,000','1,265,000','750,000'], answer:'515,000',
     hint:'Subtract the 1968 figure from the 2020 figure.',
     explanation:'1,265,000 − 750,000 = <b>515,000</b>. Reading data from a table and calculating a difference is a core map-data skills task on the NCE paper.' }),

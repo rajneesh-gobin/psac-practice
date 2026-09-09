@@ -125,12 +125,16 @@ const Store = (() => {
   // rejects the write and the work is lost for good.
   function flushPendingProgress() {
     if (!_pendingWrite) return Promise.resolve();
-    const { studentId, data } = _pendingWrite;
+    const { studentId, data, json } = _pendingWrite;
     clearTimeout(_saveDebounceTimer);
     _saveDebounceTimer = null;
     _pendingWrite = null;
     _pendingSince = 0;
-    return _flushProgressToSupabase(studentId, data);
+    // ⚠ Parse the SNAPSHOT taken when this write was queued, never the live
+    //   object. See saveStudentProgress below for what that cost.
+    let payload = data;
+    if (json) { try { payload = JSON.parse(json); } catch (_) {} }
+    return _flushProgressToSupabase(studentId, payload);
   }
 
   // ── Student session (PIN-based, not Supabase Auth) ────
@@ -682,18 +686,27 @@ const Store = (() => {
   }
 
   async function saveStudentProgress(studentId, progressData, immediate = false) {
-    // Write to localStorage immediately (zero latency during practice)
-    try { localStorage.setItem(_sKey(studentId), JSON.stringify(progressData)); } catch(e) {}
+    // ⚠⚠ SNAPSHOT, NOT A REFERENCE. app.js passes the single global `DB` to
+    //   every save, and switching child does `Object.assign(DB, progress)` -
+    //   which mutates that same object in place. A write queued here for one
+    //   child therefore used to flush up to 30 seconds later carrying whatever
+    //   the NEXT child had loaded into DB, and land it on the first child's row.
+    //   Measured on live data: a Grade 4 account created on 2 September held a
+    //   byte-identical copy of a Grade 5 sibling's history, including practice
+    //   days from before that account existed.
+    //   The serialisation is free - localStorage needs the same string anyway.
+    let json = null;
+    try { json = JSON.stringify(progressData); localStorage.setItem(_sKey(studentId), json); } catch(e) {}
     // Debounce Supabase writes: batch rapid question answers into one write every 30s.
     // Pass immediate=true on exam submit / explicit checkpoints so data is never lost.
     if (immediate) {
-      _pendingWrite = { studentId, data: progressData };
+      _pendingWrite = { studentId, data: progressData, json };
       return flushPendingProgress();
     }
     // A different child now: their write must go out rather than be replaced.
     if (_pendingWrite && _pendingWrite.studentId !== studentId) flushPendingProgress();
 
-    _pendingWrite = { studentId, data: progressData };
+    _pendingWrite = { studentId, data: progressData, json };
     if (!_pendingSince) _pendingSince = Date.now();
 
     // The max-wait check is what turns this from a debounce into a throttle:

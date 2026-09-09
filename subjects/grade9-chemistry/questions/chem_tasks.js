@@ -59,14 +59,18 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'The dissolved oxygen at D (2 km from the farm) has risen to 7.5 mg/L. Explain this observation.',
       marks: 2,
       hint: 'The river has had more distance to recover — what processes restore oxygen?',
-      explanation: 'Further downstream the organic matter is fully decomposed, bacterial activity falls, and the river re-oxygenates by diffusion of atmospheric oxygen and photosynthesis by recovering aquatic plants. This is called the oxygen sag recovery.'
+      explanation: 'Further downstream the organic matter is fully decomposed, bacterial activity falls, and the river re-oxygenates by diffusion of atmospheric oxygen and photosynthesis by recovering aquatic plants. This is called the oxygen sag recovery.',
+      response: { kind: 'written' },
+      rubric: '1 mark each, to a maximum of 2: the organic matter has been fully decomposed so bacterial respiration falls; oxygen re-enters the water by diffusion from the atmosphere; aquatic plants recovering downstream add oxygen by photosynthesis; this is the recovery limb of the oxygen sag curve.'
     },
     {
       label: 'd',
       prompt: 'Name the process by which excess fertiliser in a river causes fish to die. Describe the chain of events.',
       marks: 3,
       hint: 'Nutrient enrichment → algae → decomposition → deoxygenation.',
-      explanation: 'Eutrophication. Nitrates/phosphates from the fertiliser stimulate rapid algal growth (algal bloom). The bloom shades submerged plants, which die; then the algae die and decomposer bacteria use up dissolved oxygen by aerobic respiration, leaving too little O₂ for fish to survive (deoxygenation).'
+      explanation: 'Eutrophication. Nitrates/phosphates from the fertiliser stimulate rapid algal growth (algal bloom). The bloom shades submerged plants, which die; then the algae die and decomposer bacteria use up dissolved oxygen by aerobic respiration, leaving too little O₂ for fish to survive (deoxygenation).',
+      response: { kind: 'written' },
+      rubric: '1 mark for naming eutrophication. Then 1 mark each, to a maximum of 2 more, for the chain: nitrates and phosphates enrich the water and stimulate an algal bloom; the bloom shades submerged plants, which die; decomposer bacteria break down the dead algae and plants and their aerobic respiration removes dissolved oxygen; the fish die of deoxygenation.'
     }
   ]
 }));
@@ -117,14 +121,18 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Explain why the thermometer should be positioned at the junction of the side arm (B) rather than immersed in the boiling liquid.',
       marks: 2,
       hint: 'What does the thermometer measure, and why is vapour temperature the important quantity?',
-      explanation: 'The thermometer measures the boiling point of the vapour entering the condenser, which equals the boiling point of the substance being collected as distillate. If placed in the liquid, it would record the temperature of the whole mixture (which is higher), not just the component that is distilling over.'
+      explanation: 'The thermometer measures the boiling point of the vapour entering the condenser, which equals the boiling point of the substance being collected as distillate. If placed in the liquid, it would record the temperature of the whole mixture (which is higher), not just the component that is distilling over.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: The thermometer measures the boiling point of the vapour entering the condenser, which equals the boiling point of the substance being collected as distillate; If placed in the liquid, it would record the temperature of the whole mixture (which is higher), not just the component that is distilling over.'
     },
     {
       label: 'd',
       prompt: 'After distillation, the student tests the distillate and finds it conducts electricity poorly. What does this confirm?',
       marks: 2,
       hint: 'Pure water vs. salt solution: which conducts?',
-      explanation: 'Pure water is a very poor conductor of electricity because it contains very few ions; the salt solution conducts because dissolved Na⁺ and Cl⁻ ions carry charge. Poor conductivity in the distillate confirms that the salt was separated and the distillate is (essentially) pure water.'
+      explanation: 'Pure water is a very poor conductor of electricity because it contains very few ions; the salt solution conducts because dissolved Na⁺ and Cl⁻ ions carry charge. Poor conductivity in the distillate confirms that the salt was separated and the distillate is (essentially) pure water.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Pure water is a very poor conductor of electricity because it contains very few ions; the salt solution conducts because dissolved Na⁺ and Cl⁻ ions carry charge; Poor conductivity in the distillate confirms that the salt was separated and the distillate is (essentially) pure water.'
     }
   ]
 }));
@@ -159,14 +167,18 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Explain why copper does not react with dilute hydrochloric acid.',
       marks: 2,
       hint: 'Use the reactivity series.',
-      explanation: 'Copper is below hydrogen in the reactivity series. A metal can only displace hydrogen from an acid if it is more reactive than hydrogen. Since Cu < H in reactivity, it cannot displace H⁺ ions from HCl.'
+      explanation: 'Copper is below hydrogen in the reactivity series. A metal can only displace hydrogen from an acid if it is more reactive than hydrogen. Since Cu < H in reactivity, it cannot displace H⁺ ions from HCl.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Copper is below hydrogen in the reactivity series; A metal can only displace hydrogen from an acid if it is more reactive than hydrogen; Since Cu < H in reactivity, it cannot displace H⁺ ions from HCl.'
     },
     {
       label: 'd',
       prompt: 'The student measures the time taken to collect 20 cm³ of hydrogen from excess magnesium in 50 cm³ of 1 mol/dm³ HCl: 45 seconds. She then repeats with 0.5 mol/dm³ HCl. Predict whether the new time will be greater or smaller than 45 s. Explain.',
       marks: 2,
       hint: 'How does halving the acid concentration affect the rate of reaction?',
-      explanation: 'The time will be greater (longer). Halving the concentration reduces the number of H⁺ ions per unit volume, decreasing the frequency of successful collisions between H⁺ and Mg surface atoms, so the rate of H₂ production is lower and it takes longer to collect 20 cm³.'
+      explanation: 'The time will be greater (longer). Halving the concentration reduces the number of H⁺ ions per unit volume, decreasing the frequency of successful collisions between H⁺ and Mg surface atoms, so the rate of H₂ production is lower and it takes longer to collect 20 cm³.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: The time will be greater (longer); Halving the concentration reduces the number of H⁺ ions per unit volume, decreasing the frequency of successful collisions between H⁺ and Mg surface atoms, so the rate of H₂ production is lower and it takes longer to collect 20 cm³.'
     }
   ]
 }));
@@ -230,14 +242,18 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Predict what would be observed if silver wire were placed into zinc sulfate solution. Explain your reasoning.',
       marks: 2,
       hint: 'Where does Ag sit relative to Zn in the reactivity series?',
-      explanation: 'No visible reaction. Silver is less reactive than zinc (Ag < Zn); a less reactive metal cannot displace a more reactive metal from its salt solution. The wire remains unchanged and the solution stays colourless.'
+      explanation: 'No visible reaction. Silver is less reactive than zinc (Ag < Zn); a less reactive metal cannot displace a more reactive metal from its salt solution. The wire remains unchanged and the solution stays colourless.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: No visible reaction; Silver is less reactive than zinc (Ag < Zn); a less reactive metal cannot displace a more reactive metal from its salt solution; The wire remains unchanged and the solution stays colourless.'
     },
     {
       label: 'd',
       prompt: 'Iron is used to galvanise steel (coat it). How does this protect the steel from rusting, even when the coating is scratched?',
       marks: 2,
       hint: 'Wait — is it iron or zinc used for galvanising? Which is more reactive?',
-      explanation: 'Galvanising uses ZINC, not iron. Zinc is more reactive than iron; when both metals are exposed at a scratch, zinc is preferentially oxidised (sacrificial protection), protecting the iron from corrosion. The zinc acts as a sacrificial anode.'
+      explanation: 'Galvanising uses ZINC, not iron. Zinc is more reactive than iron; when both metals are exposed at a scratch, zinc is preferentially oxidised (sacrificial protection), protecting the iron from corrosion. The zinc acts as a sacrificial anode.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Galvanising uses ZINC, not iron; Zinc is more reactive than iron; when both metals are exposed at a scratch, zinc is preferentially oxidised (sacrificial protection), protecting the iron from corrosion; The zinc acts as a sacrificial anode.'
     }
   ]
 }));
@@ -256,7 +272,9 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Name the two main gaseous pollutants that cause acid rain and state one source of each.',
       marks: 4,
       hint: 'SO₂ and NOₓ — where does each come from?',
-      explanation: 'SO₂: burning of sulfur-containing coal in power stations. NOₓ (nitrogen monoxide/dioxide): high-temperature combustion in car engines, where atmospheric N₂ and O₂ react.'
+      explanation: 'SO₂: burning of sulfur-containing coal in power stations. NOₓ (nitrogen monoxide/dioxide): high-temperature combustion in car engines, where atmospheric N₂ and O₂ react.',
+      response: { kind: 'written' },
+      rubric: '4 marks. Award one mark per point, to a maximum of 4: SO₂: burning of sulfur-containing coal in power stations; NOₓ (nitrogen monoxide/dioxide): high-temperature combustion in car engines, where atmospheric N₂ and O₂ react.'
     },
     {
       label: 'b',
@@ -271,14 +289,18 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Give <b>two</b> harmful effects of acid rain on the environment.',
       marks: 2,
       hint: 'Think about effects on lakes, forests and buildings.',
-      explanation: 'Any two from: (1) lowers pH of lakes and rivers, killing fish and aquatic life; (2) damages forests by leaching essential minerals from the soil and destroying leaf cuticles; (3) erodes limestone and marble buildings and statues; (4) acidifies soil, reducing crop yields.'
+      explanation: 'Any two from: (1) lowers pH of lakes and rivers, killing fish and aquatic life; (2) damages forests by leaching essential minerals from the soil and destroying leaf cuticles; (3) erodes limestone and marble buildings and statues; (4) acidifies soil, reducing crop yields.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Any two from: (1) lowers pH of lakes and rivers, killing fish and aquatic life; (2) damages forests by leaching essential minerals from the soil and destroying leaf cuticles; (3) erodes limestone and marble buildings and statues; (4) acidifies soil, reducing crop yields.'
     },
     {
       label: 'd',
       prompt: 'Suggest one industrial and one agricultural measure that would reduce acid rain.',
       marks: 2,
       hint: 'Reduce emissions OR neutralise the acid.',
-      explanation: 'Industrial: fit flue-gas desulfurisation (scrubbers) to power stations to remove SO₂ before it is emitted. Agricultural: apply lime (CaCO₃ or Ca(OH)₂) to acidified farmland and lakes to neutralise the acid.'
+      explanation: 'Industrial: fit flue-gas desulfurisation (scrubbers) to power stations to remove SO₂ before it is emitted. Agricultural: apply lime (CaCO₃ or Ca(OH)₂) to acidified farmland and lakes to neutralise the acid.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Industrial: fit flue-gas desulfurisation (scrubbers) to power stations to remove SO₂ before it is emitted; Agricultural: apply lime (CaCO₃ or Ca(OH)₂) to acidified farmland and lakes to neutralise the acid.'
     }
   ]
 }));
@@ -305,21 +327,27 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Explain why excess copper oxide is added to the acid rather than the exact stoichiometric amount.',
       marks: 2,
       hint: 'What happens if excess acid remains in the product?',
-      explanation: 'Excess solid CuO ensures all the acid is neutralised; any remaining acid would contaminate the final crystals. The excess CuO (undissolved solid) can then be removed by filtration, leaving a pure CuSO₄ solution.'
+      explanation: 'Excess solid CuO ensures all the acid is neutralised; any remaining acid would contaminate the final crystals. The excess CuO (undissolved solid) can then be removed by filtration, leaving a pure CuSO₄ solution.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Excess solid CuO ensures all the acid is neutralised; any remaining acid would contaminate the final crystals; The excess CuO (undissolved solid) can then be removed by filtration, leaving a pure CuSO₄ solution.'
     },
     {
       label: 'c',
       prompt: 'Describe how the student would obtain dry copper sulfate crystals from the pure CuSO₄ solution.',
       marks: 3,
       hint: 'Evaporate, then cool, then dry.',
-      explanation: 'Gently heat the solution in an evaporating dish until a saturated solution is produced (test by dipping a cooled glass rod — crystals form on it). Remove from heat and allow to cool slowly — crystals form. Filter off the crystals. Pat dry between sheets of filter paper or leave in a warm oven at low temperature (not too hot, or crystals lose water of crystallisation and turn white).'
+      explanation: 'Gently heat the solution in an evaporating dish until a saturated solution is produced (test by dipping a cooled glass rod — crystals form on it). Remove from heat and allow to cool slowly — crystals form. Filter off the crystals. Pat dry between sheets of filter paper or leave in a warm oven at low temperature (not too hot, or crystals lose water of crystallisation and turn white).',
+      response: { kind: 'written' },
+      rubric: '3 marks. Award one mark per point, to a maximum of 3: Gently heat the solution in an evaporating dish until a saturated solution is produced (test by dipping a cooled glass rod — crystals form on it); Remove from heat and allow to cool slowly — crystals form; Filter off the crystals; Pat dry between sheets of filter paper or leave in a warm oven at low temperature (not too hot, or crystals lose water of crystallisation and turn white).'
     },
     {
       label: 'd',
       prompt: 'The student notices her crystals are blue. A friend says anhydrous copper sulfate is white. Explain the difference.',
       marks: 2,
       hint: 'What is different about the two forms?',
-      explanation: 'The blue crystals are CuSO₄·5H₂O (copper sulfate pentahydrate); they contain five water molecules of crystallisation chemically incorporated into the crystal lattice, which gives the blue colour. Anhydrous CuSO₄ (CuSO₄ with no water) is white because the absence of water changes the coordination environment of the Cu²⁺ ion.'
+      explanation: 'The blue crystals are CuSO₄·5H₂O (copper sulfate pentahydrate); they contain five water molecules of crystallisation chemically incorporated into the crystal lattice, which gives the blue colour. Anhydrous CuSO₄ (CuSO₄ with no water) is white because the absence of water changes the coordination environment of the Cu²⁺ ion.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: The blue crystals are CuSO₄·5H₂O (copper sulfate pentahydrate); they contain five water molecules of crystallisation chemically incorporated into the crystal lattice, which gives the blue colour; Anhydrous CuSO₄ (CuSO₄ with no water) is white because the absence of water changes the coordination environment of the Cu²⁺ ion.'
     }
   ]
 }));
@@ -374,14 +402,18 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Methane has a shorter atmospheric lifetime than CO₂ but a much higher GWP. Explain the significance of this for climate policy.',
       marks: 3,
       hint: 'Short lifetime = fast results; high GWP = large impact while present.',
-      explanation: 'Methane is 28× more potent than CO₂ while present. Its short lifetime (12 years) means that if methane emissions are cut sharply, atmospheric concentrations drop relatively quickly, giving faster climate benefit than CO₂ reduction (which takes centuries to clear). This makes methane a high-priority short-term target for slowing near-term warming.'
+      explanation: 'Methane is 28× more potent than CO₂ while present. Its short lifetime (12 years) means that if methane emissions are cut sharply, atmospheric concentrations drop relatively quickly, giving faster climate benefit than CO₂ reduction (which takes centuries to clear). This makes methane a high-priority short-term target for slowing near-term warming.',
+      response: { kind: 'written' },
+      rubric: '3 marks. Award one mark per point, to a maximum of 3: Methane is 28× more potent than CO₂ while present; Its short lifetime (12 years) means that if methane emissions are cut sharply, atmospheric concentrations drop relatively quickly, giving faster climate benefit than CO₂ reduction (which takes centuries to clear); This makes methane a high-priority short-term target for slowing near-term warming.'
     },
     {
       label: 'c',
       prompt: 'State one human activity that produces nitrous oxide (N₂O) and explain why this makes it an environmental concern.',
       marks: 2,
       hint: 'N₂O is produced in agriculture.',
-      explanation: 'N₂O is produced by nitrification and denitrification of nitrogen fertilisers in soil. It is a concern because it has a GWP of 265 and an atmospheric lifetime of 114 years, so even small amounts make a large long-term contribution to warming; it also destroys stratospheric ozone.'
+      explanation: 'N₂O is produced by nitrification and denitrification of nitrogen fertilisers in soil. It is a concern because it has a GWP of 265 and an atmospheric lifetime of 114 years, so even small amounts make a large long-term contribution to warming; it also destroys stratospheric ozone.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: N₂O is produced by nitrification and denitrification of nitrogen fertilisers in soil; It is a concern because it has a GWP of 265 and an atmospheric lifetime of 114 years, so even small amounts make a large long-term contribution to warming; it also destroys stratospheric ozone.'
     }
   ]
 }));
@@ -400,7 +432,9 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Mixture 1: Iodine crystals mixed with sodium chloride powder. Name the separation technique and explain the principle.',
       marks: 2,
       hint: 'Only one substance changes state when gently heated.',
-      explanation: 'Sublimation. Iodine sublimes (converts directly from solid to vapour) when gently heated; sodium chloride does not sublime. The iodine vapour is collected as pure crystals on a cold surface, leaving NaCl behind.'
+      explanation: 'Sublimation. Iodine sublimes (converts directly from solid to vapour) when gently heated; sodium chloride does not sublime. The iodine vapour is collected as pure crystals on a cold surface, leaving NaCl behind.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Sublimation; Iodine sublimes (converts directly from solid to vapour) when gently heated; sodium chloride does not sublime; The iodine vapour is collected as pure crystals on a cold surface, leaving NaCl behind.'
     },
     {
       label: 'b',
@@ -443,7 +477,9 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Predict whether the following reaction will occur and explain why:<br>Cu(s) + ZnSO₄(aq) → ?',
       marks: 2,
       hint: 'Compare positions of Cu and Zn in the reactivity series.',
-      explanation: 'No reaction. Cu is less reactive than Zn (Cu < Zn), so it cannot displace Zn from zinc sulfate solution. Only a more reactive metal can displace a less reactive one.'
+      explanation: 'No reaction. Cu is less reactive than Zn (Cu < Zn), so it cannot displace Zn from zinc sulfate solution. Only a more reactive metal can displace a less reactive one.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: No reaction; Cu is less reactive than Zn (Cu < Zn), so it cannot displace Zn from zinc sulfate solution; Only a more reactive metal can displace a less reactive one.'
     },
     {
       label: 'b',
@@ -458,7 +494,9 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'A student places a tin strip into lead nitrate solution. She observes a grey deposit on the tin. Which metal is the grey deposit and what does this tell us about the relative reactivity of tin and lead?',
       marks: 2,
       hint: 'The deposited metal is the one displaced from solution.',
-      explanation: 'The grey deposit is lead (Pb). Tin has displaced lead from lead nitrate solution, which means Sn > Pb in reactivity. The tin is more reactive and loses electrons to Pb²⁺ ions: Sn + Pb(NO₃)₂ → Sn(NO₃)₂ + Pb.'
+      explanation: 'The grey deposit is lead (Pb). Tin has displaced lead from lead nitrate solution, which means Sn > Pb in reactivity. The tin is more reactive and loses electrons to Pb²⁺ ions: Sn + Pb(NO₃)₂ → Sn(NO₃)₂ + Pb.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: The grey deposit is lead (Pb); Tin has displaced lead from lead nitrate solution, which means Sn > Pb in reactivity; The tin is more reactive and loses electrons to Pb²⁺ ions: Sn + Pb(NO₃)₂ → Sn(NO₃)₂ + Pb.'
     }
   ]
 }));
@@ -492,21 +530,27 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Identify the pollutant most likely released from source X (the factory).',
       marks: 1,
       hint: 'Factories can release heavy metals, toxic chemicals or hot water.',
-      explanation: 'Likely pollutants from a factory include heavy metals (e.g. lead, mercury), toxic organic chemicals (e.g. pesticides, solvents) or thermal pollution (hot water reducing dissolved oxygen). Any one of these with a brief explanation is acceptable.'
+      explanation: 'Likely pollutants from a factory include heavy metals (e.g. lead, mercury), toxic organic chemicals (e.g. pesticides, solvents) or thermal pollution (hot water reducing dissolved oxygen). Any one of these with a brief explanation is acceptable.',
+      response: { kind: 'written' },
+      rubric: '1 mark. Award the mark for: Likely pollutants from a factory include heavy metals (e.g; lead, mercury), toxic organic chemicals (e.g; pesticides, solvents) or thermal pollution (hot water reducing dissolved oxygen); Any one of these with a brief explanation is acceptable.'
     },
     {
       label: 'b',
       prompt: 'Explain how the runoff from source Y (the farm) can lead to fish dying in the river even though the fertiliser itself is not directly toxic to fish.',
       marks: 3,
       hint: 'Nutrient enrichment → algae → decomposition → oxygen depletion.',
-      explanation: 'Farm runoff carries nitrate/phosphate fertilisers into the river. These nutrients trigger an algal bloom. The algae die; decomposer bacteria break down the algal biomass by aerobic respiration, consuming dissolved oxygen. The dissolved oxygen falls so low that fish suffocate (deoxygenation). This chain of events is eutrophication.'
+      explanation: 'Farm runoff carries nitrate/phosphate fertilisers into the river. These nutrients trigger an algal bloom. The algae die; decomposer bacteria break down the algal biomass by aerobic respiration, consuming dissolved oxygen. The dissolved oxygen falls so low that fish suffocate (deoxygenation). This chain of events is eutrophication.',
+      response: { kind: 'written' },
+      rubric: '3 marks. Award one mark per point, to a maximum of 3: Farm runoff carries nitrate/phosphate fertilisers into the river; These nutrients trigger an algal bloom; The algae die; decomposer bacteria break down the algal biomass by aerobic respiration, consuming dissolved oxygen; The dissolved oxygen falls so low that fish suffocate (deoxygenation); This chain of events is eutrophication.'
     },
     {
       label: 'c',
       prompt: 'State one biological indicator organism that would be found in abundance near source Z (sewage) and one that would be absent. Explain.',
       marks: 2,
       hint: 'Pollution-tolerant organisms thrive in low-oxygen, organic-rich water.',
-      explanation: 'Present: sludge worms (rat-tailed maggots / Tubifex worms) — they tolerate very low dissolved oxygen. Absent: stonefly larvae / mayfly larvae — these require well-oxygenated, clean water and cannot survive in sewage-polluted conditions.'
+      explanation: 'Present: sludge worms (rat-tailed maggots / Tubifex worms) — they tolerate very low dissolved oxygen. Absent: stonefly larvae / mayfly larvae — these require well-oxygenated, clean water and cannot survive in sewage-polluted conditions.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Present: sludge worms (rat-tailed maggots / Tubifex worms) — they tolerate very low dissolved oxygen; Absent: stonefly larvae / mayfly larvae — these require well-oxygenated, clean water and cannot survive in sewage-polluted conditions.'
     }
   ]
 }));
@@ -533,14 +577,18 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'The student burns methane (CH₄) in a limited air supply. Name the two carbon-containing products that form and explain why both can be present.',
       marks: 3,
       hint: 'What happens when there is not enough oxygen for complete combustion?',
-      explanation: 'Carbon monoxide (CO) and carbon dioxide (CO₂). In limited air, some CH₄ undergoes complete combustion (→ CO₂) but where oxygen is depleted, incomplete combustion occurs (→ CO, and sometimes C as soot). Both products can coexist because different regions of the flame have different oxygen concentrations.'
+      explanation: 'Carbon monoxide (CO) and carbon dioxide (CO₂). In limited air, some CH₄ undergoes complete combustion (→ CO₂) but where oxygen is depleted, incomplete combustion occurs (→ CO, and sometimes C as soot). Both products can coexist because different regions of the flame have different oxygen concentrations.',
+      response: { kind: 'written' },
+      rubric: '3 marks. Award one mark per point, to a maximum of 3: Carbon monoxide (CO) and carbon dioxide (CO₂); In limited air, some CH₄ undergoes complete combustion (→ CO₂) but where oxygen is depleted, incomplete combustion occurs (→ CO, and sometimes C as soot); Both products can coexist because different regions of the flame have different oxygen concentrations.'
     },
     {
       label: 'c',
       prompt: 'Why is carbon monoxide dangerous, and how is it detected in a home?',
       marks: 2,
       hint: 'Colour? Smell? What does it do in the blood?',
-      explanation: 'CO is colourless and odourless, giving no sensory warning; it binds to haemoglobin about 200 times more strongly than oxygen, preventing oxygen transport and causing death by asphyxiation. It is detected using an electronic carbon monoxide alarm that sounds when CO reaches a dangerous concentration.'
+      explanation: 'CO is colourless and odourless, giving no sensory warning; it binds to haemoglobin about 200 times more strongly than oxygen, preventing oxygen transport and causing death by asphyxiation. It is detected using an electronic carbon monoxide alarm that sounds when CO reaches a dangerous concentration.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: CO is colourless and odourless, giving no sensory warning; it binds to haemoglobin about 200 times more strongly than oxygen, preventing oxygen transport and causing death by asphyxiation; It is detected using an electronic carbon monoxide alarm that sounds when CO reaches a dangerous concentration.'
     }
   ]
 }));
@@ -620,21 +668,27 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Whose method of adding CuO is better — Student A or B? Explain.',
       marks: 2,
       hint: 'What happens if excess acid remains in the product?',
-      explanation: 'Student B. Adding excess CuO ensures all the H₂SO₄ is neutralised; excess solid CuO can be removed by filtration, leaving only the pure CuSO₄ solution. Student A\'s exact amount risks leaving unreacted acid, which would contaminate the final crystals.'
+      explanation: 'Student B. Adding excess CuO ensures all the H₂SO₄ is neutralised; excess solid CuO can be removed by filtration, leaving only the pure CuSO₄ solution. Student A\'s exact amount risks leaving unreacted acid, which would contaminate the final crystals.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Student B; Adding excess CuO ensures all the H₂SO₄ is neutralised; excess solid CuO can be removed by filtration, leaving only the pure CuSO₄ solution; Student A\'s exact amount risks leaving unreacted acid, which would contaminate the final crystals.'
     },
     {
       label: 'b',
       prompt: 'Whose method of drying is better — Student A or B? Explain.',
       marks: 2,
       hint: 'Blue copper sulfate crystals contain water of crystallisation.',
-      explanation: 'Student B. Strong heating in an oven (Student A) drives off the water of crystallisation, converting the blue CuSO₄·5H₂O to white anhydrous CuSO₄, destroying the crystals. Gentle patting between filter papers preserves the water of crystallisation and the crystalline form.'
+      explanation: 'Student B. Strong heating in an oven (Student A) drives off the water of crystallisation, converting the blue CuSO₄·5H₂O to white anhydrous CuSO₄, destroying the crystals. Gentle patting between filter papers preserves the water of crystallisation and the crystalline form.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Student B; Strong heating in an oven (Student A) drives off the water of crystallisation, converting the blue CuSO₄·5H₂O to white anhydrous CuSO₄, destroying the crystals; Gentle patting between filter papers preserves the water of crystallisation and the crystalline form.'
     },
     {
       label: 'c',
       prompt: 'Student A obtained 4.2 g of crystals; Student B obtained 3.9 g. Does the lower yield of Student B necessarily mean her method is worse? Explain.',
       marks: 2,
       hint: 'Think about purity vs. yield.',
-      explanation: 'No. Student B\'s lower yield may be because some product remained dissolved in the mother liquor or was lost during washing — but her crystals are purer. Student A\'s higher yield may be contaminated with residual acid or anhydrous CuSO₄ from overheating. Yield and purity are two different criteria.'
+      explanation: 'No. Student B\'s lower yield may be because some product remained dissolved in the mother liquor or was lost during washing — but her crystals are purer. Student A\'s higher yield may be contaminated with residual acid or anhydrous CuSO₄ from overheating. Yield and purity are two different criteria.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: No; Student B\'s lower yield may be because some product remained dissolved in the mother liquor or was lost during washing — but her crystals are purer; Student A\'s higher yield may be contaminated with residual acid or anhydrous CuSO₄ from overheating; Yield and purity are two different criteria.'
     }
   ]
 }));
@@ -707,7 +761,9 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Explain why the reaction of sodium with steam is described as "dangerous" in the table.',
       marks: 2,
       hint: 'Two hazards: the gas and the product.',
-      explanation: 'Steam provides more energy than cold water, making the already vigorous sodium-water reaction extremely exothermic; the hydrogen gas produced ignites immediately from the heat of the reaction, causing an explosion. The sodium hydroxide produced is also strongly corrosive.'
+      explanation: 'Steam provides more energy than cold water, making the already vigorous sodium-water reaction extremely exothermic; the hydrogen gas produced ignites immediately from the heat of the reaction, causing an explosion. The sodium hydroxide produced is also strongly corrosive.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Steam provides more energy than cold water, making the already vigorous sodium-water reaction extremely exothermic; the hydrogen gas produced ignites immediately from the heat of the reaction, causing an explosion; The sodium hydroxide produced is also strongly corrosive.'
     }
   ]
 }));
@@ -725,21 +781,27 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Describe the mechanism of the enhanced greenhouse effect, starting with sunlight arriving at the Earth.',
       marks: 4,
       hint: 'Sunlight in → Earth warms → infrared out → greenhouse gases absorb → re-radiate back.',
-      explanation: '(1) Short-wave solar radiation passes through the atmosphere and is absorbed by the Earth\'s surface, warming it. (2) The warmed surface emits long-wave infrared (heat) radiation. (3) Greenhouse gases (CO₂, CH₄, H₂O, N₂O) absorb this outgoing infrared instead of letting it escape to space. (4) The gases re-radiate the energy in all directions, including back to the surface, warming it further. The enhanced effect is due to increased concentrations of greenhouse gases from human activities.'
+      explanation: '(1) Short-wave solar radiation passes through the atmosphere and is absorbed by the Earth\'s surface, warming it. (2) The warmed surface emits long-wave infrared (heat) radiation. (3) Greenhouse gases (CO₂, CH₄, H₂O, N₂O) absorb this outgoing infrared instead of letting it escape to space. (4) The gases re-radiate the energy in all directions, including back to the surface, warming it further. The enhanced effect is due to increased concentrations of greenhouse gases from human activities.',
+      response: { kind: 'written' },
+      rubric: '4 marks. Award one mark per point, to a maximum of 4: (1) Short-wave solar radiation passes through the atmosphere and is absorbed by the Earth\'s surface, warming it; (2) The warmed surface emits long-wave infrared (heat) radiation; (3) Greenhouse gases (CO₂, CH₄, H₂O, N₂O) absorb this outgoing infrared instead of letting it escape to space; (4) The gases re-radiate the energy in all directions, including back to the surface, warming it further; The enhanced effect is due to increased concentrations of greenhouse gases from human activities.'
     },
     {
       label: 'b',
       prompt: 'Give <b>two</b> consequences of global warming on natural ecosystems.',
       marks: 2,
       hint: 'Ice, sea level, species ranges, weather patterns.',
-      explanation: 'Any two from: (1) melting of polar ice caps and glaciers, reducing habitat for species such as polar bears; (2) rising sea levels threatening coastal and island ecosystems; (3) coral bleaching due to ocean warming and acidification; (4) poleward and uphill shifts in species ranges, disrupting ecosystems; (5) increased frequency and severity of droughts and floods affecting biodiversity.'
+      explanation: 'Any two from: (1) melting of polar ice caps and glaciers, reducing habitat for species such as polar bears; (2) rising sea levels threatening coastal and island ecosystems; (3) coral bleaching due to ocean warming and acidification; (4) poleward and uphill shifts in species ranges, disrupting ecosystems; (5) increased frequency and severity of droughts and floods affecting biodiversity.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Any two from: (1) melting of polar ice caps and glaciers, reducing habitat for species such as polar bears; (2) rising sea levels threatening coastal and island ecosystems; (3) coral bleaching due to ocean warming and acidification; (4) poleward and uphill shifts in species ranges, disrupting ecosystems; (5) increased frequency and severity of droughts and floods affecting biodiversity.'
     },
     {
       label: 'c',
       prompt: 'State <b>two</b> actions that individuals or governments could take to reduce greenhouse gas emissions.',
       marks: 2,
       hint: 'Reduce, switch fuel, capture, plant.',
-      explanation: 'Any two from: (1) switch electricity generation to renewable sources (solar, wind, hydroelectric); (2) improve insulation and energy efficiency of buildings; (3) use electric or hydrogen-powered vehicles instead of petrol/diesel; (4) reduce deforestation and plant new forests; (5) adopt carbon capture and storage (CCS) at power stations; (6) reduce methane from agriculture by changing livestock diet or rice cultivation practices.'
+      explanation: 'Any two from: (1) switch electricity generation to renewable sources (solar, wind, hydroelectric); (2) improve insulation and energy efficiency of buildings; (3) use electric or hydrogen-powered vehicles instead of petrol/diesel; (4) reduce deforestation and plant new forests; (5) adopt carbon capture and storage (CCS) at power stations; (6) reduce methane from agriculture by changing livestock diet or rice cultivation practices.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Any two from: (1) switch electricity generation to renewable sources (solar, wind, hydroelectric); (2) improve insulation and energy efficiency of buildings; (3) use electric or hydrogen-powered vehicles instead of petrol/diesel; (4) reduce deforestation and plant new forests; (5) adopt carbon capture and storage (CCS) at power stations; (6) reduce methane from agriculture by changing livestock diet or rice cultivation practices.'
     }
   ]
 }));
@@ -758,20 +820,26 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Sodium chloride (NaCl) is spread on icy roads in winter. Explain the chemical reason it melts ice.',
       marks: 2,
       hint: 'Dissolving a solute changes the freezing point of the solvent.',
-      explanation: 'NaCl dissolves in any surface water, dissociating into Na⁺ and Cl⁻ ions. The dissolved ions lower the freezing point of the solution below 0 °C (freezing-point depression), so the mixture does not freeze at normal winter temperatures and ice is melted.'
+      explanation: 'NaCl dissolves in any surface water, dissociating into Na⁺ and Cl⁻ ions. The dissolved ions lower the freezing point of the solution below 0 °C (freezing-point depression), so the mixture does not freeze at normal winter temperatures and ice is melted.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: NaCl dissolves in any surface water, dissociating into Na⁺ and Cl⁻ ions; The dissolved ions lower the freezing point of the solution below 0 °C (freezing-point depression), so the mixture does not freeze at normal winter temperatures and ice is melted.'
     },
     {
       label: 'b',
       prompt: 'Barium sulfate (BaSO₄) is used as a barium meal for X-ray imaging of the gut. Explain why its insolubility is essential to its safe use.',
       marks: 2,
       hint: 'Ba²⁺ ions are toxic — what happens if the salt dissolves?',
-      explanation: 'Ba²⁺ ions are highly poisonous. BaSO₄ is almost completely insoluble (Ksp ≈ 10⁻¹⁰), so essentially no Ba²⁺ enters the bloodstream from the gut. Its insolubility makes it safe to swallow; it also blocks X-rays effectively, providing contrast for imaging.'
+      explanation: 'Ba²⁺ ions are highly poisonous. BaSO₄ is almost completely insoluble (Ksp ≈ 10⁻¹⁰), so essentially no Ba²⁺ enters the bloodstream from the gut. Its insolubility makes it safe to swallow; it also blocks X-rays effectively, providing contrast for imaging.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Ba²⁺ ions are highly poisonous; BaSO₄ is almost completely insoluble (Ksp ≈ 10⁻¹⁰), so essentially no Ba²⁺ enters the bloodstream from the gut; Its insolubility makes it safe to swallow; it also blocks X-rays effectively, providing contrast for imaging.'
     },
     {
       label: 'c',
       prompt: 'Potassium nitrate (KNO₃) is used as a fertiliser. State which two nutrients it provides and explain why these are important for plant growth.',
       marks: 2,
-      explanation: 'Potassium (K) — needed for flower and fruit development, and to regulate water in cells. Nitrogen (N) — needed for synthesis of amino acids and proteins, promoting leaf and stem growth. Both are macronutrients essential for healthy plant development.'
+      explanation: 'Potassium (K) — needed for flower and fruit development, and to regulate water in cells. Nitrogen (N) — needed for synthesis of amino acids and proteins, promoting leaf and stem growth. Both are macronutrients essential for healthy plant development.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: Potassium (K) — needed for flower and fruit development, and to regulate water in cells; Nitrogen (N) — needed for synthesis of amino acids and proteins, promoting leaf and stem growth; Both are macronutrients essential for healthy plant development.'
     }
   ]
 }));
@@ -805,7 +873,9 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Explain the difference between the formulae 2H₂O and H₂O₂.',
       marks: 2,
       hint: 'One has a large number in front; one has a subscript.',
-      explanation: '2H₂O means two molecules of water, each containing 2 hydrogen atoms and 1 oxygen atom (total: 4 H, 2 O). H₂O₂ is one molecule of hydrogen peroxide, containing 2 hydrogen atoms and 2 oxygen atoms (total: 2 H, 2 O) — a completely different substance.'
+      explanation: '2H₂O means two molecules of water, each containing 2 hydrogen atoms and 1 oxygen atom (total: 4 H, 2 O). H₂O₂ is one molecule of hydrogen peroxide, containing 2 hydrogen atoms and 2 oxygen atoms (total: 2 H, 2 O) — a completely different substance.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: 2H₂O means two molecules of water, each containing 2 hydrogen atoms and 1 oxygen atom (total: 4 H, 2 O); H₂O₂ is one molecule of hydrogen peroxide, containing 2 hydrogen atoms and 2 oxygen atoms (total: 2 H, 2 O) — a completely different substance.'
     },
     {
       label: 'd',
@@ -864,7 +934,9 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Explain why carbon monoxide (CO) is so dangerous to humans.',
       marks: 2,
       hint: 'What does it do in the blood? Why is it not noticed?',
-      explanation: 'CO is colourless and odourless, giving no sensory warning. It binds to haemoglobin about 200 times more strongly than oxygen, forming carboxyhaemoglobin, which cannot carry oxygen. This causes oxygen starvation of tissues and, at high concentrations, death.'
+      explanation: 'CO is colourless and odourless, giving no sensory warning. It binds to haemoglobin about 200 times more strongly than oxygen, forming carboxyhaemoglobin, which cannot carry oxygen. This causes oxygen starvation of tissues and, at high concentrations, death.',
+      response: { kind: 'written' },
+      rubric: '2 marks. Award one mark per point, to a maximum of 2: CO is colourless and odourless, giving no sensory warning; It binds to haemoglobin about 200 times more strongly than oxygen, forming carboxyhaemoglobin, which cannot carry oxygen; This causes oxygen starvation of tissues and, at high concentrations, death.'
     },
     {
       label: 'b',
@@ -878,7 +950,9 @@ STATIC_QUESTIONS.push(makeTask({
       prompt: 'Explain the mechanism by which CFCs destroy the ozone layer.',
       marks: 3,
       hint: 'UV breaks the CFC, releasing chlorine atoms that catalytically destroy ozone.',
-      explanation: 'UV radiation in the upper atmosphere breaks a C–Cl bond in the CFC molecule, releasing a chlorine radical (Cl•). The chlorine radical reacts with ozone: Cl• + O₃ → ClO• + O₂. Then ClO• reacts with O to regenerate Cl•: ClO• + O → Cl• + O₂. The Cl• is regenerated and can destroy thousands more ozone molecules — acting as a catalyst. Overall: O₃ + O → 2O₂ (each Cl• repeating many times).'
+      explanation: 'UV radiation in the upper atmosphere breaks a C–Cl bond in the CFC molecule, releasing a chlorine radical (Cl•). The chlorine radical reacts with ozone: Cl• + O₃ → ClO• + O₂. Then ClO• reacts with O to regenerate Cl•: ClO• + O → Cl• + O₂. The Cl• is regenerated and can destroy thousands more ozone molecules — acting as a catalyst. Overall: O₃ + O → 2O₂ (each Cl• repeating many times).',
+      response: { kind: 'written' },
+      rubric: '3 marks. Award one mark per point, to a maximum of 3: UV radiation in the upper atmosphere breaks a C–Cl bond in the CFC molecule, releasing a chlorine radical (Cl•); The chlorine radical reacts with ozone: Cl• + O₃ → ClO• + O₂; Then ClO• reacts with O to regenerate Cl•: ClO• + O → Cl• + O₂; The Cl• is regenerated and can destroy thousands more ozone molecules — acting as a catalyst; Overall: O₃ + O → 2O₂ (each Cl• repeating many times).'
     },
     {
       label: 'd',

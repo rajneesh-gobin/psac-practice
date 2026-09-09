@@ -104,6 +104,32 @@ wins.
   Safari's 7-day eviction all lose it. `openParentPinSetup()` (Account & Settings →
   Security) is the unguarded entry; `_promptSetParentPin()` keeps its once-only
   first-run guard.
+- ⚠ **`_fetchDbPinHash()` reads `error`, not just `data`.** supabase-js does not
+  throw on an RLS denial, a dead session or a 5xx — it returns
+  `{ data: null, error }`. Destructuring `data` alone recorded every one of those
+  as `_dbPinHash = ''`, which is the *same value* as a genuine no-PIN account, so
+  a parent with a PIN was told they had none. **A DB miss is not a verdict
+  either** — `_dbPinFetchFailed` is the discriminator.
+- **The hand-over offer** (`_offerPinBeforeSwitch`, `#modal-pin-offer`): a parent
+  with no PIN who taps "switch to student mode" is asked whether to set one
+  first, because that is the moment the cost is about to be paid — a kid-only
+  screen whose only way back is 🔒 Parent, and with no PIN that means the full
+  email and password.
+  - ⚠ **Every exit performs the switch** — accept, decline, ✕, backdrop, Escape,
+    and backing out of the PIN pad afterwards. The parent tapped "hand this to
+    my child"; a box that swallows that action is worse than no box.
+  - ⚠ **The setup continuation is one-shot and cleared before it runs** —
+    Settings opens the same pad, and a stale one teleports a parent editing
+    their PIN into a child sign-in.
+  - ⚠ **Offered once per parent per browser**, scoped like the PIN itself
+    (`psac_pin_offer_declined_v1_<uid>`): it sits in front of an action already
+    chosen, so a second showing is an obstacle, not a nudge.
+  - ⚠ **Not for teachers** (`role !== 'parent'`) and **not when the lookup
+    failed** — unknown is not "no PIN".
+  - `scripts/test-pin-offer-on-switch.js` (28 checks, real browser). Its
+    `Auth.__testSetup` seam is **localhost-only** — a seam that lets page script
+    set `_parentUser` is an account-takeover primitive, so on the live site the
+    key is never added to the object at all.
 
 ### Server-side PIN sign-in — `netlify/functions/parent-pin-signin.js`
 `POST /api/parent-pin-signin {user_id, pin}` → service role verifies against

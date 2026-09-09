@@ -651,7 +651,7 @@ How many loaves were baked on <b>Monday</b>?`,
     explanation:'6 × 50 = <b>300 loaves</b>.' }),
 
   makeMCQ({ id:'DGR02', chapterId:'graphs', subsection:'bar_chart', difficulty:3,
-    question:'A bar chart shows pupils\' favourite sport:<br>Football=18, Cricket=12, Swimming=8, Tennis=6.<br>What fraction of pupils chose <b>Cricket</b>? (simplest form)',
+    question:'<svg class="q-chart" viewBox="0 0 368 218" font-family="sans-serif"><rect width="100%" height="100%" rx="10" fill="#fff"/><text x="184" y="18" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e293b">Pupils\' favourite sport</text><path d="M58 34V186H354" stroke="#334155" stroke-width="1.5" fill="none"/><path d="M58 186H354M58 148H354M58 110H354M58 72H354M58 34H354" stroke="#e5e7eb"/><g font-size="10" fill="#64748b" text-anchor="end"><text x="50" y="190">0</text><text x="50" y="152">5</text><text x="50" y="114">10</text><text x="50" y="76">15</text><text x="50" y="38">20</text></g><rect x="73" y="49" width="42" height="137" rx="3" fill="#3b82f6"/><rect x="145" y="95" width="42" height="91" rx="3" fill="#f59e0b"/><rect x="217" y="125" width="42" height="61" rx="3" fill="#10b981"/><rect x="289" y="140" width="42" height="46" rx="3" fill="#ef4444"/><g font-size="11" fill="#334155" text-anchor="middle"><text x="94" y="203">Football</text><text x="94" y="43">18</text><text x="166" y="203">Cricket</text><text x="166" y="89">12</text><text x="238" y="203">Swimming</text><text x="238" y="119">8</text><text x="310" y="203">Tennis</text><text x="310" y="134">6</text></g></svg>What fraction of pupils chose <b>Cricket</b>? (simplest form)',
     options:['12/44','3/11','4/15','1/4'],
     answer:'3/11',
     hint:'Total = 18+12+8+6=44. Cricket = 12/44. Simplify.',

@@ -86,6 +86,24 @@ filtered for *them* and the next child read it straight back.
   quota (Grade 6 already puts the origin at 4.19 MB). ⚠ There is nothing to strip:
   74% of a French bundle is question + explanation + hint + options — the teaching
   content. The fix had to be eviction, not compression.
+- ⚠ **The payload IS compressed now** (lz-string `compress`, 2026-09-09), and it
+  changes every number above: re-measured, **Grade 4 0.43 MB, Grade 5 0.55 MB,
+  Grade 6 0.51 MB, Grade 9 0.98 MB** against the same 3.70 MB budget. The
+  headroom crisis is over; the byte budget remains the real guard.
+- ⚠⚠ **Compression silently made `test-question-cache-budget.js` VACUOUS.** Its
+  filler was one question padded with `'y'.repeat(size)` — the right byte count,
+  and a fair proxy until the cache started compressing, at which point a run of
+  one character compressed to nothing and **every grade measured 0.00 MB and
+  passed**. It now writes the **real bundles**. A proxy for size stops being a
+  proxy the moment anything transforms the payload.
+- ⚠ **That test only measured grades 4–6** (`/^grade[456]-/` against a hard-coded
+  15) so grades 1–3 and 7–9 were never checked after they went live. Now derived
+  from the live packs — and it immediately found the next one:
+- ⚠ **`_LRU_MAX` was 6 and Grade 9 has EIGHT live packs**, so a Grade 9 child
+  opening their seventh subject evicted two of their own — measured, Biology and
+  Chemistry dropped. "Six covers one full grade with room to spare" was written
+  when a grade meant five subjects. Now **9** = largest live grade + 1.
+  ⚠ Re-measure before raising it again; do not reason about it.
 - ⚠ **A size the index does not know is MEASURED, never assumed zero.** The
   recency index stores `{u, b}` (use counter, size) and reads an older bare number
   as `{u:n, b:0}`, filling `b` in from storage the first time a total is needed.

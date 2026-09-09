@@ -331,7 +331,9 @@ const MCQ_B2 = [
    'Condoms are the only contraceptive method that acts as a physical barrier, preventing both sperm and infectious pathogens from being transferred; other methods prevent pregnancy but offer no protection against STIs.'],
 
   ['g9s-bpi-030', 'stis_and_contraception', 3,
-   'A table shows HIV infection rates (new cases per 1000 people) in a country over five years: Year 1: 8.2, Year 2: 7.5, Year 3: 6.1, Year 4: 5.3, Year 5: 4.0. A health campaign was launched at the start of Year 2. What is the mean infection rate over all five years, and what trend does the data show?',
+   'The table shows HIV infection rates in a country over five years.' +
+   '<table class="q-table"><tr><th>Year</th><th>New cases per 1000</th></tr><tr><td>1</td><td>8.2</td></tr><tr><td>2</td><td>7.5</td></tr><tr><td>3</td><td>6.1</td></tr><tr><td>4</td><td>5.3</td></tr><tr><td>5</td><td>4.0</td></tr></table>' +
+   'A health campaign was launched at the start of Year 2. What is the <b>mean</b> infection rate over all five years, and what trend does the data show?',
    ['Mean of 6.2 new cases per 1000 per year; a consistent downward trend suggesting the campaign may have contributed to falling rates',
     'Mean of 5.3 new cases per 1000 per year; a steady upward trend showing the campaign had no effect',
     'Mean of 8.2 new cases per 1000 per year; no clear trend because the figures fluctuate randomly each year',
