@@ -12,6 +12,10 @@
 //
 // La séquence de trois images reste dessinée : il n\'existe pas de série de
 // photos libres montrant les mêmes personnages à trois moments d\'une histoire.
+// Elle a été REDESSINÉE le 2026-09-09 : les trois cases sont désormais trois
+// svg séparés dans une grille qui s\'empile sur un téléphone, et les
+// personnages ont un corps. Avant, un enfant voyait trois vignettes de
+// ~110 px de large dont la troisième sortait de l\'écran.
 //
 // ⚠ alt et <title> restent génériques - ils ne doivent JAMAIS donner la réponse.
 // ⚠ Photos sous licence CC BY / CC BY-SA : le crédit sous chaque image est une
@@ -51,9 +55,9 @@ function _g5imgPerson(x, feetY, shirt, face, scale) {
 // Le cartable : le rabat relevé et l'ouverture sombre sont ce qui rend le sac
 // « ouvert » - c'est le détail sur lequel porte g5fr-img-012.
 function _g5imgBagOpen(x, baseY) {
-  return `<polygon points="${x - 17},${baseY - 26} ${x - 21},${baseY - 44} ${x + 15},${baseY - 42} ${x + 17},${baseY - 26}"
+  return `<polygon points="${x - 16},${baseY - 32} ${x - 21},${baseY - 50} ${x + 14},${baseY - 48} ${x + 16},${baseY - 32}"
       fill="#ec4899" stroke="#9d174d" stroke-width="2" stroke-linejoin="round"/>
-    <rect x="${x - 17}" y="${baseY - 28}" width="34" height="8" fill="#4c0519"/>
+    <rect x="${x - 17}" y="${baseY - 34}" width="34" height="12" rx="2" fill="#4c0519"/>
     <rect x="${x - 17}" y="${baseY - 24}" width="34" height="24" rx="4" fill="#f472b6" stroke="#9d174d" stroke-width="2"/>
     <rect x="${x - 7}" y="${baseY - 14}" width="14" height="9" rx="2" fill="#fbcfe8" stroke="#9d174d"/>`;
 }
@@ -117,7 +121,7 @@ const _G5IMG_CHAT = _g5imgStrip([
     ${_g5imgEmoji(168, 154, 32, '🐈')}
   `),
   _g5imgPanel(2, '#bfe4ff', '#9ca3af', `
-    <circle cx="26" cy="28" r="14" fill="#fcd34d"/>
+    <circle cx="94" cy="26" r="14" fill="#fcd34d"/>
     <rect x="112" y="50" width="82" height="70" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/>
     <rect x="120" y="62" width="18" height="18" fill="#bfdbfe" stroke="#9a3412" stroke-width="2"/>
     <rect x="168" y="62" width="18" height="18" fill="#bfdbfe" stroke="#9a3412" stroke-width="2"/>
@@ -128,13 +132,13 @@ const _G5IMG_CHAT = _g5imgStrip([
     ${_g5imgPerson(56, 146, _G5IMG_GIRL, '😊')}
   `),
   _g5imgPanel(3, '#ecfdf5', '#d6d3d1', `
-    <rect x="8" y="22" width="88" height="48" rx="3" fill="#14532d" stroke="#052e16" stroke-width="2"/>
+    <rect x="52" y="20" width="96" height="48" rx="3" fill="#14532d" stroke="#052e16" stroke-width="2"/>
     <rect x="96" y="112" width="76" height="9" fill="#a16207"/>
     <rect x="102" y="121" width="6" height="24" fill="#78350f"/>
     <rect x="160" y="121" width="6" height="24" fill="#78350f"/>
-    ${_g5imgBagClosed(120, 112, 26, 22)}
-    ${_g5imgEmoji(146, 108, 30, '🐈')}
-    ${_g5imgPerson(178, 150, '#0f766e', '😮', 0.8)}
+    ${_g5imgEmoji(104, 108, 32, '🐈')}
+    ${_g5imgBagClosed(128, 112, 30, 24)}
+    ${_g5imgPerson(172, 150, '#0f766e', '😮', 0.8)}
     ${_g5imgPerson(34, 156, _G5IMG_GIRL, '😲', 0.85)}
     ${_g5imgPerson(72, 156, '#ea580c', '😲', 0.85)}
   `)

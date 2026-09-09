@@ -8,7 +8,11 @@
 // réellement visible.
 //
 // La séquence de trois images reste dessinée : il n\'existe pas de série de
-// photos libres montrant le même enfant à trois moments d\'une même histoire.
+// photos libres montrant le même enfant à trois moments d\'une histoire.
+// Elle a été REDESSINÉE le 2026-09-09 : les trois cases sont désormais trois
+// svg séparés dans une grille qui s\'empile sur un téléphone, et les
+// personnages ont un corps. Avant, un enfant voyait trois vignettes de
+// ~110 px de large dont la troisième sortait de l\'écran.
 //
 // ⚠ Le texte alternatif doit rester générique - il ne doit JAMAIS donner la
 //   réponse. Idem pour le <title> des SVG.
@@ -37,14 +41,14 @@ function _g4imgMark(x, y, size, txt, colour) {
 }
 function _g4imgPerson(x, feetY, shirt, face, scale) {
   const k = scale || 1;
-  const legH = 12 * k, torsoH = 21 * k, torsoW = 27 * k, head = 30 * k;
+  const legH = 12 * k, torsoH = 21 * k, torsoW = 30 * k, head = 27 * k;
   const torsoY = feetY - legH - torsoH;
   return `<rect x="${x - 10 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#1e3a8a" rx="2"/>
     <rect x="${x + 3 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#1e3a8a" rx="2"/>
     <rect x="${x - torsoW / 2}" y="${torsoY}" width="${torsoW}" height="${torsoH}" rx="${8 * k}" fill="${shirt}"/>
     <rect x="${x - torsoW / 2 - 5 * k}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>
     <rect x="${x + torsoW / 2}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>
-    ${_g4imgEmoji(x, torsoY + 3 * k, head, face)}`;
+    ${_g4imgEmoji(x, torsoY + 4 * k, head, face)}`;
 }
 function _g4imgTree(x) {
   return `<rect x="${x - 7}" y="80" width="14" height="42" fill="#92400e" rx="2"/>

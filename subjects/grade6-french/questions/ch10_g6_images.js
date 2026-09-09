@@ -14,6 +14,10 @@
 //
 // La séquence de trois images reste dessinée : il n\'existe pas de série de
 // photos libres montrant les mêmes personnages à trois moments d\'une histoire.
+// Elle a été REDESSINÉE le 2026-09-09 : les trois cases sont désormais trois
+// svg séparés dans une grille qui s\'empile sur un téléphone, et les
+// personnages ont un corps. Avant, un enfant voyait trois vignettes de
+// ~110 px de large dont la troisième sortait de l\'écran.
 //
 // ⚠ alt et <title> restent génériques - ils ne doivent JAMAIS donner la réponse.
 // ⚠ Photos sous licence CC BY / CC BY-SA : le crédit sous chaque image est une
@@ -41,7 +45,7 @@ function _g6imgPerson(x, feetY, shirt, face, scale, wave) {
   const legH = 12 * k, torsoH = 21 * k, torsoW = 30 * k, head = 27 * k;
   const torsoY = feetY - legH - torsoH;
   const armR = wave
-    ? `<rect x="${x + torsoW / 2}" y="${torsoY + 3 * k}" width="${5 * k}" height="${15 * k}" rx="${2.5 * k}"
+    ? `<rect x="${x + torsoW / 2}" y="${torsoY + 3 * k}" width="${5 * k}" height="${17 * k}" rx="${2.5 * k}"
         fill="${shirt}" transform="rotate(-150 ${x + torsoW / 2} ${torsoY + 3 * k})"/>`
     : `<rect x="${x + torsoW / 2}" y="${torsoY + 3 * k}" width="${5 * k}" height="${13 * k}" rx="${2.5 * k}" fill="${shirt}"/>`;
   return `<rect x="${x - 10 * k}" y="${feetY - legH}" width="${7 * k}" height="${legH}" fill="#374151" rx="2"/>
@@ -60,6 +64,8 @@ function _g6imgTree(x) {
 function _g6imgBench(x, seatY) {
   return `<rect x="${x}" y="${seatY}" width="62" height="8" rx="2" fill="#a16207"/>
     <rect x="${x}" y="${seatY - 14}" width="62" height="6" rx="2" fill="#a16207"/>
+    <rect x="${x + 6}" y="${seatY - 14}" width="5" height="22" fill="#a16207"/>
+    <rect x="${x + 51}" y="${seatY - 14}" width="5" height="22" fill="#a16207"/>
     <rect x="${x + 4}" y="${seatY + 8}" width="6" height="18" fill="#78350f"/>
     <rect x="${x + 52}" y="${seatY + 8}" width="6" height="18" fill="#78350f"/>`;
 }
@@ -109,7 +115,7 @@ const _G6IMG_KID = '#f59e0b';
 const _G6IMG_MUM = '#be123c';
 const _G6IMG_OISEAU = _g6imgStrip([
   _g6imgPanel(1, '#bfe4ff', '#86efac', `
-    <circle cx="30" cy="28" r="15" fill="#fcd34d"/>
+    <circle cx="100" cy="26" r="14" fill="#fcd34d"/>
     ${_g6imgTree(166)}
     ${_g6imgBench(8, 126)}
     ${_g6imgPerson(94, 150, _G6IMG_KID, '😯', 0.85)}
@@ -131,7 +137,7 @@ const _G6IMG_OISEAU = _g6imgStrip([
     ${_g6imgPerson(176, 152, _G6IMG_MUM, '🙂', 0.85)}
   `),
   _g6imgPanel(3, '#bfe4ff', '#86efac', `
-    <circle cx="30" cy="28" r="15" fill="#fcd34d"/>
+    <circle cx="58" cy="24" r="13" fill="#fcd34d"/>
     ${_g6imgTree(166)}
     ${_g6imgEmoji(112, 52, 28, '🐦')}
     <path d="M84,46 q8,-7 16,0" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>

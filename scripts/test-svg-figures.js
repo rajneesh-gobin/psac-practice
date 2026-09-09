@@ -60,6 +60,16 @@ const PACKS = [
   'subjects/grade9-biology/questions',
   'subjects/grade9-chemistry/questions',
   'subjects/grade9-physics/questions',
+  // ⚠ Les trois « Description d'Images » : la séquence de trois images est
+  //   dessinée en svg inline, et personne ne la vérifiait. Elles passent
+  //   proprement. ⚠ D'AUTRES PACKS PORTENT AUSSI DU SVG INLINE et ne sont
+  //   toujours pas listés ici - grade{1,2,4,5,6}-maths, grade{4,5,6}-science,
+  //   grade{4,5,6}-history : mesuré, les ajouter aujourd'hui lève 151 alertes
+  //   de largeur estimée sur du contenu qui n'a pas changé, donc c'est un
+  //   chantier à part, pas un oubli.
+  'subjects/grade4-french/questions',
+  'subjects/grade5-french/questions',
+  'subjects/grade6-french/questions',
 ];
 
 const ctx = { STATIC_QUESTIONS: [], console, Math, JSON, window: {} };
