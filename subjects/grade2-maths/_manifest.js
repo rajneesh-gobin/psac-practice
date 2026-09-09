@@ -1,41 +1,47 @@
 'use strict';
-// ══════════════════════════════════════════════════════════════════════════
-//  Grade 2 - Mathematics   ·   PLACEHOLDER PACK
-//
-//  Registered so the plumbing exists: the grade picker, the admin Content tab,
-//  the shop catalogue, the question bundler and the DB importer all discover
-//  grades from SUBJECT_PACKS / the subjects/ directory, so nothing else has to
-//  be edited when this is filled in.
-//
-//  ⚠ comingSoon: true is what makes this safe to ship empty. It makes
-//    activateSubjectPack() refuse the pack, keeps it out of QuestionLoader's
-//    per-grade fetch and out of assembleExamPaper(), and renders the grade card
-//    as "Coming Soon" and disabled. Flip it to false ONLY when this pack has
-//    real chapters and real questions.
-//
-// STAGE: Mauritian primary, lower years. Same MIE track as Grades 4-6,
-// so the five subjects and the PSAC framing below are correct.
-// ⚠ Grades 1-2 will need a picture-first question mode before this is
-//   opened to children - the current renderer assumes the child can read
-//   the question and all four options. See CLAUDE.md.
-//
-//  TO FILL THIS IN
-//    1. Replace the one sample chapter below with the real MIE chapters.
-//       Each needs: id, name, icon, examWeight, and a prose `syllabus` -
-//       one idea per sentence (_syllabusPoints splits on sentences).
-//    2. Write questions/ch01_*.js files following subjects/grade4-maths as the
-//       model. IDs: g2m-samp-001 style. Every question needs a `subsection:`
-//       tag that matches an id declared in G2M_SYLLABUS below.
-//    3. Add each new file to LOCAL_FILES in engine/question_loader.js (for
-//       file:// dev only - production auto-discovers) and bump _CACHE_VERSION.
-//    4. Delete questions/ch01_sample.js.
-//    5. Set comingSoon: false.
-// ══════════════════════════════════════════════════════════════════════════
 
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: an id declared here
-// with no questions behind it advertises a topic that opens empty, which is
-// worse than no subsections at all. Add ids only as questions are tagged.
-const G2M_SYLLABUS = {};
+const G2M_SYLLABUS = {
+  'g2mth-numbers': { subsections: [
+    { id: 'place_value',        name: 'Tens and Ones' },
+    { id: 'ordering_comparing', name: 'Ordering & Comparing' },
+    { id: 'odd_even_100',       name: 'Odd and Even to 100' },
+  ]},
+  'g2mth-addition': { subsections: [
+    { id: 'mental_addition',    name: 'Mental Addition' },
+    { id: 'column_addition',    name: 'Column Addition' },
+    { id: 'addition_problems',  name: 'Addition Word Problems' },
+  ]},
+  'g2mth-subtraction': { subsections: [
+    { id: 'mental_subtraction',    name: 'Mental Subtraction' },
+    { id: 'column_subtraction',    name: 'Column Subtraction' },
+    { id: 'subtraction_problems',  name: 'Subtraction Word Problems' },
+  ]},
+  'g2mth-multiplication': { subsections: [
+    { id: 'repeated_addition',  name: 'Repeated Addition' },
+    { id: 'times_2',            name: '2 Times Table' },
+    { id: 'times_5_10',         name: '5 and 10 Times Tables' },
+  ]},
+  'g2mth-fractions': { subsections: [
+    { id: 'half',               name: 'One Half (½)' },
+    { id: 'quarter',            name: 'One Quarter (¼)' },
+    { id: 'comparing_fractions',name: 'Comparing Fractions' },
+  ]},
+  'g2mth-measurement': { subsections: [
+    { id: 'length_cm_m',        name: 'Length (cm and m)' },
+    { id: 'mass_kg',            name: 'Mass (kg)' },
+    { id: 'capacity_litres',    name: 'Capacity (litres)' },
+  ]},
+  'g2mth-time': { subsections: [
+    { id: 'days_months',        name: 'Days and Months' },
+    { id: 'oclock_halfpast',    name: "O'clock and Half Past" },
+    { id: 'calendar',           name: 'Reading a Calendar' },
+  ]},
+  'g2mth-shapes': { subsections: [
+    { id: '2d_shapes',          name: '2D Shapes' },
+    { id: '3d_shapes',          name: '3D Shapes' },
+    { id: 'symmetry',           name: 'Lines of Symmetry' },
+  ]},
+};
 
 registerSubject({
   id:         'grade2-maths',
@@ -45,11 +51,24 @@ registerSubject({
   subject:    'Maths',
   curriculum: 'MIE Mauritius',
   comingSoon: true,
+  noDifficulty: false,
   syllabus:   G2M_SYLLABUS,
   chapters: [
-    // One placeholder so the shape is copyable. examWeight: 0 keeps it out of
-    // exam papers even if comingSoon is flipped before real content lands.
-    { id: 'g2m-sample', name: 'Sample Chapter', icon: '📝', examWeight: 0,
-      syllabus: '' },
+    { id: 'g2mth-numbers',        name: 'Numbers to 100',               icon: '🔢', examWeight: 3,
+      syllabus: 'Count, read and write numbers 0–100. Understand place value: tens and ones. Compare numbers using > < =. Identify odd and even numbers up to 100.' },
+    { id: 'g2mth-addition',       name: 'Addition to 100',              icon: '➕', examWeight: 3,
+      syllabus: 'Add multiples of 10 mentally. Add two 2-digit numbers using column method, with and without regrouping. Solve addition word problems.' },
+    { id: 'g2mth-subtraction',    name: 'Subtraction to 100',           icon: '➖', examWeight: 3,
+      syllabus: 'Subtract multiples of 10 mentally. Subtract two 2-digit numbers using column method, with and without regrouping. Solve subtraction word problems.' },
+    { id: 'g2mth-multiplication', name: 'Introduction to Multiplication', icon: '✖️', examWeight: 2,
+      syllabus: 'Understand multiplication as repeated addition: 3+3+3 = 3×3 = 9. Learn multiplication tables for 2, 5 and 10.' },
+    { id: 'g2mth-fractions',      name: 'Simple Fractions',             icon: '½', examWeight: 2,
+      syllabus: 'Find one half (½) of shapes and sets of objects. Find one quarter (¼) of shapes and sets. Compare: ½ is greater than ¼.' },
+    { id: 'g2mth-measurement',    name: 'Measurement',                  icon: '📏', examWeight: 2,
+      syllabus: 'Measure length in centimetres (cm) and metres (m). Compare masses using kilograms (kg). Measure capacity in litres (L). Know that 100 cm = 1 m.' },
+    { id: 'g2mth-time',           name: 'Time',                         icon: '🕐', examWeight: 2,
+      syllabus: "Name the 7 days of the week in order. Name the 12 months of the year. Read o'clock and half past on an analogue clock. Use a calendar to find dates." },
+    { id: 'g2mth-shapes',         name: 'Shapes and Space',             icon: '🔷', examWeight: 2,
+      syllabus: 'Describe properties of 2D shapes (sides, corners, right angles). Name 3D shapes: cube, cuboid, sphere, cylinder, cone. Identify lines of symmetry in shapes.' },
   ],
 });
