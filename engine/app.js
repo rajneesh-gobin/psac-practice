@@ -10,6 +10,11 @@ const S = {
   currentScreen: 'dashboard',
 };
 
+// Maps question id → true when that MCQ is randomly displayed as fill-in-the-blank
+// this session. Decided once per question on first render, then memoised.
+// Cleared when a new exam or practice session starts.
+const _blankQuestions = new Map();
+
 // ── GAMIFICATION STATE ────────────────────────
 // pref_* localStorage keys are scoped per student, not global to the device -
 // a shared family tablet has a parent and several kids taking turns on it,
@@ -2996,6 +3001,24 @@ function recordAnswer(chapterId, correct, source, questionId) {
   Events.emit('answer', { chapterId, correct });
 }
 
+// ── FILL-IN-THE-BLANK RANDOMISATION ───────────
+// True when the MCQ answer is a single unspaced word (≤ 20 chars). Numeric
+// and sentence options are excluded so only language questions qualify.
+function _isSingleWordAnswer(q) {
+  if (q.type !== 'mcq') return false;
+  const a = String(q.answer || '').trim();
+  return a.length > 0 && a.length <= 20 && !/[\s\d]/.test(a);
+}
+
+// Returns true when this question should be displayed as a typed input instead
+// of MCQ buttons. The decision is random (50 %) and memoised per question id
+// so navigating away and back keeps the same presentation.
+function _shouldShowAsBlank(q) {
+  if (!_isSingleWordAnswer(q)) return false;
+  if (!_blankQuestions.has(q.id)) _blankQuestions.set(q.id, Math.random() < 0.5);
+  return _blankQuestions.get(q.id);
+}
+
 // ── ANSWER CHECKING ───────────────────────────
 function normalise(v) {
   return String(v).toLowerCase().replace(/\s+/g, '').replace(/,/g, '')
@@ -3142,6 +3165,10 @@ function checkAnswer(q, userAnswer) {
   if (q.type === 'slots') {
     if (typeof Assessment === 'undefined') return false;
     return Assessment.markPart({ marks: q.marks || 1, response: q.slotResponse }, userAnswer).correct;
+  }
+  // MCQ shown as fill-in-the-blank this session: use accent-lenient matching
+  if (q.type === 'mcq' && _blankQuestions.get(q.id)) {
+    return matchTypedAnswer(q.acceptableAnswers || [q.answer], userAnswer, q).ok;
   }
   const ua = normalise(userAnswer);
   const accepted = [q.answer, ...(q.acceptableAnswers || [])];
@@ -3493,6 +3520,20 @@ function renderAnswerArea(q, containerId, selectedAnswer, disabled) {
     renderSymmetryGrid(q, cont, selectedAnswer, disabled);
     return;
   }
+  // Single-word MCQ displayed as a typed input this session
+  if (q.type === 'mcq' && _shouldShowAsBlank(q)) {
+    const m   = disabled ? matchTypedAnswer(q.acceptableAnswers || [q.answer], selectedAnswer, q) : null;
+    const cls = disabled ? (m && m.ok ? 'num-input correct' : 'num-input wrong') : 'num-input';
+    const enter = containerId === 'exam-answer-area' ? 'saveCurrentExamAnswer()' : 'practiceSubmit()';
+    cont.innerHTML = `<input type="text" class="${cls}" id="num-ans-${containerId}" value="${_attr(selectedAnswer || '')}"
+      placeholder="Écris ta réponse…" lang="fr" inputmode="text" spellcheck="false"
+      autocapitalize="off" autocorrect="off" autocomplete="off" ${disabled ? 'disabled' : ''}
+      onkeydown="if(event.key==='Enter'){${enter}}">`;
+    if (m && m.ok && m.slip) {
+      cont.innerHTML += `<p class="txt-slip">Juste - attention à l’accent : <b>${_attr(q.answer)}</b></p>`;
+    }
+    return;
+  }
   if (q.type === 'mcq' || q.type === 'multi') {
     const multi = q.type === 'multi';
     let selectedValues = [];
@@ -3750,6 +3791,9 @@ window.selectMultiMCQ = (btn, containerId, disabled) => {
 
 function getSelectedAnswer(containerId, qType) {
   if (qType === 'mcq') {
+    // If this MCQ is rendered as fill-in-the-blank, read from the text input
+    const inp = document.getElementById('num-ans-' + containerId);
+    if (inp) return inp.value.trim() || null;
     const sel = document.querySelector(`#${containerId} .mcq-opt.selected`);
     return sel ? sel.dataset.value : null;
   }
@@ -7958,6 +8002,7 @@ function startChapterDirect(chapterId, forceDiff, _attempt) {
   // null diff = mixed mode (random across all levels up to parent cap)
   const diff = forceDiff ? Math.min(forceDiff, maxDiff) : null;
 
+  _blankQuestions.clear();
   S.practice.chapterId = chapterId;
   S.practice.difficulty = diff;
   if (resume && resume.qs.length) {
@@ -8658,6 +8703,7 @@ function startExam(type) {
   // then failed to assemble.
   _usageBump('exams');
 
+  _blankQuestions.clear();
   S.exam.qs = paper.questions;
   S.exam.answers = {};
   S.exam.flagged = new Set();
