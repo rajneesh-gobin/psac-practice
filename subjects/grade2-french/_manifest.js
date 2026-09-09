@@ -1,5 +1,33 @@
 'use strict';
-const G2FR_SYLLABUS = {};
+
+const G2FR_SYLLABUS = {
+  'g2fr-comprehension-orale': { subsections: [
+    { id:'texte_oral',          name:'Comprendre un texte oral' },
+    { id:'sequence_evenements', name:'Séquence des événements' },
+    { id:'vocabulaire',         name:'Nouveau vocabulaire' },
+  ]},
+  'g2fr-expression-orale': { subsections: [
+    { id:'description_images',  name:'Décrire une image' },
+    { id:'recit_simple',        name:'Raconter une histoire courte' },
+    { id:'questions_reponses',  name:'Questions et réponses' },
+  ]},
+  'g2fr-lecture': { subsections: [
+    { id:'decodage_syllabes',      name:'Décoder par syllabes' },
+    { id:'lecture_comprehension',  name:'Comprendre ce qu\'on lit' },
+    { id:'type_texte',             name:'Type de texte' },
+  ]},
+  'g2fr-ecriture': { subsections: [
+    { id:'phrases_courtes',     name:'Écrire des phrases courtes' },
+    { id:'ponctuation_de_base', name:'Ponctuation de base' },
+    { id:'orthographe_mots',    name:'Orthographe des mots' },
+  ]},
+  'g2fr-grammaire': { subsections: [
+    { id:'nom_determinant',     name:'Nom et déterminant' },
+    { id:'verbe_etre_avoir',    name:'être et avoir' },
+    { id:'adjectifs_simples',   name:'Adjectifs simples' },
+  ]},
+};
+
 registerSubject({
   id:         'grade2-french',
   name:       'French',
@@ -8,17 +36,54 @@ registerSubject({
   subject:    'French',
   curriculum: 'MIE Mauritius',
   comingSoon: true,
+  notesBased: true,
+  noDifficulty: true,
   syllabus:   G2FR_SYLLABUS,
   chapters: [
-    { id: 'g2fr-comprehension-orale', name: 'Compréhension orale', icon: '👂', examWeight: 1,
-      syllabus: 'Identifier un son spécifique au début, au milieu et à la fin d\'un mot entendu. Écouter et comprendre différents textes oraux courts comme un poème, une comptine, une chanson ou une histoire. Reconnaître des rimes dans une chanson ou une comptine. Identifier quelques détails donnés dans le texte comme le personnage et le lieu. Comprendre un vocabulaire de base dans le contexte de l\'histoire.' },
-    { id: 'g2fr-expression-orale', name: 'Expression orale', icon: '🗣️', examWeight: 1,
-      syllabus: 'Présenter sa famille et ses amis en donnant des informations basiques. Réciter des comptines et des poèmes simples individuellement et collectivement. Nommer des actions et des sentiments. Utiliser un vocabulaire de base pour nommer des personnes, des endroits et des objets liés à la vie quotidienne. Répondre à des questions simples dans une interaction. Situer des actions dans le temps avec hier, aujourd\'hui et demain.' },
-    { id: 'g2fr-lecture', name: 'Compréhension écrite', icon: '📚', examWeight: 1,
-      syllabus: 'Distinguer entre différents textes habituels en s\'appuyant sur le format, le contenu et le but des textes. Suivre attentivement différents textes lus par l\'enseignant. Faire la correspondance son-graphie. Reconnaître les syllabes dans des mots familiers. Lire des mots en les découpant en syllabes. Décoder le mot à partir du découpage syllabique et de la lecture globale. Associer les images aux mots correspondants.' },
-    { id: 'g2fr-ecriture', name: 'Expression écrite', icon: '✏️', examWeight: 1,
-      syllabus: 'Écrire les lettres de l\'alphabet avec modèle en minuscules et en majuscules. Mémoriser des mots. Épeler des mots phonétiquement comme stratégie pour écrire des mots simples. Compléter des mots en s\'aidant du découpage syllabique. Compléter des phrases courtes avec l\'aide de l\'enseignant. Recopier des phrases en respectant les conventions de l\'écrit. Savoir qu\'une phrase commence par une majuscule et se termine par un point.' },
-    { id: 'g2fr-grammaire', name: 'Grammaire', icon: '📝', examWeight: 1,
-      syllabus: 'Remplacer des noms propres et des noms communs par des pronoms. Utiliser des prépositions usuelles correctement comme sur, sous, dans et entre. Identifier le(s) trait(s) que soulignent les adjectifs usuels. Utiliser correctement les adjectifs pour décrire des objets, des personnes et des lieux. Former des phrases simples pour exprimer ses besoins et partager une idée. Utiliser des verbes au présent.' },
+    {
+      id: 'g2fr-comprehension-orale', name: 'Compréhension orale', icon: '👂', examWeight: 1,
+      notes: [
+        'Écoute attentivement pour trouver l\'**idée principale** du texte.',
+        'Les mots *d\'abord, ensuite, puis, enfin* indiquent l\'**ordre des événements**.',
+        'Utilise le contexte pour deviner le sens d\'un **mot nouveau**.',
+        'Après avoir écouté, demande-toi : *De quoi s\'agit-il ?*',
+      ],
+    },
+    {
+      id: 'g2fr-expression-orale', name: 'Expression orale', icon: '🗣️', examWeight: 1,
+      notes: [
+        'Pour décrire une image, dis ce que tu vois : les personnages, les objets, les couleurs.',
+        'Pour raconter, utilise : *d\'abord... ensuite... enfin...*',
+        'Pose des questions avec : *Qui ? Quoi ? Où ? Quand ? Pourquoi ?*',
+        'Réponds toujours avec une phrase complète.',
+      ],
+    },
+    {
+      id: 'g2fr-lecture', name: 'Compréhension écrite', icon: '📚', examWeight: 1,
+      notes: [
+        'Découpe les mots difficiles en **syllabes** : ma-te-las (3 syllabes).',
+        'Lis la phrase en entier avant de répondre.',
+        'Un **texte narratif** raconte une histoire. Une **liste** donne des informations.',
+        'Les **majuscules** commencent les noms propres et les phrases.',
+      ],
+    },
+    {
+      id: 'g2fr-ecriture', name: 'Expression écrite', icon: '✏️', examWeight: 1,
+      notes: [
+        'Chaque phrase commence par une **majuscule** et se termine par un **point**.',
+        'Le **point d\'interrogation** ( ? ) termine une question.',
+        'La **virgule** ( , ) sépare les éléments d\'une liste.',
+        'Vérifie l\'orthographe des mots que tu connais déjà.',
+      ],
+    },
+    {
+      id: 'g2fr-grammaire', name: 'Grammaire', icon: '📝', examWeight: 1,
+      notes: [
+        'Le **déterminant** accompagne le nom : *le, la, les, un, une, des*.',
+        'Le verbe **être** : je suis, tu es, il/elle est, nous sommes, vous êtes, ils/elles sont.',
+        'Le verbe **avoir** : j\'ai, tu as, il/elle a, nous avons, vous avez, ils/elles ont.',
+        'Un **adjectif** décrit un nom et s\'accorde avec lui : *un grand garçon / une grande fille*.',
+      ],
+    },
   ],
 });

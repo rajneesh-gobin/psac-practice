@@ -1,14 +1,43 @@
 'use strict';
-const G3HI_SYLLABUS = {};
+
+const G3HI_SYLLABUS = {
+  'g3hi-myself-family': { subsections: [
+    { id:'past_present',   name:'Past and Present' },
+    { id:'family_members', name:'My Family' },
+    { id:'family_events',  name:'Family Events' },
+  ]},
+  'g3hi-my-locality': { subsections: [
+    { id:'buildings_places',    name:'Buildings and Places' },
+    { id:'changes_locality',    name:'Changes in Our Locality' },
+    { id:'preserving_heritage', name:'Preserving Our Heritage' },
+  ]},
+  'g3hi-natural-environment': { subsections: [
+    { id:'natural_features',   name:'Natural Features of Mauritius' },
+    { id:'man_made_features',  name:'Man-Made Features' },
+    { id:'caring_environment', name:'Looking After Our Environment' },
+  ]},
+  'g3hi-weather': { subsections: [
+    { id:'weather_types',   name:'Types of Weather' },
+    { id:'weather_effects', name:'How Weather Affects Us' },
+    { id:'weather_safety',  name:'Staying Safe in Bad Weather' },
+  ]},
+  'g3hi-map-skills': { subsections: [
+    { id:'map_features',      name:'Reading a Map' },
+    { id:'natural_landmarks', name:'Natural Landmarks' },
+    { id:'safety_outdoors',   name:'Safety Outdoors' },
+  ]},
+};
+
 registerSubject({
-  id:         'grade3-history',
-  name:       'History & Geography',
-  grade:      3,
-  icon:       '🏛️',
-  subject:    'History & Geography',
-  curriculum: 'MIE Mauritius',
-  comingSoon: true,
-  syllabus:   G3HI_SYLLABUS,
+  id:           'grade3-history',
+  name:         'History & Geography',
+  grade:        3,
+  icon:         '🏛️',
+  subject:      'History & Geography',
+  curriculum:   'MIE Mauritius',
+  comingSoon:   true,
+  noDifficulty: true,
+  syllabus:     G3HI_SYLLABUS,
   chapters: [
     { id: 'g3hi-myself-family', name: 'Myself & My Family', icon: '👨‍👩‍👧', examWeight: 1,
       syllabus: 'Show basic understanding of past and present by recalling and listing significant personal events and dates in sequential manner. Develop vocabulary related to time such as today and long ago. Show awareness of time and change by comparing photographs, clothes and toys from the past. Identify members of the family, compare relative ages, discuss significant family events and draw a family tree.' },
