@@ -3037,6 +3037,9 @@
           <button id="scratch-toggle-btn" type="button" onclick="togglePracticeScratchpad()" class="pr-tool" title="Write or draw your working">
             <span class="pr-tool-ico">✏️</span><span class="pr-tool-lbl">My working</span>
           </button>
+          <button id="num-helper-btn" type="button" onclick="toggleNumHelper()" class="pr-tool hidden" title="Quick calculation helper for large numbers">
+            <span class="pr-tool-ico">🔢</span><span class="pr-tool-lbl">Numbers</span>
+          </button>
           <button id="practice-report-btn" type="button" onclick="openReportModal()" class="pr-tool pr-tool-report-visible" title="Tell an admin about a problem with this question" aria-label="Report a problem with this question">
             <span class="pr-tool-ico">🚩</span><span class="pr-tool-lbl">Report question</span>
           </button>
@@ -3069,6 +3072,21 @@
             <button id="clear-scratch-practice" class="pr-scratch-clear">Clear</button>
           </div>
           <canvas id="scratchpad-practice" class="scratchpad" height="200"></canvas>
+        </div>
+
+        <!-- Number Helper: maths practice only, collapsed by default. -->
+        <div id="num-helper-panel" class="hidden nh-panel">
+          <div class="nh-head">
+            <span class="nh-head-title">🔢 Number Helper</span>
+            <span class="nh-head-note">Tap a number chip, or type two numbers below</span>
+          </div>
+          <div class="nh-chips" id="nh-chips"></div>
+          <div class="nh-inputs">
+            <input id="nh-a" type="number" class="nh-input" placeholder="A" min="0" oninput="_nhCalc()">
+            <span class="nh-sep">and</span>
+            <input id="nh-b" type="number" class="nh-input" placeholder="B" min="0" oninput="_nhCalc()">
+          </div>
+          <table class="nh-table"><tbody id="nh-tbody"></tbody></table>
         </div>
       </div>
 

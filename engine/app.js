@@ -6618,6 +6618,101 @@ function togglePracticeHelp() {
   _setPracticeHelpOpen(tray.classList.contains('hidden'));
 }
 
+// ── NUMBER HELPER ─────────────────────────────
+// Extracts whole/decimal numbers ≥2 from question HTML (strips tags first).
+// Returns up to 8 unique numbers sorted ascending.
+function _extractQNumbers(html) {
+  const plain = html.replace(/<[^>]+>/g, ' ');
+  const seen = {};
+  const re = /\b(\d{1,6}(?:\.\d{1,4})?)\b/g;
+  let m;
+  while ((m = re.exec(plain)) !== null) {
+    const n = parseFloat(m[1]);
+    if (n >= 2 && n <= 999999) seen[n] = true;
+  }
+  return Object.keys(seen).map(Number).sort(function(a, b) { return a - b; }).slice(0, 8);
+}
+
+function _nhFmt(n) {
+  if (!isFinite(n) || Math.abs(n) > 9999999) return null;
+  return String(parseFloat(n.toFixed(4)));
+}
+
+function _nhCalc() {
+  const aEl = document.getElementById('nh-a');
+  const bEl = document.getElementById('nh-b');
+  const body = document.getElementById('nh-tbody');
+  if (!aEl || !bEl || !body) return;
+  const a = parseFloat(aEl.value);
+  const b = parseFloat(bEl.value);
+  if (!isFinite(a) || !isFinite(b)) { body.innerHTML = ''; return; }
+  const rows = [
+    { op: '+',  expr: a + ' + ' + b,   val: _nhFmt(a + b) },
+    { op: '−',  expr: a + ' − ' + b,   val: _nhFmt(a - b) },
+    { op: '×',  expr: a + ' × ' + b,   val: _nhFmt(a * b) },
+    { op: '÷',  expr: a + ' ÷ ' + b,   val: b !== 0 ? _nhFmt(a / b) : null },
+    { op: 'A²', expr: a + '²',          val: _nhFmt(a * a) },
+    { op: 'B²', expr: b + '²',          val: _nhFmt(b * b) },
+    { op: '√A', expr: '√' + a,          val: a >= 0 ? _nhFmt(Math.sqrt(a)) : null },
+    { op: '√B', expr: '√' + b,          val: b >= 0 ? _nhFmt(Math.sqrt(b)) : null },
+    { op: 'Aᴮ', expr: a + ' ^ ' + b,   val: _nhFmt(Math.pow(a, b)) },
+  ];
+  body.innerHTML = rows.map(function(r) {
+    const cell = r.val != null ? r.val : '<span class="nh-na">—</span>';
+    return '<tr><td class="nh-op">' + r.op + '</td><td class="nh-expr">' +
+           r.expr + '</td><td class="nh-val">' + cell + '</td></tr>';
+  }).join('');
+}
+
+function _nhChipClick(n) {
+  const aEl = document.getElementById('nh-a');
+  const bEl = document.getElementById('nh-b');
+  if (!aEl || !bEl) return;
+  if (!aEl.value) { aEl.value = n; }
+  else { bEl.value = n; _nhCalc(); }
+}
+
+function _nhPopulate(q) {
+  const btn   = document.getElementById('num-helper-btn');
+  const panel = document.getElementById('num-helper-panel');
+  const tools = document.querySelector('.pr-tools');
+  if (!btn || !panel) return;
+  const isMaths = !!(ACTIVE_PACK && ACTIVE_PACK.subject === 'Maths');
+  btn.classList.toggle('hidden', !isMaths);
+  if (tools) tools.classList.toggle('pr-tools-4', isMaths);
+  if (!isMaths) {
+    panel.classList.add('hidden');
+    btn.classList.remove('is-on');
+    return;
+  }
+  const nums   = _extractQNumbers(q.question || '');
+  const chips  = document.getElementById('nh-chips');
+  const aEl    = document.getElementById('nh-a');
+  const bEl    = document.getElementById('nh-b');
+  const tBody  = document.getElementById('nh-tbody');
+  if (chips) chips.innerHTML = nums.map(function(n) {
+    return '<button class="nh-chip" type="button" onclick="_nhChipClick(' + n + ')">' + n + '</button>';
+  }).join('');
+  if (aEl) aEl.value = '';
+  if (bEl) bEl.value = '';
+  if (tBody) tBody.innerHTML = '';
+  if (nums.length >= 2 && aEl && bEl) {
+    aEl.value = nums[0];
+    bEl.value = nums[1];
+    _nhCalc();
+  }
+}
+
+function toggleNumHelper() {
+  const panel = document.getElementById('num-helper-panel');
+  const btn   = document.getElementById('num-helper-btn');
+  if (!panel) return;
+  const opening = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden', !opening);
+  if (btn) btn.classList.toggle('is-on', opening);
+  if (opening) panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
 function initScratchpad(id) {
   const canvas = document.getElementById(id);
   if (!canvas || canvas._initialized) return;
@@ -9394,6 +9489,7 @@ function loadPracticeQuestion() {
 
   document.getElementById('practice-hint-box').classList.add('hidden');
   _setPracticeHelpOpen(false);
+  _nhPopulate(q);
   S.practice.hintShown = false;
   S.practice.hintIdx   = 0;
   const _hintBtn = document.getElementById('practice-hint-btn');

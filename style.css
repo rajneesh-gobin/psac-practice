@@ -1503,6 +1503,46 @@ body.has-bottom-nav #toast { bottom: calc(4.5rem + env(safe-area-inset-bottom));
 }
 .pr-scratch-clear:hover { color: #dc2626; }
 
+/* ── Number Helper panel ── */
+.pr-tools-4 { grid-template-columns: 1.25fr 1fr 1fr 1fr; }
+.nh-panel {
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 1rem;
+  padding: 0.75rem; display: flex; flex-direction: column; gap: 0.55rem;
+}
+.dark .nh-panel { background: #1e293b; border-color: #334155; }
+.nh-head { display: flex; align-items: center; justify-content: space-between; }
+.nh-head-title { font-size: 0.8rem; font-weight: 700; color: #4338ca; }
+.dark .nh-head-title { color: #a5b4fc; }
+.nh-head-note { font-size: 0.62rem; color: #94a3b8; }
+.nh-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; min-height: 1.4rem; }
+.nh-chip {
+  cursor: pointer; font-size: 0.78rem; font-weight: 700;
+  background: #eef2ff; color: #4338ca; border: 1px solid #a5b4fc;
+  border-radius: 0.45rem; padding: 0.15rem 0.5rem; transition: background 0.1s;
+}
+.dark .nh-chip { background: #1e2d4d; color: #a5b4fc; border-color: #4f46e5; }
+.nh-chip:hover { background: #e0e7ff; }
+.nh-inputs { display: flex; align-items: center; gap: 0.4rem; }
+.nh-input {
+  flex: 1; min-width: 0; padding: 0.3rem 0.4rem; border-radius: 0.5rem;
+  border: 1px solid #d1d5db; font: inherit; font-size: 0.82rem; text-align: center;
+  background: #fff; color: inherit;
+}
+.dark .nh-input { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+.nh-sep { font-size: 0.75rem; color: #94a3b8; white-space: nowrap; }
+.nh-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.nh-table tbody tr { border-bottom: 1px solid #f1f5f9; }
+.dark .nh-table tbody tr { border-color: #0f172a; }
+.nh-table tbody tr:last-child { border-bottom: none; }
+.nh-table td { padding: 0.2rem 0.3rem; }
+.nh-op { color: #64748b; font-weight: 700; width: 2.4rem; }
+.dark .nh-op { color: #94a3b8; }
+.nh-expr { color: #475569; }
+.dark .nh-expr { color: #94a3b8; }
+.nh-val { font-weight: 700; color: #1e293b; text-align: right; }
+.dark .nh-val { color: #e2e8f0; }
+.nh-na { color: #cbd5e1; font-weight: 400; }
+
 /* ── Sticky action bar ──
    One primary button at a time: Check Answer becomes Next. Skip stays a quiet
    secondary so it is never mistaken for the main action. */
