@@ -1,0 +1,3959 @@
+                Mauritius Institute of Education
+                         under the aegis of
+Ministry of Education, Tertiary Education, Science and Technology
+Name:
+_____________
+_____________
+     Professor V. NAËCK				 - Head Curriculum Implementation,
+     						 Textbook Development and Evaluation
+
+
+
+     THE ENGLISH PANEL
+
+     MAURITIUS INSTITUTE OF EDUCATION
+     Dr (Mrs) Aruna Ankiah-GANGADEEN		             - Panel Coordinator, Associate Professor
+     Ms Hélina HOOKOOMSING			                      - Panel Coordinator, Lecturer
+
+     ROMAN CATHOLIC EDUCATION AUTHORITY
+     Mrs Stephanette DUCASSE			 - Primary Educator
+     Ms Melanie ANNEA 			- Primary Educator
+
+     				
+     Acknowledgements
+
+     VETTING TEAM
+     MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+     Ms T. NATHOO					                             - School Inspector
+     Mrs J. COURONNE				                           - School Inspector
+     Mrs T. NATHOO				                             - School Inspector
+     Mrs A. CHUNDUNSINGH			                        - Deputy Headmistress
+     Mr A. SEEWOOSUNGKUR			                        - Deputy Headmaster
+
+     We also thank Mrs R. R. BAICHOO, Associate Professor, for her views and suggestions.
+
+
+
+     Illustration and layout
+
+     GRAPHICS SECTION
+     Mr Isstiac GOOLJAR				- Graphic Designer
+     Mr Leveen NOWBOTSING			 - Graphic Designer
+
+
+
+
+     REVIEW
+
+     Dr (Mrs) Aruna Ankiah-GANGADEEN		             - Coordinator, Associate Professor
+
+
+
+
+     ISBN: 978-99949-37-97-4
+     © Mauritius Institute of Education (2021)
+
+
+
+ii
+                                       Foreword
+
+MIE has produced a brand new collection of textbooks based on the National Curriculum
+Framework for the Nine Year Continuous Basic Education as from 2016. These textbooks
+have been written by a team of academic staff from MIE, supported by experienced Educators,
+advised by Inspectors, mentors and Deputy Head Masters.
+
+
+We have done our best to ensure that the textbooks enable children to undergo a pleasant
+learning experience. We have taken care to align the textbooks with very clearly defined
+learning outcomes and objectives set for the respective subjects as outlined in the National
+Curriculum Framework, Grades 1 to 6. The textbooks provide clear indications of the diverse
+skills that children should master at each stage.
+
+
+We are also providing a set of teachers’ manuals where we have outlined the appropriate
+techniques and pedagogical approaches so that children are helped to make optimal use of
+the textbook and materials provided. Some of the textbooks have been updated and changes
+effected after receiving feedback from educators.
+
+
+We are thankful to all those who have provided us with constructive feedback, thereby enabling
+us to make this curriculum development endeavour come to fruition. We are also thankful to
+the artists who carried out the illustrations, and to our graphic artists who have tried their
+best to create the right layout for the books. The authors and the curriculum team, under the
+guidance of Professor Vassen Naëck, also deserve our thanks.
+
+
+We hope that you enjoy this material and wish you lots of success.
+
+
+
+
+Dr O. Nath Varma
+Director
+Mauritius Institute of Education
+
+
+
+
+                                                                                                 iii
+                                            Preface
+
+     The Grade 2 English textbook aims at providing pupils with adequate opportunities to
+     be exposed to the target language and actively engaged in its use. In line with the NCF,
+     the textbook is structured in a way that allows the gradual development of the four
+     language skills, namely listening, speaking, reading and writing. Through activity-based
+     learning, pupils learn and practice the language in a contextualised, meaningful and
+     enjoyable manner. Further, the cross-curricular approach adopted enables links to be
+     made with other areas of the curriculum, and introduce notions that will be taught
+     formally during the later years of schooling.
+
+     The textbook constitutes 10 units, each driven by a theme that is related to the
+     learners' lives or interests. The units consist of the following sub-sections:
+
+     A reading comprehension passage that is preceded by an oral activity to set the scene
+     and introduce the main theme and vocabulary. The text is followed by short exercises to
+     evaluate pupils' understanding;
+
+     A series of vocabulary activities based on the theme and which enable pupils to build a
+     repertoire of words;
+
+     A writing activity where pupils produce different types of very short texts with the
+     support of a writing frame or model;
+
+     A project that allows pupils to develop their psycho-motor skills and creativity while
+     reinforcing concepts learnt;
+
+     Phonics activities to develop the pupils' phonemic awareness and steadily lead them to
+     read and write with confidence;
+
+     Grammar activities that empower pupils with essential notions for accurate language
+     production;
+
+     ICT activities that simultaneously cater for the development of basic ICT skills and
+     support language learning;
+
+     A story corner which provides pupils with the opportunity to listen to stories from
+     children's literature. These have been adapted for our young Mauritian learners to
+     facilitate understanding in order to trigger pleasure and appreciation;
+
+     An end-of-unit section that can be used to evaluate learning.
+
+     Each unit covers approximately two weeks and culminates in a literacy session. This
+     involves the reading of a big book, either fiction or semi-fiction, and carrying out literacy
+     activities. While the focus is mostly on literacy, concepts from other areas such as History,
+     Geography, and Values and Citizenship Education are also introduced.
+
+     We hope that pupils enjoy working through this textbook and participate fully in
+     all activities.
+
+     The writing team.
+iv
+                                To the teacher
+
+Much effort has gone into grading the content of the Grade 2 English textbook and to
+include as much visual support as possible to facilitate learning. Moreover, the provision
+of additional resources and activities (such as the ICT activities, project work, short
+stories, songs, poems/rhymes and big books) aim at extending language learning while
+creating links with other domains of the curriculum. Nevertheless, the successful
+implementation of the textbook depends largely on the teachers who will have to
+supplement it with explanations, resources and further activities as per their pupils'
+level and needs.
+
+Teacher's notes have been inserted to guide the teachers wherever they were deemed
+to be useful. These should however not be considered as being prescriptive. Rather,
+teachers have the leeway to adapt the textbook to suit the level of the learners. Below
+are some general guidelines that will support teachers:
+
+Pre-reading phase
+This is an oral session where pupils listen to a poem/song or engage in an oral
+activity. Encourage participation, be it in English or the mother-tongue. However,
+adequate support must be provided to gradually lead pupils to express themselves in
+English, using basic words and simple sentences. Use this session to introduce some key
+vocabulary that will facilitate understanding of the text that follows.
+
+While reading phase
+Read the text aloud a first time to familiarise the pupils with the theme and content.
+Read it again and encourage pupils to repeat while they follow the text with their finger.
+The use of strategies like demonstration, enacting and varying the tone will help to retain
+pupils' interest and promote understanding of the text.
+
+Post reading activities
+Carry out the activities orally first and then help pupils work out the written exercises.
+Use resources such as word and picture cards whenever possible, especially for
+vocabulary acquisition. Given that the vocabulary varies in the different units, create a
+word wall in the classroom for each theme, so that pupils are exposed to new words in a
+sustained manner. Draw their attention to these words regularly for consolidation. Derive
+a list of sight words from the text and help pupils to learn these.
+
+Phonics
+Frequent exposure and practice are necessary to develop phonemic awareness. Just as for
+vocabulary acquisition, phonics has to be taught in a sustained manner and it is necessary
+to go beyond the textbook and draw the pupils' attention to the sounds as well as make
+them blend and segment words whenever possible. Practice can be made appealing and fun
+by making pupils create nonsense words.
+
+
+
+
+                                                                                          v
+     Grammar
+     Move from oral practice to written work. Though an introduction to the grammar point
+     has been included, it may be necessary to extend it depending on the level of the pupils.
+     Use anecdotes and examples related to the pupils to make grammar learning meaningful to
+     them. Take the pupils outdoors whenever possible so that they can indulge in the games
+     or songs that involve movement. While it is necessary to top up with some explanation,
+     it is important to remember that the emphasis is on usage and not on the memorisation
+     of rules.
+
+     Bearing in mind that it is not possible to tailor textbooks to particular pupils or
+     classrooms, the textbook has been structured in a way that allows it to be used in a
+     flexible manner. Units 1 and 2 serve to consolidate concepts and language acquired in
+     Grade 1. Units 3 to 8 teach language and concepts to be acquired in Grade 2. These are
+     consolidated in Units 9 and 10. Teachers can thus adapt this resource and the pace at
+     which they progress through it as per the requirements of their pupils.
+
+     It is hoped that teachers exploit all the sections and activities which have been
+     carefully thought out in view of enhancing the teaching and learning of English.
+
+
+
+
+vi
+TABLE OF CONTENTS (Part 1)
+
+
+Page         1-24              25-48              49-72              73-99
+
+             1.Back                                                  4.Being kind
+Unit                           2. Celebrations    3. Animals
+             to School                                               to one another
+
+                               Celebrating the
+Reading      Back to School                       Visiting the Zoo   Always be Kind
+                               New Year
+                               •   Celebrations
+             •   Feelings
+                               •   Months of
+             •   Stationery
+                                   the year       •   Habitat        •   Politeness
+             •   Types of
+Vocabulary                     •   Family         •   Food           •   Kindness
+                 weather
+                               •   members        •   Texture        •   Games
+             •   Clothing
+                               •   Rooms of
+                 items
+                                   the house
+             •   Yesterday/
+                                                  •   Possessive
+                 Today/
+                               •   Gender             Adjectives
+             •   Tomorrow
+                               •   Possessive     •   Present
+             •   Capital                                             •   Prepositions
+                                   Adjectives         Continuous
+Grammar          Letters                                             •   Opposites
+                               •   Present            Tense
+             •   Full Stop                                           •   And
+                                   Continuous     •   Prepositions
+             •   A/An
+                                   Tense          •   Singular and
+             •   Personal
+                                                      Plural forms
+                 Pronouns
+                                                                     Best Friend
+             Weather           Drawing            Poster: The
+Writing                                                              Award
+             Forecast          my bedroom         great circus
+                                                                     certificate
+                                                  Little book        Kindness paper
+Project      Weather clock     Birthday card
+                                                  of textures        chain
+                               Rudolph the
+             Chicky Chick
+Story                          Red-Nosed          Jungle Book        The Good Girl
+             goes to school
+                               Reindeer
+                                                                     •   Citizenship
+                               •   Citizenship
+                                                  •   Science            & Values
+Cross-       •   The Arts          & Values
+                                                  •   HPE                Education
+curricular   •   Science           Education
+                                                  •   The Arts       •   Maths
+                               •   The Arts
+                                                                     •   The Arts
+
+                               /l/
+             /m/                                  /d/                / /
+                               /p/
+Phonics      /s/                                   /e/                /ð/
+                               /I/
+             / /                                   /f/                / /
+                               /aI/
+
+                               •   Vocabulary:
+             •   Capital/                         •   Vocabulary:    •   Vocabulary:
+                                   Parts of
+             •   Small                                Animal             Kindness,
+ICT                                the house
+                 letters                              sounds         •   Friendship
+activities       A/An
+                               •   Possessive
+                                                  •   Plural form    •   Opposites
+                                   Adjectives
+             •   Phonics                          •   Phonics        •   Phonics
+                               •   Phonics
+
+                                                  •   Jungle
+Big Book
+             Lunch Time, Fun                          Animals        The People
+literacy                       Our Festivals
+             Time                                 •   The Little     of Mauritius
+activities
+                                                      Red Hen
+
+                                                                                        vii
+                             Learning Objectives for
+                                   Grade 2 English
+
+
+
+
+       • Listen to, identify, and produce a variety of sounds
+
+
+
+       • Listen with understanding and pleasure to short and simple texts
+
+
+
+       • Willingly engage in oral activities
+
+
+
+       • Begin to read with understanding and respond to a variety of simple texts
+
+
+
+       • Acquire and use vocabulary related to specific themes
+
+
+
+       • Begin to produce simple texts with support
+
+
+
+       • Demonstrate understanding of and use grammatical concepts correctly
+
+
+
+       • Engage in creative tasks to reinforce language learning
+
+
+
+       • Develop cross-curricular competencies
+
+
+
+
+viii
+               Unit 1 : Back to school
+
+
+
+
+Back to school
+        Unit one
+                        1
+
+
+                                         1
+    Unit 1 : Back to school
+
+
+                       Hello, Renu. It’s good
+                       to be back at school.
+
+
+                                      Hello, Alia. Yes, it is nice to
+                                      meet our friends again.
+
+
+
+
+        Activity 1 – Let's sing
+
+
+
+
+                         We welcome you back to school
+
+                        We welcome you to school today,
+                          School today, school today
+                        We welcome you to school today,
+                           Please come in and play.
+
+                       We’re glad to have you here today
+                            Here today, here today,
+                       We’re glad to have you here today,
+                             Yes, it’s a special day!
+
+
+
+                          (Source: http://www.preschooleducation.com)
+
+
+
+
+                                        What do you like to do at school?
+
+
+
+
+2
+                                                        Unit 1 : Back to school
+
+Activity 2 – I listen and read.
+
+                                                      Reading comprehension
+
+
+
+                           Back to School
+
+                           It is Monday. The holidays are over. Renu and Alia
+                           go back to school. They are in Grade 2. They go into
+                           their classroom. Miss Shalini is their new teacher.
+
+                           “Hello children. I am happy to see you,” she says.
+
+The pupils are happy too. It is a sunny day.
+During recess, they will play outside with their
+friends.
+
+
+
+
+Activity 2a- I say ‘yes’ or ‘no’.
+
+1. Renu and Alia go to school. _________
+
+2. They are in Grade 2. _________
+
+3. Alia is the teacher. _________
+
+4. The teacher is happy to see them. _________
+
+5. The children will play in the classroom. _______
+
+
+
+
+                                                                                  3
+    Unit 1 : Back to school
+
+
+
+                        How do you feel to be back at school?
+
+
+
+
+     Vocabulary
+
+
+    Activity 3 – I talk about my feelings.
+
+
+    Activity 3a - I match the faces with the correct words.
+    I write the words by tracing over the dots.
+
+
+
+
+                                               happy
+                                               afraid
+                                               angry
+                                               sad
+4
+                                                            Unit 1 : Back to school
+
+
+           Let’s say how we feel in different situations!
+
+
+
+
+Activity 3b - I observe the pictures. I complete the
+sentences with one of the following words.
+
+
+   happy           afraid         angry           sad
+
+
+
+
+1. It is my birthday.                 2. My favourite toy is broken.
+  I am ___________.                       I am _________.
+
+
+
+
+3. I hear thunder: "Boom!"            4. The boys tease me.
+   I am __________.                       I am __________.
+
+
+
+
+                                                                                      5
+    Unit 1 : Back to school
+
+    Activity 4 – I name the objects I use at school.
+
+    Alia buys stationery.
+
+                    What objects do we use at school?
+
+
+                            Help me choose the correct items.
+
+
+
+
+    Activity 4a - I observe the pictures on page 7.
+    I cut the correct pictures and paste them in the trolley.
+
+
+
+
+6
+                                   Unit 1 : Back to school
+
+
+         Choose the items, cut the pictures and
+         paste them in the shopping trolley.
+
+
+
+
+ book       toothbrush              ruler
+
+
+
+
+ pen           plate                pencil
+
+
+
+
+eraser         comb               sharpener
+
+
+
+
+                                                             7
+    Unit 1 : Back to school
+
+
+
+
+8
+                                                   Unit 1 : Back to school
+
+  Vocabulary
+                                     How is the weather?
+
+
+
+Activity 5a - I match the pictures with the correct words.
+
+
+
+
+    windy              sunny              cloudy               rainy
+
+Activity 5b - I complete the sentences by writing the correct word.
+
+         sunny		cloudy		rainy			windy
+
+
+
+
+   It is _________________ .        It is _________________ .
+
+
+
+
+   It is _________________ .        It is _________________ .
+                                                                             9
+ Unit 1 : Back to school
+
+
+     Activity 5c – Dressing up for different weather conditions.
+     		            I match the pictures.
+
+
+
+
+                                             pullover    gloves    scarf
+
+
+
+
+                                            trousers      boots     raincoat
+
+
+
+
+                                             shorts        cap      t-shirt
+
+
+
+
+10
+                                                             Unit 1 : Back to school
+
+Activity 6 - I make a weather clock.
+
+
+                        1. Draw the different weather
+  You need:                icons on your plate.
+
+  - a paper plate
+                                                                        PROJECT
+  - paper arrow
+  - split pins
+  - scissors
+  - glue
+  - crayons/
+    colouring pencils
+
+                                           2. Write the correct words.
+
+                                                     sunny     cloudy
+
+
+                                                     rainy windy
+
+3. Cut out an arrow and fix it on the plate with the split pin.
+
+
+
+
+4. Look outside and say how          5. Turn the arrow to show the weather.
+   the weather is.
+                                                         windy
+
+                                             rainy                 sunny
+
+
+
+                                                        cloudy
+
+
+
+                                                                                   11
+ Unit 1 : Back to school
+
+     Activity 7 - I talk about the weather.
+
+
+                    How was the weather yesterday?
+
+
+
+                                 How is the weather today?
+
+
+
+
+      Yesterday was: _____________
+
+
+
+
+      Today is: _____________
+
+
+
+
+      Tomorrow will be: _____________
+
+
+
+
+12
+                                                     Unit 1 : Back to school
+
+Activity 8 - I identify sounds.
+
+                                                    Phonics- /m/, /s/, / /
+
+
+                   Observe the pictures and read the sentences.
+
+
+
+
+     1                                       2
+
+
+
+
+           This is Dylan’s mum.                  She is making muffins.
+
+
+
+
+     3                                       4
+
+
+
+
+         Some muffins are sweet.            Some are made with olives.
+         Some muffins are salty.            Some are made with oranges.
+
+
+
+
+     5                                       6
+
+
+
+
+      The muffins smell so good.            Dylan likes muffins very much.
+
+
+
+
+                                                                             13
+ Unit 1 : Back to school
+
+ Activity 8a - I say these words aloud.
+
+
+
+
+                    Let’s say these words together!
+
+
+
+
+           octopus          mouse           sun           ox
+
+
+
+
+             mug             spoon         orange        drum
+
+
+
+
+            seven           ostrich         worm          bus
+
+
+
+
+             Can you identify the sound / / or /m/ or /s/ in
+             these words?
+
+
+
+
+14
+                                                         Unit 1 : Back to school
+Activity 8b - I write the words in the correct column.
+
+
+             It is a sunny day. Dylan, his mum, and Oshika
+             are going to the beach. What will they take
+             with them?
+
+
+
+
+              muffins      sunglasses         book           oranges
+
+
+
+
+              swimsuit        radio          table             mat
+
+
+
+
+                milk         cheese          olives          sandals
+
+
+
+
+          /m/                         /s/                       / /
+
+
+
+
+                                                                               15
+ Unit 1 : Back to school
+
+Activity 9 - I write the correct word.
+
+
+
+                 p
+
+                 h
+
+                            ot
+             c
+
+
+             d
+
+
+
+
+                     Two of these words do not have the same sound.
+                     Cross them out!
+
+
+
+
+       pot                    lot               bed               cot
+
+
+
+                              hat               spot
+
+
+
+
+16
+                                                       Unit 1 : Back to school
+
+
+                  Renu, do you remember the rules for
+                  writing a sentence?
+
+
+
+                Yes, I do! We always start a sentence with a
+                capital letter and end with a full stop.
+
+
+
+
+                  T he boy is eating an ice-cream .
+
+
+
+
+Activity 10 – I rewrite the sentences on the line below.
+		            I add a capital letter and a full stop.
+
+
+    Example: ahmoy has a dog
+
+       Ahmoy has a dog.
+
+
+    1. it is called Bubble
+
+       ___________________________________
+
+
+    2. bubble is one year old
+
+      ___________________________________
+
+
+    3. ahmoy and bubble are friends
+
+      ___________________________________
+
+
+
+
+                                                                             17
+ Unit 1 : Back to school
+
+ Grammar
+
+ Activity 11 – I learn: ‘a’ or ‘an’.
+
+ Alia and Renu have toy binoculars. Alia looks outside.
+
+                  I can see ...
+
+
+
+
+                                       a boy      a girl
+
+
+
+
+                                       a flower a car
+
+ Renu looks in the kitchen.
+
+
+                                  I can see ...
+
+                                                    an apple            an egg
+
+
+
+
+                                                    an ice-cream        an umbrella
+     We observe: usually when a word
+     begins with a, e, i, o, u, we use ‘an’.
+     We say: an apple, an egg.
+     But we say: a boy, a girl.
+
+                                                    an onion
+
+
+
+
+                                                           Can you find other words
+                                                           that take ‘an’?
+
+18
+                                                            Unit 1 : Back to school
+
+Activity 11a - I write ‘a’ or ‘an’ in the blanks.
+
+
+
+
+                       ___ pen                      ___ book
+
+
+
+                       ___ airplane
+
+
+                                                ___ orange
+                       ___ ruler
+
+
+
+                       ___ elephant
+
+                                                    ___ ice-cream
+
+
+
+
+Activity 11b - I look at Bob’s exercise book.
+I tick the correct answers and cross the wrong ones.
+
+
+
+
+      1. The cat sees a mouse.
+      2. I have a pen.
+      3. Anna sits in an armchair.
+      4. You eat an banana.
+      5. The dog is a animal.
+
+
+                                                                                  19
+ Unit 1 : Back to school
+
+ Activity 12 – I learn: Personal Pronouns.
+
+                      I am Brian.
+
+
+
+
+                                                 We are friends.
+                You are Alia.
+
+
+
+
+                  Who are they?
+
+
+
+
+                      She is Tina.
+
+
+                      He is Nikhil.
+
+
+
+
+     Activity 12a - I play a Chain Game.
+
+
+                Let's play the Chain Game like
+                Brian and Alia.
+
+
+
+
+20
+                                                        Unit 1 : Back to school
+
+Brian and Alia are playing. Alia finds a blue boat under the bed.
+“Oh! She is beautiful!” exclaims Alia.
+“Hihihi... you are wrong. We don’t say 'he' or 'she' for an object,”
+Brian laughs.
+
+
+                  We use “it” for an object or an animal.
+                  E.g. My boat is blue. It is blue.
+
+
+                That’s easy. The bear is brown. It is brown.
+
+
+
+
+Activity 12b - I choose the correct word from the brackets and
+complete the sentences.
+
+
+1. Miss Shalini is our teacher. ______ is kind. ( He, She )
+
+2. My name is Mita. _______ am a girl. ( You, I )
+
+3. Julie and I are friends. _______ are playing. ( We, They )
+
+4. Look at the kite. _______ is flying higher. ( He , It )
+
+
+
+
+1. This is my pen. ________ is new. ( It, She )
+
+2. Rishabh is a boy. ________ likes football. ( She, He )
+
+3. The teacher talks to the children. She tells them:
+
+   “________ must be good.” ( You, He )
+
+4. Pascal and Ashish are in Grade 2. _________ are in my class.
+
+( They, We )
+
+
+
+
+                                                                              21
+ Unit 1 : Back to school
+
+ Story Time: I listen for pleasure
+
+
+
+
+                           Chicky Chick goes to school
+
+
+        It is Monday morning. Chicky Chick
+        is sleeping.
+        “Wake up Chicky Chick! It’s time for
+        school!” says Mother Hen.
+        “I want to sleep,” says Chicky Chick.
+        “I don’t want to go to school.”
+        “Wake up Chicky Chick! You will be late for school!”
+        says Mother Hen.
+        “I want to sleep,” says Chicky Chick. “I don’t want to go
+        to school.”
+        Mother Hen thinks.
+        “Ok, Chicky Chick,” says Mother Hen. “Teacher Duck will be
+        sorry. You will miss the surprise.”
+        Chicky Chick gets up.
+        “What surprise?” Chicky Chick asks.
+        “I cannot tell you, dear. It’s a surprise,” says Mother Hen.
+        “I must go to school!” says Chicky Chick. “Hurry up, Mum! I will
+        be late!”
+
+
+
+
+22
+                                                       Unit 1 : Back to school
+
+End of unit
+
+
+
+Activity 1 - I match the words with the pictures to say how Billy feels.
+
+
+
+
+        happy                      sad                    angry
+
+
+
+Activity 2 - What is the weather like? Circle the correct answer.
+
+
+
+
+   Cloudy            Windy                Rainy             Sunny
+    Sunny            Sunny                Cloudy            Rainy
+
+
+
+
+Activity 3 - I choose between ‘a’ and ‘an’.
+
+
+1. Deepa is eating _____ orange.
+
+2. My dog is playing with ________bone.
+
+3. Brian is _________boy.
+
+4. Zara has __________ umbrella.
+
+
+                                                                             23
+ Unit 1 : Back to school
+
+
+ Activity 4 - I match the two sentences that go together.
+
+
+     Sara is my sister.                       We are friends.
+
+
+     Yash and I are in Grade 2.               They are having fun.
+
+
+     Deena and Bruno are playing.             I cannot see.
+
+
+     My eyes are closed.                      She is kind.
+
+
+
+
+ Activity 5 - I complete the sentences using: am , is, are.
+
+
+ a) I _______ in Grade 2.
+
+ b) She _______ playing.
+
+ c) We _______good friends.
+
+ d) Max ______ under the tree.
+
+ e) They ______ listening to their teacher.
+
+ f) You _____ eating a muffin.
+
+
+
+
+ Activity 6 - I listen to the words and write the missing letters.
+
+
+
+
+       ____un                     ___ug                  ___range
+
+
+24
+             Unit 2 : Celebrations
+
+
+
+
+Celebrations
+      Unit two
+                     2
+
+
+                               25
+ Unit 2 : Celebrations
+
+                               "Happy New Year,
+                                    Kevin!"
+
+
+
+
+ Activity 1 - I read a poem.
+
+
+
+            Happy New Year! Happy New Year! says everyone,
+                  Happy New Year! Happy New Year!
+                         It’s New Year’s Day,
+                   We celebrate with fun and play.
+                            No work today,
+                    Only laughter and fun, we say.
+                               At night,
+                      Fireworks light up the sky.
+            Happy New Year! Happy New Year! says everyone,
+                  Happy New Year! Happy New Year!
+
+
+
+
+                         Happy New Year
+
+26
+                                                          Unit 2 : Celebrations
+
+Activity 2- I listen and I read.
+                                                      Reading comprehension
+
+                            Celebrating the New Year
+
+     It is the New Year. Kevin and Brenda wish their parents 'Happy New
+     Year'. They visit their grandparents. The children play with their cousins.
+
+     The family has lunch together. Aunty Maggie is a good cook. Their cousin
+     Kim says, “I helped Mum make lunch!”
+
+     Kevin and Brenda say, “We helped our Mum too. We cleaned our rooms.”
+
+     Grandmother says, “You are good children. I have chocolates and gifts
+     for you.”
+
+     The children shout,
+     “Hourrah! New Year is fun!”
+
+
+
+
+Activity 2a - I say 'yes' or 'no'.
+
+1.   Kevin and Brenda celebrate the New Year.
+
+2.   They go to school.
+
+3.   Kevin and Brenda play with their friends.
+
+4.   The children help their mum.
+
+5.   Grandfather has gifts for them.
+                                                                               27
+                                                                               27
+ Unit 2 : Celebrations
+
+
+     Vocabulary
+
+ Activity 3- I talk about celebrations.
+
+
+              New Year celebrations are so special.
+              We really enjoy ourselves.
+
+
+
+                  Here are some other celebrations and special
+                  occasions!
+
+
+
+
+ Birthday            Christmas            Music Day
+
+
+
+
+Mother's Day         National Day         Halloween
+
+
+
+
+             Talk about these celebrations with your friends and
+             teacher. In which months do we celebrate them?
+
+
+
+
+28
+                                                        Unit 2 : Celebrations
+
+Activity 3a - I complete each sentence with the correct month.
+
+
+             May                June                 March
+
+
+
+
+             We celebrate National day in _______________.
+
+
+
+
+             We celebrate Mothers’ Day in ______________.
+
+
+
+
+             We celebrate Music Day in ______________.
+
+
+
+
+             I celebrate my birthday in ______________.
+
+
+Activity 3b - I trace over the months of the year.
+
+
+
+ January                May                     September
+ February               June                    October
+ March                  July                    November
+ April                  August                  December
+
+
+                                                                            29
+ Unit 2 : Celebrations
+
+ Activity 4 - I talk about my family.
+
+
+                Hello! I am Brenda.
+                This is my brother Kevin.
+
+
+
+                      Hello! I am Kevin.
+                      Brenda is my sister.
+                      Here is our family.
+
+
+
+           parents                                   grand-parents
+
+
+
+
+                                              grandfather grandmother
+       father    mother
+
+
+
+                                             uncle
+                         aunt
+                                                 cousin
+
+                     cousin
+
+
+
+
+                      Tell me about your family.
+
+
+
+
+30
+                                                           Unit 2 : Celebrations
+Activity 5 - I learn: Masculine/Feminine.                               Grammar
+    Kevin
+
+
+
+
+              Kevin and Brenda have a big family!
+
+
+
+
+                  Masculine                    Feminine
+
+                        Brother                  Sister
+
+                        Father                 Mother
+
+                         Uncle                      Aunt
+
+               Grandfather                   Grandmother
+
+                        Cousin                   Cousin
+
+                niveK                                          adnerB
+
+
+
+
+            What do you notice about the words
+            in the two columns?
+
+
+
+                                                                               31
+ Unit 2 : Celebrations
+
+ Activity 5a - I match and colour.
+     Kevin
+
+
+
+
+                 Which words are masculine and which words
+                 are feminine?
+
+
+
+
+ Match and colour the masculine and feminine.
+
+
+
+
+         Grandmother                 Brother                 Aunt
+
+
+
+
+             Sister              Grandfather                 Uncle
+
+
+
+
+32
+                                                         Unit 2 : Celebrations
+Activity 6 - I talk about the rooms of my house.
+                                                                 Vocabulary
+
+               We help our parents to clean our house.
+               Do you help your parents too?
+
+
+
+                                  This is our house.
+
+
+
+             Look at the rooms. They are tidy and clean.
+
+
+
+
+        living room          dining room               bedroom
+
+
+
+
+                                                       bathroom
+                  kitchen
+                                                                              33
+ Unit 2 : Celebrations
+
+ Activity 6a - I complete the sentences with the correct words.
+
+     bathroom      bedroom       dining room        kitchen       living room
+
+
+
+ 1. We watch TV in the ________________.
+
+
+
+
+ 2. Kevin has a shower in the __________.
+
+
+
+
+ 3. Dad cooks food in the ____________.
+
+
+
+
+ 4. The family is having dinner in the _________.
+
+
+     Writing
+
+ Activity 7- I draw my bedroom and I describe it.
+
+
+
+
+                  This is my ____________ .
+                  It is ______________ . (big/small)
+                  It is ______________ . (blue/yellow/white...)
+                  It is ______________ . (clean/dirty)
+
+
+34
+                                                         Unit 2 : Celebrations
+
+Activity 8 – I talk about birthdays.
+
+                    I am 8 years old.
+                    My birthday is on 13 April.
+                    When is your birthday?
+
+
+                       My birthday is on 25 September.
+                       I am 7 years old.
+
+
+
+                      When is your birthday?
+                      Let’s sing Happy Birthday
+                      together!
+
+
+
+
+                         Happy birthday to you,
+                         Happy birthday to you,
+                     Happy birthday dear friend,
+                         Happy birthday to you!
+
+
+
+
+       Now, write the date of
+       your birthday in the
+            Kevin
+
+
+
+
+       box below!
+                                                   My birthday is on
+
+                                                  ________________.
+
+
+
+                                                                             35
+ Unit 2 : Celebrations
+
+ Activity 9 - I make a birthday card.
+                                                          PROJECT
+
+
+
+ You need:                   1. Fold your card in half.
+
+ - Cut out rectangles
+ from bristol paper
+ - crayons
+ - colouring pencils
+ - stickers
+ -glitters
+
+
+
+ 2.Write “Happy Birthday” on the outer part.
+
+
+
+       Happy Birthday
+
+
+
+
+ 3. Decorate the card as you wish.
+
+
+
+     Happy Birthday
+
+
+
+
+ 4. Give the card to a friend.
+
+
+
+
+36
+                                                                     Unit 2 : Celebrations
+
+Activity 10 - I learn new sounds.
+                                                              Phonics- /l/, /p/, /I/,/aI/
+                   Kevin
+
+
+
+
+             Celebrations are great fun! Let's sing one more song
+             together. What sounds can you hear the most?
+
+
+
+
+                           Puff out the candles on the
+                           pink cake.
+ P                         /p/-/p/-/p/,
+                           /p/-/p/-/p/.
+                           Puff out the candles on the
+                           pink cake.
+                           Puff! Puff! Puff!
+
+
+         Action: Hold up your finger, as if it is a candle,
+         and pretend to put it out, saying /p/, /p/, /p/.
+
+
+
+
+                       We lick our lollipops.
+                       We lick our lollipops.
+                       /l/-/l/-/l/-/l/!
+                       We lick our lollipops.
+                                                                         Action: pretend to lick
+                                                                         a lollipop and say /l/,
+                                                                         /l/, /l/.
+
+
+
+
+                /I/,/I/,/I/ there's ink on the table.
+                /I/,/I/,/I/ there's ink on the table.
+                Ink on the table, ink on the table,
+                                                                           Action: Shake your
+                /I/,/I/,/I/,/I/,/I/.
+                                                                           hands as you say
+                                                                           /I/,/I/,/I/.
+
+
+                                                                                                   37
+ Unit 2 : Celebrations
+
+ Activity 10a - I choose and write the correct letters to
+ complete the words.
+
+
+                     L                I                 P
+
+
+
+
+                         __ encil                           __ ear
+
+
+
+
+                         __ emon                            __ ion
+
+
+
+
+                           __ nk                            __ gloo
+
+
+
+
+ Activity 10b - I choose and write the correct words.
+
+
+
+
+ ___________               ___________
+
+
+
+
+ ___________               ___________
+
+
+ pink		pig		lips		lick
+
+
+38
+                                                                  Unit 2 : Celebrations
+
+Activity 11– I learn new sounds.
+                    Kevin
+
+
+
+
+                Do you remember the sound /I/ like as in lollipop?
+                Let’s say some words with the sound /I/.
+
+
+
+
+                                   pig                     fish
+
+
+
+
+        Kevin
+                                  gift                     ship
+
+
+
+
+                            Now, let’s learn a different way to sound letter
+                            <i>. Listen to the song and then sing together!
+
+
+
+
+                                         Here is a vowel
+
+                                          Say its name
+
+                                   And "i" is its name-o.
+
+                                 /aI/ /aI/ /aI/ in pie,
+                                 /aI/ /aI/ /aI/ in tie,
+                                /aI/ /aI/ /aI/ in high,
+                                  And "i" is its name-o.
+
+
+
+
+                                                                                      39
+ Unit 2 : Celebrations
+
+ Activity 11a – I circle the correct word.
+
+
+
+
+     ice           big           five     fish              line   lip
+
+
+
+
+     like          lick          mice     mint              tie    tin
+
+
+
+ Activity 11b – I identify the two sounds.
+           Kevin
+
+
+
+
+                          Now, you know these two sounds. Identify the
+                          correct sound in the following words.
+
+
+
+
+Write the words in the correct box.
+
+ /I/ as in pig                                 /aI/ as in nine
+
+
+
+
+                               kite     bin        smile    tick
+
+                               bike     hill       pie      fish
+
+40
+                                                       Unit 2 : Celebrations
+Activity 12 – I learn: Possessive Adjectives.
+    Kevin
+
+
+
+
+                  Listen to our friends!                        Grammar
+
+
+
+
+                 I am Brenda. This is my school bag.
+
+
+             I am Kevin. This is my bike.
+
+
+
+
+                I 			my
+
+
+
+Activity 12a - I complete Renu's sentences.
+
+
+                my
+
+
+
+
+                         I am Renu.
+
+            Miss Shalini is _______ teacher.
+
+            Ziad is ______ friend.
+
+            I like ______ school.
+
+            I like ______ friends.
+
+
+
+
+                                                                           41
+ Unit 2 : Celebrations
+
+
+
+                You are Kevin. This is your book.
+
+
+
+
+                     You are Brenda.
+                     This is your cap.
+
+
+
+
+                             You 			         your
+
+
+
+
+ Activity 12b - I complete Renu's sentences.
+
+
+
+              your
+
+
+
+
+                      You are Alia.
+
+        Miss Shalini is _____ teacher.
+
+        Neha is ______ sister.
+
+        You like ______ school.
+
+        You love ______ family.
+
+
+
+
+42
+                                                          Unit 2 : Celebrations
+
+
+
+
+        He is Ziad. This is his house.    He is Hans. This is his dog.
+
+
+                                He 			        His
+
+
+
+
+             She is Kelly.                        She is Jessica.
+          This is her jacket.                   This is her mother.
+
+
+                                She 			       her
+
+
+Activity 12c - I complete the sentences with the correct word.
+
+
+
+
+                                              Kelly wears __________ jacket
+Ziad likes _________ house very much.         when she is cold.
+
+
+He keeps _________ bedroom very tidy.         _________ jacket is blue.
+
+
+                                                                              43
+ Unit 2 : Celebrations
+ Activity 13 – I learn: Present Continuous Tense.
+
+
+
+
+       Kevin
+
+
+
+
+                  The sun is shining. Kevin is relaxing.
+                  He is lying on a hammock. He is drinking a
+                                                               niveK
+
+
+
+
+                  glass of juice. I am going to meet him.
+
+               Brian uses verbs in the Present Continuous Tense to
+               say what Kevin is doing now. Practise your verbs too.
+
+
+ I play a miming game to practise the Present Continuous Tense.
+
+
+               I take a chit of paper from the bag and I mime the action.
+               My friends guess what I am doing.
+
+
+
+
+44
+                                                                Unit 2 : Celebrations
+Story Time: I listen for pleasure.
+
+
+
+
+                      Rudolph The Red-Nosed Reindeer
+
+      On Christmas Eve, Santa Claus visits all
+      the children. He gives them gifts. His
+      magical flying reindeers help him. They
+      pull the sleigh with all the gifts.
+
+      Rudolph, the reindeer, has a bright red
+      glowing nose. The other reindeers laugh
+      at him and do not play with him. Rudolph
+      does not pull the sleigh for Santa. He
+      stays with Mrs Claus and the elves.
+      Rudolph is sad.
+
+      One Christmas eve, it is very foggy. Santa and the reindeers
+      cannot see anything.
+
+      Santa is worried. “How will I take the gifts? The children will
+      be sad if they do not get their gifts for Christmas,” he says.
+
+      Rudolph has an idea. He tells Santa, “My nose is bright. I will use
+      it as a light and guide you.”
+
+      “Hurrah!” shouts everyone. “That’s a good idea, Rudolph!”
+      Rudolph becomes the hero of Christmas.
+
+      Adapted from: “Rudolph the red-nosed reindeer” by Robert May.
+
+
+
+
+                                                                                    45
+ Unit 2 : Celebrations
+
+ End of unit
+
+
+
+ Activity 1a - I fill in the blanks with the missing months.
+
+
+     May		        March   July
+
+ 1. January		       2. February       3. ___________       4. April
+
+
+ 5. ______		        6. June		         7. ___________       8. August
+
+
+ 9. September       10. October       11. November		       12. December
+
+
+
+
+ Activity 1b - I match the pictures with the correct word.
+
+
+
+
+       Birthday                   Christmas                Halloween
+
+
+
+
+46
+                                                             Unit 2 : Celebrations
+Activity 2a - I write the different rooms of the house.
+
+    bathroom		      living room		          bedroom
+
+1                             2                        3
+
+
+
+
+1. _________________
+
+2. _________________                3. _________________
+
+
+
+Activity 2b - I write the members of the family in the correct column.
+
+    Mother       Uncle       Grandfather      Sister
+
+
+                 Masculine                                 Feminine
+
+
+
+
+Activity 3 - I choose the correct words to fill in the blanks.
+
+    my    your      his       her
+
+(a) Zarah loves to play with____________ brother Rohan.
+
+(b) Hugo enjoys watching ____________ favourite movie.
+
+(c) I keep ____________ bedroom tidy.
+
+(d) You like ____________ birthday gift.
+
+
+
+                                                                                 47
+ Unit 2 : Celebrations
+
+
+
+ Activity 4 - I match the pictures with the correct sentence.
+
+                               Shakeel is running fast.
+
+
+
+                         Cassidy is reading her book.
+
+
+
+
+Activity 5a - I colour the word red when I hear the sound /I/.
+I colour it blue when I hear the sound /aI/.
+
+
+
+
+     fish                tie                kite                pig
+
+
+
+
+Activity 5b - I listen and write the words in the correct column.
+
+
+        pen		lamb		pan		leg
+
+
+                 /p/                                      /l/
+
+
+
+
+48
+             Unit 3 : Jungle
+
+
+
+
+Animals
+Unit three
+                 3
+
+
+                           49
+ Unit 3 : Animals
+
+ Activity 1 – I discover animals in the zoo.
+                                                             niveK
+
+
+
+
+                            Let's read this poem together!
+
+
+
+
+                         What I see at the zoo
+
+                         At the zoo I see a bear.
+                         It has dark fuzzy hair.
+
+
+
+                      I see a cheetah under a tree.
+                      I look at it and it looks at me.
+
+
+
+
+                       I see a big, long-necked giraffe,
+                        and little penguins that make
+                                   me laugh.
+
+
+
+
+                    But my favourite animal at the zoo
+                      is the panda. How about you?
+
+
+
+
+50
+                                                                Unit 3 : Animals
+
+Activity 2 – I listen and I read along.
+
+
+
+
+                                                         Reading comprehension
+
+
+
+                                Visiting the Zoo
+
+Yash tells his friends about his holidays:
+
+“My favourite place was the zoo. There were many animals. The elephants
+were very big and the giraffes were very tall. I gave them leaves and fruits
+to eat. I saw many monkeys swinging from trees. The zebras had stripes and
+the rhinos had horns. I saw the crocodiles. They had sharp teeth! Look at
+this photo. The lions are walking in their cages. The tigers are sleeping. This
+is a photo of me and my dad. We are sitting on a camel.”
+
+“Wow! You had a great time,” says Deena.
+
+
+
+
+Activity 2a - I circle the correct word for each sentence.
+
+1. Yash went to the   (zoo      park).
+
+2. At the zoo, Yash saw many      (cars      animals).
+
+3. The elephants were very      (big      small).
+
+4. The lions were in their     (garden     cages).
+
+5. Yash and his dad sat on a     (camel      horse).
+
+
+
+
+                                                                               51
+ Unit 3 : Animals
+
+ Activity 2b - I choose the correct animals.
+       Kevin
+
+
+
+
+                        Colour the animals that Yash saw at the zoo.
+                                                             niveK
+
+
+
+
+               Circle the animal that Yash did not see at the zoo.
+
+
+
+
+                                                                           tiger
+
+     giraffe
+
+
+
+
+                                                          snake
+
+
+
+
+                       rhino                                           zebra
+
+52
+                                                               Unit 3 : Animals
+
+Activity 3 – I learn: Animals and their enclosures.
+
+
+
+                  Ooops! I forgot to lock up all the           Vocabulary
+                  doors.
+                  Some of the animals ran away!
+                  Please help me to put them back
+                  in their enclosures.
+
+
+
+
+Activity 3a - I match the animals with their enclosure.
+
+
+
+
+                                             zebra
+
+                giraff
+                      e
+
+
+
+
+     dile
+croco
+
+
+
+
+        ant
+ eleph
+                           hippo                           y
+                                                      monke
+
+
+
+                                                                              53
+ Unit 3 : Animals
+
+ Activity 4 – I say what animals eat.
+
+
+
+                     Phew! Thanks for your help! Now that we have the animals
+                     back in their enclosures, please help me to feed them.
+
+
+
+
+ Activity 4a - I match the animals with their food.
+
+
+
+
+ Activity 4b - I draw the animal in each box.
+
+
+
+
+     I eat leaves.         I eat grass.        I eat fish.      I eat bananas.
+
+54
+                                                           Unit 3 : Animals
+
+Activity 5 – I learn: Different textures.
+                                                                    niveK
+
+
+
+
+             The words: rough, smooth, soft and hard tell us
+             how things feel when we TOUCH them.
+
+
+
+
+                      A rock is rough.
+
+
+
+
+                      Glass is smooth.
+
+
+
+
+                      Cotton wool is soft.
+
+
+
+
+                      Wood is hard.
+
+
+
+
+                                                                            55
+ Unit 3 : Animals
+
+ Activity 6 – I make a booklet of textures.
+
+
+
+ You need:                                                          PROJECT
+                                1. Gather all your materials.
+ - Bristol paper
+   stapled together
+ - Glue or cellotape
+ - Something hard
+ - Something soft
+ - Something smooth
+ - Something rough
+
+
+ 2. Paste something hard on page 1. Write "hard".
+
+
+
+
+                (Pencil)
+                  Hard
+
+ 3. Paste something soft on page 2. Write “soft”.
+
+
+
+
+                (Cotton)
+                  Soft
+ 4. Paste something smooth on page 3. Write “smooth”.
+ Do the same with rough materials on page 4.
+                                                                        niveK
+
+
+
+
+     (Ribbon)              (Rock)              Your booklet of
+      Smooth               Rough               textures is ready!
+
+
+56
+                                                           Unit 3 : Animals
+
+Activity 7 – I learn: Possessive Adjectives.                   Grammar
+      Kevin
+
+
+
+
+                Let's learn two more Possessive Adjectives.
+
+
+
+
+                               We are Yash and Bruno.
+                               This is our friend Deena.
+
+
+
+
+                We are Kelly and Ziad.
+                This is our teacher.
+
+
+                        We			 our
+
+
+
+
+Yash, Bruno and Deena are playing.
+
+They are playing with their toys.
+
+
+
+
+Kelly and Ziad are in the classroom.
+
+They are talking to their teacher.
+
+
+
+
+                    They			 their
+
+                                                                          57
+ Unit 3 : Animals
+ Activity 7a - I write the correct word to complete the sentences.
+
+ 1. We are playing with _________ toys.
+
+ 2. This is __________ favourite game. (we)                    our
+
+ 3. They are having fun with _____________ friends.           their
+
+ 4. They are sharing ___________ sweets.
+
+
+
+
+ Activity 7b - I write the correct word to complete the sentences.
+
+
+ 1. I am kicking __________ ball.                               his
+
+ 2. She writes in ____________ book.                           your
+
+ 3. You are sharing ____________ cake.                          my
+
+ 4. He is playing with ____________ dog.                       her
+
+
+
+ Activity 7c - I match the pronoun with the correct Possesive Adjective.
+
+
+     He                     my
+
+      I                     our
+
+     We                     his
+
+     They                  your
+
+     You                    her
+
+     She                   their
+
+
+
+
+58
+                                                              Unit 3 : Animals
+
+Activity 8 – I learn: Present Continuous Tense.
+                        Kevin
+
+
+
+
+                    Yash took many photographs during his holidays.
+                    Here are some of them. What can you see?
+
+
+
+
+The lion is sleeping.           The children are eating an ice-cream.
+
+
+
+Activity 8a - I choose the correct verb and I complete the sentence.
+
+  is walking       is looking		      are standing    are talking
+
+
+
+
+                                        2.The man ________________ at
+1. The woman _____________.               an elephant.
+
+
+
+
+3.The giraffes ______________           4.Yash's grandparents
+  near the fence.                          __________________.
+                                                                             59
+ Unit 3 : Animals
+
+Activity 9 – I play an outdoor game – Animal role play.
+
+
+
+
+                Yash is showing his friends how the tiger walked
+                at the zoo.
+                “I know how an elephant walks!” Deena shouts.
+                 Bruno shows his friends how a bird flies.
+                 The three friends laugh and have a lot of fun.
+
+
+                    “Let's pretend to be other animals!” Yash says.
+
+
+
+                           “How does a gorilla walk?” asks Deena.
+
+       “How does a kangaroo jump?” asks Bruno.
+
+
+
+
+                    “How do monkeys swing
+                    from the trees?”
+
+
+
+              Now, let’s make
+              animal sounds.
+
+               I roar like a lion.
+
+
+                     I neigh like a horse.
+
+
+            I chirp like a bird.
+
+
+
+60
+                                                             Unit 3 : Animals
+
+Activity 10 – I make a poster.
+                                                                   Writing
+                                                                      niveK
+
+
+
+
+        Children love animals. Let’s make a poster to tell
+        them about the circus in town.
+
+
+
+
+                   The Great Circus
+
+
+         We are at:_______________ (place) everyday!
+
+         Watch the_________________________________
+
+         (names of animals) perform.
+
+         We also have _______________________________
+
+         (names of performers).
+
+
+                     Come to our super shows!
+
+
+                                                                              61
+ Unit 3 : Animals
+
+ Activity 11 – I learn: ‘in, on, under, over’.
+                                                                    niveK
+
+
+
+
+Grammar
+                       Yash and Bruno are playing another game.
+                       What are they doing?
+
+
+
+
+ Yash and Bruno are having fun playing a game.
+
+
+
+
+ Yash is looking for his friend. “Where are you, Bruno?” he asks.
+
+
+ Bruno says: “I am in the box."
+
+
+
+
+     “I am on the chair."
+
+
+
+
+     “I am under the table."
+
+
+
+
+ When they are tired of playing
+ this game,they fly a kite. It goes
+ over Yash’s house.
+
+
+
+62
+                                                                       Unit 3 : Animals
+
+Activity 11a – I draw pictures: ‘in, on, under, over’.
+                    Kevin
+
+
+
+
+                            This is Yash’s bedroom. It is in a mess!
+                            Let’s help Yash tidy up his bedroom.
+
+
+
+You will need to:
+
+1.   Draw the bag on the chair.
+
+2.   Draw the ball in the basket.
+
+3.   Draw the bin under the table.
+
+4.   Draw the toy airplane over the bed.
+
+
+
+
+          Thank you for helping me to tidy up my bedroom!
+
+
+
+
+                                                                                      63
+ Unit 3 : Animals
+
+ Activity 11b – I choose the correct preposition to fill in the blanks.
+
+
+
+
+          in                on			               under		                 over
+
+
+
+ 1. There is a mug ___________ the table.
+
+
+
+
+ 2. The cake is ____________the box.
+
+
+
+
+ 3. The sheep jumps ___________ the fence.
+
+
+
+
+ 4. Alicia is hiding ......................................... the chair.
+
+
+
+ Activity 11c - I read and I draw.
+
+
+
+
+     The ball is in the box.            The doll is on the bed.                The cat is under
+                                                                                  the table
+
+64
+                                                                Unit 3 : Animals
+
+Activity 12 – I learn: Singular and Plural forms.
+
+
+
+   Yash and Deena are very good friends.
+   Today they are counting what they have in their boxes.
+
+
+
+
+ Yash                                       Deena
+
+
+ • I have one toy.                          •I have two toys.
+
+
+
+
+ • I have one pencil.                       • I have three pencils.
+
+
+
+
+                                            • I have five coins.
+ • I have one coin.
+
+
+
+
+                                                                         niveK
+
+
+
+
+                        Did you notice the letter 's' underlined?
+
+
+
+
+                                                                                 65
+ Unit 3 : Animals
+
+ Activity 12a - Match the singular noun with its plural form.
+ The first one has been done for you.
+
+
+
+
+     mask            tree      tree camel                            table                   book
+
+
+
+
+                       trees              camels
+                               tables
+                            masks    books
+
+
+
+
+ Activity 12b - I write the plural form of the words.
+
+
+      Singular                      Plural
+
+      one eye                       two       ...........................................
+
+      one finger                    ten       ............................................
+
+      one monkey                    three .........................................
+
+      one flower                    six        ...........................................
+
+      one tiger                     four       ...........................................
+
+
+
+
+66
+                                                                 Unit 3 : Animals
+
+Activity 13 – I learn new sounds.
+
+                                                  Phonics- /d/, /e/, /f/
+
+
+
+
+                         Dino is a dinosaur.
+                         He likes drums and dance.
+                         He likes to hide under the bed.
+
+
+
+                         Fino is a giraffe.
+                         He sees fish and flies.
+                         He fears the fox and the wolf.
+
+
+
+                         Elly is an elephant.
+                         She likes to paint empty eggs.
+                         she rests in her shed.
+
+
+                 Kevin
+
+
+
+
+               Say the words and identify the position of the sounds!
+
+
+
+
+Activity 13a - I circle the correct letter in each word.
+
+
+               /d/                          /f/                         /e/
+
+
+
+
+drum           bed         fox       wolf             elephant         leg
+
+                                                                                67
+ Unit 3 : Animals
+
+ Activity 13b - I write the correct letter.
+
+ d      l           e       f   m
+
+
+
+
+     ___ oll                         ___ ive                    ___ gg
+
+
+
+
+     bir ___                        lea ___                     p ___ n
+
+
+Activity 13c - I write the correct word and say it aloud.
+
+
+
+
+                        r
+
+                                    ed
+                        b
+
+
+                        sh
+
+
+                    Let's say these tongue-twisters together!
+
+                        Four fat foxes and four fresh fish.
+            Kevin
+
+
+
+
+                          ‘Ding Dong’, Dino's at the door.
+                             Elephants don't eat eggs.
+
+
+
+
+68
+                                                                 Unit 3 : Animals
+
+Activity 14 – I watch a clip and I sing a song.
+
+
+
+
+At school, Yash, Bruno, and Deena are watching a
+clip. It is a song about the jungle! The title is
+'The Lion Sleeps Tonight'. The three friends like
+the song very much!
+
+
+
+
+                              The Lion Sleeps Tonight
+
+                           In the jungle, the mighty jungle
+                               the lion sleeps tonight.
+                           In the jungle, the mighty jungle
+                               the lion sleeps tonight.
+
+                           Let's be quiet, let's all be quiet,
+                               The lion sleeps tonight.
+                           Let's be quiet, let's all be quiet,
+                               The lion sleeps tonight.
+
+                           In the jungle, the mighty jungle
+                                the lion sleeps tonight.
+                                 In the jungle,
+                               the mighty jungle
+                            The lion sleeps tonight.
+                   Kevin
+
+
+
+
+                  You can listen to this song at home! Ask your parents to
+                  help you use the computer.
+                  The song is available at:
+                  http://www.youtube.com/watch?v=QvsQ9hYKq7c
+
+                                                                                69
+ Unit 3 : Animals
+ Story Time: I listen for pleasure.
+
+
+
+
+                    Jungle Book
+
+       Baloo, the bear, is walking in the
+       forest looking for food. Suddenly he
+       sees a baby. Baloo runs to find mother
+       wolf, Raksha. Raksha says, “I will look
+       after him. I will call him Mowgli.”
+
+       Baby Mowgli grows into a little boy.
+       Baloo teaches him how to live in the jungle.
+
+       One day, some monkeys kidnap Mowgli. Kaa, the snake, helps
+       Baloo to save Mowgli. Shere Khan, the ferocious tiger, sees
+       Mowgli. He tries to catch the little boy but Baloo saves him.
+
+       Some time later, Mowgli sees a girl near the river. Her name is
+       Shanti. Shanti and Mowgli become friends. He follows her to
+       the village. “Good-bye friends,” he says waving happily to the
+       animals in the jungle.
+
+
+
+                                  Adapted from “Jungle Book” by Rudyard Kipling.
+
+
+
+
+70
+                                                               Unit 3 : Animals
+End of unit
+
+
+Activity 1- I match the pictures with the correct word.
+
+
+
+
+   crocodile          monkey          zebra          giraffe         tiger
+
+
+
+Activity 2- I choose the correct word to fill in the blanks.
+
+a. Wood is ___________ . ( soft, hard)
+b. Rock is ___________ . ( rough, smooth)
+c. Monkeys eat ___________ . ( bananas, grass)
+d. Giraffes eat___________ . ( fish, leaves)
+
+
+Activity 3a - I write the correct word to complete the sentences.
+
+ their		       our
+
+a. We are watching ________ favourite film.
+b. They are talking to ________ cousins.
+c. We love ________ grandparents very much.
+d. They are enjoying ________ holidays.
+
+
+Activity 3b - I write the verbs in brackets in the Present Continuous Tense.
+
+a. Meena ________________________ a song. ( sing)
+b. Thierry ____________________ a muffin. ( eat)
+c. James and Kinsley ___________________________ football. (play)
+
+                                                                               71
+ Unit 3 : Animals
+
+ Activity 4a - I read and I draw.
+
+ a. The rat is under the table.
+
+
+
+
+ b. The plane is flying over the house.
+
+
+
+
+ c. The fish is in the bowl.
+
+
+
+
+ d. The butterfly is on the leaf.
+
+
+ Activity 4b - I write the plural form of the words in brackets.
+
+ a. I have three _______________. (dog)
+ b. Anita wants to buy four _______________ . (apple)
+ c. Paul will receive many _______________ for Christmas. (gift)
+
+ Activity 5a - I say the word and I write the missing letters.
+
+
+
+
+     ___og           ___ish             ___gg
+
+ Activity 5b - I read and I colour.
+
+
+
+
+      red             bed             shed
+
+72
+        Unit 4 : Being kind to one another
+
+
+
+
+Being kind to
+ one another
+      Unit four
+                               4
+
+
+                                         73
+ Unit 4 : Being kind to one another
+
+ Activity 1 – I talk about kindness.
+
+          Thank you for helping me to make lunch, Zara.
+          That was very kind of you.
+
+
+          I will always try to be kind, Mum. I will make a
+          list of kind acts for this week.
+
+
+
+
+ Activity 1a - Tick the acts of kindness that you will do this week.
+
+
+
+
+           1. Visit my grandmother.
+
+           2. Share my snacks with my friends during lunch time.
+
+           3. Write a "Thank You" note for my teacher.
+
+           4. Help my mother to tidy up the house.
+
+           5. Be kind to my friends.
+
+           6. Say something nice to someone.
+
+           7. Donate clothes or toys to people in need.
+
+
+
+
+74
+                                                          Unit 4 : Being kind to one another
+
+Activity 2– I listen and I read.
+                                                                        Reading comprehension
+                                  Always be Kind to Others
+
+  Max and Julia are Zara’s cousins. They are unkind to Zara. They tease her
+  because she is small.
+
+  Max plays with his toy car. He pushes it too fast and it goes into a hole.
+
+  “Oh no! My hands are too big. I cannot remove it,” says Max.
+
+  “My hands also are big,” says Julia.
+
+  Zara puts her hand in the hole and takes out the toy car. She gives it to
+  Max.
+
+  Max and Julia say, “Thank you, Zara. We are sorry we teased you. You are
+  very helpful.”
+
+  Now, the three cousins play together and are kind to one another. Their
+  friendship is a special gift.
+
+
+
+Activity 2a – I choose the correct words and fill in the blanks.
+1. Zara, Max and Julia are ..........................................
+
+       friends              pupils              cousins
+
+
+
+2. ……………………………………… is small.
+
+       Zara          Max          Julia
+
+
+
+3. Max's …………………… goes into the hole.
+
+       plane          car         ball
+
+                                                                                           75
+ Unit 4 : Being kind to one another
+
+ Activity 2b – I write True or False in the boxes below.
+
+ 1. Zara is kind to her cousins. 		
+
+ 2. Max and Julia thank Zara for her help.
+
+
+ Activity 3 – I sing a song.
+                  Kevin
+
+
+
+
+                  I try to be kind to everyone.
+                  I even know a song about kindness!
+                  Let's sing it together!
+
+
+
+                                   Three Kind Mice
+
+                                      Three kind mice!
+
+                                      Three kind mice!
+
+                                       Kind as can be!
+
+                                       Kind as can be!
+
+                          They always share their corn and cheese.
+
+                            They always say ‘thanks’ and ‘please.’
+
+                           They remember it’s not nice to tease.
+
+                                  They're three kind mice!
+
+
+
+
+76
+                                         Unit 4 : Being kind to one another
+
+Activity 4- I learn words of kindness.
+                                                            Vocabulary
+
+             Hello friends. The 'Kind Kids Club' is
+             looking for new members. Join the club
+             if you do the following :
+
+
+
+                               Help others.
+
+
+
+
+                           Compliment someone.
+
+
+
+
+Use words such as: 'Good morning', 'Thank
+you', 'Good bye', 'Please' and 'I am sorry'.
+
+
+
+
+                                                                          77
+ Unit 4 : Being kind to one another
+
+ Activity 4a – I choose the correct word to complete the sentences.
+
+
+
+       help      smile       love       share
+
+
+
+
+     1. The children __________             2. Jason and Sanya
+     their sweets.                          _______their mother.
+
+
+
+
+     3.The children __________              4. The cousins _______ at
+     their friends.                         one another.
+
+                    Kevin
+
+
+
+
+                    Can you find other things you can
+                    do to be kind to others?
+
+
+
+
+78
+                                            Unit 4 : Being kind to one another
+
+Activity 4b – I rewrite the words in the correct order to form sentences.
+
+
+                 Meena wants to join the 'Kind Kids Club'.
+                 Unfortunately, her baby sister Maya tears her letter into
+                 pieces. Can you help Meena to rewrite her letter?
+
+
+
+   I         a          child.       kind        am
+
+
+
+
+ listen      I            to       parents.      my
+
+
+
+
+  my         I         friends.     help
+
+
+
+
+ share      cake.         I           my
+
+
+
+
+                                  Thank You
+
+                                                                             79
+ Unit 4 : Being kind to one another
+
+ Activity 5 – I make a kindness paper-chain.
+                                                                       PROJECT
+
+                            1. Write your word of kindness on your
+      You need:                teddy bear.
+
+      - scissors
+      - stapler
+      - crayons
+      - colouring pencils
+                                               Peace
+
+
+
+
+     2. Decorate your teddy bear with
+        beautiful colours                    3. Cut out your teddy bear.
+
+
+
+
+                    Peace                                   Peace
+
+
+
+
+     4. Staple your teddy bear with that of your friend to make a chain.
+
+
+
+
+                             Peace    Help       Share
+
+
+
+
+80
+                             Unit 4 : Being kind to one another
+
+
+
+
+Kevin
+
+
+
+
+        Cut out your teddy bear to make a
+        kindness paper chain.
+
+
+                                                              81
+ Unit 4 : Being kind to one another
+
+
+
+
+82
+                                          Unit 4 : Being kind to one another
+
+
+Activity 6 – I make a certificate for my best friend.
+
+    Kevin
+                                                                    Writing
+
+
+              Friendship is a special gift. I am going to make a certificate
+              for my best friend, Ravi. He will be so happy! Make a
+              certificate for your best friend too!
+
+
+
+
+                    BEST FRIEND AWARD
+
+                           My best friend is
+                _________________________
+
+
+                He/She is my best friend because
+
+                _________________________
+
+                _________________________
+
+
+
+
+                                                                               83
+ Unit 4 : Being kind to one another
+
+ Activity 7 – I learn how to play with my friends.
+
+
+               We share things with our friends.
+               We also play together and enjoy ourselves at school.
+                                        niveK                               adnerB
+
+
+
+
+                                 Let’s see what games we play at school!
+
+
+
+
+ Activity 7a - I look at the pictures and name the games.
+
+
+
+     hide and seek
+
+
+
+
+                                                marbles
+
+
+
+
+      blind man's buff
+
+
+
+
+                                                                     hopscotch
+
+
+                                      skipping
+
+                         Kevin
+
+
+
+
+                 Remember: When we play, we respect
+                 others and we follow the rules.
+
+
+
+
+84
+                                          Unit 4 : Being kind to one another
+
+Activity 7b - I complete the sentences.
+                                                             Vocabulary
+
+                              The boys are playing
+
+                              ___________________ .
+
+
+
+
+                              The girls are
+
+                              ___________________ .
+
+
+
+
+                              The friends are playing
+
+                              _____________________ .
+
+
+
+
+                              Mike and Sam are playing
+
+                              ___________________ .
+
+
+
+
+Activity 7c - I draw to show the game I play at school.
+
+
+
+
+                                                                           85
+ Unit 4 : Being kind to one another
+
+ Activity 8 – I learn: "in front of, behind, next to".
+                  Kevin
+
+
+
+
+            Today we will learn three more prepositions.
+
+
+
+
+ Today, Ameera visits Zara. They have fun playing together.
+
+
+
+
+1. Ameera is in front of                      2. The tree is behind
+   the house.                                    the house.
+
+
+
+
+ 3. Zara is next to Ameera.
+                                                    niveK
+
+
+
+
+       Look carefully at the words underlined.
+       These are the prepositions we will learn today.
+
+
+
+
+86
+                                           Unit 4 : Being kind to one another
+
+Activity 8a - I say and I spell words.
+    Kevin
+
+
+
+
+              Let’s say these words together!
+
+
+
+              1. Behind
+              • Spell behind
+              • Shout behind
+              • Whisper behind
+
+              2. Next to
+              • Spell next to
+              • Shout next to
+              • Whisper next to
+
+              3. In front of
+              • Spell in front of
+              • Shout in front of
+              • Whisper in front of
+
+
+
+Activity 8b - I play a preposition game.
+
+Ameera and Zara are playing a preposition game
+called “Zara says move”. They are having fun.
+
+
+Zara says: “Move behind me.”
+So, Ameera moves behind her.
+
+
+Zara says: “Move in front of me.”
+So, Ameera moves in front of her.
+
+
+
+Zara says: “Move next to me.” So,
+Ameera moves next to her.
+
+
+
+
+                                                                            87
+ Unit 4 : Being kind to one another
+
+ Activity 8c - I write the missing preposition.
+
+ Part 1
+
+       in front of                         behind                        next to
+
+
+
+
+     1. The boy is standing                      2. The dog is hiding                       3. Max is standing
+        .....................................       .....................................      ..................................
+        the school.                                 the tree.                                  to Julia.
+
+ Part 2
+            over                            under
+
+
+
+
+     1. The plane is flying .............................                 2. The doll is .....................................
+        the house.                                                           the chair.
+
+ Part 3
+
+              on                                in
+
+
+
+
+     1. The cookies are ................................                  2. The cake is ....................................
+        the jar.                                                             the table.
+
+
+88
+                                             Unit 4 : Being kind to one another
+
+Activity 9 – I learn: Opposites.
+
+             Hello Zara! I have a gift for you!
+
+
+                     Thank you Max. You are very kind. But this
+                     hat is too big. I am small.
+
+
+
+                  Oops! I did the opposite!
+                  Let's learn more about opposites.
+
+
+
+
+Zara’s grandparents are old.
+Zara and her cousins are young.
+
+
+
+
+                                   Zara is happy to see her grandparents.
+                                   She is sad when her cousins tease her.
+
+
+
+
+Max and Julia are unkind. Zara is kind.
+
+
+
+
+Julia has big hands. Zara has small hands.
+
+                                                                              89
+ Unit 4 : Being kind to one another
+
+ Activity 9a – I match each picture with its opposite.
+
+
+
+
+       young                                             short
+
+
+
+
+       open                                               old
+
+
+
+
+        tall                                             closed
+
+
+
+
+       near                                              dirty
+
+
+
+
+       clean                                              far
+
+
+
+
+90
+                                         Unit 4 : Being kind to one another
+Activity 9b - I read a funny poem.
+
+
+                   Hello! I am Mr. Opposite.
+                   Read about me in the poem.
+
+
+
+
+                    Mr. Opposite does funny things
+
+
+                  Mr Opposite never does what you do:
+                    When the traffic lights are red,
+                            He does not stop.
+                           Wait, Mr. Opposite!
+                             You cannot go!
+                  Mr. Opposite never does what you do:
+                        In a race, he is too slow.
+                           Hey, Mr. Opposite!
+                           Run fast, will you?
+                  Mr. Opposite never does what you do:
+                          When he gets a gift,
+                           He looks very sad.
+                            Oh, Mr. Opposite!
+                     You should be happy, you know!
+
+
+
+
+            Read the poem again. Colour each pair of
+           opposites in the same colour.
+
+
+
+
+                                                                          91
+ Unit 4 : Being kind to one another
+
+
+ Activity 10 – I learn: ‘and’
+
+
+                I am kind to my friends.
+
+
+
+
+                        I am kind to my cousins.
+
+
+
+
+              I am kind to my friends and cousins.
+
+
+                We use ‘and’ to put two or more
+                items or two sentences together.
+
+
+
+
+ Activity 10a - I add ‘and’ to complete the sentences.
+
+
+     1. I like cakes ________ ice-cream.
+
+     2. Raj has a pen, an eraser, ______ a book.
+
+     3. Farad, Jenny, ____ Maggie are my friends.
+
+     4. Look at the dog ______ the cat.
+
+
+
+
+92
+                                                Unit 4 : Being kind to one another
+
+
+
+
+Dylan is wearing a t-shirt.
+
+
+Dylan is wearing trousers.
+
+
+Dylan is wearing a t-shirt and trousers.
+
+
+
+
+Oshika has black hair.
+
+
+Roshnee has black hair.
+
+
+Oshika and Roshnee have black hair.
+
+
+
+Activity 10b - I rearrange the words to write correct sentences using 'and'.
+
+
+
+1. Roshnee      are friends.    Oshika      and
+
+
+
+
+2. and      Dylan    are cousins.     Oshika
+
+
+
+
+3. cards.     football    and         Kitty likes to play
+
+
+
+
+4. dance.      Lizy likes to    and      sing
+
+
+
+
+                                                                                 93
+ Unit 4 : Being kind to one another
+
+ Phonics- /      /, / /, / /
+
+ Activity 11 – I learn new sounds.
+
+
+
+     Rosa visits her special friend Mr. O.
+
+
+     Mr. O! Mr. O! Where are you hiding?
+
+
+     Are you in an envelope?
+
+
+     Are you on a rose?
+
+
+     Are you behind a bone?
+
+
+     I will find you with my telescope.
+
+
+
+
+ Activity 11a - I circle the word with the /   / sound.
+
+
+
+
+        hope                   cop               tone          cone
+
+         hop                   cope              ton           con
+
+
+
+
+                note                  rob               rose
+
+                 not                  robe              rod
+
+
+
+94
+                                           Unit 4 : Being kind to one another
+
+Activity 11b - I complete the words with the letter that says /     /.
+
+
+
+
+                        b___ne
+                                    r___se                               gl___be
+                                                  n___se   h___me
+
+
+
+
+Activity 12 – I have fun with tongue twisters.
+    Kevin
+
+
+
+
+                 I love tongue twisters.
+                 Try saying some too!
+
+
+
+
+1. Father, mother, sister, brother - hand in hand with one another.
+
+
+2. Throw three thick things!
+
+
+3. The thieves stole those thirty three bricks.
+
+
+
+
+                                                                               95
+ Unit 4 : Being kind to one another
+
+ Activity 12a - I colour the pictures when I hear / /.
+
+
+
+
+        three                          teeth                        parrot                           toothpaste
+
+
+
+
+         dog                        television                      thumb                               flower
+
+ Activity 12b - I find the words with / / and I write
+                them on the lines below.
+
+
+                                                   weather
+                                              basket    puppy
+                                           mother
+                                                                father
+                                             feather
+                                                cupboard
+
+
+
+
+ 1. ......................................................			      2. ......................................................
+
+ 3. ......................................................			      4. ......................................................
+
+
+96
+                                              Unit 4 : Being kind to one another
+Story Time: I listen for pleasure.
+
+
+
+
+                                 The kind girl
+
+      An old woman is walking down the road. She is carrying
+      a heavy basket. Clara helps the old woman to carry
+      the basket.
+
+      The woman thanks Clara. She asks her
+      “Who taught you such good manners?”
+
+      Clara says, “My parents always tell me to
+      be kind to others.”
+
+      At home, Clara tells her parents how she
+      helped the old woman. Her parents are
+      very happy and say, “Well done, Clara!
+      It’s good to be nice to old people. You are a kind girl. We are
+      proud of you!”
+
+      The next day, they give Clara a beautiful gift. Clara is
+      very happy.
+
+                         (Translated and adapted from ‘The good girl’, by Manuel.)
+
+
+
+
+                                                                                     97
+ Unit 4 : Being kind to one another
+
+ End of unit
+
+
+ Activity 1 - I choose the correct word to fill in the blanks.
+
+ a. I must say ______________ when my mother prepares my lunch.
+
+     (sorry, thank you)
+
+ b. I must say ______________ before leaving home.
+
+     (good morning, good bye)
+
+ c. I ___________ my chocolate with my brother. (love, share)
+
+ d. I ___________ my parents in the kitchen. (help, smile)
+
+ Activity 2 - I put the letters in the correct order.
+
+
+
+
+              s   i    k    p                 a   m    r   l   b   s    e
+
+                                              Robin and Maya are playing
+
+       Alexia likes to s __ __ p.                 m__ __ b __ __ s.
+
+ Activity 3 - I choose the correct preposition to fill in the blanks.
+
+     behind       in front of		     next to
+
+
+ 1. There is a bus _______________ the school.
+
+
+
+ 2. The boy is hiding _______________ the tree.
+
+
+
+ 3. Jack is standing _______________ Philip.
+
+98
+                                          Unit 4 : Being kind to one another
+
+Activity 4 - I write the opposite of the word in brackets.
+
+ big		clean		young                  slow		long
+
+a. My mother is ______________. (old)
+
+b. Father has a ______________car. (small)
+
+c. The basket is ______________ . (dirty)
+
+d. Nicole is______________ . ( short)
+
+e. The tortoise is ______________. ( fast)
+
+
+Activity 5 - I say each word aloud. I write them on the correct basket.
+
+
+
+
+    thumb             bone           rose          mouth
+
+
+
+
+         / / as in teeth                            /o/ as in nose
+
+
+
+
+                                                                           99
+© Mauritius Institute of Education - 2021
+

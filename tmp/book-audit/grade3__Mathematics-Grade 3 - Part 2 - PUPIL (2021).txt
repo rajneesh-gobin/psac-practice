@@ -1,0 +1,5633 @@
+             nd
+
+X
+
+
+
+
+    Mathematics
+                       Grade 3
+
+        Pupil's Book
+           Part 2
+Professor Vassen NAËCK 			 - Head Curriculum Implementation,
+						 Textbook Development and Evaluation
+
+THE MATHEMATICS PANEL
+
+
+MAURITIUS INSTITUTE OF EDUCATION
+Ms S. THAPERMALL-RAMASAWMY		                - Panel Coordinator, Lecturer
+Dr R. NENDURADU				                         - Senior Lecturer
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mr J. DESCUBES				                          - Primary Educator
+Ms T. CHEETAMUN				                         - Primary Educator
+
+SERVICE DIOCÉSAIN DE L'EDUCATION CATHOLIQUE
+Mr M. JOLY					                             - Deputy Head Master
+
+				
+Acknowledgements
+
+VETTING TEAM
+
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mr R. BEEDASSY				   - School Inspector
+Mr D. GOWRY					     - School Inspector
+Mr D. MOHANGOO				   - School Inspector
+Ms T. NATHOO					- School Inspector
+Mr N. NEERGGHEEN				 - School Inspector
+Mr K. OOCHIT 				    - School Inspector
+Ms D. RUCHCHAN				   - School Inspector
+
+MAURITIUS INSTITUTE OF EDUCATION
+Mr R. Korlapu-Bungaree			                   - Proof-reading, Lecturer, English Department
+
+
+
+Illustration and layout
+
+GRAPHIC DESIGNER
+Mr Kunal SUMBHOO
+
+
+
+
+REVIEW
+
+MAURITIUS INSTITUTE OF EDUCATION
+Dr Rajeev NENDURADU		               - Coordinator, Senior Lecturer
+
+
+ISBN : 978-99949-40-23-3
+© Mauritius Institute of Education (2021)
+TABLE
+TABLE OF
+      OF CONTENTS
+         CONTENTS
+
+
+										                       Page
+
+
+Measure         Capacity					1
+
+
+Numbers 		      Ordinal Numbers			19
+
+
+					Roman Numerals			33
+
+
+			 		Multiplication			41
+
+Measure		 Length					67
+
+Numbers 		      Fractions				87
+														
+Measure 		 Time					101
+
+Numbers 		      Division					120
+
+
+Measure         Money					142
+									
+
+
+                                        i
+                            Learning Objectives
+
+
+
+ At the end of Grade 3 (Part 2), the child should be able to
+
+
+
+ • Perform the two arithmetic operations: Multiplication and Division
+
+        - Multiply a number (from 0 to 10) by 2, 3, 4 and 5
+
+        - Divide a number (multiples of 2, 3, 4 and 5) by 2, 3, 4 and 5 respectively
+
+        - Solve one-step routine and non-routine word problems involving the 2
+
+         operations
+
+ • Perform mental calculations involving the 2 operations (multiplication and
+
+     division)
+
+ • Recognise and use ordinal numbers (1st to 20th) and name the position of a
+     member in a queue up to 20th
+
+ • Recognise, read and write roman numerals up to 20
+
+ • Use unit fractions as part of a whole (e.g. ‘1 out of 4’ to describe a fraction)
+
+ • Read, write and represent simple fractions (e.g. 1 , 1 , 1 )
+                                                        2     3   4
+ • Use fractions in real-life situations
+
+ • Measure length (m/cm) and capacity (L/cL) in real-life situations
+
+ • Solve simple word problems involving length and capacity
+
+ • Tell time to the hour/half hour/quarter hour and use of ‘a.m.’ and ‘p.m.’ in
+
+     real-life situations
+
+ • Recognise, name and decompose coins and notes up to Rs 1000
+
+ • Use coins and notes up to Rs 1000 in real-life situations
+
+ • Solve word problems involving money in real-life situations
+
+
+
+
+ii
+                                               Measure
+                                              Geometry
+Capacity              The pupils are organising a party in the classrooom.
+
+
+
+
+          X
+
+
+
+
+ 1   Observe carefully and discuss the picture.
+
+
+ 2 What can you see on the table?
+                                             Look at this
+                                               picture.
+ 3 What are they used for?
+
+
+
+                                                                             1
+    Let's work out
+
+    1.   Tick (    ) the container which has a smaller capacity.
+
+
+
+
+2.       Colour the bowl with a greater capacity red.
+
+
+
+
+3.       Write more or less in the space below.
+
+
+
+
+                     A
+                                     B
+
+          (a)     Jar A has _____________ capacity than jar B.
+
+          (b)     Jar B has _____________ capacity than jar A.
+2
+                                                   Measure
+Activity: Containers of different sizes
+
+
+
+
+                             I observe
+                             containers of
+                             different sizes.
+
+
+
+
+Activity: Arbitrary Units
+
+
+
+
+         A
+                             B             C
+
+ Fill bottle B using cup C
+ Number of cups C used to fill bottle B = _________
+
+
+ Fill jug A using cup C
+ Number of cups C used to fill jug A = _________
+
+
+ Fill jug A using bottle B
+ Number of bottles B used to fill jug A = _________
+
+
+ What do you observe?
+                                                             3
+    Activity: Litre
+
+
+
+
+                               1L                          1L
+
+
+
+
+       4.   I ring '1 litre' or '1 L' containers.
+
+
+
+
+                       1L             1L                              1L
+                                             5 litres1 L
+
+
+
+
+       5.   I make a list of liquids sold in containers of 1 litre.
+                    For drinking               For other use
+
+
+
+
+4
+                                                  Measure
+Activity: Using Litre-templates
+
+
+
+
+                   2L
+                                                     5L
+     1L
+
+                                  3L
+
+
+Activity
+ 		
+   Example:
+   			             5L=1L+1L+1L+1L+1L
+   			             or 5 L = 1 L + 2 L + 2 L
+   			             or 5 L = 2 L + 3 L
+
+
+   With the help of my teacher, I complete the following:
+
+
+   		         5L   = ___ + ___ + ___ +___ + ___
+   		         ___ = 2 L + 3 L
+   		         4L   = 2 L + ___
+   		         ___ = 1 L + 1 L +1 L
+   		         2L   = ___ + ___
+
+
+
+
+              5L
+                        =        2L      +
+
+                                                            5
+6
+                                                   Measure
+Examples
+ 		
+     Example 1:               Example 2:
+     14 L + 52 L = ____ L     65 L - 34 L = ____ L
+
+      tens        units        tens        units
+
+         1         4 L            6         5 L
+     +                        -
+         5         2 L            3         4 L
+
+         6         6 L            3         1 L
+
+
+
+
+Let’s work out
+
+6.    Work out.
+
+      (a) 24 L + 33 L = ___           (b) 36 L + 28 L = ___
+
+
+
+
+      (c) 97 L - 45 L = ___           (d) 84 L - 36 L = ___
+
+
+
+
+                                                              7
+    7.    Raj has 13 litres of apple juice and his sister Jane has 9 litres of
+          pear juice. How much juice do they have altogether?
+
+
+
+
+            13 L
+                    9L
+
+
+
+    8.    Find the total capacity of water in the tank and in the pail.
+
+
+
+
+             48 L
+                          14 L
+
+
+
+
+    9.    In a tank, there are 37 litres of water. Father uses 23 litres to water
+          the garden. How much water is there left in the tank?
+
+
+
+
+    10.   Barrel A contains 125 L of oil.
+          The capacity of barrel B is 25 L less than barrel A.
+          What is the capacity of barrel B?
+
+
+
+
+              A          B
+
+8
+                                                             Measure
+IT Corner
+
+
+ Using Ms Paint, with the help of your teacher, use the oval
+ 'tool' to circle the container which holds more.
+
+
+
+
+ You can download an interactive game using this link:
+ http://www.abc.net.au/countusin/games/game15.htm
+
+
+
+
+Tip: Less than 1 Litre
+                      The cup is           It can hold
+                      too small.           less than 1
+                                           litre of water.
+                                                             1L
+                1L
+
+
+
+
+                                         1 litre = 100 centilitres
+       100
+       90
+       80
+       70
+       60
+       50
+       40
+                                                 1 L = 100 cL
+       30
+       20
+
+       10
+
+
+
+
+                                                                       9
+        0
+ Activity: Less than 1 litre
+
+
+        With the help of my teacher, I complete the following.
+
+
+
+
+               50 cL
+                                              25 cL
+                               20 cL                                       10 cL
+                                                             5 cL
+
+
+
+
+     Write down the capacity of each container starting with the smallest.
+     ________        ________         ________        ________         ________
+
+     List down items having a capacity less than 1 L in the supermarket.
+     ___________________________________________________
+     ___________________________________________________
+
+
+
+ Try these
+
+ Let's complete with L or cL.
+
+         (a)   A can of juice contains 60 _____ of liquid.
+
+         (b)   A gallon of water contains 5 _____ of water.
+
+         (c)   An aquarium can contain about 16 _____ of water.
+
+         (d)   Soft drinks are sold in bottles of 1 _____ .
+10
+                                                     Measure
+          Tip: Adding and subtracting using cL
+  		
+      Example 1:                    Example 2:
+      23 cL + 64 cL = ____ cL       97 cL - 42 cL = ____ cL
+
+       tens        units              tens       units
+
+           2       3 cL                  9       7 cL
+      +                              -
+           6       4 cL                  4       2 cL
+           8       7 cL                  5       5 cL
+
+
+
+
+Let’s work out
+
+11.    Work out.
+
+       (a) 36 cL + 42 cL = ___           (b) 47 cL + 38 cL = ___
+
+
+
+
+       (c) 86 cL - 34 cL = ___           (d) 92 cL - 56 cL = ___
+
+
+
+
+12.    Asha drinks 20 cL of pear juice and her brother Ram drinks 30 cL of
+       apple juice. How much juice do they drink in all?
+
+
+
+
+          30 cL    20 cL
+                                                                             11
+ 13.    A bottle contains 60 cL of milk. Mother uses 45 cL of it to make
+        yoghurt. How much milk is left in the bottle?
+
+
+
+
+ Try these
+
+     			
+       		 1: 1 litre
+       Example          = 100 centilitres
+       		      2 litres = _____ centilitres
+       				             = (100 cL + 100 cL)
+       				= 200 cL
+
+
+
+ 14. (a)     4 litres   =    _____ centilitres
+
+       (b)   5 L		      =    _____ cL
+
+       (c)   9 L		      =    _____ cL
+
+     			
+       Example 2:		 2 L 50 cL = ………….. cL
+       					= (200 cL +50 cL)
+       					= 250 cL
+
+
+ 15. (a)     6 L 25 cL =     _____ cL
+
+       (b)   8 L 10 cL =     _____ cL
+
+       (c)   7 L 70 cL =     _____ cL
+
+
+
+12
+                                                        Measure
+Let’s work out
+
+16.   Let’s complete.
+
+      (a)    3 L = ________ cL
+
+      (b)    6 L = ________ cL
+
+      (c)    2 L 40 cL = ________ cL
+
+      (d)    9 L 55 cL = ________ cL
+
+
+
+
+			
+Example 1:
+
+      2 L + 45 cL = ________ cL
+
+      (2 L = 100 cL+ 100 cL =200 cL)
+
+                                                         2 0 0 cL
+      200 cL + 45 cL 			                                 + 4 5 cL
+
+                                       2 L + 45 cL =      2 4 5 cL
+
+Example 2:
+
+      4 L – 200 cL = ________ cL
+
+      (4 L = 100 cL + 100 cL + 100 cL + 100 cL =400 cL)
+
+                                                         4 0 0 cL
+      400 cL - 200 cL                                   - 2 0 0 cL
+
+                                       4 L – 200 cL =     2 0 0 cL
+
+
+
+                                                                     13
+ Let's work out
+
+ 17.   (a)   6 L + 200 cL       = ________ cL
+
+
+       (b)   7 L + 25 cL        = ________ cL
+
+
+       (c)   3 L + 76 cL        = ________ cL
+
+
+       (d)   9 L - 300 cL       = ________ cL
+
+
+       (e)   4 L - 150 cL       = ________ cL
+
+
+       (f)   5 L - 225 cL       = ________ cL
+
+
+
+
+       Tip: Conservation of Capacity
+
+
+
+                            A        B         C
+
+
+
+
+                                Observation:
+                      Containers A, B and C have
+                            the same capacity.
+
+
+
+
+14
+                                                   Measure
+Let's work out
+
+18.   Look at the containers below and complete.
+
+ 		
+
+
+
+
+            A                             C
+                           B                             D
+         100 cL                          1L
+                         35 cL                         25 cL
+
+
+
+
+(a)   Which container has the least capacity?
+
+
+
+
+(b)   Which two containers have the same capacity?
+
+
+
+
+(c)   What is the total capacity of containers B and D? _______ cL
+
+
+
+
+(d)   Find the difference between the capacity of containers C and D.
+
+      _______ cL
+
+
+
+
+                                                                        15
+ Continuous Assessment
+
+ 1.    Complete.
+
+ (a)   3 L = __________ cL		            (b)   4 L 40 cL = __________ cL
+
+
+
+
+ (c)   5 L 75 cL = _________ cL		       (d)   6 L 25 cL = __________ cL
+
+
+
+
+ 2.    Work out.
+
+ (a)   50 L + 14 L = _____			           (b)   32 L + 69 L = _____
+
+
+
+
+ (c)   88 cL - 30 cL = ____			(d)             73 cL - 27 cL = ____
+
+
+
+
+ 3.    Maria gives 30 cL of juice to her brother and 40 cL of juice to her
+       father. How much juice does she give in all?
+
+
+
+
+16
+                                                    Measure
+4.   A water tank contains 500 L of water. A worker uses 120 L of water.
+     How much water is left?
+
+
+
+
+5.    Look at the containers below and complete the activity.
+
+
+
+                A
+                         B        C        D
+              100 cL     1L
+                                 20 cL   30 cL
+
+
+
+
+     (a)   Which container has the least capacity? _________________
+
+
+     (b)   Which two containers have the same capacity? ____________
+
+
+     (c)   What is the total capacity of containers B and C? ________ cL
+
+
+
+
+     (d)   Find the difference between the capacity of containers A and D.
+
+           ___________ cL
+
+
+
+
+                                                                             17
+     Profiling
+
+
+                                Good   Satisfactory   Needs Improvement
+     Measure capacity
+     •    in litres
+     •    in centilitres
+
+     Perform simple
+     conversions from
+     •     L to cL
+
+
+
+     Perform addition
+     involving capacity
+
+
+
+     Perform subtraction
+     involving capacity
+
+     Solve simple word
+     problems involving
+     capacity
+
+
+
+
+            Teacher's Remarks
+
+
+
+
+18
+                                                    Numbers
+                                                    Measure
+Ordinal Numbers
+
+     Do you remember?
+
+
+     The animals are having a race in the farm.
+
+
+
+
+      1st
+
+            2nd
+
+                   3rd      4th       5th     6th    7th
+                                                           8th
+                                                                 9th
+                                                                       10th
+
+
+
+
+ 1   Observe carefully and discuss the picture.
+
+
+ 2 Who won the race?
+
+
+
+
+                                                                       19
+                                                             X
+ Try these
+
+ Circle the balloon at the fifth position.
+
+
+
+
+          Start here
+
+
+
+
+ Tick (     ) the railway carriage in the tenth position.
+
+
+
+
+                                                            Start here
+
+
+
+
+20
+                                                  Numbers
+     nd
+
+
+
+
+Let's work out
+
+1.    Match up the numbers on the left to the words on the right.
+
+
+
+          4th                                   fifth
+
+
+          1st                                 seventh
+
+
+          9th                                   sixth
+
+
+          7th                                   first
+
+
+          2nd                                  fourth
+
+
+          6th                                   ninth
+
+
+          3rd                                 second
+
+
+          10th                                 eighth
+
+
+          8th                                   third
+
+
+          5th                                  tenth
+                                                                    21
+                                         X
+2.    Tick (   ) the correct box.
+
+
+(a)   Which one is the first object?
+
+
+
+
+(b)   Which one is the fourth object?
+
+
+
+
+(c)   Which one is the seventh object?
+
+
+
+
+(d)   Which one is the tenth object?
+
+
+
+
+22
+                                                 Numbers
+  nd
+
+
+
+
+Activity
+
+Discuss and work out the following with the help of your teacher.
+
+
+  There are four children in the line.
+  Alan is first, Amanda is next. Then
+  comes Akil followed by Doug.
+
+
+  Amanda is the ___________ one.
+
+
+  (second, third, fourth)
+
+
+
+
+  Mum is the first one in the line.
+  Amanda's little brother is next.
+  Then Amanda followed by Nadia.
+
+
+  Amanda is the ___________ one.
+
+
+  (second, third, fourth)
+
+
+
+
+  Kevin is 2nd in the line.
+  Alan is before Kevin.
+
+
+  Alan is the ___________ one.
+
+
+  (first, third, fourth)
+
+
+
+
+                                                                    23
+                                                          X
+ Activity: When is your birthday?
+
+
+          When is your                 It is on the
+           birthday?                 second of May.
+
+
+
+
+       My birthday is                     Oh, is it?
+       on the twelfth
+           of July.
+
+
+
+
+           When is your                It is on the
+          birthday, Jay?              first of April.
+
+
+
+
+            Ha! Ha! April Fool!
+
+
+
+
+      1     Observe carefully and discuss the pictures.
+
+      2 What are the children talking about?
+
+      3 When is your birthday?
+24
+                                              Numbers
+     nd
+
+
+
+
+11th to 15th
+
+
+     11th           12th      13th          14th        15th
+     eleventh       twelfth   thirteenth   fourteenth   fifteenth
+
+
+
+
+Let's work out
+
+3.    I complete.
+
+
+
+
+     1st                       3rd                      5th
+
+                    7th
+
+                                           14th
+
+                                                                    25
+                                                X
+ 4.   I copy.
+
+      11th		Eleventh 			_____________________
+
+      12th		Twelfth 			_____________________
+
+      13th		Thirteenth		_____________________
+
+      14th		Fourteenth		_____________________
+
+      15th		Fifteenth 			_____________________
+
+
+
+
+ 5.   I complete with ordinal numbers.
+
+
+           1st
+
+
+
+        first
+
+
+
+
+                                         13th
+
+                                                last
+26
+                                                      Numbers
+     nd
+
+
+
+
+Activity: Let's count up to 20th
+
+
+
+
+           1st          2nd           3rd          4th         5th
+            first       second        third        fourth       fifth
+
+
+
+
+           6th          7th           8th          9th        10th
+            sixth      seventh        eighth       ninth       tenth
+
+
+
+
+          11th         12th          13th         14th        15th
+          eleventh     twelfth      thirteenth   fourteenth   fifteenth
+
+
+
+
+          16th         17th          18th         19th        20th
+          sixteenth   seventeenth   eighteenth   nineteenth   twentieth
+
+
+
+
+Let's work out
+6.    I copy.
+
+      12th		twelfth 			_____________________
+
+							_____________________
+
+      20th		twentieth			_____________________
+							_____________________
+
+                                                                          27
+                                                                              X
+ 7.   I match.
+
+
+            16th                                             eighteenth
+
+
+            17th                                             nineteenth
+
+
+            18th                                         seventeenth
+
+
+            19th                                             sixteenth
+
+
+ 8.   I complete the sequence.
+
+      (a)         6th , 7th , 8th , _____ , _____ , _____ .
+
+      (b)         _____ , _____ , _____ , 18th , 19th , 20th.
+
+      (c)         11th , 12th , 13th , _____ , _____ , _____ .
+
+
+
+        IT Corner
+
+
+            • Prepare a worksheet on Ms Paint with ordinal numbers ranging from 1st
+            to 20th in such a way that it looks scattered.
+            • Ask pupils to use the line tool to join the ordinal numbers in the correct
+            order.
+            • Links for online games.
+              https://www.studyladder.com/games/activity/ordinal-numbers-3646
+              http://www.turtlediary.com/kindergarten-games/math-games/ordi-
+              nal-numbers.html
+
+
+
+
+28
+                                                       Numbers
+      nd
+
+
+
+
+     Activity
+
+Look at the figure below.
+1.      Colour the fourth, eighteenth and twentieth square red.
+
+2.      Colour the nineteenth, thirteenth and fourteenth square blue.
+
+3.      Put a happy face      in the first, sixth, eleventh and sixteenth square.
+
+4.      Put a red X in the fifteenth and seventeenth square.
+
+5.      Colour the second, third and fifth square green.
+
+6.      Put a red star     in the seventh, ninth and twelfth square.
+
+7.      Put two happy faces         in the eighth and tenth square.
+
+
+      1st
+
+
+
+
+                                                9th
+
+
+
+
+                                                              20th
+
+
+
+
+                                                                                29
+                                                                              X
+ Continuous Assessment
+
+ 1.    I tick (    ) the correct ordinal number.
+
+
+
+
+         1st      2nd   3rd      4th     5th     6th          7th  8th     9th       10th
+        First   Second Third   Fourth   Fifth   Sixth    Seventh Eighth   Ninth     Tenth
+
+
+
+
+                                 5th                    4th                 1st
+                                Fifth              Fourth                  First
+
+
+
+
+                                 2nd                    9th                 8th
+                               Second               Ninth                 Eighth
+
+
+
+
+                                 3rd                    6th                 7th
+                                Third               Sixth                 Seventh
+
+
+
+
+ 2.    Write the ordinal number which shows the place of each item.
+
+
+ (a)
+
+
+          The          is in the ______________ place.
+
+
+ (b)
+
+
+
+          The          is in the ______________ place.
+
+
+30
+                                                   Numbers
+     nd
+
+
+
+
+3.    Complete.
+
+      (a)   Colour the 11th rabbit.
+
+                  1st
+
+
+
+                                                                           20th
+
+
+
+
+      (b)   Colour the 19th present.
+
+
+                                                                         1st
+
+
+
+                                                                  20th
+
+
+
+
+                  Guess
+
+
+            1. What runs but cannot walk?
+             Hint: • T in the third • E in the fourth   • W in the first
+                   • A in the second • R in the fifth
+
+               _____ _____ _____ _____ _____
+
+            2. What has hands and a face but cannot touch or smile?
+            Hint: • C in the fifth • C in the second • L in the third
+                  • K in the sixth • A in the first  • O in the fourth
+
+               _____          _____ _____ _____ _____ _____
+
+
+
+
+                                                                                  31
+                                                           X
+
+     Profiling
+
+
+                                Good   Satisfactory   Needs Improvement
+     Recognise the
+     ordinal numbers –
+     1st to 20th
+
+     Write down the
+     name of the
+     ordinal numbers –
+     first to twentieth
+     Naming the
+     position of a
+     member in a set up
+     to 20th
+
+
+
+
+            Teacher's Remarks
+
+
+
+
+32
+                                                  Numbers
+  nd
+
+
+
+
+                                               Romans usually use
+
+Roman Numerals                                 Roman Numerals to
+                                               denote numbers. Roman
+                                               Numerals are used in
+                                               real life situations.
+
+
+
+
+ Observe carefully and discuss the pictures.
+
+
+
+
+                                                                       33
+                                                   X
+ A clockface with roman numerals
+
+
+
+
+     Have you
+     ever seen
+     a clock like
+     this one ?
+
+
+
+
+     1   Look carefully at the clock.
+
+
+     2 What do you notice ?
+
+
+     3 What letters have replaced the numbers on the clock ?
+
+
+
+34
+                                                                Numbers
+         nd
+
+
+
+
+Activity: Corresponding values of roman numerals
+
+1.        Compare the clockface showed by your teacher with the one on page 34.
+2.        Fill in the table below with the correct numeral.
+
+
+     I         II       III       IV   V      VI    VII VIII     IX     X     XI    XII
+
+
+                                       5                                10
+
+
+
+
+      Roman                            Look at the table on the left.
+     Numeral            Number
+                                       What do you observe ?
+          I                   1
+                                           When the same Roman Symbol is repeated,
+          II                  2
+                                           it means ADD.
+         III                  3            I and I put together as II means 1 + 1 = 2
+
+
+
+
+Let's work out
+
+1.        Find the value of
+
+
+(a)       III =           _______ + _______ + _______ = _______
+
+
+(b)       XX        =     _______ + _______ = _______
+
+
+
+
+                                                                                          35
+                                                                   X
+ Activity: Place value, position in Roman Numerals
+
+ Look at Table 1 below.
+ Complete Table 2 with the correct numeral.
+             Table 1                              Table 2
+
+         V        = 5                     V       = 5        =5
+
+         VI       = 6                     VI      = 5 + __ = 6
+
+         VII = 7                          VII = 5 + __ = 7
+
+         VIII = 8                         VIII = 5 + __ = 8
+
+
+
+
+       What do you observe?
+
+ When a larger value symbol is placed BEFORE a smaller value symbol,
+                                  it means ADD.
+ Example :
+ 		           VII = V + II = 5 + 2 = 7
+
+
+ Let's work out
+
+ 2.     Find the value of each of the Roman Numerals. The first one has been done for you.
+
+ (a)    XVII =          X + VII    =   10 + 7     = 17		
+
+ (b)    VII =           ________ = ________ = ____					
+
+ (c)    XV    =         ________ = ________ = ____
+
+ (d)    VIII =          ________ = ________ = ____
+
+ (e)    XII =           ________ = ________ = ____				
+
+ (f)    XIII =          ________ = ________ = ____
+
+
+36
+                                                   Numbers
+     nd
+
+
+
+
+Activity
+
+Observe the following.
+
+
+                       IV = 4
+
+Now fill in the box with   + or - .
+
+                 IV = 5               1 = 4
+
+
+
+          What do you observe?
+
+     When a larger value symbol is placed AFTER a smaller value symbol,
+                              it means SUBTRACT.
+     Example
+     		          IV = 5 - 1 = 6
+
+
+
+
+Let's work out
+
+3.    (a)   IX    =    ____ - ____     = ____
+
+
+      (b)   IV    =    ____ - ____     = ____
+
+
+
+
+                                                                          37
+                                                         X
+
+                 Did you know?
+
+                 No Roman Symbol is repeated more than three times.
+                 e.g., IIII (not appropriate)
+
+                 The symbol V is never repeated.
+                 e.g., VV (not appropriate)
+
+                 No Roman Symbol is repeated before a larger one.
+                 e.g., IIX (not appropriate)
+
+
+
+ Let's work out
+
+ 4.   What is the value of the following numerals?
+      The first one has been done for you.
+
+      (a)   VI      =     5    +    1    =      6
+
+      (b)   XIV =       ____ + ____ = ____
+
+      (c)   IX      =   ____ - ____ = ____
+
+      (d)   XIX =       ____ + ____ = ____
+
+
+ 5.   Write down the Roman Numeral for each number.
+      The first one has been done for you
+
+      (a)   16      =     10   +    6     = XVI
+
+      (b)   9       =   ____ - ____ = _____
+
+      (c)   20      =   ____ + ____ = _____
+
+      (d)   4       =   ____ - ____ = _____
+
+      (e)   8       =   ____ + ____ = _____
+
+      (f)   19      =   ____ - ____ = _____
+38
+                                                  Numbers
+     nd
+
+
+
+
+Continuous Assessment
+
+1.    What is the value of the following Roman Numerals?
+
+      (a)   IV = __________		        (b)   XVI = __________
+
+      (c)   XI = __________		        (d)   XX = __________
+
+      (e)   III = __________ 		      (f)   IX = __________
+
+
+
+
+2.    (a)   What number is shown on the abacus?
+     		     ________
+
+
+      (b)   Write the same number in Roman Numeral.
+                                                             T   U
+     		     ________
+
+
+
+
+3.    Complete with the correct Roman Numeral.
+
+      (a)   2 = __________		         (f)   4 = __________
+
+      (b)   5 = __________		         (g)   17 = __________
+
+      (c)   8 = __________		         (h)   19 =__________
+
+      (d)   9 = __________		         (i)   20 = __________
+
+      (e)   13 =__________		         (j)   14 = __________
+
+
+
+
+                                                                     39
+                                                          X
+
+     Profiling
+
+
+                               Good   Satisfactory   Needs Improvement
+
+
+     Recognise and read
+     Roman Numerals
+     up to 20
+
+
+
+     Write Roman
+     Numerals up to 20
+
+
+
+     Express numbers
+     in Roman Numerals
+     and vice versa
+
+
+
+
+           Teacher's Remarks
+
+
+
+
+40
+                                                    Numbers
+    nd
+
+
+
+
+Multiplication                                        When you put
+                                                      groups of items
+                                                      altogether, you get
+                                                      the amount in all.
+                Do you remember?
+
+
+         For example:
+
+
+
+
+         1 boy has 2 eyes              4 boys have 8 eyes
+                                      4 times 2 is equal to 8
+
+
+         How many eyes will 5 boys have?
+
+
+
+
+Try this
+
+Complete the following.
+
+
+(a) 							1 bird has 2 wings.
+
+
+							6 birds have 		                                             wings.
+
+
+							6 times 2 =
+
+
+
+
+                                                                            41
+                                                            X
+               Do you remember?
+
+
+       							
+
+       							1 motorcycle has 2 wheels.
+
+       							4 motorcycles have 8 wheels.
+
+          It is important to
+       								4
+          use the "x" sign to
+                              groups of 2
+          multiply.
+       							4     times 2 is equal to 8
+       							we write, 4 x 2 = 8
+
+
+
+
+ Try this
+
+ Complete the following by writing the correct sign and correct numeral.
+
+ (a)
+
+
+
+
+ 			5 times 2 equals to 10.
+
+ 			             5        2           ______.
+
+
+
+ (b)
+
+
+
+
+ 		              6 times 2 equals to 12.
+
+ 			             6        2           ______.
+42
+                                                     Numbers
+      nd
+
+
+
+
+                   Do you remember?
+
+
+           With the help of your teacher, choose one domino from a set
+           of domino strips. Draw the selected domino a certain number
+           of times. Count the number of dots. Write the number of dots
+           there are in all.
+
+           For example:
+
+
+
+
+           2 + 2 + 2
+           or 3 x 2 = 6
+
+
+
+Try this
+
+Complete the following by putting the correct number of dots and correct
+numeral.
+
+(a)
+
+
+
+
+       4       x    2     = _____
+
+(b)
+
+
+
+
+       8       x    2     = _____
+
+
+                                                                           43
+                                                  X
+Let's work out
+
+ 1.   Complete the following.
+
+
+      1    x     2    = _____
+                                        Complete your
+                                        multiplication
+                                        table of 2.
+
+      2    x     2    = _____
+
+
+      3    x     2    = _____
+
+
+      4    x     2    = _____
+                                NOTE:
+                                When you multiply any number
+      5    x     2    = _____
+                                by zero, you get zero.
+                                          E.g. 2 x 0 = 0
+      6    x     2    = _____
+                                When you multiply zero by any
+                                number, you get zero.
+      7    x     2    = _____            E.g. 0 x 2 = 0
+
+
+      8    x     2    = _____
+
+
+      9    x     2    = _____
+
+
+      10   x     2    = _____
+
+
+
+
+44
+                                                         Numbers
+     nd
+
+
+
+
+          Multiplication in column
+
+     When we carry out multiplication, we can also multiply in columns.
+
+     In a bag, there are 2 bananas. How many bananas do we have
+     in 6 bags?
+                                                                      6
+     				6 bags with 2 bananas make 12.
+                                                                  x
+     				6 times 2 make 12.
+                                                                      2
+
+                                                                      12
+
+
+
+
+2.    Complete the following.
+
+      (a)		 4         (b)			7          (c)           9
+          x               x                      x
+            2               2                        2
+
+
+
+
+4.    In a bag, there are 2 marbles.
+
+
+      7 bags have _______ marbles.
+
+
+                                             x
+                                                 2
+
+
+
+
+                                                                           45
+                                                         X
+
+         Multiplication by 3
+
+     An ice cream cone has 3 scoops. Ivy has to buy 4 cones. How many
+     scoops of ice cream will she get?
+
+
+                 An ice cream
+                 cone has 3
+                 scoops.
+     					                         4 ice cream cones       12 scoops.
+
+     					                         4 x 3 = 12 scoops.
+
+
+
+
+ Try this
+
+
+
+                                3 ice cream cones        _____ scoops.
+
+                                3 x 3 = ______ scoops.
+
+
+
+
+                                5 ice cream cones        _____ scoops.
+
+                                5 x 3 = ______ scoops.
+
+
+
+
+46
+                                              Numbers
+      nd
+
+
+
+
+Let's work out
+
+ 5.    Draw 3    on each cone and complete.
+
+
+
+ (a) 										
+
+
+                                               5 x 3   =
+
+
+
+
+ (b) 										
+
+
+
+
+                                               8 x 3   =
+
+
+
+
+ (c) 										
+
+
+
+
+                                               9 x 3   =
+
+
+
+
+                                                           47
+                                                                   X
+Let's work out
+
+ 6.       Count in three's.
+
+
+
+
+      1       2       3       4       5       6         7     8        9      10
+
+
+     11       12      13      14      15      16        17    18       19     20
+
+
+     21      22      23       24      25      26        27    28       29     30
+
+
+ (a)      Starting with 3, count in three's as shown above.
+
+
+ (b)      Colour the squares as you count in three's.
+
+
+ (c)      Complete the pattern.
+
+
+          3 , 6 , 9 , ___ , ___ , 18 , ___ , ___ , 27 , ___ .
+
+
+
+
+ 7.       In a class, there are 9 pupils. Each pupil has 3 pencils. How many 		
+          pencils do they have in all?
+
+
+
+
+48
+                                        Numbers
+     nd
+
+
+
+
+Let's work out
+
+      Complete the following.             Complete your
+                                          multiplication
+                                          table of 3.
+
+      1    x     3    = _____
+
+
+      2    x     3    = _____
+
+
+      3    x     3    = _____
+                                NOTE:
+                                When you multiply any number
+      4    x     3    = _____   by zero, you get zero.
+                                          E.g. 3 x 0 = 0
+
+      5    x     3    = _____
+                                When you multiply zero by any
+                                number, you get zero.
+      6    x     3    = _____            E.g. 0 x 3 = 0
+
+
+
+      7    x     3    = _____
+
+
+      8    x     3    = _____
+
+
+      9    x     3    = _____
+
+
+      10   x     3    = _____
+
+
+
+
+                                                                49
+                                                            X
+Let's work out
+
+ 8.    Complete the following.
+
+       (a)		 4         (b)			7            (c)           9
+           x               x                        x
+             3               3                          3
+
+
+
+
+ 9.    In a basket, there are 3 apples.
+
+
+       6 baskets have _______ apples.
+
+                                                    6
+                                                x
+                                                    3
+
+
+
+
+ 10.   In a bag, there are 3 marbles.
+
+
+       7 bags have _______ marbles.
+
+
+                                                    7
+                                                x
+                                                    3
+
+
+
+
+50
+                                                      Numbers
+      nd
+
+
+
+
+            Multiplication by 4
+
+      There are 4 cats on a wall. Each cat has 4 legs. How many legs do the
+      4 cats have in all?
+
+
+
+      								4 cats                                            16 legs.
+
+      								4 x 4 = 16 legs.
+
+
+
+
+Try this
+
+(a)
+
+                                			          2 cats         _____ legs.
+
+                                			          2 x 4 = ______ legs.
+
+
+
+(b)
+
+                                			          5 cats          _____ legs.
+
+                                			          5 x 4 = ______ legs.
+
+
+
+
+                                                                              51
+                                                  X
+Let's work out
+
+ 11.   Draw 4 legs on each cat and complete.
+
+
+
+ (a) 										                                6 x 4   =
+
+
+
+
+ (b) 										                                8 x 4   =
+
+
+
+
+ (c) 										                                9 x 4   =
+
+
+
+
+52
+                                                           Numbers
+        nd
+
+
+
+
+Let's work out
+
+ 12.     Count in four's.
+
+
+
+
+   1         2       3       4       5       6        7     8     9         10
+
+
+   11        12      13     14      15      16        17    18   19         20
+
+
+   21        22     23      24      25      26        27    28   29         30
+
+
+ (a)     Starting with 4, count in four's as shown above.
+
+
+ (b)     Colour the squares as you count in four's.
+
+
+ (c)     Complete the pattern.
+
+
+         4 , ___ , ___ , 16 , ___ , 24 , 28 , ___ , 36 , ___ .
+
+
+
+
+ 13.     In a car park, there are 7 cars. Each car has 4 wheels. How many
+         wheels do the cars have altogether?
+
+
+
+
+                                                                                 53
+                                                 X
+Let's work out
+
+      Complete the following.
+                                          Complete your
+                                          multiplication
+                                          table of 4.
+      1    x     4    = _____
+
+
+      2    x     4    = _____
+
+
+      3    x     4    = _____
+                                NOTE:
+      4    x     4    = _____   When you multiply any number
+                                by zero, you get zero.
+                                          E.g. 4 x 0 = 0
+      5    x     4    = _____
+                                When you multiply zero by any
+                                number, you get zero.
+      6    x     4    = _____
+                                         E.g. 0 x 4 = 0
+
+
+      7    x     4    = _____
+
+
+      8    x     4    = _____
+
+
+      9    x     4    = _____
+
+
+      10   x     4    = _____
+
+
+
+
+54
+                                                         Numbers
+       nd
+
+
+
+
+Let's work out
+
+ 14.    Complete the following.
+
+        (a)		 2         (b)			5            (c)       9
+            x               x                    x
+              4               4                      4
+
+
+
+
+ 15.    A clover has 4 leaves.
+
+        3 clovers have _______ leaves.
+
+
+                                                     3
+                                                 x
+                                                     4
+
+
+
+
+ 16.    On a jacket there are 4 buttons.
+
+
+        8 jackets have _______ buttons.
+                                                     8
+                                                 x
+                                                     4
+
+
+
+
+                                                               55
+                                                          X
+
+            Multiplication by 5
+
+     Noah shows his 2 hands. Each hand has 5 fingers. How many fingers
+     does he show in all?
+
+
+
+     							                             2 hands         10   fingers.
+     							                             2 x 5 = 10     fingers.
+
+
+
+
+ Try this
+
+
+
+
+                              			          4 hands     _____ fingers.
+                              			          4 x 5 = ______ fingers.
+
+
+
+
+                              			          7 hands     _____ fingers.
+                              			          7 x 5 = ______ fingers.
+
+
+
+
+56
+                                                    Numbers
+       nd
+
+
+
+
+Let's work out
+
+ 17.    Draw 5 fingers on each hand and complete.
+
+
+ (a) 										                                      6 x 5   =
+
+
+
+
+ (b) 										                                      8 x 5   =
+
+
+
+
+ (c) 										                                      9 x 5   =
+
+
+
+
+                                                                 57
+                                                                  X
+Let's work out
+
+ 18.      Count in five's.
+
+
+
+
+     1        2        3      4       5       6        7     8        9   10
+
+
+     11       12      13      14      15      16       17    18   19      20
+
+
+     21       22      23      24      25      26       27    28   29      30
+
+
+     31       32      33      34      35      36       37    38   39      40
+
+
+     41       42      43      44      45      46       47    48   49      50
+
+
+
+
+ (a)      Starting with 5, count in five's as shown above.
+
+
+
+
+ (b)      Colour the squares as you count in five's.
+
+
+
+
+ (c)      Complete the pattern.
+
+
+          5 , ___ , ___ , 20 , ___ , 30 , 35 , ___ , ___ , 50 .
+
+
+
+
+58
+                                     Numbers
+     nd
+
+
+
+
+Let's work out
+
+      Complete the following.
+                                          Complete your
+                                          multiplication
+                                          table of 5.
+      1    x     5    = _____
+
+
+      2    x     5    = _____
+
+
+      3    x     5    = _____   NOTE:
+                                When you multiply any number
+      4    x     5    = _____   by zero, you get zero.
+                                          E.g. 5 x 0 = 0
+
+      5    x     5    = _____   When you multiply zero by any
+                                number, you get zero.
+                                         E.g. 0 x 5 = 0
+      6    x     5    = _____
+
+
+      7    x     5    = _____
+
+
+      8    x     5    = _____
+
+
+      9    x     5    = _____
+
+
+      10   x     5    = _____
+
+
+
+
+                                                                59
+                                                       X
+Let's work out
+
+ 19.   Complete the following.
+
+       (a)		 4         (b)			7           (c)       8
+           x               x                   x
+             5               5                     5
+
+
+
+
+ 20.   A flower has 5 petals.
+
+       3 flowers have _______ petals.
+
+                                                   3
+                                               x
+                                                   5
+
+
+
+
+ 21.   On a shirt there are 5 buttons.
+
+       8 shirts have _______ buttons.
+
+
+                                                   8
+                                               x
+                                                   5
+
+
+
+
+60
+                                                      Numbers
+      nd
+
+
+
+
+           Tip: It is the same
+      It is important to know that multiplication works in either way.
+      For example: 5 times 2 is the same as 2 times 5.
+
+
+      					                       2 times 5 fingers         10 fingers.
+      					                       We write, 2 x 5 = 10
+
+      					                       5 times 2 fingers         10 fingers.
+      					                       We write, 5 x 2 = 10
+
+
+
+Try this
+22.    Fill in the blanks with the correct number.
+
+
+(a)    If 2 x 4 = 8
+       Then 4 x 2 = _______________ ( 8 , 10 , 12 )
+
+
+(b)    If 5 x 3 = 15
+       Then 3 x 5 = _______________ ( 5 , 15 , 20 )
+
+
+23.    Complete.
+
+
+       (a)    5x        = 10 		         (b)   6x          = 18
+
+
+		            2x        = 10.				             3x          = 18.
+
+
+                                                                          61
+                                                                      X
+              IT Corner
+
+
+
+                   http://www.learnalberta.ca/content/me3us/flash/
+
+                   With the help of your teacher, go to this website to
+
+                   play this game.
+
+
+
+
+      Continuous Assessment
+
+
+ 1.     Work out the following.
+
+              3
+        (a)					                             (b)			2
+            x                                    x
+              2                                    3
+
+
+
+
+        (c)        4     				                 (d)          5
+               x                                       x
+                    4                                      5
+
+
+
+
+62
+                                                   Numbers
+     nd
+
+
+
+
+2.    Colour according to the code.
+
+
+                                                                      2x2
+
+
+
+                                      4x3                       9x4
+
+                                                                      4x2
+                                                       6x4
+      8x2
+                                                          6x3
+
+
+
+
+                                                                          9x4
+                        7x5                               3x5
+
+
+      8x4                                                       3x4
+                                        6x5
+
+
+                                                                      5x2
+
+
+ 		4, 10, 16							15, 30, 35
+
+
+
+ 		12, 18, 32 							8, 24, 36
+
+
+
+
+3.    Jessica bought 7 pails of water of 2 litres each. How many litres
+      does she have in all?
+
+      1 pail    =     2 litres
+
+      7 pails   =     ______ x ______ litres = ______ litres
+
+      Number of litres of water in all = ______
+
+
+
+                                                                                63
+                                                          X
+ 4.    Cross ( X ) the wrong answer.
+
+
+
+ (a)     4 x 5 = 20					                   (b)    6 x 3 = 28
+
+
+
+
+ (c)     10 x 4 = 40					                  (d)    7 x 5 = 35
+
+
+
+
+ (e)      9 x 3 = 37					                  (f)    2 x 4 = 10
+
+
+
+
+ 5.    A pack has 2 sandwiches. A caterer packed 10 such packs. How many
+       sandwiches did he pack in all?
+
+
+
+
+       Number of sandwiches = _______
+
+
+
+
+64
+                                                      Numbers
+     nd
+
+
+
+
+6.    Jenna buys 10 bags of rice of 5 kg each.
+      How many kilograms of rice does she have in all?
+
+
+                                                         x
+
+
+
+
+7.    If a brick of juice contains 2L, how many 			
+      litres of juice will you get in 7 such bricks?
+
+
+
+
+                                                         x
+
+
+
+
+8.    Suzy has 9 packs of lollipops. Each pack
+      contains 4 lollipops. How many lollipops does
+      she have in all?
+
+
+
+
+                                                         x
+
+
+
+
+                                                             65
+                                                      X
+
+     Profiling
+
+
+
+                               Good   Satisfactory   Needs Improvement
+     Multiply a number
+     (0 up to 10) by 2
+
+     Multiply a number
+     (0 up to 10) by 3
+
+     Multiply a number
+     (0 up to 10) by 4
+
+     Multiply a number
+     (0 up to 10) by 5
+
+     Solve simple word
+     problems involving
+     multiplication.
+
+
+
+
+           Teacher's Remarks
+
+
+
+
+66
+                                                 Numbers
+                                                 Measure
+    nd
+
+
+
+
+Length                              Zara is comparing the length of the
+                                    objects in her school bag.
+
+
+
+
+         A         B          C             D
+1   Observe carefully and discuss the picture.
+
+2 Consider the items in pairs. Identify which
+  item is longer (or shorter)?
+
+
+                longer
+
+
+
+
+                                         Let’s prepare
+                                      and complete our
+                                      “longer/ shorter”
+                                              book
+                    shorter
+
+
+
+                                                                          67
+ Let's work out
+
+ 1.   I tick (    ) the longer bread.
+
+
+
+
+ 2.   I ring the taller tree.
+
+
+
+
+ 3.   I colour the shorter carrot.
+
+
+
+
+68
+                              Measure
+Arbitrary Units
+
+
+
+
+Activity
+
+
+
+
+           Objects   Length
+
+
+
+
+                                I estimate the
+                                length of an
+                                object.
+
+
+
+
+                                                 69
+ Activity: Measuring Objects
+
+
+     With the help of my teacher I use the 1 unit (paper clip) to find the
+     length of the strips.
+
+                                                             1 paper clip
+
+
+
+
+          Strips             Number of paper clips
+
+
+
+
+70
+                                                 Measure
+  Try these
+
+
+
+
+              This                                   is
+
+
+                     paper clips
+
+
+
+
+              This                 is        paper clips
+
+
+
+
+This                                                        is
+
+
+
+                     paper clips
+
+
+
+
+This                                                  is   paper clips
+
+
+
+
+       This                             is   paper clips
+
+                                                                    71
+ Let's work out
+
+ 4.   I count and match.
+
+
+      10
+
+      14
+
+      6
+
+      7
+
+      5
+
+72
+                                                  Measure
+The metre
+		
+ With the help of my teacher I identify the objects.
+
+
+
+
+                                                        73
+ Let's work out
+
+ 5.   Circle metre or m.
+
+
+
+
+ 6.   Tick all the objects measured in metres.
+
+
+
+
+74
+                                  Measure
+7.   I match.
+
+
+
+                                      15 m
+
+
+                                      5m
+
+
+                                      1m
+
+
+
+
+           Measuring length
+
+                      tailor's tape
+
+
+                     measuring tape
+
+
+                          ruler
+
+
+
+                                             75
+ Graduated Metre Strip
+     		
+
+
+
+
+          1 cm
+
+
+
+
+                 1 metre = 100 centimetres
+
+                       1 m = 100 cm
+
+
+      With the help of my teacher, I measure the
+      length of the objects in centimetres / cm.
+
+
+                 Objects                 Length
+
+
+
+
+76
+                                                            Measure
+Let’s work out
+
+8.    I use my metre strip and measure parts of my body.
+
+
+                      Parts of your body                     Measurement
+
+
+                       Around your head
+
+
+                From your neck to your shoulder
+
+
+              From your shoulder to your fingertips
+
+
+             From the base of your neck to your heel
+
+
+             From the top of your head to your waist
+
+
+         From the bottom of your neck to your waist
+
+
+
+
+Examples
+ 		
+     Example 1:                      Example 2:
+     13 m + 42 m = ____ m            94 m - 41 m = ____ m
+
+      tens        units                tens       units
+
+         1        3 m                     9       4 m
+     +                                -
+         4        2 m                     4           1 m
+
+         5        5 m                     5       3 m
+
+
+
+                                                                           77
+ Let’s work out
+
+ 9.    Work out.
+
+       (a) 35 m + 23 m = ___              (b) 47 m + 25 m = ___
+
+
+
+
+       (c) 86 m - 45 m = ___              (d) 95 m - 37 m = ___
+
+
+
+
+ 10.   Mary has 24 m of blue lace and her friend Shreena has 35 m of red
+       lace. What length of lace do they have altogether?
+
+
+
+
+ 11.   Mr Roy has 56 m of cloth. He sells 32 m of it. What length of cloth
+       has he left?
+
+
+
+
+78
+                                                         Measure
+Examples
+ 		
+      Example 1:                    Example 2:
+      3 m x 2 = ____ m              5 m x 3 = ____ m
+
+         tens      units                tens     units
+
+                   3 m                           5 m
+            X       2                      X      3
+
+                   6 m                    1      5 m
+
+
+
+
+Let’s work out
+
+12.    Work out.
+
+       (a) 4 m x 3 = ___                   (b) 6 m x 4 = ___
+
+
+
+
+13.    Peter walks 4 times the length of a ladder. If the ladder is 5m long,
+       what length has he walked in all?
+
+
+
+
+                                                                      5m
+
+
+
+
+                                                                               79
+  Activity
+
+ With the help of my teacher, I complete the following.
+
+
+
+
+                                                                    _____ cm
+
+
+
+
+                                                                    _____ cm
+
+
+
+
+                                                                    _____ cm
+
+
+
+
+                                                                    _____ cm
+
+
+
+
+             IT Corner
+
+
+             From the Sankore interactive tools, pupils can be given an
+             exercise where they can use the interactive ruler to measure
+             the length of a line.
+             Or a simple matching activity can be used on the following
+             website :
+             http://www.bgfl.org/bgfl/custom/resources_ftp/client_ftp/
+             ks2/maths/measures/index.htm
+
+
+80
+                                                      Measure
+Examples
+ 		
+      Example 1:                         Example 2:
+      24 cm + 57 cm = ____ cm            83 cm - 57 cm = ____ cm
+
+        tens       units                   tens     units
+           1                               7       10
+               2   4 cm                        8        3 cm
+       +                                   -
+               5   7 cm                        5        7 cm
+
+               8   1 cm                        2      6 cm
+
+
+
+Let’s work out
+
+14.    Work out.
+
+       (a) 46cm + 32cm = ___ cm          (b) 58cm + 36cm = ___ cm
+
+
+
+
+       (c) 79cm – 45cm = ___ cm          (d) 85cm – 28cm = ___ cm
+
+
+
+
+15.    Mother has 35cm of red ribbon and her daughter Asha has 42cm of
+       blue ribbon. What length of ribbon do they have altogether?
+
+
+
+
+16.    Mr Robin has a string of 96cm. He cuts 45cm from it. What length of
+       string has he left?
+
+
+
+
+                                                                             81
+              m to cm
+         (a) 1 m        = 100 cm
+              3m        = 100 cm + 100 cm + 100 cm
+                   		   = 3 x 100 cm = 300 cm
+
+
+         (b) 1m 25 cm         = 100 cm + 25 cm
+         				= 125 cm
+
+
+ Let’s work out
+
+ 17.   Work out.
+
+       (a)   4 metres = _____ centimetres
+
+
+
+       (b)   9 m = _____ cm
+
+
+
+       (c)   2 metres 15 centimetres = _____ centimetres
+
+
+
+       (d)   6 m 75 cm = _____ cm
+
+
+
+
+82
+                                                    Measure
+Conservation of length
+
+Jenny and Pooja are arguing whose set of building
+blocks is longer.
+
+
+
+
+  With the help of your teacher, use your ruler to measure A, B and C.
+  What do you observe?
+
+
+
+
+                            B
+       A
+
+
+
+
+                                              C
+
+
+
+                                                                         83
+ Continuous Assessment
+
+ 1.    I measure.
+
+
+
+
+                                 _____ cm
+
+
+
+
+ 2.    Draw a pencil of length of 15 cm.
+
+
+
+
+ 3.    Complete
+
+ (a)   5 m = __________ cm		           (b)   1 m 10 cm = __________ cm
+
+
+
+
+ (c)   5 m 25 cm = _________ cm        (d)   6 m 75 cm = __________ cm
+
+
+
+
+84
+                                                   Measure
+4.   Work out the following:
+
+     (a)   52 m + 10 m = ____ m			         (b)   62 cm + 55 cm = ____ cm
+
+
+
+
+     (c)   78 cm – 30 cm = ____ cm		       (d)   58 cm x 3 = ____ cm
+
+
+
+
+5.   Maria gives 20 cm of ribbon to Sheila and 35 cm of ribbon to Linda.
+     How much ribbon did she give in all?
+
+
+
+
+6.   The length of a rope is 24 m. Ravi adds 32 m of rope.
+     What is the total length of the rope?
+
+
+
+
+7.   Anna is 1m 55 cm tall and Sarita is 36 cm shorter than Anna.
+     (a) How tall is Sarita?
+     (b) What is the total height of both girls?
+
+
+
+
+                                                                           85
+     Profiling
+
+
+                               Good   Satisfactory   Needs Improvement
+     Measure length
+     • in metres
+     • in centimetres
+     Draw line segments
+     of specific lengths
+
+
+
+     Add lengths
+
+
+
+     Subtract lengths
+
+
+
+     Multiply lengths
+
+     Solve simple word
+     problems involving
+     lengths
+
+     Convert m into cm
+
+
+
+
+           Teacher's Remarks
+
+
+
+
+86
+                                                  Measure
+                                                  Numbers
+Fractions
+Devi’s mother has a cake to share among four persons. The cake is divided
+into 4 equal parts.
+
+               Out of one        1                                      2
+               whole cake, you
+               can get four
+               equal parts.                 I take one part.
+                                            How many parts
+                                            of the cake are
+                                            there left?
+
+
+
+
+                                 3                                      4
+                Mother takes                          Dad takes one
+                one part of                           part. Out of 4
+                the cake. How                         parts, there is
+                many parts are                        one part of the
+                there left?                           cake left.
+
+
+
+
+1   Observe carefully and discuss the pictures.
+
+
+2   How many parts of the cake are left?
+
+
+                                                                        87
+                                                                    X
+
+               Did you know?
+
+
+         A fraction is a part of a whole.
+         E.g: 1 part of pizza
+
+
+                                                 4 parts of pizza   1 part of pizza
+
+
+
+
+ Activity: From whole to part
+
+
+
+                                            With the help of
+                                            your teacher, fold
+                                            Bristol papers and
+                                            shade the
+                                            parts as per the
+                                            instructions.
+
+
+
+
+     1     Listen carefully to the instructions of your teacher.
+
+
+     2 Cut out the shapes on the next page.
+
+
+     3 Fold them accordingly and shade the parts as per your
+           teacher's instructions.
+
+88
+                        Numbers
+  nd
+
+
+
+
+Shapes to be cut out.
+
+
+
+
+                              89
+     X
+
+
+
+
+90
+                                                     Numbers
+     nd
+
+
+
+
+Let's work out
+
+1.     How many parts are coloured?
+
+
+
+
+           Tip: Writing a fraction
+
+     A fraction is written in a specific way. There are two important
+     words you need to know: Numerator and Denominator.
+
+
+     The number under the bar indicates the number of equal parts in
+     which the whole has been divided. It is called the denominator.
+
+
+     The number above the bar represents the number of parts shaded.
+     It is called the numerator.
+
+
+     The numerator is placed at the top and the denominator is placed at
+     the bottom.
+
+
+               1          Numerator             This is how you
+                                                should write a
+
+               2
+                                                fraction.
+                         Denominator
+
+
+
+                                                                           91
+                                                             X
+Activity: Fractions with building blocks
+
+
+                                  With the help of
+                                  your teacher, use
+                                  building blocks to
+                                  form fractions.
+
+
+
+ 1   Listen carefully to the instructions of your teacher.
+
+
+ 2 Observe and use the building blocks to form fractions like
+     in the example above.
+
+
+ 3 Record and draw your findings in the record sheet.
+
+                             1       1        2        3
+      Fraction     1         2       4        4        4
+
+
+
+
+      Drawing
+
+
+
+
+                             1       2
+      Fraction     1         3       3
+
+
+
+
+      Drawing
+
+
+
+
+92
+                                                    Numbers
+      nd
+
+
+
+
+           Tip: Writing a fraction
+
+
+
+                1                                                  one whole
+
+
+                2
+                                        two equal parts
+
+
+
+
+                                           One whole is divided
+                         one half          into two equal parts.
+                                           Each part is called
+                                                 'a half'.
+
+
+
+
+Let's work out
+
+2.     Colour one half of each shape.
+
+(a)                          (b)                       (c)
+
+
+
+
+(d)                          (e)                       (f)
+
+
+
+
+                                                                               93
+                                                            X
+            Do you remember? Numerator and denominator
+
+            The symbol for one half is 1 .
+                                       2
+                                              one coloured part
+
+                                      1          Numerator
+
+                                      2         Denominator
+
+                                               two equal parts
+
+
+ Let's work out
+ 3.   What fraction of each shape is shaded?
+
+      (a)                     (b)                    (c)
+
+
+
+
+              Tip: One third
+
+
+                1
+                3                            one whole
+
+
+
+                                      three equal parts           one third
+
+94
+                                                      Numbers
+      nd
+
+
+
+
+Let's work out
+4.         Colour one third of each shape.
+
+           (a)                     (b)                       (c)
+
+
+
+
+             Tip: Recognising one third
+
+      The symbol for one third is 1 .
+                                  3
+                                                     one coloured part
+
+                                                 1      Numerator
+
+                                                 3     Denominator
+
+            1        2       3                       three equal parts
+            3        3       3
+
+
+
+5.     Shade each figure to show the given fraction.
+
+(a)                              (b)                   (c)
+
+
+
+
+                 1                           2                     3
+                 3                           3                     3
+
+
+                                                                         95
+                                                              X
+            Tip: One quarter
+
+
+             1
+             4                            one whole
+
+
+
+                                   four equal parts           one quarter
+
+
+
+ Let's work out
+ 6.   Colour one quarter of each shape.
+
+      (a)                    (b)                        (c)
+
+
+
+
+              Tip: Recognising one quarter
+
+        The symbol for one quarter is 1 .
+                                      4
+                                                      one coloured part
+
+                                               1         Numerator
+
+                                               4        Denominator
+
+             1    2     3      4                      four equal parts
+             4    4     4      4
+96
+                                                    Numbers
+      nd
+
+
+
+
+7.     Shade each figure to show the given fraction.
+
+       (a)                   (b)                          (c)
+
+
+
+
+                2                       3                              4
+                4                       4                              4
+
+
+
+           Tip: Shaded and unshaded (not shaded) parts
+
+              What fraction is
+              not shaded here?
+
+                                                three parts not shaded
+
+
+                                            3          Numerator
+
+                                            4          Denominator
+                                                    four equal parts
+
+
+
+
+Try these
+8.     What fraction of each shape is not shaded?
+(a)                            (b)                      (c)
+
+
+
+
+                                                                           97
+                                                                  X
+       IT Corner
+
+
+        http://illuminations.nctm.org/activity.aspx?id=4148
+
+
+
+
+                                                              Get some more
+                                                              practice!
+
+
+
+
+     Continuous Assessment
+
+ 1. Write down the shaded fraction for each of following figures.
+
+       (a)                                        (b)
+
+
+
+
+       (c)                                        (d)
+
+
+
+
+98
+                                                      Numbers
+     nd
+
+
+
+
+2.    Shade each figure to show the given fraction.
+
+     (a)
+                                             (b)
+
+
+
+
+                  1                                    2
+                  2                                    4
+
+
+
+     (c)                                     (d)
+
+
+
+
+                  3                                    3
+                  3                                    4
+
+
+
+3.    Write in words the given fractions.
+
+          1
+      (a)		:
+          2           ______________________________________
+
+
+          1
+      (b)		:          ______________________________________
+          3
+
+          2
+      (c)		:          ______________________________________
+          3
+
+          3
+      (d)		:          ______________________________________
+          4
+
+
+
+                                                               99
+      Profiling
+
+
+                                   Good   Satisfactory   Needs Improvement
+      Identify the fraction
+      half and write its
+      symbol
+      Colour half of a
+      figure
+      Identify the fraction
+      one third
+      Write the symbol
+      for one third and
+      two thirds
+                        3
+      Colour 1 ,    2
+                      ,
+                3   3   3
+
+      Identify the fraction
+      one quarter
+      Write the symbol
+      for one quarter,two
+      quarters and three
+      quarters
+                1
+      Colour      , 2 , 3, 4
+                4   4   4 4
+
+
+
+
+               Teacher's Remarks
+
+
+
+
+100
+                                             Measure
+Time
+
+
+
+                                                     school
+
+
+
+
+                    school
+
+
+
+
+                                                  Look at these
+                                                    pictures.
+
+1   Observe carefully and discuss the pictures.
+
+
+2 What are the activities you can see in the pictures?
+
+
+
+                                                                  101
+             Clockface
+
+
+                 I play with the
+                  clockface to
+                find the correct
+                      time.
+
+
+
+
+  Activity: I construct a clockface
+
+ With the help of your teacher, complete the drawing and
+ draw the minute hand on twelve and the hour hand on five.
+
+
+
+
+102
+                                                Measure
+Let’s work out
+
+1.     Match the following.
+
+
+
+                                         Nine o'clock
+
+
+                                         Three o'clock
+
+
+                                          Ten o'clock
+
+
+                                         Four o'clock
+
+
+2.     Complete the clockface.
+
+(a)                       (b)                 (c)
+
+
+
+
+     One o'clock              Eight o'clock     Five o'clock
+
+                                                               103
+  3. Write the time in words.
+
+      (a)                       (b)                (c)
+
+
+
+
+        __________                 __________        __________
+
+
+
+  4. Match the activities with the correct time.
+
+
+                I wake up at                       Nine o'clock
+
+        The morning assembly                       Three o'clock
+                is at
+
+
+             I go back home at                      Six o'clock
+
+             I take my dinner at                   Eight o'clock
+
+            I do my homework at                    Seven o'clock
+
+104
+                                                       Measure
+Half past
+ 		
+
+
+                                      Recall your
+                                      multiplication
+                                      table of 5.
+
+
+
+
+Activity
+
+
+
+
+                                Half past two
+
+
+
+
+ With the help of my teacher, I draw the minute hand to
+ show half past.
+
+
+
+
+                                                             105
+  5.   Match with the correct words.
+
+
+
+
+                                             Half past six
+
+
+
+                                         Half past four
+
+
+
+
+  6.   Draw the hands.
+
+       (a)                             (b)
+
+
+
+
+         Half past eight                     Half past five
+
+
+106
+                                                    Measure
+Quarter past
+ 		
+
+
+                                        The clock is
+                                        divided into 4
+                                        quarters.
+
+
+
+
+Activity
+
+
+
+
+                             Quarter past one
+
+
+
+ Draw the hands to show quarter past.
+
+
+
+
+     Quarter past eleven                  Quarter past six
+                                                             107
+  7.   Match with the correct words.
+
+
+
+
+                                       Quarter past nine
+
+
+
+
+                                       Quarter past three
+
+
+
+
+                                       Quarter past four
+
+
+
+
+108
+                                                   Measure
+a.m. and p.m.
+ 		
+
+
+
+
+Activity: Activities I do before and after noon
+
+
+         Before noon                         After noon
+
+
+
+
+   With the help of your teacher, find what activities you do before
+   noon and after noon.                                                109
+  8.            I write in the morning or in the afternoon.
+
+  (a)           You are getting ready for bed				                                                                                         ______________
+
+  (b)           You are listening to the headmaster in the assembly _________
+
+  (c)           You are sleeping						______________
+
+  (d)           You are walking to school					                                                                                            ______________
+
+  (e)           You are walking home from school			                                                                                       ______________
+
+
+
+
+                      a.m. and p.m.
+         The time from midnight to noon is called a.m.
+         The time from noon to midnight is called p.m.
+
+
+                      a.m. is midnight to midday, and p.m. is midday to midnight.
+
+           Midnight                                                                                                                                              Midnight
+          (beginning of                                                               Midday                                                                     (end of the
+            the day)                                                                                                                                                day)
+
+
+
+
+       12:00   1:00   2:00   3:00   4:00   5:00   6:00   7:00   8:00   9:00   10:00   11:00   12:00   1:00   2:00   3:00   4:00   5:00   6:00   7:00   8:00   9:00   10:00   11:00   12:00
+
+
+
+
+                                      a.m.                                                                                         p.m.
+
+
+110
+                                        Measure
+9.   Complete the table.
+
+        Activity             Time         Clock
+
+
+
+Example:
+     Eat breakfast         7:30 a.m.
+
+
+
+
+     Get on bus stop       8:00 a.m.
+
+
+
+
+      Maths class          10:30 a.m.
+
+
+
+
+        Football           3:00 p.m.
+
+
+
+
+       Homework
+
+
+
+
+        Bedtime
+
+
+
+
+                                                  111
+ Days of the week
+  10.   Write down the correct day of the week to complete the sequence.
+
+
+           Sunday          Monday            Tuesday       Wednesday
+
+
+                  Saturday          Friday             Thursday
+
+
+
+  (a)   ________________ , Tuesday, Wednesday.
+
+
+  (b)   Wednesday, ________________ , Friday.
+
+
+  (c)   Friday, ________________ , Sunday.
+
+
+
+
+  11.   Write down the days on which you normally go to school.
+
+
+
+            Monday
+
+
+
+
+112
+                                                   Measure
+
+Months of the year
+With the help of your teacher, create a "month wheel".
+
+
+
+
+                                January Fe
+                      ber                 bru
+                   cem                       ar
+                 De                             y
+
+                         2 1 2
+                        1
+           r
+         be
+
+
+
+
+                                                          Ma
+       em
+
+
+
+
+                                                            rch
+    Nov
+
+
+
+                   1
+
+
+                                                   3 4 5
+                  1
+
+
+
+                              There are
+   October
+
+
+                0
+
+
+
+
+                                                             April
+                             12 months
+               1
+
+
+
+
+                              in a year.
+             9
+           ber
+
+
+
+
+                                                          M
+          m
+
+
+
+
+                           6 7 8
+                                                           a
+        te
+
+
+
+
+                                                            y
+      ep
+     S
+
+
+
+
+                      st                           Ju
+                    gu                               ne
+                  Au
+                                    July
+
+
+
+                                                                  113
+  12.   Complete each of the following calendar for the year 2018.
+
+        (a)                                  January
+                       Sunday   Monday   Tuesday Wednesday Thursday   Friday   Saturday
+
+
+                                  1
+
+
+
+
+                                                                      19
+
+
+
+
+        (b)                                    March
+                       Sunday   Monday   Tuesday Wednesday Thursday   Friday   Saturday
+
+
+                                                                       2
+
+
+
+
+                                          27
+
+
+
+
+        (c)                                      June
+                       Sunday   Monday   Tuesday Wednesday Thursday   Friday   Saturday
+
+
+
+
+                        10
+
+
+
+
+114
+                                                  Measure
+Continuous Assessment
+
+1.     Write the correct time in words.
+
+       (a)                                (b)
+
+
+
+
+       (c)                                (d)
+
+
+
+
+2.     Complete the clockface.
+
+(a)                       (b)                   (c)
+
+
+
+
+      Two o'clock          Half past seven      Quarter past two
+                                                                   115
+  3.      Complete.
+
+  (a)     The first month of the year is ________________ .
+
+  (b)     The 6th month of the year is ________________ .
+
+  (c)     The last month of the year is ________________ .
+
+  (d)     We are in the month of ________________ .
+
+  (e)     Last month was ________________ .
+
+  (f)     Next month will be ________________ .
+
+
+
+  4.      Study the weather chart.
+
+       Monday   Tuesday       Wednesday     Thursday       Friday    Saturday   Sunday
+
+
+
+
+                      rainy         sunny              windy        cloudy
+
+
+
+ (a)     It was sunny on ___________ and on ___________ .
+
+ (b)     It was rainy on ___________ and on ___________ .
+
+ (c)     It was windy on ___________ .
+
+ (d)     It was cloudy on ___________ and on ___________ .
+
+
+116
+                                     Measure
+Template to be cut out for pupils.
+
+
+
+
+                                           117
+118
+                                        Measure
+Profiling
+
+
+                          Good   Satisfactory   Needs Improvement
+Read clockface and
+identify the hour and
+the minute hands
+Show and
+tell time
+(a) To the hour
+(b) Half past
+(c) Quarter past
+Differentiate
+between a.m. and
+p.m.
+Name and write days
+of the week
+
+Read a weather
+chart
+
+Name, write and
+order months of the
+year
+
+
+
+
+      Teacher's Remarks
+
+
+
+
+                                                                119
+                                                               X
+
+ Division                                          When you put two
+                                                   groups of items
+                                                   altogether, you get
+                                                   the amount in all.
+
+
+        Do you remember?
+
+       Mila and Zohra bought 10 apples and they shared the apples
+       equally among them. Each of them got 5 apples.
+
+
+
+                                                   So we will
+              There are two
+              of us and we                         get five
+              will buy ten                         apples each.
+              apples.
+
+
+
+
+ Try these
+ Share the following equally.
+
+ (a)
+
+
+
+
+                    Each boy gets         balls.
+
+
+
+120
+                                      Numbers
+      nd
+
+
+
+
+(b)
+
+
+
+
+               Each girl gets    cakes.
+
+
+
+
+(c)
+
+
+
+
+                Each dog gets    bones.
+
+
+
+
+(d)
+
+
+
+
+           Each fisherman gets    fish.
+
+
+
+
+                                            121
+                                                             X
+
+         Do you remember?
+
+                                           Mila and Zohra share 10 apples.
+
+
+                                           Each of them gets 5 apples.
+                                           10 apples shared between 2 girls
+                                           gives 5 apples each.
+
+
+                                           We can also write:
+
+                                             10 ÷ 2 = 5
+
+
+
+ Try these
+
+ Share the following in two and write the correct numeral.
+
+ (a)
+
+
+
+
+                        60 ÷ 2 =       3
+
+
+ (b)
+
+
+
+
+                        60 ÷ 2 =       3
+
+122
+                                             Numbers
+nd
+
+
+
+
+      Group in two's
+Jenna is helping her mother. Jenna is asked to group 16 buttons
+in two's. See how many groups she gets.
+
+  1                                 2
+
+
+
+
+Try these
+
+Group the following in two's.
+
+(a)
+
+
+
+
+                                                        Try to group
+                  6 ÷ 2 =       3                       in two's.
+
+
+
+
+(b)
+
+
+
+
+                 12 ÷ 2 =       3                                      123
+                                             X
+  Let's work out
+
+  1.    Group the following in two's.
+
+  (a)
+
+
+
+
+                          8 ÷ 2 =       3
+
+  (b)
+
+
+
+
+                          10 ÷ 2 =       3
+
+
+
+
+  (c)
+
+
+
+
+                          16 ÷ 2 =      3
+
+
+
+124
+                                                     Numbers
+     nd
+
+
+
+
+2.    Complete the following.
+
+      (a)   2 ÷ 2   = _______			              (f)   12 ÷ 2   = _______
+
+
+      (b)   4 ÷ 2   = _______			              (g)   14 ÷ 2   = _______
+
+
+      (c)   6 ÷ 2   = _______			              (h)   16 ÷ 2   = _______
+
+
+      (d)   8 ÷ 2   = _______			              (i)   18 ÷ 2   = _______
+
+
+      (e)   10 ÷ 2 = _______			               (j)   20 ÷ 2 = _______
+
+
+
+
+3.    Ted has 14 chocolate bars. He wants to put them in 2 bags so that
+      there is the same number of chocolate bars in each bag. How many
+      chocolate bars should go in each bag?
+
+
+
+
+      Number of chocolate bars in each bag = __________
+
+
+                                                                          125
+                                                             X
+
+            Group in three's
+
+        A restaurant sells 3 slices of pizza in a pack. If they have baked
+        12 slices, how many packs will they get?
+
+
+
+
+            12 slices grouped in three's = 4 packs
+
+
+ Try these
+
+ Group the following in three's.
+
+ (a)
+
+
+
+
+                          6 ÷ 3 =      3
+
+ (b)
+
+
+
+
+                         9 ÷ 3 =       3
+126
+                                             Numbers
+      nd
+
+
+
+
+Let's work out
+
+4.     Group the following in three's.
+
+(a)
+
+
+
+
+                            12 ÷ 3 =     3
+
+
+
+(b)
+
+
+
+
+                            15 ÷ 3 =     3
+
+
+
+(c)
+
+
+
+
+                            21 ÷ 3 =     3
+
+                                                   127
+                                                               X
+  Let's work out
+
+ 5.   Complete the following.
+
+      (a)   3 ÷ 3    = _______			             (f)   18 ÷ 3     = _______
+
+
+      (b)   6 ÷ 3    = _______			             (g)   21 ÷ 3     = _______
+
+
+      (c)   9 ÷ 3    = _______			             (h)   24 ÷ 3     = _______
+
+
+      (d)   12 ÷ 3 = _______			               (i)   27 ÷ 3     = _______
+
+
+      (e)   15 ÷ 3 = _______			               (j)   30 ÷ 3 = _______
+
+
+
+
+ 6.   A class of 15 pupils is going for an outing. Only 3 pupils can sit on each
+      seat in the school van. How many seats are there in the van?
+
+
+
+
+      Number of seats in the van = __________
+
+
+
+
+128
+                                                     Numbers
+      nd
+
+
+
+
+           Group in four's
+
+       For the purpose of an activity, a teacher has to group his class of
+       16 pupils into groups of 4. How many groups will he get?
+
+
+
+
+            16 pupils grouped in four's = 4 groups
+
+Try these
+
+Group the following in four's.
+
+(a)
+
+
+
+
+                       8 ÷ 4 =       3
+
+
+(b)
+
+
+
+
+                     16 ÷ 4 =        3
+                                                                             129
+                                             X
+  Let's work out
+
+  7.    Group the following in four's.
+
+  (a)
+
+
+
+
+                             20 ÷ 4 =    3
+
+  (b)
+
+
+
+
+                             24 ÷ 4 =    3
+
+
+
+  (c)
+
+
+
+
+                             32 ÷ 4 =    3
+
+130
+                                                  Numbers
+     nd
+
+
+
+
+8.    Complete the following.
+
+      (a)   4 ÷ 4   = _______			           (f)   24 ÷ 4 = _______
+
+
+      (b)   8 ÷ 4   = _______			           (g)   28 ÷ 4 = _______
+
+
+      (c)   12 ÷ 4 = _______			            (h)   32 ÷ 4 = _______
+
+
+      (d)   16 ÷ 4 = _______			            (i)   36 ÷ 4 = _______
+
+
+      (e)   20 ÷ 4 = _______			            (j)   40 ÷ 4 = _______
+
+
+
+
+9.    Jane collected 36 roses for making bouquets. If she plans to put
+      4 roses per bouquet, how many bouquets will she get?
+
+
+
+
+      Number of bouquets she will get = __________
+
+
+
+
+                                                                         131
+                                                             X
+
+             Group in five's
+
+        A fruit seller has 15 pears and he has to pack them in packs of
+        five. How many packs will he get?
+
+
+
+
+              15 pears grouped in five's = 3 packs
+
+
+ Try these
+
+ Group the following in five's.
+
+ (a)
+
+
+
+                       10 ÷ 5 =       3
+ (b)
+
+
+
+
+                       15 ÷ 5 =       3
+132
+                                                Numbers
+      nd
+
+
+
+
+Let's work out
+
+10.    Group the following in five's.
+
+
+(a)                                       (b)
+
+
+
+
+               25 ÷ 5 =        3                20 ÷ 5 =   3
+
+
+(c)
+
+
+
+
+                               35 ÷ 5 =    3
+
+
+
+                                                               133
+                                                             X
+  Let's work out
+
+ 11.   Complete the following.
+
+       (a)   5 ÷ 5    = _______			            (f)   30 ÷ 5    = _______
+
+
+       (b)   10 ÷ 5 = _______			              (g)   35 ÷ 5 = _______
+
+
+       (c)   15 ÷ 5   = _______			            (h)   40 ÷ 5    = _______
+
+
+       (d)   20 ÷ 5 = _______			              (i)   45 ÷ 5    = _______
+
+
+       (e)   25 ÷ 5 = _______			              (j)   50 ÷ 5 = _______
+
+
+
+
+ 12.   Kiara packs 45 shirts in boxes. Each box can contain 5 shirts.
+       How many boxes will she get?
+
+
+
+
+       Number of boxes = __________
+
+
+
+
+134
+                                                      Numbers
+      nd
+
+
+
+
+            Working out division problems
+
+                We can carry
+                out this division
+                problem in another
+                                        10 ÷ 5 = _____
+                way.
+
+
+
+
+                     Divisor            5    10          Dividend
+
+                                             2           Quotient
+
+
+
+Try these
+
+                                                  2   14
+(a)    14   ÷       2      =         _____
+
+
+
+                                                  3   12
+(b)    12   ÷       3      =         _____
+
+
+
+
+(c)    24   ÷       4      =         _____
+                                                  4   24
+
+
+
+
+(d)    25   ÷       5      =         _____        5   25
+
+
+
+
+                                                                    135
+                                                             X
+  Let's work out
+
+ 13.   A farmer has 50 hens on his farm. To keep them, he needs to build hen 		
+       coops. One coop can keep 5 hens. How many coops will he need in all?
+
+
+
+
+                       Number of coops needed = _____
+
+
+ 14.   Complete.
+
+       (a)   16    ÷   2    =     _____
+                                                               Note
+
+                                                           Zero divided by any
+                                                           other number is zero.
+       (b)   0     ÷   3    =     _____
+                                                           E.g.,   0 ÷ 2 = 0
+                                                                   0 ÷ 3 = 0
+                                                                   0 ÷ 4 = 0
+       (c)   12    ÷   4    =     _____
+                                                                   0 ÷ 5 = 0
+                                                                   0 ÷ 1000 = 0
+
+
+       (d)   30    ÷   3    =     _____
+
+
+
+
+       (e)   25    ÷   5    =     _____
+
+
+
+
+       (f)   0     ÷   5    =     _____
+
+
+
+
+136
+                                                     Numbers
+     nd
+
+
+
+
+            IT Corner
+
+
+
+
+            With the help of your teacher, go to the following
+            website to play this game.
+
+            http://www.learnalberta.ca/content/me3us/flash/
+
+
+
+
+Continuous Assessment
+
+1.    Work out the following.
+
+
+      (a)   10    ÷     5    =     _____
+
+
+
+
+      (b)   12    ÷     3    =     _____
+
+
+
+
+      (c)   16    ÷     4    =     _____
+
+
+
+
+      (d)   20    ÷     2    =     _____
+
+
+
+
+                                                                 137
+                                                            X
+  2.   Work out the following.
+
+       (a)                               (b)
+               3      21                       4       32
+
+
+
+
+       (c)                               (d)
+               2      20                       5       45
+
+
+
+
+  3.   Match the envelopes to the correct letterbox.
+
+
+
+             35 ÷ 5        12 ÷ 3           18 ÷ 2              24 ÷
+                                                                       4
+
+
+
+
+                6                9                 7                   4
+
+
+138
+                                                    Numbers
+     nd
+
+
+
+
+4.    Jenna bought 12 litres of orange juice. She wants to share them 		
+      between Sara and Devi. How many litres of juice will each have?
+
+
+
+
+      12 ÷ 2 = _____
+
+
+
+
+5.    Tick (    ) the right answer.
+
+     (a)                                    (b)
+           20 ÷ 5 = 4                               16 ÷ 2 = 7
+
+
+     (c)                                    (d)
+           12 ÷ 4 = 10                              35 ÷ 5 = 35
+
+
+     (e)                                    (f)
+               9 ÷ 3 = 8                            36 ÷ 4 = 9
+
+
+
+
+6.    A baker needs 4 kg of flour to bake a cake.
+      How many cakes can he bake with 28 kg?
+
+
+
+
+      Number of cakes =      _____
+
+
+                                                                           139
+                                                               X
+ 7.   John has 30 m of ribbon. He needs 5 m of ribbon to wrap a gift. How
+      many gifts will he be able to wrap with 30 m of ribbon?
+
+
+
+
+      Number of gifts =      _____
+
+
+
+
+ 8.   A wholesaler has 45 L of fruit juice. He needs to pack it in bricks of 5 L.
+      How many bricks of juice will he be able to get from 45 L of juice?
+
+
+
+
+      Number of bricks = _____
+
+
+
+
+ 9.   A farmer has to put fences around his field. If he has 32 m and each
+      fence is 4 m long, how many fences will he have to put?
+
+
+
+
+      Number of fences = _____
+
+
+
+
+140
+                                            Numbers
+nd
+
+
+
+
+     Profiling
+
+
+                                Good   Satisfactory   Needs Improvement
+     Divide a number
+     (0 up to 20) by 2
+     – no remainder
+
+     Divide a number
+     (0 up to 30) by 3
+     – no remainder
+
+     Divide a number
+     (0 up to 40) by 4
+     – no remainder
+
+     Divide a number
+     (0 up to 50) by 5
+     – no remainder
+
+     Solve simple word
+     problems involving
+     division
+
+
+
+
+            Teacher's Remarks
+
+
+
+
+                                                                      141
+  Money
+
+          Do you remember?
+
+
+
+
+      1   Observe the pictures carefully.
+
+
+      2 Write down the correct amount for each note.
+
+
+
+
+142
+                                  Measure
+Let's work out
+
+1.   I match.
+
+
+         Rs 20
+
+
+          Rs 1
+
+
+         Rs 25
+
+
+
+2.   I write the correct value.
+
+
+                                      In all =
+                                     Rs ______
+
+
+
+3.   I match.
+
+
+
+                 100 rupees
+
+
+
+
+                  25 rupees
+
+
+
+
+                                                 143
+          Do you know?
+
+
+
+
+      1   Observe the pictures carefully.
+
+
+      2 Write down the correct amount for each note.
+
+
+
+
+144
+                                               Measure
+Activity 1
+
+I cut the notes on page 163.
+I paste the correct note next to the amount.
+
+
+(a)
+
+
+
+         Rs 500
+
+
+
+
+(b)
+
+
+
+         Rs 200
+
+
+
+
+(c)
+
+
+
+        Rs 1000
+
+
+
+
+                                                     145
+        Do you remember?
+
+
+
+
+  Activity 2
+
+  (a)
+                           I decompose using 10-rupee coins only.
+
+
+
+
+  (b)
+                           I decompose using 50-rupee notes only.
+
+
+
+
+146
+                               Measure
+Activity 3
+
+I cut the notes on page 163.
+I paste the correct note.
+
+  Example:
+
+
+
+
+(a)
+
+
+
+
+(b)
+
+
+
+
+                                     147
+  Let's work out
+
+  1.    Fill in the missing amount.
+
+
+
+
+  2.    I find the total value.
+        The first one has been done for you.
+
+  (a)
+                                                 Rs 1 0 0
+                                               + Rs   50
+                                                 Rs 1 5 0
+
+
+  (b)                                            Rs
+                                               + Rs
+                                                 Rs
+
+
+  (c)                                            Rs
+                                               + Rs
+                                                 Rs
+                                                 Rs
+148
+                                         Measure
+
+(d)
+                                                 Rs
+                                                 Rs
+                                                 Rs
+                                             +
+                                                 Rs
+                                                 Rs
+                                                 Rs
+
+
+
+
+3.    Work out the following:
+
+
+      (a)     Rs 2 0 0          (a)     Rs 2 5
+            + Rs 1 5 0                + Rs 2 5
+              Rs                        Rs
+
+
+
+
+      (a)     Rs 2 0 0          (a)     Rs 1 0 0
+            - Rs 1 0 0                - Rs   50
+              Rs                        Rs
+
+
+
+
+                                                      149
+  4.   Read and complete.
+
+
+       Mother has the following notes in her purse.
+       How much money does she have in all?
+
+
+
+
+                                                          Rs
+                                                          Rs
+                                                      +
+                                                          Rs
+                                                          Rs
+                                                          Rs
+
+
+
+
+       She gives Tom Rs 100.
+       How much money does she have left?
+
+
+            Rs
+         - Rs
+            Rs
+
+
+
+
+150
+                             Measure
+Activity 4
+
+I cut the notes on pg 163.
+I paste the correct note.
+
+  Example:
+
+
+
+
+(a)
+
+
+
+
+(b)
+
+
+
+
+                                   151
+  Let's work out
+
+  5.   I look at the price of each item and I complete.
+
+
+
+
+             Rs 150           Rs 25            Rs 300     Rs 100
+
+
+
+        Example:
+
+        I buy
+
+
+                                                           I pay
+
+                              Rs 300            Rs 150     Rs 450
+
+
+
+       (a)   Tom buys
+
+
+
+                                                          Tom pays
+
+
+
+
+       (b)   Anna buys
+
+
+
+                                                          Anna pays
+
+
+152
+                             Measure
+Activity 5
+
+I cut the notes on pg 163.
+I paste the correct note.
+
+
+(a)
+
+
+
+
+(b)
+
+
+
+
+                                   153
+  Let's work out
+
+  6.   How much money is there in the box?
+
+
+
+
+                                        There are Rs ___________ in all.
+
+
+
+
+  7.   In Mira's purse, there are the following notes and coin.
+
+
+
+
+                                              Rs ________
+
+
+
+                                        She gives Rs 200 to Salim.
+                                        How much money is left? ________
+
+
+
+  8.   Tony has Rs 900. He buys a book at Rs 350.
+       How much money does he have left?
+
+
+
+
+154
+                                                       Measure
+Consider the following example.
+
+
+     Decompose Rs 1000 using 500-rupee notes only.
+
+
+
+
+9.      Look at the above example to complete.
+
+(a)
+                                                      Use 50-rupee notes only.
+
+
+
+
+(b)
+                                  Use 200-rupee notes and 100-rupee notes only.
+
+
+
+
+                                                                                  155
+  Activity: Complete the table
+
+  With the help of your teacher, work in groups to complete the table .
+
+
+   		
+    Number Notes                   Number    Coins           Total amount
+                                                             of money
+
+   (a)    2     25-rupee note        10      1-rupee coin     Rs
+
+   (b)    1     500-rupee note       20      5–rupee coin     Rs
+
+   (c)    1     1000-rupee note       5      10-rupee coin    Rs
+
+   (d)    4     50-rupee note        50      1-rupee coin     Rs
+
+   (e)    5     100-rupee note        4      20-rupee coin   Rs
+
+
+
+
+          IT Corner
+
+
+
+          Use MS Excel
+
+          Prepare a sheet as follows and help the pupils to find
+          out the different ways we can break down the different
+          amounts of money.
+
+
+
+
+156
+                                            Measure
+Activity: Working with cents
+
+    Write the amount shown on each coin.
+
+
+
+
+         Work out the following.
+
+
+                  +                =
+                  +                =
+                  +                =
+                  +                =
+
+                              Note
+
+                             100 c = Rs 1
+
+
+
+                                                  157
+  Activity: Amount of money in all
+
+
+
+
+      How much money is there in all?
+
+
+
+        Group the rupees together.          Group the coins together.
+
+
+
+
+           There are 21 rupees.                There are 70 cents.
+
+
+
+  Thus, there are 21 rupees and 70 cents.
+  Another way to calculate how much money there is in all is as follows:
+
+
+                             20 rupees      20 cents
+                         +
+                              1 rupee       50 cents
+      In all there are       21 rupees      70 cents
+
+
+
+158
+                                                     Measure
+Let's work out
+
+10.   Complete the following.
+
+(a)       60 rupees   50 cents          (b)       150 rupees 50 cents
+      +                                       +
+          35 rupees   20 cents                     25 rupees
+
+
+
+
+(c)       250 rupees 50 cents           (d)       90 rupees    20 cents
+      -                                       -
+           35 rupees 20 cents                     50 rupees    5 cents
+
+
+
+
+11.   Ali has 25 rupees 50c and Sita has 10 rupees 25c.
+      How much money do they have in all?
+
+      Ali has		       ______ rupees ______ cents
+
+      Sita has		      ______ rupees ______ cents
+
+      Total 		        ______ rupees ______ cents
+
+
+
+
+12.   Ruby has 425 rupees 60 cents in her purse.
+      She spends 170 rupees at the shop.
+      How much money does she have left?
+
+
+
+
+                                                                          159
+  Continuous Assessment
+
+ 1.       Write the amount of the missing bank note to make up the larger amount.
+
+
+
+
+ 2.       Arrange the notes in order, starting with the note having the smallest value.
+
+
+
+
+      Start here
+
+
+
+
+ 3.       Work out the following.
+
+
+           (a)       Rs 1 2 5 0                    (b)       Rs     500
+                   + Rs      155                         - Rs 3 2 0
+                     Rs                                      Rs
+
+
+160
+                                                   Measure
+4.   Ali has 160 rupees and Rama has 700 rupees.
+     How much money do they have ?
+
+
+
+
+5.   Rita has a 50-cent coin and gives 20 cents to her brother. How much
+     money does she have left?
+
+
+
+
+6.   Mona has the following notes in her purse:
+
+     • one 200-rupee note
+
+     • two 100-rupee notes
+
+     • two 50-rupee notes
+
+     How much money is there in all in her purse? Rs ________
+
+
+
+
+7.   Stephanie has 545 rupees and she spends 170 rupees at the shop.
+     How much money is left?
+
+
+
+
+                                                                           161
+      Profiling
+
+
+                                Good   Satisfactory   Needs Improvement
+      Identify and use
+      bank notes
+      • 200-rupee note
+      • 500-rupee note
+      • 1000-rupee note
+      Decompose
+      • 200-rupee note
+      • 500-rupee note
+      • 1000-rupee note
+      Identify and use
+      cents
+      Find the total value
+      of notes and coins
+      Add and Subtract
+      money
+      Solve simple word
+      problems involving
+      money
+
+
+
+
+            Teacher's Remarks
+
+
+
+
+162
+Activity 1
+             Measure
+
+
+
+
+Activity 3
+
+
+
+
+Activity 4
+
+
+
+
+Activity 5
+
+
+
+
+                   163
+164
+

@@ -1,0 +1,2794 @@
+[
+  {
+    "book": "B04",
+    "pack": "grade1-maths",
+    "printed_pages": "1-25",
+    "book_topic": "Home: shapes, colours and numbers",
+    "app_chapters": [
+      "g1mth-shapes",
+      "g1mth-numbers",
+      "g1mth-patterns"
+    ],
+    "status": "Partial",
+    "note": "Basic shapes and counting map; explicitly add colour recognition and sorting by one attribute. Book Part 1 stops at 8; app goes to 20."
+  },
+  {
+    "book": "B04",
+    "pack": "grade1-maths",
+    "printed_pages": "26-49",
+    "book_topic": "School: numbers, length and time",
+    "app_chapters": [
+      "g1mth-numbers",
+      "g1mth-measurement"
+    ],
+    "status": "Partial",
+    "note": "Counting and length map. Day/night and morning/afternoon have no explicit Maths syllabus home."
+  },
+  {
+    "book": "B04",
+    "pack": "grade1-maths",
+    "printed_pages": "50-64",
+    "book_topic": "Games: numbers, shapes and patterns",
+    "app_chapters": [
+      "g1mth-numbers",
+      "g1mth-shapes",
+      "g1mth-patterns"
+    ],
+    "status": "Partial",
+    "note": "Repeating patterns map; app adds odd/even and skip-counting beyond the book objectives."
+  },
+  {
+    "book": "B05",
+    "pack": "grade1-maths",
+    "printed_pages": "1-21",
+    "book_topic": "Food: shapes, numbers and mass",
+    "app_chapters": [
+      "g1mth-shapes",
+      "g1mth-numbers",
+      "g1mth-measurement"
+    ],
+    "status": "Partial",
+    "note": "Book works to 10 and compares mass. App extends counting to 20; capacity is not established by this book."
+  },
+  {
+    "book": "B05",
+    "pack": "grade1-maths",
+    "printed_pages": "22-46",
+    "book_topic": "Transport: addition, ordering, ordinals and money",
+    "app_chapters": [
+      "g1mth-addition",
+      "g1mth-numbers"
+    ],
+    "status": "Partial",
+    "note": "Addition to 10 maps; ordinals to fifth and recognising/decomposing coins to Rs 10 are absent from declared topics."
+  },
+  {
+    "book": "B05",
+    "pack": "grade1-maths",
+    "printed_pages": "47-79",
+    "book_topic": "Animals: shapes, numbers and measurement revision",
+    "app_chapters": [
+      "g1mth-shapes",
+      "g1mth-numbers",
+      "g1mth-measurement",
+      "g1mth-patterns"
+    ],
+    "status": "Partial",
+    "note": "Revisits the same basic scope, including time and money. A subtraction chapter is not supported by the book objectives."
+  },
+  {
+    "book": "B11",
+    "pack": "grade2-maths",
+    "printed_pages": "1-19",
+    "book_topic": "Shapes",
+    "app_chapters": [
+      "g2mth-shapes"
+    ],
+    "status": "Partial",
+    "note": "Book teaches four basic 2D shapes and sorting by two attributes. App instead adds right angles, 3D shapes and symmetry; sorting is not explicit."
+  },
+  {
+    "book": "B11",
+    "pack": "grade2-maths",
+    "printed_pages": "20-40",
+    "book_topic": "Eleven to nineteen",
+    "app_chapters": [
+      "g2mth-numbers"
+    ],
+    "status": "Matches",
+    "note": "Counting, reading and writing numbers sit within Numbers to 100."
+  },
+  {
+    "book": "B11",
+    "pack": "grade2-maths",
+    "printed_pages": "41-59",
+    "book_topic": "Length",
+    "app_chapters": [
+      "g2mth-measurement"
+    ],
+    "status": "Partial",
+    "note": "Book emphasises comparing, estimating and measuring with arbitrary units; app specifies centimetres/metres and conversion."
+  },
+  {
+    "book": "B11",
+    "pack": "grade2-maths",
+    "printed_pages": "60-86",
+    "book_topic": "Twenty to one hundred",
+    "app_chapters": [
+      "g2mth-numbers"
+    ],
+    "status": "Matches",
+    "note": "Number range and ordering align. Odd/even is an app extension, not a listed book outcome."
+  },
+  {
+    "book": "B11",
+    "pack": "grade2-maths",
+    "printed_pages": "87-101",
+    "book_topic": "Mass",
+    "app_chapters": [
+      "g2mth-measurement"
+    ],
+    "status": "Partial",
+    "note": "Book uses comparison and arbitrary units; app specifies kilograms."
+  },
+  {
+    "book": "B12",
+    "pack": "grade2-maths",
+    "printed_pages": "1-10",
+    "book_topic": "Ordinal numbers",
+    "app_chapters": [
+      "g2mth-numbers"
+    ],
+    "status": "Missing",
+    "note": "Ordinals first to twelfth are not declared; cardinal ordering is a different skill."
+  },
+  {
+    "book": "B12",
+    "pack": "grade2-maths",
+    "printed_pages": "11-24",
+    "book_topic": "Addition",
+    "app_chapters": [
+      "g2mth-addition"
+    ],
+    "status": "Partial",
+    "note": "Book explicitly says without carrying. App includes regrouping."
+  },
+  {
+    "book": "B12",
+    "pack": "grade2-maths",
+    "printed_pages": "25-43",
+    "book_topic": "Subtraction",
+    "app_chapters": [
+      "g2mth-subtraction"
+    ],
+    "status": "Partial",
+    "note": "Book explicitly says without borrowing. App includes regrouping."
+  },
+  {
+    "book": "B12",
+    "pack": "grade2-maths",
+    "printed_pages": "44-53",
+    "book_topic": "Capacity",
+    "app_chapters": [
+      "g2mth-measurement"
+    ],
+    "status": "Partial",
+    "note": "Book uses arbitrary units, comparison and estimation; app teaches litres."
+  },
+  {
+    "book": "B12",
+    "pack": "grade2-maths",
+    "printed_pages": "54-70",
+    "book_topic": "Time",
+    "app_chapters": [
+      "g2mth-time"
+    ],
+    "status": "Partial",
+    "note": "Days/months and whole hours align; half past is beyond the book's stated nearest-hour outcome."
+  },
+  {
+    "book": "B12",
+    "pack": "grade2-maths",
+    "printed_pages": "71-82",
+    "book_topic": "Multiplication",
+    "app_chapters": [
+      "g2mth-multiplication"
+    ],
+    "status": "Partial",
+    "note": "Repeated addition and the 2 table align. Book scope is within 20; app adds 5 and 10 tables."
+  },
+  {
+    "book": "B12",
+    "pack": "grade2-maths",
+    "printed_pages": "83-102",
+    "book_topic": "Money",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Recognise/decompose coins and notes, shop and total values up to Rs 100."
+  },
+  {
+    "book": "B12",
+    "pack": "grade2-maths",
+    "printed_pages": "103-113",
+    "book_topic": "Division",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Sharing/dividing numbers up to 20 by 2 has no chapter or subsection."
+  },
+  {
+    "book": "B21",
+    "pack": "grade3-maths",
+    "printed_pages": "1-13",
+    "book_topic": "Shapes",
+    "app_chapters": [
+      "g3mth-geometry"
+    ],
+    "status": "Partial",
+    "note": "Basic 2D shapes map. App adds 3D shapes, angle types, symmetry and area beyond the stated book objectives."
+  },
+  {
+    "book": "B21",
+    "pack": "grade3-maths",
+    "printed_pages": "14-22",
+    "book_topic": "Pictograms",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Read, interpret and create pictograms, including ICT-supported pictograms."
+  },
+  {
+    "book": "B21",
+    "pack": "grade3-maths",
+    "printed_pages": "23-50",
+    "book_topic": "Numbers 0 to 1000",
+    "app_chapters": [
+      "g3mth-numbers"
+    ],
+    "status": "Partial",
+    "note": "Range and ordering align. Add the book's number-pattern objective explicitly; rounding is an app extension."
+  },
+  {
+    "book": "B21",
+    "pack": "grade3-maths",
+    "printed_pages": "51-62",
+    "book_topic": "Abacus",
+    "app_chapters": [
+      "g3mth-numbers"
+    ],
+    "status": "Partial",
+    "note": "Place value aligns but representing two/three-digit numbers on an abacus is not explicit."
+  },
+  {
+    "book": "B21",
+    "pack": "grade3-maths",
+    "printed_pages": "63-87",
+    "book_topic": "Addition",
+    "app_chapters": [
+      "g3mth-addition"
+    ],
+    "status": "Matches",
+    "note": "Two/three-digit addition, carrying and word problems align at declared scope."
+  },
+  {
+    "book": "B21",
+    "pack": "grade3-maths",
+    "printed_pages": "88-104",
+    "book_topic": "Mass",
+    "app_chapters": [
+      "g3mth-measurement"
+    ],
+    "status": "Partial",
+    "note": "kg/g aligns; estimation, comparing, measuring and contextual problems deserve explicit outcomes, beyond conversion alone."
+  },
+  {
+    "book": "B21",
+    "pack": "grade3-maths",
+    "printed_pages": "105-130",
+    "book_topic": "Subtraction",
+    "app_chapters": [
+      "g3mth-subtraction"
+    ],
+    "status": "Matches",
+    "note": "Two/three-digit subtraction, borrowing and word problems align at declared scope."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "1-18",
+    "book_topic": "Capacity",
+    "app_chapters": [
+      "g3mth-measurement"
+    ],
+    "status": "Partial",
+    "note": "Book uses L/cL; app uses L/ml. Add centilitres and practical estimation/measurement."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "19-32",
+    "book_topic": "Ordinal numbers",
+    "app_chapters": [
+      "g3mth-numbers"
+    ],
+    "status": "Missing",
+    "note": "First to twentieth is not specified."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "33-40",
+    "book_topic": "Roman numerals",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Read and write Roman numerals up to XX."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "41-66",
+    "book_topic": "Multiplication",
+    "app_chapters": [
+      "g3mth-multiplication"
+    ],
+    "status": "Partial",
+    "note": "Book multiplies 0-10 by 2, 3, 4 and 5. App requires tables 2-10 and two-digit by one-digit multiplication."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "67-86",
+    "book_topic": "Length",
+    "app_chapters": [
+      "g3mth-measurement"
+    ],
+    "status": "Partial",
+    "note": "m/cm aligns; practical measurement and word problems should be explicit. Perimeter is additional app scope."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "87-100",
+    "book_topic": "Fractions",
+    "app_chapters": [
+      "g3mth-fractions"
+    ],
+    "status": "Partial",
+    "note": "Halves, thirds and quarters map. App adds three-quarters, ordering and equivalent fractions beyond listed book outcomes."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "101-119",
+    "book_topic": "Time",
+    "app_chapters": [
+      "g3mth-time"
+    ],
+    "status": "Partial",
+    "note": "Book specifies hour, half-hour, quarter-hour and a.m./p.m.; app goes to five-minute precision and elapsed time."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "120-141",
+    "book_topic": "Division",
+    "app_chapters": [
+      "g3mth-division"
+    ],
+    "status": "Partial",
+    "note": "Division by 2, 3, 4 and 5 aligns; division by 10 is an extension."
+  },
+  {
+    "book": "B20",
+    "pack": "grade3-maths",
+    "printed_pages": "142-163",
+    "book_topic": "Money",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Coins/notes up to Rs 1000 and contextual money problems are not declared."
+  },
+  {
+    "book": "B06",
+    "pack": "grade1-english",
+    "printed_pages": "1-26",
+    "book_topic": "Getting started",
+    "app_chapters": [
+      "g1eng-listening",
+      "g1eng-speaking",
+      "g1eng-reading",
+      "g1eng-writing",
+      "g1eng-grammar",
+      "g1eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Alphabet and writing letters map; add an explicit colour-vocabulary list. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B06",
+    "pack": "grade1-english",
+    "printed_pages": "27-62",
+    "book_topic": "Meet Ben",
+    "app_chapters": [
+      "g1eng-listening",
+      "g1eng-speaking",
+      "g1eng-reading",
+      "g1eng-writing",
+      "g1eng-grammar",
+      "g1eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Greetings, family, home and simple oral responses fit the skill strands. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B06",
+    "pack": "grade1-english",
+    "printed_pages": "63-98",
+    "book_topic": "At school",
+    "app_chapters": [
+      "g1eng-listening",
+      "g1eng-speaking",
+      "g1eng-reading",
+      "g1eng-writing",
+      "g1eng-grammar",
+      "g1eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. School vocabulary and classroom instructions fit, but the thematic vocabulary is unspecified. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B06",
+    "pack": "grade1-english",
+    "printed_pages": "99-139",
+    "book_topic": "It’s playtime",
+    "app_chapters": [
+      "g1eng-listening",
+      "g1eng-speaking",
+      "g1eng-reading",
+      "g1eng-writing",
+      "g1eng-grammar",
+      "g1eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. I/you and who are explicit in the book but absent from the declared grammar subtopics. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B07",
+    "pack": "grade1-english",
+    "printed_pages": "1-48",
+    "book_topic": "Food, delicious food",
+    "app_chapters": [
+      "g1eng-listening",
+      "g1eng-speaking",
+      "g1eng-reading",
+      "g1eng-writing",
+      "g1eng-grammar",
+      "g1eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. What and he/she require explicit grammar outcomes. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B07",
+    "pack": "grade1-english",
+    "printed_pages": "49-94",
+    "book_topic": "Moving around",
+    "app_chapters": [
+      "g1eng-listening",
+      "g1eng-speaking",
+      "g1eng-reading",
+      "g1eng-writing",
+      "g1eng-grammar",
+      "g1eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. In/on/under, where and we/they are not explicit grammar outcomes. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B07",
+    "pack": "grade1-english",
+    "printed_pages": "95-134",
+    "book_topic": "Animals",
+    "app_chapters": [
+      "g1eng-listening",
+      "g1eng-speaking",
+      "g1eng-reading",
+      "g1eng-writing",
+      "g1eng-grammar",
+      "g1eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. In front of/behind and plural -s are not explicit grammar outcomes. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B14",
+    "pack": "grade2-english",
+    "printed_pages": "1-24",
+    "book_topic": "Back to School",
+    "app_chapters": [
+      "g2eng-listening",
+      "g2eng-speaking",
+      "g2eng-reading",
+      "g2eng-writing",
+      "g2eng-grammar",
+      "g2eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Articles, pronouns and punctuation partly align; retain the book-specific structures. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B14",
+    "pack": "grade2-english",
+    "printed_pages": "25-48",
+    "book_topic": "Celebrations",
+    "app_chapters": [
+      "g2eng-listening",
+      "g2eng-speaking",
+      "g2eng-reading",
+      "g2eng-writing",
+      "g2eng-grammar",
+      "g2eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Possessive adjectives, gender and present continuous are not explicit. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B14",
+    "pack": "grade2-english",
+    "printed_pages": "49-72",
+    "book_topic": "Animals",
+    "app_chapters": [
+      "g2eng-listening",
+      "g2eng-speaking",
+      "g2eng-reading",
+      "g2eng-writing",
+      "g2eng-grammar",
+      "g2eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Present continuous, possessives, prepositions and plural forms are not explicit. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B14",
+    "pack": "grade2-english",
+    "printed_pages": "73-99",
+    "book_topic": "Being kind to one another",
+    "app_chapters": [
+      "g2eng-listening",
+      "g2eng-speaking",
+      "g2eng-reading",
+      "g2eng-writing",
+      "g2eng-grammar",
+      "g2eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Prepositions, opposites and conjunction and need explicit coverage. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B13",
+    "pack": "grade2-english",
+    "printed_pages": "1-23",
+    "book_topic": "Travel and journeys",
+    "app_chapters": [
+      "g2eng-listening",
+      "g2eng-speaking",
+      "g2eng-reading",
+      "g2eng-writing",
+      "g2eng-grammar",
+      "g2eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Question words and opposites are not explicit; add postcard writing. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B13",
+    "pack": "grade2-english",
+    "printed_pages": "25-49",
+    "book_topic": "Pets",
+    "app_chapters": [
+      "g2eng-listening",
+      "g2eng-speaking",
+      "g2eng-reading",
+      "g2eng-writing",
+      "g2eng-grammar",
+      "g2eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Can/cannot and possessive adjectives need explicit grammar outcomes. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B13",
+    "pack": "grade2-english",
+    "printed_pages": "51-78",
+    "book_topic": "Gardening",
+    "app_chapters": [
+      "g2eng-listening",
+      "g2eng-speaking",
+      "g2eng-reading",
+      "g2eng-writing",
+      "g2eng-grammar",
+      "g2eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Future tense, a/an and plural forms exceed the app’s generic action-word specification. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B13",
+    "pack": "grade2-english",
+    "printed_pages": "79-107",
+    "book_topic": "A world of dreams and magic",
+    "app_chapters": [
+      "g2eng-listening",
+      "g2eng-speaking",
+      "g2eng-reading",
+      "g2eng-writing",
+      "g2eng-grammar",
+      "g2eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Affirmative/negative forms and what/when are not explicit. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B15",
+    "pack": "grade3-english",
+    "printed_pages": "1-24",
+    "book_topic": "Welcome to Standard 3",
+    "app_chapters": [
+      "g3eng-listening",
+      "g3eng-speaking",
+      "g3eng-reading",
+      "g3eng-writing",
+      "g3eng-grammar",
+      "g3eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Present continuous and possessive adjectives are not specified; add the letter-writing format. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B15",
+    "pack": "grade3-english",
+    "printed_pages": "25-44",
+    "book_topic": "Food",
+    "app_chapters": [
+      "g3eng-listening",
+      "g3eng-speaking",
+      "g3eng-reading",
+      "g3eng-writing",
+      "g3eng-grammar",
+      "g3eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Articles, affirmative/negative forms and question forms are hidden under general grammar; add recipe writing. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B15",
+    "pack": "grade3-english",
+    "printed_pages": "45-72",
+    "book_topic": "My Country",
+    "app_chapters": [
+      "g3eng-listening",
+      "g3eng-speaking",
+      "g3eng-reading",
+      "g3eng-writing",
+      "g3eng-grammar",
+      "g3eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Plural -s/-es/-ies and and/but/or need explicit outcomes. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B15",
+    "pack": "grade3-english",
+    "printed_pages": "73-98",
+    "book_topic": "Jobs",
+    "app_chapters": [
+      "g3eng-listening",
+      "g3eng-speaking",
+      "g3eng-reading",
+      "g3eng-writing",
+      "g3eng-grammar",
+      "g3eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Future tense and commas map; countability and irregular plurals are not explicit. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B16",
+    "pack": "grade3-english",
+    "printed_pages": "1-30",
+    "book_topic": "Superheroes",
+    "app_chapters": [
+      "g3eng-listening",
+      "g3eng-speaking",
+      "g3eng-reading",
+      "g3eng-writing",
+      "g3eng-grammar",
+      "g3eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Simple past partly maps; prepositions and telling time in language contexts are not explicit. Add the short newspaper-article format. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B16",
+    "pack": "grade3-english",
+    "printed_pages": "31-56",
+    "book_topic": "Nature and the Environment",
+    "app_chapters": [
+      "g3eng-listening",
+      "g3eng-speaking",
+      "g3eng-reading",
+      "g3eng-writing",
+      "g3eng-grammar",
+      "g3eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Do/does negatives, gender and possessive pronouns are not explicit. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B16",
+    "pack": "grade3-english",
+    "printed_pages": "57-84",
+    "book_topic": "Travelling the World",
+    "app_chapters": [
+      "g3eng-listening",
+      "g3eng-speaking",
+      "g3eng-reading",
+      "g3eng-writing",
+      "g3eng-grammar",
+      "g3eng-phonics"
+    ],
+    "status": "Partial",
+    "note": "Skill strands map across each theme. Past irregular verbs map; comparative adjectives and postcard writing need explicit coverage. Phonics needs a book-specific sound inventory; generic strand titles do not prove every sound is covered."
+  },
+  {
+    "book": "B01",
+    "pack": "grade1-french",
+    "printed_pages": "1-26",
+    "book_topic": "La maison",
+    "app_chapters": [
+      "g1fr-comprehension-orale",
+      "g1fr-expression-orale",
+      "g1fr-lecture",
+      "g1fr-ecriture",
+      "g1fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Proper nouns (pp.13-15) are absent from the common-noun-only grammar subsection."
+  },
+  {
+    "book": "B01",
+    "pack": "grade1-french",
+    "printed_pages": "27-54",
+    "book_topic": "Mon école",
+    "app_chapters": [
+      "g1fr-comprehension-orale",
+      "g1fr-expression-orale",
+      "g1fr-lecture",
+      "g1fr-ecriture",
+      "g1fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Common nouns map; school vocabulary and the named sounds require a checklist."
+  },
+  {
+    "book": "B01",
+    "pack": "grade1-french",
+    "printed_pages": "55-80",
+    "book_topic": "Les jeux",
+    "app_chapters": [
+      "g1fr-comprehension-orale",
+      "g1fr-expression-orale",
+      "g1fr-lecture",
+      "g1fr-ecriture",
+      "g1fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Singular/plural number (pp.68-70) is not explicit."
+  },
+  {
+    "book": "B02",
+    "pack": "grade1-french",
+    "printed_pages": "1-30",
+    "book_topic": "Les aliments",
+    "app_chapters": [
+      "g1fr-comprehension-orale",
+      "g1fr-expression-orale",
+      "g1fr-lecture",
+      "g1fr-ecriture",
+      "g1fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Articles partly map; check both definite and indefinite forms."
+  },
+  {
+    "book": "B02",
+    "pack": "grade1-french",
+    "printed_pages": "31-60",
+    "book_topic": "Les transports",
+    "app_chapters": [
+      "g1fr-comprehension-orale",
+      "g1fr-expression-orale",
+      "g1fr-lecture",
+      "g1fr-ecriture",
+      "g1fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Adjectives (pp.47-50) are not a declared grammar subsection."
+  },
+  {
+    "book": "B02",
+    "pack": "grade1-french",
+    "printed_pages": "61-88",
+    "book_topic": "Les animaux",
+    "app_chapters": [
+      "g1fr-comprehension-orale",
+      "g1fr-expression-orale",
+      "g1fr-lecture",
+      "g1fr-ecriture",
+      "g1fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Gender has some support in grammar notes; animal vocabulary and the full sound sequence remain unspecified."
+  },
+  {
+    "book": "B08",
+    "pack": "grade2-french",
+    "printed_pages": "1-32",
+    "book_topic": "Mes amis",
+    "app_chapters": [
+      "g2fr-comprehension-orale",
+      "g2fr-expression-orale",
+      "g2fr-lecture",
+      "g2fr-ecriture",
+      "g2fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Number/singular-plural is not explicit in grammar."
+  },
+  {
+    "book": "B08",
+    "pack": "grade2-french",
+    "printed_pages": "33-62",
+    "book_topic": "Les fêtes",
+    "app_chapters": [
+      "g2fr-comprehension-orale",
+      "g2fr-expression-orale",
+      "g2fr-lecture",
+      "g2fr-ecriture",
+      "g2fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Prepositions taught on pp.46-49 have no explicit subsection; the contents page prints an overlapping 46-59 range."
+  },
+  {
+    "book": "B08",
+    "pack": "grade2-french",
+    "printed_pages": "63-94",
+    "book_topic": "Les voyages",
+    "app_chapters": [
+      "g2fr-comprehension-orale",
+      "g2fr-expression-orale",
+      "g2fr-lecture",
+      "g2fr-ecriture",
+      "g2fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Noun groups have a partial home in noun/determiner and adjectives, but need an explicit combined outcome."
+  },
+  {
+    "book": "B09",
+    "pack": "grade2-french",
+    "printed_pages": "1-42",
+    "book_topic": "Le jardin",
+    "app_chapters": [
+      "g2fr-comprehension-orale",
+      "g2fr-expression-orale",
+      "g2fr-lecture",
+      "g2fr-ecriture",
+      "g2fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Sentence types (declarative/interrogative/exclamative) need explicit coverage beyond punctuation."
+  },
+  {
+    "book": "B09",
+    "pack": "grade2-french",
+    "printed_pages": "43-78",
+    "book_topic": "Les saisons",
+    "app_chapters": [
+      "g2fr-comprehension-orale",
+      "g2fr-expression-orale",
+      "g2fr-lecture",
+      "g2fr-ecriture",
+      "g2fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Personal pronouns on pp.56-61 are not a declared grammar subsection."
+  },
+  {
+    "book": "B09",
+    "pack": "grade2-french",
+    "printed_pages": "79-116",
+    "book_topic": "La bande dessinée",
+    "app_chapters": [
+      "g2fr-comprehension-orale",
+      "g2fr-expression-orale",
+      "g2fr-lecture",
+      "g2fr-ecriture",
+      "g2fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Adjectives and feminine agreement map; comic panels/bubbles and the sound contrasts need explicit outcomes. This sixth theme is on the second contents page."
+  },
+  {
+    "book": "B17",
+    "pack": "grade3-french",
+    "printed_pages": "1-27",
+    "book_topic": "C’est la rentrée !",
+    "app_chapters": [
+      "g3fr-comprehension-orale",
+      "g3fr-expression-orale",
+      "g3fr-lecture",
+      "g3fr-ecriture",
+      "g3fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Time reference, capitals and punctuation align at broad scope."
+  },
+  {
+    "book": "B17",
+    "pack": "grade3-french",
+    "printed_pages": "29-63",
+    "book_topic": "À la bibliothèque de l’école",
+    "app_chapters": [
+      "g3fr-comprehension-orale",
+      "g3fr-expression-orale",
+      "g3fr-lecture",
+      "g3fr-ecriture",
+      "g3fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Negation maps; explicitly name être/avoir forms and c/ç spelling."
+  },
+  {
+    "book": "B17",
+    "pack": "grade3-french",
+    "printed_pages": "65-98",
+    "book_topic": "Ma localité",
+    "app_chapters": [
+      "g3fr-comprehension-orale",
+      "g3fr-expression-orale",
+      "g3fr-lecture",
+      "g3fr-ecriture",
+      "g3fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Present tense and interrogative sentences map; the sound-cluster sequence is unspecified."
+  },
+  {
+    "book": "B18",
+    "pack": "grade3-french",
+    "printed_pages": "1-40",
+    "book_topic": "Kenzo à Rodrigues",
+    "app_chapters": [
+      "g3fr-comprehension-orale",
+      "g3fr-expression-orale",
+      "g3fr-lecture",
+      "g3fr-ecriture",
+      "g3fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Passé composé maps; possessive adjectives do not have an explicit outcome."
+  },
+  {
+    "book": "B18",
+    "pack": "grade3-french",
+    "printed_pages": "41-81",
+    "book_topic": "Protégeons la nature",
+    "app_chapters": [
+      "g3fr-comprehension-orale",
+      "g3fr-expression-orale",
+      "g3fr-lecture",
+      "g3fr-ecriture",
+      "g3fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Future forms partly map; plural common nouns, synonyms, antonyms and word families need explicit coverage."
+  },
+  {
+    "book": "B18",
+    "pack": "grade3-french",
+    "printed_pages": "83-118",
+    "book_topic": "Quand je serai grand…",
+    "app_chapters": [
+      "g3fr-comprehension-orale",
+      "g3fr-expression-orale",
+      "g3fr-lecture",
+      "g3fr-ecriture",
+      "g3fr-grammaire"
+    ],
+    "status": "Partial",
+    "note": "Themes distribute across the five skill/grammar strands. Future and adjective agreement map; specify first-group verbs and -ail/-aille/-eil/-eille spelling."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 1: Personal Hygiene",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 2: My Teeth",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 3: Hand Washing",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 4: Coughing and Sneezing",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 5: Eat a variety of foods",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 6: Meals of the day",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 7: Food I eat for breakfast, lunch and dinner",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 8: Healthy and less healthy foods",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 9: Healthy snacks",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 10: Eat clean and safe foods",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 11: Keeping Safe at School (Outdoors)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 12: Keeping Safe at School (Indoors)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B03",
+    "pack": "grade1-health",
+    "printed_pages": "Contents: PDF 7",
+    "book_topic": "Lesson 13: Identifying dangers in the environment",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "1",
+    "book_topic": "Lesson 1: Good grooming",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "7",
+    "book_topic": "Lesson 2: Dental Care",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "12",
+    "book_topic": "Lesson 3: Hand washing: caring for my hands and nails",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "16",
+    "book_topic": "Lesson 4: Importance of eating",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "20",
+    "book_topic": "Lesson 5: Eat a variety of foods",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "22",
+    "book_topic": "Lesson 6: Sources of food",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "24",
+    "book_topic": "Lesson 7: Breakfast",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "28",
+    "book_topic": "Lesson 8: Lunch",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "29",
+    "book_topic": "Lesson 9: Dinner",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "32",
+    "book_topic": "Lesson 10: Snacks",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "35",
+    "book_topic": "Lesson 11: Safety in the kitchen",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "37",
+    "book_topic": "Lesson 12: Safety in the bedroom",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "38",
+    "book_topic": "Lesson 13: Safety in the living room",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "40",
+    "book_topic": "Lesson 14: Safety on stairs, windows and doors",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B10",
+    "pack": "grade2-health",
+    "printed_pages": "41",
+    "book_topic": "Lesson 15: Safety in the bathroom",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "1",
+    "book_topic": "Lesson 1: Personal hygiene: daily shower",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "5",
+    "book_topic": "Lesson 2: Personal hygiene: hand washing",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "9",
+    "book_topic": "Lesson 3: Personal hygiene: dental care (1)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "13",
+    "book_topic": "Lesson 4: Personal hygiene: dental care (2)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "16",
+    "book_topic": "Lesson 5: Main meals and snacks",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "19",
+    "book_topic": "Lesson 6: The three food groups",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "21",
+    "book_topic": "Lesson 7: Importance of water",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "23",
+    "book_topic": "Lesson 8: Food for energy (1)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "25",
+    "book_topic": "Lesson 9: Food for energy (2)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "26",
+    "book_topic": "Lesson 10: Food for growth (1)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "32",
+    "book_topic": "Lesson 11: Food for growth (2)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "33",
+    "book_topic": "Lesson 12: Food for health (1)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B19",
+    "pack": "grade3-health",
+    "printed_pages": "35",
+    "book_topic": "Lesson 13: Food for health (2)",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "The app pack has only Sample Chapter and comingSoon=true; no substantive health syllabus is declared."
+  },
+  {
+    "book": "B22",
+    "pack": "grade3-ssee",
+    "printed_pages": "1-26",
+    "book_topic": "Looking at our Environment",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No Grade 3 SSEE, science or social-studies pack."
+  },
+  {
+    "book": "B22",
+    "pack": "grade3-ssee",
+    "printed_pages": "27-63",
+    "book_topic": "Myself and My Family",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Language themes about family do not declare these SSEE learning objectives."
+  },
+  {
+    "book": "B22",
+    "pack": "grade3-ssee",
+    "printed_pages": "65-92",
+    "book_topic": "Our Natural Environment",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No subject-level destination for the environmental content."
+  },
+  {
+    "book": "B22",
+    "pack": "grade3-ssee",
+    "printed_pages": "93-124",
+    "book_topic": "Living and Non-living Things",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No subject-level destination for life-science concepts."
+  },
+  {
+    "book": "B23",
+    "pack": "grade3-ssee",
+    "printed_pages": "1-32",
+    "book_topic": "My locality",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No subject-level destination for locality, services and map work."
+  },
+  {
+    "book": "B23",
+    "pack": "grade3-ssee",
+    "printed_pages": "33-61",
+    "book_topic": "Air around us",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No subject-level destination for the science investigations."
+  },
+  {
+    "book": "B23",
+    "pack": "grade3-ssee",
+    "printed_pages": "62-88",
+    "book_topic": "Learning about water",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No subject-level destination for water concepts and investigations."
+  },
+  {
+    "book": "B23",
+    "pack": "grade3-ssee",
+    "printed_pages": "89-116",
+    "book_topic": "Our weather",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No subject-level destination for the weather content."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "1-12",
+    "book_topic": "1. Numbers, Factors and Multiples",
+    "app_chapters": [
+      "g7m-integers",
+      "g7m-factors",
+      "g7m-indices"
+    ],
+    "status": "Partial",
+    "note": "Number types and prime factorisation map; explicitly add HCF/LCM of two or three numbers and word problems."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "13-31",
+    "book_topic": "2. Integers",
+    "app_chapters": [
+      "g7m-integers"
+    ],
+    "status": "Partial",
+    "note": "Signed numbers and arithmetic align; square roots of square numbers are not explicit."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "32-39",
+    "book_topic": "3. Order of operations",
+    "app_chapters": [
+      "g7m-operations"
+    ],
+    "status": "Matches",
+    "note": "BODMAS and commutative/associative/distributive properties align."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "40-65",
+    "book_topic": "4. Fractions and decimals",
+    "app_chapters": [
+      "g7m-fractions"
+    ],
+    "status": "Matches",
+    "note": "Types, ordering, conversion and four operations align at broad scope."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "66-83",
+    "book_topic": "5. Angles",
+    "app_chapters": [
+      "g7m-polygons",
+      "g7m-constructions"
+    ],
+    "status": "Partial",
+    "note": "Construction and polygon angles cover only part. Complementary/supplementary, vertically opposite, corresponding, alternate and co-interior angle rules are absent."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "84-95",
+    "book_topic": "6. Polygons",
+    "app_chapters": [
+      "g7m-polygons"
+    ],
+    "status": "Matches",
+    "note": "Triangles, quadrilaterals, classification and angle calculations align."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "96-116",
+    "book_topic": "7. Length, Perimeter and Area",
+    "app_chapters": [
+      "g7m-length",
+      "g7m-area"
+    ],
+    "status": "Matches",
+    "note": "One book chapter is legitimately split into two app chapters."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "117-123",
+    "book_topic": "8. Percentage",
+    "app_chapters": [
+      "g7m-percentages"
+    ],
+    "status": "Matches",
+    "note": "Percentage conversions and contextual calculations align."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "124-131",
+    "book_topic": "9. Ratio and Proportion",
+    "app_chapters": [
+      "g7m-ratio"
+    ],
+    "status": "Matches",
+    "note": "Ratio and direct proportion align."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "132-137",
+    "book_topic": "10. Indices",
+    "app_chapters": [
+      "g7m-indices"
+    ],
+    "status": "Partial",
+    "note": "Book teaches multiplication/division/power laws and zero index; app specifies notation, evaluation and prime-factor index form only."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "138-145",
+    "book_topic": "11. Money",
+    "app_chapters": [
+      "g7m-money"
+    ],
+    "status": "Matches",
+    "note": "Money and currency conversion align; profit/loss/discount are additional app scope relative to this chapter."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "146-154",
+    "book_topic": "12. Time",
+    "app_chapters": [
+      "g7m-time"
+    ],
+    "status": "Partial",
+    "note": "12/24-hour notation and conversions map; GMT/time-zone problems are not explicit."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "155-163",
+    "book_topic": "13. Speed",
+    "app_chapters": [
+      "g7m-speed"
+    ],
+    "status": "Matches",
+    "note": "Average speed and unit conversions align."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "164-169",
+    "book_topic": "14. Mass",
+    "app_chapters": [
+      "g7m-mass"
+    ],
+    "status": "Matches",
+    "note": "mg/g/kg/tonnes, conversions and operations align."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "170-186",
+    "book_topic": "15. Algebraic expressions and algebraic equations",
+    "app_chapters": [
+      "g7m-algebra",
+      "g7m-equations"
+    ],
+    "status": "Partial",
+    "note": "Basic expressions/equations map. Add expansion, multiplication/division of algebraic terms and fractions with numerical denominators."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "187-193",
+    "book_topic": "16. Patterns and Sequences",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No Grade 7 sequence topic; listing triangular/square numbers is not the same as completing number/figure patterns."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "194-206",
+    "book_topic": "17. Coordinates",
+    "app_chapters": [
+      "g7m-coordinates"
+    ],
+    "status": "Partial",
+    "note": "Plotting maps; x=h/y=k lines and their intersections are not explicit."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "207-220",
+    "book_topic": "18. Symmetry",
+    "app_chapters": [
+      "g7m-symmetry"
+    ],
+    "status": "Matches",
+    "note": "Line symmetry aligns. Rotational symmetry is extra relative to this chapter."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "221-228",
+    "book_topic": "19. Geometrical Constructions",
+    "app_chapters": [
+      "g7m-constructions"
+    ],
+    "status": "Partial",
+    "note": "Largely aligned; explicitly name perpendicular bisector of a segment, not only perpendicular lines."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "229-239",
+    "book_topic": "20. Reflection",
+    "app_chapters": [
+      "g7m-transformation"
+    ],
+    "status": "Matches",
+    "note": "Reflection maps; translation/congruence should be marked as extensions unless separately sourced."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "240-256",
+    "book_topic": "21. Sets",
+    "app_chapters": [
+      "g7m-sets"
+    ],
+    "status": "Partial",
+    "note": "Notation and Venn diagrams map; cardinality, union/intersection and shading regions need explicit outcomes."
+  },
+  {
+    "book": "B28",
+    "pack": "grade7-maths",
+    "printed_pages": "257-269",
+    "book_topic": "22. Statistics",
+    "app_chapters": [
+      "g7m-statistics"
+    ],
+    "status": "Matches",
+    "note": "Tables, pictograms and bar charts align. Statistical mean is not a listed book outcome here."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "1-7",
+    "book_topic": "1. Number Sequences",
+    "app_chapters": [
+      "g8m-sequences"
+    ],
+    "status": "Partial",
+    "note": "Book specifically teaches Fibonacci and ordered-pair sequences; app does not name either."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "8-25",
+    "book_topic": "2. Indices",
+    "app_chapters": [
+      "g8m-indices"
+    ],
+    "status": "Partial",
+    "note": "Laws and roots overlap; explicitly add negative and unit-fractional indices, beyond whole-number index notation."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "26-41",
+    "book_topic": "3. Real Numbers",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Rational/irrational numbers, recurring decimals, real number line and decimal-place approximation have no declared chapter."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "42-52",
+    "book_topic": "4. Rate and Proportion",
+    "app_chapters": [
+      "g8m-rate"
+    ],
+    "status": "Partial",
+    "note": "Book advances to scale problems and indirect/inverse proportion; app specifies direct proportion."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "53-71",
+    "book_topic": "5. Personal and Household Finance",
+    "app_chapters": [
+      "g8m-finance"
+    ],
+    "status": "Partial",
+    "note": "Simple interest/profit/loss/discount align; commission and percentage increase/decrease need explicit outcomes."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "72-86",
+    "book_topic": "6. Coordinates",
+    "app_chapters": [
+      "g8m-coordinates"
+    ],
+    "status": "Partial",
+    "note": "Linear plotting aligns. Add graphical intersections; coordinate midpoint is not a listed chapter outcome."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "87-98",
+    "book_topic": "7. Pythagoras Theorem",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Use the theorem to find an unknown side of a right triangle."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "99-108",
+    "book_topic": "8. HCF of Algebraic Terms and Factorisation",
+    "app_chapters": [
+      "g8m-algebra"
+    ],
+    "status": "Partial",
+    "note": "Generic factorisation overlaps; HCF of terms and factorisation by grouping need explicit coverage."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "109-121",
+    "book_topic": "9. LCM of Algebraic Terms and Algebraic Fractions",
+    "app_chapters": [
+      "g8m-algebra"
+    ],
+    "status": "Partial",
+    "note": "Simplifying fractions overlaps; LCM and four operations on algebraic fractions are not specified."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "122-150",
+    "book_topic": "10. Statistics",
+    "app_chapters": [
+      "g8m-statistics"
+    ],
+    "status": "Matches",
+    "note": "Pie charts and mean/median/mode align at declared scope."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "151-164",
+    "book_topic": "11. Algebraic Equations",
+    "app_chapters": [
+      "g8m-algebra"
+    ],
+    "status": "Partial",
+    "note": "App mentions equations with brackets, but has no equation subsection and omits the book's rational coefficients and algebraic-fraction equations."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "165-179",
+    "book_topic": "12. Inequalities",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Linear inequalities, their solutions and number-line representation."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "180-195",
+    "book_topic": "13. Surface Area and Volume",
+    "app_chapters": [
+      "g8m-surface-area",
+      "g8m-volume"
+    ],
+    "status": "Matches",
+    "note": "Cube/cuboid nets, area and volume align through two app chapters. General non-rectangular prisms are not established here."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "196-229",
+    "book_topic": "14. Circle",
+    "app_chapters": [
+      "g8m-circles"
+    ],
+    "status": "Partial",
+    "note": "Basic circumference/area align; arcs, sectors, chord calculations and sector perimeter/area are not explicit."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "230-244",
+    "book_topic": "15. Polygons",
+    "app_chapters": [
+      "g8m-polygons"
+    ],
+    "status": "Matches",
+    "note": "Interior/exterior angle sums and regular polygons align."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "245-253",
+    "book_topic": "16. Sets",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Two-set survey problems, union/intersection/complement and cardinality."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "254-266",
+    "book_topic": "17. Construction of triangles",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Construct equilateral/isosceles triangles, triangles from three sides or one side and two angles."
+  },
+  {
+    "book": "B24",
+    "pack": "grade7-english",
+    "printed_pages": "1-23",
+    "book_topic": "Entertainment",
+    "app_chapters": [
+      "g7eng-listening",
+      "g7eng-speaking",
+      "g7eng-reading",
+      "g7eng-writing",
+      "g7eng-gr-verbs",
+      "g7eng-gr-nouns",
+      "g7eng-gr-prepositions"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Countability, tenses and prepositions overlap. Application forms, comic writing and /th/ pronunciation are not explicit outcomes."
+  },
+  {
+    "book": "B24",
+    "pack": "grade7-english",
+    "printed_pages": "25-46",
+    "book_topic": "Going Green",
+    "app_chapters": [
+      "g7eng-listening",
+      "g7eng-speaking",
+      "g7eng-reading",
+      "g7eng-writing",
+      "g7eng-gr-verbs",
+      "g7eng-gr-prepositions",
+      "g7eng-gr-punctuation"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Continuous tenses are hidden under generic verb tenses; homonyms and named narrative/poster formats are not explicit."
+  },
+  {
+    "book": "B24",
+    "pack": "grade7-english",
+    "printed_pages": "47-69",
+    "book_topic": "Caring for Animals",
+    "app_chapters": [
+      "g7eng-listening",
+      "g7eng-speaking",
+      "g7eng-reading",
+      "g7eng-writing",
+      "g7eng-gr-pronouns",
+      "g7eng-gr-nouns",
+      "g7eng-gr-verbs"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Indefinite pronouns and forming nouns from verbs are not declared. Present perfect is only implicit in main tenses."
+  },
+  {
+    "book": "B24",
+    "pack": "grade7-english",
+    "printed_pages": "71-100",
+    "book_topic": "Log on!",
+    "app_chapters": [
+      "g7eng-listening",
+      "g7eng-speaking",
+      "g7eng-reading",
+      "g7eng-writing",
+      "g7eng-gr-verbs",
+      "g7eng-gr-adjectives",
+      "g7eng-gr-sentence"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Adjective formation maps; past perfect, diary entries and email format need explicit outcomes."
+  },
+  {
+    "book": "B24",
+    "pack": "grade7-english",
+    "printed_pages": "101-127",
+    "book_topic": "Discovering the World",
+    "app_chapters": [
+      "g7eng-listening",
+      "g7eng-speaking",
+      "g7eng-reading",
+      "g7eng-writing",
+      "g7eng-gr-nouns",
+      "g7eng-gr-verbs",
+      "g7eng-gr-determiners",
+      "g7eng-gr-sentence"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Articles and subject-verb agreement map; brochure, letter and sentence-transformation requirements are unspecified."
+  },
+  {
+    "book": "B24",
+    "pack": "grade7-english",
+    "printed_pages": "129-151",
+    "book_topic": "A glimpse of the Past",
+    "app_chapters": [
+      "g7eng-listening",
+      "g7eng-speaking",
+      "g7eng-reading",
+      "g7eng-writing",
+      "g7eng-gr-verbs",
+      "g7eng-gr-adverbs",
+      "g7eng-gr-sentence"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Adverbs map; phrasal verbs and future conditional are not explicit. Conjunctions have only a partial home in sentence structure."
+  },
+  {
+    "book": "B29",
+    "pack": "grade8-english",
+    "printed_pages": "1-31",
+    "book_topic": "Let’s Bond",
+    "app_chapters": [
+      "g8eng-listening",
+      "g8eng-speaking",
+      "g8eng-reading",
+      "g8eng-writing",
+      "g8eng-gr-verbs",
+      "g8eng-gr-prepositions",
+      "g8eng-gr-nouns",
+      "g8eng-gr-sentence"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Noun phrases/prepositions map. Book teaches present perfect continuous; app names present perfect and future continuous instead."
+  },
+  {
+    "book": "B29",
+    "pack": "grade8-english",
+    "printed_pages": "33-60",
+    "book_topic": "Let’s Laugh",
+    "app_chapters": [
+      "g8eng-listening",
+      "g8eng-speaking",
+      "g8eng-reading",
+      "g8eng-writing",
+      "g8eng-gr-verbs",
+      "g8eng-gr-punctuation",
+      "g8eng-gr-sentence",
+      "g8eng-gr-determiners"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Ellipsis, direct speech and articles map; past perfect continuous is not named in the app."
+  },
+  {
+    "book": "B29",
+    "pack": "grade8-english",
+    "printed_pages": "61-88",
+    "book_topic": "Let’s Explore",
+    "app_chapters": [
+      "g8eng-listening",
+      "g8eng-speaking",
+      "g8eng-reading",
+      "g8eng-writing",
+      "g8eng-gr-pronouns",
+      "g8eng-gr-adjectives",
+      "g8eng-gr-sentence"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Participial adjectives and reported speech map; interrogative pronouns are not declared."
+  },
+  {
+    "book": "B29",
+    "pack": "grade8-english",
+    "printed_pages": "89-117",
+    "book_topic": "Let’s Create",
+    "app_chapters": [
+      "g8eng-listening",
+      "g8eng-speaking",
+      "g8eng-reading",
+      "g8eng-writing",
+      "g8eng-gr-verbs",
+      "g8eng-gr-adverbs",
+      "g8eng-gr-sentence"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Active/passive voice, adverbs of probability/duration and forming verbs from nouns/adjectives are not explicit."
+  },
+  {
+    "book": "B29",
+    "pack": "grade8-english",
+    "printed_pages": "119-145",
+    "book_topic": "Let’s Imagine",
+    "app_chapters": [
+      "g8eng-listening",
+      "g8eng-speaking",
+      "g8eng-reading",
+      "g8eng-writing",
+      "g8eng-gr-adverbs",
+      "g8eng-gr-adjectives",
+      "g8eng-gr-modals",
+      "g8eng-gr-sentence"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Modals and past conditional map; adjective formation appears in prose but is not a dedicated subsection."
+  },
+  {
+    "book": "B29",
+    "pack": "grade8-english",
+    "printed_pages": "147-171",
+    "book_topic": "Let’s Respect Each Other",
+    "app_chapters": [
+      "g8eng-listening",
+      "g8eng-speaking",
+      "g8eng-reading",
+      "g8eng-writing",
+      "g8eng-gr-adverbs",
+      "g8eng-gr-nouns",
+      "g8eng-gr-verbs",
+      "g8eng-gr-sentence"
+    ],
+    "status": "Partial",
+    "note": "Listening/speaking/reading/writing strands span this unit. Gerunds and adjective-to-adverb conversion map. Phrasal verbs, passive sentence writing and the full conjunction scope are not explicit."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "1-16",
+    "book_topic": "1. J’apprends à apprendre",
+    "app_chapters": [
+      "g7fr-ce",
+      "g7fr-ee"
+    ],
+    "status": "Partial",
+    "note": "Dictionary use, interpreting instructions, study strategies and punctuation need explicit outcomes."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "17-42",
+    "book_topic": "2. J’apprécie la langue française",
+    "app_chapters": [
+      "g7fr-ce",
+      "g7fr-eo",
+      "g7fr-ee"
+    ],
+    "status": "Partial",
+    "note": "Reading/questions overlap. Sentence types and affirmative/negative forms have no explicit grammar destination."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "43-58",
+    "book_topic": "3. J’apprends à aimer la grammaire",
+    "app_chapters": [
+      "g7fr-ee"
+    ],
+    "status": "Partial",
+    "note": "Generic correct syntax is not an explicit syllabus for subject analysis, nouns, gender and number."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "59-80",
+    "book_topic": "4. J’apprends à écouter",
+    "app_chapters": [
+      "g7fr-co",
+      "g7fr-eo"
+    ],
+    "status": "Partial",
+    "note": "Listening maps. Determiners, noun groups and adjective agreement taught inside the unit are not declared."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "81-94",
+    "book_topic": "5. J’apprends à lire",
+    "app_chapters": [
+      "g7fr-ce",
+      "g7fr-litterature",
+      "g7fr-ee"
+    ],
+    "status": "Partial",
+    "note": "Reading/literary work maps. Name the narrative/descriptive writing and dictation outcomes."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "95-114",
+    "book_topic": "6. J’apprends à parler",
+    "app_chapters": [
+      "g7fr-eo",
+      "g7fr-co"
+    ],
+    "status": "Partial",
+    "note": "Oral skills map; retain the embedded grammar as explicit outcomes rather than losing it under oral practice."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "115-142",
+    "book_topic": "7. J’apprends à écrire",
+    "app_chapters": [
+      "g7fr-ee"
+    ],
+    "status": "Partial",
+    "note": "Writing maps broadly; conjugation, verb groups and sentence-analysis requirements are not specified."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "143-164",
+    "book_topic": "8. Je lis les images",
+    "app_chapters": [
+      "g7fr-ce",
+      "g7fr-litterature"
+    ],
+    "status": "Partial",
+    "note": "General comprehension/BD is insufficient to declare image type, context, purpose, framing, colour and interpretation."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "165-174",
+    "book_topic": "Activités complémentaires",
+    "app_chapters": [
+      "g7fr-ee",
+      "g7fr-ce"
+    ],
+    "status": "Partial",
+    "note": "Consolidation needs links back to the specific grammar and language outcomes."
+  },
+  {
+    "book": "B27",
+    "pack": "grade7-french",
+    "printed_pages": "175-183",
+    "book_topic": "Tableaux de conjugaison",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No explicit conjugation syllabus; reference tables should be indexed by required tense/verb group."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "2-4",
+    "book_topic": "Sujets pour l’oral",
+    "app_chapters": [
+      "g8fr-co",
+      "g8fr-eo"
+    ],
+    "status": "Matches",
+    "note": "Oral discussion has a clear skill-level home."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "5-22",
+    "book_topic": "1. Le texte conversationnel",
+    "app_chapters": [
+      "g8fr-ce",
+      "g8fr-eo",
+      "g8fr-ee",
+      "g8fr-litterature"
+    ],
+    "status": "Partial",
+    "note": "Text-type skills overlap, but conversation structure and embedded grammar are not specified."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "23-40",
+    "book_topic": "2. Le texte narratif",
+    "app_chapters": [
+      "g8fr-ce",
+      "g8fr-ee",
+      "g8fr-litterature"
+    ],
+    "status": "Partial",
+    "note": "Narrative analysis/production overlap broadly; noun-group expansion and detached expansions have no grammar outcome."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "41-60",
+    "book_topic": "3. Le texte descriptif",
+    "app_chapters": [
+      "g8fr-ce",
+      "g8fr-ee"
+    ],
+    "status": "Partial",
+    "note": "Description overlaps broadly; colour-adjective agreement and verbal-group expansion are not declared."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "61-84",
+    "book_topic": "4. Études pratiques",
+    "app_chapters": [
+      "g8fr-ce",
+      "g8fr-ee",
+      "g8fr-litterature"
+    ],
+    "status": "Partial",
+    "note": "Summary explicitly maps. Mixed narrative/descriptive/dialogue work and COD/COI expansion need explicit outcomes."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "85-100",
+    "book_topic": "5. Raconter au présent",
+    "app_chapters": [
+      "g8fr-ce",
+      "g8fr-ee"
+    ],
+    "status": "Partial",
+    "note": "Writing is generic; narrative uses of present tense and circumstantial complements are not specified."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "101-110",
+    "book_topic": "J’évalue mes connaissances",
+    "app_chapters": [
+      "g8fr-ce",
+      "g8fr-ee",
+      "g8fr-litterature"
+    ],
+    "status": "Partial",
+    "note": "Assessment consolidates detailed grammar absent from the app's five-strand syllabus."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "111-112",
+    "book_topic": "L’accord du participe passé",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "Agreement without auxiliary, with être/avoir and pronominal verbs has no explicit syllabus outcome."
+  },
+  {
+    "book": "B32",
+    "pack": "grade8-french",
+    "printed_pages": "113-121",
+    "book_topic": "Tableaux de conjugaison",
+    "app_chapters": [],
+    "status": "Missing",
+    "note": "No explicit tense/conjugation inventory corresponding to these reference tables."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "1-32",
+    "book_topic": "1. Measurement in Science",
+    "app_chapters": [
+      "g7s-measurement",
+      "g7s-inquiry"
+    ],
+    "status": "Partial",
+    "note": "Core quantities/instruments align; explicitly add irregular-volume displacement, pendulum period, light-years and data logging."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "33-58",
+    "book_topic": "2. Cells and Characteristics of Living Things",
+    "app_chapters": [
+      "g7s-cells"
+    ],
+    "status": "Matches",
+    "note": "Cells, microscope use, plant/animal comparison, organisation and living characteristics align in prose."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "59-94",
+    "book_topic": "3. Everything is about Matter",
+    "app_chapters": [
+      "g7s-matter",
+      "g7s-changes"
+    ],
+    "status": "Matches",
+    "note": "States/particle models and physical/chemical changes map across two app chapters."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "95-128",
+    "book_topic": "4. Elements, Compounds and Mixtures",
+    "app_chapters": [
+      "g7s-elements",
+      "g7s-changes",
+      "g7s-sts"
+    ],
+    "status": "Partial",
+    "note": "Main scope maps; periods/groups and named compound/mixture constituents should be explicit."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "129-160",
+    "book_topic": "5. Solar System and Energy",
+    "app_chapters": [
+      "g7s-solar-system",
+      "g7s-energy",
+      "g7s-sts"
+    ],
+    "status": "Matches",
+    "note": "A combined book unit is validly split in the app."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "161-196",
+    "book_topic": "6. Ecosystem",
+    "app_chapters": [
+      "g7s-ecosystem",
+      "g7s-food-chains",
+      "g7s-inquiry"
+    ],
+    "status": "Partial",
+    "note": "Ecology and food webs map; quadrat-based counting and recording is not named."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "197-222",
+    "book_topic": "7. Air",
+    "app_chapters": [
+      "g7s-air",
+      "g7s-changes"
+    ],
+    "status": "Partial",
+    "note": "Composition and gas preparation/tests map; gas uses, water-vapour evidence and air's roles need explicit coverage."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "223-254",
+    "book_topic": "8. Biodiversity",
+    "app_chapters": [
+      "g7s-biodiversity"
+    ],
+    "status": "Matches",
+    "note": "Five-group classification, vertebrates/invertebrates and plant classification align."
+  },
+  {
+    "book": "B25",
+    "pack": "grade7-science",
+    "printed_pages": "255-274",
+    "book_topic": "9. Electricity",
+    "app_chapters": [
+      "g7s-electricity"
+    ],
+    "status": "Matches",
+    "note": "Components, circuit diagrams and simple investigations align."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "1-24",
+    "book_topic": "1. Measurement in Science",
+    "app_chapters": [
+      "g8s-inquiry"
+    ],
+    "status": "Partial",
+    "note": "Volume/density align; accuracy/zero-error handling and density comparisons need explicit outcomes."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "25-50",
+    "book_topic": "2. Food and Nutrients",
+    "app_chapters": [
+      "g8s-food"
+    ],
+    "status": "Partial",
+    "note": "Nutrients, tests, balanced diet and deficiency diseases map in prose. Name the practical food tests in subsections."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "51-82",
+    "book_topic": "3. Mixtures and Separation Techniques",
+    "app_chapters": [
+      "g8s-mixtures",
+      "g8s-magnetism"
+    ],
+    "status": "Partial",
+    "note": "Main techniques map; solutions vs suspensions, magnetic separation, alloys and their composition are not explicit in the mixtures syllabus."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "83-120",
+    "book_topic": "4. Forces and Pressure around us",
+    "app_chapters": [
+      "g8s-forces",
+      "g8s-pressure",
+      "g8s-magnetism"
+    ],
+    "status": "Partial",
+    "note": "Main force/pressure scope aligns. Explicitly include W=mg, friction and force effects; magnetic force is present, so magnetism is not wholly app-only."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "121-160",
+    "book_topic": "5. Digestive and Respiratory Systems",
+    "app_chapters": [
+      "g8s-digestive",
+      "g8s-respiratory"
+    ],
+    "status": "Partial",
+    "note": "Two valid app chapters. Teeth/mechanical digestion, peristalsis, liver/pancreas roles need explicit outcomes; app's comparative-organism respiration is not a listed human-system outcome."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "161-200",
+    "book_topic": "6. The Language of Chemistry",
+    "app_chapters": [
+      "g8s-chem-language"
+    ],
+    "status": "Partial",
+    "note": "Symbols, formulae, valencies and radicals map. Book specifies word equations; app adds balancing chemical equations without support found in this book."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "201-240",
+    "book_topic": "7. Work, Energy and Power",
+    "app_chapters": [
+      "g8s-work-energy"
+    ],
+    "status": "Partial",
+    "note": "Work and power map. Kinetic and gravitational potential energy calculations are explicit in the book but not in app prose/subsections."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "241-282",
+    "book_topic": "8. Acids, Bases and Salts",
+    "app_chapters": [
+      "g8s-acids",
+      "g8s-sts"
+    ],
+    "status": "Partial",
+    "note": "Core reactions/neutralisation map; pH, alkalis, carbonate reactions, named indicators and hydrogen test need an explicit checklist."
+  },
+  {
+    "book": "B30",
+    "pack": "grade8-science",
+    "printed_pages": "283-306",
+    "book_topic": "9. Communicable and Non-Communicable Diseases",
+    "app_chapters": [
+      "g8s-diseases",
+      "g8s-sts"
+    ],
+    "status": "Partial",
+    "note": "Broad disease/prevention scope maps; identify influenza, diabetes and smoking as the book's specific examples."
+  },
+  {
+    "book": "B26",
+    "pack": "grade7-social-modern-studies",
+    "printed_pages": "1-30",
+    "book_topic": "Unit 1 Topic 1: Our Islands",
+    "app_chapters": [
+      "g7sms-islands"
+    ],
+    "status": "Matches",
+    "note": "Republic's islands, location and island types align at broad scope."
+  },
+  {
+    "book": "B26",
+    "pack": "grade7-social-modern-studies",
+    "printed_pages": "31-58",
+    "book_topic": "Unit 1 Topic 2: Trade in the Indian Ocean: Migration and Settlement",
+    "app_chapters": [
+      "g7sms-origins"
+    ],
+    "status": "Partial",
+    "note": "Historical significance/origins give an umbrella, but Indian Ocean trade and migration sequence are not explicit."
+  },
+  {
+    "book": "B26",
+    "pack": "grade7-social-modern-studies",
+    "printed_pages": "59-78",
+    "book_topic": "Unit 1 Topic 3: Our Origins",
+    "app_chapters": [
+      "g7sms-origins"
+    ],
+    "status": "Matches",
+    "note": "Origins, cultural diversity, heritage and identity align."
+  },
+  {
+    "book": "B26",
+    "pack": "grade7-social-modern-studies",
+    "printed_pages": "81-92",
+    "book_topic": "Unit 2: The Pioneers",
+    "app_chapters": [
+      "g7sms-people"
+    ],
+    "status": "Matches",
+    "note": "Contributions of Mauritians/groups align at broad scope."
+  },
+  {
+    "book": "B26",
+    "pack": "grade7-social-modern-studies",
+    "printed_pages": "93-98",
+    "book_topic": "Unit 2: The making of modern Mauritius",
+    "app_chapters": [
+      "g7sms-people"
+    ],
+    "status": "Partial",
+    "note": "Contributions provide an umbrella; historical nation-building content is not separately specified."
+  },
+  {
+    "book": "B26",
+    "pack": "grade7-social-modern-studies",
+    "printed_pages": "101-118",
+    "book_topic": "Unit 3 Topic 1: Settlements in our islands",
+    "app_chapters": [
+      "g7sms-settlement"
+    ],
+    "status": "Matches",
+    "note": "Settlement factors and evolution align."
+  },
+  {
+    "book": "B26",
+    "pack": "grade7-social-modern-studies",
+    "printed_pages": "119-128",
+    "book_topic": "Unit 3 Topic 2: Natural resources",
+    "app_chapters": [
+      "g7sms-resources"
+    ],
+    "status": "Matches",
+    "note": "Meaning, types and local resources align."
+  },
+  {
+    "book": "B26",
+    "pack": "grade7-social-modern-studies",
+    "printed_pages": "129-146",
+    "book_topic": "Unit 3 Topic 3: Water as a natural resource",
+    "app_chapters": [
+      "g7sms-resources"
+    ],
+    "status": "Partial",
+    "note": "Generic natural resources is insufficiently specific for sources, reservoirs, distribution and conservation."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "1-30",
+    "book_topic": "Unit 1 Topic 1: Trade and Colonisation",
+    "app_chapters": [
+      "g8sms-slavery",
+      "g8sms-independence"
+    ],
+    "status": "Matches",
+    "note": "Slavery, abolition, indenture and colonial context map across chapters."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "31-36",
+    "book_topic": "Unit 1 Topic 2: Mauritian Population in the Nineteenth Century",
+    "app_chapters": [
+      "g8sms-society"
+    ],
+    "status": "Partial",
+    "note": "Nineteenth-century society appears in prose under a chapter titled 1920s-1960s; clarify chronology and population content."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "37-48",
+    "book_topic": "Unit 1 Topic 3: World Wars and their impact on Mauritius",
+    "app_chapters": [
+      "g8sms-society",
+      "g8sms-independence"
+    ],
+    "status": "Partial",
+    "note": "Post-WW1 conditions and decolonisation overlap; the World Wars and local consequences are not fully named."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "49-55",
+    "book_topic": "Unit 1 Topic 4: The Struggle for Independence",
+    "app_chapters": [
+      "g8sms-independence"
+    ],
+    "status": "Matches",
+    "note": "Political awareness, movements and decolonisation align."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "59-64",
+    "book_topic": "Unit 2 Topic 1: Global Warming",
+    "app_chapters": [
+      "g8sms-climate"
+    ],
+    "status": "Matches",
+    "note": "Causes/consequences align."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "65-73",
+    "book_topic": "Unit 2 Topic 2: Our Changing Climate",
+    "app_chapters": [
+      "g8sms-climate"
+    ],
+    "status": "Matches",
+    "note": "Climate impacts on the islands align."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "75-81",
+    "book_topic": "Unit 2 Topic 3: Adaptation and Mitigation",
+    "app_chapters": [
+      "g8sms-climate"
+    ],
+    "status": "Matches",
+    "note": "Adaptation, mitigation and responses align."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "85-113",
+    "book_topic": "Unit 3 Topic 1: The Republic of Mauritius",
+    "app_chapters": [
+      "g8sms-democracy"
+    ],
+    "status": "Matches",
+    "note": "Constitution, government and civic institutions align broadly."
+  },
+  {
+    "book": "B31",
+    "pack": "grade8-social-modern-studies",
+    "printed_pages": "114-125",
+    "book_topic": "Unit 3 Topic 2: Origin of Democracy",
+    "app_chapters": [
+      "g8sms-democracy"
+    ],
+    "status": "Partial",
+    "note": "Features of democracy overlap; ancient Greek origins and historical development are not explicit."
+  },
+  {
+    "book": "B24",
+    "pack": "grade7-english",
+    "printed_pages": "153-178",
+    "book_topic": "Focusing on our Wellbeing",
+    "app_chapters": [
+      "g7eng-listening",
+      "g7eng-speaking",
+      "g7eng-reading",
+      "g7eng-writing",
+      "g7eng-gr-verbs",
+      "g7eng-gr-adverbs",
+      "g7eng-gr-modals",
+      "g7eng-gr-determiners"
+    ],
+    "status": "Partial",
+    "note": "Adverbs, modals and determiners overlap. Present conditional, recipe/magazine writing and word stress need explicit outcomes."
+  },
+  {
+    "book": "B24",
+    "pack": "grade7-english",
+    "printed_pages": "179-186",
+    "book_topic": "Appendices: listening transcripts",
+    "app_chapters": [
+      "g7eng-listening"
+    ],
+    "status": "Matches",
+    "note": "Supporting material for the seven units; this is not an extra chapter requirement."
+  },
+  {
+    "book": "B29",
+    "pack": "grade8-english",
+    "printed_pages": "172-177",
+    "book_topic": "Appendices: listening transcripts",
+    "app_chapters": [
+      "g8eng-listening"
+    ],
+    "status": "Matches",
+    "note": "Supporting material for the six units; not a separate content gap."
+  },
+  {
+    "book": "B04",
+    "pack": "grade1-maths",
+    "printed_pages": "65-67",
+    "book_topic": "Annex: memory game",
+    "app_chapters": [
+      "g1mth-shapes",
+      "g1mth-patterns"
+    ],
+    "status": "Matches",
+    "note": "Supporting game material following the Games unit."
+  },
+  {
+    "book": "B05",
+    "pack": "grade1-maths",
+    "printed_pages": "80",
+    "book_topic": "IT Pack",
+    "app_chapters": [
+      "g1mth-shapes",
+      "g1mth-numbers"
+    ],
+    "status": "Partial",
+    "note": "Linked digital consolidation resources; does not establish coverage of a standalone ICT syllabus."
+  },
+  {
+    "book": "B33",
+    "pack": "grade8-maths",
+    "printed_pages": "267-282",
+    "book_topic": "Additional problems for practice",
+    "app_chapters": [
+      "g8m-sequences",
+      "g8m-indices",
+      "g8m-rate",
+      "g8m-finance",
+      "g8m-coordinates",
+      "g8m-algebra",
+      "g8m-statistics",
+      "g8m-circles",
+      "g8m-polygons",
+      "g8m-surface-area",
+      "g8m-volume"
+    ],
+    "status": "Partial",
+    "note": "Mixed revision inherits the chapter gaps identified above; it is not an additional syllabus chapter."
+  }
+]

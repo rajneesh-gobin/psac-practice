@@ -1,0 +1,729 @@
+grade1-english comingSoon=false
+g1eng-listening: Listening
+
+Subsections: Recognising Sounds; Rhymes & Songs; Listening & Understanding
+Notes: We use our **ears** to listen to sounds around us. | English has special sounds — listen carefully to how each letter sounds. | **Rhymes** are words that end with the same sound, like cat and hat. | When you listen to a story, think: *Who? What? Where?*
+g1eng-speaking: Speaking
+
+Subsections: Greetings & Phrases; Naming Things; Talking in Sentences
+Notes: Say **hello** and **good morning** when you greet someone. | Use **please** and **thank you** when you speak. | To describe something, tell its colour, size and shape. | A **sentence** starts with a capital letter and ends with a full stop.
+g1eng-reading: Reading Readiness
+
+Subsections: Print Awareness; Letters & Sounds; Common Words
+Notes: We read from **left to right** in English. | The **alphabet** has 26 letters — 5 vowels (a, e, i, o, u) and 21 consonants. | A **word** is a group of letters that means something. | Look at pictures for clues about what a story is about.
+g1eng-writing: Writing
+
+Subsections: Writing Letters; Copying Words; Simple Sentences
+Notes: Sit up straight and hold your pencil the right way. | Write letters starting from the top. | Capital letters are **big**, small letters are **little**. | Leave a space between each word when you write.
+g1eng-grammar: Grammar
+
+Subsections: Naming Words; a and an; Putting a Sentence Together
+Notes: A **noun** is a naming word — it names a person, place or thing. e.g. *dog, school, girl*. | Use **a** before words that start with a consonant sound: *a cat, a ball*. | Use **an** before words that start with a vowel sound: *an apple, an egg*. | A simple sentence has a subject and a verb: *The dog runs.*
+g1eng-phonics: Phonics
+
+Subsections: Starting Sounds; Rhyming Words; Word Syllables
+Notes: Every letter has a **sound**. "S" says /s/ like in *sun*. | Words that **rhyme** have the same ending sound: *hat, cat, bat*. | You can break long words into parts called **syllables**: ba-na-na (3 parts). | The letters a, e, i, o, u are called **vowels**.
+
+grade1-french comingSoon=false
+g1fr-comprehension-orale: Compréhension orale
+
+Subsections: Distinguer les sons; Comprendre un message; Vocabulaire oral
+Notes: On utilise ses **oreilles** pour écouter. (We use our ears to listen.) | Les sons du français sont différents de l'anglais — écoute bien ! | Écoute une phrase et pense : *Qui ? Quoi ? Où ?* | Un **bruit** vient de l'environnement. Une **voix** vient d'une personne.
+g1fr-expression-orale: Expression orale
+
+Subsections: Comptines et chansons; Conversation simple; Décrire une image
+Notes: Dis **bonjour** le matin et **bonsoir** le soir. | Pour décrire quelque chose, dis sa couleur et sa taille. | Une **comptine** a des mots qui riment à la fin. | Parle clairement et à voix haute.
+g1fr-lecture: Compréhension écrite
+
+Subsections: Conscience phonique; Lettres et sons; Mots simples
+Notes: On lit de **gauche à droite** en français. | Les voyelles en français : **a, e, i, o, u** (et y). | Une **syllabe** est un groupe de sons : *ma-man* = 2 syllabes. | Chaque lettre a un son. Apprends-les un par un !
+g1fr-ecriture: Expression écrite
+
+Subsections: Lettres minuscules; Copier des mots; Phrases simples
+Notes: Tiens le crayon correctement — pas trop fort ! | Les lettres **minuscules** sont petites : a, b, c… | Les lettres **majuscules** sont grandes : A, B, C… | Laisse un espace entre chaque mot quand tu écris.
+g1fr-grammaire: Grammaire
+
+Subsections: Noms communs; le, la, les; Construire une phrase
+Notes: Un **nom commun** désigne une chose, une personne ou un animal : *chien, maison, fille*. | En français, les noms sont **masculins** (le, un) ou **féminins** (la, une). | **le** devant un nom masculin : *le chat*. **la** devant un nom féminin : *la maison*. | **les** devant un nom pluriel : *les chats, les maisons*.
+
+grade1-health comingSoon=true
+g1he-sample: Sample Chapter
+
+Subsections: 
+Notes: 
+
+grade1-ict comingSoon=true
+g1ict-sample: Sample Chapter
+
+Subsections: 
+Notes: 
+
+grade1-maths comingSoon=false
+g1mth-numbers: Numbers to 20
+Count, read and write numbers from 1 to 20. Order numbers — what comes before, after and between. Recognise odd and even numbers. Write number words: one to twenty.
+Subsections: Counting & Ordering; Number Words; Odd and Even Numbers
+Notes: 
+g1mth-addition: Addition
+Combine groups of objects and count the total. Learn addition facts to 10 and to 20. Write and solve number sentences: 5 + 3 = □. Understand the + sign and = sign.
+Subsections: Adding to 10; Adding to 20; Number Sentences
+Notes: 
+g1mth-subtraction: Subtraction
+Take away objects from a group and count what is left. Learn subtraction facts within 20. Write and solve subtraction sentences: 8 − 3 = □. Find the missing number.
+Subsections: Taking Away within 10; Taking Away within 20; Finding the Missing Number
+Notes: 
+g1mth-shapes: Shapes and Space
+Name and recognise 2D shapes: circle, square, rectangle and triangle. Count the sides and corners of each shape. Describe position using words: above, below, left, right, in front, behind.
+Subsections: 2D Shapes; Sides and Corners; Position Words
+Notes: 
+g1mth-measurement: Measurement
+Compare the length of objects: longer, shorter, tallest, shortest. Compare the mass of objects: heavier, lighter, same. Compare capacity: which container holds more, less or the same.
+Subsections: Comparing Length; Comparing Mass; Comparing Capacity
+Notes: 
+g1mth-patterns: Patterns
+Create and continue repeating patterns with shapes and colours. Count in 2s, 5s and 10s. Identify odd numbers (1, 3, 5…) and even numbers (2, 4, 6…).
+Subsections: Repeating Patterns; Number Patterns; Odd and Even
+Notes: 
+
+grade2-english comingSoon=false
+g2eng-listening: Listening
+
+Subsections: Telling Sounds Apart; Listening to Stories; Following Instructions
+Notes: Listen carefully to **hear the difference** between similar sounds, e.g. /b/ and /p/. | When you listen to a story, remember: *Who is in it? What happened? How did it end?* | Follow instructions in order — do the **first** thing first! | Listening well means being **quiet** and looking at the speaker.
+g2eng-speaking: Speaking
+
+Subsections: Retelling a Story; Describing Pictures; Having a Conversation
+Notes: When you retell a story, say what happened **first, next, then and last**. | Describe a picture by naming what you **see, hear, smell or feel**. | In a conversation, **take turns** — listen, then speak. | Use full sentences: "I can see a big red bus" instead of just "bus".
+g2eng-reading: Reading
+
+Subsections: Sounding Out Words; Common Words; Understanding What You Read
+Notes: Blend letter sounds together to read new words: /c/ /a/ /t/ → cat. | Common words to know by sight: *said, have, like, some, come, were, there, their, they, out, this*. | After reading, ask yourself: *What was the story about? Who were the characters?* | Use pictures and other words in the sentence to work out an unknown word.
+g2eng-writing: Writing
+
+Subsections: Writing Sentences; Using Punctuation; Choosing the Right Word
+Notes: Every sentence starts with a **capital letter** and ends with a **full stop**, **question mark** or **exclamation mark**. | Leave a **space** between words. | Choose words that tell exactly what you mean — "sprinted" is better than "went fast". | A sentence must make sense on its own.
+g2eng-grammar: Grammar
+
+Subsections: Nouns & Pronouns; Action Words (Verbs); Describing Words (Adjectives)
+Notes: A **noun** names a person, place or thing. A **pronoun** replaces a noun: he, she, it, they. | A **verb** shows what someone does: *run, eat, sleep, jump*. | An **adjective** describes a noun: the *big* red *shiny* apple. | Use **he/she** for one person; **they** for more than one.
+g2eng-phonics: Phonics
+
+Subsections: Blends & Digraphs; Word Families; Vowel Sounds
+Notes: **Blends** are two consonants together: *bl, cl, tr, st, sp* (you hear both sounds). | **Digraphs** are two letters that make one sound: *ch, sh, th, wh, ph*. | Word families share the same ending: *-at (cat, bat, hat), -an (can, man, fan)*. | **Long vowel** sounds say the letter name: c**a**ke, r**o**pe, h**e**, k**i**te, r**u**le.
+
+grade2-french comingSoon=false
+g2fr-comprehension-orale: Compréhension orale
+
+Subsections: Comprendre un texte oral; Séquence des événements; Nouveau vocabulaire
+Notes: Écoute attentivement pour trouver l'**idée principale** du texte. | Les mots *d'abord, ensuite, puis, enfin* indiquent l'**ordre des événements**. | Utilise le contexte pour deviner le sens d'un **mot nouveau**. | Après avoir écouté, demande-toi : *De quoi s'agit-il ?*
+g2fr-expression-orale: Expression orale
+
+Subsections: Décrire une image; Raconter une histoire courte; Questions et réponses
+Notes: Pour décrire une image, dis ce que tu vois : les personnages, les objets, les couleurs. | Pour raconter, utilise : *d'abord... ensuite... enfin...* | Pose des questions avec : *Qui ? Quoi ? Où ? Quand ? Pourquoi ?* | Réponds toujours avec une phrase complète.
+g2fr-lecture: Compréhension écrite
+
+Subsections: Décoder par syllabes; Comprendre ce qu'on lit; Type de texte
+Notes: Découpe les mots difficiles en **syllabes** : ma-te-las (3 syllabes). | Lis la phrase en entier avant de répondre. | Un **texte narratif** raconte une histoire. Une **liste** donne des informations. | Les **majuscules** commencent les noms propres et les phrases.
+g2fr-ecriture: Expression écrite
+
+Subsections: Écrire des phrases courtes; Ponctuation de base; Orthographe des mots
+Notes: Chaque phrase commence par une **majuscule** et se termine par un **point**. | Le **point d'interrogation** ( ? ) termine une question. | La **virgule** ( , ) sépare les éléments d'une liste. | Vérifie l'orthographe des mots que tu connais déjà.
+g2fr-grammaire: Grammaire
+
+Subsections: Nom et déterminant; être et avoir; Adjectifs simples
+Notes: Le **déterminant** accompagne le nom : *le, la, les, un, une, des*. | Le verbe **être** : je suis, tu es, il/elle est, nous sommes, vous êtes, ils/elles sont. | Le verbe **avoir** : j'ai, tu as, il/elle a, nous avons, vous avez, ils/elles ont. | Un **adjectif** décrit un nom et s'accorde avec lui : *un grand garçon / une grande fille*.
+
+grade2-health comingSoon=true
+g2he-sample: Sample Chapter
+
+Subsections: 
+Notes: 
+
+grade2-ict comingSoon=true
+g2ict-sample: Sample Chapter
+
+Subsections: 
+Notes: 
+
+grade2-maths comingSoon=false
+g2mth-numbers: Numbers to 100
+Count, read and write numbers 0–100. Understand place value: tens and ones. Compare numbers using > < =. Identify odd and even numbers up to 100.
+Subsections: Tens and Ones; Ordering & Comparing; Odd and Even to 100
+Notes: 
+g2mth-addition: Addition to 100
+Add multiples of 10 mentally. Add two 2-digit numbers using column method, with and without regrouping. Solve addition word problems.
+Subsections: Mental Addition; Column Addition; Addition Word Problems
+Notes: 
+g2mth-subtraction: Subtraction to 100
+Subtract multiples of 10 mentally. Subtract two 2-digit numbers using column method, with and without regrouping. Solve subtraction word problems.
+Subsections: Mental Subtraction; Column Subtraction; Subtraction Word Problems
+Notes: 
+g2mth-multiplication: Introduction to Multiplication
+Understand multiplication as repeated addition: 3+3+3 = 3×3 = 9. Learn multiplication tables for 2, 5 and 10.
+Subsections: Repeated Addition; 2 Times Table; 5 and 10 Times Tables
+Notes: 
+g2mth-fractions: Simple Fractions
+Find one half (½) of shapes and sets of objects. Find one quarter (¼) of shapes and sets. Compare: ½ is greater than ¼.
+Subsections: One Half (½); One Quarter (¼); Comparing Fractions
+Notes: 
+g2mth-measurement: Measurement
+Measure length in centimetres (cm) and metres (m). Compare masses using kilograms (kg). Measure capacity in litres (L). Know that 100 cm = 1 m.
+Subsections: Length (cm and m); Mass (kg); Capacity (litres)
+Notes: 
+g2mth-time: Time
+Name the 7 days of the week in order. Name the 12 months of the year. Read o'clock and half past on an analogue clock. Use a calendar to find dates.
+Subsections: Days and Months; O'clock and Half Past; Reading a Calendar
+Notes: 
+g2mth-shapes: Shapes and Space
+Describe properties of 2D shapes (sides, corners, right angles). Name 3D shapes: cube, cuboid, sphere, cylinder, cone. Identify lines of symmetry in shapes.
+Subsections: 2D Shapes; 3D Shapes; Lines of Symmetry
+Notes: 
+
+grade3-english comingSoon=false
+g3eng-listening: Listening
+
+Subsections: Main Idea & Topic; Order of Events; Purpose of a Message
+Notes: Find the **main idea** — what is the whole text mostly about? | Listen for the **order** — what happened first, next, last? | Notice **why** something was said: to inform, to entertain, to persuade, or to ask. | Words like *first, then, after, finally* signal the order of events.
+g3eng-speaking: Speaking
+
+Subsections: Using New Words; Describing & Retelling; Questions & Answers
+Notes: Use **new and interesting words** — instead of "nice" try "wonderful" or "exciting". | When retelling, use: *First... Then... After that... Finally...* | A good **description** names the thing, its colour, its size and what it does. | Ask questions starting with: *Who? What? Where? When? Why? How?*
+g3eng-reading: Reading
+
+Subsections: Reading Comprehension; Word Meanings in Context; Text Features
+Notes: Read the whole passage, then read each question carefully. | For "find" questions, use the **exact words from the passage**. | Work out unknown words from the **context** — other words around them. | **Text features** help you: titles, headings, pictures, captions, bold words.
+g3eng-writing: Writing
+
+Subsections: Creative Writing; Types of Sentences; Punctuation
+Notes: Plan before you write: *Who? Where? What happened? How did it end?* | Statement (.): gives information. Question (?): asks something. Exclamation (!): shows strong feeling. | Use **commas** in a list: I bought apples, oranges, bananas and grapes. | Make your writing interesting — add describing words and connectives.
+g3eng-grammar: Grammar
+
+Subsections: Parts of Speech; Verb Tenses; Punctuation in Grammar
+Notes: Parts of speech: **noun** (naming), **verb** (action), **adjective** (describing), **adverb** (how/when/where). | **Present tense**: I walk. **Past tense**: I walked. **Future tense**: I will walk. | Irregular past tenses: go→went, see→saw, eat→ate, run→ran, have→had, come→came. | A **full stop** ends a statement. A **question mark** ends a question. A **comma** separates list items.
+g3eng-phonics: Phonics & Spelling
+
+Subsections: Breaking Words into Syllables; Word Patterns & Spelling; Spelling Rules
+Notes: Split words into syllables to spell them: *to-mor-row (3), won-der-ful (3)*. | Common patterns: *-tion (nation), -ing (running), -ed (walked), -er (teacher)*. | Double the consonant before adding -ing/-ed if the vowel is short: *run→running*. | Silent letters: kn- (knee), wr- (write), -mb (lamb). Say the whole word, then spell it.
+
+grade3-french comingSoon=false
+g3fr-comprehension-orale: Compréhension orale
+
+Subsections: Sons phonétiquement proches; Idée globale et séquence; Type de message
+Notes: Certains sons se ressemblent : /b/ et /p/, /d/ et /t/, /f/ et /v/ — écoute bien la différence ! | L'**idée globale** est ce dont parle le texte en général. | Les mots *d'abord, puis, ensuite, enfin* indiquent la **séquence des événements**. | Un message peut informer, demander, ordonner ou suggérer — l'intonation aide à le comprendre.
+g3fr-expression-orale: Expression orale
+
+Subsections: Vocabulaire descriptif; Raconter à l'oral; Questions et réponses
+Notes: Utilise des **adjectifs** pour décrire : *grand, petit, rond, beau, rouge*. | Pour raconter : *D'abord... Ensuite... Puis... Enfin...* | Pour poser une question : *Qui ? Que/Quoi ? Où ? Quand ? Pourquoi ? Comment ?* | Réponds en faisant une **phrase complète** avec un sujet et un verbe.
+g3fr-lecture: Compréhension écrite
+
+Subsections: Lire par syllabes; Comprendre un texte lu; Ponctuation et sens
+Notes: Découpe les mots en **syllabes** pour les lire : ta-bleau (2), pa-pi-llon (3). | La **ponctuation** t'aide : le point (.) = pause, le point d'interrogation (?) = question, la virgule (,) = courte pause. | Lis le texte entier, puis relis chaque question soigneusement. | Cherche les réponses dans le texte — elles sont souvent présentes mot pour mot.
+g3fr-ecriture: Expression écrite
+
+Subsections: Majuscule et minuscule; Ponctuation de base; Orthographe et accents
+Notes: Une phrase commence par une **majuscule** et se termine par un **point**, un **?** ou un **!**. | La **virgule** (,) sépare les éléments d'une liste. | Les accents changent le son : é (école), è (mère), ê (fête), à (à côté), ù (où). | Copie soigneusement — chaque mot séparé par un espace.
+g3fr-grammaire: Grammaire
+
+Subsections: Types de phrases; Accord nom–adjectif; Temps des verbes
+Notes: **Phrase déclarative** : affirme quelque chose — *Le chat est gris.* | **Phrase négative** : utilise ne...pas — *Le chat n'est pas gris.* | **Phrase interrogative** : pose une question — *Le chat est-il gris ?* | L'adjectif s'accorde avec le nom : *un grand arbre / une grande maison / de grands arbres*. | **Présent** : je mange. **Passé composé** : j'ai mangé. **Futur simple** : je mangerai.
+
+grade3-health comingSoon=true
+g3he-sample: Sample Chapter
+
+Subsections: 
+Notes: 
+
+grade3-ict comingSoon=true
+g3ict-sample: Sample Chapter
+
+Subsections: 
+Notes: 
+
+grade3-maths comingSoon=false
+g3mth-numbers: Numbers to 1000
+Read, write and order numbers up to 1000. Understand place value: hundreds, tens and ones. Round numbers to the nearest 10. Compare numbers using >, < and =.
+Subsections: Place Value (H, T, O); Ordering & Rounding; Comparing Numbers
+Notes: 
+g3mth-addition: Addition with Regrouping
+Add 2-digit numbers with carrying. Add 3-digit numbers using the column method. Solve addition word problems.
+Subsections: Adding 2-Digit Numbers; Adding 3-Digit Numbers; Addition Word Problems
+Notes: 
+g3mth-subtraction: Subtraction with Regrouping
+Subtract 2-digit numbers with borrowing. Subtract 3-digit numbers using the column method. Solve subtraction word problems.
+Subsections: Subtracting 2-Digit Numbers; Subtracting 3-Digit Numbers; Subtraction Word Problems
+Notes: 
+g3mth-multiplication: Multiplication Tables
+Know multiplication tables from 2 to 10 by heart. Multiply a 2-digit number by a 1-digit number.
+Subsections: × Tables 2–5; × Tables 6–10; Multiplying 2-Digit × 1-Digit
+Notes: 
+g3mth-division: Division
+Divide by 2, 3, 4, 5 and 10. Understand the link between multiplication and division. Solve division word problems.
+Subsections: Sharing Equally; Dividing by 2, 3, 4, 5, 10; Multiplication & Division Link
+Notes: 
+g3mth-fractions: Fractions
+Find ½, ¼, ¾ and ⅓ of shapes and of whole numbers. Order fractions. Recognise equivalent fractions.
+Subsections: Halves and Quarters; Thirds and Three-Quarters; Ordering Fractions
+Notes: 
+g3mth-measurement: Measurement
+Convert between m and cm, kg and g, L and ml. Calculate the perimeter of rectangles.
+Subsections: Length (m and cm); Mass (kg and g); Capacity (L and ml)
+Notes: 
+g3mth-geometry: Geometry
+Identify right angles and types of angles. Draw lines of symmetry. Name 2D and 3D shapes and their properties. Find area by counting squares.
+Subsections: 2D and 3D Shapes; Angles and Symmetry; Perimeter and Area
+Notes: 
+g3mth-time: Time and Calendar
+Read the time to the nearest 5 minutes. Understand a.m. and p.m. Calculate elapsed time. Use a calendar.
+Subsections: Reading the Clock; Elapsed Time; Calendar and Dates
+Notes: 
+
+grade7-english comingSoon=false
+g7eng-listening: Listening & Comprehension
+Listen attentively to a range of spoken and audio-visual texts. Identify the speaker, the audience and the message. Understand vocabulary specific to a text. Respond to what is heard.
+Subsections: Identifying the Message; Vocabulary in Context
+Notes: 
+g7eng-speaking: Speaking & Oral Interaction
+Speak clearly and confidently about familiar topics. Take part in conversations and simple discussions. Present information and personal opinions. Use appropriate intonation and register.
+Subsections: Oral Interaction; Intonation & Register
+Notes: 
+g7eng-reading: Reading & Comprehension
+Read a range of text types with understanding. Identify the main idea and supporting details. Infer meaning of unfamiliar words from context. Respond personally to what is read.
+Subsections: Main Idea & Details; Inferring Vocabulary
+Notes: 
+g7eng-writing: Writing
+Write for a range of purposes and audiences. Organise ideas into clear paragraphs. Use appropriate vocabulary and register. Draft, revise and proofread written work.
+Subsections: Organising Ideas; Vocabulary & Register
+Notes: 
+g7eng-gr-nouns: Grammar · Nouns
+Reinforce agreement between countable and uncountable nouns and verb forms. Use correct subject-verb agreement with singular, plural and collective nouns.
+Subsections: Countable & Uncountable Nouns; Subject-Verb Agreement
+Notes: 
+g7eng-gr-pronouns: Grammar · Pronouns
+Use personal, possessive and reflexive pronouns correctly. Use relative pronouns including whose. Keep pronoun reference clear.
+Subsections: Personal & Possessive Pronouns; Relative Pronouns
+Notes: 
+g7eng-gr-adjectives: Grammar · Adjectives
+Use a variety of adjectives of opinion, size, age, temperature, shape, colour, texture, origin and material. Place adjectives correctly before nouns, after verbs and after a noun or pronoun. Form adjectives from verbs and nouns using suffixes.
+Subsections: Types of Adjectives; Adjective Placement & Order
+Notes: 
+g7eng-gr-verbs: Grammar · Verbs & Tenses
+Use the main tenses accurately in context. Maintain subject-verb agreement. Form verbs from nouns and adjectives using prefixes and suffixes.
+Subsections: Verb Tenses; Verb Formation
+Notes: 
+g7eng-gr-determiners: Grammar · Determiners, Articles & Quantifiers
+Reinforce the use of the definite article for unique objects, referents, clusters of islands and superlatives. Use words that take no article. Match quantifiers with the correct verb forms.
+Subsections: Definite Article & No Article; Quantifiers
+Notes: 
+g7eng-gr-adverbs: Grammar · Adverbs
+Consolidate adverbs of manner, place, time, degree and frequency. Pay attention to the position of adverbs in a sentence.
+Subsections: Types of Adverbs; Adverb Position
+Notes: 
+g7eng-gr-modals: Grammar · Modals
+Use common modal verbs to express ability, permission and obligation.
+Subsections: Ability & Permission; Obligation & Advice
+Notes: 
+g7eng-gr-prepositions: Grammar · Prepositions
+Consolidate the use of prepositions of place, time and direction.
+Subsections: Place & Time; Direction & Movement
+Notes: 
+g7eng-gr-sentence: Grammar · Sentence Structure
+Consolidate the construction of simple sentences. Extend the construction of compound sentences using coordinating conjunctions. Build complex sentences using who, that, which, where, whose and whom.
+Subsections: Simple & Compound Sentences; Complex Sentences
+Notes: 
+g7eng-gr-punctuation: Grammar · Punctuation
+Reinforce the full stop, comma, capital letters, colon, exclamation mark and question mark. Use the comma after linking words and for nouns in apposition. Use the colon to introduce direct speech and to list items.
+Subsections: Full Stop, Comma & Capital Letters; Colon & Direct Speech
+Notes: 
+
+grade7-french comingSoon=false
+g7fr-co: Compréhension orale
+Écouter avec attention une variété de textes sonores. Distinguer les différents types de textes écoutés. Identifier le locuteur, l'interlocuteur et le message. Comprendre le lexique spécifique au texte. Suivre des conversations simples.
+Subsections: Types de textes oraux; Locuteur et message; Vocabulaire oral
+Notes: 
+g7fr-eo: Expression orale
+Lire à voix haute en variant l'intonation et le rythme. S'exprimer avec confiance sur soi et sur son environnement immédiat. Utiliser un lexique approprié. Produire des énoncés clairs et cohérents.
+Subsections: Lecture à voix haute; S'exprimer avec confiance; Lexique approprié
+Notes: 
+g7fr-ce: Compréhension écrite
+Lire et comprendre différents types de textes écrits. Dégager l'idée principale d'un texte. Repérer les informations explicites. Comprendre le vocabulaire d'usage.
+Subsections: Idée principale; Informations explicites; Vocabulaire
+Notes: 
+g7fr-ee: Expression écrite
+Produire des textes fonctionnels simples. Organiser ses idées en paragraphes. Utiliser un lexique et une syntaxe corrects. Relire et corriger son texte.
+Subsections: Textes fonctionnels; Organisation en paragraphes; Correction syntaxique
+Notes: 
+g7fr-litterature: Littérature
+Reconnaître différents types de textes littéraires. Classer les textes selon les genres littéraires. Écouter et visionner des contes, des bandes dessinées et des dessins animés.
+Subsections: Genres littéraires; Types de textes; Contes et bandes dessinées
+Notes: 
+
+grade7-maths comingSoon=false
+g7m-integers: Integers
+Identify even, odd, prime, composite, triangular and square numbers. Represent integers on a number line. Order and compare positive and negative integers. Add, subtract, multiply and divide integers.
+Subsections: Types of Numbers; The Number Line; Integer Operations
+Notes: 
+g7m-operations: Order & Properties of Operations
+Apply the order of operations to numerical expressions. Use the commutative, associative and distributive properties. Evaluate expressions involving brackets.
+Subsections: Order of Operations; Properties of Operations; Expressions with Brackets
+Notes: 
+g7m-indices: Indices Convention
+Write repeated multiplication in index form. Read and interpret index notation. Evaluate powers of whole numbers. Express a number as a product of prime factors in index form.
+Subsections: Index Notation; Prime Factorisation; Evaluating Powers
+Notes: 
+g7m-factors: Factors, Multiples & Prime Factorisation
+Apply common divisibility tests. Find the factors and multiples of a given number. Find the prime factors of a number. Write a number as a product of its prime factors.
+Subsections: Divisibility Rules; HCF and LCM; Prime Factors
+Notes: 
+g7m-fractions: Fractions & Decimals
+Compare and order fractions and decimals. Convert between fractions and decimals. Add, subtract, multiply and divide fractions. Perform the four operations on decimals.
+Subsections: Comparing Fractions; Converting Fractions & Decimals; Operations with Fractions
+Notes: 
+g7m-percentages: Percentages
+Understand percentage as a fraction out of one hundred. Convert between fractions, decimals and percentages. Find a percentage of a quantity. Solve everyday problems involving percentages.
+Subsections: Percentage Basics; Percentage of a Quantity; Percentage Problems
+Notes: 
+g7m-ratio: Ratio & Proportion
+Understand ratio and direct proportion. Compare two quantities multiplicatively. Simplify a ratio to its lowest terms. Divide a quantity in a given ratio.
+Subsections: Simplifying Ratios; Dividing in a Ratio; Proportion
+Notes: 
+g7m-polygons: Polygons
+Name and classify polygons by their number of sides. Identify the properties of triangles and quadrilaterals. Calculate unknown angles in polygons. Recognise regular and irregular polygons.
+Subsections: Classifying Polygons; Angles in Polygons; Triangles & Quadrilaterals
+Notes: 
+g7m-coordinates: Coordinates
+Plot and read points in the Cartesian plane. Use ordered pairs to describe position. Identify the four quadrants. Plot simple shapes from given coordinates.
+Subsections: Plotting Points; The Four Quadrants; Shapes from Coordinates
+Notes: 
+g7m-constructions: Geometrical Constructions
+Use ruler, set squares, protractor, compasses and dividers. Construct parallel and perpendicular lines. Construct and bisect angles. Use digital geometry tools.
+Subsections: Using Instruments; Parallel & Perpendicular Lines; Bisecting Lines & Angles
+Notes: 
+g7m-symmetry: Symmetry
+Identify lines of symmetry in shapes. Complete a figure given its line of symmetry. Recognise rotational symmetry. Describe the order of rotational symmetry.
+Subsections: Lines of Symmetry; Completing Figures; Rotational Symmetry
+Notes: 
+g7m-transformation: Transformation
+Describe and perform reflections. Describe and perform translations. Identify the image of a shape after a transformation. Recognise congruence under transformation.
+Subsections: Reflection; Translation; Congruence
+Notes: 
+g7m-mass: Mass
+Distinguish between milligram, gram, kilogram and tonne. Convert between units of mass. Add, subtract, multiply and divide quantities of mass. Solve everyday problems involving mass.
+Subsections: Units of Mass; Converting Mass; Mass Problems
+Notes: 
+g7m-length: Length
+Convert between units of length. Estimate and measure lengths. Perform calculations with lengths. Solve problems involving perimeter and distance.
+Subsections: Units of Length; Perimeter; Distance Problems
+Notes: 
+g7m-area: Area
+Calculate the area of rectangles, squares and triangles. Convert between units of area. Find the area of compound shapes. Solve everyday problems involving area.
+Subsections: Area of Rectangles & Squares; Area of Triangles; Compound Shapes
+Notes: 
+g7m-time: Time
+Read and write time in 12-hour and 24-hour notation. Add and subtract intervals of time. Convert between units of time. Interpret timetables.
+Subsections: Reading & Writing Time; Time Intervals; Timetables
+Notes: 
+g7m-speed: Speed
+Understand speed and average speed. Convert compound units such as metres per second into kilometres per hour. Calculate speed, distance or time. Solve everyday problems involving speed.
+Subsections: The Speed Formula; Unit Conversion; Distance–Time Problems
+Notes: 
+g7m-money: Money
+Perform the four operations with money. Convert between currencies. Calculate profit, loss and discount. Solve everyday problems involving money.
+Subsections: Money Operations; Profit, Loss & Discount; Currency Conversion
+Notes: 
+g7m-algebra: Algebraic Expressions
+Use letters to represent unknown numbers. Write and simplify algebraic expressions. Substitute values into an expression. Add and subtract like terms.
+Subsections: Writing Expressions; Simplifying Expressions; Substitution
+Notes: 
+g7m-equations: Algebraic Equations
+Distinguish between an algebraic expression and an equation. Understand additive and multiplicative inverses. Solve simple linear equations. Form and solve equations from word problems.
+Subsections: Solving Equations; Forming Equations; Word Problems
+Notes: 
+g7m-sets: Sets
+Understand the idea of a set and its elements. Recognise equal, equivalent and disjoint sets. Use set notation. Represent sets with Venn diagrams.
+Subsections: Set Notation; Venn Diagrams; Types of Sets
+Notes: 
+g7m-statistics: Statistics
+Collect and organise data into tables. Draw and interpret bar charts and pictograms. Read information from graphs. Find the mean of a set of values.
+Subsections: Data Tables; Bar Charts; The Mean
+Notes: 
+
+grade7-science comingSoon=false
+g7s-inquiry: Scientific Inquiry
+Understand the different fields of science. Work safely in the laboratory and in the field. Ask meaningful questions and carry out simple investigations. Record and represent data in tables, diagrams, charts and graphs. Draw inferences and conclusions from evidence.
+Subsections: Lab Safety; Scientific Investigations; Recording Data
+Notes: 
+g7s-measurement: Measurement
+Understand fundamental physical quantities and their SI units. Choose the right instrument for each quantity. Measure length, mass, time, volume and temperature. Calculate area and volume from measurements.
+Subsections: SI Units; Measuring Instruments; Calculating Measurements
+Notes: 
+g7s-cells: Cells & Cell Structures
+State the basic characteristics of living things. Recognise that all living organisms are made of cells. Identify the parts of animal and plant cells under a microscope. Compare the structure of animal and plant cells. Describe the organisation from cell to organism.
+Subsections: Cell Characteristics; Cell Parts & Functions; Animal vs Plant Cells
+Notes: 
+g7s-matter: Matter
+Recognise that everything around us is made of matter. Understand that matter has mass and occupies space. Investigate the properties of the three states of matter. Explain changes of state using particle models.
+Subsections: States of Matter; Properties of States; Changes of State
+Notes: 
+g7s-solar-system: The Solar System
+Describe the Sun, the planets, planetary satellites, comets and asteroids. Draw a labelled diagram of the solar system. Compare the characteristics of the planets. Use two- and three-dimensional models of the solar system.
+Subsections: The Planets; Solar System Structure; Planet Characteristics
+Notes: 
+g7s-electricity: Electricity
+Discuss the importance and main uses of electricity. Identify the main parts of an electric circuit. Recognise cells, batteries, bulbs, switches and resistors. Draw circuits using conventional symbols. Investigate the workings of simple circuits.
+Subsections: Circuit Components; Circuit Symbols; Simple Circuits
+Notes: 
+g7s-ecosystem: Ecosystems
+Explain the basic concepts of an ecosystem. Identify aquatic, terrestrial and wetland ecosystems. List the factors that affect the balance of an ecosystem. Discuss the impact of human activities. Suggest ways an ecosystem can be protected.
+Subsections: Types of Ecosystems; Ecosystem Balance; Human Impact
+Notes: 
+g7s-elements: Elements, Compounds & Mixtures
+Identify elements as the building blocks of matter. Use chemical symbols to represent elements. Recognise the Periodic Table as a classification of elements. Compare the properties of metals and non-metals. Distinguish between mixtures and compounds.
+Subsections: Elements & Symbols; The Periodic Table; Metals vs Non-metals
+Notes: 
+g7s-air: Air
+Identify the components of pure air and their percentage composition. Describe the laboratory preparation of oxygen and carbon dioxide. Test for the presence of oxygen and carbon dioxide.
+Subsections: Composition of Air; Tests for Oxygen & CO₂; Properties of Air
+Notes: 
+g7s-biodiversity: Biodiversity
+Classify living organisms into five main groups. Distinguish vertebrates from invertebrates. Classify vertebrates into five classes. Group plants as flowering and non-flowering.
+Subsections: Classifying Organisms; Vertebrates & Invertebrates; Types of Plants
+Notes: 
+g7s-food-chains: Food Chains & Food Webs
+Identify the different types of interaction within an ecosystem. Recognise feeding relationships in a food chain and a food web. Construct and draw food chains and food webs. Describe energy flow in a given ecosystem.
+Subsections: Feeding Relationships; Food Chains & Webs; Energy Flow
+Notes: 
+g7s-changes: Physical & Chemical Changes
+Distinguish between physical and chemical changes. Recognise that a chemical change forms new substances. Explain why changes of state are physical changes. Explain why burning, rusting, respiration and photosynthesis are chemical changes.
+Subsections: Physical Changes; Chemical Changes; Examples of Changes
+Notes: 
+g7s-energy: Energy
+Define energy and list its different forms. Understand that energy is transformed rather than created or destroyed. State the law of conservation of energy. Classify energy sources as renewable or non-renewable. Discuss sustainable energy production.
+Subsections: Forms of Energy; Energy Transformation; Renewable & Non-renewable Sources
+Notes: 
+g7s-sts: Science, Technology & Society
+Appreciate the discovery of the cell and the microscope. Discuss the uses and conservation of common metals. Recognise astronomy as a science. Appreciate the role of satellites in modern weather forecasting.
+Subsections: Science & Technology; Key Discoveries; Sustainability
+Notes: 
+
+grade7-social-modern-studies comingSoon=false
+g7sms-islands: Our Islands & their Landforms
+Name and locate on maps the islands forming the Republic of Mauritius. Describe the main characteristics of a volcanic island, a coral island and a coral atoll. Understand the different types of island found in the region. Geographical strand of the content area Knowing my country.
+Subsections: Islands of the Republic; Types of Islands; Landforms
+Notes: 
+g7sms-origins: Origins, Heritage & Identity
+Discuss the importance of our islands from a historical perspective. Discuss the origins of the people who settled on the islands. Explain the meaning of cultural diversity. Recognise that our origins and cultural diversity are our heritage. Appreciate our unique Mauritian identity.
+Subsections: Historical Significance; Origins of Settlers; Cultural Diversity
+Notes: 
+g7sms-people: Our Country, Our People
+Appreciate the contributions of Mauritians and of groups from various fields. Recognise achievements in the arts, sport, science and public life. Understand how individuals shape the life of a country.
+Subsections: Contributions of Mauritians; Achievements in Arts & Sport; Individuals & the Country
+Notes: 
+g7sms-settlement: Where People Live
+Describe and explain the factors that promote settlement in different places. Consider physical, historical and social factors together. Explore how settlements have evolved differently over time in our islands.
+Subsections: Settlement Factors; Physical & Historical Factors; Evolution of Settlements
+Notes: 
+g7sms-resources: People, Places & the Environment
+Explain the meaning of the term natural resource. Recognise that natural resources are found in the atmosphere, hydrosphere, lithosphere and biosphere. Identify the natural resources of our islands. Recognise that natural resources have always influenced where people live.
+Subsections: Natural Resources; Types of Resources; Resources & Settlement
+Notes: 
+
+grade8-english comingSoon=false
+g8eng-listening: Listening & Comprehension
+Listen to longer spoken and audio-visual texts. Distinguish fact from opinion in what is heard. Follow discussions between several speakers. Summarise the main points of a spoken text.
+Subsections: Fact vs Opinion; Summarising a Text
+Notes: 
+g8eng-speaking: Speaking & Oral Interaction
+Speak fluently on a widening range of topics. Take part in structured discussions and debates. Support an opinion with reasons. Adapt register to the audience.
+Subsections: Structured Discussion & Debate; Register Adaptation
+Notes: 
+g8eng-reading: Reading & Comprehension
+Read and compare a range of text types. Identify purpose, audience and tone. Distinguish explicit from implicit meaning. Evaluate what is read.
+Subsections: Purpose, Audience & Tone; Explicit & Implicit Meaning
+Notes: 
+g8eng-writing: Writing
+Write extended texts in a range of forms. Structure an argument with supporting detail. Vary sentence structure for effect. Edit for accuracy and clarity.
+Subsections: Extended Writing & Argument; Editing for Accuracy
+Notes: 
+g8eng-gr-nouns: Grammar · Nouns
+Expand nouns into noun phrases. Use gerunds, which are nouns formed from verbs.
+Subsections: Noun Phrases; Gerunds
+Notes: 
+g8eng-gr-pronouns: Grammar · Pronouns
+Use pronouns to maintain reference across sentences. Avoid ambiguous pronoun reference.
+Subsections: Reference Tracking; Ambiguous Pronoun Reference
+Notes: 
+g8eng-gr-adjectives: Grammar · Adjectives
+Order several adjectives correctly when they follow each other. Distinguish between adjectives formed with an -ing participle and those formed with an -ed or -en participle. Reinforce the transformation of verbs and nouns into adjectives.
+Subsections: Adjective Order; Participial Adjectives (-ing/-ed)
+Notes: 
+g8eng-gr-verbs: Grammar · Verbs & Tenses
+Use the present perfect and the future continuous. Extend the range of tenses used in writing. Maintain consistent tense across a paragraph.
+Subsections: Present Perfect; Future Continuous
+Notes: 
+g8eng-gr-determiners: Grammar · Determiners, Articles & Quantifiers
+Differentiate between words taking and not taking articles in specific situations.
+Subsections: Article Use; No Article
+Notes: 
+g8eng-gr-adverbs: Grammar · Adverbs
+Convert adjectives into adverbs for use in a variety of sentences. Use adverbs of reason and purpose.
+Subsections: Adjective to Adverb; Adverbs of Reason & Purpose
+Notes: 
+g8eng-gr-modals: Grammar · Modals
+Use modal verbs to express possibility, probability and advice.
+Subsections: Possibility & Probability; Advice & Recommendation
+Notes: 
+g8eng-gr-prepositions: Grammar · Prepositions
+Extend the use of prepositions in phrases and after particular verbs.
+Subsections: Prepositional Phrases; Verbs + Prepositions
+Notes: 
+g8eng-gr-sentence: Grammar · Sentence Structure
+Extend the construction and use of complex sentences. Construct and use sentences in the past conditional. Construct and use sentences in direct and indirect speech.
+Subsections: Complex Sentences & Conditionals; Direct & Indirect Speech
+Notes: 
+g8eng-gr-punctuation: Grammar · Punctuation
+Use ellipsis points to indicate an incomplete sentence or unfinished speech.
+Subsections: Ellipsis (…); Punctuation Review
+Notes: 
+
+grade8-french comingSoon=false
+g8fr-co: Compréhension orale
+Différencier les types de textes écoutés. Dégager le sens et les paramètres de la communication. Préciser les éléments du schéma de communication. Suivre des discussions entre plusieurs locuteurs.
+Subsections: Schéma de communication; Types de textes oraux; Sens et contexte
+Notes: 
+g8fr-eo: Expression orale
+Lire à voix haute différents types de textes. Converser clairement avec plusieurs interlocuteurs. Traiter une problématique à l'oral. Utiliser un lexique varié et précis.
+Subsections: Lecture expressive; Conversation à plusieurs; Lexique varié et précis
+Notes: 
+g8fr-ce: Compréhension écrite
+Comparer et analyser différents types de production écrite. Identifier les registres de langue utilisés. Dégager judicieusement l'idée principale d'un texte. Repérer les informations implicites.
+Subsections: Idée principale et implicite; Registres de langue; Analyse de texte
+Notes: 
+g8fr-ee: Expression écrite
+Produire seul ou en groupe des textes fonctionnels divers. Résumer les éléments clés d'un texte. Exprimer son opinion par écrit. Structurer un texte cohérent.
+Subsections: Textes fonctionnels divers; Résumé et opinion; Structure et cohérence
+Notes: 
+g8fr-litterature: Littérature
+Identifier les genres littéraires et leurs caractéristiques. Apprécier des textes littéraires variés. Réagir à un texte littéraire à l'oral et à l'écrit.
+Subsections: Genres et caractéristiques; Appréciation de textes; Réaction littéraire
+Notes: 
+
+grade8-maths comingSoon=false
+g8m-sequences: Sequences
+Recognise and continue number sequences. Describe the rule of a sequence in words. Find a given term of a sequence. Generate a sequence from a given rule.
+Subsections: Continuing Sequences; Sequence Rules; The nth Term
+Notes: 
+g8m-indices: Indices, Square Roots & Cube Roots
+Use index notation with whole numbers. Find square roots and cube roots. Apply the laws of indices. Evaluate expressions involving powers and roots.
+Subsections: Laws of Indices; Square & Cube Roots; Evaluating Indices
+Notes: 
+g8m-rate: Rate & Proportion
+Understand rate as a comparison of two quantities. Work with direct proportion. Solve problems involving rates such as price per unit. Use proportion in everyday contexts.
+Subsections: Unit Rates; Direct Proportion; Rate Problems
+Notes: 
+g8m-finance: Personal & Household Finance
+Calculate simple interest. Work out discount, profit and loss. Read and interpret bills and household accounts. Solve problems involving budgeting.
+Subsections: Simple Interest; Profit, Loss & Discount; Bills & Budgeting
+Notes: 
+g8m-polygons: Polygons
+Calculate interior and exterior angles of polygons. Use the angle sum of a polygon. Identify the properties of regular polygons. Solve problems involving angles in polygons.
+Subsections: Interior & Exterior Angles; Angle Sum of Polygons; Regular Polygons
+Notes: 
+g8m-coordinates: Coordinates
+Plot points in all four quadrants. Find the midpoint of a line segment. Plot and interpret linear graphs. Use coordinates to solve geometric problems.
+Subsections: The Four Quadrants; Midpoint of a Line; Linear Graphs
+Notes: 
+g8m-circles: Circles
+Identify the parts of a circle. Calculate the circumference of a circle. Calculate the area of a circle. Solve everyday problems involving circles.
+Subsections: Parts of a Circle; Circumference; Area of a Circle
+Notes: 
+g8m-surface-area: Surface Area
+Find the surface area of cubes and cuboids. Use nets to work out surface area. Calculate the surface area of prisms. Solve problems involving surface area.
+Subsections: Nets of Solids; Surface Area of Cuboids; Surface Area of Prisms
+Notes: 
+g8m-volume: Volume
+Calculate the volume of cubes and cuboids. Convert between units of volume. Find the volume of prisms. Solve everyday problems involving volume.
+Subsections: Volume of Cuboids; Volume Unit Conversion; Volume of Prisms
+Notes: 
+g8m-algebra: Algebraic Expressions
+Expand brackets in algebraic expressions. Factorise simple expressions. Simplify algebraic fractions. Solve linear equations containing brackets.
+Subsections: Expanding Brackets; Factorising; Algebraic Fractions
+Notes: 
+g8m-statistics: Statistics
+Draw and interpret pie charts. Calculate the mean, median and mode. Compare two sets of data. Interpret graphs to draw conclusions.
+Subsections: Pie Charts; Mean, Median & Mode; Comparing Data
+Notes: 
+
+grade8-science comingSoon=false
+g8s-inquiry: Scientific Inquiry
+Frame questions for further investigation. Work safely in the laboratory. Record data in tables, diagrams, charts and graphs. Report apparatus, method, results and conclusions. Determine the volume of an irregular solid and the density of liquids and solids.
+Subsections: Lab Procedures & Safety; Recording Data; Density & Volume
+Notes: 
+g8s-food: Food & Nutrients
+Identify the main food groups and the nutrients they provide. Relate diet to health and to deficiency diseases. Test a food sample to identify its components. Plan a balanced diet.
+Subsections: Food Groups & Nutrients; Deficiency Diseases; Balanced Diet
+Notes: 
+g8s-mixtures: Mixtures & Separation Techniques
+Recognise mixtures and their composition. Relate the uses of substances to their properties. Separate mixtures by filtration, decantation and evaporation. Explain the principle behind each technique.
+Subsections: Types of Mixtures; Separation Techniques; Principles of Separation
+Notes: 
+g8s-digestive: The Digestive System
+Identify the parts of the human digestive system. Describe ingestion, digestion, absorption and egestion. Explain mechanical and chemical digestion. Relate the structure of the gut to its function.
+Subsections: Digestive Organs; The Digestion Process; Structure & Function
+Notes: 
+g8s-respiratory: The Respiratory System
+Identify the parts of the human respiratory system. Describe gas exchange in the lungs. Explain the processes of inspiration and expiration. Compare respiration in different organisms.
+Subsections: Respiratory Organs; Gas Exchange; The Breathing Process
+Notes: 
+g8s-chem-language: Language of Chemistry
+Write symbols and formulae for elements and compounds. Recognise common radicals and their valencies. Use valencies to work out chemical formulae. Write and balance word and chemical equations.
+Subsections: Symbols & Formulae; Valencies & Radicals; Balancing Equations
+Notes: 
+g8s-diseases: Communicable & Non-Communicable Diseases
+Distinguish communicable from non-communicable diseases. Describe how communicable diseases spread. Discuss substance abuse and its effects on the body. Explain measures for prevention and control.
+Subsections: Communicable vs Non-communicable; How Diseases Spread; Prevention & Control
+Notes: 
+g8s-acids: Acids, Bases & Salts
+Identify common acids and bases. Use indicators and recognise their colours in acidic and basic solutions. Investigate the reactions of acids with metals and with bases. Understand neutralisation and the formation of salts.
+Subsections: Acids, Bases & Indicators; Reactions of Acids; Neutralisation
+Notes: 
+g8s-forces: Forces in Nature
+Understand force and how it is measured. Measure force using a spring balance. Identify the forces found in nature. Explain the effect of gravity on a mass.
+Subsections: Types of Forces; Measuring Force; Effects of Gravity
+Notes: 
+g8s-pressure: Pressure
+Define pressure and state its unit of measurement. Investigate pressure in solids, liquids and gases. Relate pressure to force and area. Solve simple problems involving pressure.
+Subsections: Pressure — Definition & Unit; Pressure in Fluids; Pressure Calculations
+Notes: 
+g8s-magnetism: Magnetism & its Uses
+Recognise magnetic and non-magnetic materials. Investigate magnetic poles and magnetic fields. Describe the everyday uses of magnets. Carry out simple investigations on magnetism.
+Subsections: Magnetic Materials; Poles & Magnetic Fields; Uses of Magnets
+Notes: 
+g8s-work-energy: Work, Energy & Power
+Define work as a force acting through a displacement. Calculate the work done. Understand power as the rate of doing work. Relate work, energy and power in everyday examples.
+Subsections: Work Done; Power; Work, Energy & Power
+Notes: 
+g8s-sts: Science, Technology & Society
+Discuss the impact of diseases on society. Appreciate the role of neutralisation in medicine and in agriculture. Recognise the contribution of science and technology to humanity. Discuss the limitations of science and technology.
+Subsections: Science & Society; Impact of Technology; Contributions to Humanity
+Notes: 
+
+grade8-social-modern-studies comingSoon=false
+g8sms-slavery: Slavery & Indentured Labour
+Recall the slave trade and slavery during the French period. Explain the abolition of slavery during the British period. Discuss the apprenticeship system. Discuss the living and working conditions of Indian indentured labourers. Understand slavery and indenture as economic labour systems.
+Subsections: The Slave Trade; Abolition of Slavery; Indenture System
+Notes: 
+g8sms-society: Mauritian Society, 1920s to 1960s
+Recall the socio-economic conditions of the people at the end of the First World War. Discuss the social and economic changes in the life of the people between the 1920s and the 1960s. Discuss Mauritian society in the nineteenth century.
+Subsections: Post-WW1 Conditions; Social & Economic Changes; Mauritian Society
+Notes: 
+g8sms-independence: The Way to Independence
+Identify the empires and colonies of the twentieth century. Explain the factors that led to decolonisation worldwide. Realise that decolonisation worldwide had an impact on Mauritius. Recognise the rise of political awareness in Mauritius. Discuss the contributions of the various movements and the role of the media.
+Subsections: Empires & Colonies; Decolonisation; Mauritius & Independence
+Notes: 
+g8sms-democracy: Mauritius, a Democratic Country
+Show an understanding of the term democracy and identify its features. Explain the functions of the Constitution, the electoral process, the Legislature, the Executive and the Judiciary. Appreciate the role of unions, NGOs, associations and movements. Discuss the role of the media in a democracy.
+Subsections: Features of Democracy; Constitution & Government; Media & Democracy
+Notes: 
+g8sms-climate: The Changing Climate
+Explain the causes and consequences of global warming. Discuss the impact of global warming on our islands. Explore ways to adapt to climate change and mitigate its consequences. Show awareness of the measures taken to combat climate change.
+Subsections: Causes of Global Warming; Impact on Mauritius; Adaptation & Mitigation
+Notes: 

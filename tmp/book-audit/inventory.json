@@ -1,0 +1,735 @@
+[
+  {
+    "file": "books\\grade1\\FRENCH GRADE 1 P1 (STUDENT) - REVIEW 2021.pdf",
+    "text": "tmp\\book-audit\\grade1__FRENCH GRADE 1 P1 (STUDENT) - REVIEW 2021.txt",
+    "pages": 89,
+    "chars": 42833,
+    "sparse_pages": [
+      2,
+      8,
+      9,
+      34,
+      35,
+      62,
+      63,
+      89
+    ],
+    "audit_id": "B01",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade1\\FRENCH GRADE 1 P2 (STUDENT) - REVIEW 2021.pdf",
+    "text": "tmp\\book-audit\\grade1__FRENCH GRADE 1 P2 (STUDENT) - REVIEW 2021.txt",
+    "pages": 95,
+    "chars": 43958,
+    "sparse_pages": [
+      2,
+      6,
+      7,
+      33,
+      34,
+      35,
+      36,
+      37,
+      44,
+      46,
+      67
+    ],
+    "audit_id": "B02",
+    "toc_pdf_pages": [
+      5
+    ]
+  },
+  {
+    "file": "books\\grade1\\HE-Pupil Book Grade 1.pdf",
+    "text": "tmp\\book-audit\\grade1__HE-Pupil Book Grade 1.txt",
+    "pages": 42,
+    "chars": 26120,
+    "sparse_pages": [
+      2,
+      8,
+      14,
+      18,
+      28,
+      40,
+      41
+    ],
+    "audit_id": "B03",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade1\\Maths-Grade 1-PART-1-pupil (2021).pdf",
+    "text": "tmp\\book-audit\\grade1__Maths-Grade 1-PART-1-pupil (2021).txt",
+    "pages": 76,
+    "chars": 29399,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      74,
+      76
+    ],
+    "audit_id": "B04",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade1\\Maths-Grade 1-PART-2-PUPIL (2021).pdf",
+    "text": "tmp\\book-audit\\grade1__Maths-Grade 1-PART-2-PUPIL (2021).txt",
+    "pages": 86,
+    "chars": 40130,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      24
+    ],
+    "audit_id": "B05",
+    "toc_pdf_pages": [
+      5
+    ]
+  },
+  {
+    "file": "books\\grade1\\WEB-ENG_G1_P1_Pupil's_REPRINT_2021.pdf",
+    "text": "tmp\\book-audit\\grade1__WEB-ENG_G1_P1_Pupil's_REPRINT_2021.txt",
+    "pages": 153,
+    "chars": 67014,
+    "sparse_pages": [
+      2,
+      3,
+      12,
+      13,
+      17,
+      18,
+      22,
+      25,
+      30,
+      31,
+      38,
+      39,
+      52,
+      54,
+      62,
+      63,
+      64,
+      68,
+      69,
+      70,
+      74,
+      75,
+      78,
+      84,
+      85,
+      86,
+      92,
+      94,
+      102,
+      104,
+      111,
+      122,
+      130,
+      131,
+      132,
+      142,
+      144,
+      150,
+      152,
+      153
+    ],
+    "audit_id": "B06",
+    "toc_pdf_pages": [
+      10
+    ]
+  },
+  {
+    "file": "books\\grade1\\WEB-ENG_G1_P2_Pupil's_REPRINT_2021.pdf",
+    "text": "tmp\\book-audit\\grade1__WEB-ENG_G1_P2_Pupil's_REPRINT_2021.txt",
+    "pages": 141,
+    "chars": 48634,
+    "sparse_pages": [
+      2,
+      3,
+      6,
+      7,
+      14,
+      16,
+      26,
+      27,
+      28,
+      33,
+      55,
+      68,
+      69,
+      70,
+      76,
+      84,
+      85,
+      86,
+      101,
+      107,
+      108,
+      114,
+      134,
+      141
+    ],
+    "audit_id": "B07",
+    "toc_pdf_pages": [
+      5
+    ]
+  },
+  {
+    "file": "books\\grade2\\FRENCH GRADE 2 P1 (STUDENT) - REVIEW 2021.pdf",
+    "text": "tmp\\book-audit\\grade2__FRENCH GRADE 2 P1 (STUDENT) - REVIEW 2021.txt",
+    "pages": 103,
+    "chars": 61830,
+    "sparse_pages": [
+      2,
+      3,
+      8,
+      9,
+      41,
+      71,
+      103
+    ],
+    "audit_id": "B08",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade2\\FRENCH GRADE 2 P2 (STUDENT) - REVIEW 2021.pdf",
+    "text": "tmp\\book-audit\\grade2__FRENCH GRADE 2 P2 (STUDENT) - REVIEW 2021.txt",
+    "pages": 123,
+    "chars": 68329,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      7,
+      14,
+      16,
+      48,
+      49,
+      77,
+      78,
+      79,
+      80,
+      85,
+      115,
+      116,
+      118,
+      123
+    ],
+    "audit_id": "B09",
+    "toc_pdf_pages": [
+      5
+    ]
+  },
+  {
+    "file": "books\\grade2\\HE Grade 2 - Pupil's Activity Book.pdf",
+    "text": "tmp\\book-audit\\grade2__HE Grade 2 - Pupil's Activity Book.txt",
+    "pages": 53,
+    "chars": 19480,
+    "sparse_pages": [
+      1,
+      2,
+      8,
+      34,
+      38,
+      42,
+      52,
+      53
+    ],
+    "audit_id": "B10",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade2\\Maths-grade2-part-1-pupil (2021).pdf",
+    "text": "tmp\\book-audit\\grade2__Maths-grade2-part-1-pupil (2021).txt",
+    "pages": 110,
+    "chars": 64727,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      14,
+      22,
+      24,
+      52,
+      54,
+      109,
+      110
+    ],
+    "audit_id": "B11",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade2\\Maths-grade2-Pupil-part 2 (2021).pdf",
+    "text": "tmp\\book-audit\\grade2__Maths-grade2-Pupil-part 2 (2021).txt",
+    "pages": 120,
+    "chars": 74537,
+    "sparse_pages": [
+      1,
+      2,
+      64,
+      71,
+      72,
+      100,
+      103,
+      105,
+      106,
+      107,
+      108,
+      116,
+      120
+    ],
+    "audit_id": "B12",
+    "toc_pdf_pages": [
+      5
+    ]
+  },
+  {
+    "file": "books\\grade2\\WEB ENG_G2_P2_PUPILS_Reprint_2022.pdf",
+    "text": "tmp\\book-audit\\grade2__WEB ENG_G2_P2_PUPILS_Reprint_2022.txt",
+    "pages": 114,
+    "chars": 75201,
+    "sparse_pages": [
+      2,
+      3,
+      6,
+      16,
+      30,
+      31,
+      56,
+      60,
+      62,
+      64,
+      66,
+      100,
+      102,
+      114
+    ],
+    "audit_id": "B13",
+    "toc_pdf_pages": [
+      5
+    ]
+  },
+  {
+    "file": "books\\grade2\\WEB-ENG_G2_P1_Pupil's_Reprint_2021.pdf",
+    "text": "tmp\\book-audit\\grade2__WEB-ENG_G2_P1_Pupil's_Reprint_2021.txt",
+    "pages": 111,
+    "chars": 86774,
+    "sparse_pages": [
+      2,
+      3,
+      18,
+      92,
+      110,
+      111
+    ],
+    "audit_id": "B14",
+    "toc_pdf_pages": [
+      9
+    ]
+  },
+  {
+    "file": "books\\grade3\\ENG_G3_P1_Pupil's_book_REPRINT_2022.pdf",
+    "text": "tmp\\book-audit\\grade3__ENG_G3_P1_Pupil's_book_REPRINT_2022.txt",
+    "pages": 109,
+    "chars": 89563,
+    "sparse_pages": [
+      2,
+      3,
+      35,
+      74,
+      76,
+      83,
+      109
+    ],
+    "audit_id": "B15",
+    "toc_pdf_pages": [
+      9
+    ]
+  },
+  {
+    "file": "books\\grade3\\ENG_G3_P2_PUPILS_REPRINT_2022.pdf",
+    "text": "tmp\\book-audit\\grade3__ENG_G3_P2_PUPILS_REPRINT_2022.txt",
+    "pages": 93,
+    "chars": 61024,
+    "sparse_pages": [
+      2,
+      3,
+      5,
+      6,
+      34,
+      38,
+      52,
+      70,
+      71,
+      72,
+      93
+    ],
+    "audit_id": "B16",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade3\\FRENCH GRADE 3 P1 (STUDENT) - REVIEW 2021.pdf",
+    "text": "tmp\\book-audit\\grade3__FRENCH GRADE 3 P1 (STUDENT) - REVIEW 2021.txt",
+    "pages": 107,
+    "chars": 74104,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      8,
+      12,
+      18,
+      30,
+      31,
+      36,
+      42,
+      65,
+      66,
+      67,
+      68,
+      72,
+      76,
+      81,
+      98,
+      100
+    ],
+    "audit_id": "B17",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade3\\FRENCH GRADE 3 P2 (STUDENT) - REVIEW 2021.pdf",
+    "text": "tmp\\book-audit\\grade3__FRENCH GRADE 3 P2 (STUDENT) - REVIEW 2021.txt",
+    "pages": 125,
+    "chars": 91730,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      6,
+      12,
+      13,
+      39,
+      40,
+      41,
+      42,
+      52,
+      54,
+      56,
+      57,
+      88,
+      94,
+      95,
+      116,
+      118
+    ],
+    "audit_id": "B18",
+    "toc_pdf_pages": [
+      5
+    ]
+  },
+  {
+    "file": "books\\grade3\\HPE_G3_PUPIL.pdf",
+    "text": "tmp\\book-audit\\grade3__HPE_G3_PUPIL.txt",
+    "pages": 45,
+    "chars": 25371,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      8,
+      37,
+      38,
+      44,
+      45
+    ],
+    "audit_id": "B19",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade3\\Mathematics-Grade 3 - Part 2 - PUPIL (2021).pdf",
+    "text": "tmp\\book-audit\\grade3__Mathematics-Grade 3 - Part 2 - PUPIL (2021).txt",
+    "pages": 170,
+    "chars": 102237,
+    "sparse_pages": [
+      1,
+      2,
+      12,
+      95,
+      96,
+      124,
+      170
+    ],
+    "audit_id": "B20",
+    "toc_pdf_pages": [
+      5
+    ]
+  },
+  {
+    "file": "books\\grade3\\Maths-Grade 3-part 1-pupil (2021).pdf",
+    "text": "tmp\\book-audit\\grade3__Maths-Grade 3-part 1-pupil (2021).txt",
+    "pages": 138,
+    "chars": 104076,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      40
+    ],
+    "audit_id": "B21",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade3\\SSEE_G3_P1_TB_Reprint2022.pdf",
+    "text": "tmp\\book-audit\\grade3__SSEE_G3_P1_TB_Reprint2022.txt",
+    "pages": 165,
+    "chars": 156926,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      72,
+      88,
+      164,
+      165
+    ],
+    "audit_id": "B22",
+    "toc_pdf_pages": [
+      10
+    ]
+  },
+  {
+    "file": "books\\grade3\\SSEE_G3_p2_PUPILS_REPRINT 2022.pdf",
+    "text": "tmp\\book-audit\\grade3__SSEE_G3_p2_PUPILS_REPRINT 2022.txt",
+    "pages": 128,
+    "chars": 87314,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      8,
+      70,
+      98,
+      127,
+      128
+    ],
+    "audit_id": "B23",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade7\\English Grade 7 - REVIEW 2021 (WEB).pdf",
+    "text": "tmp\\book-audit\\grade7__English Grade 7 - REVIEW 2021 (WEB).txt",
+    "pages": 199,
+    "chars": 305360,
+    "sparse_pages": [
+      2,
+      3,
+      12,
+      33,
+      34,
+      36,
+      37,
+      82,
+      83,
+      116,
+      140,
+      164
+    ],
+    "audit_id": "B24",
+    "toc_pdf_pages": [
+      8,
+      9,
+      10
+    ]
+  },
+  {
+    "file": "books\\grade7\\Science Grade 7_REPRINT 2021.pdf",
+    "text": "tmp\\book-audit\\grade7__Science Grade 7_REPRINT 2021.txt",
+    "pages": 281,
+    "chars": 595423,
+    "sparse_pages": [
+      2,
+      101,
+      281
+    ],
+    "audit_id": "B25",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade7\\SMS Grade 7_Review 2021.pdf",
+    "text": "tmp\\book-audit\\grade7__SMS Grade 7_Review 2021.txt",
+    "pages": 156,
+    "chars": 276532,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      8,
+      131,
+      155,
+      156
+    ],
+    "audit_id": "B26",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade7\\WEB REPRINT 2021 Fran\u00e7ais Grade 7.pdf",
+    "text": "tmp\\book-audit\\grade7__WEB REPRINT 2021 Fran\u00e7ais Grade 7.txt",
+    "pages": 194,
+    "chars": 334515,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      8,
+      10,
+      52,
+      68,
+      124,
+      194
+    ],
+    "audit_id": "B27",
+    "toc_pdf_pages": [
+      9
+    ]
+  },
+  {
+    "file": "books\\grade7\\WEB REPRINT 2021 Maths Grade 7.pdf",
+    "text": "tmp\\book-audit\\grade7__WEB REPRINT 2021 Maths Grade 7.txt",
+    "pages": 278,
+    "chars": 774412,
+    "sparse_pages": [
+      1,
+      2,
+      278
+    ],
+    "audit_id": "B28",
+    "toc_pdf_pages": [
+      8
+    ]
+  },
+  {
+    "file": "books\\grade8\\ENGLISH GRADE 8 (Review 2021) - WEB.pdf",
+    "text": "tmp\\book-audit\\grade8__ENGLISH GRADE 8 (Review 2021) - WEB.txt",
+    "pages": 188,
+    "chars": 224686,
+    "sparse_pages": [
+      2,
+      3,
+      38,
+      39,
+      42,
+      128,
+      133,
+      137,
+      156,
+      188
+    ],
+    "audit_id": "B29",
+    "toc_pdf_pages": [
+      8,
+      9,
+      10
+    ]
+  },
+  {
+    "file": "books\\grade8\\Science Grade 8_Reprint 2021_WEB.pdf",
+    "text": "tmp\\book-audit\\grade8__Science Grade 8_Reprint 2021_WEB.txt",
+    "pages": 314,
+    "chars": 574519,
+    "sparse_pages": [
+      2,
+      3,
+      208,
+      290
+    ],
+    "audit_id": "B30",
+    "toc_pdf_pages": [
+      8
+    ]
+  },
+  {
+    "file": "books\\grade8\\SMS_G8_rep2022.pdf",
+    "text": "tmp\\book-audit\\grade8__SMS_G8_rep2022.txt",
+    "pages": 136,
+    "chars": 213008,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      8,
+      135,
+      136
+    ],
+    "audit_id": "B31",
+    "toc_pdf_pages": [
+      7
+    ]
+  },
+  {
+    "file": "books\\grade8\\WEB REPRINT 2021 Francais Grade 8.pdf",
+    "text": "tmp\\book-audit\\grade8__WEB REPRINT 2021 Francais Grade 8.txt",
+    "pages": 130,
+    "chars": 233193,
+    "sparse_pages": [
+      1,
+      2,
+      3,
+      8,
+      30,
+      48,
+      68,
+      91,
+      92,
+      130
+    ],
+    "audit_id": "B32",
+    "toc_pdf_pages": [
+      9
+    ]
+  },
+  {
+    "file": "books\\grade8\\WEB REPRINT Maths Grade 8.pdf",
+    "text": "tmp\\book-audit\\grade8__WEB REPRINT Maths Grade 8.txt",
+    "pages": 291,
+    "chars": 672712,
+    "sparse_pages": [
+      1,
+      2,
+      276,
+      277,
+      291
+    ],
+    "audit_id": "B33",
+    "toc_pdf_pages": [
+      8
+    ]
+  }
+]

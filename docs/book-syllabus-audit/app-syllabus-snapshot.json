@@ -1,0 +1,4258 @@
+[
+  {
+    "file": "subjects/grade1-english/_manifest.js",
+    "id": "grade1-english",
+    "name": "English",
+    "grade": 1,
+    "icon": "📖",
+    "subject": "English",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "notesBased": true,
+    "noDifficulty": true,
+    "syllabus": {
+      "g1eng-listening": {
+        "subsections": [
+          {
+            "id": "sound_recognition",
+            "name": "Recognising Sounds"
+          },
+          {
+            "id": "rhymes_songs",
+            "name": "Rhymes & Songs"
+          },
+          {
+            "id": "listening_comp",
+            "name": "Listening & Understanding"
+          }
+        ]
+      },
+      "g1eng-speaking": {
+        "subsections": [
+          {
+            "id": "greetings_phrases",
+            "name": "Greetings & Phrases"
+          },
+          {
+            "id": "naming_things",
+            "name": "Naming Things"
+          },
+          {
+            "id": "short_talk",
+            "name": "Talking in Sentences"
+          }
+        ]
+      },
+      "g1eng-reading": {
+        "subsections": [
+          {
+            "id": "print_awareness",
+            "name": "Print Awareness"
+          },
+          {
+            "id": "letter_recognition",
+            "name": "Letters & Sounds"
+          },
+          {
+            "id": "sight_words",
+            "name": "Common Words"
+          }
+        ]
+      },
+      "g1eng-writing": {
+        "subsections": [
+          {
+            "id": "letter_formation",
+            "name": "Writing Letters"
+          },
+          {
+            "id": "copying_words",
+            "name": "Copying Words"
+          },
+          {
+            "id": "basic_sentences",
+            "name": "Simple Sentences"
+          }
+        ]
+      },
+      "g1eng-grammar": {
+        "subsections": [
+          {
+            "id": "common_nouns",
+            "name": "Naming Words"
+          },
+          {
+            "id": "articles_a_an",
+            "name": "a and an"
+          },
+          {
+            "id": "basic_sentences",
+            "name": "Putting a Sentence Together"
+          }
+        ]
+      },
+      "g1eng-phonics": {
+        "subsections": [
+          {
+            "id": "initial_sounds",
+            "name": "Starting Sounds"
+          },
+          {
+            "id": "rhyming_words",
+            "name": "Rhyming Words"
+          },
+          {
+            "id": "syllables",
+            "name": "Word Syllables"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g1eng-listening",
+        "name": "Listening",
+        "icon": "👂",
+        "examWeight": 1,
+        "notes": [
+          "We use our **ears** to listen to sounds around us.",
+          "English has special sounds — listen carefully to how each letter sounds.",
+          "**Rhymes** are words that end with the same sound, like cat and hat.",
+          "When you listen to a story, think: *Who? What? Where?*"
+        ]
+      },
+      {
+        "id": "g1eng-speaking",
+        "name": "Speaking",
+        "icon": "🗣️",
+        "examWeight": 1,
+        "notes": [
+          "Say **hello** and **good morning** when you greet someone.",
+          "Use **please** and **thank you** when you speak.",
+          "To describe something, tell its colour, size and shape.",
+          "A **sentence** starts with a capital letter and ends with a full stop."
+        ]
+      },
+      {
+        "id": "g1eng-reading",
+        "name": "Reading Readiness",
+        "icon": "📚",
+        "examWeight": 1,
+        "notes": [
+          "We read from **left to right** in English.",
+          "The **alphabet** has 26 letters — 5 vowels (a, e, i, o, u) and 21 consonants.",
+          "A **word** is a group of letters that means something.",
+          "Look at pictures for clues about what a story is about."
+        ]
+      },
+      {
+        "id": "g1eng-writing",
+        "name": "Writing",
+        "icon": "✏️",
+        "examWeight": 1,
+        "notes": [
+          "Sit up straight and hold your pencil the right way.",
+          "Write letters starting from the top.",
+          "Capital letters are **big**, small letters are **little**.",
+          "Leave a space between each word when you write."
+        ]
+      },
+      {
+        "id": "g1eng-grammar",
+        "name": "Grammar",
+        "icon": "📝",
+        "examWeight": 1,
+        "notes": [
+          "A **noun** is a naming word — it names a person, place or thing. e.g. *dog, school, girl*.",
+          "Use **a** before words that start with a consonant sound: *a cat, a ball*.",
+          "Use **an** before words that start with a vowel sound: *an apple, an egg*.",
+          "A simple sentence has a subject and a verb: *The dog runs.*"
+        ]
+      },
+      {
+        "id": "g1eng-phonics",
+        "name": "Phonics",
+        "icon": "🔤",
+        "examWeight": 1,
+        "notes": [
+          "Every letter has a **sound**. \"S\" says /s/ like in *sun*.",
+          "Words that **rhyme** have the same ending sound: *hat, cat, bat*.",
+          "You can break long words into parts called **syllables**: ba-na-na (3 parts).",
+          "The letters a, e, i, o, u are called **vowels**."
+        ]
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade1-french/_manifest.js",
+    "id": "grade1-french",
+    "name": "French",
+    "grade": 1,
+    "icon": "🇫🇷",
+    "subject": "French",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "notesBased": true,
+    "noDifficulty": true,
+    "syllabus": {
+      "g1fr-comprehension-orale": {
+        "subsections": [
+          {
+            "id": "discrimination_sons",
+            "name": "Distinguer les sons"
+          },
+          {
+            "id": "comprehension_messages",
+            "name": "Comprendre un message"
+          },
+          {
+            "id": "vocabulaire_oral",
+            "name": "Vocabulaire oral"
+          }
+        ]
+      },
+      "g1fr-expression-orale": {
+        "subsections": [
+          {
+            "id": "comptines_chansons",
+            "name": "Comptines et chansons"
+          },
+          {
+            "id": "conversation_simple",
+            "name": "Conversation simple"
+          },
+          {
+            "id": "description_images",
+            "name": "Décrire une image"
+          }
+        ]
+      },
+      "g1fr-lecture": {
+        "subsections": [
+          {
+            "id": "conscience_phonique",
+            "name": "Conscience phonique"
+          },
+          {
+            "id": "lettres_sons",
+            "name": "Lettres et sons"
+          },
+          {
+            "id": "mots_simples",
+            "name": "Mots simples"
+          }
+        ]
+      },
+      "g1fr-ecriture": {
+        "subsections": [
+          {
+            "id": "lettres_minuscules",
+            "name": "Lettres minuscules"
+          },
+          {
+            "id": "copie_mots",
+            "name": "Copier des mots"
+          },
+          {
+            "id": "phrases_simples",
+            "name": "Phrases simples"
+          }
+        ]
+      },
+      "g1fr-grammaire": {
+        "subsections": [
+          {
+            "id": "noms_communs",
+            "name": "Noms communs"
+          },
+          {
+            "id": "determinants_le_la_les",
+            "name": "le, la, les"
+          },
+          {
+            "id": "phrases_simples_grm",
+            "name": "Construire une phrase"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g1fr-comprehension-orale",
+        "name": "Compréhension orale",
+        "icon": "👂",
+        "examWeight": 1,
+        "notes": [
+          "On utilise ses **oreilles** pour écouter. (We use our ears to listen.)",
+          "Les sons du français sont différents de l'anglais — écoute bien !",
+          "Écoute une phrase et pense : *Qui ? Quoi ? Où ?*",
+          "Un **bruit** vient de l'environnement. Une **voix** vient d'une personne."
+        ]
+      },
+      {
+        "id": "g1fr-expression-orale",
+        "name": "Expression orale",
+        "icon": "🗣️",
+        "examWeight": 1,
+        "notes": [
+          "Dis **bonjour** le matin et **bonsoir** le soir.",
+          "Pour décrire quelque chose, dis sa couleur et sa taille.",
+          "Une **comptine** a des mots qui riment à la fin.",
+          "Parle clairement et à voix haute."
+        ]
+      },
+      {
+        "id": "g1fr-lecture",
+        "name": "Compréhension écrite",
+        "icon": "📚",
+        "examWeight": 1,
+        "notes": [
+          "On lit de **gauche à droite** en français.",
+          "Les voyelles en français : **a, e, i, o, u** (et y).",
+          "Une **syllabe** est un groupe de sons : *ma-man* = 2 syllabes.",
+          "Chaque lettre a un son. Apprends-les un par un !"
+        ]
+      },
+      {
+        "id": "g1fr-ecriture",
+        "name": "Expression écrite",
+        "icon": "✏️",
+        "examWeight": 1,
+        "notes": [
+          "Tiens le crayon correctement — pas trop fort !",
+          "Les lettres **minuscules** sont petites : a, b, c…",
+          "Les lettres **majuscules** sont grandes : A, B, C…",
+          "Laisse un espace entre chaque mot quand tu écris."
+        ]
+      },
+      {
+        "id": "g1fr-grammaire",
+        "name": "Grammaire",
+        "icon": "📝",
+        "examWeight": 1,
+        "notes": [
+          "Un **nom commun** désigne une chose, une personne ou un animal : *chien, maison, fille*.",
+          "En français, les noms sont **masculins** (le, un) ou **féminins** (la, une).",
+          "**le** devant un nom masculin : *le chat*. **la** devant un nom féminin : *la maison*.",
+          "**les** devant un nom pluriel : *les chats, les maisons*."
+        ]
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade1-health/_manifest.js",
+    "id": "grade1-health",
+    "name": "Health Education",
+    "grade": 1,
+    "icon": "❤️",
+    "subject": "Health Education",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": true,
+    "syllabus": {},
+    "chapters": [
+      {
+        "id": "g1he-sample",
+        "name": "Sample Chapter",
+        "icon": "📝",
+        "examWeight": 0,
+        "syllabus": ""
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade1-ict/_manifest.js",
+    "id": "grade1-ict",
+    "name": "ICT Skills",
+    "grade": 1,
+    "icon": "💻",
+    "subject": "ICT Skills",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": true,
+    "syllabus": {},
+    "chapters": [
+      {
+        "id": "g1ict-sample",
+        "name": "Sample Chapter",
+        "icon": "📝",
+        "examWeight": 0,
+        "syllabus": ""
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade1-maths/_manifest.js",
+    "id": "grade1-maths",
+    "name": "Mathematics",
+    "grade": 1,
+    "icon": "🔢",
+    "subject": "Maths",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "noDifficulty": false,
+    "syllabus": {
+      "g1mth-numbers": {
+        "subsections": [
+          {
+            "id": "counting_ordering",
+            "name": "Counting & Ordering"
+          },
+          {
+            "id": "number_words",
+            "name": "Number Words"
+          },
+          {
+            "id": "odd_even",
+            "name": "Odd and Even Numbers"
+          }
+        ]
+      },
+      "g1mth-addition": {
+        "subsections": [
+          {
+            "id": "adding_within_10",
+            "name": "Adding to 10"
+          },
+          {
+            "id": "adding_within_20",
+            "name": "Adding to 20"
+          },
+          {
+            "id": "number_sentences",
+            "name": "Number Sentences"
+          }
+        ]
+      },
+      "g1mth-subtraction": {
+        "subsections": [
+          {
+            "id": "subtracting_within_10",
+            "name": "Taking Away within 10"
+          },
+          {
+            "id": "subtracting_within_20",
+            "name": "Taking Away within 20"
+          },
+          {
+            "id": "missing_numbers",
+            "name": "Finding the Missing Number"
+          }
+        ]
+      },
+      "g1mth-shapes": {
+        "subsections": [
+          {
+            "id": "2d_shapes",
+            "name": "2D Shapes"
+          },
+          {
+            "id": "properties_shapes",
+            "name": "Sides and Corners"
+          },
+          {
+            "id": "position_direction",
+            "name": "Position Words"
+          }
+        ]
+      },
+      "g1mth-measurement": {
+        "subsections": [
+          {
+            "id": "comparing_length",
+            "name": "Comparing Length"
+          },
+          {
+            "id": "comparing_mass",
+            "name": "Comparing Mass"
+          },
+          {
+            "id": "comparing_capacity",
+            "name": "Comparing Capacity"
+          }
+        ]
+      },
+      "g1mth-patterns": {
+        "subsections": [
+          {
+            "id": "repeating_patterns",
+            "name": "Repeating Patterns"
+          },
+          {
+            "id": "number_patterns",
+            "name": "Number Patterns"
+          },
+          {
+            "id": "odd_even_patterns",
+            "name": "Odd and Even"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g1mth-numbers",
+        "name": "Numbers to 20",
+        "icon": "🔢",
+        "examWeight": 3,
+        "syllabus": "Count, read and write numbers from 1 to 20. Order numbers — what comes before, after and between. Recognise odd and even numbers. Write number words: one to twenty."
+      },
+      {
+        "id": "g1mth-addition",
+        "name": "Addition",
+        "icon": "➕",
+        "examWeight": 3,
+        "syllabus": "Combine groups of objects and count the total. Learn addition facts to 10 and to 20. Write and solve number sentences: 5 + 3 = □. Understand the + sign and = sign."
+      },
+      {
+        "id": "g1mth-subtraction",
+        "name": "Subtraction",
+        "icon": "➖",
+        "examWeight": 3,
+        "syllabus": "Take away objects from a group and count what is left. Learn subtraction facts within 20. Write and solve subtraction sentences: 8 − 3 = □. Find the missing number."
+      },
+      {
+        "id": "g1mth-shapes",
+        "name": "Shapes and Space",
+        "icon": "🔷",
+        "examWeight": 2,
+        "syllabus": "Name and recognise 2D shapes: circle, square, rectangle and triangle. Count the sides and corners of each shape. Describe position using words: above, below, left, right, in front, behind."
+      },
+      {
+        "id": "g1mth-measurement",
+        "name": "Measurement",
+        "icon": "📏",
+        "examWeight": 2,
+        "syllabus": "Compare the length of objects: longer, shorter, tallest, shortest. Compare the mass of objects: heavier, lighter, same. Compare capacity: which container holds more, less or the same."
+      },
+      {
+        "id": "g1mth-patterns",
+        "name": "Patterns",
+        "icon": "🔁",
+        "examWeight": 2,
+        "syllabus": "Create and continue repeating patterns with shapes and colours. Count in 2s, 5s and 10s. Identify odd numbers (1, 3, 5…) and even numbers (2, 4, 6…)."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade2-english/_manifest.js",
+    "id": "grade2-english",
+    "name": "English",
+    "grade": 2,
+    "icon": "📖",
+    "subject": "English",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "notesBased": true,
+    "noDifficulty": true,
+    "syllabus": {
+      "g2eng-listening": {
+        "subsections": [
+          {
+            "id": "sound_discrimination",
+            "name": "Telling Sounds Apart"
+          },
+          {
+            "id": "story_listening",
+            "name": "Listening to Stories"
+          },
+          {
+            "id": "instruction_following",
+            "name": "Following Instructions"
+          }
+        ]
+      },
+      "g2eng-speaking": {
+        "subsections": [
+          {
+            "id": "retelling",
+            "name": "Retelling a Story"
+          },
+          {
+            "id": "describing_pictures",
+            "name": "Describing Pictures"
+          },
+          {
+            "id": "conversation",
+            "name": "Having a Conversation"
+          }
+        ]
+      },
+      "g2eng-reading": {
+        "subsections": [
+          {
+            "id": "phonics_decoding",
+            "name": "Sounding Out Words"
+          },
+          {
+            "id": "sight_words",
+            "name": "Common Words"
+          },
+          {
+            "id": "reading_comprehension",
+            "name": "Understanding What You Read"
+          }
+        ]
+      },
+      "g2eng-writing": {
+        "subsections": [
+          {
+            "id": "sentence_writing",
+            "name": "Writing Sentences"
+          },
+          {
+            "id": "punctuation",
+            "name": "Using Punctuation"
+          },
+          {
+            "id": "word_choice",
+            "name": "Choosing the Right Word"
+          }
+        ]
+      },
+      "g2eng-grammar": {
+        "subsections": [
+          {
+            "id": "nouns_pronouns",
+            "name": "Nouns & Pronouns"
+          },
+          {
+            "id": "verbs_action",
+            "name": "Action Words (Verbs)"
+          },
+          {
+            "id": "adjectives_describing",
+            "name": "Describing Words (Adjectives)"
+          }
+        ]
+      },
+      "g2eng-phonics": {
+        "subsections": [
+          {
+            "id": "blends_digraphs",
+            "name": "Blends & Digraphs"
+          },
+          {
+            "id": "word_families",
+            "name": "Word Families"
+          },
+          {
+            "id": "vowel_sounds",
+            "name": "Vowel Sounds"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g2eng-listening",
+        "name": "Listening",
+        "icon": "👂",
+        "examWeight": 1,
+        "notes": [
+          "Listen carefully to **hear the difference** between similar sounds, e.g. /b/ and /p/.",
+          "When you listen to a story, remember: *Who is in it? What happened? How did it end?*",
+          "Follow instructions in order — do the **first** thing first!",
+          "Listening well means being **quiet** and looking at the speaker."
+        ]
+      },
+      {
+        "id": "g2eng-speaking",
+        "name": "Speaking",
+        "icon": "🗣️",
+        "examWeight": 1,
+        "notes": [
+          "When you retell a story, say what happened **first, next, then and last**.",
+          "Describe a picture by naming what you **see, hear, smell or feel**.",
+          "In a conversation, **take turns** — listen, then speak.",
+          "Use full sentences: \"I can see a big red bus\" instead of just \"bus\"."
+        ]
+      },
+      {
+        "id": "g2eng-reading",
+        "name": "Reading",
+        "icon": "📚",
+        "examWeight": 1,
+        "notes": [
+          "Blend letter sounds together to read new words: /c/ /a/ /t/ → cat.",
+          "Common words to know by sight: *said, have, like, some, come, were, there, their, they, out, this*.",
+          "After reading, ask yourself: *What was the story about? Who were the characters?*",
+          "Use pictures and other words in the sentence to work out an unknown word."
+        ]
+      },
+      {
+        "id": "g2eng-writing",
+        "name": "Writing",
+        "icon": "✏️",
+        "examWeight": 1,
+        "notes": [
+          "Every sentence starts with a **capital letter** and ends with a **full stop**, **question mark** or **exclamation mark**.",
+          "Leave a **space** between words.",
+          "Choose words that tell exactly what you mean — \"sprinted\" is better than \"went fast\".",
+          "A sentence must make sense on its own."
+        ]
+      },
+      {
+        "id": "g2eng-grammar",
+        "name": "Grammar",
+        "icon": "📝",
+        "examWeight": 1,
+        "notes": [
+          "A **noun** names a person, place or thing. A **pronoun** replaces a noun: he, she, it, they.",
+          "A **verb** shows what someone does: *run, eat, sleep, jump*.",
+          "An **adjective** describes a noun: the *big* red *shiny* apple.",
+          "Use **he/she** for one person; **they** for more than one."
+        ]
+      },
+      {
+        "id": "g2eng-phonics",
+        "name": "Phonics",
+        "icon": "🔤",
+        "examWeight": 1,
+        "notes": [
+          "**Blends** are two consonants together: *bl, cl, tr, st, sp* (you hear both sounds).",
+          "**Digraphs** are two letters that make one sound: *ch, sh, th, wh, ph*.",
+          "Word families share the same ending: *-at (cat, bat, hat), -an (can, man, fan)*.",
+          "**Long vowel** sounds say the letter name: c**a**ke, r**o**pe, h**e**, k**i**te, r**u**le."
+        ]
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade2-french/_manifest.js",
+    "id": "grade2-french",
+    "name": "French",
+    "grade": 2,
+    "icon": "🇫🇷",
+    "subject": "French",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "notesBased": true,
+    "noDifficulty": true,
+    "syllabus": {
+      "g2fr-comprehension-orale": {
+        "subsections": [
+          {
+            "id": "texte_oral",
+            "name": "Comprendre un texte oral"
+          },
+          {
+            "id": "sequence_evenements",
+            "name": "Séquence des événements"
+          },
+          {
+            "id": "vocabulaire",
+            "name": "Nouveau vocabulaire"
+          }
+        ]
+      },
+      "g2fr-expression-orale": {
+        "subsections": [
+          {
+            "id": "description_images",
+            "name": "Décrire une image"
+          },
+          {
+            "id": "recit_simple",
+            "name": "Raconter une histoire courte"
+          },
+          {
+            "id": "questions_reponses",
+            "name": "Questions et réponses"
+          }
+        ]
+      },
+      "g2fr-lecture": {
+        "subsections": [
+          {
+            "id": "decodage_syllabes",
+            "name": "Décoder par syllabes"
+          },
+          {
+            "id": "lecture_comprehension",
+            "name": "Comprendre ce qu'on lit"
+          },
+          {
+            "id": "type_texte",
+            "name": "Type de texte"
+          }
+        ]
+      },
+      "g2fr-ecriture": {
+        "subsections": [
+          {
+            "id": "phrases_courtes",
+            "name": "Écrire des phrases courtes"
+          },
+          {
+            "id": "ponctuation_de_base",
+            "name": "Ponctuation de base"
+          },
+          {
+            "id": "orthographe_mots",
+            "name": "Orthographe des mots"
+          }
+        ]
+      },
+      "g2fr-grammaire": {
+        "subsections": [
+          {
+            "id": "nom_determinant",
+            "name": "Nom et déterminant"
+          },
+          {
+            "id": "verbe_etre_avoir",
+            "name": "être et avoir"
+          },
+          {
+            "id": "adjectifs_simples",
+            "name": "Adjectifs simples"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g2fr-comprehension-orale",
+        "name": "Compréhension orale",
+        "icon": "👂",
+        "examWeight": 1,
+        "notes": [
+          "Écoute attentivement pour trouver l'**idée principale** du texte.",
+          "Les mots *d'abord, ensuite, puis, enfin* indiquent l'**ordre des événements**.",
+          "Utilise le contexte pour deviner le sens d'un **mot nouveau**.",
+          "Après avoir écouté, demande-toi : *De quoi s'agit-il ?*"
+        ]
+      },
+      {
+        "id": "g2fr-expression-orale",
+        "name": "Expression orale",
+        "icon": "🗣️",
+        "examWeight": 1,
+        "notes": [
+          "Pour décrire une image, dis ce que tu vois : les personnages, les objets, les couleurs.",
+          "Pour raconter, utilise : *d'abord... ensuite... enfin...*",
+          "Pose des questions avec : *Qui ? Quoi ? Où ? Quand ? Pourquoi ?*",
+          "Réponds toujours avec une phrase complète."
+        ]
+      },
+      {
+        "id": "g2fr-lecture",
+        "name": "Compréhension écrite",
+        "icon": "📚",
+        "examWeight": 1,
+        "notes": [
+          "Découpe les mots difficiles en **syllabes** : ma-te-las (3 syllabes).",
+          "Lis la phrase en entier avant de répondre.",
+          "Un **texte narratif** raconte une histoire. Une **liste** donne des informations.",
+          "Les **majuscules** commencent les noms propres et les phrases."
+        ]
+      },
+      {
+        "id": "g2fr-ecriture",
+        "name": "Expression écrite",
+        "icon": "✏️",
+        "examWeight": 1,
+        "notes": [
+          "Chaque phrase commence par une **majuscule** et se termine par un **point**.",
+          "Le **point d'interrogation** ( ? ) termine une question.",
+          "La **virgule** ( , ) sépare les éléments d'une liste.",
+          "Vérifie l'orthographe des mots que tu connais déjà."
+        ]
+      },
+      {
+        "id": "g2fr-grammaire",
+        "name": "Grammaire",
+        "icon": "📝",
+        "examWeight": 1,
+        "notes": [
+          "Le **déterminant** accompagne le nom : *le, la, les, un, une, des*.",
+          "Le verbe **être** : je suis, tu es, il/elle est, nous sommes, vous êtes, ils/elles sont.",
+          "Le verbe **avoir** : j'ai, tu as, il/elle a, nous avons, vous avez, ils/elles ont.",
+          "Un **adjectif** décrit un nom et s'accorde avec lui : *un grand garçon / une grande fille*."
+        ]
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade2-health/_manifest.js",
+    "id": "grade2-health",
+    "name": "Health Education",
+    "grade": 2,
+    "icon": "❤️",
+    "subject": "Health Education",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": true,
+    "syllabus": {},
+    "chapters": [
+      {
+        "id": "g2he-sample",
+        "name": "Sample Chapter",
+        "icon": "📝",
+        "examWeight": 0,
+        "syllabus": ""
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade2-ict/_manifest.js",
+    "id": "grade2-ict",
+    "name": "ICT Skills",
+    "grade": 2,
+    "icon": "💻",
+    "subject": "ICT Skills",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": true,
+    "syllabus": {},
+    "chapters": [
+      {
+        "id": "g2ict-sample",
+        "name": "Sample Chapter",
+        "icon": "📝",
+        "examWeight": 0,
+        "syllabus": ""
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade2-maths/_manifest.js",
+    "id": "grade2-maths",
+    "name": "Mathematics",
+    "grade": 2,
+    "icon": "🔢",
+    "subject": "Maths",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "noDifficulty": false,
+    "syllabus": {
+      "g2mth-numbers": {
+        "subsections": [
+          {
+            "id": "place_value",
+            "name": "Tens and Ones"
+          },
+          {
+            "id": "ordering_comparing",
+            "name": "Ordering & Comparing"
+          },
+          {
+            "id": "odd_even_100",
+            "name": "Odd and Even to 100"
+          }
+        ]
+      },
+      "g2mth-addition": {
+        "subsections": [
+          {
+            "id": "mental_addition",
+            "name": "Mental Addition"
+          },
+          {
+            "id": "column_addition",
+            "name": "Column Addition"
+          },
+          {
+            "id": "addition_problems",
+            "name": "Addition Word Problems"
+          }
+        ]
+      },
+      "g2mth-subtraction": {
+        "subsections": [
+          {
+            "id": "mental_subtraction",
+            "name": "Mental Subtraction"
+          },
+          {
+            "id": "column_subtraction",
+            "name": "Column Subtraction"
+          },
+          {
+            "id": "subtraction_problems",
+            "name": "Subtraction Word Problems"
+          }
+        ]
+      },
+      "g2mth-multiplication": {
+        "subsections": [
+          {
+            "id": "repeated_addition",
+            "name": "Repeated Addition"
+          },
+          {
+            "id": "times_2",
+            "name": "2 Times Table"
+          },
+          {
+            "id": "times_5_10",
+            "name": "5 and 10 Times Tables"
+          }
+        ]
+      },
+      "g2mth-fractions": {
+        "subsections": [
+          {
+            "id": "half",
+            "name": "One Half (½)"
+          },
+          {
+            "id": "quarter",
+            "name": "One Quarter (¼)"
+          },
+          {
+            "id": "comparing_fractions",
+            "name": "Comparing Fractions"
+          }
+        ]
+      },
+      "g2mth-measurement": {
+        "subsections": [
+          {
+            "id": "length_cm_m",
+            "name": "Length (cm and m)"
+          },
+          {
+            "id": "mass_kg",
+            "name": "Mass (kg)"
+          },
+          {
+            "id": "capacity_litres",
+            "name": "Capacity (litres)"
+          }
+        ]
+      },
+      "g2mth-time": {
+        "subsections": [
+          {
+            "id": "days_months",
+            "name": "Days and Months"
+          },
+          {
+            "id": "oclock_halfpast",
+            "name": "O'clock and Half Past"
+          },
+          {
+            "id": "calendar",
+            "name": "Reading a Calendar"
+          }
+        ]
+      },
+      "g2mth-shapes": {
+        "subsections": [
+          {
+            "id": "2d_shapes",
+            "name": "2D Shapes"
+          },
+          {
+            "id": "3d_shapes",
+            "name": "3D Shapes"
+          },
+          {
+            "id": "symmetry",
+            "name": "Lines of Symmetry"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g2mth-numbers",
+        "name": "Numbers to 100",
+        "icon": "🔢",
+        "examWeight": 3,
+        "syllabus": "Count, read and write numbers 0–100. Understand place value: tens and ones. Compare numbers using > < =. Identify odd and even numbers up to 100."
+      },
+      {
+        "id": "g2mth-addition",
+        "name": "Addition to 100",
+        "icon": "➕",
+        "examWeight": 3,
+        "syllabus": "Add multiples of 10 mentally. Add two 2-digit numbers using column method, with and without regrouping. Solve addition word problems."
+      },
+      {
+        "id": "g2mth-subtraction",
+        "name": "Subtraction to 100",
+        "icon": "➖",
+        "examWeight": 3,
+        "syllabus": "Subtract multiples of 10 mentally. Subtract two 2-digit numbers using column method, with and without regrouping. Solve subtraction word problems."
+      },
+      {
+        "id": "g2mth-multiplication",
+        "name": "Introduction to Multiplication",
+        "icon": "✖️",
+        "examWeight": 2,
+        "syllabus": "Understand multiplication as repeated addition: 3+3+3 = 3×3 = 9. Learn multiplication tables for 2, 5 and 10."
+      },
+      {
+        "id": "g2mth-fractions",
+        "name": "Simple Fractions",
+        "icon": "½",
+        "examWeight": 2,
+        "syllabus": "Find one half (½) of shapes and sets of objects. Find one quarter (¼) of shapes and sets. Compare: ½ is greater than ¼."
+      },
+      {
+        "id": "g2mth-measurement",
+        "name": "Measurement",
+        "icon": "📏",
+        "examWeight": 2,
+        "syllabus": "Measure length in centimetres (cm) and metres (m). Compare masses using kilograms (kg). Measure capacity in litres (L). Know that 100 cm = 1 m."
+      },
+      {
+        "id": "g2mth-time",
+        "name": "Time",
+        "icon": "🕐",
+        "examWeight": 2,
+        "syllabus": "Name the 7 days of the week in order. Name the 12 months of the year. Read o'clock and half past on an analogue clock. Use a calendar to find dates."
+      },
+      {
+        "id": "g2mth-shapes",
+        "name": "Shapes and Space",
+        "icon": "🔷",
+        "examWeight": 2,
+        "syllabus": "Describe properties of 2D shapes (sides, corners, right angles). Name 3D shapes: cube, cuboid, sphere, cylinder, cone. Identify lines of symmetry in shapes."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade3-english/_manifest.js",
+    "id": "grade3-english",
+    "name": "English",
+    "grade": 3,
+    "icon": "📖",
+    "subject": "English",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "notesBased": true,
+    "noDifficulty": true,
+    "syllabus": {
+      "g3eng-listening": {
+        "subsections": [
+          {
+            "id": "main_idea",
+            "name": "Main Idea & Topic"
+          },
+          {
+            "id": "sequence_events",
+            "name": "Order of Events"
+          },
+          {
+            "id": "purpose_message",
+            "name": "Purpose of a Message"
+          }
+        ]
+      },
+      "g3eng-speaking": {
+        "subsections": [
+          {
+            "id": "oral_vocabulary",
+            "name": "Using New Words"
+          },
+          {
+            "id": "describing_retelling",
+            "name": "Describing & Retelling"
+          },
+          {
+            "id": "asking_answering",
+            "name": "Questions & Answers"
+          }
+        ]
+      },
+      "g3eng-reading": {
+        "subsections": [
+          {
+            "id": "reading_comprehension",
+            "name": "Reading Comprehension"
+          },
+          {
+            "id": "vocabulary_context",
+            "name": "Word Meanings in Context"
+          },
+          {
+            "id": "text_features",
+            "name": "Text Features"
+          }
+        ]
+      },
+      "g3eng-writing": {
+        "subsections": [
+          {
+            "id": "creative_writing",
+            "name": "Creative Writing"
+          },
+          {
+            "id": "sentence_types",
+            "name": "Types of Sentences"
+          },
+          {
+            "id": "punctuation",
+            "name": "Punctuation"
+          }
+        ]
+      },
+      "g3eng-grammar": {
+        "subsections": [
+          {
+            "id": "parts_of_speech",
+            "name": "Parts of Speech"
+          },
+          {
+            "id": "verb_tenses",
+            "name": "Verb Tenses"
+          },
+          {
+            "id": "punctuation_grammar",
+            "name": "Punctuation in Grammar"
+          }
+        ]
+      },
+      "g3eng-phonics": {
+        "subsections": [
+          {
+            "id": "syllabication",
+            "name": "Breaking Words into Syllables"
+          },
+          {
+            "id": "word_patterns",
+            "name": "Word Patterns & Spelling"
+          },
+          {
+            "id": "spelling_rules",
+            "name": "Spelling Rules"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g3eng-listening",
+        "name": "Listening",
+        "icon": "👂",
+        "examWeight": 1,
+        "notes": [
+          "Find the **main idea** — what is the whole text mostly about?",
+          "Listen for the **order** — what happened first, next, last?",
+          "Notice **why** something was said: to inform, to entertain, to persuade, or to ask.",
+          "Words like *first, then, after, finally* signal the order of events."
+        ]
+      },
+      {
+        "id": "g3eng-speaking",
+        "name": "Speaking",
+        "icon": "🗣️",
+        "examWeight": 1,
+        "notes": [
+          "Use **new and interesting words** — instead of \"nice\" try \"wonderful\" or \"exciting\".",
+          "When retelling, use: *First... Then... After that... Finally...*",
+          "A good **description** names the thing, its colour, its size and what it does.",
+          "Ask questions starting with: *Who? What? Where? When? Why? How?*"
+        ]
+      },
+      {
+        "id": "g3eng-reading",
+        "name": "Reading",
+        "icon": "📚",
+        "examWeight": 1,
+        "notes": [
+          "Read the whole passage, then read each question carefully.",
+          "For \"find\" questions, use the **exact words from the passage**.",
+          "Work out unknown words from the **context** — other words around them.",
+          "**Text features** help you: titles, headings, pictures, captions, bold words."
+        ]
+      },
+      {
+        "id": "g3eng-writing",
+        "name": "Writing",
+        "icon": "✏️",
+        "examWeight": 1,
+        "notes": [
+          "Plan before you write: *Who? Where? What happened? How did it end?*",
+          "Statement (.): gives information. Question (?): asks something. Exclamation (!): shows strong feeling.",
+          "Use **commas** in a list: I bought apples, oranges, bananas and grapes.",
+          "Make your writing interesting — add describing words and connectives."
+        ]
+      },
+      {
+        "id": "g3eng-grammar",
+        "name": "Grammar",
+        "icon": "📝",
+        "examWeight": 1,
+        "notes": [
+          "Parts of speech: **noun** (naming), **verb** (action), **adjective** (describing), **adverb** (how/when/where).",
+          "**Present tense**: I walk. **Past tense**: I walked. **Future tense**: I will walk.",
+          "Irregular past tenses: go→went, see→saw, eat→ate, run→ran, have→had, come→came.",
+          "A **full stop** ends a statement. A **question mark** ends a question. A **comma** separates list items."
+        ]
+      },
+      {
+        "id": "g3eng-phonics",
+        "name": "Phonics & Spelling",
+        "icon": "🔤",
+        "examWeight": 1,
+        "notes": [
+          "Split words into syllables to spell them: *to-mor-row (3), won-der-ful (3)*.",
+          "Common patterns: *-tion (nation), -ing (running), -ed (walked), -er (teacher)*.",
+          "Double the consonant before adding -ing/-ed if the vowel is short: *run→running*.",
+          "Silent letters: kn- (knee), wr- (write), -mb (lamb). Say the whole word, then spell it."
+        ]
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade3-french/_manifest.js",
+    "id": "grade3-french",
+    "name": "French",
+    "grade": 3,
+    "icon": "🇫🇷",
+    "subject": "French",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "notesBased": true,
+    "noDifficulty": true,
+    "syllabus": {
+      "g3fr-comprehension-orale": {
+        "subsections": [
+          {
+            "id": "sons_phonetiques",
+            "name": "Sons phonétiquement proches"
+          },
+          {
+            "id": "idee_globale",
+            "name": "Idée globale et séquence"
+          },
+          {
+            "id": "type_message",
+            "name": "Type de message"
+          }
+        ]
+      },
+      "g3fr-expression-orale": {
+        "subsections": [
+          {
+            "id": "vocabulaire_descriptif",
+            "name": "Vocabulaire descriptif"
+          },
+          {
+            "id": "recit_oral",
+            "name": "Raconter à l'oral"
+          },
+          {
+            "id": "questions_reponses",
+            "name": "Questions et réponses"
+          }
+        ]
+      },
+      "g3fr-lecture": {
+        "subsections": [
+          {
+            "id": "decodage_syllabes",
+            "name": "Lire par syllabes"
+          },
+          {
+            "id": "lecture_comprehension",
+            "name": "Comprendre un texte lu"
+          },
+          {
+            "id": "ponctuation_sens",
+            "name": "Ponctuation et sens"
+          }
+        ]
+      },
+      "g3fr-ecriture": {
+        "subsections": [
+          {
+            "id": "majuscule_minuscule",
+            "name": "Majuscule et minuscule"
+          },
+          {
+            "id": "ponctuation_base",
+            "name": "Ponctuation de base"
+          },
+          {
+            "id": "orthographe_accents",
+            "name": "Orthographe et accents"
+          }
+        ]
+      },
+      "g3fr-grammaire": {
+        "subsections": [
+          {
+            "id": "types_phrases",
+            "name": "Types de phrases"
+          },
+          {
+            "id": "accord_nom_adj",
+            "name": "Accord nom–adjectif"
+          },
+          {
+            "id": "temps_verbes",
+            "name": "Temps des verbes"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g3fr-comprehension-orale",
+        "name": "Compréhension orale",
+        "icon": "👂",
+        "examWeight": 1,
+        "notes": [
+          "Certains sons se ressemblent : /b/ et /p/, /d/ et /t/, /f/ et /v/ — écoute bien la différence !",
+          "L'**idée globale** est ce dont parle le texte en général.",
+          "Les mots *d'abord, puis, ensuite, enfin* indiquent la **séquence des événements**.",
+          "Un message peut informer, demander, ordonner ou suggérer — l'intonation aide à le comprendre."
+        ]
+      },
+      {
+        "id": "g3fr-expression-orale",
+        "name": "Expression orale",
+        "icon": "🗣️",
+        "examWeight": 1,
+        "notes": [
+          "Utilise des **adjectifs** pour décrire : *grand, petit, rond, beau, rouge*.",
+          "Pour raconter : *D'abord... Ensuite... Puis... Enfin...*",
+          "Pour poser une question : *Qui ? Que/Quoi ? Où ? Quand ? Pourquoi ? Comment ?*",
+          "Réponds en faisant une **phrase complète** avec un sujet et un verbe."
+        ]
+      },
+      {
+        "id": "g3fr-lecture",
+        "name": "Compréhension écrite",
+        "icon": "📚",
+        "examWeight": 1,
+        "notes": [
+          "Découpe les mots en **syllabes** pour les lire : ta-bleau (2), pa-pi-llon (3).",
+          "La **ponctuation** t'aide : le point (.) = pause, le point d'interrogation (?) = question, la virgule (,) = courte pause.",
+          "Lis le texte entier, puis relis chaque question soigneusement.",
+          "Cherche les réponses dans le texte — elles sont souvent présentes mot pour mot."
+        ]
+      },
+      {
+        "id": "g3fr-ecriture",
+        "name": "Expression écrite",
+        "icon": "✏️",
+        "examWeight": 1,
+        "notes": [
+          "Une phrase commence par une **majuscule** et se termine par un **point**, un **?** ou un **!**.",
+          "La **virgule** (,) sépare les éléments d'une liste.",
+          "Les accents changent le son : é (école), è (mère), ê (fête), à (à côté), ù (où).",
+          "Copie soigneusement — chaque mot séparé par un espace."
+        ]
+      },
+      {
+        "id": "g3fr-grammaire",
+        "name": "Grammaire",
+        "icon": "📝",
+        "examWeight": 1,
+        "notes": [
+          "**Phrase déclarative** : affirme quelque chose — *Le chat est gris.*",
+          "**Phrase négative** : utilise ne...pas — *Le chat n'est pas gris.*",
+          "**Phrase interrogative** : pose une question — *Le chat est-il gris ?*",
+          "L'adjectif s'accorde avec le nom : *un grand arbre / une grande maison / de grands arbres*.",
+          "**Présent** : je mange. **Passé composé** : j'ai mangé. **Futur simple** : je mangerai."
+        ]
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade3-health/_manifest.js",
+    "id": "grade3-health",
+    "name": "Health Education",
+    "grade": 3,
+    "icon": "❤️",
+    "subject": "Health Education",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": true,
+    "syllabus": {},
+    "chapters": [
+      {
+        "id": "g3he-sample",
+        "name": "Sample Chapter",
+        "icon": "📝",
+        "examWeight": 0,
+        "syllabus": ""
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade3-ict/_manifest.js",
+    "id": "grade3-ict",
+    "name": "ICT Skills",
+    "grade": 3,
+    "icon": "💻",
+    "subject": "ICT Skills",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": true,
+    "syllabus": {},
+    "chapters": [
+      {
+        "id": "g3ict-sample",
+        "name": "Sample Chapter",
+        "icon": "📝",
+        "examWeight": 0,
+        "syllabus": ""
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade3-maths/_manifest.js",
+    "id": "grade3-maths",
+    "name": "Mathematics",
+    "grade": 3,
+    "icon": "🔢",
+    "subject": "Maths",
+    "curriculum": "MIE Mauritius",
+    "comingSoon": false,
+    "syllabus": {
+      "g3mth-numbers": {
+        "subsections": [
+          {
+            "id": "place_value_hto",
+            "name": "Place Value (H, T, O)"
+          },
+          {
+            "id": "ordering_rounding",
+            "name": "Ordering & Rounding"
+          },
+          {
+            "id": "comparing",
+            "name": "Comparing Numbers"
+          }
+        ]
+      },
+      "g3mth-addition": {
+        "subsections": [
+          {
+            "id": "adding_2digit",
+            "name": "Adding 2-Digit Numbers"
+          },
+          {
+            "id": "adding_3digit",
+            "name": "Adding 3-Digit Numbers"
+          },
+          {
+            "id": "add_word_problems",
+            "name": "Addition Word Problems"
+          }
+        ]
+      },
+      "g3mth-subtraction": {
+        "subsections": [
+          {
+            "id": "subtracting_2digit",
+            "name": "Subtracting 2-Digit Numbers"
+          },
+          {
+            "id": "subtracting_3digit",
+            "name": "Subtracting 3-Digit Numbers"
+          },
+          {
+            "id": "sub_word_problems",
+            "name": "Subtraction Word Problems"
+          }
+        ]
+      },
+      "g3mth-multiplication": {
+        "subsections": [
+          {
+            "id": "times_2_to_5",
+            "name": "× Tables 2–5"
+          },
+          {
+            "id": "times_6_to_10",
+            "name": "× Tables 6–10"
+          },
+          {
+            "id": "multiply_2digit",
+            "name": "Multiplying 2-Digit × 1-Digit"
+          }
+        ]
+      },
+      "g3mth-division": {
+        "subsections": [
+          {
+            "id": "sharing_equally",
+            "name": "Sharing Equally"
+          },
+          {
+            "id": "dividing_simple",
+            "name": "Dividing by 2, 3, 4, 5, 10"
+          },
+          {
+            "id": "mult_div_link",
+            "name": "Multiplication & Division Link"
+          }
+        ]
+      },
+      "g3mth-fractions": {
+        "subsections": [
+          {
+            "id": "halves_quarters",
+            "name": "Halves and Quarters"
+          },
+          {
+            "id": "thirds_three_quarters",
+            "name": "Thirds and Three-Quarters"
+          },
+          {
+            "id": "ordering_fractions",
+            "name": "Ordering Fractions"
+          }
+        ]
+      },
+      "g3mth-measurement": {
+        "subsections": [
+          {
+            "id": "length_m_cm",
+            "name": "Length (m and cm)"
+          },
+          {
+            "id": "mass_kg_g",
+            "name": "Mass (kg and g)"
+          },
+          {
+            "id": "capacity_l_ml",
+            "name": "Capacity (L and ml)"
+          }
+        ]
+      },
+      "g3mth-geometry": {
+        "subsections": [
+          {
+            "id": "shapes_properties",
+            "name": "2D and 3D Shapes"
+          },
+          {
+            "id": "angles_symmetry",
+            "name": "Angles and Symmetry"
+          },
+          {
+            "id": "perimeter_area",
+            "name": "Perimeter and Area"
+          }
+        ]
+      },
+      "g3mth-time": {
+        "subsections": [
+          {
+            "id": "reading_clock",
+            "name": "Reading the Clock"
+          },
+          {
+            "id": "elapsed_time",
+            "name": "Elapsed Time"
+          },
+          {
+            "id": "calendar_dates",
+            "name": "Calendar and Dates"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g3mth-numbers",
+        "name": "Numbers to 1000",
+        "icon": "🔢",
+        "examWeight": 3,
+        "syllabus": "Read, write and order numbers up to 1000. Understand place value: hundreds, tens and ones. Round numbers to the nearest 10. Compare numbers using >, < and =."
+      },
+      {
+        "id": "g3mth-addition",
+        "name": "Addition with Regrouping",
+        "icon": "➕",
+        "examWeight": 3,
+        "syllabus": "Add 2-digit numbers with carrying. Add 3-digit numbers using the column method. Solve addition word problems."
+      },
+      {
+        "id": "g3mth-subtraction",
+        "name": "Subtraction with Regrouping",
+        "icon": "➖",
+        "examWeight": 3,
+        "syllabus": "Subtract 2-digit numbers with borrowing. Subtract 3-digit numbers using the column method. Solve subtraction word problems."
+      },
+      {
+        "id": "g3mth-multiplication",
+        "name": "Multiplication Tables",
+        "icon": "✖️",
+        "examWeight": 3,
+        "syllabus": "Know multiplication tables from 2 to 10 by heart. Multiply a 2-digit number by a 1-digit number."
+      },
+      {
+        "id": "g3mth-division",
+        "name": "Division",
+        "icon": "➗",
+        "examWeight": 2,
+        "syllabus": "Divide by 2, 3, 4, 5 and 10. Understand the link between multiplication and division. Solve division word problems."
+      },
+      {
+        "id": "g3mth-fractions",
+        "name": "Fractions",
+        "icon": "½",
+        "examWeight": 2,
+        "syllabus": "Find ½, ¼, ¾ and ⅓ of shapes and of whole numbers. Order fractions. Recognise equivalent fractions."
+      },
+      {
+        "id": "g3mth-measurement",
+        "name": "Measurement",
+        "icon": "📏",
+        "examWeight": 2,
+        "syllabus": "Convert between m and cm, kg and g, L and ml. Calculate the perimeter of rectangles."
+      },
+      {
+        "id": "g3mth-geometry",
+        "name": "Geometry",
+        "icon": "🔷",
+        "examWeight": 2,
+        "syllabus": "Identify right angles and types of angles. Draw lines of symmetry. Name 2D and 3D shapes and their properties. Find area by counting squares."
+      },
+      {
+        "id": "g3mth-time",
+        "name": "Time and Calendar",
+        "icon": "🕐",
+        "examWeight": 2,
+        "syllabus": "Read the time to the nearest 5 minutes. Understand a.m. and p.m. Calculate elapsed time. Use a calendar."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade7-english/_manifest.js",
+    "id": "grade7-english",
+    "name": "English",
+    "grade": 7,
+    "icon": "📖",
+    "subject": "English",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g7eng-listening": {
+        "subsections": [
+          {
+            "id": "identifying_message",
+            "name": "Identifying the Message"
+          },
+          {
+            "id": "vocabulary_context",
+            "name": "Vocabulary in Context"
+          }
+        ]
+      },
+      "g7eng-speaking": {
+        "subsections": [
+          {
+            "id": "oral_interaction",
+            "name": "Oral Interaction"
+          },
+          {
+            "id": "intonation_register",
+            "name": "Intonation & Register"
+          }
+        ]
+      },
+      "g7eng-reading": {
+        "subsections": [
+          {
+            "id": "main_idea_details",
+            "name": "Main Idea & Details"
+          },
+          {
+            "id": "inferring_vocabulary",
+            "name": "Inferring Vocabulary"
+          }
+        ]
+      },
+      "g7eng-writing": {
+        "subsections": [
+          {
+            "id": "organising_ideas",
+            "name": "Organising Ideas"
+          },
+          {
+            "id": "vocabulary_register",
+            "name": "Vocabulary & Register"
+          }
+        ]
+      },
+      "g7eng-gr-nouns": {
+        "subsections": [
+          {
+            "id": "countable_uncountable",
+            "name": "Countable & Uncountable Nouns"
+          },
+          {
+            "id": "subject_verb_agreement",
+            "name": "Subject-Verb Agreement"
+          }
+        ]
+      },
+      "g7eng-gr-pronouns": {
+        "subsections": [
+          {
+            "id": "personal_possessive",
+            "name": "Personal & Possessive Pronouns"
+          },
+          {
+            "id": "relative_pronouns",
+            "name": "Relative Pronouns"
+          }
+        ]
+      },
+      "g7eng-gr-adjectives": {
+        "subsections": [
+          {
+            "id": "types_adjectives",
+            "name": "Types of Adjectives"
+          },
+          {
+            "id": "adjective_placement",
+            "name": "Adjective Placement & Order"
+          }
+        ]
+      },
+      "g7eng-gr-verbs": {
+        "subsections": [
+          {
+            "id": "verb_tenses",
+            "name": "Verb Tenses"
+          },
+          {
+            "id": "verb_formation",
+            "name": "Verb Formation"
+          }
+        ]
+      },
+      "g7eng-gr-determiners": {
+        "subsections": [
+          {
+            "id": "definite_article",
+            "name": "Definite Article & No Article"
+          },
+          {
+            "id": "quantifiers",
+            "name": "Quantifiers"
+          }
+        ]
+      },
+      "g7eng-gr-adverbs": {
+        "subsections": [
+          {
+            "id": "types_adverbs",
+            "name": "Types of Adverbs"
+          },
+          {
+            "id": "adverb_position",
+            "name": "Adverb Position"
+          }
+        ]
+      },
+      "g7eng-gr-modals": {
+        "subsections": [
+          {
+            "id": "ability_permission",
+            "name": "Ability & Permission"
+          },
+          {
+            "id": "obligation",
+            "name": "Obligation & Advice"
+          }
+        ]
+      },
+      "g7eng-gr-prepositions": {
+        "subsections": [
+          {
+            "id": "place_time",
+            "name": "Place & Time"
+          },
+          {
+            "id": "direction",
+            "name": "Direction & Movement"
+          }
+        ]
+      },
+      "g7eng-gr-sentence": {
+        "subsections": [
+          {
+            "id": "simple_compound",
+            "name": "Simple & Compound Sentences"
+          },
+          {
+            "id": "complex_sentences",
+            "name": "Complex Sentences"
+          }
+        ]
+      },
+      "g7eng-gr-punctuation": {
+        "subsections": [
+          {
+            "id": "full_stop_comma",
+            "name": "Full Stop, Comma & Capital Letters"
+          },
+          {
+            "id": "colon_direct_speech",
+            "name": "Colon & Direct Speech"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g7eng-listening",
+        "name": "Listening & Comprehension",
+        "icon": "👂",
+        "examWeight": 3,
+        "syllabus": "Listen attentively to a range of spoken and audio-visual texts. Identify the speaker, the audience and the message. Understand vocabulary specific to a text. Respond to what is heard."
+      },
+      {
+        "id": "g7eng-speaking",
+        "name": "Speaking & Oral Interaction",
+        "icon": "🗣️",
+        "examWeight": 3,
+        "syllabus": "Speak clearly and confidently about familiar topics. Take part in conversations and simple discussions. Present information and personal opinions. Use appropriate intonation and register."
+      },
+      {
+        "id": "g7eng-reading",
+        "name": "Reading & Comprehension",
+        "icon": "📖",
+        "examWeight": 4,
+        "syllabus": "Read a range of text types with understanding. Identify the main idea and supporting details. Infer meaning of unfamiliar words from context. Respond personally to what is read."
+      },
+      {
+        "id": "g7eng-writing",
+        "name": "Writing",
+        "icon": "✍️",
+        "examWeight": 4,
+        "syllabus": "Write for a range of purposes and audiences. Organise ideas into clear paragraphs. Use appropriate vocabulary and register. Draft, revise and proofread written work."
+      },
+      {
+        "id": "g7eng-gr-nouns",
+        "name": "Grammar · Nouns",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Reinforce agreement between countable and uncountable nouns and verb forms. Use correct subject-verb agreement with singular, plural and collective nouns."
+      },
+      {
+        "id": "g7eng-gr-pronouns",
+        "name": "Grammar · Pronouns",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Use personal, possessive and reflexive pronouns correctly. Use relative pronouns including whose. Keep pronoun reference clear."
+      },
+      {
+        "id": "g7eng-gr-adjectives",
+        "name": "Grammar · Adjectives",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Use a variety of adjectives of opinion, size, age, temperature, shape, colour, texture, origin and material. Place adjectives correctly before nouns, after verbs and after a noun or pronoun. Form adjectives from verbs and nouns using suffixes."
+      },
+      {
+        "id": "g7eng-gr-verbs",
+        "name": "Grammar · Verbs & Tenses",
+        "icon": "🔤",
+        "examWeight": 3,
+        "syllabus": "Use the main tenses accurately in context. Maintain subject-verb agreement. Form verbs from nouns and adjectives using prefixes and suffixes."
+      },
+      {
+        "id": "g7eng-gr-determiners",
+        "name": "Grammar · Determiners, Articles & Quantifiers",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Reinforce the use of the definite article for unique objects, referents, clusters of islands and superlatives. Use words that take no article. Match quantifiers with the correct verb forms."
+      },
+      {
+        "id": "g7eng-gr-adverbs",
+        "name": "Grammar · Adverbs",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Consolidate adverbs of manner, place, time, degree and frequency. Pay attention to the position of adverbs in a sentence."
+      },
+      {
+        "id": "g7eng-gr-modals",
+        "name": "Grammar · Modals",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Use common modal verbs to express ability, permission and obligation."
+      },
+      {
+        "id": "g7eng-gr-prepositions",
+        "name": "Grammar · Prepositions",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Consolidate the use of prepositions of place, time and direction."
+      },
+      {
+        "id": "g7eng-gr-sentence",
+        "name": "Grammar · Sentence Structure",
+        "icon": "🔤",
+        "examWeight": 3,
+        "syllabus": "Consolidate the construction of simple sentences. Extend the construction of compound sentences using coordinating conjunctions. Build complex sentences using who, that, which, where, whose and whom."
+      },
+      {
+        "id": "g7eng-gr-punctuation",
+        "name": "Grammar · Punctuation",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Reinforce the full stop, comma, capital letters, colon, exclamation mark and question mark. Use the comma after linking words and for nouns in apposition. Use the colon to introduce direct speech and to list items."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade7-french/_manifest.js",
+    "id": "grade7-french",
+    "name": "Français",
+    "grade": 7,
+    "icon": "🇫🇷",
+    "subject": "French",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g7fr-co": {
+        "subsections": [
+          {
+            "id": "type_texte_oral",
+            "name": "Types de textes oraux"
+          },
+          {
+            "id": "locuteur_message",
+            "name": "Locuteur et message"
+          },
+          {
+            "id": "vocabulaire_oral",
+            "name": "Vocabulaire oral"
+          }
+        ]
+      },
+      "g7fr-eo": {
+        "subsections": [
+          {
+            "id": "lecture_voix_haute",
+            "name": "Lecture à voix haute"
+          },
+          {
+            "id": "expression_confiance",
+            "name": "S'exprimer avec confiance"
+          },
+          {
+            "id": "lexique_approprie",
+            "name": "Lexique approprié"
+          }
+        ]
+      },
+      "g7fr-ce": {
+        "subsections": [
+          {
+            "id": "idee_principale",
+            "name": "Idée principale"
+          },
+          {
+            "id": "information_explicite",
+            "name": "Informations explicites"
+          },
+          {
+            "id": "vocabulaire",
+            "name": "Vocabulaire"
+          }
+        ]
+      },
+      "g7fr-ee": {
+        "subsections": [
+          {
+            "id": "textes_fonctionnels",
+            "name": "Textes fonctionnels"
+          },
+          {
+            "id": "organisation_paragraphes",
+            "name": "Organisation en paragraphes"
+          },
+          {
+            "id": "correction_syntaxe",
+            "name": "Correction syntaxique"
+          }
+        ]
+      },
+      "g7fr-litterature": {
+        "subsections": [
+          {
+            "id": "genres_litteraires",
+            "name": "Genres littéraires"
+          },
+          {
+            "id": "types_textes",
+            "name": "Types de textes"
+          },
+          {
+            "id": "conte_bd",
+            "name": "Contes et bandes dessinées"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g7fr-co",
+        "name": "Compréhension orale",
+        "icon": "👂",
+        "examWeight": 3,
+        "syllabus": "Écouter avec attention une variété de textes sonores. Distinguer les différents types de textes écoutés. Identifier le locuteur, l'interlocuteur et le message. Comprendre le lexique spécifique au texte. Suivre des conversations simples."
+      },
+      {
+        "id": "g7fr-eo",
+        "name": "Expression orale",
+        "icon": "🗣️",
+        "examWeight": 3,
+        "syllabus": "Lire à voix haute en variant l'intonation et le rythme. S'exprimer avec confiance sur soi et sur son environnement immédiat. Utiliser un lexique approprié. Produire des énoncés clairs et cohérents."
+      },
+      {
+        "id": "g7fr-ce",
+        "name": "Compréhension écrite",
+        "icon": "📖",
+        "examWeight": 4,
+        "syllabus": "Lire et comprendre différents types de textes écrits. Dégager l'idée principale d'un texte. Repérer les informations explicites. Comprendre le vocabulaire d'usage."
+      },
+      {
+        "id": "g7fr-ee",
+        "name": "Expression écrite",
+        "icon": "✍️",
+        "examWeight": 4,
+        "syllabus": "Produire des textes fonctionnels simples. Organiser ses idées en paragraphes. Utiliser un lexique et une syntaxe corrects. Relire et corriger son texte."
+      },
+      {
+        "id": "g7fr-litterature",
+        "name": "Littérature",
+        "icon": "📚",
+        "examWeight": 2,
+        "syllabus": "Reconnaître différents types de textes littéraires. Classer les textes selon les genres littéraires. Écouter et visionner des contes, des bandes dessinées et des dessins animés."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade7-maths/_manifest.js",
+    "id": "grade7-maths",
+    "name": "Mathematics",
+    "grade": 7,
+    "icon": "🔢",
+    "subject": "Maths",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g7m-integers": {
+        "subsections": [
+          {
+            "id": "number_types",
+            "name": "Types of Numbers"
+          },
+          {
+            "id": "number_line",
+            "name": "The Number Line"
+          },
+          {
+            "id": "operations",
+            "name": "Integer Operations"
+          }
+        ]
+      },
+      "g7m-operations": {
+        "subsections": [
+          {
+            "id": "order_operations",
+            "name": "Order of Operations"
+          },
+          {
+            "id": "properties",
+            "name": "Properties of Operations"
+          },
+          {
+            "id": "brackets",
+            "name": "Expressions with Brackets"
+          }
+        ]
+      },
+      "g7m-indices": {
+        "subsections": [
+          {
+            "id": "index_notation",
+            "name": "Index Notation"
+          },
+          {
+            "id": "prime_factorisation",
+            "name": "Prime Factorisation"
+          },
+          {
+            "id": "evaluating_powers",
+            "name": "Evaluating Powers"
+          }
+        ]
+      },
+      "g7m-factors": {
+        "subsections": [
+          {
+            "id": "divisibility",
+            "name": "Divisibility Rules"
+          },
+          {
+            "id": "hcf_lcm",
+            "name": "HCF and LCM"
+          },
+          {
+            "id": "prime_factors",
+            "name": "Prime Factors"
+          }
+        ]
+      },
+      "g7m-fractions": {
+        "subsections": [
+          {
+            "id": "comparing_fractions",
+            "name": "Comparing Fractions"
+          },
+          {
+            "id": "converting",
+            "name": "Converting Fractions & Decimals"
+          },
+          {
+            "id": "operations_fractions",
+            "name": "Operations with Fractions"
+          }
+        ]
+      },
+      "g7m-percentages": {
+        "subsections": [
+          {
+            "id": "percent_basics",
+            "name": "Percentage Basics"
+          },
+          {
+            "id": "percent_quantity",
+            "name": "Percentage of a Quantity"
+          },
+          {
+            "id": "percent_problems",
+            "name": "Percentage Problems"
+          }
+        ]
+      },
+      "g7m-ratio": {
+        "subsections": [
+          {
+            "id": "simplifying_ratio",
+            "name": "Simplifying Ratios"
+          },
+          {
+            "id": "dividing_ratio",
+            "name": "Dividing in a Ratio"
+          },
+          {
+            "id": "proportion",
+            "name": "Proportion"
+          }
+        ]
+      },
+      "g7m-polygons": {
+        "subsections": [
+          {
+            "id": "classifying_polygons",
+            "name": "Classifying Polygons"
+          },
+          {
+            "id": "angles_polygons",
+            "name": "Angles in Polygons"
+          },
+          {
+            "id": "triangles_quadrilaterals",
+            "name": "Triangles & Quadrilaterals"
+          }
+        ]
+      },
+      "g7m-coordinates": {
+        "subsections": [
+          {
+            "id": "plotting_points",
+            "name": "Plotting Points"
+          },
+          {
+            "id": "quadrants",
+            "name": "The Four Quadrants"
+          },
+          {
+            "id": "shapes_coordinates",
+            "name": "Shapes from Coordinates"
+          }
+        ]
+      },
+      "g7m-constructions": {
+        "subsections": [
+          {
+            "id": "using_instruments",
+            "name": "Using Instruments"
+          },
+          {
+            "id": "parallel_perpendicular",
+            "name": "Parallel & Perpendicular Lines"
+          },
+          {
+            "id": "bisecting",
+            "name": "Bisecting Lines & Angles"
+          }
+        ]
+      },
+      "g7m-symmetry": {
+        "subsections": [
+          {
+            "id": "lines_symmetry",
+            "name": "Lines of Symmetry"
+          },
+          {
+            "id": "completing_figures",
+            "name": "Completing Figures"
+          },
+          {
+            "id": "rotational_symmetry",
+            "name": "Rotational Symmetry"
+          }
+        ]
+      },
+      "g7m-transformation": {
+        "subsections": [
+          {
+            "id": "reflection",
+            "name": "Reflection"
+          },
+          {
+            "id": "translation",
+            "name": "Translation"
+          },
+          {
+            "id": "congruence",
+            "name": "Congruence"
+          }
+        ]
+      },
+      "g7m-mass": {
+        "subsections": [
+          {
+            "id": "units_mass",
+            "name": "Units of Mass"
+          },
+          {
+            "id": "converting_mass",
+            "name": "Converting Mass"
+          },
+          {
+            "id": "mass_problems",
+            "name": "Mass Problems"
+          }
+        ]
+      },
+      "g7m-length": {
+        "subsections": [
+          {
+            "id": "units_length",
+            "name": "Units of Length"
+          },
+          {
+            "id": "perimeter",
+            "name": "Perimeter"
+          },
+          {
+            "id": "distance_problems",
+            "name": "Distance Problems"
+          }
+        ]
+      },
+      "g7m-area": {
+        "subsections": [
+          {
+            "id": "rectangle_area",
+            "name": "Area of Rectangles & Squares"
+          },
+          {
+            "id": "triangle_area",
+            "name": "Area of Triangles"
+          },
+          {
+            "id": "compound_shapes",
+            "name": "Compound Shapes"
+          }
+        ]
+      },
+      "g7m-time": {
+        "subsections": [
+          {
+            "id": "reading_time",
+            "name": "Reading & Writing Time"
+          },
+          {
+            "id": "time_intervals",
+            "name": "Time Intervals"
+          },
+          {
+            "id": "timetables",
+            "name": "Timetables"
+          }
+        ]
+      },
+      "g7m-speed": {
+        "subsections": [
+          {
+            "id": "speed_formula",
+            "name": "The Speed Formula"
+          },
+          {
+            "id": "unit_conversion",
+            "name": "Unit Conversion"
+          },
+          {
+            "id": "distance_time",
+            "name": "Distance–Time Problems"
+          }
+        ]
+      },
+      "g7m-money": {
+        "subsections": [
+          {
+            "id": "money_operations",
+            "name": "Money Operations"
+          },
+          {
+            "id": "profit_loss",
+            "name": "Profit, Loss & Discount"
+          },
+          {
+            "id": "currency",
+            "name": "Currency Conversion"
+          }
+        ]
+      },
+      "g7m-algebra": {
+        "subsections": [
+          {
+            "id": "writing_expressions",
+            "name": "Writing Expressions"
+          },
+          {
+            "id": "simplifying",
+            "name": "Simplifying Expressions"
+          },
+          {
+            "id": "substitution",
+            "name": "Substitution"
+          }
+        ]
+      },
+      "g7m-equations": {
+        "subsections": [
+          {
+            "id": "solving_equations",
+            "name": "Solving Equations"
+          },
+          {
+            "id": "forming_equations",
+            "name": "Forming Equations"
+          },
+          {
+            "id": "word_equations",
+            "name": "Word Problems"
+          }
+        ]
+      },
+      "g7m-sets": {
+        "subsections": [
+          {
+            "id": "set_notation",
+            "name": "Set Notation"
+          },
+          {
+            "id": "venn_diagrams",
+            "name": "Venn Diagrams"
+          },
+          {
+            "id": "set_types",
+            "name": "Types of Sets"
+          }
+        ]
+      },
+      "g7m-statistics": {
+        "subsections": [
+          {
+            "id": "data_tables",
+            "name": "Data Tables"
+          },
+          {
+            "id": "bar_charts",
+            "name": "Bar Charts"
+          },
+          {
+            "id": "mean",
+            "name": "The Mean"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g7m-integers",
+        "name": "Integers",
+        "icon": "🔢",
+        "examWeight": 3,
+        "syllabus": "Identify even, odd, prime, composite, triangular and square numbers. Represent integers on a number line. Order and compare positive and negative integers. Add, subtract, multiply and divide integers."
+      },
+      {
+        "id": "g7m-operations",
+        "name": "Order & Properties of Operations",
+        "icon": "➗",
+        "examWeight": 3,
+        "syllabus": "Apply the order of operations to numerical expressions. Use the commutative, associative and distributive properties. Evaluate expressions involving brackets."
+      },
+      {
+        "id": "g7m-indices",
+        "name": "Indices Convention",
+        "icon": "🔣",
+        "examWeight": 2,
+        "syllabus": "Write repeated multiplication in index form. Read and interpret index notation. Evaluate powers of whole numbers. Express a number as a product of prime factors in index form."
+      },
+      {
+        "id": "g7m-factors",
+        "name": "Factors, Multiples & Prime Factorisation",
+        "icon": "🧮",
+        "examWeight": 3,
+        "syllabus": "Apply common divisibility tests. Find the factors and multiples of a given number. Find the prime factors of a number. Write a number as a product of its prime factors."
+      },
+      {
+        "id": "g7m-fractions",
+        "name": "Fractions & Decimals",
+        "icon": "½",
+        "examWeight": 4,
+        "syllabus": "Compare and order fractions and decimals. Convert between fractions and decimals. Add, subtract, multiply and divide fractions. Perform the four operations on decimals."
+      },
+      {
+        "id": "g7m-percentages",
+        "name": "Percentages",
+        "icon": "％",
+        "examWeight": 3,
+        "syllabus": "Understand percentage as a fraction out of one hundred. Convert between fractions, decimals and percentages. Find a percentage of a quantity. Solve everyday problems involving percentages."
+      },
+      {
+        "id": "g7m-ratio",
+        "name": "Ratio & Proportion",
+        "icon": "⚖️",
+        "examWeight": 3,
+        "syllabus": "Understand ratio and direct proportion. Compare two quantities multiplicatively. Simplify a ratio to its lowest terms. Divide a quantity in a given ratio."
+      },
+      {
+        "id": "g7m-polygons",
+        "name": "Polygons",
+        "icon": "📐",
+        "examWeight": 3,
+        "syllabus": "Name and classify polygons by their number of sides. Identify the properties of triangles and quadrilaterals. Calculate unknown angles in polygons. Recognise regular and irregular polygons."
+      },
+      {
+        "id": "g7m-coordinates",
+        "name": "Coordinates",
+        "icon": "📍",
+        "examWeight": 2,
+        "syllabus": "Plot and read points in the Cartesian plane. Use ordered pairs to describe position. Identify the four quadrants. Plot simple shapes from given coordinates."
+      },
+      {
+        "id": "g7m-constructions",
+        "name": "Geometrical Constructions",
+        "icon": "📏",
+        "examWeight": 2,
+        "syllabus": "Use ruler, set squares, protractor, compasses and dividers. Construct parallel and perpendicular lines. Construct and bisect angles. Use digital geometry tools."
+      },
+      {
+        "id": "g7m-symmetry",
+        "name": "Symmetry",
+        "icon": "🦋",
+        "examWeight": 2,
+        "syllabus": "Identify lines of symmetry in shapes. Complete a figure given its line of symmetry. Recognise rotational symmetry. Describe the order of rotational symmetry."
+      },
+      {
+        "id": "g7m-transformation",
+        "name": "Transformation",
+        "icon": "🔄",
+        "examWeight": 2,
+        "syllabus": "Describe and perform reflections. Describe and perform translations. Identify the image of a shape after a transformation. Recognise congruence under transformation."
+      },
+      {
+        "id": "g7m-mass",
+        "name": "Mass",
+        "icon": "🏋️",
+        "examWeight": 2,
+        "syllabus": "Distinguish between milligram, gram, kilogram and tonne. Convert between units of mass. Add, subtract, multiply and divide quantities of mass. Solve everyday problems involving mass."
+      },
+      {
+        "id": "g7m-length",
+        "name": "Length",
+        "icon": "📏",
+        "examWeight": 2,
+        "syllabus": "Convert between units of length. Estimate and measure lengths. Perform calculations with lengths. Solve problems involving perimeter and distance."
+      },
+      {
+        "id": "g7m-area",
+        "name": "Area",
+        "icon": "▭",
+        "examWeight": 3,
+        "syllabus": "Calculate the area of rectangles, squares and triangles. Convert between units of area. Find the area of compound shapes. Solve everyday problems involving area."
+      },
+      {
+        "id": "g7m-time",
+        "name": "Time",
+        "icon": "⏰",
+        "examWeight": 2,
+        "syllabus": "Read and write time in 12-hour and 24-hour notation. Add and subtract intervals of time. Convert between units of time. Interpret timetables."
+      },
+      {
+        "id": "g7m-speed",
+        "name": "Speed",
+        "icon": "🚗",
+        "examWeight": 2,
+        "syllabus": "Understand speed and average speed. Convert compound units such as metres per second into kilometres per hour. Calculate speed, distance or time. Solve everyday problems involving speed."
+      },
+      {
+        "id": "g7m-money",
+        "name": "Money",
+        "icon": "💰",
+        "examWeight": 2,
+        "syllabus": "Perform the four operations with money. Convert between currencies. Calculate profit, loss and discount. Solve everyday problems involving money."
+      },
+      {
+        "id": "g7m-algebra",
+        "name": "Algebraic Expressions",
+        "icon": "🔤",
+        "examWeight": 3,
+        "syllabus": "Use letters to represent unknown numbers. Write and simplify algebraic expressions. Substitute values into an expression. Add and subtract like terms."
+      },
+      {
+        "id": "g7m-equations",
+        "name": "Algebraic Equations",
+        "icon": "🟰",
+        "examWeight": 3,
+        "syllabus": "Distinguish between an algebraic expression and an equation. Understand additive and multiplicative inverses. Solve simple linear equations. Form and solve equations from word problems."
+      },
+      {
+        "id": "g7m-sets",
+        "name": "Sets",
+        "icon": "🔗",
+        "examWeight": 2,
+        "syllabus": "Understand the idea of a set and its elements. Recognise equal, equivalent and disjoint sets. Use set notation. Represent sets with Venn diagrams."
+      },
+      {
+        "id": "g7m-statistics",
+        "name": "Statistics",
+        "icon": "📊",
+        "examWeight": 3,
+        "syllabus": "Collect and organise data into tables. Draw and interpret bar charts and pictograms. Read information from graphs. Find the mean of a set of values."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade7-science/_manifest.js",
+    "id": "grade7-science",
+    "name": "Science",
+    "grade": 7,
+    "icon": "🔬",
+    "subject": "Science",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g7s-inquiry": {
+        "subsections": [
+          {
+            "id": "lab_safety",
+            "name": "Lab Safety"
+          },
+          {
+            "id": "investigations",
+            "name": "Scientific Investigations"
+          },
+          {
+            "id": "data_recording",
+            "name": "Recording Data"
+          }
+        ]
+      },
+      "g7s-measurement": {
+        "subsections": [
+          {
+            "id": "si_units",
+            "name": "SI Units"
+          },
+          {
+            "id": "measuring_instruments",
+            "name": "Measuring Instruments"
+          },
+          {
+            "id": "calculating_measurements",
+            "name": "Calculating Measurements"
+          }
+        ]
+      },
+      "g7s-cells": {
+        "subsections": [
+          {
+            "id": "cell_characteristics",
+            "name": "Cell Characteristics"
+          },
+          {
+            "id": "cell_parts",
+            "name": "Cell Parts & Functions"
+          },
+          {
+            "id": "animal_plant_cells",
+            "name": "Animal vs Plant Cells"
+          }
+        ]
+      },
+      "g7s-matter": {
+        "subsections": [
+          {
+            "id": "states_of_matter",
+            "name": "States of Matter"
+          },
+          {
+            "id": "properties_states",
+            "name": "Properties of States"
+          },
+          {
+            "id": "changes_of_state",
+            "name": "Changes of State"
+          }
+        ]
+      },
+      "g7s-solar-system": {
+        "subsections": [
+          {
+            "id": "planets",
+            "name": "The Planets"
+          },
+          {
+            "id": "solar_system_structure",
+            "name": "Solar System Structure"
+          },
+          {
+            "id": "planet_characteristics",
+            "name": "Planet Characteristics"
+          }
+        ]
+      },
+      "g7s-electricity": {
+        "subsections": [
+          {
+            "id": "circuit_parts",
+            "name": "Circuit Components"
+          },
+          {
+            "id": "circuit_symbols",
+            "name": "Circuit Symbols"
+          },
+          {
+            "id": "simple_circuits",
+            "name": "Simple Circuits"
+          }
+        ]
+      },
+      "g7s-ecosystem": {
+        "subsections": [
+          {
+            "id": "ecosystem_types",
+            "name": "Types of Ecosystems"
+          },
+          {
+            "id": "ecosystem_balance",
+            "name": "Ecosystem Balance"
+          },
+          {
+            "id": "human_impact",
+            "name": "Human Impact"
+          }
+        ]
+      },
+      "g7s-elements": {
+        "subsections": [
+          {
+            "id": "elements_symbols",
+            "name": "Elements & Symbols"
+          },
+          {
+            "id": "periodic_table",
+            "name": "The Periodic Table"
+          },
+          {
+            "id": "metals_nonmetals",
+            "name": "Metals vs Non-metals"
+          }
+        ]
+      },
+      "g7s-air": {
+        "subsections": [
+          {
+            "id": "composition_air",
+            "name": "Composition of Air"
+          },
+          {
+            "id": "oxygen_co2_tests",
+            "name": "Tests for Oxygen & CO₂"
+          },
+          {
+            "id": "air_properties",
+            "name": "Properties of Air"
+          }
+        ]
+      },
+      "g7s-biodiversity": {
+        "subsections": [
+          {
+            "id": "classifying_organisms",
+            "name": "Classifying Organisms"
+          },
+          {
+            "id": "vertebrates_invertebrates",
+            "name": "Vertebrates & Invertebrates"
+          },
+          {
+            "id": "plant_types",
+            "name": "Types of Plants"
+          }
+        ]
+      },
+      "g7s-food-chains": {
+        "subsections": [
+          {
+            "id": "feeding_relationships",
+            "name": "Feeding Relationships"
+          },
+          {
+            "id": "food_chains",
+            "name": "Food Chains & Webs"
+          },
+          {
+            "id": "energy_flow",
+            "name": "Energy Flow"
+          }
+        ]
+      },
+      "g7s-changes": {
+        "subsections": [
+          {
+            "id": "physical_changes",
+            "name": "Physical Changes"
+          },
+          {
+            "id": "chemical_changes",
+            "name": "Chemical Changes"
+          },
+          {
+            "id": "examples_changes",
+            "name": "Examples of Changes"
+          }
+        ]
+      },
+      "g7s-energy": {
+        "subsections": [
+          {
+            "id": "forms_energy",
+            "name": "Forms of Energy"
+          },
+          {
+            "id": "energy_transformation",
+            "name": "Energy Transformation"
+          },
+          {
+            "id": "renewable_nonrenewable",
+            "name": "Renewable & Non-renewable Sources"
+          }
+        ]
+      },
+      "g7s-sts": {
+        "subsections": [
+          {
+            "id": "science_technology",
+            "name": "Science & Technology"
+          },
+          {
+            "id": "discoveries",
+            "name": "Key Discoveries"
+          },
+          {
+            "id": "sustainability",
+            "name": "Sustainability"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g7s-inquiry",
+        "name": "Scientific Inquiry",
+        "icon": "🔍",
+        "examWeight": 2,
+        "syllabus": "Understand the different fields of science. Work safely in the laboratory and in the field. Ask meaningful questions and carry out simple investigations. Record and represent data in tables, diagrams, charts and graphs. Draw inferences and conclusions from evidence."
+      },
+      {
+        "id": "g7s-measurement",
+        "name": "Measurement",
+        "icon": "📏",
+        "examWeight": 3,
+        "syllabus": "Understand fundamental physical quantities and their SI units. Choose the right instrument for each quantity. Measure length, mass, time, volume and temperature. Calculate area and volume from measurements."
+      },
+      {
+        "id": "g7s-cells",
+        "name": "Cells & Cell Structures",
+        "icon": "🔬",
+        "examWeight": 3,
+        "syllabus": "State the basic characteristics of living things. Recognise that all living organisms are made of cells. Identify the parts of animal and plant cells under a microscope. Compare the structure of animal and plant cells. Describe the organisation from cell to organism."
+      },
+      {
+        "id": "g7s-matter",
+        "name": "Matter",
+        "icon": "🧊",
+        "examWeight": 3,
+        "syllabus": "Recognise that everything around us is made of matter. Understand that matter has mass and occupies space. Investigate the properties of the three states of matter. Explain changes of state using particle models."
+      },
+      {
+        "id": "g7s-solar-system",
+        "name": "The Solar System",
+        "icon": "🪐",
+        "examWeight": 2,
+        "syllabus": "Describe the Sun, the planets, planetary satellites, comets and asteroids. Draw a labelled diagram of the solar system. Compare the characteristics of the planets. Use two- and three-dimensional models of the solar system."
+      },
+      {
+        "id": "g7s-electricity",
+        "name": "Electricity",
+        "icon": "⚡",
+        "examWeight": 3,
+        "syllabus": "Discuss the importance and main uses of electricity. Identify the main parts of an electric circuit. Recognise cells, batteries, bulbs, switches and resistors. Draw circuits using conventional symbols. Investigate the workings of simple circuits."
+      },
+      {
+        "id": "g7s-ecosystem",
+        "name": "Ecosystems",
+        "icon": "🌿",
+        "examWeight": 3,
+        "syllabus": "Explain the basic concepts of an ecosystem. Identify aquatic, terrestrial and wetland ecosystems. List the factors that affect the balance of an ecosystem. Discuss the impact of human activities. Suggest ways an ecosystem can be protected."
+      },
+      {
+        "id": "g7s-elements",
+        "name": "Elements, Compounds & Mixtures",
+        "icon": "⚗️",
+        "examWeight": 3,
+        "syllabus": "Identify elements as the building blocks of matter. Use chemical symbols to represent elements. Recognise the Periodic Table as a classification of elements. Compare the properties of metals and non-metals. Distinguish between mixtures and compounds."
+      },
+      {
+        "id": "g7s-air",
+        "name": "Air",
+        "icon": "💨",
+        "examWeight": 2,
+        "syllabus": "Identify the components of pure air and their percentage composition. Describe the laboratory preparation of oxygen and carbon dioxide. Test for the presence of oxygen and carbon dioxide."
+      },
+      {
+        "id": "g7s-biodiversity",
+        "name": "Biodiversity",
+        "icon": "🦋",
+        "examWeight": 3,
+        "syllabus": "Classify living organisms into five main groups. Distinguish vertebrates from invertebrates. Classify vertebrates into five classes. Group plants as flowering and non-flowering."
+      },
+      {
+        "id": "g7s-food-chains",
+        "name": "Food Chains & Food Webs",
+        "icon": "🍃",
+        "examWeight": 3,
+        "syllabus": "Identify the different types of interaction within an ecosystem. Recognise feeding relationships in a food chain and a food web. Construct and draw food chains and food webs. Describe energy flow in a given ecosystem."
+      },
+      {
+        "id": "g7s-changes",
+        "name": "Physical & Chemical Changes",
+        "icon": "🔥",
+        "examWeight": 3,
+        "syllabus": "Distinguish between physical and chemical changes. Recognise that a chemical change forms new substances. Explain why changes of state are physical changes. Explain why burning, rusting, respiration and photosynthesis are chemical changes."
+      },
+      {
+        "id": "g7s-energy",
+        "name": "Energy",
+        "icon": "🔋",
+        "examWeight": 3,
+        "syllabus": "Define energy and list its different forms. Understand that energy is transformed rather than created or destroyed. State the law of conservation of energy. Classify energy sources as renewable or non-renewable. Discuss sustainable energy production."
+      },
+      {
+        "id": "g7s-sts",
+        "name": "Science, Technology & Society",
+        "icon": "🌍",
+        "examWeight": 2,
+        "syllabus": "Appreciate the discovery of the cell and the microscope. Discuss the uses and conservation of common metals. Recognise astronomy as a science. Appreciate the role of satellites in modern weather forecasting."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade7-social-modern-studies/_manifest.js",
+    "id": "grade7-social-modern-studies",
+    "name": "Social & Modern Studies",
+    "grade": 7,
+    "icon": "🌍",
+    "subject": "Social & Modern Studies",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g7sms-islands": {
+        "subsections": [
+          {
+            "id": "islands_republic",
+            "name": "Islands of the Republic"
+          },
+          {
+            "id": "island_types",
+            "name": "Types of Islands"
+          },
+          {
+            "id": "landforms",
+            "name": "Landforms"
+          }
+        ]
+      },
+      "g7sms-origins": {
+        "subsections": [
+          {
+            "id": "historical_significance",
+            "name": "Historical Significance"
+          },
+          {
+            "id": "settlers_origins",
+            "name": "Origins of Settlers"
+          },
+          {
+            "id": "cultural_diversity",
+            "name": "Cultural Diversity"
+          }
+        ]
+      },
+      "g7sms-people": {
+        "subsections": [
+          {
+            "id": "contributions_mauritians",
+            "name": "Contributions of Mauritians"
+          },
+          {
+            "id": "achievements_arts_sport",
+            "name": "Achievements in Arts & Sport"
+          },
+          {
+            "id": "individuals_country",
+            "name": "Individuals & the Country"
+          }
+        ]
+      },
+      "g7sms-settlement": {
+        "subsections": [
+          {
+            "id": "settlement_factors",
+            "name": "Settlement Factors"
+          },
+          {
+            "id": "physical_historical",
+            "name": "Physical & Historical Factors"
+          },
+          {
+            "id": "settlement_evolution",
+            "name": "Evolution of Settlements"
+          }
+        ]
+      },
+      "g7sms-resources": {
+        "subsections": [
+          {
+            "id": "natural_resources",
+            "name": "Natural Resources"
+          },
+          {
+            "id": "resource_types",
+            "name": "Types of Resources"
+          },
+          {
+            "id": "resources_settlement",
+            "name": "Resources & Settlement"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g7sms-islands",
+        "name": "Our Islands & their Landforms",
+        "icon": "🏝️",
+        "examWeight": 3,
+        "syllabus": "Name and locate on maps the islands forming the Republic of Mauritius. Describe the main characteristics of a volcanic island, a coral island and a coral atoll. Understand the different types of island found in the region. Geographical strand of the content area Knowing my country."
+      },
+      {
+        "id": "g7sms-origins",
+        "name": "Origins, Heritage & Identity",
+        "icon": "📜",
+        "examWeight": 3,
+        "syllabus": "Discuss the importance of our islands from a historical perspective. Discuss the origins of the people who settled on the islands. Explain the meaning of cultural diversity. Recognise that our origins and cultural diversity are our heritage. Appreciate our unique Mauritian identity."
+      },
+      {
+        "id": "g7sms-people",
+        "name": "Our Country, Our People",
+        "icon": "👥",
+        "examWeight": 2,
+        "syllabus": "Appreciate the contributions of Mauritians and of groups from various fields. Recognise achievements in the arts, sport, science and public life. Understand how individuals shape the life of a country."
+      },
+      {
+        "id": "g7sms-settlement",
+        "name": "Where People Live",
+        "icon": "🏘️",
+        "examWeight": 3,
+        "syllabus": "Describe and explain the factors that promote settlement in different places. Consider physical, historical and social factors together. Explore how settlements have evolved differently over time in our islands."
+      },
+      {
+        "id": "g7sms-resources",
+        "name": "People, Places & the Environment",
+        "icon": "🌍",
+        "examWeight": 3,
+        "syllabus": "Explain the meaning of the term natural resource. Recognise that natural resources are found in the atmosphere, hydrosphere, lithosphere and biosphere. Identify the natural resources of our islands. Recognise that natural resources have always influenced where people live."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade8-english/_manifest.js",
+    "id": "grade8-english",
+    "name": "English",
+    "grade": 8,
+    "icon": "📖",
+    "subject": "English",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g8eng-listening": {
+        "subsections": [
+          {
+            "id": "fact_opinion",
+            "name": "Fact vs Opinion"
+          },
+          {
+            "id": "summarising",
+            "name": "Summarising a Text"
+          }
+        ]
+      },
+      "g8eng-speaking": {
+        "subsections": [
+          {
+            "id": "structured_discussion",
+            "name": "Structured Discussion & Debate"
+          },
+          {
+            "id": "register_adaptation",
+            "name": "Register Adaptation"
+          }
+        ]
+      },
+      "g8eng-reading": {
+        "subsections": [
+          {
+            "id": "purpose_audience",
+            "name": "Purpose, Audience & Tone"
+          },
+          {
+            "id": "explicit_implicit",
+            "name": "Explicit & Implicit Meaning"
+          }
+        ]
+      },
+      "g8eng-writing": {
+        "subsections": [
+          {
+            "id": "extended_writing",
+            "name": "Extended Writing & Argument"
+          },
+          {
+            "id": "editing_accuracy",
+            "name": "Editing for Accuracy"
+          }
+        ]
+      },
+      "g8eng-gr-nouns": {
+        "subsections": [
+          {
+            "id": "noun_phrases",
+            "name": "Noun Phrases"
+          },
+          {
+            "id": "gerunds",
+            "name": "Gerunds"
+          }
+        ]
+      },
+      "g8eng-gr-pronouns": {
+        "subsections": [
+          {
+            "id": "reference_tracking",
+            "name": "Reference Tracking"
+          },
+          {
+            "id": "ambiguous_reference",
+            "name": "Ambiguous Pronoun Reference"
+          }
+        ]
+      },
+      "g8eng-gr-adjectives": {
+        "subsections": [
+          {
+            "id": "adjective_order",
+            "name": "Adjective Order"
+          },
+          {
+            "id": "participial_adjectives",
+            "name": "Participial Adjectives (-ing/-ed)"
+          }
+        ]
+      },
+      "g8eng-gr-verbs": {
+        "subsections": [
+          {
+            "id": "present_perfect",
+            "name": "Present Perfect"
+          },
+          {
+            "id": "future_continuous",
+            "name": "Future Continuous"
+          }
+        ]
+      },
+      "g8eng-gr-determiners": {
+        "subsections": [
+          {
+            "id": "article_use",
+            "name": "Article Use"
+          },
+          {
+            "id": "no_article",
+            "name": "No Article"
+          }
+        ]
+      },
+      "g8eng-gr-adverbs": {
+        "subsections": [
+          {
+            "id": "adjective_to_adverb",
+            "name": "Adjective to Adverb"
+          },
+          {
+            "id": "reason_purpose",
+            "name": "Adverbs of Reason & Purpose"
+          }
+        ]
+      },
+      "g8eng-gr-modals": {
+        "subsections": [
+          {
+            "id": "possibility_probability",
+            "name": "Possibility & Probability"
+          },
+          {
+            "id": "advice",
+            "name": "Advice & Recommendation"
+          }
+        ]
+      },
+      "g8eng-gr-prepositions": {
+        "subsections": [
+          {
+            "id": "prepositional_phrases",
+            "name": "Prepositional Phrases"
+          },
+          {
+            "id": "verbs_prepositions",
+            "name": "Verbs + Prepositions"
+          }
+        ]
+      },
+      "g8eng-gr-sentence": {
+        "subsections": [
+          {
+            "id": "complex_sentences",
+            "name": "Complex Sentences & Conditionals"
+          },
+          {
+            "id": "direct_indirect_speech",
+            "name": "Direct & Indirect Speech"
+          }
+        ]
+      },
+      "g8eng-gr-punctuation": {
+        "subsections": [
+          {
+            "id": "ellipsis",
+            "name": "Ellipsis (…)"
+          },
+          {
+            "id": "punctuation_review",
+            "name": "Punctuation Review"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g8eng-listening",
+        "name": "Listening & Comprehension",
+        "icon": "👂",
+        "examWeight": 3,
+        "syllabus": "Listen to longer spoken and audio-visual texts. Distinguish fact from opinion in what is heard. Follow discussions between several speakers. Summarise the main points of a spoken text."
+      },
+      {
+        "id": "g8eng-speaking",
+        "name": "Speaking & Oral Interaction",
+        "icon": "🗣️",
+        "examWeight": 3,
+        "syllabus": "Speak fluently on a widening range of topics. Take part in structured discussions and debates. Support an opinion with reasons. Adapt register to the audience."
+      },
+      {
+        "id": "g8eng-reading",
+        "name": "Reading & Comprehension",
+        "icon": "📖",
+        "examWeight": 4,
+        "syllabus": "Read and compare a range of text types. Identify purpose, audience and tone. Distinguish explicit from implicit meaning. Evaluate what is read."
+      },
+      {
+        "id": "g8eng-writing",
+        "name": "Writing",
+        "icon": "✍️",
+        "examWeight": 4,
+        "syllabus": "Write extended texts in a range of forms. Structure an argument with supporting detail. Vary sentence structure for effect. Edit for accuracy and clarity."
+      },
+      {
+        "id": "g8eng-gr-nouns",
+        "name": "Grammar · Nouns",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Expand nouns into noun phrases. Use gerunds, which are nouns formed from verbs."
+      },
+      {
+        "id": "g8eng-gr-pronouns",
+        "name": "Grammar · Pronouns",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Use pronouns to maintain reference across sentences. Avoid ambiguous pronoun reference."
+      },
+      {
+        "id": "g8eng-gr-adjectives",
+        "name": "Grammar · Adjectives",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Order several adjectives correctly when they follow each other. Distinguish between adjectives formed with an -ing participle and those formed with an -ed or -en participle. Reinforce the transformation of verbs and nouns into adjectives."
+      },
+      {
+        "id": "g8eng-gr-verbs",
+        "name": "Grammar · Verbs & Tenses",
+        "icon": "🔤",
+        "examWeight": 3,
+        "syllabus": "Use the present perfect and the future continuous. Extend the range of tenses used in writing. Maintain consistent tense across a paragraph."
+      },
+      {
+        "id": "g8eng-gr-determiners",
+        "name": "Grammar · Determiners, Articles & Quantifiers",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Differentiate between words taking and not taking articles in specific situations."
+      },
+      {
+        "id": "g8eng-gr-adverbs",
+        "name": "Grammar · Adverbs",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Convert adjectives into adverbs for use in a variety of sentences. Use adverbs of reason and purpose."
+      },
+      {
+        "id": "g8eng-gr-modals",
+        "name": "Grammar · Modals",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Use modal verbs to express possibility, probability and advice."
+      },
+      {
+        "id": "g8eng-gr-prepositions",
+        "name": "Grammar · Prepositions",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Extend the use of prepositions in phrases and after particular verbs."
+      },
+      {
+        "id": "g8eng-gr-sentence",
+        "name": "Grammar · Sentence Structure",
+        "icon": "🔤",
+        "examWeight": 3,
+        "syllabus": "Extend the construction and use of complex sentences. Construct and use sentences in the past conditional. Construct and use sentences in direct and indirect speech."
+      },
+      {
+        "id": "g8eng-gr-punctuation",
+        "name": "Grammar · Punctuation",
+        "icon": "🔤",
+        "examWeight": 2,
+        "syllabus": "Use ellipsis points to indicate an incomplete sentence or unfinished speech."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade8-french/_manifest.js",
+    "id": "grade8-french",
+    "name": "Français",
+    "grade": 8,
+    "icon": "🇫🇷",
+    "subject": "French",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g8fr-co": {
+        "subsections": [
+          {
+            "id": "schema_communication",
+            "name": "Schéma de communication"
+          },
+          {
+            "id": "types_textes_oral",
+            "name": "Types de textes oraux"
+          },
+          {
+            "id": "sens_contexte",
+            "name": "Sens et contexte"
+          }
+        ]
+      },
+      "g8fr-eo": {
+        "subsections": [
+          {
+            "id": "lecture_expressive",
+            "name": "Lecture expressive"
+          },
+          {
+            "id": "conversation_multi",
+            "name": "Conversation à plusieurs"
+          },
+          {
+            "id": "lexique_varie",
+            "name": "Lexique varié et précis"
+          }
+        ]
+      },
+      "g8fr-ce": {
+        "subsections": [
+          {
+            "id": "idee_implicite",
+            "name": "Idée principale et implicite"
+          },
+          {
+            "id": "registres_langue",
+            "name": "Registres de langue"
+          },
+          {
+            "id": "analyse_texte",
+            "name": "Analyse de texte"
+          }
+        ]
+      },
+      "g8fr-ee": {
+        "subsections": [
+          {
+            "id": "textes_fonctionnels_divers",
+            "name": "Textes fonctionnels divers"
+          },
+          {
+            "id": "resume_opinion",
+            "name": "Résumé et opinion"
+          },
+          {
+            "id": "structure_coherente",
+            "name": "Structure et cohérence"
+          }
+        ]
+      },
+      "g8fr-litterature": {
+        "subsections": [
+          {
+            "id": "genres_caracteristiques",
+            "name": "Genres et caractéristiques"
+          },
+          {
+            "id": "appreciation_textes",
+            "name": "Appréciation de textes"
+          },
+          {
+            "id": "reaction_litteraire",
+            "name": "Réaction littéraire"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g8fr-co",
+        "name": "Compréhension orale",
+        "icon": "👂",
+        "examWeight": 3,
+        "syllabus": "Différencier les types de textes écoutés. Dégager le sens et les paramètres de la communication. Préciser les éléments du schéma de communication. Suivre des discussions entre plusieurs locuteurs."
+      },
+      {
+        "id": "g8fr-eo",
+        "name": "Expression orale",
+        "icon": "🗣️",
+        "examWeight": 3,
+        "syllabus": "Lire à voix haute différents types de textes. Converser clairement avec plusieurs interlocuteurs. Traiter une problématique à l'oral. Utiliser un lexique varié et précis."
+      },
+      {
+        "id": "g8fr-ce",
+        "name": "Compréhension écrite",
+        "icon": "📖",
+        "examWeight": 4,
+        "syllabus": "Comparer et analyser différents types de production écrite. Identifier les registres de langue utilisés. Dégager judicieusement l'idée principale d'un texte. Repérer les informations implicites."
+      },
+      {
+        "id": "g8fr-ee",
+        "name": "Expression écrite",
+        "icon": "✍️",
+        "examWeight": 4,
+        "syllabus": "Produire seul ou en groupe des textes fonctionnels divers. Résumer les éléments clés d'un texte. Exprimer son opinion par écrit. Structurer un texte cohérent."
+      },
+      {
+        "id": "g8fr-litterature",
+        "name": "Littérature",
+        "icon": "📚",
+        "examWeight": 2,
+        "syllabus": "Identifier les genres littéraires et leurs caractéristiques. Apprécier des textes littéraires variés. Réagir à un texte littéraire à l'oral et à l'écrit."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade8-maths/_manifest.js",
+    "id": "grade8-maths",
+    "name": "Mathematics",
+    "grade": 8,
+    "icon": "🔢",
+    "subject": "Maths",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g8m-sequences": {
+        "subsections": [
+          {
+            "id": "continuing_sequences",
+            "name": "Continuing Sequences"
+          },
+          {
+            "id": "sequence_rules",
+            "name": "Sequence Rules"
+          },
+          {
+            "id": "nth_term",
+            "name": "The nth Term"
+          }
+        ]
+      },
+      "g8m-indices": {
+        "subsections": [
+          {
+            "id": "index_laws",
+            "name": "Laws of Indices"
+          },
+          {
+            "id": "square_cube_roots",
+            "name": "Square & Cube Roots"
+          },
+          {
+            "id": "evaluating_indices",
+            "name": "Evaluating Indices"
+          }
+        ]
+      },
+      "g8m-rate": {
+        "subsections": [
+          {
+            "id": "unit_rates",
+            "name": "Unit Rates"
+          },
+          {
+            "id": "direct_proportion",
+            "name": "Direct Proportion"
+          },
+          {
+            "id": "rate_problems",
+            "name": "Rate Problems"
+          }
+        ]
+      },
+      "g8m-finance": {
+        "subsections": [
+          {
+            "id": "simple_interest",
+            "name": "Simple Interest"
+          },
+          {
+            "id": "profit_loss_discount",
+            "name": "Profit, Loss & Discount"
+          },
+          {
+            "id": "bills_budgeting",
+            "name": "Bills & Budgeting"
+          }
+        ]
+      },
+      "g8m-polygons": {
+        "subsections": [
+          {
+            "id": "interior_exterior_angles",
+            "name": "Interior & Exterior Angles"
+          },
+          {
+            "id": "angle_sum",
+            "name": "Angle Sum of Polygons"
+          },
+          {
+            "id": "regular_polygons",
+            "name": "Regular Polygons"
+          }
+        ]
+      },
+      "g8m-coordinates": {
+        "subsections": [
+          {
+            "id": "four_quadrants",
+            "name": "The Four Quadrants"
+          },
+          {
+            "id": "midpoint",
+            "name": "Midpoint of a Line"
+          },
+          {
+            "id": "linear_graphs",
+            "name": "Linear Graphs"
+          }
+        ]
+      },
+      "g8m-circles": {
+        "subsections": [
+          {
+            "id": "parts_circle",
+            "name": "Parts of a Circle"
+          },
+          {
+            "id": "circumference",
+            "name": "Circumference"
+          },
+          {
+            "id": "area_circle",
+            "name": "Area of a Circle"
+          }
+        ]
+      },
+      "g8m-surface-area": {
+        "subsections": [
+          {
+            "id": "nets",
+            "name": "Nets of Solids"
+          },
+          {
+            "id": "cuboid_surface",
+            "name": "Surface Area of Cuboids"
+          },
+          {
+            "id": "prism_surface",
+            "name": "Surface Area of Prisms"
+          }
+        ]
+      },
+      "g8m-volume": {
+        "subsections": [
+          {
+            "id": "cuboid_volume",
+            "name": "Volume of Cuboids"
+          },
+          {
+            "id": "unit_conversion",
+            "name": "Volume Unit Conversion"
+          },
+          {
+            "id": "prism_volume",
+            "name": "Volume of Prisms"
+          }
+        ]
+      },
+      "g8m-algebra": {
+        "subsections": [
+          {
+            "id": "expanding_brackets",
+            "name": "Expanding Brackets"
+          },
+          {
+            "id": "factorising",
+            "name": "Factorising"
+          },
+          {
+            "id": "algebraic_fractions",
+            "name": "Algebraic Fractions"
+          }
+        ]
+      },
+      "g8m-statistics": {
+        "subsections": [
+          {
+            "id": "pie_charts",
+            "name": "Pie Charts"
+          },
+          {
+            "id": "mean_median_mode",
+            "name": "Mean, Median & Mode"
+          },
+          {
+            "id": "comparing_data",
+            "name": "Comparing Data"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g8m-sequences",
+        "name": "Sequences",
+        "icon": "🔢",
+        "examWeight": 3,
+        "syllabus": "Recognise and continue number sequences. Describe the rule of a sequence in words. Find a given term of a sequence. Generate a sequence from a given rule."
+      },
+      {
+        "id": "g8m-indices",
+        "name": "Indices, Square Roots & Cube Roots",
+        "icon": "🔣",
+        "examWeight": 3,
+        "syllabus": "Use index notation with whole numbers. Find square roots and cube roots. Apply the laws of indices. Evaluate expressions involving powers and roots."
+      },
+      {
+        "id": "g8m-rate",
+        "name": "Rate & Proportion",
+        "icon": "⚖️",
+        "examWeight": 3,
+        "syllabus": "Understand rate as a comparison of two quantities. Work with direct proportion. Solve problems involving rates such as price per unit. Use proportion in everyday contexts."
+      },
+      {
+        "id": "g8m-finance",
+        "name": "Personal & Household Finance",
+        "icon": "💰",
+        "examWeight": 3,
+        "syllabus": "Calculate simple interest. Work out discount, profit and loss. Read and interpret bills and household accounts. Solve problems involving budgeting."
+      },
+      {
+        "id": "g8m-polygons",
+        "name": "Polygons",
+        "icon": "📐",
+        "examWeight": 3,
+        "syllabus": "Calculate interior and exterior angles of polygons. Use the angle sum of a polygon. Identify the properties of regular polygons. Solve problems involving angles in polygons."
+      },
+      {
+        "id": "g8m-coordinates",
+        "name": "Coordinates",
+        "icon": "📍",
+        "examWeight": 3,
+        "syllabus": "Plot points in all four quadrants. Find the midpoint of a line segment. Plot and interpret linear graphs. Use coordinates to solve geometric problems."
+      },
+      {
+        "id": "g8m-circles",
+        "name": "Circles",
+        "icon": "⭕",
+        "examWeight": 3,
+        "syllabus": "Identify the parts of a circle. Calculate the circumference of a circle. Calculate the area of a circle. Solve everyday problems involving circles."
+      },
+      {
+        "id": "g8m-surface-area",
+        "name": "Surface Area",
+        "icon": "🧊",
+        "examWeight": 3,
+        "syllabus": "Find the surface area of cubes and cuboids. Use nets to work out surface area. Calculate the surface area of prisms. Solve problems involving surface area."
+      },
+      {
+        "id": "g8m-volume",
+        "name": "Volume",
+        "icon": "📦",
+        "examWeight": 3,
+        "syllabus": "Calculate the volume of cubes and cuboids. Convert between units of volume. Find the volume of prisms. Solve everyday problems involving volume."
+      },
+      {
+        "id": "g8m-algebra",
+        "name": "Algebraic Expressions",
+        "icon": "🔤",
+        "examWeight": 4,
+        "syllabus": "Expand brackets in algebraic expressions. Factorise simple expressions. Simplify algebraic fractions. Solve linear equations containing brackets."
+      },
+      {
+        "id": "g8m-statistics",
+        "name": "Statistics",
+        "icon": "📊",
+        "examWeight": 3,
+        "syllabus": "Draw and interpret pie charts. Calculate the mean, median and mode. Compare two sets of data. Interpret graphs to draw conclusions."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade8-science/_manifest.js",
+    "id": "grade8-science",
+    "name": "Science",
+    "grade": 8,
+    "icon": "🔬",
+    "subject": "Science",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g8s-inquiry": {
+        "subsections": [
+          {
+            "id": "lab_procedures",
+            "name": "Lab Procedures & Safety"
+          },
+          {
+            "id": "recording_data",
+            "name": "Recording Data"
+          },
+          {
+            "id": "density_volume",
+            "name": "Density & Volume"
+          }
+        ]
+      },
+      "g8s-food": {
+        "subsections": [
+          {
+            "id": "food_groups_nutrients",
+            "name": "Food Groups & Nutrients"
+          },
+          {
+            "id": "deficiency_diseases",
+            "name": "Deficiency Diseases"
+          },
+          {
+            "id": "balanced_diet",
+            "name": "Balanced Diet"
+          }
+        ]
+      },
+      "g8s-mixtures": {
+        "subsections": [
+          {
+            "id": "types_mixtures",
+            "name": "Types of Mixtures"
+          },
+          {
+            "id": "separation_techniques",
+            "name": "Separation Techniques"
+          },
+          {
+            "id": "principles_separation",
+            "name": "Principles of Separation"
+          }
+        ]
+      },
+      "g8s-digestive": {
+        "subsections": [
+          {
+            "id": "digestive_organs",
+            "name": "Digestive Organs"
+          },
+          {
+            "id": "digestion_process",
+            "name": "The Digestion Process"
+          },
+          {
+            "id": "structure_function",
+            "name": "Structure & Function"
+          }
+        ]
+      },
+      "g8s-respiratory": {
+        "subsections": [
+          {
+            "id": "respiratory_organs",
+            "name": "Respiratory Organs"
+          },
+          {
+            "id": "gas_exchange",
+            "name": "Gas Exchange"
+          },
+          {
+            "id": "breathing_process",
+            "name": "The Breathing Process"
+          }
+        ]
+      },
+      "g8s-chem-language": {
+        "subsections": [
+          {
+            "id": "symbols_formulae",
+            "name": "Symbols & Formulae"
+          },
+          {
+            "id": "valencies_radicals",
+            "name": "Valencies & Radicals"
+          },
+          {
+            "id": "balancing_equations",
+            "name": "Balancing Equations"
+          }
+        ]
+      },
+      "g8s-diseases": {
+        "subsections": [
+          {
+            "id": "communicable_noncommunicable",
+            "name": "Communicable vs Non-communicable"
+          },
+          {
+            "id": "disease_spread",
+            "name": "How Diseases Spread"
+          },
+          {
+            "id": "prevention_control",
+            "name": "Prevention & Control"
+          }
+        ]
+      },
+      "g8s-acids": {
+        "subsections": [
+          {
+            "id": "acids_bases_indicators",
+            "name": "Acids, Bases & Indicators"
+          },
+          {
+            "id": "reactions_acids",
+            "name": "Reactions of Acids"
+          },
+          {
+            "id": "neutralisation",
+            "name": "Neutralisation"
+          }
+        ]
+      },
+      "g8s-forces": {
+        "subsections": [
+          {
+            "id": "types_forces",
+            "name": "Types of Forces"
+          },
+          {
+            "id": "measuring_force",
+            "name": "Measuring Force"
+          },
+          {
+            "id": "gravity_effects",
+            "name": "Effects of Gravity"
+          }
+        ]
+      },
+      "g8s-pressure": {
+        "subsections": [
+          {
+            "id": "pressure_definition",
+            "name": "Pressure — Definition & Unit"
+          },
+          {
+            "id": "pressure_in_fluids",
+            "name": "Pressure in Fluids"
+          },
+          {
+            "id": "pressure_calculations",
+            "name": "Pressure Calculations"
+          }
+        ]
+      },
+      "g8s-magnetism": {
+        "subsections": [
+          {
+            "id": "magnetic_materials",
+            "name": "Magnetic Materials"
+          },
+          {
+            "id": "poles_fields",
+            "name": "Poles & Magnetic Fields"
+          },
+          {
+            "id": "uses_magnets",
+            "name": "Uses of Magnets"
+          }
+        ]
+      },
+      "g8s-work-energy": {
+        "subsections": [
+          {
+            "id": "work_done",
+            "name": "Work Done"
+          },
+          {
+            "id": "power_rate",
+            "name": "Power"
+          },
+          {
+            "id": "work_energy_power",
+            "name": "Work, Energy & Power"
+          }
+        ]
+      },
+      "g8s-sts": {
+        "subsections": [
+          {
+            "id": "science_society",
+            "name": "Science & Society"
+          },
+          {
+            "id": "technology_impact",
+            "name": "Impact of Technology"
+          },
+          {
+            "id": "contributions_humanity",
+            "name": "Contributions to Humanity"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g8s-inquiry",
+        "name": "Scientific Inquiry",
+        "icon": "🔍",
+        "examWeight": 2,
+        "syllabus": "Frame questions for further investigation. Work safely in the laboratory. Record data in tables, diagrams, charts and graphs. Report apparatus, method, results and conclusions. Determine the volume of an irregular solid and the density of liquids and solids."
+      },
+      {
+        "id": "g8s-food",
+        "name": "Food & Nutrients",
+        "icon": "🥗",
+        "examWeight": 3,
+        "syllabus": "Identify the main food groups and the nutrients they provide. Relate diet to health and to deficiency diseases. Test a food sample to identify its components. Plan a balanced diet."
+      },
+      {
+        "id": "g8s-mixtures",
+        "name": "Mixtures & Separation Techniques",
+        "icon": "⚗️",
+        "examWeight": 3,
+        "syllabus": "Recognise mixtures and their composition. Relate the uses of substances to their properties. Separate mixtures by filtration, decantation and evaporation. Explain the principle behind each technique."
+      },
+      {
+        "id": "g8s-digestive",
+        "name": "The Digestive System",
+        "icon": "🍽️",
+        "examWeight": 3,
+        "syllabus": "Identify the parts of the human digestive system. Describe ingestion, digestion, absorption and egestion. Explain mechanical and chemical digestion. Relate the structure of the gut to its function."
+      },
+      {
+        "id": "g8s-respiratory",
+        "name": "The Respiratory System",
+        "icon": "🫁",
+        "examWeight": 3,
+        "syllabus": "Identify the parts of the human respiratory system. Describe gas exchange in the lungs. Explain the processes of inspiration and expiration. Compare respiration in different organisms."
+      },
+      {
+        "id": "g8s-chem-language",
+        "name": "Language of Chemistry",
+        "icon": "🧪",
+        "examWeight": 3,
+        "syllabus": "Write symbols and formulae for elements and compounds. Recognise common radicals and their valencies. Use valencies to work out chemical formulae. Write and balance word and chemical equations."
+      },
+      {
+        "id": "g8s-diseases",
+        "name": "Communicable & Non-Communicable Diseases",
+        "icon": "🦠",
+        "examWeight": 3,
+        "syllabus": "Distinguish communicable from non-communicable diseases. Describe how communicable diseases spread. Discuss substance abuse and its effects on the body. Explain measures for prevention and control."
+      },
+      {
+        "id": "g8s-acids",
+        "name": "Acids, Bases & Salts",
+        "icon": "🧫",
+        "examWeight": 3,
+        "syllabus": "Identify common acids and bases. Use indicators and recognise their colours in acidic and basic solutions. Investigate the reactions of acids with metals and with bases. Understand neutralisation and the formation of salts."
+      },
+      {
+        "id": "g8s-forces",
+        "name": "Forces in Nature",
+        "icon": "🧲",
+        "examWeight": 3,
+        "syllabus": "Understand force and how it is measured. Measure force using a spring balance. Identify the forces found in nature. Explain the effect of gravity on a mass."
+      },
+      {
+        "id": "g8s-pressure",
+        "name": "Pressure",
+        "icon": "🌡️",
+        "examWeight": 2,
+        "syllabus": "Define pressure and state its unit of measurement. Investigate pressure in solids, liquids and gases. Relate pressure to force and area. Solve simple problems involving pressure."
+      },
+      {
+        "id": "g8s-magnetism",
+        "name": "Magnetism & its Uses",
+        "icon": "🧭",
+        "examWeight": 2,
+        "syllabus": "Recognise magnetic and non-magnetic materials. Investigate magnetic poles and magnetic fields. Describe the everyday uses of magnets. Carry out simple investigations on magnetism."
+      },
+      {
+        "id": "g8s-work-energy",
+        "name": "Work, Energy & Power",
+        "icon": "⚙️",
+        "examWeight": 3,
+        "syllabus": "Define work as a force acting through a displacement. Calculate the work done. Understand power as the rate of doing work. Relate work, energy and power in everyday examples."
+      },
+      {
+        "id": "g8s-sts",
+        "name": "Science, Technology & Society",
+        "icon": "🌍",
+        "examWeight": 2,
+        "syllabus": "Discuss the impact of diseases on society. Appreciate the role of neutralisation in medicine and in agriculture. Recognise the contribution of science and technology to humanity. Discuss the limitations of science and technology."
+      }
+    ]
+  },
+  {
+    "file": "subjects/grade8-social-modern-studies/_manifest.js",
+    "id": "grade8-social-modern-studies",
+    "name": "Social & Modern Studies",
+    "grade": 8,
+    "icon": "🌍",
+    "subject": "Social & Modern Studies",
+    "curriculum": "MIE Mauritius (NCF Grades 7-9)",
+    "comingSoon": false,
+    "practiceble": true,
+    "notesBased": false,
+    "level4Label": "Word Problems",
+    "syllabus": {
+      "g8sms-slavery": {
+        "subsections": [
+          {
+            "id": "slave_trade",
+            "name": "The Slave Trade"
+          },
+          {
+            "id": "abolition_slavery",
+            "name": "Abolition of Slavery"
+          },
+          {
+            "id": "indenture_system",
+            "name": "Indenture System"
+          }
+        ]
+      },
+      "g8sms-society": {
+        "subsections": [
+          {
+            "id": "post_ww1_conditions",
+            "name": "Post-WW1 Conditions"
+          },
+          {
+            "id": "social_economic_changes",
+            "name": "Social & Economic Changes"
+          },
+          {
+            "id": "mauritian_society",
+            "name": "Mauritian Society"
+          }
+        ]
+      },
+      "g8sms-independence": {
+        "subsections": [
+          {
+            "id": "empires_colonies",
+            "name": "Empires & Colonies"
+          },
+          {
+            "id": "decolonisation",
+            "name": "Decolonisation"
+          },
+          {
+            "id": "mauritius_independence",
+            "name": "Mauritius & Independence"
+          }
+        ]
+      },
+      "g8sms-democracy": {
+        "subsections": [
+          {
+            "id": "democracy_features",
+            "name": "Features of Democracy"
+          },
+          {
+            "id": "constitution_government",
+            "name": "Constitution & Government"
+          },
+          {
+            "id": "media_democracy",
+            "name": "Media & Democracy"
+          }
+        ]
+      },
+      "g8sms-climate": {
+        "subsections": [
+          {
+            "id": "global_warming_causes",
+            "name": "Causes of Global Warming"
+          },
+          {
+            "id": "impact_mauritius",
+            "name": "Impact on Mauritius"
+          },
+          {
+            "id": "adaptation_mitigation",
+            "name": "Adaptation & Mitigation"
+          }
+        ]
+      }
+    },
+    "chapters": [
+      {
+        "id": "g8sms-slavery",
+        "name": "Slavery & Indentured Labour",
+        "icon": "⛓️",
+        "examWeight": 3,
+        "syllabus": "Recall the slave trade and slavery during the French period. Explain the abolition of slavery during the British period. Discuss the apprenticeship system. Discuss the living and working conditions of Indian indentured labourers. Understand slavery and indenture as economic labour systems."
+      },
+      {
+        "id": "g8sms-society",
+        "name": "Mauritian Society, 1920s to 1960s",
+        "icon": "📜",
+        "examWeight": 3,
+        "syllabus": "Recall the socio-economic conditions of the people at the end of the First World War. Discuss the social and economic changes in the life of the people between the 1920s and the 1960s. Discuss Mauritian society in the nineteenth century."
+      },
+      {
+        "id": "g8sms-independence",
+        "name": "The Way to Independence",
+        "icon": "🇲🇺",
+        "examWeight": 3,
+        "syllabus": "Identify the empires and colonies of the twentieth century. Explain the factors that led to decolonisation worldwide. Realise that decolonisation worldwide had an impact on Mauritius. Recognise the rise of political awareness in Mauritius. Discuss the contributions of the various movements and the role of the media."
+      },
+      {
+        "id": "g8sms-democracy",
+        "name": "Mauritius, a Democratic Country",
+        "icon": "🏛️",
+        "examWeight": 3,
+        "syllabus": "Show an understanding of the term democracy and identify its features. Explain the functions of the Constitution, the electoral process, the Legislature, the Executive and the Judiciary. Appreciate the role of unions, NGOs, associations and movements. Discuss the role of the media in a democracy."
+      },
+      {
+        "id": "g8sms-climate",
+        "name": "The Changing Climate",
+        "icon": "🌍",
+        "examWeight": 3,
+        "syllabus": "Explain the causes and consequences of global warming. Discuss the impact of global warming on our islands. Explore ways to adapt to climate change and mitigate its consequences. Show awareness of the measures taken to combat climate change."
+      }
+    ]
+  }
+]

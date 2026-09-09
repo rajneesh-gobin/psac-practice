@@ -1,0 +1,5916 @@
+Name:
+_____________
+_____________
+     Professor Vassen NAËCK 		- Head, Curriculum Implementation,
+     						 Textbook Development and Evaluation
+
+
+
+     THE SOCIAL, SCIENTIFIC AND ENVIRONMENTAL EDUCATION (SSEE) PANEL
+
+
+     MAURITIUS INSTITUTE OF EDUCATION
+     Dr (Mrs) Sarojiny SADDUL-HAUZAREE           - Panel Coordinator (SSEE), Associate Professor
+     Mr Pierre André BOULLÉ 			                  - Coordinator (Geography), Senior Lecturer
+     Dr (Mrs) Seema GOBURDHUN 			                - Coordinator (History), Associate Professor
+
+     Panel Members
+     Mr Chandrashekhar PADARUTH - Senior Lecturer
+     Dr (Mrs) Fawzia NAROD 			  - Associate Professor
+     Mr Pillay JAGAMBRUM 			- Lecturer
+
+     Mrs Vedwanti RAMSOONDUR 			                 - ex Principal School Inspector
+
+     BUREAU DE L’ÉDUCATION CATHOLIQUE
+     Mr Francois JOLICOEUR 			                   - Deputy Head Master
+     Mr Jean-Noël MANIACARA 			                  - Educator (Primary)
+     Mr Nasser BEEHARRY 				                     - Educator (Primary)
+
+     Acknowledgements
+
+     Vetting Team
+     MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+     Mr Dahmiasdeho GOWRY			                     - School Inspector
+     Mrs Taramatee NATHOO			                     - School Inspector
+     Mrs Dineshwaree RUCHCHAN			                 - School Inspector
+     Mr Rajkumar BEEDASSY			                     - School Inspector
+     Mr Henrio Douglas POTIÉ			                  - Supervisor (The Arts)
+
+     Illustration		       Mr William RASOANAIVO
+
+     Layout		 Mr Isstiac GOOLJAR                 - Graphic Designer
+
+
+     ISBN : 978-99949-40-27-1
+     © Mauritius Institute of Education (2021)
+
+
+     REVIEW PANEL
+
+     MAURITIUS INSTITUTE OF EDUCATION
+     Dr (Mrs) Seema GOBURDHUN 			 - Coordinator (History), Associate Professor
+     Sarvesh HURRY					- Lecturer
+
+
+
+
+ii
+                                        Foreword
+
+MIE has produced a brand new collection of textbooks based on the National Curriculum
+Framework for the Nine Year Continuous Basic Education as from 2016. These textbooks have
+been written by a team of academic staff from MIE, supported by experienced Educators,
+advised by Inspectors, mentors and Deputy Head Masters.
+
+
+We have done our best to ensure that the textbooks enable children to undergo a pleasant
+learning experience. We have taken care to align the textbooks with very clearly defined learning
+outcomes and objectives set for the respective subjects as outlined in the National Curriculum
+Framework, Grades 1 to 6. The textbooks provide clear indications of the diverse skills that
+children should master at each stage.
+
+
+We are also providing a set of teachers’ manuals where we have outlined the appropriate
+techniques and pedagogical approaches so that children are helped to make optimal use of
+the textbook and materials provided. Some of the textbooks have been updated and changes
+effected after receiving feedback from educators.
+
+
+We are thankful to all those who have provided us with constructive feedback, thereby enabling
+us to make this curriculum development endeavour come to fruition. We are also thankful to the
+artists who carried out the illustrations, and to our graphic artists who have tried their best to
+create the right layout for the books. The authors and the curriculum team, under the guidance
+of Professor Vassen Naëck, also deserve our thanks.
+
+
+We hope that you enjoy this material and wish you lots of success..
+
+
+
+
+Dr O. Nath Varma
+Director
+Mauritius Institute of Education
+
+
+
+
+                                                                                                iii
+                             About the Teacher’s Book
+
+The purpose of this Teacher’s Book is to help teachers organise pupils’ learning experiences
+in SSEE in a more effective way and to enhance the understanding and appreciation of the
+environment by pupils. It provides basic information on each unit for teachers. It highlights the
+objectives, teaching points, concepts to focus on and helpful hints. Additional notes on subject
+knowledge are provided to the teacher for some concepts whenever required. The Teacher’s
+Book not being exhaustive, teachers may need to search for additional information from other
+reliable sources.
+
+
+It is to be noted that in keeping with the National Curriculum Framework (2015), the Social,
+Scientific and Environmental Education (SSEE) curriculum “enables learners to acquire subject
+knowledge and conceptual understanding, develop inquiry skills, attitudes and values for a
+critical understanding of the three dimensions of the environment: natural, cultural and
+social.”
+
+
+The aims of SSEE in the primary curriculum are to ensure that learners:
+
+
+•    Develop curiosity about the world around them
+•    Develop knowledge and a critical understanding of the natural, cultural and social environment
+•    Appreciate the interdependence of all living things
+•    Appreciate and care for the environment
+•    Develop an understanding of their cultural and historical heritage
+•    Understand how to act as responsible citizens
+•    Develop a sense of personal and national identity
+•    Use a variety of ICT tools in exploring the environment
+
+
+Effective Pedagogy
+
+
+A successful implementation of the SSEE curriculum will depend largely on the way it is taught
+to pupils. The pedagogical plan for the units in the Pupil’s Book should consist of different
+types of teaching/learning and assessment strategies. Teachers should consider the following,
+without, however, limiting themselves to them:
+
+
+Cooperative (Peer) Learning
+
+
+It is important for pupils to work together to gain and share knowledge and understand
+the world around them. ‘Discuss and Share’ is a component of the book that allows pupils to
+work with their peers (in pairs or in groups) to learn and share. This component of the book gives
+suggestions for classroom discussions, helps pupils to share and work with others and in the
+
+iv
+process promotes peer learning, develops oral communication skills and reinforces concepts.
+Brainstorming, concept mapping, debates, games, visits to places of interests are other means
+of learning cooperatively.
+
+
+Learning and Teaching by Inquiry
+
+
+Inquiry is a method of teaching and learning that actively involves the learner and in the process
+leads him/her to understand concepts.
+
+
+Passive teaching strategies like ‘chalk and talk’ will not meet and promote the objectives of the
+SSEE curriculum. To achieve the aims listed above, SSEE should be taught through active and
+child-centred teaching/learning strategies. Pupils should be encouraged to learn by doing and
+discovery. It is recommended that pupils be involved in all activities which include the inquiry
+skills mentioned in the SSEE curriculum. The Pupil’s Book for Grade 3 focusses on observation,
+comparison, classification, data collection/recording and the communication of findings and
+ideas.
+
+
+Pupils should be encouraged to manipulate materials (photos, maps, pictures, items), specimens
+and simple equipment safely. The set of ‘Activities’ in the book actively engages the pupils to
+construct subject knowledge, explore and engage with the content and develop inquiry skills,
+attitudes and values. A lot of ‘illustrations’ are used to complement the writing and to give
+young learners a lot of opportunities to observe and in the process help visual learners also.
+
+
+Motivating Pupils and Arousing their Interests
+
+
+The SSEE curriculum can be made more interesting to pupils by providing them with situations
+and problems that are challenging, thought-provoking, stimulating and that encourage them to
+reflect on phenomena relevant to their daily life experiences.
+
+
+‘Did you know?’ triggers the interest and curiosity of pupils.
+
+
+‘Think and Think!’ stretches the thinking of pupils and develops their creativity. Pupils should
+also be encouraged to think, wherever possible, about the everyday applications of the basic
+scientific principles they have learnt.
+
+
+
+
+                                                                                                v
+‘Find out’ prompts pupils to think and learn beyond the content of the book and underscores
+the fact that the book should not be seen as the only source of knowledge. This activity is
+meant to prompt pupils to develop the habit of looking for information on their own from relevant
+sources. The emphasis is not only on finding the correct answer but also on properly exploring
+the various sources of information available including the Internet.
+
+
+The use of learning resources such as living and non-living specimens, models, pictures, maps,
+drawings, photographs, press and magazine cuttings and low-cost equipment is essential to
+make learning interesting for pupils.
+
+
+Using ICT
+
+
+The use of ICT tools to explore and discover the environment must be encouraged throughout
+the book. ICT can help in broadening and deepening pupils’ learning. It is to be noted that digital
+resources will be developed and made accessible to both teachers and learners.
+
+
+Formative and Summative Assessment
+
+
+Pupils should be assessed in many ways to determine their understanding. It is important to
+note that many exercises are inbuilt into the units for formative purposes. It is recommended
+that assessment and evaluation be continuous and comprehensive and aligned to how pupils
+learn and are taught.
+
+
+For example, asking pupils questions about prior knowledge (what they have learnt in previous
+classes) will build on knowledge progressively. Speaking with pupils, asking them questions
+about the activity to see what they learnt from it is a good way of assessing what a child
+knows and understands from a particular activity. Creating maps and drawings is another way
+to informally assess pupils in a group or individually to see what they can come up with.
+
+
+‘I check my progress’ represents a checklist of attained learning outcomes that the pupils can
+read, understand and use to assess their own learning.
+
+
+‘What I have learnt’ summarises key learning points.
+
+
+
+
+vi
+‘Words to learn’ focusses on key vocabulary and promotes literacy development.
+A unit is not complete without a way to assess the pupils to figure out what they gained from
+their learning experiences in the classroom. At the end of each unit, pupils will be tested on
+their knowledge and understanding. ‘End-of-unit exercises’ check the progress of pupils
+and consolidate knowledge and understanding. More authentic performance assessment
+instruments to assess what the pupils know and understand must be developed by the
+teacher related to content knowledge, understanding and skills development. Pupils must
+receive feedback on what they need to work on in order to improve performance and reach the
+next level.
+
+
+I sincerely hope that the teaching of SSEE will be effective and learning will be enjoyable to
+all pupils.
+
+
+
+Dr (Mrs) Sarojiny Saddul-Hauzaree
+Panel Coordinator
+Social, Scientific and Environmental Education (SSEE)
+
+
+
+
+                                                                                           vii
+       Table of contents
+
+                                           Unit 1
+
+
+
+             Looking at our Environment    Pg 1-26
+
+
+
+
+                                           Unit 2
+
+
+
+               Myself and My Family       Pg 27-63
+
+
+
+
+                                           Unit 3
+
+
+
+              Our Natural Environment     Pg 65-92
+
+
+
+
+                                           Unit 4
+
+
+
+                    Living and
+                                          Pg 93-124
+                 Non-living Things
+
+
+
+
+viii
+                                                             Unit 1 - Looking at our Environment
+
+
+
+
+                  Teacher’s note
+
+Unit 1: Looking at our Environment
+
+Pupils must learn how we understand the world around us. In this unit, pupils will use their senses
+to observe and gather information from the environment around them. As pupils learn everything
+through the five senses, the lessons incorporated in Unit 1 will engage pupils in activities to explore
+the environment around them through their five senses. This unit will explain each of the five sense
+organs and senses in detail and give pupils a chance to explore their environment using their
+five senses. They will be using their eyes, skin (hands), ears, nose, and tongue to gain knowledge
+of the environment around them.
+
+The objectives of the Unit 1 are to enable the pupil to:
+
+•   Write a simple definition of the environment
+•   Ask many questions about the environment
+•   Name the different parts of the body that help us observe the environment
+•   Use the eyes, ears, nose, tongue and hands to observe the environment
+•   Identify and name the five sense organs
+•   Tell what each sense organ helps us to do
+•   Name the five senses
+•   Relate the five senses to how we see, hear, touch, smell and taste.
+
+In keeping with the SSEE curriculum, pupils are given a lot of opportunities throughout the units to
+develop inquiry skills, scientific attitudes and values. Pupils will be given opportunities in Unit 1 to
+develop skills such as questioning, observing, classifying, comparing and communicating.
+
+Inquiry Skills
+
+Questioning		          - Asking questions about animals, plants, objects and events in the
+			                      environment around them
+Observing		            - Using the senses to gather information from the environment around them
+Classifying		          - Grouping objects according to observable characteristics
+Comparing		            - Identifying similarities and differences
+Communicating          - Receiving and transmitting information orally, in writing or by drawing
+			                      pictures, tables and models
+
+Attitudes and Values
+
+Cooperation		          - Sharing with others and working together with others
+
+Curiosity		 - Asking questions about objects and events and finding out more about
+			           things around them on their own
+
+
+
+
+                                                1.1
+Unit 1 - Looking at our Environment
+
+
+
+    Unit 1- Looking at our Environment
+
+
+
+
+When we look around us, we see many things.
+We see people, animals and plants.
+We see houses, roads, mountains and rivers.
+In this unit, you will learn how your body helps you to observe things
+around you.
+
+
+      At the end of this unit, you should be able to
+
+    • write a simple definition of the environment.
+    • ask many questions about your environment.
+    • name the different parts of the body that help you observe
+      your environment.
+    • use your eyes, ears, nose, tongue and hands to observe
+      your environment.
+    • identify and name the five sense organs.
+    • tell what each sense organ helps you to do.
+    • name the five senses.
+    • relate the five senses to how you see, hear, touch, smell
+      and taste.
+
+1
+                                                             Unit 1 - Looking at our Environment
+
+
+
+
+          Teacher’s note pg 2-6
+
+Activity 1.1 Our Environment
+
+Objective: To make learners aware of the environment and lead them to a simple definition of the
+environment.
+
+Unit 1 begins with an activity on the environment around a girl called Alisha to open the discussion
+about the meaning of the environment. Discuss the picture with pupils and ask them to share
+information about what they see in the picture. The activity will give them a general idea of what
+the term environment means.
+
+Helpful hints:
+• Help pupils to extract as many details from the picture as this will help in developing their
+   observational skills.
+• At the end of the activity, let pupils think how different or similar (same) the environment at
+   home or the school is.
+
+In relation to Activity 1.1, help pupils understand the following:
+The environment is everything that is around us.
+Environments can be the same or different.
+
+
+
+Activity 1.2 Asking Questions about your Environment
+
+Objective: To enable learners to ask questions and be aware of the importance of asking questions.
+
+In keeping with the aims of the National Curriculum, the Pupil’s Book encourages pupils to
+ask questions.
+
+Helpful hints:
+• Formulate different questions using the models given.
+• Let pupils try to formulate their own questions about the environment.
+
+In relation to Activity 1.2, help pupils understand the following:
+Asking questions help us to find out about things.
+Asking questions help us to learn about the environment around us.
+
+
+
+
+                                                1.2
+Unit 1 - Looking at our Environment
+
+
+
+             Activity 1.1 Our Environment
+
+
+
+
+The picture shows Alisha in her environment. She is looking around her.
+What can she see?
+
+    Discuss and Share
+When we discuss about something with others, we share and learn
+many things.
+Discuss and share with your friends what Alisha sees around her.
+
+2
+                                            Unit 1 - Looking at our Environment
+
+
+Write down the things Alisha can see around her.
+
+________________________________________________________
+
+________________________________________________________
+
+
+There are many things around all of us.
+Write down the things you can see around:
+
+
+1.		 your home
+
+________________________________________________________
+
+________________________________________________________
+
+
+2.		 your school
+
+________________________________________________________
+
+________________________________________________________
+
+
+3. Are your home and school environments same or different?
+		Think and write down how they are same or different.
+
+________________________________________________________
+
+________________________________________________________
+
+
+
+
+  What I have learnt
+
+
+  • Our environment is everything that is around us.
+  • Environments can be the same or different.
+
+
+
+
+                                                                             3
+Unit 1 - Looking at our Environment
+
+
+
+             Activity 1.2 Asking questions about your environment
+
+
+When we look around us, we can ask many questions.
+The children are asking a lot of questions in the pictures below.
+Read these questions aloud.
+Write them in your copybook.
+
+
+
+
+    Who am I?
+    Who are my family members?
+
+
+
+
+                                      Why is my sister taller than me?
+                                      Why are my toys made of wood?
+
+
+
+
+4
+                                         Unit 1 - Looking at our Environment
+
+
+
+
+                                Where does water come from?
+                                Where does this river go?
+
+
+
+
+  How can I care for my environment?
+  How did people live in the past?
+  How do I draw a map of my environment?
+
+
+
+
+                                  What is a living thing?
+                                  What is the difference between a
+                                  mountain and a hill?
+                                  What is inside this empty bottle?
+
+
+
+
+The children are asking questions about themselves and the things
+around them.
+We can ask many questions about our environment.
+
+
+
+
+                                                                          5
+Unit 1 - Looking at our Environment
+
+
+Ask and write two questions about:
+
+
+1.		 yourself
+
+________________________________________________________
+
+________________________________________________________
+
+
+2.		 your home
+
+________________________________________________________
+
+________________________________________________________
+
+
+3.		 your school
+
+________________________________________________________
+
+________________________________________________________
+
+Do you know why we ask questions?
+We ask questions to learn about things around us.
+When you ask questions, you learn about yourself, your home, your school,
+your family, other people and places.
+
+
+
+              Words to learn
+
+
+
+             environment     question   look around   share   learn   think
+
+
+    What I have learnt
+
+
+    • We ask questions to find out about things.
+    • We ask questions to learn about the environment around us.
+    • Many times, we have answers to these questions.
+
+
+6
+                                                             Unit 1 - Looking at our Environment
+
+
+
+
+         Teacher’s note pg 7-15
+
+Activity 1.3 Your School Environment
+
+Objective: To make learners aware of the school environment as another type of environment
+around them and understand what it means to observe the environment or something.
+
+In relation to Activity 1.3, help pupils understand the following:
+To observe means to look at something closely and carefully
+
+
+Activity 1.4 Using your body to observe the environment
+
+Objective: To make learners aware of the importance of different parts of the body to observe the
+environment and introduce the sense organs.
+
+In Grades 1 and 2, pupils learnt about the different parts of the body. In this unit, the main external
+body parts associated with the sense organs are taken up, and pupils are expected to elaborate
+on the main function(s) of each. Furthermore, the senses associated with different sense organs are
+also mentioned. Pupils should be encouraged to learn more about their different senses through
+the various activities described in this unit.
+
+Helpful hints:
+• Make a brief recapitulation of what pupils learnt in Grades 1 and 2 about the main
+   body parts.
+• Ask pupils to draw a human body.
+• Ask pupils to write down in their exercise book the names of the different body parts.
+• Have an oral discussion of the main functions of each body part by asking questions: How
+   does the body part help you everyday? e.g. hands to touch, hold or carry objects; legs for
+   walking and running/moving etc.
+
+The unit begins with a story about using the five sense organs that will help to open the discussion
+about using the body to observe the environment.  Read the story to the pupils to give them a
+general idea of the following action verbs: see, hear, touch, smell and taste. Focus on each action
+verb individually before bringing them all together.  
+
+In relation to Activity 1.4, ask pupils
+
+•   to read the story and to mention the sense organs
+•   to study the pictures and read out the name of the sense organs shown
+•   to make the link between the different sense organs and the five senses
+•   to fill table on page 15 in their exercise book.
+
+In relation to Activity 1.4, help pupils understand the following:
+
+We have five sense organs.
+We use the eyes to see.
+We use the tongue to taste.
+We use the nose to smell.
+We use the ears to hear.
+We use the skin (hands) to touch and feel.
+The five sense organs help us to observe our environment.
+
+Additional Notes to the Teacher: The Human Body
+
+The human body is made up of many parts, each of which is suited to its function. Among the
+external body organs, the sense organs are very important. Without being able to sense the
+environment, it would be difficult to move and act. The five senses are sight, hearing, smell, taste
+and touch. All these senses send information to the brain which then tells us what we see, hear,
+smell, taste and touch (or feel).
+
+
+                                                1.3
+Unit 1 - Looking at our Environment
+
+
+
+             Activity 1.3 Your School Environment
+
+
+Look around your classroom. List a few things you see in your classroom.
+
+_______________________________________________________
+
+Choose one thing from the list above. Name the thing that you have chosen.
+
+
+_______________________________________________________
+
+
+Now, look at it closely and carefully.
+When we look at something closely and carefully, we say that
+we observe it.
+Now, go outside the classroom and look around you.
+Observe carefully what you see in your school environment.
+Draw some of the things that you see around you.
+
+
+
+
+7
+                                             Unit 1 - Looking at our Environment
+
+
+
+             Think and Think!
+
+
+    What parts of your body have you used to find out about the things
+    around you?
+
+
+
+
+             Words to learn
+
+
+
+            look at   find out   observe   different   same    answer
+
+
+
+Be creative: Think of an environment that you like. Draw it.
+
+
+
+
+                                                                              8
+Unit 1 - Looking at our Environment
+
+
+
+             Activity 1.4 Using your body to observe the environment
+
+
+Alisha is inside the house. It is raining outside. She hears the rain falling.
+After some time, it stops raining. She sees a beautiful rainbow with many
+colours. She goes outside in the garden. There is a lot of water everywhere.
+She touches the ground and it is wet. She smells the beautiful flowers.
+Hmmm… Another smell is coming from the kitchen. Mum is cooking a delicious
+meal. She tastes it.
+
+
+    She hears the rain falling.
+
+
+
+
+    She sees a beautiful rainbow with many colours.
+
+
+
+
+9
+                                              Unit 1 - Looking at our Environment
+
+
+
+
+ She touches the ground and it is wet.
+
+
+
+
+ She smells the beautiful flowers.       Mum is cooking a delicious meal.
+                                         She tastes it.
+
+
+
+
+The pictures show what Alisha hears, sees, touches, smells and tastes.
+
+Find out what parts of the body Alisha uses to observe things around her.
+
+Write down the parts of the body used by Alisha.
+
+1. _________________
+
+2. _________________
+
+3. _________________
+
+4. _________________
+
+5. _________________
+
+                                                                              10
+Unit 1 - Looking at our Environment
+
+
+     Observing our environment
+
+We can do many things to observe our environment.
+
+We can see.
+We can smell.
+We can hear.
+We can touch.
+We can taste.
+Our body helps us to do all this.
+
+Write which part of the body helps you to see, to touch, to hear, to smell and
+to taste.
+
+
+
+
+We use our eyes to see.
+List five things you can see around you.
+
+1. _________________
+
+2. _________________
+
+3. _________________
+
+4. _________________
+
+5. _________________
+
+11
+                                             Unit 1 - Looking at our Environment
+
+We use our tongue to taste.
+List five things you can taste around you.
+
+1. _________________
+
+2. _________________
+
+3. _________________
+
+4. _________________
+
+5. _________________
+
+
+We use our nose to smell.
+List five things you can smell around you.
+
+1. _________________
+
+2. _________________
+
+3. _________________
+
+4. _________________
+
+5. _________________
+
+
+
+We use our ears to hear.
+List five things you can hear around you.
+
+1. _________________
+
+2. _________________
+
+3. _________________
+
+4. _________________
+
+5. _________________
+                                                                             12
+Unit 1 - Looking at our Environment
+
+
+
+We use our skin (hands) to touch and feel.
+List five things you can touch and feel around you.
+
+1. _________________
+
+2. _________________
+
+3. _________________
+
+4. _________________
+
+5. _________________
+
+
+The eyes, the tongue, the ears, the nose and the skin (the hands) are our five
+sense organs.
+
+Complete the sentences below and draw the sense organs.
+
+
+             I complete                      I draw my sense organ/s
+
+
+
+
+     I see with my ____________ .
+
+
+
+
+     I smell with my ____________ .
+
+
+
+
+13
+                                            Unit 1 - Looking at our Environment
+
+
+
+            I complete                     I draw my sense organ/s
+
+
+
+
+    I hear with my ____________ .
+
+
+
+
+    I taste with my ____________ .
+
+
+
+
+    I touch with my ____________ .
+
+
+
+
+What I have learnt
+
+•    We have five sense organs.
+•    We use the eyes to see.
+•    We use the tongue to taste.
+•    We use the nose to smell.
+•    We use the ears to hear.
+•    We use the skin (hands) to touch and feel.
+•    The five sense organs help us to observe our environment.
+
+
+                                                                            14
+Unit 1 - Looking at our Environment
+
+
+     The five senses
+
+The parts of the body that you have drawn on pages 13-14 are related to
+the senses.
+
+We have five senses:
+1. The sense of sight
+2. The sense of taste
+3. The sense of smell
+4. The sense of hearing
+5. The sense of touch
+
+Each sense is related to a sense organ.
+
+Complete the table below.The first one has been done for you.
+
+                                                  I write a
+My sense organs              My senses
+                                                  complete sentence
+
+
+                             My sense of sight    My eyes are my sense
+      I see with my eyes.
+                                                  of sight.
+
+
+
+ I hear with my _____.
+
+
+
+
+ I taste with my _____.
+
+
+
+
+ I touch with my _____.
+
+
+
+
+ I smell with my _____.
+
+
+
+15
+                                                             Unit 1 - Looking at our Environment
+
+
+
+
+        Teacher’s note pg 16-17
+
+Activities 1.5-1.9 will be inquiry-based teaching instruction because we want to see what the pupils
+can come up with by themselves before giving them any answer. At the end of each activity, the
+findings will be discussed.  Pupils need to work cooperatively to figure out the answers.
+
+Activity 1.5 Using my sense of sight
+
+Objective: This activity focusses on the concept of sight and learners will understand the concept
+of sight.
+
+Prompt question before the activity: What is sight?
+
+Helpful hints:
+• Let pupils explain what they think sight is
+• Explain how the eyes are the location at which sight occurs and that we use our eyes to learn
+   things such as colours, sizes, and shapes of objects.  
+• Asking “What do you see?” can be used to focus on sight as a way of gaining knowledge of
+   the world around them.  
+• Show pictures of different objects to the pupils and let them use their eyes to figure out what
+   the object is.  
+
+In relation to Activity 1.5, help pupils understand the following:
+We use our eyes to see.
+Our sense of sight allows us to see.
+
+Additional Notes to the Teacher: The Sense of Sight
+The eyes are responsible for the sense of sight. Eyes respond to light. They can be compared to
+two tiny cameras inside the head. They send a steady stream of pictures back to the brain, like a
+television camera sending live pictures back to a television screen.
+
+
+
+
+                                                1.4
+Unit 1 - Looking at our Environment
+
+
+
+              Activity 1.5 Using my sense of sight
+
+
+In this activity, you will use your sense of sight to compare things.
+
+
+When we compare things, we say how they are similar and different.
+
+
+Write down what you observe or see.
+Use the words given.
+Write the sentence again in the space given.
+
+
+     shapes     colours    sizes      old   animals   flowers   bigger   new
+
+
+
+
+                                            I can see different __________ .
+
+                                            __________________________ .
+
+
+
+                                            I can see ____________ of
+
+                                            different____________ .
+
+                                            __________________________
+
+                                            __________________________ .
+
+                                            I can see ____________ of
+
+                                            different____________ .
+
+                                            ___________________________
+
+                                            __________________________ .
+
+
+
+16
+                                        Unit 1 - Looking at our Environment
+
+
+                                  I can see ____________ and
+
+                                  ____________ shoes.
+
+                                  __________________________
+
+                                  __________________________ .
+
+              Alisha              I can see that Alisha is
+
+                                  _________ than her sister.
+
+                                  __________________________
+
+                                  __________________________ .
+
+
+
+        Did you know?
+
+
+
+Some things are very small.
+
+
+
+                                                          Hand lens
+
+But we can still see very small
+things. We use a hand lens to
+make them look bigger.
+
+
+
+
+        Think and Think!
+
+
+What other things can help us to see better?
+
+
+                                                                        17
+Unit 1 - Looking at our Environment
+
+
+          Teacher’s note pg 18-19
+
+  Activity 1.6 Using my Sense of Taste
+
+  Objective: This activity focusses on the concept of taste and learners will understand the concept
+  of taste.
+
+  Prompt question before the activity: What is taste?
+
+  Helpful hints:
+  • Focus on the concept of taste where pupils will explain what they think taste is.  
+  • Explain to them how the tongue is the location of the sense of taste which we use to learn
+     about flavours of things.  
+  • Mention how there are four types of taste which include salty, sweet, sour, and bitter.  
+
+  In relation to Activity 1.6, help pupils understand the following:
+  • Our tongue helps us to taste food and food can taste sweet, salty, sour and bitter.
+  • Table on page 16 should be reproduced and completed in pupil’s exercise book
+  • The tongue allows us to tell whether the food eaten is hot, cold or warm.
+
+
+
+  Additional Notes to the Teacher: The Sense of Taste
+  The tongue is the main taste organ. The tongue is also used in the chewing and swallowing of food.
+  The tongue is covered with tiny spots called taste buds. They allow us to notice the difference
+  between the four tastes - sweet, salty, sour and bitter.
+
+
+
+
+          Teacher’s note pg 19-20
+
+  Activity 1.7 Using my sense of smell
+
+  Objective: This activity focusses on the concept of smell and learners will understand the concept
+  of smell.
+
+  Prompt question before the activity: What is smell?
+
+  Helpful hints:
+  • Explain to pupils how the nose is the location of the sense of smell which we use to learn about
+     smell (odours) of substances.  
+
+  In relation to Activity 1.7, help pupils understand the following:
+  • our nose helps us to smell
+  • different objects have different smells: there are pleasant and unpleasant smells
+
+  Additional Notes to the Teacher: The Sense of Smell
+
+  Smells are caused by chemicals floating in the air. The nose has special parts known as receptors
+  which respond to these chemicals. The receptor sends a message to the brain. The brain then
+  interprets and detects the smell. Smell is important to us because it helps us to identify decaying
+  matters, fires, gas etc.
+
+
+                                                   1.5
+                                          Unit 1 - Looking at our Environment
+
+
+
+           Activity 1.6 Using my sense of taste
+
+
+In this activity, you will use your sense of taste to compare things.
+By looking at the pictures, write what you will observe when you use your
+sense of taste.
+Use the words given.
+Write the sentence again in the space given.
+
+
+                 sweet      salty     bitter      sour
+
+
+
+
+                                    Is it sweet or sour?
+
+                                    The lemon is ____________ .
+
+
+
+
+                                    Is it sweet or bitter?
+
+                                    The gourd is ___________ .
+
+
+
+
+                                    Is it sweet or salty?
+
+                                    The honey is ____________ .
+
+
+
+
+                                                                          18
+Unit 1 - Looking at our Environment
+
+
+
+
+                                          Are they sweet or sour?
+
+                                          The ‘rasgullas’ are ____________.
+
+
+
+
+                                          Are they sweet or salty?
+
+                                          The olive fruits are ___________.
+
+
+
+
+             Activity 1.7 Using my sense of smell
+
+
+In this activity, you will use your sense of smell to compare things.
+By looking at the pictures, write what you will observe when you use your
+sense of smell.
+Use the words given.
+Write the sentences again in the space given.
+
+                            pleasant       unpleasant
+
+A pleasant smell is a good smell.
+An unpleasant smell is a bad smell.
+
+
+
+                                      The flowers have a ____________ smell.
+
+                                      ______________________________.
+
+
+
+19
+                           Unit 1 - Looking at our Environment
+
+
+
+
+                 Garbage has an _____________ smell.
+
+                 ______________________________.
+
+
+
+
+                 Mint leaves have a ___________ smell.
+
+                 ______________________________.
+
+
+
+
+                 Rotten food has an __________ smell.
+
+                 ______________________________.
+
+
+
+
+                 Dirty shoes have an ___________ smell.
+
+                 ______________________________.
+
+
+
+
+                 Spices have a __________ smell.
+
+                 ______________________________.
+
+
+
+
+Words to learn
+
+
+eye       ear     smell      organ         sight
+tongue    skin    taste      compare       hearing
+nose      see     touch      sense         feel
+
+                                                           20
+Unit 1 - Looking at our Environment
+
+
+
+
+          Teacher’s note pg 21-25
+
+  Activity 1.8 Using my sense of touch
+
+  Objective: This activity focusses on the concept of touch and learners will understand the sense of
+  touch and be aware of the importance of the sense of touch.
+
+  The activity will help the pupils distinguish between different types of textures that different
+  objects have.
+
+  Prompt question before the activity: What is touch?
+
+  Note: Encourage each pupil to bring at least one material which is readily available at home.
+
+  Helpful hints:
+  • Explain how our skin is the location of the sense of touch which we use to determine the
+     roughness, smoothness, hardness, softness, or different shapes of objects.
+  • Explain how we use the sense of touch to feel different textures of objects.
+  • Observe pupils as they explore the different textures on their own.  
+  • Bring some of the objects shown in the picture so that pupils will actually see the objects to
+     touch and feel to understand what the different objects feel like.  
+
+  In relation to Activity 1.8, help pupils understand the following:
+
+  Make sure pupils are able to distinguish between: hard and soft, rough and smooth, hot and cold
+
+  Additional Notes to the Teacher: The Sense of Touch
+  The skin is like a coat that protects the body. It contains nerves that can sense pain, temperature
+  and pressure. These nerves send messages to the brain and give us the sense of touch.
+
+  Activity 1.9 Using my sense of hearing
+
+  Objective: This activity focusses on the concept of hearing and pupils will understand the concept
+  of hearing.
+
+  Prompt question before the activity: What is hearing?
+
+  Helpful hints:
+  • Explain in detail that the ears are the location of hearing and we use our ears to determine high
+     and low sounds (pitches) of objects.
+  • Focus on pupils using their ears only to comprehend information.  
+  • Ask pupils to whisper different sentences in other pupil’s ears and to really listen to determine
+     what is being told. This lesson will reinforce the importance of the ability to hear.  
+
+  In relation to Activity 1.9, make pupils understand the following:
+  • We have two ears
+  • Our ears allow us to hear
+  • We can identify objects by listening to the sound they make
+  • Different objects produce different sounds
+  • Bring pupils to conclude that the ears enable us to hear different sounds
+
+  Additional Notes to the Teacher: The Sense of Hearing
+
+  The ears allow us to hear sounds. Sound is produced when an object vibrates. These vibrations
+  cause the air around to vibrate as well, producing sound waves. The ear can distinguish the
+  strength, speed and direction of the vibrations.
+
+
+
+
+                                                     1.6
+                                           Unit 1 - Looking at our Environment
+
+
+
+
+            Activity 1.8 Using my sense of touch
+
+
+In this activity, you will use your sense of touch to compare things.
+By looking at the pictures, write what you will observe when you use your
+sense of touch.
+
+
+                               I compare
+
+Is it soft or hard?                  Is it smooth or rough?
+
+A “galet”                            An apple
+
+___________                          ___________
+
+A sponge                             A dried coconut
+
+___________                          ___________
+
+Touching a pet                       Touching sand paper
+
+___________                          ___________
+
+A glass window                       A brick
+
+___________                          ___________
+
+A rock                               A glass window
+
+___________                          ___________
+
+A leaf                               A tree bark
+
+___________                          ___________
+
+
+
+
+                                                                           21
+Unit 1 - Looking at our Environment
+
+
+                          I compare: Is it hot or cold?
+
+Ice cubes                                Boiling water
+
+___________                              ___________
+
+
+
+
+              Think and Think!
+
+
+     Some people cannot see. They are blind.
+     They use a white walking stick to move around.
+
+
+     What senses do blind people use to help them move around?
+
+
+
+
+               Words to learn
+
+
+                sweet      sour          soft         hard
+                bitter     pleasant      smooth       cold
+                salty      unpleasant    rough        hot
+
+
+
+
+22
+                                            Unit 1 - Looking at our Environment
+
+
+
+            Activity 1.9 Using my sense of hearing
+
+
+In this activity, you will use your sense of hearing to compare things.
+By looking at the pictures, write what you will observe when you use your
+sense of hearing.
+Use the words given.
+
+                       I compare: Is it loud or soft?
+
+Bird chirping                         Church bells ringing
+
+___________                           ___________
+
+
+Mother and baby
+                                      River flowing
+sleeping
+                                      ___________
+___________
+
+
+
+Barking of a dog                      Shouting for help
+
+___________                           ___________
+
+
+
+Drilling a hole                       Listening to music
+
+                                      ___________
+___________
+
+
+  What I have learnt
+
+  • Each sense organ is related to a sense.
+  • We have five senses.
+  • The five senses are the sense of sight, sense of hearing, sense of
+    touch, sense of smell and sense of taste.
+  • The senses help us to observe the environment around us.
+
+                                                                            23
+Unit 1 - Looking at our Environment
+
+
+
+                                 End-of-Unit Exercises
+
+
+     1. Draw a line to show how you use each body part.
+
+
+
+
+                                                I use it to see.
+
+
+
+
+                                               I use it to hear.
+
+
+
+
+                                              I use it to smell.
+
+
+
+
+                                              I use it to touch.
+
+
+
+
+                                              I use it to taste.
+
+
+
+
+24
+                                          Unit 1 - Looking at our Environment
+
+
+2. Draw a line to match the sense organs to the senses.
+
+
+     Ears       Nose        Eyes      Skin (hands)          Tongue
+
+
+
+
+  sense          sense          sense           sense             sense
+ of touch      of hearing      of smell        of sight          of taste
+
+
+
+
+                                                                            25
+Unit 1 - Looking at our Environment
+
+
+
+I check my progress
+
+
+           At the end of this unit, I can
+
+
+ 1 write a simple definition of the environment.
+
+
+ 2 ask and write questions about my environment.
+
+
+     name the different parts of the body that help
+ 3
+     me observe my environment.
+
+     use my eyes, ears, nose, tongue and skin
+ 4
+     (hands) to observe my environment.
+
+
+ 5 name and draw my five sense organs.
+
+
+ 6 tell what each sense organ helps me to do.
+
+
+ 7 name my five senses.
+
+
+ 8 say how I use my five senses.
+
+     say how I use my five senses to observe things
+ 9
+     in my environment.
+
+
+
+
+26
+                                                  Unit 2- Myself and My Family
+
+
+
+  Unit 2- Myself and My Family
+
+
+
+
+In this unit, you will learn to speak, write and share information about
+yourself. You will also learn about the different members of your family
+and know that they care for each other.
+
+
+
+       At the end of this unit, you should be able to
+
+
+   •    remember events and dates related to yourself.
+   •    list events in the correct order.
+   •    collect and observe pictures and photographs of yourself.
+   •    identify members of the family and compare their age.
+   •    explore and discuss how family members care for each other.
+   •    draw and complete a simple family tree.
+
+
+                                                                           27
+Unit 2 - Myself and My Family
+
+
+
+
+                  Teacher’s note
+
+
+  Theme 1: Myself
+
+  Aim: In this topic, pupils will listen, tell and write their stories. The teacher will guide the pupils to
+  think/reflect on a series of key questions, which will allow the pupils to tell the tale of who they are.
+
+  Focus/ Key questions:
+  1. Who am I?
+  2. To which grade/school do I belong?
+  3. How do I know I have grown?
+
+  Objectives: At the end of the lesson pupils will:
+  • Describe themselves using appropriate words
+  • State to which grade/school they belong
+  • Talk about their likes and dislikes
+  • Demonstrate an awareness of time and relationship with events
+  • Talk about changes in themselves that occur over time.
+
+  Key Concepts: Similarities & Differences, Time and Change, Chronology
+
+  Skills: Listening, Responding to questions, Collecting, Organising, Categorising, Comparing/
+  Contrasting and Reporting information.
+
+  Processes: Drawing pictures, Collecting information, Making posters, Completing timelines
+
+  Questions to focus on:
+  • What’s your name?
+  • How old are you? / When is your birthday?
+
+  (These are almost always the first questions asked when we meet people. Our name tells the story
+  of who we are. Other things in our life tell stories too. For example: Where do I live? Which School
+  do I go to? Who are my friends? What do I like doing? These are the questions that make us think
+  about what is important to us.
+
+  The activities in this lesson will provide an opportunity to share (both orally & and in writing) about
+  many of the important things in our own lives).
+
+  The pupils will say and write their name, their birthday, tell about their friends and a few things they
+  are good at and enjoy doing.
+
+
+
+
+                                                      2.1
+                                                                      Unit 2 - Myself and My Family
+
+
+
+
+        Teacher’s note pg 28-32
+
+
+Activity 1: Oral Discussion
+Pupils will tell others (their classmates) about themselves. They will introduce themselves by telling
+their names. The teacher will demonstrate the importance of names as a means of identifying
+themselves and others.
+Pupils will talk about their likes/dislikes and compare these with the likes and dislikes of others in the
+class. They will also have to talk about why they consider themselves to be special.
+
+Activity 2: Role play
+Teacher can ask 3-4 pupils to come in front of the class. Pupils can enact a conversation among
+themselves. ( They can ask: name, birthday, address, likes and dislikes)
+Example: Hello. My name is……..
+Ask two or three pupils: What’s your name? How old are you?
+If possible, get each pupil to come in front of the class and have a conversation similar to the
+first group.
+
+Activity 3: Card Game
+Play games with word cards using the names of places where the pupils live. Pupils will tell the
+name of the places where they and their friends live by reading the cards (Cards to be prepared
+beforehand by the teachers). This activity will enable the pupils to develop skills of associating
+names of places with written words.
+
+Activity 4: Completing Information Card (Page 31)
+Emphasise on the key word ‘Information Card’. Discuss what an information card is. You can ask the
+pupils if they have seen an ‘Identity Card’. Ask what information an ‘Identity Card’ has (contains).
+Next, complete the Information Card on page 31.
+Teachers can use this activity to develop creative skills among pupils by making them prepare their
+‘Information Card ‘on a Bristol sheet and display same in the class.
+
+Activity 5: Creating a Poster
+Create a poster on the theme ‘Myself’ using photographs and drawing of themselves. Pupils to
+be encouraged to write words, sentences beneath their drawing/photograph and display their
+poster in class.
+
+The activity provided on page 32 is a ‘Consolidation Activity’. It will allow the teachers to know if
+the pupils have been able to grasp the key vocabularies associated with the theme.
+
+Assessment: Oral/written response to questions/Drawing
+
+
+
+
+                                                 2.2
+Unit 2 - Myself and My Family
+
+
+     Myself: Who am I?
+
+Alisha, Sam, Marie and Jean are now in Grade 3. They live in different places.
+They go to different schools. They like to do different things.
+Let us find out what they have to say.
+
+
+
+
+                                Hello Everyone!
+                                I am Alisha. I am a girl. I am eight years
+                                old. My birthday is on 18 January. I live in
+                                Curepipe and I go to Rainbow School. Meet
+                                my friend Sam.
+
+
+
+
+                   Hello! I am Sam. I am a boy. I live
+                   in Bel Air. I am seven years old.
+                   My birthday is on 10 October. I
+                   also go to Rainbow School. I like to
+                   play football.
+
+
+
+
+28
+                                           Unit 2 - Myself and My Family
+
+
+
+
+I like to read books. Meet my two other
+friends, Marie and Jean from Rodrigues.
+They have come to visit us.
+
+
+
+
+                                Hello Friends!
+                                I am Marie and this is Jean. We
+                                live in Rodrigues. We are also
+                                eight years old. We go to Marina
+                                School. We like to go fishing with
+                                our parents.
+
+
+
+
+          When is        My birthday is            My birthday is
+       your birthday?    on 10 March.               on 6 June.
+
+
+
+
+                                                                     29
+Unit 2 - Myself and My Family
+
+
+
+            Activity 2.1 Completing my Information Card
+
+
+Do you know what is an information card?
+An information card has information about oneself.
+Let us read the information on Alisha’s card.
+
+
+
+
+                                        a      tion Card
+                        Alisha’s Inform
+
+                                Name: Alisha
+                                                      anuary
+                                Birthday: 18 J
+                                                      3
+                                Class: Grade
+                                  la c e w h  e re   I  live: Curepipe
+                                P
+                                           n  d s  : S  a m  ,  M arie and Jean
+                                 My Frie
+                                         I li k e :  L is te n in g to stories and
+                                 What
+                                                                             iends
+                                                     p  la ying with my fr
+                                 		
+                                                                                      ne
+                                                ri  te   to y  o r b o ok: An aeropla
+                                  My favou
+
+
+
+
+30
+                                                Unit 2 - Myself and My Family
+
+
+Now I draw, write and complete my own information card.
+
+
+
+
+                        My Information Card
+
+                            Name: ____________________
+
+                            Birthday: _______________
+
+                            Class: _______________
+
+                            Place where I live: _________________
+
+                            My Friends: ____________________
+
+                            What I like: ____________________
+
+                            My favourite toy or book:
+                            ______________________________
+
+
+
+
+                                                                          31
+Unit 2 - Myself and My Family
+
+
+I read my Information Card and complete the sentences below.
+
+1. My name is _______________________ .
+
+2. I am a _______________________ .
+
+3. I am _______________________ years old.
+
+4. My birthday is on _______________________ .
+
+5. I am in Grade _______________________ .
+
+6. I live in _______________________ .
+
+7. My friends’ names are _______________________ .
+
+8. I like _______________________ .
+
+9. My favourite toy is _______________________ .
+
+
+
+
+              Words to learn
+
+
+
+               birthday information favourite
+
+
+
+     What I have learnt
+
+     • To share information about myself
+     • To write my name
+     • To know my birthday
+     • To write the name of the place where I live
+     • To share information about things I like to do
+
+
+32
+                                                                     Unit 2 - Myself and My Family
+
+
+
+
+        Teacher’s note pg 33-36
+
+I am growing
+
+Question to focus on:
+How do I know I have grown?
+
+Objectives: At the end of the lesson pupils will:
+• Observe changes in themselves
+• Talk about changes in themselves that occur over time.
+
+Key Concepts: Time and Change
+
+Vocabulary: Last Year, This Year, Larger, Bigger, Longer, Taller, Same
+
+Skills: Observing changes, Discussing changes, Comparing changes
+
+Processes: Drawing pictures, Collecting information, Completing timelines
+
+Procedures
+Emphasise on key vocabulary associated with time (for example: Last year, This Year, Now, Today).
+Ask oral questions: In which Grade are you this year? In which Grade were you last year? What
+are you doing now? What did you do yesterday? You could ask questions related to any activity
+ensuring that the key vocabulary associated with time is used (for example: activities done last
+week….)
+Then gradually introduce questions about the changes that they can observe in themselves. You can
+also draw their attention to the fact that some things have changed but others are still the same. Make
+pupils aware that some changes are natural while others can be man made (for example, changes
+in the environment, weather (natural), new buildings (man-made) and then move to changes
+in them).
+
+The focus is to enable the pupils to understand ‘change’ in relation to the passing of ‘time’.
+
+Activity 1: Observing and recording changes in the school environment for a week.
+This can be a group activity. The teacher can divide the class in groups. Each group will have to
+observe at least five things that have changed in a week (activity can start on Monday and last till
+Friday). Pupils can be asked to observe changes in the school yard, classroom, weather….. Pupils
+can write words or even draw to show the changes. (Bristol sheet to be provided to the pupils to
+record their observation which can be displayed). Class discussion to follow the activity.
+
+Activity 2: Observing changes in themselves.
+Observe and discuss different pictures of children ranging from the time they were still babies until
+their present age and relate the changes to their own experience. (Teachers can refer to Activity
+2.2 provided in the book to initiate discussion in the class). Discuss personal changes in size, height,
+age, shape, new uniform, shoes (Discussion to include terms: tall, short, taller, bigger, smaller,
+larger etc). Objects/pictures of things used when they were still a baby until now (eight years)
+could also be brought by pupils in class to observe and discuss changes. Teachers may use non-
+Grade measurement to record change (for example: strings or strips to measure height/size and
+compare these characteristic features with the pupils in class).
+
+Activity 3: Creative activity
+Pupils can draw their own pictures to show changes in themselves (size, height). Encourage them
+to talk about the pictures.
+
+Assessment: Oral/written response to questions/Drawing/ Completing timeline
+
+
+
+
+                                                2.3
+Unit 2 - Myself and My Family
+
+
+     I am growing
+
+
+
+
+                                This year I am in Grade 3. Last year
+                                I was in Grade 2. My class teacher
+                                this year is Miss Reema. Last year my
+                                class teacher was Mr Rex.
+
+
+
+
+                                          Yes. I have a new school
+         Do you have a new                uniform. It is larger this
+         uniform this year?               year. I have grown bigger
+                                          and taller.
+
+
+
+
+33
+                                          Unit 2 - Myself and My Family
+
+
+I have new shoes. The shoes I wore
+last year are small now.
+Do you have new shoes too?
+
+
+
+
+                                            This year we have the
+                                            same school bag.
+
+
+
+
+         Think and Think!
+
+
+ Why do I need a new uniform this year?
+
+
+                                                                    34
+Unit 2 - Myself and My Family
+
+
+
+             Activity 2.2 Growing up
+
+
+The pictures below are of Alisha. They show changes in Alisha as she is
+growing up. They are arranged in order from the time Alisha was a baby until
+now when she is in Grade 3.
+
+
+ Alisha as a baby          Alisha          Alisha in         Alisha in
+                         3 years old       Grade 1           Grade 3
+
+
+
+
+What can you observe in the pictures? Write two sentences about what you
+see in the pictures.
+
+1. I can see Alisha _________________________________________ .
+
+2. I can see Alisha _________________________________________ .
+
+
+I draw pictures of myself as I grow.
+
+
+        As a baby                  In Grade 1            In Grade 3
+
+
+
+
+35
+                                                      Unit 2 - Myself and My Family
+
+
+
+
+             Did you know?
+
+
+   Do you know that important events can be shown on a line?
+   For example, your birthday, your first day at school or a place you
+   visited during your holidays.
+   This line shows the time when the events happened.
+   It also shows the order in which it happened.
+
+
+
+
+  Discuss and Share
+
+I observe, compare and talk to my friends about pictures when I was a baby,
+in Grade 1 and now.
+
+
+
+           Words to learn
+
+
+            this year   last year   bigger   taller
+            larger      small       same     change
+
+
+
+
+   What I have learnt
+
+   • To observe and compare the changes in me
+   • To know that things that I wore and used as a baby get small
+      as I grow
+   • To arrange in a correct order important events related to myself
+
+
+
+
+                                                                                36
+Unit 2 - Myself and My Family
+
+
+
+
+          Teacher’s note pg 37-38
+
+  I am going to school
+
+  Question to focus on:
+  How do I sequence/order events?
+  How do I gather/collect information?
+
+  Objectives: At the end of the lesson pupils will:
+  • Sequence/order events
+  • Identify the months of the year and days of the week with a focus on sequential nature of time.
+  • Inquire and collect information.
+
+  Key Concepts: Chronology
+
+  Vocabulary: Before, After, Morning, Afternoon, Evening, Yesterday, Today
+
+  Skills: Categorising, Sequencing, Inquiring
+
+  Processes: Drawing, Collecting information
+
+  Question to focus on:
+  Putting events in the correct sequence / order (for example ‘My school timetable’)
+
+  Procedures
+  Make pupils focus on the sequence in which events happen. You may ask questions (for example:
+  What happened before? What happened later? What did you do in the morning? What did you do
+  in the evening? When do you have breakfast? What do you do before coming to school?)
+
+  The focus here is to enable pupils to understand that all events happen in a sequence and at a
+  particular time.
+
+  Activity 1: Class Discussion
+  Ask pupils to talk about all the activities they have done from morning till evening. Arrange all the
+  activities in the right sequence. Ask each pupil to talk about and share their sequence of activities
+  with their friends. Compare the similarities and differences in the sequencing of the activities.
+
+  Activity 2: Making a school timetable
+  Refer to activity 2.3 in the book (page 38). Complete the table provided. Pupils may not write all
+  the subjects they did in the morning or afternoon considering the space provided. However, in
+  order to develop the recalling skills pupils can be asked to recall which subjects/activities are done
+  in the morning and afternoon.
+
+  The second section of the activity aims at developing the inquiry skills of the pupils. Encourage
+  pupils to find and discover information from different sources (people, books, …..) and share
+  in class.
+
+
+
+
+                                                   2.4
+                                                Unit 2 - Myself and My Family
+
+
+I am going to school
+
+
+
+ Today is the first day at school after the holidays.
+ I am happy to be back at school.
+ My school starts in the morning and finishes in the afternoon.
+
+ Yesterday I bought new books, pencils, an eraser and crayons.
+
+ What are the subjects that you are studying?
+
+
+
+                This year I am studying many subjects.
+                Last year I did not study so many subjects.
+                I like studying English.
+
+
+
+
+                                            I like French and
+                                            PE the most.
+
+
+                          I like Maths.
+
+
+
+                                                                          37
+Unit 2 - Myself and My Family
+
+
+
+              Activity 2.3 I make my school timetable
+
+
+I put the subjects I study at school in the right order.
+
+      Time      Monday          Tuesday   Wednesday Thursday       Friday
+Morning        English
+
+
+
+Afternoon
+
+
+
+
+1. The subjects I study at school are ____________________________
+
+     ______________________________________________________
+
+2. Ask an older person/your parents about the subjects they studied in
+   primary school. Make a list of the subjects your parents studied at school.
+
+     ______________________________________________________
+
+
+3. Did they study the same subjects as you?
+
+     ______________________________________________________
+
+
+               Words to learn                    yesterday today after
+
+
+
+     What I have learnt
+
+     • To use words for past and present
+     • To arrange events in the order they happen
+     • To ask questions and find information from my parents, grandparents
+       and other people
+
+38
+                                                                    Unit 2 - Myself and My Family
+
+
+
+
+        Teacher’s note pg 39-41
+
+I Remember
+
+What events/information do I remember?
+How do I record and share information about what I remember?
+
+Objectives: At the end of the lesson pupils will:
+• Recall events related to themselves
+• Collect, organise and record information.
+
+Vocabulary: Recall, Remember, Record
+
+Skills: Recalling, Recording
+
+Processes: Drawing, Remembering, Recording information
+
+Procedures
+Begin the session by asking pupils to narrate any event / activity that they remember. You can ask
+questions (for example: Who were your friends in Grade 2? Where did you go for Easter holidays?
+What is the colour of your favourite toy?.......). Encourage them to talk.
+Read page 39 with the pupils.
+
+
+Activity 1: Remembering things and events from the past
+Ask pupils to bring their favourite toys/ objects in class. Ask them when they got the toy? Who gave
+them? How old were they when they got the toy? (Those students who are unable to bring toys or
+objects can draw and talk about them). As a consolidation exercise pupils can work the activity
+on page 40 (Activity 2.4).
+Pupils can be asked to draw their favourite toy that they remember when they were small. The
+drawings can be displayed in class.
+
+Activity 2: Recording Information in a diary
+Teachers can bring a diary in class with notes of events to show to pupils (1 event per page. Write
+the date at the top). It would be interesting if a colourful diary is prepared to be shown to the
+pupils.
+
+Creative Activity: Making their own Diary
+Ask pupils to get a copybook or any book (it can be of any size but preferably small) on
+which they can write. Make the pupils draw and colour the first page. This can be their diary. Ask
+pupils to write in sentences or words events they can remember: birthdays when they were small,
+a visit to another country, a visit to a zoo, festivals, a film, etc. (You can also develop in them the
+habit of keeping a diary by asking them to write everyday any interesting event that took place at
+home or school. Explain to them the importance of writing the date in the diary when they record
+their interesting event).
+
+Activity 2.5 on page 41 can be used as a consolidation activity. Pupils can also make a poster of
+interesting activities/events that they remember. They can draw and write one sentence about
+the interesting thing they remember. But they must write the time (for example: which month/ how
+old they were/ in which class they were ….) The poster can be displayed in class.
+
+
+
+
+                                               2.5
+Unit 2 - Myself and My Family
+
+
+     I remember
+
+
+      I remember when I was five
+      years old, my favourite toy was   I remember my first
+      a plane. It was blue and white.   day at primary school.
+      It was made of plastic.
+
+
+
+
+                                            I remember my holidays
+                                            in Rodrigues.
+          I remember my visit to
+          S.S.R Botanical Garden.
+
+
+
+
+39
+                                                 Unit 2 - Myself and My Family
+
+
+
+           Activity 2.4 I remember my favourite toys
+
+
+I remember and write about my favourite toys in the table given below.
+
+
+
+My Favourite      How old       Colour of        Size of        What they
+   Toys            I was        the toys        the toys       were made of
+                                              (big or small)
+
+
+
+
+  Discuss and Share
+
+I remember and draw a picture of my favourite toy. I discuss and talk to my
+friends about my favourite toy and two other things I remember.
+
+
+
+
+                                                                           40
+Unit 2 - Myself and My Family
+
+
+
+              Activity 2.5 I write things I remember
+
+
+I remember interesting things that happened last year.
+I keep a record of them in my copybook.
+
+A few examples of events are given below. You can add more events to the
+given list.
+
+Event                                     I record interesting things
+
+Visit to a place
+
+Independence Day
+
+Easter Holidays
+
+Christmas gift
+
+
+
+              Did you know?
+
+
+     Many people keep a record of interesting
+     events/things in a notebook called a diary.
+
+
+
+
+               Words to learn                      remember record
+
+
+
+     What I have learnt
+
+     • To remember important events
+     • To record information in a diary
+
+41
+                                                                        Unit 2 - Myself and My Family
+
+
+
+
+           Teacher’s note pg 42
+
+Theme 2: My Family
+
+Aim: In this topic, pupils will listen and tell stories of their family. The teacher will guide the pupils to
+think/reflect on a series of key questions, which will allow the pupils to understand that everyone
+belongs to a family and members of family care for each other. (Note: Teachers must be sensitive
+to pupils who live with single parent or do not live with parents).
+
+Focus/ Key Questions:
+• Who are my family members?
+• How do family members care for each other?
+• What are the activities in which we take part as a family?
+
+Objectives: At the end of the lesson pupils will:
+• Trace their family history for three generations: Grandparents, parents and the pupils themselves
+• Be aware that everyone belongs to a family and that families differ in many ways
+• Discuss size and composition of the family
+• Discuss activities done by the family at a particular time.
+
+Vocabulary: Family members, Grandfather, Grandmother, Mother, Father, Parents, Brother, Sister
+
+Skills: Identifying similarities and differences, Discussing and comparing, Inquiring, Interviewing
+
+Processes: Drawing family members, Explaining drawings, Reporting information
+
+
+
+Note: Some pupils may belong to single parent families or reconstituted families. This can be a
+sensitive topic for some. Teachers should therefore be careful and pay particular attention when
+discussing this topic.
+
+
+
+
+                                                  2.6
+Unit 2 - Myself and My Family
+
+
+
+
+          Teacher’s note pg 42-47
+
+  My Family: With whom I live
+
+  Question to focus on:
+  Who are the members of my family?
+  How are my family and other families alike and different?
+
+  In this lesson, pupils will trace their family history to three generations (grandparents, parents and
+  the pupils).
+
+  Objectives: At the end of the lesson pupils will:
+  • Identify and name family members with whom they live
+  • Identify similarities and differences in family structure when compared to other families
+  • Complete their family tree.
+
+  Skills: Identifying similarities and differences, Labelling, Comparing, Interpreting pictures, Inquiring
+
+  Processes: Drawing, Making information card, Completing family tree
+
+  Procedures
+  You can ask questions (for example: How many members are there in your family? Who are they?
+  Who is the oldest member of the family? Who is the youngest member of the family?) Read with
+  the pupils pages 42-44
+
+  Note: Be sensitive while asking questions to pupils who may be living in a single parent family or in
+  a reconstituted family.
+
+  Activity1: Observing and interpreting the picture (pages 42-44)
+  The above pages provide pictures of different kinds of family. Ask pupils to observe these pictures
+  and talk about them. You can ask them to observe and talk about the birth order (older/younger)
+  of the boy/girl shown in the picture in the family and the birth order of their siblings (brother, sister)
+  using words (younger, elder) orally and in writing.
+
+  Creative Activity: Ask pupils to draw and colour members of their family. Then make them talk
+  about the drawings and write words/ or one sentence about the drawings.
+
+  Activity 2: Role Play
+  Make pupils act out stories about different families. Make sure to emphasise during role play their
+  birth order (older/younger) in the family and that of their siblings (brother, sister) and practise using
+  words (younger, elder, grandmother, grandfather, parents) orally and in writing.
+
+  Activity 3: Creating Family Information Card & Completing Family Tree
+  Pupils work on Activity 2.6 (Page 44). The information completed in the activity can be used to
+  create ‘A Family Information Card’ and displayed in the class. Teachers may provide a sample
+  family information card. Pupils can bring photographs of their family members. If it is difficult for
+  children to bring photographs, they may draw and colour their family members.
+
+  Completing Family Tree (Page 46)
+  Teachers may display an example of family tree. You may ask pupils to write different family
+  relationships (for example: mother, father, brother, sister, grandmother, grandfather) among
+  various people on their respective family trees.
+
+  Tell students to inquire and find information about their own family history. They may ask questions
+  from different members of the family about their age, the name of their mother/father, their likes
+  and dislikes, the work they do/ did…… Then complete Activity 2.7 on Page 46-47.
+
+
+
+
+                                                    2.7
+                                                 Unit 2 - Myself and My Family
+
+
+  My Family: With whom I live
+
+Alisha is back home after school. She lives with her grandfather,
+grandmother, father, mother, elder brother and younger sister. They are
+her family. Alisha is happy to be at home with her family.
+
+
+  Members of Alisha’s family
+
+
+                          father
+          Hello!                                        grandfather
+   It is Alisha again.
+ Come meet my family.
+
+                                                                 grandmother
+
+
+
+
+                              mother
+
+
+
+
+                                        sister
+
+              brother
+                            Alisha
+
+
+
+
+                                                                           42
+Unit 2 - Myself and My Family
+
+
+
+                                      I am happy to meet your family
+                                      Alisha. Come with me and meet
+                                      my family.
+
+
+
+
+                                Sam
+
+
+
+
+                                  I live with my mother and father.
+
+
+
+
+                                                Marie
+
+
+
+
+43
+                                            Unit 2 - Myself and My Family
+
+
+
+
+I live with my grandfather,
+grandmother, father, mother
+and younger brother .
+                              Jean
+
+
+
+
+         Activity 2.6 I make my family information card
+
+
+
+
+              My Family Information Card
+
+     There are _________________ members in my family.
+
+     They are my ______________________________________.
+
+     My brother is _____________ younger/older than me.
+
+     My sister is _____________ younger/older than me.
+
+     The oldest member in my family is my ________________.
+
+     The youngest member in my family is my _____________.
+
+
+
+
+                                                                      44
+Unit 2 - Myself and My Family
+
+
+
+              Activity 2.7 Alisha’s Family Tree
+
+
+This is Alisha’s Family Tree.
+
+
+
+
+              Did you know?
+
+
+     A Family Tree is a drawing that shows how the different members of a
+     family are related to each other.
+     You can know about your family history from your Family Tree.
+
+
+45
+                                 Unit 2 - Myself and My Family
+
+
+Now I complete my Family Tree.
+
+
+
+
+                                                           46
+Unit 2 - Myself and My Family
+
+
+I write two sentences about my family members.
+You can write about how old they are, what they like and what work they do.
+
+Grandfather ______________________________________________
+
+___________________________________________________________
+
+Grandmother ______________________________________________
+
+___________________________________________________________
+
+Father ___________________________________________________
+
+___________________________________________________________
+
+Mother __________________________________________________
+
+___________________________________________________________
+
+Brother __________________________________________________
+
+___________________________________________________________
+
+Sister ___________________________________________________
+
+___________________________________________________________
+
+
+
+
+     What I have learnt
+
+     • To share information about my family
+     • To name the different members of my family
+     • To name the oldest and the youngest member of my family
+
+
+
+
+47
+                                                                    Unit 2 - Myself and My Family
+
+
+
+
+        Teacher’s note pg 48-61
+
+My Family: Living happily together
+
+Question to focus on:
+How do family members care for each other?
+How do families celebrate special events?
+
+Skills: Sequencing pictures, Creating stories, Listening to each other, Inquiring, Communicating
+(orally & writing)
+
+Processes: Drawing, Identifying and describing activities, Gathering information from text,
+Sharing information
+
+Procedures
+Make pupils observe the picture on page 48 in the textbook about members of the family. Ask
+them to pick out details. Ask them to answer in short sentences questions asked (for example: Who
+is the boy/girl in the picture? What is mother doing? What is the girl in the front doing? Where is
+father standing? What is grandmother doing? What is grandfather reading?)
+
+Additional Activities
+Activity1: Drawing/Making Poster
+Pupils draw a picture of their family showing an activity in which all family members participate
+(Page 49). They can also make a poster or if they have pictures they can glue on to the Bristol sheet
+which can be displayed in the class (Note: Teachers have to be sensitive /careful to pupils who
+may not be living with both parents).
+
+Activity 2: Observing, interpreting & discussing about the pictures
+(Discuss activity/work being done by different family members using stimulus material such as
+pictures in the textbook). Teachers may also bring different pictures of family members doing
+things together. Ensure that the pictures are of families doing things at different places and time
+(for example: at seaside, in the garden, at dinner time…….) Initiate discussion in the class by asking
+pupils to observe and respond to the pictures. (You may ask them the time of the activity. What is
+each member of the family doing…..?)
+
+Activity 3: Role play
+Pupils can do role play showing different activities performed by members of the family (For example:
+mother washing, father cooking, grandfather telling stories, ………) Make pupils participate in the
+role play. After the role play they can draw pictures of family members working together.
+
+Activity 4: Sequence a number of still pictures about the family to create a story.
+
+Display/Provide pictures of family working/doing things at different time. Ask pupils to sequence
+the picture and write one sentence about each picture. (They create their own picture story).
+Pupils talk about the story they have created.
+
+Activity 5: Celebrating special occasions
+(Oral question: What are the activities in which we take part as a family?)
+Discuss special days that families celebrate (for example: Mother’s Day, Father’s Day. Emphasise
+that families have fun on special days. Discuss other activities in which the family takes part (for
+example: worshipping, going on trips, cinema etc.) Write two sentences about their experiences
+during these events. Draw pictures of special occasions in which family takes part.
+
+
+
+
+                                               2.8
+Unit 2 - Myself and My Family
+
+
+     My Family: Living happily together
+
+
+
+
+48
+                                                 Unit 2 - Myself and My Family
+
+
+           Activity 2.8 I draw a picture of my family doing
+                        things together at home.
+
+
+
+
+I write a few sentences about the pictures drawn.
+
+1. When was it? (For example- Last weekend/ week/ month/ year/ summer…)
+
+  ______________________________________________________
+
+
+2. What time was it? (For example- morning/ afternoon...)
+
+  ______________________________________________________
+
+
+                                                                           49
+Unit 2 - Myself and My Family
+
+
+3. What were the people in the family doing? Write one sentence about
+   each person.
+
+     ______________________________________________________
+
+     ______________________________________________________
+
+     ______________________________________________________
+
+     ______________________________________________________
+
+     ______________________________________________________
+
+
+     Celebrating Mother’s Day in the Family
+
+
+                                We don’t know what to give
+Friends! Today is               to our mother.
+Mother’s Day!                                                Oh no, don’t be
+                                                             sad! Let’s make
+                                                             some flowers.
+
+
+
+
+50
+                                                  Unit 2 - Myself and My Family
+
+
+
+           Activity 2.9 Making a Paper Flower
+
+
+What you will need: paper, scissors, thread, cotton wool, straw and glue.
+
+Step 1: Glue the cotton wool and        Step 2: Cut paper strips and
+        the straw on the paper.                 fold them.
+
+
+
+
+Step 3: Cut a petal shape.              Step 4: Wrap the petals
+                                                around the straw.
+
+
+
+
+Step 5: Tie the petals to               Step 6: Make and glue the leaves.
+        the straw.                              Wrap green paper round
+                                                the straw.
+
+
+
+
+                                                                            51
+Unit 2 - Myself and My Family
+
+
+
+                                 Oh, it’s beautiful! Thank you!
+
+
+
+
+         Happy Mother’s Day!
+
+
+
+
+I write three sentences on how I celebrate Mother’s Day with my family.
+
+
+1. _______________________________________________________
+
+
+2. _______________________________________________________
+
+
+3. _______________________________________________________
+
+
+
+
+     What I have learnt
+
+     • Members of the family do things together.
+     • Members of the family celebrate events together.
+     • Members of the family care for each other.
+
+
+52
+                                              Unit 2 - Myself and My Family
+
+
+
+                         End-of-Unit Exercises
+
+
+1. Reading, Writing and Sharing Information
+
+a. Write six sentences about yourself.
+
+Myself
+
+_______________________________________________________
+
+_______________________________________________________
+
+_______________________________________________________
+
+_______________________________________________________
+
+_______________________________________________________
+
+_______________________________________________________
+
+
+b. Write six sentences about your family.
+
+My Family
+
+_______________________________________________________
+
+_______________________________________________________
+
+_______________________________________________________
+
+_______________________________________________________
+
+_______________________________________________________
+
+_______________________________________________________
+
+
+
+
+                                                                        53
+Unit 2 - Myself and My Family
+
+
+2. Observing and arranging in correct order
+
+Observe the pictures given below. Arrange them in the correct order
+using numbers 1 to 6.
+
+
+
+
+      Picture                       Picture              Picture
+
+
+
+
+      Picture   1                   Picture              Picture
+
+
+Write one sentence about each picture. An example is provided below.
+
+
+ Picture 1
+                He wakes up in the morning.
+
+ Picture 2
+
+
+ Picture 3
+
+
+ Picture 4
+
+
+ Picture 5
+
+
+ Picture 6
+
+
+54
+                                                      Unit 2 - Myself and My Family
+
+
+3. Read and complete the Picture Story. Use the words given in the
+   box below.
+
+    yesterday     last year    today      next week     this year      now
+
+
+
+
+                I am going to school ____________ .
+
+
+
+
+                ______________ I packed my bag with new books.
+
+
+
+
+                _____________ is my first day at school after the holidays.
+
+
+
+
+                I am in Grade 3 ________________ .
+
+
+
+
+                We will go to Casela ______________ .
+
+
+
+
+                _____________ when I was in Grade 2, my friends and I
+
+                went to Crocodile Park.
+
+
+                                                                                55
+Unit 2 - Myself and My Family
+
+
+4. Completing my Family Tree
+
+Fill in the blanks with the correct word.
+
+
+     mother    brother      grandmother     sister   father   grandfather
+
+
+
+
+                                    me
+
+56
+                                                  Unit 2 - Myself and My Family
+
+
+Observe the drawings on page 56 and complete the sentences given below.
+
+1. There are _______________ members in my family .
+
+2. The oldest members in my family are my ____________________
+
+  and ____________________.
+
+3. The youngest member in my family is my _________________ .
+
+
+
+5. Asking questions and recording information
+
+Ask for information from your mother, father or any other older member of
+the family. Ask them the questions given below.
+
+
+Then write, in the space provided, the information they give you.
+
+Where they lived when they were small?
+
+_______________________________________________________
+
+_______________________________________________________
+
+
+What were the things they liked to do?
+
+_______________________________________________________
+
+_______________________________________________________
+
+
+What were the things they did not like to do?
+
+_______________________________________________________
+
+_______________________________________________________
+
+
+
+
+                                                                            57
+Unit 2 - Myself and My Family
+
+
+In the space provided, draw or stick a picture of your father/ mother/
+other family member when they were small.
+
+
+
+
+58
+                                                   Unit 2 - Myself and My Family
+
+
+6. Making an Activity Poster
+
+Observe the activities done by Sam in one month.
+
+
+
+
+             Activity 1                                Activity 2
+
+
+
+
+            Activity 3                                 Activity 4
+
+
+
+
+             Activity 5
+
+
+                                                                             59
+Unit 2 - Myself and My Family
+
+
+Now I draw and make a poster of five activities I did in one month.
+I write one sentence about each activity.
+
+
+
+
+                  Activity 1                   Activity 2
+      ___________________________     ___________________________
+
+      ___________________________     ___________________________
+
+
+
+
+                  Activity 3                   Activity 4
+      ___________________________     ___________________________
+
+      ___________________________     ___________________________
+
+
+
+
+                  Activity 5
+      ___________________________
+
+      ___________________________
+
+
+
+60
+                                                  Unit 2 - Myself and My Family
+
+
+I make a record of the activities done in one month.
+
+
+
+
+How many activities are there on
+your poster?
+
+
+
+
+Which is your favourite activity?
+
+
+
+
+How often do you do your favourite activity?
+
+
+
+
+Which of these activities do you usually do
+with your family?
+
+
+
+
+Which of these activities do you do at home?
+
+
+
+
+Which activity can you do outside?
+
+
+
+
+                                                                            61
+Unit 2 - Myself and My Family
+
+
+
+I check my progress
+
+
+           At the end of this unit, I can
+
+
+ 1 tell/describe myself using appropriate words.
+
+      collect, organise and record information
+ 2
+      about myself.
+
+ 3 talk about what I like and do not like to do.
+
+ 4 draw and create my information card.
+
+ 5 draw and collect pictures of myself.
+
+ 6 talk about changes which occur in me over time.
+
+      observe and talk about different pictures of
+ 7
+      myself from baby up to now.
+
+ 8 remember important events about myself.
+
+ 9 identify similarities and differences.
+
+      order a number of pictures and events about
+10
+      myself to create a story.
+
+      use appropriate words to show and describe
+ 11
+      awareness of time.
+
+12 remember and record important events.
+
+      tell that everyone belongs to a family and that
+13
+      families differ in many ways.
+
+   talk about my position (older/younger) in the
+14 family and/or the position of my brother and/
+   or sister in my family.
+
+
+
+
+62
+                                                Unit 2 - Myself and My Family
+
+
+
+
+          At the end of this unit, I can
+
+
+     tell my family history by reading my
+15
+     Family Tree.
+
+   ask simple questions/information from my
+16 grandparents/parents/or any other
+   older person.
+
+17 talk about things my family does together.
+
+     talk about celebrations in which my
+18
+     family participates.
+
+
+
+
+                                                                          63
+Unit 2- Myself and My Family
+
+
+
+
+64
+                                                Unit 3 - Our Natural Environment
+
+
+
+  Unit 3- Our Natural Environment
+
+
+
+
+In this unit, you will learn that there are beautiful places that form part of
+the environment. You will use your senses to observe, describe and compare
+some features. You will learn more about them by studying pictures, drawings
+and maps.
+
+
+You will learn that these places must be protected and kept clean.
+
+
+       At the end of this unit, you should be able to
+
+
+   •    observe the natural environment around you.
+   •    list and name some features of our natural environment.
+   •    use pictures and drawings to describe the natural environment.
+   •    draw maps and symbols to represent natural features.
+   •    name three islands of our Republic.
+   •    explore the natural environment of our islands.
+   •    know that the natural environment is precious and must be
+        protected and kept clean.
+
+                                                                              65
+Unit 3 - Our Natural Environment
+
+
+
+
+          Teacher’s note pg 66-68
+
+  Our Natural environment
+
+  AIM: Observe, describe and classify natural features in the immediate environment.
+  1. Recognise and name features of the natural environment.
+  2. Read and write correctly features of the natural environment.
+
+  Skills: observation, interpretation, communication, literacy
+
+  •   This lesson encourages pupils to discover and explore their natural environment through
+      drawings and pictures and the observation of their immediate environment.
+  •   Recall that the environment is everything that is around us.
+  •   Pupils will work in groups and discuss among themselves on features they have observed. They
+      will provide examples to make a list and then should be able to identify those which are natural
+      features. They will learn to share ideas thus helping those behind to catch up.
+  •   They develop their language and literacy skills by learning to write correctly the words,
+      mountain, river and hill. Make sure that writing comes only after pupils have understood to
+      your satisfaction the concept taught, i.e features of the natural environment.
+
+  key words: mountain, hill and river.
+
+  Reinforcement: You are expected to devise any other type of exercise to reinforce their
+  understanding to achieve the objectives of the lesson.
+
+  Enrichment: You should use other appropriate teaching aids (ICT)to consolidate teaching
+  and learning.
+
+
+
+
+                                                   3.1
+                                                   Unit 3 - Our Natural Environment
+
+
+
+           Activity 3.1 Naming some features of the
+                        natural environment
+
+Look at Drawing 1.
+It shows some features that you can see in Mauritius and Rodrigues.
+Can you name the features A, B and C ?
+
+
+
+
+         A
+
+
+
+
+                                               B
+
+
+
+
+                                   C
+
+
+
+                                                                         Sea
+
+
+                                   Drawing 1
+
+You have learnt in Unit 1 that these features form part of our environment.
+
+
+
+   I remember
+
+
+   The ENVIRONMENT is everything that is around us.
+
+
+
+                                                                                 66
+Unit 3 - Our Natural Environment
+
+
+With the help of your teacher, name features a, b and c by filling the missing
+letters in the words.
+
+
+
+a.                           M __ __ __ __ __ __ __
+
+
+
+
+b.                           H __ __ __
+
+
+
+
+c.                           R __ __ __ __
+
+
+
+
+Mountains, hills and rivers form part of the natural environment.
+
+
+     Discuss and Share
+
+I name two other natural features that I can see in the environment.
+
+1. ______________________________________________________
+
+2. ______________________________________________________
+
+Observe the natural environment near your school. Which natural features
+can you see?
+
+
+I name the two natural features that I can see near my school.
+
+1. ______________________________________________________
+
+2. ______________________________________________________
+
+67
+                                               Unit 3 - Our Natural Environment
+
+
+
+With the help of your parents, name the natural features that you can see
+around the place where you live.
+
+
+I name the two natural features that I can see.
+
+1. ______________________________________________________
+
+2. ______________________________________________________
+
+
+
+
+   What I have learnt
+
+
+  • Mountains, hills and rivers are natural features that make up the
+    natural environment.
+
+
+
+
+          Words to learn
+
+
+
+           feature    natural   mountain    hill   river
+
+
+
+
+                                                                             68
+Unit 3 - Our Natural Environment
+
+
+
+
+          Teacher’s note pg 69-73
+
+  Mountains and Hills
+
+  AIM: Observe, describe and differentiate between a mountain and a hill.
+  1. Recognise and compare the natural features using pictures and line drawings.
+  2. Identify and state in a short sentence the differences between a mountain and a hill
+  3. Draw and label a mountain and a hill
+  4. Recognise and name 4 well known mountains in Mauritius
+  5. Draw and label line drawings of mountains.
+
+  Skills: observation, comparison, interpretation, communication, drawing and literacy
+
+  •   This activity helps pupils to develop their skill of comparison by observing and interpreting two
+      pictures. Bring the discussion to the idea that mountains are “high and not easy to climb”
+      whereas hills are “low and easy to climb.”
+  •   While planning the lesson, include ample time for pupils to draw and label properly the two
+      features. This will encourage their creativity. Drawing and sketching skills form part of basic
+      geographical skills and are essential in geography education.
+  •   Pupils will start their investigation of mountains of Mauritius by starting with Le Pouce mountain
+      which is a familiar and easily identifiable one. They will discuss about its shape and understand
+      why it is named Le Pouce.
+  •   They should be encouraged to draw and label properly Le Pouce mountain as it is an important
+      part of the lesson.
+  •   Pupils will further explore by identifying and naming some mountains near the school and/or in
+      their immediate environment.
+  •   With the use of pictures, pupils will study three other well known mountains in Mauritius namely
+      Lion mountain, Pieter Both and Le Morne mountain.
+  •   Pupils can work in groups and discuss for example about the shape of the mountains. They will
+      share their thoughts and prior knowledge on these mountains.
+  •   Pupils are taught to interpret line drawings and identify the mountains. These geographical
+      skills are developed while tracing and labelling the drawings. They should also spell and write
+      correctly the name of the four mountains.
+
+  key words: low, high, Le Pouce mountain, Lion mountain, Pieter Both mountain and
+  Le Morne mountain.
+
+  Reinforcement: You are expected to devise any other type of exercise to reinforce their
+  understanding and to achieve the objectives of the lesson.
+
+  Enrichment: You should use other appropriate teaching aids to consolidate teaching and learning.
+
+
+
+
+                                                    3.2
+                                               Unit 3 - Our Natural Environment
+
+
+
+
+           Activity 3.2 Comparing mountains and hills
+
+
+
+
+             Picture 1                               Picture 2
+
+You have learnt in Unit 1 that when we compare two things, we say how they
+are similar and different.
+
+Compare Picture 1 and Picture 2.
+
+a. Are these two natural features similar?
+
+________________________________________________________
+
+b. Can you tell the difference between them?
+
+________________________________________________________
+
+c. What do the two pictures show?
+
+  Picture 1 shows a _________________________________________.
+
+  Picture 2 shows a _________________________________________.
+
+
+   What I have learnt
+
+   • A mountain is much higher than a hill.
+   • Mountains are high. They are difficult to climb.
+   • Hills are low. They are easy to climb.
+
+                                                                             69
+Unit 3 - Our Natural Environment
+
+
+
+     I draw and label a mountain and a hill
+
+
+
+
+     1. A mountain
+
+
+
+
+     2. A hill
+
+
+
+
+70
+                                                 Unit 3 - Our Natural Environment
+
+
+
+  Mountains of Mauritius
+
+A well known mountain in Mauritius is Le Pouce Mountain.
+
+
+Observe the picture of Le Pouce Mountain.
+
+
+
+
+                                                      Think and Think!
+
+
+                                            Why is this mountain called
+                                            Le Pouce?
+
+
+
+
+Le Pouce Mountain looks like a _______________.
+
+In the space provided, draw Le Pouce Mountain.
+
+
+
+
+                                                                               71
+Unit 3 - Our Natural Environment
+
+
+     Discuss and Share
+
+a. Is there a mountain where you live?
+
+b. Do you know the name of other mountains in Mauritius?
+
+c. The name of a mountain I know is _________________________ .
+
+
+
+
+              Did you know?
+
+
+     Lion Mountain, Pieter Both Mountain and Le Morne Mountain are other
+     mountains found in Mauritius.
+
+
+
+
+               Lion Mountain                           Pieter Both Mountain
+
+
+
+
+                                   Le Morne Mountain
+
+
+72
+                                              Unit 3 - Our Natural Environment
+
+
+
+
+           Activity 3.3 Observing and tracing line drawings
+
+
+
+A line drawing shows the shape of a feature.
+
+Observe the ‘line drawings’ 1 to 4 below. They show four mountains found in
+Mauritius.
+
+Do you recognise them? Write their names in the space given.
+
+
+
+ 1.                                     2.
+
+
+
+
+ ___________________________            ___________________________
+
+
+
+
+ 3.                                     4.
+
+
+
+
+ ___________________________            ___________________________
+
+
+
+                                                                            73
+Unit 3 - Our Natural Environment
+
+
+
+
+          Teacher’s note pg 74-75
+
+  Hills / Mounts
+
+  AIM: Observe and describe a hill and/or a mount.
+  1. Recognise and describe a hill / mount through pictures and line drawings.
+  2. Recognise and name a well known hill in Mauritius and three mounts in Rodrigues.
+
+  Skills: observation, interpretation, communication, drawing, literacy
+
+  •   This activity helps pupils to develop their thinking skills by observing and interpreting a picture of
+      Candos hill. Pupils will discuss about the shape of the hill and may come with various answers.
+      Explain that it looks like a dome. You could bring pictures of buildings to facilitate understanding.
+  •   Pupils will then draw a line-drawing of the hill.
+  •   With the two questions, you will reinforce the idea that hills are low and easy to climb.
+  •   You will introduce Rodrigues to the pupils by a brainstorming activity and a discussion. They will
+      observe and interpret the pictures in the textbook. You may bring your own pictures or show a
+      video clip of the island.
+  •   At this stage, pupils will learn that Rodrigues is a much smaller island than Mauritius and that it
+      is a very hilly island.
+  •   Explain that in Rodrigues the hills are also called mounts.
+  •   Pupils will then learn the names of three mounts. (Mont Limon, Mont Grenade and Mont
+      Malartic). In Rodrigues, pupils can further explore by identifying and naming a mount near the
+      school and/or in their immediate environment.
+
+  key words: Rodrigues, mount, dome, Mont Limon, Mont Grenade and Mont Malartic.
+
+  Reinforcement: You are expected to devise any other type of exercise to reinforce their
+  understanding and reach the objectives of the lesson.
+
+  Enrichment: You should use other appropriate teaching aids to consolidate teaching and learning.
+
+
+
+
+                                                     3.3
+                                                   Unit 3 - Our Natural Environment
+
+
+  Hills and Mounts
+
+A well known hill in Mauritius is Candos Hill.
+
+Observe the picture of Candos Hill. What does it look like?
+
+
+
+
+                                                 Candos Hill looks
+
+                                                 like a _________________ .
+
+
+
+
+Draw a line drawing of Candos Hill below.
+
+
+
+
+1. Is Candos Hill higher or lower than a mountain?
+
+
+  Candos Hill is _____________ than a mountain.
+
+
+
+2. Is Candos Hill easy or difficult to climb?
+
+
+  Candos Hill is _____________ to climb.
+
+                                                                                 74
+Unit 3 - Our Natural Environment
+
+
+Rodrigues Island is a much smaller island than Mauritius.
+
+
+In Rodrigues there are many hills. They are also called mounts.
+Three well known mounts in Rodrigues are Mont Limon, Mont Grenade and
+Mont Malartic.
+
+
+
+
+                                   A Mount in Rodrigues
+
+
+
+     What I have learnt
+
+     In Rodrigues there are many hills which are also called mounts.
+
+
+
+
+                Words to learn
+
+
+
+                 high    low       mount    line drawing
+
+75
+                                                                   Unit 3 - Our Natural Environment
+
+
+
+
+        Teacher’s note pg 76-80
+
+Rivers and waterfalls
+
+AIM: Observe, recognise and describe a river and features associated with a river.
+1. Recognise and describe a river and its parts through drawings, pictures and observations.
+2. Name a river in the immediate environment.
+3. State that GRSE is the longest river in Mauritius.
+4. Read and write correctly the parts of a river.
+5. Recognise and describe a waterfall.
+6. Give a simple description of the Black River Gorges National Park.
+
+Skills: observation, interpretation, communication, drawing, literacy
+
+•   Introduce the lesson with a discussion on rivers. Let pupils share their ideas.
+•   Ask them if they know the name of rivers and / or to guess the name of a river in their locality.
+•   Study the drawing carefully. Give pupils time to observe and identify/read the elements. Guide
+    them if they have difficulties.
+•   Carry out the activity (questions 1, 2 and 3) and ensure that the words are properly written.
+•   Sum-up the lesson by explaining that a river flows from the highland to a lowland. The source is
+    found in the mountains (highland) and the mouth is found on the coast. (lowland)
+•   Pupils will also learn that the longest river in Mauritius is the Grand River South East. It is advised
+    to use pictures to show them the parts of a river and GRSE.
+•   The next step introduces a waterfall as a spectacular feature along a river. Ask pupils to study
+    the drawings and the pictures and to discuss about their observation. They can describe the
+    environment in one or two sentences.
+•   Explain to them that the water is falling from a certain height along the river. Usually it falls at a
+    high speed and is spectacular.
+•   Think of the opportunity of observing a waterfall during an educational tour. Do not forget to
+    talk about precautions to be taken when visiting a river and explain why.
+•   Reinforce the pupil’s understanding by completing drawing 3.4. Once more, ensure that the
+    words are correctly written and spelt.
+•   End the lesson with the drawing activity and encourage sharing and discussion as
+    per instructions.
+
+key words: river, source, mouth, lowland, highland, waterfall, Grand River South East, Rochester
+falls, Chamarel Waterfall, Black River Gorges National Park, forest, protected.
+
+Reinforcement: You are expected to devise any other type of exercise to reinforce their
+understanding and reach the objectives of the lesson.
+
+Enrichment: You should use other appropriate teaching aids to consolidate teaching and learning.
+
+
+
+
+                                                 3.4
+Unit 3 - Our Natural Environment
+
+
+     Rivers
+
+In Mauritius and Rodrigues there are many rivers. Rivers are important
+features of our natural environment.
+Do you know the name of a river?
+The name of a river I know is ________________.
+Find out if there is a river near your place.
+The river near my place is ________________.
+
+
+     Mountains
+                   Source      Highland
+
+
+
+
+                                    Mouth
+     Lowland
+
+Observe the picture carefully and find out:
+
+1. Where does the river start?
+   The place where a river starts is called the _______________ .
+
+2. Where does the river enter the sea?
+   The place where a river enters the sea is called the _______________ .
+
+3. From where does the river flow?
+   Choose the correct word from the list to complete the sentence below.
+                       mountains highland lowland
+
+     The river flows from the _____________ and ____________ to the
+
+     _______________ before entering the sea.
+
+
+                 Did you know?
+
+
+      The longest river in Mauritius is Grand River South East.
+
+76
+                                              Unit 3 - Our Natural Environment
+
+
+
+   Waterfalls
+
+
+
+
+                        Waterfall
+
+
+
+
+Sometimes, along a river there are waterfalls.
+Some well known waterfalls in Mauritius are Rochester Falls and the
+Chamarel Waterfall.
+
+
+
+
+                  Rochester Falls                 Chamarel Waterfall
+
+
+
+Have you ever seen a waterfall?
+
+________________________________________________________
+
+
+
+
+                                                                            77
+Unit 3 - Our Natural Environment
+
+
+
+
+              Think and Think!
+
+
+     Why must we be careful when walking near rivers and waterfalls?
+
+
+
+Fill in the blanks with the words given below.
+
+
+                      river    mouth     waterfall   source
+
+
+
+
+                                       ___________
+
+
+
+
+                                           ____________
+
+
+
+
+                               ____________
+
+
+
+              __________
+
+
+
+
+     Discuss and Share
+
+Why must we keep the environment near rivers and waterfalls clean?
+
+
+
+78
+                                                Unit 3 - Our Natural Environment
+
+
+
+           Activity 3.4 I draw a waterfall
+
+
+Draw: A waterfall and show a clean natural environment.
+Be Creative: Imagine the waterfall along a river in a forest.
+Draw the trees, plants and animals living there.
+Think: Why should we keep our forests clean?
+Share: Tell your ideas to your friends.
+
+
+
+
+             Words to learn
+
+
+
+              highland    lowland    flow   source     mouth waterfall
+
+                                                                              79
+Unit 3 - Our Natural Environment
+
+
+
+               Did you know?
+
+
+     In Mauritius, there is a big forest at the Black River Gorges National Park.
+
+
+     Black River Gorges National Park
+
+
+
+
+     What I have learnt
+
+
+     • A river flows from the mountains and highland to the lowland.
+     • The place where a river starts is known as its source.
+     • The place where a river enters the sea is known as its mouth.
+
+
+
+80
+                                                                Unit 3 - Our Natural Environment
+
+
+
+
+        Teacher’s note pg 81-86
+
+Maps and symbols
+
+AIM: develop basic map skills by drawing maps and symbols to represent natural features.
+1. Observe and recognise different types of maps.
+2. Explain the use of a map.
+3. State that symbols are used to show features on a map.
+4. Draw symbols.
+5. Read and interpret a map with symbols.
+
+Skills: observation, interpretation, communication, drawing, literacy
+
+•   Pupils study the Drawings 1 to 4 and discuss. They identify the elements and features of each
+    drawing. Ask them how these drawings are called. They guess the name given to these types
+    of drawings.
+•   The discussion follows with the purpose of maps and symbols. You should provide other
+    examples of maps adapted to your learners’ level. May be some will be discovering maps for
+    the first time. Give them time to understand and state the purpose of a map. – shows places,
+    features, lands, seas etc…
+•   Pupils identify the symbols on a map. At this stage they are expected to recognise and draw
+    symbols which are mentioned in the textbook. You may reinforce their understanding with two
+    or three features of the natural environment of your choice.
+•   Reading a map:
+    Show pupils an outline map of Mauritius. They should become familiar with the shape of the
+    island.
+•   Ask the pupils to observe the map and to carry out the activity. While working with the map,
+    they will reinforce their understanding of concepts related to rivers.
+•   The activity is completed by tracing and drawing the map which is followed by a
+    class discussion.
+•   The next step is to further work with maps by studying the map of Rodrigues. Pupils also need to
+    become familiar with the shape of Rodrigues island.
+•   The last map shows Agalega. Explain to pupils that Agalega islands form part of our Republic.
+    A group discussion follows to explore the natural environment of the islands of Agalega. This will
+    also introduce the next lesson on natural features at the seaside.
+
+key words: map, symbol, Agalega, flat, sandy.
+
+Reinforcement: You are expected to devise any other type of exercises to reinforce their
+understanding and reach the objectives of the lesson.
+
+Enrichment: You should use other appropriate teaching aids to consolidate teaching and learning.
+
+
+
+
+                                               3.5
+Unit 3 - Our Natural Environment
+
+
+
+
+             Activity 3.5 Learning how to use maps and symbols
+
+
+
+
+              Drawing 1                          Drawing 2
+
+
+
+
+              Drawing 3                          Drawing 4
+
+
+     Discuss and Share
+
+Observe drawings 1,2,3 and 4.
+
+Name four features that you observe on these drawings.
+
+1. _______________________             2. _______________________
+
+3. _______________________             4. _______________________
+
+
+What name is given to these types of drawings?
+
+These drawings are called ___________________ .
+
+81
+                                                Unit 3 - Our Natural Environment
+
+
+
+
+               Did you know?
+
+
+    • Maps can show the world with the lands and seas.
+    • Maps can also show a place where we live.
+
+
+
+    Using symbols
+
+Symbols are used to show places and features on a map.
+
+Symbols can be used to show features of the natural environment:
+
+
+•   mountains
+•   hills or mounts
+•   forests
+•   rivers
+
+In the space provided, draw symbols for a mountain, a hill and a forest.
+
+One example has been done for you.
+
+
+
+
+       River            Mountain              Hill                Forest
+
+
+
+
+                                                                              82
+Unit 3 - Our Natural Environment
+
+
+Map 1 shows some features of the natural environment using symbols.
+
+
+
+                                                          MAURITIUS
+
+
+
+
+                                           Lowland
+
+
+
+
+                   Lowland
+                                                            Lowland
+                                     Highland
+
+
+
+
+                                   Map 1
+
+
+                            A mountain		        A hill
+
+
+                            A forest			         A river
+
+
+83
+                                               Unit 3 - Our Natural Environment
+
+
+  Observing Map 1
+
+I observe Map 1 and tick (√) the symbols I can see.
+
+                        Natural feature                Tick (√)
+
+               1.   The mountains
+
+               2.   The hills
+
+               3.   The rivers
+
+               4.   A waterfall
+
+               5.   The forest
+
+
+Use your pencil to follow the rivers.
+
+Where do the rivers start? Tick the correct answer.
+
+The sources of the rivers are found in the   lowland              highland
+
+
+
+Where do they end? Tick the correct answer.
+
+The mouths of the rivers are found in the    lowland              highland
+
+
+
+
+  What I have learnt
+
+  • Rivers start from the mountains and highland and flow to the
+     lowland and sea.
+
+
+
+On Map 1, write the letter ‘S’ to show the source of the rivers and the
+letter ‘M’ to show the mouth of the rivers on the coast.
+
+
+
+                                                                             84
+Unit 3 - Our Natural Environment
+
+
+
+             Activity 3.6 Tracing a map
+
+
+Trace: Trace Map 1 on page 83 and draw symbols to show the natural features.
+Be Creative: Colour your map.
+Think: Why do we use maps?
+Share: Tell your ideas to your friends and show your map to the class.
+
+
+Observe: The island is surrounded by the sea.
+
+
+Map 2 shows the island of Rodrigues.
+
+
+                                                        RODRIGUES
+
+
+
+
+                                   Map 2
+
+Trace: Trace map 2.
+
+Be Creative: Colour your map.
+
+Find out: Name the natural features on the map.
+
+
+
+     What I have learnt
+
+ • A map is a drawing used to show places and features of our environment.
+ • We use symbols on a map to show the features of our environment.
+
+
+
+
+85
+                                             Unit 3 - Our Natural Environment
+
+
+
+
+         Did you know?
+
+
+Have you ever heard of Agalega islands?
+
+
+
+
+                                                            AGALEGA
+
+
+
+
+                                Map 3
+The two islands of Agalega are shown on Map 3.
+In Agalega, there are two flat and sandy islands.
+There are no mountains and hills.
+
+
+
+The two pictures below show the natural environment in Agalega.
+
+
+
+
+          Words to learn
+
+
+
+           map    symbol    forest    land    island
+
+                                                                           86
+Unit 3 - Our Natural Environment
+
+
+
+
+          Teacher’s note pg 87-90
+
+  At the seaside
+
+  AIM: Observe, recognise and describe natural features at the seaside.
+  Discuss about the activities we do at the seaside
+  1. Share why we like to go to the seaside.
+  2. Recognise, name and describe the natural features at the seaside.
+  3. Name two well known beaches.
+  4. Learn, read and write properly features found at the seaside.
+  5. Explain why we must be careful at the seaside.
+  6. Appreciate that we must keep our beaches clean.
+
+  Skills: observation, interpretation, communication, drawing, literacy
+
+  •   Introduce the lesson with a discussion on the seaside and activities that pupils do when they
+      are at the beach. Give them time to share, discuss and explain when, why, etc … They will
+      gradually come with the key words that need to be taught and explained.
+  •   Pupils study the drawing and try to complete the words A, B, C on their own. Identify those
+      having difficulties and gradually guide them to guess and write the words correctly.
+  •   Pictures of the features can be brought to enhance the teaching and learning.
+  •   Pupils name beaches they know or where they have been to. They should then write properly
+      the name of two well known beaches.
+  •   The crossword activity is meant to reinforce their geographical literacy and contributes in
+      language development. It comes as a reminder that the learning of geography goes along
+      with the acquisition of competencies in English language.
+  •   To end, there is a discussion on safety measures at the seaside and the need for keeping the
+      beaches clean. This is an opportunity to develop civic responsibility together with environmental
+      awareness.
+
+  key words: seaside, beach, lagoon, reef, sea.
+
+  Reinforcement: You are expected to devise any other type of exercise to reinforce their
+  understanding and reach the objectives of the lesson.
+
+  Enrichment: You should use other appropriate teaching aids to consolidate teaching and learning.
+
+
+
+
+                                                    3.6
+                                               Unit 3 - Our Natural Environment
+
+
+The natural environment at the seaside
+
+In Mauritius, Rodrigues and Agalega, there are beautiful sandy beaches.
+
+
+
+
+     Discuss and Share
+
+Why do people like to go to the seaside?
+Share with your friends the activities you do when you are at the seaside.
+
+
+
+
+           A.   B __ __ __ __
+
+
+
+
+                                   B.   L __ __ __ __ __
+
+
+
+
+                                   C.   R __ __ __
+
+
+
+
+With the help of your teacher, name features A, B and C found in the drawing
+by filling the missing letters in the words.
+
+
+I name two well known beaches in our island.
+
+1.    ___________________
+
+2.    ___________________
+
+
+                                                                             87
+Unit 3 - Our Natural Environment
+
+Complete the crosswords by using the words given below.
+
+
+               lagoon   beach      reef     coral   sand    shell    fish
+
+
+                                   B
+                                                       C
+                           L
+
+
+               F                                                     D
+
+
+                                   F
+
+
+                           L
+
+              Think and Think!
+
+
+     Why should we be careful when we go to the seaside?
+     Why should we keep the beaches and lagoons clean?
+
+
+
+               Words to learn
+
+
+
+                beach     reef         lagoon   park       protect       seaside
+
+
+     What I have learnt
+
+     • The features we see at the seaside are the beaches, the lagoons and
+       the reefs.
+     • There are beautiful beaches in Mauritius, Rodrigues and Agalega.
+       We must protect and keep the beaches clean.
+
+88
+                                              Unit 3 - Our Natural Environment
+
+
+
+                           End-of-Unit Exercises
+
+
+1. Reading with understanding
+
+I can read and understand:
+• Le Pouce Mountain is high and difficult to climb.
+• Candos Hill is low and easy to climb.
+• There is a beautiful waterfall along Grand River South East.
+• Mauritius, Rodrigues and Agalega are islands with beautiful beaches
+   and lagoons.
+
+
+2. Observing and writing
+
+
+
+
+               Picture 1                           Picture 2
+
+
+
+
+               Picture 3                           Picture 4
+
+Picture 1 shows a ___________________ .
+
+Picture 2 shows a ___________________ .
+
+Picture 3 shows a ___________________ .
+
+Picture 4 shows a ___________________ .
+
+                                                                            89
+Unit 3- Our Natural Environment
+
+
+3. Drawing
+
+I draw the natural environment around the place where I live.
+
+
+
+
+4. Asking questions and observing
+
+I will visit the Black River Gorges National Park or a nature park with my
+parents:
+
+1. to see the trees, birds, mountain and river.
+
+2. to hear the birds chirping, the flow of the river and the sound of the wind.
+
+3. to touch and feel the cold water of the river.
+
+4. to ask questions about the natural features I see around me.
+
+
+
+
+90
+                                                 Unit 3 - Our Natural Environment
+
+
+
+I check my progress
+
+
+           At the end of this unit, I can
+
+
+1 write a simple definition of the environment.
+
+     recognise and name features of the
+2
+     natural environment.
+
+     read and write correctly features of the
+3
+     natural environment.
+     identify and state the difference between a
+4
+     mountain and a hill.
+
+5 draw and label a mountain and a hill.
+
+6 name four well known mountains in Mauritius.
+     recognise four well known mountains
+7
+     in Mauritius.
+8 state that there are many mounts in Rodrigues.
+
+9 name three well known mounts in Rodrigues.
+
+     tell that rivers are important features of the
+10
+     natural environment.
+
+11 name two well known rivers.
+
+     state what is the source and the mouth of
+12
+     a river.
+     show and label the source and the mouth of a
+13
+     river.
+
+14 name the longest river in Mauritius.
+
+
+
+
+                                                                               91
+Unit 3 - Our Natural Environment
+
+
+
+
+            At the end of this unit, I can
+
+
+ 15 recognise a waterfall along a river.
+
+ 16 name two waterfalls found in Mauritius.
+
+ 17 draw and label a waterfall.
+
+ 18 read and write correctly the parts of a river.
+
+ 19 tell the use of maps and symbols.
+
+ 20 read a map with symbols.
+
+ 21 state that Agalega is an island.
+
+      identify and name the natural features at the
+ 22
+      seaside.
+
+ 23 name two well known beaches.
+
+      tell that the natural environment is beautiful
+ 24
+      and should be protected and kept clean.
+
+
+
+
+92
+                                            Unit 4- Living and Non-Living Things
+
+
+
+  Unit 4- Living and Non-living Things
+
+
+
+
+In Unit 3, you learnt about your natural environment. In this unit,
+you will observe and learn about living and non-living things in our environment.
+
+
+        At the end of this unit, you should be able to
+
+
+    • state that there is a variety of things in our environment.
+    • observe living and non-living things.
+    • name living and non-living things.
+    • classify living things into animals and plants.
+    • state that living things grow and change, need food and breathe.
+    • demonstrate skills to care for animals and plants in
+      your environment.
+    • observe and identify some non-living things made of wood, plastic
+      and glass.
+    • classify things made of wood, plastic and glass.
+
+
+
+                                                                                   93
+Unit 4 - Living and Non-Living Things
+
+
+
+
+          Teacher’s note pg 94-95
+
+  Activity 4.1 : I observe things in our environment
+
+  Learning outcomes
+  • To state that there is a variety of things in our environment.
+  • To identify and list things found in our environment.
+
+  Skills: Observation, literacy, communication and social
+
+  •   This lesson encourages pupils to observe and find out about the variety of things present in
+      our environment.
+  •   Pupils will observe the picture on page 94 to identify and note down the things they have
+      observed in the picture.
+  •   Teacher must monitor the pupils’ answers to ensure that they are able to identify the things and
+      write down the words correctly.
+  •   In the next part of the activity, pupils will work in groups and discuss among themselves to think
+      of other things that they have observed in the environment. They will work together to list these
+      things in the table given on page 95.
+
+  Reinforcement: The teacher is advised to use other resources like pictures, cartoons and charts that
+  would encourage children to think of other things present in the environment.
+
+  Enrichment: Teacher may also plan an outdoor activity (eg walking in the school yard) to help
+  children identify other things in the environment.
+
+
+
+
+                                                       4.1
+                                              Unit 4 - Living and Non-Living Things
+
+
+
+            Activity 4.1 I observe things in our environment
+
+
+Alisha and Sam are sitting near a pond.
+They can see many things.
+They can see animals and plants.
+
+I observe the picture below.
+
+
+
+
+ Look at these animals and plants. Some are big and some are small.
+
+
+
+
+               I can see a water bottle. It is made of
+               plastic. The bench is made of wood.
+
+
+
+
+I name and write four things that Alisha and Sam can see around them.
+
+1. _______________________                 2. _______________________
+
+3. _______________________                 4. _______________________
+
+                                                                                94
+Unit 4 - Living and Non-Living Things
+
+
+
+      Discuss and Share
+
+I discuss with my friends and find out about other things that are in
+our environment.
+I name them in the table below.
+
+
+
+                            Things in our environment
+
+
+
+
+     What I have learnt
+
+     • We observe a variety of things in our environment.
+
+
+
+
+95
+                                                            Unit 4 - Living and Non-Living Things
+
+
+
+
+        Teacher’s note pg 96-98
+
+Activity 4.2 : I classify living and non-living things
+
+Learning outcomes
+• To write down the name of some things present in the environment.
+• To classify things into living things and non-living things.
+• To identify some living things that are present in nature parks.
+
+Skills: Observation, communication, literacy, social, classifying
+
+•   This activity will help children to distinguish between things which are alive and those which
+    have never been alive.
+•   Teacher then introduces the words living and non-living things.
+•   The last part of the activity (Page 98) aims at encouraging pupils to recall about the living
+    things they have seen during their trips at Casela Nature Park, La Vanille Crocodile Park or Le
+    Val Nature Park. During this activity, it is important for teacher to give the pupils time to discuss
+    and share their ideas with their friends.
+
+Reinforcement: Teacher may provide each group with Bristol paper or Kitchen paper for children
+to write down their answers and share with the whole class. Pupils may also be allowed to draw
+the living things that they have seen in these parks.
+
+Enrichment: Teacher is advised to ask pupils to bring pictures of other living things and encourage
+them to identify these living things.
+
+
+
+
+                                                  4.2
+Unit 4 - Living and Non-Living Things
+
+
+
+             Activity 4.2 I classify living and non-living things
+
+
+Think of the things that you have named in Activity 4.1.
+Do you think that some of these things are alive?
+Yes, you are right!
+Many things that we see around us are alive.
+But some are not alive.
+
+
+Observe the pictures below.
+Name the things that you see.
+Circle the things that are alive and cross the things that are not alive.
+
+
+
+
+96
+                                           Unit 4 - Living and Non-Living Things
+
+
+I name and classify the things which are alive or not alive in the pictures
+given on page 96.
+
+
+       Things which are alive              Things which are not alive
+
+
+
+
+Things which are alive are called living things.
+Things which have never been alive are called non-living things.
+
+
+I write the names of two more living things and two more non-living things
+that I see in our environment.
+
+
+            Living things                       Non-living things
+
+
+
+
+When you classify, you group objects or things depending on what they are.
+For example, things around us can be living or non-living.
+
+
+When we group them under living or non-living things, we classify them.
+
+
+
+
+                                                                             97
+Unit 4 - Living and Non-Living Things
+
+
+
+      Discuss and Share
+
+Have you visited Casela Nature Park, La Vanille Crocodile Park or Le Val
+Nature Park?
+Discuss and share with your friends the living things that you have seen in
+these parks.
+
+
+
+     What I have learnt
+
+     • The things in our environment can be alive or not alive.
+     • Living things are alive.
+     • Non-living things have never been alive.
+     • To classify things means to group them.
+
+
+
+
+                Words to learn
+
+
+
+                 living   non-living    classify   group
+
+
+
+
+               Activity 4.3 I classify living things into animals
+                            and plants
+
+
+In the last lesson you have learnt that there is a variety of living and
+non-living things around us.
+In this activity, we will learn more about living things.
+
+
+Observe the pictures which show different living things in our environment.
+
+
+
+98
+                                                             Unit 4 - Living and Non-Living Things
+
+
+
+
+           Teacher’s note pg 99
+
+Activity 4.3: I classify living things into animals and plants
+
+Learning outcomes
+• To classify living things into animals and plants.
+• To identify and write down the names of some animals and plants.
+
+Skills: Observation, literacy, interpretation, classifying
+
+•   Introduce this activity with a discussion on the living things that pupils have identified and listed
+    in Activity 4.2. Let pupils share their ideas and talk about living things.
+•   Guide pupils to use the term plants and animals.
+•   Teacher helps pupils to identify and list the animals and plants given on page 99.
+
+Reinforcement: Teacher is expected to bring pictures of other animals and plants and ask pupils to
+classify them into plants and animals. Teacher helps pupils to realise that there are other animals
+living in our environment, such as rats, lizards, spiders, cockroaches, flies, butterflies, bees, cows,
+goats, deer, lions, giraffes and horses amongst others.
+
+Enrichment: Teacher is advised to ask pupils to bring pictures of different animals and plants and
+to prepare one chart with two columns – 1 column with animal pictures and 1 column with plant
+pictures. The pupils are encouraged to write the names of the animals and plants.
+
+
+
+
+                                                 4.3
+Unit 4 - Living and Non-Living Things
+
+
+
+
+I name and classify the living things shown above into animals and plants.
+
+                  Animals                                 Plants
+                                                       Coconut tree
+
+
+
+
+     What I have learnt
+
+     • Living things can be classified into animals and plants.
+
+
+99
+                                                          Unit 4 - Living and Non-Living Things
+
+
+
+
+      Teacher’s note pg 100-102
+
+Activity 4.4: I observe, compare and classify animals
+
+Learning outcomes
+• To state that there are different types of animals in our environment.
+• To observe and compare animals.
+• To recognise some ways in which animals are different.
+• To classify animals depending on where they live.
+
+Skills: Observation, communication, literacy, social, classifying
+
+•   Teacher introduces lesson by asking pupils to observe the picture on page 100.
+•   Teacher encourages the children to find out the ways in which the animals are different through
+    relevant questions, eg in terms of size, number of legs, etc...
+•   Pupils then discuss in groups and complete the two tables on page 101.
+
+Reinforcement: Pupils are encouraged to think about other ways in which animals are different
+and to give examples to illustrate their answers.
+
+Enrichment: Pupils can be guided to prepare posters showing different types of animals and their
+names as well as the place where they live. They may use newspaper and magazine cuttings to
+prepare the posters. Pupils will make list of animals living in different habitats and compare their
+lists with those of their friends.
+
+Find out: Pupils to ask their relatives to help them find about the dodo and the solitaire.
+
+Background information for teachers
+• The dodo lived in Mauritius long ago. It was a heavy bird with short wings and could not fly. It
+   had no natural enemies. When the Dutch came they killed the dodo for food. They also ate
+   the eggs of the dodo.
+• The solitaire in Rodrigues suffered the same fate.
+• Show pictures of the dodo and the solitaire to pupils.
+
+
+
+
+                                               4.4
+Unit 4 - Living and Non-Living Things
+
+
+
+             Activity 4.4 I observe, compare and classify animals
+
+
+There are different types of animals in our environment.
+Observe the picture below which shows different animals in our environment.
+Animals can be big or small.
+In what other ways can animals be different?
+I discuss with my friend to share my answers.
+
+
+
+
+100
+                                            Unit 4 - Living and Non-Living Things
+
+
+Observe the picture on page 100.
+Let us find out in what ways the animals are different.
+
+I complete the table below with the name of the animals.
+
+                                                More
+                                                                        No
+   Big       Small     No legs     2 legs        than     Wings
+                                                                       wings
+                                               two legs
+
+
+
+
+Observe again the picture on page 100. Where do the animals live?
+
+Complete the table below to give your answer.
+
+
+
+                                                    Animals that
+            Animals that       Animals that          live both
+            live on land       live in water        on land and
+                                                      in water
+
+
+
+
+                                                                               101
+Unit 4 - Living and Non-Living Things
+
+
+  Find out
+
+One famous bird that existed in the past:
+(1) In Mauritius		   (2) In Rodrigues.      Name and draw the birds.
+
+1. In Mauritius: _______________
+
+
+
+
+2. In Rodrigues: _______________
+
+
+
+
+102
+                                                            Unit 4 - Living and Non-Living Things
+
+
+
+
+      Teacher’s note pg 103-104
+
+Activity 4.5: I observe, compare and classify plants
+
+Learning outcomes
+• To state that there are different types of plants in our environment.
+• To observe and compare plants.
+• To recognise some ways in which plants are different.
+• To classify plants depending on their size, the size of their leaves and the presence or absence
+   of flowers.
+
+Skills: Observation, communication, literacy, classifying
+
+•   Teacher introduces the activity by asking pupils about the different plants they have seen.
+•   Teacher encourages the pupils to talk about the ways in which plants are different through
+    observation of the drawing on page103 and questioning.
+•   Pupils will be guided to complete the table on page 104.
+
+Reinforcement: Teacher can bring pupils for an outdoor activity in the school yard or in the
+neighbourhood to observe more plants and recognise the variety of plants and the ways in which
+they are different. (Observation of plants in the environment).
+
+Enrichment: Pupils can write the names of some plants they have identified during the outdoor
+activity and try to classify them depending on the similarities and differences between them.
+Group discussion about the colour, size and shapes of leaves, flowers and the size of the
+plants, etc.
+
+Game: Pupils to find and write the maximum number of names of plants.
+
+Background information for teachers
+• The Talipot is a plant that flowers every hundred years. There are some Talipot plants in
+   SSR botanical garden in Pamplemousses.
+
+
+
+
+                                              4.5
+Unit 4 - Living and Non-Living Things
+
+
+
+             Activity 4.5 I observe, compare and classify plants
+
+
+There are different types of plants in our environment.
+
+Observe the picture which shows different types of plants in
+the environment around us.
+
+
+
+
+103
+                                              Unit 4 - Living and Non-Living Things
+
+
+Plants can be big or small.
+In what other ways are the plants different?
+Observe and name two differences.
+
+1.     _____________________________________________________
+
+2.     _____________________________________________________
+
+I complete the table below with the name of plants that I find in the
+environment shown on page 103.
+
+
+       With     Without                                   Small           Big
+                             Big         Small
+     flowers    flowers                                  leaves         leaves
+
+
+
+
+     Find out
+
+
+This plant has flowers every hundred years.
+
+Find out its name.
+
+
+
+
+                                                                                 104
+Unit 4 - Living and Non-Living Things
+
+
+
+
+        Teacher’s note pg 105-110
+
+  Activities 4.6 to 4.9 : Characteristics of living things - breathing, feeding, growing
+
+  Activities 4.6 to 4.9 aim at developing pupils’ understanding of 3 characteristics of living things,
+  namely, growth, breathing and feeding.
+
+  Learning outcomes
+  • To state that living things breathe, need food and grow.
+  • To infer that animals eat food, but plants make their food in the presence of sunlight, air and
+     water.
+  • To deduce that different animals eat different types of food
+
+  Skills: Observation, communication, literacy, classifying, comparing
+  • These activities aim at introducing pupils to three characteristics of living things.
+  • It is important for teacher to emphasise that all living things breathe, need food and grow, and
+       help pupils to differentiate between living things and non-living things.
+  • Teacher can consolidate on the differences between living and non-living things through use
+       of appropriate questions.
+
+  Note: Living things have other characteristics, but pupils will learn these characteristics in
+  higher classes.
+
+  Reinforcement:
+  • In Grade 2, pupils have learnt about steps for planting a seed (French Book Std II Unit 5)
+  • Teacher is advised to relate to what pupils have learnt in Unit 2 (Growing up – pages 35 to 36
+      and Activity 2.2 Growing up – page 35)
+
+  Enrichment:
+  • Outdoor activity: Dig a hole, plant a seed, cover the hole and water the seed daily. Observe
+      after one week. Seeds can be planted in plastic cups. Pupils can also carry out the activity at
+      home with the help of their parents.
+  • Teacher can use pictures to show other animals with their young ones and compare to
+      consolidate on the idea of growth.
+  • Regarding the importance of breathing air, teacher may use pictures showing patients at
+      hospitals with air masks or divers with masks or aquarium with air pumps.
+
+
+
+
+                                                     4.6
+                                             Unit 4 - Living and Non-Living Things
+
+
+
+            Activity 4.6 Living things breathe
+
+
+There is a large variety of animals and plants living in our environment.
+Animals and plants live in different places.
+Living things are different.
+But they have a few things which are common.
+For example, both animals and plants breathe.
+
+
+Alisha: How do we know if a thing found in our environment is living
+        or non-living?
+
+
+Sam: My Teddy Bear cannot breathe. People and animals breathe. Plants
+     also breathe. All living things breathe.
+
+
+  What I have learnt
+
+  • All living things breathe.
+
+
+
+
+            Think and Think!
+
+
+  How do fish breathe in water?
+
+
+
+
+                                                                              105
+Unit 4 - Living and Non-Living Things
+
+
+
+             Activity 4.7 Living things need food
+
+
+                                          Let us find out what animals eat.
+  My Teddy Bear
+  does not eat food.
+  People and animals
+  need food.
+
+
+
+
+      Discuss and Share
+I observe the picture below.
+I discuss with my friends to find out about the food that
+the animals are eating.
+
+
+
+
+106
+                                           Unit 4 - Living and Non-Living Things
+
+
+Different types of animals eat different types of food.
+I observe the pictures of people and animals eating food.
+
+
+
+
+You have learnt that animals eat different types of food.
+Draw a line from each animal to the food it eats.
+
+
+
+          Monkey                                     Carrot
+
+          Cat                                        Seeds
+
+          Fish                                       Algae
+
+          Rabbit                                     Meat
+
+          Lizard (gecko)                             Insects
+
+          Hen                                        Bananas
+
+
+
+
+            Think and Think!
+
+
+  Do animals eat only one type of food?
+
+                                                                            107
+Unit 4 - Living and Non-Living Things
+
+
+There is an important difference between plants and animals.
+Animals depend on plants and other animals for food.
+
+
+
+
+                                 But plants make their own food.
+
+
+
+
+  What I have learnt
+
+  • Plants make their own food.
+
+
+
+
+                Activity 4.8 Living things grow and change
+
+
+
+
+                              But what about my Teddy Bear?
+      Lions, cats, bears
+      are living things.
+                                                                     Because Teddy
+                                                                     Bears cannot
+                                                                     grow bigger and
+                                        Your Teddy Bear              change. Living
+                                        is not alive. It is          things grow
+                                        not a living thing.          and change.
+
+                                                              But why?
+
+
+
+
+108
+                                              Unit 4 - Living and Non-Living Things
+
+
+
+
+As you can see from these pictures, both plants and animals grow.
+All living things grow and change.
+
+
+  What I have learnt
+
+  Living things breathe.
+  Living things need food.
+  Living things grow and change.
+
+
+
+
+            Did you know?
+
+
+  The dolphin is not a fish but it lives in water.
+
+
+
+
+             Words to learn
+
+
+
+               breathe     grow   change
+
+                                                                               109
+Unit 4 - Living and Non-Living Things
+
+
+
+                Activity 4.9 Is it a living thing?
+
+
+Fill in the table below by saying yes or no.
+
+
+
+
+                         Does it         Does it       Does it      Is it a
+                         grow?          breathe?     need food? living thing?
+
+
+
+
+        worm
+
+
+
+
+         car
+
+
+
+
+      soccer ball
+
+
+
+
+        puppy
+
+
+
+
+        a plant
+
+
+
+
+         book
+
+
+
+
+110
+                                                         Unit 4 - Living and Non-Living Things
+
+
+
+
+      Teacher’s note pg 111-112
+
+Activity 4.10 How do we care for our pet?
+
+Learning outcomes
+• To demonstrate skills to care for animals and plants in the environment.
+
+Skills: Observation, communication, literacy, comparing
+
+Values to be developed: care, love, responsibility, sharing
+
+Through this activity, teacher is advised to:
+• Encourage children to talk about their pets or animals which they like.
+• Help children realise that pets must be treated with kindness, must be correctly fed and have
+    some sort of clean shelter (kennel, cage, aquarium, basket). Pets also need clean water.
+    Masters should bring pet dogs and cats to the veterinary for medical care.
+
+Reinforcement: Pupils can be encouraged to bring pictures of their pets and to share with their
+friends how they care for their pets.
+
+Enrichment: In case there is a nature corner at school and/or potted plants, teacher can bring
+pupils in the nature corner to water the plants.
+
+
+
+
+                                              4.7
+Unit 4 - Living and Non-Living Things
+
+
+
+             Activity 4.10 Caring for our pets
+
+
+      Come and look at my new puppy.            I must feed it, keep it clean
+      My grandmother gave it to me              and play with it.
+      for my birthday.
+
+                  It is so cute. I love dogs.
+                  Can I hold it, please?
+
+
+
+
+Do you have a pet? How do you care for your pet? Some animals live with us.
+We love and care for them. They are called pet animals or pets.
+
+
+
+
+111
+                                           Unit 4 - Living and Non-Living Things
+
+
+I draw and colour an animal that I like.
+
+
+
+
+I write five sentences to say how I care for my pet.
+
+1. ________________________________________________________
+
+2. ________________________________________________________
+
+3. ________________________________________________________
+
+4. ________________________________________________________
+
+5. ________________________________________________________
+
+                                                                            112
+Unit 4 - Living and Non-Living Things
+
+
+
+
+        Teacher’s note pg 113-114
+
+  Activity 4.11: I observe wood, paper and glass around us
+
+  The aim of this activity is to develop pupils’ awareness about three types of materials which are
+  used to make objects. These materials are wood, paper and glass.
+
+  Learning outcomes
+  • To identify objects made of wood, paper and glass in the classroom.
+  • To infer that wood, paper and glass are used to make objects.
+  • To recognise wood, paper and glass.
+
+  Skills: Observation, communication, literacy, social, classifying
+
+  •   This activity encourages pupils to observe objects in the classroom and to infer that objects are
+      made of different materials.
+  •   It is important for teachers to ensure that there are enough objects made of wood, paper and
+      glass in the classroom to allow pupils to identify a sufficient number of these objects.
+  •   After the activity, teachers must give pupils the opportunity to share their observations.
+
+  A large chart of the table on page 113 may be placed in the classroom to allow all pupils to share
+  their list of objects with others.
+
+  Reinforcement:
+  In addition to the usual objects present in the classroom, teachers are encouraged to bring other
+  objects made of wood, paper and glass to show to pupils. Pupils should also be encouraged to
+  brainstorm and think of other objects which are made of these materials.
+
+  Enrichment:
+  The teacher is advised to ask pupils to work in groups and to look for pictures of objects made of
+  glass, wood and paper. Each group will then make posters that will show objects made of wood,
+  glass and paper respectively. The pupils will also need to identify and name each object on the
+  posters.
+
+  Safety aspects:
+  Teacher should be cautious that pupils are not allowed to touch or manipulate glass objects in the
+  classroom to avoid injury. Glass is fragile and is easily broken.
+
+
+
+
+                                                    4.8
+                                             Unit 4 - Living and Non-Living Things
+
+
+            Activity 4.11 I observe wood, paper and glass
+                          around us
+
+
+You have learnt about the variety of living things and non-living things in our
+environment.
+Non-living things are objects that we use everyday.
+Can you think about some objects that you use every day?
+Let us find out what we use to make these objects.
+
+
+1. I observe carefully the objects in my classroom.
+2. I identify the objects made of wood, paper and glass.
+3. I complete the table to list the different objects and to write down what
+   we use to make these objects.
+
+
+
+                Object                   What we use to make the object
+
+
+
+
+                                                                              113
+Unit 4 - Living and Non-Living Things
+
+
+  What I have learnt
+
+
+  What have you learnt after completing the table?
+
+
+
+
+           wood                         glass              paper
+
+      Wood, glass and paper are used to make many objects that we see
+      around us.
+
+
+
+
+              Activity 4.12 I classify objects
+
+
+The pictures below show a variety of objects.
+I observe the pictures and complete the table to classify the objects.
+
+
+
+
+           table                        bowl              notebook
+
+
+
+
+114
+                            Unit 4 - Living and Non-Living Things
+
+
+
+
+    toy        drinking glass                paper bag
+
+
+
+
+   book          armchair                      bottle
+
+
+
+
+Objects made   Objects made               Objects made
+  of wood        of paper                   of glass
+
+
+
+
+                                                             115
+Unit 4 - Living and Non-Living Things
+
+
+
+
+        Teacher’s note pg 114-123
+
+  Activity 4.12 : I classify objects.
+
+  The aim of this activity is to provide pupils with an opportunity to classify objects based on the
+  materials they are made of.
+
+  The pupils are provided with pictures of 9 objects. They must be given enough time to observe
+  these pictures carefully to be able to classify them in the appropriate column in the table given
+  on page 115.
+
+  Teachers may also bring pictures of other objects or real objects made of the different materials
+  and allow pupils to classify them based on the material used to make these objects. In addition,
+  pupils may also be invited to bring pictures of different objects to extend the activity.
+
+  Another important point is that pupils may also be exposed to objects which are made of more
+  than one materials, for example chairs and tables made of glass and wood. These would help
+  pupils to become aware of the fact that some objects are made of only one material, but others
+  are made of two or more materials.
+
+  Activities 4.11 and 4.12 have been designed to allow pupils to develop awareness of the 3 types of
+  materials and to recognise objects made of these materials. This would form the basis for further
+  learning about materials in higher classes where they would learn that the materials are selected
+  for making objects based on their properties.
+
+  Reinforcement: Teacher is advised to bring children in school yard for an outdoor activity and ask
+  them to list other objects and find out what each object is made of.
+
+  Enrichment: Pupils to make a list of other objects found at home and classify them based on what
+  they are made of. Pupils can share and discuss their findings.
+
+
+
+
+                                                  4.9
+                                      Unit 4 - Living and Non-Living Things
+
+
+Objects made of wood
+
+
+
+
+     door                pen holder                    cupboard
+
+
+
+
+sofas and table        table and chairs                    bed
+
+
+
+
+     toys                   ruler                     pencil case
+                                                      and pencils
+
+
+
+                                                                       116
+Unit 4 - Living and Non-Living Things
+
+
+      Objects made of paper
+
+
+
+
+        tissue paper          flowers made of paper   envelopes
+
+
+
+
+       writing paper                    paper bags    calendar
+
+
+
+
+117
+                                            Unit 4 - Living and Non-Living Things
+
+
+ Objects made of glass
+
+
+
+
+   drinking glass                bottles                        table
+
+
+
+
+   window pane                  aquarium                     spectacles
+
+
+
+          Words to learn                           wood     paper glass
+
+
+
+What I have learnt
+
+• There is a variety of things around us.
+• Things can be alive or not alive.
+• Things can be classified into living and non-living things.
+• People, animals and plants are living things.
+• All living things breathe, need food, grow and change.
+• We must take care of animals and plants.
+• Many non-living things or objects around us are made of wood, glass
+  and paper.
+
+
+                                                                             118
+Unit 4 - Living and Non-Living Things
+
+
+
+                              End of Unit Exercises
+
+1. I observe the pictures to understand.
+   Match the items in column A with the correct answer in column B.
+
+
+            Column A                                   Column B
+
+
+
+                                                        a plant
+
+
+
+
+                                               an animal with four legs
+
+
+
+
+                                             an animal which lives in water
+
+
+
+
+                                                   a non-living thing
+                                                   used for drinking
+
+
+
+
+                                                 an animal with wings
+
+
+
+
+                                                   a non-living thing
+
+
+
+119
+                                            Unit 4 - Living and Non-Living Things
+
+
+2. I choose the correct word and fill in the blanks.
+
+1.   A dog is a _________________ thing. (living, non-living)
+
+2.   A cat cannot _________________ . (grow, breathe, fly)
+
+3.   The whale is an _______________ (animal, plant) which lives in
+
+     the _____________. (soil, sea, tree)
+
+4.   A bus is a _________________ thing. (living, non-living)
+
+
+
+3. I read with understanding.
+
+I write TRUE or FALSE
+
+1.   A horse lives in the sea.   _______________
+
+2.   A lion eats meat. _______________
+
+3.   All plants are tall trees. _______________
+
+4.   A rock is a living thing. _______________
+
+5.   A fish has four legs. _______________
+
+6.   Paper is used to make raincoats. _______________
+
+7.   Plants make their own food. _______________
+
+
+4. I complete the sentence.
+
+                 breathe
+Living things _____________, _____________ and _______________ .
+
+
+
+
+                                                                             120
+Unit 4 - Living and Non-Living Things
+
+
+5. I complete the table with the words: wood, paper or glass.
+
+
+
+                  chair
+
+
+                  book
+
+
+                aquarium
+
+
+                  table
+
+
+6. I answer the questions below.
+
+
+1.      How do animals obtain their food?
+
+      ______________________________________________________
+
+
+2.		 How do plants obtain their food?
+
+      ______________________________________________________
+
+
+3.		 Why are wooden toys non-living things?
+
+      ___________________________________________________
+
+
+
+
+121
+                                         Unit 4 - Living and Non-Living Things
+
+
+7. I match the pictures in column A with the correct answer in column B.
+
+
+
+          Column A                                   Column B
+
+
+
+
+                                             Object made of paper
+
+
+
+
+                                             Object made of glass
+
+
+
+
+                                             Object made of wood
+
+
+
+
+                                                                          122
+Unit 4 - Living and Non-Living Things
+
+
+8. I read with understanding.
+   Five children are talking. Find out who is right and who is wrong.
+   Give a reason for each answer.
+
+
+                                Paper is used to make bags only.
+
+
+                                ___________________________________
+
+                                ___________________________________
+
+
+                        Wooden doors are always brown.
+
+
+       ___________________________________
+
+       ___________________________________
+
+
+                    Objects made of glass are
+                    used in the kitchen only.
+
+
+                    ___________________________________
+
+                    ___________________________________
+
+
+            Tables and chairs are made of wood only.
+
+
+        ___________________________________
+
+        ___________________________________
+
+
+                    All bottles are made of glass.
+
+                    ___________________________________
+
+                    ___________________________________
+
+123
+                                            Unit 4 - Living and Non-Living Things
+
+
+
+I check my progress
+
+
+         At the end of this unit, I can
+
+    recognise that there are living and non-living
+1
+    things around us.
+    state that all living things breathe, need food,
+2
+    grow and change.
+    observe and state that animals, plants and
+3
+    people are living things.
+
+4 give examples of animals and plants.
+
+5 show care for animals and plants.
+
+6 give some examples of non-living things.
+
+    recognise that many non-livings are objects
+7
+    which we use everyday.
+
+    state that wood, glass and paper are used to
+8
+    make objects.
+
+
+
+
+                                                                             124
+

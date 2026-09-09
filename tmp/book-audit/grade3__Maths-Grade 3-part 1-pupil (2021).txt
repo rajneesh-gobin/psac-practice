@@ -1,0 +1,4504 @@
+                             X
+
+
+
+
+Mathematics
+                   Grade 3
+
+    Pupil's Book
+       Part 1
+Professor Vassen NAËCK 			 - Head Curriculum Implementation,
+						 Textbook Development and Evaluation
+
+
+
+
+THE MATHEMATICS PANEL
+
+
+MAURITIUS INSTITUTE OF EDUCATION
+Dr R. NENDURADU				                         - Panel Coordinator, Senior Lecturer
+Ms S. THAPERMALL-RAMASAWMY		                - Lecturer
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mr J. DESCUBES				                          - Primary Educator
+Ms T. CHEETAMUN				                         - Primary Educator
+Ms D. OOGARAH				                           - Mentor
+Ms J. APPADOO				                           - Mentor
+SERVICE DIOCÉSAIN DE L'EDUCATION CATHOLIQUE
+Mr M. JOLY					                             - Deputy Head Master
+
+				
+Acknowledgements
+
+VETTING TEAM
+
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mr Y. FOKEERBUX				                         - School Inspector
+Mr D. MOHANGOO				                          - School Inspector
+Mr K. OOCHIT 				                           - School Inspector
+
+MAURITIUS INSTITUTE OF EDUCATION
+Mr R. Korlapu-Bungaree			                   - Proof-reading, Lecturer, English Department
+
+
+
+Illustration and layout
+
+GRAPHIC DESIGNER
+Mr Kunal SUMBHOO
+
+
+
+REVIEW
+
+MAURITIUS INSTITUTE OF EDUCATION
+Dr Rajeev NENDURADU		               - Coordinator, Senior Lecturer
+
+
+ISBN : 978-99949-40-23-3
+© Mauritius Institute of Education (2021)
+                                      Foreword
+
+
+
+
+MIE has produced a brand new collection of textbooks based on the National
+Curriculum Framework for the Nine Year Continuous Basic Education as from 2016.
+These textbooks have been written by a team of academic staff from MIE, supported
+by experienced Educators, advised by Inspectors, mentors and Deputy Head Masters.
+
+
+We have done our best to ensure that the textbooks enable children to undergo a
+pleasant learning experience. We have taken care to align the textbooks with very
+clearly defined learning outcomes and objectives set for the respective subjects as
+outlined in the National Curriculum Framework, Grades 1 to 6. The textbooks provide
+clear indications of the diverse skills that children should master at each stage.
+
+
+We are also providing a set of teachers’ manuals where we have outlined the
+appropriate techniques and pedagogical approaches so that children are helped
+to make optimal use of the textbook and materials provided. Some of the textbooks
+have been updated and changes effected after receiving feedback from educators.
+
+
+We are thankful to all those who have provided us with constructive feedback, thereby
+enabling us to make this curriculum development endeavour come to fruition. We are
+also thankful to the artists who carried out the illustrations, and to our graphic artists
+who have tried their best to create the right layout for the books. The authors and the
+curriculum team, under the guidance of Professor Vassen Naëck, also deserve our
+thanks.
+
+
+We hope that you enjoy this material and wish you lots of success.
+
+
+
+
+Dr O. Nath Varma
+Director
+Mauritius Institute of Education
+
+
+
+
+                                                                                             i
+                                        Preface
+
+
+
+ The development of the Pupil’s Workbook and the Teacher’s Book for Grade 3
+ Mathematics is in line with the philosophical principles of the New Curriculum Framework
+ (Primary). The same philosophy and pedagogical approaches used to develop the
+ curriculum materials for Grades 1 and 2 are followed in the currently produced materials.
+
+
+ The main aim of this new workbook is to enable pupils to better understand the key
+ concepts in Mathematics as well as enjoy learning about them as they move from
+ Grade 2 to Grade 3. The mathematical concepts are presented in a sequential
+ manner. Every fundamental concept is introduced through a story or a conversation
+ and is connected to real life situations.
+
+
+ Activities are incorporated to help pupils better understand mathematical concepts.
+ Exercises for pupils are presented in a child-friendly and progressive manner. An IT
+ corner is integrated within the materials so as to enhance understanding of concepts
+ using technology. Continuous assessment is included within the materials developed.
+ Profiling is also incorporated at the end of each unit/chapter to help educators monitor
+ their pupils’ progress.
+
+
+ Educators should act as facilitators in helping students grasp the key ideas and
+ concepts presented in the Pupil’s Workbook. Educators are also encouraged to carry
+ out the different activities as per the instructions given in the ‘Note to Teacher’ so as to
+ promote better understanding of the different mathematical concepts.
+ The Mathematics Panel sincerely hope that pupils will benefit from the curriculum
+ materials presented to them and that they will be motivated to study Mathematics
+ further.
+
+
+
+ Dr R. Nenduradu
+ Coordinator, Mathematics Panel
+
+
+
+
+ii
+TABLE
+TABLE OF
+      OF CONTENTS
+         CONTENTS
+
+
+											                    Page
+
+
+Geometry        Shapes						1
+
+
+Graphs			       Pictograms					14
+
+
+Numbers 		      0 to 1000					23
+
+
+					Abacus						51
+
+					Addition						63
+														
+Measure 		 Mass						88
+
+Numbers 		      Subtraction					105
+
+
+
+
+									
+
+
+
+                                      iii
+                            Learning Objectives
+
+ At the end of Grade 3 (Part I), the child should be able to
+
+
+ • Manipulate, represent, describe and explore various 2-D shapes
+ • Identify, name, describe and classify 2-D shapes (rectangle, square,
+     circle and triangle)
+ • Draw and manipulate basic 2-D shapes using ICT
+ • Use, read and interpret pictograms
+ • Use ICT to create pictograms representing real-life situations
+ • Recognise, read and write the numbers up to 1 000 in numerals and
+     in words
+ • Count, compare and order numbers up to 1000
+ • Illustrate the meaning of place value (up to 1000) with and without
+     use of ICT
+ • Recognise and complete patterns in number sequences up to 1000
+ • Represent 2-digit and 3-digit numbers on an abacus/number house
+ • Use ICT to represent 2-digit/3-digit numbers on an abacus
+ • Perform the two arithmetic operations Addition and Subtraction
+       - Add 2 numbers (up to 3 digits) with and without carrying
+       - Subtract 2 numbers (up to 3 digits) with and without borrowing
+       - Solve one-step routine and non-routine word problem involving
+         the 2 operations (addition;subtraction)
+ • Perform and describe mental calculations involving the 2 operations
+ • Write numbers from 1 to 1000 and perform the 2 arithmetic operations
+     using ICT
+ • Estimate, compare and measure mass (kg/g)
+ • Solve simple word problems involving mass
+
+
+
+iv
+                                               Geometry
+Shapes                  Anna and Tom are playing in the classroom.
+                        Anna: “Look Tom! My building block is rectangular.”
+                        Tom: “My puzzle piece is triangular.”
+
+
+           X
+
+
+
+
+1   Observe carefully and discuss the picture.
+
+
+2 What shapes can you see in the picture?          Look at this
+                                                     picture.
+
+
+
+
+                                                                              1
+                Do you remember?
+
+
+
+
+                       circle         rectangle
+
+
+
+
+                      triangle         square
+
+
+
+       Activity: I match the objects with the shapes
+
+
+              P
+               P
+hool
+chool                            P
+             school
+
+  2
+                                                Geometry
+Let's work out
+
+1.   I colour the small circles red and the big rectangle green.
+
+
+
+           X
+
+
+
+
+2.   I draw the shapes.
+
+
+
+
+              circle                          square
+
+
+
+
+            triangle                        rectangle
+                                                                   3
+    Sides
+
+                                  side
+                            one
+
+
+
+
+      Look at the
+      sides of the
+      box.
+
+
+
+
+                     A rectangle has 4 sides
+
+
+
+
+4
+                                                  Geometry
+Let's work out
+
+3.   How many sides are there in each shape?
+
+
+
+           X
+
+
+
+
+       IT Corner
+
+
+
+        Using Ms Paint with the help of your teacher,
+        use the "line tool" to draw shapes with
+        different number of sides.
+        For example: Shapes with 3, 4 and 5 sides.
+
+
+
+                                                             5
+    Vertex                              Vertex
+
+
+
+
+                One Vertex , Many Vertices
+
+
+
+
+4.    I count the number of vertices.
+
+
+
+
+6
+                                         Geometry
+             Do you remember?
+
+
+
+           X
+
+            A circle has no side and no vertex.
+
+
+
+5.   I complete the table.
+
+
+                             Name          Number of   Number of
+                                            vertices     sides
+
+
+
+
+                                                                   7
+    Pattern
+                               A unit
+
+
+
+
+                               Pattern
+
+
+
+
+             We see a pattern when a unit repeats itself.
+
+
+
+    Activity: I complete the pattern
+
+
+
+
+8
+                                                     Geometry
+
+Tessellation
+
+
+          X
+       A Tessellation is when we cover a surface with a pattern of flat
+       shapes so that there are no overlaps or gaps.
+
+
+
+
+ 1   Observe carefully and discuss the picture.
+
+
+
+                                                                          9
+ Let's work out
+
+ 6.   I colour to complete the tessellation.
+
+      (a)                                (b)
+
+
+
+
+            (c)
+
+
+
+
+10
+                                                       Geometry
+Continuous Assessment
+
+1.      Complete the pattern.
+
+      (a)
+              X
+      (b)
+
+
+
+      (c)
+
+
+
+      (d)
+
+
+
+
+2.      Look at these shapes and fill in the blanks.
+
+
+
+
+                                            B               C
+                 A
+
+(a)     Shape A has ________ vertices and ________ sides.
+
+(b)     Shape B has ________ vertices and ________ sides.
+
+(c)     Shape C has ________ vertices and ________ sides.
+
+                                                                11
+ 3.    I match.
+
+
+
+
+                                               Square
+
+
+                                              Triangle
+
+
+                                             Rectangle
+
+
+                                                Circle
+
+
+
+ 4.    I complete.
+
+
+ (a)   A ________________ has 3 sides and 3 vertices.
+
+
+ (b)   A ________________ has no side and no vertex.
+
+
+ (c)   A ________________ or a ________________ has 4 sides and
+       4 vertices.
+
+
+
+12
+                                    Geometry
+Profiling
+
+
+   X                      Good   Satisfactory   Needs Improvement
+
+
+Recognise and name
+2-D shapes
+
+
+
+
+Describe 2-D
+shapes (properties
+of shapes: sides,
+vertices)
+
+
+
+Recognise, complete
+and create patterns
+of shapes
+
+
+
+
+      Teacher's Remarks
+
+
+
+
+                                                                    13
+                               Mr Sam, the teacher, has asked all the boys to stand
+Pictogram                      on the left side and all the girls to stand on the right
+                               side of the class.
+                               Now let's count.
+
+
+
+
+     1   Observe carefully and discuss the picture.
+
+
+
+            Boys
+
+            Girls
+
+
+                    One boy                                 Look at this
+                                                            picture and
+                                                             complete.
+
+                    One girl
+
+14
+                                                     Graph
+Activity: Observe the shapes
+
+
+
+
+             X
+
+
+
+I draw the shapes in the chart and I count.
+
+
+   Circle
+
+
+  Square
+
+
+  Triangle
+
+
+ Rectangle
+
+
+
+ Number of Circles		         =    ______
+ 		                                           I count the
+ Number of Squares		         =    ______      number of
+                                              each shape.
+ Number of Triangles		       =    ______
+
+ Number of Rectangles        =    ______
+                                                            15
+ Let's work out
+ 1.      The chart shows the number of fruits in a box.
+
+      Apple
+
+
+      Banana
+
+
+      Guava
+
+
+  Pineapple
+
+ (a)     There are 5 apples.
+ (b)     There are ______ guavas.
+ (c)     There are ______ bananas
+ (d)     There are ______ pineapples.
+
+
+ 2.      Draw       and complete the chart below.
+
+ (a)     9 pupils like football.
+ (b)     4 pupils like basketball.
+ (c)     5 pupils like volleyball.
+                                                          represents 1 pupil
+ (d)     2 pupils like handball.
+
+
+      Handball
+
+
+     Volleyball
+
+
+     Basketball
+
+
+      Football
+
+
+
+16
+                                                         Graph
+Activity: Introducing "In all" or "Altogether"
+
+
+
+
+           X
+                                                          How many
+                                                         children are
+                                                         there in all?
+
+
+
+                      There are 5 children in all.
+
+
+
+Let's work out
+
+3.   The chart shows how pupils in Grade 3 come to school everyday.
+
+       By bus                                               represents 1 pupil
+
+
+       By car
+
+
+      On foot
+
+
+       By van
+
+
+     Complete:
+     (a)   How many pupils travel by bus? _________
+     (b)   How many pupils travel by van?   _________
+     (c)   How many pupils are there in all in the class? _________
+
+                                                                          17
+     Activity: More/Less
+
+
+
+
+        Who has
+        more blocks?
+
+
+
+                            Tom has more blocks.
+
+
+
+4.     The chart shows the number of balloons that 5 children have.
+
+          Raj                                              represents 1 balloon
+
+          Mira
+
+
+          Zafir
+
+
+         Lewis
+
+
+         Amina
+
+
+            (a)   Amina has ______ balloons.
+
+            (b)   _______ has the greatest number of balloons.
+
+            (c)   _______ has the smallest number of balloons.
+
+            (d)   _______ and _______ have same number of balloons.
+18          (e)   There are _______ balloons in all.
+                                                          Graph
+Continuous Assessment
+
+1.   Draw            to complete the pictogram.
+
+
+            X
+     Children              Navin    Roshan        Sara    Noor   Azeeza
+
+     Number of pencils       4        7            2       5       9
+
+
+
+
+            Navin
+
+
+         Roshan
+
+
+            Sara
+
+
+            Noor
+
+
+         Azeeza
+
+
+2.   The chart shows the number of fish each child has.
+
+
+       Sally
+
+
+        Amir
+
+
+       Alvin
+
+
+       Reena
+
+
+             represents 1 fish                                            19
+ Complete.
+
+
+ (a) Who has the largest number of fish?				                   ___________
+ 		
+ (b) How many fish does Amir have?					                        ___________
+ 			
+ (c) How many fish do Sally and Reena have altogether?         ___________
+
+ (d)   How many fish are there in all?					                    ___________
+
+
+
+ 3.    The chart shows the favourite juice of pupils in a class.
+
+             represents 1 pupil
+
+
+
+         Grape juice
+
+
+         Apple juice
+
+
+         Mango juice
+
+
+        Orange juice
+
+
+         Peach juice
+
+ Complete:
+
+
+ (a)   How many pupils like mango juice?      _____________
+
+ (b)   Which 2 juices are preferred by the same number of pupils?
+
+       _________________ and _________________
+
+ (c)   Which juice is preferred by the least number of pupils? _________
+
+ (d)   How many pupils are there in the class? _____________
+
+
+20
+                                                  Graph
+IT Corner
+
+
+
+
+   X
+ Use the program "Tux paint".
+
+ With the "stamp tool", help the pupils to create a pictogram
+ with farm animals.
+
+
+
+
+                                                                21
+     Profiling
+
+
+                              Good   Satisfactory   Needs Improvement
+
+
+     Represent data on a
+     pictogram
+
+
+
+
+     Use, read and
+     interpret a
+     pictogram
+
+
+
+     Use ICT to
+     create pictograms
+     representing real-
+     life situations
+
+
+
+
+               Teacher's Remarks
+
+
+
+
+22
+                                               Numbers
+                                                 Graph
+0 to 1000            Miss Cindy, the teacher, is counting the number
+                     of pupils in class.
+
+
+
+
+     X
+
+
+
+
+     Do you remember?
+
+
+
+
+            4 tens      and    7 units     =   47
+
+            In figures :       47
+            In words : 		      Forty seven
+                                                                  23
+ Let's work out
+
+ 1.   I write the correct numeral.
+
+      (a)
+
+
+
+
+      (b)
+
+
+
+
+      (c)
+
+
+
+
+ 2.   I match the number name with the correct numeral.
+
+
+              seventeen                          11
+
+               fifty five                       60
+
+                 eleven                         17
+
+                  sixty                         55
+24
+                                                   Numbers
+3.   Complete the number bonds.
+
+     (a)                                 (b)
+                 25                                    91
+
+
+
+           ___         ___                       ___         ___
+
+
+
+     (c)                                 (d)
+                 ___                                   ___
+
+
+
+           30           6                        50           8
+
+
+
+4.   Write the missing numerals.
+
+
+     (a)     6    ,7   ,8    , ___ , ___ , ___
+
+     (b)     ___ , ___ , ___ , 21 , 22   , 23
+
+     (c)     86 , 87 , 88 , ___ , ___, ___
+
+     (d)     ___ , ___, ___ , 61 , 62 , 63
+
+     (e)     95 , 96 , 97 , ___ , ___ , ___
+
+
+                                                                   25
+          Do you remember?
+
+
+
+
+                      10 tens                              100
+
+     When you add 10 ten-strips altogether, you get a hundred (one flat).
+
+
+
+
+ Activity: One hundred
+
+
+
+
+       With the help
+       of your teacher,   How many ten-strips are there?
+       complete.
+                          Answer: __________
+                          What do ten tens give?
+                          Answer: __________
+                          Write in words: _____________
+
+
+26
+                                 Numbers
+    Let's count
+    together.
+
+
+5. (a)
+
+
+                                 20 tens = 200
+                                 In words:   Two hundred
+
+             10 tens   10 tens
+
+
+  (b)
+
+
+
+
+                                 ____ tens = _____
+
+
+                                 In words:   ______________
+
+
+
+
+  (c)
+
+
+
+
+                                 ____ tens = _____
+
+
+                                 In words:   ______________
+
+
+
+
+                                                         27
+ (d)
+
+
+
+
+       ____ tens = _____
+
+
+       In words:     ______________
+
+
+
+
+ (e)
+
+
+
+
+       ____ tens = _____
+
+       In words:     ______________
+
+
+
+
+ (f)
+
+
+
+
+                   ____ tens = _____
+
+                   In words:
+                   _______________
+28
+                              Numbers
+(g)
+
+
+
+
+                              ____ tens = _____
+
+
+                              In words:   ______________
+
+
+
+
+(h)
+
+
+
+
+      ____ tens = _____
+
+
+      In words:   ______________
+
+
+
+
+                                                     29
+ Let's complete
+
+
+     10 tens = 100 = one hundred
+     20 tens = 200 = _________________
+     30 tens = 300 = _________________
+     40 tens = 400 = _________________
+     50 tens = 500 = _________________
+     60 tens = 600 = _________________
+     70 tens = 700 = _________________
+     80 tens = 800 = _________________
+     90 tens = 900 = _________________
+
+
+
+        IT Corner                                                 Note to Teacher
+
+                                                               This activity will be used to
+                                                               consolidate the concept
+                            Discovering place value            of "hundreds", "tens" and
+           Open Ms Excel.                                      "units" place value.
+           Create a table as follows:
+
+
+
+           In a number bag, place flash cards showing a numeral
+           between 0 to 99 and those number count in 100s; pull one
+           then ask pupils to fill up the table with the numbers in the
+           correct place value
+
+
+
+
+30
+                                                Numbers
+Activity
+
+           Cut out the hundred square (flat), ten-strip
+           and unit squares given below.
+           Glue them on Bristol paper.
+
+
+
+
+                                                          31
+32
+                                        Numbers
+          Do you remember?
+
+                               247
+
+                2 hundreds     4 tens    7 units
+
+
+
+
+Try these
+I write the correct numeral.
+(a)
+
+
+
+
+(b)
+
+
+
+
+(c)
+
+
+
+
+(d)
+
+
+
+
+                                                   33
+     Example
+
+
+
+
+                                                     213
+
+               2 hundreds          1 ten   3 units   213
+
+ Let's work out
+
+ 6. I write the correct numeral.
+
+ (a)
+
+
+
+
+ (b)
+
+
+
+
+ (c)
+
+
+
+
+ (d)
+
+
+
+
+34
+                                                   Numbers
+7.   I match with the correct numeral.
+
+       9 hundreds, 1 ten and 2 units                         890
+
+       1 hundred, 9 tens and 7 units                         426
+
+       4 hundreds, 2 tens and 6 units                        653
+
+       6 hundreds, 5 tens and 3 units                        912
+
+       8 hundreds and 9 tens                                 197
+
+
+8.   I write the correct numeral.
+
+     (a)   4 hundreds, 2 tens and 5 units
+
+     (b)   6 hundreds, 4 tens and 7 units
+
+     (c)   2 hundreds, 5 tens and 1 unit
+
+     (d)   8 hundreds, 3 tens and 8 units
+
+     (e)   9 hundreds, 7 tens and 4 units
+
+
+9.   Complete the following. The first one has been done for you.
+
+          615
+     (a)			           :   6 hundreds, 1 ten and 5 units
+
+     (b)			:
+         423
+
+     (c)			:
+         941
+
+     (d)			:
+         864
+
+     (e)			:
+         187
+                                                                    35
+             "No" Tens
+                                                           H    T    U
+
+           100      100       100                          3   0     5
+
+
+                  3 hundreds                 5 units           305
+
+
+
+
+ 10. I write the correct numeral.
+
+     (a)
+            100         100         100                H        T        U
+
+
+                  100         100
+
+
+
+
+     (b)
+                                                       H        T        U
+            100
+
+
+
+
+     (c)
+           100     100        100     100   100        H        T        U
+
+
+           100     100        100     100
+
+
+
+36
+                                                                     Numbers
+Activity: Using Number line
+
+      Let's count.
+
+
+      100 101 102 103 104 105 106 107 108 109 110
+
+
+
+
+                              104    105   106
+
+                           Before          After
+
+
+
+11.     I write the number which comes before or after.
+                       Before                          After
+                                                 501           502
+                     124       125
+
+                                                 725
+                               305
+
+                                                 661
+                               214
+
+                                                 130
+                               910
+
+
+
+12.     I write the missing numeral.
+
+        (a)   97 , 98 , …………. , 100 , ………….. , …………. , 103 , …………..
+
+        (b)   ……….. , 687 , 688 , …………. , 690 , ………….. , …………. 693
+
+        (c)   282 , ………… , 284 , …………. , …………. , 287 , …………. , 289
+
+        (d)   508 , 509 , 510 , …………. , …………. , ………….. , ………….
+
+        (e)   …………. , …………. , ………….. , 863 , 864 , 865 , ………….
+
+        (f)   249 , 250 , 251 , …………. , …………. , ………….. , ………….
+                                                                           37
+ Activity: Write greater or smaller
+
+
+
+     105     is ____________ than     102
+
+     242     is ____________ than     245
+
+     521     is ____________ than     531
+
+     611     is ____________ than     512
+
+
+
+           Guess the number
+
+           It is greater than 590.
+
+
+           It is smaller than 600.
+
+
+           It has 5 in the units place.
+
+
+           The number is
+
+
+38
+                                                   Numbers
+ Number names
+
+
+            H      T     U                    H      T     U
+
+            1     5      9                    7      0     9
+
+       one hundred and fifty nine         seven hundred and nine
+
+
+
+
+13.   Put in columns and write number names. One example has been done for you.
+
+      (a)
+                           H    T    U
+             435           4    3   5
+                                            Four hundred and thirty five
+
+
+
+
+      (b)
+                           H    T    U
+             628
+
+
+
+      (c)
+                           H    T    U
+             936
+
+
+
+                                                                           39
+ 14.   I match.
+
+
+         Two hundred and fifty six                     701
+
+
+         Six hundred and ninety eight                  470
+
+
+         Four hundred and seventy                      823
+
+
+         Seven hundred and one                         698
+
+
+         Eight hundred and twenty three                256
+
+
+
+ 15.   I write the number names.
+
+
+       (a)   135:		   ______________________________________
+
+
+
+       (b)   357:		   ______________________________________
+
+
+
+       (c)   260:		   ______________________________________
+
+
+
+       (d)   879:		   ______________________________________
+
+
+
+       (e)   681:		   ______________________________________
+
+
+
+40
+                                                                                         Numbers
+          Do you remember?
+                                                                     200                 +     40    + 3
+      Example:
+                        can be represented by
+
+
+        2 43
+              Units                                               2 hundreds + 4 tens + 3 units
+          Tens                                          H    T       U
+
+       Hundreds                                         2    4       3
+
+
+
+
+16.   I write the correct numeral.
+
+        Example:
+        		             300                          +        10          +       2           = 312
+                   3 hundreds , 1 ten and 2 units = 312
+
+
+      (a)		        600		                        +       40       +           5       =
+
+
+      (b)		        3 hundreds + 6 tens + 1 unit                                      =
+
+
+      (c)		800		 +                                      20			=
+
+
+      (d)		        7 hundreds + 3 units		                                            =
+
+
+      (e)		        200		                        +       70        +          3       =
+
+
+                                                                                                           41
+      Activity: Forming 3-digit numbers
+
+
+      Using the digits only once, form as many 3-digit
+      numbers as possible.
+
+                6          2        3
+
+       Hundreds      Tens        Units    Numbers
+          6            2          3         623
+
+
+
+
+                                                         Let's complete.
+
+
+
+
+ Using the table above, answer the following questions:
+
+
+ a)     Which number is the greatest?
+
+
+
+ b)     Which number is the smallest?
+
+
+
+ c)     Which two numbers have the smallest hundreds?
+
+
+
+
+42
+                                           Numbers
+Activity: Ascending and Descending Order
+
+
+
+
+            Ascending                      Descending
+
+ Ascending order is when numbers   Descending order is when numbers
+
+ are arranged from smallest to     are arranged from largest to
+
+ largest.                          smallest.
+
+
+
+
+                            600
+                      500                  900
+                  400                          800
+              300                                 700
+            200                                       600
+     100                                                  500
+                                                                  400
+
+
+
+
+                                                                   43
+     Activity
+
+     Write the numbers in descending order.
+
+
+      30                                 22   25   28   26   24
+                                         27   30   21   23   29
+
+
+
+
+     I write in descending order.
+
+
+
+
+     Write the numbers in ascending order.
+
+       32       35   38     36      34
+       37       40   31     33      39
+
+
+
+
+      31
+     I write in ascending order.
+
+
+
+
+44
+                                                Numbers
+Let's work out
+
+17.   I write in descending order.
+
+(a)   34 , 15 , 25 , 40 , 56 		      _____ , _____ , _____ , _____ , _____
+
+
+(b)   100 , 101 , 898 , 890 , 902    _____ , _____ , _____ , _____ , _____
+
+
+(c)   786 , 703 , 727 , 796 , 734    _____ , _____ , _____ , _____ , _____
+
+
+18.   I write in ascending order.
+
+(a)   53 , 51 , 54 , 50, 52 		       _____ , _____ , _____ , _____ , _____
+
+
+(b)   553 , 503 , 703 , 603 , 530    _____ , _____ , _____ , _____ , _____
+
+
+(c)   978 , 987 , 686 , 590 , 690    _____ , _____ , _____ , _____ , _____
+
+
+19.   Complete the table.
+
+ 101 102 103 104 105 106             110
+                 115 116 117 118 119 120
+ 121             125             129 130
+                 135             139 140
+                 145             149 150
+         153 154 155 156 157 158 159 160
+                 165         168 169 170
+                 175         178 179 180
+                 185         188 189 190
+ 191             195         198 199 200                              45
+ One thousand
+
+
+
+
+                                If 9 hundreds make
+
+                                     900
+
+
+
+
+                                 then, 10 hundreds make
+
+                                       1000
+
+                                    This is one
+                                   thousand and
+                                  it comes after
+                                       999.
+                 After
+
+           999           1000
+
+
+
+
+46
+                                      Numbers
+20.   I circle the numeral 1000.
+
+
+
+
+21.   I look for the word thousand.
+
+               t h o          u s a n d q w
+               h r u          p f t y a p d
+               o i m          l a v x d o n
+               u o b          k w t n s l a
+               s f j          n q a n u m s
+               a c k          q s r f o h u
+               n w p          u z d e h g o
+               d b o          u i b d t r h
+               q h d          n a s u o h t
+               t h u          d w o t u s d
+                                              47
+ Continuous Assessment
+ 1.   I match.
+
+        Nine hundred and nineteen                              909
+
+        Three hundred and twenty four                          483
+
+        Four hundred and eighty three                          555
+
+        Nine hundred and nine                                  919
+
+        Five hundred and fifty five                            324
+
+
+ 2.   Fill in the blanks. One example has been done for you.
+
+      (a)   267 =          2 hundreds   6 tens       7 units
+      (b)   356 =     ___ hundreds      ___ tens   ___ units
+      (c)   89 =		    ___ hundreds      ___ tens   ___ units
+      (d)   205 =     ___ hundreds      ___ tens   ___ units
+      (e)   555 =     ___ hundreds      ___ tens   ___ units
+      (f)   940 =     ___ hundreds      ___ tens   ___ units
+
+
+ 3.   Complete.
+
+      (a)   400 + 20 + 8      = 428
+      (b)   700 + 20 + 9      = ____
+      (c)   800 + 3           = ____
+      (d)   200 + 80		        = ____
+      (e)   300 + 30 + 3      = ____
+
+
+48
+                                                 Numbers
+4.    Write in words.
+(a)   325:		    three hundred and twenty five
+(b)   621:		    __________________________________
+(c)   993:		    __________________________________
+(d)   405:		    __________________________________
+(e)   750:		    __________________________________
+
+5.    Write the missing numerals.
+(a)   5, 6, 7, 8, …………, …………, …………, ……… .
+(b)   …………, …………, …………, 15, 16, 17, 18.
+(c)   47, 48, 49, …………, …………, …………, ……… .
+(d)   295, 296, 297, 298, …………, …………, …………, ……… .
+(e)   520, 530, 540, …………, …………, …………, ……… .
+(f)   994, 995, 996, …………, …………, …………, ……… .
+
+6.    Write in ascending order.
+(a)   116, 117, 114, 112, 115, 113			       ________________________
+(b)   200, 202, 199, 197, 204, 198		        ________________________
+(c)   747, 737, 738, 741, 739, 743		        ________________________
+(d)   898, 900, 899, 902, 904, 901, 903     ________________________
+
+
+7.    Write in descending order.
+
+(a)   905, 901, 899, 900, 904, 903, 902     ________________________
+(b)   679, 682, 678, 680, 677, 681		        ________________________
+(c)   145, 148,150, 146, 149, 147			        ________________________
+(d)   252, 225, 522, 552, 255			            ________________________
+
+                                                                   49
+     Profiling
+
+
+                             Good   Satisfactory   Needs Improvement
+     Recognise, read,
+     count and write
+     numerals 0 to
+     1000
+     Read, count and
+     write number
+     names (up to one
+     thousand)
+     Represent
+     numbers 100
+     to 1000 using
+     number strips
+     Represent
+     numbers 100
+     to 1000 using
+     number line
+     Compare and
+     order numbers up
+     to 1000
+     Illustrate the
+     meaning of place
+     value (up to
+     1000) with and
+     without use of
+     ICT
+     Recognise and
+     complete number
+     patterns (up to
+     1000)
+     Arrange numbers
+     in ascending and
+     descending order
+
+
+
+             Teacher's Remarks
+
+
+
+
+50
+                                                  Numbers
+Abacus
+              Do you remember?
+                                                         Do you remember
+                                                         the "Number
+                                                         House" with the
+                                                         "tens" and "units"
+                                                         place value?
+
+
+
+
+                          tens       units
+
+
+
+
+Activity: Create your own Number House
+
+
+                                                              Note:
+                                 Create your own
+                                 Number House with            A bundle of ten straws:
+
+                                 the help of your
+                                 teacher.
+
+                                 You will need:               Now we will represent a
+                                                              bundle of ten red straws
+       tens          units       plastic cups, straws,        by a big blue straw.
+                                 glue, marker, elastic
+                                 bands and a piece of
+   2                  3          cardboard.
+
+
+
+                                                                                 51
+The Abacus
+                   Count the number
+                   of red beads and
+                   the number of
+                   blue beads.
+
+
+                                            Then tell us how
+                                            many tens and
+                                            how many units
+                                            are shown in the
+                                            abacus.
+
+                            tens   units
+
+
+
+                       2 tens and 3 units
+
+
+
+
+ Activity
+
+
+                                   With the help of your
+                                   teacher, use your beads
+                                   and listen attentively to
+                                   the instructions.
+
+                                   Your teacher will say
+                                   a number and you
+                                   will have to place the
+                                   correct number of
+            tens    units
+                                   beads on the abacus.
+
+
+
+
+52
+                                                          Numbers
+     Try these
+
+1.     Complete the following by writing the correct numeral.
+      (a)                       (b)                        (c)
+
+
+
+
+            tens        units         tens        units          tens        units
+
+
+
+
+2.      Draw correct number beads on each abacus to show the given numeral.
+      (a)                       (b)                        (c)
+
+
+
+
+            tens        units         tens        units          tens        units
+
+
+
+                   15                        28                         46
+
+      (d)                       (e)                        (f)
+
+
+
+
+            tens        units         tens        units          tens        units
+
+
+
+                   33                        60                         79
+                                                                                     53
+ Let's work out
+
+ 1.   Complete the following.
+
+
+
+
+               tens         units
+
+               tens         units
+                                    tens   units
+               tens         units
+
+
+
+
+               tens         units
+
+               tens         units
+
+               tens         units
+                                    tens   units
+
+
+
+
+               tens         units
+
+               tens         units
+
+               tens         units
+
+
+                                    tens   units
+
+
+
+
+54
+                                      Numbers
+      Do you remember?
+
+
+
+                                     Can you count
+                                     the number of
+                                     bundles?
+
+
+
+
+                                 If 10 units make
+                                1 ten then what
+                       make    will ten tens make?
+
+
+
+
+and
+
+
+
+
+                              make     one hundred
+
+                                This is one
+                               hundred and
+                              it comes after 99.
+               after
+
+
+
+          99           100
+
+                                                     55
+              Tip
+      From now on, ten bundles will be represented by a purple
+      straw.
+
+
+
+
+                                             1 hundred
+                                                            Let’s see if you
+                                                            have understood.
+                                                            One example has
+     Try these                                              been done for you.
+
+      (a)                           (b)
+
+
+
+
+             4 hundreds                      ___________
+
+                 400                             ______
+
+
+                                    (d)
+      (c)
+
+
+
+
+            ___________                      ___________
+
+               ______                            ______
+56
+                                                                    Numbers
+                                                                  Observe the
+                                                                  way "hundreds",
+                                                                  "tens" and "units"
+                 Tip                                              are shown on an
+                                                                  abacus.
+
+
+      214 is shown on an abacus as follows.
+
+                       214
+
+
+
+
+      hundreds            tens           units
+
+                                                            hundreds        tens           units
+
+
+
+
+                       2 hundreds 1 ten and 4 units
+
+
+
+Try these
+
+(a)                                              (b)
+
+
+
+
+       hundreds    tens          units                 hundreds      tens          units
+
+
+
+
+                                                                                                   57
+     Let's work out
+ 2.      Write the correct numeral.
+
+         (a)                             (b)
+
+
+
+
+               hundreds   tens   units         hundreds   tens   units
+
+
+
+
+         (c)                             (d)
+
+
+
+
+               hundreds   tens   units         hundreds   tens   units
+
+
+
+
+         (e)                             (f)
+
+
+
+
+               hundreds   tens   units         hundreds   tens   units
+
+
+
+
+58
+                                               Numbers
+Let's work out
+3.   Draw the correct number of beads.
+
+     (a)                                 (b)
+
+
+
+
+                 572                                825
+     (c)                                 (d)
+
+
+
+
+                 637                                908
+
+
+
+     4.    Complete.
+
+
+                                     Units:    ______
+                                     Tens:     ______
+                                     Hundreds: ______
+                                     Number name:
+                                     ______________________
+
+
+                                                              59
+                                          Get some more practice with
+                                          this game. Represent the
+      IT Corner                           numbers that the teacher
+                                          will tell you on the abacus.
+
+
+       http://www.ictgames.com/abacusInteger.html
+
+
+
+
+ Continuous Assessment
+
+ 1.   Draw the correct number of beads.
+
+       (a)                                (b)
+
+
+
+
+             Units:     1                        Units:       5
+             Tens:      3                        Tens:        0
+             Hundreds: 5                         Hundreds: 3
+
+60
+                               Numbers
+2.    Match.
+
+
+
+
+     hundreds   tens   units
+
+
+
+
+     hundreds   tens   units
+
+
+
+
+     hundreds   tens   units
+     hundreds   tens   units
+
+
+
+
+     hundreds   tens   units
+
+
+
+
+     hundreds   tens   units
+     hundreds   tens   units
+
+
+
+
+     hundreds   tens   units
+
+
+
+
+     hundreds   tens   units
+
+
+
+
+                                     61
+     Profiling
+
+
+                            Good    Satisfactory   Needs Improvement
+     Represent a
+     2-digit number
+     on an abacus/
+     number house
+     Draw beads
+     on an abacus
+     to represent a
+     2-digit number
+     Represent a
+     3-digit number
+     on an abacus/
+     number house
+     Draw beads
+     on an abacus
+     to represent a
+     3-digit number
+     Use ICT to
+     represent
+     2-digit/3-digit
+     numbers on an
+     abacus
+
+
+
+                Teacher's Remarks
+
+
+
+
+62
+                                                      Numbers
+Addition                                            When you put two
+                                                    groups of items
+                                                    together, you get the
+                                                    "amount in all" or
+          Do you remember?                          "total amount".
+
+
+      Mike and Kelly were at the beach collecting some seashells.
+
+                                              We have sixteen
+                                              seashells in all.
+                 Let’s count how
+                 many seashells
+                 we have in all.              Eleven and five
+                                              make sixteen.
+
+
+
+
+                     Eleven and five make sixteen
+
+                               11 + 5 = 16
+
+Try these
+
+(a)
+
+
+
+
+           7 + 3             =
+
+(b)
+
+
+
+
+           8 + 4             =
+                                                                            63
+                                                       In Grade 2, you used
+                                                       number strips to
+                                                       carry out addition.
+            Do you remember?
+
+
+
+
+     4 tens and 2 units   +   2 tens and 4 units   =    6 tens and 6 units
+            42            +          24            =          66
+
+
+
+ Try these
+
+ (a)    14 + 13 =
+
+
+
+
+ (b)    37 + 21 =
+
+
+
+
+64
+                                                 Numbers
+
+    Do you remember?
+
+
+When you have to add in columns, you have to place the numerals in the
+appropriate place. Add the units first, and then add the tens.
+
+
+Write 45 + 12 in columns and add.
+
+
+         tens   units                         tens     units
+
+                                                 4       5
+                                             +
+                                                 1       2
+
+
+          4       5
+     +
+                                              tens     units
+
+                                                 4       5
+                                             +
+                                                 1       2
+          1       2                                      7
+
+
+
+                                              tens     units
+
+                                                 4       5
+                                             +
+                                                 1       2
+
+          5       7                              5       7
+
+
+
+
+                                                                         65
+ Try these
+
+     (a)                        (b )
+             tens       units          tens    units
+
+                 4        2                6     0
+             +                         +
+                 3        3                1     5
+
+
+
+
+     (c)                        (d )
+             tens       units          tens    units
+
+                 8        5                4     0
+             +                         +
+                          3                      7
+
+
+
+
+      (e)    40 + 32 =                 tens    units
+
+
+                                       +
+
+
+
+
+      (f )   52 + 6 =
+                                       tens    units
+
+
+                                       +
+
+
+
+
+66
+                                                      Numbers
+                                                                Read this word
+                                                                problem carefully.
+     There are 20 green apples. Akil adds 15 red apples.
+     How many apples does he have in all?
+
+
+
+
+                                                                      tens       units
+
+                                                                        2            0
+                                                                   +
+                                                                        1            5
+
+                                                                        3            5
+
+
+
+
+Let's work out
+
+1.      There are 12 pencils in a box and Sarah adds 13 more pencils in it.
+        How many pencils are there in the box?
+                                                            tens         units
+
+
+                                                           +
+
+
+
+
+2.      Yoan has 32 beads. He gets 61 more beads from his father.
+        How many beads does he have in all?
+                                                               tens         units
+
+
+                                                            +
+
+
+
+
+                                                                                     67
+ 3.   Jean has 53 football stickers. He buys 40 more stickers.
+      How many stickers does he have in all?
+                                                        tens        units
+
+
+                                                       +
+
+
+
+
+ 4.   Nelly has 45 sweets. She gets 34 more sweets from her sister.
+      How many sweets does she have in all?
+                                                           tens     units
+
+
+                                                        +
+
+
+
+
+         Tip
+                                                This is a hundred
+      When you add 10 ten
+      strips altogether you                     square.
+      get a hundred.
+
+
+
+
+                  10 ten-strips                A hundred square
+
+
+68
+                                             Numbers
+     Tip: Adding two 3-digit numbers
+    When you have to add two 3-digit numbers, you can make use
+    of hundred squares, ten strips and unit squares to help you.
+
+    Add 244 + 512
+
+    Split the numbers as follows:
+
+    244 is 2 hundreds 4 tens and 4 units
+
+    That is,
+
+
+
+
+    512 is 5 hundreds 1 ten and 2 units
+
+    That is,
+
+
+
+
+                                                       You get:
+                                                       7 hundreds,
+                                                       5 tens
+                                                       and 6 units.
+When you add
+these strips
+altogether           244 + 512 = 756
+
+
+                                                                      69
+                                  Use your hundred
+                                  squares, ten-strips
+ Let's work out                   and unit squares
+
+ 5.     Work out the following.
+
+ (a)                  475
+        124 + 351 = _________
+
+
+
+
+                          +
+
+
+ (b )   725 + 141 = _________
+
+
+
+
+ (c)    610 + 269 = _________
+
+
+
+
+70
+                                           Numbers
+   Tip: Adding two 3-digit numbers
+When you have to add in columns, don’t forget to put the
+numerals in the appropriate place.
+For example:
+
+
+Write 125 + 322 in columns
+                                                  H    T   U
+Split the numbers as follows:
+                                                  1    2   5
+                                              +
+125 is 1 hundred, 2 tens and 5 units
+
+
+
+
+322 is 3 hundreds, 2 tens and 2 units
+                                                  H    T   U
+                                                  1    2   5
+                                              +
+                                                  3    2   2
+
+                                                  4    4   7
+      When you add
+      these strips
+      altogether
+
+
+
+
+                                                               71
+ Let's work out
+
+ 6.    Work out the following.
+
+ (a)   421 + 215 = _________     (b )   743 + 135 = _________
+
+
+
+           H      T        U                H    T      U
+           4       2       1                7    4      3
+       +                                +
+           2       1       5                1    3      5
+
+
+
+
+ (c)   307 + 192 = _________     (d )   520 + 209 = _________
+
+
+
+           H      T        U                H    T      U
+           3       0       7                5    2      0
+       +                                +
+           1       9       2                2    0      9
+
+
+
+
+72
+                                                     Numbers
+         Tip: Recall place value
+      When you have to write and add in columns, pay attention to the
+      "place value" of each digit in the numerals.
+      For example:
+
+                                                     H       T    U
+      Write 625 + 42 in columns
+                                                     6       2    5
+      625 has 6 hundreds, 2 tens and 5 units     +
+                                                             4    2
+      42 has 0 hundred, 4 tens and 2 units           6       6    7
+                  You can do this
+                  to help you.
+                  Always add the
+                  units first.
+
+                                    H   T    U   H   T   U
+
+                                    6   2    5   3
+                                                 +   4   2
+
+
+
+
+7.    Work out.
+
+(a)   417 + 52 = _________                   H       T       U
+
+
+                                        +
+
+
+
+
+                                                                        73
+ (b )   950 + 28 = _________
+                                                H   T   U
+
+
+                                            +
+
+
+
+
+ (c)    In a school, there are 128 girls
+                                                H   T   U
+        and 71 boys.
+        How many pupils are there in all?
+
+                                            +
+
+        Number of pupils in all = _______
+
+
+
+
+ (d )   In a park, there are 225 pigeons
+        and 53 sparrows.                        H   T   U
+        How many birds are there in all?
+
+                                            +
+        Number of birds in all = _______
+
+
+
+
+74
+                                                   Numbers
+Kader is doing some problems in mathematics at home. He starts to work out
+an addition problem. He gets stuck.
+
+                                                            T   U
+
+                                                                8
+                                                        +
+                                                                6
+
+
+
+
+                    U
+              T
+                     8
+          +          6
+
+
+
+
+ 1   Do you know how to help Kader out?
+
+
+Activity: Addition using Number strips
+
+
+
+                               With the help of
+                               your teacher, use
+                               your number strips to
+                               help Kader solve the
+                               problem.
+
+
+                               1 ten-strip represents
+                               10 unit squares.
+
+                                                                         75
+        Tip: Addition with carrying
+     Let's try this out:
+
+                                                   T        U
+     8 + 6
+                                                             8
+                                               +
+                                                             6
+
+
+
+
+                                                8 + 6 = 14
+
+
+                                                       14
+
+                                               1 ten        4 units
+
+
+                                                   T        U
+
+                                                             8
+                                               +
+                                                             6
+                           Then, write 4 in        1         4
+                           the units column
+                           and 1 in the tens
+                           column.
+
+
+
+
+76
+                                                 Numbers
+Let's work out
+
+8.   Complete the following.
+
+
+     (a)                                      (b )
+               T        U                                T        U
+
+                         9                                         7
+           +                                         +
+                         4                                         6
+
+
+
+
+     (c)                                      (d )
+               T        U                                T        U
+
+                         3                                         5
+           +                                         +
+                         9                                         8
+
+
+
+
+9.   In a pet shop, there are 8 dogs and 7 cats. How many animals are
+     there in all?
+
+
+               T        U
+
+
+           +
+
+                                         Number of animals = _______
+
+
+
+                                                                        77
+          Tip: Addition with carrying
+       Let's try this out:
+                              When you add 7 units
+                              to 9 units you get 16.
+       47 + 9
+
+                                       16 units
+
+                                1 ten         6 units
+
+           47
+     4 tens and 7 units
+
+
+
+            +                          Then, add the tens.
+                                       Carry 1 ten to the
+                                       tens column. Add
+                                       4 tens and 1 ten.
+            9
+          9 units
+
+                                       T          U
+                                   1
+                                       4          7
+                                  +
+                                                  9
+
+                                        5         6
+
+
+
+78
+                                                   Numbers
+Let's work out
+
+10.   Complete the following.
+
+
+      (a)                                       (b )
+                T        U                                 T        U
+
+                5         8                                3         7
+            +                                          +
+                          4                                          8
+
+
+
+
+      (c)                                       (d )
+                T        U                                 T        U
+
+                7         2                                6         7
+            +                                          +
+                          9                                          6
+
+
+
+
+11.   Sofia decides to make a bouquet. She has 38 roses and 9 dahlias.
+      How many flowers are there in all?
+
+
+                T        U
+
+
+            +
+
+                                           Number of flowers = _______
+
+
+
+                                                                         79
+          Tip: Addition with carrying
+      Let's try this out:
+                                                                    T       U
+
+      56 + 75                                                       5       6
+                                                             +
+                                                                    7       5
+
+                                         11 units                           1
+
+     56                               1 ten         1 unit
+
+
+
+
+     +         5 tens and 6 units
+                                                    H               T       U
+                                                                1
+                                                                    5       6
+     75                                                      +
+                                                                    7       5
+                                          13 tens                           1
+
+                                    1 hundred       3 tens
+
+               7 tens and 5 units
+
+                                                H           T           U
+                                                1       1
+                                                            5           6
+                                          +
+                                                            7           5
+
+               13 tens and 1 unit               1           3           1
+
+80
+                                       Numbers
+Let's work out
+
+12.   Complete.
+
+
+      (a)                   (b )
+                H   T   U              H   T   U
+                    4   8                  5   7
+            +                      +
+                    9   5                  7   3
+
+
+
+
+      (c)                   (d )
+                H   T   U              H   T   U
+                    5   6                  8   9
+            +                      +
+                    6   9                  3   6
+
+
+
+
+      (e)                   (f )
+                H   T   U              H   T   U
+                    6   7                  9   8
+            +                      +
+                    6   3                  7   8
+
+
+
+
+                                                   81
+        Tip: Addition with carrying
+     Let's try this out:
+
+
+     697 + 229                                   H       T   U
+                                                 6       9   7
+                                         +
+                                                 2       2   9
+                 Add the units first.
+
+                                                             6
+
+
+
+
+                                                 H       T   U       16 units
+              You get 16 units that is
+              1 ten and 6 units. Add                 1
+              the tens. You get 12               6       9   7    1 ten      6 units
+              tens, that is 1 hundred
+              and 2 tens.                +
+                                                 2       2   9
+
+                                                         2   6
+
+
+
+
+            Add the hundreds.
+            You get 9 hundreds.
+                                                 H       T   U            12 tens
+            The answer is 926.               1       1
+                                                 6       9   7
+                                                                 1 hundred     2 tens
+                                         +
+                                                 2       2   9
+
+                                                 9       2   6
+
+
+82
+                                                        Numbers
+Let's work out
+
+13.   Complete the following.
+
+      (a)                                        (b )
+                H     T         U                           H   T   U
+                1     8         9                           3   8   3
+            +                                           +
+                2     4         9                           5   7   9
+
+
+
+
+      (c)                                        (d )
+                H     T         U                           H   T   U
+                5     7         8                           4   9   7
+            +                                           +
+                3     6         5                           1   2   6
+
+
+
+
+14.   In a school, there are 247 boys and 196
+                                                            H   T   U
+      girls. How many pupils are there in all?
+
+
+                                                        +
+
+
+
+
+                                                                        83
+      IT Corner                             Get some more practice!
+
+
+
+
+       With the help of your teacher, go to this website to
+       play this game.
+
+       http://www.learnalberta.ca/content/me3us/flash/
+
+
+
+
+ Continuous Assessment
+
+
+ 1.   Work out the following.
+
+
+      (a)                                   (b )
+             tens        units                      tens         units
+
+                2           5                           5             3
+            +                                      +
+                3           1                           4             0
+
+
+
+
+84
+                                              Numbers
+     (c)                           (d )
+               H       T     U                H   T   U
+               3       0     8                7   2   6
+           +                              +
+               2       7     1                1   3   3
+
+
+
+
+2.   Work out the following.
+
+
+     (a)                           (b )
+               tens        units              H   T   U
+                   6         7                6   2   1
+               +                          +
+                   3         6                2   5   6
+
+
+
+
+     (c)                           (d )
+               H       T     U                H   T   U
+               6       3     0                5   3   4
+           +                              +
+               2       9     7                3   7   7
+
+
+
+
+                                                          85
+ 3.   Write in columns and work out.
+
+
+      (a)     65 + 34 =                               tens       units
+
+
+                                                     +
+
+
+
+
+       (b )   87 + 32 =
+                                                      tens       units
+
+
+                                                     +
+
+
+
+
+ 4.   Kiran has a bag of coins. There are 839 gold coins and 48
+      silver coins in it. How many coins are there in the bag?
+
+
+
+
+      Number of coins in all= _______
+
+
+
+
+86
+                                             Numbers
+Profiling
+
+
+                           Good   Satisfactory   Needs Improvement
+Add a 2-digit
+number to a
+1-digit number,
+with and without
+carrying
+Add a 2-digit
+number to another
+2-digit number,
+with and without
+carrying
+Add a 3-digit
+number to a
+- 2-digit number
+- 3-digit number
+(without carrying)
+Add a 3-digit
+number to a
+- 2-digit number
+- 3-digit number
+(with carrying)
+Solve simple word
+problems involving
+addition.
+
+
+
+       Teacher's Remarks
+
+
+
+
+                                                                     87
+Mass
+
+
+          Do you remember?
+
+                                                   The tennis
+               The basket                          ball is lighter
+               ball is heavier                     than the
+               than the tennis                     basket ball.
+               ball.
+
+
+
+
+ Try this
+
+ Write heavier or lighter in the space provided.
+
+
+
+
+       The jug is __________ than the eggplant.
+       The eggplant is __________ than the jug.
+88
+                                                  Measure
+
+            Do you remember?
+                                       Do you remember this
+                                       example from Grade 2?
+                                       3 apples balance 6 marbles.
+
+
+
+
+Try this
+
+Complete.
+
+
+
+
+            ______    balance ______
+
+                                                                     89
+ Jim and his mother are at the market. Jim is curious about the scale that
+ the vegetable seller is using.
+
+
+                                      1                               2
+               Can you give
+               me 1 kilogram
+               of carrots
+               please?                     Mum, what is
+                                           kilogram?
+
+
+
+
+                                      3                                4
+                Kilogram is a unit
+                for measuring mass.
+                We can also write
+                it as kg.
+
+
+
+
+     1   Observe carefully and discuss the picture.
+
+
+     2 What is the unit that Jim is talking about?
+
+
+     3 Have you ever come across this unit in real life?
+         Give some examples.
+
+
+90
+                                                        Measure
+
+            Did you know?
+
+            The kilogram is a metric measure of mass. It can also be
+            written as kg.
+
+
+
+
+Activity: I discover the kilogram
+
+
+
+                                    With the help
+                                    of your teacher,
+                                    estimate the mass
+                                    of some objects.
+                                    Record your findings
+                                    in your sheet.
+
+
+
+     1 kg         1 kg       1 kg        1 kg
+
+
+
+
+ 1   Listen carefully to the instructions of your teacher.
+
+
+ 2   Can you tell whether the mass of each item is equal to one
+     kilogram or more/less than one kilogram?
+
+
+ 3   Record your findings in the record sheet on the next page.
+
+                                                                       91
+                                                           Write each
+                                                           item's name
+ Activity: I discover the kilogram                         in the correct
+                                                           column.
+
+
+
+
+            Less than 1 kg       1 kg           More than 1 kg
+
+
+
+
+ Let's work out
+
+ 1.   Make a list of products that have 1 kg written on the package.
+
+      (a)     _________________
+
+      (b)     _________________
+                                           With the help of
+                                           your parents and your
+      (c)     _________________            teacher, complete this
+                                           list.
+      (d)     _________________
+
+
+92
+                                                 Measure
+Let's work out
+
+2.   Write down the correct mass of each item.
+
+     (a)                   (b)                   (c)
+
+
+
+
+           _______ kg            _______ kg            _______ kg
+
+
+
+3.   Show the correct mass of each item.
+
+     (a)                   (b)                   (c)
+
+
+
+
+              1 kg                   8 kg                 7 kg
+
+
+
+                                                                    93
+                                tens       units
+        kg
+
+
+
+
+                                  2          5     kg
+       25
+
+
+
+
+                           +
+                                  1          4     kg
+
+                                  3          9     kg
+
+                 kg
+            14
+
+
+
+ Let's work out
+
+ 4.     Complete the following.
+ (a)    34 kg + 55 kg     (b)     70 kg + 25 kg         (c)   48 kg + 31 kg
+
+
+
+
+ 5.     A chef in a restaurant cooks 61 kg of pasta in a week. Then, he
+        cooks 24 kg of pasta the next week. What is the total mass of
+        pasta cooked during the two weeks?
+
+
+
+
+94
+                                                        Measure
+
+                              tens       units
+
+                          1
+                                3          9     kg
+         kg
+
+
+
+
+                         +
+      39
+
+
+
+
+                                1          6     kg
+
+                                5         5      kg
+
+
+       16 kg
+
+
+
+Let's work out
+
+6.    Complete the following.
+(a)   35 kg + 45 kg     (b)     88 kg + 36 kg         (c)   95 kg + 52 kg
+
+
+
+
+7.    Sarah weighs 48 kg. Michel weighs 15 kg more than Sarah.
+      What is the mass of Michel?
+
+
+
+
+                                                                            95
+                  Did you know?
+
+           The gram is a metric measure of mass. It can also be written as g.
+           One Gram is less than 1 kilogram.
+
+                             1 kilogram = 1000 grams
+
+           1 kilogram         1 kilo (thousand) gram
+           1 kilogram         1 thousand grams
+
+
+
+ Activity: I discover the gram
+
+
+                                       With the help
+                                       of your teacher,
+                                       estimate the mass
+                                       of some objects.
+                                       Record your findings
+                                       in your sheet.
+
+         1000 g      750 g     500 g
+
+
+
+
+     1   Listen carefully to the instructions of your teacher.
+
+
+     2   Estimate whether the items are equal to 1000 g or more/less
+         than 1000 g.
+
+
+     3   Write your findings in the record sheet on the next page.
+
+96
+                                                   Measure
+                                                          Write the
+                                                          item's name
+Activity: I discover the gram                             in the correct
+                                                          column.
+
+
+
+
+      Less than 1000 g         1000 g        More than 1000 g
+
+
+
+
+Let's work out
+
+7.   Make a list of products that have their mass in grams.
+
+     (a)   _________________
+
+     (b)   _________________
+                                          With the help of
+                                          your parents and your
+     (c)   _________________              teacher, complete this
+                                          list.
+     (d)   _________________
+
+
+                                                                           97
+Let's work out
+
+8.   Show the correct mass of each item on the scales.
+     (a)                           (b)                                   (c)
+
+
+
+
+               900         100                       900         100             900         100
+             800             200               800                 200         800             200
+
+             700             300               700                 300         700             300
+               600         400                   600             400             600         400
+                     500                                   500                         500
+
+
+
+
+              600 g                             200 g                           800 g
+
+
+
+9.   Write the correct mass.
+
+     (a)
+
+
+                                     500 g   250 g
+
+
+
+
+                                                           mass of watermelon = _______ g
+
+
+
+     (b)
+
+
+                                    750 g
+                                             200 g
+
+
+
+
+                                                           mass of cabbage = _______ g
+
+98
+                                                     Measure
+Let's work out
+
+10.    Work out the following.
+
+(a)         2 5    g        (b )        4 2    g       (c)            1 3   g
+        +                           +                             +
+            3 1    g                    5 7    g                      6 5   g
+
+
+
+
+(d )        5 5    g        (e)         7 8    g       (f )       4 2 6         g
+        +                           +                         +
+            3 5    g                    5 6    g                  5 1 5         g
+
+
+
+
+11.    Work out the following.
+
+                            (a)    What is the mass of the cereal box?
+                                   _______ g
+                            (b)    What is the mass of the biscuit box?
+                                   _______ g
+                            (c)    What is the total mass of the two boxes?
+                                   _______ g
+
+
+
+
+                                                                                99
+12.   Complete the following.
+                                                I’m Emma. I
+                                                have the same
+                I’m Shanna.                     mass as Shanna.
+                I weigh 34 kg.
+
+
+                                      I’m Roy. I weigh
+                                      15 kg more than
+                                      Shanna.
+
+
+
+
+(a)   What is the mass of Emma? _______ kg
+
+(b)   What is the mass of Roy? _______ kg
+
+(c)   What is the total mass of Shanna and Roy? _______ kg
+
+
+
+
+13.   Eric gets 850 g of chocolate. He decides to buy 350 g of chocolate
+      the next day. What is the mass of chocolate that Eric has in all?
+
+
+
+
+100
+                                                          Measure
+14.   Selvina is measuring the mass of some vegetables. Then, she records
+      the different masses.
+
+
+
+
+              900         100         900         100          900         100
+            800             200     800             200      800             200
+
+            700             300     700             300      700             300
+              600         400         600         400          600         400
+                    500                     500                      500
+
+
+
+
+          _______ g               _______ g                 _______ g
+
+
+(a)   What is the total mass of the carrots and the eggplants? _______ g
+
+
+(b)   What is the total mass of the carrots and the cabbage?          _______ g
+
+
+
+
+15.   In April, Razia buys 350 kg of rice for her restaurant. The next month,
+      she buys 250 kg of rice. Then in June, she buys 300 kg of rice.
+
+
+      What is total mass of rice for April and May?		        ____________
+
+
+      What is total mass of rice for April, May and June?    ____________
+
+
+
+
+                                                                                   101
+       IT Corner
+                                                        Get some more practice!
+
+
+
+             http://www.ictgames.com/mostlyPostie.html
+
+
+
+
+  Continuous Assessment
+
+  1.         Complete with the correct word.
+
+             (a)    We measure the mass of heavy objects in _________ . ( kg , g )
+
+             (b)    We measure the mass of light objects in _________ . ( kg , g )
+
+
+
+  2.         Write down the mass of each object.
+
+
+
+       (a)                                (b)                 (c)
+
+
+
+
+                      900         100                                     900         100
+                    800             200                                 800             200
+
+                    700             300                                 700             300
+                      600         400                                     600         400
+                            500                                                 500
+
+
+
+
+102                _______ g                    _______ kg            _______ g
+                                                      Measure
+3.   Joe buys 525 g of onions and 300 g of garlic. What is the total mass
+     of spices that he buys?
+
+
+
+
+4.   Alan weighs 59 kg and Alice weighs 15 kg more. What is the mass of
+     Alice?
+
+
+
+
+5.   Ali buys 675 kg of lentils. Then he buys 225 kg of lentils. What is
+     the total mass of lentils that he buys in all?
+
+
+
+
+                                                                           103
+      Profiling
+
+
+                               Good   Satisfactory   Needs Improvement
+      Estimate mass of
+      an object using
+      arbitrary units
+
+      Compare masses
+      of 2 objects
+
+
+
+      Measure mass
+      of different
+      objects:
+      • in kilograms
+      • in grams
+
+      Add masses
+      of different
+      objects
+
+      Solve word
+      problems
+      involving mass
+
+
+
+
+               Teacher's Remarks
+
+
+
+
+104
+                                                   Numbers
+                                           When you have to
+Subtraction                                subtract any number
+                                           of items, you may cross
+                                           the number of items you
+                                           need to remove.
+
+
+      Do you remember?
+
+
+  Aurelie has five balloons. Sandy takes one of them.
+
+
+
+
+                                           There were five
+                                           balloons and Sandy
+                                           takes one of them.
+
+
+        I take one
+        balloon. How                       Therefore,
+        many balloons                      Aurelie has four
+        have you left?                     left.
+
+
+
+
+                   Five take away one makes four
+
+
+                         5 - 1 = 4
+
+
+                                                                    5
+                                                                -
+                                                                    1
+                                                                    4
+                             left
+
+
+
+
+                                                                        105
+  Try these
+
+  Complete the following.
+
+
+  (a)   5 – 4 = ______      (b)   6 – 5 = ______
+
+
+
+
+  (c)   9 – 2 = ______      (d)   8 – 4 = ______
+
+
+
+
+  (e)                       (f)
+             6                         5
+         -                         -
+             4                         1
+
+
+
+
+  (g)                       (h)
+             8                         9
+         -                         -
+             3                         7
+
+
+
+
+106
+                                                 Numbers
+                                      In Grade 2, you used
+                                      number strips to carry
+       Do you remember?               out subtraction.
+
+
+
+
+3 tens and 8 units take away 1 ten and 5 units   = 2 tens and 3 units
+
+        38             -            15           =        23
+
+
+When we write the numbers, put the numerals in the appropriate columns.
+
+
+                           tens      units
+
+                               3         8
+                           -
+                               1         5
+
+      You can use sticks
+                               2         3
+      to help you.
+
+
+
+
+                                                                        107
+  Try these
+
+  Complete the following using ten-strips and unit squares.
+
+  (a)   45 - 13 =                          (b)   63 - 32 =
+
+
+
+
+  (c)   52 - 21 =                          (d)   78 - 46 =
+
+
+
+
+  Write in columns and complete.
+
+
+  (e)   72 - 41 =                          (f)   99 - 58 =
+
+
+          tens        units                         tens      units
+
+
+         -                                         -
+
+
+108
+                                                     Numbers
+     Let’s work out
+
+1.     Jeff has 54 beads. He gives 32 beads to Jason. Find the
+       number of beads Jeff has left.
+
+
+
+
+2.     Complete the following.
+
+       (a)                                     (b)
+                tens    units                          tens      units
+
+                    4      6                              4         0
+                -                                     -
+                    2      4                              1         0
+
+
+
+
+3.     Alan weighs 59 kg and Alice weighs 15 kg less. What is the mass of
+       Alice?
+
+
+
+
+                                                                            109
+  Kelly wants to learn a new way to carry out subtraction. She comes across
+  subtraction with borrowing. She gets stuck.
+
+                                                               T   U
+
+                                                               5   6
+                                                           -
+                                                               2   7
+
+
+
+                       U
+               T
+                       6
+               5
+           -           7
+                   2
+
+
+
+
+      1   Do you know how to help Kelly out?
+
+
+  Activity: Subtraction using Number Strips
+
+
+                           With the help of your
+                           teacher, use your strips to
+                           help Kelly.
+
+
+                           Don’t forget that 1 ten strip
+                           represents 10 unit squares.
+
+
+
+
+110
+                                                   Numbers
+     Tip: Subtraction with borrowing
+ When you have to subtract two numbers, sometimes you may
+ need to “borrow” from the column on the left.
+
+ Work out 56 - 27
+         T         U
+                             We cannot                     T         U
+                             subtract 7 from
+                             6 to get a whole
+                                                           5         6
+56                           number.
+                                                       -
+                                                           2         7
+
+
+     T             U
+
+                                We borrow 1 ten
+                                from 5 tens and            T         U
+                                we get 16 units.
+                                                       4        10
+                                                           5         6
+                                                       -
+                                                           2         7
+     T         U                                                     9
+                             Now, we can take
+                             away 7 units from
+                             16 units.
+
+
+
+                                                           T        U
+                                                       4       10
+                                                           5        6
+     T         U
+                         Then, we take             -
+                         away 2 tens from                  2        7
+                         4 tens. 2 tens and
+                         9 units are left.
+                                                           2        9
+
+
+                                                                         111
+  Try these
+
+  (a)       tens        units                     (b )             tens            units
+
+            5                  3                                   6                     4
+        -                                                      -
+            3                  6                                   1                     8
+
+
+
+
+  (c)       tens        units                     (d )             tens            units
+
+            6                  1                                   9                     7
+        -                                                      -
+            3                  3                                   8                     9
+
+
+
+
+        Work out.
+                        tens       units                                    tens    units
+
+                                                                        4           10
+                        5            0     Look carefully at                5            0
+                    -                      this example.            -
+                                     6                                      0            6
+
+                                                                             4           4
+
+
+
+  (e)   In a garden, there are 30 rabbits. 9 of                    tens            units
+        them went away. How many rabbits are
+        left?                                                      3                     0
+                                                               -
+                                                                                         9
+
+
+
+112
+                                                           Numbers
+  Tip: Subtracting two 3-digit numbers
+How would you carry out the following?                    Use your hundred
+                                                          squares, ten-strips
+365 - 153 =                                               and unit squares.
+
+                                     365
+
+
+
+
+                       3 hundreds 6 tens and 5 units
+
+
+                                                               Take away 1
+                                                               hundred 5 tens
+                                                               and 3 units.
+
+
+
+
+                                                  We have 2
+                                                  hundreds, 1 ten
+                                                  and 2 units left.
+
+
+
+
+      2 hundreds 1 ten and 2 units
+
+
+
+
+Therefore, 365 - 153 = 212
+
+                                                                                113
+       Let’s work out
+
+  4.     Cross out and write the correct answer.
+
+  (a)    524 – 312 =    212
+
+
+
+
+  (b)    346 – 30 = ______
+
+
+
+
+  (c)    289 – 7 = ______
+
+
+
+
+  (d)    435 – 125 = ______
+
+
+
+
+114
+                                                 Numbers
+     Tip: Subtracting two 3-digit numbers in columns
+
+When you have to subtract in columns, don’t forget to put the
+numerals in the right place.
+For example:
+                                           H      T      U
+Write 685 - 424 in columns
+                                           6      8      5
+Break down the numbers:
+                                       -
+                                           4      2      4
+
+685 is 6 hundreds 8 tens and 5 units                     1
+                                                             Start with units.
+
+
+
+                                           H      T      U
+                                           6      8      5
+                                       -
+                                           4      2      4
+424 is 4 hundreds 2 tens and 4 units
+                                                  6      1
+                                                                Then, subtract
+                                                                the tens followed
+                                                                by subtraction of
+                                                                hundreds.
+
+                                           H      T      U
+                                           6      8      5
+                                       -
+                                           4      2      4
+
+                                           2      6      1
+
+
+
+
+                                                                                 115
+       Let’s work out
+
+  5.     Work out the following.
+
+  (a)    542 - 321 = _________     (b )   903 - 502 = _________
+
+
+
+             H      T        U                H    T      U
+             5       4       2                9    0      3
+         -                                -
+             3       2       1                5    0      2
+
+
+
+
+  (c)    307 - 5 = _________       (d )   459 - 30 = _________
+
+
+
+             H      T        U                H    T      U
+             3       0       7                4    5      9
+         -                                -
+                             5                     3      0
+
+
+
+
+116
+                                                         Numbers
+
+          Tip: Recall place value
+        When you have to write and subtract in columns, pay attention to
+        the "place value" of each digit in the numerals.
+        For example:
+
+        Write 346 - 123 in columns                           H       T       U
+
+        346 has 3 hundreds 4 tens and 6 units                3       4       6
+                                                     -
+        123 has 1 hundred 2 tens and 3 units                 1       2       3
+
+             You can do this                                 2       2       3
+             exercise to help
+             you. Always start
+             with the units.
+                                 H   T   U       H       T       U
+
+                                 3   4   6   -   1   2           3
+
+
+
+
+     Let’s work out
+
+6.     Write in columns and subtract.
+
+(a)    437 - 214       = ________                H               T       U
+
+
+                                             -
+
+
+
+
+                                                                                 117
+  (b )   568 - 40      = ________
+                                                H   T   U
+
+
+                                            -
+
+
+
+
+  7.     Ali buys 675 kg of lentils. He         H   T   U
+         sells 225 kg of lentils. What is
+         the mass of lentils left?
+                                            -
+
+
+         Mass of lentils left = _______
+
+
+
+
+  8.     Abi has 652 eggs. 231 eggs are
+                                                H   T   U
+         broken. How many eggs are left?
+
+
+                                            -
+
+
+         Number of eggs left= _______
+
+
+
+
+118
+                                                       Numbers
+    Tip: (1) Subtracting two 3-digit numbers with borrowing
+
+When you have to subtract two 3-digit numbers, sometimes you
+need to “borrow” from other column.
+
+Work out 275 - 169                                     H       T        U
+                               We cannot               2       7        5
+       275
+                               subtract 9 from
+                                                   -
+                               5 to get a whole        1       6        9
+                               number.
+
+
+
+
+                          We borrow 1 ten
+                          from 7 tens and we           H       T        U
+                          are left with 6 tens.            6       10
+                                                       2       7        5
+                                                   -
+                                                       1       6        9
+                           The 1 ten is carried
+                           to the unit column.
+                           Then we get 15 units.
+
+
+
+     Now, we can
+     proceed.
+
+                                                       H       T        U
+                                                           6       10
+          15 units – 9 units = 6 units                 2       7        5
+                                                   -
+            6 tens – 6 tens = 0 ten                    1       6        9
+     2 hundreds – 1 hundred = 1 hundred
+                                                       1       0        6
+
+
+
+                                                                            119
+       Let’s work out
+
+  9.     Work out the following.
+
+  (a)    972 - 354 = _________     (b )   545 - 328 = _________
+
+
+
+             H      T        U                H    T      U
+             9       7       2                5    4      5
+         -                                -
+             3       5       4                3    2      8
+
+
+
+
+  (c)    443 - 324 = _________     (d )   756 - 237 = _________
+
+
+
+             H      T        U                H    T      U
+             4       4       3                7    5      6
+         -                                -
+             3       2       4                2    3      7
+
+
+
+
+120
+                                                       Numbers
+   Tip: (2) Subtracting two 3-digit numbers with borrowing
+
+Work out 367 - 179                                             H       T         U
+                                                               3        6        7
+          367
+                                                       -
+                                 We cannot
+                                                               1        7        9
+                                 subtract 9 units
+                                 from 7 units to get
+                                 a whole number.
+
+
+                                                               H       T         U
+                                                                   5        10
+                                                               3        6        7
+                                                       -
+                             We borrow 1 ten                   1        7        9
+                             from 6 tens, add it
+                             to 7 units, we get 17
+                             units.
+
+
+                                                               H       T         U
+                                                           2       10       10
+                             1 hundred is 10
+                                                               3        5        7
+                             tens added to 5           -
+                             tens gives 15 tens.               1        7        9
+
+                                                                                 8
+   Now, we can
+   proceed.
+                                                               H       T         U
+                                                           2       10       10
+           17 units – 9 units = 8 units                        3        5        7
+                                                       -
+            15 tens – 7 tens = 8 tens                          1        7        9
+      2 hundreds – 1 hundred = 1 hundred
+                                                               1        8        8
+
+
+                                                                                     121
+      Let’s work out
+
+  10.   Work out the following.
+
+  (a)   543 - 324 = _________     (b )   756 - 368 = _________
+
+
+
+            H      T        U                H    T      U
+            5       4       3                7    5      6
+        -                                -
+            3       2       4                3    6      8
+
+
+
+
+  (c)   423 - 154 = _________     (d )   826 - 237 = _________
+
+
+
+            H      T        U                H    T      U
+            4       2       3                8    2      6
+        -                                -
+            1       5       4                2    3      7
+
+
+
+
+122
+                                                    Numbers
+
+         Tip: Write the larger numeral first
+      Subtract 456 from 958
+
+      In this example, write the larger numeral first.
+      We subtract as follows:
+                                                   H      T      U
+        H    T    U         H   T   U
+                                                   9      5      8
+        9    5    8    -    4   5   6
+                                               -
+                                                   4      5      6
+             Write the larger                      5      0      2
+             number first.
+
+
+
+
+  Let’s work out
+
+11.   Subtract 235 from 649.		          12.   Subtract 142 from 751.
+
+
+
+
+13.   Subtract 408 from 757.		          14.   Subtract 465 from 952.
+
+
+
+
+                                                                       123
+         Tip: Subtracting with borrowing involving zero
+
+  Pay attention to
+  this example.
+                                                     H       T         U
+              Subtract 69 from 503
+                                                     5        0        3
+                          We cannot          -
+                          subtract 9 units                    6        9
+                          from 3 units.
+
+
+
+
+                      There is 0 ten.
+                      We borrow 1 hundred            H       T         U
+                      from the hundred's
+                      column.                    4       10
+                                                     5        0        3
+                                             -
+                                                              6        9
+
+                         We can now borrow
+                         from the ten's
+                         column.
+
+
+
+                                                     H       T         U
+                                                         9
+                                                 4           10   10
+                                                     5        0        3
+                       We borrow 1 ten       -
+                       from 10 tens and                       6        9
+                       subtract.
+
+                                                     4        3        4
+
+
+124
+                                                    Numbers
+  Let’s work out
+
+15.   Work out the following.
+
+(a)                                      (b )
+          H       T          U                      H   T   U
+          7       0          3                      5   0   7
+      -                                         -
+                  3          5                          9   8
+
+
+
+
+16.   Subtract 65 from 389.
+                                                    H   T   U
+
+
+                                                -
+
+
+
+
+17.   In a zoo, there are 385 animals.
+      378 animals are transferred to
+                                                    H   T   U
+      another zoo. How many animals
+      are left in the zoo?                      -
+
+
+
+
+                                                                125
+                                                  Get some more practice!
+        IT Corner
+
+
+
+         http://www.learnalberta.ca/content/me3us/flash/
+
+
+         With the help of your teacher, go to this website to
+         play the game.
+
+
+
+
+  Continuous Assessment
+
+  1.     Work out the following.
+
+
+  (a)                                      (b )
+             T        U                                  T         U
+
+             4         9                                 6           5
+         -                                           -
+             2         8                                 4           0
+
+
+
+
+126
+                                           Numbers
+(c)                             (d )
+          H      T        U                H   T   U
+          5       3       6                8   7   6
+      -                                -
+          2       2       1                    4   0
+
+
+
+
+2.    Complete the following.
+
+
+(a)                             (b )
+          H      T        U                H   T   U
+          8       2       1                5   2   1
+      -                                -
+          6       1       2                2   1   8
+
+
+
+
+(c)                             (d )
+          H      T        U                H   T   U
+          7       1       0                8   7   5
+      -                                -
+          2       9       7                    9   7
+
+
+
+
+                                                       127
+  3.     Write in columns and work out.
+
+  (a)    65 - 34 = _________
+                                                     H         T     U
+
+
+                                                 -
+
+
+
+
+  (b )   987 - 192 = _________
+                                                     H         T     U
+
+
+                                                 -
+
+
+
+
+  4.     Eric gets 850 grams of chocolate and he decides to give 350 grams to
+         Kalvida. How many grams of chocolate has Eric left?
+
+
+
+
+         Number of grams of chocolate left = _______
+
+
+
+
+128
+                                          Numbers
+5.   Subtract 138 from 679.
+                                          H   T   U
+
+
+                                      -
+
+
+
+
+6.   Subtract 75 from 785.
+                                          H   T   U
+
+
+                                      -
+
+
+
+
+7.   Subtract three hundred and six
+                                          H   T   U
+     from seven hundred and ten.
+
+
+                                      -
+
+
+
+
+                                                      129
+      Profiling
+
+
+                                   Good   Satisfactory   Needs Improvement
+      Subtract a 1-digit
+      number from another
+      1-digit number
+      Subtract a 2-digit
+      number from another
+      2-digit number,
+      without borrowing
+      Subtract a 2-digit
+      number from another
+      2-digit number, with
+      borrowing
+      Subtract a 2-digit
+      number from a 3-digit
+      number with or
+      without borrowing
+      Subtract a 3-digit
+      number from another
+      3-digit number
+      (without borrowing)
+      Subtract a 3-digit
+      number from another
+      3-digit number (with
+      borrowing)
+      Solve simple word
+      problems involving
+      subtraction
+
+
+                   Teacher's Remarks
+
+
+
+
+130
+

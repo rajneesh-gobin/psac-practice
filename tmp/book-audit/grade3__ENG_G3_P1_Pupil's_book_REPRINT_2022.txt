@@ -1,0 +1,3723 @@
+                Mauritius Institute of Education
+                         under the aegis of
+Ministry of Education, Tertiary Education, Science and Technology
+ENGLISH
+    GRADE 3
+       PART 1
+Professor Vassen NAËCK			 - Head Curriculum Implementation, Textbook 		
+						 Development and Evaluation
+
+THE ENGLISH PANEL
+
+MAURITIUS INSTITUTE OF EDUCATION
+Ms Helina HOOKOOMSING			                    - Panel Coordinator, Lecturer
+Dr Pascal NADAL				                         - Senior Lecturer
+Mrs Mangala JAWAHEER			                     - Lecturer
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mr Jagdish KORLAPU-BUNGAREE		               - Deputy Head Master
+Mrs Marie Françoise CONSTANCE		             - Deputy Head Master
+Ms Andora LAVAL				                         - Primary Educator
+				
+Acknowledgements
+
+VETTING TEAM
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mrs Taramatee NATHOO			                     - School Inspector
+Mr Nunkishore NEERGHEEN			                  - School Inspector
+Mr Henrio Douglas POTIÉ		                   - Supervisor (The Arts)
+
+
+
+Illustration and layout
+
+GRAPHIC DESIGNER
+Mr Leveen NOWBOTSING
+
+
+
+
+REVIEW
+
+MAURITIUS INSTITUTE OF EDUCATION
+Mrs Mangala JAWAHEER		              - Coordinator, Lecturer
+
+
+
+
+ISBN : 978-99949-40-19-6
+© Mauritius Institute of Education (2021)
+                                           Foreword
+
+MIE has produced a brand new collection of textbooks based on the National Curriculum Framework
+for the Nine Year Continuous Basic Education as from 2016. These textbooks have been written by
+a team of academic staff from MIE, supported by experienced Educators, advised by Inspectors,
+mentors and Deputy Head Masters.
+
+We have done our best to ensure that the textbooks enable children to undergo a pleasant learning
+experience. We have taken care to align the textbooks with very clearly defined learning outcomes
+and objectives set for the respective subjects as outlined in the National Curriculum Framework,
+Grades 1 to 6. The textbooks provide clear indications of the diverse skills that children should master
+at each stage.
+
+We are also providing a set of teachers’ manuals where we have outlined the appropriate techniques
+and pedagogical approaches so that children are helped to make optimal use of the textbook and
+materials provided. Some of the textbooks have been updated and changes effected after receiving
+feedback from educators.
+
+We are thankful to all those who have provided us with constructive feedback, thereby enabling us
+to make this curriculum development endeavour come to fruition. We are also thankful to the artists
+who carried out the illustrations, and to our graphic artists who have tried their best to create the
+right layout for the books. The authors and the curriculum team, under the guidance of Professor
+Vassen Naëck, also deserve our thanks.
+
+We hope that you enjoy this material and wish you lots of success.
+
+
+Dr O. Nath Varma
+Director
+Mauritius Institute of Education.
+
+
+
+
+                                                                                                       i
+                                                  Preface
+
+     The Grade 3 'Let's Learn English' textbook aims at providing pupils with adequate opportunities for
+     exposure to the English language and active engagement in its use. In line with the NCF, the structure of
+     the textbook allows the gradual development of the four language skills, namely listening, speaking,
+     reading, and writing, as well as grammar and punctuation. Through activity-based learning, pupils
+     learn and practise English in a contextualized, meaningful, and enjoyable manner, which focuses on
+     key areas of language and literacy development. Additionally, many of the activities adopt a cross-
+     curricular approach,which enables links to be made with other areas of the curriculum that are being
+     formally introduced and taught in Grade 3.
+
+     The textbook comprises of eight units, each driven by a theme that is related to the learners' lives or
+     interest. The units consist of the following sub-sections:
+
+     • Oral -
+     These activities precede the reading passage and are also interspersed throughout
+     each unit. They provide some key vocabulary related to the theme of a unit and support the
+     development of oral language skills;
+
+     • Reading comprehension -
+     The reading activities introduce the main theme and vocabulary of a unit. The text is followed by
+     short exercises to evaluate pupils' understanding;
+
+     • Writing -
+     These activities provide pupils with opportunities to produce different types of short texts with the
+     support of a writing frame or model;
+
+     • Phonics -
+     These activities help to develop and reinforce pupils' phonemic awareness, steadily leading them to
+     read and write with confidence;
+
+     • Grammar -
+     These activities empower pupils with essential notions of English grammar for accurate language
+     production both orally and in writing;
+
+     • Vocabulary -
+     These activities are based on the theme and are integrated throughout a unit so as to enable pupils
+     to increasingly build a repertoire of words;
+
+     • End of Unit -
+     These activities can be used to evaluate learning;
+
+     • ICT activities -
+     These activities simultaneously cater for the development of basic ICT skills and support language
+     learning.
+
+     Each unit covers approximately two weeks and is accompanied by a short literacy story which
+     complements the theme. A few fun and enjoyable activities are also provided at the end of each
+     literacy story.
+
+
+ii
+The literacy stories are presented as a separate collection to encourage pupils to enjoy reading in
+English, enable them to develop their own personal library, and inspire them to begin reading with
+some independence; albeit with continued assistance and support from the teacher as needed.
+While the focus is mostly on literacy in English, concepts from other areas such as History, Geography,
+Values and Citizenship Education are also integrated.
+
+We hope that pupils enjoy working through the Grade 3 'Let's Learn English' textbook and participate
+fully in all activities.
+
+The writing team
+
+
+                                       To the teacher
+
+Much effort has gone into grading the content of the Grade 3 'Let's Learn English' textbook and
+to include as many visual elements as possible to support learning. Moreover, the provision of
+additional resources and activities (such as songs, poems/rhymes, short-story texts, ICT activities,
+and the literacy story collection) aims at extending language learning while creating links with other
+areas of the curriculum.
+
+Nevertheless, the successful implementation of the textbook depends largely on teachers who will
+have to supplement it with explanations, further resources, and additional activities as per their
+pupils' level and needs to facilitate learning.
+
+Teacher's notes have been inserted, wherever they were deemed to be useful, so as to guide teachers
+and offer more detailed information about activities. However, these should not be considered
+as being prescriptive. Instead, teachers have the scope and flexibility to adapt all activities in the
+textbook to suit the level and needs of their learners.
+
+Below are some general guidelines for conducting a reading activity (story, rhyme/poem/song):
+
+Pre-reading phase
+Carry out an oral session where pupils listen to a rhyme/poem/song or engage in an oral activity or
+brainstorming. Make use of the illustrations and pictures in the textbook to stimulate discussion and
+support learning. Encourage pupils' participation in English but allow pupils to use the language/s
+with which they are more familiar as needed. Adequate support must be provided to gradually lead
+pupils to express themselves using simple utterances and sentences in English. The use of the pre-
+reading phase to teach some key vocabulary will facilitate understanding of the reading passage that
+follows.Take the pupils outdoors whenever possible, so that they can indulge in the games or songs
+that involve movements.
+
+While reading phase
+Read a text aloud a first time for pupils to listen and to familiarise themselves with the theme and
+content. Read it again one line at a time and encourage pupils to repeat each line while they follow
+the text with their finger. The use of strategies like demonstration, enacting/miming, and varying the
+reading intonation and tone will help to retain pupils' interest and promote understanding of the
+text.
+
+Post-reading activities
+Carry out the activities orally first to check pupils' understanding and then help them to complete
+the written exercises. Use resources such as word and picture cards whenever possible, especially for
+
+                                                                                                    iii
+vocabulary acquisition, as this will facilitate learning.
+Given that the vocabulary varies in the different units, create a word wall in the classroom so that
+pupils are exposed to new words in a sustained manner for the duration of the unit. Draw pupils'
+attention to these words regularly for consolidation. Derive a list of sight words from the text and
+help pupils to learn these.
+
+Phonics
+Frequent exposure and practice are necessary to develop phonemic awareness. Like vocabulary
+acquisition, phonics must be taught in a sustained manner, and it is necessary to go beyond the
+activities provided in the textbook. Whenever possible, the teacher will have to supplement the
+phonics activities with further resources and additional exercises to draw pupils' attention to the
+sounds, letter-sound associations in words, and how to blend letters and segment words. Practice
+can be made appealing and fun by encouraging pupils to create nonsense words. Phonics instruction
+helps children learn the relationships between the letters of written language and the sounds of
+spoken language, which is essential for developing reading skills.
+
+Grammar
+Carry out the activities orally first to check pupils' understanding and then help them to complete
+the written exercises. Though an introduction to and some explanation of the grammar points have
+been included in the textbook, it may be necessary to extend explanations depending on the level
+and needs of pupils. Use anecdotes and examples related to the pupils to make grammar learning
+meaningful. While it may be necessary to top up with some explanations, where needed, the
+emphasis is on grammar usage and developing an awareness of the grammar points. The focus is
+not on the memorisation of rules.
+
+Bearing in mind that it is not possible to tailor textbooks to specific pupils or classrooms, the Grade
+3 'Let's Learn English' textbook has been structured in a way that allows the teacher to use it in a
+flexible manner. Units 1 and 2 serve to consolidate concepts and language acquired during Grade 2.
+Units 3 to 7 teach language and concepts to be acquired at Grade 3 level; and these are reinforced in
+Unit 8. The teachers can thus adapt this textbook and the pace at which they progress through it, as
+per the level and needs of their pupils.
+
+It is hoped that teachers will exploit all the sections and activities which have been carefully thought
+out, in view of enhancing the teaching and learning of English in Grade 3.
+
+
+
+
+iv
+                          Content pages
+
+ Pages            1- 24           25 - 44          45 - 72            73 - 98
+
+
+                 Unit 1            Unit 2          Unit 3              Unit 4
+
+
+Theme         Welcome to           Food         My Country              Jobs
+              Standard 3
+
+
+             - Parts of the  - A variety of   - Islands           - A variety of
+             body and face     foods, fruits,                       jobs
+                             and vegetables - Places in
+             - Clothing                         Mauritius         - Items and
+Key                          - Tableware                            tools related
+Vocabulary   - Feelings        and utensils   - Holiday /           to different
+                                                travel              jobs
+             - School and    -Parts of the
+               the classroom house
+
+                              -Places to go
+                               shopping
+
+
+             - Song: We are   - Song: I like   - Poem: Island     - Rhyme: Work
+             back at school   fruits and       in the sun         Hard
+                              vegetables
+             - Game: My                        - Role-play: The
+Oral         friends in                        story of Van
+             Grade 3                           Warwick
+
+             - Poem: Going
+             to school
+
+
+
+
+Phonics
+
+
+                   Clusters
+
+                                                                                    v
+        Reading      The new girl in A lunch for       A letter to Sam Different jobs
+                     Grade 3         Mother
+
+                     Letter            Recipe          About             Note
+       Writing                                         Mauritius
+
+                     - Capital letters - Determiners   - Nouns           - Use of
+                     and full-stops (a, an)            (introduction     commas
+                                                       of the term)
+                     - Possessive      - Affirmative                     - Countable
+                     adjectives        and negative     - Plural forms   and
+                                       forms (not, is   (s, es, ies)     uncountable
+                     - Simple          not, are not, do                  nouns
+        Grammar      present tense     not, does not) - Conjunctions
+                     of verb ‘to be’                    (and, but, or)   - Future tense
+                     (am, are, is)     - Question                        (will)
+                                       mark +           - Simple
+                     - Present         interrogative    present tense    - Plural form
+                     continuous        form (what,                       (common
+                     tense (am, are,   when, who,                        irregular
+                     is + ‘ing’)       where)                            words)
+
+       End of Unit        22 - 24          41 - 44          70 - 72          96 - 98
+
+     Literacy session Lacey Loves to   Having Tea      I Spy a Dodo      When I Grow
+                      Talk             with a Tiger                      Up
+
+
+
+
+vi
+              Unit 1 : Welcome to Grade 3
+
+
+
+
+Welcome to Grade 3
+            Unit one
+                             1
+
+
+                                            1
+    Unit 1 : Welcome to Grade 3
+
+
+    The Grade 3 Team
+
+
+
+
+                Hello, my name is Mika.
+
+
+
+
+                                    Hello, my name is Wendy.
+
+
+
+
+               Hello, my name is Sonia.
+
+
+
+                                   Hello, my name is Tony.
+
+
+
+
+                             Hello, my name is Dax.
+
+
+
+
+2
+                                                Unit 1 : Welcome to Grade 3
+
+Activity 1 – I sing a song: We are back at school.
+                                                                       Oral
+
+Hello, hello, we are back at school, back at school, back at school,
+Hello, hello, we are back at school, early in the morning.
+
+Hello, hello, we are with our friends, with our friends, with our friends,
+Hello, hello, we are with our friends, early in the morning.
+
+Hello, hello, we greet our teacher, greet our teacher, greet our teacher,
+Hello, hello, we greet our teacher, early in the morning.
+
+This is the class of Grade 3, Grade 3, Grade 3,
+This is the class of Grade 3, hello to everybody!
+
+
+Keywords: school     friends     teacher    class
+
+
+Activity 2 – I trace, colour, and write how I feel to be back at school.
+
+                               How do you feel?
+
+
+
+
+I feel....
+
+
+
+
+excited            scared           happy             sad               angry
+                                                                                3
+    Unit 1 : Welcome to Grade 3
+           Grammar
+
+    Activity 3a – I write the correct possessive adjective.
+
+
+
+
+    1. This is ________ Grade 3 book.		         2. ______ name is Mika.
+
+
+
+
+    3. _____ name is Wendy.           4. They are playing with _______ dog.
+
+                                                                     my
+                                                                     their
+                                                                     her
+                                                                     our
+    5. We will have fun with _____ Grade 3 Team.                     his
+                                                                     your
+    Activity 3b – I learn the possessive adjective ‘its’.
+
+             We have learnt many possessive adjectives. There is one more!
+
+
+    1. a) It is a dog. ______ name is Dax. (Its/Their)
+
+      b) _____ hairs are brown and white. (Its/Our)
+
+
+    2. She is laughing with ________ friends. (its/her)
+
+
+    3. The shop is famous for _______ toys. (its/my)
+
+4
+                                              Unit 1 : Welcome to Grade 3
+
+                                                               Oral
+Activity 4 – I talk with my friends and I write a list.
+
+
+                   Let’s talk with our
+                   friends. We can learn
+                   about each other.
+
+                           Good idea! Let’s try
+                           to find one friend for
+                           each item on the list!
+
+
+
+
+                          My friends in Grade 3.
+
+ 1   Who can ride a bicycle?
+
+ 2   Who owns a pet dog?
+
+ 3   Who wears glasses?
+
+ 4   Who has a brother or sister in this
+     school?
+
+ 5   Who has gone swimming during the
+     summer holidays?
+
+ 6   Who knows the answer to 3 and 4?
+
+ 7   Who has travelled outside
+     Mauritius?
+
+ 8   Who has a first name starting with
+     the letter ‘A’?
+
+
+
+
+                                                                            5
+    Unit 1 : Welcome to Grade 3
+
+             Reading
+
+    Activity 5 – I listen to and read a short story.
+
+                                 The new girl in Grade 3
+
+    The pupils are in the classroom. They are sitting at their desks. Miss Molly
+    is the teacher. She welcomes all the pupils to Grade 3. She is happy to see
+    them.
+
+    Miss Molly sees a new pupil in the class. Her name is Seema. She is shy. She
+    does not want to talk.
+
+    Miss Molly knows that all her pupils are nice children.
+    "Say hello to Seema everyone. Who wants to be her friend?"
+    Miss Molly asks.
+
+    All the pupils raise their hands. They all want to
+    be Seema's friend. This makes Seema happy.
+    She likes her new Grade 3 class.
+
+    Keywords: classroom desks teacher
+              pupil   shy  nice friend           happy
+
+    Activity 5a - I shade the correct box if the answer is true or false
+
+    1. The pupils are sitting at their desks.              T   F
+
+    2. Miss Polly is the teacher.                          T   F
+
+    3. The new pupil is angry.                             T   F
+
+    4. All the pupils want to be Seema's friend.           T   F
+
+    5. Seema does not like her new Grade 3 class.          T   F
+
+    Activity 5b - I choose the correct words to complete the sentences.
+
+    1. Miss Molly is __________ to see her Grade 3 pupils. (happy      /sad)
+    2. Seema is a new _________________. (teacher/pupil)
+    3. Seema does not want to _______________. (sit/talk)
+    4. The Grade 3 class is full of _____________ children. (nice/naughty)
+
+6
+                                            Unit 1 : Welcome to Grade 3
+
+
+Activity 6a – I choose and copy the correct words:
+               parts of the face and body.
+
+
+             This is my friend Seema. Can you help me
+             label the different parts of the picture?
+
+
+
+
+foot   eye   leg   hand   ear arm   nose   mouth     belly   hair
+
+
+
+
+                                                                          7
+    Unit 1 : Welcome to Grade 3
+
+    Activity 6b – I choose and copy the correct words: clothing items.
+
+                    My friend Seema always wears clean
+                    clothes. Can you help me label the different
+                    parts of this picture too?
+
+
+
+
+    skirt   socks    shoes   leggings   shirt   hat
+
+
+
+
+8
+                                              Unit 1 : Welcome to Grade 3
+Activity 7 - I choose the correct words to complete the sentences.
+
+
+
+           It is important to learn and respect all the classroom rules!
+
+
+
+listen    kind      walk     work        desk     hand
+
+
+
+
+I must _____ carefully in the classroom.    I must be _____ to my classmates.
+
+
+
+
+I must sit quietly at my ______.      I must _______ to my teacher.
+
+
+
+
+I must raise my ______ before I speak.            I must _______ hard.
+
+
+
+
+                                                                            9
+ Unit 1 : Welcome to Grade 3
+
+      Oral
+
+ Activity 8a - I listen to and read a poem.
+
+         This is a poem about going to school.
+         Let’s read it together!
+
+
+                            Going to school
+                               Going to school,
+                                Being happy,
+                               Making friends.
+
+
+                               Going to class,
+                               Where I learn
+                             And keep it clean.
+
+
+                           Learning my numbers
+                                   1, 2, 3,
+                            Learning my letters
+                                   a, b, c.
+
+
+
+
+10
+                                               Unit 1 : Welcome to Grade 3
+
+
+Activity 8b - I complete a crossword puzzle.
+
+
+Across: 1. A place where I learn : C _ _ _ _
+
+Down: 2. How must I keep my class: C _ _ _ _
+
+       3. How do I feel when I am with my friends? H _ _ _ _
+
+       4. A place where I meet my teachers and friends. S _ _ _ _ _
+
+                        3
+                        H
+           2                       4
+                                                      Let’s look for words in
+      1    C                       S                  the poem to complete
+                                                      this crossword puzzle.
+
+
+
+
+           N
+
+
+
+
+Activity 9a - I add full-stops to the short story.          Grammar
+
+               Do you remember the short story we read together?
+               Let’s read it again and add in the full-stops.
+
+
+                            The new girl in Grade 3
+
+
+
+The pupils are in the classroom They are sitting at their desks Miss Molly is
+
+the teacher She welcomes all the pupils to Grade 3
+
+Miss Molly knows that all her pupils are nice children
+
+                                                                                11
+ Unit 1 : Welcome to Grade 3
+
+
+ Activity 9b - I rewrite the sentences correctly using capital letters.
+
+
+                   Remember!
+                   Every sentence begins with a capital letter and ends
+                   with a full-stop.
+
+
+ Rewrite the following sentences with the correct capital letters
+ and full stops.
+
+
+ 1. this is a beautiful island
+
+
+     ______________________________________________________
+
+
+
+ 2. we like going to school
+
+
+     ______________________________________________________
+
+
+
+ 3. you are happy to meet your friends
+
+
+     ______________________________________________________
+
+
+
+ 4. the girls are dancing
+
+
+     ______________________________________________________
+
+
+
+ 5. my friend lives in Vacoas
+
+
+     ______________________________________________________
+
+
+
+12
+                                             Unit 1 : Welcome to Grade 3
+
+                                                            Writing
+
+Activity 10 - I write a letter about myself.
+
+
+         I want my new friend Seema to know things
+         about me. This is my letter to her.
+
+
+
+
+          Hi Seema,
+
+
+          My name is Mika. I am seven years old. I live in Pretty Town.
+          I like reading and swimming.
+
+
+          My favourite subject is English. This year, I am excited about
+          Sports Day at school.
+
+
+          I am happy to be your friend.
+
+
+          From Mika
+
+
+
+
+ Did you like reading Mika’s letter? Now, write a letter to your
+ friend about yourself. You may use the words given or add your
+ own.
+
+
+
+
+                                                                           13
+ Unit 1 : Welcome to Grade 3
+
+
+
+
+                                     ________,
+     Hi ____________________
+
+                               __        _________________
+     My name is ______________
+
+                                      __________ years old.
+     ______________________
+
+                                ____        _____________________
+     I live in ________________
+
+                               ________           _________________
+     I like __________________
+                            ________              _________________
+     ______________________
+                             ________             _________________
+      ______________________
+                                                                            )
+                                        ll, playing video games, watching TV
+      (dancing, singing, playing footba
+
+                                   ____      ___________________
+      My favourite subject is ____
+
+                                                                         ___
+                                    __     ______________________
+      This year, I am excited about
+                                   ol.
+      ________________ at scho
+
+                                   ld Bo     ok Day, Flag Raising Day)
+       (Music Day, Sports Day, Wor
+
+
+
+                                         ______________
+       From __________________
+
+
+
+
+14
+                                              Unit 1 : Welcome to Grade 3
+                                                         Grammar
+
+Activity 11 - I choose among am, are, is to complete the sentences.
+
+         In Grade 2 we learned am, are, and
+         is. Complete the sentences below
+         using these words.
+
+
+                Remember, we say:
+                I am
+                You are
+                He/She/ It is
+                We are                                 Example:
+                They are.                              The boy – tall
+                                                       The boy is tall.
+
+1. I – happy
+___________________________________________________
+
+
+2. Mika – a good pupil
+___________________________________________________
+
+
+3. You – my friend
+___________________________________________________
+
+
+4. Sonia and Tony – happy
+___________________________________________________
+
+
+5. I – in Grade 3
+___________________________________________________
+
+
+6. We – at school
+___________________________________________________
+
+
+7. She – a good teacher
+___________________________________________________
+                                                                          15
+ Unit 1 : Welcome to Grade 3
+ Activity 12a - I write the verbs in the present continuous tense: add ‘ing’.
+
+            Remember!
+            We also use am, are, or is when verbs
+            are in the present continuous tense.
+
+
+
+
+            We use verbs in the present continuous tense
+            to say what we are doing now.
+
+            For some verbs we only need to add ‘ing’.
+
+            Let’s write the verbs correctly.
+
+     Example:
+     Jump
+                       The girls are jumping (jump).
+     Jumping
+
+               Hello. My name
+               is Sonia.
+
+
+
+
+             1. Sonia is __________                    2. Tony is ________ a kiwi
+             (talk).                                      (eat).
+
+
+
+
+ 3. The pupils are ___________                           4. I am ___________
+    (sing).                                                 (dream).
+
+
+
+
+ 5. The teacher is ___________                   6. The birds are ___________
+    (laugh).                                        near the tree (fly).
+16
+                                            Unit 1 : Welcome to Grade 3
+Activity 12b - I write the verbs in the present continuous tense:
+               Verbs ending with ‘e’.
+
+         For verbs ending with ‘e’, we must
+         remove the ‘e’ and then add ‘ing’.
+
+        Example:
+        write
+        writ + ing
+        writing
+
+        Let’s do the same for the following verbs!
+
+
+
+1. dance _________________        5. create ________________ __
+
+2. make _________________         6. type ____________________
+
+3. smile _________________        7. hope ____________________
+
+4. come _________________         8. ride ____________________
+
+Activity 12c - I write the verbs in present continuous tense:
+               Double the last letter.
+
+           For some other verbs, we must double
+           the last letter and then add ‘ing’.
+
+
+
+          Example:
+          run
+          runn + ing
+          running
+
+          Let’s do the same for the following verbs!
+
+1. dig ___________________		          5. swim _________________
+
+2. put ___________________		          6. shut __________________
+
+3. clap __________________		          7. sit ___________________
+
+4. cut ___________________		          8. win ___________________
+
+                                                                      17
+ Unit 1 : Welcome to Grade 3
+
+        honics
+
+ Activity 13 - I colour words with the /I/ sound.
+
+         Do you remember some words with the /I/ sound?
+         Colour the words with this sound in blue!
+
+
+                     ten                      bug
+                              dog
+        top                                            bed
+                                        pin
+                    swim                       lip
+                                                           like
+                     dig          bin
+       can
+                                    pot
+             bike                                    fan
+                           kite
+
+
+ Words
+ ________________________________________________________
+
+ ________________________________________________________
+
+ ________________________________________________________
+
+ ________________________________________________________
+
+ ________________________________________________________
+
+
+
+
+18
+                                           Unit 1 : Welcome to Grade 3
+Activity 14 – I circle words with the /aI/ sound.
+
+                                                    a
+           Do you remember some words with the / I/ sound? Circle the
+           words below that contain this sound. The first one has been
+           done for you.
+
+
+
+
+                            look                        tree
+                            see                         kite
+                            ice                         book
+
+
+
+                            pie                         hand
+                            school                      bike
+                            cone                        lips
+
+
+
+                            chair                       door
+                            bag                         lime
+                            five                        flower
+
+
+
+                            class                       nine
+                            mice                        new
+                            clock                       dessert
+
+
+
+                            socks                       rice
+                            happy                       bees
+                            slide                       square
+
+
+
+
+                                                                         19
+ Unit 1 : Welcome to Grade 3
+Activity 15 – I colour the correct boxes.
+              I trace the words with the /i:/ sound.
+
+            Sonia says you are really good at identifying sounds.
+            Can you please help me with this activity?
+
+
+
+
+     Tree
+ ________                    Frog
+                            ________                    Cat
+                                                      ________
+
+
+
+
+     Bag
+ ________
+                            Knee
+                            ________
+                                                      Shoe
+                                                      ________
+
+
+
+
+     Ball
+ ________                    Star
+                            ________                   Leaf
+                                                      ________
+
+
+
+
+     Dog
+ ________                    Sea
+                            ________                   Sock
+                                                      ________
+
+
+20
+                                              Unit 1 : Welcome to Grade 3
+Activity 16 – I choose and write the correct
+              letters to complete the words.
+
+            You are doing great!
+            Let’s do one more activity together.
+
+              pr    br     fr       tr   dr    cr   gr
+
+
+                       o   g                                   a   s   s
+
+
+
+
+                       a   b                                   u   m
+
+
+
+
+                       e   e                                   e   s   s
+
+
+
+
+                       e   a    d                              i   n   k
+
+
+
+
+                       a   i    n                              u   s   h
+
+
+
+
+                                                                           21
+ Unit 1 : Welcome to Grade 3
+
+
+
+     Unit 1 End of unit Unit one
+      Oral
+                                                                    1
+ 1. I listen to and read the following poem.
+
+
+                        My Promise
+
+                  Each day I will do my best
+                  And I will not do any less.
+
+
+                  My work will be the finest
+                 And I will not make a mess.
+
+
+                       I will play nicely
+                    And I will work neatly.
+
+
+                       This I promise
+                       With a big kiss!
+     			               (Adapted from: http://www.tooter4kids.com/
+     		                 classroom/school_rule_poems.htm)
+
+
+
+
+ 2. I listen to and say a tongue-twister.
+
+
+
+ Red rats run around the playground.
+
+
+
+
+22
+                                                  Unit 1 : Welcome to Grade 3
+
+3. I choose the correct words to complete the sentences.
+
+
+1. When I am ___________ (angry, sad), tears fall from
+ my___________ (ears, eyes).
+
+
+2. When I am _________ (happy, naughty), there is a big and
+  beautiful smile on my _________ (hand, face).
+
+
+3. The teacher says: “If you’re happy and you know it,
+   stomp your__________ (nose, foot)!”
+
+
+4. The ____________ (naughty, nice) child does not listen to the teacher
+   and pulls the girls’ ________ (belly, hair).
+
+
+5. He walks in the mud and his _________ (dirty, clean)
+  __________ (hat, shoes) make our class __________ (messy, tidy).
+
+
+
+4. I fill in the blanks with the correct words.
+
+
+
+1. I ______ (is, am) in Grade 3 this year.
+
+2. My teacher _________ (is, are) nice to me.
+
+3. John and Dany __________ (is, are) cleaning ____________
+  (its, their) room.
+
+4. We always wash ____________ (its, our) hands before eating.
+
+5. Sara is talking to ____________ (their, her) friend Zoé.
+
+6. “Open ____________ (your, his) books at page 9,” says the teacher.
+
+
+                                                                            23
+ Unit 1 : Welcome to Grade 3
+ 7. Jordan brushes ____________ (her, his) teeth twice a day.
+
+ 8. My dog ___________ (is, are) wagging ________ (its, my) tail.
+
+
+
+          honics
+
+ 5. I write the words below in the correct circles.
+
+
+
+
+ fly      eat        fit       right      sleep      ill
+
+ ship       arrive         sheep       read       funny    island
+
+
+
+
+        /I/ sound			               /aI/ sound			            /i:/ sound
+
+
+
+
+24
+           Unit 2 : Food
+
+
+
+
+ Food
+Unit two
+           2
+
+
+                       25
+ Unit 2 : Food
+      Oral
+
+ Activity 1 – I sing a song about fruits and vegetables.
+
+             Let’s sing a song!
+
+
+
+
+                 I like fruits and vegetables
+
+
+
+
+                       I like oranges. I like oranges.
+                     They are a fruit. They are a fruit.
+             They are round and juicy. They are round and juicy.
+                     They taste good. They taste good.
+
+
+
+
+                    I like cabbages. I like cabbages.
+              They are a vegetable. They are a vegetable.
+        They are green and crunchy. They are green and crunchy.
+                   They taste good. They taste good.
+
+
+
+
+26
+                                                                    Unit 2 : Food
+
+Activity 2 – I listen to and read a short story.               Reading
+
+                            A lunch for mother
+
+It is Mother’s Day. The family is in the kitchen. Suzan wants to prepare
+lunch for her family.
+
+“Who will help me?” Suzan asks.
+“I will cut and fry the fish,” says father.
+“I will wash and cook the rice and vegetables,” says Jenna.
+
+Uncle joins them to eat lunch.
+
+After the meal, Suzan and Jenna give their mother some flowers.
+“Thank you,” says mother. She gives them a big hug.
+
+
+
+
+Keywords: lunch    family   kitchen   fry       cook   meal   hug
+
+
+Activity 2a – I colour the correct box if the answer is true or false.
+
+
+1. Jenna and Suzan are preparing lunch. T          F
+
+2. Suzan cuts the fish.                     T      F
+
+3. The girls give mother some flowers.      T      F
+
+4. Mother does not say thank you.           T      F
+
+
+
+
+                                                                                27
+ Unit 2 : Food
+
+Activity 2b – I choose and write the correct words.
+
+1. In the story, it is ________________________.
+   (Christmas, Mother’s Day, Music Day)
+
+2. The girls are preparing __________________. (dinner, lunch, breakfast)
+
+3. Jenna washes the _______________________.(vegetables, fruits)
+
+4. ___________ joins them for lunch. (Grandma, Uncle)
+
+5. They give mother some __________________. (flowers, cakes)
+
+        Grammar
+
+Activity 3 – I write 'a' or 'an' to complete the sentences.
+
+                 Remember!
+                 In Grade 2 we learned about ‘a’ and ‘an’.
+                 We use ‘an’ when a word starts with a, e, i, o, u.
+
+                 For example: an umbrella, an elephant
+
+It is lunchtime. The Grade 3 Team is near the canteen.
+
+
+
+        In my lunchbox, there is ____ sandwich. I also have ____ orange.
+
+
+                            There is _____ banana and ____
+                            cheese sandwich in my lunch bag!
+
+
+                   I have finished my sandwich.
+                   I will buy ____ chocolate bar.
+
+
+                                  I will buy ____ apple juice.
+
+
+
+
+28
+                                                           Unit 2 : Food
+
+Activity 4 – I circle the correct words.
+
+
+              We learned many of the words below in Grade 2.
+              How many do you remember?
+
+
+
+
+  apple             bedroom           house             garden
+  kitchen           bread             cream             kitchen
+  milk              toilet            bathroom          living room
+
+
+
+
+  oven              basket            shelf             door
+  fridge            plate             cupboard          sink
+  window            shelf             window            basket
+
+
+
+
+  plate             hotdog            cheese            mug
+  fridge            fork              glass             fruit
+  cream             bowl              mug               spoon
+
+
+
+
+  plate             pot               cheese            rolling pin
+  spoon             knife             kettle            towel
+  pan               bowl              mug               soap
+
+                                                                       29
+ Unit 2 : Food
+
+         Writing
+
+
+ Activity 5 – I write a recipe.
+
+          Do you like smoothies?
+          My friends and I love smoothies!
+          Here is a simple recipe.
+
+
+                   FRUIT AND VEGETABLE SMOOTHIE
+                             You will need:
+                            One sliced mango
+                            Two sliced apples
+                      One peeled and sliced carrot
+                            Two sliced pears
+                        One glass of orange juice
+
+
+                              Instructions:
+           1 Put all the fruits and vegetables in the blender.
+           2 Mix everything together.
+           3 Pour into a glass and enjoy!
+
+
+
+
+30
+                                                            Unit 2 : Food
+
+        Let’s write a smoothie recipe together! You may choose words from
+        the list of ingredients given below or add your own.
+
+
+                   FRUIT AND VEGETABLE SMOOTHIE
+  You will need:
+  __________________________________________________
+  __________________________________________________
+  __________________________________________________
+  __________________________________________________
+
+
+  Instructions:
+  1. Put all the ________________________________ in the
+       ____________________________________________.
+  2. ____________________________________________.
+  3. Pour into ___________________________________ and
+       ______________________________________.
+
+
+
+
+List
+
+- Sliced pineapple				                - Sliced red apple
+
+- Carrot						                        - Peeled orange
+
+- One cup of coconut water			         - One glass of orange juice
+
+- Cucumber					                       - Broccoli
+
+                                                                        31
+ Unit 2 : Food
+
+ Activity 6 – I number the pictures in the
+              correct order to make a story.
+
+
+
+
+                                         In the morning, the family eats
+     At night, the family eats dinner.
+                                         breakfast.
+
+
+
+
+     In the afternoon, father goes to          At noon, mother goes
+     the supermarket.                             to the market.
+
+
+
+
+32
+                                                               Unit 2 : Food
+
+                                                          Grammar
+Activity 7 – I learn: Affirmative and negative forms.
+
+Jenna and Suzan are at the market.
+Jenna: This lettuce is fresh.
+Suzan: This pumpkin is not fresh.
+Jenna: Mother likes green apples.
+Suzan: She does not like red apples.
+Jenna: Let’s buy some mangoes.
+Suzan: The mangoes are not ripe.
+
+
+         Did you notice the words in red?
+         Sentences that contain ‘not’ are called negative sentences.
+
+
+Activity 7a – I match the affirmative sentences
+              with the correct negative sentences.
+
+           Affirmative                           Negative
+
+1. He is sad.                               • We do not play tennis.
+2. They are laughing. 		                    • She does not go to school.
+3. She goes to school.                      • He is not sad.
+4. We play tennis.                          • They are not laughing.
+
+Activity 7b – I write 'is not' or 'are not' to complete the sentences.
+
+
+
+
+1. Sarah _______           2. The dogs               3. He __________
+   reading her book.          _______ barking.          drinking milk.
+
+
+
+
+4. They ________ happy.                5. Rani ___________ baking a cake.
+
+
+                                                                           33
+ Unit 2 : Food
+
+          Grammar
+
+ Activity 8 – I learn: Interrogative form.
+
+
+
+
+     What are you doing Suzan?
+
+
+
+
+        I am making a salad.
+        Where is the lettuce?
+
+
+
+
+     It is in the basket.                                Mum will make
+     When are you going to set the table?                the dessert.
+
+
+
+
+                  I will do it later.
+                  Who will make the dessert?
+
+
+
+
+       Did you notice the words in bold?
+       Did you notice the question marks?
+       We use a question mark when asking a question.
+       The words 'what', 'when', 'where' and 'who' are used to ask questions.
+
+34
+                                                               Unit 2 : Food
+
+Activity 8a – I read the sentences and put
+              a question mark(?) or a full-stop(.).
+
+
+1. What is your favourite food __
+2. Mina is reading a book __
+3. Where is your father going __
+4. They are swimming __
+5. When do we have lunch __
+
+
+Activity 8b – I choose who or what and match it to form questions.
+
+
+			
+
+					do you eat everyday ?
+
+     Who				prepares your dinner?
+
+          			              is your teacher’s name?
+
+     What			               sits next to you?
+
+					                      are the pupils doing in the classroom?
+
+
+
+Now, write the interrogative sentences in full.
+
+1. ___________________________________________________
+
+2. ___________________________________________________
+
+3. ___________________________________________________
+
+4. ___________________________________________________
+
+5. ___________________________________________________
+
+
+
+
+                                                                           35
+ Unit 2 : Food
+
+ Activity 8c – I write when or where to complete the questions.
+
+
+ 1. _____________ do you live?
+ 2. ____________ is your birthday?
+ 3. ____________ is dinner time?
+ 4. ____________ are my shoes?
+ 5. ___________ is the restaurant?
+
+
+           honics
+
+                                                       e
+ Activity 9 – I colour the pictures for words with the / / sound.
+
+
+
+
+     bed               book               cheese                    web
+
+
+
+
+     cake              lemon              desk                      dog
+
+
+
+
+     egg               pen                  apple                   key
+
+
+
+36
+                                                         Unit 2 : Food
+
+Activity 10 – I circle words with the / / sound.
+                                      a
+                                                               honics
+
+
+
+
+      box                  snail                   bed
+
+
+
+
+      sock                 hat                     dog
+
+
+
+
+      ear                  car                     pot
+
+
+
+
+      ring                 boat                    mop
+
+
+
+
+                                                                     37
+ Unit 2 : Food
+
+
+         honics
+
+ Activity 11 – I circle the pictures with the /u:/ sound.
+               I write the correct words in the boxes.
+
+
+                 school   group   star   nest   girl   broom
+
+                 boy      soup    spoon tooth   moon   cat
+
+
+
+
+38
+                                              Unit 2 : Food
+
+Activity 12 – I connect the correct letters
+                                                    honics
+              and write the word.
+
+
+
+
+                         k    e    te
+                         p    i    ce
+
+
+
+
+                         k    a    ke
+                         c    e    ak
+
+
+
+
+                         c    e    f
+                         k    a    r
+
+
+
+
+                         d    o    w
+                         c    a    p
+
+
+
+
+                         d    e    t
+                         b    u    ck
+
+
+
+
+                                                          39
+ Unit 2 : Food
+
+
+
+                  n    a   ck
+                  r    o   nk
+
+
+
+
+                 s    o    ck
+                 z     i   nd
+
+
+
+
+                 st   e    ck
+                 st    i   p
+
+
+
+
+                      cl   u     d
+                      tr   o    ck
+
+
+
+
+                      dr   i    ck
+                      br   e    mp
+
+
+
+
+40
+                                                             Unit 2 : Food
+
+
+
+     Unit 2 End of unit Unit two                         2
+1. I tell my friends about my favourite foods and drinks.      Oral
+
+
+
+
+2. I use who, what, when and where to make questions.
+
+
+
+
+       When                        prepares your lunch?
+       What                        do you brush you teeth?
+       Who                         do you go shopping?
+       Where                       is your favourite meal?
+
+
+
+
+1.
+
+2.
+
+3.
+
+4.
+
+
+
+                                                                         41
+ Unit 2 : Food
+
+        Grammar
+
+ 3. I complete the sentences in the negative form.
+
+ 1. Shana ______ ______ baking a cake.
+
+ 2. The children ______ ______ eating their lunch.
+
+ 3. You ______ ______ drinking your milk.
+
+ 4. He ______ ______ cleaning the kitchen.
+
+ 5. We ______ ______ play badminton.
+
+ 6. She ______ ______ like to eat bananas.
+
+
+ 5. I fill in the blanks with the correct words.
+
+ 1. Mum and dad are preparing _______ (a, an) nice dessert in the kitchen.
+
+
+ 2. “__________ (What, Where) have you put the milk?” dad asks.
+
+
+ 3. “I don’t know. I __________ (did, did not) take it. _____________
+ (When, Who) was the last time you used it?” replies mother.
+
+
+ 4. “I used it this morning. ___________ (Who, What) did I do with the
+ bottle of milk?” dad says to himself.
+
+
+ 5. "Here it is! In the oven! _______ (Where, Who) put it here?”
+     mother asks.
+
+
+
+
+42
+                                                         Unit 2 : Food
+
+
+4. I choose and copy the correct words with the /e/ sound.
+   I circle the correct ending of each word.
+
+
+
+
+   				 ending
+   net       pet         ed
+   vet       get         et
+                         ell
+
+
+
+
+                         et
+   hen       ten
+                         ed
+   zen       pen         en
+
+
+
+
+   nest      rest        ell
+                         est
+   dest      test
+                         en
+
+
+
+
+                         ell
+   shell     bell        ed
+   fell      cell        et
+
+
+
+
+                         en
+   red       bed
+                         est
+   ted       shed
+                         ed
+
+
+
+
+                                                                     43
+ Unit 2 : Food
+
+         honics
+
+ 5. I colour the boxes red for words with the sound /u:/. I colour
+ the boxes blue for words with the sound the / /.
+
+
+
+
+      dot                        roof
+
+
+
+
+      zoo                        olive
+
+
+
+
+     room                        food
+
+
+
+
+     frog                      balloon
+
+
+
+
+     sock                          log
+
+
+
+
+44
+            Unit 3 : My Country
+
+
+
+
+My Country
+   Unit three
+                  3
+
+
+                              45
+ Unit 3 : My Country
+
+      Oral
+
+ Activity 1a - I read a poem: Island in the Sun.
+
+
+
+
+                         This is my island in the sun,
+                       This is my island of joy and fun.
+
+
+
+
+                 There is the mountain, there is the tree,
+                        This island is home to me.
+
+
+
+
+                   There is the river, there is the sea,
+                    This island is home to my family.
+
+
+
+
+                   There is the sky, there is the sand,
+                      It is such a beautiful island.
+
+
+
+
+                         This is my island in the sun,
+                       This is my island of joy and fun.
+
+             Can you find words in the poem which rhyme with “bee”?
+             Colour these words.
+
+
+
+46
+                                                           Unit 3 : My Country
+
+
+
+Activity 1b - I write the correct words below each picture.
+
+
+
+
+Activity 2 - I listen and read a letter.                         Reading
+
+                                 A letter to Sam
+Dear Sam,
+
+I am happy you will come to Mauritius on holiday. You will like my beautiful
+island. We will go shopping at Bagatelle Mall. We can go to Flic en Flac beach.
+
+We will eat different foods. You will like our Mauritian fried noodles, dholl
+puri, and biryani. You can drink alouda at Port-Louis market.
+
+I can teach you some Mauritian Creole words. You will help me to speak
+English. I will teach you how to dance the sega. My friend Sonia is excited
+to meet you.
+
+My father and I will be at the airport when you arrive.
+
+See you soon.
+From Wendy.
+
+
+Keywords: holiday    beautiful     island   shopping   excited    airport
+
+
+
+                                                                              47
+ Unit 3 : My Country
+
+ Activity 2a - I tick the correct answer.
+
+
+ 1. Who writes the letter?
+
+
+      Sonia
+      Wendy
+      Jenny
+
+
+ 2. Who will come to Mauritius?
+
+
+      Wendy
+      Sam
+      Darren
+
+
+ 3. Where will Sam and Wendy go shopping?
+
+
+      Cascavelle Mall
+      La Croisette Mall
+      Bagatelle Mall
+
+
+ 4.What food will they eat during Sam’s holiday?
+
+
+      Cupcakes
+      Dholl puri
+      Pizza
+
+
+ 5. What language will Sam help Wendy to speak?
+
+
+      French
+      Creole
+      English
+
+
+
+
+48
+                                                    Unit 3 : My Country
+
+Activity 2b – I write the correct words to complete the sentences.
+
+
+1. Wendy and Sam will go to the ______________.
+2. They can drink alouda at Port-Louis _______________.
+3. Wendy will teach Sam how to __________________ the sega.
+4. Wendy and her father will be at the ____________ when Sam arrives.
+
+
+market   airport   dance    beach
+
+
+
+Activity 3 - I match the words with the corresponding pictures.
+
+
+
+         Do you know that
+         Mauritius is an island?
+
+                           Yes, I know. An island
+                           is surrounded by sea.
+
+
+
+
+    Agalega
+
+
+
+
+    Mauritius
+
+
+
+
+    Rodrigues
+
+
+
+                                                                        49
+ Unit 3 : My Country
+
+          Grammar
+
+ Activity 4 - I learn: nouns.
+
+
+                               Sam comes to Mauritius
+
+ Sam and Wendy are cousins. Sam lives in England. He has come to visit
+ Mauritius. Wendy goes to Sir Seewoosagur Ramgoolam International
+ Airport in Plaine Magnien with her father. They sit on a bench and wait for
+ Sam. There is a dog sleeping nearby.
+ Two pilots walk by and get into a taxi. Then, Wendy’s cousin arrives. Wendy
+ gives him flowers. When they reach home, they see a cat sitting near the
+ door.
+
+
+
+
+                   The words in bold are names of people, places,
+                   animals and things. These words are called
+                   nouns.
+
+          People                    Places                 Animals      Things
+     Sam                 England                     dog             bench
+     Wendy               Mauritius                   cat             taxi
+     cousin              Sir Seewoosagur                             flowers
+                         Ramgoolam International
+                         Airport
+     father              Plaine Magnien                              door
+     pilots              home
+
+50
+                                                              Unit 3 : My Country
+
+Activity 4a - I write the words in the correct boxes.
+
+Rodrigues         sister       book       rabbit          hospital      Mika
+school         teacher       horse       bird        flag        car
+
+
+     People                Places               Animals                Things
+
+
+
+
+Activity 5 - I do a role-play.
+
+
+              Long ago, Mauritius was covered with trees. There were
+              many birds and animals. Let’s learn more about Mauritius.
+
+
+
+                 		      The story of Van Warwick
+
+
+Captain: I am Van Warwick. I am the captain of a big ship.
+         I am sailing in the sea but there is a storm.
+
+Sailor 1: Look! Here is an island! Let’s land on the beach.
+
+
+Captain: I am hungry. Let’s hunt birds to eat.
+
+Sailor 2: There are many trees everywhere.
+         We can use the wood to fix our ship.
+
+Sailor1: We can all stay here for some time.
+
+
+Captain: We must leave now. I will name this island Mauritius.
+
+
+
+
+                                                                                51
+ Unit 3 : My Country
+
+ Activity 5a - I colour the pictures and write the correct words below.
+
+     tree   sailor   bird   island   captain   beach   ship   wood
+
+
+
+
+            Grammar
+
+ Activity 6 - I learn: plural ‘s’.
+
+
+                            Sam and Wendy visit Casela
+
+ "Look, there is a tiger!" Wendy shouts.
+ "I can see two tigers," Sam says.
+ Wendy counts and says: "I can see three tiger."
+ "You're right," says Sam, "but we say 'tigers' because there is more than
+ one."
+
+
+ "Oops! I forgot to add the 's' at the end of the word," Wendy says.
+
+
+       When we have more than one, we add 's' to some words:
+       cousins, birds, lions, tigers
+       These words are in the plural form.
+
+
+
+
+52
+                                                           Unit 3 : My Country
+Activity 6a - I choose the correct words below and
+              write them in the plural.
+
+
+1. Sam and Wendy go to see the                  __________ and
+
+
+______________.
+
+
+2. They play with two ______________ at the mini farm.
+
+
+3. They wash their __________ and then eat their lunch.
+
+
+4. They can hear the ________________ roar.
+
+
+rabbit    foot       zebra     lion   hand       giraffe
+
+
+
+Activity 7 - I learn: plural ‘es’.
+
+
+
+
+           Hey Sam! Don't forget:
+           Sometimes we add 'es' to form the plural of some words.
+
+
+
+                 Singular                             Plural
+
+box                                   boxes
+
+bench                                 benches
+
+dish                                  dishes
+
+potato                                potatoes
+
+
+                                                                             53
+ Unit 3 : My Country
+
+ Activity 7a - I write the plural of the words.
+
+
+ fox            _________			                church        _________
+
+ tomato         _________			                bus           _________
+
+ sandwich       _________			                glass          _________
+
+ class          _________			                match         _________
+
+
+
+ Activity 7b - I choose and write the correct words in the plural
+               form to complete the story.
+
+
+ glass    fox   sandwich    dish   tomato
+
+
+
+ Some _______________ live in the woods.
+
+
+
+ Mother fox is cutting ________________.
+
+
+
+ Father fox is making _____________________.
+
+
+
+ Loulou is putting the _________________ on the table.
+
+
+
+ After lunch, everyone helps to wash and dry the ____________.
+
+
+
+
+54
+                                                         Unit 3 : My Country
+
+
+Activity 8 – I learn: Plural ‘ies’.
+
+
+             Sometimes we add ‘ies’ to form the plural of some words.
+             Look at the example and then write the plural of the words
+             below.
+                 Example:
+
+
+                     baby       		        babies
+
+
+
+
+   fly     ____________                   butterfly   ____________
+
+
+
+
+   bunny     ____________                 family    ____________
+
+
+
+
+   puppy     ___________                  city     ____________
+
+
+
+
+   story    ____________                  lorry    ____________
+
+
+
+                                                                           55
+ Unit 3 : My Country
+
+        Writing
+
+Activity 9 - I write about Mauritius.
+
+Mauritius
+
+
+
+
+               Let’s write about Mauritius! You can use the
+               words given in the box and add your own.
+
+
+ In Mauritius, we can visit _____________________________________
+ ________________________________________________________
+ _______________________________________________________.
+ We can eat ________________________________________________
+ _______________________________________________________.
+ I like to __________________________________________________
+ ______________________________________________________
+ _____________________________________________________.
+
+ swim in the sea - dholl puri - noodles - play with my friends - rice and
+ curry - Casela - Bagatelle - kebab - ride my bicycle - Rochester Falls
+ Black River Gorges - banana tart - pineapple salad - Chamarel Seven
+ Coloured Earth - biryani - Blue Penny Museum - dance sega
+
+56
+                                                         Unit 3 : My Country
+
+Activity 10 - I write the words in the correct             Grammar
+              order to make sentences.
+
+             Do you remember learning how to use 'and' in Grade 2?
+             Help me to do this activity.
+
+
+1.   Sonia      are friends       Wendy        and
+
+
+
+
+2.   and       Wendy          are cousins      Sam
+
+
+
+
+3. a sister      a brother       and        Sonia has
+
+
+
+
+Activity 11- I learn: ‘but’.
+
+
+                              Sabrina and the cupcakes
+
+
+Sabrina can see a box of cupcakes but she cannot reach it.
+Sabrina tries to climb on to the table but it is too high.
+She asks her brother to help her but he is too busy.
+Sabrina feels sad but she does not cry.
+
+
+
+
+             Did you notice the underlined word?
+             We use the word 'but' to put together two different ideas.
+
+
+
+
+                                                                           57
+ Unit 3 : My Country
+
+ Activity 11a - I match part A with the correct part B.
+                I write the complete sentences.
+
+
+                        A                                      B
+
+     1. Wendy goes to the shop                       but she is strong.
+
+     2. The boy kicks the ball                       but it is not cold.
+
+     3. The girl is small                            but he cannot swim.
+
+     4. It is rainy                                  but it is closed.
+
+     5. Mika can ride a bicycle                      but it hits the goal post.
+
+
+
+                Now, write your sentences in full.
+
+
+
+
+ 1. ______________________________________________________
+
+      ______________________________________________________
+
+ 2. ______________________________________________________
+
+      ______________________________________________________
+
+ 3. ______________________________________________________
+
+      ______________________________________________________
+
+ 4. ______________________________________________________
+
+      ______________________________________________________
+
+ 5. ______________________________________________________
+
+      ______________________________________________________
+
+
+
+
+58
+                                                           Unit 3 : My Country
+
+Activity 12 – I learn: ‘or’.
+
+               The word 'or' can also be used to join words and ideas.
+               The word 'or' is used when there is a choice.
+
+
+
+
+Examples:
+
+I can go to school on foot or by car.
+
+Do you want to eat noodles or biryani?
+
+
+Activity 12a - I listen to and read a funny rhyme.
+
+
+
+What do you want?
+
+
+Do you want to see the forest or the sea?
+Do you want a flower or a tree?
+
+
+Do you want to play or sleep?
+Do you want a dragon or a sheep?
+
+
+Do you want to go to school or a shop?
+Do you want a broom or a mop?
+
+
+What do you want?
+I want you to stop!
+
+
+
+
+                       Circle the word 'or' in the poem!
+
+
+
+
+                                                                             59
+ Unit 3 : My Country
+
+ Activity 13 - I learn: Simple present tense.
+
+
+              Let's read these sentences together!
+              Pay attention to the underlined words.
+
+
+
+
+                       I eat rice.
+                       You eat rice
+                       He eats rice.
+                       She eats rice.
+                       It eats rice.
+                       We eat rice.
+                       They eat rice.
+
+
+        The underlined verbs are in the simple present tense.
+        The simple present tense tells us about an action that happens regularly
+        or it tells us something that is generally true.
+        Ex: I go to bed at eight every night. (An action that happens regularly)
+            There are seven days in a week. (Something that is generally true)
+
+
+
+
+                       For the personal pronouns 'he', 'she' and 'it',
+                       we add 's' to the verb.
+                       For example: He eats a cake.
+                                     She drinks her milk.
+                       		            It plays with a toy.
+
+
+
+                           For some verbs, we add 'es':
+                           He goes to school.
+                           She finishes her homework.
+                           It catches the ball.
+
+
+
+60
+                                                                   Unit 3 : My Country
+Activity 13a - I choose the correct verbs to fill in the blanks.
+
+
+  I _________ football.            You _________ a song.          He ________ juice.
+
+
+
+
+                   (play, plays)                 (sings, sing)             (drinks, drink)
+
+
+
+ She _______ in the pool. We __________ in the                   They __________ at
+                                   playground.                   the clown.
+
+
+                (swim, swims)                    (talks, talk)       (laugh, laughs)
+
+
+
+It __________ up the               I __________ music.           She ___________ to
+tree.                                                            dance.
+
+
+
+
+        (climb, climbs)                  (likes, like)                  (likes, like)
+
+
+Activity 13b - I make sentences and I write them down.
+
+
+
+                                     writes
+
+        Tony                         studies                      everyday
+
+        Sonia                        plays                       often
+
+        The girl                     works                       well
+                                     draws
+
+                                     reads
+
+
+
+
+                                                                                        61
+ Unit 3 : My Country
+
+ 1. ______________________________________________________
+
+ 2. ______________________________________________________
+
+ 3. ______________________________________________________
+
+ 4. ______________________________________________________
+
+ 5. ______________________________________________________
+
+ 6. ______________________________________________________
+
+        honics
+
+ Activity 14 - I choose and write the correct cluster of letters.
+
+                            Ch      Sh
+
+
+     __air        __eese         __oe       __erries         __eep
+
+
+
+
+     di__         bea__          fi__          wat__          __ip
+
+
+
+
+            __ell                __ips                bru__
+
+
+
+
+62
+                                                      Unit 3 : My Country
+Activity 15 - I cut and paste the pictures in the correct boxes.
+
+         Can you hear “th” as in thumb in the given words?
+
+            Cut out the words and pictures below. Stick
+            them in the correct boxes on the next page.
+
+
+
+
+       bath                     bottle                       apple
+
+
+
+
+       teeth                    thorn                        house
+
+
+
+
+                 table                     mouth
+
+
+
+
+                                                                        63
+ Unit 3 : My Country
+
+
+
+
+64
+                          Unit 3 : My Country
+
+
+I can hear “th”   I cannot hear “th”
+
+
+
+
+                                            65
+ Unit 3 : My Country
+
+
+
+
+66
+                                                       Unit 3 : My Country
+Activity 16 - I circle the words with the /ð/ sound.
+
+
+
+
+    mother               sun           grandmother              shoes
+
+
+
+
+    clothes             table          grandfather              door
+
+
+
+
+   brother              flower            feather             weather
+
+
+
+
+                                                                         67
+ Unit 3 : My Country
+ Activity 17- I cross out the odd word in each row.
+
+
+
+
+          whale           bird         whiskers       wheel
+
+
+
+
+       wheelchair         whip           tree         wharf
+
+
+
+
+         pencil         whistle          whisk        wheat
+
+
+
+
+      wheelbarrow         hair          whisper       white
+
+
+
+
+68
+                                                     Unit 3 : My Country
+Activity 18- I colour the pictures and I circle the correct words.
+
+
+
+
+     brush                   feet                      park
+     hen                     hammer                    hat
+     beach                   juice                     fish
+
+
+
+
+     bag                     sun                       harp
+     hand                    book                      eye
+     island                  hug                       mountain
+
+
+
+
+     heart                   house                     horse
+     square                  wall                      dog
+     circle                  tree                      mango
+
+
+
+
+                                                                       69
+ Unit 3 : My Country
+
+
+
+ Unit 3 End of unit Unit three
+      Oral
+                                                       3
+ 1. I say what I like and what I like less about my country.
+
+
+
+
+70
+                                                                       Unit 3 : My Country
+
+2. I correct the underlined words in the text.                            Grammar
+
+
+                 I wrote this postcard for my mum but I have made a few
+                 mistakes. Please help me to correct the underlined words.
+
+
+
+
+  Hi mum,
+
+
+  How are you? How is dad? I’m sure he miss       and show me everywhere. Uncle and aunty
+  me a lot! Here it are fine. There are many      are very nice. Together we enjoys ourselves
+  lovely beach to swim and have fun. I goes       every day. They says that you needs to come
+  to the seaside as much as I wants. I eats       here one day.
+  a lot of local meal, especially the different
+  curry. Wendy is really helpful. She bring me    I misses you,
+                                                  Sam
+
+
+
+
+3. I fill in the blanks to complete the sentences.
+
+1. Mary brushes her teeth and ________________________________.
+
+2. Seeven is sick but _______________________________________.
+
+3. Do you want to read a book or _____________________________?
+
+4. I want to play outside but ________________________________.
+
+5. We can go to Blue Bay on foot or __________________________.
+
+
+watch a film                it is raining               by car
+
+washes her face                   he goes to school
+
+                                                                                                71
+ Unit 3 : My Country
+
+         honics
+
+ 4. I pronounce the words below. I pay attention
+    to the sounds shown by the letters in red.
+
+
+ Words with ‘ch’: child, chair, much, chicken, branch,
+ Words with ‘sh’: show, push, shell, wish, shark
+ Words with ‘th’: three, throw, north, month, both
+ Words with ‘th’: the, this, their, brother, with
+
+ 5. I match the correct parts of the words.
+
+       hea                                          py
+
+
+       hor                                          ey
+
+
+       hippo                                        mer
+
+
+       hel                                          pe
+
+
+       he                                           potamus
+
+
+       ham                                          se
+
+
+       hap                                          lo
+
+
+       hon                                          ad
+
+
+       hou                                          rt
+
+
+       ho                                           se
+
+72
+            Unit 4 : Jobs
+
+
+
+
+  Jobs
+Unit four
+            4
+
+
+                        73
+ Unit 4 : Jobs
+       Oral
+
+
+ Activity 1- I listen to and read a rhyme.
+
+
+
+                                        Work hard
+                                                                             ,
+                                         te          r fighting fires
+                       I see a fire figh
+                                       ic ch             anging tyres,
+                        I see a mechan
+                                         ing thro           ugh the air,
+                       I see a pilot fly
+                                  sser cutting                  people’s hair.
+                  I see a hairdre
+
+
+                                          n              with the mail,
+                           I see a postma
+                                       e putting             thieves in jail,
+                       I see the polic
+                                         at the s              wimming pool,
+                       I see a lifeguard
+                                   ers, working                   in the schools.
+                   I see the teach
+
+
+                                              s,            astronauts,
+                               Doctors, nurse
+                                               in th              e courts.
+                               Judges, lawyers
+
+
+
+
+                                                                                       it
+                                        y jobs,               so if you want
+                          There are man
+                                                   go            and get it!
+                                     Work hard and
+                                                                                                            r8)
+                                                                                                ?v=JBXaupIJH
+                                                                       s://www.youtube.com/watch
+                                                  ompatz channel- http
+                                  ople Song' on tt
+                    d from 'The Pe
+     (Source: Adapte
+
+
+
+
+74
+                                                                   Unit 4 : Jobs
+
+Activity 2 – I listen to and read a short story.               Reading
+
+                                Different Jobs
+
+
+Some parents have come to school to talk about their jobs.
+
+“Good morning,” Miss Molly says. “We will play a game. The parents will
+
+describe what they do. The pupils will guess the job.”
+
+The first speaker is Mr. Nailor: “I make trousers, suits, and shirts.”
+
+The pupils shout: “Mr. Nailor is a tailor.”
+
+Mr. Gummer says: “I fix leaking taps and pipes.”
+
+The pupils shout: “Mr. Gummer is a plumber.”
+
+Mrs. Prentis says: “I help to keep teeth clean and healthy.”
+
+“Mrs. Prentis is a dentist,” the pupils shout.
+
+The final speaker is Mrs. Shaker: “I make bread and cakes.”
+
+		         “Mrs. Shaker is a baker,” shout the pupils.
+
+		         “Well done pupils! All the answers are correct,” Miss Molly says.
+
+		
+
+
+
+
+Keywords: parents     job   tailor   plumber     dentist   baker
+
+
+
+
+                                                                               75
+ Unit 4 : Jobs
+
+ Activity 2a – I match the pictures to the words.
+
+
+
+
+                                                    teacher
+
+
+
+
+                                                    baker
+
+
+
+
+                                                    plumber
+
+
+
+
+                                                    tailor
+
+
+
+
+                                                    dentist
+
+
+
+
+76
+                                                                Unit 4 : Jobs
+
+Activity 2b – I use words from the short story to fill in the blanks.
+
+1. Some ___________________ have come to school.
+
+2. The parents talk about their _________.
+
+3. Mr. Gummer fixes ___________ and pipes.
+
+4. Mrs. Prentis helps to keep _____________ clean.
+
+5. Mrs. Shaker makes ______________ and ________________.
+
+
+Activity 3a- I match part A with the correct part B.
+
+
+   Part A						                           Part B
+
+The postman                           fixes vehicles.
+
+The writer                            takes care of our teeth.
+
+The policeman                         builds houses and buildings.
+
+The mechanic                          writes books.
+
+The hairdresser                       cures us when we are sick.
+
+The pilot                             cuts people’s hair.
+
+The dentist                           delivers letters.
+
+The doctor                            cures animals when they are sick.
+
+The builder                           flies airplanes.
+
+The vet                               cares for our security.
+
+
+
+
+                                                                            77
+ Unit 4 : Jobs
+
+ Activity 3b - I play a game: Who am I?
+
+
+
+                  Let's put the letters in the
+                  correct order to make words.
+
+
+
+
+ 		         1. I work on the stage.
+
+ 		              I am an ……………………. (a, c, o,t, r )
+
+
+
+
+ 		         2. I work in a hospital.
+
+ 		              I am a …………………( n, s, r, u, e)
+
+
+
+
+ 		         3. I work in a school.
+
+ 		              I am a ……………………….( t, e, c, e, h, a, r)
+
+
+
+
+ 		         4. I work on a ship.
+
+ 		              I am a ………………………..( s, o, l, i, a, r)
+
+
+
+
+ 		         5. I work in a restaurant.
+
+ 		              I am a ……………….. ( c, e, h, f)
+
+
+
+78
+                                                                      Unit 4 : Jobs
+
+Activity 4 – I learn: Commas.                                 Grammar
+
+
+         Let’s look carefully at the sentences below.
+         Notice the little marks in red.
+
+
+
+
+1. A vet cares for dogs, cats, rabbits and birds.
+
+2. A gardener looks after the flowers, trees, bushes and grass.
+
+
+
+            The little marks, are called commas.
+            We use a comma to separate items on a list.
+            We use ‘and’ before the last item.
+            Circle the word ‘and’ in the sentences above.
+
+
+Activity 4a – I add the commas in the correct places in the sentences.
+
+1. There is a pencil an eraser a ruler and a pen in my pencil case.
+
+2. The musicians are playing guitar drums violin and piano.
+
+3. The lifeguard is a tall strong intelligent and kind man.
+
+4. The mechanics are fixing cars vans and motorbikes.
+
+5. The hairdresser uses combs scissors gel and a hairdryer.
+
+6. My friends are Tony Sonia Mika Wendy and Dax.
+
+
+
+
+                                                                                  79
+ Unit 4 : Jobs
+
+         Grammar
+
+ Activity 6 – I learn: Countable nouns.
+
+
+                   one cake
+
+
+
+
+                 What do you see? Write the correct answers.
+                 One example has been done for you.
+
+
+
+80
+                                                              Unit 4 : Jobs
+
+
+
+                 There are some things that we can count.
+                 We call these ‘countable nouns’.
+
+
+
+
+            Countable nouns can be singular or plural.
+
+
+
+
+          You can use ‘how many’ to ask questions with countable nouns.
+          Let’s practise together!
+
+
+
+
+Activity 5a – I ask questions using “how many”.
+
+
+
+
+How many chairs do you see?    I see ___________ chairs.
+
+
+How many bees do you see? I see ___________ bees.
+
+
+How many flowers do you see?    I see ___________ flowers.
+
+
+
+
+                                                                          81
+ Unit 4 : Jobs
+
+
+ Activity 5b – I learn: Uncountable nouns.
+
+
+
+                 There are some things that we cannot count.
+                 These are called ‘uncountable nouns’.
+
+
+     For example: We cannot count...
+
+
+
+
+          rice             tea             toothpaste          honey
+
+
+
+
+         grass              water             sand             milk
+
+
+
+
+             Uncountable nouns can only be singular.
+
+
+
+
+                        SAY                   DON'T SAY
+
+
+
+                   water                   a water
+
+                   six jugs of water       six waters
+
+                   a little water          a little waters
+
+
+
+
+82
+                                                                Unit 4 : Jobs
+
+
+
+           With uncountable nouns we use ‘much’, ‘a little’, or we
+           use the nouns alone.
+           I have much rice in my plate.
+           There is a little water left in my glass.
+
+
+
+
+Activity 5c – I tick the correct answer.
+
+                                                  Countable   Uncountable
+                                                    noun         noun
+
+1. Tony and Neena are playing with their toys.
+
+2. Neena has two dolls.
+
+3. Wendy wants to eat a little soup.
+
+4. Rahul is eating an orange.
+
+5. Dax is drinking water.
+
+6. They like sitting on the grass.
+
+7. There is much honey in the jar.
+
+
+
+
+                                                                            83
+ Unit 4 : Jobs
+
+         Writing
+
+ Activity 6 – I draw and I write a note.
+
+
+ When I grow up, I want to be a policeman, just like my dad!
+
+
+
+                 What job would you like to do when you grow up?
+                 Draw two jobs you like. Write something about each job.
+
+
+
+
+     I want to be a _______________
+     I like this job because
+
+
+
+
+84
+                                                                      Unit 4 : Jobs
+
+                                                                 Grammar
+Activity 7 – I learn: Future tense.
+
+
+The Grade 3 Team is talking about different jobs.
+
+
+            I will be a policeman                    I will be an airhostess.
+            when I grow up.                          I will travel to many places!
+
+                        I will be a
+                        scientist!                                I will be an artist.
+                                                                  I will paint
+                                                                  beautiful art. I
+                                                                  will be rich!
+
+
+
+
+                                All the friends laugh.
+
+
+
+
+                Did you notice the words in pink?
+                We use will to talk about the future.
+                We use the future tense to talk about something that is
+                going to happen.
+
+
+
+
+   I will    You will      He will    She will   It will   We will    They will
+
+
+
+                                                                                     85
+ Unit 4 : Jobs
+ Activity 7a – I write the verbs in the future tense.
+
+
+ 1. Marc (go) ______________ to the cinema with his family.
+
+
+ 2. They (watch) _____________a film about superheroes.
+
+
+ 3. I (be) ____________ absent tomorrow.
+
+
+
+ Activity 7b – I make sentences and I write them down.
+
+
+
+                 I               be      a fruit salad
+
+                 It            make        to school
+                      will
+             Bella              rain        a poet
+
+             They                go        tomorrow
+
+
+
+
+ 1. ______________________________________________________
+
+
+ 2. ______________________________________________________
+
+
+ 3. ______________________________________________________
+
+
+ 4. ______________________________________________________
+
+
+
+
+86
+                                                             Unit 4 : Jobs
+Activity 8a – I learn: Irregular plural forms.          Grammar
+
+            Remember!
+            Do you remember the plural forms we learnt in Unit 3?
+
+
+
+
+        There are some words that change when there is more than one.
+        Let’s look at the pictures. Write the correct words and read
+        them aloud!
+
+
+
+
+            man
+
+
+
+
+             woman
+
+
+
+
+             child
+
+
+
+
+                                                                         87
+ Unit 4 : Jobs
+
+
+
+
+             foot
+
+
+
+
+                 tooth
+
+
+
+
+             leaf
+
+
+
+
+                     shelf
+
+
+
+
+             mouse
+
+
+
+
+88
+                                             Unit 4 : Jobs
+
+There are some words that do not
+change even when there is more than one.
+
+
+
+
+      grass                                grass
+
+
+          sheep                            sheep
+
+
+
+
+          deer                             deer
+
+
+
+
+                                                         89
+ Unit 4 : Jobs
+
+ Activity 8b – I choose and copy the correct words.
+
+
+             Choose the correct words from the box
+             below and label all the pictures.
+
+
+
+
+                      teeth      leaves     lions
+
+                      men      trees      children
+
+
+
+90
+                             Unit 4 : Jobs
+
+
+
+
+flies   sheep      boxes
+
+feet    tomatoes      dogs
+
+
+
+                                         91
+ Unit 4 : Jobs
+
+         honics
+
+ Activity 9: I circle the pictures and words with the /ʤ/sound.
+
+
+            Let’s learn some more words together.
+
+
+
+
+      jam                  angel              juice       gold fish
+
+
+
+
+      bag                   jar              giraffe         jet
+
+
+
+
+     jungle                jewel             guitar         baby
+
+
+
+92
+                                                       Unit 4 : Jobs
+Activity 10 - I circle the words with the /v/sound.
+
+
+
+
+      boat                      shoes                 clock
+       car                       vest                 vase
+      van                        hat                  bowl
+
+
+
+
+      fruits                    village               guitar
+   vegetables                   forest                drum
+     animals                      sea                 violin
+
+
+
+
+       mop                     volcano                dove
+     broom                       hill                 fish
+     vacuum                     tree                   cat
+
+
+
+
+     waiter                       six                 glove
+      chef                       five                 dress
+       vet                      eight                 foot
+
+
+
+
+                                                                   93
+ Unit 4 : Jobs
+ Activity 11 : I tick the pictures and words with the sound /j/.
+
+
+
+
+      yacht       juice       cloud        Doctor           bag
+
+
+
+
+       jam        yard        sailor         sad          bicycle
+
+
+
+
+      child      teacher       yoyo        postman        waiter
+
+
+
+
+     airplane     grass       yellow         rice          milk
+
+
+
+
+94
+                                                 Unit 4 : Jobs
+
+Activity 12: I make words and write them down.
+
+
+                 z    f     p
+                  l    i    a
+
+
+
+
+                 z    k     ra
+                  p   eb    o
+
+
+
+                 k    o     te
+                 z     i    o
+
+
+
+
+                  s   e     to
+                 z     i    ro
+
+
+
+
+                 d    uzz   te
+                  p   ub    le
+
+
+
+
+                 wi   te    ul
+                 ma   za    rd
+
+
+
+
+                                                             95
+ Unit 4 : Jobs
+
+
+
+     Unit 4 End of unit Unit four
+       Oral
+                                                        4
+ 1. I sing 'The Job Song'.
+
+
+
+
+                           The Job Song
+
+
+          I’m a policeman/fireman/postman/milkman in the town
+
+                       All day long I walk around.
+
+                       It’s my job, it’s what I do
+
+                        It’s my job, I like it too!
+
+
+
+
+96
+                                                                    Unit 4 : Jobs
+
+2. I write the correct words to                                 Vocabulary
+   complete the sentences.
+1. Laura likes to take care of animals. One day she will be a
+  _______________
+
+
+2. It has always been my dream to fly. I hope one day I will be a
+  ________________
+
+
+3. I don’t like thieves. If I become a ________________ I will catch
+  them all.
+
+
+4. Karishma likes to explain things to people. One day she will work as a
+  _______________
+
+
+5. Alvin likes working outside, planting trees and cutting grass.
+  _______________ is his dream job.
+
+
+3. I fill in the blanks with the correct words.                 Grammar
+
+On my way to school, I see __________ (much, many) people working. Most
+
+people work during the day, but ___________ (a few, a little) work during
+
+_________ (the, some) night as well. I hope that __________ (one, many)
+
+day I ___________ (will get, got) ____________ (much, a) job that is
+
+interesting, like being _________ (a, an) doctor. That way, I will be able
+
+to help _________ (child, children), __________ (womans, women),
+
+_________ (men, mans). Everybody! Then, I ________ (was, will be) very
+
+happy.
+
+                                                                                97
+ Unit 4 : Jobs
+
+           honics
+
+ 4a. I circle the words with the /j/ sound and underline words
+     with the /v/ sound.
+ vehicle             five             yogurt		       vet         young
+
+
+ verb             year               you         glove          yes
+
+
+ 4b. I tick the words with the /dʒ/ sound and colour the words
+     with the /z/ sound.
+
+
+ zip             giant              zigzag        jump           zone		
+
+
+ January                 joke          zebra          giraffe         judge
+
+
+
+ 5. I complete the word search.
+
+
+
+            Help me find these different words.                          CHEF
+
+
+                 H       T      E     X      V   E       T
+                                                                         PILOT
+                 C       H      E     F      A   U Q
+                 P       N X          P      N   F       P               NURSE
+
+                 I       P      B     A      K   E       R
+                                                                         BAKER
+                 L       E      C     L      F   H N
+                 O M H O N A                             D               VET
+
+                 T       V      N U          R   S       E
+
+98
+© Mauritius Institute of Education - 2021
+

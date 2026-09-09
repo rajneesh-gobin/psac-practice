@@ -1,0 +1,1730 @@
+Mathematics
+                   Grade1
+
+    Pupil's Book
+       Part 1
+Professor Vassen NAËCK 			 - Head Curriculum Implementation,
+						 Textbook Development and Evaluation
+
+
+
+THE MATHEMATICS PANEL
+
+
+MAURITIUS INSTITUTE OF EDUCATION
+Dr R. NENDURADU				                         - Panel Coordinator, Senior Lecturer
+Ms S. THAPERMALL-RAMASAWMY		                - Lecturer
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mr J. DESCUBES				                          - Primary Educator
+Ms D. OOGARAH				                           - Mentor
+Ms J. APPADOO				                           - Mentor
+SERVICE DIOCÉSAIN DE L'EDUCATION CATHOLIQUE
+Mr M. JOLY					                             - Deputy Head Master
+
+				
+Acknowledgements
+
+VETTING TEAM
+
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mr Y. FOKEERBUX				 - School Inspector
+Mr D. MOHANGOO				  - School Inspector
+Mr K. OOCHIT 				   - School Inspector
+Ms D. RUCHCHAN				  - School Inspector
+Ms T. NATHOO					- School Inspector
+
+MAURITIUS INSTITUTE OF EDUCATION
+Ms R. GUNGAPERSAND			                       - Proof-reading, Lecturer, English Department
+
+
+
+Illustration and layout
+
+GRAPHIC DESIGNER
+Mr Kunal SUMBHOO
+
+
+
+REVIEW
+
+MAURITIUS INSTITUTE OF EDUCATION
+
+Dr Rajeev NENDURADU		               - Coordinator, Senior Lecturer
+
+
+ISBN : 978-99949-37-84-4
+© Mauritius Institute of Education (2021)
+                                      Foreword
+
+
+
+
+MIE has produced a brand new collection of textbooks based on the National
+Curriculum Framework for the Nine Year Continuous Basic Education as from 2016.
+These textbooks have been written by a team of academic staff from MIE, supported
+by experienced Educators, advised by Inspectors, mentors and Deputy Head Masters.
+
+
+We have done our best to ensure that the textbooks enable children to undergo a
+pleasant learning experience. We have taken care to align the textbooks with very
+clearly defined learning outcomes and objectives set for the respective subjects as
+outlined in the National Curriculum Framework, Grades 1 to 6. The textbooks provide
+clear indications of the diverse skills that children should master at each stage.
+
+
+We are also providing a set of teachers’ manuals where we have outlined the
+appropriate techniques and pedagogical approaches so that children are helped
+to make optimal use of the textbook and materials provided. Some of the textbooks
+have been updated and changes effected after receiving feedback from educators.
+
+
+We are thankful to all those who have provided us with constructive feedback, thereby
+enabling us to make this curriculum development endeavour come to fruition. We are
+also thankful to the artists who carried out the illustrations, and to our graphic artists
+who have tried their best to create the right layout for the books. The authors and the
+curriculum team, under the guidance of Professor Vassen Naëck, also deserve our
+thanks.
+
+
+We hope that you enjoy this material and wish you lots of success.
+
+
+
+
+Dr O. Nath Varma
+Director
+Mauritius Institute of Education
+
+
+
+
+                                                                                             i
+                                       Preface
+
+ The Grade 1 Mathematics Pupil’s Workbook and the Teacher’s Book have been
+ developed following the same philosophical principles as presented in the New
+ Curriculum Framework (Primary). The philosophy underpinning the development of the
+ curricular materials is geared towards the holistic development of the pupil. Pedagogical
+ approaches focussing on child-centered as well as activity-based learning have been
+ used. Key mathematical concepts are learnt via themes. This thematic approach
+ enables pupils to enjoy learning as well as to understand the underlying mathematical
+ concepts as they transit from preprimary to primary level.
+
+
+ The mathematical concepts are integrated within the themes. Part I of the curriculum
+ materials consist of three themes namely, Home, School and Games. Moreover, the
+ three main strands at this level are shapes, numbers and measure. The three selected
+ themes are familiar to pupils and enable the latter to link mathematical concepts
+ to their real-life situations. Activities are incorporated so as to help pupils understand
+ mathematical concepts therein. Exercises for pupils are presented in a progressive as
+ well as child-friendly manner. Continuous assessment is also included in the materials
+ presented to gauge pupils’ understanding of mathematical concepts covered at
+ different phases. Profiling is also incorporated at the end of each theme in order to
+ help educators monitor each pupil’s progress after covering it.
+
+
+ Educators are encouraged to make optimal use of the ‘Note to Teacher’ in their book
+ so as to facilitate learning of related mathematical concepts. They should act as
+ facilitators and support pupils to learn key ideas and concepts presented in the Pupil’s
+ Workbook.
+
+
+ The Mathematics Panel sincerely hopes that pupils will have fun in learning fundamental
+ mathematical concepts and also understand the importance of learning Mathematics
+ using the curriculum materials presented to them.
+
+
+
+ Dr R. Nenduradu
+ Coordinator, Mathematics Panel
+
+
+
+
+ii
+TABLE OF CONTENTS
+
+											         Page
+
+Home										1
+		
+Shapes											
+
+Colours						
+
+Numbers
+				
+														
+School 									26
+Numbers										
+
+Length						
+
+Time
+					
+
+Games 									50
+Numbers									
+
+Shapes						
+
+					
+
+
+
+
+                           iii
+                      Learning Objectives
+
+
+At the end of Grade 1 (Part 1), the child should be able to
+
+
+•    recognise, draw and name 2-D shapes - circle, rectangle, square,
+     and triangle
+
+
+•    recognise and name colours - red, blue, yellow, green
+
+
+•    sort objects according to one attribute (shape; colour; size)
+
+
+•    identify and compare shapes in the environment
+
+
+•    recognise, read and write numerals up to 8 (1 to 8)
+
+
+•    count and write numerals up to 8 (1 to 8)
+
+
+•    recognise, read, count and write number names up to 8
+     (one to eight)
+
+
+•    match numerals to a number of items in a group and vice versa
+
+
+•    sort and compare objects according to length
+
+
+•    distinguish between time concepts (day/night; morning/
+     afternoon)
+
+
+•    recognise, complete and create patterns (shapes; numbers)
+
+
+
+
+iv
+                            Shapes
+   Home
+
+
+
+
+                 Hi, I am Anna.
+                 What is your
+                 name?
+
+Hello, nice to
+meet you! I am
+Tom!
+
+
+
+
+                                     1
+Unit
+    1
+Shapes
+Unit
+    2              Anna pays a visit to her friend, Tom, at his place.
+                   “Hello Anna! Welcome to my home.
+                   Please come in and let’s go to the living room.”
+
+
+
+                                                               Tom, I have a
+                                                               gift for you.
+Unit                                                           Here, take it!
+
+
+    3
+                                                        BOOK
+
+
+
+
+ Activity: Picture discussion
+
+    1   Observe carefully and discuss the picture.
+
+
+    2 What gift is Anna giving to Tom?
+
+
+    3 Look at the book cover. What shape is it?
+
+
+
+2
+                                                              Home
+
+
+                                              12 1
+                                         11
+                                    10                2
+                                 9                        3
+                                    8                 4
+                                         7        5
+                                              6
+
+
+
+
+                        Thank you Anna!
+
+
+
+
+Activity: Picture discussion
+
+ 1   Observe the picture carefully and circle the
+     objects having these shapes.
+
+
+
+ 2 Can you identify similar shapes in your classroom?
+
+
+ 3 Can you name the shapes?
+                                                                     3
+Unit
+    1
+Activity: I explore and I draw
+Draw some objects you find in your classroom having these shapes.
+Unit
+    2
+Unit
+    3
+
+
+
+
+                                                     One example
+                                                     has been done
+                                                     for you.
+
+
+
+
+4
+                                                     Home
+Let's work out
+
+1.   Match each object to its corresponding shape.
+
+                       12 1
+                  11
+             10                2
+            9                      3
+             8                 4
+                  7        5
+                       6
+
+
+
+
+                                                               12 1
+                                                          11
+                                                     10                2
+                                                     9                     3
+                                                     8                 4
+                                                          7        5
+                                                               6
+
+
+
+
+2.   Trace around the shapes.
+
+
+
+
+                                                                               5
+Unit
+    1
+
+Unit
+    2
+        Anna, look at                    Oh! Your
+        the window.                      window has two
+                                         rectangles.
+
+Unit
+    3
+    Activity: Name of shapes
+
+
+
+
+                               triangle
+
+                               rectangle
+
+                                circle
+
+                                square
+
+6
+                                     Home
+Let's work out
+
+3.   Trace the name of the shapes.
+
+
+
+
+4.   Cross ( X ) all the circles.
+     Tick ( ) all the triangles.
+
+
+
+
+                                            7
+Unit
+      1
+    Anna and Tom are outside.
+
+    “Look Anna, my father has just painted the house," says Tom.
+
+Unit
+      2
+“Oh! Its roof is as red as tomatoes. Its door is as green as the grass.
+    Its walls are as yellow as these flowers. Its windows are as blue as the sky,”
+    says Anna.
+
+
+
+
+Unit
+      3
+
+
+
+1     Observe carefully and discuss the picture.
+
+
+2 Can you name the colours in the picture?
+
+
+3 Find some objects having these colours.
+
+
+
+
+8
+                                                        Home
+                                                One example
+Let's work out                                  has been done
+                                                for you.
+5.   Circle the items having the same colour.
+
+
+
+
+                                                                9
+ Unit
+      1
+Colours
+ Unit                                    Red
+      2
+ Unit
+      3
+      a red apple                 a red car     two red cherries
+
+
+
+ Let's work out
+
+ 6.       Trace and reproduce the word “red”.
+
+
+
+      red
+      red
+      red
+      red
+
+
+10
+                                      Home
+7.   Tick (   ) the red rectangles.
+
+
+
+
+8.   Colour the triangles     red.
+
+
+
+
+                                         11
+ Unit
+      1
+
+ Unit                                    Blue
+      2
+ Unit
+      3
+      a blue chair             a blue basket     a blue ball
+
+
+
+
+ Let's work out
+
+ 9.       Trace and reproduce the word “blue”.
+
+
+
+      blue
+      blue
+      blue
+      blue
+
+
+12
+                                     Home
+10.   Tick (   ) the blue squares.
+
+
+
+
+11.   Colour the circles     blue.
+
+
+
+
+                                        13
+ Unit
+     1
+Numbers
+ Unit
+     2
+ Unit
+     3
+                                           Your house has
+               My house has                two windows.
+               only one door.
+
+
+
+
+ 1   Observe carefully and discuss the picture.
+
+
+ 2 Can you count the number of windows?
+
+
+ 3 How many doors are there in the house?
+
+
+
+
+14
+                                                  Home
+
+       Number (1)                              This is
+                                             number one.
+
+
+
+
+                                         one apple
+
+
+                                         one pencil
+
+
+           one                           one eraser
+
+
+
+Let's work out
+
+12.   Trace and write the numeral “1”.
+
+
+
+
+                                                           15
+ Unit
+     1
+ Let's work out
+
+ 13.     Trace and write the word “one” in the space provided.
+ Unit
+     2
+ Unit
+ 14. 3   Colour one door blue.
+
+
+
+
+ 15.     Draw and colour one tree.
+
+
+
+
+16
+                                                 Home
+
+       Number (2)                             This is
+                                            number two.
+
+
+
+
+                                         two balloons
+
+
+                                         two shoes
+
+
+           two                           two cherries
+
+
+
+Let's work out
+
+16.   Trace and write the numeral “2”.
+
+
+
+
+                                                          17
+ Unit
+     1
+ Let's work out
+
+ 17.     Trace and write the word “two” in the space provided.
+ Unit
+     2
+ Unit
+ 18. 3   Colour two apples red.
+
+
+
+
+ 19.     Draw and colour two birds.
+
+
+
+
+18
+                                                 Home
+
+Colours
+
+                                   Yellow
+
+
+
+
+ a yellow lemon              a yellow sun   a yellow banana
+
+
+
+Let's work out
+
+20.   Trace and write the word “yellow”.
+
+
+
+      yellow
+      yellow
+      yellow
+      yellow
+
+
+                                                              19
+ Unit
+     1
+ 21.     Tick (   ) the yellow triangles.
+
+
+
+ Unit
+     2
+ Unit
+     3
+ 22.     Colour the squares      yellow.
+
+
+
+
+20
+                                               Home
+
+
+                                    Green
+
+
+
+
+      a green apple           a green leaf   a green cap
+
+
+
+
+Let's work out
+
+23.    Trace and write the word “green”.
+
+
+
+      green
+      green
+      green
+      green
+
+
+                                                           21
+ Unit
+     1
+ 24.     Tick (   ) the green circles.
+
+
+
+ Unit
+     2
+ Unit
+     3
+ 25.     Colour the rectangles           green.
+
+
+
+
+22
+                                               Home
+Continuous Assessment
+1.   Colour the house using the colour code.
+
+
+
+
+                                                  23
+ Unit
+      1
+ 2.       Colour the parts using the colour code.
+
+
+
+ Unit
+      2
+ Unit
+      3
+ (a)      Colour the image as follows:
+
+          1 		blue				2		yellow
+
+
+ (b)      What can you see in the picture when the colours have been added?
+
+
+
+
+ 3.       Describe the character.
+
+
+                                  Tom has _______ ( one , two ) bag.
+
+                                  The bag is _______ ( blue , yellow ).
+
+                                  Tom has _______ ( one , two ) shoes.
+
+                                  The shoes are _______ ( red , green ).
+
+
+24
+Profiling                                              Home
+
+                           Good   Satisfactory   Needs Improvement
+Recognise and
+name four
+different shapes
+(circle, rectangle,
+square, and
+triangle)
+Trace and draw
+four different
+shapes (circle,
+rectangle, square,
+and triangle)
+Recognise and
+name four
+different colours
+(red, blue, yellow,
+green)
+Recognise, read
+and write the
+numerals (1 and
+2) and number
+names (one and
+two)
+Count and write
+numerals and
+number names up
+to 2
+Sort objects
+according to one
+attribute (shape;
+colour)
+
+
+
+       Teacher's Remarks
+
+
+
+
+                                                                     25
+  Unit
+      2
+                   School
+  Unit
+      3
+
+
+
+                I am happy to
+                                    school
+                see my new
+                classroom.
+
+
+
+
+           Anna! Here is
+          our new school.
+
+
+
+
+                                school
+ 26
+26
+                                                      School
+Length
+Anna and Tom are in their new classroom.
+The teacher asks them to remove their pencils.
+
+
+
+
+                                       My pencil is
+                                       short.
+                     My pencil is
+                     long.
+
+
+
+
+ 1   Observe carefully and discuss the picture.
+
+
+ 2 What are Anna and Tom talking about?
+
+
+ 3 Try to compare your pencil or another object with that of
+     a friend in your class.
+
+
+
+
+                                                               27
+ Unit
+     2
+ Try these
+
+ Draw a short pencil.                   Draw a long ruler.
+ Unit
+     3
+
+
+
+
+ Activity: Exploration
+ Draw a long item that you have seen.
+
+
+
+
+                                                   You may draw
+                                                   something that you
+                                                   have seen at home
+                                                   or at school.
+
+
+
+
+28
+                                  School
+Let's work out
+
+1.   Tick (   ) the long ruler.
+
+
+
+
+2.   Colour the short pencil.
+
+
+
+
+                                       29
+ Unit
+     2
+ Unit
+     3                         Hello! I’m
+                               Ishanvee.
+                               I am tall.
+
+
+
+
+                         Hello! I’m
+                         Kaitlyn. I am
+                         short.
+
+
+
+
+ Activity: Who is tall? Who is short?
+
+
+     1   Observe carefully and discuss the picture.
+
+
+     2 Who is short?
+
+
+     3 Who is tall?
+
+
+
+
+30
+                                                               School
+Let's work out
+
+3. (a)    Colour the tall tree.             (b)     Tick (   ) the short boy.
+
+
+
+
+4.       Look at the picture and write the correct word.
+
+
+
+
+               Jessica                                        Sophie
+
+
+
+         Sophie is _________ . ( tall , short )
+
+         Jessica is __________ . ( tall , short )
+
+                                                                                31
+ Unit
+     2
+ Numbers
+ Unit
+ Anna and Tom are counting their school items.
+
+     3
+                                       I have five
+                    I have three       pencils.
+                    erasers and
+                    we have four
+                    copybooks.
+
+
+
+
+     1   Observe carefully and discuss the picture.
+
+
+     2 Can you count the number of pencils?
+
+
+     3 How many copybooks are there on the desk?
+
+
+
+
+32
+                                             School
+
+       Number (3)                           This is
+                                         number three.
+
+
+
+
+                                        three bananas
+
+
+                                        three eggs
+
+
+        three                           three spoons
+
+
+
+Let's work out
+
+5.   Trace and write the numeral “3”.
+
+
+
+
+                                                         33
+ Unit
+      2
+ Let's work out
+
+ 6.   Trace and write the word “three” in the space provided.
+ Unit
+      3
+
+
+ 7.   Colour three pencils.
+
+
+
+
+ 8.   Draw and colour three apples.
+
+
+
+
+34
+                                              School
+
+      Number ( )                             This is
+                                          number four.
+
+
+
+
+                                        four flowers
+
+
+
+
+         four                           four balls
+
+
+
+
+Let's work out
+
+9.   Trace and write the numeral “ ”.
+
+
+
+
+                                                         35
+ Unit
+       2
+ Let's work out
+
+ 10.   Trace and write the word “four” in the space provided.
+ Unit
+       3
+
+
+ 11.   Colour four pencil sharpeners.
+
+
+
+
+ 12.   Draw four boys.
+
+
+
+
+36
+                                              School
+
+       Number (5)                           This is
+                                          number five.
+
+
+
+
+                                         five bags
+
+
+
+
+           five                          five pens
+
+
+
+
+Let's work out
+
+13.   Trace and write the numeral “5”.
+
+
+
+
+                                                         37
+ Unit
+     2
+ Let's work out
+
+ 14.   Trace and write the word “five” in the space provided.
+ Unit
+     3
+
+
+ 15.   Colour five erasers.
+
+
+
+
+ 16.   Draw five books.
+
+
+
+
+38
+                                                      School
+Let's work out
+
+17.   Match the numeral to the correct number name.
+      Trace the number names accordingly.
+
+
+
+
+       1
+
+      2
+
+      3
+
+      4
+
+      5
+                                                           39
+    Unit
+        2
+    Time
+    Unit
+        3
+    Mia is already in bed.
+    “Oh! It is bedtime.
+    The moon and the stars are
+    shining brightly.”
+    “I will have a nice sleep.”
+
+
+
+
+1
+
+
+    Activity: Picture discussion
+
+
+    1   Observe carefully and discuss the pictures 1 and 2.
+
+
+    2 Describe what is happening in the pictures?
+
+
+    3 In which picture is it day time?
+
+
+
+
+40
+                                                School
+
+“It is time to get up.
+The sun is up in the sky”
+“Getting ready for a nice day.”
+
+
+
+
+                                                         2
+
+
+  4 Discuss some activities you do at night?
+
+
+  5 What activities do you do during the day?
+
+
+
+
+                                                     41
+ Unit
+     2
+ Let's work out
+
+ 18.   Colour the two drawings.
+ Unit
+     3
+
+
+
+
+42
+                                                   School
+Let's work out
+
+19.   Match the pictures.
+
+
+
+
+20.   Complete the word with the correct letter.
+
+
+
+                                d            n
+
+                  ight                             ay
+                                                        43
+     Unit
+         2
+    It is breakfast time.
+    Leo is eating his cereals.
+     Unit
+    Then he will get ready to
+
+         3
+    go to school.
+
+
+
+
+1
+
+
+     Activity: Picture discussion
+
+
+     1   Observe carefully and discuss the pictures 1 and 2.
+
+
+     2 At what time do you have breakfast?
+
+
+
+
+44
+                                                      School
+It is snack time.
+“It’s time to get up.
+Leo has just returned
+The sun is up in the sky”
+from school.
+“Getting ready for a nice day.”
+He is eating some snacks.
+
+
+
+
+                                                               2
+
+
+
+
+  3 What do you usually eat at snack time?
+
+
+  4 What activities do you do during the afternoon?
+
+
+
+
+                                                           45
+ Unit
+     2
+ Let's work out
+
+ 21.   Complete with the correct word.
+ Unit
+     3 afternoon                                  morning
+
+
+
+                              It is a beautiful
+                              _____________ .
+                              It is snack time.
+
+
+
+
+ 22.   Match the picture to the correct label.
+
+
+
+                                                    morning
+
+
+                                                   afternoon
+
+46
+                                                        School
+Continuous Assessment
+1.   Match each picture to its corresponding numeral.
+
+
+
+
+                                                         1
+
+                                                         2
+
+                                                         3
+
+                                                         4
+
+                                                         5
+
+                                                             47
+ Unit
+      2
+ 2. (a) Cross (   ) the tall one.		       (a)    Tick (   ) the long one.
+
+
+
+ Unit
+      3
+
+ 3.    Write the missing letter.
+
+
+
+
+                  3                       4                        5
+          th ee                       f         ur             f      ve
+ 4.    Complete with the correct word.
+
+
+                    I eat breakfast in the
+
+                    _______________ .                     afternoon
+
+                    I eat snacks in the
+                                                          morning
+                    _______________ .
+
+
+
+48
+Profiling
+                                                School
+                          Good   Satisfactory   Needs Improvement
+Compare the
+lengths of two
+objects and identify
+long/short object
+Compare the
+lengths of two
+objects and identify
+tall/short objects
+or persons
+Sort objects/
+persons according
+to length (long/
+short; tall/short)
+Distinguish between
+time concepts (day/
+night and morning/
+afternoon)
+Recognise, read,
+count and write
+numerals (3, 4 and
+5) and number
+names (three, four
+and five)
+Match numerals to
+a number of items
+in a group and vice
+versa
+
+
+
+      Teacher's Remarks
+
+
+
+
+                                                                    49
+ Unit
+     3                  Games
+ During recess Tom and Anna are playing hopscotch.
+ “Can you count up to eight?” asks Tom.
+
+
+
+                                             Count up to 8,
+                                             Anna.
+
+
+
+
+     1   Observe carefully and discuss the picture.
+
+
+     2 What are Tom and Anna talking about?
+
+
+     3 Can you identify which numerals do you have on the hopscotch?
+
+
+
+50
+                                         Games
+                                        Measure
+
+      Number (6)                          This is
+                                        number six.
+
+
+
+
+                                         six kites
+
+
+
+
+           six                           six tennis balls
+
+
+
+
+Let's work out
+
+1.   Trace and write the numeral “6”.
+
+
+
+
+                                                            51
+ Unit
+      3
+ Let's work out
+
+ 2.   Trace and write the word “six” in the space provided.
+
+
+
+
+ 3.   Colour six dice.
+
+
+
+
+ 4.   Draw six balls.
+
+
+
+
+52
+                                         Games
+                                        Measure
+
+                                           This is
+      Number (7)                        number seven.
+
+
+
+
+       seven                                seven balls
+
+
+
+Let's work out
+
+5.   Trace and write the numeral “7”.
+
+
+
+
+                                                          53
+ Unit
+      3
+ Let's work out
+
+ 6.   Trace and write the word “seven” in the space provided.
+
+
+
+
+ 7.   Colour seven marbles.
+
+
+
+
+ 8.   Draw seven rackets      .
+
+
+
+
+54
+                                               Games
+                                              Measure
+
+      Number (8)                                 This is
+                                              number eight.
+
+
+
+
+        eight                           eight dolls
+
+
+
+Let's work out
+
+9.   Trace and write the numeral “8”.
+
+
+
+
+                                                              55
+ Unit
+     3
+ Let's work out
+
+ 10.   Trace and write the word “eight” in the space provided.
+
+
+
+
+ 11.   Join the dots to complete the picture.
+
+
+
+
+ 12.   Tick the balls having numeral “8” on them.
+
+
+
+
+               5                          7            3
+
+56
+                                                  Games
+                                                 Measure
+Shapes
+
+
+
+
+1   Observe carefully and discuss the picture.
+
+
+2 What can you see on the table?
+
+
+3 Comment on the shapes and colours.
+
+
+
+
+                                                       57
+ Unit
+     3                                    Look carefully
+                                         at the patterns.
+ Let's work out
+
+ 13.   Tick (   ) the correct pattern.
+
+
+ (a)
+
+
+
+
+ (b)
+
+
+
+
+ (c)
+
+
+
+
+ (d)
+
+
+
+
+58
+                                       Games
+                                      Measure
+Let's work out                      Use the dotted lines
+                                    to trace and complete
+                                    the pattern.
+14.         Complete the pattern.
+
+
+
+      (a)
+
+
+
+
+      (b)
+
+
+
+
+      (c)
+
+
+
+
+      (d)
+
+
+
+
+                                                            59
+ Unit
+     3
+ Let's work out
+
+ 15.   Complete the drawings.
+
+
+ (a)
+
+
+
+
+ (b)
+
+
+
+
+ (c)
+
+
+
+
+60
+                                         Games
+                                        Measure
+Continuous Assessment
+                                        Write the
+                                        correct numeral
+1.   Complete the Hopscotch game.       in the right
+                                        place.
+
+
+                           HOME
+
+
+                     7
+                            6
+                                    4
+                            3
+
+                             1
+                                                          61
+ Unit
+      3
+ 2.   Complete the pattern.
+
+
+
+
+ 3.   Write the missing letter.
+
+
+
+
+          6                       7       8
+            s_x                   s_ven   ei_ht
+
+
+ 4.   Complete and colour the drawing.
+
+
+
+
+62
+                                             Games
+                                            Measure
+5.   Count and write the correct numeral.
+
+
+
+
+                                                  63
+ Unit
+     3Profiling
+                           Good   Satisfactory   Needs Improvement
+ Recognise,
+ complete and
+ create patterns
+
+ Recognise, read,
+ count and write
+ numerals (6,7 and
+ 8) and number
+ names (six, seven
+ and eight)
+
+
+
+
+       Teacher's Remarks
+
+
+
+
+64
+Annex: Memory game    Games
+                     Measure
+
+
+
+
+                           65
+ Unit
+     3
+
+
+
+
+66
+Annex: Memory game
+                      Games
+                     Measure
+
+
+
+
+                           67
+

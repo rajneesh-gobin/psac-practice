@@ -1,0 +1,3359 @@
+                Mauritius Institute of Education
+                         under the aegis of
+Ministry of Education, Tertiary Education, Science and Technology
+Name:
+_____________
+_____________
+Professor V. NAËCK				 - Head Curriculum Implementation,
+						 Textbook Development and Evaluation
+
+THE ENGLISH PANEL
+MAURITIUS INSTITUTE OF EDUCATION
+Dr (Mrs) Aruna ANKIAH-GANGADEEN		           - Panel Coordinator, Associate Professor
+Dr Pascal NADAL				                         - Senior Lecturer
+Ms Reshma GUNGAPERSAND			                   - Lecturer
+
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mrs Sazia Bibi MULUNG				                   - Mentor
+
+				
+Acknowledgements
+
+VETTING TEAM
+MINISTRY OF EDUCATION AND HUMAN RESOURCES, TERTIARY EDUCATION AND SCIENTIFIC RESEARCH
+Mr Nunkishore NEERGHEEN			                  - School Inspector
+Mrs Dineshwaree RUCHCHAN			                 - School Inspector
+Mrs Taramatee NATHOO			                     - School Inspector
+Mr Henrio Douglas POTIÉ			                  - Supervisor (The Arts)
+Mr Dahmiasdeho GOWRY			                     - School Inspector
+Mr Raj-Kumar BEEDASSY			                    - School Inspector
+Mr Doomanlall MOHANGOO			                   - School Inspector
+Mr Krishnaduth OOCHIT			                    - School Inspector
+
+We also thank Ms Melanie ANNEA and Mrs Raynoo RAMDEEHUL, Primary Educators, for their views
+and suggestions
+
+Illustration
+
+Mr Saminaden RAMEN				- Secondary Educator
+
+Layout and colouring of illustrations
+
+GRAPHIC DESIGNER
+
+Mr Isstiac GOOLJAR
+Mr Leveen NOWBOTSING
+
+
+
+
+REVIEW
+MAURITIUS INSTITUTE OF EDUCATION
+Dr (Mrs) Aruna ANKIAH-GANGADEEN		           - Coordinator, Associate Professor
+
+
+
+ISBN : 978-99949-37-80-6
+© Mauritius Institute of Education (2021)
+
+ii
+                                           Foreword
+
+MIE has produced a brand new collection of textbooks based on the National Curriculum Framework
+for the Nine Year Continuous Basic Education as from 2016. These textbooks have been written by
+a team of academic staff from MIE, supported by experienced Educators, advised by Inspectors,
+mentors and Deputy Head Masters.
+
+
+We have done our best to ensure that the textbooks enable children to undergo a pleasant learning
+experience. We have taken care to align the textbooks with very clearly defined learning outcomes
+and objectives set for the respective subjects as outlined in the National Curriculum Framework,
+Grades 1 to 6. The textbooks provide clear indications of the diverse skills that children should master
+at each stage.
+
+
+We are also providing a set of teachers’ manuals where we have outlined the appropriate techniques
+and pedagogical approaches so that children are helped to make optimal use of the textbook and
+materials provided. Some of the textbooks have been updated and changes effected after receiving
+feedback from educators.
+
+
+We are thankful to all those who have provided us with constructive feedback, thereby enabling us
+to make this curriculum development endeavour come to fruition. We are also thankful to the artists
+who carried out the illustrations, and to our graphic artists who have tried their best to create the
+right layout for the books. The authors and the curriculum team, under the guidance of Professor
+Vassen Naëck, also deserve our thanks.
+
+
+We hope that you enjoy this material and wish you lots of success.
+
+
+Dr O. Nath Varma
+Director
+Mauritius Institute of Education.
+
+
+
+
+                                                                                                      iii
+                                          Preface
+
+To Pupils,
+
+The Grade 1 English textbook aims to make your experience of learning English fun and
+successful. The textbook consists of six units based on the following themes: home, school,
+games, food, transport, and animals.
+
+The textbook opens with Getting started. This will help you consolidate your knowledge of
+alphabets and colours through simple activities and games.
+
+This is followed by six units.
+Each of the units has the following sections:
+
+Story time: You will listen to a simple story several times. Your teacher will use a big book. You
+can read together when you are ready.
+
+Vocabulary building: You will learn simple vocabulary on different themes.
+
+Grammar time: You will learn basic grammar so that you can produce simple utterances.
+
+Little writers: You will learn to write words and simple sentences.
+
+Creative fingers: You will carry out creative activities related to the theme of each unit.
+
+Sound it out: You will learn the sounds that letters produce. This will help you to read
+simple words.
+
+ICT activities: You will play ICT games to reinforce language learning.
+
+Cross-curricular themes: You will be taught life skills and values.
+
+Songs/poems: You will learn in a fun way, by singing and reciting poems.
+
+I check what I know: You will assess your learning at the end of every unit.
+
+We hope that you enjoy learning English throughout the year!
+
+The writing team.
+
+
+
+
+iv
+                                      To the teacher
+
+The Grade 1 English textbook has been conceived and written with the aim of making the
+learning of English pleasant and effective for our young learners. Taking into account the pupils’
+current level of proficiency in English, it proposes a set of activities that will develop skills and
+knowledge that will serve as foundation for further learning of the language.
+
+The textbook comprises an introductory section entitled “Getting started” that reinforces
+pupils’ knowledge of alphabets and colours. This is followed by six units with different sections.
+Each section focusses on the development of specific skills and knowledge. Learning is made
+meaningful and fun through content that is based on the experiences of the children and
+topics of interest to them. A variety of activities have been included to sustain interest
+and motivation.
+
+At this level, there is more emphasis on the development of the oral and aural skills, and on
+equipping the pupils with basic vocabulary and grammar. However, literacy skills are also
+developed through the use of big books and simple writing activities. Teachers’ notes are
+interspersed throughout the textbook to assist you in implementing the activities. It is however
+understood that you have a key role in adapting the activities and the pace at which teaching
+will take place according to the profile and needs of your learners. You will also have to
+produce additional resources to support teaching, and devise supplementary activities for
+the consolidation of learning or for remedial action.
+
+Further details about the different components and guidelines for their implementation are
+given below:
+
+Story time: This component serves to introduce learners to simple narrative texts and develop
+budding notions of literacy (cover page, title, author, direction of print, etc.) Use the big book
+over several days according to the procedure detailed on the back cover. Make sure that the
+pace is adapted to the learners’ level. The vocabulary is basic, sentences are simple and the
+texts are short. It is expected that, with appropriate support, pupils will internalise certain
+words and language patterns after they have heard the story a few times, and will be willing
+to join in as you read. The pupils are NOT expected to be able to read on their own nor to
+understand each and every word. To help them understand the storyline and main ideas, point
+to the illustrations in the big book, mime actions, refer to their own experiences, draw from
+prior knowledge, and use additional resources - such as realia or word and picture cards.
+
+Vocabulary building: The vocabulary taught is derived from the theme of each unit and is
+introduced through the story. The activities move from oral to writing, with visual support included
+to ease understanding. Additional resources will nevertheless be required. Word walls can be
+set up in the classroom to ensure that pupils are continuously exposed to the new vocabulary
+as they work on a given unit. You must however draw their attention to these words and
+encourage them to recall their meaning and use them. You may teach additional words
+related to the theme as per the level of your pupils.
+
+
+                                                                                                   v
+Grammar time: Through the teaching of basic grammar points, pupils are empowered to
+produce simple oral utterances. As such, provide as many opportunities for them to practise
+orally the structures introduced. The written activities are included for practice. The aim is not
+to develop mastery of grammar rules but, rather, to develop an awareness of basic rules. As
+indicated in the Teacher’s notes, move from oral to written work. Work out the activities orally
+with the whole class before asking pupils to carry these out in the textbook.
+
+Little writers: In this section, pupils write words and are initiated into the formation of simple
+sentences. They develop an awareness of word and sentence boundaries, and are introduced
+to basic writing conventions, namely the use of capital letters and full stops. In line with the
+whole language approach, you are however encouraged to draw pupils’ attention to these
+aspects of writing in other sections, such as story time.
+
+Creative fingers: As pupils are engaged in a creative activity related to the theme of the unit,
+use the opportunity to expose them further to the English language. This section also has scope
+for cross-curricular teaching, namely the development of life skills and values. Refer to the
+themes indicated on the contents page and address these in your lesson.
+
+Sound it out: Pupils are taught phonics as a precursor to reading and writing. At this level,
+pupils learn to associate letters and sounds. The activities are to be conducted orally and
+pupils must have the opportunity to hear the sounds repeatedly. Visual support and writing
+activities have been included to support learning. Though the phonics section is found at the
+end of the units, do not teach the phonemes one after the other. Rather, spread out the
+teaching of the different phonemes across the unit. You may decide to teach one phoneme
+per week.
+
+ICT activities: The NCF propounds the integration of ICT in all areas. As such, language
+learning and the development of ICT skills take place concurrently as pupils are involved in
+simple interactive games. It is therefore important to provide learners with the opportunity to
+engage in such activities.
+
+Cross-curricular themes: In line with the NCF, a cross-curricular approach has been adopted.
+The themes indicated on the contents page give an indication of aspects of life skills and
+values that can be taught alongside language. Encourage pupils to reflect and share their views
+on issues related to the theme you are dealing with. Pupils may have recourse to their mother
+tongue to better express themselves.
+
+Songs/poems: Songs and poems are beneficial to the teaching and learning of young
+children as they provide further exposure to the English language. As such, a number of
+songs/poems have been included in the textbook. These serve mostly to introduce theme-
+related vocabulary but are also an effective way of making language learning enjoyable.
+Through songs, pupils internalise vocabulary and language patterns more easily and are more
+
+vi
+motivated to participate in the lesson. It is important to note that pupils are NOT expected to
+read the lyrics. These have been included to provide a focus for pupils. It is necessary for them
+to hear the song/poem a few times and they should be encouraged to echo the singer/teacher
+and join in when they feel ready. Adapt songs/poems to suit the local context. Teach over a
+number of lessons if deemed necessary.
+
+I check what I know: End of unit exercises have been included to assess pupils’ learning.
+Since pupils are not independent readers at this point, read out the words/texts and lead them
+through the exercises. An oral exercise has been included because it is important to gauge
+the children’s progress with respect to this skill too. Stagger the assessment over a few days if
+you are unable to conduct it for all pupils in the course of a single lesson. Do, however, make it
+a point to carry out this exercise.
+
+While detailed guidelines regarding the implementation of the activities have been given, the
+onus is on you to use an approach that is suitable for your learners. As for all resources, the
+textbook also needs to be ADAPTED. The different resources that can be used to supplement
+the textbook are indicated but you can use additional materials as deemed necessary. The
+mother tongue can also be used as a tool to support learning but do not make it a habit to
+systematically translate every utterance. Rather, use the language judiciously so that it is an
+effective aid for learners. As far as possible, use actions, realia and visuals to help pupils derive
+meaning from oral and written texts. Focus on key words in English rather than on each and
+every word. Language learning is a process and, though pupils should be exposed to the target
+language as much as possible, it should not be expected that they can make sense of every
+word at once. Rather, build a sound foundation with key vocabulary and basic grammar to
+enable further language learning as they move on to higher levels of primary schooling.
+
+The writing team.
+
+
+
+
+                                                                                                  vii
+                                    Table of contents
+
+ Getting started
+
+ Page                  1-26
+ Learning the
+                       a-z
+ alphabets
+ Naming colours        Red, blue, yellow, green, pink, orange, purple, brown, white, black
+
+ Creative fingers      Letter stand
+
+
+ Page                  27-62                       63-98                           99-139
+
+ Unit                  1. Meet Ben                 2. At school                    3. It’s playtime
+
+ Story time            Good morning, Ben.          Ben goes to school.             Fun at the playground.
+                       •   Members of              •     Days of the week          •     Months
+                           the Family              •     School                    •     Games
+                       •   Greetings               •     Stationery                •     Directions
+ Vocabulary building   •   Action verbs            •     Weather                   •     Action
+                           (self-care routine)                                           verbs (games)
+                       •   Rooms in the house                                      •     Feelings
+                       •   Weather
+                                                   •     Classroom                 •     I/You
+ Grammar time          •   Yes/no
+                                                         instructions              •     Who
+
+ Little writers        Fill in a name tag          Complete words                  Form simple sentences
+
+ Creative Fingers      Paper house                 Little bin                      Football player
+
+                       /b/                         /d/                             /h/
+                       /m/                         /n/                             /e/
+ Sound it out
+                       /f/                         /æ/                             /p/
+                       /s/                         /k/                             /l/
+                                                                                   •     Score a goal
+                                                                                         phonics game
+                                                   •     Clean the garden
+                       •   Click on the balloon                                    •     Take Ben around
+                                                         phonics game
+                           phonics game                                                  the playground
+ ICT activities                                    •     Memory phonics game
+                       •   Listen and match                                              vocabulary game
+                                                   •     Follow the instructions
+                           vocabulary activity                                     •     Say how Ben is
+                                                         vocabulary activity
+                                                                                         feeling vocabulary
+                                                                                         activity
+                       •   Politeness              •     Friendship                •     Politeness
+                           (greeting people)       •     Abiding by rules          •     Life skills
+ Cross-curricular      •   Life skills (hygiene)   •     Keeping the                     (Keeping fit)
+                       •   Importance                    environment clean         •     Team spirit and
+                           of family                                                     fair play
+
+                       •   Hello, good morning. •        The days of               •     If you’re happy and
+                       •   Hello, how are you?           the week                        you know it
+ Songs / poems         •   This is the way we   •        How’s the weather?        •     How about you?
+                           brush our teeth      •        Classroom commands        •     Up and down
+
+                       •   Vocabulary              •     Vocabulary                •     Vocabulary
+ I check what
+                       •   Grammar                 •     Grammar                   •     Grammar
+ I know
+                       •   Phonics                 •     Phonics                   •     Phonics
+
+viii
+                            Learning Outcomes for
+                                 Grade 1 English
+
+
+Pupils should be able to:
+
+Listening
+
+•   Identify familiar sounds from the environment
+•   Demonstrate understanding of simple instructions, directions and questions
+•   Show appreciation of a short aural text
+•   Identify rhyming words in a short aural text
+
+Speaking
+
+•   Demonstrate willingness to join in oral activities
+•   Introduce themselves
+•   Begin to pronounce words accurately with support
+•   Use common greetings and polite forms
+•   Begin to name items related to everyday life
+•   Begin to name actions and feelings
+•   Name the days of the week
+•   Begin to use pronouns
+•   Begin to use common question words
+•   Begin to respond to simple ‘yes/no’ questions
+•   Begin to state position using basic prepositions
+•   Begin to vary intonation according to purpose
+
+Reading
+
+•   Demonstrate understanding that print contains a message
+•   Show interest in reading activities
+•   Recognise and name alphabets
+•   Differentiate between capital and small letters
+•   Demonstrate awareness of basic conventions of text
+•   Provide personal response to a story
+•   Demonstrate phonemic awareness
+
+Writing
+
+•   Write the letters of the alphabet
+•   Begin to recognize word and sentence boundaries
+•   Copy/complete simple words and sentences with support
+•   Begin to use basic punctuation marks
+
+
+
+                                                                                 ix
+Getting started
+    Getting started
+
+
+                                       Hop on t
+                                                 he
+                                       English b
+                                                 us!
+
+
+
+
+                                   is fun!
+                Learning English
+
+
+                                  is fun!
+                 Learning English
+                                    and
+                  We learn to read
+                                      .
+                   We learn to write
+                                   is fun!
+                  Learning English
+                                       d
+                    We play games an
+                      We sing songs.
+
+                                     is fun!
+                   Learning English
+                                   e alphabets!
+               Let’s start with th
+
+
+
+
+2
+Activity 1: We sing the alphabet song.
+
+
+
+
+                  We learn: a, b, c, d, e
+
+
+Activity 2: I play the letter hunt.
+            I find: a, b, c, d, e.
+
+
+
+                                                e
+            a
+                                            b
+
+                                         c
+                               d
+                                                    3
+         Getting started
+
+    Activity 3: I match the children with the correct balloon.
+
+
+
+
+     b               a              d             e              c
+
+
+
+
+                                   C               D             E
+    A            B
+
+
+
+
+4
+Activity 4: I write the alphabets.
+
+
+
+
+                                     5
+    Getting started
+
+
+
+
+6
+                                          That was ea
+                                                      sy! Stay on
+                                          the bus and
+                                                      sing a song:
+                                         ‘The wheels
+                                                      on the bus
+                                         go round an
+                                                     d round’.
+
+
+
+
+                   We learn: f, g, h, i, j
+
+
+Activity 5: I colour the letters as shown.
+
+
+
+
+    g       i       h        j       f
+
+    h       f       g       f        i
+
+    j       g       j        i      h
+
+    h       i       f        i       g
+
+    f       j       h       g        j
+
+                                                                     7
+         Getting started
+
+    Activity 6: Who is in the English bus? I write the missing letter.
+
+
+
+
+                       H                 I
+         ___ ans                                         ___ sabelle
+
+
+
+
+                   J                F                G
+
+
+
+       ___ amila                ___ arzeen                  ___ eeta
+
+
+
+
+8
+Activity 7: I write letters f, g, h, i, j.
+
+
+
+
+                                             9
+     Getting started
+
+
+
+
+10
+                                           Good job!
+                                                      Take a br
+                                          and sing:             eak
+                                                     ‘The more
+                                          get togeth            we
+                                                      er’.
+
+
+
+
+                      We learn: k, l, m, n, o
+
+
+Activity 8: I match the small and capital letters.
+
+
+
+
+   k              l            m              n              o
+
+
+
+
+   M            K                 L           O                  N
+                                                                      11
+           Getting started
+
+     Activity 9: I write the alphabets in the correct order.
+
+
+
+
+                                                                   l
+                                          o
+                               k                   n           m
+
+
+
+
+     Activity 10: I write letters k, l, m, n, o.
+
+
+
+
+12
+13
+          Getting started
+
+                       We learn: p, q, r, s, t
+
+
+     Activity 11: I trace along the dotted lines.
+
+                                    q
+
+
+
+
+                 p                                      r
+
+
+
+
+                        t                           s
+
+
+
+     Activity 12: I match the letters.
+
+
+
+
+                            p                  Q
+                            q                  S
+                            r                  R
+                            s                  T
+                            t                  P
+14
+Activity 13: I write letters p, q , r, s, t.
+
+
+
+
+                                               15
+             Getting started
+
+
+
+
+                                 ere.
+       e ’r e   a lmost th
+     W
+              s i n g  :  ‘Twinkle
+     Let  ’s
+                   l i t t l e star’.
+     twink    l e
+
+
+
+
+16
+                  We learn: u, v, w, x, y, z
+
+
+Activity 14: I connect the dots to guide the rocket.
+
+
+
+
+                                             v
+                       u                               w
+
+
+                                         y
+                   x                                   z
+
+
+Activity 15: I circle the letters indicated.
+
+
+
+  u        sun         house           cup
+
+  v       vase             van        cave
+
+  w        wall        seesaw         wave
+
+
+
+  x         ox             box         six
+
+  y       yoyo          play         yellow
+
+  z        zoo         zebra         pizza
+
+
+                                                           17
+           Getting started
+
+     Activity 16: I write letters u, v, w, x, y, z.
+
+
+
+
+18
+19
+        Getting started
+
+
+
+
+                             r
+      a y ! W e k now all ou
+ Hoor                    g:
+             . Let’s sin
+ alphabets
+              happy’!
+ ‘If you’re
+
+
+
+
+20
+                                Naming colours
+
+
+     Activity 17: We listen to a song - ‘The colours song’.
+
+
+
+
+     Activity 17a: I help the fairy colour the garden.
+
+
+
+
+                              ue
+                           bl
+
+
+                                                                           low
+                                                                       yel
+
+
+                              e en
+                           gr
+
+re
+  d
+                                                                 een
+                                                              gr
+
+
+
+
+                                                                                 d
+                                                                            re
+
+
+
+
+                                                                           21
+           Getting started
+
+     Activity 17b: I trace over the words.
+
+
+
+
+     Activity 18a: I help the fairy colour the flowers.
+
+
+
+
+              k                                               ple
+                                       ge
+
+
+
+
+             n
+          pi                                               ur
+                                      an
+
+
+
+
+                                                          p
+                                    or
+
+
+
+
+22
+Activity 18b: I trace over the words.
+
+
+
+
+Activity 19a: I make patches on the puppies as indicated.
+
+
+
+
+               black
+
+
+
+
+white                                      brown
+
+
+
+
+                                                            23
+          Getting started
+
+     Activity 19b: I trace over the words.
+
+
+
+
+                             Creative fingers
+
+
+
+     Activity 20: Let’s make a letter stand.
+
+
+
+
+       Materials
+       Cardboard of A4 size
+       Wax crayons/Colouring pencils
+       Small decorative items
+       (e.g. filao seeds, glitter)
+       Scissors
+       Glue
+
+
+
+
+24
+Step 1: Fold the cardboard about 8 cm from the bottom.
+
+
+
+
+  8 cm
+
+
+
+
+Step 2: Trace the first letter of your name on the upper part of
+the cardboard.
+
+
+
+
+             I                                     I
+Step 3: Decorate your letter by colouring it. Make drawings or stick
+decorative items on it.
+
+
+
+
+              Your letter stand is ready. Put it on your desk!
+
+                                                                       25
+     Getting started
+
+
+
+
+26
+      1
+Meet Ben!
+ Unit one
+         Unit 1: Meet Ben!
+
+
+
+                              Hello. My name is Ben.
+                              I am a boy.
+                              I am 5 years old.
+                              I am in Grade 1.
+
+
+
+
+     Activity 1: I introduce myself.
+
+
+
+
+                         Tell your friend
+                         about yourself!
+
+
+
+
+            Hello. My name is _________________________ .
+
+
+            I am a ________________ .
+
+
+            I am ______________ years old.
+
+
+            I am in ____________________________ .
+
+
+
+
+28
+                           Little writers
+
+
+Activity 2: I make a name tag.
+
+
+
+
+                  Name ________________
+
+
+                  Class ________________
+
+
+
+
+                      Vocabulary building
+
+
+Activity 3: We listen and sing along.
+
+
+
+
+                      ‘Hello, good morning’
+
+                      Hello, good morning,
+                      Hello, good morning,
+                     How is everyone today?
+
+                       Hello, good morning,
+                       Hello, good morning,
+
+                  I’m so glad you came to play.
+                        The sun is shining,
+                      The birds are singing,
+                  What a way to start the day.
+                        If we keep singing,
+                        Hello good morning,
+                  We’ll be happy come what may.
+
+                  (Source: https://www.youtube.com/
+                       watch?v=ctfDBR90-6Q)
+
+                                                      29
+         Unit 1: Meet Ben!
+
+     Activity 4: The weather chart: I choose the correct drawing
+     		          and I match.
+
+
+
+
+                                                       sunny
+         Today, the weather is
+
+
+
+
+                                                       rainy
+
+
+                                 Storytime
+
+
+     Activity 5: We listen to and read the story: ‘Good morning, Ben’.
+
+
+
+
+30
+Activity 6a: I draw Ben’s family. I match the words with the people.
+
+
+
+
+                             Ben’s family
+
+
+
+
+  mother            father                  Ben          brother
+
+
+                                                                   31
+         Unit 1: Meet Ben!
+
+     Activity 6b: I draw my family. I label the drawing.
+
+
+
+
+                                 My family
+
+
+
+
+mother       sister    brother     father     grandmother   grandfather
+
+
+32
+Activity 7: We learn about greetings.
+
+
+
+
+                      Look at the pictures.
+                      What is Ben doing?
+                      What does he say?
+
+
+
+
+          Good morning!
+                                          Good night.
+
+
+
+
+                                                        Hello.
+
+                 Good bye.
+
+
+
+
+                                                                 33
+         Unit 1: Meet Ben!
+
+     Activity 7a: What does Ben say? I match the pictures with
+     		           the words.
+
+
+
+
+                                                 Good night.
+
+
+
+
+                                                Good morning.
+
+
+
+
+                                                    Hello.
+
+
+
+
+                                                  Goodbye.
+
+
+
+
+                     Tell your friends when
+                     you use these words.
+
+
+
+
+34
+Activity 7b: We listen and sing along.
+
+
+
+
+                      ‘Hello, how are you?’
+
+                        Hello, hello, hello,
+                          How are you?
+                        I’m fine, I’m fine,
+                     I hope that you are too.
+
+                        Hello, hello, hello,
+                          How are you?
+                        I’m fine, I’m fine,
+                     I hope that you are too.
+
+                  (Source: https://www.youtube.com/
+                       watch?v=hqx2phxn_cM)
+
+
+
+
+Activity 8: Taking care of myself.
+
+
+
+
+                      Ben, what do you do
+                      when you wake up?
+
+
+
+
+                           I brush my teeth.
+
+
+
+
+                                                      35
+         Unit 1: Meet Ben!
+
+                     I wash my face.
+
+
+
+
+                                              I comb my hair.
+
+
+
+
+                        I know a fun song.
+                        Let’s sing it together.
+
+
+
+     Activity 8a: We listen and sing along.
+
+
+
+
+                    ‘This is the way we brush our teeth’.
+
+                     This is the way we brush our teeth,
+                             We brush our teeth,
+                             We brush our teeth,
+                     This is the way we brush our teeth,
+                           So early in the morning.
+
+                       This is the way we wash our face,
+                               We wash our face,
+                               We wash our face,
+                       This is the way we wash our face,
+                            So early in the morning.
+
+                       This is the way we comb our hair,
+                               We comb our hair,
+                               We comb our hair,
+                       This is the way we comb our hair,
+                            So early in the morning.
+
+                        (Source: https://www.youtube.com/
+                             watch?v=lUrYQ_h51XM)
+
+
+
+36
+Activity 8b: We play a guessing game.
+
+
+
+
+                That was fun! Let’s play a
+                game now! You must guess
+                    what I am doing.
+
+
+
+
+                               You are brushing
+                                 your teeth.
+
+
+
+
+              Play with us!
+
+
+
+
+Activity 8c: I draw the appropriate picture.
+
+
+
+
+                          I brush my teeth.
+
+
+
+
+                                                  37
+     Unit 1: Meet Ben!
+
+
+                  I wash my face.
+
+
+
+
+                  I comb my hair.
+
+
+
+
+38
+Activity 9: We learn about the rooms in Ben’s house.
+
+
+
+
+                  Where does Ben brush
+                  his teeth?
+
+
+
+
+                             Look at the rooms in
+                             our house and tell us
+                             the answer!
+
+
+
+
+                   bedroom                           bathroom
+
+
+
+
+                  living room                        kitchen
+
+
+
+
+                                                                39
+     Unit 1: Meet Ben!
+
+
+
+
+40
+Activity 9a: I cut the labels and I stick them below the
+		           correct picture.
+
+
+
+
+              bathroom                       kitchen
+
+
+
+
+             living room                    bedroom
+
+
+
+
+                                                           41
+     Unit 1: Meet Ben!
+
+
+
+
+42
+                            Grammar time
+
+
+  Activity 10: “Yes” or “No”.
+
+
+
+Ben and Vick are playing a game.
+
+
+
+
+                                                     Yes.
+                  Is my T-shirt blue?
+
+
+
+
+                    Can I fly?
+                                               No.
+
+
+
+
+  Activity 10a: Let’s play the “Yes/No” game.
+
+
+
+1. Does mother cook in the kitchen?
+2. Do we sleep in the bedroom?
+3. Do we brush our teeth in the dining room?
+4. Is it sunny today?
+5. Is Ben a girl?
+
+
+
+
+                                                            43
+         Unit 1: Meet Ben!
+
+     Activity 10b: I colour the correct box.
+
+
+
+
+                                                         “Kwik, kwik.”
+
+
+      Is Ben brushing                            Does the bird say:
+                                Is it raining?
+         his teeth?                               “Vroom, vroom.”
+
+
+      Yes        No            Yes         No      Yes          No
+
+
+
+
+                               Sound it out
+
+
+
+     Activity 11: /b/
+
+
+
+            “buzz buzz”
+
+
+                                                 Ben is buzzing
+
+                                                 like a busy bee...
+
+                                                 buzz, buzz, buzz.
+
+
+
+
+44
+Activity 11a: I listen and circle the letter that says /b/.
+
+
+
+
+           bee                  ball                 box
+
+
+
+
+           boat                 bat                  bed
+
+
+
+
+Activity 11b: I complete the words. I write the letter ‘b’.
+
+
+
+
+          ___ in                                        ___ ook
+
+
+
+
+              ___ rothers                                  ___ aby
+
+                                                                     45
+         Unit 1: Meet Ben!
+
+     Activity 12: /f/
+
+
+
+
+     Fanny the fox
+
+     Finds the fish
+
+     Fantastic!
+
+
+
+
+     Activity 12a: Let’s play a game. We clap when we hear /f/.
+
+
+
+
+        father            box              fox               hat
+
+
+
+
+         fan             table            family             foot
+
+
+
+
+46
+Activity 12b: I complete the words with the letter that says /f/.
+
+
+
+
+                                               iona
+
+
+
+
+                                       lower
+
+
+                       ish
+     rog
+
+
+
+
+Activity 13: /m/
+
+
+
+
+                                                 Mother makes
+
+                                                 mango milkshake
+
+                                                 on Mondays.
+
+
+
+
+                                                                    47
+         Unit 1: Meet Ben!
+
+     Activity 13a: I find the bones with /m/ words.
+     		            I match them with Max.
+
+
+
+
+                                  mouse          ball
+                                                               man
+
+
+
+
+                                                mothe          boy
+                    moon           fox                  r
+      Max
+
+
+
+
+     Activity 13b: I complete the words with the letter that says /m/.
+
+
+
+
+48
+Activity 14: /s/
+
+
+
+
+                            Hiss, hiss
+                                                  “Hiss hiss,”
+
+                                                  says the snake.
+
+                                                  “I can sing a
+
+                                                  silly song.
+
+                                                  Hiss, hiss.”
+
+
+
+
+Activity 14a: I listen to the words. I cut words with /s/
+		            and paste them in the box.
+
+
+
+
+                                                                    49
+     Unit 1: Meet Ben!
+
+
+
+
+50
+mat     sisters
+
+
+
+
+sofa     foot
+
+
+
+
+socks     sink
+
+
+
+
+                  51
+     Unit 1: Meet Ben!
+
+
+
+
+52
+Activity 14b: I complete the words with the letter that says /s/.
+
+
+
+
+                                     even
+
+
+                                     oap
+
+
+
+
+                                                                    53
+         Unit 1: Meet Ben!
+
+                              Creative fingers
+
+
+
+     Activity 15: Let’s make a house.
+
+
+
+
+      Materials
+
+      Scissors
+      Colouring pencils or crayons
+      Glue
+
+
+
+
+Step 1: Cut out the walls and roof of the house.
+
+
+             Wall
+
+
+
+
+             Roof
+
+
+
+
+54
+Step 2: Draw the windows and the door. Colour your house.
+
+
+
+
+Step 3: Fold the paper as shown. Apply glue on the flaps.
+                  Glue
+
+
+
+
+Glue             Fold                     Fold              Fold
+
+
+
+
+Step 4: Stick the walls and the roof.
+
+Your paper house is ready!
+
+
+
+
+                                                                   55
+     Unit 1: Meet Ben!
+
+
+
+
+56
+57
+     Unit 1: Meet Ben!
+
+
+
+
+58
+                       I check what I know
+
+
+  1. I look at the pictures and I tick the correct words.
+
+
+
+
+                      bedroom                       bathroom
+
+
+
+
+         1                            2
+
+                     living room                       kitchen
+
+
+
+
+         3                            4
+
+
+
+1. Ben’s ______________ is in the bedroom (sister, brother).
+
+2. Ben is in the ______________ (bedroom, bathroom).
+
+3. Father is in the ______________ (bathroom, living room).
+
+4. _____________ is in the kitchen (Father, Mother).
+
+
+
+
+                                                                 59
+         Unit 1: Meet Ben!
+
+     2. I tick the correct sentence.
+
+
+
+
+                                  It is sunny.
+
+
+                                   It is rainy.
+
+
+
+
+                                  “Good morning, Ben.”
+
+
+                                  “Good night, Ben.”
+
+
+
+
+                                  I wash my face.
+
+
+                                  I brush my teeth.
+
+
+
+
+                                  “Hello.”
+
+
+                                  “Good bye.”
+
+
+
+
+60
+4a. I listen and I match words starting with the same sound.
+
+
+
+
+                 man                        sofa
+
+
+
+
+                 fox                        mug
+
+
+
+
+                 bag                        book
+
+
+
+
+                 sun                        fish
+
+
+
+
+4b. I say a word with one of the sounds:
+    /b/, /m/, /f/, /s/.
+
+
+
+
+                                                               61
+     Unit 1: Meet Ben!
+
+
+
+
+62
+      2
+At school
+ Unit two
+     Unit 2: At school
+We learn the days of the week.
+
+
+
+
+                   Hooray! It’s Monday morning.
+                   I’m going to school. We go to
+                   school for five days. Do you
+                   know the days of the week?
+
+
+
+
+     Activity 1: We listen and sing along.
+
+
+                       ‘The days of the week’.
+                                     Monday
+                                     Tuesday
+                                   Wednesday
+                                    Thursday
+                                      Friday
+                                    Saturday
+                                      Sunday
+                                  7 days a week.
+
+                                    It’s Monday
+                                   It’s Tuesday
+                                  It’s Wednesday
+                                   It’s Thursday
+                                     It’s Friday
+
+                             Here comes the weekend.
+                                  It’s Saturday
+                                   It’s Sunday
+
+                             Here comes the weekend.
+                            The weekend’s so much fun!
+
+                           (Source: https://www.youtube.com/
+                                 watch?v=spi77By9-iA)
+
+
+64
+                  I have a favourite
+                  activity everyday!
+
+
+
+
+Activity 1a: I trace the days of the week.
+
+
+
+
+                                             65
+     Unit 2: At school
+
+
+
+
+66
+                            Storytime
+
+
+Activity 2: We listen to and read the story: ‘Ben goes to school.’
+
+
+
+
+                                                                     67
+     Unit 2: At school
+
+                            Vocabulary building
+
+
+     Activity 3: Let’s visit Ben’s school.
+
+
+
+
+                         Hello friends. Let’s
+                         visit my school.
+
+
+
+
+68
+Activity 3a: I match the pictures with the words.
+
+
+
+
+                                                playground
+
+
+
+
+         English class
+
+
+
+                                                    office
+
+
+
+
+                                                classroom
+
+
+
+
+                                                    pupils
+
+
+
+
+                                                    teacher
+
+
+
+
+                                                              69
+     Unit 2: At school
+
+     Activity 4: Let’s visit Ben’s classroom.
+
+
+
+
+                           Come in my classroom.
+                           What can you see?
+
+
+
+
+                                                     whiteboard
+
+
+
+
+                                                   book
+
+                                                          desk    chair
+                     bag
+
+
+
+
+                                    sharpener
+     eraser             ruler
+
+
+
+
+                                                      pencil
+
+
+
+
+70
+Activity 4a: I cut and stick the correct picture in each box.
+
+
+
+
+                   desk                           sharpener
+
+
+
+
+                  chair                             ruler
+
+
+
+
+                  pencil                            eraser
+
+
+
+
+                   bag                           whiteboard
+
+
+
+                                                                71
+     Unit 2: At school
+
+
+
+
+72
+73
+     Unit 2: At school
+
+
+
+
+74
+Activity 4: We listen and sing along.
+
+
+
+                        ‘How’s the weather?’
+
+                         How’s the weather?
+                       How’s the weather today?
+                              Is it sunny?
+                              Is it rainy?
+                             Is it cloudy?
+                              Is it snowy?
+                       How’s the weather today?
+
+                           Let’s look outside
+                          How’s the weather?
+                           Is it sunny today?
+
+                           Let’s look outside
+                          How’s the weather?
+                           Is it rainy today?
+
+                           Let’s look outside
+                          How’s the weather?
+                          Is it cloudy today?
+
+                           Let’s look outside
+                          How’s the weather?
+                          Is it snowy today?
+
+                         How’s the weather?
+                         How’s the weather?
+                       How’s the weather today?
+                              Is it sunny?
+                              Is it rainy?
+                             Is it cloudy?
+                              Is it snowy?
+                       How’s the weather today?
+
+                     (Source: https://www.youtube.com/
+                          watch?v=rD6FRDd9Hew)
+
+
+                                                         75
+     Unit 2: At school
+
+     Activity 5: The weather chart.
+
+
+
+
+                            Hooray! It’s windy today.
+                            We will fly our kites
+                            during the PE class!
+
+
+
+
+     Activity 5a: I write the appropriate words in the blanks.
+
+
+
+
+                            Today is ___________
+
+
+
+ Monday           Tuesday      Wednesday          Thursday       Friday
+
+
+
+
+                       The weather is ____________
+
+
+
+
+          rainy             sunny            windy           cloudy
+
+
+76
+                         Grammar time
+
+
+
+Activity 6: We listen and sing along.
+
+
+
+
+                       ‘Classroom commands’
+
+                              Be quiet.
+                         Take out your book.
+                          Open your book.
+                          Close your book.
+
+                         Stand up. Sit down.
+                          Wiggle all around
+                           And do it again.
+
+                           Pick up your pen.
+                          Put down your pen.
+                              Come here.
+                          Give me your book.
+
+                          Stand up. Sit down.
+                           Wiggle all around
+                            And do it again.
+
+                    (Source: https://www.youtube.com/
+                         watch?v=8UAyg4l_AFw)
+
+
+
+
+                                                        77
+     Unit 2: At school
+
+     Activity 6a: We learn about classroom instructions.
+
+
+
+
+                                School is fun but we
+                                must follow instructions!
+
+
+
+
+                Line up.                        Listen attentively.
+
+
+
+
+                           Open your book.                    Wait for your turn.
+
+
+
+
+                   Raise your hand.                          Stand up.
+
+
+
+
+78
+Activity 6b: I match each instruction with the corresponding picture.
+
+
+
+
+  I raise my hand.
+
+
+
+
+   I open my book.
+
+
+
+
+      I line up.
+
+
+
+
+     I stand up.
+
+
+
+
+                                                                   79
+     Unit 2: At school
+
+
+
+
+80
+Activity 6c: I cut and paste the instructions.
+
+
+
+
+       Sit down.                             Open your book.
+
+
+
+
+       Be quiet.                            Line up.
+
+
+
+
+                                                               81
+     Unit 2: At school
+
+
+
+
+82
+                           Sound it out
+
+
+Activity 7: /d/
+
+
+
+
+                                        Dolly rings the
+
+                                        bell… ding dong
+
+                                        ding dong.
+
+
+
+
+Activity 7a: I listen and colour the letter that says /d/.
+
+
+
+
+           dog                   doll                      duck
+
+
+
+
+          dress                domino                     dolphin
+
+
+
+                                                                    83
+     Unit 2: At school
+
+     Activity 7b: I listen and complete the words. I write the letter ‘d’.
+
+
+
+
+                        __ esk                       __ oll
+
+
+
+
+                       __ uck                        __ og
+
+
+
+
+     Activity 8: /æ/
+
+
+
+
+                                   “ah, ah, ah.”
+
+
+
+
+                                                       The angry ant bit
+
+                                                       Anna. Anna cried:
+
+                                                       “ah, ah, ah.”
+
+
+
+
+84
+Activity 8a: We listen and circle words with /æ/.
+
+
+
+
+          apple                 book                animals
+
+
+
+
+         avocado                pencil                ant
+
+
+
+
+Activity 8b: I listen and complete the words with the letter ‘a’.
+
+
+
+
+                                                                    85
+     Unit 2: At school
+
+     Activity 9: /n/
+
+
+
+
+                                            My new neighbour,
+
+                                            Nelly, is a nice nurse.
+
+
+
+
+     Activity 9a: Let’s play a game. We clap when we hear /n/.
+
+
+
+
+86
+Activity 9b: I complete the words with the letter that says /n/.
+
+
+
+
+Activity 10: /k/
+
+
+
+
+      “click click click.”
+
+
+
+                                                 Kitty the cat is
+
+                                                 clicking pictures
+
+                                                 of the kite.
+
+                                                 click click click.
+
+
+
+
+                                                                      87
+     Unit 2: At school
+
+     Activity 10a: I listen and I trace the letters to complete the words.
+
+
+
+
+88
+Activity 10b: I help Kitty. I cut the pictures on page 91 and
+              stick words that start with /k/ in her box.
+
+
+
+
+                                                                89
+     Unit 2: At school
+
+
+
+
+90
+kite     cap
+
+
+
+
+snake    nose
+
+
+
+
+cake     fan
+
+
+
+
+ cup     key
+
+
+
+
+kettle   mat
+
+
+
+
+                91
+     Unit 2: At school
+
+
+
+
+92
+                         Little writers
+
+
+Activity 11: I add the missing letter and complete the words.
+
+
+
+
+          d                     n                   a
+
+
+
+
+                                                                93
+     Unit 2: At school
+
+                              Creative fingers
+
+
+     Activity 12: Let’s make a little bin.
+
+
+
+
+       Materials
+
+       A paper cup
+       Paint or wax crayons
+       Paper
+       Scissors
+       Glue
+
+
+
+
+Step 1: Paint the paper cup with your favourite colours.
+
+
+
+
+Step 2: Make drawings on paper.
+
+
+
+
+94
+Step 3: Cut and paste them to decorate the bin.
+
+
+
+
+Step 4: Use your bin and keep your classroom clean!
+
+
+
+
+                                                      95
+     Unit 2: At school
+
+                               I check what I know
+
+
+     1. I tick the correct word.
+
+
+
+               English class
+
+
+
+
+         teacher                     ruler             office
+
+           pupil                    eraser           classroom
+
+
+
+
+        sharpener                    chair           whiteboard
+
+          pencil                     desk               bag
+
+
+
+
+96
+ 2. I choose and write the missing days on the beads.
+
+
+
+
+         _______
+Monday             Wednesday                           _______
+                                            Friday                  Sunday
+                               _______
+
+
+
+         Tuesday               Saturday                  Thursday
+
+
+
+
+ 3. I tick the correct instruction for each picture.
+
+
+
+
+                                       Stand up.
+
+                                    Raise your hand.
+
+
+
+
+                                    Open your book.
+
+                                        Line up.
+
+
+
+
+                                                                        97
+     Unit 2: At school
+
+     4a. I listen and I colour the box indicating the correct sound.
+
+
+
+
+                 /a/        /d/               /a/         /n/
+
+
+
+
+                 /n/        /k/               /d/         /k/
+
+
+
+
+     4b. I say a word with one of the sounds: /n/, /a/, /k/, /d/.
+
+
+
+
+98
+         3
+It’s playtime
+  Unit three
+  Unit 3: It’s playtime!
+We learn the months of the year.
+
+
+
+
+                      Look at my birthday gift.
+                      It’s a ball!
+
+
+
+
+  Activity 1: We listen and sing along.
+
+
+
+
+                           ‘The months chart’
+                                  January
+                                 February
+                                   March
+                                    April
+                                     May
+                                    June
+                                     July
+                                   August
+                                 September
+                                  October
+                                  November
+                                  December
+
+
+                    (Source: http://supersimplelearning.com/
+                        songs/original-series/three/the-
+                                 months-chant/)
+
+
+
+
+100
+Activity 2: We talk about games.
+
+
+
+
+                  Do you like to play games?
+
+
+
+
+                            Storytime
+
+
+Activity 3: We listen to and read a story - ‘Fun at the playground!’
+
+
+
+
+                                                                   101
+  Unit 3: It’s playtime!
+
+                        Vocabulary building
+
+
+
+                    We had fun at the playground.
+
+
+
+
+  Activity 4: We listen and sing along.
+
+
+
+
+                   ‘If you’re happy and you know it’.
+
+                    If you’re happy and you know it,
+                          Say ‘hooray, hooray’!
+                    If you’re happy and you know it,
+                          Say ‘hooray, hooray’!
+
+                     If you’re angry and you know it,
+                             Stomp your feet,
+                              Stomp, stomp!
+                     If you’re angry and you know it,
+                             Stomp your feet,
+                              Stomp, stomp!
+
+                     If you’re tired and you know it,
+                               Go to sleep,
+                               Zzzz, Zzzz.
+                     If you’re tired and you know it,
+                               Go to sleep,
+                               Zzzz, Zzzz.
+
+                      If you’re sad and you know it,
+                               Here’s a hug:
+                                 Hug, hug!
+                      If you’re sad and you know it,
+                               Here’s a hug:
+                                 Hug, hug!
+
+
+102
+Activity 4a: We name feelings.
+
+
+
+         Ben is happy.               Ben is sad.
+
+
+
+
+         Ben is bored.               Ben is angry.
+
+
+
+
+Activity 4b: Let’s make smiley faces with playdough.
+
+
+
+
+                  happy                     sad
+
+
+
+
+                  angry                   bored
+                                                       103
+  Unit 3: It’s playtime!
+
+  Activity 4c: I say and copy the words.
+
+
+
+
+      happy             sad                angry     bored
+  ________          ________          ________      ________
+
+
+
+
+  Activity 5: We name actions.
+
+
+
+
+                We push our friend
+                on the swing.
+
+
+
+
+                                 We hang from the
+                                  monkey bars.
+
+
+
+
+104
+              We run and kick
+              the ball.
+
+
+
+
+                                     We jump up
+                                     and down.
+
+
+
+
+Activity 5a: We listen and do actions.
+
+
+
+
+                                It’s more fun with
+                                      a song!
+
+
+
+
+                                                     105
+  Unit 3: It’s playtime!
+
+  Activity 5b: We listen and sing along.
+
+
+
+
+                        ‘How about you?’
+
+                         How about you?
+                         How about you?
+                         How about you?
+                         What can you do?
+
+                         Jump, I can jump.
+                         Jump, I can jump.
+                       Jump, jump, jump, jump,
+                             I can jump.
+
+                         Swim, I can swim.
+                         Swim, I can swim.
+                       Swim, swim, swim, swim,
+                             I can swim.
+
+                    Ride a bike, I can ride a bike.
+                    Ride a bike, I can ride a bike.
+                        Ride, ride, ride, ride,
+                             Ride a bike.
+
+                          How about you?
+                          How about you?
+                          How about you?
+                          What can you do?
+
+                    (Source: https://www.youtube.com/
+                         watch?v=7MKmbyfhkkE)
+
+
+
+
+106
+Activity 5c: I match the words and the pictures.
+
+
+
+
+     jump
+
+
+
+
+     push
+
+
+
+
+      run
+
+
+
+
+      kick
+
+
+
+
+     hang
+
+
+
+
+                                                   107
+  Unit 3: It’s playtime!
+
+
+
+
+                   Football is my favourite
+                   game. What about yours?
+
+
+
+
+  Activity 6a: I name my favourite game.
+
+
+
+
+108
+Activity 6b: I cut and paste the words to label the pictures.
+
+
+
+
+        merry-go-round                        seesaw
+
+
+          monkey bars                 swing             slide
+
+
+                                                                109
+  Unit 3: It’s playtime!
+
+
+
+
+110
+Activity 6c: Let’s play ‘Guess the game’.
+
+
+
+
+                       Watch your friends
+                       perform an action and
+                       guess the game.
+
+
+
+
+Activity 7a: We listen and sing along.
+
+
+
+
+                          ‘Up and down’
+
+                      Up and up and up and up
+                  Things go up and things go down
+                      Up and up, up to the sky
+                     Watch balloons fly and fly
+                             Up up up up
+                          Down down down
+                             Up up up up
+                      And down it comes again.
+
+
+                (Adapted from: https://www.youtube.com/
+                        watch?v=Se618pRAROc)
+
+
+
+
+                                                          111
+  Unit 3: It’s playtime!
+
+  Activity 7b: We play a game - We jump left and right,
+  		           forward and backward.
+
+
+
+
+                         Let’s get moving! Listen
+                         to your teacher. Jump
+                         left or right, forward
+                         or backward!
+
+
+
+
+                           Grammar time
+
+
+
+  Activity 8a: Let’s play a guessing game - We ask questions with ‘who’.
+
+
+
+
+                      Who is your friend?
+
+                      Who has a red pencil?
+
+                      Who has a blue bag?
+
+                      Who has a big pencil case?
+
+
+
+
+112
+Activity 8b: I write ‘who’.
+
+
+
+
+                          a. ________ is he?
+
+                              He is Vick.
+
+
+
+
+           Wat
+              er          b. ________ is she?
+
+                              She is Ben’s mother.
+
+
+
+
+                          c. ________ is playing?
+
+                              Ben is playing.
+
+
+
+
+                          d. ________ is she?
+
+                              She is Ben’s teacher.
+
+
+
+
+                                                      113
+  Unit 3: It’s playtime!
+
+  Activity 9: We learn to use ‘I’ and ‘you’.
+
+
+
+
+                          I am Ben.
+
+
+
+
+                                      You are Vick.
+
+
+
+
+114
+             I am Nikhil.
+
+
+
+
+                            You are Rishabh.
+
+
+
+
+Activity 9a: I write ‘I’.
+
+
+
+
+     ____ have a pencil.           ____ brush my teeth.
+
+
+
+
+        ____ swing.
+
+
+
+
+                                                          115
+  Unit 3: It’s playtime!
+
+      Activity 9b: I write ‘You’.
+
+
+
+
+                             ____ play football.
+
+
+
+
+                               _____ have a pen.
+
+
+
+
+                              ____ are a girl.
+
+
+
+
+116
+                          Little writers
+
+
+
+Activity 10a: I form sentences. I paste them next to
+the correct picture on pg 119.
+
+
+
+
+   Ben and Vick                      go to the playground.
+
+
+
+
+    with their friends.                        They play
+
+
+
+
+     the ball.                                 They kick
+
+
+
+
+   The seesaw                          goes up and down.
+
+
+
+
+                                                             117
+  Unit 3: It’s playtime!
+
+
+
+
+118
+119
+  Unit 3: It’s playtime!
+
+
+
+
+120
+                           Sound it out
+
+
+Activity 11a: /h/
+
+
+
+
+ Happy Harry has a huge hat.
+ Ha ha ha!
+ Harry climbs up the hill.
+ Hurrah! Hurrah! Hurrah!
+
+
+
+
+Activity 11b: I listen and circle the letter that says /h/.
+
+
+
+
+          hat                   hen                    hill
+
+
+
+
+       horse                  hair                  hammer
+
+                                                              121
+  Unit 3: It’s playtime!
+
+  Activity 11c: I trace the letter ‘h’. I write the words again.
+
+
+
+
+                                  en
+
+                              ________
+
+
+
+
+          orse                                          ammer
+
+      ________                                      ________
+
+
+
+
+                                   at
+
+                              ________
+
+
+
+
+122
+Activity 12a: /e/
+
+
+
+
+                                             Elly the elephant and
+                                             his friend Eddy eat
+                                             eggs for breakfast.
+                                             Elly and Eddy have a
+                                             big belly.
+
+
+
+
+Activity 12b: I listen. I colour the item when I hear /e/.
+
+
+
+
+     egg                   house                  elbow
+
+
+
+
+   elephant                  sun
+
+                                                                     123
+  Unit 3: It’s playtime!
+
+  Activity 12c: I complete the words with the letter that says /e/.
+                I draw lines to match.
+
+
+
+
+            ..... gg
+
+
+
+
+         ..... lephant
+
+
+
+
+           ..... lbow
+
+
+
+
+  Activity 13a: /p/
+
+
+                          “Pip! Pip! Pip!”
+                                                Polly plays with her
+                                                puppy. Her puppy is
+                                                called Pip.
+                                                Polly runs after Pip
+                                                and calls: “Pip! Pip! Pip!”
+
+124
+Activity 13b: Let’s play a game. We hop like a rabbit
+		            when we hear /p/.
+
+
+
+
+           pencil                               pawpaw
+
+
+
+
+            pot                                  dress
+
+
+
+
+           frog                                    pan
+
+
+
+
+                                                         125
+  Unit 3: It’s playtime!
+
+  Activity 14c: I complete the words with the letter that says /p/.
+
+
+
+
+                             __ encil
+
+
+
+
+      __ awpaw                                          __ ig
+
+
+
+
+                               __ an
+
+
+
+
+126
+Activity 15a: /l/
+
+
+
+
+                                            Lala the lion has a
+                                            long tail….la la la
+
+
+                                            Lala the lion has long
+                                            legs….la la la
+
+
+
+
+Activity 15b: I listen and trace the letters to complete the words.
+
+
+
+
+                                                                      127
+  Unit 3: It’s playtime!
+
+
+
+
+  Activity 15c: I listen and complete only words starting with /l/.
+  		            I write the words with /l/ again.
+
+
+
+
+      ____ izard     ____ at         ____ ion        ____ en         ____ eaf
+
+
+  _____________    _____________   _____________   _____________   _____________
+
+
+
+
+128
+                              Creative fingers
+
+
+  Activity 16: Let’s make a football player.
+
+
+
+
+       Materials
+
+       Tissue roll
+       Paint or wax crayons
+       Scissors
+       Glue
+
+
+
+
+Step 1: Colour the different parts of the player on page 131.
+
+
+
+
+                   A
+
+
+                   B
+
+
+
+
+                                                                129
+  Unit 3: It’s playtime!
+
+
+
+
+130
+Step 2: Cut out the pieces.
+
+
+
+
+                              A
+
+
+                              B
+
+
+
+
+                                  131
+  Unit 3: It’s playtime!
+
+
+
+
+132
+Step 3: Stick them on the tissue roll as shown.
+
+
+
+
+                                                  A
+
+
+                                                  B
+
+
+
+
+Put your players together to make a football team!
+
+
+
+
+           A                                          A
+
+
+           B                                          B
+
+
+
+
+                                                          133
+  Unit 3: It’s playtime!
+
+                       I check what I know
+
+
+  1. I tick the correct word.
+
+
+
+
+               sad                       bored
+
+             happy                       angry
+
+
+
+
+            seesaw                           slide
+
+             swing                     merry-go-round
+
+
+
+134
+2. I match the word with the picture.
+
+
+
+
+    jump
+
+
+
+
+     kick
+
+
+
+
+     run
+
+
+
+
+                                        135
+  Unit 3: It’s playtime!
+
+  3. I listen to the sound at the beginning of the words. I colour
+     the word yellow when I hear /h/.
+
+
+
+
+                  hat           egg            house          hen
+
+
+
+
+                                                             elbow
+
+
+
+
+                                                            elephant
+
+
+
+
+                            Finish             hill          hand
+
+
+
+
+136
+4. I listen to the sound at the beginning of the words. I cut and
+   paste the pictures on the correct page.
+
+
+
+
+                 /p/                            /l/
+
+
+
+
+    pear               lizard             pen               leaf
+
+
+
+
+                                                                    137
+  Unit 3: It’s playtime!
+
+
+
+
+138
+5. I say ‘I’ or ‘You’.
+
+
+
+
+                         _________ am Ben.
+
+
+
+
+                         _________ are Vick.
+
+
+
+
+                                               139
+© Mauritius Institute of Education - 2021
+
