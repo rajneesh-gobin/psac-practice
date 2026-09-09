@@ -2841,6 +2841,13 @@ function _sameNumber(a, b) {
 const _FRAC_RE = /(^|[^\w\/.])(\d{1,3}|□)\s*\/\s*(\d{1,3}|□)(?=$|[^\w\/]|\.(?!\d))/g;
 const _BOX_NUMERALS = ['①', '②', '③', '④'];
 
+// Unicode fraction glyphs used in authored content (½ ¼ ¾ ⅓ …).
+// _prettyMath normalises them to n/d so _FRAC_RE can stack them the same way.
+const _UNICODE_FRACS = {'½':'1/2','¼':'1/4','¾':'3/4','⅓':'1/3','⅔':'2/3',
+  '⅕':'1/5','⅖':'2/5','⅗':'3/5','⅘':'4/5','⅙':'1/6','⅚':'5/6',
+  '⅛':'1/8','⅜':'3/8','⅝':'5/8','⅞':'7/8'};
+const _UNICODE_FRAC_RE = /[½¼¾⅓⅔⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞]/g;
+
 // A whole number immediately before a fraction is a MIXED number in a PSAC
 // paper ("2 1/2 hours"), and a book prints the two tight against each other, not
 // with a word space between them. Marked up so .frac-mixed can close that gap.
@@ -2848,7 +2855,8 @@ const _MIXED_RE = /(^|[^\w.])(\d{1,3}) (<span class="frac")/g;
 
 function _prettyMath(html) {
   if (typeof html !== 'string') return html;
-  if (html.indexOf('/') < 0 && html.indexOf('□') < 0) return html;
+  if (html.indexOf('/') < 0 && html.indexOf('□') < 0 && !_UNICODE_FRAC_RE.test(html)) return html;
+  _UNICODE_FRAC_RE.lastIndex = 0;
   // Diagrams label themselves; never rewrite anything inside one.
   if (html.indexOf('<svg') >= 0) return html;
 
@@ -2869,12 +2877,15 @@ function _prettyMath(html) {
   const OVER  = fr ? 'sur'   : 'over';
   const BLANK = fr ? 'blanc' : 'blank';
   const say = v => v === '□' ? BLANK : v;
-  let out = html.replace(/(<[^>]+>)|([^<]+)/g, (m, tag, text) =>
-    tag ? tag : text.replace(_FRAC_RE, (_m, pre, n, d) => {
+  let out = html.replace(/(<[^>]+>)|([^<]+)/g, (m, tag, text) => {
+    if (tag) return tag;
+    text = text.replace(_UNICODE_FRAC_RE, c => _UNICODE_FRACS[c] || c);
+    return text.replace(_FRAC_RE, (_m, pre, n, d) => {
       const spoken = `${say(n)} ${OVER} ${say(d)}`;
       return `${pre}<span class="frac" role="img" aria-label="${spoken}" data-tts="${spoken}">` +
              `<span class="fr-n">${n}</span><span class="fr-d">${d}</span></span>`;
-    }));
+    });
+  });
 
   out = out.replace(_MIXED_RE, (_m, pre, whole, span) =>
     `${pre}<span class="frac-mixed">${whole}</span>${span}`);
@@ -9128,7 +9139,7 @@ document.getElementById('exam-flag-btn').addEventListener('click', () => {
 });
 document.getElementById('exam-hint-btn').addEventListener('click', () => {
   const q = S.exam.qs[S.exam.idx];
-  document.getElementById('exam-hint-text').textContent = q?.hint || 'No hint available.';
+  document.getElementById('exam-hint-text').innerHTML = _prettyMath(q?.hint || 'No hint available.');
   document.getElementById('exam-hint-box').classList.toggle('hidden');
 });
 document.getElementById('exit-exam-btn').addEventListener('click', () => {
@@ -9550,7 +9561,7 @@ document.getElementById('practice-hint-btn').addEventListener('click', () => {
   const box     = document.getElementById('practice-hint-box');
 
   if (numEl)   numEl.textContent  = S.practice.hintIdx;
-  if (txtEl)   txtEl.innerHTML    = hint;
+  if (txtEl)   txtEl.innerHTML    = _prettyMath(hint);
   const left = MAX_HINTS - S.practice.hintIdx;
   if (remEl)   remEl.textContent  = left > 0 ? `${left} more hint${left > 1 ? 's' : ''} available` : 'No more hints';
   if (badgeEl) badgeEl.textContent = left > 0 ? left : '✓';
