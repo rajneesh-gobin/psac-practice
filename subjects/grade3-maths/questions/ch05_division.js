@@ -1,0 +1,372 @@
+(function () {
+'use strict';
+
+// ── sharing_equally ───────────────────────────────────────────────────────────
+
+STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g3mth-div-001', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'Share 12 mangoes equally among 3 children. How many does each child get?',
+    options:['4','3','6','5'], answer:'4',
+    hint:'12 ÷ 3 = ?',
+    explanation:'12 ÷ 3 = <b>4</b>. Each child gets 4 mangoes.' }),
+
+  makeMCQ({ id:'g3mth-div-002', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'20 sweets are shared equally among 4 friends. How many sweets does each friend get?',
+    options:['5','4','6','10'], answer:'5',
+    hint:'20 ÷ 4 = ?',
+    explanation:'20 ÷ 4 = <b>5</b>. Each friend gets 5 sweets.' }),
+
+  makeMCQ({ id:'g3mth-div-003', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'Divide 18 flowers equally into 2 vases. How many flowers are in each vase?',
+    options:['9','8','10','6'], answer:'9',
+    hint:'18 ÷ 2 = ?',
+    explanation:'18 ÷ 2 = <b>9</b>. Each vase has 9 flowers.' }),
+
+  makeMCQ({ id:'g3mth-div-004', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'Share 30 lychees equally among 5 children. How many does each child get?',
+    options:['6','5','7','10'], answer:'6',
+    hint:'30 ÷ 5 = ?',
+    explanation:'30 ÷ 5 = <b>6</b>. Each child gets 6 lychees.' }),
+
+  makeMCQ({ id:'g3mth-div-005', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'24 crayons are shared equally among 4 pupils. How many crayons does each pupil get?',
+    options:['6','4','8','5'], answer:'6',
+    hint:'24 ÷ 4 = ?',
+    explanation:'24 ÷ 4 = <b>6</b>. Each pupil gets 6 crayons.' }),
+
+  makeMCQ({ id:'g3mth-div-006', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'Rani shares 16 biscuits equally between herself and her sister. How many each?',
+    options:['8','6','10','4'], answer:'8',
+    hint:'16 ÷ 2 = ?',
+    explanation:'16 ÷ 2 = <b>8</b>. They each get 8 biscuits.' }),
+
+  makeMCQ({ id:'g3mth-div-007', chapterId:'g3mth-division', difficulty:2, subsection:'sharing_equally',
+    question:'Dev has 28 stickers to give equally to 4 friends. How many stickers does each friend get?',
+    options:['7','6','8','5'], answer:'7',
+    hint:'28 ÷ 4 = ?',
+    explanation:'28 ÷ 4 = <b>7</b>. Each friend gets 7 stickers.' }),
+
+  makeMCQ({ id:'g3mth-div-008', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'45 seeds are planted in 5 equal rows. How many seeds are in each row?',
+    options:['9','8','10','5'], answer:'9',
+    hint:'45 ÷ 5 = ?',
+    explanation:'45 ÷ 5 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-009', chapterId:'g3mth-division', difficulty:2, subsection:'sharing_equally',
+    question:'Priya has 36 sweets. She puts them equally into 4 bags. How many sweets in each bag?',
+    options:['9','8','10','6'], answer:'9',
+    hint:'36 ÷ 4 = ?',
+    explanation:'36 ÷ 4 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-010', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'40 apples are shared equally among 10 people. How many apples each?',
+    options:['4','5','3','8'], answer:'4',
+    hint:'40 ÷ 10 = ?',
+    explanation:'40 ÷ 10 = <b>4</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-011', chapterId:'g3mth-division', difficulty:2, subsection:'sharing_equally',
+    question:'Raj has 50 marbles and shares them equally among 5 friends. How many each?',
+    options:['10','8','12','5'], answer:'10',
+    hint:'50 ÷ 5 = ?',
+    explanation:'50 ÷ 5 = <b>10</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-012', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'A box of 27 chocolates is shared equally among 3 children. How many chocolates each?',
+    options:['9','8','10','6'], answer:'9',
+    hint:'27 ÷ 3 = ?',
+    explanation:'27 ÷ 3 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-013', chapterId:'g3mth-division', difficulty:2, subsection:'sharing_equally',
+    question:'Nadia divides 42 beads into 6 equal groups. How many beads in each group?',
+    options:['7','6','8','9'], answer:'7',
+    hint:'42 ÷ 6 = ?',
+    explanation:'42 ÷ 6 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-014', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'35 books are put equally onto 5 shelves. How many books on each shelf?',
+    options:['7','6','8','5'], answer:'7',
+    hint:'35 ÷ 5 = ?',
+    explanation:'35 ÷ 5 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-015', chapterId:'g3mth-division', difficulty:2, subsection:'sharing_equally',
+    question:'Mia has 48 oranges. She puts them equally into 8 baskets. How many oranges in each basket?',
+    options:['6','5','7','8'], answer:'6',
+    hint:'48 ÷ 8 = ?',
+    explanation:'48 ÷ 8 = <b>6</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-016', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'Share 21 stickers equally among 3 friends. How many each?',
+    options:['7','6','8','9'], answer:'7',
+    hint:'21 ÷ 3 = ?',
+    explanation:'21 ÷ 3 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-017', chapterId:'g3mth-division', difficulty:2, subsection:'sharing_equally',
+    question:'A market has 56 papayas packed equally into 7 boxes. How many papayas in each box?',
+    options:['8','7','9','6'], answer:'8',
+    hint:'56 ÷ 7 = ?',
+    explanation:'56 ÷ 7 = <b>8</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-018', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'64 cards are shared equally among 8 players. How many cards each?',
+    options:['8','7','9','6'], answer:'8',
+    hint:'64 ÷ 8 = ?',
+    explanation:'64 ÷ 8 = <b>8</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-019', chapterId:'g3mth-division', difficulty:2, subsection:'sharing_equally',
+    question:'Rani has 72 beads and divides them equally into 9 necklaces. How many beads per necklace?',
+    options:['8','7','9','6'], answer:'8',
+    hint:'72 ÷ 9 = ?',
+    explanation:'72 ÷ 9 = <b>8</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-020', chapterId:'g3mth-division', difficulty:1, subsection:'sharing_equally',
+    question:'There are 90 stickers shared equally among 10 children. How many stickers each?',
+    options:['9','8','10','7'], answer:'9',
+    hint:'90 ÷ 10 = ?',
+    explanation:'90 ÷ 10 = <b>9</b>.' }),
+
+// ── dividing_simple ───────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-div-021', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'15 ÷ 3 = ?',
+    options:['5','4','6','3'], answer:'5',
+    hint:'How many 3s make 15? 3, 6, 9, 12, 15.',
+    explanation:'15 ÷ 3 = <b>5</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-022', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'24 ÷ 4 = ?',
+    options:['6','5','8','4'], answer:'6',
+    hint:'How many 4s make 24? 4, 8, 12, 16, 20, 24.',
+    explanation:'24 ÷ 4 = <b>6</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-023', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'35 ÷ 5 = ?',
+    options:['7','6','8','5'], answer:'7',
+    hint:'How many 5s make 35?',
+    explanation:'35 ÷ 5 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-024', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'40 ÷ 10 = ?',
+    options:['4','5','3','8'], answer:'4',
+    hint:'÷ 10 removes a zero.',
+    explanation:'40 ÷ 10 = <b>4</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-025', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'18 ÷ 2 = ?',
+    options:['9','8','10','6'], answer:'9',
+    hint:'How many 2s make 18?',
+    explanation:'18 ÷ 2 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-026', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'32 ÷ 4 = ?',
+    options:['8','6','10','4'], answer:'8',
+    hint:'How many 4s make 32?',
+    explanation:'32 ÷ 4 = <b>8</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-027', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'30 ÷ 5 = ?',
+    options:['6','5','7','10'], answer:'6',
+    hint:'5, 10, 15, 20, 25, 30 — count to 30.',
+    explanation:'30 ÷ 5 = <b>6</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-028', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'27 ÷ 3 = ?',
+    options:['9','8','6','7'], answer:'9',
+    hint:'3, 6, 9, 12, 15, 18, 21, 24, 27.',
+    explanation:'27 ÷ 3 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-029', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'60 ÷ 10 = ?',
+    options:['6','5','7','60'], answer:'6',
+    hint:'÷ 10 removes a zero.',
+    explanation:'60 ÷ 10 = <b>6</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-030', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'16 ÷ 2 = ?',
+    options:['8','7','9','6'], answer:'8',
+    hint:'How many 2s make 16?',
+    explanation:'16 ÷ 2 = <b>8</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-031', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'45 ÷ 5 = ?',
+    options:['9','8','10','7'], answer:'9',
+    hint:'5 × 9 = 45.',
+    explanation:'45 ÷ 5 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-032', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'20 ÷ 4 = ?',
+    options:['5','4','6','10'], answer:'5',
+    hint:'4, 8, 12, 16, 20.',
+    explanation:'20 ÷ 4 = <b>5</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-033', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'21 ÷ 3 = ?',
+    options:['7','6','8','9'], answer:'7',
+    hint:'3 × 7 = 21.',
+    explanation:'21 ÷ 3 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-034', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'80 ÷ 10 = ?',
+    options:['8','9','7','80'], answer:'8',
+    hint:'÷ 10 removes a zero.',
+    explanation:'80 ÷ 10 = <b>8</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-035', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'14 ÷ 2 = ?',
+    options:['7','6','8','5'], answer:'7',
+    hint:'2 × 7 = 14.',
+    explanation:'14 ÷ 2 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-036', chapterId:'g3mth-division', difficulty:2, subsection:'dividing_simple',
+    question:'28 ÷ 4 = ?',
+    options:['7','6','8','5'], answer:'7',
+    hint:'4 × 7 = 28.',
+    explanation:'28 ÷ 4 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-037', chapterId:'g3mth-division', difficulty:2, subsection:'dividing_simple',
+    question:'25 ÷ 5 = ?',
+    options:['5','4','6','10'], answer:'5',
+    hint:'5 × 5 = 25.',
+    explanation:'25 ÷ 5 = <b>5</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-038', chapterId:'g3mth-division', difficulty:1, subsection:'dividing_simple',
+    question:'12 ÷ 2 = ?',
+    options:['6','5','7','4'], answer:'6',
+    hint:'2 × 6 = 12.',
+    explanation:'12 ÷ 2 = <b>6</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-039', chapterId:'g3mth-division', difficulty:2, subsection:'dividing_simple',
+    question:'36 ÷ 4 = ?',
+    options:['9','8','10','6'], answer:'9',
+    hint:'4 × 9 = 36.',
+    explanation:'36 ÷ 4 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-040', chapterId:'g3mth-division', difficulty:2, subsection:'dividing_simple',
+    question:'50 ÷ 5 = ?',
+    options:['10','9','11','5'], answer:'10',
+    hint:'5 × 10 = 50.',
+    explanation:'50 ÷ 5 = <b>10</b>.' }),
+
+// ── mult_div_link ─────────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-div-041', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'If 4 × 6 = 24, then 24 ÷ 6 = ?',
+    options:['4','6','3','8'], answer:'4',
+    hint:'Division undoes multiplication.',
+    explanation:'If 4 × 6 = 24, then 24 ÷ 6 = <b>4</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-042', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'If 7 × 8 = 56, then 56 ÷ 8 = ?',
+    options:['7','8','6','9'], answer:'7',
+    hint:'Turn the multiplication around.',
+    explanation:'If 7 × 8 = 56, then 56 ÷ 8 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-043', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'Which multiplication fact helps you solve 42 ÷ 7?',
+    options:['7 × 6 = 42','6 × 8 = 48','7 × 5 = 35','8 × 6 = 48'], answer:'7 × 6 = 42',
+    hint:'Find the fact that uses both 42 and 7.',
+    explanation:'7 × 6 = 42, so 42 ÷ 7 = 6.' }),
+
+  makeMCQ({ id:'g3mth-div-044', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'If 5 × 9 = 45, then 45 ÷ 9 = ?',
+    options:['5','9','4','6'], answer:'5',
+    hint:'Use the inverse operation.',
+    explanation:'If 5 × 9 = 45, then 45 ÷ 9 = <b>5</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-045', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'If 3 × 8 = 24, then 24 ÷ 3 = ?',
+    options:['8','3','6','9'], answer:'8',
+    hint:'Division is the inverse of multiplication.',
+    explanation:'If 3 × 8 = 24, then 24 ÷ 3 = <b>8</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-046', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'6 × 7 = 42, so 42 ÷ 6 = ?',
+    options:['7','6','8','9'], answer:'7',
+    hint:'Flip the multiplication.',
+    explanation:'42 ÷ 6 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-047', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'Which fact is in the same family as 9 × 4 = 36?',
+    options:['36 ÷ 9 = 4','36 ÷ 9 = 5','9 + 4 = 13','36 − 9 = 27'], answer:'36 ÷ 9 = 4',
+    hint:'Multiplication and division are in the same fact family.',
+    explanation:'9 × 4 = 36 and 36 ÷ 9 = 4 are in the same fact family.' }),
+
+  makeMCQ({ id:'g3mth-div-048', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'If 8 × 5 = 40, which of these is also true?',
+    options:['40 ÷ 5 = 8','40 ÷ 8 = 5 is wrong','5 × 9 = 40','40 + 8 = 5'], answer:'40 ÷ 5 = 8',
+    hint:'40 ÷ 5 = 8 follows from 8 × 5 = 40.',
+    explanation:'If 8 × 5 = 40, then <b>40 ÷ 5 = 8</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-049', chapterId:'g3mth-division', difficulty:3, subsection:'mult_div_link',
+    question:'Raj knows 6 × 9 = 54. He needs to find 54 ÷ 6. What is the answer?',
+    options:['9','6','8','7'], answer:'9',
+    hint:'Use the multiplication fact to find the division.',
+    explanation:'54 ÷ 6 = <b>9</b> because 6 × 9 = 54.' }),
+
+  makeMCQ({ id:'g3mth-div-050', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'Complete the fact family: 3 × 7 = 21, so 21 ÷ ___ = 7',
+    options:['3','7','21','4'], answer:'3',
+    hint:'Divide by the first number in the multiplication.',
+    explanation:'21 ÷ <b>3</b> = 7, which links to 3 × 7 = 21.' }),
+
+  makeMCQ({ id:'g3mth-div-051', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'Which two facts are in the SAME fact family as 8 × 3 = 24?',
+    options:['24 ÷ 3 = 8 and 24 ÷ 8 = 3','8 + 3 = 11 and 24 − 3 = 21','8 × 2 = 16 and 16 ÷ 8 = 2','3 × 4 = 12 and 12 ÷ 3 = 4'], answer:'24 ÷ 3 = 8 and 24 ÷ 8 = 3',
+    hint:'The fact family includes both division facts.',
+    explanation:'8 × 3 = 24, so the family includes <b>24 ÷ 3 = 8 and 24 ÷ 8 = 3</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-052', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'If 10 × 7 = 70, then 70 ÷ 10 = ?',
+    options:['7','10','6','8'], answer:'7',
+    hint:'Dividing by 10 removes a zero.',
+    explanation:'70 ÷ 10 = <b>7</b> because 10 × 7 = 70.' }),
+
+  makeMCQ({ id:'g3mth-div-053', chapterId:'g3mth-division', difficulty:3, subsection:'mult_div_link',
+    question:'Nadia uses the fact 9 × 6 = 54 to check her division. She divided 54 by 9. What answer should she get?',
+    options:['6','9','5','8'], answer:'6',
+    hint:'54 ÷ 9 = ?',
+    explanation:'54 ÷ 9 = <b>6</b> because 9 × 6 = 54.' }),
+
+  makeMCQ({ id:'g3mth-div-054', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'What is the missing number? 7 × ___ = 63, so 63 ÷ 7 = ___',
+    options:['9','8','7','6'], answer:'9',
+    hint:'7 × 9 = 63.',
+    explanation:'7 × <b>9</b> = 63, so 63 ÷ 7 = 9.' }),
+
+  makeMCQ({ id:'g3mth-div-055', chapterId:'g3mth-division', difficulty:3, subsection:'mult_div_link',
+    question:'Mia divides 72 cookies into groups of 8. She uses the fact 8 × ___ = 72 to help her. How many groups are there?',
+    options:['9','8','7','10'], answer:'9',
+    hint:'8 × 9 = 72.',
+    explanation:'8 × 9 = 72, so 72 ÷ 8 = <b>9</b> groups.' }),
+
+  makeMCQ({ id:'g3mth-div-056', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'If 5 × 7 = 35, then 35 ÷ 7 = ?',
+    options:['5','7','4','6'], answer:'5',
+    hint:'Use the inverse.',
+    explanation:'35 ÷ 7 = <b>5</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-057', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'True or False: If 4 × 8 = 32, then 32 ÷ 4 = 9.',
+    options:['False','True'], answer:'False',
+    hint:'32 ÷ 4 = 8, not 9.',
+    explanation:'32 ÷ 4 = <b>8</b>, not 9. So the statement is <b>False</b>.' }),
+
+  makeMCQ({ id:'g3mth-div-058', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'Which multiplication fact helps you to solve 81 ÷ 9?',
+    options:['9 × 9 = 81','8 × 9 = 72','9 × 7 = 63','9 × 10 = 90'], answer:'9 × 9 = 81',
+    hint:'Find the fact with 81 and 9.',
+    explanation:'9 × 9 = 81, so 81 ÷ 9 = 9.' }),
+
+  makeMCQ({ id:'g3mth-div-059', chapterId:'g3mth-division', difficulty:3, subsection:'mult_div_link',
+    question:'Dev knows that 6 × 7 = 42. He uses this to find how many groups of 6 are in 42. What is his answer?',
+    options:['7','6','8','9'], answer:'7',
+    hint:'42 ÷ 6 = ?',
+    explanation:'42 ÷ 6 = <b>7</b>, because 6 × 7 = 42.' }),
+
+  makeMCQ({ id:'g3mth-div-060', chapterId:'g3mth-division', difficulty:2, subsection:'mult_div_link',
+    question:'Complete: 4 × 7 = 28, so 28 ÷ ___ = 7',
+    options:['4','7','28','3'], answer:'4',
+    hint:'The divisor is the first number in the multiplication fact.',
+    explanation:'28 ÷ <b>4</b> = 7 links to 4 × 7 = 28.' })
+);
+
+})();

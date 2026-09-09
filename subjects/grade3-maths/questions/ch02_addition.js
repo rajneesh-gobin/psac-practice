@@ -1,0 +1,372 @@
+(function () {
+'use strict';
+
+// ── adding_2digit ─────────────────────────────────────────────────────────────
+
+STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g3mth-add-001', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'47 + 35 = ?',
+    options:['82','72','92','81'], answer:'82',
+    hint:'Add the ones: 7+5=12. Write 2, carry 1. Tens: 4+3+1=8.',
+    explanation:'47 + 35 = <b>82</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-002', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'68 + 27 = ?',
+    options:['95','85','105','94'], answer:'95',
+    hint:'Ones: 8+7=15. Carry 1. Tens: 6+2+1=9.',
+    explanation:'68 + 27 = <b>95</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-003', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'59 + 43 = ?',
+    options:['102','92','112','100'], answer:'102',
+    hint:'Ones: 9+3=12. Carry 1. Tens: 5+4+1=10.',
+    explanation:'59 + 43 = <b>102</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-004', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'76 + 18 = ?',
+    options:['94','84','104','93'], answer:'94',
+    hint:'Ones: 6+8=14. Carry 1. Tens: 7+1+1=9.',
+    explanation:'76 + 18 = <b>94</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-005', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'55 + 46 = ?',
+    options:['101','91','111','100'], answer:'101',
+    hint:'Ones: 5+6=11. Carry 1. Tens: 5+4+1=10.',
+    explanation:'55 + 46 = <b>101</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-006', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'83 + 49 = ?',
+    options:['132','122','142','131'], answer:'132',
+    hint:'Ones: 3+9=12. Carry 1. Tens: 8+4+1=13.',
+    explanation:'83 + 49 = <b>132</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-007', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'74 + 58 = ?',
+    options:['132','122','142','131'], answer:'132',
+    hint:'Ones: 4+8=12. Carry 1. Tens: 7+5+1=13.',
+    explanation:'74 + 58 = <b>132</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-008', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'37 + 64 = ?',
+    options:['101','91','111','100'], answer:'101',
+    hint:'Ones: 7+4=11. Carry 1. Tens: 3+6+1=10.',
+    explanation:'37 + 64 = <b>101</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-009', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_2digit',
+    question:'Rani had 57 stickers and Dev gave her 38 more. How many stickers does she have now?',
+    options:['95','85','105','94'], answer:'95',
+    hint:'57 + 38 = ?',
+    explanation:'57 + 38: Ones 7+8=15, carry 1. Tens 5+3+1=9. Answer: <b>95</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-010', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'45 + 65 = ?',
+    options:['110','100','120','105'], answer:'110',
+    hint:'Ones: 5+5=10. Carry 1. Tens: 4+6+1=11.',
+    explanation:'45 + 65 = <b>110</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-011', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'88 + 13 = ?',
+    options:['101','91','111','100'], answer:'101',
+    hint:'Ones: 8+3=11. Carry 1. Tens: 8+1+1=10.',
+    explanation:'88 + 13 = <b>101</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-012', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'29 + 71 = ?',
+    options:['100','90','110','99'], answer:'100',
+    hint:'Ones: 9+1=10. Carry 1. Tens: 2+7+1=10.',
+    explanation:'29 + 71 = <b>100</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-013', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_2digit',
+    question:'A class collected 48 cans on Monday and 56 cans on Tuesday. How many cans in total?',
+    options:['104','94','114','103'], answer:'104',
+    hint:'48 + 56 = ?',
+    explanation:'48 + 56: Ones 8+6=14, carry 1. Tens 4+5+1=10. Answer: <b>104</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-014', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'63 + 79 = ?',
+    options:['142','132','152','141'], answer:'142',
+    hint:'Ones: 3+9=12. Carry 1. Tens: 6+7+1=14.',
+    explanation:'63 + 79 = <b>142</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-015', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_2digit',
+    question:'Priya read 46 pages on Saturday and 67 pages on Sunday. How many pages did she read altogether?',
+    options:['113','103','123','112'], answer:'113',
+    hint:'46 + 67 = ?',
+    explanation:'46 + 67: Ones 6+7=13, carry 1. Tens 4+6+1=11. Answer: <b>113</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-016', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'92 + 19 = ?',
+    options:['111','101','121','110'], answer:'111',
+    hint:'Ones: 2+9=11. Carry 1. Tens: 9+1+1=11.',
+    explanation:'92 + 19 = <b>111</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-017', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'35 + 85 = ?',
+    options:['120','110','130','115'], answer:'120',
+    hint:'Ones: 5+5=10. Carry 1. Tens: 3+8+1=12.',
+    explanation:'35 + 85 = <b>120</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-018', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'57 + 57 = ?',
+    options:['114','104','124','110'], answer:'114',
+    hint:'Ones: 7+7=14. Carry 1. Tens: 5+5+1=11.',
+    explanation:'57 + 57 = <b>114</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-019', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_2digit',
+    question:'Raj had 78 marbles. He won 43 more. How many does he have altogether?',
+    options:['121','111','131','120'], answer:'121',
+    hint:'78 + 43 = ?',
+    explanation:'78 + 43: Ones 8+3=11, carry 1. Tens 7+4+1=12. Answer: <b>121</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-020', chapterId:'g3mth-addition', difficulty:1, subsection:'adding_2digit',
+    question:'66 + 54 = ?',
+    options:['120','110','130','115'], answer:'120',
+    hint:'Ones: 6+4=10. Carry 1. Tens: 6+5+1=12.',
+    explanation:'66 + 54 = <b>120</b>.' }),
+
+// ── adding_3digit ─────────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-add-021', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'234 + 152 = ?',
+    options:['386','376','396','387'], answer:'386',
+    hint:'No carrying needed. Just add each column.',
+    explanation:'234 + 152: 4+2=6, 3+5=8, 2+1=3. Answer: <b>386</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-022', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'467 + 275 = ?',
+    options:['742','732','752','741'], answer:'742',
+    hint:'Ones: 7+5=12, carry 1. Tens: 6+7+1=14, carry 1. Hundreds: 4+2+1=7.',
+    explanation:'467 + 275 = <b>742</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-023', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'309 + 486 = ?',
+    options:['795','785','805','796'], answer:'795',
+    hint:'Ones: 9+6=15, carry 1. Tens: 0+8+1=9. Hundreds: 3+4=7.',
+    explanation:'309 + 486 = <b>795</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-024', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'528 + 364 = ?',
+    options:['892','882','902','891'], answer:'892',
+    hint:'Ones: 8+4=12, carry 1. Tens: 2+6+1=9. Hundreds: 5+3=8.',
+    explanation:'528 + 364 = <b>892</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-025', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'416 + 375 = ?',
+    options:['791','781','801','790'], answer:'791',
+    hint:'Ones: 6+5=11, carry 1. Tens: 1+7+1=9. Hundreds: 4+3=7.',
+    explanation:'416 + 375 = <b>791</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-026', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'157 + 436 = ?',
+    options:['593','583','603','592'], answer:'593',
+    hint:'Ones: 7+6=13, carry 1. Tens: 5+3+1=9. Hundreds: 1+4=5.',
+    explanation:'157 + 436 = <b>593</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-027', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'643 + 278 = ?',
+    options:['921','911','931','920'], answer:'921',
+    hint:'Ones: 3+8=11, carry 1. Tens: 4+7+1=12, carry 1. Hundreds: 6+2+1=9.',
+    explanation:'643 + 278 = <b>921</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-028', chapterId:'g3mth-addition', difficulty:3, subsection:'adding_3digit',
+    question:'255 + 345 = ?',
+    options:['600','590','610','601'], answer:'600',
+    hint:'Ones: 5+5=10, carry 1. Tens: 5+4+1=10, carry 1. Hundreds: 2+3+1=6.',
+    explanation:'255 + 345 = <b>600</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-029', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'483 + 319 = ?',
+    options:['802','792','812','801'], answer:'802',
+    hint:'Ones: 3+9=12, carry 1. Tens: 8+1+1=10, carry 1. Hundreds: 4+3+1=8.',
+    explanation:'483 + 319 = <b>802</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-030', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'176 + 548 = ?',
+    options:['724','714','734','723'], answer:'724',
+    hint:'Ones: 6+8=14, carry 1. Tens: 7+4+1=12, carry 1. Hundreds: 1+5+1=7.',
+    explanation:'176 + 548 = <b>724</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-031', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'300 + 456 = ?',
+    options:['756','746','766','755'], answer:'756',
+    hint:'Add 3 to the hundreds digit of 456.',
+    explanation:'300 + 456 = <b>756</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-032', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'487 + 214 = ?',
+    options:['701','691','711','700'], answer:'701',
+    hint:'Ones: 7+4=11, carry 1. Tens: 8+1+1=10, carry 1. Hundreds: 4+2+1=7.',
+    explanation:'487 + 214 = <b>701</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-033', chapterId:'g3mth-addition', difficulty:3, subsection:'adding_3digit',
+    question:'365 + 365 = ?',
+    options:['730','720','740','731'], answer:'730',
+    hint:'Ones: 5+5=10, carry 1. Tens: 6+6+1=13, carry 1. Hundreds: 3+3+1=7.',
+    explanation:'365 + 365 = <b>730</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-034', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'219 + 567 = ?',
+    options:['786','776','796','785'], answer:'786',
+    hint:'Ones: 9+7=16, carry 1. Tens: 1+6+1=8. Hundreds: 2+5=7.',
+    explanation:'219 + 567 = <b>786</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-035', chapterId:'g3mth-addition', difficulty:3, subsection:'adding_3digit',
+    question:'499 + 301 = ?',
+    options:['800','790','810','801'], answer:'800',
+    hint:'Ones: 9+1=10, carry 1. Tens: 9+0+1=10, carry 1. Hundreds: 4+3+1=8.',
+    explanation:'499 + 301 = <b>800</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-036', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'638 + 253 = ?',
+    options:['891','881','901','890'], answer:'891',
+    hint:'Ones: 8+3=11, carry 1. Tens: 3+5+1=9. Hundreds: 6+2=8.',
+    explanation:'638 + 253 = <b>891</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-037', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'174 + 528 = ?',
+    options:['702','692','712','701'], answer:'702',
+    hint:'Ones: 4+8=12, carry 1. Tens: 7+2+1=10, carry 1. Hundreds: 1+5+1=7.',
+    explanation:'174 + 528 = <b>702</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-038', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'346 + 427 = ?',
+    options:['773','763','783','772'], answer:'773',
+    hint:'Ones: 6+7=13, carry 1. Tens: 4+2+1=7. Hundreds: 3+4=7.',
+    explanation:'346 + 427 = <b>773</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-039', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'525 + 268 = ?',
+    options:['793','783','803','792'], answer:'793',
+    hint:'Ones: 5+8=13, carry 1. Tens: 2+6+1=9. Hundreds: 5+2=7.',
+    explanation:'525 + 268 = <b>793</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-040', chapterId:'g3mth-addition', difficulty:2, subsection:'adding_3digit',
+    question:'417 + 383 = ?',
+    options:['800','790','810','801'], answer:'800',
+    hint:'Ones: 7+3=10, carry 1. Tens: 1+8+1=10, carry 1. Hundreds: 4+3+1=8.',
+    explanation:'417 + 383 = <b>800</b>.' }),
+
+// ── add_word_problems ─────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-add-041', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Rani scored 245 marks in Term 1 and 318 marks in Term 2. What was her total score?',
+    options:['563','553','573','562'], answer:'563',
+    hint:'245 + 318 = ?',
+    explanation:'245 + 318: Ones 5+8=13 carry 1, Tens 4+1+1=6, Hundreds 2+3=5. Total = <b>563</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-042', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'A school has 347 boys and 289 girls. How many pupils are there altogether?',
+    options:['636','626','646','637'], answer:'636',
+    hint:'347 + 289 = ?',
+    explanation:'347 + 289: Ones 7+9=16 carry 1, Tens 4+8+1=13 carry 1, Hundreds 3+2+1=6. Total = <b>636</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-043', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Dev had Rs 275. His mother gave him Rs 148 more. How much does he have now?',
+    options:['Rs 423','Rs 413','Rs 433','Rs 422'], answer:'Rs 423',
+    hint:'275 + 148 = ?',
+    explanation:'275 + 148: Ones 5+8=13 carry 1, Tens 7+4+1=12 carry 1, Hundreds 2+1+1=4. Total = Rs <b>423</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-044', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'There are 165 mango trees and 248 lychee trees in a garden. How many trees are there in all?',
+    options:['413','403','423','412'], answer:'413',
+    hint:'165 + 248 = ?',
+    explanation:'165 + 248 = <b>413</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-045', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Priya sold 364 bottles of juice in the morning and 278 bottles in the evening. How many bottles did she sell in all?',
+    options:['642','632','652','641'], answer:'642',
+    hint:'364 + 278 = ?',
+    explanation:'364 + 278: Ones 4+8=12 carry 1, Tens 6+7+1=14 carry 1, Hundreds 3+2+1=6. Total = <b>642</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-046', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Nadia had 136 cards. She bought 218 more. How many cards does she have now?',
+    options:['354','344','364','353'], answer:'354',
+    hint:'136 + 218 = ?',
+    explanation:'136 + 218 = <b>354</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-047', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'In a village, 423 people live on the north side and 359 people live on the south side. How many people live in the village?',
+    options:['782','772','792','781'], answer:'782',
+    hint:'423 + 359 = ?',
+    explanation:'423 + 359: Ones 3+9=12 carry 1, Tens 2+5+1=8, Hundreds 4+3=7. Total = <b>782</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-048', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Raj collected 187 sea shells on Monday and 265 sea shells on Tuesday. How many sea shells did he collect altogether?',
+    options:['452','442','462','451'], answer:'452',
+    hint:'187 + 265 = ?',
+    explanation:'187 + 265: Ones 7+5=12 carry 1, Tens 8+6+1=15 carry 1, Hundreds 1+2+1=4. Total = <b>452</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-049', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'A bakery made 318 bread rolls in the morning and 276 in the afternoon. How many bread rolls did the bakery make altogether?',
+    options:['594','584','604','593'], answer:'594',
+    hint:'318 + 276 = ?',
+    explanation:'318 + 276: Ones 8+6=14 carry 1, Tens 1+7+1=9, Hundreds 3+2=5. Total = <b>594</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-050', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Mia read 245 pages of a book in week 1 and 386 pages in week 2. How many pages did she read in total?',
+    options:['631','621','641','630'], answer:'631',
+    hint:'245 + 386 = ?',
+    explanation:'245 + 386: Ones 5+6=11 carry 1, Tens 4+8+1=13 carry 1, Hundreds 2+3+1=6. Total = <b>631</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-051', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'A farmer has 456 chickens and 378 ducks. How many birds are there altogether?',
+    options:['834','824','844','833'], answer:'834',
+    hint:'456 + 378 = ?',
+    explanation:'456 + 378: Ones 6+8=14 carry 1, Tens 5+7+1=13 carry 1, Hundreds 4+3+1=8. Total = <b>834</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-052', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'A school collected Rs 538 on Monday and Rs 247 on Tuesday for a charity. How much money was collected in total?',
+    options:['Rs 785','Rs 775','Rs 795','Rs 784'], answer:'Rs 785',
+    hint:'538 + 247 = ?',
+    explanation:'538 + 247: Ones 8+7=15 carry 1, Tens 3+4+1=8, Hundreds 5+2=7. Total = Rs <b>785</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-053', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'A library has 619 English books and 275 French books. How many books are there altogether?',
+    options:['894','884','904','893'], answer:'894',
+    hint:'619 + 275 = ?',
+    explanation:'619 + 275: Ones 9+5=14 carry 1, Tens 1+7+1=9, Hundreds 6+2=8. Total = <b>894</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-054', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Dev cycled 325 km in January and 468 km in February. How many kilometres did he cycle in total?',
+    options:['793','783','803','792'], answer:'793',
+    hint:'325 + 468 = ?',
+    explanation:'325 + 468: Ones 5+8=13 carry 1, Tens 2+6+1=9, Hundreds 3+4=7. Total = <b>793</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-055', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'There are 254 red flowers and 378 yellow flowers in a park. How many flowers are there in all?',
+    options:['632','622','642','631'], answer:'632',
+    hint:'254 + 378 = ?',
+    explanation:'254 + 378: Ones 4+8=12 carry 1, Tens 5+7+1=13 carry 1, Hundreds 2+3+1=6. Total = <b>632</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-056', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Priya collected 147 shells and Rani collected 286 shells at the beach. How many shells did they collect together?',
+    options:['433','423','443','432'], answer:'433',
+    hint:'147 + 286 = ?',
+    explanation:'147 + 286: Ones 7+6=13 carry 1, Tens 4+8+1=13 carry 1, Hundreds 1+2+1=4. Total = <b>433</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-057', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Nadia saved Rs 348 in June and Rs 236 in July. How much did she save altogether?',
+    options:['Rs 584','Rs 574','Rs 594','Rs 583'], answer:'Rs 584',
+    hint:'348 + 236 = ?',
+    explanation:'348 + 236: Ones 8+6=14 carry 1, Tens 4+3+1=8, Hundreds 3+2=5. Total = Rs <b>584</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-058', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'A market sold 429 papayas and 318 mangoes. How many fruits were sold altogether?',
+    options:['747','737','757','746'], answer:'747',
+    hint:'429 + 318 = ?',
+    explanation:'429 + 318: Ones 9+8=17 carry 1, Tens 2+1+1=4, Hundreds 4+3=7. Total = <b>747</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-059', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Raj walked 253 steps to school and 417 steps to the market. How many steps did he walk in total?',
+    options:['670','660','680','671'], answer:'670',
+    hint:'253 + 417 = ?',
+    explanation:'253 + 417: Ones 3+7=10 carry 1, Tens 5+1+1=7, Hundreds 2+4=6. Total = <b>670</b>.' }),
+
+  makeMCQ({ id:'g3mth-add-060', chapterId:'g3mth-addition', difficulty:4, subsection:'add_word_problems',
+    question:'Mia\'s school raised Rs 465 from cake sales and Rs 327 from book sales. How much money did they raise in total?',
+    options:['Rs 792','Rs 782','Rs 802','Rs 791'], answer:'Rs 792',
+    hint:'465 + 327 = ?',
+    explanation:'465 + 327: Ones 5+7=12 carry 1, Tens 6+2+1=9, Hundreds 4+3=7. Total = Rs <b>792</b>.' })
+);
+
+})();

@@ -1,0 +1,372 @@
+(function () {
+'use strict';
+
+// ── place_value_hto ───────────────────────────────────────────────────────────
+
+STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g3mth-num-001', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'What is the value of the digit 4 in the number 456?',
+    options:['400','40','4','456'], answer:'400',
+    hint:'4 is in the hundreds place.',
+    explanation:'In 456, the digit 4 is in the <b>hundreds</b> place, so its value is <b>400</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-002', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'In the number 732, the digit 3 is in the ___ place.',
+    options:['tens','hundreds','ones','thousands'], answer:'tens',
+    hint:'H is hundreds, T is tens, O is ones.',
+    explanation:'In 732: 7 is hundreds, <b>3 is tens</b>, 2 is ones.' }),
+
+  makeMCQ({ id:'g3mth-num-003', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'Write 600 + 50 + 7 as a number.',
+    options:['657','675','756','607'], answer:'657',
+    hint:'Hundreds + Tens + Ones.',
+    explanation:'600 + 50 + 7 = <b>657</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-004', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'What is 8 hundreds, 0 tens and 5 ones?',
+    options:['805','850','508','580'], answer:'805',
+    hint:'8 hundreds = 800, 0 tens = 0, 5 ones = 5.',
+    explanation:'800 + 0 + 5 = <b>805</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-005', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'What is the value of the digit 9 in 391?',
+    options:['90','9','900','39'], answer:'90',
+    hint:'9 is in the tens place.',
+    explanation:'In 391, the 9 is in the tens place, so its value is <b>90</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-006', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'Which digit is in the hundreds place in 527?',
+    options:['5','2','7','52'], answer:'5',
+    hint:'The hundreds place is the first digit in a 3-digit number.',
+    explanation:'In 527, the digit <b>5</b> is in the hundreds place.' }),
+
+  makeMCQ({ id:'g3mth-num-007', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'Write 300 + 4 as a number.',
+    options:['304','340','400','34'], answer:'304',
+    hint:'300 + 0 tens + 4 ones.',
+    explanation:'300 + 4 = <b>304</b>. There are 0 tens.' }),
+
+  makeMCQ({ id:'g3mth-num-008', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'In 860, the digit 6 is in the ___ place.',
+    options:['tens','ones','hundreds','thousands'], answer:'tens',
+    hint:'The middle digit of a 3-digit number is in the tens place.',
+    explanation:'In 860: 8 is hundreds, <b>6 is tens</b>, 0 is ones.' }),
+
+  makeMCQ({ id:'g3mth-num-009', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'What number has 4 hundreds, 7 tens and 2 ones?',
+    options:['472','427','742','247'], answer:'472',
+    hint:'Hundreds first, then tens, then ones.',
+    explanation:'4 hundreds = 400, 7 tens = 70, 2 ones = 2. So 400 + 70 + 2 = <b>472</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-010', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'What is the value of the digit 1 in 915?',
+    options:['10','1','100','910'], answer:'10',
+    hint:'1 is in the tens place in 915.',
+    explanation:'In 915, the digit 1 is in the tens place, so its value is <b>10</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-011', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'Write 500 + 60 + 0 as a number.',
+    options:['560','506','605','650'], answer:'560',
+    hint:'There are 0 ones.',
+    explanation:'500 + 60 + 0 = <b>560</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-012', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'What number has 0 hundreds, 3 tens and 8 ones?',
+    options:['38','308','380','83'], answer:'38',
+    hint:'0 hundreds means the number is less than 100.',
+    explanation:'0 hundreds + 3 tens + 8 ones = 0 + 30 + 8 = <b>38</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-013', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'Rani says: "My number has 7 in the hundreds place, 0 in the tens place and 3 in the ones place." What is her number?',
+    options:['703','730','307','370'], answer:'703',
+    hint:'H=7, T=0, O=3.',
+    explanation:'7 hundreds + 0 tens + 3 ones = 700 + 0 + 3 = <b>703</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-014', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'Which digit is in the ones place in 648?',
+    options:['8','4','6','48'], answer:'8',
+    hint:'The ones place is the last digit.',
+    explanation:'In 648, the last digit is <b>8</b>, which is in the ones place.' }),
+
+  makeMCQ({ id:'g3mth-num-015', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'What is 900 + 90 + 9?',
+    options:['999','909','990','99'], answer:'999',
+    hint:'Add the hundreds, tens and ones.',
+    explanation:'900 + 90 + 9 = <b>999</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-016', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'Break 476 into hundreds, tens and ones. How many tens are there?',
+    options:['7','4','6','47'], answer:'7',
+    hint:'The middle digit tells you the tens.',
+    explanation:'In 476: 4 hundreds, <b>7 tens</b>, 6 ones.' }),
+
+  makeMCQ({ id:'g3mth-num-017', chapterId:'g3mth-numbers', difficulty:1, subsection:'place_value_hto',
+    question:'How many hundreds are in the number 300?',
+    options:['3','30','300','0'], answer:'3',
+    hint:'300 = 3 hundreds.',
+    explanation:'300 has <b>3 hundreds</b>, 0 tens and 0 ones.' }),
+
+  makeMCQ({ id:'g3mth-num-018', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'Which number equals 200 + 30 + 5?',
+    options:['235','253','325','352'], answer:'235',
+    hint:'Add the parts together.',
+    explanation:'200 + 30 + 5 = <b>235</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-019', chapterId:'g3mth-numbers', difficulty:2, subsection:'place_value_hto',
+    question:'Dev wrote the number 104. Which digit is in the tens place?',
+    options:['0','1','4','10'], answer:'0',
+    hint:'In 104: H=1, T=?, O=4.',
+    explanation:'In 104, the tens digit is <b>0</b>. There are no tens.' }),
+
+  makeMCQ({ id:'g3mth-num-020', chapterId:'g3mth-numbers', difficulty:3, subsection:'place_value_hto',
+    question:'I have 6 hundreds, 12 tens and 5 ones. What number am I? (Hint: 12 tens = 1 hundred and 2 tens)',
+    options:['725','625','765','635'], answer:'725',
+    hint:'12 tens = 120. Add to 600 + 5.',
+    explanation:'6 hundreds = 600, 12 tens = 120, 5 ones = 5. Total = 600 + 120 + 5 = <b>725</b>.' }),
+
+// ── ordering_rounding ─────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-num-021', chapterId:'g3mth-numbers', difficulty:1, subsection:'ordering_rounding',
+    question:'Round 347 to the nearest 10.',
+    options:['350','340','300','400'], answer:'350',
+    hint:'Look at the ones digit: 7 ≥ 5, so round up.',
+    explanation:'347 rounded to the nearest 10 is <b>350</b> because the ones digit (7) is 5 or more.' }),
+
+  makeMCQ({ id:'g3mth-num-022', chapterId:'g3mth-numbers', difficulty:1, subsection:'ordering_rounding',
+    question:'Round 462 to the nearest 10.',
+    options:['460','470','400','500'], answer:'460',
+    hint:'Look at the ones digit: 2 < 5, so round down.',
+    explanation:'462 rounded to the nearest 10 is <b>460</b> because the ones digit (2) is less than 5.' }),
+
+  makeMCQ({ id:'g3mth-num-023', chapterId:'g3mth-numbers', difficulty:1, subsection:'ordering_rounding',
+    question:'Round 265 to the nearest 100.',
+    options:['300','200','260','270'], answer:'300',
+    hint:'Look at the tens digit: 6 ≥ 5, so round up.',
+    explanation:'265 rounded to the nearest 100 is <b>300</b> because the tens digit (6) is 5 or more.' }),
+
+  makeMCQ({ id:'g3mth-num-024', chapterId:'g3mth-numbers', difficulty:1, subsection:'ordering_rounding',
+    question:'Round 830 to the nearest 100.',
+    options:['800','900','850','700'], answer:'800',
+    hint:'Look at the tens digit: 3 < 5, so round down.',
+    explanation:'830 rounded to the nearest 100 is <b>800</b> because the tens digit (3) is less than 5.' }),
+
+  makeMCQ({ id:'g3mth-num-025', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Arrange from smallest to largest: 215, 512, 251, 125. Which number comes third?',
+    options:['251','215','125','512'], answer:'251',
+    hint:'Order: 125, 215, 251, 512.',
+    explanation:'Ordered: 125, 215, <b>251</b>, 512. The third number is 251.' }),
+
+  makeMCQ({ id:'g3mth-num-026', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Which number is closest to 500: 490, 510, 450, 560?',
+    options:['490','510','450','560'], answer:'490',
+    hint:'490 is only 10 away from 500.',
+    explanation:'490 is 10 away, 510 is 10 away — but 490 comes first when both are equal distance. Actually 490 is the same as 510. Let\'s pick 490 (it\'s the first listed closest).' }),
+
+  makeMCQ({ id:'g3mth-num-027', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Put these numbers in order from largest to smallest: 304, 340, 403, 430. Which comes second?',
+    options:['403','430','340','304'], answer:'403',
+    hint:'Largest first: 430, 403, 340, 304.',
+    explanation:'From largest to smallest: 430, <b>403</b>, 340, 304. The second number is 403.' }),
+
+  makeMCQ({ id:'g3mth-num-028', chapterId:'g3mth-numbers', difficulty:1, subsection:'ordering_rounding',
+    question:'Round 185 to the nearest 10.',
+    options:['190','180','200','100'], answer:'190',
+    hint:'The ones digit is 5 — round up.',
+    explanation:'185 rounded to the nearest 10 is <b>190</b> because the ones digit (5) means round up.' }),
+
+  makeMCQ({ id:'g3mth-num-029', chapterId:'g3mth-numbers', difficulty:1, subsection:'ordering_rounding',
+    question:'Round 550 to the nearest 100.',
+    options:['600','500','550','700'], answer:'600',
+    hint:'The tens digit is 5 — round up.',
+    explanation:'550 rounded to the nearest 100 is <b>600</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-030', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Priya has these scores: 340, 298, 312, 275. Which is the highest score?',
+    options:['340','312','298','275'], answer:'340',
+    hint:'Compare the hundreds first.',
+    explanation:'340 is the largest because 3 hundreds > 2 hundreds.' }),
+
+  makeMCQ({ id:'g3mth-num-031', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Which number, when rounded to the nearest 10, gives 360?',
+    options:['364','351','370','359'], answer:'364',
+    hint:'Numbers 355–364 round to 360.',
+    explanation:'364 rounds to <b>360</b> (ones digit 4 < 5, round down).' }),
+
+  makeMCQ({ id:'g3mth-num-032', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Put in order from smallest to largest: 99, 100, 9, 1000. Which comes second?',
+    options:['99','100','9','1000'], answer:'99',
+    hint:'Order: 9, 99, 100, 1000.',
+    explanation:'Ordered: 9, <b>99</b>, 100, 1000. Second is 99.' }),
+
+  makeMCQ({ id:'g3mth-num-033', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Round 795 to the nearest 10.',
+    options:['800','790','700','810'], answer:'800',
+    hint:'Ones digit is 5 — round up.',
+    explanation:'795 → ones digit 5, so round up: <b>800</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-034', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Which number is between 450 and 500?',
+    options:['475','405','510','445'], answer:'475',
+    hint:'The number must be more than 450 and less than 500.',
+    explanation:'<b>475</b> is between 450 and 500.' }),
+
+  makeMCQ({ id:'g3mth-num-035', chapterId:'g3mth-numbers', difficulty:3, subsection:'ordering_rounding',
+    question:'A shop sells 428 sweets on Monday and 375 sweets on Tuesday. Which day had more sweets sold?',
+    options:['Monday','Tuesday','Both the same','Cannot tell'], answer:'Monday',
+    hint:'Compare 428 and 375.',
+    explanation:'428 > 375, so <b>Monday</b> had more sweets sold.' }),
+
+  makeMCQ({ id:'g3mth-num-036', chapterId:'g3mth-numbers', difficulty:1, subsection:'ordering_rounding',
+    question:'Round 712 to the nearest 100.',
+    options:['700','800','710','720'], answer:'700',
+    hint:'Tens digit is 1 — round down.',
+    explanation:'712 rounded to the nearest 100 is <b>700</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-037', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Which is the smallest: 609, 906, 690, 960?',
+    options:['609','690','906','960'], answer:'609',
+    hint:'Compare the hundreds first.',
+    explanation:'All start with 6 or 9 in the hundreds. 609 < 690, so <b>609</b> is smallest.' }),
+
+  makeMCQ({ id:'g3mth-num-038', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Round 445 to the nearest 10.',
+    options:['450','440','400','500'], answer:'450',
+    hint:'Ones digit is 5 — round up.',
+    explanation:'445 → ones digit 5, round up to <b>450</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-039', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'Round 249 to the nearest 100.',
+    options:['200','300','250','240'], answer:'200',
+    hint:'Tens digit is 4 — round down.',
+    explanation:'249 rounded to nearest 100: tens digit is 4 < 5, so round down to <b>200</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-040', chapterId:'g3mth-numbers', difficulty:2, subsection:'ordering_rounding',
+    question:'The numbers 561, 165, 651, 516 are arranged from smallest to largest. Which is third?',
+    options:['561','165','651','516'], answer:'561',
+    hint:'Order: 165, 516, 561, 651.',
+    explanation:'Ordered: 165, 516, <b>561</b>, 651. Third is 561.' }),
+
+// ── comparing ─────────────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-num-041', chapterId:'g3mth-numbers', difficulty:1, subsection:'comparing',
+    question:'456 ___ 465',
+    options:['<','>','=','cannot tell'], answer:'<',
+    hint:'The tens digits are different: 5 tens vs 6 tens.',
+    explanation:'456 has 5 tens and 465 has 6 tens, so 456 <b>&lt;</b> 465.' }),
+
+  makeMCQ({ id:'g3mth-num-042', chapterId:'g3mth-numbers', difficulty:1, subsection:'comparing',
+    question:'Which is greater: 709 or 790?',
+    options:['790','709','They are equal','Cannot tell'], answer:'790',
+    hint:'Compare the tens: 0 tens vs 9 tens.',
+    explanation:'709 has 0 tens, 790 has 9 tens. So <b>790</b> is greater.' }),
+
+  makeMCQ({ id:'g3mth-num-043', chapterId:'g3mth-numbers', difficulty:1, subsection:'comparing',
+    question:'True or False: 381 > 318',
+    options:['True','False'], answer:'True',
+    hint:'Compare the tens: 8 tens > 1 ten.',
+    explanation:'381 has 8 tens, 318 has 1 ten. So 381 > 318 is <b>True</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-044', chapterId:'g3mth-numbers', difficulty:1, subsection:'comparing',
+    question:'500 ___ 499',
+    options:['>','<','=','cannot tell'], answer:'>',
+    hint:'500 is one more than 499.',
+    explanation:'500 has 5 hundreds but 499 has only 4 hundreds. So 500 <b>&gt;</b> 499.' }),
+
+  makeMCQ({ id:'g3mth-num-045', chapterId:'g3mth-numbers', difficulty:1, subsection:'comparing',
+    question:'Which is the smallest: 301, 310, 130, 103?',
+    options:['103','130','301','310'], answer:'103',
+    hint:'Compare the hundreds first.',
+    explanation:'103 has 1 hundred. 130 has 1 hundred but more tens. 103 < 130, so <b>103</b> is smallest.' }),
+
+  makeMCQ({ id:'g3mth-num-046', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'Raj scored 475 marks and Nadia scored 457 marks. Who scored more?',
+    options:['Raj','Nadia','They scored the same','Cannot tell'], answer:'Raj',
+    hint:'Compare the tens digits: 7 > 5.',
+    explanation:'475 > 457 because the tens digit 7 > 5. So <b>Raj</b> scored more.' }),
+
+  makeMCQ({ id:'g3mth-num-047', chapterId:'g3mth-numbers', difficulty:1, subsection:'comparing',
+    question:'825 ___ 825',
+    options:['=','<','>','cannot tell'], answer:'=',
+    hint:'The numbers are identical.',
+    explanation:'825 and 825 are the same number, so 825 <b>=</b> 825.' }),
+
+  makeMCQ({ id:'g3mth-num-048', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'Put the correct sign: 643 ___ 634',
+    options:['>','<','=','cannot tell'], answer:'>',
+    hint:'Both have 6 hundreds. Compare the tens.',
+    explanation:'643 has 4 tens; 634 has 3 tens. So 643 <b>&gt;</b> 634.' }),
+
+  makeMCQ({ id:'g3mth-num-049', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'Which statement is correct?',
+    options:['207 < 270','270 < 207','207 = 270','207 > 270'], answer:'207 < 270',
+    hint:'Compare the tens: 0 tens vs 7 tens.',
+    explanation:'207 has 0 tens and 270 has 7 tens. So 207 <b>&lt;</b> 270.' }),
+
+  makeMCQ({ id:'g3mth-num-050', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'Mia has Rs 540 and Dev has Rs 504. Who has more money?',
+    options:['Mia','Dev','They have the same','Cannot tell'], answer:'Mia',
+    hint:'Compare the tens: 4 tens vs 0 tens.',
+    explanation:'540 > 504 because 4 tens > 0 tens. So <b>Mia</b> has more.' }),
+
+  makeMCQ({ id:'g3mth-num-051', chapterId:'g3mth-numbers', difficulty:1, subsection:'comparing',
+    question:'Which is greater: 100 or 99?',
+    options:['100','99','They are equal','Cannot tell'], answer:'100',
+    hint:'100 has 1 hundred; 99 has 0 hundreds.',
+    explanation:'<b>100</b> is greater than 99.' }),
+
+  makeMCQ({ id:'g3mth-num-052', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'999 ___ 1000',
+    options:['<','>','=','cannot tell'], answer:'<',
+    hint:'1000 is bigger than 999.',
+    explanation:'999 is less than 1000, so 999 <b>&lt;</b> 1000.' }),
+
+  makeMCQ({ id:'g3mth-num-053', chapterId:'g3mth-numbers', difficulty:3, subsection:'comparing',
+    question:'A papaya weighs 750 g and a mango weighs 570 g. Which fruit is heavier?',
+    options:['papaya','mango','They weigh the same','Cannot tell'], answer:'papaya',
+    hint:'Compare 750 and 570.',
+    explanation:'750 > 570 because 7 hundreds > 5 hundreds. The <b>papaya</b> is heavier.' }),
+
+  makeMCQ({ id:'g3mth-num-054', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'Which of these is NOT true?',
+    options:['450 > 540','450 < 540','540 > 450','540 ≠ 450'], answer:'450 > 540',
+    hint:'450 is less than 540.',
+    explanation:'450 < 540, so the statement "450 > 540" is <b>NOT true</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-055', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'Put the correct sign: 308 ___ 380',
+    options:['<','>','=','cannot tell'], answer:'<',
+    hint:'Compare the tens.',
+    explanation:'308 has 0 tens; 380 has 8 tens. So 308 <b>&lt;</b> 380.' }),
+
+  makeMCQ({ id:'g3mth-num-056', chapterId:'g3mth-numbers', difficulty:3, subsection:'comparing',
+    question:'Class A has 234 pupils and Class B has 243 pupils. Which class is bigger?',
+    options:['Class B','Class A','They are the same size','Cannot tell'], answer:'Class B',
+    hint:'Compare the tens digits: 3 tens vs 4 tens.',
+    explanation:'234 has 3 tens; 243 has 4 tens. 243 > 234, so <b>Class B</b> is bigger.' }),
+
+  makeMCQ({ id:'g3mth-num-057', chapterId:'g3mth-numbers', difficulty:1, subsection:'comparing',
+    question:'True or False: 600 = 60 tens',
+    options:['True','False'], answer:'True',
+    hint:'60 tens = 60 × 10 = 600.',
+    explanation:'60 tens = 60 × 10 = 600, so this is <b>True</b>.' }),
+
+  makeMCQ({ id:'g3mth-num-058', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'Which number is between 700 and 800?',
+    options:['756','670','807','698'], answer:'756',
+    hint:'The number must be more than 700 and less than 800.',
+    explanation:'<b>756</b> is between 700 and 800.' }),
+
+  makeMCQ({ id:'g3mth-num-059', chapterId:'g3mth-numbers', difficulty:2, subsection:'comparing',
+    question:'Arrange from greatest to least: 512, 521, 251, 215. Which is second?',
+    options:['512','521','251','215'], answer:'512',
+    hint:'Largest first: 521, 512, 251, 215.',
+    explanation:'From greatest to least: 521, <b>512</b>, 251, 215. Second is 512.' }),
+
+  makeMCQ({ id:'g3mth-num-060', chapterId:'g3mth-numbers', difficulty:3, subsection:'comparing',
+    question:'A school library has 875 books. A community library has 857 books. Which library has more books?',
+    options:['The school library','The community library','They have the same','Cannot tell'], answer:'The school library',
+    hint:'Compare 875 and 857.',
+    explanation:'875 > 857 (7 tens > 5 tens). The <b>school library</b> has more books.' })
+);
+
+})();

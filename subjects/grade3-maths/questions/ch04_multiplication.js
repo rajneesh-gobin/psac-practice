@@ -1,0 +1,372 @@
+(function () {
+'use strict';
+
+// ── times_2_to_5 ──────────────────────────────────────────────────────────────
+
+STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g3mth-mul-001', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'3 × 4 = ?',
+    options:['12','9','15','8'], answer:'12',
+    hint:'3 groups of 4.',
+    explanation:'3 × 4 = <b>12</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-002', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'5 × 7 = ?',
+    options:['35','30','40','25'], answer:'35',
+    hint:'Count in 5s: 5, 10, 15, 20, 25, 30, 35.',
+    explanation:'5 × 7 = <b>35</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-003', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'4 × 8 = ?',
+    options:['32','28','36','24'], answer:'32',
+    hint:'Count in 4s: 4, 8, 12, 16, 20, 24, 28, 32.',
+    explanation:'4 × 8 = <b>32</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-004', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'2 × 9 = ?',
+    options:['18','16','20','14'], answer:'18',
+    hint:'Count in 2s: 2, 4, 6, 8, 10, 12, 14, 16, 18.',
+    explanation:'2 × 9 = <b>18</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-005', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'3 × 7 = ?',
+    options:['21','18','24','14'], answer:'21',
+    hint:'Count in 3s: 3, 6, 9, 12, 15, 18, 21.',
+    explanation:'3 × 7 = <b>21</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-006', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'5 × 9 = ?',
+    options:['45','40','50','35'], answer:'45',
+    hint:'5 × 9: count in 5s nine times.',
+    explanation:'5 × 9 = <b>45</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-007', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'4 × 6 = ?',
+    options:['24','20','28','16'], answer:'24',
+    hint:'Count in 4s: 4, 8, 12, 16, 20, 24.',
+    explanation:'4 × 6 = <b>24</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-008', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'2 × 7 = ?',
+    options:['14','12','16','10'], answer:'14',
+    hint:'Count in 2s: 2, 4, 6, 8, 10, 12, 14.',
+    explanation:'2 × 7 = <b>14</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-009', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'3 × 9 = ?',
+    options:['27','24','30','21'], answer:'27',
+    hint:'Count in 3s: 3, 6, 9, 12, 15, 18, 21, 24, 27.',
+    explanation:'3 × 9 = <b>27</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-010', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'5 × 4 = ?',
+    options:['20','15','25','10'], answer:'20',
+    hint:'Count in 5s: 5, 10, 15, 20.',
+    explanation:'5 × 4 = <b>20</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-011', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'4 × 3 = ?',
+    options:['12','8','16','9'], answer:'12',
+    hint:'4 × 3 is the same as 3 × 4.',
+    explanation:'4 × 3 = <b>12</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-012', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'2 × 12 = ?',
+    options:['24','22','26','20'], answer:'24',
+    hint:'2 × 12 = 2 × 10 + 2 × 2.',
+    explanation:'2 × 12 = <b>24</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-013', chapterId:'g3mth-multiplication', difficulty:2, subsection:'times_2_to_5',
+    question:'Rani has 4 bags. Each bag has 7 mangoes. How many mangoes are there altogether?',
+    options:['28','24','32','21'], answer:'28',
+    hint:'4 × 7 = ?',
+    explanation:'4 × 7 = <b>28</b> mangoes.' }),
+
+  makeMCQ({ id:'g3mth-mul-014', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'3 × 6 = ?',
+    options:['18','15','21','12'], answer:'18',
+    hint:'Count in 3s: 3, 6, 9, 12, 15, 18.',
+    explanation:'3 × 6 = <b>18</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-015', chapterId:'g3mth-multiplication', difficulty:2, subsection:'times_2_to_5',
+    question:'Dev buys 5 packets of biscuits. Each packet has 8 biscuits. How many biscuits altogether?',
+    options:['40','35','45','30'], answer:'40',
+    hint:'5 × 8 = ?',
+    explanation:'5 × 8 = <b>40</b> biscuits.' }),
+
+  makeMCQ({ id:'g3mth-mul-016', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'2 × 11 = ?',
+    options:['22','20','24','18'], answer:'22',
+    hint:'2 × 11 = 2 × 10 + 2 × 1.',
+    explanation:'2 × 11 = <b>22</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-017', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'5 × 6 = ?',
+    options:['30','25','35','20'], answer:'30',
+    hint:'Count in 5s: 5, 10, 15, 20, 25, 30.',
+    explanation:'5 × 6 = <b>30</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-018', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'4 × 9 = ?',
+    options:['36','32','40','28'], answer:'36',
+    hint:'Count in 4s nine times.',
+    explanation:'4 × 9 = <b>36</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-019', chapterId:'g3mth-multiplication', difficulty:2, subsection:'times_2_to_5',
+    question:'Priya plants 3 rows of flowers. Each row has 10 flowers. How many flowers are there?',
+    options:['30','20','40','13'], answer:'30',
+    hint:'3 × 10 = ?',
+    explanation:'3 × 10 = <b>30</b> flowers.' }),
+
+  makeMCQ({ id:'g3mth-mul-020', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_2_to_5',
+    question:'5 × 5 = ?',
+    options:['25','20','30','10'], answer:'25',
+    hint:'5 × 5 = 25. This is a square number!',
+    explanation:'5 × 5 = <b>25</b>.' }),
+
+// ── times_6_to_10 ─────────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-mul-021', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'6 × 7 = ?',
+    options:['42','36','48','54'], answer:'42',
+    hint:'Count in 6s: 6, 12, 18, 24, 30, 36, 42.',
+    explanation:'6 × 7 = <b>42</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-022', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'8 × 4 = ?',
+    options:['32','28','36','24'], answer:'32',
+    hint:'8 × 4 is the same as 4 × 8.',
+    explanation:'8 × 4 = <b>32</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-023', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'9 × 6 = ?',
+    options:['54','48','63','45'], answer:'54',
+    hint:'Count in 9s: 9, 18, 27, 36, 45, 54.',
+    explanation:'9 × 6 = <b>54</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-024', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'7 × 8 = ?',
+    options:['56','49','63','42'], answer:'56',
+    hint:'7 × 8 = 56. A great one to remember!',
+    explanation:'7 × 8 = <b>56</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-025', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'10 × 9 = ?',
+    options:['90','80','100','70'], answer:'90',
+    hint:'× 10 just adds a zero.',
+    explanation:'10 × 9 = <b>90</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-026', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'6 × 9 = ?',
+    options:['54','48','63','42'], answer:'54',
+    hint:'Count in 6s nine times.',
+    explanation:'6 × 9 = <b>54</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-027', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'8 × 7 = ?',
+    options:['56','48','64','63'], answer:'56',
+    hint:'8 × 7 = 56 (same as 7 × 8).',
+    explanation:'8 × 7 = <b>56</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-028', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'9 × 9 = ?',
+    options:['81','72','90','63'], answer:'81',
+    hint:'9 × 9 = 81. This is a square number.',
+    explanation:'9 × 9 = <b>81</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-029', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'7 × 6 = ?',
+    options:['42','36','49','48'], answer:'42',
+    hint:'7 × 6 is the same as 6 × 7.',
+    explanation:'7 × 6 = <b>42</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-030', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'10 × 7 = ?',
+    options:['70','60','80','77'], answer:'70',
+    hint:'× 10 adds a zero: 7 → 70.',
+    explanation:'10 × 7 = <b>70</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-031', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'8 × 8 = ?',
+    options:['64','56','72','48'], answer:'64',
+    hint:'8 × 8 = 64. Another square number!',
+    explanation:'8 × 8 = <b>64</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-032', chapterId:'g3mth-multiplication', difficulty:2, subsection:'times_6_to_10',
+    question:'Raj has 7 boxes. Each box has 6 lychees. How many lychees are there altogether?',
+    options:['42','36','48','49'], answer:'42',
+    hint:'7 × 6 = ?',
+    explanation:'7 × 6 = <b>42</b> lychees.' }),
+
+  makeMCQ({ id:'g3mth-mul-033', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'6 × 6 = ?',
+    options:['36','30','42','24'], answer:'36',
+    hint:'6 × 6 = 36.',
+    explanation:'6 × 6 = <b>36</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-034', chapterId:'g3mth-multiplication', difficulty:2, subsection:'times_6_to_10',
+    question:'A shop has 9 shelves. Each shelf has 8 tins. How many tins are there in total?',
+    options:['72','63','81','64'], answer:'72',
+    hint:'9 × 8 = ?',
+    explanation:'9 × 8 = <b>72</b> tins.' }),
+
+  makeMCQ({ id:'g3mth-mul-035', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'10 × 10 = ?',
+    options:['100','90','110','1000'], answer:'100',
+    hint:'10 × 10 = 100.',
+    explanation:'10 × 10 = <b>100</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-036', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'9 × 7 = ?',
+    options:['63','54','72','56'], answer:'63',
+    hint:'Count in 9s: 9, 18, 27, 36, 45, 54, 63.',
+    explanation:'9 × 7 = <b>63</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-037', chapterId:'g3mth-multiplication', difficulty:2, subsection:'times_6_to_10',
+    question:'Nadia plants 8 rows of seeds. Each row has 9 seeds. How many seeds in total?',
+    options:['72','63','81','64'], answer:'72',
+    hint:'8 × 9 = ?',
+    explanation:'8 × 9 = <b>72</b> seeds.' }),
+
+  makeMCQ({ id:'g3mth-mul-038', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'7 × 7 = ?',
+    options:['49','42','56','63'], answer:'49',
+    hint:'7 × 7 = 49.',
+    explanation:'7 × 7 = <b>49</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-039', chapterId:'g3mth-multiplication', difficulty:2, subsection:'times_6_to_10',
+    question:'Mia puts 6 photos on each page of her album. She uses 8 pages. How many photos in total?',
+    options:['48','42','54','36'], answer:'48',
+    hint:'6 × 8 = ?',
+    explanation:'6 × 8 = <b>48</b> photos.' }),
+
+  makeMCQ({ id:'g3mth-mul-040', chapterId:'g3mth-multiplication', difficulty:1, subsection:'times_6_to_10',
+    question:'10 × 6 = ?',
+    options:['60','50','70','66'], answer:'60',
+    hint:'× 10 adds a zero: 6 → 60.',
+    explanation:'10 × 6 = <b>60</b>.' }),
+
+// ── multiply_2digit ───────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-mul-041', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'23 × 3 = ?',
+    options:['69','63','72','66'], answer:'69',
+    hint:'23 × 3: Ones 3×3=9, Tens 2×3=6. Answer: 69.',
+    explanation:'23 × 3 = <b>69</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-042', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'45 × 2 = ?',
+    options:['90','80','100','85'], answer:'90',
+    hint:'45 × 2: Ones 5×2=10 carry 1, Tens 4×2+1=9.',
+    explanation:'45 × 2 = <b>90</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-043', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'32 × 4 = ?',
+    options:['128','118','138','124'], answer:'128',
+    hint:'32 × 4: Ones 2×4=8, Tens 3×4=12.',
+    explanation:'32 × 4 = <b>128</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-044', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'21 × 5 = ?',
+    options:['105','100','110','115'], answer:'105',
+    hint:'21 × 5: Ones 1×5=5, Tens 2×5=10.',
+    explanation:'21 × 5 = <b>105</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-045', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'14 × 6 = ?',
+    options:['84','74','94','81'], answer:'84',
+    hint:'14 × 6: Ones 4×6=24 carry 2, Tens 1×6+2=8.',
+    explanation:'14 × 6 = <b>84</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-046', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'33 × 3 = ?',
+    options:['99','89','109','93'], answer:'99',
+    hint:'33 × 3: Ones 3×3=9, Tens 3×3=9.',
+    explanation:'33 × 3 = <b>99</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-047', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'12 × 7 = ?',
+    options:['84','74','94','77'], answer:'84',
+    hint:'12 × 7: Ones 2×7=14 carry 1, Tens 1×7+1=8.',
+    explanation:'12 × 7 = <b>84</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-048', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'25 × 4 = ?',
+    options:['100','90','110','104'], answer:'100',
+    hint:'25 × 4: Ones 5×4=20 carry 2, Tens 2×4+2=10.',
+    explanation:'25 × 4 = <b>100</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-049', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'Rani saves Rs 15 a week. How much does she save in 6 weeks?',
+    options:['Rs 90','Rs 80','Rs 100','Rs 85'], answer:'Rs 90',
+    hint:'15 × 6 = ?',
+    explanation:'15 × 6 = <b>90</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-050', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'11 × 9 = ?',
+    options:['99','89','109','93'], answer:'99',
+    hint:'11 × 9: Ones 1×9=9, Tens 1×9=9.',
+    explanation:'11 × 9 = <b>99</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-051', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'42 × 2 = ?',
+    options:['84','74','94','82'], answer:'84',
+    hint:'42 × 2: Ones 2×2=4, Tens 4×2=8.',
+    explanation:'42 × 2 = <b>84</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-052', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'13 × 5 = ?',
+    options:['65','55','75','60'], answer:'65',
+    hint:'13 × 5: Ones 3×5=15 carry 1, Tens 1×5+1=6.',
+    explanation:'13 × 5 = <b>65</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-053', chapterId:'g3mth-multiplication', difficulty:3, subsection:'multiply_2digit',
+    question:'Dev has 24 bags of sweets. Each bag has 3 sweets. How many sweets in all?',
+    options:['72','62','82','69'], answer:'72',
+    hint:'24 × 3 = ?',
+    explanation:'24 × 3: Ones 4×3=12 carry 1, Tens 2×3+1=7. Answer: <b>72</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-054', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'31 × 4 = ?',
+    options:['124','114','134','121'], answer:'124',
+    hint:'31 × 4: Ones 1×4=4, Tens 3×4=12.',
+    explanation:'31 × 4 = <b>124</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-055', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'16 × 5 = ?',
+    options:['80','70','90','75'], answer:'80',
+    hint:'16 × 5: Ones 6×5=30 carry 3, Tens 1×5+3=8.',
+    explanation:'16 × 5 = <b>80</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-056', chapterId:'g3mth-multiplication', difficulty:3, subsection:'multiply_2digit',
+    question:'Priya reads 22 pages each day. How many pages does she read in 4 days?',
+    options:['88','78','98','84'], answer:'88',
+    hint:'22 × 4 = ?',
+    explanation:'22 × 4: Ones 2×4=8, Tens 2×4=8. Answer: <b>88</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-057', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'43 × 2 = ?',
+    options:['86','76','96','84'], answer:'86',
+    hint:'43 × 2: Ones 3×2=6, Tens 4×2=8.',
+    explanation:'43 × 2 = <b>86</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-058', chapterId:'g3mth-multiplication', difficulty:3, subsection:'multiply_2digit',
+    question:'Raj buys 15 packets. Each packet has 6 biscuits. How many biscuits altogether?',
+    options:['90','80','100','85'], answer:'90',
+    hint:'15 × 6 = ?',
+    explanation:'15 × 6: Ones 5×6=30 carry 3, Tens 1×6+3=9. Answer: <b>90</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-059', chapterId:'g3mth-multiplication', difficulty:2, subsection:'multiply_2digit',
+    question:'34 × 2 = ?',
+    options:['68','58','78','66'], answer:'68',
+    hint:'34 × 2: Ones 4×2=8, Tens 3×2=6.',
+    explanation:'34 × 2 = <b>68</b>.' }),
+
+  makeMCQ({ id:'g3mth-mul-060', chapterId:'g3mth-multiplication', difficulty:3, subsection:'multiply_2digit',
+    question:'Nadia has 17 jars. Each jar holds 4 lychees. How many lychees in all?',
+    options:['68','58','78','64'], answer:'68',
+    hint:'17 × 4 = ?',
+    explanation:'17 × 4: Ones 7×4=28 carry 2, Tens 1×4+2=6. Answer: <b>68</b>.' })
+);
+
+})();

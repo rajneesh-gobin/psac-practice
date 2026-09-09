@@ -1,0 +1,372 @@
+(function () {
+'use strict';
+
+// ── reading_clock ─────────────────────────────────────────────────────────────
+
+STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g3mth-tim-001', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'The clock shows 7:30. This is the same as half past ___.',
+    options:['7','6','8','30'], answer:'7',
+    hint:'Half past 7 means 30 minutes past 7 o\'clock.',
+    explanation:'7:30 = half past <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-002', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'How many minutes are in one hour?',
+    options:['60','30','24','12'], answer:'60',
+    hint:'1 hour = 60 minutes.',
+    explanation:'There are <b>60</b> minutes in one hour.' }),
+
+  makeMCQ({ id:'g3mth-tim-003', chapterId:'g3mth-time', difficulty:2, subsection:'reading_clock',
+    question:'The time is 10:15. What time was it 30 minutes ago?',
+    options:['9:45','10:45','9:30','10:00'], answer:'9:45',
+    hint:'10:15 − 30 minutes.',
+    explanation:'10:15 − 30 min = 9:45.' }),
+
+  makeMCQ({ id:'g3mth-tim-004', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'How many minutes is it from 3:00 to 3:20?',
+    options:['20','30','10','25'], answer:'20',
+    hint:'Count from 3:00 to 3:20.',
+    explanation:'From 3:00 to 3:20 is <b>20</b> minutes.' }),
+
+  makeMCQ({ id:'g3mth-tim-005', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'What time is "quarter past 4"?',
+    options:['4:15','4:30','4:45','3:45'], answer:'4:15',
+    hint:'Quarter past = 15 minutes past.',
+    explanation:'Quarter past 4 = <b>4:15</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-006', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'What time is "quarter to 6"?',
+    options:['5:45','6:15','6:45','5:15'], answer:'5:45',
+    hint:'Quarter to 6 means 15 minutes before 6.',
+    explanation:'Quarter to 6 = <b>5:45</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-007', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'How many seconds are in one minute?',
+    options:['60','100','30','24'], answer:'60',
+    hint:'1 minute = 60 seconds.',
+    explanation:'There are <b>60</b> seconds in one minute.' }),
+
+  makeMCQ({ id:'g3mth-tim-008', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'The clock shows 8:55. What time will it be in 10 minutes?',
+    options:['9:05','9:55','8:45','9:10'], answer:'9:05',
+    hint:'8:55 + 10 minutes crosses 9:00.',
+    explanation:'8:55 + 10 min = <b>9:05</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-009', chapterId:'g3mth-time', difficulty:2, subsection:'reading_clock',
+    question:'Which clock shows 2:45?',
+    options:['quarter to 3','quarter past 2','half past 2','quarter past 3'], answer:'quarter to 3',
+    hint:'2:45 is 15 minutes before 3.',
+    explanation:'2:45 = <b>quarter to 3</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-010', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'How many hours are in one day?',
+    options:['24','12','48','60'], answer:'24',
+    hint:'A full day has 24 hours.',
+    explanation:'There are <b>24</b> hours in one day.' }),
+
+  makeMCQ({ id:'g3mth-tim-011', chapterId:'g3mth-time', difficulty:2, subsection:'reading_clock',
+    question:'The time is 6:00 p.m. What time will it be in 2 hours 30 minutes?',
+    options:['8:30 p.m.','7:30 p.m.','8:00 p.m.','9:00 p.m.'], answer:'8:30 p.m.',
+    hint:'6:00 + 2 hours = 8:00; + 30 min = 8:30.',
+    explanation:'6:00 p.m. + 2 h 30 min = <b>8:30 p.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-012', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'Dev\'s lesson starts at 9:00 a.m. and ends at 9:45 a.m. How long is the lesson?',
+    options:['45 minutes','30 minutes','1 hour','55 minutes'], answer:'45 minutes',
+    hint:'9:00 to 9:45 is how many minutes?',
+    explanation:'9:45 − 9:00 = <b>45 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-013', chapterId:'g3mth-time', difficulty:2, subsection:'reading_clock',
+    question:'Rani goes to sleep at 8:30 p.m. She wakes up at 6:30 a.m. How long did she sleep?',
+    options:['10 hours','8 hours','9 hours','12 hours'], answer:'10 hours',
+    hint:'8:30 p.m. to 6:30 a.m. = 10 hours.',
+    explanation:'From 8:30 p.m. to 6:30 a.m. is <b>10 hours</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-014', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'Which of these is an a.m. time?',
+    options:['7:30 a.m.','3:00 p.m.','midnight','midday'], answer:'7:30 a.m.',
+    hint:'a.m. times are in the morning, from midnight to midday.',
+    explanation:'<b>7:30 a.m.</b> is in the morning.' }),
+
+  makeMCQ({ id:'g3mth-tim-015', chapterId:'g3mth-time', difficulty:2, subsection:'reading_clock',
+    question:'Priya\'s maths lesson is 50 minutes long. It starts at 10:10 a.m. When does it end?',
+    options:['11:00 a.m.','10:50 a.m.','10:40 a.m.','11:10 a.m.'], answer:'11:00 a.m.',
+    hint:'10:10 + 50 minutes.',
+    explanation:'10:10 + 50 min = <b>11:00 a.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-016', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'Half past 11 in the morning is written as ___.',
+    options:['11:30 a.m.','11:30 p.m.','10:30 a.m.','12:30 a.m.'], answer:'11:30 a.m.',
+    hint:'Half past = :30. Morning = a.m.',
+    explanation:'Half past 11 a.m. = <b>11:30 a.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-017', chapterId:'g3mth-time', difficulty:2, subsection:'reading_clock',
+    question:'Raj left home at 7:45 a.m. and arrived at school at 8:10 a.m. How long was the journey?',
+    options:['25 minutes','15 minutes','35 minutes','30 minutes'], answer:'25 minutes',
+    hint:'From 7:45 to 8:00 is 15 min, then to 8:10 is another 10 min.',
+    explanation:'7:45 to 8:00 = 15 min; 8:00 to 8:10 = 10 min. Total = <b>25 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-018', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'How many minutes are there in 2 hours?',
+    options:['120','60','90','24'], answer:'120',
+    hint:'1 hour = 60 min. 2 hours = 2 × 60.',
+    explanation:'2 × 60 = <b>120</b> minutes.' }),
+
+  makeMCQ({ id:'g3mth-tim-019', chapterId:'g3mth-time', difficulty:2, subsection:'reading_clock',
+    question:'Nadia started reading at 4:20 p.m. She read for 45 minutes. What time did she finish?',
+    options:['5:05 p.m.','4:55 p.m.','5:00 p.m.','5:10 p.m.'], answer:'5:05 p.m.',
+    hint:'4:20 + 45 min: to 4:60 is 40 min, then 5 more.',
+    explanation:'4:20 + 45 min = <b>5:05 p.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-020', chapterId:'g3mth-time', difficulty:1, subsection:'reading_clock',
+    question:'Is 11:00 p.m. closer to midnight or to midday?',
+    options:['midnight','midday','they are equal','cannot tell'], answer:'midnight',
+    hint:'11:00 p.m. is only 1 hour before midnight.',
+    explanation:'11:00 p.m. is 1 hour from <b>midnight</b> and 11 hours from midday.' }),
+
+// ── elapsed_time ──────────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-tim-021', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'School starts at 8:00 a.m. and ends at 2:00 p.m. How long is the school day?',
+    options:['6 hours','8 hours','4 hours','7 hours'], answer:'6 hours',
+    hint:'Count from 8:00 a.m. to 2:00 p.m.',
+    explanation:'8 a.m. to 2 p.m. = <b>6 hours</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-022', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Dev left home at 7:30 a.m. and arrived at school at 8:05 a.m. How long was the journey?',
+    options:['35 minutes','30 minutes','45 minutes','1 hour'], answer:'35 minutes',
+    hint:'7:30 to 8:00 = 30 min; 8:00 to 8:05 = 5 min.',
+    explanation:'7:30 to 8:05 = 30 + 5 = <b>35 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-023', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'A film started at 6:00 p.m. and lasted 2 hours. When did it end?',
+    options:['8:00 p.m.','7:00 p.m.','9:00 p.m.','6:30 p.m.'], answer:'8:00 p.m.',
+    hint:'6:00 + 2 hours = ?',
+    explanation:'6:00 p.m. + 2 hours = <b>8:00 p.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-024', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Rani started cooking at 11:15 a.m. The meal was ready at 12:00. How long did she cook?',
+    options:['45 minutes','30 minutes','1 hour','15 minutes'], answer:'45 minutes',
+    hint:'From 11:15 to 12:00.',
+    explanation:'11:15 to 12:00 = <b>45 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-025', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Priya swam from 3:30 p.m. to 5:00 p.m. How long did she swim?',
+    options:['1 hour 30 minutes','2 hours','1 hour','30 minutes'], answer:'1 hour 30 minutes',
+    hint:'3:30 to 5:00.',
+    explanation:'3:30 to 5:00 = <b>1 hour 30 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-026', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Raj started his homework at 4:45 p.m. and finished at 6:15 p.m. How long did he work?',
+    options:['1 hour 30 minutes','1 hour','2 hours','1 hour 15 minutes'], answer:'1 hour 30 minutes',
+    hint:'4:45 to 6:15.',
+    explanation:'4:45 to 5:45 = 1 hour; 5:45 to 6:15 = 30 min. Total = <b>1 hour 30 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-027', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Nadia\'s bus journey takes 50 minutes. She boards at 7:20 a.m. What time does she arrive?',
+    options:['8:10 a.m.','8:00 a.m.','7:70 a.m.','8:20 a.m.'], answer:'8:10 a.m.',
+    hint:'7:20 + 50 min: to 8:00 is 40 min, then 10 more.',
+    explanation:'7:20 + 50 min = <b>8:10 a.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-028', chapterId:'g3mth-time', difficulty:3, subsection:'elapsed_time',
+    question:'A party started at 4:30 p.m. and ended 3 hours 15 minutes later. When did the party end?',
+    options:['7:45 p.m.','7:30 p.m.','7:15 p.m.','8:00 p.m.'], answer:'7:45 p.m.',
+    hint:'4:30 + 3 h = 7:30; + 15 min = 7:45.',
+    explanation:'4:30 p.m. + 3 h 15 min = <b>7:45 p.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-029', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Mia arrived at the market at 9:15 a.m. and left at 10:00 a.m. How long was she at the market?',
+    options:['45 minutes','30 minutes','1 hour','15 minutes'], answer:'45 minutes',
+    hint:'9:15 to 10:00.',
+    explanation:'9:15 to 10:00 = <b>45 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-030', chapterId:'g3mth-time', difficulty:3, subsection:'elapsed_time',
+    question:'Dev\'s cricket match started at 10:00 a.m. and ended at 1:30 p.m. How long did it last?',
+    options:['3 hours 30 minutes','3 hours','2 hours 30 minutes','4 hours'], answer:'3 hours 30 minutes',
+    hint:'10:00 to 1:30 p.m.',
+    explanation:'10:00 a.m. to 1:30 p.m. = <b>3 hours 30 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-031', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Rani\'s piano lesson lasts 40 minutes. She starts at 5:25 p.m. When will it end?',
+    options:['6:05 p.m.','6:00 p.m.','5:55 p.m.','6:10 p.m.'], answer:'6:05 p.m.',
+    hint:'5:25 + 40 min: to 6:00 is 35 min, then 5 more.',
+    explanation:'5:25 + 40 min = <b>6:05 p.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-032', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Priya baked a cake for 1 hour 20 minutes. She put it in the oven at 3:00 p.m. When was it done?',
+    options:['4:20 p.m.','4:00 p.m.','3:20 p.m.','4:30 p.m.'], answer:'4:20 p.m.',
+    hint:'3:00 + 1 h 20 min.',
+    explanation:'3:00 p.m. + 1 h 20 min = <b>4:20 p.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-033', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Raj watched TV from 6:30 p.m. to 8:00 p.m. How long did he watch TV?',
+    options:['1 hour 30 minutes','2 hours','1 hour','30 minutes'], answer:'1 hour 30 minutes',
+    hint:'6:30 to 8:00.',
+    explanation:'6:30 to 8:00 = <b>1 hour 30 minutes</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-034', chapterId:'g3mth-time', difficulty:3, subsection:'elapsed_time',
+    question:'Nadia spent 2 hours 45 minutes at the beach. She arrived at 11:30 a.m. What time did she leave?',
+    options:['2:15 p.m.','2:00 p.m.','1:45 p.m.','2:30 p.m.'], answer:'2:15 p.m.',
+    hint:'11:30 + 2 h 45 min: 11:30 + 2 h = 1:30; + 45 min = 2:15.',
+    explanation:'11:30 a.m. + 2 h 45 min = <b>2:15 p.m.</b>' }),
+
+  makeMCQ({ id:'g3mth-tim-035', chapterId:'g3mth-time', difficulty:2, subsection:'elapsed_time',
+    question:'Mia spent 1 hour 15 minutes gardening. She started at 7:00 a.m. When did she finish?',
+    options:['8:15 a.m.','8:00 a.m.','7:15 a.m.','8:30 a.m.'], answer:'8:15 a.m.',
+    hint:'7:00 + 1 h 15 min.',
+    explanation:'7:00 a.m. + 1 h 15 min = <b>8:15 a.m.</b>' }),
+
+// ── calendar_dates ────────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-tim-036', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'How many days are in a leap year?',
+    options:['366','365','364','360'], answer:'366',
+    hint:'An ordinary year has 365 days. A leap year has one extra day.',
+    explanation:'A leap year has <b>366</b> days.' }),
+
+  makeMCQ({ id:'g3mth-tim-037', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'In which month is Mauritius National Day celebrated?',
+    options:['March','January','June','December'], answer:'March',
+    hint:'Mauritius National Day is on 12 March.',
+    explanation:'Mauritius National Day is on 12 <b>March</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-038', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'How many weeks are in a year?',
+    options:['52','48','54','50'], answer:'52',
+    hint:'365 ÷ 7 ≈ 52.',
+    explanation:'There are <b>52</b> weeks in a year.' }),
+
+  makeMCQ({ id:'g3mth-tim-039', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'If the 1st of a month is a Tuesday, on what day does the 8th fall?',
+    options:['Tuesday','Monday','Wednesday','Sunday'], answer:'Tuesday',
+    hint:'7 days later is the same day of the week.',
+    explanation:'1st is Tuesday; 1 + 7 = 8th is also <b>Tuesday</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-040', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'Which month is the 9th month of the year?',
+    options:['September','October','August','November'], answer:'September',
+    hint:'Jan=1, Feb=2, Mar=3, Apr=4, May=5, Jun=6, Jul=7, Aug=8, Sep=9.',
+    explanation:'The 9th month is <b>September</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-041', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'How many days are in February in a normal (non-leap) year?',
+    options:['28','29','30','31'], answer:'28',
+    hint:'February is the shortest month.',
+    explanation:'February has <b>28</b> days in a normal year.' }),
+
+  makeMCQ({ id:'g3mth-tim-042', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'Which months have 31 days?',
+    options:['January, March, May, July, August, October, December','All months','February, April, June, September, November','Only January'], answer:'January, March, May, July, August, October, December',
+    hint:'Use the knuckle trick! Seven months have 31 days.',
+    explanation:'<b>January, March, May, July, August, October and December</b> each have 31 days.' }),
+
+  makeMCQ({ id:'g3mth-tim-043', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'Dev\'s birthday is on 15 August. Rani\'s is on 3 September. How many days apart are their birthdays?',
+    options:['19','15','29','25'], answer:'19',
+    hint:'August has 31 days. 31 − 15 = 16 days left in August; then 3 days in September.',
+    explanation:'31 − 15 = 16 days remaining in August. Plus 3 days in September. Total = <b>19 days</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-044', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'How many months are in a year?',
+    options:['12','10','52','365'], answer:'12',
+    hint:'January to December.',
+    explanation:'There are <b>12</b> months in a year.' }),
+
+  makeMCQ({ id:'g3mth-tim-045', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'Priya starts a 3-week holiday on 1 July. When does her holiday end?',
+    options:['22 July','21 July','31 July','15 July'], answer:'22 July',
+    hint:'3 weeks = 21 days. 1 July + 21 days.',
+    explanation:'1 July + 21 days = <b>22 July</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-046', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'Which is the last month of the year?',
+    options:['December','November','October','January'], answer:'December',
+    hint:'The year ends with the 12th month.',
+    explanation:'<b>December</b> is the 12th and last month of the year.' }),
+
+  makeMCQ({ id:'g3mth-tim-047', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'A project starts on 10 March and takes 4 weeks to complete. On what date does it end?',
+    options:['7 April','3 April','14 April','10 April'], answer:'7 April',
+    hint:'4 weeks = 28 days. March has 31 days. 10 + 28 = 38; 38 − 31 = 7 April.',
+    explanation:'10 March + 28 days: 21 more days in March (up to 31 March) + 7 days in April = <b>7 April</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-048', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'How many days are in the month of April?',
+    options:['30','31','28','29'], answer:'30',
+    hint:'April is one of four months with 30 days.',
+    explanation:'April has <b>30</b> days.' }),
+
+  makeMCQ({ id:'g3mth-tim-049', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'Raj was born on 20 June 2016. How old is he on 20 June 2024?',
+    options:['8','6','10','7'], answer:'8',
+    hint:'2024 − 2016 = ?',
+    explanation:'2024 − 2016 = <b>8</b> years old.' }),
+
+  makeMCQ({ id:'g3mth-tim-050', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'Which month comes just after June?',
+    options:['July','May','August','January'], answer:'July',
+    hint:'June is the 6th month; the 7th month is?',
+    explanation:'The month after June is <b>July</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-051', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'Nadia has piano lessons every Tuesday. There are 5 Tuesdays in October. How many piano lessons does she have in October?',
+    options:['5','4','6','3'], answer:'5',
+    hint:'One lesson per Tuesday; 5 Tuesdays.',
+    explanation:'5 Tuesdays = <b>5</b> piano lessons.' }),
+
+  makeMCQ({ id:'g3mth-tim-052', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'Mia has a dentist appointment on the third Wednesday of November. The first Wednesday of November is the 4th. What date is the appointment?',
+    options:['18 November','11 November','25 November','15 November'], answer:'18 November',
+    hint:'1st Wed = 4th; 2nd = 11th; 3rd = 18th.',
+    explanation:'4th → 11th → <b>18th November</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-053', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'How many days are in a week?',
+    options:['7','5','10','6'], answer:'7',
+    hint:'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.',
+    explanation:'There are <b>7</b> days in a week.' }),
+
+  makeMCQ({ id:'g3mth-tim-054', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'A school term is 10 weeks long. How many days long is the term?',
+    options:['70','50','60','100'], answer:'70',
+    hint:'10 weeks × 7 days.',
+    explanation:'10 × 7 = <b>70 days</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-055', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'Which month is the 6th month of the year?',
+    options:['June','May','July','August'], answer:'June',
+    hint:'Count: Jan, Feb, Mar, Apr, May, Jun.',
+    explanation:'The 6th month is <b>June</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-056', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'Raj has football practice every Monday, Wednesday and Friday. How many practices does he have in a 4-week period?',
+    options:['12','8','15','10'], answer:'12',
+    hint:'3 practices per week × 4 weeks.',
+    explanation:'3 × 4 = <b>12</b> practices.' }),
+
+  makeMCQ({ id:'g3mth-tim-057', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'Rani started reading a book on 28 January. She read for 5 days. On what date did she finish?',
+    options:['1 February','2 February','31 January','5 February'], answer:'1 February',
+    hint:'January has 31 days. 28 + 5 = 33; 33 − 31 = 2 February? Wait: 28, 29, 30, 31 Jan (4 days), then 1 Feb (5th day).',
+    explanation:'Day 1=28 Jan, Day 2=29, Day 3=30, Day 4=31, Day 5=<b>1 February</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-058', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'In which season does Mauritius typically experience cyclones?',
+    options:['Summer (November to April)','Winter (May to October)','Spring','Year-round equally'], answer:'Summer (November to April)',
+    hint:'Cyclones hit during the hot wet season.',
+    explanation:'Cyclones in Mauritius mainly occur during <b>summer (November to April)</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-059', chapterId:'g3mth-time', difficulty:1, subsection:'calendar_dates',
+    question:'What comes after Sunday?',
+    options:['Monday','Saturday','Friday','Tuesday'], answer:'Monday',
+    hint:'The week starts again after Sunday.',
+    explanation:'After Sunday comes <b>Monday</b>.' }),
+
+  makeMCQ({ id:'g3mth-tim-060', chapterId:'g3mth-time', difficulty:2, subsection:'calendar_dates',
+    question:'Dev has a holiday from 24 December to 2 January (inclusive). How many days is that?',
+    options:['10','7','8','9'], answer:'10',
+    hint:'Dec: 24, 25, 26, 27, 28, 29, 30, 31 (8 days); Jan: 1, 2 (2 days).',
+    explanation:'8 days in December + 2 days in January = <b>10 days</b>.' })
+);
+
+})();

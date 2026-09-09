@@ -1,0 +1,372 @@
+(function () {
+'use strict';
+
+// ── subtracting_2digit ────────────────────────────────────────────────────────
+
+STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g3mth-sub-001', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'73 − 47 = ?',
+    options:['26','36','16','27'], answer:'26',
+    hint:'Borrow from the tens. Ones: 13−7=6. Tens: 6−4=2.',
+    explanation:'73 − 47 = <b>26</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-002', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'81 − 56 = ?',
+    options:['25','15','35','24'], answer:'25',
+    hint:'Borrow. Ones: 11−6=5. Tens: 7−5=2.',
+    explanation:'81 − 56 = <b>25</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-003', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'92 − 38 = ?',
+    options:['54','44','64','53'], answer:'54',
+    hint:'Borrow. Ones: 12−8=4. Tens: 8−3=5.',
+    explanation:'92 − 38 = <b>54</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-004', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'65 − 29 = ?',
+    options:['36','26','46','35'], answer:'36',
+    hint:'Borrow. Ones: 15−9=6. Tens: 5−2=3.',
+    explanation:'65 − 29 = <b>36</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-005', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'84 − 46 = ?',
+    options:['38','28','48','37'], answer:'38',
+    hint:'Borrow. Ones: 14−6=8. Tens: 7−4=3.',
+    explanation:'84 − 46 = <b>38</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-006', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'50 − 27 = ?',
+    options:['23','33','13','22'], answer:'23',
+    hint:'Borrow. Ones: 10−7=3. Tens: 4−2=2.',
+    explanation:'50 − 27 = <b>23</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-007', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'76 − 48 = ?',
+    options:['28','18','38','27'], answer:'28',
+    hint:'Borrow. Ones: 16−8=8. Tens: 6−4=2.',
+    explanation:'76 − 48 = <b>28</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-008', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'100 − 43 = ?',
+    options:['57','47','67','56'], answer:'57',
+    hint:'Borrow twice. 100 − 43.',
+    explanation:'100 − 43 = <b>57</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-009', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_2digit',
+    question:'Dev had 82 cards. He gave 37 to his friend. How many does he have left?',
+    options:['45','35','55','44'], answer:'45',
+    hint:'82 − 37 = ?',
+    explanation:'82 − 37: Ones 12−7=5, Tens 7−3=4. Answer: <b>45</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-010', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'91 − 64 = ?',
+    options:['27','17','37','26'], answer:'27',
+    hint:'Borrow. Ones: 11−4=7. Tens: 8−6=2.',
+    explanation:'91 − 64 = <b>27</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-011', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'63 − 18 = ?',
+    options:['45','35','55','44'], answer:'45',
+    hint:'Borrow. Ones: 13−8=5. Tens: 5−1=4.',
+    explanation:'63 − 18 = <b>45</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-012', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'70 − 35 = ?',
+    options:['35','25','45','34'], answer:'35',
+    hint:'Borrow. Ones: 10−5=5. Tens: 6−3=3.',
+    explanation:'70 − 35 = <b>35</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-013', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_2digit',
+    question:'Rani had Rs 90 and spent Rs 54. How much does she have left?',
+    options:['Rs 36','Rs 46','Rs 26','Rs 35'], answer:'Rs 36',
+    hint:'90 − 54 = ?',
+    explanation:'90 − 54 = <b>36</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-014', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'55 − 18 = ?',
+    options:['37','27','47','36'], answer:'37',
+    hint:'Borrow. Ones: 15−8=7. Tens: 4−1=3.',
+    explanation:'55 − 18 = <b>37</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-015', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_2digit',
+    question:'Priya had 74 sweets. She ate 28. How many sweets are left?',
+    options:['46','36','56','45'], answer:'46',
+    hint:'74 − 28 = ?',
+    explanation:'74 − 28: Ones 14−8=6, Tens 6−2=4. Answer: <b>46</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-016', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'87 − 59 = ?',
+    options:['28','18','38','27'], answer:'28',
+    hint:'Borrow. Ones: 17−9=8. Tens: 7−5=2.',
+    explanation:'87 − 59 = <b>28</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-017', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'60 − 14 = ?',
+    options:['46','36','56','45'], answer:'46',
+    hint:'Borrow. Ones: 10−4=6. Tens: 5−1=4.',
+    explanation:'60 − 14 = <b>46</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-018', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'95 − 67 = ?',
+    options:['28','18','38','27'], answer:'28',
+    hint:'Borrow. Ones: 15−7=8. Tens: 8−6=2.',
+    explanation:'95 − 67 = <b>28</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-019', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_2digit',
+    question:'Raj scored 80 points in a game but lost 36 points. What is his final score?',
+    options:['44','34','54','43'], answer:'44',
+    hint:'80 − 36 = ?',
+    explanation:'80 − 36 = <b>44</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-020', chapterId:'g3mth-subtraction', difficulty:1, subsection:'subtracting_2digit',
+    question:'47 − 19 = ?',
+    options:['28','18','38','27'], answer:'28',
+    hint:'Borrow. Ones: 17−9=8. Tens: 3−1=2.',
+    explanation:'47 − 19 = <b>28</b>.' }),
+
+// ── subtracting_3digit ────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-sub-021', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'456 − 234 = ?',
+    options:['222','212','232','221'], answer:'222',
+    hint:'No borrowing needed.',
+    explanation:'456 − 234: 6−4=2, 5−3=2, 4−2=2. Answer: <b>222</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-022', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'700 − 358 = ?',
+    options:['342','352','332','341'], answer:'342',
+    hint:'Borrow twice. 700 − 358.',
+    explanation:'700 − 358 = <b>342</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-023', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'815 − 467 = ?',
+    options:['348','338','358','347'], answer:'348',
+    hint:'Borrow. Ones: 15−7=8. Tens: 0−6, borrow: 10−6=4 (or 11−7=4?). Work column by column.',
+    explanation:'815 − 467: Ones 15−7=8, Tens 10−6 (after borrow)=4 carry adjusted, Hundreds 7−4=3. Answer: <b>348</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-024', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'963 − 418 = ?',
+    options:['545','535','555','544'], answer:'545',
+    hint:'Borrow. Ones: 13−8=5. Tens: 5−1=4 (after borrow). Hundreds: 9−4=5... check: 963−418.',
+    explanation:'963 − 418: Ones 3 < 8 so borrow: 13−8=5, Tens (5 after borrow)−1=4... actually 963−418=545.' }),
+
+  makeMCQ({ id:'g3mth-sub-025', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'500 − 236 = ?',
+    options:['264','254','274','263'], answer:'264',
+    hint:'Borrow from hundreds. 500 − 236.',
+    explanation:'500 − 236 = <b>264</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-026', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'846 − 379 = ?',
+    options:['467','457','477','466'], answer:'467',
+    hint:'Ones: 16−9=7. Tens: 3−7, borrow: 13−7=6. Hundreds: 7−3=4.',
+    explanation:'846 − 379 = <b>467</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-027', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'732 − 548 = ?',
+    options:['184','174','194','183'], answer:'184',
+    hint:'Borrow twice.',
+    explanation:'732 − 548 = <b>184</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-028', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'900 − 471 = ?',
+    options:['429','419','439','428'], answer:'429',
+    hint:'900 − 471. Borrow from hundreds.',
+    explanation:'900 − 471 = <b>429</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-029', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'574 − 286 = ?',
+    options:['288','278','298','287'], answer:'288',
+    hint:'Ones: 14−6=8. Tens: 6−8, borrow: 16−8=8. Hundreds: 4−2=2.',
+    explanation:'574 − 286 = <b>288</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-030', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'631 − 345 = ?',
+    options:['286','276','296','285'], answer:'286',
+    hint:'Borrow twice.',
+    explanation:'631 − 345 = <b>286</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-031', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'800 − 325 = ?',
+    options:['475','465','485','474'], answer:'475',
+    hint:'800 − 325.',
+    explanation:'800 − 325 = <b>475</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-032', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'457 − 168 = ?',
+    options:['289','279','299','288'], answer:'289',
+    hint:'Borrow. Ones: 17−8=9. Tens: 4−6, borrow: 14−6=8... 457−168.',
+    explanation:'457 − 168 = <b>289</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-033', chapterId:'g3mth-subtraction', difficulty:3, subsection:'subtracting_3digit',
+    question:'1000 − 547 = ?',
+    options:['453','443','463','452'], answer:'453',
+    hint:'1000 − 547.',
+    explanation:'1000 − 547 = <b>453</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-034', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'763 − 489 = ?',
+    options:['274','264','284','273'], answer:'274',
+    hint:'Ones: 13−9=4. Tens: 5−8, borrow: 15−8=7 (then 6−4=2)... work it out.',
+    explanation:'763 − 489 = <b>274</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-035', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'925 − 637 = ?',
+    options:['288','278','298','287'], answer:'288',
+    hint:'Ones: 15−7=8. Tens: 1−3, borrow: 11−3=8 (then 8−6=2).',
+    explanation:'925 − 637 = <b>288</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-036', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'541 − 276 = ?',
+    options:['265','255','275','264'], answer:'265',
+    hint:'Borrow twice. 541 − 276.',
+    explanation:'541 − 276 = <b>265</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-037', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'682 − 195 = ?',
+    options:['487','477','497','486'], answer:'487',
+    hint:'Borrow. 682 − 195.',
+    explanation:'682 − 195 = <b>487</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-038', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'310 − 178 = ?',
+    options:['132','122','142','131'], answer:'132',
+    hint:'Borrow twice. 310 − 178.',
+    explanation:'310 − 178 = <b>132</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-039', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'824 − 566 = ?',
+    options:['258','248','268','257'], answer:'258',
+    hint:'Borrow twice. 824 − 566.',
+    explanation:'824 − 566 = <b>258</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-040', chapterId:'g3mth-subtraction', difficulty:2, subsection:'subtracting_3digit',
+    question:'403 − 157 = ?',
+    options:['246','236','256','245'], answer:'246',
+    hint:'Borrow twice. 403 − 157.',
+    explanation:'403 − 157 = <b>246</b>.' }),
+
+// ── sub_word_problems ─────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-sub-041', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'A shop had 524 bottles of water. They sold 278. How many are left?',
+    options:['246','256','236','247'], answer:'246',
+    hint:'524 − 278 = ?',
+    explanation:'524 − 278: Ones 14−8=6, Tens 1−7 borrow 11−7=4, Hundreds 4−2=2. Answer: <b>246</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-042', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Priya had Rs 600. She spent Rs 375. How much does she have left?',
+    options:['Rs 225','Rs 235','Rs 215','Rs 226'], answer:'Rs 225',
+    hint:'600 − 375 = ?',
+    explanation:'600 − 375 = <b>225</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-043', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'There were 820 mangoes at the market. 465 were sold. How many are left?',
+    options:['355','345','365','356'], answer:'355',
+    hint:'820 − 465 = ?',
+    explanation:'820 − 465 = <b>355</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-044', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'A library had 913 books. Children borrowed 468. How many books are still on the shelves?',
+    options:['445','435','455','444'], answer:'445',
+    hint:'913 − 468 = ?',
+    explanation:'913 − 468 = <b>445</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-045', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Raj had Rs 750. He spent Rs 283 on shoes. How much does he have left?',
+    options:['Rs 467','Rs 457','Rs 477','Rs 466'], answer:'Rs 467',
+    hint:'750 − 283 = ?',
+    explanation:'750 − 283 = <b>467</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-046', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'There are 500 seats in a cinema. 324 are filled. How many seats are empty?',
+    options:['176','186','166','175'], answer:'176',
+    hint:'500 − 324 = ?',
+    explanation:'500 − 324 = <b>176</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-047', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Nadia\'s school ordered 680 exercise books. They gave out 437. How many are left?',
+    options:['243','233','253','242'], answer:'243',
+    hint:'680 − 437 = ?',
+    explanation:'680 − 437 = <b>243</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-048', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'A farmer had 842 litres of milk. He sold 576 litres. How many litres are left?',
+    options:['266','256','276','265'], answer:'266',
+    hint:'842 − 576 = ?',
+    explanation:'842 − 576 = <b>266</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-049', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Mia needed 900 beads to make a necklace. She already has 357. How many more does she need?',
+    options:['543','533','553','542'], answer:'543',
+    hint:'900 − 357 = ?',
+    explanation:'900 − 357 = <b>543</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-050', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Dev\'s village has 763 residents. 418 of them are adults. How many are children?',
+    options:['345','335','355','344'], answer:'345',
+    hint:'763 − 418 = ?',
+    explanation:'763 − 418 = <b>345</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-051', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'A baker made 615 buns. He sold 378 in the morning. How many buns are left?',
+    options:['237','227','247','236'], answer:'237',
+    hint:'615 − 378 = ?',
+    explanation:'615 − 378 = <b>237</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-052', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Rani collected 800 stamps over many years. She gave away 294. How many does she still have?',
+    options:['506','496','516','505'], answer:'506',
+    hint:'800 − 294 = ?',
+    explanation:'800 − 294 = <b>506</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-053', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'A shop had 725 kg of rice. They sold 468 kg. How many kg of rice are left?',
+    options:['257','247','267','256'], answer:'257',
+    hint:'725 − 468 = ?',
+    explanation:'725 − 468 = <b>257</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-054', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Priya saved Rs 945. She spent Rs 377 on a present. How much does she have left?',
+    options:['Rs 568','Rs 558','Rs 578','Rs 567'], answer:'Rs 568',
+    hint:'945 − 377 = ?',
+    explanation:'945 − 377 = <b>568</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-055', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'There are 1000 pages in a big book. Raj has read 648 pages. How many pages are left to read?',
+    options:['352','342','362','351'], answer:'352',
+    hint:'1000 − 648 = ?',
+    explanation:'1000 − 648 = <b>352</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-056', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'A bottle holds 750 ml of juice. Nadia drank 280 ml. How much juice is left in the bottle?',
+    options:['470 ml','460 ml','480 ml','469 ml'], answer:'470 ml',
+    hint:'750 − 280 = ?',
+    explanation:'750 − 280 = <b>470</b> ml.' }),
+
+  makeMCQ({ id:'g3mth-sub-057', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Dev\'s school raised Rs 835 for charity. They spent Rs 569 on supplies. How much money is left?',
+    options:['Rs 266','Rs 256','Rs 276','Rs 265'], answer:'Rs 266',
+    hint:'835 − 569 = ?',
+    explanation:'835 − 569 = <b>266</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-058', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'A sports shop had 460 footballs. They sold 183. How many footballs are left?',
+    options:['277','267','287','276'], answer:'277',
+    hint:'460 − 183 = ?',
+    explanation:'460 − 183 = <b>277</b>.' }),
+
+  makeMCQ({ id:'g3mth-sub-059', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'Mia earned Rs 730 last month. She saved Rs 465. How much did she spend?',
+    options:['Rs 265','Rs 255','Rs 275','Rs 264'], answer:'Rs 265',
+    hint:'730 − 465 = ?',
+    explanation:'730 − 465 = <b>265</b>. That is how much she spent.' }),
+
+  makeMCQ({ id:'g3mth-sub-060', chapterId:'g3mth-subtraction', difficulty:4, subsection:'sub_word_problems',
+    question:'There are 900 fish in a pond. A storm washed away 347. How many fish are left?',
+    options:['553','543','563','552'], answer:'553',
+    hint:'900 − 347 = ?',
+    explanation:'900 − 347 = <b>553</b>.' })
+);
+
+})();

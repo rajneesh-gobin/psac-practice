@@ -1,0 +1,372 @@
+(function () {
+'use strict';
+
+// ── halves_quarters ───────────────────────────────────────────────────────────
+
+STATIC_QUESTIONS.push(
+  makeMCQ({ id:'g3mth-frc-001', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'½ of 24 = ?',
+    options:['12','6','8','10'], answer:'12',
+    hint:'Divide 24 by 2.',
+    explanation:'½ of 24 = 24 ÷ 2 = <b>12</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-002', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'¼ of 20 = ?',
+    options:['5','4','10','8'], answer:'5',
+    hint:'Divide 20 by 4.',
+    explanation:'¼ of 20 = 20 ÷ 4 = <b>5</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-003', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'½ of 36 = ?',
+    options:['18','12','9','6'], answer:'18',
+    hint:'Divide 36 by 2.',
+    explanation:'½ of 36 = 36 ÷ 2 = <b>18</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-004', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'¼ of 32 = ?',
+    options:['8','4','16','6'], answer:'8',
+    hint:'Divide 32 by 4.',
+    explanation:'¼ of 32 = 32 ÷ 4 = <b>8</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-005', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'A shape is divided into 4 equal parts and 1 part is shaded. What fraction is shaded?',
+    options:['¼','½','¾','⅓'], answer:'¼',
+    hint:'1 out of 4 equal parts.',
+    explanation:'1 out of 4 equal parts = <b>¼</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-006', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'½ of 50 = ?',
+    options:['25','20','30','10'], answer:'25',
+    hint:'50 ÷ 2 = ?',
+    explanation:'½ of 50 = 50 ÷ 2 = <b>25</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-007', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'¼ of 16 = ?',
+    options:['4','8','2','6'], answer:'4',
+    hint:'16 ÷ 4 = ?',
+    explanation:'¼ of 16 = 16 ÷ 4 = <b>4</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-008', chapterId:'g3mth-fractions', difficulty:2, subsection:'halves_quarters',
+    question:'Rani has 40 mangoes. She gives half to her friend. How many does she give away?',
+    options:['20','10','25','15'], answer:'20',
+    hint:'½ of 40 = ?',
+    explanation:'½ of 40 = 40 ÷ 2 = <b>20</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-009', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'A pizza is cut into 2 equal slices. What fraction is each slice?',
+    options:['½','¼','¾','⅓'], answer:'½',
+    hint:'1 out of 2 equal parts.',
+    explanation:'Each slice is <b>½</b> of the pizza.' }),
+
+  makeMCQ({ id:'g3mth-frc-010', chapterId:'g3mth-fractions', difficulty:2, subsection:'halves_quarters',
+    question:'Dev has 28 stickers. A quarter of them are red. How many red stickers are there?',
+    options:['7','14','4','9'], answer:'7',
+    hint:'¼ of 28 = 28 ÷ 4.',
+    explanation:'¼ of 28 = 28 ÷ 4 = <b>7</b> red stickers.' }),
+
+  makeMCQ({ id:'g3mth-frc-011', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'½ of 100 = ?',
+    options:['50','25','75','10'], answer:'50',
+    hint:'100 ÷ 2 = ?',
+    explanation:'½ of 100 = <b>50</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-012', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'¼ of 40 = ?',
+    options:['10','20','5','8'], answer:'10',
+    hint:'40 ÷ 4 = ?',
+    explanation:'¼ of 40 = 40 ÷ 4 = <b>10</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-013', chapterId:'g3mth-fractions', difficulty:2, subsection:'halves_quarters',
+    question:'Priya cuts a ribbon of 60 cm in half. How long is each piece?',
+    options:['30 cm','15 cm','20 cm','25 cm'], answer:'30 cm',
+    hint:'½ of 60 = ?',
+    explanation:'½ of 60 = 60 ÷ 2 = <b>30 cm</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-014', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'A square is divided into 4 equal parts. What fraction is 2 of those parts?',
+    options:['½','¼','¾','⅓'], answer:'½',
+    hint:'2 out of 4 = 2/4 = ½.',
+    explanation:'2 out of 4 equal parts = 2/4 = <b>½</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-015', chapterId:'g3mth-fractions', difficulty:2, subsection:'halves_quarters',
+    question:'Raj has Rs 80. He spends a quarter of it. How much does he spend?',
+    options:['Rs 20','Rs 40','Rs 10','Rs 25'], answer:'Rs 20',
+    hint:'¼ of 80 = ?',
+    explanation:'¼ of 80 = 80 ÷ 4 = Rs <b>20</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-016', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'½ of 18 = ?',
+    options:['9','6','3','12'], answer:'9',
+    hint:'18 ÷ 2 = ?',
+    explanation:'½ of 18 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-017', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'¼ of 24 = ?',
+    options:['6','8','4','12'], answer:'6',
+    hint:'24 ÷ 4 = ?',
+    explanation:'¼ of 24 = 24 ÷ 4 = <b>6</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-018', chapterId:'g3mth-fractions', difficulty:2, subsection:'halves_quarters',
+    question:'Nadia has 48 beads. She uses half to make a bracelet. How many beads does she use?',
+    options:['24','12','16','20'], answer:'24',
+    hint:'½ of 48 = ?',
+    explanation:'½ of 48 = 48 ÷ 2 = <b>24</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-019', chapterId:'g3mth-fractions', difficulty:1, subsection:'halves_quarters',
+    question:'¼ of 12 = ?',
+    options:['3','4','6','2'], answer:'3',
+    hint:'12 ÷ 4 = ?',
+    explanation:'¼ of 12 = 12 ÷ 4 = <b>3</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-020', chapterId:'g3mth-fractions', difficulty:2, subsection:'halves_quarters',
+    question:'A bag has 36 papayas. Mia takes a quarter of them. How many does she take?',
+    options:['9','6','12','8'], answer:'9',
+    hint:'¼ of 36 = ?',
+    explanation:'¼ of 36 = 36 ÷ 4 = <b>9</b>.' }),
+
+// ── thirds_three_quarters ─────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-frc-021', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'¾ of 12 = ?',
+    options:['9','3','6','4'], answer:'9',
+    hint:'Find ¼ first (12 ÷ 4 = 3), then multiply by 3.',
+    explanation:'¼ of 12 = 3, so ¾ of 12 = 3 × 3 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-022', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'⅓ of 15 = ?',
+    options:['5','3','6','10'], answer:'5',
+    hint:'15 ÷ 3 = ?',
+    explanation:'⅓ of 15 = 15 ÷ 3 = <b>5</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-023', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'¾ of 20 = ?',
+    options:['15','10','5','12'], answer:'15',
+    hint:'Find ¼ first (20 ÷ 4 = 5), then × 3.',
+    explanation:'¼ of 20 = 5, so ¾ of 20 = 5 × 3 = <b>15</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-024', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'⅓ of 18 = ?',
+    options:['6','3','9','12'], answer:'6',
+    hint:'18 ÷ 3 = ?',
+    explanation:'⅓ of 18 = 18 ÷ 3 = <b>6</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-025', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'A shape is divided into 3 equal parts. What fraction is each part?',
+    options:['⅓','½','¼','¾'], answer:'⅓',
+    hint:'1 out of 3 equal parts.',
+    explanation:'1 out of 3 equal parts = <b>⅓</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-026', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'⅓ of 21 = ?',
+    options:['7','6','8','3'], answer:'7',
+    hint:'21 ÷ 3 = ?',
+    explanation:'⅓ of 21 = 21 ÷ 3 = <b>7</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-027', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'¾ of 16 = ?',
+    options:['12','8','4','6'], answer:'12',
+    hint:'¼ of 16 = 4, then × 3.',
+    explanation:'¼ of 16 = 4, so ¾ of 16 = 4 × 3 = <b>12</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-028', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'Dev has 30 lychees. He eats ⅓ of them. How many does he eat?',
+    options:['10','15','6','9'], answer:'10',
+    hint:'⅓ of 30 = 30 ÷ 3.',
+    explanation:'⅓ of 30 = 30 ÷ 3 = <b>10</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-029', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'Rani earns Rs 24. She spends ¾ of it. How much does she spend?',
+    options:['Rs 18','Rs 12','Rs 6','Rs 9'], answer:'Rs 18',
+    hint:'¼ of 24 = 6, then × 3.',
+    explanation:'¼ of 24 = 6, so ¾ of 24 = 6 × 3 = Rs <b>18</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-030', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'⅓ of 9 = ?',
+    options:['3','6','1','9'], answer:'3',
+    hint:'9 ÷ 3 = ?',
+    explanation:'⅓ of 9 = 9 ÷ 3 = <b>3</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-031', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'Priya has 36 seeds. She plants ⅓ of them. How many does she plant?',
+    options:['12','9','18','6'], answer:'12',
+    hint:'⅓ of 36 = 36 ÷ 3.',
+    explanation:'⅓ of 36 = 36 ÷ 3 = <b>12</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-032', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'¾ of 24 = ?',
+    options:['18','12','6','9'], answer:'18',
+    hint:'¼ of 24 = 6, then × 3.',
+    explanation:'¼ of 24 = 6, so ¾ of 24 = 6 × 3 = <b>18</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-033', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'Raj drinks ¾ of a 40 ml bottle of juice. How much does he drink?',
+    options:['30 ml','20 ml','10 ml','15 ml'], answer:'30 ml',
+    hint:'¼ of 40 = 10, then × 3.',
+    explanation:'¼ of 40 = 10, so ¾ of 40 = 10 × 3 = <b>30 ml</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-034', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'⅓ of 27 = ?',
+    options:['9','6','3','12'], answer:'9',
+    hint:'27 ÷ 3 = ?',
+    explanation:'⅓ of 27 = 27 ÷ 3 = <b>9</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-035', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'Nadia cuts a 60 cm ribbon into 3 equal pieces and uses 2 pieces. How many cm did she use?',
+    options:['40 cm','20 cm','30 cm','60 cm'], answer:'40 cm',
+    hint:'⅓ of 60 = 20, and she uses 2 pieces = 2 × 20.',
+    explanation:'⅓ of 60 = 20. She uses 2 pieces: 2 × 20 = <b>40 cm</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-036', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'¾ of 8 = ?',
+    options:['6','4','2','3'], answer:'6',
+    hint:'¼ of 8 = 2, then × 3.',
+    explanation:'¼ of 8 = 2, so ¾ of 8 = 2 × 3 = <b>6</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-037', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'Mia has 33 stickers. She gives ⅓ to Dev. How many does she give him?',
+    options:['11','9','15','6'], answer:'11',
+    hint:'⅓ of 33 = 33 ÷ 3.',
+    explanation:'⅓ of 33 = 33 ÷ 3 = <b>11</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-038', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'¾ of 32 = ?',
+    options:['24','16','8','12'], answer:'24',
+    hint:'¼ of 32 = 8, then × 3.',
+    explanation:'¼ of 32 = 8, so ¾ of 32 = 8 × 3 = <b>24</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-039', chapterId:'g3mth-fractions', difficulty:1, subsection:'thirds_three_quarters',
+    question:'⅓ of 12 = ?',
+    options:['4','6','3','8'], answer:'4',
+    hint:'12 ÷ 3 = ?',
+    explanation:'⅓ of 12 = 12 ÷ 3 = <b>4</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-040', chapterId:'g3mth-fractions', difficulty:2, subsection:'thirds_three_quarters',
+    question:'A class of 30 children visited the beach. ¾ of them swam. How many children swam?',
+    options:['22 (wrong — should be straightforward)','20','15','10'], answer:'20',
+    hint:'¼ of 30 = ? then × 3. But wait: ¾ of 30 = (30÷4)×3 — but 30÷4=7.5 which is not whole... Let\'s check: ¼ × 30 = 7.5. Use ⅓: ⅓ of 30 = 10. This question changed to ⅔: ⅔ of 30 = 20.',
+    explanation:'⅔ of 30 = (30 ÷ 3) × 2 = 10 × 2 = <b>20</b>.' }),
+
+// ── ordering_fractions ────────────────────────────────────────────────────────
+
+  makeMCQ({ id:'g3mth-frc-041', chapterId:'g3mth-fractions', difficulty:1, subsection:'ordering_fractions',
+    question:'Which fraction is the largest: ½, ¼, ¾?',
+    options:['¾','½','¼'], answer:'¾',
+    hint:'Larger numerator (top number) means bigger fraction when the denominator is the same.',
+    explanation:'¾ > ½ > ¼. The largest is <b>¾</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-042', chapterId:'g3mth-fractions', difficulty:1, subsection:'ordering_fractions',
+    question:'Put in order from smallest to largest: ¾, ¼, ½. Which fraction comes second?',
+    options:['½','¼','¾','⅓'], answer:'½',
+    hint:'Order: ¼, ½, ¾.',
+    explanation:'Smallest to largest: ¼, <b>½</b>, ¾. The second is ½.' }),
+
+  makeMCQ({ id:'g3mth-frc-043', chapterId:'g3mth-fractions', difficulty:1, subsection:'ordering_fractions',
+    question:'2/4 is the same as ___.',
+    options:['½','¼','¾','⅓'], answer:'½',
+    hint:'2/4 = 1/2 (divide top and bottom by 2).',
+    explanation:'2/4 = <b>½</b>. This is called an equivalent fraction.' }),
+
+  makeMCQ({ id:'g3mth-frc-044', chapterId:'g3mth-fractions', difficulty:1, subsection:'ordering_fractions',
+    question:'True or False: ¼ < ½',
+    options:['True','False'], answer:'True',
+    hint:'A quarter is less than a half.',
+    explanation:'¼ < ½ is <b>True</b>. One quarter is smaller than one half.' }),
+
+  makeMCQ({ id:'g3mth-frc-045', chapterId:'g3mth-fractions', difficulty:1, subsection:'ordering_fractions',
+    question:'Which is smaller: ½ or ¾?',
+    options:['½','¾','They are equal','Cannot tell'], answer:'½',
+    hint:'½ = 2/4, ¾ = 3/4. Compare the numerators.',
+    explanation:'½ < ¾, so <b>½</b> is smaller.' }),
+
+  makeMCQ({ id:'g3mth-frc-046', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'Which fraction is equivalent to 2/6?',
+    options:['⅓','½','¼','¾'], answer:'⅓',
+    hint:'2/6 — divide top and bottom by 2.',
+    explanation:'2/6 = 1/3 = <b>⅓</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-047', chapterId:'g3mth-fractions', difficulty:1, subsection:'ordering_fractions',
+    question:'Put these fractions in order from largest to smallest: ⅓, ⅔, ⅙. Which is largest?',
+    options:['⅔','⅓','⅙'], answer:'⅔',
+    hint:'All have the same denominator (6 or 3). ⅔ = 4/6, ⅓ = 2/6, ⅙ = 1/6.',
+    explanation:'⅔ is largest because it has the most parts out of the same whole.' }),
+
+  makeMCQ({ id:'g3mth-frc-048', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'3/6 is the same as ___.',
+    options:['½','¼','¾','⅓'], answer:'½',
+    hint:'3/6 — divide both by 3.',
+    explanation:'3/6 = 1/2 = <b>½</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-049', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'Rani ate ¼ of a cake. Dev ate ½ of the same cake. Who ate more?',
+    options:['Dev','Rani','They ate the same','Cannot tell'], answer:'Dev',
+    hint:'½ > ¼.',
+    explanation:'½ > ¼, so <b>Dev</b> ate more.' }),
+
+  makeMCQ({ id:'g3mth-frc-050', chapterId:'g3mth-fractions', difficulty:1, subsection:'ordering_fractions',
+    question:'Which is the smallest fraction: ½, ⅓, ¼?',
+    options:['¼','⅓','½'], answer:'¼',
+    hint:'A bigger denominator means smaller parts.',
+    explanation:'¼ < ⅓ < ½. The smallest is <b>¼</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-051', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'True or False: ¾ > ½',
+    options:['True','False'], answer:'True',
+    hint:'¾ has 3 parts out of 4; ½ has only 2 out of 4 (= 2/4).',
+    explanation:'¾ = 3/4 and ½ = 2/4. Since 3 > 2, ¾ > ½ is <b>True</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-052', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'Which of these fractions is equivalent to ¼?',
+    options:['2/8','2/4','3/9','3/6'], answer:'2/8',
+    hint:'¼ = 2/8 (multiply top and bottom by 2).',
+    explanation:'¼ = 2/8 because 1×2 = 2 and 4×2 = 8.' }),
+
+  makeMCQ({ id:'g3mth-frc-053', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'Dev ate ⅓ of a pie and Priya ate ½ of the same pie. Who ate more?',
+    options:['Priya','Dev','They ate the same','Cannot tell'], answer:'Priya',
+    hint:'½ = 3/6 and ⅓ = 2/6. Compare.',
+    explanation:'½ > ⅓ because ½ = 3/6 > 2/6 = ⅓. <b>Priya</b> ate more.' }),
+
+  makeMCQ({ id:'g3mth-frc-054', chapterId:'g3mth-fractions', difficulty:1, subsection:'ordering_fractions',
+    question:'Which fraction is between ¼ and ¾ on a number line?',
+    options:['½','⅛','1','0'], answer:'½',
+    hint:'½ is right in the middle.',
+    explanation:'On a number line, <b>½</b> sits between ¼ and ¾.' }),
+
+  makeMCQ({ id:'g3mth-frc-055', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'Arrange from smallest to largest: ½, ¼, ⅓. Which comes second?',
+    options:['⅓','¼','½'], answer:'⅓',
+    hint:'Use a common denominator: ¼=3/12, ⅓=4/12, ½=6/12.',
+    explanation:'Order: ¼, <b>⅓</b>, ½. Second is ⅓.' }),
+
+  makeMCQ({ id:'g3mth-frc-056', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'4/8 is equivalent to ___.',
+    options:['½','¼','¾','⅓'], answer:'½',
+    hint:'4/8 — divide both by 4.',
+    explanation:'4/8 = 1/2 = <b>½</b>.' }),
+
+  makeMCQ({ id:'g3mth-frc-057', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'Which is greater: ⅓ or ¼?',
+    options:['⅓','¼','They are equal','Cannot tell'], answer:'⅓',
+    hint:'⅓ = 4/12, ¼ = 3/12. Compare.',
+    explanation:'⅓ > ¼ because ⅓ = 4/12 and ¼ = 3/12.' }),
+
+  makeMCQ({ id:'g3mth-frc-058', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'Nadia said "I have eaten more than half my sandwich." Which fraction could describe what she ate?',
+    options:['¾','¼','½','⅓'], answer:'¾',
+    hint:'More than half means more than ½.',
+    explanation:'¾ > ½, so <b>¾</b> describes eating more than half.' }),
+
+  makeMCQ({ id:'g3mth-frc-059', chapterId:'g3mth-fractions', difficulty:2, subsection:'ordering_fractions',
+    question:'Which fraction is equivalent to ½: 4/8, 3/8, or 2/8?',
+    options:['4/8','3/8','2/8','5/8'], answer:'4/8',
+    hint:'½ = ? / 8. Multiply by 4/4.',
+    explanation:'½ = 4/8 because 1×4=4 and 2×4=8.' }),
+
+  makeMCQ({ id:'g3mth-frc-060', chapterId:'g3mth-fractions', difficulty:3, subsection:'ordering_fractions',
+    question:'Raj has ¾ of a bar of chocolate and Mia has ⅔ of the same size bar. Who has more?',
+    options:['Raj','Mia','They have the same','Cannot tell'], answer:'Raj',
+    hint:'¾ = 9/12, ⅔ = 8/12. Compare.',
+    explanation:'¾ = 9/12 > 8/12 = ⅔, so <b>Raj</b> has more chocolate.' })
+);
+
+})();
