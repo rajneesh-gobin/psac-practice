@@ -8685,6 +8685,47 @@ textarea.contact-field { min-height: 120px; }
 /* A 13px tick box is not a touch target; this is the one the admin taps most. */
 .rep-pick { width: 20px; height: 20px; accent-color: #4f46e5; cursor: pointer; }
 
+/* Search box above the chips. Same pill language as .rep-chip so the whole
+   toolbar reads as one control strip. */
+.rep-search-row { display: flex; align-items: center; gap: .4rem; margin-bottom: .5rem; }
+.rep-search-ico { font-size: .9rem; opacity: .7; flex: 0 0 auto; }
+.rep-search {
+  flex: 1 1 auto; min-width: 0; min-height: 44px;
+  padding: .3rem .85rem; border-radius: 999px;
+  border: 1px solid #d1d5db; background: #fff; color: #111827; font-size: .85rem;
+}
+.rep-search::placeholder { color: #9ca3af; }
+.rep-search:focus { outline: 2px solid #a5b4fc; outline-offset: 1px; border-color: #a5b4fc; }
+.dark .rep-search { background: #1f2937; border-color: #4b5563; color: #e5e7eb; }
+.dark .rep-search::placeholder { color: #6b7280; }
+
+/* ══ Admin reports: collapsed cards ══════════════════════════════════════
+   The card body lives in <details>, so "collapsed by default" is the absence
+   of an [open] attribute rather than a class anyone has to remember to add. */
+/* ⚠ The flex row is an inner SPAN, not the <summary> itself. Overriding a
+   summary's own display is what stops it toggling in older WebKit - the same
+   Safari the no-lookbehind rule exists for - and a card that will not open is
+   a worse bug than a marker that will not hide. */
+.rep-sum { display: block; cursor: pointer; list-style: none; border-radius: .5rem; padding: .1rem; }
+.rep-sum-inner { display: flex; align-items: flex-start; gap: .5rem; }
+.rep-sum::-webkit-details-marker { display: none; }
+.rep-sum:hover { background: rgba(99, 102, 241, .06); }
+.rep-sum:focus-visible { outline: 2px solid #818cf8; outline-offset: 2px; }
+.rep-caret {
+  flex: 0 0 auto; margin-top: .15rem; font-size: .8rem; color: #9ca3af;
+  transition: transform .15s ease;
+}
+/* Safe here and nowhere near a .screen: a transformed ancestor becomes the
+   containing block for every position:fixed descendant, and this span has none. */
+details.rep-det[open] > .rep-sum .rep-caret { transform: rotate(90deg); }
+.rep-sum-main { display: flex; flex-direction: column; gap: .15rem; min-width: 0; flex: 1 1 auto; }
+.rep-sum-top { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+.rep-sum-sub { font-size: .72rem; font-weight: 600; }
+/* One line, clipped: the snippet is there to tell two reports apart, not to be
+   read in full - that is what opening the card is for. */
+.rep-sum-snip { display: block; font-size: .75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rep-sum-meta { font-size: .68rem; }
+
 /* ===== HEADER CONTROL: WORK IN PROGRESS =====
    Set by setHeaderBtnBusy() while a header button is awaiting the network.
    Deliberately not `disabled`: a disabled button drops its tooltip and its

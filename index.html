@@ -1966,8 +1966,8 @@
     <div class="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 flex items-center justify-center p-4">
       <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 max-w-sm w-full text-center border border-white/20">
         <div class="text-6xl mb-4 select-none">📧</div>
-        <h2 class="text-2xl font-black text-white mb-2">Check your email!</h2>
-        <p class="text-indigo-200 text-sm mb-2">We sent a verification link to</p>
+        <h2 id="verify-email-title" class="text-2xl font-black text-white mb-2">Check your email!</h2>
+        <p id="verify-email-lead" class="text-indigo-200 text-sm mb-2">We sent a verification link to</p>
         <p class="text-white font-semibold mb-5" id="verify-email-addr"></p>
         <p class="text-white/50 text-xs mb-5" id="verify-email-message">Click the link in the email to activate your account. Check your spam folder if you don't see it within a minute.</p>
         <!-- Shown only for teacher sign-ups: verification alone does not grant
@@ -3576,8 +3576,20 @@
           <button onclick="AdminPanel.loadReports()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
         <!-- Filtered in the database, not after the fact: a client-side filter
-             over one page would make the count lie and hide the rest. -->
-        <div class="rep-tools" role="group" aria-label="Filter and clear reports">
+             over one page would make the count lie and hide the rest. That goes
+             for the search box too - it matches the reporter's name, the
+             message, the question text and the question id, server-side. -->
+        <div class="rep-search-row">
+          <label class="sr-only" for="rep-search">Search reports</label>
+          <span class="rep-search-ico" aria-hidden="true">🔍</span>
+          <input type="search" id="rep-search" class="rep-search" autocomplete="off"
+            placeholder="Search name, keyword, question id…"
+            oninput="AdminPanel.onReportSearch(this.value)"
+            onkeydown="if (event.key === 'Enter') { event.preventDefault(); AdminPanel.submitReportSearch(); }">
+          <button type="button" id="rep-search-clear" class="rep-chip hidden"
+            onclick="AdminPanel.clearReportSearch()">✕ Clear</button>
+        </div>
+        <div class="rep-tools" role="group" aria-label="Filter reports by type">
           <button type="button" id="rep-kind-all" class="rep-chip is-on" aria-pressed="true"
             onclick="AdminPanel.setReportKind('all')">All</button>
           <button type="button" id="rep-kind-questions" class="rep-chip" aria-pressed="false"
@@ -3588,6 +3600,19 @@
           <button type="button" id="rep-select-all" class="rep-chip" onclick="AdminPanel.toggleSelectAllReports()">☑️ Select all shown</button>
           <button type="button" id="rep-bulk-delete" class="rep-chip rep-chip-danger" disabled
             onclick="AdminPanel.deleteSelectedReports()">🗑 Delete selected</button>
+        </div>
+        <div class="rep-tools" role="group" aria-label="Filter reports by status">
+          <button type="button" id="rep-st-all" class="rep-chip is-on" aria-pressed="true"
+            onclick="AdminPanel.setReportStatusFilter('all')">Any status</button>
+          <button type="button" id="rep-st-open" class="rep-chip" aria-pressed="false"
+            onclick="AdminPanel.setReportStatusFilter('open')">🟠 Open</button>
+          <button type="button" id="rep-st-resolved" class="rep-chip" aria-pressed="false"
+            onclick="AdminPanel.setReportStatusFilter('resolved')">✅ Resolved</button>
+          <button type="button" id="rep-st-wontfix" class="rep-chip" aria-pressed="false"
+            onclick="AdminPanel.setReportStatusFilter('wont_fix')">⚪ Won't fix</button>
+          <span class="rep-tools-gap"></span>
+          <button type="button" id="rep-expand-all" class="rep-chip" disabled
+            onclick="AdminPanel.toggleExpandAllReports()">⤢ Expand all</button>
         </div>
         <p id="admin-reports-count" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
         <div id="admin-reports-list">
@@ -3600,10 +3625,20 @@
 
       <!-- Roles tab (super admin only) -->
       <div id="admin-tab-roles" class="admin-tab-panel hidden">
-        <div class="flex justify-between items-center mb-3">
-          <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Admin role management</p>
+        <div class="flex justify-between items-center mb-1">
+          <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">🛡️ Who holds admin rights</p>
           <button onclick="AdminPanel.loadRoles()" class="text-xs text-indigo-500 hover:text-indigo-700 font-semibold">↻ Refresh</button>
         </div>
+        <p class="text-[11px] text-gray-400 dark:text-gray-500 mb-3 leading-relaxed">
+          This tab grants and removes <b>admin rights</b> only - it is not the member list.
+          The list below shows <b>administrators</b>. To promote someone, search for their name:
+          any account can be found here, but only accounts you promote appear when the box is empty.
+          Everything else about an account - plan, expiry, family, children - lives in the <b>👥 Members</b> tab.
+        </p>
+        <input id="admin-roles-search" type="text" placeholder="Search any account by name to promote…"
+          aria-label="Search accounts to change admin rights"
+          oninput="AdminPanel.filterRoles(this.value)"
+          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 mb-3 bg-white dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400">
         <details class="mb-3 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <summary class="cursor-pointer px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700/40">
             What each role can do

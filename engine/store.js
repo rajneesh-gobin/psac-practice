@@ -1108,11 +1108,40 @@ const Store = (() => {
     return q;
   }
 
-  async function loadReports(offset = 0, limit = 30, kind = 'all') {
+  // status: 'all' | 'open' | 'resolved' | 'wont_fix'.
+  // ⚠ 'open' must include a NULL status and 'in_review'. The admin card reads
+  // `r.status || 'open'`, so a row with no status is already SHOWN as open -
+  // an .eq('status','open') filter would hide rows the list calls open.
+  function _reportStatusFilter(q, status) {
+    if (status === 'open')     return q.or('status.is.null,status.in.(open,in_review)');
+    if (status === 'resolved') return q.eq('status', 'resolved');
+    if (status === 'wont_fix') return q.eq('status', 'wont_fix');
+    return q;
+  }
+
+  // PostgREST parses an or= string itself, so a comma or a bracket in the term
+  // would be read as syntax rather than as text. Those characters are dropped,
+  // not escaped - there is no escape for them inside or=().
+  // The reporter's NAME is searchable because it is packed into question_text
+  // as __meta__{"studentName":…} (and guestName/guestEmail for the contact
+  // form). Searching the joined students row would need students!inner, which
+  // silently drops every report that has no student attached.
+  function _reportSearchFilter(q, search) {
+    const term = String(search || '').trim().replace(/[,()"'*%\\]/g, ' ').trim();
+    if (!term) return q;
+    const like = '*' + term + '*';
+    return q.or(`question_id.ilike.${like},question_text.ilike.${like},message.ilike.${like}`);
+  }
+
+  function _reportFilters(q, kind, status, search) {
+    return _reportSearchFilter(_reportStatusFilter(_reportKindFilter(q, kind), status), search);
+  }
+
+  async function loadReports(offset = 0, limit = 30, kind = 'all', status = 'all', search = '') {
     if (!_sb) return [];
     let q = _sb.from('question_reports')
       .select('*, students!student_id(display_name, grade)');
-    q = _reportKindFilter(q, kind);
+    q = _reportFilters(q, kind, status, search);
     const { data } = await q
       .order('updated_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + limit - 1);
@@ -1123,10 +1152,10 @@ const Store = (() => {
   // rather than a second return value: the total only has to be fetched when
   // the list resets, not on every Load more page.
   // head:true means the rows are not transferred, only the count header.
-  async function countReports(kind = 'all') {
+  async function countReports(kind = 'all', status = 'all', search = '') {
     if (!_sb) return null;
     let q = _sb.from('question_reports').select('id', { count: 'exact', head: true });
-    q = _reportKindFilter(q, kind);
+    q = _reportFilters(q, kind, status, search);
     const { count, error } = await q;
     return error ? null : (count ?? null);
   }

@@ -928,10 +928,10 @@ const Auth = (() => {
 
     _parentProfile = profile;
 
-    // Fire and forget: moving a legacy localStorage-only PIN onto the server is
-    // housekeeping, and a parent must never wait on it to reach their own
-    // dashboard. It is what makes the PIN sign-in reachable for them at all.
-    _backfillDbPinFromLocal();
+    // Fire and forget: migrating the old browser-global PIN key onto this
+    // account's scoped key is housekeeping, and a parent must never wait on it
+    // to reach their own dashboard.
+    _migrateLegacyPin();
 
     // Closed by the parent themselves (Settings → Close my account). Nothing was
     // erased, so offer it back instead of letting them in to an app that looks
@@ -1840,10 +1840,8 @@ const Auth = (() => {
       const _msg  = (error.message || '').toLowerCase();
       if (_code === 'email_not_confirmed'
           || _msg.includes('not confirmed') || _msg.includes('not verified')) {
-        _pendingVerifyEmail = email;
-        if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
+        _showVerifyScreen(email, 'unconfirmed');
         toast('Please verify your email first.', 3000);
-        showScreen('verify-email');
       } else {
         _showAuthError(error.message);
       }
@@ -1858,6 +1856,42 @@ const Auth = (() => {
     if (data?.session) {
       await _handleParentSessionGated(data.session);
     }
+  }
+
+  // ⚠ THREE paths reach the verify-email screen and they say three different
+  // things, so every field it owns is written on EVERY path - none may be left
+  // carrying the previous path's text. Signing up with an address that already
+  // exists used to leave "An account already exists" and the reset button on
+  // screen for the NEXT person, who merely had not clicked their link yet; a
+  // teacher sign-up left the amber teacher note behind for a parent.
+  //
+  // ⚠ 'exists' must NOT be headed "Check your email" - nothing was sent.
+  // signUp() for a known address returns an obfuscated user and mails nothing,
+  // so that heading sent people to wait on an inbox that would stay empty.
+  // Measured 2026-09-09 on a real parent's account: it was already CONFIRMED,
+  // and every route this screen offered first was one that could not help.
+  function _showVerifyScreen(email, mode, isTeacher) {
+    _pendingVerifyEmail = email;
+    const set = (id, txt) => { const el = _el(id); if (el) el.textContent = txt; };
+    set('verify-email-addr', email);
+    const note = _el('verify-teacher-note');
+    if (note) note.classList.toggle('hidden', mode !== 'sent' || !isTeacher);
+
+    if (mode === 'exists') {
+      set('verify-email-title', 'This email is already registered');
+      set('verify-email-lead',  'There is already an account for');
+      set('verify-email-message',
+        'If it is activated, sign in below - or reset the password if you have forgotten it. '
+      + 'Only resend the activation email if that account is still waiting for verification.');
+    } else {
+      set('verify-email-title', 'Check your email!');
+      set('verify-email-lead',  'We sent a verification link to');
+      set('verify-email-message', mode === 'unconfirmed'
+        ? 'This account has not been activated yet. Click the link in the email we sent you, or resend it below.'
+        : 'Click the link in the email to activate your account. Check your spam folder if you do not see it within a minute.');
+    }
+    _el('verify-reset-password')?.classList.toggle('hidden', mode === 'sent');
+    showScreen('verify-email');
   }
 
   // ⚠ Every sign-up, resend and password reset costs ONE email, and they all
@@ -1945,12 +1979,7 @@ const Auth = (() => {
       (!error && Array.isArray(data?.user?.identities) && data.user.identities.length === 0);
 
     if (alreadyRegistered) {
-      _pendingVerifyEmail = email;
-      if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
-      const msg = _el('verify-email-message');
-      if (msg) msg.textContent = 'An account already exists for this email. If it is still waiting for verification, resend the activation email. If it is already activated, reset the password instead.';
-      _el('verify-reset-password')?.classList.remove('hidden');
-      showScreen('verify-email');
+      _showVerifyScreen(email, 'exists');
       return;
     }
 
@@ -1970,15 +1999,7 @@ const Auth = (() => {
       return;
     }
 
-    // Show check-email screen
-    _pendingVerifyEmail = email;
-    if (_el('verify-email-addr')) _el('verify-email-addr').textContent = email;
-    const note = _el('verify-teacher-note');
-    if (note) note.classList.toggle('hidden', role !== 'teacher');
-    const msg = _el('verify-email-message');
-    if (msg) msg.textContent = 'Click the link in the email to activate your account. Check your spam folder if you do not see it within a minute.';
-    _el('verify-reset-password')?.classList.add('hidden');
-    showScreen('verify-email');
+    _showVerifyScreen(email, 'sent', role === 'teacher');
   }
 
   function backToSignUp() {
@@ -2032,8 +2053,18 @@ const Auth = (() => {
     const email = _pendingVerifyEmail || (_el('verify-email-addr')?.textContent || '').trim();
     if (!email) { toast('Could not find email address. Please go back and sign up again.', 4000); return; }
     const { error } = await _sb.auth.resend({ type: 'signup', email });
-    if (error) toast(_emailErrorText(error, 'activation email'), 6000);
-    else toast('Verification email resent! Check your inbox.', 4000);
+    if (error) { toast(_emailErrorText(error, 'activation email'), 6000); return; }
+    // ⚠ A 200 here is NOT proof an email was sent. Measured against live GoTrue
+    // 2026-09-09: resending to an ALREADY-CONFIRMED address answers 200 {} and
+    // sends nothing - it will not confirm or deny that the address exists, which
+    // is the anti-enumeration behaviour we want and cannot ask it to drop. So the
+    // browser can never know which happened, and 'Verification email resent!' was
+    // a flat claim that was wrong in exactly the case a parent presses this button
+    // hardest: they are stuck, so they press it again, and again, each press
+    // sending nothing and teaching them the app is broken. Name the other branch
+    // instead, so the one route that CAN get them in is on screen.
+    toast('If that account is still waiting for verification, a new link is on its way. '
+        + 'Already activated? Sign in, or use "Reset my password" below.', 7000);
   }
 
   async function sendRecoveryForPending() {
@@ -3180,13 +3211,33 @@ const Auth = (() => {
 
   // ── Parent dashboard ───────────────────────────
   // ── Parent PIN helpers ─────────────────────────
-  const _PARENT_PIN_KEY = 'psac_parent_pin_v1';
+  // ⚠ psac_parent_pin_v1 used to be ONE browser-global key, which made the
+  // local PIN gate leak ACROSS accounts: a PIN set under any account validated
+  // the parent switch-back for EVERY account signed into that browser. Measured
+  // 2026-09-09: an account whose profiles.parent_pin_hash was null was entered
+  // with another account's 4455, because _pinMatches() falls back to this key
+  // whenever the account has no DB hash. The local copy is now keyed by account
+  // - _PARENT_PIN_PREFIX + uid - so one account's PIN can never match another's,
+  // and _migrateLegacyPin() moves a legacy global key onto its verified owner's
+  // scoped key and deletes it. The server hash was always per-account; only this
+  // browser-side copy was shared.
+  const _PARENT_PIN_KEY    = 'psac_parent_pin_v1';   // LEGACY browser-global; migrated away
+  const _PARENT_PIN_PREFIX = 'psac_parent_pin_v1:';  // per-account: prefix + _parentUser.id
   let _parentPinBusy = false;
   let _dbPinHash = null; // cached parent_pin_hash from profiles; '' = confirmed absent
   let _dbPinFetchFailed = false; // true when the last fetch threw (network unavailable)
 
+  // ⚠ Null when no parent is known yet: there is no account to scope to, so
+  // there is deliberately no local PIN to read. Routing then falls to
+  // _ensureParentSession(), which is the correct path when _parentUser is unset.
+  function _scopedPinKey() {
+    return _parentUser ? _PARENT_PIN_PREFIX + _parentUser.id : null;
+  }
+
   function _getStoredPinHash() {
-    try { return localStorage.getItem(_PARENT_PIN_KEY) || null; } catch(_) { return null; }
+    const key = _scopedPinKey();
+    if (!key) return null;
+    try { return localStorage.getItem(key) || null; } catch(_) { return null; }
   }
 
   async function _hashPinForDb(pin) {
@@ -3208,7 +3259,8 @@ const Auth = (() => {
   }
 
   function _storePin(pin) {
-    try { localStorage.setItem(_PARENT_PIN_KEY, btoa(pin + ':psac_v1')); } catch(_) {}
+    const key = _scopedPinKey();
+    if (key) { try { localStorage.setItem(key, btoa(pin + ':psac_v1')); } catch(_) {} }
     // Also save SHA-256 hash to DB so the PIN survives localStorage clears
     _hashPinForDb(pin).then(hash => {
       if (!hash || !_parentUser) return;
@@ -3325,24 +3377,43 @@ const Auth = (() => {
     if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
   }
 
-  // ⚠ btoa is not a hash - atob() gives the PIN straight back. That is a
-  // statement about how weak the localStorage copy always was, and here it is
-  // the one useful consequence: a parent who set their PIN before
-  // profiles.parent_pin_hash existed can have it moved to the server silently,
-  // on the next visit where they hold a real session, instead of discovering
-  // years later that PIN recovery never covered them.
-  async function _backfillDbPinFromLocal() {
+  // ⚠ One-time migration off the old browser-global psac_parent_pin_v1.
+  // btoa is not a hash - atob() gives the PIN straight back - which is the one
+  // useful thing here: it lets us re-hash the legacy PIN and check it against
+  // the account's OWN server hash before claiming it. Runs fire-and-forget on
+  // every parent session load; a parent must never wait on it.
+  //
+  // ⚠ Claim the legacy key ONLY for the account whose profiles.parent_pin_hash
+  // proves it owns that PIN, then delete the global copy so the cross-account
+  // leak cannot persist. An account with no hash, or a different one, must NOT
+  // adopt it - that adoption IS the leak being removed (measured 2026-09-09: a
+  // null-hash account matching another account's 4455) - and the global key is
+  // left in place so its real owner can still claim it on a later load. The
+  // non-owner simply has no local copy; its server hash still matches online,
+  // which is the ordinary switch-back path anyway.
+  //
+  // This deliberately drops the former DB-backfill of an unverified local PIN:
+  // there is no way to tell a legacy owner from a bystander on a shared browser,
+  // so writing an unknown local PIN into the server hash would make the leak
+  // permanent. (That path never fired in any case - its guard read /^d{4}$/,
+  // matching the literal "dddd", never a 4-digit PIN.)
+  async function _migrateLegacyPin() {
     try {
       if (!_parentUser) return;
-      const local = _getStoredPinHash();
-      if (!local) return;
-      if (await _fetchDbPinHash(true)) return;
-      const plain = (atob(local) || '').split(':')[0];
-      if (!/^d{4}$/.test(plain)) return;
-      const hash = await _hashPinForDb(plain);
-      if (!hash) return;
-      await _sb.from('profiles').update({ parent_pin_hash: hash }).eq('id', _parentUser.id);
-      _dbPinHash = hash;
+      const scoped = _scopedPinKey();
+      if (!scoped || localStorage.getItem(scoped)) return; // already scoped
+      const legacy = localStorage.getItem(_PARENT_PIN_KEY);
+      if (!legacy) return;
+      const plain = (atob(legacy) || '').split(':')[0];
+      if (!/^\d{4}$/.test(plain)) { localStorage.removeItem(_PARENT_PIN_KEY); return; }
+      const dbHash = await _fetchDbPinHash(true);
+      if (_dbPinFetchFailed) return; // cannot verify ownership now; retry next load
+      if (dbHash && (await _hashPinForDb(plain)) === dbHash) {
+        try {
+          localStorage.setItem(scoped, legacy);
+          localStorage.removeItem(_PARENT_PIN_KEY);
+        } catch (_) {}
+      }
     } catch (_) {}
   }
 
@@ -3575,7 +3646,8 @@ const Auth = (() => {
   function hasParentPin() { return !!_getStoredPinHash() || !!_dbPinHash; }
 
   function clearParentPin() {
-    try { localStorage.removeItem(_PARENT_PIN_KEY); } catch (_) {}
+    const key = _scopedPinKey();
+    try { if (key) localStorage.removeItem(key); localStorage.removeItem(_PARENT_PIN_KEY); } catch (_) {}
     _dbPinHash = null;
     if (_parentUser) {
       _sb.from('profiles').update({ parent_pin_hash: null }).eq('id', _parentUser.id).catch(() => {});

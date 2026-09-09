@@ -35,7 +35,10 @@ async function backend(failure) {
   test = await run([403]); await assert.rejects(test.result,/Request refused/); assert.equal(test.routes.length,1);
   test = await run([new Error('offline'),new Error('offline'),new Error('offline')]);
   await assert.rejects(test.result,/after 3 attempts/); assert.equal(test.routes.length,3);
-  assert.equal((await backend(true)).statusCode,502);
+  const failed = await backend(true);
+  assert.equal(failed.statusCode,200);
+  assert.equal(failed.body.partial,true);
+  assert.equal(Object.keys(failed.body.emails).length,0);
   assert.equal((await backend(false)).statusCode,200);
   console.log('Email service: network and server retries, direct-route fallback, auth failure and incomplete lookup handling passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
