@@ -75,6 +75,7 @@ const ok = (label, cond, detail) => { assert(cond, label + (detail ? ' — ' + J
     "    subject: document.getElementById('qm-subject').value,",
     "    subjects: vals('#qm-subject'),",
     "    subjectLabel1: (document.querySelectorAll('#qm-subject option')[1] || {}).textContent || '',",
+    "    optgroups: [...document.querySelectorAll('#qm-subject optgroup')].map(g => g.label),",
     "    chapter: document.getElementById('qm-chapter').value,",
     "    chapters: vals('#qm-chapter').length,",
     "    chapterDisabled: document.getElementById('qm-chapter').disabled,",
@@ -92,14 +93,20 @@ const ok = (label, cond, detail) => { assert(cond, label + (detail ? ' — ' + J
   // Derived, never a literal: publishing a pack (the Grade 9 packs went live)
   // changes how many subjects this control offers.
   const liveCount = await ev('SUBJECT_PACKS.filter(p => !p.comingSoon).length');
+  const liveGradeCount = await ev('new Set(SUBJECT_PACKS.filter(p => !p.comingSoon).map(p => p.grade)).size');
 
   await pick('qm-grade', ''); let s = await state();
-  ok('no grade: every published pack is offered, grade-prefixed',
-    s.subjects.length === liveCount + 1 && /^Grade \d+ - /.test(s.subjectLabel1), s);
+  ok('no grade: every published pack is offered, grouped by grade',
+    s.subjects.length === liveCount + 1 && s.optgroups.length === liveGradeCount
+    && s.optgroups.every(l => /^Grade \d+$/.test(l)), s);
+  // The grade is carried by the group label now. Repeating it on every row is
+  // what made 42 published packs read as one subject listed nine times over.
+  ok('no grade: the row itself is not grade-prefixed', !/^Grade \d+ - /.test(s.subjectLabel1), s);
 
   await pick('qm-grade', '5'); s = await state();
-  ok('grade 5: subject list narrows to that grade and drops the prefix',
-    s.subjects.length === 6 && s.subjects.every(v => !v || v.startsWith('grade5-')) && !/^Grade /.test(s.subjectLabel1), s);
+  ok('grade 5: subject list narrows to that grade, flat and unprefixed',
+    s.subjects.length === 6 && s.subjects.every(v => !v || v.startsWith('grade5-'))
+    && s.optgroups.length === 0 && !/^Grade /.test(s.subjectLabel1), s);
 
   await pick('qm-subject', 'grade5-french'); s = await state();
   ok('subject enables the chapter list', s.chapter === '' && s.chapters > 1 && !s.chapterDisabled, s);
@@ -116,23 +123,39 @@ const ok = (label, cond, detail) => { assert(cond, label + (detail ? ' — ' + J
   await pick('qm-chapter', firstChapter); s = await state();
   ok('a chapter can be chosen', s.chapter === firstChapter, s);
 
-  // The dead end: a grade whose packs are all placeholders.
-  const deadGrade = String(allGrades.find(g => !liveGrades.includes(g)));
+  // The dead end: a grade whose packs are all placeholders. Derived, and it
+  // can legitimately not exist - every registered grade published at least
+  // one pack on 2026-09-09. Asserting on String(undefined) tested nothing and
+  // reported it as a failure of the control.
+  const deadGradeNum = allGrades.find(g => !liveGrades.includes(g));
+  const deadGrade = deadGradeNum === undefined ? null : String(deadGradeNum);
   await tick(false);
-  await pick('qm-grade', deadGrade); s = await state();
-  ok('grade ' + deadGrade + ' (placeholders only) opens its packs instead of emptying the control',
-    s.subjects.length > 1 && s.unpublished === true, s);
-  ok('grade ' + deadGrade + ' says why', s.hintShown && /no published packs/.test(s.hint), s);
+  if (deadGrade === null) {
+    console.log('- no placeholder-only grade left to test (every registered grade has a published pack)');
+  } else {
+    await pick('qm-grade', deadGrade); s = await state();
+    ok('grade ' + deadGrade + ' (placeholders only) opens its packs instead of emptying the control',
+      s.subjects.length > 1 && s.unpublished === true, s);
+    ok('grade ' + deadGrade + ' says why', s.hintShown && /no published packs/.test(s.hint), s);
+  }
 
   await pick('qm-grade', String(liveGrades[0])); s = await state();
-  ok('returning to a published grade clears the notice', !s.hintShown && s.hint === '', s);
+  ok('a published grade shows no notice', !s.hintShown && s.hint === '', s);
 
+  // Derived, never a literal: this read `=== 6` because liveGrades[0] was
+  // Grade 4 and Grade 4 publishes five packs. Grades 1-3 went live on
+  // 2026-09-09 with three packs each, so the literal started failing over a
+  // control that was working.
+  const firstLiveCount = await ev('SUBJECT_PACKS.filter(p => !p.comingSoon && p.grade === ' + liveGrades[0] + ').length');
   await tick(false); s = await state();
   ok('unticking "include unpublished" rebuilds the subject list',
-    s.subjects.length === 6 && s.subjects.every(v => !v || v.startsWith('grade' + liveGrades[0] + '-')), s);
+    s.subjects.length === firstLiveCount + 1 && s.subjects.every(v => !v || v.startsWith('grade' + liveGrades[0] + '-')), s);
 
   // The notice sits inside the panel, which is a different ground in each theme.
-  await pick('qm-grade', deadGrade);
+  // With no placeholder-only grade the notice cannot be raised, so its
+  // contrast is unmeasurable rather than wrong.
+  if (deadGrade === null) { console.log('- notice contrast not measurable without a placeholder-only grade'); }
+  else await pick('qm-grade', deadGrade);
   const colours = await ev([
     '(() => {',
     "  const e = document.getElementById('qm-filter-hint'), p = e.closest('.qm-filter-panel');",

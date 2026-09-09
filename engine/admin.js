@@ -152,7 +152,7 @@ const AdminPanel = (() => {
     if (panel) panel.classList.remove('hidden');
     if (name === 'reports')   loadReports();
     if (name === 'teachers')  loadTeachers();
-    if (name === 'roles')     loadRoles();
+    if (name === 'roles')     { _rolesQuery = ''; const rs = document.getElementById('admin-roles-search'); if (rs) rs.value = ''; loadRoles(); }
     if (name === 'plans')     loadPlans();
     if (name === 'questions') QM.tabOpen();
     if (name === 'syllabus')  Syllabus.open();
@@ -202,6 +202,7 @@ const AdminPanel = (() => {
             ? `<span class="text-xs text-gray-500 dark:text-gray-400">${_esc(r.tier)}</span>` : ''}
           <span class="text-xs text-gray-500 dark:text-gray-400 ml-auto">${when}</span>
         </div>
+        <p data-member-email="${r.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[r.id] || '')}</p>
         ${r.note ? `<p class="text-xs text-gray-500 dark:text-gray-400 italic mt-1">"${_esc(r.note)}"</p>` : ''}
         <div class="flex gap-2 flex-wrap mt-2">
           ${r.status !== 'approved' ? `
@@ -234,6 +235,10 @@ const AdminPanel = (() => {
             ${others.length} existing teacher${others.length === 1 ? '' : 's'}</summary>
             <div class="mt-2">${others.map(row).join('')}</div></details>` : ''}
       </div>`;
+
+    // Same addresses, same cache as the members list: a teacher waiting for
+    // approval is a name and a uuid otherwise, and neither says who applied.
+    _loadMemberEmails(rows.map(r => r.id));
   }
 
   async function setTeacherStatus(userId, status, tier) {
@@ -456,10 +461,27 @@ const AdminPanel = (() => {
     }
     // Remember the misses too, as null, so a member whose auth row is gone is
     // not re-requested on every render for the rest of the session.
-    missing.forEach(id => { _memberEmails[id] = result.emails?.[id] || null; });
+    // ⚠ EXCEPT when the server reports a partial answer: that means ITS lookup
+    // failed, not that the account has no address, and caching null there blanks
+    // the row for the rest of the session over one transient error.
     missing.forEach(id => {
-      const el = document.getElementById("member-email-" + id);
-      if (el) el.textContent = _memberEmails[id] || "";
+      const email = result.emails?.[id];
+      if (email) _memberEmails[id] = email;
+      else if (!result.partial) _memberEmails[id] = null;
+    });
+    if (result.partial) console.warn("[AdminPanel] some member email lookups failed "
+      + "on the server; the missing rows will be asked for again on the next render.");
+    _paintMemberEmails(missing);
+  }
+
+  // A teacher is listed twice in one render - in the queue panel on the
+  // Members tab and in the Teachers tab - so this matches on an attribute.
+  // getElementById finds the first of the two and leaves the other blank.
+  function _paintMemberEmails(ids) {
+    ids.forEach(id => {
+      const text = _memberEmails[id] || "";
+      document.querySelectorAll('[data-member-email="' + id + '"]')
+        .forEach(el => { el.textContent = text; });
     });
   }
 
@@ -985,7 +1007,7 @@ const AdminPanel = (() => {
               ${m.created_at ? 'Joined ' + _fmtJoined(m.created_at) : ''}
             </p>
             ${_memberAccountLabel(m)}
-            <p id="member-email-${m.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[m.id] || '')}</p>
+            <p id="member-email-${m.id}" data-member-email="${m.id}" class="text-[11px] text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[m.id] || '')}</p>
             <p class="text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">${m.id}</p>
           </div>
           <span class="hidden sm:block">${_memberChildrenSummary(m)}</span>
@@ -1647,6 +1669,7 @@ const AdminPanel = (() => {
           <div class="flex flex-wrap items-center gap-3">
             <div class="flex-1 min-w-0">
               <p class="text-sm font-bold text-gray-800 dark:text-white truncate">${_esc(t.full_name || 'Unnamed')}</p>
+              <p data-member-email="${t.id}" class="text-xs text-indigo-600 dark:text-indigo-300 truncate">${_esc(_memberEmails[t.id] || '')}</p>
               <p class="text-xs text-gray-500 dark:text-gray-400 font-mono truncate">${t.id}</p>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Joined ${joined}</p>
             </div>
@@ -1686,6 +1709,7 @@ const AdminPanel = (() => {
           ${_teacherActivityHtml(t.id)}
         </div>`;
     }).join('');
+    _loadMemberEmails(list.map(t => t.id));
     _renderTeacherActivityHeadline();
   }
 
@@ -1861,9 +1885,17 @@ const AdminPanel = (() => {
   }
 
   // ── Roles tab (super admin only) ───────────────
+  // ⚠ This tab answers ONE question: who holds admin rights. It used to list
+  // every profile alphabetically, 40 at a time, which reads as a second
+  // Members tab - a super admin opening "Roles" found a user directory and no
+  // hint of what the tab was for. It now shows the administrators only, and
+  // queries the rest of the table just when you are searching for someone to
+  // promote.
   const ROLES_PAGE = 40;
   let _rolesOffset  = 0;
   let _rolesAll     = [];
+  let _rolesQuery   = '';
+  let _rolesFilterTimer = null;
 
   function _renderRoles() {
     const listEl = document.getElementById('admin-roles-list');
@@ -1872,18 +1904,34 @@ const AdminPanel = (() => {
     listEl.innerHTML = _rolesAll.map(p => {
       const isSelf  = p.id === mySelf;
       const isSuper = p.is_super_admin;
+      const isAdmin = p.role === 'admin';
+      const label   = ROLE_LABELS[p.role] || `👨‍👩‍👧 ${p.role || 'parent'}`;
+      const why     = isSuper ? 'A super admin can only be changed in SQL.'
+                    : isSelf ? 'You cannot change your own role.' : '';
       return `<div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
         <div class="flex-1 min-w-0">
           <div class="text-sm font-semibold text-gray-800 dark:text-white truncate">${_esc(p.full_name || p.id)}</div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">${p.role || 'user'}${isSuper ? ' 👑 super admin' : ''}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">${label}${isSuper ? ' · 👑 super admin' : ''}</div>
         </div>
-        ${(isSelf || isSuper) ? '<span class="text-xs text-gray-500 dark:text-gray-400 italic">Cannot change</span>' :
-          `<button onclick="AdminPanel.setRole('${p.id}','${p.role === 'admin' ? 'user' : 'admin'}')"
-            class="text-xs ${p.role === 'admin' ? 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400' : 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400'} px-3 py-1.5 rounded-full font-semibold hover:opacity-80 transition-colors">
-            ${p.role === 'admin' ? 'Remove Admin' : 'Make Admin'}
+        ${(isSelf || isSuper) ? `<span class="text-xs text-gray-500 dark:text-gray-400 italic text-right shrink-0">${why}</span>` :
+          `<button onclick="AdminPanel.setRole('${p.id}','${isAdmin ? 'parent' : 'admin'}')"
+            class="shrink-0 text-xs ${isAdmin ? 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400' : 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400'} px-3 py-1.5 rounded-full font-semibold hover:opacity-80 transition-colors">
+            ${isAdmin ? 'Remove admin' : 'Make admin'}
           </button>`}
       </div>`;
-    }).join('') || '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">No profiles found.</p>';
+    }).join('') || `<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">${
+      _rolesQuery ? 'No account matches that name.'
+                  : 'No administrators besides super admins. Search for an account above to grant admin rights.'}</p>`;
+  }
+
+  // Debounced for the same reason as the Members search: each keystroke would
+  // otherwise be a server query.
+  function filterRoles(query) {
+    clearTimeout(_rolesFilterTimer);
+    _rolesFilterTimer = setTimeout(() => {
+      _rolesQuery = (query || '').trim();
+      loadRoles(true);
+    }, 300);
   }
 
   // Same 1000-users/month reasoning as Members: this used to pull every
@@ -1893,10 +1941,15 @@ const AdminPanel = (() => {
     const listEl = document.getElementById('admin-roles-list');
     if (!listEl) return;
     if (reset) { _rolesOffset = 0; _rolesAll = []; listEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4 animate-pulse">Loading…</p>'; }
-    const { data, error, count } = await _sb.from('profiles')
+    let query = _sb.from('profiles')
       .select('id, full_name, role, is_super_admin', { count: 'exact' })
       .order('full_name')
       .range(_rolesOffset, _rolesOffset + ROLES_PAGE - 1);
+    // No search = the people this tab exists to manage. A search = the whole
+    // table, because the account you want to promote is a parent today.
+    if (_rolesQuery) query = query.ilike('full_name', `%${_rolesQuery}%`);
+    else             query = query.or('role.eq.admin,is_super_admin.eq.true');
+    const { data, error, count } = await query;
     if (error) {
       // An RLS denial or a network failure is NOT an empty database. Reporting
       // it as "No profiles found" also hid the Load more button, so paging
@@ -1909,7 +1962,7 @@ const AdminPanel = (() => {
     _rolesAll = reset ? rows : _rolesAll.concat(rows);
     _rolesOffset += rows.length;
     _renderRoles();
-    _setCount('admin-roles-count', _rolesAll.length, count, 'accounts');
+    _setCount('admin-roles-count', _rolesAll.length, count, _rolesQuery ? 'matching accounts' : 'administrators');
     const moreBtn = document.getElementById('admin-roles-more');
     if (moreBtn) moreBtn.classList.toggle('hidden', rows.length < ROLES_PAGE);
   }
@@ -1921,8 +1974,16 @@ const AdminPanel = (() => {
   // .select('id') so a row blocked by RLS - or already a super admin, which the
   // is_super_admin filter excludes - comes back as zero rows rather than a
   // silent no-op that still toasted "promoted to Admin".
+  // ⚠ Demotion writes 'parent', NOT 'user'. profiles_role_check allows only
+  // parent|teacher|admin, so the old 'user' target was rejected by the
+  // constraint every time: removing an admin could never work.
   async function setRole(userId, newRole) {
     if (!_sb || !(typeof Auth !== 'undefined' && Auth.isSuperAdmin?.())) return;
+    const who = _rolesAll.find(p => p.id === userId);
+    const name = who?.full_name || 'this account';
+    if (!confirm(newRole === 'admin'
+      ? `Give ${name} full admin rights?`
+      : `Remove admin rights from ${name}? They become a parent account.`)) return;
     const { data, error } = await _sb.from('profiles')
       .update({ role: newRole }).eq('id', userId).eq('is_super_admin', false).select('id');
     loadRoles();
@@ -1931,7 +1992,7 @@ const AdminPanel = (() => {
       toast('Could not change that role - nothing was changed.', 3500);
       return;
     }
-    toast(newRole === 'admin' ? 'User promoted to Admin. ✅' : 'Admin rights removed.', 2000);
+    toast(newRole === 'admin' ? 'Admin rights granted. ✅' : 'Admin rights removed.', 2000);
   }
 
   // ── Plans tab (super admin only) ───────────────
@@ -2357,22 +2418,51 @@ const AdminPanel = (() => {
   // 'all' | 'questions' | 'contact'. Reset lives in loadReports(), not in the
   // chip handler, so opening the tab never inherits the last admin's filter.
   let _reportKind     = 'all';
+  // 'all' | 'open' | 'resolved' | 'wont_fix', and a free-text search. Both are
+  // sent to the DATABASE for the same reason the kind chip is: filtering one
+  // fetched page would make "showing N of M" lie and would hide every match
+  // past the first 30 rows.
+  let _reportStatus   = 'all';
+  let _reportSearch   = '';
+  let _repSearchTimer = null;
   const _reportsSelected = new Set();
+  // Which cards are expanded. Module-level, not per-render: a card repaints
+  // after Resolve / Reply / Won't fix, and collapsing the one the admin is
+  // working in at that moment is the whole reason the old member list was
+  // rewritten the same way. New cards are always closed.
+  const _reportsOpen = new Set();
+
+  function _chipOn(id, on) {
+    const b = document.getElementById(id);
+    if (!b) return;
+    b.classList.toggle('is-on', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
 
   function _syncReportTools() {
     [['all', 'rep-kind-all'], ['questions', 'rep-kind-questions'], ['contact', 'rep-kind-contact']]
-      .forEach(([kind, id]) => {
-        const b = document.getElementById(id);
-        if (!b) return;
-        const on = _reportKind === kind;
-        b.classList.toggle('is-on', on);
-        b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      });
+      .forEach(([kind, id]) => _chipOn(id, _reportKind === kind));
+    [['all', 'rep-st-all'], ['open', 'rep-st-open'], ['resolved', 'rep-st-resolved'], ['wont_fix', 'rep-st-wontfix']]
+      .forEach(([st, id]) => _chipOn(id, _reportStatus === st));
+    // The box is the state's mirror, never the source: a repaint that arrives
+    // while the admin is mid-word must not rewrite what they have typed, and
+    // it cannot, because the debounce has already copied it into _reportSearch.
+    const box = document.getElementById('rep-search');
+    if (box && box.value !== _reportSearch) box.value = _reportSearch;
+    const clear = document.getElementById('rep-search-clear');
+    if (clear) clear.classList.toggle('hidden', !_reportSearch);
     const del = document.getElementById('rep-bulk-delete');
     const n = _reportsSelected.size;
     if (del) {
       del.disabled = n === 0;
       del.textContent = n ? `🗑 Delete ${n} selected` : '🗑 Delete selected';
+    }
+    const exp = document.getElementById('rep-expand-all');
+    if (exp) {
+      const dets = document.querySelectorAll('#admin-reports-list details.rep-det');
+      const allOpen = dets.length > 0 && [...dets].every(d => d.open);
+      exp.disabled = dets.length === 0;
+      exp.textContent = allOpen ? '⤡ Collapse all' : '⤢ Expand all';
     }
   }
 
@@ -2380,6 +2470,58 @@ const AdminPanel = (() => {
     _reportKind = ['all', 'questions', 'contact'].includes(kind) ? kind : 'all';
     _syncReportTools();
     loadReports(true);
+  }
+
+  function setReportStatusFilter(status) {
+    _reportStatus = ['all', 'open', 'resolved', 'wont_fix'].includes(status) ? status : 'all';
+    _syncReportTools();
+    loadReports(true);
+  }
+
+  // Debounced: every keystroke would otherwise be a count query and a page
+  // query, and the answers can come back out of order.
+  function onReportSearch(value) {
+    const next = String(value || '').trim();
+    clearTimeout(_repSearchTimer);
+    _repSearchTimer = setTimeout(() => {
+      if (next === _reportSearch) return;
+      _reportSearch = next;
+      _syncReportTools();
+      loadReports(true);
+    }, 350);
+  }
+
+  function submitReportSearch() {
+    clearTimeout(_repSearchTimer);
+    const next = String(document.getElementById('rep-search')?.value || '').trim();
+    if (next === _reportSearch) return;
+    _reportSearch = next;
+    _syncReportTools();
+    loadReports(true);
+  }
+
+  function clearReportSearch() {
+    clearTimeout(_repSearchTimer);
+    if (!_reportSearch) { const b = document.getElementById('rep-search'); if (b) b.value = ''; return; }
+    _reportSearch = '';
+    _syncReportTools();
+    loadReports(true);
+  }
+
+  function toggleReportOpen(id, open) {
+    if (open) _reportsOpen.add(id); else _reportsOpen.delete(id);
+    _syncReportTools();
+  }
+
+  // Drives the <details> elements directly rather than re-rendering: their
+  // ontoggle writes _reportsOpen back, so the Set and the DOM cannot drift,
+  // and no second network round-trip is spent on a purely visual change.
+  function toggleExpandAllReports() {
+    const dets = [...document.querySelectorAll('#admin-reports-list details.rep-det')];
+    if (!dets.length) return;
+    const open = !dets.every(d => d.open);
+    dets.forEach(d => { d.open = open; });
+    _syncReportTools();
   }
 
   function toggleReportPick(id, on) {
@@ -2444,8 +2586,8 @@ const AdminPanel = (() => {
       }
     }
     // Total fetched only on reset - a Load more page does not change it.
-    if (reset) { _reportsTotal = await Store.countReports(_reportKind); _reportsSelected.clear(); }
-    const page = await Store.loadReports(_reportsOffset, REPORTS_PAGE, _reportKind);
+    if (reset) { _reportsTotal = await Store.countReports(_reportKind, _reportStatus, _reportSearch); _reportsSelected.clear(); }
+    const page = await Store.loadReports(_reportsOffset, REPORTS_PAGE, _reportKind, _reportStatus, _reportSearch);
     _reportsOffset += page.length;
     _reportsAll = reset ? page : _reportsAll.concat(page);
     _setCount('admin-reports-count', _reportsAll.length, _reportsTotal, 'reports');
@@ -2453,7 +2595,15 @@ const AdminPanel = (() => {
     const moreBtn = document.getElementById('admin-reports-more');
     if (moreBtn) moreBtn.classList.toggle('hidden', page.length < REPORTS_PAGE);
     if (!_reportsAll.length) {
-      if (el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No reports yet.</p>';
+      // "No reports yet" is a lie the moment a filter is on - the queue may be
+      // full and simply not match. Say which it is, and offer the way back.
+      const filtered = _reportKind !== 'all' || _reportStatus !== 'all' || !!_reportSearch;
+      if (el) el.innerHTML = filtered
+        ? `<div class="text-center py-6">
+             <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">No reports match these filters${_reportSearch ? ` and “${_esc(_reportSearch)}”` : ''}.</p>
+             <button onclick="AdminPanel.resetReportFilters()" class="text-xs text-indigo-500 underline font-semibold">Clear filters</button>
+           </div>`
+        : '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6">No reports yet.</p>';
       return;
     }
     if (el) el.innerHTML = _reportsAll.map(r => {
@@ -2517,81 +2667,106 @@ const AdminPanel = (() => {
         </div>`;
       }).join('') : '';
 
+      // ⚠ COLLAPSED BY DEFAULT. A full report card is close to a screenful, so
+      // ten reports were ten scrolls of question text before the admin could
+      // see what the eleventh was about. The summary carries what triage needs
+      // - id, type, status, subject, the first line of the message, who and
+      // when - and <details> keeps open/closed in the DOM. The checkbox sits
+      // OUTSIDE <summary>: inside it, ticking a box for a bulk delete would
+      // also toggle the card open.
+      const openAttr = _reportsOpen.has(r.id) ? ' open' : '';
+      const snippet  = (r.message || '').replace(/\s+/g, ' ').trim();
+      const whoLine  = [
+        studentName ? `${studentName}${studentGrade}` : (isContact ? 'Guest' : 'Anonymous'),
+        new Date(r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+      ].join(' · ');
+
       return `
-      <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow mb-3 border-l-4 ${borderCls}">
-        <!-- Header row -->
-        <div class="flex justify-between items-start gap-2 mb-3">
-          <div class="flex flex-wrap gap-1.5 items-center">
-            <input type="checkbox" class="rep-pick" data-rep="${safeId}" ${_reportsSelected.has(r.id) ? 'checked' : ''}
-              onchange="AdminPanel.toggleReportPick('${safeId}', this.checked)" aria-label="Select this report for deletion">
-            <span class="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">${_esc(r.question_id || '-')}</span>
-            ${mode ? `<span class="text-xs text-gray-500 dark:text-gray-400">(${_esc(mode)})</span>` : ''}
-            ${reportTypeLabel ? `<span class="text-xs text-gray-600 dark:text-gray-300">${_esc(reportTypeLabel)}</span>` : ''}
-          </div>
-          <span class="text-xs ${statusCls} px-2 py-0.5 rounded-full shrink-0 font-medium">${_esc(status)}</span>
-        </div>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow mb-3 border-l-4 ${borderCls}">
+        <div class="flex items-start gap-2">
+          <input type="checkbox" class="rep-pick shrink-0 mt-1" data-rep="${safeId}" ${_reportsSelected.has(r.id) ? 'checked' : ''}
+            onchange="AdminPanel.toggleReportPick('${safeId}', this.checked)" aria-label="Select this report for deletion">
+          <details class="rep-det flex-1 min-w-0"${openAttr}
+            ontoggle="AdminPanel.toggleReportOpen('${safeId}', this.open)">
+            <summary class="rep-sum">
+              <span class="rep-sum-inner">
+              <span class="rep-caret" aria-hidden="true">▸</span>
+              <span class="rep-sum-main">
+                <span class="rep-sum-top">
+                  <span class="text-xs font-mono bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">${_esc(r.question_id || '-')}</span>
+                  ${mode ? `<span class="text-xs text-gray-500 dark:text-gray-400">(${_esc(mode)})</span>` : ''}
+                  ${reportTypeLabel ? `<span class="text-xs text-gray-600 dark:text-gray-300">${_esc(reportTypeLabel)}</span>` : ''}
+                  <span class="text-xs ${statusCls} px-2 py-0.5 rounded-full font-medium">${_esc(status)}</span>
+                </span>
+                <span class="rep-sum-sub text-blue-600 dark:text-blue-400">${_esc(subjectLabel)}${chapterName ? ' · ' + _esc(chapterName) : ''}</span>
+                ${snippet ? `<span class="rep-sum-snip text-gray-600 dark:text-gray-300">${_esc(snippet)}</span>` : ''}
+                <span class="rep-sum-meta text-gray-400 dark:text-gray-500">${_esc(whoLine)}</span>
+              </span>
+              </span>
+            </summary>
 
-        <!-- Subject / chapter / difficulty -->
-        <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-0.5">${_esc(subjectLabel)}</p>
-        ${chapterName ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Chapter: ${_esc(chapterName)}</p>` : ''}
-        ${diff ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-2">${_esc(_diffBadge(diff))}</p>` : ''}
+            <div class="rep-body pt-3">
+              ${diff ? `<p class="text-xs text-gray-500 dark:text-gray-400 mb-2">${_esc(_diffBadge(diff))}</p>` : ''}
 
-        <!-- Question text -->
-        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 mb-3">
-          <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">${isContact ? 'About' : 'Question'}</p>
-          <p class="text-sm text-gray-800 dark:text-white leading-relaxed">${_esc(qText.slice(0, 400))}${qText.length > 400 ? '…' : ''}</p>
-        </div>
+              <!-- Question text -->
+              <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 mb-3">
+                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">${isContact ? 'About' : 'Question'}</p>
+                <p class="text-sm text-gray-800 dark:text-white leading-relaxed">${_esc(qText.slice(0, 400))}${qText.length > 400 ? '…' : ''}</p>
+              </div>
 
-        <!-- Options -->
-        ${optionsHtml ? `<div class="mb-3">${optionsHtml}</div>` : ''}
+              <!-- Options -->
+              ${optionsHtml ? `<div class="mb-3">${optionsHtml}</div>` : ''}
 
-        <!-- Hint (for admin context) -->
-        ${hint ? `<p class="text-xs text-amber-600 dark:text-amber-400 mb-3">💡 Hint: ${_esc(hint)}</p>` : ''}
+              <!-- Hint (for admin context) -->
+              ${hint ? `<p class="text-xs text-amber-600 dark:text-amber-400 mb-3">💡 Hint: ${_esc(hint)}</p>` : ''}
 
-        <!-- Reporter's comment -->
-        <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
-          <p class="text-xs font-semibold text-red-500 mb-1">${isContact ? 'Their message' : "Reporter's comment"}</p>
-          <p class="text-sm text-gray-800 dark:text-white">${_esc(r.message || '-')}</p>
-        </div>
+              <!-- Reporter's comment -->
+              <div class="border-t border-gray-100 dark:border-gray-700 pt-3 mb-3">
+                <p class="text-xs font-semibold text-red-500 mb-1">${isContact ? 'Their message' : "Reporter's comment"}</p>
+                <p class="text-sm text-gray-800 dark:text-white whitespace-pre-wrap">${_esc(r.message || '-')}</p>
+              </div>
 
-        <!-- Thread (follow-up messages) -->
-        <div id="report-thread-${safeId}" class="mb-3"></div>
-        <button onclick="AdminPanel.loadReportThread('${safeId}')" class="text-xs text-indigo-500 dark:text-indigo-400 underline mb-3">Load message thread</button>
+              <!-- Thread (follow-up messages) -->
+              <div id="report-thread-${safeId}" class="mb-3"></div>
+              <button onclick="AdminPanel.loadReportThread('${safeId}')" class="text-xs text-indigo-500 dark:text-indigo-400 underline mb-3">Load message thread</button>
 
-        <!-- Guest sender: the only way back to them is the address they left -->
-        ${isContact ? `<div class="border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-3 mb-3">
-          <p class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 mb-1">Sent from the contact form - no account</p>
-          ${meta.guestEmail
-            ? `<a href="mailto:${_esc(meta.guestEmail)}?subject=${encodeURIComponent('Re: your message to PSAC Exam Practice')}"
-                 class="text-sm font-semibold text-indigo-600 dark:text-indigo-300 underline break-all">✉️ ${_esc(meta.guestEmail)}</a>
-               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Replying in the app will not reach them - use this address.</p>`
-            : '<p class="text-sm text-amber-600 dark:text-amber-400">No email address left - there is no way to reply to this one.</p>'}
-          ${meta.ua ? `<p class="text-[11px] text-gray-400 dark:text-gray-500 mt-2 break-all">Browser: ${_esc(meta.ua)}</p>` : ''}
-        </div>` : ''}
+              <!-- Guest sender: the only way back to them is the address they left -->
+              ${isContact ? `<div class="border border-indigo-200 dark:border-indigo-800 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-3 mb-3">
+                <p class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 mb-1">Sent from the contact form - no account</p>
+                ${meta.guestEmail
+                  ? `<a href="mailto:${_esc(meta.guestEmail)}?subject=${encodeURIComponent('Re: your message to PSAC Exam Practice')}"
+                       class="text-sm font-semibold text-indigo-600 dark:text-indigo-300 underline break-all">✉️ ${_esc(meta.guestEmail)}</a>
+                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Replying in the app will not reach them - use this address.</p>`
+                  : '<p class="text-sm text-amber-600 dark:text-amber-400">No email address left - there is no way to reply to this one.</p>'}
+                ${meta.ua ? `<p class="text-[11px] text-gray-400 dark:text-gray-500 mt-2 break-all">Browser: ${_esc(meta.ua)}</p>` : ''}
+              </div>` : ''}
 
-        <!-- Admin reply form -->
-        ${isOpen && !isContact ? `<div class="mb-3">
-          <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Reply to student</p>
-          <div class="flex gap-2">
-            <textarea id="report-reply-${safeId}" rows="2" maxlength="1000" placeholder="Type a reply - the student will see this in their inbox…"
-              class="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"></textarea>
-            <button id="report-reply-btn-${safeId}" onclick="AdminPanel.sendAdminReply('${safeId}')"
-              class="shrink-0 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-colors self-end">Send</button>
-          </div>
-        </div>` : ''}
+              <!-- Admin reply form -->
+              ${isOpen && !isContact ? `<div class="mb-3">
+                <p class="text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Reply to student</p>
+                <div class="flex gap-2">
+                  <textarea id="report-reply-${safeId}" rows="2" maxlength="1000" placeholder="Type a reply - the student will see this in their inbox…"
+                    class="flex-1 text-sm border border-gray-300 dark:border-gray-600 rounded-xl px-3 py-2 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"></textarea>
+                  <button id="report-reply-btn-${safeId}" onclick="AdminPanel.sendAdminReply('${safeId}')"
+                    class="shrink-0 px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-colors self-end">Send</button>
+                </div>
+              </div>` : ''}
 
-        <!-- Footer -->
-        <div class="flex justify-between items-center flex-wrap gap-2">
-          <div>
-            ${studentName ? `<p class="text-xs text-gray-500 dark:text-gray-400">Reported by: <span class="font-medium">${_esc(studentName)}${_esc(studentGrade)}</span></p>` : ''}
-            <p class="text-xs text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleString()}</p>
-          </div>
-          <div class="flex flex-wrap gap-1.5">
-            ${isOpen ? `<button onclick="AdminPanel.resolveReport('${safeId}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">✅ Resolved</button>` : ''}
-            ${status !== 'wont_fix' ? `<button onclick="AdminPanel.setReportStatus('${safeId}','wont_fix')" class="text-xs bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg transition-colors">⚪ Won't fix</button>` : ''}
-            ${status !== 'open' ? `<button onclick="AdminPanel.setReportStatus('${safeId}','open')" class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded-lg transition-colors">🔁 Reopen</button>` : ''}
-            <button id="report-delete-${safeId}" onclick="AdminPanel.deleteReport('${safeId}')" class="text-xs border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 px-3 py-1 rounded-lg transition-colors disabled:opacity-50">🗑 Delete</button>
-          </div>
+              <!-- Footer -->
+              <div class="flex justify-between items-center flex-wrap gap-2">
+                <div>
+                  ${studentName ? `<p class="text-xs text-gray-500 dark:text-gray-400">Reported by: <span class="font-medium">${_esc(studentName)}${_esc(studentGrade)}</span></p>` : ''}
+                  <p class="text-xs text-gray-500 dark:text-gray-400">${new Date(r.created_at).toLocaleString()}</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  ${isOpen ? `<button onclick="AdminPanel.resolveReport('${safeId}')" class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg transition-colors">✅ Resolved</button>` : ''}
+                  ${status !== 'wont_fix' ? `<button onclick="AdminPanel.setReportStatus('${safeId}','wont_fix')" class="text-xs bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg transition-colors">⚪ Won't fix</button>` : ''}
+                  ${status !== 'open' ? `<button onclick="AdminPanel.setReportStatus('${safeId}','open')" class="text-xs bg-amber-500 hover:bg-amber-600 text-white px-3 py-1 rounded-lg transition-colors">🔁 Reopen</button>` : ''}
+                  <button id="report-delete-${safeId}" onclick="AdminPanel.deleteReport('${safeId}')" class="text-xs border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 px-3 py-1 rounded-lg transition-colors disabled:opacity-50">🗑 Delete</button>
+                </div>
+              </div>
+            </div>
+          </details>
         </div>
       </div>`;
     }).join('');
@@ -2599,6 +2774,13 @@ const AdminPanel = (() => {
 
   async function loadMoreReports() {
     await loadReports(false);
+  }
+
+  function resetReportFilters() {
+    clearTimeout(_repSearchTimer);
+    _reportKind = 'all'; _reportStatus = 'all'; _reportSearch = '';
+    _syncReportTools();
+    loadReports(true);
   }
 
   // ── Create pre-activated account (super admin only) ───────────
@@ -2790,14 +2972,28 @@ const AdminPanel = (() => {
       const subSel = _el('qm-subject');
       const prev   = subSel.value;
       subSel.innerHTML = '<option value="">All subjects</option>';
-      _qmPacksFor(grade).forEach(p => {
+      const packs  = _qmPacksFor(grade);
+      const mkOpt  = p => {
         const o = document.createElement('option');
         o.value = p.id;
-        // The grade prefix is what makes the unfiltered list unreadable, so it
-        // is only carried while no grade has been chosen.
-        o.textContent = grade ? p.name : `Grade ${p.grade} - ${p.name}`;
-        subSel.appendChild(o);
-      });
+        o.textContent = `${p.icon ? p.icon + ' ' : ''}${p.name}${p.comingSoon ? ' - placeholder' : ''}`;
+        return o;
+      };
+      if (grade) {
+        packs.forEach(p => subSel.appendChild(mkOpt(p)));
+      } else {
+        // ⚠ A flat list with no grade chosen repeats every subject once per
+        // grade - "Grade 4 - Mathematics, Grade 5 - Mathematics, …" - which
+        // reads as a subject control that ignores the grade control above it.
+        // Grouped, the repetition becomes structure, and the "Grade N - "
+        // prefix that made every row long is carried by the group label.
+        [...new Set(packs.map(p => p.grade))].sort((a, b) => a - b).forEach(g => {
+          const grp = document.createElement('optgroup');
+          grp.label = `Grade ${g}`;
+          packs.filter(p => p.grade === g).forEach(p => grp.appendChild(mkOpt(p)));
+          subSel.appendChild(grp);
+        });
+      }
       // Keep the subject already being looked at when it survives the new
       // grade. Clearing it on every touch of the grade control is what made the
       // two dropdowns feel unrelated.
@@ -3592,7 +3788,7 @@ const AdminPanel = (() => {
     loadGuestLimits, saveGuestLimits, previewGuestLimits,
     publishCatalog, loadSecurityEvents, blockUser, adjustCredits, showCreditLedger, previewShopEconomy,
     setSubjectPrice, renderSubjectPrices,
-    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, setReportKind, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
+    loadTeacherQueue, setTeacherStatus, loadMoreTeachers, toggleDisable, toggleChildren, forceLogout, updateMemberName, setExpiry, setStudentExpiry, toggleGrade, toggleSubject, toggleRegistration, togglePlanEnforcement, loadStats, loadReports, loadMoreReports, setReportKind, setReportStatusFilter, onReportSearch, submitReportSearch, clearReportSearch, resetReportFilters, toggleReportOpen, toggleExpandAllReports, toggleReportPick, toggleSelectAllReports, deleteSelectedReports, resolveReport, deleteReport, setReportStatus, sendAdminReply, loadReportThread, loadRoles, loadMoreRoles, setRole, filterRoles, loadPlans, togglePlan, toggleAllChapters, togglePackAll, savePlanFeatures, showPlanHistory, assignPlan, createAccount, genPassword, toggleFamilyField, copyAccountDetails,
     loadTeachers, teacherApprove, teacherSuspend, teacherChangeTier, sortTeachers, refreshTeacherActivity,
     qmSearch: QM.qmSearch, qmLoadMore: QM.qmLoadMore, qmGradeFilter: QM.qmGradeFilter,
     qmSubjectFilter: QM.qmSubjectFilter, qmOpenForm: QM.qmOpenForm, qmCloseForm: QM.qmCloseForm,
