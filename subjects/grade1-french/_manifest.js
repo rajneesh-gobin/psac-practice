@@ -35,7 +35,7 @@ registerSubject({
   icon:         '🇫🇷',
   subject:      'French',
   curriculum:   'MIE Mauritius',
-  comingSoon:   true,
+  comingSoon: false,
   notesBased:   true,
   noDifficulty: true,
   syllabus:     G1FR_SYLLABUS,

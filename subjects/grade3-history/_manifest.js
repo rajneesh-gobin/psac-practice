@@ -35,7 +35,7 @@ registerSubject({
   icon:         '🏛️',
   subject:      'History & Geography',
   curriculum:   'MIE Mauritius',
-  comingSoon:   true,
+  comingSoon: false,
   noDifficulty: true,
   syllabus:     G3HI_SYLLABUS,
   chapters: [

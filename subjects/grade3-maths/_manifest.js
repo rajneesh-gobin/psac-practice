@@ -55,7 +55,7 @@ registerSubject({
   icon:       '🔢',
   subject:    'Maths',
   curriculum: 'MIE Mauritius',
-  comingSoon: true,
+  comingSoon: false,
   syllabus:   G3M_SYLLABUS,
   chapters: [
     { id: 'g3mth-numbers',       name: 'Numbers to 1000',             icon: '🔢', examWeight: 3,

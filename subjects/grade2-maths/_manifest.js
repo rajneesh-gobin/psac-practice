@@ -50,7 +50,7 @@ registerSubject({
   icon:       '🔢',
   subject:    'Maths',
   curriculum: 'MIE Mauritius',
-  comingSoon: true,
+  comingSoon: false,
   noDifficulty: false,
   syllabus:   G2M_SYLLABUS,
   chapters: [

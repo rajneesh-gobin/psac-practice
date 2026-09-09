@@ -40,7 +40,7 @@ registerSubject({
   icon:       '📖',
   subject:    'English',
   curriculum: 'MIE Mauritius',
-  comingSoon: true,
+  comingSoon: false,
   notesBased: true,
   noDifficulty: true,
   syllabus:   G3ENG_SYLLABUS,

@@ -41,7 +41,7 @@ registerSubject({
   icon:       '🔬',
   subject:    'Science',
   curriculum: 'MIE Mauritius',
-  comingSoon: true,
+  comingSoon: false,
   noDifficulty: true,
   syllabus:   G3SC_SYLLABUS,
   chapters: [
