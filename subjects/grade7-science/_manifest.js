@@ -28,11 +28,82 @@
 // Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
 // declared here with no questions behind it advertises a topic that opens
 // empty. Add ids only as questions are written and tagged.
-const G7SC_SYLLABUS = {};
+const G7SC_SYLLABUS = {
+  'g7s-inquiry': { subsections: [
+    { id:'lab_safety',       name:'Lab Safety' },
+    { id:'investigations',   name:'Scientific Investigations' },
+    { id:'data_recording',   name:'Recording Data' },
+  ]},
+  'g7s-measurement': { subsections: [
+    { id:'si_units',                 name:'SI Units' },
+    { id:'measuring_instruments',    name:'Measuring Instruments' },
+    { id:'calculating_measurements', name:'Calculating Measurements' },
+  ]},
+  'g7s-cells': { subsections: [
+    { id:'cell_characteristics', name:'Cell Characteristics' },
+    { id:'cell_parts',           name:'Cell Parts & Functions' },
+    { id:'animal_plant_cells',   name:'Animal vs Plant Cells' },
+  ]},
+  'g7s-matter': { subsections: [
+    { id:'states_of_matter',  name:'States of Matter' },
+    { id:'properties_states', name:'Properties of States' },
+    { id:'changes_of_state',  name:'Changes of State' },
+  ]},
+  'g7s-solar-system': { subsections: [
+    { id:'planets',               name:'The Planets' },
+    { id:'solar_system_structure',name:'Solar System Structure' },
+    { id:'planet_characteristics',name:'Planet Characteristics' },
+  ]},
+  'g7s-electricity': { subsections: [
+    { id:'circuit_parts',   name:'Circuit Components' },
+    { id:'circuit_symbols', name:'Circuit Symbols' },
+    { id:'simple_circuits', name:'Simple Circuits' },
+  ]},
+  'g7s-ecosystem': { subsections: [
+    { id:'ecosystem_types',   name:'Types of Ecosystems' },
+    { id:'ecosystem_balance', name:'Ecosystem Balance' },
+    { id:'human_impact',      name:'Human Impact' },
+  ]},
+  'g7s-elements': { subsections: [
+    { id:'elements_symbols', name:'Elements & Symbols' },
+    { id:'periodic_table',   name:'The Periodic Table' },
+    { id:'metals_nonmetals', name:'Metals vs Non-metals' },
+  ]},
+  'g7s-air': { subsections: [
+    { id:'composition_air',   name:'Composition of Air' },
+    { id:'oxygen_co2_tests',  name:'Tests for Oxygen & CO₂' },
+    { id:'air_properties',    name:'Properties of Air' },
+  ]},
+  'g7s-biodiversity': { subsections: [
+    { id:'classifying_organisms',       name:'Classifying Organisms' },
+    { id:'vertebrates_invertebrates',   name:'Vertebrates & Invertebrates' },
+    { id:'plant_types',                 name:'Types of Plants' },
+  ]},
+  'g7s-food-chains': { subsections: [
+    { id:'feeding_relationships', name:'Feeding Relationships' },
+    { id:'food_chains',           name:'Food Chains & Webs' },
+    { id:'energy_flow',           name:'Energy Flow' },
+  ]},
+  'g7s-changes': { subsections: [
+    { id:'physical_changes',  name:'Physical Changes' },
+    { id:'chemical_changes',  name:'Chemical Changes' },
+    { id:'examples_changes',  name:'Examples of Changes' },
+  ]},
+  'g7s-energy': { subsections: [
+    { id:'forms_energy',           name:'Forms of Energy' },
+    { id:'energy_transformation',  name:'Energy Transformation' },
+    { id:'renewable_nonrenewable', name:'Renewable & Non-renewable Sources' },
+  ]},
+  'g7s-sts': { subsections: [
+    { id:'science_technology', name:'Science & Technology' },
+    { id:'discoveries',        name:'Key Discoveries' },
+    { id:'sustainability',     name:'Sustainability' },
+  ]},
+};
 
 registerSubject({
   id: 'grade7-science', name: 'Science', grade: 7, icon: '🔬', subject: 'Science',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G7SC_SYLLABUS,
   chapters: [

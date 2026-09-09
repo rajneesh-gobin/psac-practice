@@ -28,11 +28,77 @@
 // Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
 // declared here with no questions behind it advertises a topic that opens
 // empty. Add ids only as questions are written and tagged.
-const G8SC_SYLLABUS = {};
+const G8SC_SYLLABUS = {
+  'g8s-inquiry': { subsections: [
+    { id:'lab_procedures',  name:'Lab Procedures & Safety' },
+    { id:'recording_data',  name:'Recording Data' },
+    { id:'density_volume',  name:'Density & Volume' },
+  ]},
+  'g8s-food': { subsections: [
+    { id:'food_groups_nutrients', name:'Food Groups & Nutrients' },
+    { id:'deficiency_diseases',   name:'Deficiency Diseases' },
+    { id:'balanced_diet',         name:'Balanced Diet' },
+  ]},
+  'g8s-mixtures': { subsections: [
+    { id:'types_mixtures',          name:'Types of Mixtures' },
+    { id:'separation_techniques',   name:'Separation Techniques' },
+    { id:'principles_separation',   name:'Principles of Separation' },
+  ]},
+  'g8s-digestive': { subsections: [
+    { id:'digestive_organs',   name:'Digestive Organs' },
+    { id:'digestion_process',  name:'The Digestion Process' },
+    { id:'structure_function', name:'Structure & Function' },
+  ]},
+  'g8s-respiratory': { subsections: [
+    { id:'respiratory_organs', name:'Respiratory Organs' },
+    { id:'gas_exchange',       name:'Gas Exchange' },
+    { id:'breathing_process',  name:'The Breathing Process' },
+  ]},
+  'g8s-chem-language': { subsections: [
+    { id:'symbols_formulae',     name:'Symbols & Formulae' },
+    { id:'valencies_radicals',   name:'Valencies & Radicals' },
+    { id:'balancing_equations',  name:'Balancing Equations' },
+  ]},
+  'g8s-diseases': { subsections: [
+    { id:'communicable_noncommunicable', name:'Communicable vs Non-communicable' },
+    { id:'disease_spread',               name:'How Diseases Spread' },
+    { id:'prevention_control',           name:'Prevention & Control' },
+  ]},
+  'g8s-acids': { subsections: [
+    { id:'acids_bases_indicators', name:'Acids, Bases & Indicators' },
+    { id:'reactions_acids',        name:'Reactions of Acids' },
+    { id:'neutralisation',         name:'Neutralisation' },
+  ]},
+  'g8s-forces': { subsections: [
+    { id:'types_forces',    name:'Types of Forces' },
+    { id:'measuring_force', name:'Measuring Force' },
+    { id:'gravity_effects', name:'Effects of Gravity' },
+  ]},
+  'g8s-pressure': { subsections: [
+    { id:'pressure_definition',   name:'Pressure — Definition & Unit' },
+    { id:'pressure_in_fluids',    name:'Pressure in Fluids' },
+    { id:'pressure_calculations', name:'Pressure Calculations' },
+  ]},
+  'g8s-magnetism': { subsections: [
+    { id:'magnetic_materials', name:'Magnetic Materials' },
+    { id:'poles_fields',       name:'Poles & Magnetic Fields' },
+    { id:'uses_magnets',       name:'Uses of Magnets' },
+  ]},
+  'g8s-work-energy': { subsections: [
+    { id:'work_done',        name:'Work Done' },
+    { id:'power_rate',       name:'Power' },
+    { id:'work_energy_power',name:'Work, Energy & Power' },
+  ]},
+  'g8s-sts': { subsections: [
+    { id:'science_society',       name:'Science & Society' },
+    { id:'technology_impact',     name:'Impact of Technology' },
+    { id:'contributions_humanity',name:'Contributions to Humanity' },
+  ]},
+};
 
 registerSubject({
   id: 'grade8-science', name: 'Science', grade: 8, icon: '🔬', subject: 'Science',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G8SC_SYLLABUS,
   chapters: [

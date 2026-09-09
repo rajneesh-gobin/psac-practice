@@ -25,14 +25,37 @@
 //    4. Set comingSoon: false only once every chapter above has questions.
 // ══════════════════════════════════════════════════════════════════════════
 
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
-// declared here with no questions behind it advertises a topic that opens
-// empty. Add ids only as questions are written and tagged.
-const G7SMS_SYLLABUS = {};
+const G7SMS_SYLLABUS = {
+  'g7sms-islands': { subsections: [
+    { id:'islands_republic', name:'Islands of the Republic' },
+    { id:'island_types',     name:'Types of Islands' },
+    { id:'landforms',        name:'Landforms' },
+  ]},
+  'g7sms-origins': { subsections: [
+    { id:'historical_significance', name:'Historical Significance' },
+    { id:'settlers_origins',        name:'Origins of Settlers' },
+    { id:'cultural_diversity',      name:'Cultural Diversity' },
+  ]},
+  'g7sms-people': { subsections: [
+    { id:'contributions_mauritians',   name:'Contributions of Mauritians' },
+    { id:'achievements_arts_sport',    name:'Achievements in Arts & Sport' },
+    { id:'individuals_country',        name:'Individuals & the Country' },
+  ]},
+  'g7sms-settlement': { subsections: [
+    { id:'settlement_factors',   name:'Settlement Factors' },
+    { id:'physical_historical',  name:'Physical & Historical Factors' },
+    { id:'settlement_evolution', name:'Evolution of Settlements' },
+  ]},
+  'g7sms-resources': { subsections: [
+    { id:'natural_resources',    name:'Natural Resources' },
+    { id:'resource_types',       name:'Types of Resources' },
+    { id:'resources_settlement', name:'Resources & Settlement' },
+  ]},
+};
 
 registerSubject({
   id: 'grade7-social-modern-studies', name: 'Social & Modern Studies', grade: 7, icon: '🌍', subject: 'Social & Modern Studies',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G7SMS_SYLLABUS,
   chapters: [

@@ -25,14 +25,37 @@
 //    4. Set comingSoon: false only once every chapter above has questions.
 // ══════════════════════════════════════════════════════════════════════════
 
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
-// declared here with no questions behind it advertises a topic that opens
-// empty. Add ids only as questions are written and tagged.
-const G8SMS_SYLLABUS = {};
+const G8SMS_SYLLABUS = {
+  'g8sms-slavery': { subsections: [
+    { id:'slave_trade',       name:'The Slave Trade' },
+    { id:'abolition_slavery', name:'Abolition of Slavery' },
+    { id:'indenture_system',  name:'Indenture System' },
+  ]},
+  'g8sms-society': { subsections: [
+    { id:'post_ww1_conditions',    name:'Post-WW1 Conditions' },
+    { id:'social_economic_changes',name:'Social & Economic Changes' },
+    { id:'mauritian_society',      name:'Mauritian Society' },
+  ]},
+  'g8sms-independence': { subsections: [
+    { id:'empires_colonies',       name:'Empires & Colonies' },
+    { id:'decolonisation',         name:'Decolonisation' },
+    { id:'mauritius_independence', name:'Mauritius & Independence' },
+  ]},
+  'g8sms-democracy': { subsections: [
+    { id:'democracy_features',     name:'Features of Democracy' },
+    { id:'constitution_government',name:'Constitution & Government' },
+    { id:'media_democracy',        name:'Media & Democracy' },
+  ]},
+  'g8sms-climate': { subsections: [
+    { id:'global_warming_causes', name:'Causes of Global Warming' },
+    { id:'impact_mauritius',      name:'Impact on Mauritius' },
+    { id:'adaptation_mitigation', name:'Adaptation & Mitigation' },
+  ]},
+};
 
 registerSubject({
   id: 'grade8-social-modern-studies', name: 'Social & Modern Studies', grade: 8, icon: '🌍', subject: 'Social & Modern Studies',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G8SMS_SYLLABUS,
   chapters: [

@@ -28,11 +28,122 @@
 // Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
 // declared here with no questions behind it advertises a topic that opens
 // empty. Add ids only as questions are written and tagged.
-const G7M_SYLLABUS = {};
+const G7M_SYLLABUS = {
+  'g7m-integers': { subsections: [
+    { id:'number_types', name:'Types of Numbers' },
+    { id:'number_line',  name:'The Number Line' },
+    { id:'operations',   name:'Integer Operations' },
+  ]},
+  'g7m-operations': { subsections: [
+    { id:'order_operations', name:'Order of Operations' },
+    { id:'properties',       name:'Properties of Operations' },
+    { id:'brackets',         name:'Expressions with Brackets' },
+  ]},
+  'g7m-indices': { subsections: [
+    { id:'index_notation',      name:'Index Notation' },
+    { id:'prime_factorisation', name:'Prime Factorisation' },
+    { id:'evaluating_powers',   name:'Evaluating Powers' },
+  ]},
+  'g7m-factors': { subsections: [
+    { id:'divisibility',  name:'Divisibility Rules' },
+    { id:'hcf_lcm',       name:'HCF and LCM' },
+    { id:'prime_factors', name:'Prime Factors' },
+  ]},
+  'g7m-fractions': { subsections: [
+    { id:'comparing_fractions',  name:'Comparing Fractions' },
+    { id:'converting',           name:'Converting Fractions & Decimals' },
+    { id:'operations_fractions', name:'Operations with Fractions' },
+  ]},
+  'g7m-percentages': { subsections: [
+    { id:'percent_basics',   name:'Percentage Basics' },
+    { id:'percent_quantity', name:'Percentage of a Quantity' },
+    { id:'percent_problems', name:'Percentage Problems' },
+  ]},
+  'g7m-ratio': { subsections: [
+    { id:'simplifying_ratio', name:'Simplifying Ratios' },
+    { id:'dividing_ratio',    name:'Dividing in a Ratio' },
+    { id:'proportion',        name:'Proportion' },
+  ]},
+  'g7m-polygons': { subsections: [
+    { id:'classifying_polygons',      name:'Classifying Polygons' },
+    { id:'angles_polygons',           name:'Angles in Polygons' },
+    { id:'triangles_quadrilaterals',  name:'Triangles & Quadrilaterals' },
+  ]},
+  'g7m-coordinates': { subsections: [
+    { id:'plotting_points',    name:'Plotting Points' },
+    { id:'quadrants',          name:'The Four Quadrants' },
+    { id:'shapes_coordinates', name:'Shapes from Coordinates' },
+  ]},
+  'g7m-constructions': { subsections: [
+    { id:'using_instruments',      name:'Using Instruments' },
+    { id:'parallel_perpendicular', name:'Parallel & Perpendicular Lines' },
+    { id:'bisecting',              name:'Bisecting Lines & Angles' },
+  ]},
+  'g7m-symmetry': { subsections: [
+    { id:'lines_symmetry',       name:'Lines of Symmetry' },
+    { id:'completing_figures',   name:'Completing Figures' },
+    { id:'rotational_symmetry',  name:'Rotational Symmetry' },
+  ]},
+  'g7m-transformation': { subsections: [
+    { id:'reflection',  name:'Reflection' },
+    { id:'translation', name:'Translation' },
+    { id:'congruence',  name:'Congruence' },
+  ]},
+  'g7m-mass': { subsections: [
+    { id:'units_mass',     name:'Units of Mass' },
+    { id:'converting_mass', name:'Converting Mass' },
+    { id:'mass_problems',  name:'Mass Problems' },
+  ]},
+  'g7m-length': { subsections: [
+    { id:'units_length',     name:'Units of Length' },
+    { id:'perimeter',        name:'Perimeter' },
+    { id:'distance_problems', name:'Distance Problems' },
+  ]},
+  'g7m-area': { subsections: [
+    { id:'rectangle_area',  name:'Area of Rectangles & Squares' },
+    { id:'triangle_area',   name:'Area of Triangles' },
+    { id:'compound_shapes', name:'Compound Shapes' },
+  ]},
+  'g7m-time': { subsections: [
+    { id:'reading_time',   name:'Reading & Writing Time' },
+    { id:'time_intervals', name:'Time Intervals' },
+    { id:'timetables',     name:'Timetables' },
+  ]},
+  'g7m-speed': { subsections: [
+    { id:'speed_formula',   name:'The Speed Formula' },
+    { id:'unit_conversion', name:'Unit Conversion' },
+    { id:'distance_time',   name:'Distance–Time Problems' },
+  ]},
+  'g7m-money': { subsections: [
+    { id:'money_operations', name:'Money Operations' },
+    { id:'profit_loss',      name:'Profit, Loss & Discount' },
+    { id:'currency',         name:'Currency Conversion' },
+  ]},
+  'g7m-algebra': { subsections: [
+    { id:'writing_expressions', name:'Writing Expressions' },
+    { id:'simplifying',         name:'Simplifying Expressions' },
+    { id:'substitution',        name:'Substitution' },
+  ]},
+  'g7m-equations': { subsections: [
+    { id:'solving_equations', name:'Solving Equations' },
+    { id:'forming_equations', name:'Forming Equations' },
+    { id:'word_equations',    name:'Word Problems' },
+  ]},
+  'g7m-sets': { subsections: [
+    { id:'set_notation',  name:'Set Notation' },
+    { id:'venn_diagrams', name:'Venn Diagrams' },
+    { id:'set_types',     name:'Types of Sets' },
+  ]},
+  'g7m-statistics': { subsections: [
+    { id:'data_tables', name:'Data Tables' },
+    { id:'bar_charts',  name:'Bar Charts' },
+    { id:'mean',        name:'The Mean' },
+  ]},
+};
 
 registerSubject({
   id: 'grade7-maths', name: 'Mathematics', grade: 7, icon: '🔢', subject: 'Maths',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G7M_SYLLABUS,
   chapters: [

@@ -28,11 +28,68 @@
 // Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
 // declared here with no questions behind it advertises a topic that opens
 // empty. Add ids only as questions are written and tagged.
-const G7ENG_SYLLABUS = {};
+const G7ENG_SYLLABUS = {
+  'g7eng-listening': { subsections: [
+    { id: 'identifying_message',  name: 'Identifying the Message' },
+    { id: 'vocabulary_context',   name: 'Vocabulary in Context' },
+  ]},
+  'g7eng-speaking': { subsections: [
+    { id: 'oral_interaction',     name: 'Oral Interaction' },
+    { id: 'intonation_register',  name: 'Intonation & Register' },
+  ]},
+  'g7eng-reading': { subsections: [
+    { id: 'main_idea_details',    name: 'Main Idea & Details' },
+    { id: 'inferring_vocabulary', name: 'Inferring Vocabulary' },
+  ]},
+  'g7eng-writing': { subsections: [
+    { id: 'organising_ideas',     name: 'Organising Ideas' },
+    { id: 'vocabulary_register',  name: 'Vocabulary & Register' },
+  ]},
+  'g7eng-gr-nouns': { subsections: [
+    { id: 'countable_uncountable',  name: 'Countable & Uncountable Nouns' },
+    { id: 'subject_verb_agreement', name: 'Subject-Verb Agreement' },
+  ]},
+  'g7eng-gr-pronouns': { subsections: [
+    { id: 'personal_possessive',  name: 'Personal & Possessive Pronouns' },
+    { id: 'relative_pronouns',    name: 'Relative Pronouns' },
+  ]},
+  'g7eng-gr-adjectives': { subsections: [
+    { id: 'types_adjectives',     name: 'Types of Adjectives' },
+    { id: 'adjective_placement',  name: 'Adjective Placement & Order' },
+  ]},
+  'g7eng-gr-verbs': { subsections: [
+    { id: 'verb_tenses',          name: 'Verb Tenses' },
+    { id: 'verb_formation',       name: 'Verb Formation' },
+  ]},
+  'g7eng-gr-determiners': { subsections: [
+    { id: 'definite_article',     name: 'Definite Article & No Article' },
+    { id: 'quantifiers',          name: 'Quantifiers' },
+  ]},
+  'g7eng-gr-adverbs': { subsections: [
+    { id: 'types_adverbs',        name: 'Types of Adverbs' },
+    { id: 'adverb_position',      name: 'Adverb Position' },
+  ]},
+  'g7eng-gr-modals': { subsections: [
+    { id: 'ability_permission',   name: 'Ability & Permission' },
+    { id: 'obligation',           name: 'Obligation & Advice' },
+  ]},
+  'g7eng-gr-prepositions': { subsections: [
+    { id: 'place_time',           name: 'Place & Time' },
+    { id: 'direction',            name: 'Direction & Movement' },
+  ]},
+  'g7eng-gr-sentence': { subsections: [
+    { id: 'simple_compound',      name: 'Simple & Compound Sentences' },
+    { id: 'complex_sentences',    name: 'Complex Sentences' },
+  ]},
+  'g7eng-gr-punctuation': { subsections: [
+    { id: 'full_stop_comma',      name: 'Full Stop, Comma & Capital Letters' },
+    { id: 'colon_direct_speech',  name: 'Colon & Direct Speech' },
+  ]},
+};
 
 registerSubject({
   id: 'grade7-english', name: 'English', grade: 7, icon: '📖', subject: 'English',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G7ENG_SYLLABUS,
   chapters: [

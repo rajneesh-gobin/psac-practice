@@ -28,11 +28,68 @@
 // Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
 // declared here with no questions behind it advertises a topic that opens
 // empty. Add ids only as questions are written and tagged.
-const G8ENG_SYLLABUS = {};
+const G8ENG_SYLLABUS = {
+  'g8eng-listening': { subsections: [
+    { id: 'fact_opinion',             name: 'Fact vs Opinion' },
+    { id: 'summarising',              name: 'Summarising a Text' },
+  ]},
+  'g8eng-speaking': { subsections: [
+    { id: 'structured_discussion',    name: 'Structured Discussion & Debate' },
+    { id: 'register_adaptation',      name: 'Register Adaptation' },
+  ]},
+  'g8eng-reading': { subsections: [
+    { id: 'purpose_audience',         name: 'Purpose, Audience & Tone' },
+    { id: 'explicit_implicit',        name: 'Explicit & Implicit Meaning' },
+  ]},
+  'g8eng-writing': { subsections: [
+    { id: 'extended_writing',         name: 'Extended Writing & Argument' },
+    { id: 'editing_accuracy',         name: 'Editing for Accuracy' },
+  ]},
+  'g8eng-gr-nouns': { subsections: [
+    { id: 'noun_phrases',             name: 'Noun Phrases' },
+    { id: 'gerunds',                  name: 'Gerunds' },
+  ]},
+  'g8eng-gr-pronouns': { subsections: [
+    { id: 'reference_tracking',       name: 'Reference Tracking' },
+    { id: 'ambiguous_reference',      name: 'Ambiguous Pronoun Reference' },
+  ]},
+  'g8eng-gr-adjectives': { subsections: [
+    { id: 'adjective_order',          name: 'Adjective Order' },
+    { id: 'participial_adjectives',   name: 'Participial Adjectives (-ing/-ed)' },
+  ]},
+  'g8eng-gr-verbs': { subsections: [
+    { id: 'present_perfect',          name: 'Present Perfect' },
+    { id: 'future_continuous',        name: 'Future Continuous' },
+  ]},
+  'g8eng-gr-determiners': { subsections: [
+    { id: 'article_use',              name: 'Article Use' },
+    { id: 'no_article',              name: 'No Article' },
+  ]},
+  'g8eng-gr-adverbs': { subsections: [
+    { id: 'adjective_to_adverb',      name: 'Adjective to Adverb' },
+    { id: 'reason_purpose',           name: 'Adverbs of Reason & Purpose' },
+  ]},
+  'g8eng-gr-modals': { subsections: [
+    { id: 'possibility_probability',  name: 'Possibility & Probability' },
+    { id: 'advice',                   name: 'Advice & Recommendation' },
+  ]},
+  'g8eng-gr-prepositions': { subsections: [
+    { id: 'prepositional_phrases',    name: 'Prepositional Phrases' },
+    { id: 'verbs_prepositions',       name: 'Verbs + Prepositions' },
+  ]},
+  'g8eng-gr-sentence': { subsections: [
+    { id: 'complex_sentences',        name: 'Complex Sentences & Conditionals' },
+    { id: 'direct_indirect_speech',   name: 'Direct & Indirect Speech' },
+  ]},
+  'g8eng-gr-punctuation': { subsections: [
+    { id: 'ellipsis',                 name: 'Ellipsis (…)' },
+    { id: 'punctuation_review',       name: 'Punctuation Review' },
+  ]},
+};
 
 registerSubject({
   id: 'grade8-english', name: 'English', grade: 8, icon: '📖', subject: 'English',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G8ENG_SYLLABUS,
   chapters: [

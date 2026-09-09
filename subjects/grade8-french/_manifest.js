@@ -25,14 +25,37 @@
 //    4. Set comingSoon: false only once every chapter above has questions.
 // ══════════════════════════════════════════════════════════════════════════
 
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
-// declared here with no questions behind it advertises a topic that opens
-// empty. Add ids only as questions are written and tagged.
-const G8FR_SYLLABUS = {};
+const G8FR_SYLLABUS = {
+  'g8fr-co': { subsections: [
+    { id:'schema_communication', name:'Schéma de communication' },
+    { id:'types_textes_oral',    name:'Types de textes oraux' },
+    { id:'sens_contexte',        name:'Sens et contexte' },
+  ]},
+  'g8fr-eo': { subsections: [
+    { id:'lecture_expressive',    name:'Lecture expressive' },
+    { id:'conversation_multi',    name:'Conversation à plusieurs' },
+    { id:'lexique_varie',         name:'Lexique varié et précis' },
+  ]},
+  'g8fr-ce': { subsections: [
+    { id:'idee_implicite',    name:'Idée principale et implicite' },
+    { id:'registres_langue',  name:'Registres de langue' },
+    { id:'analyse_texte',     name:'Analyse de texte' },
+  ]},
+  'g8fr-ee': { subsections: [
+    { id:'textes_fonctionnels_divers', name:'Textes fonctionnels divers' },
+    { id:'resume_opinion',             name:'Résumé et opinion' },
+    { id:'structure_coherente',        name:'Structure et cohérence' },
+  ]},
+  'g8fr-litterature': { subsections: [
+    { id:'genres_caracteristiques', name:'Genres et caractéristiques' },
+    { id:'appreciation_textes',     name:'Appréciation de textes' },
+    { id:'reaction_litteraire',     name:'Réaction littéraire' },
+  ]},
+};
 
 registerSubject({
   id: 'grade8-french', name: 'Français', grade: 8, icon: '🇫🇷', subject: 'French',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G8FR_SYLLABUS,
   chapters: [

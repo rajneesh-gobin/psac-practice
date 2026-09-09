@@ -28,11 +28,67 @@
 // Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
 // declared here with no questions behind it advertises a topic that opens
 // empty. Add ids only as questions are written and tagged.
-const G8M_SYLLABUS = {};
+const G8M_SYLLABUS = {
+  'g8m-sequences': { subsections: [
+    { id:'continuing_sequences', name:'Continuing Sequences' },
+    { id:'sequence_rules',       name:'Sequence Rules' },
+    { id:'nth_term',             name:'The nth Term' },
+  ]},
+  'g8m-indices': { subsections: [
+    { id:'index_laws',        name:'Laws of Indices' },
+    { id:'square_cube_roots', name:'Square & Cube Roots' },
+    { id:'evaluating_indices', name:'Evaluating Indices' },
+  ]},
+  'g8m-rate': { subsections: [
+    { id:'unit_rates',       name:'Unit Rates' },
+    { id:'direct_proportion', name:'Direct Proportion' },
+    { id:'rate_problems',    name:'Rate Problems' },
+  ]},
+  'g8m-finance': { subsections: [
+    { id:'simple_interest',       name:'Simple Interest' },
+    { id:'profit_loss_discount',  name:'Profit, Loss & Discount' },
+    { id:'bills_budgeting',       name:'Bills & Budgeting' },
+  ]},
+  'g8m-polygons': { subsections: [
+    { id:'interior_exterior_angles', name:'Interior & Exterior Angles' },
+    { id:'angle_sum',                name:'Angle Sum of Polygons' },
+    { id:'regular_polygons',         name:'Regular Polygons' },
+  ]},
+  'g8m-coordinates': { subsections: [
+    { id:'four_quadrants',  name:'The Four Quadrants' },
+    { id:'midpoint',        name:'Midpoint of a Line' },
+    { id:'linear_graphs',   name:'Linear Graphs' },
+  ]},
+  'g8m-circles': { subsections: [
+    { id:'parts_circle',   name:'Parts of a Circle' },
+    { id:'circumference',  name:'Circumference' },
+    { id:'area_circle',    name:'Area of a Circle' },
+  ]},
+  'g8m-surface-area': { subsections: [
+    { id:'nets',           name:'Nets of Solids' },
+    { id:'cuboid_surface', name:'Surface Area of Cuboids' },
+    { id:'prism_surface',  name:'Surface Area of Prisms' },
+  ]},
+  'g8m-volume': { subsections: [
+    { id:'cuboid_volume',   name:'Volume of Cuboids' },
+    { id:'unit_conversion', name:'Volume Unit Conversion' },
+    { id:'prism_volume',    name:'Volume of Prisms' },
+  ]},
+  'g8m-algebra': { subsections: [
+    { id:'expanding_brackets',  name:'Expanding Brackets' },
+    { id:'factorising',         name:'Factorising' },
+    { id:'algebraic_fractions', name:'Algebraic Fractions' },
+  ]},
+  'g8m-statistics': { subsections: [
+    { id:'pie_charts',       name:'Pie Charts' },
+    { id:'mean_median_mode', name:'Mean, Median & Mode' },
+    { id:'comparing_data',   name:'Comparing Data' },
+  ]},
+};
 
 registerSubject({
   id: 'grade8-maths', name: 'Mathematics', grade: 8, icon: '🔢', subject: 'Maths',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G8M_SYLLABUS,
   chapters: [

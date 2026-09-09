@@ -25,14 +25,37 @@
 //    4. Set comingSoon: false only once every chapter above has questions.
 // ══════════════════════════════════════════════════════════════════════════
 
-// Sub-topics for the Syllabus screen. Deliberately EMPTY: a subsection id
-// declared here with no questions behind it advertises a topic that opens
-// empty. Add ids only as questions are written and tagged.
-const G7FR_SYLLABUS = {};
+const G7FR_SYLLABUS = {
+  'g7fr-co': { subsections: [
+    { id:'type_texte_oral',   name:'Types de textes oraux' },
+    { id:'locuteur_message',  name:'Locuteur et message' },
+    { id:'vocabulaire_oral',  name:'Vocabulaire oral' },
+  ]},
+  'g7fr-eo': { subsections: [
+    { id:'lecture_voix_haute',    name:'Lecture à voix haute' },
+    { id:'expression_confiance',  name:'S\'exprimer avec confiance' },
+    { id:'lexique_approprie',     name:'Lexique approprié' },
+  ]},
+  'g7fr-ce': { subsections: [
+    { id:'idee_principale',       name:'Idée principale' },
+    { id:'information_explicite', name:'Informations explicites' },
+    { id:'vocabulaire',           name:'Vocabulaire' },
+  ]},
+  'g7fr-ee': { subsections: [
+    { id:'textes_fonctionnels',        name:'Textes fonctionnels' },
+    { id:'organisation_paragraphes',   name:'Organisation en paragraphes' },
+    { id:'correction_syntaxe',         name:'Correction syntaxique' },
+  ]},
+  'g7fr-litterature': { subsections: [
+    { id:'genres_litteraires', name:'Genres littéraires' },
+    { id:'types_textes',       name:'Types de textes' },
+    { id:'conte_bd',           name:'Contes et bandes dessinées' },
+  ]},
+};
 
 registerSubject({
   id: 'grade7-french', name: 'Français', grade: 7, icon: '🇫🇷', subject: 'French',
-  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: true,
+  curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G7FR_SYLLABUS,
   chapters: [
