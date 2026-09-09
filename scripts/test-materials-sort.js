@@ -255,7 +255,10 @@ const TEACHER_ROWS = MATS.map((m, i) => ({
   let ready = false;
   for (let i = 0; i < 40 && !ready; i++) {
     await sleep(500);
-    ready = await evalIn('typeof TeacherMaterials !== "undefined" && typeof sortMaterials === "function"').catch(() => false);
+    // ⚠ TeacherMaterials ships inside the lazy teacher group, so ASK for it.
+    //   Polling for the global alone never resolves: nothing on a child's path
+    //   loads those files any more (scripts/test-role-modules.js).
+    ready = await evalIn("RoleModules.ensure('teacher').then(() => typeof TeacherMaterials !== 'undefined' && typeof sortMaterials === 'function')").catch(() => false);
   }
   check(!!ready, 'index.html loads with TeacherMaterials and the shared comparator');
   if (!ready) { ws.close(); chrome.kill(); server.close(); process.exit(1); }

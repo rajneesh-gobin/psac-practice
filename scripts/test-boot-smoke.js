@@ -141,12 +141,20 @@ function rpc(ws, method, params, timeoutMs = 10000) {
     ok(await evalIn('typeof makeMCQ === "function"'), 'helpers.js ran (makeMCQ defined)');
     ok(await evalIn('typeof isPoolQuestion === "function"'), 'questions_engine.js ran');
     ok(await evalIn('typeof Auth === "object"'), 'auth.js ran');
+    // ⚠ 49 SINCE grade3-ssee WAS ADDED (0696fe3). The three Grade 1-3 Health
+    //   packs in that same commit were already registered and already counted;
+    //   only SSEE was new.
     // ⚠ 48 SINCE grade9-science WAS SPLIT into Biology/Chemistry/Physics.
     // ⚠ 46 SINCE grade9-ict WAS ADDED. The count is hard-coded on purpose:
     //   a pack that silently stops registering is exactly what this catches,
     //   and the number should only ever change in the same commit that adds
     //   or removes one. It was 45 before ICT.
-    ok(await evalIn('Array.isArray(SUBJECT_PACKS) && SUBJECT_PACKS.length === 48'), '48 subject packs registered');
+    // ⚠ THIS ONE DID NOT: the pack landed in 0696fe3 and the constant stayed
+    //   at 48, so the suite failed for a day on a change that was correct. If
+    //   you are here because the count is off, check subjects/_index.js first -
+    //   a pack that stopped registering and a pack that was legitimately added
+    //   fail this line identically.
+    ok(await evalIn('Array.isArray(SUBJECT_PACKS) && SUBJECT_PACKS.length === 49'), '49 subject packs registered');
 
     // The new module.
     ok(await evalIn('typeof Assessment === "object"'), 'assessment.js ran (Assessment defined)');

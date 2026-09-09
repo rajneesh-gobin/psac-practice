@@ -58,7 +58,10 @@ const ok = (label, cond, detail) => { assert(cond, label + (detail ? ' — ' + J
   };
   await call('Page.navigate', { url: 'http://127.0.0.1:' + PORT + '/' });
   let ready = false;
-  for (let i = 0; i < 80 && !ready; i++) { await sleep(500); try { ready = await ev("document.readyState === 'complete' && typeof AdminPanel !== 'undefined' && typeof SUBJECT_PACKS !== 'undefined'"); } catch (_) {} }
+  for (let i = 0; i < 80 && !ready; i++) { await sleep(500); try { // ⚠ AdminPanel is injected by RoleModules on the admin route, so ask for
+//   the group rather than waiting for a global that a plain boot never defines.
+ready = await ev("document.readyState === 'complete' && typeof SUBJECT_PACKS !== 'undefined' " +
+  "? RoleModules.ensure('admin').then(() => typeof AdminPanel !== 'undefined') : false"); } catch (_) {} }
   assert(ready, 'app globals loaded');
   await sleep(800);
 

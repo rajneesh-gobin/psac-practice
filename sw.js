@@ -75,15 +75,13 @@ const SHELL_FILES = [
   // ⚠ Must match the <script src="engine/…"> tags in index.html. This list is
   //   all-or-nothing — cache.addAll rejects wholesale on a single 404 — so a
   //   name here that is not on disk kills the whole offline shell, not one
-  //   feature. All six exist; re-check on any deploy that touches these tags.
-  '/engine/teacher_insights.js',
-  '/engine/teacher_workspace.js',
-  '/engine/teacher_guest_classes.js',
-  '/engine/teacher_home.js',
-  '/engine/teacher.js',
-  '/engine/teacher_classroom_detail.js',
-  '/engine/admin.js',
-  '/engine/forum.js',
+  //   feature. Re-check on any deploy that touches those tags.
+  // ⚠ THE EIGHT ROLE MODULES ARE DELIBERATELY ABSENT — admin.js, forum.js and
+  //   the six teacher files. Pre-caching them put 0.48 MB into the first load
+  //   of every child, for screens they can never open. RoleModules injects them
+  //   on demand, and the default fetch branch (cache-first into SHELL_CACHE)
+  //   caches each one the first time it is actually used, so a teacher still
+  //   works offline after opening the screen once.
   '/engine/calendar.js',
   '/engine/search.js',
   '/engine/classroom.js',

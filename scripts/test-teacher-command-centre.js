@@ -65,9 +65,18 @@ const cdMore = [...overlay.matchAll(/role="menuitem" data-sec="([a-z]+)"/g)].map
 assert.deepEqual(cdMore, ['results', 'settings'], 'classroom More holds only results and settings'); checks++;
 for (const s of ['overview', 'work', 'pupils', 'materials', 'results', 'settings']) ok(overlay.includes(`id="tc-cd-${s}"`), `classroom section ${s} exists`);
 ok(/id="ta-share-class"/.test(html) && /id="ta-share-due"/.test(html) && /id="ta-share-qr"/.test(html) && /id="ta-share-view"/.test(html) && /TeacherMode\.shareCopyLink\(\)/.test(html), 'success screen shows classroom, due date, copy, QR and View');
-ok(html.includes('engine/teacher_insights.js') && html.includes('engine/teacher_home.js'), 'new modules are loaded');
+// ⚠ NOT <script> TAGS AND NOT IN SHELL_FILES ANY MORE. The eight role
+//   modules are injected by RoleModules.ensure() when someone opens one of
+//   those screens; scripts/test-role-modules.js fails if a tag or a
+//   pre-cache entry comes back. What matters here is that the two newer
+//   teacher modules are in the group, in the right order.
+const groups = fs.readFileSync('engine/registry.js', 'utf8')
+  .match(/const GROUPS = \{([\s\S]*?)\n  \};/)[1];
+ok(groups.includes("'engine/teacher_insights.js'") && groups.includes("'engine/teacher_home.js'"),
+  'new modules are in the RoleModules teacher group');
 const swSrc = fs.readFileSync('sw.js', 'utf8');
-ok(swSrc.includes("'/engine/teacher_insights.js'") && swSrc.includes("'/engine/teacher_home.js'"), 'new modules are in the shell cache list');
+ok(!swSrc.includes("'/engine/teacher_insights.js'") && !swSrc.includes("'/engine/teacher_home.js'"),
+  'new modules are kept OUT of the all-or-nothing pre-cache list');
 ok(/_ADULT_ONLY_SCREENS = new Set\(\[[^\]]*'teacher'/.test(fs.readFileSync('engine/app.js', 'utf8')), 'teacher screen is adult-only in showScreen');
 
 // ── 2. Insights ─────────────────────────────────────────────────────────────

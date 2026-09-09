@@ -157,7 +157,10 @@ const ROWS = [
   let ready = false;
   for (let i = 0; i < 40 && !ready; i++) {
     await sleep(500);
-    ready = await evalIn('typeof TeacherMaterials !== "undefined" && typeof TeacherWorkspace !== "undefined"').catch(() => false);
+    // ⚠ The teacher modules are lazy now, so ASK FOR THEM. Waiting for the
+    //   globals to appear on their own waits forever: nothing on a child's
+    //   path loads them, which is the whole point of RoleModules.
+    ready = await evalIn("RoleModules.ensure('teacher').then(() => typeof TeacherMaterials !== 'undefined' && typeof TeacherWorkspace !== 'undefined')").catch(() => false);
   }
   check(!!ready, 'index.html loads with TeacherMaterials and TeacherWorkspace');
   if (!ready) { ws.close(); chrome.kill(); server.close(); process.exit(1); }

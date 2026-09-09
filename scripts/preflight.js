@@ -20,23 +20,73 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 const { spawnSync } = require('child_process');
+const crypto = require('crypto');
 const path = require('path');
+const fs = require('fs');
 
 const ROOT = path.resolve(__dirname, '..');
 
+const num = n => n.toLocaleString('en-US');
+const lines = out => out.split(/\r?\n/);
+const grab = (out, re) => { const m = out.match(re); return m ? m[1].trim() : ''; };
+
+// A step that PASSES still has something to say, and under --quiet its output
+// is thrown away — so every step names, in one line, what it measured. These
+// are the counts CLAUDE.md says to re-measure from the built bundles rather
+// than quote from a .md; the preflight computes them, so it should report them.
+const SUMMARY = {
+  index: out => grab(out, /_index\.js\s+—\s+(.+)$/m),
+
+  tests: out => {
+    const m = out.match(/(\d+) passed, (\d+) failed/g);
+    return m ? m[m.length - 1] : '';
+  },
+
+  bundles: out => {
+    let grades = 0, qs = 0, past = 0;
+    for (const l of lines(out)) {
+      const g = l.match(/^grade\d+\.json\s+—\s+\d+ subjects, (\d+) questions/);
+      if (g) { grades++; qs += Number(g[1]); continue; }
+      const p = l.match(/^past-papers\.json\s+—\s+(\d+) questions/);
+      if (p) past = Number(p[1]);
+    }
+    if (!grades) return '';
+    return `${grades} grades, ${num(qs)} questions + ${num(past)} past-paper items`;
+  },
+
+  checks: out => {
+    const n = lines(out).filter(l => /^\s{2}ok\s{2}/.test(l)).length;
+    return n ? `${n} checks passed` : '';
+  },
+};
+
 const STEPS = [
-  { script: 'scripts/build-subject-index.js',       label: 'regenerate subjects/_index.js' },
-  { script: 'scripts/test-subsection-invariant.js', label: 'declared subsections == tagged subsections' },
-  { script: 'netlify/build-questions.js',           label: 'rebuild the question bundles' },
-  { script: 'scripts/test-live-pack-content.js',    label: 'live packs hold real content' },
-  { script: 'scripts/check.js',                     label: 'static checks (index drift, sw shell, LOCAL_FILES)' },
+  { script: 'scripts/build-subject-index.js',       label: 'regenerate subjects/_index.js',
+    summary: SUMMARY.index, watch: 'subjects/_index.js' },
+  { script: 'scripts/test-subsection-invariant.js', label: 'declared subsections == tagged subsections',
+    summary: SUMMARY.tests },
+  { script: 'netlify/build-questions.js',           label: 'rebuild the question bundles',
+    summary: SUMMARY.bundles },
+  { script: 'scripts/test-live-pack-content.js',    label: 'live packs hold real content',
+    summary: SUMMARY.tests },
+  { script: 'scripts/check.js',                     label: 'static checks (index drift, sw shell, LOCAL_FILES)',
+    summary: SUMMARY.checks },
 ];
+
+// ⚠ A review that fails nothing is invisible: the thin-pack notes, and the
+// `skip <file>: <error>` a question file throws on during the build — which is
+// exactly how 365 French questions once went missing from the database with a
+// warning in a summary nobody read. Collected and re-printed under the summary.
+const NOTE_RE = /^\s*(?:note\b|warn(?:ing)?\b|skip\b|⚠)/i;
+const FAIL_RE = /(?:^|\s)(?:FAIL\b|✗|✖|Error:)/;
 
 const ESC   = String.fromCharCode(27);
 const color = process.stdout.isTTY && !process.env.NO_COLOR;
 const BOLD  = color ? ESC + '[1m'  : '';
+const DIM   = color ? ESC + '[2m'  : '';
 const RED   = color ? ESC + '[31m' : '';
 const GREEN = color ? ESC + '[32m' : '';
+const AMBER = color ? ESC + '[33m' : '';
 const OFF   = color ? ESC + '[0m'  : '';
 
 const args      = process.argv.slice(2);
@@ -54,8 +104,16 @@ if (args.includes('--list') || args.includes('-h') || args.includes('--help')) {
   process.exit(0);
 }
 
+const fingerprint = rel => {
+  try {
+    return crypto.createHash('sha1').update(fs.readFileSync(path.join(ROOT, rel))).digest('hex');
+  } catch { return null; }
+};
+
 const results = [];
+const notes = [];
 let failed = false;
+const started = Date.now();
 
 for (let i = 0; i < STEPS.length; i++) {
   const step = STEPS[i];
@@ -63,23 +121,43 @@ for (let i = 0; i < STEPS.length; i++) {
   if (only && !only.has(n)) { results.push({ n, step, status: 'skipped', ms: 0 }); continue; }
 
   console.log(`\n${BOLD}── ${n}/${STEPS.length} · node ${step.script}${OFF} — ${step.label}`);
+  const before = step.watch ? fingerprint(step.watch) : null;
   const t0 = Date.now();
+  // ⚠ Always piped, never 'inherit': the summary is derived from what the step
+  // PRINTED, and there is no second copy of it. Each step is well under a
+  // second, so its output lands as one block instead of streaming.
   const r = spawnSync(process.execPath, [path.join(ROOT, step.script)], {
     cwd: ROOT,
-    stdio: quiet ? ['ignore', 'pipe', 'pipe'] : 'inherit',
+    stdio: ['ignore', 'pipe', 'pipe'],
     env: process.env,
   });
   const ms = Date.now() - t0;
   const code = r.status === null ? 1 : r.status;
   const ok   = code === 0 && !r.error;
 
-  if (quiet && !ok) {
-    if (r.stdout) process.stdout.write(r.stdout.toString());
-    if (r.stderr) process.stderr.write(r.stderr.toString());
+  const stdout = r.stdout ? r.stdout.toString() : '';
+  const stderr = r.stderr ? r.stderr.toString() : '';
+  const out = stdout + stderr;
+
+  if (!quiet || !ok) {
+    if (stdout) process.stdout.write(stdout);
+    if (stderr) process.stderr.write(stderr);
   }
   if (r.error) console.error(`  ✗ could not run: ${r.error.message}`);
 
-  results.push({ n, step, status: ok ? 'passed' : 'FAILED', ms, code });
+  for (const l of lines(out)) if (NOTE_RE.test(l)) notes.push({ n, text: l.trim() });
+
+  let headline = '';
+  if (ok && step.summary) { try { headline = step.summary(out) || ''; } catch { headline = ''; } }
+  if (step.watch && before !== null) {
+    const changed = fingerprint(step.watch) !== before;
+    headline += (headline ? ' · ' : '')
+      + (changed ? `${step.watch} REWRITTEN — commit it` : `${step.watch} unchanged`);
+  }
+
+  const firstFail = ok ? '' : (lines(out).find(l => FAIL_RE.test(l)) || '').trim();
+
+  results.push({ n, step, status: ok ? 'passed' : 'FAILED', ms, code, headline, firstFail });
   if (!ok) {
     failed = true;
     if (!keepGoing) {
@@ -96,9 +174,22 @@ for (const r of results) {
     : r.status === 'skipped' ? 'skip  '
       : `${RED}FAIL${OFF}  `;
   const time = r.status === 'skipped' ? '' : ` (${(r.ms / 1000).toFixed(1)}s)`;
-  console.log(`  ${mark}${r.n}. ${r.step.script}${time}`);
+  const noteCount = notes.filter(x => x.n === r.n).length;
+  const tail = r.status === 'FAILED'
+    ? ` — exit ${r.code}${r.firstFail ? ': ' + r.firstFail : ''}`
+    : (r.headline ? ` — ${r.headline}` : '')
+      + (noteCount ? `${AMBER} · ${noteCount} note${noteCount === 1 ? '' : 's'}${OFF}` : '');
+  console.log(`  ${mark}${r.n}. ${r.step.script}${time}${tail}`);
 }
 const notRun = STEPS.length - results.length;
 if (notRun > 0) console.log(`  ${notRun} step(s) not run.`);
+console.log(`  ${DIM}${((Date.now() - started) / 1000).toFixed(1)}s total${OFF}`);
+
+if (notes.length) {
+  console.log(`\n${BOLD}Reviews and warnings${OFF} ${DIM}(nothing failed on these)${OFF}`);
+  const SHOWN = 15;
+  for (const nt of notes.slice(0, SHOWN)) console.log(`  ${AMBER}${nt.n}.${OFF} ${nt.text}`);
+  if (notes.length > SHOWN) console.log(`  … and ${notes.length - SHOWN} more, above.`);
+}
 
 process.exit(failed ? 1 : 0);

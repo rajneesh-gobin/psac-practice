@@ -477,7 +477,10 @@ const run = async (fn, over) => { calls = []; const r = await fn.handler(ev(over
     message: 'The Grade 5 science chapter will not open.',
     status: 'open', report_type: 'contact', student_id: null, chapter_id: null,
   };
+  // ⚠ AdminPanel arrives with the lazy admin group, which the real app loads
+  //   on the admin route. Without the ensure() this reads 'no-admin' forever.
   const rendered = await evalIn(`(async () => {
+    await RoleModules.ensure('admin');
     if (typeof AdminPanel === 'undefined' || !AdminPanel.loadReports) return 'no-admin';
     if (typeof QuestionLoader !== 'undefined') QuestionLoader.loadAllForGrade = async () => [];
     Store.countReports = async () => 1;

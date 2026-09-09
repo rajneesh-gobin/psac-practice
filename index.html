@@ -5666,21 +5666,19 @@
   <script src="engine/app.js"></script>
   <script src="engine/biometric.js"></script>
   <script src="engine/auth.js"></script>
-  <!-- Teacher mode (loads last - uses globals from app + auth) -->
-  <!-- ⚠ Order here is dependencies-first, but it is TOLERANT: every module is a
-       self-contained IIFE that assigns one global, and every cross-module call
-       is guarded (`typeof TeacherWorkspace !== 'undefined'`). Nothing runs at
-       load time that reaches into another teacher module, so a reorder cannot
-       produce the "X is not defined" class of failure app.js/auth.js has. -->
-  <script src="engine/teacher_insights.js"></script>
-  <script src="engine/teacher_workspace.js"></script>
-  <script src="engine/teacher_guest_classes.js"></script>
-  <script src="engine/teacher_home.js"></script>
-  <script src="engine/teacher.js"></script>
-  <script src="engine/teacher_classroom_detail.js"></script>
-  <!-- Admin panel (loads after auth) -->
-  <script src="engine/admin.js"></script>
-  <script src="engine/forum.js"></script>
+  <!-- ⚠ THE EIGHT ROLE MODULES ARE NOT LOADED HERE. admin.js, forum.js and
+       the six teacher files are 0.48 MB of source that every child used to
+       download and parse on first load, for screens they can never open.
+       RoleModules.ensure() in engine/registry.js injects them when someone
+       actually opens one of those screens - showScreen() for teacher and
+       forum, the auth routing for admin - and holds one cached promise per
+       group so a double tap loads once.
+       ⚠ Do not "fix" a missing TeacherMode/AdminPanel by adding a tag back.
+       The order inside the teacher group is load-bearing and now lives in
+       the GROUPS list; scripts/test-role-modules.js fails if a tag returns.
+       ⚠ They are still cached: the service worker default branch is
+       cache-first into SHELL_CACHE, so each file is fetched once and then
+       served offline, exactly like the question images. -->
   <script src="engine/calendar.js"></script>
   <script src="engine/search.js"></script>
   <!-- Classrooms / enrollments data layer (teacher role) -->

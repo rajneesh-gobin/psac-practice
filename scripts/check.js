@@ -87,7 +87,13 @@ function checkServiceWorker() {
   const block = sw.match(/SHELL_FILES\s*=\s*\[([\s\S]*?)\]/);
   if (!block) return fail('sw.js: could not locate SHELL_FILES');
 
-  const urls = [...block[1].matchAll(/'([^']+)'/g)].map(x => x[1]);
+  // ⚠ STRIP THE COMMENTS FIRST. The entries are matched with a bare
+  //   /'([^']+)'/, so one apostrophe in a comment inside the array - "every
+  //   child’s first load" - pairs with the opening quote of the next entry and
+  //   swallows it. That reported TWELVE files as missing from SHELL_FILES when
+  //   every one of them was listed, and the message points at sw.js rather
+  //   than at the prose that broke the parse.
+  const urls = [...block[1].replace(/\/\/[^\n]*/g, '').matchAll(/'([^']+)'/g)].map(x => x[1]);
   let checked = 0;
   for (const u of urls) {
     if (u === '/') continue;                       // the shell root, not a file
