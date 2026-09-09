@@ -429,10 +429,11 @@ const AdminPanel = (() => {
   // warning every single time - dozens of them, all saying the same thing.
   let _memberEmailsUnavailable = false;
 
-  // ⚠ Deliberately quiet. This runs on every members render, and an admin who
-  // has not deployed the function yet would otherwise get a toast every single
-  // time the list paints. The console still says exactly what happened, and the
-  // address line simply stays blank - which is what it looked like before.
+  // ⚠ Deliberately quiet on transient errors — this runs on every members render,
+  // so a toast on every failure would spam an admin whose function is not yet
+  // deployed. One toast is shown on the FIRST permanent failure per full reload;
+  // _memberEmailsUnavailable is reset by loadMembers(reset=true) so a manual
+  // page refresh gets one clean retry.
   async function _loadMemberEmails(ids) {
     if (_memberEmailsUnavailable) return;
     const missing = [...new Set(ids)].filter(id => id && !(id in _memberEmails));
@@ -441,12 +442,13 @@ const AdminPanel = (() => {
     try {
       result = await _adminApi("/api/admin-member-emails", { user_ids: missing });
     } catch (e) {
-      // "not available" is permanent for this session; anything else (a dropped
+      // "not available" is permanent for this load cycle; anything else (a dropped
       // connection, an expired token) is worth retrying on the next render.
       if (/not available/.test(e.message || "")) {
         _memberEmailsUnavailable = true;
         console.warn("[AdminPanel] member emails need /api/admin-member-emails to be "
           + "deployed. Reload this page after deploying.", e.message);
+        toast('Member emails could not be loaded from the server. Open the browser console for details, or refresh the page to retry.', 6000);
       } else {
         console.warn("[AdminPanel] could not load member emails:", e.message);
       }
@@ -612,7 +614,7 @@ const AdminPanel = (() => {
       await loadPendingRegistrations(reset, true);
       return;
     }
-    if (reset) { _membersOffset = 0; _members = []; }
+    if (reset) { _membersOffset = 0; _members = []; _memberEmailsUnavailable = false; }
     const el = document.getElementById('admin-members-list');
     if (reset && el) el.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400 text-center py-6 animate-pulse">Loading members…</p>';
     const visibility = _memberVisibility();

@@ -170,7 +170,7 @@ const G9SMS_SYLLABUS = {
 };;
 
 registerSubject({
-  id: 'grade9-social-modern-studies', name: 'Social & Modern Studies', grade: 9, icon: '🌍', subject: 'Social & Modern Studies',
+  id: 'grade9-social-modern-studies', name: 'Social & Modern Studies', grade: 9, icon: '🏛️', subject: 'Social & Modern Studies',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Word Problems',
   syllabus: G9SMS_SYLLABUS,

@@ -90,7 +90,7 @@ const G9CHEM_SYLLABUS = {
 };
 
 registerSubject({
-  id: 'grade9-chemistry', name: 'Chemistry', grade: 9, icon: '⚗️',
+  id: 'grade9-chemistry', name: 'Chemistry', grade: 9, icon: '🧪',
   subject: 'Chemistry',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Applied Scenarios',

@@ -84,7 +84,7 @@ const G9BIO_SYLLABUS = {
 };
 
 registerSubject({
-  id: 'grade9-biology', name: 'Biology', grade: 9, icon: '🧬',
+  id: 'grade9-biology', name: 'Biology', grade: 9, icon: '🦠',
   subject: 'Biology',
   curriculum: 'MIE Mauritius (NCF Grades 7-9)', comingSoon: false,
   practiceble: true, notesBased: false, level4Label: 'Applied Scenarios',

@@ -55,7 +55,8 @@ exports.handler = async (event) => {
     results.forEach(([id, email]) => { if (email) emails[id] = email; });
   }
 
-  if (lookupFailed) return json(502, { error: 'Some email lookups failed. Please retry; no complete email list is available yet.' });
-
-  return json(200, { ok: true, emails });
+  // Return whatever we found even if some lookups failed — the client handles
+  // null entries gracefully, and blocking the whole batch on one missing auth
+  // row means no emails ever show when any account was hard-deleted from auth.
+  return json(200, { ok: true, emails, partial: lookupFailed });
 };
